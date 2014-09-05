@@ -1,0 +1,30 @@
+//------------------------------------------------------------------------------
+
+import QmlProject 1.1
+
+Project {
+    QmlFiles {
+        directory: "."
+        recursive: true
+    }
+
+    JavaScriptFiles {
+        directory: "."
+        recursive: true
+    }
+
+    ImageFiles {
+        directory: "."
+        recursive: true
+    }
+
+    Files {
+        directory: "."
+        recursive: true
+        filter: "qmldir;*.json;*.png;*.txt"
+    }
+
+    importPaths: [
+   ]
+}
+
