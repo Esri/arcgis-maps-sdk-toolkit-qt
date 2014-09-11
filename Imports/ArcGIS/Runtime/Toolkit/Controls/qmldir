@@ -21,5 +21,5 @@ OverviewMap 1.0 OverviewMap.qml
 PortalItemsView 1.0 PortalItemsView.qml
 ImageButton 1.0 ImageButton.qml
 Fader 1.0 Fader.qml
-ZoomButtons 1.0 ZoomButtons.qml
+NavigationToolbar 1.0 NavigationToolbar.qml
 

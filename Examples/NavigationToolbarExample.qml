@@ -44,7 +44,7 @@ Rectangle {
             url: "http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer"
         }
 
-        ZoomButtons {
+        NavigationToolbar {
             anchors {
                 left: parent.left
                 leftMargin: 10
