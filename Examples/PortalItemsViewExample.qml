@@ -99,7 +99,7 @@ Rectangle {
                 }
             }
 
-            ZoomButtons {
+            NavigationToolbar {
                 anchors {
                     right: parent.right
                     rightMargin: 10

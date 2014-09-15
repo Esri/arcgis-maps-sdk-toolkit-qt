@@ -28,8 +28,8 @@ Rectangle {
         id: examplesModel
 
         ListElement {
-            description: "ZoomButtons  Example"
-            source: "ZoomButtonsExample.qml"
+            description: "Navigation Toolbar  Example"
+            source: "NavigationToolbarExample.qml"
         }
 
         ListElement {
