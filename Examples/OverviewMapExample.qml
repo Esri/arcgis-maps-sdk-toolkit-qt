@@ -71,7 +71,7 @@ Rectangle {
             visible: map.mapRotation != 0
         }
 
-        ZoomButtons {
+        NavigationToolbar {
             anchors {
                 right: parent.right
                 rightMargin: 10
