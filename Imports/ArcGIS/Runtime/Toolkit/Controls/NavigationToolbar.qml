@@ -17,11 +17,11 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
-
+import QtQuick.Layouts 1.1
 import ArcGIS.Runtime.AppKit 1.0
 import ArcGIS.Runtime 10.3
 
-Column {
+GridLayout {
     id: zoomButtons
 
     property Map map: null
@@ -35,6 +35,7 @@ Column {
     property color backgroundColor: "#F7F8F8"
     property color focusBorderColor: "#AADBFA"
     property color borderColor: "#CBCBCB"
+    property string orientation: "portrait"
 
     property Envelope homeExtent
 
@@ -46,8 +47,10 @@ Column {
     readonly property int buttonPosition: 0x08
 
     property int buttons: buttonZoomIn + buttonZoomOut + buttonHome + buttonPosition
-
-    spacing: 1
+    columns: orientation === "portrait" ? 1 : 4
+    rows: orientation === "portrait" ? 4 : 1
+    rowSpacing: orientation === "landscape" ? 0 : 1
+    columnSpacing: orientation === "portrait" ? 0 : 1
 
     //--------------------------------------------------------------------------
 
