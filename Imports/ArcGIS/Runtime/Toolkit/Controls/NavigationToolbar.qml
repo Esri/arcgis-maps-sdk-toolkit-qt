@@ -87,11 +87,11 @@ GridLayout {
     }
 
     //--------------------------------------------------------------------------
-    // Zoom-Out Button
-    ZoomOutButton {
-        id: zoomOut
+    // Home Button
+    HomeButton {
+        id: home
         onHoveredChanged: {
-            if (zoomOut.hovered) {
+            if (home.hovered) {
                 stopFader();
             } else {
                 startFader();
@@ -100,11 +100,11 @@ GridLayout {
     }
 
     //--------------------------------------------------------------------------
-    // Home Button
-    HomeButton {
-        id: home
+    // Zoom-Out Button
+    ZoomOutButton {
+        id: zoomOut
         onHoveredChanged: {
-            if (home.hovered) {
+            if (zoomOut.hovered) {
                 stopFader();
             } else {
                 startFader();
