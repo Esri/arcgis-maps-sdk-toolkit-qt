@@ -27,10 +27,66 @@ Button {
     height: width
     text: "+"
     tooltip: qsTr("Zoom in")
+    style: buttonStyle
 
     onClicked: {
         fader.start();
         map.zoomToScale (map.mapScale / zoomRatio);
+    }
+
+    Component {
+        id: buttonStyle
+
+        ButtonStyle {
+
+            label: Item {
+                Image {
+                    width: internal._size * 0.8
+                    height: width
+                    source: control.iconSource
+                    fillMode: Image.PreserveAspectFit
+                }
+
+                Text {
+                    anchors.centerIn: parent
+                    color: control.enabled ? zoomButtons.color : disabledColor
+                    text: control.text
+                    font {
+                        pixelSize: internal._size * 0.75
+                        bold: true
+                    }
+                }
+            }
+
+            background: Rectangle {
+                color: control.hovered ?  hoveredColor : (control.pressed ? pressedColor : backgroundColor)
+                border {
+                    color: control.activeFocus ? focusBorderColor : borderColor
+                    width: control.activeFocus ? 2 : 1
+                }
+                radius: 4
+                implicitWidth: 40
+                implicitHeight: 40
+            }
+
+            Connections {
+                target: control
+
+                onPressedChanged: {
+                    if (control.pressed) {
+                        fader.start();
+                    }
+                }
+
+                onHoveredChanged: {
+                    if (control.hovered) {
+                        fader.stop();
+                    } else {
+                        fader.start();
+                    }
+                }
+            }
+        }
     }
 }
 
