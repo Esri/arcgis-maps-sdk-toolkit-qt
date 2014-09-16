@@ -32,17 +32,13 @@ Button {
     property color focusBorderColor: "#AADBFA"
     property color borderColor: "#CBCBCB"
 
-    readonly property int buttonZoomOut: 0x02
     readonly property int buttonPosition: 0x08
-    readonly property int buttonZoomIn: 0x01
-    readonly property int buttonHome: 0x04
-    property int buttons: buttonZoomIn + buttonZoomOut + buttonHome + buttonPosition
     property alias fader: fader
 
     property bool isActive: map && map.positionDisplay.positionSource && map.positionDisplay.positionSource.active
     property int maxModes: map.positionDisplay.isCompassAvailable ? 4 : 3;
 
-    visible: buttons & buttonPosition && map && map.positionDisplay.positionSource
+    visible: buttonPosition && map && map.positionDisplay.positionSource
     width: internal._size
     height: width
     iconSource: isActive ? modeImage(map.positionDisplay.mode) : "images/position-off.png"

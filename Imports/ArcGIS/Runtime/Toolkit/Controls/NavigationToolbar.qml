@@ -44,7 +44,6 @@ GridLayout {
     readonly property int buttonHome: 0x04
     property int buttons: buttonZoomIn + buttonZoomOut + buttonHome + buttonPosition
 
-    visible: buttons & buttonZoomIn && map
     columns: orientation === "portrait" ? 1 : 4
     rows: orientation === "portrait" ? 4 : 1
     rowSpacing: orientation === "landscape" ? 0 : 1
@@ -58,21 +57,31 @@ GridLayout {
         }
     }
 
+    function stop()
+    {
+        zoomIn.fader.stop();
+        home.fader.stop();
+        zoomOut.fader.stop();
+        currentLocation.fader.stop();
+    }
+
+    function start()
+    {
+        zoomIn.fader.start();
+        home.fader.start();
+        zoomOut.fader.start();
+        currentLocation.fader.start();
+    }
+
     //--------------------------------------------------------------------------
     // Zoom-In Button
     ZoomInButton {
         id: zoomIn
-        onHoveredChanged:  {
-            if(zoomIn.hovered){
-                zoomIn.fader.stop();
-                home.fader.stop();
-                zoomOut.fader.stop();
-                currentLocation.fader.stop();
+        onHoveredChanged: {
+            if(zoomIn.hovered) {
+                stop();
             } else {
-                zoomIn.fader.start();
-                home.fader.start();
-                zoomOut.fader.start();
-                currentLocation.fader.start();
+                start();
             }
         }
     }
@@ -81,17 +90,11 @@ GridLayout {
     // Zoom-Out Button
     ZoomOutButton {
         id: zoomOut
-        onHoveredChanged:  {
-            if(zoomOut.hovered){
-                zoomIn.fader.stop();
-                home.fader.stop();
-                zoomOut.fader.stop();
-                currentLocation.fader.stop();
+        onHoveredChanged: {
+            if(zoomOut.hovered) {
+                stop();
             } else {
-                zoomIn.fader.start();
-                home.fader.start();
-                zoomOut.fader.start();
-                currentLocation.fader.start();
+                start();
             }
         }
     }
@@ -100,17 +103,11 @@ GridLayout {
     // Home Button
     HomeButton {
         id: home
-        onHoveredChanged:  {
-            if(home.hovered){
-                zoomIn.fader.stop();
-                home.fader.stop();
-                zoomOut.fader.stop();
-                currentLocation.fader.stop();
+        onHoveredChanged: {
+            if(home.hovered) {
+                stop();
             } else {
-                zoomIn.fader.start();
-                home.fader.start();
-                zoomOut.fader.start();
-                currentLocation.fader.start();
+                start();
             }
         }
     }
@@ -119,17 +116,11 @@ GridLayout {
     // PositionButton
     PositionButton {
         id: currentLocation
-        onHoveredChanged:  {
-            if(currentLocation.hovered){
-                zoomIn.fader.stop();
-                home.fader.stop();
-                zoomOut.fader.stop();
-                currentLocation.fader.stop();
+        onHoveredChanged: {
+            if(currentLocation.hovered) {
+                stop();
             } else {
-                zoomIn.fader.start();
-                home.fader.start();
-                zoomOut.fader.start();
-                currentLocation.fader.start();
+                start();
             }
         }
     }

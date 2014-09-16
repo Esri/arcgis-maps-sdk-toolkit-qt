@@ -35,13 +35,9 @@ Button {
     property color borderColor: "#CBCBCB"
 
     readonly property int buttonZoomOut: 0x02
-    readonly property int buttonPosition: 0x08
-    readonly property int buttonZoomIn: 0x01
-    readonly property int buttonHome: 0x04
-    property int buttons: buttonZoomIn + buttonZoomOut + buttonHome + buttonPosition
     property alias fader: fader
 
-    visible: buttons & buttonZoomOut && map
+    visible: buttonZoomOut && map
     width: internal._size
     height: width
     text: "-"
