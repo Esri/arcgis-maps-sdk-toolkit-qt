@@ -38,6 +38,7 @@ Button {
     readonly property int buttonHome: 0x04
     property int buttons: buttonZoomIn + buttonZoomOut + buttonHome + buttonPosition
 
+    property Envelope homeExtent
 
     visible: buttons & buttonHome && map
     width: internal._size

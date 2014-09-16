@@ -24,6 +24,8 @@ import ArcGIS.Runtime 10.3
 Button {
     id: zoomOutButton
     property real size: 40
+    property real zoomRatio: 2
+
     property color color: "#4C4C4C"
     property color disabledColor: "#E5E6E7"
     property color hoveredColor: "#E1F0FB"

@@ -38,6 +38,8 @@ Button {
     readonly property int buttonHome: 0x04
     property int buttons: buttonZoomIn + buttonZoomOut + buttonHome + buttonPosition
 
+    property real zoomRatio: 2
+
     visible: buttons & buttonZoomIn && map
     width: internal._size
     height: width
