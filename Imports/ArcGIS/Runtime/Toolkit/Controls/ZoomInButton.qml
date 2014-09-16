@@ -37,6 +37,7 @@ Button {
     readonly property int buttonZoomIn: 0x01
     readonly property int buttonHome: 0x04
     property int buttons: buttonZoomIn + buttonZoomOut + buttonHome + buttonPosition
+    property alias fader: fader
 
     property real zoomRatio: 2
 

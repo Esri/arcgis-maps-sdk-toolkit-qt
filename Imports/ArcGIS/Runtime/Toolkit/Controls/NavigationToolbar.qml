@@ -38,15 +38,13 @@ GridLayout {
     property string orientation: "portrait"
 
     property Envelope homeExtent
-
-    property alias fader: fader
-
     readonly property int buttonZoomOut: 0x02
     readonly property int buttonPosition: 0x08
     readonly property int buttonZoomIn: 0x01
     readonly property int buttonHome: 0x04
     property int buttons: buttonZoomIn + buttonZoomOut + buttonHome + buttonPosition
 
+    visible: buttons & buttonZoomIn && map
     columns: orientation === "portrait" ? 1 : 4
     rows: orientation === "portrait" ? 4 : 1
     rowSpacing: orientation === "landscape" ? 0 : 1
@@ -60,85 +58,82 @@ GridLayout {
         }
     }
 
-    Fader {
-        id: fader
-    }
+    //    Fader {
+    //        id: faderToolBar
+    //    }
 
     //--------------------------------------------------------------------------
     // Zoom-In Button
     ZoomInButton {
         id: zoomIn
+        onHoveredChanged:  {
+            if(zoomIn.hovered){
+                zoomIn.fader.stop();
+                home.fader.stop();
+                zoomOut.fader.stop();
+                currentLocation.fader.stop();
+            } else {
+                zoomIn.fader.start();
+                home.fader.start();
+                zoomOut.fader.start();
+                currentLocation.fader.start();
+            }
+        }
     }
 
     //--------------------------------------------------------------------------
     // Zoom-Out Button
     ZoomOutButton {
         id: zoomOut
+        onHoveredChanged:  {
+            if(zoomOut.hovered){
+                zoomIn.fader.stop();
+                home.fader.stop();
+                zoomOut.fader.stop();
+                currentLocation.fader.stop();
+            } else {
+                zoomIn.fader.start();
+                home.fader.start();
+                zoomOut.fader.start();
+                currentLocation.fader.start();
+            }
+        }
     }
 
     //--------------------------------------------------------------------------
     // Home Button
     HomeButton {
         id: home
+        onHoveredChanged:  {
+            if(home.hovered){
+                zoomIn.fader.stop();
+                home.fader.stop();
+                zoomOut.fader.stop();
+                currentLocation.fader.stop();
+            } else {
+                zoomIn.fader.start();
+                home.fader.start();
+                zoomOut.fader.start();
+                currentLocation.fader.start();
+            }
+        }
     }
 
     //--------------------------------------------------------------------------
     // PositionButton
     PositionButton {
         id: currentLocation
-    }
-
-    Component {
-        id: buttonStyle
-
-        ButtonStyle {
-
-            label: Item {
-                Image {
-                    width: internal._size * 0.8
-                    height: width
-                    source: control.iconSource
-                    fillMode: Image.PreserveAspectFit
-                }
-
-                Text {
-                    anchors.centerIn: parent
-                    color: control.enabled ? homeButton.color : disabledColor
-                    text: control.text
-                    font {
-                        pixelSize: internal._size * 0.75
-                        bold: true
-                    }
-                }
-            }
-
-            background: Rectangle {
-                color: control.hovered ?  hoveredColor : (control.pressed ? pressedColor : backgroundColor)
-                border {
-                    color: control.activeFocus ? focusBorderColor : borderColor
-                    width: control.activeFocus ? 2 : 1
-                }
-                radius: 4
-                implicitWidth: 40
-                implicitHeight: 40
-            }
-
-            Connections {
-                target: control
-
-                onPressedChanged: {
-                    if (control.pressed) {
-                        fader.start();
-                    }
-                }
-
-                onHoveredChanged: {
-                    if (control.hovered) {
-                        fader.stop();
-                    } else {
-                        fader.start();
-                    }
-                }
+        onHoveredChanged:  {
+            if(currentLocation.hovered){
+                zoomIn.fader.stop();
+                home.fader.stop();
+                zoomOut.fader.stop();
+                currentLocation.fader.stop();
+            } else {
+                zoomIn.fader.start();
+                home.fader.start();
+                zoomOut.fader.start();
+                currentLocation.fader.start();
             }
         }
     }

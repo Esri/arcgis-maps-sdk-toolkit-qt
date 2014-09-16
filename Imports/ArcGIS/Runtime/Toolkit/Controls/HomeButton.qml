@@ -39,6 +39,7 @@ Button {
     property int buttons: buttonZoomIn + buttonZoomOut + buttonHome + buttonPosition
 
     property Envelope homeExtent
+    property alias fader: fader
 
     visible: buttons & buttonHome && map
     width: internal._size

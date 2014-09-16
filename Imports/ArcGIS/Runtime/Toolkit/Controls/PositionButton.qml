@@ -37,6 +37,7 @@ Button {
     readonly property int buttonZoomIn: 0x01
     readonly property int buttonHome: 0x04
     property int buttons: buttonZoomIn + buttonZoomOut + buttonHome + buttonPosition
+    property alias fader: fader
 
     property bool isActive: map && map.positionDisplay.positionSource && map.positionDisplay.positionSource.active
     property int maxModes: map.positionDisplay.isCompassAvailable ? 4 : 3;
