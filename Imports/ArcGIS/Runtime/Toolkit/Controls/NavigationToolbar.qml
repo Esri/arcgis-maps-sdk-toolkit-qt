@@ -57,7 +57,7 @@ GridLayout {
         }
     }
 
-    function stop()
+    function stopFader()
     {
         zoomIn.fader.stop();
         home.fader.stop();
@@ -65,7 +65,7 @@ GridLayout {
         currentLocation.fader.stop();
     }
 
-    function start()
+    function startFader()
     {
         zoomIn.fader.start();
         home.fader.start();
@@ -78,10 +78,10 @@ GridLayout {
     ZoomInButton {
         id: zoomIn
         onHoveredChanged: {
-            if(zoomIn.hovered) {
-                stop();
+            if (zoomIn.hovered) {
+                stopFader();
             } else {
-                start();
+                startFader();
             }
         }
     }
@@ -91,10 +91,10 @@ GridLayout {
     ZoomOutButton {
         id: zoomOut
         onHoveredChanged: {
-            if(zoomOut.hovered) {
-                stop();
+            if (zoomOut.hovered) {
+                stopFader();
             } else {
-                start();
+                startFader();
             }
         }
     }
@@ -104,10 +104,10 @@ GridLayout {
     HomeButton {
         id: home
         onHoveredChanged: {
-            if(home.hovered) {
-                stop();
+            if (home.hovered) {
+                stopFader();
             } else {
-                start();
+                startFader();
             }
         }
     }
@@ -117,10 +117,10 @@ GridLayout {
     PositionButton {
         id: currentLocation
         onHoveredChanged: {
-            if(currentLocation.hovered) {
-                stop();
+            if (currentLocation.hovered) {
+                stopFader();
             } else {
-                start();
+                startFader();
             }
         }
     }
