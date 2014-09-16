@@ -21,13 +21,9 @@ import QtQuick.Layouts 1.1
 import ArcGIS.Runtime.AppKit 1.0
 import ArcGIS.Runtime 10.3
 
-GridLayout {
-    id: zoomButtons
-
-    property Map map: null
+Button {
+    id: zoomInButton
     property real size: 40
-    property real zoomRatio: 2
-
     property color color: "#4C4C4C"
     property color disabledColor: "#E5E6E7"
     property color hoveredColor: "#E1F0FB"
@@ -35,11 +31,6 @@ GridLayout {
     property color backgroundColor: "#F7F8F8"
     property color focusBorderColor: "#AADBFA"
     property color borderColor: "#CBCBCB"
-    property string orientation: "portrait"
-
-    property Envelope homeExtent
-
-    property alias fader: fader
 
     readonly property int buttonZoomOut: 0x02
     readonly property int buttonPosition: 0x08
@@ -47,45 +38,27 @@ GridLayout {
     readonly property int buttonHome: 0x04
     property int buttons: buttonZoomIn + buttonZoomOut + buttonHome + buttonPosition
 
-    columns: orientation === "portrait" ? 1 : 4
-    rows: orientation === "portrait" ? 4 : 1
-    rowSpacing: orientation === "landscape" ? 0 : 1
-    columnSpacing: orientation === "portrait" ? 0 : 1
+    property real zoomRatio: 2
 
-    //--------------------------------------------------------------------------
+    visible: buttons & buttonZoomIn && map
+    width: internal._size
+    height: width
+    text: "+"
+    tooltip: qsTr("Zoom in")
+    style: buttonStyle
 
-    Component.onCompleted: {
-        if (!map && parent && parent.objectType && parent.objectType === "Map") {
-            map = parent;
-        }
+    onClicked: {
+        fader.start();
+        map.zoomToScale (map.mapScale / zoomRatio);
     }
 
     Fader {
         id: fader
     }
 
-    //--------------------------------------------------------------------------
-    // Zoom-In Button
-    ZoomInButton {
-        id: zoomIn
-    }
-
-    //--------------------------------------------------------------------------
-    // Zoom-Out Button
-    ZoomOutButton {
-        id: zoomOut
-    }
-
-    //--------------------------------------------------------------------------
-    // Home Button
-    HomeButton {
-        id: home
-    }
-
-    //--------------------------------------------------------------------------
-    // PositionButton
-    PositionButton {
-        id: currentLocation
+    QtObject {
+        id: internal
+        property real _size: size * System.displayScaleFactor
     }
 
     Component {
@@ -103,7 +76,7 @@ GridLayout {
 
                 Text {
                     anchors.centerIn: parent
-                    color: control.enabled ? homeButton.color : disabledColor
+                    color: control.enabled ? zoomInButton.color : disabledColor
                     text: control.text
                     font {
                         pixelSize: internal._size * 0.75
@@ -143,3 +116,5 @@ GridLayout {
         }
     }
 }
+
+

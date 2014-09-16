@@ -21,13 +21,9 @@ import QtQuick.Layouts 1.1
 import ArcGIS.Runtime.AppKit 1.0
 import ArcGIS.Runtime 10.3
 
-GridLayout {
-    id: zoomButtons
-
-    property Map map: null
+Button {
+    id: positionButton
     property real size: 40
-    property real zoomRatio: 2
-
     property color color: "#4C4C4C"
     property color disabledColor: "#E5E6E7"
     property color hoveredColor: "#E1F0FB"
@@ -35,11 +31,6 @@ GridLayout {
     property color backgroundColor: "#F7F8F8"
     property color focusBorderColor: "#AADBFA"
     property color borderColor: "#CBCBCB"
-    property string orientation: "portrait"
-
-    property Envelope homeExtent
-
-    property alias fader: fader
 
     readonly property int buttonZoomOut: 0x02
     readonly property int buttonPosition: 0x08
@@ -47,16 +38,52 @@ GridLayout {
     readonly property int buttonHome: 0x04
     property int buttons: buttonZoomIn + buttonZoomOut + buttonHome + buttonPosition
 
-    columns: orientation === "portrait" ? 1 : 4
-    rows: orientation === "portrait" ? 4 : 1
-    rowSpacing: orientation === "landscape" ? 0 : 1
-    columnSpacing: orientation === "portrait" ? 0 : 1
+    property bool isActive: map && map.positionDisplay.positionSource && map.positionDisplay.positionSource.active
+    property int maxModes: map.positionDisplay.isCompassAvailable ? 4 : 3;
 
-    //--------------------------------------------------------------------------
+    visible: buttons & buttonPosition && map && map.positionDisplay.positionSource
+    width: internal._size
+    height: width
+    iconSource: isActive ? modeImage(map.positionDisplay.mode) : "images/position-off.png"
+    tooltip: qsTr("Location")
+    style: buttonStyle
 
-    Component.onCompleted: {
-        if (!map && parent && parent.objectType && parent.objectType === "Map") {
-            map = parent;
+    MouseArea {
+        anchors.fill: parent
+
+        onPressAndHold: {
+            fader.start();
+
+            if (map.positionDisplay.positionSource.active) {
+                map.positionDisplay.positionSource.active = false;
+            }
+        }
+
+        onClicked: {
+            fader.start();
+
+            if (map.positionDisplay.positionSource.active) {
+                map.positionDisplay.mode = (map.positionDisplay.mode + 1) % positionButton.maxModes;
+            } else {
+                map.positionDisplay.positionSource.active = true;
+                map.positionDisplay.mode = 1;
+            }
+        }
+    }
+
+    function modeImage(mode) {
+        switch (mode) {
+        case 0 :
+            return "images/position-on.png";
+
+        case 1 :
+            return "images/position-autopan.png";
+
+        case 2 :
+            return "images/position-navigation.png";
+
+        case 3 :
+            return "images/position-compass.png"
         }
     }
 
@@ -64,28 +91,9 @@ GridLayout {
         id: fader
     }
 
-    //--------------------------------------------------------------------------
-    // Zoom-In Button
-    ZoomInButton {
-        id: zoomIn
-    }
-
-    //--------------------------------------------------------------------------
-    // Zoom-Out Button
-    ZoomOutButton {
-        id: zoomOut
-    }
-
-    //--------------------------------------------------------------------------
-    // Home Button
-    HomeButton {
-        id: home
-    }
-
-    //--------------------------------------------------------------------------
-    // PositionButton
-    PositionButton {
-        id: currentLocation
+    QtObject {
+        id: internal
+        property real _size: size * System.displayScaleFactor
     }
 
     Component {
@@ -103,7 +111,7 @@ GridLayout {
 
                 Text {
                     anchors.centerIn: parent
-                    color: control.enabled ? homeButton.color : disabledColor
+                    color: control.enabled ? positionButton.color : disabledColor
                     text: control.text
                     font {
                         pixelSize: internal._size * 0.75
