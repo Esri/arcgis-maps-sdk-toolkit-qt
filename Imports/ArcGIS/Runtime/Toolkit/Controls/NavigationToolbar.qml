@@ -92,8 +92,8 @@ GridLayout {
     }
 
     //--------------------------------------------------------------------------
-    // MyCurrentLocationButton
-    MyCurrentLocationButton {
+    // PositionButton
+    PositionButton {
         id: currentLocation
     }
 

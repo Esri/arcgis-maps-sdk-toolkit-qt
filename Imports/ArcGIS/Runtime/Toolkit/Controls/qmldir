@@ -23,7 +23,7 @@ ImageButton 1.0 ImageButton.qml
 Fader 1.0 Fader.qml
 NavigationToolbar 1.0 NavigationToolbar.qml
 HomeButton 1.0 HomeButton.qml
-MyCurrentLocationButton 1.0 MyCurrentLocationButton.qml
+PositionButton 1.0 PositionButton.qml
 ZoomInButton 1.0 ZoomInButton.qml
 ZoomOutButton 1.0 ZoomOutButton.qml
 
