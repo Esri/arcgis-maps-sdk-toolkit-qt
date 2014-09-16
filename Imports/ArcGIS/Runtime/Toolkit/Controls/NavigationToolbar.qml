@@ -75,120 +75,39 @@ GridLayout {
     }
 
     //--------------------------------------------------------------------------
-
-    Button {
-        visible: buttons & buttonZoomIn && map
-        width: internal._size
-        height: width
-        text: "+"
-        tooltip: qsTr("Zoom in")
+    // Zoom-In Button
+    ZoomInButton {
+        id: zoomIn
         style: buttonStyle
 
-        onClicked: {
-            fader.start();
-            map.zoomToScale (map.mapScale / zoomRatio);
-        }
     }
 
     //--------------------------------------------------------------------------
-
-    Button {
-        visible: buttons & buttonHome && map
-        width: internal._size
-        height: width
-        iconSource: "images/home.png"
-        tooltip: qsTr("Home")
+    // Zoom-Out Button
+    ZoomOutButton {
+        id: zoomOut
         style: buttonStyle
-
-        onClicked: {
-            fader.start();
-
-            if (homeExtent) {
-                map.extent = homeExtent;
-            } else {
-                map.extent = map.fullExtent;
-            }
-
-            map.positionDisplay.mode = 0;
-        }
     }
 
     //--------------------------------------------------------------------------
-
-    Button {
-        visible: buttons & buttonZoomOut && map
-        width: internal._size
-        height: width
-        text: "-"
-        tooltip: qsTr("Zoom out")
+    // Home Button
+    HomeButton {
+        id: home
         style: buttonStyle
-
-        onClicked: {
-            fader.start();
-
-            map.zoomToScale (map.mapScale * zoomRatio);
-        }
     }
 
     //--------------------------------------------------------------------------
-
-    Button {
-        id: positionButton
-
-        property bool isActive: map && map.positionDisplay.positionSource && map.positionDisplay.positionSource.active
-        property int maxModes: map.positionDisplay.isCompassAvailable ? 4 : 3;
-
-        visible: buttons & buttonPosition && map && map.positionDisplay.positionSource
-        width: internal._size
-        height: width
-        iconSource: isActive ? modeImage(map.positionDisplay.mode) : "images/position-off.png"
-        tooltip: qsTr("Location")
+    // MyCurrentLocationButton
+    MyCurrentLocationButton {
+        id: currentLocation
         style: buttonStyle
-
-        MouseArea {
-            anchors.fill: parent
-
-            onPressAndHold: {
-                fader.start();
-
-                if (map.positionDisplay.positionSource.active) {
-                    map.positionDisplay.positionSource.active = false;
-                }
-            }
-
-            onClicked: {
-                fader.start();
-
-                if (map.positionDisplay.positionSource.active) {
-                    map.positionDisplay.mode = (map.positionDisplay.mode + 1) % positionButton.maxModes;
-                } else {
-                    map.positionDisplay.positionSource.active = true;
-                    map.positionDisplay.mode = 1;
-                }
-            }
-        }
-
-        function modeImage(mode) {
-            switch (mode) {
-            case 0 :
-                return "images/position-on.png";
-
-            case 1 :
-                return "images/position-autopan.png";
-
-            case 2 :
-                return "images/position-navigation.png";
-
-            case 3 :
-                return "images/position-compass.png"
-            }
-        }
     }
 
     //--------------------------------------------------------------------------
-
+    // Button Style Component
     Component {
         id: buttonStyle
+
         ButtonStyle {
 
             label: Item {
