@@ -22,4 +22,4 @@ PortalItemsView 1.0 PortalItemsView.qml
 ImageButton 1.0 ImageButton.qml
 Fader 1.0 Fader.qml
 NavigationToolbar 1.0 NavigationToolbar.qml
-
+RotationToolbar 1.0 RotationToolbar.qml

@@ -25,10 +25,9 @@ Item {
     property alias image: image
     property Map map: null
     property real size: 40
-    property bool resetOnDoubleClick: true
+    property bool resetOnClick: true
 
     signal clicked()
-    signal doubleClicked()
 
     implicitWidth: 40
     implicitHeight: 40
@@ -62,15 +61,10 @@ Item {
         hoverEnabled: true
 
         onClicked: {
-            northArrow.clicked();
-        }
-
-        onDoubleClicked: {
-            if (map && resetOnDoubleClick) {
+            if (map && resetOnClick) {
                 map.mapRotation = 0;
             }
-
-            northArrow.doubleClicked();
+            northArrow.clicked();
         }
     }
 }
