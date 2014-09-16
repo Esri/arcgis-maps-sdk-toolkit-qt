@@ -41,12 +41,12 @@ GridLayout {
 
     property alias fader: fader
 
-    readonly property int buttonZoomIn: 0x01
     readonly property int buttonZoomOut: 0x02
-    readonly property int buttonHome: 0x04
     readonly property int buttonPosition: 0x08
-
+    readonly property int buttonZoomIn: 0x01
+    readonly property int buttonHome: 0x04
     property int buttons: buttonZoomIn + buttonZoomOut + buttonHome + buttonPosition
+
     columns: orientation === "portrait" ? 1 : 4
     rows: orientation === "portrait" ? 4 : 1
     rowSpacing: orientation === "landscape" ? 0 : 1
@@ -59,15 +59,6 @@ GridLayout {
             map = parent;
         }
     }
-
-    //--------------------------------------------------------------------------
-
-    QtObject {
-        id: internal
-        property real _size: size * System.displayScaleFactor
-    }
-
-    //--------------------------------------------------------------------------
 
     Fader {
         id: fader

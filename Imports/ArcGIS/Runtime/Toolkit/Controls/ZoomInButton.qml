@@ -22,6 +22,22 @@ import ArcGIS.Runtime.AppKit 1.0
 import ArcGIS.Runtime 10.3
 
 Button {
+    id: zoomInButton
+    property real size: 40
+    property color color: "#4C4C4C"
+    property color disabledColor: "#E5E6E7"
+    property color hoveredColor: "#E1F0FB"
+    property color pressedColor: "#90CDF2"
+    property color backgroundColor: "#F7F8F8"
+    property color focusBorderColor: "#AADBFA"
+    property color borderColor: "#CBCBCB"
+
+    readonly property int buttonZoomOut: 0x02
+    readonly property int buttonPosition: 0x08
+    readonly property int buttonZoomIn: 0x01
+    readonly property int buttonHome: 0x04
+    property int buttons: buttonZoomIn + buttonZoomOut + buttonHome + buttonPosition
+
     visible: buttons & buttonZoomIn && map
     width: internal._size
     height: width
@@ -32,6 +48,15 @@ Button {
     onClicked: {
         fader.start();
         map.zoomToScale (map.mapScale / zoomRatio);
+    }
+
+    Fader {
+        id: fader
+    }
+
+    QtObject {
+        id: internal
+        property real _size: size * System.displayScaleFactor
     }
 
     Component {
@@ -49,7 +74,7 @@ Button {
 
                 Text {
                     anchors.centerIn: parent
-                    color: control.enabled ? zoomButtons.color : disabledColor
+                    color: control.enabled ? zoomInButton.color : disabledColor
                     text: control.text
                     font {
                         pixelSize: internal._size * 0.75
