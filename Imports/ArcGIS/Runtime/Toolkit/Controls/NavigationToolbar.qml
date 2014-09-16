@@ -38,15 +38,13 @@ GridLayout {
     property string orientation: "portrait"
 
     property Envelope homeExtent
-
-    property alias fader: fader
-
-    readonly property int buttonZoomIn: 0x01
     readonly property int buttonZoomOut: 0x02
-    readonly property int buttonHome: 0x04
     readonly property int buttonPosition: 0x08
-
+    readonly property int buttonZoomIn: 0x01
+    readonly property int buttonHome: 0x04
     property int buttons: buttonZoomIn + buttonZoomOut + buttonHome + buttonPosition
+
+    visible: buttons & buttonZoomIn && map
     columns: orientation === "portrait" ? 1 : 4
     rows: orientation === "portrait" ? 4 : 1
     rowSpacing: orientation === "landscape" ? 0 : 1
@@ -61,182 +59,77 @@ GridLayout {
     }
 
     //--------------------------------------------------------------------------
-
-    QtObject {
-        id: internal
-
-        property real _size: size * System.displayScaleFactor
-    }
-
-    //--------------------------------------------------------------------------
-
-    Fader {
-        id: fader
-    }
-
-    //--------------------------------------------------------------------------
-
-    Button {
-        visible: buttons & buttonZoomIn && map
-        width: internal._size
-        height: width
-        text: "+"
-        tooltip: qsTr("Zoom in")
-        style: buttonStyle
-
-        onClicked: {
-            fader.start();
-            map.zoomToScale (map.mapScale / zoomRatio);
-        }
-    }
-
-    //--------------------------------------------------------------------------
-
-    Button {
-        visible: buttons & buttonHome && map
-        width: internal._size
-        height: width
-        iconSource: "images/home.png"
-        tooltip: qsTr("Home")
-        style: buttonStyle
-
-        onClicked: {
-            fader.start();
-
-            if (homeExtent) {
-                map.extent = homeExtent;
+    // Zoom-In Button
+    ZoomInButton {
+        id: zoomIn
+        onHoveredChanged:  {
+            if(zoomIn.hovered){
+                zoomIn.fader.stop();
+                home.fader.stop();
+                zoomOut.fader.stop();
+                currentLocation.fader.stop();
             } else {
-                map.extent = map.fullExtent;
-            }
-
-            map.positionDisplay.mode = 0;
-        }
-    }
-
-    //--------------------------------------------------------------------------
-
-    Button {
-        visible: buttons & buttonZoomOut && map
-        width: internal._size
-        height: width
-        text: "-"
-        tooltip: qsTr("Zoom out")
-        style: buttonStyle
-
-        onClicked: {
-            fader.start();
-
-            map.zoomToScale (map.mapScale * zoomRatio);
-        }
-    }
-
-    //--------------------------------------------------------------------------
-
-    Button {
-        id: positionButton
-
-        property bool isActive: map && map.positionDisplay.positionSource && map.positionDisplay.positionSource.active
-        property int maxModes: map.positionDisplay.isCompassAvailable ? 4 : 3;
-
-        visible: buttons & buttonPosition && map && map.positionDisplay.positionSource
-        width: internal._size
-        height: width
-        iconSource: isActive ? modeImage(map.positionDisplay.mode) : "images/position-off.png"
-        tooltip: qsTr("Location")
-        style: buttonStyle
-
-        MouseArea {
-            anchors.fill: parent
-
-            onPressAndHold: {
-                fader.start();
-
-                if (map.positionDisplay.positionSource.active) {
-                    map.positionDisplay.positionSource.active = false;
-                }
-            }
-
-            onClicked: {
-                fader.start();
-
-                if (map.positionDisplay.positionSource.active) {
-                    map.positionDisplay.mode = (map.positionDisplay.mode + 1) % positionButton.maxModes;
-                } else {
-                    map.positionDisplay.positionSource.active = true;
-                    map.positionDisplay.mode = 1;
-                }
-            }
-        }
-
-        function modeImage(mode) {
-            switch (mode) {
-            case 0 :
-                return "images/position-on.png";
-
-            case 1 :
-                return "images/position-autopan.png";
-
-            case 2 :
-                return "images/position-navigation.png";
-
-            case 3 :
-                return "images/position-compass.png"
+                zoomIn.fader.start();
+                home.fader.start();
+                zoomOut.fader.start();
+                currentLocation.fader.start();
             }
         }
     }
 
     //--------------------------------------------------------------------------
-
-    Component {
-        id: buttonStyle
-        ButtonStyle {
-
-            label: Item {
-                Image {
-                    width: internal._size * 0.8
-                    height: width
-                    source: control.iconSource
-                    fillMode: Image.PreserveAspectFit
-                }
-
-                Text {
-                    anchors.centerIn: parent
-                    color: control.enabled ? zoomButtons.color : disabledColor
-                    text: control.text
-                    font {
-                        pixelSize: internal._size * 0.75
-                        bold: true
-                    }
-                }
+    // Zoom-Out Button
+    ZoomOutButton {
+        id: zoomOut
+        onHoveredChanged:  {
+            if(zoomOut.hovered){
+                zoomIn.fader.stop();
+                home.fader.stop();
+                zoomOut.fader.stop();
+                currentLocation.fader.stop();
+            } else {
+                zoomIn.fader.start();
+                home.fader.start();
+                zoomOut.fader.start();
+                currentLocation.fader.start();
             }
+        }
+    }
 
-            background: Rectangle {
-                color: control.hovered ?  hoveredColor : (control.pressed ? pressedColor : backgroundColor)
-                border {
-                    color: control.activeFocus ? focusBorderColor : borderColor
-                    width: control.activeFocus ? 2 : 1
-                }
-                radius: 4
-                implicitWidth: 40
-                implicitHeight: 40
+    //--------------------------------------------------------------------------
+    // Home Button
+    HomeButton {
+        id: home
+        onHoveredChanged:  {
+            if(home.hovered){
+                zoomIn.fader.stop();
+                home.fader.stop();
+                zoomOut.fader.stop();
+                currentLocation.fader.stop();
+            } else {
+                zoomIn.fader.start();
+                home.fader.start();
+                zoomOut.fader.start();
+                currentLocation.fader.start();
             }
+        }
+    }
 
-            Connections {
-                target: control
-
-                onPressedChanged: {
-                    if (control.pressed) {
-                        fader.start();
-                    }
-                }
-
-                onHoveredChanged: {
-                    if (control.hovered) {
-                        fader.stop();
-                    } else {
-                        fader.start();
-                    }
-                }
+    //--------------------------------------------------------------------------
+    // PositionButton
+    PositionButton {
+        id: currentLocation
+        onHoveredChanged:  {
+            if(currentLocation.hovered){
+                zoomIn.fader.stop();
+                home.fader.stop();
+                zoomOut.fader.stop();
+                currentLocation.fader.stop();
+            } else {
+                zoomIn.fader.start();
+                home.fader.start();
+                zoomOut.fader.start();
+                currentLocation.fader.start();
             }
         }
     }
