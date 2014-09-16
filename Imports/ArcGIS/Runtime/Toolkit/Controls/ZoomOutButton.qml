@@ -27,7 +27,6 @@ Button {
     height: width
     text: "-"
     tooltip: qsTr("Zoom out")
-    style: buttonStyle
 
     onClicked: {
         fader.start();

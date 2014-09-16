@@ -27,7 +27,6 @@ Button {
     height: width
     text: "+"
     tooltip: qsTr("Zoom in")
-    style: buttonStyle
 
     onClicked: {
         fader.start();

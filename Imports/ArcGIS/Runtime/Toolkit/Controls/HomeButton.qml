@@ -27,7 +27,6 @@ Button {
     height: width
     iconSource: "images/home.png"
     tooltip: qsTr("Home")
-    style: buttonStyle
 
     onClicked: {
         fader.start();

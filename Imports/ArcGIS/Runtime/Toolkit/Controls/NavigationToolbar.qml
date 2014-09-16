@@ -64,7 +64,6 @@ GridLayout {
 
     QtObject {
         id: internal
-
         property real _size: size * System.displayScaleFactor
     }
 

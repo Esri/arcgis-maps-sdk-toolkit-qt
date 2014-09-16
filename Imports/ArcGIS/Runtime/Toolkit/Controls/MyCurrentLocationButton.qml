@@ -32,7 +32,6 @@ Button {
     height: width
     iconSource: isActive ? modeImage(map.positionDisplay.mode) : "images/position-off.png"
     tooltip: qsTr("Location")
-    style: buttonStyle
 
     MouseArea {
         anchors.fill: parent
