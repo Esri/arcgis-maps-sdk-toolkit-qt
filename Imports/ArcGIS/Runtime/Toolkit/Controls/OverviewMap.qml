@@ -68,9 +68,7 @@ Item {
         }
 
         aoiLayer.removeAllGraphics();
-        //        var e = overviewMap.extent;
-        var e = overviewBasemap.extent;
-
+        var e = map.fullExtent;
         var v = map.visibleExtent;
         v.reverseAllPaths();
 
@@ -95,8 +93,9 @@ Item {
             }
         };
 
+        overviewMap.zoomToScale(map.mapScale * 15);
+        overviewMap.panTo(map.extent.center);
         aoiLayer.addGraphic(graphic);
-        //        overviewMap.extent = overviewBasemap.fullExtent;
     }
 
     Connections {
@@ -120,7 +119,6 @@ Item {
         id: overviewMap
 
         anchors.fill: parent
-
         wrapAroundEnabled: true
         esriLogoVisible: false
 
