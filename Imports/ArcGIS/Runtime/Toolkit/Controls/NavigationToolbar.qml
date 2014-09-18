@@ -46,8 +46,8 @@ GridLayout {
 
     columns: orientation === "portrait" ? 1 : 4
     rows: orientation === "portrait" ? 4 : 1
-    rowSpacing: orientation === "landscape" ? 0 : 1
-    columnSpacing: orientation === "portrait" ? 0 : 1
+    rowSpacing: orientation === "landscape" ? 0 : 1 * System.displayScaleFactor
+    columnSpacing: orientation === "portrait" ? 0 : 1 * System.displayScaleFactor
 
     //--------------------------------------------------------------------------
 
