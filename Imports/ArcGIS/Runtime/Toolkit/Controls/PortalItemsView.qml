@@ -19,9 +19,10 @@ import QtQuick.Controls 1.1
 import QtQuick.Layouts 1.1
 import QtQuick.Dialogs 1.1
 import QtGraphicalEffects 1.0
+import QtQuick.Window 2.2
 
 import ArcGIS.Runtime 10.3
-import ArcGIS.Runtime.AppKit 1.0
+
 
 Item {
     id: portalItemsView
@@ -37,15 +38,16 @@ Item {
     property Portal portal
     property bool infoButtonVisible: true
     property int infoButtonSize: 25
-    property int referenceWidth: 200 * System.displayScaleFactor
+    property int referenceWidth: 200 * displayScaleFactor
     property int cellMargin: 10
     property int cells: calcCells(width)
     property int cellWidth: width / cells
-    property int titleMargin: 45 * System.displayScaleFactor
+    property int titleMargin: 45 * displayScaleFactor
     property int cellHeight: cellWidth
     property real titlePointSize: 12
     property alias currentIndex: itemsGridView.currentIndex
     property PortalItemInfo currentItem: itemsGridView.currentIndex >= 0 ? itemsGridView.model[itemsGridView.currentIndex] : null
+    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
 
     signal clicked(PortalItemInfo itemInfo)
     signal doubleClicked(PortalItemInfo itemInfo)
@@ -61,7 +63,7 @@ Item {
     }
 
     function calcCells(w) {
-        var rw =  (referenceWidth + cellMargin) * System.displayScaleFactor;
+        var rw =  (referenceWidth + cellMargin) * displayScaleFactor;
         var c = Math.max(1, Math.round(w / referenceWidth));
 
         var cw = w / c;
@@ -200,8 +202,7 @@ Item {
                         id: titleText
                         text: title;
                         font {
-                            pointSize: titlePointSize
-                            //bold: true
+                            pointSize: titlePointSize                            
                         }
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                         horizontalAlignment: Text.AlignLeft
@@ -244,7 +245,7 @@ Item {
                             id: infoButton
                             visible: portalItemsView.infoButtonVisible
                             source: "images/info.png"
-                            height: portalItemsView.infoButtonSize * System.displayScaleFactor
+                            height: portalItemsView.infoButtonSize * displayScaleFactor
                             width: height
                             anchors {
                                 right: parent.right

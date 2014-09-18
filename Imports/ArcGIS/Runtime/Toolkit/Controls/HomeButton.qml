@@ -18,7 +18,8 @@ import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
 import QtQuick.Layouts 1.1
-import ArcGIS.Runtime.AppKit 1.0
+import QtQuick.Window 2.2
+
 import ArcGIS.Runtime 10.3
 
 Button {
@@ -33,6 +34,7 @@ Button {
     property color borderColor: "#CBCBCB"
 
     readonly property int buttonHome: 0x04
+    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
 
     property Envelope homeExtent
     property alias fader: fader
@@ -62,7 +64,7 @@ Button {
 
     QtObject {
         id: internal
-        property real _size: size * System.displayScaleFactor
+        property real _size: size * displayScaleFactor
     }
 
     Component {
@@ -97,8 +99,8 @@ Button {
                     width: control.activeFocus ? 2 : 1
                 }
                 radius: 4
-                implicitWidth: 40 * System.displayScaleFactor
-                implicitHeight: 40 * System.displayScaleFactor
+                implicitWidth: 40 * displayScaleFactor
+                implicitHeight: 40 * displayScaleFactor
             }
 
             Connections {
