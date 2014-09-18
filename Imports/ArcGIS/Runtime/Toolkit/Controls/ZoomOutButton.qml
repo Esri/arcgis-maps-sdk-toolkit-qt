@@ -66,6 +66,7 @@ Button {
 
             label: Item {
                 Image {
+                    anchors.centerIn: parent
                     width: internal._size * 0.8
                     height: width
                     source: control.iconSource
@@ -90,8 +91,8 @@ Button {
                     width: control.activeFocus ? 2 : 1
                 }
                 radius: 4
-                implicitWidth: 40
-                implicitHeight: 40
+                implicitWidth: 40 * System.displayScaleFactor
+                implicitHeight: 40 * System.displayScaleFactor
             }
 
             Connections {

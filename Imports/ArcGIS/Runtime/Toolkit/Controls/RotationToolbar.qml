@@ -41,8 +41,8 @@ GridLayout {
 
     columns: orientation === "portrait" ? 1 : 2
     rows: orientation === "portrait" ? 2 : 1
-    rowSpacing: orientation === "landscape" ? 0 : 1
-    columnSpacing: orientation === "portrait" ? 0 : 1
+    rowSpacing: orientation === "landscape" ? 0 : 1 * System.displayScaleFactor
+    columnSpacing: orientation === "portrait" ? 0 : 1 * System.displayScaleFactor
 
     //--------------------------------------------------------------------------
 
@@ -102,6 +102,7 @@ GridLayout {
 
             label: Item {
                 Image {
+                    anchors.centerIn: parent
                     width: internal._size * 0.8
                     height: width
                     source: control.iconSource
@@ -126,8 +127,8 @@ GridLayout {
                     width: control.activeFocus ? 2 : 1
                 }
                 radius: 4
-                implicitWidth: 40
-                implicitHeight: 40
+                implicitWidth: 40 * System.displayScaleFactor
+                implicitHeight: 40 * System.displayScaleFactor
             }
 
             Connections {
