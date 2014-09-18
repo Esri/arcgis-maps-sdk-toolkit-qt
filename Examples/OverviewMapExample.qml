@@ -41,9 +41,17 @@ Rectangle {
         }
 
         ArcGISTiledMapServiceLayer {
-            url: "http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer"
+            url: "http://services.arcgisonline.com/arcgis/rest/services/NatGeo_World_Map/MapServer"
         }
 
+
+        Envelope {
+            id: initialExtent
+            xMin: -401141.52444049926
+            yMin: 5025857.891979294
+            xMax: 4295149.493399481
+            yMax: 7518316.510301659
+        }
 
         OverviewMap {
             anchors {
@@ -53,7 +61,7 @@ Rectangle {
             }
 
             baseLayer: ArcGISTiledMapServiceLayer {
-                url: "http://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer"
+                url: "http://services.arcgisonline.com/arcgis/rest/services/NatGeo_World_Map/MapServer"
             }
 
             northArrow {

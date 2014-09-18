@@ -18,7 +18,8 @@ import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
 import QtQuick.Layouts 1.1
-import ArcGIS.Runtime.AppKit 1.0
+import QtQuick.Window 2.2
+
 import ArcGIS.Runtime 10.3
 
 GridLayout {
@@ -43,11 +44,12 @@ GridLayout {
     readonly property int buttonZoomIn: 0x01
     readonly property int buttonHome: 0x04
     property int buttons: buttonZoomIn + buttonZoomOut + buttonHome + buttonPosition
+    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
 
     columns: orientation === "portrait" ? 1 : 4
     rows: orientation === "portrait" ? 4 : 1
-    rowSpacing: orientation === "landscape" ? 0 : 1 * System.displayScaleFactor
-    columnSpacing: orientation === "portrait" ? 0 : 1 * System.displayScaleFactor
+    rowSpacing: orientation === "landscape" ? 0 : 1 * displayScaleFactor
+    columnSpacing: orientation === "portrait" ? 0 : 1 * displayScaleFactor
 
     //--------------------------------------------------------------------------
 

@@ -18,7 +18,8 @@ import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
 import QtQuick.Layouts 1.1
-import ArcGIS.Runtime.AppKit 1.0
+import QtQuick.Window 2.2
+
 import ArcGIS.Runtime 10.3
 
 GridLayout {
@@ -27,6 +28,7 @@ GridLayout {
     property Map map: null
     property real size: 40
     property real zoomRatio: 2
+    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
 
     property color color: "#4C4C4C"
     property color disabledColor: "#E5E6E7"
@@ -41,8 +43,8 @@ GridLayout {
 
     columns: orientation === "portrait" ? 1 : 2
     rows: orientation === "portrait" ? 2 : 1
-    rowSpacing: orientation === "landscape" ? 0 : 1 * System.displayScaleFactor
-    columnSpacing: orientation === "portrait" ? 0 : 1 * System.displayScaleFactor
+    rowSpacing: orientation === "landscape" ? 0 : 1 * displayScaleFactor
+    columnSpacing: orientation === "portrait" ? 0 : 1 * displayScaleFactor
 
     //--------------------------------------------------------------------------
 
@@ -57,7 +59,7 @@ GridLayout {
     QtObject {
         id: internal
 
-        property real _size: size * System.displayScaleFactor
+        property real _size: size * displayScaleFactor
     }
 
     //--------------------------------------------------------------------------
@@ -127,8 +129,8 @@ GridLayout {
                     width: control.activeFocus ? 2 : 1
                 }
                 radius: 4
-                implicitWidth: 40 * System.displayScaleFactor
-                implicitHeight: 40 * System.displayScaleFactor
+                implicitWidth: 40 * displayScaleFactor
+                implicitHeight: 40 * displayScaleFactor
             }
 
             Connections {

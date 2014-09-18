@@ -17,7 +17,7 @@
 import QtQuick 2.2
 
 import ArcGIS.Runtime 10.3
-import ArcGIS.Runtime.AppKit 1.0
+import QtQuick.Window 2.2
 
 Item {
     id: northArrow
@@ -26,6 +26,7 @@ Item {
     property Map map: null
     property real size: 40
     property bool resetOnClick: true
+    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
 
     signal clicked()
 
@@ -44,7 +45,7 @@ Item {
     QtObject {
         id: internal
 
-        property real _size: size * System.displayScaleFactor
+        property real _size: size * displayScaleFactor
     }
 
     Image {
