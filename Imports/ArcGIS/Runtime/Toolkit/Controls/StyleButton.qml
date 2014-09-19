@@ -71,7 +71,7 @@ Button {
 
                 Text {
                     anchors.centerIn: parent
-                    color: control.enabled ? zoomInButton.color : disabledColor
+                    color: control.enabled ? styleButton.color : disabledColor
                     text: control.text
                     font {
                         pixelSize: internal._size * 0.75
