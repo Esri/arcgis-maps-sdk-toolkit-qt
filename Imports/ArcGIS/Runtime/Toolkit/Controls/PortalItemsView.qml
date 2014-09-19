@@ -65,7 +65,6 @@ Item {
     function calcCells(w) {
         var rw =  (referenceWidth + cellMargin) * displayScaleFactor;
         var c = Math.max(1, Math.round(w / referenceWidth));
-
         var cw = w / c;
 
         if (cw > rw) {
@@ -107,7 +106,6 @@ Item {
 
     Component {
         id: defaultHighlight
-
 
         Item {
             width: itemsGridView.cellWidth
@@ -194,7 +192,6 @@ Item {
                             right: parent.right
                             bottom: thumbnailImage.bottom
                         }
-
                         color:"#60FFFFFF"
                     }
 
@@ -202,7 +199,7 @@ Item {
                         id: titleText
                         text: title;
                         font {
-                            pointSize: titlePointSize                            
+                            pointSize: titlePointSize
                         }
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                         horizontalAlignment: Text.AlignLeft
@@ -255,7 +252,6 @@ Item {
 
                             onClicked: {
                                 var itemInfo = itemsGridView.model[index];
-
                                 infoDialog.title = itemInfo.title;
                                 infoDialog.text = itemInfo.title;
                                 infoDialog.informativeText = itemInfo.description;

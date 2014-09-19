@@ -51,6 +51,11 @@ Rectangle {
             description: "PortalItemsDialog  Example"
             source: "PortalItemsDialogExample.qml"
         }
+
+        ListElement {
+            description: "StyleTemplate Example"
+            source: "StyleTemplateExample.qml"
+        }
     }
 
 

@@ -83,13 +83,7 @@ Rectangle {
 
         Map {
             id: map
-
             wrapAroundEnabled: true
-
-//            ArcGISLocalTiledLayer {
-//                path: "~/ArcGIS/data/tpks/Topographic.tpk"
-//            }
-
 
             NorthArrow {
                 anchors {

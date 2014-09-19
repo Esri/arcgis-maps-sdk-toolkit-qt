@@ -30,7 +30,6 @@ StyleButton {
 
     onClicked: {
         fader.start();
-
         if (homeExtent) {
             map.extent = homeExtent;
         } else {

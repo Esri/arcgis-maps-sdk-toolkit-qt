@@ -32,7 +32,6 @@ Button {
     property color backgroundColor: "#F7F8F8"
     property color focusBorderColor: "#AADBFA"
     property color borderColor: "#CBCBCB"
-
     property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
     property alias fader: fader
 
@@ -93,7 +92,6 @@ Button {
 
             Connections {
                 target: control
-
                 onPressedChanged: {
                     if (control.pressed) {
                         fader.start();

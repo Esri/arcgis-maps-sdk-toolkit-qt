@@ -27,7 +27,6 @@ StyleButton {
     property bool isActive: map && map.positionDisplay.positionSource && map.positionDisplay.positionSource.active
     property int maxModes: map.positionDisplay.isCompassAvailable ? 4 : 3;
     property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
-
     iconSource: isActive ? modeImage(map.positionDisplay.mode) : "images/position-off.png"
     tooltip: qsTr("Location")
 

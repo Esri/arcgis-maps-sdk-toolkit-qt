@@ -21,6 +21,8 @@ OverviewMap 1.0 OverviewMap.qml
 PortalItemsView 1.0 PortalItemsView.qml
 ImageButton 1.0 ImageButton.qml
 Fader 1.0 Fader.qml
+StyleButton 1.0 StyleButton.qml
+StyleToolbar 1.0 StyleToolbar.qml
 NavigationToolbar 1.0 NavigationToolbar.qml
 RotationToolbar 1.0 RotationToolbar.qml
 HomeButton 1.0 HomeButton.qml

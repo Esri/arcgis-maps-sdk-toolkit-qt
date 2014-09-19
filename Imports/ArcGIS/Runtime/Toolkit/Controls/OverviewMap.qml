@@ -17,6 +17,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.0
 import QtGraphicalEffects 1.0
+
 import ArcGIS.Runtime 10.3
 
 Item {
@@ -29,7 +30,6 @@ Item {
     property bool initialized : false
     property var baseLayer
     property alias northArrow : northArrow
-
     width: 200
     height: width * 0.665
 
@@ -117,7 +117,6 @@ Item {
 
     Map {
         id: overviewMap
-
         anchors.fill: parent
         wrapAroundEnabled: true
         esriLogoVisible: false

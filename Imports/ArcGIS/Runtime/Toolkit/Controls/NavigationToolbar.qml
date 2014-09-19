@@ -22,36 +22,15 @@ import QtQuick.Window 2.2
 
 import ArcGIS.Runtime 10.3
 
-GridLayout {
-    id: zoomButtons
-
-    property Map map: null
-    property real size: 40
+StyleToolbar {
+    id: navigationToolbar
     property real zoomRatio: 2
-
-    property color color: "#4C4C4C"
-    property color disabledColor: "#E5E6E7"
-    property color hoveredColor: "#E1F0FB"
-    property color pressedColor: "#90CDF2"
-    property color backgroundColor: "#F7F8F8"
-    property color focusBorderColor: "#AADBFA"
-    property color borderColor: "#CBCBCB"
-    property string orientation: "portrait"
-
     property Envelope homeExtent
     readonly property int buttonZoomOut: 0x02
     readonly property int buttonPosition: 0x08
     readonly property int buttonZoomIn: 0x01
     readonly property int buttonHome: 0x04
     property int buttons: buttonZoomIn + buttonZoomOut + buttonHome + buttonPosition
-    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
-
-    columns: orientation === "portrait" ? 1 : 4
-    rows: orientation === "portrait" ? 4 : 1
-    rowSpacing: orientation === "landscape" ? 0 : 1 * displayScaleFactor
-    columnSpacing: orientation === "portrait" ? 0 : 1 * displayScaleFactor
-
-    //--------------------------------------------------------------------------
 
     Component.onCompleted: {
         if (!map && parent && parent.objectType && parent.objectType === "Map") {
@@ -127,3 +106,4 @@ GridLayout {
         }
     }
 }
+
