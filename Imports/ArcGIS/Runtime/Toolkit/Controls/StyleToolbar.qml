@@ -37,6 +37,8 @@ GridLayout {
     property string orientation: "portrait"
     property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
 
+    // Default orientation Properties which can be overwritten at
+    // the time of defining the StyleToolbar in your qml file.
     columns: orientation === "portrait" ? 1 : 4
     rows: orientation === "portrait" ? 4 : 1
     rowSpacing: orientation === "landscape" ? 0 : 1 * displayScaleFactor

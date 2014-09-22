@@ -19,12 +19,20 @@ import QtQuick.Controls 1.1
 import QtPositioning 5.2
 
 import ArcGIS.Runtime 10.3
+import QtQuick.Window 2.2
 import ArcGIS.Runtime.Toolkit.Controls 1.0
 
 Rectangle {
     width: 500
     height: 400
+    property real size: 40
     property int panDistance : 1000000
+    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
+
+    QtObject {
+        id: internal
+        property real _size: size * displayScaleFactor
+    }
 
     Map {
         id: map
@@ -51,10 +59,57 @@ Rectangle {
                 rightMargin: 10
             }
 
+            orientation: "landscape"
+            columns: orientation === "portrait" ? 1 : 5
+            rows: orientation === "portrait" ? 5 : 1
+            rowSpacing: orientation === "landscape" ? 0 : 1 * displayScaleFactor
+
             //--------------------------------------------------------------------------
             // Rotate Counter Clockwise Button
             StyleButton {
                 id: buttonRotateCounterClockwise
+                text: "A"
+                width: internal._size
+                height: width
+
+                onClicked: {
+                    fader.start();
+                    map.mapRotation -= 22.5;
+                }
+            }
+
+            //--------------------------------------------------------------------------
+            // Rotate Counter Clockwise Button
+            StyleButton {
+                id: buttonRotateCounterClockwise2
+                text: "A"
+                width: internal._size
+                height: width
+
+                onClicked: {
+                    fader.start();
+                    map.mapRotation -= 22.5;
+                }
+            }
+
+            //--------------------------------------------------------------------------
+            // Rotate Counter Clockwise Button
+            StyleButton {
+                id: buttonRotateCounterClockwise3
+                text: "A"
+                width: internal._size
+                height: width
+
+                onClicked: {
+                    fader.start();
+                    map.mapRotation -= 22.5;
+                }
+            }
+
+            //--------------------------------------------------------------------------
+            // Rotate Counter Clockwise Button
+            StyleButton {
+                id: buttonRotateCounterClockwise4
                 text: "A"
                 width: internal._size
                 height: width
@@ -93,11 +148,10 @@ Rectangle {
             }
 
             onHoveredChanged: {
-                if (moveNorth.hovered) {
+                if (moveNorth.hovered)
                     moveNorth.fader.stop();
-                } else {
+                else
                     moveNorth.fader.start();
-                }
             }
 
             onClicked: {
@@ -117,15 +171,13 @@ Rectangle {
                 left: parent.left
                 topMargin: 10
                 leftMargin: 15
-
             }
 
             onHoveredChanged: {
-                if (moveSouth.hovered) {
+                if (moveSouth.hovered)
                     moveSouth.fader.stop();
-                } else {
+                else
                     moveSouth.fader.start();
-                }
             }
 
             onClicked: {
@@ -149,11 +201,10 @@ Rectangle {
             }
 
             onHoveredChanged: {
-                if (moveWest.hovered) {
+                if (moveWest.hovered)
                     moveWest.fader.stop();
-                } else {
+                else
                     moveWest.fader.start();
-                }
             }
 
             onClicked: {
@@ -177,11 +228,10 @@ Rectangle {
             }
 
             onHoveredChanged: {
-                if (moveEast.hovered) {
+                if (moveEast.hovered)
                     moveEast.fader.stop();
-                } else {
+                else
                     moveEast.fader.start();
-                }
             }
 
             onClicked: {

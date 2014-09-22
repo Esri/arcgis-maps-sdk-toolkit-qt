@@ -93,17 +93,17 @@ Button {
             Connections {
                 target: control
                 onPressedChanged: {
-                    if (control.pressed) {
+                    if (control.pressed)
                         fader.start();
-                    }
+
                 }
 
                 onHoveredChanged: {
-                    if (control.hovered) {
+                    if (control.hovered)
                         fader.stop();
-                    } else {
+                    else
                         fader.start();
-                    }
+
                 }
             }
         }
