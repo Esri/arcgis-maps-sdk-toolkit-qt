@@ -28,7 +28,6 @@ Rectangle {
 
     Portal {
         id: portal
-
         url: "http://arcgis.com"
     }
 

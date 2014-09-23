@@ -22,31 +22,8 @@ import QtQuick.Window 2.2
 
 import ArcGIS.Runtime 10.3
 
-GridLayout {
+StyleToolbar {
     id: rotationToolbar
-
-    property Map map: null
-    property real size: 40
-    property real zoomRatio: 2
-    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
-
-    property color color: "#4C4C4C"
-    property color disabledColor: "#E5E6E7"
-    property color hoveredColor: "#E1F0FB"
-    property color pressedColor: "#90CDF2"
-    property color backgroundColor: "#F7F8F8"
-    property color focusBorderColor: "#AADBFA"
-    property color borderColor: "#CBCBCB"
-    property string orientation: "portrait"
-
-    property alias fader: fader
-
-    columns: orientation === "portrait" ? 1 : 2
-    rows: orientation === "portrait" ? 2 : 1
-    rowSpacing: orientation === "landscape" ? 0 : 1 * displayScaleFactor
-    columnSpacing: orientation === "portrait" ? 0 : 1 * displayScaleFactor
-
-    //--------------------------------------------------------------------------
 
     Component.onCompleted: {
         if (!map && parent && parent.objectType && parent.objectType === "Map") {
@@ -54,28 +31,23 @@ GridLayout {
         }
     }
 
-    //--------------------------------------------------------------------------
-
     QtObject {
         id: internal
-
         property real _size: size * displayScaleFactor
     }
-
-    //--------------------------------------------------------------------------
 
     Fader {
         id: fader
     }
 
     //--------------------------------------------------------------------------
-
-    Button {
+    // Rotate Counter Clockwise Button
+    StyleButton {
         id: buttonRotateCounterClockwise
         iconSource: "images/rotate_clockwise.png"
         width: internal._size
         height: width
-        style: buttonStyle
+
         onClicked: {
             fader.start();
             map.mapRotation -= 22.5;
@@ -83,73 +55,16 @@ GridLayout {
     }
 
     //--------------------------------------------------------------------------
-
-    Button {
+    // Rotate Clockwise Button
+    StyleButton {
         id: buttonRotateClockwise
         iconSource: "images/rotate_counter_clockwise.png"
         width: internal._size
         height: width
-        style: buttonStyle
+
         onClicked: {
             fader.start();
             map.mapRotation += 22.5;
-        }
-    }
-
-    //--------------------------------------------------------------------------
-
-    Component {
-        id: buttonStyle
-        ButtonStyle {
-
-            label: Item {
-                Image {
-                    anchors.centerIn: parent
-                    width: internal._size * 0.8
-                    height: width
-                    source: control.iconSource
-                    fillMode: Image.PreserveAspectFit
-                }
-
-                Text {
-                    anchors.centerIn: parent
-                    color: control.enabled ? rotationToolbar.color : disabledColor
-                    text: control.text
-                    font {
-                        pixelSize: internal._size * 0.75
-                        bold: true
-                    }
-                }
-            }
-
-            background: Rectangle {
-                color: control.hovered ?  hoveredColor : (control.pressed ? pressedColor : backgroundColor)
-                border {
-                    color: control.activeFocus ? focusBorderColor : borderColor
-                    width: control.activeFocus ? 2 : 1
-                }
-                radius: 4
-                implicitWidth: 40 * displayScaleFactor
-                implicitHeight: 40 * displayScaleFactor
-            }
-
-            Connections {
-                target: control
-
-                onPressedChanged: {
-                    if (control.pressed) {
-                        fader.start();
-                    }
-                }
-
-                onHoveredChanged: {
-                    if (control.hovered) {
-                        fader.stop();
-                    } else {
-                        fader.start();
-                    }
-                }
-            }
         }
     }
 }

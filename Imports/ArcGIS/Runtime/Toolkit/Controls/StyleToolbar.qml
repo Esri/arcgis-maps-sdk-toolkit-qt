@@ -15,56 +15,33 @@
  ******************************************************************************/
 
 import QtQuick 2.2
-
-import ArcGIS.Runtime 10.3
+import QtQuick.Controls 1.1
+import QtQuick.Controls.Styles 1.1
+import QtQuick.Layouts 1.1
 import QtQuick.Window 2.2
 
-Item {
-    id: northArrow
+import ArcGIS.Runtime 10.3
 
-    property alias image: image
+GridLayout {
+    id: templateToolbar
+
     property Map map: null
     property real size: 40
-    property bool resetOnClick: true
+    property color color: "#4C4C4C"
+    property color disabledColor: "#E5E6E7"
+    property color hoveredColor: "#E1F0FB"
+    property color pressedColor: "#90CDF2"
+    property color backgroundColor: "#F7F8F8"
+    property color focusBorderColor: "#AADBFA"
+    property color borderColor: "#CBCBCB"
+    property string orientation: "portrait"
     property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
 
-    signal clicked()
+    // Default orientation Properties which can be overwritten at
+    // the time of defining the StyleToolbar in your qml file.
+    columns: orientation === "portrait" ? 1 : 4
+    rows: orientation === "portrait" ? 4 : 1
+    rowSpacing: orientation === "landscape" ? 0 : 1 * displayScaleFactor
+    columnSpacing: orientation === "portrait" ? 0 : 1 * displayScaleFactor
 
-    implicitWidth: 40
-    implicitHeight: 40
-    width: internal._size
-    height: width
-
-    Component.onCompleted: {
-        if (!map && parent && parent.objectType && parent.objectType === "Map") {
-            map = parent;
-        }
-    }
-
-    QtObject {
-        id: internal
-
-        property real _size: size * displayScaleFactor
-    }
-
-    Image {
-        id: image
-        anchors.fill: parent
-        source: "images/NorthArrow.png"
-        rotation: map != null ? -map.mapRotation : 0
-        fillMode: Image.PreserveAspectFit
-    }
-
-    MouseArea {
-        anchors.fill: parent
-
-        hoverEnabled: true
-
-        onClicked: {
-            if (map && resetOnClick) {
-                map.mapRotation = 0;
-            }
-            northArrow.clicked();
-        }
-    }
 }

@@ -29,11 +29,10 @@ Rectangle {
 
     signal clicked
 
-    color: "transparent"
-
     id: button
     width: 32
     height: 32
+    color: "transparent"
 
     Glow {
         id: buttonGlow

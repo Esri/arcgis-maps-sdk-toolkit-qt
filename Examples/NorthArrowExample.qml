@@ -27,9 +27,7 @@ Rectangle {
 
     Map {
         id: map
-
         anchors.fill: parent
-
         wrapAroundEnabled: true
         mapPanningByMagnifierEnabled: true
         magnifierOnPressAndHoldEnabled: true
