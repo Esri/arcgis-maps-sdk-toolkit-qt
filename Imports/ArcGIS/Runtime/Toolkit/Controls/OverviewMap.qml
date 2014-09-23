@@ -17,6 +17,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.0
 import QtGraphicalEffects 1.0
+import QtQuick.Window 2.2
 
 import ArcGIS.Runtime 10.3
 
@@ -30,7 +31,9 @@ Item {
     property bool initialized : false
     property var baseLayer
     property alias northArrow : northArrow
-    width: 200
+    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
+
+    width: 200 * displayScaleFactor
     height: width * 0.665
 
     Timer {
