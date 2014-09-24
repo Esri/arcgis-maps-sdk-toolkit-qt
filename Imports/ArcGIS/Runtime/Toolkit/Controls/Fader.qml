@@ -31,16 +31,13 @@ Item {
     property real maximumOpacity: 1
     
     Component.onCompleted: {
-        if (enabled) {
+        if (enabled)
             start();
-        }
     }
     
     function start() {
-        if (!enabled) {
+        if (!enabled)
             return;
-        }
-
         fadeTimer.stop();
         fadeAnimation.stop();
         target.opacity = maximumOpacity;
@@ -54,11 +51,10 @@ Item {
     }
     
     onEnabledChanged: {
-        if (enabled) {
+        if (enabled)
             start();
-        } else {
+        else
             stop();
-        }
     }
     
     PropertyAnimation {
