@@ -17,4 +17,5 @@
 module ArcGIS.Runtime.Toolkit.Dialogs
 
 PortalItemsDialog 1.0 PortalItemsDialog.qml
+SimpleDialog 1.0 SimpleDialog.qml
 
