@@ -17,7 +17,6 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtPositioning 5.2
-
 import ArcGIS.Runtime 10.3
 import QtQuick.Window 2.2
 import ArcGIS.Runtime.Toolkit.Controls 1.0
@@ -52,13 +51,11 @@ Rectangle {
         }
 
         StyleToolbar {
-
             anchors {
                 top: navi.bottom
                 right: parent.right
                 rightMargin: 10
             }
-
             orientation: "landscape"
             columns: orientation === "portrait" ? 1 : 5
             rows: orientation === "portrait" ? 5 : 1

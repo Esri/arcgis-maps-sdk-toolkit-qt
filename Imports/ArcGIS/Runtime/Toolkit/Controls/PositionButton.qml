@@ -19,7 +19,6 @@ import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.2
-
 import ArcGIS.Runtime 10.3
 
 StyleButton {
@@ -35,10 +34,8 @@ StyleButton {
 
         onPressAndHold: {
             fader.start();
-
-            if (map.positionDisplay.positionSource.active) {
+            if (map.positionDisplay.positionSource.active)
                 map.positionDisplay.positionSource.active = false;
-            }
         }
 
         onClicked: {
@@ -57,13 +54,10 @@ StyleButton {
         switch (mode) {
         case 0 :
             return "images/position-on.png";
-
         case 1 :
             return "images/position-autopan.png";
-
         case 2 :
             return "images/position-navigation.png";
-
         case 3 :
             return "images/position-compass.png"
         }

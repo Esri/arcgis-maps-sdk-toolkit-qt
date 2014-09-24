@@ -19,7 +19,6 @@ import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.2
-
 import ArcGIS.Runtime 10.3
 
 Button {
@@ -80,7 +79,12 @@ Button {
             }
 
             background: Rectangle {
-                color: control.hovered ?  hoveredColor : (control.pressed ? pressedColor : backgroundColor)
+                color: {
+                    if ( Qt.platform.os == "android" || Qt.platform.os == "ios" )
+                        color: backgroundColor
+                    else
+                        color: control.hovered ?  hoveredColor : (control.pressed ? pressedColor : backgroundColor)
+                }
                 border {
                     color: control.activeFocus ? focusBorderColor : borderColor
                     width: control.activeFocus ? 2 : 1
@@ -95,7 +99,6 @@ Button {
                 onPressedChanged: {
                     if (control.pressed)
                         fader.start();
-
                 }
 
                 onHoveredChanged: {
@@ -103,7 +106,6 @@ Button {
                         fader.stop();
                     else
                         fader.start();
-
                 }
             }
         }

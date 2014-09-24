@@ -20,9 +20,7 @@ import QtQuick.Layouts 1.1
 import QtQuick.Dialogs 1.1
 import QtGraphicalEffects 1.0
 import QtQuick.Window 2.2
-
 import ArcGIS.Runtime 10.3
-
 
 Item {
     id: portalItemsView
@@ -55,7 +53,6 @@ Item {
     function refresh() {
         console.log("Search Parameters=", JSON.stringify(portalSearchParameters.json));
         portalSearch.searchItems(portalSearchParameters);
-
     }
 
     onQueryChanged: {
@@ -66,17 +63,11 @@ Item {
         var rw =  (referenceWidth + cellMargin) * displayScaleFactor;
         var c = Math.max(1, Math.round(w / referenceWidth));
         var cw = w / c;
-
-        if (cw > rw) {
+        if (cw > rw)
             c++;
-        }
-
         cw = w / c;
-
-        if (c > 1 && cw < (rw * 0.75)) {
+        if (c > 1 && cw < (rw * 0.75))
             c--;
-        }
-
         return c;
     }
 
@@ -117,7 +108,6 @@ Item {
                     fill: parent
                     margins: cellMargin
                 }
-
                 glowRadius: cellMargin
                 cornerRadius: cellMargin
                 spread: 0.5
@@ -153,13 +143,11 @@ Item {
 
                 Rectangle {
                     id: itemRect
-
                     anchors.fill: parent
                     border {
                         width: 1
                         color: "#4c4c4c"
                     }
-
                     color: "#f7f8f8"
                     radius: 3
 
@@ -172,7 +160,6 @@ Item {
                             top: parent.top
                             margins: 4
                         }
-
                         source: thumbnailUrl
                         fillMode: Image.PreserveAspectFit
 
@@ -218,11 +205,10 @@ Item {
                         anchors.fill: parent
 
                         onClicked: {
-                            if (itemsGridView.highlightFollowsCurrentItem) {
+                            if (itemsGridView.highlightFollowsCurrentItem)
                                 itemsGridView.currentIndex = index;
-                            } else {
+                            else
                                 portalItemsView.clicked(itemsGridView.model[index]);
-                            }
                         }
 
                         onDoubleClicked: {

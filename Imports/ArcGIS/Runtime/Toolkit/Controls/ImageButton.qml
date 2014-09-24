@@ -66,9 +66,8 @@ Rectangle {
         cursorShape: button.enabled && containsMouse ? Qt.PointingHandCursor : Qt.ArrowCursor
 
         onClicked: {
-            if (button.enabled) {
+            if (button.enabled)
                 button.clicked();
-            }
         }
     }
 }

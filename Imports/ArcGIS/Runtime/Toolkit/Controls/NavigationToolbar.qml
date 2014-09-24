@@ -19,35 +19,33 @@ import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.2
-
 import ArcGIS.Runtime 10.3
 
 StyleToolbar {
     id: navigationToolbar
+
     property real zoomRatio: 2
     property Envelope homeExtent
     readonly property int buttonZoomOut: 0x02
     readonly property int buttonPosition: 0x08
     readonly property int buttonZoomIn: 0x01
     readonly property int buttonHome: 0x04
+    property string platform: Qt.platform.os
     property int buttons: buttonZoomIn + buttonZoomOut + buttonHome + buttonPosition
 
     Component.onCompleted: {
-        if (!map && parent && parent.objectType && parent.objectType === "Map") {
+        if (!map && parent && parent.objectType && parent.objectType === "Map")
             map = parent;
-        }
     }
 
-    function stopFader()
-    {
+    function stopFader() {
         zoomIn.fader.stop();
         home.fader.stop();
         zoomOut.fader.stop();
         currentLocation.fader.stop();
     }
 
-    function startFader()
-    {
+    function startFader() {
         zoomIn.fader.start();
         home.fader.start();
         zoomOut.fader.start();
@@ -58,11 +56,15 @@ StyleToolbar {
     // Zoom-In Button
     ZoomInButton {
         id: zoomIn
+
         onHoveredChanged: {
-            if (zoomIn.hovered) {
-                stopFader();
+            if (platform == "android" || platform == "ios") {
+
             } else {
-                startFader();
+                if (zoomIn.hovered)
+                    stopFader();
+                else
+                    startFader();
             }
         }
     }
@@ -71,11 +73,15 @@ StyleToolbar {
     // Home Button
     HomeButton {
         id: home
+
         onHoveredChanged: {
-            if (home.hovered) {
-                stopFader();
+            if (platform == "android" || platform == "ios") {
+
             } else {
-                startFader();
+                if (home.hovered)
+                    stopFader();
+                else
+                    startFader();
             }
         }
     }
@@ -84,11 +90,15 @@ StyleToolbar {
     // Zoom-Out Button
     ZoomOutButton {
         id: zoomOut
+
         onHoveredChanged: {
-            if (zoomOut.hovered) {
-                stopFader();
+            if (platform == "android" || platform == "ios") {
+
             } else {
-                startFader();
+                if (zoomOut.hovered)
+                    stopFader();
+                else
+                    startFader();
             }
         }
     }
@@ -97,11 +107,15 @@ StyleToolbar {
     // PositionButton
     PositionButton {
         id: currentLocation
+
         onHoveredChanged: {
-            if (currentLocation.hovered) {
-                stopFader();
+            if (platform == "android" || platform == "ios") {
+
             } else {
-                startFader();
+                if (currentLocation.hovered)
+                    stopFader();
+                else
+                    startFader();
             }
         }
     }

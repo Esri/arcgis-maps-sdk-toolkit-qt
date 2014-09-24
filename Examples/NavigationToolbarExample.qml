@@ -17,7 +17,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.1
 import QtPositioning 5.2
-
 import ArcGIS.Runtime 10.3
 import ArcGIS.Runtime.Toolkit.Controls 1.0
 
@@ -32,7 +31,6 @@ Rectangle {
         mapPanningByMagnifierEnabled: true
         magnifierOnPressAndHoldEnabled: true
         zoomByPinchingEnabled: true
-
         positionDisplay {
             positionSource: PositionSource {
             }
@@ -47,13 +45,6 @@ Rectangle {
                 left: parent.left
                 leftMargin: 10
                 verticalCenter: parent.verticalCenter
-            }
-        }
-
-        RotationToolbar {
-            anchors {
-                right: parent.right
-                rightMargin: 20
             }
         }
     }
