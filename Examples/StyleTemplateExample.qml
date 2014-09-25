@@ -61,9 +61,9 @@ Rectangle {
             rowSpacing: orientation === "landscape" ? 0 : 1 * displayScaleFactor
 
             //--------------------------------------------------------------------------
-            // Rotate Counter Clockwise Button
+            // Rotate Clockwise Button
             StyleButton {
-                id: buttonRotateCounterClockwise
+                id: buttonRotateClockwise
                 iconSource: "images/rotate_clockwise.png"
                 width: internal._size
                 height: width
@@ -75,9 +75,9 @@ Rectangle {
             }
 
             //--------------------------------------------------------------------------
-            // Rotate Clockwise Button
+            // Rotate Counter Clockwise Button
             StyleButton {
-                id: buttonRotateClockwise
+                id: buttonRotateCounterClockwise
                 iconSource: "images/rotate_counter_clockwise.png"
                 width: internal._size
                 height: width
