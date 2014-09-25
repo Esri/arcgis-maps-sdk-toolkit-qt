@@ -17,7 +17,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.1
 import QtPositioning 5.2
-
 import ArcGIS.Runtime 10.3
 import ArcGIS.Runtime.Toolkit.Controls 1.0
 
@@ -73,7 +72,6 @@ Rectangle {
                 right: parent.right
                 margins: 20
             }
-
             visible: map.mapRotation != 0
         }
 

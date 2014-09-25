@@ -17,7 +17,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.1
 import QtPositioning 5.2
-
 import ArcGIS.Runtime 10.3
 import ArcGIS.Runtime.Toolkit.Controls 1.0
 
@@ -42,7 +41,17 @@ Rectangle {
             anchors {
                 top: parent.top
                 right: parent.right
-                margins: 20
+                topMargin: 20
+                rightMargin: 10
+            }
+        }
+
+        RotationToolbar {
+            anchors {
+                top: northArrow.bottom
+                right: parent.right
+                topMargin: 30
+                rightMargin: 10
             }
         }
 
@@ -57,46 +66,9 @@ Rectangle {
                 pointSize: 16
                 bold: true
             }
-
             horizontalAlignment: Text.AlignHCenter
             style: Text.Outline
             styleColor: "white"
-        }
-
-        Button {
-            id: rotateLeft
-            text: "Rotate Left"
-
-            anchors {
-                left: parent.left
-                bottom: parent.bottom
-                margins: 20
-            }
-
-            onClicked: {
-                map.mapRotation += 22.5;
-                enabled = false;
-            }
-        }
-
-        Button {
-            id: rotateRight
-            text: "Rotate Right"
-            anchors {
-                right: parent.right
-                bottom: parent.bottom
-                margins: 20
-            }
-
-            onClicked: {
-                map.mapRotation -= 22.5;
-                enabled = false;
-            }
-        }
-
-        onExtentChanged: {
-            rotateLeft.enabled = true;
-            rotateRight.enabled = true;
         }
     }
 }

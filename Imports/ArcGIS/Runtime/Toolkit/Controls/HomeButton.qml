@@ -19,23 +19,22 @@ import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.2
-
 import ArcGIS.Runtime 10.3
 
 StyleButton {
     id: homeButton
+
     property Envelope homeExtent
+
     iconSource: "images/home.png"
     tooltip: qsTr("Home")
 
     onClicked: {
         fader.start();
-        if (homeExtent) {
+        if (homeExtent)
             map.extent = homeExtent;
-        } else {
+        else
             map.extent = map.fullExtent;
-        }
-
         map.positionDisplay.mode = 0;
     }
 

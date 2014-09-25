@@ -16,7 +16,6 @@
 
 import QtQuick 2.2
 import QtQuick.Controls 1.1
-
 import ArcGIS.Runtime 10.3
 import ArcGIS.Runtime.Toolkit.Controls 1.0
 
@@ -65,12 +64,10 @@ Rectangle {
 
             PortalItemsView {
                 id: portalItemsView
-
                 anchors {
                     fill: parent
                     margins: 10
                 }
-
                 portal: portal
                 query: 'owner:esri AND type:"Map Service"'
                 highlightFollowsCurrentItem: true

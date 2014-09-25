@@ -17,7 +17,6 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
-
 import ArcGIS.Runtime 10.3
 
 Item {
@@ -29,38 +28,42 @@ Item {
     property int animationDuration: 3000
     property real minumumOpacity: 0.35
     property real maximumOpacity: 1
-    
+    property string platform: Qt.platform.os
+
     Component.onCompleted: {
-        if (enabled) {
-            start();
-        }
+        if (platform !== "android" && platform !== "ios")
+            if (enabled)
+                start();
     }
     
     function start() {
-        if (!enabled) {
-            return;
+        if (platform !== "android" && platform !== "ios"){
+            if (!enabled)
+                return;
+            fadeTimer.stop();
+            fadeAnimation.stop();
+            target.opacity = maximumOpacity;
+            fadeTimer.start();
         }
-
-        fadeTimer.stop();
-        fadeAnimation.stop();
-        target.opacity = maximumOpacity;
-        fadeTimer.start();
     }
     
     function stop() {
-        fadeTimer.stop();
-        fadeAnimation.stop();
-        target.opacity = maximumOpacity;
-    }
-    
-    onEnabledChanged: {
-        if (enabled) {
-            start();
-        } else {
-            stop();
+        if (platform !== "android" && platform !== "ios") {
+            fadeTimer.stop();
+            fadeAnimation.stop();
+            target.opacity = maximumOpacity;
         }
     }
     
+    onEnabledChanged: {
+        if (platform !== "android" && platform !== "ios") {
+            if (enabled)
+                start();
+            else
+                stop();
+        }
+    }
+
     PropertyAnimation {
         id: fadeAnimation
         target: fader.target
@@ -71,12 +74,11 @@ Item {
             type: Easing.OutCubic
         }
     }
-    
+
     Timer {
         id: fadeTimer
         repeat: false
         interval: timeoutDuration
-        
         onTriggered: {
             fadeAnimation.restart();
         }

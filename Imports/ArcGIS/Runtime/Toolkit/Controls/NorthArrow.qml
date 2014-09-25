@@ -15,7 +15,6 @@
  ******************************************************************************/
 
 import QtQuick 2.2
-
 import ArcGIS.Runtime 10.3
 import QtQuick.Window 2.2
 
@@ -36,9 +35,8 @@ Item {
     height: width
 
     Component.onCompleted: {
-        if (!map && parent && parent.objectType && parent.objectType === "Map") {
+        if (!map && parent && parent.objectType && parent.objectType === "Map")
             map = parent;
-        }
     }
 
     QtObject {
@@ -57,13 +55,11 @@ Item {
 
     MouseArea {
         anchors.fill: parent
-
         hoverEnabled: true
 
         onClicked: {
-            if (map && resetOnClick) {
+            if (map && resetOnClick)
                 map.mapRotation = 0;
-            }
             northArrow.clicked();
         }
     }

@@ -18,11 +18,11 @@ import QtQuick 2.0
 import QtQuick.Controls 1.0
 import QtGraphicalEffects 1.0
 import QtQuick.Window 2.2
-
 import ArcGIS.Runtime 10.3
 
 Item {
     id: overview
+
     property Map map
     property string basemapPath
     property alias glow : overviewGlow
@@ -54,22 +54,14 @@ Item {
 
     function updateView() {
 
-        if(!initialized) {
+        if(!initialized)
             return;
-        }
-
-        if (!map) {
+        if (!map)
             return;
-        }
-
-        if (!map.isMapInitialized || !map.isMapReady) {
+        if (!map.isMapInitialized || !map.isMapReady)
             return;
-        }
-
-        if (!overviewMap.isMapInitialized || !overviewMap.isMapReady) {
+        if (!overviewMap.isMapInitialized || !overviewMap.isMapReady)
             return;
-        }
-
         aoiLayer.removeAllGraphics();
         var e = map.fullExtent;
         var v = map.visibleExtent;
@@ -157,12 +149,9 @@ Item {
     }
 
     Component.onCompleted: {
-        if (!map && parent && parent.objectType && parent.objectType === "Map") {
+        if (!map && parent && parent.objectType && parent.objectType === "Map")
             map = parent;
-        }
-
-        if (map && baseLayer) {
+        if (map && baseLayer)
             overviewMap.insertLayer(baseLayer, 0);
-        }
     }
 }
