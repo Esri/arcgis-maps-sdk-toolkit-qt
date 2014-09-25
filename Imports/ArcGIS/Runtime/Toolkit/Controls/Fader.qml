@@ -31,13 +31,13 @@ Item {
     property string platform: Qt.platform.os
 
     Component.onCompleted: {
-        if (!platform == "android" || platform == "ios")
+        if (platform !== "android" && platform !== "ios")
             if (enabled)
                 start();
     }
     
     function start() {
-        if (!platform == "android" || platform == "ios"){
+        if (platform !== "android" && platform !== "ios"){
             if (!enabled)
                 return;
             fadeTimer.stop();
@@ -48,7 +48,7 @@ Item {
     }
     
     function stop() {
-        if (!platform == "android" || platform == "ios") {
+        if (platform !== "android" && platform !== "ios") {
             fadeTimer.stop();
             fadeAnimation.stop();
             target.opacity = maximumOpacity;
@@ -56,7 +56,7 @@ Item {
     }
     
     onEnabledChanged: {
-        if (!platform == "android" || platform == "ios") {
+        if (platform !== "android" && platform !== "ios") {
             if (enabled)
                 start();
             else

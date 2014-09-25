@@ -58,7 +58,7 @@ StyleToolbar {
         id: zoomIn
 
         onHoveredChanged: {
-            if (!platform == "android" || platform == "ios") {
+            if (platform !== "android" && platform !== "ios") {
                 if (zoomIn.hovered)
                     stopFader();
                 else
@@ -73,7 +73,7 @@ StyleToolbar {
         id: home
 
         onHoveredChanged: {
-            if (!platform == "android" || platform == "ios") {
+            if (platform !== "android" && platform !== "ios") {
                 if (home.hovered)
                     stopFader();
                 else
@@ -88,7 +88,7 @@ StyleToolbar {
         id: zoomOut
 
         onHoveredChanged: {
-            if (!platform == "android" || platform == "ios") {
+            if (platform !== "android" && platform !== "ios") {
                 if (zoomOut.hovered)
                     stopFader();
                 else
@@ -103,7 +103,7 @@ StyleToolbar {
         id: currentLocation
 
         onHoveredChanged: {
-            if (!platform == "android" || platform == "ios") {
+            if (platform !== "android" && platform !== "ios") {
                 if (currentLocation.hovered)
                     stopFader();
                 else
