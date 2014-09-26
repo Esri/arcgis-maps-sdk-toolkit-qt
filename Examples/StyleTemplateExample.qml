@@ -13,7 +13,6 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  ******************************************************************************/
-
 import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtPositioning 5.2
@@ -62,66 +61,24 @@ Rectangle {
             rowSpacing: orientation === "landscape" ? 0 : 1 * displayScaleFactor
 
             //--------------------------------------------------------------------------
-            // Rotate Counter Clockwise Button
-            StyleButton {
-                id: buttonRotateCounterClockwise
-                text: "A"
-                width: internal._size
-                height: width
-
-                onClicked: {
-                    fader.start();
-                    map.mapRotation -= 22.5;
-                }
-            }
-
-            //--------------------------------------------------------------------------
-            // Rotate Counter Clockwise Button
-            StyleButton {
-                id: buttonRotateCounterClockwise2
-                text: "A"
-                width: internal._size
-                height: width
-
-                onClicked: {
-                    fader.start();
-                    map.mapRotation -= 22.5;
-                }
-            }
-
-            //--------------------------------------------------------------------------
-            // Rotate Counter Clockwise Button
-            StyleButton {
-                id: buttonRotateCounterClockwise3
-                text: "A"
-                width: internal._size
-                height: width
-
-                onClicked: {
-                    fader.start();
-                    map.mapRotation -= 22.5;
-                }
-            }
-
-            //--------------------------------------------------------------------------
-            // Rotate Counter Clockwise Button
-            StyleButton {
-                id: buttonRotateCounterClockwise4
-                text: "A"
-                width: internal._size
-                height: width
-
-                onClicked: {
-                    fader.start();
-                    map.mapRotation -= 22.5;
-                }
-            }
-
-            //--------------------------------------------------------------------------
             // Rotate Clockwise Button
             StyleButton {
                 id: buttonRotateClockwise
-                text: "C"
+                iconSource: "images/rotate_clockwise.png"
+                width: internal._size
+                height: width
+
+                onClicked: {
+                    fader.start();
+                    map.mapRotation -= 22.5;
+                }
+            }
+
+            //--------------------------------------------------------------------------
+            // Rotate Counter Clockwise Button
+            StyleButton {
+                id: buttonRotateCounterClockwise
+                iconSource: "images/rotate_counter_clockwise.png"
                 width: internal._size
                 height: width
 
@@ -130,13 +87,27 @@ Rectangle {
                     map.mapRotation += 22.5;
                 }
             }
+
+            //--------------------------------------------------------------------------
+            // Info Button
+            StyleButton {
+                id: infoButton
+                iconSource: "images/info.png"
+                width: internal._size
+                height: width
+
+                onClicked: {
+                    fader.start();
+                    Qt.openUrlExternally("https://developers.arcgis.com/qt")
+                }
+            }
         }
 
         //--------------------------------------------------------------------------
         // Pan North Button
         StyleButton {
             id: moveNorth
-            text: "\u2191"
+            iconSource:"images/arrow.png"
             anchors {
                 top: parent.top
                 left: parent.left
@@ -162,7 +133,8 @@ Rectangle {
         // Pan South Button
         StyleButton {
             id: moveSouth
-            text: "\u2193"
+            iconSource:"images/arrow.png"
+            rotation: 180
             anchors {
                 top: moveNorth.bottom
                 left: parent.left
@@ -188,13 +160,13 @@ Rectangle {
         // Pan West Button
         StyleButton {
             id: moveWest
-            text: "\u2190"
+            iconSource:"images/arrow.png"
+            rotation: 270
             anchors {
                 top: moveSouth.bottom
                 left: parent.left
                 topMargin: 10
                 leftMargin: 15
-
             }
 
             onHoveredChanged: {
@@ -215,13 +187,13 @@ Rectangle {
         // Pan East Button
         StyleButton {
             id: moveEast
-            text: "\u2192"
+            iconSource:"images/arrow.png"
+            rotation: 90
             anchors {
                 top: moveWest.bottom
                 left: parent.left
                 topMargin: 10
                 leftMargin: 15
-
             }
 
             onHoveredChanged: {
