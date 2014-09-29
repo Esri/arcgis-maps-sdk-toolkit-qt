@@ -30,7 +30,6 @@ StyleButton {
     tooltip: qsTr("Home")
 
     onClicked: {
-        fader.start();
         if (homeExtent)
             map.extent = homeExtent;
         else
