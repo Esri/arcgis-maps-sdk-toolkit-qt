@@ -28,7 +28,6 @@ StyleButton {
     tooltip: qsTr("Zoom out")
 
     onClicked: {
-        fader.start();
         map.zoomToScale (map.mapScale * zoomRatio);
     }
 

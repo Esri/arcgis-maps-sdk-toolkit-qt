@@ -33,17 +33,14 @@ StyleButton {
         anchors.fill: parent
 
         onPressAndHold: {
-            fader.start();
             if (map.positionDisplay.positionSource.active)
                 map.positionDisplay.positionSource.active = false;
         }
 
         onClicked: {
-            fader.start();
-
-            if (map.positionDisplay.positionSource.active) {
+            if (map.positionDisplay.positionSource.active)
                 map.positionDisplay.mode = (map.positionDisplay.mode + 1) % positionButton.maxModes;
-            } else {
+            else {
                 map.positionDisplay.positionSource.active = true;
                 map.positionDisplay.mode = 1;
             }

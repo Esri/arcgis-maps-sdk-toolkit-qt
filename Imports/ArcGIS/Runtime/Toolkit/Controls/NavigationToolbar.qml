@@ -65,6 +65,10 @@ StyleToolbar {
                     startFader();
             }
         }
+        onClicked: {
+            if (platform !== "android" && platform !== "ios")
+                startFader();
+        }
     }
 
     //--------------------------------------------------------------------------
@@ -79,6 +83,10 @@ StyleToolbar {
                 else
                     startFader();
             }
+        }
+        onClicked: {
+            if (platform !== "android" && platform !== "ios")
+                startFader();
         }
     }
 
@@ -95,6 +103,10 @@ StyleToolbar {
                     startFader();
             }
         }
+        onClicked: {
+            if (platform !== "android" && platform !== "ios")
+                startFader();
+        }
     }
 
     //--------------------------------------------------------------------------
@@ -109,6 +121,10 @@ StyleToolbar {
                 else
                     startFader();
             }
+        }
+        onClicked: {
+            if (platform !== "android" && platform !== "ios")
+                startFader();
         }
     }
 }
