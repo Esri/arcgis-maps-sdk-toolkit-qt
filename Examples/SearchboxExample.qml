@@ -3,7 +3,6 @@ import ArcGIS.Runtime.Toolkit.Controls 1.0
 import QtQuick.Window 2.0
 import QtQuick.Controls 1.2
 import QtQuick.Dialogs 1.2
-import ArcGIS.Extras 1.0
 import ArcGIS.Runtime 10.3
 
 Rectangle {
@@ -74,9 +73,11 @@ Rectangle {
 
     SearchBox {
         id: searchBox
-        anchors.left:parent.left
-        anchors.top: parent.top
-        anchors.margins: 20 * displayScaleFactor
+        anchors {
+            left:parent.left
+            top: parent.top
+            margins: 20 * displayScaleFactor
+        }
 
         onSearch: {
             findTextParams.text = searchBox.searchTextInput
@@ -87,7 +88,7 @@ Rectangle {
         onClear: {
             mainMap.extent = usExtent;
             mainMap.mapRotation = 0;
-            searchBox.searchTextInput = ""
+            searchBox.searchTextInput = "";
         }
 
         Keys.onPressed: {
