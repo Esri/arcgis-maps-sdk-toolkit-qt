@@ -29,4 +29,5 @@ HomeButton 1.0 HomeButton.qml
 PositionButton 1.0 PositionButton.qml
 ZoomInButton 1.0 ZoomInButton.qml
 ZoomOutButton 1.0 ZoomOutButton.qml
+SearchBox 1.0 SearchBox.qml
 

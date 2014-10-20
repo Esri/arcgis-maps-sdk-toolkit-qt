@@ -55,6 +55,11 @@ Rectangle {
             description: "StyleTemplate Example"
             source: "StyleTemplateExample.qml"
         }
+
+        ListElement {
+            description: "SearchBox Example"
+            source: "SearchboxExample.qml"
+        }
     }
 
 
