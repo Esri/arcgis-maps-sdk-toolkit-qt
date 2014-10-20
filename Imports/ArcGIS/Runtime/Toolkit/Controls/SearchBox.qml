@@ -24,6 +24,8 @@ Item {
 
     property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
     property string searchTextInput: textInput.text
+    property string addressTextInput: " "
+    property bool addressTextVisibility: false
 
     signal search()
     signal clear()
@@ -70,7 +72,7 @@ Item {
                 height: 30 * displayScaleFactor
                 font.pixelSize: 12 * displayScaleFactor
                 focus: true
-                text: "380 New York Street, Redlands, CA"
+                text: "3575 Geary Blvd, San Francisco"
 
             }
 
@@ -109,6 +111,25 @@ Item {
                         searchbox.clear();
                     }
                 }
+            }
+        }
+
+        //-------------------------------------------------------
+        //Address Field (Visibility is set to false by default)
+        Row {
+            id: reverseGeocodeText
+            visible: addressTextVisibility
+
+            Text {
+                id: textAddress
+                width: columnControls.width
+                font {
+                    pixelSize: 12 * displayScaleFactor
+                }
+                text: addressTextInput
+                wrapMode: Text.WrapAnywhere
+                elide: Text.ElideRight
+                maximumLineCount: 2
             }
         }
     }
