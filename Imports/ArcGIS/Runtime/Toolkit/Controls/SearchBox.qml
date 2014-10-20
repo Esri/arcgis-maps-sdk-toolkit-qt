@@ -72,9 +72,6 @@ Item {
                 focus: true
                 text: "380 New York Street, Redlands, CA"
 
-                onTextChanged: {
-                    searchTextInput = textInput.text
-                }
             }
 
             //----------------------------------------------
