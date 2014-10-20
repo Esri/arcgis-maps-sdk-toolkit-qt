@@ -115,7 +115,7 @@ Item {
         }
 
         //-------------------------------------------------------
-        //Address Field (Visibility is set to false by default)
+        //Description Field (Visibility is set to false by default)
         Row {
             id: extrasText
             visible: descriptionTextVisibility
