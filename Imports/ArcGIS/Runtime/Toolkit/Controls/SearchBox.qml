@@ -24,8 +24,8 @@ Item {
 
     property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
     property string searchTextInput: textInput.text
-    property string addressTextInput: " "
-    property bool addressTextVisibility: false
+    property string featureTextInput: " "
+    property bool featureTextVisibility: false
 
     signal search()
     signal clear()
@@ -117,16 +117,16 @@ Item {
         //-------------------------------------------------------
         //Address Field (Visibility is set to false by default)
         Row {
-            id: reverseGeocodeText
-            visible: addressTextVisibility
+            id: extrasText
+            visible: featureTextVisibility
 
             Text {
-                id: textAddress
+                id: textFeature
                 width: columnControls.width
                 font {
                     pixelSize: 12 * displayScaleFactor
                 }
-                text: addressTextInput
+                text: featureTextInput
                 wrapMode: Text.WrapAnywhere
                 elide: Text.ElideRight
                 maximumLineCount: 2
