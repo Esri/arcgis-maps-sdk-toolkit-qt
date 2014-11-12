@@ -73,7 +73,7 @@ Item {
                 font.pixelSize: 12 * displayScaleFactor
                 focus: true
                 text: "3575 Geary Blvd, San Francisco"
-
+                onTextChanged: searchTextInput = text;
             }
 
             //----------------------------------------------
