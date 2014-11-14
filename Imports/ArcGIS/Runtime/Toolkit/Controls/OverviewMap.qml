@@ -60,7 +60,7 @@ Item {
             return;
         if (map.status !== Enums.MapStatusReady)
             return;
-        if (!overviewMap.status !== Enums.MapStatusReady)
+        if (overviewMap.status !== Enums.MapStatusReady)
             return;
         aoiLayer.removeAllGraphics();
         var e = map.fullExtent;
