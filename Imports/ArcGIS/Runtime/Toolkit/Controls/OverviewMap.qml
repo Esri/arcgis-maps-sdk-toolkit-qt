@@ -58,9 +58,9 @@ Item {
             return;
         if (!map)
             return;
-        if (!map.isMapInitialized || !map.isMapReady)
+        if (map.status !== Enums.MapStatusReady)
             return;
-        if (!overviewMap.isMapInitialized || !overviewMap.isMapReady)
+        if (overviewMap.status !== Enums.MapStatusReady)
             return;
         aoiLayer.removeAllGraphics();
         var e = map.fullExtent;
@@ -139,8 +139,9 @@ Item {
             }
         }
 
-        onMapReady: {
-            fullExtent = overviewBasemap.fullExtent;
+        onStatusChanged: {
+            if (status === Enums.MapStatusReady)
+                fullExtent = overviewBasemap.fullExtent;
         }
 
         onExtentChanged: {
