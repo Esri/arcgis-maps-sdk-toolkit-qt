@@ -7,8 +7,14 @@ This project contains QML source code for controls and utilities you can use wit
 
 ## Features
 
-- Map Navigation Toolbar - Example show a toolbar with 4 buttons: 
+- MapNavigation Toolbar - Example shows a toolbar control with 4 buttons: 
     -   Show your location on the map
     -   Zoom in
     -   Zoom out
     -   Home (Back to full extent)
+- NorthArrow Control - Example that shows a compass that points toward true north and the map angle in degrees as the map rotates.
+- Overview Map Control - Example that shows the use of an overview map control
+- PortalItemsView Control - A control that provides a scrollable list of Portal items based on a Portal url and a query for specifi portal items.
+- PortaItems Dialog - A dialog containing a list of items from a Portal.
+- StyleTemplate Control - a way to style your toolbars and buttons they way you want
+- SearchBox Control - this control allows you to search the map content for addresses and places.
