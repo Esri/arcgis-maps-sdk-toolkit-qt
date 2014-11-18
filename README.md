@@ -28,4 +28,30 @@ This project contains QML source code for controls and utilities you can use wit
 5. To run the QML Example app, on the toolbar go to <b>Tools->External->ArcGIS Runtime->ArcGIS Runtime Sample App</b>. The QML Example app with open, and you can use the pulldown to select each individual example program that demonstrates a specific control.
 6. Browse the QML code to see how to utilize the control
 
+## Resources
+
+* [ArcGIS Runtime SDK for .NET](http://esriurl/dotnetsdk)
+* [Visual Studio 2013 SDK](http://www.microsoft.com/en-us/download/details.aspx?id=40758)
+
+## Issues
+
+Find a bug or want to request a new feature?  Please let us know by submitting an issue.
+
+## Contributing
+
+Anyone and everyone is welcome to contribute.
+
+## Licensing
+Copyright 2014 Esri
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+A copy of the license is available in the repository's [license.txt]( https://raw.github.com/Esri/arcgis-toolkit-dotnet/master/license.txt) file.
+
+[](Esri Tags: ArcGIS Runtime SDK Qt QML)
+[](Esri Language: Qt)
 
