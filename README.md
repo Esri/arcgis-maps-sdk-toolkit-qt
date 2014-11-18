@@ -30,8 +30,8 @@ This project contains QML source code for controls and utilities you can use wit
 
 ## Resources
 
-* [ArcGIS Runtime SDK for .NET](http://esriurl/dotnetsdk)
-* [Visual Studio 2013 SDK](http://www.microsoft.com/en-us/download/details.aspx?id=40758)
+* [ArcGIS Runtime SDK 10.3 Beta for Qt](http://developers.arcgis.com/qt/beta/)
+* [Qt and QML](http://www.qt.io/)
 
 ## Issues
 
