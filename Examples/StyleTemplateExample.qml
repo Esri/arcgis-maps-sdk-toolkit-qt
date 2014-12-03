@@ -16,7 +16,7 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtPositioning 5.2
-import ArcGIS.Runtime 10.3
+import ArcGIS.Runtime 10.25
 import QtQuick.Window 2.2
 import ArcGIS.Runtime.Toolkit.Controls 1.0
 

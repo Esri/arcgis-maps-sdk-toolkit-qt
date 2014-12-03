@@ -3,7 +3,7 @@ import ArcGIS.Runtime.Toolkit.Controls 1.0
 import QtQuick.Window 2.0
 import QtQuick.Controls 1.2
 import QtQuick.Dialogs 1.2
-import ArcGIS.Runtime 10.3
+import ArcGIS.Runtime 10.25
 
 Rectangle {
     id: searchBoxExample
