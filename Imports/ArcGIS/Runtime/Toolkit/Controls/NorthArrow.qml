@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 import QtQuick 2.2
-import ArcGIS.Runtime 10.3
+import ArcGIS.Runtime 10.25
 import QtQuick.Window 2.2
 
 Item {
