@@ -11,12 +11,13 @@
 //
 
 import QtQuick 2.0
+import QtQuick.Window 2.2
 
 Item {
     id: dialogComponent
     anchors.fill: parent
     property string platform: Qt.platform.os
-    property double scalefactor: System.displayScaleFactor
+    property double scalefactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
     property string portBackground
 
     PropertyAnimation {
