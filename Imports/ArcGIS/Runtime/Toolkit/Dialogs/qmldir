@@ -19,4 +19,5 @@ module ArcGIS.Runtime.Toolkit.Dialogs
 PortalItemsDialog 1.0 PortalItemsDialog.qml
 SimpleDialog 1.0 SimpleDialog.qml
 ImagePopUpDialog 1.0 ImagePopUpDialog.qml
+UserCredentialsDialog 1.0 UserCredentialsDialog.qml
 

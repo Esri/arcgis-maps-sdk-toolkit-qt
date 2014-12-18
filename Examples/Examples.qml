@@ -27,6 +27,11 @@ Rectangle {
         id: examplesModel
 
         ListElement {
+            description: "UserCredentialsDialog Example"
+            source: "UserCredentialsDialogExample.qml"
+        }
+
+        ListElement {
             description: "Navigation Toolbar  Example"
             source: "NavigationToolbarExample.qml"
         }
@@ -60,6 +65,7 @@ Rectangle {
             description: "SearchBox Example"
             source: "SearchboxExample.qml"
         }
+
     }
 
 
