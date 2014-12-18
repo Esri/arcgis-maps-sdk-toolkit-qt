@@ -29,6 +29,11 @@ Rectangle {
 
     UserCredentialsDialog {
         id: userCredentials
+        onAccepted: {
+            busy = true;
+            console.log(username)
+            console.log(password)
+        }
     }
 
     Component.onCompleted: userCredentials.open();

@@ -23,24 +23,35 @@ import QtQuick.Window 2.2
 
 Dialog {    
     id: dialog
+    modality: Qt.ApplicationModal
+    title: "User Credentials"
 
-    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
     property bool busy: false
-
-    modality: Qt.WindowModal
+    property alias bannerTitle: titleText.text
+    property alias bannerImage: bannerImage.source
+    property alias usernameLabel: usernameText.text
+    property alias username: usernameField.text
+    property alias passwordLabel: passwordText.text
+    property alias password: passwordField.text
+    property string message : ""
+    property alias dialogTitle: dialog.title
 
     contentItem: Rectangle {
         id: rootRectangle
         anchors.fill: parent
-        implicitHeight: Math.min(250, Screen.desktopAvailableHeight * .95)
-        implicitWidth: Math.min(350, Screen.desktopAvailableWidth * .95)
+        enabled: !busy
+
+        property real displayScaleFactor: ((Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72))
+
+        implicitHeight: Math.min(280 * displayScaleFactor, Screen.desktopAvailableHeight * .95)
+        implicitWidth: Math.min(325 * displayScaleFactor, Screen.desktopAvailableWidth * .95)
 
         Keys.onPressed: {
             signIn();
         }
 
         Image {
-            id: image
+            id: bannerImage
             height: titleText.paintedHeight + 20
             anchors {
                 top: parent.top
@@ -60,15 +71,15 @@ Dialog {
             verticalAlignment: Text.AlignVCenter
 
             font {
-                pointSize: 30
+                pixelSize: 30 * rootRectangle.displayScaleFactor
                 bold: true
             }
             anchors {
                 top: parent.top
                 left: parent.left
-                leftMargin: 10
+                leftMargin: 10 * rootRectangle.displayScaleFactor
                 right: parent.right
-                bottom: image.bottom
+                bottom: bannerImage.bottom
             }
         }
         Column {
@@ -76,13 +87,13 @@ Dialog {
             anchors {
                 left: parent.left
                 right: parent.right
-                top: image.bottom
-                margins: 10
+                top: bannerImage.bottom
+                margins: 10 * rootRectangle.displayScaleFactor
             }
-            spacing: 25
+            spacing: 25 * rootRectangle.displayScaleFactor
 
             Column {
-                spacing: 10
+                spacing: 10 * rootRectangle.displayScaleFactor
                 anchors {
                     left: parent.left
                     right: parent.right
@@ -93,7 +104,7 @@ Dialog {
                     text: qsTr("Username")
                     horizontalAlignment: Text.AlignLeft
                     font {
-                        pointSize: 14
+                        pixelSize: 16 * rootRectangle.displayScaleFactor
                         bold: true
                     }
                 }
@@ -107,7 +118,7 @@ Dialog {
                     height: usernameText.paintedHeight * 1.5
                     width: rootRectangle.width * .95
                     placeholderText: "Username"
-                    font.pointSize: 16
+                    font.pixelSize: 16 * rootRectangle.displayScaleFactor
                     style: TextFieldStyle {
                         renderType: Text.QtRendering
                     }
@@ -140,11 +151,11 @@ Dialog {
             }
 
             Column {
-                spacing: 20
+                spacing: 20 * rootRectangle.displayScaleFactor
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 Row {
-                    spacing: 10
+                    spacing: 10 * rootRectangle.displayScaleFactor
                     anchors.horizontalCenter: parent.horizontalCenter
 
                     Button {
@@ -153,10 +164,10 @@ Dialog {
                         style: ButtonStyle {
                             background: Rectangle {
                                 id: styleRectSignIn
-                                implicitWidth: 100
-                                implicitHeight: 25
+                                implicitWidth: 100 * rootRectangle.displayScaleFactor
+                                implicitHeight: 25 * rootRectangle.displayScaleFactor
                                 border {
-                                    width: control.activeFocus ? 2 : 1
+                                    width: control.activeFocus ? 2 * rootRectangle.displayScaleFactor : 1 * rootRectangle.displayScaleFactor
                                     color: "#888"
                                 }
                                 radius: 3
@@ -165,9 +176,11 @@ Dialog {
                             label: Text {
                                 horizontalAlignment: Text.AlignHCenter
                                 color: "white"
-                                font.bold: true
+                                font {
+                                    bold: true
+                                    pointSize: 14
+                                }
                                 text: signInButton.text
-                                font.pixelSize: 18 * displayScaleFactor
                                 renderType: Text.QtRendering
                             }
                         }
@@ -183,10 +196,10 @@ Dialog {
                         style: ButtonStyle {
                             background: Rectangle {
                                 id: styleRectCancel
-                                implicitWidth: 100
-                                implicitHeight: 25
+                                implicitWidth: 100 * rootRectangle.displayScaleFactor
+                                implicitHeight: 25 * rootRectangle.displayScaleFactor
                                 border {
-                                    width: control.activeFocus ? 2 : 1
+                                    width: control.activeFocus ? 2 * rootRectangle.displayScaleFactor : 1 * rootRectangle.displayScaleFactor
                                     color: "#888"
                                 }
                                 radius: 3
@@ -199,7 +212,7 @@ Dialog {
                                 horizontalAlignment: Text.AlignHCenter
                                 color: "black"
                                 text: cancelButton.text
-                                font.pixelSize: 18 * displayScaleFactor
+                                font.pointSize: 14
                                 renderType: Text.QtRendering
                             }
                         }
@@ -212,6 +225,14 @@ Dialog {
             }
         }
 
+        Rectangle {
+            id: busyScreen
+            anchors.fill: parent
+            color: "darkgrey"
+            visible: busy
+            opacity: 0.4
+        }
+
         BusyIndicator {
             id: busyIndicator
             running: busy
@@ -220,11 +241,12 @@ Dialog {
     }
 
     function signIn() {
+        accepted();
         console.log("signin")
-        busy = true;
     }
 
     function cancel() {
+        rejected();
         close();
     }
 }
