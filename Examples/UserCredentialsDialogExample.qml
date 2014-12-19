@@ -15,26 +15,107 @@
  ******************************************************************************/
 
 import QtQuick 2.3
-import ArcGIS.Runtime.Toolkit.Controls 1.0
-import ArcGIS.Runtime.Toolkit.Dialogs 1.0
 import QtQuick.Window 2.0
 import QtQuick.Controls 1.2
 import QtQuick.Dialogs 1.2
+import ArcGIS.Runtime 10.25
+import ArcGIS.Runtime.Toolkit.Controls 1.0
+import ArcGIS.Runtime.Toolkit.Dialogs 1.0
 
 Rectangle {
     id: searchBoxExample
     clip: true
 
-    color: "blue"
+    property string errorString
+    property bool signedIn: false
+    property string portalUrl: "http://arcgis.com"
+    property Portal portal
+    signal signInCompleted
+    signal signInErrored(var error)
 
     UserCredentialsDialog {
-        id: userCredentials
+        id: userCredentialsDialog
         onAccepted: {
             busy = true;
-            console.log(username)
-            console.log(password)
+            portal = ArcGISRuntime.createObject("Portal", {url: portalUrl});
+            portal.signInComplete.connect(function () {
+                signedIn = true;
+                signInCompleted();
+                busy = false;
+                visible = false;
+            });
+            portal.signInError.connect(function (error) {
+                visible = false;
+                signInErrored(error);
+                errorString = "Error during sign in.\n" + error.code + ": " + error.message + "\n" + error.details;
+                busy = false;
+                errorDialog.open();
+            });
+            userCredentials.userName = username;
+            userCredentials.password = password;
+            portal.credentials = userCredentials;
+            portal.signIn();
+        }
+
+        UserCredentials {
+            id: userCredentials
+        }
+
+        MessageDialog {
+            id: errorDialog
+            text: errorString
+            title: "Sign In Error"
+            standardButtons: StandardButton.Ok
+            onAccepted: userCredentialsDialog.visible = true;
         }
     }
 
-    Component.onCompleted: userCredentials.open();
+    Column {
+        anchors {
+            fill: parent
+            margins: 15
+        }
+
+        Text {
+            width: searchBoxExample.width
+            clip: true
+            font.pointSize: 14
+            wrapMode: Text.WordWrap
+            text: signedIn ? "Full name: " + portal.user.fullName : "";
+        }
+
+        Text {
+            width: searchBoxExample.width
+            clip: true
+            font.pointSize: 14
+            wrapMode: Text.WordWrap
+            text: signedIn ? "\nCreated on: " + portal.user.created : "";
+        }
+
+        Text {
+            width: searchBoxExample.width
+            clip: true
+            font.pointSize: 14
+            wrapMode: Text.WordWrap
+            text: signedIn ? "\nModified on: " + portal.user.modified : "";
+        }
+
+        Text {
+            width: searchBoxExample.width
+            clip: true
+            font.pointSize: 14
+            wrapMode: Text.WordWrap
+            text: signedIn ? "\nOrganization Id: " + portal.portalInfo.organizationId : "";
+        }
+
+        Text {
+            width: searchBoxExample.width
+            clip: true
+            wrapMode: Text.WrapAnywhere
+            font.pointSize: 14
+            text: signedIn ? "\nLicense string: " + portal.portalInfo.licenseInfo.json["licenseString"] : "";
+        }
+    }
+
+    Component.onCompleted: userCredentialsDialog.visible = true;
 }

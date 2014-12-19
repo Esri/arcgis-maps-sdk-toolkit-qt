@@ -25,6 +25,8 @@ Dialog {
     id: dialog
     modality: Qt.ApplicationModal
     title: "User Credentials"
+    height: rootRectangle.implicitHeight
+    width: rootRectangle.implicitWidth
 
     property bool busy: false
     property alias bannerTitle: titleText.text
@@ -38,21 +40,26 @@ Dialog {
 
     contentItem: Rectangle {
         id: rootRectangle
-        anchors.fill: parent
         enabled: !busy
 
+        Component.onCompleted: {
+            // workaround for Qt bug - Desktop platforms need anchors.fill set, and Mobile platforms cannot have it set
+            if (Qt.platform.os !== "ios" || Qt.platform.os != "android") {
+                anchors.fill = parent;
+            }
+        }
         property real displayScaleFactor: ((Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72))
-
-        implicitHeight: Math.min(280 * displayScaleFactor, Screen.desktopAvailableHeight * .95)
+        implicitHeight: Math.min(265 * displayScaleFactor, Screen.desktopAvailableHeight * .95)
         implicitWidth: Math.min(325 * displayScaleFactor, Screen.desktopAvailableWidth * .95)
 
-        Keys.onPressed: {
-            signIn();
+        Keys.onReturnPressed: {
+            if (username.length > 0 && password.length > 0)
+                signIn();
         }
 
         Image {
             id: bannerImage
-            height: titleText.paintedHeight + 20
+            height: 40 * rootRectangle.displayScaleFactor
             anchors {
                 top: parent.top
                 left: parent.left
@@ -170,11 +177,12 @@ Dialog {
                                     width: control.activeFocus ? 2 * rootRectangle.displayScaleFactor : 1 * rootRectangle.displayScaleFactor
                                     color: "#888"
                                 }
-                                radius: 3
+                                radius: 4
                                 color: control.pressed ? "#E68A2E" : "#FFA319"
                             }
                             label: Text {
                                 horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
                                 color: "white"
                                 font {
                                     bold: true
@@ -202,7 +210,7 @@ Dialog {
                                     width: control.activeFocus ? 2 * rootRectangle.displayScaleFactor : 1 * rootRectangle.displayScaleFactor
                                     color: "#888"
                                 }
-                                radius: 3
+                                radius: 4
                                 gradient: Gradient {
                                     GradientStop { position: 0 ; color: control.pressed ? "#ccc" : "#eee" }
                                     GradientStop { position: 1 ; color: control.pressed ? "#aaa" : "#ccc" }
@@ -210,6 +218,7 @@ Dialog {
                             }
                             label: Text {
                                 horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
                                 color: "black"
                                 text: cancelButton.text
                                 font.pointSize: 14
