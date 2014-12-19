@@ -59,28 +59,18 @@ Dialog {
 
         Image {
             id: bannerImage
-            height: 40 * rootRectangle.displayScaleFactor
             anchors {
                 top: parent.top
                 left: parent.left
                 right: parent.right
             }
-
+            height: 40 * rootRectangle.displayScaleFactor
             fillMode: Image.PreserveAspectCrop
             source: "images/userCredentialsBanner.png"
         }
 
         Text {
             id: titleText
-            text: qsTr("Sign In")
-            color: "white"
-            horizontalAlignment: Text.AlignLeft
-            verticalAlignment: Text.AlignVCenter
-
-            font {
-                pixelSize: 30 * rootRectangle.displayScaleFactor
-                bold: true
-            }
             anchors {
                 top: parent.top
                 left: parent.left
@@ -88,7 +78,16 @@ Dialog {
                 right: parent.right
                 bottom: bannerImage.bottom
             }
+            text: qsTr("Sign In")
+            color: "white"
+            horizontalAlignment: Text.AlignLeft
+            verticalAlignment: Text.AlignVCenter
+            font {
+                pixelSize: 30 * rootRectangle.displayScaleFactor
+                bold: true
+            }
         }
+
         Column {
             id: baseColumn
             anchors {

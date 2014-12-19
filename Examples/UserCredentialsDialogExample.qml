@@ -117,5 +117,15 @@ Rectangle {
         }
     }
 
+    Button {
+        anchors {
+            left: parent.left
+            top: parent.top
+            margins: 15
+        }
+        text: "Sign In"
+        onClicked: userCredentialsDialog.open();
+    }
+
     Component.onCompleted: userCredentialsDialog.visible = true;
 }
