@@ -118,13 +118,14 @@ Rectangle {
     }
 
     Button {
+        id: button
         anchors {
-            left: parent.left
-            top: parent.top
+            right: parent.right
+            bottom: parent.bottom
             margins: 15
         }
         text: "Sign In"
-        onClicked: userCredentialsDialog.open();
+        onClicked: userCredentialsDialog.visible = true;
     }
 
     Component.onCompleted: userCredentialsDialog.visible = true;

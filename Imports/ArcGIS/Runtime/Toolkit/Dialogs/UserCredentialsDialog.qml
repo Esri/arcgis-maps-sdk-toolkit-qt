@@ -25,8 +25,8 @@ Dialog {
     id: dialog
     modality: Qt.ApplicationModal
     title: "User Credentials"
-    height: rootRectangle.implicitHeight
-    width: rootRectangle.implicitWidth
+    height: rootRectangle.height
+    width: rootRectangle.width
 
     property bool busy: false
     property alias bannerTitle: titleText.text
@@ -49,12 +49,12 @@ Dialog {
             }
         }
         property real displayScaleFactor: ((Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72))
-        implicitHeight: Math.min(265 * displayScaleFactor, Screen.desktopAvailableHeight * .95)
-        implicitWidth: Math.min(325 * displayScaleFactor, Screen.desktopAvailableWidth * .95)
+        height: Math.min(265 * displayScaleFactor, Screen.desktopAvailableHeight * .95)
+        width: Math.min(325 * displayScaleFactor, Screen.desktopAvailableWidth * .95)
 
         Keys.onReturnPressed: {
             if (username.length > 0 && password.length > 0)
-                signIn();
+                accepted();
         }
 
         Image {
@@ -193,7 +193,7 @@ Dialog {
                         }
 
                         onClicked: {
-                            signIn();
+                            accepted();
                         }
                     }
 
@@ -226,7 +226,8 @@ Dialog {
                         }
 
                         onClicked: {
-                            cancel();
+                            rejected();
+                            close();
                         }
                     }
                 }
@@ -246,15 +247,5 @@ Dialog {
             running: busy
             anchors.centerIn: parent
         }
-    }
-
-    function signIn() {
-        accepted();
-        console.log("signin")
-    }
-
-    function cancel() {
-        rejected();
-        close();
     }
 }
