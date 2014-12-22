@@ -60,6 +60,11 @@ Rectangle {
             description: "SearchBox Example"
             source: "SearchboxExample.qml"
         }
+
+        ListElement {
+            description: "UserCredentialsDialog Example"
+            source: "UserCredentialsDialogExample.qml"
+        }
     }
 
 

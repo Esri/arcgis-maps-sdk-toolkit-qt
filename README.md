@@ -6,7 +6,7 @@ Current Release: 10.3 Beta,  Oct 2014
 This project contains QML source code for controls and utilities you can use with the [ArcGIS Runtime SDK for Qt](http://developers.arcgis.com/qt). There are QML examples in this repo that demonstrate the use of these controls and how they can be used as resuable building blocks for your QML-based ArcGIS applications.
 
 ## Features
-
+- UserCredentialsDialog - a dialog that takes in a username and password. It can be connected with a UserCredentials instance and a Portal instance to sign into Portal for ArcGIS or ArcGIS Online. The dialog is customizable, as the top banner and several labels can be changed.
 - MapNavigation Toolbar - a toolbar control with 4 buttons: 
     -   Show your location on the map
     -   Zoom in
