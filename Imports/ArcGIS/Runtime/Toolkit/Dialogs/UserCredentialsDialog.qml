@@ -14,40 +14,33 @@
  *   limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.2
-import QtQuick.Controls 1.1
+import QtQuick 2.3
+import QtQuick.Controls 1.2
 import QtQuick.Controls.Styles 1.1
 import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.2
 
-Dialog {    
+Dialog {
     id: dialog
     modality: Qt.ApplicationModal
     title: "User Credentials"
-    height: rootRectangle.height
-    width: rootRectangle.width
 
     property bool busy: false
+    property string message : ""
     property alias bannerTitle: titleText.text
     property alias bannerImage: bannerImage.source
     property alias usernameLabel: usernameText.text
     property alias username: usernameField.text
     property alias passwordLabel: passwordText.text
     property alias password: passwordField.text
-    property string message : ""
     property alias dialogTitle: dialog.title
+    property alias internalContent: rootRectangle
 
     contentItem: Rectangle {
         id: rootRectangle
         enabled: !busy
 
-        Component.onCompleted: {
-            // workaround for Qt bug - Desktop platforms need anchors.fill set, and Mobile platforms cannot have it set
-            if (Qt.platform.os !== "ios" || Qt.platform.os != "android") {
-                anchors.fill = parent;
-            }
-        }
         property real displayScaleFactor: ((Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72))
         height: Math.min(265 * displayScaleFactor, Screen.desktopAvailableHeight * .95)
         width: Math.min(325 * displayScaleFactor, Screen.desktopAvailableWidth * .95)
@@ -127,6 +120,8 @@ Dialog {
                     font.pixelSize: 16 * rootRectangle.displayScaleFactor
                     style: TextFieldStyle {
                         renderType: Text.QtRendering
+                        textColor: "black"
+                        placeholderTextColor: "darkgrey"
                     }
                     activeFocusOnTab: true
                     focus: true
