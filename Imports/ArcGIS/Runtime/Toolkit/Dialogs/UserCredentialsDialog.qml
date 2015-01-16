@@ -23,7 +23,7 @@ import QtQuick.Window 2.2
 
 Dialog {
     id: dialog
-    modality: Qt.ApplicationModals
+    modality: Qt.ApplicationModal
     title: "User Credentials"
 
     property bool busy: false
