@@ -35,6 +35,8 @@ Rectangle {
 
     UserCredentialsDialog {
         id: userCredentialsDialog
+        visible: false
+
         onAccepted: {
             busy = true;
             portal = ArcGISRuntime.createObject("Portal", {url: portalUrl});
@@ -66,7 +68,13 @@ Rectangle {
             text: errorString
             title: "Sign In Error"
             standardButtons: StandardButton.Ok
-            onAccepted: userCredentialsDialog.visible = true;
+            onAccepted: {
+                userCredentialsDialog.visible = true;
+                if(Qt.platform.os !== "ios" && Qt.platform.os != "android") {
+                   userCredentialsDialog.height = userCredentialsDialog.internalContent.height
+                   userCredentialsDialog.width = userCredentialsDialog.internalContent.width
+                }
+            }
         }
     }
 
@@ -125,8 +133,14 @@ Rectangle {
             margins: 15
         }
         text: "Sign In"
-        onClicked: userCredentialsDialog.visible = true;
+        onClicked: {
+            userCredentialsDialog.visible = true;
+            if(Qt.platform.os !== "ios" && Qt.platform.os != "android") {
+               userCredentialsDialog.height = userCredentialsDialog.internalContent.height
+               userCredentialsDialog.width = userCredentialsDialog.internalContent.width
+            }
+        }
     }
 
-    Component.onCompleted: userCredentialsDialog.visible = true;
+    Component.onCompleted: userCredentialsDialog.visible = false;
 }
