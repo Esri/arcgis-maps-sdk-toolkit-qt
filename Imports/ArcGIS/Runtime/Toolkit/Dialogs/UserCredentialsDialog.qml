@@ -42,8 +42,10 @@ Dialog {
         enabled: !busy
 
         property real displayScaleFactor: ((Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72))
-        height: Math.min(265 * displayScaleFactor, Screen.desktopAvailableHeight * .95)
-        width: Math.min(325 * displayScaleFactor, Screen.desktopAvailableWidth * .95)
+        property real screenWidth: Screen.desktopAvailableWidth *.95
+        property real screenHeight: Screen.desktopAvailableHeight *.95
+        property real scaledHeight: 265 * displayScaleFactor
+        property real scaledWidth: 325 * displayScaleFactor
 
         Keys.onReturnPressed: {
             if (username.length > 0 && password.length > 0)
