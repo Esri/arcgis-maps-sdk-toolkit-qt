@@ -16,6 +16,7 @@
 
 import QtQuick 2.3
 import QtQuick.Controls 1.2
+import QtQuick.Controls.Styles 1.2
 import QtQuick.Dialogs 1.2
 import QtQuick.Window 2.0
 
@@ -73,6 +74,9 @@ Item {
                 font.pixelSize: 12 * displayScaleFactor
                 focus: true
                 text: "3575 Geary Blvd, San Francisco"
+                style: TextFieldStyle {
+                    textColor: "black"
+                }
                 onTextChanged: searchTextInput = text;
             }
 
