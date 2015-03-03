@@ -30,7 +30,7 @@ This project contains QML source code for controls and utilities you can use wit
 
 ## Resources
 
-* [ArcGIS Runtime SDK 10.3 Beta for Qt](http://developers.arcgis.com/qt/beta/)
+* [ArcGIS Runtime SDK 10.2.5 Beta for Qt](https://developers.arcgis.com/qt/)
 * [Qt and QML](http://www.qt.io/)
 
 ## Issues
