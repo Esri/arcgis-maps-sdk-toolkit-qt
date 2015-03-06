@@ -37,10 +37,6 @@ StyleButton {
         map.positionDisplay.mode = 0;
     }
 
-    Fader {
-        id: fader
-    }
-
     QtObject {
         id: internal
         property real _size: size * displayScaleFactor

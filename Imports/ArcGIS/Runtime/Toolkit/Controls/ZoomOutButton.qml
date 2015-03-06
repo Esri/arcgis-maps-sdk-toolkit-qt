@@ -31,10 +31,6 @@ StyleButton {
         map.zoomToScale (map.mapScale * zoomRatio);
     }
 
-    Fader {
-        id: fader
-    }
-
     QtObject {
         id: internal
         property real _size: size * displayScaleFactor
