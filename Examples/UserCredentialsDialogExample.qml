@@ -18,7 +18,7 @@ import QtQuick 2.3
 import QtQuick.Window 2.0
 import QtQuick.Controls 1.2
 import QtQuick.Dialogs 1.2
-import ArcGIS.Runtime 10.25
+import ArcGIS.Runtime 10.26
 import ArcGIS.Runtime.Toolkit.Controls 1.0
 import ArcGIS.Runtime.Toolkit.Dialogs 1.0
 
