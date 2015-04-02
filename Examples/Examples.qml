@@ -17,7 +17,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.1
 import QtGraphicalEffects 1.0
-import ArcGIS.Runtime 10.25
+import ArcGIS.Runtime 10.26
 
 Rectangle {
     width: 640
