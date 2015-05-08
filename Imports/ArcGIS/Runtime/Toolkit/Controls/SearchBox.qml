@@ -24,7 +24,7 @@ Item {
     id: searchbox
 
     property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
-    property string searchTextInput: textInput.text
+    property string searchTextInput: "3575 Geary Blvd, San Francisco"
     property string descriptionTextInput: " "
     property bool descriptionTextVisibility: false
 
@@ -73,7 +73,7 @@ Item {
                 height: 30 * displayScaleFactor
                 font.pixelSize: 12 * displayScaleFactor
                 focus: true
-                text: "3575 Geary Blvd, San Francisco"
+                text: searchBox.searchTextInput
                 style: TextFieldStyle {
                     textColor: "black"
                 }
