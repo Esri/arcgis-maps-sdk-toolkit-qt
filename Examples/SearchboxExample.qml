@@ -89,6 +89,9 @@ Rectangle {
 
     SearchBox {
         id: searchBox
+
+        searchTextInput: "900 North Point Ave, San Francisco"
+
         anchors {
             left:parent.left
             top: parent.top
