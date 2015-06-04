@@ -1,7 +1,7 @@
 ArcGIS Runtime API Toolkit
 ==========================
 
-Current Release: 10.2.5 Final,  Feb 2015
+Current Release: 10.2.6 Final,  June 2015
 
 This project contains QML source code for controls and utilities you can use with the [ArcGIS Runtime SDK for Qt](http://developers.arcgis.com/qt). There are QML examples in this repo that demonstrate the use of these controls and how they can be used as resuable building blocks for your QML-based ArcGIS applications.
 
@@ -30,7 +30,7 @@ This project contains QML source code for controls and utilities you can use wit
 
 ## Resources
 
-* [ArcGIS Runtime SDK 10.2.5 for Qt](https://developers.arcgis.com/qt/)
+* [ArcGIS Runtime SDK for Qt](https://developers.arcgis.com/qt/)
 * [Qt and QML](http://www.qt.io/)
 
 ## Issues

@@ -19,47 +19,26 @@ import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.2
-import ArcGIS.Runtime 10.25
+import ArcGIS.Runtime 10.26
 
-StyleToolbar {
-    id: rotationToolbar
+StyleButton {
+    id: homeButton
 
-    Component.onCompleted: {
-        if (!map && parent && parent.objectType && parent.objectType === "Map") {
-            map = parent;
-        }
+    property Envelope homeExtent
+
+    iconSource: "images/home.png"
+    tooltip: qsTr("Home")
+
+    onClicked: {
+        if (homeExtent)
+            map.extent = homeExtent;
+        else
+            map.extent = map.fullExtent;
+        map.positionDisplay.mode = 0;
     }
 
     QtObject {
         id: internal
         property real _size: size * displayScaleFactor
-    }
-
-    //--------------------------------------------------------------------------
-    // Rotate Counter Clockwise Button
-    StyleButton {
-        id: buttonRotateCounterClockwise
-        iconSource: "images/rotate_clockwise.png"
-        width: internal._size
-        height: width
-
-        onClicked: {
-            fader.start();
-            map.mapRotation -= 22.5;
-        }
-    }
-
-    //--------------------------------------------------------------------------
-    // Rotate Clockwise Button
-    StyleButton {
-        id: buttonRotateClockwise
-        iconSource: "images/rotate_counter_clockwise.png"
-        width: internal._size
-        height: width
-
-        onClicked: {
-            fader.start();
-            map.mapRotation += 22.5;
-        }
     }
 }

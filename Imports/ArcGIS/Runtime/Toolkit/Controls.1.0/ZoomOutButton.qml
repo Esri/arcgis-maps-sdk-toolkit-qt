@@ -19,18 +19,16 @@ import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.2
-import ArcGIS.Runtime 10.25
+import ArcGIS.Runtime 10.26
 
 StyleButton {
-    id: zoomInButton
+    id: zoomOutButton
     property real zoomRatio: 2
-    property string platform: Qt.platform.os
-
-    text: "+"
-    tooltip: qsTr("Zoom in")
+    text: "-"
+    tooltip: qsTr("Zoom out")
 
     onClicked: {
-        map.zoomToScale (map.mapScale / zoomRatio);
+        map.zoomToScale (map.mapScale * zoomRatio);
     }
 
     QtObject {
@@ -38,5 +36,3 @@ StyleButton {
         property real _size: size * displayScaleFactor
     }
 }
-
-
