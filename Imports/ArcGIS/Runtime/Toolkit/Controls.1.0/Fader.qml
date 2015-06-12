@@ -17,7 +17,7 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
-import ArcGIS.Runtime 10.26
+import Esri.ArcGISRuntime 100.0
 
 Item {
     id: fader

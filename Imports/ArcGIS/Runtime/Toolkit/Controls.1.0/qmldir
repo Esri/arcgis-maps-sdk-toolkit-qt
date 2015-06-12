@@ -14,7 +14,7 @@
 #   limitations under the License.
 ################################################################################
 
-module ArcGIS.Runtime.Toolkit.Controls
+module Esri.ArcGISRuntime.Toolkit.Controls
 
 NorthArrow 1.0 NorthArrow.qml
 OverviewMap 1.0 OverviewMap.qml
