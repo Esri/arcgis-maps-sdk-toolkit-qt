@@ -19,8 +19,8 @@ import QtQuick.Window 2.0
 import QtQuick.Controls 1.2
 import QtQuick.Dialogs 1.2
 import Esri.ArcGISRuntime 100.0
-import Esri.ArcGISRuntime.Toolkit.Controls 1.0
-import Esri.ArcGISRuntime.Toolkit.Dialogs 1.0
+import Esri.ArcGISRuntime.Toolkit.Controls 1.1
+import Esri.ArcGISRuntime.Toolkit.Dialogs 1.1
 
 Rectangle {
     id: searchBoxExample

@@ -18,7 +18,7 @@ import QtQuick 2.0
 import QtQuick.Controls 1.1
 import QtPositioning 5.2
 import Esri.ArcGISRuntime 100.0
-import Esri.ArcGISRuntime.Toolkit.Controls 1.0
+import Esri.ArcGISRuntime.Toolkit.Controls 1.1
 
 Rectangle {
     width: 500
