@@ -14,7 +14,7 @@
 #   limitations under the License.
 ################################################################################
 
-module ArcGIS.Runtime.Toolkit.Dialogs
+module Esri.ArcGISRuntime.Toolkit.Dialogs
 
 PortalItemsDialog 1.0 PortalItemsDialog.qml
 SimpleDialog 1.0 SimpleDialog.qml
