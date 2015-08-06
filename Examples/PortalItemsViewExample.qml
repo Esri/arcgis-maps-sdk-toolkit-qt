@@ -28,7 +28,7 @@ Rectangle {
     }
 
     function addLayer(url) {
-        var layer = ArcGISRuntime.createObject("ArcGISTiledMapServiceLayer", { "url": url });
+        var layer = ArcGISRuntimeEnvironment.createObject("ArcGISTiledMapServiceLayer", { "url": url });
         map.addLayer(layer);
     }
 
