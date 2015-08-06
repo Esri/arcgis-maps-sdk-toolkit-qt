@@ -39,7 +39,7 @@ Rectangle {
 
         onAccepted: {
             busy = true;
-            portal = ArcGISRuntime.createObject("Portal", {url: portalUrl});
+            portal = ArcGISRuntimeEnvironment.createObject("Portal", {url: portalUrl});
             portal.signInComplete.connect(function () {
                 signedIn = true;
                 signInCompleted();
