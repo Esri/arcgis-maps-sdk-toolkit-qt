@@ -34,7 +34,7 @@ Rectangle {
     }
 
     Map {
-        id: map
+        id: mainMap
         anchors.fill: parent
         wrapAroundEnabled: true
         mapPanningByMagnifierEnabled: true
@@ -65,13 +65,14 @@ Rectangle {
             // Rotate Clockwise Button
             StyleButton {
                 id: buttonRotateClockwise
+                map: mainMap
                 iconSource: "images/rotate_clockwise.png"
                 width: internal._size
                 height: width
 
                 onClicked: {
                     fader.start();
-                    map.mapRotation -= 22.5;
+                    mainMap.mapRotation -= 22.5;
                 }
             }
 
@@ -79,13 +80,14 @@ Rectangle {
             // Rotate Counter Clockwise Button
             StyleButton {
                 id: buttonRotateCounterClockwise
+                map: mainMap
                 iconSource: "images/rotate_counter_clockwise.png"
                 width: internal._size
                 height: width
 
                 onClicked: {
                     fader.start();
-                    map.mapRotation += 22.5;
+                    mainMap.mapRotation += 22.5;
                 }
             }
 
@@ -93,6 +95,7 @@ Rectangle {
             // Info Button
             StyleButton {
                 id: infoButton
+                map: mainMap
                 iconSource: "images/info.png"
                 width: internal._size
                 height: width
@@ -108,6 +111,7 @@ Rectangle {
         // Pan North Button
         StyleButton {
             id: moveNorth
+            map: mainMap
             iconSource:"images/arrow.png"
             anchors {
                 top: parent.top
@@ -124,9 +128,9 @@ Rectangle {
             }
 
             onClicked: {
-                var extent = map.extent;
+                var extent = mainMap.extent;
                 extent.yMin += panDistance
-                map.panTo(extent)
+                mainMap.panTo(extent)
             }
         }
 
@@ -134,6 +138,7 @@ Rectangle {
         // Pan South Button
         StyleButton {
             id: moveSouth
+            map: mainMap
             iconSource:"images/arrow.png"
             rotation: 180
             anchors {
@@ -151,9 +156,9 @@ Rectangle {
             }
 
             onClicked: {
-                var extent = map.extent;
+                var extent = mainMap.extent;
                 extent.yMin -= panDistance;
-                map.panTo(extent)
+                mainMap.panTo(extent)
             }
         }
 
@@ -161,6 +166,7 @@ Rectangle {
         // Pan West Button
         StyleButton {
             id: moveWest
+            map: mainMap
             iconSource:"images/arrow.png"
             rotation: 270
             anchors {
@@ -178,9 +184,9 @@ Rectangle {
             }
 
             onClicked: {
-                var extent = map.extent;
+                var extent = mainMap.extent;
                 extent.xMin -= panDistance;
-                map.panTo(extent)
+                mainMap.panTo(extent)
             }
         }
 
@@ -188,6 +194,7 @@ Rectangle {
         // Pan East Button
         StyleButton {
             id: moveEast
+            map: mainMap
             iconSource:"images/arrow.png"
             rotation: 90
             anchors {
@@ -205,14 +212,15 @@ Rectangle {
             }
 
             onClicked: {
-                var extent = map.extent;
+                var extent = mainMap.extent;
                 extent.xMin += panDistance;
-                map.panTo(extent)
+                mainMap.panTo(extent)
             }
         }
 
         NavigationToolbar {
             id: navi
+            map: mainMap
             anchors {
                 top: parent.top
                 right: parent.right
