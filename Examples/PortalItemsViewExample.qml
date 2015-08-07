@@ -27,76 +27,25 @@ Rectangle {
         portalItemsView.refresh();
     }
 
-    function addLayer(url) {
-        var layer = ArcGISRuntime.createObject("ArcGISTiledMapServiceLayer", { "url": url });
-        map.addLayer(layer);
-    }
-
     Portal {
         id: portal
         url: "http://arcgis.com"
     }
 
-    SplitView {
+    Rectangle {
+        width: parent.width * 0.25
+        color: "#F0F0F0"
         anchors.fill: parent
-        orientation: Qt.Horizontal
-        resizing: true
 
-        handleDelegate: Rectangle {
-            width: 15
-            height: parent.height
-            color: "black"
-
-            Rectangle {
-                width: 1
-                anchors {
-                    top: parent.top
-                    bottom: parent.bottom
-                    horizontalCenter: parent.horizontalCenter
-                }
-                color: "#80808080"
+        PortalItemsView {
+            id: portalItemsView
+            anchors {
+                fill: parent
+                margins: 10
             }
-        }
-
-        Rectangle {
-            width: parent.width * 0.25
-            color: "#F0F0F0"
-
-            PortalItemsView {
-                id: portalItemsView
-                anchors {
-                    fill: parent
-                    margins: 10
-                }
-                portal: portal
-                query: 'owner:esri AND type:"Map Service"'
-                highlightFollowsCurrentItem: true
-
-                onDoubleClicked: {
-                    addLayer(itemInfo.url);
-                }
-            }
-        }
-
-        Map {
-            id: map
-            wrapAroundEnabled: true
-
-            NorthArrow {
-                anchors {
-                    top: parent.top
-                    right: parent.right
-                    margins: 20
-                }
-            }
-
-            NavigationToolbar {
-                anchors {
-                    right: parent.right
-                    rightMargin: 10
-                    verticalCenter: parent.verticalCenter
-                }
-            }
+            portal: portal
+            query: 'owner:esri AND type:"Map Service"'
+            highlightFollowsCurrentItem: true
         }
     }
 }

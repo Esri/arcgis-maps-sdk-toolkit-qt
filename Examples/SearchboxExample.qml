@@ -48,7 +48,7 @@ Rectangle {
         url: "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
 
         onFindStatusChanged: {
-            if (findStatus === Locator.FindComplete) {
+            if (findStatus === Enums.FindStatusCompleted) {
                 progressBar.visible = false;
                 if (findResults.length < 1) {
                     showError("No address Found");
@@ -58,7 +58,7 @@ Rectangle {
                     }
                     mainMap.zoomTo(result.location);
                 }
-            } else if (findStatus === Locator.FindError) {
+            } else if (findStatus === Enums.FindStatusErrored) {
                 progressBar.visible = false;
                 showError(findError.message + "\nNo Address Found");
             }
@@ -90,7 +90,7 @@ Rectangle {
     SearchBox {
         id: searchBox
 
-        searchTextInput: "900 North Point Ave, San Francisco"
+        searchTextInput: "Los Angeles, CA"
 
         anchors {
             left:parent.left
