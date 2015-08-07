@@ -40,6 +40,7 @@ Rectangle {
 
         NavigationToolbar {
             id: navigationToolbar
+            map: mainMap
             anchors {
                 top: parent.top
                 left: parent.left

@@ -24,6 +24,7 @@ import ArcGIS.Runtime 10.26
 StyleToolbar {
     id: navigationToolbar
 
+    property Map map: null
     property real zoomRatio: 2
     property Envelope homeExtent
     readonly property int buttonZoomOut: 0x02
@@ -56,6 +57,7 @@ StyleToolbar {
     // Zoom-In Button
     ZoomInButton {
         id: zoomIn
+        map: navigationToolbar.map
 
         onHoveredChanged: {
             if (platform !== "android" && platform !== "ios") {
@@ -75,6 +77,7 @@ StyleToolbar {
     // Home Button
     HomeButton {
         id: home
+        map: navigationToolbar.map
 
         onHoveredChanged: {
             if (platform !== "android" && platform !== "ios") {
@@ -94,6 +97,7 @@ StyleToolbar {
     // Zoom-Out Button
     ZoomOutButton {
         id: zoomOut
+        map: navigationToolbar.map
 
         onHoveredChanged: {
             if (platform !== "android" && platform !== "ios") {
@@ -113,6 +117,7 @@ StyleToolbar {
     // PositionButton
     PositionButton {
         id: currentLocation
+        map: navigationToolbar.map
 
         onHoveredChanged: {
             if (platform !== "android" && platform !== "ios") {
