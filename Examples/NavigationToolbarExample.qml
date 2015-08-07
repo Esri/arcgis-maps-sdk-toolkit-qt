@@ -14,9 +14,9 @@
  *   limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.0
-import QtQuick.Controls 1.1
-import QtPositioning 5.2
+import QtPositioning 5.3
+import QtQuick 2.3
+import QtQuick.Controls 1.2
 import ArcGIS.Runtime 10.26
 import ArcGIS.Runtime.Toolkit.Controls 1.0
 
@@ -25,26 +25,31 @@ Rectangle {
     height: 400
 
     Map {
-        id: map
+        id: mainMap
         anchors.fill: parent
         wrapAroundEnabled: true
-        mapPanningByMagnifierEnabled: true
-        magnifierOnPressAndHoldEnabled: true
-        zoomByPinchingEnabled: true
-        positionDisplay {
-            positionSource: PositionSource {
-            }
-        }
+        focus: true
 
         ArcGISTiledMapServiceLayer {
             url: "http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer"
         }
 
+        PositionSource {
+            id: position
+        }
+
         NavigationToolbar {
+            id: navigationToolbar
             anchors {
+                top: parent.top
                 left: parent.left
-                leftMargin: 10
-                verticalCenter: parent.verticalCenter
+                margins: 10
+            }
+        }
+
+        onStatusChanged: {
+            if (status === Enums.MapStatusReady) {
+                mainMap.positionDisplay.positionSource = position;
             }
         }
     }
