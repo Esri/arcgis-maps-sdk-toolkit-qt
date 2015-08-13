@@ -16,8 +16,8 @@
 
 module Esri.ArcGISRuntime.Toolkit.Dialogs
 
-PortalItemsDialog 1.0 PortalItemsDialog.qml
-SimpleDialog 1.0 SimpleDialog.qml
-ImagePopUpDialog 1.0 ImagePopUpDialog.qml
-UserCredentialsDialog 1.0 UserCredentialsDialog.qml
+PortalItemsDialog 1.1 PortalItemsDialog.qml
+SimpleDialog 1.1 SimpleDialog.qml
+ImagePopUpDialog 1.1 ImagePopUpDialog.qml
+UserCredentialsDialog 1.1 UserCredentialsDialog.qml
 
