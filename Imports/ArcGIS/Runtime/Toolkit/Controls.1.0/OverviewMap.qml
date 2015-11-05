@@ -18,7 +18,7 @@ import QtQuick 2.0
 import QtQuick.Controls 1.0
 import QtGraphicalEffects 1.0
 import QtQuick.Window 2.2
-import ArcGIS.Runtime 10.26
+import ArcGIS.Runtime 10.27
 
 Item {
     id: overview
