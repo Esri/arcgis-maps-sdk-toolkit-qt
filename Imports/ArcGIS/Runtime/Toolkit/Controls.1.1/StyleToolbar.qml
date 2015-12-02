@@ -19,12 +19,12 @@ import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.2
-import Esri.ArcGISRuntime 100.0
+import Esri.ArcGISRuntime 100.00
 
 GridLayout {
     id: templateToolbar
 
-    property Map map: null
+    property var mapview: null
     property real size: 40
     property color color: "#4C4C4C"
     property color disabledColor: "#E5E6E7"
@@ -42,5 +42,4 @@ GridLayout {
     rows: orientation === "portrait" ? 4 : 1
     rowSpacing: orientation === "landscape" ? 0 : 1 * displayScaleFactor
     columnSpacing: orientation === "portrait" ? 0 : 1 * displayScaleFactor
-
 }

@@ -19,15 +19,15 @@ import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.2
-import Esri.ArcGISRuntime 100.0
+import Esri.ArcGISRuntime 100.00
 
 StyleToolbar {
     id: rotationToolbar
 
     Component.onCompleted: {
-        if (!map && parent && parent.objectType && parent.objectType === "Map") {
-            map = parent;
-        }
+        if (!mapview && parent) //&& parent.objectType && parent.objectType === "MapView")
+            mapview = parent;
+
     }
 
     QtObject {
@@ -45,7 +45,7 @@ StyleToolbar {
 
         onClicked: {
             fader.start();
-            map.mapRotation -= 22.5;
+            mapview.setViewpointRotation(mapview.mapRotation - 22.5);
         }
     }
 
@@ -59,7 +59,7 @@ StyleToolbar {
 
         onClicked: {
             fader.start();
-            map.mapRotation += 22.5;
+            mapview.setViewpointRotation(mapview.mapRotation + 22.5);
         }
     }
 }

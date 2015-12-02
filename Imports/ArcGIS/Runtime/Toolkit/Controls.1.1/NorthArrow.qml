@@ -15,14 +15,14 @@
  ******************************************************************************/
 
 import QtQuick 2.2
-import Esri.ArcGISRuntime 100.0
 import QtQuick.Window 2.2
+import Esri.ArcGISRuntime 100.00
 
 Item {
     id: northArrow
 
     property alias image: image
-    property Map map: null
+    property var mapview: null
     property real size: 40
     property bool resetOnClick: true
     property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
@@ -35,8 +35,8 @@ Item {
     height: width
 
     Component.onCompleted: {
-        if (!map && parent && parent.objectType && parent.objectType === "Map")
-            map = parent;
+        if (!mapview && parent && parent.objectType && parent.objectType === "MapView")
+            mapview = parent;
     }
 
     QtObject {
@@ -49,7 +49,7 @@ Item {
         id: image
         anchors.fill: parent
         source: "images/NorthArrow.png"
-        rotation: map != null ? -map.mapRotation : 0
+        rotation: mapview != null ? -mapview.mapRotation : 0
         fillMode: Image.PreserveAspectFit
     }
 
@@ -58,8 +58,8 @@ Item {
         hoverEnabled: true
 
         onClicked: {
-            if (map && resetOnClick)
-                map.mapRotation = 0;
+            if (mapview && resetOnClick)
+                mapview.setViewpointRotation(0);
             northArrow.clicked();
         }
     }
