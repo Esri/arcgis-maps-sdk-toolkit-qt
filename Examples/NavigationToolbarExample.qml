@@ -24,21 +24,29 @@ Rectangle {
     width: 500
     height: 400
 
-    Map {
-        id: map
+    MapView {
+        id: mapview
         anchors.fill: parent
-        wrapAroundEnabled: true
-        mapPanningByMagnifierEnabled: true
-        magnifierOnPressAndHoldEnabled: true
+        wrapAroundMode: Enums.WrapAroundModeDisabled
+        magnifierEnabled: true
         zoomByPinchingEnabled: true
-        positionDisplay {
-            positionSource: PositionSource {
+        allowMagnifierToPanMap: true
+        rotationByPinchingEnabled: true
+
+        Map {
+            Basemap {
+                ArcGISTiledLayer {
+                    url: "http://services.arcgisonline.com/arcgis/rest/services/NatGeo_World_Map/MapServer"
+                }
             }
         }
 
-        ArcGISTiledMapServiceLayer {
-            url: "http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer"
-        }
+        // set the location display's position source
+        /*locationDisplay {
+            positionSource: PositionSource {
+                active: true
+            }
+        }*/
 
         NavigationToolbar {
             anchors {

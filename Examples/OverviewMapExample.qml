@@ -16,71 +16,37 @@
 
 import QtQuick 2.0
 import QtQuick.Controls 1.1
-import QtPositioning 5.2
-import Esri.ArcGISRuntime 100.0
+import Esri.ArcGISRuntime 100.00
 import Esri.ArcGISRuntime.Toolkit.Controls 1.1
 
 Rectangle {
     width: 500
     height: 400
 
-    Map {
-        id: map
+    MapView {
+        id: mapview
         anchors.fill: parent
-        wrapAroundEnabled: true
-        mapPanningByMagnifierEnabled: true
-        magnifierOnPressAndHoldEnabled: true
+        wrapAroundMode: Enums.WrapAroundModeDisabled
+        magnifierEnabled: true
         zoomByPinchingEnabled: true
-
-        positionDisplay {
-            positionSource: PositionSource {
-            }
-        }
-
-        ArcGISTiledMapServiceLayer {
-            url: "http://services.arcgisonline.com/arcgis/rest/services/NatGeo_World_Map/MapServer"
-        }
-
-
-        Envelope {
-            id: initialExtent
-            xMin: -401141.52444049926
-            yMin: 5025857.891979294
-            xMax: 4295149.493399481
-            yMax: 7518316.510301659
+        Map {
+            id: map
+            BasemapTopographic {}
         }
 
         OverviewMap {
+            id: overviewmap
             anchors {
                 top: parent.top
                 left: parent.left
                 margins: 20
             }
-
-            baseLayer: ArcGISTiledMapServiceLayer {
-                url: "http://services.arcgisonline.com/arcgis/rest/services/NatGeo_World_Map/MapServer"
-            }
-
-            northArrow {
-                visible: false
-            }
         }
 
-        NorthArrow {
-            anchors {
-                top: parent.top
-                right: parent.right
-                margins: 20
-            }
-            visible: map.mapRotation != 0
-        }
-
-        NavigationToolbar {
-            anchors {
-                right: parent.right
-                rightMargin: 10
-                verticalCenter: parent.verticalCenter
-            }
+        Component.onCompleted: {
+            var basemap = ArcGISRuntimeEnvironment.createObject("BasemapTopographic");
+            overviewmap.mapview.map = ArcGISRuntimeEnvironment.createObject("Map", {basemap: basemap});
+            overviewmap.parentMapview =mapview;
         }
     }
 }

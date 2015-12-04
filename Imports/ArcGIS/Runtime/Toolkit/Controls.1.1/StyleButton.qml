@@ -34,7 +34,6 @@ Button {
     property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
     property alias fader: fader
 
-    visible: styleButton && map
     width: internal._size
     height: width
     tooltip: qsTr("Style Button")

@@ -23,39 +23,45 @@ import Esri.ArcGISRuntime 100.00
 
 StyleButton {
     id: positionButton
-    property bool isActive: map && map.positionDisplay.positionSource && map.positionDisplay.positionSource.active
-    property int maxModes: map.positionDisplay.isCompassAvailable ? 4 : 3;
+    property bool isActive: mapview && mapview.locationDisplay.started
+    property int maxModes: 4;
     property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
-    iconSource: isActive ? modeImage(map.positionDisplay.mode) : "images/position-off.png"
+    property var mapview: null
+
+    visible: mapview && mapview.locationDisplay
+    iconSource: isActive ? modeImage(mapview.locationDisplay.autoPanMode) : "images/position-off.png"
     tooltip: qsTr("Location")
 
     MouseArea {
         anchors.fill: parent
 
         onPressAndHold: {
-            if (map.positionDisplay.positionSource.active)
-                map.positionDisplay.positionSource.active = false;
+            if (mapview.locationDisplay.started){
+                mapview.locationDisplay.stop();
+                mapview.locationDisplay.autoPanMode = mapview.locationDisplay.autoPanMode;
+            }
         }
 
         onClicked: {
-            if (map.positionDisplay.positionSource.active)
-                map.positionDisplay.mode = (map.positionDisplay.mode + 1) % positionButton.maxModes;
+            if (mapview.locationDisplay.started)
+                mapview.locationDisplay.autoPanMode = (mapview.locationDisplay.autoPanMode+1) % positionButton.maxModes;
             else {
-                map.positionDisplay.positionSource.active = true;
-                map.positionDisplay.mode = 1;
+                mapview.locationDisplay.positionSource.active = true;
+                mapview.locationDisplay.autoPanMode = mapview.locationDisplay.autoPanMode;
+                mapview.locationDisplay.start();
             }
         }
     }
 
     function modeImage(mode) {
         switch (mode) {
-        case 0 :
+        case Enums.LocationDisplayAutoPanModeOff :
             return "images/position-on.png";
-        case 1 :
+        case Enums.LocationDisplayAutoPanModeDefault :
             return "images/position-autopan.png";
-        case 2 :
+        case Enums.LocationDisplayAutoPanModeNavigation :
             return "images/position-navigation.png";
-        case 3 :
+        case Enums.LocationDisplayAutoPanModeCompassNavigation :
             return "images/position-compass.png"
         }
     }
