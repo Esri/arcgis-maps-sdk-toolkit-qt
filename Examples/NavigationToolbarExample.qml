@@ -42,11 +42,11 @@ Rectangle {
         }
 
         // set the location display's position source
-        /*locationDisplay {
+        locationDisplay {
             positionSource: PositionSource {
                 active: true
             }
-        }*/
+        }
 
         NavigationToolbar {
             anchors {

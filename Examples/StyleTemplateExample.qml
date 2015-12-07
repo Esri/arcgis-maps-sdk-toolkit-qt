@@ -33,21 +33,28 @@ Rectangle {
         property real _size: size * displayScaleFactor
     }
 
-    Map {
-        id: map
+    MapView {
+        id: mapview
         anchors.fill: parent
-        wrapAroundEnabled: true
-        mapPanningByMagnifierEnabled: true
-        magnifierOnPressAndHoldEnabled: true
+        wrapAroundMode: Enums.WrapAroundModeDisabled
+        magnifierEnabled: true
         zoomByPinchingEnabled: true
+        allowMagnifierToPanMap: true
+        rotationByPinchingEnabled: true
 
-        positionDisplay {
-            positionSource: PositionSource {
+        Map {
+            Basemap {
+                ArcGISTiledLayer {
+                    url: "http://services.arcgisonline.com/arcgis/rest/services/NatGeo_World_Map/MapServer"
+                }
             }
         }
 
-        ArcGISTiledMapServiceLayer {
-            url: "http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer"
+        // set the location display's position source
+        locationDisplay {
+            positionSource: PositionSource {
+                active: true
+            }
         }
 
         StyleToolbar {
@@ -71,7 +78,7 @@ Rectangle {
 
                 onClicked: {
                     fader.start();
-                    map.mapRotation -= 22.5;
+                    mapview.setViewpointRotation(mapview.mapRotation - 22.5);
                 }
             }
 
@@ -85,7 +92,7 @@ Rectangle {
 
                 onClicked: {
                     fader.start();
-                    map.mapRotation += 22.5;
+                    mapview.setViewpointRotation(mapview.mapRotation + 22.5);
                 }
             }
 
@@ -102,6 +109,13 @@ Rectangle {
                     Qt.openUrlExternally("https://developers.arcgis.com/qt")
                 }
             }
+        }
+
+        // -------------------------------------------------------------------------
+        // Envelope used for North, South, West and East buttons
+        EnvelopeBuilder {
+            id: envBuilder
+            spatialReference: mapview.spatialReference
         }
 
         //--------------------------------------------------------------------------
@@ -124,9 +138,9 @@ Rectangle {
             }
 
             onClicked: {
-                var extent = map.extent;
-                extent.yMin += panDistance
-                map.panTo(extent)
+                var extent = mapview.visibleArea.extent;
+                envBuilder.setCoords(extent.xMin, extent.yMin + panDistance, extent.xMax, extent.yMax  + panDistance,  0.0, 0.0, 0.0, 0.0, false, false);
+                mapview.setViewpointGeometry(envBuilder);
             }
         }
 
@@ -151,9 +165,9 @@ Rectangle {
             }
 
             onClicked: {
-                var extent = map.extent;
-                extent.yMin -= panDistance;
-                map.panTo(extent)
+                var extent = mapview.visibleArea.extent;
+                envBuilder.setCoords(extent.xMin, extent.yMin - panDistance, extent.xMax, extent.yMax - panDistance,  0.0, 0.0, 0.0, 0.0, false, false);
+                mapview.setViewpointGeometry(envBuilder);
             }
         }
 
@@ -178,9 +192,9 @@ Rectangle {
             }
 
             onClicked: {
-                var extent = map.extent;
-                extent.xMin -= panDistance;
-                map.panTo(extent)
+                var extent = mapview.visibleArea.extent;
+                envBuilder.setCoords(extent.xMin - panDistance, extent.yMin, extent.xMax- panDistance, extent.yMax, 0.0, 0.0, 0.0, 0.0, false, false);
+                mapview.setViewpointGeometry(envBuilder.geometry)
             }
         }
 
@@ -205,9 +219,9 @@ Rectangle {
             }
 
             onClicked: {
-                var extent = map.extent;
-                extent.xMin += panDistance;
-                map.panTo(extent)
+                var extent = mapview.visibleArea.extent;
+                envBuilder.setCoords(extent.xMin + panDistance, extent.yMin, extent.xMax + panDistance, extent.yMax,  0.0, 0.0, 0.0, 0.0, false, false);
+                mapview.setViewpointGeometry(envBuilder.geometry)
             }
         }
 
