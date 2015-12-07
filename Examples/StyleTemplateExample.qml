@@ -140,7 +140,7 @@ Rectangle {
             onClicked: {
                 var extent = mapview.visibleArea.extent;
                 envBuilder.setCoords(extent.xMin, extent.yMin + panDistance, extent.xMax, extent.yMax  + panDistance,  0.0, 0.0, 0.0, 0.0, false, false);
-                mapview.setViewpointGeometry(envBuilder);
+                mapview.setViewpointGeometry(envBuilder.geometry);
             }
         }
 
@@ -167,7 +167,7 @@ Rectangle {
             onClicked: {
                 var extent = mapview.visibleArea.extent;
                 envBuilder.setCoords(extent.xMin, extent.yMin - panDistance, extent.xMax, extent.yMax - panDistance,  0.0, 0.0, 0.0, 0.0, false, false);
-                mapview.setViewpointGeometry(envBuilder);
+                mapview.setViewpointGeometry(envBuilder.geometry);
             }
         }
 
