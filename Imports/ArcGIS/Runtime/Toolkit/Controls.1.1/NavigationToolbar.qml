@@ -34,8 +34,14 @@ StyleToolbar {
     property int buttons: buttonZoomIn + buttonZoomOut + buttonHome + buttonPosition
 
     Component.onCompleted: {
-        if (!map && parent && parent.objectType && parent.objectType === "Map")
-            map = parent;
+        if (!mapview && parent){ // && parent.objectType && parent.objectType === "MapView")
+            mapview = parent;
+            home.mapview = mapview
+            zoomIn.mapview = mapview
+            zoomOut.mapview = mapview
+            currentLocation.mapview = mapview
+        }
+
     }
 
     function stopFader() {
@@ -75,7 +81,6 @@ StyleToolbar {
     // Home Button
     HomeButton {
         id: home
-
         onHoveredChanged: {
             if (platform !== "android" && platform !== "ios") {
                 if (home.hovered)

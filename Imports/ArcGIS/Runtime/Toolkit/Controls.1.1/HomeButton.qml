@@ -24,17 +24,20 @@ import Esri.ArcGISRuntime 100.00
 StyleButton {
     id: homeButton
 
+    //must be the same spatial reference as the MapView
     property Envelope homeExtent
+    property MapView mapview: null
 
     iconSource: "images/home.png"
     tooltip: qsTr("Home")
 
     onClicked: {
-        if (homeExtent)
-            map.extent = homeExtent;
-        else
-            map.extent = map.fullExtent;
-        map.positionDisplay.mode = 0;
+        if(mapview){
+            if(homeExtent)
+                mapview.setViewpointGeometry(homeExtent);
+            else
+                mapview.setViewpointGeometry(mapview.map.initialViewpoint.extent);
+        }
     }
 
     QtObject {

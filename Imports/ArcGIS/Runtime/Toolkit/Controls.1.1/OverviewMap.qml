@@ -23,136 +23,109 @@ import Esri.ArcGISRuntime 100.00
 Item {
     id: overview
 
-    property Map map
-    property string basemapPath
     property alias glow : overviewGlow
+    property alias mapview: overviewmap
     property alias markupLayer : markupLayer
+
+    property var parentMapview: null
+    property var overviewLayer: null
     property string fillColor : "#60000000"
-    property bool initialized : false
-    property var baseLayer
-    property alias northArrow : northArrow
+    property real zoomRatio: 10
     property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
 
     width: 200 * displayScaleFactor
     height: width * 0.665
 
-    Timer {
-        interval: 1000
-        running: true
-        repeat: false;
-
-        onTriggered: {
-            initialized = true;
-            updateView();
-        }
-    }
 
     function zoomAll() {
-        overviewMap.mapRotation = 0;
-        overviewMap.extent = overviewBasemap.fullExtent;
+        overviewmap.setViewpointRotation(0);
+        overviewmap.setViewpointGeometry(parentMapview.map.initialViewpoint.extent);
     }
 
     function updateView() {
-
-        if(!initialized)
+        if( !parentMapview || !parentMapview.map ||!overviewmap.map)
             return;
-        if (!map)
+        if (parentMapview.map.loadStatus !== Enums.LoadStatusLoaded)
             return;
-        if (map.status !== Enums.MapStatusReady)
+        if (overviewmap.map.loadStatus !== Enums.LoadStatusLoaded)
             return;
-        if (overviewMap.status !== Enums.MapStatusReady)
-            return;
-        aoiLayer.removeAllGraphics();
-        var e = map.fullExtent;
-        var v = map.visibleExtent;
-        v.reverseAllPaths();
 
-        var graphic = {
-            geometry: {
-                "rings" : [
-                    [
-                        [e.xMin, e.yMax],
-                        [e.xMax, e.yMax],
-                        [e.xMax, e.yMin],
-                        [e.xMin, e.yMin],
-                        [e.xMin, e.yMax]
-                    ],
-                    v.json.rings[0]
-                ]
-            },
+        aoiLayer.graphics.clear();
+        var e = parentMapview.map.initialViewpoint.extent;
+        var v = parentMapview.visibleArea.extent;
 
-            symbol: {
-                type: "esriSFS",
-                style: "esriSFSSolid",
-                color: fillColor
-            }
-        };
+        var part1 = ArcGISRuntimeEnvironment.createObject("Part");
+        part1.spatialReference = overviewmap.map.spatialReference
+        part1.addPointXY(e.xMin, e.yMax);
+        part1.addPointXY(e.xMax, e.yMax);
+        part1.addPointXY(e.xMax, e.yMin);
+        part1.addPointXY(e.xMin, e.yMin);
+        part1.addPointXY(e.xMin, e.yMax);
 
-        overviewMap.zoomToScale(map.mapScale * 15);
-        overviewMap.panTo(map.extent.center);
-        aoiLayer.addGraphic(graphic);
+        var part2 = ArcGISRuntimeEnvironment.createObject("Part");
+        part2.spatialReference = overviewmap.map.spatialReference
+        part2.addPointXY(v.xMax, v.yMin);
+        part2.addPointXY(v.xMax, v.yMax);
+        part2.addPointXY(v.xMin, v.yMax);
+        part2.addPointXY(v.xMin, v.yMin);
+        part2.addPointXY(v.xMax, v.yMin);
+
+        var pCollection = ArcGISRuntimeEnvironment.createObject("PartCollection");
+        var builder = ArcGISRuntimeEnvironment.createObject("PolygonBuilder");
+        pCollection.spatialReference =  overviewmap.map.spatialReference
+        builder.spatialReference = overviewmap.map.spatialReference
+        pCollection.addPart(part1);
+        pCollection.addPart(part2);
+        builder.parts = pCollection;
+
+        // assign the geometry of the graphic to be the polygon
+        var polygonGraphic = ArcGISRuntimeEnvironment.createObject("Graphic");
+        polygonGraphic.geometry = builder.geometry;
+        polygonGraphic.symbol = fillSymbol;
+        overviewmap.setViewpointCenterAndScale(parentMapview.visibleArea.extent.center,parentMapview.mapScale * zoomRatio);
+        aoiLayer.graphics.append(polygonGraphic);
     }
 
     Connections {
-        target: map
+        target: parentMapview
 
-        onExtentChanged: {
+        onVisibleAreaChanged: {
             updateView();
         }
     }
 
     RectangularGlow {
         id: overviewGlow
-        anchors.fill: overviewMap
+        anchors.fill: overviewmap
         glowRadius: 10
         spread: 0.2
         color: "black"
         cornerRadius: 10
     }
 
-    Map {
-        id: overviewMap
+    SimpleFillSymbol {
+        id: fillSymbol
+        style: Enums.SimpleFillSymbolStyleSolid
+        color: fillColor
+    }
+
+    MapView {
+        id: overviewmap
         anchors.fill: parent
-        wrapAroundEnabled: true
-        esriLogoVisible: false
+        wrapAroundMode: Enums.WrapAroundModeDisabled
 
-        ArcGISLocalTiledLayer {
-            id: overviewBasemap
-            path: basemapPath
-        }
-
-        GraphicsLayer {
+        GraphicsOverlay {
             id: aoiLayer
         }
 
-        GraphicsLayer {
+        GraphicsOverlay {
             id: markupLayer
-        }
-
-        NorthArrow {
-            id: northArrow
-            width: 20
-            anchors {
-                top: parent.top
-                right: parent.right
-                margins: 5
-            }
-        }
-
-        onStatusChanged: {
-            if (status === Enums.MapStatusReady)
-                fullExtent = overviewBasemap.fullExtent;
-        }
-
-        onExtentChanged: {
-            updateView();
         }
     }
 
     Component.onCompleted: {
-        if (!map && parent && parent.objectType && parent.objectType === "Map")
-            map = parent;
-        if (map && baseLayer)
-            overviewMap.insertLayer(baseLayer, 0);
+        var basemap = ArcGISRuntimeEnvironment.createObject("Basemap");
+        basemap.baseLayers.append(overviewLayer);
+        overviewmap.map = ArcGISRuntimeEnvironment.createObject("Map", {basemap: basemap});
     }
 }

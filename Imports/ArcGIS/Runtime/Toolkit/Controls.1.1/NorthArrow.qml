@@ -22,7 +22,7 @@ Item {
     id: northArrow
 
     property alias image: image
-    property var mapview: null
+    property MapView mapview: null
     property real size: 40
     property bool resetOnClick: true
     property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
@@ -35,7 +35,7 @@ Item {
     height: width
 
     Component.onCompleted: {
-        if (!mapview && parent && parent.objectType && parent.objectType === "MapView")
+        if (!mapview && parent) //&& parent.objectType && parent.objectType === "MapView")
             mapview = parent;
     }
 

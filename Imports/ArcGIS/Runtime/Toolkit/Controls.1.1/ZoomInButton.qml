@@ -23,14 +23,17 @@ import Esri.ArcGISRuntime 100.00
 
 StyleButton {
     id: zoomInButton
+
     property real zoomRatio: 2
     property string platform: Qt.platform.os
+    property MapView mapview: null
 
     text: "+"
     tooltip: qsTr("Zoom in")
 
     onClicked: {
-        map.zoomToScale (map.mapScale / zoomRatio);
+        if (mapview)
+            mapview.setViewpointScale(mapview.mapScale / zoomRatio);
     }
 
     QtObject {

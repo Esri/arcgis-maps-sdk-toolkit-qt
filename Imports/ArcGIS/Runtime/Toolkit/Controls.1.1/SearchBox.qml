@@ -73,7 +73,7 @@ Item {
                 height: 30 * displayScaleFactor
                 font.pixelSize: 12 * displayScaleFactor
                 focus: true
-                text: "3575 Geary Blvd, San Francisco"
+                text: " "
                 style: TextFieldStyle {
                     textColor: "black"
                 }

@@ -28,39 +28,39 @@ Rectangle {
 
     property string errorString
     property bool signedIn: false
-    property string portalUrl: "http://arcgis.com"
+    property string portalUrl: "http://www.arcgis.com"
     property Portal portal
     signal signInCompleted
     signal signInErrored(var error)
 
     UserCredentialsDialog {
-        id: userCredentialsDialog
+        id: userCredentialDialog
         visible: false
 
         onAccepted: {
             busy = true;
             portal = ArcGISRuntimeEnvironment.createObject("Portal", {url: portalUrl});
-            portal.signInComplete.connect(function () {
+            portal.signInCompleted.connect(function () {
                 signedIn = true;
                 signInCompleted();
                 busy = false;
                 visible = false;
             });
-            portal.signInError.connect(function (error) {
+            portal.signInErrored.connect(function (error) {
                 visible = false;
                 signInErrored(error);
                 errorString = "Error during sign in.\n" + error.code + ": " + error.message + "\n" + error.details;
                 busy = false;
                 errorDialog.open();
             });
-            userCredentials.userName = username;
-            userCredentials.password = password;
-            portal.credentials = userCredentials;
+            userCredential.username = username;
+            userCredential.password = password;
+            portal.credential = userCredential;
             portal.signIn();
         }
 
-        UserCredentials {
-            id: userCredentials
+        Credential {
+            id: userCredential
         }
 
         MessageDialog {
@@ -69,10 +69,13 @@ Rectangle {
             title: "Sign In Error"
             standardButtons: StandardButton.Ok
             onAccepted: {
-                userCredentialsDialog.visible = true;
+                userCredentialDialog.visible = true;
+                userCredentialDialog.contentItem.height = Math.min(userCredentialDialog.contentItem.screenHeight, userCredentialDialog.contentItem.scaledHeight)
+                userCredentialDialog.contentItem.width = Math.min(userCredentialDialog.contentItem.screenWidth, userCredentialDialog.contentItem.scaledWidth)
+
                 if(Qt.platform.os !== "ios" && Qt.platform.os != "android") {
-                   userCredentialsDialog.height = userCredentialsDialog.internalContent.height
-                   userCredentialsDialog.width = userCredentialsDialog.internalContent.width
+                    userCredentialDialog.height = Math.min(userCredentialDialog.contentItem.screenHeight, userCredentialDialog.contentItem.scaledHeight)
+                    userCredentialDialog.width = Math.min(userCredentialDialog.contentItem.screenWidth, userCredentialDialog.contentItem.scaledWidth)
                 }
             }
         }
@@ -134,13 +137,16 @@ Rectangle {
         }
         text: "Sign In"
         onClicked: {
-            userCredentialsDialog.visible = true;
+            userCredentialDialog.visible = true;
+            userCredentialDialog.contentItem.height = Math.min(userCredentialDialog.contentItem.screenHeight, userCredentialDialog.contentItem.scaledHeight)
+            userCredentialDialog.contentItem.width = Math.min(userCredentialDialog.contentItem.screenWidth, userCredentialDialog.contentItem.scaledWidth)
+
             if(Qt.platform.os !== "ios" && Qt.platform.os != "android") {
-               userCredentialsDialog.height = userCredentialsDialog.internalContent.height
-               userCredentialsDialog.width = userCredentialsDialog.internalContent.width
+                userCredentialDialog.height = Math.min(userCredentialDialog.contentItem.screenHeight, userCredentialDialog.contentItem.scaledHeight)
+                userCredentialDialog.width = Math.min(userCredentialDialog.contentItem.screenWidth, userCredentialDialog.contentItem.scaledWidth)
             }
         }
     }
 
-    Component.onCompleted: userCredentialsDialog.visible = false;
+    Component.onCompleted: userCredentialDialog.visible = false;
 }
