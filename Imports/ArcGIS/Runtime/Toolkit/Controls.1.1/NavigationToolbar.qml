@@ -34,7 +34,7 @@ StyleToolbar {
     property int buttons: buttonZoomIn + buttonZoomOut + buttonHome + buttonPosition
 
     Component.onCompleted: {
-        if (!mapview && parent){ //&& parent.objectType && parent.objectType === "MapView")
+        if (!mapview && parent && parent.objectType && parent.objectType === "MapView")
             mapview = parent;
             home.mapview = mapview
             zoomIn.mapview = mapview

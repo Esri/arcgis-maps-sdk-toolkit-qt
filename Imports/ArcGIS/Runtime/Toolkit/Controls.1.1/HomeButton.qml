@@ -37,7 +37,6 @@ StyleButton {
                 mapview.setViewpointGeometry(homeExtent);
             else
                 mapview.setViewpointGeometry(mapview.map.initialViewpoint.extent);
-            //map.positionDisplay.mode = 0;
         }
     }
 
