@@ -38,7 +38,7 @@ StyleButton {
         onPressAndHold: {
             if (mapview.locationDisplay.started){
                 mapview.locationDisplay.stop();
-                mapview.locationDisplay.autoPanMode = mapview.locationDisplay.autoPanMode;
+                mapview.locationDisplay.autoPanMode = Enums.LocationDisplayAutoPanModeOff;
             }
         }
 
@@ -47,8 +47,8 @@ StyleButton {
                 mapview.locationDisplay.autoPanMode = (mapview.locationDisplay.autoPanMode+1) % positionButton.maxModes;
             else {
                 mapview.locationDisplay.positionSource.active = true;
-                mapview.locationDisplay.autoPanMode = mapview.locationDisplay.autoPanMode;
                 mapview.locationDisplay.start();
+                mapview.locationDisplay.autoPanMode = Enums.LocationDisplayAutoPanModeOff;
             }
         }
     }
