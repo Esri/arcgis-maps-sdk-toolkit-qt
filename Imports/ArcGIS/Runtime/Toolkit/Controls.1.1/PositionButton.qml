@@ -26,7 +26,7 @@ StyleButton {
     property bool isActive: mapview && mapview.locationDisplay.started
     property int maxModes: 4;
     property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
-    property var mapview: null
+    property MapView mapview: null
 
     visible: mapview && mapview.locationDisplay
     iconSource: isActive ? modeImage(mapview.locationDisplay.autoPanMode) : "images/position-off.png"

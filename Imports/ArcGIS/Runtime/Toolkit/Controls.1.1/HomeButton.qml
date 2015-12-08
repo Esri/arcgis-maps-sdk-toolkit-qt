@@ -26,7 +26,7 @@ StyleButton {
 
     //must be the same spatial reference as the MapView
     property Envelope homeExtent
-    property var mapview: null
+    property MapView mapview: null
 
     iconSource: "images/home.png"
     tooltip: qsTr("Home")

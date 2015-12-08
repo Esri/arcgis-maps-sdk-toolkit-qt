@@ -24,14 +24,14 @@ import Esri.ArcGISRuntime 100.00
 StyleButton {
     id: zoomOutButton
     property real zoomRatio: 2
-    property var mapview: null
+    property MapView mapview: null
 
     text: "-"
     tooltip: qsTr("Zoom out")
 
     onClicked: {
         if (mapview)
-            mapview.setViewpointScale (mapview.mapScale * zoomRatio);
+            mapview.setViewpointScale(mapview.mapScale * zoomRatio);
     }
 
     QtObject {

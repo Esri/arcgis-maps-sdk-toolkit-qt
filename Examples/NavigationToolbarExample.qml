@@ -34,11 +34,7 @@ Rectangle {
         rotationByPinchingEnabled: true
 
         Map {
-            Basemap {
-                ArcGISTiledLayer {
-                    url: "http://services.arcgisonline.com/arcgis/rest/services/NatGeo_World_Map/MapServer"
-                }
-            }
+           BasemapNationalGeographic {}
         }
 
         // set the location display's position source

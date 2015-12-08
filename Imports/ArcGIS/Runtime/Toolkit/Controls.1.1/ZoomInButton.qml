@@ -26,14 +26,14 @@ StyleButton {
 
     property real zoomRatio: 2
     property string platform: Qt.platform.os
-    property var mapview: null
+    property MapView mapview: null
 
     text: "+"
     tooltip: qsTr("Zoom in")
 
     onClicked: {
         if (mapview)
-            mapview.setViewpointScale (mapview.mapScale / zoomRatio);
+            mapview.setViewpointScale(mapview.mapScale / zoomRatio);
     }
 
     QtObject {
