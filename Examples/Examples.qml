@@ -42,23 +42,8 @@ Rectangle {
         }
 
         ListElement {
-            description: "PortalItemsView  Example"
-            source: "PortalItemsViewExample.qml"
-        }
-
-        ListElement {
-            description: "PortalItemsDialog  Example"
-            source: "PortalItemsDialogExample.qml"
-        }
-
-        ListElement {
             description: "StyleTemplate Example"
             source: "StyleTemplateExample.qml"
-        }
-
-        ListElement {
-            description: "SearchBox Example"
-            source: "SearchboxExample.qml"
         }
 
         ListElement {
