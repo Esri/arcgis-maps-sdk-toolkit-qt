@@ -28,23 +28,14 @@ Item {
     property alias markupLayer : markupLayer
 
     property var parentMapview: null
+    property var overviewLayer: null
     property string fillColor : "#60000000"
-    property bool initialized : false
+    property real zoomRatio: 10
     property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
 
     width: 200 * displayScaleFactor
     height: width * 0.665
 
-    Timer {
-        interval: 1000
-        running: true
-        repeat: false;
-
-        onTriggered: {
-            initialized = true;
-            updateView();
-        }
-    }
 
     function zoomAll() {
         overviewmap.setViewpointRotation(0);
@@ -52,7 +43,7 @@ Item {
     }
 
     function updateView() {
-        if(!initialized|| !parentMapview || !parentMapview.map ||!overviewmap.map)
+        if( !parentMapview || !parentMapview.map ||!overviewmap.map)
             return;
         if (parentMapview.map.loadStatus !== Enums.LoadStatusLoaded)
             return;
@@ -91,7 +82,7 @@ Item {
         var polygonGraphic = ArcGISRuntimeEnvironment.createObject("Graphic");
         polygonGraphic.geometry = builder.geometry;
         polygonGraphic.symbol = fillSymbol;
-        overviewmap.setViewpointCenter(overviewmap.map.initialViewpoint.extent.center);
+        overviewmap.setViewpointCenterAndScale(parentMapview.visibleArea.extent.center,parentMapview.mapScale * zoomRatio);
         aoiLayer.graphics.append(polygonGraphic);
     }
 
@@ -130,5 +121,11 @@ Item {
         GraphicsOverlay {
             id: markupLayer
         }
+    }
+
+    Component.onCompleted: {
+        var basemap = ArcGISRuntimeEnvironment.createObject("Basemap");
+        basemap.baseLayers.append(overviewLayer);
+        overviewmap.map = ArcGISRuntimeEnvironment.createObject("Map", {basemap: basemap});
     }
 }

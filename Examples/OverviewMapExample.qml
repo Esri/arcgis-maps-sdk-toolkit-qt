@@ -36,17 +36,18 @@ Rectangle {
 
         OverviewMap {
             id: overviewmap
+
             anchors {
                 top: parent.top
                 left: parent.left
                 margins: 20
             }
+            parentMapview: mapview
+            overviewLayer: ArcGISMapImageLayer {
+                url: "http://sampleserver5.arcgisonline.com/arcgis/rest/services/Elevation/WorldElevations/MapServer"
+            }
         }
 
-        Component.onCompleted: {
-            var basemap = ArcGISRuntimeEnvironment.createObject("BasemapTopographic");
-            overviewmap.mapview.map = ArcGISRuntimeEnvironment.createObject("Map", {basemap: basemap});
-            overviewmap.parentMapview =mapview;
-        }
+
     }
 }
