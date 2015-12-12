@@ -15,19 +15,21 @@
  ******************************************************************************/
 
 import QtQuick 2.2
+import QtQuick.Window 2.2
 import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
 import QtQuick.Layouts 1.1
-import QtQuick.Window 2.2
 import ArcGIS.Runtime 10.27
+
 
 StyleToolbar {
     id: rotationToolbar
 
+    property Map map: null
+
     Component.onCompleted: {
-        if (!map && parent && parent.objectType && parent.objectType === "Map") {
+        if (!map && parent && parent.objectType && parent.objectType === "Map")
             map = parent;
-        }
     }
 
     QtObject {
@@ -63,3 +65,5 @@ StyleToolbar {
         }
     }
 }
+
+

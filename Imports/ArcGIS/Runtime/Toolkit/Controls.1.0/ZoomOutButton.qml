@@ -23,7 +23,10 @@ import ArcGIS.Runtime 10.27
 
 StyleButton {
     id: zoomOutButton
+
+    property Map map: null
     property real zoomRatio: 2
+
     text: "-"
     tooltip: qsTr("Zoom out")
 
