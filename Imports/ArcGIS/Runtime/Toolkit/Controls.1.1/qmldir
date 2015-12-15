@@ -1,5 +1,5 @@
 ################################################################################
-# Copyright 2012-2014 Esri
+# Copyright 2012-2016 Esri
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -16,18 +16,18 @@
 
 module ArcGIS.Runtime.Toolkit.Controls
 
-NorthArrow 1.0 NorthArrow.qml
-OverviewMap 1.0 OverviewMap.qml
-PortalItemsView 1.0 PortalItemsView.qml
-ImageButton 1.0 ImageButton.qml
-Fader 1.0 Fader.qml
-StyleButton 1.0 StyleButton.qml
-StyleToolbar 1.0 StyleToolbar.qml
-NavigationToolbar 1.0 NavigationToolbar.qml
-RotationToolbar 1.0 RotationToolbar.qml
-HomeButton 1.0 HomeButton.qml
-PositionButton 1.0 PositionButton.qml
-ZoomInButton 1.0 ZoomInButton.qml
-ZoomOutButton 1.0 ZoomOutButton.qml
-SearchBox 1.0 SearchBox.qml
+NorthArrow 1.1 NorthArrow.qml
+OverviewMap 1.1 OverviewMap.qml
+PortalItemsView 1.1 PortalItemsView.qml
+ImageButton 1.1 ImageButton.qml
+Fader 1.1 Fader.qml
+StyleButton 1.1 StyleButton.qml
+StyleToolbar 1.1 StyleToolbar.qml
+NavigationToolbar 1.1 NavigationToolbar.qml
+RotationToolbar 1.1 RotationToolbar.qml
+HomeButton 1.1 HomeButton.qml
+PositionButton 1.1 PositionButton.qml
+ZoomInButton 1.1 ZoomInButton.qml
+ZoomOutButton 1.1 ZoomOutButton.qml
+SearchBox 1.1 SearchBox.qml
 

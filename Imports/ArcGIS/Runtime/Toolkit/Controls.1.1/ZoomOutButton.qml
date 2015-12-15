@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2012-2015 Esri
+ * Copyright 2012-2016 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,19 +22,13 @@ import QtQuick.Window 2.2
 import ArcGIS.Runtime 10.27
 
 StyleButton {
-    id: homeButton
-
-    property Envelope homeExtent
-
-    iconSource: "images/home.png"
-    tooltip: qsTr("Home")
+    id: zoomOutButton
+    property real zoomRatio: 2
+    text: "-"
+    tooltip: qsTr("Zoom out")
 
     onClicked: {
-        if (homeExtent)
-            map.extent = homeExtent;
-        else
-            map.extent = map.fullExtent;
-        map.positionDisplay.mode = 0;
+        map.zoomToScale (map.mapScale * zoomRatio);
     }
 
     QtObject {

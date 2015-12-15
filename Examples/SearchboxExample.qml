@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2012-2015 Esri
+ * Copyright 2012-2016 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  ******************************************************************************/
 
 import QtQuick 2.3
-import ArcGIS.Runtime.Toolkit.Controls 1.0
 import QtQuick.Window 2.0
 import QtQuick.Controls 1.2
 import QtQuick.Dialogs 1.2
 import ArcGIS.Runtime 10.27
+import ArcGIS.Runtime.Toolkit.Controls 1.1
 
 Rectangle {
     id: searchBoxExample

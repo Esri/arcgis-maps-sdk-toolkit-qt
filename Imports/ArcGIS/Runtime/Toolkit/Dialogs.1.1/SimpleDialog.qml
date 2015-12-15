@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2012-2015 Esri
+ * Copyright 2012-2016 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,24 +15,12 @@
  ******************************************************************************/
 
 import QtQuick 2.2
+import QtQuick.Dialogs 1.2
 import QtQuick.Controls 1.1
-import QtQuick.Controls.Styles 1.1
-import QtQuick.Layouts 1.1
-import QtQuick.Window 2.2
-import ArcGIS.Runtime 10.27
 
-StyleButton {
-    id: zoomOutButton
-    property real zoomRatio: 2
-    text: "-"
-    tooltip: qsTr("Zoom out")
-
-    onClicked: {
-        map.zoomToScale (map.mapScale * zoomRatio);
-    }
-
-    QtObject {
-        id: internal
-        property real _size: size * displayScaleFactor
-    }
+Dialog {
+    id: dialog
+    modality: Qt.ApplicationModal
+    visible: false
+    standardButtons: AbstractDialog.Close
 }
