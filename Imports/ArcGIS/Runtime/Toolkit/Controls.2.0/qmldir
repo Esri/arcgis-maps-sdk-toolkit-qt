@@ -14,10 +14,20 @@
 #   limitations under the License.
 ################################################################################
 
-module Esri.ArcGISRuntime.Toolkit.Dialogs
+module Esri.ArcGISRuntime.Toolkit.Controls
 
-PortalItemsDialog 1.1 PortalItemsDialog.qml
-SimpleDialog 1.1 SimpleDialog.qml
-ImagePopUpDialog 1.1 ImagePopUpDialog.qml
-UserCredentialsDialog 1.1 UserCredentialsDialog.qml
+NorthArrow 2.0 NorthArrow.qml
+OverviewMap 2.0 OverviewMap.qml
+PortalItemsView 2.0 PortalItemsView.qml
+ImageButton 2.0 ImageButton.qml
+Fader 2.0 Fader.qml
+StyleButton 2.0 StyleButton.qml
+StyleToolbar 2.0 StyleToolbar.qml
+NavigationToolbar 2.0 NavigationToolbar.qml
+RotationToolbar 2.0 RotationToolbar.qml
+HomeButton 2.0 HomeButton.qml
+PositionButton 2.0 PositionButton.qml
+ZoomInButton 2.0 ZoomInButton.qml
+ZoomOutButton 2.0 ZoomOutButton.qml
+SearchBox 2.0 SearchBox.qml
 

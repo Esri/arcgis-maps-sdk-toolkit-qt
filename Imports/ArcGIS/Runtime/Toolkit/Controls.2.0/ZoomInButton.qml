@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2012-2015 Esri
+ * Copyright 2012-2016 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,12 +15,31 @@
  ******************************************************************************/
 
 import QtQuick 2.2
-import QtQuick.Dialogs 1.2
 import QtQuick.Controls 1.1
+import QtQuick.Controls.Styles 1.1
+import QtQuick.Layouts 1.1
+import QtQuick.Window 2.2
+import Esri.ArcGISRuntime 100.00
 
-Dialog {
-    id: dialog
-    modality: Qt.ApplicationModal
-    visible: false
-    standardButtons: AbstractDialog.Close
+StyleButton {
+    id: zoomInButton
+
+    property real zoomRatio: 2
+    property string platform: Qt.platform.os
+    property MapView mapview: null
+
+    text: "+"
+    tooltip: qsTr("Zoom in")
+
+    onClicked: {
+        if (mapview)
+            mapview.setViewpointScale(mapview.mapScale / zoomRatio);
+    }
+
+    QtObject {
+        id: internal
+        property real _size: size * displayScaleFactor
+    }
 }
+
+
