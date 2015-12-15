@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2012-2015 Esri
+ * Copyright 2012-2016 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.1
 import Esri.ArcGISRuntime 100.00
-import Esri.ArcGISRuntime.Toolkit.Controls 1.1
+import Esri.ArcGISRuntime.Toolkit.Controls 2.0
 
 Rectangle {
     width: 500

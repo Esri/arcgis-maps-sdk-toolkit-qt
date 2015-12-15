@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2012-2015 Esri
+ * Copyright 2012-2016 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,22 +22,16 @@ import QtQuick.Window 2.2
 import Esri.ArcGISRuntime 100.00
 
 StyleButton {
-    id: homeButton
-
-    //must be the same spatial reference as the MapView
-    property Envelope homeExtent
+    id: zoomOutButton
+    property real zoomRatio: 2
     property MapView mapview: null
 
-    iconSource: "images/home.png"
-    tooltip: qsTr("Home")
+    text: "-"
+    tooltip: qsTr("Zoom out")
 
     onClicked: {
-        if(mapview){
-            if(homeExtent)
-                mapview.setViewpointGeometry(homeExtent);
-            else
-                mapview.setViewpointGeometry(mapview.map.initialViewpoint.extent);
-        }
+        if (mapview)
+            mapview.setViewpointScale(mapview.mapScale * zoomRatio);
     }
 
     QtObject {
