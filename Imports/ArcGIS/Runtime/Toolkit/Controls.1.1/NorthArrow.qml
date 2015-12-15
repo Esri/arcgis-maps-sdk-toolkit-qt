@@ -15,8 +15,8 @@
  ******************************************************************************/
 
 import QtQuick 2.2
-import ArcGIS.Runtime 10.27
 import QtQuick.Window 2.2
+import ArcGIS.Runtime 10.27
 
 Item {
     id: northArrow

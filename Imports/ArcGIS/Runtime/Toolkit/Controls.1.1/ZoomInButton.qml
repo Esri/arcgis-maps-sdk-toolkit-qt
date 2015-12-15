@@ -23,8 +23,9 @@ import ArcGIS.Runtime 10.27
 
 StyleButton {
     id: zoomInButton
+
+    property Map map: null
     property real zoomRatio: 2
-    property string platform: Qt.platform.os
 
     text: "+"
     tooltip: qsTr("Zoom in")

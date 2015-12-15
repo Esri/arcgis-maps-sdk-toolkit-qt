@@ -23,6 +23,8 @@ import ArcGIS.Runtime 10.27
 
 StyleButton {
     id: positionButton
+
+    property Map map: null
     property bool isActive: map && map.positionDisplay.positionSource && map.positionDisplay.positionSource.active
     property int maxModes: map.positionDisplay.isCompassAvailable ? 4 : 3;
     property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)

@@ -25,6 +25,7 @@ StyleButton {
     id: homeButton
 
     property Envelope homeExtent
+    property Map map: null
 
     iconSource: "images/home.png"
     tooltip: qsTr("Home")
