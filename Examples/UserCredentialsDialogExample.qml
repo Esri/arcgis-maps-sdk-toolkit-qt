@@ -18,7 +18,7 @@ import QtQuick 2.3
 import QtQuick.Window 2.0
 import QtQuick.Controls 1.2
 import QtQuick.Dialogs 1.2
-import Esri.ArcGISRuntime 100.00
+import Esri.ArcGISRuntime 100.0
 import Esri.ArcGISRuntime.Toolkit.Controls 2.0
 import Esri.ArcGISRuntime.Toolkit.Dialogs 2.0
 
