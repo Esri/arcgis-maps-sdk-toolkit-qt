@@ -16,7 +16,7 @@
 
 import QtQuick 2.2
 import QtQuick.Window 2.2
-import Esri.ArcGISRuntime 100.00
+import Esri.ArcGISRuntime 100.0
 
 Item {
     id: northArrow

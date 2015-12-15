@@ -20,7 +20,7 @@ import QtQuick.Layouts 1.1
 import QtQuick.Dialogs 1.1
 import QtGraphicalEffects 1.0
 import QtQuick.Window 2.2
-import Esri.ArcGISRuntime 100.00
+import Esri.ArcGISRuntime 100.0
 
 Item {
     id: portalItemsView
