@@ -35,7 +35,7 @@ Item {
     height: width
 
     Component.onCompleted: {
-        if (!mapview && parent) //&& parent.objectType && parent.objectType === "MapView")
+        if (!mapview && parent && parent.objectType && parent.objectType === "MapView")
             mapview = parent;
     }
 
