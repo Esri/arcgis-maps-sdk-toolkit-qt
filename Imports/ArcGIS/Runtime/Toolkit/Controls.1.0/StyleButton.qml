@@ -23,7 +23,6 @@ import ArcGIS.Runtime 10.26
 
 Button {
     id: styleButton
-    property Map map: null
     property real size: 40
     property color color: "#4C4C4C"
     property color disabledColor: "#E5E6E7"
