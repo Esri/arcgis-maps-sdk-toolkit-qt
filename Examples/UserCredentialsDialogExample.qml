@@ -70,7 +70,7 @@ Rectangle {
             standardButtons: StandardButton.Ok
             onAccepted: {
                 userCredentialsDialog.visible = true;
-                if(Qt.platform.os !== "ios" && Qt.platform.os != "android") {
+                if (Qt.platform.os !== "ios" && Qt.platform.os != "android") {
                    userCredentialsDialog.height = userCredentialsDialog.internalContent.height
                    userCredentialsDialog.width = userCredentialsDialog.internalContent.width
                 }
@@ -135,7 +135,7 @@ Rectangle {
         text: "Sign In"
         onClicked: {
             userCredentialsDialog.visible = true;
-            if(Qt.platform.os !== "ios" && Qt.platform.os != "android") {
+            if (Qt.platform.os !== "ios" && Qt.platform.os != "android") {
                userCredentialsDialog.height = userCredentialsDialog.internalContent.height
                userCredentialsDialog.width = userCredentialsDialog.internalContent.width
             }
