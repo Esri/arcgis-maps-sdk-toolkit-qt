@@ -31,7 +31,7 @@ Rectangle {
         zoomByPinchingEnabled: true
         Map {
             id: map
-            BasemapTopographic {}
+            BasemapLightGrayCanvas{}
         }
 
         OverviewMap {
@@ -43,8 +43,8 @@ Rectangle {
                 margins: 20
             }
             parentMapview: mapview
-            overviewLayer: ArcGISMapImageLayer {
-                url: "http://sampleserver5.arcgisonline.com/arcgis/rest/services/Elevation/WorldElevations/MapServer"
+            overviewLayer: ArcGISTiledLayer {
+                url: "http://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer"
             }
         }
 

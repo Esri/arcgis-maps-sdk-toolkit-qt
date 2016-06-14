@@ -60,7 +60,7 @@ Rectangle {
 
         Text {
             id: textBearing
-            text: (Number(mapview.mapRotation)).toFixed(1) === "0.0" ? "00.0°" : (Number(mainMap.mapRotation)).toFixed(1) + "°"
+            text: (Number(mapview.mapRotation)).toFixed(1) === "0.0" ? "00.0°" : (Number(mapview.mapRotation)).toFixed(1) + "°"
             anchors {
                 top: northArrow.bottom
                 bottomMargin: 5 * displayScaleFactor
