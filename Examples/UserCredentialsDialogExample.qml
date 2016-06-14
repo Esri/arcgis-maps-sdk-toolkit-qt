@@ -46,10 +46,10 @@ Rectangle {
                     signInCompleted();
                     busy = false;
                     visible = false;
-                } else if (portal.signInError === Enums.TaskStatusErrored) {
+                } else if (portal.signInStatus === Enums.TaskStatusErrored) {
                     visible = false;
-                    signInErrored(portal.error);
-                    errorString = "Error during sign in.\n" + portal.error.code + ": " + portal.error.message + "\n" + portal.error.additionalMessage;
+                    signInErrored(portal.signInError);
+                    errorString = "Error during sign in.\n" + portal.signInError.code + ": " + portal.signInError.message + "\n" + portal.signInError.additionalMessage;
                     busy = false;
                     errorDialog.open();
                 }
