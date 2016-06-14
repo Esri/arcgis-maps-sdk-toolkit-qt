@@ -40,18 +40,19 @@ Rectangle {
         onAccepted: {
             busy = true;
             portal = ArcGISRuntimeEnvironment.createObject("Portal", {url: portalUrl});
-            portal.signInCompleted.connect(function () {
-                signedIn = true;
-                signInCompleted();
-                busy = false;
-                visible = false;
-            });
-            portal.signInErrored.connect(function (error) {
-                visible = false;
-                signInErrored(error);
-                errorString = "Error during sign in.\n" + error.code + ": " + error.message + "\n" + error.details;
-                busy = false;
-                errorDialog.open();
+            portal.signInStatusChanged.connect(function () {
+                if (portal.signInStatus === Enums.TaskStatusCompleted) {
+                    signedIn = true;
+                    signInCompleted();
+                    busy = false;
+                    visible = false;
+                } else if (portal.signInStatus === Enums.TaskStatusErrored) {
+                    visible = false;
+                    signInErrored(portal.signInError);
+                    errorString = "Error during sign in.\n" + portal.signInError.code + ": " + portal.signInError.message + "\n" + portal.signInError.additionalMessage;
+                    busy = false;
+                    errorDialog.open();
+                }
             });
             userCredential.username = username;
             userCredential.password = password;
@@ -92,7 +93,7 @@ Rectangle {
             clip: true
             font.pointSize: 14
             wrapMode: Text.WordWrap
-            text: signedIn ? "Full name: " + portal.user.fullName : "";
+            text: signedIn ? "Full name: " + portal.portalUser.fullName : "";
         }
 
         Text {
@@ -100,7 +101,7 @@ Rectangle {
             clip: true
             font.pointSize: 14
             wrapMode: Text.WordWrap
-            text: signedIn ? "\nCreated on: " + portal.user.created : "";
+            text: signedIn ? "\nCreated on: " + portal.portalUser.created : "";
         }
 
         Text {
@@ -108,7 +109,7 @@ Rectangle {
             clip: true
             font.pointSize: 14
             wrapMode: Text.WordWrap
-            text: signedIn ? "\nModified on: " + portal.user.modified : "";
+            text: signedIn ? "\nModified on: " + portal.portalUser.modified : "";
         }
 
         Text {

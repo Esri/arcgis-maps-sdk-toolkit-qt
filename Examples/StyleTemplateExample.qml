@@ -135,8 +135,14 @@ Rectangle {
 
             onClicked: {
                 var extent = mapview.visibleArea.extent;
-                envBuilder.setCoords(extent.xMin, extent.yMin + panDistance, extent.xMax, extent.yMax  + panDistance,  0.0, 0.0, 0.0, 0.0, false, false);
-                mapview.setViewpointGeometry(envBuilder.geometry);
+                var newExtent = ArcGISRuntimeEnvironment.createObject("Envelope", {
+                                                                              spatialReference: extent.spatialReference,
+                                                                              xMin: extent.xMin,
+                                                                              yMin: extent.yMin + panDistance,
+                                                                              xMax: extent.xMax,
+                                                                              yMax: extent.yMax + panDistance
+                                                                          });
+                mapview.setViewpointGeometry(newExtent);
             }
         }
 
@@ -162,8 +168,14 @@ Rectangle {
 
             onClicked: {
                 var extent = mapview.visibleArea.extent;
-                envBuilder.setCoords(extent.xMin, extent.yMin - panDistance, extent.xMax, extent.yMax - panDistance,  0.0, 0.0, 0.0, 0.0, false, false);
-                mapview.setViewpointGeometry(envBuilder.geometry);
+                var newExtent = ArcGISRuntimeEnvironment.createObject("Envelope", {
+                                                                              spatialReference: extent.spatialReference,
+                                                                              xMin: extent.xMin,
+                                                                              yMin: extent.yMin - panDistance,
+                                                                              xMax: extent.xMax,
+                                                                              yMax: extent.yMax - panDistance
+                                                                          });
+                mapview.setViewpointGeometry(newExtent);
             }
         }
 
@@ -189,8 +201,14 @@ Rectangle {
 
             onClicked: {
                 var extent = mapview.visibleArea.extent;
-                envBuilder.setCoords(extent.xMin - panDistance, extent.yMin, extent.xMax- panDistance, extent.yMax, 0.0, 0.0, 0.0, 0.0, false, false);
-                mapview.setViewpointGeometry(envBuilder.geometry)
+                var newExtent = ArcGISRuntimeEnvironment.createObject("Envelope", {
+                                                                              spatialReference: extent.spatialReference,
+                                                                              xMin: extent.xMin - panDistance,
+                                                                              yMin: extent.yMin,
+                                                                              xMax: extent.xMax - panDistance,
+                                                                              yMax: extent.yMax
+                                                                          });
+                mapview.setViewpointGeometry(newExtent);
             }
         }
 
@@ -216,8 +234,14 @@ Rectangle {
 
             onClicked: {
                 var extent = mapview.visibleArea.extent;
-                envBuilder.setCoords(extent.xMin + panDistance, extent.yMin, extent.xMax + panDistance, extent.yMax,  0.0, 0.0, 0.0, 0.0, false, false);
-                mapview.setViewpointGeometry(envBuilder.geometry)
+                var newExtent = ArcGISRuntimeEnvironment.createObject("Envelope", {
+                                                                              spatialReference: extent.spatialReference,
+                                                                              xMin: extent.xMin + panDistance,
+                                                                              yMin: extent.yMin,
+                                                                              xMax: extent.xMax + panDistance,
+                                                                              yMax: extent.yMax
+                                                                          });
+                mapview.setViewpointGeometry(newExtent);
             }
         }
 
