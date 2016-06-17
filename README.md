@@ -32,6 +32,8 @@ This project contains QML source code for controls and utilities you can use wit
 
 * [ArcGIS Runtime SDK for Qt](https://developers.arcgis.com/qt/)
 * [Qt and QML](http://www.qt.io/)
+* [ArcGIS Blog](http://blogs.esri.com/esri/arcgis/)
+* [twitter@esri](http://twitter.com/esri)
 
 ## Issues
 
