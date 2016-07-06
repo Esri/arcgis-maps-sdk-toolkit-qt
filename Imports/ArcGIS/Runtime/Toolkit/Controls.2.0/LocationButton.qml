@@ -22,7 +22,7 @@ import QtQuick.Window 2.2
 import Esri.ArcGISRuntime 100.0
 
 StyleButton {
-    id: positionButton
+    id: locationButton
     property bool isActive: mapview && mapview.locationDisplay.started
     property int maxModes: 4;
     property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
@@ -44,7 +44,7 @@ StyleButton {
 
         onClicked: {
             if (mapview.locationDisplay.started)
-                mapview.locationDisplay.autoPanMode = (mapview.locationDisplay.autoPanMode+1) % positionButton.maxModes;
+                mapview.locationDisplay.autoPanMode = (mapview.locationDisplay.autoPanMode+1) % locationButton.maxModes;
             else {
                 mapview.locationDisplay.positionSource.active = true;
                 mapview.locationDisplay.start();

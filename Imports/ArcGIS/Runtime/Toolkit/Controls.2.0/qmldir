@@ -26,7 +26,7 @@ StyleToolbar 2.0 StyleToolbar.qml
 NavigationToolbar 2.0 NavigationToolbar.qml
 RotationToolbar 2.0 RotationToolbar.qml
 HomeButton 2.0 HomeButton.qml
-PositionButton 2.0 PositionButton.qml
+LocationButton 2.0 LocationButton.qml
 ZoomInButton 2.0 ZoomInButton.qml
 ZoomOutButton 2.0 ZoomOutButton.qml
 SearchBox 2.0 SearchBox.qml
