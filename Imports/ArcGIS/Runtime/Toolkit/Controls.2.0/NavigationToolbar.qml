@@ -115,8 +115,8 @@ StyleToolbar {
     }
 
     //--------------------------------------------------------------------------
-    // PositionButton
-    PositionButton {
+    // LocationButton
+    LocationButton {
         id: currentLocation
 
         onHoveredChanged: {
