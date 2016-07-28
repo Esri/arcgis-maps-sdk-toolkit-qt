@@ -1,7 +1,7 @@
 import QtQuick 2.4
 import QtQuick.Window 2.2
 import Esri.ArcGISExtras 1.1
-import "PlacementPosition.js" as Enums
+import "LeaderPosition.js" as Enums
 import Esri.ArcGISExtras 1.1
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.4
@@ -57,6 +57,10 @@ Item {
 
             if (!hidden)
                 showCallout();
+        }
+
+        onImageUrlChanged: {
+            image.source = imageUrl;
         }
     }
 

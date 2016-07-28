@@ -14,12 +14,12 @@
 import QtQuick 2.3
 import QtQuick.Controls 1.2
 import Esri.ArcGISRuntime 100.0
+import Esri.ArcGISRuntime.Toolkit.Controls 2.0
 
-ApplicationWindow {
+Item {
     id: appWindow
     width: 800
     height: 600
-    title: "CalloutTestApp"
 
     // add a mapView component
     MapView {
