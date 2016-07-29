@@ -15,7 +15,7 @@ Item {
 
     // configurable properties
     property bool autoAdjustWidth: true
-    property var leaderPosition: Enums.LeaderPosition.Top
+    property var leaderPosition: Enums.LeaderPosition.Automatic
     property color borderColor: "#000000"
     property int borderWidth: 2
     property color backgroundColor: "#AFFFFFFF"
@@ -60,7 +60,7 @@ Item {
         }
 
         onImageUrlChanged: {
-            image.source = imageUrl;
+            image.source = calloutData.imageUrl;
         }
     }
 
@@ -354,18 +354,16 @@ Item {
             if (calloutLayout.width === 0) {
                 rectWidth = minWidth;
             } else {
-                console.log("calloutLayout.width = ", calloutLayout.width, "maxWidth = ", maxWidth);
                 rectWidth = calloutLayout.width + calloutFramePadding;
-                rectWidth = Math.max(rectWidth, minWidth);
+                //rectWidth = Math.max(rectWidth, minWidth);
             }
 
             // If we know the height of the content, base the height on that
             if (calloutLayout.height === 0) {
                 rectHeight = minHeight;
             } else {
-                console.log("calloutLayout.heigth = ", calloutLayout.height, "maxHeight = ", maxHeight);
-                rectHeight = calloutLayout.height + calloutFramePadding;
-                rectHeight = Math.max(rectHeight, minHeight);
+                rectHeight = calloutLayout.height + calloutFramePadding + leaderHeight * scaleFactor;
+                //rectHeight = Math.max(rectHeight, minHeight);
             }
         } else {
             rectWidth = minWidth;
@@ -374,6 +372,8 @@ Item {
 
         console.log("rectWidth = ", rectWidth);
         console.log("rectHeight = ", rectHeight);
+        console.log("calloutLayout.width = ", calloutLayout.width);
+        console.log("calloutLayout.height = ", calloutLayout.height);
     }
 
     function adjustRelativePositionOfCanvasFrame(mousex, mousey) {
@@ -417,18 +417,6 @@ Item {
             calloutFrame.y = mousey  - (leaderHeight + rectHeight);
             console.log("lower left calloutFrame = " , calloutFrame.x, " ", calloutFrame.y);
         }
-
-//        if (calloutFrame.x < 0 || calloutFrame.y < 0) {
-//            console.log("CalloutFrame is out of bounds!!");
-//            if (calloutFrame.x < 0) {
-//                var diffx = Math.abs(calloutFrame.x);
-//                calloutFrame.x += diffx;
-//            }
-//            if (calloutFrame.y < 0) {
-//                var diffy = Math.abs(calloutFrame.y);
-//                calloutFrame.y += diffy;
-//            }
-//        }
     }
 
     onScreenCoordinatesChanged: {
@@ -440,8 +428,8 @@ Item {
     Rectangle {
         id: calloutFrame
         color: "transparent"
-        width: rectWidth + 2* leaderWidth + edgeBuffer
-        height: rectHeight + 2* leaderHeight + edgeBuffer
+        width: (rectWidth + 2* leaderWidth + edgeBuffer) * scaleFactor
+        height: (rectHeight + 2* leaderHeight + edgeBuffer) * scaleFactor
         visible: false
         z: 100
 
@@ -493,8 +481,6 @@ Item {
                 var halfRectWidth = rectWidth / 2;
                 var halfLeaderWidth = leaderWidth / 2;
                 var halfRectHeight = rectHeight  / 2;
-                console.log("halfRectWidth = ", halfRectWidth);
-                console.log("halfLeaderWidth = ", halfLeaderWidth);
                 ctx.beginPath();
 
                 if (adjustedLeaderPosition === Enums.LeaderPosition.UpperLeft) {
@@ -647,7 +633,8 @@ Item {
                 anchors {
                     left: parent.left
                     top: parent.top
-                    topMargin: leaderHeight
+                    topMargin: leaderHeight * scaleFactor
+                    leftMargin: 5
                 }
 
                 GridLayout {
@@ -658,11 +645,11 @@ Item {
                         left: parent.left
                         top: parent.top
                    }
-                    columnSpacing: 7
+                    columnSpacing: 7 * scaleFactor
 
                     Image {
                         id: image
-                        width: 25
+                        width: 25 * scaleFactor
                         height: width
                         source: System.userHomePath + "/ArcGIS/Runtime/UnitTests/images/RedShinyPin.png"
                         Layout.rowSpan: 2
@@ -673,11 +660,11 @@ Item {
                         //width: 85
                         text: calloutData.title
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                        font.pixelSize: 20
+                        font.pixelSize: 20 * scaleFactor
                     }
 
                     Rectangle {
-                        width: 35
+                        width: 35 * scaleFactor
                         height: width
                         Layout.rowSpan: 2
                         color: "transparent"
@@ -690,7 +677,7 @@ Item {
                             anchors.centerIn: parent
                             text: "i"
                             color: "navy"
-                            font.pixelSize: 20
+                            font.pixelSize: 20 * scaleFactor
                         }
 
                         MouseArea {
@@ -705,7 +692,7 @@ Item {
                         id: detail
                         //width: 85
                         text: calloutData.detail
-                        font.pixelSize: 15
+                        font.pixelSize: 15 * scaleFactor
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                     }
                 }
