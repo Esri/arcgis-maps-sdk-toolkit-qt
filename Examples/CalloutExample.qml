@@ -13,11 +13,13 @@
 
 import QtQuick 2.3
 import QtQuick.Controls 1.2
+import QtPositioning 5.3
+import QtSensors 5.3
 import Esri.ArcGISRuntime 100.0
+import Esri.ArcGISExtras 1.1
 import Esri.ArcGISRuntime.Toolkit.Controls 2.0
 
-Item {
-    id: appWindow
+Rectangle {
     width: 800
     height: 600
 
@@ -65,6 +67,8 @@ Item {
 
         onMouseClicked: {
             clickedPoint = mouse.mapPoint;
+
+            console.log("x = ", mouse.x, " y = ", mouse.y);
             // call identify on the feature layer
             mapView.identifyLayer(featureLayer, mouse.x, mouse.y, 10);
         }
@@ -81,8 +85,8 @@ Item {
                     console.log(geoElement.attributes);
                     mapView.calloutData.title = geoElement.attributes.attributeValue("objectid");
                     mapView.calloutData.detail = geoElement.attributes.attributeValue("typdamage");
-                    callout.showCallout();
                 } else {
+                    console.log("No identify results");
                     var spatialRef = ArcGISRuntimeEnvironment.createObject("SpatialReference", {wkid: 4326});
                     var point = GeometryEngine.project(clickedPoint, spatialRef);
 
@@ -91,16 +95,22 @@ Item {
                     mapView.calloutData.title = "Location";
                     mapView.calloutData.detail = "Lat: " + point.y.toFixed(2) + " Long: " + point.x.toFixed(2);
                     mapView.calloutData.imageUrl = System.userHomePath + "/ArcGIS/Runtime/UnitTests/images/RedShinyPin.png";
-                    callout.showCallout();
                 }
-
+                callout.showCallout();
             }
+        }
+
+        Callout {
+            id: callout
+            //anchors.fill: parent
+            calloutData: mapView.calloutData
+            z: 100
         }
     }
 
     Image {
         source: System.userHomePath + "/ArcGIS/Runtime/UnitTests/images/On.png"
-        width: 40 * scaleFactor
+        width: 40 * System.displayScaleFactor
         height: width
         anchors {
            right: parent.right
@@ -118,12 +128,5 @@ Item {
                 callout.showCallout();
             }
         }
-    }
-
-    Callout {
-        id: callout
-        anchors.fill: parent
-        calloutData: mapView.calloutData
-        z: 100
     }
 }
