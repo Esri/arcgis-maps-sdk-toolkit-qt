@@ -60,11 +60,6 @@ Rectangle {
             compass: Compass {}
         }
 
-        QueryParameters {
-            id: params
-            maxFeatures: 1
-        }
-
         onMouseClicked: {
             clickedPoint = mouse.mapPoint;
 
@@ -77,10 +72,8 @@ Rectangle {
             if (identifyLayerStatus === Enums.TaskStatusCompleted) {
                 if (identifyLayerResult.geoElements.length > 0) {
                     var geoElement = identifyLayerResult.geoElements[0];
-                    // get the objectid of the identifed object
-                    params.objectIds = [identifyLayerResult.geoElements[0].attributes.attributeValue("objectid")];
-                    // query for the feature using the objectid
-                    featureLayer.selectFeaturesWithQuery(params, Enums.SelectionModeNew);
+                    featureLayer.clearSelection();
+                    featureLayer.selectFeature(geoElement);
                     mapView.calloutData.geoElement = geoElement;
                     console.log(geoElement.attributes);
                     mapView.calloutData.title = geoElement.attributes.attributeValue("objectid");
@@ -94,7 +87,7 @@ Rectangle {
                     mapView.calloutData.location = clickedPoint;
                     mapView.calloutData.title = "Location";
                     mapView.calloutData.detail = "Lat: " + point.y.toFixed(2) + " Long: " + point.x.toFixed(2);
-                    mapView.calloutData.imageUrl = System.userHomePath + "/ArcGIS/Runtime/UnitTests/images/RedShinyPin.png";
+                    mapView.calloutData.imageUrl = System.userHomePath + "/images/RedShinyPin.png";
                 }
                 callout.showCallout();
             }
@@ -109,7 +102,7 @@ Rectangle {
     }
 
     Image {
-        source: System.userHomePath + "/ArcGIS/Runtime/UnitTests/images/On.png"
+        source: System.userHomePath + "/images/On.png"
         width: 40 * System.displayScaleFactor
         height: width
         anchors {

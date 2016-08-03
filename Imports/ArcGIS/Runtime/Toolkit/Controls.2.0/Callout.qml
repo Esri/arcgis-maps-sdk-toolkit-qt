@@ -54,16 +54,10 @@ Item {
     Connections {
         id: calloutConnection
         target: calloutData
-        onScreenCoordinatesChanged: {
-            anchorPointx = calloutData.screenCoordinates.x;
-            anchorPointy = calloutData.screenCoordinates.y;
+        onScreenPointChanged: {
+            anchorPointx = calloutData.screenPoint.x;
+            anchorPointy = calloutData.screenPoint.y;
 
-//            if (Screen.devicePixelRatio > 1) {
-//                console.log("scaleFactor = ", scaleFactor);
-//                console.log("dividing by ", Screen.devicePixelRatio);
-//                anchorPointx = calloutData.screenCoordinates.x / Screen.devicePixelRatio;
-//                anchorPointy = calloutData.screenCoordinates.y / Screen.devicePixelRatio;
-//            }
             // add any configured offsets
             if (screenOffsetx !== 0)
                 anchorPointx += screenOffsetx
@@ -72,10 +66,6 @@ Item {
 
             if (!hidden)
                 showCallout();
-        }
-
-        onImageUrlChanged: {
-            image.source = calloutData.imageUrl;
         }
     }
 
@@ -164,16 +154,13 @@ Item {
 
                     Image {
                         id: image
+                        source: calloutData.imageUrl
                         fillMode : Image.PreserveAspectFit
-                        width: 25 * scaleFactor
-                        height: width
-                        source: System.userHomePath + "/ArcGIS/Runtime/UnitTests/images/RedShinyPin.png"
                         Layout.rowSpan: 2
                     }
 
                     Text {
                         id: title
-                        //width: 85
                         text: calloutData.title
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                         font.pixelSize: 20 * scaleFactor
@@ -206,7 +193,6 @@ Item {
 
                     Text {
                         id: detail
-                        //width: 85
                         text: calloutData.detail
                         font.pixelSize: 15 * scaleFactor
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
@@ -671,7 +657,6 @@ Item {
         }
 
     }
-
 
     function calloutContentMaxWidth() {
         // Start by getting width of MapView
