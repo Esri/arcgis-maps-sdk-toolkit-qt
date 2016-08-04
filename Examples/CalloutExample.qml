@@ -87,7 +87,7 @@ Rectangle {
                     mapView.calloutData.location = clickedPoint;
                     mapView.calloutData.title = "Location";
                     mapView.calloutData.detail = "Lat: " + point.y.toFixed(2) + " Long: " + point.x.toFixed(2);
-                    mapView.calloutData.imageUrl = System.userHomePath + "/images/RedShinyPin.png";
+                    mapView.calloutData.imageUrl = "images/RedShinyPin.png";
                 }
                 callout.showCallout();
             }
@@ -102,7 +102,7 @@ Rectangle {
     }
 
     Image {
-        source: System.userHomePath + "/images/On.png"
+        source: "images/On.png"
         width: 40 * System.displayScaleFactor
         height: width
         anchors {
