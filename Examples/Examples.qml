@@ -50,6 +50,11 @@ Rectangle {
             description: "UserCredentialsDialog Example"
             source: "UserCredentialsDialogExample.qml"
         }
+
+        ListElement {
+            description: "Callout Example"
+            source: "CalloutExample.qml"
+        }
     }
 
 
