@@ -27,7 +27,7 @@ Item {
     property int leaderWidth: 30
     property int screenOffsetx: 0
     property int screenOffsety: 0
-    property var calloutData
+    property var calloutData: null
 
     // internal properties
     property int padding: 3
@@ -36,7 +36,7 @@ Item {
     property real anchorPointy: 0
     property point screenCoordinates
     property var adjustedLeaderPosition: Enums.LeaderPosition.Bottom
-    property bool hidden: true
+    property bool calloutVisible
     property real calloutMaxWidth: 210
     property real calloutMaxHeight: 100
     property real calloutMinWidth: calloutMaxWidth
@@ -64,13 +64,23 @@ Item {
             if (screenOffsety !== 0)
                 anchorPointy += screenOffsety
 
-            if (!hidden)
+            if (calloutVisible)
                 showCallout();
+        }
+
+        onVisibleChanged: {
+            if (calloutData.visible) {
+                showCallout();
+            }
+            else {
+                dismiss();
+            }
+
         }
     }
 
     function showCallout() {
-        hidden = false;
+        calloutVisible = true;
         root.visible = true;
 
         if (leaderPosition !== Enums.LeaderPosition.Automatic)
@@ -101,7 +111,7 @@ Item {
     }
 
     function dismiss() {
-        hidden = true;
+        calloutVisible = false;
         calloutFrame.visible = false;
     }
 
