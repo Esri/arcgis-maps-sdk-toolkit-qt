@@ -7,7 +7,7 @@ This project contains QML source code for controls and utilities you can use wit
 
 ## Features
 - UserCredentials Dialog - a dialog that takes in a username and password. It can be connected with a UserCredentials instance and a Portal instance to sign into Portal for ArcGIS or ArcGIS Online. The dialog is customizable, as the top banner and several labels can be changed.
-- Navigation Toolbar Control- a toolbar control with 4 buttons: 
+- NavigationToolbar Control- a toolbar control with 4 buttons: 
     -   Show your location on the map
     -   Zoom in
     -   Zoom out
