@@ -7,6 +7,24 @@ import Esri.ArcGISRuntime 100.0
 import Esri.ArcGISExtras 1.1
 import "LeaderPosition.js" as Enums
 
+/*!
+    \qmltype Callout
+    \ingroup ArcGISQtToolkit
+    \inqmlmodule Esri.ArcGISRuntime.Toolkit.Controls
+    \since 2.0
+    \brief A view for displaying information at a geographic location on a Map.
+
+  A Callout can be displayed for several different scenarios:
+
+  \list
+    \li To display the coordinates where a user tapped on the map.
+    \li To display information about a GeoElement that has been identified
+    on the MapView.
+    \li To display a callout at your current location.
+  \endlist
+
+  For more information, please see the CallouData documentation.
+*/
 Item {
     id: root
     x: 0
@@ -14,19 +32,119 @@ Item {
 
     visible: false
 
-    // configurable properties
+    /*========================================
+         Configurable properties
+    ========================================*/
+
+    /*!
+        Whether to automatically adjust the width of the Callout based on content.
+
+        The default is \c true.
+    */
     property bool autoAdjustWidth: true
+
+    /*!
+        The position of the leader line in the callout.
+
+        LeaderPosition includes:
+
+        \list
+            \li Enums.LeaderPosition.UpperLeft (0)
+            \li Enums.LeaderPosition.Top (1)
+            \li Enums.LeaderPosition.UpperRight (2)
+            \li Enums.LeaderPosition.Right (3)
+            \li Enums.LeaderPosition.LowerRight (4)
+            \li Enums.LeaderPosition.Bottom (5)
+            \li Enums.LeaderPosition.LowerLeft (6)
+            \li Enums.LeaderPosition.Left (7)
+            \li Enums.LeaderPosition.Automatic (8)
+        \endlist
+
+        Automatic will decide the best placement, based on the
+        location of the callout within the MapView.
+
+        The default is \c Enums.LeaderPosition.Bottom.
+    */
     property var leaderPosition: Enums.LeaderPosition.Bottom
+
+    /*!
+        The border color of the Callout.
+
+        The default color is \c #000000.
+    */
     property color borderColor: "#000000"
+
+    /*!
+        The border width of the Callout.
+
+        The default width is \c 2.
+    */
     property int borderWidth: 2
+
+    /*!
+        The background color of the Callout.
+
+        The default color is "#AFFFFFFF".
+    */
     property color backgroundColor: "#AFFFFFFF"
+
+    /*!
+        The color of the title text in the Callout.
+
+        The default color is \c #000000.
+    */
     property color titleColor: "#000000"
+
+    /*!
+        The color of the detail text in the Callout.
+
+        The default color is \c #000000.
+    */
     property color detailColor: "#000000"
+
+    /*!
+        The corner radius of the Callout.
+
+        The default value is \c 10.
+    */
     property int cornerRadius: 10
+
+    /*!
+        The height of the leader line in the Callout.
+
+        The default leader height is 15.
+    */
     property int leaderHeight: 15
+
+    /*!
+        The width of the leader line in the Callout.
+
+        The default leader width is 30.
+    */
     property int leaderWidth: 30
+
+    /*!
+        The x offset of the placement of the Callout.
+
+        The default is \c 0.
+    */
     property int screenOffsetx: 0
+
+    /*!
+        The y offset of the placement of the Callout.
+
+        The default is \c 0.
+    */
     property int screenOffsety: 0
+
+    /*!
+        The CalloutData to display in the Callout.
+
+        The CalloutData controls the data that is being displayed
+        in the Callout view. Use CallouData to do set title text,
+        set detail text, set images, set GeoElements, and so on.
+        CalloutData is obtained from the MapView.
+    */
     property var calloutData: null
 
     // internal properties
@@ -51,6 +169,9 @@ Item {
     property real halfLeaderWidth: leaderWidth / 2
     property bool debug: false
 
+    /*!
+        \internal
+    */
     Connections {
         id: calloutConnection
         target: calloutData
@@ -79,6 +200,13 @@ Item {
         }
     }
 
+    /*!
+        A method used to show the callout.
+
+        Before showing the callout, set your desired properties for
+        CalloutData (which controls the information that is displayed)
+        and for Callout (which controls how the view appears on the MapView).
+    */
     function showCallout() {
         calloutVisible = true;
         root.visible = true;
@@ -110,6 +238,13 @@ Item {
         calloutFrame.visible = true;
     }
 
+    /*!
+        A method used to dismiss the callout.
+
+        The Callout does not hide itself automatically, so you must
+        explicitly call this method to hide the Callout from the
+        MapView.
+    */
     function dismiss() {
         calloutVisible = false;
         calloutFrame.visible = false;
