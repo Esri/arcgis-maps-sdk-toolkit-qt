@@ -3,7 +3,6 @@ import QtQuick.Window 2.2
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
-import Esri.ArcGISRuntime 100.0
 import Esri.ArcGISExtras 1.1
 import "LeaderPosition.js" as Enums
 
