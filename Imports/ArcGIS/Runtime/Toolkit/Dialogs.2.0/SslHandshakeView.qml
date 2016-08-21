@@ -8,7 +8,8 @@ Rectangle {
     color: "transparent"
 
     property real scaleFactor: System.displayScaleFactor
-    property string requestingHost: authView.authChallenge.authenticatingHost
+    property var challenge: authView.authChallenge
+    property string requestingHost: challenge ? challenge.authenticatingHost : ""
     property string detailText: qsTr("The server could not prove itself; its security certificate is not trusted by your OS. Would you like to continue anyway?")
 
     RadialGradient {
@@ -137,7 +138,8 @@ Rectangle {
                 text: qsTr("Block")
                 onClicked: {
                     // reject the challenge and let the resource fail to load
-                    authView.authChallenge.continueWithSslHandshake(false, rememberCheckbox.checked);
+                    if (challenge)
+                        challenge.continueWithSslHandshake(false, rememberCheckbox.checked);
                     root.visible = false;
                 }
             }
@@ -147,7 +149,8 @@ Rectangle {
                 text: qsTr("Trust")
                 onClicked: {
                     // continue SSL handshake and trust host
-                    authView.authChallenge.continueWithSslHandshake(true, rememberCheckbox.checked);
+                    if (challenge)
+                        challenge.continueWithSslHandshake(true, rememberCheckbox.checked);
                     root.visible = false;
                 }
             }

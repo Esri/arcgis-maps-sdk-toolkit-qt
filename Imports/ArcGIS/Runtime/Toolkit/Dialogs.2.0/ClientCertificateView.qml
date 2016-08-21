@@ -9,7 +9,8 @@ Rectangle {
     color: "transparent"
 
     property real scaleFactor: System.displayScaleFactor
-    property string requestingHost: authView.authChallenge.authenticatingHost
+    property var challenge: authView.authChallenge
+    property string requestingHost: challenge ? challenge.authenticatingHost : ""
     property string detailText: qsTr("The service has requested a client certificate to authenticate you. The app has identified the requesting server as '%1', but you should only give the app access to the certificate if you trust it.").arg(requestingHost)
     property string certificateFilename: certificateFileInfo.fileName
     property string passwordDetailText: qsTr("The client certificate file '%1' requires a password to open.").arg(certificateFilename)
@@ -242,7 +243,8 @@ Rectangle {
                     text: qsTr("Skip")
                     onClicked: {
                         // cancel the challenge and let the resource fail to load
-                        authView.authChallenge.cancel();
+                        if (challenge)
+                            challenge.cancel();
                         root.visible = false;
                     }
                 }
@@ -253,7 +255,8 @@ Rectangle {
                     enabled: certificateList.currentIndex != -1
                     onClicked: {
                         // continue with client certificate file
-                        authView.authChallenge.continueWithClientCertificate(certificateList.currentIndex);
+                        if (challenge)
+                            challenge.continueWithClientCertificate(certificateList.currentIndex);
                         root.visible = false;
                     }
                 }

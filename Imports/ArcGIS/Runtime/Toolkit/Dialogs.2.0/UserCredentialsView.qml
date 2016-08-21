@@ -8,7 +8,8 @@ Rectangle {
     color: "transparent"
 
     property real scaleFactor: System.displayScaleFactor
-    property string requestingHost: authView.authChallenge.authenticatingHost
+    property var challenge: authView.authChallenge
+    property string requestingHost: challenge ? challenge.authenticatingHost : ""
     property string detailText: qsTr("You need to sign in to access the resource at '%1'").arg(requestingHost)
 
     Keys.onEnterPressed: {
@@ -109,7 +110,7 @@ Rectangle {
             width: parent.width
             anchors.margins: 10 * scaleFactor
             height: 20 * scaleFactor
-            visible: authView.authChallenge.failureCount > 1
+            visible: challenge ? challenge.failureCount > 1 : false
 
             Text {
                 anchors.centerIn: parent
@@ -155,7 +156,8 @@ Rectangle {
                 text: qsTr("Skip")
                 onClicked: {
                     // cancel the challenge and let the resource fail to load
-                    authView.authChallenge.cancel();
+                    if (challenge)
+                        challenge.cancel();
                     root.visible = false;
                 }
             }
@@ -167,7 +169,8 @@ Rectangle {
                 isDefault: true
                 onClicked: {
                     // continue with the username and password
-                    authView.authChallenge.continueWithUsernamePassword(usernameTextField.text, passwordTextField.text);
+                    if (challenge)
+                        challenge.continueWithUsernamePassword(usernameTextField.text, passwordTextField.text);
                     root.visible = false;
                 }
             }
