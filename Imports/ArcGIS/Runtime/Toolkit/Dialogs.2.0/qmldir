@@ -16,11 +16,10 @@
 
 module Esri.ArcGISRuntime.Toolkit.Dialogs
 
-PortalItemsDialog 2.0 PortalItemsDialog.qml
 SimpleDialog 2.0 SimpleDialog.qml
 ImagePopUpDialog 2.0 ImagePopUpDialog.qml
 AuthenticationView 2.0 AuthenticationView.qml
 OAuth2View 2.0 OAuth2View.qml
-PkiCertificateView 2.0 PkiCertificateView.qml
-UntrustedHostView 2.0 UntrustedHostView.qml
+ClientCertificateView 2.0 ClientCertificateView.qml
+SslHandshakeView 2.0 SslHandshakeView.qml
 UserCredentialsView 2.0 UserCredentialsView.qml
