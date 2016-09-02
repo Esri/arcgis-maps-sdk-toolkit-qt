@@ -1,44 +1,101 @@
+/*******************************************************************************
+ * Copyright 2012-2016 Esri
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ ******************************************************************************/
+
 import QtQuick 2.6
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 import Esri.ArcGISExtras 1.1
 
+/*!
+    \qmltype AttributeListModel
+    \ingroup ArcGISQtToolkit
+    \inqmlmodule Esri.ArcGISRuntime.Toolkit.Controls
+    \since 2.0
+    \brief A view for displaying and editing attributes from an AttributeListModel from a \l Feature or a \l Graphic.
+*/
+
 Item {
     id: attributeListView
-    height: 300 * scaleFactor
-    width: 250 * scaleFactor
     visible: false
 
-    // user configurable properties
+    /*========================================
+         Configurable properties
+    ========================================*/
 
-    // The color of the title bar of the view. The default color is "#3F51B5".
+    /*!
+        \brief The color of the title bar of the view.
+
+        The default color is \c "#3F51B5".
+    */
     property color barColor: "#3F51B5"
 
-    // The color of the text and buttons in the title bar. The default color is "#FFFFFF".
+    /*!
+        \brief The color of the text and buttons in the title bar.
+
+        The default color is \c "#FFFFFF".
+    */
     property color barTextColor: "#FFFFFF"
 
-    // The background color of the cells in the view. The default color is "#F5F5F5".
+    /*!
+        \brief The background color of the cells in the view.
+
+        The default color is \c "#F5F5F5".
+    */
     property color cellColor: "#F5F5F5"
 
-    // The color of the cell borders in the view. The default color is "#000000".
+    /*!
+        \brief The color of the cell borders in the view.
+
+        The default color is \c "#000000".
+    */
     property color cellBorderColor: "#000000"
 
-    // The height of the rows. The default height is 20.
+    /*!
+        \brief The height of the rows in the list.
+
+        The default value is \c 20.
+    */
     property real rowHeight: 20 * scaleFactor
 
-    // Whether the view should stay permanently expanded. The default value is false.
+    /*!
+        \brief Whether the view should stay permanently expanded.
+
+        The default value is \c false.
+    */
     property bool alwaysExpanded: false
 
-    // This property holds the model that provides data for the list of attributes.
-    // When displaying the attributes of a Feature, the Feature must be loaded before using its attributes as a model.
+    /*!
+        \brief This property holds the model that provides data for the list of attributes.
+
+        When displaying the attributes of a Feature, the Feature must be loaded before using its attributes as a model.
+    */
     property var model: null
 
-    // Emitted when an attributeValue has been modified.
+    /*!
+      \qmlsignal AttributeListModel::countChanged()
+      \brief Emitted when an attribute value inside the model has been modified.
+     */
     signal attributeValueChanged();
 
     // internal properties
+     /*! \internal */
     property int attributeCount
+     /*! \internal */
     property real columnWidth: width / 2
+     /*! \internal */
     property bool expanded: false
 
     Column {
@@ -118,7 +175,7 @@ Item {
                                 // otherwise expand
                                 else {
                                     listView.height = attributeListView.height - topBar.height;
-                                    listView.width = attributeListView.columnWidth * 2 + 80 * scaleFactor;
+                                    listView.width = attributeListView.columnWidth * 2 + 50 * scaleFactor;
                                     topBar.width = attributeListView.columnWidth * 2;
                                 }
 
@@ -184,13 +241,13 @@ Item {
 
                 Rectangle {
                     height: rowHeight
-                    width: listView.width / 2 - 80 * scaleFactor
+                    width: listView.width / 2 - 50 * scaleFactor
                     color: cellColor
                     border.color: cellBorderColor
 
                     Text {
                         anchors.centerIn: parent
-                        horizontalAlignment: Text.AlignHCenter
+                        horizontalAlignment: Text.AlignLeft
                         renderType: Text.NativeRendering
                         text: attributeName
                     }
