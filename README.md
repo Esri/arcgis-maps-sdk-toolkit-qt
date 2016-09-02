@@ -7,6 +7,11 @@ This project contains QML source code for controls and utilities you can use wit
 
 ## Features
 - UserCredentials Dialog - a dialog that takes in a username and password. It can be connected with a UserCredentials instance and a Portal instance to sign into Portal for ArcGIS or ArcGIS Online. The dialog is customizable, as the top banner and several labels can be changed.
+- AuthenticationView Dialog - a wrapper view that will automatically display the proper authentication view for any of the supported authentication types (OAuth, Token, HTTP Basic, HTTP Digest, SAML, PKI)
+- ClientCertificateView Dialog - a dialog for handling PKI authentication
+- OAuth2View Dialog - a dialog for handling OAuth authentication
+- SslHandshakeView Dialog - a dialog for allowing/blocking SSL Handshake related issues
+- UserCredentialsView Dialog - a generic dialog for handling username/password authentication
 - NavigationToolbar Control - a toolbar control with 4 buttons: 
     -   Show your location on the map
     -   Zoom in
@@ -16,6 +21,7 @@ This project contains QML source code for controls and utilities you can use wit
 - OverviewMap Control - an overview map control.
 - StyleToolbar Control - a way to style your toolbars and buttons they way you want.
 - SearchBox Control - allows you to search the map content for addresses and places.
+- Callout Control - a view for displaying information at a geographic location on the map.
 
 ## Instructions 
 
