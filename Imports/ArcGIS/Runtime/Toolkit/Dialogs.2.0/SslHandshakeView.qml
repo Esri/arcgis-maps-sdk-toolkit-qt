@@ -33,7 +33,7 @@ Rectangle {
         opacity: 0.7
         gradient: Gradient {
             GradientStop { position: 0.0; color: "lightgrey" }
-            GradientStop { position: 0.5; color: "black" }
+            GradientStop { position: 1.0; color: "black" }
         }
     }
 
@@ -91,7 +91,6 @@ Rectangle {
 
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
-                width: parent.width
                 elide: Text.ElideRight
                 text: requestingHost
                 font {
