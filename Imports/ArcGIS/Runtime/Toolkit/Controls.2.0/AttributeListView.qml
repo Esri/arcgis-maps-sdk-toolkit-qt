@@ -24,7 +24,10 @@ import Esri.ArcGISExtras 1.1
     \ingroup ArcGISQtToolkit
     \inqmlmodule Esri.ArcGISRuntime.Toolkit.Controls
     \since 2.0
-    \brief A view for displaying and editing attributes from an AttributeListModel from a \l Feature or a \l Graphic.
+    \brief A view for displaying and editing attributes in an AttributeListModel from a \l Feature or a \l Graphic.
+
+    Although edits for Features can be made inside of the view, to update the Feature with the changes, its \l FeatureTable must call the updateFeature() method.
+    A Graphic's attribute values can be edited inside of the view without any additional steps.
 */
 
 Item {
