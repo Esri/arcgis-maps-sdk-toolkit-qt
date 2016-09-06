@@ -110,7 +110,7 @@ Item {
         Rectangle {
             id: topBar
             width: columnWidth * 2.50
-            height: rowHeight * 3
+            height: Qt.platform.os === "ios" || Qt.platform.os === "android" ?  rowHeight * 2.50 : rowHeight * 1.50
             color: attributeListView.barColor
 
             // animate on expand and collapse
