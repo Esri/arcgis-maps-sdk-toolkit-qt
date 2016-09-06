@@ -1,7 +1,5 @@
 import QtQuick 2.3
 import QtQuick.Controls 1.2
-import QtPositioning 5.3
-import QtSensors 5.3
 import Esri.ArcGISRuntime 100.0
 import Esri.ArcGISExtras 1.1
 import Esri.ArcGISRuntime.Toolkit.Controls 2.0
@@ -120,10 +118,12 @@ Rectangle {
             margins: 5 * scaleFactor
         }
 
+        width: 350 * scaleFactor
+        height: 200 * scaleFactor
+
         // after the model has been changed, update the feature
         onAttributeValueChanged: {
             featureTable.updateFeature(selectedFeature);
         }
     }
-
 }
