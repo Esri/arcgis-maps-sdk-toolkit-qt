@@ -22,6 +22,7 @@ This project contains QML source code for controls and utilities you can use wit
 - StyleToolbar Control - a way to style your toolbars and buttons they way you want.
 - SearchBox Control - allows you to search the map content for addresses and places.
 - Callout Control - a view for displaying information at a geographic location on the map.
+- AttributeListView Control - a view for displaying and editing attributes of Features and Graphics.
 
 ## Instructions 
 
