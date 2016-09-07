@@ -50,6 +50,11 @@ Rectangle {
             description: "Callout Example"
             source: "CalloutExample.qml"
         }
+
+        ListElement {
+            description: "AttributeListView Example"
+            source: "AttributeListViewExample.qml"
+        }
     }
 
 
