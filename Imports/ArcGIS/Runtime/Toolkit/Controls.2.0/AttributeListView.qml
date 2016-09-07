@@ -109,8 +109,8 @@ Item {
 
         Rectangle {
             id: topBar
-            width: columnWidth
-            height: rowHeight
+            width: columnWidth * 2.50
+            height: Qt.platform.os === "ios" || Qt.platform.os === "android" ?  rowHeight * 2.50 : rowHeight * 1.50
             color: attributeListView.barColor
 
             // animate on expand and collapse
@@ -147,7 +147,7 @@ Item {
 
                 Rectangle {
                     color: "transparent"
-                    width: attributeListView.height / 20
+                    width: attributeListView.height / 12
                     height: width
                     border.color: attributeListView.barTextColor
                     radius: 90
@@ -156,7 +156,7 @@ Item {
                     Text {
                         anchors.centerIn: parent
                         verticalAlignment: Text.AlignVCenter
-                        font.pixelSize: attributeListView.height / 33
+                        font.pixelSize: attributeListView.height / 22
                         color: attributeListView.barTextColor
                         renderType: Text.NativeRendering
                         text: expanded ? "-" : "+"
@@ -190,7 +190,7 @@ Item {
 
                 Rectangle {
                     color: "transparent"
-                    width: attributeListView.height / 20
+                    width: attributeListView.height / 12
                     height: width
                     border.color: attributeListView.barTextColor
                     radius: 90
@@ -200,7 +200,7 @@ Item {
                         color: attributeListView.barTextColor
                         renderType: Text.NativeRendering
                         verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignHCenter
+                        font.pixelSize: attributeListView.height / 22
                         text: "x"
                     }
 
