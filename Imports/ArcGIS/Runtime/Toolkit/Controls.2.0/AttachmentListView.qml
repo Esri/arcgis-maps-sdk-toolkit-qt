@@ -20,9 +20,26 @@ import QtQuick.Controls.Styles 1.4
 import QtQuick.Dialogs 1.2
 import Esri.ArcGISExtras 1.1
 
+/*!
+    \qmltype AttachmentListView
+    \ingroup ArcGISQtToolkit
+    \inqmlmodule Esri.ArcGISRuntime.Toolkit.Controls
+    \since 2.0
+    \brief A view for displaying and editing attachments in an AttachmentListModel from an \l ArcGISFeature.
+
+    Although the AttachmentListView provides graphical ways to interact with attachments, it cannot directly modify a model.
+    In order to add and remove attachments, the appropriate AttachmentListModel methods must be called in the onAddButtonClicked and onDeleteButtonClicked signal handlers using the signal parameters.
+    Please see the AttachmentListViewExample in the Toolkit for an example on how to do this.
+*/
+
 Item {
     id: attachmentListView
+
+    // default properties
     visible: false
+    opacity: 0.95
+    height: 200 * scaleFactor
+    width: 250 * scaleFactor
 
     /*========================================
          Configurable properties
@@ -36,9 +53,9 @@ Item {
 
     /*!
         \brief Whether the dataFetched role of the Attachment should be displayed.
-        The default value is \c true.
+        The default value is \c false.
     */
-    property bool showDataFetched: true
+    property bool showDataFetched: false
 
     /*!
         \brief Whether the size role of the Attachment should be displayed.
@@ -48,9 +65,9 @@ Item {
 
     /*!
         \brief Whether the attachmentUrl role of the Attachment should be displayed.
-        The default value is \c true.
+        The default value is \c false.
     */
-    property bool showUrl: true
+    property bool showUrl: false
 
     /*!
         \brief Whether thumbnails should be displayed for image attachments.
@@ -95,8 +112,8 @@ Item {
     property color expandButtonColor: "darkgray"
 
     /*!
-        \brief The color of the symbol that displays the expansion status of an item.
-        The default color is \c "darkgray".
+        \brief The height of the row that contains the attachment's information.
+        The default value is \c 80 multiplied by the display's scale factor.
     */
     property real rowHeight: 80 * scaleFactor
 
@@ -111,6 +128,13 @@ Item {
       \brief Emitted when the add button is clicked in the view and file is selected from the FileDialog.
 
       The signal parameters pass the necessary data to add the file as an attachment to an AttachmentListModel using the addAttachment function.
+
+      \list
+        \li \a fileUrl The Url of the attachment passed as a string.
+        \li \a contentType the MIME Type of the attachment passed as a string
+        \li \a name The name of the attachment passed as a string.
+      \endlist
+
      */
     signal addButtonClicked(string fileUrl, string contentType, string name);
 
@@ -118,7 +142,7 @@ Item {
       \qmlsignal AttachmentListView::deleteButtonClicked(int attachmentIndex)
       \brief Emitted when the delete button is clicked in the view
 
-      The signal parameter pass the index of attachment to be deleted. It can be deleted using the AttachmentListModel's deleteAttachment function.
+      The signal parameter \a index passes the index of attachment to be deleted in the model. It can be deleted using the AttachmentListModel's deleteAttachment function.
      */
     signal deleteButtonClicked(int attachmentIndex);
 
@@ -126,7 +150,7 @@ Item {
       \qmlsignal AttachmentListView::deleteButtonBlicked(int attachmentIndex)
       \brief Emitted when the thumbnail of an image attachment is clicked.
 
-      The signal parameter passes a string containing the Url of the attachment.
+      The signal parameter \a imageUrl passes a string containing the Url of the attachment.
      */
     signal imageClicked(string imageUrl);
 
@@ -153,6 +177,7 @@ Item {
             width: attachmentListView.width
             height: rowHeight * 0.75
             color: titleBarColor
+            radius: 2
 
             Text {
                 anchors {
@@ -178,12 +203,11 @@ Item {
                 color: "transparent"
                 border.color: titleTextColor
 
-                Text {
+                Image {
                     anchors.centerIn: parent
-                    renderType: Text.NativeRendering
-                    verticalAlignment: Text.AlignVCenter
-                    color: titleTextColor
-                    text : "Add"
+                    source: "images/add.png"
+                    height: parent.height * 0.95
+                    width: parent.width
                 }
 
                 MouseArea {
@@ -209,12 +233,11 @@ Item {
                 color: "transparent"
                 border.color: titleTextColor
 
-                Text {
+                Image {
                     anchors.centerIn: parent
-                    renderType: Text.NativeRendering
-                    verticalAlignment: Text.AlignVCenter
-                    color: titleTextColor
-                    text : "X"
+                    source: "images/exit.png"
+                    height: parent.height * 0.95
+                    width: parent.width
                 }
 
                 MouseArea {
@@ -239,6 +262,7 @@ Item {
                     width: attachmentListView.width
                     clip: true
                     color: backgroundColor
+                    radius: 2
 
                     // show the attachment name
                     Text {
@@ -248,7 +272,7 @@ Item {
                             margins: 5 * scaleFactor
                         }
                         text: name
-                        width: attachmentListView.width - canvas.width - 10 * scaleFactor
+                        width: attachmentListView.width - dropDownIndicator.width - 10 * scaleFactor
                         maximumLineCount: 1
                         clip: true
                         elide: Text.ElideRight
@@ -256,8 +280,8 @@ Item {
                         renderType: Text.NativeRendering
                     }
 
-                    Canvas {
-                        id: canvas
+                    Image {
+                        id: dropDownIndicator
                         anchors {
                             right: parent.right
                             bottom: parent.bottom
@@ -265,36 +289,20 @@ Item {
                         }
                         width: attachmentListView.width / 20
                         height: width
+                        rotation: 180
+                        source: "images/triangle.png"
 
                         Behavior on rotation {
                             SmoothedAnimation {
                                 duration: 650
                             }
                         }
-
-                        // draw a triangle
-                        onPaint: {
-                            var ctx = getContext("2d");
-                            ctx.clearRect(0, 0, canvas.width, canvas.height);
-                            ctx.strokeStyle = expandButtonColor;
-                            ctx.fillStyle = expandButtonColor;
-                            ctx.lineJoin = "round";
-
-                            ctx.moveTo(0, canvas.height * 0.10);
-                            ctx.lineTo(canvas.width, canvas.height * 0.10);
-                            ctx.lineTo(canvas.width / 2, canvas.height / 2 + canvas.height * 0.10);
-
-                            ctx.closePath();
-                            ctx.stroke();
-                            ctx.fill();
-                            ctx.restore();
-                        }
                     }
 
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
-                            canvas.rotation += 180;
+                            dropDownIndicator.rotation += 180;
                             informationRect.expanded = !informationRect.expanded;
                         }
                     }
@@ -380,22 +388,26 @@ Item {
                         spacing: 10 * scaleFactor
 
                         Rectangle {
+                            id: deleteButton
                             width: 44 * scaleFactor
                             height: width
-                            color: "transparent"
+                            color: pressed ? backgroundColor : "transparent"
                             border.color: titleTextColor
 
-                            Text {
+                            property bool pressed: false
+
+                            Image {
                                 anchors.centerIn: parent
-                                renderType: Text.NativeRendering
-                                verticalAlignment: Text.AlignVCenter
-                                font.pixelSize: 12 * scaleFactor
-                                color: titleTextColor
-                                text : "Delete"
+                                height: parent.width * 0.95
+                                width: height
+                                source: "images/delete.png"
                             }
 
                             MouseArea {
                                 anchors.fill: parent
+
+                                onPressed: deleteButton.pressed = true;
+                                onReleased: deleteButton.pressed = false;
 
                                 // emit signal so user can handle deletion
                                 onClicked: {
