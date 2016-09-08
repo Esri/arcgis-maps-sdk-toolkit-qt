@@ -89,7 +89,7 @@ Rectangle {
             maxFeatures: 1
         }
 
-        // hide the callout after navigation
+        // hide the view after navigation
         onViewpointChanged: {
             attachmentList.visible = false;
         }
@@ -135,16 +135,6 @@ Rectangle {
         onDeleteButtonClicked: {
             if (selectedFeature.loadStatus === Enums.LoadStatusLoaded)
                 selectedFeature.attachments.deleteAttachmentWithIndex(attachmentIndex);
-        }
-    }
-
-    // neatline
-    Rectangle {
-        anchors.fill: parent
-        color: "transparent"
-        border {
-            width: 0.5 * scaleFactor
-            color: "black"
         }
     }
 }

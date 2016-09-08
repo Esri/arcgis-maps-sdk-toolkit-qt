@@ -418,10 +418,10 @@ Item {
                                     fillMode: Image.PreserveAspectFit
                                     source: attachmentUrl
 
-                                    // refine this idea a little bit
                                     MouseArea {
                                         anchors.fill: parent
                                         onClicked: {
+                                            // pass image url when image is clicked
                                             attachmentListView.imageClicked(attachmentUrl);
                                         }
                                     }
@@ -450,6 +450,7 @@ Item {
         id: fileInfo
     }
 
+    // when valid model is set, make view visible
     onModelChanged: {
         if (model !== null)
             attachmentListView.visible = true;
