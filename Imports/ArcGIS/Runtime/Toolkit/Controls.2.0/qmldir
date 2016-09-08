@@ -32,4 +32,6 @@ ZoomOutButton 2.0 ZoomOutButton.qml
 SearchBox 2.0 SearchBox.qml
 Callout 2.0 Callout.qml
 AttributeListView 2.0 AttributeListView.qml
+AttachmentListView 2.0 AttachmentListView.qml
+
 

@@ -55,6 +55,11 @@ Rectangle {
             description: "AttributeListView Example"
             source: "AttributeListViewExample.qml"
         }
+
+        ListElement {
+            description: "AttachmentListView Example"
+            source: "AttachmentListViewExample.qml"
+        }
     }
 
 
