@@ -23,6 +23,7 @@ Rectangle {
 
     property real scaleFactor: System.displayScaleFactor
     property var selectedFeature: null
+    property var attachmentModel: null
 
     // Create MapView that contains a Map
     MapView {
@@ -47,7 +48,6 @@ Rectangle {
 
             FeatureLayer {
                 id: featureLayer
-
                 selectionColor: "cyan"
                 selectionWidth: 3
 
@@ -65,6 +65,8 @@ Rectangle {
                 // signal handler for selecting features
                 onSelectFeaturesStatusChanged: {
                     if (selectFeaturesStatus === Enums.TaskStatusCompleted) {
+
+                        // if no feature located, stop
                         if (!selectFeaturesResult.iterator.hasNext)
                             return;
 
@@ -73,11 +75,12 @@ Rectangle {
                         // if selected feature loads, use its attributes property as Model for the view
                         selectedFeature.loadStatusChanged.connect(function() {
                             if (selectedFeature.loadStatus === Enums.LoadStatusLoaded) {
-                                attachmentList.model = selectedFeature.attachments;
+                                attachmentModel = selectedFeature.attachments;
                                 attachmentList.visible = true;
                             }
                         });
 
+                        // load the selected feature
                         selectedFeature.load();
                     }
                 }
@@ -120,12 +123,7 @@ Rectangle {
     AttachmentListView {
         id: attachmentList
         anchors.centerIn: parent
-        opacity: 0.95
-        height: 200 * scaleFactor
-        width: 250 * scaleFactor
-        clip: true
-        showUrl: false
-        showDataFetched: false
+        model: attachmentModel
 
         onAddButtonClicked: {
             if (selectedFeature.loadStatus === Enums.LoadStatusLoaded)
