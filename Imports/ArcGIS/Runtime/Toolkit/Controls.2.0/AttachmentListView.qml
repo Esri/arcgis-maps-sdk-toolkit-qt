@@ -191,7 +191,7 @@ Item {
                 color: titleTextColor
             }
 
-            Rectangle {
+            Image {
                 anchors {
                     right: closeButton.left
                     verticalCenter: parent.verticalCenter
@@ -200,15 +200,7 @@ Item {
                 visible: attachmentListView.model !== null
                 width: 45 * scaleFactor
                 height: titleBar.height / 1.5
-                color: "transparent"
-                border.color: titleTextColor
-
-                Image {
-                    anchors.centerIn: parent
-                    source: "images/add.png"
-                    height: parent.height * 0.95
-                    width: parent.width
-                }
+                source: "images/add.png"
 
                 MouseArea {
                     anchors.fill: parent
@@ -220,7 +212,7 @@ Item {
                 }
             }
 
-            Rectangle {
+            Image {
                 id: closeButton
                 anchors {
                     right: parent.right
@@ -228,17 +220,9 @@ Item {
                     margins: 5 * scaleFactor
                 }
                 visible: attachmentListView.model !== null
+                source: "images/exit.png"
                 width: 45 * scaleFactor
                 height: titleBar.height / 1.5
-                color: "transparent"
-                border.color: titleTextColor
-
-                Image {
-                    anchors.centerIn: parent
-                    source: "images/exit.png"
-                    height: parent.height * 0.95
-                    width: parent.width
-                }
 
                 MouseArea {
                     anchors.fill: parent
@@ -392,7 +376,7 @@ Item {
                             width: 44 * scaleFactor
                             height: width
                             color: pressed ? backgroundColor : "transparent"
-                            border.color: titleTextColor
+                            border.color: "transparent"
 
                             property bool pressed: false
 
