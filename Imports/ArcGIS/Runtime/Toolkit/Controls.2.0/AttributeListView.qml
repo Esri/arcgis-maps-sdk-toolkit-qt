@@ -32,11 +32,15 @@ import Esri.ArcGISExtras 1.1
 
 Item {
     id: attributeListView
-    visible: false
 
     /*========================================
          Configurable properties
     ========================================*/
+
+    //default properties
+    visible: false
+    height: 250 * scaleFactor
+    width: height
 
     /*!
         \brief The color of the title bar of the view.
@@ -88,18 +92,25 @@ Item {
     property var model: null
 
     /*!
-      \qmlsignal AttributeListModel::countChanged()
+      \qmlsignal AttributeListModel::attributeValueChanged()
       \brief Emitted when an attribute value inside the model has been modified.
      */
     signal attributeValueChanged();
 
     // internal properties
-     /*! \internal */
+    /*! \internal */
     property int attributeCount
-     /*! \internal */
+    /*! \internal */
     property real columnWidth: width / 2
-     /*! \internal */
+    /*! \internal */
     property bool expanded: false
+
+    // do not allow mouse actions to propagate down
+    MouseArea {
+        anchors.fill: parent
+        onClicked: mouse.accepted = true
+        onWheel: wheel.accepted = true
+    }
 
     Column {
         id: view
@@ -112,6 +123,7 @@ Item {
             width: columnWidth * 2.50
             height: Qt.platform.os === "ios" || Qt.platform.os === "android" ?  rowHeight * 2.50 : rowHeight * 1.50
             color: attributeListView.barColor
+            radius: 1
 
             // animate on expand and collapse
             Behavior on width {
@@ -145,21 +157,17 @@ Item {
 
                 spacing: 2 * scaleFactor
 
-                Rectangle {
-                    color: "transparent"
+                Image {
                     width: attributeListView.height / 12
                     height: width
-                    border.color: attributeListView.barTextColor
-                    radius: 90
                     visible: !alwaysExpanded
+                    source: "images/triangle.png"
+                    rotation: expanded ? 0 : 180
 
-                    Text {
-                        anchors.centerIn: parent
-                        verticalAlignment: Text.AlignVCenter
-                        font.pixelSize: attributeListView.height / 22
-                        color: attributeListView.barTextColor
-                        renderType: Text.NativeRendering
-                        text: expanded ? "-" : "+"
+                    Behavior on rotation {
+                        SmoothedAnimation {
+                            duration: 650
+                        }
                     }
 
                     MouseArea {
@@ -188,21 +196,11 @@ Item {
                     }
                 }
 
-                Rectangle {
-                    color: "transparent"
-                    width: attributeListView.height / 12
-                    height: width
-                    border.color: attributeListView.barTextColor
-                    radius: 90
 
-                    Text {
-                        anchors.centerIn: parent
-                        color: attributeListView.barTextColor
-                        renderType: Text.NativeRendering
-                        verticalAlignment: Text.AlignVCenter
-                        font.pixelSize: attributeListView.height / 22
-                        text: "x"
-                    }
+                Image {
+                    height: attributeListView.height / 12
+                    width: height
+                    source: "images/exit.png"
 
                     MouseArea {
                         anchors.fill: parent
@@ -269,18 +267,11 @@ Item {
                         visible: false
                         anchors.right: parent.right
 
-                        Rectangle {
+                        // confirm edit
+                        Image {
                             height: rowHeight
                             width: 25 * scaleFactor
-                            color: cellColor
-                            border.color: cellBorderColor
-
-                            Text {
-                                anchors.centerIn: parent
-                                horizontalAlignment: Text.AlignHCenter
-                                renderType: Text.NativeRendering
-                                text: "ok"
-                            }
+                            source: "images/check-mark.png"
 
                             MouseArea {
                                 anchors.fill: parent
@@ -294,18 +285,11 @@ Item {
                             }
                         }
 
-                        Rectangle {
+                        // cancel edit
+                        Image {
+                            source: "images/exit.png"
                             height: rowHeight
                             width: 25 * scaleFactor
-                            color: cellColor
-                            border.color: cellBorderColor
-
-                            Text {
-                                anchors.centerIn: parent
-                                horizontalAlignment: Text.AlignHCenter
-                                renderType: Text.NativeRendering
-                                text: "x"
-                            }
 
                             MouseArea {
                                 anchors.fill: parent

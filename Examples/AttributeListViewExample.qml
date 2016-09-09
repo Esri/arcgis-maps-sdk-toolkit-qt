@@ -16,13 +16,13 @@ import Esri.ArcGISRuntime 100.0
 import Esri.ArcGISExtras 1.1
 import Esri.ArcGISRuntime.Toolkit.Controls 2.0
 
-
 Rectangle {
     width: 800
     height: 600
 
     property real scaleFactor: System.displayScaleFactor
     property var selectedFeature: null
+    property var attributeModel: null
 
     // Create MapView that contains a Map
     MapView {
@@ -89,7 +89,7 @@ Rectangle {
                         // if selected feature loads, use its attributes property as Model for the view
                         selectedFeature.loadStatusChanged.connect(function() {
                             if (selectedFeature.loadStatus === Enums.LoadStatusLoaded) {
-                                attributeListView.model = selectedFeature.attributes;
+                                attributeModel = selectedFeature.attributes;
                             }
                         });
 
@@ -129,9 +129,7 @@ Rectangle {
             top: parent.top
             margins: 5 * scaleFactor
         }
-
-        width: 250 * scaleFactor
-        height: 250 * scaleFactor
+        model: attributeModel
 
         // after the model has been changed, update the feature
         onAttributeValueChanged: {
