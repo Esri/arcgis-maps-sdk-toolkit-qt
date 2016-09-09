@@ -34,16 +34,35 @@ import Esri.ArcGISExtras 1.1
 
 Item {
     id: attachmentListView
-
-    // default properties
-    visible: false
-    opacity: 0.95
-    height: 200 * scaleFactor
-    width: 250 * scaleFactor
-
+    
+    
     /*========================================
          Configurable properties
     ========================================*/
+
+    /*!
+        \brief Whether the view is visible.
+        The default is \c false.
+    */
+    visible: false
+    
+    /*!
+        \brief The view's opacity.
+        The default is \c 0.95.
+    */
+    opacity: 0.95
+    
+    /*!
+        \brief The view's height.
+        The default is \c 200.
+    */
+    height: 200 * scaleFactor
+    
+    /*!
+        \brief The view's width.
+        The default is \c 250.
+    */
+    width: 250 * scaleFactor
 
     /*!
         \brief Whether the contentType role of the Attachment should be displayed.
@@ -142,7 +161,7 @@ Item {
       \qmlsignal AttachmentListView::deleteButtonClicked(int attachmentIndex)
       \brief Emitted when the delete button is clicked in the view
 
-      The signal parameter \a index passes the index of attachment to be deleted in the model. It can be deleted using the AttachmentListModel's deleteAttachment function.
+      The signal parameter \a attachmentIndex passes the index of attachment to be deleted in the model. It can be deleted using the AttachmentListModel's deleteAttachment function.
      */
     signal deleteButtonClicked(int attachmentIndex);
 
