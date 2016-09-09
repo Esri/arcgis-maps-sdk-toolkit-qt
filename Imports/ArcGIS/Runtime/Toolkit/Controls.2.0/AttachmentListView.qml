@@ -205,7 +205,7 @@ Item {
                     margins: 5 * scaleFactor
                 }
                 renderType: Text.NativeRendering
-                font.pixelSize: titleBar.height / 4
+                font.pixelSize: titleBar.height / 3
                 text: "Attachments"
                 color: titleTextColor
             }
@@ -217,8 +217,8 @@ Item {
                     margins: 5 * scaleFactor
                 }
                 visible: attachmentListView.model !== null
-                width: 45 * scaleFactor
-                height: titleBar.height / 1.5
+                width: 30 * scaleFactor
+                height: width
                 source: "images/add.png"
 
                 MouseArea {
@@ -240,8 +240,8 @@ Item {
                 }
                 visible: attachmentListView.model !== null
                 source: "images/exit.png"
-                width: 45 * scaleFactor
-                height: titleBar.height / 1.5
+                width: 30 * scaleFactor
+                height: width
 
                 MouseArea {
                     anchors.fill: parent
@@ -287,10 +287,10 @@ Item {
                         id: dropDownIndicator
                         anchors {
                             right: parent.right
-                            bottom: parent.bottom
+                            verticalCenter: parent.verticalCenter
                             margins:  5 * scaleFactor
                         }
-                        width: attachmentListView.width / 20
+                        width: 25 * scaleFactor
                         height: width
                         rotation: 180
                         source: "images/triangle.png"
@@ -324,7 +324,7 @@ Item {
                     Behavior on height {
                         SpringAnimation {
                             spring: 3
-                            damping: .4
+                            damping: 0.4
                         }
                     }
 
@@ -401,7 +401,7 @@ Item {
 
                             Image {
                                 anchors.centerIn: parent
-                                height: parent.width * 0.95
+                                height: parent.width * 0.75
                                 width: height
                                 source: "images/delete.png"
                             }
