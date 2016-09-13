@@ -21,6 +21,7 @@ Item {
     anchors.fill: parent
     property var authenticationManager
     property var authChallenge
+    property var currentView
 
     // Connect to the target (AuthenticationManager)
     // authenticationChallenge signal
@@ -32,25 +33,31 @@ Item {
 
             if (Number(challenge.authenticationChallengeType) === 1) {
                 // ArcGIS token, HTTP Basic/Digest, IWA
-                loader.source = "UserCredentialsView.qml";
+                createView("UserCredentialsView.qml");
             } else if (Number(challenge.authenticationChallengeType) === 2) {
                 // OAuth 2
-                loader.source = "OAuth2View.qml";
+                createView("OAuth2View.qml");
             } else if (Number(challenge.authenticationChallengeType) === 3) {
                 // Client Certificate
-                loader.source = "ClientCertificateView.qml";
+                createView("ClientCertificateView.qml");
             } else if (Number(challenge.authenticationChallengeType) === 4) {
                 // SSL Handshake - Self-signed certificate
-                loader.source = "SslHandshakeView.qml";
+                createView("SslHandshakeView.qml");
+            }
+        }
+
+        function createView(fileUrl) {
+            if (currentView) {
+                // destroy current active view
+                currentView.destroy();
             }
 
-            if (loader.item)
-                loader.item.visible = true;
+            // create and display new view
+            var component = Qt.createComponent(fileUrl);
+            if (component.status === Component.Ready) {
+                currentView = component.createObject(authView);
+                currentView.anchors.fill = authView;
+            }
         }
-    }
-
-    Loader {
-        id: loader
-        anchors.fill: parent
     }
 }
