@@ -29,6 +29,29 @@ Item {
     x: 0
     y: 0
 
+    /*!
+        \brief The enumerator for the set of possible positions of the leader line in the callout.
+
+        LeaderPosition includes:
+
+        \list
+            \li leaderPosition.UpperLeft (0)
+            \li leaderPosition.Top (1)
+            \li leaderPosition.UpperRight (2)
+            \li leaderPosition.Right (3)
+            \li leaderPosition.LowerRight (4)
+            \li leaderPosition.Bottom (5)
+            \li leaderPosition.LowerLeft (6)
+            \li leaderPosition.Left (7)
+            \li leaderPosition.Automatic (8)
+        \endlist
+
+        Automatic will decide the best placement, based on the
+        location of the callout within the MapView.
+
+        The default is \c leaderPosition.Bottom.
+    */
+    property var leaderPositionEnum: Enums.LeaderPosition
     visible: false
 
     /*========================================
@@ -43,26 +66,11 @@ Item {
     property bool autoAdjustWidth: true
 
     /*!
-        \brief The position of the leader line in the callout.
+        \brief The property to set the leader position of the callout.
 
-        LeaderPosition includes:
+        For example, to set the leader line to the top of the callout use:
 
-        \list
-            \li Enums.LeaderPosition.UpperLeft (0)
-            \li Enums.LeaderPosition.Top (1)
-            \li Enums.LeaderPosition.UpperRight (2)
-            \li Enums.LeaderPosition.Right (3)
-            \li Enums.LeaderPosition.LowerRight (4)
-            \li Enums.LeaderPosition.Bottom (5)
-            \li Enums.LeaderPosition.LowerLeft (6)
-            \li Enums.LeaderPosition.Left (7)
-            \li Enums.LeaderPosition.Automatic (8)
-        \endlist
-
-        Automatic will decide the best placement, based on the
-        location of the callout within the MapView.
-
-        The default is \c Enums.LeaderPosition.Bottom.
+        Callout.leaderPosition: leaderPositionEnum.Top
     */
     property var leaderPosition: Enums.LeaderPosition.Bottom
 
@@ -106,7 +114,7 @@ Item {
 
         The default value is \c 10.
     */
-    property int cornerRadius: 10
+    property int cornerRadius: 5
 
     /*!
         \brief The height of the leader line in the Callout.
@@ -137,6 +145,32 @@ Item {
     property int screenOffsety: 0
 
     /*!
+        \brief The type of accessory button to be displayed in the Callout.
+
+        Default is "Info".
+
+        \list
+            \li "Info"
+            \li "Add"
+            \li "Custom"
+        \endlist
+    */
+    property string accessoryButtonType: "Info"
+
+    /*!
+        \brief The url of the image to be used for the accessory button of the Callout if the type
+        of the accessoryButton is "Custom".
+    */
+    property string customImageUrl
+
+    /*!
+        \brief Whether to hide the accessoryButton of the Callout.
+
+        The default is \c false.
+    */
+    property bool accessoryButtonHidden: false
+
+    /*!
         \brief The CalloutData to display in the Callout.
 
         The CalloutData controls the data that is being displayed
@@ -164,7 +198,7 @@ Item {
     /*! \internal */
     property real calloutMaxWidth: 210
     /*! \internal */
-    property real calloutMaxHeight: 100
+    property real calloutMaxHeight: 50
     /*! \internal */
     property real calloutMinWidth: calloutMaxWidth
     /*! \internal */
@@ -186,7 +220,7 @@ Item {
     /*! \internal */
     property real halfLeaderWidth: leaderWidth / 2
     /*! \internal */
-    property bool debug: false
+    property bool debug: true
 
     /*! \internal */
     Connections {
@@ -217,6 +251,12 @@ Item {
         }
     }
 
+
+    onLeaderPositionChanged: {
+        if (calloutVisible)
+            showCallout();
+    }
+
     /*!
         \brief Show the Callout on the MapView.
 
@@ -228,8 +268,12 @@ Item {
         calloutVisible = true;
         root.visible = true;
 
+        // set the adjustedLeaderPosition
         if (leaderPosition !== Enums.LeaderPosition.Automatic)
             adjustedLeaderPosition = leaderPosition
+
+        // setup the accessory button mode
+        setupAccessoryButton();
 
         // these are some of the initial calculations
         // before creating the callout frame
@@ -300,7 +344,6 @@ Item {
                 anchors {
                     left: parent.left
                     top: parent.top
-                    topMargin: leaderHeight * scaleFactor
                     leftMargin: 7
                 }
 
@@ -314,50 +357,70 @@ Item {
                    }
                     columnSpacing: 7 * scaleFactor
 
-                    Image {
-                        id: image
-                        source: calloutData.imageUrl
-                        fillMode : Image.PreserveAspectFit
+                    Rectangle {
+                        id: imageRect
+                        width: 40 * scaleFactor
+                        height: width
+                        color: "transparent"
+                        Layout.row: 0
+                        Layout.column: 0
                         Layout.rowSpan: 2
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        Image {
+                            id: image
+                            source: calloutData.imageUrl
+                            width: 40 * scaleFactor
+                            height: width
+                            fillMode : Image.PreserveAspectFit
+                            anchors.fill: parent
+                        }
                     }
 
                     Text {
                         id: title
                         text: calloutData.title
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                        font.pixelSize: 20 * scaleFactor
+                        font.pixelSize: 15 * scaleFactor
+                        Layout.row: 0
+                        Layout.column: 1
+                        Layout.alignment: Qt.AlignVCenter
                     }
 
                     Rectangle {
-                        width: 35 * scaleFactor
+                        id: accessoryButton
+                        width: 40 * scaleFactor
                         height: width
-                        Layout.rowSpan: 2
                         color: "transparent"
-                        border {
-                            color: "navy"
-                            width: 2
-                        }
+                        Layout.row: 0
+                        Layout.column: 2
+                        Layout.rowSpan: 2
+                        signal accessoryButtonClicked()
 
-                        Text {
-                            anchors.centerIn: parent
-                            text: "i"
-                            color: "navy"
-                            font.pixelSize: 20 * scaleFactor
+                        Image {
+                            id: accessoryButtonImage
+                            width: 40* scaleFactor
+                            height: width
+                            anchors.fill: parent
+                            fillMode: Image.PreserveAspectFit
+                            visible: !accessoryButtonHidden
                         }
 
                         MouseArea {
-                            anchors.fill: parent
-                            onClicked: {
-                                console.log("Info clicked");
-                            }
+                          id: region
+                          anchors.fill: parent
+                          onClicked: accessoryButton.accessoryButtonClicked()
+                          visible: !accessoryButtonHidden
                         }
                     }
 
                     Text {
                         id: detail
                         text: calloutData.detail
-                        font.pixelSize: 15 * scaleFactor
+                        font.pixelSize: 12 * scaleFactor
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        Layout.row: 1
+                        Layout.column: 1
+                        Layout.alignment: Qt.AlignVCenter
                     }
                 }
             }
@@ -383,7 +446,7 @@ Item {
         ctx.lineWidth = borderWidth;
         ctx.strokeStyle = "darkGray";
         ctx.fillStyle = "white";
-        ctx.alpha = 1.0;
+        ctx.alpha = 0.9;
 
         ctx.save();
         ctx.clearRect(0,0,canvas.width, canvas.height);
@@ -726,6 +789,16 @@ Item {
     }
 
     /*! \internal */
+    function setupAccessoryButton() {
+        if (accessoryButtonType === "Info")
+            accessoryButtonImage.source = "images/info-encircled.png";
+        else if (accessoryButtonType === "Add")
+            accessoryButtonImage.source = "images/add-encircled.png";
+        else if (accessoryButtonType === "Custom")
+            accessoryButtonImage.source = customImageUrl;
+    }
+
+    /*! \internal */
     function preCalculateWidthAndHeight() {
 
         // Calculate width and height of the rectangle with curved corners that we're going to draw.
@@ -750,11 +823,11 @@ Item {
             }
 
             // If we know the height of the content, base the height on that
-            if (calloutLayout.height === 0) {
+//            if (calloutLayout.height === 0) {
                 rectHeight = minHeight;
-            } else {
-                rectHeight = calloutLayout.height + calloutFramePadding + leaderHeight;
-            }
+//            } else {
+//                rectHeight = calloutLayout.height + calloutFramePadding + leaderHeight;
+//            }
         } else {
             rectWidth = minWidth;
             rectHeight = minHeight;
@@ -773,6 +846,7 @@ Item {
     function adjustRelativePositionOfCanvasFrame(screenx, screeny) {
 
         if (adjustedLeaderPosition === Enums.LeaderPosition.Top ) {
+            calloutContentFrame.anchors.topMargin = leaderHeight;
             calloutFrame.x = screenx - rectWidth / 2;
             calloutFrame.y = screeny;
             if (debug) {
