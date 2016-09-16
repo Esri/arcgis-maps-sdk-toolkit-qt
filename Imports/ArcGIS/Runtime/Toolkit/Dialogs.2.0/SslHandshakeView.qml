@@ -19,14 +19,37 @@ import QtQuick.Controls 1.4
 import QtGraphicalEffects 1.0
 import Esri.ArcGISExtras 1.1
 
+/*!
+    \qmltype SslHandshakeView
+    \ingroup ArcGISQtToolkit
+    \inqmlmodule Esri.ArcGISRuntime.Toolkit.Dialogs
+    \since 2.0
+    \brief A view for handling SSL Handshake authentication challenges.
+
+    When a request is made to access a resource and there is an SSL
+    handshake challenge (such as in the case of a self-signed certificate),
+    the AuthenticationView will automatically launch this view. The
+    checkbox allows for you to either be prompted each time a SSL handshake
+    error occurs from the same host, or only the first time for each host.
+*/
 Rectangle {
     id: root
     color: "transparent"
 
-    property real scaleFactor: System.displayScaleFactor
-    property var challenge: authView.authChallenge
+    /*!
+        \brief The AuthenticationChallenge for SSL Handshake errors.
+
+        \note If using the AuthenticationView, this is set automatically and
+         requires no configuration.
+    */
+    property var challenge
+
+    /*! \internal */
     property string requestingHost: challenge ? challenge.authenticatingHost : ""
+    /*! \internal */
     property string detailText: qsTr("The server could not prove itself; its security certificate is not trusted by your OS. Would you like to continue anyway?")
+    /*! \internal */
+    property real scaleFactor: System.displayScaleFactor
 
     RadialGradient {
         anchors.fill: parent

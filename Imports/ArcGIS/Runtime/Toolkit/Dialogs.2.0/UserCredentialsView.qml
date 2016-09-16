@@ -19,13 +19,44 @@ import QtQuick.Controls 1.4
 import QtGraphicalEffects 1.0
 import Esri.ArcGISExtras 1.1
 
+/*!
+    \qmltype UserCredentialsView
+    \ingroup ArcGISQtToolkit
+    \inqmlmodule Esri.ArcGISRuntime.Toolkit.Dialogs
+    \since 2.0
+    \brief A view for handling username and password authentication challenges.
+
+    When a request is made to access a resource that requires a username and
+    password, the AuthenticationView will automatically launch this view. This
+    is applicable for:
+
+    \list
+      \li ArcGIS Token
+      \li HTTP Digest
+      \li HTTP Basic
+      \li Integrated Windows Authentication (IWA)
+    \endlist
+
+    \note In the case of using an IWA secured resource on a Windows system, the
+    OS will automatically handle the authentication, and no UI dialog will appear.
+*/
 Rectangle {
     id: root
     color: "transparent"
 
+    /*!
+        \brief The AuthenticationChallenge for ArcGIS Token, HTTP Basic, HTTP Digest, and IWA.
+
+        \note If using the AuthenticationView, this is set automatically and
+         requires no configuration.
+    */
+    property var challenge
+
+    /*! \internal */
     property real scaleFactor: System.displayScaleFactor
-    property var challenge: authView.authChallenge
+    /*! \internal */
     property string requestingHost: challenge ? challenge.authenticatingHost : ""
+    /*! \internal */
     property string detailText: qsTr("You need to sign in to access the resource at '%1'").arg(requestingHost)
 
     Keys.onEnterPressed: {
