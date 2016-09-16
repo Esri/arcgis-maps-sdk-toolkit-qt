@@ -135,14 +135,14 @@ Item {
 
         The default is \c 0.
     */
-    property int screenOffsetx: 0
+    property int screenOffsetX: 0
 
     /*!
         \brief The y offset of the placement of the Callout.
 
         The default is \c 0.
     */
-    property int screenOffsety: 0
+    property int screenOffsetY: 0
 
     /*!
         \brief The type of accessory button to be displayed in the Callout.
@@ -231,10 +231,10 @@ Item {
             anchorPointy = calloutData.screenPoint.y;
 
             // add any configured offsets
-            if (screenOffsetx !== 0)
-                anchorPointx += screenOffsetx
-            if (screenOffsety !== 0)
-                anchorPointy += screenOffsety
+            if (screenOffsetX !== 0)
+                anchorPointx += screenOffsetX
+            if (screenOffsetY !== 0)
+                anchorPointy += screenOffsetY
 
             if (calloutVisible)
                 showCallout();
@@ -265,6 +265,11 @@ Item {
         and for Callout (which controls how the view appears on the MapView).
     */
     function showCallout() {
+
+        // no calloutData set
+        if (!calloutData)
+            return;
+
         calloutVisible = true;
         root.visible = true;
 
@@ -349,7 +354,7 @@ Item {
 
                 GridLayout {
                     id: calloutLayout
-                    columns: 3
+                    columns: accessoryButtonHidden ? 2 : 3
                     rows: 2
                     anchors {
                         left: parent.left
@@ -363,12 +368,12 @@ Item {
                         height: width
                         color: "transparent"
                         Layout.row: 0
-                        Layout.column: 0
+                        Layout.column: calloutData.imageUrl ? 0 : 1
                         Layout.rowSpan: 2
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         Image {
                             id: image
-                            source: calloutData.imageUrl
+                            source: calloutData ? calloutData.imageUrl : ""
                             width: 40 * scaleFactor
                             height: width
                             fillMode : Image.PreserveAspectFit
@@ -378,11 +383,13 @@ Item {
 
                     Text {
                         id: title
-                        text: calloutData.title
+                        width: 50
+                        text: calloutData ? calloutData.title : ""
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        renderType: Text.NativeRendering
                         font.pixelSize: 15 * scaleFactor
                         Layout.row: 0
-                        Layout.column: 1
+                        Layout.column: calloutData.imageUrl ? 1 : 0
                         Layout.alignment: Qt.AlignVCenter
                     }
 
@@ -392,7 +399,7 @@ Item {
                         height: width
                         color: "transparent"
                         Layout.row: 0
-                        Layout.column: 2
+                        Layout.column: !accessoryButtonHidden ? 2 : 1
                         Layout.rowSpan: 2
                         signal accessoryButtonClicked()
 
@@ -415,11 +422,12 @@ Item {
 
                     Text {
                         id: detail
-                        text: calloutData.detail
+                        text: calloutData ? calloutData.detail : ""
+                        renderType: Text.NativeRendering
                         font.pixelSize: 12 * scaleFactor
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                         Layout.row: 1
-                        Layout.column: 1
+                        Layout.column: calloutData.imageUrl ? 1 : 0
                         Layout.alignment: Qt.AlignVCenter
                     }
                 }
