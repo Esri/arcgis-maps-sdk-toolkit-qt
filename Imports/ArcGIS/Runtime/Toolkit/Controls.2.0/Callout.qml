@@ -200,7 +200,8 @@ Item {
     /*! \internal */
     property real calloutMaxHeight: 50
     /*! \internal */
-    property real calloutMinWidth: calloutMaxWidth
+    //property real calloutMinWidth: calloutMaxWidth
+    property real calloutMinWidth: 95
     /*! \internal */
     property real calloutMinHeight: calloutMaxHeight
     /*! \internal */
@@ -249,8 +250,12 @@ Item {
             }
 
         }
-    }
 
+        onTitleChanged: {
+            if (calloutVisible)
+                showCallout();
+        }
+    }
 
     onLeaderPositionChanged: {
         if (calloutVisible)
@@ -367,8 +372,6 @@ Item {
                         width: 40 * scaleFactor
                         height: width
                         color: "transparent"
-                        Layout.row: 0
-                        Layout.column: calloutData.imageUrl ? 0 : 1
                         Layout.rowSpan: 2
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         Image {
@@ -383,13 +386,14 @@ Item {
 
                     Text {
                         id: title
-                        width: 50
+                        width: titleWidth
                         text: calloutData ? calloutData.title : ""
-                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        wrapMode: Text.Wrap
                         renderType: Text.NativeRendering
-                        font.pixelSize: 15 * scaleFactor
-                        Layout.row: 0
-                        Layout.column: calloutData.imageUrl ? 1 : 0
+                        font {
+                            pixelSize: 11 * scaleFactor
+                            family: "sanserif"
+                        }
                         Layout.alignment: Qt.AlignVCenter
                     }
 
@@ -398,14 +402,12 @@ Item {
                         width: 40 * scaleFactor
                         height: width
                         color: "transparent"
-                        Layout.row: 0
-                        Layout.column: !accessoryButtonHidden ? 2 : 1
                         Layout.rowSpan: 2
                         signal accessoryButtonClicked()
 
                         Image {
                             id: accessoryButtonImage
-                            width: 40* scaleFactor
+                            width: 40 * scaleFactor
                             height: width
                             anchors.fill: parent
                             fillMode: Image.PreserveAspectFit
@@ -422,12 +424,14 @@ Item {
 
                     Text {
                         id: detail
+                        width: detailWidth
                         text: calloutData ? calloutData.detail : ""
                         renderType: Text.NativeRendering
-                        font.pixelSize: 12 * scaleFactor
+                        font {
+                            pixelSize: 10 * scaleFactor
+                            family: "sanserif"
+                        }
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                        Layout.row: 1
-                        Layout.column: calloutData.imageUrl ? 1 : 0
                         Layout.alignment: Qt.AlignVCenter
                     }
                 }
@@ -818,7 +822,7 @@ Item {
         var minWidth = Math.min(calloutMinWidth, maxWidth); // don't allow minWidth to be > maxWidth
         var minHeight = Math.min(calloutMinHeight, maxHeight); // don't allow minHeight to be > maxHeight
 
-        if (title.text.length > 0 && detail.text.length > 0) {
+        if (autoAdjustWidth) {
             // If we know the width of the content, base the width on that
             if (calloutLayout.width === 0) {
                 rectWidth = minWidth;
@@ -844,6 +848,8 @@ Item {
         if (debug) {
             console.log("rectWidth = ", rectWidth);
             console.log("rectHeight = ", rectHeight);
+            console.log("minWidth = ", minWidth);
+            console.log("minHeight = ", minHeight);
             console.log("calloutLayout.width = ", calloutLayout.width);
             console.log("calloutLayout.height = ", calloutLayout.height);
             console.log("calloutContentFrame.width = ", calloutContentFrame.width);
