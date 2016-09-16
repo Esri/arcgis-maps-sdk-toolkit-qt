@@ -20,15 +20,39 @@ import QtQuick.Dialogs 1.2
 import QtGraphicalEffects 1.0
 import Esri.ArcGISExtras 1.1
 
+/*!
+    \qmltype ClientCertificateView
+    \ingroup ArcGISQtToolkit
+    \inqmlmodule Esri.ArcGISRuntime.Toolkit.Dialogs
+    \since 2.0
+    \brief A view for handling PKI authentication challenges.
+
+    When a request is made to access a resource that is secured with PKI
+    security, the AuthenticationView will automatically launch this view.
+    The view allows you to browse to browse to different certificate files,
+    and will automatically prompt for a password if one is required.
+*/
 Rectangle {
     id: root
     color: "transparent"
 
-    property real scaleFactor: System.displayScaleFactor
-    property var challenge: authView.authChallenge
-    property string requestingHost: challenge ? challenge.authenticatingHost : ""
+    /*!
+        \brief The AuthenticationChallenge for PKI security.
+
+        \note If using the AuthenticationView, this is set automatically and
+         requires no configuration.
+    */
+    property var challenge
+
+    /*! \internal */
     property string detailText: qsTr("The service has requested a client certificate to authenticate you. The app has identified the requesting server as '%1', but you should only give the app access to the certificate if you trust it.").arg(requestingHost)
+    /*! \internal */
+    property real scaleFactor: System.displayScaleFactor
+    /*! \internal */
+    property string requestingHost: challenge ? challenge.authenticatingHost : ""
+    /*! \internal */
     property string certificateFilename: certificateFileInfo.fileName
+    /*! \internal */
     property string passwordDetailText: qsTr("The client certificate file '%1' requires a password to open.").arg(certificateFilename)
 
     RadialGradient {

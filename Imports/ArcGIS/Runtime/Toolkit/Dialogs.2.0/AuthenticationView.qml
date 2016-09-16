@@ -16,11 +16,48 @@
 
 import QtQuick 2.5
 
+/*!
+    \qmltype AuthenticationView
+    \ingroup ArcGISQtToolkit
+    \inqmlmodule Esri.ArcGISRuntime.Toolkit.Dialogs
+    \since 2.0
+    \brief A view for handling authentication challenges and automatically launching
+    the appropriate UI for each type of authentication.
+
+    Declare an AuthenticationView in your QML file, and set the
+    authenticationManager property. The AuthenticationView will
+    then be connected to all authentication challenges, and will
+    automatically launch the appropriate view for the type of
+    challenge. Supported security formats include:
+
+    \list
+      \li ArcGIS Token (UserCredentialsView)
+      \li HTTP Basic (UserCredentialsView)
+      \li HTTP Digest (UserCredentialsView)
+      \li IWA (UserCredentialsView)
+      \li OAuth 2.0 (OAuth2View)
+      \li SAML (OAuth2View)
+      \li PKI (ClientCertificateView)
+      \li SSL Handshake Warnings (SslHandshakeView)
+    \endlist
+*/
 Item {
     id: authView
     anchors.fill: parent
+
+    /*!
+        \brief The AuthenticationManager instance.
+
+        This property is required so that the view can receive the authenticationChallenge
+        signals. In the case of the QML API, set this to the AuthenticationManager
+        singleton. In the case of the C++ API, you must register the AuthenticationManager
+        as a QML type before setting it in your QML UI.
+    */
     property var authenticationManager
+
+    /*! \internal */
     property var authChallenge
+    /*! \internal */
     property var currentView
 
     // Connect to the target (AuthenticationManager)
@@ -56,6 +93,7 @@ Item {
             var component = Qt.createComponent(fileUrl);
             if (component.status === Component.Ready) {
                 currentView = component.createObject(authView);
+                currentView.challenge = authChallenge;
                 currentView.anchors.fill = authView;
             }
         }

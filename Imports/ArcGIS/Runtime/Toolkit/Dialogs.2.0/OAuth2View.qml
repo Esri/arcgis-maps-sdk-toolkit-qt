@@ -17,10 +17,31 @@
 import QtQuick 2.5
 import QtWebView 1.1
 
+/*!
+    \qmltype OAuth2View
+    \ingroup ArcGISQtToolkit
+    \inqmlmodule Esri.ArcGISRuntime.Toolkit.Dialogs
+    \since 2.0
+    \brief A view for handling OAuth 2.0 authentication challenges.
+
+    When a request is made to access a resource via OAuth 2.0, the
+    AuthenticationView will automatically launch this view. The
+    OAuth2View is used for standard ArcGIS Online/Portal OAuth logins,
+    SAML, and Enterprise logins.
+*/
 WebView {
     id: webView
     anchors.fill: parent
-    property var challenge: authView.authChallenge
+
+    /*!
+        \brief The AuthenticationChallenge for PKI security.
+
+        \note If using the AuthenticationView, this is set automatically and
+         requires no configuration.
+    */
+    property var challenge
+
+    /*! \internal */
     url: challenge ? challenge.authorizationUrl : ""
 
     onLoadingChanged: {
