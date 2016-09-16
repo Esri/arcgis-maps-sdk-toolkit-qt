@@ -25,7 +25,7 @@ import Esri.ArcGISExtras 1.1
     \ingroup ArcGISQtToolkit
     \inqmlmodule Esri.ArcGISRuntime.Toolkit.Controls
     \since 2.0
-    \brief A view for displaying and editing attachments in an AttachmentListModel from an \l ArcGISFeature.
+    \brief A view for displaying and editing attachments in an AttachmentListModel from an ArcGISFeature.
 
     Although the AttachmentListView provides graphical ways to interact with attachments, it cannot directly modify a model.
     In order to add and remove attachments, the appropriate AttachmentListModel methods must be called in the onAddButtonClicked and onDeleteButtonClicked signal handlers using the signal parameters.
