@@ -200,7 +200,6 @@ Item {
     /*! \internal */
     property real calloutMaxHeight: 50
     /*! \internal */
-    //property real calloutMinWidth: calloutMaxWidth
     property real calloutMinWidth: 95
     /*! \internal */
     property real calloutMinHeight: calloutMaxHeight
@@ -220,6 +219,9 @@ Item {
     property real halfRectHeight: rectHeight / 2
     /*! \internal */
     property real halfLeaderWidth: leaderWidth / 2
+    property real imageWidth: rectWidth / 4
+    property real titleWidth: rectWidth / 2
+    property real detailWidth: rectWidth / 2
     /*! \internal */
     property bool debug: true
 
@@ -359,7 +361,8 @@ Item {
 
                 GridLayout {
                     id: calloutLayout
-                    columns: accessoryButtonHidden ? 2 : 3
+                    height: 45 * scaleFactor
+                    columns: 3
                     rows: 2
                     anchors {
                         left: parent.left
@@ -835,11 +838,11 @@ Item {
             }
 
             // If we know the height of the content, base the height on that
-//            if (calloutLayout.height === 0) {
-                rectHeight = minHeight;
-//            } else {
-//                rectHeight = calloutLayout.height + calloutFramePadding + leaderHeight;
-//            }
+            if (platform === "ios") {
+                rectHeight = calloutLayout.height * Screen.devicePixelRatio;
+            } else {
+                rectHeight = calloutLayout.height;
+            }
         } else {
             rectWidth = minWidth;
             rectHeight = minHeight;
