@@ -219,11 +219,14 @@ Item {
     property real halfRectHeight: rectHeight / 2
     /*! \internal */
     property real halfLeaderWidth: leaderWidth / 2
+    /*! \internal */
     property real imageWidth: rectWidth / 4
+    /*! \internal */
     property real titleWidth: rectWidth / 2
+    /*! \internal */
     property real detailWidth: rectWidth / 2
     /*! \internal */
-    property bool debug: true
+    property bool debug: false
 
     /*! \internal */
     Connections {
