@@ -29,8 +29,6 @@ Item {
     x: 0
     y: 0
 
-    visible: false
-
     /*========================================
          Configurable properties
     ========================================*/
@@ -43,28 +41,37 @@ Item {
     property bool autoAdjustWidth: true
 
     /*!
-        \brief The position of the leader line in the callout.
+        \brief The enumerator for the set of possible positions of the leader line in the callout.
 
         LeaderPosition includes:
 
         \list
-            \li Enums.LeaderPosition.UpperLeft (0)
-            \li Enums.LeaderPosition.Top (1)
-            \li Enums.LeaderPosition.UpperRight (2)
-            \li Enums.LeaderPosition.Right (3)
-            \li Enums.LeaderPosition.LowerRight (4)
-            \li Enums.LeaderPosition.Bottom (5)
-            \li Enums.LeaderPosition.LowerLeft (6)
-            \li Enums.LeaderPosition.Left (7)
-            \li Enums.LeaderPosition.Automatic (8)
+            \li leaderPositionEnum.UpperLeft (0)
+            \li leaderPositionEnum.Top (1)
+            \li leaderPositionEnum.UpperRight (2)
+            \li leaderPositionEnum.Right (3)
+            \li leaderPositionEnum.LowerRight (4)
+            \li leaderPositionEnum.Bottom (5)
+            \li leaderPositionEnum.LowerLeft (6)
+            \li leaderPositionEnum.Left (7)
+            \li leaderPositionEnum.Automatic (8)
         \endlist
 
         Automatic will decide the best placement, based on the
         location of the callout within the MapView.
 
-        The default is \c Enums.LeaderPosition.Bottom.
+        The default is \c leaderPositionEnum.Bottom.
     */
-    property var leaderPosition: Enums.LeaderPosition.Bottom
+    property var leaderPositionEnum: Enums.LeaderPosition
+
+    /*!
+        \brief The property to set the leader position of the callout.
+
+        For example, to set the leader line to the top of the callout use:
+
+        \c Callout.leaderPosition: leaderPositionEnum.Top
+    */
+    property var leaderPosition: leaderPositionEnum.Bottom
 
     /*!
         \brief The border color of the Callout.
@@ -106,7 +113,7 @@ Item {
 
         The default value is \c 10.
     */
-    property int cornerRadius: 10
+    property int cornerRadius: 5
 
     /*!
         \brief The height of the leader line in the Callout.
@@ -127,14 +134,40 @@ Item {
 
         The default is \c 0.
     */
-    property int screenOffsetx: 0
+    property int screenOffsetX: 0
 
     /*!
         \brief The y offset of the placement of the Callout.
 
         The default is \c 0.
     */
-    property int screenOffsety: 0
+    property int screenOffsetY: 0
+
+    /*!
+        \brief The type of accessory button to be displayed in the Callout.
+
+        Default is "Info".
+
+        \list
+            \li "Info"
+            \li "Add"
+            \li "Custom"
+        \endlist
+    */
+    property string accessoryButtonType: "Info"
+
+    /*!
+        \brief The url of the image to be used for the accessory button of the Callout if the type
+        of the accessoryButton is "Custom".
+    */
+    property string customImageUrl
+
+    /*!
+        \brief Whether to hide the accessoryButton of the Callout.
+
+        The default is \c false.
+    */
+    property bool accessoryButtonHidden: false
 
     /*!
         \brief The CalloutData to display in the Callout.
@@ -164,9 +197,9 @@ Item {
     /*! \internal */
     property real calloutMaxWidth: 210
     /*! \internal */
-    property real calloutMaxHeight: 100
+    property real calloutMaxHeight: 50
     /*! \internal */
-    property real calloutMinWidth: calloutMaxWidth
+    property real calloutMinWidth: 95
     /*! \internal */
     property real calloutMinHeight: calloutMaxHeight
     /*! \internal */
@@ -186,7 +219,15 @@ Item {
     /*! \internal */
     property real halfLeaderWidth: leaderWidth / 2
     /*! \internal */
+    property real imageWidth: rectWidth / 4
+    /*! \internal */
+    property real titleWidth: rectWidth / 2
+    /*! \internal */
+    property real detailWidth: rectWidth / 2
+    /*! \internal */
     property bool debug: false
+    /*! \internal */
+    visible: false
 
     /*! \internal */
     Connections {
@@ -197,10 +238,10 @@ Item {
             anchorPointy = calloutData.screenPoint.y;
 
             // add any configured offsets
-            if (screenOffsetx !== 0)
-                anchorPointx += screenOffsetx
-            if (screenOffsety !== 0)
-                anchorPointy += screenOffsety
+            if (screenOffsetX !== 0)
+                anchorPointx += screenOffsetX
+            if (screenOffsetY !== 0)
+                anchorPointy += screenOffsetY
 
             if (calloutVisible)
                 showCallout();
@@ -215,6 +256,16 @@ Item {
             }
 
         }
+
+        onTitleChanged: {
+            if (calloutVisible)
+                showCallout();
+        }
+    }
+
+    onLeaderPositionChanged: {
+        if (calloutVisible)
+            showCallout();
     }
 
     /*!
@@ -225,11 +276,20 @@ Item {
         and for Callout (which controls how the view appears on the MapView).
     */
     function showCallout() {
+
+        // no calloutData set
+        if (!calloutData)
+            return;
+
         calloutVisible = true;
         root.visible = true;
 
+        // set the adjustedLeaderPosition
         if (leaderPosition !== Enums.LeaderPosition.Automatic)
             adjustedLeaderPosition = leaderPosition
+
+        // setup the accessory button mode
+        setupAccessoryButton();
 
         // these are some of the initial calculations
         // before creating the callout frame
@@ -300,12 +360,12 @@ Item {
                 anchors {
                     left: parent.left
                     top: parent.top
-                    topMargin: leaderHeight * scaleFactor
                     leftMargin: 7
                 }
 
                 GridLayout {
                     id: calloutLayout
+                    height: 45 * scaleFactor
                     columns: 3
                     rows: 2
                     anchors {
@@ -314,50 +374,72 @@ Item {
                    }
                     columnSpacing: 7 * scaleFactor
 
-                    Image {
-                        id: image
-                        source: calloutData.imageUrl
-                        fillMode : Image.PreserveAspectFit
+                    Rectangle {
+                        id: imageRect
+                        width: 40 * scaleFactor
+                        height: width
+                        color: "transparent"
                         Layout.rowSpan: 2
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        Image {
+                            id: image
+                            source: calloutData ? calloutData.imageUrl : ""
+                            width: 40 * scaleFactor
+                            height: width
+                            fillMode : Image.PreserveAspectFit
+                            anchors.fill: parent
+                        }
                     }
 
                     Text {
                         id: title
-                        text: calloutData.title
-                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                        font.pixelSize: 20 * scaleFactor
+                        width: titleWidth
+                        text: calloutData ? calloutData.title : ""
+                        wrapMode: Text.Wrap
+                        renderType: Text.NativeRendering
+                        font {
+                            pixelSize: 11 * scaleFactor
+                            family: "sanserif"
+                        }
+                        Layout.alignment: Qt.AlignVCenter
                     }
 
                     Rectangle {
-                        width: 35 * scaleFactor
+                        id: accessoryButton
+                        width: 40 * scaleFactor
                         height: width
-                        Layout.rowSpan: 2
                         color: "transparent"
-                        border {
-                            color: "navy"
-                            width: 2
-                        }
+                        Layout.rowSpan: 2
+                        signal accessoryButtonClicked()
 
-                        Text {
-                            anchors.centerIn: parent
-                            text: "i"
-                            color: "navy"
-                            font.pixelSize: 20 * scaleFactor
+                        Image {
+                            id: accessoryButtonImage
+                            width: 40 * scaleFactor
+                            height: width
+                            anchors.fill: parent
+                            fillMode: Image.PreserveAspectFit
+                            visible: !accessoryButtonHidden
                         }
 
                         MouseArea {
-                            anchors.fill: parent
-                            onClicked: {
-                                console.log("Info clicked");
-                            }
+                          id: region
+                          anchors.fill: parent
+                          onClicked: accessoryButton.accessoryButtonClicked()
+                          visible: !accessoryButtonHidden
                         }
                     }
 
                     Text {
                         id: detail
-                        text: calloutData.detail
-                        font.pixelSize: 15 * scaleFactor
+                        width: detailWidth
+                        text: calloutData ? calloutData.detail : ""
+                        renderType: Text.NativeRendering
+                        font {
+                            pixelSize: 10 * scaleFactor
+                            family: "sanserif"
+                        }
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        Layout.alignment: Qt.AlignVCenter
                     }
                 }
             }
@@ -383,7 +465,7 @@ Item {
         ctx.lineWidth = borderWidth;
         ctx.strokeStyle = "darkGray";
         ctx.fillStyle = "white";
-        ctx.alpha = 1.0;
+        ctx.alpha = 0.9;
 
         ctx.save();
         ctx.clearRect(0,0,canvas.width, canvas.height);
@@ -726,6 +808,16 @@ Item {
     }
 
     /*! \internal */
+    function setupAccessoryButton() {
+        if (accessoryButtonType === "Info")
+            accessoryButtonImage.source = "images/info-encircled.png";
+        else if (accessoryButtonType === "Add")
+            accessoryButtonImage.source = "images/add-encircled.png";
+        else if (accessoryButtonType === "Custom")
+            accessoryButtonImage.source = customImageUrl;
+    }
+
+    /*! \internal */
     function preCalculateWidthAndHeight() {
 
         // Calculate width and height of the rectangle with curved corners that we're going to draw.
@@ -737,7 +829,7 @@ Item {
         var minWidth = Math.min(calloutMinWidth, maxWidth); // don't allow minWidth to be > maxWidth
         var minHeight = Math.min(calloutMinHeight, maxHeight); // don't allow minHeight to be > maxHeight
 
-        if (title.text.length > 0 && detail.text.length > 0) {
+        if (autoAdjustWidth) {
             // If we know the width of the content, base the width on that
             if (calloutLayout.width === 0) {
                 rectWidth = minWidth;
@@ -750,10 +842,10 @@ Item {
             }
 
             // If we know the height of the content, base the height on that
-            if (calloutLayout.height === 0) {
-                rectHeight = minHeight;
+            if (platform === "ios") {
+                rectHeight = calloutLayout.height * Screen.devicePixelRatio;
             } else {
-                rectHeight = calloutLayout.height + calloutFramePadding + leaderHeight;
+                rectHeight = calloutLayout.height;
             }
         } else {
             rectWidth = minWidth;
@@ -763,6 +855,8 @@ Item {
         if (debug) {
             console.log("rectWidth = ", rectWidth);
             console.log("rectHeight = ", rectHeight);
+            console.log("minWidth = ", minWidth);
+            console.log("minHeight = ", minHeight);
             console.log("calloutLayout.width = ", calloutLayout.width);
             console.log("calloutLayout.height = ", calloutLayout.height);
             console.log("calloutContentFrame.width = ", calloutContentFrame.width);
@@ -773,6 +867,7 @@ Item {
     function adjustRelativePositionOfCanvasFrame(screenx, screeny) {
 
         if (adjustedLeaderPosition === Enums.LeaderPosition.Top ) {
+            calloutContentFrame.anchors.topMargin = leaderHeight;
             calloutFrame.x = screenx - rectWidth / 2;
             calloutFrame.y = screeny;
             if (debug) {
