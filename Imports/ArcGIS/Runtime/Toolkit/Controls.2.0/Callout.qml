@@ -29,31 +29,6 @@ Item {
     x: 0
     y: 0
 
-    /*!
-        \brief The enumerator for the set of possible positions of the leader line in the callout.
-
-        LeaderPosition includes:
-
-        \list
-            \li leaderPosition.UpperLeft (0)
-            \li leaderPosition.Top (1)
-            \li leaderPosition.UpperRight (2)
-            \li leaderPosition.Right (3)
-            \li leaderPosition.LowerRight (4)
-            \li leaderPosition.Bottom (5)
-            \li leaderPosition.LowerLeft (6)
-            \li leaderPosition.Left (7)
-            \li leaderPosition.Automatic (8)
-        \endlist
-
-        Automatic will decide the best placement, based on the
-        location of the callout within the MapView.
-
-        The default is \c leaderPosition.Bottom.
-    */
-    property var leaderPositionEnum: Enums.LeaderPosition
-    visible: false
-
     /*========================================
          Configurable properties
     ========================================*/
@@ -66,13 +41,37 @@ Item {
     property bool autoAdjustWidth: true
 
     /*!
+        \brief The enumerator for the set of possible positions of the leader line in the callout.
+
+        LeaderPosition includes:
+
+        \list
+            \li leaderPositionEnum.UpperLeft (0)
+            \li leaderPositionEnum.Top (1)
+            \li leaderPositionEnum.UpperRight (2)
+            \li leaderPositionEnum.Right (3)
+            \li leaderPositionEnum.LowerRight (4)
+            \li leaderPositionEnum.Bottom (5)
+            \li leaderPositionEnum.LowerLeft (6)
+            \li leaderPositionEnum.Left (7)
+            \li leaderPositionEnum.Automatic (8)
+        \endlist
+
+        Automatic will decide the best placement, based on the
+        location of the callout within the MapView.
+
+        The default is \c leaderPositionEnum.Bottom.
+    */
+    property var leaderPositionEnum: Enums.LeaderPosition
+
+    /*!
         \brief The property to set the leader position of the callout.
 
         For example, to set the leader line to the top of the callout use:
 
-        Callout.leaderPosition: leaderPositionEnum.Top
+        \c Callout.leaderPosition: leaderPositionEnum.Top
     */
-    property var leaderPosition: Enums.LeaderPosition.Bottom
+    property var leaderPosition: leaderPositionEnum.Bottom
 
     /*!
         \brief The border color of the Callout.
@@ -227,6 +226,8 @@ Item {
     property real detailWidth: rectWidth / 2
     /*! \internal */
     property bool debug: false
+    /*! \internal */
+    visible: false
 
     /*! \internal */
     Connections {
