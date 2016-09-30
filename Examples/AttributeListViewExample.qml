@@ -22,7 +22,7 @@ Rectangle {
 
     property real scaleFactor: System.displayScaleFactor
     property var selectedFeature: null
-    property var attributeModel: null
+    property var attributeModel: selectedFeature ? selectedFeature.attributes : null
 
     // Create MapView that contains a Map
     MapView {
@@ -80,19 +80,10 @@ Rectangle {
                 // signal handler for selecting features
                 onSelectFeaturesStatusChanged: {
                     if (selectFeaturesStatus === Enums.TaskStatusCompleted) {
-
                         if (!selectFeaturesResult.iterator.hasNext)
                             return;
 
                         selectedFeature = selectFeaturesResult.iterator.next();
-
-                        // if selected feature loads, use its attributes property as Model for the view
-                        selectedFeature.loadStatusChanged.connect(function() {
-                            if (selectedFeature.loadStatus === Enums.LoadStatusLoaded) {
-                                attributeModel = selectedFeature.attributes;
-                            }
-                        });
-
                         selectedFeature.load();
                     }
                 }
@@ -107,7 +98,7 @@ Rectangle {
         onMouseClicked: {
             // reset selection and check if there is a feature at clicked point
             featureLayer.clearSelection();
-            mapView.identifyLayer(featureLayer, mouse.x, mouse.y, 10, 1);
+            mapView.identifyLayerWithMaxResults(featureLayer, mouse.x, mouse.y, 10, Enums.IdentifyReturnsGeoElementsOnly, 1);
         }
 
         onIdentifyLayerStatusChanged: {
@@ -116,7 +107,7 @@ Rectangle {
                     // get the objectid of the identifed object
                     params.objectIds = [identifyLayerResult.geoElements[0].attributes.attributeValue("objectid")];
                     // query for the feature using the objectid
-                    featureLayer.selectFeaturesWithQuery(params, Enums.SelectionModeNew);
+                    featureLayer.selectFeaturesWithQuery(params, Enums.IdentifyReturnsGeoElementsOnly);
                 }
             }
         }
