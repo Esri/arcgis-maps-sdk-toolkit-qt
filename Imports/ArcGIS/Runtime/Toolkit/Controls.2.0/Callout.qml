@@ -170,6 +170,11 @@ Item {
     property bool accessoryButtonHidden: false
 
     /*!
+        \brief The signal emitted when the accessory button is clicked.
+    */
+    signal accessoryButtonClicked()
+
+    /*!
         \brief The CalloutData to display in the Callout.
 
         The CalloutData controls the data that is being displayed
@@ -410,7 +415,6 @@ Item {
                         height: width
                         color: "transparent"
                         Layout.rowSpan: 2
-                        signal accessoryButtonClicked()
 
                         Image {
                             id: accessoryButtonImage
@@ -424,7 +428,7 @@ Item {
                         MouseArea {
                           id: region
                           anchors.fill: parent
-                          onClicked: accessoryButton.accessoryButtonClicked()
+                          onClicked: accessoryButtonClicked()
                           visible: !accessoryButtonHidden
                         }
                     }
