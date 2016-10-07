@@ -40,6 +40,33 @@ import QtQuick 2.5
       \li PKI (ClientCertificateView)
       \li SSL Handshake Warnings (SslHandshakeView)
     \endlist
+    
+    \note OAuth 2.0 uses a WebView, and in Qt, certain platforms 
+    fall back to use the WebEngine. Because of this, it is advised 
+    that you add the following lines to your project's .pro file
+    and main.cpp when using the AuthenticationView:
+    
+    *.pro:
+    \code
+    qtHaveModule(webengine) {
+      QT += webengine
+      DEFINES += QT_WEBVIEW_WEBENGINE_BACKEND
+    }
+    \endcode
+    
+    main.cpp:
+    \code
+    #ifdef QT_WEBVIEW_WEBENGINE_BACKEND
+    #include <QtWebEngine>
+    #endif // QT_WEBVIEW_WEBENGINE_BACKEND
+    \endcode
+    
+    main.cpp:
+    \code
+    #ifdef QT_WEBVIEW_WEBENGINE_BACKEND
+    QtWebEngine::initialize();
+    #endif // QT_WEBVIEW_WEBENGINE_BACKEND
+    \endcode
 */
 Item {
     id: authView
