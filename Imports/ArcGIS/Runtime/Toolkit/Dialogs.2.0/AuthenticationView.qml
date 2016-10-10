@@ -75,11 +75,12 @@ Item {
     Component.onCompleted: {
         var parentsChildren = parent.children;
         var maxZ = 0;
-        for (var i = 0; i < parentsChildren.length; i++){}
+        for (var i = 0; i < parentsChildren.length; i++){
             if (parentsChildren[i] === item)
                 continue;
             maxZ = Math.max(maxZ, parentsChildren[z]);
-        z = maxZ + 1; // the view should be shown on top
+            z = maxZ + 1; // the view should be shown on top
+        }
     }
 
     /*!
