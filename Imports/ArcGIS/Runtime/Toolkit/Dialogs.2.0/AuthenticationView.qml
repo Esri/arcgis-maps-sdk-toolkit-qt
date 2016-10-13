@@ -76,11 +76,11 @@ Item {
         var parentsChildren = parent.children;
         var maxZ = 0;
         for (var i = 0; i < parentsChildren.length; i++){
-            if (parentsChildren[i] === item)
+            if (parentsChildren[i] === authView)
                 continue;
-            maxZ = Math.max(maxZ, parentsChildren[z]);
-            z = maxZ + 1; // the view should be shown on top
+            maxZ = Math.max(maxZ, parentsChildren[i].z);
         }
+        authView.z = maxZ + 1; // the view should be shown on top
     }
 
     /*!
