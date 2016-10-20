@@ -300,7 +300,7 @@ Item {
         // before creating the callout frame
         preCalculateWidthAndHeight();
         if (platform == "ios")
-            adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, calloutLayout.width, calloutLayout.height);
+            adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, calloutLayout.width - 2*cornerRadius, calloutLayout.height - cornerRadius);
         else
             adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, rectWidth, rectHeight);
 
@@ -314,7 +314,7 @@ Item {
         // once leader position is finalized
         if (findBestLeaderPosition(anchorPointx, anchorPointy)) {
             if (platform == "ios")
-                adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, calloutLayout.width, calloutLayout.height);
+                adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, calloutLayout.width - 2*cornerRadius, calloutLayout.height - cornerRadius);
             else
                 adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, rectWidth, rectHeight);
 
@@ -383,7 +383,7 @@ Item {
                     anchors {
                         left: parent.left
                         top: parent.top
-                   }
+                    }
                     columnSpacing: 7 * scaleFactor
 
                     Rectangle {
