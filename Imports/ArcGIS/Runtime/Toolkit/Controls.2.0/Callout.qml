@@ -299,7 +299,10 @@ Item {
         // these are some of the initial calculations
         // before creating the callout frame
         preCalculateWidthAndHeight();
-        adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy);
+        if (platform == "ios")
+            adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, calloutLayout.width, calloutLayout.height);
+        else
+            adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, rectWidth, rectHeight);
 
         if (leaderPosition !== Enums.LeaderPosition.Automatic)
             adjustedLeaderPosition = leaderPosition;
@@ -310,7 +313,11 @@ Item {
 
         // once leader position is finalized
         if (findBestLeaderPosition(anchorPointx, anchorPointy)) {
-            adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy);
+            if (platform == "ios")
+                adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, calloutLayout.width, calloutLayout.height);
+            else
+                adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, rectWidth, rectHeight);
+
 
         }
 
@@ -868,36 +875,36 @@ Item {
     }
 
     /*! \internal */
-    function adjustRelativePositionOfCanvasFrame(screenx, screeny) {
+    function adjustRelativePositionOfCanvasFrame(screenx, screeny, calloutWidth, calloutHeight) {
 
         if (adjustedLeaderPosition === Enums.LeaderPosition.Top ) {
             calloutContentFrame.anchors.topMargin = leaderHeight;
-            calloutFrame.x = screenx - rectWidth / 2;
+            calloutFrame.x = screenx - calloutWidth / 2;
             calloutFrame.y = screeny;
             if (debug) {
                 console.log("top calloutFrame = " , calloutFrame.x, " ", calloutFrame.y);
             }
         } else if (adjustedLeaderPosition === Enums.LeaderPosition.Bottom) {
-            calloutFrame.x = screenx - (rectWidth / 2);
-            calloutFrame.y = screeny  - (leaderHeight + rectHeight );
+            calloutFrame.x = screenx - (calloutWidth / 2);
+            calloutFrame.y = screeny  - (leaderHeight + calloutHeight);
             if (debug) {
                 console.log("bottom calloutFrame = " , calloutFrame.x, " ", calloutFrame.y);
             }
         } else if (adjustedLeaderPosition === Enums.LeaderPosition.Left) {
             calloutContentFrame.anchors.leftMargin = leaderHeight;
             calloutFrame.x = screenx;
-            calloutFrame.y = screeny  - rectHeight / 2;
+            calloutFrame.y = screeny  - calloutHeight / 2;
             if (debug) {
                 console.log("left calloutFrame = " , calloutFrame.x, " ", calloutFrame.y);
             }
         } else if (adjustedLeaderPosition === Enums.LeaderPosition.Right) {
-            calloutFrame.x = screenx - (rectWidth + leaderWidth);
-            calloutFrame.y = screeny  - rectHeight / 2;
+            calloutFrame.x = screenx - (calloutWidth + leaderHeight);
+            calloutFrame.y = screeny  - calloutHeight / 2;
             if (debug) {
                 console.log("right calloutFrame = " , calloutFrame.x, " ", calloutFrame.y);
             }
         } else if (adjustedLeaderPosition === Enums.LeaderPosition.UpperRight) {
-            calloutFrame.x = screenx - leaderWidth / 2 - (rectWidth - leaderWidth);
+            calloutFrame.x = screenx - leaderWidth / 2 - (calloutWidth - leaderWidth);
             calloutFrame.y = screeny;
             if (debug) {
                 console.log("upper right top right calloutFrame = " , calloutFrame.x, " ", calloutFrame.y);
@@ -909,14 +916,14 @@ Item {
                 console.log("upper left calloutFrame = " , calloutFrame.x, " ", calloutFrame.y);
             }
         } else if (adjustedLeaderPosition === Enums.LeaderPosition.LowerRight) {
-            calloutFrame.x = screenx - rectWidth + leaderWidth / 2;
-            calloutFrame.y = screeny  - (leaderHeight + rectHeight);
+            calloutFrame.x = screenx - calloutWidth + leaderWidth / 2;
+            calloutFrame.y = screeny  - (leaderHeight + calloutHeight);
             if (debug) {
                 console.log("lower right calloutFrame = " , calloutFrame.x, " ", calloutFrame.y);
             }
         } else if (adjustedLeaderPosition === Enums.LeaderPosition.LowerLeft) {
             calloutFrame.x = screenx - leaderWidth / 2;
-            calloutFrame.y = screeny  - (leaderHeight + rectHeight);
+            calloutFrame.y = screeny  - (leaderHeight + calloutHeight);
             if (debug) {
                 console.log("lower left calloutFrame = " , calloutFrame.x, " ", calloutFrame.y);
             }
