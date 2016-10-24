@@ -49,7 +49,7 @@ Rectangle {
                     y: 6806138.66
                     spatialReference: SpatialReference { wkid: 102100 }
                 }
-                scale: 2e6
+                targetScale: 2e6
             }
         }
 
