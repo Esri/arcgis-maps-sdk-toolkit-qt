@@ -65,7 +65,7 @@ Rectangle {
 
             console.log("x = ", mouse.x, " y = ", mouse.y);
             // call identify on the feature layer
-            mapView.identifyLayer(featureLayer, mouse.x, mouse.y, 10);
+            mapView.identifyLayerWithMaxResults(featureLayer, mouse.x, mouse.y, 10, Enums.IdentifyReturnsGeoElementsOnly, 1);
         }
 
         onIdentifyLayerStatusChanged: {
