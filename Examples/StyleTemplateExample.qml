@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2012-2015 Esri
+ * Copyright 2012-2016 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtPositioning 5.2
-import ArcGIS.Runtime 10.26
+import Esri.ArcGISRuntime 100.0
 import QtQuick.Window 2.2
-import ArcGIS.Runtime.Toolkit.Controls 1.0
+import Esri.ArcGISRuntime.Toolkit.Controls 2.0
 
 Rectangle {
     width: 500
@@ -33,21 +33,24 @@ Rectangle {
         property real _size: size * displayScaleFactor
     }
 
-    Map {
-        id: mainMap
+    MapView {
+        id: mapview
         anchors.fill: parent
-        wrapAroundEnabled: true
-        mapPanningByMagnifierEnabled: true
-        magnifierOnPressAndHoldEnabled: true
+        wrapAroundMode: Enums.WrapAroundModeDisabled
+        magnifierEnabled: true
         zoomByPinchingEnabled: true
+        allowMagnifierToPanMap: true
+        rotationByPinchingEnabled: true
 
-        positionDisplay {
-            positionSource: PositionSource {
-            }
+        Map {
+            BasemapNationalGeographic {}
         }
 
-        ArcGISTiledMapServiceLayer {
-            url: "http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer"
+        // set the location display's position source
+        locationDisplay {
+            positionSource: PositionSource {
+                active: true
+            }
         }
 
         StyleToolbar {
@@ -65,14 +68,13 @@ Rectangle {
             // Rotate Clockwise Button
             StyleButton {
                 id: buttonRotateClockwise
-                map: mainMap
                 iconSource: "images/rotate_clockwise.png"
                 width: internal._size
                 height: width
 
                 onClicked: {
                     fader.start();
-                    mainMap.mapRotation -= 22.5;
+                    mapview.setViewpointRotation(mapview.mapRotation - 22.5);
                 }
             }
 
@@ -80,14 +82,13 @@ Rectangle {
             // Rotate Counter Clockwise Button
             StyleButton {
                 id: buttonRotateCounterClockwise
-                map: mainMap
                 iconSource: "images/rotate_counter_clockwise.png"
                 width: internal._size
                 height: width
 
                 onClicked: {
                     fader.start();
-                    mainMap.mapRotation += 22.5;
+                    mapview.setViewpointRotation(mapview.mapRotation + 22.5);
                 }
             }
 
@@ -95,7 +96,6 @@ Rectangle {
             // Info Button
             StyleButton {
                 id: infoButton
-                map: mainMap
                 iconSource: "images/info.png"
                 width: internal._size
                 height: width
@@ -107,11 +107,17 @@ Rectangle {
             }
         }
 
+        // -------------------------------------------------------------------------
+        // Envelope used for North, South, West and East buttons
+        EnvelopeBuilder {
+            id: envBuilder
+            spatialReference: mapview.spatialReference
+        }
+
         //--------------------------------------------------------------------------
         // Pan North Button
         StyleButton {
             id: moveNorth
-            map: mainMap
             iconSource:"images/arrow.png"
             anchors {
                 top: parent.top
@@ -128,9 +134,15 @@ Rectangle {
             }
 
             onClicked: {
-                var extent = mainMap.extent;
-                extent.yMin += panDistance
-                mainMap.panTo(extent)
+                var extent = mapview.visibleArea.extent;
+                var newExtent = ArcGISRuntimeEnvironment.createObject("Envelope", {
+                                                                              spatialReference: extent.spatialReference,
+                                                                              xMin: extent.xMin,
+                                                                              yMin: extent.yMin + panDistance,
+                                                                              xMax: extent.xMax,
+                                                                              yMax: extent.yMax + panDistance
+                                                                          });
+                mapview.setViewpointGeometry(newExtent);
             }
         }
 
@@ -138,7 +150,6 @@ Rectangle {
         // Pan South Button
         StyleButton {
             id: moveSouth
-            map: mainMap
             iconSource:"images/arrow.png"
             rotation: 180
             anchors {
@@ -156,9 +167,15 @@ Rectangle {
             }
 
             onClicked: {
-                var extent = mainMap.extent;
-                extent.yMin -= panDistance;
-                mainMap.panTo(extent)
+                var extent = mapview.visibleArea.extent;
+                var newExtent = ArcGISRuntimeEnvironment.createObject("Envelope", {
+                                                                              spatialReference: extent.spatialReference,
+                                                                              xMin: extent.xMin,
+                                                                              yMin: extent.yMin - panDistance,
+                                                                              xMax: extent.xMax,
+                                                                              yMax: extent.yMax - panDistance
+                                                                          });
+                mapview.setViewpointGeometry(newExtent);
             }
         }
 
@@ -166,7 +183,6 @@ Rectangle {
         // Pan West Button
         StyleButton {
             id: moveWest
-            map: mainMap
             iconSource:"images/arrow.png"
             rotation: 270
             anchors {
@@ -184,9 +200,15 @@ Rectangle {
             }
 
             onClicked: {
-                var extent = mainMap.extent;
-                extent.xMin -= panDistance;
-                mainMap.panTo(extent)
+                var extent = mapview.visibleArea.extent;
+                var newExtent = ArcGISRuntimeEnvironment.createObject("Envelope", {
+                                                                              spatialReference: extent.spatialReference,
+                                                                              xMin: extent.xMin - panDistance,
+                                                                              yMin: extent.yMin,
+                                                                              xMax: extent.xMax - panDistance,
+                                                                              yMax: extent.yMax
+                                                                          });
+                mapview.setViewpointGeometry(newExtent);
             }
         }
 
@@ -194,7 +216,6 @@ Rectangle {
         // Pan East Button
         StyleButton {
             id: moveEast
-            map: mainMap
             iconSource:"images/arrow.png"
             rotation: 90
             anchors {
@@ -212,15 +233,20 @@ Rectangle {
             }
 
             onClicked: {
-                var extent = mainMap.extent;
-                extent.xMin += panDistance;
-                mainMap.panTo(extent)
+                var extent = mapview.visibleArea.extent;
+                var newExtent = ArcGISRuntimeEnvironment.createObject("Envelope", {
+                                                                              spatialReference: extent.spatialReference,
+                                                                              xMin: extent.xMin + panDistance,
+                                                                              yMin: extent.yMin,
+                                                                              xMax: extent.xMax + panDistance,
+                                                                              yMax: extent.yMax
+                                                                          });
+                mapview.setViewpointGeometry(newExtent);
             }
         }
 
         NavigationToolbar {
             id: navi
-            map: mainMap
             anchors {
                 top: parent.top
                 right: parent.right

@@ -14,40 +14,32 @@
  *   limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.0
+import QtQuick 2.2
 import QtQuick.Controls 1.1
+import QtQuick.Controls.Styles 1.1
+import QtQuick.Layouts 1.1
+import QtQuick.Window 2.2
 import Esri.ArcGISRuntime 100.0
-import Esri.ArcGISRuntime.Toolkit.Controls 2.0
 
-Rectangle {
-    width: 500
-    height: 400
+StyleButton {
+    id: zoomInButton
 
-    MapView {
-        id: mapview
-        anchors.fill: parent
-        wrapAroundMode: Enums.WrapAroundModeDisabled
-        magnifierEnabled: true
-        zoomByPinchingEnabled: true
-        Map {
-            id: map
-            BasemapLightGrayCanvas{}
-        }
+    property real zoomRatio: 2
+    property string platform: Qt.platform.os
+    property MapView mapview: null
 
-        OverviewMap {
-            id: overviewmap
+    text: "+"
+    tooltip: qsTr("Zoom in")
 
-            anchors {
-                top: parent.top
-                left: parent.left
-                margins: 20
-            }
-            parentMapview: mapview
-            overviewLayer: ArcGISTiledLayer {
-                url: "http://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer"
-            }
-        }
+    onClicked: {
+        if (mapview)
+            mapview.setViewpointScale(mapview.mapScale / zoomRatio);
+    }
 
-
+    QtObject {
+        id: internal
+        property real _size: size * displayScaleFactor
     }
 }
+
+
