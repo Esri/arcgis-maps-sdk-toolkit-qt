@@ -104,7 +104,7 @@ Rectangle {
             selectedFeature = null;
 
             // call identify on the mapview
-            mapView.identifyLayer(featureLayer, mouse.x, mouse.y, 10);
+            mapView.identifyLayer(featureLayer, mouse.x, mouse.y, 10, false);
         }
 
         onIdentifyLayerStatusChanged: {
