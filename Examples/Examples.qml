@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2012-2015 Esri
+ * Copyright 2012-2016 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.1
 import QtGraphicalEffects 1.0
-import ArcGIS.Runtime 10.26
+import Esri.ArcGISRuntime 100.0
 
 Rectangle {
     width: 640
@@ -42,28 +42,23 @@ Rectangle {
         }
 
         ListElement {
-            description: "PortalItemsView  Example"
-            source: "PortalItemsViewExample.qml"
-        }
-
-        ListElement {
-            description: "PortalItemsDialog  Example"
-            source: "PortalItemsDialogExample.qml"
-        }
-
-        ListElement {
             description: "StyleTemplate Example"
             source: "StyleTemplateExample.qml"
         }
 
         ListElement {
-            description: "SearchBox Example"
-            source: "SearchboxExample.qml"
+            description: "Callout Example"
+            source: "CalloutExample.qml"
         }
 
         ListElement {
-            description: "UserCredentialsDialog Example"
-            source: "UserCredentialsDialogExample.qml"
+            description: "AttributeListView Example"
+            source: "AttributeListViewExample.qml"
+        }
+
+        ListElement {
+            description: "AttachmentListView Example"
+            source: "AttachmentListViewExample.qml"
         }
     }
 

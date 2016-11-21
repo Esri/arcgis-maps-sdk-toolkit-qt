@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2012-2015 Esri
+ * Copyright 2012-2016 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,28 +16,32 @@
 
 import QtQuick 2.0
 import QtQuick.Controls 1.1
-import QtPositioning 5.2
-import ArcGIS.Runtime 10.26
-import ArcGIS.Runtime.Toolkit.Controls 1.0
+import QtQuick.Controls.Styles 1.2
+import QtQuick.Window 2.0
+import Esri.ArcGISRuntime 100.0
+import Esri.ArcGISRuntime.Toolkit.Controls 2.0
 
 Rectangle {
     width: 500
     height: 400
 
-    Map {
-        id: map
-        anchors.fill: parent
-        wrapAroundEnabled: true
-        mapPanningByMagnifierEnabled: true
-        magnifierOnPressAndHoldEnabled: true
-        zoomByPinchingEnabled: true
+    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
 
-        ArcGISTiledMapServiceLayer {
-            url: "http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer"
+    MapView {
+        id: mapview
+        anchors.fill: parent
+        wrapAroundMode: Enums.WrapAroundModeDisabled
+        magnifierEnabled: true
+        zoomByPinchingEnabled: true
+        rotationByPinchingEnabled: true
+
+        Map {
+            BasemapNationalGeographic {}
         }
 
         NorthArrow {
             id: northArrow
+
             anchors {
                 top: parent.top
                 right: parent.right
@@ -48,27 +52,27 @@ Rectangle {
 
         RotationToolbar {
             anchors {
-                top: northArrow.bottom
-                right: parent.right
-                topMargin: 30
-                rightMargin: 10
+                left: parent.left
+                top: parent.top
+                margins: 10 * displayScaleFactor
             }
         }
 
         Text {
-            text: map.mapRotation + "°"
+            id: textBearing
+            text: (Number(mapview.mapRotation)).toFixed(1) === "0.0" ? "00.0°" : (Number(mapview.mapRotation)).toFixed(1) + "°"
             anchors {
                 top: northArrow.bottom
-                bottomMargin: 5
-                horizontalCenter: northArrow.horizontalCenter
+                bottomMargin: 5 * displayScaleFactor
+                right: parent.right
+                rightMargin: 10 * displayScaleFactor
             }
-            font {
-                pointSize: 16
-                bold: true
-            }
+            font.pixelSize: 16 * displayScaleFactor
             horizontalAlignment: Text.AlignHCenter
             style: Text.Outline
             styleColor: "white"
         }
+
     }
 }
+

@@ -14,34 +14,13 @@
  *   limitations under the License.
  ******************************************************************************/
 
-import QmlProject 1.1
+import QtQuick 2.2
+import QtQuick.Dialogs 1.2
+import QtQuick.Controls 1.1
 
-Project {
-    mainFile: "Examples.qml"
-
-    QmlFiles {
-        directory: "."
-        recursive: true
-    }
-
-    JavaScriptFiles {
-        directory: "."
-        recursive: true
-    }
-
-    ImageFiles {
-        directory: "."
-        recursive: true
-    }
-
-    Files {
-        directory: "."
-        recursive: true
-        filter: "*.json;*.png;*.txt"
-    }
-
-    importPaths: [
-        "../Imports"
-   ]
+Dialog {
+    id: dialog
+    modality: Qt.ApplicationModal
+    visible: false
+    standardButtons: AbstractDialog.Close
 }
-

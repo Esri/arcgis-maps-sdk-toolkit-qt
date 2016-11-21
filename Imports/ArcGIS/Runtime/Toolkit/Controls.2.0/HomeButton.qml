@@ -14,40 +14,34 @@
  *   limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.0
+import QtQuick 2.2
 import QtQuick.Controls 1.1
+import QtQuick.Controls.Styles 1.1
+import QtQuick.Layouts 1.1
+import QtQuick.Window 2.2
 import Esri.ArcGISRuntime 100.0
-import Esri.ArcGISRuntime.Toolkit.Controls 2.0
 
-Rectangle {
-    width: 500
-    height: 400
+StyleButton {
+    id: homeButton
 
-    MapView {
-        id: mapview
-        anchors.fill: parent
-        wrapAroundMode: Enums.WrapAroundModeDisabled
-        magnifierEnabled: true
-        zoomByPinchingEnabled: true
-        Map {
-            id: map
-            BasemapLightGrayCanvas{}
+    //must be the same spatial reference as the MapView
+    property Envelope homeExtent
+    property MapView mapview: null
+
+    iconSource: "images/home.png"
+    tooltip: qsTr("Home")
+
+    onClicked: {
+        if(mapview){
+            if(homeExtent)
+                mapview.setViewpointGeometry(homeExtent);
+            else
+                mapview.setViewpointGeometry(mapview.map.initialViewpoint.extent);
         }
+    }
 
-        OverviewMap {
-            id: overviewmap
-
-            anchors {
-                top: parent.top
-                left: parent.left
-                margins: 20
-            }
-            parentMapview: mapview
-            overviewLayer: ArcGISTiledLayer {
-                url: "http://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer"
-            }
-        }
-
-
+    QtObject {
+        id: internal
+        property real _size: size * displayScaleFactor
     }
 }

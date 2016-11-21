@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2012-2015 Esri
+ * Copyright 2012-2016 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,43 +14,41 @@
  *   limitations under the License.
  ******************************************************************************/
 
-import QtPositioning 5.3
-import QtQuick 2.3
-import QtQuick.Controls 1.2
-import ArcGIS.Runtime 10.26
-import ArcGIS.Runtime.Toolkit.Controls 1.0
+import QtQuick 2.0
+import QtQuick.Controls 1.1
+import QtPositioning 5.2
+import Esri.ArcGISRuntime 100.0
+import Esri.ArcGISRuntime.Toolkit.Controls 2.0
 
 Rectangle {
     width: 500
     height: 400
 
-    Map {
-        id: mainMap
+    MapView {
+        id: mapview
         anchors.fill: parent
-        wrapAroundEnabled: true
-        focus: true
+        wrapAroundMode: Enums.WrapAroundModeDisabled
+        magnifierEnabled: true
+        zoomByPinchingEnabled: true
+        allowMagnifierToPanMap: true
+        rotationByPinchingEnabled: true
 
-        ArcGISTiledMapServiceLayer {
-            url: "http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer"
+        Map {
+           BasemapNationalGeographic {}
         }
 
-        PositionSource {
-            id: position
-        }
-
-        NavigationToolbar {
-            id: navigationToolbar
-            map: mainMap
-            anchors {
-                top: parent.top
-                left: parent.left
-                margins: 10
+        // set the location display's position source
+        locationDisplay {
+            positionSource: PositionSource {
+                active: true
             }
         }
 
-        onStatusChanged: {
-            if (status === Enums.MapStatusReady) {
-                mainMap.positionDisplay.positionSource = position;
+        NavigationToolbar {
+            anchors {
+                left: parent.left
+                leftMargin: 10
+                verticalCenter: parent.verticalCenter
             }
         }
     }
