@@ -27,7 +27,7 @@ This project contains QML source code for controls and utilities you can use wit
 ## Instructions 
 
 1. Fork and then clone the repo or download the .zip file.
-2. The Toolkit requires the ArcGIS Runtime SDK for Qt.  Confirm that your system meets the requirements for using the ArcGIS Runtime SDK for Qt (http://developers.arcgis.com/qt/qml/guide/arcgis-runtime-sdk-for-qt-system-requirements.htm).  
+2. The Toolkit requires the ArcGIS Runtime SDK for Qt.  Confirm that your system meets the requirements for using the ArcGIS Runtime SDK for Qt (https://developers.arcgis.com/qt/latest/qml/guide/arcgis-runtime-sdk-for-qt-system-requirements.htm).  
 3. From Qt Creator, go to <b>File->Open File or Project...</b> on the toolbar, browse for the .qml files from your cloned repo, and open them. 
 4. Once these have been added to your Qt Creator, double-click "Example.qml" to open it in the editor. 
 5. To run the QML Example app, on the toolbar go to <b>Tools->External->ArcGIS Runtime->ArcGIS Runtime Sample App</b>. The QML Example app with open, and you can use the pulldown to select each individual example program that demonstrates a specific control.
@@ -36,6 +36,7 @@ This project contains QML source code for controls and utilities you can use wit
 ## Resources
 
 * [ArcGIS Runtime SDK for Qt](https://developers.arcgis.com/qt/)
+* [Qt Toolkit API Reference](https://developers.arcgis.com/qt/latest/toolkit/api-reference/)
 * [Qt and QML](http://www.qt.io/)
 * [ArcGIS Blog](http://blogs.esri.com/esri/arcgis/)
 * [twitter@esri](http://twitter.com/esri)
