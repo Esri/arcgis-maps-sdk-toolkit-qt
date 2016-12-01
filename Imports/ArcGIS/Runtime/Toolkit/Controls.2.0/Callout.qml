@@ -27,7 +27,7 @@ import "LeaderPosition.js" as Enums
 Item {
     id: root
     x: 0
-    y: 0
+    y: 0    
 
     /*========================================
          Configurable properties
@@ -90,44 +90,44 @@ Item {
     /*!
         \brief The background color of the Callout.
 
-        The default color is \c "#AFFFFFFF".
+        The default color is \c "#ffffff".
     */
-    property color backgroundColor: "#AFFFFFFF"
+    property var backgroundColor: "#ffffff"
 
     /*!
         \brief The color of the title text in the Callout.
 
         The default color is \c #000000.
     */
-    property color titleColor: "#000000"
+    property color titleTextColor: "#000000"
 
     /*!
         \brief The color of the detail text in the Callout.
 
         The default color is \c #000000.
     */
-    property color detailColor: "#000000"
+    property color detailTextColor: "#000000"
 
     /*!
         \brief The corner radius of the Callout.
 
-        The default value is \c 10.
+        The default value is \c 5.
     */
     property int cornerRadius: 5
 
     /*!
         \brief The height of the leader line in the Callout.
 
-        The default leader height is \c 15.
+        The default leader height is \c 10.
     */
-    property int leaderHeight: 15
+    property int leaderHeight: 10
 
     /*!
         \brief The width of the leader line in the Callout.
 
-        The default leader width is \c 30.
+        The default leader width is \c 20.
     */
-    property int leaderWidth: 30
+    property int leaderWidth: 20
 
     /*!
         \brief The x offset of the placement of the Callout.
@@ -184,6 +184,11 @@ Item {
     */
     property var calloutData: null
 
+    /*!
+        \brief The maximum width of the Callout.
+    */
+    property real maxWidth: 300
+
     // internal properties
     /*! \internal */
     property int padding: 3
@@ -198,13 +203,11 @@ Item {
     /*! \internal */
     property var adjustedLeaderPosition: Enums.LeaderPosition.Bottom
     /*! \internal */
-    property bool calloutVisible
+    property bool calloutVisible    
     /*! \internal */
-    property real calloutMaxWidth: 210
+    property real calloutMaxHeight: 45
     /*! \internal */
-    property real calloutMaxHeight: 50
-    /*! \internal */
-    property real calloutMinWidth: 95
+    property real calloutMinWidth: 200
     /*! \internal */
     property real calloutMinHeight: calloutMaxHeight
     /*! \internal */
@@ -214,7 +217,7 @@ Item {
     /*! \internal */
     property real edgeBuffer: 10
     /*! \internal */
-    property real calloutFramePadding: 2 * cornerRadius
+    property real calloutFramePadding: 2 * internalCornerRadius
     /*! \internal */
     property string platform: Qt.platform.os
     /*! \internal */
@@ -230,7 +233,11 @@ Item {
     /*! \internal */
     property real detailWidth: rectWidth / 2
     /*! \internal */
+    property real cornerOffset: 15 * scaleFactor
+    /*! \internal */
     property bool debug: false
+    /*! \internal */
+    property int internalCornerRadius: cornerRadius < 0 ? 0 : cornerRadius
     /*! \internal */
     visible: false
 
@@ -247,7 +254,6 @@ Item {
                 anchorPointx += screenOffsetX
             if (screenOffsetY !== 0)
                 anchorPointy += screenOffsetY
-
             if (calloutVisible)
                 showCallout();
         }
@@ -259,7 +265,6 @@ Item {
             else {
                 dismiss();
             }
-
         }
 
         onTitleChanged: {
@@ -299,8 +304,8 @@ Item {
         // these are some of the initial calculations
         // before creating the callout frame
         preCalculateWidthAndHeight();
-        if (platform == "ios")
-            adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, calloutLayout.width - 2*cornerRadius, calloutLayout.height - cornerRadius);
+        if (platform === "ios")
+            adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, calloutLayout.width - 2 * internalCornerRadius, calloutLayout.height - internalCornerRadius);
         else
             adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, rectWidth, rectHeight);
 
@@ -313,12 +318,10 @@ Item {
 
         // once leader position is finalized
         if (findBestLeaderPosition(anchorPointx, anchorPointy)) {
-            if (platform == "ios")
-                adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, calloutLayout.width - 2*cornerRadius, calloutLayout.height - cornerRadius);
+            if (platform === "ios")
+                adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, calloutLayout.width - 2*internalCornerRadius, calloutLayout.height - internalCornerRadius);
             else
                 adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, rectWidth, rectHeight);
-
-
         }
 
         // paint now.
@@ -341,11 +344,11 @@ Item {
 
     Rectangle {
         id: calloutFrame
-        width: (rectWidth + 2* leaderWidth + edgeBuffer) * scaleFactor
-        height: (rectHeight + 2* leaderHeight + edgeBuffer) * scaleFactor
+        width: (rectWidth + 2 * leaderWidth + edgeBuffer) * scaleFactor
+        height: (rectHeight + 2 * leaderHeight + edgeBuffer) * scaleFactor
         visible: false
         z: 100
-        clip:true
+        clip: true
         color: "transparent"
 
         Canvas {
@@ -354,36 +357,34 @@ Item {
 
             property bool createPathAndPaint: false
 
-            antialiasing: true
+            antialiasing: true            
 
             renderTarget: Canvas.FramebufferObject
             renderStrategy: Canvas.Cooperative
 
             // handler to override for drawing
-            onPaint: {
-                screenCoordinates.x = 0;
-                screenCoordinates.y = 0;
+            onPaint: {                
+                screenCoordinates.x = borderWidth;
+                screenCoordinates.y = borderWidth;
                 drawCalloutFrame();
             }
 
             Rectangle {
                 id: calloutContentFrame
-
                 anchors {
                     left: parent.left
                     top: parent.top
-                    leftMargin: 7
                 }
 
                 GridLayout {
                     id: calloutLayout
-                    height: 45 * scaleFactor
-                    columns: 3
-                    rows: 2
                     anchors {
                         left: parent.left
                         top: parent.top
                     }
+                    height: 45 * scaleFactor
+                    columns: 3
+                    rows: 2
                     columnSpacing: 7 * scaleFactor
 
                     Rectangle {
@@ -393,27 +394,30 @@ Item {
                         color: "transparent"
                         Layout.rowSpan: 2
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
                         Image {
                             id: image
                             source: calloutData ? calloutData.imageUrl : ""
-                            width: 40 * scaleFactor
+                            width: parent.width
                             height: width
                             fillMode : Image.PreserveAspectFit
-                            anchors.fill: parent
                         }
                     }
 
                     Text {
                         id: title
-                        width: titleWidth
                         text: calloutData ? calloutData.title : ""
-                        wrapMode: Text.Wrap
+                        wrapMode: Text.NoWrap
                         renderType: Text.NativeRendering
+                        color: titleTextColor
                         font {
                             pixelSize: 11 * scaleFactor
                             family: "sanserif"
                         }
+                        clip: true
+                        elide: Text.ElideRight
                         Layout.alignment: Qt.AlignVCenter
+                        Layout.maximumWidth: !autoAdjustWidth ? titleWidth : -1 // resets to implicit width if non-autoAdjust
                     }
 
                     Rectangle {
@@ -425,9 +429,9 @@ Item {
 
                         Image {
                             id: accessoryButtonImage
+                            anchors.fill: parent
                             width: 40 * scaleFactor
                             height: width
-                            anchors.fill: parent
                             fillMode: Image.PreserveAspectFit
                             visible: !accessoryButtonHidden
                         }
@@ -442,15 +446,17 @@ Item {
 
                     Text {
                         id: detail
-                        width: detailWidth
                         text: calloutData ? calloutData.detail : ""
                         renderType: Text.NativeRendering
+                        color: detailTextColor
                         font {
                             pixelSize: 10 * scaleFactor
                             family: "sanserif"
                         }
-                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        wrapMode: Text.NoWrap
+                        elide: Text.ElideRight
                         Layout.alignment: Qt.AlignVCenter
+                        Layout.maximumWidth: !autoAdjustWidth ? detailWidth : -1 // resets to implicit width if non-autoAdjust
                     }
                 }
             }
@@ -461,33 +467,39 @@ Item {
     // Draw the rounded rectangle with leader
     function drawCalloutFrame() {
 
-        // Adjust the relative coordinates only for Top and Left to account
-        // for leaderHeight
-        if (adjustedLeaderPosition === Enums.LeaderPosition.Top || adjustedLeaderPosition === Enums.LeaderPosition.UpperRight || adjustedLeaderPosition === Enums.LeaderPosition.UpperLeft) {
+        // Adjust the relative coordinates
+        if (adjustedLeaderPosition === Enums.LeaderPosition.Top) {
+            screenCoordinates.y += leaderHeight;
+        } else if (adjustedLeaderPosition === Enums.LeaderPosition.Left) {
+            screenCoordinates.x += leaderHeight;
+        } else if (adjustedLeaderPosition === Enums.LeaderPosition.UpperRight) {
+            screenCoordinates.y += leaderHeight;
+            screenCoordinates.x += cornerOffset;
+        } else if (adjustedLeaderPosition === Enums.LeaderPosition.LowerRight) {
+            screenCoordinates.x += cornerOffset;
+        } else if (adjustedLeaderPosition === Enums.LeaderPosition.UpperLeft) {
             screenCoordinates.y += leaderHeight;
         }
-        if (adjustedLeaderPosition === Enums.LeaderPosition.Left)
-            screenCoordinates.x += leaderHeight;
 
         // get context to draw with
         var ctx = canvas.getContext("2d");
 
         // setup the style
         ctx.lineWidth = borderWidth;
-        ctx.strokeStyle = "darkGray";
-        ctx.fillStyle = "white";
+        ctx.strokeStyle = borderColor;
+        ctx.fillStyle = backgroundColor;
         ctx.alpha = 0.9;
 
         ctx.save();
-        ctx.clearRect(0,0,canvas.width, canvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.lineJoin = "round";
 
         ctx.beginPath();
 
-        if (adjustedLeaderPosition === Enums.LeaderPosition.UpperLeft) {
-            ctx.moveTo(screenCoordinates.x + leaderWidth,screenCoordinates.y);
+        if (adjustedLeaderPosition === Enums.LeaderPosition.UpperLeft) {            
+            ctx.moveTo(screenCoordinates.x + leaderWidth + cornerOffset, screenCoordinates.y);
         } else {
-            ctx.moveTo(screenCoordinates.x + cornerRadius,screenCoordinates.y);
+            ctx.moveTo(screenCoordinates.x + internalCornerRadius, screenCoordinates.y);
         }
 
         // top side
@@ -495,81 +507,72 @@ Item {
             ctx.lineTo(screenCoordinates.x + (halfRectWidth - halfLeaderWidth), screenCoordinates.y);
             ctx.lineTo(screenCoordinates.x + halfRectWidth, screenCoordinates.y - leaderHeight);
             ctx.lineTo(screenCoordinates.x + (halfRectWidth + halfLeaderWidth), screenCoordinates.y);
-            ctx.lineTo(screenCoordinates.x + rectWidth - cornerRadius, screenCoordinates.y);
-        } else {
-            if (adjustedLeaderPosition === Enums.LeaderPosition.UpperRight) {
-                ctx.lineTo(screenCoordinates.x + rectWidth-leaderWidth,screenCoordinates.y);
-
-            } else {
-                ctx.lineTo(screenCoordinates.x + rectWidth-cornerRadius,screenCoordinates.y);
-
-            }
+            ctx.lineTo(screenCoordinates.x + rectWidth - internalCornerRadius, screenCoordinates.y);
         }
 
         // draw top right corner
         if (adjustedLeaderPosition === Enums.LeaderPosition.UpperRight) {
-            ctx.lineTo(screenCoordinates.x + (rectWidth - halfLeaderWidth), screenCoordinates.y - leaderHeight);
-            ctx.lineTo(screenCoordinates.x + rectWidth,screenCoordinates.y);
-        } else {
-            ctx.arcTo(screenCoordinates.x + rectWidth,screenCoordinates.y,screenCoordinates.x+rectWidth,screenCoordinates.y+cornerRadius,cornerRadius);
+            ctx.lineTo(screenCoordinates.x + rectWidth - leaderWidth - cornerOffset, screenCoordinates.y);
+            ctx.lineTo(screenCoordinates.x + (rectWidth - halfLeaderWidth - cornerOffset), screenCoordinates.y - leaderHeight);
+            ctx.lineTo(screenCoordinates.x + rectWidth - cornerOffset, screenCoordinates.y);
         }
+        ctx.lineTo(screenCoordinates.x + rectWidth - internalCornerRadius, screenCoordinates.y);
+        ctx.arcTo(screenCoordinates.x + rectWidth, screenCoordinates.y, screenCoordinates.x + rectWidth, screenCoordinates.y + internalCornerRadius, internalCornerRadius);
 
         // right side
         if (adjustedLeaderPosition === Enums.LeaderPosition.Right) {
-            ctx.lineTo(screenCoordinates.x+rectWidth , screenCoordinates.y + cornerRadius + halfRectHeight - halfLeaderWidth);
-            ctx.lineTo(screenCoordinates.x+rectWidth + leaderHeight, screenCoordinates.y + halfRectHeight);
-            ctx.lineTo(screenCoordinates.x+rectWidth, screenCoordinates.y + halfRectHeight + halfLeaderWidth);
-            ctx.lineTo(screenCoordinates.x + rectWidth, screenCoordinates.y+rectHeight-cornerRadius);
-        } else {
-            ctx.lineTo(screenCoordinates.x+rectWidth,screenCoordinates.y+rectHeight-cornerRadius);
+            ctx.lineTo(screenCoordinates.x + rectWidth, screenCoordinates.y + halfRectHeight - halfLeaderWidth);
+            ctx.lineTo(screenCoordinates.x + rectWidth + leaderHeight, screenCoordinates.y + halfRectHeight);
+            ctx.lineTo(screenCoordinates.x + rectWidth, screenCoordinates.y + halfRectHeight + halfLeaderWidth);
+            ctx.lineTo(screenCoordinates.x + rectWidth, screenCoordinates.y + rectHeight - internalCornerRadius);
         }
+        ctx.arcTo(screenCoordinates.x + rectWidth, screenCoordinates.y + rectHeight, screenCoordinates.x + rectWidth - internalCornerRadius, screenCoordinates.y + rectHeight, internalCornerRadius);
+
         // draw bottom right corner
         if (adjustedLeaderPosition === Enums.LeaderPosition.LowerRight) {
-            ctx.lineTo(screenCoordinates.x + rectWidth - halfLeaderWidth, screenCoordinates.y + rectHeight + leaderHeight);
-            ctx.lineTo(screenCoordinates.x + rectWidth - leaderWidth ,screenCoordinates.y + rectHeight );
-        } else {
-            ctx.arcTo(screenCoordinates.x+rectWidth,screenCoordinates.y+rectHeight,screenCoordinates.x+rectWidth-cornerRadius,screenCoordinates.y+rectHeight,cornerRadius);
+            ctx.lineTo(screenCoordinates.x + rectWidth - internalCornerRadius, screenCoordinates.y + rectHeight);
+            ctx.lineTo(screenCoordinates.x + rectWidth - cornerOffset, screenCoordinates.y + rectHeight);
+            ctx.lineTo(screenCoordinates.x + rectWidth - halfLeaderWidth - cornerOffset, screenCoordinates.y + rectHeight + leaderHeight);
+            ctx.lineTo(screenCoordinates.x + rectWidth - leaderWidth - cornerOffset, screenCoordinates.y + rectHeight);
         }
 
         // bottom side
         if (adjustedLeaderPosition === Enums.LeaderPosition.Bottom) {
-            ctx.lineTo(screenCoordinates.x+halfRectWidth+halfLeaderWidth, screenCoordinates.y + rectHeight);
-            ctx.lineTo(screenCoordinates.x+halfRectWidth, screenCoordinates.y + rectHeight + leaderHeight);
-            ctx.lineTo(screenCoordinates.x+halfRectWidth-halfLeaderWidth, screenCoordinates.y + rectHeight);
-            ctx.lineTo(screenCoordinates.x + cornerRadius, screenCoordinates.y+rectHeight);
-        } else {
-            if (adjustedLeaderPosition === Enums.LeaderPosition.LowerLeft) {
-                ctx.lineTo(screenCoordinates.x+leaderWidth,screenCoordinates.y+rectHeight);
-
-            } else {
-                ctx.lineTo(screenCoordinates.x+cornerRadius,screenCoordinates.y+rectHeight);
-            }
+            ctx.lineTo(screenCoordinates.x + halfRectWidth+halfLeaderWidth, screenCoordinates.y + rectHeight);
+            ctx.lineTo(screenCoordinates.x + halfRectWidth, screenCoordinates.y + rectHeight + leaderHeight);
+            ctx.lineTo(screenCoordinates.x + halfRectWidth-halfLeaderWidth, screenCoordinates.y + rectHeight);
+            ctx.lineTo(screenCoordinates.x + internalCornerRadius, screenCoordinates.y + rectHeight);
         }
 
         // draw bottom left corner
         if (adjustedLeaderPosition === Enums.LeaderPosition.LowerLeft) {
-            ctx.lineTo(screenCoordinates.x + halfLeaderWidth, screenCoordinates.y + rectHeight + leaderHeight);
-            ctx.lineTo(screenCoordinates.x, screenCoordinates.y + rectHeight);
+            ctx.lineTo(screenCoordinates.x + leaderWidth + cornerOffset, screenCoordinates.y + rectHeight);
+            ctx.lineTo(screenCoordinates.x + leaderWidth + cornerOffset, screenCoordinates.y + rectHeight);
+            ctx.lineTo(screenCoordinates.x + halfLeaderWidth + cornerOffset, screenCoordinates.y + rectHeight + leaderHeight);
+            ctx.lineTo(screenCoordinates.x + cornerOffset, screenCoordinates.y + rectHeight);
+            ctx.lineTo(screenCoordinates.x + internalCornerRadius, screenCoordinates.y + rectHeight);
         } else {
-            ctx.arcTo(screenCoordinates.x,screenCoordinates.y+rectHeight,screenCoordinates.x,screenCoordinates.y+rectHeight-cornerRadius,cornerRadius);
+            ctx.lineTo(screenCoordinates.x + internalCornerRadius, screenCoordinates.y + rectHeight);
         }
+        ctx.arcTo(screenCoordinates.x, screenCoordinates.y + rectHeight, screenCoordinates.x, screenCoordinates.y + rectHeight - internalCornerRadius, internalCornerRadius);
 
         // left side
         if (adjustedLeaderPosition === Enums.LeaderPosition.Left) {
             ctx.lineTo(screenCoordinates.x, screenCoordinates.y + halfRectHeight + halfLeaderWidth);
             ctx.lineTo(screenCoordinates.x - leaderHeight, screenCoordinates.y + halfRectHeight);
             ctx.lineTo(screenCoordinates.x, screenCoordinates.y + halfRectHeight - halfLeaderWidth);
-            ctx.lineTo(screenCoordinates.x, screenCoordinates.y+cornerRadius);
-        } else {
-            ctx.lineTo(screenCoordinates.x,screenCoordinates.y+cornerRadius);
+            ctx.lineTo(screenCoordinates.x, screenCoordinates.y + internalCornerRadius);
+        } else if (adjustedLeaderPosition === Enums.LeaderPosition.UpperLeft) {
+            ctx.arcTo(screenCoordinates.x, screenCoordinates.y, screenCoordinates.x + internalCornerRadius + cornerOffset, screenCoordinates.y, internalCornerRadius);
         }
 
         // draw top left corner
         if (adjustedLeaderPosition === Enums.LeaderPosition.UpperLeft) {
-            ctx.lineTo(screenCoordinates.x + halfLeaderWidth , screenCoordinates.y - leaderHeight);
-            ctx.lineTo(screenCoordinates.x + leaderWidth,screenCoordinates.y);
+            ctx.lineTo(screenCoordinates.x + cornerOffset, screenCoordinates.y);
+            ctx.lineTo(screenCoordinates.x + halfLeaderWidth + cornerOffset, screenCoordinates.y - leaderHeight);
+            ctx.lineTo(screenCoordinates.x + leaderWidth + cornerOffset, screenCoordinates.y);
         } else {
-            ctx.arcTo(screenCoordinates.x,screenCoordinates.y,screenCoordinates.x+cornerRadius,screenCoordinates.y,cornerRadius);
+            ctx.arcTo(screenCoordinates.x, screenCoordinates.y, screenCoordinates.x + internalCornerRadius, screenCoordinates.y, internalCornerRadius);
         }
         ctx.closePath();
 
@@ -579,7 +582,6 @@ Item {
         }
 
         ctx.restore();
-
     }
 
     /*! \internal */
@@ -835,10 +837,10 @@ Item {
         // This is the basic shape of the callout, but excluding the leader and not yet including extra room to take account
         // of the border having width.
 
-        var maxWidth = calloutContentMaxWidth() + 2*cornerRadius;
-        var maxHeight = calloutContentMaxHeight() + 2*cornerRadius;
-        var minWidth = Math.min(calloutMinWidth, maxWidth); // don't allow minWidth to be > maxWidth
-        var minHeight = Math.min(calloutMinHeight, maxHeight); // don't allow minHeight to be > maxHeight
+        var calcMaxWidth = calloutContentMaxWidth() + 2 * internalCornerRadius;
+        var calcMaxHeight = calloutContentMaxHeight() + 2 * internalCornerRadius;
+        var minWidth = Math.min(calloutMinWidth, calcMaxWidth); // don't allow minWidth to be > maxWidth
+        var minHeight = Math.min(calloutMinHeight, calcMaxHeight); // don't allow minHeight to be > maxHeight
 
         if (autoAdjustWidth) {
             // If we know the width of the content, base the width on that
@@ -846,7 +848,7 @@ Item {
                 rectWidth = minWidth;
             } else {
                 if (platform === "ios") {
-                    rectWidth = calloutLayout.width + calloutFramePadding + 2* leaderWidth
+                    rectWidth = calloutLayout.width + calloutFramePadding + 2 * leaderWidth;
                 } else {
                     rectWidth = calloutLayout.width + calloutFramePadding;
                 }
@@ -859,8 +861,8 @@ Item {
                 rectHeight = calloutLayout.height;
             }
         } else {
-            rectWidth = minWidth;
-            rectHeight = minHeight;
+            rectWidth = calloutMinWidth;
+            rectHeight = calloutMinHeight;
         }
 
         if (debug) {
@@ -878,52 +880,66 @@ Item {
     function adjustRelativePositionOfCanvasFrame(screenx, screeny, calloutWidth, calloutHeight) {
 
         if (adjustedLeaderPosition === Enums.LeaderPosition.Top ) {
+            calloutContentFrame.anchors.leftMargin = 0;
             calloutContentFrame.anchors.topMargin = leaderHeight;
-            calloutFrame.x = screenx - calloutWidth / 2;
-            calloutFrame.y = screeny;
+            calloutFrame.x = (screenx - calloutWidth / 2) - borderWidth;
+            calloutFrame.y = screeny - borderWidth;
             if (debug) {
                 console.log("top calloutFrame = " , calloutFrame.x, " ", calloutFrame.y);
             }
         } else if (adjustedLeaderPosition === Enums.LeaderPosition.Bottom) {
-            calloutFrame.x = screenx - (calloutWidth / 2);
-            calloutFrame.y = screeny  - (leaderHeight + calloutHeight);
+            calloutContentFrame.anchors.topMargin = 0;
+            calloutContentFrame.anchors.leftMargin = 0;
+            calloutFrame.x = (screenx - (calloutWidth / 2)) - borderWidth;
+            calloutFrame.y = (screeny  - (leaderHeight + calloutHeight)) - borderWidth;
             if (debug) {
                 console.log("bottom calloutFrame = " , calloutFrame.x, " ", calloutFrame.y);
             }
         } else if (adjustedLeaderPosition === Enums.LeaderPosition.Left) {
             calloutContentFrame.anchors.leftMargin = leaderHeight;
-            calloutFrame.x = screenx;
-            calloutFrame.y = screeny  - calloutHeight / 2;
+            calloutContentFrame.anchors.topMargin = 0;
+            calloutFrame.x = screenx - borderWidth;
+            calloutFrame.y = (screeny  - calloutHeight / 2) - borderWidth;
             if (debug) {
                 console.log("left calloutFrame = " , calloutFrame.x, " ", calloutFrame.y);
             }
         } else if (adjustedLeaderPosition === Enums.LeaderPosition.Right) {
-            calloutFrame.x = screenx - (calloutWidth + leaderHeight);
-            calloutFrame.y = screeny  - calloutHeight / 2;
+            calloutContentFrame.anchors.leftMargin = 0;
+            calloutContentFrame.anchors.topMargin = 0;
+            calloutFrame.x = (screenx - (calloutWidth + leaderHeight)) - borderWidth;
+            calloutFrame.y = (screeny  - calloutHeight / 2) - borderWidth;
             if (debug) {
                 console.log("right calloutFrame = " , calloutFrame.x, " ", calloutFrame.y);
             }
         } else if (adjustedLeaderPosition === Enums.LeaderPosition.UpperRight) {
-            calloutFrame.x = screenx - leaderWidth / 2 - (calloutWidth - leaderWidth);
-            calloutFrame.y = screeny;
+            calloutContentFrame.anchors.topMargin = leaderHeight;
+            calloutContentFrame.anchors.leftMargin = leaderHeight;
+            calloutFrame.x = (screenx - leaderWidth / 2 - (calloutWidth - leaderWidth)) - borderWidth;
+            calloutFrame.y = screeny - borderWidth;
             if (debug) {
                 console.log("upper right top right calloutFrame = " , calloutFrame.x, " ", calloutFrame.y);
             }
         } else if (adjustedLeaderPosition === Enums.LeaderPosition.UpperLeft) {
-            calloutFrame.x = screenx - leaderWidth / 2;
-            calloutFrame.y = screeny;
+            calloutContentFrame.anchors.leftMargin = 0;
+            calloutContentFrame.anchors.topMargin = leaderHeight;
+            calloutFrame.x = ((screenx - leaderWidth / 2) - cornerOffset) - borderWidth;
+            calloutFrame.y = screeny - borderWidth;
             if (debug) {
                 console.log("upper left calloutFrame = " , calloutFrame.x, " ", calloutFrame.y);
             }
         } else if (adjustedLeaderPosition === Enums.LeaderPosition.LowerRight) {
-            calloutFrame.x = screenx - calloutWidth + leaderWidth / 2;
-            calloutFrame.y = screeny  - (leaderHeight + calloutHeight);
+            calloutContentFrame.anchors.topMargin = 0;
+            calloutContentFrame.anchors.leftMargin = leaderHeight;
+            calloutFrame.x = (screenx - calloutWidth + leaderWidth / 2) - borderWidth;
+            calloutFrame.y = (screeny  - (leaderHeight + calloutHeight)) - borderWidth;
             if (debug) {
                 console.log("lower right calloutFrame = " , calloutFrame.x, " ", calloutFrame.y);
             }
         } else if (adjustedLeaderPosition === Enums.LeaderPosition.LowerLeft) {
-            calloutFrame.x = screenx - leaderWidth / 2;
-            calloutFrame.y = screeny  - (leaderHeight + calloutHeight);
+            calloutContentFrame.anchors.leftMargin = 0;
+            calloutContentFrame.anchors.topMargin = 0;
+            calloutFrame.x = ((screenx - leaderWidth / 2) - cornerOffset) - borderWidth;
+            calloutFrame.y = (screeny  - (leaderHeight + calloutHeight)) - borderWidth;
             if (debug) {
                 console.log("lower left calloutFrame = " , calloutFrame.x, " ", calloutFrame.y);
             }
@@ -937,7 +953,7 @@ Item {
         var maxWidthForMapView = root.parent.width;
 
         // Calculate space to allow for 2 corners and 1 border width.
-        var widthOfExtras = borderWidth + (2 * cornerRadius);
+        var widthOfExtras = borderWidth + (2 * internalCornerRadius);
 
         // Allow space for the leader, plus 2 extra leader lengths to ensure there's always room for some map to show around
         // the outside of the callout.
@@ -945,7 +961,7 @@ Item {
         maxWidthForMapView -= widthOfExtras;
 
         // If max width has been specified and fits in MapView, just return that value
-        var styleMaxWidthExclExtras = calloutMaxWidth - widthOfExtras;
+        var styleMaxWidthExclExtras = maxWidth - widthOfExtras;
         if (styleMaxWidthExclExtras > 0 && styleMaxWidthExclExtras < maxWidthForMapView) {
             return styleMaxWidthExclExtras;
         }
@@ -960,7 +976,7 @@ Item {
         var maxHeightForMapView = root.parent.height;
 
         // Calculate space to allow for 2 corners and 1 border width.
-        var heightOfExtras = borderWidth + (2 * cornerRadius);
+        var heightOfExtras = borderWidth + (2 * internalCornerRadius);
 
         // Allow space for the leader, plus 2 extra leader lengths to ensure there's always room for some map to show around
         // the outside of the callout.
