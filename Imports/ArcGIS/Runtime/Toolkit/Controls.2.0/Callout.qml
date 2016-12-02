@@ -85,14 +85,14 @@ Item {
 
         The default width is \c 2.
     */
-    property int borderWidth: 2
+    property int borderWidth: 2 * scaleFactor
 
     /*!
         \brief The background color of the Callout.
 
         The default color is \c "#ffffff".
     */
-    property var backgroundColor: "#ffffff"
+    property color backgroundColor: "#ffffff"
 
     /*!
         \brief The color of the title text in the Callout.
@@ -113,35 +113,35 @@ Item {
 
         The default value is \c 5.
     */
-    property int cornerRadius: 5
+    property int cornerRadius: 5 * scaleFactor
 
     /*!
         \brief The height of the leader line in the Callout.
 
         The default leader height is \c 10.
     */
-    property int leaderHeight: 10
+    property int leaderHeight: 10 * scaleFactor
 
     /*!
         \brief The width of the leader line in the Callout.
 
         The default leader width is \c 20.
     */
-    property int leaderWidth: 20
+    property int leaderWidth: 20 * scaleFactor
 
     /*!
         \brief The x offset of the placement of the Callout.
 
         The default is \c 0.
     */
-    property int screenOffsetX: 0
+    property int screenOffsetX: 0 * scaleFactor
 
     /*!
         \brief The y offset of the placement of the Callout.
 
         The default is \c 0.
     */
-    property int screenOffsetY: 0
+    property int screenOffsetY: 0 * scaleFactor
 
     /*!
         \brief The type of accessory button to be displayed in the Callout.
@@ -187,11 +187,11 @@ Item {
     /*!
         \brief The maximum width of the Callout.
     */
-    property real maxWidth: 300
+    property real maxWidth: 300 * scaleFactor
 
     // internal properties
     /*! \internal */
-    property int padding: 3
+    property int padding: 3 * scaleFactor
     /*! \internal */
     property real scaleFactor: System.displayScaleFactor
     /*! \internal */
@@ -203,11 +203,11 @@ Item {
     /*! \internal */
     property var adjustedLeaderPosition: Enums.LeaderPosition.Bottom
     /*! \internal */
-    property bool calloutVisible    
+    property bool calloutVisible
     /*! \internal */
-    property real calloutMaxHeight: 45
+    property real calloutMaxHeight: 45 * scaleFactor
     /*! \internal */
-    property real calloutMinWidth: 200
+    property real calloutMinWidth: 200 * scaleFactor
     /*! \internal */
     property real calloutMinHeight: calloutMaxHeight
     /*! \internal */
@@ -215,9 +215,9 @@ Item {
     /*! \internal */
     property real rectHeight: 0
     /*! \internal */
-    property real edgeBuffer: 10
+    property real edgeBuffer: 10 * scaleFactor
     /*! \internal */
-    property real calloutFramePadding: 2 * internalCornerRadius
+    property real calloutFramePadding: (2 * internalCornerRadius) * scaleFactor
     /*! \internal */
     property string platform: Qt.platform.os
     /*! \internal */
@@ -873,6 +873,7 @@ Item {
             console.log("calloutLayout.width = ", calloutLayout.width);
             console.log("calloutLayout.height = ", calloutLayout.height);
             console.log("calloutContentFrame.width = ", calloutContentFrame.width);
+            console.log("dpi", Screen.pixelDensity * 25.4)
         }
     }
 
