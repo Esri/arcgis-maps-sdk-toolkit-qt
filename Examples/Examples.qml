@@ -20,11 +20,16 @@ import QtGraphicalEffects 1.0
 import Esri.ArcGISRuntime 100.0
 
 Rectangle {
-    width: 640
-    height: 480
+    width: 840
+    height: 680
 
     ListModel {
         id: examplesModel
+
+        ListElement {
+            description: "PopupView Example"
+            source: "PopupExample.qml"
+        }
 
         ListElement {
             description: "Navigation Toolbar  Example"
