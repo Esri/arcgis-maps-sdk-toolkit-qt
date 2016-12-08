@@ -37,7 +37,7 @@ Item {
     property color backgroundColor: "#f2f3f4"
     property color borderColor: "#4f4f4f"
     property real borderWidth: 2 * scaleFactor
-    property real popupRadius: 4 * scaleFactor
+    property real popupRadius: 2 * scaleFactor
     property string titleText: popupManagerInternal ? popupManagerInternal.title : ""
     property real titleTextSize: 13 * scaleFactor
     property var popupManagerInternal: null
@@ -45,10 +45,7 @@ Item {
     property var attachments: popupManagerInternal ? popupManagerInternal.attachmentMananger.attachmentListModel : null
     
     Rectangle {
-        anchors {
-            fill: parent
-            margins: 10 * scaleFactor
-        }
+        anchors.fill: parent
         color: backgroundColor
         border {
             color: borderColor
@@ -171,7 +168,7 @@ Item {
                                 text: name
                                 wrapMode: Text.WrapAnywhere
                                 font.pixelSize: 14 * scaleFactor
-                                color: "gray"
+                                color: borderColor
                             }
 
                             Image {

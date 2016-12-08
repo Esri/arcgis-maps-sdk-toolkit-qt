@@ -35,21 +35,24 @@ Item {
     property var popupManager: null
     property real popupWidth: 275 * scaleFactor
     property real popupHeight: 350 * scaleFactor
+    property bool popupVisible: false
 
     /* public functions */
     function show() {
-        popupView.visible = true;
+        popupVisible = true;
     }
 
     function dismiss() {
-        popupView.visible = false;
+        popupVisible = false;
     }
 
     /* internal */
-    visible: false
+    visible: popupVisible
     width: popupWidth
     height: popupHeight
-    property real scaleFactor: System.displayScaleFactor
+    implicitHeight: popupHeight
+    implicitWidth: popupWidth
+    property real scaleFactor: System.displayScaleFactor   
 
     PopupViewBase {
         anchors.fill: parent
