@@ -42,7 +42,7 @@ Item {
     property real titleTextSize: 13 * scaleFactor
     property var popupManagerInternal: null
     property var displayedFields: popupManagerInternal ? popupManagerInternal.displayedFields : null
-    property var attachments: popupManagerInternal ? popupManagerInternal.attachmentMananger.attachmentListModel : null
+    property var attachments: popupManagerInternal ? popupManagerInternal.attachmentMananger.attachmentsModel : null
     
     Rectangle {
         anchors.fill: parent
@@ -158,23 +158,151 @@ Item {
                     Repeater {
                         model: attachments
 
-                        Row {
-                            anchors.left: parent.left
-                            clip: true
-                            spacing: 5
+                        Column {
+                            Row {
+                                anchors.left: parent.left
+                                clip: true
+                                spacing: 5
 
-                            Text {
-                                width: popupColumn.width * 0.6
-                                text: name
-                                wrapMode: Text.WrapAnywhere
-                                font.pixelSize: 14 * scaleFactor
-                                color: borderColor
+                                Text {
+                                    width: popupColumn.width * 0.6
+                                    text: "Url"
+                                    wrapMode: Text.WrapAnywhere
+                                    font.pixelSize: 14 * scaleFactor
+                                    color: borderColor
+                                }
+
+                                Text {
+                                    width: popupColumn.width * 0.6
+                                    text: attachmentUrl
+                                    wrapMode: Text.WrapAnywhere
+                                    font.pixelSize: 14 * scaleFactor
+                                    color: borderColor
+                                }
                             }
 
-                            Image {
-                                source: thumbnailUrl
-                                width: 32 * scaleFactor
-                                height: width
+                            Row {
+                                anchors.left: parent.left
+                                clip: true
+                                spacing: 5
+
+                                Text {
+                                    width: popupColumn.width * 0.6
+                                    text: "Name"
+                                    wrapMode: Text.WrapAnywhere
+                                    font.pixelSize: 14 * scaleFactor
+                                    color: borderColor
+                                }
+
+                                Text {
+                                    width: popupColumn.width * 0.6
+                                    text: name
+                                    wrapMode: Text.WrapAnywhere
+                                    font.pixelSize: 14 * scaleFactor
+                                    color: borderColor
+                                }
+                            }
+
+                            Row {
+                                anchors.left: parent.left
+                                clip: true
+                                spacing: 5
+
+                                Text {
+                                    width: popupColumn.width * 0.6
+                                    text: "Content Type"
+                                    wrapMode: Text.WrapAnywhere
+                                    font.pixelSize: 14 * scaleFactor
+                                    color: borderColor
+                                }
+
+                                Text {
+                                    width: popupColumn.width * 0.6
+                                    text: contentType
+                                    wrapMode: Text.WrapAnywhere
+                                    font.pixelSize: 14 * scaleFactor
+                                    color: borderColor
+                                }
+                            }
+
+                            Row {
+                                anchors.left: parent.left
+                                clip: true
+                                spacing: 5
+
+                                Text {
+                                    width: popupColumn.width * 0.6
+                                    text: "Size"
+                                    wrapMode: Text.WrapAnywhere
+                                    font.pixelSize: 14 * scaleFactor
+                                    color: borderColor
+                                }
+
+                                Text {
+                                    width: popupColumn.width * 0.6
+                                    text: size
+                                    wrapMode: Text.WrapAnywhere
+                                    font.pixelSize: 14 * scaleFactor
+                                    color: borderColor
+                                }
+                            }
+
+                            Row {
+                                anchors.left: parent.left
+                                clip: true
+                                spacing: 5
+
+                                Text {
+                                    width: popupColumn.width * 0.6
+                                    text: "Local"
+                                    wrapMode: Text.WrapAnywhere
+                                    font.pixelSize: 14 * scaleFactor
+                                    color: borderColor
+                                }
+
+                                Text {
+                                    width: popupColumn.width * 0.6
+                                    text: local
+                                    wrapMode: Text.WrapAnywhere
+                                    font.pixelSize: 14 * scaleFactor
+                                    color: borderColor
+                                }
+                            }
+
+                            Row {
+                                anchors.left: parent.left
+                                clip: true
+                                spacing: 5
+
+                                Text {
+                                    width: popupColumn.width * 0.6
+                                    text: "Thumbnail"
+                                    wrapMode: Text.WrapAnywhere
+                                    font.pixelSize: 14 * scaleFactor
+                                    color: borderColor
+                                }
+
+                                Image {
+                                    source: thumbnailUrl
+                                }
+                            }
+
+                            Row {
+                                anchors.left: parent.left
+                                clip: true
+                                spacing: 5
+
+                                Text {
+                                    width: popupColumn.width * 0.6
+                                    text: "Full Image"
+                                    wrapMode: Text.WrapAnywhere
+                                    font.pixelSize: 14 * scaleFactor
+                                    color: borderColor
+                                }
+
+                                Image {
+                                    source: fullImageUrl
+                                }
                             }
                         }
                     }
