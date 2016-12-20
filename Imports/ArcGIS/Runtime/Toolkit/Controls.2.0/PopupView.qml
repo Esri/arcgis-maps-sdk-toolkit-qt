@@ -36,6 +36,7 @@ Item {
     property real popupWidth: 275 * scaleFactor
     property real popupHeight: 350 * scaleFactor
     property bool popupVisible: false
+    property bool viewFilteredAttachments: false
 
     /* public functions */
     function show() {
@@ -57,5 +58,6 @@ Item {
     PopupViewBase {
         anchors.fill: parent
         popupManagerInternal: popupManager
+        useFilteredAttachmentsList: viewFilteredAttachments
     }
 }

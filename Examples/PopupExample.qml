@@ -11,8 +11,8 @@
 // See the Sample code usage restrictions document for further information.
 //
 
-import QtQuick 2.3
-import QtQuick.Controls 1.2
+import QtQuick 2.6
+import QtQuick.Controls 1.5
 import QtPositioning 5.3
 import QtSensors 5.3
 import QtQuick.Dialogs 1.2
@@ -115,16 +115,10 @@ Rectangle {
         }
 
         Button {
-            text: "Show Popup From Mock Manager"
+            text: "Filter Attachments (on/off)"
             width: 250 * scaleFactor
             onClicked: {
-                if (popupView.state === "dialog") {
-                    popupViewDialog.popupManager = popupManager;
-                    popupAsDialog.open();
-                } else {
-                    popupView.popupManager = popupManager;
-                    popupView.show();
-                }
+                popupView.viewFilteredAttachments = !popupView.viewFilteredAttachments
             }
         }
 
@@ -244,50 +238,6 @@ Rectangle {
                     anchors.fill: parent
                     onClicked: popupAsDialog.close();
                 }
-            }
-        }
-    }
-
-    // Mock PopupManager
-    Item {
-        id: popupManager
-
-        property string title: "Damage to Commercial Buildings"
-        property var displayedFields: attributeListModel
-        property var attachmentMananger: attachments
-
-        ListModel {
-            id: attributeListModel
-            ListElement { fieldName : "SomeName" ; fieldValue : "SomeValue" }
-            ListElement { fieldName : "SomeNameThatIsLonger" ; fieldValue : "SomeNameThatIsLonger" }
-            ListElement { fieldName : "SomeLongishName" ; fieldValue : "SomeLongishName" }
-            ListElement { fieldName : "SomeName" ; fieldValue : "SomeValue" }
-            ListElement { fieldName : "SomeNameThatIsLonger" ; fieldValue : "SomeNameThatIsLonger" }
-            ListElement { fieldName : "SomeLongishName" ; fieldValue : "SomeLongishName" }ListElement { fieldName : "SomeName" ; fieldValue : "SomeValue" }
-            ListElement { fieldName : "SomeNameThatIsLonger" ; fieldValue : "SomeNameThatIsLonger" }
-            ListElement { fieldName : "SomeLongishName" ; fieldValue : "SomeLongishName" }ListElement { fieldName : "SomeName" ; fieldValue : "SomeValue" }
-            ListElement { fieldName : "SomeNameThatIsLonger" ; fieldValue : "SomeNameThatIsLonger" }
-            ListElement { fieldName : "SomeLongishName" ; fieldValue : "SomeLongishName" }ListElement { fieldName : "SomeName" ; fieldValue : "SomeValue" }
-            ListElement { fieldName : "SomeNameThatIsLonger" ; fieldValue : "SomeNameThatReallyIsLonger" }
-            ListElement { fieldName : "SomeLongishName" ; fieldValue : "SomeLongishName" }ListElement { fieldName : "SomeName" ; fieldValue : "SomeValue" }
-            ListElement { fieldName : "SomeNameThatIsLonger" ; fieldValue : "SomeNameThatReallyReallyIsLonger" }
-            ListElement { fieldName : "SomeLongishName" ; fieldValue : "SomeLongishName" }
-        }
-
-        // Mock AttachmentManager
-        Item {
-            id: attachments
-
-            property var attachmentListModel: _attachmentListModel
-
-            ListModel {
-                id: _attachmentListModel
-
-                ListElement { name: "Attachment1" ; thumbnailUrl: "/Users/luca6804/ArcGIS/Runtime/UnitTests/images/RedShinyPin.png" }
-                ListElement { name: "AttachmentWithLongName" ; thumbnailUrl: "/Users/luca6804/ArcGIS/Runtime/UnitTests/images/RedShinyPin.png" }
-                ListElement { name: "AttachmentWithReallyLongName" ; thumbnailUrl: "/Users/luca6804/ArcGIS/Runtime/UnitTests/images/RedShinyPin.png" }
-                ListElement { name: "AttachmentWithReallyReallyLongName" ; thumbnailUrl: "/Users/luca6804/ArcGIS/Runtime/UnitTests/images/RedShinyPin.png" }
-                ListElement { name: "Attach.jpg" ; thumbnailUrl: "/Users/luca6804/ArcGIS/Runtime/UnitTests/images/RedShinyPin.png" }
             }
         }
     }

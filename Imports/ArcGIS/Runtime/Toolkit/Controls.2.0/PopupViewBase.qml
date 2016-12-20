@@ -43,6 +43,12 @@ Item {
     property var popupManagerInternal: null
     property var displayedFields: popupManagerInternal ? popupManagerInternal.displayedFields : null
     property var attachments: popupManagerInternal ? popupManagerInternal.attachmentMananger.attachmentsModel : null
+    property bool useFilteredAttachmentsList: false
+    
+    onUseFilteredAttachmentsListChanged: {
+        if (attachments)
+            attachments.applyFilter = useFilteredAttachmentsList;
+    }
     
     Rectangle {
         anchors.fill: parent
