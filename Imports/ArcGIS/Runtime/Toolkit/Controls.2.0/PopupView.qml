@@ -33,31 +33,42 @@ Item {
 
     /* public properties */
     property var popupManager: null
-    property real popupWidth: 275 * scaleFactor
-    property real popupHeight: 350 * scaleFactor
-    property bool popupVisible: false
-    property bool viewFilteredAttachments: false
+    property color backgroundColor: "#f2f3f4"
+    property color borderColor: "#4f4f4f"
+    property real borderWidth: 2 * scaleFactor
+    property real radius: 2 * scaleFactor
+    property string titleText: popupManager ? popupManager.title : ""
+    property real titleTextSize: 13 * scaleFactor
+    property color attributeNameTextColor: "gray"
+    property color attributeValueTextColor: "#4f4f4f"
+
+    visible: false
+    width: 275 * scaleFactor
+    height: 350 * scaleFactor
+
 
     /* public functions */
     function show() {
-        popupVisible = true;
+        visible = true;
     }
 
     function dismiss() {
-        popupVisible = false;
+        visibler = false;
     }
 
     /* internal */
-    visible: popupVisible
-    width: popupWidth
-    height: popupHeight
-    implicitHeight: popupHeight
-    implicitWidth: popupWidth
     property real scaleFactor: System.displayScaleFactor   
 
     PopupViewBase {
         anchors.fill: parent
         popupManagerInternal: popupManager
-        useFilteredAttachmentsList: viewFilteredAttachments
+        backgroundColorInternal: backgroundColor
+        borderColorInternal: borderColor
+        borderWidthInternal: borderWidth
+        radiusInternal: radius
+        titleTextInternal: titleText
+        titleTextSizeInternal: titleTextSize
+        attributeNameTextColorInternal: attributeNameTextColor
+        attributeValueTextColorInternal: attributeValueTextColor
     }
 }

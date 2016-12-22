@@ -56,8 +56,14 @@ Rectangle {
                         var newPopupManager = ArcGISRuntimeEnvironment.createObject("PopupManager", {popup: newPopup});
 
                         // show the popup view
-                        popupView.popupManager = newPopupManager;
-                        popupView.show();
+                        if (displayModeComboBox.currentText !== "dialog") {
+                            popupView.popupManager = newPopupManager;
+                            popupView.show();
+                        } else {
+                            popupViewDialog.popupManager = newPopupManager;
+                            popupAsDialog.open();
+                        }
+
                     }
                 }
 
@@ -97,52 +103,21 @@ Rectangle {
         }
     }
 
-    Column {
+    ComboBox {
+        id: displayModeComboBox
         anchors {
             left: parent.left
             top: parent.top
             margins: 5
         }
-        spacing: 5
+        model: displayMode
 
-        ComboBox {
-            width: 250 * scaleFactor
-            model: displayMode
-
-            onCurrentIndexChanged: {
-                popupView.state = displayMode[currentIndex];
-            }
-        }
-
-        Button {
-            text: "Filter Attachments (on/off)"
-            width: 250 * scaleFactor
-            onClicked: {
-                popupView.viewFilteredAttachments = !popupView.viewFilteredAttachments
-            }
-        }
-
-        Button {
-            text: "Hide Popup"
-            width: 250 * scaleFactor
-            onClicked: {
-                if (popupView.state === "dialog") {
-                    popupAsDialog.close();
-                } else {
-                    popupView.dismiss();
-                }
-            }
-        }
+        onCurrentIndexChanged: popupView.state = displayMode[currentIndex];
     }
 
     // This is what the user can create. They can anchor it anywhere, display in a dialog, etc
     PopupView {
         id: popupView
-
-        anchors {
-            top: parent.top
-            right: parent.right
-        }
 
         states: [
             State {
@@ -153,7 +128,7 @@ Rectangle {
                     anchors.top: parent.top
                     anchors.left: undefined
                     anchors.right: parent.right
-                    anchors.bottom: undefined
+                    anchors.bottom: parent.bottom
                 }
             }, State {
                 name: "leftpanel"
@@ -204,8 +179,9 @@ Rectangle {
                 top: parent.top
                 margins: 10 * scaleFactor
             }
-            text: "X"
+            text: "x"
             font.pixelSize: 14 * scaleFactor
+            visible: popupView.state === "fullscreen"
 
             MouseArea {
                 anchors.fill: parent
@@ -223,22 +199,7 @@ Rectangle {
             id: popupViewDialog
             implicitHeight: 400
             implicitWidth: 400
-            popupVisible: true
-
-            Text {
-                anchors {
-                    right: parent.right
-                    top: parent.top
-                    margins: 10 * scaleFactor
-                }
-                text: "X"
-                font.pixelSize: 14 * scaleFactor
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: popupAsDialog.close();
-                }
-            }
+            visible: true
         }
     }
 }

@@ -21,43 +21,33 @@ import QtQuick.Dialogs 1.2
 import Esri.ArcGISExtras 1.1
 
 /*!
-    \qmltype PopupViewBase
-    \ingroup ArcGISQtToolkit
-    \inqmlmodule Esri.ArcGISRuntime.Toolkit.Controls
-    \since 2.0
-    \brief
+    internal
 */
-
 Item {
     id: popupViewBase
-    anchors.fill: parent
 
-    /* public properties */
-    property real scaleFactor: System.displayScaleFactor
-    property color backgroundColor: "#f2f3f4"
-    property color borderColor: "#4f4f4f"
-    property real borderWidth: 2 * scaleFactor
-    property real popupRadius: 2 * scaleFactor
-    property string titleText: popupManagerInternal ? popupManagerInternal.title : ""
-    property real titleTextSize: 13 * scaleFactor
+    /* internal */
+    property color backgroundColorInternal
+    property color borderColorInternal
+    property real borderWidthInternal
+    property real radiusInternal
+    property string titleTextInternal
+    property real titleTextSizeInternal
+    property color attributeNameTextColorInternal
+    property color attributeValueTextColorInternal
     property var popupManagerInternal: null
+    property real scaleFactor: System.displayScaleFactor
     property var displayedFields: popupManagerInternal ? popupManagerInternal.displayedFields : null
     property var attachments: popupManagerInternal ? popupManagerInternal.attachmentMananger.attachmentsModel : null
-    property bool useFilteredAttachmentsList: false
-    
-    onUseFilteredAttachmentsListChanged: {
-        if (attachments)
-            attachments.applyFilter = useFilteredAttachmentsList;
-    }
     
     Rectangle {
         anchors.fill: parent
-        color: backgroundColor
+        color: backgroundColorInternal
         border {
-            color: borderColor
-            width: borderWidth
+            color: borderColorInternal
+            width: borderWidthInternal
         }
-        radius: popupRadius
+        radius: radiusInternal
         clip: true
 
         MouseArea {
@@ -80,11 +70,11 @@ Item {
 
             Text {
                 width: parent.width
-                text: titleText + ":"
+                text: titleTextInternal + ":"
                 elide: Text.ElideRight
                 font {
                     family: "serif"
-                    pixelSize: titleTextSize
+                    pixelSize: titleTextSizeInternal
                     bold: true
                 }
                 renderType: Text.NativeRendering
@@ -93,7 +83,7 @@ Item {
             Rectangle {
                 width: parent.width
                 height: 1 * scaleFactor
-                color: borderColor
+                color: borderColorInternal
             }
         }
 
@@ -132,7 +122,7 @@ Item {
                                 text: fieldName ? fieldName : ""
                                 wrapMode: Text.WrapAnywhere
                                 font.pixelSize: 14 * scaleFactor
-                                color: "gray"
+                                color: attributeNameTextColorInternal
                             }
 
                             Text {
@@ -140,7 +130,7 @@ Item {
                                 text: fieldValue ? fieldValue : ""
                                 wrapMode: Text.WrapAnywhere
                                 font.pixelSize: 14 * scaleFactor
-                                color: borderColor
+                                color: attributeValueTextColorInternal
                             }
                         }
                     }
@@ -150,7 +140,7 @@ Item {
                     text: "Attachments:"
                     font {
                         family: "serif"
-                        pixelSize: titleTextSize
+                        pixelSize: titleTextSizeInternal
                         bold: true
                     }
                     renderType: Text.NativeRendering
@@ -175,7 +165,7 @@ Item {
                                     text: "Url"
                                     wrapMode: Text.WrapAnywhere
                                     font.pixelSize: 14 * scaleFactor
-                                    color: borderColor
+                                    color: borderColorInternal
                                 }
 
                                 Text {
@@ -183,7 +173,7 @@ Item {
                                     text: attachmentUrl
                                     wrapMode: Text.WrapAnywhere
                                     font.pixelSize: 14 * scaleFactor
-                                    color: borderColor
+                                    color: borderColorInternal
                                 }
                             }
 
@@ -197,7 +187,7 @@ Item {
                                     text: "Name"
                                     wrapMode: Text.WrapAnywhere
                                     font.pixelSize: 14 * scaleFactor
-                                    color: borderColor
+                                    color: borderColorInternal
                                 }
 
                                 Text {
@@ -205,7 +195,7 @@ Item {
                                     text: name
                                     wrapMode: Text.WrapAnywhere
                                     font.pixelSize: 14 * scaleFactor
-                                    color: borderColor
+                                    color: borderColorInternal
                                 }
                             }
 
@@ -219,7 +209,7 @@ Item {
                                     text: "Content Type"
                                     wrapMode: Text.WrapAnywhere
                                     font.pixelSize: 14 * scaleFactor
-                                    color: borderColor
+                                    color: borderColorInternal
                                 }
 
                                 Text {
@@ -227,7 +217,7 @@ Item {
                                     text: contentType
                                     wrapMode: Text.WrapAnywhere
                                     font.pixelSize: 14 * scaleFactor
-                                    color: borderColor
+                                    color: borderColorInternal
                                 }
                             }
 
@@ -241,7 +231,7 @@ Item {
                                     text: "Size"
                                     wrapMode: Text.WrapAnywhere
                                     font.pixelSize: 14 * scaleFactor
-                                    color: borderColor
+                                    color: borderColorInternal
                                 }
 
                                 Text {
@@ -249,7 +239,7 @@ Item {
                                     text: size
                                     wrapMode: Text.WrapAnywhere
                                     font.pixelSize: 14 * scaleFactor
-                                    color: borderColor
+                                    color: borderColorInternal
                                 }
                             }
 
@@ -263,7 +253,7 @@ Item {
                                     text: "Local"
                                     wrapMode: Text.WrapAnywhere
                                     font.pixelSize: 14 * scaleFactor
-                                    color: borderColor
+                                    color: borderColorInternal
                                 }
 
                                 Text {
@@ -271,7 +261,7 @@ Item {
                                     text: local
                                     wrapMode: Text.WrapAnywhere
                                     font.pixelSize: 14 * scaleFactor
-                                    color: borderColor
+                                    color: borderColorInternal
                                 }
                             }
 
@@ -285,7 +275,7 @@ Item {
                                     text: "Thumbnail"
                                     wrapMode: Text.WrapAnywhere
                                     font.pixelSize: 14 * scaleFactor
-                                    color: borderColor
+                                    color: borderColorInternal
                                 }
 
                                 Image {
@@ -303,7 +293,7 @@ Item {
                                     text: "Full Image"
                                     wrapMode: Text.WrapAnywhere
                                     font.pixelSize: 14 * scaleFactor
-                                    color: borderColor
+                                    color: borderColorInternal
                                 }
 
                                 Image {
