@@ -25,10 +25,9 @@ Rectangle {
     height: 600
 
     property real scaleFactor: System.displayScaleFactor
-    property bool featureSelected: false
-    property Point newLocation
     property var selectedFeature: null
-    property var displayMode: ["default", "leftpanel", "rightpanel", "fullscreen", "dialog"]
+    property var displayMode: ["rightpanel", "leftpanel", "fullscreen", "dialog"]
+    property var currentAttachment
 
     MapView {
         id: mapView
@@ -117,20 +116,10 @@ Rectangle {
 
     // This is what the user can create. They can anchor it anywhere, display in a dialog, etc
     PopupView {
-        id: popupView
+        id: popupView        
 
         states: [
             State {
-                name: "default"
-
-                AnchorChanges {
-                    target: popupView
-                    anchors.top: parent.top
-                    anchors.left: undefined
-                    anchors.right: parent.right
-                    anchors.bottom: parent.bottom
-                }
-            }, State {
                 name: "leftpanel"
 
                 AnchorChanges {
@@ -173,6 +162,24 @@ Rectangle {
             }
         ]
 
+        onAttachmentThumbnailClicked: {
+            // get the attachment
+            currentAttachment = popupView.popupManager.attachmentMananger.attachmentsModel.get(index);
+
+            // set up signal handler
+            currentAttachment.fullImageStatusChanged.connect(function() {
+                if (currentAttachment.fullImageStatus === Enums.TaskStatusCompleted) {
+                    // assign the full image URL
+                    attachmentImg.source = currentAttachment.fullImageUrl;
+                    // show the dialog
+                    imgDialog.open();
+                }
+            });
+
+            // fetch the full image
+            currentAttachment.fullImage();
+        }
+
         Text {
             anchors {
                 right: parent.right
@@ -200,6 +207,24 @@ Rectangle {
             implicitHeight: 400
             implicitWidth: 400
             visible: true
+        }
+    }
+
+    Dialog {
+        id: imgDialog
+        standardButtons: StandardButton.Close
+        modality: Qt.NonModal
+
+        contentItem: Rectangle {
+            implicitHeight: 400
+            implicitWidth:  400
+
+            Image {
+                id: attachmentImg
+                anchors.centerIn: parent
+                width: parent.width
+                height: parent.height
+            }
         }
     }
 }

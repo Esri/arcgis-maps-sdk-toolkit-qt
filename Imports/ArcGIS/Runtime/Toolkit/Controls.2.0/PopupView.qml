@@ -37,11 +37,10 @@ Item {
     property color borderColor: "#4f4f4f"
     property real borderWidth: 2 * scaleFactor
     property real radius: 2 * scaleFactor
-    property string titleText: popupManager ? popupManager.title : ""
+    property color titleTextColor: "black"
     property real titleTextSize: 13 * scaleFactor
     property color attributeNameTextColor: "gray"
     property color attributeValueTextColor: "#4f4f4f"
-
     visible: false
     width: 275 * scaleFactor
     height: 350 * scaleFactor
@@ -53,8 +52,11 @@ Item {
     }
 
     function dismiss() {
-        visibler = false;
+        visible = false;
     }
+
+    /* public signals */
+    signal attachmentThumbnailClicked(var index)
 
     /* internal */
     property real scaleFactor: System.displayScaleFactor   
@@ -66,9 +68,12 @@ Item {
         borderColorInternal: borderColor
         borderWidthInternal: borderWidth
         radiusInternal: radius
-        titleTextInternal: titleText
+        titleTextInternal: popupManager ? popupManager.title : ""
         titleTextSizeInternal: titleTextSize
         attributeNameTextColorInternal: attributeNameTextColor
         attributeValueTextColorInternal: attributeValueTextColor
+        titleTextColorInternal: titleTextColor
+
+        onAttachmentThumbnailClickedInternal: attachmentThumbnailClicked(index)
     }
 }
