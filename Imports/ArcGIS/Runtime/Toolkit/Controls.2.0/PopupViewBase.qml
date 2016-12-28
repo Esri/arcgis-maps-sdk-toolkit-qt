@@ -39,7 +39,7 @@ Item {
     property var popupManagerInternal: null
     property real scaleFactor: System.displayScaleFactor
     property var displayedFields: popupManagerInternal ? popupManagerInternal.displayedFields : null
-    property var attachments: popupManagerInternal ? popupManagerInternal.attachmentMananger.attachmentsModel : null
+    property var attachments: popupManagerInternal ? popupManagerInternal.attachmentManager.attachmentsModel : null
     property bool showAttachments: popupManagerInternal ? popupManagerInternal.showAttachments : true
     signal attachmentThumbnailClickedInternal(var index)
     
