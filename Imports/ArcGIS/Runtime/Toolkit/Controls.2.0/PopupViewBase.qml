@@ -130,8 +130,7 @@ Item {
 
                             Text {
                                 width: popupColumn.width * 0.4
-                                text: formattedValue ? formattedValue : ""
-                                //text: fieldValue ? fieldValue : ""
+                                text: formattedValue ? formattedValue : fieldValue
                                 wrapMode: Text.WrapAnywhere
                                 font.pixelSize: 14 * scaleFactor
                                 color: attributeValueTextColorInternal
@@ -153,6 +152,7 @@ Item {
                             pixelSize: titleTextSizeInternal
                             bold: true
                         }
+                        color: titleTextColorInternal
                         renderType: Text.NativeRendering
                     }
 
