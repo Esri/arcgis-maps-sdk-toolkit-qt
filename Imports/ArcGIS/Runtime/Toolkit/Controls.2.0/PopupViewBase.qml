@@ -26,7 +26,6 @@ import Esri.ArcGISExtras 1.1
 Item {
     id: popupViewBase
 
-    /* internal */
     property color backgroundColorInternal
     property color borderColorInternal
     property real borderWidthInternal
@@ -111,6 +110,7 @@ Item {
                 Column {
                     spacing: 5
                     width: parent.width
+
                     Repeater {
                         model: displayedFields
 
@@ -118,6 +118,7 @@ Item {
                             anchors.left: parent.left
                             clip: true
                             spacing: 5
+                            visible: attributeVisible
 
                             Text {
                                 width: popupColumn.width * 0.55
@@ -139,22 +140,21 @@ Item {
                     }
                 }
 
-                Text {
-                    text: "Attachments:"
-                    font {
-                        family: "serif"
-                        pixelSize: titleTextSizeInternal
-                        bold: true
-                    }
-                    renderType: Text.NativeRendering
-                    visible: showAttachments
-                }
-
                 // display of attachments
                 Column {
                     spacing: 5
                     width: parent.width
                     visible: showAttachments
+
+                    Text {
+                        text: "Attachments:"
+                        font {
+                            family: "serif"
+                            pixelSize: titleTextSizeInternal
+                            bold: true
+                        }
+                        renderType: Text.NativeRendering
+                    }
 
                     Repeater {
                         model: attachments
