@@ -38,14 +38,14 @@ import Esri.ArcGISExtras 1.1
 
     \list
       \li Declare a PopupView and anchor it to a desired location.
-      \li Identify on a GeoView, and select a Feature from the identify
-      result.
+      \li Perform an identify operation on a GeoView and select a
+      Feature from the identify result.
       \li Create a Popup from the Feature.
       \li Optionally obtain the Popup's PopupDefinition and set the
       title, whether to show attachments, and so on.
-      \li Create a PopupManager from the Popup
+      \li Create a PopupManager from the Popup.
       \li Assign the PopupView's \c popupManager property the PopupManager
-      created in the previous step
+      created in the previous step.
       \li Call the \c show() method to display the PopupView.
       \li Call the \c dismiss() method to hide the PopupView.
     \endlist
