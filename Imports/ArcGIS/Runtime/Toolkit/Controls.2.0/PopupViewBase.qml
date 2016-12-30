@@ -37,11 +37,20 @@ Item {
     property color attributeValueTextColorInternal
     property var popupManagerInternal: null
     property real scaleFactor: System.displayScaleFactor
-    property var displayedFields: popupManagerInternal ? popupManagerInternal.displayedFields : null
-    property var attachments: popupManagerInternal ? popupManagerInternal.attachmentManager.attachmentsModel : null
-    property bool showAttachments: popupManagerInternal ? popupManagerInternal.showAttachments : true
+    property var displayedFields: null
+    property var attachments: null
+    property bool showAttachments: false
     signal attachmentThumbnailClickedInternal(var index)
     
+    onPopupManagerInternalChanged: {
+        if (popupManagerInternal) {
+            displayedFields = popupManagerInternal.displayedFields;
+            attachments = popupManagerInternal.attachmentManager.attachmentsModel;
+            showAttachments = popupManagerInternal.showAttachments;
+            titleTextInternal = popupManagerInternal.title;
+        }
+    }
+
     Rectangle {
         anchors.fill: parent
         color: backgroundColorInternal
@@ -130,7 +139,7 @@ Item {
 
                             Text {
                                 width: popupColumn.width * 0.4
-                                text: formattedValue ? formattedValue : fieldValue
+                                text: formattedValue
                                 wrapMode: Text.WrapAnywhere
                                 font.pixelSize: 14 * scaleFactor
                                 color: attributeValueTextColorInternal

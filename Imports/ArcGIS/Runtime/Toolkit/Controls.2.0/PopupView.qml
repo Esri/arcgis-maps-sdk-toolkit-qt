@@ -146,7 +146,6 @@ Item {
         The default width is \c 275.
     */
     width: 275 * scaleFactor
-
     /*!
         \brief The height of the PopupView.
 
@@ -197,7 +196,6 @@ Item {
         borderColorInternal: borderColor
         borderWidthInternal: borderWidth
         radiusInternal: radius
-        titleTextInternal: popupManager ? popupManager.title : ""
         titleTextSizeInternal: titleTextSize
         attributeNameTextColorInternal: attributeNameTextColor
         attributeValueTextColorInternal: attributeValueTextColor
