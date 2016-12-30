@@ -45,7 +45,6 @@ Item {
     width: 275 * scaleFactor
     height: 350 * scaleFactor
 
-
     /* public functions */
     function show() {
         visible = true;
@@ -68,7 +67,6 @@ Item {
         borderColorInternal: borderColor
         borderWidthInternal: borderWidth
         radiusInternal: radius
-        titleTextInternal: popupManager ? popupManager.title : ""
         titleTextSizeInternal: titleTextSize
         attributeNameTextColorInternal: attributeNameTextColor
         attributeValueTextColorInternal: attributeValueTextColor
