@@ -21,13 +21,16 @@ import Esri.ArcGISExtras 1.1
 import Esri.ArcGISRuntime.Toolkit.Controls 2.0
 
 Rectangle {
+    id: root
     width: 800
     height: 600
 
     property real scaleFactor: System.displayScaleFactor
     property var selectedFeature: null
-    property var displayMode: ["rightpanel", "leftpanel", "fullscreen", "dialog"]
+    property var displayMode: ["rightpanel", "leftpanel", "fullscreen", "dialog", "animate"]
     property var currentAttachment
+    property real adjustedX: width - popupView.width
+    property real originX: width
 
     MapView {
         id: mapView
@@ -57,7 +60,11 @@ Rectangle {
                         // show the popup view
                         if (displayModeComboBox.currentText !== "dialog") {
                             popupView.popupManager = newPopupManager;
-                            popupView.show();
+                            if (displayModeComboBox.currentText === "animate") {
+                                popupView.slideHorizontal(originX, adjustedX);
+                            } else {
+                                popupView.show();
+                            }
                         } else {
                             popupViewDialog.popupManager = newPopupManager;
                             popupAsDialog.open();
@@ -96,7 +103,16 @@ Rectangle {
                 } else {
                     // hide the view
                     popupView.popupManager = null;
-                    popupView.dismiss();
+                    if (displayModeComboBox.currentText === "animate") {
+                        if (popupView.x === originX || popupView.x === 0) {
+                            popupView.dismiss();
+                        } else {
+                            popupView.slideHorizontal(adjustedX, originX);
+                        }
+                    } else {
+                        popupView.dismiss();
+                    }
+
                 }
             }
         }
@@ -116,7 +132,7 @@ Rectangle {
 
     // This is what the user can create. They can anchor it anywhere, display in a dialog, etc
     PopupView {
-        id: popupView        
+        id: popupView
 
         states: [
             State {
@@ -158,6 +174,16 @@ Rectangle {
                     anchors.left: undefined
                     anchors.right: undefined
                     anchors.bottom: undefined
+                }
+            }, State {
+                name: "animate"
+
+                AnchorChanges {
+                    target: popupView
+                    anchors.top: parent.top
+                    anchors.left: undefined
+                    anchors.right: undefined
+                    anchors.bottom: parent.bottom
                 }
             }
         ]

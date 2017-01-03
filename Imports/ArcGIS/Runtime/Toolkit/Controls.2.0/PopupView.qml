@@ -101,7 +101,7 @@ Item {
     /*!
         \brief The radius of the PopupView.
 
-        The default width is \c 2.
+        The default radius is \c 2.
     */
     property real radius: 2 * scaleFactor
 
@@ -134,6 +134,22 @@ Item {
     property color attributeValueTextColor: "#4f4f4f"
 
     /*!
+        \brief The animation duration for the slideHorizontal and slideVertical methods.
+
+        The default duration is \c 250.
+    */
+    property real animationDuration: 250
+
+    /*!
+        \brief The animation easing type for the slideHorizontal and slideVertical methods.
+
+        \sa {http://links.esri.com/qtEasingProperties}{Property Animation QML Type}
+
+        The default animationEasingType is \c Easing.OutQuad.
+    */
+    property real animationEasingType: Easing.OutQuad
+
+    /*!
         \brief The visibility of the PopupView.
 
         The default visibility is \c false.
@@ -146,6 +162,7 @@ Item {
         The default width is \c 275.
     */
     width: 275 * scaleFactor
+
     /*!
         \brief The height of the PopupView.
 
@@ -165,6 +182,64 @@ Item {
     */
     function dismiss() {
         visible = false;
+    }
+
+    /*!
+        \brief Slide the PopupView horizontally with animation.
+
+        \list
+          \li fromX - The x-value of the top-left corner to move the PopupView from.
+          \li toX - The x-value of the top-left corner to move the PopupView to.
+        \endlist
+
+        If using this method, the left and right anchors cannot be set on the PopupView.
+        Rather, anchor the top and bottom only, so that the x-value can be changed.
+
+        Set the animationDuration and animationEasingType properties for finer-grained
+        control of the animation.
+    */
+    function slideHorizontal(fromX, toX) {
+        visible = true;
+        animateHorizontal.from = fromX;
+        animateHorizontal.to = toX;
+        animateHorizontal.start();
+    }
+
+    /*!
+        \brief Slide the PopupView vertically with animation.
+
+        \list
+          \li fromY - The y-value of the top-left corner to move the PopupView from.
+          \li toY - The y-value of the top-left corner to move the PopupView to.
+        \endlist
+
+        If using this method, the top and bottom anchors cannot be set on the PopupView.
+        Rather, anchor the left or right only, so that the y-value can be changed.
+
+        Set the animationDuration and animationEasingType properties for finer-grained
+        control of the animation.
+    */
+    function slideVertical(fromY, toY) {
+        visible = true;
+        animateVertical.from = fromY;
+        animateVertical.to = toY;
+        animateVertical.start();
+    }
+
+    NumberAnimation {
+        id: animateHorizontal
+        target: popupView
+        properties: "x"
+        duration: animationDuration
+        easing.type: animationEasingType
+    }
+
+    NumberAnimation {
+        id: animateVertical
+        target: popupView
+        properties: "y"
+        duration: animationDuration
+        easing.type: animationEasingType
     }
 
     /*!
