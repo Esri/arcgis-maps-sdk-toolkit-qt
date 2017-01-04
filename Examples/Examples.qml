@@ -27,6 +27,11 @@ Rectangle {
         id: examplesModel
 
         ListElement {
+            description: "PopupView Example"
+            source: "PopupExample.qml"
+        }
+
+        ListElement {
             description: "Navigation Toolbar  Example"
             source: "NavigationToolbarExample.qml"
         }

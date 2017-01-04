@@ -1,5 +1,5 @@
 ################################################################################
-# Copyright 2012-2014 Esri
+# Copyright 2012-2016 Esri
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -33,5 +33,4 @@ SearchBox 2.0 SearchBox.qml
 Callout 2.0 Callout.qml
 AttributeListView 2.0 AttributeListView.qml
 AttachmentListView 2.0 AttachmentListView.qml
-
-
+PopupView 2.0 PopupView.qml
