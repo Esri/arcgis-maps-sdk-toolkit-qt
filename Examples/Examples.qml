@@ -20,8 +20,8 @@ import QtGraphicalEffects 1.0
 import Esri.ArcGISRuntime 100.0
 
 Rectangle {
-    width: 840
-    height: 680
+    width: 640
+    height: 480
 
     ListModel {
         id: examplesModel
