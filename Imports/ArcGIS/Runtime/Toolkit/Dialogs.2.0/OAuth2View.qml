@@ -21,7 +21,7 @@ import QtWebView 1.1
     \qmltype OAuth2View
     \ingroup ArcGISQtToolkit
     \inqmlmodule Esri.ArcGISRuntime.Toolkit.Dialogs
-    \since Esri::ArcGISRutime::Toolkit 2.0
+    \since Esri.ArcGISRutime.Toolkit 2.0
     \brief A view for handling OAuth 2.0 authentication challenges.
 
     When a request is made to access a resource via OAuth 2.0, the
