@@ -226,6 +226,7 @@ Item {
         animateVertical.start();
     }
 
+    /*! internal */
     NumberAnimation {
         id: animateHorizontal
         target: popupView
@@ -234,6 +235,7 @@ Item {
         easing.type: animationEasingType
     }
 
+    /*! internal */
     NumberAnimation {
         id: animateVertical
         target: popupView
@@ -260,10 +262,10 @@ Item {
     */
     signal attachmentThumbnailClicked(var index)
 
-    /* internal */
+    /*! internal */
     property real scaleFactor: System.displayScaleFactor   
 
-    /* internal */
+    /*! internal */
     PopupViewBase {
         anchors.fill: parent
         popupManagerInternal: popupManager

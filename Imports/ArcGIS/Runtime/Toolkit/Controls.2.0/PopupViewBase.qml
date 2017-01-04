@@ -20,9 +20,6 @@ import QtQuick.Controls.Styles 1.4
 import QtQuick.Dialogs 1.2
 import Esri.ArcGISExtras 1.1
 
-/*!
-    internal
-*/
 Item {
     id: popupViewBase
 
