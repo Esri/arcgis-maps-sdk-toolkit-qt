@@ -33,5 +33,4 @@ SearchBox 2.0 SearchBox.qml
 Callout 2.0 Callout.qml
 AttributeListView 2.0 AttributeListView.qml
 AttachmentListView 2.0 AttachmentListView.qml
-PopupViewBase 2.0 PopupViewBase.qml
 PopupView 2.0 PopupView.qml
