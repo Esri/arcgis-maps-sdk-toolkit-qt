@@ -23,7 +23,7 @@ import Esri.ArcGISExtras 1.1
     \qmltype UserCredentialsView
     \ingroup ArcGISQtToolkit
     \inqmlmodule Esri.ArcGISRuntime.Toolkit.Dialogs
-    \since 2.0
+    \since Esri::ArcGISRutime::Toolkit 2.0
     \brief A view for handling username and password authentication challenges.
 
     When a request is made to access a resource that requires a username and
