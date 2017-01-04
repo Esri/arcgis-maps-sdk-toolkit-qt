@@ -34,7 +34,7 @@ import Esri.ArcGISExtras 1.1
     layer.
 
     An example workflow for displaying a PopupView for a feature in a
-    Feature Layer would be:
+    FeatureLayer would be:
 
     \list
       \li Declare a PopupView and anchor it to a desired location.
@@ -134,9 +134,9 @@ Item {
     property color attributeValueTextColor: "#4f4f4f"
 
     /*!
-        \brief The animation duration for the slideHorizontal and slideVertical methods.
+        \brief The animation duration for the slideHorizontal and slideVertical methods in milliseconds.
 
-        The default duration is \c 250.
+        The default duration is \c 250 milliseconds.
     */
     property real animationDuration: 250
 

@@ -75,7 +75,7 @@ Item {
                 top: parent.top
                 margins: 10 * scaleFactor
             }
-            spacing: 10
+            spacing: 10 * scaleFactor
             clip: true
 
             Text {
@@ -112,12 +112,12 @@ Item {
             Column {
                 id: popupColumn
                 width: parent.width
-                spacing: 10
+                spacing: 10 * scaleFactor
                 clip: true
 
                 // display of attributes
                 Column {
-                    spacing: 5
+                    spacing: 5 * scaleFactor
                     width: parent.width
 
                     Repeater {
@@ -126,7 +126,7 @@ Item {
                         Row {
                             anchors.left: parent.left
                             clip: true
-                            spacing: 5
+                            spacing: 5 * scaleFactor
                             visible: attributeVisible
 
                             Text {
@@ -150,7 +150,7 @@ Item {
 
                 // display of attachments
                 Column {
-                    spacing: 5
+                    spacing: 5 * scaleFactor
                     width: parent.width
                     visible: showAttachments
 
@@ -171,7 +171,7 @@ Item {
                         Row {
                             anchors.left: parent.left
                             clip: true
-                            spacing: 5
+                            spacing: 5 * scaleFactor
 
                             Text {
                                 width: popupColumn.width * 0.6

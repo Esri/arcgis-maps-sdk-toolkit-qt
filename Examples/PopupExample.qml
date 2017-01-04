@@ -123,7 +123,7 @@ Rectangle {
         anchors {
             left: parent.left
             top: parent.top
-            margins: 5
+            margins: 5 * scaleFactor
         }
         model: displayMode
 
@@ -230,8 +230,8 @@ Rectangle {
 
         contentItem: PopupView {
             id: popupViewDialog
-            implicitHeight: 400
-            implicitWidth: 400
+            implicitHeight: 400 * scaleFactor
+            implicitWidth: 400 * scaleFactor
             visible: true
         }
     }
@@ -242,8 +242,8 @@ Rectangle {
         modality: Qt.NonModal
 
         contentItem: Rectangle {
-            implicitHeight: 400
-            implicitWidth:  400
+            implicitHeight: 400 * scaleFactor
+            implicitWidth:  400 * scaleFactor
 
             Image {
                 id: attachmentImg
