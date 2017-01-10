@@ -330,6 +330,9 @@ Item {
                 adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, rectWidth, rectHeight);
         }
 
+        if (leaderPosition !== Enums.LeaderPosition.Automatic)
+            adjustedLeaderPosition = leaderPosition
+
         // paint now.
         canvas.createPathAndPaint = true;
         canvas.requestPaint(true);
