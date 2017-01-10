@@ -304,6 +304,8 @@ Item {
         // set the adjustedLeaderPosition
         if (leaderPosition !== Enums.LeaderPosition.Automatic)
             adjustedLeaderPosition = leaderPosition
+        else
+            adjustedLeaderPosition = Enums.LeaderPosition.Bottom
 
         // setup the accessory button mode
         setupAccessoryButton();
@@ -315,9 +317,6 @@ Item {
             adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, calloutLayout.width - 2 * internalCornerRadius, calloutLayout.height - internalCornerRadius);
         else
             adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, rectWidth, rectHeight);
-
-        if (leaderPosition !== Enums.LeaderPosition.Automatic)
-            adjustedLeaderPosition = leaderPosition;
 
         // create the callout frame don't paint yet.
         canvas.createPathAndPaint = false;
@@ -610,6 +609,15 @@ Item {
 
         if (leaderPosition === Enums.LeaderPosition.Automatic) {
 
+            // Move leader vertically if vertical position isn't optimal
+            if (mousey + calloutFrame.height > root.parent.height && !refresh) {
+                // Bottom edge of callout is below bottom edge of map
+                refresh = moveLeader(Enums.LeaderMoveDirection.Down, mousex, mousey);
+            } else if (mousey - calloutFrame.height < 0 && !refresh) {
+                // Top edge of callout is above top edge of map
+                refresh = moveLeader(Enums.LeaderMoveDirection.Up, mousex, mousey);
+            }
+
             // Move leader horizontally if horizontal position isn't optimal
             if (mousex + calloutFrame.width > root.parent.width) {
                 // Right edge of callout is right of right edge of map
@@ -619,14 +627,6 @@ Item {
                 refresh = moveLeader(Enums.LeaderMoveDirection.Left, mousex, mousey);
             }
 
-            // Move leader vertically if vertical position isn't optimal
-            if (mousey + calloutFrame.height > root.parent.height && !refresh) {
-                // Bottom edge of callout is below bottom edge of map
-                refresh = moveLeader(Enums.LeaderMoveDirection.Down, mousex, mousey);
-            } else if (mousey - calloutFrame.height < 0 && !refresh) {
-                // Top edge of callout is above top edge of map
-                refresh = moveLeader(Enums.LeaderMoveDirection.Up, mousex, mousey);
-            }
         }
 
         return refresh;
