@@ -311,6 +311,9 @@ Item {
         else
             adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, rectWidth, rectHeight);
 
+        if (leaderPosition !== Enums.LeaderPosition.Automatic)
+            adjustedLeaderPosition = leaderPosition
+
         // create the callout frame don't paint yet.
         canvas.createPathAndPaint = false;
         canvas.requestPaint();
@@ -322,9 +325,6 @@ Item {
             else
                 adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, rectWidth, rectHeight);
         }
-
-        if (leaderPosition !== Enums.LeaderPosition.Automatic)
-            adjustedLeaderPosition = leaderPosition
 
         // paint now.
         canvas.createPathAndPaint = true;
