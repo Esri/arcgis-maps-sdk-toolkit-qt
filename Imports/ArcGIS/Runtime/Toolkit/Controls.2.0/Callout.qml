@@ -296,9 +296,9 @@ Item {
 
         // set the adjustedLeaderPosition
         if (leaderPosition !== Enums.LeaderPosition.Automatic)
-            adjustedLeaderPosition = leaderPosition
+            adjustedLeaderPosition = leaderPosition;
         else
-            adjustedLeaderPosition = Enums.LeaderPosition.Bottom
+            adjustedLeaderPosition = Enums.LeaderPosition.Bottom;
 
         // setup the accessory button mode
         setupAccessoryButton();
@@ -312,7 +312,7 @@ Item {
             adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, rectWidth, rectHeight);
 
         if (leaderPosition !== Enums.LeaderPosition.Automatic)
-            adjustedLeaderPosition = leaderPosition
+            adjustedLeaderPosition = leaderPosition;
 
         // create the callout frame don't paint yet.
         canvas.createPathAndPaint = false;
