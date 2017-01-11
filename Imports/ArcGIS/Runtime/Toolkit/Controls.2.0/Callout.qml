@@ -622,8 +622,7 @@ Item {
             if (calloutFrame.x - edgeBuffer < 0) {
                 // Left edge of callout is left of left edge of map
                 refresh = moveLeader(Enums.LeaderMoveDirection.Left, mousex, mousey);
-            } else if (calloutFrame.x + calloutFrame.width - (calloutFrame.width / 3) + edgeBuffer
-                       > root.parent.width) {
+            } else if (calloutFrame.x + rectWidth + edgeBuffer > root.parent.width) {
                 // Right edge of callout is right of right edge of map
                 refresh = moveLeader(Enums.LeaderMoveDirection.Right, mousex, mousey);
             }
