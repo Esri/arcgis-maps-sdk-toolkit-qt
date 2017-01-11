@@ -212,7 +212,7 @@ Item {
     /*! \internal */
     property real calloutMaxHeight: 45 * scaleFactor
     /*! \internal */
-    property real calloutMinWidth: 80 * scaleFactor
+    property real calloutMinWidth: 95 * scaleFactor
     /*! \internal */
     property real calloutMinHeight: calloutMaxHeight
     /*! \internal */
