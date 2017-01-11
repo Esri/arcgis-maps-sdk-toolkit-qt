@@ -896,8 +896,6 @@ Item {
             console.log("imageWidth = ", imageWidth);
             console.log("maxWidth = ", maxWidth);
             console.log("calloutWidth = ", calloutWidth);
-            console.log("titleWidth = ", title.width);
-            console.log("detailWidth = ", detail.width);
             console.log("adjustedMaxWidth = ", adjustedMaxWidth);
             console.log("scaleFactor = ", scaleFactor);
         }
