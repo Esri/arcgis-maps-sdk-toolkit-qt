@@ -240,7 +240,7 @@ Item {
     /*! \internal */
     property real cornerOffset: 15 * scaleFactor
     /*! \internal */
-    property bool debug: true
+    property bool debug: false
     /*! \internal */
     property int internalCornerRadius: cornerRadius < 0 ? 0 : cornerRadius
     /*! \internal */
