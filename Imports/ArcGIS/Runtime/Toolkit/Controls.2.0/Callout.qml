@@ -185,9 +185,14 @@ Item {
     property var calloutData: null
 
     /*!
-        \brief The maximum width of the Callout.
+        \brief The maximum width of the Callout if autoAdjustWidth is true.
     */
     property real maxWidth: 300 * scaleFactor
+
+    /*!
+        \brief The width of the Callout if autoAdjustWidth is false.
+    */
+    property real calloutWidth: 300 * scaleFactor
 
     // internal properties
     /*! \internal */
@@ -207,7 +212,7 @@ Item {
     /*! \internal */
     property real calloutMaxHeight: 45 * scaleFactor
     /*! \internal */
-    property real calloutMinWidth: 200 * scaleFactor
+    property real calloutMinWidth: 80 * scaleFactor
     /*! \internal */
     property real calloutMinHeight: calloutMaxHeight
     /*! \internal */
@@ -229,15 +234,17 @@ Item {
     /*! \internal */
     property real imageWidth: rectWidth / 4
     /*! \internal */
-    property real titleWidth: rectWidth / 2
+    property real titleWidth: Math.max(0, rectWidth - 95)
     /*! \internal */
-    property real detailWidth: rectWidth / 2
+    property real detailWidth: Math.max(0, rectWidth - 95)
     /*! \internal */
     property real cornerOffset: 15 * scaleFactor
     /*! \internal */
-    property bool debug: false
+    property bool debug: true
     /*! \internal */
     property int internalCornerRadius: cornerRadius < 0 ? 0 : cornerRadius
+    /*! \internal */
+    property int adjustedMaxWidth: maxWidth
     /*! \internal */
     visible: false
 
@@ -417,7 +424,7 @@ Item {
                         clip: true
                         elide: Text.ElideRight
                         Layout.alignment: Qt.AlignVCenter
-                        Layout.maximumWidth: !autoAdjustWidth ? titleWidth : -1 // resets to implicit width if non-autoAdjust
+                        Layout.maximumWidth: !autoAdjustWidth ? titleWidth : Math.max(0, adjustedMaxWidth - 90) // resets to implicit width if non-autoAdjust
                     }
 
                     Rectangle {
@@ -456,7 +463,7 @@ Item {
                         wrapMode: Text.NoWrap
                         elide: Text.ElideRight
                         Layout.alignment: Qt.AlignVCenter
-                        Layout.maximumWidth: !autoAdjustWidth ? detailWidth : -1 // resets to implicit width if non-autoAdjust
+                        Layout.maximumWidth: !autoAdjustWidth ? detailWidth : Math.max(0, adjustedMaxWidth - 90) // resets to implicit width if non-autoAdjust
                     }
                 }
             }
@@ -860,8 +867,18 @@ Item {
             } else {
                 rectHeight = calloutLayout.height;
             }
+
+            adjustedMaxWidth = maxWidth - (2 * leaderWidth) - edgeBuffer;
+            adjustedMaxWidth = Math.max(calloutMinWidth, adjustedMaxWidth);
+
+            if (rectWidth > maxWidth) {
+                rectWidth = adjustedMaxWidth;
+            }
+
         } else {
-            rectWidth = calloutMinWidth;
+            // no auto adjust
+            var adjustedCalloutWidth = calloutWidth - (2 * leaderWidth + edgeBuffer);
+            rectWidth = Math.max(calloutMinWidth, adjustedCalloutWidth);
             rectHeight = calloutMinHeight;
         }
 
@@ -873,7 +890,15 @@ Item {
             console.log("calloutLayout.width = ", calloutLayout.width);
             console.log("calloutLayout.height = ", calloutLayout.height);
             console.log("calloutContentFrame.width = ", calloutContentFrame.width);
-            console.log("dpi", Screen.pixelDensity * 25.4)
+            console.log("dpi", Screen.pixelDensity * 25.4);
+            console.log("detailWidth = ", detailWidth)
+            console.log("titleWidth = ", titleWidth);
+            console.log("imageWidth = ", imageWidth);
+            console.log("maxWidth = ", maxWidth);
+            console.log("calloutWidth = ", calloutWidth);
+            console.log("titleWidth = ", title.width);
+            console.log("detailWidth = ", detail.width);
+            console.log("adjustedMaxWidth = ", adjustedMaxWidth);
         }
     }
 
@@ -962,7 +987,7 @@ Item {
         maxWidthForMapView -= widthOfExtras;
 
         // If max width has been specified and fits in MapView, just return that value
-        var styleMaxWidthExclExtras = maxWidth - widthOfExtras;
+        var styleMaxWidthExclExtras = calloutWidth - widthOfExtras;
         if (styleMaxWidthExclExtras > 0 && styleMaxWidthExclExtras < maxWidthForMapView) {
             return styleMaxWidthExclExtras;
         }
