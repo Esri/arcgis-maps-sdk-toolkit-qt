@@ -613,21 +613,19 @@ Item {
         if (leaderPosition === Enums.LeaderPosition.Automatic) {
 
             // Move leader vertically if vertical position isn't optimal
-            if (mousey + calloutFrame.height > root.parent.height && !refresh) {
-                // Bottom edge of callout is below bottom edge of map
-                refresh = moveLeader(Enums.LeaderMoveDirection.Down, mousex, mousey);
-            } else if (mousey - calloutFrame.height < 0 && !refresh) {
+            if (calloutFrame.y - edgeBuffer < 0) {
                 // Top edge of callout is above top edge of map
                 refresh = moveLeader(Enums.LeaderMoveDirection.Up, mousex, mousey);
             }
 
             // Move leader horizontally if horizontal position isn't optimal
-            if (mousex + calloutFrame.width > root.parent.width) {
-                // Right edge of callout is right of right edge of map
-                refresh = moveLeader(Enums.LeaderMoveDirection.Right, mousex, mousey);
-            } else if (mousex - calloutFrame.width < 0) {
+            if (calloutFrame.x - edgeBuffer < 0) {
                 // Left edge of callout is left of left edge of map
                 refresh = moveLeader(Enums.LeaderMoveDirection.Left, mousex, mousey);
+            } else if (calloutFrame.x + calloutFrame.width - (calloutFrame.width / 3) + edgeBuffer
+                       > root.parent.width) {
+                // Right edge of callout is right of right edge of map
+                refresh = moveLeader(Enums.LeaderMoveDirection.Right, mousex, mousey);
             }
 
         }
