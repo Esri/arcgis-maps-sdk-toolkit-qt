@@ -234,9 +234,9 @@ Item {
     /*! \internal */
     property real imageWidth: rectWidth / 4
     /*! \internal */
-    property real titleWidth: Math.max(0, rectWidth - 95)
+    property real titleWidth: Math.max(0, rectWidth - 95 * scaleFactor)
     /*! \internal */
-    property real detailWidth: Math.max(0, rectWidth - 95)
+    property real detailWidth: Math.max(0, rectWidth - 95 * scaleFactor)
     /*! \internal */
     property real cornerOffset: 15 * scaleFactor
     /*! \internal */
@@ -424,7 +424,7 @@ Item {
                         clip: true
                         elide: Text.ElideRight
                         Layout.alignment: Qt.AlignVCenter
-                        Layout.maximumWidth: !autoAdjustWidth ? titleWidth : Math.max(0, adjustedMaxWidth - 90) // resets to implicit width if non-autoAdjust
+                        Layout.maximumWidth: !autoAdjustWidth ? titleWidth : Math.max(0, adjustedMaxWidth - 90 * scaleFactor) // resets to implicit width if non-autoAdjust
                     }
 
                     Rectangle {
@@ -463,7 +463,7 @@ Item {
                         wrapMode: Text.NoWrap
                         elide: Text.ElideRight
                         Layout.alignment: Qt.AlignVCenter
-                        Layout.maximumWidth: !autoAdjustWidth ? detailWidth : Math.max(0, adjustedMaxWidth - 90) // resets to implicit width if non-autoAdjust
+                        Layout.maximumWidth: !autoAdjustWidth ? detailWidth : Math.max(0, adjustedMaxWidth - 90 * scaleFactor) // resets to implicit width if non-autoAdjust
                     }
                 }
             }
@@ -899,6 +899,7 @@ Item {
             console.log("titleWidth = ", title.width);
             console.log("detailWidth = ", detail.width);
             console.log("adjustedMaxWidth = ", adjustedMaxWidth);
+            console.log("scaleFactor = ", scaleFactor);
         }
     }
 
