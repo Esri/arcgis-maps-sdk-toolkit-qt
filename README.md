@@ -37,7 +37,7 @@ This project contains QML source code for controls and utilities you can use wit
   - `import Esri.ArcGISRuntime.Toolkit.Controls 2.1`
   - `import Esri.ArcGISRuntime.Toolkit.Dialogs 2.1`
 
-### Run the example application:
+## Run the example application:
 1. From Qt Creator, go to <b>File->Open File or Project...</b> on the toolbar, browse for the .qml files from your cloned repo, and open them. 
 2. Once these have been added to your Qt Creator, double-click "Example.qml" to open it in the editor. 
 3. To run the QML Example app, on the toolbar go to <b>Tools->External->ArcGIS Runtime->ArcGIS Runtime Sample App</b>. The QML Example app with open, and you can use the pulldown to select each individual example program that demonstrates a specific control.
