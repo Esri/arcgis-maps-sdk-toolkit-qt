@@ -7,6 +7,7 @@ import Esri.ArcGISExtras 1.1
 import "LeaderPosition.js" as Enums
 
 /*!
+    \internal
     \qmltype Callout
     \ingroup ArcGISQtToolkit
     \inqmlmodule Esri.ArcGISRuntime.Toolkit.Controls
