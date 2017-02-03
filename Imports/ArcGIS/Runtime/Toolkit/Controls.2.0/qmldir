@@ -30,7 +30,8 @@ LocationButton 2.0 LocationButton.qml
 ZoomInButton 2.0 ZoomInButton.qml
 ZoomOutButton 2.0 ZoomOutButton.qml
 SearchBox 2.0 SearchBox.qml
-Callout 2.0 Callout.qml
+Callout 2.0 Callout20.qml
+Callout 2.1 Callout.qml
 AttributeListView 2.0 AttributeListView.qml
 AttachmentListView 2.0 AttachmentListView.qml
 PopupView 2.0 PopupView.qml
