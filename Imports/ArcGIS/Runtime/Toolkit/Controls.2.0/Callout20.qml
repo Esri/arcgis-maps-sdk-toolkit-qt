@@ -7,6 +7,7 @@ import Esri.ArcGISExtras 1.1
 import "LeaderPosition.js" as Enums
 
 /*!
+    \internal
     \qmltype Callout
     \ingroup ArcGISQtToolkit
     \inqmlmodule Esri.ArcGISRuntime.Toolkit.Controls
@@ -58,7 +59,7 @@ Item {
         \endlist
 
         Automatic will decide the best placement, based on the
-        location of the callout within the visible area of the MapView.
+        location of the callout within the MapView.
 
         The default is \c leaderPositionEnum.Bottom.
     */
@@ -600,7 +601,6 @@ Item {
     function findBestLeaderPosition(mousex, mousey) {
 
         var refresh = false;
-        var mapViewInsets = root.parent.viewInsets;
 
         if (debug) {
             console.log("mousex = ", mousex);
@@ -614,16 +614,16 @@ Item {
         if (leaderPosition === Enums.LeaderPosition.Automatic) {
 
             // Move leader vertically if vertical position isn't optimal
-            if (calloutFrame.y - edgeBuffer < 0 + mapViewInsets.top * scaleFactor) {
+            if (calloutFrame.y - edgeBuffer < 0) {
                 // Top edge of callout is above top edge of map
                 refresh = moveLeader(Enums.LeaderMoveDirection.Up, mousex, mousey);
             }
 
             // Move leader horizontally if horizontal position isn't optimal
-            if (calloutFrame.x - edgeBuffer < 0 + mapViewInsets.left * scaleFactor) {
+            if (calloutFrame.x - edgeBuffer < 0) {
                 // Left edge of callout is left of left edge of map
                 refresh = moveLeader(Enums.LeaderMoveDirection.Left, mousex, mousey);
-            } else if (calloutFrame.x + rectWidth + edgeBuffer > root.parent.width - mapViewInsets.right * scaleFactor) {
+            } else if (calloutFrame.x + rectWidth + edgeBuffer > root.parent.width) {
                 // Right edge of callout is right of right edge of map
                 refresh = moveLeader(Enums.LeaderMoveDirection.Right, mousex, mousey);
             }
@@ -638,7 +638,6 @@ Item {
     // Return true if a new leaderPosition has been set.
     function moveLeader(direction, mousex, mousey) {
         var refresh = false;
-        var mapViewInsets = root.parent.viewInsets;
         var mapViewWidth = root.parent.width;
         var mapViewHeight = root.parent.height;
         var anchorX = mousex;
@@ -646,13 +645,13 @@ Item {
 
         // Callout is 'narrow' if it's less than half the width of the MapView
         var narrowCallout = true;
-        if (calloutFrame.width > (mapViewWidth + (mapViewInsets.left + mapViewInsets.right) * scaleFactor) / 2) {
+        if (calloutFrame.width > mapViewWidth / 2) {
           narrowCallout = false;
         }
 
         // Callout is 'short' if it's less than half the height of the MapView
         var shortCallout = true;
-        if (calloutFrame.height > (mapViewHeight + (mapViewInsets.top + mapViewInsets.bottom) * scaleFactor) / 2) {
+        if (calloutFrame.height > mapViewHeight / 2) {
           shortCallout = false;
         }
 
@@ -758,7 +757,7 @@ Item {
                 }
                 break;
               case Enums.LeaderPosition.Bottom:
-                if (narrowCallout || anchorX < mapViewWidth * 2 / 3) {
+                if (narrowCallout || anchorX < mapViewWidth / 3) {
                     adjustedLeaderPosition = Enums.LeaderPosition.LowerLeft;
                   refresh = true;
                 }
