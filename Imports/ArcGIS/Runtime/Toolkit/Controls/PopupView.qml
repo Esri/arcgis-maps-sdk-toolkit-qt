@@ -24,7 +24,7 @@ import Esri.ArcGISExtras 1.1
     \qmltype PopupView
     \ingroup ArcGISQtToolkit
     \inqmlmodule Esri.ArcGISRuntime.Toolkit.Controls
-    \since Esri.ArcGISRutime.Toolkit 2.0
+    \since Esri.ArcGISRutime 100.1
     \brief A view for displaying and editing information about a feature.
 
     A PopupView can be used to display information for any type that
