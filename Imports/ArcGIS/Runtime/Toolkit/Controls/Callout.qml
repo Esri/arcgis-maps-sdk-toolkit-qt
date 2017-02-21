@@ -10,7 +10,7 @@ import "LeaderPosition.js" as Enums
     \qmltype Callout
     \ingroup ArcGISQtToolkit
     \inqmlmodule Esri.ArcGISRuntime.Toolkit.Controls
-    \since Esri.ArcGISRutime 100.0
+    \since Esri.ArcGISRutime 100.1
     \brief A view for displaying information at a geographic location on a Map.
 
      A Callout can be displayed for several different scenarios:
