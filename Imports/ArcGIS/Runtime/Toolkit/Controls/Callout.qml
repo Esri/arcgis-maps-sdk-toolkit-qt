@@ -362,8 +362,8 @@ Item {
 
             antialiasing: true            
 
-            // work around for Qt bug with Canvas on iOS. Rendering to Frame buffer object causes
-            // weirdness with size.
+            // work around for Qt bug with Canvas on iOS.
+            // Rendering to Frame buffer object causes weirdness with size.
             renderTarget: (Qt.platform.os === "ios") ? Canvas.Image : Canvas.FramebufferObject
             renderStrategy: Canvas.Cooperative
 
