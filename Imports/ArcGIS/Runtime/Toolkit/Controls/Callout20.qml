@@ -315,7 +315,7 @@ Item {
         // before creating the callout frame
         preCalculateWidthAndHeight();
         if (platform === "ios")
-            adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, calloutLayout.width - 2 * internalCornerRadius, calloutLayout.height - internalCornerRadius);
+            adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, rectWidth / 1.5, rectHeight / 1.5);
         else
             adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, rectWidth, rectHeight);
 
@@ -329,7 +329,7 @@ Item {
         // once leader position is finalized
         if (findBestLeaderPosition(anchorPointx, anchorPointy)) {
             if (platform === "ios")
-                adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, calloutLayout.width - 2*internalCornerRadius, calloutLayout.height - internalCornerRadius);
+                adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, rectWidth / 1.5, rectHeight / 1.5);
             else
                 adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, rectWidth, rectHeight);
         }
@@ -856,17 +856,10 @@ Item {
                 rectWidth = minWidth;
             } else {
                 if (platform === "ios") {
-                    rectWidth = calloutLayout.width + calloutFramePadding + 2 * leaderWidth;
+                    rectWidth = calloutLayout.width * 1.5 + calloutFramePadding;
                 } else {
                     rectWidth = calloutLayout.width + calloutFramePadding;
                 }
-            }
-
-            // If we know the height of the content, base the height on that
-            if (platform === "ios") {
-                rectHeight = calloutLayout.height * Screen.devicePixelRatio;
-            } else {
-                rectHeight = calloutLayout.height;
             }
 
             adjustedMaxWidth = maxWidth - (2 * leaderWidth) - edgeBuffer;
@@ -878,9 +871,15 @@ Item {
 
         } else {
             // no auto adjust
-            var adjustedCalloutWidth = calloutWidth - (2 * leaderWidth + edgeBuffer);
+            var adjustedCalloutWidth = calloutWidth;
             rectWidth = Math.max(calloutMinWidth, adjustedCalloutWidth);
-            rectHeight = calloutMinHeight;
+        }
+
+        // If we know the height of the content, base the height on that
+        if (platform === "ios") {
+            rectHeight = calloutLayout.height * 1.5;
+        } else {
+            rectHeight = calloutLayout.height;
         }
 
         if (debug) {
