@@ -313,10 +313,7 @@ Item {
         // these are some of the initial calculations
         // before creating the callout frame
         preCalculateWidthAndHeight();
-        if (platform === "ios")
-            adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, calloutLayout.width - 2 * internalCornerRadius, calloutLayout.height - internalCornerRadius);
-        else
-            adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, rectWidth, rectHeight);
+        adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, rectWidth, rectHeight);
 
         if (leaderPosition !== Enums.LeaderPosition.Automatic)
             adjustedLeaderPosition = leaderPosition;
@@ -327,10 +324,7 @@ Item {
 
         // once leader position is finalized
         if (findBestLeaderPosition(anchorPointx, anchorPointy)) {
-            if (platform === "ios")
-                adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, calloutLayout.width - 2*internalCornerRadius, calloutLayout.height - internalCornerRadius);
-            else
-                adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, rectWidth, rectHeight);
+            adjustRelativePositionOfCanvasFrame(anchorPointx, anchorPointy, rectWidth, rectHeight);
         }
 
         // paint now.
@@ -368,7 +362,9 @@ Item {
 
             antialiasing: true            
 
-            renderTarget: Canvas.FramebufferObject
+            // work around for Qt bug with Canvas on iOS. Rendering to Frame buffer object causes
+            // weirdness with size.
+            renderTarget: (Qt.platform.os === "ios") ? Canvas.Image : Canvas.FramebufferObject
             renderStrategy: Canvas.Cooperative
 
             // handler to override for drawing
@@ -856,19 +852,12 @@ Item {
             if (calloutLayout.width === 0) {
                 rectWidth = minWidth;
             } else {
-                if (platform === "ios") {
-                    rectWidth = calloutLayout.width + calloutFramePadding + 2 * leaderWidth;
-                } else {
-                    rectWidth = calloutLayout.width + calloutFramePadding;
-                }
+                rectWidth = calloutLayout.width + calloutFramePadding;
             }
 
             // If we know the height of the content, base the height on that
-            if (platform === "ios") {
-                rectHeight = calloutLayout.height * Screen.devicePixelRatio;
-            } else {
-                rectHeight = calloutLayout.height;
-            }
+            rectHeight = calloutLayout.height;
+
 
             adjustedMaxWidth = maxWidth - (2 * leaderWidth) - edgeBuffer;
             adjustedMaxWidth = Math.max(calloutMinWidth, adjustedMaxWidth);
