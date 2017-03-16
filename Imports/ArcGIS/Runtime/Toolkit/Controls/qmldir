@@ -1,5 +1,5 @@
 ################################################################################
-# Copyright 2012-2016 Esri
+# Copyright 2012-2017 Esri
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -16,22 +16,23 @@
 
 module Esri.ArcGISRuntime.Toolkit.Controls
 
-NorthArrow 2.0 NorthArrow.qml
-OverviewMap 2.0 OverviewMap.qml
-PortalItemsView 2.0 PortalItemsView.qml
-ImageButton 2.0 ImageButton.qml
-Fader 2.0 Fader.qml
-StyleButton 2.0 StyleButton.qml
-StyleToolbar 2.0 StyleToolbar.qml
-NavigationToolbar 2.0 NavigationToolbar.qml
-RotationToolbar 2.0 RotationToolbar.qml
-HomeButton 2.0 HomeButton.qml
-LocationButton 2.0 LocationButton.qml
-ZoomInButton 2.0 ZoomInButton.qml
-ZoomOutButton 2.0 ZoomOutButton.qml
-SearchBox 2.0 SearchBox.qml
+AttachmentListView 2.0 AttachmentListView20.qml
+AttributeListView 2.0 AttributeListView20.qml
 Callout 2.0 Callout20.qml
-Callout 2.1 Callout.qml
-AttributeListView 2.0 AttributeListView.qml
-AttachmentListView 2.0 AttachmentListView.qml
-PopupView 2.0 PopupView.qml
+Callout 100.0 Callout100.qml
+Callout 100.1 Callout.qml
+CurrentVersion 100.1 CurrentVersion.qml
+Fader 2.0 Fader20.qml
+HomeButton 2.0 HomeButton20.qml
+ImageButton 2.0 ImageButton20.qml
+LocationButton 2.0 LocationButton20.qml
+NavigationToolbar 2.0 NavigationToolbar20.qml
+NorthArrow 2.0 NorthArrow20.qml
+OverviewMap 2.0 OverviewMap20.qml
+PopupView 100.1 PopupView.qml
+RotationToolbar 2.0 RotationToolbar20.qml
+SearchBox 2.0 SearchBox20.qml
+StyleButton 2.0 StyleButton20.qml
+StyleToolbar 2.0 StyleToolbar20.qml
+ZoomInButton 2.0 ZoomInButton20.qml
+ZoomOutButton 2.0 ZoomOutButton20.qml

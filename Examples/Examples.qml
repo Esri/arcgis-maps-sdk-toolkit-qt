@@ -29,42 +29,12 @@ Rectangle {
         ListElement {
             description: "PopupView Example"
             source: "PopupExample.qml"
-        }
-
-        ListElement {
-            description: "Navigation Toolbar  Example"
-            source: "NavigationToolbarExample.qml"
-        }
-
-        ListElement {
-            description: "NorthArrow Control Example"
-            source: "NorthArrowExample.qml"
-        }
-
-        ListElement {
-            description: "OverviewMap Control Example"
-            source: "OverviewMapExample.qml"
-        }
-
-        ListElement {
-            description: "StyleTemplate Example"
-            source: "StyleTemplateExample.qml"
-        }
+        }        
 
         ListElement {
             description: "Callout Example"
             source: "CalloutExample.qml"
-        }
-
-        ListElement {
-            description: "AttributeListView Example"
-            source: "AttributeListViewExample.qml"
-        }
-
-        ListElement {
-            description: "AttachmentListView Example"
-            source: "AttachmentListViewExample.qml"
-        }
+        }        
     }
 
 

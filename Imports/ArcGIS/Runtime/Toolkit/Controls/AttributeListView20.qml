@@ -20,6 +20,8 @@ import QtQuick.Controls.Styles 1.4
 import Esri.ArcGISExtras 1.1
 
 /*!
+    \internal
+    \obsolete
     \qmltype AttributeListModel
     \ingroup ArcGISQtToolkit
     \inqmlmodule Esri.ArcGISRuntime.Toolkit.Controls

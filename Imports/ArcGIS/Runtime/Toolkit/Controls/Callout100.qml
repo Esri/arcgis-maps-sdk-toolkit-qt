@@ -8,7 +8,6 @@ import "LeaderPosition.js" as Enums
 
 /*!
     \internal
-    \obsolete Use version 100.x instead.
     \qmltype Callout
     \ingroup ArcGISQtToolkit
     \inqmlmodule Esri.ArcGISRuntime.Toolkit.Controls
