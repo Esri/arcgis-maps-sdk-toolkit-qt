@@ -21,6 +21,8 @@ import QtQuick.Dialogs 1.2
 import Esri.ArcGISExtras 1.1
 
 /*!
+    \internal
+    \obsolete
     \qmltype AttachmentListView
     \ingroup ArcGISQtToolkit
     \inqmlmodule Esri.ArcGISRuntime.Toolkit.Controls
