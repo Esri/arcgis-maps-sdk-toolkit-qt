@@ -364,7 +364,12 @@ Item {
 
             // work around for Qt bug with Canvas on iOS.
             // Rendering to Frame buffer object causes weirdness with size.
-            renderTarget: (Qt.platform.os === "ios") ? Canvas.Image : Canvas.FramebufferObject
+            Component.onCompleted: {
+                if (Qt.platform.os === "ios")
+                    renderTarget = Canvas.Image;
+            }
+
+            renderTarget: Canvas.FramebufferObject
             renderStrategy: Canvas.Cooperative
 
             // handler to override for drawing
