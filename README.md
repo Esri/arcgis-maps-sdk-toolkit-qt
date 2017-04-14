@@ -61,7 +61,3 @@ limitations under the License.
 
 A copy of the license is available in the repository's [license.txt](license.txt) file.
 
-
-[](Esri Tags: ArcGIS Runtime SDK Qt QML)
-[](Esri Language: Qt)
-
