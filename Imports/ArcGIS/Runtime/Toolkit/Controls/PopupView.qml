@@ -266,9 +266,6 @@ Item {
     signal attachmentThumbnailClicked(var index)
 
     /*! internal */
-    property real displayScaleFactor: System.displaydisplayScaleFactor
-
-    /*! internal */
     PopupViewBase {
         anchors.fill: parent
         popupManagerInternal: popupManager
