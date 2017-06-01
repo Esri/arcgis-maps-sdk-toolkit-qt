@@ -51,7 +51,7 @@ Rectangle {
     /*! \internal */
     property string requestingHost: challenge ? challenge.authenticatingHost : ""
     /*! \internal */
-    property string certificateFilename: certificateFileInfo.fileName
+    property string certificateFilename
     /*! \internal */
     property string passwordDetailText: qsTr("The client certificate file '%1' requires a password to open.").arg(certificateFilename)
 
@@ -429,15 +429,12 @@ Rectangle {
         onClientCertificatePasswordRequired: {
             certificatePasswordPage.certificateFile = certificate;
 
+            certificateFilename = certificatePasswordPage.certificateFile.split("/").pop;
+
             // the certificate requires password
             certificatePage.visible = false;
             certificatePasswordPage.visible = true;
         }
-    }
-
-    FileInfo {
-        id: certificateFileInfo
-        url: certificatePasswordPage.certificateFile
     }
 
     FileDialog {
