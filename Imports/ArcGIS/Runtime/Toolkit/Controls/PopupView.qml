@@ -18,7 +18,7 @@ import QtQuick 2.4
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Dialogs 1.2
-import Esri.ArcGISExtras 1.1
+import QtQuick.Window 2.0
 
 /*!
     \qmltype PopupView
@@ -65,6 +65,9 @@ import Esri.ArcGISExtras 1.1
 Item {
     id: popupView
 
+    /*! \internal */
+    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
+
     /*========================================
          Configurable properties
     ========================================*/
@@ -96,14 +99,14 @@ Item {
 
         The default width is \c 2.
     */
-    property real borderWidth: 2 * scaleFactor
+    property real borderWidth: 2 * displayScaleFactor
 
     /*!
         \brief The radius of the PopupView.
 
         The default radius is \c 2.
     */
-    property real radius: 2 * scaleFactor
+    property real radius: 2 * displayScaleFactor
 
     /*!
         \brief The title text color of the PopupView.
@@ -117,7 +120,7 @@ Item {
 
         The default size is \c 13.
     */
-    property real titleTextSize: 13 * scaleFactor
+    property real titleTextSize: 13 * displayScaleFactor
 
     /*!
         \brief The attribute name color of the PopupView.
@@ -161,14 +164,14 @@ Item {
 
         The default width is \c 275.
     */
-    width: 275 * scaleFactor
+    width: 275 * displayScaleFactor
 
     /*!
         \brief The height of the PopupView.
 
         The default height is \c 350.
     */
-    height: 350 * scaleFactor
+    height: 350 * displayScaleFactor
 
     /*!
         \brief Show the PopupView.
@@ -263,7 +266,7 @@ Item {
     signal attachmentThumbnailClicked(var index)
 
     /*! internal */
-    property real scaleFactor: System.displayScaleFactor   
+    property real displayScaleFactor: System.displaydisplayScaleFactor
 
     /*! internal */
     PopupViewBase {
