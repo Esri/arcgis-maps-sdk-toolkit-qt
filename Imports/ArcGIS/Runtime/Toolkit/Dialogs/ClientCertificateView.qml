@@ -429,7 +429,7 @@ Rectangle {
         onClientCertificatePasswordRequired: {
             certificatePasswordPage.certificateFile = certificate;
 
-            certificateFilename = certificatePasswordPage.certificateFile.split("/").pop;
+            certificateFilename = certificatePasswordPage.certificateFile.toString().split("/").pop();
 
             // the certificate requires password
             certificatePage.visible = false;
