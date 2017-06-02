@@ -17,7 +17,7 @@
 import QtQuick 2.5
 import QtQuick.Controls 1.4
 import QtGraphicalEffects 1.0
-import Esri.ArcGISExtras 1.1
+import QtQuick.Window 2.0
 
 /*!
     \qmltype UserCredentialsView
@@ -53,7 +53,7 @@ Rectangle {
     property var challenge
 
     /*! \internal */
-    property real scaleFactor: System.displayScaleFactor
+    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
     /*! \internal */
     property string requestingHost: challenge ? challenge.authenticatingHost : ""
     /*! \internal */
@@ -89,12 +89,12 @@ Rectangle {
     Rectangle {
         anchors {
             fill: banner
-            margins: -1 * scaleFactor
+            margins: -1 * displayScaleFactor
         }
         color: "white"
         border {
             color: "black"
-            width: 1 * scaleFactor
+            width: 1 * displayScaleFactor
         }
         radius: 3
         smooth: true
@@ -106,10 +106,10 @@ Rectangle {
         id: banner
         anchors {
             centerIn: parent
-            verticalCenterOffset: -50 * scaleFactor
+            verticalCenterOffset: -50 * displayScaleFactor
         }
-        width: 224 * scaleFactor
-        height: 50 * scaleFactor
+        width: 224 * displayScaleFactor
+        height: 50 * displayScaleFactor
         clip: true
         source: "images/banner.png"
 
@@ -117,7 +117,7 @@ Rectangle {
             anchors.centerIn: parent
             text: qsTr("Authentication Required")
             font {
-                pixelSize: 18 * scaleFactor
+                pixelSize: 18 * displayScaleFactor
                 family: "sanserif"
             }
             color: "white"
@@ -128,12 +128,12 @@ Rectangle {
     Rectangle {
         anchors {
             fill: controlsColumn
-            margins: -5 * scaleFactor
+            margins: -5 * displayScaleFactor
         }
         color: "white"
         border {
             color: "black"
-            width: 1 * scaleFactor
+            width: 1 * displayScaleFactor
         }
         radius: 3
         smooth: true
@@ -145,25 +145,25 @@ Rectangle {
         id: controlsColumn
         anchors {
             top: banner.bottom
-            topMargin: 5 * scaleFactor
+            topMargin: 5 * displayScaleFactor
             horizontalCenter: banner.horizontalCenter
         }
-        width: 215 * scaleFactor
-        spacing: 10 * scaleFactor
+        width: 215 * displayScaleFactor
+        spacing: 10 * displayScaleFactor
 
         Rectangle {
             color: "#FFCCCC"
             radius: 5
             width: parent.width
-            anchors.margins: 10 * scaleFactor
-            height: 20 * scaleFactor
+            anchors.margins: 10 * displayScaleFactor
+            height: 20 * displayScaleFactor
             visible: challenge ? challenge.failureCount > 1 : false
 
             Text {
                 anchors.centerIn: parent
                 text: qsTr("Invalid username or password.")
                 font {
-                    pixelSize: 12 * scaleFactor
+                    pixelSize: 12 * displayScaleFactor
                     family: "sanserif"
                 }
                 color: "red"
@@ -176,7 +176,7 @@ Rectangle {
             width: parent.width
             wrapMode: Text.Wrap
             font {
-                pixelSize: 12 * scaleFactor
+                pixelSize: 12 * displayScaleFactor
                 family: "sanserif"
             }
             renderType: Text.NativeRendering
@@ -197,9 +197,9 @@ Rectangle {
 
         Row {
             width: parent.width
-            spacing: 4 * scaleFactor
+            spacing: 4 * displayScaleFactor
             Button {
-                width: ((parent.width / 2) - 2 * scaleFactor)
+                width: ((parent.width / 2) - 2 * displayScaleFactor)
                 text: qsTr("Skip")
                 onClicked: {
                     // cancel the challenge and let the resource fail to load
@@ -211,7 +211,7 @@ Rectangle {
 
             Button {
                 id: continueButton
-                width: ((parent.width / 2) - 2 * scaleFactor)
+                width: ((parent.width / 2) - 2 * displayScaleFactor)
                 text: qsTr("Continue")
                 isDefault: true
                 onClicked: {

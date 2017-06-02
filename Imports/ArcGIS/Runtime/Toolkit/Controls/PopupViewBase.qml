@@ -18,7 +18,7 @@ import QtQuick 2.4
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Dialogs 1.2
-import Esri.ArcGISExtras 1.1
+import QtQuick.Window 2.0
 
 Item {
     id: popupViewBase
@@ -33,7 +33,7 @@ Item {
     property color attributeNameTextColorInternal
     property color attributeValueTextColorInternal
     property var popupManagerInternal: null
-    property real scaleFactor: System.displayScaleFactor
+    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
     property var displayedFields: null
     property var attachments: null
     property bool showAttachments: false
@@ -70,9 +70,9 @@ Item {
                 left: parent.left
                 right: parent.right
                 top: parent.top
-                margins: 10 * scaleFactor
+                margins: 10 * displayScaleFactor
             }
-            spacing: 10 * scaleFactor
+            spacing: 10 * displayScaleFactor
             clip: true
 
             Text {
@@ -90,7 +90,7 @@ Item {
 
             Rectangle {
                 width: parent.width
-                height: 1 * scaleFactor
+                height: 1 * displayScaleFactor
                 color: borderColorInternal
             }
         }
@@ -101,7 +101,7 @@ Item {
                 right: parent.right
                 top: heading.bottom
                 bottom: parent.bottom
-                margins: 10 * scaleFactor
+                margins: 10 * displayScaleFactor
             }
             contentHeight: popupColumn.height
             clip: true
@@ -109,12 +109,12 @@ Item {
             Column {
                 id: popupColumn
                 width: parent.width
-                spacing: 10 * scaleFactor
+                spacing: 10 * displayScaleFactor
                 clip: true
 
                 // display of attributes
                 Column {
-                    spacing: 5 * scaleFactor
+                    spacing: 5 * displayScaleFactor
                     width: parent.width
 
                     Repeater {
@@ -123,14 +123,14 @@ Item {
                         Row {
                             anchors.left: parent.left
                             clip: true
-                            spacing: 5 * scaleFactor
+                            spacing: 5 * displayScaleFactor
                             visible: attributeVisible
 
                             Text {
                                 width: popupColumn.width * 0.55
                                 text: fieldName ? fieldName : ""
                                 wrapMode: Text.WrapAnywhere
-                                font.pixelSize: 14 * scaleFactor
+                                font.pixelSize: 14 * displayScaleFactor
                                 color: attributeNameTextColorInternal
                             }
 
@@ -138,7 +138,7 @@ Item {
                                 width: popupColumn.width * 0.4
                                 text: formattedValue
                                 wrapMode: Text.WrapAnywhere
-                                font.pixelSize: 14 * scaleFactor
+                                font.pixelSize: 14 * displayScaleFactor
                                 color: attributeValueTextColorInternal
                             }
                         }
@@ -147,7 +147,7 @@ Item {
 
                 // display of attachments
                 Column {
-                    spacing: 5 * scaleFactor
+                    spacing: 5 * displayScaleFactor
                     width: parent.width
                     visible: showAttachments
 
@@ -168,13 +168,13 @@ Item {
                         Row {
                             anchors.left: parent.left
                             clip: true
-                            spacing: 5 * scaleFactor
+                            spacing: 5 * displayScaleFactor
 
                             Text {
                                 width: popupColumn.width * 0.6
                                 text: name
                                 wrapMode: Text.WrapAnywhere
-                                font.pixelSize: 14 * scaleFactor
+                                font.pixelSize: 14 * displayScaleFactor
                                 color: attributeNameTextColor
                             }
 

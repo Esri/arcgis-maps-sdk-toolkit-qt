@@ -18,7 +18,7 @@ import QtQuick 2.5
 import QtQuick.Controls 1.4
 import QtQuick.Dialogs 1.2
 import QtGraphicalEffects 1.0
-import Esri.ArcGISExtras 1.1
+import QtQuick.Window 2.0
 
 /*!
     \qmltype ClientCertificateView
@@ -47,11 +47,11 @@ Rectangle {
     /*! \internal */
     property string detailText: qsTr("The service has requested a client certificate to authenticate you. The app has identified the requesting server as '%1', but you should only give the app access to the certificate if you trust it.").arg(requestingHost)
     /*! \internal */
-    property real scaleFactor: System.displayScaleFactor
+    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
     /*! \internal */
     property string requestingHost: challenge ? challenge.authenticatingHost : ""
     /*! \internal */
-    property string certificateFilename: certificateFileInfo.fileName
+    property string certificateFilename
     /*! \internal */
     property string passwordDetailText: qsTr("The client certificate file '%1' requires a password to open.").arg(certificateFilename)
 
@@ -78,12 +78,12 @@ Rectangle {
         Rectangle {
             anchors {
                 fill: banner
-                margins: -1 * scaleFactor
+                margins: -1 * displayScaleFactor
             }
             color: "white"
             border {
                 color: "black"
-                width: 1 * scaleFactor
+                width: 1 * displayScaleFactor
             }
             radius: 3
             smooth: true
@@ -97,24 +97,24 @@ Rectangle {
                 top: parent.top
                 horizontalCenter: parent.horizontalCenter
             }
-            width: 224 * scaleFactor
-            height: 50 * scaleFactor
+            width: 224 * displayScaleFactor
+            height: 50 * displayScaleFactor
             clip: true
             source: "images/banner.png"
 
             Column {
                 anchors {
                     fill: parent
-                    margins: 5 * scaleFactor
+                    margins: 5 * displayScaleFactor
                 }
 
-                spacing: 2 * scaleFactor
+                spacing: 2 * displayScaleFactor
 
                 Text {
                     anchors.horizontalCenter: parent.horizontalCenter
                     text: qsTr("Client Certificate Requested")
                     font {
-                        pixelSize: 16 * scaleFactor
+                        pixelSize: 16 * displayScaleFactor
                         family: "sanserif"
                     }
                     color: "white"
@@ -126,7 +126,7 @@ Rectangle {
                     elide: Text.ElideRight
                     text: requestingHost
                     font {
-                        pixelSize: 12 * scaleFactor
+                        pixelSize: 12 * displayScaleFactor
                         family: "sanserif"
                     }
                     color: "white"
@@ -138,12 +138,12 @@ Rectangle {
         Rectangle {
             anchors {
                 fill: controlsColumn
-                margins: -5 * scaleFactor
+                margins: -5 * displayScaleFactor
             }
             color: "white"
             border {
                 color: "black"
-                width: 1 * scaleFactor
+                width: 1 * displayScaleFactor
             }
             radius: 3
             smooth: true
@@ -155,11 +155,11 @@ Rectangle {
             id: controlsColumn
             anchors {
                 top: banner.bottom
-                topMargin: 5 * scaleFactor
+                topMargin: 5 * displayScaleFactor
                 horizontalCenter: parent.horizontalCenter
             }
-            width: 215 * scaleFactor
-            spacing: 5 * scaleFactor
+            width: 215 * displayScaleFactor
+            spacing: 5 * displayScaleFactor
 
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -167,7 +167,7 @@ Rectangle {
                 width: parent.width
                 wrapMode: Text.Wrap
                 font {
-                    pixelSize: 10 * scaleFactor
+                    pixelSize: 10 * displayScaleFactor
                     family: "sanserif"
                 }
                 renderType: Text.NativeRendering
@@ -179,7 +179,7 @@ Rectangle {
                 width: parent.width
                 wrapMode: Text.Wrap
                 font {
-                    pixelSize: 12 * scaleFactor
+                    pixelSize: 12 * displayScaleFactor
                     family: "sanserif"
                 }
                 renderType: Text.NativeRendering
@@ -188,23 +188,23 @@ Rectangle {
 
             Rectangle {
                 width: parent.width
-                height: 80 * scaleFactor
-                anchors.margins: 10 * scaleFactor
+                height: 80 * displayScaleFactor
+                anchors.margins: 10 * displayScaleFactor
                 color: "white"
                 radius: 5
                 border {
                     color: "black"
-                    width: 1 * scaleFactor
+                    width: 1 * displayScaleFactor
                 }
 
                 ListView {
                     id: certificateList
                     anchors {
                         fill: parent
-                        margins: 5 * scaleFactor
+                        margins: 5 * displayScaleFactor
                     }
 
-                    spacing: 10 * scaleFactor
+                    spacing: 10 * displayScaleFactor
                     clip: true
                     highlightFollowsCurrentItem: true
                     highlightResizeVelocity: 10000
@@ -215,10 +215,10 @@ Rectangle {
 
                     delegate: Item {
                         width: parent.width
-                        height: 25 * scaleFactor
+                        height: 25 * displayScaleFactor
                         anchors {
-                            leftMargin: 5 * scaleFactor
-                            rightMargin: 5 * scaleFactor
+                            leftMargin: 5 * displayScaleFactor
+                            rightMargin: 5 * displayScaleFactor
                         }
 
                         Row {
@@ -244,21 +244,21 @@ Rectangle {
                 id: addButton
                 property bool pressed: false
                 anchors.right: parent.right
-                width: 25 * scaleFactor
-                height: 25 * scaleFactor
+                width: 25 * displayScaleFactor
+                height: 25 * displayScaleFactor
                 radius: 25
                 smooth: true
                 antialiasing: true
                 color: pressed ? "#959595" : "#D6D6D6"
                 border {
                     color: "#585858"
-                    width: 1 * scaleFactor
+                    width: 1 * displayScaleFactor
                 }
 
                 Image {
                     anchors.centerIn: parent
                     rotation: 45
-                    width: 20 * scaleFactor
+                    width: 20 * displayScaleFactor
                     height: width
                     source: "images/add.png"
                 }
@@ -278,7 +278,7 @@ Rectangle {
                 spacing: 4
 
                 Button {
-                    width: ((parent.width / 2) - 2 * scaleFactor)
+                    width: ((parent.width / 2) - 2 * displayScaleFactor)
                     text: qsTr("Skip")
                     onClicked: {
                         // cancel the challenge and let the resource fail to load
@@ -289,7 +289,7 @@ Rectangle {
                 }
 
                 Button {
-                    width: ((parent.width / 2) - 2 * scaleFactor)
+                    width: ((parent.width / 2) - 2 * displayScaleFactor)
                     text: qsTr("Continue")
                     enabled: certificateList.currentIndex != -1
                     onClicked: {
@@ -313,12 +313,12 @@ Rectangle {
         Rectangle {
             anchors {
                 fill: banner2
-                margins: -1 * scaleFactor
+                margins: -1 * displayScaleFactor
             }
             color: "white"
             border {
                 color: "black"
-                width: 1 * scaleFactor
+                width: 1 * displayScaleFactor
             }
             radius: 3
             smooth: true
@@ -332,8 +332,8 @@ Rectangle {
                 top: parent.top
                 horizontalCenter: parent.horizontalCenter
             }
-            width: 224 * scaleFactor
-            height: 50 * scaleFactor
+            width: 224 * displayScaleFactor
+            height: 50 * displayScaleFactor
             clip: true
             source: "images/banner.png"
 
@@ -341,7 +341,7 @@ Rectangle {
                 anchors.centerIn: parent
                 text: qsTr("Enter Password")
                 font {
-                    pixelSize: 18 * scaleFactor
+                    pixelSize: 18 * displayScaleFactor
                     family: "sanserif"
                 }
                 color: "white"
@@ -352,12 +352,12 @@ Rectangle {
         Rectangle {
             anchors {
                 fill: controlsColumn2
-                margins: -5 * scaleFactor
+                margins: -5 * displayScaleFactor
             }
             color: "white"
             border {
                 color: "black"
-                width: 1 * scaleFactor
+                width: 1 * displayScaleFactor
             }
             radius: 3
             smooth: true
@@ -369,11 +369,11 @@ Rectangle {
             id: controlsColumn2
             anchors {
                 top: banner2.bottom
-                topMargin: 5 * scaleFactor
+                topMargin: 5 * displayScaleFactor
                 horizontalCenter: parent.horizontalCenter
             }
-            width: 215 * scaleFactor
-            spacing: 5 * scaleFactor
+            width: 215 * displayScaleFactor
+            spacing: 5 * displayScaleFactor
 
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -381,7 +381,7 @@ Rectangle {
                 width: parent.width
                 wrapMode: Text.Wrap
                 font {
-                    pixelSize: 10 * scaleFactor
+                    pixelSize: 10 * displayScaleFactor
                     family: "sanserif"
                 }
                 renderType: Text.NativeRendering
@@ -398,7 +398,7 @@ Rectangle {
                 width: parent.width
                 spacing: 4
                 Button {
-                    width: ((parent.width / 2) - 2 * scaleFactor)
+                    width: ((parent.width / 2) - 2 * displayScaleFactor)
                     text: qsTr("Skip")
                     onClicked: {
                         certificatePasswordPage.visible = false;
@@ -408,7 +408,7 @@ Rectangle {
                 }
 
                 Button {
-                    width: ((parent.width / 2) - 2 * scaleFactor)
+                    width: ((parent.width / 2) - 2 * displayScaleFactor)
                     text: qsTr("Continue")
                     onClicked: {
                         certificatePasswordPage.visible = false;
@@ -429,15 +429,12 @@ Rectangle {
         onClientCertificatePasswordRequired: {
             certificatePasswordPage.certificateFile = certificate;
 
+            certificateFilename = certificatePasswordPage.certificateFile.toString().split("/").pop();
+
             // the certificate requires password
             certificatePage.visible = false;
             certificatePasswordPage.visible = true;
         }
-    }
-
-    FileInfo {
-        id: certificateFileInfo
-        url: certificatePasswordPage.certificateFile
     }
 
     FileDialog {

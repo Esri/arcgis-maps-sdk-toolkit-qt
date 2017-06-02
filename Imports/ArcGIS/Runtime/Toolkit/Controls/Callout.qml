@@ -3,7 +3,7 @@ import QtQuick.Window 2.2
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
-import Esri.ArcGISExtras 1.1
+import QtQuick.Window 2.0
 import "LeaderPosition.js" as Enums
 
 /*!
@@ -85,7 +85,7 @@ Item {
 
         The default width is \c 2.
     */
-    property int borderWidth: 2 * scaleFactor
+    property int borderWidth: 2 * displayScaleFactor
 
     /*!
         \brief The background color of the Callout.
@@ -113,35 +113,35 @@ Item {
 
         The default value is \c 5.
     */
-    property int cornerRadius: 5 * scaleFactor
+    property int cornerRadius: 5 * displayScaleFactor
 
     /*!
         \brief The height of the leader line in the Callout.
 
         The default leader height is \c 10.
     */
-    property int leaderHeight: 10 * scaleFactor
+    property int leaderHeight: 10 * displayScaleFactor
 
     /*!
         \brief The width of the leader line in the Callout.
 
         The default leader width is \c 20.
     */
-    property int leaderWidth: 20 * scaleFactor
+    property int leaderWidth: 20 * displayScaleFactor
 
     /*!
         \brief The x offset of the placement of the Callout.
 
         The default is \c 0.
     */
-    property int screenOffsetX: 0 * scaleFactor
+    property int screenOffsetX: 0 * displayScaleFactor
 
     /*!
         \brief The y offset of the placement of the Callout.
 
         The default is \c 0.
     */
-    property int screenOffsetY: 0 * scaleFactor
+    property int screenOffsetY: 0 * displayScaleFactor
 
     /*!
         \brief The type of accessory button to be displayed in the Callout.
@@ -187,18 +187,18 @@ Item {
     /*!
         \brief The maximum width of the Callout if autoAdjustWidth is true.
     */
-    property real maxWidth: 300 * scaleFactor
+    property real maxWidth: 300 * displayScaleFactor
 
     /*!
         \brief The width of the Callout if autoAdjustWidth is false.
     */
-    property real calloutWidth: 300 * scaleFactor
+    property real calloutWidth: 300 * displayScaleFactor
 
     // internal properties
     /*! \internal */
-    property int padding: 3 * scaleFactor
+    property int padding: 3 * displayScaleFactor
     /*! \internal */
-    property real scaleFactor: System.displayScaleFactor
+    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
     /*! \internal */
     property real anchorPointx: 0
     /*! \internal */
@@ -210,9 +210,9 @@ Item {
     /*! \internal */
     property bool calloutVisible
     /*! \internal */
-    property real calloutMaxHeight: 45 * scaleFactor
+    property real calloutMaxHeight: 45 * displayScaleFactor
     /*! \internal */
-    property real calloutMinWidth: 95 * scaleFactor
+    property real calloutMinWidth: 95 * displayScaleFactor
     /*! \internal */
     property real calloutMinHeight: calloutMaxHeight
     /*! \internal */
@@ -220,9 +220,9 @@ Item {
     /*! \internal */
     property real rectHeight: 0
     /*! \internal */
-    property real edgeBuffer: 10 * scaleFactor
+    property real edgeBuffer: 10 * displayScaleFactor
     /*! \internal */
-    property real calloutFramePadding: (2 * internalCornerRadius) * scaleFactor
+    property real calloutFramePadding: (2 * internalCornerRadius) * displayScaleFactor
     /*! \internal */
     property string platform: Qt.platform.os
     /*! \internal */
@@ -234,11 +234,11 @@ Item {
     /*! \internal */
     property real imageWidth: rectWidth / 4
     /*! \internal */
-    property real titleWidth: Math.max(0, rectWidth - 95 * scaleFactor)
+    property real titleWidth: Math.max(0, rectWidth - 95 * displayScaleFactor)
     /*! \internal */
-    property real detailWidth: Math.max(0, rectWidth - 95 * scaleFactor)
+    property real detailWidth: Math.max(0, rectWidth - 95 * displayScaleFactor)
     /*! \internal */
-    property real cornerOffset: 15 * scaleFactor
+    property real cornerOffset: 15 * displayScaleFactor
     /*! \internal */
     property bool debug: false
     /*! \internal */
@@ -347,8 +347,8 @@ Item {
 
     Rectangle {
         id: calloutFrame
-        width: (rectWidth + 2 * leaderWidth + edgeBuffer) * scaleFactor
-        height: (rectHeight + 2 * leaderHeight + edgeBuffer) * scaleFactor
+        width: (rectWidth + 2 * leaderWidth + edgeBuffer) * displayScaleFactor
+        height: (rectHeight + 2 * leaderHeight + edgeBuffer) * displayScaleFactor
         visible: false
         z: 100
         clip: true
@@ -392,14 +392,14 @@ Item {
                         left: parent.left
                         top: parent.top
                     }
-                    height: 45 * scaleFactor
+                    height: 45 * displayScaleFactor
                     columns: 3
                     rows: 2
-                    columnSpacing: 7 * scaleFactor
+                    columnSpacing: 7 * displayScaleFactor
 
                     Rectangle {
                         id: imageRect
-                        width: 40 * scaleFactor
+                        width: 40 * displayScaleFactor
                         height: width
                         color: "transparent"
                         Layout.rowSpan: 2
@@ -421,18 +421,18 @@ Item {
                         renderType: Text.NativeRendering
                         color: titleTextColor
                         font {
-                            pixelSize: 11 * scaleFactor
+                            pixelSize: 11 * displayScaleFactor
                             family: "sanserif"
                         }
                         clip: true
                         elide: Text.ElideRight
                         Layout.alignment: Qt.AlignVCenter
-                        Layout.maximumWidth: !autoAdjustWidth ? titleWidth : Math.max(0, adjustedMaxWidth - 90 * scaleFactor) // resets to implicit width if non-autoAdjust
+                        Layout.maximumWidth: !autoAdjustWidth ? titleWidth : Math.max(0, adjustedMaxWidth - 90 * displayScaleFactor) // resets to implicit width if non-autoAdjust
                     }
 
                     Rectangle {
                         id: accessoryButton
-                        width: 40 * scaleFactor
+                        width: 40 * displayScaleFactor
                         height: width
                         color: "transparent"
                         Layout.rowSpan: 2
@@ -440,7 +440,7 @@ Item {
                         Image {
                             id: accessoryButtonImage
                             anchors.fill: parent
-                            width: 40 * scaleFactor
+                            width: 40 * displayScaleFactor
                             height: width
                             fillMode: Image.PreserveAspectFit
                             visible: !accessoryButtonHidden
@@ -460,13 +460,13 @@ Item {
                         renderType: Text.NativeRendering
                         color: detailTextColor
                         font {
-                            pixelSize: 10 * scaleFactor
+                            pixelSize: 10 * displayScaleFactor
                             family: "sanserif"
                         }
                         wrapMode: Text.NoWrap
                         elide: Text.ElideRight
                         Layout.alignment: Qt.AlignVCenter
-                        Layout.maximumWidth: !autoAdjustWidth ? detailWidth : Math.max(0, adjustedMaxWidth - 90 * scaleFactor) // resets to implicit width if non-autoAdjust
+                        Layout.maximumWidth: !autoAdjustWidth ? detailWidth : Math.max(0, adjustedMaxWidth - 90 * displayScaleFactor) // resets to implicit width if non-autoAdjust
                     }
                 }
             }
@@ -615,16 +615,16 @@ Item {
         if (leaderPosition === Enums.LeaderPosition.Automatic) {
 
             // Move leader vertically if vertical position isn't optimal
-            if (calloutFrame.y - edgeBuffer < 0 + mapViewInsets.top * scaleFactor) {
+            if (calloutFrame.y - edgeBuffer < 0 + mapViewInsets.top * displayScaleFactor) {
                 // Top edge of callout is above top edge of map
                 refresh = moveLeader(Enums.LeaderMoveDirection.Up, mousex, mousey);
             }
 
             // Move leader horizontally if horizontal position isn't optimal
-            if (calloutFrame.x - edgeBuffer < 0 + mapViewInsets.left * scaleFactor) {
+            if (calloutFrame.x - edgeBuffer < 0 + mapViewInsets.left * displayScaleFactor) {
                 // Left edge of callout is left of left edge of map
                 refresh = moveLeader(Enums.LeaderMoveDirection.Left, mousex, mousey);
-            } else if (calloutFrame.x + rectWidth + edgeBuffer > root.parent.width - mapViewInsets.right * scaleFactor) {
+            } else if (calloutFrame.x + rectWidth + edgeBuffer > root.parent.width - mapViewInsets.right * displayScaleFactor) {
                 // Right edge of callout is right of right edge of map
                 refresh = moveLeader(Enums.LeaderMoveDirection.Right, mousex, mousey);
             }
@@ -647,13 +647,13 @@ Item {
 
         // Callout is 'narrow' if it's less than half the width of the MapView
         var narrowCallout = true;
-        if (calloutFrame.width > (mapViewWidth + (mapViewInsets.left + mapViewInsets.right) * scaleFactor) / 2) {
+        if (calloutFrame.width > (mapViewWidth + (mapViewInsets.left + mapViewInsets.right) * displayScaleFactor) / 2) {
           narrowCallout = false;
         }
 
         // Callout is 'short' if it's less than half the height of the MapView
         var shortCallout = true;
-        if (calloutFrame.height > (mapViewHeight + (mapViewInsets.top + mapViewInsets.bottom) * scaleFactor) / 2) {
+        if (calloutFrame.height > (mapViewHeight + (mapViewInsets.top + mapViewInsets.bottom) * displayScaleFactor) / 2) {
           shortCallout = false;
         }
 
@@ -893,7 +893,7 @@ Item {
             console.log("maxWidth = ", maxWidth);
             console.log("calloutWidth = ", calloutWidth);
             console.log("adjustedMaxWidth = ", adjustedMaxWidth);
-            console.log("scaleFactor = ", scaleFactor);
+            console.log("displayScaleFactor = ", displayScaleFactor);
         }
     }
 
