@@ -19,7 +19,7 @@ This project contains QML source code for controls and utilities you can use wit
 
 1. Fork and then clone the repo or download the .zip file.
 2. The Toolkit components are designed to be used with the ArcGIS Runtime SDK for Qt. Confirm that your system meets the [minimum requirements](https://developers.arcgis.com/qt/latest/qml/guide/arcgis-runtime-sdk-for-qt-system-requirements.htm) for using the ArcGIS Runtime SDK for Qt. See the below [version section](#version) to ensure you have the correct version of the Toolkit and ArcGIS Runtime.
-3. Add a QML Import Path that points to your local repository's installated location into your project. The process for this is documented in the [Import Statements](http://doc.qt.io/qt-5/qtqml-syntax-imports.html#qml-import-path) Qt documentation. For example, you could do any of the following:
+3. Add a QML Import Path that points to your local repository's installed location into your project. The process for this is documented in the [Import Statements](http://doc.qt.io/qt-5/qtqml-syntax-imports.html#qml-import-path) Qt documentation. For example, you could do any of the following:
   - Add an environment variable - `QML2_IMPORT_PATH=<path_to_repo>/Import`
   - Add a qmake variable - `QML_IMPORT_PATH+=<path_to_repo>/Import`
   - Add the path to the QML Engine's path list in C++ code - `QQmlEngine::addImportPath("<path_to_repo>/Import");`
