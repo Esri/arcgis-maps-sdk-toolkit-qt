@@ -28,7 +28,7 @@ This project contains QML source code for controls and utilities you can use wit
   - `import Esri.ArcGISRuntime.Toolkit.Dialogs 100.1`
 
 ## Running the toolkit demo project
-The toolkit repo has a demo project located in the Examples folder. This project is not meant to be a template to base your projects off of, but rather to be a quick and easy way to test and demonstrate the capibilities of various toolkit components. You can run the demo project by doing the following steps:
+The toolkit repo has a demo project located in the Examples folder. This project is not meant to be a template to base your projects off of, but rather to be a quick and easy way to test and demonstrate the capabilities of various toolkit components. You can run the demo project by doing the following steps:
 
 1. Open `Examples.qmlproject` in Qt Creator
 2. Go to Projects > Run, and add a new variable called QML2_IMPORT_PATH, and set the value equal to the path of ArcGIS Runtime and the Toolkit. For example, `/Users/<username>/ArcGIS_SDKs/Qt100.1/sdk/macOS/x64/qml:/Users/<username>/ArcGIS_SDKs/Qt100.1/sdk/toolkit/Import`
