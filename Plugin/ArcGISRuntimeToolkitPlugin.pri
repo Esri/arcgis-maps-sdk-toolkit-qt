@@ -14,21 +14,9 @@
 #   limitations under the License.
 ################################################################################
 
-mac {
-    cache()
-}
+HEADERS += $$PWD/ArcGISRuntimeToolkitPlugin.h
 
-#-------------------------------------------------------------------------------
+SOURCES += $$PWD/ArcGISRuntimeToolkitPlugin.cpp
 
-TEMPLATE = subdirs
-
-OTHER_FILES += \
-    README.md \
-    .gitattributes \
-    .gitignore \
-    Imports/*.qmlproject \
-    Examples/*.qmlproject \
-    Plugin/*
-
-#-------------------------------------------------------------------------------
-
+RESOURCES += $$PWD/../Imports/ArcGIS/Runtime/Toolkit/Controls/Controls.qrc \
+             $$PWD/../Imports/ArcGIS/Runtime/Toolkit/Dialogs/Dialogs.qrc
