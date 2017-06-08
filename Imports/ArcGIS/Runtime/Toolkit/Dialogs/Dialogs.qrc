@@ -1,0 +1,20 @@
+<RCC>
+    <qresource prefix="/qt-project.org/imports/Esri/ArcGISRuntime/Toolkit/Dialogs">
+        <file>images/add.png</file>
+        <file>images/banner.png</file>
+        <file>AuthenticationView.qml</file>
+        <file>AuthenticationView20.qml</file>
+        <file>ClientCertificateView.qml</file>
+        <file>ClientCertificateView20.qml</file>
+        <file>CurrentVersion.qml</file>
+        <file>ImagePopUpDialog20.qml</file>
+        <file>OAuth2View.qml</file>
+        <file>OAuth2View20.qml</file>
+        <file>SimpleDialog20.qml</file>
+        <file>SslHandshakeView.qml</file>
+        <file>SslHandshakeView20.qml</file>
+        <file>UserCredentialsView.qml</file>
+        <file>UserCredentialsView20.qml</file>
+        <file>qmldir</file>
+    </qresource>
+</RCC>
