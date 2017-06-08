@@ -27,6 +27,20 @@ This project contains QML source code for controls and utilities you can use wit
   - `import Esri.ArcGISRuntime.Toolkit.Controls 100.1`
   - `import Esri.ArcGISRuntime.Toolkit.Dialogs 100.1`
 
+## Alternate Setup instructions (importing the Toolkit as a plugin)
+
+Starting with Qt 5.9.0 on iOS, the Toolkit must be imported as a plugin.
+
+1. Follow the steps above (Setup instructions ) but skip step 3 for adding the Qml import paths to your project.
+2. Include [ArcGISRuntimeToolkitPlugin.pri](Plugin/ArcGISRuntimeToolkitPlugin.pri) in your project file.
+
+For example, 
+```qmake 
+include(/Users/james/ArcGIS_SDKs/Qt100.1/sdk/toolkit/Plugin/ArcGISRuntimeToolkitPlugin.pri)
+```
+
+3. The Toolkit will now be compiled into your application directly as a plugin.
+
 ## Running the toolkit demo project
 The toolkit repo has a demo project located in the Examples folder. This project is not meant to be a template to base your projects off of, but rather to be a quick and easy way to test and demonstrate the capabilities of various toolkit components. You can run the demo project by doing the following steps:
 
