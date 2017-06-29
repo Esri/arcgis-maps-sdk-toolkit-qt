@@ -20,32 +20,26 @@ import QtGraphicalEffects 1.0
 import Esri.ArcGISExtras 1.1
 
 /*!
-    \qmltype UserCredentialsView
+    \internal
+    \obsolete Use version 100.x instead.
+    \qmltype SslHandshakeView
     \ingroup ArcGISQtToolkit
     \inqmlmodule Esri.ArcGISRuntime.Toolkit.Dialogs
-    \since 2.0
-    \brief A view for handling username and password authentication challenges.
+    \since Esri.ArcGISRutime 100.0
+    \brief A view for handling SSL Handshake authentication challenges.
 
-    When a request is made to access a resource that requires a username and
-    password, the AuthenticationView will automatically launch this view. This
-    is applicable for:
-
-    \list
-      \li ArcGIS Token
-      \li HTTP Digest
-      \li HTTP Basic
-      \li Integrated Windows Authentication (IWA)
-    \endlist
-
-    \note In the case of using an IWA secured resource on a Windows system, the
-    OS will automatically handle the authentication, and no UI dialog will appear.
+    When a request is made to access a resource and there is an SSL
+    handshake challenge (such as in the case of a self-signed certificate),
+    the AuthenticationView will automatically launch this view. The
+    checkbox allows for you to either be prompted each time a SSL handshake
+    error occurs from the same host, or only the first time for each host.
 */
 Rectangle {
     id: root
     color: "transparent"
 
     /*!
-        \brief The AuthenticationChallenge for ArcGIS Token, HTTP Basic, HTTP Digest, and IWA.
+        \brief The AuthenticationChallenge for SSL Handshake errors.
 
         \note If using the AuthenticationView, this is set automatically and
          requires no configuration.
@@ -53,23 +47,11 @@ Rectangle {
     property var challenge
 
     /*! \internal */
-    property real scaleFactor: System.displayScaleFactor
-    /*! \internal */
     property string requestingHost: challenge ? challenge.authenticatingHost : ""
     /*! \internal */
-    property string detailText: qsTr("You need to sign in to access the resource at '%1'").arg(requestingHost)
-
-    Keys.onEnterPressed: {
-        if (Qt.platform.os !== "android" && Qt.platform.os !== "ios") {
-            continueButton.clicked();
-        }
-    }
-
-    Keys.onReturnPressed: {
-        if (Qt.platform.os !== "android" && Qt.platform.os !== "ios") {
-            continueButton.clicked();
-        }
-    }
+    property string detailText: qsTr("The server could not prove itself; its security certificate is not trusted by your OS. Would you like to continue anyway?")
+    /*! \internal */
+    property real scaleFactor: System.displayScaleFactor
 
     RadialGradient {
         anchors.fill: parent
@@ -113,15 +95,35 @@ Rectangle {
         clip: true
         source: "images/banner.png"
 
-        Text {
-            anchors.centerIn: parent
-            text: qsTr("Authentication Required")
-            font {
-                pixelSize: 18 * scaleFactor
-                family: "sanserif"
+        Column {
+            anchors {
+                fill: parent
+                margins: 5 * scaleFactor
             }
-            color: "white"
-            renderType: Text.NativeRendering
+
+            spacing: 2 * scaleFactor
+
+            Text {
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: qsTr("Untrusted Host")
+                font {
+                    pixelSize: 18 * scaleFactor
+                    family: "sanserif"
+                }
+                renderType: Text.NativeRendering
+                color: "white"
+            }
+
+            Text {
+                anchors.horizontalCenter: parent.horizontalCenter
+                elide: Text.ElideRight
+                text: requestingHost
+                font {
+                    pixelSize: 12 * scaleFactor
+                    family: "sanserif"
+                }
+                color: "white"
+            }
         }
     }
 
@@ -149,26 +151,7 @@ Rectangle {
             horizontalCenter: banner.horizontalCenter
         }
         width: 215 * scaleFactor
-        spacing: 10 * scaleFactor
-
-        Rectangle {
-            color: "#FFCCCC"
-            radius: 5
-            width: parent.width
-            anchors.margins: 10 * scaleFactor
-            height: 20 * scaleFactor
-            visible: challenge ? challenge.failureCount > 1 : false
-
-            Text {
-                anchors.centerIn: parent
-                text: qsTr("Invalid username or password.")
-                font {
-                    pixelSize: 12 * scaleFactor
-                    family: "sanserif"
-                }
-                color: "red"
-            }
-        }
+        spacing: 8 * scaleFactor
 
         Text {
             anchors.horizontalCenter: parent.horizontalCenter
@@ -176,52 +159,41 @@ Rectangle {
             width: parent.width
             wrapMode: Text.Wrap
             font {
-                pixelSize: 12 * scaleFactor
+                pixelSize: 10 * scaleFactor
                 family: "sanserif"
             }
-            renderType: Text.NativeRendering
         }
 
-        TextField {
-            id: usernameTextField
-            width: parent.width
-            placeholderText: qsTr("username")
-        }
-
-        TextField {
-            id: passwordTextField
-            width: parent.width
-            placeholderText: qsTr("password")
-            echoMode: TextInput.Password
+        CheckBox {
+            id: rememberCheckbox
+            text: qsTr("Remember")
         }
 
         Row {
             width: parent.width
             spacing: 4 * scaleFactor
+
             Button {
                 width: ((parent.width / 2) - 2 * scaleFactor)
-                text: qsTr("Skip")
+                text: qsTr("Block")
                 onClicked: {
-                    // cancel the challenge and let the resource fail to load
+                    // reject the challenge and let the resource fail to load
                     if (challenge)
-                        challenge.cancel();
+                        challenge.continueWithSslHandshake(false, rememberCheckbox.checked);
                     root.visible = false;
                 }
             }
 
             Button {
-                id: continueButton
                 width: ((parent.width / 2) - 2 * scaleFactor)
-                text: qsTr("Continue")
-                isDefault: true
+                text: qsTr("Trust")
                 onClicked: {
-                    // continue with the username and password
+                    // continue SSL handshake and trust host
                     if (challenge)
-                        challenge.continueWithUsernamePassword(usernameTextField.text, passwordTextField.text);
+                        challenge.continueWithSslHandshake(true, rememberCheckbox.checked);
                     root.visible = false;
                 }
             }
         }
     }
 }
-

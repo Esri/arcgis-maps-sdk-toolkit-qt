@@ -17,7 +17,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.1
 import QtGraphicalEffects 1.0
-import Esri.ArcGISRuntime 100.0
+import Esri.ArcGISRuntime 100.1
 
 Rectangle {
     width: 640
@@ -27,39 +27,14 @@ Rectangle {
         id: examplesModel
 
         ListElement {
-            description: "Navigation Toolbar  Example"
-            source: "NavigationToolbarExample.qml"
-        }
-
-        ListElement {
-            description: "NorthArrow Control Example"
-            source: "NorthArrowExample.qml"
-        }
-
-        ListElement {
-            description: "OverviewMap Control Example"
-            source: "OverviewMapExample.qml"
-        }
-
-        ListElement {
-            description: "StyleTemplate Example"
-            source: "StyleTemplateExample.qml"
-        }
+            description: "PopupView Example"
+            source: "PopupExample.qml"
+        }        
 
         ListElement {
             description: "Callout Example"
             source: "CalloutExample.qml"
-        }
-
-        ListElement {
-            description: "AttributeListView Example"
-            source: "AttributeListViewExample.qml"
-        }
-
-        ListElement {
-            description: "AttachmentListView Example"
-            source: "AttachmentListViewExample.qml"
-        }
+        }        
     }
 
 

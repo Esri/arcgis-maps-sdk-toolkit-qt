@@ -14,21 +14,25 @@
 #   limitations under the License.
 ################################################################################
 
-mac {
-    cache()
-}
+module Esri.ArcGISRuntime.Toolkit.Controls
 
-#-------------------------------------------------------------------------------
-
-TEMPLATE = subdirs
-
-OTHER_FILES += \
-    README.md \
-    .gitattributes \
-    .gitignore \
-    Imports/*.qmlproject \
-    Examples/*.qmlproject \
-    Plugin/*
-
-#-------------------------------------------------------------------------------
-
+AttachmentListView 2.0 AttachmentListView20.qml
+AttributeListView 2.0 AttributeListView20.qml
+Callout 2.0 Callout20.qml
+Callout 100.0 Callout100.qml
+Callout 100.1 Callout.qml
+CurrentVersion 100.1 CurrentVersion.qml
+Fader 2.0 Fader20.qml
+HomeButton 2.0 HomeButton20.qml
+ImageButton 2.0 ImageButton20.qml
+LocationButton 2.0 LocationButton20.qml
+NavigationToolbar 2.0 NavigationToolbar20.qml
+NorthArrow 2.0 NorthArrow20.qml
+OverviewMap 2.0 OverviewMap20.qml
+PopupView 100.1 PopupView.qml
+RotationToolbar 2.0 RotationToolbar20.qml
+SearchBox 2.0 SearchBox20.qml
+StyleButton 2.0 StyleButton20.qml
+StyleToolbar 2.0 StyleToolbar20.qml
+ZoomInButton 2.0 ZoomInButton20.qml
+ZoomOutButton 2.0 ZoomOutButton20.qml

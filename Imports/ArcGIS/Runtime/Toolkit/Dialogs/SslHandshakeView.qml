@@ -17,13 +17,13 @@
 import QtQuick 2.5
 import QtQuick.Controls 1.4
 import QtGraphicalEffects 1.0
-import Esri.ArcGISExtras 1.1
+import QtQuick.Window 2.0
 
 /*!
     \qmltype SslHandshakeView
     \ingroup ArcGISQtToolkit
     \inqmlmodule Esri.ArcGISRuntime.Toolkit.Dialogs
-    \since 2.0
+    \since Esri.ArcGISRutime 100.0
     \brief A view for handling SSL Handshake authentication challenges.
 
     When a request is made to access a resource and there is an SSL
@@ -49,7 +49,7 @@ Rectangle {
     /*! \internal */
     property string detailText: qsTr("The server could not prove itself; its security certificate is not trusted by your OS. Would you like to continue anyway?")
     /*! \internal */
-    property real scaleFactor: System.displayScaleFactor
+    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
 
     RadialGradient {
         anchors.fill: parent
@@ -69,12 +69,12 @@ Rectangle {
     Rectangle {
         anchors {
             fill: banner
-            margins: -1 * scaleFactor
+            margins: -1 * displayScaleFactor
         }
         color: "white"
         border {
             color: "black"
-            width: 1 * scaleFactor
+            width: 1 * displayScaleFactor
         }
         radius: 3
         smooth: true
@@ -86,26 +86,26 @@ Rectangle {
         id: banner
         anchors {
             centerIn: parent
-            verticalCenterOffset: -50 * scaleFactor
+            verticalCenterOffset: -50 * displayScaleFactor
         }
-        width: 224 * scaleFactor
-        height: 50 * scaleFactor
+        width: 224 * displayScaleFactor
+        height: 50 * displayScaleFactor
         clip: true
         source: "images/banner.png"
 
         Column {
             anchors {
                 fill: parent
-                margins: 5 * scaleFactor
+                margins: 5 * displayScaleFactor
             }
 
-            spacing: 2 * scaleFactor
+            spacing: 2 * displayScaleFactor
 
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: qsTr("Untrusted Host")
                 font {
-                    pixelSize: 18 * scaleFactor
+                    pixelSize: 18 * displayScaleFactor
                     family: "sanserif"
                 }
                 renderType: Text.NativeRendering
@@ -117,7 +117,7 @@ Rectangle {
                 elide: Text.ElideRight
                 text: requestingHost
                 font {
-                    pixelSize: 12 * scaleFactor
+                    pixelSize: 12 * displayScaleFactor
                     family: "sanserif"
                 }
                 color: "white"
@@ -128,12 +128,12 @@ Rectangle {
     Rectangle {
         anchors {
             fill: controlsColumn
-            margins: -5 * scaleFactor
+            margins: -5 * displayScaleFactor
         }
         color: "white"
         border {
             color: "black"
-            width: 1 * scaleFactor
+            width: 1 * displayScaleFactor
         }
         radius: 3
         smooth: true
@@ -145,11 +145,11 @@ Rectangle {
         id: controlsColumn
         anchors {
             top: banner.bottom
-            topMargin: 5 * scaleFactor
+            topMargin: 5 * displayScaleFactor
             horizontalCenter: banner.horizontalCenter
         }
-        width: 215 * scaleFactor
-        spacing: 8 * scaleFactor
+        width: 215 * displayScaleFactor
+        spacing: 8 * displayScaleFactor
 
         Text {
             anchors.horizontalCenter: parent.horizontalCenter
@@ -157,7 +157,7 @@ Rectangle {
             width: parent.width
             wrapMode: Text.Wrap
             font {
-                pixelSize: 10 * scaleFactor
+                pixelSize: 10 * displayScaleFactor
                 family: "sanserif"
             }
         }
@@ -169,10 +169,10 @@ Rectangle {
 
         Row {
             width: parent.width
-            spacing: 4 * scaleFactor
+            spacing: 4 * displayScaleFactor
 
             Button {
-                width: ((parent.width / 2) - 2 * scaleFactor)
+                width: ((parent.width / 2) - 2 * displayScaleFactor)
                 text: qsTr("Block")
                 onClicked: {
                     // reject the challenge and let the resource fail to load
@@ -183,7 +183,7 @@ Rectangle {
             }
 
             Button {
-                width: ((parent.width / 2) - 2 * scaleFactor)
+                width: ((parent.width / 2) - 2 * displayScaleFactor)
                 text: qsTr("Trust")
                 onClicked: {
                     // continue SSL handshake and trust host

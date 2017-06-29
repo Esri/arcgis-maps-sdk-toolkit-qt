@@ -14,31 +14,19 @@
  *   limitations under the License.
  ******************************************************************************/
 
-import QmlProject 1.1
+#ifndef ArcGISRuntimeToolkitPlugin_H
+#define ArcGISRuntimeToolkitPlugin_H
 
-Project {
-    QmlFiles {
-        directory: "."
-        recursive: true
-    }
+#include <QQmlExtensionPlugin>
 
-    JavaScriptFiles {
-        directory: "."
-        recursive: true
-    }
+class ArcGISRuntimeToolkitPlugin : public QQmlExtensionPlugin
+{
+  Q_OBJECT
+  Q_PLUGIN_METADATA(IID QQmlExtensionInterface_iid)
 
-    ImageFiles {
-        directory: "."
-        recursive: true
-    }
+public:
+  explicit ArcGISRuntimeToolkitPlugin(QObject* parent = nullptr);
+  void registerTypes(const char* uri) Q_DECL_OVERRIDE;
+};
 
-    Files {
-        directory: "."
-        recursive: true
-        filter: "qmldir;*.json;*.png;*.txt"
-    }
-
-    importPaths: [
-   ]
-}
-
+#endif // ArcGISRuntimeToolkitPlugin_H

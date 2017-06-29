@@ -1,5 +1,5 @@
 ################################################################################
-# Copyright 2012-2014 Esri
+# Copyright 2012-2017 Esri
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -16,10 +16,16 @@
 
 module Esri.ArcGISRuntime.Toolkit.Dialogs
 
-SimpleDialog 2.0 SimpleDialog.qml
-ImagePopUpDialog 2.0 ImagePopUpDialog.qml
-AuthenticationView 2.0 AuthenticationView.qml
-OAuth2View 2.0 OAuth2View.qml
-ClientCertificateView 2.0 ClientCertificateView.qml
-SslHandshakeView 2.0 SslHandshakeView.qml
-UserCredentialsView 2.0 UserCredentialsView.qml
+AuthenticationView 2.0 AuthenticationView20.qml
+AuthenticationView 100.0 AuthenticationView.qml
+ClientCertificateView 2.0 ClientCertificateView20.qml
+ClientCertificateView 100.0 ClientCertificateView.qml
+CurrentVersion 100.1 CurrentVersion.qml
+ImagePopUpDialog 2.0 ImagePopUpDialog20.qml
+OAuth2View 2.0 OAuth2View20.qml
+OAuth2View 100.0 OAuth2View.qml
+SimpleDialog 2.0 SimpleDialog20.qml
+SslHandshakeView 2.0 SslHandshakeView20.qml
+SslHandshakeView 100.0 SslHandshakeView.qml
+UserCredentialsView 2.0 UserCredentialsView20.qml
+UserCredentialsView 100.0 UserCredentialsView.qml

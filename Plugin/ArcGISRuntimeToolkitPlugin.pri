@@ -1,5 +1,5 @@
 ################################################################################
-# Copyright 2012-2014 Esri
+# Copyright 2012-2017 Esri
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -14,24 +14,9 @@
 #   limitations under the License.
 ################################################################################
 
-module Esri.ArcGISRuntime.Toolkit.Controls
+HEADERS += $$PWD/ArcGISRuntimeToolkitPlugin.h
 
-NorthArrow 2.0 NorthArrow.qml
-OverviewMap 2.0 OverviewMap.qml
-PortalItemsView 2.0 PortalItemsView.qml
-ImageButton 2.0 ImageButton.qml
-Fader 2.0 Fader.qml
-StyleButton 2.0 StyleButton.qml
-StyleToolbar 2.0 StyleToolbar.qml
-NavigationToolbar 2.0 NavigationToolbar.qml
-RotationToolbar 2.0 RotationToolbar.qml
-HomeButton 2.0 HomeButton.qml
-LocationButton 2.0 LocationButton.qml
-ZoomInButton 2.0 ZoomInButton.qml
-ZoomOutButton 2.0 ZoomOutButton.qml
-SearchBox 2.0 SearchBox.qml
-Callout 2.0 Callout.qml
-AttributeListView 2.0 AttributeListView.qml
-AttachmentListView 2.0 AttachmentListView.qml
+SOURCES += $$PWD/ArcGISRuntimeToolkitPlugin.cpp
 
-
+RESOURCES += $$PWD/../Imports/ArcGIS/Runtime/Toolkit/Controls/Controls.qrc \
+             $$PWD/../Imports/ArcGIS/Runtime/Toolkit/Dialogs/Dialogs.qrc

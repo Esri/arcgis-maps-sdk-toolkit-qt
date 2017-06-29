@@ -21,10 +21,12 @@ import QtGraphicalEffects 1.0
 import Esri.ArcGISExtras 1.1
 
 /*!
+    \internal
+    \obsolete Use version 100.x instead.
     \qmltype ClientCertificateView
     \ingroup ArcGISQtToolkit
     \inqmlmodule Esri.ArcGISRuntime.Toolkit.Dialogs
-    \since 2.0
+    \since Esri.ArcGISRutime 100.0
     \brief A view for handling PKI authentication challenges.
 
     When a request is made to access a resource that is secured with PKI

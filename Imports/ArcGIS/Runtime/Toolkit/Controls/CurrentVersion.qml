@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2012-2017 Esri
+ * Copyright 2012-2016 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,31 +14,11 @@
  *   limitations under the License.
  ******************************************************************************/
 
-import QmlProject 1.1
+/*!
+  \internal
+  This QML file is only used for incrementing the current version of the toolkit and
+  should not be used in your application.
+*/
+import QtQuick 2.2
 
-Project {
-    QmlFiles {
-        directory: "."
-        recursive: true
-    }
-
-    JavaScriptFiles {
-        directory: "."
-        recursive: true
-    }
-
-    ImageFiles {
-        directory: "."
-        recursive: true
-    }
-
-    Files {
-        directory: "."
-        recursive: true
-        filter: "qmldir;*.json;*.png;*.txt"
-    }
-
-    importPaths: [
-   ]
-}
-
+Component {}

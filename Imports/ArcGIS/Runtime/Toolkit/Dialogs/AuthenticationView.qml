@@ -20,7 +20,7 @@ import QtQuick 2.5
     \qmltype AuthenticationView
     \ingroup ArcGISQtToolkit
     \inqmlmodule Esri.ArcGISRuntime.Toolkit.Dialogs
-    \since 2.0
+    \since Esri.ArcGISRutime 100.0
     \brief A view for handling authentication challenges and automatically launching
     the appropriate UI for each type of authentication.
 
