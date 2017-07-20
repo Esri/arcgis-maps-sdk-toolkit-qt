@@ -28,6 +28,8 @@ Message::Message(Message& other) :
   m_symbolId(other.m_symbolId),
   m_action(other.m_action),
   m_messageId(other.m_messageId),
+  m_messageType(other.m_messageType),
+  m_symbolJson(other.m_symbolJson),
   m_attributes(other.m_attributes),
   m_geometry(other.m_geometry)
 {
@@ -37,6 +39,8 @@ Message::Message(Message&& other) :
   m_symbolId(std::move(other.m_symbolId)),
   m_action(std::move(other.m_action)),
   m_messageId(std::move(other.m_messageId)),
+  m_messageType(std::move(other.m_messageType)),
+  m_symbolJson(std::move(other.m_symbolJson)),
   m_attributes(std::move(other.m_attributes)),
   m_geometry(std::move(other.m_geometry))
 {
@@ -53,6 +57,8 @@ Message& Message::operator=(Message& other)
     m_symbolId = other.m_symbolId;
     m_action = other.m_action;
     m_messageId = other.m_messageId;
+    m_messageType = other.m_messageType;
+    m_symbolJson = other.m_symbolJson;
     m_attributes = other.m_attributes;
     m_geometry = other.m_geometry;
   }
@@ -67,6 +73,8 @@ Message& Message::operator=(Message&& other)
     m_symbolId = std::move(other.m_symbolId);
     m_action = std::move(other.m_action);
     m_messageId = std::move(other.m_messageId);
+    m_messageType = std::move(other.m_messageType);
+    m_symbolJson = std::move(other.m_symbolJson);
     m_attributes = std::move(other.m_attributes);
     m_geometry = std::move(other.m_geometry);
   }
@@ -112,6 +120,26 @@ QString Message::messageId() const
 void Message::setMessageId(const QString& messageId)
 {
   m_messageId = messageId;
+}
+
+QString Message::messageType() const
+{
+  return m_messageType;
+}
+
+void Message::setMessageType(const QString& messageType)
+{
+  m_messageType = messageType;
+}
+
+QString Message::symbolJson() const
+{
+  return m_symbolJson;
+}
+
+void Message::setSymbolJson(const QString& symbolJson)
+{
+  m_symbolJson = symbolJson;
 }
 
 QHash<QString, QString> Message::attributes() const

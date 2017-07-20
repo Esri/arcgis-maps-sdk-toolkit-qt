@@ -49,6 +49,12 @@ public:
   QString messageId() const;
   void setMessageId(const QString& messageId);
 
+  QString messageType() const;
+  void setMessageType(const QString& messageType);
+
+  QString symbolJson() const;
+  void setSymbolJson(const QString& symbolJson);
+
   QHash<QString, QString> attributes() const;
   void setAttributes(const QHash<QString, QString>& attributes);
 
@@ -56,6 +62,8 @@ private:
   QString m_symbolId;
   QString m_action;
   QString m_messageId;
+  QString m_messageType;
+  QString m_symbolJson;
   QHash<QString, QString> m_attributes;
   Geometry m_geometry;
 };
