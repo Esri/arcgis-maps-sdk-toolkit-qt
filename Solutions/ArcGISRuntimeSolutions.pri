@@ -14,4 +14,5 @@
 #   limitations under the License.
 ################################################################################
 
-# this file will include a locally build version of the toolkit components into an application
+INCLUDEPATH += $PWD/include
+QMAKE_LFLAGS += -L$PWD/output -lArcGISRuntimeSolutions
