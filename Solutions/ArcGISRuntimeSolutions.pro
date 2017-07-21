@@ -14,10 +14,10 @@
 #   limitations under the License.
 ################################################################################
 
-TARGET = $$qtLibraryTarget(ArcGISRuntimeToolkitComponents)
+TARGET = $$qtLibraryTarget(ArcGISRuntimeSolutions)
 TEMPLATE = lib
 
-DEFINES += QTRUNTIME_TOOLKIT_COMPONENTS_BUILD
+DEFINES += QTRUNTIME_SOLUTIONS_BUILD
 
 RUNTIME_PRI = arcgis_runtime_qml_cpp.pri
 #RUNTIME_PRI = esri_runtime_qt.pri # use this for widgets

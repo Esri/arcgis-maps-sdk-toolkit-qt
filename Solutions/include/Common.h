@@ -14,15 +14,15 @@
  *   limitations under the License.
  ******************************************************************************/
 
-#ifndef QRT_TOOLKIT_Common_H
-#define QRT_TOOLKIT_Common_H
+#ifndef QRT_SOLUTIONS_Common_H
+#define QRT_SOLUTIONS_Common_H
 
 #include <QtCore/qglobal.h>
 
-#ifdef QTRUNTIME_TOOLKIT_COMPONENTS_BUILD
-#define TOOLKIT_EXPORT Q_DECL_EXPORT
+#ifdef QTRUNTIME_SOLUTIONS_BUILD
+#define SOLUTIONS_EXPORT Q_DECL_EXPORT
 #else
-#define TOOLKIT_EXPORT Q_DECL_IMPORT
+#define SOLUTIONS_EXPORT Q_DECL_IMPORT
 #endif
 
-#endif // QRT_TOOLKIT_Common_H
+#endif // QRT_SOLUTIONS_Common_H

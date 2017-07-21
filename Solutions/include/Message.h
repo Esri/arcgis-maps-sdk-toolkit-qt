@@ -14,8 +14,8 @@
  *   limitations under the License.
  ******************************************************************************/
 
-#ifndef QRT_TOOLKIT_Message_H
-#define QRT_TOOLKIT_Message_H
+#ifndef QRT_SOLUTIONS_Message_H
+#define QRT_SOLUTIONS_Message_H
 
 #include <QHash>
 #include <QString>
@@ -24,9 +24,9 @@
 
 namespace Esri {
 namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Solutions {
 
-class TOOLKIT_EXPORT Message
+class SOLUTIONS_EXPORT Message
 {
 public:
   Message();
@@ -68,8 +68,8 @@ private:
   Geometry m_geometry;
 };
 
-} // namespace Toolkit
+} // namespace Solutions
 } // namespace ArcGISRuntime
 } // namespace Esri
 
-#endif // QRT_TOOLKIT_Message_H
+#endif // QRT_SOLUTIONS_Message_H

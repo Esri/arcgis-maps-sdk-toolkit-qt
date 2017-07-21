@@ -21,7 +21,7 @@
 
 namespace Esri {
 namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Solutions {
 
 MessageProcessor::MessageProcessor(DictionarySymbolStyle* dictionarySymbolStyle, GeoView* geoView, QObject* parent) :
   QObject(parent),
@@ -62,6 +62,6 @@ bool MessageProcessor::processMessage(const Message& message)
   return false;
 }
 
-} // namespace Toolkit
+} // namespace Solutions
 } // namespace ArcGISRuntime
 } // namespace Esri

@@ -18,7 +18,7 @@
 
 namespace Esri {
 namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Solutions {
 
 Message::Message()
 {
@@ -152,6 +152,6 @@ void Message::setAttributes(const QHash<QString, QString>& attributes)
   m_attributes = attributes;
 }
 
-} // namespace Toolkit
+} // namespace Solutions
 } // namespace ArcGISRuntime
 } // namespace Esri

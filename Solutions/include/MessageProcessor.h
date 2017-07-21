@@ -14,8 +14,8 @@
  *   limitations under the License.
  ******************************************************************************/
 
-#ifndef QRT_TOOLKIT_MessageProcessor_H
-#define QRT_TOOLKIT_MessageProcessor_H
+#ifndef QRT_SOLUTIONS_MessageProcessor_H
+#define QRT_SOLUTIONS_MessageProcessor_H
 
 #include <QObject>
 #include "Message.h"
@@ -27,9 +27,9 @@ class GeoView;
 class DictionarySymbolStyle;
 class GraphicsOverlay;
 
-namespace Toolkit {
+namespace Solutions {
 
-class TOOLKIT_EXPORT MessageProcessor : public QObject
+class SOLUTIONS_EXPORT MessageProcessor : public QObject
 {
 public:
   MessageProcessor() = delete;
@@ -52,8 +52,8 @@ private:
   DictionarySymbolStyle* m_dictionarySymbolStyle = nullptr;
 };
 
-} // namespace Toolkit
+} // namespace Solutions
 } // namespace ArcGISRuntime
 } // namespace Esri
 
-#endif // QRT_TOOLKIT_MessageProcessor_H
+#endif // QRT_SOLUTIONS_MessageProcessor_H
