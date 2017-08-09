@@ -14,8 +14,8 @@
  *   limitations under the License.
  ******************************************************************************/
 
-#ifndef QRT_SOLUTIONS_MessageProcessor_H
-#define QRT_SOLUTIONS_MessageProcessor_H
+#ifndef QRT_SOLUTIONS_MessagesOverlay_H
+#define QRT_SOLUTIONS_MessagesOverlay_H
 
 #include <QObject>
 #include "Message.h"
@@ -29,12 +29,12 @@ class GraphicsOverlay;
 
 namespace Solutions {
 
-class SOLUTIONS_EXPORT MessageProcessor : public QObject
+class SOLUTIONS_EXPORT MessagesOverlay : public QObject
 {
 public:
-  MessageProcessor() = delete;
-  MessageProcessor(DictionarySymbolStyle* dictionarySymbolStyle, GeoView* geoView, QObject* parent = nullptr);
-  ~MessageProcessor();
+  MessagesOverlay() = delete;
+  MessagesOverlay(DictionarySymbolStyle* dictionarySymbolStyle, GeoView* geoView, QObject* parent = nullptr);
+  ~MessagesOverlay();
 
   GeoView* geoView() const;
 
@@ -43,10 +43,10 @@ public:
   DictionarySymbolStyle* dictionarySymbolStyle() const;
   void setDictionarySymbolStyle(DictionarySymbolStyle* dictionarySymbolStyle);
 
-  bool processMessage(const Message& message);
+  bool addMessage(const Message& message);
 
 private:
-  Q_DISABLE_COPY(MessageProcessor)
+  Q_DISABLE_COPY(MessagesOverlay)
   GeoView* m_geoView = nullptr;
   QList<GraphicsOverlay*> m_graphicsOverlays;
   DictionarySymbolStyle* m_dictionarySymbolStyle = nullptr;
@@ -56,4 +56,4 @@ private:
 } // namespace ArcGISRuntime
 } // namespace Esri
 
-#endif // QRT_SOLUTIONS_MessageProcessor_H
+#endif // QRT_SOLUTIONS_MessagesOverlay_H

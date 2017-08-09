@@ -14,7 +14,7 @@
  *   limitations under the License.
  ******************************************************************************/
 
-#include "MessageProcessor.h"
+#include "MessagesOverlay.h"
 #include "DictionarySymbolStyle.h"
 #include "GeoView.h"
 #include "GraphicsOverlay.h"
@@ -23,39 +23,39 @@ namespace Esri {
 namespace ArcGISRuntime {
 namespace Solutions {
 
-MessageProcessor::MessageProcessor(DictionarySymbolStyle* dictionarySymbolStyle, GeoView* geoView, QObject* parent) :
+MessagesOverlay::MessagesOverlay(DictionarySymbolStyle* dictionarySymbolStyle, GeoView* geoView, QObject* parent) :
   QObject(parent),
   m_geoView(geoView),
   m_dictionarySymbolStyle(dictionarySymbolStyle)
 {
 }
 
-MessageProcessor::~MessageProcessor()
+MessagesOverlay::~MessagesOverlay()
 {
 }
 
-GeoView* MessageProcessor::geoView() const
+GeoView* MessagesOverlay::geoView() const
 {
   return m_geoView;
 }
 
-QList<GraphicsOverlay*> MessageProcessor::graphicsOverlays() const
+QList<GraphicsOverlay*> MessagesOverlay::graphicsOverlays() const
 {
   return m_graphicsOverlays;
 }
 
-DictionarySymbolStyle* MessageProcessor::dictionarySymbolStyle() const
+DictionarySymbolStyle* MessagesOverlay::dictionarySymbolStyle() const
 {
   return m_dictionarySymbolStyle;
 }
 
-void MessageProcessor::setDictionarySymbolStyle(DictionarySymbolStyle* dictionarySymbolStyle)
+void MessagesOverlay::setDictionarySymbolStyle(DictionarySymbolStyle* dictionarySymbolStyle)
 {
   Q_UNIMPLEMENTED();
   Q_UNUSED(dictionarySymbolStyle)
 }
 
-bool MessageProcessor::processMessage(const Message& message)
+bool MessagesOverlay::addMessage(const Message& message)
 {
   Q_UNIMPLEMENTED();
   Q_UNUSED(message)
