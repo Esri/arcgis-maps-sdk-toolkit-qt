@@ -14,31 +14,6 @@
 #   limitations under the License.
 ################################################################################
 
-TARGET = $$qtLibraryTarget(ArcGISRuntimeSolutions)
-TEMPLATE = lib
+module Esri.ArcGISRuntime.Solutions.Controls
 
-QT += core gui opengl network positioning sensors qml quick
-CONFIG += c++11
-
-DEFINES += QTRUNTIME_SOLUTIONS_BUILD
-
-URI = Esri.ArcGISRuntime.Solutions
-QMAKE_MOC_OPTIONS += -Muri=$$URI
-
-RUNTIME_PRI = arcgis_runtime_qml_cpp.pri
-#RUNTIME_PRI = esri_runtime_qt.pri # use this for widgets
-
-ios:RESOURCES += $${PWD}/ArcGISRuntimeSolutions.qrc
-
-ARCGIS_RUNTIME_VERSION = 100.2
-include($$PWD/arcgisruntime.pri)
-
-HEADERS += $$PWD/include/*.h
-SOURCES += $$PWD/source/*.cpp
-
-INCLUDEPATH +=  $$PWD/include/
-
-DESTDIR = $$PWD/output
-OBJECTS_DIR = $$DESTDIR/obj
-MOC_DIR = $$DESTDIR/moc
-RCC_DIR = $$DESTDIR/qrc
+CoordinateConversion 1.0 CoordinateConversion.qml

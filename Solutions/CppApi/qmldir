@@ -1,0 +1,4 @@
+module Esri.ArcGISRuntime.Solutions
+plugin ArcGISRuntimeSolutions
+classname ArcGISRuntimeSolutions
+typeinfo ArcGISRuntimeSolutions.qmltypes

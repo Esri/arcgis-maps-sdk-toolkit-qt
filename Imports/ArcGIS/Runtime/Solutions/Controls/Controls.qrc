@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/qt-project.org/imports/Esri/ArcGISRuntime/Solutions/Controls">
+        <file>CoordinateConversion.qml</file>
+        <file>qmldir</file>
+    </qresource>
+</RCC>
