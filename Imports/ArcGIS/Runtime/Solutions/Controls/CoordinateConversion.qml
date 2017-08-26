@@ -7,37 +7,6 @@ Rectangle {
     height: 800
     width: 600
 
-    CoordinateConversionEngine {
-        id: coordinateConversionEngine
-        objectName: "coordinateConversionEngine"
-
-        CoordinateConversionOptions {
-            name: "Coast Guard"
-            outputMode: CoordinateConversionOptions.CoordinateTypeLatLon
-            latLonFormat: CoordinateConversionOptions.LatitudeLongitudeFormatDegreesDecimalMinutes
-        }
-
-        CoordinateConversionOptions {
-            name: "Air Force"
-            outputMode: CoordinateConversionOptions.CoordinateTypeUsng
-            precision: 7
-            addSpaces: true
-        }
-
-        CoordinateConversionOptions {
-            name: "Squad Alpha"
-            outputMode: CoordinateConversionOptions.CoordinateTypeUtm
-            utmConversionMode: CoordinateConversionOptions.UtmConversionModeNorthSouthIndicators
-            addSpaces: true
-        }
-
-        CoordinateConversionOptions {
-            name: "Division B"
-            outputMode: CoordinateConversionOptions.LatitudeLongitudeFormatDegreesMinutesSeconds
-            decimalPlaces: 12
-        }
-    }
-
     CoordinateConversionOptions {
         id: options
     }
@@ -58,41 +27,46 @@ Rectangle {
         }
     }
 
-    Column {
+    ScrollView {
+        id: scrollView
         anchors.fill: parent
-        anchors.margins: 30
-        spacing: spacingVal * 2
+        anchors.margins: 10
 
-        Row {
-            spacing: spacingVal
+        Column {
+            id: column
+            anchors.margins: 30
+            spacing: spacingVal * 2
 
-            ComboBox {
-                id: notationTypeCombo
-                width: buttonWidth
-                model: options.coordinateTypeNames
-                onCurrentIndexChanged: {
-                    engine.inputMode = options.stringToCoordinateType(currentText);
+            Row {
+                spacing: spacingVal
+
+                ComboBox {
+                    id: notationTypeCombo
+                    width: buttonWidth
+                    model: options.coordinateTypeNames
+                    onCurrentIndexChanged: {
+                        engine.inputMode = options.stringToCoordinateType(currentText);
+                    }
+                }
+
+                TextField {
+                    id: inputNotation
+                    width: buttonWidth * 3
+                }
+
+                Button {
+                    text: "Convert"
+                    enabled: inputNotation.text !== ""
+                    onClicked: {
+                        engine.convertNotation(inputNotation.text);
+                    }
                 }
             }
 
-            TextField {
-                id: inputNotation
-                width: buttonWidth * 3
-            }
-
-            Button {
-                text: "Convert"
-                enabled: inputNotation.text !== ""
-                onClicked: {
-                    engine.convertNotation(inputNotation.text);
-                }
-            }
-        }
-
-        Repeater {
-            model: engine ? engine.results : null
-            delegate:
-                Row {
+            Repeater {
+                model: engine ? engine.results : null
+                delegate:
+                    Row {
                     spacing: spacingVal
 
                     Label {
@@ -114,39 +88,54 @@ Rectangle {
                         }
                     }
                 }
+            }
         }
 
-        Row {
-            spacing: spacingVal
+    }
 
-            CheckBox {
-                id: getFromMap
-                text: "Get From Map"
+    Rectangle {
+        anchors {
+            bottom: parent.bottom
+            left: parent.left
+            right: scrollView.right
+            topMargin: 5
+            bottomMargin: 5
+            leftMargin: 10
+            rightMargin: 30
+        }
+        height: 30
 
-                onCheckedChanged: {
-                    getFromMapMode = checked;
-                    if (checked) {
-                        coordinateConversionUI.visible = false;
-                    }
-                }
+        CheckBox {
+            id: getFromMap
+            anchors {
+                left: parent.left
+                bottom: parent.bottom
+                top: parent.top
             }
 
-            Button {
-                id: convertButton
-                text: "Convert"
-                enabled: !getFromMap.checked
-                onClicked: {
-                    engine.convertPoint();
-                }
-            }
+            text: "Get From Map"
 
-            Button {
-                id: close
-                text: "Close"
-
-                onClicked: {
+            onCheckedChanged: {
+                getFromMapMode = checked;
+                if (checked) {
                     coordinateConversionUI.visible = false;
                 }
+            }
+        }
+
+        Button {
+            id: close
+            anchors {
+                right: parent.right
+                bottom: parent.bottom
+                top: parent.top
+                rightMargin: 25
+            }
+
+            text: "Close"
+
+            onClicked: {
+                coordinateConversionUI.visible = false;
             }
         }
     }
