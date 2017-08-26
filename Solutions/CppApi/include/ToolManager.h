@@ -16,7 +16,6 @@
 #include "AbstractTool.h"
 
 #include <QObject>
-#include <QDebug>
 #include <QMap>
 #include <memory>
 
