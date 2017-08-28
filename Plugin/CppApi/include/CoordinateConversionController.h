@@ -27,12 +27,12 @@ namespace Esri
 {
 namespace ArcGISRuntime
 {
-namespace Solutions
+namespace Toolkit
 {
 
 class CoordinateConversionResults;
 
-class SOLUTIONS_EXPORT CoordinateConversionController : public QObject, public AbstractTool
+class TOOLKIT_EXPORT CoordinateConversionController : public QObject, public AbstractTool
 {
   Q_OBJECT
 
@@ -128,7 +128,7 @@ private:
   bool m_runConversion = false;
 };
 
-} // Solutions
+} // Toolkit
 } // ArcGISRuntime
 } // Esri
 

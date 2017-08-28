@@ -17,7 +17,7 @@ namespace Esri
 {
 namespace ArcGISRuntime
 {
-namespace Solutions
+namespace Toolkit
 {
 
 using MgrsConversionMode = CoordinateConversionOptions::MgrsConversionMode;
@@ -191,6 +191,6 @@ QStringList CoordinateConversionOptions::coordinateTypeNames() const
                        << QStringLiteral("Utm");
 }
 
-} // Solutions
+} // Toolkit
 } // ArcGISRuntime
 } // Esri

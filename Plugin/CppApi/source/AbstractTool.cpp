@@ -16,7 +16,7 @@ namespace Esri
 {
 namespace ArcGISRuntime
 {
-namespace Solutions
+namespace Toolkit
 {
 
 AbstractTool::AbstractTool()
@@ -44,6 +44,6 @@ bool AbstractTool::isActive() const
   return m_active;
 }
 
-} // Solutions
+} // Toolkit
 } // ArcGISRuntime
 } // Esri

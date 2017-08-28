@@ -20,7 +20,7 @@ namespace Esri
 {
 namespace ArcGISRuntime
 {
-namespace Solutions
+namespace Toolkit
 {
 
 using CoordinateType = CoordinateConversionOptions::CoordinateType;
@@ -285,6 +285,6 @@ void CoordinateConversionController::setRunConversion(bool runConversion)
   emit runConversionChanged();
 }
 
-} // Solutions
+} // Toolkit
 } // ArcGISRuntime
 } // Esri

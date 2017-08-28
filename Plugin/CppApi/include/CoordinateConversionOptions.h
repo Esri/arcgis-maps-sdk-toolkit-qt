@@ -16,7 +16,7 @@
 #include <QObject>
 #include <QStringList>
 
-#include "SolutionsCommon.h"
+#include "ToolkitCommon.h"
 #include "GeometryTypes.h"
 #include <QQmlListProperty>
 
@@ -24,10 +24,10 @@ namespace Esri
 {
 namespace ArcGISRuntime
 {
-namespace Solutions
+namespace Toolkit
 {
 
-class SOLUTIONS_EXPORT CoordinateConversionOptions : public QObject
+class TOOLKIT_EXPORT CoordinateConversionOptions : public QObject
 {
   Q_OBJECT
 
@@ -144,14 +144,14 @@ private:
   UtmConversionMode m_utmConversionMode = UtmConversionModeLatitudeBandIndicators;
 };
 
-} // Solutions
+} // Toolkit
 } // ArcGISRuntime
 } // Esri
 
-Q_DECLARE_METATYPE(Esri::ArcGISRuntime::Solutions::CoordinateConversionOptions::CoordinateType)
-Q_DECLARE_METATYPE(Esri::ArcGISRuntime::Solutions::CoordinateConversionOptions::GarsConversionMode)
-Q_DECLARE_METATYPE(Esri::ArcGISRuntime::Solutions::CoordinateConversionOptions::MgrsConversionMode)
-Q_DECLARE_METATYPE(Esri::ArcGISRuntime::Solutions::CoordinateConversionOptions::UtmConversionMode)
-Q_DECLARE_METATYPE(Esri::ArcGISRuntime::Solutions::CoordinateConversionOptions::LatitudeLongitudeFormat)
+Q_DECLARE_METATYPE(Esri::ArcGISRuntime::Toolkit::CoordinateConversionOptions::CoordinateType)
+Q_DECLARE_METATYPE(Esri::ArcGISRuntime::Toolkit::CoordinateConversionOptions::GarsConversionMode)
+Q_DECLARE_METATYPE(Esri::ArcGISRuntime::Toolkit::CoordinateConversionOptions::MgrsConversionMode)
+Q_DECLARE_METATYPE(Esri::ArcGISRuntime::Toolkit::CoordinateConversionOptions::UtmConversionMode)
+Q_DECLARE_METATYPE(Esri::ArcGISRuntime::Toolkit::CoordinateConversionOptions::LatitudeLongitudeFormat)
 
 #endif // COORDINATECONVERSIONOPTIONS_H

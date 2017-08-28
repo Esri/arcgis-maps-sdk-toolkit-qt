@@ -13,7 +13,7 @@
 #ifndef ABSTRACT_TOOL_H
 #define ABSTRACT_TOOL_H
 
-#include "SolutionsCommon.h"
+#include "ToolkitCommon.h"
 #include <QString>
 
 namespace Esri
@@ -23,10 +23,10 @@ namespace ArcGISRuntime
 
 class Point;
 
-namespace Solutions
+namespace Toolkit
 {
 
-class SOLUTIONS_EXPORT AbstractTool
+class TOOLKIT_EXPORT AbstractTool
 {
 public:
   AbstractTool();
@@ -42,7 +42,7 @@ protected:
   bool m_active = false;
 };
 
-} // Solutions
+} // Toolkit
 } // ArcGISRuntime
 } // Esri
 

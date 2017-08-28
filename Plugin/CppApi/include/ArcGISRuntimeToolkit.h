@@ -14,16 +14,16 @@
 #define ArcGISRuntimeSolutions_H
 
 #include <QQmlExtensionPlugin>
-#include "SolutionsCommon.h"
+#include "ToolkitCommon.h"
 
 namespace Esri
 {
 namespace ArcGISRuntime
 {
-namespace Solutions
+namespace Toolkit
 {
 
-class SOLUTIONS_EXPORT ArcGISRuntimeSolutions : public QQmlExtensionPlugin
+class TOOLKIT_EXPORT ArcGISRuntimeSolutions : public QQmlExtensionPlugin
 {
   Q_OBJECT
   Q_PLUGIN_METADATA(IID QQmlExtensionInterface_iid)
@@ -36,7 +36,7 @@ public:
   static void registerSolutionsTypes(const char* uri = "Esri.ArcGISRuntime.Solutions");
 };
 
-} // Solutions
+} // Toolkit
 } // ArcGISRuntime
 } // Esri
 

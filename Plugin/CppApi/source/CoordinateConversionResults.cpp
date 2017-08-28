@@ -17,7 +17,7 @@ namespace Esri
 {
 namespace ArcGISRuntime
 {
-namespace Solutions
+namespace Toolkit
 {
 
 CoordinateConversionResults::CoordinateConversionResults(QObject* parent) :
@@ -105,6 +105,6 @@ QVariant CoordinateConversionResults::data(const QModelIndex& index, int role) c
   return QVariant();
 }
 
-} // Solutions
+} // Toolkit
 } // ArcGISRuntime
 } // Esri

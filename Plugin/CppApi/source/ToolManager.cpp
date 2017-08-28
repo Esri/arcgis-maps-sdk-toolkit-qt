@@ -17,7 +17,7 @@ namespace Esri
 {
 namespace ArcGISRuntime
 {
-namespace Solutions
+namespace Toolkit
 {
 
 std::shared_ptr<ToolManager> ToolManager::m_instance;
@@ -53,6 +53,6 @@ ToolManager::ToolsList::iterator ToolManager::toolsEnd()
   return m_tools.end();
 }
 
-} // Solutions
+} // Toolkit
 } // ArcGISRuntime
 } // Esri

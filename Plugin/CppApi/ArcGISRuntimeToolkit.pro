@@ -20,9 +20,9 @@ TEMPLATE = lib
 QT += core gui opengl network positioning sensors qml quick
 CONFIG += c++11
 
-DEFINES += QTRUNTIME_SOLUTIONS_BUILD
+DEFINES += QTRUNTIME_TOOLKIT_BUILD
 
-URI = Esri.ArcGISRuntime.Solutions
+URI = Esri.ArcGISRuntime.Toolkit
 QMAKE_MOC_OPTIONS += -Muri=$$URI
 
 RUNTIME_PRI = arcgis_runtime_qml_cpp.pri

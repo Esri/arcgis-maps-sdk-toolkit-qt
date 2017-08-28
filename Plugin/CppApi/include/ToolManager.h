@@ -13,7 +13,7 @@
 #ifndef TOOL_MANAGER_H
 #define TOOL_MANAGER_H
 
-#include "SolutionsCommon.h"
+#include "ToolkitCommon.h"
 
 #include <QObject>
 #include <QMap>
@@ -23,11 +23,11 @@ namespace Esri
 {
 namespace ArcGISRuntime
 {
-namespace Solutions
+namespace Toolkit
 {
 
 class AbstractTool;
-class SOLUTIONS_EXPORT ToolManager {
+class TOOLKIT_EXPORT ToolManager {
 
   typedef QMap<QString, AbstractTool*> ToolsList;
 
@@ -47,7 +47,7 @@ private:
   static std::shared_ptr<ToolManager> m_instance;
 };
 
-} // Solutions
+} // Toolkit
 } // ArcGISRuntime
 } // Esri
 

@@ -16,16 +16,16 @@
 #include <QAbstractListModel>
 #include <QList>
 #include <QHash>
-#include "SolutionsCommon.h"
+#include "ToolkitCommon.h"
 
 namespace Esri
 {
 namespace ArcGISRuntime
 {
-namespace Solutions
+namespace Toolkit
 {
 
-struct SOLUTIONS_EXPORT Result
+struct TOOLKIT_EXPORT Result
 {
   Result(const QString& name, const QString& notation, int type) :
     m_name(name), m_notation(notation), m_type(type)
@@ -37,7 +37,7 @@ struct SOLUTIONS_EXPORT Result
   int m_type; // actually CoordinateConversionOptions::CoordinateType
 };
 
-class SOLUTIONS_EXPORT CoordinateConversionResults : public QAbstractListModel
+class TOOLKIT_EXPORT CoordinateConversionResults : public QAbstractListModel
 {
   Q_OBJECT
 
@@ -73,7 +73,7 @@ private:
   QList<Result> m_results;
 };
 
-} // Solutions
+} // Toolkit
 } // ArcGISRuntime
 } // Esri
 

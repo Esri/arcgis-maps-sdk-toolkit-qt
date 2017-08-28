@@ -10,7 +10,7 @@
 // See the Sample code usage restrictions document for further information.
 //
 
-#include "ArcGISRuntimeSolutions.h"
+#include "ArcGISRuntimeToolkit.h"
 #include <QtQml>
 
 #include "CoordinateConversionController.h"
@@ -24,7 +24,7 @@ namespace Esri
 {
 namespace ArcGISRuntime
 {
-namespace Solutions
+namespace Toolkit
 {
 
 static CoordinateConversionOptions* m_optionsProvider = nullptr;
@@ -71,6 +71,6 @@ void ArcGISRuntimeSolutions::registerSolutionsTypes(const char* uri)
   qRegisterMetaType<CoordinateConversionOptions::LatitudeLongitudeFormat>("CoordinateConversionOptions::LatitudeLongitudeFormat");
 }
 
-} // Solutions
+} // Toolkit
 } // ArcGISRuntime
 } // Esri
