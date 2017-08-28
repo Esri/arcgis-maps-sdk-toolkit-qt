@@ -4,25 +4,21 @@ import QtQuick.Controls.Styles 1.4
 import Esri.ArcGISRuntime.Solutions 1.0
 
 Rectangle {
+    id: coordinateConversionWindow
     height: 800
     width: 600
 
-    CoordinateConversionOptions {
-        id: options
-    }
-
-    property CoordinateConversionTool tool: null
-    property CoordinateConversionEngine engine: null
     property bool getFromMapMode: false
     property int buttonWidth: 100
     property int spacingVal: 5
 
-    Connections {
-        target: engine
+    CoordinateConversionController {
+        id: controller
+        objectName: "coordinateConversionController"
 
         onResultsChanged: {
-            if (getFromMapMode && !coordinateConversionUI.visible) {
-                coordinateConversionUI.visible = true;
+            if (getFromMapMode && !coordinateConversionWindow.visible) {
+                coordinateConversionWindow.visible = true;
             }
         }
     }
@@ -43,9 +39,9 @@ Rectangle {
                 ComboBox {
                     id: notationTypeCombo
                     width: buttonWidth
-                    model: options.coordinateTypeNames
+                    model: CoordinateConversionOptions.coordinateTypeNames
                     onCurrentIndexChanged: {
-                        engine.inputMode = options.stringToCoordinateType(currentText);
+                        controller.inputMode = CoordinateConversionOptions.stringToCoordinateType(currentText);
                     }
                 }
 
@@ -58,13 +54,13 @@ Rectangle {
                     text: "Convert"
                     enabled: inputNotation.text !== ""
                     onClicked: {
-                        engine.convertNotation(inputNotation.text);
+                        controller.convertNotation(inputNotation.text);
                     }
                 }
             }
 
             Repeater {
-                model: engine ? engine.results : null
+                model: controller ? controller.results : null
                 delegate:
                     Row {
                     spacing: spacingVal
@@ -83,8 +79,8 @@ Rectangle {
                     Button {
                         text: "Copy to clipboard"
                         onClicked: {
-                            tool.copyToClipboard(notationBox.text);
-                            notationTypeCombo.currentIndex = notationTypeCombo.model.indexOf(options.coordinateTypeToString(coordinateType));
+                            controller.copyToClipboard(notationBox.text);
+                            notationTypeCombo.currentIndex = notationTypeCombo.model.indexOf(CoordinateConversionOptions.coordinateTypeToString(coordinateType));
                         }
                     }
                 }
@@ -118,7 +114,7 @@ Rectangle {
             onCheckedChanged: {
                 getFromMapMode = checked;
                 if (checked) {
-                    coordinateConversionUI.visible = false;
+                    coordinateConversionWindow.visible = false;
                 }
             }
         }
@@ -135,7 +131,7 @@ Rectangle {
             text: "Close"
 
             onClicked: {
-                coordinateConversionUI.visible = false;
+                coordinateConversionWindow.visible = false;
             }
         }
     }
