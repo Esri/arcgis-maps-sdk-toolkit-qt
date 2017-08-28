@@ -41,6 +41,7 @@
         <file>StyleToolbar20.qml</file>
         <file>ZoomInButton20.qml</file>
         <file>ZoomOutButton20.qml</file>
+        <file>CoordinateConversion.qml</file>
         <file>qmldir</file>
     </qresource>
 </RCC>
