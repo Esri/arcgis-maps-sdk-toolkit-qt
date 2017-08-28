@@ -142,3 +142,4 @@ Thumbs.db
 *.user.2.7pre1
 *.exp
 Solutions/CppApi/output/
+Plugin/CppApi/output/
