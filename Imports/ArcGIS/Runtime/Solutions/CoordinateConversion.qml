@@ -54,7 +54,7 @@ Rectangle {
             }
 
             Repeater {
-                model: controller ? controller.results : null
+                model: controller.results
                 delegate:
                     Row {
                     spacing: spacingVal
