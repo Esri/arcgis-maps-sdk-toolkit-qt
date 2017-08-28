@@ -38,7 +38,7 @@ void ToolManager::addTool(AbstractTool* tool)
   m_tools.insert(tool->toolName(), tool);
 }
 
-AbstractTool* ToolManager::tool(const QString &toolName) const
+AbstractTool* ToolManager::tool(const QString& toolName) const
 {
   return m_tools[toolName];
 }

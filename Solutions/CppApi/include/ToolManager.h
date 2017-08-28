@@ -13,7 +13,7 @@
 #ifndef TOOL_MANAGER_H
 #define TOOL_MANAGER_H
 
-#include "AbstractTool.h"
+#include "SolutionsCommon.h"
 
 #include <QObject>
 #include <QMap>
@@ -26,7 +26,8 @@ namespace ArcGISRuntime
 namespace Solutions
 {
 
-class ToolManager {
+class AbstractTool;
+class SOLUTIONS_EXPORT ToolManager {
 
   typedef QMap<QString, AbstractTool*> ToolsList;
 
