@@ -227,6 +227,9 @@ void CoordinateConversionController::setInputUtmConversionMode(CoordinateConvers
 void CoordinateConversionController::setPointToConvert(const Point& point)
 {
   m_pointToConvert = point;
+
+  if (m_runConversion)
+    convertPoint();
 }
 
 QQmlListProperty<QObject> CoordinateConversionController::objects()
@@ -269,6 +272,17 @@ QString CoordinateConversionController::toolName() const
 void CoordinateConversionController::copyToClipboard(const QString& text)
 {
   QApplication::clipboard()->setText(text);
+}
+
+bool CoordinateConversionController::runConversion() const
+{
+  return m_runConversion;
+}
+
+void CoordinateConversionController::setRunConversion(bool runConversion)
+{
+  m_runConversion = runConversion;
+  emit runConversionChanged();
 }
 
 } // Solutions

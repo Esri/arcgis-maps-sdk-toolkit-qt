@@ -105,7 +105,7 @@ Rectangle {
             text: "Get From Map"
 
             onCheckedChanged: {
-                getFromMapMode = checked;
+                controller.runConversion = checked;
             }
         }
 

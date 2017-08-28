@@ -42,6 +42,10 @@ class SOLUTIONS_EXPORT CoordinateConversionController : public QObject, public A
   // bind to the results, which will have "name" and "notation" roles
   Q_PROPERTY(CoordinateConversionResults* results READ results NOTIFY resultsChanged)
 
+  // whether the controller should immediately convert on calling setPointToConvert or just
+  // store the point for later
+  Q_PROPERTY(bool runConversion READ runConversion WRITE setRunConversion NOTIFY runConversionChanged)
+
   // set the input mode and any corresponding conversion options
   Q_PROPERTY(CoordinateConversionOptions::CoordinateType inputMode READ inputMode WRITE setInputMode NOTIFY inputModeChanged)
   Q_PROPERTY(CoordinateConversionOptions::GarsConversionMode inputGarsConversionMode READ inputGarsConversionMode WRITE setInputGarsConversionMode NOTIFY inputGarsConversionModeChanged)
@@ -70,6 +74,7 @@ signals:
   void inputGarsConversionModeChanged();
   void inputMgrsConversionModeChanged();
   void inputUtmConversionModeChanged();
+  void runConversionChanged();
 
 public:
   CoordinateConversionController(QObject* parent = nullptr);
@@ -89,6 +94,9 @@ public:
 
   CoordinateConversionOptions::UtmConversionMode inputUtmConversionMode() const;
   void setInputUtmConversionMode(CoordinateConversionOptions::UtmConversionMode inputUtmConversionMode);
+
+  bool runConversion() const;
+  void setRunConversion(bool runConversion);
 
   void addOption(CoordinateConversionOptions* option);
   void clearOptions();
@@ -117,6 +125,7 @@ private:
   CoordinateConversionOptions::UtmConversionMode  m_inputUtmConversionMode  = CoordinateConversionOptions::UtmConversionModeLatitudeBandIndicators;
 
   QList<CoordinateConversionOptions*> m_options;
+  bool m_runConversion = false;
 };
 
 } // Solutions
