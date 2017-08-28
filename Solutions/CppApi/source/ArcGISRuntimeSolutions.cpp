@@ -17,8 +17,8 @@
 #include "CoordinateConversionOptions.h"
 #include "CoordinateConversionResults.h"
 
-static constexpr int s_version_major = 1;
-static constexpr int s_version_minor = 0;
+static constexpr int s_version_major = 100;
+static constexpr int s_version_minor = 2;
 
 namespace Esri
 {

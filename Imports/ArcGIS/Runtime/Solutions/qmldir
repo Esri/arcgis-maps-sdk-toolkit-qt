@@ -16,4 +16,4 @@
 
 module Esri.ArcGISRuntime.Solutions.Controls
 
-CoordinateConversion 1.0 CoordinateConversion.qml
+CoordinateConversion 100.2 CoordinateConversion.qml
