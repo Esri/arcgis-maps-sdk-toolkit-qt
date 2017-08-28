@@ -15,12 +15,6 @@ Rectangle {
     CoordinateConversionController {
         id: controller
         objectName: "coordinateConversionController"
-
-        onResultsChanged: {
-            if (getFromMapMode && !coordinateConversionWindow.visible) {
-                coordinateConversionWindow.visible = true;
-            }
-        }
     }
 
     ScrollView {
@@ -86,7 +80,6 @@ Rectangle {
                 }
             }
         }
-
     }
 
     Rectangle {
@@ -113,9 +106,6 @@ Rectangle {
 
             onCheckedChanged: {
                 getFromMapMode = checked;
-                if (checked) {
-                    coordinateConversionWindow.visible = false;
-                }
             }
         }
 

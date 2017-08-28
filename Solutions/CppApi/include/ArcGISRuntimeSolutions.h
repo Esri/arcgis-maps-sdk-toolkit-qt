@@ -14,6 +14,7 @@
 #define ArcGISRuntimeSolutions_H
 
 #include <QQmlExtensionPlugin>
+#include "SolutionsCommon.h"
 
 namespace Esri
 {
@@ -22,7 +23,7 @@ namespace ArcGISRuntime
 namespace Solutions
 {
 
-class ArcGISRuntimeSolutions : public QQmlExtensionPlugin
+class SOLUTIONS_EXPORT ArcGISRuntimeSolutions : public QQmlExtensionPlugin
 {
   Q_OBJECT
   Q_PLUGIN_METADATA(IID QQmlExtensionInterface_iid)
@@ -31,6 +32,8 @@ public:
   explicit ArcGISRuntimeSolutions(QObject* parent = nullptr);
 
   void registerTypes(const char* uri);
+
+  static void registerSolutionsTypes(const char* uri = "Esri.ArcGISRuntime.Solutions");
 };
 
 } // Solutions

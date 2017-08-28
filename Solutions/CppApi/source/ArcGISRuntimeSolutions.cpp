@@ -27,6 +27,18 @@ namespace ArcGISRuntime
 namespace Solutions
 {
 
+static CoordinateConversionOptions* m_optionsProvider = nullptr;
+
+QObject* optionsProvider(QQmlEngine* engine, QJSEngine*)
+{
+  if (!m_optionsProvider)
+  {
+    m_optionsProvider = new CoordinateConversionOptions(engine);
+  }
+
+  return m_optionsProvider;
+}
+
 ArcGISRuntimeSolutions::ArcGISRuntimeSolutions(QObject* parent) :
   QQmlExtensionPlugin(parent)
 {
@@ -37,9 +49,26 @@ ArcGISRuntimeSolutions::ArcGISRuntimeSolutions(QObject* parent) :
 
 void ArcGISRuntimeSolutions::registerTypes(const char* uri)
 {
-  qmlRegisterType<CoordinateConversionController>(uri, s_version_major, s_version_minor, "CoordinateConversionController");
+  registerSolutionsTypes(uri);
+}
+
+void ArcGISRuntimeSolutions::registerSolutionsTypes(const char* uri)
+{
+  // singletons
+  qmlRegisterSingletonType<CoordinateConversionOptions>(uri, s_version_major, s_version_minor, "CoordinateConversionOptions", optionsProvider);
+
+  // types
   qmlRegisterType<CoordinateConversionOptions>(uri, s_version_major, s_version_minor, "CoordinateConversionOptions");
   qmlRegisterType<CoordinateConversionResults>(uri, s_version_major, s_version_minor, "CoordinateConversionResults");
+  qmlRegisterType<CoordinateConversionController>(uri, s_version_major, s_version_minor, "CoordinateConversionController");
+  qRegisterMetaType<CoordinateConversionResults*>("CoordinateConversionResults*");
+
+  // enums
+  qRegisterMetaType<CoordinateConversionOptions::CoordinateType>("CoordinateConversionOptions::CoordinateType");
+  qRegisterMetaType<CoordinateConversionOptions::GarsConversionMode>("CoordinateConversionOptions::GarsConversionMode");
+  qRegisterMetaType<CoordinateConversionOptions::MgrsConversionMode>("CoordinateConversionOptions::MgrsConversionMode");
+  qRegisterMetaType<CoordinateConversionOptions::UtmConversionMode>("CoordinateConversionOptions::UtmConversionMode");
+  qRegisterMetaType<CoordinateConversionOptions::LatitudeLongitudeFormat>("CoordinateConversionOptions::LatitudeLongitudeFormat");
 }
 
 } // Solutions

@@ -141,7 +141,7 @@ void CoordinateConversionOptions::listClear(QQmlListProperty<CoordinateConversio
   static_cast<CoordinateConversionController*>(property->object)->clearOptions();
 }
 
-CoordinateConversionOptions::CoordinateType CoordinateConversionOptions::stringToCoordinateType(const QString& type)
+CoordinateConversionOptions::CoordinateType CoordinateConversionOptions::stringToCoordinateType(const QString& type) const
 {
   if (type == "Gars")
     return CoordinateType::CoordinateTypeGars;
@@ -159,7 +159,7 @@ CoordinateConversionOptions::CoordinateType CoordinateConversionOptions::stringT
   return CoordinateType::CoordinateTypeLatLon;
 }
 
-QString CoordinateConversionOptions::coordinateTypeToString(CoordinateType type)
+QString CoordinateConversionOptions::coordinateTypeToString(CoordinateType type) const
 {
   switch (type)
   {

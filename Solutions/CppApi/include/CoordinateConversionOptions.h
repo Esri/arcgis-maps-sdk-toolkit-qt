@@ -84,8 +84,10 @@ public:
     LatitudeLongitudeFormatDegreesMinutesSeconds = (int)Esri::ArcGISRuntime::LatitudeLongitudeFormat::DegreesMinutesSeconds
   };
 
-  Q_INVOKABLE CoordinateType stringToCoordinateType(const QString& type);
-  Q_INVOKABLE QString coordinateTypeToString(CoordinateType type);
+  // static qml methods
+  Q_INVOKABLE CoordinateType stringToCoordinateType(const QString& type) const;
+  Q_INVOKABLE QString coordinateTypeToString(CoordinateType type) const;
+  Q_INVOKABLE QStringList coordinateTypeNames() const;
 
 signals:
   void nameChanged();
@@ -125,8 +127,6 @@ public:
   UtmConversionMode utmConversionMode() const;
   void setUtmConversionMode(UtmConversionMode utmConversionMode);
 
-  QStringList coordinateTypeNames() const;
-
   static void listAppend(QQmlListProperty<CoordinateConversionOptions>* property, CoordinateConversionOptions* value);
   static CoordinateConversionOptions* listAt(QQmlListProperty<CoordinateConversionOptions>* property, int index);
   static int listCount(QQmlListProperty<CoordinateConversionOptions>* property);
@@ -149,5 +149,9 @@ private:
 } // Esri
 
 Q_DECLARE_METATYPE(Esri::ArcGISRuntime::Solutions::CoordinateConversionOptions::CoordinateType)
+Q_DECLARE_METATYPE(Esri::ArcGISRuntime::Solutions::CoordinateConversionOptions::GarsConversionMode)
+Q_DECLARE_METATYPE(Esri::ArcGISRuntime::Solutions::CoordinateConversionOptions::MgrsConversionMode)
+Q_DECLARE_METATYPE(Esri::ArcGISRuntime::Solutions::CoordinateConversionOptions::UtmConversionMode)
+Q_DECLARE_METATYPE(Esri::ArcGISRuntime::Solutions::CoordinateConversionOptions::LatitudeLongitudeFormat)
 
 #endif // COORDINATECONVERSIONOPTIONS_H

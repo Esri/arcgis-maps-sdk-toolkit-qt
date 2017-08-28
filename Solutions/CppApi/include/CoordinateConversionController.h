@@ -59,6 +59,9 @@ public:
   // convert the previously passed in point
   Q_INVOKABLE void convertPoint();
 
+  // copy contents to the clipboard
+  Q_INVOKABLE void copyToClipboard(const QString& text);
+
 signals:
   void componentCompleted();
   void optionsChanged();

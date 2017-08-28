@@ -13,6 +13,8 @@
 #include "CoordinateConversionController.h"
 #include "CoordinateConversionResults.h"
 #include "CoordinateFormatter.h"
+#include <QClipboard>
+#include <QApplication>
 
 namespace Esri
 {
@@ -262,6 +264,11 @@ void CoordinateConversionController::clearOptions()
 QString CoordinateConversionController::toolName() const
 {
   return "CoordinateConversion";
+}
+
+void CoordinateConversionController::copyToClipboard(const QString& text)
+{
+  QApplication::clipboard()->setText(text);
 }
 
 } // Solutions
