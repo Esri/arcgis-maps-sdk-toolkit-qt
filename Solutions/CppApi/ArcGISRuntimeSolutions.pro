@@ -38,7 +38,14 @@ SOURCES += $$PWD/source/*.cpp
 
 INCLUDEPATH +=  $$PWD/include/
 
+CONFIG(release) {
+  BUILDTYPE = release
+}
+else {
+  BUILDTYPE = debug
+}
+
 DESTDIR = $$PWD/output
-OBJECTS_DIR = $$DESTDIR/obj
-MOC_DIR = $$DESTDIR/moc
-RCC_DIR = $$DESTDIR/qrc
+OBJECTS_DIR = $$DESTDIR/$$BUILDTYPE/obj
+MOC_DIR = $$DESTDIR/$$BUILDTYPE/moc
+RCC_DIR = $$DESTDIR/$$BUILDTYPE/qrc
