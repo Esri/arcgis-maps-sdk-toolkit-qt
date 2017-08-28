@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/qt-project.org/imports/Esri/ArcGISRuntimeSolutions">
-        <file>qmldir</file>
-    </qresource>
-</RCC>

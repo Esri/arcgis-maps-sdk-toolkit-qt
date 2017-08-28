@@ -1,7 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
-import Esri.ArcGISRuntime.Solutions 100.2
+import Esri.ArcGISRuntime.Toolkit 2.0
 
 Rectangle {
     id: coordinateConversionWindow
