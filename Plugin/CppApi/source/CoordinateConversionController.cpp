@@ -43,6 +43,12 @@ CoordinateConversionController::~CoordinateConversionController()
 {
 }
 
+bool CoordinateConversionController::handleClick(const Point& pos)
+{
+  setPointToConvert(pos);
+  return true;
+}
+
 void CoordinateConversionController::convertNotation(const QString& notation)
 {
   QList<Result> results;

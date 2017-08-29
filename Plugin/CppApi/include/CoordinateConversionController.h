@@ -103,6 +103,7 @@ public:
   CoordinateConversionResults* results();
 
   QString toolName() const override;
+  bool handleClick(const Point& pos) override;
 
 private:
   QQmlListProperty<CoordinateConversionOptions> options();
