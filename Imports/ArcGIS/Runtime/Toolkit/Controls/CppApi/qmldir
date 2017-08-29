@@ -14,6 +14,6 @@
 #   limitations under the License.
 ################################################################################
 
-module Esri.ArcGISRuntime.Solutions
+module Esri.ArcGISRuntime.Toolkit.Controls.CppApi
 
 CoordinateConversion 100.2 CoordinateConversion.qml

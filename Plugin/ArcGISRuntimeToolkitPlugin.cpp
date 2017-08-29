@@ -21,6 +21,7 @@ ArcGISRuntimeToolkitPlugin::ArcGISRuntimeToolkitPlugin(QObject* parent) :
 {
   Q_INIT_RESOURCE(Controls);
   Q_INIT_RESOURCE(Dialogs);
+  Q_INIT_RESOURCE(CppApi);
 }
 
 void ArcGISRuntimeToolkitPlugin::registerTypes(const char* uri)

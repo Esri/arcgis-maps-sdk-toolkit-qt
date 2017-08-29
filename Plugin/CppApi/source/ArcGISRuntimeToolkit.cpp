@@ -17,9 +17,6 @@
 #include "CoordinateConversionOptions.h"
 #include "CoordinateConversionResults.h"
 
-static constexpr int s_version_major = 100;
-static constexpr int s_version_minor = 2;
-
 namespace Esri
 {
 namespace ArcGISRuntime
@@ -39,7 +36,7 @@ QObject* optionsProvider(QQmlEngine* engine, QJSEngine*)
   return m_optionsProvider;
 }
 
-ArcGISRuntimeSolutions::ArcGISRuntimeSolutions(QObject* parent) :
+ArcGISRuntimeToolkit::ArcGISRuntimeToolkit(QObject* parent) :
   QQmlExtensionPlugin(parent)
 {
 #ifdef QT_STATICPLUGIN
@@ -47,20 +44,20 @@ ArcGISRuntimeSolutions::ArcGISRuntimeSolutions(QObject* parent) :
 #endif
 }
 
-void ArcGISRuntimeSolutions::registerTypes(const char* uri)
+void ArcGISRuntimeToolkit::registerTypes(const char* uri)
 {
-  registerSolutionsTypes(uri);
+  registerToolkitTypes(uri);
 }
 
-void ArcGISRuntimeSolutions::registerSolutionsTypes(const char* uri)
+void ArcGISRuntimeToolkit::registerToolkitTypes(const char* uri)
 {
   // singletons
-  qmlRegisterSingletonType<CoordinateConversionOptions>(uri, s_version_major, s_version_minor, "CoordinateConversionOptions", optionsProvider);
+  qmlRegisterSingletonType<CoordinateConversionOptions>(uri, s_versionMajor, s_versionMinor, "CoordinateConversionOptions", optionsProvider);
 
   // types
-  qmlRegisterType<CoordinateConversionOptions>(uri, s_version_major, s_version_minor, "CoordinateConversionOptions");
-  qmlRegisterType<CoordinateConversionResults>(uri, s_version_major, s_version_minor, "CoordinateConversionResults");
-  qmlRegisterType<CoordinateConversionController>(uri, s_version_major, s_version_minor, "CoordinateConversionController");
+  qmlRegisterType<CoordinateConversionOptions>(uri, s_versionMajor, s_versionMinor, "CoordinateConversionOptions");
+  qmlRegisterType<CoordinateConversionResults>(uri, s_versionMajor, s_versionMinor, "CoordinateConversionResults");
+  qmlRegisterType<CoordinateConversionController>(uri, s_versionMajor, s_versionMinor, "CoordinateConversionController");
   qRegisterMetaType<CoordinateConversionResults*>("CoordinateConversionResults*");
 
   // enums

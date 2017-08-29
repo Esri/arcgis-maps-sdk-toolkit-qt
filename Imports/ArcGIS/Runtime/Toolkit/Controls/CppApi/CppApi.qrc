@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/qt-project.org/imports/Esri/ArcGISRuntime/Solutions">
+    <qresource prefix="/qt-project.org/imports/Esri/ArcGISRuntime/Toolkit/Controls/CppApi">
         <file>CoordinateConversion.qml</file>
         <file>qmldir</file>
     </qresource>

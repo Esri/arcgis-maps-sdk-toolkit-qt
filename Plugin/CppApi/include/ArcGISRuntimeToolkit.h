@@ -23,17 +23,21 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
-class TOOLKIT_EXPORT ArcGISRuntimeSolutions : public QQmlExtensionPlugin
+class TOOLKIT_EXPORT ArcGISRuntimeToolkit : public QQmlExtensionPlugin
 {
   Q_OBJECT
   Q_PLUGIN_METADATA(IID QQmlExtensionInterface_iid)
 
 public:
-  explicit ArcGISRuntimeSolutions(QObject* parent = nullptr);
+  explicit ArcGISRuntimeToolkit(QObject* parent = nullptr);
 
   void registerTypes(const char* uri);
 
-  static void registerSolutionsTypes(const char* uri = "Esri.ArcGISRuntime.Solutions");
+  static void registerToolkitTypes(const char* uri = "Esri.ArcGISRuntime.Toolkit.CppApi");
+
+private:
+  static constexpr int s_versionMajor = 100;
+  static constexpr int s_versionMinor = 2;
 };
 
 } // Toolkit

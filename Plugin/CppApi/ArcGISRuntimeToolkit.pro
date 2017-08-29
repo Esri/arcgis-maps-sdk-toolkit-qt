@@ -14,7 +14,7 @@
 #   limitations under the License.
 ################################################################################
 
-TARGET = $$qtLibraryTarget(ArcGISRuntimeSolutions)
+TARGET = $$qtLibraryTarget(ArcGISRuntimeToolkitCppApi)
 TEMPLATE = lib
 
 QT += core gui opengl network positioning sensors qml quick
@@ -28,7 +28,7 @@ QMAKE_MOC_OPTIONS += -Muri=$$URI
 RUNTIME_PRI = arcgis_runtime_qml_cpp.pri
 #RUNTIME_PRI = esri_runtime_qt.pri # use this for widgets
 
-ios:RESOURCES += $${PWD}/ArcGISRuntimeSolutions.qrc
+ios:RESOURCES += $${PWD}/ArcGISRuntimeToolkit.qrc
 
 ARCGIS_RUNTIME_VERSION = 100.2
 include($$PWD/arcgisruntime.pri)

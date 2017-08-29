@@ -67,7 +67,6 @@ public:
   Q_INVOKABLE void copyToClipboard(const QString& text);
 
 signals:
-  void componentCompleted();
   void optionsChanged();
   void resultsChanged();
   void inputModeChanged();
