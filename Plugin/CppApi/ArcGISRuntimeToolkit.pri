@@ -15,4 +15,4 @@
 ################################################################################
 
 INCLUDEPATH += $PWD/include
-QMAKE_LFLAGS += -L$PWD/output -lArcGISRuntimeToolkit
+QMAKE_LFLAGS += -L$PWD/output -lArcGISRuntimeToolkitCppApi

@@ -10,8 +10,8 @@
 // See the Sample code usage restrictions document for further information.
 //
 
-#ifndef ArcGISRuntimeSolutions_H
-#define ArcGISRuntimeSolutions_H
+#ifndef ArcGISRuntimeToolkit_H
+#define ArcGISRuntimeToolkit_H
 
 #include <QQmlExtensionPlugin>
 #include "ToolkitCommon.h"
@@ -44,4 +44,4 @@ private:
 } // ArcGISRuntime
 } // Esri
 
-#endif // ArcGISRuntimeSolutions_H
+#endif // ArcGISRuntimeToolkit_H
