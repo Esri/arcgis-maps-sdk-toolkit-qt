@@ -22,9 +22,6 @@ CONFIG += c++11
 
 DEFINES += QTRUNTIME_TOOLKIT_BUILD
 
-URI = Esri.ArcGISRuntime.Toolkit
-QMAKE_MOC_OPTIONS += -Muri=$$URI
-
 RUNTIME_PRI = arcgis_runtime_qml_cpp.pri
 #RUNTIME_PRI = esri_runtime_qt.pri # use this for widgets
 
