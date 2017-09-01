@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
+import Esri.ArcGISExtras 1.1
 import Esri.ArcGISRuntime.Toolkit.CppApi 100.2
 
 Rectangle {
@@ -8,9 +9,10 @@ Rectangle {
     height: 800
     width: 600
 
-    property bool getFromMapMode: false
-    property int buttonWidth: 100
-    property int spacingVal: 5
+    property real scaleFactor: System.displayScaleFactor
+
+    property int buttonWidth: 100 * scaleFactor
+    property int spacingValue: 5 * scaleFactor
 
     CoordinateConversionController {
         id: controller
@@ -20,15 +22,15 @@ Rectangle {
     ScrollView {
         id: scrollView
         anchors.fill: parent
-        anchors.margins: 10
+        anchors.margins: 10 * scaleFactor
 
         Column {
             id: column
-            anchors.margins: 30
-            spacing: spacingVal * 2
+            anchors.margins: 30 * scaleFactor
+            spacing: spacingValue * 2
 
             Row {
-                spacing: spacingVal
+                spacing: spacingValue
 
                 ComboBox {
                     id: notationTypeCombo
@@ -57,7 +59,7 @@ Rectangle {
                 model: controller.results
                 delegate:
                     Row {
-                    spacing: spacingVal
+                    spacing: spacingValue
 
                     Label {
                         width: buttonWidth
@@ -87,12 +89,12 @@ Rectangle {
             bottom: parent.bottom
             left: parent.left
             right: scrollView.right
-            topMargin: 5
-            bottomMargin: 5
-            leftMargin: 10
-            rightMargin: 30
+            topMargin: 5 * scaleFactor
+            bottomMargin: 5 * scaleFactor
+            leftMargin: 10 * scaleFactor
+            rightMargin: 30 * scaleFactor
         }
-        height: 30
+        height: 30 * scaleFactor
 
         CheckBox {
             id: getFromMap
@@ -115,7 +117,7 @@ Rectangle {
                 right: parent.right
                 bottom: parent.bottom
                 top: parent.top
-                rightMargin: 25
+                rightMargin: 25 * scaleFactor
             }
 
             text: "Close"
