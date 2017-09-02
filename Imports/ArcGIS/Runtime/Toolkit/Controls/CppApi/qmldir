@@ -14,10 +14,6 @@
 #   limitations under the License.
 ################################################################################
 
-HEADERS += $$PWD/ArcGISRuntimeToolkitPlugin.h
+module Esri.ArcGISRuntime.Toolkit.Controls.CppApi
 
-SOURCES += $$PWD/ArcGISRuntimeToolkitPlugin.cpp
-
-RESOURCES += $$PWD/../Imports/ArcGIS/Runtime/Toolkit/Controls/Controls.qrc \
-             $$PWD/../Imports/ArcGIS/Runtime/Toolkit/Dialogs/Dialogs.qrc \
-             $$PWD/../Imports/ArcGIS/Runtime/Toolkit/Controls/CppApi/CppApi.qrc
+CoordinateConversion 100.2 CoordinateConversion.qml

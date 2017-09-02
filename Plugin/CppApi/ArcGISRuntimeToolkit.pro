@@ -14,10 +14,35 @@
 #   limitations under the License.
 ################################################################################
 
-HEADERS += $$PWD/ArcGISRuntimeToolkitPlugin.h
+TARGET = $$qtLibraryTarget(ArcGISRuntimeToolkitCppApi)
+TEMPLATE = lib
 
-SOURCES += $$PWD/ArcGISRuntimeToolkitPlugin.cpp
+QT += core gui opengl network positioning sensors qml quick
+CONFIG += c++11
 
-RESOURCES += $$PWD/../Imports/ArcGIS/Runtime/Toolkit/Controls/Controls.qrc \
-             $$PWD/../Imports/ArcGIS/Runtime/Toolkit/Dialogs/Dialogs.qrc \
-             $$PWD/../Imports/ArcGIS/Runtime/Toolkit/Controls/CppApi/CppApi.qrc
+DEFINES += QTRUNTIME_TOOLKIT_BUILD
+
+RUNTIME_PRI = arcgis_runtime_qml_cpp.pri
+#RUNTIME_PRI = esri_runtime_qt.pri # use this for widgets
+
+ios:RESOURCES += $${PWD}/ArcGISRuntimeToolkit.qrc
+
+ARCGIS_RUNTIME_VERSION = 100.2
+include($$PWD/arcgisruntime.pri)
+
+HEADERS += $$PWD/include/*.h
+SOURCES += $$PWD/source/*.cpp
+
+INCLUDEPATH +=  $$PWD/include/
+
+CONFIG(release) {
+  BUILDTYPE = release
+}
+else {
+  BUILDTYPE = debug
+}
+
+DESTDIR = $$PWD/output
+OBJECTS_DIR = $$DESTDIR/$$BUILDTYPE/obj
+MOC_DIR = $$DESTDIR/$$BUILDTYPE/moc
+RCC_DIR = $$DESTDIR/$$BUILDTYPE/qrc
