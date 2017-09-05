@@ -18,7 +18,7 @@ TARGET = $$qtLibraryTarget(ArcGISRuntimeToolkitCppApi)
 TEMPLATE = lib
 
 QT += core gui opengl network positioning sensors qml quick
-CONFIG += c++11
+CONFIG += c++11 plugin
 
 DEFINES += QTRUNTIME_TOOLKIT_BUILD
 
