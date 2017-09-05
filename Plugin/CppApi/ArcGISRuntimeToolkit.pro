@@ -18,22 +18,35 @@ TARGET = $$qtLibraryTarget(ArcGISRuntimeToolkitCppApi)
 TEMPLATE = lib
 
 QT += core gui opengl network positioning sensors qml quick
-CONFIG += c++11
+CONFIG += c++11 plugin
 
 DEFINES += QTRUNTIME_TOOLKIT_BUILD
-
-RUNTIME_PRI = arcgis_runtime_qml_cpp.pri
-#RUNTIME_PRI = esri_runtime_qt.pri # use this for widgets
-
-ios:RESOURCES += $${PWD}/ArcGISRuntimeToolkit.qrc
-
-ARCGIS_RUNTIME_VERSION = 100.2
-include($$PWD/arcgisruntime.pri)
 
 HEADERS += $$PWD/include/*.h
 SOURCES += $$PWD/source/*.cpp
 
 INCLUDEPATH +=  $$PWD/include/
+
+RUNTIME_PRI = arcgis_runtime_qml_cpp.pri
+#RUNTIME_PRI = esri_runtime_qt.pri # use this for widgets
+
+ARCGIS_RUNTIME_VERSION = 100.2
+include($$PWD/arcgisruntime.pri)
+
+ios {
+  RESOURCES += $${PWD}/ArcGISRuntimeToolkit.qrc
+  # the following file is needed to generate universal iOS libs
+  # prior to Qt 5.8
+  equals(QT_MAJOR_VERSION, 5):lessThan(QT_MINOR_VERSION, 8) {
+    CONFIG += bitcode device iphoneos simulator iphonesimulator
+    include ($$PWD/ios_config.prf)
+  }
+}
+
+macx: {
+  QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.11
+  QMAKE_POST_LINK =
+}
 
 CONFIG(release) {
   BUILDTYPE = release
@@ -42,7 +55,13 @@ else {
   BUILDTYPE = debug
 }
 
-DESTDIR = $$PWD/output
+equals(ANDROID_ARCH, "") {
+  PLATFORM_OUTPUT = $$PLATFORM
+} else {
+  PLATFORM_OUTPUT = $$PLATFORM/$$ANDROID_ARCH
+}
+
+DESTDIR = $$PWD/output/$$PLATFORM_OUTPUT
 OBJECTS_DIR = $$DESTDIR/$$BUILDTYPE/obj
 MOC_DIR = $$DESTDIR/$$BUILDTYPE/moc
 RCC_DIR = $$DESTDIR/$$BUILDTYPE/qrc

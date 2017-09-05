@@ -14,5 +14,25 @@
 #   limitations under the License.
 ################################################################################
 
+macx: PLATFORM = "macOS"
+unix:!macx:!android:!ios: PLATFORM = "linux"
+win32: PLATFORM = "windows"
+ios: PLATFORM = "iOS"
+android: {
+  PLATFORM = "android"
+  contains(QT_ARCH, i386) {
+    ANDROID_ARCH = "x86"
+  } else {
+    ANDROID_ARCH = "armv7"
+  }
+}
+
 INCLUDEPATH += $PWD/include
-QMAKE_LFLAGS += -L$PWD/output -lArcGISRuntimeToolkitCppApi
+
+equals(ANDROID_ARCH, "") {
+  PLATFORM_OUTPUT = $$PLATFORM
+} else {
+  PLATFORM_OUTPUT = $$PLATFORM/$$ANDROID_ARCH
+}
+
+QMAKE_LFLAGS += -L$$PWD/output/$$PLATFORM_OUTPUT -lArcGISRuntimeToolkitCppApi
