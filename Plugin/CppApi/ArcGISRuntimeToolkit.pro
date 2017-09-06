@@ -29,9 +29,13 @@ INCLUDEPATH +=  $$PWD/include/
 
 RUNTIME_PRI = arcgis_runtime_qml_cpp.pri
 #RUNTIME_PRI = esri_runtime_qt.pri # use this for widgets
-
 ARCGIS_RUNTIME_VERSION = 100.2
-include($$PWD/arcgisruntime.pri)
+
+!CONFIG(daily) {
+  include($$PWD/arcgisruntime.pri)
+} else {
+  include($$PWD/dev_build_config.pri)
+}
 
 ios {
   RESOURCES += $${PWD}/ArcGISRuntimeToolkit.qrc
