@@ -39,4 +39,4 @@ win32: {
   }
 }
 
-QMAKE_LFLAGS += -L$$PWD/output/$$PLATFORM_OUTPUT -lArcGISRuntimeToolkitCppApi
+LIBS += -L$$PWD/output/$$PLATFORM_OUTPUT -lArcGISRuntimeToolkitCppApi
