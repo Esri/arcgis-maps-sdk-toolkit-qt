@@ -55,10 +55,14 @@ else {
   BUILDTYPE = debug
 }
 
-equals(ANDROID_ARCH, "") {
-  PLATFORM_OUTPUT = $$PLATFORM
-} else {
-  PLATFORM_OUTPUT = $$PLATFORM/$$ANDROID_ARCH
+!android:!win32: PLATFORM_OUTPUT = $$PLATFORM
+android: PLATFORM_OUTPUT = $$PLATFORM/$$ANDROID_ARCH
+win32: {
+  contains(QMAKE_TARGET.arch, x86_64): {
+    PLATFORM_OUTPUT = $$PLATFORM/x64
+  } else {
+    PLATFORM_OUTPUT = $$PLATFORM/x86
+  }
 }
 
 DESTDIR = $$PWD/output/$$PLATFORM_OUTPUT
