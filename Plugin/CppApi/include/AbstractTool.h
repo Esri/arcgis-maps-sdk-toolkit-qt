@@ -14,6 +14,8 @@
 #define ABSTRACT_TOOL_H
 
 #include "ToolkitCommon.h"
+
+#include <QObject>
 #include <QString>
 
 namespace Esri
@@ -21,15 +23,18 @@ namespace Esri
 namespace ArcGISRuntime
 {
 
+class Basemap;
 class Point;
 
 namespace Toolkit
 {
 
-class TOOLKIT_EXPORT AbstractTool
+class TOOLKIT_EXPORT AbstractTool : public QObject
 {
+  Q_OBJECT
+
 public:
-  AbstractTool();
+  AbstractTool(QObject* parent = nullptr);
   virtual ~AbstractTool();
 
   virtual QString toolName() const = 0;
@@ -37,6 +42,9 @@ public:
 
   virtual void setActive(bool active);
   bool isActive() const;
+
+signals:
+  void basemapChanged(Basemap* basemap);
 
 protected:
   bool m_active = false;

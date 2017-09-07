@@ -26,7 +26,7 @@ namespace Toolkit
 using CoordinateType = CoordinateConversionOptions::CoordinateType;
 
 CoordinateConversionController::CoordinateConversionController(QObject* parent):
-  QObject(parent)
+  AbstractTool(parent)
 {
   connect(this, &CoordinateConversionController::optionsChanged, this,
   [this]()
