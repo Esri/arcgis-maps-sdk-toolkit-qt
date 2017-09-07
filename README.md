@@ -85,3 +85,5 @@ limitations under the License.
 
 A copy of the license is available in the repository's [license.txt](license.txt) file.
 
+Some files (ios_config.prf) are from the Qt SDK and modified to support the Toolkit.
+See https://www.qt.io/terms-conditions/ for license details for those files.
