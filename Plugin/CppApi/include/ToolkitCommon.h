@@ -14,17 +14,15 @@
  *   limitations under the License.
  ******************************************************************************/
 
-#include "ArcGISRuntimeToolkitPlugin.h"
+#ifndef QRT_TOOLKIT_Common_H
+#define QRT_TOOLKIT_Common_H
 
-ArcGISRuntimeToolkitPlugin::ArcGISRuntimeToolkitPlugin(QObject* parent) :
-  QQmlExtensionPlugin(parent)
-{
-  Q_INIT_RESOURCE(Controls);
-  Q_INIT_RESOURCE(Dialogs);
-  Q_INIT_RESOURCE(CppApi);
-}
+#include <QtCore/qglobal.h>
 
-void ArcGISRuntimeToolkitPlugin::registerTypes(const char* uri)
-{
-  Q_UNUSED(uri)
-}
+#ifdef QTRUNTIME_TOOLKIT_BUILD
+#define TOOLKIT_EXPORT Q_DECL_EXPORT
+#else
+#define TOOLKIT_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // QRT_TOOLKIT_Common_H

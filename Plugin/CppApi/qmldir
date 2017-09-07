@@ -1,0 +1,4 @@
+module Esri.ArcGISRuntime.Toolkit.CppApi
+plugin ArcGISRuntimeToolkitCppApi
+classname ArcGISRuntimeToolkit
+typeinfo ArcGISRuntimeToolkitCppApi.qmltypes
