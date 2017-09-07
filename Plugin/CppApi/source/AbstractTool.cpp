@@ -19,7 +19,8 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
-AbstractTool::AbstractTool()
+AbstractTool::AbstractTool(QObject* parent /*= nullptr */):
+  QObject(parent)
 {
 }
 

@@ -32,7 +32,7 @@ namespace Toolkit
 
 class CoordinateConversionResults;
 
-class TOOLKIT_EXPORT CoordinateConversionController : public QObject, public AbstractTool
+class TOOLKIT_EXPORT CoordinateConversionController : public AbstractTool
 {
   Q_OBJECT
 
