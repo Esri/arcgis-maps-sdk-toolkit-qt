@@ -16,7 +16,6 @@ NorthArrowController::NorthArrowController(QObject *parent) : QObject(parent)
 
 NorthArrowController::~NorthArrowController()
 {
-
 }
 
 void NorthArrowController::setHeading(double rotation)
@@ -42,11 +41,11 @@ void NorthArrowController::setAutoHide(bool autoHide)
 
 bool NorthArrowController::setView(Esri::ArcGISRuntime::MapQuickView* mapView)
 {
-    if (mapView == nullptr)
+    if (!mapView)
         return false;
 
     // NorthArrowController can only be set to one MapView or SceneView
-    // might change this restriction later after checking possible use cases
+    // might change this restriction later
     if (m_sceneView != nullptr || m_mapView != nullptr)
         return false;
 
@@ -66,6 +65,9 @@ bool NorthArrowController::setView(Esri::ArcGISRuntime::MapQuickView* mapView)
 
 bool NorthArrowController::setView(Esri::ArcGISRuntime::SceneQuickView* sceneView)
 {
+    if (!sceneView)
+        return false;
+
     // NorthArrowController can only be set to one MapView or SceneView
     // might change this restriction later
     if (m_sceneView != nullptr || m_mapView != nullptr)

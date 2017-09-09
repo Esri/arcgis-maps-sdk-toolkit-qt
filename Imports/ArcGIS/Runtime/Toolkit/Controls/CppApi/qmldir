@@ -17,3 +17,4 @@
 module Esri.ArcGISRuntime.Toolkit.Controls.CppApi
 
 CoordinateConversion 100.2 CoordinateConversion.qml
+NorthArrow 100.2 NorthArrow.qml

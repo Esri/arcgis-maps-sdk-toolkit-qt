@@ -15,7 +15,7 @@ class SceneQuickView;
 
 namespace Toolkit
 {
-class TOOLKIT_EXPORT NorthArrowController : public QObject
+class NorthArrowController : public QObject
 {
     Q_OBJECT
 

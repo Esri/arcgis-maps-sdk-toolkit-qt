@@ -15,19 +15,20 @@ Item {
         objectName: "northArrowController"
     }
 
-    height: 100 * scaleFactor
-    width: 100 * scaleFactor
+    height: 80 * scaleFactor
+    width: 80 * scaleFactor
 
     Rectangle {
         anchors.fill: parent
-        radius: 100
-        opacity: 0.85
         border {
             width: 5
             color: "#808080"
         }
-
-        visible: controller.autoHide && controller.heading === 0 ? false : true
+        radius: 100
+        opacity: 0.85
+        color: "#55FFFFFF"
+        // should be === 0 but when zooming, heading will adjust by a miniscule amount
+        visible: controller.autoHide && (controller.heading < 1e-05 || controller.heading === 360) ? false : true
 
         MouseArea {
             anchors.fill: parent
@@ -36,19 +37,16 @@ Item {
             }
         }
 
-        color: "#55FFFFFF"
-
         Image {
             anchors {
                 centerIn: parent
             }
 
-            height: compassWindow.height * (4 / 5)
-            width: compassWindow.width * (2 / 5)
-            source: "NorthArrow.png"
+            height: compassWindow.height * (3.5 / 5)
+            width: compassWindow.width * (3.5 / 5)
+            source: "qrc:/qt-project.org/imports/Esri/ArcGISRuntime/Toolkit/Controls/images/NorthArrow.png" // Will need to change because this path isn't defined for earlier qt versions
             fillMode: Image.PreserveAspectFit
             rotation: -1 * controller.heading
         }
     }
-
 }
