@@ -56,7 +56,7 @@ public:
   bool autoHide() const;
 
 private:
-  double m_heading = 0;
+  double m_heading = 0.0;
   bool m_autoHide = true;
   Esri::ArcGISRuntime::MapQuickView* m_mapView = nullptr;
   Esri::ArcGISRuntime::SceneQuickView* m_sceneView = nullptr;
