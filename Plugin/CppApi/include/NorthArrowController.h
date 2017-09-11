@@ -56,10 +56,10 @@ public:
   bool autoHide() const;
 
 private:
-  double m_heading;
-  bool m_autoHide;
-  Esri::ArcGISRuntime::MapQuickView* m_mapView;
-  Esri::ArcGISRuntime::SceneQuickView* m_sceneView;
+  double m_heading = 0;
+  bool m_autoHide = true;
+  Esri::ArcGISRuntime::MapQuickView* m_mapView = nullptr;
+  Esri::ArcGISRuntime::SceneQuickView* m_sceneView = nullptr;
 };
 
 } // Toolkit

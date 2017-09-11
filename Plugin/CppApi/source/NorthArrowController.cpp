@@ -15,6 +15,8 @@
 #include "SceneQuickView.h"
 #include "NorthArrowController.h"
 
+using namespace Esri::ArcGISRuntime;
+
 namespace Esri
 {
 namespace ArcGISRuntime
@@ -23,11 +25,7 @@ namespace Toolkit
 {
 
 NorthArrowController::NorthArrowController(QObject *parent):
-  QObject(parent),
-  m_heading(0),
-  m_autoHide(true),
-  m_mapView(nullptr),
-  m_sceneView(nullptr)
+  QObject(parent)
 {
 }
 
@@ -37,37 +35,42 @@ NorthArrowController::~NorthArrowController()
 
 void NorthArrowController::setHeading(double rotation)
 {
+  if (m_heading == rotation)
+    return;
+
   if (m_mapView)
     m_mapView->setViewpointRotation(rotation);
-  // create a new camera with same pitch and roll but different heading
   else if (m_sceneView)
   {
-    Esri::ArcGISRuntime::Camera currentCamera = m_sceneView->currentViewpointCamera();
-    Esri::ArcGISRuntime::Camera updatedCamera = currentCamera.rotateTo(rotation, currentCamera.pitch(), currentCamera.roll());
+    // create a new camera with same pitch and roll but different heading
+    Camera currentCamera = m_sceneView->currentViewpointCamera();
+    Camera updatedCamera = currentCamera.rotateTo(rotation, currentCamera.pitch(), currentCamera.roll());
     m_sceneView->setViewpointCamera(updatedCamera);
   }
-  else
-    return;
 }
 
 void NorthArrowController::setAutoHide(bool autoHide)
 {
+  if (m_autoHide == autoHide)
+    return;
+
   m_autoHide = autoHide;
   emit autoHideChanged();
 }
 
-bool NorthArrowController::setView(Esri::ArcGISRuntime::MapQuickView* mapView)
+bool NorthArrowController::setView(MapQuickView* mapView)
 {
   if (!mapView)
     return false;
 
+  // controller can only be set to one view
   if (m_sceneView != nullptr || m_mapView != nullptr)
     return false;
 
   // set mapView
   m_mapView = mapView;
 
-  connect(m_mapView, &Esri::ArcGISRuntime::MapQuickView::mapRotationChanged, this,
+  connect(m_mapView, &MapQuickView::mapRotationChanged, this,
   [this]()
   {
     m_heading = m_mapView->mapRotation();
@@ -79,18 +82,19 @@ bool NorthArrowController::setView(Esri::ArcGISRuntime::MapQuickView* mapView)
   return true;
 }
 
-bool NorthArrowController::setView(Esri::ArcGISRuntime::SceneQuickView* sceneView)
+bool NorthArrowController::setView(SceneQuickView* sceneView)
 {
   if (!sceneView)
     return false;
 
+  // controller can only be set to one view
   if (m_sceneView != nullptr || m_mapView != nullptr)
     return false;
 
   // set SceneView
   m_sceneView = sceneView;
 
-  connect(m_sceneView, &Esri::ArcGISRuntime::SceneQuickView::viewpointChanged, this,
+  connect(m_sceneView, &SceneQuickView::viewpointChanged, this,
   [this]()
   {
     m_heading = m_sceneView->currentViewpointCamera().heading();

@@ -4,7 +4,6 @@ import QtQuick.Controls.Styles 1.4
 import Esri.ArcGISExtras 1.1
 
 Item {
-
     property real scaleFactor: System.displayScaleFactor
 
     // NorthArrowController must be registered as a QML type in C++ code
@@ -19,7 +18,7 @@ Item {
 
     Image {
         anchors.fill: parent
-        source: "qrc:/qt-project.org/imports/Esri/ArcGISRuntime/Toolkit/Controls/images/NorthArrow.png"
+        source: "../images/NorthArrow.png"
         fillMode: Image.PreserveAspectFit
         rotation: -1 * controller.heading
 
