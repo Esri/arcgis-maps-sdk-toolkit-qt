@@ -15,7 +15,7 @@
 
 #include <QObject>
 
-#include "AbstractTool.h"
+#include "ToolkitCommon.h"
 
 namespace Esri
 {
