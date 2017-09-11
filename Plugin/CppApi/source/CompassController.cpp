@@ -13,7 +13,7 @@
 #include "Camera.h"
 #include "MapQuickView.h"
 #include "SceneQuickView.h"
-#include "NorthArrowController.h"
+#include "CompassController.h"
 
 using namespace Esri::ArcGISRuntime;
 
@@ -24,16 +24,16 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
-NorthArrowController::NorthArrowController(QObject *parent):
+CompassController::CompassController(QObject *parent):
   QObject(parent)
 {
 }
 
-NorthArrowController::~NorthArrowController()
+CompassController::~CompassController()
 {
 }
 
-void NorthArrowController::setHeading(double rotation)
+void CompassController::setHeading(double rotation)
 {
   if (m_heading == rotation)
     return;
@@ -49,7 +49,7 @@ void NorthArrowController::setHeading(double rotation)
   }
 }
 
-void NorthArrowController::setAutoHide(bool autoHide)
+void CompassController::setAutoHide(bool autoHide)
 {
   if (m_autoHide == autoHide)
     return;
@@ -58,7 +58,7 @@ void NorthArrowController::setAutoHide(bool autoHide)
   emit autoHideChanged();
 }
 
-bool NorthArrowController::setView(MapQuickView* mapView)
+bool CompassController::setView(MapQuickView* mapView)
 {
   if (!mapView)
     return false;
@@ -82,7 +82,7 @@ bool NorthArrowController::setView(MapQuickView* mapView)
   return true;
 }
 
-bool NorthArrowController::setView(SceneQuickView* sceneView)
+bool CompassController::setView(SceneQuickView* sceneView)
 {
   if (!sceneView)
     return false;
@@ -106,12 +106,12 @@ bool NorthArrowController::setView(SceneQuickView* sceneView)
   return true;
 }
 
-double NorthArrowController::heading() const
+double CompassController::heading() const
 {
   return m_heading;
 }
 
-bool NorthArrowController::autoHide() const
+bool CompassController::autoHide() const
 {
   return m_autoHide;
 }

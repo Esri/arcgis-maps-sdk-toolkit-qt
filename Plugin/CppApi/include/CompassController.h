@@ -10,8 +10,8 @@
 // See the Sample code usage restrictions document for further information.
 //
 
-#ifndef NorthArrowController_H
-#define NorthArrowController_H
+#ifndef CompassController_H
+#define CompassController_H
 
 #include <QObject>
 
@@ -27,7 +27,7 @@ class SceneQuickView;
 
 namespace Toolkit
 {
-class TOOLKIT_EXPORT NorthArrowController : public QObject
+class TOOLKIT_EXPORT CompassController : public QObject
 {
   Q_OBJECT
 
@@ -46,8 +46,8 @@ public:
   Q_INVOKABLE void setAutoHide(bool autoHide);
 
 public:
-  NorthArrowController(QObject *parent = nullptr);
-  ~NorthArrowController();
+  CompassController(QObject *parent = nullptr);
+  ~CompassController();
 
   bool setView(Esri::ArcGISRuntime::MapQuickView* mapView);
   bool setView(Esri::ArcGISRuntime::SceneQuickView* sceneView);
@@ -66,4 +66,4 @@ private:
 } // ArcGISRuntime
 } // Esri
 
-#endif // NorthArrowControllerController_H
+#endif // CompassControllerController_H

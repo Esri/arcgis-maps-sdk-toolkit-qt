@@ -6,10 +6,10 @@ import Esri.ArcGISExtras 1.1
 Item {
     property real scaleFactor: System.displayScaleFactor
 
-    // NorthArrowController must be registered as a QML type in C++ code
-    NorthArrowController {
+    // CompassController must be registered as a QML type in C++ code
+    CompassController {
         id: controller
-        objectName: "northArrowController"
+        objectName: "compassController"
     }
 
     height: 25 * scaleFactor
@@ -18,7 +18,7 @@ Item {
 
     Image {
         anchors.fill: parent
-        source: "../images/NorthArrow.png"
+        source: "../images/Compass.png"
         fillMode: Image.PreserveAspectFit
         rotation: -1 * controller.heading
 

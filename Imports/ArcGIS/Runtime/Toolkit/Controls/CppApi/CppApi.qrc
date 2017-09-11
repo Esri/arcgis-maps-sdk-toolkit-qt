@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/qt-project.org/imports/Esri/ArcGISRuntime/Toolkit/Controls/CppApi">
         <file>CoordinateConversion.qml</file>
-        <file>NorthArrow.qml</file>
+        <file>Compass.qml</file>
         <file>qmldir</file>
     </qresource>
 </RCC>
