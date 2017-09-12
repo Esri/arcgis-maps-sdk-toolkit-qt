@@ -28,6 +28,8 @@ android: {
   }
 }
 
+win32:RC_FILE += $$PWD/ArcGISRuntimeToolkit.rc
+
 INCLUDEPATH += ../../../../api/qt_cpp/Include
 
 !ios:LIBS += -L$${DESTDIR} -L$${LIB_FOLDER_STATICLIB} \
