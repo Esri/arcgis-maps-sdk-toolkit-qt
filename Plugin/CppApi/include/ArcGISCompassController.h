@@ -10,8 +10,8 @@
 // See the Sample code usage restrictions document for further information.
 //
 
-#ifndef CompassController_H
-#define CompassController_H
+#ifndef ARCGISCOMPASSCONTROLLER_H
+#define ARCGISCOMPASSCONTROLLER_H
 
 #include <QObject>
 
@@ -27,7 +27,7 @@ class SceneQuickView;
 
 namespace Toolkit
 {
-class TOOLKIT_EXPORT CompassController : public QObject
+class TOOLKIT_EXPORT ArcGISCompassController : public QObject
 {
   Q_OBJECT
 
@@ -46,8 +46,8 @@ public:
   Q_INVOKABLE void setAutoHide(bool autoHide);
 
 public:
-  CompassController(QObject *parent = nullptr);
-  ~CompassController();
+  ArcGISCompassController(QObject *parent = nullptr);
+  ~ArcGISCompassController();
 
   bool setView(Esri::ArcGISRuntime::MapQuickView* mapView);
   bool setView(Esri::ArcGISRuntime::SceneQuickView* sceneView);
@@ -66,4 +66,4 @@ private:
 } // ArcGISRuntime
 } // Esri
 
-#endif // CompassControllerController_H
+#endif // ARCGISCOMPASSCONTROLLER_H

@@ -48,7 +48,7 @@ Item {
     Image {
         id: image
         anchors.fill: parent
-        source: "images/Compass.png"
+        source: "images/compass.png"
         rotation: mapview != null ? -mapview.mapRotation : 0
         fillMode: Image.PreserveAspectFit
     }

@@ -17,4 +17,4 @@
 module Esri.ArcGISRuntime.Toolkit.Controls.CppApi
 
 CoordinateConversion 100.2 CoordinateConversion.qml
-Compass 100.2 Compass.qml
+ArcGISCompass 100.2 ArcGISCompass.qml

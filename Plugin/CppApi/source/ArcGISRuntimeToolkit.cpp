@@ -16,7 +16,7 @@
 #include "CoordinateConversionController.h"
 #include "CoordinateConversionOptions.h"
 #include "CoordinateConversionResults.h"
-#include "CompassController.h"
+#include "ArcGISCompassController.h"
 
 namespace Esri
 {
@@ -60,7 +60,7 @@ void ArcGISRuntimeToolkit::registerToolkitTypes(const char* uri)
   qmlRegisterType<CoordinateConversionResults>(uri, s_versionMajor, s_versionMinor, "CoordinateConversionResults");
   qmlRegisterType<CoordinateConversionController>(uri, s_versionMajor, s_versionMinor, "CoordinateConversionController");
   qRegisterMetaType<CoordinateConversionResults*>("CoordinateConversionResults*");
-  qmlRegisterType<CompassController>(uri, s_versionMajor, s_versionMinor, "CompassController");
+  qmlRegisterType<ArcGISCompassController>(uri, s_versionMajor, s_versionMinor, "ArcGISCompassController");
 
   // enums
   qRegisterMetaType<CoordinateConversionOptions::CoordinateType>("CoordinateConversionOptions::CoordinateType");

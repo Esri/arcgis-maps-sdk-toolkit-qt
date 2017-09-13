@@ -13,7 +13,7 @@
 #include "Camera.h"
 #include "MapQuickView.h"
 #include "SceneQuickView.h"
-#include "CompassController.h"
+#include "ArcGISCompassController.h"
 
 using namespace Esri::ArcGISRuntime;
 
@@ -24,16 +24,16 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
-CompassController::CompassController(QObject *parent):
+ArcGISCompassController::ArcGISCompassController(QObject *parent):
   QObject(parent)
 {
 }
 
-CompassController::~CompassController()
+ArcGISCompassController::~ArcGISCompassController()
 {
 }
 
-void CompassController::setHeading(double rotation)
+void ArcGISCompassController::setHeading(double rotation)
 {
   if (m_heading == rotation)
     return;
@@ -49,7 +49,7 @@ void CompassController::setHeading(double rotation)
   }
 }
 
-void CompassController::setAutoHide(bool autoHide)
+void ArcGISCompassController::setAutoHide(bool autoHide)
 {
   if (m_autoHide == autoHide)
     return;
@@ -58,7 +58,7 @@ void CompassController::setAutoHide(bool autoHide)
   emit autoHideChanged();
 }
 
-bool CompassController::setView(MapQuickView* mapView)
+bool ArcGISCompassController::setView(MapQuickView* mapView)
 {
   if (!mapView)
     return false;
@@ -82,7 +82,7 @@ bool CompassController::setView(MapQuickView* mapView)
   return true;
 }
 
-bool CompassController::setView(SceneQuickView* sceneView)
+bool ArcGISCompassController::setView(SceneQuickView* sceneView)
 {
   if (!sceneView)
     return false;
@@ -106,12 +106,12 @@ bool CompassController::setView(SceneQuickView* sceneView)
   return true;
 }
 
-double CompassController::heading() const
+double ArcGISCompassController::heading() const
 {
   return m_heading;
 }
 
-bool CompassController::autoHide() const
+bool ArcGISCompassController::autoHide() const
 {
   return m_autoHide;
 }

@@ -6,10 +6,10 @@ import Esri.ArcGISExtras 1.1
 Item {
     property real scaleFactor: System.displayScaleFactor
 
-    // CompassController must be registered as a QML type in C++ code
-    CompassController {
+    // ArcGISCompassController must be registered as a QML type in C++ code
+    ArcGISCompassController {
         id: controller
-        objectName: "compassController"
+        objectName: "arcGISCompassController"
     }
 
     height: 25 * scaleFactor
@@ -18,7 +18,7 @@ Item {
 
     Image {
         anchors.fill: parent
-        source: "../images/Compass.png"
+        source: "../images/compass.png"
         fillMode: Image.PreserveAspectFit
         rotation: -1 * controller.heading
 
