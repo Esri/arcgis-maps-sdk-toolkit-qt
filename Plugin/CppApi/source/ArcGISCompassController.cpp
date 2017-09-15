@@ -116,6 +116,11 @@ bool ArcGISCompassController::autoHide() const
   return m_autoHide;
 }
 
+QString ArcGISCompassController::toolName() const
+{
+  return "ArcGISCompass";
+}
+
 } // Toolkit
 } // ArcGISRuntime
 } // Esri
