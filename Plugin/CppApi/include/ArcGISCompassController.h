@@ -16,6 +16,7 @@
 #include <QObject>
 
 #include "ToolkitCommon.h"
+#include "AbstractTool.h"
 
 namespace Esri
 {
@@ -27,7 +28,7 @@ class SceneQuickView;
 
 namespace Toolkit
 {
-class TOOLKIT_EXPORT ArcGISCompassController : public QObject
+class TOOLKIT_EXPORT ArcGISCompassController : public QObject, public AbstractTool
 {
   Q_OBJECT
 
@@ -54,6 +55,8 @@ public:
 
   double heading() const;
   bool autoHide() const;
+
+  QString toolName() const override;
 
 private:
   double m_heading = 0.0;
