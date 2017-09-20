@@ -58,6 +58,23 @@ void ArcGISCompassController::setAutoHide(bool autoHide)
   emit autoHideChanged();
 }
 
+bool ArcGISCompassController::setView(GeoView *geoView)
+{
+  if (!geoView)
+    return false;
+
+  // controller can only be set to one view
+  if (m_sceneView != nullptr || m_mapView != nullptr)
+    return false;
+
+  if (geoView->geoViewType() == GeoViewType::SceneView)
+    return setView(static_cast<SceneQuickView*>(geoView));
+  else if(geoView->geoViewType() == GeoViewType::MapView)
+    return setView(static_cast<MapQuickView*>(geoView));
+  else
+    return false;
+}
+
 bool ArcGISCompassController::setView(MapQuickView* mapView)
 {
   if (!mapView)

@@ -25,6 +25,7 @@ namespace ArcGISRuntime
 
 class MapQuickView;
 class SceneQuickView;
+class GeoView;
 
 namespace Toolkit
 {
@@ -50,6 +51,7 @@ public:
   ArcGISCompassController(QObject *parent = nullptr);
   ~ArcGISCompassController();
 
+  bool setView(Esri::ArcGISRuntime::GeoView* geoView);
   bool setView(Esri::ArcGISRuntime::MapQuickView* mapView);
   bool setView(Esri::ArcGISRuntime::SceneQuickView* sceneView);
 
