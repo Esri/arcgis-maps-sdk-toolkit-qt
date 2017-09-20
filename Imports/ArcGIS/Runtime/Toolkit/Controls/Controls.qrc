@@ -19,6 +19,7 @@
         <file>images/rotate_counter_clockwise.png</file>
         <file>images/search.png</file>
         <file>images/triangle.png</file>
+        <file>images/forward.png</file>
         <file>LeaderPosition.js</file>
         <file>AttachmentListView20.qml</file>
         <file>AttributeListView20.qml</file>
@@ -42,5 +43,8 @@
         <file>ZoomInButton20.qml</file>
         <file>ZoomOutButton20.qml</file>
         <file>qmldir</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>PopupStackView.qml</file>
     </qresource>
 </RCC>
