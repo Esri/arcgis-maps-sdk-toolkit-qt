@@ -37,6 +37,12 @@ ARCGIS_RUNTIME_VERSION = 100.2
   include($$PWD/dev_build_config.pri)
 }
 
+unix:!macx:!android:!ios: {
+  # Linux: make sure we get the definition of std::__throw_bad_function_call from the
+  # standard library since libQt5Qml.so.5.6.2 also defines it.
+  LIBS += -lstdc++
+}
+
 ios {
   RESOURCES += $${PWD}/ArcGISRuntimeToolkit.qrc
   # the following file is needed to generate universal iOS libs
