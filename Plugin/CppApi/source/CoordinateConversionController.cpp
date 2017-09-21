@@ -16,6 +16,8 @@
 #include <QClipboard>
 #include <QApplication>
 
+#include "ToolManager.h"
+
 namespace Esri
 {
 namespace ArcGISRuntime
@@ -26,8 +28,10 @@ namespace Toolkit
 using CoordinateType = CoordinateConversionOptions::CoordinateType;
 
 CoordinateConversionController::CoordinateConversionController(QObject* parent):
-  QObject(parent)
+  AbstractTool(parent)
 {
+  ToolManager::instance()->addTool(this);
+
   connect(this, &CoordinateConversionController::optionsChanged, this,
   [this]()
   {

@@ -14,6 +14,8 @@
 #define ABSTRACT_TOOL_H
 
 #include "ToolkitCommon.h"
+
+#include <QObject>
 #include <QString>
 
 namespace Esri
@@ -26,10 +28,11 @@ class Point;
 namespace Toolkit
 {
 
-class TOOLKIT_EXPORT AbstractTool
+class TOOLKIT_EXPORT AbstractTool : public QObject
 {
+  Q_OBJECT
 public:
-  AbstractTool();
+  AbstractTool(QObject* parent = nullptr);
   virtual ~AbstractTool();
 
   virtual QString toolName() const = 0;
