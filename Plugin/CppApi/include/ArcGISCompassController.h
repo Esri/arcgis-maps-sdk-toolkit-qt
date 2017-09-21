@@ -13,9 +13,6 @@
 #ifndef ARCGISCOMPASSCONTROLLER_H
 #define ARCGISCOMPASSCONTROLLER_H
 
-#include <QObject>
-
-#include "ToolkitCommon.h"
 #include "AbstractTool.h"
 
 namespace Esri
@@ -29,7 +26,7 @@ class GeoView;
 
 namespace Toolkit
 {
-class TOOLKIT_EXPORT ArcGISCompassController : public QObject, public AbstractTool
+class TOOLKIT_EXPORT ArcGISCompassController : public AbstractTool
 {
   Q_OBJECT
 

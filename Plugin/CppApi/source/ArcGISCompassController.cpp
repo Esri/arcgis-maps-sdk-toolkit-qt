@@ -13,7 +13,9 @@
 #include "Camera.h"
 #include "MapQuickView.h"
 #include "SceneQuickView.h"
+
 #include "ArcGISCompassController.h"
+#include "ToolManager.h"
 
 using namespace Esri::ArcGISRuntime;
 
@@ -25,8 +27,9 @@ namespace Toolkit
 {
 
 ArcGISCompassController::ArcGISCompassController(QObject *parent):
-  QObject(parent)
+  AbstractTool(parent)
 {
+  ToolManager::instance()->addTool(this);
 }
 
 ArcGISCompassController::~ArcGISCompassController()

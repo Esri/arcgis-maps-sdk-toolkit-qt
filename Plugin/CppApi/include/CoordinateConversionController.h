@@ -13,7 +13,6 @@
 #ifndef COORDINATECONVERSIONCONTROLLER_H
 #define COORDINATECONVERSIONCONTROLLER_H
 
-#include <QObject>
 #include <QQmlListProperty>
 
 #include "AbstractTool.h"
@@ -32,7 +31,7 @@ namespace Toolkit
 
 class CoordinateConversionResults;
 
-class TOOLKIT_EXPORT CoordinateConversionController : public QObject, public AbstractTool
+class TOOLKIT_EXPORT CoordinateConversionController : public AbstractTool
 {
   Q_OBJECT
 
