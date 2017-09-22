@@ -43,9 +43,9 @@ import QtQuick.Window 2.0
       \li Create Popups from the Features.
       \li Optionally obtain the Popup's PopupDefinition and set the
       title, whether to show attachments, and so on.
-      \li Call the PopupViewController's \c showPopups() function in C++ code to pass in the Popups
-      \li Call the \c show() method to display the PopupView.
-      \li Call the \c dismiss() method to hide the PopupView.
+      \li Call the PopupStackViewController's \c showPopups() function in C++ code to pass in the Popups
+      \li Call the \c show() method to display the PopupStackView.
+      \li Call the \c dismiss() method to hide the PopupStackView.
     \endlist
 
     The PopupStackView is a QML Item that can be anchored, given to a dialog,
@@ -78,56 +78,56 @@ Item {
     property var popupManagers: null
 
     /*!
-        \brief The background color of the PopupView.
+        \brief The background color of the PopupStackView.
 
         The default color is \c "#f2f3f4".
     */
     property color backgroundColor: "#f2f3f4"
 
     /*!
-        \brief The border color of the PopupView.
+        \brief The border color of the PopupStackView.
 
         The default color is \c "#4f4f4f".
     */
     property color borderColor: "#4f4f4f"
 
     /*!
-        \brief The border width of the PopupView.
+        \brief The border width of the PopupStackView.
 
         The default width is \c 2.
     */
     property real borderWidth: 2 * displayScaleFactor
 
     /*!
-        \brief The radius of the PopupView.
+        \brief The radius of the PopupStackView.
 
         The default radius is \c 2.
     */
     property real radius: 2 * displayScaleFactor
 
     /*!
-        \brief The title text color of the PopupView.
+        \brief The title text color of the PopupStackView.
 
         The default color is \c "black".
     */
     property color titleTextColor: "black"
 
     /*!
-        \brief The title text size of the PopupView.
+        \brief The title text size of the PopupStackView.
 
         The default size is \c 13.
     */
     property real titleTextSize: 13 * displayScaleFactor
 
     /*!
-        \brief The attribute name color of the PopupView.
+        \brief The attribute name color of the PopupStackView.
 
         The default color is \c "gray".
     */
     property color attributeNameTextColor: "gray"
 
     /*!
-        \brief The attribute value color of the PopupView.
+        \brief The attribute value color of the PopupStackView.
 
         The default color is \c "4f4f4f".
     */
@@ -155,49 +155,51 @@ Item {
     property int currentIndex: 0
 
     /*!
-        \brief The visibility of the PopupView.
+        \brief The visibility of the PopupStackView.
 
         The default visibility is \c false.
     */
     visible: false
 
     /*!
-        \brief The width of the PopupView.
+        \brief The width of the PopupStackView.
 
         The default width is \c 275.
     */
     width: 275 * displayScaleFactor
 
     /*!
-        \brief The height of the PopupView.
+        \brief The height of the PopupStackView.
 
         The default height is \c 350.
     */
     height: 350 * displayScaleFactor
 
     /*!
-        \brief Show the PopupView.
+        \brief Show the PopupStackView.
     */
     function show() {
         visible = true;
     }
 
     /*!
-        \brief Hide the PopupView.
+        \brief Hide the PopupStackView.
     */
     function dismiss() {
+        currentIndex = 0;
+        popupManagers = null;
         visible = false;
     }
 
     /*!
-        \brief Slide the PopupView horizontally with animation.
+        \brief Slide the PopupStackView horizontally with animation.
 
         \list
-          \li fromX - The x-value of the top-left corner to move the PopupView from.
-          \li toX - The x-value of the top-left corner to move the PopupView to.
+          \li fromX - The x-value of the top-left corner to move the PopupStackView from.
+          \li toX - The x-value of the top-left corner to move the PopupStackView to.
         \endlist
 
-        If using this method, the left and right anchors cannot be set on the PopupView.
+        If using this method, the left and right anchors cannot be set on the PopupStackView.
         Rather, anchor the top and bottom only, so that the x-value can be changed.
 
         Set the animationDuration and animationEasingType properties for finer-grained
@@ -211,14 +213,14 @@ Item {
     }
 
     /*!
-        \brief Slide the PopupView vertically with animation.
+        \brief Slide the PopupStackView vertically with animation.
 
         \list
-          \li fromY - The y-value of the top-left corner to move the PopupView from.
-          \li toY - The y-value of the top-left corner to move the PopupView to.
+          \li fromY - The y-value of the top-left corner to move the PopupStackView from.
+          \li toY - The y-value of the top-left corner to move the PopupStackView to.
         \endlist
 
-        If using this method, the top and bottom anchors cannot be set on the PopupView.
+        If using this method, the top and bottom anchors cannot be set on the PopupStackView.
         Rather, anchor the left or right only, so that the y-value can be changed.
 
         Set the animationDuration and animationEasingType properties for finer-grained
@@ -234,8 +236,10 @@ Item {
     /*! internal */
     onPopupManagersChanged: {
         if (popupManagers !== null && popupManagers.length > 0) {
+            currentIndex = 0;
             popupStack.clear();
             popup1.popupManagerInternal = popupManagers[currentIndex]
+            popupManagers[currentIndex].selectGeoElement(true);
             popupStack.push(popup1);
         }
     }
@@ -243,7 +247,7 @@ Item {
     /*! internal */
     NumberAnimation {
         id: animateHorizontal
-        target: popupView
+        target: popupStackView
         properties: "x"
         duration: animationDuration
         easing.type: animationEasingType
@@ -252,7 +256,7 @@ Item {
     /*! internal */
     NumberAnimation {
         id: animateVertical
-        target: popupView
+        target: popupStackView
         properties: "y"
         duration: animationDuration
         easing.type: animationEasingType
@@ -281,7 +285,9 @@ Item {
         if (currentIndex + 1 === popupManagers.length)
             return;
 
+        popupManagers[currentIndex].selectGeoElement(false);
         currentIndex += 1;
+        popupManagers[currentIndex].selectGeoElement(true);
 
         if (popupStack.currentItem === popup1) {
             popup2.popupManagerInternal = popupManagers[currentIndex]
@@ -292,13 +298,14 @@ Item {
             popup1.popupManagerInternal = popupManagers[currentIndex]
             popupStack.push(popup1);
         }
+
     }
 
     /*! internal */
     function previousPopup() {
         if (currentIndex === 0)
             return;
-
+       popupManagers[currentIndex].selectGeoElement(false);
        currentIndex -= 1;
 
         if (popupStack.currentItem === popup2)
@@ -307,6 +314,7 @@ Item {
             popup2.popupManagerInternal = popupManagers[currentIndex];
 
         popupStack.pop();
+        popupManagers[currentIndex].selectGeoElement(true);
     }
 
     // Instead of creating a new view for each popup that is to be shown, cycle between views two but change the PopupManager as necessary
@@ -417,9 +425,6 @@ Item {
             id: popupStack
             height: parent.height
             width: parent.width
-//            onCurrentItemChanged: {
-//                currentItem.popupManagerInternal.selectGeoElement();
-//            }
         }
     }
 }
