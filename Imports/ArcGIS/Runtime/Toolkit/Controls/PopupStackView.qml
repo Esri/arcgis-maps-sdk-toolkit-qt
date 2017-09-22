@@ -185,7 +185,6 @@ Item {
         popupStack.clear();
         if (popupManagers !== null && popupManagers.length > 0) {
             popup1.popupManagerInternal = popupManagers[currentIndex]
-            popupManagers[currentIndex].selectGeoElement(true);
             popupStack.push(popup1);
         }
         visible = true;
