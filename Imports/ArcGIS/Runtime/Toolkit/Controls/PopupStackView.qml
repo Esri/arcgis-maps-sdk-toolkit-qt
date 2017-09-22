@@ -21,19 +21,19 @@ import QtQuick.Dialogs 1.2
 import QtQuick.Window 2.0
 
 /*!
-    \qmltype PopupsView
+    \qmltype PopupStackView
     \ingroup ArcGISQtToolkit
-    \inqmlmodule Esri.ArcGISRuntime.Toolkit.Controls.CppApi
+    \inqmlmodule Esri.ArcGISRuntime.Toolkit.Controls
     \since Esri.ArcGISRutime 100.2
     \brief A view for displaying and editing information of Features.
 
-    A PopupsView can be used to display information for any type that
+    A PopupStackView can be used to display information for any type that
     implements the PopupSource interface. For example, FeatureLayer
     implements PopupSource. This means that it has a PopupDefinition,
     which defines how the Popup should look for any features in that
     layer.
 
-    An example workflow for displaying a PopupsView for a feature in a
+    An example workflow for displaying a PopupStackView for features in a
     FeatureLayer would be:
 
     \list
@@ -43,7 +43,8 @@ import QtQuick.Window 2.0
       \li Create Popups from the Features.
       \li Optionally obtain the Popup's PopupDefinition and set the
       title, whether to show attachments, and so on.
-      \li Call the PopupStackViewController's \c showPopups() function in C++ code to pass in the Popups
+      \li Create a PopupManager from the Popup and add it to a list of PopupManagers
+      \li Assign the list mentioned in the above step to the PopupStackView's \c popupManagers property
       \li Call the \c show() method to display the PopupStackView.
       \li Call the \c dismiss() method to hide the PopupStackView.
     \endlist
@@ -57,7 +58,8 @@ import QtQuick.Window 2.0
     documentation.
 
     \note Each time a change is made to the Popup, PopupDefinition,
-    PopupManager, or any of their properties,
+    PopupManager, or any of their properties, the popupManagers must be
+    re-set to the PopupStackView.
 */
 Item {
     id: popupStackView
@@ -179,6 +181,13 @@ Item {
         \brief Show the PopupStackView.
     */
     function show() {
+        currentIndex = 0;
+        popupStack.clear();
+        if (popupManagers !== null && popupManagers.length > 0) {
+            popup1.popupManagerInternal = popupManagers[currentIndex]
+            popupManagers[currentIndex].selectGeoElement(true);
+            popupStack.push(popup1);
+        }
         visible = true;
     }
 
@@ -187,7 +196,6 @@ Item {
     */
     function dismiss() {
         currentIndex = 0;
-        popupManagers = null;
         visible = false;
     }
 
@@ -206,7 +214,7 @@ Item {
         control of the animation.
     */
     function slideHorizontal(fromX, toX) {
-        visible = true;
+        show();
         animateHorizontal.from = fromX;
         animateHorizontal.to = toX;
         animateHorizontal.start();
@@ -227,21 +235,10 @@ Item {
         control of the animation.
     */
     function slideVertical(fromY, toY) {
-        visible = true;
+        show();
         animateVertical.from = fromY;
         animateVertical.to = toY;
         animateVertical.start();
-    }
-
-    /*! internal */
-    onPopupManagersChanged: {
-        if (popupManagers !== null && popupManagers.length > 0) {
-            currentIndex = 0;
-            popupStack.clear();
-            popup1.popupManagerInternal = popupManagers[currentIndex]
-            popupManagers[currentIndex].selectGeoElement(true);
-            popupStack.push(popup1);
-        }
     }
 
     /*! internal */
@@ -285,9 +282,7 @@ Item {
         if (currentIndex + 1 === popupManagers.length)
             return;
 
-        popupManagers[currentIndex].selectGeoElement(false);
         currentIndex += 1;
-        popupManagers[currentIndex].selectGeoElement(true);
 
         if (popupStack.currentItem === popup1) {
             popup2.popupManagerInternal = popupManagers[currentIndex]
@@ -305,8 +300,8 @@ Item {
     function previousPopup() {
         if (currentIndex === 0)
             return;
-       popupManagers[currentIndex].selectGeoElement(false);
-       currentIndex -= 1;
+
+        currentIndex -= 1;
 
         if (popupStack.currentItem === popup2)
             popup1.popupManagerInternal = popupManagers[currentIndex];
@@ -314,11 +309,9 @@ Item {
             popup2.popupManagerInternal = popupManagers[currentIndex];
 
         popupStack.pop();
-        popupManagers[currentIndex].selectGeoElement(true);
     }
 
-    // Instead of creating a new view for each popup that is to be shown, cycle between views two but change the PopupManager as necessary
-
+    // Create two PopupView and cycle between the two to act as StackView.
     /*! internal */
     PopupViewBase {
         id: popup1
@@ -370,7 +363,7 @@ Item {
                 anchors {
                     left: parent.left
                     verticalCenter: parent.verticalCenter
-                    margins: 5 * displayScaleFactor
+                    margins: 2 * displayScaleFactor
                 }
                 height: parent.height
                 width: height
@@ -406,7 +399,7 @@ Item {
                 anchors {
                     right: parent.right
                     verticalCenter: parent.verticalCenter
-                    margins: 5 * displayScaleFactor
+                    margins: 2 * displayScaleFactor
                 }
                 height: parent.height
                 width: height
