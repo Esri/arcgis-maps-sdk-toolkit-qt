@@ -36,6 +36,7 @@
         <file>OverviewMap20.qml</file>
         <file>PopupView.qml</file>
         <file>PopupViewBase.qml</file>
+        <file>PopupStackView.qml</file>
         <file>RotationToolbar20.qml</file>
         <file>SearchBox20.qml</file>
         <file>StyleButton20.qml</file>
@@ -43,8 +44,5 @@
         <file>ZoomInButton20.qml</file>
         <file>ZoomOutButton20.qml</file>
         <file>qmldir</file>
-    </qresource>
-    <qresource prefix="/">
-        <file>PopupStackView.qml</file>
     </qresource>
 </RCC>
