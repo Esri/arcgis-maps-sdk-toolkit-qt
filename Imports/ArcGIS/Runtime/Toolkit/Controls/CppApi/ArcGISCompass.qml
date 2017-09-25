@@ -19,7 +19,7 @@ Item {
 
     Image {
         anchors.fill: parent
-        source: "../images/compass.png"
+        source: "images/compass.png"
         fillMode: Image.PreserveAspectFit
         rotation: -1 * controller.heading
 
