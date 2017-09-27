@@ -48,7 +48,7 @@ void ArcGISCompassController::setHeading(double rotation)
     // create a new camera with same pitch and roll but different heading
     Camera currentCamera = m_sceneView->currentViewpointCamera();
     Camera updatedCamera = currentCamera.rotateTo(rotation, currentCamera.pitch(), currentCamera.roll());
-    m_sceneView->setViewpointCamera(updatedCamera);
+    m_sceneView->setViewpointCamera(updatedCamera, 0.50);
   }
 }
 
