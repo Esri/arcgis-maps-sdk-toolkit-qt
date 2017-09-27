@@ -27,6 +27,8 @@ namespace Toolkit
 {
 
 class AbstractTool;
+class ObjectPool;
+
 class TOOLKIT_EXPORT ToolManager {
 
   typedef QMap<QString, AbstractTool*> ToolsList;
@@ -35,14 +37,20 @@ public:
 
   static std::shared_ptr<ToolManager> instance(); // singleton
 
+  ToolManager();
+  ~ToolManager();
+
   void addTool(AbstractTool* tool);
 
   AbstractTool* tool(const QString& toolName) const;
   ToolsList::iterator toolsBegin();
   ToolsList::iterator toolsEnd();
 
+  ObjectPool* objectPool() const;
+
 private:
   ToolsList m_tools;
+  ObjectPool* m_objects;
 
   static std::shared_ptr<ToolManager> m_instance;
 };
