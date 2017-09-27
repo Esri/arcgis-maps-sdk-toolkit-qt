@@ -1,18 +1,22 @@
 import QtQuick 2.0
-import QtQuick.Controls 1.4
-import QtQuick.Controls.Styles 1.4
+import QtQuick.Controls 2.2
+//import QtQuick.Controls.Styles 1.4
+import QtQuick.Controls.Material 2.2
 import Esri.ArcGISExtras 1.1
 import Esri.ArcGISRuntime.Toolkit.CppApi 100.2
 
 Rectangle {
     id: coordinateConversionWindow
-    height: 800
-    width: 600
+//    height: 800
+//    width: parent.width
 
     property real scaleFactor: System.displayScaleFactor
-
     property int buttonWidth: 100 * scaleFactor
     property int spacingValue: 5 * scaleFactor
+    property int imageWidth: 36 * scaleFactor
+    property int fontSize: 14 * scaleFactor
+
+    signal closeClicked();
 
     CoordinateConversionController {
         id: controller
@@ -27,6 +31,8 @@ Rectangle {
         Column {
             id: column
             anchors.margins: 30 * scaleFactor
+            anchors.left: parent.left
+            anchors.right: parent.right
             spacing: spacingValue * 2
 
             Row {
@@ -43,16 +49,16 @@ Rectangle {
 
                 TextField {
                     id: inputNotation
-                    width: buttonWidth * 3
+                    width: buttonWidth * 5
                 }
 
-                Button {
-                    text: "Convert"
-                    enabled: inputNotation.text !== ""
-                    onClicked: {
-                        controller.convertNotation(inputNotation.text);
-                    }
-                }
+//                Button {
+//                    text: "Convert"
+//                    enabled: inputNotation.text !== ""
+//                    onClicked: {
+//                        controller.convertNotation(inputNotation.text);
+//                    }
+//                }
             }
 
             Repeater {
@@ -64,16 +70,37 @@ Rectangle {
                     Label {
                         width: buttonWidth
                         text: name
+
+                        font {
+                            pixelSize: fontSize
+                        }
+                        color: "black"
                     }
 
                     TextField {
                         id: notationBox
                         text: notation
-                        width: buttonWidth * 3
+                        width: buttonWidth * 5
+                        color: "black"
                     }
 
                     Button {
-                        text: "Copy to clipboard"
+                        width: 32 * scaleFactor
+                        height: 32 * scaleFactor
+
+                        background: Rectangle {
+                            anchors.fill: this
+                            color: Material.primary
+                        }
+
+                        Image {
+                            fillMode: Image.PreserveAspectFit
+                            anchors.centerIn: parent
+                            sourceSize.height: buttonWidth
+                            height: sourceSize.height
+                            source: "qrc:/Resources/icons/xhdpi/ic_menu_layervisibilitypopover_dark_d.png"
+                        }
+
                         onClicked: {
                             controller.copyToClipboard(notationBox.text);
                             notationTypeCombo.currentIndex = notationTypeCombo.model.indexOf(CoordinateConversionOptions.coordinateTypeToString(coordinateType));
@@ -104,7 +131,7 @@ Rectangle {
                 top: parent.top
             }
 
-            text: "Get From Map"
+            text: qsTr("Get From Map")
 
             onCheckedChanged: {
                 controller.runConversion = checked;
@@ -123,7 +150,7 @@ Rectangle {
             text: "Close"
 
             onClicked: {
-                coordinateConversionWindow.visible = false;
+                closeClicked();
             }
         }
     }
