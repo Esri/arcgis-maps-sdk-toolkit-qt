@@ -30,11 +30,11 @@ namespace Toolkit
 ArcGISCompassController::ArcGISCompassController(QObject *parent):
   AbstractTool(parent)
 {
-  ToolManager::instance()->addTool(this);
+  ToolManager::instance().addTool(this);
 
-  connect(Toolkit::ToolManager::instance()->resourceProvider(), &Toolkit::ToolResourceProvider::geoViewChanged, this, [this]()
+  connect(Toolkit::ToolManager::instance().resourceProvider(), &Toolkit::ToolResourceProvider::geoViewChanged, this, [this]()
   {
-    GeoView* geoView = Toolkit::ToolManager::instance()->resourceProvider()->geoView();
+    GeoView* geoView = Toolkit::ToolManager::instance().resourceProvider()->geoView();
     if (geoView)
       setView(geoView);
   });
