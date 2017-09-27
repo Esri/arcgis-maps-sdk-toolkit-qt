@@ -27,7 +27,7 @@ namespace Toolkit
 {
 
 class AbstractTool;
-class ObjectPool;
+class ToolResourceProvider;
 
 class TOOLKIT_EXPORT ToolManager {
 
@@ -46,11 +46,11 @@ public:
   ToolsList::iterator toolsBegin();
   ToolsList::iterator toolsEnd();
 
-  ObjectPool* objectPool() const;
+  ToolResourceProvider* resourceProvider() const;
 
 private:
   ToolsList m_tools;
-  ObjectPool* m_objects;
+  ToolResourceProvider* m_resourceProvider;
 
   static std::shared_ptr<ToolManager> m_instance;
 };

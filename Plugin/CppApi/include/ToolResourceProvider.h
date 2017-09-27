@@ -10,8 +10,8 @@
 // See the Sample code usage restrictions document for further information.
 //
 
-#ifndef OBJECT_POOL_H
-#define OBJECT_POOL_H
+#ifndef TOOL_RESOURCE_PROVIDER_H
+#define TOOL_RESOURCE_PROVIDER_H
 
 #include <QObject>
 
@@ -31,13 +31,13 @@ class Scene;
 namespace Toolkit
 {
 
-class TOOLKIT_EXPORT ObjectPool : public QObject
+class TOOLKIT_EXPORT ToolResourceProvider : public QObject
 {
   Q_OBJECT
 
 public:
-  explicit ObjectPool(QObject* parent = nullptr);
-  ~ObjectPool();
+  explicit ToolResourceProvider(QObject* parent = nullptr);
+  ~ToolResourceProvider();
 
   Scene* map() const;
   void registerMap(Scene* newMap);
@@ -69,4 +69,4 @@ private:
 } // ArcGISRuntime
 } // Esri
 
-#endif // OBJECT_POOL_H
+#endif // TOOL_RESOURCE_PROVIDER_H

@@ -15,7 +15,7 @@
 #include "SceneQuickView.h"
 
 #include "ArcGISCompassController.h"
-#include "ObjectPool.h"
+#include "ToolResourceProvider.h"
 #include "ToolManager.h"
 
 using namespace Esri::ArcGISRuntime;
@@ -32,9 +32,9 @@ ArcGISCompassController::ArcGISCompassController(QObject *parent):
 {
   ToolManager::instance()->addTool(this);
 
-  connect(Toolkit::ToolManager::instance()->objectPool(), &Toolkit::ObjectPool::geoViewChanged, this, [this]()
+  connect(Toolkit::ToolManager::instance()->resourceProvider(), &Toolkit::ToolResourceProvider::geoViewChanged, this, [this]()
   {
-    GeoView* geoView = Toolkit::ToolManager::instance()->objectPool()->geoView();
+    GeoView* geoView = Toolkit::ToolManager::instance()->resourceProvider()->geoView();
     if (geoView)
       setView(geoView);
   });

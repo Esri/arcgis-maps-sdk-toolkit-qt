@@ -14,7 +14,7 @@
 #include "Map.h"
 #include "Scene.h"
 
-#include "ObjectPool.h"
+#include "ToolResourceProvider.h"
 
 namespace Esri
 {
@@ -23,23 +23,23 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
-ObjectPool::ObjectPool(QObject* parent /*= nullptr*/):
+ToolResourceProvider::ToolResourceProvider(QObject* parent /*= nullptr*/):
   QObject(parent)
 {
 
 }
 
-ObjectPool::~ObjectPool()
+ToolResourceProvider::~ToolResourceProvider()
 {
 
 }
 
-Scene* ObjectPool::map() const
+Scene* ToolResourceProvider::map() const
 {
   return m_map;
 }
 
-void ObjectPool::registerMap(Scene* newMap)
+void ToolResourceProvider::registerMap(Scene* newMap)
 {
   if (!newMap)
     return;
@@ -49,12 +49,12 @@ void ObjectPool::registerMap(Scene* newMap)
   emit mapChanged();
 }
 
-Scene* ObjectPool::scene() const
+Scene* ToolResourceProvider::scene() const
 {
   return m_scene;
 }
 
-void ObjectPool::registerScene(Scene* newScene)
+void ToolResourceProvider::registerScene(Scene* newScene)
 {
   if (!newScene)
     return;
@@ -64,12 +64,12 @@ void ObjectPool::registerScene(Scene* newScene)
   emit sceneChanged();
 }
 
-GeoView* ObjectPool::geoView() const
+GeoView* ToolResourceProvider::geoView() const
 {
   return m_geoView;
 }
 
-void ObjectPool::registerGeoView(GeoView* newGeoView)
+void ToolResourceProvider::registerGeoView(GeoView* newGeoView)
 {
   if (!newGeoView)
     return;
@@ -78,7 +78,7 @@ void ObjectPool::registerGeoView(GeoView* newGeoView)
   emit geoViewChanged();
 }
 
-LayerListModel *ObjectPool::operationalLayers() const
+LayerListModel* ToolResourceProvider::operationalLayers() const
 {
   if (m_map)
     return m_map->operationalLayers();
@@ -88,7 +88,7 @@ LayerListModel *ObjectPool::operationalLayers() const
   return nullptr;
 }
 
-void ObjectPool::setBasemap(Basemap* newBasemap)
+void ToolResourceProvider::setBasemap(Basemap* newBasemap)
 {
   if (!newBasemap)
     return;
@@ -105,7 +105,7 @@ void ObjectPool::setBasemap(Basemap* newBasemap)
   }
 }
 
-void ObjectPool::clear()
+void ToolResourceProvider::clear()
 {
   m_scene = nullptr;
   m_geoView = nullptr;

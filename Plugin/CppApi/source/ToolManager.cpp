@@ -12,7 +12,7 @@
 
 #include "ToolManager.h"
 #include "AbstractTool.h"
-#include "ObjectPool.h"
+#include "ToolResourceProvider.h"
 
 namespace Esri
 {
@@ -32,14 +32,14 @@ std::shared_ptr<ToolManager> ToolManager::instance()
 }
 
 ToolManager::ToolManager():
-  m_objects(new ObjectPool)
+  m_resourceProvider(new ToolResourceProvider)
 {
 
 }
 
 ToolManager::~ToolManager()
 {
-  delete m_objects;
+  delete m_resourceProvider;
 }
 
 void ToolManager::addTool(AbstractTool* tool)
@@ -65,9 +65,9 @@ ToolManager::ToolsList::iterator ToolManager::toolsEnd()
   return m_tools.end();
 }
 
-ObjectPool* ToolManager::objectPool() const
+ToolResourceProvider* ToolManager::resourceProvider() const
 {
-  return m_objects;
+  return m_resourceProvider;
 }
 
 } // Toolkit
