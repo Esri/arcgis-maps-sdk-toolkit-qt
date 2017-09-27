@@ -14,18 +14,29 @@
 #   limitations under the License.
 ################################################################################
 
-module Esri.ArcGISRuntime.Toolkit.Dialogs
+macx: PLATFORM = "macOS"
+unix:!macx:!android:!ios: PLATFORM = "linux"
+win32: PLATFORM = "windows"
+ios: PLATFORM = "iOS"
+android: {
+  PLATFORM = "android"
+  contains(QT_ARCH, i386) {
+    ANDROID_ARCH = "x86"
+  } else {
+    ANDROID_ARCH = "armv7"
+  }
+}
 
-AuthenticationView 2.0 AuthenticationView20.qml
-AuthenticationView 100.0 AuthenticationView.qml
-ClientCertificateView 2.0 ClientCertificateView20.qml
-ClientCertificateView 100.0 ClientCertificateView.qml
-CurrentVersion 100.2 CurrentVersion.qml
-ImagePopUpDialog 2.0 ImagePopUpDialog20.qml
-OAuth2View 2.0 OAuth2View20.qml
-OAuth2View 100.0 OAuth2View.qml
-SimpleDialog 2.0 SimpleDialog20.qml
-SslHandshakeView 2.0 SslHandshakeView20.qml
-SslHandshakeView 100.0 SslHandshakeView.qml
-UserCredentialsView 2.0 UserCredentialsView20.qml
-UserCredentialsView 100.0 UserCredentialsView.qml
+INCLUDEPATH += $$PWD/include
+
+!android:!win32: PLATFORM_OUTPUT = $$PLATFORM
+android: PLATFORM_OUTPUT = $$PLATFORM/$$ANDROID_ARCH
+win32: {
+  contains(QMAKE_TARGET.arch, x86_64): {
+    PLATFORM_OUTPUT = $$PLATFORM/x64
+  } else {
+    PLATFORM_OUTPUT = $$PLATFORM/x86
+  }
+}
+
+LIBS += -L$$PWD/output/$$PLATFORM_OUTPUT -lArcGISRuntimeToolkitCppApi

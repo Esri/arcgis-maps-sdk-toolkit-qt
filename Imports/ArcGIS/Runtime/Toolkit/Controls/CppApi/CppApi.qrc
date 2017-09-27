@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/qt-project.org/imports/Esri/ArcGISRuntime/Toolkit/Controls/CppApi">
+        <file>CoordinateConversion.qml</file>
+        <file>ArcGISCompass.qml</file>
+        <file>images/compass.png</file>
+        <file>qmldir</file>
+    </qresource>
+</RCC>
