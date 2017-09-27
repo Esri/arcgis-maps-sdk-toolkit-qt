@@ -41,7 +41,7 @@ Project {
     }
 
     importPaths: [
-        "../Imports"
+        "../Import"
    ]
 }
 

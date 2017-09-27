@@ -18,6 +18,6 @@ HEADERS += $$PWD/ArcGISRuntimeToolkitPlugin.h
 
 SOURCES += $$PWD/ArcGISRuntimeToolkitPlugin.cpp
 
-RESOURCES += $$PWD/../Imports/ArcGIS/Runtime/Toolkit/Controls/Controls.qrc \
-             $$PWD/../Imports/ArcGIS/Runtime/Toolkit/Dialogs/Dialogs.qrc \
-             $$PWD/../Imports/ArcGIS/Runtime/Toolkit/Controls/CppApi/CppApi.qrc
+RESOURCES += $$PWD/../Import/Esri/ArcGISRuntime/Toolkit/Controls/Controls.qrc \
+             $$PWD/../Import/Esri/ArcGISRuntime/Toolkit/Dialogs/Dialogs.qrc \
+             $$PWD/../Import/Esri/ArcGISRuntime/Toolkit/Controls/CppApi/CppApi.qrc
