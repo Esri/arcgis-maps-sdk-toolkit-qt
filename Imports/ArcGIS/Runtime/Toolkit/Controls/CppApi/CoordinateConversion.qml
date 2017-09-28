@@ -7,16 +7,15 @@ import Esri.ArcGISRuntime.Toolkit.CppApi 100.2
 
 Rectangle {
     id: coordinateConversionWindow
-//    height: 800
-//    width: parent.width
 
     property real scaleFactor: System.displayScaleFactor
     property int buttonWidth: 100 * scaleFactor
     property int spacingValue: 5 * scaleFactor
     property int imageWidth: 36 * scaleFactor
-    property int fontSize: 14 * scaleFactor
+    property int fontSize: 12 * scaleFactor
+    property double labelWidth: 0.0
 
-    signal closeClicked();
+    signal clearClicked();
 
     CoordinateConversionController {
         id: controller
@@ -25,15 +24,20 @@ Rectangle {
 
     ScrollView {
         id: scrollView
-        anchors.fill: parent
+        anchors {
+            top: parent.top
+            bottom: bottomRect.top
+            right: parent.right
+            left: parent.left
+        }
+
         anchors.margins: 10 * scaleFactor
 
         Column {
             id: column
-            anchors.margins: 30 * scaleFactor
             anchors.left: parent.left
             anchors.right: parent.right
-            spacing: spacingValue * 2
+            spacing: spacingValue
 
             Row {
                 spacing: spacingValue
@@ -49,42 +53,62 @@ Rectangle {
 
                 TextField {
                     id: inputNotation
-                    width: buttonWidth * 5
+                    width: coordinateConversionWindow.width * 0.7
                 }
 
-//                Button {
-//                    text: "Convert"
-//                    enabled: inputNotation.text !== ""
-//                    onClicked: {
-//                        controller.convertNotation(inputNotation.text);
-//                    }
-//                }
+                Button {
+                    id: repeaterButton
+                    width: 32 * scaleFactor
+                    height: 32 * scaleFactor
+
+                    background: Rectangle {
+                        anchors.fill: this
+                        color: Material.primary
+                    }
+
+                    Image {
+                        fillMode: Image.PreserveAspectFit
+                        anchors.centerIn: parent
+                        sourceSize.height: parent.width
+                        height: sourceSize.height
+                        source: "qrc:/Resources/icons/xhdpi/ic_menu_previousslide_dark_d.png"
+                        rotation: 180
+                    }
+
+                    onClicked: {
+//                        controller.copyToClipboard(notationBox.text);
+//                        notationTypeCombo.currentIndex = notationTypeCombo.model.indexOf(CoordinateConversionOptions.coordinateTypeToString(coordinateType));
+                    }
+                }
+
             }
 
             Repeater {
+                id: repeater
                 model: controller.results
-                delegate:
-                    Row {
+
+                delegate: Row {
                     spacing: spacingValue
 
                     Label {
+                        id: repeaterLabel
+                        anchors.verticalCenter: parent.verticalCenter
                         width: buttonWidth
                         text: name
-
-                        font {
-                            pixelSize: fontSize
-                        }
                         color: "black"
                     }
 
                     TextField {
                         id: notationBox
+                        anchors.verticalCenter: parent.verticalCenter
                         text: notation
-                        width: buttonWidth * 5
+                        width: coordinateConversionWindow.width * 0.7
                         color: "black"
+                        font.pixelSize: fontSize
                     }
 
                     Button {
+                        id: repeaterButton
                         width: 32 * scaleFactor
                         height: 32 * scaleFactor
 
@@ -96,9 +120,9 @@ Rectangle {
                         Image {
                             fillMode: Image.PreserveAspectFit
                             anchors.centerIn: parent
-                            sourceSize.height: buttonWidth
+                            sourceSize.height: parent.width
                             height: sourceSize.height
-                            source: "qrc:/Resources/icons/xhdpi/ic_menu_layervisibilitypopover_dark_d.png"
+                            source: "qrc:/Resources/icons/xhdpi/editcopy32_d_gray.png"
                         }
 
                         onClicked: {
@@ -112,26 +136,25 @@ Rectangle {
     }
 
     Rectangle {
+        id: bottomRect
+
         anchors {
             bottom: parent.bottom
             left: parent.left
-            right: scrollView.right
+            right: coordinateConversionWindow.right
             topMargin: 5 * scaleFactor
-            bottomMargin: 5 * scaleFactor
-            leftMargin: 10 * scaleFactor
-            rightMargin: 30 * scaleFactor
         }
-        height: 30 * scaleFactor
+        height: 40 * scaleFactor
+        color: Material.primary
 
         CheckBox {
             id: getFromMap
             anchors {
-                left: parent.left
+                right: clear.left
                 bottom: parent.bottom
                 top: parent.top
+                rightMargin: 10 * scaleFactor
             }
-
-            text: qsTr("Get From Map")
 
             onCheckedChanged: {
                 controller.runConversion = checked;
@@ -139,18 +162,31 @@ Rectangle {
         }
 
         Button {
-            id: close
+            id: clear
+            width: 32 * scaleFactor
+            height: 32 * scaleFactor
+
             anchors {
                 right: parent.right
-                bottom: parent.bottom
-                top: parent.top
-                rightMargin: 25 * scaleFactor
+                rightMargin: coordinateConversionWindow.width - ((coordinateConversionWindow.width * 0.7) + buttonWidth + (spacingValue * 2) + (32 * scaleFactor) + (10 * scaleFactor))
+                verticalCenter: parent.verticalCenter
             }
 
-            text: "Close"
+            background: Rectangle {
+                anchors.fill: this
+                color: Material.primary
+            }
+
+            Image {
+                fillMode: Image.PreserveAspectFit
+                anchors.centerIn: parent
+                sourceSize.height: parent.width
+                height: sourceSize.height
+                source: "qrc:/Resources/icons/xhdpi/ic_menu_trash_dark_d.png"
+            }
 
             onClicked: {
-                closeClicked();
+                clearClicked();
             }
         }
     }
