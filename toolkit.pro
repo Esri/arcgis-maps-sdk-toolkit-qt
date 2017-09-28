@@ -26,7 +26,7 @@ OTHER_FILES += \
     README.md \
     .gitattributes \
     .gitignore \
-    Imports/*.qmlproject \
+    Import/*.qmlproject \
     Examples/*.qmlproject \
     Plugin/*
 
