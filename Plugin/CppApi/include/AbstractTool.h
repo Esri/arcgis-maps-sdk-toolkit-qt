@@ -23,6 +23,7 @@ namespace Esri
 namespace ArcGISRuntime
 {
 
+class Error;
 class Point;
 
 namespace Toolkit
@@ -40,6 +41,9 @@ public:
 
   virtual void setActive(bool active);
   bool isActive() const;
+
+signals:
+  void errorOccurred(const Error& error);
 
 protected:
   bool m_active = false;
