@@ -29,19 +29,26 @@ ToolResourceProvider::ToolResourceProvider(QObject* parent /*= nullptr*/):
 
 }
 
+ToolResourceProvider* ToolResourceProvider::instance()
+{
+  static ToolResourceProvider s_instance;
+
+  return &s_instance;
+}
+
 ToolResourceProvider::~ToolResourceProvider()
 {
 
 }
 
-Scene* ToolResourceProvider::map() const
+Map* ToolResourceProvider::map() const
 {
   return m_map;
 }
 
-void ToolResourceProvider::registerMap(Scene* newMap)
+void ToolResourceProvider::setMap(Map* newMap)
 {
-  if (!newMap)
+  if (!newMap || newMap == m_map)
     return;
 
   m_map = newMap;
@@ -54,9 +61,9 @@ Scene* ToolResourceProvider::scene() const
   return m_scene;
 }
 
-void ToolResourceProvider::registerScene(Scene* newScene)
+void ToolResourceProvider::setScene(Scene* newScene)
 {
-  if (!newScene)
+  if (!newScene || newScene == m_scene)
     return;
 
   m_scene = newScene;
@@ -69,9 +76,9 @@ GeoView* ToolResourceProvider::geoView() const
   return m_geoView;
 }
 
-void ToolResourceProvider::registerGeoView(GeoView* newGeoView)
+void ToolResourceProvider::setGeoView(GeoView* newGeoView)
 {
-  if (!newGeoView)
+  if (!newGeoView || newGeoView == m_geoView)
     return;
 
   m_geoView = newGeoView;
@@ -107,9 +114,11 @@ void ToolResourceProvider::setBasemap(Basemap* newBasemap)
 
 void ToolResourceProvider::clear()
 {
+  m_map = nullptr;
   m_scene = nullptr;
   m_geoView = nullptr;
 
+  emit mapChanged();
   emit sceneChanged();
   emit geoViewChanged();
 }

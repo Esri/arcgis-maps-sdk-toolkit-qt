@@ -36,17 +36,19 @@ class TOOLKIT_EXPORT ToolResourceProvider : public QObject
   Q_OBJECT
 
 public:
-  explicit ToolResourceProvider(QObject* parent = nullptr);
+
+  static ToolResourceProvider* instance();
+
   ~ToolResourceProvider();
 
-  Scene* map() const;
-  void registerMap(Scene* newMap);
+  Map* map() const;
+  void setMap(Map* newMap);
 
   Scene* scene() const;
-  void registerScene(Scene* newScene);
+  void setScene(Scene* newScene);
 
   GeoView* geoView() const;
-  void registerGeoView(GeoView* newGeoView);
+  void setGeoView(GeoView* newGeoView);
 
   LayerListModel* operationalLayers() const;
 
@@ -60,8 +62,10 @@ signals:
   void mapChanged();
 
 private:
+  explicit ToolResourceProvider(QObject* parent = nullptr);
+
   GeoView* m_geoView = nullptr;
-  Scene* m_map = nullptr;
+  Map* m_map = nullptr;
   Scene* m_scene = nullptr;
 };
 

@@ -32,9 +32,9 @@ ArcGISCompassController::ArcGISCompassController(QObject *parent):
 {
   ToolManager::instance().addTool(this);
 
-  connect(Toolkit::ToolManager::instance().resourceProvider(), &Toolkit::ToolResourceProvider::geoViewChanged, this, [this]()
+  connect(ToolResourceProvider::instance(), &ToolResourceProvider::geoViewChanged, this, [this]()
   {
-    GeoView* geoView = Toolkit::ToolManager::instance().resourceProvider()->geoView();
+    GeoView* geoView = ToolResourceProvider::instance()->geoView();
     if (geoView)
       setView(geoView);
   });

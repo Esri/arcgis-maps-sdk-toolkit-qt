@@ -28,15 +28,14 @@ ToolManager& ToolManager::instance()
   return instance;
 }
 
-ToolManager::ToolManager():
-  m_resourceProvider(new ToolResourceProvider)
+ToolManager::ToolManager()
 {
 
 }
 
 ToolManager::~ToolManager()
 {
-  delete m_resourceProvider;
+
 }
 
 void ToolManager::addTool(AbstractTool* tool)
@@ -70,11 +69,6 @@ ToolManager::ToolsList::const_iterator ToolManager::begin() const
 ToolManager::ToolsList::const_iterator ToolManager::end() const
 {
   return m_tools.cend();
-}
-
-ToolResourceProvider* ToolManager::resourceProvider() const
-{
-  return m_resourceProvider;
 }
 
 } // Toolkit

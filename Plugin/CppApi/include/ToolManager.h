@@ -27,7 +27,6 @@ namespace Toolkit
 {
 
 class AbstractTool;
-class ToolResourceProvider;
 
 class TOOLKIT_EXPORT ToolManager {
 
@@ -48,13 +47,10 @@ public:
   ToolsList::const_iterator begin() const;
   ToolsList::const_iterator end() const;
 
-  ToolResourceProvider* resourceProvider() const;
-
 private:
   ToolManager();
 
   ToolsList m_tools;
-  ToolResourceProvider* m_resourceProvider;
 };
 
 } // Toolkit
