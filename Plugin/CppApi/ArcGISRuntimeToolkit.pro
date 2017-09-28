@@ -44,6 +44,7 @@ unix:!macx:!android:!ios: {
 }
 
 ios {
+  QMAKE_CXXFLAGS += -fembed-bitcode
   RESOURCES += $${PWD}/ArcGISRuntimeToolkit.qrc
   # the following file is needed to generate universal iOS libs
   # prior to Qt 5.8
