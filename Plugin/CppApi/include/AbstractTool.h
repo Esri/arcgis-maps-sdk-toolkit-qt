@@ -47,7 +47,7 @@ public:
 
 signals:
   void errorOccurred(const Error& error);
-  void propertyUpdated(const QString& propertyName, const QVariant& propertyValue);
+  void propertyChanged(const QString& propertyName, const QVariant& propertyValue);
 
 protected:
   bool m_active = false;
