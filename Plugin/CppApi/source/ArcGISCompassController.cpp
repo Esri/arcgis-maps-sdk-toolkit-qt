@@ -15,6 +15,7 @@
 #include "SceneQuickView.h"
 
 #include "ArcGISCompassController.h"
+#include "ToolResourceProvider.h"
 #include "ToolManager.h"
 
 using namespace Esri::ArcGISRuntime;
@@ -29,7 +30,14 @@ namespace Toolkit
 ArcGISCompassController::ArcGISCompassController(QObject *parent):
   AbstractTool(parent)
 {
-  ToolManager::instance()->addTool(this);
+  ToolManager::instance().addTool(this);
+
+  connect(ToolResourceProvider::instance(), &ToolResourceProvider::geoViewChanged, this, [this]()
+  {
+    GeoView* geoView = ToolResourceProvider::instance()->geoView();
+    if (geoView)
+      setView(geoView);
+  });
 }
 
 ArcGISCompassController::~ArcGISCompassController()
@@ -48,7 +56,7 @@ void ArcGISCompassController::setHeading(double rotation)
     // create a new camera with same pitch and roll but different heading
     Camera currentCamera = m_sceneView->currentViewpointCamera();
     Camera updatedCamera = currentCamera.rotateTo(rotation, currentCamera.pitch(), currentCamera.roll());
-    m_sceneView->setViewpointCamera(updatedCamera);
+    m_sceneView->setViewpointCamera(updatedCamera, 0.50);
   }
 }
 

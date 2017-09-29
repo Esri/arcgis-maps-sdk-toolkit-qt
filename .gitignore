@@ -9,6 +9,7 @@
 *-debug
 *-release
 *.autosave
+*.qmlc
 
 #################
 ## *nux

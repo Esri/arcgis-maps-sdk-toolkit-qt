@@ -36,6 +36,11 @@ bool AbstractTool::handleClick(const Point& pos)
   return false;
 }
 
+void AbstractTool::setProperties(const QVariantMap&)
+{
+
+}
+
 void AbstractTool::setActive(bool active)
 {
   m_active = active;

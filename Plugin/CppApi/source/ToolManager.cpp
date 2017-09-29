@@ -12,6 +12,7 @@
 
 #include "ToolManager.h"
 #include "AbstractTool.h"
+#include "ToolResourceProvider.h"
 
 namespace Esri
 {
@@ -20,14 +21,21 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
-std::shared_ptr<ToolManager> ToolManager::m_instance;
-
-std::shared_ptr<ToolManager> ToolManager::instance()
+ToolManager& ToolManager::instance()
 {
-  if (m_instance == nullptr)
-    m_instance = std::shared_ptr<ToolManager>(new ToolManager);
+  static ToolManager instance;
 
-  return m_instance;
+  return instance;
+}
+
+ToolManager::ToolManager()
+{
+
+}
+
+ToolManager::~ToolManager()
+{
+
 }
 
 void ToolManager::addTool(AbstractTool* tool)
@@ -43,14 +51,24 @@ AbstractTool* ToolManager::tool(const QString& toolName) const
   return m_tools[toolName];
 }
 
-ToolManager::ToolsList::iterator ToolManager::toolsBegin()
+ToolManager::ToolsList::iterator ToolManager::begin()
 {
   return m_tools.begin();
 }
 
-ToolManager::ToolsList::iterator ToolManager::toolsEnd()
+ToolManager::ToolsList::iterator ToolManager::end()
 {
   return m_tools.end();
+}
+
+ToolManager::ToolsList::const_iterator ToolManager::begin() const
+{
+  return m_tools.cbegin();
+}
+
+ToolManager::ToolsList::const_iterator ToolManager::end() const
+{
+  return m_tools.cend();
 }
 
 } // Toolkit

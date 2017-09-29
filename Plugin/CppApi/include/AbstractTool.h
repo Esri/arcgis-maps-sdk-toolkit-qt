@@ -17,12 +17,14 @@
 
 #include <QObject>
 #include <QString>
+#include <QVariantMap>
 
 namespace Esri
 {
 namespace ArcGISRuntime
 {
 
+class Error;
 class Point;
 
 namespace Toolkit
@@ -38,8 +40,14 @@ public:
   virtual QString toolName() const = 0;
   virtual bool handleClick(const Point& pos);
 
+  virtual void setProperties(const QVariantMap& properties);
+
   virtual void setActive(bool active);
   bool isActive() const;
+
+signals:
+  void errorOccurred(const Error& error);
+  void propertyChanged(const QString& propertyName, const QVariant& propertyValue);
 
 protected:
   bool m_active = false;
