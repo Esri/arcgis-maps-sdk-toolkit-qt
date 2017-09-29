@@ -30,7 +30,7 @@ using CoordinateType = CoordinateConversionOptions::CoordinateType;
 CoordinateConversionController::CoordinateConversionController(QObject* parent):
   AbstractTool(parent)
 {
-  ToolManager::instance()->addTool(this);
+  ToolManager::instance().addTool(this);
 
   connect(this, &CoordinateConversionController::optionsChanged, this,
   [this]()
