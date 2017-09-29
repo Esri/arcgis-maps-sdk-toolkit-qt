@@ -295,16 +295,6 @@ void CoordinateConversionController::setRunConversion(bool runConversion)
   emit runConversionChanged();
 }
 
-void CoordinateConversionController::clearResults()
-{
-  for (int i = 0; i < m_results->rowCount(); ++i)
-  {
-    m_results->data(m_results->index(i)).clear();
-  }
-
-  emit resultsChanged();
-}
-
 } // Toolkit
 } // ArcGISRuntime
 } // Esri

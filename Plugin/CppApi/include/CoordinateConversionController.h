@@ -100,7 +100,6 @@ public:
   void clearOptions();
 
   CoordinateConversionResults* results();
-  void clearResults();
 
   QString toolName() const override;
   bool handleClick(const Point& pos) override;
