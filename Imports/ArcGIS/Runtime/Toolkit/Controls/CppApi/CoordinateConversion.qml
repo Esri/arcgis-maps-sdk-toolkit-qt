@@ -5,6 +5,14 @@ import QtQuick.Controls.Material 2.2
 import Esri.ArcGISExtras 1.1
 import Esri.ArcGISRuntime.Toolkit.CppApi 100.2
 
+/*!
+    \qmltype CoordinateConversion
+    \ingroup ArcGISQtToolkit
+    \inqmlmodule Esri.ArcGISRuntime.Toolkit.Controls
+    \since Esri.ArcGISRutime 100.2
+    \brief A window to do coordinate conversion.
+*/
+
 Rectangle {
     id: coordinateConversionWindow
 
@@ -18,7 +26,7 @@ Rectangle {
     signal clearClicked();
 
     CoordinateConversionController {
-        id: controller
+        id: coordinateConvController
         objectName: "coordinateConversionController"
     }
 
@@ -27,8 +35,7 @@ Rectangle {
         anchors {
             top: parent.top
             bottom: bottomRect.top
-            right: parent.right
-            left: parent.left
+            horizontalCenter: parent.horizontalCenter
         }
 
         anchors.margins: 10 * scaleFactor
@@ -45,25 +52,28 @@ Rectangle {
                 ComboBox {
                     id: notationTypeCombo
                     width: buttonWidth
+                    anchors.verticalCenter: parent.verticalCenter
                     model: CoordinateConversionOptions.coordinateTypeNames
                     onCurrentIndexChanged: {
-                        controller.inputMode = CoordinateConversionOptions.stringToCoordinateType(currentText);
+                        coordinateConvController.inputMode = CoordinateConversionOptions.stringToCoordinateType(currentText);
                     }
                 }
 
                 TextField {
                     id: inputNotation
                     width: coordinateConversionWindow.width * 0.7
+                    color: "black"
+                    font.pixelSize: fontSize
                 }
 
                 Button {
-                    id: repeaterButton
+                    id: convertButton
                     width: 32 * scaleFactor
                     height: 32 * scaleFactor
 
                     background: Rectangle {
                         anchors.fill: this
-                        color: Material.primary
+                        color: Material.accent
                     }
 
                     Image {
@@ -71,21 +81,19 @@ Rectangle {
                         anchors.centerIn: parent
                         sourceSize.height: parent.width
                         height: sourceSize.height
-                        source: "qrc:/Resources/icons/xhdpi/ic_menu_previousslide_dark_d.png"
+                        source: "qrc:/Resources/icons/xhdpi/ic_menu_refresh_dark_d.png"
                         rotation: 180
                     }
 
                     onClicked: {
-//                        controller.copyToClipboard(notationBox.text);
-//                        notationTypeCombo.currentIndex = notationTypeCombo.model.indexOf(CoordinateConversionOptions.coordinateTypeToString(coordinateType));
+                        coordinateConvController.convertNotation(inputNotation.text);
                     }
                 }
-
             }
 
             Repeater {
                 id: repeater
-                model: controller.results
+                model: coordinateConvController.results
 
                 delegate: Row {
                     spacing: spacingValue
@@ -108,7 +116,6 @@ Rectangle {
                     }
 
                     Button {
-                        id: repeaterButton
                         width: 32 * scaleFactor
                         height: 32 * scaleFactor
 
@@ -126,7 +133,7 @@ Rectangle {
                         }
 
                         onClicked: {
-                            controller.copyToClipboard(notationBox.text);
+                            coordinateConvController.copyToClipboard(notationBox.text);
                             notationTypeCombo.currentIndex = notationTypeCombo.model.indexOf(CoordinateConversionOptions.coordinateTypeToString(coordinateType));
                         }
                     }
@@ -157,7 +164,39 @@ Rectangle {
             }
 
             onCheckedChanged: {
-                controller.runConversion = checked;
+                coordinateConvController.runConversion = checked;
+            }
+        }
+
+        Button {
+            id: useLocationFromMap
+            width: 32 * scaleFactor
+            height: 32 * scaleFactor
+            checkable: true
+            checked: false
+
+            anchors {
+                right: clear.left
+                bottom: parent.bottom
+                top: parent.top
+                rightMargin: 10 * scaleFactor
+            }
+
+            background: Rectangle {
+                anchors.fill: this
+                color: Material.primary
+            }
+
+            Image {
+                fillMode: Image.PreserveAspectFit
+                anchors.centerIn: parent
+                sourceSize.height: parent.width
+                height: sourceSize.height
+                source: useLocationFromMap.checked ? "qrc:/Resources/icons/xhdpi/directionsto_dark.png" : "qrc:/Resources/icons/xhdpi/directionsto_light.png"
+            }
+
+            onCheckedChanged: {
+                coordinateConvController.runConversion = checked;
             }
         }
 
@@ -186,7 +225,7 @@ Rectangle {
             }
 
             onClicked: {
-                clearClicked();
+//                coordinateConvController.clearResults();
             }
         }
     }
