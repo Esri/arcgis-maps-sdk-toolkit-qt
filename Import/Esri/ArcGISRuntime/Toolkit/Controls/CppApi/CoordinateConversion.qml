@@ -21,7 +21,6 @@ Rectangle {
     property int spacingValue: 5 * scaleFactor
     property int imageWidth: 36 * scaleFactor
     property int fontSize: 12 * scaleFactor
-    property double labelWidth: 0.0
 
     CoordinateConversionController {
         id: coordinateConvController
@@ -203,7 +202,7 @@ Rectangle {
 
             anchors {
                 right: parent.right
-                rightMargin: coordinateConversionWindow.width - ((coordinateConversionWindow.width * 0.7) + buttonWidth + (spacingValue * 2) + (32 * scaleFactor) + (10 * scaleFactor))
+                rightMargin: (coordinateConversionWindow.width - (coordinateConversionWindow.width * 0.7 + buttonWidth + spacingValue * 4 + clear.width)) * scaleFactor
                 verticalCenter: parent.verticalCenter
             }
 
