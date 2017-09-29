@@ -7,7 +7,7 @@
         <file>images/directionsto_light.png</file>
         <file>images/trash.png</file>
         <file>images/editcopy.png</file>
-        <file>images/.png</file>
+        <file>images/convert.png</file>
         <file>qmldir</file>
     </qresource>
 </RCC>
