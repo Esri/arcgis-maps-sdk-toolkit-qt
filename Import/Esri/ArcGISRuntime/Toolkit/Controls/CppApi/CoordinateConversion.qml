@@ -23,8 +23,6 @@ Rectangle {
     property int fontSize: 12 * scaleFactor
     property double labelWidth: 0.0
 
-    signal clearClicked();
-
     CoordinateConversionController {
         id: coordinateConvController
         objectName: "coordinateConversionController"
@@ -79,7 +77,7 @@ Rectangle {
                             anchors.centerIn: parent
                             sourceSize.width: 26 * scaleFactor
                             height: width
-                            source: "qrc:/Resources/icons/xhdpi/ic_menu_refresh_dark_d.png"
+                            source: "images/convert.png"
                         }
                     }
 
@@ -126,7 +124,7 @@ Rectangle {
                                 anchors.centerIn: parent
                                 sourceSize.width: 26 * scaleFactor
                                 height: width
-                                source: "qrc:/Resources/icons/xhdpi/editcopy32_d_gray.png"
+                                source: "images/editcopy.png"
                             }
                         }
 
@@ -190,7 +188,7 @@ Rectangle {
                 anchors.centerIn: parent
                 sourceSize.height: parent.width
                 height: sourceSize.height
-                source: useLocationFromMap.checked ? "qrc:/Resources/icons/xhdpi/directionsto_dark.png" : "qrc:/Resources/icons/xhdpi/directionsto_light.png"
+                source: useLocationFromMap.checked ? "images/directionsto_dark.png" : "images/directionsto_light.png"
             }
 
             onCheckedChanged: {
@@ -219,11 +217,11 @@ Rectangle {
                 anchors.centerIn: parent
                 sourceSize.height: parent.width
                 height: sourceSize.height
-                source: "qrc:/Resources/icons/xhdpi/ic_menu_trash_dark_d.png"
+                source: "images/trash.png"
             }
 
             onClicked: {
-                //                coordinateConvController.clearResults();
+                coordinateConvController.clearResults();
             }
         }
     }
