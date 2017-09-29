@@ -61,6 +61,8 @@ public:
 
   void setResults(QList<Result>&& results);
 
+  void clearResults();
+
 signals:
   void resultsChanged();
 
