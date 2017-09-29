@@ -65,6 +65,9 @@ public:
   // copy contents to the clipboard
   Q_INVOKABLE void copyToClipboard(const QString& text);
 
+  // clear the current set of results
+  Q_INVOKABLE void clearResults();
+
 signals:
   void optionsChanged();
   void resultsChanged();

@@ -53,6 +53,21 @@ void CoordinateConversionResults::setResults(QList<Result>&& results)
 /*!
   \internal
  */
+void CoordinateConversionResults::clearResults()
+{
+  if (m_results.isEmpty())
+    return;
+
+  for (auto& result : m_results)
+    result.m_notation.clear();
+
+  emit dataChanged(index(0), index(m_results.size()-1), QVector<int>() << CoordinateConversionResultsNotationRole);
+  emit resultsChanged();
+}
+
+/*!
+  \internal
+ */
 void CoordinateConversionResults::setupRoles()
 {
   m_roles[CoordinateConversionResultsNameRole] = "name";

@@ -284,6 +284,12 @@ void CoordinateConversionController::copyToClipboard(const QString& text)
   QApplication::clipboard()->setText(text);
 }
 
+void CoordinateConversionController::clearResults()
+{
+  if (m_results)
+    m_results->clearResults();
+}
+
 bool CoordinateConversionController::runConversion() const
 {
   return m_runConversion;
