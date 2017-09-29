@@ -66,23 +66,21 @@ Rectangle {
                     font.pixelSize: fontSize
                 }
 
-                Button {
+                RoundButton {
                     id: convertButton
                     width: 32 * scaleFactor
                     height: 32 * scaleFactor
 
                     background: Rectangle {
-                        anchors.fill: this
                         color: Material.accent
-                    }
+                        radius: convertButton.radius
 
-                    Image {
-                        fillMode: Image.PreserveAspectFit
-                        anchors.centerIn: parent
-                        sourceSize.height: parent.width
-                        height: sourceSize.height
-                        source: "qrc:/Resources/icons/xhdpi/ic_menu_refresh_dark_d.png"
-                        rotation: 180
+                        Image {
+                            anchors.centerIn: parent
+                            sourceSize.width: 26 * scaleFactor
+                            height: width
+                            source: "qrc:/Resources/icons/xhdpi/ic_menu_refresh_dark_d.png"
+                        }
                     }
 
                     onClicked: {
@@ -115,21 +113,21 @@ Rectangle {
                         font.pixelSize: fontSize
                     }
 
-                    Button {
+                    RoundButton {
+                        id: copyButton
                         width: 32 * scaleFactor
                         height: 32 * scaleFactor
 
                         background: Rectangle {
-                            anchors.fill: this
                             color: Material.primary
-                        }
+                            radius: copyButton.radius
 
-                        Image {
-                            fillMode: Image.PreserveAspectFit
-                            anchors.centerIn: parent
-                            sourceSize.height: parent.width
-                            height: sourceSize.height
-                            source: "qrc:/Resources/icons/xhdpi/editcopy32_d_gray.png"
+                            Image {
+                                anchors.centerIn: parent
+                                sourceSize.width: 26 * scaleFactor
+                                height: width
+                                source: "qrc:/Resources/icons/xhdpi/editcopy32_d_gray.png"
+                            }
                         }
 
                         onClicked: {
@@ -225,7 +223,7 @@ Rectangle {
             }
 
             onClicked: {
-//                coordinateConvController.clearResults();
+                //                coordinateConvController.clearResults();
             }
         }
     }
