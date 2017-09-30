@@ -14,6 +14,8 @@
 #   limitations under the License.
 ################################################################################
 
+CONFIG(ToolkitBuildUsePrefix): ToolkitPrefix = _dev
+
 macx: PLATFORM = "macOS"
 unix:!macx:!android:!ios: PLATFORM = "linux"
 win32: PLATFORM = "windows"
@@ -39,9 +41,7 @@ win32: {
   }
 }
 
-# make sure this path comes first so we pick up the local build rather
-# than any existing libraries in the setup
-LIBS = -L$$PWD/output/$$PLATFORM_OUTPUT -lArcGISRuntimeToolkitCppApi $$LIBS
+LIBS += -L$$PWD/output/$$PLATFORM_OUTPUT -lArcGISRuntimeToolkitCppApi$${ToolkitPrefix}
 
 # unset the previous toolkit path
 DEFINES -= ARCGIS_TOOLKIT_IMPORT_PATH=\"$$ARCGIS_TOOLKIT_IMPORT_PATH\"
