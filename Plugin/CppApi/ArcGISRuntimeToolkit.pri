@@ -14,6 +14,8 @@
 #   limitations under the License.
 ################################################################################
 
+CONFIG(ToolkitBuildUsePrefix): ToolkitPrefix = _dev
+
 macx: PLATFORM = "macOS"
 unix:!macx:!android:!ios: PLATFORM = "linux"
 win32: PLATFORM = "windows"
@@ -39,4 +41,33 @@ win32: {
   }
 }
 
-LIBS += -L$$PWD/output/$$PLATFORM_OUTPUT -lArcGISRuntimeToolkitCppApi
+LIBS += -L$$PWD/output/$$PLATFORM_OUTPUT -lArcGISRuntimeToolkitCppApi$${ToolkitPrefix}
+
+# unset the previous toolkit path
+DEFINES -= ARCGIS_TOOLKIT_IMPORT_PATH=\"$$ARCGIS_TOOLKIT_IMPORT_PATH\"
+
+# Set ArcGIS Runtime Toolkit Path for Qml UI files
+ARCGIS_TOOLKIT_IMPORT_PATH = $$absolute_path($$PWD/../../Import)
+DEFINES += ARCGIS_TOOLKIT_IMPORT_PATH=\"$$ARCGIS_TOOLKIT_IMPORT_PATH\"
+
+# Add plugin paths to QML_IMPORT_PATH
+QML_IMPORT_PATH += $${ARCGIS_TOOLKIT_IMPORT_PATH}
+
+# Add plugin paths to QMLPATHS
+QMLPATHS += $${ARCGIS_TOOLKIT_IMPORT_PATH}
+
+# DEFINES
+unix:!macx:!ios {
+  contains(QMAKE_HOST.os, Linux):{
+    # on some linux platforms the string 'linux' is replaced with 1
+    # temporarily replace it with ARCGISRUNTIME_SDK_LINUX_REPLACEMENT
+    LINUX_PLATFORM_REPLACEMENT = ARCGISRUNTIME_SDK_LINUX_REPLACEMENT
+    ARCGIS_TOOLKIT_IMPORT_PATH = $$replace(ARCGIS_TOOLKIT_IMPORT_PATH, linux, $$LINUX_PLATFORM_REPLACEMENT)
+    DEFINES += LINUX_PLATFORM_REPLACEMENT=$$LINUX_PLATFORM_REPLACEMENT
+  }
+}
+
+android {
+  ANDROID_EXTRA_LIBS += \
+  $$PWD/output/$$PLATFORM_OUTPUT/libArcGISRuntimeToolkitCppApi$${ToolkitPrefix}.so
+}
