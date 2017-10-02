@@ -63,7 +63,7 @@ macx: {
   QMAKE_POST_LINK =
 }
 
-CONFIG(release) {
+CONFIG(release, debug|release) {
   BUILDTYPE = release
 }
 else {
