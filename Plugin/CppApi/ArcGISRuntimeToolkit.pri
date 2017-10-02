@@ -58,11 +58,16 @@ QMLPATHS += $${ARCGIS_TOOLKIT_IMPORT_PATH}
 
 # DEFINES
 unix:!macx:!ios {
-    contains(QMAKE_HOST.os, Linux):{
-      # on some linux platforms the string 'linux' is replaced with 1
-      # temporarily replace it with ARCGISRUNTIME_SDK_LINUX_REPLACEMENT
-      LINUX_PLATFORM_REPLACEMENT = ARCGISRUNTIME_SDK_LINUX_REPLACEMENT
-      ARCGIS_TOOLKIT_IMPORT_PATH = $$replace(ARCGIS_TOOLKIT_IMPORT_PATH, linux, $$LINUX_PLATFORM_REPLACEMENT)
-      DEFINES += LINUX_PLATFORM_REPLACEMENT=$$LINUX_PLATFORM_REPLACEMENT
-    }
+  contains(QMAKE_HOST.os, Linux):{
+    # on some linux platforms the string 'linux' is replaced with 1
+    # temporarily replace it with ARCGISRUNTIME_SDK_LINUX_REPLACEMENT
+    LINUX_PLATFORM_REPLACEMENT = ARCGISRUNTIME_SDK_LINUX_REPLACEMENT
+    ARCGIS_TOOLKIT_IMPORT_PATH = $$replace(ARCGIS_TOOLKIT_IMPORT_PATH, linux, $$LINUX_PLATFORM_REPLACEMENT)
+    DEFINES += LINUX_PLATFORM_REPLACEMENT=$$LINUX_PLATFORM_REPLACEMENT
+  }
+}
+
+android {
+  ANDROID_EXTRA_LIBS += \
+  $$PWD/output/$$PLATFORM_OUTPUT/libArcGISRuntimeToolkitCppApi$${ToolkitPrefix}.so
 }
