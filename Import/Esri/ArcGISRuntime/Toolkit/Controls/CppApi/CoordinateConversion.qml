@@ -50,7 +50,7 @@ Rectangle {
                     width: buttonWidth
                     anchors.verticalCenter: parent.verticalCenter
                     model: CoordinateConversionOptions.coordinateTypeNames
-                    onCurrentIndexChanged: {
+                    onCurrentTextChanged: {
                         coordinateConvController.inputMode = CoordinateConversionOptions.stringToCoordinateType(currentText);
                     }
                 }
