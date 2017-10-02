@@ -65,8 +65,7 @@ macx: {
 
 CONFIG(release, debug|release) {
   BUILDTYPE = release
-}
-else {
+} else {
   BUILDTYPE = debug
 }
 
