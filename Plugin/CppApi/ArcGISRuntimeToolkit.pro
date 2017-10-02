@@ -14,7 +14,11 @@
 #   limitations under the License.
 ################################################################################
 
-TARGET = $$qtLibraryTarget(ArcGISRuntimeToolkitCppApi)
+# Uncomment this line to add a prefix to the toolkit library
+#CONFIG += ToolkitBuildUsePrefix
+CONFIG(ToolkitBuildUsePrefix): ToolkitPrefix = _dev
+
+TARGET = $$qtLibraryTarget(ArcGISRuntimeToolkitCppApi$${ToolkitPrefix})
 TEMPLATE = lib
 
 QT += core gui opengl network positioning sensors qml quick
