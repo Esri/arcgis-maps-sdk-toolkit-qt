@@ -23,12 +23,12 @@ namespace Toolkit
 /*!
   \class Esri::ArcGISRuntime::Toolkit::CoordinateConversionResults
   \since Esri::ArcGISRuntime 100.2
-  \brief This class stores results for the CoordinateConversionController.
+  \brief Results for the CoordinateConversionController.
 
   This class is primarily used by the CoordinateConversionController. You should
   not need to interact with this class directly.
 
-  The following roles are available
+  The following roles are available:
   \table
     \header
         \li Role
