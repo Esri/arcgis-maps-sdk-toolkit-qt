@@ -25,11 +25,13 @@
 /*!
   \class Esri::ArcGISRuntime::Toolkit::CoordinateConversionController
   \since Esri::ArcGISRuntime 100.2
-  \brief A tool the performs coordinate conversions to and from notations (strings)
+  \brief A tool that performs coordinate conversions to and from notations (strings)
   and points.
 
   This tool abstracts the ArcGIS Runtime SDK class \l CoordinateFormatter and provides a UI
   to allow for combining many sets of options that can all be converted in a single operation.
+
+  \sa CoordinateConversionOptions
  */
 
 namespace Esri

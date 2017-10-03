@@ -27,6 +27,30 @@ namespace Toolkit
 
   This class is primarily used by the CoordinateConversionController. You should
   not need to interact with this class directly.
+
+  The following roles are available
+  \table
+    \header
+        \li Role
+        \li Type
+        \li Description
+        \li AttributeRoles
+    \row
+        \li name
+        \li QString
+        \li The name of the option.
+        \li \l {Esri::ArcGISRuntime::Toolkit::CoordinateConversionResults::CoordinateConversionResultsNameRole}{CoordinateConversionResultsNameRole}
+    \row
+        \li notation
+        \li QString
+        \li The resulting notation from any conversion operations.
+        \li \l {Esri::ArcGISRuntime::Toolkit::CoordinateConversionResults::CoordinateConversionResultsNotationRole}{CoordinateConversionResultsNotationRole}
+    \row
+        \li type
+        \li int (as CoordinateConversionOptions::CoordinateType)
+        \li The format used for the conversion.
+        \li \l {Esri::ArcGISRuntime::Toolkit::CoordinateConversionResults::CoordinateConversionResultsCoordinateTypeRole}{CoordinateConversionResultsCoordinateTypeRole}
+  \endtable
  */
 
 /*!
