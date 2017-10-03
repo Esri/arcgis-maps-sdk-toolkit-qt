@@ -13,6 +13,9 @@
 #include "Basemap.h"
 #include "Map.h"
 #include "Scene.h"
+#include "GeoView.h"
+#include "MapQuickView.h"
+#include "SceneQuickView.h"
 
 #include "ToolResourceProvider.h"
 
@@ -83,6 +86,45 @@ void ToolResourceProvider::setGeoView(GeoView* newGeoView)
 
   m_geoView = newGeoView;
   emit geoViewChanged();
+
+  if (!m_geoView->spatialReference().isEmpty())
+    emit spatialReferenceChanged();
+
+  if (m_srChangedConn)
+    disconnect(m_srChangedConn);
+
+  if (m_pointClickedConn)
+    disconnect(m_pointClickedConn);
+
+  if (dynamic_cast<SceneQuickView*>(m_geoView))
+  {
+    auto sceneView = static_cast<SceneQuickView*>(m_geoView);
+    m_srChangedConn = connect(sceneView, &SceneQuickView::spatialReferenceChanged,
+                              this, &ToolResourceProvider::spatialReferenceChanged);
+
+    m_pointClickedConn = connect(sceneView, &SceneQuickView::mouseClicked, this,
+    [this, sceneView](QMouseEvent& event)
+    {
+      emit mouseClicked(sceneView->screenToBaseSurface(event.x(), event.y()));
+    });
+  }
+  else if (dynamic_cast<MapQuickView*>(m_geoView))
+  {
+    auto mapView = static_cast<MapQuickView*>(m_geoView);
+    m_srChangedConn = connect(mapView, &MapQuickView::spatialReferenceChanged,
+                              this, &ToolResourceProvider::spatialReferenceChanged);
+
+    m_pointClickedConn = connect(mapView, &MapQuickView::mouseClicked, this,
+    [this, mapView](QMouseEvent& event)
+    {
+      emit mouseClicked(mapView->screenToLocation(event.x(), event.y()));
+    });
+  }
+}
+
+SpatialReference ToolResourceProvider::spatialReference() const
+{
+  return m_geoView ? m_geoView->spatialReference() : SpatialReference();
 }
 
 LayerListModel* ToolResourceProvider::operationalLayers() const

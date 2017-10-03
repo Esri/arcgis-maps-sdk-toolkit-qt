@@ -14,7 +14,7 @@
 #include "CoordinateConversionResults.h"
 #include "CoordinateFormatter.h"
 #include <QClipboard>
-#include <QApplication>
+#include <QGuiApplication>
 
 #include "ToolManager.h"
 #include "ToolResourceProvider.h"
@@ -50,57 +50,20 @@ CoordinateConversionController::CoordinateConversionController(QObject* parent):
 {
   ToolManager::instance().addTool(this);
 
-  const auto setupGeoView = [this](GeoView* geoView) -> bool
+  auto geoView = ToolResourceProvider::instance()->geoView();
+  if (geoView)
+    setSpatialReference(geoView->spatialReference());
+
+  connect(ToolResourceProvider::instance(), &ToolResourceProvider::spatialReferenceChanged, this, [this]()
   {
-    if (!geoView)
-      return false;
+    setSpatialReference(ToolResourceProvider::instance()->spatialReference());
+  });
 
-    if (dynamic_cast<Esri::ArcGISRuntime::SceneQuickView*>(geoView))
-    {
-      auto sceneView = static_cast<Esri::ArcGISRuntime::SceneQuickView*>(geoView);
-
-      setSpatialReference(sceneView->spatialReference());
-      connect(sceneView, &Esri::ArcGISRuntime::SceneQuickView::spatialReferenceChanged, this,
-      [sceneView, this]()
-      {
-        setSpatialReference(sceneView->spatialReference());
-      });
-
-      connect(sceneView, &Esri::ArcGISRuntime::SceneQuickView::mouseClicked, this,
-      [sceneView, this](QMouseEvent& mouseEvent)
-      {
-        setPointToConvert(sceneView->screenToBaseSurface(mouseEvent.x(), mouseEvent.y()));
-      });
-    }
-    else if (dynamic_cast<Esri::ArcGISRuntime::MapQuickView*>(geoView))
-    {
-      auto mapView = static_cast<Esri::ArcGISRuntime::MapQuickView*>(geoView);
-
-      setSpatialReference(mapView->spatialReference());
-      connect(mapView, &Esri::ArcGISRuntime::MapQuickView::spatialReferenceChanged, this,
-      [mapView, this]()
-      {
-        setSpatialReference(mapView->spatialReference());
-      });
-
-      connect(mapView, &Esri::ArcGISRuntime::MapQuickView::mouseClicked, this,
-      [mapView, this](QMouseEvent& mouseEvent)
-      {
-        setPointToConvert(mapView->screenToLocation(mouseEvent.x(), mouseEvent.y()));
-      });
-    }
-
-    return true;
-  };
-
-  // try to setup the connections now if the geoview is ready, otherwise wait for the view
-  if (!setupGeoView(ToolResourceProvider::instance()->geoView()))
+  connect(ToolResourceProvider::instance(), &ToolResourceProvider::mouseClicked, this,
+  [this](const Point& point)
   {
-    connect(ToolResourceProvider::instance(), &ToolResourceProvider::geoViewChanged, this, [this, setupGeoView]()
-    {
-      setupGeoView(ToolResourceProvider::instance()->geoView());
-    });
-  }
+    setPointToConvert(point);
+  });
 
   connect(this, &CoordinateConversionController::optionsChanged, this,
   [this]()
@@ -458,7 +421,7 @@ QString CoordinateConversionController::toolName() const
  */
 void CoordinateConversionController::copyToClipboard(const QString& text)
 {
-  auto clipboard = QApplication::clipboard();
+  auto clipboard = QGuiApplication::clipboard();
   if (clipboard)
     clipboard->setText(text);
 }
