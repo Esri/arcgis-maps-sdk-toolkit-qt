@@ -16,6 +16,7 @@
 #include <QObject>
 
 #include "ToolkitCommon.h"
+#include "Point.h"
 
 namespace Esri
 {
@@ -27,6 +28,7 @@ class GeoView;
 class Map;
 class LayerListModel;
 class Scene;
+class SpatialReference;
 
 namespace Toolkit
 {
@@ -50,6 +52,8 @@ public:
   GeoView* geoView() const;
   void setGeoView(GeoView* newGeoView);
 
+  SpatialReference spatialReference() const;
+
   LayerListModel* operationalLayers() const;
 
   void setBasemap(Basemap* newBasemap);
@@ -60,13 +64,20 @@ signals:
   void sceneChanged();
   void geoViewChanged();
   void mapChanged();
+  void spatialReferenceChanged();
+  void mouseClicked(const Point& point);
 
 private:
   explicit ToolResourceProvider(QObject* parent = nullptr);
 
+  void setupGeoViewConnections();
+
   GeoView* m_geoView = nullptr;
   Map* m_map = nullptr;
   Scene* m_scene = nullptr;
+
+  QMetaObject::Connection m_srChangedConn;
+  QMetaObject::Connection m_pointClickedConn;
 };
 
 } // Toolkit

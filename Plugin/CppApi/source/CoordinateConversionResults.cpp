@@ -1,4 +1,4 @@
-// Copyright 2016 ESRI
+// Copyright 2017 ESRI
 //
 // All rights reserved under the copyright laws of the United States
 // and applicable international laws, treaties, and conventions.
@@ -20,16 +20,58 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
+/*!
+  \class Esri::ArcGISRuntime::Toolkit::CoordinateConversionResults
+  \since Esri::ArcGISRuntime 100.2
+  \brief Results for the CoordinateConversionController.
+
+  This class is primarily used by the CoordinateConversionController. You should
+  not need to interact with this class directly.
+
+  The following roles are available:
+  \table
+    \header
+        \li Role
+        \li Type
+        \li Description
+        \li AttributeRoles
+    \row
+        \li name
+        \li QString
+        \li The name of the option.
+        \li \l {Esri::ArcGISRuntime::Toolkit::CoordinateConversionResults::CoordinateConversionResultsNameRole}{CoordinateConversionResultsNameRole}
+    \row
+        \li notation
+        \li QString
+        \li The resulting notation from any conversion operations.
+        \li \l {Esri::ArcGISRuntime::Toolkit::CoordinateConversionResults::CoordinateConversionResultsNotationRole}{CoordinateConversionResultsNotationRole}
+    \row
+        \li type
+        \li int (as CoordinateConversionOptions::CoordinateType)
+        \li The format used for the conversion.
+        \li \l {Esri::ArcGISRuntime::Toolkit::CoordinateConversionResults::CoordinateConversionResultsCoordinateTypeRole}{CoordinateConversionResultsCoordinateTypeRole}
+  \endtable
+ */
+
+/*!
+  \internal
+ */
 CoordinateConversionResults::CoordinateConversionResults(QObject* parent) :
   QAbstractListModel(parent)
 {
   setupRoles();
 }
 
+/*!
+  \internal
+ */
 CoordinateConversionResults::~CoordinateConversionResults()
 {
 }
 
+/*!
+  \internal
+ */
 void CoordinateConversionResults::setResults(QList<Result>&& results)
 {
   // clear the old results
@@ -75,11 +117,17 @@ void CoordinateConversionResults::setupRoles()
   m_roles[CoordinateConversionResultsCoordinateTypeRole] = "coordinateType";
 }
 
+/*!
+  \internal
+ */
 QHash<int, QByteArray> CoordinateConversionResults::roleNames() const
 {
   return m_roles;
 }
 
+/*!
+  \internal
+ */
 Qt::ItemFlags CoordinateConversionResults::flags(const QModelIndex& index) const
 {
   if (!index.isValid())
@@ -88,6 +136,9 @@ Qt::ItemFlags CoordinateConversionResults::flags(const QModelIndex& index) const
   return QAbstractListModel::flags(index);
 }
 
+/*!
+  \internal
+ */
 int CoordinateConversionResults::rowCount(const QModelIndex& parent) const
 {
   if (parent.isValid())
@@ -96,6 +147,9 @@ int CoordinateConversionResults::rowCount(const QModelIndex& parent) const
   return m_results.size();
 }
 
+/*!
+  \internal
+ */
 QVariant CoordinateConversionResults::data(const QModelIndex& index, int role) const
 {
   const int row = index.row();
@@ -118,6 +172,14 @@ QVariant CoordinateConversionResults::data(const QModelIndex& index, int role) c
   }
 
   return QVariant();
+}
+
+/*!
+  \internal
+ */
+Result::Result(const QString& name, const QString& notation, int type) :
+  m_name(name), m_notation(notation), m_type(type)
+{
 }
 
 } // Toolkit

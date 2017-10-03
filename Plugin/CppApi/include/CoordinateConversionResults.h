@@ -1,4 +1,4 @@
-// Copyright 2016 ESRI
+// Copyright 2017 ESRI
 //
 // All rights reserved under the copyright laws of the United States
 // and applicable international laws, treaties, and conventions.
@@ -25,16 +25,17 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
-struct TOOLKIT_EXPORT Result
+/*!
+  \internal
+*/
+class Result
 {
-  Result(const QString& name, const QString& notation, int type) :
-    m_name(name), m_notation(notation), m_type(type)
-  {
-  }
-
-  QString m_name;
-  QString m_notation;
-  int m_type; // actually CoordinateConversionOptions::CoordinateType
+public:
+ Result(const QString& name, const QString& notation, int type);
+ ~Result() = default;
+ QString m_name;
+ QString m_notation;
+ int m_type; // CoordinateConversionOptions::CoordinateType as int
 };
 
 class TOOLKIT_EXPORT CoordinateConversionResults : public QAbstractListModel
@@ -50,18 +51,14 @@ public:
   };
 
 public:
+  explicit CoordinateConversionResults(QObject* parent = nullptr);
+  ~CoordinateConversionResults();
+
   Qt::ItemFlags flags(const QModelIndex& index) const override;
 
   int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 
   QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
-
-  explicit CoordinateConversionResults(QObject* parent = nullptr);
-  ~CoordinateConversionResults();
-
-  void setResults(QList<Result>&& results);
-
-  void clearResults();
 
 signals:
   void resultsChanged();
@@ -70,7 +67,12 @@ protected:
   QHash<int, QByteArray> roleNames() const override;
 
 private:
+  friend class CoordinateConversionController;
+
+  void setResults(QList<Result>&& results);
+  void clearResults();
   void setupRoles();
+
   QHash<int, QByteArray> m_roles;
   QList<Result> m_results;
 };

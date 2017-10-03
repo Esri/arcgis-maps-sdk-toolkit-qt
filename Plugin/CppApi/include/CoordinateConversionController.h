@@ -1,4 +1,4 @@
-// Copyright 2016 ESRI
+// Copyright 2017 ESRI
 //
 // All rights reserved under the copyright laws of the United States
 // and applicable international laws, treaties, and conventions.
@@ -105,7 +105,6 @@ public:
   CoordinateConversionResults* results();
 
   QString toolName() const override;
-  bool handleClick(const Point& pos) override;
 
 private:
   QQmlListProperty<CoordinateConversionOptions> options();
