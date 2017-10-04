@@ -14,6 +14,8 @@
 #include "Map.h"
 #include "Scene.h"
 #include "GeoView.h"
+#include "MapView.h"
+#include "SceneView.h"
 
 #include "ToolResourceProvider.h"
 
@@ -119,6 +121,23 @@ void ToolResourceProvider::setBasemap(Basemap* newBasemap)
     newBasemap->setParent(m_scene);
     m_scene->setBasemap(newBasemap);
   }
+}
+
+void ToolResourceProvider::onMouseClicked(QMouseEvent& mouseEvent)
+{
+  emit mouseClicked(mouseEvent);
+
+  if (!m_geoView)
+    return;
+
+  if (m_scene)
+    emit mouseClickedPoint(static_cast<SceneView*>(m_geoView)->screenToBaseSurface(mouseEvent.x(), mouseEvent.y()));
+  else if (m_map)
+    emit mouseClickedPoint(static_cast<MapView*>(m_geoView)->screenToLocation(mouseEvent.x(), mouseEvent.y()));
+  else if (dynamic_cast<SceneView*>(m_geoView))
+    emit mouseClickedPoint(static_cast<SceneView*>(m_geoView)->screenToBaseSurface(mouseEvent.x(), mouseEvent.y()));
+  else if (dynamic_cast<MapView*>(m_geoView))
+    emit mouseClickedPoint(static_cast<MapView*>(m_geoView)->screenToLocation(mouseEvent.x(), mouseEvent.y()));
 }
 
 void ToolResourceProvider::clear()

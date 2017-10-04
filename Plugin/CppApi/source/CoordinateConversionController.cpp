@@ -59,7 +59,7 @@ CoordinateConversionController::CoordinateConversionController(QObject* parent):
     setSpatialReference(ToolResourceProvider::instance()->spatialReference());
   });
 
-  connect(ToolResourceProvider::instance(), &ToolResourceProvider::mouseClicked, this,
+  connect(ToolResourceProvider::instance(), &ToolResourceProvider::mouseClickedPoint, this,
   [this](const Point& point)
   {
     setPointToConvert(point);

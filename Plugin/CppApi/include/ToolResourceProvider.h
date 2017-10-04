@@ -17,6 +17,7 @@
 
 #include "ToolkitCommon.h"
 #include "Point.h"
+#include <QMouseEvent>
 
 namespace Esri
 {
@@ -60,12 +61,16 @@ public:
 
   void clear();
 
+public slots:
+  void onMouseClicked(QMouseEvent& mouseEvent);
+
 signals:
   void sceneChanged();
   void geoViewChanged();
   void mapChanged();
   void spatialReferenceChanged();
-  void mouseClicked(const Point& point);
+  void mouseClicked(QMouseEvent& mouseEvent);
+  void mouseClickedPoint(const Point& point);
 
 private:
   explicit ToolResourceProvider(QObject* parent = nullptr);
