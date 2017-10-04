@@ -1,7 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.2
+import QtQuick.Window 2.2
 import QtQuick.Controls.Material 2.2
-import Esri.ArcGISExtras 1.1
 import Esri.ArcGISRuntime.Toolkit.CppApi 100.2
 
 /*!
@@ -15,7 +15,7 @@ import Esri.ArcGISRuntime.Toolkit.CppApi 100.2
 Rectangle {
     id: coordinateConversionWindow
 
-    property real scaleFactor: System.displayScaleFactor
+    property real scaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
     property int buttonWidth: 100 * scaleFactor
     property int spacingValue: 5 * scaleFactor
     property int imageWidth: 36 * scaleFactor
