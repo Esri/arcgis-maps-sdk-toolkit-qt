@@ -14,8 +14,8 @@
 #include "Map.h"
 #include "Scene.h"
 #include "GeoView.h"
-#include "MapQuickView.h"
-#include "SceneQuickView.h"
+#include "MapView.h"
+#include "SceneView.h"
 
 #include "ToolResourceProvider.h"
 
@@ -89,8 +89,6 @@ void ToolResourceProvider::setGeoView(GeoView* newGeoView)
 
   if (!m_geoView->spatialReference().isEmpty())
     emit spatialReferenceChanged();
-
-  setupGeoViewConnections();
 }
 
 SpatialReference ToolResourceProvider::spatialReference() const
@@ -125,38 +123,21 @@ void ToolResourceProvider::setBasemap(Basemap* newBasemap)
   }
 }
 
-void ToolResourceProvider::setupGeoViewConnections()
+void ToolResourceProvider::onMouseClicked(QMouseEvent& mouseEvent)
 {
-  if (m_srChangedConn)
-    disconnect(m_srChangedConn);
+  emit mouseClicked(mouseEvent);
 
-  if (m_pointClickedConn)
-    disconnect(m_pointClickedConn);
+  if (!m_geoView)
+    return;
 
-  if (dynamic_cast<SceneQuickView*>(m_geoView))
-  {
-    auto sceneView = static_cast<SceneQuickView*>(m_geoView);
-    m_srChangedConn = connect(sceneView, &SceneQuickView::spatialReferenceChanged,
-                              this, &ToolResourceProvider::spatialReferenceChanged);
-
-    m_pointClickedConn = connect(sceneView, &SceneQuickView::mouseClicked, this,
-    [this, sceneView](QMouseEvent& event)
-    {
-      emit mouseClicked(sceneView->screenToBaseSurface(event.x(), event.y()));
-    });
-  }
-  else if (dynamic_cast<MapQuickView*>(m_geoView))
-  {
-    auto mapView = static_cast<MapQuickView*>(m_geoView);
-    m_srChangedConn = connect(mapView, &MapQuickView::spatialReferenceChanged,
-                              this, &ToolResourceProvider::spatialReferenceChanged);
-
-    m_pointClickedConn = connect(mapView, &MapQuickView::mouseClicked, this,
-    [this, mapView](QMouseEvent& event)
-    {
-      emit mouseClicked(mapView->screenToLocation(event.x(), event.y()));
-    });
-  }
+  if (m_scene)
+    emit mouseClickedPoint(static_cast<SceneView*>(m_geoView)->screenToBaseSurface(mouseEvent.x(), mouseEvent.y()));
+  else if (m_map)
+    emit mouseClickedPoint(static_cast<MapView*>(m_geoView)->screenToLocation(mouseEvent.x(), mouseEvent.y()));
+  else if (dynamic_cast<SceneView*>(m_geoView))
+    emit mouseClickedPoint(static_cast<SceneView*>(m_geoView)->screenToBaseSurface(mouseEvent.x(), mouseEvent.y()));
+  else if (dynamic_cast<MapView*>(m_geoView))
+    emit mouseClickedPoint(static_cast<MapView*>(m_geoView)->screenToLocation(mouseEvent.x(), mouseEvent.y()));
 }
 
 void ToolResourceProvider::clear()
