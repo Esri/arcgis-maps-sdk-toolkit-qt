@@ -70,14 +70,9 @@ signals:
 private:
   explicit ToolResourceProvider(QObject* parent = nullptr);
 
-  void setupGeoViewConnections();
-
   GeoView* m_geoView = nullptr;
   Map* m_map = nullptr;
   Scene* m_scene = nullptr;
-
-  QMetaObject::Connection m_srChangedConn;
-  QMetaObject::Connection m_pointClickedConn;
 };
 
 } // Toolkit
