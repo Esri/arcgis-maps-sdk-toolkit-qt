@@ -16,6 +16,11 @@
 
 CONFIG(ToolkitBuildUsePrefix): ToolkitPrefix = _dev
 
+CONFIG(debug, debug|release) {
+  macx:  DebugSuffix = _debug
+  win32: DebugSuffix = d
+}
+
 macx: PLATFORM = "macOS"
 unix:!macx:!android:!ios: PLATFORM = "linux"
 win32: PLATFORM = "windows"
@@ -41,7 +46,7 @@ win32: {
   }
 }
 
-LIBS += -L$$PWD/output/$$PLATFORM_OUTPUT -lArcGISRuntimeToolkitCppApi$${ToolkitPrefix}
+LIBS += -L$$PWD/output/$$PLATFORM_OUTPUT -lArcGISRuntimeToolkitCppApi$${ToolkitPrefix}$${DebugSuffix}
 
 # unset the previous toolkit path
 DEFINES -= ARCGIS_TOOLKIT_IMPORT_PATH=\"$$ARCGIS_TOOLKIT_IMPORT_PATH\"
