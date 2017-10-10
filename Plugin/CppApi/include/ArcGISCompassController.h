@@ -41,10 +41,6 @@ signals:
   void autoHideChanged();
 
 public:
-  Q_INVOKABLE void setHeading(double rotation);
-  Q_INVOKABLE void setAutoHide(bool autoHide);
-
-public:
   ArcGISCompassController(QObject *parent = nullptr);
   ~ArcGISCompassController();
 
@@ -53,7 +49,10 @@ public:
   bool setView(Esri::ArcGISRuntime::SceneQuickView* sceneView);
 
   double heading() const;
+  void setHeading(double value);
+
   bool autoHide() const;
+  void setAutoHide(bool value);
 
   QString toolName() const override;
 
