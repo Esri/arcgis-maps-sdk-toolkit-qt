@@ -41,10 +41,6 @@ signals:
   void autoHideChanged();
 
 public:
-  Q_INVOKABLE void setHeading(double rotation);
-  Q_INVOKABLE void setAutoHide(bool autoHide);
-
-public:
   ArcGISCompassController(QObject *parent = nullptr);
   ~ArcGISCompassController();
 
@@ -62,6 +58,8 @@ private:
   bool m_autoHide = true;
   Esri::ArcGISRuntime::MapQuickView* m_mapView = nullptr;
   Esri::ArcGISRuntime::SceneQuickView* m_sceneView = nullptr;
+  void setAutoHide(bool value);
+  void setHeading(double value);
 };
 
 } // Toolkit

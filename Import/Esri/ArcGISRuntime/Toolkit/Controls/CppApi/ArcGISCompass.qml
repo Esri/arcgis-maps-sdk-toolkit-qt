@@ -1,20 +1,22 @@
 import QtQuick 2.6
+import QtQuick.Window 2.2
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
-import Esri.ArcGISExtras 1.1
 import Esri.ArcGISRuntime.Toolkit.CppApi 100.2
 
 Item {
-    property real scaleFactor: System.displayScaleFactor
+    property real scaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
+    property bool autoHideCompass: true
 
     // ArcGISCompassController must be registered as a QML type in C++ code
     ArcGISCompassController {
         id: controller
         objectName: "arcGISCompassController"
+        autoHide: autoHideCompass
     }
 
-    height: 25 * scaleFactor
-    width: 25 * scaleFactor
+    height: 32 * scaleFactor
+    width: 32 * scaleFactor
     opacity: 0.85
 
     Image {
