@@ -49,7 +49,10 @@ public:
   bool setView(Esri::ArcGISRuntime::SceneQuickView* sceneView);
 
   double heading() const;
+  void setHeading(const double value);
+
   bool autoHide() const;
+  void setAutoHide(const bool value);
 
   QString toolName() const override;
 
@@ -58,8 +61,6 @@ private:
   bool m_autoHide = true;
   Esri::ArcGISRuntime::MapQuickView* m_mapView = nullptr;
   Esri::ArcGISRuntime::SceneQuickView* m_sceneView = nullptr;
-  void setAutoHide(bool value);
-  void setHeading(double value);
 };
 
 } // Toolkit
