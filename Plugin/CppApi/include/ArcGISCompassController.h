@@ -49,10 +49,10 @@ public:
   bool setView(Esri::ArcGISRuntime::SceneQuickView* sceneView);
 
   double heading() const;
-  void setHeading(const double value);
+  void setHeading(double value);
 
   bool autoHide() const;
-  void setAutoHide(const bool value);
+  void setAutoHide(bool value);
 
   QString toolName() const override;
 
