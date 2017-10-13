@@ -126,6 +126,11 @@ void ToolResourceProvider::setBasemap(Basemap* newBasemap)
   }
 }
 
+void ToolResourceProvider::setMouseCursor(const QCursor& cursor)
+{
+  emit setMouseCursorRequested(cursor);
+}
+
 void ToolResourceProvider::onMouseClicked(QMouseEvent& mouseEvent)
 {
   emit mouseClicked(mouseEvent);

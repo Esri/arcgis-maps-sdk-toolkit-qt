@@ -19,6 +19,7 @@
 #include "Point.h"
 #include <QMouseEvent>
 #include <QUuid>
+#include <QCursor>
 
 namespace Esri
 {
@@ -61,6 +62,8 @@ public:
 
   void setBasemap(Basemap* newBasemap);
 
+  void setMouseCursor(const QCursor& cursor);
+
   void clear();
 
 public slots:
@@ -78,6 +81,7 @@ signals:
   void mapChanged();
   void spatialReferenceChanged();
   void identifyGraphicsOverlayCompleted(QUuid id, IdentifyGraphicsOverlayResult* identifyResult);
+  void setMouseCursorRequested(const QCursor& cursor);
 
   // mouse signals
   void mouseClicked(QMouseEvent& mouseEvent);
