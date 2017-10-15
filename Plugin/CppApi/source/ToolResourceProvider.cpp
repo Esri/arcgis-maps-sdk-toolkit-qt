@@ -16,8 +16,11 @@
 #include "GeoView.h"
 #include "MapView.h"
 #include "SceneView.h"
+#include "IdentifyGraphicsOverlayResult.h"
 
 #include "ToolResourceProvider.h"
+
+#include <QUuid>
 
 namespace Esri
 {
@@ -123,6 +126,11 @@ void ToolResourceProvider::setBasemap(Basemap* newBasemap)
   }
 }
 
+void ToolResourceProvider::setMouseCursor(const QCursor& cursor)
+{
+  emit setMouseCursorRequested(cursor);
+}
+
 void ToolResourceProvider::onMouseClicked(QMouseEvent& mouseEvent)
 {
   emit mouseClicked(mouseEvent);
@@ -138,6 +146,96 @@ void ToolResourceProvider::onMouseClicked(QMouseEvent& mouseEvent)
     emit mouseClickedPoint(static_cast<SceneView*>(m_geoView)->screenToBaseSurface(mouseEvent.x(), mouseEvent.y()));
   else if (dynamic_cast<MapView*>(m_geoView))
     emit mouseClickedPoint(static_cast<MapView*>(m_geoView)->screenToLocation(mouseEvent.x(), mouseEvent.y()));
+}
+
+void ToolResourceProvider::onMousePressed(QMouseEvent &mouseEvent)
+{
+  emit mousePressed(mouseEvent);
+
+  if (!m_geoView)
+    return;
+
+  if (m_scene)
+    emit mousePressedPoint(static_cast<SceneView*>(m_geoView)->screenToBaseSurface(mouseEvent.x(), mouseEvent.y()));
+  else if (m_map)
+    emit mousePressedPoint(static_cast<MapView*>(m_geoView)->screenToLocation(mouseEvent.x(), mouseEvent.y()));
+  else if (dynamic_cast<SceneView*>(m_geoView))
+    emit mousePressedPoint(static_cast<SceneView*>(m_geoView)->screenToBaseSurface(mouseEvent.x(), mouseEvent.y()));
+  else if (dynamic_cast<MapView*>(m_geoView))
+    emit mousePressedPoint(static_cast<MapView*>(m_geoView)->screenToLocation(mouseEvent.x(), mouseEvent.y()));
+}
+
+void ToolResourceProvider::onMouseMoved(QMouseEvent &mouseEvent)
+{
+  emit mouseMoved(mouseEvent);
+
+  if (!m_geoView)
+    return;
+
+  if (m_scene)
+    emit mouseMovedPoint(static_cast<SceneView*>(m_geoView)->screenToBaseSurface(mouseEvent.x(), mouseEvent.y()));
+  else if (m_map)
+    emit mouseMovedPoint(static_cast<MapView*>(m_geoView)->screenToLocation(mouseEvent.x(), mouseEvent.y()));
+  else if (dynamic_cast<SceneView*>(m_geoView))
+    emit mouseMovedPoint(static_cast<SceneView*>(m_geoView)->screenToBaseSurface(mouseEvent.x(), mouseEvent.y()));
+  else if (dynamic_cast<MapView*>(m_geoView))
+    emit mouseMovedPoint(static_cast<MapView*>(m_geoView)->screenToLocation(mouseEvent.x(), mouseEvent.y()));
+}
+
+void ToolResourceProvider::onMouseReleased(QMouseEvent &mouseEvent)
+{
+  emit mouseReleased(mouseEvent);
+
+  if (!m_geoView)
+    return;
+
+  if (m_scene)
+    emit mouseReleasedPoint(static_cast<SceneView*>(m_geoView)->screenToBaseSurface(mouseEvent.x(), mouseEvent.y()));
+  else if (m_map)
+    emit mouseReleasedPoint(static_cast<MapView*>(m_geoView)->screenToLocation(mouseEvent.x(), mouseEvent.y()));
+  else if (dynamic_cast<SceneView*>(m_geoView))
+    emit mouseReleasedPoint(static_cast<SceneView*>(m_geoView)->screenToBaseSurface(mouseEvent.x(), mouseEvent.y()));
+  else if (dynamic_cast<MapView*>(m_geoView))
+    emit mouseReleasedPoint(static_cast<MapView*>(m_geoView)->screenToLocation(mouseEvent.x(), mouseEvent.y()));
+}
+
+void ToolResourceProvider::onMousePressedAndHeld(QMouseEvent &mouseEvent)
+{
+  emit mousePressedAndHeld(mouseEvent);
+
+  if (!m_geoView)
+    return;
+
+  if (m_scene)
+    emit mousePressedAndHeldPoint(static_cast<SceneView*>(m_geoView)->screenToBaseSurface(mouseEvent.x(), mouseEvent.y()));
+  else if (m_map)
+    emit mousePressedAndHeldPoint(static_cast<MapView*>(m_geoView)->screenToLocation(mouseEvent.x(), mouseEvent.y()));
+  else if (dynamic_cast<SceneView*>(m_geoView))
+    emit mousePressedAndHeldPoint(static_cast<SceneView*>(m_geoView)->screenToBaseSurface(mouseEvent.x(), mouseEvent.y()));
+  else if (dynamic_cast<MapView*>(m_geoView))
+    emit mousePressedAndHeldPoint(static_cast<MapView*>(m_geoView)->screenToLocation(mouseEvent.x(), mouseEvent.y()));
+}
+
+void ToolResourceProvider::onMouseDoubleClicked(QMouseEvent &mouseEvent)
+{
+  emit mouseDoubleClicked(mouseEvent);
+
+  if (!m_geoView)
+    return;
+
+  if (m_scene)
+    emit mouseDoubleClickedPoint(static_cast<SceneView*>(m_geoView)->screenToBaseSurface(mouseEvent.x(), mouseEvent.y()));
+  else if (m_map)
+    emit mouseDoubleClickedPoint(static_cast<MapView*>(m_geoView)->screenToLocation(mouseEvent.x(), mouseEvent.y()));
+  else if (dynamic_cast<SceneView*>(m_geoView))
+    emit mouseDoubleClickedPoint(static_cast<SceneView*>(m_geoView)->screenToBaseSurface(mouseEvent.x(), mouseEvent.y()));
+  else if (dynamic_cast<MapView*>(m_geoView))
+    emit mouseDoubleClickedPoint(static_cast<MapView*>(m_geoView)->screenToLocation(mouseEvent.x(), mouseEvent.y()));
+}
+
+void ToolResourceProvider::onIdentifyGraphicsOverlayCompleted(QUuid id, IdentifyGraphicsOverlayResult* identifyResult)
+{
+  emit identifyGraphicsOverlayCompleted(id, identifyResult);
 }
 
 void ToolResourceProvider::clear()

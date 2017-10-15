@@ -18,6 +18,8 @@
 #include "ToolkitCommon.h"
 #include "Point.h"
 #include <QMouseEvent>
+#include <QUuid>
+#include <QCursor>
 
 namespace Esri
 {
@@ -30,6 +32,7 @@ class Map;
 class LayerListModel;
 class Scene;
 class SpatialReference;
+class IdentifyGraphicsOverlayResult;
 
 namespace Toolkit
 {
@@ -59,18 +62,40 @@ public:
 
   void setBasemap(Basemap* newBasemap);
 
+  void setMouseCursor(const QCursor& cursor);
+
   void clear();
 
 public slots:
   void onMouseClicked(QMouseEvent& mouseEvent);
+  void onMousePressed(QMouseEvent& mouseEvent);
+  void onMouseMoved(QMouseEvent& mouseEvent);
+  void onMouseReleased(QMouseEvent& mouseEvent);
+  void onMousePressedAndHeld(QMouseEvent& mouseEvent);
+  void onMouseDoubleClicked(QMouseEvent& mouseEvent);
+  void onIdentifyGraphicsOverlayCompleted(QUuid id, IdentifyGraphicsOverlayResult* identifyResult);
 
 signals:
   void sceneChanged();
   void geoViewChanged();
   void mapChanged();
   void spatialReferenceChanged();
+  void identifyGraphicsOverlayCompleted(QUuid id, IdentifyGraphicsOverlayResult* identifyResult);
+  void setMouseCursorRequested(const QCursor& cursor);
+
+  // mouse signals
   void mouseClicked(QMouseEvent& mouseEvent);
   void mouseClickedPoint(const Point& point);
+  void mousePressed(QMouseEvent& mouseEvent);
+  void mousePressedPoint(const Point& point);
+  void mouseMoved(QMouseEvent& mouseEvent);
+  void mouseMovedPoint(const Point& point);
+  void mouseReleased(QMouseEvent& mouseEvent);
+  void mouseReleasedPoint(const Point& point);
+  void mousePressedAndHeld(QMouseEvent& mouseEvent);
+  void mousePressedAndHeldPoint(const Point& point);
+  void mouseDoubleClicked(QMouseEvent& mouseEvent);
+  void mouseDoubleClickedPoint(const Point& point);
 
 private:
   explicit ToolResourceProvider(QObject* parent = nullptr);
