@@ -74,6 +74,7 @@ public slots:
   void onMousePressedAndHeld(QMouseEvent& mouseEvent);
   void onMouseDoubleClicked(QMouseEvent& mouseEvent);
   void onIdentifyGraphicsOverlayCompleted(QUuid id, IdentifyGraphicsOverlayResult* identifyResult);
+  void onscreenToLocationCompleted(QUuid taskId, Point location);
 
 signals:
   void sceneChanged();
@@ -82,6 +83,7 @@ signals:
   void spatialReferenceChanged();
   void identifyGraphicsOverlayCompleted(QUuid id, IdentifyGraphicsOverlayResult* identifyResult);
   void setMouseCursorRequested(const QCursor& cursor);
+  void screenToLocationCompleted(QUuid taskId, Point location);
 
   // mouse signals
   void mouseClicked(QMouseEvent& mouseEvent);
