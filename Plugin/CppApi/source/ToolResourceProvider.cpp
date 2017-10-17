@@ -240,11 +240,7 @@ void ToolResourceProvider::onIdentifyGraphicsOverlayCompleted(QUuid id, Identify
 
 void ToolResourceProvider::onscreenToLocationCompleted(QUuid taskId, Point location)
 {
-  if (!m_geoView)
-    return;
-
-  if (m_scene)
-    emit screenToLocationCompleted(taskId, location);
+  emit screenToLocationCompleted(taskId, location);
 }
 
 void ToolResourceProvider::clear()
