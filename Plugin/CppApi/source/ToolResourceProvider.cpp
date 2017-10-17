@@ -238,6 +238,11 @@ void ToolResourceProvider::onIdentifyGraphicsOverlayCompleted(QUuid id, Identify
   emit identifyGraphicsOverlayCompleted(id, identifyResult);
 }
 
+void ToolResourceProvider::onScreenToLocationCompleted(QUuid taskId, const Point& location)
+{
+  emit screenToLocationCompleted(taskId, location);
+}
+
 void ToolResourceProvider::clear()
 {
   m_map = nullptr;
