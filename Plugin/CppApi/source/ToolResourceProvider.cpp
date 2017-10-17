@@ -238,13 +238,9 @@ void ToolResourceProvider::onIdentifyGraphicsOverlayCompleted(QUuid id, Identify
   emit identifyGraphicsOverlayCompleted(id, identifyResult);
 }
 
-void ToolResourceProvider::onscreenToLocationCompleted(QUuid taskId, Point location)
+void ToolResourceProvider::onScreenToLocationCompleted(QUuid taskId, const Point& location)
 {
-  if (!m_geoView)
-    return;
-
-  if (m_scene)
-    emit screenToLocationCompleted(taskId, location);
+  emit screenToLocationCompleted(taskId, location);
 }
 
 void ToolResourceProvider::clear()
