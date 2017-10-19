@@ -20,6 +20,7 @@ Rectangle {
     property int spacingValue: 5 * scaleFactor
     property int imageWidth: 36 * scaleFactor
     property int fontSize: 12 * scaleFactor
+    property color textColor: "black"
 
     CoordinateConversionController {
         id: coordinateConvController
@@ -58,7 +59,7 @@ Rectangle {
                 TextField {
                     id: inputNotation
                     width: coordinateConversionWindow.width * 0.7
-                    color: "black"
+                    color: textColor
                     font.pixelSize: fontSize
                 }
 
@@ -97,7 +98,7 @@ Rectangle {
                         anchors.verticalCenter: parent.verticalCenter
                         width: buttonWidth
                         text: name
-                        color: "black"
+                        color: textColor
                     }
 
                     TextField {
@@ -105,7 +106,7 @@ Rectangle {
                         anchors.verticalCenter: parent.verticalCenter
                         text: notation
                         width: coordinateConversionWindow.width * 0.7
-                        color: "black"
+                        color: textColor
                         font.pixelSize: fontSize
                     }
 
@@ -182,11 +183,13 @@ Rectangle {
             }
 
             Image {
+                id: img
                 fillMode: Image.PreserveAspectFit
                 anchors.centerIn: parent
                 sourceSize.height: parent.width
                 height: sourceSize.height
-                source: useLocationFromMap.checked ? "images/directionsto_dark.png" : "images/directionsto_light.png"
+                opacity: useLocationFromMap.checked ? 1.0 : 0.5
+                source: "images/directionsto_dark.png"
             }
 
             onCheckedChanged: {
@@ -217,6 +220,7 @@ Rectangle {
                 height: sourceSize.height
                 source: "images/trash.png"
             }
+
 
             onClicked: {
                 coordinateConvController.clearResults();
