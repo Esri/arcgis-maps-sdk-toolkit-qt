@@ -15,11 +15,17 @@ import Esri.ArcGISRuntime.Toolkit.CppApi 100.2
 Rectangle {
     id: coordinateConversionWindow
 
+    /*! \internal */
     property real scaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
+    /*! \internal */
     property int buttonWidth: 100 * scaleFactor
+    /*! \internal */
     property int spacingValue: 5 * scaleFactor
+    /*! \internal */
     property int imageWidth: 36 * scaleFactor
+    /*! \internal */
     property int fontSize: 12 * scaleFactor
+    /*! \internal */
     property color textColor: "black"
 
     CoordinateConversionController {
