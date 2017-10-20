@@ -15,17 +15,35 @@ import Esri.ArcGISRuntime.Toolkit.CppApi 100.2
 Rectangle {
     id: coordinateConversionWindow
 
-    /*! \internal */
+    /*! \brief internal */
     property real scaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
-    /*! \internal */
-    property int buttonWidth: 100 * scaleFactor
-    /*! \internal */
-    property int spacingValue: 5 * scaleFactor
-    /*! \internal */
-    property int imageWidth: 36 * scaleFactor
-    /*! \internal */
-    property int fontSize: 12 * scaleFactor
-    /*! \internal */
+
+    /*!
+      \brief Width of buttons.
+
+      Default value is 100.
+     */
+    property int buttonWidth: 100
+
+    /*!
+      \brief spacing between rows and columns
+
+      Default value is 5.
+     */
+    property int spacingValue: 5
+
+    /*!
+      \brief Font size of text in TextFields.
+
+      Default value is 12.
+     */
+    property int fontSize: 12
+
+    /*!
+      \brief Text color for TextFields and Labels.
+
+      Default value is "black".
+     */
     property color textColor: "black"
 
     CoordinateConversionController {
@@ -47,14 +65,14 @@ Rectangle {
             id: column
             anchors.left: parent.left
             anchors.right: parent.right
-            spacing: spacingValue
+            spacing: spacingValue * scaleFactor
 
             Row {
-                spacing: spacingValue
+                spacing: spacingValue * scaleFactor
 
                 ComboBox {
                     id: notationTypeCombo
-                    width: buttonWidth
+                    width: buttonWidth * scaleFactor
                     anchors.verticalCenter: parent.verticalCenter
                     model: CoordinateConversionOptions.coordinateTypeNames
                     onCurrentTextChanged: {
@@ -66,7 +84,7 @@ Rectangle {
                     id: inputNotation
                     width: coordinateConversionWindow.width * 0.7
                     color: textColor
-                    font.pixelSize: fontSize
+                    font.pixelSize: fontSize * scaleFactor
                 }
 
                 RoundButton {
@@ -97,12 +115,12 @@ Rectangle {
                 model: coordinateConvController.results
 
                 delegate: Row {
-                    spacing: spacingValue
+                    spacing: spacingValue * scaleFactor
 
                     Label {
                         id: repeaterLabel
                         anchors.verticalCenter: parent.verticalCenter
-                        width: buttonWidth
+                        width: buttonWidth * scaleFactor
                         text: name
                         color: textColor
                     }
@@ -113,7 +131,7 @@ Rectangle {
                         text: notation
                         width: coordinateConversionWindow.width * 0.7
                         color: textColor
-                        font.pixelSize: fontSize
+                        font.pixelSize: fontSize * scaleFactor
                     }
 
                     RoundButton {
@@ -210,7 +228,7 @@ Rectangle {
 
             anchors {
                 right: parent.right
-                rightMargin: (coordinateConversionWindow.width - (coordinateConversionWindow.width * 0.7 + buttonWidth + spacingValue * 4 + clear.width)) * scaleFactor
+                rightMargin: (coordinateConversionWindow.width - (coordinateConversionWindow.width * 0.7 + (buttonWidth * scaleFactor) + (spacingValue * scaleFactor * 4) + clear.width)) * scaleFactor
                 verticalCenter: parent.verticalCenter
             }
 
