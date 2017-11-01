@@ -19,6 +19,7 @@ Item {
     /*!
       \qmlproperty real scaleFactor
       \brief The scale factor used for sizing UI elements.
+      \internal
 
       Pixel density and screen resolution varies greatly between different
       devices and operating systems. This property allows your app to specify
@@ -52,13 +53,6 @@ Item {
         autoHide: autoHideCompass
     }
 
-    /*!
-      \qmlproperty bool autoHideCompass
-      \brief Whether the compass should be hidden when north is at the top
-      of the display.
-
-      The default value is \c true.
-     */
     height: 32 * scaleFactor
     width: 32 * scaleFactor
     opacity: 0.85

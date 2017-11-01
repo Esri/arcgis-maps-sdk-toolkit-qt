@@ -18,6 +18,7 @@ Rectangle {
     /*!
       \qmlproperty real scaleFactor
       \brief The scale factor used for sizing UI elements.
+      \internal
 
       Pixel density and screen resolution varies greatly between different
       devices and operating systems. This property allows your app to specify
