@@ -4,8 +4,45 @@ import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 import Esri.ArcGISRuntime.Toolkit.CppApi 100.2
 
+/*!
+    \qmltype ArcGISCompass
+    \ingroup ToolArcGISCompass
+    \inqmlmodule Esri.ArcGISRuntime.Toolkit.Controls
+    \since Esri.ArcGISRutime 100.2
+    \brief The user interface for the ArcGIS Compass tool.
+    \sa {ArcGIS Compass}
+
+    \since Esri::ArcGISRuntime 100.2.0
+*/
+
 Item {
+    /*!
+      \qmlproperty real scaleFactor
+      \brief The scale factor used for sizing UI elements.
+
+      Pixel density and screen resolution varies greatly between different
+      devices and operating systems. This property allows your app to specify
+      the width and height of UI elements so that the sizes appear similar
+      (relative to screen size) across devices. Here is an example of how to
+      use this property.
+
+      \code
+         ArcGISCompass {
+            width: 100 * scaleFactor
+            height: 100 * scaleFactor
+            ...
+         }
+      \endcode
+     */
     property real scaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
+
+    /*!
+      \qmlproperty bool autoHideCompass
+      \brief Whether the compass should be hidden when north is at the top
+      of the display.
+
+      The default value is \c true.
+     */
     property bool autoHideCompass: true
 
     // ArcGISCompassController must be registered as a QML type in C++ code
@@ -15,6 +52,13 @@ Item {
         autoHide: autoHideCompass
     }
 
+    /*!
+      \qmlproperty bool autoHideCompass
+      \brief Whether the compass should be hidden when north is at the top
+      of the display.
+
+      The default value is \c true.
+     */
     height: 32 * scaleFactor
     width: 32 * scaleFactor
     opacity: 0.85

@@ -6,20 +6,73 @@ import Esri.ArcGISRuntime.Toolkit.CppApi 100.2
 
 /*!
     \qmltype CoordinateConversion
-    \ingroup ArcGISQtToolkit
-    \inqmlmodule Esri.ArcGISRuntime.Toolkit.Controls
+    \ingroup ToolCoordinateConversion
     \since Esri.ArcGISRutime 100.2
-    \brief A window to do coordinate conversion.
+    \brief The user interface for the coordinate conversion tool.
+    \sa {Coordinate Conversion}
 */
 
 Rectangle {
     id: coordinateConversionWindow
 
+    /*!
+      \qmlproperty real scaleFactor
+      \brief The scale factor used for sizing UI elements.
+
+      Pixel density and screen resolution varies greatly between different
+      devices and operating systems. This property allows your app to specify
+      the width and height of UI elements so that the sizes appear similar
+      (relative to screen size) across devices. Here is an example of how to
+      use this property.
+
+      \code
+         CoordinateConversion {
+            buttonWidth: 90 * scaleFactor
+            spacingValue: 8 * scaleFactor
+            ...
+         }
+      \endcode
+     */
     property real scaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
+
+    /*!
+      \qmlproperty int buttonWidth
+      \brief The width of various buttons on this tool.
+
+      The default value is \c {100 * \l scaleFactor}.
+     */
     property int buttonWidth: 100 * scaleFactor
+
+    /*!
+      \qmlproperty int spacingValue
+      \brief The spacing between rows and columns on this tool.
+
+      The default value is \c {5 * \l scaleFactor}.
+     */
     property int spacingValue: 5 * scaleFactor
+
+    /*!
+      \qmlproperty int imageWidth
+      \brief The width of the images used for buttons on this tool.
+
+      The default value is \c {36 * \l scaleFactor}.
+     */
     property int imageWidth: 36 * scaleFactor
+
+    /*!
+      \qmlproperty int fontSize
+      \brief The font size of coordinate notation text on this tool.
+
+      The default value is \c {12 * \l scaleFactor}.
+     */
     property int fontSize: 12 * scaleFactor
+
+    /*!
+      \qmlproperty int textColor
+      \brief The color of coordinate notation text and labels on this tool.
+
+      The default value is \c "black".
+     */
     property color textColor: "black"
 
     CoordinateConversionController {

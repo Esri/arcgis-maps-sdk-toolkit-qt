@@ -23,6 +23,8 @@ import QtQuick.Window 2.0
 /*!
     \qmltype PopupStackView
     \ingroup ArcGISQtToolkit
+    \ingroup ArcGISQtToolkitCppApi
+    \ingroup ArcGISQtToolkitQmlApi
     \inqmlmodule Esri.ArcGISRuntime.Toolkit.Controls
     \since Esri.ArcGISRutime 100.2
     \brief A view for displaying and editing information of Features.

@@ -9,6 +9,7 @@ import "LeaderPosition.js" as Enums
 /*!
     \qmltype Callout
     \ingroup ArcGISQtToolkit
+    \ingroup ArcGISQtToolkitQmlApi
     \inqmlmodule Esri.ArcGISRuntime.Toolkit.Controls
     \since Esri.ArcGISRutime 100.1
     \brief A view for displaying information at a geographic location on a Map.

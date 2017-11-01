@@ -21,64 +21,58 @@ namespace Toolkit
 {
 
 /*!
-  \class Esri::ArcGISRuntime::CoordinateConversionOptions
+  \class Esri::ArcGISRuntime::Toolkit::CoordinateConversionOptions
+  \ingroup ToolCoordinateConversion
+  \inmodule ArcGISQtToolkit
   \since Esri::ArcGISRuntime 100.2
-  \brief A class that combines all available options for converting
-  an x-y coordinate to a notation string.
+  \brief Options for converting between geographic coordinate notations.
 
-  Supported notations are:
-  \list
-    \li Latitude-longitude in degrees.
-    \li Global Area Reference System (GARS).
-    \li World Geographic Reference System (GEOREF).
-    \li Military Grid Reference System (MGRS).
-    \li United States National Grid (USNG).
-    \li Universal Transverse Mercator (UTM).
-  \endlist
+  \table
+  \header
+    \li Supported notation
+    \li Options (valid range)
+  \row
+    \li {1, 3} Latitude-longitude in degrees
+    \li \l name
+  \row
+    \li \l latLonFormat
+  \row
+    \li \l decimalPlaces (0 to 16)
+  \row
+    \li GARS (Global Area Reference System)
+    \li \l name
+  \row
+    \li {1, 2} GEOREF (World Geographic Reference System)
+    \li \l name
+  \row
+    \li \l precision (0 to 9)
+  \row
+    \li {1, 4} MGRS (Military Grid Reference System)
+    \li \l name
+  \row
+    \li \l mgrsConversionMode
+  \row
+    \li \l precision (0 to 8)
+  \row
+    \li \l addSpaces
+  \row
+    \li {1, 3} USNG (United States National Grid)
+    \li \l name
+  \row
+    \li \l precision (0 to 8)
+  \row
+    \li \l addSpaces
+  \row
+    \li {1 ,3} UTM (Universal Transverse Mercator)
+    \li \l name
+  \row
+    \li \l utmConversionMode
+  \row
+    \li \l addSpaces
+  \endtable
 
-  The following options are available for the different format types.
-
-  Gars:
-  \list
-    \li name
-  \endlist
-
-  GeoRef:
-  \list
-    \li name
-    \li precision [0, 9]
-  \endlist
-
-  LatLon (Latitude Longitude):
-  \list
-    \li name
-    \li latLonFormat
-    \li decimal places [0, 16]
-  \endlist
-
-  Mgrs:
-  \list
-    \li name
-    \li mgrsConversionMode
-    \li precision [0, 8]
-    \li addSpaces
-  \endlist
-
-  Usng:
-  \list
-    \li name
-    \li precision [0, 8]
-    \li addSpaces
-  \endlist
-
-  Utm:
-  \list
-    \li name
-    \li utmConversionMode
-    \li addSpaces
-  \endlist
-
-  For more information see the documentation for \l CoordinateFormatter
+  For more information see the API documentation for
+  \l {http://../../../cpp/api-reference/esri-arcgisruntime-coordinateformatter.html} {CoordinateFormatter}.
  */
 
 using MgrsConversionMode = CoordinateConversionOptions::MgrsConversionMode;
@@ -106,7 +100,7 @@ CoordinateConversionOptions::~CoordinateConversionOptions()
 
   \brief Gets the coordinate format this option will be output in.
 
-  \note The default value is Usng.
+  The default value is \l {CoordinateType} {CoordinateTypeUsng}.
  */
 CoordinateConversionOptions::CoordinateType CoordinateConversionOptions::outputMode() const
 {
@@ -116,7 +110,7 @@ CoordinateConversionOptions::CoordinateType CoordinateConversionOptions::outputM
 /*!
   \brief Sets the coordinate format this option will be output in to \a outputMode.
 
-  \note The default value is Usng.
+  The default value is \l {CoordinateType} {CoordinateTypeUsng}.
  */
 void CoordinateConversionOptions::setOutputMode(CoordinateType outputMode)
 {
@@ -151,7 +145,7 @@ void CoordinateConversionOptions::setName(const QString& name)
   \note This option only applies to the following notation types:
   Mgrs, Usng and Utm.
 
-  \note The default value is true.
+  \note The default value is \c true.
  */
 bool CoordinateConversionOptions::addSpaces() const
 {
@@ -164,7 +158,7 @@ bool CoordinateConversionOptions::addSpaces() const
   \note This option only applied to the following notation types:
   Mgrs, Usng and Utm.
 
-  \note The default value is true.
+  \note The default value is \c true.
  */
 void CoordinateConversionOptions::setAddSpaces(bool addSpaces)
 {
@@ -178,9 +172,9 @@ void CoordinateConversionOptions::setAddSpaces(bool addSpaces)
   \brief Gets the precision for the option.
 
   \note This option only applies to the following notation types:
-  GeoRef [0, 9], Mgrs [0, 8] and Usng [0, 8]
+  GeoRef (0 to 9), MGRS (0 to 8), and USNG (0 to 8).
 
-  \note The default value is 8.
+  \note The default value is \c 8.
  */
 int CoordinateConversionOptions::precision() const
 {
@@ -191,9 +185,9 @@ int CoordinateConversionOptions::precision() const
   \brief Sets the precision for the option to \a precision.
 
   \note This option only applies to the following notation types:
-  GeoRef [0, 9], Mgrs [0, 8] and Usng [0, 8]
+  GeoRef (0 to 9), MGRS (0 to 8), and USNG (0 to 8).
 
-  \note The default value is 8.
+  The default value is \c 8.
  */
 void CoordinateConversionOptions::setPrecision(int precision)
 {
@@ -206,10 +200,8 @@ void CoordinateConversionOptions::setPrecision(int precision)
 
   \brief Gets the decimal places for the option.
 
-  \note This option only applies to the LatLon (LatitudeLongitude) format.
-  Possible values are [0, 16].
-
-  \note The default value is 6.
+  This option only applies to the LatLon (LatitudeLongitude) format.
+  Possible values are \c 0 to \c 16. The default value is \c 6.
  */
 int CoordinateConversionOptions::decimalPlaces() const
 {
@@ -219,10 +211,8 @@ int CoordinateConversionOptions::decimalPlaces() const
 /*!
   \brief Sets the decimal places for the option to \a decimalPlaces.
 
-  \note This option only applies to the LatLon (LatitudeLongitude) format.
-  Possible values are [0, 16].
-
-  \note The default value is 6.
+  This option only applies to the LatLon (LatitudeLongitude) format.
+  Possible values are \c 0 to \c 16. The default value is 6.
  */
 void CoordinateConversionOptions::setDecimalPlaces(int decimalPlaces)
 {
@@ -233,11 +223,10 @@ void CoordinateConversionOptions::setDecimalPlaces(int decimalPlaces)
 /*!
   \qmlproperty MgrsConversionMode CoordinateConversionOptions::mgrsConversionMode
 
-  \brief Gets Mgrs conversion mode.
+  \brief Gets MGRS conversion mode.
 
-  \note This option only applies to the Mgrs format.
-
-  \note The default value is Automatic.
+  This option only applies to the MGRS format. The default value is
+  \l {MgrsConversionMode} {\c MgrsConversionModeAutomatic}.
  */
 MgrsConversionMode CoordinateConversionOptions::mgrsConversionMode() const
 {
@@ -247,9 +236,8 @@ MgrsConversionMode CoordinateConversionOptions::mgrsConversionMode() const
 /*!
   \brief Sets Mgrs conversion mode to \a mgrsConversionMode.
 
-  \note This option only applies to the Mgrs format.
-
-  \note The default value is Automatic.
+  This option only applies to the MGRS format. The default value is
+  \l {MgrsConversionMode} {\c MgrsConversionModeAutomatic}.
  */
 void CoordinateConversionOptions::setMgrsConversionMode(MgrsConversionMode mgrsConversionMode)
 {

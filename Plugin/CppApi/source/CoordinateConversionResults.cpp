@@ -22,8 +22,10 @@ namespace Toolkit
 
 /*!
   \class Esri::ArcGISRuntime::Toolkit::CoordinateConversionResults
+  \ingroup ToolCoordinateConversion
+  \inmodule ArcGISQtToolkit
   \since Esri::ArcGISRuntime 100.2
-  \brief Results for the CoordinateConversionController.
+  \brief Results from the CoordinateConversionController.
 
   This class is primarily used by the CoordinateConversionController. You should
   not need to interact with this class directly.
