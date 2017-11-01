@@ -34,10 +34,6 @@
   provides a UI to allow for combining several types of conversion into a
   single operation.
 
-  https://developers.arcgis.com/qt/latest/cpp/api-reference/esri-arcgisruntime-coordinateformatter.html
-  https://developers.arcgis.com/qt/latest/toolkit/api-reference/qml-esri-arcgisruntime-toolkit-dialogs-usercredentialsview.html
-
-
   \sa CoordinateConversionOptions
  */
 
