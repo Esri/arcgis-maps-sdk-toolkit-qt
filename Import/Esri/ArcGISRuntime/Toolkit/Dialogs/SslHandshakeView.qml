@@ -22,6 +22,8 @@ import QtQuick.Window 2.0
 /*!
     \qmltype SslHandshakeView
     \ingroup ArcGISQtToolkit
+    \ingroup ArcGISQtToolkitCppApi
+    \ingroup ArcGISQtToolkitQmlApi
     \inqmlmodule Esri.ArcGISRuntime.Toolkit.Dialogs
     \since Esri.ArcGISRutime 100.0
     \brief A view for handling SSL Handshake authentication challenges.

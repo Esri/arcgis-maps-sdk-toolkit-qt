@@ -27,6 +27,14 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
+/*!
+  \class Esri::ArcGISRuntime::Toolkit::ArcGISCompassController
+  \ingroup ToolArcGISCompass
+  \inmodule ArcGISQtToolkit
+  \since Esri::ArcGISRuntime 100.2
+  \brief The controller for the ArcGIS Compass tool.
+ */
+
 ArcGISCompassController::ArcGISCompassController(QObject *parent):
   AbstractTool(parent)
 {

@@ -24,11 +24,15 @@
 
 /*!
   \class Esri::ArcGISRuntime::Toolkit::CoordinateConversionController
+  \ingroup ToolCoordinateConversion
+  \inmodule ArcGISQtToolkit
   \since Esri::ArcGISRuntime 100.2
-  \brief A tool that converts coordinates between various coordinate notation strings and points.
+  \brief The controller for the coordinate conversion tool.
 
-  This tool abstracts the ArcGIS Runtime SDK class \l CoordinateFormatter and provides a UI
-  to allow for combining several types of conversion into a single operation.
+  This tool abstracts the ArcGIS Runtime SDK class
+  \l {http://../../../cpp/api-reference/esri-arcgisruntime-coordinateformatter.html} {CoordinateFormatter} and
+  provides a UI to allow for combining several types of conversion into a
+  single operation.
 
   \sa CoordinateConversionOptions
  */
@@ -284,7 +288,7 @@ void CoordinateConversionController::setSpatialReference(const SpatialReference&
 
   \brief Gets the inputGarsConversionMode.
 
-  \note This property is only used if the \inputMode property is set to `Gars`.
+  \note This property is only used if the \l inputMode property is set to `Gars`.
  */
 CoordinateConversionOptions::GarsConversionMode CoordinateConversionController::inputGarsConversionMode() const
 {
@@ -294,7 +298,7 @@ CoordinateConversionOptions::GarsConversionMode CoordinateConversionController::
 /*!
   \brief Sets the inputGarsConversionMode to \a inputGarsConversionMode.
 
-  \note This property is only used if the \inputMode property is set to `Gars`.
+  \note This property is only used if the \l inputMode property is set to `Gars`.
  */
 void CoordinateConversionController::setInputGarsConversionMode(CoordinateConversionOptions::GarsConversionMode inputGarsConversionMode)
 {
@@ -307,7 +311,7 @@ void CoordinateConversionController::setInputGarsConversionMode(CoordinateConver
 
   \brief Gets the inputMgrsConversionMode.
 
-  \note This property is only used if the \inputMode property is set to `Mgrs`.
+  \note This property is only used if the \l inputMode property is set to `Mgrs`.
  */
 CoordinateConversionOptions::MgrsConversionMode CoordinateConversionController::inputMgrsConversionMode() const
 {
@@ -317,7 +321,7 @@ CoordinateConversionOptions::MgrsConversionMode CoordinateConversionController::
 /*!
   \brief Sets the inputMgrsConversionMode to \a inputMgrsConversionMode.
 
-  \note This property is only used if the \inputMode property is set to `Mgrs`.
+  \note This property is only used if the \l inputMode property is set to `Mgrs`.
  */
 void CoordinateConversionController::setInputMgrsConversionMode(CoordinateConversionOptions::MgrsConversionMode inputMgrsConversionMode)
 {
@@ -330,7 +334,7 @@ void CoordinateConversionController::setInputMgrsConversionMode(CoordinateConver
 
   \brief Gets the inputUtmConversionMode.
 
-  \note This property is only used if the \inputMode property is set to `Utm`.
+  \note This property is only used if the \l inputMode property is set to `Utm`.
  */
 CoordinateConversionOptions::UtmConversionMode CoordinateConversionController::inputUtmConversionMode() const
 {
@@ -340,7 +344,7 @@ CoordinateConversionOptions::UtmConversionMode CoordinateConversionController::i
 /*!
   \brief Sets the inputUtmConversionMode to \a inputUtmConversionMode.
 
-  \note This property is only used if the \inputMode property is set to `Utm`
+  \note This property is only used if the \l inputMode property is set to `Utm`
  */
 void CoordinateConversionController::setInputUtmConversionMode(CoordinateConversionOptions::UtmConversionMode inputUtmConversionMode)
 {
