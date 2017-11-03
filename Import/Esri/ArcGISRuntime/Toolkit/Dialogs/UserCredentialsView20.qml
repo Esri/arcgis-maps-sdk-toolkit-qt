@@ -17,7 +17,7 @@
 import QtQuick 2.5
 import QtQuick.Controls 1.4
 import QtGraphicalEffects 1.0
-import Esri.ArcGISExtras 1.1
+import Esri.ArcGISExtras 1.2
 
 /*!
     \internal
