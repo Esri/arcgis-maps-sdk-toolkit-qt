@@ -107,7 +107,7 @@ CoordinateConversionOptions::~CoordinateConversionOptions()
 
 /*!
   \property CoordinateConversionOptions::outputMode
-  \brief The coordinate notation type that this option will be output in.
+  \brief The output coordinate notation type.
 
   The default value is \l {CoordinateType} {CoordinateTypeUsng}.
  */
@@ -124,7 +124,7 @@ void CoordinateConversionOptions::setOutputMode(CoordinateType outputMode)
 
 /*!
   \property CoordinateConversionOptions::name
-  \brief The name of the option.
+  \brief The name used to identify this option, usually in the UI.
  */
 QString CoordinateConversionOptions::name() const
 {
@@ -139,7 +139,7 @@ void CoordinateConversionOptions::setName(const QString& name)
 
 /*!
   \property CoordinateConversionOptions::addSpaces
-  \brief Indicates whether the notation format should use spaces.
+  \brief Whether the output notation format should use spaces.
 
   This option only applies to the Mgrs, Usng and Utm notation types.
  */

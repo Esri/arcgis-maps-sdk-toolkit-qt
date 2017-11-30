@@ -80,7 +80,7 @@ void ArcGISCompassController::setHeading(double rotation)
 
 /*!
    \property ArcGISCompassController::autoHide
-   \brief Whether the compass should be hidden when its heading is \c 0.0 (north).
+   \brief Whether the compass should be hidden when its heading is north.
  */
 void ArcGISCompassController::setAutoHide(bool autoHide)
 {
@@ -162,17 +162,11 @@ bool ArcGISCompassController::setView(SceneQuickView* sceneView)
   return true;
 }
 
-/*!
-   \brief Returns the compass heading in degrees.
- */
 double ArcGISCompassController::heading() const
 {
   return m_heading;
 }
 
-/*!
-   \brief Returns whether the compass should be visible if heading is \c 0.0 (north).
- */
 bool ArcGISCompassController::autoHide() const
 {
   return m_autoHide;

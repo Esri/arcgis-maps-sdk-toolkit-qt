@@ -408,7 +408,7 @@ void CoordinateConversionController::clearResults()
 
 /*!
   \property CoordinateConversionController::runConversion
-  \brief When \c true, the conversion runs automatically when \l setPointToConvert
+  \brief Whether the conversion runs automatically when \l setPointToConvert
   is called.
  */
 bool CoordinateConversionController::runConversion() const
