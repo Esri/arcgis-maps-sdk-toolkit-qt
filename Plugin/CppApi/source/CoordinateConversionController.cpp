@@ -29,12 +29,12 @@
   \since Esri::ArcGISRuntime 100.2
   \brief The controller for the coordinate conversion tool.
 
-  This tool abstracts the ArcGIS Runtime SDK class
-  \l {http://../../../cpp/api-reference/esri-arcgisruntime-coordinateformatter.html} {CoordinateFormatter} and
-  provides a UI to allow for combining several types of conversion into a
-  single operation.
-
-  \sa CoordinateConversionOptions
+  This tool converts a notation text string to all output notations formats
+  defined in your app. Those output formats are defined using a list of
+  \l CoordinateConversionOptions objects that your app builds
+  using \l addOption. Each \l CoordinateConversionOptions object specifies a
+  coordinate notation and options that apply to that notation (decimal places,
+  use of spaces, and so on).
  */
 
 namespace Esri
@@ -47,7 +47,7 @@ namespace Toolkit
 using CoordinateType = CoordinateConversionOptions::CoordinateType;
 
 /*!
-  \brief Default constructor with an optional \a parent.
+  \brief A constructor that accepts an optional \a parent.
  */
 CoordinateConversionController::CoordinateConversionController(QObject* parent):
   AbstractTool(parent)
@@ -81,7 +81,7 @@ CoordinateConversionController::CoordinateConversionController(QObject* parent):
 }
 
 /*!
-   \brief Destructor.
+   \brief The destructor.
  */
 CoordinateConversionController::~CoordinateConversionController()
 {
@@ -90,11 +90,14 @@ CoordinateConversionController::~CoordinateConversionController()
 /*!
   \brief Converts \a notation and updates the \l results property.
 
-  \note \l inputMode must be set to the appropriate type and a valid spatial
-  reference must be set before calling this method.
+  Before calling this method, set the \l inputMode property to the
+  notation type of \a notation, and call \l setSpatialReference property
+  to the spatial reference of the notation's coordinates.
 
-  \warning It is preferable to convert from a Point to avoid any potential
-  loss of precision that may occur when converting from some notation formats.
+  \note Converting between some notation formats can result in loss
+  of precision due to the number of decimal places expresses in the
+  notation, and other factors. The best precision is attained by
+  converting from a Point object. See \l convertPoint.
  */
 void CoordinateConversionController::convertNotation(const QString& notation)
 {
@@ -219,22 +222,14 @@ QString CoordinateConversionController::convertPointInternal(CoordinateConversio
 }
 
 /*!
-  \qmlproperty CoordinateType CoordinateConversionController::inputMode
-
-  \brief Gets the current input conversion mode.
-
-  \note \a inputMode is used for the \l convertNotation method.
+  \property CoordinateConversionController::inputMode
+  \brief The current input conversion mode used for the \l convertNotation method.
  */
 CoordinateType CoordinateConversionController::inputMode() const
 {
   return m_inputMode;
 }
 
-/*!
-  \brief Sets the current input conversion mode to \a inputMode.
-
-  \note \a inputMode is used for the \l convertNotation method.
- */
 void CoordinateConversionController::setInputMode(CoordinateType inputMode)
 {
   m_inputMode = inputMode;
@@ -242,11 +237,10 @@ void CoordinateConversionController::setInputMode(CoordinateType inputMode)
 }
 
 /*!
-  \qmlmethod CoordinateConversionResults* CoordinateConversionController::results()
+  \property CoordinateConversionController::results
+  \brief The conversion results as a list model.
 
-  \brief Gets the results as a list model.
-
-  \note The results are automatically updated as conversions are run.
+  The results are automatically updated as conversions are run.
  */
 CoordinateConversionResults* CoordinateConversionController::results()
 {
@@ -260,9 +254,8 @@ CoordinateConversionResults* CoordinateConversionController::results()
 }
 
 /*!
-  \qmlmethod list<CoordinateConversionOptions> CoordinateConversionController::options()
-
-  \brief Gets the notation options as a list.
+  \property CoordinateConversionController::options
+  \brief The notation options as a list.
  */
 QQmlListProperty<CoordinateConversionOptions> CoordinateConversionController::options()
 {
@@ -275,31 +268,23 @@ QQmlListProperty<CoordinateConversionOptions> CoordinateConversionController::op
 
 /*!
   \brief Sets the spatial reference to \a spatialReference.
-
-  \note Spatial reference must be set before calling the \l convertNotation method.
+  \note This property must be set before calling the \l convertNotation method.
  */
-void CoordinateConversionController::setSpatialReference(const SpatialReference& spatialReference)
+void CoordinateConversionController::setSpatialReference(const Esri::ArcGISRuntime::SpatialReference& spatialReference)
 {
   m_spatialReference = spatialReference;
 }
 
 /*!
-  \qmlproperty GarsConversionMode CoordinateConversionController::inputGarsConversionMode
-
-  \brief Gets the inputGarsConversionMode.
-
-  \note This property is only used if the \l inputMode property is set to `Gars`.
+  \property CoordinateConversionController::inputGarsConversionMode
+  \brief The inputGarsConversionMode.
+  \note This property is only used if the \l inputMode property is set to \c Gars.
  */
 CoordinateConversionOptions::GarsConversionMode CoordinateConversionController::inputGarsConversionMode() const
 {
   return m_inputGarsConversionMode;
 }
 
-/*!
-  \brief Sets the inputGarsConversionMode to \a inputGarsConversionMode.
-
-  \note This property is only used if the \l inputMode property is set to `Gars`.
- */
 void CoordinateConversionController::setInputGarsConversionMode(CoordinateConversionOptions::GarsConversionMode inputGarsConversionMode)
 {
   m_inputGarsConversionMode = inputGarsConversionMode;
@@ -307,22 +292,15 @@ void CoordinateConversionController::setInputGarsConversionMode(CoordinateConver
 }
 
 /*!
-  \qmlproperty MgrsConversionMode CoordinateConversionController::inputMgrsConversionMode
-
-  \brief Gets the inputMgrsConversionMode.
-
-  \note This property is only used if the \l inputMode property is set to `Mgrs`.
+  \property CoordinateConversionController::inputMgrsConversionMode
+  \brief The inputMgrsConversionMode.
+  \note This property is only used if the \l inputMode property is set to \c Mgrs.
  */
 CoordinateConversionOptions::MgrsConversionMode CoordinateConversionController::inputMgrsConversionMode() const
 {
   return m_inputMgrsConversionMode;
 }
 
-/*!
-  \brief Sets the inputMgrsConversionMode to \a inputMgrsConversionMode.
-
-  \note This property is only used if the \l inputMode property is set to `Mgrs`.
- */
 void CoordinateConversionController::setInputMgrsConversionMode(CoordinateConversionOptions::MgrsConversionMode inputMgrsConversionMode)
 {
   m_inputMgrsConversionMode = inputMgrsConversionMode;
@@ -330,22 +308,15 @@ void CoordinateConversionController::setInputMgrsConversionMode(CoordinateConver
 }
 
 /*!
-  \qmlproperty UtmConversionMode CoordinateConversionController::inputUtmConversionMode
-
-  \brief Gets the inputUtmConversionMode.
-
-  \note This property is only used if the \l inputMode property is set to `Utm`.
+  \property CoordinateConversionController::inputUtmConversionMode
+  \brief The inputUtmConversionMode.
+  \note This property is only used if the \l inputMode property is set to \c Utm.
  */
 CoordinateConversionOptions::UtmConversionMode CoordinateConversionController::inputUtmConversionMode() const
 {
   return m_inputUtmConversionMode;
 }
 
-/*!
-  \brief Sets the inputUtmConversionMode to \a inputUtmConversionMode.
-
-  \note This property is only used if the \l inputMode property is set to `Utm`
- */
 void CoordinateConversionController::setInputUtmConversionMode(CoordinateConversionOptions::UtmConversionMode inputUtmConversionMode)
 {
   m_inputUtmConversionMode = inputUtmConversionMode;
@@ -353,11 +324,10 @@ void CoordinateConversionController::setInputUtmConversionMode(CoordinateConvers
 }
 
 /*!
-  \brief Sets the next point to be converted via the \l convertPoint method.
-
+  \brief Sets the point to be converted via the \l convertPoint method to \a point.
   \note If the \l runConversion property is \c true, the conversion will be run immediately.
  */
-void CoordinateConversionController::setPointToConvert(const Point& point)
+void CoordinateConversionController::setPointToConvert(const Esri::ArcGISRuntime::Point& point)
 {
   m_pointToConvert = point;
 
@@ -392,8 +362,7 @@ void CoordinateConversionController::objectAppend(QQmlListProperty<QObject>* pro
 }
 
 /*!
-  \brief Helper method to programtically add a CoordinateConversionOptions \a option
-  to the list of options.
+  \brief Add a the \l CoordinateConversionOptions object \a option to the list of options.
  */
 void CoordinateConversionController::addOption(CoordinateConversionOptions* option)
 {
@@ -402,7 +371,7 @@ void CoordinateConversionController::addOption(CoordinateConversionOptions* opti
 }
 
 /*!
-  \brief Helper method to clear all the options from the list.
+  \brief Clear all the \l CoordinateConversionOptions from the list of options.
  */
 void CoordinateConversionController::clearOptions()
 {
@@ -411,7 +380,7 @@ void CoordinateConversionController::clearOptions()
 }
 
 /*!
-  \brief Gets the name of this tool.
+  \brief Returns the name of this tool.
  */
 QString CoordinateConversionController::toolName() const
 {
@@ -419,9 +388,7 @@ QString CoordinateConversionController::toolName() const
 }
 
 /*!
-  \qmlmethod void CoordinateConversionController::copyToClipboard(string text)
-
-  \brief Helper method to copy \a text to the clipboard.
+  \brief Copy \a text to the system clipboard.
  */
 void CoordinateConversionController::copyToClipboard(const QString& text)
 {
@@ -431,9 +398,7 @@ void CoordinateConversionController::copyToClipboard(const QString& text)
 }
 
 /*!
-  \qmlmethod void CoordinateConversionController::clearResults()
-
-  \brief Clears the results strings from the results list model.
+  \brief Clears the results notation strings from the results list model.
  */
 void CoordinateConversionController::clearResults()
 {
@@ -442,9 +407,8 @@ void CoordinateConversionController::clearResults()
 }
 
 /*!
-  \qmlproperty bool CoordinateConversionController::runConversion
-
-  \brief Gets whether the conversion should be run automatically when \l setPointToConvert
+  \property CoordinateConversionController::runConversion
+  \brief When \c true, the conversion runs automatically when \l setPointToConvert
   is called.
  */
 bool CoordinateConversionController::runConversion() const
@@ -452,15 +416,48 @@ bool CoordinateConversionController::runConversion() const
   return m_runConversion;
 }
 
-/*!
-  \brief Sets whether the conversion should be run automatically when \l setPointToConvert
-  is called to \a runConversion.
- */
 void CoordinateConversionController::setRunConversion(bool runConversion)
 {
   m_runConversion = runConversion;
   emit runConversionChanged();
 }
+
+// signals
+
+/*!
+  \fn void CoordinateConversionController::optionsChanged();
+  \brief Signal emitted when the \l options property changes.
+ */
+
+/*!
+  \fn void CoordinateConversionController::resultsChanged();
+  \brief Signal emitted when the \l results property changes.
+ */
+
+/*!
+  \fn void CoordinateConversionController::inputModeChanged();
+  \brief Signal emitted when the \l inputMode property changes.
+ */
+
+/*!
+  \fn void CoordinateConversionController::inputGarsConversionModeChanged();
+  \brief Signal emitted when the \l inputGarsConversionMode property changes.
+ */
+
+/*!
+  \fn void CoordinateConversionController::inputMgrsConversionModeChanged();
+  \brief Signal emitted when the \l inputMgrsConversionMode property changes.
+ */
+
+/*!
+  \fn void CoordinateConversionController::inputUtmConversionModeChanged();
+  \brief Signal emitted when the \l inputUtmConversionMode property changes.
+ */
+
+/*!
+  \fn void CoordinateConversionController::runConversionChanged();
+  \brief Signal emitted when the \l runConversion property changes.
+ */
 
 } // Toolkit
 } // ArcGISRuntime

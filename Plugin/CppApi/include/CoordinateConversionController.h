@@ -52,6 +52,7 @@ class TOOLKIT_EXPORT CoordinateConversionController : public AbstractTool
   Q_PROPERTY(CoordinateConversionOptions::UtmConversionMode inputUtmConversionMode READ inputUtmConversionMode WRITE setInputUtmConversionMode NOTIFY inputUtmConversionModeChanged)
 
   // internal: support for nested default property "options" objects
+  /*! \internal */
   Q_PRIVATE_PROPERTY(CoordinateConversionController::self(), QQmlListProperty<QObject> objects READ objects DESIGNABLE false)
   Q_CLASSINFO("DefaultProperty", "objects")
 

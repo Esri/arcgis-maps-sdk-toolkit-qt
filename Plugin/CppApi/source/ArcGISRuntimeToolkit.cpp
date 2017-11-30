@@ -24,6 +24,12 @@ namespace ArcGISRuntime
 {
 namespace Toolkit
 {
+/*!
+  \class Esri::ArcGISRuntime::Toolkit::ArcGISRuntimeToolkit
+  \inmodule ArcGISQtToolkit
+  \brief TODO Need brief and detailed description.
+  \since Esri::ArcGISRuntime 100.2
+ */
 
 static CoordinateConversionOptions* m_optionsProvider = nullptr;
 
@@ -37,6 +43,9 @@ QObject* optionsProvider(QQmlEngine* engine, QJSEngine*)
   return m_optionsProvider;
 }
 
+/*!
+   \brief Constructor that accepts an optional \a parent object.
+ */
 ArcGISRuntimeToolkit::ArcGISRuntimeToolkit(QObject* parent) :
   QQmlExtensionPlugin(parent)
 {
@@ -45,11 +54,19 @@ ArcGISRuntimeToolkit::ArcGISRuntimeToolkit(QObject* parent) :
 #endif
 }
 
+/*!
+  \brief TODO Need brief and detailed description, then remove QDoc "internal" command.
+  \internal
+ */
 void ArcGISRuntimeToolkit::registerTypes(const char* uri)
 {
   registerToolkitTypes(uri);
 }
 
+/*!
+  \brief TODO Need brief and detailed description, then remove QDoc "internal" command.
+  \internal
+ */
 void ArcGISRuntimeToolkit::registerToolkitTypes(const char* uri)
 {
   // singletons

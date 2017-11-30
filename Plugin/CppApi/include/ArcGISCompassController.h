@@ -45,7 +45,9 @@ public:
   ~ArcGISCompassController();
 
   bool setView(Esri::ArcGISRuntime::GeoView* geoView);
+  /*! \internal */
   bool setView(Esri::ArcGISRuntime::MapQuickView* mapView);
+  /*! \internal */
   bool setView(Esri::ArcGISRuntime::SceneQuickView* sceneView);
 
   double heading() const;
