@@ -50,12 +50,6 @@ unix:!macx:!android:!ios: {
 ios {
   QMAKE_CXXFLAGS += -fembed-bitcode
   RESOURCES += $${PWD}/ArcGISRuntimeToolkit.qrc
-  # the following file is needed to generate universal iOS libs
-  # prior to Qt 5.8
-  equals(QT_MAJOR_VERSION, 5):lessThan(QT_MINOR_VERSION, 8) {
-    CONFIG += bitcode device iphoneos simulator iphonesimulator
-    include ($$PWD/ios_config.prf)
-  }
 }
 
 macx: {
