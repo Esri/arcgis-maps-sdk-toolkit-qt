@@ -210,7 +210,7 @@ void CoordinateConversionOptions::setDecimalPlaces(int decimalPlaces)
   \property CoordinateConversionOptions::mgrsConversionMode
   \brief The MGRS conversion mode.
 
-  This option only applies to the MGRS notation. The default value is
+  This option only applies to the \c Mgrs notation. The default value is
   \l {MgrsConversionMode} {\c MgrsConversionModeAutomatic}.
  */
 MgrsConversionMode CoordinateConversionOptions::mgrsConversionMode() const
