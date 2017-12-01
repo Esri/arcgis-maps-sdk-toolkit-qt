@@ -54,6 +54,11 @@ The toolkit repo has a demo project located in the Examples folder. This project
 ## Version
 The Toolkit is forwards compatible with the ArcGIS Runtime API. It is not backwards compatible. This means that version 100.0 of the Toolkit can be used with version 100.2 of the Runtime API. However, version 100.2 of the Toolkit cannot be used with version 100.0 of the Runtime API, as this version of the Toolkit may require functionality from a newer version of the Runtime API.
 
+## Use a previous version
+The `master` branch contains toolkit components for the current, most up-to-date version of ArcGIS Runtime. To access previous versions, you can checkout by a tag or commit, or alternativley you can download the source zip:
+
+- [100.0](https://github.com/Esri/arcgis-runtime-toolkit-qt/releases/tag/1529)
+- [100.1](https://github.com/Esri/arcgis-runtime-toolkit-qt/releases/tag/1744)
 
 ## Resources
 
