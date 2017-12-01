@@ -21,12 +21,13 @@ namespace Toolkit
 /*!
   \class Esri::ArcGISRuntime::Toolkit::AbstractTool
   \inmodule ArcGISQtToolkit
-  \ingroup ToolCoordinateConversion
-  \ingroup ToolArcGISCompass
   \brief Base class for classes that implement individual tools.
   \since Esri::ArcGISRuntime 100.2
 
   AbstractTool provides functions and properties that all derived tools share.
+
+  \note You cannot create an object of this class. Instead, create a tool
+  object from a derived class.
  */
 
 /*!
@@ -47,8 +48,8 @@ AbstractTool::~AbstractTool()
 }
 
 /*!
-  \fn virtual bool AbstractTool::handleClick(const Point& pos)
-  \brief Reimplement this method in subclasses to handle a click at screen position \a pos.
+  \brief Reimplement this method in subclasses to handle a click at
+  geographic coordinate \a pos.
 
   Returns \c false.
  */
@@ -59,13 +60,14 @@ bool AbstractTool::handleClick(const Point& pos)
 }
 
 /*!
-  \fn virtual void AbstractTool::setProperties(const QVariantMap& properties)
   \brief Reimplement this method in subclasses to set tool properties.
   \list
   \li \a properties - A QVariantMap containing property settings.
   \endlist
 
-  Returns \c false.
+  A tool property is defined as a key-value pair where the key is a QString
+  and the value is a QVariant. Properties are useful for general settings
+  which you wish to persist for the tool, such as default modes.
  */
 void AbstractTool::setProperties(const QVariantMap&)
 {

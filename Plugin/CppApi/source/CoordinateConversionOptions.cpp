@@ -141,7 +141,7 @@ void CoordinateConversionOptions::setName(const QString& name)
   \property CoordinateConversionOptions::addSpaces
   \brief Whether the output notation format should use spaces.
 
-  This option only applies to the Mgrs, Usng and Utm notation types.
+  This option only applies to the \c Mgrs, \c Usng, and \c Utm notation types.
  */
 bool CoordinateConversionOptions::addSpaces() const
 {
@@ -192,7 +192,7 @@ void CoordinateConversionOptions::setPrecision(int precision)
   \property CoordinateConversionOptions::decimalPlaces
   \brief The number of decimal places used in the notation.
 
-  This option only applies to the latitude / longitude notation type.
+  This option only applies to the \c LatLon notation type.
   Possible values are \c 0 to \c 16. The default value is \c 6.
  */
 int CoordinateConversionOptions::decimalPlaces() const
@@ -228,7 +228,7 @@ void CoordinateConversionOptions::setMgrsConversionMode(MgrsConversionMode mgrsC
   \property CoordinateConversionOptions::latLonFormat
   \brief The latitude / longitude notation format.
 
-  This option only applies to the latitude / longitude notation.
+  This option only applies to the \c LatLon notation.
   The default value is \l {LatitudeLongitudeFormat} {LatitudeLongitudeFormatDecimalDegrees}.
  */
 LatitudeLongitudeFormat CoordinateConversionOptions::latLonFormat() const
@@ -246,7 +246,7 @@ void CoordinateConversionOptions::setLatLonFormat(LatitudeLongitudeFormat latLon
   \property CoordinateConversionOptions::utmConversionMode
   \brief The Utm conversion mode.
 
-  This option only applies to the Utm format.
+  This option only applies to the \c Utm notation.
   The default value is \l {UtmConversionMode} {UtmConversionModeLatitudeBandIndicators}.
  */
 UtmConversionMode CoordinateConversionOptions::utmConversionMode() const
@@ -293,7 +293,7 @@ void CoordinateConversionOptions::listClear(QQmlListProperty<CoordinateConversio
 }
 
 /*!
-  \brief Returns the input string \a type converted to a \l CoordinateType enum value.
+  \brief Returns the \l CoordinateType enum value corresponding to the enum's text representation, \a type.
  */
 CoordinateConversionOptions::CoordinateType CoordinateConversionOptions::stringToCoordinateType(const QString& type) const
 {
@@ -314,7 +314,7 @@ CoordinateConversionOptions::CoordinateType CoordinateConversionOptions::stringT
 }
 
 /*!
-  \brief Returns the \l CoordinateType enum value \a type converted to a string.
+  \brief Returns the text representation of the \l CoordinateType enum value \a type.
  */
 QString CoordinateConversionOptions::coordinateTypeToString(CoordinateType type) const
 {
@@ -340,7 +340,7 @@ QString CoordinateConversionOptions::coordinateTypeToString(CoordinateType type)
 
 /*!
   \property CoordinateConversionOptions::coordinateTypeNames
-  \brief A list of strings of the supported coordinate types.
+  \brief A list of strings representing all of the supported \l CoordinateType types.
  */
 QStringList CoordinateConversionOptions::coordinateTypeNames() const
 {
@@ -351,7 +351,6 @@ QStringList CoordinateConversionOptions::coordinateTypeNames() const
                        << s_usng
                        << s_utm;
 }
-
 
 // enums
 

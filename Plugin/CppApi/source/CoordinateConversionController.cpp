@@ -95,7 +95,7 @@ CoordinateConversionController::~CoordinateConversionController()
   to the spatial reference of the notation's coordinates.
 
   \note Converting between some notation formats can result in loss
-  of precision due to the number of decimal places expresses in the
+  of precision due to the number of decimal places expressed in the
   notation, and other factors. The best precision is attained by
   converting from a Point object. See \l convertPoint.
  */
@@ -362,7 +362,7 @@ void CoordinateConversionController::objectAppend(QQmlListProperty<QObject>* pro
 }
 
 /*!
-  \brief Add a the \l CoordinateConversionOptions object \a option to the list of options.
+  \brief Add the \l CoordinateConversionOptions object \a option to the list of options.
  */
 void CoordinateConversionController::addOption(CoordinateConversionOptions* option)
 {
@@ -380,7 +380,7 @@ void CoordinateConversionController::clearOptions()
 }
 
 /*!
-  \brief Returns the name of this tool.
+  \brief Returns the name of this tool: "CoordinateConversion".
  */
 QString CoordinateConversionController::toolName() const
 {
