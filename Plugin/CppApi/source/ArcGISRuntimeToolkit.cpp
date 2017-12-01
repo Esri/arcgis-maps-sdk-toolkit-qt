@@ -27,8 +27,12 @@ namespace Toolkit
 /*!
   \class Esri::ArcGISRuntime::Toolkit::ArcGISRuntimeToolkit
   \inmodule ArcGISQtToolkit
-  \brief TODO Need brief and detailed description.
   \since Esri::ArcGISRuntime 100.2
+  \brief The main plugin class for the ArcGISRuntimeToolkit.
+
+  You must call the static \l registerToolkitTypes function
+  to ensure all the types are accessible in the QML environment.
+  You may alternately do this manually if you only need specific types.
  */
 
 static CoordinateConversionOptions* m_optionsProvider = nullptr;
@@ -55,8 +59,16 @@ ArcGISRuntimeToolkit::ArcGISRuntimeToolkit(QObject* parent) :
 }
 
 /*!
-  \brief TODO Need brief and detailed description, then remove QDoc "internal" command.
-  \internal
+  \brief Type registration function to ensure the types are accessible
+  in the QML environment.
+
+  You can use this method if you want to customize the import path. For ease
+  of use, \l registerToolkitTypes can be used instead without needing to instantiate
+  this class.
+
+  \list
+  \li \a uri - The namespace in which to register the types.
+  \endlist
  */
 void ArcGISRuntimeToolkit::registerTypes(const char* uri)
 {
@@ -64,8 +76,17 @@ void ArcGISRuntimeToolkit::registerTypes(const char* uri)
 }
 
 /*!
-  \brief TODO Need brief and detailed description, then remove QDoc "internal" command.
-  \internal
+  \brief Static type registration function to ensure the types are accessible
+  in the QML environment.
+
+  This is the starting point for most uses of the ArcGISRuntimeToolkit. If you
+  want to use the ArcGISRuntimeToolkit out of the box, then this method (with
+  the default argument) will register all the types with the default import
+  path.
+
+  \list
+  \li \a uri - The namespace in which to register the types.
+  \endlist
  */
 void ArcGISRuntimeToolkit::registerToolkitTypes(const char* uri)
 {
