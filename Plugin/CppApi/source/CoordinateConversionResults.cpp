@@ -24,8 +24,8 @@ namespace Toolkit
   \class Esri::ArcGISRuntime::Toolkit::CoordinateConversionResults
   \ingroup ToolCoordinateConversion
   \inmodule ArcGISQtToolkit
-  \since Esri::ArcGISRuntime 100.2
   \brief Results from the CoordinateConversionController.
+  \since Esri::ArcGISRuntime 100.2
 
   This class is primarily used by the CoordinateConversionController. You should
   not need to interact with this class directly.
@@ -183,6 +183,23 @@ Result::Result(const QString& name, const QString& notation, int type) :
   m_name(name), m_notation(notation), m_type(type)
 {
 }
+
+/*!
+  \fn CoordinateConversionResults::resultsChanged()
+  \brief Signal emitted when the results change.
+ */
+
+/*!
+  \enum CoordinateConversionResults::CoordinateConversionResultsRoles
+  \brief Enumeration of roles used to access results in the list model.
+
+  \value CoordinateConversionResultsNameRole
+         The Name role.
+  \value CoordinateConversionResultsNotationRole
+         The Notation role.
+  \value CoordinateConversionResultsCoordinateTypeRole
+         The Coordinate Type role.
+ */
 
 } // Toolkit
 } // ArcGISRuntime

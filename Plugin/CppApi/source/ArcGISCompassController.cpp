@@ -29,12 +29,15 @@ namespace Toolkit
 
 /*!
   \class Esri::ArcGISRuntime::Toolkit::ArcGISCompassController
-  \ingroup ToolArcGISCompass
   \inmodule ArcGISQtToolkit
-  \since Esri::ArcGISRuntime 100.2
+  \ingroup ToolArcGISCompass
   \brief The controller for the ArcGIS Compass tool.
+  \since Esri::ArcGISRuntime 100.2
  */
 
+/*!
+   \brief The constructor that accepts an optional \a parent object.
+ */
 ArcGISCompassController::ArcGISCompassController(QObject *parent):
   AbstractTool(parent)
 {
@@ -48,10 +51,17 @@ ArcGISCompassController::ArcGISCompassController(QObject *parent):
   });
 }
 
+/*!
+   \brief The destructor.
+ */
 ArcGISCompassController::~ArcGISCompassController()
 {
 }
 
+/*!
+   \property ArcGISCompassController::heading
+   \brief The compass heading in degrees.
+ */
 void ArcGISCompassController::setHeading(double rotation)
 {
   if (m_heading == rotation)
@@ -68,6 +78,10 @@ void ArcGISCompassController::setHeading(double rotation)
   }
 }
 
+/*!
+   \property ArcGISCompassController::autoHide
+   \brief Whether the compass should be hidden when its heading is north (zero degrees).
+ */
 void ArcGISCompassController::setAutoHide(bool autoHide)
 {
   if (m_autoHide == autoHide)
@@ -77,6 +91,12 @@ void ArcGISCompassController::setAutoHide(bool autoHide)
   emit autoHideChanged();
 }
 
+/*!
+  \fn Esri::ArcGISRuntime::Toolkit::ArcGISCompassController::setView(Esri::ArcGISRuntime::GeoView* geoView)
+  \brief Sets the \c Esri::ArcGISRuntime::GeoView associated with the compass to \a geoView.
+
+  Returns \c true on success.
+ */
 bool ArcGISCompassController::setView(GeoView *geoView)
 {
   if (!geoView)

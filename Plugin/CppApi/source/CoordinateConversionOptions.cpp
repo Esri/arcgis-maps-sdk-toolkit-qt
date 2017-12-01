@@ -24,13 +24,17 @@ namespace Toolkit
   \class Esri::ArcGISRuntime::Toolkit::CoordinateConversionOptions
   \ingroup ToolCoordinateConversion
   \inmodule ArcGISQtToolkit
-  \since Esri::ArcGISRuntime 100.2
   \brief Options for converting between geographic coordinate notations.
+  \since Esri::ArcGISRuntime 100.2
+
+  CoordinateConvertionsOptions define the various coordinate notation formats that this tool can convert between.
+  Create one of these objects for each format you want your app to convert between. See
+  \l CoordinateConversionController for details.
 
   \table
   \header
-    \li Supported notation
-    \li Options (valid range)
+    \li Notations supported
+    \li Format options (valid range)
   \row
     \li {1, 3} Latitude-longitude in degrees
     \li \l name
@@ -86,19 +90,24 @@ static const QString s_mgrs   = QStringLiteral("Mgrs");
 static const QString s_usng   = QStringLiteral("Usng");
 static const QString s_utm    = QStringLiteral("Utm");
 
+/*!
+   \brief The constructor that accepts an optional \a parent object.
+ */
 CoordinateConversionOptions::CoordinateConversionOptions(QObject* parent):
   QObject(parent)
 {
 }
 
+/*!
+   \brief The destructor.
+ */
 CoordinateConversionOptions::~CoordinateConversionOptions()
 {
 }
 
 /*!
-  \qmlproperty CoordinateType CoordinateConversionOptions::outputMode
-
-  \brief Gets the coordinate format this option will be output in.
+  \property CoordinateConversionOptions::outputMode
+  \brief The output coordinate notation type.
 
   The default value is \l {CoordinateType} {CoordinateTypeUsng}.
  */
@@ -107,11 +116,6 @@ CoordinateConversionOptions::CoordinateType CoordinateConversionOptions::outputM
   return m_outputMode;
 }
 
-/*!
-  \brief Sets the coordinate format this option will be output in to \a outputMode.
-
-  The default value is \l {CoordinateType} {CoordinateTypeUsng}.
- */
 void CoordinateConversionOptions::setOutputMode(CoordinateType outputMode)
 {
   m_outputMode = outputMode;
@@ -119,18 +123,14 @@ void CoordinateConversionOptions::setOutputMode(CoordinateType outputMode)
 }
 
 /*!
-  \qmlproperty string CoordinateConversionOptions::name
-
-  \brief Gets the name of the option.
+  \property CoordinateConversionOptions::name
+  \brief The name used to identify this option, usually in the UI.
  */
 QString CoordinateConversionOptions::name() const
 {
   return m_name;
 }
 
-/*!
-  \brief Sets the name of the option to \a name.
- */
 void CoordinateConversionOptions::setName(const QString& name)
 {
   m_name = name;
@@ -138,28 +138,16 @@ void CoordinateConversionOptions::setName(const QString& name)
 }
 
 /*!
-  \qmlproperty bool CoordinateConversionOptions::addSpaces
+  \property CoordinateConversionOptions::addSpaces
+  \brief Whether the output notation format should use spaces.
 
-  \brief Gets whether the notation output should use spaces.
-
-  \note This option only applies to the following notation types:
-  Mgrs, Usng and Utm.
-
-  \note The default value is \c true.
+  This option only applies to the \c Mgrs, \c Usng, and \c Utm notation types.
  */
 bool CoordinateConversionOptions::addSpaces() const
 {
   return m_addSpaces;
 }
 
-/*!
-  \brief Sets whether the notation output should use spaces to \a addSpaces.
-
-  \note This option only applied to the following notation types:
-  Mgrs, Usng and Utm.
-
-  \note The default value is \c true.
- */
 void CoordinateConversionOptions::setAddSpaces(bool addSpaces)
 {
   m_addSpaces = addSpaces;
@@ -167,28 +155,33 @@ void CoordinateConversionOptions::setAddSpaces(bool addSpaces)
 }
 
 /*!
-  \qmlproperty int CoordinateConversionOptions::precision
+  \property CoordinateConversionOptions::precision
+  \brief The precision for the notation type.
 
-  \brief Gets the precision for the option.
-
-  \note This option only applies to the following notation types:
-  GeoRef (0 to 9), MGRS (0 to 8), and USNG (0 to 8).
-
-  \note The default value is \c 8.
+  \table
+  \header
+  \li Notation type
+  \li Value range
+  \li Default value
+  \row
+  \li GeoRef
+  \li \c {0 to 9}
+  \li \c 8
+  \row
+  \li MGRS
+  \li \c {0 to 8}
+  \li \c 8
+  \row
+  \li USNG
+  \li \c {0 to 8}
+  \li \c 8
+  \endtable
  */
 int CoordinateConversionOptions::precision() const
 {
   return m_precision;
 }
 
-/*!
-  \brief Sets the precision for the option to \a precision.
-
-  \note This option only applies to the following notation types:
-  GeoRef (0 to 9), MGRS (0 to 8), and USNG (0 to 8).
-
-  The default value is \c 8.
- */
 void CoordinateConversionOptions::setPrecision(int precision)
 {
   m_precision = precision;
@@ -196,11 +189,10 @@ void CoordinateConversionOptions::setPrecision(int precision)
 }
 
 /*!
-  \qmlproperty int CoordinateConversionOptions::decimalPlaces
+  \property CoordinateConversionOptions::decimalPlaces
+  \brief The number of decimal places used in the notation.
 
-  \brief Gets the decimal places for the option.
-
-  This option only applies to the LatLon (LatitudeLongitude) format.
+  This option only applies to the \c LatLon notation type.
   Possible values are \c 0 to \c 16. The default value is \c 6.
  */
 int CoordinateConversionOptions::decimalPlaces() const
@@ -208,12 +200,6 @@ int CoordinateConversionOptions::decimalPlaces() const
   return m_decimalPlaces;
 }
 
-/*!
-  \brief Sets the decimal places for the option to \a decimalPlaces.
-
-  This option only applies to the LatLon (LatitudeLongitude) format.
-  Possible values are \c 0 to \c 16. The default value is 6.
- */
 void CoordinateConversionOptions::setDecimalPlaces(int decimalPlaces)
 {
   m_decimalPlaces = decimalPlaces;
@@ -221,11 +207,10 @@ void CoordinateConversionOptions::setDecimalPlaces(int decimalPlaces)
 }
 
 /*!
-  \qmlproperty MgrsConversionMode CoordinateConversionOptions::mgrsConversionMode
+  \property CoordinateConversionOptions::mgrsConversionMode
+  \brief The MGRS conversion mode.
 
-  \brief Gets MGRS conversion mode.
-
-  This option only applies to the MGRS format. The default value is
+  This option only applies to the \c Mgrs notation. The default value is
   \l {MgrsConversionMode} {\c MgrsConversionModeAutomatic}.
  */
 MgrsConversionMode CoordinateConversionOptions::mgrsConversionMode() const
@@ -233,12 +218,6 @@ MgrsConversionMode CoordinateConversionOptions::mgrsConversionMode() const
   return m_mgrsConversionMode;
 }
 
-/*!
-  \brief Sets Mgrs conversion mode to \a mgrsConversionMode.
-
-  This option only applies to the MGRS format. The default value is
-  \l {MgrsConversionMode} {\c MgrsConversionModeAutomatic}.
- */
 void CoordinateConversionOptions::setMgrsConversionMode(MgrsConversionMode mgrsConversionMode)
 {
   m_mgrsConversionMode = mgrsConversionMode;
@@ -246,26 +225,17 @@ void CoordinateConversionOptions::setMgrsConversionMode(MgrsConversionMode mgrsC
 }
 
 /*!
-  \qmlproperty LatitudeLongitudeFormat CoordinateConversionOptions::latLonFormat
+  \property CoordinateConversionOptions::latLonFormat
+  \brief The latitude / longitude notation format.
 
-  \brief Gets the latitude longitude format.
-
-  \note This option only applies to the LatLon (LatitudeLongitude) format.
-
-  \note The default value is DecimalDegrees.
+  This option only applies to the \c LatLon notation.
+  The default value is \l {LatitudeLongitudeFormat} {LatitudeLongitudeFormatDecimalDegrees}.
  */
 LatitudeLongitudeFormat CoordinateConversionOptions::latLonFormat() const
 {
   return m_latLonFormat;
 }
 
-/*!
-  \brief Sets the latitude longitude format to \a latLonFormat.
-
-  \note This option only applies to the LatLon (LatitudeLongitude) format.
-
-  \note The default value is DecimalDegrees.
- */
 void CoordinateConversionOptions::setLatLonFormat(LatitudeLongitudeFormat latLonFormat)
 {
   m_latLonFormat = latLonFormat;
@@ -273,26 +243,17 @@ void CoordinateConversionOptions::setLatLonFormat(LatitudeLongitudeFormat latLon
 }
 
 /*!
-  \qmlproperty UtmConversionMode CoordinateConversionOptions::utmConversionMode
+  \property CoordinateConversionOptions::utmConversionMode
+  \brief The Utm conversion mode.
 
-  \brief Gets the Utm conversion mode.
-
-  \note This option only applies to the Utm format.
-
-  \note The default value is LatitudeBandIndicators.
+  This option only applies to the \c Utm notation.
+  The default value is \l {UtmConversionMode} {UtmConversionModeLatitudeBandIndicators}.
  */
 UtmConversionMode CoordinateConversionOptions::utmConversionMode() const
 {
   return m_utmConversionMode;
 }
 
-/*!
-  \brief Sets the Utm conversion mode to \a utmConversionMode.
-
-  \note This option only applies to the Utm format.
-
-  \note The default value is LatitudeBandIndicators.
- */
 void CoordinateConversionOptions::setUtmConversionMode(UtmConversionMode utmConversionMode)
 {
   m_utmConversionMode = utmConversionMode;
@@ -332,9 +293,7 @@ void CoordinateConversionOptions::listClear(QQmlListProperty<CoordinateConversio
 }
 
 /*!
-  \qmlmethod CoordinateType CoordinateConversionOptions::stringToCoordinateType(string type)
-
-  \brief Converts the input string type to a CoordinateType enum value
+  \brief Returns the \l CoordinateType enum value corresponding to the enum's text representation, \a type.
  */
 CoordinateConversionOptions::CoordinateType CoordinateConversionOptions::stringToCoordinateType(const QString& type) const
 {
@@ -355,9 +314,7 @@ CoordinateConversionOptions::CoordinateType CoordinateConversionOptions::stringT
 }
 
 /*!
-  \qmlmethod string CoordinateConversionOptions::coordinateTypeToString(CoordinateType type)
-
-  \brief Converts the input enum value CoordinateType to a string representation.
+  \brief Returns the text representation of the \l CoordinateType enum value \a type.
  */
 QString CoordinateConversionOptions::coordinateTypeToString(CoordinateType type) const
 {
@@ -382,9 +339,8 @@ QString CoordinateConversionOptions::coordinateTypeToString(CoordinateType type)
 }
 
 /*!
-  \qmlproperty list<string> CoordinateConversionOptions::coordinateTypeNames
-
-  \brief A list of strings of the supported coordinate types.
+  \property CoordinateConversionOptions::coordinateTypeNames
+  \brief A list of strings representing all of the supported \l CoordinateType types.
  */
 QStringList CoordinateConversionOptions::coordinateTypeNames() const
 {
@@ -395,6 +351,105 @@ QStringList CoordinateConversionOptions::coordinateTypeNames() const
                        << s_usng
                        << s_utm;
 }
+
+// enums
+
+/*!
+  \enum CoordinateConversionOptions::CoordinateType
+  \brief Enumeration of notation types supported for conversion.
+
+  \value CoordinateTypeGars
+         Global Area Reference System (GARS)
+
+  \value CoordinateTypeGeoRef
+         World Geographic Reference System (GEOREF)
+
+  \value CoordinateTypeLatLon
+         Latitude-longitude in degrees
+
+  \value CoordinateTypeMgrs
+         Military Grid Reference System (MGRS)
+
+  \value CoordinateTypeUsng
+         United States National Grid (USNG)
+
+  \value CoordinateTypeUtm
+         Universal Transverse Mercator (UTM)
+ */
+
+/*!
+  \enum CoordinateConversionOptions::GarsConversionMode
+  \brief Enumerates possible locations of a point relative to a GARS cell.
+
+  \value GarsConversionModeLowerLeft
+         Represents a GARS cell by the coordinate of its southwest corner.
+
+  \value GarsConversionModeCenter
+         Represents a GARS cell by the coordinates of its center.
+ */
+
+/*!
+  \enum CoordinateConversionOptions::MgrsConversionMode
+  \brief Enumerates the lettering scheme and treatment of coordinates at
+         180 degrees longitude when converting MGRS.
+
+  \value MgrsConversionModeAutomatic
+         The choice of MGRS lettering scheme is based on the datum and ellipsoid
+         of the spatial reference provided. Spatial references with new datums
+         (e.g. WGS 84) assume new lettering scheme (AA scheme). This is
+         equivalent to MgrsConversionMode::New180InZone60. Spatial references
+         with older datums (e.g. Clarke 1866, Bessel 1841, Clarke 1880) assume
+         old lettering scheme (AL scheme). This is equivalent to
+         MgrsConversionMode::Old180InZone60. When converted, points with
+         longitude of exactly 180 degrees are placed in zone 60.
+
+  \value MgrsConversionModeNew180InZone01
+         The MGRS notation uses the new lettering scheme (AA scheme) and, when
+         converted, places points with longitude of 180 degrees in zone 01.
+
+  \value MgrsConversionModeNew180InZone60
+         The MGRS notation uses the new lettering scheme (AA scheme) and, when
+         converted, places points with longitude of 180 degrees in zone 60.
+
+  \value MgrsConversionModeOld180InZone01
+         The MGRS notation uses the old lettering scheme (AL scheme) and, when
+         converted, places points with longitude of 180 degrees in zone 01.
+
+  \value MgrsConversionModeOld180InZone60
+         The MGRS notation uses the old lettering scheme (AL scheme) and, when
+         converted, places points with longitude of 180 degrees in zone 60.
+ */
+
+/*!
+  \enum CoordinateConversionOptions::UtmConversionMode
+  \brief Enumerates types of latitude designation in UTM notation.
+
+  \value UtmConversionModeLatitudeBandIndicators
+         The letter after the UTM zone number represents a latitudinal band
+        (\c C through \c X, omitting \c I and \c O).
+
+  \value UtmConversionModeNorthSouthIndicators
+         The letter after the UTM zone number represents a hemisphere
+         (\c N or \c S).
+ */
+
+/*!
+  \enum CoordinateConversionOptions::LatitudeLongitudeFormat
+  \brief Enumerates supported formats for representing latitude-longitude
+  geographical coordinates as a string.
+
+  \value LatitudeLongitudeFormatDecimalDegrees
+         The geographical coordinates are represented in decimal degrees.
+
+  \value LatitudeLongitudeFormatDegreesDecimalMinutes
+         The geographical coordinates are represented in degrees and decimal
+         minutes.
+
+  \value LatitudeLongitudeFormatDegreesMinutesSeconds
+         The geographical coordinates are represented in degrees and minutes
+         and decimal seconds.
+ */
+
 
 } // Toolkit
 } // ArcGISRuntime
