@@ -19,11 +19,10 @@ Rectangle {
     /*!
       \qmlproperty real scaleFactor
       \brief The scale factor used for sizing UI elements.
-      \internal
 
       Pixel density and screen resolution varies greatly between different
       devices and operating systems. This property allows your app to specify
-      the width and height of UI elements so that the sizes appear similar
+      the width or height of UI elements so that the sizes appear similar
       (relative to screen size) across devices. Here is an example of how to
       use this property.
 
@@ -41,7 +40,7 @@ Rectangle {
       \qmlproperty int buttonWidth
       \brief The width of various buttons on this tool.
 
-      The default value is \c {100 * \l scaleFactor}.
+      The default value is \c {100 * scaleFactor}.
      */
     property int buttonWidth: 100 * scaleFactor
 
@@ -49,7 +48,7 @@ Rectangle {
       \qmlproperty int spacingValue
       \brief The spacing between rows and columns on this tool.
 
-      The default value is \c {5 * \l scaleFactor}.
+      The default value is \c {5 * scaleFactor}.
      */
     property int spacingValue: 5 * scaleFactor
 
@@ -57,7 +56,7 @@ Rectangle {
       \qmlproperty int imageWidth
       \brief The width of the images used for buttons on this tool.
 
-      The default value is \c {36 * \l scaleFactor}.
+      The default value is \c {36 * scaleFactor}.
      */
     property int imageWidth: 36 * scaleFactor
 
@@ -65,7 +64,7 @@ Rectangle {
       \qmlproperty int fontSize
       \brief The font size of coordinate notation text on this tool.
 
-      The default value is \c {12 * \l scaleFactor}.
+      The default value is \c {12 * scaleFactor}.
      */
     property int fontSize: 12 * scaleFactor
 
