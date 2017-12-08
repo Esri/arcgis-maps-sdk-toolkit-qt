@@ -8,7 +8,7 @@ import Esri.ArcGISRuntime.Toolkit.CppApi 100.2
     \qmltype ArcGISCompass
     \ingroup ToolArcGISCompass
     \inqmlmodule Esri.ArcGISRuntime.Toolkit.Controls
-    \since Esri.ArcGISRutime 100.2.0
+    \since Esri.ArcGISRutime 100.2
     \brief The user interface for the ArcGIS Compass tool.
     \sa {ArcGIS Compass Tool}
 */
