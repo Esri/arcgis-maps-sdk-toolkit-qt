@@ -77,6 +77,8 @@ namespace Toolkit
 
   For more information see the API documentation for
   \l {http://../../../cpp/api-reference/esri-arcgisruntime-coordinateformatter.html} {CoordinateFormatter}.
+
+  \sa {Coordinate Conversion Tool}
  */
 
 using MgrsConversionMode = CoordinateConversionOptions::MgrsConversionMode;

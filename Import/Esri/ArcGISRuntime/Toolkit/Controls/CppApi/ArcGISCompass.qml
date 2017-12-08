@@ -10,9 +10,7 @@ import Esri.ArcGISRuntime.Toolkit.CppApi 100.2
     \inqmlmodule Esri.ArcGISRuntime.Toolkit.Controls
     \since Esri.ArcGISRutime 100.2
     \brief The user interface for the ArcGIS Compass tool.
-    \sa {ArcGIS Compass}
-
-    \since Esri::ArcGISRuntime 100.2.0
+    \sa {ArcGIS Compass Tool}
 */
 
 Item {

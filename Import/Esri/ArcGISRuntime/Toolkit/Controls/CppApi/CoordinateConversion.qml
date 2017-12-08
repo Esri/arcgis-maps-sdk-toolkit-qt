@@ -10,7 +10,7 @@ import Esri.ArcGISRuntime.Toolkit.CppApi 100.2
     \ingroup ToolCoordinateConversion
     \since Esri.ArcGISRutime 100.2
     \brief The user interface for the coordinate conversion tool.
-    \sa {Coordinate Conversion}
+    \sa {Coordinate Conversion Tool}
 */
 
 Rectangle {

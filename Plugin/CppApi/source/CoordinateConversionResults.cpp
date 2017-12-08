@@ -53,6 +53,8 @@ namespace Toolkit
         \li The format used for the conversion.
         \li \l {Esri::ArcGISRuntime::Toolkit::CoordinateConversionResults::CoordinateConversionResultsCoordinateTypeRole}{CoordinateConversionResultsCoordinateTypeRole}
   \endtable
+
+  \sa {Coordinate Conversion Tool}
  */
 
 /*!

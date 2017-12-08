@@ -35,6 +35,8 @@
   using \l addOption. Each \l CoordinateConversionOptions object specifies a
   coordinate notation and options that apply to that notation (decimal places,
   use of spaces, and so on).
+
+  \sa {Coordinate Conversion Tool}
  */
 
 namespace Esri
