@@ -33,6 +33,8 @@ namespace Toolkit
   \ingroup ToolArcGISCompass
   \brief The controller for the ArcGIS Compass tool.
   \since Esri::ArcGISRuntime 100.2
+
+  \sa {ArcGIS Compass Tool}
  */
 
 /*!
