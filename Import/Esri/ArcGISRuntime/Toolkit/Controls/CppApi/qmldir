@@ -14,21 +14,7 @@
 #   limitations under the License.
 ################################################################################
 
-mac {
-    cache()
-}
+module Esri.ArcGISRuntime.Toolkit.Controls.CppApi
 
-#-------------------------------------------------------------------------------
-
-TEMPLATE = subdirs
-
-OTHER_FILES += \
-    README.md \
-    .gitattributes \
-    .gitignore \
-    Import/*.qmlproject \
-    Examples/*.qmlproject \
-    Plugin/*
-
-#-------------------------------------------------------------------------------
-
+CoordinateConversion 100.2 CoordinateConversion.qml
+ArcGISCompass 100.2 ArcGISCompass.qml

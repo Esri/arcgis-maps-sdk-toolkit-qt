@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2012-2016 Esri
+ * Copyright 2012-2017 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,34 +14,15 @@
  *   limitations under the License.
  ******************************************************************************/
 
-import QmlProject 1.1
+#ifndef QRT_TOOLKIT_Common_H
+#define QRT_TOOLKIT_Common_H
 
-Project {
-    mainFile: "Examples.qml"
+#include <QtCore/qglobal.h>
 
-    QmlFiles {
-        directory: "."
-        recursive: true
-    }
+#ifdef QTRUNTIME_TOOLKIT_BUILD
+#define TOOLKIT_EXPORT Q_DECL_EXPORT
+#else
+#define TOOLKIT_EXPORT Q_DECL_IMPORT
+#endif
 
-    JavaScriptFiles {
-        directory: "."
-        recursive: true
-    }
-
-    ImageFiles {
-        directory: "."
-        recursive: true
-    }
-
-    Files {
-        directory: "."
-        recursive: true
-        filter: "*.json;*.png;*.txt"
-    }
-
-    importPaths: [
-        "../Import"
-   ]
-}
-
+#endif // QRT_TOOLKIT_Common_H
