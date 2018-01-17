@@ -74,8 +74,8 @@ public slots:
   void onMouseReleased(QMouseEvent& mouseEvent);
   void onMousePressedAndHeld(QMouseEvent& mouseEvent);
   void onMouseDoubleClicked(QMouseEvent& mouseEvent);
-  void onIdentifyGraphicsOverlayCompleted(QUuid id, IdentifyGraphicsOverlayResult* identifyResult);
-  void onIdentifyGraphicsOverlaysCompleted(QUuid id, QList<IdentifyGraphicsOverlayResult*> identifyResults);
+  void onIdentifyGraphicsOverlayCompleted(QUuid taskId, IdentifyGraphicsOverlayResult* identifyResult);
+  void onIdentifyGraphicsOverlaysCompleted(QUuid taskId, QList<IdentifyGraphicsOverlayResult*> identifyResults);
   void onIdentifyLayerCompleted(QUuid taskId, IdentifyLayerResult* identifyResult);
   void onIdentifyLayersCompleted(QUuid taskId, QList<IdentifyLayerResult*> identifyResults);
   void onScreenToLocationCompleted(QUuid taskId, const Point& location);
