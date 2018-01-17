@@ -77,7 +77,7 @@ Item {
 
             Text {
                 width: parent.width
-                text: titleTextInternal + ":"
+                text: titleTextInternal
                 elide: Text.ElideRight
                 color: titleTextColorInternal
                 font {
