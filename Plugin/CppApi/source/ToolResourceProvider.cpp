@@ -238,6 +238,21 @@ void ToolResourceProvider::onIdentifyGraphicsOverlayCompleted(QUuid id, Identify
   emit identifyGraphicsOverlayCompleted(id, identifyResult);
 }
 
+void ToolResourceProvider::onIdentifyGraphicsOverlaysCompleted(QUuid taskId, QList<IdentifyGraphicsOverlayResult *> identifyResults)
+{
+  emit identifyGraphicsOverlaysCompleted(taskId, identifyResults);
+}
+
+void ToolResourceProvider::onIdentifyLayerCompleted(QUuid taskId, IdentifyLayerResult* identifyResult)
+{
+  emit identifyLayerCompleted(taskId, identifyResult);
+}
+
+void ToolResourceProvider::onIdentifyLayersCompleted(QUuid taskId, QList<IdentifyLayerResult*> identifyResults)
+{
+  emit identifyLayersCompleted(taskId, identifyResults);
+}
+
 void ToolResourceProvider::onScreenToLocationCompleted(QUuid taskId, const Point& location)
 {
   emit screenToLocationCompleted(taskId, location);
