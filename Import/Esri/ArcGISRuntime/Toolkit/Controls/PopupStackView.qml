@@ -26,7 +26,7 @@ import QtQuick.Window 2.0
     \ingroup ArcGISQtToolkitCppApi
     \ingroup ArcGISQtToolkitQmlApi
     \inqmlmodule Esri.ArcGISRuntime.Toolkit.Controls
-    \since Esri.ArcGISRutime 100.3
+    \since Esri.ArcGISRutime 100.2
     \brief A view for displaying and editing information of Features.
 
     A PopupStackView can be used to display information for any type that
@@ -358,7 +358,7 @@ Item {
             radius: radius
             width: parent.width
             height: parent.height / 12
-
+            visible: popupManagers !== null && popupManagers.length > 1
 
             Image {
                 anchors {
