@@ -358,7 +358,7 @@ Item {
             radius: radius
             width: parent.width
             height: parent.height / 12
-
+            visible: popupManagers !== null && popupManagers.length > 1
 
             Image {
                 anchors {
