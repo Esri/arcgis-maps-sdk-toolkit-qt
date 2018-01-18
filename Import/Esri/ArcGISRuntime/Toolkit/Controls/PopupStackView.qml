@@ -318,7 +318,7 @@ Item {
         id: popup1
         backgroundColorInternal: backgroundColor
         borderColorInternal: borderColor
-        borderWidthInternal: borderWidth
+        borderWidthInternal: 0
         radiusInternal: radius
         titleTextSizeInternal: titleTextSize
         attributeNameTextColorInternal: attributeNameTextColor
@@ -334,7 +334,7 @@ Item {
         id: popup2
         backgroundColorInternal: backgroundColor
         borderColorInternal: borderColor
-        borderWidthInternal: borderWidth
+        borderWidthInternal: 0
         radiusInternal: radius
         titleTextSizeInternal: titleTextSize
         attributeNameTextColorInternal: attributeNameTextColor
@@ -348,8 +348,10 @@ Item {
     Column {
         height: parent.height
         width: parent.width
+        clip: true
 
         Rectangle {
+            id: navButtonsRectangle
             color: backgroundColor
             border {
                 color: borderColor
@@ -415,10 +417,23 @@ Item {
             }
         }
 
-        StackView {
-            id: popupStack
-            height: parent.height
+        Item {
+            height: parent.height - navButtonsRectangle.height
             width: parent.width
+
+            StackView {
+                id: popupStack
+                anchors.fill: parent
+            }
+
+            Rectangle {
+                anchors.fill: parent
+                color: "transparent"
+                border {
+                    width: borderWidth
+                    color: borderColor
+                }
+            }
         }
     }
 }
