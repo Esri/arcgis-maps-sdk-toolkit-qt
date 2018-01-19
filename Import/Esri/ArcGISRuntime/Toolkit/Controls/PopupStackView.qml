@@ -483,4 +483,9 @@ Item {
             }
         }
     }
+
+    onButtonColorChanged: {
+        forwardButtonCanvas.requestPaint();
+        previousButtonCanvas.requestPaint();
+    }
 }
