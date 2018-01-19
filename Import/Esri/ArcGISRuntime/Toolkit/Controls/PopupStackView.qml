@@ -138,6 +138,13 @@ Item {
     property color attributeValueTextColor: "#4f4f4f"
 
     /*!
+        \brief The color of the navigation buttons used to change the viewed Popup.
+
+        The default color is \c "gray".
+    */
+    property color buttonColor: "gray"
+
+    /*!
         \brief The animation duration for the slideHorizontal and slideVertical methods in milliseconds.
 
         The default duration is \c 250 milliseconds.
@@ -312,6 +319,33 @@ Item {
         popupStack.pop();
     }
 
+    /*! internal */
+    function drawButton(canvas) {
+        var ctx = canvas.getContext("2d");
+        ctx.strokeStyle = buttonColor;
+        ctx.lineWidth = canvas.height / 10;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.save();
+
+        // place in middle
+        ctx.translate(0.5 * canvas.width - 0.5 * canvas.height / 2, 0.5 * canvas.height - 0.5 * canvas.height / 2);
+
+        // start drawing the triangle
+        ctx.beginPath();
+
+        // top point of the triangle
+        ctx.moveTo(canvas.height / 4, 0);
+
+        // middle point
+        ctx.lineTo(0, canvas.height / 4);
+
+        // bottom point
+        ctx.lineTo(canvas.height / 4, canvas.height / 2);
+
+        ctx.stroke();
+        ctx.restore();
+    }
+
     // Create two PopupView and cycle between the two to act as StackView.
     /*! internal */
     PopupViewBase {
@@ -362,16 +396,25 @@ Item {
             height: parent.height / 12
             visible: popupManagers !== null && popupManagers.length > 1
 
-            Image {
+            Canvas {
+                id: previousButtonCanvas
                 anchors {
                     left: parent.left
                     verticalCenter: parent.verticalCenter
                     margins: 2 * displayScaleFactor
                 }
+                antialiasing: true
                 height: parent.height
                 width: height
-                source: "images/forward.png"
-                rotation: 180
+
+                onPaint: {
+                    drawButton(previousButtonCanvas);
+                }
+
+                Component.onCompleted: {
+                    if (Qt.platform.os === "ios")
+                        renderTarget = Canvas.Image;
+                }
 
                 MouseArea {
                     anchors.fill: parent
@@ -389,25 +432,29 @@ Item {
                 }
                 color: attributeNameTextColor
                 text: popupManagers !== null && popupManagers.length > 0 ? (currentIndex + 1) + " of " + popupManagers.length : ""
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        previousPopup();
-                    }
-                }
             }
 
-            Image {
+            Canvas {
+                id: forwardButtonCanvas
                 anchors {
                     right: parent.right
                     verticalCenter: parent.verticalCenter
                     margins: 2 * displayScaleFactor
                 }
+                antialiasing: true
                 height: parent.height
                 width: height
+                rotation: 180
 
-                source: "images/forward.png"
+                onPaint: {
+                    drawButton(forwardButtonCanvas);
+                }
+
+                Component.onCompleted: {
+                    if (Qt.platform.os === "ios")
+                        renderTarget = Canvas.Image;
+                }
+
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
