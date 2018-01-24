@@ -258,6 +258,11 @@ void ToolResourceProvider::onScreenToLocationCompleted(QUuid taskId, const Point
   emit screenToLocationCompleted(taskId, location);
 }
 
+void ToolResourceProvider::onLocationChanged(const Point& location)
+{
+  emit locationChanged(location);
+}
+
 void ToolResourceProvider::clear()
 {
   m_map = nullptr;
