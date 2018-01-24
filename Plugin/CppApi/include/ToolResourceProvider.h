@@ -79,7 +79,7 @@ public slots:
   void onIdentifyLayerCompleted(QUuid taskId, IdentifyLayerResult* identifyResult);
   void onIdentifyLayersCompleted(QUuid taskId, QList<IdentifyLayerResult*> identifyResults);
   void onScreenToLocationCompleted(QUuid taskId, const Point& location);
-  void onLocationChanged(const Esri::ArcGISRuntime::Point& location);
+  void onLocationChanged(const Point& location);
 
 signals:
   void sceneChanged();
@@ -92,7 +92,7 @@ signals:
   void identifyLayersCompleted(QUuid taskId, QList<IdentifyLayerResult*> identifyResults);
   void setMouseCursorRequested(const QCursor& cursor);
   void screenToLocationCompleted(QUuid taskId, const Point& location);
-  void locationChanged(const Esri::ArcGISRuntime::Point& location);
+  void locationChanged(const Point& location);
 
   // mouse signals
   void mouseClicked(QMouseEvent& mouseEvent);
