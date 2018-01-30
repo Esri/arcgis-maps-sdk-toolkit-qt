@@ -42,7 +42,7 @@ Item {
     onPopupManagerInternalChanged: {
         if (popupManagerInternal) {
             displayedFields = popupManagerInternal.displayedFields;
-            attachments = popupManagerInternal.attachmentManager.attachmentsModel;
+            attachments = popupManagerInternal.attachmentManager ? popupManagerInternal.attachmentManager.attachmentsModel : null;
             showAttachments = popupManagerInternal.showAttachments;
             titleTextInternal = popupManagerInternal.title;
         }
