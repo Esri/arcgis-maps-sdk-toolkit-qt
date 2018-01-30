@@ -37,7 +37,7 @@ public:
 
 private:
   static constexpr int s_versionMajor = 100;
-  static constexpr int s_versionMinor = 2;
+  static constexpr int s_versionMinor = 3;
 };
 
 } // Toolkit
