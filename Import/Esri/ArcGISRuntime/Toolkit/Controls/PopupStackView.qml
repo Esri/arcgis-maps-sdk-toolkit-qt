@@ -465,7 +465,7 @@ Item {
         }
 
         Item {
-            height: parent.height - navButtonsRectangle.height
+            height: navButtonsRectangle.visible ? parent.height - navButtonsRectangle.height : parent.height
             width: parent.width
 
             StackView {
