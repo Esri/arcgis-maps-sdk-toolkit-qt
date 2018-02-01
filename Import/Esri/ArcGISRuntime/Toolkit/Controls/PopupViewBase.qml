@@ -250,4 +250,8 @@ Item {
             }
         }
     }
+
+    onCloseButtonColorInternalChanged: {
+        closeButtonCanvas.requestPaint();
+    }
 }
