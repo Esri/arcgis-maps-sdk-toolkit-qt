@@ -58,7 +58,7 @@ Item {
         var ctx = canvas.getContext("2d");
         ctx.strokeStyle = closeButtonColorInternal;
         ctx.lineWidth = canvasHeight / 10;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         ctx.save();
 
         // place at origin
