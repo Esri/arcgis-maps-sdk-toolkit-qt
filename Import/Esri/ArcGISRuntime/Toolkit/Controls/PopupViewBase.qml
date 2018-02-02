@@ -52,14 +52,14 @@ Item {
 
     /*! internal */
     function drawCloseButton(canvas) {
-        var ctx = canvas.getContext("2d");
-        ctx.strokeStyle = closeButtonColorInternal;
-        ctx.lineWidth = canvas.height / 10;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.save();
-
         var canvasWidth = canvas.width;
         var canvasHeight = canvas.height;
+
+        var ctx = canvas.getContext("2d");
+        ctx.strokeStyle = closeButtonColorInternal;
+        ctx.lineWidth = canvasHeight / 10;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.save();
 
         // place at origin
         ctx.translate(0, 0);
