@@ -166,6 +166,13 @@ Item {
     property int currentIndex: 0
 
     /*!
+        \brief The color used for the close button.
+
+        The default color is \c "gray".
+    */
+    property color closeButtonColor: "gray"
+
+    /*!
         \brief The visibility of the PopupStackView.
 
         The default visibility is \c false.
@@ -358,9 +365,11 @@ Item {
         attributeNameTextColorInternal: attributeNameTextColor
         attributeValueTextColorInternal: attributeValueTextColor
         titleTextColorInternal: titleTextColor
+        closeButtonColorInternal: closeButtonColor
         visible: false
 
         onAttachmentThumbnailClickedInternal: attachmentThumbnailClicked(index)
+        onPopupViewDismissed: dismiss();
     }
 
     /*! internal */
@@ -374,9 +383,11 @@ Item {
         attributeNameTextColorInternal: attributeNameTextColor
         attributeValueTextColorInternal: attributeValueTextColor
         titleTextColorInternal: titleTextColor
+        closeButtonColorInternal: closeButtonColor
         visible: false
 
         onAttachmentThumbnailClickedInternal: attachmentThumbnailClicked(index)
+        onPopupViewDismissed: dismiss();
     }
 
     Column {
