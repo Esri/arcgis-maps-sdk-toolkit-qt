@@ -32,12 +32,14 @@ Item {
     property color titleTextColorInternal
     property color attributeNameTextColorInternal
     property color attributeValueTextColorInternal
+    property color closeButtonColorInternal
     property var popupManagerInternal: null
     property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
     property var displayedFields: null
     property var attachments: null
     property bool showAttachments: false
     signal attachmentThumbnailClickedInternal(var index)
+    signal popupViewDismissed()
     
     onPopupManagerInternalChanged: {
         if (popupManagerInternal) {
@@ -46,6 +48,33 @@ Item {
             showAttachments = popupManagerInternal.showAttachments;
             titleTextInternal = popupManagerInternal.title;
         }
+    }
+
+    /*! internal */
+    function drawCloseButton(canvas) {
+        var ctx = canvas.getContext("2d");
+        ctx.strokeStyle = closeButtonColorInternal;
+        ctx.lineWidth = canvas.height / 10;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.save();
+
+        var canvasWidth = canvas.width;
+        var canvasHeight = canvas.height;
+
+        // place at origin
+        ctx.translate(0, 0);
+        ctx.beginPath();
+
+        // line 1
+        ctx.moveTo(canvasWidth, canvasHeight);
+        ctx.lineTo(0, 0);
+
+        // line 2
+        ctx.moveTo(canvasWidth, 0);
+        ctx.lineTo(0, canvasHeight);
+
+        ctx.stroke();
+        ctx.restore();
     }
 
     Rectangle {
@@ -75,22 +104,49 @@ Item {
             spacing: 10 * displayScaleFactor
             clip: true
 
-            Text {
-                width: parent.width
-                text: titleTextInternal
-                elide: Text.ElideRight
-                color: titleTextColorInternal
-                font {
-                    family: "serif"
-                    pixelSize: titleTextSizeInternal
-                    bold: true
+            Row {
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: heading.width * 0.9
+                    text: titleTextInternal
+                    elide: Text.ElideRight
+                    color: titleTextColorInternal
+                    font {
+                        family: "serif"
+                        pixelSize: titleTextSizeInternal
+                        bold: true
+                    }
+                    renderType: Text.NativeRendering
                 }
-                renderType: Text.NativeRendering
+
+                Canvas {
+                    id: closeButtonCanvas
+                    anchors.verticalCenter: parent.verticalCenter
+                    antialiasing: true
+                    height: parent.height
+                    width: height
+
+                    onPaint: {
+                        drawCloseButton(closeButtonCanvas);
+                    }
+
+                    Component.onCompleted: {
+                        if (Qt.platform.os === "ios")
+                            renderTarget = Canvas.Image;
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            popupViewDismissed();
+                        }
+                    }
+                }
             }
 
             Rectangle {
                 width: parent.width
-                height: 1 * displayScaleFactor
+                height: displayScaleFactor
                 color: borderColorInternal
             }
         }
@@ -193,5 +249,9 @@ Item {
                 }
             }
         }
+    }
+
+    onCloseButtonColorInternalChanged: {
+        closeButtonCanvas.requestPaint();
     }
 }
