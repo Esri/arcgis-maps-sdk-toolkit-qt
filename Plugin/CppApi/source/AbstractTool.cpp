@@ -76,10 +76,17 @@ void AbstractTool::setProperties(const QVariantMap&)
 
 /*!
    \brief Sets whether this tool is active to \a active.
+
+   \sa activeChanged
  */
 void AbstractTool::setActive(bool active)
 {
+  if (m_active == active)
+    return;
+
   m_active = active;
+
+  emit activeChanged();
 }
 
 /*!
