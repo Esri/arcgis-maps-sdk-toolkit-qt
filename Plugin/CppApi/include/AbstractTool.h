@@ -46,6 +46,7 @@ public:
   bool isActive() const;
 
 signals:
+  void activeChanged();
   void errorOccurred(const Error& error);
   void propertyChanged(const QString& propertyName, const QVariant& propertyValue);
 
