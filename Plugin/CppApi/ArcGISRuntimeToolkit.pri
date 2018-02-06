@@ -39,7 +39,7 @@ INCLUDEPATH += $$PWD/include
 !android:!win32: PLATFORM_OUTPUT = $$PLATFORM
 android: PLATFORM_OUTPUT = $$PLATFORM/$$ANDROID_ARCH
 win32: {
-  contains(QMAKE_TARGET.arch, x86_64): {
+  contains(QT_ARCH, x86_64): {
     PLATFORM_OUTPUT = $$PLATFORM/x64
   } else {
     PLATFORM_OUTPUT = $$PLATFORM/x86

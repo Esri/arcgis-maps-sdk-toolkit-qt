@@ -33,6 +33,7 @@ class LayerListModel;
 class Scene;
 class SpatialReference;
 class IdentifyGraphicsOverlayResult;
+class IdentifyLayerResult;
 
 namespace Toolkit
 {
@@ -73,17 +74,25 @@ public slots:
   void onMouseReleased(QMouseEvent& mouseEvent);
   void onMousePressedAndHeld(QMouseEvent& mouseEvent);
   void onMouseDoubleClicked(QMouseEvent& mouseEvent);
-  void onIdentifyGraphicsOverlayCompleted(QUuid id, IdentifyGraphicsOverlayResult* identifyResult);
+  void onIdentifyGraphicsOverlayCompleted(QUuid taskId, IdentifyGraphicsOverlayResult* identifyResult);
+  void onIdentifyGraphicsOverlaysCompleted(QUuid taskId, QList<IdentifyGraphicsOverlayResult*> identifyResults);
+  void onIdentifyLayerCompleted(QUuid taskId, IdentifyLayerResult* identifyResult);
+  void onIdentifyLayersCompleted(QUuid taskId, QList<IdentifyLayerResult*> identifyResults);
   void onScreenToLocationCompleted(QUuid taskId, const Point& location);
+  void onLocationChanged(const Point& location);
 
 signals:
   void sceneChanged();
   void geoViewChanged();
   void mapChanged();
   void spatialReferenceChanged();
-  void identifyGraphicsOverlayCompleted(QUuid id, IdentifyGraphicsOverlayResult* identifyResult);
+  void identifyGraphicsOverlayCompleted(QUuid taskId, IdentifyGraphicsOverlayResult* identifyResult);
+  void identifyGraphicsOverlaysCompleted(QUuid taskId, QList<IdentifyGraphicsOverlayResult*> identifyResults);
+  void identifyLayerCompleted(QUuid taskId, IdentifyLayerResult* identifyResult);
+  void identifyLayersCompleted(QUuid taskId, QList<IdentifyLayerResult*> identifyResults);
   void setMouseCursorRequested(const QCursor& cursor);
   void screenToLocationCompleted(QUuid taskId, const Point& location);
+  void locationChanged(const Point& location);
 
   // mouse signals
   void mouseClicked(QMouseEvent& mouseEvent);
