@@ -33,6 +33,9 @@ namespace Toolkit
 class TOOLKIT_EXPORT AbstractTool : public QObject
 {
   Q_OBJECT
+
+  Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
+
 public:
   AbstractTool(QObject* parent = nullptr);
   virtual ~AbstractTool();
