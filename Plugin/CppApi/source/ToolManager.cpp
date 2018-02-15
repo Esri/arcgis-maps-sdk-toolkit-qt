@@ -60,16 +60,7 @@ void ToolManager::addTool(AbstractTool* tool)
   // when a tool is destroyed, remove it from the manager
   QObject::connect(tool, &AbstractTool::destroyed, tool, [this, tool]()
   {
-    auto it = m_tools.begin();
-    auto itEnd = m_tools.end();
-    for(; it != itEnd; ++it)
-    {
-      if (it.value() == tool)
-      {
-        m_tools.erase(it);
-        break;
-      }
-    }
+    removeTool(tool);
   });
 
   m_tools.insert(tool->toolName(), tool);
@@ -80,6 +71,25 @@ void ToolManager::addTool(AbstractTool* tool)
 void ToolManager::removeTool(const QString& toolName)
 {
   m_tools.remove(toolName);
+}
+
+/*! \brief Removes the \l AbstractTool \a tool from the manager.
+ */
+void ToolManager::removeTool(AbstractTool* tool)
+{
+  if (tool == nullptr)
+    return;
+
+  auto it = m_tools.begin();
+  auto itEnd = m_tools.end();
+  for(; it != itEnd; ++it)
+  {
+    if (it.value() == tool)
+    {
+      m_tools.erase(it);
+      return;
+    }
+  }
 }
 
 /*! \brief Clears all tools from the manager.
