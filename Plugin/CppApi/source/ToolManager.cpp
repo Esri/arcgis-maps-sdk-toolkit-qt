@@ -75,6 +75,20 @@ void ToolManager::addTool(AbstractTool* tool)
   m_tools.insert(tool->toolName(), tool);
 }
 
+/*! \brief Removes the \l AbstractTool called \a toolName from the manager.
+ */
+void ToolManager::removeTool(const QString& toolName)
+{
+  m_tools.remove(toolName);
+}
+
+/*! \brief Clears all tools from the manager.
+ */
+void ToolManager::clearTools()
+{
+  m_tools.clear();
+}
+
 /*! \brief Retrieve the \l AbsgtractTool with the name \a toolName.
  *
  * return \c nullptr if the tool cannot be found.

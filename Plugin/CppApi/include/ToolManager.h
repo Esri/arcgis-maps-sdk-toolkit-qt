@@ -40,6 +40,10 @@ public:
 
   void addTool(AbstractTool* tool);
 
+  void removeTool(const QString& toolName);
+
+  void clearTools();
+
   AbstractTool* tool(const QString& toolName) const;
 
   template<class T>
