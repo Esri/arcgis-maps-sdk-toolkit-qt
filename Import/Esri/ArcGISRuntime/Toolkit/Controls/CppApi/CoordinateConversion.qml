@@ -79,6 +79,12 @@ Rectangle {
     CoordinateConversionController {
         id: coordinateConvController
         objectName: "coordinateConversionController"
+        active: coordinateConversionWindow.visible
+
+        onActiveChanged: {
+            if (!active && coordinateConversionWindow.visible)
+                coordinateConversionWindow.visible = false;
+        }
     }
 
     ScrollView {
