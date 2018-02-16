@@ -70,15 +70,11 @@ void ToolResourceProvider::setMap(Map* newMap)
   if (m_map == nullptr)
     return;
 
-  QObject* mapObject = dynamic_cast<QObject*>(m_map);
-  if (mapObject)
+  connect(m_map, &QObject::destroyed, this, [this]
   {
-    connect(mapObject, &QObject::destroyed, this, [this]
-    {
-      m_map = nullptr;
-      emit mapChanged();
-    });
-  }
+    m_map = nullptr;
+    emit mapChanged();
+  });
 }
 
 Scene* ToolResourceProvider::scene() const
@@ -104,15 +100,11 @@ void ToolResourceProvider::setScene(Scene* newScene)
   if (m_scene == nullptr)
     return;
 
-  QObject* sceneObject = dynamic_cast<QObject*>(m_scene);
-  if (sceneObject)
+  connect(m_scene, &QObject::destroyed, this, [this]
   {
-    connect(sceneObject, &QObject::destroyed, this, [this]
-    {
-      m_scene = nullptr;
-      emit sceneChanged();
-    });
-  }
+    m_scene = nullptr;
+    emit sceneChanged();
+  });
 }
 
 GeoView* ToolResourceProvider::geoView() const
