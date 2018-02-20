@@ -40,7 +40,17 @@ public:
 
   void addTool(AbstractTool* tool);
 
+  void removeTool(const QString& toolName);
+
+  void removeTool(AbstractTool* tool);
+
+  void clearTools();
+
   AbstractTool* tool(const QString& toolName) const;
+
+  template<class T>
+  T* tool() const;
+
   ToolsList::iterator begin();
   ToolsList::iterator end();
 
@@ -52,6 +62,25 @@ private:
 
   ToolsList m_tools;
 };
+
+template<class T>
+T* ToolManager::tool() const
+{
+  auto it = begin();
+  const auto itEnd = end();
+  for (; it != itEnd; ++it)
+  {
+    AbstractTool* absTool = it.value();
+    if (!absTool)
+      continue;
+
+    T* tool = qobject_cast<T*>(absTool);
+    if (tool)
+      return tool;
+  }
+
+  return nullptr;
+}
 
 } // Toolkit
 } // ArcGISRuntime

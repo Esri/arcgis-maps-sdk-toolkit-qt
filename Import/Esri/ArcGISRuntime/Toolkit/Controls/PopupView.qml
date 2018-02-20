@@ -155,6 +155,13 @@ Item {
     property real animationEasingType: Easing.OutQuad
 
     /*!
+        \brief The color used for the close button.
+
+        The default color is \c "gray".
+    */
+    property color closeButtonColor: "gray"
+
+    /*!
         \brief The visibility of the PopupView.
 
         The default visibility is \c false.
@@ -279,7 +286,9 @@ Item {
         attributeNameTextColorInternal: attributeNameTextColor
         attributeValueTextColorInternal: attributeValueTextColor
         titleTextColorInternal: titleTextColor
+        closeButtonColorInternal: closeButtonColor
 
         onAttachmentThumbnailClickedInternal: attachmentThumbnailClicked(index)
+        onPopupViewDismissed: dismiss();
     }
 }

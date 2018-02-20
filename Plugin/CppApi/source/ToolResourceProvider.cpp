@@ -52,14 +52,29 @@ Map* ToolResourceProvider::map() const
   return m_map;
 }
 
+/*! \brief Sets the map to \a newMap.
+ *
+ * To clear the map pass \c nullptr.
+ *
+ * \sa mapChanged.
+ */
 void ToolResourceProvider::setMap(Map* newMap)
 {
-  if (!newMap || newMap == m_map)
+  if (newMap == m_map)
     return;
 
   m_map = newMap;
 
   emit mapChanged();
+
+  if (m_map == nullptr)
+    return;
+
+  connect(m_map, &QObject::destroyed, this, [this]
+  {
+    m_map = nullptr;
+    emit mapChanged();
+  });
 }
 
 Scene* ToolResourceProvider::scene() const
@@ -67,14 +82,29 @@ Scene* ToolResourceProvider::scene() const
   return m_scene;
 }
 
+/*! \brief Sets the scene to \a newScene.
+ *
+ * To clear the scene pass \c nullptr.
+ *
+ * \sa sceneChanged.
+ */
 void ToolResourceProvider::setScene(Scene* newScene)
 {
-  if (!newScene || newScene == m_scene)
+  if (newScene == m_scene)
     return;
 
   m_scene = newScene;
 
   emit sceneChanged();
+
+  if (m_scene == nullptr)
+    return;
+
+  connect(m_scene, &QObject::destroyed, this, [this]
+  {
+    m_scene = nullptr;
+    emit sceneChanged();
+  });
 }
 
 GeoView* ToolResourceProvider::geoView() const
@@ -82,16 +112,36 @@ GeoView* ToolResourceProvider::geoView() const
   return m_geoView;
 }
 
+/*! \brief Sets the geoView to \a newGeoView.
+ *
+ * To clear the geoView pass \c nullptr.
+ *
+ * \sa geoViewChanged.
+ * \sa spatialReferenceChanged.
+ */
 void ToolResourceProvider::setGeoView(GeoView* newGeoView)
 {
-  if (!newGeoView || newGeoView == m_geoView)
+  if (newGeoView == m_geoView)
     return;
 
   m_geoView = newGeoView;
   emit geoViewChanged();
 
+  if (m_geoView == nullptr)
+    return;
+
   if (!m_geoView->spatialReference().isEmpty())
     emit spatialReferenceChanged();
+
+  QObject* geoViewObject = dynamic_cast<QObject*>(m_geoView);
+  if (geoViewObject)
+  {
+    connect(geoViewObject, &QObject::destroyed, this, [this]
+    {
+      m_geoView = nullptr;
+      emit geoViewChanged();
+    });
+  }
 }
 
 SpatialReference ToolResourceProvider::spatialReference() const
@@ -238,9 +288,29 @@ void ToolResourceProvider::onIdentifyGraphicsOverlayCompleted(QUuid id, Identify
   emit identifyGraphicsOverlayCompleted(id, identifyResult);
 }
 
+void ToolResourceProvider::onIdentifyGraphicsOverlaysCompleted(QUuid taskId, QList<IdentifyGraphicsOverlayResult *> identifyResults)
+{
+  emit identifyGraphicsOverlaysCompleted(taskId, identifyResults);
+}
+
+void ToolResourceProvider::onIdentifyLayerCompleted(QUuid taskId, IdentifyLayerResult* identifyResult)
+{
+  emit identifyLayerCompleted(taskId, identifyResult);
+}
+
+void ToolResourceProvider::onIdentifyLayersCompleted(QUuid taskId, QList<IdentifyLayerResult*> identifyResults)
+{
+  emit identifyLayersCompleted(taskId, identifyResults);
+}
+
 void ToolResourceProvider::onScreenToLocationCompleted(QUuid taskId, const Point& location)
 {
   emit screenToLocationCompleted(taskId, location);
+}
+
+void ToolResourceProvider::onLocationChanged(const Point& location)
+{
+  emit locationChanged(location);
 }
 
 void ToolResourceProvider::clear()

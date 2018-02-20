@@ -18,8 +18,7 @@
 
 #include "ToolManager.h"
 #include "ToolResourceProvider.h"
-#include "MapQuickView.h"
-#include "SceneQuickView.h"
+#include "GeoView.h"
 #include <functional>
 
 /*!
