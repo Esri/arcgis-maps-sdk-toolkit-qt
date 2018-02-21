@@ -118,11 +118,12 @@ bool AbstractTool::isActive() const
  */
 
 /*!
-  \fn void Esri::ArcGISRuntime::Toolkit::AbstractTool::toolErrorOccurred(const QString& errorMessage)
+  \fn void Esri::ArcGISRuntime::Toolkit::AbstractTool::toolErrorOccurred(const QString& errorMessage, const QString& additionalMessage)
   \brief Signal emitted when the tool encounters an error.
 
   \list
     \li \a errorMessage - The message describing the error.
+    \li \a additionalMessage - Additional message details.
   \endlist
  */
 
