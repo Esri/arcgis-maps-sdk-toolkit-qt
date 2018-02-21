@@ -100,7 +100,7 @@ bool AbstractTool::isActive() const
 // Signals
 /*!
   \fn void Esri::ArcGISRuntime::Toolkit::AbstractTool::errorOccurred(const Error& error)
-  \brief Signal emitted when this tool encounters an error.
+  \brief Signal emitted when this tool encounters an ArcGISRuntime SDK Qt error.
 
   \list
     \li \a error - Details about the error that occurred.
@@ -114,6 +114,16 @@ bool AbstractTool::isActive() const
   \list
     \li \a propertyName - The changed property's name.
     \li \a propertyValue - The changed property's new value.
+  \endlist
+ */
+
+/*!
+  \fn void Esri::ArcGISRuntime::Toolkit::AbstractTool::toolErrorOccurred(const QString& errorMessage, const QString& additionalMessage)
+  \brief Signal emitted when the tool encounters an error.
+
+  \list
+    \li \a errorMessage - The message describing the error.
+    \li \a additionalMessage - Additional message details.
   \endlist
  */
 
