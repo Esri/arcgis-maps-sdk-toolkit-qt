@@ -52,6 +52,7 @@ signals:
   void activeChanged();
   void errorOccurred(const Error& error);
   void propertyChanged(const QString& propertyName, const QVariant& propertyValue);
+  void toolErrorOccurred(const QString& errorMessage);
 
 protected:
   bool m_active = false;
