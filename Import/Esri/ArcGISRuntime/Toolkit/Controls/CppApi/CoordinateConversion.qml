@@ -84,6 +84,8 @@ Rectangle {
         onActiveChanged: {
             if (!active && coordinateConversionWindow.visible)
                 coordinateConversionWindow.visible = false;
+            else if (active && !coordinateConversionWindow.visible)
+                coordinateConversionWindow.visible = true;
         }
     }
 
