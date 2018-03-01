@@ -365,11 +365,12 @@ Item {
             }
 
             Text {
+                id: formatNotation
                 text: notation
                 anchors {
                     left: formatName.right
                     verticalCenter: parent.verticalCenter
-                    right: removeFormat.left
+                    right: copyButton.left
                 }
                 height: parent.height
                 verticalAlignment: Text.AlignVCenter
@@ -381,6 +382,29 @@ Item {
                 wrapMode: Text.Wrap
                 elide: Text.ElideRight
                 color: textColor
+            }
+
+            Button {
+                id: copyButton
+                width: height
+                height: inputModeButton.height
+
+                anchors {
+                    right: removeFormat.left
+                    verticalCenter: parent.verticalCenter
+                }
+
+                Image {
+                    fillMode: Image.PreserveAspectFit
+                    anchors.centerIn: copyButton
+                    height: copyButton.height
+                    width: height
+                    source: "images/editcopy.png"
+                }
+
+                onClicked: {
+                    coordinateConvController.copyToClipboard(notation);
+                }
             }
 
             Button {
