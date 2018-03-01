@@ -265,14 +265,6 @@ void CoordinateConversionOptions::setUtmConversionMode(UtmConversionMode utmConv
 /*!
   \internal
  */
-void CoordinateConversionOptions::listAppend(QQmlListProperty<CoordinateConversionOptions>* property, CoordinateConversionOptions* value)
-{
-  static_cast<CoordinateConversionController*>(property->object)->addOption(value);
-}
-
-/*!
-  \internal
- */
 CoordinateConversionOptions* CoordinateConversionOptions::listAt(QQmlListProperty<CoordinateConversionOptions>* property, int index)
 {
   return static_cast<QList<CoordinateConversionOptions*>*>(property->data)->value(index);

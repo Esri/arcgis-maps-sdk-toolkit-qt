@@ -127,7 +127,6 @@ public:
   UtmConversionMode utmConversionMode() const;
   void setUtmConversionMode(UtmConversionMode utmConversionMode);
 
-  static void listAppend(QQmlListProperty<CoordinateConversionOptions>* property, CoordinateConversionOptions* value);
   static CoordinateConversionOptions* listAt(QQmlListProperty<CoordinateConversionOptions>* property, int index);
   static int listCount(QQmlListProperty<CoordinateConversionOptions>* property);
   static void listClear(QQmlListProperty<CoordinateConversionOptions>* property);
