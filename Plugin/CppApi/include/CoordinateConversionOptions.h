@@ -127,10 +127,6 @@ public:
   UtmConversionMode utmConversionMode() const;
   void setUtmConversionMode(UtmConversionMode utmConversionMode);
 
-  static CoordinateConversionOptions* listAt(QQmlListProperty<CoordinateConversionOptions>* property, int index);
-  static int listCount(QQmlListProperty<CoordinateConversionOptions>* property);
-  static void listClear(QQmlListProperty<CoordinateConversionOptions>* property);
-
 private:
   QString m_name;
   CoordinateType m_outputMode = CoordinateTypeUsng;
