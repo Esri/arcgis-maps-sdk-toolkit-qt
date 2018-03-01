@@ -214,7 +214,8 @@ Item {
             anchors.centerIn: menuButton
             sourceSize.height: menuButton.width
             height: sourceSize.height
-            source: menuButton.checked ? "images/menuCollapse.png" : "images/menuExpand.png"
+            source: menuButton.checked ? (expandUpwards ? "images/menuCollapse.png" : "images/menuExpand.png") :
+                                         (expandUpwards ? "images/menuExpand.png" : "images/menuCollapse.png")
         }
     }
 
@@ -222,7 +223,8 @@ Item {
         id: addConversionButton
         anchors {
             left: parent.left
-            bottom: results.top
+            bottom: expandUpwards ? results.top : undefined
+            top: expandUpwards ? undefined : inputModeButton.bottom
         }
         visible: menuButton.checked
         text: "Add conversion"
@@ -331,7 +333,8 @@ Item {
     ListView {
         id: results
         anchors {
-            bottom: inputModeButton.top
+            bottom: expandUpwards ? inputModeButton.top : undefined
+            top: expandUpwards ? undefined: addConversionButton.bottom
             left: inputModeButton.left
             right: parent.right
         }

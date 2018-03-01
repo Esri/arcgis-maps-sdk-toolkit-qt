@@ -53,6 +53,7 @@ const QString CoordinateConversionController::DEGREES_MINUTES_SECONDS_FORMAT = "
 const QString CoordinateConversionController::MGRS_FORMAT = "MGRS";
 const QString CoordinateConversionController::USNG_FORMAT = "USGS";
 const QString CoordinateConversionController::UTM_FORMAT = "UTM";
+const QString CoordinateConversionController::COORDINATE_FORMAT_PROPERTY = "CoordinateFormat";
 
 /*!
   \brief A constructor that accepts an optional \a parent.
@@ -480,6 +481,13 @@ QString CoordinateConversionController::toolName() const
   return "CoordinateConversion";
 }
 
+void CoordinateConversionController::setProperties(const QVariantMap& properties)
+{
+  auto findFormatIt = properties.find(COORDINATE_FORMAT_PROPERTY);
+  if (findFormatIt != properties.end())
+    setInputFormat(findFormatIt.value().toString());
+}
+
 QString CoordinateConversionController::pointToConvert() const
 {
   for (CoordinateConversionOptions* option : m_options)
@@ -548,7 +556,7 @@ void CoordinateConversionController::addCoordinateFormat(const QString& newForma
   {
     option->setOutputMode(CoordinateConversionOptions::CoordinateType::CoordinateTypeLatLon);
     option->setLatLonFormat(CoordinateConversionOptions::LatitudeLongitudeFormat::LatitudeLongitudeFormatDegreesMinutesSeconds);
-    option->setDecimalPlaces(12);
+    option->setDecimalPlaces(6);
   }
   else if (newFormat == MGRS_FORMAT)
   {
