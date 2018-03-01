@@ -47,20 +47,25 @@ namespace Toolkit
 
 using CoordinateType = CoordinateConversionOptions::CoordinateType;
 
-const QString CoordinateConversionController::DECIMAL_DEGREES_FORMAT = "DD";
-const QString CoordinateConversionController::DEGREES_DECIMAL_MINUTES_FORMAT = "DDM";
-const QString CoordinateConversionController::DEGREES_MINUTES_SECONDS_FORMAT = "DMS";
-const QString CoordinateConversionController::MGRS_FORMAT = "MGRS";
-const QString CoordinateConversionController::USNG_FORMAT = "USGS";
-const QString CoordinateConversionController::UTM_FORMAT = "UTM";
-const QString CoordinateConversionController::COORDINATE_FORMAT_PROPERTY = "CoordinateFormat";
+const QString CoordinateConversionController::DECIMAL_DEGREES_FORMAT = QStringLiteral("DD");
+const QString CoordinateConversionController::DEGREES_DECIMAL_MINUTES_FORMAT = QStringLiteral("DDM");
+const QString CoordinateConversionController::DEGREES_MINUTES_SECONDS_FORMAT = QStringLiteral("DMS");
+const QString CoordinateConversionController::MGRS_FORMAT = QStringLiteral("MGRS");
+const QString CoordinateConversionController::USNG_FORMAT = QStringLiteral("USGS");
+const QString CoordinateConversionController::UTM_FORMAT = QStringLiteral("UTM");
+const QString CoordinateConversionController::COORDINATE_FORMAT_PROPERTY = QStringLiteral("CoordinateFormat");
 
 /*!
   \brief A constructor that accepts an optional \a parent.
  */
 CoordinateConversionController::CoordinateConversionController(QObject* parent):
   AbstractTool(parent),
-  m_coordinateFormats{DECIMAL_DEGREES_FORMAT, DEGREES_DECIMAL_MINUTES_FORMAT, DEGREES_MINUTES_SECONDS_FORMAT, MGRS_FORMAT, USNG_FORMAT, UTM_FORMAT }
+  m_coordinateFormats{DECIMAL_DEGREES_FORMAT,
+                      DEGREES_DECIMAL_MINUTES_FORMAT,
+                      DEGREES_MINUTES_SECONDS_FORMAT,
+                      MGRS_FORMAT,
+                      USNG_FORMAT,
+                      UTM_FORMAT }
 {
   ToolManager::instance().addTool(this);
 
@@ -137,7 +142,7 @@ Point CoordinateConversionController::pointFromNotation(const QString& incomingN
   {
     return CoordinateFormatter::fromGars(incomingNotation,
                                          m_spatialReference,
-                                         static_cast<Esri::ArcGISRuntime::GarsConversionMode>(m_inputGarsConversionMode));
+                                         Esri::ArcGISRuntime::GarsConversionMode::Center);
   }
   case CoordinateType::CoordinateTypeGeoRef:
   {
@@ -153,7 +158,7 @@ Point CoordinateConversionController::pointFromNotation(const QString& incomingN
   {
     return CoordinateFormatter::fromMgrs(incomingNotation,
                                          m_spatialReference,
-                                         static_cast<Esri::ArcGISRuntime::MgrsConversionMode>(m_inputMgrsConversionMode));
+                                         static_cast<Esri::ArcGISRuntime::MgrsConversionMode>(inputOption->mgrsConversionMode()));
   }
   case CoordinateType::CoordinateTypeUsng:
   {
@@ -164,7 +169,7 @@ Point CoordinateConversionController::pointFromNotation(const QString& incomingN
   {
     return CoordinateFormatter::fromUtm(incomingNotation,
                                         m_spatialReference,
-                                        static_cast<Esri::ArcGISRuntime::UtmConversionMode>(m_inputUtmConversionMode));
+                                        static_cast<Esri::ArcGISRuntime::UtmConversionMode>(inputOption->utmConversionMode()));
   }
   default: {}
   }
@@ -276,73 +281,16 @@ CoordinateConversionResults *CoordinateConversionController::resultsInternal()
   \brief Sets the spatial reference to \a spatialReference.
   \note This property must be set before calling the \l convertNotation method.
  */
-void CoordinateConversionController::setSpatialReference(const Esri::ArcGISRuntime::SpatialReference& spatialReference)
+void CoordinateConversionController::setSpatialReference(const SpatialReference& spatialReference)
 {
   m_spatialReference = spatialReference;
-}
-
-/*!
-  \property CoordinateConversionController::inputGarsConversionMode
-  \brief The inputGarsConversionMode.
-  \note This property is only used if the \l inputMode property is set to \c Gars.
- */
-CoordinateConversionOptions::GarsConversionMode CoordinateConversionController::inputGarsConversionMode() const
-{
-  return m_inputGarsConversionMode;
-}
-
-void CoordinateConversionController::setInputGarsConversionMode(CoordinateConversionOptions::GarsConversionMode inputGarsConversionMode)
-{
-  m_inputGarsConversionMode = inputGarsConversionMode;
-  emit inputGarsConversionModeChanged();
-  emit pointToConvertChanged();
-  if (m_runConversion)
-    convertPoint();
-}
-
-/*!
-  \property CoordinateConversionController::inputMgrsConversionMode
-  \brief The inputMgrsConversionMode.
-  \note This property is only used if the \l inputMode property is set to \c Mgrs.
- */
-CoordinateConversionOptions::MgrsConversionMode CoordinateConversionController::inputMgrsConversionMode() const
-{
-  return m_inputMgrsConversionMode;
-}
-
-void CoordinateConversionController::setInputMgrsConversionMode(CoordinateConversionOptions::MgrsConversionMode inputMgrsConversionMode)
-{
-  m_inputMgrsConversionMode = inputMgrsConversionMode;
-  emit inputMgrsConversionModeChanged();
-  emit pointToConvertChanged();
-  if (m_runConversion)
-    convertPoint();
-}
-
-/*!
-  \property CoordinateConversionController::inputUtmConversionMode
-  \brief The inputUtmConversionMode.
-  \note This property is only used if the \l inputMode property is set to \c Utm.
- */
-CoordinateConversionOptions::UtmConversionMode CoordinateConversionController::inputUtmConversionMode() const
-{
-  return m_inputUtmConversionMode;
-}
-
-void CoordinateConversionController::setInputUtmConversionMode(CoordinateConversionOptions::UtmConversionMode inputUtmConversionMode)
-{
-  m_inputUtmConversionMode = inputUtmConversionMode;
-  emit inputUtmConversionModeChanged();
-  emit pointToConvertChanged();
-  if (m_runConversion)
-    convertPoint();
 }
 
 /*!
   \brief Sets the point to be converted via the \l convertPoint method to \a point.
   \note If the \l runConversion property is \c true, the conversion will be run immediately.
  */
-void CoordinateConversionController::setPointToConvert(const Esri::ArcGISRuntime::Point& point)
+void CoordinateConversionController::setPointToConvert(const Point& point)
 {
   if (point == m_pointToConvert)
     return;
@@ -578,7 +526,7 @@ void CoordinateConversionController::removeCoordinateFormat(const QString& forma
   bool removed = false;
   auto it = m_options.begin();
   auto itEnd = m_options.end();
-  for(; it != itEnd; ++it)
+  for (; it != itEnd; ++it)
   {
     const auto& option = *it;
     if (option->name().compare(formatToRemove) == 0)
