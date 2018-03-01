@@ -13,8 +13,6 @@
 #ifndef COORDINATECONVERSIONCONTROLLER_H
 #define COORDINATECONVERSIONCONTROLLER_H
 
-#include <QQmlListProperty>
-
 #include "AbstractTool.h"
 #include "CoordinateConversionOptions.h"
 
@@ -22,6 +20,7 @@
 #include "Point.h"
 #include "GeometryTypes.h"
 
+#include <QQmlListProperty>
 #include <QAbstractListModel>
 
 namespace Esri
@@ -37,9 +36,6 @@ class TOOLKIT_EXPORT CoordinateConversionController : public AbstractTool
 {
   Q_OBJECT
 
-  // set the options which will determine how many outputs there are and the formats
-  Q_PROPERTY(QQmlListProperty<CoordinateConversionOptions> options READ options NOTIFY optionsChanged)
-
   // bind to the results, which will have "name" and "notation" roles
   Q_PROPERTY(QAbstractListModel* results READ results NOTIFY resultsChanged)
 
@@ -53,11 +49,6 @@ class TOOLKIT_EXPORT CoordinateConversionController : public AbstractTool
   Q_PROPERTY(QString pointToConvert READ pointToConvert NOTIFY pointToConvertChanged)
 
   Q_PROPERTY(bool captureMode READ isCaptureMode WRITE setCaptureMode NOTIFY captureModeChanged)
-
-  // internal: support for nested default property "options" objects
-  /*! \internal */
-  Q_PRIVATE_PROPERTY(CoordinateConversionController::self(), QQmlListProperty<QObject> objects READ objects DESIGNABLE false)
-  Q_CLASSINFO("DefaultProperty", "objects")
 
 public:
   static const QString DECIMAL_DEGREES_FORMAT;
@@ -130,7 +121,6 @@ public slots:
   void onLocationChanged(const Esri::ArcGISRuntime::Point& location);
 
 private:
-  QQmlListProperty<CoordinateConversionOptions> options();
   CoordinateConversionResults* resultsInternal();
 
   Esri::ArcGISRuntime::Point pointFromNotation(const QString& incomingNotation);

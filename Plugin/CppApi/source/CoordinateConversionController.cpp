@@ -253,19 +253,6 @@ QAbstractListModel* CoordinateConversionController::results()
   return resultsInternal();
 }
 
-/*!
-  \property CoordinateConversionController::options
-  \brief The notation options as a list.
- */
-QQmlListProperty<CoordinateConversionOptions> CoordinateConversionController::options()
-{
-  return QQmlListProperty<CoordinateConversionOptions>(this, &m_options,
-                                                       CoordinateConversionOptions::listAppend,
-                                                       CoordinateConversionOptions::listCount,
-                                                       CoordinateConversionOptions::listAt,
-                                                       CoordinateConversionOptions::listClear);
-}
-
 CoordinateConversionResults *CoordinateConversionController::resultsInternal()
 {
   if (!m_results)
