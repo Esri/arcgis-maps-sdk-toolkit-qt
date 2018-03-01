@@ -47,7 +47,6 @@ class TOOLKIT_EXPORT CoordinateConversionController : public AbstractTool
 
   // set the input mode and any corresponding conversion options
   Q_PROPERTY(QString inputFormat READ inputFormat WRITE setInputFormat NOTIFY inputFormatChanged)
-  Q_PROPERTY(CoordinateConversionOptions::CoordinateType inputMode READ inputMode WRITE setInputMode NOTIFY inputModeChanged)
   Q_PROPERTY(CoordinateConversionOptions::GarsConversionMode inputGarsConversionMode READ inputGarsConversionMode WRITE setInputGarsConversionMode NOTIFY inputGarsConversionModeChanged)
   Q_PROPERTY(CoordinateConversionOptions::MgrsConversionMode inputMgrsConversionMode READ inputMgrsConversionMode WRITE setInputMgrsConversionMode NOTIFY inputMgrsConversionModeChanged)
   Q_PROPERTY(CoordinateConversionOptions::UtmConversionMode inputUtmConversionMode READ inputUtmConversionMode WRITE setInputUtmConversionMode NOTIFY inputUtmConversionModeChanged)
@@ -154,7 +153,6 @@ private:
   QQmlListProperty<QObject> objects();
   static void objectAppend(QQmlListProperty<QObject>* property, QObject* value);
 
-  CoordinateConversionOptions::CoordinateType m_inputMode = CoordinateConversionOptions::CoordinateTypeUsng;
   Esri::ArcGISRuntime::Point m_pointToConvert;
   Esri::ArcGISRuntime::SpatialReference m_spatialReference;
   CoordinateConversionResults* m_results = nullptr;
