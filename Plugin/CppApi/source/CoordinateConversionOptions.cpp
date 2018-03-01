@@ -263,30 +263,6 @@ void CoordinateConversionOptions::setUtmConversionMode(UtmConversionMode utmConv
 }
 
 /*!
-  \internal
- */
-CoordinateConversionOptions* CoordinateConversionOptions::listAt(QQmlListProperty<CoordinateConversionOptions>* property, int index)
-{
-  return static_cast<QList<CoordinateConversionOptions*>*>(property->data)->value(index);
-}
-
-/*!
-  \internal
- */
-int CoordinateConversionOptions::listCount(QQmlListProperty<CoordinateConversionOptions>* property)
-{
-  return static_cast<QList<CoordinateConversionOptions*>*>(property->data)->count();
-}
-
-/*!
-  \internal
- */
-void CoordinateConversionOptions::listClear(QQmlListProperty<CoordinateConversionOptions>* property)
-{
-  static_cast<CoordinateConversionController*>(property->object)->clearOptions();
-}
-
-/*!
   \brief Returns the \l CoordinateType enum value corresponding to the enum's text representation, \a type.
  */
 CoordinateConversionOptions::CoordinateType CoordinateConversionOptions::stringToCoordinateType(const QString& type) const
