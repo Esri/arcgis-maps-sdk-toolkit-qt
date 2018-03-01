@@ -46,10 +46,15 @@ class TOOLKIT_EXPORT CoordinateConversionController : public AbstractTool
   Q_PROPERTY(bool runConversion READ runConversion WRITE setRunConversion NOTIFY runConversionChanged)
 
   // set the input mode and any corresponding conversion options
+  Q_PROPERTY(QString inputFormat READ inputFormat WRITE setInputFormat NOTIFY inputFormatChanged)
   Q_PROPERTY(CoordinateConversionOptions::CoordinateType inputMode READ inputMode WRITE setInputMode NOTIFY inputModeChanged)
   Q_PROPERTY(CoordinateConversionOptions::GarsConversionMode inputGarsConversionMode READ inputGarsConversionMode WRITE setInputGarsConversionMode NOTIFY inputGarsConversionModeChanged)
   Q_PROPERTY(CoordinateConversionOptions::MgrsConversionMode inputMgrsConversionMode READ inputMgrsConversionMode WRITE setInputMgrsConversionMode NOTIFY inputMgrsConversionModeChanged)
   Q_PROPERTY(CoordinateConversionOptions::UtmConversionMode inputUtmConversionMode READ inputUtmConversionMode WRITE setInputUtmConversionMode NOTIFY inputUtmConversionModeChanged)
+
+  Q_PROPERTY(QStringList coordinateFormats READ coordinateFormats NOTIFY coordinateFormatsChanged)
+  Q_PROPERTY(QString pointToConvert READ pointToConvert NOTIFY pointToConvertChanged)
+
 
   // internal: support for nested default property "options" objects
   /*! \internal */
@@ -57,6 +62,13 @@ class TOOLKIT_EXPORT CoordinateConversionController : public AbstractTool
   Q_CLASSINFO("DefaultProperty", "objects")
 
 public:
+  static const QString DECIMAL_DEGREES_FORMAT;
+  static const QString DEGREES_DECIMAL_MINUTES_FORMAT;
+  static const QString DEGREES_MINUTES_SECONDS_FORMAT;
+  static const QString MGRS_FORMAT;
+  static const QString USNG_FORMAT;
+  static const QString UTM_FORMAT;
+
   // convert the following notation using the input options specified
   Q_INVOKABLE void convertNotation(const QString& notation);
 
@@ -69,6 +81,9 @@ public:
   // clear the current set of results
   Q_INVOKABLE void clearResults();
 
+  Q_INVOKABLE void addCoordinateFormat(const QString& newFormat);
+  Q_INVOKABLE void removeCoordinateFormat(const QString& formatToRemove);
+
 signals:
   void optionsChanged();
   void resultsChanged();
@@ -77,6 +92,9 @@ signals:
   void inputMgrsConversionModeChanged();
   void inputUtmConversionModeChanged();
   void runConversionChanged();
+  void pointToConvertChanged();
+  void coordinateFormatsChanged();
+  void inputFormatChanged();
 
 public:
   CoordinateConversionController(QObject* parent = nullptr);
@@ -107,11 +125,18 @@ public:
 
   QString toolName() const override;
 
+  QString pointToConvert() const;
+
+  QStringList coordinateFormats() const;
+
+  QString inputFormat() const;
+  void setInputFormat(const QString &inputFormat);
+
 private:
   QQmlListProperty<CoordinateConversionOptions> options();
 
   Esri::ArcGISRuntime::Point pointFromNotation(const QString& incomingNotation);
-  QString convertPointInternal(CoordinateConversionOptions* option, const Esri::ArcGISRuntime::Point& point);
+  QString convertPointInternal(CoordinateConversionOptions* option, const Esri::ArcGISRuntime::Point& point) const;
 
   CoordinateConversionController* self() { return this; }
   QQmlListProperty<QObject> objects();
@@ -127,7 +152,10 @@ private:
   CoordinateConversionOptions::UtmConversionMode  m_inputUtmConversionMode  = CoordinateConversionOptions::UtmConversionModeLatitudeBandIndicators;
 
   QList<CoordinateConversionOptions*> m_options;
-  bool m_runConversion = false;
+  bool m_runConversion = true;
+
+  QStringList m_coordinateFormats;
+  QString m_inputFormat;
 };
 
 } // Toolkit
