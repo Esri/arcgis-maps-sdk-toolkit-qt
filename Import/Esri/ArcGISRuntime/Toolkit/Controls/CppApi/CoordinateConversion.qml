@@ -102,7 +102,7 @@ Item {
             bottom: parent.bottom
         }
         width: inputModesMenu.width
-        text: coordinateConvController.inputFormat
+        text: coordinateConvController.inputFormat.length > 0 ? coordinateConvController.inputFormat : "Set format"
 
         background: Rectangle {
             color: inputModeButton.down ? highlightColor : backgroundColor
