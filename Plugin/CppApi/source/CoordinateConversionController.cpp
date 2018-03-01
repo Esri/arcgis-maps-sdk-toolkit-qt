@@ -190,9 +190,9 @@ void CoordinateConversionController::convertPoint()
   }
 
   if (results.isEmpty())
-    this->results()->clearResults();
+    resultsInternal()->clearResults();
   else
-    this->results()->setResults(std::move(results));
+    resultsInternal()->setResults(std::move(results));
 
   emit resultsChanged();
 }
@@ -243,15 +243,9 @@ QString CoordinateConversionController::convertPointInternal(CoordinateConversio
 
   The results are automatically updated as conversions are run.
  */
-CoordinateConversionResults* CoordinateConversionController::results()
+QAbstractListModel* CoordinateConversionController::results()
 {
-  if (!m_results)
-  {
-    m_results = new CoordinateConversionResults(this);
-    connect(m_results, &CoordinateConversionResults::resultsChanged, this, &CoordinateConversionController::resultsChanged);
-  }
-
-  return m_results;
+  return resultsInternal();
 }
 
 /*!
@@ -265,6 +259,17 @@ QQmlListProperty<CoordinateConversionOptions> CoordinateConversionController::op
                                                        CoordinateConversionOptions::listCount,
                                                        CoordinateConversionOptions::listAt,
                                                        CoordinateConversionOptions::listClear);
+}
+
+CoordinateConversionResults *CoordinateConversionController::resultsInternal()
+{
+  if (!m_results)
+  {
+    m_results = new CoordinateConversionResults(this);
+    connect(m_results, &CoordinateConversionResults::resultsChanged, this, &CoordinateConversionController::resultsChanged);
+  }
+
+  return m_results;
 }
 
 /*!
@@ -587,7 +592,8 @@ void CoordinateConversionController::removeCoordinateFormat(const QString& forma
   if (!removed)
     return;
 
-  results()->removeResult(formatToRemove);
+  if (m_results)
+    m_results->removeResult(formatToRemove);
 
   if(runConversion())
     convertPoint();

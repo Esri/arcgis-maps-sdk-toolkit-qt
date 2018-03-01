@@ -22,6 +22,8 @@
 #include "Point.h"
 #include "GeometryTypes.h"
 
+#include <QAbstractListModel>
+
 namespace Esri
 {
 namespace ArcGISRuntime
@@ -39,7 +41,7 @@ class TOOLKIT_EXPORT CoordinateConversionController : public AbstractTool
   Q_PROPERTY(QQmlListProperty<CoordinateConversionOptions> options READ options NOTIFY optionsChanged)
 
   // bind to the results, which will have "name" and "notation" roles
-  Q_PROPERTY(CoordinateConversionResults* results READ results NOTIFY resultsChanged)
+  Q_PROPERTY(QAbstractListModel* results READ results NOTIFY resultsChanged)
 
   // whether the controller should immediately convert on calling setPointToConvert or just
   // store the point for later
@@ -123,7 +125,7 @@ public:
   void addOption(CoordinateConversionOptions* option);
   void clearOptions();
 
-  CoordinateConversionResults* results();
+  QAbstractListModel* results();
 
   QString toolName() const override;
 
@@ -145,6 +147,7 @@ public slots:
 
 private:
   QQmlListProperty<CoordinateConversionOptions> options();
+  CoordinateConversionResults* resultsInternal();
 
   Esri::ArcGISRuntime::Point pointFromNotation(const QString& incomingNotation);
   QString convertPointInternal(CoordinateConversionOptions* option, const Esri::ArcGISRuntime::Point& point) const;
