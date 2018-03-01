@@ -78,22 +78,28 @@ CoordinateConversionResults::~CoordinateConversionResults()
  */
 void CoordinateConversionResults::setResults(QList<Result>&& results)
 {
-  // clear the old results
-  if (!m_results.isEmpty())
-  {
-    beginRemoveRows(QModelIndex(), 0, m_results.size() - 1);
-    m_results.clear();
-    endRemoveRows();
-  }
-
-  QList<Result> tempResults = std::move(results);
-
   // set the new results
-  beginInsertRows(QModelIndex(), 0, tempResults.size() - 1);
-  m_results = std::move(tempResults);
-  endInsertRows();
+  beginResetModel();
+  m_results.clear();
+  m_results = std::move(results);
+  endResetModel();
 
   emit resultsChanged();
+}
+
+void CoordinateConversionResults::removeResult(const QString& name)
+{
+  for (int i = 0; i < m_results.size(); ++i)
+  {
+    if (m_results.at(i).m_name.compare(name) == 0)
+    {
+      beginRemoveRows(QModelIndex(), i, i);
+      m_results.removeAt(i);
+      endRemoveRows();
+
+      break;
+    }
+  }
 }
 
 /*!
@@ -104,10 +110,11 @@ void CoordinateConversionResults::clearResults()
   if (m_results.isEmpty())
     return;
 
+  emit beginResetModel();
   for (auto& result : m_results)
     result.m_notation.clear();
+  endResetModel();
 
-  emit dataChanged(index(0), index(m_results.size()-1), QVector<int>() << CoordinateConversionResultsNotationRole);
   emit resultsChanged();
 }
 
@@ -160,7 +167,7 @@ QVariant CoordinateConversionResults::data(const QModelIndex& index, int role) c
   if (row < 0 || row >= rowCount())
     return QVariant();
 
-  const Result result = m_results.at(row);
+  const Result& result = m_results.at(row);
 
   switch (role)
   {

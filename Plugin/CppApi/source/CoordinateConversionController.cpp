@@ -47,11 +47,19 @@ namespace Toolkit
 
 using CoordinateType = CoordinateConversionOptions::CoordinateType;
 
+const QString CoordinateConversionController::DECIMAL_DEGREES_FORMAT = "DD";
+const QString CoordinateConversionController::DEGREES_DECIMAL_MINUTES_FORMAT = "DDM";
+const QString CoordinateConversionController::DEGREES_MINUTES_SECONDS_FORMAT = "DMS";
+const QString CoordinateConversionController::MGRS_FORMAT = "MGRS";
+const QString CoordinateConversionController::USNG_FORMAT = "USGS";
+const QString CoordinateConversionController::UTM_FORMAT = "UTM";
+
 /*!
   \brief A constructor that accepts an optional \a parent.
  */
 CoordinateConversionController::CoordinateConversionController(QObject* parent):
-  AbstractTool(parent)
+  AbstractTool(parent),
+  m_coordinateFormats{DECIMAL_DEGREES_FORMAT, DEGREES_DECIMAL_MINUTES_FORMAT, DEGREES_MINUTES_SECONDS_FORMAT, MGRS_FORMAT, USNG_FORMAT, UTM_FORMAT }
 {
   ToolManager::instance().addTool(this);
 
@@ -65,19 +73,16 @@ CoordinateConversionController::CoordinateConversionController(QObject* parent):
   });
 
   connect(ToolResourceProvider::instance(), &ToolResourceProvider::mouseClickedPoint, this,
-  [this](const Point& point)
+          [this](const Point& point)
   {
-    setPointToConvert(point);
+    if (isActive())
+      setPointToConvert(point);
   });
 
   connect(this, &CoordinateConversionController::optionsChanged, this,
-  [this]()
+          [this]()
   {
-    QList<Result> list;
-    for (const auto& option : m_options)
-      list.append(Result(option->name(), QString(), option->outputMode()));
-
-    results()->setResults(std::move(list));
+    convertPoint();
   });
 }
 
@@ -175,17 +180,24 @@ void CoordinateConversionController::convertPoint()
   for (CoordinateConversionOptions* option : m_options)
   {
     const QString name = option->name();
+    if (name.compare(m_inputFormat) == 0)
+      continue;
+
     results.append(Result(name, convertPointInternal(option, m_pointToConvert), option->outputMode()));
   }
 
-  this->results()->setResults(std::move(results));
+  if (results.isEmpty())
+    this->results()->clearResults();
+  else
+    this->results()->setResults(std::move(results));
+
   emit resultsChanged();
 }
 
 /*!
   \internal
  */
-QString CoordinateConversionController::convertPointInternal(CoordinateConversionOptions* option, const Esri::ArcGISRuntime::Point& point)
+QString CoordinateConversionController::convertPointInternal(CoordinateConversionOptions* option, const Esri::ArcGISRuntime::Point& point) const
 {
   switch (option->outputMode())
   {
@@ -234,7 +246,11 @@ CoordinateType CoordinateConversionController::inputMode() const
 void CoordinateConversionController::setInputMode(CoordinateType inputMode)
 {
   m_inputMode = inputMode;
+
   emit inputModeChanged();
+  emit pointToConvertChanged();
+  if (m_runConversion)
+    convertPoint();
 }
 
 /*!
@@ -290,6 +306,9 @@ void CoordinateConversionController::setInputGarsConversionMode(CoordinateConver
 {
   m_inputGarsConversionMode = inputGarsConversionMode;
   emit inputGarsConversionModeChanged();
+  emit pointToConvertChanged();
+  if (m_runConversion)
+    convertPoint();
 }
 
 /*!
@@ -306,6 +325,9 @@ void CoordinateConversionController::setInputMgrsConversionMode(CoordinateConver
 {
   m_inputMgrsConversionMode = inputMgrsConversionMode;
   emit inputMgrsConversionModeChanged();
+  emit pointToConvertChanged();
+  if (m_runConversion)
+    convertPoint();
 }
 
 /*!
@@ -322,6 +344,9 @@ void CoordinateConversionController::setInputUtmConversionMode(CoordinateConvers
 {
   m_inputUtmConversionMode = inputUtmConversionMode;
   emit inputUtmConversionModeChanged();
+  emit pointToConvertChanged();
+  if (m_runConversion)
+    convertPoint();
 }
 
 /*!
@@ -334,6 +359,8 @@ void CoordinateConversionController::setPointToConvert(const Esri::ArcGISRuntime
 
   if (m_runConversion)
     convertPoint();
+
+  emit pointToConvertChanged();
 }
 
 /*!
@@ -362,6 +389,35 @@ void CoordinateConversionController::objectAppend(QQmlListProperty<QObject>* pro
   engine->addOption(option);
 }
 
+QString CoordinateConversionController::inputFormat() const
+{
+  return m_inputFormat;
+}
+
+void CoordinateConversionController::setInputFormat(const QString& inputFormat)
+{
+  if (m_inputFormat == inputFormat)
+    return;
+
+  if (!m_coordinateFormats.contains(inputFormat))
+    return;
+
+  m_inputFormat = inputFormat;
+
+  addCoordinateFormat(m_inputFormat);
+
+  if (m_runConversion)
+    convertPoint();
+
+  emit inputFormatChanged();
+  emit pointToConvertChanged();
+}
+
+QStringList CoordinateConversionController::coordinateFormats() const
+{
+  return m_coordinateFormats;
+}
+
 /*!
   \brief Add the \l CoordinateConversionOptions object \a option to the list of options.
  */
@@ -388,6 +444,17 @@ QString CoordinateConversionController::toolName() const
   return "CoordinateConversion";
 }
 
+QString CoordinateConversionController::pointToConvert() const
+{
+  for (CoordinateConversionOptions* option : m_options)
+  {
+    if (option->name().compare(m_inputFormat) == 0)
+      return convertPointInternal(option, m_pointToConvert);
+  }
+
+  return QString();
+}
+
 /*!
   \brief Copy \a text to the system clipboard.
  */
@@ -405,6 +472,99 @@ void CoordinateConversionController::clearResults()
 {
   if (m_results)
     m_results->clearResults();
+}
+
+void CoordinateConversionController::addCoordinateFormat(const QString& newFormat)
+{
+  if (!m_coordinateFormats.contains(newFormat))
+    return;
+
+  auto it = m_options.cbegin();
+  auto itEnd = m_options.cend();
+  for (; it != itEnd; ++it)
+  {
+    const auto& option = *it;
+    if (option->name().compare(newFormat) == 0)
+      return;
+  }
+
+  CoordinateConversionOptions* option = new CoordinateConversionOptions(this);
+  option->setName(newFormat);
+
+  if (newFormat == DEGREES_DECIMAL_MINUTES_FORMAT)
+  {
+    option->setOutputMode(CoordinateConversionOptions::CoordinateType::CoordinateTypeLatLon);
+    option->setLatLonFormat(CoordinateConversionOptions::LatitudeLongitudeFormat::LatitudeLongitudeFormatDegreesDecimalMinutes);
+  }
+  else if (newFormat == USNG_FORMAT)
+  {
+    option->setOutputMode(CoordinateConversionOptions::CoordinateType::CoordinateTypeUsng);
+    option->setPrecision(7);
+    option->setAddSpaces(true);
+  }
+  else if (newFormat == UTM_FORMAT)
+  {
+    option->setOutputMode(CoordinateConversionOptions::CoordinateType::CoordinateTypeUtm);
+    option->setUtmConversionMode(CoordinateConversionOptions::UtmConversionMode::UtmConversionModeNorthSouthIndicators);
+    option->setAddSpaces(true);
+  }
+  else if (newFormat == DEGREES_MINUTES_SECONDS_FORMAT)
+  {
+    option->setOutputMode(CoordinateConversionOptions::CoordinateType::CoordinateTypeLatLon);
+    option->setLatLonFormat(CoordinateConversionOptions::LatitudeLongitudeFormat::LatitudeLongitudeFormatDegreesMinutesSeconds);
+    option->setDecimalPlaces(12);
+  }
+  else if (newFormat == MGRS_FORMAT)
+  {
+    option->setOutputMode(CoordinateConversionOptions::CoordinateType::CoordinateTypeMgrs);
+    option->setMgrsConversionMode(CoordinateConversionOptions::MgrsConversionMode::MgrsConversionModeAutomatic);
+  }
+  else if (newFormat == DECIMAL_DEGREES_FORMAT)
+  {
+    option->setOutputMode(CoordinateConversionOptions::CoordinateType::CoordinateTypeLatLon);
+    option->setLatLonFormat(CoordinateConversionOptions::LatitudeLongitudeFormat::LatitudeLongitudeFormatDecimalDegrees);
+  }
+  else
+  {
+    delete option;
+    return;
+  }
+
+  addOption(option);
+
+  if (m_runConversion)
+    convertPoint();
+}
+
+void CoordinateConversionController::removeCoordinateFormat(const QString& formatToRemove)
+{
+  if (formatToRemove.compare(m_inputFormat) == 0)
+    return;
+
+  bool removed = false;
+  auto it = m_options.begin();
+  auto itEnd = m_options.end();
+  for(; it != itEnd; ++it)
+  {
+    const auto& option = *it;
+    if (option->name().compare(formatToRemove) == 0)
+    {
+      m_options.erase(it);
+      removed = true;
+      break;
+    }
+  }
+
+  if (!removed)
+    return;
+
+  results()->removeResult(formatToRemove);
+
+  if(runConversion())
+    convertPoint();
+
+  emit optionsChanged();
+  emit pointToConvertChanged();
 }
 
 /*!
