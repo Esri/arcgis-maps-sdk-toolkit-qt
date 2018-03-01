@@ -69,6 +69,7 @@ public:
   static const QString MGRS_FORMAT;
   static const QString USNG_FORMAT;
   static const QString UTM_FORMAT;
+  static const QString COORDINATE_FORMAT_PROPERTY;
 
   // convert the following notation using the input options specified
   Q_INVOKABLE void convertNotation(const QString& notation);
@@ -126,6 +127,8 @@ public:
   CoordinateConversionResults* results();
 
   QString toolName() const override;
+
+  void setProperties(const QVariantMap& properties) override;
 
   QString pointToConvert() const;
 
