@@ -436,7 +436,7 @@ Item {
                 anchors {
                     left: formatName.right
                     verticalCenter: parent.verticalCenter
-                    right: copyButton.left
+                    right: editMenuButton.left
                 }
                 height: parent.height
                 verticalAlignment: Text.AlignVCenter
@@ -451,30 +451,7 @@ Item {
             }
 
             Button {
-                id: copyButton
-                width: height
-                height: inputModeButton.height
-
-                anchors {
-                    right: removeFormat.left
-                    verticalCenter: parent.verticalCenter
-                }
-
-                Image {
-                    fillMode: Image.PreserveAspectFit
-                    anchors.centerIn: copyButton
-                    height: copyButton.height
-                    width: height
-                    source: "images/editcopy.png"
-                }
-
-                onClicked: {
-                    coordinateConvController.copyToClipboard(notation);
-                }
-            }
-
-            Button {
-                id: removeFormat
+                id: editMenuButton
                 width: height
                 height: inputModeButton.height
 
@@ -485,14 +462,51 @@ Item {
 
                 Image {
                     fillMode: Image.PreserveAspectFit
-                    anchors.centerIn: removeFormat
-                    height: removeFormat.height
-                    width: height
-                    source: "images/trash.png"
+                    anchors.centerIn: editMenuButton
+                    sourceSize.height: editMenuButton.width
+                    height: sourceSize.height
+                    source: "images/menu.png"
                 }
 
                 onClicked: {
-                    coordinateConvController.removeCoordinateFormat(name);
+                    editMenu.open();
+                }
+
+                Menu {
+                    id: editMenu
+                    visible: false
+
+                    Column {
+                        anchors.margins: 10 * scaleFactor
+                        spacing: 10 * scaleFactor
+                        Label {
+                            text: "Delete"
+                            font {
+                                family: fontFamily
+                                pixelSize: coordinateConversionWindow.fontSize * scaleFactor
+                            }
+                            color: textColor
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: coordinateConvController.removeCoordinateFormat(name);
+                            }
+                        }
+
+                        Label {
+                            text: "Copy"
+                            font {
+                                family: fontFamily
+                                pixelSize: coordinateConversionWindow.fontSize * scaleFactor
+                            }
+                            color: textColor
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: coordinateConvController.copyToClipboard(notation);
+                            }
+                        }
+                    }
                 }
             }
         }
