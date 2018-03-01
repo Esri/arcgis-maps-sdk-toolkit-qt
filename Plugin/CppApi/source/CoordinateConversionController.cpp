@@ -72,12 +72,10 @@ CoordinateConversionController::CoordinateConversionController(QObject* parent):
     setSpatialReference(ToolResourceProvider::instance()->spatialReference());
   });
 
-  connect(ToolResourceProvider::instance(), &ToolResourceProvider::mouseClickedPoint, this,
-          [this](const Point& point)
-  {
-    if (isActive())
-      setPointToConvert(point);
-  });
+  connect(ToolResourceProvider::instance(), &ToolResourceProvider::mouseClickedPoint, this, &CoordinateConversionController::onMouseClicked);
+
+  connect(ToolResourceProvider::instance(), &ToolResourceProvider::locationChanged, this, &CoordinateConversionController::onLocationChanged);
+
 
   connect(this, &CoordinateConversionController::optionsChanged, this,
           [this]()
@@ -355,6 +353,9 @@ void CoordinateConversionController::setInputUtmConversionMode(CoordinateConvers
  */
 void CoordinateConversionController::setPointToConvert(const Esri::ArcGISRuntime::Point& point)
 {
+  if (point == m_pointToConvert)
+    return;
+
   m_pointToConvert = point;
 
   if (m_runConversion)
@@ -387,6 +388,41 @@ void CoordinateConversionController::objectAppend(QQmlListProperty<QObject>* pro
     return;
 
   engine->addOption(option);
+}
+
+bool CoordinateConversionController::isCaptureMode() const
+{
+  return m_captureMode;
+}
+
+void CoordinateConversionController::setCaptureMode(bool captureMode)
+{
+  if (captureMode == m_captureMode)
+    return;
+
+  m_captureMode = captureMode;
+
+  setPointToConvert(Point());
+
+  emit captureModeChanged();
+}
+
+void CoordinateConversionController::onMouseClicked(const Point& clickedPoint)
+{
+  if (!isActive())
+    return;
+
+  if (isCaptureMode())
+     setPointToConvert(clickedPoint);
+}
+
+void CoordinateConversionController::onLocationChanged(const Point& location)
+{
+  if (!isActive())
+    return;
+
+  if (!isCaptureMode())
+    setPointToConvert(location);
 }
 
 QString CoordinateConversionController::inputFormat() const
