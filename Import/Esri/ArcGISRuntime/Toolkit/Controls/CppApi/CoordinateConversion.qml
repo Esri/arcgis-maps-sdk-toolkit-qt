@@ -423,7 +423,7 @@ Item {
                 height: parent.height
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
-                font{
+                font {
                     family: fontFamily
                     pixelSize: coordinateConversionWindow.fontSize * scaleFactor
                 }
