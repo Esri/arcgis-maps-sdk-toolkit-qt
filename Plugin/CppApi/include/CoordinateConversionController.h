@@ -55,6 +55,7 @@ class TOOLKIT_EXPORT CoordinateConversionController : public AbstractTool
   Q_PROPERTY(QStringList coordinateFormats READ coordinateFormats NOTIFY coordinateFormatsChanged)
   Q_PROPERTY(QString pointToConvert READ pointToConvert NOTIFY pointToConvertChanged)
 
+  Q_PROPERTY(bool captureMode READ isCaptureMode WRITE setCaptureMode NOTIFY captureModeChanged)
 
   // internal: support for nested default property "options" objects
   /*! \internal */
@@ -95,6 +96,7 @@ signals:
   void pointToConvertChanged();
   void coordinateFormatsChanged();
   void inputFormatChanged();
+  void captureModeChanged();
 
 public:
   CoordinateConversionController(QObject* parent = nullptr);
@@ -132,6 +134,13 @@ public:
   QString inputFormat() const;
   void setInputFormat(const QString &inputFormat);
 
+  bool isCaptureMode() const;
+  void setCaptureMode(bool captureMode);
+
+public slots:
+  void onMouseClicked(const Esri::ArcGISRuntime::Point& clickedPoint);
+  void onLocationChanged(const Esri::ArcGISRuntime::Point& location);
+
 private:
   QQmlListProperty<CoordinateConversionOptions> options();
 
@@ -156,6 +165,7 @@ private:
 
   QStringList m_coordinateFormats;
   QString m_inputFormat;
+  bool m_captureMode = false;
 };
 
 } // Toolkit

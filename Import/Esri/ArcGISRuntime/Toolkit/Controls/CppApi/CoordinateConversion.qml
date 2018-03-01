@@ -111,6 +111,7 @@ Item {
         contentItem: Text {
             text: inputModeButton.text
             font{
+                bold: true
                 family: fontFamily
                 pixelSize: coordinateConversionWindow.fontSize * scaleFactor
             }
@@ -175,7 +176,7 @@ Item {
         anchors {
             left: inputModeButton.right
             verticalCenter: inputModeButton.verticalCenter
-            right: parent.right
+            right: menuButton.left
         }
         height: inputModeButton.height
         verticalAlignment: Text.AlignVCenter
@@ -190,87 +191,30 @@ Item {
         color: textColor
     }
 
-    ListView {
-        id: results
+    Button {
+        id: menuButton
+
         anchors {
-            bottom: inputModeButton.top
-            left: inputModeButton.left
+            verticalCenter: inputModeButton.verticalCenter
             right: parent.right
         }
+        height: inputModeButton.height
+        width: height
 
-        height: count * inputModeButton.height
+        checkable: true
+        checked: false
 
-        model: coordinateConvController.results
-
-        delegate:
-            Rectangle {
-            height: inputModeButton.height
-            width: results.width
+        background: Rectangle {
+            anchors.fill: menuButton
             color: backgroundColor
+        }
 
-            Text {
-                id: formatName
-                text: name
-                anchors {
-                    left: parent.left
-                    verticalCenter: parent.verticalCenter
-                }
-                width: inputModeButton.width
-                height: parent.height
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                font{
-                    family: fontFamily
-                    pixelSize: coordinateConversionWindow.fontSize * scaleFactor
-                }
-                color: textColor
-            }
-
-            Text {
-                text: notation
-                anchors {
-                    left: formatName.right
-                    verticalCenter: parent.verticalCenter
-                    right: removeFormat.left
-                }
-                height: parent.height
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignLeft
-                font{
-                    family: fontFamily
-                    pixelSize: coordinateConversionWindow.fontSize * scaleFactor
-                }
-                color: textColor
-            }
-
-            Button {
-                id: removeFormat
-                width: height
-                height: parent.height
-
-                anchors {
-                    right: parent.right
-                    verticalCenter: parent.verticalCenter
-                }
-
-                background: Rectangle {
-                    anchors.fill: this
-                    color: backgroundColor
-                }
-
-                Image {
-                    fillMode: Image.PreserveAspectFit
-                    anchors.centerIn: parent
-                    sourceSize.height: parent.width
-                    height: sourceSize.height
-                    source: "images/trash.png"
-                }
-
-
-                onClicked: {
-                    coordinateConvController.removeCoordinateFormat(name);
-                }
-            }
+        Image {
+            fillMode: Image.PreserveAspectFit
+            anchors.centerIn: menuButton
+            sourceSize.height: menuButton.width
+            height: sourceSize.height
+            source: menuButton.checked ? "images/menuCollapse.png" : "images/menuExpand.png"
         }
     }
 
@@ -280,6 +224,7 @@ Item {
             left: parent.left
             bottom: results.top
         }
+        visible: menuButton.checked
         text: "Add conversion"
 
         background: Rectangle {
@@ -339,6 +284,125 @@ Item {
                         coordinateConvController.addCoordinateFormat(modelData);
                         addConversionMenu.close();
                     }
+                }
+            }
+        }
+    }
+
+    Button {
+        id: captureModeButton
+
+        anchors {
+            verticalCenter: addConversionButton.verticalCenter
+            left: addConversionButton.right
+        }
+        height: addConversionButton.height
+        width: height
+
+        visible: menuButton.checked
+        checkable: true
+        checked: coordinateConvController.captureMode
+
+        background: Rectangle {
+            anchors.fill: captureModeButton
+            color: backgroundColor
+            border {
+                color: captureModeButton.checked ? highlightColor : "transparent"
+                width: 1 * scaleFactor
+            }
+
+        }
+
+        Image {
+            fillMode: Image.PreserveAspectFit
+            anchors.centerIn: parent
+            sourceSize.height: parent.width
+            height: sourceSize.height
+            opacity: captureModeButton.checked ? 1.0 : 0.5
+            source: "images/directionsto_dark.png"
+        }
+
+        onCheckedChanged: {
+            if (coordinateConvController.captureMode !== checked)
+                coordinateConvController.captureMode = checked;
+        }
+    }
+
+    ListView {
+        id: results
+        anchors {
+            bottom: inputModeButton.top
+            left: inputModeButton.left
+            right: parent.right
+        }
+
+        visible: menuButton.checked
+        height: count * inputModeButton.height
+        model: coordinateConvController.results
+
+        delegate:
+            Rectangle {
+            height: inputModeButton.height
+            width: results.width
+            color: backgroundColor
+
+            Text {
+                id: formatName
+                text: name
+                anchors {
+                    left: parent.left
+                    verticalCenter: parent.verticalCenter
+                }
+                width: inputModeButton.width
+                height: parent.height
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                font{
+                    family: fontFamily
+                    pixelSize: coordinateConversionWindow.fontSize * scaleFactor
+                }
+                color: textColor
+            }
+
+            Text {
+                text: notation
+                anchors {
+                    left: formatName.right
+                    verticalCenter: parent.verticalCenter
+                    right: removeFormat.left
+                }
+                height: parent.height
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+                font{
+                    family: fontFamily
+                    pixelSize: coordinateConversionWindow.fontSize * scaleFactor
+                }
+                wrapMode: Text.Wrap
+                elide: Text.ElideRight
+                color: textColor
+            }
+
+            Button {
+                id: removeFormat
+                width: height
+                height: inputModeButton.height
+
+                anchors {
+                    right: parent.right
+                    verticalCenter: parent.verticalCenter
+                }
+
+                Image {
+                    fillMode: Image.PreserveAspectFit
+                    anchors.centerIn: removeFormat
+                    height: removeFormat.height
+                    width: height
+                    source: "images/trash.png"
+                }
+
+                onClicked: {
+                    coordinateConvController.removeCoordinateFormat(name);
                 }
             }
         }
