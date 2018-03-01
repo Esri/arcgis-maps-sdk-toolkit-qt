@@ -106,17 +106,7 @@ CoordinateConversionController::~CoordinateConversionController()
  */
 void CoordinateConversionController::convertNotation(const QString& notation)
 {
-  QList<Result> results;
-  const Point convertedPoint = pointFromNotation(notation);
-
-  for (CoordinateConversionOptions* option : m_options)
-  {
-    const QString name = option->name();
-    results.append(Result(name, convertPointInternal(option, convertedPoint), option->outputMode()));
-  }
-
-  this->results()->setResults(std::move(results));
-  emit resultsChanged();
+  setPointToConvert(pointFromNotation(notation));
 }
 
 /*!
@@ -127,7 +117,21 @@ Point CoordinateConversionController::pointFromNotation(const QString& incomingN
   if (m_spatialReference.isEmpty())
     qWarning("The spatial reference property is empty: conversions will fail.");
 
-  switch (m_inputMode)
+  CoordinateConversionOptions* inputOption = nullptr;
+  for (CoordinateConversionOptions* option : m_options)
+  {
+    const QString name = option->name();
+    if (name.compare(m_inputFormat) == 0)
+    {
+      inputOption = option;
+      break;
+    }
+  }
+
+  if (inputOption == nullptr)
+    return Point();
+
+  switch (inputOption->outputMode())
   {
   case CoordinateType::CoordinateTypeGars:
   {
@@ -231,25 +235,6 @@ QString CoordinateConversionController::convertPointInternal(CoordinateConversio
   }
 
   return QString();
-}
-
-/*!
-  \property CoordinateConversionController::inputMode
-  \brief The current input conversion mode used for the \l convertNotation method.
- */
-CoordinateType CoordinateConversionController::inputMode() const
-{
-  return m_inputMode;
-}
-
-void CoordinateConversionController::setInputMode(CoordinateType inputMode)
-{
-  m_inputMode = inputMode;
-
-  emit inputModeChanged();
-  emit pointToConvertChanged();
-  if (m_runConversion)
-    convertPoint();
 }
 
 /*!
@@ -637,11 +622,6 @@ void CoordinateConversionController::setRunConversion(bool runConversion)
 /*!
   \fn void CoordinateConversionController::resultsChanged();
   \brief Signal emitted when the \l results property changes.
- */
-
-/*!
-  \fn void CoordinateConversionController::inputModeChanged();
-  \brief Signal emitted when the \l inputMode property changes.
  */
 
 /*!

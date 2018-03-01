@@ -170,9 +170,9 @@ Item {
         color: backgroundColor
     }
 
-    TextField {
+    Text {
         id: pointToConvertEntry
-
+        visible: !editCoordinateButton.checked
         anchors {
             left: inputModeButton.right
             verticalCenter: inputModeButton.verticalCenter
@@ -183,12 +183,34 @@ Item {
         horizontalAlignment: Text.AlignLeft
 
         text: coordinateConvController.pointToConvert
-        placeholderText: "No position"
         font{
             family: fontFamily
             pixelSize: coordinateConversionWindow.fontSize * scaleFactor
         }
         color: textColor
+    }
+
+    TextField {
+        id: editPointEntry
+        visible: editCoordinateButton.checked
+        anchors {
+            left: inputModeButton.right
+            verticalCenter: inputModeButton.verticalCenter
+            right: menuButton.left
+        }
+
+        placeholderText: "No position"
+        text: coordinateConvController.pointToConvert
+        font{
+            family: fontFamily
+            pixelSize: coordinateConversionWindow.fontSize * scaleFactor
+        }
+        color: highlightColor
+
+        onAccepted: {
+            coordinateConvController.convertNotation(text);
+            editCoordinateButton.checked = false;
+        }
     }
 
     Button {
@@ -219,6 +241,18 @@ Item {
         }
     }
 
+    Rectangle {
+        visible: menuButton.checked
+        anchors {
+            top: addConversionButton.top
+            left: parent.left
+            right: parent.right
+            bottom: addConversionButton.bottom
+        }
+
+        color: backgroundColor
+    }
+
     Button {
         id: addConversionButton
         anchors {
@@ -230,7 +264,7 @@ Item {
         text: "Add conversion"
 
         background: Rectangle {
-            color: addConversionButton.down ? highlightColor : backgroundColor
+            color: addConversionButton.down ? highlightColor : "transparent"
         }
 
         contentItem: Text {
@@ -292,11 +326,42 @@ Item {
     }
 
     Button {
+        id: editCoordinateButton
+
+        anchors {
+            verticalCenter: addConversionButton.verticalCenter
+            right: captureModeButton.left
+        }
+        height: addConversionButton.height
+        width: height
+
+        visible: menuButton.checked
+        checkable: true
+
+        background: Rectangle {
+            color: "transparent"
+            border {
+                color: editCoordinateButton.checked ? highlightColor : "transparent"
+                width: 1 * scaleFactor
+            }
+        }
+
+        Image {
+            fillMode: Image.PreserveAspectFit
+            anchors.centerIn: parent
+            sourceSize.height: parent.width
+            height: sourceSize.height
+            opacity: editCoordinateButton.checked ? 1.0 : 0.5
+            source: "images/edit.png"
+        }
+    }
+
+    Button {
         id: captureModeButton
 
         anchors {
             verticalCenter: addConversionButton.verticalCenter
-            left: addConversionButton.right
+            right: parent.right
         }
         height: addConversionButton.height
         width: height
@@ -306,13 +371,11 @@ Item {
         checked: coordinateConvController.captureMode
 
         background: Rectangle {
-            anchors.fill: captureModeButton
-            color: backgroundColor
+            color: "transparent"
             border {
                 color: captureModeButton.checked ? highlightColor : "transparent"
                 width: 1 * scaleFactor
             }
-
         }
 
         Image {
