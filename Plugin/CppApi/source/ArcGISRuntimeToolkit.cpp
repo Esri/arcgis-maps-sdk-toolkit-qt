@@ -14,8 +14,6 @@
 #include <QtQml>
 
 #include "CoordinateConversionController.h"
-#include "CoordinateConversionOptions.h"
-#include "CoordinateConversionResults.h"
 #include "ArcGISCompassController.h"
 
 namespace Esri
@@ -34,18 +32,6 @@ namespace Toolkit
   to ensure all the types are accessible in the QML environment.
   You may alternately do this manually if you only need specific types.
  */
-
-static CoordinateConversionOptions* m_optionsProvider = nullptr;
-
-QObject* optionsProvider(QQmlEngine* engine, QJSEngine*)
-{
-  if (!m_optionsProvider)
-  {
-    m_optionsProvider = new CoordinateConversionOptions(engine);
-  }
-
-  return m_optionsProvider;
-}
 
 /*!
    \brief Constructor that accepts an optional \a parent object.
@@ -90,22 +76,9 @@ void ArcGISRuntimeToolkit::registerTypes(const char* uri)
  */
 void ArcGISRuntimeToolkit::registerToolkitTypes(const char* uri)
 {
-  // singletons
-  qmlRegisterSingletonType<CoordinateConversionOptions>(uri, s_versionMajor, s_versionMinor, "CoordinateConversionOptions", optionsProvider);
-
   // types
-  qmlRegisterType<CoordinateConversionOptions>(uri, s_versionMajor, s_versionMinor, "CoordinateConversionOptions");
-  qmlRegisterType<CoordinateConversionResults>(uri, s_versionMajor, s_versionMinor, "CoordinateConversionResults");
   qmlRegisterType<CoordinateConversionController>(uri, s_versionMajor, s_versionMinor, "CoordinateConversionController");
-  qRegisterMetaType<CoordinateConversionResults*>("CoordinateConversionResults*");
   qmlRegisterType<ArcGISCompassController>(uri, s_versionMajor, s_versionMinor, "ArcGISCompassController");
-
-  // enums
-  qRegisterMetaType<CoordinateConversionOptions::CoordinateType>("CoordinateConversionOptions::CoordinateType");
-  qRegisterMetaType<CoordinateConversionOptions::GarsConversionMode>("CoordinateConversionOptions::GarsConversionMode");
-  qRegisterMetaType<CoordinateConversionOptions::MgrsConversionMode>("CoordinateConversionOptions::MgrsConversionMode");
-  qRegisterMetaType<CoordinateConversionOptions::UtmConversionMode>("CoordinateConversionOptions::UtmConversionMode");
-  qRegisterMetaType<CoordinateConversionOptions::LatitudeLongitudeFormat>("CoordinateConversionOptions::LatitudeLongitudeFormat");
 }
 
 } // Toolkit
