@@ -60,7 +60,8 @@ CoordinateConversionController::CoordinateConversionController(QObject* parent):
                       CoordinateConversionConstants::DEGREES_MINUTES_SECONDS_FORMAT,
                       CoordinateConversionConstants::MGRS_FORMAT,
                       CoordinateConversionConstants::USNG_FORMAT,
-                      CoordinateConversionConstants::UTM_FORMAT}
+                      CoordinateConversionConstants::UTM_FORMAT,
+                      CoordinateConversionConstants::GARS_FORMAT}
 {
   ToolManager::instance().addTool(this);
 

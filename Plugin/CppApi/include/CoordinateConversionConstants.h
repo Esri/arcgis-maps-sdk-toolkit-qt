@@ -33,6 +33,9 @@ public:
   static const QString MGRS_FORMAT;
   static const QString USNG_FORMAT;
   static const QString UTM_FORMAT;
+  static const QString GARS_FORMAT;
+  static const QString GEOREF_FORMAT;
+  static const QString LATLON;
   static const QString COORDINATE_FORMAT_PROPERTY;
 };
 
