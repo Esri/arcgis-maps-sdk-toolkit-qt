@@ -33,18 +33,6 @@ namespace Toolkit
   You may alternately do this manually if you only need specific types.
  */
 
-static CoordinateConversionOptions* m_optionsProvider = nullptr;
-
-QObject* optionsProvider(QQmlEngine* engine, QJSEngine*)
-{
-  if (!m_optionsProvider)
-  {
-    m_optionsProvider = new CoordinateConversionOptions(engine);
-  }
-
-  return m_optionsProvider;
-}
-
 /*!
    \brief Constructor that accepts an optional \a parent object.
  */
@@ -88,9 +76,6 @@ void ArcGISRuntimeToolkit::registerTypes(const char* uri)
  */
 void ArcGISRuntimeToolkit::registerToolkitTypes(const char* uri)
 {
-  // singletons
-  qmlRegisterSingletonType<CoordinateConversionOptions>(uri, s_versionMajor, s_versionMinor, "CoordinateConversionOptions", optionsProvider);
-
   // types
   qmlRegisterType<CoordinateConversionController>(uri, s_versionMajor, s_versionMinor, "CoordinateConversionController");
   qmlRegisterType<ArcGISCompassController>(uri, s_versionMajor, s_versionMinor, "ArcGISCompassController");

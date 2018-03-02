@@ -14,7 +14,6 @@
 #define COORDINATECONVERSIONCONTROLLER_H
 
 #include "AbstractTool.h"
-#include "CoordinateConversionOptions.h"
 
 #include "SpatialReference.h"
 #include "Point.h"
@@ -29,6 +28,7 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
+class CoordinateConversionOptions;
 class CoordinateConversionResults;
 
 class TOOLKIT_EXPORT CoordinateConversionController : public AbstractTool
@@ -50,13 +50,6 @@ class TOOLKIT_EXPORT CoordinateConversionController : public AbstractTool
   Q_PROPERTY(bool captureMode READ isCaptureMode WRITE setCaptureMode NOTIFY captureModeChanged)
 
 public:
-  static const QString DECIMAL_DEGREES_FORMAT;
-  static const QString DEGREES_DECIMAL_MINUTES_FORMAT;
-  static const QString DEGREES_MINUTES_SECONDS_FORMAT;
-  static const QString MGRS_FORMAT;
-  static const QString USNG_FORMAT;
-  static const QString UTM_FORMAT;
-  static const QString COORDINATE_FORMAT_PROPERTY;
 
   // convert the following notation using the input options specified
   Q_INVOKABLE void convertNotation(const QString& notation);
