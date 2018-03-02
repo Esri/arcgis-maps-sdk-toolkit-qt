@@ -20,7 +20,6 @@
 #include "Point.h"
 #include "GeometryTypes.h"
 
-#include <QQmlListProperty>
 #include <QAbstractListModel>
 
 namespace Esri
@@ -88,9 +87,6 @@ public:
   CoordinateConversionController(QObject* parent = nullptr);
   ~CoordinateConversionController();
 
-  CoordinateConversionOptions::CoordinateType inputMode() const;
-  void setInputMode(CoordinateConversionOptions::CoordinateType inputMode);
-
   void setSpatialReference(const Esri::ArcGISRuntime::SpatialReference& spatialReference);
   void setPointToConvert(const Esri::ArcGISRuntime::Point& point);
 
@@ -126,9 +122,8 @@ private:
   Esri::ArcGISRuntime::Point pointFromNotation(const QString& incomingNotation);
   QString convertPointInternal(CoordinateConversionOptions* option, const Esri::ArcGISRuntime::Point& point) const;
 
-  CoordinateConversionController* self() { return this; }
-  QQmlListProperty<QObject> objects();
-  static void objectAppend(QQmlListProperty<QObject>* property, QObject* value);
+  bool isInputFormat(CoordinateConversionOptions* option) const;
+  bool isFormat(CoordinateConversionOptions* option, const QString& formatName) const;
 
   Esri::ArcGISRuntime::Point m_pointToConvert;
   Esri::ArcGISRuntime::SpatialReference m_spatialReference;

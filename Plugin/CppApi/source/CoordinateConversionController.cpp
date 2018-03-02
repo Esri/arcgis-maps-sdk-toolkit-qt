@@ -125,8 +125,7 @@ Point CoordinateConversionController::pointFromNotation(const QString& incomingN
   CoordinateConversionOptions* inputOption = nullptr;
   for (CoordinateConversionOptions* option : m_options)
   {
-    const QString name = option->name();
-    if (name.compare(m_inputFormat) == 0)
+    if (isInputFormat(option))
     {
       inputOption = option;
       break;
@@ -187,11 +186,10 @@ void CoordinateConversionController::convertPoint()
 
   for (CoordinateConversionOptions* option : m_options)
   {
-    const QString name = option->name();
-    if (name.compare(m_inputFormat) == 0)
+    if (isInputFormat(option))
       continue;
 
-    results.append(Result(name, convertPointInternal(option, m_pointToConvert), option->outputMode()));
+    results.append(Result(option->name(), convertPointInternal(option, m_pointToConvert), option->outputMode()));
   }
 
   if (results.isEmpty())
@@ -242,6 +240,19 @@ QString CoordinateConversionController::convertPointInternal(CoordinateConversio
   return QString();
 }
 
+bool CoordinateConversionController::isInputFormat(CoordinateConversionOptions* option) const
+{
+  return isFormat(option, m_inputFormat);
+}
+
+bool CoordinateConversionController::isFormat(CoordinateConversionOptions *option, const QString& formatName) const
+{
+  if (option == nullptr)
+    return false;
+
+  return option->name().compare(formatName, Qt::CaseInsensitive) == 0;
+}
+
 /*!
   \property CoordinateConversionController::results
   \brief The conversion results as a list model.
@@ -290,32 +301,6 @@ void CoordinateConversionController::setPointToConvert(const Point& point)
   emit pointToConvertChanged();
 }
 
-/*!
-  \internal
- */
-QQmlListProperty<QObject> CoordinateConversionController::objects()
-{
-  return QQmlListProperty<QObject>(this, nullptr, objectAppend, nullptr, nullptr, nullptr);
-}
-
-/*!
-  \internal
- */
-void CoordinateConversionController::objectAppend(QQmlListProperty<QObject>* property, QObject* value)
-{
-  auto engine = qobject_cast<CoordinateConversionController*>(property->object);
-
-  if (!engine)
-    return;
-
-  auto* option = qobject_cast<CoordinateConversionOptions*>(value);
-
-  if (!option)
-    return;
-
-  engine->addOption(option);
-}
-
 bool CoordinateConversionController::isCaptureMode() const
 {
   return m_captureMode;
@@ -335,19 +320,13 @@ void CoordinateConversionController::setCaptureMode(bool captureMode)
 
 void CoordinateConversionController::onMouseClicked(const Point& clickedPoint)
 {
-  if (!isActive())
-    return;
-
-  if (isCaptureMode())
+  if (isActive() && isCaptureMode())
      setPointToConvert(clickedPoint);
 }
 
 void CoordinateConversionController::onLocationChanged(const Point& location)
 {
-  if (!isActive())
-    return;
-
-  if (!isCaptureMode())
+  if (isActive() && !isCaptureMode())
     setPointToConvert(location);
 }
 
@@ -417,7 +396,7 @@ QString CoordinateConversionController::pointToConvert() const
 {
   for (CoordinateConversionOptions* option : m_options)
   {
-    if (option->name().compare(m_inputFormat) == 0)
+    if (isInputFormat(option))
       return convertPointInternal(option, m_pointToConvert);
   }
 
@@ -449,11 +428,10 @@ void CoordinateConversionController::addCoordinateFormat(const QString& newForma
     return;
 
   auto it = m_options.cbegin();
-  auto itEnd = m_options.cend();
+  const auto itEnd = m_options.cend();
   for (; it != itEnd; ++it)
   {
-    const auto& option = *it;
-    if (option->name().compare(newFormat) == 0)
+    if (isFormat(*it, newFormat))
       return;
   }
 
@@ -507,7 +485,7 @@ void CoordinateConversionController::addCoordinateFormat(const QString& newForma
 
 void CoordinateConversionController::removeCoordinateFormat(const QString& formatToRemove)
 {
-  if (formatToRemove.compare(m_inputFormat) == 0)
+  if (formatToRemove.compare(m_inputFormat, Qt::CaseInsensitive) == 0)
     return;
 
   bool removed = false;
@@ -516,7 +494,7 @@ void CoordinateConversionController::removeCoordinateFormat(const QString& forma
   for (; it != itEnd; ++it)
   {
     const auto& option = *it;
-    if (option->name().compare(formatToRemove) == 0)
+    if (isFormat(option, formatToRemove))
     {
       m_options.erase(it);
       removed = true;
