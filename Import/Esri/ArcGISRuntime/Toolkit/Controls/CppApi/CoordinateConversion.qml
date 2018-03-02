@@ -82,6 +82,8 @@ Item {
      */
     property bool expandUpwards: true
 
+    property alias radius: backgroundRecatangle.radius
+
     CoordinateConversionController {
         id: coordinateConvController
         objectName: "coordinateConversionController"
@@ -95,6 +97,18 @@ Item {
         }
     }
 
+    Rectangle {
+        id: backgroundRecatangle
+        anchors{
+            top: menuButton.checked ? expandUpwards ? addConversionButton.top : inputModeButton.top : inputModeButton.top
+            bottom: menuButton.checked ? expandUpwards ? inputModeButton.bottom : addConversionButton.bottom : inputModeButton.bottom
+            left: parent.left
+            right: parent.right
+        }
+        color: backgroundColor
+        opacity: coordinateConversionWindow.opacity
+    }
+
     Button {
         id: inputModeButton
         anchors {
@@ -103,10 +117,6 @@ Item {
         }
         width: inputModesMenu.width
         text: coordinateConvController.inputFormat.length > 0 ? coordinateConvController.inputFormat : "Set format"
-
-        background: Rectangle {
-            color: inputModeButton.down ? highlightColor : backgroundColor
-        }
 
         contentItem: Text {
             text: inputModeButton.text
@@ -142,7 +152,7 @@ Item {
                     }
 
                     background: Rectangle {
-                        color: text === inputModeButton.text ? highlightColor : backgroundColor
+                        color: text === inputModeButton.text ? highlightColor : "transparent"
                     }
 
                     contentItem: Text {
@@ -163,11 +173,6 @@ Item {
                 }
             }
         }
-    }
-
-    Rectangle {
-        anchors.fill: pointToConvertEntry
-        color: backgroundColor
     }
 
     Text {
@@ -226,11 +231,6 @@ Item {
         checkable: true
         checked: false
 
-        background: Rectangle {
-            anchors.fill: menuButton
-            color: backgroundColor
-        }
-
         Image {
             fillMode: Image.PreserveAspectFit
             anchors.centerIn: menuButton
@@ -239,18 +239,6 @@ Item {
             source: menuButton.checked ? (expandUpwards ? "images/menuCollapse.png" : "images/menuExpand.png") :
                                          (expandUpwards ? "images/menuExpand.png" : "images/menuCollapse.png")
         }
-    }
-
-    Rectangle {
-        visible: menuButton.checked
-        anchors {
-            top: addConversionButton.top
-            left: parent.left
-            right: parent.right
-            bottom: addConversionButton.bottom
-        }
-
-        color: backgroundColor
     }
 
     Button {
@@ -299,10 +287,6 @@ Item {
                     opacity: enabled ? 1.0 : 0.5
                     anchors{
                         left: parent.left
-                    }
-
-                    background: Rectangle {
-                        color: backgroundColor
                     }
 
                     contentItem: Text {
@@ -407,10 +391,9 @@ Item {
         model: coordinateConvController.results
 
         delegate:
-            Rectangle {
+            Item {
             height: inputModeButton.height
             width: results.width
-            color: backgroundColor
 
             Text {
                 id: formatName
