@@ -137,7 +137,7 @@ Point CoordinateConversionController::pointFromNotation(const QString& incomingN
   {
     return CoordinateFormatter::fromGars(incomingNotation,
                                          m_spatialReference,
-                                         Esri::ArcGISRuntime::GarsConversionMode::Center);
+                                         inputOption->garsConvesrionMode());
   }
   case CoordinateConversionOptions::CoordinateType::CoordinateTypeGeoRef:
   {
@@ -153,7 +153,7 @@ Point CoordinateConversionController::pointFromNotation(const QString& incomingN
   {
     return CoordinateFormatter::fromMgrs(incomingNotation,
                                          m_spatialReference,
-                                         static_cast<Esri::ArcGISRuntime::MgrsConversionMode>(inputOption->mgrsConversionMode()));
+                                         inputOption->mgrsConversionMode());
   }
   case CoordinateConversionOptions::CoordinateType::CoordinateTypeUsng:
   {
@@ -164,7 +164,7 @@ Point CoordinateConversionController::pointFromNotation(const QString& incomingN
   {
     return CoordinateFormatter::fromUtm(incomingNotation,
                                         m_spatialReference,
-                                        static_cast<Esri::ArcGISRuntime::UtmConversionMode>(inputOption->utmConversionMode()));
+                                       inputOption->utmConversionMode());
   }
   default: {}
   }
@@ -336,9 +336,6 @@ void CoordinateConversionController::setInputFormat(const QString& inputFormat)
   if (m_inputFormat == inputFormat)
     return;
 
-  if (!m_coordinateFormats.contains(inputFormat))
-    return;
-
   m_inputFormat = inputFormat;
 
   addCoordinateFormat(m_inputFormat);
@@ -361,6 +358,9 @@ QStringList CoordinateConversionController::coordinateFormats() const
 void CoordinateConversionController::addOption(CoordinateConversionOptions* option)
 {
   m_options.append(option);
+  if (m_options.size() == 1)
+    setInputFormat(option->name());
+
   emit optionsChanged();
 }
 
