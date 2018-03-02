@@ -182,7 +182,7 @@ Item {
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignLeft
 
-        text: coordinateConvController.pointToConvert
+        text: coordinateConvController.pointToConvert.length > 0 ? coordinateConvController.pointToConvert : "No position"
         font{
             family: fontFamily
             pixelSize: coordinateConversionWindow.fontSize * scaleFactor
@@ -489,7 +489,10 @@ Item {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: coordinateConvController.removeCoordinateFormat(name);
+                                onClicked: {
+                                    editMenu.close();
+                                    coordinateConvController.removeCoordinateFormat(name);
+                                }
                             }
                         }
 
@@ -503,7 +506,10 @@ Item {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: coordinateConvController.copyToClipboard(notation);
+                                onClicked: {
+                                    editMenu.close();
+                                    coordinateConvController.copyToClipboard(notation);
+                                }
                             }
                         }
                     }
