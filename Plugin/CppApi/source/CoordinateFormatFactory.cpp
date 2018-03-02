@@ -14,6 +14,8 @@
 #include "CoordinateConversionConstants.h"
 #include "CoordinateFormatFactory.h"
 
+#include "GeodatabaseTypes.h"
+
 #include <QObject>
 
 namespace Esri

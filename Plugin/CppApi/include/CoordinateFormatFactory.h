@@ -15,14 +15,17 @@
 
 #include "ToolkitCommon.h"
 
-#include "GeometryTypes.h"
-
 class QObject;
 
 namespace Esri
 {
 namespace ArcGISRuntime
 {
+
+enum class GarsConversionMode;
+enum class MgrsConversionMode;
+enum class UtmConversionMode;
+
 namespace Toolkit
 {
 
