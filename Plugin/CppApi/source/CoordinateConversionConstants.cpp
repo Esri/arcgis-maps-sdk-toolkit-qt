@@ -25,6 +25,9 @@ const QString CoordinateConversionConstants::DEGREES_MINUTES_SECONDS_FORMAT = QS
 const QString CoordinateConversionConstants::MGRS_FORMAT = QStringLiteral("MGRS");
 const QString CoordinateConversionConstants::USNG_FORMAT = QStringLiteral("USGS");
 const QString CoordinateConversionConstants::UTM_FORMAT = QStringLiteral("UTM");
+const QString CoordinateConversionConstants::GARS_FORMAT = QStringLiteral("GARS");
+const QString CoordinateConversionConstants::GEOREF_FORMAT = QStringLiteral("GeoRef");
+const QString CoordinateConversionConstants::LATLON = QStringLiteral("LatLon");
 const QString CoordinateConversionConstants::COORDINATE_FORMAT_PROPERTY = QStringLiteral("CoordinateFormat");
 
 } // Toolkit

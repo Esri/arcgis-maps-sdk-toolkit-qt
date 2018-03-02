@@ -18,7 +18,6 @@
 
 #include "ToolkitCommon.h"
 #include "GeometryTypes.h"
-#include <QQmlListProperty>
 
 namespace Esri
 {
@@ -43,8 +42,6 @@ class TOOLKIT_EXPORT CoordinateConversionOptions : public QObject
 
   Q_PROPERTY(QStringList coordinateTypeNames READ coordinateTypeNames CONSTANT)
 
-  Q_ENUMS(CoordinateType GarsConversionMode MgrsConversionMode UtmConversionMode LatitudeLongitudeFormat)
-
 public:
   enum CoordinateType
   {
@@ -54,34 +51,6 @@ public:
     CoordinateTypeMgrs,
     CoordinateTypeUsng,
     CoordinateTypeUtm
-  };
-
-  enum GarsConversionMode
-  {
-    GarsConversionModeLowerLeft = (int)Esri::ArcGISRuntime::GarsConversionMode::LowerLeft,
-    GarsConversionModeCenter    = (int)Esri::ArcGISRuntime::GarsConversionMode::Center
-  };
-
-  enum MgrsConversionMode
-  {
-    MgrsConversionModeAutomatic      = (int)Esri::ArcGISRuntime::MgrsConversionMode::Automatic,
-    MgrsConversionModeNew180InZone01 = (int)Esri::ArcGISRuntime::MgrsConversionMode::New180InZone01,
-    MgrsConversionModeNew180InZone60 = (int)Esri::ArcGISRuntime::MgrsConversionMode::New180InZone60,
-    MgrsConversionModeOld180InZone01 = (int)Esri::ArcGISRuntime::MgrsConversionMode::Old180InZone01,
-    MgrsConversionModeOld180InZone60 = (int)Esri::ArcGISRuntime::MgrsConversionMode::Old180InZone60
-  };
-
-  enum UtmConversionMode
-  {
-    UtmConversionModeLatitudeBandIndicators = (int)Esri::ArcGISRuntime::UtmConversionMode::LatitudeBandIndicators,
-    UtmConversionModeNorthSouthIndicators   = (int)Esri::ArcGISRuntime::UtmConversionMode::NorthSouthIndicators
-  };
-
-  enum LatitudeLongitudeFormat
-  {
-    LatitudeLongitudeFormatDecimalDegrees        = (int)Esri::ArcGISRuntime::LatitudeLongitudeFormat::DecimalDegrees,
-    LatitudeLongitudeFormatDegreesDecimalMinutes = (int)Esri::ArcGISRuntime::LatitudeLongitudeFormat::DegreesDecimalMinutes,
-    LatitudeLongitudeFormatDegreesMinutesSeconds = (int)Esri::ArcGISRuntime::LatitudeLongitudeFormat::DegreesMinutesSeconds
   };
 
   // static qml methods
@@ -98,6 +67,7 @@ signals:
   void mgrsConversionModeChanged();
   void latLonFormatChanged();
   void utmConversionModeChanged();
+  void garsConversionModeChanged();
 
 public:
   CoordinateConversionOptions(QObject* parent = nullptr);
@@ -127,6 +97,9 @@ public:
   UtmConversionMode utmConversionMode() const;
   void setUtmConversionMode(UtmConversionMode utmConversionMode);
 
+  GarsConversionMode garsConvesrionMode() const;
+  void setGarsConversionMode(GarsConversionMode conversionMode);
+
 private:
   QString m_name;
   CoordinateType m_outputMode = CoordinateTypeUsng;
@@ -134,9 +107,10 @@ private:
   int m_precision = 8;
   int m_decimalPlaces = 6;
 
-  MgrsConversionMode m_mgrsConversionMode = MgrsConversionModeAutomatic;
-  LatitudeLongitudeFormat m_latLonFormat = LatitudeLongitudeFormatDecimalDegrees;
-  UtmConversionMode m_utmConversionMode = UtmConversionModeLatitudeBandIndicators;
+  MgrsConversionMode m_mgrsConversionMode = MgrsConversionMode::Automatic;
+  LatitudeLongitudeFormat m_latLonFormat = LatitudeLongitudeFormat::DecimalDegrees;
+  UtmConversionMode m_utmConversionMode = UtmConversionMode::LatitudeBandIndicators;
+  GarsConversionMode m_garsConvesrionMode = GarsConversionMode::Center;
 };
 
 } // Toolkit
@@ -144,9 +118,5 @@ private:
 } // Esri
 
 Q_DECLARE_METATYPE(Esri::ArcGISRuntime::Toolkit::CoordinateConversionOptions::CoordinateType)
-Q_DECLARE_METATYPE(Esri::ArcGISRuntime::Toolkit::CoordinateConversionOptions::GarsConversionMode)
-Q_DECLARE_METATYPE(Esri::ArcGISRuntime::Toolkit::CoordinateConversionOptions::MgrsConversionMode)
-Q_DECLARE_METATYPE(Esri::ArcGISRuntime::Toolkit::CoordinateConversionOptions::UtmConversionMode)
-Q_DECLARE_METATYPE(Esri::ArcGISRuntime::Toolkit::CoordinateConversionOptions::LatitudeLongitudeFormat)
 
 #endif // COORDINATECONVERSIONOPTIONS_H
