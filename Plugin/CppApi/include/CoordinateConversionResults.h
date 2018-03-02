@@ -70,6 +70,7 @@ private:
   friend class CoordinateConversionController;
 
   void setResults(QList<Result>&& results);
+  void removeResult(const QString& name);
   void clearResults();
   void setupRoles();
 

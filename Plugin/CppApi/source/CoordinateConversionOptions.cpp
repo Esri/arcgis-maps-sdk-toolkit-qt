@@ -10,6 +10,7 @@
 // See the Sample code usage restrictions document for further information.
 //
 
+#include "CoordinateConversionConstants.h"
 #include "CoordinateConversionOptions.h"
 #include "CoordinateConversionController.h"
 
@@ -80,17 +81,6 @@ namespace Toolkit
 
   \sa {Coordinate Conversion Tool}
  */
-
-using MgrsConversionMode = CoordinateConversionOptions::MgrsConversionMode;
-using LatitudeLongitudeFormat = CoordinateConversionOptions::LatitudeLongitudeFormat;
-using UtmConversionMode = CoordinateConversionOptions::UtmConversionMode;
-
-static const QString s_gars   = QStringLiteral("Gars");
-static const QString s_georef = QStringLiteral("GeoRef");
-static const QString s_latlon = QStringLiteral("LatLon");
-static const QString s_mgrs   = QStringLiteral("Mgrs");
-static const QString s_usng   = QStringLiteral("Usng");
-static const QString s_utm    = QStringLiteral("Utm");
 
 /*!
    \brief The constructor that accepts an optional \a parent object.
@@ -262,36 +252,15 @@ void CoordinateConversionOptions::setUtmConversionMode(UtmConversionMode utmConv
   emit utmConversionModeChanged();
 }
 
-/*!
-  \internal
- */
-void CoordinateConversionOptions::listAppend(QQmlListProperty<CoordinateConversionOptions>* property, CoordinateConversionOptions* value)
+GarsConversionMode CoordinateConversionOptions::garsConvesrionMode() const
 {
-  static_cast<CoordinateConversionController*>(property->object)->addOption(value);
+  return m_garsConvesrionMode;
 }
 
-/*!
-  \internal
- */
-CoordinateConversionOptions* CoordinateConversionOptions::listAt(QQmlListProperty<CoordinateConversionOptions>* property, int index)
+void CoordinateConversionOptions::setGarsConversionMode(GarsConversionMode conversionMode)
 {
-  return static_cast<QList<CoordinateConversionOptions*>*>(property->data)->value(index);
-}
-
-/*!
-  \internal
- */
-int CoordinateConversionOptions::listCount(QQmlListProperty<CoordinateConversionOptions>* property)
-{
-  return static_cast<QList<CoordinateConversionOptions*>*>(property->data)->count();
-}
-
-/*!
-  \internal
- */
-void CoordinateConversionOptions::listClear(QQmlListProperty<CoordinateConversionOptions>* property)
-{
-  static_cast<CoordinateConversionController*>(property->object)->clearOptions();
+  m_garsConvesrionMode = conversionMode;
+  emit garsConversionModeChanged();
 }
 
 /*!
@@ -299,17 +268,17 @@ void CoordinateConversionOptions::listClear(QQmlListProperty<CoordinateConversio
  */
 CoordinateConversionOptions::CoordinateType CoordinateConversionOptions::stringToCoordinateType(const QString& type) const
 {
-  if (type == s_gars)
+  if (type.compare(CoordinateConversionConstants::GARS_FORMAT, Qt::CaseInsensitive) == 0)
     return CoordinateType::CoordinateTypeGars;
-  else if (type == s_georef)
+  else if (type.compare(CoordinateConversionConstants::GEOREF_FORMAT, Qt::CaseInsensitive) == 0)
     return CoordinateType::CoordinateTypeGeoRef;
-  else if (type == s_latlon)
+  else if (type.compare(CoordinateConversionConstants::LATLON, Qt::CaseInsensitive) == 0)
     return CoordinateType::CoordinateTypeLatLon;
-  else if (type == s_mgrs)
+  else if (type.compare(CoordinateConversionConstants::MGRS_FORMAT, Qt::CaseInsensitive) == 0)
     return CoordinateType::CoordinateTypeMgrs;
-  else if (type == s_usng)
+  else if (type.compare(CoordinateConversionConstants::USNG_FORMAT, Qt::CaseInsensitive) == 0)
     return CoordinateType::CoordinateTypeUsng;
-  else if (type == s_utm)
+  else if (type.compare(CoordinateConversionConstants::UTM_FORMAT, Qt::CaseInsensitive) == 0)
     return CoordinateType::CoordinateTypeUtm;
 
   return CoordinateType::CoordinateTypeLatLon;
@@ -323,17 +292,17 @@ QString CoordinateConversionOptions::coordinateTypeToString(CoordinateType type)
   switch (type)
   {
   case CoordinateType::CoordinateTypeGars:
-    return s_gars;
+    return CoordinateConversionConstants::GARS_FORMAT;
   case CoordinateType::CoordinateTypeGeoRef:
-    return s_georef;
+    return CoordinateConversionConstants::GEOREF_FORMAT;
   case CoordinateType::CoordinateTypeLatLon:
-    return s_latlon;
+    return CoordinateConversionConstants::LATLON;
   case CoordinateType::CoordinateTypeMgrs:
-    return s_mgrs;
+    return CoordinateConversionConstants::MGRS_FORMAT;
   case CoordinateType::CoordinateTypeUsng:
-    return s_usng;
+    return CoordinateConversionConstants::USNG_FORMAT;
   case CoordinateType::CoordinateTypeUtm:
-    return s_utm;
+    return CoordinateConversionConstants::UTM_FORMAT;
   default: {}
   }
 
@@ -346,12 +315,13 @@ QString CoordinateConversionOptions::coordinateTypeToString(CoordinateType type)
  */
 QStringList CoordinateConversionOptions::coordinateTypeNames() const
 {
-  return QStringList() << s_gars
-                       << s_georef
-                       << s_latlon
-                       << s_mgrs
-                       << s_usng
-                       << s_utm;
+  return QStringList{
+    CoordinateConversionConstants::GARS_FORMAT,
+        CoordinateConversionConstants::GEOREF_FORMAT,
+        CoordinateConversionConstants::LATLON,
+        CoordinateConversionConstants::MGRS_FORMAT,
+        CoordinateConversionConstants::USNG_FORMAT,
+        CoordinateConversionConstants::UTM_FORMAT};
 }
 
 // enums
