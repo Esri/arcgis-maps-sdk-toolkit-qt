@@ -11,14 +11,19 @@
 //
 
 #include "CoordinateConversionController.h"
+#include "CoordinateConversionConstants.h"
+#include "CoordinateConversionOptions.h"
 #include "CoordinateConversionResults.h"
+#include "CoordinateFormatFactory.h"
+#include "ToolManager.h"
+#include "ToolResourceProvider.h"
+
 #include "CoordinateFormatter.h"
+#include "GeoView.h"
+
 #include <QClipboard>
 #include <QGuiApplication>
 
-#include "ToolManager.h"
-#include "ToolResourceProvider.h"
-#include "GeoView.h"
 #include <functional>
 
 /*!
@@ -45,27 +50,17 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
-using CoordinateType = CoordinateConversionOptions::CoordinateType;
-
-const QString CoordinateConversionController::DECIMAL_DEGREES_FORMAT = QStringLiteral("DD");
-const QString CoordinateConversionController::DEGREES_DECIMAL_MINUTES_FORMAT = QStringLiteral("DDM");
-const QString CoordinateConversionController::DEGREES_MINUTES_SECONDS_FORMAT = QStringLiteral("DMS");
-const QString CoordinateConversionController::MGRS_FORMAT = QStringLiteral("MGRS");
-const QString CoordinateConversionController::USNG_FORMAT = QStringLiteral("USGS");
-const QString CoordinateConversionController::UTM_FORMAT = QStringLiteral("UTM");
-const QString CoordinateConversionController::COORDINATE_FORMAT_PROPERTY = QStringLiteral("CoordinateFormat");
-
 /*!
   \brief A constructor that accepts an optional \a parent.
  */
 CoordinateConversionController::CoordinateConversionController(QObject* parent):
   AbstractTool(parent),
-  m_coordinateFormats{DECIMAL_DEGREES_FORMAT,
-                      DEGREES_DECIMAL_MINUTES_FORMAT,
-                      DEGREES_MINUTES_SECONDS_FORMAT,
-                      MGRS_FORMAT,
-                      USNG_FORMAT,
-                      UTM_FORMAT }
+  m_coordinateFormats{CoordinateConversionConstants::DECIMAL_DEGREES_FORMAT,
+                      CoordinateConversionConstants::DEGREES_DECIMAL_MINUTES_FORMAT,
+                      CoordinateConversionConstants::DEGREES_MINUTES_SECONDS_FORMAT,
+                      CoordinateConversionConstants::MGRS_FORMAT,
+                      CoordinateConversionConstants::USNG_FORMAT,
+                      CoordinateConversionConstants::UTM_FORMAT}
 {
   ToolManager::instance().addTool(this);
 
@@ -137,34 +132,34 @@ Point CoordinateConversionController::pointFromNotation(const QString& incomingN
 
   switch (inputOption->outputMode())
   {
-  case CoordinateType::CoordinateTypeGars:
+  case CoordinateConversionOptions::CoordinateType::CoordinateTypeGars:
   {
     return CoordinateFormatter::fromGars(incomingNotation,
                                          m_spatialReference,
                                          Esri::ArcGISRuntime::GarsConversionMode::Center);
   }
-  case CoordinateType::CoordinateTypeGeoRef:
+  case CoordinateConversionOptions::CoordinateType::CoordinateTypeGeoRef:
   {
     return CoordinateFormatter::fromGeoRef(incomingNotation,
                                            m_spatialReference);
   }
-  case CoordinateType::CoordinateTypeLatLon:
+  case CoordinateConversionOptions::CoordinateType::CoordinateTypeLatLon:
   {
     return CoordinateFormatter::fromLatitudeLongitude(incomingNotation,
                                                       m_spatialReference);
   }
-  case CoordinateType::CoordinateTypeMgrs:
+  case CoordinateConversionOptions::CoordinateType::CoordinateTypeMgrs:
   {
     return CoordinateFormatter::fromMgrs(incomingNotation,
                                          m_spatialReference,
                                          static_cast<Esri::ArcGISRuntime::MgrsConversionMode>(inputOption->mgrsConversionMode()));
   }
-  case CoordinateType::CoordinateTypeUsng:
+  case CoordinateConversionOptions::CoordinateType::CoordinateTypeUsng:
   {
     return CoordinateFormatter::fromUsng(incomingNotation,
                                          m_spatialReference);
   }
-  case CoordinateType::CoordinateTypeUtm:
+  case CoordinateConversionOptions::CoordinateType::CoordinateTypeUtm:
   {
     return CoordinateFormatter::fromUtm(incomingNotation,
                                         m_spatialReference,
@@ -207,29 +202,29 @@ QString CoordinateConversionController::convertPointInternal(CoordinateConversio
 {
   switch (option->outputMode())
   {
-  case CoordinateType::CoordinateTypeGars:
+  case CoordinateConversionOptions::CoordinateType::CoordinateTypeGars:
   {
     return CoordinateFormatter::toGars(point);
   }
-  case CoordinateType::CoordinateTypeGeoRef:
+  case CoordinateConversionOptions::CoordinateType::CoordinateTypeGeoRef:
   {
     return CoordinateFormatter::toGeoRef(point, option->precision());
   }
-  case CoordinateType::CoordinateTypeLatLon:
+  case CoordinateConversionOptions::CoordinateType::CoordinateTypeLatLon:
   {
     const auto format = static_cast<Esri::ArcGISRuntime::LatitudeLongitudeFormat>(option->latLonFormat());
     return CoordinateFormatter::toLatitudeLongitude(point, format, option->decimalPlaces());
   }
-  case CoordinateType::CoordinateTypeMgrs:
+  case CoordinateConversionOptions::CoordinateType::CoordinateTypeMgrs:
   {
     const auto conversionMode = static_cast<Esri::ArcGISRuntime::MgrsConversionMode>(option->mgrsConversionMode());
     return CoordinateFormatter::toMgrs(point, conversionMode, option->decimalPlaces(), option->addSpaces());
   }
-  case CoordinateType::CoordinateTypeUsng:
+  case CoordinateConversionOptions::CoordinateType::CoordinateTypeUsng:
   {
     return CoordinateFormatter::toUsng(point, option->precision(),option->decimalPlaces());
   }
-  case CoordinateType::CoordinateTypeUtm:
+  case CoordinateConversionOptions::CoordinateType::CoordinateTypeUtm:
   {
     const auto conversionMode = static_cast<Esri::ArcGISRuntime::UtmConversionMode>(option->utmConversionMode());
     return CoordinateFormatter::toUtm(point, conversionMode, option->addSpaces());
@@ -387,7 +382,7 @@ QString CoordinateConversionController::toolName() const
 
 void CoordinateConversionController::setProperties(const QVariantMap& properties)
 {
-  auto findFormatIt = properties.find(COORDINATE_FORMAT_PROPERTY);
+  auto findFormatIt = properties.find(CoordinateConversionConstants::COORDINATE_FORMAT_PROPERTY);
   if (findFormatIt != properties.end())
     setInputFormat(findFormatIt.value().toString());
 }
@@ -435,47 +430,9 @@ void CoordinateConversionController::addCoordinateFormat(const QString& newForma
       return;
   }
 
-  CoordinateConversionOptions* option = new CoordinateConversionOptions(this);
-  option->setName(newFormat);
-
-  if (newFormat == DEGREES_DECIMAL_MINUTES_FORMAT)
-  {
-    option->setOutputMode(CoordinateConversionOptions::CoordinateType::CoordinateTypeLatLon);
-    option->setLatLonFormat(CoordinateConversionOptions::LatitudeLongitudeFormat::LatitudeLongitudeFormatDegreesDecimalMinutes);
-  }
-  else if (newFormat == USNG_FORMAT)
-  {
-    option->setOutputMode(CoordinateConversionOptions::CoordinateType::CoordinateTypeUsng);
-    option->setPrecision(7);
-    option->setAddSpaces(true);
-  }
-  else if (newFormat == UTM_FORMAT)
-  {
-    option->setOutputMode(CoordinateConversionOptions::CoordinateType::CoordinateTypeUtm);
-    option->setUtmConversionMode(CoordinateConversionOptions::UtmConversionMode::UtmConversionModeNorthSouthIndicators);
-    option->setAddSpaces(true);
-  }
-  else if (newFormat == DEGREES_MINUTES_SECONDS_FORMAT)
-  {
-    option->setOutputMode(CoordinateConversionOptions::CoordinateType::CoordinateTypeLatLon);
-    option->setLatLonFormat(CoordinateConversionOptions::LatitudeLongitudeFormat::LatitudeLongitudeFormatDegreesMinutesSeconds);
-    option->setDecimalPlaces(6);
-  }
-  else if (newFormat == MGRS_FORMAT)
-  {
-    option->setOutputMode(CoordinateConversionOptions::CoordinateType::CoordinateTypeMgrs);
-    option->setMgrsConversionMode(CoordinateConversionOptions::MgrsConversionMode::MgrsConversionModeAutomatic);
-  }
-  else if (newFormat == DECIMAL_DEGREES_FORMAT)
-  {
-    option->setOutputMode(CoordinateConversionOptions::CoordinateType::CoordinateTypeLatLon);
-    option->setLatLonFormat(CoordinateConversionOptions::LatitudeLongitudeFormat::LatitudeLongitudeFormatDecimalDegrees);
-  }
-  else
-  {
-    delete option;
+  CoordinateConversionOptions* option = CoordinateFormatFactory::createFormat(newFormat, this);
+  if (!option)
     return;
-  }
 
   addOption(option);
 
