@@ -223,7 +223,7 @@ QString CoordinateConversionController::convertPointInternal(CoordinateConversio
   }
   case CoordinateConversionOptions::CoordinateType::CoordinateTypeUsng:
   {
-    return CoordinateFormatter::toUsng(point, option->precision(),option->decimalPlaces());
+    return CoordinateFormatter::toUsng(point, option->precision(), option->decimalPlaces());
   }
   case CoordinateConversionOptions::CoordinateType::CoordinateTypeUtm:
   {
