@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.2
 import QtQuick.Window 2.2
+import QtGraphicalEffects 1.0
 import QtQuick.Controls.Material 2.2
 import Esri.ArcGISRuntime.Toolkit.CppApi 100.3
 
@@ -43,6 +44,8 @@ Item {
       The default value is \c "black".
      */
     property color textColor: "black"
+
+    property var geoView: null
 
     /*!
       \qmlproperty int highlightColor
@@ -310,6 +313,46 @@ Item {
     }
 
     Button {
+        id: flashCoordinateButton
+
+        anchors {
+            verticalCenter: addConversionButton.verticalCenter
+            right: editCoordinateButton.left
+        }
+        height: addConversionButton.height
+        width: height
+
+        visible: geoView && menuButton.checked
+
+        background: Rectangle {
+            color: flashCoordinateButton.down ? highlightColor : "transparent"
+        }
+
+        Image {
+            fillMode: Image.PreserveAspectFit
+            anchors.centerIn: parent
+            sourceSize.height: parent.width
+            height: sourceSize.height
+            opacity: editCoordinateButton.checked ? 1.0 : 0.5
+            source: "images/flash.png"
+        }
+
+        onClicked: {
+            if (geoView === null)
+                return;
+
+            var screenPos = coordinateConvController.screenCoordinate(geoView.width, geoView.height);
+            if (screenPos.x === 0.0 && screenPos.y === 0.0)
+                return;
+
+            var itemPos = geoView.mapToItem(coordinateConversionWindow, screenPos.x, screenPos.y);
+            flashImage.x = itemPos.x - (flashImage.width * 0.5);
+            flashImage.y = itemPos.y - (flashImage.height * 0.5);
+            flashImage.running = true;
+        }
+    }
+
+    Button {
         id: editCoordinateButton
 
         anchors {
@@ -497,6 +540,37 @@ Item {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    Rectangle {
+        id: flashImage
+        property alias running: animation.running
+
+        opacity: 0.0
+        height: 32 * scaleFactor
+        width: height
+        radius: height
+        color: highlightColor
+
+        SequentialAnimation {
+            id: animation
+            running: false
+            loops: 1
+            NumberAnimation {
+                target: flashImage
+                property: "opacity"
+                to: 1.0
+                duration: 500
+                easing.type: Easing.InOutQuad
+            }
+            NumberAnimation {
+                target: flashImage
+                property: "opacity"
+                to: 0.0
+                duration: 500
+                easing.type: Easing.InOutQuad
             }
         }
     }
