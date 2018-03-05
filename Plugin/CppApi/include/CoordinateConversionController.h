@@ -42,11 +42,12 @@ class TOOLKIT_EXPORT CoordinateConversionController : public AbstractTool
   // store the point for later
   Q_PROPERTY(bool runConversion READ runConversion WRITE setRunConversion NOTIFY runConversionChanged)
 
-  // set the input mode and any corresponding conversion options
+  // set the input format etc.
   Q_PROPERTY(QString inputFormat READ inputFormat WRITE setInputFormat NOTIFY inputFormatChanged)
   Q_PROPERTY(QStringList coordinateFormats READ coordinateFormats NOTIFY coordinateFormatsChanged)
   Q_PROPERTY(QString pointToConvert READ pointToConvert NOTIFY pointToConvertChanged)
 
+  // whether the tool is in "capture mode" (sets the target to a clicked point) or "live" mode (uses current location)
   Q_PROPERTY(bool captureMode READ isCaptureMode WRITE setCaptureMode NOTIFY captureModeChanged)
 
 public:
@@ -64,7 +65,10 @@ public:
   Q_INVOKABLE QPointF screenCoordinate(double screenWidth, double screenHeight) const;
   Q_INVOKABLE void clearResults();
 
+  // adds the specified format to the set of results the tool will produce
   Q_INVOKABLE void addCoordinateFormat(const QString& newFormat);
+
+  // remove the specified format from the set of resulst the tool will produce
   Q_INVOKABLE void removeCoordinateFormat(const QString& formatToRemove);
 
 signals:
