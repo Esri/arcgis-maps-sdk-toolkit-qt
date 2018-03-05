@@ -19,7 +19,11 @@
 #include "ToolResourceProvider.h"
 
 #include "CoordinateFormatter.h"
+#include "GeometryEngine.h"
 #include "GeoView.h"
+#include "MapView.h"
+#include "PolylineBuilder.h"
+#include "SceneView.h"
 
 #include <QClipboard>
 #include <QGuiApplication>
@@ -164,7 +168,7 @@ Point CoordinateConversionController::pointFromNotation(const QString& incomingN
   {
     return CoordinateFormatter::fromUtm(incomingNotation,
                                         m_spatialReference,
-                                       inputOption->utmConversionMode());
+                                        inputOption->utmConversionMode());
   }
   default: {}
   }
@@ -317,7 +321,7 @@ void CoordinateConversionController::setCaptureMode(bool captureMode)
 void CoordinateConversionController::onMouseClicked(const Point& clickedPoint)
 {
   if (isActive() && isCaptureMode())
-     setPointToConvert(clickedPoint);
+    setPointToConvert(clickedPoint);
 }
 
 void CoordinateConversionController::onLocationChanged(const Point& location)
@@ -471,6 +475,48 @@ void CoordinateConversionController::removeCoordinateFormat(const QString& forma
 
   emit optionsChanged();
   emit pointToConvertChanged();
+}
+
+QPointF CoordinateConversionController::screenCoordinate(double screenWidth, double screenHeight) const
+{
+  GeoView* geoView = ToolResourceProvider::instance()->geoView();
+  if (!geoView)
+    return QPointF();
+
+  // attempt to get the target point as a screen coordinate
+  QPointF res;
+  SceneView* sceneView = dynamic_cast<SceneView*>(geoView);
+  MapView* mapView = dynamic_cast<MapView*>(geoView);
+  if (sceneView)
+    res = sceneView->locationToScreen(m_pointToConvert).screenPoint();
+  else if (mapView)
+    res = mapView->locationToScreen(m_pointToConvert);
+  else
+    return res;
+
+  // if we have a valid screen coordinate, return it
+  if (res.x() > 0.0 || res.y() > 0.0)
+    return res;
+
+  // otherwise build a polyline describing the extent of the screen
+  const Point topLeft = sceneView ? sceneView->screenToBaseSurface(0.01, 0.01) : mapView->screenToLocation(0.01, 0.01);
+  const Point topRight = sceneView ? sceneView->screenToBaseSurface(screenWidth, 0.01) : mapView->screenToLocation(screenWidth, 0.01);
+  const Point lowerLeft = sceneView ? sceneView->screenToBaseSurface(0.01, screenHeight) : mapView->screenToLocation(0.01, screenHeight);
+  const Point lowerRight = sceneView ? sceneView->screenToBaseSurface(screenWidth, screenHeight) : mapView->screenToLocation(screenWidth, screenHeight);
+  PolylineBuilder bldr(topLeft.spatialReference());
+  bldr.addPoint(topLeft);
+  bldr.addPoint(topRight);
+  bldr.addPoint(lowerRight);
+  bldr.addPoint(lowerLeft);
+  bldr.addPoint(topLeft);
+  const Polyline viewBoundary = bldr.toPolyline();
+
+  // obtain the point on the view boundary polyline which is closest to the target point
+  Point projected = GeometryEngine::instance()->project(m_pointToConvert, topLeft.spatialReference());
+  const Point pointOnBoundary = GeometryEngine::instance()->nearestCoordinate(viewBoundary, projected).coordinate();
+
+  // return the point on the boundary as a screen coordinate
+  return sceneView ? sceneView->locationToScreen(pointOnBoundary).screenPoint() : mapView->locationToScreen(pointOnBoundary);
 }
 
 /*!
