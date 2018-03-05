@@ -101,7 +101,7 @@ CoordinateConversionController::~CoordinateConversionController()
   \brief Converts \a notation and updates the \l results property.
 
   Before calling this method, set the \l inputFormat property to the
-  desired fromat, and call \l setSpatialReference property
+  desired format, and set the \l spatialReference property
   to the spatial reference of the notation's coordinates.
 
   \note Converting between some notation formats can result in loss
@@ -203,7 +203,7 @@ void CoordinateConversionController::convertPoint()
   \internal
  */
 QString CoordinateConversionController::convertPointInternal(CoordinateConversionOptions* option,
-                                                             const Esri::ArcGISRuntime::Point& point) const
+                                                             const Point& point) const
 {
   switch (option->outputMode())
   {
@@ -448,7 +448,8 @@ void CoordinateConversionController::setProperties(const QVariantMap& properties
     setInputFormat(findFormatIt.value().toString());
 }
 
-/*! \brief Returns a string representation of the input point in the input coordinate format.
+/*!
+ * \brief Returns a string representation of the input point in the input coordinate format.
  */
 QString CoordinateConversionController::pointToConvert() const
 {
@@ -628,17 +629,17 @@ void CoordinateConversionController::setRunConversion(bool runConversion)
 
 /*!
   \fn void CoordinateConversionController::coordinateFormatsChanged();
-  \brief Signal emitted when the list of \l coordinateFormats property changes.
+  \brief Signal emitted when the \l coordinateFormats property changes.
  */
 
 /*!
   \fn void CoordinateConversionController::inputFormatChanged();
-  \brief Signal emitted when the list of \l inputFormat property changes.
+  \brief Signal emitted when the \l inputFormat property changes.
  */
 
 /*!
   \fn void CoordinateConversionController::captureModeChanged();
-  \brief Signal emitted when the list of \l captureMode property changes.
+  \brief Signal emitted when the \l captureMode property changes.
  */
 
 } // Toolkit

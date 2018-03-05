@@ -68,7 +68,7 @@ public:
   // adds the specified format to the set of results the tool will produce
   Q_INVOKABLE void addCoordinateFormat(const QString& newFormat);
 
-  // remove the specified format from the set of resulst the tool will produce
+  // remove the specified format from the set of results the tool will produce
   Q_INVOKABLE void removeCoordinateFormat(const QString& formatToRemove);
 
 signals:
