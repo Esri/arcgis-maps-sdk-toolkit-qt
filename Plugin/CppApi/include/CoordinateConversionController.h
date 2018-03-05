@@ -20,6 +20,7 @@
 #include "GeometryTypes.h"
 
 #include <QAbstractListModel>
+#include <QPointF>
 
 namespace Esri
 {
