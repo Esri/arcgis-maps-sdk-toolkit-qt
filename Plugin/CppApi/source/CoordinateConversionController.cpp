@@ -33,10 +33,11 @@
   \since Esri::ArcGISRuntime 100.2
   \brief The controller for the coordinate conversion tool.
 
-  This tool converts a notation text string to all output notations formats
-  defined in your app. Those output formats are defined using a list of
-  \l CoordinateConversionOptions objects that your app builds
-  using \l addOption. Each \l CoordinateConversionOptions object specifies a
+  This tool converts a notation text string to the selected output notations formats
+  defined in your app. The output formats are selected by the user when running the tool,
+  from a set of possible formats defined in a \l CoordinateFormatFactory.
+
+  Each \l CoordinateConversionOptions object specifies a
   coordinate notation and options that apply to that notation (decimal places,
   use of spaces, and so on).
 
@@ -78,7 +79,6 @@ CoordinateConversionController::CoordinateConversionController(QObject* parent):
 
   connect(ToolResourceProvider::instance(), &ToolResourceProvider::locationChanged, this, &CoordinateConversionController::onLocationChanged);
 
-
   connect(this, &CoordinateConversionController::optionsChanged, this,
           [this]()
   {
@@ -96,8 +96,8 @@ CoordinateConversionController::~CoordinateConversionController()
 /*!
   \brief Converts \a notation and updates the \l results property.
 
-  Before calling this method, set the \l inputMode property to the
-  notation type of \a notation, and call \l setSpatialReference property
+  Before calling this method, set the \l inputFormat property to the
+  desired fromat, and call \l setSpatialReference property
   to the spatial reference of the notation's coordinates.
 
   \note Converting between some notation formats can result in loss
@@ -179,7 +179,6 @@ Point CoordinateConversionController::pointFromNotation(const QString& incomingN
 void CoordinateConversionController::convertPoint()
 {
   QList<Result> results;
-
   for (CoordinateConversionOptions* option : m_options)
   {
     if (isInputFormat(option))
@@ -199,7 +198,8 @@ void CoordinateConversionController::convertPoint()
 /*!
   \internal
  */
-QString CoordinateConversionController::convertPointInternal(CoordinateConversionOptions* option, const Esri::ArcGISRuntime::Point& point) const
+QString CoordinateConversionController::convertPointInternal(CoordinateConversionOptions* option,
+                                                             const Esri::ArcGISRuntime::Point& point) const
 {
   switch (option->outputMode())
   {
@@ -236,11 +236,17 @@ QString CoordinateConversionController::convertPointInternal(CoordinateConversio
   return QString();
 }
 
+/*!
+  \internal
+ */
 bool CoordinateConversionController::isInputFormat(CoordinateConversionOptions* option) const
 {
   return isFormat(option, m_inputFormat);
 }
 
+/*!
+  \internal
+ */
 bool CoordinateConversionController::isFormat(CoordinateConversionOptions *option, const QString& formatName) const
 {
   if (option == nullptr)
@@ -254,12 +260,17 @@ bool CoordinateConversionController::isFormat(CoordinateConversionOptions *optio
   \brief The conversion results as a list model.
 
   The results are automatically updated as conversions are run.
+
+  \sa CoordinateConversionResults
  */
 QAbstractListModel* CoordinateConversionController::results()
 {
   return resultsInternal();
 }
 
+/*!
+  \internal
+ */
 CoordinateConversionResults *CoordinateConversionController::resultsInternal()
 {
   if (!m_results)
@@ -297,11 +308,23 @@ void CoordinateConversionController::setPointToConvert(const Point& point)
   emit pointToConvertChanged();
 }
 
+/*!
+  \brief Returns whether the tool is in capture mode.
+
+  If \c true, the tool will convert a point set via a mouse click.
+  If \c false, the too will use the app's current location as the target point.
+ */
 bool CoordinateConversionController::isCaptureMode() const
 {
   return m_captureMode;
 }
 
+/*!
+  \brief Sets the tool's capture mode to \a captureMode.
+
+  If \c true, the tool will convert a point set via a mouse click.
+  If \c false, the too will use the app's current location as the target point.
+ */
 void CoordinateConversionController::setCaptureMode(bool captureMode)
 {
   if (captureMode == m_captureMode)
@@ -314,23 +337,39 @@ void CoordinateConversionController::setCaptureMode(bool captureMode)
   emit captureModeChanged();
 }
 
+/*!
+  \brief Handles the mouse click at \a clickedPoint.
+
+  If the tool is active and in \l captureMode, this will be used as the input for conversions.
+ */
 void CoordinateConversionController::onMouseClicked(const Point& clickedPoint)
 {
   if (isActive() && isCaptureMode())
      setPointToConvert(clickedPoint);
 }
 
+/*!
+  \brief Handles the app's location update to \a location.
+
+  If the tool is active and is not in \l captureMode, this will be used as the input for conversions.
+ */
 void CoordinateConversionController::onLocationChanged(const Point& location)
 {
   if (isActive() && !isCaptureMode())
     setPointToConvert(location);
 }
 
+/*!
+  \brief Returns the input coordinate format of the tool.
+ */
 QString CoordinateConversionController::inputFormat() const
 {
   return m_inputFormat;
 }
 
+/*!
+  \brief Sets the input coordinate format of the tool to \a inputFormat.
+ */
 void CoordinateConversionController::setInputFormat(const QString& inputFormat)
 {
   if (m_inputFormat == inputFormat)
@@ -347,6 +386,9 @@ void CoordinateConversionController::setInputFormat(const QString& inputFormat)
   emit pointToConvertChanged();
 }
 
+/*!
+  \brief Returns a list of the avilable coordinate formats for the tool.
+ */
 QStringList CoordinateConversionController::coordinateFormats() const
 {
   return m_coordinateFormats;
@@ -360,6 +402,12 @@ void CoordinateConversionController::addOption(CoordinateConversionOptions* opti
   m_options.append(option);
   if (m_options.size() == 1)
     setInputFormat(option->name());
+
+  if (!m_coordinateFormats.contains(option->name()))
+  {
+    m_coordinateFormats.append(option->name());
+    emit coordinateFormatsChanged();
+  }
 
   emit optionsChanged();
 }
@@ -381,6 +429,14 @@ QString CoordinateConversionController::toolName() const
   return "CoordinateConversion";
 }
 
+/*! \brief Sets any values in \a properties which are relevant for the coordinate conversion controller.
+ *
+ * This tool will use the following key/value pairs in the \a properties map if they are set:
+ *
+ * \list
+ *  \li CoordinateFormat. The default input coordinate format for the tool.
+ * \endList
+ */
 void CoordinateConversionController::setProperties(const QVariantMap& properties)
 {
   auto findFormatIt = properties.find(CoordinateConversionConstants::COORDINATE_FORMAT_PROPERTY);
@@ -388,6 +444,8 @@ void CoordinateConversionController::setProperties(const QVariantMap& properties
     setInputFormat(findFormatIt.value().toString());
 }
 
+/*! \brief Returns a string representation of the input point in the input coordinate format.
+ */
 QString CoordinateConversionController::pointToConvert() const
 {
   for (CoordinateConversionOptions* option : m_options)
@@ -418,6 +476,9 @@ void CoordinateConversionController::clearResults()
     m_results->clearResults();
 }
 
+/*!
+  \brief Adds the coordinate format \a newFormat to the list of results produced by the tool.
+ */
 void CoordinateConversionController::addCoordinateFormat(const QString& newFormat)
 {
   if (!m_coordinateFormats.contains(newFormat))
@@ -441,6 +502,9 @@ void CoordinateConversionController::addCoordinateFormat(const QString& newForma
     convertPoint();
 }
 
+/*!
+  \brief Removes the coordinate format \a formatToRemove from the list of results produced by the tool.
+ */
 void CoordinateConversionController::removeCoordinateFormat(const QString& formatToRemove)
 {
   if (formatToRemove.compare(m_inputFormat, Qt::CaseInsensitive) == 0)
@@ -502,23 +566,28 @@ void CoordinateConversionController::setRunConversion(bool runConversion)
  */
 
 /*!
-  \fn void CoordinateConversionController::inputGarsConversionModeChanged();
-  \brief Signal emitted when the \l inputGarsConversionMode property changes.
- */
-
-/*!
-  \fn void CoordinateConversionController::inputMgrsConversionModeChanged();
-  \brief Signal emitted when the \l inputMgrsConversionMode property changes.
- */
-
-/*!
-  \fn void CoordinateConversionController::inputUtmConversionModeChanged();
-  \brief Signal emitted when the \l inputUtmConversionMode property changes.
- */
-
-/*!
   \fn void CoordinateConversionController::runConversionChanged();
   \brief Signal emitted when the \l runConversion property changes.
+ */
+
+/*!
+  \fn void CoordinateConversionController::pointToConvertChanged();
+  \brief Signal emitted when the \l pointToConvert property changes.
+ */
+
+/*!
+  \fn void CoordinateConversionController::coordinateFormatsChanged();
+  \brief Signal emitted when the list of \l coordinateFormats property changes.
+ */
+
+/*!
+  \fn void CoordinateConversionController::inputFormatChanged();
+  \brief Signal emitted when the list of \l inputFormat property changes.
+ */
+
+/*!
+  \fn void CoordinateConversionController::captureModeChanged();
+  \brief Signal emitted when the list of \l captureMode property changes.
  */
 
 } // Toolkit
