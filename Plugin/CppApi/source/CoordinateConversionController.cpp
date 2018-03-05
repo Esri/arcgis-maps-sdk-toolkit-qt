@@ -541,6 +541,11 @@ void CoordinateConversionController::removeCoordinateFormat(const QString& forma
   emit pointToConvertChanged();
 }
 
+/*!
+  \brief Returns the screen coordinate of the current \l pointToConvert, within the bounds of \a screenWidth and \a screenHeight.
+
+  If the point is off the screen, attempts to find the closest point on the screen (e.g. on the edge) to the point.
+ */
 QPointF CoordinateConversionController::screenCoordinate(double screenWidth, double screenHeight) const
 {
   GeoView* geoView = ToolResourceProvider::instance()->geoView();
