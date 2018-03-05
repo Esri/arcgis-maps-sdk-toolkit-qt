@@ -62,6 +62,7 @@ public:
   Q_INVOKABLE void copyToClipboard(const QString& text);
 
   // clear the current set of results
+  Q_INVOKABLE QPointF screenCoordinate(double screenWidth, double screenHeight) const;
   Q_INVOKABLE void clearResults();
 
   // adds the specified format to the set of results the tool will produce
