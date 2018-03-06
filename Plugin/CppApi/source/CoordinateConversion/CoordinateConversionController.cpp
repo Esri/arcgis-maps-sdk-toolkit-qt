@@ -590,6 +590,33 @@ QPointF CoordinateConversionController::screenCoordinate(double screenWidth, dou
 }
 
 /*!
+  \brief Zooms the current \l Esri::ArcGISRuntime::GeoView to the current input position.
+ */
+void CoordinateConversionController::zoomTo()
+{
+  GeoView* geoView = ToolResourceProvider::instance()->geoView();
+  if (!geoView)
+    return;
+
+  SceneView* sceneView = dynamic_cast<SceneView*>(geoView);
+  if (sceneView)
+  {
+    const Camera currentCam = sceneView->currentViewpointCamera();
+    constexpr double targetDistance = 1500.0;
+    const Camera newCam(m_pointToConvert, targetDistance, currentCam.heading(), currentCam.pitch(), currentCam.roll());
+
+    sceneView->setViewpointCamera(newCam, 1.0);
+  }
+  else
+  {
+    const Viewpoint currVP = geoView->currentViewpoint(ViewpointType::CenterAndScale);
+    const Viewpoint newViewPoint(m_pointToConvert, currVP.targetScale());
+
+    geoView->setViewpoint(newViewPoint, 1.0);
+  }
+}
+
+/*!
   \property CoordinateConversionController::runConversion
   \brief Whether the conversion runs automatically when \l setPointToConvert
   is called.
