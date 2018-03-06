@@ -603,7 +603,7 @@ void CoordinateConversionController::zoomTo()
   {
     const Camera currentCam = sceneView->currentViewpointCamera();
     constexpr double targetDistance = 1500.0;
-    Camera newCam(m_pointToConvert, targetDistance, currentCam.heading(), currentCam.pitch(), currentCam.roll());
+    const Camera newCam(m_pointToConvert, targetDistance, currentCam.heading(), currentCam.pitch(), currentCam.roll());
 
     sceneView->setViewpointCamera(newCam, 1.0);
   }
