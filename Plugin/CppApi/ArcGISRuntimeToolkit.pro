@@ -26,10 +26,13 @@ CONFIG += c++11 plugin
 
 DEFINES += QTRUNTIME_TOOLKIT_BUILD
 
-HEADERS += $$PWD/include/*.h
-SOURCES += $$PWD/source/*.cpp
+HEADERS += $$PWD/include/*.h \
+           $$PWD/include/CoordinateConversion/*.h
+SOURCES += $$PWD/source/*.cpp \
+           $$PWD/source/CoordinateConversion/*.cpp
 
-INCLUDEPATH +=  $$PWD/include/
+INCLUDEPATH += $$PWD/include/ \
+               $$PWD/include/CoordinateConversion/
 
 RUNTIME_PRI = arcgis_runtime_qml_cpp.pri
 #RUNTIME_PRI = esri_runtime_qt.pri # use this for widgets
