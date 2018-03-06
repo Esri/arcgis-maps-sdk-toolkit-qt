@@ -34,7 +34,8 @@ android: {
   }
 }
 
-INCLUDEPATH += $$PWD/include
+INCLUDEPATH += $$PWD/include \
+               $$PWD/include/CoordinateConversion
 
 !android:!win32: PLATFORM_OUTPUT = $$PLATFORM
 android: PLATFORM_OUTPUT = $$PLATFORM/$$ANDROID_ARCH
