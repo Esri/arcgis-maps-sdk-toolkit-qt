@@ -118,6 +118,7 @@ Item {
             left: parent.left
             bottom: parent.bottom
         }
+        height: 32 * scaleFactor
         width: implicitWidth
         text: coordinateConvController.inputFormat.length > 0 ? coordinateConvController.inputFormat : "Set format"
 
@@ -238,9 +239,7 @@ Item {
 
         Image {
             fillMode: Image.PreserveAspectFit
-            anchors.centerIn: menuButton
-            sourceSize.height: menuButton.width
-            height: sourceSize.height
+            anchors.fill: menuButton
             source: menuButton.checked ? (expandUpwards ? "images/menuCollapse.png" : "images/menuExpand.png") :
                                          (expandUpwards ? "images/menuExpand.png" : "images/menuCollapse.png")
         }
@@ -253,6 +252,7 @@ Item {
             bottom: expandUpwards ? results.top : undefined
             top: expandUpwards ? undefined : inputModeButton.bottom
         }
+        height: inputModeButton.height
         visible: menuButton.checked
         text: "Add conversion"
 
@@ -366,9 +366,7 @@ Item {
 
         Image {
             fillMode: Image.PreserveAspectFit
-            anchors.centerIn: parent
-            sourceSize.height: parent.width
-            height: sourceSize.height
+            anchors.fill: flashCoordinateButton
             source: "images/flash.png"
         }
 
