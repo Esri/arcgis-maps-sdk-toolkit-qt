@@ -118,7 +118,8 @@ Item {
             left: parent.left
             bottom: parent.bottom
         }
-        width: inputModesMenu.width
+        height: 32 * scaleFactor
+        width: implicitWidth
         text: coordinateConvController.inputFormat.length > 0 ? coordinateConvController.inputFormat : "Set format"
 
         contentItem: Text {
@@ -195,6 +196,8 @@ Item {
             family: fontFamily
             pixelSize: coordinateConversionWindow.fontSize * scaleFactor
         }
+        wrapMode: Text.Wrap
+        elide: Text.ElideRight
         color: textColor
     }
 
@@ -236,9 +239,7 @@ Item {
 
         Image {
             fillMode: Image.PreserveAspectFit
-            anchors.centerIn: menuButton
-            sourceSize.height: menuButton.width
-            height: sourceSize.height
+            anchors.fill: menuButton
             source: menuButton.checked ? (expandUpwards ? "images/menuCollapse.png" : "images/menuExpand.png") :
                                          (expandUpwards ? "images/menuExpand.png" : "images/menuCollapse.png")
         }
@@ -251,6 +252,7 @@ Item {
             bottom: expandUpwards ? results.top : undefined
             top: expandUpwards ? undefined : inputModeButton.bottom
         }
+        height: inputModeButton.height
         visible: menuButton.checked
         text: "Add conversion"
 
@@ -313,6 +315,40 @@ Item {
     }
 
     Button {
+        id: zoomToButton
+
+        anchors {
+            verticalCenter: addConversionButton.verticalCenter
+            right: flashCoordinateButton.left
+        }
+        height: addConversionButton.height
+        width: height
+
+        visible: menuButton.checked
+
+        background: Rectangle {
+            color: zoomToButton.down ? highlightColor : "transparent"
+        }
+
+        Text {
+            anchors.fill: zoomToButton
+            text: "Go"
+            color: textColor
+            font {
+                family: fontFamily
+                pixelSize: coordinateConversionWindow.fontSize * scaleFactor
+                bold: true
+            }
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+        }
+
+        onClicked: {
+            coordinateConvController.zoomTo();
+        }
+    }
+
+    Button {
         id: flashCoordinateButton
 
         anchors {
@@ -330,10 +366,7 @@ Item {
 
         Image {
             fillMode: Image.PreserveAspectFit
-            anchors.centerIn: parent
-            sourceSize.height: parent.width
-            height: sourceSize.height
-            opacity: editCoordinateButton.checked ? 1.0 : 0.5
+            anchors.fill: flashCoordinateButton
             source: "images/flash.png"
         }
 
@@ -454,6 +487,8 @@ Item {
                     pixelSize: coordinateConversionWindow.fontSize * scaleFactor
                 }
                 color: textColor
+                wrapMode: Text.Wrap
+                elide: Text.ElideRight
             }
 
             Text {
@@ -549,10 +584,14 @@ Item {
         property alias running: animation.running
 
         opacity: 0.0
-        height: 32 * scaleFactor
+        height: 16 * scaleFactor
         width: height
         radius: height
         color: highlightColor
+        border {
+            color: backgroundColor
+            width: 1 * scaleFactor
+        }
 
         SequentialAnimation {
             id: animation

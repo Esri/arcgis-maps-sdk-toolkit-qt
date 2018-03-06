@@ -62,8 +62,13 @@ public:
   // copy contents to the clipboard
   Q_INVOKABLE void copyToClipboard(const QString& text);
 
-  // clear the current set of results
+  // get the current input position in screen coordinates
   Q_INVOKABLE QPointF screenCoordinate(double screenWidth, double screenHeight) const;
+
+  // zooms the geoview to the current input position
+  Q_INVOKABLE void zoomTo();
+
+  // clear the current set of results
   Q_INVOKABLE void clearResults();
 
   // adds the specified format to the set of results the tool will produce
