@@ -118,7 +118,7 @@ Item {
             left: parent.left
             bottom: parent.bottom
         }
-        width: inputModesMenu.width
+        width: implicitWidth
         text: coordinateConvController.inputFormat.length > 0 ? coordinateConvController.inputFormat : "Set format"
 
         contentItem: Text {
@@ -195,6 +195,8 @@ Item {
             family: fontFamily
             pixelSize: coordinateConversionWindow.fontSize * scaleFactor
         }
+        wrapMode: Text.Wrap
+        elide: Text.ElideRight
         color: textColor
     }
 
@@ -313,6 +315,40 @@ Item {
     }
 
     Button {
+        id: zoomToButton
+
+        anchors {
+            verticalCenter: addConversionButton.verticalCenter
+            right: flashCoordinateButton.left
+        }
+        height: addConversionButton.height
+        width: height
+
+        visible: menuButton.checked
+
+        background: Rectangle {
+            color: zoomToButton.down ? highlightColor : "transparent"
+        }
+
+        Text {
+            anchors.fill: zoomToButton
+            text: "Go"
+            color: textColor
+            font {
+                family: fontFamily
+                pixelSize: coordinateConversionWindow.fontSize * scaleFactor
+                bold: true
+            }
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+        }
+
+        onClicked: {
+            coordinateConvController.zoomTo();
+        }
+    }
+
+    Button {
         id: flashCoordinateButton
 
         anchors {
@@ -333,7 +369,6 @@ Item {
             anchors.centerIn: parent
             sourceSize.height: parent.width
             height: sourceSize.height
-            opacity: editCoordinateButton.checked ? 1.0 : 0.5
             source: "images/flash.png"
         }
 
@@ -454,6 +489,8 @@ Item {
                     pixelSize: coordinateConversionWindow.fontSize * scaleFactor
                 }
                 color: textColor
+                wrapMode: Text.Wrap
+                elide: Text.ElideRight
             }
 
             Text {
@@ -549,10 +586,14 @@ Item {
         property alias running: animation.running
 
         opacity: 0.0
-        height: 32 * scaleFactor
+        height: 16 * scaleFactor
         width: height
         radius: height
         color: highlightColor
+        border {
+            color: backgroundColor
+            width: 1 * scaleFactor
+        }
 
         SequentialAnimation {
             id: animation
