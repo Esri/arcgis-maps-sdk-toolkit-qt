@@ -585,29 +585,36 @@ QPointF CoordinateConversionController::screenCoordinate(double screenWidth, dou
   else
     return res;
 
-  // if we have a valid screen coordinate, return it
-  if (res.x() > 0.0 || res.y() > 0.0)
-    return res;
+  // if we did not recieve a valid screen coord
+  if (res.x() == 0.0 && res.y() == 0.0)
+  {
+    // otherwise build a polyline describing the extent of the screen
+    const Point topLeft = m_sceneView ? m_sceneView->screenToBaseSurface(0.01, 0.01) : m_mapView->screenToLocation(0.01, 0.01);
+    const Point topRight = m_sceneView ? m_sceneView->screenToBaseSurface(screenWidth, 0.01) : m_mapView->screenToLocation(screenWidth, 0.01);
+    const Point lowerLeft = m_sceneView ? m_sceneView->screenToBaseSurface(0.01, screenHeight) : m_mapView->screenToLocation(0.01, screenHeight);
+    const Point lowerRight = m_sceneView ? m_sceneView->screenToBaseSurface(screenWidth, screenHeight) : m_mapView->screenToLocation(screenWidth, screenHeight);
+    PolylineBuilder bldr(topLeft.spatialReference());
+    bldr.addPoint(topLeft);
+    bldr.addPoint(topRight);
+    bldr.addPoint(lowerRight);
+    bldr.addPoint(lowerLeft);
+    bldr.addPoint(topLeft);
+    const Polyline viewBoundary = bldr.toPolyline();
 
-  // otherwise build a polyline describing the extent of the screen
-  const Point topLeft = m_sceneView ? m_sceneView->screenToBaseSurface(0.01, 0.01) : m_mapView->screenToLocation(0.01, 0.01);
-  const Point topRight = m_sceneView ? m_sceneView->screenToBaseSurface(screenWidth, 0.01) : m_mapView->screenToLocation(screenWidth, 0.01);
-  const Point lowerLeft = m_sceneView ? m_sceneView->screenToBaseSurface(0.01, screenHeight) : m_mapView->screenToLocation(0.01, screenHeight);
-  const Point lowerRight = m_sceneView ? m_sceneView->screenToBaseSurface(screenWidth, screenHeight) : m_mapView->screenToLocation(screenWidth, screenHeight);
-  PolylineBuilder bldr(topLeft.spatialReference());
-  bldr.addPoint(topLeft);
-  bldr.addPoint(topRight);
-  bldr.addPoint(lowerRight);
-  bldr.addPoint(lowerLeft);
-  bldr.addPoint(topLeft);
-  const Polyline viewBoundary = bldr.toPolyline();
+    // obtain the point on the view boundary polyline which is closest to the target point
+    Point projected = GeometryEngine::instance()->project(m_pointToConvert, topLeft.spatialReference());
+    const Point pointOnBoundary = GeometryEngine::instance()->nearestCoordinate(viewBoundary, projected).coordinate();
 
-  // obtain the point on the view boundary polyline which is closest to the target point
-  Point projected = GeometryEngine::instance()->project(m_pointToConvert, topLeft.spatialReference());
-  const Point pointOnBoundary = GeometryEngine::instance()->nearestCoordinate(viewBoundary, projected).coordinate();
+    // return the point on the boundary as a screen coordinate
+    res = m_sceneView ? m_sceneView->locationToScreen(pointOnBoundary).screenPoint() : m_mapView->locationToScreen(pointOnBoundary);
+  }
 
-  // return the point on the boundary as a screen coordinate
-  return m_sceneView ? m_sceneView->locationToScreen(pointOnBoundary).screenPoint() : m_mapView->locationToScreen(pointOnBoundary);
+  res.setX(std::max(0.0, res.x()));
+  res.setY(std::max(0.0, res.y()));
+  res.setX(std::min(screenWidth, res.x()));
+  res.setY(std::min(screenHeight, res.y()));
+
+  return res;
 }
 
 /*!
