@@ -273,9 +273,9 @@ void CoordinateConversionController::setGeoView(QObject* geoView)
 /*!
   \property CoordinateConversionController::results
   \brief The conversion results as a list model.
-  
+
   The results are automatically updated as conversions are run.
-  
+
   \sa CoordinateConversionResults
  */
 QAbstractListModel* CoordinateConversionController::results()
