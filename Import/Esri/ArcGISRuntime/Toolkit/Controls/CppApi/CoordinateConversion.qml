@@ -49,7 +49,9 @@ Item {
       \qmlproperty GeoView geoView
       \brief The GeoView for this tool. Should be a SceneQuickView or a MapQuickView.
      */
-    property alias geoView: coordinateConvController.geoView
+    property var geoView: null
+
+    onGeoViewChanged: coordinateConvController.setGeoView(geoView);
 
     /*!
       \qmlproperty bool captureMode
