@@ -127,8 +127,7 @@ public:
   void setGeoView(QObject* geoView);
 
 public slots:
-
-  void handleMouseClicked(QMouseEvent& clickedPoint);
+  void onMouseClicked(QMouseEvent& clickedPoint);
   void onLocationChanged(const Esri::ArcGISRuntime::Point& location);
 
 private:
