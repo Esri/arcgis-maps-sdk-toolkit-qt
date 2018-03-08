@@ -29,6 +29,8 @@ namespace Esri
 namespace ArcGISRuntime
 {
   class GeoView;
+  class MapView;
+  class SceneView;
 
 namespace Toolkit
 {
@@ -54,8 +56,6 @@ class TOOLKIT_EXPORT CoordinateConversionController : public AbstractTool
 
   // whether the tool is in "capture mode" (sets the target to a clicked point) or "live" mode (uses current location)
   Q_PROPERTY(bool captureMode READ isCaptureMode WRITE setCaptureMode NOTIFY captureModeChanged)
-
-  Q_PROPERTY(QObject* geoView READ geoView WRITE setGeoView NOTIFY geoViewChanged)
 
 public:
 
@@ -83,6 +83,8 @@ public:
   // remove the specified format from the set of results the tool will produce
   Q_INVOKABLE void removeCoordinateFormat(const QString& formatToRemove);
 
+  Q_INVOKABLE void setGeoView(QObject* geoView);
+
 signals:
   void optionsChanged();
   void resultsChanged();
@@ -92,7 +94,6 @@ signals:
   void coordinateFormatsChanged();
   void inputFormatChanged();
   void captureModeChanged();
-  void geoViewChanged();
 
 public:
   CoordinateConversionController(QObject* parent = nullptr);
@@ -123,16 +124,13 @@ public:
   bool isCaptureMode() const;
   void setCaptureMode(bool captureMode);
 
-  QObject* geoView() const;
-  void setGeoView(QObject* geoView);
-
 public slots:
   void onMouseClicked(QMouseEvent& clickedPoint);
   void onLocationChanged(const Esri::ArcGISRuntime::Point& location);
 
 private:
   CoordinateConversionResults* resultsInternal();
-
+  bool setGeoViewInternal(GeoView* geoView);
   Esri::ArcGISRuntime::Point pointFromNotation(const QString& incomingNotation);
   QString convertPointInternal(CoordinateConversionOptions* option, const Esri::ArcGISRuntime::Point& point) const;
 
@@ -149,7 +147,8 @@ private:
   QStringList m_coordinateFormats;
   QString m_inputFormat;
   bool m_captureMode = false;
-  Esri::ArcGISRuntime::GeoView* m_geoView;
+  Esri::ArcGISRuntime::MapView* m_mapView = nullptr;
+  Esri::ArcGISRuntime::SceneView* m_sceneView = nullptr;
 };
 
 } // Toolkit
