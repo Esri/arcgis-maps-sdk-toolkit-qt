@@ -45,7 +45,10 @@ Item {
      */
     property color textColor: "black"
 
-    property var geoView: null
+    property alias geoView: coordinateConvController.geoView
+
+    property alias captureMode: coordinateConvController.captureMode
+    property alias inputFormat: coordinateConvController.inputFormat
 
     /*!
       \qmlproperty int highlightColor
