@@ -45,9 +45,36 @@ Item {
      */
     property color textColor: "black"
 
+    /*!
+      \qmlproperty GeoView geoView
+      \brief The GeoView for this tool. Should be a SceneQuickView or a MapQuickView.
+     */
     property alias geoView: coordinateConvController.geoView
 
+    /*!
+      \qmlproperty bool captureMode
+      \brief Whether whether the tool is in capture mode.
+
+      If \c true, the tool will convert a point set via a mouse click.
+      If \c false, the too will use the app's current location as the target point.
+     */
     property alias captureMode: coordinateConvController.captureMode
+
+    /*!
+      \qmlproperty string inputFormat
+      \brief The input format for the tool. This can be in a user defined format or one of:
+
+      * \list
+        * \li \c DD. Decimal degrees.
+        * \li \c DDM. Degrees decimal minutes.
+        * \li \c DMS. Degrees minutes seconds.
+        * \li \c MGRS.
+        * \li \c USNG.
+        * \li \c UTM.
+        * \li \c GARS
+        * \li GeoRef
+      * \endList
+     */
     property alias inputFormat: coordinateConvController.inputFormat
 
     /*!
