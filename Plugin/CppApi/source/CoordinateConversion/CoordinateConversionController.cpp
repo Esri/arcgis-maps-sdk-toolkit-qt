@@ -609,10 +609,16 @@ QPointF CoordinateConversionController::screenCoordinate(double screenWidth, dou
     res = m_sceneView ? m_sceneView->locationToScreen(pointOnBoundary).screenPoint() : m_mapView->locationToScreen(pointOnBoundary);
   }
 
-  res.setX(std::max(0.0, res.x()));
-  res.setY(std::max(0.0, res.y()));
-  res.setX(std::min(screenWidth, res.x()));
-  res.setY(std::min(screenHeight, res.y()));
+  // enusre the returned point is within the bounds of the visisble screen
+  if (res.x() < 0.0)
+    res.setX(0.0);
+  else if (res.x() > screenWidth)
+    res.setX(screenWidth);
+
+  if (res.y() < 0.0)
+    res.setY(0.0);
+  else if (res.y() > screenHeight)
+    res.setY(screenHeight);
 
   return res;
 }
