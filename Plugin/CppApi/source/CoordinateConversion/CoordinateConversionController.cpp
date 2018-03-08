@@ -79,9 +79,14 @@ CoordinateConversionController::CoordinateConversionController(QObject* parent):
     setSpatialReference(ToolResourceProvider::instance()->spatialReference());
   });
 
-  connect(ToolResourceProvider::instance(), &ToolResourceProvider::mouseClickedPoint, this, &CoordinateConversionController::onMouseClicked);
+  connect(ToolResourceProvider::instance(), &ToolResourceProvider::mouseClicked, this, &CoordinateConversionController::handleMouseClicked);
 
   connect(ToolResourceProvider::instance(), &ToolResourceProvider::locationChanged, this, &CoordinateConversionController::onLocationChanged);
+
+  connect(ToolResourceProvider::instance(), &ToolResourceProvider::geoViewChanged, this, [this]()
+  {
+    setGeoView(dynamic_cast<QObject*>(Toolkit::ToolResourceProvider::instance()->geoView()));
+  });
 
   connect(this, &CoordinateConversionController::optionsChanged, this,
           [this]()
@@ -259,12 +264,29 @@ bool CoordinateConversionController::isFormat(CoordinateConversionOptions *optio
   return option->name().compare(formatName, Qt::CaseInsensitive) == 0;
 }
 
+QObject* CoordinateConversionController::geoView() const
+{
+  return dynamic_cast<QObject*>(m_geoView);
+}
+
+void CoordinateConversionController::setGeoView(QObject* geoView)
+{
+  GeoView* testView = dynamic_cast<GeoView*>(geoView);
+  if (!testView)
+    return;
+
+  connect(geoView, SIGNAL(mouseClicked(QMouseEvent&)), this, SLOT(handleMouseClicked(QMouseEvent&)));
+
+  m_geoView = testView;
+  emit geoViewChanged();
+}
+
 /*!
   \property CoordinateConversionController::results
   \brief The conversion results as a list model.
-
+  
   The results are automatically updated as conversions are run.
-
+  
   \sa CoordinateConversionResults
  */
 QAbstractListModel* CoordinateConversionController::results()
@@ -346,10 +368,14 @@ void CoordinateConversionController::setCaptureMode(bool captureMode)
 
   If the tool is active and in \l captureMode, this will be used as the input for conversions.
  */
-void CoordinateConversionController::onMouseClicked(const Point& clickedPoint)
+void CoordinateConversionController::handleMouseClicked(QMouseEvent& mouse)
 {
-  if (isActive() && isCaptureMode())
-    setPointToConvert(clickedPoint);
+  if (!isActive() || !isCaptureMode())
+    return;
+
+  SceneView* sceneView = dynamic_cast<SceneView*>(m_geoView);
+  if (sceneView)
+    setPointToConvert(sceneView->screenToBaseSurface(mouse.pos().x(), mouse.pos().y()));
 }
 
 /*!
@@ -549,14 +575,10 @@ void CoordinateConversionController::removeCoordinateFormat(const QString& forma
  */
 QPointF CoordinateConversionController::screenCoordinate(double screenWidth, double screenHeight) const
 {
-  GeoView* geoView = ToolResourceProvider::instance()->geoView();
-  if (!geoView)
-    return QPointF();
-
   // attempt to get the target point as a screen coordinate
   QPointF res;
-  SceneView* sceneView = dynamic_cast<SceneView*>(geoView);
-  MapView* mapView = dynamic_cast<MapView*>(geoView);
+  SceneView* sceneView = dynamic_cast<SceneView*>(m_geoView);
+  MapView* mapView = dynamic_cast<MapView*>(m_geoView);
   if (sceneView)
     res = sceneView->locationToScreen(m_pointToConvert).screenPoint();
   else if (mapView)
@@ -594,11 +616,10 @@ QPointF CoordinateConversionController::screenCoordinate(double screenWidth, dou
  */
 void CoordinateConversionController::zoomTo()
 {
-  GeoView* geoView = ToolResourceProvider::instance()->geoView();
-  if (!geoView)
+  if (!m_geoView)
     return;
 
-  SceneView* sceneView = dynamic_cast<SceneView*>(geoView);
+  SceneView* sceneView = dynamic_cast<SceneView*>(m_geoView);
   if (sceneView)
   {
     const Camera currentCam = sceneView->currentViewpointCamera();
@@ -609,10 +630,10 @@ void CoordinateConversionController::zoomTo()
   }
   else
   {
-    const Viewpoint currVP = geoView->currentViewpoint(ViewpointType::CenterAndScale);
+    const Viewpoint currVP = m_geoView->currentViewpoint(ViewpointType::CenterAndScale);
     const Viewpoint newViewPoint(m_pointToConvert, currVP.targetScale());
 
-    geoView->setViewpoint(newViewPoint, 1.0);
+    m_geoView->setViewpoint(newViewPoint, 1.0);
   }
 }
 

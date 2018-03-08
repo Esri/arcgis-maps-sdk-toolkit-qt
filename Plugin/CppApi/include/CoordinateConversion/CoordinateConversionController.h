@@ -22,10 +22,14 @@
 #include <QAbstractListModel>
 #include <QPointF>
 
+class QMouseEvent;
+
 namespace Esri
 {
 namespace ArcGISRuntime
 {
+  class GeoView;
+
 namespace Toolkit
 {
 
@@ -50,6 +54,8 @@ class TOOLKIT_EXPORT CoordinateConversionController : public AbstractTool
 
   // whether the tool is in "capture mode" (sets the target to a clicked point) or "live" mode (uses current location)
   Q_PROPERTY(bool captureMode READ isCaptureMode WRITE setCaptureMode NOTIFY captureModeChanged)
+
+  Q_PROPERTY(QObject* geoView READ geoView WRITE setGeoView NOTIFY geoViewChanged)
 
 public:
 
@@ -86,6 +92,7 @@ signals:
   void coordinateFormatsChanged();
   void inputFormatChanged();
   void captureModeChanged();
+  void geoViewChanged();
 
 public:
   CoordinateConversionController(QObject* parent = nullptr);
@@ -116,8 +123,12 @@ public:
   bool isCaptureMode() const;
   void setCaptureMode(bool captureMode);
 
+  QObject* geoView() const;
+  void setGeoView(QObject* geoView);
+
 public slots:
-  void onMouseClicked(const Esri::ArcGISRuntime::Point& clickedPoint);
+
+  void handleMouseClicked(QMouseEvent& clickedPoint);
   void onLocationChanged(const Esri::ArcGISRuntime::Point& location);
 
 private:
@@ -139,6 +150,7 @@ private:
   QStringList m_coordinateFormats;
   QString m_inputFormat;
   bool m_captureMode = false;
+  Esri::ArcGISRuntime::GeoView* m_geoView;
 };
 
 } // Toolkit
