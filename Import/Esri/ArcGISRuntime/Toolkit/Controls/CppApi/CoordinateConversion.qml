@@ -106,8 +106,10 @@ Item {
     /*!
       \qmlproperty int fontFamily
       \brief The font family for text on this tool.
+
+      The default is \c "helvetica".
      */
-    property string fontFamily: ""
+    property string fontFamily: "helvetica"
 
     /*!
       \qmlproperty bool expandUpwards
