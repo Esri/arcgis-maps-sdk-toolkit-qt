@@ -93,7 +93,7 @@ Item {
 
       The default value is \c "blue".
      */
-    property color backgroundColor: "white"
+    property color backgroundColor: "lightgrey"
 
     /*!
       \qmlproperty int fontSize
