@@ -79,7 +79,7 @@ CoordinateConversionController::CoordinateConversionController(QObject* parent):
     setSpatialReference(ToolResourceProvider::instance()->spatialReference());
   });
 
-  connect(ToolResourceProvider::instance(), &ToolResourceProvider::mouseClicked, this, &CoordinateConversionController::handleMouseClicked);
+  connect(ToolResourceProvider::instance(), &ToolResourceProvider::mouseClicked, this, &CoordinateConversionController::onMouseClicked);
 
   connect(ToolResourceProvider::instance(), &ToolResourceProvider::locationChanged, this, &CoordinateConversionController::onLocationChanged);
 
@@ -275,7 +275,7 @@ void CoordinateConversionController::setGeoView(QObject* geoView)
   if (!testView)
     return;
 
-  connect(geoView, SIGNAL(mouseClicked(QMouseEvent&)), this, SLOT(handleMouseClicked(QMouseEvent&)));
+  connect(geoView, SIGNAL(mouseClicked(QMouseEvent&)), this, SLOT(onMouseClicked(QMouseEvent&)));
 
   m_geoView = testView;
   emit geoViewChanged();
@@ -368,14 +368,24 @@ void CoordinateConversionController::setCaptureMode(bool captureMode)
 
   If the tool is active and in \l captureMode, this will be used as the input for conversions.
  */
-void CoordinateConversionController::handleMouseClicked(QMouseEvent& mouse)
+void CoordinateConversionController::onMouseClicked(QMouseEvent& mouse)
 {
   if (!isActive() || !isCaptureMode())
     return;
 
   SceneView* sceneView = dynamic_cast<SceneView*>(m_geoView);
   if (sceneView)
+  {
     setPointToConvert(sceneView->screenToBaseSurface(mouse.pos().x(), mouse.pos().y()));
+  }
+  else
+  {
+    MapView* mapView = dynamic_cast<MapView*>(m_geoView);
+    if (mapView)
+    {
+      setPointToConvert(mapView->screenToLocation(mouse.pos().x(), mouse.pos().y()));
+    }
+  }
 }
 
 /*!
