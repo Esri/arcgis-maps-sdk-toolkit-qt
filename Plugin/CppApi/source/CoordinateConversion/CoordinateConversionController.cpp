@@ -11,6 +11,8 @@
 //
 
 #include "CoordinateConversionController.h"
+
+// toolkit headers
 #include "CoordinateConversionConstants.h"
 #include "CoordinateConversionOptions.h"
 #include "CoordinateConversionResults.h"
@@ -18,16 +20,19 @@
 #include "ToolManager.h"
 #include "ToolResourceProvider.h"
 
+// qt_cpp headers
 #include "CoordinateFormatter.h"
-#include "GeometryEngine.h"
 #include "GeoView.h"
+#include "GeometryEngine.h"
 #include "MapView.h"
 #include "PolylineBuilder.h"
 #include "SceneView.h"
 
+// Qt headers
 #include <QClipboard>
 #include <QGuiApplication>
 
+// C++ headers
 #include <functional>
 
 /*!
@@ -79,9 +84,14 @@ CoordinateConversionController::CoordinateConversionController(QObject* parent):
     setSpatialReference(ToolResourceProvider::instance()->spatialReference());
   });
 
-  connect(ToolResourceProvider::instance(), &ToolResourceProvider::mouseClickedPoint, this, &CoordinateConversionController::onMouseClicked);
+  connect(ToolResourceProvider::instance(), &ToolResourceProvider::mouseClicked, this, &CoordinateConversionController::onMouseClicked);
 
   connect(ToolResourceProvider::instance(), &ToolResourceProvider::locationChanged, this, &CoordinateConversionController::onLocationChanged);
+
+  connect(ToolResourceProvider::instance(), &ToolResourceProvider::geoViewChanged, this, [this]()
+  {
+    setGeoViewInternal(Toolkit::ToolResourceProvider::instance()->geoView());
+  });
 
   connect(this, &CoordinateConversionController::optionsChanged, this,
           [this]()
@@ -259,6 +269,12 @@ bool CoordinateConversionController::isFormat(CoordinateConversionOptions *optio
   return option->name().compare(formatName, Qt::CaseInsensitive) == 0;
 }
 
+void CoordinateConversionController::setGeoView(QObject* geoView)
+{
+  if (setGeoViewInternal(dynamic_cast<GeoView*>(geoView)))
+    connect(geoView, SIGNAL(mouseClicked(QMouseEvent&)), this, SLOT(onMouseClicked(QMouseEvent&)));
+}
+
 /*!
   \property CoordinateConversionController::results
   \brief The conversion results as a list model.
@@ -284,6 +300,17 @@ CoordinateConversionResults *CoordinateConversionController::resultsInternal()
   }
 
   return m_results;
+}
+
+bool CoordinateConversionController::setGeoViewInternal(GeoView* geoView)
+{
+  if (geoView == nullptr)
+    return false;
+
+  m_sceneView = dynamic_cast<SceneView*>(geoView);
+  m_mapView = dynamic_cast<MapView*>(geoView);
+
+  return m_sceneView != nullptr || m_mapView != nullptr;
 }
 
 /*!
@@ -342,14 +369,19 @@ void CoordinateConversionController::setCaptureMode(bool captureMode)
 }
 
 /*!
-  \brief Handles the mouse click at \a clickedPoint.
+  \brief Handles the mouse click at \a mouseEvent .
 
   If the tool is active and in \l captureMode, this will be used as the input for conversions.
  */
-void CoordinateConversionController::onMouseClicked(const Point& clickedPoint)
+void CoordinateConversionController::onMouseClicked(QMouseEvent& mouseEvent )
 {
-  if (isActive() && isCaptureMode())
-    setPointToConvert(clickedPoint);
+  if (!isActive() || !isCaptureMode())
+    return;
+
+  if (m_sceneView)
+    setPointToConvert(m_sceneView->screenToBaseSurface(mouseEvent .pos().x(), mouseEvent .pos().y()));
+  else if (m_mapView)
+    setPointToConvert(m_mapView->screenToLocation(mouseEvent .pos().x(), mouseEvent .pos().y()));
 }
 
 /*!
@@ -549,44 +581,51 @@ void CoordinateConversionController::removeCoordinateFormat(const QString& forma
  */
 QPointF CoordinateConversionController::screenCoordinate(double screenWidth, double screenHeight) const
 {
-  GeoView* geoView = ToolResourceProvider::instance()->geoView();
-  if (!geoView)
-    return QPointF();
-
   // attempt to get the target point as a screen coordinate
   QPointF res;
-  SceneView* sceneView = dynamic_cast<SceneView*>(geoView);
-  MapView* mapView = dynamic_cast<MapView*>(geoView);
-  if (sceneView)
-    res = sceneView->locationToScreen(m_pointToConvert).screenPoint();
-  else if (mapView)
-    res = mapView->locationToScreen(m_pointToConvert);
+  if (m_sceneView)
+    res = m_sceneView->locationToScreen(m_pointToConvert).screenPoint();
+  else if (m_mapView)
+    res = m_mapView->locationToScreen(m_pointToConvert);
   else
     return res;
 
-  // if we have a valid screen coordinate, return it
-  if (res.x() > 0.0 || res.y() > 0.0)
-    return res;
+  // if we did not recieve a valid screen coord
+  if (res.x() == 0.0 && res.y() == 0.0)
+  {
+    // otherwise build a polyline describing the extent of the screen
+    const Point topLeft = m_sceneView ? m_sceneView->screenToBaseSurface(0.01, 0.01) : m_mapView->screenToLocation(0.01, 0.01);
+    const Point topRight = m_sceneView ? m_sceneView->screenToBaseSurface(screenWidth, 0.01) : m_mapView->screenToLocation(screenWidth, 0.01);
+    const Point lowerLeft = m_sceneView ? m_sceneView->screenToBaseSurface(0.01, screenHeight) : m_mapView->screenToLocation(0.01, screenHeight);
+    const Point lowerRight = m_sceneView ? m_sceneView->screenToBaseSurface(screenWidth, screenHeight) : m_mapView->screenToLocation(screenWidth, screenHeight);
+    PolylineBuilder bldr(topLeft.spatialReference());
+    bldr.addPoint(topLeft);
+    bldr.addPoint(topRight);
+    bldr.addPoint(lowerRight);
+    bldr.addPoint(lowerLeft);
+    bldr.addPoint(topLeft);
+    const Polyline viewBoundary = bldr.toPolyline();
 
-  // otherwise build a polyline describing the extent of the screen
-  const Point topLeft = sceneView ? sceneView->screenToBaseSurface(0.01, 0.01) : mapView->screenToLocation(0.01, 0.01);
-  const Point topRight = sceneView ? sceneView->screenToBaseSurface(screenWidth, 0.01) : mapView->screenToLocation(screenWidth, 0.01);
-  const Point lowerLeft = sceneView ? sceneView->screenToBaseSurface(0.01, screenHeight) : mapView->screenToLocation(0.01, screenHeight);
-  const Point lowerRight = sceneView ? sceneView->screenToBaseSurface(screenWidth, screenHeight) : mapView->screenToLocation(screenWidth, screenHeight);
-  PolylineBuilder bldr(topLeft.spatialReference());
-  bldr.addPoint(topLeft);
-  bldr.addPoint(topRight);
-  bldr.addPoint(lowerRight);
-  bldr.addPoint(lowerLeft);
-  bldr.addPoint(topLeft);
-  const Polyline viewBoundary = bldr.toPolyline();
+    // obtain the point on the view boundary polyline which is closest to the target point
+    Point projected = GeometryEngine::instance()->project(m_pointToConvert, topLeft.spatialReference());
+    const Point pointOnBoundary = GeometryEngine::instance()->nearestCoordinate(viewBoundary, projected).coordinate();
 
-  // obtain the point on the view boundary polyline which is closest to the target point
-  Point projected = GeometryEngine::instance()->project(m_pointToConvert, topLeft.spatialReference());
-  const Point pointOnBoundary = GeometryEngine::instance()->nearestCoordinate(viewBoundary, projected).coordinate();
+    // return the point on the boundary as a screen coordinate
+    res = m_sceneView ? m_sceneView->locationToScreen(pointOnBoundary).screenPoint() : m_mapView->locationToScreen(pointOnBoundary);
+  }
 
-  // return the point on the boundary as a screen coordinate
-  return sceneView ? sceneView->locationToScreen(pointOnBoundary).screenPoint() : mapView->locationToScreen(pointOnBoundary);
+  // ensure the returned point is within the bounds of the visible screen
+  if (res.x() < 0.0)
+    res.setX(0.0);
+  else if (res.x() > screenWidth)
+    res.setX(screenWidth);
+
+  if (res.y() < 0.0)
+    res.setY(0.0);
+  else if (res.y() > screenHeight)
+    res.setY(screenHeight);
+
+  return res;
 }
 
 /*!
@@ -594,25 +633,20 @@ QPointF CoordinateConversionController::screenCoordinate(double screenWidth, dou
  */
 void CoordinateConversionController::zoomTo()
 {
-  GeoView* geoView = ToolResourceProvider::instance()->geoView();
-  if (!geoView)
-    return;
-
-  SceneView* sceneView = dynamic_cast<SceneView*>(geoView);
-  if (sceneView)
+  if (m_sceneView)
   {
-    const Camera currentCam = sceneView->currentViewpointCamera();
+    const Camera currentCam = m_sceneView->currentViewpointCamera();
     constexpr double targetDistance = 1500.0;
     const Camera newCam(m_pointToConvert, targetDistance, currentCam.heading(), currentCam.pitch(), currentCam.roll());
 
-    sceneView->setViewpointCamera(newCam, 1.0);
+    m_sceneView->setViewpointCamera(newCam, 1.0);
   }
-  else
+  else if (m_mapView)
   {
-    const Viewpoint currVP = geoView->currentViewpoint(ViewpointType::CenterAndScale);
+    const Viewpoint currVP = m_mapView->currentViewpoint(ViewpointType::CenterAndScale);
     const Viewpoint newViewPoint(m_pointToConvert, currVP.targetScale());
 
-    geoView->setViewpoint(newViewPoint, 1.0);
+    m_mapView->setViewpoint(newViewPoint, 1.0);
   }
 }
 
