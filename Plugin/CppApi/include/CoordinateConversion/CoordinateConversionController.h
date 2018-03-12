@@ -13,19 +13,29 @@
 #ifndef COORDINATECONVERSIONCONTROLLER_H
 #define COORDINATECONVERSIONCONTROLLER_H
 
+
+// toolkit headers
 #include "AbstractTool.h"
 
-#include "SpatialReference.h"
-#include "Point.h"
+// qt_cpp headers
 #include "GeometryTypes.h"
+#include "Point.h"
+#include "SpatialReference.h"
 
+// Qt headers
 #include <QAbstractListModel>
 #include <QPointF>
+
+class QMouseEvent;
 
 namespace Esri
 {
 namespace ArcGISRuntime
 {
+  class GeoView;
+  class MapView;
+  class SceneView;
+
 namespace Toolkit
 {
 
@@ -77,6 +87,8 @@ public:
   // remove the specified format from the set of results the tool will produce
   Q_INVOKABLE void removeCoordinateFormat(const QString& formatToRemove);
 
+  Q_INVOKABLE void setGeoView(QObject* geoView);
+
 signals:
   void optionsChanged();
   void resultsChanged();
@@ -117,12 +129,12 @@ public:
   void setCaptureMode(bool captureMode);
 
 public slots:
-  void onMouseClicked(const Esri::ArcGISRuntime::Point& clickedPoint);
+  void onMouseClicked(QMouseEvent& mouseEvent);
   void onLocationChanged(const Esri::ArcGISRuntime::Point& location);
 
 private:
   CoordinateConversionResults* resultsInternal();
-
+  bool setGeoViewInternal(GeoView* geoView);
   Esri::ArcGISRuntime::Point pointFromNotation(const QString& incomingNotation);
   QString convertPointInternal(CoordinateConversionOptions* option, const Esri::ArcGISRuntime::Point& point) const;
 
@@ -139,6 +151,8 @@ private:
   QStringList m_coordinateFormats;
   QString m_inputFormat;
   bool m_captureMode = false;
+  Esri::ArcGISRuntime::MapView* m_mapView = nullptr;
+  Esri::ArcGISRuntime::SceneView* m_sceneView = nullptr;
 };
 
 } // Toolkit
