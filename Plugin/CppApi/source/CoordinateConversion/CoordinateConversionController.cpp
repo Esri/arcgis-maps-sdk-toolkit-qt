@@ -11,6 +11,8 @@
 //
 
 #include "CoordinateConversionController.h"
+
+// toolkit headers
 #include "CoordinateConversionConstants.h"
 #include "CoordinateConversionOptions.h"
 #include "CoordinateConversionResults.h"
@@ -18,16 +20,19 @@
 #include "ToolManager.h"
 #include "ToolResourceProvider.h"
 
+// qt_cpp headers
 #include "CoordinateFormatter.h"
-#include "GeometryEngine.h"
 #include "GeoView.h"
+#include "GeometryEngine.h"
 #include "MapView.h"
 #include "PolylineBuilder.h"
 #include "SceneView.h"
 
+// Qt headers
 #include <QClipboard>
 #include <QGuiApplication>
 
+// C++ headers
 #include <functional>
 
 /*!
@@ -364,19 +369,19 @@ void CoordinateConversionController::setCaptureMode(bool captureMode)
 }
 
 /*!
-  \brief Handles the mouse click at \a clickedPoint.
+  \brief Handles the mouse click at \a mouseEvent .
 
   If the tool is active and in \l captureMode, this will be used as the input for conversions.
  */
-void CoordinateConversionController::onMouseClicked(QMouseEvent& mouse)
+void CoordinateConversionController::onMouseClicked(QMouseEvent& mouseEvent )
 {
   if (!isActive() || !isCaptureMode())
     return;
 
   if (m_sceneView)
-    setPointToConvert(m_sceneView->screenToBaseSurface(mouse.pos().x(), mouse.pos().y()));
+    setPointToConvert(m_sceneView->screenToBaseSurface(mouseEvent .pos().x(), mouseEvent .pos().y()));
   else if (m_mapView)
-    setPointToConvert(m_mapView->screenToLocation(mouse.pos().x(), mouse.pos().y()));
+    setPointToConvert(m_mapView->screenToLocation(mouseEvent .pos().x(), mouseEvent .pos().y()));
 }
 
 /*!

@@ -13,12 +13,16 @@
 #ifndef COORDINATECONVERSIONCONTROLLER_H
 #define COORDINATECONVERSIONCONTROLLER_H
 
+
+// toolkit headers
 #include "AbstractTool.h"
 
-#include "SpatialReference.h"
-#include "Point.h"
+// qt_cpp headers
 #include "GeometryTypes.h"
+#include "Point.h"
+#include "SpatialReference.h"
 
+// Qt headers
 #include <QAbstractListModel>
 #include <QPointF>
 
@@ -125,7 +129,7 @@ public:
   void setCaptureMode(bool captureMode);
 
 public slots:
-  void onMouseClicked(QMouseEvent& clickedPoint);
+  void onMouseClicked(QMouseEvent& mouseEvent);
   void onLocationChanged(const Esri::ArcGISRuntime::Point& location);
 
 private:
