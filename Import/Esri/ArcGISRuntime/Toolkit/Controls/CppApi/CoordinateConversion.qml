@@ -119,7 +119,7 @@ Item {
      */
     property bool expandUpwards: true
 
-    property alias radius: backgroundRecatangle.radius
+    property alias radius: backgroundRectangle.radius
 
     CoordinateConversionController {
         id: coordinateConvController
@@ -135,10 +135,10 @@ Item {
     }
 
     Rectangle {
-        id: backgroundRecatangle
+        id: backgroundRectangle
         anchors{
             top: menuButton.checked ? expandUpwards ? addConversionButton.top : inputModeButton.top : inputModeButton.top
-            bottom: menuButton.checked ? expandUpwards ? inputModeButton.bottom : addConversionButton.bottom : inputModeButton.bottom
+            bottom: menuButton.checked ? expandUpwards ? inputModeButton.bottom : results.bottom : inputModeButton.bottom
             left: parent.left
             right: parent.right
         }
@@ -149,8 +149,9 @@ Item {
     Button {
         id: inputModeButton
         anchors {
+            top: expandUpwards ? undefined : parent.top
             left: parent.left
-            bottom: parent.bottom
+            bottom: expandUpwards ? parent.bottom : undefined
         }
         height: 32 * scaleFactor
         width: implicitWidth
@@ -285,25 +286,26 @@ Item {
             left: parent.left
             bottom: expandUpwards ? results.top : undefined
             top: expandUpwards ? undefined : inputModeButton.bottom
+            right: zoomToButton.left
         }
         height: inputModeButton.height
         visible: menuButton.checked
-        text: "Add conversion"
-
+        clip: true
         background: Rectangle {
             color: addConversionButton.down ? highlightColor : "transparent"
         }
 
         contentItem: Text {
-            text: addConversionButton.text
+            text: "Add conversion"
             font{
                 family: fontFamily
                 pixelSize: coordinateConversionWindow.fontSize * scaleFactor
             }
             color: textColor
-            horizontalAlignment: Text.AlignHCenter
+            horizontalAlignment: Text.AlignLeft
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
+            wrapMode: Text.WrapAnywhere
         }
 
         onClicked: {
@@ -570,7 +572,6 @@ Item {
                 Menu {
                     id: editMenu
                     visible: false
-
                     Column {
                         anchors.margins: 10 * scaleFactor
                         spacing: 10 * scaleFactor
