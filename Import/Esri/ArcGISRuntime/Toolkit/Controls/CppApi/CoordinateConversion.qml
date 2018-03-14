@@ -410,8 +410,8 @@ Item {
             if (geoView === null)
                 return;
 
-            var screenPos = coordinateConvController.screenCoordinate(geoView.width, geoView.height);
-            if (screenPos.x === 0.0 && screenPos.y === 0.0)
+            var screenPos = coordinateConvController.screenCoordinate();
+            if (screenPos.x === -1.0 && screenPos.y === -1.0)
                 return;
 
             var itemPos = geoView.mapToItem(coordinateConversionWindow, screenPos.x, screenPos.y);
