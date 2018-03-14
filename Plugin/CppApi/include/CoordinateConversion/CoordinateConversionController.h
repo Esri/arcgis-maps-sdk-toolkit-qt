@@ -17,7 +17,7 @@
 // toolkit headers
 #include "AbstractTool.h"
 
-// qt_cpp headers
+// C++ API headers
 #include "GeometryTypes.h"
 #include "Point.h"
 #include "SpatialReference.h"
@@ -73,7 +73,7 @@ public:
   Q_INVOKABLE void copyToClipboard(const QString& text);
 
   // get the current input position in screen coordinates
-  Q_INVOKABLE QPointF screenCoordinate(double screenWidth, double screenHeight) const;
+  Q_INVOKABLE QPointF screenCoordinate() const;
 
   // zooms the geoview to the current input position
   Q_INVOKABLE void zoomTo();

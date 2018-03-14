@@ -20,7 +20,7 @@
 #include "ToolManager.h"
 #include "ToolResourceProvider.h"
 
-// qt_cpp headers
+// C++ API headers
 #include "CoordinateFormatter.h"
 #include "GeoView.h"
 #include "GeometryEngine.h"
@@ -32,7 +32,7 @@
 #include <QClipboard>
 #include <QGuiApplication>
 
-// C++ headers
+// STL headers
 #include <functional>
 
 /*!
@@ -307,6 +307,8 @@ bool CoordinateConversionController::setGeoViewInternal(GeoView* geoView)
   if (geoView == nullptr)
     return false;
 
+  setSpatialReference(geoView->spatialReference());
+
   m_sceneView = dynamic_cast<SceneView*>(geoView);
   m_mapView = dynamic_cast<MapView*>(geoView);
 
@@ -579,10 +581,10 @@ void CoordinateConversionController::removeCoordinateFormat(const QString& forma
 
   If the point is off the screen, attempts to find the closest point on the screen (e.g. on the edge) to the point.
  */
-QPointF CoordinateConversionController::screenCoordinate(double screenWidth, double screenHeight) const
+QPointF CoordinateConversionController::screenCoordinate() const
 {
   // attempt to get the target point as a screen coordinate
-  QPointF res;
+  QPointF res(-1.0, -1.0);
   if (m_sceneView)
     res = m_sceneView->locationToScreen(m_pointToConvert).screenPoint();
   else if (m_mapView)
@@ -590,14 +592,53 @@ QPointF CoordinateConversionController::screenCoordinate(double screenWidth, dou
   else
     return res;
 
-  // if we did not recieve a valid screen coord
+  // get the extents of the screen (padded to ensure we are within the visible area)
+  constexpr double padding = 1.0;
+  const double screenWidth = m_sceneView ? m_sceneView->widthInPixels() - padding : m_mapView->widthInPixels() - padding;
+  const double screenHeight = m_sceneView ? m_sceneView->heightInPixels() - padding : m_mapView->heightInPixels() - padding;
+
+  // if we did not recieve a valid screen coordinate
   if (res.x() == 0.0 && res.y() == 0.0)
   {
+    // lambda to search for a valid geographic position for the top of the screen (e.g. to account for the horizon)
+    auto findValidTopPoint = [this, screenHeight](double x)
+    {
+      Point validTopPoint;
+      double lastValidY = screenHeight;
+      double testMinY = 1.0;
+      for (int attempt = 0; attempt < 16; ++attempt)
+      {
+        double testY = testMinY + ((lastValidY - testMinY) * 0.5);
+        auto newRes =  m_sceneView ? m_sceneView->screenToBaseSurface(x, testY) : m_mapView->screenToLocation(x, testY);
+        if (newRes.isValid() && !newRes.isEmpty())
+        {
+          validTopPoint = newRes;
+          if (std::abs(lastValidY - testY) < 1.0)
+            break;
+
+          lastValidY = testY;
+        }
+        else
+        {
+          testMinY = testY;
+        }
+      }
+
+      return validTopPoint;
+    };
+
     // otherwise build a polyline describing the extent of the screen
-    const Point topLeft = m_sceneView ? m_sceneView->screenToBaseSurface(0.01, 0.01) : m_mapView->screenToLocation(0.01, 0.01);
-    const Point topRight = m_sceneView ? m_sceneView->screenToBaseSurface(screenWidth, 0.01) : m_mapView->screenToLocation(screenWidth, 0.01);
-    const Point lowerLeft = m_sceneView ? m_sceneView->screenToBaseSurface(0.01, screenHeight) : m_mapView->screenToLocation(0.01, screenHeight);
-    const Point lowerRight = m_sceneView ? m_sceneView->screenToBaseSurface(screenWidth, screenHeight) : m_mapView->screenToLocation(screenWidth, screenHeight);
+    Point topLeft = m_sceneView ? m_sceneView->screenToBaseSurface(padding, padding) : m_mapView->screenToLocation(padding, padding);
+    if (topLeft.isEmpty() || !topLeft.isValid())
+      topLeft = findValidTopPoint(padding);
+
+    Point topRight = m_sceneView ? m_sceneView->screenToBaseSurface(screenWidth, padding) : m_mapView->screenToLocation(screenWidth, padding);
+    if (topRight.isEmpty() || !topRight.isValid())
+      findValidTopPoint(screenWidth);
+
+    Point lowerLeft = m_sceneView ? m_sceneView->screenToBaseSurface(padding, screenHeight) : m_mapView->screenToLocation(padding, screenHeight);
+    Point lowerRight = m_sceneView ? m_sceneView->screenToBaseSurface(screenWidth, screenHeight) : m_mapView->screenToLocation(screenWidth, screenHeight);
+
     PolylineBuilder bldr(topLeft.spatialReference());
     bldr.addPoint(topLeft);
     bldr.addPoint(topRight);
@@ -605,13 +646,12 @@ QPointF CoordinateConversionController::screenCoordinate(double screenWidth, dou
     bldr.addPoint(lowerLeft);
     bldr.addPoint(topLeft);
     const Polyline viewBoundary = bldr.toPolyline();
-
     // obtain the point on the view boundary polyline which is closest to the target point
     Point projected = GeometryEngine::instance()->project(m_pointToConvert, topLeft.spatialReference());
-    const Point pointOnBoundary = GeometryEngine::instance()->nearestCoordinate(viewBoundary, projected).coordinate();
+    const ProximityResult nearestCoordinateResult = GeometryEngine::instance()->nearestCoordinate(viewBoundary, projected);
 
-    // return the point on the boundary as a screen coordinate
-    res = m_sceneView ? m_sceneView->locationToScreen(pointOnBoundary).screenPoint() : m_mapView->locationToScreen(pointOnBoundary);
+    res = m_sceneView ? m_sceneView->locationToScreen(nearestCoordinateResult.coordinate()).screenPoint() :
+                        m_mapView->locationToScreen(nearestCoordinateResult.coordinate());
   }
 
   // ensure the returned point is within the bounds of the visible screen
