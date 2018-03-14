@@ -33,6 +33,7 @@
 #include <QGuiApplication>
 
 // STL headers
+#include <cmath>
 #include <functional>
 
 /*!
