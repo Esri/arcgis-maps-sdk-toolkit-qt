@@ -48,8 +48,8 @@ win32: {
 }
 
 # make sure the local toolkit libs come first on the link line
-SDK_LIBS = $$LIBS
-LIBS = -L$$PWD/output/$$PLATFORM_OUTPUT -lArcGISRuntimeToolkitCppApi$${ToolkitPrefix}$${DebugSuffix} $$SDK_LIBS
+ARCGIS_RT_SDK_LIBS = $$LIBS
+LIBS = -L$$PWD/output/$$PLATFORM_OUTPUT -lArcGISRuntimeToolkitCppApi$${ToolkitPrefix}$${DebugSuffix} $$ARCGIS_RT_SDK_LIBS
 
 # unset the previous toolkit defines and import paths
 DEFINES -= ARCGIS_TOOLKIT_IMPORT_PATH=\"$$ARCGIS_TOOLKIT_IMPORT_PATH\"
