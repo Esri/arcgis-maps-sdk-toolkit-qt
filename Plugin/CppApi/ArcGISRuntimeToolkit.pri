@@ -47,19 +47,19 @@ win32: {
   }
 }
 
-LIBS += -L$$PWD/output/$$PLATFORM_OUTPUT -lArcGISRuntimeToolkitCppApi$${ToolkitPrefix}$${DebugSuffix}
+# make sure the local toolkit libs come first on the link line
+ARCGIS_RT_SDK_LIBS = $$LIBS
+LIBS = -L$$PWD/output/$$PLATFORM_OUTPUT -lArcGISRuntimeToolkitCppApi$${ToolkitPrefix}$${DebugSuffix} $$ARCGIS_RT_SDK_LIBS
 
-# unset the previous toolkit path
+# unset the previous toolkit defines and import paths
 DEFINES -= ARCGIS_TOOLKIT_IMPORT_PATH=\"$$ARCGIS_TOOLKIT_IMPORT_PATH\"
+QML_IMPORT_PATH -= $${ARCGIS_TOOLKIT_IMPORT_PATH}
+QMLPATHS -= $${ARCGIS_TOOLKIT_IMPORT_PATH}
 
-# Set ArcGIS Runtime Toolkit Path for Qml UI files
+# Set and use the local toolkit defines and import paths
 ARCGIS_TOOLKIT_IMPORT_PATH = $$absolute_path($$PWD/../../Import)
 DEFINES += ARCGIS_TOOLKIT_IMPORT_PATH=\"$$ARCGIS_TOOLKIT_IMPORT_PATH\"
-
-# Add plugin paths to QML_IMPORT_PATH
 QML_IMPORT_PATH += $${ARCGIS_TOOLKIT_IMPORT_PATH}
-
-# Add plugin paths to QMLPATHS
 QMLPATHS += $${ARCGIS_TOOLKIT_IMPORT_PATH}
 
 # DEFINES
