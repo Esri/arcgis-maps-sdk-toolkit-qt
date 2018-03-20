@@ -566,47 +566,53 @@ Item {
                 }
 
                 onClicked: {
+                    editMenu.y = editMenuButton.y;
+                    editMenu.currentName = name;
+                    editMenu.currentNotation = notation;
                     editMenu.open();
                 }
+            }
+        }
 
-                Menu {
-                    id: editMenu
-                    visible: false
-                    Column {
-                        anchors.margins: 10 * scaleFactor
-                        spacing: 10 * scaleFactor
-                        Label {
-                            text: "Delete"
-                            font {
-                                family: fontFamily
-                                pixelSize: coordinateConversionWindow.fontSize * scaleFactor
-                            }
-                            color: textColor
+        Menu {
+            id: editMenu
+            visible: false
+            x: results.width - width
+            property string currentName: ""
+            property string currentNotation: ""
+            Column {
+                anchors.margins: 10 * scaleFactor
+                spacing: 10 * scaleFactor
+                Label {
+                    text: "Delete"
+                    font {
+                        family: fontFamily
+                        pixelSize: coordinateConversionWindow.fontSize * scaleFactor
+                    }
+                    color: textColor
 
-                            MouseArea {
-                                anchors.fill: parent
-                                onClicked: {
-                                    editMenu.close();
-                                    coordinateConvController.removeCoordinateFormat(name);
-                                }
-                            }
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            editMenu.close();
+                            coordinateConvController.removeCoordinateFormat(editMenu.currentName);
                         }
+                    }
+                }
 
-                        Label {
-                            text: "Copy"
-                            font {
-                                family: fontFamily
-                                pixelSize: coordinateConversionWindow.fontSize * scaleFactor
-                            }
-                            color: textColor
+                Label {
+                    text: "Copy"
+                    font {
+                        family: fontFamily
+                        pixelSize: coordinateConversionWindow.fontSize * scaleFactor
+                    }
+                    color: textColor
 
-                            MouseArea {
-                                anchors.fill: parent
-                                onClicked: {
-                                    editMenu.close();
-                                    coordinateConvController.copyToClipboard(notation);
-                                }
-                            }
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            editMenu.close();
+                            coordinateConvController.copyToClipboard(editMenu.currentNotation);
                         }
                     }
                 }
