@@ -567,8 +567,8 @@ Item {
 
                 onClicked: {
                     editMenu.y = editMenuButton.y;
-                    editMenu.currName = name;
-                    editMenu.currNotation = notation;
+                    editMenu.currentName = name;
+                    editMenu.currentNotation = notation;
                     editMenu.open();
                 }
             }
@@ -578,8 +578,8 @@ Item {
             id: editMenu
             visible: false
             x: results.width - width
-            property string currName: ""
-            property string currNotation: ""
+            property string currentName: ""
+            property string currentNotation: ""
             Column {
                 anchors.margins: 10 * scaleFactor
                 spacing: 10 * scaleFactor
@@ -595,7 +595,7 @@ Item {
                         anchors.fill: parent
                         onClicked: {
                             editMenu.close();
-                            coordinateConvController.removeCoordinateFormat(editMenu.currName);
+                            coordinateConvController.removeCoordinateFormat(editMenu.currentName);
                         }
                     }
                 }
@@ -612,7 +612,7 @@ Item {
                         anchors.fill: parent
                         onClicked: {
                             editMenu.close();
-                            coordinateConvController.copyToClipboard(editMenu.currNotation);
+                            coordinateConvController.copyToClipboard(editMenu.currentNotation);
                         }
                     }
                 }
