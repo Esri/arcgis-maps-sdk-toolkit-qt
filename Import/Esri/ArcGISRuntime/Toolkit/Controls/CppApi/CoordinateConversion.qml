@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.6
 import QtQuick.Controls 2.2
 import QtQuick.Window 2.2
 import QtGraphicalEffects 1.0
@@ -366,17 +366,10 @@ Item {
             color: zoomToButton.down ? highlightColor : "transparent"
         }
 
-        Text {
+        Image {
+            fillMode: Image.PreserveAspectFit
             anchors.fill: zoomToButton
-            text: "Go"
-            color: textColor
-            font {
-                family: fontFamily
-                pixelSize: coordinateConversionWindow.fontSize * scaleFactor
-                bold: true
-            }
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
+            source: "images/Zoom.png"
         }
 
         onClicked: {
@@ -448,7 +441,7 @@ Item {
             sourceSize.height: parent.width
             height: sourceSize.height
             opacity: editCoordinateButton.checked ? 1.0 : 0.5
-            source: "images/edit.png"
+            source: "images/Text_Editing_Mode.png"
         }
     }
 
@@ -480,7 +473,7 @@ Item {
             sourceSize.height: parent.width
             height: sourceSize.height
             opacity: captureModeButton.checked ? 1.0 : 0.5
-            source: "images/directionsto_dark.png"
+            source: "images/Mouse_Click_Mode.png"
         }
 
         onCheckedChanged: {
@@ -580,9 +573,14 @@ Item {
             x: results.width - width
             property string currentName: ""
             property string currentNotation: ""
+            width: 100 * scaleFactor
+
             Column {
+                width: parent.width
                 anchors.margins: 10 * scaleFactor
                 spacing: 10 * scaleFactor
+                leftPadding: 10 * scaleFactor
+
                 Label {
                     text: "Delete"
                     font {
