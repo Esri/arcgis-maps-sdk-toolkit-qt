@@ -3,7 +3,6 @@
         <file>CoordinateConversion.qml</file>
         <file>ArcGISCompass.qml</file>
         <file>images/compass.png</file>
-        <file>images/directionsto_dark.png</file>
         <file>images/trash.png</file>
         <file>images/editcopy.png</file>
         <file>images/convert.png</file>
