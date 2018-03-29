@@ -14,10 +14,6 @@
 #   limitations under the License.
 ################################################################################
 
-# Uncomment this line to add a prefix to the toolkit library
-#CONFIG += ToolkitBuildUsePrefix
-CONFIG(ToolkitBuildUsePrefix): ToolkitPrefix = _dev
-
 TARGET = $$qtLibraryTarget(ArcGISRuntimeToolkitCppApi$${ToolkitPrefix})
 TEMPLATE = lib
 
@@ -52,6 +48,9 @@ unix:!macx:!android:!ios: {
 
 ios {
   QMAKE_CXXFLAGS += -fembed-bitcode
+}
+
+ios|CONFIG(staticlib) {
   RESOURCES += $${PWD}/ArcGISRuntimeToolkit.qrc
 }
 
