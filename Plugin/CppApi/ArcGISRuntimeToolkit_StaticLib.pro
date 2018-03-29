@@ -17,6 +17,7 @@
 # this is identical to the included project except it produces a statib library
 # rather than a dynamic library
 
-include($$PWD/ArcGISRuntimeToolkit.pro)
-
 CONFIG += staticlib
+DEFINES += QTRUNTIME_TOOLKIT_STATIC_BUILD
+
+include($$PWD/ArcGISRuntimeToolkit.pro)
