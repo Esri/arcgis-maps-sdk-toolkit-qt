@@ -50,10 +50,6 @@ ios {
   QMAKE_CXXFLAGS += -fembed-bitcode
 }
 
-ios|CONFIG(staticlib) {
-  RESOURCES += $${PWD}/ArcGISRuntimeToolkit.qrc
-}
-
 macx: {
   QMAKE_POST_LINK =
 }
