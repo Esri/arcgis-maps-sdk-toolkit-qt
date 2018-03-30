@@ -2,10 +2,20 @@
     <qresource prefix="/qt-project.org/imports/Esri/ArcGISRuntime/Toolkit/Controls/CppApi">
         <file>CoordinateConversion.qml</file>
         <file>ArcGISCompass.qml</file>
+        <file>images/Calculate_New_Coordinate.png</file>
         <file>images/compass.png</file>
-        <file>images/trash.png</file>
-        <file>images/editcopy.png</file>
         <file>images/convert.png</file>
+        <file>images/Copy_to_Clipboard.png</file>
+        <file>images/edit.png</file>
+        <file>images/editcopy.png</file>
+        <file>images/flash.png</file>
+        <file>images/menu.png</file>
+        <file>images/menuCollapse.png</file>
+        <file>images/menuExpand.png</file>
+        <file>images/Mouse_Click_Mode.png</file>
+        <file>images/Text_Editing_Mode.png</file>
+        <file>images/trash.png</file>
+        <file>images/Zoom.png</file>
         <file>qmldir</file>
     </qresource>
 </RCC>
