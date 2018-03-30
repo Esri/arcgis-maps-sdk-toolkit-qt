@@ -39,9 +39,6 @@ namespace Toolkit
 ArcGISRuntimeToolkit::ArcGISRuntimeToolkit(QObject* parent) :
   QQmlExtensionPlugin(parent)
 {
-#ifdef QT_STATICPLUGIN
-  Q_INIT_RESOURCE(ArcGISRuntimeToolkit);
-#endif
 }
 
 /*!
