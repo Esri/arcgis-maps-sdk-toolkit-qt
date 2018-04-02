@@ -14,8 +14,6 @@
 #   limitations under the License.
 ################################################################################
 
-CONFIG(ToolkitBuildUsePrefix): ToolkitPrefix = _dev
-
 CONFIG(debug, debug|release) {
   macx:  DebugSuffix = _debug
   win32: DebugSuffix = d
@@ -73,7 +71,7 @@ unix:!macx:!ios {
   }
 }
 
-android {
+android:!CONFIG(TOOLKIT_STATIC_BUILD) {
   ANDROID_EXTRA_LIBS += \
   $$PWD/output/$$PLATFORM_OUTPUT/libArcGISRuntimeToolkitCppApi$${ToolkitPrefix}.so
 }
