@@ -10,12 +10,16 @@
 // See the Sample code usage restrictions document for further information.
 //
 
-#include "CoordinateConversionOptions.h"
-#include "CoordinateConversionConstants.h"
 #include "CoordinateFormatFactory.h"
 
+// toolkit headers
+#include "CoordinateConversionConstants.h"
+#include "CoordinateConversionOptions.h"
+
+// C++ API headers
 #include "GeodatabaseTypes.h"
 
+// Qt headers
 #include <QObject>
 
 namespace Esri
@@ -69,7 +73,7 @@ CoordinateConversionOptions* CoordinateFormatFactory::createFormat(const QString
   else if (formatName.compare(CoordinateConversionConstants::DECIMAL_DEGREES_FORMAT, Qt::CaseInsensitive) == 0)
   {
     option->setOutputMode(CoordinateConversionOptions::CoordinateType::CoordinateTypeLatLon);
-    option->setLatLonFormat(LatitudeLongitudeFormat::DegreesDecimalMinutes);
+    option->setLatLonFormat(LatitudeLongitudeFormat::DecimalDegrees);
   }
   else if (formatName.compare(CoordinateConversionConstants::GARS_FORMAT, Qt::CaseInsensitive) == 0)
   {
