@@ -1,4 +1,4 @@
-// Copyright 2017 ESRI
+// Copyright 2018 ESRI
 //
 // All rights reserved under the copyright laws of the United States
 // and applicable international laws, treaties, and conventions.
@@ -587,7 +587,12 @@ QPointF CoordinateConversionController::screenCoordinate() const
   // attempt to get the target point as a screen coordinate
   QPointF res(-1.0, -1.0);
   if (m_sceneView)
-    res = m_sceneView->locationToScreen(m_pointToConvert).screenPoint();
+  {
+    const LocationToScreenResult locToScreenRes = m_sceneView->locationToScreen(m_pointToConvert);
+    if (locToScreenRes.visibility() == SceneLocationVisibility::Visible ||
+        locToScreenRes.visibility() == SceneLocationVisibility::HiddenByElevation)
+      res = locToScreenRes.screenPoint();
+  }
   else if (m_mapView)
     res = m_mapView->locationToScreen(m_pointToConvert);
   else
@@ -599,60 +604,63 @@ QPointF CoordinateConversionController::screenCoordinate() const
   const double screenHeight = m_sceneView ? m_sceneView->heightInPixels() - padding : m_mapView->heightInPixels() - padding;
 
   // if we did not recieve a valid screen coordinate
-  if (res.x() == 0.0 && res.y() == 0.0)
+  if (res.x() <= 0.0 && res.y() <= 0.0)
   {
-    // lambda to search for a valid geographic position for the top of the screen (e.g. to account for the horizon)
-    auto findValidTopPoint = [this, screenHeight](double x)
+    // obtain a heading to the off-screen point, relative to the current view rotation
+    double relativeHeading = 0.0;
+    if (m_sceneView)
     {
-      Point validTopPoint;
-      double lastValidY = screenHeight;
-      double testMinY = 1.0;
-      for (int attempt = 0; attempt < 16; ++attempt)
-      {
-        double testY = testMinY + ((lastValidY - testMinY) * 0.5);
-        auto newRes =  m_sceneView ? m_sceneView->screenToBaseSurface(x, testY) : m_mapView->screenToLocation(x, testY);
-        if (newRes.isValid() && !newRes.isEmpty())
-        {
-          validTopPoint = newRes;
-          if (std::abs(lastValidY - testY) < 1.0)
-            break;
+      const Camera currCam = m_sceneView->currentViewpointCamera();
+      const GeodeticDistanceResult distanceRes = GeometryEngine::distanceGeodetic(currCam.location(), m_pointToConvert, LinearUnit::meters(), AngularUnit::degrees(), GeodeticCurveType::Geodesic);
 
-          lastValidY = testY;
-        }
-        else
-        {
-          testMinY = testY;
-        }
-      }
+      const double camHeading = currCam.heading();
+      const double headingToPoint = distanceRes.azimuth1();
 
-      return validTopPoint;
-    };
+      relativeHeading = headingToPoint - camHeading;
+    }
+    else if (m_mapView)
+    {
+      const Point currCenter = m_mapView->currentViewpoint(ViewpointType::CenterAndScale).targetGeometry().extent().center();
+      const GeodeticDistanceResult distanceRes = GeometryEngine::distanceGeodetic(currCenter, m_pointToConvert, LinearUnit::meters(), AngularUnit::degrees(), GeodeticCurveType::Geodesic);
 
-    // otherwise build a polyline describing the extent of the screen
-    Point topLeft = m_sceneView ? m_sceneView->screenToBaseSurface(padding, padding) : m_mapView->screenToLocation(padding, padding);
-    if (topLeft.isEmpty() || !topLeft.isValid())
-      topLeft = findValidTopPoint(padding);
+      const double headingToPoint = distanceRes.azimuth1();
 
-    Point topRight = m_sceneView ? m_sceneView->screenToBaseSurface(screenWidth, padding) : m_mapView->screenToLocation(screenWidth, padding);
-    if (topRight.isEmpty() || !topRight.isValid())
-      findValidTopPoint(screenWidth);
+      relativeHeading = headingToPoint - m_mapView->mapRotation();
+    }
 
-    Point lowerLeft = m_sceneView ? m_sceneView->screenToBaseSurface(padding, screenHeight) : m_mapView->screenToLocation(padding, screenHeight);
-    Point lowerRight = m_sceneView ? m_sceneView->screenToBaseSurface(screenWidth, screenHeight) : m_mapView->screenToLocation(screenWidth, screenHeight);
+    // ensure the relative heading is in the ranage 0-360 degrees
+    while (relativeHeading < 0.0)
+      relativeHeading += 360.;
 
-    PolylineBuilder bldr(topLeft.spatialReference());
-    bldr.addPoint(topLeft);
-    bldr.addPoint(topRight);
-    bldr.addPoint(lowerRight);
-    bldr.addPoint(lowerLeft);
-    bldr.addPoint(topLeft);
-    const Polyline viewBoundary = bldr.toPolyline();
-    // obtain the point on the view boundary polyline which is closest to the target point
-    Point projected = GeometryEngine::instance()->project(m_pointToConvert, topLeft.spatialReference());
-    const ProximityResult nearestCoordinateResult = GeometryEngine::instance()->nearestCoordinate(viewBoundary, projected);
+    while (relativeHeading > 360.0)
+      relativeHeading -= 360.0;
 
-    res = m_sceneView ? m_sceneView->locationToScreen(nearestCoordinateResult.coordinate()).screenPoint() :
-                        m_mapView->locationToScreen(nearestCoordinateResult.coordinate());
+    // place the point on the middle of the edge which roughly matches the direction to the point
+    if (relativeHeading >= 0.0 && relativeHeading < 45.0 ||
+        relativeHeading > 315.0 && relativeHeading < 0.0)
+    {
+      // off the top of the screen
+      res.setX(screenWidth * 0.5);
+      res.setY(padding);
+    }
+    else if (relativeHeading >= 0.0 && relativeHeading < 90)
+    {
+      // off the right edge of the screen
+      res.setX(screenWidth - padding);
+      res.setY(screenHeight * 0.5);
+    }
+    else if (relativeHeading >= 90.0 && relativeHeading < 270)
+    {
+      // off the bottom edge of the screen
+      res.setX(screenWidth * 0.5);
+      res.setY(screenHeight - padding);
+    }
+    else
+    {
+      // off the left edge
+      res.setX(padding);
+      res.setY(screenHeight * 0.5);
+    }
   }
 
   // ensure the returned point is within the bounds of the visible screen
