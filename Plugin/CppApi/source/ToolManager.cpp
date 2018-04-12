@@ -64,6 +64,7 @@ void ToolManager::addTool(AbstractTool* tool)
   });
 
   m_tools.insert(tool->toolName(), tool);
+  emit toolAdded(tool);
 }
 
 /*! \brief Removes the \l AbstractTool called \a toolName from the manager.
