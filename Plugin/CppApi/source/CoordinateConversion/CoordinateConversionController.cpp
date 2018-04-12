@@ -630,7 +630,7 @@ QPointF CoordinateConversionController::screenCoordinate() const
 
     // ensure the relative heading is in the ranage 0-360 degrees
     while (relativeHeading < 0.0)
-      relativeHeading += 360.;
+      relativeHeading += 360.0;
 
     while (relativeHeading > 360.0)
       relativeHeading -= 360.0;
@@ -643,7 +643,7 @@ QPointF CoordinateConversionController::screenCoordinate() const
       res.setX(screenWidth * 0.5);
       res.setY(padding);
     }
-    else if (relativeHeading >= 0.0 && relativeHeading < 90)
+    else if (relativeHeading >= 0.0 && relativeHeading < 90.0)
     {
       // off the right edge of the screen
       res.setX(screenWidth - padding);
