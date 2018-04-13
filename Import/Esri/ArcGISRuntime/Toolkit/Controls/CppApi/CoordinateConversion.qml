@@ -407,7 +407,7 @@ Item {
             if (screenPos.x === -1.0 && screenPos.y === -1.0)
                 return;
 
-            var itemPos = geoView.mapToItem(coordinateConversionWindow, screenPos.x, screenPos.y);
+            var itemPos = geoView.mapToItem(coordinateConversionWindow, screenPos.x / Screen.devicePixelRatio, screenPos.y / Screen.devicePixelRatio);
             flashImage.x = itemPos.x - (flashImage.width * 0.5);
             flashImage.y = itemPos.y - (flashImage.height * 0.5);
             flashImage.running = true;
