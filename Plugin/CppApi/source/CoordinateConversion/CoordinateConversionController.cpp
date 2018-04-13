@@ -607,26 +607,17 @@ QPointF CoordinateConversionController::screenCoordinate() const
   if (res.x() <= 0.0 && res.y() <= 0.0)
   {
     // obtain a heading to the off-screen point, relative to the current view rotation
-    double relativeHeading = 0.0;
-    if (m_sceneView)
-    {
-      const Camera currCam = m_sceneView->currentViewpointCamera();
-      const GeodeticDistanceResult distanceRes = GeometryEngine::distanceGeodetic(currCam.location(), m_pointToConvert, LinearUnit::meters(), AngularUnit::degrees(), GeodeticCurveType::Geodesic);
+    const Point fromPoint = m_sceneView ? m_sceneView->currentViewpointCamera().location() :
+                                          m_mapView->currentViewpoint(ViewpointType::CenterAndScale).targetGeometry().extent().center();
 
-      const double camHeading = currCam.heading();
-      const double headingToPoint = distanceRes.azimuth1();
+    const double viewHeading = m_sceneView ? m_sceneView->currentViewpointCamera().heading() :
+                                             m_mapView->mapRotation();
 
-      relativeHeading = headingToPoint - camHeading;
-    }
-    else if (m_mapView)
-    {
-      const Point currCenter = m_mapView->currentViewpoint(ViewpointType::CenterAndScale).targetGeometry().extent().center();
-      const GeodeticDistanceResult distanceRes = GeometryEngine::distanceGeodetic(currCenter, m_pointToConvert, LinearUnit::meters(), AngularUnit::degrees(), GeodeticCurveType::Geodesic);
+    const GeodeticDistanceResult distanceRes = GeometryEngine::distanceGeodetic(fromPoint, m_pointToConvert, LinearUnit::meters(), AngularUnit::degrees(), GeodeticCurveType::Geodesic);
 
-      const double headingToPoint = distanceRes.azimuth1();
+    const double headingToPoint = distanceRes.azimuth1();
 
-      relativeHeading = headingToPoint - m_mapView->mapRotation();
-    }
+    double relativeHeading = headingToPoint - viewHeading;
 
     // ensure the relative heading is in the ranage 0-360 degrees
     while (relativeHeading < 0.0)
@@ -635,31 +626,55 @@ QPointF CoordinateConversionController::screenCoordinate() const
     while (relativeHeading > 360.0)
       relativeHeading -= 360.0;
 
-    // place the point on the middle of the edge which roughly matches the direction to the point
-    if (relativeHeading >= 0.0 && relativeHeading < 45.0 ||
-        relativeHeading > 315.0 && relativeHeading < 0.0)
+    // place the point on the screen edge which roughly matches the direction to the point
+    // assign to a screen position based on 45 degree zones
+    if (relativeHeading <= 22.5 || relativeHeading > 337.5)
     {
       // off the top of the screen
       res.setX(screenWidth * 0.5);
       res.setY(padding);
     }
-    else if (relativeHeading >= 0.0 && relativeHeading < 90.0)
+    else if (relativeHeading > 22.5 && relativeHeading <= 67.5)
+    {
+      // off the top-right edge of the screen
+      res.setX(screenWidth - padding);
+      res.setY(padding);
+    }
+    else if (relativeHeading > 67.5 && relativeHeading <= 112.5)
     {
       // off the right edge of the screen
       res.setX(screenWidth - padding);
       res.setY(screenHeight * 0.5);
     }
-    else if (relativeHeading >= 90.0 && relativeHeading < 270)
+    else if (relativeHeading > 112.5 && relativeHeading <= 157.5)
+    {
+      // off the bottom-right of the screen
+      res.setX(screenWidth - padding);
+      res.setY(screenHeight - padding);
+    }
+    else if (relativeHeading > 157.5 && relativeHeading <= 202.5)
     {
       // off the bottom edge of the screen
       res.setX(screenWidth * 0.5);
       res.setY(screenHeight - padding);
     }
-    else
+    else if (relativeHeading > 202.5 && relativeHeading <= 247.5)
     {
-      // off the left edge
+      // off the bottom left of the screen
+      res.setX(padding);
+      res.setY(screenHeight - padding);
+    }
+    else if (relativeHeading > 247.5 && relativeHeading <= 292.5)
+    {
+      // off the left edge of the screen
       res.setX(padding);
       res.setY(screenHeight * 0.5);
+    }
+    else
+    {
+      // off the top-left of the screen
+      res.setX(padding);
+      res.setY(padding);
     }
   }
 
