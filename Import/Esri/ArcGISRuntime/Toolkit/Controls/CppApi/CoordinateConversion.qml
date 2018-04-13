@@ -63,6 +63,12 @@ Item {
     property alias captureMode: coordinateConvController.captureMode
 
     /*!
+      \qmlproperty real backgroundOpacity
+      \brief The opacity of the background rectangle.
+      */
+    property alias backgroundOpacity: backgroundRectangle.opacity
+
+    /*!
       \qmlproperty string inputFormat
       \brief The input format for the tool. This can be in a user defined format or one of:
 
@@ -143,7 +149,6 @@ Item {
             right: parent.right
         }
         color: backgroundColor
-        opacity: coordinateConversionWindow.opacity
     }
 
     Button {
@@ -152,6 +157,7 @@ Item {
             top: expandUpwards ? undefined : parent.top
             left: parent.left
             bottom: expandUpwards ? parent.bottom : undefined
+            margins: 5 * scaleFactor
         }
         height: 32 * scaleFactor
         width: implicitWidth
@@ -183,10 +189,10 @@ Item {
             Repeater {
                 model: coordinateConvController.coordinateFormats
 
-                delegate: Button{
+                delegate: Button {
                     id: inputModeOptionButton
                     text: modelData.toUpperCase()
-                    anchors{
+                    anchors {
                         left: parent.left
                     }
 
@@ -196,7 +202,7 @@ Item {
 
                     contentItem: Text {
                         text: inputModeOptionButton.text.toUpperCase()
-                        font{
+                        font {
                             family: fontFamily
                             pixelSize: coordinateConversionWindow.fontSize * scaleFactor
                         }
@@ -221,6 +227,7 @@ Item {
             left: inputModeButton.right
             verticalCenter: inputModeButton.verticalCenter
             right: menuButton.left
+            leftMargin: 5 * scaleFactor
         }
         height: inputModeButton.height
         verticalAlignment: Text.AlignVCenter
@@ -243,6 +250,7 @@ Item {
             left: inputModeButton.right
             verticalCenter: inputModeButton.verticalCenter
             right: menuButton.left
+            leftMargin: 5 * scaleFactor
         }
 
         placeholderText: "No position"
@@ -265,6 +273,7 @@ Item {
         anchors {
             verticalCenter: inputModeButton.verticalCenter
             right: parent.right
+            margins: 5 * scaleFactor
         }
         height: inputModeButton.height
         width: height
@@ -321,12 +330,12 @@ Item {
             Repeater {
                 model: coordinateConvController.coordinateFormats
 
-                delegate: Button{
+                delegate: Button {
                     id: addConversionOptionButton
                     text: modelData
                     enabled: text !== inputModeButton.text
                     opacity: enabled ? 1.0 : 0.5
-                    anchors{
+                    anchors {
                         left: parent.left
                     }
 
@@ -505,6 +514,7 @@ Item {
                 text: name
                 anchors {
                     left: parent.left
+                    leftMargin: 5 * scaleFactor
                     verticalCenter: parent.verticalCenter
                 }
                 width: inputModeButton.width
@@ -548,6 +558,7 @@ Item {
                 anchors {
                     right: parent.right
                     verticalCenter: parent.verticalCenter
+                    margins: 5 * scaleFactor
                 }
 
                 Image {
