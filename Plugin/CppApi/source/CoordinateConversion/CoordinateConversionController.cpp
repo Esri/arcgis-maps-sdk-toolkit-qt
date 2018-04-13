@@ -1,4 +1,4 @@
-// Copyright 2017 ESRI
+// Copyright 2018 ESRI
 //
 // All rights reserved under the copyright laws of the United States
 // and applicable international laws, treaties, and conventions.
@@ -587,7 +587,12 @@ QPointF CoordinateConversionController::screenCoordinate() const
   // attempt to get the target point as a screen coordinate
   QPointF res(-1.0, -1.0);
   if (m_sceneView)
-    res = m_sceneView->locationToScreen(m_pointToConvert).screenPoint();
+  {
+    const LocationToScreenResult locToScreenRes = m_sceneView->locationToScreen(m_pointToConvert);
+    if (locToScreenRes.visibility() == SceneLocationVisibility::Visible ||
+        locToScreenRes.visibility() == SceneLocationVisibility::HiddenByElevation)
+      res = locToScreenRes.screenPoint();
+  }
   else if (m_mapView)
     res = m_mapView->locationToScreen(m_pointToConvert);
   else
@@ -599,60 +604,78 @@ QPointF CoordinateConversionController::screenCoordinate() const
   const double screenHeight = m_sceneView ? m_sceneView->heightInPixels() - padding : m_mapView->heightInPixels() - padding;
 
   // if we did not recieve a valid screen coordinate
-  if (res.x() == 0.0 && res.y() == 0.0)
+  if (res.x() <= 0.0 && res.y() <= 0.0)
   {
-    // lambda to search for a valid geographic position for the top of the screen (e.g. to account for the horizon)
-    auto findValidTopPoint = [this, screenHeight](double x)
+    // obtain a heading to the off-screen point, relative to the current view rotation
+    const Point fromPoint = m_sceneView ? m_sceneView->currentViewpointCamera().location() :
+                                          m_mapView->currentViewpoint(ViewpointType::CenterAndScale).targetGeometry().extent().center();
+
+    const double viewHeading = m_sceneView ? m_sceneView->currentViewpointCamera().heading() :
+                                             m_mapView->mapRotation();
+
+    const GeodeticDistanceResult distanceRes = GeometryEngine::distanceGeodetic(fromPoint, m_pointToConvert, LinearUnit::meters(), AngularUnit::degrees(), GeodeticCurveType::Geodesic);
+
+    const double headingToPoint = distanceRes.azimuth1();
+
+    double relativeHeading = headingToPoint - viewHeading;
+
+    // ensure the relative heading is in the ranage 0-360 degrees
+    while (relativeHeading < 0.0)
+      relativeHeading += 360.0;
+
+    while (relativeHeading > 360.0)
+      relativeHeading -= 360.0;
+
+    // place the point on the screen edge which roughly matches the direction to the point
+    // assign to a screen position based on 45 degree zones
+    if (relativeHeading <= 22.5 || relativeHeading > 337.5)
     {
-      Point validTopPoint;
-      double lastValidY = screenHeight;
-      double testMinY = 1.0;
-      for (int attempt = 0; attempt < 16; ++attempt)
-      {
-        double testY = testMinY + ((lastValidY - testMinY) * 0.5);
-        auto newRes =  m_sceneView ? m_sceneView->screenToBaseSurface(x, testY) : m_mapView->screenToLocation(x, testY);
-        if (newRes.isValid() && !newRes.isEmpty())
-        {
-          validTopPoint = newRes;
-          if (std::abs(lastValidY - testY) < 1.0)
-            break;
-
-          lastValidY = testY;
-        }
-        else
-        {
-          testMinY = testY;
-        }
-      }
-
-      return validTopPoint;
-    };
-
-    // otherwise build a polyline describing the extent of the screen
-    Point topLeft = m_sceneView ? m_sceneView->screenToBaseSurface(padding, padding) : m_mapView->screenToLocation(padding, padding);
-    if (topLeft.isEmpty() || !topLeft.isValid())
-      topLeft = findValidTopPoint(padding);
-
-    Point topRight = m_sceneView ? m_sceneView->screenToBaseSurface(screenWidth, padding) : m_mapView->screenToLocation(screenWidth, padding);
-    if (topRight.isEmpty() || !topRight.isValid())
-      findValidTopPoint(screenWidth);
-
-    Point lowerLeft = m_sceneView ? m_sceneView->screenToBaseSurface(padding, screenHeight) : m_mapView->screenToLocation(padding, screenHeight);
-    Point lowerRight = m_sceneView ? m_sceneView->screenToBaseSurface(screenWidth, screenHeight) : m_mapView->screenToLocation(screenWidth, screenHeight);
-
-    PolylineBuilder bldr(topLeft.spatialReference());
-    bldr.addPoint(topLeft);
-    bldr.addPoint(topRight);
-    bldr.addPoint(lowerRight);
-    bldr.addPoint(lowerLeft);
-    bldr.addPoint(topLeft);
-    const Polyline viewBoundary = bldr.toPolyline();
-    // obtain the point on the view boundary polyline which is closest to the target point
-    Point projected = GeometryEngine::instance()->project(m_pointToConvert, topLeft.spatialReference());
-    const ProximityResult nearestCoordinateResult = GeometryEngine::instance()->nearestCoordinate(viewBoundary, projected);
-
-    res = m_sceneView ? m_sceneView->locationToScreen(nearestCoordinateResult.coordinate()).screenPoint() :
-                        m_mapView->locationToScreen(nearestCoordinateResult.coordinate());
+      // off the top of the screen
+      res.setX(screenWidth * 0.5);
+      res.setY(padding);
+    }
+    else if (relativeHeading > 22.5 && relativeHeading <= 67.5)
+    {
+      // off the top-right edge of the screen
+      res.setX(screenWidth - padding);
+      res.setY(padding);
+    }
+    else if (relativeHeading > 67.5 && relativeHeading <= 112.5)
+    {
+      // off the right edge of the screen
+      res.setX(screenWidth - padding);
+      res.setY(screenHeight * 0.5);
+    }
+    else if (relativeHeading > 112.5 && relativeHeading <= 157.5)
+    {
+      // off the bottom-right of the screen
+      res.setX(screenWidth - padding);
+      res.setY(screenHeight - padding);
+    }
+    else if (relativeHeading > 157.5 && relativeHeading <= 202.5)
+    {
+      // off the bottom edge of the screen
+      res.setX(screenWidth * 0.5);
+      res.setY(screenHeight - padding);
+    }
+    else if (relativeHeading > 202.5 && relativeHeading <= 247.5)
+    {
+      // off the bottom left of the screen
+      res.setX(padding);
+      res.setY(screenHeight - padding);
+    }
+    else if (relativeHeading > 247.5 && relativeHeading <= 292.5)
+    {
+      // off the left edge of the screen
+      res.setX(padding);
+      res.setY(screenHeight * 0.5);
+    }
+    else
+    {
+      // off the top-left of the screen
+      res.setX(padding);
+      res.setY(padding);
+    }
   }
 
   // ensure the returned point is within the bounds of the visible screen
