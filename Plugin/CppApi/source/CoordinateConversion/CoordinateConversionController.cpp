@@ -595,8 +595,8 @@ QPointF CoordinateConversionController::screenCoordinate() const
 
   // get the extents of the screen (padded to ensure we are within the visible area)
   constexpr double padding = 1.0;
-  const double screenWidth = m_sceneView ? m_sceneView->widthInPixels() - padding : m_mapView->widthInPixels() - padding;
-  const double screenHeight = m_sceneView ? m_sceneView->heightInPixels() - padding : m_mapView->heightInPixels() - padding;
+  const double screenWidth = m_sceneView ? m_sceneView->sceneWidth() - padding : m_mapView->mapWidth() - padding;
+  const double screenHeight = m_sceneView ? m_sceneView->sceneHeight() - padding : m_mapView->mapHeight() - padding;
 
   // if we did not recieve a valid screen coordinate
   if (res.x() == 0.0 && res.y() == 0.0)
