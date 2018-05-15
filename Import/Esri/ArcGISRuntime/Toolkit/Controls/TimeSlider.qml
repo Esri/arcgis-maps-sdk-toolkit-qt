@@ -20,7 +20,7 @@ import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Window 2.0
-import "LeaderPosition.js" as Enums
+import Esri.ArcGISRuntime 100.3
 
 /*!
     \qmltype TimeSlider
@@ -34,18 +34,41 @@ Item {
     id: root
     x: 0
     y: 0
-    width: 800
     height: implicitHeight
     property bool isInstant: instantCB.checked
+    enabled: controller.initialStartStep !== -1
+
+    Rectangle {
+        anchors.centerIn: parent
+        width: parent.width
+        height: 200
+        radius: 8
+        color: "white"
+        opacity: 0.5
+    }
+
+    property alias geoView: controller.geoView
+    TimeSliderController {
+        id: controller
+
+        onInitialStartStepChanged: {
+            console.log("initial start step", initialStartStep);
+            thumb1.x = (initialStartStep * stepSize) + thumb1.halfWidth;
+        }
+
+        onInitialEndStepChanged: {
+            console.log("initial end step", initialEndStep);
+            thumb2.x = (initialEndStep * stepSize) + thumb2.halfWidth;
+        }
+    }
 
     onIsInstantChanged: {
         if (!isInstant && thumb1.x > thumb2.x)
             thumb1.x = thumb2.x;
     }
 
-    property int layerMinX : 100
-    property int layerMaxX : 500
-    property int intervals : 25
+    property alias numberOfSteps : controller.numberOfSteps
+    property int stepSize: bar.width / numberOfSteps
 
     CheckBox {
         id: instantCB
@@ -64,7 +87,7 @@ Item {
             left: parent.left
         }
 
-        text: "June 22, 2008"
+        text: controller.fullExtent ? controller.fullExtent.startTime : ""
     }
 
     Label {
@@ -74,7 +97,23 @@ Item {
             right: parent.right
         }
 
-        text: "November 23, 2008"
+        text: controller.fullExtent ? controller.fullExtent.endTime : ""
+    }
+
+    Button {
+        id: backButton
+        anchors {
+            right: playButton.left
+            bottom: bar.top
+            margins: 16
+        }
+        text: "-"
+
+        onClicked: {
+            thumb1.x -= stepSize;
+            thumb2.x -= stepSize;
+            controller.setStartAndEndIntervals(thumb1.x/stepSize, thumb2.x/stepSize);
+        }
     }
 
     Button {
@@ -96,37 +135,32 @@ Item {
         repeat: true
 
         onTriggered: {
-            thumb2.x = thumb2.x + (bar.width / intervals);
-            thumb1.x = thumb1.x + (bar.width / intervals);
+            thumb1.x += stepSize;
+            thumb2.x += stepSize;
+            controller.setStartAndEndIntervals(thumb1.x/stepSize, thumb2.x/stepSize);
         }
     }
 
-    Rectangle {
-        id: layerExtentFill
-        color: "lightsteelblue"
+    Button {
+        id: forwardsButton
         anchors {
-            verticalCenter: bar.verticalCenter
+            left: playButton.right
+            bottom: bar.top
+            margins: 16
         }
-        height: bar.height
-        x: bar.x + layerMinX
-        width: layerMaxX - layerMinX
-    }
+        text: "+"
 
-    Rectangle {
-        id: currentExtentFill
-        color: "darkblue"
-        anchors {
-            verticalCenter: bar.verticalCenter
-            left: isInstant ? thumb2.horizontalCenter : thumb1.horizontalCenter
-            right: thumb2.horizontalCenter
+        onClicked: {
+            thumb1.x += stepSize;
+            thumb2.x += stepSize;
+            controller.setStartAndEndIntervals(thumb1.x/stepSize, thumb2.x/stepSize);
         }
-        height: bar.height
     }
 
     Rectangle {
         id: bar
         anchors {
-            bottom: thumb1Label.top
+            bottom: parent.bottom
             left: startExtentLabel.horizontalCenter
             right: endExtentLabel.horizontalCenter
         }
@@ -137,119 +171,146 @@ Item {
             color: "black"
             width: 2
         }
-    }
 
-    Row {
-        anchors {
-            top: bar.top
-            left: bar.left
-            right: bar.right
+        Rectangle {
+            id: currentExtentFill
+            color: "darkblue"
+            anchors {
+                verticalCenter: bar.verticalCenter
+                left: isInstant ? thumb2.horizontalCenter : thumb1.horizontalCenter
+                right: thumb2.horizontalCenter
+            }
+            height: bar.height
         }
-        spacing: width / intervals
-        Repeater {
-            model: intervals
-            Rectangle {
-                width: 1; height: bar.height * 2
-                border.width: 1
-                color: "black"
+
+        Row {
+            anchors {
+                top: bar.top
+                left: bar.left
+                right: bar.right
+            }
+            spacing: stepSize
+            Repeater {
+                model: numberOfSteps
+                Rectangle {
+                    width: 1; height: bar.height * 2
+                    border.width: 1
+                    color: "black"
+                }
             }
         }
-    }
 
-    Rectangle {
-        id: thumb1
-        anchors {
-            verticalCenter: bar.verticalCenter
-        }
-        visible: !isInstant
-        height: 32
-        width: height
-        x: bar.x
-        property int halfWidth: width * 0.5
-        property bool inBar: (x + halfWidth >= bar.x) && x <= thumb2.x
+        Rectangle {
+            id: thumb1
+            anchors {
+                verticalCenter: bar.verticalCenter
+            }
+            visible: !isInstant
+            height: 32
+            width: height
 
-        color: "red"
+            property int halfWidth: width * 0.5
+            property bool inBar: (x + halfWidth >= bar.x) && x <= thumb2.x
 
-        Drag.active: thum1DragArea.drag.active
-        Drag.hotSpot.x: halfWidth
-        Drag.hotSpot.y: halfWidth
+            color: "red"
 
-        onXChanged: {
-            if ((x + halfWidth) < bar.x)
-                x = bar.x - halfWidth;
-            else if (x > thumb2.x)
-                x = thumb2.x;
-        }
+            Drag.active: thum1DragArea.drag.active
+            Drag.hotSpot.x: halfWidth
+            Drag.hotSpot.y: halfWidth
 
-        MouseArea {
-            id: thum1DragArea
-            anchors.fill: parent
+            onXChanged: {
+                if (x < 0)
+                    x = 0;
+                var draggedX = x;
+                if (draggedX <0)
+                    draggedX = 0;
+                if (draggedX > thumb2.x)
+                    draggedX = thumb2.x;
 
-            drag.target: parent.inBar ? parent : null
-        }
-    }
+                draggedX = Math.round(x/stepSize) * stepSize;
+                draggedX += halfWidth;
+                controller.setStartInterval(draggedX/stepSize);
+            }
 
-    Rectangle {
-        id: thumb2
-        anchors {
-            verticalCenter: bar.verticalCenter
-        }
-        height: 32
-        width: height
-        x: bar.x
-        property int minX: isInstant ? bar.x - halfWidth : thumb1.x
-        property int halfWidth: width * 0.5
-        property bool inBar: x >= minX && x - halfWidth <= (bar.x + bar.width)
+            MouseArea {
+                id: thum1DragArea
+                anchors.fill: parent
 
-        color: "blue"
-
-        Drag.active: thum2DragArea.drag.active
-        Drag.hotSpot.x: halfWidth
-        Drag.hotSpot.y: halfWidth
-
-        onXChanged: {
-            if (x < minX)
-                x = minX;
-            else if ((x + halfWidth) > (bar.x + bar.width))
-                x = (bar.x + bar.width) - halfWidth;
+                drag.target: parent
+            }
         }
 
-        MouseArea {
-            id: thum2DragArea
-            anchors.fill: parent
+        Rectangle {
+            id: thumb2
+            anchors {
+                verticalCenter: bar.verticalCenter
+            }
+            height: 32
+            width: height
 
-            drag.target: parent.inBar ? parent : null
-        }
-    }
+            property int minX: isInstant ? bar.x - halfWidth : thumb1.x
+            property int halfWidth: width * 0.5
+            property bool inBar: x >= minX && x - halfWidth <= (bar.x + bar.width)
 
-    Label {
-        id: thumb1Label
-        visible: thumb1.visible
-        anchors {
-            bottom: parent.bottom
-            right : thumb1.left
-        }
-        text: "June 27, 2008"
-        horizontalAlignment: Text.AlignHCenter
-    }
+            color: "blue"
 
-    Label {
-        id: thumb2Label
-        visible: !isInstant
-        anchors {
-            bottom: parent.bottom
-            left: thumb2.right
-        }
-        text: "June 27, 2008"
-    }
+            Drag.active: thum2DragArea.drag.active
+            Drag.hotSpot.x: halfWidth
+            Drag.hotSpot.y: halfWidth
 
-    Label {
-        id: thumb2LabelB
-        visible: isInstant
-        anchors {
-            bottom: parent.bottom
-            horizontalCenter: thumb2.horizontalCenter
+            onXChanged: {
+                if (!Drag.active)
+                    return;
+
+                var draggedX = x;
+                if (draggedX < minX)
+                    draggedX = minX;
+                else if ((draggedX + halfWidth) > (bar.x + bar.width))
+                    draggedX = (bar.x + bar.width) - halfWidth;
+
+                draggedX = Math.round(draggedX/stepSize) * stepSize;
+                draggedX += halfWidth;
+                controller.setEndInterval(draggedX/stepSize);
+            }
+
+            MouseArea {
+                id: thum2DragArea
+                anchors.fill: parent
+
+                drag.target: parent.inBar ? parent : null
+            }
         }
-        text: "June 27, 2008"
+
+
+        Label {
+            id: thumb1Label
+            visible: thumb1.visible
+            anchors {
+                bottom: parent.bottom
+                right : thumb1.left
+            }
+            text: controller.currentExtent ? controller.currentExtent.startTime : ""
+            horizontalAlignment: Text.AlignHCenter
+        }
+
+        Label {
+            id: thumb2Label
+            visible: !isInstant
+            anchors {
+                bottom: parent.bottom
+                left: thumb2.right
+            }
+            text: controller.currentExtent ? controller.currentExtent.endTime : ""
+        }
+
+        Label {
+            id: thumb2LabelB
+            visible: isInstant
+            anchors {
+                bottom: parent.bottom
+                horizontalCenter: thumb2.horizontalCenter
+            }
+            text: "June 27, 2008"
+        }
     }
 }
