@@ -32,13 +32,13 @@ Item {
     property bool isMapView: geoView && geoView.objectType === "MapView"
     property var operationalLayers: geoView ? (isMapView ? geoView.map.operationalLayers : geoView.scene.operationalLayers) : null
     property var timeAwareLayers: []
-    property int numberOfSteps: 20
+    property int numberOfSteps: -1
     property TimeValue timeStepInterval
     property int intervalMS: -1
     property TimeExtent fullExtent
     property TimeExtent currentExtent: geoView && geoView.timeExtent ? geoView.timeExtent : fullExtent
-    property int initialStartStep: -1
-    property int initialEndStep:  -1
+    property int startStep: currentExtent && fullExtent ? (currentExtent.startTime.getTime() - fullExtent.startTime.getTime()) / intervalMS : -1
+    property int endStep: currentExtent && fullExtent ? (currentExtent.endTime.getTime() - fullExtent.startTime.getTime()) / intervalMS : -1
 
     function setStartAndEndIntervals(startIndex, endIndex) {
         if (!fullExtent)
@@ -103,18 +103,6 @@ Item {
         }
 
         handleTimeAwareLayers();
-
-        if (!fullExtent || !currentExtent)
-            return;
-
-        var start = fullExtent.startTime.getTime();
-        var end = fullExtent.endTime.getTime();
-
-        var stMs = currentExtent.startTime.getTime() - start;
-        var endMS = currentExtent.endTime.getTime() - start;
-
-        initialStartStep = stMs / intervalMS;
-        initialEndStep = endMS / intervalMS;
     }
 
     function validLayer(layer) {

@@ -35,8 +35,12 @@ Item {
     x: 0
     y: 0
     height: implicitHeight
-    property bool isInstant: instantCB.checked
     enabled: controller.initialStartStep !== -1
+
+    property bool playbackLoop: true
+    property bool playbackReverse: false
+    property bool animateReverse: false
+    property bool needsRestart: false
 
     Rectangle {
         anchors.centerIn: parent
@@ -50,35 +54,10 @@ Item {
     property alias geoView: controller.geoView
     TimeSliderController {
         id: controller
-
-        onInitialStartStepChanged: {
-            console.log("initial start step", initialStartStep);
-            thumb1.x = (initialStartStep * stepSize) + thumb1.halfWidth;
-        }
-
-        onInitialEndStepChanged: {
-            console.log("initial end step", initialEndStep);
-            thumb2.x = (initialEndStep * stepSize) + thumb2.halfWidth;
-        }
-    }
-
-    onIsInstantChanged: {
-        if (!isInstant && thumb1.x > thumb2.x)
-            thumb1.x = thumb2.x;
     }
 
     property alias numberOfSteps : controller.numberOfSteps
-    property int stepSize: bar.width / numberOfSteps
-
-    CheckBox {
-        id: instantCB
-        anchors {
-            top: parent.top
-            right: parent.right
-        }
-        text: "is instant"
-        checked: false
-    }
+    property real stepSize: bar.width / (numberOfSteps -1)
 
     Label {
         id: startExtentLabel
@@ -110,9 +89,8 @@ Item {
         text: "-"
 
         onClicked: {
-            thumb1.x -= stepSize;
-            thumb2.x -= stepSize;
-            controller.setStartAndEndIntervals(thumb1.x/stepSize, thumb2.x/stepSize);
+            controller.setStartAndEndIntervals(Math.max(controller.startStep - 1, 0),
+                                               Math.max(controller.endStep - 1, 0));
         }
     }
 
@@ -135,9 +113,39 @@ Item {
         repeat: true
 
         onTriggered: {
-            thumb1.x += stepSize;
-            thumb2.x += stepSize;
-            controller.setStartAndEndIntervals(thumb1.x/stepSize, thumb2.x/stepSize);
+            var newStart = -1;
+            var newEnd = -1;
+            var atEnd = false;
+
+            if (needsRestart) {
+                newStart = 0;
+                newEnd = controller.endStep - controller.startStep;
+                needsRestart = false;
+                atEnd = newEnd === controller.numberOfSteps -1;
+            } else {
+                var delta = animateReverse ? -1 : 1;
+                newStart = controller.startStep + delta;
+                newEnd = controller.endStep + delta;
+
+                atEnd = newStart === 0 || newEnd === controller.numberOfSteps -1;
+            }
+
+            if (newStart === -1 || newEnd === -1) {
+                playButton.checked = false;
+                return;
+            }
+
+            controller.setStartAndEndIntervals(newStart, newEnd);
+
+            if (!atEnd)
+                return;
+
+            if (!playbackLoop)
+                playButton.checked = false;
+            else if (playbackReverse)
+                animateReverse = !animateReverse;
+            else
+                needsRestart = true;
         }
     }
 
@@ -151,9 +159,8 @@ Item {
         text: "+"
 
         onClicked: {
-            thumb1.x += stepSize;
-            thumb2.x += stepSize;
-            controller.setStartAndEndIntervals(thumb1.x/stepSize, thumb2.x/stepSize);
+            controller.setStartAndEndIntervals(Math.min(controller.startStep + 1, controller.numberOfSteps -1),
+                                               Math.min(controller.endStep + 1, controller.numberOfSteps -1));
         }
     }
 
@@ -172,25 +179,15 @@ Item {
             width: 2
         }
 
-        Rectangle {
-            id: currentExtentFill
-            color: "darkblue"
-            anchors {
-                verticalCenter: bar.verticalCenter
-                left: isInstant ? thumb2.horizontalCenter : thumb1.horizontalCenter
-                right: thumb2.horizontalCenter
-            }
-            height: bar.height
-        }
-
         Row {
             anchors {
                 top: bar.top
                 left: bar.left
                 right: bar.right
             }
-            spacing: stepSize
+            spacing: (bar.width - numberOfSteps) / (numberOfSteps -1)
             Repeater {
+                id: steps
                 model: numberOfSteps
                 Rectangle {
                     width: 1; height: bar.height * 2
@@ -201,116 +198,95 @@ Item {
         }
 
         Rectangle {
-            id: thumb1
+            id: startThumb
+
             anchors {
                 verticalCenter: bar.verticalCenter
             }
-            visible: !isInstant
-            height: 32
-            width: height
 
-            property int halfWidth: width * 0.5
-            property bool inBar: (x + halfWidth >= bar.x) && x <= thumb2.x
+            width: 32
+            height: width
+            radius: width
 
-            color: "red"
+            color: startDrag.drag.active ? "transparent" : "red"
 
-            Drag.active: thum1DragArea.drag.active
-            Drag.hotSpot.x: halfWidth
-            Drag.hotSpot.y: halfWidth
-
-            onXChanged: {
-                if (x < 0)
-                    x = 0;
-                var draggedX = x;
-                if (draggedX <0)
-                    draggedX = 0;
-                if (draggedX > thumb2.x)
-                    draggedX = thumb2.x;
-
-                draggedX = Math.round(x/stepSize) * stepSize;
-                draggedX += halfWidth;
-                controller.setStartInterval(draggedX/stepSize);
-            }
+            x: (controller.startStep * stepSize) - (width * 0.5)
 
             MouseArea {
-                id: thum1DragArea
+                id: startDrag
                 anchors.fill: parent
 
-                drag.target: parent
+                drag.target: startDragProxy
+                drag.axis: Drag.XAxis
+                drag.minimumX: - (startThumb.x + startDragProxy.halfWidth)
+                drag.maximumX: endThumb.x - startThumb.x
+
+                onReleased: {
+                    var barPos = mapToItem(bar, startDragProxy.x + (startDragProxy.halfWidth), startDragProxy.y);
+                    var newStep = barPos.x / stepSize;
+                    startDragProxy.x = 0;
+
+                    controller.setStartInterval(newStep);
+                }
+
+                Rectangle {
+                    id: startDragProxy
+                    property real halfWidth: width * 0.5
+                    visible: startDrag.drag.active
+
+                    width: startThumb.width
+                    height: startThumb.height
+                    radius: startThumb.radius
+
+                    color: "red"
+                }
             }
         }
 
         Rectangle {
-            id: thumb2
+            id: endThumb
+
             anchors {
                 verticalCenter: bar.verticalCenter
             }
-            height: 32
-            width: height
 
-            property int minX: isInstant ? bar.x - halfWidth : thumb1.x
-            property int halfWidth: width * 0.5
-            property bool inBar: x >= minX && x - halfWidth <= (bar.x + bar.width)
+            width: startThumb.width
+            height: width
+            radius: width
 
-            color: "blue"
+            color: endDrag.drag.active ? "transparent" : "red"
 
-            Drag.active: thum2DragArea.drag.active
-            Drag.hotSpot.x: halfWidth
-            Drag.hotSpot.y: halfWidth
-
-            onXChanged: {
-                if (!Drag.active)
-                    return;
-
-                var draggedX = x;
-                if (draggedX < minX)
-                    draggedX = minX;
-                else if ((draggedX + halfWidth) > (bar.x + bar.width))
-                    draggedX = (bar.x + bar.width) - halfWidth;
-
-                draggedX = Math.round(draggedX/stepSize) * stepSize;
-                draggedX += halfWidth;
-                controller.setEndInterval(draggedX/stepSize);
-            }
+            x: (controller.endStep * stepSize) - (width * 0.5)
 
             MouseArea {
-                id: thum2DragArea
+                id: endDrag
                 anchors.fill: parent
 
-                drag.target: parent.inBar ? parent : null
-            }
-        }
+                drag.target: endDragProxy
+                drag.axis: Drag.XAxis
+                drag.minimumX: startThumb.x - endThumb.x
+                drag.maximumX: bar.width - (endThumb.x + endDragProxy.halfWidth)
 
+                onReleased: {
+                    var barPos = mapToItem(bar, endDragProxy.x + (endDragProxy.halfWidth), endDragProxy.y);
+                    var newStep = barPos.x / stepSize;
+                    endDragProxy.x = 0;
 
-        Label {
-            id: thumb1Label
-            visible: thumb1.visible
-            anchors {
-                bottom: parent.bottom
-                right : thumb1.left
-            }
-            text: controller.currentExtent ? controller.currentExtent.startTime : ""
-            horizontalAlignment: Text.AlignHCenter
-        }
+                    controller.setEndInterval(newStep);
+                }
 
-        Label {
-            id: thumb2Label
-            visible: !isInstant
-            anchors {
-                bottom: parent.bottom
-                left: thumb2.right
-            }
-            text: controller.currentExtent ? controller.currentExtent.endTime : ""
-        }
+                Rectangle {
+                    id: endDragProxy
+                    property real halfWidth: width * 0.5
+                    visible: endDrag.drag.active
 
-        Label {
-            id: thumb2LabelB
-            visible: isInstant
-            anchors {
-                bottom: parent.bottom
-                horizontalCenter: thumb2.horizontalCenter
+                    width: endThumb.width
+                    height: endThumb.height
+                    radius: endThumb.radius
+
+                    color: "red"
+                }
             }
-            text: "June 27, 2008"
         }
     }
 }
