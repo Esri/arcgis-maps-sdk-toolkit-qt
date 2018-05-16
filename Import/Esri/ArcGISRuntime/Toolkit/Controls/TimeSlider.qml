@@ -14,12 +14,10 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.4
+import QtQuick 2.6
+import QtQuick.Controls 2.2
 import QtQuick.Window 2.2
 import QtQuick.Layouts 1.1
-import QtQuick.Controls 1.4
-import QtQuick.Controls.Styles 1.4
-import QtQuick.Window 2.0
 import Esri.ArcGISRuntime 100.3
 
 /*!
@@ -32,10 +30,24 @@ import Esri.ArcGISRuntime 100.3
 */
 Item {
     id: root
-    x: 0
-    y: 0
-    height: implicitHeight
-    enabled: controller.initialStartStep !== -1
+    enabled: controller.startStep !== -1
+    clip: true
+    height: backgroundRectangle.height
+
+    property real scaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
+
+    property string fontFamily : "helvetica"
+    property int pixelSize : 12
+    property color backgroundColor: "lightgrey"
+
+    property alias backgroundOpacity: backgroundRectangle.opacity
+
+    property string fullExtentLabelLocale: ""
+    property int fullExtentLabelFormat: Locale.LongFormat
+
+    property string currentExtentLabelLocale: ""
+    property int currentExtentLabelFormat: Locale.LongFormat
+
 
     property bool playbackLoop: true
     property bool playbackReverse: false
@@ -43,12 +55,14 @@ Item {
     property bool needsRestart: false
 
     Rectangle {
-        anchors.centerIn: parent
-        width: parent.width
-        height: 200
-        radius: 8
-        color: "white"
-        opacity: 0.5
+        id: backgroundRectangle
+        anchors{
+            top: playButton.top
+            bottom: slider.bottom
+            left: parent.left
+            right: parent.right
+        }
+        color: backgroundColor
     }
 
     property alias geoView: controller.geoView
@@ -62,29 +76,43 @@ Item {
     Label {
         id: startExtentLabel
         anchors {
-            bottom: bar.top
+            top: parent.top
             left: parent.left
+            margins: 4 * scaleFactor
         }
 
-        text: controller.fullExtent ? controller.fullExtent.startTime : ""
+        font {
+            family: fontFamily
+            pixelSize: root.pixelSize * scaleFactor
+        }
+
+        text: controller.fullExtent ? controller.fullExtent.startTime.toLocaleDateString(Qt.locale(fullExtentLabelLocale), fullExtentLabelFormat)
+                                    : ""
     }
 
     Label {
         id: endExtentLabel
         anchors {
-            bottom: bar.top
+            top: startExtentLabel.top
             right: parent.right
+            margins: 4 * scaleFactor
         }
 
-        text: controller.fullExtent ? controller.fullExtent.endTime : ""
+        text: controller.fullExtent ? controller.fullExtent.endTime.toLocaleDateString(Qt.locale(fullExtentLabelLocale), fullExtentLabelFormat)
+                                    : ""
+
+        font {
+            family: fontFamily
+            pixelSize: root.pixelSize * scaleFactor
+        }
     }
 
     Button {
         id: backButton
         anchors {
             right: playButton.left
-            bottom: bar.top
-            margins: 16
+            top: parent.top
+            margins: 4 * scaleFactor
         }
         text: "-"
 
@@ -97,9 +125,9 @@ Item {
     Button {
         id: playButton
         anchors {
-            horizontalCenter: bar.horizontalCenter
-            bottom: bar.top
-            margins: 16
+            horizontalCenter: slider.horizontalCenter
+            top: parent.top
+            margins: 4 * scaleFactor
         }
 
         text: ">"
@@ -153,8 +181,8 @@ Item {
         id: forwardsButton
         anchors {
             left: playButton.right
-            bottom: bar.top
-            margins: 16
+            top: parent.top
+            margins: 4 * scaleFactor
         }
         text: "+"
 
@@ -164,34 +192,49 @@ Item {
         }
     }
 
-    Rectangle {
-        id: bar
+    Item {
+        id: slider
+
         anchors {
-            bottom: parent.bottom
-            left: startExtentLabel.horizontalCenter
-            right: endExtentLabel.horizontalCenter
+            top: playButton.bottom
+            left: parent.left
+            right: parent.right
+            margins: 4 * scaleFactor
         }
 
-        height: 8
-        color: "transparent"
-        border {
-            color: "black"
-            width: 2
+        height: childrenRect.height
+
+        Rectangle {
+            id: bar
+            anchors {
+                top: slider.top
+                left: slider.left
+                right: slider.right
+            }
+
+            height: 8 * scaleFactor
+            color: "transparent"
+            border {
+                color: "black"
+                width: 1 * scaleFactor
+            }
         }
 
         Row {
+            id: tickMarksRow
             anchors {
-                top: bar.top
-                left: bar.left
-                right: bar.right
+                top: slider.top
+                left: slider.left
+                right: slider.right
             }
-            spacing: (bar.width - numberOfSteps) / (numberOfSteps -1)
+            spacing: (slider.width - numberOfSteps) / (numberOfSteps -1)
             Repeater {
                 id: steps
                 model: numberOfSteps
                 Rectangle {
-                    width: 1; height: bar.height * 2
-                    border.width: 1
+                    width: 1
+                    height: bar.height * 2
+                    border.width: 1 * scaleFactor
                     color: "black"
                 }
             }
@@ -200,11 +243,9 @@ Item {
         Rectangle {
             id: startThumb
 
-            anchors {
-                verticalCenter: bar.verticalCenter
-            }
+            anchors.verticalCenter: bar.verticalCenter
 
-            width: 32
+            width: 16 * scaleFactor
             height: width
             radius: width
 
@@ -246,9 +287,7 @@ Item {
         Rectangle {
             id: endThumb
 
-            anchors {
-                verticalCenter: bar.verticalCenter
-            }
+            anchors.verticalCenter: bar.verticalCenter
 
             width: startThumb.width
             height: width
@@ -287,6 +326,43 @@ Item {
                     color: "red"
                 }
             }
+        }
+
+        Label {
+            id: currentStartLabel
+            visible: !startDrag.drag.active && controller.startStep !== controller.numberOfSteps -1 && controller.startStep !== 0
+            anchors {
+                top: startThumb.bottom
+                right: startThumb.horizontalCenter
+            }
+
+            font {
+                family: fontFamily
+                pixelSize: root.pixelSize * scaleFactor
+            }
+
+            text: controller.currentExtent ? controller.currentExtent.startTime.toLocaleDateString(Qt.locale(currentExtentLabelLocale), currentExtentLabelFormat)
+                                           : ""
+            elide: Text.ElideLeft
+        }
+
+        Label {
+            id: currentEndLabel
+            visible: !endDrag.drag.active && controller.endStep !== controller.numberOfSteps -1 && controller.endStep !== 0
+            anchors {
+                top: endThumb.bottom
+                left: endThumb.horizontalCenter
+            }
+
+            font {
+                family: fontFamily
+                pixelSize: root.pixelSize * scaleFactor
+            }
+
+            text: controller.currentExtent ? controller.currentExtent.endTime.toLocaleDateString(Qt.locale(currentExtentLabelLocale), currentExtentLabelFormat)
+                                           : ""
+            elide: Text.ElideRight
+            horizontalAlignment: Text.AlignRight
         }
     }
 }
