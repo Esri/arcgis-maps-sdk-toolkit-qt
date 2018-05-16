@@ -44,10 +44,14 @@ Item {
 
     property string fullExtentLabelLocale: ""
     property int fullExtentLabelFormat: Locale.LongFormat
+    property alias fullExtentFillColor: bar.color
 
     property string currentExtentLabelLocale: ""
     property int currentExtentLabelFormat: Locale.LongFormat
+    property alias currentExtentFillColor: currentExtentFill.color
 
+    property color thumbFillColor: "white"
+    property color thumbBorderColor: "black"
 
     property bool playbackLoop: true
     property bool playbackReverse: false
@@ -70,8 +74,7 @@ Item {
         id: controller
     }
 
-    property alias numberOfSteps : controller.numberOfSteps
-    property real stepSize: bar.width / (numberOfSteps -1)
+    property real stepSize: bar.width / (controller.numberOfSteps -1)
 
     Label {
         id: startExtentLabel
@@ -199,7 +202,7 @@ Item {
             top: playButton.bottom
             left: parent.left
             right: parent.right
-            margins: 4 * scaleFactor
+            margins: 16 * scaleFactor
         }
 
         height: childrenRect.height
@@ -213,7 +216,7 @@ Item {
             }
 
             height: 8 * scaleFactor
-            color: "transparent"
+            color: "darkgray"
             border {
                 color: "black"
                 width: 1 * scaleFactor
@@ -223,21 +226,38 @@ Item {
         Row {
             id: tickMarksRow
             anchors {
-                top: slider.top
-                left: slider.left
-                right: slider.right
+                top: bar.bottom
+                left: bar.left
+                right: bar.right
             }
-            spacing: (slider.width - numberOfSteps) / (numberOfSteps -1)
+            property int stepsWidth: 1 * scaleFactor
+            spacing: controller.numberOfSteps === -1 ? 0 :
+                                                       (bar.width - (controller.numberOfSteps * stepsWidth)) / (controller.numberOfSteps -1)
+
             Repeater {
                 id: steps
-                model: numberOfSteps
+                model: controller.numberOfSteps === -1 ? 0 : controller.numberOfSteps
                 Rectangle {
-                    width: 1
-                    height: bar.height * 2
-                    border.width: 1 * scaleFactor
+                    width: tickMarksRow.stepsWidth
+                    height: bar.height * 0.5
                     color: "black"
                 }
             }
+        }
+
+        Rectangle {
+            id: currentExtentFill
+
+            visible: !startDrag.drag.active && !endDrag.drag.active
+
+            anchors {
+                top: bar.top
+                bottom: bar.bottom
+                left: startThumb.horizontalCenter
+                right: endThumb.horizontalCenter
+            }
+
+            color: "black"
         }
 
         Rectangle {
@@ -249,7 +269,11 @@ Item {
             height: width
             radius: width
 
-            color: startDrag.drag.active ? "transparent" : "red"
+            color: startDrag.drag.active ? "transparent" : thumbFillColor
+            border {
+                color: startDrag.drag.active ? "transparent" : thumbBorderColor
+                width: 1 * scaleFactor
+            }
 
             x: (controller.startStep * stepSize) - (width * 0.5)
 
@@ -279,7 +303,11 @@ Item {
                     height: startThumb.height
                     radius: startThumb.radius
 
-                    color: "red"
+                    color: thumbFillColor
+                    border {
+                        color: thumbBorderColor
+                        width: 1 * scaleFactor
+                    }
                 }
             }
         }
@@ -293,7 +321,11 @@ Item {
             height: width
             radius: width
 
-            color: endDrag.drag.active ? "transparent" : "red"
+            color: endDrag.drag.active ? "transparent" : thumbFillColor
+            border {
+                color: endDrag.drag.active ? "transparent" : thumbBorderColor
+                width: 1 * scaleFactor
+            }
 
             x: (controller.endStep * stepSize) - (width * 0.5)
 
@@ -323,7 +355,11 @@ Item {
                     height: endThumb.height
                     radius: endThumb.radius
 
-                    color: "red"
+                    color: thumbFillColor
+                    border {
+                        color: thumbBorderColor
+                        width: 1 * scaleFactor
+                    }
                 }
             }
         }
