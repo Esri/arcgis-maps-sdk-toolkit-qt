@@ -36,18 +36,20 @@ Item {
 
     property real scaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
 
+    property color textColor: "black"
     property string fontFamily : "helvetica"
     property int pixelSize : 12
     property color backgroundColor: "lightgrey"
 
     property alias backgroundOpacity: backgroundRectangle.opacity
+    property alias radius: backgroundRectangle.radius
 
     property string fullExtentLabelLocale: ""
     property int fullExtentLabelFormat: Locale.LongFormat
     property alias fullExtentFillColor: bar.color
 
     property string currentExtentLabelLocale: ""
-    property int currentExtentLabelFormat: Locale.LongFormat
+    property int currentExtentLabelFormat: Locale.NarrowFormat
     property alias currentExtentFillColor: currentExtentFill.color
 
     property color thumbFillColor: "white"
@@ -61,7 +63,7 @@ Item {
     Rectangle {
         id: backgroundRectangle
         anchors{
-            top: playButton.top
+            top: parent.top
             bottom: slider.bottom
             left: parent.left
             right: parent.right
@@ -79,7 +81,7 @@ Item {
     Label {
         id: startExtentLabel
         anchors {
-            top: parent.top
+            top: playButton.top
             left: parent.left
             margins: 4 * scaleFactor
         }
@@ -88,7 +90,7 @@ Item {
             family: fontFamily
             pixelSize: root.pixelSize * scaleFactor
         }
-
+        color: textColor
         text: controller.fullExtent ? controller.fullExtent.startTime.toLocaleDateString(Qt.locale(fullExtentLabelLocale), fullExtentLabelFormat)
                                     : ""
     }
@@ -96,11 +98,12 @@ Item {
     Label {
         id: endExtentLabel
         anchors {
-            top: startExtentLabel.top
+            top: playButton.top
             right: parent.right
             margins: 4 * scaleFactor
         }
 
+        color: textColor
         text: controller.fullExtent ? controller.fullExtent.endTime.toLocaleDateString(Qt.locale(fullExtentLabelLocale), fullExtentLabelFormat)
                                     : ""
 
@@ -114,10 +117,35 @@ Item {
         id: backButton
         anchors {
             right: playButton.left
-            top: parent.top
-            margins: 4 * scaleFactor
+            verticalCenter: playButton.verticalCenter
+            margins: 16 * scaleFactor
         }
-        text: "-"
+        height: width
+        width: playButton.width
+
+        text: "<"
+
+        contentItem: Text {
+            text: backButton.text
+            anchors.centerIn: parent
+            font{
+                bold: true
+                family: fontFamily
+                pixelSize: root.pixelSize * scaleFactor
+            }
+            color: textColor
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
+        }
+
+        background: Rectangle {
+            anchors.centerIn: parent
+            width: parent.width
+            height: width
+            radius: width
+            color: fullExtentFillColor
+        }
 
         onClicked: {
             controller.setStartAndEndIntervals(Math.max(controller.startStep - 1, 0),
@@ -132,10 +160,34 @@ Item {
             top: parent.top
             margins: 4 * scaleFactor
         }
+        height: width
+        width: 24 * scaleFactor
 
         text: ">"
         checkable: true
         checked: false
+
+        contentItem: Text {
+            text: playButton.text
+            anchors.centerIn: parent
+            font{
+                bold: true
+                family: fontFamily
+                pixelSize: root.pixelSize * scaleFactor
+            }
+            color: textColor
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
+        }
+
+        background: Rectangle {
+            anchors.centerIn: parent
+            width: parent.width
+            height: width
+            radius: width
+            color: playButton.checked ? backgroundColor : fullExtentFillColor
+        }
     }
 
     Timer {
@@ -184,10 +236,35 @@ Item {
         id: forwardsButton
         anchors {
             left: playButton.right
-            top: parent.top
-            margins: 4 * scaleFactor
+            verticalCenter: playButton.verticalCenter
+            margins: 16 * scaleFactor
         }
+        height: implicitHeight
+        width: playButton.width
+
         text: "+"
+
+        contentItem: Text {
+            text: forwardsButton.text
+            anchors.centerIn: parent
+            font{
+                bold: true
+                family: fontFamily
+                pixelSize: root.pixelSize * scaleFactor
+            }
+            color: textColor
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
+        }
+
+        background: Rectangle {
+            anchors.centerIn: parent
+            width: parent.width
+            height: width
+            radius: width
+            color: fullExtentFillColor
+        }
 
         onClicked: {
             controller.setStartAndEndIntervals(Math.min(controller.startStep + 1, controller.numberOfSteps -1),
@@ -202,10 +279,12 @@ Item {
             top: playButton.bottom
             left: parent.left
             right: parent.right
-            margins: 16 * scaleFactor
+            leftMargin: 16 * scaleFactor
+            rightMargin: 16 * scaleFactor
+            topMargin: 8 * scaleFactor
         }
 
-        height: childrenRect.height
+        height: startThumb.height + currentStartLabel.height
 
         Rectangle {
             id: bar
@@ -219,7 +298,7 @@ Item {
             color: "darkgray"
             border {
                 color: "black"
-                width: 1 * scaleFactor
+                width: 0.5 * scaleFactor
             }
         }
 
@@ -239,8 +318,9 @@ Item {
                 model: controller.numberOfSteps === -1 ? 0 : controller.numberOfSteps
                 Rectangle {
                     width: tickMarksRow.stepsWidth
-                    height: bar.height * 0.5
-                    color: "black"
+                    height: index % 10 === 0 ? bar.height : bar.height * 0.5
+                    color: tickMarksRow.spacing < (5 * scaleFactor) ? (index % 5 === 0 ? "black" : "transparent")
+                                                                    : "black"
                 }
             }
         }
@@ -369,6 +449,7 @@ Item {
             visible: !startDrag.drag.active && controller.startStep !== controller.numberOfSteps -1 && controller.startStep !== 0
             anchors {
                 top: startThumb.bottom
+                left: slider.left
                 right: startThumb.horizontalCenter
             }
 
@@ -377,17 +458,20 @@ Item {
                 pixelSize: root.pixelSize * scaleFactor
             }
 
+            color: textColor
             text: controller.currentExtent ? controller.currentExtent.startTime.toLocaleDateString(Qt.locale(currentExtentLabelLocale), currentExtentLabelFormat)
                                            : ""
             elide: Text.ElideLeft
+            horizontalAlignment: Text.AlignRight
         }
 
         Label {
             id: currentEndLabel
-            visible: !endDrag.drag.active && controller.endStep !== controller.numberOfSteps -1 && controller.endStep !== 0
+            visible: true //!endDrag.drag.active && controller.endStep !== controller.numberOfSteps -1 && controller.endStep !== 0
             anchors {
                 top: endThumb.bottom
                 left: endThumb.horizontalCenter
+                right: slider.right
             }
 
             font {
@@ -395,10 +479,11 @@ Item {
                 pixelSize: root.pixelSize * scaleFactor
             }
 
+            color: textColor
             text: controller.currentExtent ? controller.currentExtent.endTime.toLocaleDateString(Qt.locale(currentExtentLabelLocale), currentExtentLabelFormat)
                                            : ""
             elide: Text.ElideRight
-            horizontalAlignment: Text.AlignRight
+            horizontalAlignment: Text.AlignLeft
         }
     }
 }
