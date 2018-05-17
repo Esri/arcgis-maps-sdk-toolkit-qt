@@ -88,6 +88,7 @@ Item {
         if (!operationalLayers)
             return;
 
+////        operationalLayers = geoView.map.operationalLayers;
         timeAwareLayers = [];
         // Get all the layers that are visible and are participating in time-based filtering
 
@@ -111,7 +112,7 @@ Item {
 
     function handleTimeAwareLayers() {
         timeStepInterval = null;
-        for (var i = 0 ; i < operationalLayers.count; i++) {
+        for (var i = 0 ; i < timeAwareLayers.length; i++) {
             var layer = timeAwareLayers[i];
             if (!layer)
                 continue;

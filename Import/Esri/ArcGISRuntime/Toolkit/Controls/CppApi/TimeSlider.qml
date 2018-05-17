@@ -19,6 +19,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Window 2.2
 import QtQuick.Layouts 1.1
 import Esri.ArcGISRuntime 100.3
+import Esri.Samples 1.0
 
 /*!
     \qmltype TimeSlider
@@ -71,10 +72,13 @@ Item {
         color: backgroundColor
     }
 
-    property alias geoView: controller.geoView
     TimeSliderController {
         id: controller
     }
+
+    property var geoView: null
+
+    onGeoViewChanged: controller.setGeoView(geoView);
 
     property real stepSize: bar.width / (controller.numberOfSteps -1)
 
@@ -91,8 +95,7 @@ Item {
             pixelSize: root.pixelSize * scaleFactor
         }
         color: textColor
-        text: controller.fullExtent ? controller.fullExtent.startTime.toLocaleDateString(Qt.locale(fullExtentLabelLocale), fullExtentLabelFormat)
-                                    : ""
+        text: controller.fullExtentStart.toLocaleDateString(Qt.locale(fullExtentLabelLocale), fullExtentLabelFormat)
     }
 
     Label {
@@ -104,8 +107,7 @@ Item {
         }
 
         color: textColor
-        text: controller.fullExtent ? controller.fullExtent.endTime.toLocaleDateString(Qt.locale(fullExtentLabelLocale), fullExtentLabelFormat)
-                                    : ""
+        text: controller.fullExtentEnd.toLocaleDateString(Qt.locale(fullExtentLabelLocale), fullExtentLabelFormat)
 
         font {
             family: fontFamily
@@ -459,15 +461,15 @@ Item {
             }
 
             color: textColor
-            text: controller.currentExtent ? controller.currentExtent.startTime.toLocaleDateString(Qt.locale(currentExtentLabelLocale), currentExtentLabelFormat)
-                                           : ""
+            text: controller.currentExtentStart.toLocaleDateString(Qt.locale(currentExtentLabelLocale), currentExtentLabelFormat)
+
             elide: Text.ElideLeft
             horizontalAlignment: Text.AlignRight
         }
 
         Label {
             id: currentEndLabel
-            visible: true //!endDrag.drag.active && controller.endStep !== controller.numberOfSteps -1 && controller.endStep !== 0
+            visible: !endDrag.drag.active && controller.endStep !== controller.numberOfSteps -1 && controller.endStep !== 0
             anchors {
                 top: endThumb.bottom
                 left: endThumb.horizontalCenter
@@ -480,8 +482,7 @@ Item {
             }
 
             color: textColor
-            text: controller.currentExtent ? controller.currentExtent.endTime.toLocaleDateString(Qt.locale(currentExtentLabelLocale), currentExtentLabelFormat)
-                                           : ""
+            text: controller.currentExtentEnd.toLocaleDateString(Qt.locale(currentExtentLabelLocale), currentExtentLabelFormat)
             elide: Text.ElideRight
             horizontalAlignment: Text.AlignLeft
         }
