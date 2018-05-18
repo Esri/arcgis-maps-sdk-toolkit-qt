@@ -18,7 +18,6 @@ import QtQuick 2.6
 import QtQuick.Controls 2.2
 import QtQuick.Window 2.2
 import QtQuick.Layouts 1.1
-import Esri.ArcGISRuntime 100.3
 
 /*!
     \qmltype TimeSlider
@@ -38,7 +37,7 @@ Item {
 
     property color textColor: "black"
     property string fontFamily : "helvetica"
-    property int pixelSize : 12
+    property int pixelSizeInDips : 12
     property color backgroundColor: "lightgrey"
 
     property alias backgroundOpacity: backgroundRectangle.opacity
@@ -46,7 +45,7 @@ Item {
 
     property string fullExtentLabelLocale: ""
     property int fullExtentLabelFormat: Locale.LongFormat
-    property alias fullExtentFillColor: bar.color
+    property alias fullExtentFillColor: sliderBar.color
 
     property string currentExtentLabelLocale: ""
     property int currentExtentLabelFormat: Locale.NarrowFormat
@@ -93,7 +92,7 @@ Item {
         }
     }
 
-    property real stepSize: bar.width / (controller.numberOfSteps -1)
+    property real stepSize: sliderBar.width / (controller.numberOfSteps -1)
 
     Label {
         id: startExtentLabel
@@ -105,7 +104,7 @@ Item {
 
         font {
             family: fontFamily
-            pixelSize: root.pixelSize * scaleFactor
+            pixelSize: root.pixelSizeInDips * scaleFactor
         }
         color: textColor
         text: controller.fullExtent ? controller.fullExtent.startTime.toLocaleDateString(Qt.locale(fullExtentLabelLocale), fullExtentLabelFormat)
@@ -126,7 +125,7 @@ Item {
 
         font {
             family: fontFamily
-            pixelSize: root.pixelSize * scaleFactor
+            pixelSize: root.pixelSizeInDips * scaleFactor
         }
     }
 
@@ -150,10 +149,10 @@ Item {
         contentItem: Text {
             text: backButton.text
             anchors.centerIn: parent
-            font{
+            font {
                 bold: true
                 family: fontFamily
-                pixelSize: root.pixelSize * scaleFactor
+                pixelSize: root.pixelSizeInDips * scaleFactor
             }
             color: textColor
             horizontalAlignment: Text.AlignHCenter
@@ -197,10 +196,10 @@ Item {
         contentItem: Text {
             text: playButton.text
             anchors.centerIn: parent
-            font{
+            font {
                 bold: true
                 family: fontFamily
-                pixelSize: root.pixelSize * scaleFactor
+                pixelSize: root.pixelSizeInDips * scaleFactor
             }
             color: textColor
             horizontalAlignment: Text.AlignHCenter
@@ -278,10 +277,10 @@ Item {
         contentItem: Text {
             text: forwardsButton.text
             anchors.centerIn: parent
-            font{
+            font {
                 bold: true
                 family: fontFamily
-                pixelSize: root.pixelSize * scaleFactor
+                pixelSize: root.pixelSizeInDips * scaleFactor
             }
             color: textColor
             horizontalAlignment: Text.AlignHCenter
@@ -331,14 +330,14 @@ Item {
         height: 32 * scaleFactor
 
         background: Rectangle {
-            id: bar
+            id: sliderBar
             anchors {
                 top: slider.top
                 left: slider.left
                 right: slider.right
             }
             height: 8 * scaleFactor
-            radius: 2
+            radius: 2 * scaleFactor
             color: "darkgray"
             border {
                 color: "black"
@@ -352,26 +351,26 @@ Item {
                 width: slider.second.visualPosition * parent.width - x
                 height: parent.height
                 color: "black"
-                radius: 2
+                radius: 2 * scaleFactor
             }
 
             Row {
                 id: tickMarksRow
                 anchors {
-                    top: bar.bottom
-                    left: bar.left
-                    right: bar.right
+                    top: sliderBar.bottom
+                    left: sliderBar.left
+                    right: sliderBar.right
                 }
                 property int stepsWidth: 1 * scaleFactor
                 spacing: controller.numberOfSteps === -1 ? 0 :
-                                                           (bar.width - (controller.numberOfSteps * stepsWidth)) / (controller.numberOfSteps -1)
+                                                           (sliderBar.width - (controller.numberOfSteps * stepsWidth)) / (controller.numberOfSteps -1)
 
                 Repeater {
                     id: steps
                     model: controller.numberOfSteps === -1 ? 0 : controller.numberOfSteps
                     Rectangle {
                         width: tickMarksRow.stepsWidth
-                        height: index % 10 === 0 ? bar.height : bar.height * 0.5
+                        height: index % 10 === 0 ? sliderBar.height : sliderBar.height * 0.5
                         color: tickMarksRow.spacing < (5 * scaleFactor) ? (index % 5 === 0 ? "black" : "transparent")
                                                                         : "black"
                     }
@@ -382,25 +381,25 @@ Item {
                 id: combinedLabel
                 visible: (slider.second.visualPosition - slider.first.visualPosition) < 0.4
                 anchors {
-                    left: bar.left
-                    right: bar.right
+                    left: sliderBar.left
+                    right: sliderBar.right
                 }
-                y: (bar.height * 0.5) + 0.5 * startThumb.height
-                leftPadding: Math.min(currentExtentFill.x, bar.width * 0.5)
+                y: (sliderBar.height * 0.5) + 0.5 * startThumb.height
+                leftPadding: Math.min(currentExtentFill.x, sliderBar.width * 0.5)
 
                 text: controller.startStep === controller.endStep ? currentStartLabel.text
                                                                   : currentStartLabel.text + " - " + currentEndLabel.text
 
                 font {
                     family: fontFamily
-                    pixelSize: root.pixelSize * scaleFactor
+                    pixelSize: root.pixelSizeInDips * scaleFactor
                 }
             }
         }
 
         first.handle: Rectangle {
             id: startThumb
-            anchors.verticalCenter: bar.verticalCenter
+            anchors.verticalCenter: sliderBar.verticalCenter
             x: (slider.first.visualPosition * parent.width) - (width * 0.5)
 
             width: 16 * scaleFactor
@@ -421,7 +420,7 @@ Item {
 
                 font {
                     family: fontFamily
-                    pixelSize: root.pixelSize * scaleFactor
+                    pixelSize: root.pixelSizeInDips * scaleFactor
                 }
 
                 color: textColor
@@ -433,7 +432,7 @@ Item {
 
         second.handle: Rectangle {
             id: endThumb
-            anchors.verticalCenter: bar.verticalCenter
+            anchors.verticalCenter: sliderBar.verticalCenter
             x: (slider.second.visualPosition * parent.width) - (width * 0.5)
             width: 16 * scaleFactor
             height: width
@@ -453,7 +452,7 @@ Item {
 
                 font {
                     family: fontFamily
-                    pixelSize: root.pixelSize * scaleFactor
+                    pixelSize: root.pixelSizeInDips * scaleFactor
                 }
 
                 color: textColor
