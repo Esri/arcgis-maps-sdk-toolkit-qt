@@ -61,10 +61,6 @@ Item {
     property bool animateReverse: false
     property bool needsRestart: false
 
-    function init() {
-        controller.initializeTimeProperties();
-    }
-
     Rectangle {
         id: backgroundRectangle
         anchors{
@@ -480,6 +476,5 @@ Item {
 
             controller.setEndInterval(slider.second.value);
         }
-
     }
 }
