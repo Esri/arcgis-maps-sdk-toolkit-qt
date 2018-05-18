@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2018 Esri
  *
@@ -20,6 +21,7 @@
 #include "Scene.h"
 #include "SceneQuickView.h"
 #include "TimeAware.h"
+#include "TimeValue.h"
 
 #include "TimeSliderController.h"
 #include "ToolResourceProvider.h"
@@ -136,7 +138,6 @@ QString TimeSliderController::toolName() const
 
 void TimeSliderController::setProperties(const QVariantMap&)
 {
-
 }
 
 void TimeSliderController::setGeoView(QObject* geoView)

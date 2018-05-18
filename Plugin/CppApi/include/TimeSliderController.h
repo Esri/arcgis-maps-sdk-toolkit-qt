@@ -17,10 +17,11 @@
 #ifndef TIMESLIDERCONTROLLER_H
 #define TIMESLIDERCONTROLLER_H
 
+// toolkit headers
 #include "AbstractTool.h"
 
+// C++ API headers
 #include "TimeExtent.h"
-#include "TimeValue.h"
 
 namespace Esri
 {
