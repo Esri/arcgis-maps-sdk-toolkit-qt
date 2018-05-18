@@ -88,10 +88,8 @@ Item {
         if (!operationalLayers)
             return;
 
-////        operationalLayers = geoView.map.operationalLayers;
-        timeAwareLayers = [];
         // Get all the layers that are visible and are participating in time-based filtering
-
+        timeAwareLayers = [];
         for (var i = 0 ; i < operationalLayers.count; i++) {
             var layer = operationalLayers.get(i);
             if (layer.loadStatus !== Enums.LoadStatusLoaded && layer.loadStatus !== Enums.LoadStatusFailedToLoad) {
