@@ -146,7 +146,12 @@ Item {
         height: width
         width: playButton.width
 
-        text: "<"
+        Image {
+            fillMode: Image.PreserveAspectFit
+            anchors.fill: parent
+            source: "/images/step.png"
+            rotation: 180
+        }
 
         contentItem: Text {
             text: backButton.text
@@ -186,7 +191,12 @@ Item {
         height: width
         width: 24 * scaleFactor
 
-        text: ">"
+        Image {
+            fillMode: Image.PreserveAspectFit
+            anchors.fill: parent
+            source: "/images/play.png"
+        }
+
         checkable: true
         checked: false
 
@@ -262,10 +272,14 @@ Item {
             verticalCenter: playButton.verticalCenter
             margins: 16 * scaleFactor
         }
-        height: implicitHeight
+        height: width
         width: playButton.width
 
-        text: "+"
+        Image {
+            fillMode: Image.PreserveAspectFit
+            anchors.fill: parent
+            source: "/images/step.png"
+        }
 
         contentItem: Text {
             text: forwardsButton.text
@@ -320,7 +334,7 @@ Item {
         stepSize: 1.0
         snapMode: RangeSlider.SnapAlways
 
-        height: 64 * scaleFactor
+        height: 32 * scaleFactor
 
         background: Rectangle {
             id: bar
