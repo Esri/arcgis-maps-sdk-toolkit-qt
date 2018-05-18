@@ -145,7 +145,7 @@ Item {
         Image {
             fillMode: Image.PreserveAspectFit
             anchors.fill: parent
-            source: "/images/step.png"
+            source: "images/step.png"
             rotation: 180
         }
 
@@ -190,7 +190,7 @@ Item {
         Image {
             fillMode: Image.PreserveAspectFit
             anchors.fill: parent
-            source: "/images/play.png"
+            source: "images/play.png"
         }
 
         checkable: true
@@ -274,7 +274,7 @@ Item {
         Image {
             fillMode: Image.PreserveAspectFit
             anchors.fill: parent
-            source: "/images/step.png"
+            source: "images/step.png"
         }
 
         contentItem: Text {
