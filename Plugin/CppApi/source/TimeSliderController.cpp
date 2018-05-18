@@ -48,26 +48,35 @@ TimeExtent unionTimeExtent(const TimeExtent& timeExtent,
 
 double toMilliseconds(const TimeValue& timeValue)
 {
+  constexpr double millisecondsPerDay = 86400000.0;
+  constexpr double daysPerCentury = 36500.0;
+  constexpr double daysPerDecade = 3650.0;
+  constexpr double daysPerYear = 365.0;
+  constexpr int mothsPerYear = 12;
+  constexpr double millisecondsPerHour = 3600000.0;
+  constexpr double millisecondsPerMinute = 60000.0;
+  constexpr double millisecondsPerSecond = 1000.0;
+
   switch (timeValue.unit())
   {
   case TimeUnit::Centuries:
-      return timeValue.duration() * 86400000 * 36500.0;
+      return timeValue.duration() * millisecondsPerDay * daysPerCentury;
   case TimeUnit::Decades:
-      return timeValue.duration() * 86400000 * 3650.0;
+      return timeValue.duration() * millisecondsPerDay * daysPerDecade;
   case TimeUnit::Years:
-      return timeValue.duration() * 86400000 * 365.0;
+      return timeValue.duration() * millisecondsPerDay * daysPerYear;
   case TimeUnit::Months:
-      return timeValue.duration() * (365.0 / 12) * 86400000;
+      return timeValue.duration() * (daysPerYear / mothsPerYear) * millisecondsPerDay;
   case TimeUnit::Weeks:
       return timeValue.duration() * 604800000;
   case TimeUnit::Days:
-      return timeValue.duration() * 86400000;
+      return timeValue.duration() * millisecondsPerDay;
   case TimeUnit::Hours:
-      return timeValue.duration() * 3600000;
+      return timeValue.duration() * millisecondsPerHour;
   case TimeUnit::Minutes:
-      return timeValue.duration() * 60000;
+      return timeValue.duration() * millisecondsPerMinute;
   case TimeUnit::Seconds:
-      return timeValue.duration() * 1000;
+      return timeValue.duration() * millisecondsPerSecond;
   case TimeUnit::Milliseconds:
       return timeValue.duration();
   default:
