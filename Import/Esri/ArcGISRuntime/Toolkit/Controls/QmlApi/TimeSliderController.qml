@@ -185,6 +185,6 @@ Item {
 
         intervalMS = toMilliseconds(timeValue);
 
-        numberOfSteps = range / intervalMS;
+        numberOfSteps = (range / intervalMS) + 1;
     }
 }

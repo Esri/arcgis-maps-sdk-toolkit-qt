@@ -17,8 +17,9 @@
 #include "ArcGISRuntimeToolkit.h"
 #include <QtQml>
 
-#include "CoordinateConversionController.h"
 #include "ArcGISCompassController.h"
+#include "CoordinateConversionController.h"
+#include "TimeSliderController.h"
 
 namespace Esri
 {
@@ -80,6 +81,7 @@ void ArcGISRuntimeToolkit::registerToolkitTypes(const char* uri)
   // types
   qmlRegisterType<CoordinateConversionController>(uri, s_versionMajor, s_versionMinor, "CoordinateConversionController");
   qmlRegisterType<ArcGISCompassController>(uri, s_versionMajor, s_versionMinor, "ArcGISCompassController");
+  qmlRegisterType<TimeSliderController>(uri, s_versionMajor, s_versionMinor, "TimeSliderController");
 }
 
 } // Toolkit

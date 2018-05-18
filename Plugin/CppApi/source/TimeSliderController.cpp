@@ -219,7 +219,7 @@ void TimeSliderController::initializeTimeProperties()
 
   m_intervalMS = toMilliseconds(timeStepInterval);
 
-  setNumberOfSteps(range / m_intervalMS);
+  setNumberOfSteps((range / m_intervalMS) + 1);
 
   calculateStepPositions();
   emit currentTimeExtentChanged();
@@ -308,6 +308,24 @@ void TimeSliderController::setEndInterval(int intervalIndex)
   const auto newEnd = QDateTime::fromMSecsSinceEpoch(start + (intervalIndex * m_intervalMS));
 
   auto newExtent = TimeExtent(currentExtentStart(), newEnd);
+  if (m_sceneView)
+    m_sceneView->setTimeExtent(newExtent);
+  else if (m_mapView)
+    m_mapView->setTimeExtent(newExtent);
+
+  calculateStepPositions();
+}
+
+void TimeSliderController::setStartAndEndIntervals(int startIndex, int endIndex)
+{
+  if (m_fullTimeExtent.isEmpty())
+      return;
+
+  const auto start = m_fullTimeExtent.startTime().toMSecsSinceEpoch();
+  const auto newStart = QDateTime::fromMSecsSinceEpoch(start + (startIndex * m_intervalMS));
+  const auto newEnd = QDateTime::fromMSecsSinceEpoch(start + (endIndex * m_intervalMS));
+
+  auto newExtent = TimeExtent(newStart, newEnd);
   if (m_sceneView)
     m_sceneView->setTimeExtent(newExtent);
   else if (m_mapView)

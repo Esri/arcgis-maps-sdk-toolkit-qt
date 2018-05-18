@@ -79,6 +79,7 @@ public:
 
   Q_INVOKABLE void setStartInterval(int intervalIndex);
   Q_INVOKABLE void setEndInterval(int intervalIndex);
+  Q_INVOKABLE void setStartAndEndIntervals(int startIndex, int endIndex);
 
 private slots:
   void onOperationalLayersChanged();

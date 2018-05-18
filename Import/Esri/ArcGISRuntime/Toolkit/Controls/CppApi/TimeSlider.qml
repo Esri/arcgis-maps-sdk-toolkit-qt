@@ -19,7 +19,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Window 2.2
 import QtQuick.Layouts 1.1
 import Esri.ArcGISRuntime 100.3
-import Esri.Samples 1.0
+import Esri.ArcGISRuntime.Toolkit.CppApi 100.3
 
 /*!
     \qmltype TimeSlider
@@ -61,6 +61,10 @@ Item {
     property bool animateReverse: false
     property bool needsRestart: false
 
+    function init() {
+        controller.initializeTimeProperties();
+    }
+
     Rectangle {
         id: backgroundRectangle
         anchors{
@@ -72,13 +76,29 @@ Item {
         color: backgroundColor
     }
 
+    property var geoView: null
+    onGeoViewChanged: controller.setGeoView(geoView);
+
     TimeSliderController {
         id: controller
+
+        onStartStepChanged: {
+            if (startStep < 0 || numberOfSteps === -1)
+                return;
+
+            if (slider.first.value !== startStep)
+                slider.setValues(startStep, endStep);
+        }
+
+        onEndStepChanged: {
+            if (endStep < 0 || numberOfSteps === -1)
+                return;
+
+            if (slider.second.value !== endStep) {
+                slider.setValues(startStep, endStep);
+            }
+        }
     }
-
-    property var geoView: null
-
-    onGeoViewChanged: controller.setGeoView(geoView);
 
     property real stepSize: bar.width / (controller.numberOfSteps -1)
 
@@ -96,6 +116,7 @@ Item {
         }
         color: textColor
         text: controller.fullExtentStart.toLocaleDateString(Qt.locale(fullExtentLabelLocale), fullExtentLabelFormat)
+
     }
 
     Label {
@@ -274,7 +295,7 @@ Item {
         }
     }
 
-    Item {
+    RangeSlider {
         id: slider
 
         anchors {
@@ -286,205 +307,165 @@ Item {
             topMargin: 8 * scaleFactor
         }
 
-        height: startThumb.height + currentStartLabel.height
+        from: 0
+        to: controller.numberOfSteps
 
-        Rectangle {
+        onToChanged: {
+            if (to === -1)
+                return;
+
+            setValues(controller.startStep, controller.endStep);
+        }
+
+        stepSize: 1.0
+        snapMode: RangeSlider.SnapAlways
+
+        height: 64 * scaleFactor
+
+        background: Rectangle {
             id: bar
             anchors {
                 top: slider.top
                 left: slider.left
                 right: slider.right
             }
-
             height: 8 * scaleFactor
+            radius: 2
             color: "darkgray"
             border {
                 color: "black"
                 width: 0.5 * scaleFactor
             }
-        }
 
-        Row {
-            id: tickMarksRow
-            anchors {
-                top: bar.bottom
-                left: bar.left
-                right: bar.right
+            Rectangle {
+                id: currentExtentFill
+                anchors.top: parent.top
+                x: slider.first.visualPosition * parent.width
+                width: slider.second.visualPosition * parent.width - x
+                height: parent.height
+                color: "black"
+                radius: 2
             }
-            property int stepsWidth: 1 * scaleFactor
-            spacing: controller.numberOfSteps === -1 ? 0 :
-                                                       (bar.width - (controller.numberOfSteps * stepsWidth)) / (controller.numberOfSteps -1)
 
-            Repeater {
-                id: steps
-                model: controller.numberOfSteps === -1 ? 0 : controller.numberOfSteps
-                Rectangle {
-                    width: tickMarksRow.stepsWidth
-                    height: index % 10 === 0 ? bar.height : bar.height * 0.5
-                    color: tickMarksRow.spacing < (5 * scaleFactor) ? (index % 5 === 0 ? "black" : "transparent")
-                                                                    : "black"
+            Row {
+                id: tickMarksRow
+                anchors {
+                    top: bar.bottom
+                    left: bar.left
+                    right: bar.right
+                }
+                property int stepsWidth: 1 * scaleFactor
+                spacing: controller.numberOfSteps === -1 ? 0 :
+                                                           (bar.width - (controller.numberOfSteps * stepsWidth)) / (controller.numberOfSteps -1)
+
+                Repeater {
+                    id: steps
+                    model: controller.numberOfSteps === -1 ? 0 : controller.numberOfSteps
+                    Rectangle {
+                        width: tickMarksRow.stepsWidth
+                        height: index % 10 === 0 ? bar.height : bar.height * 0.5
+                        color: tickMarksRow.spacing < (5 * scaleFactor) ? (index % 5 === 0 ? "black" : "transparent")
+                                                                        : "black"
+                    }
+                }
+            }
+
+            Label {
+                id: combinedLabel
+                visible: (slider.second.visualPosition - slider.first.visualPosition) < 0.4
+                anchors {
+                    left: bar.left
+                    right: bar.right
+                }
+                y: (bar.height * 0.5) + 0.5 * startThumb.height
+                leftPadding: Math.min(currentExtentFill.x, bar.width * 0.5)
+
+                text: controller.startStep === controller.endStep ? currentStartLabel.text
+                                                                  : currentStartLabel.text + " - " + currentEndLabel.text
+
+                font {
+                    family: fontFamily
+                    pixelSize: root.pixelSize * scaleFactor
                 }
             }
         }
 
-        Rectangle {
-            id: currentExtentFill
-
-            visible: !startDrag.drag.active && !endDrag.drag.active
-
-            anchors {
-                top: bar.top
-                bottom: bar.bottom
-                left: startThumb.horizontalCenter
-                right: endThumb.horizontalCenter
-            }
-
-            color: "black"
-        }
-
-        Rectangle {
+        first.handle: Rectangle {
             id: startThumb
-
             anchors.verticalCenter: bar.verticalCenter
+            x: (slider.first.visualPosition * parent.width) - (width * 0.5)
 
             width: 16 * scaleFactor
             height: width
             radius: width
+            color: thumbFillColor
+            border.color: thumbBorderColor
 
-            color: startDrag.drag.active ? "transparent" : thumbFillColor
-            border {
-                color: startDrag.drag.active ? "transparent" : thumbBorderColor
-                width: 1 * scaleFactor
-            }
-
-            x: (controller.startStep * stepSize) - (width * 0.5)
-
-            MouseArea {
-                id: startDrag
-                anchors.fill: parent
-
-                drag.target: startDragProxy
-                drag.axis: Drag.XAxis
-                drag.minimumX: - (startThumb.x + startDragProxy.halfWidth)
-                drag.maximumX: endThumb.x - startThumb.x
-
-                onReleased: {
-                    var barPos = mapToItem(bar, startDragProxy.x + (startDragProxy.halfWidth), startDragProxy.y);
-                    var newStep = barPos.x / stepSize;
-                    startDragProxy.x = 0;
-
-                    controller.setStartInterval(newStep);
+            Label {
+                id: currentStartLabel
+                visible: !combinedLabel.visible && controller.startStep !== controller.numberOfSteps -1 && controller.startStep !== 0
+                anchors {
+                    top: startThumb.bottom
+                    horizontalCenter: startThumb.horizontalCenter
                 }
 
-                Rectangle {
-                    id: startDragProxy
-                    property real halfWidth: width * 0.5
-                    visible: startDrag.drag.active
+                leftPadding: (slider.width * slider.first.visualPosition) < (48 * scaleFactor) ? 48 * scaleFactor : 0
 
-                    width: startThumb.width
-                    height: startThumb.height
-                    radius: startThumb.radius
-
-                    color: thumbFillColor
-                    border {
-                        color: thumbBorderColor
-                        width: 1 * scaleFactor
-                    }
+                font {
+                    family: fontFamily
+                    pixelSize: root.pixelSize * scaleFactor
                 }
+
+                color: textColor
+                text: controller.currentExtentStart.toLocaleDateString(Qt.locale(currentExtentLabelLocale), currentExtentLabelFormat)
+                elide: Text.ElideLeft
             }
         }
 
-        Rectangle {
+        second.handle: Rectangle {
             id: endThumb
-
             anchors.verticalCenter: bar.verticalCenter
-
-            width: startThumb.width
+            x: (slider.second.visualPosition * parent.width) - (width * 0.5)
+            width: 16 * scaleFactor
             height: width
             radius: width
+            color: thumbFillColor
+            border.color: thumbBorderColor
 
-            color: endDrag.drag.active ? "transparent" : thumbFillColor
-            border {
-                color: endDrag.drag.active ? "transparent" : thumbBorderColor
-                width: 1 * scaleFactor
-            }
-
-            x: (controller.endStep * stepSize) - (width * 0.5)
-
-            MouseArea {
-                id: endDrag
-                anchors.fill: parent
-
-                drag.target: endDragProxy
-                drag.axis: Drag.XAxis
-                drag.minimumX: startThumb.x - endThumb.x
-                drag.maximumX: bar.width - (endThumb.x + endDragProxy.halfWidth)
-
-                onReleased: {
-                    var barPos = mapToItem(bar, endDragProxy.x + (endDragProxy.halfWidth), endDragProxy.y);
-                    var newStep = barPos.x / stepSize;
-                    endDragProxy.x = 0;
-
-                    controller.setEndInterval(newStep);
+            Label {
+                id: currentEndLabel
+                visible: !combinedLabel.visible && (controller.endStep < (controller.numberOfSteps -1)) && controller.endStep !== 0
+                anchors {
+                    top: endThumb.bottom
+                    horizontalCenter: endThumb.horizontalCenter
                 }
 
-                Rectangle {
-                    id: endDragProxy
-                    property real halfWidth: width * 0.5
-                    visible: endDrag.drag.active
+                rightPadding: (slider.width * slider.second.visualPosition) > slider.width - (48 * scaleFactor) ? 48 * scaleFactor : 0
 
-                    width: endThumb.width
-                    height: endThumb.height
-                    radius: endThumb.radius
-
-                    color: thumbFillColor
-                    border {
-                        color: thumbBorderColor
-                        width: 1 * scaleFactor
-                    }
+                font {
+                    family: fontFamily
+                    pixelSize: root.pixelSize * scaleFactor
                 }
+
+                color: textColor
+                text:  controller.currentExtentEnd.toLocaleDateString(Qt.locale(currentExtentLabelLocale), currentExtentLabelFormat)
+                elide: Text.ElideLeft
             }
         }
 
-        Label {
-            id: currentStartLabel
-            visible: !startDrag.drag.active && controller.startStep !== controller.numberOfSteps -1 && controller.startStep !== 0
-            anchors {
-                top: startThumb.bottom
-                left: slider.left
-                right: startThumb.horizontalCenter
-            }
+        first.onValueChanged: {
+            if (controller.startStep === slider.first.value)
+                return;
 
-            font {
-                family: fontFamily
-                pixelSize: root.pixelSize * scaleFactor
-            }
-
-            color: textColor
-            text: controller.currentExtentStart.toLocaleDateString(Qt.locale(currentExtentLabelLocale), currentExtentLabelFormat)
-
-            elide: Text.ElideLeft
-            horizontalAlignment: Text.AlignRight
+            controller.setStartInterval(slider.first.value);
         }
 
-        Label {
-            id: currentEndLabel
-            visible: !endDrag.drag.active && controller.endStep !== controller.numberOfSteps -1 && controller.endStep !== 0
-            anchors {
-                top: endThumb.bottom
-                left: endThumb.horizontalCenter
-                right: slider.right
-            }
+        second.onValueChanged: {
+            if (controller.endStep === slider.second.value)
+                return;
 
-            font {
-                family: fontFamily
-                pixelSize: root.pixelSize * scaleFactor
-            }
-
-            color: textColor
-            text: controller.currentExtentEnd.toLocaleDateString(Qt.locale(currentExtentLabelLocale), currentExtentLabelFormat)
-            elide: Text.ElideRight
-            horizontalAlignment: Text.AlignLeft
+            controller.setEndInterval(slider.second.value);
         }
+
     }
 }
