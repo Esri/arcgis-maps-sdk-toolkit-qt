@@ -111,7 +111,7 @@ bool operator == (const TimeExtent& timeExtent, const TimeExtent& otherTimeExten
 /*!
    \brief The constructor that accepts an optional \a parent object.
  */
-TimeSliderController::TimeSliderController(QObject *parent):
+TimeSliderController::TimeSliderController(QObject* parent):
   AbstractTool(parent)
 {
   ToolManager::instance().addTool(this);
@@ -181,27 +181,27 @@ void TimeSliderController::initializeTimeProperties()
   QList<TimeAware*> timeAwareLayers;
   for (int i = 0 ; i < m_operationalLayers->rowCount(); i++)
   {
-      auto layer = m_operationalLayers->at(i);
-      if (!layer)
-        continue;
+    auto layer = m_operationalLayers->at(i);
+    if (!layer)
+      continue;
 
-      auto timeAwareLayer = dynamic_cast<TimeAware*>(layer);
-      if (!timeAwareLayer)
-        continue;
+    auto timeAwareLayer = dynamic_cast<TimeAware*>(layer);
+    if (!timeAwareLayer)
+      continue;
 
-      if (layer->loadStatus() != LoadStatus::Loaded && layer->loadStatus() != LoadStatus::FailedToLoad)
-      {
-        connect(layer, &Layer::doneLoading, this, &TimeSliderController::onOperationalLayersChanged);
-        continue;
-      }
+    if (layer->loadStatus() != LoadStatus::Loaded && layer->loadStatus() != LoadStatus::FailedToLoad)
+    {
+      connect(layer, &Layer::doneLoading, this, &TimeSliderController::onOperationalLayersChanged);
+      continue;
+    }
 
-      if (!timeAwareLayer->isTimeFilteringEnabled())
-        continue;
+    if (!timeAwareLayer->isTimeFilteringEnabled())
+      continue;
 
-      if (!layer->isVisible())
-        continue;
+    if (!layer->isVisible())
+      continue;
 
-      timeAwareLayers.append(timeAwareLayer);
+    timeAwareLayers.append(timeAwareLayer);
   }
 
   if (timeAwareLayers.empty())
@@ -311,7 +311,7 @@ void TimeSliderController::setStartInterval(int intervalIndex)
 void TimeSliderController::setEndInterval(int intervalIndex)
 {
   if (m_fullTimeExtent.isEmpty())
-      return;
+    return;
 
   const auto start = m_fullTimeExtent.startTime().toMSecsSinceEpoch();
   const auto newEnd = QDateTime::fromMSecsSinceEpoch(start + (intervalIndex * m_intervalMS));
@@ -328,7 +328,7 @@ void TimeSliderController::setEndInterval(int intervalIndex)
 void TimeSliderController::setStartAndEndIntervals(int startIndex, int endIndex)
 {
   if (m_fullTimeExtent.isEmpty())
-      return;
+    return;
 
   const auto start = m_fullTimeExtent.startTime().toMSecsSinceEpoch();
   const auto newStart = QDateTime::fromMSecsSinceEpoch(start + (startIndex * m_intervalMS));
@@ -410,8 +410,6 @@ void TimeSliderController::onSceneChanged()
   connect(m_operationalLayers, &LayerListModel::layerRemoved, this, &TimeSliderController::onOperationalLayersChanged);
   initializeTimeProperties();
 }
-
-
 
 } // Toolkit
 } // ArcGISRuntime
