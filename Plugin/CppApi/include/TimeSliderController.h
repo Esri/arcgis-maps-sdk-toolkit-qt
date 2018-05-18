@@ -35,7 +35,7 @@ class SceneQuickView;
 namespace Toolkit
 {
 
-class TimeSliderController : public AbstractTool
+class TOOLKIT_EXPORT TimeSliderController : public AbstractTool
 {
   Q_OBJECT
 
