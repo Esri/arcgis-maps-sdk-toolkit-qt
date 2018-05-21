@@ -36,7 +36,9 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
-
+/*!
+ \internal
+ */
 TimeExtent unionTimeExtent(const TimeExtent& timeExtent,
                            const TimeExtent& otherTimeExtent)
 {
@@ -49,6 +51,9 @@ TimeExtent unionTimeExtent(const TimeExtent& timeExtent,
   return TimeExtent(startTime, endTime);
 }
 
+/*!
+ \internal
+ */
 TimeUnit toTimeUnit(double milisecondsRange)
 {
   constexpr double daysPerYear = 365.0;
@@ -70,6 +75,9 @@ TimeUnit toTimeUnit(double milisecondsRange)
     return TimeUnit::Years;
 }
 
+/*!
+ \internal
+ */
 double toMilliseconds(const TimeValue& timeValue)
 {
   constexpr double millisecondsPerDay = 86400000.0;
@@ -108,6 +116,9 @@ double toMilliseconds(const TimeValue& timeValue)
   }
 }
 
+/*!
+ \internal
+ */
 bool operator >(const TimeValue& timeValue, const TimeValue& otherTimeValue)
 {
   if (timeValue.unit() == otherTimeValue.unit())
@@ -116,6 +127,9 @@ bool operator >(const TimeValue& timeValue, const TimeValue& otherTimeValue)
     return toMilliseconds(timeValue) > toMilliseconds(otherTimeValue);
 }
 
+/*!
+ \internal
+ */
 bool operator == (const TimeExtent& timeExtent, const TimeExtent& otherTimeExtent)
 {
   return timeExtent.startTime() == otherTimeExtent.startTime()
