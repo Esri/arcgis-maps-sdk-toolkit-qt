@@ -187,7 +187,7 @@ Item {
         Image {
             fillMode: Image.PreserveAspectFit
             anchors.fill: parent
-            source: "images/play.png"
+            source: playButton.checked ? "images/pause.png" : "images/play.png"
         }
 
         checkable: true
