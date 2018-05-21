@@ -36,6 +36,7 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
+
 TimeExtent unionTimeExtent(const TimeExtent& timeExtent,
                            const TimeExtent& otherTimeExtent)
 {
@@ -125,8 +126,13 @@ bool operator == (const TimeExtent& timeExtent, const TimeExtent& otherTimeExten
   \class Esri::ArcGISRuntime::Toolkit::TimeSliderController
   \inmodule ArcGISQtToolkit
   \ingroup ToolTimeSlider
-  \brief The controller for the Time Slider tool.
   \since Esri::ArcGISRuntime 100.3
+
+  \brief The controller for the Time Slider tool.
+
+  The controller presents the temporal range of the data as a number of steps.
+  These steps allow the temporal extent to be set and animated by stepping through
+  the range.
 
   \sa {Time Slider Tool}
  */
@@ -152,20 +158,27 @@ TimeSliderController::~TimeSliderController()
 {
 }
 
+/*!
+   \brief The name of this tool \c "TimeSlider".
+ */
 QString TimeSliderController::toolName() const
 {
   return "TimeSlider";
 }
 
-void TimeSliderController::setProperties(const QVariantMap&)
-{
-}
+/*!
+ \brief Sets the GeoView for this tool to \a geoView.
 
+ The view should be either a MapView or a SceneView.
+ */
 void TimeSliderController::setGeoView(QObject* geoView)
 {
   setGeoViewInternal(dynamic_cast<GeoView*>(geoView));
 }
 
+/*!
+ \internal
+ */
 bool TimeSliderController::setGeoViewInternal(GeoView* geoView)
 {
   if (geoView == nullptr)
@@ -194,6 +207,9 @@ bool TimeSliderController::setGeoViewInternal(GeoView* geoView)
   return true;
 }
 
+/*!
+ \internal
+ */
 void TimeSliderController::initializeTimeProperties()
 {
   if (!m_operationalLayers)
@@ -262,6 +278,9 @@ void TimeSliderController::initializeTimeProperties()
   emit currentTimeExtentChanged();
 }
 
+/*!
+ \internal
+ */
 void TimeSliderController::setNumberOfSteps(int numberOfSteps)
 {
   if (numberOfSteps == m_numberOfSteps)
@@ -271,21 +290,33 @@ void TimeSliderController::setNumberOfSteps(int numberOfSteps)
   emit numberOfStepsChanged();
 }
 
+/*!
+ \brief Returns the full time extent of the data in the current geoView.
+ */
 TimeExtent TimeSliderController::fullTimeExtent() const
 {
   return m_fullTimeExtent;
 }
 
+/*!
+ \brief Returns the start time of the data in the current geoView.
+ */
 QDateTime TimeSliderController::fullExtentStart() const
 {
   return m_fullTimeExtent.startTime();
 }
 
+/*!
+ \brief Returns the end time of the data in the current geoView.
+ */
 QDateTime TimeSliderController::fullExtentEnd() const
 {
   return m_fullTimeExtent.endTime();
 }
 
+/*!
+ \internal
+ */
 void TimeSliderController::setFullTimeExtent(const TimeExtent& fullTimeExtent)
 {
   if (fullTimeExtent == m_fullTimeExtent)
@@ -295,6 +326,9 @@ void TimeSliderController::setFullTimeExtent(const TimeExtent& fullTimeExtent)
   emit fullTimeExtentChanged();
 }
 
+/*!
+ \brief Returns the current time extent of the data in the current geoView.
+ */
 TimeExtent TimeSliderController::currentTimeExtent() const
 {
   const auto geoViewExtent = m_sceneView ? m_sceneView->timeExtent()
@@ -304,21 +338,38 @@ TimeExtent TimeSliderController::currentTimeExtent() const
   return geoViewExtent.isEmpty() ? m_fullTimeExtent : geoViewExtent;
 }
 
+/*!
+ \brief Returns the start time of the current temporal extent of the geoView.
+ */
 QDateTime TimeSliderController::currentExtentStart() const
 {
   return currentTimeExtent().startTime();
 }
 
+/*!
+ \brief Returns the end time of the current temporal extent of the geoView.
+ */
 QDateTime TimeSliderController::currentExtentEnd() const
 {
   return currentTimeExtent().endTime();
 }
 
+/*!
+ \brief Returns the end step of the current time extent.
+
+ \sa startStep
+ \sa numberOfSteps
+ */
 int TimeSliderController::endStep() const
 {
   return m_endStep;
 }
 
+/*!
+ \brief Sets the start step index of the current time extent to \a intervalIndex.
+
+ \sa numberOfSteps
+ */
 void TimeSliderController::setStartInterval(int intervalIndex)
 {
   if (m_fullTimeExtent.isEmpty())
@@ -336,6 +387,11 @@ void TimeSliderController::setStartInterval(int intervalIndex)
   calculateStepPositions();
 }
 
+/*!
+ \brief Sets the end step index of the current time extent to \a intervalIndex.
+
+ \sa numberOfSteps
+ */
 void TimeSliderController::setEndInterval(int intervalIndex)
 {
   if (m_fullTimeExtent.isEmpty())
@@ -353,6 +409,11 @@ void TimeSliderController::setEndInterval(int intervalIndex)
   calculateStepPositions();
 }
 
+/*!
+ \brief Sets the start and end steps of the current time extent to \a startIndex and \a endIndex.
+
+ \sa numberOfSteps
+ */
 void TimeSliderController::setStartAndEndIntervals(int startIndex, int endIndex)
 {
   if (m_fullTimeExtent.isEmpty())
@@ -371,6 +432,9 @@ void TimeSliderController::setStartAndEndIntervals(int startIndex, int endIndex)
   calculateStepPositions();
 }
 
+/*!
+ \internal
+ */
 void TimeSliderController::setEndStep(int endStep)
 {
   if (m_endStep == endStep)
@@ -380,6 +444,9 @@ void TimeSliderController::setEndStep(int endStep)
   emit endStepChanged();
 }
 
+/*!
+ \internal
+ */
 void TimeSliderController::calculateStepPositions()
 {
   if (m_fullTimeExtent.isEmpty())
@@ -393,11 +460,20 @@ void TimeSliderController::calculateStepPositions()
   emit endStepChanged();
 }
 
+/*!
+ \brief Returns the start step of the current time extent.
+
+ \sa endStep
+ \sa numberOfSteps
+ */
 int TimeSliderController::startStep() const
 {
   return m_startStep;
 }
 
+/*!
+ \internal
+ */
 void TimeSliderController::setStartStep(int startStep)
 {
   if (m_startStep == startStep)
@@ -407,16 +483,31 @@ void TimeSliderController::setStartStep(int startStep)
   emit startStepChanged();
 }
 
+/*!
+ \brief Returns the total number of required steps to cover the full time extent.
+
+ This figure is based on the full temporal range of the data in the geoView
+ and the time intervals used by the data.
+
+ \sa endStep
+ \sa startStep
+ */
 int TimeSliderController::numberOfSteps() const
 {
   return m_numberOfSteps;
 }
 
+/*!
+ \internal
+ */
 void TimeSliderController::onOperationalLayersChanged()
 {
   initializeTimeProperties();
 }
 
+/*!
+ \internal
+ */
 void TimeSliderController::onMapChanged()
 {
   if (!m_mapView->map())
@@ -428,6 +519,9 @@ void TimeSliderController::onMapChanged()
   initializeTimeProperties();
 }
 
+/*!
+ \internal
+ */
 void TimeSliderController::onSceneChanged()
 {
   if (!m_sceneView->arcGISScene())
@@ -438,6 +532,31 @@ void TimeSliderController::onSceneChanged()
   connect(m_operationalLayers, &LayerListModel::layerRemoved, this, &TimeSliderController::onOperationalLayersChanged);
   initializeTimeProperties();
 }
+
+/*!
+  \fn void TimeSliderController::numberOfStepsChanged()
+  \brief Signal emitted when the \l numberOfSteps property changes.
+ */
+
+/*!
+  \fn void TimeSliderController::fullTimeExtentChanged()
+  \brief Signal emitted when the \l fullTimeExtent property changes.
+ */
+
+/*!
+  \fn void TimeSliderController::currentTimeExtentChanged()
+  \brief Signal emitted when the \l currentTimeExtent property changes.
+ */
+
+/*!
+  \fn void TimeSliderController::startStepChanged()
+  \brief Signal emitted when the \l startStep property changes.
+ */
+
+/*!
+  \fn void TimeSliderController::endStepChanged()
+  \brief Signal emitted when the \l endStep property changes.
+ */
 
 } // Toolkit
 } // ArcGISRuntime

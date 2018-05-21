@@ -61,8 +61,6 @@ public:
 
   QString toolName() const override;
 
-  void setProperties(const QVariantMap& properties) override;
-
   Q_INVOKABLE void setGeoView(QObject* geoView);
 
   int numberOfSteps() const;
