@@ -29,34 +29,157 @@ import QtQuick.Layouts 1.1
 */
 Item {
     id: root
+
     enabled: controller.startStep !== -1
     clip: true
+
     height: backgroundRectangle.height
 
+    /*!
+      \qmlproperty real scaleFactor
+      \brief The scale factor used for sizing UI elements.
+
+      Pixel density and screen resolution varies greatly between different
+      devices and operating systems. This property allows your app to specify
+      the width or height of UI elements so that the sizes appear similar
+      (relative to screen size) across devices.
+      */
     property real scaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
 
+    /*!
+      \qmlproperty int textColor
+      \brief The color of coordinate notation text and labels on this tool.
+
+      The default value is \c "black".
+     */
     property color textColor: "black"
+
+    /*!
+      \qmlproperty int fontFamily
+      \brief The font family for text on this tool.
+
+      The default is \c "helvetica".
+     */
     property string fontFamily : "helvetica"
+
+    /*!
+      \qmlproperty int pixelSizeInDips
+      \brief The font size of for text on this tool in device independant pixels (DIPS).
+
+      The default value is \c 12.
+     */
     property int pixelSizeInDips : 12
+
+    /*!
+      \qmlproperty real backgroundOpacity
+      \brief The opacity of the background rectangle.
+      */
     property color backgroundColor: "lightgrey"
 
     property alias backgroundOpacity: backgroundRectangle.opacity
+
+    /*!
+      \qmlproperty real radius
+      \brief The radius of the background rectangle.
+      */
     property alias radius: backgroundRectangle.radius
 
+    /*!
+      \qmlproperty string fullExtentLabelLocale
+      \brief The locale used for displaying \l Date values.
+
+      If not specified, the default locale will be used.
+      */
     property string fullExtentLabelLocale: ""
+
+    /*!
+      \qmlproperty int fullExtentLabelFormat
+      \brief The format for displaying \l Date values.
+
+      If not specified, \c Locale.LongFormat will be used.
+      */
     property int fullExtentLabelFormat: Locale.LongFormat
+
+    /*!
+      \qmlproperty color fullExtentFillColor
+      \brief The color for the full extent of the slider.
+
+      The default is \c "darkgray".
+      */
     property alias fullExtentFillColor: sliderBar.color
 
+    /*!
+      \qmlproperty string currentExtentLabelLocale
+      \brief The locale used for displaying \l Date values
+      for the current time extent.
+
+      If not specified, the default locale will be used.
+      */
     property string currentExtentLabelLocale: ""
+
+    /*!
+      \qmlproperty int currentExtentLabelFormat
+      \brief The format for displaying \l Date values
+      for the current time extent.
+
+      The default is \c Locale.NarrowFormat.
+      */
     property int currentExtentLabelFormat: Locale.NarrowFormat
+
+    /*!
+      \qmlproperty color currentExtentFillColor
+      \brief The color for portion of the slider covering
+      the current time extent.
+
+      The default is \c "black".
+      */
     property alias currentExtentFillColor: currentExtentFill.color
 
+    /*!
+      \qmlproperty color thumbFillColor
+      \brief The color for the slider thumb controls.
+
+      The default is \c "white".
+      */
     property color thumbFillColor: "white"
+
+    /*!
+      \qmlproperty color thumbFillColor
+      \brief The color for the border of the slider thumb controls.
+
+      The default is \c "black".
+      */
     property color thumbBorderColor: "black"
 
+    /*!
+      \qmlproperty bool playbackLoop
+      \brief Whether to loop when animation reaches the
+      end of the slider.
+
+      The default is \c "true".
+      */
     property bool playbackLoop: true
+
+    /*!
+      \qmlproperty bool playbackReverse
+      \brief Whether to reverse the animation direction when
+      animation reaches the end of the slider.
+
+      \note This property has no effect if \l playbackLoop
+      is \c false.
+
+      The default is \c "false".
+      */
     property bool playbackReverse: false
+
+    /*!
+      /internal
+      */
     property bool animateReverse: false
+
+    /*!
+      /internal
+      */
     property bool needsRestart: false
 
     Rectangle {
@@ -70,7 +193,13 @@ Item {
         color: backgroundColor
     }
 
+    /*!
+      \qmlproperty GeoView geoView
+      \brief The GeoView for this tool. Should be a SceneQuickView or a MapQuickView.
+     */
     property alias geoView: controller.geoView
+
+
     TimeSliderController {
         id: controller
 
@@ -92,6 +221,9 @@ Item {
         }
     }
 
+    /*!
+      /internal
+      */
     property real stepSize: sliderBar.width / (controller.numberOfSteps -1)
 
     Label {
