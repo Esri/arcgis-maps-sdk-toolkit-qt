@@ -48,6 +48,27 @@ TimeExtent unionTimeExtent(const TimeExtent& timeExtent,
   return TimeExtent(startTime, endTime);
 }
 
+TimeUnit toTimeUnit(double milisecondsRange)
+{
+  constexpr double daysPerYear = 365.0;
+  constexpr double millisecondsPerDay = 86400000.0;
+  constexpr double millisecondsPerHour = 3600000.0;
+  constexpr double millisecondsPerMinute = 60000.0;
+
+  if (milisecondsRange < millisecondsPerMinute)
+    return TimeUnit::Seconds;
+  else if (milisecondsRange < millisecondsPerHour)
+    return TimeUnit::Minutes;
+  else if (milisecondsRange < millisecondsPerDay)
+    return TimeUnit::Hours;
+  else if (milisecondsRange < (millisecondsPerDay * daysPerYear))
+    return TimeUnit::Days;
+  else if (milisecondsRange > (millisecondsPerDay * daysPerYear * 100))
+    return TimeUnit::Centuries;
+  else
+    return TimeUnit::Years;
+}
+
 double toMilliseconds(const TimeValue& timeValue)
 {
   constexpr double millisecondsPerDay = 86400000.0;
@@ -226,6 +247,12 @@ void TimeSliderController::initializeTimeProperties()
   const auto start = m_fullTimeExtent.startTime().toMSecsSinceEpoch();
   const auto end = m_fullTimeExtent.endTime().toMSecsSinceEpoch();
   const auto range = end - start;
+
+  if (timeStepInterval.isEmpty())
+  {
+    TimeUnit estimatedUnit = toTimeUnit(range);
+    timeStepInterval = TimeValue(1.0, estimatedUnit);
+  }
 
   m_intervalMS = toMilliseconds(timeStepInterval);
 

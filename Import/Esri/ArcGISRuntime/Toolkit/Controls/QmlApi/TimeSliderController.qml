@@ -123,6 +123,15 @@ Item {
                 timeStepInterval = layer.timeInterval;
         }
 
+        if (timeStepInterval === null || timeStepInterval.unit === Enums.TimeUnitUnknown) {
+            var start = fullExtent.startTime.getTime();
+            var end = fullExtent.endTime.getTime();
+            var range = end - start;
+
+            var estimatedUnit = toTimeUnit(range);
+            timeStepInterval = ArcGISRuntimeEnvironment.createObject("TimeValue", {"unit": estimatedUnit, "duration": 1.0});
+        }
+
         calculateNumberOfSteps(fullExtent, timeStepInterval);
     }
 
@@ -184,5 +193,25 @@ Item {
         intervalMS = toMilliseconds(timeValue);
 
         numberOfSteps = (range / intervalMS) + 1;
+    }
+
+    function toTimeUnit() {
+        var daysPerYear = 365.0;
+        var millisecondsPerDay = 86400000.0;
+        var millisecondsPerHour = 3600000.0;
+        var millisecondsPerMinute = 60000.0;
+
+        if (milisecondsRange < millisecondsPerMinute)
+          return Enums.TimeUnitSeconds;
+        else if (milisecondsRange < millisecondsPerHour)
+          return Enums.TimeUnitMinutes;
+        else if (milisecondsRange < millisecondsPerDay)
+          return Enums.TimeUnitHours;
+        else if (milisecondsRange < (millisecondsPerDay * daysPerYear))
+          return Enums.TimeUnitDays;
+        else if (milisecondsRange > (millisecondsPerDay * daysPerYear * 100))
+          return Enums.TimeUnitCenturies;
+        else
+          return Enums.TimeUnitYears;
     }
 }
