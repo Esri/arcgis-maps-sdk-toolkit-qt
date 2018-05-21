@@ -27,7 +27,14 @@ import Esri.ArcGISRuntime.Toolkit.CppApi 100.3
     \ingroup ArcGISQtToolkitQmlApi
     \inqmlmodule Esri.ArcGISRuntime.Toolkit.Controls
     \since Esri.ArcGISRutime 100.3
-    \brief
+    \brief A time slider can be bound to a geoView
+    (mapView or sceneView) to allow filtering on temporal data.
+
+    The time extents of all layers in the map will be used to set up the
+    slider with the full temporal range and the current time extent.
+
+    The slider provides a user interface for manually setting or animating
+    changes to the current time extent of the geoView.
 */
 Item {
     id: root
