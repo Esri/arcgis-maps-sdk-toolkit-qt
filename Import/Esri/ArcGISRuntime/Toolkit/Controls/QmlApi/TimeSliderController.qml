@@ -18,26 +18,90 @@ import QtQuick 2.4
 import Esri.ArcGISRuntime 100.3
 
 /*!
-    \qmltype TimeSlider
+    \qmltype TimeSliderController
     \ingroup ArcGISQtToolkit
     \ingroup ArcGISQtToolkitQmlApi
     \inqmlmodule Esri.ArcGISRuntime.Toolkit.Controls
     \since Esri.ArcGISRutime 100.3
-    \brief
+    \brief The controller for the Time Slider tool.
+
+    The controller presents the temporal range of the data as a number of steps.
+    These steps allow the temporal extent to be set and animated by stepping through
+    the range.
+
+    \note The controller will be automatically created by a TimeSlider
+    so you do not need to create this type.
 */
 Item {
     id: controller
 
+    /*!
+      \qmlproperty GeoView geoView
+      \brief the GeoView for this tool to \a geoView.
+
+      The view should be either a MapView or a SceneView.
+
+      \note This property will be provided by the TimeSlider so you do not need
+      to set this.
+      */
     property GeoView geoView
+
+    /*!
+     \internal
+     */
     property bool isMapView: geoView && geoView.objectType === "MapView"
+
+    /*!
+     \internal
+     */
     property var operationalLayers: geoView ? (isMapView ? geoView.map.operationalLayers : geoView.scene.operationalLayers) : null
+
+    /*!
+     \internal
+     */
     property var timeAwareLayers: []
+
+    /*!
+     \qmlproperty int numberOfSteps
+     \brief The total number of required steps to cover the full time extent (read-only).
+
+     This figure is based on the full temporal range of the data in the geoView
+     and the time intervals used by the data.
+     */
     property int numberOfSteps: -1
+
+    /*!
+     \internal
+     */
     property TimeValue timeStepInterval
+
+    /*!
+     \internal
+     */
     property int intervalMS: -1
+
+    /*!
+     \qmlproperty TimeExtent fullExtent
+     \brief The full time extent of the data in the current geoView (read-only).
+     */
     property TimeExtent fullExtent
+
+    /*!
+     \qmlproperty TimeExtent currentExtent
+     \brief The current time extent of the data in the current geoView (read-only).
+     */
     property TimeExtent currentExtent: geoView && geoView.timeExtent ? geoView.timeExtent : fullExtent
+
+    /*!
+     \qmlproperty int startStep
+     \brief The start step of the current time extent (read-only).
+     */
     property int startStep: currentExtent && fullExtent ? (currentExtent.startTime.getTime() - fullExtent.startTime.getTime()) / intervalMS : -1
+
+    /*!
+     \qmlproperty int endStep
+     \brief The end step of the current time extent (read-only).
+     */
     property int endStep: currentExtent && fullExtent ? (currentExtent.endTime.getTime() - fullExtent.startTime.getTime()) / intervalMS : -1
 
     function setStartAndEndIntervals(startIndex, endIndex) {

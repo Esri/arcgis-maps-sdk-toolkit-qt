@@ -25,38 +25,198 @@ import QtQuick.Layouts 1.1
     \ingroup ArcGISQtToolkitQmlApi
     \inqmlmodule Esri.ArcGISRuntime.Toolkit.Controls
     \since Esri.ArcGISRutime 100.3
-    \brief
+    \brief The slider provides a user interface for manually setting or animating
+    changes to the current time extent of the geoView.
+
+    A time slider can be bound to a geoView
+    (mapView or sceneView) to allow filtering on temporal data.
+
+    The time extents of all layers in the map will be used to set up the
+    slider with the full temporal range and the current time extent.
+
+    Here is an example of how to use this control from QML.
+
+    \code
+        // import the toolkit
+        import Esri.ArcGISRuntime.Toolkit.QmlAPI 100.3
+        ...
+
+        // add a mapView component (the geoView)
+        MapView {
+            anchors.fill: parent
+            id: mapView
+
+            Map {
+                ...
+            }
+
+            // declare a TimeSlider and bind it to the geoView
+            TimeSlider {
+                id: timeSlider
+                anchors {
+                    left: mapView.left
+                    right: mapView.right
+                    bottom: mapView.attributionTop
+                }
+
+                geoView: mapView
+            }
+        }
+    \endcode
 */
 Item {
     id: root
+
     enabled: controller.startStep !== -1
     clip: true
+
     height: backgroundRectangle.height
 
+    /*!
+      \qmlproperty real scaleFactor
+      \brief The scale factor used for sizing UI elements.
+
+      Pixel density and screen resolution varies greatly between different
+      devices and operating systems. This property allows your app to specify
+      the width or height of UI elements so that the sizes appear similar
+      (relative to screen size) across devices.
+      */
     property real scaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
 
+    /*!
+      \qmlproperty int textColor
+      \brief The color of coordinate notation text and labels on this tool.
+
+      The default value is \c "black".
+     */
     property color textColor: "black"
+
+    /*!
+      \qmlproperty int fontFamily
+      \brief The font family for text on this tool.
+
+      The default is \c "helvetica".
+     */
     property string fontFamily : "helvetica"
+
+    /*!
+      \qmlproperty int pixelSizeInDips
+      \brief The font size of for text on this tool in device independant pixels (DIPS).
+
+      The default value is \c 12.
+     */
     property int pixelSizeInDips : 12
+
+    /*!
+      \qmlproperty real backgroundOpacity
+      \brief The opacity of the background rectangle.
+      */
     property color backgroundColor: "lightgrey"
 
     property alias backgroundOpacity: backgroundRectangle.opacity
+
+    /*!
+      \qmlproperty real radius
+      \brief The radius of the background rectangle.
+      */
     property alias radius: backgroundRectangle.radius
 
+    /*!
+      \qmlproperty string fullExtentLabelLocale
+      \brief The locale used for displaying \l Date values.
+
+      If not specified, the default locale will be used.
+      */
     property string fullExtentLabelLocale: ""
+
+    /*!
+      \qmlproperty int fullExtentLabelFormat
+      \brief The format for displaying \l Date values.
+
+      If not specified, \c Locale.LongFormat will be used.
+      */
     property int fullExtentLabelFormat: Locale.LongFormat
+
+    /*!
+      \qmlproperty color fullExtentFillColor
+      \brief The color for the full extent of the slider.
+
+      The default is \c "darkgray".
+      */
     property alias fullExtentFillColor: sliderBar.color
 
+    /*!
+      \qmlproperty string currentExtentLabelLocale
+      \brief The locale used for displaying \l Date values
+      for the current time extent.
+
+      If not specified, the default locale will be used.
+      */
     property string currentExtentLabelLocale: ""
+
+    /*!
+      \qmlproperty int currentExtentLabelFormat
+      \brief The format for displaying \l Date values
+      for the current time extent.
+
+      The default is \c Locale.NarrowFormat.
+      */
     property int currentExtentLabelFormat: Locale.NarrowFormat
+
+    /*!
+      \qmlproperty color currentExtentFillColor
+      \brief The color for portion of the slider covering
+      the current time extent.
+
+      The default is \c "black".
+      */
     property alias currentExtentFillColor: currentExtentFill.color
 
+    /*!
+      \qmlproperty color thumbFillColor
+      \brief The color for the slider thumb controls.
+
+      The default is \c "white".
+      */
     property color thumbFillColor: "white"
+
+    /*!
+      \qmlproperty color thumbBorderColor
+      \brief The color for the border of the slider thumb controls.
+
+      The default is \c "black".
+      */
     property color thumbBorderColor: "black"
 
+    /*!
+      \qmlproperty bool playbackLoop
+      \brief Whether to loop when the animation reaches the
+      end of the slider.
+
+      The default is \c "true".
+      */
     property bool playbackLoop: true
+
+    /*!
+      \qmlproperty bool playbackReverse
+      \brief Whether to reverse the animation direction when
+      the animation reaches the end of the slider.
+
+      \note This property has no effect if \l playbackLoop
+      is \c false.
+
+      The default is \c "false".
+      */
     property bool playbackReverse: false
+
+    /*!
+      /internal
+      */
     property bool animateReverse: false
+
+    /*!
+      /internal
+      */
     property bool needsRestart: false
 
     Rectangle {
@@ -70,7 +230,18 @@ Item {
         color: backgroundColor
     }
 
+    /*!
+      \qmlproperty GeoView geoView
+      \brief The GeoView for this tool. Should be a SceneView or a MapView.
+
+      This property is the entry point for the time extent of the geoView itself and
+      also for any layers which support time.
+
+      \note this property must be set for the TimeSlider control to function correctly.
+    */
     property alias geoView: controller.geoView
+
+
     TimeSliderController {
         id: controller
 
@@ -92,6 +263,9 @@ Item {
         }
     }
 
+    /*!
+      /internal
+      */
     property real stepSize: sliderBar.width / (controller.numberOfSteps -1)
 
     Label {
