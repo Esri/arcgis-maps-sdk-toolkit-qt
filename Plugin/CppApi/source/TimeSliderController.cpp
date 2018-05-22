@@ -148,6 +148,9 @@ bool operator == (const TimeExtent& timeExtent, const TimeExtent& otherTimeExten
   These steps allow the temporal extent to be set and animated by stepping through
   the range.
 
+  \note The controller will be automatically created by a TimeSlider
+  so you do not need to create this type.
+
   \sa {Time Slider Tool}
  */
 
@@ -181,9 +184,12 @@ QString TimeSliderController::toolName() const
 }
 
 /*!
- \brief Sets the GeoView for this tool to \a geoView.
+  \brief Sets the GeoView for this tool to \a geoView.
 
- The view should be either a MapView or a SceneView.
+  The view should be either a MapQuickView or a SceneQuickView.
+
+  \note This property will be provided by the TimeSlider so you do not need
+  to set this.
  */
 void TimeSliderController::setGeoView(QObject* geoView)
 {

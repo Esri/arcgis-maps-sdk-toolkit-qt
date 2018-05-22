@@ -25,14 +25,45 @@ import QtQuick.Layouts 1.1
     \ingroup ArcGISQtToolkitQmlApi
     \inqmlmodule Esri.ArcGISRuntime.Toolkit.Controls
     \since Esri.ArcGISRutime 100.3
-    \brief A time slider can be bound to a geoView
+    \brief The slider provides a user interface for manually setting or animating
+    changes to the current time extent of the geoView.
+
+    A time slider can be bound to a geoView
     (mapView or sceneView) to allow filtering on temporal data.
 
     The time extents of all layers in the map will be used to set up the
     slider with the full temporal range and the current time extent.
 
-    The slider provides a user interface for manually setting or animating
-    changes to the current time extent of the geoView.
+    Here is an example of how to use this control from QML.
+
+    \code
+        // import the toolkit
+        import Esri.ArcGISRuntime.Toolkit.CppApi 100.3
+        ...
+
+        // add a mapView component (the geoView)
+        MapView {
+            anchors.fill: parent
+            objectName: "mapView"
+            id: mapView
+
+            Map {
+                ...
+            }
+
+            // declare a TimeSlider and bind it to the geoView
+            TimeSlider {
+                id: timeSlider
+                anchors {
+                    left: mapView.left
+                    right: mapView.right
+                    bottom: mapView.attributionTop
+                }
+
+                geoView: geoView
+            }
+        }
+    \endcode
 */
 Item {
     id: root
@@ -151,7 +182,7 @@ Item {
     property color thumbFillColor: "white"
 
     /*!
-      \qmlproperty color thumbFillColor
+      \qmlproperty color thumbBorderColor
       \brief The color for the border of the slider thumb controls.
 
       The default is \c "black".
@@ -160,7 +191,7 @@ Item {
 
     /*!
       \qmlproperty bool playbackLoop
-      \brief Whether to loop when animation reaches the
+      \brief Whether to loop when the animation reaches the
       end of the slider.
 
       The default is \c "true".
@@ -170,7 +201,7 @@ Item {
     /*!
       \qmlproperty bool playbackReverse
       \brief Whether to reverse the animation direction when
-      animation reaches the end of the slider.
+      the animation reaches the end of the slider.
 
       \note This property has no effect if \l playbackLoop
       is \c false.
@@ -202,8 +233,13 @@ Item {
 
     /*!
       \qmlproperty GeoView geoView
-      \brief The GeoView for this tool. Should be a SceneQuickView or a MapQuickView.
-     */
+      \brief The GeoView for this tool. Should be a SceneView or a MapView.
+
+      This property is the entry point for the time extent of the geoView itself and
+      also for any layers which support time.
+
+      \note this property must be set for the TimeSlider control to function correctly.
+    */
     property alias geoView: controller.geoView
 
 

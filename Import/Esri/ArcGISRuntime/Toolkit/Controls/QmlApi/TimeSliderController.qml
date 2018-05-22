@@ -28,6 +28,9 @@ import Esri.ArcGISRuntime 100.3
     The controller presents the temporal range of the data as a number of steps.
     These steps allow the temporal extent to be set and animated by stepping through
     the range.
+
+    \note The controller will be automatically created by a TimeSlider
+    so you do not need to create this type.
 */
 Item {
     id: controller
@@ -37,6 +40,9 @@ Item {
       \brief the GeoView for this tool to \a geoView.
 
       The view should be either a MapView or a SceneView.
+
+      \note This property will be provided by the TimeSlider so you do not need
+      to set this.
       */
     property GeoView geoView
 
@@ -57,7 +63,7 @@ Item {
 
     /*!
      \qmlproperty int numberOfSteps
-     \brief The total number of required steps to cover the full time extent.
+     \brief The total number of required steps to cover the full time extent (read-only).
 
      This figure is based on the full temporal range of the data in the geoView
      and the time intervals used by the data.
@@ -76,25 +82,25 @@ Item {
 
     /*!
      \qmlproperty TimeExtent fullExtent
-     \brief The full time extent of the data in the current geoView.
+     \brief The full time extent of the data in the current geoView (read-only).
      */
     property TimeExtent fullExtent
 
     /*!
      \qmlproperty TimeExtent currentExtent
-     \brief The current time extent of the data in the current geoView.
+     \brief The current time extent of the data in the current geoView (read-only).
      */
     property TimeExtent currentExtent: geoView && geoView.timeExtent ? geoView.timeExtent : fullExtent
 
     /*!
      \qmlproperty int startStep
-     \brief The start step of the current time extent.
+     \brief The start step of the current time extent (read-only).
      */
     property int startStep: currentExtent && fullExtent ? (currentExtent.startTime.getTime() - fullExtent.startTime.getTime()) / intervalMS : -1
 
     /*!
      \qmlproperty int endStep
-     \brief The end step of the current time extent.
+     \brief The end step of the current time extent (read-only).
      */
     property int endStep: currentExtent && fullExtent ? (currentExtent.endTime.getTime() - fullExtent.startTime.getTime()) / intervalMS : -1
 
