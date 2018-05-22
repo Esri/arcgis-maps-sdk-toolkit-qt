@@ -38,13 +38,12 @@ import QtQuick.Layouts 1.1
 
     \code
         // import the toolkit
-        import Esri.ArcGISRuntime.Toolkit.CppApi 100.3
+        import Esri.ArcGISRuntime.Toolkit.QmlAPI 100.3
         ...
 
         // add a mapView component (the geoView)
         MapView {
             anchors.fill: parent
-            objectName: "mapView"
             id: mapView
 
             Map {
@@ -60,7 +59,7 @@ import QtQuick.Layouts 1.1
                     bottom: mapView.attributionTop
                 }
 
-                geoView: geoView
+                geoView: mapView
             }
         }
     \endcode

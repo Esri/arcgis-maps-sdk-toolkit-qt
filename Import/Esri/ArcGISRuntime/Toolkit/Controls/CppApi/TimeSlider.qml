@@ -61,7 +61,7 @@ import Esri.ArcGISRuntime.Toolkit.CppApi 100.3
                     bottom: mapView.attributionTop
                 }
 
-                geoView: geoView
+                geoView: mapView
             }
         }
     \endcode
