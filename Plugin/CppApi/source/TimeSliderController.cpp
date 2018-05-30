@@ -405,6 +405,7 @@ void TimeSliderController::setStartInterval(int intervalIndex)
     m_mapView->setTimeExtent(newExtent);
 
   calculateStepPositions();
+  emit currentTimeExtentChanged();
 }
 
 /*!
@@ -427,6 +428,7 @@ void TimeSliderController::setEndInterval(int intervalIndex)
     m_mapView->setTimeExtent(newExtent);
 
   calculateStepPositions();
+  emit currentTimeExtentChanged();
 }
 
 /*!
@@ -450,6 +452,7 @@ void TimeSliderController::setStartAndEndIntervals(int startIndex, int endIndex)
     m_mapView->setTimeExtent(newExtent);
 
   calculateStepPositions();
+  emit currentTimeExtentChanged();
 }
 
 /*!
