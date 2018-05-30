@@ -297,8 +297,6 @@ Item {
             }
         }
 
-        onCurrentExtentStartChanged: console.log("onCurrentExtentStartChanged");
-
         onCurrentTimeExtentChanged: currentExtentChanged();
     }
 
@@ -681,7 +679,6 @@ Item {
             if (controller.startStep === slider.first.value)
                 return;
 
-            console.log("here");
             controller.setStartInterval(slider.first.value);
         }
 

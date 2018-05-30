@@ -72,6 +72,8 @@ Item {
 
     height: backgroundRectangle.height
 
+    signal currentExtentChanged
+
     /*!
       \qmlproperty real scaleFactor
       \brief The scale factor used for sizing UI elements.
@@ -210,6 +212,33 @@ Item {
     property bool playbackReverse: false
 
     /*!
+    \qmlproperty bool startTimePinned
+    \brief Whether the start time of the time window can
+    be manipulated
+
+    The default is \c "false".
+    */
+    property bool startTimePinned: false
+
+    /*!
+    \qmlproperty bool endTimePinned
+    \brief Whether the end time of the time window can
+    be manipulated
+
+    The default is \c "false".
+    */
+    property bool endTimePinned: false
+
+    /*!
+    \qmlproperty int playbackInterval
+    \brief The amount of time (in milliseconds) during playback
+    that will elapse before the slider advances to the next time step
+
+    The default is \c 500.
+    */
+    property alias playbackInterval : playAnimation.interval
+
+    /*!
       /internal
       */
     property bool animateReverse: false
@@ -261,6 +290,8 @@ Item {
                 slider.setValues(startStep, endStep);
             }
         }
+
+        onCurrentTimeExtentChanged: currentExtentChanged();
     }
 
     /*!
@@ -394,6 +425,7 @@ Item {
         id: playAnimation
         running: playButton.checked
         repeat: true
+        interval: 500
 
         onTriggered: {
             var newStart = -1;
@@ -573,6 +605,8 @@ Item {
 
         first.handle: Rectangle {
             id: startThumb
+            visible: !startTimePinned
+            enabled: !startTimePinned
             anchors.verticalCenter: sliderBar.verticalCenter
             x: (slider.first.visualPosition * parent.width) - (width * 0.5)
 
@@ -606,6 +640,8 @@ Item {
 
         second.handle: Rectangle {
             id: endThumb
+            visible: !endTimePinned
+            enabled: !endTimePinned
             anchors.verticalCenter: sliderBar.verticalCenter
             x: (slider.second.visualPosition * parent.width) - (width * 0.5)
             width: 16 * scaleFactor
@@ -648,6 +684,44 @@ Item {
                 return;
 
             controller.setEndInterval(slider.second.value);
+        }
+
+        first.onPressedChanged: {
+            if (!startTimePinned)
+                return;
+
+            first.pressed = false;
+        }
+
+        second.onPressedChanged: {
+            if (!endTimePinned)
+                return;
+
+            second.pressed = false;
+        }
+
+        Rectangle {
+            id: pinnedStart
+            visible: startTimePinned
+            anchors.verticalCenter: sliderBar.verticalCenter
+            x: (slider.first.visualPosition * parent.width) - (width * 0.5)
+            height: 16 * scaleFactor
+            width: 4 * scaleFactor
+            color: thumbFillColor
+            border.color: thumbBorderColor
+            radius: 1 * scaleFactor
+        }
+
+        Rectangle {
+            id: pinnedEnd
+            visible: endTimePinned
+            anchors.verticalCenter: sliderBar.verticalCenter
+            x: (slider.second.visualPosition * parent.width) - (width * 0.5)
+            height: 16 * scaleFactor
+            width: 4 * scaleFactor
+            color: thumbFillColor
+            border.color: thumbBorderColor
+            radius: 1 * scaleFactor
         }
     }
 }

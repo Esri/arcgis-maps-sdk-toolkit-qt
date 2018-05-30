@@ -35,6 +35,8 @@ import Esri.ArcGISRuntime 100.3
 Item {
     id: controller
 
+    signal currentTimeExtentChanged
+
     /*!
       \qmlproperty GeoView geoView
       \brief the GeoView for this tool to \a geoView.
@@ -114,6 +116,8 @@ Item {
 
         var newExtent = ArcGISRuntimeEnvironment.createObject("TimeExtent", {"startTime": newStart, "endTime": newEnd});
         geoView.timeExtent = newExtent;
+
+        currentTimeExtentChanged();
     }
 
     function setStartInterval(intervalIndex) {
@@ -127,6 +131,8 @@ Item {
 
         var newExtent = ArcGISRuntimeEnvironment.createObject("TimeExtent", {"startTime": currentStart, "endTime": currentEndTime});
         geoView.timeExtent = newExtent;
+
+        currentTimeExtentChanged();
     }
 
     function setEndInterval(intervalIndex) {
@@ -139,6 +145,8 @@ Item {
 
         var newExtent = ArcGISRuntimeEnvironment.createObject("TimeExtent", {"startTime": currentStart, "endTime": currentEnd});
         geoView.timeExtent = newExtent;
+
+        currentTimeExtentChanged();
     }
 
     onOperationalLayersChanged: initializeTimeProperties();
