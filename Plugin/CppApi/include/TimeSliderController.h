@@ -23,6 +23,9 @@
 // C++ API headers
 #include "TimeExtent.h"
 
+// Qt headers
+#include <QStringList>
+
 namespace Esri
 {
 namespace ArcGISRuntime
@@ -47,6 +50,7 @@ class TOOLKIT_EXPORT TimeSliderController : public AbstractTool
   Q_PROPERTY(QDateTime currentExtentEnd READ currentExtentEnd NOTIFY currentTimeExtentChanged)
   Q_PROPERTY(int startStep READ startStep NOTIFY startStepChanged)
   Q_PROPERTY(int endStep READ endStep NOTIFY endStepChanged)
+  Q_PROPERTY(QVariantList stepTimes READ stepTimes NOTIFY stepTimesChanged)
 
 signals:
   void numberOfStepsChanged();
@@ -54,6 +58,7 @@ signals:
   void currentTimeExtentChanged();
   void startStepChanged();
   void endStepChanged();
+  void stepTimesChanged();
 
 public:
   TimeSliderController(QObject* parent = nullptr);
@@ -76,6 +81,8 @@ public:
   int startStep() const;
   int endStep() const;
 
+  QVariantList stepTimes() const;
+
   Q_INVOKABLE void setStartInterval(int intervalIndex);
   Q_INVOKABLE void setEndInterval(int intervalIndex);
   Q_INVOKABLE void setStartAndEndIntervals(int startIndex, int endIndex);
@@ -90,6 +97,7 @@ private:
   void initializeTimeProperties();
 
   void setNumberOfSteps(int numberOfSteps);
+  void setStepTimes();
   void setFullTimeExtent(const Esri::ArcGISRuntime::TimeExtent& fullTimeExtent);
   void setStartStep(int startStep);
   void setEndStep(int endStep);
@@ -99,6 +107,7 @@ private:
   Esri::ArcGISRuntime::SceneQuickView* m_sceneView = nullptr;
   Esri::ArcGISRuntime::LayerListModel* m_operationalLayers = nullptr;
   Esri::ArcGISRuntime::TimeExtent m_fullTimeExtent;
+  QVariantList m_stepTimes;
 
   int m_numberOfSteps = -1;
   double m_intervalMS = -1;

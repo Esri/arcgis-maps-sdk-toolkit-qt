@@ -130,20 +130,15 @@ Item {
     property alias radius: backgroundRectangle.radius
 
     /*!
-      \qmlproperty string fullExtentLabelLocale
-      \brief The locale used for displaying \l Date values.
+      \qmlproperty var fullExtentLabelFormat
+      \brief The format for displaying \l Date values
+      for the full time extent. - for example "yy/MM/dd".
 
-      If not specified, the default locale will be used.
+      The default is \c Qt.DefaultLocaleShortDate.
+
+      \sa \l Qt.formatDateTime
       */
-    property string fullExtentLabelLocale: ""
-
-    /*!
-      \qmlproperty int fullExtentLabelFormat
-      \brief The format for displaying \l Date values.
-
-      If not specified, \c Locale.LongFormat will be used.
-      */
-    property int fullExtentLabelFormat: Locale.LongFormat
+    property var fullExtentLabelFormat
 
     /*!
       \qmlproperty color fullExtentFillColor
@@ -154,22 +149,15 @@ Item {
     property alias fullExtentFillColor: sliderBar.color
 
     /*!
-      \qmlproperty string currentExtentLabelLocale
-      \brief The locale used for displaying \l Date values
-      for the current time extent.
-
-      If not specified, the default locale will be used.
-      */
-    property string currentExtentLabelLocale: ""
-
-    /*!
-      \qmlproperty int currentExtentLabelFormat
+      \qmlproperty var currentExtentLabelFormat
       \brief The format for displaying \l Date values
-      for the current time extent.
+      for the current time extent. - for example "yy/MM/dd".
 
-      The default is \c Locale.NarrowFormat.
+      The default is \c Qt.DefaultLocaleShortDate.
+
+      \sa \l Qt.formatDateTime
       */
-    property int currentExtentLabelFormat: Locale.NarrowFormat
+    property var currentExtentLabelFormat
 
     /*!
       \qmlproperty color currentExtentFillColor
@@ -245,6 +233,17 @@ Item {
     property alias playbackInterval : playAnimation.interval
 
     /*!
+      \qmlproperty var timeStepIntervalLabelFormat
+      \brief The date format for displaying time step intervals -
+      for example "yy/MM/dd".
+
+      The default is \c Qt.DefaultLocaleShortDate.
+
+      \sa \l Qt.formatDateTime
+      */
+    property var timeStepIntervalLabelFormat
+
+    /*!
       /internal
       */
     property bool animateReverse: false
@@ -318,7 +317,8 @@ Item {
             pixelSize: root.pixelSizeInDips * scaleFactor
         }
         color: textColor
-        text: controller.fullExtentStart.toLocaleDateString(Qt.locale(fullExtentLabelLocale), fullExtentLabelFormat)
+        text: fullExtentLabelFormat ? Qt.formatDateTime(controller.fullExtentStart, fullExtentLabelFormat)
+                                    : Qt.formatDateTime(controller.fullExtentStart)
 
     }
 
@@ -331,7 +331,8 @@ Item {
         }
 
         color: textColor
-        text: controller.fullExtentEnd.toLocaleDateString(Qt.locale(fullExtentLabelLocale), fullExtentLabelFormat)
+        text: fullExtentLabelFormat ? Qt.formatDateTime(controller.fullExtentEnd, fullExtentLabelFormat)
+                                    : Qt.formatDateTime(controller.fullExtentEnd)
 
         font {
             family: fontFamily
@@ -584,6 +585,19 @@ Item {
                         height: index % 10 === 0 ? sliderBar.height : sliderBar.height * 0.5
                         color: tickMarksRow.spacing < (5 * scaleFactor) ? (index % 5 === 0 ? "black" : "transparent")
                                                                         : "black"
+
+                        Label {
+                            anchors{
+                                horizontalCenter: parent.horizontalCenter
+                                top: parent.bottom
+                            }
+                            horizontalAlignment: Text.AlignHCenter
+                            visible: index % 20 === 0 && parent.color !== "transparent"
+                            text: controller.stepTimes[index] ? timeStepIntervalLabelFormat ?
+                                                                    Qt.formatDateTime(controller.stepTimes[index], timeStepIntervalLabelFormat)
+                                                                  : Qt.formatDateTime(controller.stepTimes[index])
+                                                              : ""
+                        }
                     }
                 }
             }
@@ -637,7 +651,8 @@ Item {
                 }
 
                 color: textColor
-                text: controller.currentExtentStart.toLocaleDateString(Qt.locale(currentExtentLabelLocale), currentExtentLabelFormat)
+                text: currentExtentLabelFormat ? Qt.formatDateTime(controller.currentExtentStart, currentExtentLabelFormat) :
+                                                 Qt.formatDateTime(controller.currentExtentStart)
                 elide: Text.ElideLeft
             }
         }
@@ -670,7 +685,8 @@ Item {
                 }
 
                 color: textColor
-                text:  controller.currentExtentEnd.toLocaleDateString(Qt.locale(currentExtentLabelLocale), currentExtentLabelFormat)
+                text:  currentExtentLabelFormat ? Qt.formatDateTime(controller.currentExtentEnd, currentExtentLabelFormat)
+                                                : Qt.formatDateTime(controller.currentExtentEnd)
                 elide: Text.ElideLeft
             }
         }
@@ -726,5 +742,5 @@ Item {
             border.color: thumbBorderColor
             radius: 1 * scaleFactor
         }
-    }  
+    }
 }
