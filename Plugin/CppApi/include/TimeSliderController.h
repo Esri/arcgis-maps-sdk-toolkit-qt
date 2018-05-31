@@ -24,7 +24,7 @@
 #include "TimeExtent.h"
 
 // Qt headers
-#include <QStringList>
+#include <QVariantList>
 
 namespace Esri
 {
