@@ -89,10 +89,34 @@ Item {
     property TimeExtent fullExtent
 
     /*!
+     \qmlproperty date fullExtentStart
+     \brief The start time of the data in the current geoView. (read-only).
+     */
+    property var fullExtentStart: fullExtent ? fullExtent.startTime : null
+
+    /*!
+     \qmlproperty date fullExtentEnd
+     \brief The end time of the data in the current geoView (read-only).
+     */
+    property var fullExtentEnd: fullExtent ? fullExtent.endTime : null
+
+    /*!
      \qmlproperty TimeExtent currentExtent
      \brief The current time extent of the data in the current geoView (read-only).
      */
     property TimeExtent currentExtent: geoView && geoView.timeExtent ? geoView.timeExtent : fullExtent
+
+    /*!
+     \qmlproperty date currentExtentStart
+     \brief The start time of the current temporal extent of the geoView (read-only).
+     */
+    property var currentExtentStart: currentExtent ? currentExtent.startTime : null
+
+    /*!
+     \qmlproperty date currentExtentEnd
+     \brief The end time of the current temporal extent of the geoView (read-only).
+     */
+    property var currentExtentEnd: currentExtent ? currentExtent.endTime : null
 
     /*!
      \qmlproperty int startStep
@@ -105,6 +129,8 @@ Item {
      \brief The end step of the current time extent (read-only).
      */
     property int endStep: currentExtent && fullExtent ? (currentExtent.endTime.getTime() - fullExtent.startTime.getTime()) / intervalMS : -1
+
+    property var stepTimes: []
 
     function setStartAndEndIntervals(startIndex, endIndex) {
         if (!fullExtent)
@@ -195,6 +221,9 @@ Item {
                 timeStepInterval = layer.timeInterval;
         }
 
+        if (!fullExtent)
+            return;
+
         if (timeStepInterval === null || timeStepInterval.unit === Enums.TimeUnitUnknown) {
             var start = fullExtent.startTime.getTime();
             var end = fullExtent.endTime.getTime();
@@ -205,6 +234,7 @@ Item {
         }
 
         calculateNumberOfSteps(fullExtent, timeStepInterval);
+        setStepTimes();
     }
 
     function isGreaterThan(timeValue, otherTimeValue) {
@@ -265,6 +295,16 @@ Item {
         intervalMS = toMilliseconds(timeValue);
 
         numberOfSteps = (range / intervalMS) + 1;
+    }
+
+    function setStepTimes() {
+        var tempStepTimes = [];
+
+        var startMs = fullExtentStart.getTime();
+        for (var i = 0; i < numberOfSteps; ++i)
+          tempStepTimes.push( new Date(startMs + (i * intervalMS)) );
+
+        stepTimes = tempStepTimes;
     }
 
     function toTimeUnit() {
