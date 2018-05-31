@@ -72,6 +72,10 @@ Item {
     clip: true
     height: backgroundRectangle.height
 
+    readonly property int labelModeNone: 0
+    readonly property int labelModeThumbs: 0
+    readonly property int labelModeTicks: 2
+
     signal currentExtentChanged
 
     /*!
@@ -183,6 +187,29 @@ Item {
       The default is \c "black".
       */
     property color thumbBorderColor: "black"
+
+    /*!
+      \qmlproperty int labelMode
+      \brief How to apply labels to the Slider.
+
+      Valid options are:
+      \list
+        \li labelModeNone. No labels are applied
+        \li labelModeThumbs. Labels are applied to the slider thumbs.
+        \li labelModeTicks. Labels are applied to the slider tick marks.
+      \endList
+
+      The default is \c labelModeThumbs.
+      */
+    property int labelMode: labelModeThumbs
+
+    /*!
+      \qmlproperty int labelSliderTickInterval
+      \brief The interval at which slider ticks should be labelled
+
+      The default is \c 20.
+      */
+    property int labelSliderTickInterval: 20
 
     /*!
       \qmlproperty bool playbackLoop
@@ -592,7 +619,7 @@ Item {
                                 top: parent.bottom
                             }
                             horizontalAlignment: Text.AlignHCenter
-                            visible: index % 20 === 0 && parent.color !== "transparent"
+                            visible: (labelMode === labelModeTicks) && index % labelSliderTickInterval === 0 && parent.color !== "transparent"
                             text: controller.stepTimes[index] ? timeStepIntervalLabelFormat ?
                                                                     Qt.formatDateTime(controller.stepTimes[index], timeStepIntervalLabelFormat)
                                                                   : Qt.formatDateTime(controller.stepTimes[index])
@@ -604,7 +631,7 @@ Item {
 
             Label {
                 id: combinedLabel
-                visible: (slider.second.visualPosition - slider.first.visualPosition) < 0.4
+                visible: (labelMode === labelModeThumbs) && (slider.second.visualPosition - slider.first.visualPosition) < 0.4
                 anchors {
                     left: sliderBar.left
                     right: sliderBar.right
@@ -637,7 +664,7 @@ Item {
 
             Label {
                 id: currentStartLabel
-                visible: !combinedLabel.visible && controller.startStep !== controller.numberOfSteps -1 && controller.startStep !== 0
+                visible: (labelMode === labelModeThumbs) && !combinedLabel.visible && controller.startStep !== controller.numberOfSteps -1 && controller.startStep !== 0
                 anchors {
                     top: startThumb.bottom
                     horizontalCenter: startThumb.horizontalCenter
@@ -671,7 +698,7 @@ Item {
 
             Label {
                 id: currentEndLabel
-                visible: !combinedLabel.visible && (controller.endStep < (controller.numberOfSteps -1)) && controller.endStep !== 0
+                visible: (labelMode === labelModeThumbs) && !combinedLabel.visible && (controller.endStep < (controller.numberOfSteps -1)) && controller.endStep !== 0
                 anchors {
                     top: endThumb.bottom
                     horizontalCenter: endThumb.horizontalCenter
