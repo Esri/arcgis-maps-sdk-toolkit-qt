@@ -295,6 +295,9 @@ void TimeSliderController::initializeTimeProperties()
   setNumberOfSteps((range / m_intervalMS) + 1);
 
   calculateStepPositions();
+
+  setStepTimes();
+
   emit currentTimeExtentChanged();
 }
 
@@ -308,6 +311,16 @@ void TimeSliderController::setNumberOfSteps(int numberOfSteps)
 
   m_numberOfSteps = numberOfSteps;
   emit numberOfStepsChanged();
+}
+
+void TimeSliderController::setStepTimes()
+{
+  m_stepTimes.clear();
+
+  for (auto i = 0; i < m_numberOfSteps; ++i)
+    m_stepTimes.push_back( m_fullTimeExtent.startTime().addMSecs(i * m_intervalMS) );
+
+  emit stepTimesChanged();
 }
 
 /*!
@@ -383,6 +396,11 @@ QDateTime TimeSliderController::currentExtentEnd() const
 int TimeSliderController::endStep() const
 {
   return m_endStep;
+}
+
+QVariantList TimeSliderController::stepTimes() const
+{
+  return m_stepTimes;
 }
 
 /*!

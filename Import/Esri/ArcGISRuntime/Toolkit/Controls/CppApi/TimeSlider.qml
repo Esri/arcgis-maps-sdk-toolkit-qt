@@ -72,6 +72,10 @@ Item {
     clip: true
     height: backgroundRectangle.height
 
+    readonly property int labelModeNone: 0
+    readonly property int labelModeThumbs: 0
+    readonly property int labelModeTicks: 2
+
     signal currentExtentChanged
 
     /*!
@@ -130,20 +134,15 @@ Item {
     property alias radius: backgroundRectangle.radius
 
     /*!
-      \qmlproperty string fullExtentLabelLocale
-      \brief The locale used for displaying \l Date values.
+      \qmlproperty var fullExtentLabelFormat
+      \brief The format for displaying \l Date values
+      for the full time extent. - for example "yy/MM/dd".
 
-      If not specified, the default locale will be used.
+      The default is \c Qt.DefaultLocaleShortDate.
+
+      \sa \l Qt.formatDateTime
       */
-    property string fullExtentLabelLocale: ""
-
-    /*!
-      \qmlproperty int fullExtentLabelFormat
-      \brief The format for displaying \l Date values.
-
-      If not specified, \c Locale.LongFormat will be used.
-      */
-    property int fullExtentLabelFormat: Locale.LongFormat
+    property var fullExtentLabelFormat
 
     /*!
       \qmlproperty color fullExtentFillColor
@@ -154,22 +153,15 @@ Item {
     property alias fullExtentFillColor: sliderBar.color
 
     /*!
-      \qmlproperty string currentExtentLabelLocale
-      \brief The locale used for displaying \l Date values
-      for the current time extent.
-
-      If not specified, the default locale will be used.
-      */
-    property string currentExtentLabelLocale: ""
-
-    /*!
-      \qmlproperty int currentExtentLabelFormat
+      \qmlproperty var currentExtentLabelFormat
       \brief The format for displaying \l Date values
-      for the current time extent.
+      for the current time extent. - for example "yy/MM/dd".
 
-      The default is \c Locale.NarrowFormat.
+      The default is \c Qt.DefaultLocaleShortDate.
+
+      \sa \l Qt.formatDateTime
       */
-    property int currentExtentLabelFormat: Locale.NarrowFormat
+    property var currentExtentLabelFormat
 
     /*!
       \qmlproperty color currentExtentFillColor
@@ -195,6 +187,29 @@ Item {
       The default is \c "black".
       */
     property color thumbBorderColor: "black"
+
+    /*!
+      \qmlproperty int labelMode
+      \brief How to apply labels to the Slider.
+
+      Valid options are:
+      \list
+        \li labelModeNone. No labels are applied
+        \li labelModeThumbs. Labels are applied to the slider thumbs.
+        \li labelModeTicks. Labels are applied to the slider tick marks.
+      \endList
+
+      The default is \c labelModeThumbs.
+      */
+    property int labelMode: labelModeThumbs
+
+    /*!
+      \qmlproperty int labelSliderTickInterval
+      \brief The interval at which slider ticks should be labelled
+
+      The default is \c 20.
+      */
+    property int labelSliderTickInterval: 20
 
     /*!
       \qmlproperty bool playbackLoop
@@ -243,6 +258,17 @@ Item {
       The default is \c 500.
       */
     property alias playbackInterval : playAnimation.interval
+
+    /*!
+      \qmlproperty var timeStepIntervalLabelFormat
+      \brief The date format for displaying time step intervals -
+      for example "yy/MM/dd".
+
+      The default is \c Qt.DefaultLocaleShortDate.
+
+      \sa \l Qt.formatDateTime
+      */
+    property var timeStepIntervalLabelFormat
 
     /*!
       /internal
@@ -318,7 +344,8 @@ Item {
             pixelSize: root.pixelSizeInDips * scaleFactor
         }
         color: textColor
-        text: controller.fullExtentStart.toLocaleDateString(Qt.locale(fullExtentLabelLocale), fullExtentLabelFormat)
+        text: fullExtentLabelFormat ? Qt.formatDateTime(controller.fullExtentStart, fullExtentLabelFormat)
+                                    : Qt.formatDateTime(controller.fullExtentStart)
 
     }
 
@@ -331,7 +358,8 @@ Item {
         }
 
         color: textColor
-        text: controller.fullExtentEnd.toLocaleDateString(Qt.locale(fullExtentLabelLocale), fullExtentLabelFormat)
+        text: fullExtentLabelFormat ? Qt.formatDateTime(controller.fullExtentEnd, fullExtentLabelFormat)
+                                    : Qt.formatDateTime(controller.fullExtentEnd)
 
         font {
             family: fontFamily
@@ -584,13 +612,26 @@ Item {
                         height: index % 10 === 0 ? sliderBar.height : sliderBar.height * 0.5
                         color: tickMarksRow.spacing < (5 * scaleFactor) ? (index % 5 === 0 ? "black" : "transparent")
                                                                         : "black"
+
+                        Label {
+                            anchors{
+                                horizontalCenter: parent.horizontalCenter
+                                top: parent.bottom
+                            }
+                            horizontalAlignment: Text.AlignHCenter
+                            visible: (labelMode === labelModeTicks) && index % labelSliderTickInterval === 0 && parent.color !== "transparent"
+                            text: controller.stepTimes[index] ? timeStepIntervalLabelFormat ?
+                                                                    Qt.formatDateTime(controller.stepTimes[index], timeStepIntervalLabelFormat)
+                                                                  : Qt.formatDateTime(controller.stepTimes[index])
+                                                              : ""
+                        }
                     }
                 }
             }
 
             Label {
                 id: combinedLabel
-                visible: (slider.second.visualPosition - slider.first.visualPosition) < 0.4
+                visible: (labelMode === labelModeThumbs) && (slider.second.visualPosition - slider.first.visualPosition) < 0.4
                 anchors {
                     left: sliderBar.left
                     right: sliderBar.right
@@ -623,7 +664,7 @@ Item {
 
             Label {
                 id: currentStartLabel
-                visible: !combinedLabel.visible && controller.startStep !== controller.numberOfSteps -1 && controller.startStep !== 0
+                visible: (labelMode === labelModeThumbs) && !combinedLabel.visible && controller.startStep !== controller.numberOfSteps -1 && controller.startStep !== 0
                 anchors {
                     top: startThumb.bottom
                     horizontalCenter: startThumb.horizontalCenter
@@ -637,7 +678,8 @@ Item {
                 }
 
                 color: textColor
-                text: controller.currentExtentStart.toLocaleDateString(Qt.locale(currentExtentLabelLocale), currentExtentLabelFormat)
+                text: currentExtentLabelFormat ? Qt.formatDateTime(controller.currentExtentStart, currentExtentLabelFormat) :
+                                                 Qt.formatDateTime(controller.currentExtentStart)
                 elide: Text.ElideLeft
             }
         }
@@ -656,7 +698,7 @@ Item {
 
             Label {
                 id: currentEndLabel
-                visible: !combinedLabel.visible && (controller.endStep < (controller.numberOfSteps -1)) && controller.endStep !== 0
+                visible: (labelMode === labelModeThumbs) && !combinedLabel.visible && (controller.endStep < (controller.numberOfSteps -1)) && controller.endStep !== 0
                 anchors {
                     top: endThumb.bottom
                     horizontalCenter: endThumb.horizontalCenter
@@ -670,7 +712,8 @@ Item {
                 }
 
                 color: textColor
-                text:  controller.currentExtentEnd.toLocaleDateString(Qt.locale(currentExtentLabelLocale), currentExtentLabelFormat)
+                text:  currentExtentLabelFormat ? Qt.formatDateTime(controller.currentExtentEnd, currentExtentLabelFormat)
+                                                : Qt.formatDateTime(controller.currentExtentEnd)
                 elide: Text.ElideLeft
             }
         }
@@ -726,5 +769,5 @@ Item {
             border.color: thumbBorderColor
             radius: 1 * scaleFactor
         }
-    }  
+    }
 }

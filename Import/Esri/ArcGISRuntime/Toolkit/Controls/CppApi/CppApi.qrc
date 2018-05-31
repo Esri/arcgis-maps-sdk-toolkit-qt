@@ -2,6 +2,7 @@
     <qresource prefix="/qt-project.org/imports/Esri/ArcGISRuntime/Toolkit/Controls/CppApi">
         <file>CoordinateConversion.qml</file>
         <file>ArcGISCompass.qml</file>
+		<file>TimeSlider.qml</file>
         <file>images/Calculate_New_Coordinate.png</file>
         <file>images/compass.png</file>
         <file>images/convert.png</file>
