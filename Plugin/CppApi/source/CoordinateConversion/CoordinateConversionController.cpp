@@ -39,7 +39,7 @@
 // STL headers
 #include <cmath>
 #include <functional>
-#include <string.h>
+#include <cstring>
 
 /*!
   \class Esri::ArcGISRuntime::Toolkit::CoordinateConversionController

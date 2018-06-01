@@ -26,7 +26,7 @@
 #include "TimeSliderController.h"
 #include "ToolManager.h"
 
-#include <string.h>
+#include <cstring>
 
 using namespace Esri::ArcGISRuntime;
 
