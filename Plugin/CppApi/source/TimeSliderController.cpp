@@ -26,6 +26,8 @@
 #include "TimeSliderController.h"
 #include "ToolManager.h"
 
+#include <string.h>
+
 using namespace Esri::ArcGISRuntime;
 
 namespace Esri
@@ -197,7 +199,7 @@ QObject* TimeSliderController::geoView() const
  */
 void TimeSliderController::setGeoView(QObject* geoView)
 {
-  if (strcmp(geoView->metaObject()->className(), MapQuickView::staticMetaObject.className()) == 0)
+  if (std::strcmp(geoView->metaObject()->className(), MapQuickView::staticMetaObject.className()) == 0)
   {
     m_mapView = reinterpret_cast<MapQuickView*>(geoView);
     m_sceneView = nullptr;
@@ -208,7 +210,7 @@ void TimeSliderController::setGeoView(QObject* geoView)
       onMapChanged();
     }
   }
-  else if (strcmp(geoView->metaObject()->className(), SceneQuickView::staticMetaObject.className()) == 0)
+  else if (std::strcmp(geoView->metaObject()->className(), SceneQuickView::staticMetaObject.className()) == 0)
   {
     m_sceneView = reinterpret_cast<SceneQuickView*>(geoView);
     m_mapView = nullptr;

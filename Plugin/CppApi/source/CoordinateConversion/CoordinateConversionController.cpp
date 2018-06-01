@@ -39,6 +39,7 @@
 // STL headers
 #include <cmath>
 #include <functional>
+#include <string.h>
 
 /*!
   \class Esri::ArcGISRuntime::Toolkit::CoordinateConversionController
@@ -279,7 +280,7 @@ void CoordinateConversionController::setGeoView(QObject* geoView)
   if (!geoView)
     return;
 
-  if (strcmp(geoView->metaObject()->className(), MapQuickView::staticMetaObject.className()) == 0)
+  if (std::strcmp(geoView->metaObject()->className(), MapQuickView::staticMetaObject.className()) == 0)
   {
     m_mapView = reinterpret_cast<MapQuickView*>(geoView);
     m_sceneView = nullptr;
@@ -287,10 +288,9 @@ void CoordinateConversionController::setGeoView(QObject* geoView)
     {
       setSpatialReference(m_mapView->spatialReference());
       connect(m_mapView, &MapQuickView::mouseClicked, this, &CoordinateConversionController::onMouseClicked);
-
     }
   }
-  else if (strcmp(geoView->metaObject()->className(), SceneQuickView::staticMetaObject.className()) == 0)
+  else if (std::strcmp(geoView->metaObject()->className(), SceneQuickView::staticMetaObject.className()) == 0)
   {
     m_sceneView = reinterpret_cast<SceneQuickView*>(geoView);
     m_mapView = nullptr;
@@ -298,7 +298,6 @@ void CoordinateConversionController::setGeoView(QObject* geoView)
     {
       setSpatialReference(m_sceneView->spatialReference());
       connect(m_sceneView, &SceneQuickView::mouseClicked, this, &CoordinateConversionController::onMouseClicked);
-
     }
   }
 
