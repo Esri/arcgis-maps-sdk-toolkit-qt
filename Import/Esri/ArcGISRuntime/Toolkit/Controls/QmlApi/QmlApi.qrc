@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/qt-project.org/imports/Esri/ArcGISRuntime/Toolkit/Controls">
+    <qresource prefix="/qt-project.org/imports/Esri/ArcGISRuntime/Toolkit/Controls/QmlApi">
         <file>images/pause.png</file>
         <file>images/play.png</file>
         <file>images/step.png</file>
