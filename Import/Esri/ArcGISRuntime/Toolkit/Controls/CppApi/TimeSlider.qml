@@ -292,7 +292,7 @@ Item {
     }
 
     /*!
-      \qmlproperty GeoView geoView
+      \qmlproperty var geoView
       \brief The GeoView for this tool. Should be a SceneQuickView or a MapQuickView.
 
       This property is the entry point for the time extent of the geoView itself and
@@ -300,8 +300,7 @@ Item {
 
       \note this property must be set for the TimeSlider control to function correctly.
      */
-    property var geoView: null
-    onGeoViewChanged: controller.setGeoView(geoView);
+    property alias geoView: controller.geoView
 
     TimeSliderController {
         id: controller
