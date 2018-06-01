@@ -28,9 +28,9 @@
 #include "CoordinateFormatter.h"
 #include "GeoView.h"
 #include "GeometryEngine.h"
-#include "MapView.h"
+#include "MapQuickView.h"
 #include "PolylineBuilder.h"
-#include "SceneView.h"
+#include "SceneQuickView.h"
 
 // Qt headers
 #include <QClipboard>
@@ -266,7 +266,7 @@ bool CoordinateConversionController::isInputFormat(CoordinateConversionOptions* 
 /*!
   \internal
  */
-bool CoordinateConversionController::isFormat(CoordinateConversionOptions *option, const QString& formatName) const
+bool CoordinateConversionController::isFormat(CoordinateConversionOptions* option, const QString& formatName) const
 {
   if (option == nullptr)
     return false;
@@ -276,8 +276,32 @@ bool CoordinateConversionController::isFormat(CoordinateConversionOptions *optio
 
 void CoordinateConversionController::setGeoView(QObject* geoView)
 {
-  if (setGeoViewInternal(dynamic_cast<GeoView*>(geoView)))
-    connect(geoView, SIGNAL(mouseClicked(QMouseEvent&)), this, SLOT(onMouseClicked(QMouseEvent&)));
+  if (!geoView)
+    return;
+
+  if (strcmp(geoView->metaObject()->className(), MapQuickView::staticMetaObject.className()) == 0)
+  {
+    m_mapView = reinterpret_cast<MapQuickView*>(geoView);
+    m_sceneView = nullptr;
+    if (m_mapView)
+    {
+      setSpatialReference(m_mapView->spatialReference());
+      connect(m_mapView, &MapQuickView::mouseClicked, this, &CoordinateConversionController::onMouseClicked);
+
+    }
+  }
+  else if (strcmp(geoView->metaObject()->className(), SceneQuickView::staticMetaObject.className()) == 0)
+  {
+    m_sceneView = reinterpret_cast<SceneQuickView*>(geoView);
+    m_mapView = nullptr;
+    if (m_sceneView)
+    {
+      setSpatialReference(m_sceneView->spatialReference());
+      connect(m_sceneView, &SceneQuickView::mouseClicked, this, &CoordinateConversionController::onMouseClicked);
+
+    }
+  }
+
 }
 
 /*!
@@ -296,7 +320,7 @@ QAbstractListModel* CoordinateConversionController::results()
 /*!
   \internal
  */
-CoordinateConversionResults *CoordinateConversionController::resultsInternal()
+CoordinateConversionResults* CoordinateConversionController::resultsInternal()
 {
   if (!m_results)
   {
@@ -314,8 +338,8 @@ bool CoordinateConversionController::setGeoViewInternal(GeoView* geoView)
 
   setSpatialReference(geoView->spatialReference());
 
-  m_sceneView = dynamic_cast<SceneView*>(geoView);
-  m_mapView = dynamic_cast<MapView*>(geoView);
+  m_sceneView = dynamic_cast<SceneQuickView*>(geoView);
+  m_mapView = dynamic_cast<MapQuickView*>(geoView);
 
   return m_sceneView != nullptr || m_mapView != nullptr;
 }

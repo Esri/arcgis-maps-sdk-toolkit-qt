@@ -37,8 +37,8 @@ namespace Esri
 namespace ArcGISRuntime
 {
   class GeoView;
-  class MapView;
-  class SceneView;
+  class MapQuickView;
+  class SceneQuickView;
 
 namespace Toolkit
 {
@@ -155,8 +155,8 @@ private:
   QStringList m_coordinateFormats;
   QString m_inputFormat;
   bool m_captureMode = false;
-  Esri::ArcGISRuntime::MapView* m_mapView = nullptr;
-  Esri::ArcGISRuntime::SceneView* m_sceneView = nullptr;
+  Esri::ArcGISRuntime::MapQuickView* m_mapView = nullptr;
+  Esri::ArcGISRuntime::SceneQuickView* m_sceneView = nullptr;
 };
 
 } // Toolkit
