@@ -24,8 +24,9 @@
 #include "TimeValue.h"
 
 #include "TimeSliderController.h"
-#include "ToolResourceProvider.h"
 #include "ToolManager.h"
+
+#include <cstring>
 
 using namespace Esri::ArcGISRuntime;
 
@@ -161,11 +162,6 @@ TimeSliderController::TimeSliderController(QObject* parent):
   AbstractTool(parent)
 {
   ToolManager::instance().addTool(this);
-
-  connect(ToolResourceProvider::instance(), &ToolResourceProvider::geoViewChanged, this, [this]()
-  {
-    setGeoViewInternal(Toolkit::ToolResourceProvider::instance()->geoView());
-  });
 }
 
 /*!
@@ -183,6 +179,16 @@ QString TimeSliderController::toolName() const
   return "TimeSlider";
 }
 
+QObject* TimeSliderController::geoView() const
+{
+  if (m_mapView)
+    return m_mapView;
+  else if (m_sceneView)
+    return m_sceneView;
+
+  return nullptr;
+}
+
 /*!
   \brief Sets the GeoView for this tool to \a geoView.
 
@@ -193,38 +199,31 @@ QString TimeSliderController::toolName() const
  */
 void TimeSliderController::setGeoView(QObject* geoView)
 {
-  setGeoViewInternal(dynamic_cast<GeoView*>(geoView));
-}
+  if (std::strcmp(geoView->metaObject()->className(), MapQuickView::staticMetaObject.className()) == 0)
+  {
+    m_mapView = reinterpret_cast<MapQuickView*>(geoView);
+    m_sceneView = nullptr;
 
-/*!
- \internal
- */
-bool TimeSliderController::setGeoViewInternal(GeoView* geoView)
-{
-  if (geoView == nullptr)
-    return false;
+    if (m_mapView)
+    {
+      connect(m_mapView, &MapQuickView::mapChanged, this, &TimeSliderController::onMapChanged);
+      onMapChanged();
+    }
+  }
+  else if (std::strcmp(geoView->metaObject()->className(), SceneQuickView::staticMetaObject.className()) == 0)
+  {
+    m_sceneView = reinterpret_cast<SceneQuickView*>(geoView);
+    m_mapView = nullptr;
+
+    if (m_sceneView)
+    {
+      connect(m_sceneView, &SceneQuickView::sceneChanged, this, &TimeSliderController::onSceneChanged);
+      onSceneChanged();
+    }
+  }
 
   calculateStepPositions();
   emit currentTimeExtentChanged();
-
-  m_sceneView = dynamic_cast<SceneQuickView*>(geoView);
-  m_mapView = dynamic_cast<MapQuickView*>(geoView);
-
-  if (m_sceneView)
-  {
-    connect(m_sceneView, &SceneQuickView::sceneChanged, this, &TimeSliderController::onSceneChanged);
-    onSceneChanged();
-  }
-  else if (m_mapView)
-  {
-    connect(m_mapView, &MapQuickView::mapChanged, this, &TimeSliderController::onMapChanged);
-    onMapChanged();
-  }
-
-  if (!m_operationalLayers)
-    return false;
-
-  return true;
 }
 
 /*!

@@ -51,6 +51,7 @@ class TOOLKIT_EXPORT TimeSliderController : public AbstractTool
   Q_PROPERTY(int startStep READ startStep NOTIFY startStepChanged)
   Q_PROPERTY(int endStep READ endStep NOTIFY endStepChanged)
   Q_PROPERTY(QVariantList stepTimes READ stepTimes NOTIFY stepTimesChanged)
+  Q_PROPERTY(QObject* geoView READ geoView WRITE setGeoView NOTIFY geoViewChanged)
 
 signals:
   void numberOfStepsChanged();
@@ -59,6 +60,7 @@ signals:
   void startStepChanged();
   void endStepChanged();
   void stepTimesChanged();
+  void geoViewChanged();
 
 public:
   TimeSliderController(QObject* parent = nullptr);
@@ -66,7 +68,8 @@ public:
 
   QString toolName() const override;
 
-  Q_INVOKABLE void setGeoView(QObject* geoView);
+  QObject* geoView() const;
+  void setGeoView(QObject* geoView);
 
   int numberOfSteps() const;
 
@@ -93,7 +96,6 @@ private slots:
   void onSceneChanged();
 
 private:
-  bool setGeoViewInternal(GeoView* geoView);
   void initializeTimeProperties();
 
   void setNumberOfSteps(int numberOfSteps);
