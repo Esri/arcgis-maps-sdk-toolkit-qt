@@ -721,7 +721,24 @@ Item {
             if (controller.startStep === slider.first.value)
                 return;
 
+            if (startTimePinned) {
+                setValues(controller.startStep, controller.endStep);
+                return;
+            }
+
             controller.setStartInterval(slider.first.value);
+        }
+
+        second.onValueChanged: {
+            if (controller.endStep === slider.second.value)
+                return;
+
+            if (endTimePinned) {
+                setValues(controller.startStep, controller.endStep);
+                return;
+            }
+
+            controller.setEndInterval(slider.second.value);
         }
 
         first.onPressedChanged: {
@@ -736,13 +753,6 @@ Item {
                 return;
 
             second.pressed = false;
-        }
-
-        second.onValueChanged: {
-            if (controller.endStep === slider.second.value)
-                return;
-
-            controller.setEndInterval(slider.second.value);
         }
 
         Rectangle {
