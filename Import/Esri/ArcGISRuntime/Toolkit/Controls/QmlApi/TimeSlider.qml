@@ -468,7 +468,7 @@ Item {
                 newStart = controller.startStep + delta;
                 newEnd = controller.endStep + delta;
 
-                atEnd = newStart === 0 || newEnd === controller.numberOfSteps -1;
+                atEnd = newStart < 0 || newEnd > (controller.numberOfSteps -1);
             }
 
             if (newStart === -1 || newEnd === -1) {
@@ -547,7 +547,7 @@ Item {
         }
 
         from: 0
-        to: controller.numberOfSteps
+        to: controller.numberOfSteps -1
 
         onToChanged: {
             if (to === -1)
