@@ -328,7 +328,7 @@ Item {
     /*!
       /internal
       */
-    property real stepSize: sliderBar.width / (controller.numberOfSteps -1)
+    property real stepSize: sliderBar.width / (controller.numberOfSteps - 1)
 
     Label {
         id: startExtentLabel
@@ -470,14 +470,14 @@ Item {
                 newStart = 0;
                 newEnd = controller.endStep - controller.startStep;
                 needsRestart = false;
-                atEnd = newEnd === controller.numberOfSteps -1;
+                atEnd = newEnd === controller.numberOfSteps - 1;
             } else {
                 var delta = animateReverse ? -1 : 1;
                 newStart = controller.startStep + delta;
                 newEnd = controller.endStep + delta;
 
-                atEnd = (!startTimePinned && (newStart < 0 || newStart > (controller.numberOfSteps -1))) ||
-                        (!endTimePinned && (newEnd < 0 || newEnd > (controller.numberOfSteps -1)));
+                atEnd = (!startTimePinned && (newStart < 0 || newStart > (controller.numberOfSteps - 1))) ||
+                        (!endTimePinned && (newEnd < 0 || newEnd > (controller.numberOfSteps - 1)));
             }
 
             if (!atEnd) {
@@ -539,9 +539,9 @@ Item {
 
         onClicked: {
             controller.setStartAndEndIntervals(startTimePinned ? controller.startStep
-                                                               : Math.min(controller.startStep + 1, controller.numberOfSteps -1),
+                                                               : Math.min(controller.startStep + 1, controller.numberOfSteps - 1),
                                                endTimePinned ? controller.endStep
-                                                             : Math.min(controller.endStep + 1, controller.numberOfSteps -1));
+                                                             : Math.min(controller.endStep + 1, controller.numberOfSteps - 1));
         }
     }
 
@@ -558,7 +558,7 @@ Item {
         }
 
         from: 0
-        to: controller.numberOfSteps -1
+        to: controller.numberOfSteps - 1
 
         onToChanged: {
             if (to < 0)
@@ -606,7 +606,7 @@ Item {
                 }
                 property int stepsWidth: 1 * scaleFactor
                 spacing: controller.numberOfSteps === -1 ? 0 :
-                                                           (sliderBar.width - (controller.numberOfSteps * stepsWidth)) / (controller.numberOfSteps -1)
+                                                           (sliderBar.width - (controller.numberOfSteps * stepsWidth)) / (controller.numberOfSteps - 1)
 
                 Repeater {
                     id: steps
@@ -640,6 +640,7 @@ Item {
                     left: sliderBar.left
                     right: sliderBar.right
                 }
+                color: textColor
                 y: (sliderBar.height * 0.5) + 0.5 * startThumb.height
                 leftPadding: Math.min(currentExtentFill.x, sliderBar.width * 0.5)
 
@@ -668,7 +669,7 @@ Item {
 
             Label {
                 id: currentStartLabel
-                visible: (labelMode === labelModeThumbs) && !combinedLabel.visible && controller.startStep !== controller.numberOfSteps -1 && controller.startStep !== 0
+                visible: (labelMode === labelModeThumbs) && !combinedLabel.visible && controller.startStep !== controller.numberOfSteps - 1 && controller.startStep !== 0
                 anchors {
                     top: startThumb.bottom
                     horizontalCenter: startThumb.horizontalCenter
@@ -702,7 +703,7 @@ Item {
 
             Label {
                 id: currentEndLabel
-                visible: (labelMode === labelModeThumbs) && !combinedLabel.visible && (controller.endStep < (controller.numberOfSteps -1)) && controller.endStep !== 0
+                visible: (labelMode === labelModeThumbs) && !combinedLabel.visible && (controller.endStep < (controller.numberOfSteps - 1)) && controller.endStep !== 0
                 anchors {
                     top: endThumb.bottom
                     horizontalCenter: endThumb.horizontalCenter
