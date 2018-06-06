@@ -406,8 +406,10 @@ Item {
         }
 
         onClicked: {
-            controller.setStartAndEndIntervals(Math.max(controller.startStep - 1, 0),
-                                               Math.max(controller.endStep - 1, 0));
+            controller.setStartAndEndIntervals(startTimePinned ? controller.startStep
+                                                               : Math.max(controller.startStep - 1, 0),
+                                               endTimePinned ? controller.endStep
+                                                             : Math.max(controller.endStep - 1, 0));
         }
     }
 
@@ -474,23 +476,24 @@ Item {
                 newStart = controller.startStep + delta;
                 newEnd = controller.endStep + delta;
 
-                atEnd = newStart < 0 || newEnd > (controller.numberOfSteps -1);
+                atEnd = (!startTimePinned && (newStart < 0 || newStart > (controller.numberOfSteps -1))) ||
+                        (!endTimePinned && (newEnd < 0 || newEnd > (controller.numberOfSteps -1)));
             }
 
-            if (newStart === -1 || newEnd === -1) {
-                playButton.checked = false;
+            if (!atEnd) {
+                controller.setStartAndEndIntervals(startTimePinned ? controller.startStep
+                                                                   : newStart,
+                                                   endTimePinned ? controller.endStep
+                                                                 : newEnd);
                 return;
             }
-
-            controller.setStartAndEndIntervals(newStart, newEnd);
-
-            if (!atEnd)
-                return;
 
             if (!playbackLoop)
                 playButton.checked = false;
             else if (playbackReverse)
                 animateReverse = !animateReverse;
+            else if (startTimePinned || endTimePinned)
+                playButton.checked = false;
             else
                 needsRestart = true;
         }
@@ -535,8 +538,10 @@ Item {
         }
 
         onClicked: {
-            controller.setStartAndEndIntervals(Math.min(controller.startStep + 1, controller.numberOfSteps -1),
-                                               Math.min(controller.endStep + 1, controller.numberOfSteps -1));
+            controller.setStartAndEndIntervals(startTimePinned ? controller.startStep
+                                                               : Math.min(controller.startStep + 1, controller.numberOfSteps -1),
+                                               endTimePinned ? controller.endStep
+                                                             : Math.min(controller.endStep + 1, controller.numberOfSteps -1));
         }
     }
 
@@ -556,7 +561,7 @@ Item {
         to: controller.numberOfSteps -1
 
         onToChanged: {
-            if (to === -1)
+            if (to < 0)
                 return;
 
             setValues(controller.startStep, controller.endStep);
