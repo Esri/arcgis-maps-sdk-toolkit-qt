@@ -622,6 +622,7 @@ Item {
                                 horizontalCenter: parent.horizontalCenter
                                 top: parent.bottom
                             }
+                            color: textColor
                             horizontalAlignment: Text.AlignHCenter
                             visible: (labelMode === labelModeTicks) && index % labelSliderTickInterval === 0 && parent.color !== "transparent"
                             text: controller.stepTimes[index] ? timeStepIntervalLabelFormat ?

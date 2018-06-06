@@ -618,6 +618,7 @@ Item {
                                 top: parent.bottom
                             }
                             horizontalAlignment: Text.AlignHCenter
+                            color: textColor
                             visible: (labelMode === labelModeTicks) && index % labelSliderTickInterval === 0 && parent.color !== "transparent"
                             text: controller.stepTimes[index] ? timeStepIntervalLabelFormat ?
                                                                     Qt.formatDateTime(controller.stepTimes[index], timeStepIntervalLabelFormat)
