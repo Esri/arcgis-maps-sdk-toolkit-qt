@@ -178,7 +178,11 @@ Item {
         height: 32 * scaleFactor
         width: implicitWidth
         text: coordinateConvController.inputFormat.length > 0 ? coordinateConvController.inputFormat : "Set format"
-
+        background: Rectangle {
+            anchors.fill: parent
+            color: backgroundColor
+		}
+        
         contentItem: Text {
             text: inputModeButton.text
             font{
@@ -296,7 +300,11 @@ Item {
 
         checkable: true
         checked: false
-
+        background: Rectangle {
+            anchors.fill: parent
+            color: backgroundColor
+		}
+		
         Image {
             fillMode: Image.PreserveAspectFit
             anchors.fill: menuButton
@@ -576,7 +584,11 @@ Item {
                     verticalCenter: parent.verticalCenter
                     margins: 5 * scaleFactor
                 }
-
+                background: Rectangle {
+					anchors.fill: parent
+					color: backgroundColor
+				}
+		
                 Image {
                     fillMode: Image.PreserveAspectFit
                     anchors.centerIn: editMenuButton
