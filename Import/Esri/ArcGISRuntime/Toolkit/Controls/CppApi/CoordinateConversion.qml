@@ -178,7 +178,7 @@ Item {
         height: 32 * scaleFactor
         width: implicitWidth
         text: coordinateConvController.inputFormat.length > 0 ? coordinateConvController.inputFormat : "Set format"
-		background: Rectangle {
+        background: Rectangle {
             anchors.fill: parent
             color: backgroundColor
 		}
@@ -300,7 +300,7 @@ Item {
 
         checkable: true
         checked: false
-		background: Rectangle {
+        background: Rectangle {
             anchors.fill: parent
             color: backgroundColor
 		}
@@ -584,7 +584,7 @@ Item {
                     verticalCenter: parent.verticalCenter
                     margins: 5 * scaleFactor
                 }
-				background: Rectangle {
+                background: Rectangle {
 					anchors.fill: parent
 					color: backgroundColor
 				}
