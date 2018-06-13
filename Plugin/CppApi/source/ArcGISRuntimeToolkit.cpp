@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2018 Esri
  *
@@ -79,9 +80,9 @@ void ArcGISRuntimeToolkit::registerTypes(const char* uri)
 void ArcGISRuntimeToolkit::registerToolkitTypes(const char* uri)
 {
   // types
-  qmlRegisterType<CoordinateConversionController>(uri, s_versionMajor, s_versionMinor, "CoordinateConversionController");
-  qmlRegisterType<ArcGISCompassController>(uri, s_versionMajor, s_versionMinor, "ArcGISCompassController");
-  qmlRegisterType<TimeSliderController>(uri, s_versionMajor, s_versionMinor, "TimeSliderController");
+  qmlRegisterType<CoordinateConversionController>(uri, s_versionMajor100, s_versionMinorUpdate2, "CoordinateConversionController");
+  qmlRegisterType<ArcGISCompassController>(uri, s_versionMajor100, s_versionMinorUpdate2, "ArcGISCompassController");
+  qmlRegisterType<TimeSliderController>(uri, s_versionMajor100, s_versionMinorUpdate3, "TimeSliderController");
 }
 
 } // Toolkit

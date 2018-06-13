@@ -17,8 +17,11 @@
 #ifndef ArcGISRuntimeToolkit_H
 #define ArcGISRuntimeToolkit_H
 
-#include <QQmlExtensionPlugin>
+// toolkit headers
 #include "ToolkitCommon.h"
+
+// Qt headers
+#include <QQmlExtensionPlugin>
 
 namespace Esri
 {
@@ -40,8 +43,9 @@ public:
   static void registerToolkitTypes(const char* uri = "Esri.ArcGISRuntime.Toolkit.CppApi");
 
 private:
-  static constexpr int s_versionMajor = 100;
-  static constexpr int s_versionMinor = 3;
+  static constexpr int s_versionMajor100 = 100;
+  static constexpr int s_versionMinorUpdate2 = 2;
+  static constexpr int s_versionMinorUpdate3 = 3;
 };
 
 } // Toolkit
