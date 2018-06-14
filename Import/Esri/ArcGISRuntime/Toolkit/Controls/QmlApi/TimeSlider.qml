@@ -320,11 +320,6 @@ Item {
         onCurrentTimeExtentChanged: currentExtentChanged();
     }
 
-    /*!
-      /internal
-      */
-    property real stepSize: sliderBar.width / (controller.numberOfSteps - 1)
-
     Label {
         id: startExtentLabel
         anchors {
