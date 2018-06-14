@@ -164,7 +164,7 @@ Item {
 
     Rectangle {
         id: backgroundRectangle
-        anchors{
+        anchors {
             top: menuButton.checked ? expandUpwards ? addConversionButton.top : inputModeButton.top : inputModeButton.top
             bottom: menuButton.checked ? expandUpwards ? inputModeButton.bottom : results.bottom : inputModeButton.bottom
             left: parent.left
@@ -263,7 +263,6 @@ Item {
             left: inputModeButton.right
             verticalCenter: inputModeButton.verticalCenter
             right: menuButton.left
-            leftMargin: 5 * scaleFactor
         }
         height: inputModeButton.height
         verticalAlignment: Text.AlignVCenter
