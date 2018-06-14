@@ -554,7 +554,6 @@ Item {
                 text: name
                 anchors {
                     left: parent.left
-                    leftMargin: 5 * scaleFactor
                     verticalCenter: parent.verticalCenter
                 }
                 width: inputModeButton.width
