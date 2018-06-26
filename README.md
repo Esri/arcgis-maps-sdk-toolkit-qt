@@ -46,10 +46,9 @@ The toolkit repo has a demo project located in the Examples folder. This project
 
 1. Open `Examples.qmlproject` in Qt Creator
 2. Go to Projects > Run, and add a new variable called QML2_IMPORT_PATH, and set the value equal to the path of ArcGIS Runtime and the Toolkit. For example, `QML2_IMPORT_PATH=/Users/<username>/ArcGIS_SDKs/Qt100.3/sdk/macOS/x64/qml:/Users/<username>/ArcGIS_SDKs/Qt100.3/sdk/toolkit/Import`
-3. Depending on your system, you may additionally need to add the path to the EsriCommonQt library into an environment variable. On Windows, add it to the PATH, on Linux, add it to LD_LIBRARY_PATH, and on macOS, add it to DYLD_LIBRARY_PATH. For example, `PATH=C:\Program Files (x86)\ArcGIS SDKs\Qt100.3\sdk\windows\x64\bin\release`.
-4. The qmlscene application on Windows and Linux require that the path to the Qt libraries be specified in the PATH and LD_LIBRARY_PATH, respectively. For example, `PATH=C:\Qt5.8\msvc2015_64\bin`.
-5. On Windows only, force the usage of ANGLE by setting the `QT_OPENGL` environment variable to `angle`.
-6. Run the app and select an example from the drop down.
+3. Depending on your system, you may additionally need to add the path to the EsriCommonQt library into an environment variable. On Windows, add it to the PATH, on Linux, add it to LD_LIBRARY_PATH, and on macOS, add it to DYLD_LIBRARY_PATH. For example, `PATH=C:\Program Files (x86)\ArcGIS SDKs\Qt100.3\sdk\windows\x64\bin`.
+4. The qmlscene application on Windows and Linux require that the path to the Qt libraries be specified in the PATH and LD_LIBRARY_PATH, respectively. For example, `PATH=C:\Qt5.9.2\msvc2015_64\bin`.
+5. Run the app and select an example from the drop down.
 
 ## Version
 The Toolkit is forwards compatible with the ArcGIS Runtime API. It is not backwards compatible. This means that version 100.0 of the Toolkit can be used with version 100.3 of the Runtime API. However, version 100.3 of the Toolkit cannot be used with version 100.0 of the Runtime API, as this version of the Toolkit may require functionality from a newer version of the Runtime API.
