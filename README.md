@@ -6,7 +6,6 @@ Current Release: 100.3
 This project contains QML source code for controls and utilities you can use with the [ArcGIS Runtime SDK for Qt](http://developers.arcgis.com/qt). There are QML examples in this repo that demonstrate the use of these controls and how they can be used as resuable building blocks for your QML-based ArcGIS applications.
 
 ## Features
-- UserCredentials Dialog - A dialog that takes in a username and password. It can be connected with a UserCredentials instance and a Portal instance to sign into Portal for ArcGIS or ArcGIS Online. The dialog is customizable, as the top banner and several labels can be changed.
 - AuthenticationView Dialog - A wrapper view that will automatically display the proper authentication view for any of the supported authentication types (OAuth, Token, HTTP Basic, HTTP Digest, SAML, PKI).
 - ClientCertificateView Dialog - A dialog for handling PKI authentication.
 - OAuth2View Dialog - A dialog for handling OAuth authentication.
@@ -14,6 +13,9 @@ This project contains QML source code for controls and utilities you can use wit
 - UserCredentialsView Dialog - A generic dialog for handling username/password authentication.
 - Callout Control - A view for displaying information at a geographic location on the map.
 - PopupView Control - A view for displaying attributes and attachments for features.
+- TimeSlider Control - A control for visualizing temporal data by changing the currently visible time extent.
+- Compass Control (C++ only) - A compass (aka north arrow) control for indicating which direction is north.
+- Coordinate Conversion Control (C++ Only) - A tool for assisting in converting coordinates from one format to another.
 
 ## Setup instructions 
 
@@ -58,6 +60,8 @@ The `master` branch contains toolkit components for the current, most up-to-date
 
 - [100.0](https://github.com/Esri/arcgis-runtime-toolkit-qt/releases/tag/1529)
 - [100.1](https://github.com/Esri/arcgis-runtime-toolkit-qt/releases/tag/1744)
+- [100.2](https://github.com/Esri/arcgis-runtime-toolkit-qt/releases/tag/1912)
+- [100.2.1](https://github.com/Esri/arcgis-runtime-toolkit-qt/releases/tag/100.2.1)
 
 ## Resources
 
@@ -73,7 +77,7 @@ Find a bug or want to request a new feature?  Please let us know by submitting a
 Anyone and everyone is welcome to contribute.
 
 ## Licensing
-Copyright 2017 Esri
+Copyright 2018 Esri
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
