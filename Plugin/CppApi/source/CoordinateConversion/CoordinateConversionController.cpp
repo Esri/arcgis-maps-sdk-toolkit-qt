@@ -381,14 +381,13 @@ bool CoordinateConversionController::isCaptureMode() const
 }
 
 /*!
-  \qmlproperty bool CoordinateConversionController::captureMode
-  \brief The tool's capture mode
+  \brief Sets the tool's capture mode to \a captureMode.
+
   \list
     \li \c true = convert a point set via a mouse click.
     \li \c false = use the app's current location as the target point.
   \endlist
  */
-
 void CoordinateConversionController::setCaptureMode(bool captureMode)
 {
   if (captureMode == m_captureMode)
@@ -403,7 +402,7 @@ void CoordinateConversionController::setCaptureMode(bool captureMode)
 
 /*!
   \fn void CoordinateConversionController::onMouseClicked(QMouseEvent& mouseEvent);
-  \brief Signal emitted when the mouse is clicked.
+  \brief Handles the mouse click at \a mouseEvent .
 
   If the tool is active and is in \l captureMode, the clicked location will be used
   as the input for conversions.
@@ -421,7 +420,7 @@ void CoordinateConversionController::onMouseClicked(QMouseEvent& mouseEvent )
 
 /*!
   \fn void CoordinateConversionController::onLocationChanged(const Point& location);
-  \brief Signal emitted when the \l location property changes.
+  \brief Handles the app's location update to \a location.
 
   If the tool is active and is not in \l captureMode, the location will be used
   as the input for conversions.
@@ -743,6 +742,17 @@ void CoordinateConversionController::setRunConversion(bool runConversion)
   m_runConversion = runConversion;
   emit runConversionChanged();
 }
+
+// properties
+
+/*!
+  \qmlproperty bool CoordinateConversionController::captureMode
+  \brief The tool's capture mode.
+  \list
+    \li \c true = convert a point set via a mouse click.
+    \li \c false = use the app's current location as the target point.
+  \endlist
+ */
 
 // signals
 
