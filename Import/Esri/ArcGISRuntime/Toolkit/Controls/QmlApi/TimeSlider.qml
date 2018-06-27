@@ -129,12 +129,12 @@ Item {
 
     /*!
       \qmlproperty var fullExtentLabelFormat
-      \brief The format for displaying \l Date values
-      for the full time extent. - for example "yy/MM/dd".
+      \brief The format for displaying Date values
+      for the full time extent, for example "yy/MM/dd".
 
       The default is \c Qt.DefaultLocaleShortDate.
 
-      \sa \l Qt.formatDateTime
+      \sa Qt.formatDateTime
       */
     property var fullExtentLabelFormat
 
@@ -148,12 +148,12 @@ Item {
 
     /*!
       \qmlproperty var currentExtentLabelFormat
-      \brief The format for displaying \l Date values
+      \brief The format for displaying Date values
       for the current time extent. - for example "yy/MM/dd".
 
       The default is \c Qt.DefaultLocaleShortDate.
 
-      \sa \l Qt.formatDateTime
+      \sa Qt.formatDateTime
       */
     property var currentExtentLabelFormat
 
@@ -188,10 +188,10 @@ Item {
 
       Valid options are:
       \list
-        \li labelModeNone. No labels are applied
-        \li labelModeThumbs. Labels are applied to the slider thumbs.
-        \li labelModeTicks. Labels are applied to the slider tick marks.
-      \endList
+        \li labelModeNone - No labels are applied
+        \li labelModeThumbs - Labels are applied to the slider thumbs.
+        \li labelModeTicks - Labels are applied to the slider tick marks.
+      \endlist
 
       The default is \c labelModeThumbs.
       */
@@ -260,7 +260,7 @@ Item {
 
       The default is \c Qt.DefaultLocaleShortDate.
 
-      \sa \l Qt.formatDateTime
+      \sa Qt.formatDateTime
       */
     property var timeStepIntervalLabelFormat
 

@@ -140,7 +140,7 @@ Item {
 
       The default is \c Qt.DefaultLocaleShortDate.
 
-      \sa \l Qt.formatDateTime
+      \sa Qt.formatDateTime
       */
     property var fullExtentLabelFormat
 
@@ -159,7 +159,7 @@ Item {
 
       The default is \c Qt.DefaultLocaleShortDate.
 
-      \sa \l Qt.formatDateTime
+      \sa Qt.formatDateTime
       */
     property var currentExtentLabelFormat
 
@@ -197,7 +197,7 @@ Item {
         \li labelModeNone. No labels are applied
         \li labelModeThumbs. Labels are applied to the slider thumbs.
         \li labelModeTicks. Labels are applied to the slider tick marks.
-      \endList
+      \endlist
 
       The default is \c labelModeThumbs.
       */
@@ -266,7 +266,7 @@ Item {
 
       The default is \c Qt.DefaultLocaleShortDate.
 
-      \sa \l Qt.formatDateTime
+      \sa Qt.formatDateTime
       */
     property var timeStepIntervalLabelFormat
 

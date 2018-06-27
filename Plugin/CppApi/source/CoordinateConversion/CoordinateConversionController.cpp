@@ -381,11 +381,14 @@ bool CoordinateConversionController::isCaptureMode() const
 }
 
 /*!
-  \brief Sets the tool's capture mode to \a captureMode.
-
-  If \c true, the tool will convert a point set via a mouse click.
-  If \c false, the too will use the app's current location as the target point.
+  \qmlproperty bool CoordinateConversionController::captureMode
+  \brief The tool's capture mode
+  \list
+    \li \c true = convert a point set via a mouse click.
+    \li \c false = use the app's current location as the target point.
+  \endlist
  */
+
 void CoordinateConversionController::setCaptureMode(bool captureMode)
 {
   if (captureMode == m_captureMode)
@@ -399,9 +402,11 @@ void CoordinateConversionController::setCaptureMode(bool captureMode)
 }
 
 /*!
-  \brief Handles the mouse click at \a mouseEvent .
+  \fn void CoordinateConversionController::onMouseClicked(QMouseEvent& mouseEvent);
+  \brief Signal emitted when the mouse is clicked.
 
-  If the tool is active and in \l captureMode, this will be used as the input for conversions.
+  If the tool is active and is in \l captureMode, the clicked location will be used
+  as the input for conversions.
  */
 void CoordinateConversionController::onMouseClicked(QMouseEvent& mouseEvent )
 {
@@ -415,9 +420,11 @@ void CoordinateConversionController::onMouseClicked(QMouseEvent& mouseEvent )
 }
 
 /*!
-  \brief Handles the app's location update to \a location.
+  \fn void CoordinateConversionController::onLocationChanged(const Point& location);
+  \brief Signal emitted when the \l location property changes.
 
-  If the tool is active and is not in \l captureMode, this will be used as the input for conversions.
+  If the tool is active and is not in \l captureMode, the location will be used
+  as the input for conversions.
  */
 void CoordinateConversionController::onLocationChanged(const Point& location)
 {
@@ -495,13 +502,14 @@ QString CoordinateConversionController::toolName() const
   return "CoordinateConversion";
 }
 
-/*! \brief Sets any values in \a properties which are relevant for the coordinate conversion controller.
- *
- * This tool will use the following key/value pairs in the \a properties map if they are set:
- *
- * \list
- *  \li CoordinateFormat. The default input coordinate format for the tool.
- * \endList
+/*!
+  \brief Sets any values in \a properties which are relevant for the coordinate conversion controller.
+
+  This tool will use the following key/value pairs in the \a properties map if they are set:
+
+  \list
+   \li CoordinateFormat. The default input coordinate format for the tool.
+  \endlist
  */
 void CoordinateConversionController::setProperties(const QVariantMap& properties)
 {
@@ -511,7 +519,7 @@ void CoordinateConversionController::setProperties(const QVariantMap& properties
 }
 
 /*!
- * \brief Returns a string representation of the input point in the input coordinate format.
+  \brief Returns a string representation of the input point in the input coordinate format.
  */
 QString CoordinateConversionController::pointToConvert() const
 {
@@ -605,9 +613,11 @@ void CoordinateConversionController::removeCoordinateFormat(const QString& forma
 }
 
 /*!
-  \brief Returns the screen coordinate of the current \l pointToConvert, within the bounds of \a screenWidth and \a screenHeight.
+  \brief Returns the screen coordinate of the current \l pointToConvert,
+  within the bounds of \a screenWidth and \a screenHeight.
 
-  If the point is off the screen, attempts to find the closest point on the screen (e.g. on the edge) to the point.
+  If the point is off the screen, attempts to find the closest point on the
+  screen (e.g. on the edge) to the point.
  */
 QPointF CoordinateConversionController::screenCoordinate() const
 {
@@ -738,7 +748,8 @@ void CoordinateConversionController::setRunConversion(bool runConversion)
 
 /*!
   \fn void CoordinateConversionController::optionsChanged();
-  \brief Signal emitted when the \l options property changes.
+  \brief Signal emitted when options are added, cleared, or when a coordinate
+  format is removed.
  */
 
 /*!
