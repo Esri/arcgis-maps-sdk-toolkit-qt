@@ -202,10 +202,12 @@ Item {
         handleTimeAwareLayers();
     }
 
+    /*! \internal */
     function validLayer(layer) {
         return layer && layer.visible && layer.timeFilteringEnabled;
     }
 
+    /*! \internal */
     function handleTimeAwareLayers() {
         timeStepInterval = null;
         for (var i = 0 ; i < timeAwareLayers.length; i++) {
@@ -237,6 +239,7 @@ Item {
         setStepTimes();
     }
 
+    /*! \internal */
     function isGreaterThan(timeValue, otherTimeValue) {
         if (timeValue.unit === otherTimeValue.unit)
             return timeValue.duration > otherTimeValue.duration;
@@ -244,6 +247,7 @@ Item {
             return toMilliseconds(timeValue) > toMilliseconds(otherTimeValue);
     }
 
+    /*! \internal */
     function toMilliseconds(timeValue) {
         switch (timeValue.unit)
         {
@@ -272,6 +276,7 @@ Item {
         }
     }
 
+    /*! \internal */
     function union(timeExtent, otherTimeExtent) {
         if (otherTimeExtent === null)
             return timeExtent;
@@ -284,6 +289,7 @@ Item {
         return ArcGISRuntimeEnvironment.createObject("TimeExtent", properties);
     }
 
+    /*! \internal */
     function calculateNumberOfSteps(timeExtent, timeValue) {
         if (!timeExtent)
             return;
@@ -297,6 +303,7 @@ Item {
         numberOfSteps = (range / intervalMS) + 1;
     }
 
+    /*! \internal */
     function setStepTimes() {
         var tempStepTimes = [];
 
@@ -307,6 +314,7 @@ Item {
         stepTimes = tempStepTimes;
     }
 
+    /*! \internal */
     function toTimeUnit() {
         var daysPerYear = 365.0;
         var millisecondsPerDay = 86400000.0;

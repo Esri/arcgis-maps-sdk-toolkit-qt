@@ -97,7 +97,7 @@ Item {
         \li \c UTM.
         \li \c GARS
         \li GeoRef
-      \endList
+      \endlist
      */
     property alias inputFormat: coordinateConvController.inputFormat
 
