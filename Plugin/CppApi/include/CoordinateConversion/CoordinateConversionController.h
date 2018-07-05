@@ -37,8 +37,8 @@ namespace Esri
 namespace ArcGISRuntime
 {
   class GeoView;
-  class MapView;
-  class SceneView;
+  class MapQuickView;
+  class SceneQuickView;
 
 namespace Toolkit
 {
@@ -58,8 +58,11 @@ class TOOLKIT_EXPORT CoordinateConversionController : public AbstractTool
   Q_PROPERTY(bool runConversion READ runConversion WRITE setRunConversion NOTIFY runConversionChanged)
 
   // set the input format etc.
+  /*! \internal */
   Q_PROPERTY(QString inputFormat READ inputFormat WRITE setInputFormat NOTIFY inputFormatChanged)
+  /*! \internal */
   Q_PROPERTY(QStringList coordinateFormats READ coordinateFormats NOTIFY coordinateFormatsChanged)
+  /*! \internal */
   Q_PROPERTY(QString pointToConvert READ pointToConvert NOTIFY pointToConvertChanged)
 
   // whether the tool is in "capture mode" (sets the target to a clicked point) or "live" mode (uses current location)
@@ -96,6 +99,7 @@ public:
 signals:
   void optionsChanged();
   void resultsChanged();
+  /*! \internal */
   void inputModeChanged();
   void runConversionChanged();
   void pointToConvertChanged();
@@ -155,8 +159,8 @@ private:
   QStringList m_coordinateFormats;
   QString m_inputFormat;
   bool m_captureMode = false;
-  Esri::ArcGISRuntime::MapView* m_mapView = nullptr;
-  Esri::ArcGISRuntime::SceneView* m_sceneView = nullptr;
+  Esri::ArcGISRuntime::MapQuickView* m_mapView = nullptr;
+  Esri::ArcGISRuntime::SceneQuickView* m_sceneView = nullptr;
 };
 
 } // Toolkit

@@ -20,7 +20,7 @@ AuthenticationView 2.0 AuthenticationView20.qml
 AuthenticationView 100.0 AuthenticationView.qml
 ClientCertificateView 2.0 ClientCertificateView20.qml
 ClientCertificateView 100.0 ClientCertificateView.qml
-CurrentVersion 100.2 CurrentVersion.qml
+CurrentVersion 100.3 CurrentVersion.qml
 ImagePopUpDialog 2.0 ImagePopUpDialog20.qml
 OAuth2View 2.0 OAuth2View20.qml
 OAuth2View 100.0 OAuth2View.qml

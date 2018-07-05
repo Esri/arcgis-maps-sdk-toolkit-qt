@@ -13,13 +13,13 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
- 
+
 import QtQuick 2.6
 import QtQuick.Controls 2.2
 import QtQuick.Window 2.2
 import QtGraphicalEffects 1.0
 import QtQuick.Controls.Material 2.2
-import Esri.ArcGISRuntime.Toolkit.CppApi 100.2
+import Esri.ArcGISRuntime.Toolkit.CppApi 100.3
 
 /*!
     \qmltype CoordinateConversion
@@ -88,16 +88,16 @@ Item {
       \qmlproperty string inputFormat
       \brief The input format for the tool. This can be in a user defined format or one of:
 
-      * \list
-        * \li \c DD. Decimal degrees.
-        * \li \c DDM. Degrees decimal minutes.
-        * \li \c DMS. Degrees minutes seconds.
-        * \li \c MGRS.
-        * \li \c USNG.
-        * \li \c UTM.
-        * \li \c GARS
-        * \li GeoRef
-      * \endList
+      \list
+        \li \c DD. Decimal degrees.
+        \li \c DDM. Degrees decimal minutes.
+        \li \c DMS. Degrees minutes seconds.
+        \li \c MGRS.
+        \li \c USNG.
+        \li \c UTM.
+        \li \c GARS
+        \li GeoRef
+      \endlist
      */
     property alias inputFormat: coordinateConvController.inputFormat
 
@@ -141,6 +141,12 @@ Item {
      */
     property bool expandUpwards: true
 
+    /*!
+      \qmlproperty real radius
+      \brief This property holds the corner radius used to draw a rounded rectangle.
+
+      The default value is \c 0.
+     */
     property alias radius: backgroundRectangle.radius
 
     CoordinateConversionController {
@@ -158,13 +164,23 @@ Item {
 
     Rectangle {
         id: backgroundRectangle
-        anchors{
+        anchors {
             top: menuButton.checked ? expandUpwards ? addConversionButton.top : inputModeButton.top : inputModeButton.top
             bottom: menuButton.checked ? expandUpwards ? inputModeButton.bottom : results.bottom : inputModeButton.bottom
             left: parent.left
             right: parent.right
         }
         color: backgroundColor
+    }
+
+    TextMetrics {
+        id: textMetrics
+        font {
+            bold: true
+            family: fontFamily
+            pixelSize: coordinateConversionWindow.fontSize * scaleFactor
+        }
+        text: "MMMMMM"
     }
 
     Button {
@@ -176,12 +192,16 @@ Item {
             margins: 5 * scaleFactor
         }
         height: 32 * scaleFactor
-        width: implicitWidth
+        width: textMetrics.width
         text: coordinateConvController.inputFormat.length > 0 ? coordinateConvController.inputFormat : "Set format"
+        background: Rectangle {
+            anchors.fill: parent
+            color: "transparent"
+        }
 
         contentItem: Text {
             text: inputModeButton.text
-            font{
+            font {
                 bold: true
                 family: fontFamily
                 pixelSize: coordinateConversionWindow.fontSize * scaleFactor
@@ -243,7 +263,6 @@ Item {
             left: inputModeButton.right
             verticalCenter: inputModeButton.verticalCenter
             right: menuButton.left
-            leftMargin: 5 * scaleFactor
         }
         height: inputModeButton.height
         verticalAlignment: Text.AlignVCenter
@@ -296,6 +315,10 @@ Item {
 
         checkable: true
         checked: false
+        background: Rectangle {
+            anchors.fill: parent
+            color: "transparent"
+        }
 
         Image {
             fillMode: Image.PreserveAspectFit
@@ -432,7 +455,7 @@ Item {
             if (screenPos.x === -1.0 && screenPos.y === -1.0)
                 return;
 
-            var itemPos = geoView.mapToItem(coordinateConversionWindow, screenPos.x / Screen.devicePixelRatio, screenPos.y / Screen.devicePixelRatio);
+            var itemPos = geoView.mapToItem(coordinateConversionWindow, screenPos.x, screenPos.y);
             flashImage.x = itemPos.x - (flashImage.width * 0.5);
             flashImage.y = itemPos.y - (flashImage.height * 0.5);
             flashImage.running = true;
@@ -530,7 +553,6 @@ Item {
                 text: name
                 anchors {
                     left: parent.left
-                    leftMargin: 5 * scaleFactor
                     verticalCenter: parent.verticalCenter
                 }
                 width: inputModeButton.width
@@ -575,6 +597,10 @@ Item {
                     right: parent.right
                     verticalCenter: parent.verticalCenter
                     margins: 5 * scaleFactor
+                }
+                background: Rectangle {
+                    anchors.fill: parent
+                    color: "transparent"
                 }
 
                 Image {
@@ -655,7 +681,7 @@ Item {
         radius: height
         color: highlightColor
         border {
-            color: backgroundColor
+            color: "transparent"
             width: 1 * scaleFactor
         }
 

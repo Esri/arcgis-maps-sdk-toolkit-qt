@@ -20,4 +20,5 @@ SOURCES += $$PWD/ArcGISRuntimeToolkitPlugin.cpp
 
 RESOURCES += $$PWD/../Import/Esri/ArcGISRuntime/Toolkit/Controls/Controls.qrc \
              $$PWD/../Import/Esri/ArcGISRuntime/Toolkit/Dialogs/Dialogs.qrc \
-             $$PWD/../Import/Esri/ArcGISRuntime/Toolkit/Controls/CppApi/CppApi.qrc
+             $$PWD/../Import/Esri/ArcGISRuntime/Toolkit/Controls/CppApi/CppApi.qrc \
+             $$PWD/../Import/Esri/ArcGISRuntime/Toolkit/Controls/QmlApi/QmlApi.qrc

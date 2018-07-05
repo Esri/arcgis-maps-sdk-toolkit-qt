@@ -38,6 +38,7 @@ class TOOLKIT_EXPORT AbstractTool : public QObject
 {
   Q_OBJECT
 
+  /*! \internal */
   Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
 
 public:
