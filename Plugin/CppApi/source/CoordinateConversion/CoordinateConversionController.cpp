@@ -1,14 +1,18 @@
-// Copyright 2017 ESRI
-//
-// All rights reserved under the copyright laws of the United States
-// and applicable international laws, treaties, and conventions.
-//
-// You may freely redistribute and use this sample code, with or
-// without modification, provided you include the original copyright
-// notice and use restrictions.
-//
-// See the Sample code usage restrictions document for further information.
-//
+/*******************************************************************************
+ *  Copyright 2012-2018 Esri
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ ******************************************************************************/
 
 #include "CoordinateConversionController.h"
 
@@ -24,9 +28,9 @@
 #include "CoordinateFormatter.h"
 #include "GeoView.h"
 #include "GeometryEngine.h"
-#include "MapView.h"
+#include "MapQuickView.h"
 #include "PolylineBuilder.h"
-#include "SceneView.h"
+#include "SceneQuickView.h"
 
 // Qt headers
 #include <QClipboard>
@@ -35,6 +39,7 @@
 // STL headers
 #include <cmath>
 #include <functional>
+#include <cstring>
 
 /*!
   \class Esri::ArcGISRuntime::Toolkit::CoordinateConversionController
@@ -262,7 +267,7 @@ bool CoordinateConversionController::isInputFormat(CoordinateConversionOptions* 
 /*!
   \internal
  */
-bool CoordinateConversionController::isFormat(CoordinateConversionOptions *option, const QString& formatName) const
+bool CoordinateConversionController::isFormat(CoordinateConversionOptions* option, const QString& formatName) const
 {
   if (option == nullptr)
     return false;
@@ -272,8 +277,30 @@ bool CoordinateConversionController::isFormat(CoordinateConversionOptions *optio
 
 void CoordinateConversionController::setGeoView(QObject* geoView)
 {
-  if (setGeoViewInternal(dynamic_cast<GeoView*>(geoView)))
-    connect(geoView, SIGNAL(mouseClicked(QMouseEvent&)), this, SLOT(onMouseClicked(QMouseEvent&)));
+  if (!geoView)
+    return;
+
+  if (std::strcmp(geoView->metaObject()->className(), MapQuickView::staticMetaObject.className()) == 0)
+  {
+    m_mapView = reinterpret_cast<MapQuickView*>(geoView);
+    m_sceneView = nullptr;
+    if (m_mapView)
+    {
+      setSpatialReference(m_mapView->spatialReference());
+      connect(m_mapView, &MapQuickView::mouseClicked, this, &CoordinateConversionController::onMouseClicked);
+    }
+  }
+  else if (std::strcmp(geoView->metaObject()->className(), SceneQuickView::staticMetaObject.className()) == 0)
+  {
+    m_sceneView = reinterpret_cast<SceneQuickView*>(geoView);
+    m_mapView = nullptr;
+    if (m_sceneView)
+    {
+      setSpatialReference(m_sceneView->spatialReference());
+      connect(m_sceneView, &SceneQuickView::mouseClicked, this, &CoordinateConversionController::onMouseClicked);
+    }
+  }
+
 }
 
 /*!
@@ -292,7 +319,7 @@ QAbstractListModel* CoordinateConversionController::results()
 /*!
   \internal
  */
-CoordinateConversionResults *CoordinateConversionController::resultsInternal()
+CoordinateConversionResults* CoordinateConversionController::resultsInternal()
 {
   if (!m_results)
   {
@@ -310,8 +337,8 @@ bool CoordinateConversionController::setGeoViewInternal(GeoView* geoView)
 
   setSpatialReference(geoView->spatialReference());
 
-  m_sceneView = dynamic_cast<SceneView*>(geoView);
-  m_mapView = dynamic_cast<MapView*>(geoView);
+  m_sceneView = dynamic_cast<SceneQuickView*>(geoView);
+  m_mapView = dynamic_cast<MapQuickView*>(geoView);
 
   return m_sceneView != nullptr || m_mapView != nullptr;
 }
@@ -356,8 +383,10 @@ bool CoordinateConversionController::isCaptureMode() const
 /*!
   \brief Sets the tool's capture mode to \a captureMode.
 
-  If \c true, the tool will convert a point set via a mouse click.
-  If \c false, the too will use the app's current location as the target point.
+  \list
+    \li \c true = convert a point set via a mouse click.
+    \li \c false = use the app's current location as the target point.
+  \endlist
  */
 void CoordinateConversionController::setCaptureMode(bool captureMode)
 {
@@ -372,9 +401,11 @@ void CoordinateConversionController::setCaptureMode(bool captureMode)
 }
 
 /*!
+  \fn void CoordinateConversionController::onMouseClicked(QMouseEvent& mouseEvent);
   \brief Handles the mouse click at \a mouseEvent .
 
-  If the tool is active and in \l captureMode, this will be used as the input for conversions.
+  If the tool is active and is in \l captureMode, the clicked location will be used
+  as the input for conversions.
  */
 void CoordinateConversionController::onMouseClicked(QMouseEvent& mouseEvent )
 {
@@ -388,9 +419,11 @@ void CoordinateConversionController::onMouseClicked(QMouseEvent& mouseEvent )
 }
 
 /*!
+  \fn void CoordinateConversionController::onLocationChanged(const Point& location);
   \brief Handles the app's location update to \a location.
 
-  If the tool is active and is not in \l captureMode, this will be used as the input for conversions.
+  If the tool is active and is not in \l captureMode, the location will be used
+  as the input for conversions.
  */
 void CoordinateConversionController::onLocationChanged(const Point& location)
 {
@@ -468,13 +501,14 @@ QString CoordinateConversionController::toolName() const
   return "CoordinateConversion";
 }
 
-/*! \brief Sets any values in \a properties which are relevant for the coordinate conversion controller.
- *
- * This tool will use the following key/value pairs in the \a properties map if they are set:
- *
- * \list
- *  \li CoordinateFormat. The default input coordinate format for the tool.
- * \endList
+/*!
+  \brief Sets any values in \a properties which are relevant for the coordinate conversion controller.
+
+  This tool will use the following key/value pairs in the \a properties map if they are set:
+
+  \list
+   \li CoordinateFormat. The default input coordinate format for the tool.
+  \endlist
  */
 void CoordinateConversionController::setProperties(const QVariantMap& properties)
 {
@@ -484,7 +518,7 @@ void CoordinateConversionController::setProperties(const QVariantMap& properties
 }
 
 /*!
- * \brief Returns a string representation of the input point in the input coordinate format.
+  \brief Returns a string representation of the input point in the input coordinate format.
  */
 QString CoordinateConversionController::pointToConvert() const
 {
@@ -578,9 +612,11 @@ void CoordinateConversionController::removeCoordinateFormat(const QString& forma
 }
 
 /*!
-  \brief Returns the screen coordinate of the current \l pointToConvert, within the bounds of \a screenWidth and \a screenHeight.
+  \brief Returns the screen coordinate of the current \l pointToConvert,
+  within the bounds of \a screenWidth and \a screenHeight.
 
-  If the point is off the screen, attempts to find the closest point on the screen (e.g. on the edge) to the point.
+  If the point is off the screen, attempts to find the closest point on the
+  screen (e.g. on the edge) to the point.
  */
 QPointF CoordinateConversionController::screenCoordinate() const
 {
@@ -707,11 +743,23 @@ void CoordinateConversionController::setRunConversion(bool runConversion)
   emit runConversionChanged();
 }
 
+// properties
+
+/*!
+  \qmlproperty bool CoordinateConversionController::captureMode
+  \brief The tool's capture mode.
+  \list
+    \li \c true = convert a point set via a mouse click.
+    \li \c false = use the app's current location as the target point.
+  \endlist
+ */
+
 // signals
 
 /*!
   \fn void CoordinateConversionController::optionsChanged();
-  \brief Signal emitted when the \l options property changes.
+  \brief Signal emitted when options are added, cleared, or when a coordinate
+  format is removed.
  */
 
 /*!
