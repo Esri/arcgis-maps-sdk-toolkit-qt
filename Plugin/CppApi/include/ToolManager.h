@@ -32,7 +32,9 @@ namespace Toolkit
 
 class AbstractTool;
 
-class TOOLKIT_EXPORT ToolManager {
+class TOOLKIT_EXPORT ToolManager : public QObject
+{
+  Q_OBJECT
 
   using ToolsList = QMap<QString, AbstractTool*>;
 
@@ -60,6 +62,9 @@ public:
 
   ToolsList::const_iterator begin() const;
   ToolsList::const_iterator end() const;
+
+signals:
+  void toolAdded(Esri::ArcGISRuntime::Toolkit::AbstractTool* tool);
 
 private:
   ToolManager();
