@@ -65,6 +65,7 @@ public:
 
 signals:
   void toolAdded(Esri::ArcGISRuntime::Toolkit::AbstractTool* tool);
+  void toolRemoved(const QString& toolName);
 
 private:
   ToolManager();
