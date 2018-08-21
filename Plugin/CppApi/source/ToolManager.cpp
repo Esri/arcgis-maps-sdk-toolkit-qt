@@ -68,6 +68,7 @@ void ToolManager::addTool(AbstractTool* tool)
   });
 
   m_tools.insert(tool->toolName(), tool);
+  emit toolAdded(tool);
 }
 
 /*! \brief Removes the \l AbstractTool called \a toolName from the manager.
@@ -90,6 +91,7 @@ void ToolManager::removeTool(AbstractTool* tool)
   {
     if (it.value() == tool)
     {
+      emit toolRemoved(it.key());
       m_tools.erase(it);
       return;
     }
@@ -143,6 +145,28 @@ ToolManager::ToolsList::const_iterator ToolManager::end() const
 {
   return m_tools.cend();
 }
+
+/*!
+  \fn void ToolManager::toolAdded(Esri::ArcGISRuntime::Toolkit::AbstractTool* tool);
+  \brief The signal emitted when a tool has been added to the ToolManager.
+
+  \list
+  \li \a tool - The tool that was added.
+  \endlist
+ */
+
+/*!
+  \fn void ToolManager::toolRemoved(const QString& toolName);
+  \brief The signal emitted when a tool has been removed from the ToolManager.
+
+  \list
+  \li \a toolName - The name of the tool that was removed.
+  \endlist
+
+  The name of the tool is provided instead of a pointer to the tool
+  like with \l toolAdded. This is for safety since the pointer may
+  be invalid when the tool has been removed.
+ */
 
 } // Toolkit
 } // ArcGISRuntime
