@@ -14,7 +14,7 @@
 #  limitations under the License.
 ################################################################################
 
-# this is identical to the included project except it produces a statib library
+# this is identical to the included project except it produces a static library
 # rather than a dynamic library
 
 CONFIG += staticlib
