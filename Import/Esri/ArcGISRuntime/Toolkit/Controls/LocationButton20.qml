@@ -25,7 +25,7 @@ StyleButton {
     id: locationButton
     property bool isActive: mapview && mapview.locationDisplay.started
     property int maxModes: 4;
-    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
+    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" || Qt.platform.os === "linux" ? 96 : 72)
     property MapView mapview: null
 
     visible: mapview && mapview.locationDisplay

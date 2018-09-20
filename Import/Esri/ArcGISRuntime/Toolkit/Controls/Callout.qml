@@ -215,7 +215,7 @@ Item {
     /*! \internal */
     property int padding: 3 * displayScaleFactor
     /*! \internal */
-    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
+    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" || Qt.platform.os === "linux" ? 96 : 72)
     /*! \internal */
     property real anchorPointx: 0
     /*! \internal */

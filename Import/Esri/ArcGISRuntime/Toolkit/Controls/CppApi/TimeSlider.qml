@@ -87,7 +87,7 @@ Item {
       the width or height of UI elements so that the sizes appear similar
       (relative to screen size) across devices.
       */
-    property real scaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
+    property real scaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" || Qt.platform.os === "linux" ? 96 : 72)
 
     /*!
       \qmlproperty int textColor

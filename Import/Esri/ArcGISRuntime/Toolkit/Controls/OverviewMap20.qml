@@ -31,7 +31,7 @@ Item {
     property var overviewLayer: null
     property string fillColor : "#60000000"
     property real zoomRatio: 10
-    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
+    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" || Qt.platform.os === "linux" ? 96 : 72)
 
     width: 200 * displayScaleFactor
     height: width * 0.665
