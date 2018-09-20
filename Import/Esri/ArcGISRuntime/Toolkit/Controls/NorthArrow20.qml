@@ -25,7 +25,7 @@ Item {
     property MapView mapview: null
     property real size: 40
     property bool resetOnClick: true
-    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
+    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" || Qt.platform.os === "linux" ? 96 : 72)
 
     signal clicked()
 

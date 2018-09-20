@@ -49,7 +49,7 @@ Rectangle {
     /*! \internal */
     property string detailText: qsTr("The service has requested a client certificate to authenticate you. The app has identified the requesting server as '%1', but you should only give the app access to the certificate if you trust it.").arg(requestingHost)
     /*! \internal */
-    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
+    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" || Qt.platform.os === "linux" ? 96 : 72)
     /*! \internal */
     property string requestingHost: challenge ? challenge.authenticatingHost : ""
     /*! \internal */

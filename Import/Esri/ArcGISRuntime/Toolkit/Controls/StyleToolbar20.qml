@@ -34,7 +34,7 @@ GridLayout {
     property color focusBorderColor: "#AADBFA"
     property color borderColor: "#CBCBCB"
     property string orientation: "portrait"
-    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
+    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" || Qt.platform.os === "linux" ? 96 : 72)
 
     // Default orientation Properties which can be overwritten at
     // the time of defining the StyleToolbar in your qml file.

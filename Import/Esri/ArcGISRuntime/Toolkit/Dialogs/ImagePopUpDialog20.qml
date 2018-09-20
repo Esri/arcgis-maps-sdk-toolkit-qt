@@ -21,7 +21,7 @@ Item {
     id: dialogComponent
     anchors.fill: parent
     property string platform: Qt.platform.os
-    property double scalefactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
+    property double scalefactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" || Qt.platform.os === "linux" ? 96 : 72)
     property string portBackground
 
     PropertyAnimation {
