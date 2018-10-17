@@ -34,7 +34,7 @@ Item {
     property color attributeValueTextColorInternal
     property color closeButtonColorInternal
     property var popupManagerInternal: null
-    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" ? 96 : 72)
+    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" || Qt.platform.os === "linux" ? 96 : 72)
     property var displayedFields: null
     property var attachments: null
     property bool showAttachments: false
