@@ -17,4 +17,4 @@
 module Esri.ArcGISRuntime.Toolkit.Controls.QmlApi
 
 TimeSlider 100.3 TimeSlider.qml
-CurrentVersion 100.4 CurrentVersion.qml
+CurrentVersion 100.5 CurrentVersion.qml
