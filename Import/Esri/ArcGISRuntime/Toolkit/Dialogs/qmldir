@@ -28,4 +28,5 @@ SimpleDialog 2.0 SimpleDialog20.qml
 SslHandshakeView 2.0 SslHandshakeView20.qml
 SslHandshakeView 100.0 SslHandshakeView.qml
 UserCredentialsView 2.0 UserCredentialsView20.qml
-UserCredentialsView 100.0 UserCredentialsView.qml
+UserCredentialsView 100.0 UserCredentialsView100.qml
+UserCredentialsView 100.4 UserCredentialsView.qml
