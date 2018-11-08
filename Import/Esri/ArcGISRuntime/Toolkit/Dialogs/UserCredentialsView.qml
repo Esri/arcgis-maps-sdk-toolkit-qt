@@ -60,7 +60,7 @@ Rectangle {
     /*! \internal */
     property string requestingHost: challenge ? challenge.authenticatingHost : ""
     /*! \internal */
-    property string detailText: qsTr("You need to sign in to access the resource at '%1'").arg(requestingHost)
+    property string detailText: qsTr("You need to sign in to access the resource at:")
 
     Keys.onEnterPressed: {
         if (Qt.platform.os !== "android" && Qt.platform.os !== "ios") {
@@ -166,9 +166,25 @@ Rectangle {
             Text {
                 text: detailText
                 Layout.fillWidth: true
-                Layout.margins: 10
+                Layout.rightMargin: 10
+                Layout.leftMargin: 10
+                Layout.topMargin: 10
                 Layout.columnSpan: 2
                 Layout.alignment: Qt.AlignHCenter
+                wrapMode: Text.Wrap
+                font {
+                    pixelSize: 12 * displayScaleFactor
+                    family: "sanserif"
+                }
+            }
+
+            Text {
+                text: requestingHost
+                Layout.fillWidth: true
+                Layout.rightMargin: 10
+                Layout.leftMargin: 10
+                Layout.bottomMargin: 10
+                Layout.columnSpan: 2
                 wrapMode: Text.Wrap
                 font {
                     pixelSize: 12 * displayScaleFactor
