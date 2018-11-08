@@ -104,6 +104,7 @@ Rectangle {
         width: childrenRect.width
         height: childrenRect.height
 
+
         GridLayout {
             columns: 2
 
@@ -111,11 +112,10 @@ Rectangle {
                 id: banner
                 Layout.alignment: Qt.AlignHCenter
                 Layout.fillWidth: true
-                Layout.minimumWidth: childrenRect.width
                 Layout.columnSpan: 2
                 Layout.margins: 1
-                width: childrenRect.width
-                height: childrenRect.height
+                Layout.minimumWidth: childrenRect.width
+                Layout.minimumHeight: childrenRect.height
 
                 color: "white"
                 border {
@@ -127,20 +127,21 @@ Rectangle {
                 antialiasing: true
 
                 Image {
-                    width: childrenRect.width
-                    height: childrenRect.height
+                    anchors.fill: parent
                     source: "images/banner.png"
+                }
 
-                    Text {
-                        id: titleText
-                        text: qsTr("Authentication Required")
-                        padding: 5
-                        font {
-                            pixelSize: 18 * displayScaleFactor
-                            family: "sanserif"
-                        }
-                        color: "white"
+                Text {
+                    id: titleText
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: qsTr("Authentication Required")
+                    padding: 5
+                    horizontalAlignment: Qt.AlignHCenter
+                    font {
+                        pixelSize: 18 * displayScaleFactor
+                        family: "sanserif"
                     }
+                    color: "white"
                 }
             }
 

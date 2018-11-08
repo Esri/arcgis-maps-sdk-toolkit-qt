@@ -14,9 +14,8 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.6
-import QtQuick.Controls 2.2
-import QtQuick.Layouts 1.3
+import QtQuick 2.5
+import QtQuick.Controls 1.4
 import QtGraphicalEffects 1.0
 import QtQuick.Window 2.0
 
@@ -52,7 +51,8 @@ Rectangle {
     /*! \internal */
     property string detailText: qsTr("The server could not prove itself; its security certificate is not trusted by your OS. Would you like to continue anyway?")
     /*! \internal */
-    property real displayScaleFactor: 1
+    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" || Qt.platform.os === "linux" ? 96 : 72)
+
     RadialGradient {
         anchors.fill: parent
         opacity: 0.7
@@ -68,9 +68,11 @@ Rectangle {
         onWheel: wheel.accepted = true
     }
 
-
-
     Rectangle {
+        anchors {
+            fill: banner
+            margins: -1 * displayScaleFactor
+        }
         color: "white"
         border {
             color: "black"
@@ -80,88 +82,99 @@ Rectangle {
         smooth: true
         clip: true
         antialiasing: true
-        anchors.centerIn: parent
-        width: childrenRect.width
-        height: childrenRect.height
+    }
 
+    Image {
+        id: banner
+        anchors {
+            centerIn: parent
+            verticalCenterOffset: -50 * displayScaleFactor
+        }
+        width: 224 * displayScaleFactor
+        height: 50 * displayScaleFactor
+        clip: true
+        source: "images/banner.png"
 
+        Column {
+            anchors {
+                fill: parent
+                margins: 5 * displayScaleFactor
+            }
 
-        GridLayout {
-            id: gridLayout
-            columns: 2
+            spacing: 2 * displayScaleFactor
 
-            Rectangle {
-                Layout.fillWidth: true
-                Layout.columnSpan: 2
-                Layout.column: 0
+            Text {
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: qsTr("Untrusted Host")
+                font {
+                    pixelSize: 18 * displayScaleFactor
+                    family: "sanserif"
+                }
+                renderType: Text.NativeRendering
                 color: "white"
-                border {
-                    color: "black"
-                    width: 1 * displayScaleFactor
-                }
-                radius: 3
-                smooth: true
-                antialiasing: true
-                clip:true
-                Layout.minimumWidth: childrenRect.width
-                Layout.minimumHeight: childrenRect.height
-
-                Image {
-                    anchors.fill: parent
-                    source: "images/banner.png"
-                }
-
-                ColumnLayout {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    Text {
-                        Layout.fillWidth: true
-                        text: qsTr("Untrusted Host")
-                        horizontalAlignment: Qt.AlignHCenter
-                        padding: 5
-                        font {
-                            pixelSize: 18 * displayScaleFactor
-                            family: "sanserif"
-                        }
-                        color: "white"
-                    }
-
-                    Text {
-                        elide: Text.ElideRight
-                        Layout.fillWidth: true
-                        text: requestingHost
-                        horizontalAlignment: Qt.AlignHCenter
-                        font {
-                            pixelSize: 12 * displayScaleFactor
-                            family: "sanserif"
-                        }
-                        color: "white"
-                    }
-                }
             }
 
             Text {
-                text: detailText
-                Layout.fillWidth: true
-                Layout.margins: 10
-                Layout.columnSpan: 2
-                Layout.alignment: Qt.AlignHCenter
-                wrapMode: Text.Wrap
+                anchors.horizontalCenter: parent.horizontalCenter
+                elide: Text.ElideRight
+                text: requestingHost
                 font {
-                    pixelSize: 10 * displayScaleFactor
+                    pixelSize: 12 * displayScaleFactor
                     family: "sanserif"
                 }
+                color: "white"
             }
+        }
+    }
 
-            CheckBox {
-                id: rememberCheckbox
-                Layout.fillWidth: true
-                Layout.columnSpan: 2
-                text: qsTr("Remember")
+    Rectangle {
+        anchors {
+            fill: controlsColumn
+            margins: -5 * displayScaleFactor
+        }
+        color: "white"
+        border {
+            color: "black"
+            width: 1 * displayScaleFactor
+        }
+        radius: 3
+        smooth: true
+        clip: true
+        antialiasing: true
+    }
+
+    Column {
+        id: controlsColumn
+        anchors {
+            top: banner.bottom
+            topMargin: 5 * displayScaleFactor
+            horizontalCenter: banner.horizontalCenter
+        }
+        width: 215 * displayScaleFactor
+        spacing: 8 * displayScaleFactor
+
+        Text {
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: detailText
+            width: parent.width
+            wrapMode: Text.Wrap
+            font {
+                pixelSize: 10 * displayScaleFactor
+                family: "sanserif"
             }
+        }
+
+        CheckBox {
+            id: rememberCheckbox
+            text: qsTr("Remember")
+        }
+
+        Row {
+            width: parent.width
+            spacing: 4 * displayScaleFactor
 
             Button {
-                Layout.margins: 10
-                Layout.alignment: Qt.AlignLeft
+                width: ((parent.width / 2) - 2 * displayScaleFactor)
                 text: qsTr("Block")
                 onClicked: {
                     // reject the challenge and let the resource fail to load
@@ -172,9 +185,7 @@ Rectangle {
             }
 
             Button {
-                id: continueButton
-                Layout.margins: 10
-                Layout.alignment: Qt.AlignRight
+                width: ((parent.width / 2) - 2 * displayScaleFactor)
                 text: qsTr("Trust")
                 onClicked: {
                     // continue SSL handshake and trust host
