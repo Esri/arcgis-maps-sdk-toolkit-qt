@@ -68,8 +68,6 @@ Rectangle {
         onWheel: wheel.accepted = true
     }
 
-
-
     Rectangle {
         color: "white"
         border {
@@ -83,8 +81,6 @@ Rectangle {
         anchors.centerIn: parent
         width: childrenRect.width
         height: childrenRect.height
-
-
 
         GridLayout {
             id: gridLayout
