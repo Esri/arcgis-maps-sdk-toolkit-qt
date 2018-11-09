@@ -13,6 +13,7 @@
         <file>SimpleDialog20.qml</file>
         <file>SslHandshakeView.qml</file>
         <file>SslHandshakeView20.qml</file>
+        <file>SslHandshakeView100.qml</file>
         <file>UserCredentialsView.qml</file>
         <file>UserCredentialsView20.qml</file>
         <file>UserCredentialsView100.qml</file>
