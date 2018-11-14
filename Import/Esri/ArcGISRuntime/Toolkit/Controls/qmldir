@@ -21,7 +21,7 @@ AttributeListView 2.0 AttributeListView20.qml
 Callout 2.0 Callout20.qml
 Callout 100.0 Callout100.qml
 Callout 100.1 Callout.qml
-CurrentVersion 100.4 CurrentVersion.qml
+CurrentVersion 100.5 CurrentVersion.qml
 Fader 2.0 Fader20.qml
 HomeButton 2.0 HomeButton20.qml
 ImageButton 2.0 ImageButton20.qml

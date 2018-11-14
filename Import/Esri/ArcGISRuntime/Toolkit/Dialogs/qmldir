@@ -20,14 +20,14 @@ AuthenticationView 2.0 AuthenticationView20.qml
 AuthenticationView 100.0 AuthenticationView.qml
 ClientCertificateView 2.0 ClientCertificateView20.qml
 ClientCertificateView 100.0 ClientCertificateView.qml
-CurrentVersion 100.4 CurrentVersion.qml
+CurrentVersion 100.5 CurrentVersion.qml
 ImagePopUpDialog 2.0 ImagePopUpDialog20.qml
 OAuth2View 2.0 OAuth2View20.qml
 OAuth2View 100.0 OAuth2View.qml
 SimpleDialog 2.0 SimpleDialog20.qml
 SslHandshakeView 2.0 SslHandshakeView20.qml
 SslHandshakeView 100.0 SslHandshakeView100.qml
-SslHandshakeView 100.4 SslHandshakeView.qml
+SslHandshakeView 100.5 SslHandshakeView.qml
 UserCredentialsView 2.0 UserCredentialsView20.qml
 UserCredentialsView 100.0 UserCredentialsView100.qml
-UserCredentialsView 100.4 UserCredentialsView.qml
+UserCredentialsView 100.5 UserCredentialsView.qml
