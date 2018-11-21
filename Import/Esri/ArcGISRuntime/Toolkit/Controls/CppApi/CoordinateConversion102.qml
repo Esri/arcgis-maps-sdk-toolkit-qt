@@ -19,7 +19,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Window 2.2
 import QtGraphicalEffects 1.0
 import QtQuick.Controls.Material 2.2
-import Esri.ArcGISRuntime.Toolkit.CppApi 100.5
+import Esri.ArcGISRuntime.Toolkit.CppApi 100.3
 
 /*!
     \qmltype CoordinateConversion
@@ -32,6 +32,26 @@ import Esri.ArcGISRuntime.Toolkit.CppApi 100.5
 
 Item {
     id: coordinateConversionWindow
+
+    /*!
+      \qmlproperty real scaleFactor
+      \brief The scale factor used for sizing UI elements.
+
+      Pixel density and screen resolution varies greatly between different
+      devices and operating systems. This property allows your app to specify
+      the width or height of UI elements so that the sizes appear similar
+      (relative to screen size) across devices. Here is an example of how to
+      use this property.
+
+      \code
+         CoordinateConversion {
+            buttonWidth: 90 * scaleFactor
+            spacingValue: 8 * scaleFactor
+            ...
+         }
+      \endcode
+     */
+    property real scaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" || Qt.platform.os === "linux" ? 96 : 72)
 
     /*!
       \qmlproperty int textColor
@@ -158,7 +178,7 @@ Item {
         font {
             bold: true
             family: fontFamily
-            pixelSize: coordinateConversionWindow.fontSize
+            pixelSize: coordinateConversionWindow.fontSize * scaleFactor
         }
         text: "MMMMMM"
     }
@@ -169,9 +189,9 @@ Item {
             top: expandUpwards ? undefined : parent.top
             left: parent.left
             bottom: expandUpwards ? parent.bottom : undefined
-            margins: 5
+            margins: 5 * scaleFactor
         }
-        height: 32
+        height: 32 * scaleFactor
         width: textMetrics.width
         text: coordinateConvController.inputFormat.length > 0 ? coordinateConvController.inputFormat : "Set format"
         background: Rectangle {
@@ -184,7 +204,7 @@ Item {
             font {
                 bold: true
                 family: fontFamily
-                pixelSize: coordinateConversionWindow.fontSize
+                pixelSize: coordinateConversionWindow.fontSize * scaleFactor
             }
             color: textColor
             horizontalAlignment: Text.AlignHCenter
@@ -220,7 +240,7 @@ Item {
                         text: inputModeOptionButton.text.toUpperCase()
                         font {
                             family: fontFamily
-                            pixelSize: coordinateConversionWindow.fontSize
+                            pixelSize: coordinateConversionWindow.fontSize * scaleFactor
                         }
                         color: textColor
                         horizontalAlignment: Text.AlignHCenter
@@ -251,7 +271,7 @@ Item {
         text: coordinateConvController.pointToConvert.length > 0 ? coordinateConvController.pointToConvert : "No position"
         font{
             family: fontFamily
-            pixelSize: coordinateConversionWindow.fontSize
+            pixelSize: coordinateConversionWindow.fontSize * scaleFactor
         }
         wrapMode: Text.Wrap
         elide: Text.ElideRight
@@ -265,14 +285,14 @@ Item {
             left: inputModeButton.right
             verticalCenter: inputModeButton.verticalCenter
             right: menuButton.left
-            leftMargin: 5
+            leftMargin: 5 * scaleFactor
         }
 
         placeholderText: "No position"
         text: coordinateConvController.pointToConvert
         font{
             family: fontFamily
-            pixelSize: coordinateConversionWindow.fontSize
+            pixelSize: coordinateConversionWindow.fontSize * scaleFactor
         }
         color: highlightColor
 
@@ -288,7 +308,7 @@ Item {
         anchors {
             verticalCenter: inputModeButton.verticalCenter
             right: parent.right
-            margins: 5
+            margins: 5 * scaleFactor
         }
         height: inputModeButton.height
         width: height
@@ -327,7 +347,7 @@ Item {
             text: "Add conversion"
             font{
                 family: fontFamily
-                pixelSize: coordinateConversionWindow.fontSize
+                pixelSize: coordinateConversionWindow.fontSize * scaleFactor
             }
             color: textColor
             horizontalAlignment: Text.AlignLeft
@@ -362,7 +382,7 @@ Item {
                         text: addConversionOptionButton.text.toUpperCase()
                         font{
                             family: fontFamily
-                            pixelSize: coordinateConversionWindow.fontSize
+                            pixelSize: coordinateConversionWindow.fontSize * scaleFactor
                         }
                         color: textColor
                         horizontalAlignment: Text.AlignHCenter
@@ -459,7 +479,7 @@ Item {
             color: "transparent"
             border {
                 color: editCoordinateButton.checked ? highlightColor : "transparent"
-                width: 1
+                width: 1 * scaleFactor
             }
         }
 
@@ -491,7 +511,7 @@ Item {
             color: "transparent"
             border {
                 color: captureModeButton.checked ? highlightColor : "transparent"
-                width: 1
+                width: 1 * scaleFactor
             }
         }
 
@@ -541,7 +561,7 @@ Item {
                 horizontalAlignment: Text.AlignHCenter
                 font {
                     family: fontFamily
-                    pixelSize: coordinateConversionWindow.fontSize
+                    pixelSize: coordinateConversionWindow.fontSize * scaleFactor
                 }
                 color: textColor
                 wrapMode: Text.Wrap
@@ -561,7 +581,7 @@ Item {
                 horizontalAlignment: Text.AlignLeft
                 font{
                     family: fontFamily
-                    pixelSize: coordinateConversionWindow.fontSize
+                    pixelSize: coordinateConversionWindow.fontSize * scaleFactor
                 }
                 wrapMode: Text.Wrap
                 elide: Text.ElideRight
@@ -576,7 +596,7 @@ Item {
                 anchors {
                     right: parent.right
                     verticalCenter: parent.verticalCenter
-                    margins: 5
+                    margins: 5 * scaleFactor
                 }
                 background: Rectangle {
                     anchors.fill: parent
@@ -606,19 +626,19 @@ Item {
             x: results.width - width
             property string currentName: ""
             property string currentNotation: ""
-            width: 100
+            width: 100 * scaleFactor
 
             Column {
                 width: parent.width
-                anchors.margins: 10
-                spacing: 10
-                leftPadding: 10
+                anchors.margins: 10 * scaleFactor
+                spacing: 10 * scaleFactor
+                leftPadding: 10 * scaleFactor
 
                 Label {
                     text: "Delete"
                     font {
                         family: fontFamily
-                        pixelSize: coordinateConversionWindow.fontSize
+                        pixelSize: coordinateConversionWindow.fontSize * scaleFactor
                     }
                     color: textColor
 
@@ -635,7 +655,7 @@ Item {
                     text: "Copy"
                     font {
                         family: fontFamily
-                        pixelSize: coordinateConversionWindow.fontSize
+                        pixelSize: coordinateConversionWindow.fontSize * scaleFactor
                     }
                     color: textColor
 
@@ -656,13 +676,13 @@ Item {
         property alias running: animation.running
 
         opacity: 0.0
-        height: 16
+        height: 16 * scaleFactor
         width: height
         radius: height
         color: highlightColor
         border {
             color: "transparent"
-            width: 1
+            width: 1 * scaleFactor
         }
 
         SequentialAnimation {

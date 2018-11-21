@@ -18,7 +18,6 @@ import QtQuick 2.6
 import QtQuick.Controls 2.2
 import QtQuick.Window 2.2
 import QtQuick.Layouts 1.1
-import Esri.ArcGISRuntime.Toolkit.CppApi 100.5
 
 /*!
     \qmltype TimeSlider
@@ -35,21 +34,21 @@ import Esri.ArcGISRuntime.Toolkit.CppApi 100.5
     The time extents of all layers in the map will be used to set up the
     slider with the full temporal range and the current time extent.
 
-    If the map/scene does not contain any layers with time support, the
-    slider will be disabled.
-
     Here is an example of how to use this control from QML.
 
     \code
         // import the toolkit
-        import Esri.ArcGISRuntime.Toolkit.CppApi 100.3
+        import Esri.ArcGISRuntime.Toolkit.QmlAPI 100.3
         ...
 
         // add a mapView component (the geoView)
         MapView {
             anchors.fill: parent
-            objectName: "mapView"
             id: mapView
+
+            Map {
+                ...
+            }
 
             // declare a TimeSlider and bind it to the geoView
             TimeSlider {
@@ -70,6 +69,7 @@ Item {
 
     enabled: controller.startStep !== -1
     clip: true
+
     height: backgroundRectangle.height
 
     readonly property int labelModeNone: 0
@@ -77,6 +77,17 @@ Item {
     readonly property int labelModeTicks: 2
 
     signal currentExtentChanged
+
+    /*!
+      \qmlproperty real scaleFactor
+      \brief The scale factor used for sizing UI elements.
+
+      Pixel density and screen resolution varies greatly between different
+      devices and operating systems. This property allows your app to specify
+      the width or height of UI elements so that the sizes appear similar
+      (relative to screen size) across devices.
+      */
+    property real scaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" || Qt.platform.os === "linux" ? 96 : 72)
 
     /*!
       \qmlproperty int textColor
@@ -103,17 +114,11 @@ Item {
     property int pixelSizeInDips : 12
 
     /*!
-      \qmlproperty int backgroundColor
-      \brief The color of used to for background UI elements in this tool.
-
-      The default value is \c "lightgrey".
-     */
-    property color backgroundColor: "lightgrey"
-
-    /*!
       \qmlproperty real backgroundOpacity
       \brief The opacity of the background rectangle.
       */
+    property color backgroundColor: "lightgrey"
+
     property alias backgroundOpacity: backgroundRectangle.opacity
 
     /*!
@@ -124,8 +129,8 @@ Item {
 
     /*!
       \qmlproperty var fullExtentLabelFormat
-      \brief The format for displaying \l Date values
-      for the full time extent. - for example "yy/MM/dd".
+      \brief The format for displaying Date values
+      for the full time extent, for example "yy/MM/dd".
 
       The default is \c Qt.DefaultLocaleShortDate.
 
@@ -143,7 +148,7 @@ Item {
 
     /*!
       \qmlproperty var currentExtentLabelFormat
-      \brief The format for displaying \l Date values
+      \brief The format for displaying Date values
       for the current time extent. - for example "yy/MM/dd".
 
       The default is \c Qt.DefaultLocaleShortDate.
@@ -183,9 +188,9 @@ Item {
 
       Valid options are:
       \list
-        \li labelModeNone. No labels are applied
-        \li labelModeThumbs. Labels are applied to the slider thumbs.
-        \li labelModeTicks. Labels are applied to the slider tick marks.
+        \li labelModeNone - No labels are applied
+        \li labelModeThumbs - Labels are applied to the slider thumbs.
+        \li labelModeTicks - Labels are applied to the slider tick marks.
       \endlist
 
       The default is \c labelModeThumbs.
@@ -222,30 +227,30 @@ Item {
     property bool playbackReverse: false
 
     /*!
-      \qmlproperty bool startTimePinned
-      \brief Whether the start time of the time window can
-      be manipulated
+    \qmlproperty bool startTimePinned
+    \brief Whether the start time of the time window can
+    be manipulated
 
-      The default is \c "false".
-      */
+    The default is \c "false".
+    */
     property bool startTimePinned: false
 
     /*!
-      \qmlproperty bool endTimePinned
-      \brief Whether the end time of the time window can
-      be manipulated
+    \qmlproperty bool endTimePinned
+    \brief Whether the end time of the time window can
+    be manipulated
 
-      The default is \c "false".
-      */
+    The default is \c "false".
+    */
     property bool endTimePinned: false
 
     /*!
-      \qmlproperty int playbackInterval
-      \brief The amount of time (in milliseconds) during playback
-      that will elapse before the slider advances to the next time step
+    \qmlproperty int playbackInterval
+    \brief The amount of time (in milliseconds) during playback
+    that will elapse before the slider advances to the next time step
 
-      The default is \c 500.
-      */
+    The default is \c 500.
+    */
     property alias playbackInterval : playAnimation.interval
 
     /*!
@@ -281,15 +286,16 @@ Item {
     }
 
     /*!
-      \qmlproperty var geoView
-      \brief The GeoView for this tool. Should be a SceneQuickView or a MapQuickView.
+      \qmlproperty GeoView geoView
+      \brief The GeoView for this tool. Should be a SceneView or a MapView.
 
       This property is the entry point for the time extent of the geoView itself and
       also for any layers which support time.
 
       \note this property must be set for the TimeSlider control to function correctly.
-     */
+    */
     property alias geoView: controller.geoView
+
 
     TimeSliderController {
         id: controller
@@ -319,17 +325,16 @@ Item {
         anchors {
             top: playButton.top
             left: parent.left
-            margins: 4
+            margins: 4 * scaleFactor
         }
 
         font {
             family: fontFamily
-            pixelSize: root.pixelSizeInDips
+            pixelSize: root.pixelSizeInDips * scaleFactor
         }
         color: textColor
         text: fullExtentLabelFormat ? Qt.formatDateTime(controller.fullExtentStart, fullExtentLabelFormat)
                                     : Qt.formatDateTime(controller.fullExtentStart)
-
     }
 
     Label {
@@ -337,7 +342,7 @@ Item {
         anchors {
             top: playButton.top
             right: parent.right
-            margins: 4
+            margins: 4 * scaleFactor
         }
 
         color: textColor
@@ -346,7 +351,7 @@ Item {
 
         font {
             family: fontFamily
-            pixelSize: root.pixelSizeInDips
+            pixelSize: root.pixelSizeInDips * scaleFactor
         }
     }
 
@@ -355,7 +360,7 @@ Item {
         anchors {
             right: playButton.left
             verticalCenter: playButton.verticalCenter
-            margins: 16
+            margins: 16 * scaleFactor
         }
         height: width
         width: playButton.width
@@ -373,7 +378,7 @@ Item {
             font {
                 bold: true
                 family: fontFamily
-                pixelSize: root.pixelSizeInDips
+                pixelSize: root.pixelSizeInDips * scaleFactor
             }
             color: textColor
             horizontalAlignment: Text.AlignHCenter
@@ -402,10 +407,10 @@ Item {
         anchors {
             horizontalCenter: slider.horizontalCenter
             top: parent.top
-            margins: 4
+            margins: 4 * scaleFactor
         }
         height: width
-        width: 24
+        width: 24 * scaleFactor
 
         Image {
             fillMode: Image.PreserveAspectFit
@@ -422,7 +427,7 @@ Item {
             font {
                 bold: true
                 family: fontFamily
-                pixelSize: root.pixelSizeInDips
+                pixelSize: root.pixelSizeInDips * scaleFactor
             }
             color: textColor
             horizontalAlignment: Text.AlignHCenter
@@ -462,6 +467,7 @@ Item {
 
                 atEnd = (!startTimePinned && (newStart < 0 || newStart > (controller.numberOfSteps - 1))) ||
                         (!endTimePinned && (newEnd < 0 || newEnd > (controller.numberOfSteps - 1)));
+
             }
 
             if (!atEnd) {
@@ -488,7 +494,7 @@ Item {
         anchors {
             left: playButton.right
             verticalCenter: playButton.verticalCenter
-            margins: 16
+            margins: 16 * scaleFactor
         }
         height: width
         width: playButton.width
@@ -505,7 +511,7 @@ Item {
             font {
                 bold: true
                 family: fontFamily
-                pixelSize: root.pixelSizeInDips
+                pixelSize: root.pixelSizeInDips * scaleFactor
             }
             color: textColor
             horizontalAlignment: Text.AlignHCenter
@@ -536,9 +542,9 @@ Item {
             top: playButton.bottom
             left: parent.left
             right: parent.right
-            leftMargin: 16
-            rightMargin: 16
-            topMargin: 8
+            leftMargin: 16 * scaleFactor
+            rightMargin: 16 * scaleFactor
+            topMargin: 8 * scaleFactor
         }
 
         from: 0
@@ -554,7 +560,7 @@ Item {
         stepSize: 1.0
         snapMode: RangeSlider.SnapAlways
 
-        height: 32
+        height: 32 * scaleFactor
 
         background: Rectangle {
             id: sliderBar
@@ -563,12 +569,12 @@ Item {
                 left: slider.left
                 right: slider.right
             }
-            height: 8
-            radius: 2
+            height: 8 * scaleFactor
+            radius: 2 * scaleFactor
             color: "darkgray"
             border {
                 color: "black"
-                width: 0.5
+                width: 0.5 * scaleFactor
             }
 
             Rectangle {
@@ -578,7 +584,7 @@ Item {
                 width: slider.second.visualPosition * parent.width - x
                 height: parent.height
                 color: "black"
-                radius: 2
+                radius: 2 * scaleFactor
             }
 
             Row {
@@ -588,7 +594,7 @@ Item {
                     left: sliderBar.left
                     right: sliderBar.right
                 }
-                property int stepsWidth: 1
+                property int stepsWidth: 1 * scaleFactor
                 spacing: controller.numberOfSteps === -1 ? 0 :
                                                            (sliderBar.width - (controller.numberOfSteps * stepsWidth)) / (controller.numberOfSteps - 1)
 
@@ -598,7 +604,7 @@ Item {
                     Rectangle {
                         width: tickMarksRow.stepsWidth
                         height: index % 10 === 0 ? sliderBar.height : sliderBar.height * 0.5
-                        color: tickMarksRow.spacing < 5 ? (index % 5 === 0 ? "black" : "transparent")
+                        color: tickMarksRow.spacing < (5 * scaleFactor) ? (index % 5 === 0 ? "black" : "transparent")
                                                                         : "black"
 
                         Label {
@@ -606,8 +612,8 @@ Item {
                                 horizontalCenter: parent.horizontalCenter
                                 top: parent.bottom
                             }
-                            color: textColor
                             horizontalAlignment: Text.AlignHCenter
+                            color: textColor
                             visible: (labelMode === labelModeTicks) && index % labelSliderTickInterval === 0 && parent.color !== "transparent"
                             text: controller.stepTimes[index] ? timeStepIntervalLabelFormat ?
                                                                     Qt.formatDateTime(controller.stepTimes[index], timeStepIntervalLabelFormat)
@@ -634,7 +640,7 @@ Item {
 
                 font {
                     family: fontFamily
-                    pixelSize: root.pixelSizeInDips
+                    pixelSize: root.pixelSizeInDips * scaleFactor
                 }
             }
         }
@@ -646,7 +652,7 @@ Item {
             anchors.verticalCenter: sliderBar.verticalCenter
             x: (slider.first.visualPosition * parent.width) - (width * 0.5)
 
-            width: 16
+            width: 16 * scaleFactor
             height: width
             radius: width
             color: thumbFillColor
@@ -660,11 +666,11 @@ Item {
                     horizontalCenter: startThumb.horizontalCenter
                 }
 
-                leftPadding: (slider.width * slider.first.visualPosition) < 48 ? 48 : 0
+                leftPadding: (slider.width * slider.first.visualPosition) < (48 * scaleFactor) ? 48 * scaleFactor : 0
 
                 font {
                     family: fontFamily
-                    pixelSize: root.pixelSizeInDips
+                    pixelSize: root.pixelSizeInDips * scaleFactor
                 }
 
                 color: textColor
@@ -680,7 +686,7 @@ Item {
             enabled: !endTimePinned
             anchors.verticalCenter: sliderBar.verticalCenter
             x: (slider.second.visualPosition * parent.width) - (width * 0.5)
-            width: 16
+            width: 16 * scaleFactor
             height: width
             radius: width
             color: thumbFillColor
@@ -694,16 +700,16 @@ Item {
                     horizontalCenter: endThumb.horizontalCenter
                 }
 
-                rightPadding: (slider.width * slider.second.visualPosition) > slider.width - 48 ? 48 : 0
+                rightPadding: (slider.width * slider.second.visualPosition) > slider.width - (48 * scaleFactor) ? 48 * scaleFactor : 0
 
                 font {
                     family: fontFamily
-                    pixelSize: root.pixelSizeInDips
+                    pixelSize: root.pixelSizeInDips * scaleFactor
                 }
 
                 color: textColor
-                text:  currentExtentLabelFormat ? Qt.formatDateTime(controller.currentExtentEnd, currentExtentLabelFormat)
-                                                : Qt.formatDateTime(controller.currentExtentEnd)
+                text: currentExtentLabelFormat ? Qt.formatDateTime(controller.currentExtentEnd, currentExtentLabelFormat)
+                                               : Qt.formatDateTime(controller.currentExtentEnd)
                 elide: Text.ElideLeft
             }
         }
@@ -751,11 +757,11 @@ Item {
             visible: startTimePinned
             anchors.verticalCenter: sliderBar.verticalCenter
             x: (slider.first.visualPosition * parent.width) - (width * 0.5)
-            height: 16
-            width: 4
+            height: 16 * scaleFactor
+            width: 4 * scaleFactor
             color: thumbFillColor
             border.color: thumbBorderColor
-            radius: 1
+            radius: 1 * scaleFactor
         }
 
         Rectangle {
@@ -763,11 +769,11 @@ Item {
             visible: endTimePinned
             anchors.verticalCenter: sliderBar.verticalCenter
             x: (slider.second.visualPosition * parent.width) - (width * 0.5)
-            height: 16
-            width: 4
+            height: 16 * scaleFactor
+            width: 4 * scaleFactor
             color: thumbFillColor
             border.color: thumbBorderColor
-            radius: 1
+            radius: 1 * scaleFactor
         }
     }
 }

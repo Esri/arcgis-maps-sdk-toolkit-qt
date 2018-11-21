@@ -20,7 +20,8 @@ AttachmentListView 2.0 AttachmentListView20.qml
 AttributeListView 2.0 AttributeListView20.qml
 Callout 2.0 Callout20.qml
 Callout 100.0 Callout100.qml
-Callout 100.1 Callout.qml
+Callout 100.1 Callout101.qml
+Callout 100.5 Callout.qml
 CurrentVersion 100.5 CurrentVersion.qml
 Fader 2.0 Fader20.qml
 HomeButton 2.0 HomeButton20.qml
@@ -29,8 +30,12 @@ LocationButton 2.0 LocationButton20.qml
 NavigationToolbar 2.0 NavigationToolbar20.qml
 NorthArrow 2.0 NorthArrow20.qml
 OverviewMap 2.0 OverviewMap20.qml
-PopupView 100.1 PopupView.qml
-PopupStackView 100.2 PopupStackView.qml
+PopupView 100.1 PopupView101.qml
+PopupView 100.5 PopupView.qml
+internal PopupViewBase 100.1 PopupViewBase101.qml
+internal PopupViewBase 100.5 PopupViewBase.qml
+PopupStackView 100.2 PopupStackView102.qml
+PopupStackView 100.5 PopupStackView.qml
 RotationToolbar 2.0 RotationToolbar20.qml
 SearchBox 2.0 SearchBox20.qml
 StyleButton 2.0 StyleButton20.qml

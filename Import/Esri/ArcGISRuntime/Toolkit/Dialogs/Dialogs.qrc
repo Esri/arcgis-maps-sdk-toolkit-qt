@@ -6,6 +6,7 @@
         <file>AuthenticationView20.qml</file>
         <file>ClientCertificateView.qml</file>
         <file>ClientCertificateView20.qml</file>
+        <file>ClientCertificateView100.qml</file>
         <file>CurrentVersion.qml</file>
         <file>ImagePopUpDialog20.qml</file>
         <file>OAuth2View.qml</file>

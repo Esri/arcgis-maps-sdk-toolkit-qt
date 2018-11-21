@@ -51,8 +51,6 @@ Rectangle {
     property string requestingHost: challenge ? challenge.authenticatingHost : ""
     /*! \internal */
     property string detailText: qsTr("The server could not prove itself; its security certificate is not trusted by your OS. Would you like to continue anyway?")
-    /*! \internal */
-    property real displayScaleFactor: 1
     RadialGradient {
         anchors.fill: parent
         opacity: 0.7
@@ -72,7 +70,7 @@ Rectangle {
         color: "white"
         border {
             color: "black"
-            width: 1 * displayScaleFactor
+            width: 1
         }
         radius: 3
         smooth: true
@@ -93,7 +91,7 @@ Rectangle {
                 color: "white"
                 border {
                     color: "black"
-                    width: 1 * displayScaleFactor
+                    width: 1
                 }
                 radius: 3
                 smooth: true
@@ -115,7 +113,7 @@ Rectangle {
                         horizontalAlignment: Qt.AlignHCenter
                         padding: 5
                         font {
-                            pixelSize: 18 * displayScaleFactor
+                            pixelSize: 18
                             family: "sanserif"
                         }
                         color: "white"
@@ -127,7 +125,7 @@ Rectangle {
                         text: requestingHost
                         horizontalAlignment: Qt.AlignHCenter
                         font {
-                            pixelSize: 12 * displayScaleFactor
+                            pixelSize: 12
                             family: "sanserif"
                         }
                         color: "white"
@@ -143,7 +141,7 @@ Rectangle {
                 Layout.alignment: Qt.AlignHCenter
                 wrapMode: Text.Wrap
                 font {
-                    pixelSize: 10 * displayScaleFactor
+                    pixelSize: 10
                     family: "sanserif"
                 }
             }

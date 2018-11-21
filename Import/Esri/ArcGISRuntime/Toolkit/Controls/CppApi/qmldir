@@ -16,7 +16,10 @@
 
 module Esri.ArcGISRuntime.Toolkit.Controls.CppApi
 
-CoordinateConversion 100.2 CoordinateConversion.qml
-ArcGISCompass 100.2 ArcGISCompass.qml
-TimeSlider 100.3 TimeSlider.qml
+CoordinateConversion 100.2 CoordinateConversion102.qml
+CoordinateConversion 100.5 CoordinateConversion.qml
+ArcGISCompass 100.2 ArcGISCompass102.qml
+ArcGISCompass 100.5 ArcGISCompass.qml
+TimeSlider 100.3 TimeSlider103.qml
+TimeSlider 100.5 TimeSlider.qml
 CurrentVersion 100.5 CurrentVersion.qml

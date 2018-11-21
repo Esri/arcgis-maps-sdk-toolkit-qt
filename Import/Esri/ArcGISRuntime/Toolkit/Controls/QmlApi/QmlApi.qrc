@@ -4,7 +4,9 @@
         <file>images/play.png</file>
         <file>images/step.png</file>
         <file>TimeSlider.qml</file>
+        <file>TimeSlider103.qml</file>
         <file>TimeSliderController.qml</file>
+        <file>TimeSliderController103.qml</file>
         <file>qmldir</file>
     </qresource>
 </RCC>

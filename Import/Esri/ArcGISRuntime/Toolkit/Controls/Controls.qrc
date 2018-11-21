@@ -26,6 +26,7 @@
         <file>Callout.qml</file>
         <file>Callout20.qml</file>
         <file>Callout100.qml</file>
+        <file>Callout101.qml</file>
         <file>CurrentVersion.qml</file>
         <file>Fader20.qml</file>
         <file>HomeButton20.qml</file>
@@ -35,7 +36,9 @@
         <file>NorthArrow20.qml</file>
         <file>OverviewMap20.qml</file>
         <file>PopupView.qml</file>
+        <file>PopupView101.qml</file>
         <file>PopupViewBase.qml</file>
+        <file>PopupViewBase101.qml</file>
         <file>PopupStackView.qml</file>
         <file>RotationToolbar20.qml</file>
         <file>SearchBox20.qml</file>

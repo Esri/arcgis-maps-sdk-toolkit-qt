@@ -1,8 +1,11 @@
 <RCC>
     <qresource prefix="/qt-project.org/imports/Esri/ArcGISRuntime/Toolkit/Controls/CppApi">
         <file>CoordinateConversion.qml</file>
+        <file>CoordinateConversion102.qml</file>
         <file>ArcGISCompass.qml</file>
+        <file>ArcGISCompass102.qml</file>
         <file>TimeSlider.qml</file>
+        <file>TimeSlider103.qml</file>
         <file>images/Calculate_New_Coordinate.png</file>
         <file>images/compass.png</file>
         <file>images/convert.png</file>
