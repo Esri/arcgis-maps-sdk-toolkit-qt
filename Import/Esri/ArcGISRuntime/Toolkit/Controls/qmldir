@@ -32,8 +32,8 @@ NorthArrow 2.0 NorthArrow20.qml
 OverviewMap 2.0 OverviewMap20.qml
 PopupView 100.1 PopupView101.qml
 PopupView 100.5 PopupView.qml
-internal PopupViewBase 100.1 PopupViewBase101.qml
-internal PopupViewBase 100.5 PopupViewBase.qml
+internal PopupViewBase101 PopupViewBase101.qml
+internal PopupViewBase PopupViewBase.qml
 PopupStackView 100.2 PopupStackView102.qml
 PopupStackView 100.5 PopupStackView.qml
 RotationToolbar 2.0 RotationToolbar20.qml

@@ -296,8 +296,7 @@ Item {
     */
     property alias geoView: controller.geoView
 
-
-    TimeSliderController {
+    TimeSliderController103 {
         id: controller
 
         onStartStepChanged: {

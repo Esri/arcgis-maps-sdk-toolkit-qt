@@ -19,7 +19,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Window 2.2
 import QtGraphicalEffects 1.0
 import QtQuick.Controls.Material 2.2
-import Esri.ArcGISRuntime.Toolkit.CppApi 100.5
+import Esri.ArcGISRuntime.Toolkit.CppApi 100.3
 
 /*!
     \qmltype CoordinateConversion

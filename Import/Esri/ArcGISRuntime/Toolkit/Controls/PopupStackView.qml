@@ -66,9 +66,6 @@ import QtQuick.Window 2.0
 Item {
     id: popupStackView
 
-    /*! \internal */
-    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" || Qt.platform.os === "linux" ? 96 : 72)
-
     /*========================================
          Configurable properties
     ========================================*/
@@ -100,14 +97,14 @@ Item {
 
         The default width is \c 2.
     */
-    property real borderWidth: 2 * displayScaleFactor
+    property real borderWidth: 2
 
     /*!
         \brief The radius of the PopupStackView.
 
         The default radius is \c 2.
     */
-    property real radius: 2 * displayScaleFactor
+    property real radius: 2
 
     /*!
         \brief The title text color of the PopupStackView.
@@ -121,7 +118,7 @@ Item {
 
         The default size is \c 13.
     */
-    property real titleTextSize: 13 * displayScaleFactor
+    property real titleTextSize: 13
 
     /*!
         \brief The attribute name color of the PopupStackView.
@@ -184,14 +181,14 @@ Item {
 
         The default width is \c 275.
     */
-    width: 275 * displayScaleFactor
+    width: 275
 
     /*!
         \brief The height of the PopupStackView.
 
         The default height is \c 350.
     */
-    height: 350 * displayScaleFactor
+    height: 350
 
     /*!
         \brief Show the PopupStackView.
@@ -412,7 +409,7 @@ Item {
                 anchors {
                     left: parent.left
                     verticalCenter: parent.verticalCenter
-                    margins: 2 * displayScaleFactor
+                    margins: 2
                 }
                 antialiasing: true
                 height: parent.height
@@ -439,7 +436,7 @@ Item {
                 anchors {
                     verticalCenter: parent.verticalCenter
                     horizontalCenter: parent.horizontalCenter
-                    margins: 5 * displayScaleFactor
+                    margins: 5
                 }
                 color: attributeNameTextColor
                 text: popupManagers !== null && popupManagers.length > 0 ? (currentIndex + 1) + " of " + popupManagers.length : ""
@@ -450,7 +447,7 @@ Item {
                 anchors {
                     right: parent.right
                     verticalCenter: parent.verticalCenter
-                    margins: 2 * displayScaleFactor
+                    margins: 2
                 }
                 antialiasing: true
                 height: parent.height

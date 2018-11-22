@@ -18,6 +18,6 @@ module Esri.ArcGISRuntime.Toolkit.Controls.QmlApi
 
 TimeSlider 100.3 TimeSlider103.qml
 TimeSlider 100.5 TimeSlider.qml
-internal TimeSlider 100.3 TimeSliderController103.qml
-internal TimeSlider 100.5 TimeSliderController.qml
+internal TimeSlider103 TimeSliderController103.qml
+internal TimeSlider TimeSliderController.qml
 CurrentVersion 100.5 CurrentVersion.qml

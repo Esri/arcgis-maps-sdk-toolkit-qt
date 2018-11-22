@@ -273,7 +273,7 @@ Item {
     signal attachmentThumbnailClicked(var index)
 
     /*! internal */
-    PopupViewBase {
+    PopupViewBase101 {
         anchors.fill: parent
         popupManagerInternal: popupManager
         backgroundColorInternal: backgroundColor
