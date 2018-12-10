@@ -56,8 +56,6 @@ Rectangle {
     property var challenge
 
     /*! \internal */
-    property real displayScaleFactor: 1
-    /*! \internal */
     property string requestingHost: challenge ? challenge.authenticatingHost : ""
     /*! \internal */
     property string detailText: qsTr("You need to sign in to access the resource at:")
@@ -94,7 +92,7 @@ Rectangle {
         color: "white"
         border {
             color: "black"
-            width: 1 * displayScaleFactor
+            width: 1
         }
         radius: 3
         smooth: true
@@ -120,7 +118,7 @@ Rectangle {
                 color: "white"
                 border {
                     color: "black"
-                    width: 1 * displayScaleFactor
+                    width: 1
                 }
                 radius: 3
                 smooth: true
@@ -138,7 +136,7 @@ Rectangle {
                     padding: 5
                     horizontalAlignment: Qt.AlignHCenter
                     font {
-                        pixelSize: 18 * displayScaleFactor
+                        pixelSize: 18
                         family: "sanserif"
                     }
                     color: "white"
@@ -157,7 +155,7 @@ Rectangle {
                 Text {
                     text: qsTr("Invalid username or password.")
                     font {
-                        pixelSize: 12 * displayScaleFactor
+                        pixelSize: 12
                         family: "sanserif"
                     }
                     color: "red"
@@ -174,7 +172,7 @@ Rectangle {
                 Layout.alignment: Qt.AlignHCenter
                 wrapMode: Text.Wrap
                 font {
-                    pixelSize: 12 * displayScaleFactor
+                    pixelSize: 12
                     family: "sanserif"
                 }
             }
@@ -188,7 +186,7 @@ Rectangle {
                 Layout.columnSpan: 2
                 wrapMode: Text.Wrap
                 font {
-                    pixelSize: 12 * displayScaleFactor
+                    pixelSize: 12
                     family: "sanserif"
                 }
             }

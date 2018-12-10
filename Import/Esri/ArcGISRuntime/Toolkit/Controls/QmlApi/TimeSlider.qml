@@ -79,17 +79,6 @@ Item {
     signal currentExtentChanged
 
     /*!
-      \qmlproperty real scaleFactor
-      \brief The scale factor used for sizing UI elements.
-
-      Pixel density and screen resolution varies greatly between different
-      devices and operating systems. This property allows your app to specify
-      the width or height of UI elements so that the sizes appear similar
-      (relative to screen size) across devices.
-      */
-    property real scaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" || Qt.platform.os === "linux" ? 96 : 72)
-
-    /*!
       \qmlproperty int textColor
       \brief The color of coordinate notation text and labels on this tool.
 
@@ -325,12 +314,12 @@ Item {
         anchors {
             top: playButton.top
             left: parent.left
-            margins: 4 * scaleFactor
+            margins: 4
         }
 
         font {
             family: fontFamily
-            pixelSize: root.pixelSizeInDips * scaleFactor
+            pixelSize: root.pixelSizeInDips
         }
         color: textColor
         text: fullExtentLabelFormat ? Qt.formatDateTime(controller.fullExtentStart, fullExtentLabelFormat)
@@ -342,7 +331,7 @@ Item {
         anchors {
             top: playButton.top
             right: parent.right
-            margins: 4 * scaleFactor
+            margins: 4
         }
 
         color: textColor
@@ -351,7 +340,7 @@ Item {
 
         font {
             family: fontFamily
-            pixelSize: root.pixelSizeInDips * scaleFactor
+            pixelSize: root.pixelSizeInDips
         }
     }
 
@@ -360,7 +349,7 @@ Item {
         anchors {
             right: playButton.left
             verticalCenter: playButton.verticalCenter
-            margins: 16 * scaleFactor
+            margins: 16
         }
         height: width
         width: playButton.width
@@ -378,7 +367,7 @@ Item {
             font {
                 bold: true
                 family: fontFamily
-                pixelSize: root.pixelSizeInDips * scaleFactor
+                pixelSize: root.pixelSizeInDips
             }
             color: textColor
             horizontalAlignment: Text.AlignHCenter
@@ -407,10 +396,10 @@ Item {
         anchors {
             horizontalCenter: slider.horizontalCenter
             top: parent.top
-            margins: 4 * scaleFactor
+            margins: 4
         }
         height: width
-        width: 24 * scaleFactor
+        width: 24
 
         Image {
             fillMode: Image.PreserveAspectFit
@@ -427,7 +416,7 @@ Item {
             font {
                 bold: true
                 family: fontFamily
-                pixelSize: root.pixelSizeInDips * scaleFactor
+                pixelSize: root.pixelSizeInDips
             }
             color: textColor
             horizontalAlignment: Text.AlignHCenter
@@ -494,7 +483,7 @@ Item {
         anchors {
             left: playButton.right
             verticalCenter: playButton.verticalCenter
-            margins: 16 * scaleFactor
+            margins: 16
         }
         height: width
         width: playButton.width
@@ -511,7 +500,7 @@ Item {
             font {
                 bold: true
                 family: fontFamily
-                pixelSize: root.pixelSizeInDips * scaleFactor
+                pixelSize: root.pixelSizeInDips
             }
             color: textColor
             horizontalAlignment: Text.AlignHCenter
@@ -542,9 +531,9 @@ Item {
             top: playButton.bottom
             left: parent.left
             right: parent.right
-            leftMargin: 16 * scaleFactor
-            rightMargin: 16 * scaleFactor
-            topMargin: 8 * scaleFactor
+            leftMargin: 16
+            rightMargin: 16
+            topMargin: 8
         }
 
         from: 0
@@ -560,7 +549,7 @@ Item {
         stepSize: 1.0
         snapMode: RangeSlider.SnapAlways
 
-        height: 32 * scaleFactor
+        height: 32
 
         background: Rectangle {
             id: sliderBar
@@ -569,12 +558,12 @@ Item {
                 left: slider.left
                 right: slider.right
             }
-            height: 8 * scaleFactor
-            radius: 2 * scaleFactor
+            height: 8
+            radius: 2
             color: "darkgray"
             border {
                 color: "black"
-                width: 0.5 * scaleFactor
+                width: 0.5
             }
 
             Rectangle {
@@ -584,7 +573,7 @@ Item {
                 width: slider.second.visualPosition * parent.width - x
                 height: parent.height
                 color: "black"
-                radius: 2 * scaleFactor
+                radius: 2
             }
 
             Row {
@@ -594,7 +583,7 @@ Item {
                     left: sliderBar.left
                     right: sliderBar.right
                 }
-                property int stepsWidth: 1 * scaleFactor
+                property int stepsWidth: 1
                 spacing: controller.numberOfSteps === -1 ? 0 :
                                                            (sliderBar.width - (controller.numberOfSteps * stepsWidth)) / (controller.numberOfSteps - 1)
 
@@ -604,7 +593,7 @@ Item {
                     Rectangle {
                         width: tickMarksRow.stepsWidth
                         height: index % 10 === 0 ? sliderBar.height : sliderBar.height * 0.5
-                        color: tickMarksRow.spacing < (5 * scaleFactor) ? (index % 5 === 0 ? "black" : "transparent")
+                        color: tickMarksRow.spacing < 5 ? (index % 5 === 0 ? "black" : "transparent")
                                                                         : "black"
 
                         Label {
@@ -640,7 +629,7 @@ Item {
 
                 font {
                     family: fontFamily
-                    pixelSize: root.pixelSizeInDips * scaleFactor
+                    pixelSize: root.pixelSizeInDips
                 }
             }
         }
@@ -652,7 +641,7 @@ Item {
             anchors.verticalCenter: sliderBar.verticalCenter
             x: (slider.first.visualPosition * parent.width) - (width * 0.5)
 
-            width: 16 * scaleFactor
+            width: 16
             height: width
             radius: width
             color: thumbFillColor
@@ -666,11 +655,11 @@ Item {
                     horizontalCenter: startThumb.horizontalCenter
                 }
 
-                leftPadding: (slider.width * slider.first.visualPosition) < (48 * scaleFactor) ? 48 * scaleFactor : 0
+                leftPadding: (slider.width * slider.first.visualPosition) < 48 ? 48 : 0
 
                 font {
                     family: fontFamily
-                    pixelSize: root.pixelSizeInDips * scaleFactor
+                    pixelSize: root.pixelSizeInDips
                 }
 
                 color: textColor
@@ -686,7 +675,7 @@ Item {
             enabled: !endTimePinned
             anchors.verticalCenter: sliderBar.verticalCenter
             x: (slider.second.visualPosition * parent.width) - (width * 0.5)
-            width: 16 * scaleFactor
+            width: 16
             height: width
             radius: width
             color: thumbFillColor
@@ -700,11 +689,11 @@ Item {
                     horizontalCenter: endThumb.horizontalCenter
                 }
 
-                rightPadding: (slider.width * slider.second.visualPosition) > slider.width - (48 * scaleFactor) ? 48 * scaleFactor : 0
+                rightPadding: (slider.width * slider.second.visualPosition) > slider.width - 48 ? 48 : 0
 
                 font {
                     family: fontFamily
-                    pixelSize: root.pixelSizeInDips * scaleFactor
+                    pixelSize: root.pixelSizeInDips
                 }
 
                 color: textColor
@@ -757,11 +746,11 @@ Item {
             visible: startTimePinned
             anchors.verticalCenter: sliderBar.verticalCenter
             x: (slider.first.visualPosition * parent.width) - (width * 0.5)
-            height: 16 * scaleFactor
-            width: 4 * scaleFactor
+            height: 16
+            width: 4
             color: thumbFillColor
             border.color: thumbBorderColor
-            radius: 1 * scaleFactor
+            radius: 1
         }
 
         Rectangle {
@@ -769,11 +758,11 @@ Item {
             visible: endTimePinned
             anchors.verticalCenter: sliderBar.verticalCenter
             x: (slider.second.visualPosition * parent.width) - (width * 0.5)
-            height: 16 * scaleFactor
-            width: 4 * scaleFactor
+            height: 16
+            width: 4
             color: thumbFillColor
             border.color: thumbBorderColor
-            radius: 1 * scaleFactor
+            radius: 1
         }
     }
 }
