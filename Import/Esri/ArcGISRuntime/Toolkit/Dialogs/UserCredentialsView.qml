@@ -113,7 +113,6 @@ Rectangle {
                 Layout.alignment: Qt.AlignHCenter
                 Layout.fillWidth: true
                 Layout.columnSpan: 2
-                //Layout.margins: 1
                 Layout.minimumWidth: childrenRect.width
                 Layout.minimumHeight: childrenRect.height
 
