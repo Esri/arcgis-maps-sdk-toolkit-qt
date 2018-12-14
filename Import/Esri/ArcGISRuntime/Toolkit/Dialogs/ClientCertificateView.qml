@@ -14,11 +14,11 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.5
-import QtQuick.Controls 1.4
+import QtQuick 2.11
+import QtQuick.Controls 2.4
 import QtQuick.Dialogs 1.2
 import QtGraphicalEffects 1.0
-import QtQuick.Window 2.0
+import QtQuick.Window 2.11
 
 /*!
     \qmltype ClientCertificateView
@@ -45,6 +45,13 @@ Rectangle {
          requires no configuration.
     */
     property var challenge
+
+    /*!
+        \brief The color of the top banner in the view.
+
+        The default is blue, #005e95.
+    */
+    property color bannerColor: "#005e95"
 
     /*! \internal */
     property string detailText: qsTr("The service has requested a client certificate to authenticate you. The app has identified the requesting server as '%1', but you should only give the app access to the certificate if you trust it.").arg(requestingHost)
@@ -76,31 +83,15 @@ Rectangle {
         height: banner.height + controlsColumn.height
 
         Rectangle {
-            anchors {
-                fill: banner
-                margins: -1
-            }
-            color: "white"
-            border {
-                color: "black"
-                width: 1
-            }
-            radius: 3
-            smooth: true
-            clip: true
-            antialiasing: true
-        }
-
-        Image {
             id: banner
             anchors {
                 top: parent.top
                 horizontalCenter: parent.horizontalCenter
             }
-            width: 224
+            width: 225
             height: 50
             clip: true
-            source: "images/banner.png"
+            color: bannerColor
 
             Column {
                 anchors {
@@ -141,11 +132,6 @@ Rectangle {
                 margins: -5
             }
             color: "white"
-            border {
-                color: "black"
-                width: 1
-            }
-            radius: 3
             smooth: true
             clip: true
             antialiasing: true
