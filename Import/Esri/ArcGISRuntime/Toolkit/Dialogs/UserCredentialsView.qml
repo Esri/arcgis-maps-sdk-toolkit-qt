@@ -14,8 +14,8 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.6
-import QtQuick.Controls 2.2
+import QtQuick 2.11
+import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 import QtQuick.Window 2.0
@@ -55,6 +55,13 @@ Rectangle {
     */
     property var challenge
 
+    /*!
+        \brief The color of the top banner in the view.
+
+        The default is blue, #005e95.
+    */
+    property color bannerColor: "#005e95"
+
     /*! \internal */
     property string requestingHost: challenge ? challenge.authenticatingHost : ""
     /*! \internal */
@@ -89,12 +96,7 @@ Rectangle {
 
 
     Rectangle {
-        color: "white"
-        border {
-            color: "black"
-            width: 1
-        }
-        radius: 3
+        color: "white"        
         smooth: true
         clip: true
         antialiasing: true
@@ -111,22 +113,16 @@ Rectangle {
                 Layout.alignment: Qt.AlignHCenter
                 Layout.fillWidth: true
                 Layout.columnSpan: 2
-                Layout.margins: 1
                 Layout.minimumWidth: childrenRect.width
                 Layout.minimumHeight: childrenRect.height
 
-                color: "white"
-                border {
-                    color: "black"
-                    width: 1
-                }
-                radius: 3
+                color: "white"                
                 smooth: true
                 antialiasing: true
 
-                Image {
+                Rectangle {
                     anchors.fill: parent
-                    source: "images/banner.png"
+                    color: bannerColor
                 }
 
                 Text {

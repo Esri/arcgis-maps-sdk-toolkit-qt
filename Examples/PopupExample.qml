@@ -14,10 +14,10 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.6
-import QtQuick.Controls 1.5
-import QtPositioning 5.3
-import QtSensors 5.3
+import QtQuick 2.11
+import QtQuick.Controls 2.4
+import QtPositioning 5.8
+import QtSensors 5.9
 import QtQuick.Dialogs 1.2
 import Esri.ArcGISRuntime 100.5
 import Esri.ArcGISExtras 1.1

@@ -14,10 +14,10 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.3
-import QtQuick.Controls 1.2
-import QtPositioning 5.3
-import QtSensors 5.3
+import QtQuick 2.11
+import QtQuick.Controls 2.4
+import QtPositioning 5.8
+import QtSensors 5.9
 import Esri.ArcGISRuntime 100.5
 import Esri.ArcGISExtras 1.1
 import Esri.ArcGISRuntime.Toolkit.Controls 100.5
@@ -41,7 +41,7 @@ Rectangle {
             FeatureLayer {
                 id: featureLayer
                 ServiceFeatureTable {
-                    url: "http://holistic30.esri.com:6080/arcgis/rest/services/DamageInspection6/FeatureServer/0"
+                    url: "http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/FeatureServer/0"
                 }
             }
 

@@ -35,6 +35,7 @@ PopupView 100.5 PopupView.qml
 internal PopupViewBase101 PopupViewBase1001.qml
 internal PopupViewBase PopupViewBase.qml
 PopupStackView 100.2 PopupStackView1002.qml
+PopupStackView 100.4 PopupStackView1004.qml
 PopupStackView 100.5 PopupStackView.qml
 RotationToolbar 2.0 RotationToolbar20.qml
 SearchBox 2.0 SearchBox20.qml

@@ -14,10 +14,10 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.6
-import QtQuick.Controls 2.2
-import QtQuick.Window 2.2
-import QtQuick.Layouts 1.1
+import QtQuick 2.11
+import QtQuick.Controls 2.4
+import QtQuick.Window 2.11
+import QtQuick.Layouts 1.3
 import Esri.ArcGISRuntime.Toolkit.CppApi 100.3
 
 /*!
