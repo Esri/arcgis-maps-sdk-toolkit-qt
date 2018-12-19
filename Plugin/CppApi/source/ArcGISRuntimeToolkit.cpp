@@ -16,7 +16,7 @@
  ******************************************************************************/
 
 #include "ArcGISRuntimeToolkit.h"
-#include <QtQml>
+#include <QtQml/qqml.h>
 
 #include "ArcGISCompassController.h"
 #include "CoordinateConversionController.h"
