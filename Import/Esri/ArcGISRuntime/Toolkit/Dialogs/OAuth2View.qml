@@ -48,16 +48,20 @@ WebView {
 
     onLoadingChanged: {
         if (loadRequest.status === WebView.LoadSucceededStatus) {
-            if (title.indexOf("SUCCESS code=") > -1) {
-                var authCode = title.replace("SUCCESS code=", "");
-                if (challenge)
-                    challenge.continueWithOAuthAuthorizationCode(authCode);
-                webView.visible = false;
-            } else if (title.indexOf("Denied error=") > -1) {
-                if (challenge)
-                    challenge.cancel();
-                webView.visible = false;
-            }
+            forceActiveFocus();
+        }
+    }
+
+    onTitleChanged: {
+        if (title.indexOf("SUCCESS code=") > -1) {
+            var authCode = title.replace("SUCCESS code=", "");
+            if (challenge)
+                challenge.continueWithOAuthAuthorizationCode(authCode);
+            webView.visible = false;
+        } else if (title.indexOf("Denied error=") > -1) {
+            if (challenge)
+                challenge.cancel();
+            webView.visible = false;
         }
     }
 }
