@@ -41,6 +41,7 @@
         <file>PopupViewBase1001.qml</file>
         <file>PopupStackView.qml</file>
         <file>PopupStackView1002.qml</file>
+        <file>PopupStackView1004.qml</file>
         <file>RotationToolbar20.qml</file>
         <file>SearchBox20.qml</file>
         <file>StyleButton20.qml</file>
