@@ -125,7 +125,7 @@ Rectangle {
                     color: bannerColor
                 }
 
-                Text {
+                Label {
                     id: titleText
                     anchors.horizontalCenter: parent.horizontalCenter
                     text: qsTr("Authentication Required")
@@ -148,7 +148,7 @@ Rectangle {
                 height: childrenRect.height
                 visible: challenge ? challenge.failureCount > 1 : false
 
-                Text {
+                Label {
                     text: qsTr("Invalid username or password.")
                     font {
                         pixelSize: 12
@@ -158,7 +158,7 @@ Rectangle {
                 }
             }
 
-            Text {
+            Label {
                 text: detailText
                 Layout.fillWidth: true
                 Layout.rightMargin: 10
@@ -167,13 +167,14 @@ Rectangle {
                 Layout.columnSpan: 2
                 Layout.alignment: Qt.AlignHCenter
                 wrapMode: Text.Wrap
+                color: "black"
                 font {
                     pixelSize: 12
                     family: "sanserif"
                 }
             }
 
-            Text {
+            Label {
                 text: requestingHost
                 Layout.fillWidth: true
                 Layout.rightMargin: 10
@@ -181,6 +182,7 @@ Rectangle {
                 Layout.bottomMargin: 10
                 Layout.columnSpan: 2
                 wrapMode: Text.Wrap
+                color: "black"
                 font {
                     pixelSize: 12
                     family: "sanserif"
@@ -193,6 +195,8 @@ Rectangle {
                 Layout.margins: 10
                 Layout.columnSpan: 2
                 placeholderText: qsTr("username")
+                placeholderTextColor: "darkgray"
+                color: "black"
             }
 
             TextField {
@@ -201,7 +205,9 @@ Rectangle {
                 Layout.margins: 10
                 Layout.columnSpan: 2
                 placeholderText: qsTr("password")
+                placeholderTextColor: "darkgray"
                 echoMode: TextInput.Password
+                color: "black"
             }
 
             Button {

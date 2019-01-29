@@ -106,7 +106,7 @@ Rectangle {
 
                 ColumnLayout {
                     anchors.horizontalCenter: parent.horizontalCenter
-                    Text {
+                    Label {
                         Layout.fillWidth: true
                         text: qsTr("Untrusted Host")
                         horizontalAlignment: Qt.AlignHCenter
@@ -118,7 +118,7 @@ Rectangle {
                         color: "white"
                     }
 
-                    Text {
+                    Label {
                         elide: Text.ElideRight
                         Layout.fillWidth: true
                         text: requestingHost
@@ -132,13 +132,14 @@ Rectangle {
                 }
             }
 
-            Text {
+            Label {
                 text: detailText
                 Layout.fillWidth: true
                 Layout.margins: 10
                 Layout.columnSpan: 2
                 Layout.alignment: Qt.AlignHCenter
                 wrapMode: Text.Wrap
+                color: "black"
                 font {
                     pixelSize: 10
                     family: "sanserif"

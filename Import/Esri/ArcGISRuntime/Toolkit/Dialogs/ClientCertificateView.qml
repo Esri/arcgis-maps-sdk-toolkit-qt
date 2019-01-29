@@ -101,7 +101,7 @@ Rectangle {
 
                 spacing: 2
 
-                Text {
+                Label {
                     anchors.horizontalCenter: parent.horizontalCenter
                     text: qsTr("Client Certificate Requested")
                     font {
@@ -112,7 +112,7 @@ Rectangle {
                     renderType: Text.NativeRendering
                 }
 
-                Text {
+                Label {
                     anchors.horizontalCenter: parent.horizontalCenter
                     elide: Text.ElideRight
                     text: requestingHost
@@ -147,7 +147,7 @@ Rectangle {
             width: 215
             spacing: 5
 
-            Text {
+            Label {
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: detailText
                 width: parent.width
@@ -156,10 +156,11 @@ Rectangle {
                     pixelSize: 10
                     family: "sanserif"
                 }
+                color: "black"
                 renderType: Text.NativeRendering
             }
 
-            Text {
+            Label {
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: qsTr("Available Certificates:")
                 width: parent.width
@@ -168,6 +169,7 @@ Rectangle {
                     pixelSize: 12
                     family: "sanserif"
                 }
+                color: "black"
                 renderType: Text.NativeRendering
             }
 
