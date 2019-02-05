@@ -109,7 +109,7 @@ signals:
 
 public:
   CoordinateConversionController(QObject* parent = nullptr);
-  ~CoordinateConversionController();
+  ~CoordinateConversionController() override;
 
   void setSpatialReference(const Esri::ArcGISRuntime::SpatialReference& spatialReference);
   void setPointToConvert(const Esri::ArcGISRuntime::Point& point);

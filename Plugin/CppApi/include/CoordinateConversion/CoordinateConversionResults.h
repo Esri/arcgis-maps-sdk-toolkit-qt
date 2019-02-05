@@ -35,11 +35,11 @@ namespace Toolkit
 class Result
 {
 public:
- Result(const QString& name, const QString& notation, int type);
- ~Result() = default;
- QString m_name;
- QString m_notation;
- int m_type; // CoordinateConversionOptions::CoordinateType as int
+  Result(const QString& name, const QString& notation, int type);
+  ~Result() = default;
+  QString m_name;
+  QString m_notation;
+  int m_type = 0; // CoordinateConversionOptions::CoordinateType as int
 };
 
 class TOOLKIT_EXPORT CoordinateConversionResults : public QAbstractListModel
@@ -56,7 +56,7 @@ public:
 
 public:
   explicit CoordinateConversionResults(QObject* parent = nullptr);
-  ~CoordinateConversionResults();
+  ~CoordinateConversionResults() override;
 
   Qt::ItemFlags flags(const QModelIndex& index) const override;
 
