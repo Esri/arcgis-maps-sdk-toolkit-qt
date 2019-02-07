@@ -209,7 +209,6 @@ Result::Result(const Result& other) = default;
  */
 Result::~Result() = default;
 
-
 /*!
   \fn CoordinateConversionResults::resultsChanged()
   \brief Signal emitted when the results change.
