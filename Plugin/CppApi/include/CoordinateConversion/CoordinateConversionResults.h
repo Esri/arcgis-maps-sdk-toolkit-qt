@@ -32,14 +32,14 @@ namespace Toolkit
 /*!
   \internal
 */
-class Result
+struct Result
 {
-public:
   Result(const QString& name, const QString& notation, int type);
-  ~Result() = default;
-  QString m_name;
-  QString m_notation;
-  int m_type = 0; // CoordinateConversionOptions::CoordinateType as int
+  Result(const Result& other);
+  ~Result();
+  QString name;
+  QString notation;
+  int type = 0; // CoordinateConversionOptions::CoordinateType as int
 };
 
 class TOOLKIT_EXPORT CoordinateConversionResults : public QAbstractListModel
