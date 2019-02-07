@@ -26,7 +26,7 @@ class ArcGISRuntimeToolkitPlugin : public QQmlExtensionPlugin
 
 public:
   explicit ArcGISRuntimeToolkitPlugin(QObject* parent = nullptr);
-  void registerTypes(const char* uri) Q_DECL_OVERRIDE;
+  void registerTypes(const char* uri) override;
 };
 
 #endif // ArcGISRuntimeToolkitPlugin_H
