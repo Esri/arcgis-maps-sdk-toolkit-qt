@@ -16,7 +16,6 @@
 
 import QtQuick 2.11
 import QtQuick.Controls 2.4
-import QtQuick.Dialogs 1.2
 
 /*!
     \qmltype PopupStackView
@@ -193,10 +192,8 @@ Item {
     */
     function show() {
         currentIndex = 0;
-        popupStack.clear();
         if (popupManagers !== null && popupManagers.length > 0) {
             popup1.popupManagerInternal = popupManagers[currentIndex]
-            popupStack.push(popup1);
         }
         visible = true;
     }
@@ -296,14 +293,11 @@ Item {
 
         if (popupStack.currentItem === popup1) {
             popup2.popupManagerInternal = popupManagers[currentIndex]
-            popupStack.push(popup2);
-        }
-        else
-        {
+            popupStack.replace(popup1, popup2);
+        } else {
             popup1.popupManagerInternal = popupManagers[currentIndex]
-            popupStack.push(popup1);
+            popupStack.replace(popup2, popup1);
         }
-
     }
 
     /*! internal */
@@ -313,12 +307,14 @@ Item {
 
         currentIndex -= 1;
 
-        if (popupStack.currentItem === popup2)
+        if (popupStack.currentItem === popup2) {
             popup1.popupManagerInternal = popupManagers[currentIndex];
-        else
+            popupStack.replace(popup2, popup1);
+        }
+        else {
             popup2.popupManagerInternal = popupManagers[currentIndex];
-
-        popupStack.pop();
+            popupStack.replace(popup1, popup2);
+        }
     }
 
     /*! internal */
@@ -477,6 +473,10 @@ Item {
             StackView {
                 id: popupStack
                 anchors.fill: parent
+
+                Component.onCompleted: {
+                    push(popup1)
+                }
             }
 
             Rectangle {
