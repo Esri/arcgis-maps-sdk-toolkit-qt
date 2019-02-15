@@ -286,35 +286,42 @@ Item {
 
     /*! internal */
     function nextPopup() {
+        if (popupStack.busy)
+            return;
+
         if (currentIndex + 1 === popupManagers.length)
             return;
 
         currentIndex += 1;
 
         if (popupStack.currentItem === popup1) {
-            popup2.popupManagerInternal = popupManagers[currentIndex]
-            popupStack.replace(popup1, popup2);
+            swapPopups(popup1, popup2);
         } else {
-            popup1.popupManagerInternal = popupManagers[currentIndex]
-            popupStack.replace(popup2, popup1);
+            swapPopups(popup2, popup1);
         }
     }
 
     /*! internal */
     function previousPopup() {
+        if (popupStack.busy)
+            return;
+
         if (currentIndex === 0)
             return;
 
         currentIndex -= 1;
 
-        if (popupStack.currentItem === popup2) {
-            popup1.popupManagerInternal = popupManagers[currentIndex];
-            popupStack.replace(popup2, popup1);
+        if (popupStack.currentItem === popup1) {
+            swapPopups(popup1, popup2);
         }
         else {
-            popup2.popupManagerInternal = popupManagers[currentIndex];
-            popupStack.replace(popup1, popup2);
+            swapPopups(popup2, popup1);
         }
+    }
+
+    function swapPopups(frontPopup, backPopup) {
+        backPopup.popupManagerInternal = popupManagers[currentIndex];
+        popupStack.replace(frontPopup, backPopup);
     }
 
     /*! internal */
