@@ -191,9 +191,13 @@ Item {
         \brief Show the PopupStackView.
     */
     function show() {
+        if (popupStack.busy)
+            return;
+
         currentIndex = 0;
         if (popupManagers !== null && popupManagers.length > 0) {
-            popup1.popupManagerInternal = popupManagers[currentIndex]
+            swapPopups(popupStack.currentItem === popup1 ? popup1 : popup2,
+                       popupStack.currentItem === popup1 ? popup2 : popup1);
         }
         visible = true;
     }
