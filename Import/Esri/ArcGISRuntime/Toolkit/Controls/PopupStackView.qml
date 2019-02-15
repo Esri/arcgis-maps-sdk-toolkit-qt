@@ -16,7 +16,6 @@
 
 import QtQuick 2.11
 import QtQuick.Controls 2.4
-import QtQuick.Dialogs 1.2
 
 /*!
     \qmltype PopupStackView
@@ -193,10 +192,8 @@ Item {
     */
     function show() {
         currentIndex = 0;
-        popupStack.clear();
         if (popupManagers !== null && popupManagers.length > 0) {
             popup1.popupManagerInternal = popupManagers[currentIndex]
-            popupStack.push(popup1);
         }
         visible = true;
     }
@@ -289,36 +286,42 @@ Item {
 
     /*! internal */
     function nextPopup() {
+        if (popupStack.busy)
+            return;
+
         if (currentIndex + 1 === popupManagers.length)
             return;
 
         currentIndex += 1;
 
         if (popupStack.currentItem === popup1) {
-            popup2.popupManagerInternal = popupManagers[currentIndex]
-            popupStack.push(popup2);
+            swapPopups(popup1, popup2);
+        } else {
+            swapPopups(popup2, popup1);
         }
-        else
-        {
-            popup1.popupManagerInternal = popupManagers[currentIndex]
-            popupStack.push(popup1);
-        }
-
     }
 
     /*! internal */
     function previousPopup() {
+        if (popupStack.busy)
+            return;
+
         if (currentIndex === 0)
             return;
 
         currentIndex -= 1;
 
-        if (popupStack.currentItem === popup2)
-            popup1.popupManagerInternal = popupManagers[currentIndex];
-        else
-            popup2.popupManagerInternal = popupManagers[currentIndex];
+        if (popupStack.currentItem === popup1) {
+            swapPopups(popup1, popup2);
+        }
+        else {
+            swapPopups(popup2, popup1);
+        }
+    }
 
-        popupStack.pop();
+    function swapPopups(frontPopup, backPopup) {
+        backPopup.popupManagerInternal = popupManagers[currentIndex];
+        popupStack.replace(frontPopup, backPopup);
     }
 
     /*! internal */
@@ -477,6 +480,10 @@ Item {
             StackView {
                 id: popupStack
                 anchors.fill: parent
+
+                Component.onCompleted: {
+                    push(popup1);
+                }
             }
 
             Rectangle {
