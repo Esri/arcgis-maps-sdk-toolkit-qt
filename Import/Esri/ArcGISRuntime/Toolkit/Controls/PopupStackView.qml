@@ -482,7 +482,7 @@ Item {
                 anchors.fill: parent
 
                 Component.onCompleted: {
-                    push(popup1)
+                    push(popup1);
                 }
             }
 
