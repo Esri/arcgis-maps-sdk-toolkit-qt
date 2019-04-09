@@ -14,8 +14,11 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.11
-import QtQuick.Controls 2.4
+import QtQuick 2.4
+import QtQuick.Controls 1.4
+import QtQuick.Controls.Styles 1.4
+import QtQuick.Dialogs 1.2
+import QtQuick.Window 2.0
 
 /*!
     \qmltype PopupStackView
@@ -63,6 +66,9 @@ import QtQuick.Controls 2.4
 Item {
     id: popupStackView
 
+    /*! \internal */
+    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" || Qt.platform.os === "linux" ? 96 : 72)
+
     /*========================================
          Configurable properties
     ========================================*/
@@ -94,14 +100,14 @@ Item {
 
         The default width is \c 2.
     */
-    property real borderWidth: 2
+    property real borderWidth: 2 * displayScaleFactor
 
     /*!
         \brief The radius of the PopupStackView.
 
         The default radius is \c 2.
     */
-    property real radius: 2
+    property real radius: 2 * displayScaleFactor
 
     /*!
         \brief The title text color of the PopupStackView.
@@ -115,7 +121,7 @@ Item {
 
         The default size is \c 13.
     */
-    property real titleTextSize: 13
+    property real titleTextSize: 13 * displayScaleFactor
 
     /*!
         \brief The attribute name color of the PopupStackView.
@@ -178,26 +184,24 @@ Item {
 
         The default width is \c 275.
     */
-    width: 275
+    width: 275 * displayScaleFactor
 
     /*!
         \brief The height of the PopupStackView.
 
         The default height is \c 350.
     */
-    height: 350
+    height: 350 * displayScaleFactor
 
     /*!
         \brief Show the PopupStackView.
     */
     function show() {
-        if (popupStack.busy)
-            return;
-
         currentIndex = 0;
+        popupStack.clear();
         if (popupManagers !== null && popupManagers.length > 0) {
-            swapPopups(popupStack.currentItem === popup1 ? popup1 : popup2,
-                       popupStack.currentItem === popup1 ? popup2 : popup1);
+            popup1.popupManagerInternal = popupManagers[currentIndex]
+            popupStack.push(popup1);
         }
         visible = true;
     }
@@ -290,42 +294,36 @@ Item {
 
     /*! internal */
     function nextPopup() {
-        if (popupStack.busy)
-            return;
-
         if (currentIndex + 1 === popupManagers.length)
             return;
 
         currentIndex += 1;
 
         if (popupStack.currentItem === popup1) {
-            swapPopups(popup1, popup2);
-        } else {
-            swapPopups(popup2, popup1);
+            popup2.popupManagerInternal = popupManagers[currentIndex]
+            popupStack.push(popup2);
         }
+        else
+        {
+            popup1.popupManagerInternal = popupManagers[currentIndex]
+            popupStack.push(popup1);
+        }
+
     }
 
     /*! internal */
     function previousPopup() {
-        if (popupStack.busy)
-            return;
-
         if (currentIndex === 0)
             return;
 
         currentIndex -= 1;
 
-        if (popupStack.currentItem === popup1) {
-            swapPopups(popup1, popup2);
-        }
-        else {
-            swapPopups(popup2, popup1);
-        }
-    }
+        if (popupStack.currentItem === popup2)
+            popup1.popupManagerInternal = popupManagers[currentIndex];
+        else
+            popup2.popupManagerInternal = popupManagers[currentIndex];
 
-    function swapPopups(frontPopup, backPopup) {
-        backPopup.popupManagerInternal = popupManagers[currentIndex];
-        popupStack.replace(frontPopup, backPopup);
+        popupStack.pop();
     }
 
     /*! internal */
@@ -357,7 +355,7 @@ Item {
 
     // Create two PopupView and cycle between the two to act as StackView.
     /*! internal */
-    PopupViewBase {
+    PopupViewBase101 {
         id: popup1
         backgroundColorInternal: backgroundColor
         borderColorInternal: borderColor
@@ -375,7 +373,7 @@ Item {
     }
 
     /*! internal */
-    PopupViewBase {
+    PopupViewBase101 {
         id: popup2
         backgroundColorInternal: backgroundColor
         borderColorInternal: borderColor
@@ -414,7 +412,7 @@ Item {
                 anchors {
                     left: parent.left
                     verticalCenter: parent.verticalCenter
-                    margins: 2
+                    margins: 2 * displayScaleFactor
                 }
                 antialiasing: true
                 height: parent.height
@@ -441,7 +439,7 @@ Item {
                 anchors {
                     verticalCenter: parent.verticalCenter
                     horizontalCenter: parent.horizontalCenter
-                    margins: 5
+                    margins: 5 * displayScaleFactor
                 }
                 color: attributeNameTextColor
                 text: popupManagers !== null && popupManagers.length > 0 ? (currentIndex + 1) + " of " + popupManagers.length : ""
@@ -452,7 +450,7 @@ Item {
                 anchors {
                     right: parent.right
                     verticalCenter: parent.verticalCenter
-                    margins: 2
+                    margins: 2 * displayScaleFactor
                 }
                 antialiasing: true
                 height: parent.height
@@ -484,10 +482,6 @@ Item {
             StackView {
                 id: popupStack
                 anchors.fill: parent
-
-                Component.onCompleted: {
-                    push(popup1);
-                }
             }
 
             Rectangle {

@@ -50,7 +50,7 @@ public:
 
   static ToolResourceProvider* instance();
 
-  ~ToolResourceProvider();
+  ~ToolResourceProvider() override;
 
   Map* map() const;
   void setMap(Map* newMap);

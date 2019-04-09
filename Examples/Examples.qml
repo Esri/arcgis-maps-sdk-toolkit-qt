@@ -14,10 +14,10 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.0
-import QtQuick.Controls 1.1
+import QtQuick 2.11
+import QtQuick.Controls 2.4
 import QtGraphicalEffects 1.0
-import Esri.ArcGISRuntime 100.4
+import Esri.ArcGISRuntime 100.5
 
 Rectangle {
     width: 640

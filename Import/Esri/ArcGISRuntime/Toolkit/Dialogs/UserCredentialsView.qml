@@ -14,8 +14,9 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.5
-import QtQuick.Controls 1.4
+import QtQuick 2.11
+import QtQuick.Controls 2.4
+import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 import QtQuick.Window 2.0
 
@@ -54,12 +55,17 @@ Rectangle {
     */
     property var challenge
 
-    /*! \internal */
-    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" || Qt.platform.os === "linux" ? 96 : 72)
+    /*!
+        \brief The color of the top banner in the view.
+
+        The default is blue, #005e95.
+    */
+    property color bannerColor: "#005e95"
+
     /*! \internal */
     property string requestingHost: challenge ? challenge.authenticatingHost : ""
     /*! \internal */
-    property string detailText: qsTr("You need to sign in to access the resource at '%1'").arg(requestingHost)
+    property string detailText: qsTr("You need to sign in to access the resource at:")
 
     Keys.onEnterPressed: {
         if (Qt.platform.os !== "android" && Qt.platform.os !== "ios") {
@@ -88,120 +94,125 @@ Rectangle {
         onWheel: wheel.accepted = true
     }
 
+
     Rectangle {
-        anchors {
-            fill: banner
-            margins: -1 * displayScaleFactor
-        }
-        color: "white"
-        border {
-            color: "black"
-            width: 1 * displayScaleFactor
-        }
-        radius: 3
+        color: "white"        
         smooth: true
         clip: true
         antialiasing: true
-    }
+        anchors.centerIn: parent
+        width: childrenRect.width
+        height: childrenRect.height
 
-    Image {
-        id: banner
-        anchors {
-            centerIn: parent
-            verticalCenterOffset: -50 * displayScaleFactor
-        }
-        width: 224 * displayScaleFactor
-        height: 50 * displayScaleFactor
-        clip: true
-        source: "images/banner.png"
 
-        Text {
-            anchors.centerIn: parent
-            text: qsTr("Authentication Required")
-            font {
-                pixelSize: 18 * displayScaleFactor
-                family: "sanserif"
+        GridLayout {
+            columns: 2
+
+            Rectangle {
+                id: banner
+                Layout.alignment: Qt.AlignHCenter
+                Layout.fillWidth: true
+                Layout.columnSpan: 2
+                Layout.minimumWidth: childrenRect.width
+                Layout.minimumHeight: childrenRect.height
+
+                color: "white"                
+                smooth: true
+                antialiasing: true
+
+                Rectangle {
+                    anchors.fill: parent
+                    color: bannerColor
+                }
+
+                Label {
+                    id: titleText
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: qsTr("Authentication Required")
+                    padding: 5
+                    horizontalAlignment: Qt.AlignHCenter
+                    font {
+                        pixelSize: 18
+                        family: "sanserif"
+                    }
+                    color: "white"
+                }
             }
-            color: "white"
-            renderType: Text.NativeRendering
-        }
-    }
 
-    Rectangle {
-        anchors {
-            fill: controlsColumn
-            margins: -5 * displayScaleFactor
-        }
-        color: "white"
-        border {
-            color: "black"
-            width: 1 * displayScaleFactor
-        }
-        radius: 3
-        smooth: true
-        clip: true
-        antialiasing: true
-    }
+            Rectangle {
+                color: "#FFCCCC"
+                radius: 5
+                Layout.fillWidth: true
+                Layout.margins: 10
+                Layout.columnSpan: 2
+                height: childrenRect.height
+                visible: challenge ? challenge.failureCount > 1 : false
 
-    Column {
-        id: controlsColumn
-        anchors {
-            top: banner.bottom
-            topMargin: 5 * displayScaleFactor
-            horizontalCenter: banner.horizontalCenter
-        }
-        width: 215 * displayScaleFactor
-        spacing: 10 * displayScaleFactor
+                Label {
+                    text: qsTr("Invalid username or password.")
+                    font {
+                        pixelSize: 12
+                        family: "sanserif"
+                    }
+                    color: "red"
+                }
+            }
 
-        Rectangle {
-            color: "#FFCCCC"
-            radius: 5
-            width: parent.width
-            anchors.margins: 10 * displayScaleFactor
-            height: 20 * displayScaleFactor
-            visible: challenge ? challenge.failureCount > 1 : false
-
-            Text {
-                anchors.centerIn: parent
-                text: qsTr("Invalid username or password.")
+            Label {
+                text: detailText
+                Layout.fillWidth: true
+                Layout.rightMargin: 10
+                Layout.leftMargin: 10
+                Layout.topMargin: 10
+                Layout.columnSpan: 2
+                Layout.alignment: Qt.AlignHCenter
+                wrapMode: Text.Wrap
+                color: "black"
                 font {
-                    pixelSize: 12 * displayScaleFactor
+                    pixelSize: 12
                     family: "sanserif"
                 }
-                color: "red"
             }
-        }
 
-        Text {
-            anchors.horizontalCenter: parent.horizontalCenter
-            text: detailText
-            width: parent.width
-            wrapMode: Text.Wrap
-            font {
-                pixelSize: 12 * displayScaleFactor
-                family: "sanserif"
+            Label {
+                text: requestingHost
+                Layout.fillWidth: true
+                Layout.rightMargin: 10
+                Layout.leftMargin: 10
+                Layout.bottomMargin: 10
+                Layout.columnSpan: 2
+                wrapMode: Text.Wrap
+                color: "black"
+                font {
+                    pixelSize: 12
+                    family: "sanserif"
+                }
             }
-            renderType: Text.NativeRendering
-        }
 
-        TextField {
-            id: usernameTextField
-            width: parent.width
-            placeholderText: qsTr("username")
-        }
+            TextField {
+                id: usernameTextField
+                Layout.fillWidth: true
+                Layout.margins: 10
+                Layout.columnSpan: 2
+                placeholderText: qsTr("username")
+                placeholderTextColor: "darkgray"
+                color: "black"
+            }
 
-        TextField {
-            id: passwordTextField
-            width: parent.width
-            placeholderText: qsTr("password")
-            echoMode: TextInput.Password
-        }
+            TextField {
+                id: passwordTextField
+                Layout.fillWidth: true
+                Layout.margins: 10
+                Layout.columnSpan: 2
+                placeholderText: qsTr("password")
+                placeholderTextColor: "darkgray"
+                echoMode: TextInput.Password
+                color: "black"
+            }
 
-        Row {
-            width: parent.width
-            spacing: 4 * displayScaleFactor
             Button {
-                width: ((parent.width / 2) - 2 * displayScaleFactor)
+                Layout.margins: 10
+                Layout.alignment: Qt.AlignLeft
                 text: qsTr("Skip")
                 onClicked: {
                     // cancel the challenge and let the resource fail to load
@@ -213,9 +224,10 @@ Rectangle {
 
             Button {
                 id: continueButton
-                width: ((parent.width / 2) - 2 * displayScaleFactor)
+                Layout.margins: 10
+                Layout.alignment: Qt.AlignRight
                 text: qsTr("Continue")
-                isDefault: true
+                highlighted: true
                 onClicked: {
                     // continue with the username and password
                     if (challenge)
@@ -226,4 +238,3 @@ Rectangle {
         }
     }
 }
-

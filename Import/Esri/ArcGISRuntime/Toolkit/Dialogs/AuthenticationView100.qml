@@ -14,7 +14,7 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.11
+import QtQuick 2.5
 
 /*!
     \qmltype AuthenticationView
@@ -110,16 +110,16 @@ Item {
 
             if (Number(challenge.authenticationChallengeType) === 1) {
                 // ArcGIS token, HTTP Basic/Digest, IWA
-                createView("UserCredentialsView.qml");
+                createView("UserCredentialsView100.qml");
             } else if (Number(challenge.authenticationChallengeType) === 2) {
                 // OAuth 2
-                createView("OAuth2View.qml");
+                createView("OAuth2View100.qml");
             } else if (Number(challenge.authenticationChallengeType) === 3) {
                 // Client Certificate
-                createView("ClientCertificateView.qml");
+                createView("ClientCertificateView100.qml");
             } else if (Number(challenge.authenticationChallengeType) === 4) {
                 // SSL Handshake - Self-signed certificate
-                createView("SslHandshakeView.qml");
+                createView("SslHandshakeView100.qml");
             }
         }
 

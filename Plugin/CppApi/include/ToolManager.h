@@ -42,7 +42,7 @@ public:
 
   static ToolManager& instance(); // singleton
 
-  ~ToolManager();
+  ~ToolManager() override;
 
   void addTool(AbstractTool* tool);
 

@@ -14,9 +14,9 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.11
+import QtQuick 2.4
 import QtQuick.Dialogs 1.2
-import QtQuick.Window 2.11
+import QtQuick.Window 2.0
 
 /*!
     \qmltype PopupView
@@ -65,6 +65,9 @@ import QtQuick.Window 2.11
 Item {
     id: popupView
 
+    /*! \internal */
+    property real displayScaleFactor: (Screen.logicalPixelDensity * 25.4) / (Qt.platform.os === "windows" || Qt.platform.os === "linux" ? 96 : 72)
+
     /*========================================
          Configurable properties
     ========================================*/
@@ -96,14 +99,14 @@ Item {
 
         The default width is \c 2.
     */
-    property real borderWidth: 2
+    property real borderWidth: 2 * displayScaleFactor
 
     /*!
         \brief The radius of the PopupView.
 
         The default radius is \c 2.
     */
-    property real radius: 2
+    property real radius: 2 * displayScaleFactor
 
     /*!
         \brief The title text color of the PopupView.
@@ -117,7 +120,7 @@ Item {
 
         The default size is \c 13.
     */
-    property real titleTextSize: 13
+    property real titleTextSize: 13 * displayScaleFactor
 
     /*!
         \brief The attribute name color of the PopupView.
@@ -168,14 +171,14 @@ Item {
 
         The default width is \c 275.
     */
-    width: 275
+    width: 275 * displayScaleFactor
 
     /*!
         \brief The height of the PopupView.
 
         The default height is \c 350.
     */
-    height: 350
+    height: 350 * displayScaleFactor
 
     /*!
         \brief Show the PopupView.
@@ -270,7 +273,7 @@ Item {
     signal attachmentThumbnailClicked(var index)
 
     /*! internal */
-    PopupViewBase {
+    PopupViewBase101 {
         anchors.fill: parent
         popupManagerInternal: popupManager
         backgroundColorInternal: backgroundColor

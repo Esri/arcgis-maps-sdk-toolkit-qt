@@ -14,7 +14,7 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.11
+import QtQuick 2.5
 import QtWebView 1.1
 
 /*!

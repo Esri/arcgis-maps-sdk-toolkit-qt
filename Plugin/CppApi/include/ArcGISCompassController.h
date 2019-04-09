@@ -46,7 +46,7 @@ signals:
 
 public:
   ArcGISCompassController(QObject *parent = nullptr);
-  ~ArcGISCompassController();
+  ~ArcGISCompassController() override;
 
   bool setView(Esri::ArcGISRuntime::GeoView* geoView);
   /*! \internal */

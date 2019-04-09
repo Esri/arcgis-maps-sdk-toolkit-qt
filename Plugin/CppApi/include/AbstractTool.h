@@ -43,7 +43,7 @@ class TOOLKIT_EXPORT AbstractTool : public QObject
 
 public:
   AbstractTool(QObject* parent = nullptr);
-  virtual ~AbstractTool();
+  ~AbstractTool() override;
 
   virtual QString toolName() const = 0;
   virtual bool handleClick(const Point& pos);

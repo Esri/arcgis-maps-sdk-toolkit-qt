@@ -64,7 +64,7 @@ signals:
 
 public:
   TimeSliderController(QObject* parent = nullptr);
-  ~TimeSliderController();
+  ~TimeSliderController() override;
 
   QString toolName() const override;
 

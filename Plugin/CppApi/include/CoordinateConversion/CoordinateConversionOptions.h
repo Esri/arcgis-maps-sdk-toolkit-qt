@@ -75,7 +75,7 @@ signals:
 
 public:
   CoordinateConversionOptions(QObject* parent = nullptr);
-  ~CoordinateConversionOptions();
+  ~CoordinateConversionOptions() override;
 
   QString name() const;
   void setName(const QString& name);

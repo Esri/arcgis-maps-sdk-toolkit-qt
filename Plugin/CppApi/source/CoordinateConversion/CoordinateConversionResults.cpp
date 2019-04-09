@@ -95,7 +95,7 @@ void CoordinateConversionResults::removeResult(const QString& name)
 {
   for (int i = 0; i < m_results.size(); ++i)
   {
-    if (m_results.at(i).m_name.compare(name) == 0)
+    if (m_results.at(i).name.compare(name) == 0)
     {
       beginRemoveRows(QModelIndex(), i, i);
       m_results.removeAt(i);
@@ -116,7 +116,7 @@ void CoordinateConversionResults::clearResults()
 
   emit beginResetModel();
   for (auto& result : m_results)
-    result.m_notation.clear();
+    result.notation.clear();
   endResetModel();
 
   emit resultsChanged();
@@ -176,12 +176,12 @@ QVariant CoordinateConversionResults::data(const QModelIndex& index, int role) c
   switch (role)
   {
   case CoordinateConversionResultsNameRole:
-    return QVariant(result.m_name);
+    return QVariant(result.name);
   case CoordinateConversionResultsNotationRole:
-    return QVariant(result.m_notation);
+    return QVariant(result.notation);
   case CoordinateConversionResultsCoordinateTypeRole:
     return QVariant::fromValue<CoordinateConversionOptions::CoordinateType>(
-          static_cast<CoordinateConversionOptions::CoordinateType>(result.m_type));
+          static_cast<CoordinateConversionOptions::CoordinateType>(result.type));
   default:
     break;
   }
@@ -193,9 +193,21 @@ QVariant CoordinateConversionResults::data(const QModelIndex& index, int role) c
   \internal
  */
 Result::Result(const QString& name, const QString& notation, int type) :
-  m_name(name), m_notation(notation), m_type(type)
+  name(name),
+  notation(notation),
+  type(type)
 {
 }
+
+/*!
+  \internal
+ */
+Result::Result(const Result& other) = default;
+
+/*!
+  \internal
+ */
+Result::~Result() = default;
 
 /*!
   \fn CoordinateConversionResults::resultsChanged()
