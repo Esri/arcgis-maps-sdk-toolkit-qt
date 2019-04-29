@@ -3,6 +3,7 @@
         <file>images/pause.png</file>
         <file>images/play.png</file>
         <file>images/step.png</file>
+        <file>ArcGISARView.qml</file>
         <file>TimeSlider.qml</file>
         <file>TimeSlider1003.qml</file>
         <file>TimeSliderController.qml</file>

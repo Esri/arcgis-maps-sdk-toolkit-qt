@@ -23,12 +23,30 @@ CONFIG += c++11 plugin
 DEFINES += QTRUNTIME_TOOLKIT_BUILD
 
 HEADERS += $$PWD/include/*.h \
-           $$PWD/include/CoordinateConversion/*.h
+           $$PWD/include/CoordinateConversion/*.h \
+           $$PWD/include/AR/ArcGISARView.h
+
 SOURCES += $$PWD/source/*.cpp \
-           $$PWD/source/CoordinateConversion/*.cpp
+           $$PWD/source/CoordinateConversion/*.cpp \
+           $$PWD/source/AR/ArcGISARView.cpp
 
 INCLUDEPATH += $$PWD/include/ \
-               $$PWD/include/CoordinateConversion/
+               $$PWD/include/CoordinateConversion/ \
+               $$PWD/include/AR/
+
+# AR configs
+#ios {
+    LIBS += -framework ARKit
+    HEADERS += $$PWD/include/AR/ArKitWrapper.h
+    OBJECTIVE_SOURCES += $$PWD/source/AR/ArKitWrapper.mm
+#}
+
+#android {
+#    LIBS += -L"$${PWD}/Android/arcore-native/jni/armeabi-v7a" -larcore_sdk_c # x86 ou armeabi-v7a
+#    ANDROID_EXTRA_LIBS += $${PWD}/Android/arcore-native/jni/armeabi-v7a/libarcore_sdk_c.so
+    HEADERS += $$PWD/include/AR/ArCoreWrapper.h
+    OBJECTIVE_SOURCES += $$PWD/source/AR/ArCoreWrapper.cpp
+#}
 
 RUNTIME_PRI = arcgis_runtime_qml_cpp.pri
 #RUNTIME_PRI = esri_runtime_qt.pri # use this for widgets

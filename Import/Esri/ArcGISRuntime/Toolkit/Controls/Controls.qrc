@@ -21,6 +21,7 @@
         <file>images/triangle.png</file>
         <file>images/forward.png</file>
         <file>LeaderPosition.js</file>
+        <file>ArcGISARView.qml</file>
         <file>AttachmentListView20.qml</file>
         <file>AttributeListView20.qml</file>
         <file>Callout.qml</file>
