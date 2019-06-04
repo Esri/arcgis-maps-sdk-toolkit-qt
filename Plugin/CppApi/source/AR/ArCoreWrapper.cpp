@@ -14,7 +14,10 @@
  *  limitations under the License.
  ******************************************************************************/
 
-#include "ArcGISARView.h"
+#include "ArCoreWrapper.h"
+#include <QtAndroid>
+#include <QAndroidJniEnvironment>
+#include <QDebug>
 
 /*!
   \class Esri::ArcGISRuntime::Toolkit::ArcGISARView
@@ -25,6 +28,11 @@
   \sa {AR}
  */
 
+// TODO?
+
+// ArCoreApk_checkAvailability https://developers.google.com/ar/reference/c/group/arcoreapk#group__arcoreapk_1ga448092e9b601bc6f87d13d05317413f1
+// ARCore-optional applications must ensure that ArCoreApk_checkAvailability() returns one of the AR_AVAILABILITY_SUPPORTED_... values before calling this method.
+
 namespace Esri
 {
 namespace ArcGISRuntime
@@ -32,75 +40,133 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
-#include "arcore_c_api.h"
-#include <QtAndroid>
-#include <QAndroidJniEnvironment>
-#include <QDebug>
+int32_t ArCoreWrapper::m_installRequested = 1;
 
-static ArSession* s_ar_session = nullptr;
-static bool s_install_requested = false;
-
-void ar_destroy() {
-    if (s_ar_session != nullptr)
-        ArSession_destroy(s_ar_session);
+ArSession* ArCoreWrapper::session()
+{
+  return m_arSession;
 }
 
-void ar_pause() {
-    if (s_ar_session != nullptr)
-        ArSession_pause(s_ar_session);
+//The application's JNIEnv object
+JNIEnv* ArCoreWrapper::jniEnvironment()
+{
+//  Step 1 get JNIEnv pointer by defining
+//  JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* /*reserved*/).
+//  You can define it (once per .so file) in any .cpp file you like
+
+
+//  JNIEnv* env;
+//  6 // get the JNIEnv pointer.
+//  7 if (vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6) != JNI_OK)
+//  8 return JNI_ERR;
+
+
+//  QAndroidJniEnvironment qjniEnv;
+//  return qjniEnv->ExceptionCheck();
+  return m_jniEnvironment;
+}
+
+//A jobject referencing the application's current Android Activity.
+jobject ArCoreWrapper::applicationActivity()
+{
+  // Note: AR run in different thread, must to create local reference to avoid deleted object.
+  if (m_applicationActivity == nullptr)
+    m_applicationActivity = jniEnvironment()->NewLocalRef(QtAndroid::androidActivity().object<jobject>());
+
+  // jobject context = QtAndroid::androidContext().object<jobject>();
+  // jobject context_ = env->NewGlobalRef(context);
+  // qDebug() << "--- 1 ---" << env << context << activity << context_;
+  // jobject activity_ = env->NewLocalRef(activity);
+
+  return m_applicationActivity;
+}
+
+// Initiates installation of ARCore if needed.
+// May be called prior to ArSession_create()
+
+// When your apllication launches or enters an AR mode, it should call this method with user_requested_install = 1.
+// If ARCore is installed and compatible, this function will set out_install_status to AR_INSTALL_STATUS_INSTALLED.
+// If ARCore is not currently installed or the installed version not compatible, the function will set out_install_status to AR_INSTALL_STATUS_INSTALL_REQUESTED and return immediately. Your current activity will then pause while the user is offered the opportunity to install it.
+// When your activity resumes, you should call this method again, this time with user_requested_install = 0. This will either set out_install_status to AR_INSTALL_STATUS_INSTALLED or return an error code indicating the reason that installation could not be completed.
+
+bool ArCoreWrapper::install()
+{
+  if (m_arSession != nullptr)
+    return true;
+
+  ArInstallStatus install_status;
+  ArStatus error = ArCoreApk_requestInstall(jniEnvironment(), applicationActivity(), m_installRequested, &install_status);
+  if (error != AR_SUCCESS)
+  {
+    //AR_ERROR_FATAL if an error occurs while checking for or requesting installation
+    //AR_UNAVAILABLE_DEVICE_NOT_COMPATIBLE if ARCore is not supported on this device.
+    //AR_UNAVAILABLE_USER_DECLINED_INSTALLATION if the user previously declined installation.
+    return false;
+  }
+
+  switch (install_status)
+  {
+  case AR_INSTALL_STATUS_INSTALLED:
+    // The requested resource is already installed.
+    return true;
+  case AR_INSTALL_STATUS_INSTALL_REQUESTED:
+    // Installation of the resource was requested. The current activity will be paused.
+    m_installRequested = 0;
+    return false;
+  }
 }
 
 // java: public static native long createNativeApplication(AssetManager assetManager);
 
 // java: JniInterface.onResume(nativeApplication, getApplicationContext(), this);
 // java: public static native void onResume(long nativeApplication, Context context, Activity activity);
-void initArSession() {
-    if (s_ar_session != nullptr)
-        return;
+void ArCoreWrapper::create()
+{
+  if (m_arSession != nullptr)
+    return;
 
-    QAndroidJniEnvironment env;
-    // Note: AR run in different thread, must to create local reference to avoid deleted object.
-    jobject activity = env->NewLocalRef(QtAndroid::androidActivity().object<jobject>());
+  // === ATTENTION!  ATTENTION!  ATTENTION! ===
+  // This method can and will fail in user-facing situations.  Your
+  // application must handle these cases at least somewhat gracefully.  See
+  // HelloAR Java sample code for reasonable behavior.
+  auto ar_status = ArSession_create(jniEnvironment(), applicationActivity(), &m_arSession);
 
-// jobject context = QtAndroid::androidContext().object<jobject>();
-// jobject context_ = env->NewGlobalRef(context);
-// qDebug() << "--- 1 ---" << env << context << activity << context_;
-// jobject activity_ = env->NewLocalRef(activity);
+  if (ar_status != AR_SUCCESS)
+  {
+    qDebug() << "ArSession_create fails.";
+    return;
+  }
+  else
+  {
+    qDebug() << "Succed to run ArSession_create.";
+  }
 
-    if (!env || !activity) {
-        qDebug() << "Fails to init env or activity pointers.";
-        return;
-    }
+  if (m_arSession == nullptr)
+  {
+    qDebug() << "m_arSession is nullptr.";
+    return;
+  }
+  else {
+    qDebug() << "m_arSession is not null";
+  }
 
-    switch (install_status) {
-    case AR_INSTALL_STATUS_INSTALLED:
-        break;
-    case AR_INSTALL_STATUS_INSTALL_REQUESTED:
-        s_install_requested = true;
-        return;
-    }
+  //request camera autorisation
 
-    // === ATTENTION!  ATTENTION!  ATTENTION! ===
-    // This method can and will fail in user-facing situations.  Your
-    // application must handle these cases at least somewhat gracefully.  See
-    // HelloAR Java sample code for reasonable behavior.
-    ar_status = ArSession_create(env, context, &s_ar_session);
-    if (ar_status != AR_SUCCESS) {
-        qDebug() << "ArSession_create fails.";
-        return;
-    }
-    else {
-        qDebug() << "Succed to run ArSession_create.";
-    }
+}
 
-    if (s_ar_session == nullptr) {
-        qDebug() << "s_ar_session is nullptr.";
-        return;
-    }
-    else {
-        qDebug() << "s_ar_session is not null";
-    }
+void ArCoreWrapper::pause() {
+  if (m_arSession != nullptr)
+    ArSession_pause(m_arSession);
+}
 
+void ArCoreWrapper::resume() {
+  if (m_arSession != nullptr)
+    ArSession_resume(m_arSession);
+}
+
+void ArCoreWrapper::destroy() {
+  if (m_arSession != nullptr)
+    ArSession_destroy(m_arSession);
 }
 
 } // Toolkit

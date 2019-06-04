@@ -17,6 +17,9 @@
 #ifndef ARCOREWRAPPER_H
 #define ARCOREWRAPPER_H
 
+#include "arcore_c_api.h"
+#include <QAndroidJniEnvironment>
+
 namespace Esri
 {
 namespace ArcGISRuntime
@@ -26,6 +29,28 @@ namespace Toolkit // internal?
 
 class ArCoreWrapper
 {
+  ArSession* session(); // static?
+
+  JNIEnv* jniEnvironment();
+  jobject applicationActivity();
+
+  bool install();
+  void create();
+  void pause();
+  void resume();
+  void destroy();
+
+private:
+  QAndroidJniEnvironment m_jniEnvironment;
+
+  jobject m_applicationActivity = nullptr;
+
+  ArSession* m_arSession = nullptr; // static??
+
+  static int32_t m_installRequested; // When your apllication launches or enters an AR mode,
+        // it should call this method with user_requested_install = 1.
+
+
 };
 
 } // Toolkit

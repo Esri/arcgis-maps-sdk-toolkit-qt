@@ -16,6 +16,12 @@
 
 #include "ArcGISARView.h"
 
+#ifdef Q_OS_IOS
+#include "ArKitWrapper.h"
+#elif defined Q_OS_ANDROID
+#include "ArCoreWrapper.h"
+#endif
+
 /*!
   \class Esri::ArcGISRuntime::Toolkit::ArcGISARView
   \ingroup AR
@@ -36,7 +42,7 @@ namespace Toolkit
   \brief A constructor that accepts an optional \a parent.
  */
 ArcGISARView::ArcGISARView(QObject* parent):
-  SceneQuickView(parent)
+  QObject(parent)
 {
 }
 
@@ -44,7 +50,7 @@ ArcGISARView::ArcGISARView(QObject* parent):
   \brief A constructor that accepts an optional \a parent.
  */
 ArcGISARView::ArcGISARView(bool renderVideoFeed, QObject* parent):
-  SceneQuickView(parent)
+  QObject(parent)
 {
 }
 
@@ -58,7 +64,7 @@ ArcGISARView::~ArcGISARView()
 /*!
   \brief ...
  */
-Camera ArcGISARView::originCamera()
+Camera ArcGISARView::originCamera() const
 {
 }
 
@@ -72,8 +78,9 @@ void ArcGISARView::setOriginCamera(const Camera& originCamera)
 /*!
   \brief ...
  */
-double ArcGISARView::translationTransformationFactor()
+SceneQuickView* ArcGISARView::sceneView() const
 {
+
 }
 
 /*!
@@ -81,7 +88,6 @@ double ArcGISARView::translationTransformationFactor()
  */
 double ArcGISARView::translationTransformationFactor() const
 {
-
 }
 
 /*!

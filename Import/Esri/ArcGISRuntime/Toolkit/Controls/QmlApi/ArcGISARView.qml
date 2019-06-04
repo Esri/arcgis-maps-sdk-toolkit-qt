@@ -17,13 +17,13 @@
 import QtQuick 2.6
 import Esri.ArcGISRuntime 100.6
 
-SceneView {
+Item {
     id: root
 
     // properties
     // ARCNView?
-    property Camera originCamera: null
-    // sceneView?
+    property Camera originCamera: internalCamera
+    property alias sceneView: internalSceneView
     property real translationTransformationFactor: 1.0
 
     property bool renderVideoFeed: true // constructor?
@@ -35,6 +35,15 @@ SceneView {
     function resetUsingSpacialAnchor() {} // bool f(void)
     function startTracking() {} // void f(void). Should return bool?
     function stopTracking() {} // void f(void)
+
+    // internals
+    SceneView {
+        id: internalSceneView
+    }
+
+    Camera {
+        id: internalCamera
+    }
 }
 
 
