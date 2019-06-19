@@ -17,7 +17,7 @@
 import QtQuick 2.6
 import Esri.ArcGISRuntime 100.6
 
-ArSceneView {
+ArView {
     id: root
 }
 

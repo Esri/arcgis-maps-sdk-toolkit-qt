@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/qt-project.org/imports/Esri/ArcGISRuntime/Toolkit/Controls/CppApi">
-        <file>ArcGISARView.qml</file>
+        <file>ArcGISArView.qml</file>
         <file>CoordinateConversion.qml</file>
         <file>CoordinateConversion1002.qml</file>
         <file>ArcGISCompass.qml</file>

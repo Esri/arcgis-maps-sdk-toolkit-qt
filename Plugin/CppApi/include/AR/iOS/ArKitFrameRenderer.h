@@ -14,8 +14,11 @@
  *  limitations under the License.
  ******************************************************************************/
 
-#ifndef ARKITWRAPPER_H
-#define ARKITWRAPPER_H
+#ifndef ArKitFrameRenderer_H
+#define ArKitFrameRenderer_H
+
+#include <QOpenGLFunctions>
+#include <QOpenGLShaderProgram>
 
 namespace Esri
 {
@@ -24,12 +27,31 @@ namespace ArcGISRuntime
 namespace Toolkit // internal?
 {
 
-class ArKitWrapper
+class ArKitWrapper;
+
+// This class renders the passthrough camera image into the OpenGL frame.
+class ArKitFrameRenderer : public QOpenGLFunctions
 {
+public:
+  ArKitFrameRenderer(ArKitWrapper* arKitWrapper);
+  ~ArKitFrameRenderer() = default;
+
+  void init();
+  void render(GLuint textureIdY, GLuint textureIdCbCr);
+
+private:
+  ArKitWrapper* m_arKitWrapper = nullptr;
+
+  std::unique_ptr<QOpenGLShaderProgram> m_program;
+
+  GLuint m_uniformTextureY = 0;
+  GLuint m_uniformTextureCbCr = 0;
+  GLuint m_attributeVertices = 0;
+  GLuint m_attributeUvs = 0;
 };
 
 } // Toolkit
 } // ArcGISRuntime
 } // Esri
 
-#endif // ARKITWRAPPER_H
+#endif // ArKitFrameRenderer_H

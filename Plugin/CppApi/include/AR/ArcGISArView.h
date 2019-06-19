@@ -17,18 +17,11 @@
 #ifndef ARCGISARVIEW_H
 #define ARCGISARVIEW_H
 
-#include "ToolkitCommon.h"
-#include <QObject>
+#include <QQuickFramebufferObject>
+#include "Camera.h"
 #include "SceneQuickView.h"
-#include "Point.h"
-
-#ifdef Q_OS_IOS
-class ARSCNView;
-#elif defined Q_OS_ANDROID
-typedef struct ArSession_ ArSession;
-#endif
-
-class ArWrapper;
+#include "ArWrapper.h"
+#include "ArcGISArViewRenderer.h"
 
 namespace Esri
 {
@@ -37,50 +30,32 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
-class TOOLKIT_EXPORT ArcGISARView : public QObject
+class /*TOOLKIT_EXPORT*/ ArcGISArView : public QQuickFramebufferObject
 {
   Q_OBJECT
 
-  // Q_PROPERTY(ARCNView) // Q_PROPERTY with #ifdef?
   Q_PROPERTY(Camera originCamera READ originCamera WRITE setOriginCamera NOTIFY originCameraChanged)
-  Q_PROPERTY(SceneQuickView* sceneView READ sceneView NOTIFY sceneViewChanged) // read only?
-  // Q_PROPERTY(SceneQuickView* sceneView READ sceneView WRITE setSceneView NOTIFY sceneViewChanged) // read-write?
-  Q_PROPERTY(double translationTransformationFactor READ translationTransformationFactor WRITE setTranslationTransformationFactor NOTIFY translationTransformationFactorChanged)
+  Q_PROPERTY(SceneQuickView* sceneView READ sceneView WRITE setSceneView NOTIFY sceneViewChanged)
+  Q_PROPERTY(double translationTransformationFactor READ translationTransformationFactor
+             WRITE setTranslationTransformationFactor NOTIFY translationTransformationFactorChanged)
   Q_PROPERTY(bool renderVideoFeed READ renderVideoFeed WRITE setRenderVideoFeed NOTIFY renderVideoFeedChanged)
+
+  // add to the design?
+  Q_PROPERTY(bool tracking READ tracking WRITE setTracking NOTIFY trackingChanged)
 
   // Q_PROPERTY(default)
 
 public:
-  explicit ArcGISARView(QObject* parent = nullptr);
-  explicit ArcGISARView(bool renderVideoFeed, QObject* parent = nullptr); // implicit cast ptr to bool???
-  ~ArcGISARView() override;
-
-  // get the ARKit/ARCore object
-  // 1. get raw ptr. Need static cast to use it
-  // void* getARsceneVoid() const;
-  // 2. get using template. Compile-time error if T is invalid, then can return a reference.
-  // template<typename T>
-  // T& getARscene() const;
-  // 3. plateform specific code
-#ifdef Q_OS_IOS
-public:
-  ARSCNView* getARscene() const;
-private:
-  ARSCNView* internalPtr = nullptr; // static, in .cpp?
-#elif defined Q_OS_ANDROID
-  ArSession* getARscene() const;
-  // ArSession* internalPtr = nullptr; // static, in .cpp?
-#endif
-  // 4. wrapper
-  // ArWrapper& getARsceneWrapper() const;
+  explicit ArcGISArView(QQuickItem* parent = nullptr);
+  explicit ArcGISArView(int renderVideoFeed, QQuickItem* parent = nullptr); // implicit cast ptr to bool???
+  ~ArcGISArView() override;
 
   // properties
   Camera originCamera() const;
   void setOriginCamera(const Camera& originCamera);
 
   SceneQuickView* sceneView() const;
-  // void setSceneView(SceneQuickView* sceneView);
-  // read only? In QML: read-write, to set the view in QML. But must be QmlSceneView.
+  void setSceneView(SceneQuickView* sceneView);
 
   double translationTransformationFactor() const;
   void setTranslationTransformationFactor(double translationTransformationFactor);
@@ -88,7 +63,10 @@ private:
   bool renderVideoFeed() const;
   void setRenderVideoFeed(bool renderVideoFeed);
 
-  // methods
+  bool tracking() const;
+  void setTracking(bool tracking);
+
+  // methods invokable?
   Q_INVOKABLE Point arScreenToLocation(const Point& screenPoint) const;
   Q_INVOKABLE void resetTracking();
   Q_INVOKABLE bool resetUsingLocationService();
@@ -96,11 +74,34 @@ private:
   Q_INVOKABLE void startTracking();
   Q_INVOKABLE void stopTracking();
 
+  // low access to the ARKit/ARCore objects
+  template<typename ArRawPtr>
+  ArRawPtr* getAR() const;
+
+  // create renderer for frame buffer object
+  QQuickFramebufferObject::Renderer* createRenderer() const override;
+
+  // update the matrix transformation
+  void updateCamera();
+
 signals:
   void originCameraChanged();
   void sceneViewChanged();
   void translationTransformationFactorChanged();
   void renderVideoFeedChanged();
+  void trackingChanged();
+
+protected:
+  void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry) override;
+  void timerEvent(QTimerEvent* event) override;
+
+private:
+  int m_timerId = 0;
+  Camera m_originCamera;
+
+  mutable ArcGISArViewRenderer* m_arViewRenderer = nullptr;
+  std::unique_ptr<ArWrapper> m_arWrapper;
+  SceneQuickView* m_sceneView = nullptr;
 };
 
 } // Toolkit

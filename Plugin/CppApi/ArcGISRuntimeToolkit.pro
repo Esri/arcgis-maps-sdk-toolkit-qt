@@ -32,6 +32,11 @@ INCLUDEPATH += $$PWD/include/ \
                $$PWD/include/CoordinateConversion/
 
 # AR configs
+
+HEADERS += $$PWD/include/AR/ArView.h
+SOURCES += $$PWD/source/AR/ArView.cpp
+INCLUDEPATH += $$PWD/include/AR
+
 # option to disable the AR in the build?
 ios {
     LIBS += -framework ARKit
@@ -45,15 +50,12 @@ android {
 
     QT += androidextras
 
-    HEADERS += $$PWD/include/AR/ArcGISARView.h \
-               $$PWD/include/AR/ArCoreWrapper.h \
+    HEADERS += $$PWD/include/AR/ArCoreWrapper.h \
                $$PWD/3rdparty/arcore/include/arcore_c_api.h
 
-    SOURCES += $$PWD/source/AR/ArcGISARView.cpp \
-               $$PWD/source/AR/ArCoreWrapper.cpp
+    SOURCES += $$PWD/source/AR/ArCoreWrapper.cpp
 
-    INCLUDEPATH += $$PWD/include/AR/ \
-                   $$PWD/3rdparty/arcore//include/
+    INCLUDEPATH += $$PWD/3rdparty/arcore/include/
 }
 
 RUNTIME_PRI = arcgis_runtime_qml_cpp.pri
