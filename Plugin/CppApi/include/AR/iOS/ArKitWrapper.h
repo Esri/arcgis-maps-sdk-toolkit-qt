@@ -23,6 +23,7 @@
 #include "TransformationMatrix.h"
 #include "ArKitFrameRenderer.h"
 #include "ArKitPointCloudRenderer.h"
+#include <QOpenGLTexture>
 
 namespace Esri
 {
@@ -90,8 +91,8 @@ private:
 
   void createTextureIds();
 
-  GLuint m_textureIdY = 0;
-  GLuint m_textureIdCbCr = 0;
+  QOpenGLTexture m_textureY;
+  QOpenGLTexture m_textureCbCr;
 };
 
 } // Toolkit

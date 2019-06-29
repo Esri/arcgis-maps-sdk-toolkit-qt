@@ -101,7 +101,7 @@ void ArSample::createScene()
 
   connect(layer, &Object::errorOccurred, [](Error e)
   {
-    qDebug() << "==== error: " << e.message() << e.additionalMessage();
+    qDebug() << "Error in layer: " << e.message() << e.additionalMessage();
   });
 
   // create scene

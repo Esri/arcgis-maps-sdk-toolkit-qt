@@ -189,6 +189,7 @@ void ArcGISArView::resetUsingSpacialAnchor()
  */
 void ArcGISArView::startTracking()
 {
+  qDebug() << "== start tracking";
   m_arWrapper->startTracking();
 //  m_timerId = startTimer(50);
 }
@@ -251,7 +252,7 @@ void ArcGISArView::updateCamera()
     m_originCamera = camera; // Camera(camera.location(), camera.heading(), 90, 0);
   }
 
-//  qDebug() << "---->>> update camera -----" << m_arWrapper->transformationMatrix().translationX();
+  qDebug() << "---->>> update camera -----";
   TransformationMatrix matrix = m_originCamera.transformationMatrix().addTransformation(m_arWrapper->transformationMatrix());
   m_sceneView->setViewpointCamera(Camera(matrix));
 }

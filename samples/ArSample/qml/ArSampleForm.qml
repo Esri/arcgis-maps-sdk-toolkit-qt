@@ -32,6 +32,12 @@ Item {
         anchors.fill: parent
     }
 
+    VideoOutput {
+        id: videoOutput
+//        source: arWrapper
+        anchors.fill: parent
+    }
+
     // Declare the C++ instance which creates the scene etc. and supply the view
     ArSample {
         id: model // not sure "model" is a good name. And it's useless to set the id for this item

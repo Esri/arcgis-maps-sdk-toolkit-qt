@@ -18,6 +18,7 @@
 #import <ARKit/ARKit.h>
 #include <QMatrix4x4>
 #include "ArcGISArView.h"
+#include <QThread>
 
 using namespace Esri::ArcGISRuntime;
 using namespace Esri::ArcGISRuntime::Toolkit;
@@ -31,6 +32,8 @@ using namespace Esri::ArcGISRuntime::Toolkit;
   \sa {AR}
  */
 
+#define QDEBUG qDebug() << QThread::currentThread()
+
 /*******************************************************************************
  ******************* Objective-C class declarations ****************************
  ******************************************************************************/
@@ -41,7 +44,15 @@ using namespace Esri::ArcGISRuntime::Toolkit;
 -(void)session: (ARSession*)session didUpdateFrame:(ARFrame*)frame;
 
 @property (nonatomic) ArcGISArView* arView;
-@property (nonatomic) ARFrame* frame;
+@property (nonatomic, retain) ARFrame* frame;
+@property (nonatomic) CVImageBufferRef pixelBuffer; // CVPixelBufferRef
+@property (nonatomic) uchar* textureDataY;
+@property (nonatomic) uchar* textureDataCbCr;
+@property (nonatomic) size_t width_0;
+@property (nonatomic) size_t width_1;
+@property (nonatomic) size_t height_0;
+@property (nonatomic) size_t height_1;
+@property (atomic) bool render_in_progress;
 
 @end
 
@@ -57,13 +68,75 @@ using namespace Esri::ArcGISRuntime::Toolkit;
   {
     self.arView = nullptr;
     self.frame = nullptr;
+    self.pixelBuffer = nullptr;
+    self.textureDataY = nullptr;
+    self.textureDataCbCr = nullptr;
+    self.width_0 = 0;
+    self.width_1 = 0;
+    self.height_0 = 0;
+    self.height_1 = 0;
+    self.render_in_progress = false;
   }
   return self;
 }
 
 -(void)session: (ARSession*)session didUpdateFrame:(ARFrame*)frame
 {
+  if (!frame || self.render_in_progress)
+  {
+    QDEBUG << "----- no frame or render in progress";
+    return;
+  }
+
+  self.render_in_progress = true;
+
   self.frame = frame;
+  self.pixelBuffer = frame.capturedImage;
+
+  // release data
+  if (self.textureDataY)
+  {
+    free(self.textureDataY);
+    self.textureDataY = nullptr;
+  }
+
+  if (self.textureDataCbCr)
+  {
+    free(self.textureDataCbCr);
+    self.textureDataCbCr = nullptr;
+  }
+
+  // map
+  CVPixelBufferRetain(self.pixelBuffer); // retains the new PB
+  CVPixelBufferLockBaseAddress(self.pixelBuffer, kCVPixelBufferLock_ReadOnly);
+
+  // create buffers
+  uchar* dataY = static_cast<uchar*>(CVPixelBufferGetBaseAddressOfPlane(self.pixelBuffer, 0));
+  uchar* dataCbCr = static_cast<uchar*>(CVPixelBufferGetBaseAddressOfPlane(self.pixelBuffer, 1));
+
+  self.width_0 = CVPixelBufferGetWidthOfPlane(self.pixelBuffer, 0);
+  self.width_1 = CVPixelBufferGetWidthOfPlane(self.pixelBuffer, 1);
+
+  self.height_0 = CVPixelBufferGetHeightOfPlane(self.pixelBuffer, 0);
+  self.height_1 = CVPixelBufferGetHeightOfPlane(self.pixelBuffer, 1);
+
+  const size_t bytesPerRow_0 = CVPixelBufferGetBytesPerRowOfPlane(self.pixelBuffer, 0);
+  const size_t bytesPerRow_1 = CVPixelBufferGetBytesPerRowOfPlane(self.pixelBuffer, 1);
+
+  const size_t size_0 = self.height_0 * bytesPerRow_0;
+  const size_t size_1 = self.height_1 * bytesPerRow_1;
+
+  self.textureDataY = static_cast<uchar*>(malloc(size_0));
+  self.textureDataCbCr = static_cast<uchar*>(malloc(size_1));
+
+  memcpy(self.textureDataY, dataY, size_0);
+  memcpy(self.textureDataCbCr, dataCbCr, size_1);
+
+  // unmap
+  CVPixelBufferUnlockBaseAddress(self.pixelBuffer, kCVPixelBufferLock_ReadOnly);
+  CVPixelBufferRelease(self.pixelBuffer); // release the previous PB if necessary
+
+  // update
   self.arView->updateCamera();
   self.arView->update();
 }
@@ -79,62 +152,7 @@ struct ArKitWrapper::ArKitWrapperPrivate {
   ARWorldTrackingConfiguration* arConfiguration = nullptr;
   ArcGISArSessionDelegate* arSessionDelegate = nullptr;
   bool isSupported = false;
-
-  static GLuint createTextureId(const CVPixelBufferRef& pixelBuffer, int pixelFormat, size_t planeIndex);
 };
-
-
-GLuint ArKitWrapper::ArKitWrapperPrivate::createTextureId(const CVPixelBufferRef& pixelBuffer, int pixelFormat, size_t planeIndex)
-{
-  // Called from the render thread, so there is a current OpenGL context
-  size_t width = CVPixelBufferGetWidthOfPlane(pixelBuffer, planeIndex);
-  size_t height = CVPixelBufferGetHeightOfPlane(pixelBuffer, planeIndex);
-
-  CVOpenGLESTextureCacheRef textureCache = nullptr;
-  CVReturn status = CVOpenGLESTextureCacheCreate(kCFAllocatorDefault,
-                                                 nullptr,
-                                                 [EAGLContext currentContext],
-                                                 nullptr,
-                                                 &textureCache);
-
-  qDebug() << "------------- createTextureId" << (int)status << width << height;
-  if (status != kCVReturnSuccess )
-  {
-    qDebug() << "Error creating texture cache";
-    return 0;
-  }
-  // Then, create a CVPixelBuffer-backed OpenGL ES texture image from the texture cache:
-
-  //  CVOpenGLESTextureCacheFlush(m_renderer->m_textureCache, 0);
-  // reuse the cache? https://code.woboq.org/qt5/qtmultimedia/src/plugins/avfoundation/camera/avfcamerarenderercontrol.mm.html#164
-
-  CVOpenGLESTextureRef texture = nullptr;
-  status = CVOpenGLESTextureCacheCreateTextureFromImage(kCFAllocatorDefault,
-                                                        textureCache /*_CVGLTextureCache*/,
-                                                        pixelBuffer /*CVImageBufferRef*/,
-                                                        nullptr,
-                                                        GL_TEXTURE_2D,
-                                                        pixelFormat /*GL_RGBA, GL_LUMINANCE, GL_RGBA8_OES, GL_RED, and GL_RG*/,
-                                                        static_cast<int>(width),
-                                                        static_cast<int>(height),
-                                                        GL_RGBA /*_formatInfo->glFormat*/ /*GL_RGBA and GL_LUMINANCE GL_BGRA*/,
-                                                        GL_UNSIGNED_BYTE /*_formatInfo->glType*/ /*GL_UNSIGNED_BYTE*/,
-                                                        planeIndex,
-                                                        &texture);
-
-  if (status != kCVReturnSuccess)
-  {
-    qDebug() << "Error creating texture from buffer";
-    return 0;
-  }
-
-  // Finally, get an OpenGL ES texture name from the CVPixelBuffer-backed OpenGL ES texture image:
-  return CVOpenGLESTextureGetName(texture);
-
-  //  CVMetalTextureRef texture = nullptr;
-  //  CVReturn status = CVOpenGLESTextureCacheCreateTextureFromImage(nullptr, capturedImageTextureCache, pixelBuffer,
-  //                                                              nullptr, pixelFormat, width, height, planeIndex, &texture);
-}
 
 /*******************************************************************************
  ******************** C++ public class implementation **************************
@@ -145,7 +163,9 @@ GLuint ArKitWrapper::ArKitWrapperPrivate::createTextureId(const CVPixelBufferRef
 ArKitWrapper::ArKitWrapper(ArcGISArView* arView) :
   m_impl(new ArKitWrapperPrivate),
   m_arKitFrameRenderer(this),
-  m_arKitPointCloudRenderer(this)
+  m_arKitPointCloudRenderer(this),
+  m_textureY(QOpenGLTexture::Target2D),
+  m_textureCbCr(QOpenGLTexture::Target2D)
 {
   // Create an AR session
   m_impl->arSession = [[ARSession alloc] init];
@@ -210,34 +230,46 @@ const float* ArKitWrapper::pose() const
 void ArKitWrapper::init()
 {
   m_arKitFrameRenderer.init();
-  m_arKitPointCloudRenderer.init();
+//  m_arKitPointCloudRenderer.init();
 }
 
 void ArKitWrapper::beforeRendering()
 {
   // create textures ids
-  CVPixelBufferRef pixelBuffer = m_impl->arSessionDelegate.frame.capturedImage;
-  if (CVPixelBufferGetPlaneCount(pixelBuffer) < 2)
-    return;
+  if (m_textureY.isCreated())
+    m_textureY.destroy();
 
-  qDebug() << "---- createTextureIds";
-  m_textureIdY = ArKitWrapperPrivate::createTextureId(pixelBuffer, GL_RED, 0);
-  m_textureIdCbCr = ArKitWrapperPrivate::createTextureId(pixelBuffer, GL_RG, 1);
+  if (m_textureCbCr.isCreated())
+    m_textureCbCr.destroy();
+
+  m_textureY.setSize(m_impl->arSessionDelegate.width_0, m_impl->arSessionDelegate.height_0);
+  m_textureCbCr.setSize(m_impl->arSessionDelegate.width_1, m_impl->arSessionDelegate.height_1);
+
+  m_textureY.setFormat(QOpenGLTexture::R8_UNorm);
+  m_textureCbCr.setFormat(QOpenGLTexture::RG8_UNorm);
+
+  m_textureY.allocateStorage();
+  m_textureCbCr.allocateStorage();
+
+  m_textureY.setData(QOpenGLTexture::Red, QOpenGLTexture::UInt8, m_impl->arSessionDelegate.textureDataY);
+  m_textureCbCr.setData(QOpenGLTexture::RG, QOpenGLTexture::UInt8, m_impl->arSessionDelegate.textureDataCbCr);
 }
 
 void ArKitWrapper::afterRendering()
 {
+  m_impl->arSessionDelegate.render_in_progress = false;
 }
 
 void ArKitWrapper::render()
 {
   beforeRendering();
-  qDebug() << "----- render" << m_textureIdY << m_textureIdCbCr;
-  if (m_textureIdY != 0 && m_textureIdCbCr != 0)
+
+  if (m_textureY.textureId() != 0 && m_textureCbCr.textureId() != 0)
   {
-    m_arKitFrameRenderer.render(m_textureIdY, m_textureIdCbCr);
+    m_arKitFrameRenderer.render(m_textureY.textureId(), m_textureCbCr.textureId());
     // m_arKitPointCloudRenderer.render();
   }
+
   afterRendering();
 }
 

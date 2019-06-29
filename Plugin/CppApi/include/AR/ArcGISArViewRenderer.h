@@ -31,7 +31,7 @@ namespace Toolkit // internal?
 {
 
 // This class renders the passthrough camera image into the OpenGL frame.
-class ArcGISArViewRenderer : public QQuickFramebufferObject::Renderer, public QOpenGLFunctions
+class ArcGISArViewRenderer : public QQuickFramebufferObject::Renderer/*, public QOpenGLFunctions*/
 {
 public:
   ArcGISArViewRenderer() = default;
