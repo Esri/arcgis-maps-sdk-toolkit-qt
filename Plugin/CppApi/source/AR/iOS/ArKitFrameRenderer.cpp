@@ -47,11 +47,6 @@ void ArKitFrameRenderer::init()
 
   m_program.reset(new QOpenGLShaderProgram());
 
-  qDebug() << "====>>> frame renderer init";
-  for (GLint error = glGetError(); error; error = glGetError()) {
-    qDebug() << "==== a:" << error;
-  }
-
   m_program->addCacheableShaderFromSourceCode(QOpenGLShader::Vertex,
                                               "attribute vec4 a_position;"
                                               "attribute vec2 a_texCoord;"
@@ -60,24 +55,6 @@ void ArKitFrameRenderer::init()
                                               "  gl_Position = a_position;"
                                               "  v_texCoord = a_texCoord;"
                                               "}");
-//  m_program->addCacheableShaderFromSourceCode(QOpenGLShader::Fragment,
-//                                              "precision mediump float;"
-//                                              "varying vec2 v_texCoord;"
-//                                              "uniform sampler2D u_textureY;"
-//                                              "uniform sampler2D u_textureCbCr;"
-//                                              "const mat4 ycbcrToRgbTransform = mat4("
-//                                              "  vec4(+1.0000, +1.0000, +1.0000, +0.0000),"
-//                                              "  vec4(+0.0000, -0.3441, +1.7720, +0.0000),"
-//                                              "  vec4(+1.4020, -0.7141, +0.0000, +0.0000),"
-//                                              "  vec4(-0.7010, +0.5291, -0.8860, +1.0000)"
-//                                              ");"
-//                                              "void main() {"
-//                                              "  float yValue = texture2D(u_textureY, v_texCoord).r;"
-//                                              "  vec2 cbcrValue = texture2D(u_textureCbCr, v_texCoord).rg;"
-//                                              "  vec4 ycbcrValue = vec4(yValue, cbcrValue, 1.0);"
-//                                              "  gl_FragColor = ycbcrToRgbTransform * ycbcrValue;"
-//                                              "}");
-//  "  gl_FragColor = texture2D(u_textureY, v_texCoord);" texture2D(u_textureY, v_texCoord).r
 
   // matrix from https://developer.apple.com/documentation/arkit/displaying_an_ar_experience_with_metal?language=objc
   m_program->addCacheableShaderFromSourceCode(QOpenGLShader::Fragment,
@@ -97,48 +74,25 @@ void ArKitFrameRenderer::init()
                                               "  gl_FragColor = ycbcrToRgb * vec4(y, cbcr.r, cbcr.g, 1.0);"
                                               "}");
 
-  for (GLint error = glGetError(); error; error = glGetError()) {
-    qDebug() << "==== b:" << error;
-  }
-
   m_program->link();
   m_program->bind();
 
-  for (GLint error = glGetError(); error; error = glGetError()) {
-    qDebug() << "==== c:" << error;
-  }
   m_uniformTextureY = m_program->uniformLocation("u_textureY");
   m_uniformTextureCbCr = m_program->uniformLocation("u_textureCbCr");
   m_attributeVertices = m_program->attributeLocation("a_position");
   m_attributeUvs = m_program->attributeLocation("a_texCoord");
 
-  for (GLint error = glGetError(); error; error = glGetError()) {
-    qDebug() << "==== d:" << error;
-  }
   m_program->release();
 }
 
 void ArKitFrameRenderer::render(GLuint textureIdY, GLuint textureIdCbCr)
 {
-  Q_CHECK_PTR(m_arKitWrapper);
-
-  for (GLint error = glGetError(); error; error = glGetError()) {
-    qDebug() << "==== 0:" << error;
-  }
-
   m_program->bind();
 
   glDepthMask(GL_FALSE);
 
-  for (GLint error = glGetError(); error; error = glGetError()) {
-    qDebug() << "==== 1:" << error;
-  }
   glUniform1i(m_uniformTextureY, 1);
   glUniform1i(m_uniformTextureCbCr, 2);
-
-  for (GLint error = glGetError(); error; error = glGetError()) {
-    qDebug() << "==== 2:" << error;
-  }
 
   glActiveTexture(GL_TEXTURE1);
   glBindTexture(GL_TEXTURE_2D, textureIdY);
@@ -146,45 +100,14 @@ void ArKitFrameRenderer::render(GLuint textureIdY, GLuint textureIdCbCr)
   glActiveTexture(GL_TEXTURE2);
   glBindTexture(GL_TEXTURE_2D, textureIdCbCr);
 
-  for (GLint error = glGetError(); error; error = glGetError()) {
-    qDebug() << "==== 3:" << error;
-  }
-
-  for (GLint error = glGetError(); error; error = glGetError()) {
-    qDebug() << "==== 4:" << error;
-  }
-
-//  glUniform1i(m_uniformTextureCbCr, 2);
-//  glActiveTexture(GL_TEXTURE2);
-//  glBindTexture(GL_TEXTURE_2D, textureIdCbCr);
-
-
-//  glBindTexture(CVOpenGLESTextureGetTarget(_chromaTexture), CVOpenGLESTextureGetName(_chromaTexture));
-//  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-//  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-  for (GLint error = glGetError(); error; error = glGetError()) {
-    qDebug() << "==== 5:" << error;
-  }
   glEnableVertexAttribArray(m_attributeVertices);
   glVertexAttribPointer(m_attributeVertices, 2, GL_FLOAT, GL_FALSE, 0, kVertices);
 
-  for (GLint error = glGetError(); error; error = glGetError()) {
-    qDebug() << "==== 6:" << error;
-  }
   glEnableVertexAttribArray(m_attributeUvs);
   glVertexAttribPointer(m_attributeUvs, 2, GL_FLOAT, GL_FALSE, 0, kTexCoord);
-
-  for (GLint error = glGetError(); error; error = glGetError()) {
-    qDebug() << "==== 7:" << error;
-  }
 
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
   glDepthMask(GL_TRUE);
   m_program->release();
-
-  for (GLint error = glGetError(); error; error = glGetError()) {
-    qDebug() << "==== renderArFrame opengl error:" << error;
-  }
 }

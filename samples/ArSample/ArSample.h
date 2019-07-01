@@ -1,4 +1,3 @@
-
 // Copyright 2019 ESRI
 //
 // All rights reserved under the copyright laws of the United States
@@ -9,7 +8,6 @@
 // notice and use restrictions.
 //
 // See the Sample code usage restrictions document for further information.
-//
 
 #ifndef ARSAMPLE_H
 #define ARSAMPLE_H

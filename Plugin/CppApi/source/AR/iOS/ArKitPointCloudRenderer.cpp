@@ -78,8 +78,4 @@ void ArKitPointCloudRenderer::render()
   glDrawArrays(GL_POINTS, 0, m_arKitWrapper->pointCloudSize() /*number_of_points*/);
 
   m_program->release();
-
-  //  for (GLint error = glGetError(); error; error = glGetError()) {
-  //    qDebug() << "==== renderCloudPoint opengl error:" << error;
-  //  }
 }

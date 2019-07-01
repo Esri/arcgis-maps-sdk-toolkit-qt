@@ -16,13 +16,9 @@
 
 #include "ArcGISArViewRenderer.h"
 #include <QOpenGLFramebufferObjectFormat>
-#include <QThread>
 
 using namespace Esri::ArcGISRuntime;
 using namespace Esri::ArcGISRuntime::Toolkit;
-
-
-#define QDEBUG qDebug() << QThread::currentThread()
 
 QOpenGLFramebufferObject* ArcGISArViewRenderer::createFramebufferObject(const QSize& size)
 {
@@ -39,39 +35,16 @@ void ArcGISArViewRenderer::synchronize(QQuickFramebufferObject* item)
 
 void ArcGISArViewRenderer::render()
 {
-
-  for (GLint error = glGetError(); error; error = glGetError()) {
-    QDEBUG << "+++++ resetOpenGLState1:" << error;
-  }
-
   if (!m_isInitialized)
   {
     m_isInitialized = true;
-    QDEBUG << "----->>> init";
-//    initializeOpenGLFunctions();
     m_arWrapper->init();
-
-
-//    int maxTextureSize[1];
-//    glGetIntegerv(GL_MAX_TEXTURE_SIZE, maxTextureSize);
-//    QDEBUG << "====== GL_MAX_TEXTURE_SIZE" << maxTextureSize[0] << QString::fromLocal8Bit((const char*)glGetString(GL_VERSION));
   }
-
-//  for (GLint error = glGetError(); error; error = glGetError()) {
-//    QDEBUG << "+++++ resetOpenGLState2:" << error;
-//  }
 
   m_arWrapper->render();
 
-//  for (GLint error = glGetError(); error; error = glGetError()) {
-//    QDEBUG << "+++++ resetOpenGLState3:" << error;
-//  }
-
   if (m_window)
     m_window->resetOpenGLState();
-//  for (GLint error = glGetError(); error; error = glGetError()) {
-//    QDEBUG << "+++++ resetOpenGLState4:" << error;
-//  }
 }
 
 void ArcGISArViewRenderer::setArWrapper(ArWrapper* arWrapper)

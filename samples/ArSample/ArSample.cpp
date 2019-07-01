@@ -1,4 +1,3 @@
-
 // Copyright 2019 ESRI
 //
 // All rights reserved under the copyright laws of the United States
@@ -9,7 +8,6 @@
 // notice and use restrictions.
 //
 // See the Sample code usage restrictions document for further information.
-//
 
 #include "ArSample.h"
 
@@ -98,11 +96,6 @@ void ArSample::createScene()
   //  const QUrl elevationUrl("http://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer");
   //  const QUrl layerUrl = QUrl("/sdcard/ArcGIS/Runtime/UnitTests/slpks/matterhorn_dxt.slpk");
   //  auto layer = new IntegratedMeshLayer(layerUrl, this);
-
-  connect(layer, &Object::errorOccurred, [](Error e)
-  {
-    qDebug() << "Error in layer: " << e.message() << e.additionalMessage();
-  });
 
   // create scene
   m_scene = new Scene(this);

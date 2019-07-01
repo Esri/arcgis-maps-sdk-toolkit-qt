@@ -27,11 +27,11 @@ namespace Esri
 {
 namespace ArcGISRuntime
 {
-namespace Toolkit // internal?
+namespace Toolkit // TODO: internal?
 {
 
 // This class renders the passthrough camera image into the OpenGL frame.
-class ArcGISArViewRenderer : public QQuickFramebufferObject::Renderer/*, public QOpenGLFunctions*/
+class ArcGISArViewRenderer : public QQuickFramebufferObject::Renderer
 {
 public:
   ArcGISArViewRenderer() = default;
@@ -51,33 +51,6 @@ private:
   QPointer<QQuickWindow> m_window;
 
   ArWrapper* m_arWrapper = nullptr;
-
-//  //  GLuint shader_program_ = 0;
-//  GLuint texture_id_ = 0;
-
-//  GLuint attribute_vertices_ = 0;
-//  GLuint attribute_vertices2_ = 0;
-//  GLuint attribute_uvs_ = 0;
-//  GLuint uniform_texture_ = 0;
-//  GLint uniform_mvp_mat_ = 0;
-//  GLint uniform_color_ = 0;
-//  GLint uniform_point_size_ = 0;
-
-//  static constexpr int kNumVertices = 4;
-//  float transformed_uvs_[kNumVertices * 2];
-
-//  QOpenGLShaderProgram *m_program = nullptr;
-//  QOpenGLShaderProgram *m_program2 = nullptr;
-//  QOpenGLShaderProgram *m_program3 = nullptr;
-//  QSize m_viewportSize;
-
-//  int32_t number_of_points = 0;
-//  const float* point_cloud_data = nullptr;
-//  std::vector<float> point_cloud_data2;
-
-
-//  QMatrix4x4 m_viewMatrix;
-//  QMatrix4x4 m_projectionMatrix;
 };
 
 } // Toolkit

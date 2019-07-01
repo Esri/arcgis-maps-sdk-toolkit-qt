@@ -91,7 +91,7 @@ void ArcGISArView::setSceneView(SceneQuickView* sceneView)
     return;
 
   m_sceneView = sceneView;
-  // m_sceneView->setSpaceEffect(SpaceEffect::Transparent);
+  // m_sceneView->setSpaceEffect(SpaceEffect::Transparent); // TODO: update the SDK for this change.
   m_sceneView->setBackgroundTransparent(true);
   m_sceneView->setAtmosphereEffect(AtmosphereEffect::None);
   m_sceneView->setParent(this);
@@ -189,9 +189,12 @@ void ArcGISArView::resetUsingSpacialAnchor()
  */
 void ArcGISArView::startTracking()
 {
-  qDebug() << "== start tracking";
   m_arWrapper->startTracking();
-//  m_timerId = startTimer(50);
+
+  // TODO: hack to run a timer on Android. This timer will be removed in the future.
+#ifdef Q_OS_ANDROID
+  m_timerId = startTimer(50);
+#endif
 }
 
 /*!
@@ -252,7 +255,6 @@ void ArcGISArView::updateCamera()
     m_originCamera = camera; // Camera(camera.location(), camera.heading(), 90, 0);
   }
 
-  qDebug() << "---->>> update camera -----";
   TransformationMatrix matrix = m_originCamera.transformationMatrix().addTransformation(m_arWrapper->transformationMatrix());
   m_sceneView->setViewpointCamera(Camera(matrix));
 }

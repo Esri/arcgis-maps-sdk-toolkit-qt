@@ -32,8 +32,6 @@ using namespace Esri::ArcGISRuntime::Toolkit;
   \sa {AR}
  */
 
-#define QDEBUG qDebug() << QThread::currentThread()
-
 /*******************************************************************************
  ******************* Objective-C class declarations ****************************
  ******************************************************************************/
@@ -84,7 +82,6 @@ using namespace Esri::ArcGISRuntime::Toolkit;
 {
   if (!frame || self.render_in_progress)
   {
-    QDEBUG << "----- no frame or render in progress";
     return;
   }
 

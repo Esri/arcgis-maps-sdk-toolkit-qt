@@ -68,12 +68,16 @@ INCLUDEPATH += $$AR_PATH/include/AR
 # option to disable the AR in the build?
 ios {
     OBJECTIVE_HEADERS += \
-        $$AR_PATH/include/AR/iOS/ArKitWrapper.h \
+        $$AR_PATH/include/AR/iOS/ArKitWrapper.h
+
+    OBJECTIVE_SOURCES += \
+        $$AR_PATH/source/AR/iOS/ArKitWrapper.mm
+
+    HEADERS += \
         $$AR_PATH/include/AR/iOS/ArKitFrameRenderer.h \
         $$AR_PATH/include/AR/iOS/ArKitPointCloudRenderer.h
 
-    OBJECTIVE_SOURCES += \
-        $$AR_PATH/source/AR/iOS/ArKitWrapper.mm \
+    SOURCES += \
         $$AR_PATH/source/AR/iOS/ArKitFrameRenderer.cpp \
         $$AR_PATH/source/AR/iOS/ArKitPointCloudRenderer.cpp
 

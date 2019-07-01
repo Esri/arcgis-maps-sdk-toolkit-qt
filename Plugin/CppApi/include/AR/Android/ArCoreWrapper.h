@@ -25,15 +25,6 @@
 #include "ArCoreFrameRenderer.h"
 #include "ArCorePointCloudRenderer.h"
 
-//// for BackgroundRenderer
-////#include <GLES2/gl2.h>
-////#include <GLES2/gl2ext.h>
-//#include <QOpenGLFunctions>
-//#include <QOpenGLShaderProgram>
-//#include <QQuickFramebufferObject>
-//#include <QPointer>
-//#include <vector>
-
 // forward declaration of AR core types to avoid include "arcore_c_api.h" here.
 typedef struct ArSession_ ArSession;
 typedef struct ArFrame_ ArFrame;
@@ -44,7 +35,7 @@ namespace Esri
 {
 namespace ArcGISRuntime
 {
-namespace Toolkit // internal?
+namespace Toolkit // TODO: internal?
 {
 
 class ArcGISArView;
@@ -105,7 +96,7 @@ private:
   static constexpr int kNumVertices = 4;
 
   // AR core types
-  ArSession* m_arSession = nullptr; // unique_ptr with custom deleter?
+  ArSession* m_arSession = nullptr; // TODO: unique_ptr with custom deleter?
   ArFrame* m_arFrame = nullptr;
   ArCamera* m_arCamera = nullptr;
   ArPointCloud* m_arPointCloud = nullptr;

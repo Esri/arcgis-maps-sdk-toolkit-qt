@@ -264,10 +264,6 @@ void ArCoreWrapper::beforeRendering()
   if (!m_arSession)
     return;
 
-  /*GLuint textureId, float* m_transformedUvs,
-                                      int32_t& m_pointCloudSize, const float** m_pointCloudData,
-                                      QMatrix4x4& viewMatrix, QMatrix4x4& projectionMatrix*/
-
   // create and update AR frame
   ArFrame_create(m_arSession, &m_arFrame);
   if (!m_arFrame)
@@ -291,9 +287,6 @@ void ArCoreWrapper::beforeRendering()
     qDebug() << "ArSession_update fails";
     return;
   }
-
-
-
 
   static_assert(std::extent<decltype(kVertices)>::value == kNumVertices * 2,
                 "Incorrect kVertices length");
@@ -364,15 +357,7 @@ void ArCoreWrapper::beforeRendering()
     ArPointCloud_getData(m_arSession, m_arPointCloud, &m_pointCloudData);
   }
 
-
-
-
-  //    qDebug() << "----- Update -----";
-  //    qDebug() << "view matrix:" << m_viewMatrix;
-  //    qDebug() << "projection matrix:" << m_projectionMatrix;
-  //    qDebug() << "timestamp:" << timestamp;
-
-  // next?
+  // TODO: next?
   // Get light estimation value.
   // Render anchored objects.
   // Update and render point cloud.
@@ -434,7 +419,3 @@ int32_t ArCoreWrapper::pointCloudSize() const
 {
   return m_pointCloudSize;
 }
-
-//} // Toolkit
-//} // ArcGISRuntime
-//} // Esri

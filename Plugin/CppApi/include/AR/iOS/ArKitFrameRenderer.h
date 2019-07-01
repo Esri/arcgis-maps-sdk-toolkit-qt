@@ -24,7 +24,7 @@ namespace Esri
 {
 namespace ArcGISRuntime
 {
-namespace Toolkit // internal?
+namespace Toolkit // TODO: internal?
 {
 
 class ArKitWrapper;

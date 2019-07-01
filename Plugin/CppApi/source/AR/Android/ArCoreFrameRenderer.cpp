@@ -96,10 +96,6 @@ void ArCoreFrameRenderer::render()
 
   glDepthMask(GL_TRUE);
   m_program->release();
-
-  //  for (GLint error = glGetError(); error; error = glGetError()) {
-  //    qDebug() << "==== renderArFrame opengl error:" << error;
-  //  }
 }
 
 GLuint ArCoreFrameRenderer::textureId() const
