@@ -36,11 +36,6 @@ const GLfloat kTexCoord[] = {
 };
 }  // namespace
 
-ArKitFrameRenderer::ArKitFrameRenderer(ArKitWrapper* arKitWrapper) :
-  m_arKitWrapper(arKitWrapper)
-{
-}
-
 void ArKitFrameRenderer::init()
 {
   initializeOpenGLFunctions();

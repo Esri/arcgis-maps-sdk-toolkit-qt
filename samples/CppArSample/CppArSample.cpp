@@ -9,7 +9,7 @@
 //
 // See the Sample code usage restrictions document for further information.
 
-#include "ArSample.h"
+#include "CppArSample.h"
 
 #include "ArcGISTiledElevationSource.h"
 #include "Basemap.h"
@@ -26,57 +26,52 @@
 using namespace Esri::ArcGISRuntime;
 using namespace Esri::ArcGISRuntime::Toolkit;
 
-ArSample::ArSample(QObject* parent /* = nullptr */):
+CppArSample::CppArSample(QObject* parent /* = nullptr */):
   QObject(parent)
 {
   createScene();
 }
 
-ArSample::~ArSample()
+CppArSample::~CppArSample()
 {
 }
 
-ArcGISArView* ArSample::arcGISArView() const
+ArcGISArView* CppArSample::arcGISArView() const
 {
   return m_arcGISArView;
 }
 
-void ArSample::setArcGISArView(ArcGISArView* arcGISArView)
+void CppArSample::setArcGISArView(ArcGISArView* arcGISArView)
 {
   if (!arcGISArView || arcGISArView == m_arcGISArView)
     return;
 
   m_arcGISArView = arcGISArView;
-
-  if (m_sceneView)
-    m_arcGISArView->setSceneView(m_sceneView);
-
   emit arcGISArViewChanged();
 }
 
-SceneQuickView* ArSample::sceneView() const
+SceneQuickView* CppArSample::sceneView() const
 {
   return m_sceneView;
 }
 
 // Set the view (created in QML)
-void ArSample::setSceneView(SceneQuickView* sceneView)
+void CppArSample::setSceneView(SceneQuickView* sceneView)
 {
   if (!sceneView || sceneView == m_sceneView)
     return;
 
   m_sceneView = sceneView;
   m_sceneView->setArcGISScene(m_scene);
-
-  if (m_arcGISArView)
-    m_arcGISArView->setSceneView(m_sceneView);
-
+  // m_sceneView->setSpaceEffect(SpaceEffect::Transparent); // TODO: update the SDK for this change.
+  m_sceneView->setBackgroundTransparent(true);
+  m_sceneView->setAtmosphereEffect(AtmosphereEffect::None);
   emit sceneViewChanged();
 }
 
-void ArSample::createScene()
+void CppArSample::createScene()
 {
-  // from https://devtopia.esri.com/mort5161/ARSamples/blob/b63c7b62c217d36fa44fb91fd271554061431af5/ArcGISAR.Droid/TestScenes.cs
+  // from https://devtopia.esri.com/mort5161/CppArSamples/blob/b63c7b62c217d36fa44fb91fd271554061431af5/ArcGISAR.Droid/TestScenes.cs
 
   // Brest France
   Camera camera(Point(-4.49492, 48.3808, 48.2511, SpatialReference::wgs84()), 344.488, 74.1212, 0.0);

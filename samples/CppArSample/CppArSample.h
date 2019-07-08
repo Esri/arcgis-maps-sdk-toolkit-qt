@@ -9,8 +9,8 @@
 //
 // See the Sample code usage restrictions document for further information.
 
-#ifndef ARSAMPLE_H
-#define ARSAMPLE_H
+#ifndef CppArSample_H
+#define CppArSample_H
 
 #include <QObject>
 #include "ArcGISArView.h"
@@ -24,7 +24,7 @@ class SceneQuickView;
 }
 }
 
-class ArSample : public QObject
+class CppArSample : public QObject
 {
   Q_OBJECT
 
@@ -33,8 +33,8 @@ class ArSample : public QObject
   Q_PROPERTY(Esri::ArcGISRuntime::SceneQuickView* sceneView READ sceneView WRITE setSceneView NOTIFY sceneViewChanged)
 
 public:
-  explicit ArSample(QObject* parent = nullptr);
-  ~ArSample() override;
+  explicit CppArSample(QObject* parent = nullptr);
+  ~CppArSample() override;
 
   Esri::ArcGISRuntime::Toolkit::ArcGISArView* arcGISArView() const;
   void setArcGISArView(Esri::ArcGISRuntime::Toolkit::ArcGISArView* arcGISArView);
@@ -54,4 +54,4 @@ private:
   Esri::ArcGISRuntime::Scene* m_scene = nullptr;
 };
 
-#endif // ARSAMPLE_H
+#endif // CppArSample_H

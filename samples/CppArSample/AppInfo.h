@@ -19,7 +19,7 @@
 #define kOrganizationName               "MyOrganization"
 #define kOrganizationDomain             "myorganization.com"
 
-#define kApplicationName                "ArSample"
+#define kApplicationName                "CppArSample"
 #define kApplicationVersion             "1.0"
 #define kApplicationDescription         "Sample Qt Quick app built using the ArcGIS Qt SDK"
 

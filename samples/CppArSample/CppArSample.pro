@@ -16,7 +16,7 @@ TEMPLATE = app
 QT += core gui opengl network positioning sensors qml quick multimedia
 CONFIG += c++11
 
-TARGET = ArSample
+TARGET = CppArSample
 
 equals(QT_MAJOR_VERSION, 5) {
     lessThan(QT_MINOR_VERSION, 12) { 
@@ -32,11 +32,11 @@ include($$PWD/arcgisruntime.pri)
 
 HEADERS += \
     AppInfo.h \
-    ArSample.h
+    CppArSample.h
 
 SOURCES += \
     main.cpp \
-    ArSample.cpp
+    CppArSample.cpp
 
 RESOURCES += \
     qml/qml.qrc \
@@ -49,39 +49,40 @@ OTHER_FILES += \
 #-------------------------------------------------------------------------------
 
 # AR configs
-# TODO: create a .pri file
 
-AR_PATH = /Users/guil8553/applications/qt/sdk/toolkit/Plugin/CppApi/
+# The path to the AR toolkit must be defined in the AR_TOOLKIT_PATH envrionement variable.
+# This path correspond to toolkit, download from GitHub and should be like:
+# AR_TOOLKIT_PATH = <path to the toolkit>/toolkit/Plugin/CppApi/
 
 HEADERS += \
-    $$AR_PATH/include/AR/ArcGISArView.h \
-    $$AR_PATH/include/AR/ArcGISArViewRenderer.h \
-    $$AR_PATH/include/AR/ArWrapper.h
+    $$AR_TOOLKIT_PATH/include/AR/ArcGISArView.h \
+    $$AR_TOOLKIT_PATH/include/AR/ArcGISArViewRenderer.h \
+    $$AR_TOOLKIT_PATH/include/AR/ArWrapper.h
 
 SOURCES += \
-    $$AR_PATH/source/AR/ArcGISArView.cpp \
-    $$AR_PATH/source/AR/ArcGISArViewRenderer.cpp \
-    $$AR_PATH/source/AR/ArWrapper.cpp
+    $$AR_TOOLKIT_PATH/source/AR/ArcGISArView.cpp \
+    $$AR_TOOLKIT_PATH/source/AR/ArcGISArViewRenderer.cpp \
+    $$AR_TOOLKIT_PATH/source/AR/ArWrapper.cpp
 
-INCLUDEPATH += $$AR_PATH/include/AR
+INCLUDEPATH += $$AR_TOOLKIT_PATH/include/AR
 
 # option to disable the AR in the build?
 ios {
     OBJECTIVE_HEADERS += \
-        $$AR_PATH/include/AR/iOS/ArKitWrapper.h
+        $$AR_TOOLKIT_PATH/include/AR/iOS/ArKitWrapper.h
 
     OBJECTIVE_SOURCES += \
-        $$AR_PATH/source/AR/iOS/ArKitWrapper.mm
+        $$AR_TOOLKIT_PATH/source/AR/iOS/ArKitWrapper.mm
 
     HEADERS += \
-        $$AR_PATH/include/AR/iOS/ArKitFrameRenderer.h \
-        $$AR_PATH/include/AR/iOS/ArKitPointCloudRenderer.h
+        $$AR_TOOLKIT_PATH/include/AR/iOS/ArKitFrameRenderer.h \
+        $$AR_TOOLKIT_PATH/include/AR/iOS/ArKitPointCloudRenderer.h
 
     SOURCES += \
-        $$AR_PATH/source/AR/iOS/ArKitFrameRenderer.cpp \
-        $$AR_PATH/source/AR/iOS/ArKitPointCloudRenderer.cpp
+        $$AR_TOOLKIT_PATH/source/AR/iOS/ArKitFrameRenderer.cpp \
+        $$AR_TOOLKIT_PATH/source/AR/iOS/ArKitPointCloudRenderer.cpp
 
-    INCLUDEPATH += $$AR_PATH/include/AR/iOS
+    INCLUDEPATH += $$AR_TOOLKIT_PATH/include/AR/iOS
 
     LIBS += -framework ARKit
 }
@@ -90,19 +91,19 @@ android {
     QT += androidextras
 
     HEADERS += \
-        $$AR_PATH/3rdparty/arcore/include/arcore_c_api.h\
-        $$AR_PATH/include/AR/Android/ArCoreWrapper.h \
-        $$AR_PATH/include/AR/Android/ArCoreFrameRenderer.h \
-        $$AR_PATH/include/AR/Android/ArCorePointCloudRenderer.h
+        $$AR_TOOLKIT_PATH/3rdparty/arcore/include/arcore_c_api.h\
+        $$AR_TOOLKIT_PATH/include/AR/Android/ArCoreWrapper.h \
+        $$AR_TOOLKIT_PATH/include/AR/Android/ArCoreFrameRenderer.h \
+        $$AR_TOOLKIT_PATH/include/AR/Android/ArCorePointCloudRenderer.h
 
     SOURCES += \
-        $$AR_PATH/source/AR/Android/ArCoreWrapper.cpp \
-        $$AR_PATH/source/AR/Android/ArCoreFrameRenderer.cpp \
-        $$AR_PATH/source/AR/Android/ArCorePointCloudRenderer.cpp
+        $$AR_TOOLKIT_PATH/source/AR/Android/ArCoreWrapper.cpp \
+        $$AR_TOOLKIT_PATH/source/AR/Android/ArCoreFrameRenderer.cpp \
+        $$AR_TOOLKIT_PATH/source/AR/Android/ArCorePointCloudRenderer.cpp
 
     INCLUDEPATH += \
-        $$AR_PATH/3rdparty/arcore/include/ \
-        $$AR_PATH/include/AR/Android
+        $$AR_TOOLKIT_PATH/3rdparty/arcore/include/ \
+        $$AR_TOOLKIT_PATH/include/AR/Android
 
     LIBS += -L"/Users/guil8553/applications/qt/sdk/toolkit/Plugin/CppApi/3rdparty/core-1.9.0/jni/arm64-v8a"
     LIBS += -larcore_sdk_c -larcore_sdk_jni

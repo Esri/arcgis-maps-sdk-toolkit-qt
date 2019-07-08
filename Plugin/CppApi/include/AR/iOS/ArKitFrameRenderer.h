@@ -33,15 +33,10 @@ class ArKitWrapper;
 class ArKitFrameRenderer : public QOpenGLFunctions
 {
 public:
-  ArKitFrameRenderer(ArKitWrapper* arKitWrapper);
-  ~ArKitFrameRenderer() = default;
-
   void init();
   void render(GLuint textureIdY, GLuint textureIdCbCr);
 
 private:
-  ArKitWrapper* m_arKitWrapper = nullptr;
-
   std::unique_ptr<QOpenGLShaderProgram> m_program;
 
   GLuint m_uniformTextureY = 0;

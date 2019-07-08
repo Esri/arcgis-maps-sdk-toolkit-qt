@@ -50,7 +50,17 @@ RESOURCES += \
 
 OTHER_FILES += \
     wizard.xml \
-    wizard.png
+    wizard.png \
+    qml/*.qml \
+    qml/*.js
+
+#-------------------------------------------------------------------------------
+
+# AR configuration
+# The path to the toolkit source correspond to the files downloaded from the GitHub.
+
+AR_TOOLKIT_SOURCE_PATH = /Users/guil8553/applications/qt/sdk/toolkit/Plugin/
+include($$AR_TOOLKIT_SOURCE_PATH/AR.pri)
 
 #-------------------------------------------------------------------------------
 

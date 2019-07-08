@@ -25,6 +25,7 @@
 #endif
 
 #include "AppInfo.h"
+#include "ArcGISArView.h"
 
 //------------------------------------------------------------------------------
 
@@ -77,8 +78,10 @@ int main(int argc, char *argv[])
   QCoreApplication::instance()->setProperty("Esri.ArcGISRuntime.license", kLicense);
 #endif
 
-  // Intialize application window
+  // Register the ArcGISArView
+  qmlRegisterType<Esri::ArcGISRuntime::Toolkit::ArcGISArView>("Esri.ArcGISARView", 1, 0, "ArcGISArView");
 
+  // Intialize application window
   QQmlApplicationEngine appEngine;
   appEngine.addImportPath(QDir(QCoreApplication::applicationDirPath()).filePath("qml"));
 

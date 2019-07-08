@@ -33,6 +33,14 @@ ArWrapper::ArWrapper(ArcGISArView*)
 {
 }
 
+void ArWrapper::init() const
+{
+}
+
+void ArWrapper::render() const
+{
+}
+
 bool ArWrapper::isValid() const
 {
   return false;

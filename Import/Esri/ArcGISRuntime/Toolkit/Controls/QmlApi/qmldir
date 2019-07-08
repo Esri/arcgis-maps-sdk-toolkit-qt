@@ -16,7 +16,6 @@
 
 module Esri.ArcGISRuntime.Toolkit.Controls.QmlApi
 
-ArcGISARView 100.6 ArcGISARView.qml
 TimeSlider 100.3 TimeSlider1003.qml
 TimeSlider 100.5 TimeSlider.qml
 internal TimeSlider1003 TimeSliderController1003.qml

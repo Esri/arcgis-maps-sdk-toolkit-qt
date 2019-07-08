@@ -12,14 +12,27 @@
 //
 
 import QtQuick.Controls 2.2
-import Esri.ArSample 1.0
+import Esri.CppArSample 1.0
 
 ApplicationWindow {
     visible: true
     width: 800
     height: 600
 
-    ArSampleForm {
+    ArcGISArView {
+        id: arcGISArView
         anchors.fill: parent
+    }
+
+    SceneView {
+        id: sceneView
+        anchors.fill: parent
+    }
+
+    // Declare the C++ instance which creates the scene etc. and supply the view
+    CppArSample {
+        id: model // TODO: not sure "model" is a good name. And it's useless to set the id for this item
+        arcGISArView: arcGISArView
+        sceneView: sceneView
     }
 }

@@ -41,7 +41,7 @@ using namespace Esri::ArcGISRuntime::Toolkit;
 -(id)init;
 -(void)session: (ARSession*)session didUpdateFrame:(ARFrame*)frame;
 
-@property (nonatomic) ArcGISArView* arView;
+@property (nonatomic) ArcGISArView* arcGISArView;
 @property (nonatomic, retain) ARFrame* frame;
 @property (nonatomic) CVImageBufferRef pixelBuffer; // CVPixelBufferRef
 @property (nonatomic) uchar* textureDataY;
@@ -64,7 +64,7 @@ using namespace Esri::ArcGISRuntime::Toolkit;
 {
   if (self = [super init])
   {
-    self.arView = nullptr;
+    self.arcGISArView = nullptr;
     self.frame = nullptr;
     self.pixelBuffer = nullptr;
     self.textureDataY = nullptr;
@@ -135,7 +135,7 @@ using namespace Esri::ArcGISRuntime::Toolkit;
 
   // update
   self.arView->updateCamera();
-  self.arView->update();
+  self.arcGISArView->update();
 }
 
 @end
@@ -157,9 +157,9 @@ struct ArKitWrapper::ArKitWrapperPrivate {
 
 //TODO: test performances with ARCNView from AR kit. Integration of the ARCNView in Qt?
 
-ArKitWrapper::ArKitWrapper(ArcGISArView* arView) :
+ArKitWrapper::ArKitWrapper(ArcGISArView* arcGISArView) :
   m_impl(new ArKitWrapperPrivate),
-  m_arKitFrameRenderer(this),
+  m_arcGISArView(arcGISArView),
   m_arKitPointCloudRenderer(this),
   m_textureY(QOpenGLTexture::Target2D),
   m_textureCbCr(QOpenGLTexture::Target2D)
@@ -173,7 +173,7 @@ ArKitWrapper::ArKitWrapper(ArcGISArView* arView) :
 
   // delegate to get the frames
   m_impl->arSessionDelegate = [[ArcGISArSessionDelegate alloc]init];
-  m_impl->arSessionDelegate.arView = arView;
+  m_impl->arSessionDelegate.arcGISArView = arcGISArView;
   m_impl->arSession.delegate = m_impl->arSessionDelegate;
 
   // Run the view's session

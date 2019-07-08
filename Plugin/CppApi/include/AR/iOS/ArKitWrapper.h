@@ -42,7 +42,7 @@ class ArcGISArView;
 class ArKitWrapper
 {
 public:
-  ArKitWrapper(ArcGISArView* item);
+  ArKitWrapper(ArcGISArView* arcGISArView);
   ~ArKitWrapper();
 
   bool isValid() const;
@@ -85,6 +85,8 @@ private:
 
   struct ArKitWrapperPrivate;
   ArKitWrapperPrivate* m_impl = nullptr;
+
+  ArcGISArView* m_arcGISArView = nullptr;
 
   ArKitFrameRenderer m_arKitFrameRenderer;
   ArKitPointCloudRenderer m_arKitPointCloudRenderer;

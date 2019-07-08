@@ -13,7 +13,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 ################################################################################
-LIB_SUFFIX = d
+
 TARGET = $$qtLibraryTarget(ArcGISRuntimeToolkitCppApi$${ToolkitPrefix})
 TEMPLATE = lib
 
@@ -31,38 +31,11 @@ SOURCES += $$PWD/source/*.cpp \
 INCLUDEPATH += $$PWD/include/ \
                $$PWD/include/CoordinateConversion/
 
-# AR configs
-
-HEADERS += $$PWD/include/AR/ArView.h
-SOURCES += $$PWD/source/AR/ArView.cpp
-INCLUDEPATH += $$PWD/include/AR
-
-# option to disable the AR in the build?
-ios {
-    LIBS += -framework ARKit
-    HEADERS += $$PWD/include/AR/ArKitWrapper.h
-    OBJECTIVE_SOURCES += $$PWD/source/AR/ArKitWrapper.mm
-}
-
-android {
-#    LIBS += -L"$${PWD}/Android/arcore-native/jni/armeabi-v7a" -larcore_sdk_c # x86 ou armeabi-v7a
-#    ANDROID_EXTRA_LIBS += $${PWD}/Android/arcore-native/jni/armeabi-v7a/libarcore_sdk_c.so
-
-    QT += androidextras
-
-    HEADERS += $$PWD/include/AR/ArCoreWrapper.h \
-               $$PWD/3rdparty/arcore/include/arcore_c_api.h
-
-    SOURCES += $$PWD/source/AR/ArCoreWrapper.cpp
-
-    INCLUDEPATH += $$PWD/3rdparty/arcore/include/
-}
-
 RUNTIME_PRI = arcgis_runtime_qml_cpp.pri
 #RUNTIME_PRI = esri_runtime_qt.pri # use this for widgets
 ARCGIS_RUNTIME_VERSION = 100.6
 
-CONFIG(daily) {
+!CONFIG(daily) {
   include($$PWD/arcgisruntime.pri)
 } else {
   include($$PWD/dev_build_config.pri)

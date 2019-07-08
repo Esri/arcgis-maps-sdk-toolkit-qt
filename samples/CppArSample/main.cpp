@@ -16,7 +16,7 @@
 #endif
 
 #include "AppInfo.h"
-#include "ArSample.h"
+#include "CppArSample.h"
 
 #include "ArcGISRuntimeEnvironment.h"
 #include "SceneQuickView.h"
@@ -85,13 +85,13 @@ int main(int argc, char *argv[])
     //  }
 
     // Register the scene view for QML
-    qmlRegisterType<SceneQuickView>("Esri.ArSample", 1, 0, "SceneView");
+    qmlRegisterType<SceneQuickView>("Esri.CppArSample", 1, 0, "SceneView");
 
-    // Register the ArSample (QQuickItem) for QML
-    qmlRegisterType<ArSample>("Esri.ArSample", 1, 0, "ArSample");
+    // Register the CppArSample (QQuickItem) for QML
+    qmlRegisterType<CppArSample>("Esri.CppArSample", 1, 0, "CppArSample");
 
     // Register the ArcGISArView
-    qmlRegisterType<Esri::ArcGISRuntime::Toolkit::ArcGISArView>("Esri.ArSample", 1, 0, "ArcGISArView");
+    qmlRegisterType<Esri::ArcGISRuntime::Toolkit::ArcGISArView>("Esri.CppArSample", 1, 0, "ArcGISArView");
 
     // Initialize application view
     QQmlApplicationEngine engine;

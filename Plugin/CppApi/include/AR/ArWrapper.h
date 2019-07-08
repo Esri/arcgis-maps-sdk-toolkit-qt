@@ -54,6 +54,9 @@ class ArWrapper
 public:
   ArWrapper(ArcGISArView* arView);
 
+  void init() const;
+  void render() const;
+
   bool isValid() const;
 
   void startTracking();
