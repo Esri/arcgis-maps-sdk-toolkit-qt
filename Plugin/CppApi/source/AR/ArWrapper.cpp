@@ -29,7 +29,7 @@ using namespace Esri::ArcGISRuntime::Toolkit;
 
 #else
 
-ArWrapper::ArWrapper(ArcGISArView*)
+ArWrapper::ArWrapper(void*)
 {
 }
 
@@ -67,9 +67,9 @@ void ArWrapper::update()
 {
 }
 
-TransformationMatrix ArWrapper::transformationMatrix() const
+QObject* ArWrapper::transformationMatrix() const
 {
-  return TransformationMatrix();
+  return nullptr;
 }
 
 float* ArWrapper::transformedUvs() const

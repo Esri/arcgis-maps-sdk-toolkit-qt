@@ -63,8 +63,7 @@ void CppArSample::setSceneView(SceneQuickView* sceneView)
 
   m_sceneView = sceneView;
   m_sceneView->setArcGISScene(m_scene);
-  // m_sceneView->setSpaceEffect(SpaceEffect::Transparent); // TODO: update the SDK for this change.
-  m_sceneView->setBackgroundTransparent(true);
+  m_sceneView->setSpaceEffect(SpaceEffect::Transparent);
   m_sceneView->setAtmosphereEffect(AtmosphereEffect::None);
   emit sceneViewChanged();
 }

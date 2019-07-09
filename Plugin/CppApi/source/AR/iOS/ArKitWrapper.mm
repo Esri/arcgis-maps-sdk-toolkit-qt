@@ -17,14 +17,14 @@
 #include "ArKitWrapper.h"
 #import <ARKit/ARKit.h>
 #include <QMatrix4x4>
-#include "ArcGISArView.h"
+#include "ArcGISArViewInterface.h"
 #include <QThread>
 
 using namespace Esri::ArcGISRuntime;
 using namespace Esri::ArcGISRuntime::Toolkit;
 
 /*!
-  \class Esri::ArcGISRuntime::Toolkit::ArcGISARView
+  \class Esri::ArcGISRuntime::Toolkit::ArKitWrapper
   \ingroup AR
   \inmodule ArcGISQtToolkit
   \since Esri::ArcGISRuntime 100.6
@@ -41,7 +41,7 @@ using namespace Esri::ArcGISRuntime::Toolkit;
 -(id)init;
 -(void)session: (ARSession*)session didUpdateFrame:(ARFrame*)frame;
 
-@property (nonatomic) ArcGISArView* arcGISArView;
+@property (nonatomic) ArcGISArViewInterface* arcGISArView;
 @property (nonatomic, retain) ARFrame* frame;
 @property (nonatomic) CVImageBufferRef pixelBuffer; // CVPixelBufferRef
 @property (nonatomic) uchar* textureDataY;
@@ -134,8 +134,8 @@ using namespace Esri::ArcGISRuntime::Toolkit;
   CVPixelBufferRelease(self.pixelBuffer); // release the previous PB if necessary
 
   // update
-  self.arView->updateCamera();
-  self.arcGISArView->update();
+  self.arcGISArView->updateCamera(); // update the TM
+  self.arcGISArView->update(); // render QQuickItem
 }
 
 @end
@@ -157,7 +157,7 @@ struct ArKitWrapper::ArKitWrapperPrivate {
 
 //TODO: test performances with ARCNView from AR kit. Integration of the ARCNView in Qt?
 
-ArKitWrapper::ArKitWrapper(ArcGISArView* arcGISArView) :
+ArKitWrapper::ArKitWrapper(ArcGISArViewInterface* arcGISArView) :
   m_impl(new ArKitWrapperPrivate),
   m_arcGISArView(arcGISArView),
   m_arKitPointCloudRenderer(this),
@@ -295,27 +295,27 @@ void ArKitWrapper::destroy()
 {
 }
 
-TransformationMatrix ArKitWrapper::transformationMatrix() const
-{
-  simd_float4x4 cameraTransform = m_impl->arSessionDelegate.frame.camera.transform;
-  // uses float not double. How to convert simd_float4x4 to simd_double4x4?
+//TransformationMatrix ArKitWrapper::transformationMatrix() const
+//{
+//  simd_float4x4 cameraTransform = m_impl->arSessionDelegate.frame.camera.transform;
+//  // uses float not double. How to convert simd_float4x4 to simd_double4x4?
 
-  /// A quaternion used to compensate for the pitch being 90 degrees on `ARKit`; used to calculate the current
-  /// device transformation for each frame.
-  simd_quatf compensationQuat = { simd_float4 { 0.70710678118, 0.0, 0.0, 0.70710678118 }};
+//  /// A quaternion used to compensate for the pitch being 90 degrees on `ARKit`; used to calculate the current
+//  /// device transformation for each frame.
+//  simd_quatf compensationQuat = { simd_float4 { 0.70710678118, 0.0, 0.0, 0.70710678118 }};
 
-  // Calculate our final quaternion and create the new transformation matrix.
-  simd_quatf finalQuat = simd_mul(compensationQuat, simd_quaternion(cameraTransform));
+//  // Calculate our final quaternion and create the new transformation matrix.
+//  simd_quatf finalQuat = simd_mul(compensationQuat, simd_quaternion(cameraTransform));
 
-  const float translationTransformationFactor = 1.0;
-  return TransformationMatrix(finalQuat.vector.x,
-                              finalQuat.vector.y,
-                              finalQuat.vector.z,
-                              finalQuat.vector.w,
-                              (cameraTransform.columns[3].x) * translationTransformationFactor,
-                              (-cameraTransform.columns[3].z) * translationTransformationFactor,
-                              (cameraTransform.columns[3].y) * translationTransformationFactor);
-}
+//  const float translationTransformationFactor = 1.0;
+//  return TransformationMatrix(finalQuat.vector.x,
+//                              finalQuat.vector.y,
+//                              finalQuat.vector.z,
+//                              finalQuat.vector.w,
+//                              (cameraTransform.columns[3].x) * translationTransformationFactor,
+//                              (-cameraTransform.columns[3].z) * translationTransformationFactor,
+//                              (cameraTransform.columns[3].y) * translationTransformationFactor);
+//}
 
 float* ArKitWrapper::transformedUvs() const
 {

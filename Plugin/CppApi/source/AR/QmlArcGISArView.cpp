@@ -14,11 +14,10 @@
  *  limitations under the License.
  ******************************************************************************/
 
-#include "ArcGISArView.h"
-#include "TransformationMatrix.h"
+#include "QmlArcGISArView.h"
 
 /*!
-  \class Esri::ArcGISRuntime::Toolkit::ArcGISArView
+  \class Esri::ArcGISRuntime::Toolkit::QmlArcGISArView
   \ingroup AR
   \inmodule ArcGISQtToolkit
   \since Esri::ArcGISRuntime 100.6
@@ -32,7 +31,7 @@ using namespace Esri::ArcGISRuntime::Toolkit;
 /*!
   \brief A constructor that accepts an optional \a parent.
  */
-ArcGISArView::ArcGISArView(QQuickItem* parent):
+QmlArcGISArView::QmlArcGISArView(QQuickItem* parent):
   ArcGISArViewInterface(parent)
 {
 }
@@ -40,7 +39,7 @@ ArcGISArView::ArcGISArView(QQuickItem* parent):
 /*!
   \brief A constructor that accepts an optional \a parent.
  */
-ArcGISArView::ArcGISArView(int renderVideoFeed, QQuickItem* parent):
+QmlArcGISArView::QmlArcGISArView(int renderVideoFeed, QQuickItem* parent):
   ArcGISArViewInterface(renderVideoFeed, parent)
 {
 }
@@ -48,22 +47,22 @@ ArcGISArView::ArcGISArView(int renderVideoFeed, QQuickItem* parent):
 /*!
    \brief The destructor.
  */
-ArcGISArView::~ArcGISArView()
+QmlArcGISArView::~QmlArcGISArView()
 {
 }
 
 /*!
   \brief ...
  */
-Camera ArcGISArView::originCamera() const
+QObject* QmlArcGISArView::originCamera() const
 {
-  return Camera(m_originCamera);
+  return m_originCamera;
 }
 
 /*!
   \brief ...
  */
-void ArcGISArView::setOriginCamera(const Camera& originCamera)
+void QmlArcGISArView::setOriginCamera(QObject* originCamera)
 {
   if (m_originCamera == originCamera)
     return;
@@ -75,7 +74,7 @@ void ArcGISArView::setOriginCamera(const Camera& originCamera)
 /*!
   \brief ...
  */
-SceneQuickView* ArcGISArView::sceneView() const
+QObject* QmlArcGISArView::sceneView() const
 {
   return m_sceneView;
 }
@@ -83,16 +82,17 @@ SceneQuickView* ArcGISArView::sceneView() const
 /*!
   \brief ...
  */
-void ArcGISArView::setSceneView(SceneQuickView* sceneView)
+void QmlArcGISArView::setSceneView(QObject* sceneView)
 {
   if (sceneView == m_sceneView)
     return;
 
-  m_sceneView = sceneView;
-  m_sceneView->setSpaceEffect(SpaceEffect::Transparent);
-  m_sceneView->setAtmosphereEffect(AtmosphereEffect::None);
-  m_sceneView->setParent(this);
-  emit sceneViewChanged();
+//  m_sceneView = sceneView;
+//   m_sceneView->setSpaceEffect(SpaceEffect::Transparent); // TODO: update the SDK for this change.
+////  m_sceneView->setBackgroundTransparent(true);
+//  m_sceneView->setAtmosphereEffect(AtmosphereEffect::None);
+//  m_sceneView->setParent(this);
+//  emit sceneViewChanged();
 
   startTracking();
 }
@@ -100,27 +100,26 @@ void ArcGISArView::setSceneView(SceneQuickView* sceneView)
 /*!
   \brief ...
  */
-Point ArcGISArView::arScreenToLocation(const Point& /*screenPoint*/) const
+QObject* QmlArcGISArView::arScreenToLocation(QObject* /*screenPoint*/) const
 {
-  return Point();
+  return nullptr;
 }
 
-void ArcGISArView::updateCamera()
+void QmlArcGISArView::updateCamera()
 {
-  if (m_originCamera.isEmpty())
+  if (!m_originCamera)
   {
-    Camera camera = m_sceneView->currentViewpointCamera();
-    m_originCamera = camera; // Camera(camera.location(), camera.heading(), 90, 0);
+    // QObject* camera = m_sceneView->currentViewpointCamera(); // QmlSceneView, property  currentViewpointCamera
+//    m_originCamera = camera; // Camera(camera.location(), camera.heading(), 90, 0);
   }
 
-//  TransformationMatrix* tm = static_cast<TransformationMatrix*>(m_arWrapper->transformationMatrix());
-//  TransformationMatrix matrix = m_originCamera.transformationMatrix().addTransformation(tm);
+//  QObject* matrix = m_originCamera.transformationMatrix().addTransformation(m_arWrapper->transformationMatrix());
 //  m_sceneView->setViewpointCamera(Camera(matrix));
 }
 
 // signals
 
 /*!
-  \fn void ArcGISArView::originCameraChanged();
+  \fn void QmlArcGISArView::originCameraChanged();
   \brief Signal emitted when the \l originCamera property changes.
  */

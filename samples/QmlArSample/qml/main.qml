@@ -25,11 +25,11 @@ ApplicationWindow {
     ArcGISArView {
         id: arcGISArView
         anchors.fill: parent
-        onTransformationMatrixChanged: {
+//        onTransformationMatrixChanged: {
             // create QmlTransformationMatrix
             // create Camera
             // set to sceneiew
-        }
+//        }
     }
 
     SceneView {

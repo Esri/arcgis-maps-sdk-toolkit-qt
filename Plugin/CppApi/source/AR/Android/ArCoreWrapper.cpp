@@ -47,7 +47,7 @@ const GLfloat kVertices[] = {
 };
 }  // namespace
 
-ArCoreWrapper::ArCoreWrapper(ArcGISArView* /*arView*/) :
+ArCoreWrapper::ArCoreWrapper(ArcGISArViewInterface* /*arcGISArView*/) :
   m_arCoreFrameRenderer(this),
   m_arCorePointCloudRenderer(this)
 {
@@ -393,12 +393,12 @@ void ArCoreWrapper::destroy()
   }
 }
 
-TransformationMatrix ArCoreWrapper::transformationMatrix() const
-{
-  constexpr double tscale = 250; // HorizontalSpeedFactor;
-  return TransformationMatrix(m_pose[0], m_pose[1], m_pose[2], m_pose[3],
-      m_pose[4] * tscale, m_pose[5] * tscale, m_pose[6] * tscale);
-}
+//TransformationMatrix ArCoreWrapper::transformationMatrix() const
+//{
+//  constexpr double tscale = 250; // HorizontalSpeedFactor;
+//  return TransformationMatrix(m_pose[0], m_pose[1], m_pose[2], m_pose[3],
+//      m_pose[4] * tscale, m_pose[5] * tscale, m_pose[6] * tscale);
+//}
 
 float* ArCoreWrapper::transformedUvs() const
 {

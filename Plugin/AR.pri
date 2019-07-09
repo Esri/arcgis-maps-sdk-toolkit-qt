@@ -20,12 +20,12 @@
 # plateform independant configuration
 
 HEADERS += \
-    $$PWD/CppApi/include/AR/ArcGISArView.h \
+    $$PWD/CppApi/include/AR/ArcGISArViewInterface.h \
     $$PWD/CppApi/include/AR/ArcGISArViewRenderer.h \
     $$PWD/CppApi/include/AR/ArWrapper.h
 
 SOURCES += \
-    $$PWD/CppApi/source/AR/ArcGISArView.cpp \
+    $$PWD/CppApi/source/AR/ArcGISArViewInterface.cpp \
     $$PWD/CppApi/source/AR/ArcGISArViewRenderer.cpp \
     $$PWD/CppApi/source/AR/ArWrapper.cpp
 
@@ -33,6 +33,7 @@ INCLUDEPATH += $$PWD/CppApi/include/AR
 
 #-------------------------------------------------
 # iOS configuration
+
 ios {
     OBJECTIVE_HEADERS += \
         $$PWD/CppApi/include/AR/iOS/ArKitWrapper.h

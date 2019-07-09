@@ -19,7 +19,6 @@
 
 #include <QSize>
 #include <QOpenGLFunctions>
-#include "TransformationMatrix.h"
 
 #if defined Q_OS_IOS
 #include "ArKitWrapper.h"
@@ -52,7 +51,7 @@ class ArWrapper : public ArCoreWrapper { using ArCoreWrapper::ArCoreWrapper; };
 class ArWrapper
 {
 public:
-  ArWrapper(ArcGISArView* arView);
+  ArWrapper(void*);
 
   void init() const;
   void render() const;
@@ -65,7 +64,7 @@ public:
   void setTextureId(GLuint);
   void update();
 
-  TransformationMatrix transformationMatrix() const;
+  QObject* transformationMatrix() const; // return QmlTransformationMatrix or TransformationMatrix object
   float* transformedUvs() const;
   float* modelViewProjectionData() const;
   const float* pointCloudData() const;

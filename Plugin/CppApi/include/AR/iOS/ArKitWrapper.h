@@ -20,7 +20,7 @@
 //#include <QSize>
 #include <QOpenGLFunctions>
 
-#include "TransformationMatrix.h"
+//#include "TransformationMatrix.h"
 #include "ArKitFrameRenderer.h"
 #include "ArKitPointCloudRenderer.h"
 #include <QOpenGLTexture>
@@ -32,7 +32,7 @@ namespace ArcGISRuntime
 namespace Toolkit // internal?
 {
 
-class ArcGISArView;
+class ArcGISArViewInterface;
 
 // https://developer.apple.com/documentation/arkit/displaying_an_ar_experience_with_metal?language=objc
 // https://developer.apple.com/documentation/arkit/arframe/2867984-capturedimage?language=objc
@@ -42,7 +42,7 @@ class ArcGISArView;
 class ArKitWrapper
 {
 public:
-  ArKitWrapper(ArcGISArView* arcGISArView);
+  ArKitWrapper(ArcGISArViewInterface* arcGISArView);
   ~ArKitWrapper();
 
   bool isValid() const;
@@ -74,7 +74,7 @@ public:
   void update();
   void destroy();
 
-  TransformationMatrix transformationMatrix() const;
+//  TransformationMatrix transformationMatrix() const;
   float* transformedUvs() const;
   float* modelViewProjectionData() const;
   const float* pointCloudData() const;
@@ -86,7 +86,7 @@ private:
   struct ArKitWrapperPrivate;
   ArKitWrapperPrivate* m_impl = nullptr;
 
-  ArcGISArView* m_arcGISArView = nullptr;
+  ArcGISArViewInterface* m_arcGISArView = nullptr;
 
   ArKitFrameRenderer m_arKitFrameRenderer;
   ArKitPointCloudRenderer m_arKitPointCloudRenderer;

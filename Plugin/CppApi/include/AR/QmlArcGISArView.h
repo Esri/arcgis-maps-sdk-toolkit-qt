@@ -14,12 +14,10 @@
  *  limitations under the License.
  ******************************************************************************/
 
-#ifndef ARCGISARVIEW_H
-#define ARCGISARVIEW_H
+#ifndef QMLARCGISARVIEW_H
+#define QMLARCGISARVIEW_H
 
 #include "ArcGISArViewInterface.h"
-#include "Camera.h"
-#include "SceneQuickView.h"
 
 namespace Esri
 {
@@ -30,27 +28,27 @@ namespace Toolkit
 
 // Implementation of the AR scene view for the C++ API
 
-class /*TOOLKIT_EXPORT*/ ArcGISArView : public ArcGISArViewInterface
+class /*TOOLKIT_EXPORT*/ QmlArcGISArView : public ArcGISArViewInterface
 {
   Q_OBJECT
 
-  Q_PROPERTY(Camera originCamera READ originCamera WRITE setOriginCamera NOTIFY originCameraChanged)
-  Q_PROPERTY(SceneQuickView* sceneView READ sceneView WRITE setSceneView NOTIFY sceneViewChanged)
+  Q_PROPERTY(QObject* originCamera READ originCamera WRITE setOriginCamera NOTIFY originCameraChanged)
+  Q_PROPERTY(QObject* sceneView READ sceneView WRITE setSceneView NOTIFY sceneViewChanged)
 
 public:
-  explicit ArcGISArView(QQuickItem* parent = nullptr);
-  explicit ArcGISArView(int renderVideoFeed, QQuickItem* parent = nullptr); // implicit cast ptr to bool???
-  ~ArcGISArView() override;
+  explicit QmlArcGISArView(QQuickItem* parent = nullptr);
+  explicit QmlArcGISArView(int renderVideoFeed, QQuickItem* parent = nullptr); // implicit cast ptr to bool???
+  ~QmlArcGISArView() override;
 
   // properties
-  Camera originCamera() const;
-  void setOriginCamera(const Camera& originCamera);
+  QObject* originCamera() const;
+  void setOriginCamera(QObject* originCamera);
 
-  SceneQuickView* sceneView() const;
-  void setSceneView(SceneQuickView* sceneView);
+  QObject* sceneView() const;
+  void setSceneView(QObject* sceneView);
 
   // methods invokable?
-  Q_INVOKABLE Point arScreenToLocation(const Point& screenPoint) const;
+  Q_INVOKABLE QObject* arScreenToLocation(QObject* screenPoint) const;
 
   // update the matrix transformation
   void updateCamera() override;
@@ -61,12 +59,12 @@ signals:
 
 private:
   int m_timerId = 0;
-  Camera m_originCamera;
-  SceneQuickView* m_sceneView = nullptr;
+  QObject* m_originCamera = nullptr;
+  QObject* m_sceneView = nullptr;
 };
 
 } // Toolkit
 } // ArcGISRuntime
 } // Esri
 
-#endif // ARCGISARVIEW_H
+#endif // QMLARCGISARVIEW_H

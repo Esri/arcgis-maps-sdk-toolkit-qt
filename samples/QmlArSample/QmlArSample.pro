@@ -60,7 +60,7 @@ OTHER_FILES += \
 # The path to the toolkit source correspond to the files downloaded from the GitHub.
 
 AR_TOOLKIT_SOURCE_PATH = /Users/guil8553/applications/qt/sdk/toolkit/Plugin/
-include($$AR_TOOLKIT_SOURCE_PATH/AR.pri)
+include($$AR_TOOLKIT_SOURCE_PATH/ArQmlApi.pri)
 
 #-------------------------------------------------------------------------------
 

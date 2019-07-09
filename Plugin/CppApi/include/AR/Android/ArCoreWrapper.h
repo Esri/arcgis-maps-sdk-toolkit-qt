@@ -17,7 +17,6 @@
 #ifndef ARCOREWRAPPER_H
 #define ARCOREWRAPPER_H
 
-#include "TransformationMatrix.h"
 #include <QAndroidJniEnvironment>
 #include <QSize>
 #include <QMatrix4x4>
@@ -38,12 +37,12 @@ namespace ArcGISRuntime
 namespace Toolkit // TODO: internal?
 {
 
-class ArcGISArView;
+class ArcGISArViewInterface;
 
 class ArCoreWrapper
 {
 public:
-  ArCoreWrapper(ArcGISArView* arView);
+  ArCoreWrapper(ArcGISArViewInterface* arcGISArView);
   ~ArCoreWrapper();
 
   void startTracking();
@@ -73,7 +72,11 @@ public:
   void afterRendering();
   void destroy();
 
-  TransformationMatrix transformationMatrix() const;
+//  TransformationMatrix transformationMatrix() const;
+//  double quaternionX, double quaternionY, double quaternionZ, double quaternionW,
+//                           double translationX, double translationY, double translationZ
+
+
   float* transformedUvs() const;
   const float* modelViewProjectionData() const;
   const float* pointCloudData() const;
