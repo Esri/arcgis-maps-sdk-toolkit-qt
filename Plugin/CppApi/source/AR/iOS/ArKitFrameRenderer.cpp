@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2018 Esri
+ *  Copyright 2012-2019 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,21 +20,27 @@
 using namespace Esri::ArcGISRuntime;
 using namespace Esri::ArcGISRuntime::Toolkit;
 
+// this class renders the textures (created from the AR frames) into a quad using OpenGL.
+// The first texture contains the Y component and the second texture contains the CbCr components.
+// The RGB final color is created using the space color matrix transformation given in the documentation:
+// https://developer.apple.com/documentation/arkit/displaying_an_ar_experience_with_metal?language=objc
+
 namespace {
-// Positions of the quad vertices in clip space (X, Y).
+// positions of the quad vertices in space
 const GLfloat kVertices[] = {
   -1.0f, -1.0f,
   +1.0f, -1.0f,
   -1.0f, +1.0f,
   +1.0f, +1.0f
 };
+// positions of the texture in the quad
 const GLfloat kTexCoord[] = {
   0.0f, 1.0f,
   0.0f, 0.0f,
   1.0f, 1.0f,
   1.0f, 0.0f
 };
-}  // namespace
+} // anonymous namespace
 
 void ArKitFrameRenderer::init()
 {
@@ -51,7 +57,6 @@ void ArKitFrameRenderer::init()
                                               "  v_texCoord = a_texCoord;"
                                               "}");
 
-  // matrix from https://developer.apple.com/documentation/arkit/displaying_an_ar_experience_with_metal?language=objc
   m_program->addCacheableShaderFromSourceCode(QOpenGLShader::Fragment,
                                               "precision mediump float;"
                                               "varying vec2 v_texCoord;"

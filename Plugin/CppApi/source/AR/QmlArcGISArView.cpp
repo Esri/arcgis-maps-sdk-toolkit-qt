@@ -87,12 +87,8 @@ void QmlArcGISArView::setSceneView(QObject* sceneView)
   if (sceneView == m_sceneView)
     return;
 
-//  m_sceneView = sceneView;
-//   m_sceneView->setSpaceEffect(SpaceEffect::Transparent); // TODO: update the SDK for this change.
-////  m_sceneView->setBackgroundTransparent(true);
-//  m_sceneView->setAtmosphereEffect(AtmosphereEffect::None);
-//  m_sceneView->setParent(this);
-//  emit sceneViewChanged();
+  m_sceneView = sceneView;
+  emit sceneViewChanged();
 
   startTracking();
 }
@@ -105,8 +101,26 @@ QObject* QmlArcGISArView::arScreenToLocation(QObject* /*screenPoint*/) const
   return nullptr;
 }
 
-void QmlArcGISArView::updateCamera()
+void QmlArcGISArView::updateCamera(double quaternionX, double quaternionY, double quaternionZ, double quaternionW,
+                                   double translationX, double translationY, double translationZ)
 {
+
+//  QMetaObject::invokeMethod(QmlArcGISRuntimeEnvironment::instance(), "createObject",
+//          Q_ARG(QVariant, QVariant::fromValue(list)),
+//          Q_ARG(QVariant, QVariant::fromValue(map)));
+
+
+
+//  QQmlEngine engine;
+//  QQmlComponent component(engine, QUrl::fromLocalFile("main.qml"));
+//  // Camera { TransformationMatrix { quaternionX, quaternionY, quaternionZ, quaternionW,
+//  // translationX, translationY, translationZ } }
+//  QObject* camera = component.create();
+
+//  TransformationMatrix matrix = m_originCamera.transformationMatrix().addTransformation(tm);
+//  m_sceneView->setViewpointCamera(Camera(matrix));
+
+
   if (!m_originCamera)
   {
     // QObject* camera = m_sceneView->currentViewpointCamera(); // QmlSceneView, property  currentViewpointCamera
@@ -122,4 +136,9 @@ void QmlArcGISArView::updateCamera()
 /*!
   \fn void QmlArcGISArView::originCameraChanged();
   \brief Signal emitted when the \l originCamera property changes.
+ */
+
+/*!
+  \fn void QmlArcGISArView::sceneViewChanged();
+  \brief Signal emitted when the \l sceneView property changes.
  */

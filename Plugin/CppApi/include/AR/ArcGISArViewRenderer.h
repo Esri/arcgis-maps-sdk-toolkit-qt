@@ -17,18 +17,18 @@
 #ifndef ARCGISARVIEWRENDERER_H
 #define ARCGISARVIEWRENDERER_H
 
-#include <QQuickWindow>
-#include <QPointer>
 #include <QQuickFramebufferObject>
-#include <QOpenGLFunctions>
-#include "ArWrapper.h"
+
+class QQuickWindow;
 
 namespace Esri
 {
 namespace ArcGISRuntime
 {
-namespace Toolkit // TODO: internal?
+namespace Toolkit
 {
+
+class ArWrapper;
 
 // This class renders the passthrough camera image into the OpenGL frame.
 class ArcGISArViewRenderer : public QQuickFramebufferObject::Renderer
@@ -42,14 +42,12 @@ public:
   void synchronize(QQuickFramebufferObject* item) override;
   void render() override;
 
-  // renderers
+  // AR wrapper
   void setArWrapper(ArWrapper* arWrapper);
 
 private:
   bool m_isInitialized = false;
-
-  QPointer<QQuickWindow> m_window;
-
+  QQuickWindow* m_window = nullptr;
   ArWrapper* m_arWrapper = nullptr;
 };
 

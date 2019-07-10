@@ -16,6 +16,8 @@
 
 #include "ArcGISArViewRenderer.h"
 #include <QOpenGLFramebufferObjectFormat>
+#include "ArWrapper.h"
+#include <QQuickWindow>
 
 using namespace Esri::ArcGISRuntime;
 using namespace Esri::ArcGISRuntime::Toolkit;
@@ -35,6 +37,8 @@ void ArcGISArViewRenderer::synchronize(QQuickFramebufferObject* item)
 
 void ArcGISArViewRenderer::render()
 {
+  Q_CHECK_PTR(m_arWrapper);
+
   if (!m_isInitialized)
   {
     m_isInitialized = true;
@@ -49,5 +53,6 @@ void ArcGISArViewRenderer::render()
 
 void ArcGISArViewRenderer::setArWrapper(ArWrapper* arWrapper)
 {
+  Q_CHECK_PTR(arWrapper);
   m_arWrapper = arWrapper;
 }

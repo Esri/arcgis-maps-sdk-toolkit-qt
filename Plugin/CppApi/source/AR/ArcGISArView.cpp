@@ -22,7 +22,7 @@
   \ingroup AR
   \inmodule ArcGISQtToolkit
   \since Esri::ArcGISRuntime 100.6
-  \brief ...
+  \brief Render and tracks the camera.
   \sa {AR}
  */
 
@@ -39,9 +39,15 @@ ArcGISArView::ArcGISArView(QQuickItem* parent):
 
 /*!
   \brief A constructor that accepts an optional \a parent.
+
+  \list
+  \li \a renderVideoFeed - Not implemented.
+  \li \a tryUsingArKit - Not implemented.
+  \li \a parent - optional.
+  \endlist
  */
-ArcGISArView::ArcGISArView(int renderVideoFeed, QQuickItem* parent):
-  ArcGISArViewInterface(renderVideoFeed, parent)
+ArcGISArView::ArcGISArView(bool renderVideoFeed, bool tryUsingArKit, QQuickItem* parent):
+  ArcGISArViewInterface(renderVideoFeed, tryUsingArKit, parent)
 {
 }
 
@@ -53,7 +59,7 @@ ArcGISArView::~ArcGISArView()
 }
 
 /*!
-  \brief ...
+  \brief Gets the origin camera.
  */
 Camera ArcGISArView::originCamera() const
 {
@@ -61,7 +67,7 @@ Camera ArcGISArView::originCamera() const
 }
 
 /*!
-  \brief ...
+  \brief Sets the origin camera to \a originCamera.
  */
 void ArcGISArView::setOriginCamera(const Camera& originCamera)
 {
@@ -73,7 +79,7 @@ void ArcGISArView::setOriginCamera(const Camera& originCamera)
 }
 
 /*!
-  \brief ...
+  \brief Gets the scene view.
  */
 SceneQuickView* ArcGISArView::sceneView() const
 {
@@ -81,7 +87,10 @@ SceneQuickView* ArcGISArView::sceneView() const
 }
 
 /*!
-  \brief ...
+  \brief Sets the scene view to \a sceneView.
+
+  The space effect of the scene view is set to \c SpaceEffect::Transparent
+  and the atmosphere effect is set to \c AtmosphereEffect::None.
  */
 void ArcGISArView::setSceneView(SceneQuickView* sceneView)
 {
@@ -98,24 +107,26 @@ void ArcGISArView::setSceneView(SceneQuickView* sceneView)
 }
 
 /*!
-  \brief ...
+  \brief Not implemented.
  */
 Point ArcGISArView::arScreenToLocation(const Point& /*screenPoint*/) const
 {
   return Point();
 }
 
-void ArcGISArView::updateCamera()
+/*!
+  \brief Not implemented.
+ */
+void ArcGISArView::updateCamera(double quaternionX, double quaternionY, double quaternionZ, double quaternionW,
+                                double translationX, double translationY, double translationZ)
 {
-  if (m_originCamera.isEmpty())
-  {
-    Camera camera = m_sceneView->currentViewpointCamera();
-    m_originCamera = camera; // Camera(camera.location(), camera.heading(), 90, 0);
-  }
+  if (!m_sceneView)
+    return;
 
-//  TransformationMatrix* tm = static_cast<TransformationMatrix*>(m_arWrapper->transformationMatrix());
-//  TransformationMatrix matrix = m_originCamera.transformationMatrix().addTransformation(tm);
-//  m_sceneView->setViewpointCamera(Camera(matrix));
+  TransformationMatrix newMatrix(quaternionX, quaternionY, quaternionZ, quaternionW,
+                                 translationX, translationY, translationZ);
+  TransformationMatrix matrix = m_originCamera.transformationMatrix().addTransformation(newMatrix);
+  m_sceneView->setViewpointCamera(Camera(matrix));
 }
 
 // signals
@@ -124,3 +135,9 @@ void ArcGISArView::updateCamera()
   \fn void ArcGISArView::originCameraChanged();
   \brief Signal emitted when the \l originCamera property changes.
  */
+
+/*!
+  \fn void ArcGISArView::sceneViewChanged();
+  \brief Signal emitted when the \l sceneView property changes.
+ */
+

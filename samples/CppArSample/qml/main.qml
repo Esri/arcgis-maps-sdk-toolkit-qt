@@ -22,6 +22,7 @@ ApplicationWindow {
     ArcGISArView {
         id: arcGISArView
         anchors.fill: parent
+        sceneView: sceneView
     }
 
     SceneView {
@@ -29,9 +30,7 @@ ApplicationWindow {
         anchors.fill: parent
     }
 
-    // Declare the C++ instance which creates the scene etc. and supply the view
     CppArSample {
-        id: model // TODO: not sure "model" is a good name. And it's useless to set the id for this item
         arcGISArView: arcGISArView
         sceneView: sceneView
     }

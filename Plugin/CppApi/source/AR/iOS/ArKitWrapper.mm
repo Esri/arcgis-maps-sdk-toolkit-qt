@@ -19,18 +19,18 @@
 #include <QMatrix4x4>
 #include "ArcGISArViewInterface.h"
 #include <QThread>
+#include <array>
 
 using namespace Esri::ArcGISRuntime;
 using namespace Esri::ArcGISRuntime::Toolkit;
 
-/*!
-  \class Esri::ArcGISRuntime::Toolkit::ArKitWrapper
-  \ingroup AR
-  \inmodule ArcGISQtToolkit
-  \since Esri::ArcGISRuntime 100.6
-  \brief ...
-  \sa {AR}
- */
+// Wrapp the AR Kit
+//
+// The rendering code is based on the code example given in the ARKit documentation:
+// https://developer.apple.com/documentation/arkit/displaying_an_ar_experience_with_metal?language=objc
+//
+// https://stackoverflow.com/questions/32850012/what-is-the-most-efficient-way-to-display-cvimagebufferref-on-ios
+// https://discussions.apple.com/thread/2597309
 
 /*******************************************************************************
  ******************* Objective-C class declarations ****************************
@@ -40,17 +40,17 @@ using namespace Esri::ArcGISRuntime::Toolkit;
 
 -(id)init;
 -(void)session: (ARSession*)session didUpdateFrame:(ARFrame*)frame;
+-(void)copyPixelBuffers: (CVImageBufferRef)pixelBuffer;
+-(std::array<double, 7>)lastQuaternionTranslation: (simd_float4x4)cameraTransform;
 
 @property (nonatomic) ArcGISArViewInterface* arcGISArView;
-@property (nonatomic, retain) ARFrame* frame;
-@property (nonatomic) CVImageBufferRef pixelBuffer; // CVPixelBufferRef
 @property (nonatomic) uchar* textureDataY;
 @property (nonatomic) uchar* textureDataCbCr;
-@property (nonatomic) size_t width_0;
-@property (nonatomic) size_t width_1;
-@property (nonatomic) size_t height_0;
-@property (nonatomic) size_t height_1;
-@property (atomic) bool render_in_progress;
+@property (nonatomic) size_t widthY;
+@property (nonatomic) size_t widthCbCr;
+@property (nonatomic) size_t heightY;
+@property (nonatomic) size_t heightCbCr;
+@property (nonatomic) bool render_in_progress;
 
 @end
 
@@ -65,14 +65,12 @@ using namespace Esri::ArcGISRuntime::Toolkit;
   if (self = [super init])
   {
     self.arcGISArView = nullptr;
-    self.frame = nullptr;
-    self.pixelBuffer = nullptr;
     self.textureDataY = nullptr;
     self.textureDataCbCr = nullptr;
-    self.width_0 = 0;
-    self.width_1 = 0;
-    self.height_0 = 0;
-    self.height_1 = 0;
+    self.widthY = 0;
+    self.widthCbCr = 0;
+    self.heightY = 0;
+    self.heightCbCr = 0;
     self.render_in_progress = false;
   }
   return self;
@@ -81,14 +79,10 @@ using namespace Esri::ArcGISRuntime::Toolkit;
 -(void)session: (ARSession*)session didUpdateFrame:(ARFrame*)frame
 {
   if (!frame || self.render_in_progress)
-  {
     return;
-  }
 
+  // don't try to render an new frame if there is a rendering in progress
   self.render_in_progress = true;
-
-  self.frame = frame;
-  self.pixelBuffer = frame.capturedImage;
 
   // release data
   if (self.textureDataY)
@@ -103,25 +97,39 @@ using namespace Esri::ArcGISRuntime::Toolkit;
     self.textureDataCbCr = nullptr;
   }
 
+  [self copyPixelBuffers: frame.capturedImage];
+
+  // update
+  const std::array<double, 7> params = [self lastQuaternionTranslation: frame.camera.transform];
+  self.arcGISArView->updateCamera(params[0], params[1], params[2], params[3], params[4], params[5], params[6]);
+  self.arcGISArView->update();
+}
+
+// The first texture
+// https://en.wikipedia.org/wiki/YCbCr
+// 4:2:0
+
+-(void)copyPixelBuffers: (CVImageBufferRef)pixelBuffer
+{
   // map
-  CVPixelBufferRetain(self.pixelBuffer); // retains the new PB
-  CVPixelBufferLockBaseAddress(self.pixelBuffer, kCVPixelBufferLock_ReadOnly);
+  CVPixelBufferRetain(pixelBuffer); // retains the new PB
+  CVPixelBufferLockBaseAddress(pixelBuffer, kCVPixelBufferLock_ReadOnly);
 
   // create buffers
-  uchar* dataY = static_cast<uchar*>(CVPixelBufferGetBaseAddressOfPlane(self.pixelBuffer, 0));
-  uchar* dataCbCr = static_cast<uchar*>(CVPixelBufferGetBaseAddressOfPlane(self.pixelBuffer, 1));
+  uchar* dataY = static_cast<uchar*>(CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0));
+  uchar* dataCbCr = static_cast<uchar*>(CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 1));
 
-  self.width_0 = CVPixelBufferGetWidthOfPlane(self.pixelBuffer, 0);
-  self.width_1 = CVPixelBufferGetWidthOfPlane(self.pixelBuffer, 1);
+  self.widthY = CVPixelBufferGetWidthOfPlane(pixelBuffer, 0);
+  self.widthCbCr = CVPixelBufferGetWidthOfPlane(pixelBuffer, 1);
 
-  self.height_0 = CVPixelBufferGetHeightOfPlane(self.pixelBuffer, 0);
-  self.height_1 = CVPixelBufferGetHeightOfPlane(self.pixelBuffer, 1);
+  self.heightY = CVPixelBufferGetHeightOfPlane(pixelBuffer, 0);
+  self.heightCbCr = CVPixelBufferGetHeightOfPlane(pixelBuffer, 1);
 
-  const size_t bytesPerRow_0 = CVPixelBufferGetBytesPerRowOfPlane(self.pixelBuffer, 0);
-  const size_t bytesPerRow_1 = CVPixelBufferGetBytesPerRowOfPlane(self.pixelBuffer, 1);
+  const size_t bytesPerRow_0 = CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 0);
+  const size_t bytesPerRow_1 = CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 1);
 
-  const size_t size_0 = self.height_0 * bytesPerRow_0;
-  const size_t size_1 = self.height_1 * bytesPerRow_1;
+  const size_t size_0 = self.heightY * bytesPerRow_0;
+  const size_t size_1 = self.heightCbCr * bytesPerRow_1;
 
   self.textureDataY = static_cast<uchar*>(malloc(size_0));
   self.textureDataCbCr = static_cast<uchar*>(malloc(size_1));
@@ -130,12 +138,31 @@ using namespace Esri::ArcGISRuntime::Toolkit;
   memcpy(self.textureDataCbCr, dataCbCr, size_1);
 
   // unmap
-  CVPixelBufferUnlockBaseAddress(self.pixelBuffer, kCVPixelBufferLock_ReadOnly);
-  CVPixelBufferRelease(self.pixelBuffer); // release the previous PB if necessary
+  CVPixelBufferUnlockBaseAddress(pixelBuffer, kCVPixelBufferLock_ReadOnly);
+  CVPixelBufferRelease(pixelBuffer);
+}
 
-  // update
-  self.arcGISArView->updateCamera(); // update the TM
-  self.arcGISArView->update(); // render QQuickItem
+-(std::array<double, 7>) lastQuaternionTranslation: (simd_float4x4)cameraTransform
+{
+  // uses float not double. How to convert simd_float4x4 to simd_double4x4?
+
+  // A quaternion used to compensate for the pitch being 90 degrees on `ARKit`; used to calculate the current
+  // device transformation for each frame.
+  simd_quatf compensationQuat = { simd_float4 { 0.70710678118, 0.0, 0.0, 0.70710678118 }};
+
+  // Calculate our final quaternion and create the new transformation matrix.
+  simd_quatf finalQuat = simd_mul(compensationQuat, simd_quaternion(cameraTransform));
+
+  const float translationTransformationFactor = 1.0;
+
+  return { finalQuat.vector.x,
+        finalQuat.vector.y,
+        finalQuat.vector.z,
+        finalQuat.vector.w,
+        (cameraTransform.columns[3].x) * translationTransformationFactor,
+        (-cameraTransform.columns[3].z) * translationTransformationFactor,
+        (cameraTransform.columns[3].y) * translationTransformationFactor
+  };
 }
 
 @end
@@ -148,7 +175,6 @@ struct ArKitWrapper::ArKitWrapperPrivate {
   ARSession* arSession = nullptr;
   ARWorldTrackingConfiguration* arConfiguration = nullptr;
   ArcGISArSessionDelegate* arSessionDelegate = nullptr;
-  bool isSupported = false;
 };
 
 /*******************************************************************************
@@ -159,7 +185,6 @@ struct ArKitWrapper::ArKitWrapperPrivate {
 
 ArKitWrapper::ArKitWrapper(ArcGISArViewInterface* arcGISArView) :
   m_impl(new ArKitWrapperPrivate),
-  m_arcGISArView(arcGISArView),
   m_arKitPointCloudRenderer(this),
   m_textureY(QOpenGLTexture::Target2D),
   m_textureCbCr(QOpenGLTexture::Target2D)
@@ -187,47 +212,31 @@ ArKitWrapper::~ArKitWrapper()
   delete m_impl;
 }
 
-bool ArKitWrapper::isValid() const
-{
-  return true;
-}
-
 void ArKitWrapper::startTracking()
 {
+  // Not implemented.
 }
 
 void ArKitWrapper::stopTracking()
 {
+  // Not implemented.
 }
 
 QSizeF ArKitWrapper::size() const
 {
+  // Not implemented.
   return QSize();
 }
 
 void ArKitWrapper::setSize(const QSizeF& /*size*/)
 {
-}
-
-QMatrix4x4 ArKitWrapper::viewMatrix() const
-{
-  return QMatrix4x4();
-}
-
-QMatrix4x4 ArKitWrapper::projectionMatrix() const
-{
-  return QMatrix4x4();
-}
-
-const float* ArKitWrapper::pose() const
-{
-  return nullptr;
+  // Not implemented.
 }
 
 void ArKitWrapper::init()
 {
   m_arKitFrameRenderer.init();
-//  m_arKitPointCloudRenderer.init();
+  // m_arKitPointCloudRenderer.init(); // for debugging the AR tracking
 }
 
 void ArKitWrapper::beforeRendering()
@@ -239,8 +248,10 @@ void ArKitWrapper::beforeRendering()
   if (m_textureCbCr.isCreated())
     m_textureCbCr.destroy();
 
-  m_textureY.setSize(m_impl->arSessionDelegate.width_0, m_impl->arSessionDelegate.height_0);
-  m_textureCbCr.setSize(m_impl->arSessionDelegate.width_1, m_impl->arSessionDelegate.height_1);
+  m_textureY.setSize(static_cast<int>(m_impl->arSessionDelegate.widthY),
+                     static_cast<int>(m_impl->arSessionDelegate.heightY));
+  m_textureCbCr.setSize(static_cast<int>(m_impl->arSessionDelegate.widthCbCr),
+                        static_cast<int>(m_impl->arSessionDelegate.heightCbCr));
 
   m_textureY.setFormat(QOpenGLTexture::R8_UNorm);
   m_textureCbCr.setFormat(QOpenGLTexture::RG8_UNorm);
@@ -264,75 +275,26 @@ void ArKitWrapper::render()
   if (m_textureY.textureId() != 0 && m_textureCbCr.textureId() != 0)
   {
     m_arKitFrameRenderer.render(m_textureY.textureId(), m_textureCbCr.textureId());
-    // m_arKitPointCloudRenderer.render();
+    // m_arKitPointCloudRenderer.render(); // for debugging the AR tracking
   }
 
   afterRendering();
 }
 
-bool ArKitWrapper::install()
-{
-  return true;
-}
-
-void ArKitWrapper::create()
-{
-}
-
-void ArKitWrapper::pause()
-{
-}
-
-void ArKitWrapper::resume()
-{
-}
-
-void ArKitWrapper::update()
-{
-}
-
-void ArKitWrapper::destroy()
-{
-}
-
-//TransformationMatrix ArKitWrapper::transformationMatrix() const
-//{
-//  simd_float4x4 cameraTransform = m_impl->arSessionDelegate.frame.camera.transform;
-//  // uses float not double. How to convert simd_float4x4 to simd_double4x4?
-
-//  /// A quaternion used to compensate for the pitch being 90 degrees on `ARKit`; used to calculate the current
-//  /// device transformation for each frame.
-//  simd_quatf compensationQuat = { simd_float4 { 0.70710678118, 0.0, 0.0, 0.70710678118 }};
-
-//  // Calculate our final quaternion and create the new transformation matrix.
-//  simd_quatf finalQuat = simd_mul(compensationQuat, simd_quaternion(cameraTransform));
-
-//  const float translationTransformationFactor = 1.0;
-//  return TransformationMatrix(finalQuat.vector.x,
-//                              finalQuat.vector.y,
-//                              finalQuat.vector.z,
-//                              finalQuat.vector.w,
-//                              (cameraTransform.columns[3].x) * translationTransformationFactor,
-//                              (-cameraTransform.columns[3].z) * translationTransformationFactor,
-//                              (cameraTransform.columns[3].y) * translationTransformationFactor);
-//}
-
-float* ArKitWrapper::transformedUvs() const
-{
-  return nullptr;
-}
-
 float* ArKitWrapper::modelViewProjectionData() const
 {
+  // Not implemented.
   return nullptr;
 }
 
 const float* ArKitWrapper::pointCloudData() const
 {
+  // Not implemented.
   return nullptr;
 }
 
 int32_t ArKitWrapper::pointCloudSize() const
 {
+  // Not implemented.
   return 0;
 }

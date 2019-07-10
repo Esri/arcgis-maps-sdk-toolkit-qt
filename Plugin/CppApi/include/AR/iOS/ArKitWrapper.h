@@ -17,35 +17,26 @@
 #ifndef ArKitWrapper_H
 #define ArKitWrapper_H
 
-//#include <QSize>
 #include <QOpenGLFunctions>
+#include <QOpenGLTexture>
 
-//#include "TransformationMatrix.h"
 #include "ArKitFrameRenderer.h"
 #include "ArKitPointCloudRenderer.h"
-#include <QOpenGLTexture>
 
 namespace Esri
 {
 namespace ArcGISRuntime
 {
-namespace Toolkit // internal?
+namespace Toolkit
 {
 
 class ArcGISArViewInterface;
-
-// https://developer.apple.com/documentation/arkit/displaying_an_ar_experience_with_metal?language=objc
-// https://developer.apple.com/documentation/arkit/arframe/2867984-capturedimage?language=objc
-// https://stackoverflow.com/questions/32850012/what-is-the-most-efficient-way-to-display-cvimagebufferref-on-ios
-// https://discussions.apple.com/thread/2597309
 
 class ArKitWrapper
 {
 public:
   ArKitWrapper(ArcGISArViewInterface* arcGISArView);
   ~ArKitWrapper();
-
-  bool isValid() const;
 
   void startTracking();
   void stopTracking();
@@ -54,28 +45,17 @@ public:
   QSizeF size() const;
   void setSize(const QSizeF& size);
 
-  QMatrix4x4 viewMatrix() const;
-  QMatrix4x4 projectionMatrix() const;
-  const float* pose() const;
-
   void init();
   void beforeRendering();
   void afterRendering();
   void render();
 
   // low level access to AR kit
-  // ARSession* arSession() const;
+  //  ARSession* session() const;
+  //  ARConfiguration* configuration() const;
+  //  ArSessionDelegate* delegate() const;
 
-  //private:
-  bool install();
-  void create();
-  void pause();
-  void resume();
-  void update();
-  void destroy();
-
-//  TransformationMatrix transformationMatrix() const;
-  float* transformedUvs() const;
+  // point cloud data,
   float* modelViewProjectionData() const;
   const float* pointCloudData() const;
   int32_t pointCloudSize() const;
@@ -86,12 +66,8 @@ private:
   struct ArKitWrapperPrivate;
   ArKitWrapperPrivate* m_impl = nullptr;
 
-  ArcGISArViewInterface* m_arcGISArView = nullptr;
-
   ArKitFrameRenderer m_arKitFrameRenderer;
   ArKitPointCloudRenderer m_arKitPointCloudRenderer;
-
-  void createTextureIds();
 
   QOpenGLTexture m_textureY;
   QOpenGLTexture m_textureCbCr;

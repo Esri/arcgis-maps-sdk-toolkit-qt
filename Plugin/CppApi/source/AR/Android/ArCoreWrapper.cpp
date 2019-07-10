@@ -269,8 +269,6 @@ void ArCoreWrapper::beforeRendering()
   if (!m_arFrame)
     qDebug() << "m_arFrame is nullptr";
 
-
-
   // note: message from Android team
 //  Luke Duncan [2:00 AM]
 //  I have applied @gunt0001’s work to the `ArcGISArView` and I’ve found that there’s a decrease in FPS when it’s activated.

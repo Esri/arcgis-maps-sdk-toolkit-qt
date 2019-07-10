@@ -51,7 +51,8 @@ public:
   Q_INVOKABLE QObject* arScreenToLocation(QObject* screenPoint) const;
 
   // update the matrix transformation
-  void updateCamera() override;
+  void updateCamera(double quaternionX, double quaternionY, double quaternionZ, double quaternionW,
+                    double translationX, double translationY, double translationZ) override;
 
 signals:
   void originCameraChanged();

@@ -39,11 +39,9 @@ class /*TOOLKIT_EXPORT*/ ArcGISArViewInterface : public QQuickFramebufferObject
   // add to the design?
   Q_PROPERTY(bool tracking READ tracking WRITE setTracking NOTIFY trackingChanged)
 
-  // Q_PROPERTY(default)
-
 public:
   explicit ArcGISArViewInterface(QQuickItem* parent = nullptr);
-  explicit ArcGISArViewInterface(int renderVideoFeed, QQuickItem* parent = nullptr); // implicit cast ptr to bool???
+  explicit ArcGISArViewInterface(bool renderVideoFeed, bool tryUsingArKit, QQuickItem* parent = nullptr);
   ~ArcGISArViewInterface() override;
 
   // properties
@@ -65,13 +63,14 @@ public:
 
   // low access to the ARKit/ARCore objects
   template<typename ArRawPtr>
-  ArRawPtr* getAR() const;
+  ArRawPtr* arRawPtr() const;
 
   // create renderer for frame buffer object
   QQuickFramebufferObject::Renderer* createRenderer() const override;
 
   // update the matrix transformation
-  virtual void updateCamera() = 0; // signal?
+  virtual void updateCamera(double quaternionX, double quaternionY, double quaternionZ, double quaternionW,
+                            double translationX, double translationY, double translationZ) = 0;
 
 signals:
   void translationTransformationFactorChanged();
@@ -84,7 +83,6 @@ protected:
 
 private:
   int m_timerId = 0;
-
   mutable ArcGISArViewRenderer* m_arViewRenderer = nullptr;
   std::unique_ptr<ArWrapper> m_arWrapper;
 };

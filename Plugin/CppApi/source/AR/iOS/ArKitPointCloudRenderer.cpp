@@ -69,13 +69,13 @@ void ArKitPointCloudRenderer::render()
 
   glEnableVertexAttribArray(m_attributeVertices);
 
-  glVertexAttribPointer(m_attributeVertices, 4, GL_FLOAT, GL_FALSE, 0, m_arKitWrapper->pointCloudData() /*point_cloud_data*/);
+  glVertexAttribPointer(m_attributeVertices, 4, GL_FLOAT, GL_FALSE, 0, m_arKitWrapper->pointCloudData());
 
   // Set cyan color to the point cloud.
   glUniform4f(m_uniformColor, 31.0f / 255.0f, 188.0f / 255.0f, 210.0f / 255.0f, 1.0f);
   glUniform1f(m_uniformPointSize, 50.0f);
 
-  glDrawArrays(GL_POINTS, 0, m_arKitWrapper->pointCloudSize() /*number_of_points*/);
+  glDrawArrays(GL_POINTS, 0, m_arKitWrapper->pointCloudSize());
 
   m_program->release();
 }
