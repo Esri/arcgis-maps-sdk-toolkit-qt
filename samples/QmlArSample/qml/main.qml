@@ -25,43 +25,43 @@ ApplicationWindow {
     ArcGISArView {
         id: arcGISArView
         anchors.fill: parent
-//        sceneView: sceneView
+        sceneView: sceneView
     }
 
-//    SceneView {
-//        id: sceneView
-//        anchors.fill: parent
-//        spaceEffect: Enums.SpaceEffectTransparent
-//        atmosphereEffect: Enums.AtmosphereEffectNone
+    SceneView {
+        id: sceneView
+        anchors.fill: parent
+        spaceEffect: Enums.SpaceEffectTransparent
+        atmosphereEffect: Enums.AtmosphereEffectNone
 
         // from https://devtopia.esri.com/mort5161/ARSamples/blob/b63c7b62c217d36fa44fb91fd271554061431af5/ArcGISAR.Droid/TestScenes.cs
-//        Scene {
-//            initialViewpoint: ViewpointExtent {
-//                Camera {
-//                    Point {
-//                        x: -4.49492
-//                        y: 48.3808
-//                        z: 48.2511
-//                        spatialReference: SpatialReference.createWgs84()
-//                    }
-//                    heading: 344.488
-//                    pitch: 74.1212
-//                    roll: 0.0
-//                }
-//            }
-//            Surface {
-//                navigationConstraint: Enums.NavigationConstraintNone
-//                backgroundGrid: BackgroundGrid {
-//                    visible: false
-//                }
-//                ArcGISTiledElevationSource {
-//                    url: "https://scene.arcgis.com/arcgis/rest/services/BREST_DTM_1M/ImageServer"
-//                }
-//            }
-//            ArcGISSceneLayer {
-//                url: "https://tiles.arcgis.com/tiles/P3ePLMYs2RVChkJx/arcgis/rest/services/Buildings_Brest/SceneServer/layers/0"
-//                opacity: 1.0
-//            }
-//        }
-//    }
+        Scene {
+            initialViewpoint: ViewpointExtent {
+                Camera {
+                    Point {
+                        x: -4.49492
+                        y: 48.3808
+                        z: 48.2511
+                        spatialReference: SpatialReference.createWgs84()
+                    }
+                    heading: 344.488
+                    pitch: 74.1212
+                    roll: 0.0
+                }
+            }
+            Surface {
+                navigationConstraint: Enums.NavigationConstraintNone
+                backgroundGrid: BackgroundGrid {
+                    visible: false
+                }
+                ArcGISTiledElevationSource {
+                    url: "https://scene.arcgis.com/arcgis/rest/services/BREST_DTM_1M/ImageServer"
+                }
+            }
+            ArcGISSceneLayer {
+                url: "https://tiles.arcgis.com/tiles/P3ePLMYs2RVChkJx/arcgis/rest/services/Buildings_Brest/SceneServer/layers/0"
+                opacity: 1.0
+            }
+        }
+    }
 }

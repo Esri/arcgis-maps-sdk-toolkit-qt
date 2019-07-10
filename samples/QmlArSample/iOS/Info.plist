@@ -94,5 +94,7 @@
     <true/>
     <key>UILaunchStoryboardName</key>
     <string>LaunchScreen</string>
+    <key>NSCameraUsageDescription</key>
+    <string>Camera access is needed for AR testing</string>
 </dict>
 </plist>

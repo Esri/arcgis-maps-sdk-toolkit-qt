@@ -17,7 +17,9 @@ DEPENDPATH += $$PWD
 ios_icon.files = $$files($$PWD/Images.xcassets/AppIcon.appiconset/Icon_*.png)
 QMAKE_BUNDLE_DATA += ios_icon
 
-OTHER_FILES +=     $$PWD/Info.plist     $$PWD/Images.xcassets/AppIcon.appiconset/Contents.json
+OTHER_FILES += \
+    $$PWD/Info.plist \
+    $$PWD/Images.xcassets/AppIcon.appiconset/Contents.json
 
 QMAKE_INFO_PLIST = $$PWD/Info.plist
 

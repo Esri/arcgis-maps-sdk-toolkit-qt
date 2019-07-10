@@ -104,31 +104,7 @@ QObject* QmlArcGISArView::arScreenToLocation(QObject* /*screenPoint*/) const
 void QmlArcGISArView::updateCamera(double quaternionX, double quaternionY, double quaternionZ, double quaternionW,
                                    double translationX, double translationY, double translationZ)
 {
-
-//  QMetaObject::invokeMethod(QmlArcGISRuntimeEnvironment::instance(), "createObject",
-//          Q_ARG(QVariant, QVariant::fromValue(list)),
-//          Q_ARG(QVariant, QVariant::fromValue(map)));
-
-
-
-//  QQmlEngine engine;
-//  QQmlComponent component(engine, QUrl::fromLocalFile("main.qml"));
-//  // Camera { TransformationMatrix { quaternionX, quaternionY, quaternionZ, quaternionW,
-//  // translationX, translationY, translationZ } }
-//  QObject* camera = component.create();
-
-//  TransformationMatrix matrix = m_originCamera.transformationMatrix().addTransformation(tm);
-//  m_sceneView->setViewpointCamera(Camera(matrix));
-
-
-  if (!m_originCamera)
-  {
-    // QObject* camera = m_sceneView->currentViewpointCamera(); // QmlSceneView, property  currentViewpointCamera
-//    m_originCamera = camera; // Camera(camera.location(), camera.heading(), 90, 0);
-  }
-
-//  QObject* matrix = m_originCamera.transformationMatrix().addTransformation(m_arWrapper->transformationMatrix());
-//  m_sceneView->setViewpointCamera(Camera(matrix));
+  // No implemented.
 }
 
 // signals

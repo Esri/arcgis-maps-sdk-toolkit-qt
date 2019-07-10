@@ -16,5 +16,22 @@ DEPENDPATH += $$PWD
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD
 
-OTHER_FILES +=     $$ANDROID_PACKAGE_SOURCE_DIR/res/drawable-ldpi/icon.png     $$ANDROID_PACKAGE_SOURCE_DIR/res/drawable-mdpi/icon.png     $$ANDROID_PACKAGE_SOURCE_DIR/res/drawable-hdpi/icon.png     $$ANDROID_PACKAGE_SOURCE_DIR/res/drawable-xhdpi/icon.png     $$ANDROID_PACKAGE_SOURCE_DIR/res/drawable-xxhdpi/icon.png
+OTHER_FILES += \
+    $$ANDROID_PACKAGE_SOURCE_DIR/res/drawable-ldpi/icon.png \
+    $$ANDROID_PACKAGE_SOURCE_DIR/res/drawable-mdpi/icon.png \
+    $$ANDROID_PACKAGE_SOURCE_DIR/res/drawable-hdpi/icon.png \
+    $$ANDROID_PACKAGE_SOURCE_DIR/res/drawable-xhdpi/icon.png \
+    $$ANDROID_PACKAGE_SOURCE_DIR/res/drawable-xxhdpi/icon.png
 
+DISTFILES += \
+    $$ANDROID_PACKAGE_SOURCE_DIR/AndroidManifest.xml \
+    $$ANDROID_PACKAGE_SOURCE_DIR/gradle/wrapper/gradle-wrapper.jar \
+    $$ANDROID_PACKAGE_SOURCE_DIR/gradlew \
+    $$ANDROID_PACKAGE_SOURCE_DIR/build.gradle \
+    $$ANDROID_PACKAGE_SOURCE_DIR/gradle/wrapper/gradle-wrapper.properties \
+    $$ANDROID_PACKAGE_SOURCE_DIR/gradlew.bat
+
+ANDROID_LIBS = $$dirname(QMAKE_QMAKE)/../lib
+ANDROID_EXTRA_LIBS += \
+    $$ANDROID_LIBS/libssl.so \
+    $$ANDROID_LIBS/libcrypto.so
