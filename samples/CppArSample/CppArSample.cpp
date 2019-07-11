@@ -26,7 +26,7 @@
 using namespace Esri::ArcGISRuntime;
 using namespace Esri::ArcGISRuntime::Toolkit;
 
-CppArSample::CppArSample(QObject* parent /* = nullptr */):
+CppArSample::CppArSample(QObject* parent):
   QObject(parent)
 {
   createScene();
@@ -77,19 +77,6 @@ void CppArSample::createScene()
   const QUrl elevationUrl("https://scene.arcgis.com/arcgis/rest/services/BREST_DTM_1M/ImageServer");
   const QUrl layerUrl("https://tiles.arcgis.com/tiles/P3ePLMYs2RVChkJx/arcgis/rest/services/Buildings_Brest/SceneServer/layers/0");
   auto layer = new ArcGISSceneLayer(layerUrl, this);
-
-  // Berlin
-  //  const Point targetExtent(-4.49492, 48.3808, 48.2511, SpatialReference::wgs84());
-  //  const Camera camera(targetExtent, 344.488, 74.1212, 0.0);
-  //  const QUrl elevationUrl("http://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer");
-  //  const QUrl layerUrl("https://tiles.arcgis.com/tiles/P3ePLMYs2RVChkJx/arcgis/rest/services/Buildings_Berlin/SceneServer");
-  //  auto layer = new ArcGISSceneLayer(layerUrl, this);
-
-  // Barton School House
-  //  const Camera camera(7.5965494109812166, 45.978823845553237, 4944.7202749764547, 92.526187357522176, 69.000299172744661, 0.0);
-  //  const QUrl elevationUrl("http://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer");
-  //  const QUrl layerUrl = QUrl("/sdcard/ArcGIS/Runtime/UnitTests/slpks/matterhorn_dxt.slpk");
-  //  auto layer = new IntegratedMeshLayer(layerUrl, this);
 
   // create scene
   m_scene = new Scene(this);

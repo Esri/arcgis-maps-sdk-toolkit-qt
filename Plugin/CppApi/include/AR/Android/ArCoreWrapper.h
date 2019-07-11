@@ -34,7 +34,7 @@ namespace Esri
 {
 namespace ArcGISRuntime
 {
-namespace Toolkit // TODO: internal?
+namespace Toolkit
 {
 
 class ArcGISArViewInterface;
@@ -73,16 +73,15 @@ public:
   void destroy();
 
 //  TransformationMatrix transformationMatrix() const;
-//  double quaternionX, double quaternionY, double quaternionZ, double quaternionW,
-//                           double translationX, double translationY, double translationZ
 
-
-  float* transformedUvs() const;
+  const float* transformedUvs() const;
   const float* modelViewProjectionData() const;
   const float* pointCloudData() const;
   int32_t pointCloudSize() const;
 
 private:
+  ArcGISArViewInterface* m_arcGISArView = nullptr;
+
   QAndroidJniEnvironment m_jniEnvironment;
 
   jobject m_applicationActivity = nullptr;
@@ -95,21 +94,23 @@ private:
   static int32_t m_installRequested;
 
   GLuint m_textureId = 0;
-  bool uvs_initialized_ = false;
+  bool m_uvsInitialized = false;
   static constexpr int kNumVertices = 4;
 
   // AR core types
-  ArSession* m_arSession = nullptr; // TODO: unique_ptr with custom deleter?
+  ArSession* m_arSession = nullptr;
   ArFrame* m_arFrame = nullptr;
   ArCamera* m_arCamera = nullptr;
   ArPointCloud* m_arPointCloud = nullptr;
 
   // data returned from each frame
-  float* m_transformedUvs = nullptr;
+  float m_transformedUvs[8] = {};
   QMatrix4x4 m_modelViewProjection;
   const float* m_pointCloudData = nullptr;
   int32_t m_pointCloudSize = 0;
   float m_pose[7];
+
+  QString m_errorMessage;
 };
 
 } // Toolkit

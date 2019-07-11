@@ -28,7 +28,7 @@ const GLfloat kVertices[] = {
   -1.0f, +1.0f,
   +1.0f, +1.0f,
 };
-}  // namespace
+} // anonymous namespace
 
 ArCoreFrameRenderer::ArCoreFrameRenderer(ArCoreWrapper* arCoreWrapper) :
   m_arCoreWrapper(arCoreWrapper)
@@ -68,6 +68,8 @@ void ArCoreFrameRenderer::init()
   m_attributeUvs = m_program->attributeLocation("a_texCoord");
 
   m_program->release();
+
+  m_arCoreWrapper->setTextureId(m_textureId);
 }
 
 void ArCoreFrameRenderer::render()
@@ -80,11 +82,7 @@ void ArCoreFrameRenderer::render()
 
   glUniform1i(m_uniformTexture, 1);
   glActiveTexture(GL_TEXTURE1);
-
-  // Android specific GL config
-#ifdef Q_OS_ANDROID
   glBindTexture(GL_TEXTURE_EXTERNAL_OES, m_textureId);
-#endif
 
   glEnableVertexAttribArray(m_attributeVertices);
   glVertexAttribPointer(m_attributeVertices, 2, GL_FLOAT, GL_FALSE, 0, kVertices);
@@ -96,9 +94,5 @@ void ArCoreFrameRenderer::render()
 
   glDepthMask(GL_TRUE);
   m_program->release();
-}
 
-GLuint ArCoreFrameRenderer::textureId() const
-{
-  return m_textureId;
 }

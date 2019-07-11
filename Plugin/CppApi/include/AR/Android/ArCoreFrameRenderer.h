@@ -24,12 +24,11 @@ namespace Esri
 {
 namespace ArcGISRuntime
 {
-namespace Toolkit // TODO: internal?
+namespace Toolkit
 {
 
 class ArCoreWrapper;
 
-// This class renders the passthrough camera image into the OpenGL frame.
 class ArCoreFrameRenderer : public QOpenGLFunctions
 {
 public:
@@ -38,8 +37,6 @@ public:
 
   void init();
   void render();
-
-  GLuint textureId() const;
 
 private:
   ArCoreWrapper* m_arCoreWrapper = nullptr;

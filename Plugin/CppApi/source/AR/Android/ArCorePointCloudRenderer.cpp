@@ -64,18 +64,17 @@ void ArCorePointCloudRenderer::render()
 
   m_program->bind();
 
-  //  QMatrix4x4 modelViewProjection = m_projectionMatrix * m_viewMatrix;
   glUniformMatrix4fv(m_uniformModelViewProjection, 1, GL_FALSE, m_arCoreWrapper->modelViewProjectionData());
 
   glEnableVertexAttribArray(m_attributeVertices);
 
-  glVertexAttribPointer(m_attributeVertices, 4, GL_FLOAT, GL_FALSE, 0, m_arCoreWrapper->pointCloudData() /*point_cloud_data*/);
+  glVertexAttribPointer(m_attributeVertices, 4, GL_FLOAT, GL_FALSE, 0, m_arCoreWrapper->pointCloudData());
 
   // Set cyan color to the point cloud.
   glUniform4f(m_uniformColor, 31.0f / 255.0f, 188.0f / 255.0f, 210.0f / 255.0f, 1.0f);
   glUniform1f(m_uniformPointSize, 50.0f);
 
-  glDrawArrays(GL_POINTS, 0, m_arCoreWrapper->pointCloudSize() /*number_of_points*/);
+  glDrawArrays(GL_POINTS, 0, m_arCoreWrapper->pointCloudSize());
 
   m_program->release();
 }

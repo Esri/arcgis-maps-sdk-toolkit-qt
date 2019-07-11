@@ -73,6 +73,7 @@ public:
                             double translationX, double translationY, double translationZ) = 0;
 
 signals:
+  void errorOccurred(const QString& errorMessage);
   void translationTransformationFactorChanged();
   void renderVideoFeedChanged();
   void trackingChanged();

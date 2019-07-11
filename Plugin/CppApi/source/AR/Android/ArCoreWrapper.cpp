@@ -17,6 +17,7 @@
 #include "ArCoreWrapper.h"
 #include "arcore_c_api.h"
 #include <QtAndroid>
+#include "ArcGISArViewInterface.h"
 
 /*!
   \class Esri::ArcGISRuntime::Toolkit::ArcGISARView
@@ -26,8 +27,6 @@
   \brief ...
   \sa {AR}
  */
-
-// TODO?
 
 // ArCoreApk_checkAvailability https://developers.google.com/ar/reference/c/group/arcoreapk#group__arcoreapk_1ga448092e9b601bc6f87d13d05317413f1
 // ARCore-optional applications must ensure that ArCoreApk_checkAvailability() returns one of the AR_AVAILABILITY_SUPPORTED_... values before calling this method.
@@ -47,7 +46,8 @@ const GLfloat kVertices[] = {
 };
 }  // namespace
 
-ArCoreWrapper::ArCoreWrapper(ArcGISArViewInterface* /*arcGISArView*/) :
+ArCoreWrapper::ArCoreWrapper(ArcGISArViewInterface* arcGISArView) :
+  m_arcGISArView(arcGISArView),
   m_arCoreFrameRenderer(this),
   m_arCorePointCloudRenderer(this)
 {
@@ -57,7 +57,7 @@ ArCoreWrapper::ArCoreWrapper(ArcGISArViewInterface* /*arcGISArView*/) :
 
 ArCoreWrapper::~ArCoreWrapper()
 {
-  destroy(); // destroy here or in pause()? -> need to recreate session and frame in resume() in this case.
+  destroy();
 }
 
 void ArCoreWrapper::startTracking()
@@ -74,7 +74,7 @@ void ArCoreWrapper::setSize(const QSize& size)
 {
   if (size.width() > 0 && size.height() > 0)
   {
-    ArSession_setDisplayGeometry(m_arSession, 0 /*rotation*/, size.width(), size.height());
+    ArSession_setDisplayGeometry(m_arSession, 0, size.width(), size.height());
   }
 }
 
@@ -194,7 +194,7 @@ bool ArCoreWrapper::install()
 // java: public static native void onResume(long nativeApplication, Context context, Activity activity);
 void ArCoreWrapper::create()
 {
-  if (m_arSession != nullptr)
+  if (m_arSession)
     return;
 
   // === ATTENTION!  ATTENTION!  ATTENTION! ===
@@ -202,72 +202,89 @@ void ArCoreWrapper::create()
   // application must handle these cases at least somewhat gracefully.  See
   // HelloAR Java sample code for reasonable behavior.
   auto status = ArSession_create(jniEnvironment(), applicationActivity(), &m_arSession);
-  if (status != AR_SUCCESS)
+  if (status != AR_SUCCESS || !m_arSession)
   {
-    qDebug() << "ArSession_create fails.";
+    m_errorMessage = "Fails to create the AR session.";
+    emit m_arcGISArView->errorOccurred(m_errorMessage);
     return;
   }
 
-  // config camera
+  // request camera permission
+  const QString permissionKey = QStringLiteral("android.permission.CAMERA");
+  auto permissions = QtAndroid::requestPermissionsSync({ permissionKey }, 5000);
+  if (permissions[permissionKey] != QtAndroid::PermissionResult::Granted)
+  {
+    m_errorMessage = "Fails to access to the camera.";
+    emit m_arcGISArView->errorOccurred(m_errorMessage);
+    return;
+  }
 
   // === ATTENTION!  ATTENTION!  ATTENTION! ===
   // This method can and will fail in user-facing situations.  Your
   // application must handle these cases at least somewhat gracefully.  See
   // HelloAR Java sample code for reasonable behavior.
-  ArConfig* ar_config = nullptr;
-  ArConfig_create(m_arSession, &ar_config);
-  if (ar_config == nullptr)
+  ArConfig* arConfig = nullptr;
+  ArConfig_create(m_arSession, &arConfig);
+  if (arConfig == nullptr)
   {
-    qDebug() << "ArSession_create fails.";
+    m_errorMessage = "Fails to create the AR config.";
+    emit m_arcGISArView->errorOccurred(m_errorMessage);
     return;
   }
 
-  ArConfig_setFocusMode(m_arSession, ar_config, AR_FOCUS_MODE_AUTO);
-  status = ArSession_configure(m_arSession, ar_config);
+  ArConfig_setFocusMode(m_arSession, arConfig, AR_FOCUS_MODE_AUTO);
+  status = ArSession_configure(m_arSession, arConfig);
   if (status != AR_SUCCESS)
   {
-    qDebug() << "ArSession_configure fails.";
+    m_errorMessage = "Fails to configure the AR session.";
+    emit m_arcGISArView->errorOccurred(m_errorMessage);
     return;
   }
 
-  ArConfig_destroy(ar_config);
+  ArConfig_destroy(arConfig);
 }
 
 void ArCoreWrapper::pause()
 {
-  if (!m_arSession)
+  if (!m_arSession || !m_errorMessage.isEmpty())
     return;
 
   ArStatus status = ArSession_pause(m_arSession);
   if (status != AR_SUCCESS)
   {
-    qDebug() << "ArSession_create fails.";
+    m_errorMessage = "Fails to pause the AR session.";
+    emit m_arcGISArView->errorOccurred(m_errorMessage);
     return;
   }
 }
 
 void ArCoreWrapper::resume()
 {
-  if (!m_arSession)
+  if (!m_arSession || !m_errorMessage.isEmpty())
     return;
 
   ArStatus status = ArSession_resume(m_arSession);
   if (status != AR_SUCCESS)
   {
-    qDebug() << "ArSession_create fails.";
+    m_errorMessage = "Fails to resume the AR session.";
+    emit m_arcGISArView->errorOccurred(m_errorMessage);
     return;
   }
 }
 
 void ArCoreWrapper::beforeRendering()
 {
-  if (!m_arSession)
+  if (!m_arSession || !m_errorMessage.isEmpty())
     return;
 
   // create and update AR frame
   ArFrame_create(m_arSession, &m_arFrame);
   if (!m_arFrame)
-    qDebug() << "m_arFrame is nullptr";
+  {
+    m_errorMessage = "Fails to create an AR frame.";
+    emit m_arcGISArView->errorOccurred(m_errorMessage);
+    return;
+  }
 
   // note: message from Android team
 //  Luke Duncan [2:00 AM]
@@ -282,29 +299,27 @@ void ArCoreWrapper::beforeRendering()
   ArStatus status = ArSession_update(m_arSession, m_arFrame);
   if (status != AR_SUCCESS)
   {
-    qDebug() << "ArSession_update fails";
+    m_errorMessage = "Fails to update the AR frame.";
+    emit m_arcGISArView->errorOccurred(m_errorMessage);
     return;
   }
-
-  static_assert(std::extent<decltype(kVertices)>::value == kNumVertices * 2,
-                "Incorrect kVertices length");
 
   // If display rotation changed (also includes view size change), we need to
   // re-query the uv coordinates for the on-screen portion of the camera image.
   int32_t geometry_changed = 0;
   ArFrame_getDisplayGeometryChanged(m_arSession, m_arFrame, &geometry_changed);
-  if (geometry_changed != 0 || !uvs_initialized_)
+  if (geometry_changed != 0 || !m_uvsInitialized)
   {
     ArFrame_transformCoordinates2d(
           m_arSession, m_arFrame, AR_COORDINATES_2D_OPENGL_NORMALIZED_DEVICE_COORDINATES,
           kNumVertices, kVertices, AR_COORDINATES_2D_TEXTURE_NORMALIZED,
           m_transformedUvs);
-    uvs_initialized_ = true;
+    m_uvsInitialized = true;
   }
 
-  int64_t frame_timestamp = 0;
-  ArFrame_getTimestamp(m_arSession, m_arFrame, &frame_timestamp);
-  if (frame_timestamp == 0)
+  int64_t timestamp = 0;
+  ArFrame_getTimestamp(m_arSession, m_arFrame, &timestamp);
+  if (timestamp == 0)
   {
     // Suppress rendering if the camera did not produce the first frame yet.
     // This is to avoid drawing possible leftover data from previous sessions if
@@ -312,9 +327,13 @@ void ArCoreWrapper::beforeRendering()
     return;
   }
 
-
-
   ArFrame_acquireCamera(m_arSession, m_arFrame, &m_arCamera);
+  if (!m_arCamera)
+  {
+    m_errorMessage = "Fails to acquire the camera.";
+    emit m_arcGISArView->errorOccurred(m_errorMessage);
+    return;
+  }
 
   QMatrix4x4 viewMatrix;
   ArCamera_getViewMatrix(m_arSession, m_arCamera, viewMatrix.data());
@@ -324,41 +343,29 @@ void ArCoreWrapper::beforeRendering()
 
   m_modelViewProjection = projectionMatrix * viewMatrix;
 
-  ArTrackingState trackingState;
-  ArCamera_getTrackingState(m_arSession, m_arCamera, &trackingState);
-  //  AR_TRACKING_STATE_TRACKING = 0
-  //  AR_TRACKING_STATE_PAUSED = 1
-  //  AR_TRACKING_STATE_STOPPED = 2
-
-  int64_t timestamp = 0;
-  ArFrame_getTimestamp(m_arSession, m_arFrame, &timestamp); // timestamp in nanoseconds
-
   ArPose* pose = nullptr;
   ArPose_create(m_arSession, nullptr, &pose);
+  if (!pose)
+  {
+    m_errorMessage = "Fails to create an AR pose.";
+    emit m_arcGISArView->errorOccurred(m_errorMessage);
+    return;
+  }
+
   ArCamera_getDisplayOrientedPose(m_arSession, m_arCamera, pose);
   ArPose_getPoseRaw(m_arSession, pose, m_pose);
   ArPose_destroy(pose);
 
-
-
-
   // Update and render point cloud.
-  ArStatus point_cloud_status = ArFrame_acquirePointCloud(m_arSession, m_arFrame, &m_arPointCloud);
-  if (point_cloud_status == AR_SUCCESS)
+  ArStatus pointCloudStatus = ArFrame_acquirePointCloud(m_arSession, m_arFrame, &m_arPointCloud);
+  if (pointCloudStatus == AR_SUCCESS)
   {
     ArPointCloud_getNumberOfPoints(m_arSession, m_arPointCloud, &m_pointCloudSize);
     if (m_pointCloudSize <= 0)
-    {
       return;
-    }
 
     ArPointCloud_getData(m_arSession, m_arPointCloud, &m_pointCloudData);
   }
-
-  // TODO: next?
-  // Get light estimation value.
-  // Render anchored objects.
-  // Update and render point cloud.
 }
 
 void ArCoreWrapper::afterRendering()
@@ -391,6 +398,7 @@ void ArCoreWrapper::destroy()
   }
 }
 
+// No implemented.
 //TransformationMatrix ArCoreWrapper::transformationMatrix() const
 //{
 //  constexpr double tscale = 250; // HorizontalSpeedFactor;
@@ -398,7 +406,7 @@ void ArCoreWrapper::destroy()
 //      m_pose[4] * tscale, m_pose[5] * tscale, m_pose[6] * tscale);
 //}
 
-float* ArCoreWrapper::transformedUvs() const
+const float* ArCoreWrapper::transformedUvs() const
 {
   return m_transformedUvs;
 }
