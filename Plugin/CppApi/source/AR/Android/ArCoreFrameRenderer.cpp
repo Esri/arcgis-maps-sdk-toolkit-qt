@@ -78,6 +78,7 @@ void ArCoreFrameRenderer::render()
 
   m_program->bind();
 
+  glClear(GL_DEPTH_BUFFER_BIT);
   glDepthMask(GL_FALSE);
 
   glUniform1i(m_uniformTexture, 1);
@@ -94,5 +95,4 @@ void ArCoreFrameRenderer::render()
 
   glDepthMask(GL_TRUE);
   m_program->release();
-
 }
