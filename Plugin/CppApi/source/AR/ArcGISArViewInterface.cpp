@@ -189,8 +189,8 @@ void ArcGISArViewInterface::timerEvent(QTimerEvent* /*event*/)
   // render the frame buffer object
   update();
 
-  // update the scene view camera
-  updateCamera(0, 0, 0, 0, 0, 0, 0);
+  // update the scene view camera. Not implemented.
+//  updateCamera(0, 0, 0, 0, 0, 0, 0);
 }
 
 /*!

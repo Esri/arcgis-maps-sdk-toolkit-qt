@@ -72,6 +72,9 @@ void ArCoreWrapper::stopTracking()
 
 void ArCoreWrapper::setSize(const QSize& size)
 {
+  if (!m_arSession)
+    return;
+
   if (size.width() > 0 && size.height() > 0)
   {
     ArSession_setDisplayGeometry(m_arSession, 0, size.width(), size.height());
@@ -97,14 +100,14 @@ void ArCoreWrapper::setTextureId(GLuint textureId)
 void ArCoreWrapper::init()
 {
   m_arCoreFrameRenderer.init();
-  m_arCorePointCloudRenderer.init();
+//  m_arCorePointCloudRenderer.init();
 }
 
 void ArCoreWrapper::render()
 {
   beforeRendering();
   m_arCoreFrameRenderer.render();
-  m_arCorePointCloudRenderer.render();
+//  m_arCorePointCloudRenderer.render();
   afterRendering();
 }
 
@@ -164,8 +167,8 @@ bool ArCoreWrapper::install()
   if (m_arSession != nullptr)
     return true;
 
-  ArInstallStatus install_status;
-  ArStatus error = ArCoreApk_requestInstall(jniEnvironment(), applicationActivity(), m_installRequested, &install_status);
+  ArInstallStatus installStatus;
+  ArStatus error = ArCoreApk_requestInstall(jniEnvironment(), applicationActivity(), m_installRequested, &installStatus);
   if (error != AR_SUCCESS)
   {
     //AR_ERROR_FATAL if an error occurs while checking for or requesting installation
@@ -176,7 +179,7 @@ bool ArCoreWrapper::install()
     return false;
   }
 
-  switch (install_status)
+  switch (installStatus)
   {
     case AR_INSTALL_STATUS_INSTALLED:
       // The requested resource is already installed.
@@ -246,7 +249,7 @@ void ArCoreWrapper::create()
 
 void ArCoreWrapper::pause()
 {
-  if (!m_arSession || !m_errorMessage.isEmpty())
+  if (!m_arSession)
     return;
 
   ArStatus status = ArSession_pause(m_arSession);
@@ -260,7 +263,7 @@ void ArCoreWrapper::pause()
 
 void ArCoreWrapper::resume()
 {
-  if (!m_arSession || !m_errorMessage.isEmpty())
+  if (!m_arSession)
     return;
 
   ArStatus status = ArSession_resume(m_arSession);
@@ -274,7 +277,7 @@ void ArCoreWrapper::resume()
 
 void ArCoreWrapper::beforeRendering()
 {
-  if (!m_arSession || !m_errorMessage.isEmpty())
+  if (!m_arSession)
     return;
 
   // create and update AR frame
@@ -306,9 +309,9 @@ void ArCoreWrapper::beforeRendering()
 
   // If display rotation changed (also includes view size change), we need to
   // re-query the uv coordinates for the on-screen portion of the camera image.
-  int32_t geometry_changed = 0;
-  ArFrame_getDisplayGeometryChanged(m_arSession, m_arFrame, &geometry_changed);
-  if (geometry_changed != 0 || !m_uvsInitialized)
+  int32_t geometryChanged = 0;
+  ArFrame_getDisplayGeometryChanged(m_arSession, m_arFrame, &geometryChanged);
+  if (geometryChanged != 0 || !m_uvsInitialized)
   {
     ArFrame_transformCoordinates2d(
           m_arSession, m_arFrame, AR_COORDINATES_2D_OPENGL_NORMALIZED_DEVICE_COORDINATES,
@@ -356,16 +359,16 @@ void ArCoreWrapper::beforeRendering()
   ArPose_getPoseRaw(m_arSession, pose, m_pose);
   ArPose_destroy(pose);
 
-  // Update and render point cloud.
-  ArStatus pointCloudStatus = ArFrame_acquirePointCloud(m_arSession, m_arFrame, &m_arPointCloud);
-  if (pointCloudStatus == AR_SUCCESS)
-  {
-    ArPointCloud_getNumberOfPoints(m_arSession, m_arPointCloud, &m_pointCloudSize);
-    if (m_pointCloudSize <= 0)
-      return;
+  // Update and render point cloud. Not implemented.
+//  ArStatus pointCloudStatus = ArFrame_acquirePointCloud(m_arSession, m_arFrame, &m_arPointCloud);
+//  if (pointCloudStatus == AR_SUCCESS)
+//  {
+//    ArPointCloud_getNumberOfPoints(m_arSession, m_arPointCloud, &m_pointCloudSize);
+//    if (m_pointCloudSize <= 0)
+//      return;
 
-    ArPointCloud_getData(m_arSession, m_arPointCloud, &m_pointCloudData);
-  }
+//    ArPointCloud_getData(m_arSession, m_arPointCloud, &m_pointCloudData);
+//  }
 }
 
 void ArCoreWrapper::afterRendering()
@@ -381,16 +384,16 @@ void ArCoreWrapper::afterRendering()
     ArCamera_release(m_arCamera);
     m_arCamera = nullptr;
   }
+}
 
+void ArCoreWrapper::destroy()
+{
   if (m_arFrame)
   {
     ArFrame_destroy(m_arFrame);
     m_arFrame = nullptr;
   }
-}
 
-void ArCoreWrapper::destroy()
-{
   if (m_arSession)
   {
     ArSession_destroy(m_arSession);

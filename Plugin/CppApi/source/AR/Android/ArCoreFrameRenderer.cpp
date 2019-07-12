@@ -52,7 +52,7 @@ void ArCoreFrameRenderer::init()
                                               "varying vec2 v_texCoord;"
                                               "uniform samplerExternalOES u_texture;"
                                               "void main() {"
-                                              "  gl_FragColor = texture2D(u_texture, vec2(1.0f - v_texCoord.x, v_texCoord.y));"
+                                              "  gl_FragColor = texture2D(u_texture, vec2(1.0 - v_texCoord.x, v_texCoord.y));"
                                               "}");
 
   m_program->link();
