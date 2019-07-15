@@ -14,8 +14,6 @@
 # This configuration file must be added in a project to use the AR features of
 # the ArcGIS Runtime Toolkit for Qt.
 
-# AR_CORE_PATH=/Users/guil8553/applications/qt/sdk/toolkit/Plugin/CppApi/3rdparty/core-1.9.0
-
 #-------------------------------------------------
 # plateform independant configuration
 
@@ -61,7 +59,7 @@ android {
     QT += androidextras
 
     HEADERS += \
-        $$PWD/CppApi/3rdparty/arcore/include/arcore_c_api.h\
+        $$AR_CORE_HEADER_PATH/arcore_c_api.h \
         $$PWD/CppApi/include/AR/Android/ArCoreWrapper.h \
         $$PWD/CppApi/include/AR/Android/ArCoreFrameRenderer.h \
         $$PWD/CppApi/include/AR/Android/ArCorePointCloudRenderer.h
@@ -72,13 +70,13 @@ android {
         $$PWD/CppApi/source/AR/Android/ArCorePointCloudRenderer.cpp
 
     INCLUDEPATH += \
-        $$PWD/CppApi/3rdparty/arcore/include/ \
+        $$AR_CORE_HEADER_PATH \
         $$PWD/CppApi/include/AR/Android
 
-    LIBS += -L"$$AR_CORE_PATH/jni/arm64-v8a"
+    LIBS += -L"$$AR_CORE_BINARIES_PATH/jni/arm64-v8a"
     LIBS += -larcore_sdk_c -larcore_sdk_jni
 
     ANDROID_EXTRA_LIBS += \
-        "$$AR_CORE_PATH/jni/arm64-v8a/libarcore_sdk_c.so" \
-        "$$AR_CORE_PATH/jni/arm64-v8a/libarcore_sdk_jni.so"
+        "$$AR_CORE_BINARIES_PATH/jni/arm64-v8a/libarcore_sdk_c.so" \
+        "$$AR_CORE_BINARIES_PATH/jni/arm64-v8a/libarcore_sdk_jni.so"
 }
