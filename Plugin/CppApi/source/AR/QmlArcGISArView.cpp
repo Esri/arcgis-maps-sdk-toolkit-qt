@@ -15,6 +15,9 @@
  ******************************************************************************/
 
 #include "QmlArcGISArView.h"
+#include <QQuickWindow>
+#include <QScreen>
+#include <QtQml>
 
 /*!
   \class Esri::ArcGISRuntime::Toolkit::QmlArcGISArView
@@ -33,14 +36,6 @@ using namespace Esri::ArcGISRuntime::Toolkit;
  */
 QmlArcGISArView::QmlArcGISArView(QQuickItem* parent):
   ArcGISArViewInterface(parent)
-{
-}
-
-/*!
-  \brief A constructor that accepts an optional \a parent.
- */
-QmlArcGISArView::QmlArcGISArView(int renderVideoFeed, QQuickItem* parent):
-  ArcGISArViewInterface(renderVideoFeed, parent)
 {
 }
 
@@ -101,10 +96,81 @@ QObject* QmlArcGISArView::arScreenToLocation(QObject* /*screenPoint*/) const
   return nullptr;
 }
 
+/*!
+  \brief Not implemented.
+ */
 void QmlArcGISArView::updateCamera(double quaternionX, double quaternionY, double quaternionZ, double quaternionW,
                                    double translationX, double translationY, double translationZ)
 {
-  // No implemented.
+  if (!m_tmcc)
+  {
+    // create TMCC object
+    QQmlComponent tmcc(qmlEngine(this), QUrl("qrc:/tmcc.qml"));
+    m_tmcc = tmcc.create();
+  }
+
+  if (!m_tmcc)
+    return;
+
+  QMetaObject::invokeMethod(m_tmcc, "createAndSetTransformationMatrix", Qt::DirectConnection,
+                            Q_ARG(double, quaternionX),
+                            Q_ARG(double, quaternionY),
+                            Q_ARG(double, quaternionZ),
+                            Q_ARG(double, quaternionW),
+                            Q_ARG(double, translationX),
+                            Q_ARG(double, translationY),
+                            Q_ARG(double, translationZ));
+}
+
+/*!
+  \brief Not implemented.
+ */
+void QmlArcGISArView::updateFieldOfView(double xFocalLength, double yFocalLength,
+                                        double xPrincipal, double yPrincipal,
+                                        double xImageSize, double yImageSize)
+{
+  if (!m_sceneView)
+    return;
+
+  // get the screen orientation
+  const Qt::ScreenOrientations orientation = window()->screen()->orientation();
+  int deviceOrientation = 0;
+
+  switch (orientation) {
+    case Qt::PortraitOrientation:
+      deviceOrientation = 0;
+      break;
+    case Qt::LandscapeOrientation:
+      deviceOrientation = 1;
+      break;
+    case Qt::InvertedPortraitOrientation:
+      deviceOrientation = 2;
+      break;
+    case Qt::InvertedLandscapeOrientation:
+      deviceOrientation = 3;
+      break;
+    default:
+      deviceOrientation = 0;
+      break;
+  }
+
+  // set the field of view
+  QMetaObject::invokeMethod(m_sceneView, "setFieldOfViewFromLensIntrinsics", Qt::DirectConnection,
+                            Q_ARG(double, xFocalLength),
+                            Q_ARG(double, yFocalLength),
+                            Q_ARG(double, xPrincipal),
+                            Q_ARG(double, yPrincipal),
+                            Q_ARG(double, xImageSize),
+                            Q_ARG(double, yImageSize),
+                            Q_ARG(int, deviceOrientation));
+}
+
+void QmlArcGISArView::renderFrame()
+{
+  if (!m_sceneView)
+    return;
+
+  QMetaObject::invokeMethod(m_sceneView, "renderFrame", Qt::DirectConnection);
 }
 
 // signals

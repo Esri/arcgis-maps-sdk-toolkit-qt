@@ -19,12 +19,15 @@
 
 #include "ArcGISArViewInterface.h"
 #include "Camera.h"
-#include "SceneQuickView.h"
 
 namespace Esri
 {
 namespace ArcGISRuntime
 {
+
+class SceneQuickView;
+class TransformationMatrixCameraController;
+
 namespace Toolkit
 {
 
@@ -49,12 +52,20 @@ public:
   SceneQuickView* sceneView() const;
   void setSceneView(SceneQuickView* sceneView);
 
+  void setTranslationFactor(double translationFactor) override;
+
   // methods invokable?
   Q_INVOKABLE Point arScreenToLocation(const Point& screenPoint) const;
 
   // update the matrix transformation
   void updateCamera(double quaternionX, double quaternionY, double quaternionZ, double quaternionW,
                     double translationX, double translationY, double translationZ) override;
+
+  void updateFieldOfView(double xFocalLength, double yFocalLength,
+                         double xPrincipal, double yPrincipal,
+                         double xImageSize, double yImageSize) override;
+
+  void renderFrame() override;
 
 signals:
   void originCameraChanged();
@@ -64,6 +75,7 @@ private:
   int m_timerId = 0;
   Camera m_originCamera;
   SceneQuickView* m_sceneView = nullptr;
+  TransformationMatrixCameraController* m_tmcc = nullptr;
 };
 
 } // Toolkit

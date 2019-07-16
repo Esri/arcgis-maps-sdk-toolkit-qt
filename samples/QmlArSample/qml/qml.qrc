@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/qml">
         <file>main.qml</file>
+        <file>tmcc.qml</file>
     </qresource>
 </RCC>

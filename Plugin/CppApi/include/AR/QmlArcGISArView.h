@@ -37,7 +37,6 @@ class /*TOOLKIT_EXPORT*/ QmlArcGISArView : public ArcGISArViewInterface
 
 public:
   explicit QmlArcGISArView(QQuickItem* parent = nullptr);
-  explicit QmlArcGISArView(int renderVideoFeed, QQuickItem* parent = nullptr); // implicit cast ptr to bool???
   ~QmlArcGISArView() override;
 
   // properties
@@ -54,14 +53,20 @@ public:
   void updateCamera(double quaternionX, double quaternionY, double quaternionZ, double quaternionW,
                     double translationX, double translationY, double translationZ) override;
 
+  void updateFieldOfView(double xFocalLength, double yFocalLength,
+                         double xPrincipal, double yPrincipal,
+                         double xImageSize, double yImageSize) override;
+
+  void renderFrame() override;
+
 signals:
   void originCameraChanged();
   void sceneViewChanged();
 
 private:
-  int m_timerId = 0;
   QObject* m_originCamera = nullptr;
   QObject* m_sceneView = nullptr;
+  QObject* m_tmcc = nullptr;
 };
 
 } // Toolkit

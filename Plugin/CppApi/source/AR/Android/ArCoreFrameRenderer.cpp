@@ -35,7 +35,7 @@ ArCoreFrameRenderer::ArCoreFrameRenderer(ArCoreWrapper* arCoreWrapper) :
 {
 }
 
-void ArCoreFrameRenderer::init()
+void ArCoreFrameRenderer::initGL()
 {
   m_program.reset(new QOpenGLShaderProgram());
   m_program->addCacheableShaderFromSourceCode(QOpenGLShader::Vertex,

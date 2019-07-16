@@ -38,10 +38,11 @@ using namespace Esri::ArcGISRuntime::Toolkit;
 
 @interface ArcGISArSessionDelegate : NSObject<ARSessionDelegate>
 
--(id)init;
--(void)session: (ARSession*)session didUpdateFrame:(ARFrame*)frame;
--(void)copyPixelBuffers: (CVImageBufferRef)pixelBuffer;
--(std::array<double, 7>)lastQuaternionTranslation: (simd_float4x4)cameraTransform;
+-(id) init;
+-(void) session: (ARSession*)session didUpdateFrame:(ARFrame*)frame;
+-(void) copyPixelBuffers: (CVImageBufferRef)pixelBuffer;
+-(std::array<double, 7>) lastQuaternionTranslation: (simd_float4x4)cameraTransform;
+-(std::array<double, 6>) lastLensIntrinsics: (ARCamera*)camera;
 
 @property (nonatomic) ArcGISArViewInterface* arcGISArView;
 @property (nonatomic) uchar* textureDataY;
@@ -99,10 +100,19 @@ using namespace Esri::ArcGISRuntime::Toolkit;
 
   [self copyPixelBuffers: frame.capturedImage];
 
-  // update
-  const std::array<double, 7> params = [self lastQuaternionTranslation: frame.camera.transform];
-  self.arcGISArView->updateCamera(params[0], params[1], params[2], params[3], params[4], params[5], params[6]);
+  // render the AR frame
   self.arcGISArView->update();
+
+  // update the scene view camera
+  auto camera = [self lastQuaternionTranslation: frame.camera.transform];
+  self.arcGISArView->updateCamera(camera[0], camera[1], camera[2], camera[3], camera[4], camera[5], camera[6]);
+
+  // udapte the field of view, based on the
+  auto lens = [self lastLensIntrinsics: frame.camera];
+  self.arcGISArView->updateFieldOfView(lens[0], lens[1], lens[2], lens[3], lens[4], lens[5]);
+
+  // render the frame of the ArcGIS runtime
+  self.arcGISArView->renderFrame();
 }
 
 // The first texture
@@ -162,6 +172,21 @@ using namespace Esri::ArcGISRuntime::Toolkit;
         (cameraTransform.columns[3].x) * translationTransformationFactor,
         (-cameraTransform.columns[3].z) * translationTransformationFactor,
         (cameraTransform.columns[3].y) * translationTransformationFactor
+  };
+}
+
+-(std::array<double, 6>) lastLensIntrinsics: (ARCamera*)camera
+{
+  auto intrinsics = camera.intrinsics;
+  auto imageResolution = camera.imageResolution;
+
+  return {
+    intrinsics.columns[0][0],
+    intrinsics.columns[1][1],
+    intrinsics.columns[2][0],
+    intrinsics.columns[2][1],
+    imageResolution.width,
+    imageResolution.height
   };
 }
 
@@ -233,12 +258,14 @@ void ArKitWrapper::setSize(const QSizeF& /*size*/)
   // Not implemented.
 }
 
-void ArKitWrapper::init()
+// this function run on the rendering thread
+void ArKitWrapper::initGL()
 {
-  m_arKitFrameRenderer.init();
-  // m_arKitPointCloudRenderer.init(); // for debugging the AR tracking
+  m_arKitFrameRenderer.initGL();
+  // m_arKitPointCloudRenderer.initGL(); // for debugging the AR tracking
 }
 
+// this function run on the rendering thread
 void ArKitWrapper::beforeRendering()
 {
   // create textures ids
@@ -263,11 +290,13 @@ void ArKitWrapper::beforeRendering()
   m_textureCbCr.setData(QOpenGLTexture::RG, QOpenGLTexture::UInt8, m_impl->arSessionDelegate.textureDataCbCr);
 }
 
+// this function run on the rendering thread
 void ArKitWrapper::afterRendering()
 {
   m_impl->arSessionDelegate.render_in_progress = false;
 }
 
+// this function run on the rendering thread
 void ArKitWrapper::render()
 {
   beforeRendering();

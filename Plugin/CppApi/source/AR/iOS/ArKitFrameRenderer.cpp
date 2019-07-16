@@ -42,7 +42,7 @@ const GLfloat kTexCoord[] = {
 };
 } // anonymous namespace
 
-void ArKitFrameRenderer::init()
+void ArKitFrameRenderer::initGL()
 {
   initializeOpenGLFunctions();
 

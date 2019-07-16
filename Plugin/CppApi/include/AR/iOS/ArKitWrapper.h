@@ -40,22 +40,23 @@ public:
 
   void startTracking();
   void stopTracking();
+  bool isTracking() const;
 
   // properties
   QSizeF size() const;
   void setSize(const QSizeF& size);
 
-  void init();
+  void initGL();
   void beforeRendering();
   void afterRendering();
   void render();
 
-  // low level access to AR kit
+  // low level access to AR kit. Not implemented.
   //  ARSession* session() const;
   //  ARConfiguration* configuration() const;
   //  ArSessionDelegate* delegate() const;
 
-  // point cloud data,
+  // point cloud data
   float* modelViewProjectionData() const;
   const float* pointCloudData() const;
   int32_t pointCloudSize() const;

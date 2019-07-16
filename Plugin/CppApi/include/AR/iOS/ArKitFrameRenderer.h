@@ -32,7 +32,7 @@ class ArKitWrapper;
 class ArKitFrameRenderer : public QOpenGLFunctions
 {
 public:
-  void init();
+  void initGL();
   void render(GLuint textureIdY, GLuint textureIdCbCr);
 
 private:

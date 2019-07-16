@@ -53,22 +53,13 @@ class ArWrapper
 public:
   ArWrapper(void*);
 
-  void init() const;
+  void initGL() const;
   void render() const;
-
-  bool isValid() const;
 
   void startTracking();
   void stopTracking();
-  void setSize(const QSize&);
-  void setTextureId(GLuint);
-  void update();
 
-  QObject* transformationMatrix() const; // return QmlTransformationMatrix or TransformationMatrix object
-  float* transformedUvs() const;
-  float* modelViewProjectionData() const;
-  const float* pointCloudData() const;
-  int32_t pointCloudSize() const;
+  void setSize(const QSize&);
 };
 
 #endif

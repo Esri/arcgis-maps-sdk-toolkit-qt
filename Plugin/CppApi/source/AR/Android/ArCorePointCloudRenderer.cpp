@@ -44,7 +44,7 @@ void ArCorePointCloudRenderer::init()
                                               "precision mediump float;"
                                               "varying vec4 v_Color;"
                                               "void main() {"
-                                              "    gl_FragColor = v_Color;"
+                                              "  gl_FragColor = v_Color;"
                                               "}");
 
   m_program->link();

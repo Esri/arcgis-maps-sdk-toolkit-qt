@@ -19,6 +19,7 @@
 
 #include <QAndroidJniEnvironment>
 #include <QSize>
+#include <QTimer>
 #include <QMatrix4x4>
 #include <QOpenGLFunctions>
 #include "ArCoreFrameRenderer.h"
@@ -53,33 +54,32 @@ public:
 
   void setTextureId(GLuint textureId);
 
-  void init();
-  void render();
-
-  // low level access to AR core
-  ArSession* session();
-  ArFrame* frame();
-
-  //private:
-  JNIEnv* jniEnvironment();
-  jobject applicationActivity();
-
-  bool install();
-  void create();
-  void pause();
-  void resume();
+  void initGL();
   void beforeRendering();
+  void render();
   void afterRendering();
-  void destroy();
 
-//  TransformationMatrix transformationMatrix() const;
-
+  // parameters to render the point cloud
   const float* transformedUvs() const;
   const float* modelViewProjectionData() const;
   const float* pointCloudData() const;
   int32_t pointCloudSize() const;
 
+  // low level access to AR core
+  ArSession* session();
+  ArFrame* frame();
+
 private:
+  //private:
+  JNIEnv* jniEnvironment();
+  jobject applicationActivity();
+
+  bool installArCore();
+  void createArSession();
+
+  std::array<double, 7> lastQuaternionTranslation() const;
+  std::array<double, 6> lastLensIntrinsics() const;
+
   ArcGISArViewInterface* m_arcGISArView = nullptr;
 
   QAndroidJniEnvironment m_jniEnvironment;
@@ -108,9 +108,8 @@ private:
   QMatrix4x4 m_modelViewProjection;
   const float* m_pointCloudData = nullptr;
   int32_t m_pointCloudSize = 0;
-  float m_pose[7];
 
-  QString m_errorMessage;
+  QTimer m_timer;
 };
 
 } // Toolkit

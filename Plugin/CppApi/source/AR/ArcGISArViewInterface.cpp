@@ -32,7 +32,7 @@ using namespace Esri::ArcGISRuntime::Toolkit;
   \brief A constructor that accepts an optional \a parent.
  */
 ArcGISArViewInterface::ArcGISArViewInterface(QQuickItem* parent):
-  ArcGISArViewInterface(false, false, parent)
+  ArcGISArViewInterface(true, true, parent)
 {
 }
 
@@ -45,9 +45,11 @@ ArcGISArViewInterface::ArcGISArViewInterface(QQuickItem* parent):
   \li \a parent - optional.
   \endlist
  */
-ArcGISArViewInterface::ArcGISArViewInterface(bool /*renderVideoFeed*/, bool /*tryUsingArKit*/, QQuickItem* parent):
+ArcGISArViewInterface::ArcGISArViewInterface(bool renderVideoFeed, bool tryUsingArKit, QQuickItem* parent):
   QQuickFramebufferObject(parent),
-  m_arWrapper(new ArWrapper(this))
+  m_arWrapper(new ArWrapper(this)),
+  m_renderVideoFeed(renderVideoFeed),
+  m_tryUsingArKit(tryUsingArKit)
 {
   setFlag(ItemHasContents, true);
 }
@@ -62,16 +64,21 @@ ArcGISArViewInterface::~ArcGISArViewInterface()
 /*!
   \brief Not implemented.
  */
-double ArcGISArViewInterface::translationTransformationFactor() const
+double ArcGISArViewInterface::translationFactor() const
 {
-  return 0.0;
+  return m_translationFactor;
 }
 
 /*!
   \brief Not implemented.
  */
-void ArcGISArViewInterface::setTranslationTransformationFactor(double /*translationTransformationFactor*/)
+void ArcGISArViewInterface::setTranslationFactor(double translationFactor)
 {
+  if (m_translationFactor == translationFactor)
+    return;
+
+  m_translationFactor = translationFactor;
+  emit translationFactorChanged();
 }
 
 /*!
@@ -79,14 +86,39 @@ void ArcGISArViewInterface::setTranslationTransformationFactor(double /*translat
  */
 bool ArcGISArViewInterface::renderVideoFeed() const
 {
-  return false;
+  return m_renderVideoFeed;
 }
 
 /*!
   \brief Not implemented.
  */
-void ArcGISArViewInterface::setRenderVideoFeed(bool /*renderVideoFeed*/)
+void ArcGISArViewInterface::setRenderVideoFeed(bool renderVideoFeed)
 {
+  if (m_renderVideoFeed == renderVideoFeed)
+    return;
+
+  m_renderVideoFeed = renderVideoFeed;
+  emit renderVideoFeedChanged();
+}
+
+/*!
+  \brief Not implemented.
+ */
+bool ArcGISArViewInterface::tryUsingArKit() const
+{
+  return m_tryUsingArKit;
+}
+
+/*!
+  \brief Not implemented.
+ */
+void ArcGISArViewInterface::setTryUsingArKit(bool tryUsingArKit)
+{
+  if (m_tryUsingArKit == tryUsingArKit)
+    return;
+
+  m_tryUsingArKit = tryUsingArKit;
+  emit tryUsingArKitChanged();
 }
 
 /*!
@@ -94,7 +126,7 @@ void ArcGISArViewInterface::setRenderVideoFeed(bool /*renderVideoFeed*/)
  */
 bool ArcGISArViewInterface::tracking() const
 {
-  return m_timerId != 0;
+  return m_tracking;
 }
 
 /*!
@@ -102,7 +134,7 @@ bool ArcGISArViewInterface::tracking() const
  */
 void ArcGISArViewInterface::setTracking(bool tracking)
 {
-  if (ArcGISArViewInterface::tracking() == tracking)
+  if (m_tracking == tracking)
     return;
 
   if (tracking)
@@ -118,6 +150,8 @@ void ArcGISArViewInterface::setTracking(bool tracking)
  */
 void ArcGISArViewInterface::resetTracking()
 {
+  // m_initialLocation = nullptr;
+  startTracking();
 }
 
 /*!
@@ -142,11 +176,7 @@ void ArcGISArViewInterface::startTracking()
 {
   Q_CHECK_PTR(m_arWrapper);
   m_arWrapper->startTracking();
-
-  // TODO: hack to run a timer on Android. This timer will be removed in the future.
-#ifdef Q_OS_ANDROID
-  m_timerId = startTimer(50);
-#endif
+  m_tracking = true;
 }
 
 /*!
@@ -156,12 +186,7 @@ void ArcGISArViewInterface::stopTracking()
 {
   Q_CHECK_PTR(m_arWrapper);
   m_arWrapper->stopTracking();
-
-  // TODO: hack to run a timer on Android. This timer will be removed in the future.
-#ifdef Q_OS_ANDROID
-  killTimer(m_timerId);
-  m_timerId = 0;
-#endif
+  m_tracking = false;
 }
 
 /*!
@@ -177,20 +202,6 @@ void ArcGISArViewInterface::geometryChanged(const QRectF& newGeometry, const QRe
   // update the geometry of the AR view
   Q_CHECK_PTR(m_arWrapper);
   m_arWrapper->setSize(newGeometry.size().toSize());
-}
-
-/*!
-  \internal
-
-   Hack to run a timer on Android. This timer will be removed in the future.
- */
-void ArcGISArViewInterface::timerEvent(QTimerEvent* /*event*/)
-{
-  // render the frame buffer object
-  update();
-
-  // update the scene view camera. Not implemented.
-//  updateCamera(0, 0, 0, 0, 0, 0, 0);
 }
 
 /*!
@@ -269,6 +280,13 @@ ArSession* ArcGISArViewInterface::arRawPtr<ArSession>() const
 {
   Q_CHECK_PTR(m_arWrapper);
   return m_arWrapper->session();
+}
+
+template<>
+ArFrame* ArcGISArViewInterface::arRawPtr<ArFrame>() const
+{
+  Q_CHECK_PTR(m_arWrapper);
+  return m_arWrapper->frame();
 }
 
 #endif

@@ -16,6 +16,10 @@
 
 #include "ArcGISArView.h"
 #include "TransformationMatrix.h"
+#include "SceneQuickView.h"
+#include "TransformationMatrixCameraController.h"
+#include <QQuickWindow>
+#include <QScreen>
 
 /*!
   \class Esri::ArcGISRuntime::Toolkit::ArcGISArView
@@ -33,7 +37,8 @@ using namespace Esri::ArcGISRuntime::Toolkit;
   \brief A constructor that accepts an optional \a parent.
  */
 ArcGISArView::ArcGISArView(QQuickItem* parent):
-  ArcGISArViewInterface(parent)
+  ArcGISArViewInterface(parent),
+  m_tmcc(new TransformationMatrixCameraController(this))
 {
 }
 
@@ -47,8 +52,10 @@ ArcGISArView::ArcGISArView(QQuickItem* parent):
   \endlist
  */
 ArcGISArView::ArcGISArView(bool renderVideoFeed, bool tryUsingArKit, QQuickItem* parent):
-  ArcGISArViewInterface(renderVideoFeed, tryUsingArKit, parent)
+  ArcGISArViewInterface(renderVideoFeed, tryUsingArKit, parent),
+  m_tmcc(new TransformationMatrixCameraController(this))
 {
+  startTracking();
 }
 
 /*!
@@ -74,8 +81,12 @@ void ArcGISArView::setOriginCamera(const Camera& originCamera)
   if (m_originCamera == originCamera)
     return;
 
+  m_tmcc->setOriginCamera(originCamera);
+
   m_originCamera = originCamera;
   emit originCameraChanged();
+
+  resetTracking();
 }
 
 /*!
@@ -100,10 +111,23 @@ void ArcGISArView::setSceneView(SceneQuickView* sceneView)
   m_sceneView = sceneView;
   m_sceneView->setSpaceEffect(SpaceEffect::Transparent);
   m_sceneView->setAtmosphereEffect(AtmosphereEffect::None);
-  m_sceneView->setParent(this);
-  emit sceneViewChanged();
+  m_sceneView->setManualRendering(true);
+  m_sceneView->setCameraController(m_tmcc);
 
-  startTracking();
+  emit sceneViewChanged();
+}
+
+/*!
+  \brief...
+ */
+
+void ArcGISArView::setTranslationFactor(double translationFactor)
+{
+  if (ArcGISArViewInterface::translationFactor() == translationFactor)
+    return;
+
+  m_tmcc->setTranslationFactor(translationFactor);
+  ArcGISArViewInterface::setTranslationFactor(translationFactor);
 }
 
 /*!
@@ -120,13 +144,54 @@ Point ArcGISArView::arScreenToLocation(const Point& /*screenPoint*/) const
 void ArcGISArView::updateCamera(double quaternionX, double quaternionY, double quaternionZ, double quaternionW,
                                 double translationX, double translationY, double translationZ)
 {
+  auto matrix = TransformationMatrix::createWithQuaternionAndTranslation(quaternionX, quaternionY, quaternionZ, quaternionW,
+                                                                          translationX, translationY, translationZ);
+  m_tmcc->setTransformationMatrix(matrix);
+}
+
+/*!
+  \brief Not implemented.
+ */
+void ArcGISArView::updateFieldOfView(double xFocalLength, double yFocalLength,
+                                     double xPrincipal, double yPrincipal,
+                                     double xImageSize, double yImageSize)
+{
   if (!m_sceneView)
     return;
 
-  TransformationMatrix newMatrix(quaternionX, quaternionY, quaternionZ, quaternionW,
-                                 translationX, translationY, translationZ);
-  TransformationMatrix matrix = m_originCamera.transformationMatrix().addTransformation(newMatrix);
-  m_sceneView->setViewpointCamera(Camera(matrix));
+  // get the screen orientation
+  const Qt::ScreenOrientations orientation = window()->screen()->orientation();
+  DeviceOrientation deviceOrientation;
+
+  switch (orientation) {
+    case Qt::PortraitOrientation:
+      deviceOrientation = DeviceOrientation::Portrait;
+      break;
+    case Qt::LandscapeOrientation:
+      deviceOrientation = DeviceOrientation::LandscapeLeft;
+      break;
+    case Qt::InvertedPortraitOrientation:
+      deviceOrientation = DeviceOrientation::ReversePortrait;
+      break;
+    case Qt::InvertedLandscapeOrientation:
+      deviceOrientation = DeviceOrientation::LandscapeRight;
+      break;
+    default:
+      deviceOrientation = DeviceOrientation::Portrait;
+      break;
+  }
+
+  // set the field of view
+  m_sceneView->setFieldOfViewFromLensIntrinsics(xFocalLength, yFocalLength, xPrincipal, yPrincipal,
+                                                xImageSize, yImageSize, deviceOrientation);
+}
+
+void ArcGISArView::renderFrame()
+{
+  if (!m_sceneView)
+    return;
+
+  m_sceneView->renderFrame();
 }
 
 // signals

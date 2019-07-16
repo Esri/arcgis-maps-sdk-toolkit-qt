@@ -33,17 +33,12 @@ ArWrapper::ArWrapper(void*)
 {
 }
 
-void ArWrapper::init() const
+void ArWrapper::initGL() const
 {
 }
 
 void ArWrapper::render() const
 {
-}
-
-bool ArWrapper::isValid() const
-{
-  return false;
 }
 
 // default implementation for desktop platforms.
@@ -57,39 +52,6 @@ void ArWrapper::stopTracking()
 
 void ArWrapper::setSize(const QSize&)
 {
-}
-
-void ArWrapper::setTextureId(GLuint)
-{
-}
-
-void ArWrapper::update()
-{
-}
-
-QObject* ArWrapper::transformationMatrix() const
-{
-  return nullptr;
-}
-
-float* ArWrapper::transformedUvs() const
-{
-  return nullptr;
-}
-
-float* ArWrapper::modelViewProjectionData() const
-{
-  return nullptr;
-}
-
-const float* ArWrapper::pointCloudData() const
-{
-  return nullptr;
-}
-
-int32_t ArWrapper::pointCloudSize() const
-{
-  return 0;
 }
 
 #endif

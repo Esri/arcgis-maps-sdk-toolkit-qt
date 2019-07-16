@@ -35,7 +35,7 @@ public:
   ArCoreFrameRenderer(ArCoreWrapper* arCoreWrapper);
   ~ArCoreFrameRenderer() = default;
 
-  void init();
+  void initGL();
   void render();
 
 private:

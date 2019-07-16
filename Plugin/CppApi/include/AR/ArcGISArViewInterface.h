@@ -31,10 +31,10 @@ namespace Toolkit
 class /*TOOLKIT_EXPORT*/ ArcGISArViewInterface : public QQuickFramebufferObject
 {
   Q_OBJECT
+  Q_PROPERTY(double translationFactor READ translationFactor WRITE setTranslationFactor NOTIFY translationFactorChanged)
 
-  Q_PROPERTY(double translationTransformationFactor READ translationTransformationFactor
-             WRITE setTranslationTransformationFactor NOTIFY translationTransformationFactorChanged)
   Q_PROPERTY(bool renderVideoFeed READ renderVideoFeed WRITE setRenderVideoFeed NOTIFY renderVideoFeedChanged)
+  Q_PROPERTY(bool tryUsingArKit READ tryUsingArKit WRITE setTryUsingArKit NOTIFY tryUsingArKitChanged)
 
   // add to the design?
   Q_PROPERTY(bool tracking READ tracking WRITE setTracking NOTIFY trackingChanged)
@@ -45,16 +45,19 @@ public:
   ~ArcGISArViewInterface() override;
 
   // properties
-  double translationTransformationFactor() const;
-  void setTranslationTransformationFactor(double translationTransformationFactor);
+  double translationFactor() const;
+  virtual void setTranslationFactor(double translationFactor);
 
   bool renderVideoFeed() const;
   void setRenderVideoFeed(bool renderVideoFeed);
 
+  bool tryUsingArKit() const;
+  void setTryUsingArKit(bool tryUsingArKit);
+
   bool tracking() const;
   void setTracking(bool tracking);
 
-  // methods invokable?
+  // methods
   Q_INVOKABLE void resetTracking();
   Q_INVOKABLE bool resetUsingLocationService();
   Q_INVOKABLE void resetUsingSpacialAnchor();
@@ -68,24 +71,35 @@ public:
   // create renderer for frame buffer object
   QQuickFramebufferObject::Renderer* createRenderer() const override;
 
-  // update the matrix transformation
+  // update the the renders
   virtual void updateCamera(double quaternionX, double quaternionY, double quaternionZ, double quaternionW,
                             double translationX, double translationY, double translationZ) = 0;
 
+  virtual void updateFieldOfView(double xFocalLength, double yFocalLength,
+                                 double xPrincipal, double yPrincipal,
+                                 double xImageSize, double yImageSize) = 0;
+
+  virtual void renderFrame() = 0;
+
 signals:
-  void errorOccurred(const QString& errorMessage);
-  void translationTransformationFactorChanged();
+  void translationFactorChanged();
   void renderVideoFeedChanged();
+  void tryUsingArKitChanged();
   void trackingChanged();
+
+  void errorOccurred(const QString& errorMessage);
 
 protected:
   void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry) override;
-  void timerEvent(QTimerEvent* event) override;
 
 private:
-  int m_timerId = 0;
   mutable ArcGISArViewRenderer* m_arViewRenderer = nullptr;
   std::unique_ptr<ArWrapper> m_arWrapper;
+
+  double m_translationFactor = 0.0;
+  bool m_renderVideoFeed = true;
+  bool m_tryUsingArKit = true;
+  bool m_tracking = true;
 };
 
 } // Toolkit

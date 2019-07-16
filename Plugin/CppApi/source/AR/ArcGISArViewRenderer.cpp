@@ -42,7 +42,7 @@ void ArcGISArViewRenderer::render()
   if (!m_isInitialized)
   {
     m_isInitialized = true;
-    m_arWrapper->init();
+    m_arWrapper->initGL();
   }
 
   m_arWrapper->render();
