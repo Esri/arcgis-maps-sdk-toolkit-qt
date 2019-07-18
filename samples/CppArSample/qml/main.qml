@@ -9,8 +9,8 @@
 // notice and use restrictions.
 //
 // See the Sample code usage restrictions document for further information.
-//
 
+import QtQuick 2.12
 import QtQuick.Controls 2.2
 import Esri.CppArSample 1.0
 
@@ -31,7 +31,25 @@ ApplicationWindow {
     }
 
     CppArSample {
+        id: arSample
         arcGISArView: arcGISArView
         sceneView: sceneView
+    }
+
+    Column {
+        anchors {
+            top: parent.top
+            left: parent.left
+            margins: 5
+        }
+        spacing: 5
+        Button {
+            text: "Brest"
+            onClicked: arSample.createBrestScene();
+        }
+        Button {
+            text: "Berlin"
+            onClicked: arSample.createBerlinScene();
+        }
     }
 }

@@ -16,7 +16,6 @@
 
 #include "ArcGISArView.h"
 #include "TransformationMatrix.h"
-#include "SceneQuickView.h"
 #include "TransformationMatrixCameraController.h"
 #include <QQuickWindow>
 #include <QScreen>
@@ -120,7 +119,6 @@ void ArcGISArView::setSceneView(SceneQuickView* sceneView)
 /*!
   \brief...
  */
-
 void ArcGISArView::setTranslationFactor(double translationFactor)
 {
   if (ArcGISArViewInterface::translationFactor() == translationFactor)

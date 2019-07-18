@@ -18,6 +18,7 @@
 #include "IntegratedMeshLayer.h"
 #include "ArcGISSceneLayer.h"
 #include "ArcGISArView.h"
+#include "GeometryEngine.h"
 
 #include <QUrl>
 #include <QFileInfo>
@@ -29,7 +30,6 @@ using namespace Esri::ArcGISRuntime::Toolkit;
 CppArSample::CppArSample(QObject* parent):
   QObject(parent)
 {
-  createScene();
 }
 
 CppArSample::~CppArSample()
@@ -62,31 +62,22 @@ void CppArSample::setSceneView(SceneQuickView* sceneView)
     return;
 
   m_sceneView = sceneView;
-  m_sceneView->setArcGISScene(m_scene);
-  m_sceneView->setSpaceEffect(SpaceEffect::Transparent);
-  m_sceneView->setAtmosphereEffect(AtmosphereEffect::None);
   emit sceneViewChanged();
 }
 
-void CppArSample::createScene()
-{
-  // from https://devtopia.esri.com/mort5161/CppArSamples/blob/b63c7b62c217d36fa44fb91fd271554061431af5/ArcGISAR.Droid/TestScenes.cs
+// from https://devtopia.esri.com/mort5161/ARSamples/blob/master/ArcGISAR.Droid/TestScenes.cs
 
-  // Brest France
-  Camera camera(Point(-4.49492, 48.3808, 48.2511, SpatialReference::wgs84()), 344.488, 74.1212, 0.0);
-  const QUrl elevationUrl("https://scene.arcgis.com/arcgis/rest/services/BREST_DTM_1M/ImageServer");
-  const QUrl layerUrl("https://tiles.arcgis.com/tiles/P3ePLMYs2RVChkJx/arcgis/rest/services/Buildings_Brest/SceneServer/layers/0");
-  auto layer = new ArcGISSceneLayer(layerUrl, this);
+void CppArSample::createBrestScene()
+{
+  if (m_scene)
+    delete m_scene;
 
   // create scene
   m_scene = new Scene(this);
 
-  // set initial viewpoint
-  const Viewpoint viewpoint(camera.location(), camera);
-  m_scene->setInitialViewpoint(viewpoint);
-
-  // set surface
-  const QList<ElevationSource*> sources = { new ArcGISTiledElevationSource(elevationUrl, this) };
+  // create surface
+  const QUrl elevationSourceUrl("https://scene.arcgis.com/arcgis/rest/services/BREST_DTM_1M/ImageServer");
+  const QList<ElevationSource*> sources = { new ArcGISTiledElevationSource(elevationSourceUrl, this) };
   Surface* baseSurface = new Surface(sources, this);
 
   BackgroundGrid grid;
@@ -97,8 +88,52 @@ void CppArSample::createScene()
 
   m_scene->setBaseSurface(baseSurface);
 
-  // set layer
-  layer->setOpacity(1.0f);
-
+  // create layer
+  const QUrl brestFrance("https://tiles.arcgis.com/tiles/P3ePLMYs2RVChkJx/arcgis/rest/services/Buildings_Brest/SceneServer/layers/0");
+  ArcGISSceneLayer* layer = new ArcGISSceneLayer(brestFrance, this);
   m_scene->operationalLayers()->append(layer);
+
+  // set origin camera
+  const Camera observerCamera(Point(-4.49492, 48.3808, 48.2511, SpatialReference::wgs84()), 344.488, 74.1212, 0.0);
+  m_arcGISArView->setOriginCamera(observerCamera);
+  m_arcGISArView->setTranslationFactor(250);
+
+  m_sceneView->setArcGISScene(m_scene);
+}
+
+void CppArSample::createBerlinScene()
+{
+  if (m_scene)
+    delete m_scene;
+
+  // create scene
+  m_scene = new Scene(Basemap::imagery(this), this);
+
+  // create surface
+  const QUrl elevationSourceUrl("http://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer");
+  const QList<ElevationSource*> sources = { new ArcGISTiledElevationSource(elevationSourceUrl, this) };
+  Surface* baseSurface = new Surface(sources, this);
+
+  BackgroundGrid grid;
+  grid.setVisible(false);
+  baseSurface->setBackgroundGrid(grid);
+  baseSurface->setNavigationConstraint(NavigationConstraint::None);
+  m_scene->setBaseSurface(baseSurface);
+
+  // create layer
+  const QUrl buildingsService("https://tiles.arcgis.com/tiles/P3ePLMYs2RVChkJx/arcgis/rest/services/Buildings_Berlin/SceneServer");
+  ArcGISSceneLayer* layer = new ArcGISSceneLayer(buildingsService, this);
+  m_scene->operationalLayers()->append(layer);
+
+  // set origin camera
+  connect(layer, &ArcGISSceneLayer::doneLoading, this, [this, layer](Error)
+  {
+    const Point center = geometry_cast<Point>(GeometryEngine::project(layer->fullExtent().center(), SpatialReference::wgs84()));
+    const Camera camera(center.y(), center.x(), 600.0, 120.0, 60.0, 0.0);
+    m_arcGISArView->setOriginCamera(camera);
+  });
+  m_arcGISArView->setTranslationFactor(1000);
+
+  // set scene
+  m_sceneView->setArcGISScene(m_scene);
 }

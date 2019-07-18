@@ -15,6 +15,8 @@
  ******************************************************************************/
 
 #include "ArcGISArViewInterface.h"
+#include <QQuickWindow>
+#include <QScreen>
 
 /*!
   \class Esri::ArcGISRuntime::Toolkit::ArcGISArViewInterface
@@ -177,6 +179,10 @@ void ArcGISArViewInterface::startTracking()
   Q_CHECK_PTR(m_arWrapper);
   m_arWrapper->startTracking();
   m_tracking = true;
+
+  // enable detection of orientation changes.
+  window()->screen()->setOrientationUpdateMask(Qt::LandscapeOrientation	| Qt::PortraitOrientation |
+                                               Qt::InvertedLandscapeOrientation | Qt::InvertedPortraitOrientation);
 }
 
 /*!

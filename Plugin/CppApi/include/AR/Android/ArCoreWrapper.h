@@ -55,9 +55,10 @@ public:
   void setTextureId(GLuint textureId);
 
   void initGL();
-  void beforeRendering();
   void render();
-  void afterRendering();
+
+  void udpateArCamera();
+  void releaseArData();
 
   // parameters to render the point cloud
   const float* transformedUvs() const;

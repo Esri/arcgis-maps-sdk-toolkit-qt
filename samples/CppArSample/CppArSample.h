@@ -42,13 +42,14 @@ public:
   Esri::ArcGISRuntime::SceneQuickView* sceneView() const;
   void setSceneView(Esri::ArcGISRuntime::SceneQuickView* sceneView);
 
+  Q_INVOKABLE void createBrestScene();
+  Q_INVOKABLE void createBerlinScene();
+
 signals:
   void arcGISArViewChanged();
   void sceneViewChanged();
 
 private:
-  void createScene();
-
   Esri::ArcGISRuntime::Toolkit::ArcGISArView* m_arcGISArView = nullptr;
   Esri::ArcGISRuntime::SceneQuickView* m_sceneView = nullptr;
   Esri::ArcGISRuntime::Scene* m_scene = nullptr;

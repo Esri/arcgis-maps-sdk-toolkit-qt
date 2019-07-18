@@ -105,7 +105,7 @@ void QmlArcGISArView::updateCamera(double quaternionX, double quaternionY, doubl
   if (!m_tmcc)
   {
     // create TMCC object
-    QQmlComponent tmcc(qmlEngine(this), QUrl("qrc:/tmcc.qml"));
+    QQmlComponent tmcc(qmlEngine(this), QUrl("qrc:/qml/tmcc.qml"));
     m_tmcc = tmcc.create();
   }
 
@@ -113,13 +113,13 @@ void QmlArcGISArView::updateCamera(double quaternionX, double quaternionY, doubl
     return;
 
   QMetaObject::invokeMethod(m_tmcc, "createAndSetTransformationMatrix", Qt::DirectConnection,
-                            Q_ARG(double, quaternionX),
-                            Q_ARG(double, quaternionY),
-                            Q_ARG(double, quaternionZ),
-                            Q_ARG(double, quaternionW),
-                            Q_ARG(double, translationX),
-                            Q_ARG(double, translationY),
-                            Q_ARG(double, translationZ));
+                            Q_ARG(QVariant, quaternionX),
+                            Q_ARG(QVariant, quaternionY),
+                            Q_ARG(QVariant, quaternionZ),
+                            Q_ARG(QVariant, quaternionW),
+                            Q_ARG(QVariant, translationX),
+                            Q_ARG(QVariant, translationY),
+                            Q_ARG(QVariant, translationZ));
 }
 
 /*!
@@ -156,13 +156,13 @@ void QmlArcGISArView::updateFieldOfView(double xFocalLength, double yFocalLength
 
   // set the field of view
   QMetaObject::invokeMethod(m_sceneView, "setFieldOfViewFromLensIntrinsics", Qt::DirectConnection,
-                            Q_ARG(double, xFocalLength),
-                            Q_ARG(double, yFocalLength),
-                            Q_ARG(double, xPrincipal),
-                            Q_ARG(double, yPrincipal),
-                            Q_ARG(double, xImageSize),
-                            Q_ARG(double, yImageSize),
-                            Q_ARG(int, deviceOrientation));
+                            Q_ARG(QVariant, xFocalLength),
+                            Q_ARG(QVariant, yFocalLength),
+                            Q_ARG(QVariant, xPrincipal),
+                            Q_ARG(QVariant, yPrincipal),
+                            Q_ARG(QVariant, xImageSize),
+                            Q_ARG(QVariant, yImageSize),
+                            Q_ARG(QVariant, deviceOrientation));
 }
 
 void QmlArcGISArView::renderFrame()

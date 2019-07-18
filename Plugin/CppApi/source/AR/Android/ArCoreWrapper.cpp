@@ -157,10 +157,10 @@ void ArCoreWrapper::initGL()
 // this function run on the rendering thread
 void ArCoreWrapper::render()
 {
-  beforeRendering();
+  udpateArCamera();
+
   m_arCoreFrameRenderer.render();
   //  m_arCorePointCloudRenderer.render();
-  afterRendering();
 }
 
 ArSession* ArCoreWrapper::session()
@@ -295,17 +295,39 @@ void ArCoreWrapper::createArSession()
   ArConfig_destroy(arConfig);
 }
 
-void ArCoreWrapper::beforeRendering()
+void ArCoreWrapper::udpateArCamera()
 {
   if (!m_arSession)
     return;
 
+  // release data if necessary
+  if (m_arPointCloud)
+  {
+    ArPointCloud_release(m_arPointCloud);
+    m_arPointCloud = nullptr;
+  }
+
+  if (m_arCamera)
+  {
+    ArCamera_release(m_arCamera);
+    m_arCamera = nullptr;
+  }
+
+//  if (m_arFrame)
+//  {
+//    ArFrame_destroy(m_arFrame);
+//    m_arCamera = nullptr;
+//  }
+
   // create and update AR frame
-  ArFrame_create(m_arSession, &m_arFrame);
   if (!m_arFrame)
   {
-    emit m_arcGISArView->errorOccurred("Fails to create an AR frame.");
-    return;
+    ArFrame_create(m_arSession, &m_arFrame);
+    if (!m_arFrame)
+    {
+      emit m_arcGISArView->errorOccurred("Fails to create an AR frame.");
+      return;
+    }
   }
 
   // note: message from Android team
@@ -375,21 +397,6 @@ void ArCoreWrapper::beforeRendering()
   //  }
 }
 
-void ArCoreWrapper::afterRendering()
-{
-  if (m_arPointCloud)
-  {
-    ArPointCloud_release(m_arPointCloud);
-    m_arPointCloud = nullptr;
-  }
-
-  if (m_arCamera)
-  {
-    ArCamera_release(m_arCamera);
-    m_arCamera = nullptr;
-  }
-}
-
 std::array<double, 7> ArCoreWrapper::lastQuaternionTranslation() const
 {
   ArPose* pose = nullptr;
@@ -405,10 +412,8 @@ std::array<double, 7> ArCoreWrapper::lastQuaternionTranslation() const
   ArPose_getPoseRaw(m_arSession, pose, poseRaw);
   ArPose_destroy(pose);
 
-  constexpr double tscale = 250; // HorizontalSpeedFactor
   return {
-    poseRaw[0], poseRaw[1], poseRaw[2], poseRaw[3],
-    poseRaw[4] * tscale, poseRaw[5] * tscale, poseRaw[6] * tscale
+    poseRaw[0], poseRaw[1], poseRaw[2], poseRaw[3], poseRaw[4], poseRaw[5], poseRaw[6]
   };
 }
 

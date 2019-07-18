@@ -19,13 +19,13 @@
 
 #include "ArcGISArViewInterface.h"
 #include "Camera.h"
+#include "SceneQuickView.h"
 
 namespace Esri
 {
 namespace ArcGISRuntime
 {
 
-class SceneQuickView;
 class TransformationMatrixCameraController;
 
 namespace Toolkit

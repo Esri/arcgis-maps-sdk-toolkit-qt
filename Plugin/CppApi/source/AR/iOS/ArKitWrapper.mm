@@ -220,6 +220,7 @@ ArKitWrapper::ArKitWrapper(ArcGISArViewInterface* arcGISArView) :
   // Create an AR session configuration
   m_impl->arConfiguration = [ARWorldTrackingConfiguration new];
   m_impl->arConfiguration.worldAlignment = ARWorldAlignmentGravityAndHeading;
+  m_impl->arConfiguration.planeDetection = ARPlaneDetectionHorizontal;
 
   // delegate to get the frames
   m_impl->arSessionDelegate = [[ArcGISArSessionDelegate alloc]init];

@@ -20,6 +20,6 @@ TransformationMatrixCameraController {
         var matrix = TransformationMatrix.createWithQuaternionAndTranslation(
                     quaternionX, quaternionY, quaternionZ, quaternionW,
                     translationX, translationY, translationZ);
-        root.setTransformationMatrix(matrix);
+        root.transformationMatrix = matrix;
     }
 }
