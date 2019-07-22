@@ -46,6 +46,8 @@ public:
   QObject* sceneView() const;
   void setSceneView(QObject* sceneView);
 
+  void setTranslationFactor(double translationFactor) override;
+
   // methods invokable?
   Q_INVOKABLE QObject* arScreenToLocation(QObject* screenPoint) const;
 

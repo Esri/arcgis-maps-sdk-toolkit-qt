@@ -141,6 +141,7 @@ using namespace Esri::ArcGISRuntime::Toolkit;
   const size_t size_0 = self.heightY * bytesPerRow_0;
   const size_t size_1 = self.heightCbCr * bytesPerRow_1;
 
+  // todo: dont malloc if the size was not changed
   self.textureDataY = static_cast<uchar*>(malloc(size_0));
   self.textureDataCbCr = static_cast<uchar*>(malloc(size_1));
 
@@ -158,21 +159,20 @@ using namespace Esri::ArcGISRuntime::Toolkit;
 
   // A quaternion used to compensate for the pitch being 90 degrees on `ARKit`; used to calculate the current
   // device transformation for each frame.
-  simd_quatf compensationQuat = { simd_float4 { 0.70710678118, 0.0, 0.0, 0.70710678118 }};
+  const simd_quatf compensationQuat = { simd_float4 { 0.70710678118, 0.0, 0.0, 0.70710678118 }};
+  const simd_quatf orientationQuat = { simd_float4 { 0, 0, 0, 1 }};
 
   // Calculate our final quaternion and create the new transformation matrix.
-  simd_quatf finalQuat = simd_mul(compensationQuat, simd_quaternion(cameraTransform));
+  simd_quatf finalQuat = simd_mul(simd_mul(compensationQuat, simd_quaternion(cameraTransform)), orientationQuat);
 
-  const float translationTransformationFactor = 1.0;
-
-  return { finalQuat.vector.x,
-        finalQuat.vector.y,
+  return { finalQuat.vector.y,
+        finalQuat.vector.x,
         finalQuat.vector.z,
         finalQuat.vector.w,
-        (cameraTransform.columns[3].x) * translationTransformationFactor,
-        (-cameraTransform.columns[3].z) * translationTransformationFactor,
-        (cameraTransform.columns[3].y) * translationTransformationFactor
-  };
+        (cameraTransform.columns[3].x),
+        (-cameraTransform.columns[3].z),
+        (cameraTransform.columns[3].y)
+  }
 }
 
 -(std::array<double, 6>) lastLensIntrinsics: (ARCamera*)camera
@@ -228,7 +228,7 @@ ArKitWrapper::ArKitWrapper(ArcGISArViewInterface* arcGISArView) :
   m_impl->arSession.delegate = m_impl->arSessionDelegate;
 
   // Run the view's session
-  [m_impl->arSession runWithConfiguration:m_impl->arConfiguration];
+  [m_impl->arSession runWithConfiguration:m_impl->arConfiguration options: ARSessionRunOptionResetTracking];
 }
 
 ArKitWrapper::~ArKitWrapper()
@@ -269,7 +269,8 @@ void ArKitWrapper::initGL()
 // this function run on the rendering thread
 void ArKitWrapper::beforeRendering()
 {
-  // create textures ids
+  // todo: create textures ids
+  // dont recreate if size didnt changed
   if (m_textureY.isCreated())
     m_textureY.destroy();
 

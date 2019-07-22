@@ -2,5 +2,7 @@
     <qresource prefix="/qml">
         <file>main.qml</file>
         <file>tmcc.qml</file>
+        <file>BerlinScene.qml</file>
+        <file>BrestScene.qml</file>
     </qresource>
 </RCC>

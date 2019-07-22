@@ -63,6 +63,11 @@ void QmlArcGISArView::setOriginCamera(QObject* originCamera)
     return;
 
   m_originCamera = originCamera;
+
+  // set origin camera to tmcc if available
+  if (m_tmcc)
+    m_tmcc->setProperty("originCamera", QVariant::fromValue(m_originCamera));
+
   emit originCameraChanged();
 }
 
@@ -89,6 +94,21 @@ void QmlArcGISArView::setSceneView(QObject* sceneView)
 }
 
 /*!
+  \brief...
+ */
+void QmlArcGISArView::setTranslationFactor(double translationFactor)
+{
+  if (ArcGISArViewInterface::translationFactor() == translationFactor)
+    return;
+
+  // set translation factor to tmcc
+  if (m_tmcc)
+    m_tmcc->setProperty("translationFactor", translationFactor);
+
+  ArcGISArViewInterface::setTranslationFactor(translationFactor);
+}
+
+/*!
   \brief ...
  */
 QObject* QmlArcGISArView::arScreenToLocation(QObject* /*screenPoint*/) const
@@ -102,11 +122,21 @@ QObject* QmlArcGISArView::arScreenToLocation(QObject* /*screenPoint*/) const
 void QmlArcGISArView::updateCamera(double quaternionX, double quaternionY, double quaternionZ, double quaternionW,
                                    double translationX, double translationY, double translationZ)
 {
-  if (!m_tmcc)
+  if (m_sceneView && !m_tmcc)
   {
     // create TMCC object
     QQmlComponent tmcc(qmlEngine(this), QUrl("qrc:/qml/tmcc.qml"));
     m_tmcc = tmcc.create();
+
+    // set TMCC to scene view
+    m_sceneView->setProperty("cameraController", QVariant::fromValue(m_tmcc));
+
+    // set origin camera to tmcc if available
+    if (m_originCamera)
+      m_tmcc->setProperty("originCamera", QVariant::fromValue(m_originCamera));
+
+    // set translation factor to tmcc
+    m_tmcc->setProperty("translationFactor", translationFactor());
   }
 
   if (!m_tmcc)
@@ -155,7 +185,8 @@ void QmlArcGISArView::updateFieldOfView(double xFocalLength, double yFocalLength
   }
 
   // set the field of view
-  QMetaObject::invokeMethod(m_sceneView, "setFieldOfViewFromLensIntrinsics", Qt::DirectConnection,
+  QMetaObject::invokeMethod(m_tmcc, "setFieldOfViewFromLensIntrinsics", Qt::DirectConnection,
+                            Q_ARG(QVariant, QVariant::fromValue(m_sceneView)),
                             Q_ARG(QVariant, xFocalLength),
                             Q_ARG(QVariant, yFocalLength),
                             Q_ARG(QVariant, xPrincipal),

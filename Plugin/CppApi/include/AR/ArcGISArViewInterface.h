@@ -96,7 +96,7 @@ private:
   mutable ArcGISArViewRenderer* m_arViewRenderer = nullptr;
   std::unique_ptr<ArWrapper> m_arWrapper;
 
-  double m_translationFactor = 0.0;
+  double m_translationFactor = 1.0;
   bool m_renderVideoFeed = true;
   bool m_tryUsingArKit = true;
   bool m_tracking = true;

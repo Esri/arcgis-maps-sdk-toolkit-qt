@@ -9,11 +9,15 @@
 //
 // See the Sample code usage restrictions document for further information.
 
+import QtQuick 2.12
 import Esri.ArcGISRuntime 100.6
 
+// This QML component is used to create the QML's TMCC object from the C++.
 TransformationMatrixCameraController {
     id: root
 
+    // it's not possible to create the TransformationMatrix object diretly in C++. This function
+    // is used to create the TM object and assign it to the TMCC.
     function createAndSetTransformationMatrix(quaternionX, quaternionY, quaternionZ, quaternionW,
                                               translationX, translationY, translationZ)
     {
@@ -21,5 +25,39 @@ TransformationMatrixCameraController {
                     quaternionX, quaternionY, quaternionZ, quaternionW,
                     translationX, translationY, translationZ);
         root.transformationMatrix = matrix;
+    }
+
+    // it's not possible to call setFieldOfViewFromLensIntrinsics directly from the C++ code, due to
+    // the orientation device enumeration. This function is used to converts the orientation (int) to
+    // deviceOrientation (enum).
+    function setFieldOfViewFromLensIntrinsics(sceneView,
+                                              xFocalLength, yFocalLength,
+                                              xPrincipal, yPrincipal,
+                                              xImageSize, yImageSize,
+                                              orientation)
+    {
+        var deviceOrientation;
+        switch(orientation) {
+          case 0:
+            deviceOrientation = Enums.DeviceOrientationPortrait;
+            break;
+          case 1:
+            deviceOrientation = Enums.DeviceOrientationLandscapeLeft;
+            break;
+          case 2:
+            deviceOrientation = Enums.DeviceOrientationReversePortrait;
+            break;
+          case 3:
+            deviceOrientation = Enums.DeviceOrientationPortrait;
+            break;
+          default:
+            deviceOrientation = Enums.DeviceOrientationLandscapeRight;
+            break;
+        }
+
+        sceneView.setFieldOfViewFromLensIntrinsics(xFocalLength, yFocalLength,
+                                                   xPrincipal, yPrincipal,
+                                                   xImageSize, yImageSize,
+                                                   deviceOrientation);
     }
 }
