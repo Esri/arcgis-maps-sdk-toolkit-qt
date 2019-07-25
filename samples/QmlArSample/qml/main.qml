@@ -22,6 +22,8 @@ ApplicationWindow {
     height: 600
     title: "QmlArSample"
 
+    Component.onCompleted: arcGISArView.startTracking();
+
     ArcGISArView {
         id: arcGISArView
         anchors.fill: parent
@@ -50,6 +52,10 @@ ApplicationWindow {
             margins: 5
         }
         spacing: 5
+        Button {
+            text: "Reset"
+            onClicked: arcGISArView.resetTracking();
+        }
         Button {
             text: "Brest"
             onClicked: sceneLoader.source = "qrc:/qml/BrestScene.qml";

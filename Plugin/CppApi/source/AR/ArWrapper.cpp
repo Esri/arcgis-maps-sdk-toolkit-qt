@@ -50,6 +50,10 @@ void ArWrapper::stopTracking()
 {
 }
 
+void ArWrapper::resetTracking()
+{
+}
+
 void ArWrapper::setSize(const QSize&)
 {
 }

@@ -48,6 +48,7 @@ public:
 
   void startTracking();
   void stopTracking();
+  void resetTracking();
 
   // properties
   void setSize(const QSize& size);

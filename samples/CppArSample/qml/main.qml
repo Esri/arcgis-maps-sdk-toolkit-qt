@@ -19,6 +19,8 @@ ApplicationWindow {
     width: 800
     height: 600
 
+    Component.onCompleted: arcGISArView.startTracking();
+
     ArcGISArView {
         id: arcGISArView
         anchors.fill: parent
@@ -43,6 +45,10 @@ ApplicationWindow {
             margins: 5
         }
         spacing: 5
+        Button {
+            text: "Reset"
+            onClicked: arcGISArView.resetTracking();
+        }
         Button {
             text: "Brest"
             onClicked: arSample.createBrestScene();

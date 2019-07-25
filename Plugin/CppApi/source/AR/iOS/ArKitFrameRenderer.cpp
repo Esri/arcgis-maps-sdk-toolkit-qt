@@ -16,6 +16,8 @@
 
 #include "ArKitFrameRenderer.h"
 #include "ArKitWrapper.h"
+#include <QGuiApplication>
+#include <QScreen>
 
 using namespace Esri::ArcGISRuntime;
 using namespace Esri::ArcGISRuntime::Toolkit;
@@ -27,14 +29,33 @@ using namespace Esri::ArcGISRuntime::Toolkit;
 
 namespace {
 // positions of the quad vertices in space
-const GLfloat kVertices[] = {
+const GLfloat kVerticesReversePortrait[] = {
+  +1.0f, +1.0f,
+  -1.0f, +1.0f,
+  +1.0f, -1.0f,
+  -1.0f, -1.0f
+};
+const GLfloat kVerticesRightLandscape[] = {
+  -1.0f, +1.0f,
+  -1.0f, -1.0f,
+  +1.0f, +1.0f,
+  +1.0f, -1.0f
+};
+const GLfloat kVerticesLeftLandscape[] = {
+  +1.0f, -1.0f,
+  +1.0f, +1.0f,
+  -1.0f, -1.0f,
+  -1.0f, +1.0f
+};
+const GLfloat kVerticesPortrait[] = {
   -1.0f, -1.0f,
   +1.0f, -1.0f,
   -1.0f, +1.0f,
   +1.0f, +1.0f
 };
+
 // positions of the texture in the quad
-const GLfloat kTexCoord[] = {
+const GLfloat kTextures[] = {
   0.0f, 1.0f,
   0.0f, 0.0f,
   1.0f, 1.0f,
@@ -51,9 +72,12 @@ void ArKitFrameRenderer::initGL()
   m_program->addCacheableShaderFromSourceCode(QOpenGLShader::Vertex,
                                               "attribute vec4 a_position;"
                                               "attribute vec2 a_texCoord;"
+                                              "uniform vec2 u_verticesRatio;"
                                               "varying vec2 v_texCoord;"
                                               "void main() {"
-                                              "  gl_Position = a_position;"
+                                              "  float x = a_position.x * u_verticesRatio.x;"
+                                              "  float y = a_position.y * u_verticesRatio.y;"
+                                              "  gl_Position = vec4(x, y, a_position.zw);"
                                               "  v_texCoord = a_texCoord;"
                                               "}");
 
@@ -79,35 +103,89 @@ void ArKitFrameRenderer::initGL()
 
   m_uniformTextureY = m_program->uniformLocation("u_textureY");
   m_uniformTextureCbCr = m_program->uniformLocation("u_textureCbCr");
+  m_uniformVerticesRatio = m_program->uniformLocation("u_verticesRatio");
   m_attributeVertices = m_program->attributeLocation("a_position");
   m_attributeUvs = m_program->attributeLocation("a_texCoord");
 
   m_program->release();
 }
 
-void ArKitFrameRenderer::render(GLuint textureIdY, GLuint textureIdCbCr)
+void ArKitFrameRenderer::render(const QOpenGLTexture& textureIdY, const QOpenGLTexture& textureIdCbCr)
 {
+  // if the window size is invalid, do nothing
+  if (m_size.width() == 0 || m_size.height() == 0)
+    return;
+
   m_program->bind();
 
+  glClear(GL_DEPTH_BUFFER_BIT);
   glDepthMask(GL_FALSE);
 
   glUniform1i(m_uniformTextureY, 1);
   glUniform1i(m_uniformTextureCbCr, 2);
+  calculateVerticesRatio(textureIdY.width(), textureIdY.height());
 
   glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D, textureIdY);
+  glBindTexture(GL_TEXTURE_2D, textureIdY.textureId());
 
   glActiveTexture(GL_TEXTURE2);
-  glBindTexture(GL_TEXTURE_2D, textureIdCbCr);
+  glBindTexture(GL_TEXTURE_2D, textureIdCbCr.textureId());
 
   glEnableVertexAttribArray(m_attributeVertices);
-  glVertexAttribPointer(m_attributeVertices, 2, GL_FLOAT, GL_FALSE, 0, kVertices);
+
+  // get the screen orientation
+  const Qt::ScreenOrientations orientation = QGuiApplication::screens().front()->orientation();
+  //setOrientationUpdateMask
+
+  switch (orientation) {
+    case Qt::PortraitOrientation:
+      glVertexAttribPointer(m_attributeVertices, 2, GL_FLOAT, GL_FALSE, 0, kVerticesPortrait);
+      break;
+    case Qt::LandscapeOrientation:
+      glVertexAttribPointer(m_attributeVertices, 2, GL_FLOAT, GL_FALSE, 0, kVerticesRightLandscape);
+      break;
+    case Qt::InvertedPortraitOrientation:
+      glVertexAttribPointer(m_attributeVertices, 2, GL_FLOAT, GL_FALSE, 0, kVerticesReversePortrait);
+      break;
+    case Qt::InvertedLandscapeOrientation:
+      glVertexAttribPointer(m_attributeVertices, 2, GL_FLOAT, GL_FALSE, 0, kVerticesLeftLandscape);
+      break;
+    default:
+      break;
+  }
 
   glEnableVertexAttribArray(m_attributeUvs);
-  glVertexAttribPointer(m_attributeUvs, 2, GL_FLOAT, GL_FALSE, 0, kTexCoord);
+  glVertexAttribPointer(m_attributeUvs, 2, GL_FLOAT, GL_FALSE, 0, kTextures);
 
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
   glDepthMask(GL_TRUE);
   m_program->release();
+}
+
+void ArKitFrameRenderer::setSize(const QSizeF& size)
+{
+  m_size = size;
+}
+
+void ArKitFrameRenderer::calculateVerticesRatio(int textureWidth, int textureHeight)
+{
+  // calculates ratios
+  const float windowRatio = m_size.width() / m_size.height();
+  const float textureRatio = static_cast<float>(textureWidth) / static_cast<float>(textureHeight);
+
+  float verticesRatioX = 1.0f;
+  float verticesRatioY = 1.0f;
+  if (textureRatio >= windowRatio)
+  {
+    verticesRatioX = 1.0f / windowRatio / textureRatio;
+    verticesRatioY = 1.0f;
+  }
+  else
+  {
+    verticesRatioX = 1.0f;
+    verticesRatioY = 1.0f;
+  }
+
+  glUniform2f(m_uniformVerticesRatio, verticesRatioX, verticesRatioY);
 }

@@ -39,7 +39,17 @@ using namespace Esri::ArcGISRuntime::Toolkit;
 @interface ArcGISArSessionDelegate : NSObject<ARSessionDelegate>
 
 -(id) init;
+
+//ARSessionDelegate
 -(void) session: (ARSession*)session didUpdateFrame:(ARFrame*)frame;
+
+//ARSessionObserver
+//session:cameraDidChangeTrackingState
+//sessionWasInterrupted
+//sessionInterruptionEnded
+//sessionShouldAttemptRelocalization
+//session:didFailWithError:
+
 -(void) copyPixelBuffers: (CVImageBufferRef)pixelBuffer;
 -(std::array<double, 7>) lastQuaternionTranslation: (simd_float4x4)cameraTransform;
 -(std::array<double, 6>) lastLensIntrinsics: (ARCamera*)camera;
@@ -51,7 +61,13 @@ using namespace Esri::ArcGISRuntime::Toolkit;
 @property (nonatomic) size_t widthCbCr;
 @property (nonatomic) size_t heightY;
 @property (nonatomic) size_t heightCbCr;
-@property (nonatomic) bool render_in_progress;
+@property (nonatomic) size_t sizeY; // used to determines if the raw array need to be reallocated.
+@property (nonatomic) size_t sizeCbCr; // used to determines if the raw array need to be reallocated.
+@property (nonatomic) bool textureDataUsed;
+@property (nonatomic) NSTimeInterval timestamp;
+
+@property (nonatomic) simd_float4x4 initialMatrix;
+@property (nonatomic) bool resetInitialMatrix;
 
 @end
 
@@ -72,33 +88,26 @@ using namespace Esri::ArcGISRuntime::Toolkit;
     self.widthCbCr = 0;
     self.heightY = 0;
     self.heightCbCr = 0;
-    self.render_in_progress = false;
+    self.textureDataUsed = false;
+    self.timestamp = 0.0;
+    self.resetInitialMatrix = true;
   }
   return self;
 }
 
 -(void)session: (ARSession*)session didUpdateFrame:(ARFrame*)frame
 {
-  if (!frame || self.render_in_progress)
+  if (!frame || frame.timestamp == 0.0 || frame.timestamp == self.timestamp) // todo: or timestamp is not changed?
     return;
 
-  // don't try to render an new frame if there is a rendering in progress
-  self.render_in_progress = true;
+  // save the current timestamp
+  self.timestamp = frame.timestamp;
 
-  // release data
-  if (self.textureDataY)
+  // copy the texture data is not used.
+  if (!self.textureDataUsed)
   {
-    free(self.textureDataY);
-    self.textureDataY = nullptr;
+    [self copyPixelBuffers: frame.capturedImage];
   }
-
-  if (self.textureDataCbCr)
-  {
-    free(self.textureDataCbCr);
-    self.textureDataCbCr = nullptr;
-  }
-
-  [self copyPixelBuffers: frame.capturedImage];
 
   // render the AR frame
   self.arcGISArView->update();
@@ -135,18 +144,34 @@ using namespace Esri::ArcGISRuntime::Toolkit;
   self.heightY = CVPixelBufferGetHeightOfPlane(pixelBuffer, 0);
   self.heightCbCr = CVPixelBufferGetHeightOfPlane(pixelBuffer, 1);
 
-  const size_t bytesPerRow_0 = CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 0);
-  const size_t bytesPerRow_1 = CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 1);
+  const size_t bytesPerRowY = CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 0);
+  const size_t bytesPerRowCbCr = CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 1);
 
-  const size_t size_0 = self.heightY * bytesPerRow_0;
-  const size_t size_1 = self.heightCbCr * bytesPerRow_1;
+  const size_t sizeY = self.heightY * bytesPerRowY;
+  const size_t sizeCbCr = self.heightCbCr * bytesPerRowCbCr;
 
-  // todo: dont malloc if the size was not changed
-  self.textureDataY = static_cast<uchar*>(malloc(size_0));
-  self.textureDataCbCr = static_cast<uchar*>(malloc(size_1));
+  // reallocate if the size was changed
+  if (sizeY != self.sizeY)
+  {
+    free(self.textureDataY);
+    self.textureDataY = static_cast<uchar*>(malloc(sizeY));
+    self.sizeY = sizeY;
+  }
 
-  memcpy(self.textureDataY, dataY, size_0);
-  memcpy(self.textureDataCbCr, dataCbCr, size_1);
+  if (sizeCbCr != self.sizeCbCr)
+  {
+    free(self.textureDataCbCr);
+    self.textureDataCbCr = static_cast<uchar*>(malloc(sizeCbCr));
+    self.sizeCbCr = sizeCbCr;
+  }
+
+  // copy the data from the texture data
+  // todo: necessary?
+  memcpy(self.textureDataY, dataY, sizeY);
+  memcpy(self.textureDataCbCr, dataCbCr, sizeCbCr);
+
+  // don't try to use the texture data until the last texture was displayed.
+  self.textureDataUsed = true;
 
   // unmap
   CVPixelBufferUnlockBaseAddress(pixelBuffer, kCVPixelBufferLock_ReadOnly);
@@ -155,24 +180,35 @@ using namespace Esri::ArcGISRuntime::Toolkit;
 
 -(std::array<double, 7>) lastQuaternionTranslation: (simd_float4x4)cameraTransform
 {
-  // uses float not double. How to convert simd_float4x4 to simd_double4x4?
+  // todo: uses float not double. How to convert simd_float4x4 to simd_double4x4?
+
+  // reset the intial transformation matrix is required
+  if (self.resetInitialMatrix)
+  {
+    self.initialMatrix = cameraTransform;
+    self.resetInitialMatrix = false;
+  }
+
+//  cameraTransform = simd_mul(simd_inverse(self.initialMatrix), cameraTransform);
 
   // A quaternion used to compensate for the pitch being 90 degrees on `ARKit`; used to calculate the current
   // device transformation for each frame.
   const simd_quatf compensationQuat = { simd_float4 { 0.70710678118, 0.0, 0.0, 0.70710678118 }};
-  const simd_quatf orientationQuat = { simd_float4 { 0, 0, 0, 1 }};
+  const simd_quatf orientationQuat = { simd_float4 { 0, 0, .70710678118, .70710678118 }}; // portrait
+  const simd_quatf compensationQuat2 = { simd_float4 { -.70710678118, 0, 0, .70710678118 }};
 
   // Calculate our final quaternion and create the new transformation matrix.
   simd_quatf finalQuat = simd_mul(simd_mul(compensationQuat, simd_quaternion(cameraTransform)), orientationQuat);
+  finalQuat = simd_mul(compensationQuat2, finalQuat);
 
-  return { finalQuat.vector.y,
-        finalQuat.vector.x,
+  return { finalQuat.vector.x,
+        finalQuat.vector.y,
         finalQuat.vector.z,
         finalQuat.vector.w,
         (cameraTransform.columns[3].x),
         (-cameraTransform.columns[3].z),
         (cameraTransform.columns[3].y)
-  }
+  };
 }
 
 -(std::array<double, 6>) lastLensIntrinsics: (ARCamera*)camera
@@ -197,6 +233,7 @@ using namespace Esri::ArcGISRuntime::Toolkit;
  ******************************************************************************/
 
 struct ArKitWrapper::ArKitWrapperPrivate {
+  ARSCNView* arView = nullptr;
   ARSession* arSession = nullptr;
   ARWorldTrackingConfiguration* arConfiguration = nullptr;
   ArcGISArSessionDelegate* arSessionDelegate = nullptr;
@@ -215,12 +252,15 @@ ArKitWrapper::ArKitWrapper(ArcGISArViewInterface* arcGISArView) :
   m_textureCbCr(QOpenGLTexture::Target2D)
 {
   // Create an AR session
-  m_impl->arSession = [[ARSession alloc] init];
+  m_impl->arView = [[ARSCNView alloc] init];
+  m_impl->arSession = m_impl->arView.session;
+//  m_impl->arSession = [[ARSession alloc] init];
 
   // Create an AR session configuration
-  m_impl->arConfiguration = [ARWorldTrackingConfiguration new];
-  m_impl->arConfiguration.worldAlignment = ARWorldAlignmentGravityAndHeading;
-  m_impl->arConfiguration.planeDetection = ARPlaneDetectionHorizontal;
+  // todo: test if the COMPASS is enable
+  m_impl->arConfiguration = [[ARWorldTrackingConfiguration alloc] init];
+  m_impl->arConfiguration.worldAlignment = ARWorldAlignmentGravity;
+//  m_impl->arConfiguration.planeDetection = ARPlaneDetectionHorizontal;
 
   // delegate to get the frames
   m_impl->arSessionDelegate = [[ArcGISArSessionDelegate alloc]init];
@@ -229,34 +269,38 @@ ArKitWrapper::ArKitWrapper(ArcGISArViewInterface* arcGISArView) :
 
   // Run the view's session
   [m_impl->arSession runWithConfiguration:m_impl->arConfiguration options: ARSessionRunOptionResetTracking];
+
+  // https://developer.apple.com/documentation/arkit/arconfiguration/2923553-issupported?language=objc
 }
 
 ArKitWrapper::~ArKitWrapper()
 {
   Q_CHECK_PTR(m_impl);
+  [m_impl->arConfiguration release];
   [m_impl->arSessionDelegate release];
+  [m_impl->arView release];
   delete m_impl;
 }
 
 void ArKitWrapper::startTracking()
 {
-  // Not implemented.
+  [m_impl->arSession runWithConfiguration:m_impl->arConfiguration];
 }
 
 void ArKitWrapper::stopTracking()
 {
-  // Not implemented.
+//  m_impl->arSession->pause();
 }
 
-QSizeF ArKitWrapper::size() const
+void ArKitWrapper::resetTracking()
 {
-  // Not implemented.
-  return QSize();
+  // https://developer.apple.com/documentation/arkit/arsession/2865608-runwithconfiguration?language=objc
+  m_impl->arSessionDelegate.resetInitialMatrix = true;
 }
 
-void ArKitWrapper::setSize(const QSizeF& /*size*/)
+void ArKitWrapper::setSize(const QSizeF& size)
 {
-  // Not implemented.
+  m_arKitFrameRenderer.setSize(size);
 }
 
 // this function run on the rendering thread
@@ -269,8 +313,7 @@ void ArKitWrapper::initGL()
 // this function run on the rendering thread
 void ArKitWrapper::beforeRendering()
 {
-  // todo: create textures ids
-  // dont recreate if size didnt changed
+  // todo: dont recreate if size didnt changed
   if (m_textureY.isCreated())
     m_textureY.destroy();
 
@@ -284,18 +327,20 @@ void ArKitWrapper::beforeRendering()
 
   m_textureY.setFormat(QOpenGLTexture::R8_UNorm);
   m_textureCbCr.setFormat(QOpenGLTexture::RG8_UNorm);
-
   m_textureY.allocateStorage();
   m_textureCbCr.allocateStorage();
 
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
   m_textureY.setData(QOpenGLTexture::Red, QOpenGLTexture::UInt8, m_impl->arSessionDelegate.textureDataY);
   m_textureCbCr.setData(QOpenGLTexture::RG, QOpenGLTexture::UInt8, m_impl->arSessionDelegate.textureDataCbCr);
+
+  m_impl->arSessionDelegate.textureDataUsed = false; // now, the texture data can be reused.
 }
 
 // this function run on the rendering thread
 void ArKitWrapper::afterRendering()
 {
-  m_impl->arSessionDelegate.render_in_progress = false;
 }
 
 // this function run on the rendering thread
@@ -305,7 +350,7 @@ void ArKitWrapper::render()
 
   if (m_textureY.textureId() != 0 && m_textureCbCr.textureId() != 0)
   {
-    m_arKitFrameRenderer.render(m_textureY.textureId(), m_textureCbCr.textureId());
+    m_arKitFrameRenderer.render(m_textureY, m_textureCbCr);
     // m_arKitPointCloudRenderer.render(); // for debugging the AR tracking
   }
 

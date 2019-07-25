@@ -166,13 +166,13 @@ void ArcGISArView::updateFieldOfView(double xFocalLength, double yFocalLength,
       deviceOrientation = DeviceOrientation::Portrait;
       break;
     case Qt::LandscapeOrientation:
-      deviceOrientation = DeviceOrientation::LandscapeLeft;
+      deviceOrientation = DeviceOrientation::LandscapeRight;
       break;
     case Qt::InvertedPortraitOrientation:
       deviceOrientation = DeviceOrientation::ReversePortrait;
       break;
     case Qt::InvertedLandscapeOrientation:
-      deviceOrientation = DeviceOrientation::LandscapeRight;
+      deviceOrientation = DeviceOrientation::LandscapeLeft;
       break;
     default:
       deviceOrientation = DeviceOrientation::Portrait;

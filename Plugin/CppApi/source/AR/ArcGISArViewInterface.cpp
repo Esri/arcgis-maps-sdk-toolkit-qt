@@ -153,7 +153,7 @@ void ArcGISArViewInterface::setTracking(bool tracking)
 void ArcGISArViewInterface::resetTracking()
 {
   // m_initialLocation = nullptr;
-  startTracking();
+  m_arWrapper->resetTracking();
 }
 
 /*!

@@ -19,6 +19,7 @@
 
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
+#include <QOpenGLTexture>
 
 namespace Esri
 {
@@ -33,13 +34,19 @@ class ArKitFrameRenderer : public QOpenGLFunctions
 {
 public:
   void initGL();
-  void render(GLuint textureIdY, GLuint textureIdCbCr);
+  void render(const QOpenGLTexture& textureIdY, const QOpenGLTexture& textureIdCbCr);
+  void setSize(const QSizeF& size);
 
 private:
+  void calculateVerticesRatio(int textureWidth, int textureHeight);
+
+  QSizeF m_size;
+
   std::unique_ptr<QOpenGLShaderProgram> m_program;
 
   GLuint m_uniformTextureY = 0;
   GLuint m_uniformTextureCbCr = 0;
+  GLuint m_uniformVerticesRatio = 0;
   GLuint m_attributeVertices = 0;
   GLuint m_attributeUvs = 0;
 };

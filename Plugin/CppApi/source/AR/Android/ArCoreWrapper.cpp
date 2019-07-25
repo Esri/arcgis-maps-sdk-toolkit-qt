@@ -120,6 +120,11 @@ void ArCoreWrapper::stopTracking()
   }
 }
 
+void ArCoreWrapper::resetTracking()
+{
+  // not implemented
+}
+
 void ArCoreWrapper::setSize(const QSize& size)
 {
   if (!m_arSession)

@@ -40,10 +40,10 @@ public:
 
   void startTracking();
   void stopTracking();
+  void resetTracking();
   bool isTracking() const;
 
   // properties
-  QSizeF size() const;
   void setSize(const QSizeF& size);
 
   void initGL();
@@ -70,6 +70,7 @@ private:
   ArKitFrameRenderer m_arKitFrameRenderer;
   ArKitPointCloudRenderer m_arKitPointCloudRenderer;
 
+  // todo: move that to ArKitFrameRenderer
   QOpenGLTexture m_textureY;
   QOpenGLTexture m_textureCbCr;
 };
