@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2018 Esri
+ *  Copyright 2012-2019 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,26 +17,51 @@
 #include "ArCoreFrameRenderer.h"
 #include "ArCoreWrapper.h"
 
+/*!
+  \class Esri::ArcGISRuntime::Toolkit::ArCoreFrameRenderer
+  \ingroup AR
+  \inmodule ArcGISQtToolkit
+  \since Esri::ArcGISRuntime 100.6
+  \brief Internal class to render the camera frame in the QML item "ArcGISArView".
+
+  The AR core gets the data of the AR frames directly from the camera and copy them
+  to an OpenGL texture. The texture is rendered in an quad (2 triangles with 4 vertices)
+  which represente all the QML item surface.
+
+  The image size received from the camera is constant for a specific device but the surface
+  size of the QML item can be changed, for example when the device switch between the
+  portrait and landscape modes or if the menu bar is displayed or not.
+
+  The texture coordinate must be adapted to respect the camera image ratio. These
+  coordinates are calculated by the AR core function "transformedUvs".
+
+  \sa {AR}
+ */
+
 using namespace Esri::ArcGISRuntime;
 using namespace Esri::ArcGISRuntime::Toolkit;
 
 namespace {
-// Positions of the quad vertices in clip space (X, Y).
-const GLfloat kVertices[] = {
+// positions of the quad vertices in GL space
+const GLfloat kVerticesPortrait[] = {
   -1.0f, -1.0f,
   +1.0f, -1.0f,
   -1.0f, +1.0f,
-  +1.0f, +1.0f,
+  +1.0f, +1.0f
 };
 } // anonymous namespace
 
 ArCoreFrameRenderer::ArCoreFrameRenderer(ArCoreWrapper* arCoreWrapper) :
   m_arCoreWrapper(arCoreWrapper)
 {
+  Q_CHECK_PTR(m_arCoreWrapper);
 }
 
+// this function run in the GL thread.
 void ArCoreFrameRenderer::initGL()
 {
+  Q_CHECK_PTR(m_arCoreWrapper);
+
   m_program.reset(new QOpenGLShaderProgram());
   m_program->addCacheableShaderFromSourceCode(QOpenGLShader::Vertex,
                                               "attribute vec4 a_position;"
@@ -69,12 +94,15 @@ void ArCoreFrameRenderer::initGL()
 
   m_program->release();
 
+  // set the id to AR core then the camera frames will be copied in the texture.
   m_arCoreWrapper->setTextureId(m_textureId);
 }
 
+// this function run in the GL thread.
 void ArCoreFrameRenderer::render()
 {
   Q_CHECK_PTR(m_arCoreWrapper);
+  Q_CHECK_PTR(m_program);
 
   m_program->bind();
 
@@ -86,7 +114,7 @@ void ArCoreFrameRenderer::render()
   glBindTexture(GL_TEXTURE_EXTERNAL_OES, m_textureId);
 
   glEnableVertexAttribArray(m_attributeVertices);
-  glVertexAttribPointer(m_attributeVertices, 2, GL_FLOAT, GL_FALSE, 0, kVertices);
+  glVertexAttribPointer(m_attributeVertices, 2, GL_FLOAT, GL_FALSE, 0, kVerticesPortrait);
 
   glEnableVertexAttribArray(m_attributeUvs);
   glVertexAttribPointer(m_attributeUvs, 2, GL_FLOAT, GL_FALSE, 0, m_arCoreWrapper->transformedUvs());

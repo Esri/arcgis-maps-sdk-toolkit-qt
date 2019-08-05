@@ -23,7 +23,6 @@
 #include <QMatrix4x4>
 #include <QOpenGLFunctions>
 #include "ArCoreFrameRenderer.h"
-#include "ArCorePointCloudRenderer.h"
 
 // forward declaration of AR core types to avoid include "arcore_c_api.h" here.
 typedef struct ArSession_ ArSession;
@@ -39,6 +38,14 @@ namespace Toolkit
 {
 
 class ArcGISArViewInterface;
+class ArCorePointCloudRenderer;
+class ArCorePlaneRenderer;
+
+// todo: add tracking state?
+// https://developers.google.com/ar/reference/java/arcore/reference/com/google/ar/core/TrackingFailureReason
+// https://developers.google.com/ar/reference/java/arcore/reference/com/google/ar/core/TrackingState
+// https://developers.google.com/ar/reference/unity/namespace/GoogleARCore
+// - ApkAvailabilityStatus, ApkInstallationStatus, LostTrackingReason, SessionStatus, TrackingState
 
 class ArCoreWrapper
 {
@@ -61,11 +68,12 @@ public:
   void udpateArCamera();
   void releaseArData();
 
-  // parameters to render the point cloud
+  // methods for AR frame rendering
   const float* transformedUvs() const;
-  const float* modelViewProjectionData() const;
-  const float* pointCloudData() const;
-  int32_t pointCloudSize() const;
+
+  // methods for point cloud data
+  void pointCloudData(QMatrix4x4& mvp, int32_t& size, const float** data);
+  void releasePointCouldData();
 
   // low level access to AR core
   ArSession* session();
@@ -79,8 +87,8 @@ private:
   bool installArCore();
   void createArSession();
 
-  std::array<double, 7> lastQuaternionTranslation() const;
-  std::array<double, 6> lastLensIntrinsics() const;
+  std::array<double, 7> quaternionTranslation() const;
+  std::array<double, 6> lensIntrinsics() const;
 
   ArcGISArViewInterface* m_arcGISArView = nullptr;
 
@@ -88,8 +96,13 @@ private:
 
   jobject m_applicationActivity = nullptr;
 
-  ArCoreFrameRenderer m_arCoreFrameRenderer;
-  ArCorePointCloudRenderer m_arCorePointCloudRenderer;
+  ArCoreFrameRenderer m_arCoreFrameRenderer; // optional?
+  ArCorePlaneRenderer* m_arCorePlaneRenderer = nullptr; // optional
+  ArCorePointCloudRenderer* m_arCorePointCloudRenderer = nullptr; // optional
+
+  void renderArFrame();
+  void renderArPlane();
+  void renderArPointCloud();
 
   // When your apllication launches or enters an AR mode,
   // it should call this method with user_requested_install = 1.
@@ -103,15 +116,19 @@ private:
   ArSession* m_arSession = nullptr;
   ArFrame* m_arFrame = nullptr;
   ArCamera* m_arCamera = nullptr;
-  ArPointCloud* m_arPointCloud = nullptr;
 
   // data returned from each frame
   float m_transformedUvs[8] = {};
-  QMatrix4x4 m_modelViewProjection;
-  const float* m_pointCloudData = nullptr;
-  int32_t m_pointCloudSize = 0;
 
   QTimer m_timer;
+
+//  bool m_renderPlane = true;
+  bool m_renderPointCloud = true;
+//  bool m_debugOpenGL = true;
+//  bool m_debugPerformances = true;
+
+  // attribute for point cloud
+  ArPointCloud* m_arPointCloud = nullptr;
 };
 
 } // Toolkit

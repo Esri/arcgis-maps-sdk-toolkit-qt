@@ -14,20 +14,18 @@
  *  limitations under the License.
  ******************************************************************************/
 
-#include "ArCorePointCloudRenderer.h"
-#include "ArCoreWrapper.h"
+#include "ArKitPlaneRenderer.h"
+#include "ArKitWrapper.h"
 
 using namespace Esri::ArcGISRuntime;
 using namespace Esri::ArcGISRuntime::Toolkit;
 
-ArCorePointCloudRenderer::ArCorePointCloudRenderer(ArCoreWrapper* arCoreWrapper) :
-  m_arCoreWrapper(arCoreWrapper)
+ArKitPlaneRenderer::ArKitPlaneRenderer(ArKitWrapper* ArKitWrapper) :
+  m_arKitWrapper(ArKitWrapper)
 {
-  Q_CHECK_PTR(m_arCoreWrapper);
 }
 
-// this function run in the GL thread.
-void ArCorePointCloudRenderer::initGL()
+void ArKitPlaneRenderer::init()
 {
   m_program.reset(new QOpenGLShaderProgram());
   m_program->addCacheableShaderFromSourceCode(QOpenGLShader::Vertex,
@@ -46,7 +44,7 @@ void ArCorePointCloudRenderer::initGL()
                                               "precision mediump float;"
                                               "varying vec4 v_Color;"
                                               "void main() {"
-                                              "  gl_FragColor = v_Color;"
+                                              "    gl_FragColor = v_Color;"
                                               "}");
 
   m_program->link();
@@ -60,31 +58,24 @@ void ArCorePointCloudRenderer::initGL()
   m_program->release();
 }
 
-// this function run in the GL thread.
-void ArCorePointCloudRenderer::render()
+void ArKitPlaneRenderer::render()
 {
-  Q_CHECK_PTR(m_arCoreWrapper);
+  Q_CHECK_PTR(m_arKitWrapper);
 
   m_program->bind();
 
-  QMatrix4x4 modelViewProjection;
-  int32_t size = 0;
-  const float* data = nullptr;
+  //  QMatrix4x4 modelViewProjection = m_projectionMatrix * m_viewMatrix;
+  glUniformMatrix4fv(m_uniformModelViewProjection, 1, GL_FALSE, m_arKitWrapper->modelViewProjectionData());
 
-  m_arCoreWrapper->pointCloudData(modelViewProjection, size, &data);
-  if (!data)
-    return;
-
-  glUniformMatrix4fv(m_uniformModelViewProjection, 1, GL_FALSE, modelViewProjection.data());
   glEnableVertexAttribArray(m_attributeVertices);
-  glVertexAttribPointer(m_attributeVertices, 4, GL_FLOAT, GL_FALSE, 0, data);
 
-  // todo: lets the user defined the point cloud color. Default is cyan.
+  glVertexAttribPointer(m_attributeVertices, 4, GL_FLOAT, GL_FALSE, 0, m_arKitWrapper->pointCloudData());
+
+  // Set cyan color to the point cloud.
   glUniform4f(m_uniformColor, 31.0f / 255.0f, 188.0f / 255.0f, 210.0f / 255.0f, 1.0f);
   glUniform1f(m_uniformPointSize, 50.0f);
 
-  glDrawArrays(GL_POINTS, 0, size);
+  glDrawArrays(GL_POINTS, 0, m_arKitWrapper->pointCloudSize());
 
   m_program->release();
-  m_arCoreWrapper->releasePointCouldData();
 }

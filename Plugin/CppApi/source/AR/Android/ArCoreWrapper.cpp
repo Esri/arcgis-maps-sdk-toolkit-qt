@@ -19,6 +19,10 @@
 #include <QtAndroid>
 #include "ArcGISArViewInterface.h"
 #include <array>
+#include "ArCorePointCloudRenderer.h"
+
+#include <QGuiApplication>
+#include <QScreen>
 
 /*!
   \class Esri::ArcGISRuntime::Toolkit::ArcGISARView
@@ -39,18 +43,36 @@ int32_t ArCoreWrapper::m_installRequested = 1;
 
 namespace {
 // Positions of the quad vertices in clip space (X, Y).
-const GLfloat kVertices[] = {
+const GLfloat kVerticesReversePortrait[] = {
+  +1.0f, +1.0f,
+  -1.0f, +1.0f,
+  +1.0f, -1.0f,
+  -1.0f, -1.0f
+};
+const GLfloat kVerticesRightLandscape[] = {
+  -1.0f, +1.0f,
+  -1.0f, -1.0f,
+  +1.0f, +1.0f,
+  +1.0f, -1.0f
+};
+const GLfloat kVerticesLeftLandscape[] = {
+  +1.0f, -1.0f,
+  +1.0f, +1.0f,
+  -1.0f, -1.0f,
+  -1.0f, +1.0f
+};
+const GLfloat kVerticesPortrait[] = {
   -1.0f, -1.0f,
   +1.0f, -1.0f,
   -1.0f, +1.0f,
-  +1.0f, +1.0f,
+  +1.0f, +1.0f
 };
 }  // namespace
 
 ArCoreWrapper::ArCoreWrapper(ArcGISArViewInterface* arcGISArView) :
   m_arcGISArView(arcGISArView),
   m_arCoreFrameRenderer(this),
-  m_arCorePointCloudRenderer(this)
+  m_arCorePointCloudRenderer(new ArCorePointCloudRenderer(this))
 {
   installArCore();
   createArSession();
@@ -58,25 +80,30 @@ ArCoreWrapper::ArCoreWrapper(ArcGISArViewInterface* arcGISArView) :
   // update frames when timer timeout
   QObject::connect(&m_timer, &QTimer::timeout, [this]()
   {
-    // render the AR frame
+    qDebug() << "----- timer timeout";
+
+    // request the update of the view (in main thread), to render the AR frame (in GL thread).
     m_arcGISArView->update();
 
     // update the scene view camera
-    auto camera = lastQuaternionTranslation();
+    auto camera = quaternionTranslation();
     m_arcGISArView->updateCamera(camera[0], camera[1], camera[2], camera[3], camera[4], camera[5], camera[6]);
 
     // udapte the field of view, based on the
-    auto lens = lastLensIntrinsics();
+    auto lens = lensIntrinsics();
     m_arcGISArView->updateFieldOfView(lens[0], lens[1], lens[2], lens[3], lens[4], lens[5]);
 
     // render the frame of the ArcGIS runtime
     m_arcGISArView->renderFrame();
   });
-  m_timer.start(50);
+
+  startTracking();
 }
 
 ArCoreWrapper::~ArCoreWrapper()
 {
+  releasePointCouldData();
+
   if (m_arFrame)
   {
     ArFrame_destroy(m_arFrame);
@@ -92,7 +119,7 @@ ArCoreWrapper::~ArCoreWrapper()
 
 void ArCoreWrapper::startTracking()
 {
-  m_timer.start(50);
+  m_timer.start(33);
 
   if (!m_arSession)
     return;
@@ -132,7 +159,10 @@ void ArCoreWrapper::setSize(const QSize& size)
 
   if (size.width() > 0 && size.height() > 0)
   {
-    ArSession_setDisplayGeometry(m_arSession, 0, size.width(), size.height());
+    ArSession_setDisplayGeometry(m_arSession,
+                                 0, // ROTATION_0
+                                 qMin(size.width(), size.height()),
+                                 qMax(size.width(), size.height()));
   }
 }
 
@@ -156,7 +186,9 @@ void ArCoreWrapper::setTextureId(GLuint textureId)
 void ArCoreWrapper::initGL()
 {
   m_arCoreFrameRenderer.initGL();
-  //  m_arCorePointCloudRenderer.initGL();
+
+  if (m_arCorePointCloudRenderer)
+    m_arCorePointCloudRenderer->initGL();
 }
 
 // this function run on the rendering thread
@@ -165,7 +197,9 @@ void ArCoreWrapper::render()
   udpateArCamera();
 
   m_arCoreFrameRenderer.render();
-  //  m_arCorePointCloudRenderer.render();
+
+  if (m_arCorePointCloudRenderer)
+    m_arCorePointCloudRenderer->render();
 }
 
 ArSession* ArCoreWrapper::session()
@@ -306,23 +340,11 @@ void ArCoreWrapper::udpateArCamera()
     return;
 
   // release data if necessary
-  if (m_arPointCloud)
-  {
-    ArPointCloud_release(m_arPointCloud);
-    m_arPointCloud = nullptr;
-  }
-
   if (m_arCamera)
   {
     ArCamera_release(m_arCamera);
     m_arCamera = nullptr;
   }
-
-//  if (m_arFrame)
-//  {
-//    ArFrame_destroy(m_arFrame);
-//    m_arCamera = nullptr;
-//  }
 
   // create and update AR frame
   if (!m_arFrame)
@@ -358,10 +380,39 @@ void ArCoreWrapper::udpateArCamera()
   ArFrame_getDisplayGeometryChanged(m_arSession, m_arFrame, &geometryChanged);
   if (geometryChanged != 0 || !m_uvsInitialized)
   {
-    ArFrame_transformCoordinates2d(
-          m_arSession, m_arFrame, AR_COORDINATES_2D_OPENGL_NORMALIZED_DEVICE_COORDINATES,
-          kNumVertices, kVertices, AR_COORDINATES_2D_TEXTURE_NORMALIZED,
-          m_transformedUvs);
+    // get the screen orientation
+    // todo: move to ArCoreUtils
+    const Qt::ScreenOrientations orientation = QGuiApplication::screens().front()->orientation();
+
+    switch (orientation) {
+      case Qt::PortraitOrientation:
+        ArFrame_transformCoordinates2d(
+              m_arSession, m_arFrame, AR_COORDINATES_2D_OPENGL_NORMALIZED_DEVICE_COORDINATES,
+              kNumVertices, kVerticesPortrait, AR_COORDINATES_2D_TEXTURE_NORMALIZED,
+              m_transformedUvs);
+        break;
+      case Qt::LandscapeOrientation:
+        ArFrame_transformCoordinates2d(
+              m_arSession, m_arFrame, AR_COORDINATES_2D_OPENGL_NORMALIZED_DEVICE_COORDINATES,
+              kNumVertices, kVerticesLeftLandscape, AR_COORDINATES_2D_TEXTURE_NORMALIZED,
+              m_transformedUvs);
+        break;
+      case Qt::InvertedPortraitOrientation:
+        ArFrame_transformCoordinates2d(
+              m_arSession, m_arFrame, AR_COORDINATES_2D_OPENGL_NORMALIZED_DEVICE_COORDINATES,
+              kNumVertices, kVerticesReversePortrait, AR_COORDINATES_2D_TEXTURE_NORMALIZED,
+              m_transformedUvs);
+        break;
+      case Qt::InvertedLandscapeOrientation:
+        ArFrame_transformCoordinates2d(
+              m_arSession, m_arFrame, AR_COORDINATES_2D_OPENGL_NORMALIZED_DEVICE_COORDINATES,
+              kNumVertices, kVerticesRightLandscape, AR_COORDINATES_2D_TEXTURE_NORMALIZED,
+              m_transformedUvs);
+        break;
+      default:
+        break;
+    }
+
     m_uvsInitialized = true;
   }
 
@@ -381,28 +432,12 @@ void ArCoreWrapper::udpateArCamera()
     emit m_arcGISArView->errorOccurred("Fails to acquire the camera.");
     return;
   }
-
-  QMatrix4x4 viewMatrix;
-  ArCamera_getViewMatrix(m_arSession, m_arCamera, viewMatrix.data());
-
-  QMatrix4x4 projectionMatrix;
-  ArCamera_getProjectionMatrix(m_arSession, m_arCamera, 0.1f, 100.f, projectionMatrix.data());
-
-  m_modelViewProjection = projectionMatrix * viewMatrix;
-
-  // Update and render point cloud. Not implemented.
-  //  ArStatus pointCloudStatus = ArFrame_acquirePointCloud(m_arSession, m_arFrame, &m_arPointCloud);
-  //  if (pointCloudStatus == AR_SUCCESS)
-  //  {
-  //    ArPointCloud_getNumberOfPoints(m_arSession, m_arPointCloud, &m_pointCloudSize);
-  //    if (m_pointCloudSize <= 0)
-  //      return;
-
-  //    ArPointCloud_getData(m_arSession, m_arPointCloud, &m_pointCloudData);
-  //  }
 }
 
-std::array<double, 7> ArCoreWrapper::lastQuaternionTranslation() const
+// The returned array contains the following parameters: the quaternions x, y, z and w
+// end the translations x, y and z. These parameters can be used to create a transformation
+// matrix object using the "createWithQuaternionAndTranslation" function.
+std::array<double, 7> ArCoreWrapper::quaternionTranslation() const
 {
   ArPose* pose = nullptr;
   ArPose_create(m_arSession, nullptr, &pose);
@@ -417,13 +452,62 @@ std::array<double, 7> ArCoreWrapper::lastQuaternionTranslation() const
   ArPose_getPoseRaw(m_arSession, pose, poseRaw);
   ArPose_destroy(pose);
 
+  // get the screen orientation
+  // todo: move to ArCoreUtils
+  const Qt::ScreenOrientations orientation = QGuiApplication::screens().front()->orientation();
+
+  switch (orientation) {
+    case Qt::PortraitOrientation:
+
+      return {
+        poseRaw[0], poseRaw[1], poseRaw[2], poseRaw[3], poseRaw[4], poseRaw[5], poseRaw[6]
+      };
+
+      break;
+    case Qt::LandscapeOrientation:
+    {
+      qDebug() << "==== LandscapeOrientation";
+      const double x =  0 * poseRaw[3] + 0 * poseRaw[2] + 0.70710678118 * poseRaw[1] + 0.70710678118 * poseRaw[0];
+      const double y = -0 * poseRaw[2] + 0 * poseRaw[3] - 0.70710678118 * poseRaw[0] + 0.70710678118 * poseRaw[1];
+      const double z =  0 * poseRaw[1] - 0 * poseRaw[0] - 0.70710678118 * poseRaw[3] + 0.70710678118 * poseRaw[2];
+      const double w = -0 * poseRaw[0] - 0 * poseRaw[1] + 0.70710678118 * poseRaw[2] + 0.70710678118 * poseRaw[3];
+
+      return {
+        x, y, z, w, poseRaw[4], poseRaw[5], poseRaw[6]
+      };
+
+      break;
+    }
+    case Qt::InvertedPortraitOrientation:
+      break;
+    case Qt::InvertedLandscapeOrientation:
+    {
+      qDebug() << "==== InvertedLandscapeOrientation";
+      const double x =  0 * poseRaw[3] + 0 * poseRaw[2] - 0.70710678118 * poseRaw[1] + 0.70710678118 * poseRaw[0];
+      const double y = -0 * poseRaw[2] + 0 * poseRaw[3] + 0.70710678118 * poseRaw[0] + 0.70710678118 * poseRaw[1];
+      const double z =  0 * poseRaw[1] - 0 * poseRaw[0] + 0.70710678118 * poseRaw[3] + 0.70710678118 * poseRaw[2];
+      const double w = -0 * poseRaw[0] - 0 * poseRaw[1] - 0.70710678118 * poseRaw[2] + 0.70710678118 * poseRaw[3];
+
+      return {
+        x, y, z, w, poseRaw[4], poseRaw[5], poseRaw[6]
+      };
+
+      break;
+    }
+    default:
+      break;
+  }
+
   return {
     poseRaw[0], poseRaw[1], poseRaw[2], poseRaw[3], poseRaw[4], poseRaw[5], poseRaw[6]
   };
 }
 
-// get the lens intrinsics
-std::array<double, 6> ArCoreWrapper::lastLensIntrinsics() const
+// The returned array contains the following parameters: xFocalLength, yFocalLength,
+// xPrincipal, yPrincipal, xImageSize and yImageSize.
+// These parameters can be used to set the field of view in the scene view with the
+// "setFieldOfViewFromLensIntrinsics" function.
+std::array<double, 6> ArCoreWrapper::lensIntrinsics() const
 {
   ArCameraIntrinsics* cameraIntrinsics = nullptr;
   ArCameraIntrinsics_create(m_arSession, &cameraIntrinsics);
@@ -461,17 +545,48 @@ const float* ArCoreWrapper::transformedUvs() const
   return m_transformedUvs;
 }
 
-const float* ArCoreWrapper::modelViewProjectionData() const
+// Methods for point cloud data.
+// Be careful with the concurrent access and lifetime: the data are initialized and
+// released in the main thread and used in the GL thread.
+// todo: mutex lock for access to m_arFrame?
+void ArCoreWrapper::pointCloudData(QMatrix4x4& mvp, int32_t& size, const float** data)
 {
-  return m_modelViewProjection.data();
+  if (!m_renderPointCloud || m_arPointCloud)
+    return;
+
+  // get the point cloud data
+  ArStatus pointCloudStatus = ArFrame_acquirePointCloud(m_arSession, m_arFrame, &m_arPointCloud);
+  if (pointCloudStatus != AR_SUCCESS)
+  {
+    releasePointCouldData();
+    return;
+  }
+
+  ArPointCloud_getNumberOfPoints(m_arSession, m_arPointCloud, &size);
+  if (size <= 0)
+  {
+    releasePointCouldData();
+    return;
+  }
+
+  ArPointCloud_getData(m_arSession, m_arPointCloud, data);
+
+  // get the model view projection matrix
+  QMatrix4x4 viewMatrix;
+  ArCamera_getViewMatrix(m_arSession, m_arCamera, viewMatrix.data());
+
+  QMatrix4x4 projectionMatrix;
+  ArCamera_getProjectionMatrix(m_arSession, m_arCamera, 0.1f, 100.f, projectionMatrix.data());
+
+  mvp = projectionMatrix * viewMatrix;
 }
 
-const float* ArCoreWrapper::pointCloudData() const
+// The point cloud data can be released after the rendering is done.
+void ArCoreWrapper::releasePointCouldData()
 {
-  return m_pointCloudData;
-}
+  if (!m_arPointCloud)
+    return;
 
-int32_t ArCoreWrapper::pointCloudSize() const
-{
-  return m_pointCloudSize;
+  ArPointCloud_release(m_arPointCloud);
+  m_arPointCloud = nullptr;
 }

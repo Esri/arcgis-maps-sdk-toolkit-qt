@@ -14,8 +14,8 @@
  *  limitations under the License.
  ******************************************************************************/
 
-#ifndef ARCLOUDPOINTRENDERER_H
-#define ARCLOUDPOINTRENDERER_H
+#ifndef ArKitPlaneRenderer_H
+#define ArKitPlaneRenderer_H
 
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
@@ -24,26 +24,27 @@ namespace Esri
 {
 namespace ArcGISRuntime
 {
-namespace Toolkit
+namespace Toolkit // TODO: internal?
 {
 
-// doc: implementation example from ARCore:
-// https://github.com/google-ar/arcore-android-sdk/blob/master/samples/hello_ar_c/app/src/main/cpp/hello_ar_application.cc
-// https://github.com/google-ar/arcore-android-sdk/blob/master/samples/hello_ar_c/app/src/main/cpp/plane_renderer.cc
+// doc: https://developer.apple.com/documentation/arkit/tracking_and_visualizing_planes?language=objc
+// https://developer.apple.com/documentation/arkit/arplanegeometry?language=objc
+// active detect plane? DetectedPlaneFindingMode, DetectedPlaneType
 
-class ArCoreWrapper;
+class ArKitWrapper;
 
-class ArCorePointCloudRenderer : public QOpenGLFunctions
+// This class renders the passthrough camera image into the OpenGL frame.
+class ArKitPlaneRenderer : public QOpenGLFunctions
 {
 public:
-  ArCorePointCloudRenderer(ArCoreWrapper* arCoreWrapper);
-  ~ArCorePointCloudRenderer() = default;
+  ArKitPlaneRenderer(ArKitWrapper* ArKitWrapper);
+  ~ArKitPlaneRenderer() = default;
 
-  void initGL();
+  void init();
   void render();
 
 private:
-  ArCoreWrapper* m_arCoreWrapper = nullptr;
+  ArKitWrapper* m_arKitWrapper = nullptr;
 
   std::unique_ptr<QOpenGLShaderProgram> m_program;
 
@@ -57,4 +58,4 @@ private:
 } // ArcGISRuntime
 } // Esri
 
-#endif // ARCLOUDPOINTRENDERER_H
+#endif // ArKitPlaneRenderer_H

@@ -172,19 +172,19 @@ void ArKitFrameRenderer::calculateVerticesRatio(int textureWidth, int textureHei
 {
   // calculates ratios
   const float windowRatio = m_size.width() / m_size.height();
-  const float textureRatio = static_cast<float>(textureWidth) / static_cast<float>(textureHeight);
+  const float textureRatio = static_cast<float>(textureHeight) / static_cast<float>(textureWidth);
 
   float verticesRatioX = 1.0f;
   float verticesRatioY = 1.0f;
   if (textureRatio >= windowRatio)
   {
-    verticesRatioX = 1.0f / windowRatio / textureRatio;
+    verticesRatioX = textureRatio / windowRatio;
     verticesRatioY = 1.0f;
   }
   else
   {
     verticesRatioX = 1.0f;
-    verticesRatioY = 1.0f;
+    verticesRatioY = textureRatio * windowRatio;
   }
 
   glUniform2f(m_uniformVerticesRatio, verticesRatioX, verticesRatioY);

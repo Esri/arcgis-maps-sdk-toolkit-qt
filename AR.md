@@ -89,3 +89,28 @@ Verifies the permission for camera is present:
 
 9. The project is ready to be build and run in an Android device. You need to verify the compatibility of your device
 with the ARKit.
+
+
+
+## Performances
+
+For Android
+
+- https://developer.android.com/ndk/guides/simpleperf
+- https://developer.android.com/studio/profile/inspect-gpu-rendering
+- https://developer.android.com/studio/profile
+- https://developer.android.com/studio/profile/android-profiler
+
+Note for performances issue in mobiles
+
+There are some conflicts between the AR frameworks and the Qt's rendering thread.
+This lines of code enable the non-threaded render loops mode in Qt.
+See SceneView::renderFrame documentation and Qt's documentation
+https://doc.qt.io/qt-5/qtquick-visualcanvas-scenegraph.html#non-threaded-render-loops-basic-and-windows
+for more informations.
+
+```
+#if defined(Q_OS_IOS) && !defined(Q_OS_ANDROID)
+  qputenv("QSG_RENDER_LOOP", "basic");
+#endif
+```

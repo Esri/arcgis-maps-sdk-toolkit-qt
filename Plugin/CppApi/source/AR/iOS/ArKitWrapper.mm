@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2018 Esri
+ *  Copyright 2012-2019 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,8 +18,10 @@
 #import <ARKit/ARKit.h>
 #include <QMatrix4x4>
 #include "ArcGISArViewInterface.h"
-#include <QThread>
 #include <array>
+#include <QGuiApplication>
+#include <QScreen>
+#include "ArKitUtils.h"
 
 using namespace Esri::ArcGISRuntime;
 using namespace Esri::ArcGISRuntime::Toolkit;
@@ -40,15 +42,15 @@ using namespace Esri::ArcGISRuntime::Toolkit;
 
 -(id) init;
 
-//ARSessionDelegate
--(void) session: (ARSession*)session didUpdateFrame:(ARFrame*)frame;
+// ARSessionDelegate overrides
+- (void) session: (ARSession*) session didUpdateFrame: (ARFrame*) frame;
 
-//ARSessionObserver
-//session:cameraDidChangeTrackingState
+// ARSessionObserver overrides
+- (void) session: (ARSession*) session cameraDidChangeTrackingState: (ARCamera*) camera;
 //sessionWasInterrupted
 //sessionInterruptionEnded
 //sessionShouldAttemptRelocalization
-//session:didFailWithError:
+- (void) session: (ARSession*) session didFailWithError: (NSError*) error;
 
 -(void) copyPixelBuffers: (CVImageBufferRef)pixelBuffer;
 -(std::array<double, 7>) lastQuaternionTranslation: (simd_float4x4)cameraTransform;
@@ -95,14 +97,8 @@ using namespace Esri::ArcGISRuntime::Toolkit;
   return self;
 }
 
--(void)session: (ARSession*)session didUpdateFrame:(ARFrame*)frame
+- (void) session: (ARSession*) session didUpdateFrame: (ARFrame*) frame
 {
-  if (!frame || frame.timestamp == 0.0 || frame.timestamp == self.timestamp) // todo: or timestamp is not changed?
-    return;
-
-  // save the current timestamp
-  self.timestamp = frame.timestamp;
-
   // copy the texture data is not used.
   if (!self.textureDataUsed)
   {
@@ -111,6 +107,45 @@ using namespace Esri::ArcGISRuntime::Toolkit;
 
   // render the AR frame
   self.arcGISArView->update();
+
+  // todo: add debug infos
+//  qDebug() << "--- point cloud count:" << frame.rawFeaturePoints.count;
+
+//  static ARWorldMappingStatus worldMappingStatus = (ARWorldMappingStatus)-1;
+//  if (worldMappingStatus != frame.worldMappingStatus)
+//  {
+//    worldMappingStatus = frame.worldMappingStatus;
+//    qDebug() << frame.timestamp << "worldMappingStatus changed:" <<
+//                ArKitUtils::worldMappingStatusToString(worldMappingStatus);
+//    qDebug() << "  " <<
+//                ArKitUtils::worldMappingStatusToDescription(worldMappingStatus);
+//  }
+
+//  static ARTrackingState trackingState = (ARTrackingState)-1;
+//  if (trackingState != frame.camera.trackingState)
+//  {
+//    trackingState = frame.camera.trackingState;
+//    qDebug() << frame.timestamp << "trackingState changed:" <<
+//                ArKitUtils::trackingStateToString(trackingState);
+//    qDebug() << "  " <<
+//                ArKitUtils::trackingStateToDescription(trackingState);
+//  }
+
+//  static ARTrackingStateReason trackingStateReason = (ARTrackingStateReason)-1;
+//  if (trackingStateReason != frame.camera.trackingStateReason)
+//  {
+//    trackingStateReason = frame.camera.trackingStateReason;
+//    qDebug() << frame.timestamp << "trackingStateReason changed:" <<
+//                ArKitUtils::trackingStateReasonToString(trackingStateReason);
+//    qDebug() << "  " <<
+//                ArKitUtils::trackingStateReasonToDescription(trackingStateReason);
+//  }
+
+  // save the current timestamp
+  self.timestamp = frame.timestamp;
+
+//  qDebug() << frame.timestamp << frame.camera.transform.columns[3].x <<
+//              frame.camera.transform.columns[3].y << frame.camera.transform.columns[3].z;
 
   // update the scene view camera
   auto camera = [self lastQuaternionTranslation: frame.camera.transform];
@@ -122,6 +157,15 @@ using namespace Esri::ArcGISRuntime::Toolkit;
 
   // render the frame of the ArcGIS runtime
   self.arcGISArView->renderFrame();
+}
+
+- (void) session: (ARSession*) session cameraDidChangeTrackingState: (ARCamera*) camera
+{
+}
+
+- (void) session: (ARSession*) session didFailWithError: (NSError*) error
+{
+  qDebug() << "== error" << error.domain << (int)error.code;
 }
 
 // The first texture
@@ -181,6 +225,15 @@ using namespace Esri::ArcGISRuntime::Toolkit;
 -(std::array<double, 7>) lastQuaternionTranslation: (simd_float4x4)cameraTransform
 {
   // todo: uses float not double. How to convert simd_float4x4 to simd_double4x4?
+//  qDebug() << "------- cameraTransform\n" <<
+//              cameraTransform.columns[0].x << cameraTransform.columns[1].x <<
+//              cameraTransform.columns[2].x << cameraTransform.columns[3].x << "\n" <<
+//              cameraTransform.columns[0].y << cameraTransform.columns[1].y <<
+//              cameraTransform.columns[2].y << cameraTransform.columns[3].y << "\n" <<
+//              cameraTransform.columns[0].z << cameraTransform.columns[1].z <<
+//              cameraTransform.columns[2].z << cameraTransform.columns[3].z << "\n" <<
+//              cameraTransform.columns[0].w << cameraTransform.columns[1].w <<
+//              cameraTransform.columns[2].w << cameraTransform.columns[3].w << "\n";
 
   // reset the intial transformation matrix is required
   if (self.resetInitialMatrix)
@@ -194,20 +247,53 @@ using namespace Esri::ArcGISRuntime::Toolkit;
   // A quaternion used to compensate for the pitch being 90 degrees on `ARKit`; used to calculate the current
   // device transformation for each frame.
   const simd_quatf compensationQuat = { simd_float4 { 0.70710678118, 0.0, 0.0, 0.70710678118 }};
-  const simd_quatf orientationQuat = { simd_float4 { 0, 0, .70710678118, .70710678118 }}; // portrait
-  const simd_quatf compensationQuat2 = { simd_float4 { -.70710678118, 0, 0, .70710678118 }};
+  simd_quatf finalQuat = simd_mul(compensationQuat, simd_quaternion(cameraTransform));
+
+  // get the screen orientation
+  const Qt::ScreenOrientations orientation = QGuiApplication::screens().front()->orientation();
+
+  switch (orientation) {
+    case Qt::PortraitOrientation:
+    {
+      const simd_quatf orientationQuat = { simd_float4 { 0.0, 0.0, -0.70710678118, -0.70710678118 }};
+      finalQuat = simd_mul(finalQuat, orientationQuat);
+      break;
+    }
+    case Qt::LandscapeOrientation:
+      // do nothing
+      break;
+    case Qt::InvertedPortraitOrientation:
+    {
+      const simd_quatf orientationQuat = { simd_float4 { 0.0, 0.0, -0.70710678118, 0.70710678118 }};
+      finalQuat = simd_mul(finalQuat, orientationQuat);
+      break;
+    }
+    case Qt::InvertedLandscapeOrientation:
+    {
+      const simd_quatf orientationQuat = { simd_float4 { 0.0, 0.0, 0.70710678118, 0.70710678118 }};
+      finalQuat = simd_mul(finalQuat, orientationQuat);
+      finalQuat = simd_mul(finalQuat, orientationQuat); // 2 rotations of 90 to do a 180 rotation
+      // todo: test and fix that
+      break;
+    }
+    default:
+      break;
+  }
 
   // Calculate our final quaternion and create the new transformation matrix.
-  simd_quatf finalQuat = simd_mul(simd_mul(compensationQuat, simd_quaternion(cameraTransform)), orientationQuat);
+  const simd_quatf compensationQuat2 = { simd_float4 { -0.70710678118, 0, 0, 0.70710678118 }};
   finalQuat = simd_mul(compensationQuat2, finalQuat);
 
-  return { finalQuat.vector.x,
-        finalQuat.vector.y,
-        finalQuat.vector.z,
-        finalQuat.vector.w,
-        (cameraTransform.columns[3].x),
-        (-cameraTransform.columns[3].z),
-        (cameraTransform.columns[3].y)
+  finalQuat = simd_quaternion(cameraTransform);
+
+  return {
+    finalQuat.vector.x,
+    finalQuat.vector.y,
+    finalQuat.vector.z,
+    finalQuat.vector.w,
+    cameraTransform.columns[3].x,
+    -cameraTransform.columns[3].z,
+    cameraTransform.columns[3].y
   };
 }
 
@@ -251,16 +337,24 @@ ArKitWrapper::ArKitWrapper(ArcGISArViewInterface* arcGISArView) :
   m_textureY(QOpenGLTexture::Target2D),
   m_textureCbCr(QOpenGLTexture::Target2D)
 {
+  // Create an AR session configuration
+  // todo: test if the COMPASS is enable
+  m_impl->arConfiguration = [[ARWorldTrackingConfiguration alloc] init];
+  m_impl->arConfiguration.worldAlignment = ARWorldAlignmentGravityAndHeading;
+  m_impl->arConfiguration.planeDetection = ARPlaneDetectionHorizontal;
+
+  // do nothing if the device doesn't support AR feature.
+  if (!ARWorldTrackingConfiguration.isSupported)
+  {
+    [m_impl->arConfiguration release];
+    m_impl->arConfiguration = nullptr;
+    return;
+  }
+
   // Create an AR session
   m_impl->arView = [[ARSCNView alloc] init];
   m_impl->arSession = m_impl->arView.session;
 //  m_impl->arSession = [[ARSession alloc] init];
-
-  // Create an AR session configuration
-  // todo: test if the COMPASS is enable
-  m_impl->arConfiguration = [[ARWorldTrackingConfiguration alloc] init];
-  m_impl->arConfiguration.worldAlignment = ARWorldAlignmentGravity;
-//  m_impl->arConfiguration.planeDetection = ARPlaneDetectionHorizontal;
 
   // delegate to get the frames
   m_impl->arSessionDelegate = [[ArcGISArSessionDelegate alloc]init];

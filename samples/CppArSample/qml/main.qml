@@ -49,6 +49,28 @@ ApplicationWindow {
             text: "Reset"
             onClicked: arcGISArView.resetTracking();
         }
+
+        Button {
+            text: "Empty"
+            onClicked: arSample.createEmptyScene();
+        }
+        Button {
+            text: "Streets"
+            onClicked: arSample.createStreetsScene();
+        }
+        Button {
+            text: "Point Cloud"
+            onClicked: arSample.createPointCloudScene();
+        }
+        Button {
+            text: "Yosemite"
+            onClicked: arSample.createYosemiteScene();
+        }
+        Button {
+            text: "Border"
+            onClicked: arSample.createBorderScene();
+        }
+
         Button {
             text: "Brest"
             onClicked: arSample.createBrestScene();

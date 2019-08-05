@@ -41,11 +41,14 @@ ios {
 
     HEADERS += \
         $$PWD/CppApi/include/AR/iOS/ArKitFrameRenderer.h \
-        $$PWD/CppApi/include/AR/iOS/ArKitPointCloudRenderer.h
+        $$PWD/CppApi/include/AR/iOS/ArKitPointCloudRenderer.h \
+        $$PWD/CppApi/include/AR/iOS/ArKitPlaneRenderer.h \
+        $$PWD/CppApi/include/AR/iOS/ArKitUtils.h
 
     SOURCES += \
         $$PWD/CppApi/source/AR/iOS/ArKitFrameRenderer.cpp \
-        $$PWD/CppApi/source/AR/iOS/ArKitPointCloudRenderer.cpp
+        $$PWD/CppApi/source/AR/iOS/ArKitPointCloudRenderer.cpp \
+        $$PWD/CppApi/source/AR/iOS/ArKitPlaneRenderer.cpp
 
     INCLUDEPATH += $$PWD/CppApi/include/AR/iOS
 
@@ -62,12 +65,14 @@ android {
         $$AR_CORE_HEADER_PATH/arcore_c_api.h \
         $$PWD/CppApi/include/AR/Android/ArCoreWrapper.h \
         $$PWD/CppApi/include/AR/Android/ArCoreFrameRenderer.h \
-        $$PWD/CppApi/include/AR/Android/ArCorePointCloudRenderer.h
+        $$PWD/CppApi/include/AR/Android/ArCorePointCloudRenderer.h \
+        $$PWD/CppApi/include/AR/Android/ArCorePlaneRenderer.h
 
     SOURCES += \
         $$PWD/CppApi/source/AR/Android/ArCoreWrapper.cpp \
         $$PWD/CppApi/source/AR/Android/ArCoreFrameRenderer.cpp \
-        $$PWD/CppApi/source/AR/Android/ArCorePointCloudRenderer.cpp
+        $$PWD/CppApi/source/AR/Android/ArCorePointCloudRenderer.cpp \
+        $$PWD/CppApi/source/AR/Android/ArCorePlaneRenderer.cpp
 
     INCLUDEPATH += \
         $$AR_CORE_HEADER_PATH \

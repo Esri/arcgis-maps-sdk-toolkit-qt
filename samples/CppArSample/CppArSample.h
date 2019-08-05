@@ -42,6 +42,12 @@ public:
   Esri::ArcGISRuntime::SceneQuickView* sceneView() const;
   void setSceneView(Esri::ArcGISRuntime::SceneQuickView* sceneView);
 
+  Q_INVOKABLE void createEmptyScene();
+  Q_INVOKABLE void createStreetsScene();
+  Q_INVOKABLE void createPointCloudScene();
+  Q_INVOKABLE void createYosemiteScene();
+  Q_INVOKABLE void createBorderScene();
+
   Q_INVOKABLE void createBrestScene();
   Q_INVOKABLE void createBerlinScene();
 
@@ -50,6 +56,8 @@ signals:
   void sceneViewChanged();
 
 private:
+  void createSurfaceWithElevation();
+
   Esri::ArcGISRuntime::Toolkit::ArcGISArView* m_arcGISArView = nullptr;
   Esri::ArcGISRuntime::SceneQuickView* m_sceneView = nullptr;
   Esri::ArcGISRuntime::Scene* m_scene = nullptr;

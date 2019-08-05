@@ -27,19 +27,15 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
-// doc: implementation example from ARCore:
-// https://github.com/google-ar/arcore-android-sdk/blob/master/samples/hello_ar_c/app/src/main/cpp/hello_ar_application.cc
-// https://github.com/google-ar/arcore-android-sdk/blob/master/samples/hello_ar_c/app/src/main/cpp/plane_renderer.cc
-
 class ArCoreWrapper;
 
-class ArCorePointCloudRenderer : public QOpenGLFunctions
+class ArCorePlaneRenderer : public QOpenGLFunctions
 {
 public:
-  ArCorePointCloudRenderer(ArCoreWrapper* arCoreWrapper);
-  ~ArCorePointCloudRenderer() = default;
+  ArCorePlaneRenderer(ArCoreWrapper* arCoreWrapper);
+  ~ArCorePlaneRenderer() = default;
 
-  void initGL();
+  void init();
   void render();
 
 private:
