@@ -131,13 +131,25 @@ void ArcGISArView::setTranslationFactor(double translationFactor)
 /*!
   \brief Not implemented.
  */
-Point ArcGISArView::arScreenToLocation(const Point& /*screenPoint*/) const
+Point ArcGISArView::screenToLocation(const Point& screenPoint) const
 {
-  return Point();
+  if (!m_sceneView)
+    return Point();
+
+  const std::array<double, 7> hitResult = ArcGISArViewInterface::screenToLocation(screenPoint.x(), screenPoint.y());
+
+  auto hitMatrix = std::unique_ptr<TransformationMatrix>(
+        TransformationMatrix::createWithQuaternionAndTranslation(
+          hitResult[0], hitResult[1], hitResult[2], hitResult[3], hitResult[4], hitResult[5], hitResult[6]));
+
+  auto currentViewpointMatrix = std::unique_ptr<TransformationMatrix>(
+        m_sceneView->currentViewpointCamera().transformationMatrix());
+
+  return Camera(currentViewpointMatrix->addTransformation(hitMatrix.get())).location();
 }
 
 /*!
-  \brief Not implemented.
+  \brief ...
  */
 void ArcGISArView::updateCamera(double quaternionX, double quaternionY, double quaternionZ, double quaternionW,
                                 double translationX, double translationY, double translationZ)

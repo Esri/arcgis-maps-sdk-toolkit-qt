@@ -27,6 +27,8 @@
 #include <QFileInfo>
 #include <QStandardPaths>
 
+#include <QGeoPositionInfoSource>
+
 using namespace Esri::ArcGISRuntime;
 using namespace Esri::ArcGISRuntime::Toolkit;
 
@@ -108,7 +110,7 @@ void CppArSample::createPointCloudScene()
   if (m_scene)
     delete m_scene;
 
-  m_scene = new Scene(BasemapType::ImageryWithLabels, this);
+  m_scene = new Scene(this);
   createSurfaceWithElevation();
 
   PortalItem* item = new PortalItem("fc3f4a4919394808830cd11df4631a54", m_scene);
@@ -206,7 +208,7 @@ void CppArSample::createBorderScene()
     {
       // Create the origin camera at the center point and elevation of the data.
       // This will ensure the data is anchored to the table.
-      m_arcGISArView->setOriginCamera(Camera(center.x(), center.y(), elevation, 0, 0, 0));
+      m_arcGISArView->setOriginCamera(Camera(center.y(), center.x(), elevation, 0, 0, 0));
     });
     surface->locationToElevation(center);
   });
@@ -281,6 +283,6 @@ void CppArSample::createSurfaceWithElevation()
   BackgroundGrid grid;
   grid.setVisible(false);
   baseSurface->setBackgroundGrid(grid);
-  // baseSurface->setNavigationConstraint(NavigationConstraint::None);
+  baseSurface->setNavigationConstraint(NavigationConstraint::None);
   m_scene->setBaseSurface(baseSurface);
 }

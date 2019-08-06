@@ -127,7 +127,7 @@ void ArCoreWrapper::startTracking()
   ArStatus status = ArSession_resume(m_arSession);
   if (status != AR_SUCCESS)
   {
-    emit m_arcGISArView->errorOccurred("Fails to resume the AR session.");
+    emit m_arcGISArView->errorOccurred("ARCore failure", "Fails to resume the AR session.");
     return;
   }
 }
@@ -142,7 +142,7 @@ void ArCoreWrapper::stopTracking()
   ArStatus status = ArSession_pause(m_arSession);
   if (status != AR_SUCCESS)
   {
-    emit m_arcGISArView->errorOccurred("Fails to pause the AR session.");
+    emit m_arcGISArView->errorOccurred("ARCore failure", "Fails to pause the AR session.");
     return;
   }
 }
@@ -298,7 +298,7 @@ void ArCoreWrapper::createArSession()
   auto status = ArSession_create(jniEnvironment(), applicationActivity(), &m_arSession);
   if (status != AR_SUCCESS || !m_arSession)
   {
-    emit m_arcGISArView->errorOccurred("Fails to create the AR session.");
+    emit m_arcGISArView->errorOccurred("ARCore failure", "Fails to create the AR session.");
     return;
   }
 
@@ -307,7 +307,7 @@ void ArCoreWrapper::createArSession()
   auto permissions = QtAndroid::requestPermissionsSync({ permissionKey }, 5000);
   if (permissions[permissionKey] != QtAndroid::PermissionResult::Granted)
   {
-    emit m_arcGISArView->errorOccurred("Fails to access to the camera.");
+    emit m_arcGISArView->errorOccurred("ARCore failure", "Fails to access to the camera.");
     return;
   }
 
@@ -319,7 +319,7 @@ void ArCoreWrapper::createArSession()
   ArConfig_create(m_arSession, &arConfig);
   if (arConfig == nullptr)
   {
-    emit m_arcGISArView->errorOccurred("Fails to create the AR config.");
+    emit m_arcGISArView->errorOccurred("ARCore failure", "Fails to create the AR config.");
     return;
   }
 
@@ -327,7 +327,7 @@ void ArCoreWrapper::createArSession()
   status = ArSession_configure(m_arSession, arConfig);
   if (status != AR_SUCCESS)
   {
-    emit m_arcGISArView->errorOccurred("Fails to configure the AR session.");
+    emit m_arcGISArView->errorOccurred("ARCore failure", "Fails to configure the AR session.");
     return;
   }
 
@@ -352,7 +352,7 @@ void ArCoreWrapper::udpateArCamera()
     ArFrame_create(m_arSession, &m_arFrame);
     if (!m_arFrame)
     {
-      emit m_arcGISArView->errorOccurred("Fails to create an AR frame.");
+      emit m_arcGISArView->errorOccurred("ARCore failure", "Fails to create an AR frame.");
       return;
     }
   }
@@ -370,7 +370,7 @@ void ArCoreWrapper::udpateArCamera()
   ArStatus status = ArSession_update(m_arSession, m_arFrame);
   if (status != AR_SUCCESS)
   {
-    emit m_arcGISArView->errorOccurred("Fails to update the AR frame.");
+    emit m_arcGISArView->errorOccurred("ARCore failure", "Fails to update the AR frame.");
     return;
   }
 
@@ -429,7 +429,7 @@ void ArCoreWrapper::udpateArCamera()
   ArFrame_acquireCamera(m_arSession, m_arFrame, &m_arCamera);
   if (!m_arCamera)
   {
-    emit m_arcGISArView->errorOccurred("Fails to acquire the camera.");
+    emit m_arcGISArView->errorOccurred("ARCore failure", "Fails to acquire the camera.");
     return;
   }
 }
@@ -443,7 +443,7 @@ std::array<double, 7> ArCoreWrapper::quaternionTranslation() const
   ArPose_create(m_arSession, nullptr, &pose);
   if (!pose)
   {
-    emit m_arcGISArView->errorOccurred("Fails to create an AR pose.");
+    emit m_arcGISArView->errorOccurred("ARCore failure", "Fails to create an AR pose.");
     return {};
   }
 
@@ -513,7 +513,7 @@ std::array<double, 6> ArCoreWrapper::lensIntrinsics() const
   ArCameraIntrinsics_create(m_arSession, &cameraIntrinsics);
   if (!cameraIntrinsics)
   {
-    emit m_arcGISArView->errorOccurred("Fails to create an AR camera instrinsics.");
+    emit m_arcGISArView->errorOccurred("ARCore failure", "Fails to create an AR camera instrinsics.");
     return {};
   }
 
@@ -538,6 +538,63 @@ std::array<double, 6> ArCoreWrapper::lensIntrinsics() const
     static_cast<double>(xPrincipal), static_cast<double>(yPrincipal),
     static_cast<double>(xImageSize), static_cast<double>(yImageSize)
   };
+}
+
+// doc: https://developers.google.com/ar/reference/c/group/frame#arframe_hittest
+std::array<double, 7> ArCoreWrapper::hitTest(int x, int y) const
+{
+  if (m_arSession && m_arCamera /*&& m_arCamera.trackingState() == TrackingState::Tracking*/)
+  {
+    // create hit result list
+    ArHitResultList* hitResults = nullptr;
+    ArHitResultList_create(m_arSession, &hitResults);
+    if (!hitResults)
+      return {};
+
+    // try to find the location point
+    ArFrame_hitTest(m_arSession, m_arFrame, x, y, hitResults);
+
+    int32_t size = 0;
+    ArHitResultList_getSize(m_arSession, hitResults, &size);
+    if (size <= 0)
+    {
+      ArHitResultList_destroy(hitResults);
+      return {};
+    }
+
+    ArHitResult* hitResult = nullptr;
+    ArHitResult_create(m_arSession, &hitResult);
+    if (!hitResult)
+    {
+      ArHitResultList_destroy(hitResults);
+      return {};
+    }
+
+    ArHitResultList_getItem(m_arSession, hitResults, 0, hitResult);
+
+    ArPose* pose = nullptr;
+    ArPose_create(m_arSession, nullptr, &pose);
+    if (!hitResult)
+    {
+      ArHitResult_destroy(hitResult);
+      ArHitResultList_destroy(hitResults);
+      return {};
+    }
+
+    ArHitResult_getHitPose(m_arSession, hitResult, pose);
+
+    float poseRaw[7] = {}; // pose_raw in ArPose_create?
+    ArPose_getPoseRaw(m_arSession, pose, poseRaw);
+
+    // destroys objects
+    ArPose_destroy(pose);
+    ArHitResult_destroy(hitResult);
+    ArHitResultList_destroy(hitResults);
+
+    return { poseRaw[0], poseRaw[1], poseRaw[2], poseRaw[3], poseRaw[4], poseRaw[5], poseRaw[6] };
+  }
+
+  return {};
 }
 
 const float* ArCoreWrapper::transformedUvs() const

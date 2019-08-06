@@ -59,6 +59,7 @@ QObject* QmlArcGISArView::originCamera() const
  */
 void QmlArcGISArView::setOriginCamera(QObject* originCamera)
 {
+  // todo: verify the type using the meta object?
   if (m_originCamera == originCamera)
     return;
 
@@ -84,6 +85,7 @@ QObject* QmlArcGISArView::sceneView() const
  */
 void QmlArcGISArView::setSceneView(QObject* sceneView)
 {
+  // todo: verify the type using the meta object?
   if (sceneView == m_sceneView)
     return;
 
@@ -111,13 +113,39 @@ void QmlArcGISArView::setTranslationFactor(double translationFactor)
 /*!
   \brief ...
  */
-QObject* QmlArcGISArView::arScreenToLocation(QObject* /*screenPoint*/) const
+QObject* QmlArcGISArView::arScreenToLocation(QObject* screenPoint) const
 {
-  return nullptr;
+  if (!m_sceneView)
+    return nullptr;
+
+  //  if (!m_tmcc)
+  //    createTmccComponent();
+
+  const double x = screenPoint->property("x").toDouble(); // verify conversion?
+  const double y = screenPoint->property("y").toDouble(); // verify conversion?
+
+  const std::array<double, 7> hitResult = ArcGISArViewInterface::screenToLocation(x, y);
+
+  QObject* currentViewpointCamera = m_sceneView->property("currentViewpointCamera").value<QObject*>();
+  if (!currentViewpointCamera)
+    return nullptr;
+
+  QVariant location;
+  QMetaObject::invokeMethod(m_tmcc, "screenToLocation", Qt::DirectConnection,
+                            Q_RETURN_ARG(QVariant, location),
+                            Q_ARG(QVariant, QVariant::fromValue(currentViewpointCamera)),
+                            Q_ARG(QVariant, hitResult[0]),
+                            Q_ARG(QVariant, hitResult[1]),
+                            Q_ARG(QVariant, hitResult[2]),
+                            Q_ARG(QVariant, hitResult[3]),
+                            Q_ARG(QVariant, hitResult[4]),
+                            Q_ARG(QVariant, hitResult[5]),
+                            Q_ARG(QVariant, hitResult[6]));
+  return location.value<QObject*>();
 }
 
 /*!
-  \brief Not implemented.
+  \brief ...
  */
 void QmlArcGISArView::updateCamera(double quaternionX, double quaternionY, double quaternionZ, double quaternionW,
                                    double translationX, double translationY, double translationZ)
@@ -125,8 +153,11 @@ void QmlArcGISArView::updateCamera(double quaternionX, double quaternionY, doubl
   if (m_sceneView && !m_tmcc)
   {
     // create TMCC object
-    QQmlComponent tmcc(qmlEngine(this), QUrl("qrc:/qml/tmcc.qml"));
+    QQmlComponent tmcc(qmlEngine(this), QUrl("qrc:/qml/tmcc.qml")); // todo: keep this object to reuse it?
     m_tmcc = tmcc.create();
+
+    // get the TMCC object from the QML object
+    m_tmcc = m_tmcc->property("tmcc").value<QObject*>();
 
     // set TMCC to scene view
     m_sceneView->setProperty("cameraController", QVariant::fromValue(m_tmcc));

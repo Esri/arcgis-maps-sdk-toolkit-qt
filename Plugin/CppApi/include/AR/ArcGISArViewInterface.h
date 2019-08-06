@@ -28,6 +28,9 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
+class LocationDataSource;
+class OrientationDataSource;
+
 class /*TOOLKIT_EXPORT*/ ArcGISArViewInterface : public QQuickFramebufferObject
 {
   Q_OBJECT
@@ -38,6 +41,10 @@ class /*TOOLKIT_EXPORT*/ ArcGISArViewInterface : public QQuickFramebufferObject
 
   // add to the design?
   Q_PROPERTY(bool tracking READ tracking WRITE setTracking NOTIFY trackingChanged)
+
+  // sensors
+  Q_PROPERTY(LocationDataSource* locationDataSource READ locationDataSource WRITE setLocationDataSource NOTIFY locationDataSourceChanged)
+  Q_PROPERTY(OrientationDataSource* orientationDataSource READ orientationDataSource WRITE setOrientationDataSource NOTIFY orientationDataSourceChanged)
 
 public:
   explicit ArcGISArViewInterface(QQuickItem* parent = nullptr);
@@ -56,6 +63,13 @@ public:
 
   bool tracking() const;
   void setTracking(bool tracking);
+
+  // sensors
+  LocationDataSource* locationDataSource() const;
+  void setLocationDataSource(LocationDataSource* locationDataSource);
+
+  OrientationDataSource* orientationDataSource() const;
+  void setOrientationDataSource(OrientationDataSource* orientationDataSource);
 
   // methods
   Q_INVOKABLE void resetTracking();
@@ -87,10 +101,16 @@ signals:
   void tryUsingArKitChanged();
   void trackingChanged();
 
-  void errorOccurred(const QString& errorMessage);
+  void errorOccurred(const QString& errorMessage, const QString additionalMessage);
+
+  // sensors
+  void locationDataSourceChanged();
+  void orientationDataSourceChanged();
 
 protected:
   void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry) override;
+
+  std::array<double, 7> screenToLocation(int x, int y) const;
 
 private:
   mutable ArcGISArViewRenderer* m_arViewRenderer = nullptr;
@@ -100,6 +120,12 @@ private:
   bool m_renderVideoFeed = true;
   bool m_tryUsingArKit = true;
   bool m_tracking = true;
+
+  // sensors
+  LocationDataSource* m_locationDataSource = nullptr;
+  OrientationDataSource* m_orientationDataSource = nullptr;
+  QMetaObject::Connection m_locationDataSourceConnection;
+  QMetaObject::Connection m_orientationDataSourceConnection;
 };
 
 } // Toolkit

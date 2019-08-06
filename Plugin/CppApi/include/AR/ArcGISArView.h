@@ -42,7 +42,7 @@ class /*TOOLKIT_EXPORT*/ ArcGISArView : public ArcGISArViewInterface
 
 public:
   explicit ArcGISArView(QQuickItem* parent = nullptr);
-  explicit ArcGISArView(bool renderVideoFeed, bool tryUsingArKit, QQuickItem* parent = nullptr); // remove "ArKit" in the name?
+  explicit ArcGISArView(bool renderVideoFeed, bool tryUsingArKit, QQuickItem* parent = nullptr); // todo: remove "ArKit" in the name?
   ~ArcGISArView() override;
 
   // properties
@@ -55,7 +55,7 @@ public:
   void setTranslationFactor(double translationFactor) override;
 
   // methods invokable?
-  Q_INVOKABLE Point arScreenToLocation(const Point& screenPoint) const;
+  Q_INVOKABLE Point screenToLocation(const Point& screenPoint) const;
 
   // update the matrix transformation
   void updateCamera(double quaternionX, double quaternionY, double quaternionZ, double quaternionW,
@@ -65,6 +65,7 @@ public:
                          double xPrincipal, double yPrincipal,
                          double xImageSize, double yImageSize) override;
 
+  // update scene view render
   void renderFrame() override;
 
 signals:

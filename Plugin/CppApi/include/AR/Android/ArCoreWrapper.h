@@ -68,6 +68,9 @@ public:
   void udpateArCamera();
   void releaseArData();
 
+  // hit test for screen to location feature
+  std::array<double, 7> hitTest(int x, int y) const;
+
   // methods for AR frame rendering
   const float* transformedUvs() const;
 

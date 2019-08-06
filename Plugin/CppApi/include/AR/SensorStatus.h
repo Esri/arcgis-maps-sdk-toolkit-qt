@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2018 Esri
+ *  Copyright 2012-2019 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,53 +14,25 @@
  *  limitations under the License.
  ******************************************************************************/
 
-#include "ArWrapper.h"
+#ifndef SensorStatus_H
+#define SensorStatus_H
 
-using namespace Esri::ArcGISRuntime;
-using namespace Esri::ArcGISRuntime::Toolkit;
-
-#ifdef Q_OS_IOS
-
-// implemented in ArKitWrapper
-
-#elif defined Q_OS_ANDROID
-
-// implemented in ArCoreWrapper
-
-#else
-
-ArWrapper::ArWrapper(void*)
+namespace Esri
 {
-}
-
-void ArWrapper::initGL() const
+namespace ArcGISRuntime
 {
-}
-
-void ArWrapper::render() const
+namespace Toolkit
 {
-}
 
-// default implementation for desktop platforms.
-void ArWrapper::startTracking()
+enum class SensorStatus
 {
-}
+  Stopped,
+  Starting,
+  Started
+};
 
-void ArWrapper::stopTracking()
-{
-}
+} // Toolkit
+} // ArcGISRuntime
+} // Esri
 
-void ArWrapper::resetTracking()
-{
-}
-
-void ArWrapper::setSize(const QSize&)
-{
-}
-
-std::array<double, 7> ArWrapper::hitTest(int, int) const
-{
-  return {};
-}
-
-#endif
+#endif // SensorStatus_H

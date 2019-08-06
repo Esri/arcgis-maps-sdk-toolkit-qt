@@ -19,6 +19,7 @@
 
 #include <QSize>
 #include <QOpenGLFunctions>
+#include <array>
 
 #if defined Q_OS_IOS
 #include "ArKitWrapper.h"
@@ -61,6 +62,8 @@ public:
   void resetTracking();
 
   void setSize(const QSize&);
+
+  std::array<double, 7> hitTest(int, int) const;
 };
 
 #endif

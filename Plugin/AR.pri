@@ -20,12 +20,18 @@
 HEADERS += \
     $$PWD/CppApi/include/AR/ArcGISArViewInterface.h \
     $$PWD/CppApi/include/AR/ArcGISArViewRenderer.h \
-    $$PWD/CppApi/include/AR/ArWrapper.h
+    $$PWD/CppApi/include/AR/ArWrapper.h \
+    $$PWD/CppApi/include/AR/SensorStatus.h \
+    $$PWD/CppApi/include/AR/ArKitUsage.h \
+    $$PWD/CppApi/include/AR/LocationDataSource.h \
+    $$PWD/CppApi/include/AR/OrientationDataSource.h
 
 SOURCES += \
     $$PWD/CppApi/source/AR/ArcGISArViewInterface.cpp \
     $$PWD/CppApi/source/AR/ArcGISArViewRenderer.cpp \
-    $$PWD/CppApi/source/AR/ArWrapper.cpp
+    $$PWD/CppApi/source/AR/ArWrapper.cpp \
+    $$PWD/CppApi/source/AR/LocationDataSource.cpp \
+    $$PWD/CppApi/source/AR/OrientationDataSource.cpp
 
 INCLUDEPATH += $$PWD/CppApi/include/AR
 

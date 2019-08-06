@@ -451,6 +451,24 @@ void ArKitWrapper::render()
   afterRendering();
 }
 
+// doc: https://developer.apple.com/documentation/arkit/arframe/2875718-hittest?language=objc
+std::array<double, 7> ArKitWrapper::hitTest(int x, int y) const
+{
+  // return a list of results, sorted from nearest to farthest (in distance from the camera).
+  NSArray<ARHitTestResult*>* hitResults = [m_impl->arSession.currentFrame
+      hitTest: CGPointMake(x, y) types: ARHitTestResultTypeFeaturePoint]; // ARHitTestResultType?
+
+  if (!hitResults || [hitResults count] <= 0)
+    return {};
+
+  ARHitTestResult* hitResult = [hitResults objectAtIndex:0];
+  if (!hitResult)
+    return {};
+
+  const simd_float4x4 transform = [hitResult worldTransform];
+  return { 0, 0, 0, 1, transform.columns[3].x, -transform.columns[3].z, transform.columns[3].y };
+}
+
 float* ArKitWrapper::modelViewProjectionData() const
 {
   // Not implemented.

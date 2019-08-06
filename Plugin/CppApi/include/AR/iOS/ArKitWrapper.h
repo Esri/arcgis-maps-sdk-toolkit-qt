@@ -51,6 +51,9 @@ public:
   void afterRendering();
   void render();
 
+  // hit test for screen to location feature
+  std::array<double, 7> hitTest(int x, int y) const;
+
   // low level access to AR kit. Not implemented.
   //  ARSession* session() const;
   //  ARConfiguration* configuration() const;
