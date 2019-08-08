@@ -24,12 +24,7 @@ OTHER_FILES += \
     $$ANDROID_PACKAGE_SOURCE_DIR/res/drawable-xxhdpi/icon.png
 
 DISTFILES += \
-    $$ANDROID_PACKAGE_SOURCE_DIR/AndroidManifest.xml \
-    $$ANDROID_PACKAGE_SOURCE_DIR/gradle/wrapper/gradle-wrapper.jar \
-    $$ANDROID_PACKAGE_SOURCE_DIR/gradlew \
-    $$ANDROID_PACKAGE_SOURCE_DIR/build.gradle \
-    $$ANDROID_PACKAGE_SOURCE_DIR/gradle/wrapper/gradle-wrapper.properties \
-    $$ANDROID_PACKAGE_SOURCE_DIR/gradlew.bat
+    $$ANDROID_PACKAGE_SOURCE_DIR/AndroidManifest.xml
 
 ANDROID_LIBS = $$dirname(QMAKE_QMAKE)/../lib
 ANDROID_EXTRA_LIBS += \

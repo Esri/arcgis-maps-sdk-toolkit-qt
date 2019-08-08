@@ -48,9 +48,13 @@ OTHER_FILES += \
 
 #-------------------------------------------------------------------------------
 # AR configuration
-# The path to the toolkit source correspond to the files downloaded from the GitHub.
 
-include($$AR_TOOLKIT_SOURCE_PATH/ArCppApi.pri)
+# The path to the ArcGIS runtime toolkit for Qt sources, corresponding to the files downloaded
+# from the GitHub repo: https://github.com/Esri/arcgis-runtime-toolkit-qt
+
+AR_TOOLKIT_SOURCE_PATH = # must be set
+
+include($$AR_TOOLKIT_SOURCE_PATH/Plugin/CppApi/ArCppApi.pri)
 
 #-------------------------------------------------------------------------------
 

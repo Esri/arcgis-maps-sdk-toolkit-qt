@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
 #endif
 
   // Register the QmlArcGISArView type
-  qmlRegisterType<Esri::ArcGISRuntime::Toolkit::QmlArcGISArView>("Esri.ArcGISARView", 1, 0, "ArcGISArView");
+  qmlRegisterType<Esri::ArcGISRuntime::Toolkit::Internal::QmlArcGISArView>("Esri.ArcGISARView", 1, 0, "ArcGISArView");
 
   // Intialize application window
   QQmlApplicationEngine appEngine;
