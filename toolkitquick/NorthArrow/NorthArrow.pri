@@ -22,3 +22,5 @@ INCLUDEPATH += NorthArrow
 
 pluginfiles.files += \
     ../qml/NorthArrow.qml
+
+DEFINES += NORTHARROW
