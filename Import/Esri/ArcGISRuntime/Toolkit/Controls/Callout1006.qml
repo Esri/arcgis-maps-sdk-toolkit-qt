@@ -208,11 +208,6 @@ Item {
     */
     property real calloutWidth: 300
 
-    /*!
-        \brief The height of the Callout.
-    */
-    property real calloutHeight: 45
-
     // internal properties
     /*! \internal */
     property int padding: 3
@@ -295,16 +290,6 @@ Item {
             if (calloutVisible)
                 showCallout();
         }
-    }
-
-    onCalloutWidthChanged: {
-        if (calloutVisible)
-            showCallout();
-    }
-
-    onCalloutHeightChanged: {
-        if (calloutVisible)
-            showCallout();
     }
 
     onLeaderPositionChanged: {
@@ -419,7 +404,7 @@ Item {
                         left: parent.left
                         top: parent.top
                     }
-                    height: calloutHeight
+                    height: 45
                     columns: 3
                     rows: 2
                     columnSpacing: 7
@@ -902,7 +887,7 @@ Item {
             // no auto adjust
             var adjustedCalloutWidth = calloutWidth - (2 * leaderWidth + edgeBuffer);
             rectWidth = Math.max(calloutMinWidth, adjustedCalloutWidth);
-            rectHeight = calloutHeight;
+            rectHeight = calloutMinHeight;
         }
 
         if (debug) {
