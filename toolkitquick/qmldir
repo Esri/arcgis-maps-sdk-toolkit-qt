@@ -1,3 +1,3 @@
-module esri.arcgisruntime.toolkitquick
+module esri.arcgisruntime.toolkit
 NorthArrow 1.0 NorthArrow.qml
-plugin toolkitquick
+plugin toolkit

@@ -1,12 +1,12 @@
 TEMPLATE = lib
-TARGET = toolkitquick
+TARGET = toolkit
 QT += qml quick
 CONFIG += plugin c++11 staticlib
 
 ARCGIS_RUNTIME_VERSION = 100.6
 include($$PWD/arcgisruntime.pri)
 
-uri = esri.arcgisruntime.toolkitquick
+uri = esri.arcgisruntime.toolkit
 
 # Input
 SOURCES += \
@@ -42,8 +42,8 @@ unix {
 ### Set this to your desired output location
 TOOLKITQUICK_INSTALL = $$(PWD)../output/toolkitquick
 
-target.path += $${TOOLKITQUICK_INSTALL}/imports/esri/arcgisruntime/toolkitquick
-pluginfiles.path += $${TOOLKITQUICK_INSTALL}/imports/esri/arcgisruntime/toolkitquick
+target.path += $${TOOLKITQUICK_INSTALL}/imports/esri/arcgisruntime/toolkit
+pluginfiles.path += $${TOOLKITQUICK_INSTALL}/imports/esri/arcgisruntime/toolkit
 
 INSTALLS += target pluginfiles
 

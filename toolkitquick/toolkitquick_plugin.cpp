@@ -8,7 +8,7 @@
 
 void ToolkitquickPlugin::registerTypes(const char* uri)
 {
-  // @uri esri.arcgisruntime.toolkitquick
+  // @uri esri.arcgisruntime.toolkit
 
 #ifdef NORTHARROW
   qmlRegisterType<NorthArrowController>(uri, 1, 0, "NorthArrowController");

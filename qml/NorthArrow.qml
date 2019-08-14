@@ -1,5 +1,5 @@
 import QtQuick 2.0
-import esri.arcgisruntime.toolkitquick 1.0
+import esri.arcgisruntime.toolkit 1.0
 
 Rectangle {
 
