@@ -3,7 +3,9 @@ TARGET = toolkitquick
 QT += qml quick
 CONFIG += plugin c++11 staticlib
 
-#TARGET = $$qtLibraryTarget($$TARGET)
+ARCGIS_RUNTIME_VERSION = 100.6
+include($$PWD/arcgisruntime.pri)
+
 uri = esri.arcgisruntime.toolkitquick
 
 # Input
@@ -16,7 +18,7 @@ HEADERS += \
         NorthArrowController.h
 
 DISTFILES = qmldir \
-    qml/NorthArrow.qml
+    ../qml/NorthArrow.qml
 
 !equals(_PRO_FILE_PWD_, $$OUT_PWD) {
     copy_qmldir.target = $$OUT_PWD/qmldir
@@ -26,10 +28,9 @@ DISTFILES = qmldir \
     PRE_TARGETDEPS += $$copy_qmldir.target
 }
 
-
 pluginfiles.files += \
     qmldir \
-    qml/NorthArrow.qml
+    ../qml/NorthArrow.qml
 
 
 qmldir.files = qmldir
