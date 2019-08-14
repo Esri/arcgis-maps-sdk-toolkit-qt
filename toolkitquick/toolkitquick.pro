@@ -9,11 +9,11 @@ uri = esri.arcgisruntime.toolkitquick
 # Input
 SOURCES += \
         toolkitquick_plugin.cpp \
-        northarrow.cpp
+        NorthArrowController.cpp
 
 HEADERS += \
         toolkitquick_plugin.h \
-        northarrow.h
+        NorthArrowController.h
 
 DISTFILES = qmldir
 
