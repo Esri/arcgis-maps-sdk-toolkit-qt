@@ -8,7 +8,7 @@ Rectangle {
     Image{
         anchors.fill: parent
         source: "qrc:/images/compass.png"
-        rotation: controller.rotation
+        rotation: - controller.rotation
     }
 
     NorthArrowController {

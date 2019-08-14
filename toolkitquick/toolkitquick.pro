@@ -10,15 +10,15 @@ uri = esri.arcgisruntime.toolkitquick
 
 # Input
 SOURCES += \
-        toolkitquick_plugin.cpp \
-        NorthArrowController.cpp
+        toolkitquick_plugin.cpp
 
 HEADERS += \
-        toolkitquick_plugin.h \
-        NorthArrowController.h
+        toolkitquick_plugin.h
 
-DISTFILES = qmldir \
-    ../qml/NorthArrow.qml
+DISTFILES = qmldir
+
+### TOOLS
+include($$PWD/NorthArrow/NorthArrow.pri)
 
 !equals(_PRO_FILE_PWD_, $$OUT_PWD) {
     copy_qmldir.target = $$OUT_PWD/qmldir
@@ -29,9 +29,7 @@ DISTFILES = qmldir \
 }
 
 pluginfiles.files += \
-    qmldir \
-    ../qml/NorthArrow.qml
-
+    qmldir
 
 qmldir.files = qmldir
 unix {

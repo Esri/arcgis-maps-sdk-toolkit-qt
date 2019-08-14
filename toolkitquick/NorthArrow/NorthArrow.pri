@@ -11,3 +11,14 @@
 #  See the Sample code usage restrictions document for further information.
 #-------------------------------------------------
 
+SOURCES += NorthArrow\NorthArrowController.cpp
+
+HEADERS += NorthArrow\NorthArrowController.h
+
+DISTFILES = qmldir \
+    ../qml/NorthArrow.qml \
+
+INCLUDEPATH += NorthArrow
+
+pluginfiles.files += \
+    ../qml/NorthArrow.qml
