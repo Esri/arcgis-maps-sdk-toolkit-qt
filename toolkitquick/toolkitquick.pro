@@ -39,9 +39,15 @@ unix {
     INSTALLS += target qmldir pluginfiles
 }
 
+### Set this to your desired output location
+TOOLKITQUICK_INSTALL = $$(PWD)../output/toolkitquick
+
+target.path += $${TOOLKITQUICK_INSTALL}/imports/esri/arcgisruntime/toolkitquick
+pluginfiles.path += $${TOOLKITQUICK_INSTALL}/imports/esri/arcgisruntime/toolkitquick
+
 INSTALLS += target pluginfiles
 
-QMAKE_MOC_OPTIONS += -Muri=esri.arcgisruntime.toolkitquick
+QMAKE_MOC_OPTIONS += -Muri=$${uri}
 
 RESOURCES += \
     ../images/images.qrc
