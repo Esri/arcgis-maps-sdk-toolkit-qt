@@ -41,6 +41,3 @@ target.path += $${TOOLKITWIDGETS_INSTALL}/lib
 includes.path += $${TOOLKITWIDGETS_INSTALL}/include
 
 INSTALLS += includes target
-
-RESOURCES += \
-    ../images/images.qrc

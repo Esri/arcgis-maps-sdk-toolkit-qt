@@ -50,6 +50,3 @@ pluginfiles.path += $${TOOLKITQUICK_INSTALL}/imports/esri/arcgisruntime/toolkit
 INSTALLS += target pluginfiles
 
 QMAKE_MOC_OPTIONS += -Muri=$${uri}
-
-RESOURCES += \
-    ../images/images.qrc
