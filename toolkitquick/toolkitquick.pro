@@ -3,7 +3,10 @@ TARGET = toolkit
 QT += qml quick
 CONFIG += plugin c++11 staticlib
 
-ARCGIS_RUNTIME_VERSION = 100.6
+# Toolkit configuration settings
+include($$PWD/../toolkit_config.pri)
+
+# Esri ArcGIS Runtime SDK
 include($$PWD/arcgisruntime.pri)
 
 uri = esri.arcgisruntime.toolkit
@@ -39,8 +42,7 @@ unix {
     INSTALLS += target qmldir pluginfiles
 }
 
-### Set this to your desired output location
-TOOLKITQUICK_INSTALL = $$(PWD)../output/toolkitquick
+TOOLKITQUICK_INSTALL = $${TOOLKIT_INSTALL}/toolkitquick
 
 target.path += $${TOOLKITQUICK_INSTALL}/imports/esri/arcgisruntime/toolkit
 pluginfiles.path += $${TOOLKITQUICK_INSTALL}/imports/esri/arcgisruntime/toolkit
