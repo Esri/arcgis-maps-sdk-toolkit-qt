@@ -33,7 +33,7 @@ The `toolkitqml` project can be built to create a static QML plugin library for 
 - in QtCreator open `/toolkitqml/toolkitqml.pro` to open the project.
 - locate the `# TOOLS` section of the `.pro` file and comment out any tools you _do not_ wish to include in the library.
 - build the project
-- run `make install` (on winddows you can add a custom build step to do this using the `jom` library - e.g. 
+- run `make install` on windows you can add a custom build step to do this using the `jom` library - e.g. 
 
 `C:\Qt\Tools\QtCreator\bin\jom.exe install`
 
@@ -80,6 +80,59 @@ NorthArrow {
     }
 ```
 
+### toolkitquick
+The `toolkitquick` project can be built to create a static QML plugin library for use with C++ QtQuick version of the API.
+
+#### building
+- in QtCreator open `/toolkitquick/toolkitquick.pro` to open the project.
+- locate the `# TOOLS` section of the `.pro` file and comment out any tools you _do not_ wish to include in the library.
+- build the project
+- run `make install`. On windows you can add a custom build step to do this using the `jom` library - e.g. 
+
+`C:\Qt\Tools\QtCreator\bin\jom.exe install`
+
+- the project should output to the `TOOLKIT_INSTALL` location specified in the `toolkit_config.pri` file under a `toolkitquick` parent directory.
+- the output should contain a qml plugin under `/esri/arcgisruntime/toolkit`
+
+#### importing the toolkit
+A good way to start using the toolkit is to use one of the template apps which get added to QtCreator when you install the ArcGIS Runime SDK for Qt.
+- In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Runtime 100.6 Qt Quick C++ App
+- choose settings to match the platform etc. you are building for
+- in the .pro` file of your new app, add a line to add the library for your QML plugin - for example:
+
+`LIBS += C:\development\qt_toolkit_prototype\output\toolkitquick\imports\esri\arcgisruntime\toolkit\toolkit.lib`
+
+- in the Run environment settings for the app, add a new environment variable to import the QML module - e.g:
+
+`QML2_IMPORT_PATH = C:/development/qt_toolkit_prototype/output/toolkitquick/imports`
+
+- in `main.cpp` add a line to include the `QtPlugin` library:
+
+`#include <QtPlugin>`
+
+- `main.cpp` (outside of any function definitions) add he marco to import the plugin:
+
+```Q_IMPORT_PLUGIN(ToolkitqmlPlugin)```
+
+#### using a tool from the toolkit
+Once you have successfuly imported the toolkit, you can access individual tools in your own QML files.
+- add an import statement for the toolkit:
+`import esri.arcgisruntime.toolkit 1.0`
+- declare the tool you wish to use. Generally you will also have to supply the `GeoView` etc. you wish the tool to work with. For example, to add a `NorthArrow`:
+
+```
+NorthArrow {
+        id: arrow
+        width: 32
+        height: 32
+        anchors {
+            right: parent.right
+            bottom: view.bottom
+        }
+
+        mapView: view
+    }
+```
  
 
 
