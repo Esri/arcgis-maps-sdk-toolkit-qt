@@ -23,6 +23,8 @@ public:
   NorthArrowController(QObject* parent = nullptr);
   ~NorthArrowController();
 
+  Q_INVOKABLE void resetRotation();
+
 signals:
   void mapViewChanged();
   void rotationChanged();

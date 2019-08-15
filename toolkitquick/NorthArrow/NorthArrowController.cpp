@@ -11,6 +11,14 @@ NorthArrowController::~NorthArrowController()
 {
 }
 
+void NorthArrowController::resetRotation()
+{
+  if (m_mapView)
+  {
+    m_mapView->setViewpointRotation(0);
+  }
+}
+
 Esri::ArcGISRuntime::MapQuickView *NorthArrowController::mapView() const
 {
   return m_mapView;
