@@ -20,7 +20,7 @@ HEADERS += \
 
 DISTFILES = qmldir
 
-### TOOLS
+# TOOLS
 include($$PWD/NorthArrow/NorthArrow.pri)
 
 !equals(_PRO_FILE_PWD_, $$OUT_PWD) {
