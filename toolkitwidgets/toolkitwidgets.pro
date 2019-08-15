@@ -27,11 +27,6 @@ include($$PWD/../toolkit_config.pri)
 # Esri ArcGIS Runtime SDK
 include($$PWD/arcgisruntime.pri)
 
-unix {
-    target.path = /usr/lib
-    INSTALLS += target
-}
-
 ### TOOLS
 include($${PWD}/NorthArrow/NorthArrow.pri)
 
