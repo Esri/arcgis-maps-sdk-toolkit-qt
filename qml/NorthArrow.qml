@@ -14,4 +14,11 @@ Rectangle {
     NorthArrowController {
         id: controller
     }
+
+    MouseArea{
+        anchors.fill: parent
+        onDoubleClicked: {
+            controller.resetRotation();
+        }
+    }
 }

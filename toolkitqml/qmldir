@@ -1,0 +1,4 @@
+module esri.arcgisruntime.toolkit
+NorthArrowController 1.0 NorthArrowController.qml
+NorthArrow 1.0 NorthArrow.qml
+plugin toolkit
