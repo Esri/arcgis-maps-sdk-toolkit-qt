@@ -118,7 +118,7 @@ LIBS += -LC:\development\qt_toolkit_prototype\output\toolkitquick\imports\esri\a
 
 - `main.cpp` (outside of any function definitions) add he marco to import the plugin:
 
-```Q_IMPORT_PLUGIN(ToolkitqmlPlugin)```
+```Q_IMPORT_PLUGIN(ToolkitquickPlugin)```
 
 #### using a tool from the toolkit
 Once you have successfully imported the toolkit, you can access individual tools in your own QML files.
