@@ -35,9 +35,14 @@ unix {
 ### TOOLS
 include($$PWD/NorthArrow/NorthArrow.pri)
 
+INCLUDEPATH += \
+            ../shared/cpp\
+
 TOOLKITWIDGETS_INSTALL = $${TOOLKIT_INSTALL}/toolkitwidgets
 
 target.path += $${TOOLKITWIDGETS_INSTALL}/lib
 includes.path += $${TOOLKITWIDGETS_INSTALL}/include
 
 INSTALLS += includes target
+
+DEFINES += WIDGETS_TOOLKIT

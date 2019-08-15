@@ -11,11 +11,11 @@
 #  See the Sample code usage restrictions document for further information.
 #-------------------------------------------------
 
-SOURCES += NorthArrow\NorthArrowController.cpp \
-    $$PWD/NorthArrow.cpp
+SOURCES += ../shared/cpp/NorthArrowController.cpp \
+           $$PWD/NorthArrow.cpp
 
-HEADERS += NorthArrow\NorthArrowController.h \
-    $$PWD/NorthArrow.h
+HEADERS += ../shared/cpp\NorthArrowController.h \
+           $$PWD/NorthArrow.h
 
 INCLUDEPATH += NorthArrow
 

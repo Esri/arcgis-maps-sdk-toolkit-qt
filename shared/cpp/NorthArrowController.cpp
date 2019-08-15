@@ -1,6 +1,10 @@
 #include "NorthArrowController.h"
 
+#ifdef WIDGETS_TOOLKIT
+#include "MapGraphicsView.h"
+#else
 #include "MapQuickView.h"
+#endif
 
 NorthArrowController::NorthArrowController(QObject* parent):
   QObject(parent)
@@ -19,12 +23,12 @@ void NorthArrowController::resetRotation()
   }
 }
 
-Esri::ArcGISRuntime::MapQuickView *NorthArrowController::mapView() const
+Esri::ArcGISRuntime::MapViewType* NorthArrowController::mapView() const
 {
   return m_mapView;
 }
 
-void NorthArrowController::setMapView(Esri::ArcGISRuntime::MapQuickView* mapView)
+void NorthArrowController::setMapView(Esri::ArcGISRuntime::MapViewType* mapView)
 {
   if (mapView == m_mapView)
     return;
@@ -35,7 +39,7 @@ void NorthArrowController::setMapView(Esri::ArcGISRuntime::MapQuickView* mapView
   if (!m_mapView)
     return;
 
-  connect(m_mapView, &Esri::ArcGISRuntime::MapQuickView::mapRotationChanged, this, &NorthArrowController::rotationChanged);
+  connect(m_mapView, &Esri::ArcGISRuntime::MapViewType::mapRotationChanged, this, &NorthArrowController::rotationChanged);
 }
 
 int NorthArrowController::rotation() const

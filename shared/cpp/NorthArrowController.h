@@ -7,15 +7,22 @@ namespace Esri
   {
   namespace ArcGISRuntime
     {
-
+#ifdef WIDGETS_TOOLKIT
   class MapGraphicsView;
+  using MapViewType = MapGraphicsView;
+#else
+  class MapQuickView;
+  using MapViewType = MapQuickView;
+#endif
     }
   }
 
 class NorthArrowController : public QObject
 {
-  Q_PROPERTY(Esri::ArcGISRuntime::MapGraphicsView* mapView READ mapView WRITE setMapView NOTIFY mapViewChanged)
+#ifndef WIDGETS_TOOLKIT
+  Q_PROPERTY(Esri::ArcGISRuntime::MapQuickView* mapView READ mapView WRITE setMapView NOTIFY mapViewChanged)
   Q_PROPERTY(int rotation READ rotation NOTIFY rotationChanged)
+#endif
 
   Q_OBJECT
   Q_DISABLE_COPY(NorthArrowController)
@@ -26,8 +33,8 @@ public:
 
   Q_INVOKABLE void resetRotation();
 
-  Esri::ArcGISRuntime::MapGraphicsView* mapView() const;
-  void setMapView(Esri::ArcGISRuntime::MapGraphicsView* mapView);
+  Esri::ArcGISRuntime::MapViewType* mapView() const;
+  void setMapView(Esri::ArcGISRuntime::MapViewType* mapView);
 
   int rotation() const;
 
@@ -36,7 +43,7 @@ signals:
   void rotationChanged();
 
 private:
-  Esri::ArcGISRuntime::MapGraphicsView* m_mapView = nullptr;
+  Esri::ArcGISRuntime::MapViewType* m_mapView = nullptr;
   int m_rotation = 0;
 };
 

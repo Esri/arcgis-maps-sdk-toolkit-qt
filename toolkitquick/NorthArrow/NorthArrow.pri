@@ -11,9 +11,9 @@
 #  See the Sample code usage restrictions document for further information.
 #-------------------------------------------------
 
-SOURCES += NorthArrow\NorthArrowController.cpp
+SOURCES += ../shared/cpp/NorthArrowController.cpp
 
-HEADERS += NorthArrow\NorthArrowController.h
+HEADERS += ../shared/cpp/NorthArrowController.h
 
 DISTFILES = qmldir \
     ../shared/qml/NorthArrow.qml \
