@@ -46,7 +46,10 @@ A good way to start using the toolkit is to use one of the template apps which g
 - choose settings to match the platform etc. you are building for
 - in the .pro` file of your new app, add a line to add the library for your QML plugin - for example:
 
-`LIBS += C:\development\qt_toolkit_prototype\output\toolkitqml\imports\esri\arcgisruntime\toolkit\toolkit.lib`
+```
+LIBS += -LC:\development\qt_toolkit_prototype\output\toolkitqml\imports\esri\arcgisruntime\toolkit \
+        -ltoolkit
+```
 
 - in the Run environment settings for the app, add a new environment variable to import the QML module - e.g:
 
@@ -100,7 +103,10 @@ A good way to start using the toolkit is to use one of the template apps which g
 - choose settings to match the platform etc. you are building for
 - in the .pro` file of your new app, add a line to add the library for your QML plugin - for example:
 
-`LIBS += C:\development\qt_toolkit_prototype\output\toolkitquick\imports\esri\arcgisruntime\toolkit\toolkit.lib`
+```
+LIBS += -LC:\development\qt_toolkit_prototype\output\toolkitquick\imports\esri\arcgisruntime\toolkit \
+        -ltoolkit
+```
 
 - in the Run environment settings for the app, add a new environment variable to import the QML module - e.g:
 
@@ -154,7 +160,10 @@ A good way to start using the toolkit is to use one of the template apps which g
 - choose settings to match the platform etc. you are building for
 - in the .pro` file of your new app, add a line to add the library for your QML plugin - for example:
 
-`LIBS += C:\development\qt_toolkit_prototype\output\toolkitquick\imports\esri\arcgisruntime\toolkit\toolkit.lib`
+```
+LIBS += -LC:\development\qt_toolkit_prototype\output\toolkitwidgets\imports\esri\arcgisruntime\toolkit \
+        -ltoolkit
+```
 
 - add the include path for the libary headers:
 
