@@ -12,9 +12,9 @@
 #-------------------------------------------------
 
 DISTFILES = qmldir \
-    ../qml/NorthArrow.qml \
+    ../shared/qml/NorthArrow.qml \
     NorthArrow/NorthArrowController.qml
 
 pluginfiles.files += \
-    ../qml/NorthArrow.qml \
+    ../shared/qml/NorthArrow.qml \
     NorthArrow/NorthArrowController.qml

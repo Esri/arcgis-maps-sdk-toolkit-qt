@@ -16,11 +16,11 @@ SOURCES += NorthArrow\NorthArrowController.cpp
 HEADERS += NorthArrow\NorthArrowController.h
 
 DISTFILES = qmldir \
-    ../qml/NorthArrow.qml \
+    ../shared/qml/NorthArrow.qml \
 
 INCLUDEPATH += NorthArrow
 
 pluginfiles.files += \
-    ../qml/NorthArrow.qml
+    ../shared/qml/NorthArrow.qml
 
 DEFINES += NORTHARROW
