@@ -15,7 +15,7 @@
 ARCGIS_RUNTIME_VERSION = 100.6
 
 # Set this to your desired output location for toolkit builds:
-TOOLKIT_INSTALL = $$(PWD)../output
+TOOLKIT_INSTALL = $${PWD}/../output
 
 # Shared image resources
 RESOURCES += \

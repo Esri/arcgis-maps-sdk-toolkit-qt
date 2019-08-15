@@ -33,7 +33,7 @@ unix {
 }
 
 ### TOOLS
-include($$PWD/NorthArrow/NorthArrow.pri)
+include($${PWD}/NorthArrow/NorthArrow.pri)
 
 INCLUDEPATH += \
             ../shared/cpp\
