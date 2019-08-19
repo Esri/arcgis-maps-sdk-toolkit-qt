@@ -184,6 +184,13 @@ Item {
     property bool accessoryButtonHidden: false
 
     /*!
+        \brief A QML Item to display in the Callout.
+
+        The default is \c null.
+    */
+    property Component calloutContent: null
+
+    /*!
         \brief The signal emitted when the accessory button is clicked.
     */
     signal accessoryButtonClicked()
@@ -320,7 +327,6 @@ Item {
         and for Callout (which controls how the view appears on the MapView).
     */
     function showCallout() {
-
         // no calloutData set
         if (!calloutData)
             return;
@@ -334,7 +340,7 @@ Item {
         else
             adjustedLeaderPosition = Enums.LeaderPosition.Bottom;
 
-        // setup the accessory button mode
+        // setup the accessory button mode        
         setupAccessoryButton();
 
         // these are some of the initial calculations
@@ -388,6 +394,7 @@ Item {
             property bool createPathAndPaint: false
 
             antialiasing: true
+            clip: true
 
             // work around for Qt bug with Canvas on iOS.
             // Rendering to Frame buffer object causes weirdness with size.
@@ -406,12 +413,42 @@ Item {
                 drawCalloutFrame();
             }
 
+            Loader {
+                id: calloutContentFrameLoader
+                visible: calloutContent
+                property int margin: 4
+
+                x: if (adjustedLeaderPosition === Enums.LeaderPosition.Left) {
+                       return parent.x + leaderHeight + margin;
+                   } else if (adjustedLeaderPosition === Enums.LeaderPosition.Right) {
+                       return parent.x + leaderHeight / 2 ;
+                   } else if (adjustedLeaderPosition === Enums.LeaderPosition.LowerRight ||
+                              adjustedLeaderPosition === Enums.LeaderPosition.UpperRight) {
+                       return parent.x + leaderWidth - margin / 2 ;
+                   } else {
+                       return parent.x + margin;
+                   }
+                y: if (adjustedLeaderPosition === Enums.LeaderPosition.Top ||
+                       adjustedLeaderPosition === Enums.LeaderPosition.UpperLeft ||
+                       adjustedLeaderPosition === Enums.LeaderPosition.UpperRight) {
+                       return parent.y + margin + leaderHeight;
+                   } else {
+                       parent.y + margin
+                   }
+
+                width: rectWidth - margin
+                height: calloutHeight - margin
+                clip: true
+                sourceComponent: calloutContent
+            }
+
             Rectangle {
                 id: calloutContentFrame
                 anchors {
                     left: parent.left
                     top: parent.top
                 }
+                visible: !calloutContent
 
                 GridLayout {
                     id: calloutLayout
