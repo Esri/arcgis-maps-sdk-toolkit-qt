@@ -7,3 +7,4 @@ void ToolkitqmlPlugin::registerTypes(const char* /*uri*/)
   // @uri esri.arcgisruntime.toolkit
 }
 
+static ToolkitqmlPlugin ToolkitqmlPluginInstance;
