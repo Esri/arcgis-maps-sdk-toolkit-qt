@@ -340,7 +340,7 @@ Item {
         else
             adjustedLeaderPosition = Enums.LeaderPosition.Bottom;
 
-        // setup the accessory button mode        
+        // setup the accessory button mode
         setupAccessoryButton();
 
         // these are some of the initial calculations
