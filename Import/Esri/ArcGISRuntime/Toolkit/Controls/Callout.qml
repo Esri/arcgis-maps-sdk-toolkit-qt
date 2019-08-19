@@ -270,6 +270,10 @@ Item {
     /*! \internal */
     property int adjustedMaxWidth: maxWidth
     /*! \internal */
+    property int adjustedX: 0
+    /*! \internal */
+    property int adjustedY: 0
+    /*! \internal */
     visible: false
 
     /*! \internal */
@@ -317,6 +321,27 @@ Item {
     onLeaderPositionChanged: {
         if (calloutVisible)
             showCallout();
+    }
+
+    onAdjustedLeaderPositionChanged: {
+        var margin = calloutContentFrameLoader.margin;
+        if (adjustedLeaderPosition === Enums.LeaderPosition.Left) {
+            adjustedX = leaderHeight + margin;
+        } else if (adjustedLeaderPosition === Enums.LeaderPosition.Right) {
+            adjustedX = leaderHeight / 2 ;
+        } else if (adjustedLeaderPosition === Enums.LeaderPosition.LowerRight) {
+            adjustedX = leaderWidth - margin / 2 ;
+        } else if (adjustedLeaderPosition === Enums.LeaderPosition.UpperRight) {
+            adjustedX = leaderWidth - margin / 2 ;
+            adjustedY = margin + leaderHeight;
+        } else if (adjustedLeaderPosition === Enums.LeaderPosition.UpperLeft) {
+            adjustedY = margin + leaderHeight;
+        } else if (adjustedLeaderPosition === Enums.LeaderPosition.Top) {
+            adjustedY = margin + leaderHeight;
+        } else {
+            adjustedX = margin;
+            adjustedY = margin;
+        }
     }
 
     /*!
@@ -416,26 +441,11 @@ Item {
             Loader {
                 id: calloutContentFrameLoader
                 visible: calloutContent
-                property int margin: 4
 
-                x: if (adjustedLeaderPosition === Enums.LeaderPosition.Left) {
-                       return parent.x + leaderHeight + margin;
-                   } else if (adjustedLeaderPosition === Enums.LeaderPosition.Right) {
-                       return parent.x + leaderHeight / 2 ;
-                   } else if (adjustedLeaderPosition === Enums.LeaderPosition.LowerRight ||
-                              adjustedLeaderPosition === Enums.LeaderPosition.UpperRight) {
-                       return parent.x + leaderWidth - margin / 2 ;
-                   } else {
-                       return parent.x + margin;
-                   }
-                y: if (adjustedLeaderPosition === Enums.LeaderPosition.Top ||
-                       adjustedLeaderPosition === Enums.LeaderPosition.UpperLeft ||
-                       adjustedLeaderPosition === Enums.LeaderPosition.UpperRight) {
-                       return parent.y + margin + leaderHeight;
-                   } else {
-                       parent.y + margin
-                   }
+                property var margin: 4
 
+                x: parent.x + adjustedX
+                y: parent.y + adjustedY
                 width: rectWidth - margin
                 height: calloutHeight - margin
                 clip: true
