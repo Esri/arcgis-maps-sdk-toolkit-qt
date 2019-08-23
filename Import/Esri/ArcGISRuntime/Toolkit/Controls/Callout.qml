@@ -184,6 +184,13 @@ Item {
     property bool accessoryButtonHidden: false
 
     /*!
+        \brief A QML Item to display in the Callout.
+
+        The default is \c null.
+    */
+    property Component calloutContent: null
+
+    /*!
         \brief The signal emitted when the accessory button is clicked.
     */
     signal accessoryButtonClicked()
@@ -207,6 +214,11 @@ Item {
         \brief The width of the Callout if autoAdjustWidth is false.
     */
     property real calloutWidth: 300
+
+    /*!
+        \brief The height of the Callout.
+    */
+    property real calloutHeight: 45
 
     // internal properties
     /*! \internal */
@@ -258,6 +270,10 @@ Item {
     /*! \internal */
     property int adjustedMaxWidth: maxWidth
     /*! \internal */
+    property int adjustedX: 0
+    /*! \internal */
+    property int adjustedY: 0
+    /*! \internal */
     visible: false
 
     /*! \internal */
@@ -292,9 +308,40 @@ Item {
         }
     }
 
+    onCalloutWidthChanged: {
+        if (calloutVisible)
+            showCallout();
+    }
+
+    onCalloutHeightChanged: {
+        if (calloutVisible)
+            showCallout();
+    }
+
     onLeaderPositionChanged: {
         if (calloutVisible)
             showCallout();
+    }
+
+    onAdjustedLeaderPositionChanged: {
+        var margin = calloutContentFrameLoader.margin;
+        if (adjustedLeaderPosition === Enums.LeaderPosition.Left) {
+            adjustedX = leaderHeight + margin;
+        } else if (adjustedLeaderPosition === Enums.LeaderPosition.Right) {
+            adjustedX = leaderHeight / 2 ;
+        } else if (adjustedLeaderPosition === Enums.LeaderPosition.LowerRight) {
+            adjustedX = leaderWidth - margin / 2 ;
+        } else if (adjustedLeaderPosition === Enums.LeaderPosition.UpperRight) {
+            adjustedX = leaderWidth - margin / 2 ;
+            adjustedY = margin + leaderHeight;
+        } else if (adjustedLeaderPosition === Enums.LeaderPosition.UpperLeft) {
+            adjustedY = margin + leaderHeight;
+        } else if (adjustedLeaderPosition === Enums.LeaderPosition.Top) {
+            adjustedY = margin + leaderHeight;
+        } else {
+            adjustedX = margin;
+            adjustedY = margin;
+        }
     }
 
     /*!
@@ -305,7 +352,6 @@ Item {
         and for Callout (which controls how the view appears on the MapView).
     */
     function showCallout() {
-
         // no calloutData set
         if (!calloutData)
             return;
@@ -373,6 +419,7 @@ Item {
             property bool createPathAndPaint: false
 
             antialiasing: true
+            clip: true
 
             // work around for Qt bug with Canvas on iOS.
             // Rendering to Frame buffer object causes weirdness with size.
@@ -391,12 +438,27 @@ Item {
                 drawCalloutFrame();
             }
 
+            Loader {
+                id: calloutContentFrameLoader
+                visible: calloutContent
+
+                property var margin: 4
+
+                x: parent.x + adjustedX
+                y: parent.y + adjustedY
+                width: rectWidth - margin
+                height: calloutHeight - margin
+                clip: true
+                sourceComponent: calloutContent
+            }
+
             Rectangle {
                 id: calloutContentFrame
                 anchors {
                     left: parent.left
                     top: parent.top
                 }
+                visible: !calloutContent
 
                 GridLayout {
                     id: calloutLayout
@@ -404,7 +466,7 @@ Item {
                         left: parent.left
                         top: parent.top
                     }
-                    height: 45
+                    height: calloutHeight
                     columns: 3
                     rows: 2
                     columnSpacing: 7
@@ -887,7 +949,7 @@ Item {
             // no auto adjust
             var adjustedCalloutWidth = calloutWidth - (2 * leaderWidth + edgeBuffer);
             rectWidth = Math.max(calloutMinWidth, adjustedCalloutWidth);
-            rectHeight = calloutMinHeight;
+            rectHeight = calloutHeight;
         }
 
         if (debug) {
