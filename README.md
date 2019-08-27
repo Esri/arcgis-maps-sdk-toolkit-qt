@@ -26,7 +26,7 @@ This project contains QML source code for controls and utilities you can use wit
   - Add a qmake variable - `QML_IMPORT_PATH+=<path_to_repo>/Import`
   - Add the path to the QML Engine's path list in C++ code - `QQmlEngine::addImportPath("<path_to_repo>/Import");`
 4. Import the QML plugin modules in your project. For example:
-  - `import Esri.ArcGISRuntime.Toolkit.Controls 100.6`
+  - `import Esri.ArcGISRuntime.Toolkit.Controls 100.7`
   - `import Esri.ArcGISRuntime.Toolkit.Dialogs 100.6`
 
 ## Alternate Setup instructions (importing the Toolkit as a plugin)
