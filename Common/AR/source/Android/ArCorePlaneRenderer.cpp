@@ -25,56 +25,74 @@ ArCorePlaneRenderer::ArCorePlaneRenderer(ArCoreWrapper* ArCoreWrapper) :
 {
 }
 
-void ArCorePlaneRenderer::init()
+void ArCorePlaneRenderer::initGL()
 {
-//  m_program.reset(new QOpenGLShaderProgram());
-//  m_program->addCacheableShaderFromSourceCode(QOpenGLShader::Vertex,
-//                                              "uniform mat4 u_modelViewProjection;"
-//                                              "uniform vec4 u_color;"
-//                                              "uniform float u_pointSize;"
-//                                              "attribute vec4 a_position;"
-//                                              "varying vec4 v_Color;"
-//                                              "void main() {"
-//                                              "  v_Color = u_color;"
-//                                              "  vec4 position = u_modelViewProjection * vec4(a_position.xyz, 1.0);"
-//                                              "  gl_Position = vec4(position.x, 1.0 - position.y, position.z, position.w);"
-//                                              "  gl_PointSize = u_pointSize;"
-//                                              "}");
-//  m_program->addCacheableShaderFromSourceCode(QOpenGLShader::Fragment,
-//                                              "precision mediump float;"
-//                                              "varying vec4 v_Color;"
-//                                              "void main() {"
-//                                              "  gl_FragColor = v_Color;"
-//                                              "}");
+  m_program.reset(new QOpenGLShaderProgram());
 
-//  m_program->link();
-//  m_program->bind();
+  m_program->addCacheableShaderFromSourceCode(QOpenGLShader::Vertex,
+                                              "uniform mat4 u_modelViewProjection;"
+                                              "uniform vec4 u_color;"
+                                              "attribute vec2 a_position;"
+                                              "varying vec4 v_color;"
+                                              "void main() {"
+                                              "  v_color = u_color;"
+                                              "  vec4 localPosition = vec4(a_position.x, 0.0, a_position.y, 1.0);"
+                                              "  vec4 position = u_modelViewProjection * localPosition;"
+                                              "  gl_Position = vec4(position.x, -position.y, position.z, position.w);"
+                                              "}");
+  m_program->addCacheableShaderFromSourceCode(QOpenGLShader::Fragment,
+                                              "precision mediump float;"
+                                              "varying vec4 v_color;"
+                                              "void main() {"
+                                              "  gl_FragColor = v_color;"
+                                              "}");
 
-//  m_attributeVertices = m_program->attributeLocation("a_position");
-//  m_uniformModelViewProjection = m_program->uniformLocation("u_modelViewProjection");
-//  m_uniformColor = m_program->uniformLocation("u_color");
-//  m_uniformPointSize = m_program->uniformLocation("u_pointSize");
+  m_program->link();
+  m_program->bind();
 
-//  m_program->release();
+  m_uniformModelViewProjection = m_program->uniformLocation("u_modelViewProjection");
+  m_uniformColor = m_program->uniformLocation("u_color");
+  m_attributeVertices = m_program->attributeLocation("a_position");
+
+  m_program->release();
 }
 
 void ArCorePlaneRenderer::render()
 {
-//  Q_CHECK_PTR(m_arCoreWrapper);
+  Q_CHECK_PTR(m_arCoreWrapper);
 
-//  m_program->bind();
+  m_program->bind();
+  glDepthMask(GL_FALSE);
 
-//  glUniformMatrix4fv(m_uniformModelViewProjection, 1, GL_FALSE, m_arCoreWrapper->modelViewProjectionData());
+  int32_t size = 0;
+  m_arCoreWrapper->planeListData(size);
+  if (size == 0)
+  {
+    m_program->release();
+    m_arCoreWrapper->releasePlaneListData();
+    return;
+  }
 
-//  glEnableVertexAttribArray(m_attributeVertices);
+  for (int32_t index = 0; index < size; ++index)
+  {
+    std::vector<float> vertices;
+    QMatrix4x4 modelViewProjection;
+    if (!m_arCoreWrapper->planeData(modelViewProjection, index, vertices))
+      continue;
 
-//  glVertexAttribPointer(m_attributeVertices, 4, GL_FLOAT, GL_FALSE, 0, m_arCoreWrapper->pointCloudData());
+    glLineWidth(10);
 
-//  // Set cyan color to the point cloud.
-//  glUniform4f(m_uniformColor, 31.0f / 255.0f, 188.0f / 255.0f, 210.0f / 255.0f, 1.0f);
-//  glUniform1f(m_uniformPointSize, 50.0f);
+    glUniformMatrix4fv(m_uniformModelViewProjection, 1, GL_FALSE, modelViewProjection.data());
+    glEnableVertexAttribArray(m_attributeVertices);
+    glVertexAttribPointer(m_attributeVertices, 2, GL_FLOAT, GL_FALSE, 0, vertices.data());
+    glUniform4f(m_uniformColor, 1, 0, 0, 0.001);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, vertices.size() / 2);
 
-//  glDrawArrays(GL_POINTS, 0, m_arCoreWrapper->pointCloudSize());
+    // release data
+    m_arCoreWrapper->releasePlaneData();
+  }
 
-//  m_program->release();
+  m_program->release();
+  glDepthMask(GL_TRUE);
+  m_arCoreWrapper->releasePlaneListData();
 }

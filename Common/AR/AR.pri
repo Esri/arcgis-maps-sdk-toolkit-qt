@@ -29,9 +29,7 @@ HEADERS += \
     $$AR_COMMON_INCLUDE_PATH/ArWrapper.h \
     $$AR_COMMON_INCLUDE_PATH/SensorStatus.h \
     $$AR_COMMON_INCLUDE_PATH/ArKitUsage.h \
-    $$AR_COMMON_INCLUDE_PATH/LocationDataSource.h \
-    $$AR_COMMON_INCLUDE_PATH/OrientationDataSource.h \
-    $$AR_COMMON_INCLUDE_PATH/OrientationUtils.h
+    $$AR_COMMON_INCLUDE_PATH/LocationDataSource.h
 
 SOURCES += \
     $$AR_COMMON_SOURCE_PATH/ArcGISArViewInterface.cpp \
@@ -39,9 +37,7 @@ SOURCES += \
     $$AR_COMMON_SOURCE_PATH/ArWrapper.cpp \
     $$AR_COMMON_SOURCE_PATH/SensorStatus.cpp \
     $$AR_COMMON_SOURCE_PATH/ArKitUsage.cpp \
-    $$AR_COMMON_SOURCE_PATH/LocationDataSource.cpp \
-    $$AR_COMMON_SOURCE_PATH/OrientationDataSource.cpp \
-    $$AR_COMMON_SOURCE_PATH/OrientationUtils.cpp
+    $$AR_COMMON_SOURCE_PATH/LocationDataSource.cpp
 
 INCLUDEPATH += $$AR_COMMON_INCLUDE_PATH
 DEPENDPATH += $$AR_COMMON_INCLUDE_PATH
@@ -107,13 +103,6 @@ android {
     INCLUDEPATH += $$AR_CORE_INCLUDE_PATH
     DEPENDPATH += $$AR_CORE_INCLUDE_PATH
 
-    DISTFILES += \
-        $$AR_TOOLKIT_CPPAPI_PATH/AndroidManifest.xml \
-        $$AR_CORE_GRADLE_PATH/gradle/wrapper/gradle-wrapper.jar \
-        $$AR_CORE_GRADLE_PATH/gradlew \
-        $$AR_CORE_GRADLE_PATH/build.gradle \
-        $$AR_CORE_GRADLE_PATH/gradle/wrapper/gradle-wrapper.properties \
-        $$AR_CORE_GRADLE_PATH/gradlew.bat
 
     LIBS += -L"$$AR_CORE_LIBS_PATH/jni/arm64-v8a"
     LIBS += -larcore_sdk_c -larcore_sdk_jni

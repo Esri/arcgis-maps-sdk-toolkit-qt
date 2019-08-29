@@ -19,6 +19,7 @@
 
 #include <QQuickFramebufferObject>
 #include <array>
+#include "LocationDataSource.h"
 
 namespace Esri {
 namespace ArcGISRuntime {
@@ -29,20 +30,15 @@ class ArWrapper;
 class ArcGISArViewRenderer;
 }
 
-class LocationDataSource;
-class OrientationDataSource;
-
 class ArcGISArViewInterface : public QQuickFramebufferObject
 {
   Q_OBJECT
   Q_PROPERTY(bool renderVideoFeed READ renderVideoFeed WRITE setRenderVideoFeed NOTIFY renderVideoFeedChanged)
-  Q_PROPERTY(bool tracking READ tracking WRITE setTracking NOTIFY trackingChanged)
   Q_PROPERTY(double translationFactor READ translationFactor WRITE setTranslationFactor NOTIFY translationFactorChanged)
   Q_PROPERTY(bool tryUsingArKit READ tryUsingArKit WRITE setTryUsingArKit NOTIFY tryUsingArKitChanged)
 
   // sensors
   Q_PROPERTY(LocationDataSource* locationDataSource READ locationDataSource WRITE setLocationDataSource NOTIFY locationDataSourceChanged)
-  Q_PROPERTY(OrientationDataSource* orientationDataSource READ orientationDataSource WRITE setOrientationDataSource NOTIFY orientationDataSourceChanged)
 
 public:
   explicit ArcGISArViewInterface(QQuickItem* parent = nullptr);
@@ -52,9 +48,6 @@ public:
   // properties
   bool renderVideoFeed() const;
   void setRenderVideoFeed(bool renderVideoFeed);
-
-  bool tracking() const;
-  void setTracking(bool tracking);
 
   double translationFactor() const;
   void setTranslationFactor(double translationFactor);
@@ -66,13 +59,8 @@ public:
   LocationDataSource* locationDataSource() const;
   void setLocationDataSource(LocationDataSource* locationDataSource);
 
-  OrientationDataSource* orientationDataSource() const;
-  void setOrientationDataSource(OrientationDataSource* orientationDataSource);
-
   // invokable methods
   Q_INVOKABLE void resetTracking();
-  Q_INVOKABLE bool resetUsingLocationService();
-  Q_INVOKABLE void resetUsingSpacialAnchor();
   Q_INVOKABLE void startTracking();
   Q_INVOKABLE void stopTracking();
 
@@ -80,19 +68,8 @@ public:
   template<typename ArRawPtr>
   ArRawPtr* arRawPtr() const;
 
-  // internals functions
+  // override function from QQuickFramebufferObject
   QQuickFramebufferObject::Renderer* createRenderer() const override;
-
-  virtual void updateCamera(double quaternionX, double quaternionY, double quaternionZ, double quaternionW,
-                            double translationX, double translationY, double translationZ) = 0;
-
-  virtual void updateFieldOfView(double xFocalLength, double yFocalLength,
-                                 double xPrincipal, double yPrincipal,
-                                 double xImageSize, double yImageSize) = 0;
-
-  virtual void renderFrame() = 0;
-
-  virtual void setTranslationFactorInternal(double translationFactor) = 0;
 
 signals:
   void renderVideoFeedChanged();
@@ -104,12 +81,25 @@ signals:
 
   // sensors
   void locationDataSourceChanged();
-  void orientationDataSourceChanged();
+
+public: // internals, used by AR wrappers
+  virtual void setTransformationMatrixInternal(double quaternionX, double quaternionY, double quaternionZ, double quaternionW,
+                                               double translationX, double translationY, double translationZ) = 0;
+
+  virtual void setFieldOfViewInternal(double xFocalLength, double yFocalLength,
+                                      double xPrincipal, double yPrincipal,
+                                      double xImageSize, double yImageSize) = 0;
+
+  virtual void renderFrameInternal() = 0;
 
 protected:
   void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry) override;
 
-  std::array<double, 7> screenToLocationInternal(int x, int y) const;
+  std::array<double, 7> internalHitTest(int x, int y) const;
+
+  virtual void setTranslationFactorInternal(double translationFactor) = 0;
+  virtual void setLocationInternal(double latitude, double longitude, double altitude) = 0;
+  virtual void resetTrackingInternal() = 0;
 
 private:
   void updateTrackingSources();
@@ -120,13 +110,10 @@ private:
   bool m_renderVideoFeed = true;
   double m_translationFactor = 1.0;
   bool m_tryUsingArKit = true;
-  bool m_tracking = true;
 
   // sensors
   LocationDataSource* m_locationDataSource = nullptr;
-  OrientationDataSource* m_orientationDataSource = nullptr;
   QMetaObject::Connection m_locationDataSourceConnection;
-  QMetaObject::Connection m_orientationDataSourceConnection;
 };
 
 } // Toolkit namespace

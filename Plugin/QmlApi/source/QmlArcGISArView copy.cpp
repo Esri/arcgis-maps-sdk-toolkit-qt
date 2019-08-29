@@ -15,6 +15,9 @@
  ******************************************************************************/
 
 #include "QmlArcGISArView.h"
+#include <QQuickWindow>
+#include <QScreen>
+#include <QtQml>
 
 /*!
   \class Esri::ArcGISRuntime::Toolkit::QmlArcGISArView
@@ -53,13 +56,14 @@ QObject* QmlArcGISArView::originCamera() const
 
 void QmlArcGISArView::setOriginCamera(QObject* originCamera)
 {
+  qDebug() << "***** set origin camera" << originCamera << m_tmcc;
   if (m_originCamera == originCamera || assertClassName(originCamera, "QmlCamera"))
     return;
 
   m_originCamera = originCamera;
 
   // set origin camera to tmcc if available
-  if (m_tmcc)
+  if (tmcc())
     m_tmcc->setProperty("originCamera", QVariant::fromValue(m_originCamera));
 
   emit originCameraChanged();
@@ -79,42 +83,19 @@ QObject* QmlArcGISArView::sceneView() const
 
 void QmlArcGISArView::setSceneView(QObject* sceneView)
 {
-  if (!sceneView || m_sceneView || assertClassName(sceneView, "QmlSceneView"))
+  qDebug() << "&&&&&& " << m_sceneView;
+  if (sceneView == m_sceneView || assertClassName(sceneView, "QmlSceneView"))
     return;
 
   m_sceneView = sceneView;
 
-  // set properties
-  m_sceneView->setProperty("spaceEffect", 1); // SpaceEffect::Transparent
-  m_sceneView->setProperty("atmosphereEffect", 0); // AtmosphereEffect::None
-  m_sceneView->setProperty("manualRendering", true);
-
+  // set TMCC to scene view
   if (m_tmcc)
     m_sceneView->setProperty("cameraController", QVariant::fromValue(m_tmcc));
 
   emit sceneViewChanged();
-}
 
-/*!
-  \internal
- */
-QObject* QmlArcGISArView::transformationMatrixCameraControler() const
-{
-  return m_tmcc;
-}
-
-void QmlArcGISArView::setTransformationMatrixCameraControler(QObject* tmcc)
-{
-  if (!tmcc || m_tmcc || assertClassName(tmcc, "QmlTransformationMatrixCameraControler"))
-    return;
-
-  m_tmcc = tmcc;
-
-  // set TMCC to scene view
-  if (m_sceneView)
-    m_sceneView->setProperty("cameraController", QVariant::fromValue(m_tmcc));
-
-  emit transformationMatrixCameraControlerChanged();
+  startTracking();
 }
 
 /*!
@@ -124,7 +105,7 @@ void QmlArcGISArView::setTransformationMatrixCameraControler(QObject* tmcc)
 */
 QObject* QmlArcGISArView::screenToLocation(QObject* screenPoint) const
 {
-  if (!m_sceneView || assertClassName(screenPoint, "QmlPoint"))
+  if (!qmlWrapper() || !m_sceneView || assertClassName(screenPoint, "QmlPoint"))
     return nullptr;
 
   // gets the position of the screen point
@@ -163,40 +144,87 @@ QObject* QmlArcGISArView::screenToLocation(QObject* screenPoint) const
 /*!
   \internal
  */
-void QmlArcGISArView::setTransformationMatrixInternal(
-    double quaternionX, double quaternionY, double quaternionZ, double quaternionW,
-    double translationX, double translationY, double translationZ)
+void QmlArcGISArView::updateTransformationMatrix(double quaternionX, double quaternionY, double quaternionZ, double quaternionW,
+                                                 double translationX, double translationY, double translationZ)
 {
-  emit transformationMatrixChanged(quaternionX, quaternionY, quaternionZ, quaternionW,
-                                   translationX, translationY, translationZ);
+  if (qmlWrapper())
+  {
+    QMetaObject::invokeMethod(m_qmlWrapper, "createAndSetTransformationMatrix", Qt::DirectConnection,
+                              Q_ARG(QVariant, quaternionX),
+                              Q_ARG(QVariant, quaternionY),
+                              Q_ARG(QVariant, quaternionZ),
+                              Q_ARG(QVariant, quaternionW),
+                              Q_ARG(QVariant, translationX),
+                              Q_ARG(QVariant, translationY),
+                              Q_ARG(QVariant, translationZ));
+  }
 }
 
 /*!
   \internal
  */
-void QmlArcGISArView::setFieldOfViewInternal(double xFocalLength, double yFocalLength,
-                                             double xPrincipal, double yPrincipal,
-                                             double xImageSize, double yImageSize)
+void QmlArcGISArView::updateFieldOfView(double xFocalLength, double yFocalLength,
+                                        double xPrincipal, double yPrincipal,
+                                        double xImageSize, double yImageSize)
 {
-  emit fieldOfViewChanged(xFocalLength, yFocalLength,
-                          xPrincipal, yPrincipal,
-                          xImageSize, yImageSize);
+  if (!m_sceneView)
+    return;
+
+  // get the screen orientation
+  const Qt::ScreenOrientations orientation = window()->screen()->orientation();
+  int deviceOrientation = 0;
+
+  switch (orientation) {
+    case Qt::PortraitOrientation:
+      deviceOrientation = 0;
+      break;
+    case Qt::LandscapeOrientation:
+      deviceOrientation = 1;
+      break;
+    case Qt::InvertedPortraitOrientation:
+      deviceOrientation = 2;
+      break;
+    case Qt::InvertedLandscapeOrientation:
+      deviceOrientation = 3;
+      break;
+    default:
+      deviceOrientation = 0;
+      break;
+  }
+
+  // set the field of view
+  if (qmlWrapper())
+  {
+    QMetaObject::invokeMethod(m_qmlWrapper, "setFieldOfViewFromLensIntrinsics", Qt::DirectConnection,
+                              Q_ARG(QVariant, QVariant::fromValue(m_sceneView)),
+                              Q_ARG(QVariant, xFocalLength),
+                              Q_ARG(QVariant, yFocalLength),
+                              Q_ARG(QVariant, xPrincipal),
+                              Q_ARG(QVariant, yPrincipal),
+                              Q_ARG(QVariant, xImageSize),
+                              Q_ARG(QVariant, yImageSize),
+                              Q_ARG(QVariant, deviceOrientation));
+  }
 }
 
 /*!
   \internal
  */
-void QmlArcGISArView::renderFrameInternal()
+void QmlArcGISArView::renderFrame()
 {
-  emit renderFrame();
+  if (!m_sceneView)
+    return;
+
+  QMetaObject::invokeMethod(m_sceneView, "renderFrame", Qt::DirectConnection);
 }
 
 /*!
   \internal
  */
-void QmlArcGISArView::setTranslationFactorInternal(double)
+void QmlArcGISArView::setTranslationFactorInternal(double translationFactor)
 {
-  // do nothing
+  if (tmcc())
+    m_tmcc->setProperty("translationFactor", translationFactor);
 }
 
 /*!
@@ -204,7 +232,67 @@ void QmlArcGISArView::setTranslationFactorInternal(double)
  */
 void QmlArcGISArView::setLocationInternal(double latitude, double longitude, double altitude)
 {
-  emit locationChanged(latitude, longitude, altitude);
+  qDebug() << "++++ set location internal" << latitude << longitude << altitude << m_sceneView << m_tmcc;
+  if (m_sceneView)
+    qDebug() << "+++ TMCC:" << m_sceneView->property("cameraController").value<QObject*>();
+
+  if (tmcc())
+  {
+    QMetaObject::invokeMethod(m_qmlWrapper, "setLocation", Qt::DirectConnection,
+                              Q_ARG(QVariant, latitude),
+                              Q_ARG(QVariant, longitude),
+                              Q_ARG(QVariant, altitude));
+  }
+}
+
+/*!
+  \internal
+
+  Create the qmlWrapper object using the qmlWrapper.qml component if necessary and returns it.
+ */
+QObject* QmlArcGISArView::qmlWrapper() const
+{
+  if (!m_qmlWrapper)
+  {
+    // create TMCC object
+    QQmlComponent qmlWrapperComponent(qmlEngine(this), QUrl("qrc:/qml/qmlWrapper.qml"));
+    m_qmlWrapper = qmlWrapperComponent.create();
+    Q_CHECK_PTR(m_qmlWrapper);
+  }
+
+  return m_qmlWrapper;
+}
+
+/*!
+  \internal
+
+  Create the TMCC object using the qmlWrapper if necessary and returns it.
+ */
+QObject* QmlArcGISArView::tmcc() const
+{
+  qDebug() << "***** >>>> m_tmcc" << m_tmcc;
+  if (!m_tmcc)
+  {
+    // get the TMCC object from the QML object
+    m_tmcc = qmlWrapper()->property("tmcc").value<QObject*>();
+    Q_CHECK_PTR(m_tmcc);
+    qDebug() << "*****>>>> m_tmcc" << m_tmcc << m_sceneView;
+
+    connect(m_tmcc, SIGNAL(originCameraChanged()), this, SIGNAL(originCameraChanged()));
+
+    // set TMCC to scene view
+    if (m_sceneView)
+      m_sceneView->setProperty("cameraController", QVariant::fromValue(m_tmcc));
+
+    // set origin camera to tmcc if available
+    if (m_originCamera)
+      m_tmcc->setProperty("originCamera", QVariant::fromValue(m_originCamera));
+
+    // set translation factor to tmcc
+    m_tmcc->setProperty("translationFactor", translationFactor());
+  }
+
+  return m_tmcc;
 }
 
 /*!

@@ -20,7 +20,7 @@
 #include "ArcGISArViewInterface.h"
 #include <array>
 #include "ArCorePointCloudRenderer.h"
-
+#include "ArCorePlaneRenderer.h"
 #include <QGuiApplication>
 #include <QScreen>
 
@@ -69,6 +69,7 @@ const GLfloat kVerticesPortrait[] = {
 ArCoreWrapper::ArCoreWrapper(ArcGISArViewInterface* arcGISArView) :
   m_arcGISArView(arcGISArView),
   m_arCoreFrameRenderer(this),
+  m_arCorePlaneRenderer(new ArCorePlaneRenderer(this)),
   m_arCorePointCloudRenderer(new ArCorePointCloudRenderer(this))
 {
   installArCore();
@@ -82,14 +83,14 @@ ArCoreWrapper::ArCoreWrapper(ArcGISArViewInterface* arcGISArView) :
 
     // update the scene view camera
     auto camera = quaternionTranslation();
-    m_arcGISArView->updateCamera(camera[0], camera[1], camera[2], camera[3], camera[4], camera[5], camera[6]);
+    m_arcGISArView->setTransformationMatrixInternal(camera[0], camera[1], camera[2], camera[3], camera[4], camera[5], camera[6]);
 
     // udapte the field of view, based on the
     auto lens = lensIntrinsics();
-    m_arcGISArView->updateFieldOfView(lens[0], lens[1], lens[2], lens[3], lens[4], lens[5]);
+    m_arcGISArView->setFieldOfViewInternal(lens[0], lens[1], lens[2], lens[3], lens[4], lens[5]);
 
     // render the frame of the ArcGIS runtime
-    m_arcGISArView->renderFrame();
+    m_arcGISArView->renderFrameInternal();
   });
 
   startTracking();
@@ -144,6 +145,7 @@ void ArCoreWrapper::stopTracking()
 
 void ArCoreWrapper::resetTracking()
 {
+  // todo: arSCNView.session.run(arConfiguration, options: [.resetTracking, .removeExistingAnchors])
   // not implemented
 }
 
@@ -177,6 +179,9 @@ void ArCoreWrapper::initGL()
 {
   m_arCoreFrameRenderer.initGL();
 
+  if (m_arCorePlaneRenderer)
+    m_arCorePlaneRenderer->initGL();
+
   if (m_arCorePointCloudRenderer)
     m_arCorePointCloudRenderer->initGL();
 }
@@ -187,6 +192,9 @@ void ArCoreWrapper::render()
   udpateArCamera();
 
   m_arCoreFrameRenderer.render();
+
+  if (m_arCorePlaneRenderer)
+    m_arCorePlaneRenderer->render();
 
   if (m_arCorePointCloudRenderer)
     m_arCorePointCloudRenderer->render();
@@ -363,6 +371,13 @@ void ArCoreWrapper::udpateArCamera()
     emit m_arcGISArView->errorOccurred("ARCore failure", "Fails to acquire the camera.");
     return;
   }
+
+  // get the view and projection matrix
+  ArCamera_getViewMatrix(m_arSession, m_arCamera, m_viewMatrix.data());
+  ArCamera_getProjectionMatrix(m_arSession, m_arCamera, 0.1f, 100.f, m_projectionMatrix.data());
+
+  // calculate the model-view-projection matrix. (The model matrix is the identity matrix)
+  m_mvpMatrix = m_projectionMatrix * m_viewMatrix;
 }
 
 bool ArCoreWrapper::renderVideoFeed() const
@@ -380,6 +395,9 @@ void ArCoreWrapper::setRenderVideoFeed(bool renderVideoFeed)
 // matrix object using the "createWithQuaternionAndTranslation" function.
 std::array<double, 7> ArCoreWrapper::quaternionTranslation() const
 {
+  if (!m_arSession)
+    return {};
+
   ArPose* pose = nullptr;
   ArPose_create(m_arSession, nullptr, &pose);
   if (!pose)
@@ -396,10 +414,12 @@ std::array<double, 7> ArCoreWrapper::quaternionTranslation() const
   // get the screen orientation
   const Qt::ScreenOrientations orientation = QGuiApplication::screens().front()->orientation();
 
-  switch (orientation) {
+  switch (orientation)
+  {
     case Qt::PortraitOrientation:
 
-      return {
+      return
+      {
         poseRaw[0], poseRaw[1], poseRaw[2], poseRaw[3], poseRaw[4], poseRaw[5], poseRaw[6]
       };
 
@@ -426,7 +446,8 @@ std::array<double, 7> ArCoreWrapper::quaternionTranslation() const
       const double z =  0 * poseRaw[1] - 0 * poseRaw[0] + 0.70710678118 * poseRaw[3] + 0.70710678118 * poseRaw[2];
       const double w = -0 * poseRaw[0] - 0 * poseRaw[1] - 0.70710678118 * poseRaw[2] + 0.70710678118 * poseRaw[3];
 
-      return {
+      return
+      {
         x, y, z, w, poseRaw[4], poseRaw[5], poseRaw[6]
       };
 
@@ -436,7 +457,8 @@ std::array<double, 7> ArCoreWrapper::quaternionTranslation() const
       break;
   }
 
-  return {
+  return
+  {
     poseRaw[0], poseRaw[1], poseRaw[2], poseRaw[3], poseRaw[4], poseRaw[5], poseRaw[6]
   };
 }
@@ -447,6 +469,9 @@ std::array<double, 7> ArCoreWrapper::quaternionTranslation() const
 // "setFieldOfViewFromLensIntrinsics" function.
 std::array<double, 6> ArCoreWrapper::lensIntrinsics() const
 {
+  if (!m_arSession)
+    return {};
+
   ArCameraIntrinsics* cameraIntrinsics = nullptr;
   ArCameraIntrinsics_create(m_arSession, &cameraIntrinsics);
   if (!cameraIntrinsics)
@@ -471,7 +496,8 @@ std::array<double, 6> ArCoreWrapper::lensIntrinsics() const
 
   ArCameraIntrinsics_destroy(cameraIntrinsics);
 
-  return {
+  return
+  {
     static_cast<double>(xFocalLength), static_cast<double>(yFocalLength),
     static_cast<double>(xPrincipal), static_cast<double>(yPrincipal),
     static_cast<double>(xImageSize), static_cast<double>(yImageSize)
@@ -481,58 +507,56 @@ std::array<double, 6> ArCoreWrapper::lensIntrinsics() const
 // doc: https://developers.google.com/ar/reference/c/group/frame#arframe_hittest
 std::array<double, 7> ArCoreWrapper::hitTest(int x, int y) const
 {
-  if (m_arSession && m_arCamera)
+  if (!m_arSession || !m_arCamera)
+    return {};
+
+  // create hit result list
+  ArHitResultList* hitResults = nullptr;
+  ArHitResultList_create(m_arSession, &hitResults);
+  if (!hitResults)
+    return {};
+
+  // try to find the location point
+  ArFrame_hitTest(m_arSession, m_arFrame, x, y, hitResults);
+
+  int32_t size = 0;
+  ArHitResultList_getSize(m_arSession, hitResults, &size);
+  if (size <= 0)
   {
-    // create hit result list
-    ArHitResultList* hitResults = nullptr;
-    ArHitResultList_create(m_arSession, &hitResults);
-    if (!hitResults)
-      return {};
-
-    // try to find the location point
-    ArFrame_hitTest(m_arSession, m_arFrame, x, y, hitResults);
-
-    int32_t size = 0;
-    ArHitResultList_getSize(m_arSession, hitResults, &size);
-    if (size <= 0)
-    {
-      ArHitResultList_destroy(hitResults);
-      return {};
-    }
-
-    ArHitResult* hitResult = nullptr;
-    ArHitResult_create(m_arSession, &hitResult);
-    if (!hitResult)
-    {
-      ArHitResultList_destroy(hitResults);
-      return {};
-    }
-
-    ArHitResultList_getItem(m_arSession, hitResults, 0, hitResult);
-
-    ArPose* pose = nullptr;
-    ArPose_create(m_arSession, nullptr, &pose);
-    if (!hitResult)
-    {
-      ArHitResult_destroy(hitResult);
-      ArHitResultList_destroy(hitResults);
-      return {};
-    }
-
-    ArHitResult_getHitPose(m_arSession, hitResult, pose);
-
-    float poseRaw[7] = {};
-    ArPose_getPoseRaw(m_arSession, pose, poseRaw);
-
-    // destroys objects
-    ArPose_destroy(pose);
-    ArHitResult_destroy(hitResult);
     ArHitResultList_destroy(hitResults);
-
-    return { poseRaw[0], poseRaw[1], poseRaw[2], poseRaw[3], poseRaw[4], poseRaw[5], poseRaw[6] };
+    return {};
   }
 
-  return {};
+  ArHitResult* hitResult = nullptr;
+  ArHitResult_create(m_arSession, &hitResult);
+  if (!hitResult)
+  {
+    ArHitResultList_destroy(hitResults);
+    return {};
+  }
+
+  ArHitResultList_getItem(m_arSession, hitResults, 0, hitResult);
+
+  ArPose* pose = nullptr;
+  ArPose_create(m_arSession, nullptr, &pose);
+  if (!hitResult)
+  {
+    ArHitResult_destroy(hitResult);
+    ArHitResultList_destroy(hitResults);
+    return {};
+  }
+
+  ArHitResult_getHitPose(m_arSession, hitResult, pose);
+
+  float poseRaw[7] = {};
+  ArPose_getPoseRaw(m_arSession, pose, poseRaw);
+
+  // destroys objects
+  ArPose_destroy(pose);
+  ArHitResult_destroy(hitResult);
+  ArHitResultList_destroy(hitResults);
+
+  return { poseRaw[0], poseRaw[1], poseRaw[2], poseRaw[3], poseRaw[4], poseRaw[5], poseRaw[6] };
 }
 
 const float* ArCoreWrapper::transformedUvs() const
@@ -543,9 +567,93 @@ const float* ArCoreWrapper::transformedUvs() const
 // Methods for point cloud data.
 // Be careful with the concurrent access and lifetime: the data are initialized and
 // released in the main thread and used in the GL thread.
-void ArCoreWrapper::pointCloudData(QMatrix4x4& mvp, int32_t& size, const float** data)
+void ArCoreWrapper::planeListData(int32_t& size)
 {
-  if (!m_renderPointCloud || m_arPointCloud)
+  if (!m_arSession || m_arPlaneList)
+    return;
+
+  ArTrackableList_create(m_arSession, &m_arPlaneList);
+  if (m_arPlaneList == nullptr)
+    return;
+
+  ArTrackableType planeTrackedType = AR_TRACKABLE_PLANE;
+  ArSession_getAllTrackables(m_arSession, planeTrackedType, m_arPlaneList);
+
+  ArTrackableList_getSize(m_arSession, m_arPlaneList, &size);
+}
+
+bool ArCoreWrapper::planeData(QMatrix4x4& mvp, int32_t index, std::vector<float>& vertices)
+{
+  ArTrackableList_acquireItem(m_arSession, m_arPlaneList, index, &m_arTrackable);
+  ArPlane* arPlane = ArAsPlane(m_arTrackable);
+
+  ArTrackingState outTrackingState = AR_TRACKING_STATE_STOPPED;
+  ArTrackable_getTrackingState(m_arSession, m_arTrackable, &outTrackingState);
+
+  ArPlane* subsumePlane = nullptr;
+  ArPlane_acquireSubsumedBy(m_arSession, arPlane, &subsumePlane);
+  if (subsumePlane != nullptr)
+  {
+    ArTrackable_release(ArAsTrackable(subsumePlane));
+    return false;
+  }
+
+  if (outTrackingState != AR_TRACKING_STATE_TRACKING)
+    return false;
+
+  ArTrackingState planeTrackingState = AR_TRACKING_STATE_STOPPED;
+  ArTrackable_getTrackingState(m_arSession, ArAsTrackable(arPlane), &planeTrackingState);
+
+  if (planeTrackingState != AR_TRACKING_STATE_TRACKING)
+    return false;
+
+  int32_t polygonLength = 0;
+  ArPlane_getPolygonSize(m_arSession, arPlane, &polygonLength);
+
+  if (polygonLength == 0)
+  {
+    qDebug() << "PlaneRenderer::UpdatePlane, no valid plane polygon is found";
+    return false;
+  }
+
+  vertices.resize(polygonLength);
+  ArPlane_getPolygon(m_arSession, arPlane, vertices.data());
+
+  ArPose* arPlanePose = nullptr;
+  ArPose_create(m_arSession, nullptr, &arPlanePose);
+  ArPlane_getCenterPose(m_arSession, arPlane, arPlanePose);
+
+  QMatrix4x4 model;
+  ArPose_getMatrix(m_arSession, arPlanePose, model.data());
+  mvp = m_mvpMatrix * model;
+
+  return true;
+}
+
+void ArCoreWrapper::releasePlaneData()
+{
+  if (!m_arTrackable)
+    return;
+
+  ArTrackable_release(m_arTrackable);
+  m_arTrackable = nullptr;
+}
+
+void ArCoreWrapper::releasePlaneListData()
+{
+  if (!m_arPlaneList)
+    return;
+
+  ArTrackableList_destroy(m_arPlaneList);
+  m_arPlaneList = nullptr;
+}
+
+// Methods for point cloud data.
+// Be careful with the concurrent access and lifetime: the data are initialized and
+// released in the main thread and used in the GL thread.
+void ArCoreWrapper::pointCloudData(QMatrix4x4& mvp, int32_t& size, const float** data) // todo: change to std::vector<float>
+{
+  if (!m_arSession || !m_renderPointCloud || m_arPointCloud)
     return;
 
   // get the point cloud data
@@ -565,14 +673,9 @@ void ArCoreWrapper::pointCloudData(QMatrix4x4& mvp, int32_t& size, const float**
 
   ArPointCloud_getData(m_arSession, m_arPointCloud, data);
 
-  // get the model view projection matrix
-  QMatrix4x4 viewMatrix;
-  ArCamera_getViewMatrix(m_arSession, m_arCamera, viewMatrix.data());
 
-  QMatrix4x4 projectionMatrix;
-  ArCamera_getProjectionMatrix(m_arSession, m_arCamera, 0.1f, 100.f, projectionMatrix.data());
-
-  mvp = projectionMatrix * viewMatrix;
+  // calculate the model-view-projection matrix. (The model matrix is the identity matrix)
+  mvp = m_mvpMatrix;
 }
 
 // The point cloud data can be released after the rendering is done.

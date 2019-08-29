@@ -20,12 +20,9 @@
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri {
+namespace ArcGISRuntime {
+namespace Toolkit {
 
 class ArCoreWrapper;
 
@@ -35,7 +32,7 @@ public:
   ArCorePlaneRenderer(ArCoreWrapper* arCoreWrapper);
   ~ArCorePlaneRenderer() = default;
 
-  void init();
+  void initGL();
   void render();
 
 private:
@@ -43,10 +40,9 @@ private:
 
   std::unique_ptr<QOpenGLShaderProgram> m_program;
 
-  GLuint m_attributeVertices = 0;
   GLint m_uniformModelViewProjection = 0;
   GLint m_uniformColor = 0;
-  GLint m_uniformPointSize = 0;
+  GLuint m_attributeVertices = 0;
 };
 
 } // Toolkit

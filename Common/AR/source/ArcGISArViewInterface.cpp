@@ -16,7 +16,6 @@
 
 #include "ArcGISArViewInterface.h"
 #include "LocationDataSource.h"
-#include "OrientationDataSource.h"
 #include "ArWrapper.h"
 #include "ArcGISArViewRenderer.h"
 #include <QQuickWindow>
@@ -66,8 +65,11 @@ ArcGISArViewInterface::ArcGISArViewInterface(bool renderVideoFeed, bool tryUsing
   setFlag(ItemHasContents, true);
 
   // enable detection of orientation changes.
-  window()->screen()->setOrientationUpdateMask(Qt::LandscapeOrientation	| Qt::PortraitOrientation |
-                                               Qt::InvertedLandscapeOrientation | Qt::InvertedPortraitOrientation);
+  if (window() && window()->screen())
+  {
+    window()->screen()->setOrientationUpdateMask(Qt::LandscapeOrientation	| Qt::PortraitOrientation |
+                                                 Qt::InvertedLandscapeOrientation | Qt::InvertedPortraitOrientation);
+  }
 
   updateTrackingSources();
 }
@@ -107,30 +109,6 @@ void ArcGISArViewInterface::setRenderVideoFeed(bool renderVideoFeed)
 
   m_renderVideoFeed = renderVideoFeed;
   emit renderVideoFeedChanged();
-}
-
-/*!
-  \brief Retuns \c true if the AR framewok is tracking.
- */
-bool ArcGISArViewInterface::tracking() const
-{
-  return m_tracking;
-}
-
-/*!
-  \brief Sets to \c true to start the AR tracking and \c false to stop it.
- */
-void ArcGISArViewInterface::setTracking(bool tracking)
-{
-  if (m_tracking == tracking)
-    return;
-
-  if (tracking)
-    startTracking();
-  else
-    stopTracking();
-
-  emit trackingChanged();
 }
 
 /*!
@@ -196,7 +174,7 @@ LocationDataSource* ArcGISArViewInterface::locationDataSource() const
  * \brief Sets the location data source to \a locationDataSource.
  *
  * If \a locationDataSource is \c nullptr, the tracking of the LocationDataSource is disable.
- * If \l tryUsingArKit is \c true, the AR framework is used for the tracking, not LocationDataSource.
+ * If \l tryUsingArKit is \c true, the AR framework is used for the tracking, not \l LocationDataSource.
  */
 void ArcGISArViewInterface::setLocationDataSource(LocationDataSource* locationDataSource)
 {
@@ -207,78 +185,30 @@ void ArcGISArViewInterface::setLocationDataSource(LocationDataSource* locationDa
 
   // update connection
   disconnect(m_locationDataSourceConnection);
-  m_locationDataSourceConnection = connect(m_locationDataSource, &LocationDataSource::locationChanged,
-                                           this, [this](double latitude, double longitude, double altitude)
-  {
-    updateCamera(0, 0, 0, 0, latitude, longitude, altitude);
-  });
 
-  // starts tracking using LocationDataSource if necessary
-  if (!m_tryUsingArKit && m_tracking && m_locationDataSource)
-    m_locationDataSource->start();
+  if (m_locationDataSource)
+  {
+    m_locationDataSourceConnection = connect(m_locationDataSource, &LocationDataSource::locationChanged,
+                                             this, [this](double latitude, double longitude, double altitude)
+    {
+      setLocationInternal(latitude, longitude, altitude);
+    });
+
+    // starts tracking using LocationDataSource if necessary
+    if (!m_tryUsingArKit)
+      m_locationDataSource->start();
+  }
 
   emit locationDataSourceChanged();
 }
 
 /*!
- * \brief Gets the location data source.
- */
-OrientationDataSource* ArcGISArViewInterface::orientationDataSource() const
-{
-  return m_orientationDataSource;
-}
-
-/*!
- * \brief Sets the orientation data source to \a orientationDataSource.
- * \param orientationDataSource
- *
- * If \a orientationDataSource is \c nullptr, the updating of the OrientationDataSource is disable.
- * If \l tryUsingArKit is \c true, the AR framework is used for the tracking, not OrientationDataSource.
- */
-void ArcGISArViewInterface::setOrientationDataSource(OrientationDataSource* orientationDataSource)
-{
-  if (m_orientationDataSource == orientationDataSource)
-    return;
-
-  m_orientationDataSource = orientationDataSource;
-
-  // update connection
-  disconnect(m_orientationDataSourceConnection);
-  m_orientationDataSourceConnection =
-      connect(m_orientationDataSource, &OrientationDataSource::orientationChanged,
-              this, [this](double quaternionX, double quaternionY, double quaternionZ, double quaternionW)
-  {
-    updateCamera(quaternionX, quaternionY, quaternionZ, quaternionW, 0, 0, 0);
-  });
-
-  // starts tracking using OrientationDataSource if necessary
-  if (!m_tryUsingArKit && m_tracking && m_orientationDataSource)
-    m_locationDataSource->start();
-
-  emit orientationDataSourceChanged();
-}
-
-/*!
-  \brief Resets the AR framework.
+  \brief Resets the device tracking and related properties.
  */
 void ArcGISArViewInterface::resetTracking()
 {
+  resetTrackingInternal();
   m_arWrapper->resetTracking();
-}
-
-/*!
-  \brief No implemented.
- */
-bool ArcGISArViewInterface::resetUsingLocationService()
-{
-  return false;
-}
-
-/*!
-  \brief No implemented.
- */
-void ArcGISArViewInterface::resetUsingSpacialAnchor()
-{
 }
 
 /*!
@@ -288,25 +218,19 @@ void ArcGISArViewInterface::startTracking()
 {
   Q_CHECK_PTR(m_arWrapper);
 
-  // uses locationDataSource and orientation data sources
-  if (!m_tryUsingArKit)
+  // uses locationDataSource.
+  if (m_tryUsingArKit)
   {
     m_arWrapper->startTracking();
   }
   else
   {
-    if (!m_locationDataSource)
-      setLocationDataSource(new LocationDataSource(this));
-
-    if (!m_orientationDataSource)
-      setOrientationDataSource(new OrientationDataSource(this));
-
-    m_locationDataSource->start();
-    m_orientationDataSource->start();
+//    if (!m_locationDataSource)
+//      setLocationDataSource(new LocationDataSource(this));
   }
 
-  m_tracking = true;
-  emit trackingChanged();
+  if (m_locationDataSource)
+    m_locationDataSource->start();
 }
 
 /*!
@@ -320,10 +244,6 @@ void ArcGISArViewInterface::stopTracking()
   if (m_locationDataSource)
     m_locationDataSource->stop();
 
-  if (m_orientationDataSource)
-    m_orientationDataSource->stop();
-
-  m_tracking = false;
   emit trackingChanged();
 }
 
@@ -359,7 +279,7 @@ QQuickFramebufferObject::Renderer* ArcGISArViewInterface::createRenderer() const
 /*!
  * \internal
  */
-std::array<double, 7> ArcGISArViewInterface::screenToLocationInternal(int x, int y) const
+std::array<double, 7> ArcGISArViewInterface::internalHitTest(int x, int y) const
 {
   Q_CHECK_PTR(m_arWrapper);
   return m_arWrapper->hitTest(x, y);
@@ -372,10 +292,9 @@ void ArcGISArViewInterface::updateTrackingSources()
 {
   if (m_tryUsingArKit)
   {
-    // disable LocationDataSource and OrientationDataSource if necessary.
+    // disable LocationDataSource if necessary.
     // Don't delete these objects, its can be costumer's specific objects.
     disconnect(m_locationDataSourceConnection);
-    disconnect(m_orientationDataSourceConnection);
 
     // disable the video rendering using the QCamera
     if (m_renderVideoFeed)
@@ -389,10 +308,6 @@ void ArcGISArViewInterface::updateTrackingSources()
       m_arWrapper.reset(new ArWrapper(this));
       m_arWrapper->setRenderVideoFeed(m_renderVideoFeed);
     }
-
-    // starts the AR wrapper if necessary
-    if (m_tracking)
-      m_arWrapper->startTracking();
   }
   else
   {
@@ -403,19 +318,9 @@ void ArcGISArViewInterface::updateTrackingSources()
       m_arWrapper.reset();
     }
 
-    // create default LocationDataSource and OrientationDataSource if necessary.
+    // create default LocationDataSource if necessary.
     if (!m_locationDataSource)
       setLocationDataSource(new LocationDataSource(this));
-
-    if (!m_orientationDataSource)
-      setOrientationDataSource(new OrientationDataSource(this));
-
-    // starts LocationDataSource and OrientationDataSource.
-    if (m_tracking)
-    {
-      m_locationDataSource->start();
-      m_orientationDataSource->start();
-    }
 
     // enable the video rendering using the QCamera
     if (m_renderVideoFeed)

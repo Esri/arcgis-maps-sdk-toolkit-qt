@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/qml">
+        <file>main.qml</file>
+        <file>qmlWrapper.qml</file>
+        <file>SettingsWindow.qml</file>
+        <file>scenes/BerlinScene.qml</file>
+        <file>scenes/BorderScene.qml</file>
+        <file>scenes/BrestScene.qml</file>
+        <file>scenes/EmptyScene.qml</file>
+        <file>scenes/ImageryScene.qml</file>
+        <file>scenes/PointCloudScene.qml</file>
+        <file>scenes/SceneWithElevation.qml</file>
+        <file>scenes/StreetsScene.qml</file>
+        <file>scenes/YosemiteScene.qml</file>
+    </qresource>
+</RCC>

@@ -27,8 +27,6 @@ class QmlArcGISArView : public ArcGISArViewInterface
 {
   Q_OBJECT
 
-  Q_PROPERTY(QObject* transformationMatrixCameraControler READ transformationMatrixCameraControler
-             WRITE setTransformationMatrixCameraControler NOTIFY transformationMatrixCameraControlerChanged)
   Q_PROPERTY(QObject* originCamera READ originCamera WRITE setOriginCamera NOTIFY originCameraChanged)
   Q_PROPERTY(QObject* sceneView READ sceneView WRITE setSceneView NOTIFY sceneViewChanged)
 
@@ -45,41 +43,30 @@ public:
   QObject* sceneView() const;
   void setSceneView(QObject* sceneView);
 
-  QObject* transformationMatrixCameraControler() const;
-  void setTransformationMatrixCameraControler(QObject* tmcc);
-
-  // methods invokable
+  // methods invokable?
   Q_INVOKABLE QObject* screenToLocation(QObject* screenPoint) const;
 
 signals:
-  void transformationMatrixCameraControlerChanged();
   void originCameraChanged();
   void sceneViewChanged();
-  void renderFrame();
-  void locationChanged(double latitude, double longitude, double altitude);
-  void transformationMatrixChanged(double quaternionX, double quaternionY, double quaternionZ, double quaternionW,
-                                   double translationX, double translationY, double translationZ);
-  void fieldOfViewChanged(double xFocalLength, double yFocalLength,
-                          double xPrincipal, double yPrincipal,
-                          double xImageSize, double yImageSize);
 
 public: // internals, used by AR wrappers
-  void setTransformationMatrixInternal(double quaternionX, double quaternionY, double quaternionZ, double quaternionW,
-                                       double translationX, double translationY, double translationZ) override;
+  void updateTransformationMatrix(double quaternionX, double quaternionY, double quaternionZ, double quaternionW,
+                                  double translationX, double translationY, double translationZ) override;
 
-  void setFieldOfViewInternal(double xFocalLength, double yFocalLength,
-                              double xPrincipal, double yPrincipal,
-                              double xImageSize, double yImageSize) override;
+  void updateFieldOfView(double xFocalLength, double yFocalLength,
+                         double xPrincipal, double yPrincipal,
+                         double xImageSize, double yImageSize) override;
 
-  void renderFrameInternal() override;
+  void renderFrame() override;
 
 protected:
   void setTranslationFactorInternal(double translationFactor) override;
   void setLocationInternal(double latitude, double longitude, double altitude) override;
 
 private:
-//  QObject* qmlWrapper() const;
-//  QObject* tmcc() const;
+  QObject* qmlWrapper() const;
+  QObject* tmcc() const;
   bool assertClassName(QObject* object, const QString& className) const;
 
   QObject* m_originCamera = nullptr;

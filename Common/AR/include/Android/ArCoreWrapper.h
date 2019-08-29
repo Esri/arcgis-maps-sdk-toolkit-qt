@@ -28,6 +28,8 @@
 typedef struct ArSession_ ArSession;
 typedef struct ArFrame_ ArFrame;
 typedef struct ArCamera_ ArCamera;
+typedef struct ArTrackableList_ ArTrackableList;
+typedef struct ArTrackable_ ArTrackable;
 typedef struct ArPointCloud_ ArPointCloud;
 
 namespace Esri
@@ -76,6 +78,12 @@ public:
 
   // methods for AR frame rendering
   const float* transformedUvs() const;
+
+  // methods for plane data
+  void planeListData(int32_t& size);
+  bool planeData(QMatrix4x4& mvp, int32_t index, std::vector<float>& vertices);
+  void releasePlaneData();
+  void releasePlaneListData();
 
   // methods for point cloud data
   void pointCloudData(QMatrix4x4& mvp, int32_t& size, const float** data);
@@ -132,13 +140,20 @@ private:
 
   QTimer m_timer;
 
-//  bool m_renderPlane = true;
+  bool m_renderPlane = true;
   bool m_renderPointCloud = true;
 //  bool m_debugOpenGL = true;
 //  bool m_debugPerformances = true;
 
-  // attribute for point cloud
+  // attribute for plane and point cloud
+  ArTrackableList* m_arPlaneList = nullptr;
+  ArTrackable* m_arTrackable = nullptr;
   ArPointCloud* m_arPointCloud = nullptr;
+
+  // the view and projection matrix
+  QMatrix4x4 m_viewMatrix;
+  QMatrix4x4 m_projectionMatrix;
+  QMatrix4x4 m_mvpMatrix;
 };
 
 } // Toolkit

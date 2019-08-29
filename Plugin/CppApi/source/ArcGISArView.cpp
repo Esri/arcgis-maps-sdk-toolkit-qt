@@ -38,8 +38,10 @@ using namespace Esri::ArcGISRuntime::Toolkit::Internal;
  */
 ArcGISArView::ArcGISArView(QQuickItem* parent):
   ArcGISArViewInterface(parent),
-  m_tmcc(new TransformationMatrixCameraController(this))
+  m_tmcc(new TransformationMatrixCameraController(this)),
+  m_initialTransformation(TransformationMatrix::createIdentityMatrix(this))
 {
+  connect(m_tmcc, &TransformationMatrixCameraController::originCameraChanged, this, &ArcGISArView::originCameraChanged);
 }
 
 /*!
@@ -55,7 +57,7 @@ ArcGISArView::ArcGISArView(bool renderVideoFeed, bool tryUsingArKit, QQuickItem*
   ArcGISArViewInterface(renderVideoFeed, tryUsingArKit, parent),
   m_tmcc(new TransformationMatrixCameraController(this))
 {
-  startTracking();
+  connect(m_tmcc, &TransformationMatrixCameraController::originCameraChanged, this, &ArcGISArView::originCameraChanged);
 }
 
 /*!
@@ -81,12 +83,15 @@ void ArcGISArView::setOriginCamera(const Camera& originCamera)
   if (m_originCamera == originCamera)
     return;
 
-  m_tmcc->setOriginCamera(originCamera);
-
   m_originCamera = originCamera;
-  emit originCameraChanged();
+  m_tmcc->setOriginCamera(originCamera);
+  // don't emit originCameraChanged, this signal is emited by the core runtime
 
-  resetTracking();
+  // If we're using ARKit, reset its tracking.
+//  if isUsingARKit {
+//      arSCNView.session.run(arConfiguration, options: .resetTracking)
+//  }
+//  resetTracking();
 }
 
 /*!
@@ -114,7 +119,43 @@ void ArcGISArView::setSceneView(SceneQuickView* sceneView)
   m_sceneView->setManualRendering(true);
   m_sceneView->setCameraController(m_tmcc);
 
+  connect(m_sceneView, &SceneQuickView::touched, this, [this](QTouchEvent& event)
+  {
+    setInitialTransformation(event.touchPoints().first().lastScreenPos().toPoint());
+  });
+
   emit sceneViewChanged();
+}
+
+/*!
+  \brief Sets the initial transformation used to offset the originCamera.
+
+  The initial transformation is based on an AR point determined via existing plane hit detection
+  from `screenPoint`. If an AR point cannot be determined, this method will return `false`.
+
+  \list
+    \li \a screenPoint - The screen point to determine the `initialTransformation` from.
+  \endlist
+ */
+void ArcGISArView::setInitialTransformation(const QPoint& screenPoint)
+{
+  // Use the `internalHitTest` method to get the matrix of `screenPoint`.
+  const std::array<double, 7> hitResult = internalHitTest(screenPoint.x(), screenPoint.y());
+  if (hitResult[0] == 0) // todo: improve the return value (bool?)
+    return;
+
+  // Set the `initialTransformation` as the AGSTransformationMatrix.identity - hit test matrix.
+  const auto hitMatrix = std::unique_ptr<TransformationMatrix>(
+        TransformationMatrix::createWithQuaternionAndTranslation(
+          hitResult[0], hitResult[1], hitResult[2], hitResult[3], hitResult[4], hitResult[5], hitResult[6]));
+  Q_CHECK_PTR(hitMatrix.get());
+
+  auto identity = std::unique_ptr<TransformationMatrix>(TransformationMatrix::createIdentityMatrix());
+  Q_CHECK_PTR(identity);
+
+  m_initialTransformation = identity->subtractTransformation(hitMatrix.get(), this);
+  Q_CHECK_PTR(m_initialTransformation);
+  m_tmcc->setTransformationMatrix(m_initialTransformation);
 }
 
 /*!
@@ -125,7 +166,9 @@ Point ArcGISArView::screenToLocation(const Point& screenPoint) const
   if (!m_sceneView)
     return Point();
 
-  const std::array<double, 7> hitResult = ArcGISArViewInterface::screenToLocationInternal(screenPoint.x(), screenPoint.y());
+  const std::array<double, 7> hitResult = internalHitTest(screenPoint.x(), screenPoint.y());
+  if (hitResult[0] == 0)
+    return Point();
 
   auto hitMatrix = std::unique_ptr<TransformationMatrix>(
         TransformationMatrix::createWithQuaternionAndTranslation(
@@ -134,26 +177,34 @@ Point ArcGISArView::screenToLocation(const Point& screenPoint) const
   auto currentViewpointMatrix = std::unique_ptr<TransformationMatrix>(
         m_sceneView->currentViewpointCamera().transformationMatrix());
 
-  return Camera(currentViewpointMatrix->addTransformation(hitMatrix.get())).location();
+  auto finalMatrix = std::unique_ptr<TransformationMatrix>(currentViewpointMatrix->addTransformation(hitMatrix.get()));
+  return Camera(finalMatrix.get()).location();
 }
 
 /*!
   \internal
  */
-void ArcGISArView::updateCamera(double quaternionX, double quaternionY, double quaternionZ, double quaternionW,
-                                double translationX, double translationY, double translationZ)
+void ArcGISArView::setTransformationMatrixInternal(double quaternionX, double quaternionY, double quaternionZ, double quaternionW,
+                                                   double translationX, double translationY, double translationZ)
 {
-  auto matrix = TransformationMatrix::createWithQuaternionAndTranslation(quaternionX, quaternionY, quaternionZ, quaternionW,
-                                                                          translationX, translationY, translationZ);
-  m_tmcc->setTransformationMatrix(matrix);
+  auto matrix = std::unique_ptr<TransformationMatrix>(TransformationMatrix::createWithQuaternionAndTranslation(
+                                                        quaternionX, quaternionY, quaternionZ, quaternionW,
+                                                        translationX, translationY, translationZ));
+  Q_CHECK_PTR(matrix.get());
+
+  Q_CHECK_PTR(m_initialTransformation);
+  auto finalMatrix = std::unique_ptr<TransformationMatrix>(m_initialTransformation->addTransformation(matrix.get()));
+
+  Q_CHECK_PTR(m_tmcc);
+  m_tmcc->setTransformationMatrix(finalMatrix.get());
 }
 
 /*!
   \internal
  */
-void ArcGISArView::updateFieldOfView(double xFocalLength, double yFocalLength,
-                                     double xPrincipal, double yPrincipal,
-                                     double xImageSize, double yImageSize)
+void ArcGISArView::setFieldOfViewInternal(double xFocalLength, double yFocalLength,
+                                          double xPrincipal, double yPrincipal,
+                                          double xImageSize, double yImageSize)
 {
   if (!m_sceneView)
     return;
@@ -188,7 +239,7 @@ void ArcGISArView::updateFieldOfView(double xFocalLength, double yFocalLength,
 /*!
   \internal
  */
-void ArcGISArView::renderFrame()
+void ArcGISArView::renderFrameInternal()
 {
   if (!m_sceneView)
     return;
@@ -202,6 +253,41 @@ void ArcGISArView::renderFrame()
 void ArcGISArView::setTranslationFactorInternal(double translationFactor)
 {
   m_tmcc->setTranslationFactor(translationFactor);
+}
+
+/*!
+  \internal
+ */
+void ArcGISArView::setLocationInternal(double latitude, double longitude, double altitude)
+{
+  if (m_tmcc->originCamera().isEmpty())
+  {
+    // create a new origin camera
+    m_tmcc->setOriginCamera(Camera(latitude, longitude, altitude+100, 0.0, 90.0, 0.0));
+  }
+  else
+  {
+    // update the origin camera
+    const Camera oldCamera = m_tmcc->originCamera();
+    m_tmcc->setOriginCamera(Camera(latitude, longitude, altitude+100, oldCamera.heading(), oldCamera.pitch(), oldCamera.roll()));
+  }
+
+  // todo: Reset the camera controller's transformationMatrix to its initial state, the Identity matrix.
+//  cameraController.transformationMatrix = .identity
+}
+
+/*!
+  \internal
+
+  Resets the device tracking and related properties.
+ */
+void ArcGISArView::resetTrackingInternal()
+{
+  setOriginCamera(Camera());
+
+  m_initialTransformation = TransformationMatrix::createIdentityMatrix(this);
+
+  m_tmcc->setTransformationMatrix(m_initialTransformation);
 }
 
 // signals
