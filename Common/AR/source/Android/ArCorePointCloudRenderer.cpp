@@ -84,7 +84,7 @@ void ArCorePointCloudRenderer::render()
 
   // todo: lets the user defined the point cloud color. Default is cyan.
   glUniform4f(m_uniformColor, 31.0f / 255.0f, 188.0f / 255.0f, 210.0f / 255.0f, 1.0f);
-  glUniform1f(m_uniformPointSize, 50.0f);
+  glUniform1f(m_uniformPointSize, 20.0f);
 
   glDrawArrays(GL_POINTS, 0, size);
 

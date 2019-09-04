@@ -55,6 +55,8 @@ signals:
   void sceneViewChanged();
 
 private:
+  Q_DISABLE_COPY(CppArExample)
+
   void createSurfaceWithElevation();
   void changeScene(bool withLocationDataSource = false);
 

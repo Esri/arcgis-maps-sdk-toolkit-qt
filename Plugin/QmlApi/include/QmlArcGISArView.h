@@ -76,6 +76,7 @@ public: // internals, used by AR wrappers
 protected:
   void setTranslationFactorInternal(double translationFactor) override;
   void setLocationInternal(double latitude, double longitude, double altitude) override;
+  void resetTrackingInternal() override;
 
 private:
 //  QObject* qmlWrapper() const;

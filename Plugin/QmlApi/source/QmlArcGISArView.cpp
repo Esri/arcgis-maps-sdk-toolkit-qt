@@ -143,7 +143,7 @@ QObject* QmlArcGISArView::screenToLocation(QObject* screenPoint) const
     return nullptr;
 
   // converts the point from the screen space to the 3D space
-  const std::array<double, 7> hitResult = ArcGISArViewInterface::screenToLocationInternal(x, y);
+  const std::array<double, 7> hitResult = ArcGISArViewInterface::internalHitTest(x, y);
 
   // calculates the matrix transformations and creates the QmlPoint location.
   QVariant location;
@@ -205,6 +205,16 @@ void QmlArcGISArView::setTranslationFactorInternal(double)
 void QmlArcGISArView::setLocationInternal(double latitude, double longitude, double altitude)
 {
   emit locationChanged(latitude, longitude, altitude);
+}
+
+/*!
+  \internal
+
+  Resets the device tracking and related properties.
+ */
+void QmlArcGISArView::resetTrackingInternal()
+{
+  // to implmente
 }
 
 /*!

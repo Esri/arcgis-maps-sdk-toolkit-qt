@@ -146,8 +146,7 @@ void ArcGISArView::setInitialTransformation(const QPoint& screenPoint)
 
   // Set the `initialTransformation` as the AGSTransformationMatrix.identity - hit test matrix.
   const auto hitMatrix = std::unique_ptr<TransformationMatrix>(
-        TransformationMatrix::createWithQuaternionAndTranslation(
-          hitResult[0], hitResult[1], hitResult[2], hitResult[3], hitResult[4], hitResult[5], hitResult[6]));
+        TransformationMatrix::createWithQuaternionAndTranslation(0, 0, 0, 1,hitResult[4], hitResult[5], hitResult[6]));
   Q_CHECK_PTR(hitMatrix.get());
 
   auto identity = std::unique_ptr<TransformationMatrix>(TransformationMatrix::createIdentityMatrix());
@@ -155,7 +154,6 @@ void ArcGISArView::setInitialTransformation(const QPoint& screenPoint)
 
   m_initialTransformation = identity->subtractTransformation(hitMatrix.get(), this);
   Q_CHECK_PTR(m_initialTransformation);
-  m_tmcc->setTransformationMatrix(m_initialTransformation);
 }
 
 /*!

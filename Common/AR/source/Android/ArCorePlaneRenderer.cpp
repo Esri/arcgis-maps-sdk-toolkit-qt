@@ -62,7 +62,6 @@ void ArCorePlaneRenderer::render()
   Q_CHECK_PTR(m_arCoreWrapper);
 
   m_program->bind();
-  glDepthMask(GL_FALSE);
 
   int32_t size = 0;
   m_arCoreWrapper->planeListData(size);
@@ -80,8 +79,6 @@ void ArCorePlaneRenderer::render()
     if (!m_arCoreWrapper->planeData(modelViewProjection, index, vertices))
       continue;
 
-    glLineWidth(10);
-
     glUniformMatrix4fv(m_uniformModelViewProjection, 1, GL_FALSE, modelViewProjection.data());
     glEnableVertexAttribArray(m_attributeVertices);
     glVertexAttribPointer(m_attributeVertices, 2, GL_FLOAT, GL_FALSE, 0, vertices.data());
@@ -93,6 +90,5 @@ void ArCorePlaneRenderer::render()
   }
 
   m_program->release();
-  glDepthMask(GL_TRUE);
   m_arCoreWrapper->releasePlaneListData();
 }

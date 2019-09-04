@@ -112,14 +112,14 @@ using namespace Esri::ArcGISRuntime::Toolkit::Internal;
 
   // update the scene view camera
   auto camera = [self lastQuaternionTranslation: frame.camera.transform];
-  self.arcGISArView->updateCamera(camera[0], camera[1], camera[2], camera[3], camera[4], camera[5], camera[6]);
+  self.arcGISArView->setTransformationMatrixInternal(camera[0], camera[1], camera[2], camera[3], camera[4], camera[5], camera[6]);
 
   // udapte the field of view, based on the
   auto lens = [self lastLensIntrinsics: frame.camera];
-  self.arcGISArView->updateFieldOfView(lens[0], lens[1], lens[2], lens[3], lens[4], lens[5]);
+  self.arcGISArView->setFieldOfViewInternal(lens[0], lens[1], lens[2], lens[3], lens[4], lens[5]);
 
   // render the frame of the ArcGIS runtime
-  self.arcGISArView->renderFrame();
+  self.arcGISArView->renderFrameInternal();
 }
 
 - (void) session: (ARSession*) session cameraDidChangeTrackingState: (ARCamera*) camera

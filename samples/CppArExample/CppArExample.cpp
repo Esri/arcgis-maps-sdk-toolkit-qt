@@ -41,9 +41,7 @@ CppArExample::CppArExample(QObject* parent):
 {
 }
 
-CppArExample::~CppArExample()
-{
-}
+CppArExample::~CppArExample() = default;
 
 ArcGISArView* CppArExample::arcGISArView() const
 {
@@ -57,8 +55,6 @@ void CppArExample::setArcGISArView(ArcGISArView* arcGISArView)
 
   m_arcGISArView = arcGISArView;
   emit arcGISArViewChanged();
-
-  m_arcGISArView->startTracking();
 }
 
 SceneQuickView* CppArExample::sceneView() const
@@ -129,7 +125,7 @@ void CppArExample::createPointCloudScene()
   createSurfaceWithElevation();
 
   PortalItem* item = new PortalItem("fc3f4a4919394808830cd11df4631a54", m_scene);
-  PointCloudLayer* layer = new PointCloudLayer(item, m_scene);
+  auto* layer = new PointCloudLayer(item, m_scene);
   m_scene->operationalLayers()->append(layer);
 
   connect(layer, &PointCloudLayer::doneLoading, this, [this, layer](Error error)
@@ -154,15 +150,12 @@ void CppArExample::createPointCloudScene()
 // Mode: Tabletop AR
 void CppArExample::createYosemiteScene()
 {
-  if (m_scene)
-    delete m_scene;
-
   m_scene = new Scene(this);
   createSurfaceWithElevation();
 
   const QUrl yosemiteUrl("https://tiles.arcgis.com/tiles/FQD0rKU8X5sAQfh8/arcgis/rest/services/"
                          "VRICON_Yosemite_Sample_Integrated_Mesh_scene_layer/SceneServer");
-  IntegratedMeshLayer* layer = new IntegratedMeshLayer(yosemiteUrl, m_scene);
+  auto* layer = new IntegratedMeshLayer(yosemiteUrl, m_scene);
   m_scene->operationalLayers()->append(layer);
 
   connect(layer, &PointCloudLayer::doneLoading, this, [this, layer](Error error)
@@ -182,7 +175,8 @@ void CppArExample::createYosemiteScene()
     {
       // Create the origin camera at the center point and elevation of the data.
       // This will ensure the data is anchored to the table.
-      m_arcGISArView->setOriginCamera(Camera(center.y(), center.x(), 2000.0 /*elevation*/, 0.0, 90.0, 0.0));
+      qDebug() << "======>>> " << elevation;
+      m_arcGISArView->setOriginCamera(Camera(center.y(), center.x(), 200.0 /*elevation*/, 0.0, 90.0, 0.0));
     });
     surface->locationToElevation(center);
   });
@@ -196,15 +190,12 @@ void CppArExample::createYosemiteScene()
 // Mode: Tabletop AR
 void CppArExample::createBorderScene()
 {
-  if (m_scene)
-    delete m_scene;
-
   m_scene = new Scene(this);
   createSurfaceWithElevation();
 
   const QUrl borderUrl("https://tiles.arcgis.com/tiles/FQD0rKU8X5sAQfh8/arcgis/rest/services/"
                        "VRICON_SW_US_Sample_Integrated_Mesh_scene_layer/SceneServer");
-  IntegratedMeshLayer* layer = new IntegratedMeshLayer(borderUrl, m_scene);
+  auto* layer = new IntegratedMeshLayer(borderUrl, m_scene);
   m_scene->operationalLayers()->append(layer);
 
   connect(layer, &PointCloudLayer::doneLoading, this, [this, layer](Error error)
@@ -224,7 +215,8 @@ void CppArExample::createBorderScene()
     {
       // Create the origin camera at the center point and elevation of the data.
       // This will ensure the data is anchored to the table.
-      m_arcGISArView->setOriginCamera(Camera(center.y(), center.x(), 700.0, 0.0, 90.0, 0.0));
+      qDebug() << "====>> elevation" << elevation; // todo: to fix
+      m_arcGISArView->setOriginCamera(Camera(center.y(), center.x(), elevation, 0.0, 90.0, 0.0));
     });
     surface->locationToElevation(center);
   });
@@ -245,7 +237,7 @@ void CppArExample::createBrestScene()
   // create layer
   const QUrl brestFrance("https://tiles.arcgis.com/tiles/P3ePLMYs2RVChkJx/arcgis/rest/services/"
                          "Buildings_Brest/SceneServer/layers/0");
-  ArcGISSceneLayer* layer = new ArcGISSceneLayer(brestFrance, this);
+  auto* layer = new ArcGISSceneLayer(brestFrance, this);
   m_scene->operationalLayers()->append(layer);
 
   // set origin camera
@@ -267,18 +259,18 @@ void CppArExample::createBerlinScene()
   // berlin scene
   const QUrl buildingsService("https://tiles.arcgis.com/tiles/P3ePLMYs2RVChkJx/arcgis/rest/services/"
                               "Buildings_Berlin/SceneServer");
-  ArcGISSceneLayer* layer = new ArcGISSceneLayer(buildingsService, this);
+  auto* layer = new ArcGISSceneLayer(buildingsService, this);
   m_scene->operationalLayers()->append(layer);
 
   // set origin camera
   connect(layer, &ArcGISSceneLayer::doneLoading, this, [this, layer](Error)
   {
     const Point center = layer->fullExtent().center();
-    const Camera camera(center.y(), center.x(), 10000.0, 0.0, 90.0, 0.0);
+    const Camera camera(center.y(), center.x(), 1.0, 0.0, 90.0, 0.0);
     m_arcGISArView->setOriginCamera(camera);
   });
 
-  m_arcGISArView->setTranslationFactor(1.0);
+  m_arcGISArView->setTranslationFactor(10000.0);
 
   changeScene();
 }
@@ -288,21 +280,21 @@ void CppArExample::createBerlinScene()
 void CppArExample::createTestScene()
 {
   // create scene
-  m_scene = new Scene(this);
+  m_scene = new Scene(Basemap::imagery(), this);
   createSurfaceWithElevation();
 
   // create symbols
   SimpleMarkerSceneSymbolStyle style = SimpleMarkerSceneSymbolStyle::Sphere;
-  double symbolSize = 10.0;
+  double symbolSize = 0.1;
   SceneSymbolAnchorPosition anchorPosition = SceneSymbolAnchorPosition::Bottom;
 
   // create graphic overlay
-  GraphicsOverlay* graphicsOverlay = new GraphicsOverlay(this);
+  auto* graphicsOverlay = new GraphicsOverlay(this);
   Q_CHECK_PTR(m_sceneView);
   m_sceneView->graphicsOverlays()->append(graphicsOverlay);
 
   // create graphics
-  double offset = 0.0001;
+  double offset = 0.000001;
   for (int i = -5; i <= 10; ++i)
   {
     {
@@ -343,8 +335,8 @@ void CppArExample::createTestScene()
     graphicsOverlay->graphics()->append(new Graphic(Point(-offset * 7, 0.0, 0.0), symbol, this));
   }
 
-  m_arcGISArView->setOriginCamera(Camera(0.0, 0.0, 200.0, 0.0, 0.0, 0.0));
-  m_arcGISArView->setTranslationFactor(1.0);
+  m_arcGISArView->setOriginCamera(Camera(0.0, 0.0, 0.0, 0.0, 90.0, 0.0));
+  m_arcGISArView->setTranslationFactor(10.0);
 
   changeScene();
 }
@@ -357,7 +349,7 @@ void CppArExample::createSurfaceWithElevation()
   // add elevation source
   const QUrl elevationSourceUrl("http://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer");
   const QList<ElevationSource*> sources = { new ArcGISTiledElevationSource(elevationSourceUrl, m_scene) };
-  Surface* baseSurface = new Surface(sources, m_scene);
+  auto* baseSurface = new Surface(sources, m_scene);
 
   BackgroundGrid grid;
   grid.setVisible(false);
@@ -391,11 +383,8 @@ void CppArExample::changeScene(bool withLocationDataSource)
 
   // set the new scene
   Scene* oldScene = m_sceneView->arcGISScene();
-
   m_sceneView->setArcGISScene(m_scene);
-
-  if (oldScene)
-    delete oldScene;
+  delete oldScene;
 
   // reset and start tracking
   m_arcGISArView->resetTracking();

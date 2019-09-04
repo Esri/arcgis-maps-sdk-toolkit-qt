@@ -50,7 +50,14 @@
 
 int main(int argc, char *argv[])
 {
-  qDebug() << "Initializing application";
+  // There are some conflicts between the AR frameworks and the Qt's rendering thread.
+  // This lines of code enable the non-threaded render loops mode in Qt.
+  // See SceneView::renderFrame documentation and Qt's documentation
+  // https://doc.qt.io/qt-5/qtquick-visualcanvas-scenegraph.html#non-threaded-render-loops-basic-and-windows
+  // for more informati ons.
+#if defined(Q_OS_IOS) || defined(Q_OS_ANDROID)
+  qputenv("QSG_RENDER_LOOP", "basic");
+#endif
 
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
   // Linux requires 3.2 OpenGL Context

@@ -9,8 +9,8 @@
 // notice and use restrictions.
 //
 // See the Sample code usage restrictions document for further information.
-//
 
+#include <qglobal.h>
 #ifdef Q_OS_WIN
 #include <Windows.h>
 #endif
@@ -49,8 +49,8 @@ int main(int argc, char *argv[])
   // This lines of code enable the non-threaded render loops mode in Qt.
   // See SceneView::renderFrame documentation and Qt's documentation
   // https://doc.qt.io/qt-5/qtquick-visualcanvas-scenegraph.html#non-threaded-render-loops-basic-and-windows
-  // for more informations.
-#if defined(Q_OS_IOS) && !defined(Q_OS_ANDROID)
+  // for more informati ons.
+#if defined(Q_OS_IOS) || defined(Q_OS_ANDROID)
   qputenv("QSG_RENDER_LOOP", "basic");
 #endif
 

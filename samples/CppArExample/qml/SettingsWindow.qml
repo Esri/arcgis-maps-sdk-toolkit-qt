@@ -89,45 +89,55 @@ Item {
                 }
             }
 
-            GroupBox {
-                title: "Scenes"
-                Column {
-                    spacing: 5
-                    Button {
-                        text: "Empty - Full Scale"
-                        onClicked: emptySceneClicked();
+            Column {
+                spacing: 5
+                GroupBox {
+                    title: "Full Scale Scenes"
+                    Column {
+                        spacing: 5
+                        Button {
+                            text: "Empty"
+                            onClicked: emptySceneClicked();
+                        }
+                        Button {
+                            text: "Streets"
+                            onClicked: streetsSceneClicked();
+                        }
+                        Button {
+                            text: "Imagery"
+                            onClicked: imagerySceneClicked();
+                        }
                     }
-                    Button {
-                        text: "Streets - Full Scale"
-                        onClicked: streetsSceneClicked();
-                    }
-                    Button {
-                        text: "Imagery - Full Scale"
-                        onClicked: imagerySceneClicked();
-                    }
-                    Button {
-                        text: "Point Cloud - Tabletop"
-                        onClicked: pointCloudSceneClicked();
-                    }
-                    Button {
-                        text: "Yosemite - Tabletop"
-                        onClicked: yosemiteSceneClicked();
-                    }
-                    Button {
-                        text: "US Mexico Border - Tabletop"
-                        onClicked: borderSceneClicked();
-                    }
-                    Button {
-                        text: "Brest - Tabletop"
-                        onClicked: brestSceneClicked();
-                    }
-                    Button {
-                        text: "Berlin - Tabletop"
-                        onClicked: berlinSceneClicked();
-                    }
-                    Button {
-                        text: "Test - Tabletop"
-                        onClicked: testSceneClicked();
+                }
+
+                GroupBox {
+                    title: "Tabletop Scenes"
+                    Column {
+                        spacing: 5
+                        Button {
+                            text: "Point Cloud"
+                            onClicked: pointCloudSceneClicked();
+                        }
+                        Button {
+                            text: "Yosemite"
+                            onClicked: yosemiteSceneClicked();
+                        }
+                        Button {
+                            text: "Border"
+                            onClicked: borderSceneClicked();
+                        }
+                        Button {
+                            text: "Brest"
+                            onClicked: brestSceneClicked();
+                        }
+                        Button {
+                            text: "Berlin"
+                            onClicked: berlinSceneClicked();
+                        }
+                        Button {
+                            text: "Test"
+                            onClicked: testSceneClicked();
+                        }
                     }
                 }
             }
