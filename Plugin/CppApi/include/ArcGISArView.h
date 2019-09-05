@@ -49,6 +49,11 @@ public:
   Q_INVOKABLE void setInitialTransformation(const QPoint& screenPoint);
   Q_INVOKABLE Point screenToLocation(const Point& screenPoint) const;
 
+  // todo: add properties for cloud points/planes debug
+  // point cloud color (QColor) default=red
+  // point cloud size (int) default=20
+  // plane color (QColor) default=blanc
+
 signals:
   void originCameraChanged();
   void sceneViewChanged();
@@ -66,6 +71,7 @@ public: // internals, used by AR wrappers
 protected:
   void setTranslationFactorInternal(double translationFactor) override;
   void setLocationInternal(double latitude, double longitude, double altitude) override;
+  void setHeadingInternal(double heading) override;
   void resetTrackingInternal() override;
 
 private:

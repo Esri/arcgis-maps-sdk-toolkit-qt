@@ -184,15 +184,16 @@ void ArcGISArViewInterface::setLocationDataSource(LocationDataSource* locationDa
   m_locationDataSource = locationDataSource;
 
   // update connection
-  disconnect(m_locationDataSourceConnection);
+  disconnect(m_locationChangedConnection);
+  disconnect(m_headingChangedConnection);
 
   if (m_locationDataSource)
   {
-    m_locationDataSourceConnection = connect(m_locationDataSource, &LocationDataSource::locationChanged,
-                                             this, [this](double latitude, double longitude, double altitude)
-    {
-      setLocationInternal(latitude, longitude, altitude);
-    });
+    m_locationChangedConnection = connect(m_locationDataSource, &LocationDataSource::locationChanged,
+                                             this, &ArcGISArViewInterface::setLocationInternal);
+
+    m_headingChangedConnection = connect(m_locationDataSource, &LocationDataSource::headingChanged,
+                                             this, &ArcGISArViewInterface::setHeadingInternal);
 
     // starts tracking using LocationDataSource if necessary
     if (!m_tryUsingArKit)
@@ -294,7 +295,8 @@ void ArcGISArViewInterface::updateTrackingSources()
   {
     // disable LocationDataSource if necessary.
     // Don't delete these objects, its can be costumer's specific objects.
-    disconnect(m_locationDataSourceConnection);
+    disconnect(m_locationChangedConnection);
+    disconnect(m_headingChangedConnection);
 
     // disable the video rendering using the QCamera
     if (m_renderVideoFeed)

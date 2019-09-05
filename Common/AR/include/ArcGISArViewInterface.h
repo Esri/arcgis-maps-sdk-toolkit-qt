@@ -99,6 +99,7 @@ protected:
 
   virtual void setTranslationFactorInternal(double translationFactor) = 0;
   virtual void setLocationInternal(double latitude, double longitude, double altitude) = 0;
+  virtual void setHeadingInternal(double heading) = 0;
   virtual void resetTrackingInternal() = 0;
 
 private:
@@ -113,7 +114,8 @@ private:
 
   // sensors
   LocationDataSource* m_locationDataSource = nullptr;
-  QMetaObject::Connection m_locationDataSourceConnection;
+  QMetaObject::Connection m_locationChangedConnection;
+  QMetaObject::Connection m_headingChangedConnection;
 };
 
 } // Toolkit namespace

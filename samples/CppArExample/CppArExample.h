@@ -43,12 +43,13 @@ public:
   Q_INVOKABLE void createEmptyScene();
   Q_INVOKABLE void createStreetsScene();
   Q_INVOKABLE void createImageryScene();
+  Q_INVOKABLE void createFullScaleTestScene();
   Q_INVOKABLE void createPointCloudScene();
   Q_INVOKABLE void createYosemiteScene();
   Q_INVOKABLE void createBorderScene();
   Q_INVOKABLE void createBrestScene();
   Q_INVOKABLE void createBerlinScene();
-  Q_INVOKABLE void createTestScene();
+  Q_INVOKABLE void createTabletopTestScene();
 
 signals:
   void arcGISArViewChanged();

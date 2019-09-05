@@ -54,6 +54,10 @@
 
   The \l altitude parameter holds the altitude in meters above sea level.
   The property is undefined (\c NaN) if the altitude has not been set.
+
+  \section1 Heading
+
+  The bearing measured in degrees clockwise from true north to the direction of travel.
  */
 
 using namespace Esri::ArcGISRuntime::Toolkit;
@@ -143,11 +147,19 @@ void LocationDataSource::setPositionSource(QGeoPositionInfoSource* positionSourc
 
   disconnect(m_positionSourceConnection);
   m_positionSourceConnection = connect(positionSource, &QGeoPositionInfoSource::positionUpdated,
-                                       this, [this](const QGeoPositionInfo &update)
+                                       this, [this](const QGeoPositionInfo &positionInfo)
   {
-    const QGeoCoordinate& coordinate = update.coordinate();
+    // emit the new position if available
+    const QGeoCoordinate& coordinate = positionInfo.coordinate();
     if (coordinate.isValid())
       emit locationChanged(coordinate.latitude(), coordinate.longitude(), coordinate.altitude());
+
+    // emit the new heading if available
+    if (positionInfo.hasAttribute(QGeoPositionInfo::Direction))
+    {
+      emit headingChanged(positionInfo.attribute(QGeoPositionInfo::Direction));
+    }
+
   });
 
   emit positionSourceChanged();

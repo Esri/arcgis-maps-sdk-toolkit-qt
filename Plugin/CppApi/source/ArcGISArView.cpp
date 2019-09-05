@@ -141,18 +141,15 @@ void ArcGISArView::setInitialTransformation(const QPoint& screenPoint)
 {
   // Use the `internalHitTest` method to get the matrix of `screenPoint`.
   const std::array<double, 7> hitResult = internalHitTest(screenPoint.x(), screenPoint.y());
-  if (hitResult[0] == 0) // todo: improve the return value (bool?)
+  if (hitResult[3] == 0) // todo: improve the return value (bool?)
     return;
 
   // Set the `initialTransformation` as the AGSTransformationMatrix.identity - hit test matrix.
   const auto hitMatrix = std::unique_ptr<TransformationMatrix>(
-        TransformationMatrix::createWithQuaternionAndTranslation(0, 0, 0, 1,hitResult[4], hitResult[5], hitResult[6]));
+        TransformationMatrix::createWithQuaternionAndTranslation(0.0, 0.0, 0.0, 1.0, hitResult[4], hitResult[5], hitResult[6]));
   Q_CHECK_PTR(hitMatrix.get());
 
-  auto identity = std::unique_ptr<TransformationMatrix>(TransformationMatrix::createIdentityMatrix());
-  Q_CHECK_PTR(identity);
-
-  m_initialTransformation = identity->subtractTransformation(hitMatrix.get(), this);
+  m_initialTransformation = TransformationMatrix::createIdentityMatrix()->subtractTransformation(hitMatrix.get(), this);
   Q_CHECK_PTR(m_initialTransformation);
 }
 
@@ -261,17 +258,37 @@ void ArcGISArView::setLocationInternal(double latitude, double longitude, double
   if (m_tmcc->originCamera().isEmpty())
   {
     // create a new origin camera
-    m_tmcc->setOriginCamera(Camera(latitude, longitude, altitude+100, 0.0, 90.0, 0.0));
+    m_tmcc->setOriginCamera(Camera(latitude, longitude, altitude, 0.0, 90.0, 0.0));
   }
   else
   {
     // update the origin camera
     const Camera oldCamera = m_tmcc->originCamera();
-    m_tmcc->setOriginCamera(Camera(latitude, longitude, altitude+100, oldCamera.heading(), oldCamera.pitch(), oldCamera.roll()));
+    m_tmcc->setOriginCamera(Camera(latitude, longitude, altitude, oldCamera.heading(), oldCamera.pitch(), oldCamera.roll()));
   }
 
   // todo: Reset the camera controller's transformationMatrix to its initial state, the Identity matrix.
 //  cameraController.transformationMatrix = .identity
+}
+
+/*!
+  \internal
+ */
+void ArcGISArView::setHeadingInternal(double heading)
+{
+  if (m_tmcc->originCamera().isEmpty())
+  {
+    // create a new origin camera
+    m_tmcc->setOriginCamera(Camera(0.0, 0.0, 0.0, heading, 90.0, 0.0));
+  }
+  else
+  {
+    // update the origin camera
+    const Camera oldCamera = m_tmcc->originCamera();
+    const Point oldLocation = oldCamera.location();
+    m_tmcc->setOriginCamera(Camera(oldLocation.y(), oldLocation.x(), oldLocation.z(),
+                                   heading, oldCamera.pitch(), oldCamera.roll()));
+  }
 }
 
 /*!

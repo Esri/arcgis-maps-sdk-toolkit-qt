@@ -25,12 +25,13 @@ Item {
     signal emptySceneClicked()
     signal streetsSceneClicked()
     signal imagerySceneClicked()
+    signal fullScaleTestSceneClicked()
     signal pointCloudSceneClicked()
     signal yosemiteSceneClicked()
     signal borderSceneClicked()
     signal brestSceneClicked()
     signal berlinSceneClicked()
-    signal testSceneClicked()
+    signal tabletopTestSceneClicked()
 
     Image {
         id: settingsButton
@@ -107,6 +108,10 @@ Item {
                             text: "Imagery"
                             onClicked: imagerySceneClicked();
                         }
+                        Button {
+                            text: "Test"
+                            onClicked: fullScaleTestSceneClicked();
+                        }
                     }
                 }
 
@@ -136,7 +141,7 @@ Item {
                         }
                         Button {
                             text: "Test"
-                            onClicked: testSceneClicked();
+                            onClicked: tabletopTestSceneClicked();
                         }
                     }
                 }

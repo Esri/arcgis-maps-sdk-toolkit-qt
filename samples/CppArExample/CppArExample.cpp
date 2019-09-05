@@ -31,7 +31,7 @@
 #include <QGeoPositionInfoSource>
 
 #include "SimpleMarkerSceneSymbol.h"
-#include "TextSymbol.h"
+#include "SimpleLineSymbol.h"
 
 using namespace Esri::ArcGISRuntime;
 using namespace Esri::ArcGISRuntime::Toolkit;
@@ -41,7 +41,9 @@ CppArExample::CppArExample(QObject* parent):
 {
 }
 
-CppArExample::~CppArExample() = default;
+CppArExample::~CppArExample()
+{
+}
 
 ArcGISArView* CppArExample::arcGISArView() const
 {
@@ -116,6 +118,72 @@ void CppArExample::createImageryScene()
 
   changeScene(true);
 }
+
+
+
+// Creates a test scene
+// Mode: Full-Scale AR
+void CppArExample::createFullScaleTestScene()
+{
+  // create scene
+  m_scene = new Scene(this);
+  createSurfaceWithElevation();
+
+  // create graphic overlay
+  auto* graphicsOverlay = new GraphicsOverlay(this);
+  Q_CHECK_PTR(m_sceneView);
+  m_sceneView->graphicsOverlays()->append(graphicsOverlay);
+
+  // create graphics
+  auto createSymbol = [graphicsOverlay](double x, double y, const QColor& color)
+  {
+    SimpleMarkerSceneSymbol* symbol = new SimpleMarkerSceneSymbol(
+          SimpleMarkerSceneSymbolStyle::Sphere, color, 0.1, 0.1, 0.1, SceneSymbolAnchorPosition::Bottom, graphicsOverlay);
+    graphicsOverlay->graphics()->append(new Graphic(Point(x, y, 0.00001), symbol, graphicsOverlay));
+  };
+
+  for (int i = -30; i <= 30; ++i)
+  {
+    for (int j = -30; j <= 30; ++j)
+    {
+      createSymbol(0.00001 * i, 0.00001 * j, Qt::blue);
+    }
+  }
+  createSymbol(0.0, 0.0, Qt::green);
+
+  m_arcGISArView->setOriginCamera(Camera(0.0, 0.0, 0.0, 0.0, 90.0, 0.0));
+
+
+
+
+
+
+//  auto createSymbol2 = [graphicsOverlay](double x1, double y1, double x2, double y2, const QColor& color)
+//  {
+//    SimpleLineSymbol* symbol = new SimpleLineSymbol(SimpleLineSymbolStyle::Solid, color, 500.0f, graphicsOverlay);
+
+//    graphicsOverlay->graphics()->append(new Graphic(Point(x1, y1, 0.00001), symbol, graphicsOverlay));
+//    graphicsOverlay->graphics()->append(new Graphic(Point(x2, y2, 0.00001), symbol, graphicsOverlay));
+//  };
+
+//  for (int i = -10; i <= 10; ++i)
+//  {
+//    createSymbol2(0.00001 * i, -0.0001, 0.00001 * i, 0.0001, Qt::blue);
+//    createSymbol2(-0.0001, 0.00001 * i, 0.0001, 0.00001 * i, Qt::red);
+//  }
+
+
+
+  // Set the location data source so we use our GPS location as the originCamera.
+//  m_arcGISArView->setOriginCamera(Camera());
+  m_arcGISArView->setTranslationFactor(1.0);
+
+  changeScene(false);
+}
+
+
+
+
 
 // Creates a scene based on a point cloud layer.
 // Mode: Tabletop AR
@@ -198,29 +266,8 @@ void CppArExample::createBorderScene()
   auto* layer = new IntegratedMeshLayer(borderUrl, m_scene);
   m_scene->operationalLayers()->append(layer);
 
-  connect(layer, &PointCloudLayer::doneLoading, this, [this, layer](Error error)
-  {
-    if (!error.isEmpty())
-    {
-      qDebug() << "Fails to load the border scene:" << error.message() << error.additionalMessage();
-      return;
-    }
-
-    // Get the center point of the layer's extent.
-    const Point center = layer->fullExtent().center();
-
-    // Find the elevation of the layer at the center point.
-    Surface* surface = m_scene->baseSurface();
-    connect(surface, &Surface::locationToElevationCompleted, this, [this, center](QUuid, double elevation)
-    {
-      // Create the origin camera at the center point and elevation of the data.
-      // This will ensure the data is anchored to the table.
-      qDebug() << "====>> elevation" << elevation; // todo: to fix
-      m_arcGISArView->setOriginCamera(Camera(center.y(), center.x(), elevation, 0.0, 90.0, 0.0));
-    });
-    surface->locationToElevation(center);
-  });
-
+  // set origin camera
+  m_arcGISArView->setOriginCamera(Camera(32.5337, -116.925, 126.0, 0.0, 90.0, 0.0));
   m_arcGISArView->setTranslationFactor(1000.0);
 
   changeScene();
@@ -241,8 +288,7 @@ void CppArExample::createBrestScene()
   m_scene->operationalLayers()->append(layer);
 
   // set origin camera
-  const Camera observerCamera(Point(-4.49492, 48.3808, 48.2511, SpatialReference::wgs84()), 0.0, 90.0, 0.0);
-  m_arcGISArView->setOriginCamera(observerCamera);
+  m_arcGISArView->setOriginCamera(Camera(48.3808, -4.49492, 48.2511, 0.0, 90.0, 0.0));
   m_arcGISArView->setTranslationFactor(250.0);
 
   changeScene();
@@ -263,30 +309,19 @@ void CppArExample::createBerlinScene()
   m_scene->operationalLayers()->append(layer);
 
   // set origin camera
-  connect(layer, &ArcGISSceneLayer::doneLoading, this, [this, layer](Error)
-  {
-    const Point center = layer->fullExtent().center();
-    const Camera camera(center.y(), center.x(), 1.0, 0.0, 90.0, 0.0);
-    m_arcGISArView->setOriginCamera(camera);
-  });
-
-  m_arcGISArView->setTranslationFactor(10000.0);
+  m_arcGISArView->setOriginCamera(Camera(52.4993, 13.4215, 38.0, 0.0, 90.0, 0.0));
+  m_arcGISArView->setTranslationFactor(1000.0);
 
   changeScene();
 }
 
 // Creates a test scene
 // Mode: Tabletop AR
-void CppArExample::createTestScene()
+void CppArExample::createTabletopTestScene()
 {
   // create scene
-  m_scene = new Scene(Basemap::imagery(), this);
+  m_scene = new Scene(this);
   createSurfaceWithElevation();
-
-  // create symbols
-  SimpleMarkerSceneSymbolStyle style = SimpleMarkerSceneSymbolStyle::Sphere;
-  double symbolSize = 0.1;
-  SceneSymbolAnchorPosition anchorPosition = SceneSymbolAnchorPosition::Bottom;
 
   // create graphic overlay
   auto* graphicsOverlay = new GraphicsOverlay(this);
@@ -294,49 +329,22 @@ void CppArExample::createTestScene()
   m_sceneView->graphicsOverlays()->append(graphicsOverlay);
 
   // create graphics
-  double offset = 0.000001;
+  auto createSymbol = [graphicsOverlay](double x, double y, const QColor& color)
+  {
+    SimpleMarkerSceneSymbol* symbol = new SimpleMarkerSceneSymbol(
+          SimpleMarkerSceneSymbolStyle::Sphere, color, 0.1, 0.1, 0.1, SceneSymbolAnchorPosition::Bottom, graphicsOverlay);
+    graphicsOverlay->graphics()->append(new Graphic(Point(x, y, 0.0), symbol, graphicsOverlay));
+  };
+
   for (int i = -5; i <= 10; ++i)
   {
-    {
-      SimpleMarkerSceneSymbol* symbol = new SimpleMarkerSceneSymbol(style, QColor(Qt::blue), symbolSize, symbolSize,
-                                                                    symbolSize, anchorPosition, this);
-      graphicsOverlay->graphics()->append(new Graphic(Point(0.0, offset * i, 0.0), symbol, this));
-    }
-    {
-      SimpleMarkerSceneSymbol* symbol = new SimpleMarkerSceneSymbol(style, QColor(Qt::red), symbolSize, symbolSize,
-                                                                    symbolSize, anchorPosition, this);
-      graphicsOverlay->graphics()->append(new Graphic(Point(offset * i, 0.0, 0.0), symbol, this));
-    }
-    {
-      SimpleMarkerSceneSymbol* symbol = new SimpleMarkerSceneSymbol(style, QColor(Qt::green), symbolSize, symbolSize,
-                                                                    symbolSize, anchorPosition, this);
-      graphicsOverlay->graphics()->append(new Graphic(Point(0.0, 0.0, offset * i), symbol, this));
-    }
+    createSymbol(0.0, 0.000001 * i, Qt::blue);
+    createSymbol(0.000001 * i, 0.0, Qt::red);
   }
-
-  {
-    TextSymbol* symbol = new TextSymbol("N", QColor(Qt::blue), symbolSize * 150, HorizontalAlignment::Center,
-                                        VerticalAlignment::Middle, this);
-    graphicsOverlay->graphics()->append(new Graphic(Point(0.0, offset * 12, 0.0), symbol, this));
-  }
-  {
-    TextSymbol* symbol = new TextSymbol("S", QColor(Qt::blue), symbolSize * 150, HorizontalAlignment::Center,
-                                        VerticalAlignment::Middle, this);
-    graphicsOverlay->graphics()->append(new Graphic(Point(0.0, -offset * 7, 0.0), symbol, this));
-  }
-  {
-    TextSymbol* symbol = new TextSymbol("E", QColor(Qt::red), symbolSize * 150, HorizontalAlignment::Center,
-                                        VerticalAlignment::Middle, this);
-    graphicsOverlay->graphics()->append(new Graphic(Point(offset * 12, 0.0, 0.0), symbol, this));
-  }
-  {
-    TextSymbol* symbol = new TextSymbol("W", QColor(Qt::red), symbolSize * 150, HorizontalAlignment::Center,
-                                        VerticalAlignment::Middle, this);
-    graphicsOverlay->graphics()->append(new Graphic(Point(-offset * 7, 0.0, 0.0), symbol, this));
-  }
+  createSymbol(0.0, 0.0, Qt::green);
 
   m_arcGISArView->setOriginCamera(Camera(0.0, 0.0, 0.0, 0.0, 90.0, 0.0));
-  m_arcGISArView->setTranslationFactor(10.0);
+  m_arcGISArView->setTranslationFactor(1.0);
 
   changeScene();
 }
@@ -367,18 +375,17 @@ void CppArExample::changeScene(bool withLocationDataSource)
   m_arcGISArView->stopTracking();
 
   // update the location data source
-  LocationDataSource* oldLds = m_arcGISArView->locationDataSource();
-
+  LocationDataSource* oldLocationDataSource = m_arcGISArView->locationDataSource();
   if (withLocationDataSource)
   {
-    if (!oldLds)
+    if (!oldLocationDataSource)
       m_arcGISArView->setLocationDataSource(new LocationDataSource(this));
     // else do nothing
   }
   else
   {
     m_arcGISArView->setLocationDataSource(nullptr);
-    delete oldLds;
+    delete oldLocationDataSource;
   }
 
   // set the new scene

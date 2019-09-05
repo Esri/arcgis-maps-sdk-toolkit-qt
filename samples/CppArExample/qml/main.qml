@@ -49,11 +49,12 @@ ApplicationWindow {
         onEmptySceneClicked: arSample.createEmptyScene();
         onStreetsSceneClicked: arSample.createStreetsScene();
         onImagerySceneClicked: arSample.createImageryScene();
+        onFullScaleTestSceneClicked: arSample.createFullScaleTestScene();
         onPointCloudSceneClicked: arSample.createPointCloudScene();
         onYosemiteSceneClicked: arSample.createYosemiteScene();
         onBorderSceneClicked: arSample.createBorderScene();
         onBrestSceneClicked: arSample.createBrestScene();
         onBerlinSceneClicked: arSample.createBerlinScene();
-        onTestSceneClicked: arSample.createTestScene();
+        onTabletopTestSceneClicked: arSample.createTabletopTestScene();
     }
 }
