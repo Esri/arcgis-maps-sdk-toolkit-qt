@@ -20,8 +20,6 @@ ApplicationWindow {
     height: 600
     title: "QmlArExample"
 
-    Component.onCompleted: arcGISArView.startTracking();
-
     ArcGISArView {
         id: arcGISArView
         anchors.fill: parent
@@ -35,6 +33,7 @@ ApplicationWindow {
         id: sceneView
         anchors.fill: parent
         scene: sceneLoader.item ? sceneLoader.item.scene : null
+        onMousePressed: arcGISArView.setInitialTransformation(mouse.x, mouse.y); // for touch screen event
     }
 
     Loader {
@@ -48,18 +47,22 @@ ApplicationWindow {
             margins: 5
         }
 
-        tracking: arcGISArView.tracking
         onStartTrackingClicked: arcGISArView.startTracking();
         onStopTrackingClicked: arcGISArView.stopTracking();
         onResetTrackingClicked: arcGISArView.resetTracking();
         // onCalibrationClicked: not implemented
         onEmptySceneClicked: sceneLoader.source = "qrc:/qml/scenes/EmptyScene.qml";
-        onStreetsSceneClicked: Loader.source = "qrc:/qml/scenes/StreetsScene.qml";
+        onStreetsSceneClicked: sceneLoader.source = "qrc:/qml/scenes/StreetsScene.qml";
         onImagerySceneClicked: sceneLoader.source = "qrc:/qml/scenes/ImageryScene.qml";
         onPointCloudSceneClicked: sceneLoader.source = "qrc:/qml/scenes/PointCloudScene.qml";
         onYosemiteSceneClicked: sceneLoader.source = "qrc:/qml/scenes/YosemiteScene.qml";
         onBorderSceneClicked: sceneLoader.source = "qrc:/qml/scenes/BorderScene.qml";
         onBrestSceneClicked: sceneLoader.source = "qrc:/qml/scenes/BrestScene.qml";
         onBerlinSceneClicked: sceneLoader.source = "qrc:/qml/scenes/BerlinScene.qml";
+        onTabletopTestSceneClicked: {
+            sceneLoader.source = "qrc:/qml/scenes/TabletopTestScene.qml";
+            sceneView.graphicsOverlays.clear();
+            sceneView.graphicsOverlays.append(sceneLoader.item.graphicsOverlay);
+        }
     }
 }

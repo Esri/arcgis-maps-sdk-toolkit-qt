@@ -53,7 +53,7 @@ QObject* QmlArcGISArView::originCamera() const
 
 void QmlArcGISArView::setOriginCamera(QObject* originCamera)
 {
-  if (m_originCamera == originCamera || assertClassName(originCamera, "QmlCamera"))
+  if (m_originCamera == originCamera || !assertClassName(originCamera, "QmlCamera"))
     return;
 
   m_originCamera = originCamera;
@@ -79,7 +79,7 @@ QObject* QmlArcGISArView::sceneView() const
 
 void QmlArcGISArView::setSceneView(QObject* sceneView)
 {
-  if (!sceneView || m_sceneView || assertClassName(sceneView, "QmlSceneView"))
+  if (!sceneView || m_sceneView || !assertClassName(sceneView, "QmlSceneView"))
     return;
 
   m_sceneView = sceneView;
@@ -98,14 +98,14 @@ void QmlArcGISArView::setSceneView(QObject* sceneView)
 /*!
   \internal
  */
-QObject* QmlArcGISArView::transformationMatrixCameraControler() const
+QObject* QmlArcGISArView::transformationMatrixCameraController() const
 {
   return m_tmcc;
 }
 
-void QmlArcGISArView::setTransformationMatrixCameraControler(QObject* tmcc)
+void QmlArcGISArView::setTransformationMatrixCameraController(QObject* tmcc)
 {
-  if (!tmcc || m_tmcc || assertClassName(tmcc, "QmlTransformationMatrixCameraControler"))
+  if (!tmcc || m_tmcc || !assertClassName(tmcc, "QmlTransformationMatrixCameraController"))
     return;
 
   m_tmcc = tmcc;
@@ -114,7 +114,28 @@ void QmlArcGISArView::setTransformationMatrixCameraControler(QObject* tmcc)
   if (m_sceneView)
     m_sceneView->setProperty("cameraController", QVariant::fromValue(m_tmcc));
 
-  emit transformationMatrixCameraControlerChanged();
+  emit transformationMatrixCameraControllerChanged();
+}
+
+/*!
+  \brief Sets the initial transformation used to offset the originCamera.
+
+  The initial transformation is based on an AR point determined via existing plane hit detection
+  from `screenPoint`. If an AR point cannot be determined, this method will return `false`.
+
+  \list
+    \li \a x - The x-coordinate of the screen point to determine the `initialTransformation` from.
+    \li \a y - The y-coordinate of the screen point to determine the `initialTransformation` from.
+  \endlist
+ */
+void QmlArcGISArView::setInitialTransformation(float x, float y)
+{
+  // Use the `internalHitTest` method to get the matrix of `screenPoint`.
+  const std::array<double, 7> hitResult = internalHitTest(x, y);
+  if (hitResult[3] == 0) // todo: improve the return value (bool?)
+    return;
+
+  emit initialTransformationChanged(0.0, 0.0, 0.0, 1.0, hitResult[4], hitResult[5], hitResult[6]);
 }
 
 /*!
@@ -124,7 +145,7 @@ void QmlArcGISArView::setTransformationMatrixCameraControler(QObject* tmcc)
 */
 QObject* QmlArcGISArView::screenToLocation(QObject* screenPoint) const
 {
-  if (!m_sceneView || assertClassName(screenPoint, "QmlPoint"))
+  if (!m_sceneView || !assertClassName(screenPoint, "QmlPoint"))
     return nullptr;
 
   // gets the position of the screen point
@@ -205,6 +226,14 @@ void QmlArcGISArView::setTranslationFactorInternal(double)
 void QmlArcGISArView::setLocationInternal(double latitude, double longitude, double altitude)
 {
   emit locationChanged(latitude, longitude, altitude);
+}
+
+/*!
+  \internal
+ */
+void QmlArcGISArView::setHeadingInternal(double heading)
+{
+  emit headingChanged(heading);
 }
 
 /*!

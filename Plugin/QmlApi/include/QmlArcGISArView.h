@@ -27,8 +27,8 @@ class QmlArcGISArView : public ArcGISArViewInterface
 {
   Q_OBJECT
 
-  Q_PROPERTY(QObject* transformationMatrixCameraControler READ transformationMatrixCameraControler
-             WRITE setTransformationMatrixCameraControler NOTIFY transformationMatrixCameraControlerChanged)
+  Q_PROPERTY(QObject* transformationMatrixCameraController READ transformationMatrixCameraController
+             WRITE setTransformationMatrixCameraController NOTIFY transformationMatrixCameraControllerChanged)
   Q_PROPERTY(QObject* originCamera READ originCamera WRITE setOriginCamera NOTIFY originCameraChanged)
   Q_PROPERTY(QObject* sceneView READ sceneView WRITE setSceneView NOTIFY sceneViewChanged)
 
@@ -45,18 +45,22 @@ public:
   QObject* sceneView() const;
   void setSceneView(QObject* sceneView);
 
-  QObject* transformationMatrixCameraControler() const;
-  void setTransformationMatrixCameraControler(QObject* tmcc);
+  QObject* transformationMatrixCameraController() const;
+  void setTransformationMatrixCameraController(QObject* tmcc);
 
   // methods invokable
+  Q_INVOKABLE void setInitialTransformation(float x, float y);
   Q_INVOKABLE QObject* screenToLocation(QObject* screenPoint) const;
 
 signals:
-  void transformationMatrixCameraControlerChanged();
+  void transformationMatrixCameraControllerChanged();
   void originCameraChanged();
   void sceneViewChanged();
   void renderFrame();
   void locationChanged(double latitude, double longitude, double altitude);
+  void headingChanged(double heading);
+  void initialTransformationChanged(double quaternionX, double quaternionY, double quaternionZ, double quaternionW,
+                                    double translationX, double translationY, double translationZ);
   void transformationMatrixChanged(double quaternionX, double quaternionY, double quaternionZ, double quaternionW,
                                    double translationX, double translationY, double translationZ);
   void fieldOfViewChanged(double xFocalLength, double yFocalLength,
@@ -76,11 +80,10 @@ public: // internals, used by AR wrappers
 protected:
   void setTranslationFactorInternal(double translationFactor) override;
   void setLocationInternal(double latitude, double longitude, double altitude) override;
+  void setHeadingInternal(double heading) override;
   void resetTrackingInternal() override;
 
 private:
-//  QObject* qmlWrapper() const;
-//  QObject* tmcc() const;
   bool assertClassName(QObject* object, const QString& className) const;
 
   QObject* m_originCamera = nullptr;

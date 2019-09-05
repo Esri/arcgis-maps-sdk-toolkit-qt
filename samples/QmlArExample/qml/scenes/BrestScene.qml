@@ -31,13 +31,12 @@ Item {
     Camera {
         id: originCamera
         Point {
-            x: -4.49492
             y: 48.3808
+            x: -4.49492
             z: 48.2511
-            spatialReference: SpatialReference.createWgs84()
         }
-        heading: 344.488
-        pitch: 74.1212
+        heading: 0.0
+        pitch: 90.0
         roll: 0.0
     }
 }

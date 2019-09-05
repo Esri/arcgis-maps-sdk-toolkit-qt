@@ -16,6 +16,7 @@
 
 #include "LocationDataSource.h"
 #include <QGeoPositionInfoSource>
+#include <QCompass>
 
 /*!
   \class Esri::ArcGISRuntime::Toolkit::LocationDataSource
@@ -35,7 +36,8 @@
   Most of the time, it's not necessary to create an object of this class. A default LocationDataSource
   is created automatically by \l ArcGISArSceneView when this is necessary. This class is public to
   give the possibility to override the class QGeoPositionInfoSource to support a custom GPS device.
-  See https://doc.qt.io/qt-5/qtpositioning-plugins.html for Qt Positioning service plugins.
+
+  \sa {http://doc.qt.io/qt-5/qtpositioning-plugins.html}{Qt Positioning service plugins}.
 
   \section1 Latitude and longitude
 
@@ -57,7 +59,10 @@
 
   \section1 Heading
 
-  The bearing measured in degrees clockwise from true north to the direction of travel.
+  The azimuth of the device as degrees from magnetic north in a clockwise direction based on the
+  top of the device, as defined by QScreen::nativeOrientation.
+
+  \sa {http://doc.qt.io/qt-5/qcompass.html}{QCompass}
  */
 
 using namespace Esri::ArcGISRuntime::Toolkit;
@@ -90,12 +95,16 @@ bool LocationDataSource::isStarted() const
  */
 void LocationDataSource::start()
 {
-  // create a default source if necessary
-  if (!m_positionSource)
-    setPositionSource(QGeoPositionInfoSource::createDefaultSource(this));
+  // create a default geo position source and compass if necessary
+  if (!m_geoPositionSource)
+    setGeoPositionSource(QGeoPositionInfoSource::createDefaultSource(this));
+
+  if (!m_compass)
+    setCompass(new QCompass(this));
 
   // start
-  m_positionSource->startUpdates();
+  m_geoPositionSource->startUpdates();
+  m_compass->start();
 
   // update isStarted and sensorStatus properties
   m_isStarted = true;
@@ -109,8 +118,11 @@ void LocationDataSource::start()
  */
 void LocationDataSource::stop()
 {
-  if (m_positionSource)
-    m_positionSource->stopUpdates();
+  if (m_geoPositionSource)
+    m_geoPositionSource->stopUpdates();
+
+  if (m_compass)
+    m_compass->stop();
 
   // update isStarted and sensorStatus properties
   m_isStarted = false;
@@ -128,41 +140,64 @@ SensorStatus LocationDataSource::sensorStatus() const
 }
 
 /*!
-  \brief Gets the position source.
+  \brief Gets the \l QGeoPositionInfoSource object.
  */
-QGeoPositionInfoSource* LocationDataSource::positionSource() const
+QGeoPositionInfoSource* LocationDataSource::geoPositionSource() const
 {
-  return m_positionSource;
+  return m_geoPositionSource;
 }
 
 /*!
-  \brief Sets the position source to \a positionSource.
+  \brief Sets the position source to \a geoPositionSource.
  */
-void LocationDataSource::setPositionSource(QGeoPositionInfoSource* positionSource)
+void LocationDataSource::setGeoPositionSource(QGeoPositionInfoSource* geoPositionSource)
 {
-  if (m_positionSource == positionSource || !positionSource)
+  if (m_geoPositionSource == geoPositionSource || !geoPositionSource)
     return;
 
-  m_positionSource = positionSource;
+  m_geoPositionSource = geoPositionSource;
 
-  disconnect(m_positionSourceConnection);
-  m_positionSourceConnection = connect(positionSource, &QGeoPositionInfoSource::positionUpdated,
-                                       this, [this](const QGeoPositionInfo &positionInfo)
+  disconnect(m_geoPositionSourceConnection);
+  m_geoPositionSourceConnection = connect(m_geoPositionSource, &QGeoPositionInfoSource::positionUpdated,
+                                          this, [this](const QGeoPositionInfo &positionInfo)
   {
     // emit the new position if available
     const QGeoCoordinate& coordinate = positionInfo.coordinate();
     if (coordinate.isValid())
       emit locationChanged(coordinate.latitude(), coordinate.longitude(), coordinate.altitude());
-
-    // emit the new heading if available
-    if (positionInfo.hasAttribute(QGeoPositionInfo::Direction))
-    {
-      emit headingChanged(positionInfo.attribute(QGeoPositionInfo::Direction));
-    }
-
   });
 
-  emit positionSourceChanged();
+  emit geoPositionSourceChanged();
+}
+
+/*!
+  \brief Gets the \l QCompass object.
+ */
+QCompass* LocationDataSource::compass() const
+{
+  return m_compass;
+}
+
+/*!
+  \brief Sets the compass to \a compass.
+ */
+void LocationDataSource::setCompass(QCompass* compass)
+{
+  if (m_compass == compass || !compass)
+    return;
+
+  m_compass = compass;
+
+  disconnect(m_compassConnection);
+  m_compassConnection = connect(m_compass, &QCompass::readingChanged, this, [this]()
+  {
+    // emit the new heading if available
+    QCompassReading* reading = m_compass->reading();
+    Q_CHECK_PTR(reading);
+    emit headingChanged(reading->azimuth());
+  });
+
+  emit compassChanged();
 }
 
 // signals
@@ -183,8 +218,13 @@ void LocationDataSource::setPositionSource(QGeoPositionInfoSource* positionSourc
  */
 
 /*!
-  \fn void LocationDataSource::positionSourceChangedChanged();
-  \brief Signal emitted when the \l positionSourceChanged property changes.
+  \fn void LocationDataSource::geoPositionSourceChangedChanged();
+  \brief Signal emitted when the \l geoPositionSourceChanged property changes.
+ */
+
+/*!
+  \fn void LocationDataSource::compassChanged();
+  \brief Signal emitted when the \l compass property changes.
  */
 
 /*!

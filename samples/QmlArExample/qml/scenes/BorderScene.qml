@@ -28,32 +28,18 @@ Item {
             url: "https://tiles.arcgis.com/tiles/FQD0rKU8X5sAQfh8/arcgis/rest/services/" +
                  "VRICON_SW_US_Sample_Integrated_Mesh_scene_layer/SceneServer"
 
-            onLoadStatusChanged: {
-                if (loadStatus === Enums.LoadStatusLoaded) {
-                    // Get the center point of the layer's extent.
-                    var center = layer.fullExtent.center;
-
-                    // Find the elevation of the layer at the center point.
-                    var surface = scene.baseSurface;
-                    surface.onLocationToElevationStatusChanged.connect(function() {
-                        if (surface.locationToElevationStatus !== Enums.TaskStatusCompleted)
-                            return;
-
-                        // Create the origin camera at the center point and elevation of the data.
-                        // This will ensure the data is anchored to the table.
-                        originCamera = ArcGISRuntimeEnvironment.createObject("Camera", {
-                                                                                 latitude: center.y,
-                                                                                 longitude: center.x,
-                                                                                 altitude: 800, // surface.locationToElevationResult
-                                                                                 heading: 0,
-                                                                                 pitch: 90,
-                                                                                 roll: 0
-                                                                             });
-
-                    });
-                    surface.locationToElevation(center);
-                }
-            }
         }
+    }
+
+    Camera {
+        id: originCamera
+        location: Point {
+            y: 32.5337
+            x: -116.925
+            z: 126.0
+        }
+        heading: 0.0
+        pitch: 90.0
+        roll: 0.0
     }
 }

@@ -190,10 +190,16 @@ void ArcGISArViewInterface::setLocationDataSource(LocationDataSource* locationDa
   if (m_locationDataSource)
   {
     m_locationChangedConnection = connect(m_locationDataSource, &LocationDataSource::locationChanged,
-                                             this, &ArcGISArViewInterface::setLocationInternal);
+                                             this, [this](double latitude, double longitude, double altitude)
+    {
+      setLocationInternal(latitude, longitude, altitude);
+    });
 
     m_headingChangedConnection = connect(m_locationDataSource, &LocationDataSource::headingChanged,
-                                             this, &ArcGISArViewInterface::setHeadingInternal);
+                                             this, [this](double heading)
+    {
+      setHeadingInternal(heading);
+    });
 
     // starts tracking using LocationDataSource if necessary
     if (!m_tryUsingArKit)

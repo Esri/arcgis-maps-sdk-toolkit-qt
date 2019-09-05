@@ -17,7 +17,7 @@ import Esri.ArcGISRuntime 100.6
 
 Item {
     property alias scene: scene
-    property var originCamera: null
+    property var originCamera: originCamera
     property var locationDataSource: null
     property double translationFactor: 1000
 
@@ -27,18 +27,17 @@ Item {
             id: layer
             url: "https://tiles.arcgis.com/tiles/P3ePLMYs2RVChkJx/arcgis/rest/services/Buildings_Berlin/SceneServer"
         }
-        onLoadStatusChanged: {
-            if (loadStatus === Enums.LoadStatusLoaded) {
-                var center = layer.fullExtent.center;
-                originCamera = ArcGISRuntimeEnvironment.createObject("Camera", {
-                                                                         latitude: center.y,
-                                                                         longitude: center.x,
-                                                                         altitude: 600,
-                                                                         heading: 0,
-                                                                         pitch: 90,
-                                                                         roll: 0
-                                                                     });
-            }
+    }
+
+    Camera {
+        id: originCamera
+        location: Point {
+            y: 52.4993
+            x: 13.4215
+            z: 38.0
         }
+        heading: 0.0
+        pitch: 90.0
+        roll: 0.0
     }
 }

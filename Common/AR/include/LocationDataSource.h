@@ -21,6 +21,7 @@
 #include "SensorStatus.h"
 
 class QGeoPositionInfoSource;
+class QCompass;
 
 namespace Esri {
 namespace ArcGISRuntime {
@@ -29,8 +30,12 @@ namespace Toolkit {
 class LocationDataSource : public QObject
 {
   Q_OBJECT
+
+  Q_PROPERTY(QGeoPositionInfoSource* geoPositionSource READ geoPositionSource WRITE setGeoPositionSource
+             NOTIFY geoPositionSourceChanged)
+  Q_PROPERTY(QCompass* compass READ compass WRITE setCompass NOTIFY compassChanged)
+
   Q_PROPERTY(bool isStarted READ isStarted NOTIFY isStartedChanged)
-  Q_PROPERTY(QGeoPositionInfoSource* positionSource READ positionSource WRITE setPositionSource NOTIFY positionSourceChanged)
   Q_PROPERTY(SensorStatus sensorStatus READ sensorStatus NOTIFY sensorStatusChanged)
 
 public:
@@ -38,11 +43,13 @@ public:
   ~LocationDataSource() override;
 
   // properties
+  QGeoPositionInfoSource* geoPositionSource() const;
+  void setGeoPositionSource(QGeoPositionInfoSource* geoPositionSource);
+
+  QCompass* compass() const;
+  void setCompass(QCompass* compass);
+
   bool isStarted() const;
-
-  QGeoPositionInfoSource* positionSource() const;
-  void setPositionSource(QGeoPositionInfoSource* positionSource);
-
   SensorStatus sensorStatus() const;
 
   // invokable methods
@@ -50,16 +57,23 @@ public:
   Q_INVOKABLE void stop();
 
 signals:
-  void headingChanged(double heading);
-  void isStartedChanged();
+  void geoPositionSourceChanged();
+  void compassChanged();
+
   void locationChanged(double latitude, double longitude, double altitude);
-  void positionSourceChanged();
+  void headingChanged(double heading);
+
+  void isStartedChanged();
   void sensorStatusChanged();
 
 private:
+  QGeoPositionInfoSource* m_geoPositionSource = nullptr;
+  QCompass* m_compass = nullptr;
+
+  QMetaObject::Connection m_geoPositionSourceConnection;
+  QMetaObject::Connection m_compassConnection;
+
   bool m_isStarted = false;
-  QGeoPositionInfoSource* m_positionSource = nullptr;
-  QMetaObject::Connection m_positionSourceConnection;
   SensorStatus m_sensorStatus = SensorStatus::Stopped;
 };
 

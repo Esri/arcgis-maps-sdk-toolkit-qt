@@ -119,8 +119,6 @@ void CppArExample::createImageryScene()
   changeScene(true);
 }
 
-
-
 // Creates a test scene
 // Mode: Full-Scale AR
 void CppArExample::createFullScaleTestScene()
@@ -151,39 +149,12 @@ void CppArExample::createFullScaleTestScene()
   }
   createSymbol(0.0, 0.0, Qt::green);
 
-  m_arcGISArView->setOriginCamera(Camera(0.0, 0.0, 0.0, 0.0, 90.0, 0.0));
-
-
-
-
-
-
-//  auto createSymbol2 = [graphicsOverlay](double x1, double y1, double x2, double y2, const QColor& color)
-//  {
-//    SimpleLineSymbol* symbol = new SimpleLineSymbol(SimpleLineSymbolStyle::Solid, color, 500.0f, graphicsOverlay);
-
-//    graphicsOverlay->graphics()->append(new Graphic(Point(x1, y1, 0.00001), symbol, graphicsOverlay));
-//    graphicsOverlay->graphics()->append(new Graphic(Point(x2, y2, 0.00001), symbol, graphicsOverlay));
-//  };
-
-//  for (int i = -10; i <= 10; ++i)
-//  {
-//    createSymbol2(0.00001 * i, -0.0001, 0.00001 * i, 0.0001, Qt::blue);
-//    createSymbol2(-0.0001, 0.00001 * i, 0.0001, 0.00001 * i, Qt::red);
-//  }
-
-
-
   // Set the location data source so we use our GPS location as the originCamera.
-//  m_arcGISArView->setOriginCamera(Camera());
+  m_arcGISArView->setOriginCamera(Camera());
   m_arcGISArView->setTranslationFactor(1.0);
 
   changeScene(false);
 }
-
-
-
-
 
 // Creates a scene based on a point cloud layer.
 // Mode: Tabletop AR
@@ -344,7 +315,7 @@ void CppArExample::createTabletopTestScene()
   createSymbol(0.0, 0.0, Qt::green);
 
   m_arcGISArView->setOriginCamera(Camera(0.0, 0.0, 0.0, 0.0, 90.0, 0.0));
-  m_arcGISArView->setTranslationFactor(1.0);
+  m_arcGISArView->setTranslationFactor(10.0);
 
   changeScene();
 }

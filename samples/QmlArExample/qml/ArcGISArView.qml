@@ -19,13 +19,27 @@ ArcGISArViewInternal {
 
     // This QML component is used to create the QML's TMCC object from the C++.
     transformationMatrixCameraController: TransformationMatrixCameraController {
+        id: tmcc
     }
 
     // todo doc
-    onTranslationFactorChanged: transformationMatrixCameraController.translationFactor = translationFactor;
+    onTranslationFactorChanged: tmcc.translationFactor = translationFactor;
 
     // todo doc
-    onRenderFrame: sceneView.renderFrame();
+    onRenderFrame: root.sceneView.renderFrame();
+
+    // doc todo
+    property var identityTransformationMatrix: TransformationMatrix.createIdentityMatrix();
+    property var initialTransformationMatrix: identityTransformationMatrix;
+
+    onInitialTransformationChanged: {
+        // Set the `initialTransformation` as the AGSTransformationMatrix.identity - hit test matrix.
+        var hitMatrix = TransformationMatrix.createWithQuaternionAndTranslation(
+                    quaternionX, quaternionY, quaternionZ, quaternionW,
+                    translationX, translationY, translationZ);
+
+        initialTransformationMatrix = identityTransformationMatrix.subtractTransformation(hitMatrix);
+    }
 
     // it's not possible to create the TransformationMatrix object diretly in C++. This function
     // is used to create the TM object and assign it to the TMCC.
@@ -33,7 +47,9 @@ ArcGISArViewInternal {
         var matrix = TransformationMatrix.createWithQuaternionAndTranslation(
                     quaternionX, quaternionY, quaternionZ, quaternionW,
                     translationX, translationY, translationZ);
-        transformationMatrixCameraController.transformationMatrix = matrix;
+
+        var finalMatrix = initialTransformationMatrix.addTransformation(matrix);
+        tmcc.transformationMatrix = finalMatrix;
     }
 
     // it's not possible to call setFieldOfViewFromLensIntrinsics directly from the C++ code, due to
@@ -88,6 +104,22 @@ ArcGISArViewInternal {
 
         // todo: Reset the camera controller's transformationMatrix to its initial state, the Idenity matrix.
         //  cameraController.transformationMatrix = .identity
+    }
+
+    onHeadingChanged: {
+        if (tmcc.originCamera === null) {
+            // create a new origin camera
+            var location = ArcGISRuntimeEnvironment.createObject("Point", { x: 0.0, y: 0.0, z: 600.0 });
+            var camera = ArcGISRuntimeEnvironment.createObject(
+                        "Camera", { location: location, heading: heading, pitch: 90.0, roll: 0.0 });
+            tmcc.originCamera = camera;
+        } else {
+            // update the origin camera
+            var oldCamera = tmcc.originCamera;
+            var newCamera = ArcGISRuntimeEnvironment.createObject(
+                        "Camera", { location: oldCamera.location, heading: heading, pitch: 90.0, roll: 0.0 });
+            tmcc.originCamera = newCamera;
+        }
     }
 
     // Calculate the location using the hit result returned by the screenToLocation function.
