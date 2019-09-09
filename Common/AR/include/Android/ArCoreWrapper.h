@@ -114,9 +114,9 @@ private:
 
   jobject m_applicationActivity = nullptr;
 
-  ArCoreFrameRenderer m_arCoreFrameRenderer; // optional?
-  ArCorePlaneRenderer* m_arCorePlaneRenderer = nullptr; // optional
-  ArCorePointCloudRenderer* m_arCorePointCloudRenderer = nullptr; // optional
+  ArCoreFrameRenderer m_arCoreFrameRenderer;
+  std::unique_ptr<ArCorePlaneRenderer> m_arCorePlaneRenderer;
+  std::unique_ptr<ArCorePointCloudRenderer> m_arCorePointCloudRenderer;
 
   void renderArFrame();
   void renderArPlane();
@@ -150,9 +150,7 @@ private:
   ArTrackable* m_arTrackable = nullptr;
   ArPointCloud* m_arPointCloud = nullptr;
 
-  // the view and projection matrix
-  QMatrix4x4 m_viewMatrix;
-  QMatrix4x4 m_projectionMatrix;
+  // the model-view-projection matrix
   QMatrix4x4 m_mvpMatrix;
 };
 

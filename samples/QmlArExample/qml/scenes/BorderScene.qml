@@ -19,7 +19,7 @@ Item {
     property alias scene: scene
     property var originCamera: null
     property var locationDataSource: null
-    property double translationFactor: 1000
+    property double translationFactor: 10000.0
 
     SceneWithElevation {
         id:scene
@@ -27,7 +27,6 @@ Item {
             id: layer
             url: "https://tiles.arcgis.com/tiles/FQD0rKU8X5sAQfh8/arcgis/rest/services/" +
                  "VRICON_SW_US_Sample_Integrated_Mesh_scene_layer/SceneServer"
-
         }
     }
 

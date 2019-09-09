@@ -19,7 +19,7 @@ Item {
     property alias scene: scene
     property alias originCamera: originCamera
     property var locationDataSource: null
-    property double translationFactor: 250
+    property double translationFactor: 500.0
 
     SceneWithElevation {
         id:scene

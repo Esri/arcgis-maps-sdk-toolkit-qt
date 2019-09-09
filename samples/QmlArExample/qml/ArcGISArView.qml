@@ -83,27 +83,20 @@ ArcGISArViewInternal {
 
     // location update
     onLocationChanged: {
-        var location = ArcGISRuntimeEnvironment.createObject("Point", { x: latitude, y: longitude, z: altitude });
-        console.log("====>>>> location", location);
-        console.log("====>>>> tmcc.originCamera", tmcc.originCamera);
-
+        var location = ArcGISRuntimeEnvironment.createObject("Point", { y: latitude, x: longitude, z: 600 /*altitude*/ });
         if (tmcc.originCamera === null) {
             // create a new origin camera
             var camera = ArcGISRuntimeEnvironment.createObject(
                         "Camera", { location: location, heading: 0.0, pitch: 90.0, roll: 0.0 });
-            console.log("====>>>> camera", camera);
             tmcc.originCamera = camera;
         } else {
             // update the origin camera
             var oldCamera = tmcc.originCamera;
             var newCamera = ArcGISRuntimeEnvironment.createObject(
-                        "Camera", { location: location, heading: oldCamera.heading, pitch: oldCamera.pitch, roll: oldCamera.roll });
-            console.log("====>>>> oldCamera, newCamera", oldCamera, newCamera);
+                        "Camera", { location: location, heading: oldCamera.heading,
+                            pitch: 90 /*oldCamera.pitch*/, roll: 0 /*oldCamera.roll*/ });
             tmcc.originCamera = newCamera;
         }
-
-        // todo: Reset the camera controller's transformationMatrix to its initial state, the Idenity matrix.
-        //  cameraController.transformationMatrix = .identity
     }
 
     onHeadingChanged: {

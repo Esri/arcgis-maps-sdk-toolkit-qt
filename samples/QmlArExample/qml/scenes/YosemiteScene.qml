@@ -19,7 +19,7 @@ Item {
     property alias scene: scene
     property var originCamera: null
     property var locationDataSource: null
-    property double translationFactor: 2000
+    property double translationFactor: 18000.0
 
     SceneWithElevation {
         id:scene
@@ -27,33 +27,18 @@ Item {
             id: layer
             url: "https://tiles.arcgis.com/tiles/FQD0rKU8X5sAQfh8/arcgis/rest/services/" +
                  "VRICON_Yosemite_Sample_Integrated_Mesh_scene_layer/SceneServer"
-
-            onLoadStatusChanged: {
-                if (loadStatus === Enums.LoadStatusLoaded) {
-                    // Get the center point of the layer's extent.
-                    var center = layer.fullExtent.center;
-
-                    // Find the elevation of the layer at the center point.
-                    var surface = scene.baseSurface;
-                    surface.onLocationToElevationStatusChanged.connect(function() {
-                        if (surface.locationToElevationStatus !== Enums.TaskStatusCompleted)
-                            return;
-
-                        // Create the origin camera at the center point and elevation of the data.
-                        // This will ensure the data is anchored to the table.
-                        originCamera = ArcGISRuntimeEnvironment.createObject("Camera", {
-                                                                                 latitude: center.y,
-                                                                                 longitude: center.x,
-                                                                                 altitude: 1200, // surface.locationToElevationResult
-                                                                                 heading: 0,
-                                                                                 pitch: 90,
-                                                                                 roll: 0
-                                                                             });
-
-                    });
-                    surface.locationToElevation(center);
-                }
-            }
         }
+    }
+
+    Camera {
+        id: originCamera
+        Point {
+            y: 37.7308
+            x: -119.612
+            z: 1212.0
+        }
+        heading: 0.0
+        pitch: 90.0
+        roll: 0.0
     }
 }

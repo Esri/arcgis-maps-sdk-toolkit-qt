@@ -23,8 +23,8 @@
 #include <QScreen>
 #include "ArKitUtils.h"
 #include "ArKitFrameRenderer.h"
+#include "ArKitPlaneRenderer.h"
 #include "ArKitPointCloudRenderer.h"
-
 
 using namespace Esri::ArcGISRuntime::Toolkit;
 using namespace Esri::ArcGISRuntime::Toolkit::Internal;
@@ -71,9 +71,6 @@ using namespace Esri::ArcGISRuntime::Toolkit::Internal;
 @property (nonatomic) bool textureDataUsed;
 @property (nonatomic) NSTimeInterval timestamp;
 
-@property (nonatomic) simd_float4x4 initialMatrix;
-@property (nonatomic) bool resetInitialMatrix;
-
 @end
 
 /*******************************************************************************
@@ -94,7 +91,6 @@ using namespace Esri::ArcGISRuntime::Toolkit::Internal;
     self.heightY = 0;
     self.heightCbCr = 0;
     self.textureDataUsed = false;
-    self.resetInitialMatrix = true;
   }
   return self;
 }
@@ -183,15 +179,6 @@ using namespace Esri::ArcGISRuntime::Toolkit::Internal;
 
 -(std::array<double, 7>) lastQuaternionTranslation: (simd_float4x4)cameraTransform
 {
-  // reset the intial transformation matrix is required
-  if (self.resetInitialMatrix)
-  {
-    self.initialMatrix = cameraTransform;
-    self.resetInitialMatrix = false;
-  }
-
-//  cameraTransform = simd_mul(simd_inverse(self.initialMatrix), cameraTransform);
-
   // A quaternion used to compensate for the pitch being 90 degrees on `ARKit`; used to calculate the current
   // device transformation for each frame.
   const simd_quatf compensationQuat = { simd_float4 { 0.70710678118, 0.0, 0.0, 0.70710678118 }};
@@ -231,8 +218,6 @@ using namespace Esri::ArcGISRuntime::Toolkit::Internal;
   // Calculate our final quaternion and create the new transformation matrix.
   const simd_quatf compensationQuat2 = { simd_float4 { -0.70710678118, 0, 0, 0.70710678118 }};
   finalQuat = simd_mul(compensationQuat2, finalQuat);
-
-  finalQuat = simd_quaternion(cameraTransform);
 
   return {
     finalQuat.vector.x,
@@ -280,10 +265,11 @@ struct ArKitWrapper::ArKitWrapperPrivate {
 
 ArKitWrapper::ArKitWrapper(ArcGISArViewInterface* arcGISArView) :
   m_impl(new ArKitWrapperPrivate),
-  m_arKitFrameRenderer(new ArKitFrameRenderer)
+  m_arKitFrameRenderer(new ArKitFrameRenderer),
+  m_arKitPlaneRenderer(new ArKitPlaneRenderer(this)),
+  m_arKitPointCloudRenderer(new ArKitPointCloudRenderer(this))
 {
   // Create an AR session configuration
-  // todo: test if the COMPASS is enable
   m_impl->arConfiguration = [[ARWorldTrackingConfiguration alloc] init];
   m_impl->arConfiguration.worldAlignment = ARWorldAlignmentGravityAndHeading;
   m_impl->arConfiguration.planeDetection = ARPlaneDetectionHorizontal;
@@ -320,18 +306,17 @@ ArKitWrapper::~ArKitWrapper()
 
 void ArKitWrapper::startTracking()
 {
-  [m_impl->arSession runWithConfiguration:m_impl->arConfiguration];
+  [m_impl->arSession runWithConfiguration:m_impl->arConfiguration options: ARSessionRunOptionResetTracking];
 }
 
 void ArKitWrapper::stopTracking()
 {
-//  m_impl->arSession->pause();
+  [m_impl->arSession pause];
 }
 
 void ArKitWrapper::resetTracking()
 {
-  // https://developer.apple.com/documentation/arkit/arsession/2865608-runwithconfiguration?language=objc
-  m_impl->arSessionDelegate.resetInitialMatrix = true;
+  [m_impl->arSession runWithConfiguration:m_impl->arConfiguration];
 }
 
 void ArKitWrapper::setSize(const QSizeF& size)
@@ -344,15 +329,16 @@ void ArKitWrapper::initGL()
 {
   m_arKitFrameRenderer->initGL();
 
+  if (m_arKitPlaneRenderer)
+    m_arKitPlaneRenderer->initGL();
+
   if (m_arKitPointCloudRenderer)
-    m_arKitPointCloudRenderer->initGL(); // for debugging the AR tracking
+    m_arKitPointCloudRenderer->initGL();
 }
 
 // this function run on the rendering thread
 void ArKitWrapper::updateTextures()
 {
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // ??
-
   m_arKitFrameRenderer->updateTextreDataY(static_cast<int>(m_impl->arSessionDelegate.widthY),
                                          static_cast<int>(m_impl->arSessionDelegate.heightY),
                                          m_impl->arSessionDelegate.textureDataY);
@@ -373,8 +359,11 @@ void ArKitWrapper::render()
   // render the AR frame
   m_arKitFrameRenderer->render();
 
+  if (m_arKitPlaneRenderer)
+    m_arKitPlaneRenderer->render();
+
   if (m_arKitPointCloudRenderer)
-    m_arKitPointCloudRenderer->render(); // for debugging the AR tracking
+    m_arKitPointCloudRenderer->render();
 }
 
 bool ArKitWrapper::renderVideoFeed() const
@@ -392,7 +381,7 @@ std::array<double, 7> ArKitWrapper::hitTest(int x, int y) const
 {
   // return a list of results, sorted from nearest to farthest (in distance from the camera).
   NSArray<ARHitTestResult*>* hitResults = [m_impl->arSession.currentFrame
-      hitTest: CGPointMake(x, y) types: ARHitTestResultTypeFeaturePoint]; // ARHitTestResultType?
+      hitTest: CGPointMake(x, y) types: ARHitTestResultTypeEstimatedHorizontalPlane];
 
   if (!hitResults || [hitResults count] <= 0)
     return {};
@@ -405,22 +394,24 @@ std::array<double, 7> ArKitWrapper::hitTest(int x, int y) const
   return { 0, 0, 0, 1, transform.columns[3].x, -transform.columns[3].z, transform.columns[3].y };
 }
 
-float* ArKitWrapper::modelViewProjectionData() const
+QMatrix4x4 ArKitWrapper::modelViewProjectionMatrix() const
 {
-  // Not implemented.
-  return nullptr;
+  simd_float4x4 rawMatrix = m_impl->arSession.currentFrame.camera.transform;
+  return QMatrix4x4(reinterpret_cast<float*>(&rawMatrix));
 }
 
-const float* ArKitWrapper::pointCloudData() const
+std::vector<float> ArKitWrapper::pointCloudData() const
 {
-  // Not implemented.
-  return nullptr;
-}
+  ARPointCloud* pointCloudData = [m_impl->arSession.currentFrame rawFeaturePoints];
+  if (!pointCloudData)
+    return {};
 
-int32_t ArKitWrapper::pointCloudSize() const
-{
-  // Not implemented.
-  return 0;
+  const auto size = pointCloudData.count;
+  if (size == 0)
+    return {};
+
+  const float* rawPoints = reinterpret_cast<const float*>(pointCloudData.points);
+  return std::vector<float>(rawPoints, rawPoints + (3 * size));
 }
 
 /*!

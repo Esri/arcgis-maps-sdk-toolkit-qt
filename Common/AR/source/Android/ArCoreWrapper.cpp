@@ -373,11 +373,40 @@ void ArCoreWrapper::udpateArCamera()
   }
 
   // get the view and projection matrix
-  ArCamera_getViewMatrix(m_arSession, m_arCamera, m_viewMatrix.data());
-  ArCamera_getProjectionMatrix(m_arSession, m_arCamera, 0.1f, 100.f, m_projectionMatrix.data());
+  QMatrix4x4 viewMatrix;
+  QMatrix4x4 projectionMatrix;
+  ArCamera_getViewMatrix(m_arSession, m_arCamera, viewMatrix.data());
+  ArCamera_getProjectionMatrix(m_arSession, m_arCamera, 0.1f, 100.f, projectionMatrix.data());
 
   // calculate the model-view-projection matrix. (The model matrix is the identity matrix)
-  m_mvpMatrix = m_projectionMatrix * m_viewMatrix;
+  // get the screen orientation
+  QMatrix4x4 deviceOrientationMatrix;
+  const Qt::ScreenOrientations orientation = QGuiApplication::screens().front()->orientation();
+
+  switch (orientation)
+  {
+    case Qt::PortraitOrientation:
+      // do nothing
+      break;
+
+    case Qt::LandscapeOrientation:
+      deviceOrientationMatrix.rotate(-90.0, 0.0f, 0.0f, -1.0f);
+      break;
+
+    case Qt::InvertedPortraitOrientation:
+      // not supported
+      break;
+
+    case Qt::InvertedLandscapeOrientation:
+      deviceOrientationMatrix.rotate(90.0, 0.0f, 0.0f, -1.0f);
+      break;
+
+    default:
+      // do nothing
+      break;
+  }
+
+  m_mvpMatrix = deviceOrientationMatrix * projectionMatrix * viewMatrix;
 }
 
 bool ArCoreWrapper::renderVideoFeed() const
@@ -417,50 +446,41 @@ std::array<double, 7> ArCoreWrapper::quaternionTranslation() const
   switch (orientation)
   {
     case Qt::PortraitOrientation:
-
-      return
-      {
-        poseRaw[0], poseRaw[1], poseRaw[2], poseRaw[3], poseRaw[4], poseRaw[5], poseRaw[6]
-      };
-
+      return { poseRaw[0], poseRaw[1], poseRaw[2], poseRaw[3], poseRaw[4], poseRaw[5], poseRaw[6] };
       break;
+
     case Qt::LandscapeOrientation:
     {
-      const double x =  0 * poseRaw[3] + 0 * poseRaw[2] + 0.70710678118 * poseRaw[1] + 0.70710678118 * poseRaw[0];
-      const double y = -0 * poseRaw[2] + 0 * poseRaw[3] - 0.70710678118 * poseRaw[0] + 0.70710678118 * poseRaw[1];
-      const double z =  0 * poseRaw[1] - 0 * poseRaw[0] - 0.70710678118 * poseRaw[3] + 0.70710678118 * poseRaw[2];
-      const double w = -0 * poseRaw[0] - 0 * poseRaw[1] + 0.70710678118 * poseRaw[2] + 0.70710678118 * poseRaw[3];
+      QQuaternion rawQuaternion(poseRaw[3], poseRaw[0], poseRaw[1], poseRaw[2]);
+      QQuaternion orientationQuaternion = QQuaternion::fromAxisAndAngle(0, 0, 1, -90);
+      auto finalQuaternion = rawQuaternion * orientationQuaternion;
 
-      return {
-        x, y, z, w, poseRaw[4], poseRaw[5], poseRaw[6]
-      };
-
+      return { finalQuaternion.x(), finalQuaternion.y(), finalQuaternion.z(), finalQuaternion.scalar(),
+            poseRaw[4], poseRaw[5], poseRaw[6] };
       break;
     }
+
     case Qt::InvertedPortraitOrientation:
+      // not supported
       break;
+
     case Qt::InvertedLandscapeOrientation:
     {
-      const double x =  0 * poseRaw[3] + 0 * poseRaw[2] - 0.70710678118 * poseRaw[1] + 0.70710678118 * poseRaw[0];
-      const double y = -0 * poseRaw[2] + 0 * poseRaw[3] + 0.70710678118 * poseRaw[0] + 0.70710678118 * poseRaw[1];
-      const double z =  0 * poseRaw[1] - 0 * poseRaw[0] + 0.70710678118 * poseRaw[3] + 0.70710678118 * poseRaw[2];
-      const double w = -0 * poseRaw[0] - 0 * poseRaw[1] - 0.70710678118 * poseRaw[2] + 0.70710678118 * poseRaw[3];
+      QQuaternion rawQuaternion(poseRaw[3], poseRaw[0], poseRaw[1], poseRaw[2]);
+      QQuaternion orientationQuaternion = QQuaternion::fromAxisAndAngle(0, 0, 1, 90);
+      auto finalQuaternion = rawQuaternion * orientationQuaternion;
 
-      return
-      {
-        x, y, z, w, poseRaw[4], poseRaw[5], poseRaw[6]
-      };
-
+      return { finalQuaternion.x(), finalQuaternion.y(), finalQuaternion.z(), finalQuaternion.scalar(),
+            poseRaw[4], poseRaw[5], poseRaw[6] };
       break;
     }
+
     default:
+      return { poseRaw[0], poseRaw[1], poseRaw[2], poseRaw[3], poseRaw[4], poseRaw[5], poseRaw[6] };
       break;
   }
 
-  return
-  {
-    poseRaw[0], poseRaw[1], poseRaw[2], poseRaw[3], poseRaw[4], poseRaw[5], poseRaw[6]
-  };
+  return { poseRaw[0], poseRaw[1], poseRaw[2], poseRaw[3], poseRaw[4], poseRaw[5], poseRaw[6] };
 }
 
 // The returned array contains the following parameters: xFocalLength, yFocalLength,

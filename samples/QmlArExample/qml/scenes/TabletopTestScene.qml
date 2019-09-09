@@ -20,7 +20,7 @@ Item {
     property alias graphicsOverlay: graphicsOverlay
     property var originCamera: camera
     property var locationDataSource: null
-    property double translationFactor: 10
+    property double translationFactor: 10.0
 
     SceneWithElevation {
         id:scene

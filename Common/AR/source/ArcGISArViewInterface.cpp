@@ -63,14 +63,6 @@ ArcGISArViewInterface::ArcGISArViewInterface(bool renderVideoFeed, bool tryUsing
   m_tryUsingArKit(tryUsingArKit)
 {
   setFlag(ItemHasContents, true);
-
-  // enable detection of orientation changes.
-  if (window() && window()->screen())
-  {
-    window()->screen()->setOrientationUpdateMask(Qt::LandscapeOrientation	| Qt::PortraitOrientation |
-                                                 Qt::InvertedLandscapeOrientation | Qt::InvertedPortraitOrientation);
-  }
-
   updateTrackingSources();
 }
 
@@ -230,11 +222,6 @@ void ArcGISArViewInterface::startTracking()
   {
     m_arWrapper->startTracking();
   }
-  else
-  {
-//    if (!m_locationDataSource)
-//      setLocationDataSource(new LocationDataSource(this));
-  }
 
   if (m_locationDataSource)
     m_locationDataSource->start();
@@ -259,6 +246,13 @@ void ArcGISArViewInterface::stopTracking()
  */
 void ArcGISArViewInterface::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
+  // enable detection of orientation changes.
+  if (window() && window()->screen())
+  {
+    window()->screen()->setOrientationUpdateMask(Qt::LandscapeOrientation	| Qt::PortraitOrientation |
+                                                 Qt::InvertedLandscapeOrientation | Qt::InvertedPortraitOrientation);
+  }
+
   QQuickItem::geometryChanged(newGeometry, oldGeometry);
 
   if (newGeometry.size() == oldGeometry.size())

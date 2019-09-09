@@ -19,6 +19,9 @@
 
 #include <QtGlobal>
 #include <QSizeF>
+#include <QMatrix4x4>
+
+#include <array>
 
 namespace Esri {
 namespace ArcGISRuntime {
@@ -29,6 +32,7 @@ class ArcGISArViewInterface;
 namespace Internal {
 
 class ArKitFrameRenderer;
+class ArKitPlaneRenderer;
 class ArKitPointCloudRenderer;
 
 class ArKitWrapper
@@ -59,9 +63,8 @@ public:
   ArRawPtr* arRawPtr() const;
 
   // point cloud data
-  float* modelViewProjectionData() const;
-  const float* pointCloudData() const;
-  int32_t pointCloudSize() const;
+  QMatrix4x4 modelViewProjectionMatrix() const;
+  std::vector<float> pointCloudData() const;
 
 private:
   Q_DISABLE_COPY(ArKitWrapper)
@@ -71,7 +74,10 @@ private:
   struct ArKitWrapperPrivate;
   std::unique_ptr<ArKitWrapperPrivate> m_impl;
   std::unique_ptr<ArKitFrameRenderer> m_arKitFrameRenderer;
+  std::unique_ptr<ArKitPlaneRenderer> m_arKitPlaneRenderer;
   std::unique_ptr<ArKitPointCloudRenderer> m_arKitPointCloudRenderer;
+
+  mutable std::array<float, 3> hitpoint;
 };
 
 } // Internal namespace

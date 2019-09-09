@@ -167,20 +167,8 @@ void CppArExample::createPointCloudScene()
   auto* layer = new PointCloudLayer(item, m_scene);
   m_scene->operationalLayers()->append(layer);
 
-  connect(layer, &PointCloudLayer::doneLoading, this, [this, layer](Error error)
-  {
-    if (!error.isEmpty())
-    {
-      qDebug() << "Fails to load the point cloud scene:" << error.message() << error.additionalMessage();
-      return;
-    }
-
-    // Create the origin camera at the center point of the data. This will ensure the data is anchored to the table.
-    const Point center = layer->fullExtent().center();
-    m_arcGISArView->setOriginCamera(Camera(center.y(), center.x(), 300.0, 0.0, 90.0, 0.0));
-  });
-
-  m_arcGISArView->setTranslationFactor(2000.0);
+  m_arcGISArView->setOriginCamera(Camera(39.7712, -74.1197, 1.0, 0.0, 90.0, 0.0));
+  m_arcGISArView->setTranslationFactor(18000.0);
 
   changeScene();
 }
@@ -197,30 +185,8 @@ void CppArExample::createYosemiteScene()
   auto* layer = new IntegratedMeshLayer(yosemiteUrl, m_scene);
   m_scene->operationalLayers()->append(layer);
 
-  connect(layer, &PointCloudLayer::doneLoading, this, [this, layer](Error error)
-  {
-    if (!error.isEmpty())
-    {
-      qDebug() << "Fails to load the Yosemite scene:" << error.message() << error.additionalMessage();
-      return;
-    }
-
-    // Get the center point of the layer's extent.
-    const Point center = layer->fullExtent().center();
-
-    // Find the elevation of the layer at the center point.
-    Surface* surface = m_scene->baseSurface();
-    connect(surface, &Surface::locationToElevationCompleted, this, [this, center](QUuid, double elevation)
-    {
-      // Create the origin camera at the center point and elevation of the data.
-      // This will ensure the data is anchored to the table.
-      qDebug() << "======>>> " << elevation;
-      m_arcGISArView->setOriginCamera(Camera(center.y(), center.x(), 200.0 /*elevation*/, 0.0, 90.0, 0.0));
-    });
-    surface->locationToElevation(center);
-  });
-
-  m_arcGISArView->setTranslationFactor(1000.0);
+  m_arcGISArView->setOriginCamera(Camera(37.7308, -119.612, 1212.0, 0.0, 90.0, 0.0));
+  m_arcGISArView->setTranslationFactor(18000.0);
 
   changeScene();
 }
@@ -239,7 +205,7 @@ void CppArExample::createBorderScene()
 
   // set origin camera
   m_arcGISArView->setOriginCamera(Camera(32.5337, -116.925, 126.0, 0.0, 90.0, 0.0));
-  m_arcGISArView->setTranslationFactor(1000.0);
+  m_arcGISArView->setTranslationFactor(10000.0);
 
   changeScene();
 }
@@ -260,7 +226,7 @@ void CppArExample::createBrestScene()
 
   // set origin camera
   m_arcGISArView->setOriginCamera(Camera(48.3808, -4.49492, 48.2511, 0.0, 90.0, 0.0));
-  m_arcGISArView->setTranslationFactor(250.0);
+  m_arcGISArView->setTranslationFactor(500.0);
 
   changeScene();
 }

@@ -51,18 +51,30 @@ ApplicationWindow {
         onStopTrackingClicked: arcGISArView.stopTracking();
         onResetTrackingClicked: arcGISArView.resetTracking();
         // onCalibrationClicked: not implemented
-        onEmptySceneClicked: sceneLoader.source = "qrc:/qml/scenes/EmptyScene.qml";
-        onStreetsSceneClicked: sceneLoader.source = "qrc:/qml/scenes/StreetsScene.qml";
-        onImagerySceneClicked: sceneLoader.source = "qrc:/qml/scenes/ImageryScene.qml";
-        onPointCloudSceneClicked: sceneLoader.source = "qrc:/qml/scenes/PointCloudScene.qml";
-        onYosemiteSceneClicked: sceneLoader.source = "qrc:/qml/scenes/YosemiteScene.qml";
-        onBorderSceneClicked: sceneLoader.source = "qrc:/qml/scenes/BorderScene.qml";
-        onBrestSceneClicked: sceneLoader.source = "qrc:/qml/scenes/BrestScene.qml";
-        onBerlinSceneClicked: sceneLoader.source = "qrc:/qml/scenes/BerlinScene.qml";
+        onEmptySceneClicked: changeScene("qrc:/qml/scenes/EmptyScene.qml");
+        onStreetsSceneClicked: changeScene("qrc:/qml/scenes/StreetsScene.qml");
+        onImagerySceneClicked: changeScene("qrc:/qml/scenes/ImageryScene.qml");
+        onPointCloudSceneClicked: changeScene("qrc:/qml/scenes/PointCloudScene.qml");
+        onYosemiteSceneClicked: changeScene("qrc:/qml/scenes/YosemiteScene.qml");
+        onBorderSceneClicked: changeScene("qrc:/qml/scenes/BorderScene.qml");
+        onBrestSceneClicked: changeScene("qrc:/qml/scenes/BrestScene.qml");
+        onBerlinSceneClicked: changeScene("qrc:/qml/scenes/BerlinScene.qml");
         onTabletopTestSceneClicked: {
-            sceneLoader.source = "qrc:/qml/scenes/TabletopTestScene.qml";
-            sceneView.graphicsOverlays.clear();
+            changeScene("qrc:/qml/scenes/TabletopTestScene.qml");
             sceneView.graphicsOverlays.append(sceneLoader.item.graphicsOverlay);
+        }
+
+        function changeScene(sceneSource) {
+            // stop tracking
+            arcGISArView.stopTracking();
+
+            // set the new scene
+            sceneLoader.source = sceneSource;
+            sceneView.graphicsOverlays.clear();
+
+            // reset and start tracking
+            arcGISArView.resetTracking();
+            arcGISArView.startTracking();
         }
     }
 }

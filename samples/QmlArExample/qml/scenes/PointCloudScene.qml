@@ -17,9 +17,9 @@ import Esri.ArcGISRuntime 100.6
 
 Item {
     property alias scene: scene
-    property var originCamera: null
+    property var originCamera: originCamera
     property var locationDataSource: null
-    property double translationFactor: 2000
+    property double translationFactor: 18000.0
 
     SceneWithElevation {
         id:scene
@@ -28,19 +28,18 @@ Item {
             PortalItem {
                 itemId: "fc3f4a4919394808830cd11df4631a54"
             }
-            onLoadStatusChanged: {
-                if (loadStatus === Enums.LoadStatusLoaded) {
-                    var center = layer.fullExtent.center;
-                    originCamera = ArcGISRuntimeEnvironment.createObject("Camera", {
-                                                                             latitude: center.y,
-                                                                             longitude: center.x,
-                                                                             altitude: 100,
-                                                                             heading: 0,
-                                                                             pitch: 90,
-                                                                             roll: 0
-                                                                         });
-                }
-            }
         }
+    }
+
+    Camera {
+        id: originCamera
+        Point {
+            y: 39.7712
+            x: -74.1197
+            z: 1.0
+        }
+        heading: 0.0
+        pitch: 90.0
+        roll: 0.0
     }
 }
