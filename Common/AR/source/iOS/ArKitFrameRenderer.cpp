@@ -150,7 +150,6 @@ void ArKitFrameRenderer::render()
 
   // get the screen orientation
   const Qt::ScreenOrientations orientation = QGuiApplication::screens().front()->orientation();
-  //setOrientationUpdateMask
 
   switch (orientation) {
     case Qt::PortraitOrientation:

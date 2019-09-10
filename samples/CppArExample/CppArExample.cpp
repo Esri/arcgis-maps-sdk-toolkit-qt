@@ -74,6 +74,23 @@ void CppArExample::setSceneView(SceneQuickView* sceneView)
   emit sceneViewChanged();
 }
 
+// properties for debug mode
+void CppArExample::showPointCloud(bool visible)
+{
+  if (visible)
+    m_arcGISArView->setPointCloudColor(QColor(50, 50, 255));
+  else
+    m_arcGISArView->setPointCloudColor(QColor());
+}
+
+void CppArExample::showPlanes(bool visible)
+{
+  if (visible)
+    m_arcGISArView->setPlaneColor(QColor(255, 0, 0, 10 ));
+  else
+    m_arcGISArView->setPlaneColor(QColor());
+}
+
 // Creates an empty scene with an elevation source.
 // Mode: Full-Scale AR
 void CppArExample::createEmptyScene()
@@ -266,19 +283,19 @@ void CppArExample::createTabletopTestScene()
   m_sceneView->graphicsOverlays()->append(graphicsOverlay);
 
   // create graphics
-  auto createSymbol = [graphicsOverlay](double x, double y, const QColor& color)
+  auto createSymbol = [graphicsOverlay](double x, double y, double size, const QColor& color)
   {
     SimpleMarkerSceneSymbol* symbol = new SimpleMarkerSceneSymbol(
-          SimpleMarkerSceneSymbolStyle::Sphere, color, 0.1, 0.1, 0.1, SceneSymbolAnchorPosition::Bottom, graphicsOverlay);
+          SimpleMarkerSceneSymbolStyle::Sphere, color, size, size, size, SceneSymbolAnchorPosition::Bottom, graphicsOverlay);
     graphicsOverlay->graphics()->append(new Graphic(Point(x, y, 0.0), symbol, graphicsOverlay));
   };
 
   for (int i = -5; i <= 10; ++i)
   {
-    createSymbol(0.0, 0.000001 * i, Qt::blue);
-    createSymbol(0.000001 * i, 0.0, Qt::red);
+    createSymbol(0.0, 0.000001 * i, 0.1, Qt::blue);
+    createSymbol(0.000001 * i, 0.0, 0.1, Qt::red);
   }
-  createSymbol(0.0, 0.0, Qt::green);
+  createSymbol(0.0, 0.0, 0.11, Qt::green);
 
   m_arcGISArView->setOriginCamera(Camera(0.0, 0.0, 0.0, 0.0, 90.0, 0.0));
   m_arcGISArView->setTranslationFactor(10.0);

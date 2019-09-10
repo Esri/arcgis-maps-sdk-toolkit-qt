@@ -82,12 +82,33 @@ void ArCorePointCloudRenderer::render()
   glEnableVertexAttribArray(m_attributeVertices);
   glVertexAttribPointer(m_attributeVertices, 4, GL_FLOAT, GL_FALSE, 0, data);
 
-  // todo: lets the user defined the point cloud color. Default is cyan.
-  glUniform4f(m_uniformColor, 31.0f / 255.0f, 188.0f / 255.0f, 210.0f / 255.0f, 1.0f);
-  glUniform1f(m_uniformPointSize, 20.0f);
+  glUniform4f(m_uniformColor, m_pointCloudColor.redF(), m_pointCloudColor.greenF(), m_pointCloudColor.blueF(),
+              m_pointCloudColor.alphaF());
+  glUniform1f(m_uniformPointSize, static_cast<float>(m_pointCloudSize));
 
   glDrawArrays(GL_POINTS, 0, size);
 
   m_program->release();
   m_arCoreWrapper->releasePointCouldData();
+}
+
+// properties for debug mode
+QColor ArCorePointCloudRenderer::pointCloudColor() const
+{
+  return m_pointCloudColor;
+}
+
+void ArCorePointCloudRenderer::setPointCloudColor(const QColor& pointCloudColor)
+{
+  m_pointCloudColor = pointCloudColor;
+}
+
+int ArCorePointCloudRenderer::pointCloudSize() const
+{
+  return m_pointCloudSize;
+}
+
+void ArCorePointCloudRenderer::setPointCloudSize(int pointCloudSize)
+{
+  m_pointCloudSize = pointCloudSize;
 }

@@ -258,13 +258,13 @@ void ArcGISArView::setLocationInternal(double latitude, double longitude, double
   if (m_tmcc->originCamera().isEmpty())
   {
     // create a new origin camera
-    m_tmcc->setOriginCamera(Camera(latitude, longitude, 700, 0.0, 90.0, 0.0));
+    m_tmcc->setOriginCamera(Camera(latitude, longitude, altitude+100, 0.0, 90.0, 0.0));
   }
   else
   {
     // update the origin camera
     const Camera oldCamera = m_tmcc->originCamera();
-    m_tmcc->setOriginCamera(Camera(latitude, longitude, 700, oldCamera.heading(), oldCamera.pitch(), oldCamera.roll()));
+    m_tmcc->setOriginCamera(Camera(latitude, longitude, altitude+100, oldCamera.heading(), 90.0, 0.0));
   }
 
   m_tmcc->setTransformationMatrix(TransformationMatrix::createIdentityMatrix(this));
@@ -278,14 +278,13 @@ void ArcGISArView::setHeadingInternal(double heading)
   if (m_tmcc->originCamera().isEmpty())
   {
     // create a new origin camera
-    m_tmcc->setOriginCamera(Camera(0.0, 0.0, 700.0, heading, 90.0, 0.0));
+    m_tmcc->setOriginCamera(Camera(0.0, 0.0, 0.0, heading, 90.0, 0.0));
   }
   else
   {
     // update the origin camera
-    const Camera oldCamera = m_tmcc->originCamera();
-    const Point oldLocation = oldCamera.location();
-    m_tmcc->setOriginCamera(Camera(oldLocation.y(), oldLocation.x(), /*oldLocation.z()*/ 700, heading, oldCamera.pitch(), oldCamera.roll()));
+    const Point oldLocation = m_tmcc->originCamera().location();
+    m_tmcc->setOriginCamera(Camera(oldLocation.y(), oldLocation.x(), oldLocation.z(), heading, 90.0, 0.0));
   }
   m_tmcc->setTransformationMatrix(TransformationMatrix::createIdentityMatrix(this));
 }

@@ -82,7 +82,7 @@ void ArCorePlaneRenderer::render()
     glUniformMatrix4fv(m_uniformModelViewProjection, 1, GL_FALSE, modelViewProjection.data());
     glEnableVertexAttribArray(m_attributeVertices);
     glVertexAttribPointer(m_attributeVertices, 2, GL_FLOAT, GL_FALSE, 0, vertices.data());
-    glUniform4f(m_uniformColor, 1, 0, 0, 0.001);
+    glUniform4f(m_uniformColor, m_planeColor.redF(), m_planeColor.greenF(), m_planeColor.blueF(), m_planeColor.alphaF());
     glDrawArrays(GL_TRIANGLE_FAN, 0, vertices.size() / 2);
 
     // release data
@@ -91,4 +91,15 @@ void ArCorePlaneRenderer::render()
 
   m_program->release();
   m_arCoreWrapper->releasePlaneListData();
+}
+
+// properties for debug mode
+QColor ArCorePlaneRenderer::planeColor() const
+{
+  return m_planeColor;
+}
+
+void ArCorePlaneRenderer::setPlaneColor(const QColor& planeColor)
+{
+  m_planeColor = planeColor;
 }

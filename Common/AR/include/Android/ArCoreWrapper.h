@@ -79,6 +79,16 @@ public:
   // methods for AR frame rendering
   const float* transformedUvs() const;
 
+  // properties for debug mode
+  QColor pointCloudColor() const;
+  void setPointCloudColor(const QColor& pointCloudColor);
+
+  int pointCloudSize() const;
+  void setPointCloudSize(int pointCloudSize);
+
+  QColor planeColor() const;
+  void setPlaneColor(const QColor& planeColor);
+
   // methods for plane data
   void planeListData(int32_t& size);
   bool planeData(QMatrix4x4& mvp, int32_t index, std::vector<float>& vertices);
@@ -122,7 +132,7 @@ private:
   void renderArPlane();
   void renderArPointCloud();
 
-  // When your apllication launches or enters an AR mode,
+  // When the apllication launches or enters an AR mode,
   // it should call this method with user_requested_install = 1.
   static int32_t m_installRequested;
 
@@ -138,12 +148,8 @@ private:
   // data returned from each frame
   float m_transformedUvs[8] = {};
 
+  // timer to refresh the frames
   QTimer m_timer;
-
-  bool m_renderPlane = true;
-  bool m_renderPointCloud = true;
-//  bool m_debugOpenGL = true;
-//  bool m_debugPerformances = true;
 
   // attribute for plane and point cloud
   ArTrackableList* m_arPlaneList = nullptr;

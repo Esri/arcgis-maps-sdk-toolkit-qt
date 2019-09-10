@@ -21,8 +21,6 @@
 #include <QSizeF>
 #include <QMatrix4x4>
 
-#include <array>
-
 namespace Esri {
 namespace ArcGISRuntime {
 namespace Toolkit {
@@ -63,7 +61,7 @@ public:
   ArRawPtr* arRawPtr() const;
 
   // point cloud data
-  QMatrix4x4 modelViewProjectionMatrix() const;
+  QMatrix4x4 viewProjectionMatrix() const;
   std::vector<float> pointCloudData() const;
 
 private:
@@ -76,8 +74,6 @@ private:
   std::unique_ptr<ArKitFrameRenderer> m_arKitFrameRenderer;
   std::unique_ptr<ArKitPlaneRenderer> m_arKitPlaneRenderer;
   std::unique_ptr<ArKitPointCloudRenderer> m_arKitPointCloudRenderer;
-
-  mutable std::array<float, 3> hitpoint;
 };
 
 } // Internal namespace

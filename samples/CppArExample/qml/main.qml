@@ -46,10 +46,15 @@ ApplicationWindow {
         onStopTrackingClicked: arcGISArView.stopTracking();
         onResetTrackingClicked: arcGISArView.resetTracking();
         // onCalibrationClicked: not implemented
+
+        onShowPointCloud: arSample.showPointCloud(visible);
+        onShowPlanes: arSample.showPlanes(visible);
+
         onEmptySceneClicked: arSample.createEmptyScene();
         onStreetsSceneClicked: arSample.createStreetsScene();
         onImagerySceneClicked: arSample.createImageryScene();
         onFullScaleTestSceneClicked: arSample.createFullScaleTestScene();
+
         onPointCloudSceneClicked: arSample.createPointCloudScene();
         onYosemiteSceneClicked: arSample.createYosemiteScene();
         onBorderSceneClicked: arSample.createBorderScene();

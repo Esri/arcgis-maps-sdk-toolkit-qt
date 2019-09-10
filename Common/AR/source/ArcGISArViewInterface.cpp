@@ -242,6 +242,66 @@ void ArcGISArViewInterface::stopTracking()
 }
 
 /*!
+  \brief Gets the color of the debug point cloud.
+ */
+QColor ArcGISArViewInterface::pointCloudColor() const
+{
+  return m_arWrapper->pointCloudColor();
+}
+
+/*!
+  \brief Sets the color of the debug point cloud to \a pointCloudColor.
+ */
+void ArcGISArViewInterface::setPointCloudColor(const QColor& pointCloudColor)
+{
+  if (pointCloudColor == m_arWrapper->pointCloudColor())
+    return;
+
+  m_arWrapper->setPointCloudColor(pointCloudColor);
+  emit pointCloudColorChanged();
+}
+
+/*!
+  \brief Gets the size of the debug point cloud.
+ */
+int ArcGISArViewInterface::pointCloudSize() const
+{
+  return m_arWrapper->pointCloudSize();
+}
+
+/*!
+  \brief Sets the size of the debug point cloud to \a pointCloudSize.
+ */
+void ArcGISArViewInterface::setPointCloudSize(int pointCloudSize)
+{
+  if (pointCloudSize == m_arWrapper->pointCloudSize())
+    return;
+
+  m_arWrapper->setPointCloudSize(pointCloudSize);
+  emit pointCloudSizeChanged();
+}
+
+/*!
+  \brief Gets the color of the debug planes.
+ */
+QColor ArcGISArViewInterface::planeColor() const
+{
+  return m_arWrapper->planeColor();
+}
+
+/*!
+  \brief Sets the color of the debug planes to \a planeColor.
+ */
+void ArcGISArViewInterface::setPlaneColor(const QColor& planeColor)
+{
+  if (planeColor == m_arWrapper->planeColor())
+    return;
+
+  m_arWrapper->setPlaneColor(planeColor);
+  emit planeColorChanged();
+}
+
+/*!
   \internal
  */
 void ArcGISArViewInterface::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)

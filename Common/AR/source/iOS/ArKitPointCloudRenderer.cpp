@@ -74,7 +74,7 @@ void ArKitPointCloudRenderer::render()
 
   m_program->bind();
 
-  glUniformMatrix4fv(m_uniformModelViewProjection, 1, GL_FALSE, m_arKitWrapper->modelViewProjectionMatrix().data());
+  glUniformMatrix4fv(m_uniformModelViewProjection, 1, GL_FALSE, m_arKitWrapper->viewProjectionMatrix().data());
   glEnableVertexAttribArray(m_attributeVertices);
   glVertexAttribPointer(m_attributeVertices, 3, GL_FLOAT, GL_FALSE, 0, points.data());
 

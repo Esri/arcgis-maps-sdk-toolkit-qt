@@ -26,8 +26,8 @@ class CppArExample : public QObject
 {
   Q_OBJECT
 
-  Q_PROPERTY(Esri::ArcGISRuntime::Toolkit::ArcGISArView* arcGISArView READ arcGISArView
-             WRITE setArcGISArView NOTIFY arcGISArViewChanged)
+  Q_PROPERTY(Esri::ArcGISRuntime::Toolkit::ArcGISArView* arcGISArView READ arcGISArView WRITE setArcGISArView
+             NOTIFY arcGISArViewChanged)
   Q_PROPERTY(Esri::ArcGISRuntime::SceneQuickView* sceneView READ sceneView WRITE setSceneView NOTIFY sceneViewChanged)
 
 public:
@@ -40,10 +40,14 @@ public:
   Esri::ArcGISRuntime::SceneQuickView* sceneView() const;
   void setSceneView(Esri::ArcGISRuntime::SceneQuickView* sceneView);
 
+  Q_INVOKABLE void showPointCloud(bool visible);
+  Q_INVOKABLE void showPlanes(bool visible);
+
   Q_INVOKABLE void createEmptyScene();
   Q_INVOKABLE void createStreetsScene();
   Q_INVOKABLE void createImageryScene();
   Q_INVOKABLE void createFullScaleTestScene();
+
   Q_INVOKABLE void createPointCloudScene();
   Q_INVOKABLE void createYosemiteScene();
   Q_INVOKABLE void createBorderScene();

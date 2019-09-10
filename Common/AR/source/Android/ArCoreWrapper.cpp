@@ -584,6 +584,82 @@ const float* ArCoreWrapper::transformedUvs() const
   return m_transformedUvs;
 }
 
+// properties for debug mode
+QColor ArCoreWrapper::pointCloudColor() const
+{
+  if (m_arCorePointCloudRenderer)
+    return m_arCorePointCloudRenderer->pointCloudColor();
+  return QColor();
+}
+
+void ArCoreWrapper::setPointCloudColor(const QColor& pointCloudColor)
+{
+  if (pointCloudColor.isValid())
+  {
+    if (!m_arCorePointCloudRenderer)
+    {
+      m_arCorePointCloudRenderer.reset(new ArCorePointCloudRenderer(this));
+      m_arCorePointCloudRenderer->initGL();
+    }
+
+    m_arCorePointCloudRenderer->setPointCloudColor(pointCloudColor);
+  }
+  else
+  {
+    m_arCorePointCloudRenderer.reset();
+  }
+}
+
+int ArCoreWrapper::pointCloudSize() const
+{
+  if (m_arCorePointCloudRenderer)
+    return m_arCorePointCloudRenderer->pointCloudSize();
+  return -1;
+}
+
+void ArCoreWrapper::setPointCloudSize(int pointCloudSize)
+{
+  if (pointCloudSize > 0)
+  {
+    if (!m_arCorePointCloudRenderer)
+    {
+      m_arCorePointCloudRenderer.reset(new ArCorePointCloudRenderer(this));
+      m_arCorePointCloudRenderer->initGL();
+    }
+
+    m_arCorePointCloudRenderer->setPointCloudSize(pointCloudSize);
+  }
+  else
+  {
+    m_arCorePointCloudRenderer.reset();
+  }
+}
+
+QColor ArCoreWrapper::planeColor() const
+{
+  if (m_arCorePlaneRenderer)
+    return m_arCorePlaneRenderer->planeColor();
+  return QColor();
+}
+
+void ArCoreWrapper::setPlaneColor(const QColor& planeColor)
+{
+  if (planeColor.isValid())
+  {
+    if (!m_arCorePlaneRenderer)
+    {
+      m_arCorePlaneRenderer.reset(new ArCorePlaneRenderer(this));
+      m_arCorePlaneRenderer->initGL();
+    }
+
+    m_arCorePlaneRenderer->setPlaneColor(planeColor);
+  }
+  else
+  {
+    m_arCorePlaneRenderer.reset();
+  }
+}
+
 // Methods for point cloud data.
 // Be careful with the concurrent access and lifetime: the data are initialized and
 // released in the main thread and used in the GL thread.
@@ -673,7 +749,7 @@ void ArCoreWrapper::releasePlaneListData()
 // released in the main thread and used in the GL thread.
 void ArCoreWrapper::pointCloudData(QMatrix4x4& mvp, int32_t& size, const float** data) // todo: change to std::vector<float>
 {
-  if (!m_arSession || !m_renderPointCloud || m_arPointCloud)
+  if (!m_arSession || !m_arCorePointCloudRenderer || m_arPointCloud)
     return;
 
   // get the point cloud data
@@ -691,8 +767,8 @@ void ArCoreWrapper::pointCloudData(QMatrix4x4& mvp, int32_t& size, const float**
     return;
   }
 
+  // gets the positions of the could points
   ArPointCloud_getData(m_arSession, m_arPointCloud, data);
-
 
   // calculate the model-view-projection matrix. (The model matrix is the identity matrix)
   mvp = m_mvpMatrix;

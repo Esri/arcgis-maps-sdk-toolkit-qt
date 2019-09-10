@@ -19,13 +19,11 @@
 
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
+#include <QColor>
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri {
+namespace ArcGISRuntime {
+namespace Toolkit {
 
 // doc: implementation example from ARCore:
 // https://github.com/google-ar/arcore-android-sdk/blob/master/samples/hello_ar_c/app/src/main/cpp/hello_ar_application.cc
@@ -42,6 +40,13 @@ public:
   void initGL();
   void render();
 
+  // properties for debug mode
+  QColor pointCloudColor() const;
+  void setPointCloudColor(const QColor& pointCloudColor);
+
+  int pointCloudSize() const;
+  void setPointCloudSize(int pointCloudSize);
+
 private:
   ArCoreWrapper* m_arCoreWrapper = nullptr;
 
@@ -51,6 +56,10 @@ private:
   GLint m_uniformModelViewProjection = 0;
   GLint m_uniformColor = 0;
   GLint m_uniformPointSize = 0;
+
+  // properties for debug mode
+  QColor m_pointCloudColor = QColor(50, 50, 255);
+  int m_pointCloudSize = 10;
 };
 
 } // Toolkit

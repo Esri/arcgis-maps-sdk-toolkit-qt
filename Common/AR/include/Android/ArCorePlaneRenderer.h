@@ -19,6 +19,7 @@
 
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
+#include <QColor>
 
 namespace Esri {
 namespace ArcGISRuntime {
@@ -35,6 +36,10 @@ public:
   void initGL();
   void render();
 
+  // properties for debug mode
+  QColor planeColor() const;
+  void setPlaneColor(const QColor& planeColor);
+
 private:
   ArCoreWrapper* m_arCoreWrapper = nullptr;
 
@@ -43,6 +48,9 @@ private:
   GLint m_uniformModelViewProjection = 0;
   GLint m_uniformColor = 0;
   GLuint m_attributeVertices = 0;
+
+  // properties for debug mode
+  QColor m_planeColor = QColor(255, 0, 0, 10);
 };
 
 } // Toolkit

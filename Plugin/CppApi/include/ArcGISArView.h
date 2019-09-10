@@ -49,11 +49,6 @@ public:
   Q_INVOKABLE void setInitialTransformation(const QPoint& screenPoint);
   Q_INVOKABLE Point screenToLocation(const Point& screenPoint) const;
 
-  // todo: add properties for cloud points/planes debug
-  // point cloud color (QColor) default=red
-  // point cloud size (int) default=20
-  // plane color (QColor) default=blanc
-
 signals:
   void originCameraChanged();
   void sceneViewChanged();

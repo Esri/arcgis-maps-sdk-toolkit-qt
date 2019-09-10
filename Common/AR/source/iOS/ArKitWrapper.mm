@@ -179,10 +179,7 @@ using namespace Esri::ArcGISRuntime::Toolkit::Internal;
 
 -(std::array<double, 7>) lastQuaternionTranslation: (simd_float4x4)cameraTransform
 {
-  // A quaternion used to compensate for the pitch being 90 degrees on `ARKit`; used to calculate the current
-  // device transformation for each frame.
-  const simd_quatf compensationQuat = { simd_float4 { 0.70710678118, 0.0, 0.0, 0.70710678118 }};
-  simd_quatf finalQuat = simd_mul(compensationQuat, simd_quaternion(cameraTransform));
+  simd_quatf finalQuat = simd_quaternion(cameraTransform);
 
   // get the screen orientation
   const Qt::ScreenOrientations orientation = QGuiApplication::screens().front()->orientation();
@@ -215,18 +212,14 @@ using namespace Esri::ArcGISRuntime::Toolkit::Internal;
       break;
   }
 
-  // Calculate our final quaternion and create the new transformation matrix.
-  const simd_quatf compensationQuat2 = { simd_float4 { -0.70710678118, 0, 0, 0.70710678118 }};
-  finalQuat = simd_mul(compensationQuat2, finalQuat);
-
   return {
     finalQuat.vector.x,
     finalQuat.vector.y,
     finalQuat.vector.z,
     finalQuat.vector.w,
     cameraTransform.columns[3].x,
-    -cameraTransform.columns[3].z,
-    cameraTransform.columns[3].y
+    cameraTransform.columns[3].y,
+    cameraTransform.columns[3].z
   };
 }
 
@@ -391,7 +384,7 @@ std::array<double, 7> ArKitWrapper::hitTest(int x, int y) const
     return {};
 
   const simd_float4x4 transform = [hitResult worldTransform];
-  return { 0, 0, 0, 1, transform.columns[3].x, -transform.columns[3].z, transform.columns[3].y };
+  return { 0.0, 0.0, 0.0, 1.0, transform.columns[3].x, transform.columns[3].y, transform.columns[3].z };
 }
 
 QMatrix4x4 ArKitWrapper::modelViewProjectionMatrix() const

@@ -37,8 +37,13 @@ class ArcGISArViewInterface : public QQuickFramebufferObject
   Q_PROPERTY(double translationFactor READ translationFactor WRITE setTranslationFactor NOTIFY translationFactorChanged)
   Q_PROPERTY(bool tryUsingArKit READ tryUsingArKit WRITE setTryUsingArKit NOTIFY tryUsingArKitChanged)
 
-  // sensors
+  // sensor
   Q_PROPERTY(LocationDataSource* locationDataSource READ locationDataSource WRITE setLocationDataSource NOTIFY locationDataSourceChanged)
+
+  // properties for debug mode
+  Q_PROPERTY(QColor pointCloudColor READ pointCloudColor WRITE setPointCloudColor NOTIFY pointCloudColorChanged)
+  Q_PROPERTY(int pointCloudSize READ pointCloudSize WRITE setPointCloudSize NOTIFY pointCloudSizeChanged)
+  Q_PROPERTY(QColor planeColor READ planeColor WRITE setPlaneColor NOTIFY planeColorChanged)
 
 public:
   explicit ArcGISArViewInterface(QQuickItem* parent = nullptr);
@@ -64,6 +69,16 @@ public:
   Q_INVOKABLE void startTracking();
   Q_INVOKABLE void stopTracking();
 
+  // properties for debug mode
+  QColor pointCloudColor() const;
+  void setPointCloudColor(const QColor& pointCloudColor);
+
+  int pointCloudSize() const;
+  void setPointCloudSize(int pointCloudSize);
+
+  QColor planeColor() const;
+  void setPlaneColor(const QColor& planeColor);
+
   // low access to the ARKit/ARCore objects
   template<typename ArRawPtr>
   ArRawPtr* arRawPtr() const;
@@ -77,10 +92,16 @@ signals:
   void translationFactorChanged();
   void tryUsingArKitChanged();
 
+  // error handling
   void errorOccurred(const QString& errorMessage, const QString& additionalMessage);
 
-  // sensors
+  // sensor
   void locationDataSourceChanged();
+
+  // properties for debug mode
+  void pointCloudColorChanged();
+  void pointCloudSizeChanged();
+  void planeColorChanged();
 
 public: // internals, used by AR wrappers
   virtual void setTransformationMatrixInternal(double quaternionX, double quaternionY, double quaternionZ, double quaternionW,
