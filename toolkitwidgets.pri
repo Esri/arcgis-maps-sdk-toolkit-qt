@@ -1,13 +1,22 @@
 
 DEFINES += WIDGETS_TOOLKIT
 
-TOOLKIT = NorthArrow S
-for (component, TOOLKIT) {
+TOOLKIT_MEMBERS = $$files($$PWD/*)
+for (component, TOOLKIT_MEMBERS) {
   message("Processing component: " $$component)
-  comp_path = $$PWD/$$component
-  INCLUDEPATH += $$PWD/$$component
-  include($$PWD/$$component/cpp_views/cpp_views.pri)
-  include($$PWD/$$component/cpp_controllers/cpp_controllers.pri)
-  RESOURCES += $$PWD/$$component/images/images.qrc
+
+  path = $$absolute_path($$component)
+
+  exists($$path/cpp_views/cpp_views.pri) {
+    include($$path/cpp_views/cpp_views.pri)
+  }
+
+  exists($$path/cpp_controllers/cpp_controllers.pri) {
+    include($$path/cpp_controllers/cpp_controllers.pri)
+  }
+
+  exists($$path/images/images.qrc) {
+    RESOURCES += $$path/images/images.qrc
+  }
 }
 

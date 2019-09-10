@@ -1,4 +1,4 @@
-
+INCLUDEPATH += $$PWD
 HEADERS += \
   $$PWD/NorthArrowController.h
 

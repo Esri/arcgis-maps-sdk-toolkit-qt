@@ -1,4 +1,4 @@
-INCLUDEPATH += $PWD
+INCLUDEPATH += $$PWD
 
 HEADERS += \
   $$PWD/NorthArrow.h
@@ -8,3 +8,5 @@ SOURCES += \
 
 FORMS += \
   $$PWD/NorthArrow.ui
+
+

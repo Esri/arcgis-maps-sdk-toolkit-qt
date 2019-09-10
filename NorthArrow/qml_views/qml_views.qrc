@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/qt-project.org/imports/esri/arcgisruntime/toolkit">
         <file>qmldir</file>
-        <file alias="NorthArrow.qml">NorthArrow/NorthArrow.qml</file>
+        <file>NorthArrow.qml</file>
     </qresource>
 </RCC>

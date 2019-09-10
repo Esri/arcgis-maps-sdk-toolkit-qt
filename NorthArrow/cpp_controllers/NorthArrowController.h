@@ -23,7 +23,6 @@ class NorthArrowController : public QObject
   Q_PROPERTY(Esri::ArcGISRuntime::MapQuickView* mapView READ mapView WRITE setMapView NOTIFY mapViewChanged)
   Q_PROPERTY(int rotation READ rotation NOTIFY rotationChanged)
 #endif
-
   Q_OBJECT
   Q_DISABLE_COPY(NorthArrowController)
 
