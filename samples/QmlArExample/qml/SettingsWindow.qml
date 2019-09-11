@@ -17,15 +17,19 @@ Item {
     width: 50
     height: 50
 
-    property bool tracking: false
     signal startTrackingClicked()
     signal stopTrackingClicked()
     signal resetTrackingClicked()
     signal calibrationClicked()
+
+    signal showPointCloud(bool visible)
+    signal showPlanes(bool visible)
+
     signal emptySceneClicked()
     signal streetsSceneClicked()
     signal imagerySceneClicked()
     signal fullScaleTestSceneClicked()
+
     signal pointCloudSceneClicked()
     signal yosemiteSceneClicked()
     signal borderSceneClicked()
@@ -63,29 +67,51 @@ Item {
             }
             spacing: 5
 
-            GroupBox {
-                title: "AR view"
-                Column {
-                    spacing: 5
-                    Label {
-                        text: "Tracking status: " + tracking ? "on" : "off"
+            Column {
+                spacing: 5
+                GroupBox {
+                    title: "AR view"
+                    Column {
+                        spacing: 5
+                        Button {
+                            text: "Start tracking"
+                            onClicked: startTrackingClicked();
+                        }
+                        Button {
+                            text: "Stop tracking"
+                            onClicked: stopTrackingClicked();
+                        }
+                        Button {
+                            text: "Reset"
+                            onClicked: resetTrackingClicked();
+                        }
+                        Button {
+                            text: "Calibration"
+                            onClicked: calibrationClicked();
+                            enabled: false
+                        }
                     }
-                    Button {
-                        text: "Start tracking"
-                        onClicked: startTrackingClicked();
-                    }
-                    Button {
-                        text: "Stop tracking"
-                        onClicked: stopTrackingClicked();
-                    }
-                    Button {
-                        text: "Reset"
-                        onClicked: resetTrackingClicked();
-                    }
-                    Button {
-                        text: "Calibration"
-                        onClicked: calibrationClicked();
-                        enabled: false
+                }
+                GroupBox {
+                    title: "Debug Mode"
+                    Column {
+                        spacing: 5
+                        Button {
+                            text: "Show point cloud"
+                            onClicked: showPointCloud(true)
+                        }
+                        Button {
+                            text: "Hide point cloud"
+                            onClicked: showPointCloud(false)
+                        }
+                        Button {
+                            text: "Show planes"
+                            onClicked: showPlanes(true)
+                        }
+                        Button {
+                            text: "Hide planes"
+                            onClicked: showPlanes(false)
+                        }
                     }
                 }
             }

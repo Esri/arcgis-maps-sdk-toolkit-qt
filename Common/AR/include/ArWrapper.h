@@ -19,6 +19,7 @@
 
 #include <QSize>
 #include <array>
+#include <QColor>
 
 #if defined Q_OS_IOS
 #include "ArKitWrapper.h"
@@ -63,6 +64,16 @@ public:
   void setRenderVideoFeed(bool renderVideoFeed);
 
   std::array<double, 7> hitTest(int, int) const;
+
+  // properties for debug mode
+  QColor pointCloudColor() const;
+  void setPointCloudColor(const QColor& pointCloudColor);
+
+  int pointCloudSize() const;
+  void setPointCloudSize(int pointCloudSize);
+
+  QColor planeColor() const;
+  void setPlaneColor(const QColor& planeColor);
 
   // low access to the ARKit/ARCore objects
   template<typename ArRawPtr>

@@ -53,6 +53,16 @@ public:
   bool renderVideoFeed() const;
   void setRenderVideoFeed(bool renderVideoFeed);
 
+  // properties for debug mode
+  QColor pointCloudColor() const;
+  void setPointCloudColor(const QColor& pointCloudColor);
+
+  int pointCloudSize() const;
+  void setPointCloudSize(int pointCloudSize);
+
+  QColor planeColor() const;
+  void setPlaneColor(const QColor& planeColor);
+
   // hit test for screen to location feature
   std::array<double, 7> hitTest(int x, int y) const;
 

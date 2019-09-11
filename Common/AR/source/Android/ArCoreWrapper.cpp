@@ -145,8 +145,8 @@ void ArCoreWrapper::stopTracking()
 
 void ArCoreWrapper::resetTracking()
 {
-  // todo: arSCNView.session.run(arConfiguration, options: [.resetTracking, .removeExistingAnchors])
-  // not implemented
+  stopTracking();
+  startTracking();
 }
 
 void ArCoreWrapper::setSize(const QSize& size)
@@ -273,6 +273,7 @@ void ArCoreWrapper::createArSession()
   }
 
   ArConfig_setFocusMode(m_arSession, arConfig, AR_FOCUS_MODE_AUTO);
+  ArConfig_setUpdateMode(m_arSession, arConfig, AR_UPDATE_MODE_LATEST_CAMERA_IMAGE);
   status = ArSession_configure(m_arSession, arConfig);
   if (status != AR_SUCCESS)
   {

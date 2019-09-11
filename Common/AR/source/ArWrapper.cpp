@@ -72,6 +72,34 @@ std::array<double, 7> ArWrapper::hitTest(int, int) const
   return {};
 }
 
+// properties for debug mode
+QColor ArWrapper::pointCloudColor() const
+{
+  return QColor();
+}
+
+void ArWrapper::setPointCloudColor(const QColor&)
+{
+}
+
+int ArWrapper::pointCloudSize() const
+{
+  return -1;
+}
+
+void ArWrapper::setPointCloudSize(int)
+{
+}
+
+QColor ArWrapper::planeColor() const
+{
+  return QColor();
+}
+
+void ArWrapper::setPlaneColor(const QColor&)
+{
+}
+
 template<typename ArRawPtr>
 ArRawPtr* ArWrapper::arRawPtr() const
 {

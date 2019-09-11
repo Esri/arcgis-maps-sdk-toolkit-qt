@@ -18,6 +18,8 @@
 #define ArKitPointCloudRenderer_H
 
 #include <QOpenGLFunctions>
+#include <QOpenGLShaderProgram>
+#include <QColor>
 
 class QOpenGLShaderProgram;
 
@@ -38,6 +40,13 @@ public:
   void initGL();
   void render();
 
+  // properties for debug mode
+  QColor pointCloudColor() const;
+  void setPointCloudColor(const QColor& pointCloudColor);
+
+  int pointCloudSize() const;
+  void setPointCloudSize(int pointCloudSize);
+
 private:
   ArKitWrapper* m_arKitWrapper = nullptr;
 
@@ -47,6 +56,10 @@ private:
   GLint m_uniformModelViewProjection = 0;
   GLint m_uniformColor = 0;
   GLint m_uniformPointSize = 0;
+
+  // properties for debug mode
+  QColor m_pointCloudColor = QColor(100, 100, 255);
+  int m_pointCloudSize = 10;
 };
 
 } // Internal namespace

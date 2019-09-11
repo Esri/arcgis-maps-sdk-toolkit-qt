@@ -51,9 +51,25 @@ ApplicationWindow {
         onStopTrackingClicked: arcGISArView.stopTracking();
         onResetTrackingClicked: arcGISArView.resetTracking();
         // onCalibrationClicked: not implemented
+
+        onShowPointCloud: {
+            if (visible)
+              arcGISArView.pointCloudColor = Qt.rgba(0.39, 0.39, 1.0, 1.0);
+            else
+              arcGISArView.pointCloudColor = "";
+        }
+
+        onShowPlanes: {
+            if (visible)
+              arcGISArView.planeColor = Qt.rgba(1.0, 0.0, 0.0, 0.039);
+            else
+              arcGISArView.planeColor = "";
+        }
+
         onEmptySceneClicked: changeScene("qrc:/qml/scenes/EmptyScene.qml");
         onStreetsSceneClicked: changeScene("qrc:/qml/scenes/StreetsScene.qml");
         onImagerySceneClicked: changeScene("qrc:/qml/scenes/ImageryScene.qml");
+
         onPointCloudSceneClicked: changeScene("qrc:/qml/scenes/PointCloudScene.qml");
         onYosemiteSceneClicked: changeScene("qrc:/qml/scenes/YosemiteScene.qml");
         onBorderSceneClicked: changeScene("qrc:/qml/scenes/BorderScene.qml");

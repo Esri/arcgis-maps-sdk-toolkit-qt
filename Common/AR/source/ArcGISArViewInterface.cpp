@@ -21,6 +21,8 @@
 #include <QQuickWindow>
 #include <QScreen>
 
+#include <QGuiApplication>
+
 /*!
   \class Esri::ArcGISRuntime::Toolkit::ArcGISArViewInterface
   \ingroup ArcGISQtAr
@@ -62,6 +64,22 @@ ArcGISArViewInterface::ArcGISArViewInterface(bool renderVideoFeed, bool tryUsing
   m_renderVideoFeed(renderVideoFeed),
   m_tryUsingArKit(tryUsingArKit)
 {
+  // stops tracking when the app is minimized and starts when the app is active.
+  connect(qGuiApp, &QGuiApplication::applicationStateChanged, this, [this](Qt::ApplicationState state)
+  {
+    switch (state) {
+      case Qt::ApplicationSuspended:
+        stopTracking();
+        break;
+      case Qt::ApplicationActive:
+        startTracking();
+        break;
+      default:
+        // do nothing
+        break;
+    }
+  });
+
   setFlag(ItemHasContents, true);
   updateTrackingSources();
 }

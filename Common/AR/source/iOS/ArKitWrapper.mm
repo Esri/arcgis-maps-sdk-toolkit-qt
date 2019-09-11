@@ -258,9 +258,9 @@ struct ArKitWrapper::ArKitWrapperPrivate {
 
 ArKitWrapper::ArKitWrapper(ArcGISArViewInterface* arcGISArView) :
   m_impl(new ArKitWrapperPrivate),
-  m_arKitFrameRenderer(new ArKitFrameRenderer),
-  m_arKitPlaneRenderer(new ArKitPlaneRenderer(this)),
-  m_arKitPointCloudRenderer(new ArKitPointCloudRenderer(this))
+  m_arKitFrameRenderer(new ArKitFrameRenderer)
+//  m_arKitPlaneRenderer(new ArKitPlaneRenderer(this)) // not implemented
+//  m_arKitPointCloudRenderer(new ArKitPointCloudRenderer(this)) // disable by default
 {
   // Create an AR session configuration
   m_impl->arConfiguration = [[ARWorldTrackingConfiguration alloc] init];
@@ -367,6 +367,68 @@ bool ArKitWrapper::renderVideoFeed() const
 void ArKitWrapper::setRenderVideoFeed(bool renderVideoFeed)
 {
   m_renderVideoFeed = renderVideoFeed;
+}
+
+// properties for debug mode
+QColor ArKitWrapper::pointCloudColor() const
+{
+  if (m_arKitPointCloudRenderer)
+    return m_arKitPointCloudRenderer->pointCloudColor();
+  return QColor();
+}
+
+void ArKitWrapper::setPointCloudColor(const QColor& pointCloudColor)
+{
+  if (pointCloudColor.isValid())
+  {
+    if (!m_arKitPointCloudRenderer)
+    {
+      m_arKitPointCloudRenderer.reset(new ArKitPointCloudRenderer(this));
+      m_arKitPointCloudRenderer->initGL();
+    }
+
+    m_arKitPointCloudRenderer->setPointCloudColor(pointCloudColor);
+  }
+  else
+  {
+    m_arKitPointCloudRenderer.reset();
+  }
+}
+
+int ArKitWrapper::pointCloudSize() const
+{
+  if (m_arKitPointCloudRenderer)
+    return m_arKitPointCloudRenderer->pointCloudSize();
+  return -1;
+}
+
+void ArKitWrapper::setPointCloudSize(int pointCloudSize)
+{
+  if (pointCloudSize > 0)
+  {
+    if (!m_arKitPointCloudRenderer)
+    {
+      m_arKitPointCloudRenderer.reset(new ArKitPointCloudRenderer(this));
+      m_arKitPointCloudRenderer->initGL();
+    }
+
+    m_arKitPointCloudRenderer->setPointCloudSize(pointCloudSize);
+  }
+  else
+  {
+    m_arKitPointCloudRenderer.reset();
+  }
+}
+
+QColor ArKitWrapper::planeColor() const
+{
+  // not implemented
+  return QColor();
+}
+
+void ArKitWrapper::setPlaneColor(const QColor&)
+{
+  // not implemented
 }
 
 // doc: https://developer.apple.com/documentation/arkit/arframe/2875718-hittest?language=objc

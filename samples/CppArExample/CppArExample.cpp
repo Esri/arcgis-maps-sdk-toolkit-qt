@@ -325,9 +325,6 @@ void CppArExample::changeScene(bool withLocationDataSource)
 {
   Q_CHECK_PTR(m_sceneView);
 
-  // stop tracking
-  m_arcGISArView->stopTracking();
-
   // update the location data source
   LocationDataSource* oldLocationDataSource = m_arcGISArView->locationDataSource();
   if (withLocationDataSource)
@@ -347,7 +344,6 @@ void CppArExample::changeScene(bool withLocationDataSource)
   m_sceneView->setArcGISScene(m_scene);
   delete oldScene;
 
-  // reset and start tracking
+  // reset tracking
   m_arcGISArView->resetTracking();
-  m_arcGISArView->startTracking();
 }

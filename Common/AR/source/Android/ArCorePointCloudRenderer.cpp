@@ -65,7 +65,6 @@ void ArCorePointCloudRenderer::render()
 {
   Q_CHECK_PTR(m_arCoreWrapper);
 
-  m_program->bind();
 
   QMatrix4x4 modelViewProjection;
   int32_t size = 0;
@@ -73,10 +72,11 @@ void ArCorePointCloudRenderer::render()
   m_arCoreWrapper->pointCloudData(modelViewProjection, size, &data);
   if (!data)
   {
-    m_program->release();
     m_arCoreWrapper->releasePointCouldData();
     return;
   }
+
+  m_program->bind();
 
   glUniformMatrix4fv(m_uniformModelViewProjection, 1, GL_FALSE, modelViewProjection.data());
   glEnableVertexAttribArray(m_attributeVertices);

@@ -12,7 +12,7 @@
 import QtQuick 2.6
 import Esri.ArcGISRuntime 100.6
 
-// Creates a scene centered on Berlin (Germany)
+// Creates a tabletop test scene.
 // Mode: Tabletop AR
 
 Item {
@@ -28,44 +28,62 @@ Item {
 
     GraphicsOverlay {
         id: graphicsOverlay
-        Graphic {
-            Point {
-                x: 0.0
-                y: 0.0
-            }
-            symbol: SimpleMarkerSceneSymbol {
-                style: "SimpleMarkerSceneSymbolStyleSphere"
-                color: "green"
-                width: 0.1
-                height: 0.1
-                depth: 0.1
-            }
+        TabletopTestSceneGraphic {
+            x: 0.0
+            y: 0.0
+            color: "green"
         }
-        Graphic {
-            Point {
-                x: 0.000001
-                y: 0.0
-            }
-            symbol: SimpleMarkerSceneSymbol {
-                style: "SimpleMarkerSceneSymbolStyleSphere"
-                color: "red"
-                width: 0.1
-                height: 0.1
-                depth: 0.1
-            }
+
+        TabletopTestSceneGraphic {
+            x: 0.000001
+            y: 0.0
+            color: "red"
         }
-        Graphic {
-            Point {
-                x: 0.0
-                y: 0.000001
-            }
-            symbol: SimpleMarkerSceneSymbol {
-                style: "SimpleMarkerSceneSymbolStyleSphere"
-                color: "blue"
-                width: 0.1
-                height: 0.1
-                depth: 0.1
-            }
+        TabletopTestSceneGraphic {
+            x: 0.000002
+            y: 0.0
+            color: "red"
+        }
+        TabletopTestSceneGraphic {
+            x: 0.000003
+            y: 0.0
+            color: "red"
+        }
+        TabletopTestSceneGraphic {
+            x: 0.000004
+            y: 0.0
+            color: "red"
+        }
+        TabletopTestSceneGraphic {
+            x: 0.000005
+            y: 0.0
+            color: "red"
+        }
+
+        TabletopTestSceneGraphic {
+            x: 0.0
+            y: 0.000001
+            color: "blue"
+        }
+        TabletopTestSceneGraphic {
+            x: 0.0
+            y: 0.000002
+            color: "blue"
+        }
+        TabletopTestSceneGraphic {
+            x: 0.0
+            y: 0.000003
+            color: "blue"
+        }
+        TabletopTestSceneGraphic {
+            x: 0.0
+            y: 0.000004
+            color: "blue"
+        }
+        TabletopTestSceneGraphic {
+            x: 0.0
+            y: 0.000005
+            color: "blue"
         }
     }
 

@@ -12,6 +12,7 @@
         <file>scenes/SceneWithElevation.qml</file>
         <file>scenes/StreetsScene.qml</file>
         <file>scenes/TabletopTestScene.qml</file>
+        <file>scenes/TabletopTestSceneGraphic.qml</file>
         <file>scenes/YosemiteScene.qml</file>
     </qresource>
 </RCC>
