@@ -45,7 +45,7 @@ in your own QML files.
   `NorthArrow`:
 
 ```
-import esri.arcgisruntime.toolkit.NorthArrow 1.0
+import esri.arcgisruntime.toolkit 1.0
 ...
 NorthArrow {
         id: arrow
@@ -97,7 +97,7 @@ in your own QML files.
   `GeoView` etc. you wish the tool to work with. For example, to add a `NorthArrow`:
 
 ```
-import esri.arcgisruntime.toolkit.NorthArrow 1.0
+import esri.arcgisruntime.toolkit 1.0
 ...
 NorthArrow {
         id: arrow
