@@ -14,9 +14,9 @@ for (component, TOOLKIT_MEMBERS) {
   exists($$path/cpp_controllers/cpp_controllers.pri) {
     include($$path/cpp_controllers/cpp_controllers.pri)
   }
+}
 
-  exists($$path/images/images.qrc) {
-    RESOURCES += $$path/images/images.qrc
-  }
+exists(images/images.qrc) {
+  RESOURCES += $$PWD/images/images.qrc
 }
 

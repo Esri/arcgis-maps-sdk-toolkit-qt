@@ -1,0 +1,1 @@
+RESOURCES += $$PWD/NorthArrow.qrc

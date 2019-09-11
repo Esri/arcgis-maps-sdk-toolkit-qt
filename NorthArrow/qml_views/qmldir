@@ -1,3 +1,2 @@
-module esri.arcgisruntime.toolkit
-depends esri.arcgisruntime.toolkit.controller 1.0
+module esri.arcgisruntime.toolkit.NorthArrow
 NorthArrow 1.0 NorthArrow.qml

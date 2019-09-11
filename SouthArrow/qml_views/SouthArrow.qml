@@ -1,5 +1,5 @@
 import QtQuick 2.0
-import esri.arcgisruntime.toolkit.NorthArrowController 1.0
+import esri.arcgisruntime.toolkit.SouthArrowController 1.0
 
 Rectangle {
 
@@ -11,7 +11,7 @@ Rectangle {
         rotation: - controller.rotation
     }
 
-    NorthArrowController {
+    SouthArrowController {
         id: controller
     }
 

@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/qt-project.org/imports/esri/arcgisruntime/toolkit/controller">
+    <qresource prefix="/qt-project.org/imports/esri/arcgisruntime/toolkit/NorthArrowController">
         <file>qmldir</file>
         <file>NorthArrowController.qml</file>
     </qresource>

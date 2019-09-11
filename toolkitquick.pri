@@ -15,11 +15,12 @@ for (component, TOOLKIT_MEMBERS) {
     include($$path/cpp_controllers/cpp_controllers.pri)
   }
 
-  exists($$path/images/images.qrc) {
-    RESOURCES += $$path/images/images.qrc
-  }
-
-  exists($$path/qml_views/qml_views.qrc) {
-    RESOURCES += $$path/qml_views/qml_views.qrc
+  exists($$path/qml_views/qml_views.pri) {
+    include($$path/qml_views/qml_views.pri)
   }
 }
+
+exists(images/images.qrc) {
+  RESOURCES += $$PWD/images/images.qrc
+}
+
