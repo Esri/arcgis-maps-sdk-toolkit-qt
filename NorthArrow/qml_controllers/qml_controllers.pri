@@ -1,1 +1,0 @@
-RESOURCES += $$PWD/NorthArrowController.qrc

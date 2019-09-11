@@ -7,6 +7,6 @@
 
 void registerArcGisQtToolkitPlugins()
 {
-  qmlRegisterType<NorthArrowController>("esri.arcgisruntime.toolkit.NorthArrowController", 1, 0, "NorthArrowController");
-  qmlRegisterType<SouthArrowController>("esri.arcgisruntime.toolkit.SouthArrowController", 1, 0, "SouthArrowController");
+  qmlRegisterType<NorthArrowController>("esri.arcgisruntime.toolkit.controllers", 1, 0, "NorthArrowController");
+  qmlRegisterType<SouthArrowController>("esri.arcgisruntime.toolkit.controllers", 1, 0, "SouthArrowController");
 }

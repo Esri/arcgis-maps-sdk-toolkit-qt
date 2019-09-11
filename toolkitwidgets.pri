@@ -1,22 +1,9 @@
 
 DEFINES += WIDGETS_TOOLKIT
 
-TOOLKIT_MEMBERS = $$files($$PWD/*)
-for (component, TOOLKIT_MEMBERS) {
-  message("Processing component: " $$component)
+include($$PWD/cpp_views/cpp_views.pri)
 
-  path = $$absolute_path($$component)
+include($$PWD/cpp_controllers/cpp_controllers.pri)
 
-  exists($$path/cpp_views/cpp_views.pri) {
-    include($$path/cpp_views/cpp_views.pri)
-  }
-
-  exists($$path/cpp_controllers/cpp_controllers.pri) {
-    include($$path/cpp_controllers/cpp_controllers.pri)
-  }
-}
-
-exists(images/images.qrc) {
-  RESOURCES += $$PWD/images/images.qrc
-}
+RESOURCES += $$PWD/images/images.qrc
 

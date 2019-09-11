@@ -1,1 +1,0 @@
-RESOURCES += $$PWD/SouthArrow.qrc

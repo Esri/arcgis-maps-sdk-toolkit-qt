@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/qt-project.org/imports/esri/arcgisruntime/toolkit/SouthArrow">
-        <file>qmldir</file>
-        <file>SouthArrow.qml</file>
-    </qresource>
-</RCC>
