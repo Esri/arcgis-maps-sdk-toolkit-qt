@@ -314,6 +314,7 @@ void ArKitWrapper::resetTracking()
 
 void ArKitWrapper::setSize(const QSizeF& size)
 {
+  m_screenSize = size;
   m_arKitFrameRenderer->setSize(size);
 }
 
@@ -434,9 +435,15 @@ void ArKitWrapper::setPlaneColor(const QColor&)
 // doc: https://developer.apple.com/documentation/arkit/arframe/2875718-hittest?language=objc
 std::array<double, 7> ArKitWrapper::hitTest(int x, int y) const
 {
+  // normalize the screen coordinates. The coordinates must be normalized between 0.0 and 1.0
+  // in the image space, with respect to the screen size and the aspect ratio.
+  const float xNormalized = x / m_screenSize.width() / 1.349634 + 0.174817;
+  const float yNormalized = y / m_screenSize.height();
+  const CGPoint screenPoint = CGPointMake(yNormalized, 1.0 - xNormalized);
+
   // return a list of results, sorted from nearest to farthest (in distance from the camera).
   NSArray<ARHitTestResult*>* hitResults = [m_impl->arSession.currentFrame
-      hitTest: CGPointMake(x, y) types: ARHitTestResultTypeEstimatedHorizontalPlane];
+      hitTest: screenPoint types: ARHitTestResultTypeEstimatedHorizontalPlane];
 
   if (!hitResults || [hitResults count] <= 0)
     return {};
@@ -449,10 +456,10 @@ std::array<double, 7> ArKitWrapper::hitTest(int x, int y) const
   return { 0.0, 0.0, 0.0, 1.0, transform.columns[3].x, transform.columns[3].y, transform.columns[3].z };
 }
 
-QMatrix4x4 ArKitWrapper::modelViewProjectionMatrix() const
+QMatrix4x4 ArKitWrapper::viewProjectionMatrix() const
 {
-  simd_float4x4 rawMatrix = m_impl->arSession.currentFrame.camera.transform;
-  return QMatrix4x4(reinterpret_cast<float*>(&rawMatrix));
+  simd_float4x4 transformMatrix = m_impl->arSession.currentFrame.camera.transform;
+  return QMatrix4x4(reinterpret_cast<float*>(&transformMatrix));
 }
 
 std::vector<float> ArKitWrapper::pointCloudData() const

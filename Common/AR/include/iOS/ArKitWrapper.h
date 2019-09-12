@@ -84,6 +84,8 @@ private:
   std::unique_ptr<ArKitFrameRenderer> m_arKitFrameRenderer;
   std::unique_ptr<ArKitPlaneRenderer> m_arKitPlaneRenderer;
   std::unique_ptr<ArKitPointCloudRenderer> m_arKitPointCloudRenderer;
+
+  QSizeF m_screenSize;
 };
 
 } // Internal namespace
