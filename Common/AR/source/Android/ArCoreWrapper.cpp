@@ -68,9 +68,7 @@ const GLfloat kVerticesPortrait[] = {
 
 ArCoreWrapper::ArCoreWrapper(ArcGISArViewInterface* arcGISArView) :
   m_arcGISArView(arcGISArView),
-  m_arCoreFrameRenderer(this),
-  m_arCorePlaneRenderer(new ArCorePlaneRenderer(this)),
-  m_arCorePointCloudRenderer(new ArCorePointCloudRenderer(this))
+  m_arCoreFrameRenderer(this)
 {
   installArCore();
   createArSession();
