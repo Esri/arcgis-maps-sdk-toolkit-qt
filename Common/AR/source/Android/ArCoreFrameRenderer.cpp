@@ -18,11 +18,9 @@
 #include "ArCoreWrapper.h"
 
 /*!
-  \class Esri::ArcGISRuntime::Toolkit::ArCoreFrameRenderer
-  \ingroup AR
-  \inmodule ArcGISQtToolkit
-  \since Esri::ArcGISRuntime 100.6
-  \brief Internal class to render the camera frame in the QML item "ArcGISArView".
+  \internal
+
+  Internal class to render the camera frame in the QML item "ArcGISArView".
 
   The AR core gets the data of the AR frames directly from the camera and copy them
   to an OpenGL texture. The texture is rendered in an quad (2 triangles with 4 vertices)
@@ -34,8 +32,6 @@
 
   The texture coordinate must be adapted to respect the camera image ratio. These
   coordinates are calculated by the AR core function "transformedUvs".
-
-  \sa {AR}
  */
 
 using namespace Esri::ArcGISRuntime;
@@ -56,6 +52,8 @@ ArCoreFrameRenderer::ArCoreFrameRenderer(ArCoreWrapper* arCoreWrapper) :
 {
   Q_CHECK_PTR(m_arCoreWrapper);
 }
+
+ArCoreFrameRenderer::~ArCoreFrameRenderer() = default;
 
 // this function run in the GL thread.
 void ArCoreFrameRenderer::initGL()

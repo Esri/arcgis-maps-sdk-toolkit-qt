@@ -33,7 +33,7 @@ class ArCoreFrameRenderer : public QOpenGLFunctions
 {
 public:
   ArCoreFrameRenderer(ArCoreWrapper* arCoreWrapper);
-  ~ArCoreFrameRenderer() = default;
+  ~ArCoreFrameRenderer();
 
   void initGL();
   void render();

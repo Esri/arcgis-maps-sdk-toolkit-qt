@@ -26,6 +26,8 @@ ArCorePointCloudRenderer::ArCorePointCloudRenderer(ArCoreWrapper* arCoreWrapper)
   Q_CHECK_PTR(m_arCoreWrapper);
 }
 
+ArCorePointCloudRenderer::~ArCorePointCloudRenderer() = default;
+
 // this function run in the GL thread.
 void ArCorePointCloudRenderer::initGL()
 {

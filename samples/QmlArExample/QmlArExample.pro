@@ -61,7 +61,7 @@ OTHER_FILES += \
 # The path to the ArcGIS runtime toolkit for Qt sources, corresponding to the files downloaded
 # from the GitHub repo: https://github.com/Esri/arcgis-runtime-toolkit-qt
 
-AR_TOOLKIT_SOURCE_PATH = /Users/guil8553/applications/qt/sdk/toolkit
+AR_TOOLKIT_SOURCE_PATH = # must be set to the path to toolkit sources
 
 include($$AR_TOOLKIT_SOURCE_PATH/Plugin/QmlApi/ArQmlApi.pri)
 

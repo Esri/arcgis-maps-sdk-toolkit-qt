@@ -31,8 +31,8 @@ class ArWrapper;
 class ArcGISArViewRenderer : public QQuickFramebufferObject::Renderer
 {
 public:
-  ArcGISArViewRenderer() = default;
-  ~ArcGISArViewRenderer() override = default;
+  ArcGISArViewRenderer();
+  ~ArcGISArViewRenderer() override;
 
   // override methods from QQuickFramebufferObject::Renderer
   QOpenGLFramebufferObject* createFramebufferObject(const QSize& size) override;

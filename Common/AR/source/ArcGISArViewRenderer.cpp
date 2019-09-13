@@ -21,7 +21,21 @@
 
 using namespace Esri::ArcGISRuntime::Toolkit::Internal;
 
-// This class renders the passthrough camera image into the OpenGL frame.
+/*!
+ * \internal
+ *
+ * This class renders the passthrough camera image into the OpenGL frame.
+ */
+
+/*!
+ * \internal
+ */
+ArcGISArViewRenderer::ArcGISArViewRenderer() = default;
+
+/*!
+ * \internal
+ */
+ArcGISArViewRenderer::~ArcGISArViewRenderer() = default;
 
 /*!
  * \internal

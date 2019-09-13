@@ -25,6 +25,8 @@ ArCorePlaneRenderer::ArCorePlaneRenderer(ArCoreWrapper* ArCoreWrapper) :
 {
 }
 
+ArCorePlaneRenderer::~ArCorePlaneRenderer() = default;
+
 void ArCorePlaneRenderer::initGL()
 {
   m_program.reset(new QOpenGLShaderProgram());

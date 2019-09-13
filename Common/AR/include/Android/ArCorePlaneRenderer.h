@@ -31,7 +31,7 @@ class ArCorePlaneRenderer : public QOpenGLFunctions
 {
 public:
   ArCorePlaneRenderer(ArCoreWrapper* arCoreWrapper);
-  ~ArCorePlaneRenderer() = default;
+  ~ArCorePlaneRenderer();
 
   void initGL();
   void render();

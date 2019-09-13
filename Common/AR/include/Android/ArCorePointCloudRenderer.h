@@ -35,7 +35,7 @@ class ArCorePointCloudRenderer : public QOpenGLFunctions
 {
 public:
   ArCorePointCloudRenderer(ArCoreWrapper* arCoreWrapper);
-  ~ArCorePointCloudRenderer() = default;
+  ~ArCorePointCloudRenderer();
 
   void initGL();
   void render();
