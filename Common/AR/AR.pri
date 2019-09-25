@@ -103,11 +103,20 @@ android {
     INCLUDEPATH += $$AR_CORE_INCLUDE_PATH
     DEPENDPATH += $$AR_CORE_INCLUDE_PATH
 
-
-    LIBS += -L"$$AR_CORE_LIBS_PATH/jni/arm64-v8a"
     LIBS += -larcore_sdk_c -larcore_sdk_jni
 
-    ANDROID_EXTRA_LIBS += \
-        "$$AR_CORE_LIBS_PATH/jni/arm64-v8a/libarcore_sdk_c.so" \
-        "$$AR_CORE_LIBS_PATH/jni/arm64-v8a/libarcore_sdk_jni.so"
+    # libs foreach platforms
+    contains(ANDROID_TARGET_ARCH, armeabi-v7a) {
+        LIBS += -L"$$AR_CORE_LIBS_PATH/jni/armeabi-v7a"
+        ANDROID_EXTRA_LIBS += \
+            "$$AR_CORE_LIBS_PATH/jni/armeabi-v7a/libarcore_sdk_c.so" \
+            "$$AR_CORE_LIBS_PATH/jni/armeabi-v7a/libarcore_sdk_jni.so"
+    }
+
+    contains(ANDROID_TARGET_ARCH, arm64-v8a) {
+        LIBS += -L"$$AR_CORE_LIBS_PATH/jni/arm64-v8a"
+        ANDROID_EXTRA_LIBS += \
+            "$$AR_CORE_LIBS_PATH/jni/arm64-v8a/libarcore_sdk_c.so" \
+            "$$AR_CORE_LIBS_PATH/jni/arm64-v8a/libarcore_sdk_jni.so"
+    }
 }

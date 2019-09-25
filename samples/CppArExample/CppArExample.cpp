@@ -153,7 +153,7 @@ void CppArExample::createFullScaleTestScene()
   auto createSymbol = [graphicsOverlay](double x, double y, const QColor& color)
   {
     SimpleMarkerSceneSymbol* symbol = new SimpleMarkerSceneSymbol(
-          SimpleMarkerSceneSymbolStyle::Sphere, color, 0.1, 0.1, 0.1, SceneSymbolAnchorPosition::Bottom, graphicsOverlay);
+          SimpleMarkerSceneSymbolStyle::Sphere, color, 0.1, 0.1, 0.1, SceneSymbolAnchorPosition::Center, graphicsOverlay);
     graphicsOverlay->graphics()->append(new Graphic(Point(x, y, 0.00001), symbol, graphicsOverlay));
   };
 
@@ -286,7 +286,7 @@ void CppArExample::createTabletopTestScene()
   auto createSymbol = [graphicsOverlay](double x, double y, double size, const QColor& color)
   {
     SimpleMarkerSceneSymbol* symbol = new SimpleMarkerSceneSymbol(
-          SimpleMarkerSceneSymbolStyle::Sphere, color, size, size, size, SceneSymbolAnchorPosition::Bottom, graphicsOverlay);
+          SimpleMarkerSceneSymbolStyle::Sphere, color, size, size, size, SceneSymbolAnchorPosition::Center, graphicsOverlay);
     graphicsOverlay->graphics()->append(new Graphic(Point(x, y, 0.0), symbol, graphicsOverlay));
   };
 
@@ -345,5 +345,6 @@ void CppArExample::changeScene(bool withLocationDataSource)
   delete oldScene;
 
   // reset tracking
+  m_arcGISArView->startTracking();
   m_arcGISArView->resetTracking();
 }

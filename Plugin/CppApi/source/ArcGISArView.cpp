@@ -156,7 +156,7 @@ void ArcGISArView::setInitialTransformation(const QPoint& screenPoint)
 /*!
   \brief Gets the location in the real world space corresponding to the screen point.
  */
-Point ArcGISArView::screenToLocation(const Point& screenPoint) const
+Point ArcGISArView::screenToLocation(const QPoint& screenPoint) const
 {
   if (!m_sceneView)
     return Point();

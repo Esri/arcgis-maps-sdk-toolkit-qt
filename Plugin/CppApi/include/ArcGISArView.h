@@ -47,7 +47,7 @@ public:
 
   // methods
   Q_INVOKABLE void setInitialTransformation(const QPoint& screenPoint);
-  Q_INVOKABLE Point screenToLocation(const Point& screenPoint) const;
+  Q_INVOKABLE Point screenToLocation(const QPoint& screenPoint) const;
 
 signals:
   void originCameraChanged();
