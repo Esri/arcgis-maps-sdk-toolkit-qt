@@ -19,8 +19,6 @@
 
 #include <QOpenGLFunctions>
 
-class QOpenGLShaderProgram;
-
 namespace Esri {
 namespace ArcGISRuntime {
 namespace Toolkit {
@@ -39,13 +37,6 @@ public:
 
 private:
   ArKitWrapper* m_arKitWrapper = nullptr;
-
-  std::unique_ptr<QOpenGLShaderProgram> m_program;
-
-  GLuint m_attributeVertices = 0;
-  GLint m_uniformModelViewProjection = 0;
-  GLint m_uniformColor = 0;
-  GLint m_uniformPointSize = 0;
 };
 
 } // Internal namespace

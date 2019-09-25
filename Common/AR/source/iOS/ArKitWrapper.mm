@@ -120,6 +120,7 @@ using namespace Esri::ArcGISRuntime::Toolkit::Internal;
 
 - (void) session: (ARSession*) session cameraDidChangeTrackingState: (ARCamera*) camera
 {
+  // not implemented.
 }
 
 - (void) session: (ARSession*) session didFailWithError: (NSError*) error
