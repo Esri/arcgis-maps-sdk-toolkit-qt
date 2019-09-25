@@ -33,6 +33,7 @@ class ArcGISArViewRenderer;
 class ArcGISArViewInterface : public QQuickFramebufferObject
 {
   Q_OBJECT
+  Q_PROPERTY(bool tracking READ tracking WRITE setTracking NOTIFY trackingChanged)
   Q_PROPERTY(bool renderVideoFeed READ renderVideoFeed WRITE setRenderVideoFeed NOTIFY renderVideoFeedChanged)
   Q_PROPERTY(double translationFactor READ translationFactor WRITE setTranslationFactor NOTIFY translationFactorChanged)
   Q_PROPERTY(bool tryUsingArKit READ tryUsingArKit WRITE setTryUsingArKit NOTIFY tryUsingArKitChanged)
@@ -51,6 +52,9 @@ public:
   ~ArcGISArViewInterface() override;
 
   // properties
+  bool tracking() const;
+  void setTracking(bool tracking);
+
   bool renderVideoFeed() const;
   void setRenderVideoFeed(bool renderVideoFeed);
 
@@ -129,6 +133,7 @@ private:
   mutable Internal::ArcGISArViewRenderer* m_arViewRenderer = nullptr;
   std::unique_ptr<Internal::ArWrapper> m_arWrapper;
 
+  bool m_tracking = false;
   bool m_renderVideoFeed = true;
   double m_translationFactor = 1.0;
   bool m_tryUsingArKit = true;

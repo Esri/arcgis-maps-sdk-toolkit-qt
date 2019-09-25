@@ -89,8 +89,10 @@ ApplicationWindow {
             sceneView.graphicsOverlays.clear();
 
             // reset and start tracking
-            arcGISArView.resetTracking();
-            arcGISArView.startTracking();
+            if (arcGISArView.tracking)
+                arcGISArView.resetTracking();
+            else
+                arcGISArView.startTracking();
         }
     }
 }

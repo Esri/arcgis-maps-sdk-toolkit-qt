@@ -86,12 +86,6 @@ void ArcGISArView::setOriginCamera(const Camera& originCamera)
   m_originCamera = originCamera;
   m_tmcc->setOriginCamera(originCamera);
   // don't emit originCameraChanged, this signal is emited by the core runtime
-
-  // If we're using ARKit, reset its tracking.
-//  if isUsingARKit {
-//      arSCNView.session.run(arConfiguration, options: .resetTracking)
-//  }
-//  resetTracking();
 }
 
 /*!

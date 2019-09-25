@@ -345,6 +345,8 @@ void CppArExample::changeScene(bool withLocationDataSource)
   delete oldScene;
 
   // reset tracking
-  m_arcGISArView->startTracking();
-  m_arcGISArView->resetTracking();
+  if (m_arcGISArView->tracking())
+    m_arcGISArView->resetTracking();
+  else
+    m_arcGISArView->startTracking();
 }

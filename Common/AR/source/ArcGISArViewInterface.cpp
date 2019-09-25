@@ -69,10 +69,12 @@ ArcGISArViewInterface::ArcGISArViewInterface(bool renderVideoFeed, bool tryUsing
   {
     switch (state) {
       case Qt::ApplicationSuspended:
-        stopTracking();
+        if (m_tracking)
+          stopTracking();
         break;
       case Qt::ApplicationActive:
-        startTracking();
+        if (m_tracking)
+          startTracking();
         break;
       default:
         // do nothing
@@ -89,6 +91,25 @@ ArcGISArViewInterface::ArcGISArViewInterface(bool renderVideoFeed, bool tryUsing
  */
 ArcGISArViewInterface::~ArcGISArViewInterface()
 {
+}
+
+/*!
+  \brief Returns \c true when the AR scene view is tracking.
+ */
+bool ArcGISArViewInterface::tracking() const
+{
+  return m_tracking;
+}
+
+/*!
+  \brief Starts or stops the AR scene view tracking.
+ */
+void ArcGISArViewInterface::setTracking(bool tracking)
+{
+  if (tracking)
+    startTracking();
+  else
+    stopTracking();
 }
 
 /*!
@@ -243,6 +264,9 @@ void ArcGISArViewInterface::startTracking()
 
   if (m_locationDataSource)
     m_locationDataSource->start();
+
+  m_tracking = true;
+  emit trackingChanged();
 }
 
 /*!
@@ -256,6 +280,7 @@ void ArcGISArViewInterface::stopTracking()
   if (m_locationDataSource)
     m_locationDataSource->stop();
 
+  m_tracking = false;
   emit trackingChanged();
 }
 

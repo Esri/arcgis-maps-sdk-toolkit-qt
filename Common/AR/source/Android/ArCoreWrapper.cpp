@@ -90,8 +90,6 @@ ArCoreWrapper::ArCoreWrapper(ArcGISArViewInterface* arcGISArView) :
     // render the frame of the ArcGIS runtime
     m_arcGISArView->renderFrameInternal();
   });
-
-  startTracking();
 }
 
 ArCoreWrapper::~ArCoreWrapper()

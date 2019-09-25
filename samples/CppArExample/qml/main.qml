@@ -22,6 +22,7 @@ ApplicationWindow {
         id: arcGISArView
         anchors.fill: parent
         sceneView: sceneView
+        tracking: true
     }
 
     SceneView {
