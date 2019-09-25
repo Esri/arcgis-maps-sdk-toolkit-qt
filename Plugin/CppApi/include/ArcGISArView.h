@@ -23,7 +23,9 @@
 
 namespace Esri {
 namespace ArcGISRuntime {
+
 class TransformationMatrixCameraController;
+
 namespace Toolkit {
 
 class ArcGISArView : public ArcGISArViewInterface

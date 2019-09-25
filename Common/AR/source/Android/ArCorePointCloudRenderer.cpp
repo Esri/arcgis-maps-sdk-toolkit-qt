@@ -18,7 +18,7 @@
 #include "ArCoreWrapper.h"
 
 using namespace Esri::ArcGISRuntime;
-using namespace Esri::ArcGISRuntime::Toolkit;
+using namespace Esri::ArcGISRuntime::Toolkit::Internal;
 
 /*!
   \internal

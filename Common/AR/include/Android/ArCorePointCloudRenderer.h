@@ -24,6 +24,7 @@
 namespace Esri {
 namespace ArcGISRuntime {
 namespace Toolkit {
+namespace Internal {
 
 class ArCoreWrapper;
 
@@ -58,8 +59,9 @@ private:
   int m_pointCloudSize = 10;
 };
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Internal namespace
+} // Toolkit namespace
+} // ArcGISRuntime namespace
+} // Esri namespace
 
 #endif // ArCorePointCloudRenderer_H

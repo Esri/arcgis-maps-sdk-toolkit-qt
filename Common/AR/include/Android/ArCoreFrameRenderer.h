@@ -23,6 +23,7 @@
 namespace Esri {
 namespace ArcGISRuntime {
 namespace Toolkit {
+namespace Internal {
 
 class ArCoreWrapper;
 
@@ -45,8 +46,9 @@ private:
   GLuint m_attributeUvs = 0;
 };
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Internal namespace
+} // Toolkit namespace
+} // ArcGISRuntime namespace
+} // Esri namespace
 
 #endif // ArCoreFrameRenderer_H

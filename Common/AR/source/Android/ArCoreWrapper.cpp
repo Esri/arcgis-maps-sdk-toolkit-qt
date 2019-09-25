@@ -40,7 +40,7 @@
  */
 
 using namespace Esri::ArcGISRuntime;
-using namespace Esri::ArcGISRuntime::Toolkit;
+using namespace Esri::ArcGISRuntime::Toolkit::Internal;
 
 int32_t ArCoreWrapper::m_installRequested = 1;
 
@@ -882,8 +882,8 @@ void ArCoreWrapper::pointCloudData(QMatrix4x4& mvp, std::vector<float>& pointClo
   ArPointCloud_getData(m_arSession, m_arPointCloud, &rawData);
 
   // copy the data to vector
-  pointCloud.resize(size * 4);
-  pointCloud.assign(rawData, rawData + (size * 4));
+  pointCloud.resize(size * kNumVertices);
+  pointCloud.assign(rawData, rawData + (size * kNumVertices));
 
   // calculate the model-view-projection matrix. (The model matrix is the identity matrix)
   mvp = m_mvpMatrix;

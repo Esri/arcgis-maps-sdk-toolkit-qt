@@ -20,7 +20,6 @@
 namespace Esri {
 namespace ArcGISRuntime {
 namespace Toolkit {
-namespace Internal {
 namespace ArKitUtils {
 
 QString worldMappingStatusToString(ARWorldMappingStatus status)
@@ -198,7 +197,6 @@ QString arErrorCodeToDescription(ARErrorCode errorCode)
 }
 
 } // ArKitUtils namespace
-} // Internal namespace
 } // Toolkit namespace
 } // ArcGISRuntime namespace
 } // Esri namespace

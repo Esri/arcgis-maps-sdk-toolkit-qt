@@ -37,6 +37,9 @@ namespace ArcGISRuntime {
 namespace Toolkit {
 
 class ArcGISArViewInterface;
+
+namespace Internal {
+
 class ArCoreFrameRenderer;
 class ArCorePointCloudRenderer;
 class ArCorePlaneRenderer;
@@ -153,8 +156,9 @@ private:
   QMatrix4x4 m_mvpMatrix;
 };
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Internal namespace
+} // Toolkit namespace
+} // ArcGISRuntime namespace
+} // Esri namespace
 
 #endif // ArCoreWrapper_H

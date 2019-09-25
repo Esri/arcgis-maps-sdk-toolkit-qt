@@ -24,6 +24,7 @@
 namespace Esri {
 namespace ArcGISRuntime {
 namespace Toolkit {
+namespace Internal {
 
 class ArCoreWrapper;
 
@@ -53,8 +54,9 @@ private:
   QColor m_planeColor = QColor(255, 0, 0, 10);
 };
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Internal namespace
+} // Toolkit namespace
+} // ArcGISRuntime namespace
+} // Esri namespace
 
 #endif // ArCorePlaneRenderer_H

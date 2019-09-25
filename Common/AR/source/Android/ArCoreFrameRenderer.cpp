@@ -35,7 +35,7 @@
  */
 
 using namespace Esri::ArcGISRuntime;
-using namespace Esri::ArcGISRuntime::Toolkit;
+using namespace Esri::ArcGISRuntime::Toolkit::Internal;
 
 namespace {
 // positions of the quad vertices in GL space

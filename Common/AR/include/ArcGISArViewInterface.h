@@ -25,9 +25,10 @@ namespace Esri {
 namespace ArcGISRuntime {
 namespace Toolkit {
 
+class ArcGISArViewRenderer;
+
 namespace Internal {
 class ArWrapper;
-class ArcGISArViewRenderer;
 }
 
 class ArcGISArViewInterface : public QQuickFramebufferObject
@@ -130,7 +131,7 @@ protected:
 private:
   void updateTrackingSources();
 
-  mutable Internal::ArcGISArViewRenderer* m_arViewRenderer = nullptr;
+  mutable ArcGISArViewRenderer* m_arViewRenderer = nullptr;
   std::unique_ptr<Internal::ArWrapper> m_arWrapper;
 
   bool m_tracking = false;

@@ -28,8 +28,8 @@ enum class ArKitUsage
   No
 };
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Toolkit namespace
+} // ArcGISRuntime namespace
+} // Esri namespace
 
 #endif // ArKitUsage_H
