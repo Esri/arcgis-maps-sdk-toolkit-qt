@@ -14,8 +14,8 @@
  *  limitations under the License.
  ******************************************************************************/
 
-#ifndef ARCLOUDPOINTRENDERER_H
-#define ARCLOUDPOINTRENDERER_H
+#ifndef ArCorePointCloudRenderer_H
+#define ArCorePointCloudRenderer_H
 
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
@@ -24,10 +24,6 @@
 namespace Esri {
 namespace ArcGISRuntime {
 namespace Toolkit {
-
-// doc: implementation example from ARCore:
-// https://github.com/google-ar/arcore-android-sdk/blob/master/samples/hello_ar_c/app/src/main/cpp/hello_ar_application.cc
-// https://github.com/google-ar/arcore-android-sdk/blob/master/samples/hello_ar_c/app/src/main/cpp/plane_renderer.cc
 
 class ArCoreWrapper;
 
@@ -66,4 +62,4 @@ private:
 } // ArcGISRuntime
 } // Esri
 
-#endif // ARCLOUDPOINTRENDERER_H
+#endif // ArCorePointCloudRenderer_H

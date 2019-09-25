@@ -20,15 +20,31 @@
 using namespace Esri::ArcGISRuntime;
 using namespace Esri::ArcGISRuntime::Toolkit;
 
+/*!
+  \internal
+  The implementation is based on the code provide in the ARCore examples:
+  - https://github.com/google-ar/arcore-android-sdk/blob/master/samples/hello_ar_c/app/src/main/cpp/hello_ar_application.cc
+  - https://github.com/google-ar/arcore-android-sdk/blob/master/samples/hello_ar_c/app/src/main/cpp/plane_renderer.cc
+  */
+
+/*!
+  \internal
+  */
 ArCorePointCloudRenderer::ArCorePointCloudRenderer(ArCoreWrapper* arCoreWrapper) :
   m_arCoreWrapper(arCoreWrapper)
 {
   Q_CHECK_PTR(m_arCoreWrapper);
 }
 
+/*!
+  \internal
+  */
 ArCorePointCloudRenderer::~ArCorePointCloudRenderer() = default;
 
-// this function run in the GL thread.
+/*!
+  \internal
+  This function run in the GL thread.
+  */
 void ArCorePointCloudRenderer::initGL()
 {
   m_program.reset(new QOpenGLShaderProgram());
@@ -61,18 +77,19 @@ void ArCorePointCloudRenderer::initGL()
 
   m_program->release();
 }
-
-// this function run in the GL thread.
+/*!
+  \internal
+  This function run in the GL thread.
+  */
 void ArCorePointCloudRenderer::render()
 {
   Q_CHECK_PTR(m_arCoreWrapper);
 
 
   QMatrix4x4 modelViewProjection;
-  int32_t size = 0;
-  const float* data = nullptr;
-  m_arCoreWrapper->pointCloudData(modelViewProjection, size, &data);
-  if (!data)
+  std::vector<float> pointCloud;
+  m_arCoreWrapper->pointCloudData(modelViewProjection, pointCloud);
+  if (pointCloud.empty())
   {
     m_arCoreWrapper->releasePointCouldData();
     return;
@@ -82,34 +99,49 @@ void ArCorePointCloudRenderer::render()
 
   glUniformMatrix4fv(m_uniformModelViewProjection, 1, GL_FALSE, modelViewProjection.data());
   glEnableVertexAttribArray(m_attributeVertices);
-  glVertexAttribPointer(m_attributeVertices, 4, GL_FLOAT, GL_FALSE, 0, data);
+  glVertexAttribPointer(m_attributeVertices, 4, GL_FLOAT, GL_FALSE, 0, pointCloud.data());
 
   glUniform4f(m_uniformColor, m_pointCloudColor.redF(), m_pointCloudColor.greenF(), m_pointCloudColor.blueF(),
               m_pointCloudColor.alphaF());
   glUniform1f(m_uniformPointSize, static_cast<float>(m_pointCloudSize));
 
-  glDrawArrays(GL_POINTS, 0, size);
+  glDrawArrays(GL_POINTS, 0, pointCloud.size() / 4);
 
   m_program->release();
   m_arCoreWrapper->releasePointCouldData();
 }
 
-// properties for debug mode
+/*!
+  \internal
+  Property for debug mode.
+  */
 QColor ArCorePointCloudRenderer::pointCloudColor() const
 {
   return m_pointCloudColor;
 }
 
+/*!
+  \internal
+  Property for debug mode.
+  */
 void ArCorePointCloudRenderer::setPointCloudColor(const QColor& pointCloudColor)
 {
   m_pointCloudColor = pointCloudColor;
 }
 
+/*!
+  \internal
+  Property for debug mode.
+  */
 int ArCorePointCloudRenderer::pointCloudSize() const
 {
   return m_pointCloudSize;
 }
 
+/*!
+  \internal
+  Property for debug mode.
+  */
 void ArCorePointCloudRenderer::setPointCloudSize(int pointCloudSize)
 {
   m_pointCloudSize = pointCloudSize;

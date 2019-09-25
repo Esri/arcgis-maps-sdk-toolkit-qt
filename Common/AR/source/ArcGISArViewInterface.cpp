@@ -16,10 +16,10 @@
 
 #include "ArcGISArViewInterface.h"
 #include "LocationDataSource.h"
-#include "ArWrapper.h"
 #include "ArcGISArViewRenderer.h"
 #include <QQuickWindow>
 #include <QScreen>
+#include "ArWrapper.h"
 
 #include <QGuiApplication>
 
@@ -381,7 +381,7 @@ QQuickFramebufferObject::Renderer* ArcGISArViewInterface::createRenderer() const
 }
 
 /*!
- * \internal
+  \internal
  */
 std::array<double, 7> ArcGISArViewInterface::internalHitTest(int x, int y) const
 {
@@ -390,7 +390,7 @@ std::array<double, 7> ArcGISArViewInterface::internalHitTest(int x, int y) const
 }
 
 /*!
- * \internal
+  \internal
  */
 void ArcGISArViewInterface::updateTrackingSources()
 {
@@ -436,6 +436,7 @@ void ArcGISArViewInterface::updateTrackingSources()
 }
 
 /*!
+  \fn ArRawPtr* ArcGISArViewInterface::arRawPtr() const;
   \brief Returns the internal object used for AR tracking. The available objects depend on
   the plateform. Using an invalid tempate argument will cause a link error. The pointer returned
   by this function can be \c nullptr.

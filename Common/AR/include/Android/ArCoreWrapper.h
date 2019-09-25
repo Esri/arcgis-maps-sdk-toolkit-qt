@@ -14,15 +14,15 @@
  *  limitations under the License.
  ******************************************************************************/
 
-#ifndef ARCOREWRAPPER_H
-#define ARCOREWRAPPER_H
+#ifndef ArCoreWrapper_H
+#define ArCoreWrapper_H
 
 #include <QAndroidJniEnvironment>
 #include <QSize>
 #include <QTimer>
 #include <QMatrix4x4>
 #include <QOpenGLFunctions>
-#include "ArCoreFrameRenderer.h"
+#include <array>
 
 // forward declaration of AR core types to avoid include "arcore_c_api.h" here.
 typedef struct ArSession_ ArSession;
@@ -32,22 +32,14 @@ typedef struct ArTrackableList_ ArTrackableList;
 typedef struct ArTrackable_ ArTrackable;
 typedef struct ArPointCloud_ ArPointCloud;
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri {
+namespace ArcGISRuntime {
+namespace Toolkit {
 
 class ArcGISArViewInterface;
+class ArCoreFrameRenderer;
 class ArCorePointCloudRenderer;
 class ArCorePlaneRenderer;
-
-// todo: add tracking state?
-// https://developers.google.com/ar/reference/java/arcore/reference/com/google/ar/core/TrackingFailureReason
-// https://developers.google.com/ar/reference/java/arcore/reference/com/google/ar/core/TrackingState
-// https://developers.google.com/ar/reference/unity/namespace/GoogleARCore
-// - ApkAvailabilityStatus, ApkInstallationStatus, LostTrackingReason, SessionStatus, TrackingState
 
 class ArCoreWrapper
 {
@@ -77,7 +69,7 @@ public:
   std::array<double, 7> hitTest(int x, int y) const;
 
   // methods for AR frame rendering
-  const float* transformedUvs() const;
+  std::array<float, 8> transformedUvs() const;
 
   // properties for debug mode
   QColor pointCloudColor() const;
@@ -91,12 +83,13 @@ public:
 
   // methods for plane data
   void planeListData(int32_t& size);
-  bool planeData(QMatrix4x4& mvp, int32_t index, std::vector<float>& vertices);
-  void releasePlaneData();
   void releasePlaneListData();
 
+  bool planeData(int32_t index, QMatrix4x4& mvp, std::vector<float>& vertices);
+  void releasePlaneData();
+
   // methods for point cloud data
-  void pointCloudData(QMatrix4x4& mvp, int32_t& size, const float** data);
+  void pointCloudData(QMatrix4x4& mvp, std::vector<float>& data);
   void releasePointCouldData();
 
   // low access to the ARCore objects
@@ -124,7 +117,7 @@ private:
 
   jobject m_applicationActivity = nullptr;
 
-  ArCoreFrameRenderer m_arCoreFrameRenderer;
+  std::unique_ptr<ArCoreFrameRenderer> m_arCoreFrameRenderer;
   std::unique_ptr<ArCorePlaneRenderer> m_arCorePlaneRenderer;
   std::unique_ptr<ArCorePointCloudRenderer> m_arCorePointCloudRenderer;
 
@@ -146,7 +139,7 @@ private:
   ArCamera* m_arCamera = nullptr;
 
   // data returned from each frame
-  float m_transformedUvs[8] = {};
+  std::array<float, 8> m_transformedUvs;
 
   // timer to refresh the frames
   QTimer m_timer;
@@ -164,4 +157,4 @@ private:
 } // ArcGISRuntime
 } // Esri
 
-#endif // ARCOREWRAPPER_H
+#endif // ArCoreWrapper_H

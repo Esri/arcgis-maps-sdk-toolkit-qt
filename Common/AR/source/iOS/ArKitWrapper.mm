@@ -477,7 +477,7 @@ std::vector<float> ArKitWrapper::pointCloudData() const
 }
 
 /*!
- * \internal
+  \internal
  * Low access to the ARKit objects.
  */
 template<>
@@ -488,8 +488,8 @@ ARSession* ArKitWrapper::arRawPtr<ARSession>() const
 }
 
 /*!
- * \internal
- * Low access to the ARCore objects.
+  \internal
+  Low access to the ARCore objects.
  */
 template<>
 ARConfiguration* ArKitWrapper::arRawPtr<ARConfiguration>() const
@@ -499,8 +499,8 @@ ARConfiguration* ArKitWrapper::arRawPtr<ARConfiguration>() const
 }
 
 /*!
- * \internal
- * Low access to the ARCore objects.
+  \internal
+  Low access to the ARCore objects.
  */
 template<>
 NSObject<ARSessionDelegate>* ArKitWrapper::arRawPtr<NSObject<ARSessionDelegate>>() const

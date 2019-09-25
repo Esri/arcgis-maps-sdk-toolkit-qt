@@ -22,23 +22,23 @@
 using namespace Esri::ArcGISRuntime::Toolkit::Internal;
 
 /*!
- * \internal
+  \internal
  *
  * This class renders the passthrough camera image into the OpenGL frame.
  */
 
 /*!
- * \internal
+  \internal
  */
 ArcGISArViewRenderer::ArcGISArViewRenderer() = default;
 
 /*!
- * \internal
+  \internal
  */
 ArcGISArViewRenderer::~ArcGISArViewRenderer() = default;
 
 /*!
- * \internal
+  \internal
  */
 QOpenGLFramebufferObject* ArcGISArViewRenderer::createFramebufferObject(const QSize& size)
 {
@@ -48,7 +48,7 @@ QOpenGLFramebufferObject* ArcGISArViewRenderer::createFramebufferObject(const QS
 }
 
 /*!
- * \internal
+  \internal
  */
 void ArcGISArViewRenderer::synchronize(QQuickFramebufferObject* item)
 {
@@ -57,7 +57,7 @@ void ArcGISArViewRenderer::synchronize(QQuickFramebufferObject* item)
 }
 
 /*!
- * \internal
+  \internal
  */
 void ArcGISArViewRenderer::render()
 {
@@ -76,7 +76,7 @@ void ArcGISArViewRenderer::render()
 }
 
 /*!
- * \internal
+  \internal
  */
 void ArcGISArViewRenderer::setArWrapper(ArWrapper* arWrapper)
 {

@@ -18,8 +18,8 @@
 #define ArcGISArViewInterface_H
 
 #include <QQuickFramebufferObject>
-#include <array>
 #include "LocationDataSource.h"
+#include <array>
 
 namespace Esri {
 namespace ArcGISRuntime {

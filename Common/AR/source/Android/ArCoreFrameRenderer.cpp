@@ -115,7 +115,7 @@ void ArCoreFrameRenderer::render()
   glVertexAttribPointer(m_attributeVertices, 2, GL_FLOAT, GL_FALSE, 0, kVerticesPortrait);
 
   glEnableVertexAttribArray(m_attributeUvs);
-  glVertexAttribPointer(m_attributeUvs, 2, GL_FLOAT, GL_FALSE, 0, m_arCoreWrapper->transformedUvs());
+  glVertexAttribPointer(m_attributeUvs, 2, GL_FLOAT, GL_FALSE, 0, m_arCoreWrapper->transformedUvs().data());
 
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 

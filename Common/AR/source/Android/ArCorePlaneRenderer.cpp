@@ -78,7 +78,7 @@ void ArCorePlaneRenderer::render()
   {
     std::vector<float> vertices;
     QMatrix4x4 modelViewProjection;
-    if (!m_arCoreWrapper->planeData(modelViewProjection, index, vertices))
+    if (!m_arCoreWrapper->planeData(index, modelViewProjection, vertices))
       continue;
 
     glUniformMatrix4fv(m_uniformModelViewProjection, 1, GL_FALSE, modelViewProjection.data());

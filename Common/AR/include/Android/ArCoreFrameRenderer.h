@@ -20,12 +20,9 @@
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri {
+namespace ArcGISRuntime {
+namespace Toolkit {
 
 class ArCoreWrapper;
 
