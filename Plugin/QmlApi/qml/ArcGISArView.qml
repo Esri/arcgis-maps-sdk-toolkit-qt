@@ -83,7 +83,7 @@ ArcGISArViewInternal {
 
     // location update
     onLocationChanged: {
-        var location = ArcGISRuntimeEnvironment.createObject("Point", { y: latitude, x: longitude, z: 600 /*altitude*/ });
+        var location = ArcGISRuntimeEnvironment.createObject("Point", { y: latitude, x: longitude, z: altitude });
         if (tmcc.originCamera === null) {
             // create a new origin camera
             var camera = ArcGISRuntimeEnvironment.createObject(
@@ -93,8 +93,7 @@ ArcGISArViewInternal {
             // update the origin camera
             var oldCamera = tmcc.originCamera;
             var newCamera = ArcGISRuntimeEnvironment.createObject(
-                        "Camera", { location: location, heading: oldCamera.heading,
-                            pitch: 90 /*oldCamera.pitch*/, roll: 0 /*oldCamera.roll*/ });
+                        "Camera", { location: location, heading: oldCamera.heading, pitch: 90.0, roll: 0.0 });
             tmcc.originCamera = newCamera;
         }
     }
@@ -128,5 +127,15 @@ ArcGISArViewInternal {
         var matrix = currentViewpointMatrix.addTransformation(hitMatrix);
         var camera = ArcGISRuntimeEnvironment.createObject("Camera", { transformationMatrix: matrix });
         return camera.location;
+    }
+
+    // Resets the device tracking and related properties.
+    onResetTracking: {
+        var camera = ArcGISRuntimeEnvironment.createObject("Camera");
+        tmcc.originCamera = camera;
+
+        initialTransformationMatrix = identityTransformationMatrix;
+
+        tmcc.transformationMatrix = initialTransformationMatrix;
     }
 }

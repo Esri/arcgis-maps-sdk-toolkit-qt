@@ -32,8 +32,6 @@ class QmlArcGISArView : public ArcGISArViewInterface
   Q_PROPERTY(QObject* originCamera READ originCamera WRITE setOriginCamera NOTIFY originCameraChanged)
   Q_PROPERTY(QObject* sceneView READ sceneView WRITE setSceneView NOTIFY sceneViewChanged)
 
-  // todo: add default/qmlObjects for camera, sceneView, etc.
-
 public:
   explicit QmlArcGISArView(QQuickItem* parent = nullptr);
   ~QmlArcGISArView() override;
@@ -66,6 +64,7 @@ signals:
   void fieldOfViewChanged(double xFocalLength, double yFocalLength,
                           double xPrincipal, double yPrincipal,
                           double xImageSize, double yImageSize);
+  void resetTracking();
 
 public: // internals, used by AR wrappers
   void setTransformationMatrixInternal(double quaternionX, double quaternionY, double quaternionZ, double quaternionW,

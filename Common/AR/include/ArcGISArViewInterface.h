@@ -121,7 +121,8 @@ public: // internals, used by AR wrappers
 protected:
   void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry) override;
 
-  std::array<double, 7> internalHitTest(int x, int y) const;
+  // internals, used by AR view derived classes
+  std::array<double, 7> hitTestInternal(int x, int y) const;
 
   virtual void setTranslationFactorInternal(double translationFactor) = 0;
   virtual void setLocationInternal(double latitude, double longitude, double altitude) = 0;

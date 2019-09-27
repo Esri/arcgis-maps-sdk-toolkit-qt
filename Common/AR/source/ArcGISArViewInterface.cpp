@@ -17,11 +17,10 @@
 #include "ArcGISArViewInterface.h"
 #include "LocationDataSource.h"
 #include "ArcGISArViewRenderer.h"
+#include <QGuiApplication>
 #include <QQuickWindow>
 #include <QScreen>
 #include "ArWrapper.h"
-
-#include <QGuiApplication>
 
 /*!
   \class Esri::ArcGISRuntime::Toolkit::ArcGISArViewInterface
@@ -29,7 +28,6 @@
   \inmodule ArcGISQtToolkit
   \since Esri::ArcGISRuntime 100.6
   \brief Base class to impemente AR scene view.
-  \sa {AR}
 
   This class provides the AR features without using the C++ or QML APIs of the ArcGIS runtime SDK for Qt.
   It used as a base class to create two API-depends classes: \l ArcGISArSceneView which uses the C++ API and
@@ -221,13 +219,13 @@ void ArcGISArViewInterface::setLocationDataSource(LocationDataSource* locationDa
   if (m_locationDataSource)
   {
     m_locationChangedConnection = connect(m_locationDataSource, &LocationDataSource::locationChanged,
-                                             this, [this](double latitude, double longitude, double altitude)
+                                          this, [this](double latitude, double longitude, double altitude)
     {
       setLocationInternal(latitude, longitude, altitude);
     });
 
     m_headingChangedConnection = connect(m_locationDataSource, &LocationDataSource::headingChanged,
-                                             this, [this](double heading)
+                                         this, [this](double heading)
     {
       setHeadingInternal(heading);
     });
@@ -258,9 +256,7 @@ void ArcGISArViewInterface::startTracking()
 
   // uses locationDataSource.
   if (m_tryUsingArKit)
-  {
     m_arWrapper->startTracking();
-  }
 
   if (m_locationDataSource)
     m_locationDataSource->start();
@@ -383,7 +379,7 @@ QQuickFramebufferObject::Renderer* ArcGISArViewInterface::createRenderer() const
 /*!
   \internal
  */
-std::array<double, 7> ArcGISArViewInterface::internalHitTest(int x, int y) const
+std::array<double, 7> ArcGISArViewInterface::hitTestInternal(int x, int y) const
 {
   Q_CHECK_PTR(m_arWrapper);
   return m_arWrapper->hitTest(x, y);

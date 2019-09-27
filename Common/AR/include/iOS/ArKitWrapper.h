@@ -42,7 +42,6 @@ public:
   void startTracking();
   void stopTracking();
   void resetTracking();
-  bool isTracking() const;
 
   void setSize(const QSizeF& size);
 

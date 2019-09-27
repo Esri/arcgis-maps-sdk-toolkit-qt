@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/qml">
         <file>main.qml</file>
-        <file>ArcGISArView.qml</file>
         <file>SettingsWindow.qml</file>
         <file>scenes/BerlinScene.qml</file>
         <file>scenes/BorderScene.qml</file>

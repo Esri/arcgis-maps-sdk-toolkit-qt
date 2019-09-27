@@ -54,16 +54,16 @@ ApplicationWindow {
 
         onShowPointCloud: {
             if (visible)
-              arcGISArView.pointCloudColor = Qt.rgba(0.39, 0.39, 1.0, 1.0);
+                arcGISArView.pointCloudColor = Qt.rgba(0.39, 0.39, 1.0, 1.0);
             else
-              arcGISArView.pointCloudColor = "";
+                arcGISArView.pointCloudColor = "";
         }
 
         onShowPlanes: {
             if (visible)
-              arcGISArView.planeColor = Qt.rgba(1.0, 0.0, 0.0, 0.039);
+                arcGISArView.planeColor = Qt.rgba(1.0, 0.0, 0.0, 0.039);
             else
-              arcGISArView.planeColor = "";
+                arcGISArView.planeColor = "";
         }
 
         onEmptySceneClicked: changeScene("qrc:/qml/scenes/EmptyScene.qml");

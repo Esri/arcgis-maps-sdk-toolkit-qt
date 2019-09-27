@@ -15,16 +15,22 @@
  ******************************************************************************/
 
 #include "ArKitWrapper.h"
-#import <ARKit/ARKit.h>
-#include <QMatrix4x4>
 #include "ArcGISArViewInterface.h"
-#include <array>
-#include <QGuiApplication>
-#include <QScreen>
 #include "ArKitUtils.h"
 #include "ArKitFrameRenderer.h"
 #include "ArKitPlaneRenderer.h"
 #include "ArKitPointCloudRenderer.h"
+
+// Qt headers
+#include <QMatrix4x4>
+#include <QGuiApplication>
+#include <QScreen>
+
+// C++ header
+#include <array>
+
+// ARCore header
+#import <ARKit/ARKit.h>
 
 using namespace Esri::ArcGISRuntime::Toolkit;
 using namespace Esri::ArcGISRuntime::Toolkit::Internal;
@@ -45,14 +51,8 @@ using namespace Esri::ArcGISRuntime::Toolkit::Internal;
 
 -(id) init;
 
-// ARSessionDelegate overrides
 - (void) session: (ARSession*) session didUpdateFrame: (ARFrame*) frame;
-
-// ARSessionObserver overrides
 - (void) session: (ARSession*) session cameraDidChangeTrackingState: (ARCamera*) camera;
-//sessionWasInterrupted
-//sessionInterruptionEnded
-//sessionShouldAttemptRelocalization
 - (void) session: (ARSession*) session didFailWithError: (NSError*) error;
 
 -(void) copyPixelBuffers: (CVImageBufferRef)pixelBuffer;
@@ -79,7 +79,7 @@ using namespace Esri::ArcGISRuntime::Toolkit::Internal;
 
 @implementation ArcGISArSessionDelegate
 
--(id)init
+-(id) init
 {
   if (self = [super init])
   {
@@ -128,7 +128,7 @@ using namespace Esri::ArcGISRuntime::Toolkit::Internal;
   // not implemented.
 }
 
--(void)copyPixelBuffers: (CVImageBufferRef)pixelBuffer
+-(void) copyPixelBuffers: (CVImageBufferRef)pixelBuffer
 {
   // map
   CVPixelBufferRetain(pixelBuffer); // retains the new PB
@@ -166,7 +166,6 @@ using namespace Esri::ArcGISRuntime::Toolkit::Internal;
   }
 
   // copy the data from the texture data
-  // todo: necessary?
   memcpy(self.textureDataY, dataY, sizeY);
   memcpy(self.textureDataCbCr, dataCbCr, sizeCbCr);
 
@@ -185,7 +184,8 @@ using namespace Esri::ArcGISRuntime::Toolkit::Internal;
   // get the screen orientation
   const Qt::ScreenOrientations orientation = QGuiApplication::screens().front()->orientation();
 
-  switch (orientation) {
+  switch (orientation)
+  {
     case Qt::PortraitOrientation:
     {
       const simd_quatf orientationQuat = { simd_float4 { 0.0, 0.0, -0.70710678118, -0.70710678118 }};
@@ -206,7 +206,6 @@ using namespace Esri::ArcGISRuntime::Toolkit::Internal;
       const simd_quatf orientationQuat = { simd_float4 { 0.0, 0.0, 0.70710678118, 0.70710678118 }};
       finalQuat = simd_mul(finalQuat, orientationQuat);
       finalQuat = simd_mul(finalQuat, orientationQuat); // 2 rotations of 90 to do a 180 rotation
-      // todo: test and fix that
       break;
     }
     default:
@@ -255,13 +254,9 @@ struct ArKitWrapper::ArKitWrapperPrivate {
  ******************** C++ public class implementation **************************
  ******************************************************************************/
 
-//TODO: test performances with ARCNView from AR kit. Integration of the ARCNView in Qt?
-
 ArKitWrapper::ArKitWrapper(ArcGISArViewInterface* arcGISArView) :
   m_impl(new ArKitWrapperPrivate),
   m_arKitFrameRenderer(new ArKitFrameRenderer)
-//  m_arKitPlaneRenderer(new ArKitPlaneRenderer(this)) // not implemented
-//  m_arKitPointCloudRenderer(new ArKitPointCloudRenderer(this)) // disable by default
 {
   // Create an AR session configuration
   m_impl->arConfiguration = [[ARWorldTrackingConfiguration alloc] init];
@@ -286,8 +281,6 @@ ArKitWrapper::ArKitWrapper(ArcGISArViewInterface* arcGISArView) :
 
   // Run the view's session
   [m_impl->arSession runWithConfiguration:m_impl->arConfiguration options: ARSessionRunOptionResetTracking];
-
-  // https://developer.apple.com/documentation/arkit/arconfiguration/2923553-issupported?language=objc
 }
 
 ArKitWrapper::~ArKitWrapper()
@@ -300,28 +293,33 @@ ArKitWrapper::~ArKitWrapper()
 
 void ArKitWrapper::startTracking()
 {
+  Q_CHECK_PTR(m_impl);
   [m_impl->arSession runWithConfiguration:m_impl->arConfiguration options: ARSessionRunOptionResetTracking];
 }
 
 void ArKitWrapper::stopTracking()
 {
+  Q_CHECK_PTR(m_impl);
   [m_impl->arSession pause];
 }
 
 void ArKitWrapper::resetTracking()
 {
+  Q_CHECK_PTR(m_impl);
   [m_impl->arSession runWithConfiguration:m_impl->arConfiguration];
 }
 
 void ArKitWrapper::setSize(const QSizeF& size)
 {
   m_screenSize = size;
+  Q_CHECK_PTR(m_arKitFrameRenderer);
   m_arKitFrameRenderer->setSize(size);
 }
 
 // this function run on the rendering thread
 void ArKitWrapper::initGL()
 {
+  Q_CHECK_PTR(m_arKitFrameRenderer);
   m_arKitFrameRenderer->initGL();
 
   if (m_arKitPlaneRenderer)
@@ -334,14 +332,16 @@ void ArKitWrapper::initGL()
 // this function run on the rendering thread
 void ArKitWrapper::updateTextures()
 {
+  Q_CHECK_PTR(m_arKitFrameRenderer);
   m_arKitFrameRenderer->updateTextreDataY(static_cast<int>(m_impl->arSessionDelegate.widthY),
-                                         static_cast<int>(m_impl->arSessionDelegate.heightY),
-                                         m_impl->arSessionDelegate.textureDataY);
+                                          static_cast<int>(m_impl->arSessionDelegate.heightY),
+                                          m_impl->arSessionDelegate.textureDataY);
 
   m_arKitFrameRenderer->updateTextreDataCbCr(static_cast<int>(m_impl->arSessionDelegate.widthCbCr),
-                                            static_cast<int>(m_impl->arSessionDelegate.heightCbCr),
-                                            m_impl->arSessionDelegate.textureDataCbCr);
+                                             static_cast<int>(m_impl->arSessionDelegate.heightCbCr),
+                                             m_impl->arSessionDelegate.textureDataCbCr);
 
+  Q_CHECK_PTR(m_impl);
   m_impl->arSessionDelegate.textureDataUsed = false; // now, the texture data can be reused.
 }
 
@@ -352,6 +352,7 @@ void ArKitWrapper::render()
   updateTextures();
 
   // render the AR frame
+  Q_CHECK_PTR(m_arKitFrameRenderer);
   m_arKitFrameRenderer->render();
 
   if (m_arKitPlaneRenderer)
@@ -443,6 +444,7 @@ std::array<double, 7> ArKitWrapper::hitTest(int x, int y) const
   const CGPoint screenPoint = CGPointMake(yNormalized, 1.0 - xNormalized);
 
   // return a list of results, sorted from nearest to farthest (in distance from the camera).
+  Q_CHECK_PTR(m_impl);
   NSArray<ARHitTestResult*>* hitResults = [m_impl->arSession.currentFrame
       hitTest: screenPoint types: ARHitTestResultTypeEstimatedHorizontalPlane];
 
@@ -459,12 +461,14 @@ std::array<double, 7> ArKitWrapper::hitTest(int x, int y) const
 
 QMatrix4x4 ArKitWrapper::viewProjectionMatrix() const
 {
+  Q_CHECK_PTR(m_impl);
   simd_float4x4 transformMatrix = m_impl->arSession.currentFrame.camera.transform;
   return QMatrix4x4(reinterpret_cast<float*>(&transformMatrix));
 }
 
 std::vector<float> ArKitWrapper::pointCloudData() const
 {
+  Q_CHECK_PTR(m_impl);
   ARPointCloud* pointCloudData = [m_impl->arSession.currentFrame rawFeaturePoints];
   if (!pointCloudData)
     return {};

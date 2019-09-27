@@ -22,7 +22,6 @@
   \inmodule ArcGISQtToolkit
   \since Esri::ArcGISRuntime 100.6
   \brief Render and tracks the camera.
-  \sa {AR}
  */
 
 using namespace Esri::ArcGISRuntime::Toolkit;
@@ -130,9 +129,9 @@ void QmlArcGISArView::setTransformationMatrixCameraController(QObject* tmcc)
  */
 void QmlArcGISArView::setInitialTransformation(float x, float y)
 {
-  // Use the `internalHitTest` method to get the matrix of `screenPoint`.
-  const std::array<double, 7> hitResult = internalHitTest(x, y);
-  if (hitResult[3] == 0) // todo: improve the return value (bool?)
+  // Use the `hitTestInternal` method to get the matrix of `screenPoint`.
+  const std::array<double, 7> hitResult = hitTestInternal(x, y);
+  if (hitResult[3] == 0) // quaternionW shouldn't be 0
     return;
 
   emit initialTransformationChanged(0.0, 0.0, 0.0, 1.0, hitResult[4], hitResult[5], hitResult[6]);
@@ -164,7 +163,7 @@ QObject* QmlArcGISArView::screenToLocation(QObject* screenPoint) const
     return nullptr;
 
   // converts the point from the screen space to the 3D space
-  const std::array<double, 7> hitResult = ArcGISArViewInterface::internalHitTest(x, y);
+  const std::array<double, 7> hitResult = ArcGISArViewInterface::hitTestInternal(x, y);
 
   // calculates the matrix transformations and creates the QmlPoint location.
   QVariant location;
@@ -217,7 +216,7 @@ void QmlArcGISArView::renderFrameInternal()
  */
 void QmlArcGISArView::setTranslationFactorInternal(double)
 {
-  // do nothing
+  // do nothing, translationFactorChanged signal is emitted in ArcGISArViewInterface::setTranslationFactor
 }
 
 /*!

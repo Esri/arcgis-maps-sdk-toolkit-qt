@@ -56,6 +56,7 @@ void CppArExample::setArcGISArView(ArcGISArView* arcGISArView)
     return;
 
   m_arcGISArView = arcGISArView;
+
   emit arcGISArViewChanged();
 }
 

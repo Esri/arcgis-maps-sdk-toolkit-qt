@@ -26,7 +26,6 @@
   \inmodule ArcGISQtToolkit
   \since Esri::ArcGISRuntime 100.6
   \brief Render and tracks the camera.
-  \sa {AR}
  */
 
 using namespace Esri::ArcGISRuntime;
@@ -133,9 +132,9 @@ void ArcGISArView::setSceneView(SceneQuickView* sceneView)
  */
 void ArcGISArView::setInitialTransformation(const QPoint& screenPoint)
 {
-  // Use the `internalHitTest` method to get the matrix of `screenPoint`.
-  const std::array<double, 7> hitResult = internalHitTest(screenPoint.x(), screenPoint.y());
-  if (hitResult[3] == 0) // todo: improve the return value (bool?)
+  // Use the `hitTestInternal` method to get the matrix of `screenPoint`.
+  const std::array<double, 7> hitResult = hitTestInternal(screenPoint.x(), screenPoint.y());
+  if (hitResult[3] == 0) // quaternionW shouldn't be 0
     return;
 
   // Set the `initialTransformation` as the AGSTransformationMatrix.identity - hit test matrix.
@@ -155,7 +154,7 @@ Point ArcGISArView::screenToLocation(const QPoint& screenPoint) const
   if (!m_sceneView)
     return Point();
 
-  const std::array<double, 7> hitResult = internalHitTest(screenPoint.x(), screenPoint.y());
+  const std::array<double, 7> hitResult = hitTestInternal(screenPoint.x(), screenPoint.y());
   if (hitResult[0] == 0)
     return Point();
 
@@ -180,7 +179,6 @@ void ArcGISArView::setTransformationMatrixInternal(double quaternionX, double qu
                                                         quaternionX, quaternionY, quaternionZ, quaternionW,
                                                         translationX, translationY, translationZ));
   Q_CHECK_PTR(matrix.get());
-
   Q_CHECK_PTR(m_initialTransformation);
   auto finalMatrix = std::unique_ptr<TransformationMatrix>(m_initialTransformation->addTransformation(matrix.get()));
 
@@ -252,13 +250,13 @@ void ArcGISArView::setLocationInternal(double latitude, double longitude, double
   if (m_tmcc->originCamera().isEmpty())
   {
     // create a new origin camera
-    m_tmcc->setOriginCamera(Camera(latitude, longitude, altitude+100, 0.0, 90.0, 0.0));
+    m_tmcc->setOriginCamera(Camera(latitude, longitude, altitude, 0.0, 90.0, 0.0));
   }
   else
   {
     // update the origin camera
     const Camera oldCamera = m_tmcc->originCamera();
-    m_tmcc->setOriginCamera(Camera(latitude, longitude, altitude+100, oldCamera.heading(), 90.0, 0.0));
+    m_tmcc->setOriginCamera(Camera(latitude, longitude, altitude, oldCamera.heading(), 90.0, 0.0));
   }
 
   m_tmcc->setTransformationMatrix(TransformationMatrix::createIdentityMatrix(this));
