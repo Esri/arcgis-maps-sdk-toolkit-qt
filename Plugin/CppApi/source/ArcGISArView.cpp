@@ -33,7 +33,7 @@ using namespace Esri::ArcGISRuntime::Toolkit;
 using namespace Esri::ArcGISRuntime::Toolkit::Internal;
 
 /*!
-  \brief A constructor that accepts an optional \a parent.
+  \brief A constructor that accepts an optional \a parent object.
  */
 ArcGISArView::ArcGISArView(QQuickItem* parent):
   ArcGISArViewInterface(parent),
