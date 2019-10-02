@@ -31,18 +31,11 @@
 // C++ headers
 #include <array>
 
-/*!
-  \class Esri::ArcGISRuntime::Toolkit::ArcGISARView
-  \ingroup AR
-  \inmodule ArcGISQtToolkit
-  \since Esri::ArcGISRuntime 100.6
-  \brief Wrap the ARCore for Android.
- */
-
 using namespace Esri::ArcGISRuntime;
 using namespace Esri::ArcGISRuntime::Toolkit::Internal;
 
 int32_t ArCoreWrapper::m_installRequested = 1;
+static constexpr int s_timerInterval = 33;
 
 namespace {
 // Positions of the quad vertices in clip space (X, Y).
@@ -105,7 +98,7 @@ ArCoreWrapper::ArCoreWrapper(ArcGISArViewInterface* arcGISArView) :
  */
 ArCoreWrapper::~ArCoreWrapper()
 {
-  releasePointCouldData();
+  releasePointCloudData();
 
   if (m_arFrame)
   {
@@ -125,7 +118,7 @@ ArCoreWrapper::~ArCoreWrapper()
  */
 void ArCoreWrapper::startTracking()
 {
-  m_timer.start(33);
+  m_timer.start(s_timerInterval);
 
   if (!m_arSession)
     return;
@@ -133,7 +126,7 @@ void ArCoreWrapper::startTracking()
   ArStatus status = ArSession_resume(m_arSession);
   if (status != AR_SUCCESS)
   {
-    emit m_arcGISArView->errorOccurred("ARCore failure", "Fails to resume the AR session.");
+    emit m_arcGISArView->errorOccurred("ARCore failure", "Failed to resume the AR session.");
     return;
   }
 }
@@ -151,7 +144,7 @@ void ArCoreWrapper::stopTracking()
   ArStatus status = ArSession_pause(m_arSession);
   if (status != AR_SUCCESS)
   {
-    emit m_arcGISArView->errorOccurred("ARCore failure", "Fails to pause the AR session.");
+    emit m_arcGISArView->errorOccurred("ARCore failure", "Failed to pause the AR session.");
     return;
   }
 }
@@ -187,8 +180,6 @@ void ArCoreWrapper::setSize(const QSize& size)
  */
 void ArCoreWrapper::setTextureId(GLuint textureId)
 {
-  m_textureId = textureId;
-
   if (!m_arSession)
     return;
 
@@ -198,7 +189,7 @@ void ArCoreWrapper::setTextureId(GLuint textureId)
 
 /*!
   \internal
-  this function run on the rendering thread.
+  This functions runs on the rendering thread.
  */
 void ArCoreWrapper::initGL()
 {
@@ -214,7 +205,7 @@ void ArCoreWrapper::initGL()
 
 /*!
   \internal
-  this function run on the rendering thread.
+  This functions runs on the rendering thread.
  */
 void ArCoreWrapper::render()
 {
@@ -246,7 +237,7 @@ JNIEnv* ArCoreWrapper::jniEnvironment()
 jobject ArCoreWrapper::applicationActivity()
 {
   // note: AR run in different thread, must to create local reference to avoid deleted object.
-  if (m_applicationActivity == nullptr)
+  if (!m_applicationActivity)
     m_applicationActivity = jniEnvironment()->NewLocalRef(QtAndroid::androidActivity().object<jobject>());
 
   return m_applicationActivity;
@@ -258,7 +249,7 @@ jobject ArCoreWrapper::applicationActivity()
  */
 bool ArCoreWrapper::installArCore()
 {
-  if (m_arSession != nullptr)
+  if (m_arSession)
     return true;
 
   ArInstallStatus installStatus;
@@ -276,6 +267,8 @@ bool ArCoreWrapper::installArCore()
       m_installRequested = 0;
       return false;
   }
+
+  return false;
 }
 
 /*!
@@ -287,30 +280,30 @@ void ArCoreWrapper::createArSession()
   if (m_arSession)
     return;
 
-  // try to create the ARCore session. This function can fail if the user reject the autorization
+  // try to create the ARCore session. This function can fail if the user reject the authorization
   // to install ARCore.
   auto status = ArSession_create(jniEnvironment(), applicationActivity(), &m_arSession);
   if (status != AR_SUCCESS || !m_arSession)
   {
-    emit m_arcGISArView->errorOccurred("ARCore failure", "Fails to create the AR session.");
+    emit m_arcGISArView->errorOccurred("ARCore failure", "Failed to create the AR session.");
     return;
   }
 
   // request camera permission
   const QString permissionKey = QStringLiteral("android.permission.CAMERA");
-  auto permissions = QtAndroid::requestPermissionsSync({ permissionKey }, 5000);
+  const auto permissions = QtAndroid::requestPermissionsSync({ permissionKey }, 5000);
   if (permissions[permissionKey] != QtAndroid::PermissionResult::Granted)
   {
-    emit m_arcGISArView->errorOccurred("ARCore failure", "Fails to access to the camera.");
+    emit m_arcGISArView->errorOccurred("ARCore failure", "Failed to access to the camera.");
     return;
   }
 
   // create the ARCore config.
   ArConfig* arConfig = nullptr;
   ArConfig_create(m_arSession, &arConfig);
-  if (arConfig == nullptr)
+  if (!arConfig)
   {
-    emit m_arcGISArView->errorOccurred("ARCore failure", "Fails to create the AR config.");
+    emit m_arcGISArView->errorOccurred("ARCore failure", "Failed to create the AR config.");
     return;
   }
 
@@ -319,7 +312,7 @@ void ArCoreWrapper::createArSession()
   status = ArSession_configure(m_arSession, arConfig);
   if (status != AR_SUCCESS)
   {
-    emit m_arcGISArView->errorOccurred("ARCore failure", "Fails to configure the AR session.");
+    emit m_arcGISArView->errorOccurred("ARCore failure", "Failed to configure the AR session.");
     return;
   }
 
@@ -347,16 +340,16 @@ void ArCoreWrapper::udpateArCamera()
     ArFrame_create(m_arSession, &m_arFrame);
     if (!m_arFrame)
     {
-      emit m_arcGISArView->errorOccurred("ARCore failure", "Fails to create an AR frame.");
+      emit m_arcGISArView->errorOccurred("ARCore failure", "Failed to create an AR frame.");
       return;
     }
   }
 
-  // update the session and received the last available frame.
+  // update the session and receive the last available frame.
   ArStatus status = ArSession_update(m_arSession, m_arFrame);
   if (status != AR_SUCCESS)
   {
-    emit m_arcGISArView->errorOccurred("ARCore failure", "Fails to update the AR frame.");
+    emit m_arcGISArView->errorOccurred("ARCore failure", "Failed to update the AR frame.");
     return;
   }
 
@@ -414,7 +407,7 @@ void ArCoreWrapper::udpateArCamera()
   ArFrame_acquireCamera(m_arSession, m_arFrame, &m_arCamera);
   if (!m_arCamera)
   {
-    emit m_arcGISArView->errorOccurred("ARCore failure", "Fails to acquire the camera.");
+    emit m_arcGISArView->errorOccurred("ARCore failure", "Failed to acquire the camera.");
     return;
   }
 
@@ -498,7 +491,7 @@ std::array<double, 7> ArCoreWrapper::quaternionTranslation() const
   ArPose_create(m_arSession, nullptr, &pose);
   if (!pose)
   {
-    emit m_arcGISArView->errorOccurred("ARCore failure", "Fails to create an AR pose.");
+    emit m_arcGISArView->errorOccurred("ARCore failure", "Failed to create an AR pose.");
     return {};
   }
 
@@ -512,10 +505,6 @@ std::array<double, 7> ArCoreWrapper::quaternionTranslation() const
 
   switch (orientation)
   {
-    case Qt::PortraitOrientation:
-      return { poseRaw[0], poseRaw[1], poseRaw[2], poseRaw[3], poseRaw[4], poseRaw[5], poseRaw[6] };
-      break;
-
     case Qt::LandscapeOrientation:
     {
       QQuaternion rawQuaternion(poseRaw[3], poseRaw[0], poseRaw[1], poseRaw[2]);
@@ -524,7 +513,6 @@ std::array<double, 7> ArCoreWrapper::quaternionTranslation() const
 
       return { finalQuaternion.x(), finalQuaternion.y(), finalQuaternion.z(), finalQuaternion.scalar(),
             poseRaw[4], poseRaw[5], poseRaw[6] };
-      break;
     }
 
     case Qt::InvertedPortraitOrientation:
@@ -539,12 +527,11 @@ std::array<double, 7> ArCoreWrapper::quaternionTranslation() const
 
       return { finalQuaternion.x(), finalQuaternion.y(), finalQuaternion.z(), finalQuaternion.scalar(),
             poseRaw[4], poseRaw[5], poseRaw[6] };
-      break;
     }
 
+    case Qt::PortraitOrientation:
     default:
       return { poseRaw[0], poseRaw[1], poseRaw[2], poseRaw[3], poseRaw[4], poseRaw[5], poseRaw[6] };
-      break;
   }
 
   return { poseRaw[0], poseRaw[1], poseRaw[2], poseRaw[3], poseRaw[4], poseRaw[5], poseRaw[6] };
@@ -566,7 +553,7 @@ std::array<double, 6> ArCoreWrapper::lensIntrinsics() const
   ArCameraIntrinsics_create(m_arSession, &cameraIntrinsics);
   if (!cameraIntrinsics)
   {
-    emit m_arcGISArView->errorOccurred("ARCore failure", "Fails to create an AR camera instrinsics.");
+    emit m_arcGISArView->errorOccurred("ARCore failure", "Failed to create an AR camera instrinsics.");
     return {};
   }
 
@@ -668,6 +655,7 @@ QColor ArCoreWrapper::pointCloudColor() const
 {
   if (m_arCorePointCloudRenderer)
     return m_arCorePointCloudRenderer->pointCloudColor();
+
   return QColor();
 }
 
@@ -699,6 +687,7 @@ int ArCoreWrapper::pointCloudSize() const
 {
   if (m_arCorePointCloudRenderer)
     return m_arCorePointCloudRenderer->pointCloudSize();
+
   return -1;
 }
 
@@ -766,7 +755,7 @@ void ArCoreWrapper::planeListData(int32_t& size)
     return;
 
   ArTrackableList_create(m_arSession, &m_arPlaneList);
-  if (m_arPlaneList == nullptr)
+  if (!m_arPlaneList)
     return;
 
   ArTrackableType planeTrackedType = AR_TRACKABLE_PLANE;
@@ -800,7 +789,7 @@ bool ArCoreWrapper::planeData(int32_t index, QMatrix4x4& mvp, std::vector<float>
 
   ArPlane* subsumePlane = nullptr;
   ArPlane_acquireSubsumedBy(m_arSession, arPlane, &subsumePlane);
-  if (subsumePlane != nullptr)
+  if (subsumePlane)
   {
     ArTrackable_release(ArAsTrackable(subsumePlane));
     return false;
@@ -865,7 +854,7 @@ void ArCoreWrapper::pointCloudData(QMatrix4x4& mvp, std::vector<float>& pointClo
   ArStatus pointCloudStatus = ArFrame_acquirePointCloud(m_arSession, m_arFrame, &m_arPointCloud);
   if (pointCloudStatus != AR_SUCCESS)
   {
-    releasePointCouldData();
+    releasePointCloudData();
     return;
   }
 
@@ -873,11 +862,11 @@ void ArCoreWrapper::pointCloudData(QMatrix4x4& mvp, std::vector<float>& pointClo
   ArPointCloud_getNumberOfPoints(m_arSession, m_arPointCloud, &size);
   if (size <= 0)
   {
-    releasePointCouldData();
+    releasePointCloudData();
     return;
   }
 
-  // gets the positions of the could points
+  // gets the positions of the cloud points
   const float* rawData = nullptr;
   ArPointCloud_getData(m_arSession, m_arPointCloud, &rawData);
 
@@ -893,7 +882,7 @@ void ArCoreWrapper::pointCloudData(QMatrix4x4& mvp, std::vector<float>& pointClo
   \internal
   The point cloud data can be released after the rendering is done.
  */
-void ArCoreWrapper::releasePointCouldData()
+void ArCoreWrapper::releasePointCloudData()
 {
   if (!m_arPointCloud)
     return;

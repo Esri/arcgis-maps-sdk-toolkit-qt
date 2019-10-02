@@ -13,7 +13,7 @@
 
 # This file is a part of the AR features provides in the toolkit.
 # This file must be imported in the project to use the QML API of the
-# ArcGIS runtime SDK for Qt. See AR.md for details.
+# ArcGIS Runtime SDK for Qt. See AR.md for details.
 
 include($$AR_TOOLKIT_SOURCE_PATH/Common/AR/AR.pri)
 

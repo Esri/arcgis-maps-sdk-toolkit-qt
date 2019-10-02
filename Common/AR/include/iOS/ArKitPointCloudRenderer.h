@@ -30,7 +30,7 @@ namespace Internal {
 
 class ArKitWrapper;
 
-// This class renders the passthrough camera image into the OpenGL frame.
+// This class renders the detected point cloud into the view.
 class ArKitPointCloudRenderer : public QOpenGLFunctions
 {
 public:
@@ -58,7 +58,7 @@ private:
   GLint m_uniformPointSize = 0;
 
   // properties for debug mode
-  QColor m_pointCloudColor = QColor(100, 100, 255);
+  QColor m_pointCloudColor = QColor(Qt::darkBlue);
   int m_pointCloudSize = 10;
 };
 

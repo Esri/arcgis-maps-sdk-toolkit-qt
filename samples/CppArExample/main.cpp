@@ -46,7 +46,7 @@ using namespace Esri::ArcGISRuntime;
 int main(int argc, char *argv[])
 {
   // There are some conflicts between the AR frameworks and the Qt's rendering thread.
-  // This lines of code enable the non-threaded render loops mode in Qt.
+  // This code enables the non-threaded render loop mode in Qt.
   // See SceneView::renderFrame documentation and Qt's documentation
   // https://doc.qt.io/qt-5/qtquick-visualcanvas-scenegraph.html#non-threaded-render-loops-basic-and-windows
   // for more informati ons.

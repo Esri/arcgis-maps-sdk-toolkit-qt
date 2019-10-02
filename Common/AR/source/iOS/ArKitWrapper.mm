@@ -35,7 +35,7 @@
 using namespace Esri::ArcGISRuntime::Toolkit;
 using namespace Esri::ArcGISRuntime::Toolkit::Internal;
 
-// Wrapp the AR Kit
+// Wrap the AR Kit
 //
 // The rendering code is based on the code example given in the ARKit documentation:
 // https://developer.apple.com/documentation/arkit/displaying_an_ar_experience_with_metal?language=objc
@@ -316,7 +316,10 @@ void ArKitWrapper::setSize(const QSizeF& size)
   m_arKitFrameRenderer->setSize(size);
 }
 
-// this function run on the rendering thread
+/*!
+  \internal
+  This functions runs on the rendering thread.
+ */
 void ArKitWrapper::initGL()
 {
   Q_CHECK_PTR(m_arKitFrameRenderer);
@@ -329,7 +332,10 @@ void ArKitWrapper::initGL()
     m_arKitPointCloudRenderer->initGL();
 }
 
-// this function run on the rendering thread
+/*!
+  \internal
+  This functions runs on the rendering thread.
+ */
 void ArKitWrapper::updateTextures()
 {
   Q_CHECK_PTR(m_arKitFrameRenderer);
@@ -345,7 +351,10 @@ void ArKitWrapper::updateTextures()
   m_impl->arSessionDelegate.textureDataUsed = false; // now, the texture data can be reused.
 }
 
-// this function run on the rendering thread
+/*!
+  \internal
+  This functions runs on the rendering thread.
+ */
 void ArKitWrapper::render()
 {
   // updates the texture datas

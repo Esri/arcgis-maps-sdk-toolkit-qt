@@ -72,7 +72,10 @@ ArKitFrameRenderer::~ArKitFrameRenderer()
 {
 }
 
-// this function run on the rendering thread
+/*!
+  \internal
+  This functions runs on the rendering thread.
+ */
 void ArKitFrameRenderer::initGL()
 {
   initializeOpenGLFunctions();
@@ -120,7 +123,10 @@ void ArKitFrameRenderer::initGL()
   m_program->release();
 }
 
-// this function run on the rendering thread
+/*!
+  \internal
+  This functions runs on the rendering thread.
+ */
 void ArKitFrameRenderer::render()
 {
   // the texture ids are not valid, do nothing

@@ -47,9 +47,11 @@ class ArcGISArViewInterface : public QQuickFramebufferObject
   Q_PROPERTY(int pointCloudSize READ pointCloudSize WRITE setPointCloudSize NOTIFY pointCloudSizeChanged)
   Q_PROPERTY(QColor planeColor READ planeColor WRITE setPlaneColor NOTIFY planeColorChanged)
 
-public:
+protected:
   explicit ArcGISArViewInterface(QQuickItem* parent = nullptr);
   explicit ArcGISArViewInterface(bool renderVideoFeed, bool tryUsingArKit, QQuickItem* parent = nullptr);
+
+public:
   ~ArcGISArViewInterface() override;
 
   // properties

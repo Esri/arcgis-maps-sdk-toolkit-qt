@@ -33,7 +33,7 @@ ApplicationWindow {
         id: sceneView
         anchors.fill: parent
         scene: sceneLoader.item ? sceneLoader.item.scene : null
-        onMousePressed: arcGISArView.setInitialTransformation(mouse.x, mouse.y); // for touch screen event
+        onMousePressed: arcGISArView.setInitialTransformation(mouse.x, mouse.y); // for touch screen events
     }
 
     Loader {

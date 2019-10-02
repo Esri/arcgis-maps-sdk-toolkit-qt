@@ -22,13 +22,13 @@
 
   Internal class to render the camera frame in the QML item "ArcGISArView".
 
-  The AR core gets the data of the AR frames directly from the camera and copy them
-  to an OpenGL texture. The texture is rendered in an quad (2 triangles with 4 vertices)
-  which represente all the QML item surface.
+  The AR core gets the data of the AR frames directly from the camera and copies them
+  to an OpenGL texture. The texture is rendered in a quad (2 triangles with 4 vertices)
+  which represent all the QML item surface.
 
   The image size received from the camera is constant for a specific device but the surface
-  size of the QML item can be changed, for example when the device switch between the
-  portrait and landscape modes or if the menu bar is displayed or not.
+  size of the QML item can be changed, for example when the device is switched between the
+  portrait and landscape modes, or if the menu bar is displayed or not.
 
   The texture coordinate must be adapted to respect the camera image ratio. These
   coordinates are calculated by the AR core function "transformedUvs".
@@ -55,7 +55,11 @@ ArCoreFrameRenderer::ArCoreFrameRenderer(ArCoreWrapper* arCoreWrapper) :
 
 ArCoreFrameRenderer::~ArCoreFrameRenderer() = default;
 
-// this function run in the GL thread.
+
+/*!
+  \internal
+  this function run in the GL thread.
+ */
 void ArCoreFrameRenderer::initGL()
 {
   Q_CHECK_PTR(m_arCoreWrapper);

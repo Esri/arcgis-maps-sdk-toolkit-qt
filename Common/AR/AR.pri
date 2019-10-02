@@ -21,14 +21,13 @@ AR_COMMON_INCLUDE_PATH = $$AR_COMMON_PATH/include
 AR_COMMON_SOURCE_PATH = $$AR_COMMON_PATH/source
 
 #-------------------------------------------------
-# plateform independant configuration
+# platform independent configuration
 
 HEADERS += \
     $$AR_COMMON_INCLUDE_PATH/ArcGISArViewInterface.h \
     $$AR_COMMON_INCLUDE_PATH/ArcGISArViewRenderer.h \
     $$AR_COMMON_INCLUDE_PATH/ArWrapper.h \
     $$AR_COMMON_INCLUDE_PATH/SensorStatus.h \
-    $$AR_COMMON_INCLUDE_PATH/ArKitUsage.h \
     $$AR_COMMON_INCLUDE_PATH/LocationDataSource.h
 
 SOURCES += \
@@ -36,7 +35,6 @@ SOURCES += \
     $$AR_COMMON_SOURCE_PATH/ArcGISArViewRenderer.cpp \
     $$AR_COMMON_SOURCE_PATH/ArWrapper.cpp \
     $$AR_COMMON_SOURCE_PATH/SensorStatus.cpp \
-    $$AR_COMMON_SOURCE_PATH/ArKitUsage.cpp \
     $$AR_COMMON_SOURCE_PATH/LocationDataSource.cpp
 
 INCLUDEPATH += $$AR_COMMON_INCLUDE_PATH

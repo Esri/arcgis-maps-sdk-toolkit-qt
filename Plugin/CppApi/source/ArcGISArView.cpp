@@ -47,8 +47,9 @@ ArcGISArView::ArcGISArView(QQuickItem* parent):
   \brief A constructor that accepts an optional \a parent.
 
   \list
-  \li \a renderVideoFeed - Not implemented.
-  \li \a tryUsingArKit - Not implemented.
+  \li \a renderVideoFeed - Sets to \c true to render the camera frames in the background.
+  \li \a tryUsingArKit - Sets to \c true to use the AR framework, depending of the plateform (ARKit
+  in Android and ARKit in iOS).
   \li \a parent - optional.
   \endlist
  */

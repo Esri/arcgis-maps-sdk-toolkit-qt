@@ -22,7 +22,8 @@ using namespace Esri::ArcGISRuntime::Toolkit::Internal;
 
 /*!
   \internal
-  The implementation is based on the code provide in the ARCore examples:
+
+  The implementation is based on the code provided in the ARCore examples:
   - https://github.com/google-ar/arcore-android-sdk/blob/master/samples/hello_ar_c/app/src/main/cpp/hello_ar_application.cc
   - https://github.com/google-ar/arcore-android-sdk/blob/master/samples/hello_ar_c/app/src/main/cpp/plane_renderer.cc
   */
@@ -91,7 +92,7 @@ void ArCorePointCloudRenderer::render()
   m_arCoreWrapper->pointCloudData(modelViewProjection, pointCloud);
   if (pointCloud.empty())
   {
-    m_arCoreWrapper->releasePointCouldData();
+    m_arCoreWrapper->releasePointCloudData();
     return;
   }
 
@@ -108,7 +109,7 @@ void ArCorePointCloudRenderer::render()
   glDrawArrays(GL_POINTS, 0, pointCloud.size() / 4);
 
   m_program->release();
-  m_arCoreWrapper->releasePointCouldData();
+  m_arCoreWrapper->releasePointCloudData();
 }
 
 /*!

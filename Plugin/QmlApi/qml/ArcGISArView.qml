@@ -29,8 +29,8 @@ ArcGISArViewInternal {
     onRenderFrame: root.sceneView.renderFrame();
 
     // doc todo
-    property var identityTransformationMatrix: TransformationMatrix.createIdentityMatrix();
-    property var initialTransformationMatrix: identityTransformationMatrix;
+    property var identityTransformationMatrix: TransformationMatrix.createIdentityMatrix()
+    property var initialTransformationMatrix: identityTransformationMatrix
 
     onInitialTransformationChanged: {
         // Set the `initialTransformation` as the AGSTransformationMatrix.identity - hit test matrix.

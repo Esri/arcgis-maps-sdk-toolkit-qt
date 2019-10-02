@@ -51,10 +51,10 @@
 int main(int argc, char *argv[])
 {
   // There are some conflicts between the AR frameworks and the Qt's rendering thread.
-  // This lines of code enable the non-threaded render loops mode in Qt.
+  // This code enables the non-threaded render loop mode in Qt.
   // See SceneView::renderFrame documentation and Qt's documentation
   // https://doc.qt.io/qt-5/qtquick-visualcanvas-scenegraph.html#non-threaded-render-loops-basic-and-windows
-  // for more informati ons.
+  // for more information.
 #if defined(Q_OS_IOS) || defined(Q_OS_ANDROID)
   qputenv("QSG_RENDER_LOOP", "basic");
 #endif
@@ -98,14 +98,14 @@ int main(int argc, char *argv[])
   QString arcGISToolkitImportPath = QUOTE(ARCGIS_TOOLKIT_IMPORT_PATH);
 
 #if defined(LINUX_PLATFORM_REPLACEMENT)
-  // on some linux platforms the string 'linux' is replaced with 1
-  // fix the replacement paths which were created
+  // On some Linux platforms the string 'linux' is replaced with 1
+  // Fix the created replacement paths
   QString replaceString = QUOTE(LINUX_PLATFORM_REPLACEMENT);
   arcGISRuntimeImportPath = arcGISRuntimeImportPath.replace(replaceString, "linux", Qt::CaseSensitive);
   arcGISToolkitImportPath = arcGISToolkitImportPath.replace(replaceString, "linux", Qt::CaseSensitive);
 #endif
 
-  // Add the Runtime and Extras path
+  // Add the Runtime and Extras paths
   appEngine.addImportPath(arcGISRuntimeImportPath);
   // Add the Toolkit path
   appEngine.addImportPath(arcGISToolkitImportPath);

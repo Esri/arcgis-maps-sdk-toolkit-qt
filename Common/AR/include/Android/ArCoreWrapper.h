@@ -93,7 +93,7 @@ public:
 
   // methods for point cloud data
   void pointCloudData(QMatrix4x4& mvp, std::vector<float>& data);
-  void releasePointCouldData();
+  void releasePointCloudData();
 
   // low access to the ARCore objects
   template<typename ArRawPtr>
@@ -102,7 +102,6 @@ public:
 private:
   Q_DISABLE_COPY(ArCoreWrapper)
 
-  //private:
   JNIEnv* jniEnvironment();
   jobject applicationActivity();
 
@@ -128,11 +127,10 @@ private:
   void renderArPlane();
   void renderArPointCloud();
 
-  // When the apllication launches or enters an AR mode,
+  // When the application launches or enters an AR mode,
   // it should call this method with user_requested_install = 1.
   static int32_t m_installRequested;
 
-  GLuint m_textureId = 0;
   bool m_uvsInitialized = false;
   static constexpr int kNumVertices = 4;
 

@@ -30,7 +30,7 @@
 
   LocationDataSource can be started using the function \l start and stopped using the function
   \l stop. When LocationDataSource is running, the signals \l headingChanged and \l locationChanged
-  are emmitted everytime the values change.
+  are emitted every time the values change.
 
   Most of the time, it's not necessary to create an object of this class. A default LocationDataSource
   is created automatically by \l ArcGISArSceneView when this is necessary. This class is public to
@@ -40,7 +40,7 @@
 
   \section1 Latitude and longitude
 
-  This latitude and longitude parameters hold the latitude and longitude in decimal degrees
+  The latitude and longitude parameters hold the latitude and longitude in decimal degrees
   in the WGS84 datum format.
   The property is undefined (\c NaN) if the latitude or longitude has not been set.
 

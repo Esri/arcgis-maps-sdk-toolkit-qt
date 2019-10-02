@@ -35,7 +35,7 @@ class LocationDataSource : public QObject
              NOTIFY geoPositionSourceChanged)
   Q_PROPERTY(QCompass* compass READ compass WRITE setCompass NOTIFY compassChanged)
 
-  Q_PROPERTY(bool isStarted READ isStarted NOTIFY isStartedChanged)
+  Q_PROPERTY(bool started READ isStarted NOTIFY isStartedChanged)
   Q_PROPERTY(SensorStatus sensorStatus READ sensorStatus NOTIFY sensorStatusChanged)
 
 public:

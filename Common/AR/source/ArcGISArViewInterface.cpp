@@ -29,7 +29,7 @@
   \since Esri::ArcGISRuntime 100.6
   \brief Base class to impemente AR scene view.
 
-  This class provides the AR features without using the C++ or QML APIs of the ArcGIS runtime SDK for Qt.
+  This class provides the AR features without using the C++ or QML APIs of the ArcGIS Runtime SDK for Qt.
   It used as a base class to create two API-depends classes: \l ArcGISArSceneView which uses the C++ API and
   \l QmlArcGISArSceneView which uses the QML API.
  */
@@ -202,7 +202,7 @@ LocationDataSource* ArcGISArViewInterface::locationDataSource() const
 /*!
  * \brief Sets the location data source to \a locationDataSource.
  *
- * If \a locationDataSource is \c nullptr, the tracking of the LocationDataSource is disable.
+ * If \a locationDataSource is \c nullptr, the tracking of the LocationDataSource is disabled.
  * If \l tryUsingArKit is \c true, the AR framework is used for the tracking, not \l LocationDataSource.
  */
 void ArcGISArViewInterface::setLocationDataSource(LocationDataSource* locationDataSource)
