@@ -22,10 +22,16 @@
 
 /*!
   \class Esri::ArcGISRuntime::Toolkit::ArcGISArView
-  \ingroup AR
+  \ingroup ArcGISQtToolkitCppApi
   \inmodule ArcGISQtToolkit
   \since Esri::ArcGISRuntime 100.6
-  \brief Render and tracks the camera.
+  \brief A scene view for displaying ARKit/ARCore features on mobile devices.
+
+  The Augmented Reality toolkit provides support for ARKit for iOS and Android.
+  The Augmented Reality (AR) toolkit component allows quick and easy integration
+  of AR into your application for a variety of scenarios.
+
+  See AR.md for details.
  */
 
 using namespace Esri::ArcGISRuntime;
@@ -76,7 +82,8 @@ Camera ArcGISArView::originCamera() const
 }
 
 /*!
-  \brief Sets the origin camera to \a originCamera.
+  \property ArcGISArView::originCamera
+  \brief The origin camera of this ArcGISArView.
  */
 void ArcGISArView::setOriginCamera(const Camera& originCamera)
 {
@@ -89,7 +96,8 @@ void ArcGISArView::setOriginCamera(const Camera& originCamera)
 }
 
 /*!
-  \brief Gets the scene view.
+  \property ArcGISArView::sceneView
+  \brief The SceneView associated with this ArcGISArView.
  */
 SceneQuickView* ArcGISArView::sceneView() const
 {
