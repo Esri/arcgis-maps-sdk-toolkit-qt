@@ -24,11 +24,13 @@ Graphic {
     property alias y: location.y
     property alias color: symbol.color
     property real size: 0.1
+
     Point {
         id: location
         x: 0.0
         y: 0.0
     }
+
     symbol: SimpleMarkerSceneSymbol {
         id: symbol
         style: "SimpleMarkerSceneSymbolStyleSphere"

@@ -26,6 +26,7 @@ Item {
     signal stopTrackingClicked()
     signal resetTrackingClicked()
     signal calibrationClicked()
+    signal resetCalibrationClicked()
 
     signal showPointCloud(bool visible)
     signal showPlanes(bool visible)
@@ -92,8 +93,17 @@ Item {
                         }
                         Button {
                             text: "Calibration"
-                            onClicked: calibrationClicked();
-                            enabled: false
+                            onClicked: {
+                                settings.visible = false;
+                                calibrationClicked();
+                            }
+                        }
+                        Button {
+                            text: "Reset Calibration"
+                            onClicked: {
+                                settings.visible = false;
+                                resetCalibrationClicked();
+                            }
                         }
                     }
                 }
@@ -103,19 +113,19 @@ Item {
                         spacing: 5
                         Button {
                             text: "Show point cloud"
-                            onClicked: showPointCloud(true)
+                            onClicked: showPointCloud(true);
                         }
                         Button {
                             text: "Hide point cloud"
-                            onClicked: showPointCloud(false)
+                            onClicked: showPointCloud(false);
                         }
                         Button {
                             text: "Show planes"
-                            onClicked: showPlanes(true)
+                            onClicked: showPlanes(true);
                         }
                         Button {
                             text: "Hide planes"
-                            onClicked: showPlanes(false)
+                            onClicked: showPlanes(false);
                         }
                     }
                 }
@@ -129,19 +139,31 @@ Item {
                         spacing: 5
                         Button {
                             text: "Empty"
-                            onClicked: emptySceneClicked();
+                            onClicked: {
+                                settings.visible = false;
+                                emptySceneClicked();
+                            }
                         }
                         Button {
                             text: "Streets"
-                            onClicked: streetsSceneClicked();
+                            onClicked: {
+                                settings.visible = false;
+                                streetsSceneClicked();
+                            }
                         }
                         Button {
                             text: "Imagery"
-                            onClicked: imagerySceneClicked();
+                            onClicked: {
+                                settings.visible = false;
+                                imagerySceneClicked();
+                            }
                         }
                         Button {
                             text: "Test"
-                            onClicked: fullScaleTestSceneClicked();
+                            onClicked: {
+                                settings.visible = false;
+                                fullScaleTestSceneClicked();
+                            }
                         }
                     }
                 }
@@ -152,27 +174,45 @@ Item {
                         spacing: 5
                         Button {
                             text: "Point Cloud"
-                            onClicked: pointCloudSceneClicked();
+                            onClicked: {
+                                settings.visible = false;
+                                pointCloudSceneClicked();
+                            }
                         }
                         Button {
                             text: "Yosemite"
-                            onClicked: yosemiteSceneClicked();
+                            onClicked: {
+                                settings.visible = false;
+                                yosemiteSceneClicked();
+                            }
                         }
                         Button {
                             text: "Border"
-                            onClicked: borderSceneClicked();
+                            onClicked: {
+                                settings.visible = false;
+                                borderSceneClicked();
+                            }
                         }
                         Button {
                             text: "Brest"
-                            onClicked: brestSceneClicked();
+                            onClicked: {
+                                settings.visible = false;
+                                brestSceneClicked();
+                            }
                         }
                         Button {
                             text: "Berlin"
-                            onClicked: berlinSceneClicked();
+                            onClicked: {
+                                settings.visible = false;
+                                berlinSceneClicked();
+                            }
                         }
                         Button {
                             text: "Test"
-                            onClicked: tabletopTestSceneClicked();
+                            onClicked: {
+                                settings.visible = false;
+                                tabletopTestSceneClicked();
+                            }
                         }
                     }
                 }

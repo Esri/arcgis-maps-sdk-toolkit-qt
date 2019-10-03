@@ -25,11 +25,14 @@ ApplicationWindow {
     height: 600
     title: "QmlArExample"
 
+    // The origin camera is set when the scene is created. The origin camera sets to ArcGISArView is
+    // this camera updated with the offset values returned by the calibration view.
+    property Camera originCamera: sceneLoader.item ? sceneLoader.item.originCamera : null
+
     ArcGISArView {
         id: arcGISArView
         anchors.fill: parent
         sceneView: sceneView
-        originCamera: sceneLoader.item ? sceneLoader.item.originCamera : null
         locationDataSource: sceneLoader.item ? sceneLoader.item.locationDataSource : null
         translationFactor: sceneLoader.item ? sceneLoader.item.translationFactor : 1
 
@@ -48,6 +51,13 @@ ApplicationWindow {
         id: sceneLoader
     }
 
+    CalibrationView {
+        id: calibrationView
+        anchors.fill: parent
+        visible: false
+        onTriggered: updateOriginCamera(latitude, longitude, altitude, heading);
+    }
+
     SettingsWindow {
         anchors {
             top: parent.top
@@ -58,7 +68,8 @@ ApplicationWindow {
         onStartTrackingClicked: arcGISArView.startTracking();
         onStopTrackingClicked: arcGISArView.stopTracking();
         onResetTrackingClicked: arcGISArView.resetTracking();
-        // onCalibrationClicked: not implemented
+        onCalibrationClicked: calibrationView.visible = ! calibrationView.visible
+        onResetCalibrationClicked: updateOriginCamera(0, 0, 0, 0);
 
         onShowPointCloud: {
             if (visible)
@@ -89,18 +100,36 @@ ApplicationWindow {
         }
 
         function changeScene(sceneSource) {
-            // stop tracking
+            // Stop tracking
             arcGISArView.stopTracking();
 
             // set the new scene
-            sceneLoader.source = sceneSource;
             sceneView.graphicsOverlays.clear();
+            sceneLoader.source = sceneSource;
+            arcGISArView.originCamera = originCamera;
 
-            // reset and start tracking
+            // Reset and start tracking
             if (arcGISArView.tracking)
                 arcGISArView.resetTracking();
             else
                 arcGISArView.startTracking();
         }
+    }
+
+    function updateOriginCamera(latitude, longitude, altitude, heading) {
+        // Calculate the new parameters
+        const oldLocation = originCamera.location;
+        const x = oldLocation ? oldLocation.x + longitude : longitude;
+        const y = oldLocation ? oldLocation.y + latitude : latitude;
+        const z = oldLocation ? oldLocation.z + altitude : altitude;
+        const h = originCamera.heading + heading;
+
+        // Create a new origin camera
+        const location = ArcGISRuntimeEnvironment.createObject("Point", { x: x , y: y , z: z });
+        const newCamera = ArcGISRuntimeEnvironment.createObject(
+                         "Camera", { location: location, heading: h, pitch: originCamera.pitch, roll: originCamera.roll });
+
+        // Set the origin camera.
+        arcGISArView.originCamera = newCamera;
     }
 }

@@ -41,6 +41,13 @@ ApplicationWindow {
         sceneView: sceneView
     }
 
+    CalibrationView {
+        id: calibrationView
+        anchors.fill: parent
+        visible: false
+        onTriggered: arSample.updateOriginCamera(latitude, longitude, altitude, heading);
+    }
+
     SettingsWindow {
         anchors {
             top: parent.top
@@ -48,19 +55,24 @@ ApplicationWindow {
             margins: 5
         }
 
+        // tracking options
         onStartTrackingClicked: arcGISArView.startTracking();
         onStopTrackingClicked: arcGISArView.stopTracking();
         onResetTrackingClicked: arcGISArView.resetTracking();
-        // onCalibrationClicked: not implemented
+        onCalibrationClicked: calibrationView.visible = ! calibrationView.visible
+        onResetCalibrationClicked: arSample.updateOriginCamera(0, 0, 0, 0);
 
+        // debug options
         onShowPointCloud: arSample.showPointCloud(visible);
         onShowPlanes: arSample.showPlanes(visible);
 
+        // full scale scenes
         onEmptySceneClicked: arSample.createEmptyScene();
         onStreetsSceneClicked: arSample.createStreetsScene();
         onImagerySceneClicked: arSample.createImageryScene();
         onFullScaleTestSceneClicked: arSample.createFullScaleTestScene();
 
+        // tabletop scenes
         onPointCloudSceneClicked: arSample.createPointCloudScene();
         onYosemiteSceneClicked: arSample.createYosemiteScene();
         onBorderSceneClicked: arSample.createBorderScene();

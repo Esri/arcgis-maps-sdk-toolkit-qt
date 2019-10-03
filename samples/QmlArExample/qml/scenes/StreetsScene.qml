@@ -35,6 +35,14 @@ Item {
 
     Camera {
         id: originCamera
+        location: Point {
+            y: 0.0
+            x: 0.0
+            z: 0.0
+        }
+        heading: 0.0
+        pitch: 0.0
+        roll: 0.0
     }
 
     LocationDataSource {
