@@ -72,7 +72,10 @@ ArKitFrameRenderer::~ArKitFrameRenderer()
 {
 }
 
-// this function run on the rendering thread
+/*!
+  \internal
+  This functions runs on the rendering thread.
+ */
 void ArKitFrameRenderer::initGL()
 {
   initializeOpenGLFunctions();
@@ -120,7 +123,10 @@ void ArKitFrameRenderer::initGL()
   m_program->release();
 }
 
-// this function run on the rendering thread
+/*!
+  \internal
+  This functions runs on the rendering thread.
+ */
 void ArKitFrameRenderer::render()
 {
   // the texture ids are not valid, do nothing
@@ -151,7 +157,8 @@ void ArKitFrameRenderer::render()
   // get the screen orientation
   const Qt::ScreenOrientations orientation = QGuiApplication::screens().front()->orientation();
 
-  switch (orientation) {
+  switch (orientation)
+  {
     case Qt::PortraitOrientation:
       glVertexAttribPointer(m_attributeVertices, 2, GL_FLOAT, GL_FALSE, 0, kVerticesPortrait);
       break;
@@ -184,26 +191,30 @@ void ArKitFrameRenderer::setSize(const QSizeF& size)
 
 void ArKitFrameRenderer::updateTextreDataY(int width, int height, const void* data)
 {
-  // todo: dont recreate if size didnt changed
-  if (m_textureY.isCreated())
-    m_textureY.destroy();
+  if (m_textureY.width() != width || m_textureY.height() != height)
+  {
+    if (m_textureY.isCreated())
+      m_textureY.destroy();
 
-  m_textureY.setSize(width, height);
-  m_textureY.setFormat(QOpenGLTexture::R8_UNorm);
-  m_textureY.allocateStorage();
+    m_textureY.setSize(width, height);
+    m_textureY.setFormat(QOpenGLTexture::R8_UNorm);
+    m_textureY.allocateStorage();
+  }
 
   m_textureY.setData(QOpenGLTexture::Red, QOpenGLTexture::UInt8, data);
 }
 
 void ArKitFrameRenderer::updateTextreDataCbCr(int width, int height, const void* data)
 {
-  // todo: dont recreate if size didnt changed
-  if (m_textureCbCr.isCreated())
-    m_textureCbCr.destroy();
+  if (m_textureCbCr.width() != width || m_textureCbCr.height() != height)
+  {
+    if (m_textureCbCr.isCreated())
+      m_textureCbCr.destroy();
 
-  m_textureCbCr.setSize(width, height);
-  m_textureCbCr.setFormat(QOpenGLTexture::RG8_UNorm);
-  m_textureCbCr.allocateStorage();
+    m_textureCbCr.setSize(width, height);
+    m_textureCbCr.setFormat(QOpenGLTexture::RG8_UNorm);
+    m_textureCbCr.allocateStorage();
+  }
 
   m_textureCbCr.setData(QOpenGLTexture::RG, QOpenGLTexture::UInt8, data);
 }

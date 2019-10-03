@@ -25,10 +25,9 @@ namespace Esri {
 namespace ArcGISRuntime {
 namespace Toolkit {
 
-class ArcGISArViewRenderer;
-
 namespace Internal {
 class ArWrapper;
+class ArcGISArViewRenderer;
 }
 
 class ArcGISArViewInterface : public QQuickFramebufferObject
@@ -47,9 +46,11 @@ class ArcGISArViewInterface : public QQuickFramebufferObject
   Q_PROPERTY(int pointCloudSize READ pointCloudSize WRITE setPointCloudSize NOTIFY pointCloudSizeChanged)
   Q_PROPERTY(QColor planeColor READ planeColor WRITE setPlaneColor NOTIFY planeColorChanged)
 
-public:
+protected:
   explicit ArcGISArViewInterface(QQuickItem* parent = nullptr);
   explicit ArcGISArViewInterface(bool renderVideoFeed, bool tryUsingArKit, QQuickItem* parent = nullptr);
+
+public:
   ~ArcGISArViewInterface() override;
 
   // properties
@@ -132,7 +133,7 @@ protected:
 private:
   void updateTrackingSources();
 
-  mutable ArcGISArViewRenderer* m_arViewRenderer = nullptr;
+  mutable Internal::ArcGISArViewRenderer* m_arViewRenderer = nullptr;
   std::unique_ptr<Internal::ArWrapper> m_arWrapper;
 
   bool m_tracking = false;

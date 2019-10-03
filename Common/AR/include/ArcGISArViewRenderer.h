@@ -24,15 +24,14 @@ class QQuickWindow;
 namespace Esri {
 namespace ArcGISRuntime {
 namespace Toolkit {
-
 namespace Internal {
+
 class ArWrapper;
-}
 
 class ArcGISArViewRenderer : public QQuickFramebufferObject::Renderer
 {
 public:
-  ArcGISArViewRenderer();
+  ArcGISArViewRenderer(Internal::ArWrapper* arWrapper);
   ~ArcGISArViewRenderer() override;
 
   // override methods from QQuickFramebufferObject::Renderer
@@ -40,15 +39,13 @@ public:
   void synchronize(QQuickFramebufferObject* item) override;
   void render() override;
 
-  // AR wrapper
-  void setArWrapper(Internal::ArWrapper* arWrapper);
-
 private:
   bool m_isInitialized = false;
   QQuickWindow* m_window = nullptr;
   Internal::ArWrapper* m_arWrapper = nullptr;
 };
 
+} // Internal namespace
 } // Toolkit namespace
 } // ArcGISRuntime namespace
 } // Esri namespace

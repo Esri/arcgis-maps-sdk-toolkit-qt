@@ -27,10 +27,10 @@
   \ingroup ArcGISQtAr
   \inmodule ArcGISQtToolkit
   \since Esri::ArcGISRuntime 100.6
-  \brief Base class to impemente AR scene view.
+  \brief Base class to impement AR scene view.
 
-  This class provides the AR features without using the C++ or QML APIs of the ArcGIS runtime SDK for Qt.
-  It used as a base class to create two API-depends classes: \l ArcGISArSceneView which uses the C++ API and
+  This class provides the AR features without using the C++ or QML APIs of the ArcGIS Runtime SDK for Qt.
+  It is used as a base class to create two API-dependent classes: \l ArcGISArSceneView which uses the C++ API and
   \l QmlArcGISArSceneView which uses the QML API.
  */
 
@@ -52,7 +52,7 @@ ArcGISArViewInterface::ArcGISArViewInterface(QQuickItem* parent):
 
   \list
   \li \a renderVideoFeed - Sets to \c true to render the camera frames in the background.
-  \li \a tryUsingArKit - Sets to \c true to use the AR framework, depending of the plateform (ARKit
+  \li \a tryUsingArKit - Sets to \c true to use the AR framework, depending of the platform (ARKit
   in Android and ARKit in iOS).
   \li \a parent - optional.
   \endlist
@@ -65,7 +65,8 @@ ArcGISArViewInterface::ArcGISArViewInterface(bool renderVideoFeed, bool tryUsing
   // stops tracking when the app is minimized and starts when the app is active.
   connect(qGuiApp, &QGuiApplication::applicationStateChanged, this, [this](Qt::ApplicationState state)
   {
-    switch (state) {
+    switch (state)
+    {
       case Qt::ApplicationSuspended:
         if (m_tracking)
           stopTracking();
@@ -152,7 +153,7 @@ double ArcGISArViewInterface::translationFactor() const
   \brief The translation factor used to support a table top AR experience.
 
   All the translation of the device are multiplied by this factor, to have translations in
-  the scene view adapted to the scene zoomming.
+  the scene view adapted to the scene zooming.
  */
 void ArcGISArViewInterface::setTranslationFactor(double translationFactor)
 {
@@ -167,7 +168,7 @@ void ArcGISArViewInterface::setTranslationFactor(double translationFactor)
 }
 
 /*!
-  \brief Returns \c true to use the AR framework, depending of the plateform (ARKit
+  \brief Returns \c true to use the AR framework, depending of the platform (ARKit
   in Android and ARKit in iOS).
  */
 bool ArcGISArViewInterface::tryUsingArKit() const
@@ -176,7 +177,7 @@ bool ArcGISArViewInterface::tryUsingArKit() const
 }
 
 /*!
-  \brief Sets to \c true to use the AR framework, depending of the plateform (ARKit
+  \brief Sets to \c true to use the AR framework, depending of the platform (ARKit
   in Android and ARKit in iOS).
  */
 void ArcGISArViewInterface::setTryUsingArKit(bool tryUsingArKit)
@@ -202,7 +203,7 @@ LocationDataSource* ArcGISArViewInterface::locationDataSource() const
 /*!
  * \brief Sets the location data source to \a locationDataSource.
  *
- * If \a locationDataSource is \c nullptr, the tracking of the LocationDataSource is disable.
+ * If \a locationDataSource is \c nullptr, the tracking of the LocationDataSource is disabled.
  * If \l tryUsingArKit is \c true, the AR framework is used for the tracking, not \l LocationDataSource.
  */
 void ArcGISArViewInterface::setLocationDataSource(LocationDataSource* locationDataSource)
@@ -371,8 +372,7 @@ QQuickFramebufferObject::Renderer* ArcGISArViewInterface::createRenderer() const
   if (m_arViewRenderer)
     return m_arViewRenderer;
 
-  m_arViewRenderer = new ArcGISArViewRenderer;
-  m_arViewRenderer->setArWrapper(m_arWrapper.get());
+  m_arViewRenderer = new ArcGISArViewRenderer(m_arWrapper.get());
   return m_arViewRenderer;
 }
 
@@ -393,7 +393,7 @@ void ArcGISArViewInterface::updateTrackingSources()
   if (m_tryUsingArKit)
   {
     // disable LocationDataSource if necessary.
-    // Don't delete these objects, its can be costumer's specific objects.
+    // Don't delete these objects, they can be the user's objects.
     disconnect(m_locationChangedConnection);
     disconnect(m_headingChangedConnection);
 
@@ -434,7 +434,7 @@ void ArcGISArViewInterface::updateTrackingSources()
 /*!
   \fn ArRawPtr* ArcGISArViewInterface::arRawPtr() const;
   \brief Returns the internal object used for AR tracking. The available objects depend on
-  the plateform. Using an invalid tempate argument will cause a link error. The pointer returned
+  the platform. Using an invalid template argument will cause a link error. The pointer returned
   by this function can be \c nullptr.
 
   \section1 On iOS

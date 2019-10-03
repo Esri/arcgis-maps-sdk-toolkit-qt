@@ -1,13 +1,18 @@
-// Copyright 2019 ESRI
-//
-// All rights reserved under the copyright laws of the United States
-// and applicable international laws, treaties, and conventions.
-//
-// You may freely redistribute and use this sample code, with or
-// without modification, provided you include the original copyright
-// notice and use restrictions.
-//
-// See the Sample code usage restrictions document for further information.
+/*******************************************************************************
+ *  Copyright 2012-2019 Esri
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ ******************************************************************************/
 
 #include "CppArExample.h"
 
@@ -75,7 +80,7 @@ void CppArExample::setSceneView(SceneQuickView* sceneView)
   emit sceneViewChanged();
 }
 
-// properties for debug mode
+// Set whether point clouds should be visible.
 void CppArExample::showPointCloud(bool visible)
 {
   if (visible)
@@ -84,6 +89,7 @@ void CppArExample::showPointCloud(bool visible)
     m_arcGISArView->setPointCloudColor(QColor());
 }
 
+// Set whether planes should be visible.
 void CppArExample::showPlanes(bool visible)
 {
   if (visible)
@@ -92,11 +98,11 @@ void CppArExample::showPlanes(bool visible)
     m_arcGISArView->setPlaneColor(QColor());
 }
 
-// Creates an empty scene with an elevation source.
+// Create an empty scene with an elevation source.
 // Mode: Full-Scale AR
 void CppArExample::createEmptyScene()
 {
-  // create an empty scene with elevation
+  // Create an empty scene with elevation
   m_scene = new Scene(this);
   createSurfaceWithElevation();
 
@@ -107,11 +113,11 @@ void CppArExample::createEmptyScene()
   changeScene(true);
 }
 
-// Creates a scene based on the Streets base map.
+// Create a scene based on the Streets base map.
 // Mode: Full-Scale AR
 void CppArExample::createStreetsScene()
 {
-  // create a scene with streets
+  // Create a scene with streets
   m_scene = new Scene(BasemapType::Streets, this);
   createSurfaceWithElevation();
 
@@ -122,11 +128,11 @@ void CppArExample::createStreetsScene()
   changeScene(true);
 }
 
-// Creates a scene based on the ImageryWithLabels base map.
+// Create a scene based on the ImageryWithLabels base map.
 // Mode: Full-Scale AR
 void CppArExample::createImageryScene()
 {
-  // create a scene with imagery
+  // Create a scene with imagery
   m_scene = new Scene(BasemapType::ImageryWithLabels, this);
   createSurfaceWithElevation();
 
@@ -137,20 +143,20 @@ void CppArExample::createImageryScene()
   changeScene(true);
 }
 
-// Creates a test scene
+// Create a test scene
 // Mode: Full-Scale AR
 void CppArExample::createFullScaleTestScene()
 {
-  // create scene
+  // Create scene
   m_scene = new Scene(this);
   createSurfaceWithElevation();
 
-  // create graphic overlay
+  // Create graphic overlay
   auto* graphicsOverlay = new GraphicsOverlay(this);
   Q_CHECK_PTR(m_sceneView);
   m_sceneView->graphicsOverlays()->append(graphicsOverlay);
 
-  // create graphics
+  // Create graphics
   auto createSymbol = [graphicsOverlay](double x, double y, const QColor& color)
   {
     SimpleMarkerSceneSymbol* symbol = new SimpleMarkerSceneSymbol(
@@ -162,10 +168,10 @@ void CppArExample::createFullScaleTestScene()
   {
     for (int j = -30; j <= 30; ++j)
     {
-      createSymbol(0.00001 * i, 0.00001 * j, Qt::blue);
+      createSymbol(0.00001 * i, 0.00001 * j, QColor(Qt::blue));
     }
   }
-  createSymbol(0.0, 0.0, Qt::green);
+  createSymbol(0.0, 0.0, QColor(Qt::green));
 
   // Set the location data source so we use our GPS location as the originCamera.
   m_arcGISArView->setOriginCamera(Camera());
@@ -174,7 +180,7 @@ void CppArExample::createFullScaleTestScene()
   changeScene(false);
 }
 
-// Creates a scene based on a point cloud layer.
+// Create a scene based on a point cloud layer.
 // Mode: Tabletop AR
 void CppArExample::createPointCloudScene()
 {
@@ -191,7 +197,7 @@ void CppArExample::createPointCloudScene()
   changeScene();
 }
 
-// Creates a scene centered on Yosemite National Park.
+// Create a scene centered on Yosemite National Park.
 // Mode: Tabletop AR
 void CppArExample::createYosemiteScene()
 {
@@ -209,7 +215,7 @@ void CppArExample::createYosemiteScene()
   changeScene();
 }
 
-// Creates a scene centered on the US-Mexico border.
+// Create a scene centered on the US-Mexico border.
 // Mode: Tabletop AR
 void CppArExample::createBorderScene()
 {
@@ -221,43 +227,43 @@ void CppArExample::createBorderScene()
   auto* layer = new IntegratedMeshLayer(borderUrl, m_scene);
   m_scene->operationalLayers()->append(layer);
 
-  // set origin camera
+  // Set origin camera
   m_arcGISArView->setOriginCamera(Camera(32.5337, -116.925, 126.0, 0.0, 90.0, 0.0));
   m_arcGISArView->setTranslationFactor(10000.0);
 
   changeScene();
 }
 
-// Creates a scene centered on Brest (France)
+// Create a scene centered on Brest (France)
 // Mode: Tabletop AR
 void CppArExample::createBrestScene()
 {
-  // create scene
+  // Create scene
   m_scene = new Scene(this);
   createSurfaceWithElevation();
 
-  // create layer
+  // Create layer
   const QUrl brestFrance("https://tiles.arcgis.com/tiles/P3ePLMYs2RVChkJx/arcgis/rest/services/"
                          "Buildings_Brest/SceneServer/layers/0");
   auto* layer = new ArcGISSceneLayer(brestFrance, this);
   m_scene->operationalLayers()->append(layer);
 
-  // set origin camera
+  // Set origin camera
   m_arcGISArView->setOriginCamera(Camera(48.3808, -4.49492, 48.2511, 0.0, 90.0, 0.0));
   m_arcGISArView->setTranslationFactor(500.0);
 
   changeScene();
 }
 
-// Creates a scene centered on Berlin (Germany)
+// Create a scene centered on Berlin (Germany)
 // Mode: Tabletop AR
 void CppArExample::createBerlinScene()
 {
-  // create scene
+  // Create scene
   m_scene = new Scene(this);
   createSurfaceWithElevation();
 
-  // berlin scene
+  // Create berlin layer
   const QUrl buildingsService("https://tiles.arcgis.com/tiles/P3ePLMYs2RVChkJx/arcgis/rest/services/"
                               "Buildings_Berlin/SceneServer");
   auto* layer = new ArcGISSceneLayer(buildingsService, this);
@@ -270,20 +276,20 @@ void CppArExample::createBerlinScene()
   changeScene();
 }
 
-// Creates a test scene
+// Create a test scene
 // Mode: Tabletop AR
 void CppArExample::createTabletopTestScene()
 {
-  // create scene
+  // Create scene
   m_scene = new Scene(this);
   createSurfaceWithElevation();
 
-  // create graphic overlay
+  // Create graphic overlay
   auto* graphicsOverlay = new GraphicsOverlay(this);
   Q_CHECK_PTR(m_sceneView);
   m_sceneView->graphicsOverlays()->append(graphicsOverlay);
 
-  // create graphics
+  // Create graphics
   auto createSymbol = [graphicsOverlay](double x, double y, double size, const QColor& color)
   {
     SimpleMarkerSceneSymbol* symbol = new SimpleMarkerSceneSymbol(
@@ -293,10 +299,10 @@ void CppArExample::createTabletopTestScene()
 
   for (int i = -5; i <= 10; ++i)
   {
-    createSymbol(0.0, 0.000001 * i, 0.1, Qt::blue);
-    createSymbol(0.000001 * i, 0.0, 0.1, Qt::red);
+    createSymbol(0.0, 0.000001 * i, 0.1, QColor(Qt::blue));
+    createSymbol(0.000001 * i, 0.0, 0.1, QColor(Qt::red));
   }
-  createSymbol(0.0, 0.0, 0.11, Qt::green);
+  createSymbol(0.0, 0.0, 0.11, QColor(Qt::green));
 
   m_arcGISArView->setOriginCamera(Camera(0.0, 0.0, 0.0, 0.0, 90.0, 0.0));
   m_arcGISArView->setTranslationFactor(10.0);
@@ -304,7 +310,7 @@ void CppArExample::createTabletopTestScene()
   changeScene();
 }
 
-// create and add a surface with elevation to the scene.
+// Create and add a surface with elevation to the scene.
 void CppArExample::createSurfaceWithElevation()
 {
   Q_CHECK_PTR(m_scene);
@@ -321,18 +327,18 @@ void CppArExample::createSurfaceWithElevation()
   m_scene->setBaseSurface(baseSurface);
 }
 
-// change the current scene and delete the old one.
+// Change the current scene and delete the old one.
 void CppArExample::changeScene(bool withLocationDataSource)
 {
   Q_CHECK_PTR(m_sceneView);
 
-  // update the location data source
+  // Update the location data source
   LocationDataSource* oldLocationDataSource = m_arcGISArView->locationDataSource();
   if (withLocationDataSource)
   {
     if (!oldLocationDataSource)
       m_arcGISArView->setLocationDataSource(new LocationDataSource(this));
-    // else do nothing
+    // Else do nothing
   }
   else
   {
@@ -340,12 +346,12 @@ void CppArExample::changeScene(bool withLocationDataSource)
     delete oldLocationDataSource;
   }
 
-  // set the new scene
+  // Set the new scene
   Scene* oldScene = m_sceneView->arcGISScene();
   m_sceneView->setArcGISScene(m_scene);
   delete oldScene;
 
-  // reset tracking
+  // Reset tracking
   if (m_arcGISArView->tracking())
     m_arcGISArView->resetTracking();
   else

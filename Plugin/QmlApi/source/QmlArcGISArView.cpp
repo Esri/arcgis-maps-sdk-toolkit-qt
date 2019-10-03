@@ -120,7 +120,8 @@ void QmlArcGISArView::setTransformationMatrixCameraController(QObject* tmcc)
   \brief Sets the initial transformation used to offset the originCamera.
 
   The initial transformation is based on an AR point determined via existing plane hit detection
-  from `screenPoint`. If an AR point cannot be determined, this method will return `false`.
+  from `screenPoint`. If an AR point cannot be determined, the initial transformation is the
+  identity matrix.
 
   \list
     \li \a x - The x-coordinate of the screen point to determine the `initialTransformation` from.
@@ -131,7 +132,8 @@ void QmlArcGISArView::setInitialTransformation(float x, float y)
 {
   // Use the `hitTestInternal` method to get the matrix of `screenPoint`.
   const std::array<double, 7> hitResult = hitTestInternal(x, y);
-  if (hitResult[3] == 0) // quaternionW shouldn't be 0
+  // quaternionW can never be 0, this indicates an error occurred
+  if (hitResult[3] == 0)
     return;
 
   emit initialTransformationChanged(0.0, 0.0, 0.0, 1.0, hitResult[4], hitResult[5], hitResult[6]);
@@ -139,7 +141,6 @@ void QmlArcGISArView::setInitialTransformation(float x, float y)
 
 /*!
   \qmlmethod Point ArcGISArView::screenToLocation(Point screenPoint)
-
   \brief Gets the location in the real world space corresponding to the screen point.
 */
 QObject* QmlArcGISArView::screenToLocation(QObject* screenPoint) const
@@ -246,11 +247,12 @@ void QmlArcGISArView::resetTrackingInternal()
 }
 
 /*!
+  \brief Verify than \a object is of the type expressed in \a className.
   \internal
 
-  As the QML API headers is not available, it's not possible to use the concret types in the QmlArcGISArView
-  API. Then, this API uses QObject* and this function is used to verify than the type of the objects passed
-  in the parameters are correct (using the Qt's meta-object).
+  This method exists because the QML API headers are not available, so it's not possible to use the concret
+  types in the QmlArcGISArView API. Then, this API uses QObject* and this function is used to verify than
+  the type of the objects passed in the parameters are correct (using the Qt's meta-object).
  */
 bool QmlArcGISArView::assertClassName(QObject* object, const QString& className) const
 {

@@ -23,9 +23,9 @@ namespace Toolkit {
 
 enum class SensorStatus
 {
-  Stopped,
-  Starting,
-  Started
+  Stopped = 0,
+  Starting = 1,
+  Started = 2
 };
 
 } // Toolkit namespace

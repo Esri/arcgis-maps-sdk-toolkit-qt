@@ -17,9 +17,10 @@
 #ifndef ARWRAPPER_H
 #define ARWRAPPER_H
 
+#include <QtGlobal>
 #include <QSize>
-#include <array>
 #include <QColor>
+#include <array>
 
 #if defined Q_OS_IOS
 #include "ArKitWrapper.h"

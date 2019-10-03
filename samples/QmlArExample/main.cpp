@@ -1,15 +1,18 @@
-
-// Copyright 2019 ESRI
-//
-// All rights reserved under the copyright laws of the United States
-// and applicable international laws, treaties, and conventions.
-//
-// You may freely redistribute and use this sample code, with or
-// without modification, provided you include the original copyright
-// notice and use restrictions.
-//
-// See the Sample code usage restrictions document for further information.
-//
+/*******************************************************************************
+ *  Copyright 2012-2019 Esri
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ ******************************************************************************/
 
 #include <QDebug>
 #include <QSettings>
@@ -51,10 +54,10 @@
 int main(int argc, char *argv[])
 {
   // There are some conflicts between the AR frameworks and the Qt's rendering thread.
-  // This lines of code enable the non-threaded render loops mode in Qt.
+  // This code enables the non-threaded render loop mode in Qt.
   // See SceneView::renderFrame documentation and Qt's documentation
   // https://doc.qt.io/qt-5/qtquick-visualcanvas-scenegraph.html#non-threaded-render-loops-basic-and-windows
-  // for more informati ons.
+  // for more information.
 #if defined(Q_OS_IOS) || defined(Q_OS_ANDROID)
   qputenv("QSG_RENDER_LOOP", "basic");
 #endif
@@ -98,14 +101,14 @@ int main(int argc, char *argv[])
   QString arcGISToolkitImportPath = QUOTE(ARCGIS_TOOLKIT_IMPORT_PATH);
 
 #if defined(LINUX_PLATFORM_REPLACEMENT)
-  // on some linux platforms the string 'linux' is replaced with 1
-  // fix the replacement paths which were created
+  // On some Linux platforms the string 'linux' is replaced with 1
+  // Fix the created replacement paths
   QString replaceString = QUOTE(LINUX_PLATFORM_REPLACEMENT);
   arcGISRuntimeImportPath = arcGISRuntimeImportPath.replace(replaceString, "linux", Qt::CaseSensitive);
   arcGISToolkitImportPath = arcGISToolkitImportPath.replace(replaceString, "linux", Qt::CaseSensitive);
 #endif
 
-  // Add the Runtime and Extras path
+  // Add the Runtime and Extras paths
   appEngine.addImportPath(arcGISRuntimeImportPath);
   // Add the Toolkit path
   appEngine.addImportPath(arcGISToolkitImportPath);

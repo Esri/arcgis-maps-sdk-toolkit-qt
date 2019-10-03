@@ -1,15 +1,18 @@
-#-------------------------------------------------
-#  Copyright 2019 ESRI
+###############################################################################
+# Copyright 2012-2019 Esri
 #
-#  All rights reserved under the copyright laws of the United States
-#  and applicable international laws, treaties, and conventions.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-#  You may freely redistribute and use this sample code, with or
-#  without modification, provided you include the original copyright
-#  notice and use restrictions.
+# http://www.apache.org/licenses/LICENSE-2.0
 #
-#  See the Sample code usage restrictions document for further information.
-#-------------------------------------------------
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+###############################################################################
 
 # This configuration file is an internal file.
 # To use the AR features of the ArcGIS Runtime Toolkit for Qt,
@@ -21,14 +24,13 @@ AR_COMMON_INCLUDE_PATH = $$AR_COMMON_PATH/include
 AR_COMMON_SOURCE_PATH = $$AR_COMMON_PATH/source
 
 #-------------------------------------------------
-# plateform independant configuration
+# platform independent configuration
 
 HEADERS += \
     $$AR_COMMON_INCLUDE_PATH/ArcGISArViewInterface.h \
     $$AR_COMMON_INCLUDE_PATH/ArcGISArViewRenderer.h \
     $$AR_COMMON_INCLUDE_PATH/ArWrapper.h \
     $$AR_COMMON_INCLUDE_PATH/SensorStatus.h \
-    $$AR_COMMON_INCLUDE_PATH/ArKitUsage.h \
     $$AR_COMMON_INCLUDE_PATH/LocationDataSource.h
 
 SOURCES += \
@@ -36,7 +38,6 @@ SOURCES += \
     $$AR_COMMON_SOURCE_PATH/ArcGISArViewRenderer.cpp \
     $$AR_COMMON_SOURCE_PATH/ArWrapper.cpp \
     $$AR_COMMON_SOURCE_PATH/SensorStatus.cpp \
-    $$AR_COMMON_SOURCE_PATH/ArKitUsage.cpp \
     $$AR_COMMON_SOURCE_PATH/LocationDataSource.cpp
 
 INCLUDEPATH += $$AR_COMMON_INCLUDE_PATH
@@ -94,7 +95,6 @@ android {
     # Extra files from the ARCore framework (Apache 2.0 licence)
     AR_CORE_PATH = $$AR_COMMON_PATH/3rdparty/arcore
     AR_CORE_INCLUDE_PATH = $$AR_CORE_PATH/include
-    AR_CORE_LIBS_PATH = $$AR_CORE_PATH/libs
     AR_CORE_GRADLE_PATH = $$AR_CORE_PATH/gradle
 
     HEADERS += \
