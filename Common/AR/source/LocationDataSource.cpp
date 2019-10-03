@@ -23,9 +23,9 @@
   \ingroup ArcGISQtAr
   \inmodule ArcGISQtToolkit
   \since Esri::ArcGISRuntime 100.6
-  \brief Updates the location using the positionning device.
+  \brief Updates the location using the positioning device.
 
-  LocationDataSource uses the Qt's class QGeoPositionInfoSource to get the location and the
+  LocationDataSource uses the Qt class QGeoPositionInfoSource to get the location and the
   heading of the device, using the GPS sensor.
 
   LocationDataSource can be started using the function \l start and stopped using the function

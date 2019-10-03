@@ -1,13 +1,18 @@
-// Copyright 2019 ESRI
-//
-// All rights reserved under the copyright laws of the United States
-// and applicable international laws, treaties, and conventions.
-//
-// You may freely redistribute and use this sample code, with or
-// without modification, provided you include the original copyright
-// notice and use restrictions.
-//
-// See the Sample code usage restrictions document for further information.
+/*******************************************************************************
+ *  Copyright 2012-2019 Esri
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ ******************************************************************************/
 
 import QtQuick 2.12
 import QtQuick.Window 2.12
@@ -29,26 +34,26 @@ ArcGISArViewInternal {
     onRenderFrame: root.sceneView.renderFrame();
 
     // doc todo
-    property var identityTransformationMatrix: TransformationMatrix.createIdentityMatrix()
-    property var initialTransformationMatrix: identityTransformationMatrix
+    property TransformationMatrix identityTransformationMatrix: TransformationMatrix.createIdentityMatrix()
+    property TransformationMatrix initialTransformationMatrix: identityTransformationMatrix
 
     onInitialTransformationChanged: {
-        // Set the `initialTransformation` as the AGSTransformationMatrix.identity - hit test matrix.
-        var hitMatrix = TransformationMatrix.createWithQuaternionAndTranslation(
+        // Set the `initialTransformation` as the TransformationMatrix.identity - hit test matrix.
+        const hitMatrix = TransformationMatrix.createWithQuaternionAndTranslation(
                     quaternionX, quaternionY, quaternionZ, quaternionW,
                     translationX, translationY, translationZ);
 
         initialTransformationMatrix = identityTransformationMatrix.subtractTransformation(hitMatrix);
     }
 
-    // it's not possible to create the TransformationMatrix object diretly in C++. This function
+    // it's not possible to create the TransformationMatrix object directly in C++. This function
     // is used to create the TM object and assign it to the TMCC.
     onTransformationMatrixChanged: {
-        var matrix = TransformationMatrix.createWithQuaternionAndTranslation(
+        const matrix = TransformationMatrix.createWithQuaternionAndTranslation(
                     quaternionX, quaternionY, quaternionZ, quaternionW,
                     translationX, translationY, translationZ);
 
-        var finalMatrix = initialTransformationMatrix.addTransformation(matrix);
+        const finalMatrix = initialTransformationMatrix.addTransformation(matrix);
         tmcc.transformationMatrix = finalMatrix;
     }
 
@@ -83,16 +88,16 @@ ArcGISArViewInternal {
 
     // location update
     onLocationChanged: {
-        var location = ArcGISRuntimeEnvironment.createObject("Point", { y: latitude, x: longitude, z: altitude });
+        const location = ArcGISRuntimeEnvironment.createObject("Point", { y: latitude, x: longitude, z: altitude });
         if (tmcc.originCamera === null) {
             // create a new origin camera
-            var camera = ArcGISRuntimeEnvironment.createObject(
+            const camera = ArcGISRuntimeEnvironment.createObject(
                         "Camera", { location: location, heading: 0.0, pitch: 90.0, roll: 0.0 });
             tmcc.originCamera = camera;
         } else {
             // update the origin camera
-            var oldCamera = tmcc.originCamera;
-            var newCamera = ArcGISRuntimeEnvironment.createObject(
+            const oldCamera = tmcc.originCamera;
+            const newCamera = ArcGISRuntimeEnvironment.createObject(
                         "Camera", { location: location, heading: oldCamera.heading, pitch: 90.0, roll: 0.0 });
             tmcc.originCamera = newCamera;
         }
@@ -101,14 +106,14 @@ ArcGISArViewInternal {
     onHeadingChanged: {
         if (tmcc.originCamera === null) {
             // create a new origin camera
-            var location = ArcGISRuntimeEnvironment.createObject("Point", { x: 0.0, y: 0.0, z: 600.0 });
-            var camera = ArcGISRuntimeEnvironment.createObject(
+            const location = ArcGISRuntimeEnvironment.createObject("Point", { x: 0.0, y: 0.0, z: 600.0 });
+            const camera = ArcGISRuntimeEnvironment.createObject(
                         "Camera", { location: location, heading: heading, pitch: 90.0, roll: 0.0 });
             tmcc.originCamera = camera;
         } else {
             // update the origin camera
-            var oldCamera = tmcc.originCamera;
-            var newCamera = ArcGISRuntimeEnvironment.createObject(
+            const oldCamera = tmcc.originCamera;
+            const newCamera = ArcGISRuntimeEnvironment.createObject(
                         "Camera", { location: oldCamera.location, heading: heading, pitch: 90.0, roll: 0.0 });
             tmcc.originCamera = newCamera;
         }
@@ -119,19 +124,19 @@ ArcGISArViewInternal {
                               quaternionX, quaternionY, quaternionZ, quaternionW,
                               translationX, translationY, translationZ)
     {
-        var hitMatrix = TransformationMatrix.createWithQuaternionAndTranslation(
+        const hitMatrix = TransformationMatrix.createWithQuaternionAndTranslation(
                     quaternionX, quaternionY, quaternionZ, quaternionW,
                     translationX, translationY, translationZ);
 
-        var currentViewpointMatrix = currentViewpointCamera.transformationMatrix;
-        var matrix = currentViewpointMatrix.addTransformation(hitMatrix);
-        var camera = ArcGISRuntimeEnvironment.createObject("Camera", { transformationMatrix: matrix });
+        const currentViewpointMatrix = currentViewpointCamera.transformationMatrix;
+        const matrix = currentViewpointMatrix.addTransformation(hitMatrix);
+        const camera = ArcGISRuntimeEnvironment.createObject("Camera", { transformationMatrix: matrix });
         return camera.location;
     }
 
     // Resets the device tracking and related properties.
     onResetTracking: {
-        var camera = ArcGISRuntimeEnvironment.createObject("Camera");
+        const camera = ArcGISRuntimeEnvironment.createObject("Camera");
         tmcc.originCamera = camera;
 
         initialTransformationMatrix = identityTransformationMatrix;

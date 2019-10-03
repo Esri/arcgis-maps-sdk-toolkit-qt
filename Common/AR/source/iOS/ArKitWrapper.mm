@@ -66,8 +66,8 @@ using namespace Esri::ArcGISRuntime::Toolkit::Internal;
 @property (nonatomic) size_t widthCbCr;
 @property (nonatomic) size_t heightY;
 @property (nonatomic) size_t heightCbCr;
-@property (nonatomic) size_t sizeY; // used to determines if the raw array need to be reallocated.
-@property (nonatomic) size_t sizeCbCr; // used to determines if the raw array need to be reallocated.
+@property (nonatomic) size_t sizeY; // used to determine if the raw array need to be reallocated.
+@property (nonatomic) size_t sizeCbCr; // used to determine if the raw array need to be reallocated.
 @property (nonatomic) bool textureDataUsed;
 @property (nonatomic) NSTimeInterval timestamp;
 
@@ -386,6 +386,7 @@ QColor ArKitWrapper::pointCloudColor() const
 {
   if (m_arKitPointCloudRenderer)
     return m_arKitPointCloudRenderer->pointCloudColor();
+
   return QColor();
 }
 
@@ -411,6 +412,7 @@ int ArKitWrapper::pointCloudSize() const
 {
   if (m_arKitPointCloudRenderer)
     return m_arKitPointCloudRenderer->pointCloudSize();
+
   return -1;
 }
 

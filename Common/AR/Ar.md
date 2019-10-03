@@ -29,6 +29,8 @@ and synchronization with the Runtime SDK's `SceneView`. The `ArcGISArView` is re
 managing an `ARKit` or `ARCore` session. `ArcGISArView` uses a `LocationDataSource` for getting an initial GPS location
 and when continuous GPS tracking is required.
 
+The minimal version of the ArcGIS Runtime SDK for Qt is 100.6.
+
 ### Features of the AR component
 
 - Allows display of the live camera feed
@@ -47,9 +49,9 @@ To create an application with the `ARKit` support:
 1. Download the sources of the [ArcGIS Runtime API Toolkit](https://github.com/Esri/arcgis-runtime-toolkit-qt).
 Set the `AR_TOOLKIT_SOURCE_PATH` variable to the path of the toolkit sources.
 
-2. Install the ArcGIS Runtime SDK for Qt version 100.6
+2. Install the ArcGIS Runtime SDK for Qt.
 
-3. In Qt Creator, create a new project "ArcGIS Runtime 100.6 Qt Quick C++ app" or "ArcGIS Runtime 100.6 Qt Quick QML app".
+3. In Qt Creator, create a new project "ArcGIS Runtime 100.x Qt Quick C++ app" or "ArcGIS Runtime 100.x Qt Quick QML app".
 
 4. In the project file (.pro), include the .pri file corresponding to the API used for the project:
 
@@ -81,12 +83,12 @@ Installation details of `ARCore` are described at
 
 To create an application with the `ARCore` support:
 
-1. Download the sources of the [ArcGIS Runtime API Toolkit: https://github.com/Esri/arcgis-runtime-toolkit-qt.
+1. Download the sources of the [ArcGIS Runtime API Toolkit](https://github.com/Esri/arcgis-runtime-toolkit-qt).
 The `AR_TOOLKIT_SOURCE_PATH` variable refers to the toolkit sources path.
 
-2. Install the ArcGIS Runtime SDK for Qt version 100.6.
+2. Install the ArcGIS Runtime SDK for Qt version.
 
-3. In Qt Creator, create a new project "ArcGIS Runtime 100.6 Qt Quick C++ app" or "ArcGIS Runtime 100.6 Qt Quick QML app".
+3. In Qt Creator, create a new project "ArcGIS Runtime 100.x Qt Quick C++ app" or "ArcGIS Runtime 100.x Qt Quick QML app".
 
 4. In the project file (.pro), include the `.pri` file corresponding to the API used by the project:
 
@@ -123,7 +125,7 @@ Using the C++ API to explore a scene in AR:
 // create the AR view
 auto arcGISArView = new ArcGISArView(this);
 auto sceneView = new SceneQuickView(this);
-arcGISArView->setSceneView(ceneView);
+arcGISArView->setSceneView(sceneView);
 
 // Create a simple scene with a transparency background.
 auto scene = new Scene(BasemapType::ImageryWithLabels, this);

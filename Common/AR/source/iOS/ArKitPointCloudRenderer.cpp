@@ -68,9 +68,9 @@ void ArKitPointCloudRenderer::render()
 {
   Q_CHECK_PTR(m_arKitWrapper);
 
-  std::vector<float> points = m_arKitWrapper->pointCloudData();
+  const std::vector<float> points = m_arKitWrapper->pointCloudData();
   if (points.empty())
-      return;
+    return;
 
   m_program->bind();
 

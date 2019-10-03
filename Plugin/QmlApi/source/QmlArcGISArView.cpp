@@ -132,7 +132,8 @@ void QmlArcGISArView::setInitialTransformation(float x, float y)
 {
   // Use the `hitTestInternal` method to get the matrix of `screenPoint`.
   const std::array<double, 7> hitResult = hitTestInternal(x, y);
-  if (hitResult[3] == 0) // quaternionW shouldn't be 0
+  // quaternionW can never be 0, this indicates an error occurred
+  if (hitResult[3] == 0)
     return;
 
   emit initialTransformationChanged(0.0, 0.0, 0.0, 1.0, hitResult[4], hitResult[5], hitResult[6]);

@@ -362,7 +362,8 @@ void ArCoreWrapper::udpateArCamera()
     // get the screen orientation
     const Qt::ScreenOrientations orientation = QGuiApplication::screens().front()->orientation();
 
-    switch (orientation) {
+    switch (orientation)
+    {
       case Qt::PortraitOrientation:
         ArFrame_transformCoordinates2d(
               m_arSession, m_arFrame, AR_COORDINATES_2D_OPENGL_NORMALIZED_DEVICE_COORDINATES,

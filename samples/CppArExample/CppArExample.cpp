@@ -1,13 +1,18 @@
-// Copyright 2019 ESRI
-//
-// All rights reserved under the copyright laws of the United States
-// and applicable international laws, treaties, and conventions.
-//
-// You may freely redistribute and use this sample code, with or
-// without modification, provided you include the original copyright
-// notice and use restrictions.
-//
-// See the Sample code usage restrictions document for further information.
+/*******************************************************************************
+ *  Copyright 2012-2019 Esri
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ ******************************************************************************/
 
 #include "CppArExample.h"
 
@@ -163,10 +168,10 @@ void CppArExample::createFullScaleTestScene()
   {
     for (int j = -30; j <= 30; ++j)
     {
-      createSymbol(0.00001 * i, 0.00001 * j, Qt::blue);
+      createSymbol(0.00001 * i, 0.00001 * j, QColor(Qt::blue));
     }
   }
-  createSymbol(0.0, 0.0, Qt::green);
+  createSymbol(0.0, 0.0, QColor(Qt::green));
 
   // Set the location data source so we use our GPS location as the originCamera.
   m_arcGISArView->setOriginCamera(Camera());
@@ -294,10 +299,10 @@ void CppArExample::createTabletopTestScene()
 
   for (int i = -5; i <= 10; ++i)
   {
-    createSymbol(0.0, 0.000001 * i, 0.1, Qt::blue);
-    createSymbol(0.000001 * i, 0.0, 0.1, Qt::red);
+    createSymbol(0.0, 0.000001 * i, 0.1, QColor(Qt::blue));
+    createSymbol(0.000001 * i, 0.0, 0.1, QColor(Qt::red));
   }
-  createSymbol(0.0, 0.0, 0.11, Qt::green);
+  createSymbol(0.0, 0.0, 0.11, QColor(Qt::green));
 
   m_arcGISArView->setOriginCamera(Camera(0.0, 0.0, 0.0, 0.0, 90.0, 0.0));
   m_arcGISArView->setTranslationFactor(10.0);

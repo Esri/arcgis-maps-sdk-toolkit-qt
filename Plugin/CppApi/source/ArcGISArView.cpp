@@ -48,7 +48,7 @@ ArcGISArView::ArcGISArView(QQuickItem* parent):
 
   \list
   \li \a renderVideoFeed - Sets to \c true to render the camera frames in the background.
-  \li \a tryUsingArKit - Sets to \c true to use the AR framework, depending of the plateform (ARKit
+  \li \a tryUsingArKit - Sets to \c true to use the AR framework, depending of the platform (ARKit
   in Android and ARKit in iOS).
   \li \a parent - optional.
   \endlist
@@ -135,7 +135,8 @@ void ArcGISArView::setInitialTransformation(const QPoint& screenPoint)
 {
   // Use the `hitTestInternal` method to get the matrix of `screenPoint`.
   const std::array<double, 7> hitResult = hitTestInternal(screenPoint.x(), screenPoint.y());
-  if (hitResult[3] == 0) // quaternionW shouldn't be 0
+  // quaternionW can never be 0, this indicates an error occurred
+  if (hitResult[3] == 0)
     return;
 
   // Set the `initialTransformation` as the AGSTransformationMatrix.identity - hit test matrix.
@@ -201,7 +202,8 @@ void ArcGISArView::setFieldOfViewInternal(double xFocalLength, double yFocalLeng
   const Qt::ScreenOrientations orientation = window()->screen()->orientation();
   DeviceOrientation deviceOrientation = DeviceOrientation::Portrait;
 
-  switch (orientation) {
+  switch (orientation)
+  {
     case Qt::PortraitOrientation:
       deviceOrientation = DeviceOrientation::Portrait;
       break;

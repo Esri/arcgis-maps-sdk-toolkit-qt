@@ -19,7 +19,7 @@
 #include <QOpenGLFramebufferObjectFormat>
 #include <QQuickWindow>
 
-using namespace Esri::ArcGISRuntime::Toolkit;
+using namespace Esri::ArcGISRuntime::Toolkit::Internal;
 
 /*!
   \internal
@@ -30,7 +30,11 @@ using namespace Esri::ArcGISRuntime::Toolkit;
 /*!
   \internal
  */
-ArcGISArViewRenderer::ArcGISArViewRenderer() = default;
+ArcGISArViewRenderer::ArcGISArViewRenderer(Internal::ArWrapper* arWrapper) :
+  m_arWrapper(arWrapper)
+{
+  Q_CHECK_PTR(arWrapper);
+}
 
 /*!
   \internal
@@ -73,13 +77,4 @@ void ArcGISArViewRenderer::render()
 
   if (m_window)
     m_window->resetOpenGLState();
-}
-
-/*!
-  \internal
- */
-void ArcGISArViewRenderer::setArWrapper(Internal::ArWrapper* arWrapper)
-{
-  Q_CHECK_PTR(arWrapper);
-  m_arWrapper = arWrapper;
 }
