@@ -31,6 +31,7 @@ HEADERS += \
     $$AR_COMMON_INCLUDE_PATH/ArcGISArViewRenderer.h \
     $$AR_COMMON_INCLUDE_PATH/ArWrapper.h \
     $$AR_COMMON_INCLUDE_PATH/SensorStatus.h \
+    $$AR_COMMON_INCLUDE_PATH/LocationTrackingMode.h \
     $$AR_COMMON_INCLUDE_PATH/LocationDataSource.h
 
 SOURCES += \

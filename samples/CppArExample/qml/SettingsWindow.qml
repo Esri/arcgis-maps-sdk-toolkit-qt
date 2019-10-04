@@ -86,6 +86,10 @@ Item {
                             text: "Stop tracking"
                             onClicked: stopTrackingClicked();
                         }
+                        ComboBox {
+                            model: [ "Ignore Tracking", "Initial Tracking", "Continuous Tracking" ]
+                            onCurrentIndexChanged: console.debug(currentIndex);
+                        }
                         Button {
                             text: "Reset"
                             onClicked: resetTrackingClicked();
