@@ -42,6 +42,7 @@ ArcGISArViewInternal {
                     quaternionX, quaternionY, quaternionZ, quaternionW,
                     translationX, translationY, translationZ);
 
+        const identityTransformationMatrix = TransformationMatrix.createIdentityMatrix();
         initialTransformationMatrix = identityTransformationMatrix.subtractTransformation(hitMatrix);
     }
 

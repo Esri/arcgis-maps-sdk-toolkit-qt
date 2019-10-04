@@ -16,6 +16,7 @@
 
 import QtQuick 2.6
 import Esri.ArcGISRuntime 100.6
+import Esri.ArcGISArToolkit 1.0
 
 // Creates a tabletop test scene.
 // Mode: Tabletop AR
