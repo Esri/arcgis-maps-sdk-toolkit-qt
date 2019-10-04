@@ -17,6 +17,7 @@
 #include "ArcGISArViewRenderer.h"
 #include "ArWrapper.h"
 #include <QOpenGLFramebufferObjectFormat>
+#include <QOpenGLContext>
 #include <QQuickWindow>
 
 using namespace Esri::ArcGISRuntime::Toolkit::Internal;
