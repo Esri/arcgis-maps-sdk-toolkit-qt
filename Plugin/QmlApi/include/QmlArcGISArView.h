@@ -88,7 +88,6 @@ private:
   QObject* m_originCamera = nullptr;
   QObject* m_sceneView = nullptr;
   mutable QObject* m_tmcc = nullptr;
-  mutable QObject* m_qmlWrapper = nullptr;
 };
 
 } // Toolkit namespace

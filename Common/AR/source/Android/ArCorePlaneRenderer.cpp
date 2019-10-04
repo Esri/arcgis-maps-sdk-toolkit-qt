@@ -29,6 +29,11 @@ ArCorePlaneRenderer::~ArCorePlaneRenderer() = default;
 
 void ArCorePlaneRenderer::initGL()
 {
+  // This function must to run with a valid OpenGL context.
+  Q_CHECK_PTR(QOpenGLContext::currentContext());
+
+  initializeOpenGLFunctions();
+
   m_program.reset(new QOpenGLShaderProgram());
 
   m_program->addCacheableShaderFromSourceCode(QOpenGLShader::Vertex,
@@ -61,11 +66,19 @@ void ArCorePlaneRenderer::initGL()
 
 void ArCorePlaneRenderer::render()
 {
-  Q_CHECK_PTR(m_arCoreWrapper);
+  // This function must to run with a valid OpenGL context.
+  Q_CHECK_PTR(QOpenGLContext::currentContext());
 
+  // Init the program if necessary.
+  if (!m_program)
+    initGL();
+
+  // Render the detected planes.
+  Q_CHECK_PTR(m_program);
   m_program->bind();
 
   int32_t size = 0;
+  Q_CHECK_PTR(m_arCoreWrapper);
   m_arCoreWrapper->planeListData(size);
   if (size == 0)
   {

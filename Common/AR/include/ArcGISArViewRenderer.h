@@ -31,7 +31,7 @@ class ArWrapper;
 class ArcGISArViewRenderer : public QQuickFramebufferObject::Renderer
 {
 public:
-  ArcGISArViewRenderer(Internal::ArWrapper* arWrapper);
+  ArcGISArViewRenderer(Internal::ArWrapper* arWrapper = nullptr);
   ~ArcGISArViewRenderer() override;
 
   // override methods from QQuickFramebufferObject::Renderer

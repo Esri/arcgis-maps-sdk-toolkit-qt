@@ -131,6 +131,12 @@ private:
   // it should call this method with user_requested_install = 1.
   static int32_t m_installRequested;
 
+  // Keep the session status.
+  bool m_sessionIsPaused = true;
+
+  // Texture id used to render the frames.
+  GLuint m_textureId = 0;
+
   bool m_uvsInitialized = false;
   static constexpr int kNumVertices = 4;
 

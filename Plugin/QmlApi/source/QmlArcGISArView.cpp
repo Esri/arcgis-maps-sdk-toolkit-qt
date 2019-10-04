@@ -168,16 +168,6 @@ QObject* QmlArcGISArView::screenToLocation(QObject* screenPoint) const
 
   // calculates the matrix transformations and creates the QmlPoint location.
   QVariant location;
-  QMetaObject::invokeMethod(m_qmlWrapper, "screenToLocation", Qt::DirectConnection,
-                            Q_RETURN_ARG(QVariant, location),
-                            Q_ARG(QVariant, QVariant::fromValue(currentViewpointCamera)),
-                            Q_ARG(QVariant, hitResult[0]),
-                            Q_ARG(QVariant, hitResult[1]),
-                            Q_ARG(QVariant, hitResult[2]),
-                            Q_ARG(QVariant, hitResult[3]),
-                            Q_ARG(QVariant, hitResult[4]),
-                            Q_ARG(QVariant, hitResult[5]),
-                            Q_ARG(QVariant, hitResult[6]));
   return location.value<QObject*>();
 }
 

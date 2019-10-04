@@ -34,8 +34,7 @@ ArcGISArViewInternal {
     onRenderFrame: root.sceneView.renderFrame();
 
     // doc todo
-    property TransformationMatrix identityTransformationMatrix: TransformationMatrix.createIdentityMatrix()
-    property TransformationMatrix initialTransformationMatrix: identityTransformationMatrix
+    property TransformationMatrix initialTransformationMatrix: null
 
     onInitialTransformationChanged: {
         // Set the `initialTransformation` as the TransformationMatrix.identity - hit test matrix.
@@ -52,6 +51,9 @@ ArcGISArViewInternal {
         const matrix = TransformationMatrix.createWithQuaternionAndTranslation(
                     quaternionX, quaternionY, quaternionZ, quaternionW,
                     translationX, translationY, translationZ);
+
+        if (!initialTransformationMatrix)
+            initialTransformationMatrix = TransformationMatrix.createIdentityMatrix();
 
         const finalMatrix = initialTransformationMatrix.addTransformation(matrix);
         tmcc.transformationMatrix = finalMatrix;
@@ -139,8 +141,7 @@ ArcGISArViewInternal {
         const camera = ArcGISRuntimeEnvironment.createObject("Camera");
         tmcc.originCamera = camera;
 
-        initialTransformationMatrix = identityTransformationMatrix;
-
-        tmcc.transformationMatrix = initialTransformationMatrix;
+        initialTransformationMatrix = TransformationMatrix.createIdentityMatrix();
+        tmcc.transformationMatrix = TransformationMatrix.createIdentityMatrix();
     }
 }

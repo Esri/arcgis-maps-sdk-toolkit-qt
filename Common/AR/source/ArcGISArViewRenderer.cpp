@@ -65,6 +65,9 @@ void ArcGISArViewRenderer::synchronize(QQuickFramebufferObject* item)
  */
 void ArcGISArViewRenderer::render()
 {
+  // This function must to run with a valid OpenGL context.
+  Q_CHECK_PTR(QOpenGLContext::currentContext());
+
   Q_CHECK_PTR(m_arWrapper);
 
   if (!m_isInitialized)

@@ -55,14 +55,16 @@ ArCoreFrameRenderer::ArCoreFrameRenderer(ArCoreWrapper* arCoreWrapper) :
 
 ArCoreFrameRenderer::~ArCoreFrameRenderer() = default;
 
-
 /*!
   \internal
   this function run in the GL thread.
  */
 void ArCoreFrameRenderer::initGL()
 {
-  Q_CHECK_PTR(m_arCoreWrapper);
+  // This function must to run with a valid OpenGL context.
+  Q_CHECK_PTR(QOpenGLContext::currentContext());
+
+  initializeOpenGLFunctions();
 
   m_program.reset(new QOpenGLShaderProgram());
   m_program->addCacheableShaderFromSourceCode(QOpenGLShader::Vertex,
@@ -97,15 +99,25 @@ void ArCoreFrameRenderer::initGL()
   m_program->release();
 
   // set the id to AR core then the camera frames will be copied in the texture.
+  Q_CHECK_PTR(m_arCoreWrapper);
   m_arCoreWrapper->setTextureId(m_textureId);
 }
 
-// this function run in the GL thread.
+/*!
+  \internal
+  this function run in the GL thread.
+ */
 void ArCoreFrameRenderer::render()
 {
-  Q_CHECK_PTR(m_arCoreWrapper);
-  Q_CHECK_PTR(m_program);
+  // This function must to run with a valid OpenGL context.
+  Q_CHECK_PTR(QOpenGLContext::currentContext());
 
+  // Init the program if necessary.
+  if (!m_program)
+    initGL();
+
+  // Render the frame as texture.
+  Q_CHECK_PTR(m_program);
   m_program->bind();
 
   glClear(GL_DEPTH_BUFFER_BIT);
@@ -119,6 +131,7 @@ void ArCoreFrameRenderer::render()
   glVertexAttribPointer(m_attributeVertices, 2, GL_FLOAT, GL_FALSE, 0, kVerticesPortrait);
 
   glEnableVertexAttribArray(m_attributeUvs);
+  Q_CHECK_PTR(m_arCoreWrapper);
   glVertexAttribPointer(m_attributeUvs, 2, GL_FLOAT, GL_FALSE, 0, m_arCoreWrapper->transformedUvs().data());
 
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);

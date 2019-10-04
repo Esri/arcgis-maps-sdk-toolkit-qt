@@ -37,7 +37,6 @@ SOURCES += \
     $$AR_COMMON_SOURCE_PATH/ArcGISArViewInterface.cpp \
     $$AR_COMMON_SOURCE_PATH/ArcGISArViewRenderer.cpp \
     $$AR_COMMON_SOURCE_PATH/ArWrapper.cpp \
-    $$AR_COMMON_SOURCE_PATH/SensorStatus.cpp \
     $$AR_COMMON_SOURCE_PATH/LocationDataSource.cpp
 
 INCLUDEPATH += $$AR_COMMON_INCLUDE_PATH
@@ -95,6 +94,7 @@ android {
     # Extra files from the ARCore framework (Apache 2.0 licence)
     AR_CORE_PATH = $$AR_COMMON_PATH/3rdparty/arcore
     AR_CORE_INCLUDE_PATH = $$AR_CORE_PATH/include
+    AR_CORE_LIBS_PATH = $$AR_CORE_PATH/libs
     AR_CORE_GRADLE_PATH = $$AR_CORE_PATH/gradle
 
     HEADERS += \

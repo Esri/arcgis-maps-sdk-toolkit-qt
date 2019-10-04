@@ -124,6 +124,7 @@ void ArCoreWrapper::startTracking()
     return;
 
   ArStatus status = ArSession_resume(m_arSession);
+  m_sessionIsPaused = false;
   if (status != AR_SUCCESS)
   {
     emit m_arcGISArView->errorOccurred("ARCore failure", "Failed to resume the AR session.");
@@ -142,6 +143,7 @@ void ArCoreWrapper::stopTracking()
     return;
 
   ArStatus status = ArSession_pause(m_arSession);
+  m_sessionIsPaused = true;
   if (status != AR_SUCCESS)
   {
     emit m_arcGISArView->errorOccurred("ARCore failure", "Failed to pause the AR session.");
@@ -184,6 +186,7 @@ void ArCoreWrapper::setTextureId(GLuint textureId)
     return;
 
   // sets the texture id created by OpenGL context
+  m_textureId = textureId;
   ArSession_setCameraTextureName(m_arSession, textureId);
 }
 
@@ -193,6 +196,9 @@ void ArCoreWrapper::setTextureId(GLuint textureId)
  */
 void ArCoreWrapper::initGL()
 {
+  // This function must to run with a valid OpenGL context.
+  Q_CHECK_PTR(QOpenGLContext::currentContext());
+
   if (m_arCoreFrameRenderer)
     m_arCoreFrameRenderer->initGL();
 
@@ -209,8 +215,17 @@ void ArCoreWrapper::initGL()
  */
 void ArCoreWrapper::render()
 {
+  // This function must to run with a valid OpenGL context.
+  Q_CHECK_PTR(QOpenGLContext::currentContext());
+
+  // Checks if the texture is created and the session is not paused.
+  if (m_textureId == 0 || m_sessionIsPaused)
+    return;
+
+  // Update the camera parameters and get the frame texture.
   udpateArCamera();
 
+  // Render everything.
   if (m_arCoreFrameRenderer)
     m_arCoreFrameRenderer->render();
 
@@ -324,6 +339,9 @@ void ArCoreWrapper::createArSession()
  */
 void ArCoreWrapper::udpateArCamera()
 {
+  if (m_sessionIsPaused)
+    return;
+
   if (!m_arSession)
     return;
 
@@ -468,10 +486,7 @@ void ArCoreWrapper::setRenderVideoFeed(bool renderVideoFeed)
   if (renderVideoFeed)
   {
     if (!m_arCoreFrameRenderer)
-    {
       m_arCoreFrameRenderer.reset(new ArCoreFrameRenderer(this));
-      m_arCoreFrameRenderer->initGL();
-    }
   }
   else
     m_arCoreFrameRenderer.reset();
@@ -668,10 +683,7 @@ void ArCoreWrapper::setPointCloudColor(const QColor& pointCloudColor)
   if (pointCloudColor.isValid())
   {
     if (!m_arCorePointCloudRenderer)
-    {
       m_arCorePointCloudRenderer.reset(new ArCorePointCloudRenderer(this));
-      m_arCorePointCloudRenderer->initGL();
-    }
 
     m_arCorePointCloudRenderer->setPointCloudColor(pointCloudColor);
   }
@@ -700,10 +712,7 @@ void ArCoreWrapper::setPointCloudSize(int pointCloudSize)
   if (pointCloudSize > 0)
   {
     if (!m_arCorePointCloudRenderer)
-    {
       m_arCorePointCloudRenderer.reset(new ArCorePointCloudRenderer(this));
-      m_arCorePointCloudRenderer->initGL();
-    }
 
     m_arCorePointCloudRenderer->setPointCloudSize(pointCloudSize);
   }
@@ -720,6 +729,7 @@ QColor ArCoreWrapper::planeColor() const
 {
   if (m_arCorePlaneRenderer)
     return m_arCorePlaneRenderer->planeColor();
+
   return QColor();
 }
 
@@ -731,10 +741,7 @@ void ArCoreWrapper::setPlaneColor(const QColor& planeColor)
   if (planeColor.isValid())
   {
     if (!m_arCorePlaneRenderer)
-    {
       m_arCorePlaneRenderer.reset(new ArCorePlaneRenderer(this));
-      m_arCorePlaneRenderer->initGL();
-    }
 
     m_arCorePlaneRenderer->setPlaneColor(planeColor);
   }

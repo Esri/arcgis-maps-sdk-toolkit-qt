@@ -105,10 +105,17 @@ include($$AR_TOOLKIT_SOURCE_PATH/ArQmlApi.pri) // for QML API
 6. In the Android manifest file `AndroidManifest.xml`, add the following entries:
 
 ```
-<meta-data android:name="com.google.ar.core" android:value="optional" />
+<meta-data android:name="com.google.ar.core" android:value="required" />
 ```
 
-Verify that the permission for camera is present:
+The value can be `optional` or `required`. An AR optional app can be installed and run on devices
+that don't support `ARCore` and the `Google Play Services for AR` is not automatically installed
+with the app. An AR required app is available only on devices that support ARCore and the
+`Google Play Services for AR` is automatically installed.
+
+For details, see [Enable ARCore documentation](https://developers.google.com/ar/develop/java/enable-arcore#manifest).
+
+7. Verify that the permission for camera is present:
 
 ```
 <uses-permission android:name="android.permission.CAMERA"/>

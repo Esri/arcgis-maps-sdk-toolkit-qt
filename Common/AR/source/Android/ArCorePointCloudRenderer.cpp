@@ -48,6 +48,11 @@ ArCorePointCloudRenderer::~ArCorePointCloudRenderer() = default;
   */
 void ArCorePointCloudRenderer::initGL()
 {
+  // This function must to run with a valid OpenGL context.
+  Q_CHECK_PTR(QOpenGLContext::currentContext());
+
+  initializeOpenGLFunctions();
+
   m_program.reset(new QOpenGLShaderProgram());
   m_program->addCacheableShaderFromSourceCode(QOpenGLShader::Vertex,
                                               "uniform mat4 u_modelViewProjection;"
@@ -78,17 +83,24 @@ void ArCorePointCloudRenderer::initGL()
 
   m_program->release();
 }
+
 /*!
   \internal
   This function run in the GL thread.
   */
 void ArCorePointCloudRenderer::render()
 {
-  Q_CHECK_PTR(m_arCoreWrapper);
+  // This function must to run with a valid OpenGL context.
+  Q_CHECK_PTR(QOpenGLContext::currentContext());
 
+  // Init the program if necessary.
+  if (!m_program)
+    initGL();
 
+  // Render the detected point cloud.
   QMatrix4x4 modelViewProjection;
   std::vector<float> pointCloud;
+  Q_CHECK_PTR(m_arCoreWrapper);
   m_arCoreWrapper->pointCloudData(modelViewProjection, pointCloud);
   if (pointCloud.empty())
   {
@@ -96,6 +108,7 @@ void ArCorePointCloudRenderer::render()
     return;
   }
 
+  Q_CHECK_PTR(m_program);
   m_program->bind();
 
   glUniformMatrix4fv(m_uniformModelViewProjection, 1, GL_FALSE, modelViewProjection.data());
