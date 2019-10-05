@@ -45,6 +45,8 @@ public:
   Esri::ArcGISRuntime::SceneQuickView* sceneView() const;
   void setSceneView(Esri::ArcGISRuntime::SceneQuickView* sceneView);
 
+  Q_INVOKABLE void screenToLocation(float x, float y);
+
   Q_INVOKABLE void showPointCloud(bool visible);
   Q_INVOKABLE void showPlanes(bool visible);
 

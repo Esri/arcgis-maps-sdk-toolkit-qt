@@ -80,6 +80,23 @@ void CppArExample::setSceneView(SceneQuickView* sceneView)
   emit sceneViewChanged();
 }
 
+// Place a symbol on the 3D scene space, corresponding to the position in the 2D screen space.
+void CppArExample::screenToLocation(float x, float y)
+{
+  const Point location = m_arcGISArView->screenToLocation(QPoint(x, y));
+  if (location.isEmpty())
+    return;
+
+  // Add symbol using the location.
+  auto* graphicsOverlay = new GraphicsOverlay(this);
+  Q_CHECK_PTR(m_sceneView);
+  m_sceneView->graphicsOverlays()->append(graphicsOverlay);
+
+  SimpleMarkerSceneSymbol* symbol = new SimpleMarkerSceneSymbol(
+        SimpleMarkerSceneSymbolStyle::Sphere, QColor(Qt::red), 0.1, 0.1, 0.1, SceneSymbolAnchorPosition::Center, graphicsOverlay);
+  graphicsOverlay->graphics()->append(new Graphic(Point(location.x(), location.y(), location.z()), symbol, graphicsOverlay));
+}
+
 // Set whether point clouds should be visible.
 void CppArExample::showPointCloud(bool visible)
 {

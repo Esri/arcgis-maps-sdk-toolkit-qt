@@ -41,6 +41,14 @@ ApplicationWindow {
         sceneView: sceneView
     }
 
+    // Used for screenToLocation test.
+    MouseArea {
+        id: mouseArea
+        anchors.fill: parent
+        enabled: false
+        onClicked: arSample.screenToLocation(mouseX, mouseY);
+    }
+
     SettingsWindow {
         anchors {
             top: parent.top
@@ -52,6 +60,7 @@ ApplicationWindow {
         onStopTrackingClicked: arcGISArView.stopTracking();
         onResetTrackingClicked: arcGISArView.resetTracking();
         // onCalibrationClicked: not implemented
+        onScreenToLocationClicked: mouseArea.enabled = !mouseArea.enabled;
 
         onShowPointCloud: arSample.showPointCloud(visible);
         onShowPlanes: arSample.showPlanes(visible);
