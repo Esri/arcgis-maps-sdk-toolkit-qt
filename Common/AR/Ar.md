@@ -29,6 +29,9 @@ and synchronization with the Runtime SDK's `SceneView`. The `ArcGISArView` is re
 managing an `ARKit` or `ARCore` session. `ArcGISArView` uses a `LocationDataSource` for getting an initial GPS location
 and when continuous GPS tracking is required.
 
+For details about using `ARKit`, please refer to [Apple's documentation](https://developer.apple.com/augmented-reality).
+For `ARCore`, please refer to [Google's documentation](https://developers.google.com/ar/).
+
 The minimal version of the ArcGIS Runtime SDK for Qt is 100.6.
 
 ### Features of the AR component
@@ -39,10 +42,6 @@ The minimal version of the ArcGIS Runtime SDK for Qt is 100.6.
 - Provides access to a `SceneView` to display your GIS 3D data over the live camera feed
 - `screenToLocation` method to convert a screen point to a real-world coordinate
 - Easy access to all `ARKit` or `ARCore` and `LocationDataSource` delegate methods
-
-
-
-
 
 ## Creating an new AR application using ArcGIS Runtime AR toolkit
 
@@ -259,14 +258,13 @@ translationFactor: 1000.0
 ## AR frameworks configuration
 
 All the files necessary to build an ArcGIS application with AR support are provided in the AR toolkit.
-To deploy the application on Android and iOS devices, the permission need to be given in the configuration.
+To deploy the application on Android and iOS devices, extra steps are needed to give the permission
+to the application.
 
 ### Configuration for iOS devices
 
-For details about using `ARKit`, please refer to [Apple's documentation](https://developer.apple.com/augmented-reality).
-
-5. Update the `Info.plist` file to request permission for camera:
-
+1. Open the `Info.plist` file and add the following key at the end of the file, just before `</dict>`,
+to give the access to the camera to the `ARKit`.
 ```
 <key>NSCameraUsageDescription</key>
 <string>Camera access is needed for AR testing</string>
@@ -274,43 +272,57 @@ For details about using `ARKit`, please refer to [Apple's documentation](https:/
 
 See [NSCameraUsageDescription Apple's documentation](https://developer.apple.com/documentation/bundleresources/information_property_list/nscamerausagedescription?language=objc) for details.
 
-6. The project is ready to be build and run in an iOS device. You need to verify the compatibility of your device
-with the ARCore.
+2. The project is ready to be build and run in an iOS device. You need to verify the compatibility of your device
+with the `ARKit`.
 
 ### Configuration for Android devices
 
-For details about using `ARCore`, please refer to [Google's documentation](https://developers.google.com/ar/).
-Installation details of `ARCore` are described at
-[documentation](https://developers.google.com/ar/develop/c/enable-arcore).
+For details about `ARCore` configuration, see [ARCore documentation](https://developers.google.com/ar/develop/c/enable-arcore).
 
-To create an application with the `ARCore` support:
+1. In Qt Creator.
 
+1a. Open the `Projects` mode in the left toolbar and select an Android kit.
 
+1b. In the `Build Settings` then `Build Android APK`, clic on `Create template` button.
+An `AndroidManifest.xml` and `gradle` files are added to the project.
 
-5. Copy the gradle files from the ARCore SDK for Android to the `Android` dir in our project.
+2. Open the `AndroidManifest.xml` file using the plain text editor (right clic on the filename and select
+`Open With` then `Plain Text Editor`).
 
-6. In the Android manifest file `AndroidManifest.xml`, add the following entries:
-
+2a. Under the line `<!-- Application arguments -->`, add the following line to enable the ARCore support.
 ```
-<meta-data android:name="com.google.ar.core" android:value="required" />
+<meta-data android:name="com.google.ar.core" android:value="required"/>
 ```
 
-The value can be `optional` or `required`. An AR optional app can be installed and run on devices
+The value can be `optional` or `required`. An AR optional application can be installed and run on devices
 that don't support `ARCore` and the `Google Play Services for AR` is not automatically installed
-with the app. An AR required app is available only on devices that support ARCore and the
+with the app. An AR required application is available only on devices that support `ARCore` and the
 `Google Play Services for AR` is automatically installed.
 
 For details, see [Enable ARCore documentation](https://developers.google.com/ar/develop/java/enable-arcore#manifest).
 
-7. Verify that the permission for camera is present:
-
+2b. Under the line `<!-- %%INSERT_FEATURES -->`, add the following line to give the access to
+the camera to ARCore.
 ```
-<uses-permission android:name="android.permission.CAMERA"/>
+<uses-feature android:name="android.hardware.camera.ar" android:required="true"/>
 ```
 
-7. The project is ready to be built and run on an Android device. You need to verify the compatibility of your device
+2c. Set the minimal SDK version `android:minSdkVersion` to 24 for AR required application and 14 for
+AR optional application.
+```
+<uses-sdk android:minSdkVersion="24" android:targetSdkVersion="28"/>
+```
+
+3. Open the `build.gradle` file. In `dependencies`, add the ARCore dependency:
+```
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+    implementation 'com.google.ar:core:1.11.0'
+}
+```
+
+4. The project is ready to be built and run on an Android device. You need to verify the compatibility of your device
 with the ARKit.
-
 
 ## Note for performance issues
 

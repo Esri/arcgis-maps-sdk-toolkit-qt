@@ -17,6 +17,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.2
 import Esri.CppArExample 1.0
+import Esri.ArcGISArToolkit 1.0
 
 ApplicationWindow {
     visible: true
