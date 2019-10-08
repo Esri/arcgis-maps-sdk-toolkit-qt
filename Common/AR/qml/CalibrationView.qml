@@ -17,15 +17,71 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.2
 
+/*!
+    \qmltype CalibrationView
+    \ingroup ArcGISQtToolkit
+    \ingroup ArcGISQtToolkitCppApi
+    \ingroup ArcGISQtToolkitQmlApi
+    \inqmlmodule Esri.ArcGISRuntime.Toolkit.AR
+    \since Esri.ArcGISRutime 100.6
+    \brief A item displaying controls for adjusting a scene view's location, heading, and elevation.
+
+    Used to calibrate an AR session.
+*/
+
 Item {
     id: root
 
-    // The interval between triggers, in milliseconds. Default is 250 milliseconds.
+    /*!
+      \brief The interval between triggers, in milliseconds.
+      Default is 250 milliseconds.
+     */
     property alias interval: timer.interval
 
-    // /...
+    /*!
+      \brief The multiplication factor to apply to the latitude value.
+      Default is 0.0001.
+     */
+    property alias latitudeFactor: latitudeSlider.factor
+
+    /*!
+      \brief The multiplication factor to apply to the longitude value.
+      Default is 0.0001.
+     */
+    property alias longitudeFactor: longitudeSlider.factor
+
+    /*!
+      \brief The multiplication factor to apply to the altitude value.
+      Default is 0.01.
+     */
+    property alias altitudeFactor: altitudeSlider.factor
+
+    /*!
+      \brief The multiplication factor to apply to the heading value.
+      Default is 0.01.
+     */
+    property alias headingFactor: headingSlider.factor
+
+    /*!
+      \qmlsignal triggered(double latitude, double longitude, double altitude, double heading)
+      \brief Send the updated values for location and heading.
+      This signal is emitted everytime the timer is triggered.
+     */
     signal triggered(double latitude, double longitude, double altitude, double heading);
 
+    /*!
+      \qmlmethod void reset()
+      \brief Reset the calibration to location (0, 0, 0) and heading 0.0.
+     */
+    function reset() {
+        latitudeSlider.value = 0.0;
+        longitudeSlider.value = 0.0;
+        altitudeSlider.value = 0.0;
+        headingSlider.value = 0.0;
+        root.triggered(latitudeSlider.value, longitudeSlider.value, altitudeSlider.value, headingSlider.value);
+    }
+
+    // private
     Timer {
         id: timer
         repeat: true

@@ -64,24 +64,62 @@ ApplicationWindow {
         onStopTrackingClicked: arcGISArView.stopTracking();
         onResetTrackingClicked: arcGISArView.resetTracking();
         onCalibrationClicked: calibrationView.visible = ! calibrationView.visible
-        onResetCalibrationClicked: arSample.updateOriginCamera(0, 0, 0, 0);
+        onResetCalibrationClicked: calibrationView.reset();
 
         // debug options
         onShowPointCloud: arSample.showPointCloud(visible);
         onShowPlanes: arSample.showPlanes(visible);
 
         // full scale scenes
-        onEmptySceneClicked: arSample.createEmptyScene();
-        onStreetsSceneClicked: arSample.createStreetsScene();
-        onImagerySceneClicked: arSample.createImageryScene();
-        onFullScaleTestSceneClicked: arSample.createFullScaleTestScene();
+        onEmptySceneClicked: {
+            setCalibrationFactors(0.000001);
+            arSample.createEmptyScene();
+        }
+        onStreetsSceneClicked: {
+            setCalibrationFactors(0.000001);
+            arSample.createStreetsScene();
+        }
+        onImagerySceneClicked: {
+            setCalibrationFactors(0.000001);
+            arSample.createImageryScene();
+        }
+        onFullScaleTestSceneClicked: {
+            setCalibrationFactors(0.000001);
+            arSample.createFullScaleTestScene();
+        }
 
         // tabletop scenes
-        onPointCloudSceneClicked: arSample.createPointCloudScene();
-        onYosemiteSceneClicked: arSample.createYosemiteScene();
-        onBorderSceneClicked: arSample.createBorderScene();
-        onBrestSceneClicked: arSample.createBrestScene();
-        onBerlinSceneClicked: arSample.createBerlinScene();
-        onTabletopTestSceneClicked: arSample.createTabletopTestScene();
+        onPointCloudSceneClicked: {
+            setCalibrationFactors(0.0001);
+            arSample.createPointCloudScene();
+        }
+        onYosemiteSceneClicked: {
+            setCalibrationFactors(0.0001);
+            arSample.createYosemiteScene();
+        }
+        onBorderSceneClicked: {
+            setCalibrationFactors(0.0001);
+            arSample.createBorderScene();
+        }
+        onBrestSceneClicked: {
+            setCalibrationFactors(0.00001);
+            arSample.createBrestScene();
+        }
+        onBerlinSceneClicked: {
+            setCalibrationFactors(0.0001);
+            arSample.createBerlinScene();
+        }
+        onTabletopTestSceneClicked: {
+            setCalibrationFactors(0.0000001);
+            arSample.createTabletopTestScene();
+        }
+
+        // helper for calibration factor
+        function setCalibrationFactors(factor) {
+            calibrationView.latitudeFactor = factor;
+            calibrationView.longitudeFactor = factor;
+            calibrationView.altitudeFactor = 0.01;
+            calibrationView.headingFactor = 0.01;
+        }
     }
 }

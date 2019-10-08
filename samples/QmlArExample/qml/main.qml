@@ -83,21 +83,21 @@ ApplicationWindow {
                 arcGISArView.planeColor = "";
         }
 
-        onEmptySceneClicked: changeScene("qrc:/qml/scenes/EmptyScene.qml");
-        onStreetsSceneClicked: changeScene("qrc:/qml/scenes/StreetsScene.qml");
-        onImagerySceneClicked: changeScene("qrc:/qml/scenes/ImageryScene.qml");
+        onEmptySceneClicked: changeScene("qrc:/qml/scenes/EmptyScene.qml", 0.000001);
+        onStreetsSceneClicked: changeScene("qrc:/qml/scenes/StreetsScene.qml", 0.000001);
+        onImagerySceneClicked: changeScene("qrc:/qml/scenes/ImageryScene.qml", 0.000001);
 
-        onPointCloudSceneClicked: changeScene("qrc:/qml/scenes/PointCloudScene.qml");
-        onYosemiteSceneClicked: changeScene("qrc:/qml/scenes/YosemiteScene.qml");
-        onBorderSceneClicked: changeScene("qrc:/qml/scenes/BorderScene.qml");
-        onBrestSceneClicked: changeScene("qrc:/qml/scenes/BrestScene.qml");
-        onBerlinSceneClicked: changeScene("qrc:/qml/scenes/BerlinScene.qml");
+        onPointCloudSceneClicked: changeScene("qrc:/qml/scenes/PointCloudScene.qml", 0.0001);
+        onYosemiteSceneClicked: changeScene("qrc:/qml/scenes/YosemiteScene.qml", 0.0001);
+        onBorderSceneClicked: changeScene("qrc:/qml/scenes/BorderScene.qml", 0.0001);
+        onBrestSceneClicked: changeScene("qrc:/qml/scenes/BrestScene.qml", 0.00001);
+        onBerlinSceneClicked: changeScene("qrc:/qml/scenes/BerlinScene.qml", 0.0001);
         onTabletopTestSceneClicked: {
-            changeScene("qrc:/qml/scenes/TabletopTestScene.qml");
+            changeScene("qrc:/qml/scenes/TabletopTestScene.qml", 0.0000001);
             sceneView.graphicsOverlays.append(sceneLoader.item.graphicsOverlay);
         }
 
-        function changeScene(sceneSource) {
+        function changeScene(sceneSource, factor) {
             // Stop tracking
             arcGISArView.stopTracking();
 
@@ -111,6 +111,12 @@ ApplicationWindow {
                 arcGISArView.resetTracking();
             else
                 arcGISArView.startTracking();
+
+            // update calibration factor
+            calibrationView.latitudeFactor = factor;
+            calibrationView.longitudeFactor = factor;
+            calibrationView.altitudeFactor = 0.01;
+            calibrationView.headingFactor = 0.01;
         }
     }
 

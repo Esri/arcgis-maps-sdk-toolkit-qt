@@ -37,9 +37,6 @@ Item {
     // This property holds whether the slider is pressed by either touch, mouse, or keys.
     property alias pressed: slider.pressed
 
-    // .. signal
-    signal update();
-
     Label {
         id: label
         anchors {
@@ -67,5 +64,7 @@ Item {
     }
 
     // update the value with the offet 10^value.
-    onUpdate: value += Math.sign(slider.value) * Math.pow(10, Math.abs(slider.value)) * factor;
+    function update() {
+        value += Math.sign(slider.value) * Math.pow(10, Math.abs(slider.value)) * factor;
+    }
 }
