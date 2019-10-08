@@ -27,13 +27,13 @@ ArcGISArViewInternal {
         id: tmcc
     }
 
-    // todo doc
+    // Update the translation factor.
     onTranslationFactorChanged: tmcc.translationFactor = translationFactor;
 
-    // todo doc
+    // Render the scene.
     onRenderFrame: root.sceneView.renderFrame();
 
-    // doc todo
+    // Update the initial transformation, using the hit matrix.
     property TransformationMatrix initialTransformationMatrix: null
 
     onInitialTransformationChanged: {
@@ -46,7 +46,7 @@ ArcGISArViewInternal {
         initialTransformationMatrix = identityTransformationMatrix.subtractTransformation(hitMatrix);
     }
 
-    // it's not possible to create the TransformationMatrix object directly in C++. This function
+    // It's not possible to create the TransformationMatrix object directly in C++. This function
     // is used to create the TM object and assign it to the TMCC.
     onTransformationMatrixChanged: {
         const matrix = TransformationMatrix.createWithQuaternionAndTranslation(
@@ -60,36 +60,34 @@ ArcGISArViewInternal {
         tmcc.transformationMatrix = finalMatrix;
     }
 
-    // it's not possible to call setFieldOfViewFromLensIntrinsics directly from the C++ code, due to
+    // Cast from Qt's screen orientation to ArcGIS Runtime's screen orientation.
+    function toDeviceOrientation(orientation) {
+        switch(Screen.orientation) {
+        case Qt.PortraitOrientation:
+            return Enums.DeviceOrientationPortrait;
+        case Qt.LandscapeOrientation:
+            return Enums.DeviceOrientationLandscapeLeft;
+        case Qt.InvertedPortraitOrientation:
+            return Enums.DeviceOrientationReversePortrait;
+        case Qt.InvertedLandscapeOrientation:
+            return Enums.DeviceOrientationPortrait;
+        default:
+            return Enums.DeviceOrientationPortrait;
+        }
+    }
+
+    // It's not possible to call setFieldOfViewFromLensIntrinsics directly from the C++ code, due to
     // the orientation device enumeration. This function is used to converts the orientation (int) to
     // deviceOrientation (enum).
     onFieldOfViewChanged: {
-        var deviceOrientation;
-        switch(Screen.orientation) {
-        case Qt.PortraitOrientation:
-            deviceOrientation = Enums.DeviceOrientationPortrait;
-            break;
-        case Qt.LandscapeOrientation:
-            deviceOrientation = Enums.DeviceOrientationLandscapeLeft;
-            break;
-        case Qt.InvertedPortraitOrientation:
-            deviceOrientation = Enums.DeviceOrientationReversePortrait;
-            break;
-        case Qt.InvertedLandscapeOrientation:
-            deviceOrientation = Enums.DeviceOrientationPortrait;
-            break;
-        default:
-            deviceOrientation = Enums.DeviceOrientationPortrait;
-            break;
-        }
-
+        const deviceOrientation = toDeviceOrientation(Screen.orientation);
         sceneView.setFieldOfViewFromLensIntrinsics(xFocalLength, yFocalLength,
                                                    xPrincipal, yPrincipal,
                                                    xImageSize, yImageSize,
                                                    deviceOrientation);
     }
 
-    // location update
+    // Update the location.
     onLocationChanged: {
         const location = ArcGISRuntimeEnvironment.createObject("Point", { y: latitude, x: longitude, z: altitude });
         if (tmcc.originCamera === null) {
@@ -106,6 +104,7 @@ ArcGISArViewInternal {
         }
     }
 
+    // Update the heading.
     onHeadingChanged: {
         if (tmcc.originCamera === null) {
             // create a new origin camera
@@ -122,21 +121,6 @@ ArcGISArViewInternal {
         }
     }
 
-    // Calculate the location using the hit result returned by the screenToLocation function.
-    function screenToLocation(currentViewpointCamera,
-                              quaternionX, quaternionY, quaternionZ, quaternionW,
-                              translationX, translationY, translationZ)
-    {
-        const hitMatrix = TransformationMatrix.createWithQuaternionAndTranslation(
-                    quaternionX, quaternionY, quaternionZ, quaternionW,
-                    translationX, translationY, translationZ);
-
-        const currentViewpointMatrix = currentViewpointCamera.transformationMatrix;
-        const matrix = currentViewpointMatrix.addTransformation(hitMatrix);
-        const camera = ArcGISRuntimeEnvironment.createObject("Camera", { transformationMatrix: matrix });
-        return camera.location;
-    }
-
     // Resets the device tracking and related properties.
     onResetTracking: {
         const camera = ArcGISRuntimeEnvironment.createObject("Camera");
@@ -144,5 +128,21 @@ ArcGISArViewInternal {
 
         initialTransformationMatrix = TransformationMatrix.createIdentityMatrix();
         tmcc.transformationMatrix = TransformationMatrix.createIdentityMatrix();
+    }
+
+    /*!
+      \brief Gets the location in the real world space corresponding to the screen point \a screenPoint.
+     */
+    function screenToLocation(x, y) {
+        const hitTest = root.screenToLocation(x, y);
+
+        const hitMatrix = TransformationMatrix.createWithQuaternionAndTranslation(
+                            hitTest[0], hitTest[1], hitTest[2], hitTest[3], // quaternionX, quaternionY, quaternionZ, quaternionW
+                            hitTest[4], hitTest[5], hitTest[6]); // translationX, translationY, translationZ
+
+        const currentViewpointMatrix = currentViewpointCamera.transformationMatrix;
+        const matrix = currentViewpointMatrix.addTransformation(hitMatrix);
+        const camera = ArcGISRuntimeEnvironment.createObject("Camera", { transformationMatrix: matrix });
+        return camera.location;
     }
 }

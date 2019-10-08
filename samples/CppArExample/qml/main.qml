@@ -23,6 +23,7 @@ ApplicationWindow {
     width: 800
     height: 600
 
+    // Create AR
     ArcGISArView {
         id: arcGISArView
         anchors.fill: parent
@@ -30,11 +31,13 @@ ApplicationWindow {
         tracking: true
     }
 
+    // Create SceneQuickView here, and create its Scene etc. in C++ code
     SceneView {
         id: sceneView
         anchors.fill: parent
     }
 
+    // Declare the C++ instance which creates the scene etc. and supply the view
     CppArExample {
         id: arSample
         arcGISArView: arcGISArView

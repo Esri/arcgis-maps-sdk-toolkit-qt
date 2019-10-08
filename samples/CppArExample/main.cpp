@@ -32,6 +32,7 @@
 #include <QSurfaceFormat>
 #include <QQmlApplicationEngine>
 
+// Include the AR view from toolkit
 #include "ArcGISArView.h"
 
 //------------------------------------------------------------------------------
@@ -104,7 +105,7 @@ int main(int argc, char *argv[])
   qmlRegisterType<CppArExample>("Esri.CppArExample", 1, 0, "CppArExample");
 
   // Register the ArcGISArView
-  qmlRegisterType<Esri::ArcGISRuntime::Toolkit::ArcGISArView>("Esri.CppArExample", 1, 0, "ArcGISArView");
+  Esri::ArcGISRuntime::Toolkit::ArcGISArView::qmlRegisterTypes();
 
   // Initialize application view
   QQmlApplicationEngine engine;
