@@ -51,6 +51,9 @@ public:
   Q_INVOKABLE void setInitialTransformation(const QPoint& screenPoint);
   Q_INVOKABLE Point screenToLocation(const QPoint& screenPoint) const;
 
+  // Register the QML creatable types provide by QR toolkit
+  static void qmlRegisterTypes();
+
 signals:
   void originCameraChanged();
   void sceneViewChanged();
@@ -72,7 +75,10 @@ protected:
   void resetTrackingInternal() override;
 
 private:
-  int m_timerId = 0;
+  // Helper for device orientation
+  static DeviceOrientation toDeviceOrientation(Qt::ScreenOrientations orientation);
+
+  // Pointer to the SceneView.
   SceneQuickView* m_sceneView = nullptr;
 
   // The `AGSTransformationMatrixCameraController` used to control the Scene.

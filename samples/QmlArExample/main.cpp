@@ -28,8 +28,9 @@
 #endif
 
 #include "AppInfo.h"
+
+// Include the AR view from toolkit
 #include "QmlArcGISArView.h"
-#include "LocationDataSource.h"
 
 //------------------------------------------------------------------------------
 
@@ -89,9 +90,8 @@ int main(int argc, char *argv[])
   QCoreApplication::instance()->setProperty("Esri.ArcGISRuntime.license", kLicense);
 #endif
 
-  // Register the QmlArcGISArView type
-  qmlRegisterType<Esri::ArcGISRuntime::Toolkit::QmlArcGISArView>("Esri.ArcGISArToolkit", 1, 0, "ArcGISArViewInternal");
-  qmlRegisterType<Esri::ArcGISRuntime::Toolkit::LocationDataSource>("Esri.ArcGISArToolkit", 1, 0, "LocationDataSource");
+  // Register the AR toolkit types
+  Esri::ArcGISRuntime::Toolkit::QmlArcGISArView::qmlRegisterTypes();
 
   // Intialize application window
   QQmlApplicationEngine appEngine;

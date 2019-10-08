@@ -57,6 +57,10 @@ OTHER_FILES += \
 
 AR_TOOLKIT_SOURCE_PATH = # must be set to the path to toolkit sources
 
+isEmpty(AR_TOOLKIT_SOURCE_PATH) {
+    error(AR_TOOLKIT_SOURCE_PATH is not set)
+}
+
 include($$AR_TOOLKIT_SOURCE_PATH/Plugin/CppApi/ArCppApi.pri)
 
 #-------------------------------------------------------------------------------

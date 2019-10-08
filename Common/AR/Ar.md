@@ -29,6 +29,9 @@ and synchronization with the Runtime SDK's `SceneView`. The `ArcGISArView` is re
 managing an `ARKit` or `ARCore` session. `ArcGISArView` uses a `LocationDataSource` for getting an initial GPS location
 and when continuous GPS tracking is required.
 
+For details about using `ARKit`, please refer to [Apple's documentation](https://developer.apple.com/augmented-reality).
+For `ARCore`, please refer to [Google's documentation](https://developers.google.com/ar/).
+
 The minimal version of the ArcGIS Runtime SDK for Qt is 100.6.
 
 ### Features of the AR component
@@ -40,31 +43,234 @@ The minimal version of the ArcGIS Runtime SDK for Qt is 100.6.
 - `screenToLocation` method to convert a screen point to a real-world coordinate
 - Easy access to all `ARKit` or `ARCore` and `LocationDataSource` delegate methods
 
-## ARKit installation
+## Creating an new AR application using ArcGIS Runtime AR toolkit
 
-For details about using `ARKit`, please refer to [Apple's documentation](https://developer.apple.com/augmented-reality).
+### Creating a new C++ application with AR support
 
-To create an application with the `ARKit` support:
+An example C++ application with AR support can be found in the folder `Examples\AR\CppArExample` in
+the toolkit repo.
 
-1. Download the sources of the [ArcGIS Runtime API Toolkit](https://github.com/Esri/arcgis-runtime-toolkit-qt).
-Set the `AR_TOOLKIT_SOURCE_PATH` variable to the path of the toolkit sources.
+Note - In the following explanation, `<ProjectName>` refers to the project name used to create the Qt project.
 
-2. Install the ArcGIS Runtime SDK for Qt.
+1. Install the ArcGIS Runtime SDK for Qt. See
+[ArcGIS Runtime SDK for Qt](https://developers.arcgis.com/qt/latest/qml/guide/arcgis-runtime-sdk-for-qt.htm)
+for details.
 
-3. In Qt Creator, create a new project "ArcGIS Runtime 100.x Qt Quick C++ app" or "ArcGIS Runtime 100.x Qt Quick QML app".
+2. Download the sources of the [ArcGIS Runtime API Toolkit](https://github.com/Esri/arcgis-runtime-toolkit-qt).
 
-4. In the project file (.pro), include the .pri file corresponding to the API used for the project:
+3. In Qt Creator, create a new project and select `ArcGIS Runtime 100.6 Qt Quick C++ app`.
+Select the option "3D project" in the "Details" step.
+
+4. In the created project, add the following lines anywhere in the `.pro` file.
+Note - Make sure to set the correct path to the ArcGIS Toolkit source folder.
 
 ```
-include($$AR_TOOLKIT_SOURCE_PATH/Plugin/CppApi/ArCppApi.pri) // for C++ API
-```
-or
-```
-include($$AR_TOOLKIT_SOURCE_PATH/Plugin/QmlApi/ArQmlApi.pri) // for QML API
+AR_TOOLKIT_SOURCE_PATH = # must be set to the path to toolkit sources
+include($$AR_TOOLKIT_SOURCE_PATH/Plugin/CppApi/ArCppApi.pri)
 ```
 
-5. Update the `Info.plist` file to request permission for camera:
+5. In the `main.cpp` file.
 
+5a. Set the environment variable `QSG_RENDER_LOOP` to `basic` in the beginning of the `main` function.
+See [Note for performance issues] for details.
+```
+#if defined(Q_OS_IOS) || defined(Q_OS_ANDROID)
+  qputenv("QSG_RENDER_LOOP", "basic");
+#endif
+```
+
+5b. Include the header `ArcGISArView.h`.
+```
+#include "ArcGISArView.h"
+```
+
+5c. Call the `ArcGISArView::qmlRegisterTypes()` before the creation of the QML engine, to register the
+`ArcGISArView` and `LocationDataSource` C++ classes in QML engine. This is necessary to create a object
+of these types in QML.
+```
+Esri::ArcGISRuntime::Toolkit::ArcGISArView::qmlRegisterTypes();
+```
+
+6. In the `<ProjectName>.h` file, add a new property to access to AR view:
+```
+#include "ArcGISArView.h"
+...
+
+class <ProjectName> : public QObject
+{
+  Q_OBJECT
+  Q_PROPERTY(Esri::ArcGISRuntime::Toolkit::ArcGISArView* arcGISArView READ arcGISArView WRITE setArcGISArView
+             NOTIFY arcGISArViewChanged)
+  ...
+
+signals:
+  void arcGISArViewChanged();
+  ...
+
+private:
+  Esri::ArcGISRuntime::Toolkit::ArcGISArView* arcGISArView() const;
+  void setArcGISArView(Esri::ArcGISRuntime::Toolkit::ArcGISArView* arcGISArView);
+
+  Esri::ArcGISRuntime::Toolkit::ArcGISArView* m_arcGISArView = nullptr;
+  ...
+};
+```
+
+7. In the `<ProjectName>.cpp` file, implement the setter and getter for `arcGISArView` property.
+In the setter, set the properties `originCamera`, `translationFactor` and `setLocationDataSource`.
+An example of settings for full scale mode is given in the following code.
+```
+using namespace Esri::ArcGISRuntime::Toolkit;
+...
+
+ArcGISArView* <ProjectName>::arcGISArView() const
+{
+  return m_arcGISArView;
+}
+
+void <ProjectName>::setArcGISArView(ArcGISArView* arcGISArView)
+{
+  if (!arcGISArView || arcGISArView == m_arcGISArView)
+    return;
+
+  m_arcGISArView = arcGISArView;
+
+  // full scale mode
+  m_arcGISArView->setOriginCamera(Camera());
+  m_arcGISArView->setTranslationFactor(1.0);
+  m_arcGISArView->setLocationDataSource(new LocationDataSource(this));
+
+  emit arcGISArViewChanged();
+}
+```
+
+An example of parameters for tabletop AR app is given in the following code:
+```
+  m_arcGISArView->setOriginCamera(Camera(latitude, longitude, altitude, 0.0, 90.0, 0.0));
+  m_arcGISArView->setTranslationFactor(1000.0);
+  m_arcGISArView->setLocationDataSource(nullptr);
+```
+
+In the constructor of <ProjectName>, adapt the creation of the scene.
+The default scene is suitable for full scale mode.
+
+8. In the `<ProjectName>Form.qml` file.
+
+8a. Import the AR toolkit:
+```
+import Esri.ArcGISArToolkit 1.0
+```
+
+8b. Create an AR view in the back of the `SceneView` (then before the declaration of `SceneView` in the QML file):
+```
+ArcGISArView {
+    id: arcGISArView
+    anchors.fill: parent
+    sceneView: view
+    tracking: true
+}
+```
+
+8c. In the declaration of `<ProjectName>` component, bind the AR view to the `arcGISArView` property:
+```
+<ProjectName> {
+    id: model
+    arcGISArView: arcGISArView
+    ...
+```
+
+### Creating a new QML application with AR support
+
+An example of QML application with AR support can be found in the folder `Examples\AR\QmlArExample` in
+the toolkit repo.
+
+1. Install the ArcGIS Runtime SDK for Qt. See
+[ArcGIS Runtime SDK for Qt](https://developers.arcgis.com/qt/latest/qml/guide/arcgis-runtime-sdk-for-qt.htm)
+for details.
+
+2. Download the sources of the [ArcGIS Runtime API Toolkit](https://github.com/Esri/arcgis-runtime-toolkit-qt).
+
+3. In Qt Creator, create a new project and select `ArcGIS Runtime 100.6 Qt Quick QML app`.
+Select the option "3D project" in the "Details" step.
+
+4. In the created project, add the following lines anywhere in the `.pro` file.
+    Note -Make sure to set the correct path to the ArcGIS Toolkit source folder.
+
+```
+AR_TOOLKIT_SOURCE_PATH = # must be set to the path to toolkit sources
+include($$AR_TOOLKIT_SOURCE_PATH/Plugin/QmlApi/ArQmlApi.pri)
+```
+
+5. In the `main.cpp` file.
+
+5a. Set the environment variable `QSG_RENDER_LOOP` to `basic` in the beginning of the `main` function.
+See [Note for performance issues] for details.
+```
+#if defined(Q_OS_IOS) || defined(Q_OS_ANDROID)
+  qputenv("QSG_RENDER_LOOP", "basic");
+#endif
+```
+
+5b. Include the header `QmlArcGISArView.h`.
+```
+#include "QmlArcGISArView.h"
+```
+
+5c. Call the `QmlArcGISArView::qmlRegisterTypes()` before the creation of the QML engine, to register the
+`ArcGISArView` and `LocationDataSource` QML types in QML engine. This is necessary to create a object
+of these types in QML.
+```
+Esri::ArcGISRuntime::Toolkit::QmlArcGISArView::qmlRegisterTypes();
+```
+
+6. In the `main.qml` file.
+
+6a. Import the AR toolkit:
+```
+import Esri.ArcGISArToolkit 1.0
+```
+
+6b. Create an AR view in the back of the `SceneView` (then before the declaration of `SceneView` in the QML file).
+The following code show an example of initialization for the properties `originCamera`, `translationFactor` and
+`locationDataSource`used for full scale mode.
+```
+ArcGISArView {
+    id: arcGISArView
+    anchors.fill: parent
+    tracking: true
+    sceneView: sceneView
+    originCamera: Camera {}
+    locationDataSource: LocationDataSource {}
+    translationFactor: 1.0
+}
+```
+
+The following code show an example for tabletop mode.
+```
+originCamera: Camera {
+    location: Point {
+        y: latitude
+        x: longitude
+        z: altitude
+    }
+    heading: 0.0
+    pitch: 90.0
+    roll: 0.0
+}
+locationDataSource: null
+translationFactor: 1000.0
+```
+
+## AR frameworks configuration
+
+All the files necessary to build an ArcGIS application with AR support are provided in the AR toolkit.
+To deploy the application on Android and iOS devices, extra steps are needed to give the permission
+to the application.
+
+### Configuration for iOS devices
+
+1. Open the `Info.plist` file and add the following key at the end of the file, just before `</dict>`,
+to give the access to the camera to the `ARKit`.
 ```
 <key>NSCameraUsageDescription</key>
 <string>Camera access is needed for AR testing</string>
@@ -72,120 +278,63 @@ include($$AR_TOOLKIT_SOURCE_PATH/Plugin/QmlApi/ArQmlApi.pri) // for QML API
 
 See [NSCameraUsageDescription Apple's documentation](https://developer.apple.com/documentation/bundleresources/information_property_list/nscamerausagedescription?language=objc) for details.
 
-6. The project is ready to be build and run in an iOS device. You need to verify the compatibility of your device
-with the ARCore.
+2. The project is ready to be build and run in a compatible iOS device. ARKit requires an iOS or iPadOS device
+with iOS 11 and an A9 processor or later. The list of compatible devices can be found in the end of the
+[Augmented Reality page](https://www.apple.com/lae/ios/augmented-reality/)
 
-## ARCore installation
+### Configuration for Android devices
 
-For details about using `ARCore`, please refer to [Google's documentation](https://developers.google.com/ar/).
-Installation details of `ARCore` are described at
-[documentation](https://developers.google.com/ar/develop/c/enable-arcore).
+For details about `ARCore` configuration, see [ARCore documentation](https://developers.google.com/ar/develop/c/enable-arcore).
 
-To create an application with the `ARCore` support:
+1. In Qt Creator.
 
-1. Download the sources of the [ArcGIS Runtime API Toolkit](https://github.com/Esri/arcgis-runtime-toolkit-qt).
-The `AR_TOOLKIT_SOURCE_PATH` variable refers to the toolkit sources path.
+1a. Open the `Projects` mode in the left toolbar and select an Android kit.
 
-2. Install the ArcGIS Runtime SDK for Qt version.
+1b. In the `Build Settings` then `Build Android APK`, click on `Create template` button.
+An `AndroidManifest.xml` and `gradle` files are added to the project.
 
-3. In Qt Creator, create a new project "ArcGIS Runtime 100.x Qt Quick C++ app" or "ArcGIS Runtime 100.x Qt Quick QML app".
+2. Open the `AndroidManifest.xml` file using the plain text editor (right click on the filename and select
+`Open With` then `Plain Text Editor`).
 
-4. In the project file (.pro), include the `.pri` file corresponding to the API used by the project:
-
+2a. Under the line `<!-- Application arguments -->`, add the following line to enable the ARCore support.
 ```
-include($$AR_TOOLKIT_SOURCE_PATH/ArCppApi.pri) // for C++ API
-```
-or
-```
-include($$AR_TOOLKIT_SOURCE_PATH/ArQmlApi.pri) // for QML API
+<meta-data android:name="com.google.ar.core" android:value="required"/>
 ```
 
-5. Copy the gradle files from the ARCore SDK for Android to the `Android` dir in our project.
-
-6. In the Android manifest file `AndroidManifest.xml`, add the following entries:
-
-```
-<meta-data android:name="com.google.ar.core" android:value="required" />
-```
-
-The value can be `optional` or `required`. An AR optional app can be installed and run on devices
+The value can be `optional` or `required`. An AR optional application can be installed and run on devices
 that don't support `ARCore` and the `Google Play Services for AR` is not automatically installed
-with the app. An AR required app is available only on devices that support ARCore and the
+with the app. An AR required application is available only on devices that support `ARCore` and the
 `Google Play Services for AR` is automatically installed.
 
 For details, see [Enable ARCore documentation](https://developers.google.com/ar/develop/java/enable-arcore#manifest).
 
-7. Verify that the permission for camera is present:
-
+2b. Under the line `<!-- %%INSERT_FEATURES -->`, add the following line to give the access to
+the camera to ARCore.
 ```
-<uses-permission android:name="android.permission.CAMERA"/>
-```
-
-7. The project is ready to be built and run on an Android device. You need to verify the compatibility of your device
-with the ARKit.
-
-## Usage
-
-Using the C++ API to explore a scene in AR:
-
-```
-// create the AR view
-auto arcGISArView = new ArcGISArView(this);
-auto sceneView = new SceneQuickView(this);
-arcGISArView->setSceneView(sceneView);
-
-// Create a simple scene with a transparency background.
-auto scene = new Scene(BasemapType::ImageryWithLabels, this);
-BackgroundGrid grid;
-grid.setVisible(false);
-auto baseSurface = new Surface(this);
-baseSurface->setBackgroundGrid(grid);
-baseSurface->setNavigationConstraint(NavigationConstraint::None);
-scene->setBaseSurface(baseSurface);
-sceneView->setArcGISScene(scene);
-
-// Set a LocationDataSource, used to get our initial real-world location.
-arcGISArView->setLocationDataSource(new LocationDataSource(this));
-
-// Start tracking our location and device orientation
-arcGISArView->startTracking();
+<uses-feature android:name="android.hardware.camera.ar" android:required="true"/>
 ```
 
-Using the QML API to explore a scene in AR:
-
+2c. Set the minimum SDK version `android:minSdkVersion` to 24 for AR required application and 14 for
+AR optional application.
 ```
-// create the AR view
-ArcGISArView {
-    id: arcGISArView
-    anchors.fill: parent
-    sceneView: sceneView
-    locationDataSource: LocationDataSource {}
-}
+<uses-sdk android:minSdkVersion="24" android:targetSdkVersion="28"/>
+```
 
-SceneView {
-    id: sceneView
-    anchors.fill: parent
-    scene: scene
-    onMousePressed: arcGISArView.setInitialTransformation(mouse.x, mouse.y); // for touch screen events
-}
-
-// Create a simple scene with a transparency background.
-Scene {
-    id: scene
-    Surface {
-        navigationConstraint: Enums.NavigationConstraintNone
-        backgroundGrid: BackgroundGrid {
-            visible: false
-        }
-    }
+3. Open the `build.gradle` file. In `dependencies`, add the ARCore dependency:
+```
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+    implementation 'com.google.ar:core:1.11.0'
 }
 ```
 
-To see it in action, try out the `CppArExample` and `QmlArExample` in the project.
+4. The project is ready to be build and run in a compatible Android device. ARCore requires Android 7.0 or later.
+The list of compatible devices can be found in
+[ARCore supported devices](https://developers.google.com/ar/discover/supported-devices)
 
 ## Note for performance issues
 
-There are some conflicts between the AR frameworks and the Qt's rendering thread.
+There are some conflicts between the AR frameworks and Qt's rendering thread.
 These lines of code enable the non-threaded render loop mode in Qt.
 
 See `SceneView::renderFrame` documentation and
