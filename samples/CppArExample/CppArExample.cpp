@@ -81,8 +81,9 @@ void CppArExample::setSceneView(SceneQuickView* sceneView)
 }
 
 // Update the origin camera using the values send by the calibration view.
-// The m_originCamera is set when the scene is created. The origin camera sets to ArcGISArView is
-// this m_originCamera updated with the offset values returned by the calibration view.
+// The m_originCamera is set when the scene is created.
+// The final origin camera send to ArcGISArView is the sum of m_originCamera
+// and the offset values returned by the calibration view.
 void CppArExample::updateOriginCamera(double latitude, double longitude, double altitude, double heading)
 {
   const Camera newCamera(m_originCamera.location().y() + latitude,

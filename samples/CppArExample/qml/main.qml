@@ -36,6 +36,7 @@ ApplicationWindow {
     SceneView {
         id: sceneView
         anchors.fill: parent
+        opacity: calibrationView.visible ? 0.65 : 1.0
     }
 
     // Declare the C++ instance which creates the scene etc. and supply the view
@@ -63,7 +64,7 @@ ApplicationWindow {
         onStartTrackingClicked: arcGISArView.startTracking();
         onStopTrackingClicked: arcGISArView.stopTracking();
         onResetTrackingClicked: arcGISArView.resetTracking();
-        onCalibrationClicked: calibrationView.visible = ! calibrationView.visible
+        onCalibrationClicked: calibrationView.visible = !calibrationView.visible
         onResetCalibrationClicked: calibrationView.reset();
 
         // debug options
@@ -118,8 +119,6 @@ ApplicationWindow {
         function setCalibrationFactors(factor) {
             calibrationView.latitudeFactor = factor;
             calibrationView.longitudeFactor = factor;
-            calibrationView.altitudeFactor = 0.01;
-            calibrationView.headingFactor = 0.01;
         }
     }
 }

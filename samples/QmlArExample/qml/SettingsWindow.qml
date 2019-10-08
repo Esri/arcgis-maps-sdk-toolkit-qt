@@ -99,7 +99,7 @@ Item {
                             }
                         }
                         Button {
-                            text: "Reset Calibration"
+                            text: "Reset calibration"
                             onClicked: {
                                 settings.visible = false;
                                 resetCalibrationClicked();
@@ -173,7 +173,7 @@ Item {
                     Column {
                         spacing: 5
                         Button {
-                            text: "Point Cloud"
+                            text: "Point cloud"
                             onClicked: {
                                 settings.visible = false;
                                 pointCloudSceneClicked();

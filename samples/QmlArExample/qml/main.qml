@@ -43,6 +43,7 @@ ApplicationWindow {
         anchors.fill: parent
         scene: sceneLoader.item ? sceneLoader.item.scene : null
         onMousePressed: arcGISArView.setInitialTransformation(mouse.x, mouse.y); // for touch screen events
+        opacity: calibrationView.visible ? 0.65 : 1.0
     }
 
     Loader {
@@ -66,7 +67,7 @@ ApplicationWindow {
         onStartTrackingClicked: arcGISArView.startTracking();
         onStopTrackingClicked: arcGISArView.stopTracking();
         onResetTrackingClicked: arcGISArView.resetTracking();
-        onCalibrationClicked: calibrationView.visible = ! calibrationView.visible
+        onCalibrationClicked: calibrationView.visible = !calibrationView.visible;
         onResetCalibrationClicked: updateOriginCamera(0, 0, 0, 0);
 
         onShowPointCloud: {
@@ -115,8 +116,6 @@ ApplicationWindow {
             // update calibration factor
             calibrationView.latitudeFactor = factor;
             calibrationView.longitudeFactor = factor;
-            calibrationView.altitudeFactor = 0.01;
-            calibrationView.headingFactor = 0.01;
         }
     }
 

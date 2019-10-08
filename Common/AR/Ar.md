@@ -324,6 +324,10 @@ dependencies {
 4. The project is ready to be built and run on an Android device. You need to verify the compatibility of your device
 with the ARKit.
 
+## Calibration view item
+
+...
+
 ## Note for performance issues
 
 There are some conflicts between the AR frameworks and the Qt's rendering thread.
