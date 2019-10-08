@@ -103,14 +103,11 @@ bool LocationDataSource::isStarted() const
 /*!
   \brief Starts the location data source.
  */
-void LocationDataSource::start(LocationTrackingMode locationTrackingMode)
+void LocationDataSource::start()
 {
   // Do nothing if the tracking is already started.
   if (m_isStarted)
     return;
-
-  // Update the tracking mode.
-  setLocationTrackingMode(locationTrackingMode);
 
   // Update objects and connections.
   updateObjectsAndConnections();
@@ -124,6 +121,22 @@ void LocationDataSource::start(LocationTrackingMode locationTrackingMode)
   m_sensorStatus = SensorStatus::Started;
   emit isStartedChanged();
   emit sensorStatusChanged();
+}
+
+/*!
+  \brief Starts the location data source with a location tracking mode.
+ */
+void LocationDataSource::start(LocationTrackingMode locationTrackingMode)
+{
+  // Do nothing if the tracking is already started.
+  if (m_isStarted)
+    return;
+
+  // Update the tracking mode.
+  setLocationTrackingMode(locationTrackingMode);
+
+  // Start the tracking
+  start();
 }
 
 /*!
@@ -179,10 +192,14 @@ LocationTrackingMode LocationDataSource::locationTrackingMode() const
  */
 void LocationDataSource::setLocationTrackingMode(LocationTrackingMode locationTrackingMode)
 {
-  if (m_isStarted || m_locationTrackingMode == locationTrackingMode)
+  if (m_locationTrackingMode == locationTrackingMode)
     return;
 
   m_locationTrackingMode = locationTrackingMode;
+
+  if (m_isStarted)
+    updateObjectsAndConnections();
+
   emit locationTrackingModeChanged();
 }
 
@@ -253,7 +270,7 @@ void LocationDataSource::updateObjectsAndConnections()
     setCompass(new QCompass(this));
 
   // Connect the change signals.
-  if (m_locationTrackingMode != LocationTrackingMode::Continuous)
+  if (m_locationTrackingMode == LocationTrackingMode::Continuous)
   {
     // Connect the geoPositionSource.
     m_geoPositionSourceConnection = connect(m_geoPositionSource, &QGeoPositionInfoSource::positionUpdated,
@@ -274,7 +291,7 @@ void LocationDataSource::updateObjectsAndConnections()
       emit headingChanged(reading->azimuth());
     });
   }
-  else if (m_locationTrackingMode != LocationTrackingMode::Initial)
+  else if (m_locationTrackingMode == LocationTrackingMode::Initial)
   {
     // Connect the geoPositionSource and disconnect when the first signal is emitted.
     m_geoPositionSourceConnection = connect(m_geoPositionSource, &QGeoPositionInfoSource::positionUpdated,

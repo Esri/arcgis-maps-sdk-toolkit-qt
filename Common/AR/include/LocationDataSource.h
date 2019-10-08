@@ -58,7 +58,8 @@ public:
   void setLocationTrackingMode(LocationTrackingMode locationTrackingMode);
 
   // invokable methods
-  Q_INVOKABLE void start(LocationTrackingMode locationTrackingMode = LocationTrackingMode::Continuous);
+  Q_INVOKABLE void start();
+  Q_INVOKABLE void start(LocationTrackingMode locationTrackingMode);
   Q_INVOKABLE void stop();
 
 signals:
@@ -85,7 +86,7 @@ private:
   bool m_isStarted = false;
   SensorStatus m_sensorStatus = SensorStatus::Stopped;
 
-  LocationTrackingMode m_locationTrackingMode = LocationTrackingMode::Continuous;
+  LocationTrackingMode m_locationTrackingMode = LocationTrackingMode::Initial;
 };
 
 } // Toolkit namespace

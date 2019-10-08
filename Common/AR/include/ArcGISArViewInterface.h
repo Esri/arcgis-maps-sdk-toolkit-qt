@@ -79,7 +79,8 @@ public:
 
   // invokable methods
   Q_INVOKABLE void resetTracking();
-  Q_INVOKABLE void startTracking(LocationTrackingMode locationTrackingMode = LocationTrackingMode::Ignore);
+  Q_INVOKABLE void startTracking();
+  Q_INVOKABLE void startTracking(LocationTrackingMode locationTrackingMode);
   Q_INVOKABLE void stopTracking();
 
   // properties for debug mode
@@ -151,7 +152,7 @@ private:
 
   // sensors
   LocationDataSource* m_locationDataSource = nullptr;
-  LocationTrackingMode m_locationTrackingMode = LocationTrackingMode::Ignore;
+  LocationTrackingMode m_locationTrackingMode = LocationTrackingMode::Initial;
 };
 
 } // Toolkit namespace

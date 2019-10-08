@@ -25,6 +25,9 @@ Item {
     signal startTrackingClicked()
     signal stopTrackingClicked()
     signal resetTrackingClicked()
+    signal ignoreTrackingClicked()
+    signal initialTrackingClicked()
+    signal continuousTrackingClicked()
     signal calibrationClicked()
 
     signal showPointCloud(bool visible)
@@ -89,6 +92,18 @@ Item {
                         Button {
                             text: "Reset"
                             onClicked: resetTrackingClicked();
+                        }
+                        Button {
+                            text: "Ignore Tracking"
+                            onClicked: ignoreTrackingClicked();
+                        }
+                        Button {
+                            text: "Initial Tracking"
+                            onClicked: initialTrackingClicked();
+                        }
+                        Button {
+                            text: "Continuous Tracking"
+                            onClicked: continuousTrackingClicked();
                         }
                         Button {
                             text: "Calibration"

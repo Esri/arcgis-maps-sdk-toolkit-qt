@@ -80,6 +80,12 @@ void CppArExample::setSceneView(SceneQuickView* sceneView)
   emit sceneViewChanged();
 }
 
+// Set the location tracking mode
+void CppArExample::setTrackingMode(int mode)
+{
+  m_arcGISArView->setLocationTrackingMode(static_cast<LocationTrackingMode>(mode));
+}
+
 // Set whether point clouds should be visible.
 void CppArExample::showPointCloud(bool visible)
 {

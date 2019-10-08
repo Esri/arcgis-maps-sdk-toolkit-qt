@@ -45,6 +45,8 @@ public:
   Esri::ArcGISRuntime::SceneQuickView* sceneView() const;
   void setSceneView(Esri::ArcGISRuntime::SceneQuickView* sceneView);
 
+  Q_INVOKABLE void setTrackingMode(int mode);
+
   Q_INVOKABLE void showPointCloud(bool visible);
   Q_INVOKABLE void showPlanes(bool visible);
 

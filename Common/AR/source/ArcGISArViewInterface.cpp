@@ -229,22 +229,18 @@ LocationTrackingMode ArcGISArViewInterface::locationTrackingMode() const
 }
 
 /*!
-  \brief ...
+  \brief Sets the tracking mode to \a locationTrackingMode.
  */
 void ArcGISArViewInterface::setLocationTrackingMode(LocationTrackingMode locationTrackingMode)
 {
-  if (locationTrackingMode != LocationTrackingMode::Ignore && !m_locationDataSource)
-  {
-    // create default LDS
-  }
+  if (m_locationTrackingMode == locationTrackingMode)
+    return;
 
   if (m_locationDataSource)
-  {
-    // if already started???
     m_locationDataSource->setLocationTrackingMode(locationTrackingMode);
-    m_locationTrackingMode = locationTrackingMode;
-    emit locationTrackingModeChanged();
-  }
+
+  m_locationTrackingMode = locationTrackingMode;
+  emit locationTrackingModeChanged();
 }
 
 /*!
@@ -259,22 +255,36 @@ void ArcGISArViewInterface::resetTracking()
 /*!
   \brief Starts AR tracking.
  */
-void ArcGISArViewInterface::startTracking(LocationTrackingMode locationTrackingMode)
+void ArcGISArViewInterface::startTracking()
 {
   Q_CHECK_PTR(m_arWrapper);
 
-  // set locationTrackingMode
-  setLocationTrackingMode(locationTrackingMode);
+  // Create LocationDataSource if necessary
+  if (!m_locationDataSource)
+    setLocationDataSource(new LocationDataSource(this));
 
-  // uses locationDataSource.
+  // Start AR wrapper
   if (m_tryUsingArKit)
     m_arWrapper->startTracking();
 
+  // Start location data source.
   if (m_locationDataSource)
-    m_locationDataSource->start(locationTrackingMode);
+    m_locationDataSource->start();
 
   m_tracking = true;
   emit trackingChanged();
+}
+
+/*!
+  \brief Starts AR tracking with location tracking mode.
+ */
+void ArcGISArViewInterface::startTracking(LocationTrackingMode locationTrackingMode)
+{
+  // Set locationTrackingMode
+  setLocationTrackingMode(locationTrackingMode);
+
+  // Start tracking.
+  startTracking();
 }
 
 /*!
