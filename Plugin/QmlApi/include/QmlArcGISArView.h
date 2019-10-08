@@ -27,10 +27,13 @@ class QmlArcGISArView : public ArcGISArViewInterface
 {
   Q_OBJECT
 
-  Q_PROPERTY(QObject* transformationMatrixCameraController READ transformationMatrixCameraController
-             WRITE setTransformationMatrixCameraController NOTIFY transformationMatrixCameraControllerChanged)
+  // public properties
   Q_PROPERTY(QObject* originCamera READ originCamera WRITE setOriginCamera NOTIFY originCameraChanged)
   Q_PROPERTY(QObject* sceneView READ sceneView WRITE setSceneView NOTIFY sceneViewChanged)
+
+  // internal property
+  Q_PROPERTY(QObject* transformationMatrixCameraController READ transformationMatrixCameraController
+             WRITE setTransformationMatrixCameraController NOTIFY transformationMatrixCameraControllerChanged)
 
 public:
   explicit QmlArcGISArView(QQuickItem* parent = nullptr);
@@ -48,12 +51,18 @@ public:
 
   // methods invokable
   Q_INVOKABLE void setInitialTransformation(float x, float y);
-  Q_INVOKABLE QObject* screenToLocation(QObject* screenPoint) const;
+  Q_INVOKABLE std::vector<qreal> screenToLocation(float x, float y) const;
+
+  // Register the QML creatable types provide by QR toolkit
+  static void qmlRegisterTypes();
 
 signals:
-  void transformationMatrixCameraControllerChanged();
+  // public signals
   void originCameraChanged();
   void sceneViewChanged();
+
+  // internal signals
+  void transformationMatrixCameraControllerChanged();
   void renderFrame();
   void locationChanged(double latitude, double longitude, double altitude);
   void headingChanged(double heading);

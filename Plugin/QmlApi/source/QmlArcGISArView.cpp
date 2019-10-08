@@ -21,29 +21,35 @@
   \ingroup AR
   \inmodule ArcGISQtToolkit
   \since Esri::ArcGISRuntime 100.6
-  \brief Render and tracks the camera.
+  \brief A scene view for displaying ARKit/ARCore features on mobile devices.
+
+  The Augmented Reality toolkit provides support for ARKit for iOS and Android.
+  The Augmented Reality (AR) toolkit component allows quick and easy integration
+  of AR into your application for a variety of scenarios.
+
+  See AR.md for details.
  */
 
 using namespace Esri::ArcGISRuntime::Toolkit;
 
 /*!
-  \brief A constructor that accepts an optional \a parent.
- */
+  \internal
+*/
 QmlArcGISArView::QmlArcGISArView(QQuickItem* parent):
   ArcGISArViewInterface(parent)
 {
 }
 
 /*!
-   \brief The destructor.
- */
+  \internal
+*/
 QmlArcGISArView::~QmlArcGISArView()
 {
 }
 
 /*!
   \qmlproperty Camera ArcGISArView::originCamera
-  \brief Returns the origin camera.
+  \brief The origin camera of the scene.
  */
 QObject* QmlArcGISArView::originCamera() const
 {
@@ -66,7 +72,7 @@ void QmlArcGISArView::setOriginCamera(QObject* originCamera)
 
 /*!
   \qmlproperty SceneView ArcGISArView::sceneView
-  \brief Returns the scene view.
+  \brief The ArcGIS scene view used to display the scene.
 
   The space effect of the scene view is set to \c SpaceEffect::Transparent
   and the atmosphere effect is set to \c AtmosphereEffect::None.
@@ -102,6 +108,9 @@ QObject* QmlArcGISArView::transformationMatrixCameraController() const
   return m_tmcc;
 }
 
+/*!
+  \internal
+ */
 void QmlArcGISArView::setTransformationMatrixCameraController(QObject* tmcc)
 {
   if (!tmcc || m_tmcc || !assertClassName(tmcc, "QmlTransformationMatrixCameraController"))
@@ -117,7 +126,8 @@ void QmlArcGISArView::setTransformationMatrixCameraController(QObject* tmcc)
 }
 
 /*!
-  \brief Sets the initial transformation used to offset the originCamera.
+  \internal
+  Sets the initial transformation used to offset the originCamera.
 
   The initial transformation is based on an AR point determined via existing plane hit detection
   from `screenPoint`. If an AR point cannot be determined, the initial transformation is the
@@ -132,7 +142,8 @@ void QmlArcGISArView::setInitialTransformation(float x, float y)
 {
   // Use the `hitTestInternal` method to get the matrix of `screenPoint`.
   const std::array<double, 7> hitResult = hitTestInternal(x, y);
-  // quaternionW can never be 0, this indicates an error occurred
+
+  // QuaternionW can never be 0, this indicates an error occurred
   if (hitResult[3] == 0)
     return;
 
@@ -140,35 +151,28 @@ void QmlArcGISArView::setInitialTransformation(float x, float y)
 }
 
 /*!
-  \qmlmethod Point ArcGISArView::screenToLocation(Point screenPoint)
+  \internal
   \brief Gets the location in the real world space corresponding to the screen point.
 */
-QObject* QmlArcGISArView::screenToLocation(QObject* screenPoint) const
+std::vector<qreal> QmlArcGISArView::screenToLocation(float x, float y) const
 {
-  if (!m_sceneView || !assertClassName(screenPoint, "QmlPoint"))
-    return nullptr;
-
-  // gets the position of the screen point
-  bool isOk = false;
-  const double x = screenPoint->property("x").toDouble(&isOk);
-  if (!isOk)
-    return nullptr;
-
-  const double y = screenPoint->property("y").toDouble(&isOk);
-  if (!isOk)
-    return nullptr;
-
-  // gets the current viewpoint camera
-  QObject* currentViewpointCamera = m_sceneView->property("currentViewpointCamera").value<QObject*>();
-  if (!currentViewpointCamera)
-    return nullptr;
-
-  // converts the point from the screen space to the 3D space
+  // Converts the point from the screen space to the 3D space
   const std::array<double, 7> hitResult = ArcGISArViewInterface::hitTestInternal(x, y);
 
-  // calculates the matrix transformations and creates the QmlPoint location.
-  QVariant location;
-  return location.value<QObject*>();
+  // Copy the data to std::vector to use it in QML.
+  return std::vector<qreal>(hitResult.begin(), hitResult.end());
+}
+
+/*!
+  \brief Register the QML creatable types provide by QR toolkit.
+
+  The static function register the QML types \l ArcGISArView and \l LocationDataSource in the QML engine.
+  This function must becalled before using the QML types.
+ */
+void QmlArcGISArView::qmlRegisterTypes()
+{
+  qmlRegisterType<Esri::ArcGISRuntime::Toolkit::QmlArcGISArView>("Esri.ArcGISArToolkit", 1, 0, "ArcGISArViewInternal");
+  qmlRegisterType<Esri::ArcGISRuntime::Toolkit::LocationDataSource>("Esri.ArcGISArToolkit", 1, 0, "LocationDataSource");
 }
 
 /*!
@@ -207,7 +211,7 @@ void QmlArcGISArView::renderFrameInternal()
  */
 void QmlArcGISArView::setTranslationFactorInternal(double)
 {
-  // do nothing, translationFactorChanged signal is emitted in ArcGISArViewInterface::setTranslationFactor
+  // Do nothing, translationFactorChanged signal is emitted in ArcGISArViewInterface::setTranslationFactor
 }
 
 /*!

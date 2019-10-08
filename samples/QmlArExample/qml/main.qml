@@ -32,12 +32,10 @@ ApplicationWindow {
     ArcGISArView {
         id: arcGISArView
         anchors.fill: parent
+        tracking: true
         sceneView: sceneView
         locationDataSource: sceneLoader.item ? sceneLoader.item.locationDataSource : null
         translationFactor: sceneLoader.item ? sceneLoader.item.translationFactor : 1
-
-        // By default, start the tracking.
-        Component.onCompleted: startTracking();
     }
 
     SceneView {

@@ -180,6 +180,18 @@ Point ArcGISArView::screenToLocation(const QPoint& screenPoint) const
 }
 
 /*!
+  \brief Register the QML creatable types provide by QR toolkit.
+
+  The static function register the QML types \l ArcGISArView and \l LocationDataSource in the QML engine.
+  This function must becalled before using the QML types.
+ */
+void ArcGISArView::qmlRegisterTypes()
+{
+  qmlRegisterType<Esri::ArcGISRuntime::Toolkit::ArcGISArView>("Esri.ArcGISArToolkit", 1, 0, "ArcGISArView");
+  qmlRegisterType<Esri::ArcGISRuntime::Toolkit::LocationDataSource>("Esri.ArcGISArToolkit", 1, 0, "LocationDataSource");
+}
+
+/*!
   \internal
  */
 void ArcGISArView::setTransformationMatrixInternal(double quaternionX, double quaternionY, double quaternionZ, double quaternionW,
@@ -208,26 +220,7 @@ void ArcGISArView::setFieldOfViewInternal(double xFocalLength, double yFocalLeng
 
   // get the screen orientation
   const Qt::ScreenOrientations orientation = window()->screen()->orientation();
-  DeviceOrientation deviceOrientation = DeviceOrientation::Portrait;
-
-  switch (orientation)
-  {
-    case Qt::PortraitOrientation:
-      deviceOrientation = DeviceOrientation::Portrait;
-      break;
-    case Qt::LandscapeOrientation:
-      deviceOrientation = DeviceOrientation::LandscapeRight;
-      break;
-    case Qt::InvertedPortraitOrientation:
-      deviceOrientation = DeviceOrientation::ReversePortrait;
-      break;
-    case Qt::InvertedLandscapeOrientation:
-      deviceOrientation = DeviceOrientation::LandscapeLeft;
-      break;
-    default:
-      deviceOrientation = DeviceOrientation::Portrait;
-      break;
-  }
+  const DeviceOrientation deviceOrientation = toDeviceOrientation(orientation);
 
   // set the field of view
   m_sceneView->setFieldOfViewFromLensIntrinsics(xFocalLength, yFocalLength, xPrincipal, yPrincipal,
@@ -304,6 +297,28 @@ void ArcGISArView::resetTrackingInternal()
   m_initialTransformation = TransformationMatrix::createIdentityMatrix(this);
 
   m_tmcc->setTransformationMatrix(m_initialTransformation);
+}
+
+/*!
+  \internal
+
+  Cast from Qt's screen orientation to ArcGIS Runtime's screen orientation.
+ */
+DeviceOrientation ArcGISArView::toDeviceOrientation(Qt::ScreenOrientations orientation)
+{
+  switch (orientation)
+  {
+    case Qt::PortraitOrientation:
+      return DeviceOrientation::Portrait;
+    case Qt::LandscapeOrientation:
+      return DeviceOrientation::LandscapeRight;
+    case Qt::InvertedPortraitOrientation:
+      return DeviceOrientation::ReversePortrait;
+    case Qt::InvertedLandscapeOrientation:
+      return DeviceOrientation::LandscapeLeft;
+    default:
+      return DeviceOrientation::Portrait;
+  }
 }
 
 // signals
