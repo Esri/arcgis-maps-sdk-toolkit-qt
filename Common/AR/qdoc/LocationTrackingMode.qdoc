@@ -14,22 +14,26 @@
  *  limitations under the License.
  ******************************************************************************/
 
-#ifndef LocationTrackingMode_H
-#define LocationTrackingMode_H
+/*!
+  \class Esri::ArcGISRuntime::Toolkit::LocationTrackingMode
+  \ingroup ArcGISQtAr
+  \inmodule ArcGISQtToolkit
+  \brief Controls how the locations generated from the location data source are used during AR tracking.
+  \since Esri::ArcGISRuntime 100.6
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
-
-enum class LocationTrackingMode
-{
-  Ignore = 0,
-  Initial = 1,
-  Continuous = 2
-};
-
-} // Toolkit namespace
-} // ArcGISRuntime namespace
-} // Esri namespace
-
-#endif // LocationTrackingMode_H
+  The LocationTrackingMode can be one of:
+  \table
+    \header
+      \li Value
+      \li Description
+    \row
+      \li LocationTrackingMode::Ignore (0)
+      \li Ignore all location data source locations.
+    \row
+      \li LocationTrackingMode::Initial (1)
+      \li Use only the initial location from the location data source and ignore all subsequent locations.
+    \row
+      \li LocationTrackingMode::Continuous (2)
+      \li Use all locations from the location data source.
+  \endtable
+*/
