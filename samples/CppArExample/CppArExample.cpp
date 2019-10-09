@@ -77,24 +77,14 @@ void CppArExample::setSceneView(SceneQuickView* sceneView)
     return;
 
   m_sceneView = sceneView;
+
+  // connect the screen touch
+  if (m_touchedConnection)
+    disconnect(m_touchedConnection);
+
+  m_touchedConnection = connect(m_sceneView, &SceneQuickView::touched, this, &CppArExample::onTouched);
+
   emit sceneViewChanged();
-}
-
-// Place a symbol on the 3D scene space, corresponding to the position in the 2D screen space.
-void CppArExample::screenToLocation(float x, float y)
-{
-  const Point location = m_arcGISArView->screenToLocation(QPoint(x, y));
-  if (location.isEmpty())
-    return;
-
-  // Add symbol using the location.
-  auto* graphicsOverlay = new GraphicsOverlay(this);
-  Q_CHECK_PTR(m_sceneView);
-  m_sceneView->graphicsOverlays()->append(graphicsOverlay);
-
-  SimpleMarkerSceneSymbol* symbol = new SimpleMarkerSceneSymbol(
-        SimpleMarkerSceneSymbolStyle::Sphere, QColor(Qt::red), 0.1, 0.1, 0.1, SceneSymbolAnchorPosition::Center, graphicsOverlay);
-  graphicsOverlay->graphics()->append(new Graphic(Point(location.x(), location.y(), location.z()), symbol, graphicsOverlay));
 }
 
 // Set whether point clouds should be visible.
@@ -325,6 +315,45 @@ void CppArExample::createTabletopTestScene()
   m_arcGISArView->setTranslationFactor(10.0);
 
   changeScene();
+}
+
+// If m_screenToLocationMode is true, create and place a 3D sphere in the scene. Otherwise set the
+// initial transformation based on the screen position.
+void CppArExample::onTouched(QTouchEvent& event)
+{
+  Q_CHECK_PTR(m_arcGISArView);
+
+  const QPoint screenPoint = event.touchPoints().first().lastScreenPos().toPoint();
+
+  // If "screenToLocation" mode is enabled.
+  if (m_screenToLocationMode)
+  {
+    // Get the real world location for screen point from AR view.
+    const Point point = m_arcGISArView->screenToLocation(screenPoint);
+    if (point.isEmpty())
+      return;
+
+    // Get or create graphic overlay
+    Q_CHECK_PTR(m_sceneView);
+    GraphicsOverlay* graphicsOverlay = m_sceneView->graphicsOverlays()->first();
+    if (!graphicsOverlay)
+    {
+      graphicsOverlay = new GraphicsOverlay(this);
+      m_sceneView->graphicsOverlays()->append(graphicsOverlay);
+    }
+    Q_CHECK_PTR(graphicsOverlay);
+
+    // Create and place a graphic at the real world location.
+    SimpleMarkerSceneSymbol* sphere = new SimpleMarkerSceneSymbol(
+          SimpleMarkerSceneSymbolStyle::Sphere, QColor("yellow"), 0.25, 0.25, 0.25,
+          SceneSymbolAnchorPosition::Bottom, graphicsOverlay);
+    Graphic* sphereGraphic = new Graphic(point, sphere, graphicsOverlay);
+    graphicsOverlay->graphics()->append(sphereGraphic);
+  }
+  else
+  {
+    m_arcGISArView->setInitialTransformation(screenPoint);
+  }
 }
 
 // Create and add a surface with elevation to the scene.

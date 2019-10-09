@@ -34,6 +34,7 @@ class CppArExample : public QObject
   Q_PROPERTY(Esri::ArcGISRuntime::Toolkit::ArcGISArView* arcGISArView READ arcGISArView WRITE setArcGISArView
              NOTIFY arcGISArViewChanged)
   Q_PROPERTY(Esri::ArcGISRuntime::SceneQuickView* sceneView READ sceneView WRITE setSceneView NOTIFY sceneViewChanged)
+  Q_PROPERTY(bool screenToLocationMode MEMBER m_screenToLocationMode NOTIFY screenToLocationModeChanged)
 
 public:
   explicit CppArExample(QObject* parent = nullptr);
@@ -44,8 +45,6 @@ public:
 
   Esri::ArcGISRuntime::SceneQuickView* sceneView() const;
   void setSceneView(Esri::ArcGISRuntime::SceneQuickView* sceneView);
-
-  Q_INVOKABLE void screenToLocation(float x, float y);
 
   Q_INVOKABLE void showPointCloud(bool visible);
   Q_INVOKABLE void showPlanes(bool visible);
@@ -65,6 +64,10 @@ public:
 signals:
   void arcGISArViewChanged();
   void sceneViewChanged();
+  void screenToLocationModeChanged();
+
+private slots:
+  void onTouched(QTouchEvent& event);
 
 private:
   Q_DISABLE_COPY(CppArExample)
@@ -75,6 +78,10 @@ private:
   Esri::ArcGISRuntime::Toolkit::ArcGISArView* m_arcGISArView = nullptr;
   Esri::ArcGISRuntime::SceneQuickView* m_sceneView = nullptr;
   Esri::ArcGISRuntime::Scene* m_scene = nullptr;
+
+  // Screen to location properties
+  bool m_screenToLocationMode = false;
+  QMetaObject::Connection m_touchedConnection;
 };
 
 #endif // CppArExample_H

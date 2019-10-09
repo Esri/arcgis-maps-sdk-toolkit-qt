@@ -30,14 +30,6 @@ ApplicationWindow {
         anchors.fill: parent
         sceneView: sceneView
         tracking: true
-
-        InformationDialog {
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            visible: true
-            text: "Tap on the screen to place the initial location of the scene"
-        }
     }
 
     // Create SceneQuickView here, and create its Scene etc. in C++ code
@@ -53,22 +45,6 @@ ApplicationWindow {
         sceneView: sceneView
     }
 
-    // Used for screenToLocation test.
-    MouseArea {
-        id: mouseArea
-        anchors.fill: parent
-        enabled: false
-        onClicked: arSample.screenToLocation(mouseX, mouseY);
-
-        InformationDialog {
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            visible: parent.enabled
-            text: "Tap on the screen to place a 3D object in the scene"
-        }
-    }
-
     SettingsWindow {
         anchors {
             top: parent.top
@@ -80,7 +56,7 @@ ApplicationWindow {
         onStopTrackingClicked: arcGISArView.stopTracking();
         onResetTrackingClicked: arcGISArView.resetTracking();
         // onCalibrationClicked: not implemented
-        onScreenToLocationClicked: mouseArea.enabled = !mouseArea.enabled;
+        onScreenToLocationClicked: arSample.screenToLocationMode = !arSample.screenToLocationMode
 
         onShowPointCloud: arSample.showPointCloud(visible);
         onShowPlanes: arSample.showPlanes(visible);

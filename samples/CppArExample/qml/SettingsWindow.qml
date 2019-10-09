@@ -97,7 +97,7 @@ Item {
                             enabled: false
                         }
                         Button {
-                            text: "Screen To Location"
+                            text: "Screen to location"
                             onClicked: screenToLocationClicked();
                         }
                     }

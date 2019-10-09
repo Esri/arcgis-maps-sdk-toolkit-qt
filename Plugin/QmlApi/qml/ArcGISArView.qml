@@ -31,7 +31,7 @@ ArcGISArViewInternal {
     onTranslationFactorChanged: tmcc.translationFactor = translationFactor;
 
     // Render the scene.
-    onRenderFrame: root.sceneView.renderFrame();
+    onRenderFrame: sceneView.renderFrame();
 
     // Update the initial transformation, using the hit matrix.
     property TransformationMatrix initialTransformationMatrix: null
@@ -134,13 +134,13 @@ ArcGISArViewInternal {
       \brief Gets the location in the real world space corresponding to the screen point \a screenPoint.
      */
     function screenToLocation(x, y) {
-        const hitTest = root.screenToLocation(x, y);
+        const hitTest = root.hitTest(x, y);
 
         const hitMatrix = TransformationMatrix.createWithQuaternionAndTranslation(
                             hitTest[0], hitTest[1], hitTest[2], hitTest[3], // quaternionX, quaternionY, quaternionZ, quaternionW
                             hitTest[4], hitTest[5], hitTest[6]); // translationX, translationY, translationZ
 
-        const currentViewpointMatrix = currentViewpointCamera.transformationMatrix;
+        const currentViewpointMatrix = sceneView.currentViewpointCamera.transformationMatrix;
         const matrix = currentViewpointMatrix.addTransformation(hitMatrix);
         const camera = ArcGISRuntimeEnvironment.createObject("Camera", { transformationMatrix: matrix });
         return camera.location;

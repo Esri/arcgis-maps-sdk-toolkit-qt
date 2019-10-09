@@ -121,11 +121,6 @@ void ArcGISArView::setSceneView(SceneQuickView* sceneView)
   m_sceneView->setManualRendering(true);
   m_sceneView->setCameraController(m_tmcc);
 
-  connect(m_sceneView, &SceneQuickView::touched, this, [this](QTouchEvent& event)
-  {
-    setInitialTransformation(event.touchPoints().first().lastScreenPos().toPoint());
-  });
-
   emit sceneViewChanged();
 }
 
@@ -144,7 +139,7 @@ void ArcGISArView::setInitialTransformation(const QPoint& screenPoint)
   // Use the `hitTestInternal` method to get the matrix of `screenPoint`.
   const std::array<double, 7> hitResult = hitTestInternal(screenPoint.x(), screenPoint.y());
   // quaternionW can never be 0, this indicates an error occurred
-  if (hitResult[3] == 0)
+  if (hitResult[3] == 0.0)
     return;
 
   // Set the `initialTransformation` as the AGSTransformationMatrix.identity - hit test matrix.
@@ -165,7 +160,8 @@ Point ArcGISArView::screenToLocation(const QPoint& screenPoint) const
     return Point();
 
   const std::array<double, 7> hitResult = hitTestInternal(screenPoint.x(), screenPoint.y());
-  if (hitResult[0] == 0)
+  // quaternionW can never be 0, this indicates an error occurred
+  if (hitResult[3] == 0.0)
     return Point();
 
   auto hitMatrix = std::unique_ptr<TransformationMatrix>(

@@ -26,6 +26,7 @@ Item {
     signal stopTrackingClicked()
     signal resetTrackingClicked()
     signal calibrationClicked()
+    signal screenToLocationClicked()
 
     signal showPointCloud(bool visible)
     signal showPlanes(bool visible)
@@ -94,6 +95,10 @@ Item {
                             text: "Calibration"
                             onClicked: calibrationClicked();
                             enabled: false
+                        }
+                        Button {
+                            text: "Screen to location"
+                            onClicked: screenToLocationClicked();
                         }
                     }
                 }

@@ -25,6 +25,8 @@ ApplicationWindow {
     height: 600
     title: "QmlArExample"
 
+    property bool screenToLocationMode: false
+
     ArcGISArView {
         id: arcGISArView
         anchors.fill: parent
@@ -39,7 +41,44 @@ ApplicationWindow {
         id: sceneView
         anchors.fill: parent
         scene: sceneLoader.item ? sceneLoader.item.scene : null
-        onMousePressed: arcGISArView.setInitialTransformation(mouse.x, mouse.y); // for touch screen events
+
+        // If m_screenToLocationMode is true, create and place a 3D sphere in the scene. Otherwise set the
+        // initial transformation based on the screen position.
+        onMousePressed: {
+            // If "screenToLocation" mode is enabled.
+            if (screenToLocationMode)
+            {
+                // Get the real world location for screen point from AR view.
+                const point = arcGISArView.screenToLocation(mouse.x, mouse.y);
+                if (!point)
+                    return;
+
+                // Get or create graphic overlay
+                var graphicsOverlay = graphicsOverlays.get(0);
+                if (!graphicsOverlay)
+                {
+                  graphicsOverlay = ArcGISRuntimeEnvironment.createObject("GraphicsOverlay");
+                  graphicsOverlays.append(graphicsOverlay);
+                }
+
+                // Create and place a graphic at the real world location.
+                const sphereParams = {
+                    style: Enums.SimpleMarkerSceneSymbolStyleSphere, color: "yellow",
+                    width: 0.2520, height: 0.25, depth: 0.25,
+                    anchorPosition: Enums.SceneSymbolAnchorPositionBottom };
+                const sphere = ArcGISRuntimeEnvironment.createObject("SimpleMarkerSceneSymbol", sphereParams);
+
+                const sphereGraphicParams = { geometry: point, symbol: sphere };
+                const sphereGraphic = ArcGISRuntimeEnvironment.createObject("Graphic", sphereGraphicParams);
+
+                graphicsOverlay.graphics.append(sphereGraphic);
+            }
+            else
+            {
+                // Set the initial transformation corresponding to the screen point.
+                arcGISArView.setInitialTransformation(mouse.x, mouse.y); // for touch screen events
+            }
+        }
     }
 
     Loader {
@@ -57,6 +96,7 @@ ApplicationWindow {
         onStopTrackingClicked: arcGISArView.stopTracking();
         onResetTrackingClicked: arcGISArView.resetTracking();
         // onCalibrationClicked: not implemented
+        onScreenToLocationClicked: screenToLocationMode = !screenToLocationMode;
 
         onShowPointCloud: {
             if (visible)
