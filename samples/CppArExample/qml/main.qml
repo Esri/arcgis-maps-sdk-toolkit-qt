@@ -45,12 +45,36 @@ ApplicationWindow {
         arcGISArView: arcGISArView
         sceneView: sceneView
     }
+    Column {
+        anchors {
+            right: parent.right
+            left: parent.left
+            margins: 10
+            bottom: parent.bottom
+            bottomMargin: 30
+        }
+        spacing: 5
 
-    CalibrationView {
-        id: calibrationView
-        anchors.fill: parent
-        visible: false
-        onTriggered: arSample.updateOriginCamera(latitude, longitude, altitude, heading);
+        Message {
+            id: waitingInitMessage
+            width: parent.width
+            visible: true
+            text: "Touch screen to place the tabletop scene..."
+        }
+
+        Message {
+            id: waitingLocationMessage
+            width: parent.width
+            visible: true
+            text: "Waiting for location..."
+        }
+
+        CalibrationView {
+            id: calibrationView
+            width: parent.width
+            visible: false
+            onTriggered: arSample.updateOriginCamera(latitude, longitude, altitude, heading);
+        }
     }
 
     SettingsWindow {
@@ -73,19 +97,19 @@ ApplicationWindow {
 
         // full scale scenes
         onEmptySceneClicked: {
-            setCalibrationFactors(0.000001);
+            setCalibrationFactors(0.0000001);
             arSample.createEmptyScene();
         }
         onStreetsSceneClicked: {
-            setCalibrationFactors(0.000001);
+            setCalibrationFactors(0.0000001);
             arSample.createStreetsScene();
         }
         onImagerySceneClicked: {
-            setCalibrationFactors(0.000001);
+            setCalibrationFactors(0.0000001);
             arSample.createImageryScene();
         }
         onFullScaleTestSceneClicked: {
-            setCalibrationFactors(0.000001);
+            setCalibrationFactors(0.0000001);
             arSample.createFullScaleTestScene();
         }
 

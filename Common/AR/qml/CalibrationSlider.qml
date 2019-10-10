@@ -31,11 +31,16 @@ Item {
     // The offset to applied.
     property double value: 0.0
 
-    // The mutiply factor to applied to offset.
+    // The multiply factor to applied to offset.
     property double factor: 1.0
 
     // This property holds whether the slider is pressed by either touch, mouse, or keys.
     property alias pressed: slider.pressed
+
+    // Resets the value to 0.0
+    function reset() {
+        value = 0.0;
+    }
 
     Label {
         id: label
@@ -63,7 +68,7 @@ Item {
         onPressedChanged: value = 0.0;
     }
 
-    // update the value with the offet 10^value.
+    // update the value with the offset 10^value.
     function update() {
         value += Math.sign(slider.value) * Math.pow(10, Math.abs(slider.value)) * factor;
     }

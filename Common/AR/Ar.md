@@ -27,7 +27,8 @@ contains the functionality needed to display an AR experience in your applicatio
 `ARCore` (Android) augmented reality framework to display the live camera feed and handle real world tracking
 and synchronization with the Runtime SDK's `SceneView`. The `ArcGISArView` is responsible for starting and
 managing an `ARKit` or `ARCore` session. `ArcGISArView` uses a `LocationDataSource` for getting an initial GPS location
-and when continuous GPS tracking is required.
+and when continuous GPS tracking is required. The `CalibrationView` can be used to change manually the location and
+heading of the scene, to ensure accuracy between the device live video and the scene.
 
 For details about using `ARKit`, please refer to [Apple's documentation](https://developer.apple.com/augmented-reality).
 For `ARCore`, please refer to [Google's documentation](https://developers.google.com/ar/).
@@ -323,10 +324,6 @@ dependencies {
 
 4. The project is ready to be built and run on an Android device. You need to verify the compatibility of your device
 with the ARKit.
-
-## Calibration view item
-
-...
 
 ## Note for performance issues
 

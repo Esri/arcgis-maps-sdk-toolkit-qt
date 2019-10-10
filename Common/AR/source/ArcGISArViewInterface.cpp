@@ -232,7 +232,7 @@ void ArcGISArViewInterface::setLocationDataSource(LocationDataSource* locationDa
     });
 
     // starts tracking using LocationDataSource if necessary
-    if (!m_tryUsingArKit)
+    if (m_tracking)
       m_locationDataSource->start();
   }
 

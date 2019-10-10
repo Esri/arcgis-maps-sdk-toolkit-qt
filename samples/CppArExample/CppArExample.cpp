@@ -86,13 +86,21 @@ void CppArExample::setSceneView(SceneQuickView* sceneView)
 // and the offset values returned by the calibration view.
 void CppArExample::updateOriginCamera(double latitude, double longitude, double altitude, double heading)
 {
-  const Camera newCamera(m_originCamera.location().y() + latitude,
-                         m_originCamera.location().x() + longitude,
-                         m_originCamera.location().z() + altitude,
-                         m_originCamera.heading() + heading,
-                         m_originCamera.pitch(),
-                         m_originCamera.roll());
-  m_arcGISArView->setOriginCamera(newCamera);
+  if (m_originCamera.isEmpty())
+  {
+    const Camera newCamera(latitude, longitude, altitude, heading, 0.0, 0.0);
+    m_arcGISArView->setOriginCamera(newCamera);
+  }
+  else
+  {
+    const Camera newCamera(m_originCamera.location().y() + latitude,
+                           m_originCamera.location().x() + longitude,
+                           m_originCamera.location().z() + altitude,
+                           m_originCamera.heading() + heading,
+                           m_originCamera.pitch(),
+                           m_originCamera.roll());
+    m_arcGISArView->setOriginCamera(newCamera);
+  }
 }
 
 // Set whether point clouds should be visible.

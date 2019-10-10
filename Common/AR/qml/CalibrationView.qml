@@ -26,11 +26,14 @@ import QtQuick.Controls 2.2
     \since Esri.ArcGISRutime 100.6
     \brief A item displaying controls for adjusting a scene view's location, heading, and elevation.
 
-    Used to calibrate an AR session.
+    This item can be used to change manually the location and heading of the scene, to ensure
+    accuracy between the device live video and the scene.
+
 */
 
 Item {
     id: root
+    height: rect.height
 
     /*!
       \brief The interval between triggers, in milliseconds.
@@ -80,10 +83,10 @@ Item {
       \brief Resets the calibration to location (0, 0, 0) and heading 0.0.
      */
     function reset() {
-        latitudeSlider.value = 0.0;
-        longitudeSlider.value = 0.0;
-        altitudeSlider.value = 0.0;
-        headingSlider.value = 0.0;
+        latitudeSlider.reset();
+        longitudeSlider.reset();
+        altitudeSlider.reset();
+        headingSlider.reset();
         root.triggered(latitudeSlider.value, longitudeSlider.value, altitudeSlider.value, headingSlider.value);
     }
 
@@ -100,20 +103,23 @@ Item {
             longitudeSlider.update();
             altitudeSlider.update();
             headingSlider.update();
-            root.triggered(latitudeSlider.value, longitudeSlider.value, altitudeSlider.value, headingSlider.value);
+
+            if (latitudeSlider.value !== 0.0 || longitudeSlider.value !== 0.0 ||
+                    altitudeSlider.value !== 0.0 || headingSlider.value !== 0.0) {
+                root.triggered(latitudeSlider.value, longitudeSlider.value, altitudeSlider.value, headingSlider.value);
+            }
         }
     }
 
     Rectangle {
+        id: rect
         anchors {
             left: parent.left
             right: parent.right
             bottom: parent.bottom
-            margins: 10
-            bottomMargin: 30
         }
         height: column.height + 20
-        color: "#88ffffff"
+        color: "#88ffffff" // transparent white
         radius: 5
 
         Column {

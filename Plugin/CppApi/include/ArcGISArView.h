@@ -75,8 +75,9 @@ protected:
   void resetTrackingInternal() override;
 
 private:
-  // Helper for device orientation
+  // Helpers
   static DeviceOrientation toDeviceOrientation(Qt::ScreenOrientations orientation);
+  void updateTmccOriginCamera() const;
 
   // Pointer to the SceneView.
   SceneQuickView* m_sceneView = nullptr;
@@ -87,9 +88,12 @@ private:
   // The initial transformation used for a table top experience. Defaults to the Identity Matrix.
   TransformationMatrix* m_initialTransformation = nullptr;
 
-  // The viewpoint camera used to set the initial view of the sceneView instead of the device's GPS
-  // location via the location data source.  You can use Key-Value Observing to track changes to the origin camera.
+  // The viewpoint camera used to set the initial view of the scene view. This camera can be
+  // modified by the calibration.
   Camera m_originCamera;
+
+  // The camera corresponding to the GPS coordinates.
+  Camera m_locationCamera;
 };
 
 } // Toolkit namespace
