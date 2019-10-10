@@ -115,17 +115,28 @@ ApplicationWindow {
                 arcGISArView.planeColor = "";
         }
 
-        onEmptySceneClicked: changeScene("qrc:/qml/scenes/EmptyScene.qml", 0.0000001, true);
-        onStreetsSceneClicked: changeScene("qrc:/qml/scenes/StreetsScene.qml", 0.0000001, true);
-        onImagerySceneClicked: changeScene("qrc:/qml/scenes/ImageryScene.qml", 0.0000001, true);
+        readonly property double emptySceneFactor: 0.0000001
+        readonly property double streetsSceneFactor: 0.0000001
+        readonly property double imagerySceneFactor: 0.0000001
 
-        onPointCloudSceneClicked: changeScene("qrc:/qml/scenes/PointCloudScene.qml", 0.0001);
-        onYosemiteSceneClicked: changeScene("qrc:/qml/scenes/YosemiteScene.qml", 0.0001);
-        onBorderSceneClicked: changeScene("qrc:/qml/scenes/BorderScene.qml", 0.0001);
-        onBrestSceneClicked: changeScene("qrc:/qml/scenes/BrestScene.qml", 0.00001);
-        onBerlinSceneClicked: changeScene("qrc:/qml/scenes/BerlinScene.qml", 0.0001);
+        onEmptySceneClicked: changeScene("qrc:/qml/scenes/EmptyScene.qml",emptySceneFactor, true);
+        onStreetsSceneClicked: changeScene("qrc:/qml/scenes/StreetsScene.qml", streetsSceneFactor, true);
+        onImagerySceneClicked: changeScene("qrc:/qml/scenes/ImageryScene.qml", imagerySceneFactor, true);
+
+        readonly property double pointCloundSceneFactor: 0.0001
+        readonly property double yosemiteSceneFactor: 0.0001
+        readonly property double borderSceneFactor: 0.0001
+        readonly property double brestSceneFactor: 0.00001
+        readonly property double berlinSceneFactor: 0.0001
+        readonly property double tabletopTestSceneFactor: 0.0000001
+
+        onPointCloudSceneClicked: changeScene("qrc:/qml/scenes/PointCloudScene.qml", pointCloundSceneFactor);
+        onYosemiteSceneClicked: changeScene("qrc:/qml/scenes/YosemiteScene.qml", yosemiteSceneFactor);
+        onBorderSceneClicked: changeScene("qrc:/qml/scenes/BorderScene.qml", borderSceneFactor);
+        onBrestSceneClicked: changeScene("qrc:/qml/scenes/BrestScene.qml", brestSceneFactor);
+        onBerlinSceneClicked: changeScene("qrc:/qml/scenes/BerlinScene.qml", berlinSceneFactor);
         onTabletopTestSceneClicked: changeScene("qrc:/qml/scenes/TabletopTestScene.qml",
-                                                0.0000001, false, sceneLoader.item.graphicsOverlay);
+                                                tabletopTestSceneFactor, false, sceneLoader.item.graphicsOverlay);
 
         function changeScene(sceneSource, factor, isTabletop = false, overlay = null) {
             tabletop = isTabletop;

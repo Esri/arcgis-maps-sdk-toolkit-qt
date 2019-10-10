@@ -96,46 +96,58 @@ ApplicationWindow {
         onShowPlanes: arSample.showPlanes(visible);
 
         // full scale scenes
+        readonly property double emptySceneFactor: 0.0000001
+        readonly property double streetsSceneFactor: 0.0000001
+        readonly property double imagerySceneFactor: 0.0000001
+        readonly property double fullScaleTestSceneFactor: 0.0000001
+
         onEmptySceneClicked: {
-            setCalibrationFactors(0.0000001);
+            setCalibrationFactors(emptySceneFactor);
             arSample.createEmptyScene();
         }
         onStreetsSceneClicked: {
-            setCalibrationFactors(0.0000001);
+            setCalibrationFactors(streetsSceneFactor);
             arSample.createStreetsScene();
         }
         onImagerySceneClicked: {
-            setCalibrationFactors(0.0000001);
+            setCalibrationFactors(imagerySceneFactor);
             arSample.createImageryScene();
         }
         onFullScaleTestSceneClicked: {
-            setCalibrationFactors(0.0000001);
+            setCalibrationFactors(fullScaleTestSceneFactor);
             arSample.createFullScaleTestScene();
         }
 
         // tabletop scenes
+        readonly property double pointCloundSceneFactor: 0.0001
+        readonly property double yosemiteSceneFactor: 0.0001
+        readonly property double borderSceneFactor: 0.0001
+        readonly property double brestSceneFactor: 0.00001
+        readonly property double berlinSceneFactor: 0.0001
+        readonly property double tabletopTestSceneFactor: 0.0000001
+
         onPointCloudSceneClicked: {
-            setCalibrationFactors(0.0001);
+            setCalibrationFactors(pointCloundSceneFactor);
             arSample.createPointCloudScene();
         }
         onYosemiteSceneClicked: {
-            setCalibrationFactors(0.0001);
+            setCalibrationFactors(yosemiteSceneFactor);
             arSample.createYosemiteScene();
         }
         onBorderSceneClicked: {
-            setCalibrationFactors(0.0001);
+            setCalibrationFactors(borderSceneFactor);
             arSample.createBorderScene();
         }
         onBrestSceneClicked: {
-            setCalibrationFactors(0.00001);
+            setCalibrationFactors(brestSceneFactor);
             arSample.createBrestScene();
         }
         onBerlinSceneClicked: {
-            setCalibrationFactors(0.0001);
+            setCalibrationFactors(berlinSceneFactor);
             arSample.createBerlinScene();
         }
         onTabletopTestSceneClicked: {
-            setCalibrationFactors(0.0000001);
+            setCalibrationFactors(tabletopTestSceneFactor);
             arSample.createTabletopTestScene();
         }
 
