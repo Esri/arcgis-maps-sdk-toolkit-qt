@@ -28,7 +28,7 @@ if the scene were a 3D physical model.
 physical world as viewed through a device's camera feed. The camera feed
 provides physical context to the data content, with data content rendered on
 top of that feed. This pattern is used in scenarios ranging from viewing hidden
-infrastructure, such as the recorded positon of utility lines or pipes below a
+infrastructure, such as the recorded position of utility lines or pipes below a
 street, to displaying waypoints for navigation.
 
 The AR toolkit component is comprised of one class: `ArcGISArView`. This is a
@@ -81,7 +81,7 @@ for details.
 "ArcGIS Runtime 100.6 Qt Quick C++ app". Select the option "3D project" in the
 "Details" dialog.
 
-4. In the newly-created project, add the following lines anywhere in the app's project (`.pro`)
+4. In the newly created project, add the following lines anywhere in the app's project (`.pro`)
 file, making sure to use the correct path to the ArcGIS Toolkit source folder
 on your development machine.
 
@@ -174,7 +174,7 @@ An example of parameters for tabletop AR app is given in the following code:
   m_arcGISArView->setLocationDataSource(nullptr);
 ```
 
-In the constructor of <ProjectName>, adapt the creation of the scene.
+In the constructor of the app's root class, adapt the creation of the scene.
 The default scene is suitable for full scale mode.
 
 8. In the `<ProjectName>Form.qml` file,  make the following changes:
