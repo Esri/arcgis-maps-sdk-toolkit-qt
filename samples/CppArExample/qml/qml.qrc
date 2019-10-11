@@ -2,6 +2,5 @@
     <qresource prefix="/qml">
         <file>main.qml</file>
         <file>SettingsWindow.qml</file>
-        <file>InformationDialog.qml</file>
     </qresource>
 </RCC>
