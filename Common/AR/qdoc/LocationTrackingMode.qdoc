@@ -18,7 +18,7 @@
   \class Esri::ArcGISRuntime::Toolkit::LocationTrackingMode
   \ingroup ArcGISQtAr
   \inmodule ArcGISQtToolkit
-  \brief Controls how the locations generated from the location data source are used during AR tracking.
+  \brief Specifies how locations generated from the location data source are used during AR tracking.
   \since Esri::ArcGISRuntime 100.6
 
   The LocationTrackingMode can be one of:
@@ -34,6 +34,6 @@
       \li Use only the initial location from the location data source and ignore all subsequent locations.
     \row
       \li LocationTrackingMode::Continuous (2)
-      \li Use all locations from the location data source.
+      \li Use continuous location updates from the location data source.
   \endtable
 */

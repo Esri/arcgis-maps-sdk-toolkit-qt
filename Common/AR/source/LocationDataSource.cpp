@@ -72,7 +72,7 @@
   If the tracking mode is not \c {LocationTrackingode::Ignore}{ignore} and the user didn't provide
   \l QGeoPositionInfoSource and \l QCompass objects, default ones are created with the
   \l LocationDataSource as parent. If one of these objects is provided, the \l LocationDataSource
-  don't take the ownership of the object.
+  doesn't take ownership of the object.
  */
 
 using namespace Esri::ArcGISRuntime::Toolkit;
@@ -186,7 +186,7 @@ LocationTrackingMode LocationDataSource::locationTrackingMode() const
 /*!
   \brief Sets the location tracking mode to \a locationTrackingMode.
 
-  The location tracking mode can not be changed when the tracking is started.
+  The location tracking mode cannot be changed after tracking is started.
 
   \sa LocationTrackingMode
  */
@@ -214,7 +214,7 @@ QGeoPositionInfoSource* LocationDataSource::geoPositionSource() const
 /*!
   \brief Sets the position source to \a geoPositionSource.
 
-  The geoposition source can not be changed when the tracking is started.
+  The geoposition source cannot be changed after tracking is started.
  */
 void LocationDataSource::setGeoPositionSource(QGeoPositionInfoSource* geoPositionSource)
 {
@@ -236,7 +236,7 @@ QCompass* LocationDataSource::compass() const
 /*!
   \brief Sets the compass to \a compass.
 
-  The compass can not be changed when the tracking is started.
+  The compass cannot be changed after tracking is started.
  */
 void LocationDataSource::setCompass(QCompass* compass)
 {
@@ -257,67 +257,44 @@ void LocationDataSource::setCompass(QCompass* compass)
 void LocationDataSource::updateObjectsAndConnections()
 {
   // The geoPositionSource and compass objects can be created by the user and
-  // can be still alive when the pointers are set to null. Then the connections
+  // can be still active when the pointers are set to null. Therefore, the connections
   // must be disconnected manually.
   disconnect(m_geoPositionSourceConnection);
   disconnect(m_compassConnection);
 
-  // Create a default geo position source and compass if necessary.
+  // If necessary, create a default geoposition source and compass.
   if (!m_geoPositionSource)
     setGeoPositionSource(QGeoPositionInfoSource::createDefaultSource(this));
 
   if (!m_compass)
     setCompass(new QCompass(this));
 
-  // Connect the change signals.
-  if (m_locationTrackingMode == LocationTrackingMode::Continuous)
+  // Connect the geoPositionSource.
+  m_geoPositionSourceConnection = connect(m_geoPositionSource, &QGeoPositionInfoSource::positionUpdated,
+                                          this, [this](const QGeoPositionInfo& positionInfo)
   {
-    // Connect the geoPositionSource.
-    m_geoPositionSourceConnection = connect(m_geoPositionSource, &QGeoPositionInfoSource::positionUpdated,
-                                            this, [this](const QGeoPositionInfo &positionInfo)
-    {
-      // Emit the new position if available.
-      const QGeoCoordinate& coordinate = positionInfo.coordinate();
-      if (coordinate.isValid())
-        emit locationChanged(coordinate.latitude(), coordinate.longitude(), coordinate.altitude());
-    });
+    // Emit the new position if available.
+    QGeoCoordinate coordinate = positionInfo.coordinate();
+    if (coordinate.isValid())
+      emit locationChanged(coordinate.latitude(), coordinate.longitude(), coordinate.altitude());
 
-    // Connect the geoPositionSource.
-    m_compassConnection = connect(m_compass, &QCompass::readingChanged, this, [this]()
-    {
-      // emit the new heading if available
-      QCompassReading* reading = m_compass->reading();
-      Q_CHECK_PTR(reading);
-      emit headingChanged(reading->azimuth());
-    });
-  }
-  else if (m_locationTrackingMode == LocationTrackingMode::Initial)
+    // Disconnect the signal if the location tracking mode is Initial.
+    if (m_locationTrackingMode == LocationTrackingMode::Initial)
+      disconnect(m_geoPositionSourceConnection);
+  });
+
+  // Connect the QCompass.
+  m_compassConnection = connect(m_compass, &QCompass::readingChanged, this, [this]()
   {
-    // Connect the geoPositionSource and disconnect when the first signal is emitted.
-    m_geoPositionSourceConnection = connect(m_geoPositionSource, &QGeoPositionInfoSource::positionUpdated,
-                                            this, [this](const QGeoPositionInfo &positionInfo)
-    {
-      // Emit the new position if available.
-      const QGeoCoordinate& coordinate = positionInfo.coordinate();
-      if (coordinate.isValid())
-        emit locationChanged(coordinate.latitude(), coordinate.longitude(), coordinate.altitude());
+    // emit the new heading if available
+    QCompassReading* reading = m_compass->reading();
+    Q_CHECK_PTR(reading);
+    emit headingChanged(reading->azimuth());
 
-      // Disconnect the signal.
+    // Disconnect the signal if the location tracking mode is Initial.
+    if (m_locationTrackingMode == LocationTrackingMode::Initial)
       disconnect(m_compassConnection);
-    });
-
-    // Connect the geoPositionSource and disconnect when the first signal is emitted.
-    m_compassConnection = connect(m_compass, &QCompass::readingChanged, this, [this]()
-    {
-      // Emit the new heading if available.
-      QCompassReading* reading = m_compass->reading();
-      Q_CHECK_PTR(reading);
-      emit headingChanged(reading->azimuth());
-
-      // Disconnect the signal.
-      disconnect(m_compassConnection);
-    });
-  }
+  });
 }
 
 // signals

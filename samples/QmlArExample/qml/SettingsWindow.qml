@@ -94,15 +94,15 @@ Item {
                             onClicked: resetTrackingClicked();
                         }
                         Button {
-                            text: "Ignore Tracking"
+                            text: "Ignore tracking"
                             onClicked: ignoreTrackingClicked();
                         }
                         Button {
-                            text: "Initial Tracking"
+                            text: "Initial tracking"
                             onClicked: initialTrackingClicked();
                         }
                         Button {
-                            text: "Continuous Tracking"
+                            text: "Continuous tracking"
                             onClicked: continuousTrackingClicked();
                         }
                         Button {
@@ -113,7 +113,7 @@ Item {
                     }
                 }
                 GroupBox {
-                    title: "Debug Mode"
+                    title: "Debug mode"
                     Column {
                         spacing: 5
                         Button {
@@ -139,7 +139,7 @@ Item {
             Column {
                 spacing: 5
                 GroupBox {
-                    title: "Full Scale Scenes"
+                    title: "Full scale scenes"
                     Column {
                         spacing: 5
                         Button {
@@ -162,11 +162,11 @@ Item {
                 }
 
                 GroupBox {
-                    title: "Tabletop Scenes"
+                    title: "Tabletop scenes"
                     Column {
                         spacing: 5
                         Button {
-                            text: "Point Cloud"
+                            text: "Point cloud"
                             onClicked: pointCloudSceneClicked();
                         }
                         Button {

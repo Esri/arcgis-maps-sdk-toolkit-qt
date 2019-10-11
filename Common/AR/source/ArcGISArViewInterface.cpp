@@ -203,7 +203,7 @@ LocationDataSource* ArcGISArViewInterface::locationDataSource() const
 /*!
   \brief Sets the location data source to \a locationDataSource.
 
-  If \a locationDataSource is \c nullptr, the tracking of the LocationDataSource is disabled.
+  If \a locationDataSource is \c nullptr, the tracking of the \l LocationDataSource is disabled.
   If \l tryUsingArKit is \c true, the AR framework is used for the tracking, not \l LocationDataSource.
  */
 void ArcGISArViewInterface::setLocationDataSource(LocationDataSource* locationDataSource)
@@ -218,7 +218,7 @@ void ArcGISArViewInterface::setLocationDataSource(LocationDataSource* locationDa
 }
 
 /*!
-  \brief The tracking mode controlling how the locations generated from the location data source
+  \brief Gets the tracking mode controlling how the locations generated from the location data source
   are used during AR tracking.
 
   The default value is \c LocationTrackingMode::Ignore.
@@ -229,7 +229,7 @@ LocationTrackingMode ArcGISArViewInterface::locationTrackingMode() const
 }
 
 /*!
-  \brief Sets the tracking mode to \a locationTrackingMode.
+  \brief Sets the location tracking mode to \a locationTrackingMode.
  */
 void ArcGISArViewInterface::setLocationTrackingMode(LocationTrackingMode locationTrackingMode)
 {
@@ -413,7 +413,7 @@ void ArcGISArViewInterface::updateTrackingSources()
 {
   if (m_tryUsingArKit)
   {
-    // Stop locationDataSource is exist.
+    // Stop locationDataSource if it exists.
     if (m_locationDataSource)
       m_locationDataSource->stop();
 
