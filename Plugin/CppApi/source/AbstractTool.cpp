@@ -112,6 +112,11 @@ bool AbstractTool::isActive() const
  */
 
 /*!
+  \fn void Esri::ArcGISRuntime::Toolkit::AbstractTool::activeChanged()
+  \brief Signal emitted when the active property of this tool changes.
+ */
+
+/*!
   \fn void Esri::ArcGISRuntime::Toolkit::AbstractTool::propertyChanged(const QString& propertyName, const QVariant& propertyValue)
   \brief Signal emitted when a property of this tool changes.
 

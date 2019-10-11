@@ -199,14 +199,8 @@ Result::Result(const QString& name, const QString& notation, int type) :
 {
 }
 
-/*!
-  \internal
- */
 Result::Result(const Result& other) = default;
 
-/*!
-  \internal
- */
 Result::~Result() = default;
 
 /*!

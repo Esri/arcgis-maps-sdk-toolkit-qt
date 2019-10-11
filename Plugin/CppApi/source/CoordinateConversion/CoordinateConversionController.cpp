@@ -117,8 +117,8 @@ CoordinateConversionController::~CoordinateConversionController()
   \brief Converts \a notation and updates the \l results property.
 
   Before calling this method, set the \l inputFormat property to the
-  desired format, and set the \l spatialReference property
-  to the spatial reference of the notation's coordinates.
+  desired format, and call \l setSpatialReference to set
+  the spatial reference of the notation's coordinates.
 
   \note Converting between some notation formats can result in loss
   of precision due to the number of decimal places expressed in the
@@ -789,7 +789,7 @@ void CoordinateConversionController::setRunConversion(bool runConversion)
 
 /*!
   \fn void CoordinateConversionController::captureModeChanged();
-  \brief Signal emitted when the \l captureMode property changes.
+  \brief Signal emitted when the \c captureMode property changes.
  */
 
 } // Toolkit

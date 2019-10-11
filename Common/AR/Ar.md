@@ -1,68 +1,86 @@
-
 # Augmented Reality (AR) toolkit for ArcGIS Runtime SDK for Qt
 
-The Augmented Reality toolkit provides support for ARKit for iOS and Android.
+The Augmented Reality toolkit provides support for ARKit for iOS and Android
+apps written using ArcGIS Runtime SDK for Qt.
 This documentation describes the installation and uses of the AR toolkit.
 
 ## Overview
 
-Augmented reality experiences are designed to "augment" the physical world with virtual content that
-respects real world scale, position, and orientation of a device. In the case of Runtime, a SceneView
-displays 3D geographic data as virtual content on top of a camera feed which represents the real, physical
+Augmented reality experiences are designed to "augment" the physical world with
+virtual content that respects real world scale, position, and orientation of a
+device. In the case of Runtime, a SceneView displays 3D geographic data as
+virtual content on top of a camera feed which represents the real, physical
 world.
 
-The Augmented Reality (AR) toolkit component allows quick and easy integration of AR into your application
-for a wide variety of scenarios. The toolkit recognizes the following common patterns for AR:
+The Augmented Reality (AR) toolkit component allows quick and easy integration
+of AR into your application for a wide variety of scenarios. The toolkit
+recognizes the following common patterns for AR:
 
-- **Flyover**: Flyover AR lets you explore a scene using your device as a window into the virtual world.
-A typical flyover AR scenario begins with the scene’s virtual camera positioned over an area of interest.
-You can walk around and reorient the device to focus on specific content in the scene.
-- **Tabletop**: Scene content is anchored to a physical surface, as if it were a 3D-printed model.
-- **Real-scale**: Scene content is rendered exactly where it would be in the physical world. A camera feed
-is shown and GIS content is rendered on top of that feed. This is used in scenarios ranging from viewing
-hidden infrastructure to displaying waypoints for navigation.
+- **Flyover**: Flyover AR lets you explore a scene using your device as a
+window into the virtual world. A typical flyover AR scenario begins with the
+scene’s virtual camera positioned over an area of interest. You can walk around
+and reorient the device to focus on specific content in the scene.
 
-The AR toolkit component is comprised of one class: `ArcGISArView`. This is a subclass of QQuickItem, which
-contains the functionality needed to display an AR experience in your application. `ArcGISArView` uses `ARKit` (iOS) or
-`ARCore` (Android) augmented reality framework to display the live camera feed and handle real world tracking
-and synchronization with the Runtime SDK's `SceneView`. The `ArcGISArView` is responsible for starting and
-managing an `ARKit` or `ARCore` session. `ArcGISArView` uses a `LocationDataSource` for getting an initial GPS location
-and when continuous GPS tracking is required.
+- **Tabletop**: Scene content is anchored to a physical surface, as if it were
+a 3D-printed model.
 
-For details about using `ARKit`, please refer to [Apple's documentation](https://developer.apple.com/augmented-reality).
-For `ARCore`, please refer to [Google's documentation](https://developers.google.com/ar/).
+- **World-scale**: Scene content is rendered exactly where it would be in the
+physical world. A camera feed is shown and GIS content is rendered on top of
+that feed. This is used in scenarios ranging from viewing hidden infrastructure
+to displaying waypoints for navigation.
 
-The minimal version of the ArcGIS Runtime SDK for Qt is 100.6.
+The AR toolkit component is comprised of one class: `ArcGISArView`. This is a
+subclass of QQuickItem, which contains the functionality needed to display an
+AR experience in your application. `ArcGISArView` uses `ARKit` (iOS) or
+`ARCore` (Android) augmented reality framework to display the live camera feed
+and handle real world tracking and synchronization with the Runtime SDK's
+`SceneView`. The `ArcGISArView` is responsible for starting and managing an
+`ARKit` or `ARCore` session. `ArcGISArView` uses a `LocationDataSource` for
+getting an initial GPS location and when continuous GPS tracking is required.
 
-### Features of the AR component
+For details about using `ARKit`, please refer to
+[Apple's documentation](https://developer.apple.com/augmented-reality).
+For `ARCore`, please refer to
+[Google's documentation](https://developers.google.com/ar/).
+
+ArcGIS Runtime SDK 100.6 for Qt 100.6 is required to use this component.
+
+### Features of this AR component
 
 - Allows display of the live camera feed
 - Manages `ARKit` or `ARCore` session lifecycle
-- Tracks user location and device orientation through a combination of `ARKit`or `ARCore` and the device GPS
-- Provides access to a `SceneView` to display your GIS 3D data over the live camera feed
+- Tracks user location and device orientation through a combination of
+  `ARKit`or `ARCore` and the device GPS
+- Provides access to a `SceneView` to display your GIS 3D data over the live
+  camera feed
 - `screenToLocation` method to convert a screen point to a real-world coordinate
-- Easy access to all `ARKit` or `ARCore` and `LocationDataSource` delegate methods
+- Easy access to all `ARKit` or `ARCore` and `LocationDataSource` delegate
+  methods
 
-## Creating an new AR application using ArcGIS Runtime AR toolkit
+## Creating a new AR application using ArcGIS Runtime AR toolkit
 
-### Creating a new C++ application with AR support
+### Creating a new C++ application
 
-An example C++ application with AR support can be found in the folder `Examples\AR\CppArExample` in
-the toolkit repo.
+An example C++ application with AR support can be found in the folder
+`Examples\AR\CppArExample` in the toolkit repo.
 
-Note - In the following explanation, `<ProjectName>` refers to the project name used to create the Qt project.
+Note: In the following explanation, `<ProjectName>` refers to the project name
+used to create the Qt project.
 
 1. Install the ArcGIS Runtime SDK for Qt. See
 [ArcGIS Runtime SDK for Qt](https://developers.arcgis.com/qt/latest/qml/guide/arcgis-runtime-sdk-for-qt.htm)
 for details.
 
-2. Download the sources of the [ArcGIS Runtime API Toolkit](https://github.com/Esri/arcgis-runtime-toolkit-qt).
+2. Download from GitHub the source files of the
+[ArcGIS Runtime API Toolkit](https://github.com/Esri/arcgis-runtime-toolkit-qt).
 
-3. In Qt Creator, create a new project and select `ArcGIS Runtime 100.6 Qt Quick C++ app`.
-Select the option "3D project" in the "Details" step.
+3. In Qt Creator, create a new project and select the app template named
+`ArcGIS Runtime 100.6 Qt Quick C++ app`. Select the option "3D project" in the
+"Details" dialog.
 
-4. In the created project, add the following lines anywhere in the `.pro` file.
-Note - Make sure to set the correct path to the ArcGIS Toolkit source folder.
+4. In the newly-created project, add the following lines anywhere in the `.pro`
+file, making sure to use the correct path to the ArcGIS Toolkit source folder
+on your development machine.
 
 ```
 AR_TOOLKIT_SOURCE_PATH = # must be set to the path to toolkit sources
@@ -85,7 +103,7 @@ See [Note for performance issues] for details.
 ```
 
 5c. Call the `ArcGISArView::qmlRegisterTypes()` before the creation of the QML engine, to register the
-`ArcGISArView` and `LocationDataSource` C++ classes in QML engine. This is necessary to create a object
+`ArcGISArView` and `LocationDataSource` C++ classes in QML engine. This is necessary to create objects
 of these types in QML.
 ```
 Esri::ArcGISRuntime::Toolkit::ArcGISArView::qmlRegisterTypes();
@@ -116,9 +134,10 @@ private:
 };
 ```
 
-7. In the `<ProjectName>.cpp` file, implement the setter and getter for `arcGISArView` property.
-In the setter, set the properties `originCamera`, `translationFactor` and `setLocationDataSource`.
-An example of settings for full scale mode is given in the following code.
+7. In the `<ProjectName>.cpp` file, implement the setter and getter for the
+`arcGISArView` property. In the setter, set the properties `originCamera`,
+`translationFactor`, and `setLocationDataSource`.
+An example of settings for world scale mode is given in the following code.
 ```
 using namespace Esri::ArcGISRuntime::Toolkit;
 ...
