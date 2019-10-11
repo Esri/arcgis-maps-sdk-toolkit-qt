@@ -33,15 +33,15 @@ street, to displaying waypoints for navigation.
 
 The AR toolkit component is comprised of one class: `ArcGISArView`. This is a
 subclass of `QQuickItem`, which contains the functionality needed to display an
-AR experience in your application. `ArcGISArView` uses `ARKit` (iOS) or
-`ARCore` (Android) augmented reality framework to display the live camera feed
+AR experience in your application. `ArcGISArView` uses ARKit (iOS) or
+ARCore (Android) augmented reality framework to display the live camera feed
 and handle real world tracking and synchronization with the Runtime SDK's
 `SceneView`. The `ArcGISArView` is responsible for starting and managing an
-`ARKit` or `ARCore` session. `ArcGISArView` also uses a `LocationDataSource`
+ARKit or ARCore session. `ArcGISArView` also uses a `LocationDataSource`
 for getting an initial GPS location when continuous GPS tracking is required.
 
-For details about using `ARKit`, please refer to [Apple's
-documentation](https://developer.apple.com/augmented-reality). For `ARCore`,
+For details about using ARKit, please refer to [Apple's
+documentation](https://developer.apple.com/augmented-reality). For ARCore,
 please refer to [Google's documentation](https://developers.google.com/ar/).
 
 ArcGIS Runtime SDK 100.6 for Qt 100.6 is required to use this toolkit
@@ -50,14 +50,14 @@ component.
 ### Features of the AR toolkit component
 
 - Allows display of the live camera feed
-- Manages `ARKit` or `ARCore` session lifecycle
+- Manages ARKit or ARCore session lifecycle
 - Tracks user location and device orientation through a combination of
-  `ARKit`or `ARCore` and the device's GPS and other sensors
+  ARKit or ARCore and the device's GPS and other sensors
 - Provides access to a `SceneView` to display your GIS 3D data over the live
   camera feed
 - Provides the `screenToLocation` method to convert a screen point to a
   real-world coordinate
-- Eases access to all `ARKit` or `ARCore` and `LocationDataSource` delegate
+- Eases access to all ARKit or ARCore and `LocationDataSource` delegate
   methods
 
 ## Creating a new AR application using ArcGIS Runtime AR toolkit
@@ -254,7 +254,7 @@ Esri::ArcGISRuntime::Toolkit::QmlArcGISArView::qmlRegisterTypes();
 import Esri.ArcGISArToolkit 1.0
 ```
 
-  - Create an AR view in the back of the `SceneView` (then before the declaration of `SceneView` in the QML file).
+  - Create an AR view before the declaration of `SceneView` in the QML file.
 The following code show an example of initialization for the properties `originCamera`, `translationFactor` and
 `locationDataSource`used for world-scale mode.
 ```
@@ -294,8 +294,8 @@ application.
 
 ### Configuration for iOS devices
 
-1. Open the `Info.plist` file and add the following key at the end of the file,
-just before `</dict>`, to give the access to the camera to the `ARKit`.
+1. In the `Info.plist` file, add the following key at the end of the file,
+just before `</dict>`. This gives ARKit access to the device's camera.
 
 ```
 <key>NSCameraUsageDescription</key>
@@ -307,24 +307,24 @@ See [Apple's documentation for NSCameraUsageDescription](https://developer.apple
 2. The project is now ready to be build and run in a compatible iOS device.
 ARKit requires an iOS or iPadOS device with iOS 11 and an A9 processor or later.
 The list of compatible devices can be found in the end of the
-[Augmented Reality page](https://www.apple.com/lae/ios/augmented-reality/)
+[Augmented Reality page](https://www.apple.com/lae/ios/augmented-reality/).
 
 ### Configuration for Android devices
 
 For details about `ARCore` configuration, see [Google's ARCore documentation](https://developers.google.com/ar/develop/c/enable-arcore).
 
-1. In Qt Creator:
+1. In Qt Creator, make these changes to the project:
 
-  - Open the "Projects" mode in the left toolbar and select an Android kit.
+  - Open the "Projects" mode (in the left toolbar) and select an Android kit.
 
   - In the "Build Settings" then "Build Android APK", click on the "Create
   template" button. (`AndroidManifest.xml` and "gradle" files are added to the
   project.)
 
-2. Open the `AndroidManifest.xml` file using the plain text editor (right-click
+2. In the file `AndroidManifest.xml`, make the following changes using a plain text editor (right-click
 on the filename and select "Open With" then "Plain Text Editor").
 
-3. Under the line `<!-- Application arguments -->`, add the following line to
+  - Under the line `<!-- Application arguments -->`, add the following line to
 enable ARCore support.
 ```
 <meta-data android:name="com.google.ar.core" android:value="required"/>
@@ -338,19 +338,19 @@ Play Services for AR` is automatically installed with the app.
 
 For details, see [Enable ARCore documentation](https://developers.google.com/ar/develop/java/enable-arcore#manifest).
 
-4. Under the line `<!-- %%INSERT_FEATURES -->`, add the following line to give
+  - Under the line `<!-- %%INSERT_FEATURES -->`, add the following line to give
 permission to access the camera to ARCore.
 ```
 <uses-feature android:name="android.hardware.camera.ar" android:required="true"/>
 ```
 
-5. Set the minimum SDK version `android:minSdkVersion` to 24 for AR required application and 14 for
+  - Set the minimum SDK version `android:minSdkVersion` to 24 for AR required application and 14 for
 AR optional application.
 ```
 <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="28"/>
 ```
 
-6. Open the `build.gradle` file. In `dependencies`, add the ARCore dependency:
+3. In the `build.gradle` file, in `dependencies`, add the ARCore dependency:
 ```
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
@@ -358,18 +358,19 @@ dependencies {
 }
 ```
 
-7. The project is now ready to be build and run in a compatible Android device. ARCore requires Android 7.0 or later.
-The list of compatible devices can be found in
+4. The project is now ready to be build and run in a compatible Android device. 
+
+ARCore requires Android 7.0 or later. The list of compatible devices can be found in
 [ARCore supported devices](https://developers.google.com/ar/discover/supported-devices)
 
 ## Note for performance issues
 
 There are some conflicts between the AR frameworks and Qt's rendering thread.
-See `SceneView::renderFrame` documentation and
-[Qt's documentation](https://doc.qt.io/qt-5/qtquick-visualcanvas-scenegraph.html#non-threaded-render-loops-basic-and-windows)
+See the [SceneView::renderFrame](https://developers.arcgis.com/qt/latest/cpp/api-reference/esri-arcgisruntime-sceneview.html#renderFrame) API documentation and
+[Qt's documentation about non-threaded render loops](https://doc.qt.io/qt-5/qtquick-visualcanvas-scenegraph.html#non-threaded-render-loops-basic-and-windows)
 for more information.
 
-These lines of code enable the non-threaded render loop mode in Qt.
+The following lines of code enable the non-threaded render loop mode in Qt:
 
 ```
 #if defined(Q_OS_IOS) && defined(Q_OS_ANDROID)
