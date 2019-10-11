@@ -175,7 +175,10 @@ An example of parameters for tabletop AR app is given in the following code:
 ```
 
 In the constructor of the app's root class, adapt the creation of the scene.
-The default scene is suitable for full scale mode.
+When creating the [Scene](https://developers.arcgis.com/qt/latest/cpp/api-reference/esri-arcgisruntime-scene.html),
+add some data that will visualize well in AR, like an 
+[IntegratedMeshLayer](https://developers.arcgis.com/qt/latest/cpp/api-reference/esri-arcgisruntime-integratedmeshlayer.html), for example.
+The default Scene is suitable for full scale mode. 
 
 8. In the `<ProjectName>Form.qml` file,  make the following changes:
 
