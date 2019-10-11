@@ -36,7 +36,7 @@ using namespace Esri::ArcGISRuntime::Toolkit::Internal;
   This toolkit component allows quick and easy integration
   of AR into your application for a variety of scenarios.
 
-  See \l {https://github.com/Esri/arcgis-runtime-toolkit-qt/blob/ArcGISARView/Common/AR/Ar.md} {additional details about using the ArcGISArView toolkit component}.
+  See \l {https://github.com/Esri/arcgis-runtime-toolkit-qt/blob/master/Common/AR/Ar.md} {additional details about using the ArcGISArView toolkit component}.
  */
 
 /*!
