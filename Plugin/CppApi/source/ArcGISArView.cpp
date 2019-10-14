@@ -138,6 +138,7 @@ void ArcGISArView::setInitialTransformation(const QPoint& screenPoint)
 {
   // Use the `hitTestInternal` method to get the matrix of `screenPoint`.
   const std::array<double, 7> hitResult = hitTestInternal(screenPoint.x(), screenPoint.y());
+
   // quaternionW can never be 0, this indicates an error occurred
   if (hitResult[3] == 0.0)
     return;
@@ -159,6 +160,7 @@ Point ArcGISArView::screenToLocation(const QPoint& screenPoint) const
   if (!m_sceneView)
     return Point();
 
+  // Use the `hitTestInternal` method to get the matrix of `screenPoint`.
   const std::array<double, 7> hitResult = hitTestInternal(screenPoint.x(), screenPoint.y());
   // quaternionW can never be 0, this indicates an error occurred
   if (hitResult[3] == 0.0)

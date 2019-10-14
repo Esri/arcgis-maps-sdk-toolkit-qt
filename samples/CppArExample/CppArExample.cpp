@@ -323,7 +323,11 @@ void CppArExample::onTouched(QTouchEvent& event)
 {
   Q_CHECK_PTR(m_arcGISArView);
 
-  const QPoint screenPoint = event.touchPoints().first().lastScreenPos().toPoint();
+  const QList<QTouchEvent::TouchPoint>& touchPoints = event.touchPoints();
+  if (touchPoints.isEmpty())
+    return;
+
+  const QPoint screenPoint = touchPoints.first().lastScreenPos().toPoint();
 
   // If "screenToLocation" mode is enabled.
   if (m_screenToLocationMode)
@@ -335,17 +339,21 @@ void CppArExample::onTouched(QTouchEvent& event)
 
     // Get or create graphic overlay
     Q_CHECK_PTR(m_sceneView);
-    GraphicsOverlay* graphicsOverlay = m_sceneView->graphicsOverlays()->first();
-    if (!graphicsOverlay)
+    GraphicsOverlay* graphicsOverlay = nullptr;
+    if (m_sceneView->graphicsOverlays()->isEmpty())
     {
       graphicsOverlay = new GraphicsOverlay(this);
       m_sceneView->graphicsOverlays()->append(graphicsOverlay);
+    }
+    else
+    {
+      graphicsOverlay = m_sceneView->graphicsOverlays()->first();
     }
     Q_CHECK_PTR(graphicsOverlay);
 
     // Create and place a graphic at the real world location.
     SimpleMarkerSceneSymbol* sphere = new SimpleMarkerSceneSymbol(
-          SimpleMarkerSceneSymbolStyle::Sphere, QColor("yellow"), 0.25, 0.25, 0.25,
+          SimpleMarkerSceneSymbolStyle::Sphere, QColor(Qt::yellow), 0.25, 0.25, 0.25,
           SceneSymbolAnchorPosition::Bottom, graphicsOverlay);
     Graphic* sphereGraphic = new Graphic(point, sphere, graphicsOverlay);
     graphicsOverlay->graphics()->append(sphereGraphic);

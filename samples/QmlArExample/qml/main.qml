@@ -42,23 +42,24 @@ ApplicationWindow {
         anchors.fill: parent
         scene: sceneLoader.item ? sceneLoader.item.scene : null
 
-        // If m_screenToLocationMode is true, create and place a 3D sphere in the scene. Otherwise set the
+        // If screenToLocationMode is true, create and place a 3D sphere in the scene. Otherwise set the
         // initial transformation based on the screen position.
         onMousePressed: {
             // If "screenToLocation" mode is enabled.
-            if (screenToLocationMode)
-            {
+            if (screenToLocationMode) {
                 // Get the real world location for screen point from AR view.
                 const point = arcGISArView.screenToLocation(mouse.x, mouse.y);
                 if (!point)
                     return;
 
                 // Get or create graphic overlay
-                var graphicsOverlay = graphicsOverlays.get(0);
-                if (!graphicsOverlay)
-                {
+                var graphicsOverlay = null;
+                if (graphicsOverlays.count === 0) {
                   graphicsOverlay = ArcGISRuntimeEnvironment.createObject("GraphicsOverlay");
                   graphicsOverlays.append(graphicsOverlay);
+                }
+                else {
+                    graphicsOverlay = graphicsOverlays.get(0);
                 }
 
                 // Create and place a graphic at the real world location.
@@ -73,8 +74,7 @@ ApplicationWindow {
 
                 graphicsOverlay.graphics.append(sphereGraphic);
             }
-            else
-            {
+            else {
                 // Set the initial transformation corresponding to the screen point.
                 arcGISArView.setInitialTransformation(mouse.x, mouse.y); // for touch screen events
             }
