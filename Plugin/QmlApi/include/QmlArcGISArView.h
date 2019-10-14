@@ -95,9 +95,9 @@ protected:
 private:
   bool assertClassName(QObject* object, const QString& className) const;
 
-  QPointer<QObject> m_originCamera = nullptr;
-  QPointer<QObject> m_sceneView = nullptr;
-  mutable QPointer<QObject> m_tmcc = nullptr;
+  QPointer<QObject> m_originCamera;
+  QPointer<QObject> m_sceneView;
+  mutable QPointer<QObject> m_tmcc;
 };
 
 } // Toolkit namespace

@@ -330,14 +330,8 @@ void ArcGISArView::updateTmccOriginCamera() const
 {
   if (m_originCamera.isEmpty())
   {
-    if (m_locationCamera.isEmpty())
-    {
-      // Do nothing.
-    }
-    else
-    {
+    if (!m_locationCamera.isEmpty())
       m_tmcc->setOriginCamera(m_locationCamera);
-    }
   }
   else
   {

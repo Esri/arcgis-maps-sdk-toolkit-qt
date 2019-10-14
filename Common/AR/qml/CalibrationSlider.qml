@@ -28,8 +28,8 @@ Item {
     // The width of the text.
     property alias textWidth: label.width
 
-    // The offset to applied.
-    property double value: 0.0
+    // The value of the calibration slider.
+    property double sliderValue: 0.0
 
     // The multiply factor to applied to offset.
     property double factor: 1.0
@@ -37,9 +37,9 @@ Item {
     // This property holds whether the slider is pressed by either touch, mouse, or keys.
     property alias pressed: slider.pressed
 
-    // Resets the value to 0.0
+    // Resets the slider value to 0.0
     function reset() {
-        value = 0.0;
+        sliderValue = 0.0;
     }
 
     Label {
@@ -70,6 +70,6 @@ Item {
 
     // update the value with the offset 10^value.
     function update() {
-        value += Math.sign(slider.value) * Math.pow(10, Math.abs(slider.value)) * factor;
+        sliderValue += Math.sign(slider.value) * Math.pow(10, Math.abs(slider.value)) * factor;
     }
 }

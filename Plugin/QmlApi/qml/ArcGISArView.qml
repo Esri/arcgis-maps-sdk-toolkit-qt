@@ -40,7 +40,7 @@ ArcGISArViewInternal {
     property TransformationMatrix initialTransformationMatrix: null
 
     onInitialTransformationChanged: {
-        // Set the `initialTransformation` as the TransformationMatrix.identity - hit test matrix.
+        // Set the `initialTransformationMatrix` as the TransformationMatrix.identity - hit test matrix.
         const hitMatrix = TransformationMatrix.createWithQuaternionAndTranslation(
                     quaternionX, quaternionY, quaternionZ, quaternionW,
                     translationX, translationY, translationZ);
@@ -187,14 +187,11 @@ ArcGISArViewInternal {
         Calculate the origin camera to use in TMCC, by addition of the origin camera (wich contains
         the initial view of the scene view and calibration) and the location camera (which contains
         the GPS data).
-        m_originCamera and m_locationCamera can be invalid if not set previously.
+        originCameraInternal and locationCameraInternal can be invalid if not set previously.
      */
     function updateTmccOriginCamera() {
         if (!originCameraInternal) {
-            if (!locationCameraInternal) {
-                // Do nothing.
-            }
-            else {
+            if (locationCameraInternal) {
                 tmcc.originCamera = locationCameraInternal;
             }
         }

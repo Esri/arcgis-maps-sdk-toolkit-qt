@@ -87,7 +87,8 @@ Item {
         longitudeSlider.reset();
         altitudeSlider.reset();
         headingSlider.reset();
-        root.triggered(latitudeSlider.value, longitudeSlider.value, altitudeSlider.value, headingSlider.value);
+        root.triggered(latitudeSlider.sliderValue, longitudeSlider.sliderValue,
+                       altitudeSlider.sliderValue, headingSlider.sliderValue);
     }
 
     // private
@@ -104,9 +105,10 @@ Item {
             altitudeSlider.update();
             headingSlider.update();
 
-            if (latitudeSlider.value !== 0.0 || longitudeSlider.value !== 0.0 ||
-                    altitudeSlider.value !== 0.0 || headingSlider.value !== 0.0) {
-                root.triggered(latitudeSlider.value, longitudeSlider.value, altitudeSlider.value, headingSlider.value);
+            if (latitudeSlider.sliderValue !== 0.0 || longitudeSlider.sliderValue !== 0.0 ||
+                    altitudeSlider.sliderValue !== 0.0 || headingSlider.sliderValue !== 0.0) {
+                root.triggered(latitudeSlider.sliderValue, longitudeSlider.sliderValue,
+                               altitudeSlider.sliderValue, headingSlider.sliderValue);
             }
         }
     }

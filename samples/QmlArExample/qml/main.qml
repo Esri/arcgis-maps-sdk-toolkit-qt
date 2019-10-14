@@ -168,9 +168,9 @@ ApplicationWindow {
         }
     }
 
-    // Update the origin camera using the values send by the calibration view.
+    // Update the origin camera using the values sent by the calibration view.
     // The originCamera is set when the scene is created.
-    // The final origin camera send to ArcGISArView is the sum of originCamera
+    // The final origin camera sent to ArcGISArView is the sum of originCamera
     // and the offset values returned by the calibration view.
     function updateOriginCamera(latitude, longitude, altitude, heading) {
         if (!originCamera) {
