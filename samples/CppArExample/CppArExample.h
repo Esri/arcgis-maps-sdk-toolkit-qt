@@ -45,6 +45,8 @@ public:
   Esri::ArcGISRuntime::SceneQuickView* sceneView() const;
   void setSceneView(Esri::ArcGISRuntime::SceneQuickView* sceneView);
 
+  Q_INVOKABLE void updateOriginCamera(double latitude, double longitude, double altitude, double heading);
+
   Q_INVOKABLE void showPointCloud(bool visible);
   Q_INVOKABLE void showPlanes(bool visible);
 
@@ -73,6 +75,7 @@ private:
   Esri::ArcGISRuntime::Toolkit::ArcGISArView* m_arcGISArView = nullptr;
   Esri::ArcGISRuntime::SceneQuickView* m_sceneView = nullptr;
   Esri::ArcGISRuntime::Scene* m_scene = nullptr;
+  Esri::ArcGISRuntime::Camera m_originCamera;
 };
 
 #endif // CppArExample_H

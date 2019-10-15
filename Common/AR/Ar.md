@@ -27,7 +27,8 @@ contains the functionality needed to display an AR experience in your applicatio
 `ARCore` (Android) augmented reality framework to display the live camera feed and handle real world tracking
 and synchronization with the Runtime SDK's `SceneView`. The `ArcGISArView` is responsible for starting and
 managing an `ARKit` or `ARCore` session. `ArcGISArView` uses a `LocationDataSource` for getting an initial GPS location
-and when continuous GPS tracking is required.
+and when continuous GPS tracking is required. The `CalibrationView` can be used to change manually the location and
+heading of the scene, to ensure accuracy between the device live video and the scene.
 
 For details about using `ARKit`, please refer to [Apple's documentation](https://developer.apple.com/augmented-reality).
 For `ARCore`, please refer to [Google's documentation](https://developers.google.com/ar/).
@@ -47,20 +48,23 @@ The minimal version of the ArcGIS Runtime SDK for Qt is 100.6.
 
 ### Creating a new C++ application with AR support
 
-An example of C++ application with AR support can be found in the folder `Examples\AR\CppArExemple` in
+An example C++ application with AR support can be found in the folder `Examples\AR\CppArExample` in
 the toolkit repo.
 
-In the following explaination, `<ProjectName>` refere to the project name used to create the Qt's project.
+Note - In the following explanation, `<ProjectName>` refers to the project name used to create the Qt project.
 
-1. Install the ArcGIS Runtime SDK for Qt.
+1. Install the ArcGIS Runtime SDK for Qt. See
+[ArcGIS Runtime SDK for Qt](https://developers.arcgis.com/qt/latest/qml/guide/arcgis-runtime-sdk-for-qt.htm)
+for details.
 
 2. Download the sources of the [ArcGIS Runtime API Toolkit](https://github.com/Esri/arcgis-runtime-toolkit-qt).
 
-3. In Qt Create, create a new project and select `ArcGIS Runtime 100.6 Qt Quick C++ app`.
+3. In Qt Creator, create a new project and select `ArcGIS Runtime 100.6 Qt Quick C++ app`.
 Select the option "3D project" in the "Details" step.
 
-4. In the created project, add these lignes in the `.pro` file. These lines can be anywhere.
-Set the correct path to the ArcGIS Toolkit source folder.
+4. In the created project, add the following lines anywhere in the `.pro` file.
+Note - Make sure to set the correct path to the ArcGIS Toolkit source folder.
+
 ```
 AR_TOOLKIT_SOURCE_PATH = # must be set to the path to toolkit sources
 include($$AR_TOOLKIT_SOURCE_PATH/Plugin/CppApi/ArCppApi.pri)
@@ -68,7 +72,7 @@ include($$AR_TOOLKIT_SOURCE_PATH/Plugin/CppApi/ArCppApi.pri)
 
 5. In the `main.cpp` file.
 
-5a. Set the environment variable `QSG_RENDER_LOOP` to `basic` in the begining of the `main` function.
+5a. Set the environment variable `QSG_RENDER_LOOP` to `basic` in the beginning of the `main` function.
 See [Note for performance issues] for details.
 ```
 #if defined(Q_OS_IOS) || defined(Q_OS_ANDROID)
@@ -113,9 +117,9 @@ private:
 };
 ```
 
-7. In the `<ProjectName>.cpp` file, implemente the setter and getter for `arcGISArView` proprety.
+7. In the `<ProjectName>.cpp` file, implement the setter and getter for `arcGISArView` property.
 In the setter, set the properties `originCamera`, `translationFactor` and `setLocationDataSource`.
-An example of settings for full scall mode is given in the following code.
+An example of settings for full scale mode is given in the following code.
 ```
 using namespace Esri::ArcGISRuntime::Toolkit;
 ...
@@ -148,7 +152,7 @@ An example of parameters for tabletop AR app is given in the following code:
   m_arcGISArView->setLocationDataSource(nullptr);
 ```
 
-In the constructeur of <ProjectName>, adapte the creation of the scene.
+In the constructor of <ProjectName>, adapt the creation of the scene.
 The default scene is suitable for full scale mode.
 
 8. In the `<ProjectName>Form.qml` file.
@@ -178,18 +182,21 @@ ArcGISArView {
 
 ### Creating a new QML application with AR support
 
-An example of QML application with AR support can be found in the folder `Examples\AR\QmlArExemple` in
+An example of QML application with AR support can be found in the folder `Examples\AR\QmlArExample` in
 the toolkit repo.
 
-1. Install the ArcGIS Runtime SDK for Qt.
+1. Install the ArcGIS Runtime SDK for Qt. See
+[ArcGIS Runtime SDK for Qt](https://developers.arcgis.com/qt/latest/qml/guide/arcgis-runtime-sdk-for-qt.htm)
+for details.
 
 2. Download the sources of the [ArcGIS Runtime API Toolkit](https://github.com/Esri/arcgis-runtime-toolkit-qt).
 
-3. In Qt Create, create a new project and select `ArcGIS Runtime 100.6 Qt Quick QML app`.
+3. In Qt Creator, create a new project and select `ArcGIS Runtime 100.6 Qt Quick QML app`.
 Select the option "3D project" in the "Details" step.
 
-4. In the created project, add these lignes in the `.pro` file. These lines can be anywhere.
-Set the correct path to the ArcGIS Toolkit source folder.
+4. In the created project, add the following lines anywhere in the `.pro` file.
+    Note -Make sure to set the correct path to the ArcGIS Toolkit source folder.
+
 ```
 AR_TOOLKIT_SOURCE_PATH = # must be set to the path to toolkit sources
 include($$AR_TOOLKIT_SOURCE_PATH/Plugin/QmlApi/ArQmlApi.pri)
@@ -197,7 +204,7 @@ include($$AR_TOOLKIT_SOURCE_PATH/Plugin/QmlApi/ArQmlApi.pri)
 
 5. In the `main.cpp` file.
 
-5a. Set the environment variable `QSG_RENDER_LOOP` to `basic` in the begining of the `main` function.
+5a. Set the environment variable `QSG_RENDER_LOOP` to `basic` in the beginning of the `main` function.
 See [Note for performance issues] for details.
 ```
 #if defined(Q_OS_IOS) || defined(Q_OS_ANDROID)
@@ -272,8 +279,9 @@ to give the access to the camera to the `ARKit`.
 
 See [NSCameraUsageDescription Apple's documentation](https://developer.apple.com/documentation/bundleresources/information_property_list/nscamerausagedescription?language=objc) for details.
 
-2. The project is ready to be build and run in an iOS device. You need to verify the compatibility of your device
-with the `ARKit`.
+2. The project is ready to be build and run in a compatible iOS device. ARKit requires an iOS or iPadOS device
+with iOS 11 and an A9 processor or later. The list of compatible devices can be found in the end of the
+[Augmented Reality page](https://www.apple.com/lae/ios/augmented-reality/)
 
 ### Configuration for Android devices
 
@@ -283,10 +291,10 @@ For details about `ARCore` configuration, see [ARCore documentation](https://dev
 
 1a. Open the `Projects` mode in the left toolbar and select an Android kit.
 
-1b. In the `Build Settings` then `Build Android APK`, clic on `Create template` button.
+1b. In the `Build Settings` then `Build Android APK`, click on `Create template` button.
 An `AndroidManifest.xml` and `gradle` files are added to the project.
 
-2. Open the `AndroidManifest.xml` file using the plain text editor (right clic on the filename and select
+2. Open the `AndroidManifest.xml` file using the plain text editor (right click on the filename and select
 `Open With` then `Plain Text Editor`).
 
 2a. Under the line `<!-- Application arguments -->`, add the following line to enable the ARCore support.
@@ -307,7 +315,7 @@ the camera to ARCore.
 <uses-feature android:name="android.hardware.camera.ar" android:required="true"/>
 ```
 
-2c. Set the minimal SDK version `android:minSdkVersion` to 24 for AR required application and 14 for
+2c. Set the minimum SDK version `android:minSdkVersion` to 24 for AR required application and 14 for
 AR optional application.
 ```
 <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="28"/>
@@ -321,12 +329,13 @@ dependencies {
 }
 ```
 
-4. The project is ready to be built and run on an Android device. You need to verify the compatibility of your device
-with the ARKit.
+4. The project is ready to be build and run in a compatible Android device. ARCore requires Android 7.0 or later.
+The list of compatible devices can be found in
+[ARCore supported devices](https://developers.google.com/ar/discover/supported-devices)
 
 ## Note for performance issues
 
-There are some conflicts between the AR frameworks and the Qt's rendering thread.
+There are some conflicts between the AR frameworks and Qt's rendering thread.
 These lines of code enable the non-threaded render loop mode in Qt.
 
 See `SceneView::renderFrame` documentation and

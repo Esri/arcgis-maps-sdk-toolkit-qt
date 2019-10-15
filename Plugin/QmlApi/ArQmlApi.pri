@@ -34,7 +34,7 @@ OTHER_FILES += \
     $$AR_TOOLKIT_SOURCE_PATH/Plugin/QmlApi/qml/ArcGISArView.qml
 
 RESOURCES += \
-    $$AR_TOOLKIT_SOURCE_PATH/Plugin/QmlApi/qml/arQml.qrc
+    $$AR_TOOLKIT_SOURCE_PATH/Plugin/QmlApi/qml/ArQmlApi.qrc
 
 INCLUDEPATH += $$AR_TOOLKIT_SOURCE_PATH/Plugin/QmlApi/include
 DEPENDPATH += $$AR_TOOLKIT_SOURCE_PATH/Plugin/QmlApi/include

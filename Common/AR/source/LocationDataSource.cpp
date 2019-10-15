@@ -116,10 +116,8 @@ void LocationDataSource::start()
   m_geoPositionSource->startUpdates();
   m_compass->start();
 
-  // Update isStarted and sensorStatus properties
-  m_isStarted = true;
-  m_sensorStatus = ArEnums::SensorStatus::Started;
-  emit isStartedChanged();
+  // update isStarted and sensorStatus properties
+  m_sensorStatus = SensorStatus::Starting;
   emit sensorStatusChanged();
 }
 
@@ -278,6 +276,15 @@ void LocationDataSource::updateObjectsAndConnections()
     if (coordinate.isValid())
       emit locationChanged(coordinate.latitude(), coordinate.longitude(), coordinate.altitude());
 
+    // Update sensor status
+    if (m_sensorStatus == SensorStatus::Starting)
+    {
+      m_isStarted = true;
+      m_sensorStatus = SensorStatus::Started;
+      emit isStartedChanged();
+      emit sensorStatusChanged();
+    }
+    
     // Disconnect the signal if the location tracking mode is Initial.
     if (m_locationTrackingMode == ArEnums::LocationTrackingMode::Initial)
       disconnect(m_geoPositionSourceConnection);
@@ -291,6 +298,15 @@ void LocationDataSource::updateObjectsAndConnections()
     Q_CHECK_PTR(reading);
     emit headingChanged(reading->azimuth());
 
+    // Update sensor status
+    if (m_sensorStatus == SensorStatus::Starting)
+    {
+      m_isStarted = true;
+      m_sensorStatus = SensorStatus::Started;
+      emit isStartedChanged();
+      emit sensorStatusChanged();
+    }
+    
     // Disconnect the signal if the location tracking mode is Initial.
     if (m_locationTrackingMode == ArEnums::LocationTrackingMode::Initial)
       disconnect(m_compassConnection);
