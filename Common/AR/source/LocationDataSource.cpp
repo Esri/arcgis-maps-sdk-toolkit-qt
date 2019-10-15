@@ -62,6 +62,17 @@
   top of the device, as defined by QScreen::nativeOrientation.
 
   \sa {http://doc.qt.io/qt-5/qcompass.html}{QCompass}
+
+  \section1 Tracking Mode
+
+  The tracking mode can be \c {LocationTrackingode::Ignore}{ignore} (the location data are ignored),
+  \c {LocationTrackingode::Initial}{initial} (only the first location data are used) or
+  \c {LocationTrackingode::Continuous}{continuous} (all the location data are used).
+
+  If the tracking mode is not \c {LocationTrackingode::Ignore}{ignore} and the user didn't provide
+  \l QGeoPositionInfoSource and \l QCompass objects, default ones are created with the
+  \l LocationDataSource as parent. If one of these objects is provided, the \l LocationDataSource
+  doesn't take ownership of the object.
  */
 
 using namespace Esri::ArcGISRuntime::Toolkit;
@@ -94,14 +105,14 @@ bool LocationDataSource::isStarted() const
  */
 void LocationDataSource::start()
 {
-  // create a default geo position source and compass if necessary
-  if (!m_geoPositionSource)
-    setGeoPositionSource(QGeoPositionInfoSource::createDefaultSource(this));
+  // Do nothing if the tracking is already started.
+  if (m_isStarted)
+    return;
 
-  if (!m_compass)
-    setCompass(new QCompass(this));
+  // Update objects and connections.
+  updateObjectsAndConnections();
 
-  // start
+  // Start sensors
   m_geoPositionSource->startUpdates();
   m_compass->start();
 
@@ -111,19 +122,44 @@ void LocationDataSource::start()
 }
 
 /*!
+  \brief Starts the location data source with a location tracking mode.
+ */
+void LocationDataSource::start(ArEnums::LocationTrackingMode locationTrackingMode)
+{
+  // Do nothing if the tracking is already started.
+  if (m_isStarted)
+    return;
+
+  // Update the tracking mode.
+  setLocationTrackingMode(locationTrackingMode);
+
+  // Start the tracking
+  start();
+}
+
+/*!
   \brief Stops the location data source.
  */
 void LocationDataSource::stop()
 {
+  // Do nothing if the tracking is not started.
+  if (!m_isStarted)
+    return;
+
+  // Stop sensors.
   if (m_geoPositionSource)
     m_geoPositionSource->stopUpdates();
 
   if (m_compass)
     m_compass->stop();
 
-  // update isStarted and sensorStatus properties
+  // Disconnect signals.
+  disconnect(m_geoPositionSourceConnection);
+  disconnect(m_compassConnection);
+
+  // Update isStarted and sensorStatus properties.
   m_isStarted = false;
-  m_sensorStatus = SensorStatus::Stopped;
+  m_sensorStatus = ArEnums::SensorStatus::Stopped;
   emit isStartedChanged();
   emit sensorStatusChanged();
 }
@@ -131,9 +167,38 @@ void LocationDataSource::stop()
 /*!
   \brief Gets the sensor status.
  */
-SensorStatus LocationDataSource::sensorStatus() const
+ArEnums::SensorStatus LocationDataSource::sensorStatus() const
 {
   return m_sensorStatus;
+}
+
+/*!
+  \brief Gets the location tracking mode.
+  \sa LocationTrackingMode
+ */
+ArEnums::LocationTrackingMode LocationDataSource::locationTrackingMode() const
+{
+  return m_locationTrackingMode;
+}
+
+/*!
+  \brief Sets the location tracking mode to \a locationTrackingMode.
+
+  The location tracking mode cannot be changed after tracking is started.
+
+  \sa LocationTrackingMode
+ */
+void LocationDataSource::setLocationTrackingMode(ArEnums::LocationTrackingMode locationTrackingMode)
+{
+  if (m_locationTrackingMode == locationTrackingMode)
+    return;
+
+  m_locationTrackingMode = locationTrackingMode;
+
+  if (m_isStarted)
+    updateObjectsAndConnections();
+
+  emit locationTrackingModeChanged();
 }
 
 /*!
@@ -146,20 +211,68 @@ QGeoPositionInfoSource* LocationDataSource::geoPositionSource() const
 
 /*!
   \brief Sets the position source to \a geoPositionSource.
+
+  The geoposition source cannot be changed after tracking is started.
  */
 void LocationDataSource::setGeoPositionSource(QGeoPositionInfoSource* geoPositionSource)
 {
-  if (m_geoPositionSource == geoPositionSource || !geoPositionSource)
+  if (m_isStarted || m_geoPositionSource == geoPositionSource)
     return;
 
   m_geoPositionSource = geoPositionSource;
+  emit geoPositionSourceChanged();
+}
 
+/*!
+  \brief Gets the compass object.
+ */
+QCompass* LocationDataSource::compass() const
+{
+  return m_compass;
+}
+
+/*!
+  \brief Sets the compass to \a compass.
+
+  The compass cannot be changed after tracking is started.
+ */
+void LocationDataSource::setCompass(QCompass* compass)
+{
+  if (m_isStarted || m_compass == compass)
+    return;
+
+  m_compass = compass;
+  emit compassChanged();
+}
+
+/*!
+  \internal
+  Connect or disconnect the geoPositionSource and compass signals.
+  If locationTrackingMode is "Continuous", the connection still alive until stopped.
+  If locationTrackingMode is "Initial", the connection is disconnected after the first signal
+  is emitted.
+ */
+void LocationDataSource::updateObjectsAndConnections()
+{
+  // The geoPositionSource and compass objects can be created by the user and
+  // can be still active when the pointers are set to null. Therefore, the connections
+  // must be disconnected manually.
   disconnect(m_geoPositionSourceConnection);
+  disconnect(m_compassConnection);
+
+  // If necessary, create a default geoposition source and compass.
+  if (!m_geoPositionSource)
+    setGeoPositionSource(QGeoPositionInfoSource::createDefaultSource(this));
+
+  if (!m_compass)
+    setCompass(new QCompass(this));
+
+  // Connect the geoPositionSource.
   m_geoPositionSourceConnection = connect(m_geoPositionSource, &QGeoPositionInfoSource::positionUpdated,
-                                          this, [this](const QGeoPositionInfo &positionInfo)
+                                          this, [this](const QGeoPositionInfo& positionInfo)
   {
-    // Emit the new position if available
-    const QGeoCoordinate& coordinate = positionInfo.coordinate();
+    // Emit the new position if available.
+    QGeoCoordinate coordinate = positionInfo.coordinate();
     if (coordinate.isValid())
       emit locationChanged(coordinate.latitude(), coordinate.longitude(), coordinate.altitude());
 
@@ -171,39 +284,33 @@ void LocationDataSource::setGeoPositionSource(QGeoPositionInfoSource* geoPositio
       emit isStartedChanged();
       emit sensorStatusChanged();
     }
+    
+    // Disconnect the signal if the location tracking mode is Initial.
+    if (m_locationTrackingMode == ArEnums::LocationTrackingMode::Initial)
+      disconnect(m_geoPositionSourceConnection);
   });
 
-  emit geoPositionSourceChanged();
-}
-
-/*!
-  \brief Gets the \l QCompass object.
- */
-QCompass* LocationDataSource::compass() const
-{
-  return m_compass;
-}
-
-/*!
-  \brief Sets the compass to \a compass.
- */
-void LocationDataSource::setCompass(QCompass* compass)
-{
-  if (m_compass == compass || !compass)
-    return;
-
-  m_compass = compass;
-
-  disconnect(m_compassConnection);
+  // Connect the QCompass.
   m_compassConnection = connect(m_compass, &QCompass::readingChanged, this, [this]()
   {
     // emit the new heading if available
     QCompassReading* reading = m_compass->reading();
     Q_CHECK_PTR(reading);
     emit headingChanged(reading->azimuth());
-  });
 
-  emit compassChanged();
+    // Update sensor status
+    if (m_sensorStatus == SensorStatus::Starting)
+    {
+      m_isStarted = true;
+      m_sensorStatus = SensorStatus::Started;
+      emit isStartedChanged();
+      emit sensorStatusChanged();
+    }
+    
+    // Disconnect the signal if the location tracking mode is Initial.
+    if (m_locationTrackingMode == ArEnums::LocationTrackingMode::Initial)
+      disconnect(m_compassConnection);
+  });
 }
 
 // signals
@@ -236,4 +343,9 @@ void LocationDataSource::setCompass(QCompass* compass)
 /*!
   \fn void LocationDataSource::sensorStatusChanged();
   \brief Signal emitted when the \l sensorStatus property changes.
+ */
+
+/*!
+  \fn void LocationDataSource::locationTrackingModeChanged();
+  \brief Signal emitted when the \l locationTrackingMode property changes.
  */

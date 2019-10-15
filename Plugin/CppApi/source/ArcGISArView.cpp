@@ -189,8 +189,13 @@ Point ArcGISArView::screenToLocation(const QPoint& screenPoint) const
  */
 void ArcGISArView::qmlRegisterTypes()
 {
-  qmlRegisterType<Esri::ArcGISRuntime::Toolkit::ArcGISArView>("Esri.ArcGISArToolkit", 1, 0, "ArcGISArView");
-  qmlRegisterType<Esri::ArcGISRuntime::Toolkit::LocationDataSource>("Esri.ArcGISArToolkit", 1, 0, "LocationDataSource");
+  qmlRegisterType<ArcGISArView>("Esri.ArcGISArToolkit", 1, 0, "ArcGISArView");
+  qmlRegisterType<LocationDataSource>("Esri.ArcGISArToolkit", 1, 0, "LocationDataSource");
+  qmlRegisterUncreatableType<ArEnums>("Esri.ArcGISArToolkit", 1, 0, "ArEnums", "ArEnums is not creatable.");
+
+  // Register enum types.
+  qRegisterMetaType<ArEnums::LocationTrackingMode>("ArEnums::LocationTrackingMode");
+  qRegisterMetaType<ArEnums::SensorStatus>("ArEnums::SensorStatus");
 }
 
 /*!

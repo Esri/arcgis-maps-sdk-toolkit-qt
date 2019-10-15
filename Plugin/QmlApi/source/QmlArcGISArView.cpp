@@ -158,8 +158,13 @@ std::vector<qreal> QmlArcGISArView::screenToLocation(float x, float y) const
  */
 void QmlArcGISArView::qmlRegisterTypes()
 {
-  qmlRegisterType<Esri::ArcGISRuntime::Toolkit::QmlArcGISArView>("Esri.ArcGISArToolkit", 1, 0, "ArcGISArViewInternal");
-  qmlRegisterType<Esri::ArcGISRuntime::Toolkit::LocationDataSource>("Esri.ArcGISArToolkit", 1, 0, "LocationDataSource");
+  qmlRegisterType<QmlArcGISArView>("Esri.ArcGISArToolkit", 1, 0, "ArcGISArViewInternal");
+  qmlRegisterType<LocationDataSource>("Esri.ArcGISArToolkit", 1, 0, "LocationDataSource");
+  qmlRegisterUncreatableType<ArEnums>("Esri.ArcGISArToolkit", 1, 0, "ArEnums", "ArEnums is not creatable.");
+
+  // Register enum types.
+  qRegisterMetaType<ArEnums::LocationTrackingMode>("ArEnums::LocationTrackingMode");
+  qRegisterMetaType<ArEnums::SensorStatus>("ArEnums::SensorStatus");
 }
 
 /*!

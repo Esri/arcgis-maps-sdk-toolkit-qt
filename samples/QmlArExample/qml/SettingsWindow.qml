@@ -25,6 +25,9 @@ Item {
     signal startTrackingClicked()
     signal stopTrackingClicked()
     signal resetTrackingClicked()
+    signal ignoreTrackingClicked()
+    signal initialTrackingClicked()
+    signal continuousTrackingClicked()
     signal calibrationClicked()
     signal resetCalibrationClicked()
 
@@ -92,6 +95,18 @@ Item {
                             onClicked: resetTrackingClicked();
                         }
                         Button {
+                            text: "Ignore tracking"
+                            onClicked: ignoreTrackingClicked();
+                        }
+                        Button {
+                            text: "Initial tracking"
+                            onClicked: initialTrackingClicked();
+                        }
+                        Button {
+                            text: "Continuous tracking"
+                            onClicked: continuousTrackingClicked();
+                        }
+                        Button {
                             text: "Calibration"
                             onClicked: {
                                 settings.visible = false;
@@ -108,7 +123,7 @@ Item {
                     }
                 }
                 GroupBox {
-                    title: "Debug Mode"
+                    title: "Debug mode"
                     Column {
                         spacing: 5
                         Button {
@@ -134,7 +149,7 @@ Item {
             Column {
                 spacing: 5
                 GroupBox {
-                    title: "Full Scale Scenes"
+                    title: "Full scale scenes"
                     Column {
                         spacing: 5
                         Button {
@@ -169,7 +184,7 @@ Item {
                 }
 
                 GroupBox {
-                    title: "Tabletop Scenes"
+                    title: "Tabletop scenes"
                     Column {
                         spacing: 5
                         Button {

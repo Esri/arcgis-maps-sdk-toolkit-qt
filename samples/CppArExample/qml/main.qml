@@ -88,6 +88,9 @@ ApplicationWindow {
         onStartTrackingClicked: arcGISArView.startTracking();
         onStopTrackingClicked: arcGISArView.stopTracking();
         onResetTrackingClicked: arcGISArView.resetTracking();
+        onIgnoreTrackingClicked: arcGISArView.locationTrackingMode = ArEnums.Ignore;
+        onInitialTrackingClicked: arcGISArView.locationTrackingMode = ArEnums.Initial;
+        onContinuousTrackingClicked: arcGISArView.locationTrackingMode = ArEnums.Continuous;
         onCalibrationClicked: calibrationView.visible = !calibrationView.visible
         onResetCalibrationClicked: calibrationView.reset();
 

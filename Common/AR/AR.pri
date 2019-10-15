@@ -30,13 +30,14 @@ AR_COMMON_QML_PATH = $$AR_COMMON_PATH/qml
 HEADERS += \
     $$AR_COMMON_INCLUDE_PATH/ArcGISArViewInterface.h \
     $$AR_COMMON_INCLUDE_PATH/ArcGISArViewRenderer.h \
+    $$AR_COMMON_INCLUDE_PATH/ArEnums.h \
     $$AR_COMMON_INCLUDE_PATH/ArWrapper.h \
-    $$AR_COMMON_INCLUDE_PATH/SensorStatus.h \
     $$AR_COMMON_INCLUDE_PATH/LocationDataSource.h
 
 SOURCES += \
     $$AR_COMMON_SOURCE_PATH/ArcGISArViewInterface.cpp \
     $$AR_COMMON_SOURCE_PATH/ArcGISArViewRenderer.cpp \
+    $$AR_COMMON_SOURCE_PATH/ArEnums.cpp \
     $$AR_COMMON_SOURCE_PATH/ArWrapper.cpp \
     $$AR_COMMON_SOURCE_PATH/LocationDataSource.cpp
 
