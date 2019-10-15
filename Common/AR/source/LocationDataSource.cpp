@@ -117,7 +117,7 @@ void LocationDataSource::start()
   m_compass->start();
 
   // update isStarted and sensorStatus properties
-  m_sensorStatus = SensorStatus::Starting;
+  m_sensorStatus = ArEnums::SensorStatus::Starting;
   emit sensorStatusChanged();
 }
 
@@ -277,10 +277,10 @@ void LocationDataSource::updateObjectsAndConnections()
       emit locationChanged(coordinate.latitude(), coordinate.longitude(), coordinate.altitude());
 
     // Update sensor status
-    if (m_sensorStatus == SensorStatus::Starting)
+    if (m_sensorStatus == ArEnums::SensorStatus::Starting)
     {
       m_isStarted = true;
-      m_sensorStatus = SensorStatus::Started;
+      m_sensorStatus = ArEnums::SensorStatus::Started;
       emit isStartedChanged();
       emit sensorStatusChanged();
     }
@@ -299,10 +299,10 @@ void LocationDataSource::updateObjectsAndConnections()
     emit headingChanged(reading->azimuth());
 
     // Update sensor status
-    if (m_sensorStatus == SensorStatus::Starting)
+    if (m_sensorStatus == ArEnums::SensorStatus::Starting)
     {
       m_isStarted = true;
-      m_sensorStatus = SensorStatus::Started;
+      m_sensorStatus = ArEnums::SensorStatus::Started;
       emit isStartedChanged();
       emit sensorStatusChanged();
     }
