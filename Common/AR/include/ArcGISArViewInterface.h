@@ -19,7 +19,7 @@
 
 #include <QQuickFramebufferObject>
 #include "LocationDataSource.h"
-#include "LocationTrackingMode.h"
+#include "ArEnums.h"
 #include <array>
 
 namespace Esri {
@@ -42,7 +42,7 @@ class ArcGISArViewInterface : public QQuickFramebufferObject
   // sensor
   Q_PROPERTY(LocationDataSource* locationDataSource READ locationDataSource
              WRITE setLocationDataSource NOTIFY locationDataSourceChanged)
-  Q_PROPERTY(LocationTrackingMode locationTrackingMode READ locationTrackingMode
+  Q_PROPERTY(ArEnums::LocationTrackingMode locationTrackingMode READ locationTrackingMode
              WRITE setLocationTrackingMode NOTIFY locationTrackingModeChanged)
 
   // properties for debug mode
@@ -74,13 +74,13 @@ public:
   LocationDataSource* locationDataSource() const;
   void setLocationDataSource(LocationDataSource* locationDataSource);
 
-  LocationTrackingMode locationTrackingMode() const;
-  void setLocationTrackingMode(LocationTrackingMode locationTrackingMode);
+  ArEnums::LocationTrackingMode locationTrackingMode() const;
+  void setLocationTrackingMode(ArEnums::LocationTrackingMode locationTrackingMode);
 
   // invokable methods
   Q_INVOKABLE void resetTracking();
   Q_INVOKABLE void startTracking();
-  Q_INVOKABLE void startTracking(LocationTrackingMode locationTrackingMode);
+  Q_INVOKABLE void startTracking(ArEnums::LocationTrackingMode locationTrackingMode);
   Q_INVOKABLE void stopTracking();
 
   // properties for debug mode
@@ -152,7 +152,7 @@ private:
 
   // sensors
   LocationDataSource* m_locationDataSource = nullptr;
-  LocationTrackingMode m_locationTrackingMode = LocationTrackingMode::Initial;
+  ArEnums::LocationTrackingMode m_locationTrackingMode = ArEnums::LocationTrackingMode::Initial;
 };
 
 } // Toolkit namespace

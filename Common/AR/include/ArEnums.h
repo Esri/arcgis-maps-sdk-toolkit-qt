@@ -14,22 +14,42 @@
  *  limitations under the License.
  ******************************************************************************/
 
-#ifndef SensorStatus_H
-#define SensorStatus_H
+#ifndef ArEnums_H
+#define ArEnums_H
+
+#include <QObject>
 
 namespace Esri {
 namespace ArcGISRuntime {
 namespace Toolkit {
 
-enum class SensorStatus
+class ArEnums
 {
-  Stopped = 0,
-  Starting = 1,
-  Started = 2
+  Q_GADGET
+
+public:
+  enum class LocationTrackingMode
+  {
+    Ignore = 0,
+    Initial = 1,
+    Continuous = 2
+  };
+  Q_ENUM(LocationTrackingMode)
+
+  enum class SensorStatus
+  {
+    Stopped = 0,
+    Starting = 1,
+    Started = 2
+  };
+  Q_ENUM(SensorStatus)
+
+  ArEnums();
+  ~ArEnums();
 };
 
 } // Toolkit namespace
 } // ArcGISRuntime namespace
 } // Esri namespace
 
-#endif // SensorStatus_H
+#endif // ArEnums_H

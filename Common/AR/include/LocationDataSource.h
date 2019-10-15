@@ -18,8 +18,7 @@
 #define LocationDataSource_H
 
 #include <QObject>
-#include "LocationTrackingMode.h"
-#include "SensorStatus.h"
+#include "ArEnums.h"
 
 class QGeoPositionInfoSource;
 class QCompass;
@@ -36,8 +35,8 @@ class LocationDataSource : public QObject
              WRITE setGeoPositionSource NOTIFY geoPositionSourceChanged)
   Q_PROPERTY(QCompass* compass READ compass WRITE setCompass NOTIFY compassChanged)
   Q_PROPERTY(bool started READ isStarted NOTIFY isStartedChanged)
-  Q_PROPERTY(SensorStatus sensorStatus READ sensorStatus NOTIFY sensorStatusChanged)
-  Q_PROPERTY(LocationTrackingMode locationTrackingMode READ locationTrackingMode
+  Q_PROPERTY(ArEnums::SensorStatus sensorStatus READ sensorStatus NOTIFY sensorStatusChanged)
+  Q_PROPERTY(ArEnums::LocationTrackingMode locationTrackingMode READ locationTrackingMode
              WRITE setLocationTrackingMode NOTIFY locationTrackingModeChanged)
 
 public:
@@ -52,14 +51,14 @@ public:
   void setCompass(QCompass* compass);
 
   bool isStarted() const;
-  SensorStatus sensorStatus() const;
+  ArEnums::SensorStatus sensorStatus() const;
 
-  LocationTrackingMode locationTrackingMode() const;
-  void setLocationTrackingMode(LocationTrackingMode locationTrackingMode);
+  ArEnums::LocationTrackingMode locationTrackingMode() const;
+  void setLocationTrackingMode(ArEnums::LocationTrackingMode locationTrackingMode);
 
   // invokable methods
   Q_INVOKABLE void start();
-  Q_INVOKABLE void start(LocationTrackingMode locationTrackingMode);
+  Q_INVOKABLE void start(ArEnums::LocationTrackingMode locationTrackingMode);
   Q_INVOKABLE void stop();
 
 signals:
@@ -84,9 +83,9 @@ private:
   QMetaObject::Connection m_compassConnection;
 
   bool m_isStarted = false;
-  SensorStatus m_sensorStatus = SensorStatus::Stopped;
+  ArEnums::SensorStatus m_sensorStatus = ArEnums::SensorStatus::Stopped;
 
-  LocationTrackingMode m_locationTrackingMode = LocationTrackingMode::Initial;
+  ArEnums::LocationTrackingMode m_locationTrackingMode = ArEnums::LocationTrackingMode::Initial;
 };
 
 } // Toolkit namespace

@@ -223,7 +223,7 @@ void ArcGISArViewInterface::setLocationDataSource(LocationDataSource* locationDa
 
   The default value is \c LocationTrackingMode::Ignore.
  */
-LocationTrackingMode ArcGISArViewInterface::locationTrackingMode() const
+ArEnums::LocationTrackingMode ArcGISArViewInterface::locationTrackingMode() const
 {
   return m_locationTrackingMode;
 }
@@ -231,7 +231,7 @@ LocationTrackingMode ArcGISArViewInterface::locationTrackingMode() const
 /*!
   \brief Sets the location tracking mode to \a locationTrackingMode.
  */
-void ArcGISArViewInterface::setLocationTrackingMode(LocationTrackingMode locationTrackingMode)
+void ArcGISArViewInterface::setLocationTrackingMode(ArEnums::LocationTrackingMode locationTrackingMode)
 {
   if (m_locationTrackingMode == locationTrackingMode)
     return;
@@ -278,7 +278,7 @@ void ArcGISArViewInterface::startTracking()
 /*!
   \brief Starts AR tracking with location tracking mode.
  */
-void ArcGISArViewInterface::startTracking(LocationTrackingMode locationTrackingMode)
+void ArcGISArViewInterface::startTracking(ArEnums::LocationTrackingMode locationTrackingMode)
 {
   // Set locationTrackingMode
   setLocationTrackingMode(locationTrackingMode);

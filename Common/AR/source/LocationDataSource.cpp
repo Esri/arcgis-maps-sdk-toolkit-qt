@@ -118,7 +118,7 @@ void LocationDataSource::start()
 
   // Update isStarted and sensorStatus properties
   m_isStarted = true;
-  m_sensorStatus = SensorStatus::Started;
+  m_sensorStatus = ArEnums::SensorStatus::Started;
   emit isStartedChanged();
   emit sensorStatusChanged();
 }
@@ -126,7 +126,7 @@ void LocationDataSource::start()
 /*!
   \brief Starts the location data source with a location tracking mode.
  */
-void LocationDataSource::start(LocationTrackingMode locationTrackingMode)
+void LocationDataSource::start(ArEnums::LocationTrackingMode locationTrackingMode)
 {
   // Do nothing if the tracking is already started.
   if (m_isStarted)
@@ -161,7 +161,7 @@ void LocationDataSource::stop()
 
   // Update isStarted and sensorStatus properties.
   m_isStarted = false;
-  m_sensorStatus = SensorStatus::Stopped;
+  m_sensorStatus = ArEnums::SensorStatus::Stopped;
   emit isStartedChanged();
   emit sensorStatusChanged();
 }
@@ -169,7 +169,7 @@ void LocationDataSource::stop()
 /*!
   \brief Gets the sensor status.
  */
-SensorStatus LocationDataSource::sensorStatus() const
+ArEnums::SensorStatus LocationDataSource::sensorStatus() const
 {
   return m_sensorStatus;
 }
@@ -178,7 +178,7 @@ SensorStatus LocationDataSource::sensorStatus() const
   \brief Gets the location tracking mode.
   \sa LocationTrackingMode
  */
-LocationTrackingMode LocationDataSource::locationTrackingMode() const
+ArEnums::LocationTrackingMode LocationDataSource::locationTrackingMode() const
 {
   return m_locationTrackingMode;
 }
@@ -190,7 +190,7 @@ LocationTrackingMode LocationDataSource::locationTrackingMode() const
 
   \sa LocationTrackingMode
  */
-void LocationDataSource::setLocationTrackingMode(LocationTrackingMode locationTrackingMode)
+void LocationDataSource::setLocationTrackingMode(ArEnums::LocationTrackingMode locationTrackingMode)
 {
   if (m_locationTrackingMode == locationTrackingMode)
     return;
@@ -279,7 +279,7 @@ void LocationDataSource::updateObjectsAndConnections()
       emit locationChanged(coordinate.latitude(), coordinate.longitude(), coordinate.altitude());
 
     // Disconnect the signal if the location tracking mode is Initial.
-    if (m_locationTrackingMode == LocationTrackingMode::Initial)
+    if (m_locationTrackingMode == ArEnums::LocationTrackingMode::Initial)
       disconnect(m_geoPositionSourceConnection);
   });
 
@@ -292,7 +292,7 @@ void LocationDataSource::updateObjectsAndConnections()
     emit headingChanged(reading->azimuth());
 
     // Disconnect the signal if the location tracking mode is Initial.
-    if (m_locationTrackingMode == LocationTrackingMode::Initial)
+    if (m_locationTrackingMode == ArEnums::LocationTrackingMode::Initial)
       disconnect(m_compassConnection);
   });
 }

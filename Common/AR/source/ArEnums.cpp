@@ -14,22 +14,14 @@
  *  limitations under the License.
  ******************************************************************************/
 
-#ifndef LocationTrackingMode_H
-#define LocationTrackingMode_H
+#include "ArEnums.h"
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+using namespace Esri::ArcGISRuntime::Toolkit;
 
-enum class LocationTrackingMode
+ArEnums::ArEnums()
 {
-  Ignore = 0,
-  Initial = 1,
-  Continuous = 2
-};
+}
 
-} // Toolkit namespace
-} // ArcGISRuntime namespace
-} // Esri namespace
-
-#endif // LocationTrackingMode_H
+ArEnums::~ArEnums()
+{
+}

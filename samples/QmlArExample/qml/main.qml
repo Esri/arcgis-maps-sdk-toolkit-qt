@@ -56,9 +56,9 @@ ApplicationWindow {
         onStartTrackingClicked: arcGISArView.startTracking();
         onStopTrackingClicked: arcGISArView.stopTracking();
         onResetTrackingClicked: arcGISArView.resetTracking();
-        onIgnoreTrackingClicked: arSample.setTrackingMode(0);
-        onInitialTrackingClicked: arSample.setTrackingMode(1);
-        onContinuousTrackingClicked: arSample.setTrackingMode(2);
+        onIgnoreTrackingClicked: arcGISArView.locationTrackingMode = ArEnums.Ignore;
+        onInitialTrackingClicked: arcGISArView.locationTrackingMode = ArEnums.Initial;
+        onContinuousTrackingClicked: arcGISArView.locationTrackingMode = ArEnums.Continuous;
         // onCalibrationClicked: not implemented
 
         onShowPointCloud: {
