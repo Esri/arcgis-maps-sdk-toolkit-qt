@@ -52,11 +52,6 @@ private:
 
   std::unique_ptr<QOpenGLShaderProgram> m_program;
 
-  GLuint m_attributeVertices = 0;
-  GLint m_uniformModelViewProjection = 0;
-  GLint m_uniformColor = 0;
-  GLint m_uniformPointSize = 0;
-
   // properties for debug mode
   QColor m_pointCloudColor = QColor(Qt::darkBlue);
   int m_pointCloudSize = 10;

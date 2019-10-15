@@ -37,7 +37,7 @@ class ArcGISArView : public ArcGISArViewInterface
 
 public:
   explicit ArcGISArView(QQuickItem* parent = nullptr);
-  explicit ArcGISArView(bool renderVideoFeed, bool tryUsingArKit, QQuickItem* parent = nullptr);
+  explicit ArcGISArView(bool renderVideoFeed, QQuickItem* parent = nullptr);
   ~ArcGISArView() override;
 
   // properties

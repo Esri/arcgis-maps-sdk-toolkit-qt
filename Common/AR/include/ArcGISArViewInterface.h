@@ -37,7 +37,6 @@ class ArcGISArViewInterface : public QQuickFramebufferObject
   Q_PROPERTY(bool tracking READ tracking WRITE setTracking NOTIFY trackingChanged)
   Q_PROPERTY(bool renderVideoFeed READ renderVideoFeed WRITE setRenderVideoFeed NOTIFY renderVideoFeedChanged)
   Q_PROPERTY(double translationFactor READ translationFactor WRITE setTranslationFactor NOTIFY translationFactorChanged)
-  Q_PROPERTY(bool tryUsingArKit READ tryUsingArKit WRITE setTryUsingArKit NOTIFY tryUsingArKitChanged)
 
   // sensor
   Q_PROPERTY(LocationDataSource* locationDataSource READ locationDataSource
@@ -52,7 +51,7 @@ class ArcGISArViewInterface : public QQuickFramebufferObject
 
 protected:
   explicit ArcGISArViewInterface(QQuickItem* parent = nullptr);
-  explicit ArcGISArViewInterface(bool renderVideoFeed, bool tryUsingArKit, QQuickItem* parent = nullptr);
+  explicit ArcGISArViewInterface(bool renderVideoFeed, QQuickItem* parent = nullptr);
 
 public:
   ~ArcGISArViewInterface() override;
@@ -66,9 +65,6 @@ public:
 
   double translationFactor() const;
   void setTranslationFactor(double translationFactor);
-
-  bool tryUsingArKit() const;
-  void setTryUsingArKit(bool tryUsingArKit);
 
   // sensors
   LocationDataSource* locationDataSource() const;
@@ -104,7 +100,6 @@ signals:
   void renderVideoFeedChanged();
   void trackingChanged();
   void translationFactorChanged();
-  void tryUsingArKitChanged();
 
   // error handling
   void errorOccurred(const QString& errorMessage, const QString& additionalMessage);
@@ -140,15 +135,12 @@ protected:
   virtual void resetTrackingInternal() = 0;
 
 private:
-  void updateTrackingSources();
-
   mutable Internal::ArcGISArViewRenderer* m_arViewRenderer = nullptr;
   std::unique_ptr<Internal::ArWrapper> m_arWrapper;
 
   bool m_tracking = false;
   bool m_renderVideoFeed = true;
   double m_translationFactor = 1.0;
-  bool m_tryUsingArKit = true;
 
   // sensors
   LocationDataSource* m_locationDataSource = nullptr;

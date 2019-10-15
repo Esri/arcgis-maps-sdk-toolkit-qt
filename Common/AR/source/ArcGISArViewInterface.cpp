@@ -40,10 +40,10 @@ using namespace Esri::ArcGISRuntime::Toolkit::Internal;
 /*!
   \brief A constructor that accepts an optional \a parent.
 
-  The default values for the \l renderVideoFeed and \l tryUsingArKit properties are \c true.
+  The default values for the \l renderVideoFeed property is \c true.
  */
 ArcGISArViewInterface::ArcGISArViewInterface(QQuickItem* parent):
-  ArcGISArViewInterface(true, true, parent)
+  ArcGISArViewInterface(true, parent)
 {
 }
 
@@ -52,15 +52,14 @@ ArcGISArViewInterface::ArcGISArViewInterface(QQuickItem* parent):
 
   \list
   \li \a renderVideoFeed - Sets to \c true to render the camera frames in the background.
-  \li \a tryUsingArKit - Sets to \c true to use the AR framework, depending of the platform (ARKit
   in Android and ARKit in iOS).
   \li \a parent - optional.
   \endlist
  */
-ArcGISArViewInterface::ArcGISArViewInterface(bool renderVideoFeed, bool tryUsingArKit, QQuickItem* parent):
+ArcGISArViewInterface::ArcGISArViewInterface(bool renderVideoFeed, QQuickItem* parent):
   QQuickFramebufferObject(parent),
-  m_renderVideoFeed(renderVideoFeed),
-  m_tryUsingArKit(tryUsingArKit)
+  m_arWrapper(new ArWrapper(this)),
+  m_renderVideoFeed(renderVideoFeed)
 {
   // stops tracking when the app is minimized and starts when the app is active.
   connect(qGuiApp, &QGuiApplication::applicationStateChanged, this, [this](Qt::ApplicationState state)
@@ -82,7 +81,7 @@ ArcGISArViewInterface::ArcGISArViewInterface(bool renderVideoFeed, bool tryUsing
   });
 
   setFlag(ItemHasContents, true);
-  updateTrackingSources();
+  m_arWrapper->setRenderVideoFeed(m_renderVideoFeed);
 }
 
 /*!
@@ -129,13 +128,7 @@ void ArcGISArViewInterface::setRenderVideoFeed(bool renderVideoFeed)
 
   // enable the render video in the AR wrapper or using QCamera
   if (m_arWrapper)
-  {
     m_arWrapper->setRenderVideoFeed(renderVideoFeed);
-  }
-  else
-  {
-    // not implemented.
-  }
 
   m_renderVideoFeed = renderVideoFeed;
   emit renderVideoFeedChanged();
@@ -167,29 +160,6 @@ void ArcGISArViewInterface::setTranslationFactor(double translationFactor)
   emit translationFactorChanged();
 }
 
-/*!
-  \brief Returns \c true to use the AR framework, depending of the platform (ARKit
-  in Android and ARKit in iOS).
- */
-bool ArcGISArViewInterface::tryUsingArKit() const
-{
-  return m_tryUsingArKit;
-}
-
-/*!
-  \brief Sets to \c true to use the AR framework, depending of the platform (ARKit
-  in Android and ARKit in iOS).
- */
-void ArcGISArViewInterface::setTryUsingArKit(bool tryUsingArKit)
-{
-  if (m_tryUsingArKit == tryUsingArKit)
-    return;
-
-  m_tryUsingArKit = tryUsingArKit;
-  updateTrackingSources();
-  emit tryUsingArKitChanged();
-}
-
 // sensors
 /*!
   \brief Returns the \l LocationDataSource if the AR scene view uses it to update the
@@ -204,7 +174,6 @@ LocationDataSource* ArcGISArViewInterface::locationDataSource() const
   \brief Sets the location data source to \a locationDataSource.
 
   If \a locationDataSource is \c nullptr, the tracking of the \l LocationDataSource is disabled.
-  If \l tryUsingArKit is \c true, the AR framework is used for the tracking, not \l LocationDataSource.
  */
 void ArcGISArViewInterface::setLocationDataSource(LocationDataSource* locationDataSource)
 {
@@ -264,8 +233,7 @@ void ArcGISArViewInterface::startTracking()
     setLocationDataSource(new LocationDataSource(this));
 
   // Start AR wrapper
-  if (m_tryUsingArKit)
-    m_arWrapper->startTracking();
+  m_arWrapper->startTracking();
 
   // Start location data source.
   if (m_locationDataSource)
@@ -404,51 +372,6 @@ std::array<double, 7> ArcGISArViewInterface::hitTestInternal(int x, int y) const
 {
   Q_CHECK_PTR(m_arWrapper);
   return m_arWrapper->hitTest(x, y);
-}
-
-/*!
-  \internal
- */
-void ArcGISArViewInterface::updateTrackingSources()
-{
-  if (m_tryUsingArKit)
-  {
-    // Stop locationDataSource if it exists.
-    if (m_locationDataSource)
-      m_locationDataSource->stop();
-
-    // disable the video rendering using the QCamera
-    if (m_renderVideoFeed)
-    {
-      // not implemented.
-    }
-
-    // create the AR wrapper object if necessary
-    if (!m_arWrapper)
-    {
-      m_arWrapper.reset(new ArWrapper(this));
-      m_arWrapper->setRenderVideoFeed(m_renderVideoFeed);
-    }
-  }
-  else
-  {
-    // delete the AR wrapper if necessary
-    if (m_arWrapper)
-    {
-      m_arWrapper->stopTracking();
-      m_arWrapper.reset();
-    }
-
-    // create default LocationDataSource if necessary.
-    if (!m_locationDataSource)
-      setLocationDataSource(new LocationDataSource(this));
-
-    // enable the video rendering using the QCamera
-    if (m_renderVideoFeed)
-    {
-      // not implemented.
-    }
-  }
 }
 
 /*!

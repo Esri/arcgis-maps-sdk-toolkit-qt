@@ -54,13 +54,11 @@ ArcGISArView::ArcGISArView(QQuickItem* parent):
 
   \list
   \li \a renderVideoFeed - Sets to \c true to render the camera frames in the background.
-  \li \a tryUsingArKit - Sets to \c true to use the AR framework, depending of the platform (ARKit
-  in Android and ARKit in iOS).
   \li \a parent - optional.
   \endlist
  */
-ArcGISArView::ArcGISArView(bool renderVideoFeed, bool tryUsingArKit, QQuickItem* parent):
-  ArcGISArViewInterface(renderVideoFeed, tryUsingArKit, parent),
+ArcGISArView::ArcGISArView(bool renderVideoFeed, QQuickItem* parent):
+  ArcGISArViewInterface(renderVideoFeed, parent),
   m_tmcc(new TransformationMatrixCameraController(this))
 {
   connect(m_tmcc, &TransformationMatrixCameraController::originCameraChanged, this, &ArcGISArView::originCameraChanged);
