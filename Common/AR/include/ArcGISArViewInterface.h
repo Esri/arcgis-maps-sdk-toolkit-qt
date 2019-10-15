@@ -19,6 +19,7 @@
 
 #include <QQuickFramebufferObject>
 #include "LocationDataSource.h"
+#include "ArEnums.h"
 #include <array>
 
 namespace Esri {
@@ -39,7 +40,10 @@ class ArcGISArViewInterface : public QQuickFramebufferObject
   Q_PROPERTY(bool tryUsingArKit READ tryUsingArKit WRITE setTryUsingArKit NOTIFY tryUsingArKitChanged)
 
   // sensor
-  Q_PROPERTY(LocationDataSource* locationDataSource READ locationDataSource WRITE setLocationDataSource NOTIFY locationDataSourceChanged)
+  Q_PROPERTY(LocationDataSource* locationDataSource READ locationDataSource
+             WRITE setLocationDataSource NOTIFY locationDataSourceChanged)
+  Q_PROPERTY(ArEnums::LocationTrackingMode locationTrackingMode READ locationTrackingMode
+             WRITE setLocationTrackingMode NOTIFY locationTrackingModeChanged)
 
   // properties for debug mode
   Q_PROPERTY(QColor pointCloudColor READ pointCloudColor WRITE setPointCloudColor NOTIFY pointCloudColorChanged)
@@ -70,9 +74,13 @@ public:
   LocationDataSource* locationDataSource() const;
   void setLocationDataSource(LocationDataSource* locationDataSource);
 
+  ArEnums::LocationTrackingMode locationTrackingMode() const;
+  void setLocationTrackingMode(ArEnums::LocationTrackingMode locationTrackingMode);
+
   // invokable methods
   Q_INVOKABLE void resetTracking();
   Q_INVOKABLE void startTracking();
+  Q_INVOKABLE void startTracking(ArEnums::LocationTrackingMode locationTrackingMode);
   Q_INVOKABLE void stopTracking();
 
   // properties for debug mode
@@ -103,6 +111,7 @@ signals:
 
   // sensor
   void locationDataSourceChanged();
+  void locationTrackingModeChanged();
 
   // properties for debug mode
   void pointCloudColorChanged();
@@ -143,8 +152,7 @@ private:
 
   // sensors
   LocationDataSource* m_locationDataSource = nullptr;
-  QMetaObject::Connection m_locationChangedConnection;
-  QMetaObject::Connection m_headingChangedConnection;
+  ArEnums::LocationTrackingMode m_locationTrackingMode = ArEnums::LocationTrackingMode::Initial;
 };
 
 } // Toolkit namespace

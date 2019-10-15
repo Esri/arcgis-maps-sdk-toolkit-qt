@@ -62,11 +62,6 @@ void QmlArcGISArView::setOriginCamera(QObject* originCamera)
     return;
 
   m_originCamera = originCamera;
-
-  // set origin camera to tmcc if available
-  if (m_tmcc)
-    m_tmcc->setProperty("originCamera", QVariant::fromValue(m_originCamera));
-
   emit originCameraChanged();
 }
 
@@ -94,9 +89,6 @@ void QmlArcGISArView::setSceneView(QObject* sceneView)
   m_sceneView->setProperty("atmosphereEffect", 0); // AtmosphereEffect::None
   m_sceneView->setProperty("manualRendering", true);
 
-  if (m_tmcc)
-    m_sceneView->setProperty("cameraController", QVariant::fromValue(m_tmcc));
-
   emit sceneViewChanged();
 }
 
@@ -117,11 +109,6 @@ void QmlArcGISArView::setTransformationMatrixCameraController(QObject* tmcc)
     return;
 
   m_tmcc = tmcc;
-
-  // set TMCC to scene view
-  if (m_sceneView)
-    m_sceneView->setProperty("cameraController", QVariant::fromValue(m_tmcc));
-
   emit transformationMatrixCameraControllerChanged();
 }
 
@@ -171,8 +158,13 @@ std::vector<qreal> QmlArcGISArView::hitTest(float x, float y) const
  */
 void QmlArcGISArView::qmlRegisterTypes()
 {
-  qmlRegisterType<Esri::ArcGISRuntime::Toolkit::QmlArcGISArView>("Esri.ArcGISArToolkit", 1, 0, "ArcGISArViewInternal");
-  qmlRegisterType<Esri::ArcGISRuntime::Toolkit::LocationDataSource>("Esri.ArcGISArToolkit", 1, 0, "LocationDataSource");
+  qmlRegisterType<QmlArcGISArView>("Esri.ArcGISArToolkit", 1, 0, "ArcGISArViewInternal");
+  qmlRegisterType<LocationDataSource>("Esri.ArcGISArToolkit", 1, 0, "LocationDataSource");
+  qmlRegisterUncreatableType<ArEnums>("Esri.ArcGISArToolkit", 1, 0, "ArEnums", "ArEnums is not creatable.");
+
+  // Register enum types.
+  qRegisterMetaType<ArEnums::LocationTrackingMode>("ArEnums::LocationTrackingMode");
+  qRegisterMetaType<ArEnums::SensorStatus>("ArEnums::SensorStatus");
 }
 
 /*!

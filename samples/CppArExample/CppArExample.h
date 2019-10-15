@@ -46,6 +46,8 @@ public:
   Esri::ArcGISRuntime::SceneQuickView* sceneView() const;
   void setSceneView(Esri::ArcGISRuntime::SceneQuickView* sceneView);
 
+  Q_INVOKABLE void updateOriginCamera(double latitude, double longitude, double altitude, double heading);
+
   Q_INVOKABLE void showPointCloud(bool visible);
   Q_INVOKABLE void showPlanes(bool visible);
 
@@ -82,6 +84,9 @@ private:
   // Screen to location properties
   bool m_screenToLocationMode = false;
   QMetaObject::Connection m_touchedConnection;
+  
+  // The origin camera set when the scene is created.
+  Esri::ArcGISRuntime::Camera m_originCamera;
 };
 
 #endif // CppArExample_H

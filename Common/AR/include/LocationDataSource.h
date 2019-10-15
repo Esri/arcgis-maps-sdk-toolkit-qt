@@ -18,7 +18,7 @@
 #define LocationDataSource_H
 
 #include <QObject>
-#include "SensorStatus.h"
+#include "ArEnums.h"
 
 class QGeoPositionInfoSource;
 class QCompass;
@@ -31,12 +31,13 @@ class LocationDataSource : public QObject
 {
   Q_OBJECT
 
-  Q_PROPERTY(QGeoPositionInfoSource* geoPositionSource READ geoPositionSource WRITE setGeoPositionSource
-             NOTIFY geoPositionSourceChanged)
+  Q_PROPERTY(QGeoPositionInfoSource* geoPositionSource READ geoPositionSource
+             WRITE setGeoPositionSource NOTIFY geoPositionSourceChanged)
   Q_PROPERTY(QCompass* compass READ compass WRITE setCompass NOTIFY compassChanged)
-
   Q_PROPERTY(bool started READ isStarted NOTIFY isStartedChanged)
-  Q_PROPERTY(SensorStatus sensorStatus READ sensorStatus NOTIFY sensorStatusChanged)
+  Q_PROPERTY(ArEnums::SensorStatus sensorStatus READ sensorStatus NOTIFY sensorStatusChanged)
+  Q_PROPERTY(ArEnums::LocationTrackingMode locationTrackingMode READ locationTrackingMode
+             WRITE setLocationTrackingMode NOTIFY locationTrackingModeChanged)
 
 public:
   explicit LocationDataSource(QObject* parent = nullptr);
@@ -50,10 +51,14 @@ public:
   void setCompass(QCompass* compass);
 
   bool isStarted() const;
-  SensorStatus sensorStatus() const;
+  ArEnums::SensorStatus sensorStatus() const;
+
+  ArEnums::LocationTrackingMode locationTrackingMode() const;
+  void setLocationTrackingMode(ArEnums::LocationTrackingMode locationTrackingMode);
 
   // invokable methods
   Q_INVOKABLE void start();
+  Q_INVOKABLE void start(ArEnums::LocationTrackingMode locationTrackingMode);
   Q_INVOKABLE void stop();
 
 signals:
@@ -66,7 +71,11 @@ signals:
   void isStartedChanged();
   void sensorStatusChanged();
 
+  void locationTrackingModeChanged();
+
 private:
+  void updateObjectsAndConnections();
+
   QGeoPositionInfoSource* m_geoPositionSource = nullptr;
   QCompass* m_compass = nullptr;
 
@@ -74,7 +83,9 @@ private:
   QMetaObject::Connection m_compassConnection;
 
   bool m_isStarted = false;
-  SensorStatus m_sensorStatus = SensorStatus::Stopped;
+  ArEnums::SensorStatus m_sensorStatus = ArEnums::SensorStatus::Stopped;
+
+  ArEnums::LocationTrackingMode m_locationTrackingMode = ArEnums::LocationTrackingMode::Initial;
 };
 
 } // Toolkit namespace
