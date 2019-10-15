@@ -15,7 +15,6 @@
  ******************************************************************************/
 
 #include "ArcGISArView.h"
-#include "ArEnums.h"
 #include "TransformationMatrix.h"
 #include "TransformationMatrixCameraController.h"
 #include <QQuickWindow>
