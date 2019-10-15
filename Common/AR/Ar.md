@@ -1,19 +1,19 @@
-# Augmented Reality toolkit component
+# Augmented Reality toolkit components
 
-The Augmented Reality (AR) toolkit component provides support for ARKit for iOS and
+The Augmented Reality (AR) toolkit components provide support for ARKit for iOS apps and ARCore for 
 Android apps written using ArcGIS Runtime SDK for Qt. This documentation
-describes the installation and uses of the AR toolkit component.
+describes the installation and uses of the AR toolkit components.
 
 ## Overview
 
-Augmented reality experiences are designed to "augment" the physical world with
+Augmented reality experiences are augment the physical world with
 virtual content that respects real world scale, position, and orientation of a
-device. In the case of Runtime, a `SceneView` object is used to display 3D
+device. In the case of Runtime, a `SceneView` object displays 3D
 geographic AR data as virtual content on top of a camera feed of the real,
 physical world.
 
-The AR toolkit component allows quick and easy integration of AR into your
-application for a wide variety of scenarios. The toolkit recognizes the
+The AR toolkit components facilitates integrating AR into your
+apps for a wide variety of scenarios. The toolkit recognizes the
 following common patterns for AR:
 
 - **Flyover**: Flyover AR lets you explore a scene using your device as a
@@ -31,20 +31,19 @@ top of that feed. This pattern is used in scenarios ranging from viewing hidden
 infrastructure, such as the recorded position of utility lines or pipes below a
 street, to displaying waypoints for navigation.
 
-The AR toolkit component is comprised of one class: `ArcGISArView`. This is a
-subclass of `QQuickItem`, which contains the functionality needed to display an
-AR experience in your application. `ArcGISArView` uses ARKit (iOS) or
+The AR toolkit component includes the `ArcGISArView` class, a
+subclass of `QQuickItem`, which contains the functionality your app needs to display an AR experience. `ArcGISArView` uses ARKit (iOS) or
 ARCore (Android) augmented reality framework to display the live camera feed
 and handle real world tracking and synchronization with the Runtime SDK's
-`SceneView`. The `ArcGISArView` is responsible for starting and managing an
-ARKit or ARCore session. `ArcGISArView` also uses a `LocationDataSource`
+`SceneView` class. The `ArcGISArView` class is responsible for starting and managing an
+ARKit or ARCore session. `ArcGISArView` also uses a `LocationDataSource` class
 for getting an initial GPS location when continuous GPS tracking is required.
 
 For details about using ARKit, please refer to [Apple's
 documentation](https://developer.apple.com/augmented-reality). For ARCore,
 please refer to [Google's documentation](https://developers.google.com/ar/).
 
-ArcGIS Runtime SDK 100.6 for Qt 100.6 is required to use this toolkit
+ArcGIS Runtime SDK 100.6 for Qt is required to use this toolkit
 component.
 
 ### Features of the AR toolkit component
@@ -60,11 +59,11 @@ component.
 - Eases access to all ARKit or ARCore and `LocationDataSource` delegate
   methods
 
-## Creating a new AR application using ArcGIS Runtime AR toolkit
+## Creating a new AR app using ArcGIS Runtime AR toolkit
 
-### Creating a new C++ application
+### Creating a new C++ app
 
-An example C++ application with AR support can be found in the folder
+An example C++ app with AR support can be found in the folder
 `Examples\AR\CppArExample` in the toolkit repo.
 
 Note: In the following explanation, `<ProjectName>` refers to the project name
@@ -205,9 +204,9 @@ ArcGISArView {
     ...
 ```
 
-### Creating a new QML application with AR support
+### Creating a new QML app with AR support
 
-An example of QML application with AR support can be found in the folder
+An example of QML app with AR support can be found in the folder
 `Examples\AR\QmlArExample` in the toolkit repo.
 
 1. Install the ArcGIS Runtime SDK for Qt. See
@@ -290,10 +289,10 @@ translationFactor: 1000.0
 
 ## AR frameworks configuration
 
-All the files necessary to build an ArcGIS application with AR support are
-provided in the AR toolkit. To deploy the application on Android and iOS
+All the files necessary to build an ArcGIS app with AR support are
+provided in the AR toolkit. To deploy the app on Android and iOS
 devices, extra steps are needed to give necessary permissions to the
-application.
+app.
 
 ### Configuration for iOS devices
 
@@ -333,10 +332,10 @@ enable ARCore support.
 <meta-data android:name="com.google.ar.core" android:value="required"/>
 ```
 
-The value can be `optional` or `required`. An AR optional application can be
+The value can be `optional` or `required`. An AR optional app can be
 installed and run on devices that don't support `ARCore`, and the `Google Play
 Services for AR` is not automatically installed with the app. An AR required
-application is available only on devices that support `ARCore`, and `Google
+app is available only on devices that support `ARCore`, and `Google
 Play Services for AR` is automatically installed with the app.
 
 For details, see [Enable ARCore documentation](https://developers.google.com/ar/develop/java/enable-arcore#manifest).
@@ -347,8 +346,8 @@ permission to access the camera to ARCore.
 <uses-feature android:name="android.hardware.camera.ar" android:required="true"/>
 ```
 
-  - Set the minimum SDK version `android:minSdkVersion` to 24 for AR required application and 14 for
-AR optional application.
+  - Set the minimum SDK version `android:minSdkVersion` to 24 for AR required app and 14 for
+AR optional app.
 ```
 <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="28"/>
 ```
