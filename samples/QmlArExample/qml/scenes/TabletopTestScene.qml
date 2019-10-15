@@ -24,7 +24,7 @@ import Esri.ArcGISArToolkit 1.0
 Item {
     property alias scene: scene
     property alias graphicsOverlay: graphicsOverlay
-    property Camera originCamera: camera
+    property alias originCamera: originCamera
     property LocationDataSource locationDataSource: null
     property double translationFactor: 10.0
 
@@ -98,7 +98,7 @@ Item {
     }
 
     Camera {
-        id: camera
+        id: originCamera
         location: Point {
             y: 0.0
             x: 0.0

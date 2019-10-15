@@ -80,6 +80,29 @@ void CppArExample::setSceneView(SceneQuickView* sceneView)
   emit sceneViewChanged();
 }
 
+// Update the origin camera using the values sent by the calibration view.
+// The m_originCamera is set when the scene is created.
+// The final origin camera sent to ArcGISArView is the sum of m_originCamera
+// and the offset values returned by the calibration view.
+void CppArExample::updateOriginCamera(double latitude, double longitude, double altitude, double heading)
+{
+  if (m_originCamera.isEmpty())
+  {
+    const Camera newCamera(latitude, longitude, altitude, heading, 0.0, 0.0);
+    m_arcGISArView->setOriginCamera(newCamera);
+  }
+  else
+  {
+    const Camera newCamera(m_originCamera.location().y() + latitude,
+                           m_originCamera.location().x() + longitude,
+                           m_originCamera.location().z() + altitude,
+                           m_originCamera.heading() + heading,
+                           m_originCamera.pitch(),
+                           m_originCamera.roll());
+    m_arcGISArView->setOriginCamera(newCamera);
+  }
+}
+
 // Set whether point clouds should be visible.
 void CppArExample::showPointCloud(bool visible)
 {
@@ -107,7 +130,8 @@ void CppArExample::createEmptyScene()
   createSurfaceWithElevation();
 
   // Set the location data source so we use our GPS location as the originCamera.
-  m_arcGISArView->setOriginCamera(Camera());
+  m_originCamera = Camera();
+  m_arcGISArView->setOriginCamera(m_originCamera);
   m_arcGISArView->setTranslationFactor(1.0);
 
   changeScene(true);
@@ -122,7 +146,8 @@ void CppArExample::createStreetsScene()
   createSurfaceWithElevation();
 
   // Set the location data source so we use our GPS location as the originCamera.
-  m_arcGISArView->setOriginCamera(Camera());
+  m_originCamera = Camera();
+  m_arcGISArView->setOriginCamera(m_originCamera);
   m_arcGISArView->setTranslationFactor(1.0);
 
   changeScene(true);
@@ -137,7 +162,8 @@ void CppArExample::createImageryScene()
   createSurfaceWithElevation();
 
   // Set the location data source so we use our GPS location as the originCamera.
-  m_arcGISArView->setOriginCamera(Camera());
+  m_originCamera = Camera();
+  m_arcGISArView->setOriginCamera(m_originCamera);
   m_arcGISArView->setTranslationFactor(1.0);
 
   changeScene(true);
@@ -174,7 +200,8 @@ void CppArExample::createFullScaleTestScene()
   createSymbol(0.0, 0.0, QColor(Qt::green));
 
   // Set the location data source so we use our GPS location as the originCamera.
-  m_arcGISArView->setOriginCamera(Camera());
+  m_originCamera = Camera();
+  m_arcGISArView->setOriginCamera(m_originCamera);
   m_arcGISArView->setTranslationFactor(1.0);
 
   changeScene(false);
@@ -191,7 +218,8 @@ void CppArExample::createPointCloudScene()
   auto* layer = new PointCloudLayer(item, m_scene);
   m_scene->operationalLayers()->append(layer);
 
-  m_arcGISArView->setOriginCamera(Camera(39.7712, -74.1197, 1.0, 0.0, 90.0, 0.0));
+  m_originCamera = Camera(39.7712, -74.1197, 1.0, 0.0, 90.0, 0.0);
+  m_arcGISArView->setOriginCamera(m_originCamera);
   m_arcGISArView->setTranslationFactor(18000.0);
 
   changeScene();
@@ -209,7 +237,8 @@ void CppArExample::createYosemiteScene()
   auto* layer = new IntegratedMeshLayer(yosemiteUrl, m_scene);
   m_scene->operationalLayers()->append(layer);
 
-  m_arcGISArView->setOriginCamera(Camera(37.7308, -119.612, 1212.0, 0.0, 90.0, 0.0));
+  m_originCamera = Camera(37.7308, -119.612, 1212.0, 0.0, 90.0, 0.0);
+  m_arcGISArView->setOriginCamera(m_originCamera);
   m_arcGISArView->setTranslationFactor(18000.0);
 
   changeScene();
@@ -228,7 +257,8 @@ void CppArExample::createBorderScene()
   m_scene->operationalLayers()->append(layer);
 
   // Set origin camera
-  m_arcGISArView->setOriginCamera(Camera(32.5337, -116.925, 126.0, 0.0, 90.0, 0.0));
+  m_originCamera = Camera(32.5337, -116.925, 126.0, 0.0, 90.0, 0.0);
+  m_arcGISArView->setOriginCamera(m_originCamera);
   m_arcGISArView->setTranslationFactor(10000.0);
 
   changeScene();
@@ -249,7 +279,8 @@ void CppArExample::createBrestScene()
   m_scene->operationalLayers()->append(layer);
 
   // Set origin camera
-  m_arcGISArView->setOriginCamera(Camera(48.3808, -4.49492, 48.2511, 0.0, 90.0, 0.0));
+  m_originCamera = Camera(48.3808, -4.49492, 48.2511, 0.0, 90.0, 0.0);
+  m_arcGISArView->setOriginCamera(m_originCamera);
   m_arcGISArView->setTranslationFactor(500.0);
 
   changeScene();
@@ -270,7 +301,8 @@ void CppArExample::createBerlinScene()
   m_scene->operationalLayers()->append(layer);
 
   // set origin camera
-  m_arcGISArView->setOriginCamera(Camera(52.4993, 13.4215, 38.0, 0.0, 90.0, 0.0));
+  m_originCamera = Camera(52.4993, 13.4215, 38.0, 0.0, 90.0, 0.0);
+  m_arcGISArView->setOriginCamera(m_originCamera);
   m_arcGISArView->setTranslationFactor(1000.0);
 
   changeScene();
@@ -304,7 +336,9 @@ void CppArExample::createTabletopTestScene()
   }
   createSymbol(0.0, 0.0, 0.11, QColor(Qt::green));
 
-  m_arcGISArView->setOriginCamera(Camera(0.0, 0.0, 0.0, 0.0, 90.0, 0.0));
+  // set origin camera
+  m_originCamera = Camera(0.0, 0.0, 0.0, 0.0, 90.0, 0.0);
+  m_arcGISArView->setOriginCamera(m_originCamera);
   m_arcGISArView->setTranslationFactor(10.0);
 
   changeScene();

@@ -23,7 +23,7 @@ import Esri.ArcGISArToolkit 1.0
 
 Item {
     property alias scene: scene
-    property Camera originCamera: originCamera
+    property alias originCamera: originCamera
     property LocationDataSource locationDataSource: null
     property double translationFactor: 18000.0
 

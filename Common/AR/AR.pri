@@ -22,6 +22,7 @@
 AR_COMMON_PATH = $$AR_TOOLKIT_SOURCE_PATH/Common/AR
 AR_COMMON_INCLUDE_PATH = $$AR_COMMON_PATH/include
 AR_COMMON_SOURCE_PATH = $$AR_COMMON_PATH/source
+AR_COMMON_QML_PATH = $$AR_COMMON_PATH/qml
 
 #-------------------------------------------------
 # platform independent configuration
@@ -38,6 +39,9 @@ SOURCES += \
     $$AR_COMMON_SOURCE_PATH/ArcGISArViewRenderer.cpp \
     $$AR_COMMON_SOURCE_PATH/ArWrapper.cpp \
     $$AR_COMMON_SOURCE_PATH/LocationDataSource.cpp
+
+RESOURCES += \
+    $$AR_COMMON_QML_PATH/ar.qrc
 
 INCLUDEPATH += $$AR_COMMON_INCLUDE_PATH
 DEPENDPATH += $$AR_COMMON_INCLUDE_PATH

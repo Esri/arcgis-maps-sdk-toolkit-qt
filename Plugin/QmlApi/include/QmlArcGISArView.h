@@ -18,6 +18,7 @@
 #define QmlArcGISArView_H
 
 #include "ArcGISArViewInterface.h"
+#include <QPointer>
 
 namespace Esri {
 namespace ArcGISRuntime {
@@ -94,9 +95,9 @@ protected:
 private:
   bool assertClassName(QObject* object, const QString& className) const;
 
-  QObject* m_originCamera = nullptr;
-  QObject* m_sceneView = nullptr;
-  mutable QObject* m_tmcc = nullptr;
+  QPointer<QObject> m_originCamera;
+  QPointer<QObject> m_sceneView;
+  mutable QPointer<QObject> m_tmcc;
 };
 
 } // Toolkit namespace

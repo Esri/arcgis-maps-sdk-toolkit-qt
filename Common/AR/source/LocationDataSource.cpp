@@ -106,9 +106,7 @@ void LocationDataSource::start()
   m_compass->start();
 
   // update isStarted and sensorStatus properties
-  m_isStarted = true;
-  m_sensorStatus = SensorStatus::Started;
-  emit isStartedChanged();
+  m_sensorStatus = SensorStatus::Starting;
   emit sensorStatusChanged();
 }
 
@@ -160,10 +158,19 @@ void LocationDataSource::setGeoPositionSource(QGeoPositionInfoSource* geoPositio
   m_geoPositionSourceConnection = connect(m_geoPositionSource, &QGeoPositionInfoSource::positionUpdated,
                                           this, [this](const QGeoPositionInfo &positionInfo)
   {
-    // emit the new position if available
+    // Emit the new position if available
     const QGeoCoordinate& coordinate = positionInfo.coordinate();
     if (coordinate.isValid())
       emit locationChanged(coordinate.latitude(), coordinate.longitude(), coordinate.altitude());
+
+    // Update sensor status
+    if (m_sensorStatus == SensorStatus::Starting)
+    {
+      m_isStarted = true;
+      m_sensorStatus = SensorStatus::Started;
+      emit isStartedChanged();
+      emit sensorStatusChanged();
+    }
   });
 
   emit geoPositionSourceChanged();

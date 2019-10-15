@@ -13,5 +13,6 @@
         <file>scenes/TabletopTestScene.qml</file>
         <file>scenes/TabletopTestSceneGraphic.qml</file>
         <file>scenes/YosemiteScene.qml</file>
+        <file>Message.qml</file>
     </qresource>
 </RCC>
