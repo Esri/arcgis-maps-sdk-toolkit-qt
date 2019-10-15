@@ -201,10 +201,10 @@ LocationDataSource* ArcGISArViewInterface::locationDataSource() const
 }
 
 /*!
- * \brief Sets the location data source to \a locationDataSource.
- *
- * If \a locationDataSource is \c nullptr, the tracking of the LocationDataSource is disabled.
- * If \l tryUsingArKit is \c true, the AR framework is used for the tracking, not \l LocationDataSource.
+  \brief Sets the location data source to \a locationDataSource.
+
+  If \a locationDataSource is \c nullptr, the tracking of the \l LocationDataSource is disabled.
+  If \l tryUsingArKit is \c true, the AR framework is used for the tracking, not \l LocationDataSource.
  */
 void ArcGISArViewInterface::setLocationDataSource(LocationDataSource* locationDataSource)
 {
@@ -212,31 +212,35 @@ void ArcGISArViewInterface::setLocationDataSource(LocationDataSource* locationDa
     return;
 
   m_locationDataSource = locationDataSource;
+  connect(m_locationDataSource, &LocationDataSource::locationChanged, this, &ArcGISArViewInterface::setLocationInternal);
+  connect(m_locationDataSource, &LocationDataSource::headingChanged, this, &ArcGISArViewInterface::setHeadingInternal);
+  emit locationDataSourceChanged();
+}
 
-  // update connection
-  disconnect(m_locationChangedConnection);
-  disconnect(m_headingChangedConnection);
+/*!
+  \brief Gets the tracking mode controlling how the locations generated from the location data source
+  are used during AR tracking.
+
+  The default value is \c LocationTrackingMode::Ignore.
+ */
+ArEnums::LocationTrackingMode ArcGISArViewInterface::locationTrackingMode() const
+{
+  return m_locationTrackingMode;
+}
+
+/*!
+  \brief Sets the location tracking mode to \a locationTrackingMode.
+ */
+void ArcGISArViewInterface::setLocationTrackingMode(ArEnums::LocationTrackingMode locationTrackingMode)
+{
+  if (m_locationTrackingMode == locationTrackingMode)
+    return;
 
   if (m_locationDataSource)
-  {
-    m_locationChangedConnection = connect(m_locationDataSource, &LocationDataSource::locationChanged,
-                                          this, [this](double latitude, double longitude, double altitude)
-    {
-      setLocationInternal(latitude, longitude, altitude);
-    });
+    m_locationDataSource->setLocationTrackingMode(locationTrackingMode);
 
-    m_headingChangedConnection = connect(m_locationDataSource, &LocationDataSource::headingChanged,
-                                         this, [this](double heading)
-    {
-      setHeadingInternal(heading);
-    });
-
-    // starts tracking using LocationDataSource if necessary
-    if (!m_tryUsingArKit)
-      m_locationDataSource->start();
-  }
-
-  emit locationDataSourceChanged();
+  m_locationTrackingMode = locationTrackingMode;
+  emit locationTrackingModeChanged();
 }
 
 /*!
@@ -255,15 +259,32 @@ void ArcGISArViewInterface::startTracking()
 {
   Q_CHECK_PTR(m_arWrapper);
 
-  // uses locationDataSource.
+  // Create LocationDataSource if necessary
+  if (!m_locationDataSource)
+    setLocationDataSource(new LocationDataSource(this));
+
+  // Start AR wrapper
   if (m_tryUsingArKit)
     m_arWrapper->startTracking();
 
+  // Start location data source.
   if (m_locationDataSource)
     m_locationDataSource->start();
 
   m_tracking = true;
   emit trackingChanged();
+}
+
+/*!
+  \brief Starts AR tracking with location tracking mode.
+ */
+void ArcGISArViewInterface::startTracking(ArEnums::LocationTrackingMode locationTrackingMode)
+{
+  // Set locationTrackingMode
+  setLocationTrackingMode(locationTrackingMode);
+
+  // Start tracking.
+  startTracking();
 }
 
 /*!
@@ -392,10 +413,9 @@ void ArcGISArViewInterface::updateTrackingSources()
 {
   if (m_tryUsingArKit)
   {
-    // disable LocationDataSource if necessary.
-    // Don't delete these objects, they can be the user's objects.
-    disconnect(m_locationChangedConnection);
-    disconnect(m_headingChangedConnection);
+    // Stop locationDataSource if it exists.
+    if (m_locationDataSource)
+      m_locationDataSource->stop();
 
     // disable the video rendering using the QCamera
     if (m_renderVideoFeed)

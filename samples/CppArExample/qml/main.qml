@@ -36,6 +36,7 @@ ApplicationWindow {
     SceneView {
         id: sceneView
         anchors.fill: parent
+        opacity: calibrationView.visible ? 0.65 : 1.0
     }
 
     // Declare the C++ instance which creates the scene etc. and supply the view
@@ -43,6 +44,37 @@ ApplicationWindow {
         id: arSample
         arcGISArView: arcGISArView
         sceneView: sceneView
+    }
+    Column {
+        anchors {
+            right: parent.right
+            left: parent.left
+            margins: 10
+            bottom: parent.bottom
+            bottomMargin: 30
+        }
+        spacing: 5
+
+        Message {
+            id: waitingInitMessage
+            width: parent.width
+            visible: true
+            text: "Touch screen to place the tabletop scene..."
+        }
+
+        Message {
+            id: waitingLocationMessage
+            width: parent.width
+            visible: true
+            text: "Waiting for location..."
+        }
+
+        CalibrationView {
+            id: calibrationView
+            width: parent.width
+            visible: false
+            onTriggered: arSample.updateOriginCamera(latitude, longitude, altitude, heading);
+        }
     }
 
     SettingsWindow {
@@ -52,24 +84,80 @@ ApplicationWindow {
             margins: 5
         }
 
+        // tracking options
         onStartTrackingClicked: arcGISArView.startTracking();
         onStopTrackingClicked: arcGISArView.stopTracking();
         onResetTrackingClicked: arcGISArView.resetTracking();
-        // onCalibrationClicked: not implemented
+        onIgnoreTrackingClicked: arcGISArView.locationTrackingMode = ArEnums.Ignore;
+        onInitialTrackingClicked: arcGISArView.locationTrackingMode = ArEnums.Initial;
+        onContinuousTrackingClicked: arcGISArView.locationTrackingMode = ArEnums.Continuous;
+        onCalibrationClicked: calibrationView.visible = !calibrationView.visible
+        onResetCalibrationClicked: calibrationView.reset();
 
+        // debug options
         onShowPointCloud: arSample.showPointCloud(visible);
         onShowPlanes: arSample.showPlanes(visible);
 
-        onEmptySceneClicked: arSample.createEmptyScene();
-        onStreetsSceneClicked: arSample.createStreetsScene();
-        onImagerySceneClicked: arSample.createImageryScene();
-        onFullScaleTestSceneClicked: arSample.createFullScaleTestScene();
+        // full scale scenes
+        readonly property double emptySceneFactor: 0.0000001
+        readonly property double streetsSceneFactor: 0.0000001
+        readonly property double imagerySceneFactor: 0.0000001
+        readonly property double fullScaleTestSceneFactor: 0.0000001
 
-        onPointCloudSceneClicked: arSample.createPointCloudScene();
-        onYosemiteSceneClicked: arSample.createYosemiteScene();
-        onBorderSceneClicked: arSample.createBorderScene();
-        onBrestSceneClicked: arSample.createBrestScene();
-        onBerlinSceneClicked: arSample.createBerlinScene();
-        onTabletopTestSceneClicked: arSample.createTabletopTestScene();
+        onEmptySceneClicked: {
+            setCalibrationFactors(emptySceneFactor);
+            arSample.createEmptyScene();
+        }
+        onStreetsSceneClicked: {
+            setCalibrationFactors(streetsSceneFactor);
+            arSample.createStreetsScene();
+        }
+        onImagerySceneClicked: {
+            setCalibrationFactors(imagerySceneFactor);
+            arSample.createImageryScene();
+        }
+        onFullScaleTestSceneClicked: {
+            setCalibrationFactors(fullScaleTestSceneFactor);
+            arSample.createFullScaleTestScene();
+        }
+
+        // tabletop scenes
+        readonly property double pointCloundSceneFactor: 0.0001
+        readonly property double yosemiteSceneFactor: 0.0001
+        readonly property double borderSceneFactor: 0.0001
+        readonly property double brestSceneFactor: 0.00001
+        readonly property double berlinSceneFactor: 0.0001
+        readonly property double tabletopTestSceneFactor: 0.0000001
+
+        onPointCloudSceneClicked: {
+            setCalibrationFactors(pointCloundSceneFactor);
+            arSample.createPointCloudScene();
+        }
+        onYosemiteSceneClicked: {
+            setCalibrationFactors(yosemiteSceneFactor);
+            arSample.createYosemiteScene();
+        }
+        onBorderSceneClicked: {
+            setCalibrationFactors(borderSceneFactor);
+            arSample.createBorderScene();
+        }
+        onBrestSceneClicked: {
+            setCalibrationFactors(brestSceneFactor);
+            arSample.createBrestScene();
+        }
+        onBerlinSceneClicked: {
+            setCalibrationFactors(berlinSceneFactor);
+            arSample.createBerlinScene();
+        }
+        onTabletopTestSceneClicked: {
+            setCalibrationFactors(tabletopTestSceneFactor);
+            arSample.createTabletopTestScene();
+        }
+
+        // helper for calibration factor
+        function setCalibrationFactors(factor) {
+            calibrationView.latitudeFactor = factor;
+            calibrationView.longitudeFactor = factor;
+        }
     }
 }

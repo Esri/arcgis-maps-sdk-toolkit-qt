@@ -14,22 +14,14 @@
  *  limitations under the License.
  ******************************************************************************/
 
-#ifndef SensorStatus_H
-#define SensorStatus_H
+#include "ArEnums.h"
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+using namespace Esri::ArcGISRuntime::Toolkit;
 
-enum class SensorStatus
+ArEnums::ArEnums()
 {
-  Stopped = 0,
-  Starting = 1,
-  Started = 2
-};
+}
 
-} // Toolkit namespace
-} // ArcGISRuntime namespace
-} // Esri namespace
-
-#endif // SensorStatus_H
+ArEnums::~ArEnums()
+{
+}

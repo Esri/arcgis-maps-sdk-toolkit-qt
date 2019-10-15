@@ -23,7 +23,7 @@ import Esri.ArcGISArToolkit 1.0
 
 Item {
     property alias scene: scene
-    property alias originCamera: originCamera
+    property Camera originCamera: null
     property alias locationDataSource: locationDataSource
     property double translationFactor: 1.0
 
@@ -31,10 +31,6 @@ Item {
         id:scene
         BasemapImageryWithLabels {
         }
-    }
-
-    Camera {
-        id: originCamera
     }
 
     LocationDataSource {

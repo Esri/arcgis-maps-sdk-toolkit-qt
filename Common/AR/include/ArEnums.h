@@ -14,29 +14,42 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.6
-import Esri.ArcGISRuntime 100.6
+#ifndef ArEnums_H
+#define ArEnums_H
 
-// Creates a graphic with sympbol for the tabletop test scene.
+#include <QObject>
 
-Graphic {
-    property alias x: location.x
-    property alias y: location.y
-    property alias color: symbol.color
-    property real size: 0.1
+namespace Esri {
+namespace ArcGISRuntime {
+namespace Toolkit {
 
-    Point {
-        id: location
-        x: 0.0
-        y: 0.0
-    }
+class ArEnums
+{
+  Q_GADGET
 
-    symbol: SimpleMarkerSceneSymbol {
-        id: symbol
-        style: "SimpleMarkerSceneSymbolStyleSphere"
-        color: "green"
-        width: size
-        height: size
-        depth: size
-    }
-}
+public:
+  enum class LocationTrackingMode
+  {
+    Ignore = 0,
+    Initial = 1,
+    Continuous = 2
+  };
+  Q_ENUM(LocationTrackingMode)
+
+  enum class SensorStatus
+  {
+    Stopped = 0,
+    Starting = 1,
+    Started = 2
+  };
+  Q_ENUM(SensorStatus)
+
+  ArEnums();
+  ~ArEnums();
+};
+
+} // Toolkit namespace
+} // ArcGISRuntime namespace
+} // Esri namespace
+
+#endif // ArEnums_H

@@ -31,13 +31,15 @@ top of that feed. This pattern is used in scenarios ranging from viewing hidden
 infrastructure, such as the recorded position of utility lines or pipes below a
 street, to displaying waypoints for navigation.
 
-The AR toolkit component includes the `ArcGISArView` class, a
+The AR toolkit components include the `ArcGISArView` class, a
 subclass of `QQuickItem`, which contains the functionality your app needs to display an AR experience. `ArcGISArView` uses ARKit (iOS) or
 ARCore (Android) augmented reality framework to display the live camera feed
 and handle real world tracking and synchronization with the Runtime SDK's
 `SceneView` class. The `ArcGISArView` class is responsible for starting and managing an
 ARKit or ARCore session. `ArcGISArView` also uses a `LocationDataSource` class
 for getting an initial GPS location when continuous GPS tracking is required.
+Use the `CalibrationView` class to manually change the location and
+heading of the scene to ensure accuracy between the device live video and the scene.
 
 For details about using ARKit, please refer to [Apple's
 documentation](https://developer.apple.com/augmented-reality). For ARCore,
@@ -56,7 +58,7 @@ component.
   camera feed
 - Provides the `screenToLocation` method to convert a screen point to a
   real-world coordinate
-- Eases access to all ARKit or ARCore and `LocationDataSource` delegate
+- Eases access to ARKit, ARCore, and `LocationDataSource` delegate
   methods
 
 ## Creating a new AR app using ArcGIS Runtime AR toolkit

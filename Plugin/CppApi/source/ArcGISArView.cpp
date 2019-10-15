@@ -39,6 +39,10 @@ using namespace Esri::ArcGISRuntime::Toolkit::Internal;
   See \l {https://github.com/Esri/arcgis-runtime-toolkit-qt/blob/master/Common/AR/Ar.md} {additional details about using the ArcGISArView toolkit component}.
  */
 
+using namespace Esri::ArcGISRuntime;
+using namespace Esri::ArcGISRuntime::Toolkit;
+using namespace Esri::ArcGISRuntime::Toolkit::Internal;
+
 /*!
   \brief A constructor that accepts an optional \a parent object.
  */
@@ -92,8 +96,10 @@ void ArcGISArView::setOriginCamera(const Camera& originCamera)
     return;
 
   m_originCamera = originCamera;
-  m_tmcc->setOriginCamera(originCamera);
-  // don't emit originCameraChanged, this signal is emited by the core runtime
+  // Don't emit originCameraChanged, this signal is emited by the core runtime
+
+  // Update TMCC origin camera.
+  updateTmccOriginCamera();
 }
 
 /*!
@@ -190,8 +196,13 @@ Point ArcGISArView::screenToLocation(const QPoint& screenPoint) const
  */
 void ArcGISArView::qmlRegisterTypes()
 {
-  qmlRegisterType<Esri::ArcGISRuntime::Toolkit::ArcGISArView>("Esri.ArcGISArToolkit", 1, 0, "ArcGISArView");
-  qmlRegisterType<Esri::ArcGISRuntime::Toolkit::LocationDataSource>("Esri.ArcGISArToolkit", 1, 0, "LocationDataSource");
+  qmlRegisterType<ArcGISArView>("Esri.ArcGISArToolkit", 1, 0, "ArcGISArView");
+  qmlRegisterType<LocationDataSource>("Esri.ArcGISArToolkit", 1, 0, "LocationDataSource");
+  qmlRegisterUncreatableType<ArEnums>("Esri.ArcGISArToolkit", 1, 0, "ArEnums", "ArEnums is not creatable.");
+
+  // Register enum types.
+  qRegisterMetaType<ArEnums::LocationTrackingMode>("ArEnums::LocationTrackingMode");
+  qRegisterMetaType<ArEnums::SensorStatus>("ArEnums::SensorStatus");
 }
 
 /*!
@@ -254,19 +265,15 @@ void ArcGISArView::setTranslationFactorInternal(double translationFactor)
  */
 void ArcGISArView::setLocationInternal(double latitude, double longitude, double altitude)
 {
-  if (m_tmcc->originCamera().isEmpty())
-  {
-    // create a new origin camera
-    m_tmcc->setOriginCamera(Camera(latitude, longitude, altitude, 0.0, 90.0, 0.0));
-  }
+  // Save location camera parameters.
+  if (m_locationCamera.isEmpty())
+    m_locationCamera = Camera(latitude, longitude, altitude, 0.0, 90.0, 0.0);
   else
-  {
-    // update the origin camera
-    const Camera oldCamera = m_tmcc->originCamera();
-    m_tmcc->setOriginCamera(Camera(latitude, longitude, altitude, oldCamera.heading(), 90.0, 0.0));
-  }
+    m_locationCamera = Camera(latitude, longitude, altitude,
+                              m_locationCamera.heading(), m_locationCamera.pitch(), m_locationCamera.roll());
 
-  m_tmcc->setTransformationMatrix(TransformationMatrix::createIdentityMatrix(this));
+  // Update TMCC origin camera.
+  updateTmccOriginCamera();
 }
 
 /*!
@@ -274,18 +281,17 @@ void ArcGISArView::setLocationInternal(double latitude, double longitude, double
  */
 void ArcGISArView::setHeadingInternal(double heading)
 {
-  if (m_tmcc->originCamera().isEmpty())
-  {
-    // create a new origin camera
-    m_tmcc->setOriginCamera(Camera(0.0, 0.0, 0.0, heading, 90.0, 0.0));
-  }
+  const Point oldLocation = m_locationCamera.location();
+
+  // Save location camera parameters.
+  if (m_locationCamera.isEmpty())
+    m_locationCamera = Camera(0.0, 0.0, 0.0, heading, 90.0, 0.0);
   else
-  {
-    // update the origin camera
-    const Point oldLocation = m_tmcc->originCamera().location();
-    m_tmcc->setOriginCamera(Camera(oldLocation.y(), oldLocation.x(), oldLocation.z(), heading, 90.0, 0.0));
-  }
-  m_tmcc->setTransformationMatrix(TransformationMatrix::createIdentityMatrix(this));
+    m_locationCamera = Camera(oldLocation.y(), oldLocation.x(), oldLocation.z(),
+                              heading, m_locationCamera.pitch(), m_locationCamera.roll());
+
+  // Update TMCC origin camera.
+  updateTmccOriginCamera();
 }
 
 /*!
@@ -321,6 +327,41 @@ DeviceOrientation ArcGISArView::toDeviceOrientation(Qt::ScreenOrientations orien
       return DeviceOrientation::LandscapeLeft;
     default:
       return DeviceOrientation::Portrait;
+  }
+}
+
+/*!
+  \internal
+
+  Calculate the origin camera to use in TMCC, by addition of the origin camera (wich contains
+  the initial view of the scene view and calibration) and the location camera (which contains
+  the GPS data).
+  m_originCamera and m_locationCamera can be invalid if not set previously.
+ */
+void ArcGISArView::updateTmccOriginCamera() const
+{
+  if (m_originCamera.isEmpty())
+  {
+    if (!m_locationCamera.isEmpty())
+      m_tmcc->setOriginCamera(m_locationCamera);
+  }
+  else
+  {
+    if (m_locationCamera.isEmpty())
+    {
+      m_tmcc->setOriginCamera(m_originCamera);
+    }
+    else
+    {
+      const Point oldLocation = m_locationCamera.location();
+      const Point oldOriginLocation = m_originCamera.location();
+      m_tmcc->setOriginCamera(Camera(oldOriginLocation.y() + oldLocation.y(),
+                                     oldOriginLocation.x() + oldLocation.x(),
+                                     oldOriginLocation.z() + oldLocation.z(),
+                                     m_originCamera.heading() + m_locationCamera.heading(),
+                                     m_originCamera.pitch() + m_locationCamera.pitch(),
+                                     m_originCamera.roll() + m_locationCamera.roll()));
+    }
   }
 }
 

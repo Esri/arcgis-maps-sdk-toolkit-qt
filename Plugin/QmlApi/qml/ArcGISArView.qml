@@ -27,6 +27,9 @@ ArcGISArViewInternal {
         id: tmcc
     }
 
+    // Connect the sceneView.cameraController to transformationMatrixCameraController
+    Binding { target: sceneView; property: "cameraController"; value: transformationMatrixCameraController }
+
     // Update the translation factor.
     onTranslationFactorChanged: tmcc.translationFactor = translationFactor;
 
@@ -37,7 +40,7 @@ ArcGISArViewInternal {
     property TransformationMatrix initialTransformationMatrix: null
 
     onInitialTransformationChanged: {
-        // Set the `initialTransformation` as the TransformationMatrix.identity - hit test matrix.
+        // Set the `initialTransformationMatrix` as the TransformationMatrix.identity - hit test matrix.
         const hitMatrix = TransformationMatrix.createWithQuaternionAndTranslation(
                     quaternionX, quaternionY, quaternionZ, quaternionW,
                     translationX, translationY, translationZ);
@@ -60,7 +63,96 @@ ArcGISArViewInternal {
         tmcc.transformationMatrix = finalMatrix;
     }
 
-    // Cast from Qt's screen orientation to ArcGIS Runtime's screen orientation.
+    // It's not possible to call setFieldOfViewFromLensIntrinsics directly from the C++ code, due to
+    // the orientation device enumeration. This function is used to converts the orientation (int) to
+    // deviceOrientation (enum).
+    onFieldOfViewChanged: {
+        const deviceOrientation = toDeviceOrientation(Screen.orientation);
+        sceneView.setFieldOfViewFromLensIntrinsics(xFocalLength, yFocalLength,
+                                                   xPrincipal, yPrincipal,
+                                                   xImageSize, yImageSize,
+                                                   deviceOrientation);
+    }
+
+    // Update the origin camera
+    onOriginCameraChanged: {
+        originCameraInternal = originCamera;
+
+        // Update TMCC origin camera.
+        updateTmccOriginCamera();
+    }
+
+    // Update the location.
+    onLocationChanged: {
+        const location = ArcGISRuntimeEnvironment.createObject("Point", { y: latitude, x: longitude, z: altitude });
+
+        // Save location camera parameters.
+        if (!locationCameraInternal) {
+            locationCameraInternal = ArcGISRuntimeEnvironment.createObject("Camera", {
+                location: location, heading: 0.0, pitch: 90.0, roll: 0.0 });
+
+        }
+        else {
+            locationCameraInternal = ArcGISRuntimeEnvironment.createObject("Camera", {
+                location: location,
+                heading: locationCameraInternal.heading,
+                pitch: locationCameraInternal.pitch,
+                roll: locationCameraInternal.roll });
+        }
+
+        // Update TMCC origin camera.
+        updateTmccOriginCamera();
+    }
+
+    // Update the heading.
+    onHeadingChanged: {
+        // Save location camera parameters.
+        if (!locationCameraInternal) {
+            const location = ArcGISRuntimeEnvironment.createObject("Point", { y: 0.0, x: 0.0, z: 0.0 });
+            locationCameraInternal= ArcGISRuntimeEnvironment.createObject("Camera", {
+                location: location, heading: heading, pitch: 90.0, roll: 0.0 });
+        }
+        else {
+            locationCameraInternal= ArcGISRuntimeEnvironment.createObject("Camera", {
+                location: locationCameraInternal.location,
+                heading: heading,
+                pitch: locationCameraInternal.pitch,
+                roll: locationCameraInternal.roll });
+        }
+
+        // Update TMCC origin camera.
+        updateTmccOriginCamera();
+    }
+
+    // Resets the device tracking and related properties.
+    onResetTracking: {
+        const camera = ArcGISRuntimeEnvironment.createObject("Camera");
+        tmcc.originCamera = camera;
+
+        initialTransformationMatrix = TransformationMatrix.createIdentityMatrix();
+        tmcc.transformationMatrix = TransformationMatrix.createIdentityMatrix();
+    }
+
+    /*!
+        \brief Gets the location in the real world space corresponding to the screen point \a screenPoint.
+     */
+    function screenToLocation(x, y) {
+        const hitTest = root.screenToLocation(x, y);
+
+        const hitMatrix = TransformationMatrix.createWithQuaternionAndTranslation(
+                            hitTest[0], hitTest[1], hitTest[2], hitTest[3], // quaternionX, quaternionY, quaternionZ, quaternionW
+                            hitTest[4], hitTest[5], hitTest[6]); // translationX, translationY, translationZ
+
+        const currentViewpointMatrix = currentViewpointCamera.transformationMatrix;
+        const matrix = currentViewpointMatrix.addTransformation(hitMatrix);
+        const camera = ArcGISRuntimeEnvironment.createObject("Camera", { transformationMatrix: matrix });
+        return camera.location;
+    }
+
+    /*!
+        \internal
+        Cast from Qt's screen orientation to ArcGIS Runtime's screen orientation.
+     */
     function toDeviceOrientation(orientation) {
         switch(Screen.orientation) {
         case Qt.PortraitOrientation:
@@ -76,73 +168,56 @@ ArcGISArViewInternal {
         }
     }
 
-    // It's not possible to call setFieldOfViewFromLensIntrinsics directly from the C++ code, due to
-    // the orientation device enumeration. This function is used to converts the orientation (int) to
-    // deviceOrientation (enum).
-    onFieldOfViewChanged: {
-        const deviceOrientation = toDeviceOrientation(Screen.orientation);
-        sceneView.setFieldOfViewFromLensIntrinsics(xFocalLength, yFocalLength,
-                                                   xPrincipal, yPrincipal,
-                                                   xImageSize, yImageSize,
-                                                   deviceOrientation);
-    }
-
-    // Update the location.
-    onLocationChanged: {
-        const location = ArcGISRuntimeEnvironment.createObject("Point", { y: latitude, x: longitude, z: altitude });
-        if (tmcc.originCamera === null) {
-            // create a new origin camera
-            const camera = ArcGISRuntimeEnvironment.createObject(
-                        "Camera", { location: location, heading: 0.0, pitch: 90.0, roll: 0.0 });
-            tmcc.originCamera = camera;
-        } else {
-            // update the origin camera
-            const oldCamera = tmcc.originCamera;
-            const newCamera = ArcGISRuntimeEnvironment.createObject(
-                        "Camera", { location: location, heading: oldCamera.heading, pitch: 90.0, roll: 0.0 });
-            tmcc.originCamera = newCamera;
-        }
-    }
-
-    // Update the heading.
-    onHeadingChanged: {
-        if (tmcc.originCamera === null) {
-            // create a new origin camera
-            const location = ArcGISRuntimeEnvironment.createObject("Point", { x: 0.0, y: 0.0, z: 600.0 });
-            const camera = ArcGISRuntimeEnvironment.createObject(
-                        "Camera", { location: location, heading: heading, pitch: 90.0, roll: 0.0 });
-            tmcc.originCamera = camera;
-        } else {
-            // update the origin camera
-            const oldCamera = tmcc.originCamera;
-            const newCamera = ArcGISRuntimeEnvironment.createObject(
-                        "Camera", { location: oldCamera.location, heading: heading, pitch: 90.0, roll: 0.0 });
-            tmcc.originCamera = newCamera;
-        }
-    }
-
-    // Resets the device tracking and related properties.
-    onResetTracking: {
-        const camera = ArcGISRuntimeEnvironment.createObject("Camera");
-        tmcc.originCamera = camera;
-
-        initialTransformationMatrix = TransformationMatrix.createIdentityMatrix();
-        tmcc.transformationMatrix = TransformationMatrix.createIdentityMatrix();
-    }
+    /*!
+        \internal
+        The viewpoint camera used to set the initial view of the scene view. This camera can be
+        modified by the calibration.
+     */
+    property Camera originCameraInternal: null;
 
     /*!
-      \brief Gets the location in the real world space corresponding to the screen point \a screenPoint.
+        \internal
+        The camera corresponding to the GPS coordinates.
      */
-    function screenToLocation(x, y) {
-        const hitTest = root.screenToLocation(x, y);
+    property Camera locationCameraInternal: null;
 
-        const hitMatrix = TransformationMatrix.createWithQuaternionAndTranslation(
-                            hitTest[0], hitTest[1], hitTest[2], hitTest[3], // quaternionX, quaternionY, quaternionZ, quaternionW
-                            hitTest[4], hitTest[5], hitTest[6]); // translationX, translationY, translationZ
+    /*!
+        \internal
 
-        const currentViewpointMatrix = currentViewpointCamera.transformationMatrix;
-        const matrix = currentViewpointMatrix.addTransformation(hitMatrix);
-        const camera = ArcGISRuntimeEnvironment.createObject("Camera", { transformationMatrix: matrix });
-        return camera.location;
+        Calculate the origin camera to use in TMCC, by addition of the origin camera (wich contains
+        the initial view of the scene view and calibration) and the location camera (which contains
+        the GPS data).
+        originCameraInternal and locationCameraInternal can be invalid if not set previously.
+     */
+    function updateTmccOriginCamera() {
+        if (!originCameraInternal) {
+            if (locationCameraInternal) {
+                tmcc.originCamera = locationCameraInternal;
+            }
+        }
+        else
+        {
+            if (!locationCameraInternal) {
+                tmcc.originCamera = originCameraInternal;
+            }
+            else {
+                const oldLocation = locationCameraInternal.location;
+                const oldOriginLocation = originCameraInternal.location;
+
+                // create a new origin camera
+                const newLocation = ArcGISRuntimeEnvironment.createObject("Point", {
+                    x: oldLocation.x + oldOriginLocation.x,
+                    y: oldLocation.y + oldOriginLocation.y,
+                    z: oldLocation.z + oldOriginLocation.z });
+
+                const newCamera = ArcGISRuntimeEnvironment.createObject("Camera", {
+                    location: newLocation,
+                    heading: originCameraInternal.heading + locationCameraInternal.heading,
+                    pitch: originCameraInternal.pitch + locationCameraInternal.pitch,
+                    roll: originCameraInternal.roll + locationCameraInternal.roll, });
+
+                tmcc.originCamera = newCamera;
+            }
+        }
     }
 }
