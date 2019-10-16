@@ -113,8 +113,11 @@ void LocationDataSource::start()
   updateObjectsAndConnections();
 
   // Start sensors
-  m_geoPositionSource->startUpdates();
-  m_compass->start();
+  if (m_geoPositionSource)
+    m_geoPositionSource->startUpdates();
+
+  if (m_compass)
+    m_compass->start();
 
   // update isStarted and sensorStatus properties
   m_sensorStatus = ArEnums::SensorStatus::Starting;
@@ -259,6 +262,9 @@ void LocationDataSource::updateObjectsAndConnections()
   // must be disconnected manually.
   disconnect(m_geoPositionSourceConnection);
   disconnect(m_compassConnection);
+
+  if (m_locationTrackingMode == ArEnums::LocationTrackingMode::Ignore)
+    return;
 
   // If necessary, create a default geoposition source and compass.
   if (!m_geoPositionSource)

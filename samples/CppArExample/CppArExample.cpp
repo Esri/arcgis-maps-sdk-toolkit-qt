@@ -372,7 +372,6 @@ void CppArExample::changeScene(bool withLocationDataSource)
   {
     if (!oldLocationDataSource)
       m_arcGISArView->setLocationDataSource(new LocationDataSource(this));
-    // Else do nothing
   }
   else
   {

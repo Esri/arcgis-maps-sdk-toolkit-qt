@@ -68,11 +68,17 @@ ArcGISArViewInterface::ArcGISArViewInterface(bool renderVideoFeed, QQuickItem* p
     {
       case Qt::ApplicationSuspended:
         if (m_tracking)
+        {
           stopTracking();
+          m_trackingPaused = true;
+        }
         break;
       case Qt::ApplicationActive:
-        if (m_tracking)
+        if (m_tracking || m_trackingPaused)
+        {
           startTracking();
+          m_trackingPaused = false;
+        }
         break;
       default:
         // do nothing
@@ -181,8 +187,18 @@ void ArcGISArViewInterface::setLocationDataSource(LocationDataSource* locationDa
     return;
 
   m_locationDataSource = locationDataSource;
-  connect(m_locationDataSource, &LocationDataSource::locationChanged, this, &ArcGISArViewInterface::setLocationInternal);
-  connect(m_locationDataSource, &LocationDataSource::headingChanged, this, &ArcGISArViewInterface::setHeadingInternal);
+
+  // Reconnect the signals.
+  disconnect(m_locationChangedConnection);
+  disconnect(m_headingChangedConnection);
+  if (m_locationDataSource)
+  {
+    m_locationChangedConnection = connect(m_locationDataSource, &LocationDataSource::locationChanged,
+                                          this, &ArcGISArViewInterface::setLocationInternal);
+    m_headingChangedConnection = connect(m_locationDataSource, &LocationDataSource::headingChanged,
+                                         this, &ArcGISArViewInterface::setHeadingInternal);
+  }
+
   emit locationDataSourceChanged();
 }
 
@@ -217,6 +233,8 @@ void ArcGISArViewInterface::setLocationTrackingMode(ArEnums::LocationTrackingMod
  */
 void ArcGISArViewInterface::resetTracking()
 {
+  stopTracking();
+  startTracking();
   resetTrackingInternal();
   m_arWrapper->resetTracking();
 }
@@ -229,7 +247,7 @@ void ArcGISArViewInterface::startTracking()
   Q_CHECK_PTR(m_arWrapper);
 
   // Create LocationDataSource if necessary
-  if (!m_locationDataSource)
+  if (!m_locationDataSource && m_locationTrackingMode != ArEnums::LocationTrackingMode::Ignore)
     setLocationDataSource(new LocationDataSource(this));
 
   // Start AR wrapper
