@@ -22,9 +22,16 @@
 #include <QScreen>
 #include "ArWrapper.h"
 
+
+using namespace Esri::ArcGISRuntime::Toolkit;
+using namespace Esri::ArcGISRuntime::Toolkit::Internal;
+
 /*!
-  \class Esri::ArcGISRuntime::Toolkit::ArcGISArViewInterface
-  \ingroup ArcGISQtAr
+  \class ArcGISArViewInterface
+  \ingroup ArcGISQtToolkit
+  \ingroup ArcGISQtToolkitAR
+  \ingroup ArcGISQtToolkitARCppApi
+  \ingroup ArcGISQtToolkitCppApi
   \inmodule ArcGISQtToolkit
   \since Esri::ArcGISRuntime 100.6
   \brief Base class to impement AR scene view.
@@ -33,9 +40,6 @@
   It is used as a base class to create two API-dependent classes: \l ArcGISArSceneView which uses the C++ API and
   \l QmlArcGISArSceneView which uses the QML API.
  */
-
-using namespace Esri::ArcGISRuntime::Toolkit;
-using namespace Esri::ArcGISRuntime::Toolkit::Internal;
 
 /*!
   \brief A constructor that accepts an optional \a parent.

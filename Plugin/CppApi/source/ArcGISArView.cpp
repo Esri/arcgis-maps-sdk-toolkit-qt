@@ -25,11 +25,15 @@ using namespace Esri::ArcGISRuntime::Toolkit;
 using namespace Esri::ArcGISRuntime::Toolkit::Internal;
 
 /*!
-  \class ArcGISArView
+  \class Esri::ArcGISRuntime::Toolkit::ArcGISArView
   \ingroup ArcGISQtToolkitAR
+  \ingroup ArcGISQtToolkitARCppApi
+  \ingroup ArcGISQtToolkit
+  \ingroup ArcGISQtToolkitCppApi
   \inmodule ArcGISQtToolkit
   \since Esri::ArcGISRuntime 100.6
-  \brief A scene view for displaying ARKit/ARCore features on mobile devices.
+  \brief A scene view for displaying ARKit/ARCore features on mobile devices
+  using the C++ API.
 
   The Augmented Reality (AR) toolkit provides support for ARKit for iOS and
   ArCore for Android.
@@ -38,10 +42,6 @@ using namespace Esri::ArcGISRuntime::Toolkit::Internal;
 
   See \l {https://github.com/Esri/arcgis-runtime-toolkit-qt/blob/master/Common/AR/Ar.md} {additional details about using the ArcGISArView toolkit component}.
  */
-
-using namespace Esri::ArcGISRuntime;
-using namespace Esri::ArcGISRuntime::Toolkit;
-using namespace Esri::ArcGISRuntime::Toolkit::Internal;
 
 /*!
   \brief A constructor that accepts an optional \a parent object.
