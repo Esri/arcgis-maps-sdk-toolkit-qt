@@ -6,7 +6,7 @@ describes the installation and uses of the AR toolkit components.
 
 ## Overview
 
-Augmented reality experiences are augment the physical world with
+Augmented reality experiences augment the physical world with
 virtual content that respects real world scale, position, and orientation of a
 device. In the case of Runtime, a `SceneView` object displays 3D
 geographic AR data as virtual content on top of a camera feed of the real,
@@ -245,7 +245,7 @@ See [Note for performance issues] for details.
 ```
 
   - Call the `QmlArcGISArView::qmlRegisterTypes()` before the creation of the QML engine, to register the
-`ArcGISArView` and `LocationDataSource` QML types in QML engine. This is necessary to create a object
+`ArcGISArView` and `LocationDataSource` QML types in QML engine. This is necessary to create an object
 of these types in QML.
 ```
 Esri::ArcGISRuntime::Toolkit::QmlArcGISArView::qmlRegisterTypes();
@@ -330,6 +330,7 @@ on the filename and select "Open With" then "Plain Text Editor").
 
   - Under the line `<!-- Application arguments -->`, add the following line to
 enable ARCore support.
+
 ```
 <meta-data android:name="com.google.ar.core" android:value="required"/>
 ```
@@ -340,7 +341,7 @@ Services for AR` is not automatically installed with the app. An AR required
 app is available only on devices that support `ARCore`, and `Google
 Play Services for AR` is automatically installed with the app.
 
-For details, see [Enable ARCore documentation](https://developers.google.com/ar/develop/java/enable-arcore#manifest).
+For details, see [Google's Enable ARCore documentation](https://developers.google.com/ar/develop/java/enable-arcore#manifest).
 
   - Under the line `<!-- %%INSERT_FEATURES -->`, add the following line to give
 permission to access the camera to ARCore.

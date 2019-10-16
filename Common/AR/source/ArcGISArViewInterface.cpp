@@ -32,7 +32,6 @@ using namespace Esri::ArcGISRuntime::Toolkit::Internal;
   \ingroup ArcGISQtToolkitAR
   \ingroup ArcGISQtToolkitARCppApi
   \ingroup ArcGISQtToolkitCppApi
-  \inmodule ArcGISQtToolkit
   \since Esri::ArcGISRuntime 100.6
   \brief Base class to impement AR scene view.
 
@@ -496,8 +495,8 @@ ArRawPtr* ArcGISArViewInterface::arRawPtr() const
 // signals
 
 /*!
-  \fn void ArcGISArViewInterface::translationTransformationFactorChanged();
-  \brief Signal emitted when the \l translationTransformationFactor property changes.
+  \fn void ArcGISArViewInterface::translationFactorChanged();
+  \brief Signal emitted when the \l translationFactor property changes.
  */
 
 /*!
