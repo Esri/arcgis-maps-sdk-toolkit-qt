@@ -1,8 +1,8 @@
 # Augmented Reality toolkit components
 
-The Augmented Reality (AR) toolkit components provide support for ARKit for iOS apps and ARCore for 
-Android apps written using ArcGIS Runtime SDK for Qt. This documentation
-describes the installation and uses of the AR toolkit components.
+The Augmented Reality (AR) toolkit components provide support for ARKit for iOS
+apps and ARCore for Android apps written using ArcGIS Runtime SDK for Qt. This
+documentation describes the installation and uses of the AR toolkit components.
 
 ## Overview
 
@@ -37,7 +37,7 @@ ARCore (Android) augmented reality framework to display the live camera feed
 and handle real world tracking and synchronization with the Runtime SDK's
 `SceneView` class. The `ArcGISArView` class is responsible for starting and managing an
 ARKit or ARCore session. `ArcGISArView` also uses a `LocationDataSource` class
-for getting an initial GPS location when continuous GPS tracking is required.
+for getting an initial GPS location when GPS tracking is required.
 Use the `CalibrationView` class to manually change the location and
 heading of the scene to ensure accuracy between the device live video and the scene.
 
@@ -260,7 +260,7 @@ import Esri.ArcGISArToolkit 1.0
 
   - Create an AR view before the declaration of `SceneView` in the QML file.
 The following code show an example of initialization for the properties `originCamera`, `translationFactor` and
-`locationDataSource`used for world-scale mode.
+`locationDataSource` used for world-scale mode.
 ```
 ArcGISArView {
     id: arcGISArView
