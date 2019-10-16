@@ -33,9 +33,6 @@ ArCorePointCloudRenderer::ArCorePointCloudRenderer(ArCoreWrapper* arCoreWrapper)
   Q_CHECK_PTR(m_arCoreWrapper);
 }
 
-/*
-  \internal
-  */
 ArCorePointCloudRenderer::~ArCorePointCloudRenderer() = default;
 
 /*!

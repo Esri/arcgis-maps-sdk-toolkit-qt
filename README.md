@@ -6,7 +6,7 @@ Current Release: 100.6
 This project contains QML source code for controls and utilities you can use with the [ArcGIS Runtime SDK for Qt](http://developers.arcgis.com/qt). There are QML examples in this repo that demonstrate the use of these controls and how they can be used as resuable building blocks for your QML-based ArcGIS applications.
 
 ## Features
-- ArcGISArSceneView - A scene view for displaying ARKit/ARCore features on mobile devices. See [details about using the ArcGISArView toolkit component](https://github.com/Esri/arcgis-runtime-toolkit-qt/blob/master/Common/AR/Ar.md).
+- ArcGISArSceneView - A scene view for displaying ARKit/ARCore features on mobile devices. See [details about using the ArcGISArView toolkit component](https://github.com/Esri/arcgis-runtime-toolkit-qt/blob/master/Common/AR/README.md).
 - AuthenticationView Dialog - A wrapper view that will automatically display the proper authentication view for any of the supported authentication types (OAuth, Token, HTTP Basic, HTTP Digest, SAML, PKI).
 - ClientCertificateView Dialog - A dialog for handling PKI authentication.
 - OAuth2View Dialog - A dialog for handling OAuth authentication.

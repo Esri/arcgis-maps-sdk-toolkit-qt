@@ -40,7 +40,7 @@ using namespace Esri::ArcGISRuntime::Toolkit::Internal;
   This toolkit component allows quick and easy integration
   of AR into your application for a variety of scenarios.
 
-  See \l {https://github.com/Esri/arcgis-runtime-toolkit-qt/blob/master/Common/AR/Ar.md} {additional details about using the ArcGISArView toolkit component}.
+  See \l {https://github.com/Esri/arcgis-runtime-toolkit-qt/blob/master/Common/AR/README.md} {additional details about using the ArcGISArView toolkit component}.
  */
 
 /*!
@@ -188,7 +188,7 @@ Point ArcGISArView::screenToLocation(const QPoint& screenPoint) const
 }
 
 /*!
-  \brief Register the QML-creatable types provided by QR toolkit.
+  \brief Register the QML-creatable types provided by the AR toolkit.
 
   This static function registers the QML types \l ArcGISArView and
   \c LocationDataSource in the QML engine.
