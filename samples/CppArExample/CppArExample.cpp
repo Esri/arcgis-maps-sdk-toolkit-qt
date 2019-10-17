@@ -323,6 +323,8 @@ void CppArExample::createTabletopTestScene()
   m_scene = new Scene(this);
   createSurfaceWithElevation();
 
+  m_sceneView->graphicsOverlays()->clear();
+
   // Create graphic overlay
   auto* graphicsOverlay = new GraphicsOverlay(this);
   Q_CHECK_PTR(m_sceneView);
