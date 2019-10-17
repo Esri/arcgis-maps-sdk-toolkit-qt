@@ -69,7 +69,7 @@ signals:
   void screenToLocationModeChanged();
 
 private slots:
-  void onTouched(QTouchEvent& event);
+  void onTouched(QMouseEvent& event);
 
 private:
   Q_DISABLE_COPY(CppArExample)
