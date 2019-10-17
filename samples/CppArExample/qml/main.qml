@@ -45,6 +45,7 @@ ApplicationWindow {
         arcGISArView: arcGISArView
         sceneView: sceneView
     }
+
     Column {
         anchors {
             right: parent.right
