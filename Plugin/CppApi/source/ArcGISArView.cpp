@@ -20,23 +20,28 @@
 #include <QQuickWindow>
 #include <QScreen>
 
-/*!
-  \class Esri::ArcGISRuntime::Toolkit::ArcGISArView
-  \ingroup ArcGISQtToolkitCppApi
-  \inmodule ArcGISQtToolkit
-  \since Esri::ArcGISRuntime 100.6
-  \brief A scene view for displaying ARKit/ARCore features on mobile devices.
-
-  The Augmented Reality toolkit provides support for ARKit for iOS and Android.
-  The Augmented Reality (AR) toolkit component allows quick and easy integration
-  of AR into your application for a variety of scenarios.
-
-  See AR.md for details.
- */
-
 using namespace Esri::ArcGISRuntime;
 using namespace Esri::ArcGISRuntime::Toolkit;
 using namespace Esri::ArcGISRuntime::Toolkit::Internal;
+
+/*!
+  \class Esri::ArcGISRuntime::Toolkit::ArcGISArView
+  \ingroup ArcGISQtToolkitAR
+  \ingroup ArcGISQtToolkitARCppApi
+  \ingroup ArcGISQtToolkit
+  \ingroup ArcGISQtToolkitCppApi
+  \inmodule ArcGISQtToolkit
+  \since Esri::ArcGISRuntime 100.6
+  \brief A scene view for displaying ARKit/ARCore features on mobile devices
+  using the C++ API.
+
+  The Augmented Reality (AR) toolkit provides support for ARKit for iOS and
+  ArCore for Android.
+  This toolkit component allows quick and easy integration
+  of AR into your application for a variety of scenarios.
+
+  See \l {https://github.com/Esri/arcgis-runtime-toolkit-qt/blob/master/Common/AR/README.md} {additional details about using the ArcGISArView toolkit component}.
+ */
 
 /*!
   \brief A constructor that accepts an optional \a parent object.
@@ -50,13 +55,13 @@ ArcGISArView::ArcGISArView(QQuickItem* parent):
 }
 
 /*!
-  \brief A constructor that accepts an optional \a parent.
+  \internal
 
   \list
-  \li \a renderVideoFeed - Sets to \c true to render the camera frames in the background.
-  \li \a tryUsingArKit - Sets to \c true to use the AR framework, depending of the platform (ARKit
+  \li \a renderVideoFeed - Set to \c true to render the camera frames in the background.
+  \li \a tryUsingArKit - Set to \c true to use the AR framework, depending of the platform (ARKit
   in Android and ARKit in iOS).
-  \li \a parent - optional.
+  \li \a parent - optional parent object.
   \endlist
  */
 ArcGISArView::ArcGISArView(bool renderVideoFeed, bool tryUsingArKit, QQuickItem* parent):
@@ -83,7 +88,7 @@ Camera ArcGISArView::originCamera() const
 
 /*!
   \property ArcGISArView::originCamera
-  \brief The origin camera of this ArcGISArView.
+  \brief Sets the origin camera of this ArcGISArView.
  */
 void ArcGISArView::setOriginCamera(const Camera& originCamera)
 {
@@ -99,7 +104,7 @@ void ArcGISArView::setOriginCamera(const Camera& originCamera)
 
 /*!
   \property ArcGISArView::sceneView
-  \brief The SceneView associated with this ArcGISArView.
+  \brief Gets the SceneView associated with this ArcGISArView.
  */
 SceneQuickView* ArcGISArView::sceneView() const
 {
@@ -132,13 +137,13 @@ void ArcGISArView::setSceneView(SceneQuickView* sceneView)
 }
 
 /*!
-  \brief Sets the initial transformation used to offset the originCamera.
+  \brief Sets the initial transformation used to offset the \l originCamera.
 
   The initial transformation is based on an AR point determined via existing plane hit detection
-  from `screenPoint`. If an AR point cannot be determined, this method will return `false`.
+  from `screenPoint`. If an AR point cannot be determined, this method will return \c false.
 
   \list
-    \li \a screenPoint - The screen point to determine the `initialTransformation` from.
+    \li \a screenPoint - The screen point to determine the initialTransformation from.
   \endlist
  */
 void ArcGISArView::setInitialTransformation(const QPoint& screenPoint)
@@ -159,7 +164,8 @@ void ArcGISArView::setInitialTransformation(const QPoint& screenPoint)
 }
 
 /*!
-  \brief Gets the location in the real world space corresponding to the screen point \a screenPoint.
+  \brief Gets the location in the real world space corresponding to the screen
+   point \a screenPoint.
  */
 Point ArcGISArView::screenToLocation(const QPoint& screenPoint) const
 {
@@ -182,10 +188,11 @@ Point ArcGISArView::screenToLocation(const QPoint& screenPoint) const
 }
 
 /*!
-  \brief Register the QML creatable types provide by QR toolkit.
+  \brief Register the QML-creatable types provided by the AR toolkit.
 
-  The static function register the QML types \l ArcGISArView and \l LocationDataSource in the QML engine.
-  This function must becalled before using the QML types.
+  This static function registers the QML types \l ArcGISArView and
+  \c LocationDataSource in the QML engine.
+  This function must be called before using the QML types.
  */
 void ArcGISArView::qmlRegisterTypes()
 {

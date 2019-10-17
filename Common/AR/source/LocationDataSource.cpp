@@ -20,7 +20,12 @@
 
 /*!
   \class Esri::ArcGISRuntime::Toolkit::LocationDataSource
-  \ingroup ArcGISQtAr
+  \ingroup ArcGISQtToolkitAR
+  \ingroup ArcGISQtToolkitARCppApi
+  \ingroup ArcGISQtToolkitARQmlApi
+  \ingroup ArcGISQtToolkit
+  \ingroup ArcGISQtToolkitCppApi
+  \ingroup ArcGISQtToolkitQmlApi
   \inmodule ArcGISQtToolkit
   \since Esri::ArcGISRuntime 100.6
   \brief Updates the location using the positioning device.
@@ -36,7 +41,7 @@
   is created automatically by \l ArcGISArSceneView when this is necessary. This class is public to
   give the possibility to override the class QGeoPositionInfoSource to support a custom GPS device.
 
-  \sa {http://doc.qt.io/qt-5/qtpositioning-plugins.html}{Qt Positioning service plugins}.
+  See also {http://doc.qt.io/qt-5/qtpositioning-plugins.html}{Qt Positioning service plugins}.
 
   \section1 Latitude and longitude
 

@@ -17,11 +17,17 @@
 #include "QmlArcGISArView.h"
 
 /*!
-  \class Esri::ArcGISRuntime::Toolkit::QmlArcGISArView
-  \ingroup AR
+  \qmltype ArcGISArView
+  \instantiates QmlArcGISArView
+  \inherits ArcGISArViewInterface
+  \ingroup ArcGISQtToolkitAR
+  \ingroup ArcGISQtToolkitARQmlApi
+  \ingroup ArcGISQtToolkit
+  \ingroup ArcGISQtToolkitQmlApi
   \inmodule ArcGISQtToolkit
   \since Esri::ArcGISRuntime 100.6
-  \brief A scene view for displaying ARKit/ARCore features on mobile devices.
+  \brief A scene view for displaying ARKit/ARCore features on mobile devices
+   using the QML API.
 
   The Augmented Reality toolkit provides support for ARKit for iOS and Android.
   The Augmented Reality (AR) toolkit component allows quick and easy integration
@@ -248,11 +254,11 @@ bool QmlArcGISArView::assertClassName(QObject* object, const QString& className)
 // signals
 
 /*!
-  \fn void ArcGISArView::originCameraChanged();
+  \fn void QmlArcGISArView::originCameraChanged();
   \brief Signal emitted when the \l originCamera property changes.
  */
 
 /*!
-  \fn void ArcGISArView::sceneViewChanged();
+  \fn void QmlArcGISArView::sceneViewChanged();
   \brief Signal emitted when the \l sceneView property changes.
  */

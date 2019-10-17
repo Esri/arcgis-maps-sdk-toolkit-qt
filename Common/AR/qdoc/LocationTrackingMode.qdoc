@@ -15,13 +15,12 @@
  ******************************************************************************/
 
 /*!
-  \class Esri::ArcGISRuntime::Toolkit::LocationTrackingMode
-  \ingroup ArcGISQtAr
-  \inmodule ArcGISQtToolkit
-  \brief Specifies how locations generated from the location data source are used during AR tracking.
+  \page LocationTrackingMode
+  \title LocationTrackingMode enumeration
   \since Esri::ArcGISRuntime 100.6
 
-  The LocationTrackingMode can be one of:
+  Enumerates options for using locations generated from the location data
+  source during AR tracking. The LocationTrackingMode can be one of:
   \table
     \header
       \li Value

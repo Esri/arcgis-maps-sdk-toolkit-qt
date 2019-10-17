@@ -19,6 +19,9 @@ import QtQuick.Controls 2.2
 
 /*!
     \qmltype CalibrationView
+    \ingroup ArcGISQtToolkitAR
+    \ingroup ArcGISQtToolkitARCppApi
+    \ingroup ArcGISQtToolkitARQmlApi
     \ingroup ArcGISQtToolkit
     \ingroup ArcGISQtToolkitCppApi
     \ingroup ArcGISQtToolkitQmlApi

@@ -27,19 +27,12 @@ using namespace Esri::ArcGISRuntime::Toolkit::Internal;
   - https://github.com/google-ar/arcore-android-sdk/blob/master/samples/hello_ar_c/app/src/main/cpp/hello_ar_application.cc
   - https://github.com/google-ar/arcore-android-sdk/blob/master/samples/hello_ar_c/app/src/main/cpp/plane_renderer.cc
   */
-
-/*!
-  \internal
-  */
 ArCorePointCloudRenderer::ArCorePointCloudRenderer(ArCoreWrapper* arCoreWrapper) :
   m_arCoreWrapper(arCoreWrapper)
 {
   Q_CHECK_PTR(m_arCoreWrapper);
 }
 
-/*!
-  \internal
-  */
 ArCorePointCloudRenderer::~ArCorePointCloudRenderer() = default;
 
 /*!
