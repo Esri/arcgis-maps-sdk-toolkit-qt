@@ -25,10 +25,10 @@ using namespace Esri::ArcGISRuntime::Toolkit;
 using namespace Esri::ArcGISRuntime::Toolkit::Internal;
 
 /*!
-  \class Esri::ArcGISRuntime::Toolkit::ArcGISArView
+  \class ArcGISArView
+  \ingroup ArcGISQtToolkit
   \ingroup ArcGISQtToolkitAR
   \ingroup ArcGISQtToolkitARCppApi
-  \ingroup ArcGISQtToolkit
   \ingroup ArcGISQtToolkitCppApi
   \inmodule ArcGISQtToolkit
   \since Esri::ArcGISRuntime 100.6
