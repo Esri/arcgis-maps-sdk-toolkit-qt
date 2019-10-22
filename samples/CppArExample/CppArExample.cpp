@@ -362,8 +362,6 @@ void CppArExample::createTabletopTestScene()
 // initial transformation based on the screen position.
 void CppArExample::onMouseClicked(QMouseEvent& event)
 {
-  qDebug() << "===== SceneQuickView::mouseClicked";
-
   Q_CHECK_PTR(m_arcGISArView);
   const QPoint screenPoint = event.screenPos().toPoint();
 
