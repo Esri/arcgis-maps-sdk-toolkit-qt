@@ -401,7 +401,7 @@ void CppArExample::createSurfaceWithElevation() const
 }
 
 // Get or create graphic overlay
-Esri::ArcGISRuntime::GraphicsOverlay* CppArExample::getOrCreateGraphicsOverlay() const
+GraphicsOverlay* CppArExample::getOrCreateGraphicsOverlay() const
 {
   Q_CHECK_PTR(m_sceneView);
 
