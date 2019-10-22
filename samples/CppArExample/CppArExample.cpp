@@ -77,6 +77,13 @@ void CppArExample::setSceneView(SceneQuickView* sceneView)
     return;
 
   m_sceneView = sceneView;
+
+  // connect the screen touch
+  if (m_touchedConnection)
+    disconnect(m_touchedConnection);
+
+  m_touchedConnection = connect(m_sceneView, &SceneQuickView::mouseClicked, this, &CppArExample::onTouched);
+
   emit sceneViewChanged();
 }
 
@@ -312,29 +319,30 @@ void CppArExample::createBerlinScene()
 // Mode: Tabletop AR
 void CppArExample::createTabletopTestScene()
 {
-  // Create scene
+  // Create scene.
   m_scene = new Scene(this);
   createSurfaceWithElevation();
 
-  // Create graphic overlay
-  auto* graphicsOverlay = new GraphicsOverlay(this);
   Q_CHECK_PTR(m_sceneView);
-  m_sceneView->graphicsOverlays()->append(graphicsOverlay);
+  m_sceneView->graphicsOverlays()->clear();
+
+  // Get or create graphic overlay.
+  GraphicsOverlay* graphicsOverlay = getOrCreateGraphicsOverlay();
 
   // Create graphics
-  auto createSymbol = [graphicsOverlay](double x, double y, double size, const QColor& color)
+  auto createSymbol = [graphicsOverlay](double x, double y, double z, const QColor& color)
   {
     SimpleMarkerSceneSymbol* symbol = new SimpleMarkerSceneSymbol(
-          SimpleMarkerSceneSymbolStyle::Sphere, color, size, size, size, SceneSymbolAnchorPosition::Center, graphicsOverlay);
-    graphicsOverlay->graphics()->append(new Graphic(Point(x, y, 0.0), symbol, graphicsOverlay));
+          SimpleMarkerSceneSymbolStyle::Sphere, color, 0.1, 0.1, 0.1, SceneSymbolAnchorPosition::Center, graphicsOverlay);
+    graphicsOverlay->graphics()->append(new Graphic(Point(x, y, z), symbol, graphicsOverlay));
   };
 
-  for (int i = -5; i <= 10; ++i)
+  for (int i = 0; i <= 10; ++i)
   {
-    createSymbol(0.0, 0.000001 * i, 0.1, QColor(Qt::blue));
-    createSymbol(0.000001 * i, 0.0, 0.1, QColor(Qt::red));
+    createSymbol(0.0, 0.000001 * i, 0.0, QColor(Qt::blue));
+    createSymbol(0.000001 * i, 0.0, 0.0, QColor(Qt::red));
+    createSymbol(0.0, 0.0, 0.1 * i, QColor(Qt::green));
   }
-  createSymbol(0.0, 0.0, 0.11, QColor(Qt::green));
 
   // set origin camera
   m_originCamera = Camera(0.0, 0.0, 0.0, 0.0, 90.0, 0.0);
@@ -344,8 +352,39 @@ void CppArExample::createTabletopTestScene()
   changeScene();
 }
 
+// If m_screenToLocationMode is true, create and place a 3D sphere in the scene. Otherwise set the
+// initial transformation based on the screen position.
+void CppArExample::onTouched(QMouseEvent& event)
+{
+  Q_CHECK_PTR(m_arcGISArView);
+  const QPoint screenPoint = event.screenPos().toPoint();
+
+  // If "screenToLocation" mode is enabled.
+  if (m_screenToLocationMode)
+  {
+    // Get the real world location for screen point from AR view.
+    const Point point = m_arcGISArView->screenToLocation(screenPoint);
+
+    if (point.isEmpty())
+      return;
+
+    // Get or create graphic overlay
+    GraphicsOverlay* graphicsOverlay = getOrCreateGraphicsOverlay();
+
+    // Create and place a graphic at the real world location.
+    SimpleMarkerSceneSymbol* sphere = new SimpleMarkerSceneSymbol(
+          SimpleMarkerSceneSymbolStyle::Sphere, QColor(Qt::yellow), 0.1, 0.1, 0.1,SceneSymbolAnchorPosition::Center, graphicsOverlay);
+    Graphic* sphereGraphic = new Graphic(point, sphere, graphicsOverlay);
+    graphicsOverlay->graphics()->append(sphereGraphic);
+  }
+  else
+  {
+    m_arcGISArView->setInitialTransformation(screenPoint);
+  }
+}
+
 // Create and add a surface with elevation to the scene.
-void CppArExample::createSurfaceWithElevation()
+void CppArExample::createSurfaceWithElevation() const
 {
   Q_CHECK_PTR(m_scene);
 
@@ -361,8 +400,28 @@ void CppArExample::createSurfaceWithElevation()
   m_scene->setBaseSurface(baseSurface);
 }
 
+// Get or create graphic overlay
+GraphicsOverlay* CppArExample::getOrCreateGraphicsOverlay() const
+{
+  Q_CHECK_PTR(m_sceneView);
+
+  GraphicsOverlay* graphicsOverlay = nullptr;
+  if (m_sceneView->graphicsOverlays()->isEmpty())
+  {
+    graphicsOverlay = new GraphicsOverlay(m_sceneView);
+    graphicsOverlay->setSceneProperties(LayerSceneProperties(SurfacePlacement::Absolute));
+    m_sceneView->graphicsOverlays()->append(graphicsOverlay);
+  }
+  else
+  {
+    graphicsOverlay = m_sceneView->graphicsOverlays()->first();
+  }
+  Q_CHECK_PTR(graphicsOverlay);
+  return graphicsOverlay;
+}
+
 // Change the current scene and delete the old one.
-void CppArExample::changeScene(bool withLocationDataSource)
+void CppArExample::changeScene(bool withLocationDataSource) const
 {
   Q_CHECK_PTR(m_sceneView);
 
@@ -371,7 +430,7 @@ void CppArExample::changeScene(bool withLocationDataSource)
   if (withLocationDataSource)
   {
     if (!oldLocationDataSource)
-      m_arcGISArView->setLocationDataSource(new LocationDataSource(this));
+      m_arcGISArView->setLocationDataSource(new LocationDataSource(m_arcGISArView));
     // Else do nothing
   }
   else

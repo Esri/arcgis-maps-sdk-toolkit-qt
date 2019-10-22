@@ -32,6 +32,9 @@ ApplicationWindow {
     // Is true if the current scene is tabletop scene.
     property bool tabletop: false
 
+    // Is true when the screen to location mode is enabled.
+    property bool screenToLocationMode: false
+
     ArcGISArView {
         id: arcGISArView
         anchors.fill: parent
@@ -45,14 +48,64 @@ ApplicationWindow {
         id: sceneView
         anchors.fill: parent
         scene: sceneLoader.item ? sceneLoader.item.scene : null
-        onMousePressed: arcGISArView.setInitialTransformation(mouse.x, mouse.y); // for touch screen events
         opacity: calibrationView.visible ? 0.65 : 1.0
+
+        // If screenToLocationMode is true, create and place a 3D sphere in the scene. Otherwise set the
+        // initial transformation based on the screen position.
+        onMousePressed: {
+            // If "screenToLocation" mode is enabled.
+            if (screenToLocationMode) {
+                // Get the real world location for screen point from AR view.
+                const point = arcGISArView.screenToLocation(mouse.x, mouse.y);
+                if (!point)
+                    return;
+
+                // Get or create graphic overlay
+                var graphicsOverlay = getOrCreateGraphicsOverlay();
+
+                // Create and place a graphic at the real world location.
+                const sphereParams = {
+                    style: Enums.SimpleMarkerSceneSymbolStyleSphere, color: "yellow",
+                    width: 0.2520, height: 0.25, depth: 0.25,
+                    anchorPosition: Enums.SceneSymbolAnchorPositionBottom };
+                const sphere = ArcGISRuntimeEnvironment.createObject("SimpleMarkerSceneSymbol", sphereParams);
+
+                const sphereGraphicParams = { geometry: point, symbol: sphere };
+                const sphereGraphic = ArcGISRuntimeEnvironment.createObject("Graphic", sphereGraphicParams);
+
+                graphicsOverlay.graphics.append(sphereGraphic);
+            }
+            else {
+                // Set the initial transformation corresponding to the screen point.
+                arcGISArView.setInitialTransformation(mouse.x, mouse.y); // for touch screen events
+            }
+        }
+
+        // Get or create graphic overlay
+        function getOrCreateGraphicsOverlay() {
+            var graphicsOverlay = null;
+            if (graphicsOverlays.count === 0) {
+                graphicsOverlay = ArcGISRuntimeEnvironment.createObject("GraphicsOverlay");
+                graphicsOverlay.sceneProperties = ArcGISRuntimeEnvironment.createObject(
+                            "LayerSceneProperties", { surfacePlacement: "SurfacePlacementAbsolute" });
+                graphicsOverlays.append(graphicsOverlay);
+            }
+            else {
+                graphicsOverlay = graphicsOverlays.get(0);
+            }
+            return graphicsOverlay;
+        }
     }
 
     Loader {
         id: sceneLoader
         onLoaded: {
             originCamera = sceneLoader.item.originCamera;
+
+            // Set the graphics overlay
+            sceneView.graphicsOverlays.clear();
+            if (item.graphicsOverlay)
+                sceneView.graphicsOverlays.append(sceneLoader.item.graphicsOverlay);
         }
     }
 
@@ -103,6 +156,7 @@ ApplicationWindow {
         onContinuousTrackingClicked: arcGISArView.locationTrackingMode = ArEnums.Continuous;
         onCalibrationClicked: calibrationView.visible = !calibrationView.visible;
         onResetCalibrationClicked: calibrationView.reset();
+        onScreenToLocationClicked: screenToLocationMode = !screenToLocationMode;
 
         onShowPointCloud: {
             if (visible)
@@ -138,17 +192,11 @@ ApplicationWindow {
         onBorderSceneClicked: changeScene("qrc:/qml/scenes/BorderScene.qml", borderSceneFactor);
         onBrestSceneClicked: changeScene("qrc:/qml/scenes/BrestScene.qml", brestSceneFactor);
         onBerlinSceneClicked: changeScene("qrc:/qml/scenes/BerlinScene.qml", berlinSceneFactor);
-        onTabletopTestSceneClicked: changeScene("qrc:/qml/scenes/TabletopTestScene.qml",
-                                                tabletopTestSceneFactor, false, sceneLoader.item.graphicsOverlay);
+        onTabletopTestSceneClicked: changeScene("qrc:/qml/scenes/TabletopTestScene.qml", tabletopTestSceneFactor);
 
-        function changeScene(sceneSource, factor, isTabletop = false, overlay = null) {
+        // Change the current scene and delete the old one.
+        function changeScene(sceneSource, factor, isTabletop = false) {
             tabletop = isTabletop;
-
-            // Set or clear the graphics overlay
-            if (overlay)
-                sceneView.graphicsOverlays.append(overlay);
-            else
-                sceneView.graphicsOverlays.clear()
 
             // Stop tracking
             arcGISArView.stopTracking();

@@ -128,11 +128,6 @@ void ArcGISArView::setSceneView(SceneQuickView* sceneView)
   m_sceneView->setManualRendering(true);
   m_sceneView->setCameraController(m_tmcc);
 
-  connect(m_sceneView, &SceneQuickView::touched, this, [this](QTouchEvent& event)
-  {
-    setInitialTransformation(event.touchPoints().first().lastScreenPos().toPoint());
-  });
-
   emit sceneViewChanged();
 }
 
@@ -150,8 +145,9 @@ void ArcGISArView::setInitialTransformation(const QPoint& screenPoint)
 {
   // Use the `hitTestInternal` method to get the matrix of `screenPoint`.
   const std::array<double, 7> hitResult = hitTestInternal(screenPoint.x(), screenPoint.y());
+
   // quaternionW can never be 0, this indicates an error occurred
-  if (hitResult[3] == 0)
+  if (hitResult[3] == 0.0)
     return;
 
   // Set the `initialTransformation` as the AGSTransformationMatrix.identity - hit test matrix.
@@ -172,19 +168,23 @@ Point ArcGISArView::screenToLocation(const QPoint& screenPoint) const
   if (!m_sceneView)
     return Point();
 
+  // Use the `hitTestInternal` method to get the matrix of `screenPoint`.
   const std::array<double, 7> hitResult = hitTestInternal(screenPoint.x(), screenPoint.y());
-  if (hitResult[0] == 0)
+
+  // quaternionW can never be 0, this indicates an error occurred
+  if (hitResult[3] == 0.0)
     return Point();
 
-  auto hitMatrix = std::unique_ptr<TransformationMatrix>(
+  // Final matrix is origin camera + initial transformation + hit matrix.
+  const auto hitMatrix = std::unique_ptr<TransformationMatrix>(
         TransformationMatrix::createWithQuaternionAndTranslation(
           hitResult[0], hitResult[1], hitResult[2], hitResult[3], hitResult[4], hitResult[5], hitResult[6]));
-
-  auto currentViewpointMatrix = std::unique_ptr<TransformationMatrix>(
-        m_sceneView->currentViewpointCamera().transformationMatrix());
-
-  auto finalMatrix = std::unique_ptr<TransformationMatrix>(currentViewpointMatrix->addTransformation(hitMatrix.get()));
-  return Camera(finalMatrix.get()).location();
+  const auto origin = std::unique_ptr<TransformationMatrix>(m_tmcc->originCamera().transformationMatrix());
+  const auto intermediateMatrix = std::unique_ptr<TransformationMatrix>(origin->addTransformation(m_initialTransformation));
+  const auto finalMatrix = std::unique_ptr<TransformationMatrix>(intermediateMatrix->addTransformation(hitMatrix.get()));
+  const auto finalLocation = Camera(finalMatrix.get()).location();
+  const auto factor = translationFactor();
+  return Point(finalLocation.x() * factor, finalLocation.y() * factor, finalLocation.z() * factor);
 }
 
 /*!

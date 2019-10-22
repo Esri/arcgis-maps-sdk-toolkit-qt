@@ -264,7 +264,7 @@ void ArcGISArViewInterface::startTracking()
   Q_CHECK_PTR(m_arWrapper);
 
   // Create LocationDataSource if necessary
-  if (!m_locationDataSource)
+  if (!m_locationDataSource && m_locationTrackingMode != ArEnums::LocationTrackingMode::Ignore)
     setLocationDataSource(new LocationDataSource(this));
 
   // Start AR wrapper

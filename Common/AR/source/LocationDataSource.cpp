@@ -266,6 +266,9 @@ void LocationDataSource::updateObjectsAndConnections()
   disconnect(m_geoPositionSourceConnection);
   disconnect(m_compassConnection);
 
+  if (m_locationTrackingMode == ArEnums::LocationTrackingMode::Ignore)
+    return;
+
   // If necessary, create a default geoposition source and compass.
   if (!m_geoPositionSource)
     setGeoPositionSource(QGeoPositionInfoSource::createDefaultSource(this));

@@ -146,7 +146,7 @@ void QmlArcGISArView::setInitialTransformation(float x, float y)
   \internal
   \brief Gets the location in the real world space corresponding to the screen point.
 */
-std::vector<qreal> QmlArcGISArView::screenToLocation(float x, float y) const
+std::vector<qreal> QmlArcGISArView::hitTest(float x, float y) const
 {
   // Converts the point from the screen space to the 3D space
   const std::array<double, 7> hitResult = ArcGISArViewInterface::hitTestInternal(x, y);

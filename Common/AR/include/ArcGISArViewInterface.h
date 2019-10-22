@@ -152,7 +152,7 @@ private:
 
   // sensors
   LocationDataSource* m_locationDataSource = nullptr;
-  ArEnums::LocationTrackingMode m_locationTrackingMode = ArEnums::LocationTrackingMode::Initial;
+  ArEnums::LocationTrackingMode m_locationTrackingMode = ArEnums::LocationTrackingMode::Ignore;
 };
 
 } // Toolkit namespace
