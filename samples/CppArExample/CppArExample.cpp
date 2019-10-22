@@ -228,24 +228,6 @@ void CppArExample::createFullScaleTestScene()
   changeScene(false);
 }
 
-// Create a scene based on a point cloud layer.
-// Mode: Tabletop AR
-void CppArExample::createPointCloudScene()
-{
-  m_scene = new Scene(this);
-  createSurfaceWithElevation();
-
-  PortalItem* item = new PortalItem("fc3f4a4919394808830cd11df4631a54", m_scene);
-  auto* layer = new PointCloudLayer(item, m_scene);
-  m_scene->operationalLayers()->append(layer);
-
-  m_originCamera = Camera(39.7712, -74.1197, 1.0, 0.0, 90.0, 0.0);
-  m_arcGISArView->setOriginCamera(m_originCamera);
-  m_arcGISArView->setTranslationFactor(18000.0);
-
-  changeScene();
-}
-
 // Create a scene centered on Yosemite National Park.
 // Mode: Tabletop AR
 void CppArExample::createYosemiteScene()

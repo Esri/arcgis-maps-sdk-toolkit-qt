@@ -132,10 +132,6 @@ ApplicationWindow {
         readonly property double berlinSceneFactor: 0.0001
         readonly property double tabletopTestSceneFactor: 0.0000001
 
-        onPointCloudSceneClicked: {
-            setCalibrationFactors(pointCloundSceneFactor);
-            arSample.createPointCloudScene();
-        }
         onYosemiteSceneClicked: {
             setCalibrationFactors(yosemiteSceneFactor);
             arSample.createYosemiteScene();
