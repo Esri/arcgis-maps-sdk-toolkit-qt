@@ -18,9 +18,9 @@
 #include "ArCoreWrapper.h"
 
 /*!
+  \class ArCoreFrameRenderer
   \internal
-
-  Internal class to render the camera frame in the QML item "ArcGISArView".
+  \brief Internal class to render the camera frame in the QML item "ArcGISArView".
 
   The AR core gets the data of the AR frames directly from the camera and copies them
   to an OpenGL texture. The texture is rendered in a quad (2 triangles with 4 vertices)

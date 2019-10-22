@@ -899,7 +899,7 @@ void ArCoreWrapper::releasePointCloudData()
   m_arPointCloud = nullptr;
 }
 
-/*!
+/*
   \internal
   Low access to the ARCore objects.
  */
@@ -909,7 +909,7 @@ ArSession* ArCoreWrapper::arRawPtr<ArSession>() const
   return m_arSession;
 }
 
-/*!
+/*
   \internal
   Low access to the ARCore objects.
  */
@@ -919,7 +919,7 @@ ArFrame* ArCoreWrapper::arRawPtr<ArFrame>() const
   return m_arFrame;
 }
 
-/*!
+/*
   \internal
   Low access to the ARCore objects.
  */

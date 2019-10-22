@@ -15,13 +15,13 @@
  ******************************************************************************/
 
 /*!
-  \class Esri::ArcGISRuntime::Toolkit::SensorStatus
-  \ingroup ArcGISQtAr
+  \page SensorStatus
+  \title SensorStatus enumeration
+  \ingroup ArcGISQtToolkitEnums
   \inmodule ArcGISQtToolkit
-  \brief Enumerates the status of a sensor.
   \since Esri::ArcGISRuntime 100.6
 
-  The SensorStatus can be one of:
+  Enumerates the status of a sensor. The SensorStatus can be one of:
   \table
     \header
       \li Value
