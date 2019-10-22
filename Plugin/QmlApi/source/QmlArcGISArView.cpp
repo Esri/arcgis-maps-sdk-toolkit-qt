@@ -33,10 +33,9 @@
   The Augmented Reality (AR) toolkit component allows quick and easy integration
   of AR into your application for a variety of scenarios.
 
-  See AR.md for details.
+  See see \l {https://github.com/Esri/arcgis-runtime-toolkit-qt/blob/master/Common/AR/README.md}{the AR README on GitHub}
+  for details.
  */
-
-using namespace Esri::ArcGISRuntime::Toolkit;
 
 /*!
   \internal
