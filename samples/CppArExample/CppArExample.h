@@ -36,6 +36,8 @@ class CppArExample : public QObject
              NOTIFY arcGISArViewChanged)
   Q_PROPERTY(Esri::ArcGISRuntime::SceneQuickView* sceneView READ sceneView WRITE setSceneView NOTIFY sceneViewChanged)
   Q_PROPERTY(bool screenToLocationMode MEMBER m_screenToLocationMode NOTIFY screenToLocationModeChanged)
+  Q_PROPERTY(bool tabletopMode MEMBER m_tabletopMode NOTIFY tabletopModeChanged)
+  Q_PROPERTY(bool waitingInitialization MEMBER m_waitingInitialization NOTIFY waitingInitializationChanged)
 
 public:
   explicit CppArExample(QObject* parent = nullptr);
@@ -68,6 +70,8 @@ signals:
   void arcGISArViewChanged();
   void sceneViewChanged();
   void screenToLocationModeChanged();
+  void tabletopModeChanged();
+  void waitingInitializationChanged();
 
 private slots:
   void onTouched(QMouseEvent& event);
@@ -77,7 +81,7 @@ private:
 
   Esri::ArcGISRuntime::GraphicsOverlay* getOrCreateGraphicsOverlay() const;
   void createSurfaceWithElevation() const;
-  void changeScene(bool withLocationDataSource = false) const;
+  void changeScene(bool withLocationDataSource = false);
 
   Esri::ArcGISRuntime::Toolkit::ArcGISArView* m_arcGISArView = nullptr;
   Esri::ArcGISRuntime::SceneQuickView* m_sceneView = nullptr;
@@ -89,6 +93,12 @@ private:
   
   // The origin camera set when the scene is created.
   Esri::ArcGISRuntime::Camera m_originCamera;
+
+  // Properties for messages
+  bool m_tabletopMode = false;
+  bool m_waitingInitialization = false;
+
+  QMetaObject::Connection m_locationDataSourceConnection;
 };
 
 #endif // CppArExample_H

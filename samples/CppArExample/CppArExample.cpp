@@ -62,6 +62,20 @@ void CppArExample::setArcGISArView(ArcGISArView* arcGISArView)
 
   m_arcGISArView = arcGISArView;
 
+  // Connect to the isStarted signal, to update the QML messages
+  connect(m_arcGISArView, &ArcGISArView::locationDataSourceChanged, this, [this]()
+  {
+    disconnect(m_locationDataSourceConnection);
+    m_locationDataSourceConnection =  connect(m_arcGISArView->locationDataSource(), &LocationDataSource::locationChanged, this, [this]()
+    {
+      if (!m_tabletopMode)
+      {
+        m_waitingInitialization = false;
+        emit waitingInitializationChanged();
+      }
+    });
+  });
+
   emit arcGISArViewChanged();
 }
 
@@ -380,6 +394,11 @@ void CppArExample::onTouched(QMouseEvent& event)
   else
   {
     m_arcGISArView->setInitialTransformation(screenPoint);
+    if (m_tabletopMode)
+    {
+      m_waitingInitialization = false;
+      emit waitingInitializationChanged();
+    }
   }
 }
 
@@ -421,8 +440,14 @@ GraphicsOverlay* CppArExample::getOrCreateGraphicsOverlay() const
 }
 
 // Change the current scene and delete the old one.
-void CppArExample::changeScene(bool withLocationDataSource) const
+void CppArExample::changeScene(bool withLocationDataSource)
 {
+  m_tabletopMode = !withLocationDataSource;
+  emit tabletopModeChanged();
+
+  m_waitingInitialization = true;
+  emit waitingInitializationChanged();
+
   Q_CHECK_PTR(m_sceneView);
 
   // Update the location data source

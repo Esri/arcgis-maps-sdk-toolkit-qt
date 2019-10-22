@@ -36,7 +36,8 @@ ApplicationWindow {
     SceneView {
         id: sceneView
         anchors.fill: parent
-        opacity: calibrationView.visible ? 0.65 : 1.0
+        property bool transparentMode: calibrationView.visible || waitingInitMessage.visible || waitingLocationMessage.visible
+        opacity: transparentMode ? 0.35 : 1.0
     }
 
     // Declare the C++ instance which creates the scene etc. and supply the view
@@ -52,21 +53,21 @@ ApplicationWindow {
             left: parent.left
             margins: 10
             bottom: parent.bottom
-            bottomMargin: 30
+            bottomMargin: 60
         }
         spacing: 5
 
         Message {
             id: waitingInitMessage
             width: parent.width
-            visible: true
+            visible: arSample.tabletopMode && arSample.waitingInitialization
             text: "Touch screen to place the tabletop scene..."
         }
 
         Message {
             id: waitingLocationMessage
             width: parent.width
-            visible: true
+            visible: !arSample.tabletopMode && arSample.waitingInitialization
             text: "Waiting for location..."
         }
 

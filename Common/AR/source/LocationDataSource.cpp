@@ -82,7 +82,6 @@ using namespace Esri::ArcGISRuntime::Toolkit;
   doesn't take ownership of the object.
  */
 
-
 /*!
   \brief A constructor that accepts an optional \a parent.
  */
