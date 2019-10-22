@@ -74,6 +74,8 @@ signals:
   void locationTrackingModeChanged();
 
 private:
+  Q_DISABLE_COPY(LocationDataSource)
+
   void updateObjectsAndConnections();
 
   QGeoPositionInfoSource* m_geoPositionSource = nullptr;

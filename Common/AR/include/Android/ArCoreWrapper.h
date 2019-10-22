@@ -25,12 +25,12 @@
 #include <array>
 
 // forward declaration of AR core types to avoid include "arcore_c_api.h" here.
-typedef struct ArSession_ ArSession;
-typedef struct ArFrame_ ArFrame;
-typedef struct ArCamera_ ArCamera;
-typedef struct ArTrackableList_ ArTrackableList;
-typedef struct ArTrackable_ ArTrackable;
-typedef struct ArPointCloud_ ArPointCloud;
+using ArSession = struct ArSession_;
+using ArFrame = struct ArFrame_;
+using ArCamera = struct ArCamera_;
+using ArTrackableList = struct ArTrackableList_;
+using ArTrackable = struct ArTrackable_;
+using ArPointCloud = struct ArPointCloud_;
 
 namespace Esri {
 namespace ArcGISRuntime {
@@ -92,7 +92,7 @@ public:
   void releasePlaneData();
 
   // methods for point cloud data
-  void pointCloudData(QMatrix4x4& mvp, std::vector<float>& data);
+  void pointCloudData(QMatrix4x4& mvp, std::vector<float>& pointCloud);
   void releasePointCloudData();
 
   // low access to the ARCore objects
@@ -146,7 +146,7 @@ private:
   ArCamera* m_arCamera = nullptr;
 
   // data returned from each frame
-  std::array<float, 8> m_transformedUvs;
+  std::array<float, 8> m_transformedUvs = {};
 
   // timer to refresh the frames
   QTimer m_timer;

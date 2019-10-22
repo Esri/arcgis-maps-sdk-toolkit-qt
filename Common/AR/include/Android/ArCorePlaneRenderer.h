@@ -42,6 +42,8 @@ public:
   void setPlaneColor(const QColor& planeColor);
 
 private:
+  Q_DISABLE_COPY(ArCorePlaneRenderer)
+  
   ArCoreWrapper* m_arCoreWrapper = nullptr;
 
   std::unique_ptr<QOpenGLShaderProgram> m_program;

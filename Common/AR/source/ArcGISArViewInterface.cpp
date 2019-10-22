@@ -364,7 +364,7 @@ void ArcGISArViewInterface::geometryChanged(const QRectF& newGeometry, const QRe
                                                  Qt::InvertedLandscapeOrientation | Qt::InvertedPortraitOrientation);
   }
 
-  QQuickItem::geometryChanged(newGeometry, oldGeometry);
+  QQuickFramebufferObject::geometryChanged(newGeometry, oldGeometry);
 
   if (newGeometry.size() == oldGeometry.size())
     return;

@@ -75,6 +75,8 @@ protected:
   void resetTrackingInternal() override;
 
 private:
+  Q_DISABLE_COPY(ArcGISArView)
+
   // Helpers
   static DeviceOrientation toDeviceOrientation(Qt::ScreenOrientations orientation);
   void updateTmccOriginCamera() const;

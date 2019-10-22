@@ -37,6 +37,8 @@ public:
   void render();
 
 private:
+  Q_DISABLE_COPY(ArCoreFrameRenderer)
+
   ArCoreWrapper* m_arCoreWrapper = nullptr; // not the owner
   std::unique_ptr<QOpenGLShaderProgram> m_program;
 

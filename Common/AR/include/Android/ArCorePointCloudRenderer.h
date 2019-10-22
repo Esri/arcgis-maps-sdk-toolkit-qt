@@ -45,6 +45,8 @@ public:
   void setPointCloudSize(int pointCloudSize);
 
 private:
+  Q_DISABLE_COPY(ArCorePointCloudRenderer)
+
   ArCoreWrapper* m_arCoreWrapper = nullptr;
 
   std::unique_ptr<QOpenGLShaderProgram> m_program;

@@ -135,6 +135,8 @@ protected:
   virtual void resetTrackingInternal() = 0;
 
 private:
+  Q_DISABLE_COPY(ArcGISArViewInterface)
+
   mutable Internal::ArcGISArViewRenderer* m_arViewRenderer = nullptr;
   std::unique_ptr<Internal::ArWrapper> m_arWrapper;
 
