@@ -101,7 +101,6 @@ void CppArExample::setSceneView(SceneQuickView* sceneView)
   // Ignore move events.
   connect(m_sceneView, &SceneQuickView::mouseMoved, this, [ ](QMouseEvent& mouseEvent)
   {
-    qDebug() << "===== SceneQuickView::mouseMoved";
     mouseEvent.accept();
   });
 
