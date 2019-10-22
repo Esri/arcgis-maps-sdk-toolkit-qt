@@ -32,6 +32,7 @@ using namespace Esri::ArcGISRuntime::Toolkit::Internal;
   \ingroup ArcGISQtToolkitAR
   \ingroup ArcGISQtToolkitARCppApi
   \ingroup ArcGISQtToolkitCppApi
+  \inmodule ArcGISQtToolkit
   \since Esri::ArcGISRuntime 100.6
   \brief Base class to impement AR scene view.
 

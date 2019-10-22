@@ -52,7 +52,7 @@ public:
 
   // methods invokable
   Q_INVOKABLE void setInitialTransformation(float x, float y);
-  Q_INVOKABLE std::vector<qreal> screenToLocation(float x, float y) const;
+  Q_INVOKABLE std::vector<qreal> hitTest(float x, float y) const;
 
   // Register the QML creatable types provide by QR toolkit
   static void qmlRegisterTypes();

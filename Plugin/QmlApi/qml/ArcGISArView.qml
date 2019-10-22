@@ -34,7 +34,10 @@ ArcGISArViewInternal {
     onTranslationFactorChanged: tmcc.translationFactor = translationFactor;
 
     // Render the scene.
-    onRenderFrame: root.sceneView.renderFrame();
+    onRenderFrame: {
+        if (sceneView)
+            sceneView.renderFrame();
+    }
 
     // Update the initial transformation, using the hit matrix.
     property TransformationMatrix initialTransformationMatrix: null
@@ -67,6 +70,9 @@ ArcGISArViewInternal {
     // the orientation device enumeration. This function is used to converts the orientation (int) to
     // deviceOrientation (enum).
     onFieldOfViewChanged: {
+        if (!sceneView)
+            return;
+
         const deviceOrientation = toDeviceOrientation(Screen.orientation);
         sceneView.setFieldOfViewFromLensIntrinsics(xFocalLength, yFocalLength,
                                                    xPrincipal, yPrincipal,
@@ -137,16 +143,21 @@ ArcGISArViewInternal {
         \brief Gets the location in the real world space corresponding to the screen point \a screenPoint.
      */
     function screenToLocation(x, y) {
-        const hitTest = root.screenToLocation(x, y);
+        const hitTest = root.hitTest(x, y);
 
         const hitMatrix = TransformationMatrix.createWithQuaternionAndTranslation(
                             hitTest[0], hitTest[1], hitTest[2], hitTest[3], // quaternionX, quaternionY, quaternionZ, quaternionW
                             hitTest[4], hitTest[5], hitTest[6]); // translationX, translationY, translationZ
 
-        const currentViewpointMatrix = currentViewpointCamera.transformationMatrix;
-        const matrix = currentViewpointMatrix.addTransformation(hitMatrix);
+        const origin = tmcc.originCamera.transformationMatrix;
+        const intermediateMatrix = origin.addTransformation(initialTransformationMatrix);
+        const finalMatrix = intermediateMatrix.addTransformation(hitMatrix);
         const camera = ArcGISRuntimeEnvironment.createObject("Camera", { transformationMatrix: matrix });
-        return camera.location;
+        const location = ArcGISRuntimeEnvironment.createObject("Point", {
+            x: camera.location.x * translationFactor,
+            y: camera.location.y * translationFactor,
+            z: camera.location.z * translationFactor });
+        return location;
     }
 
     /*!

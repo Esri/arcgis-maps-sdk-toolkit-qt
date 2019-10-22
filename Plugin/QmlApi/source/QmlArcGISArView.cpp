@@ -33,10 +33,9 @@
   The Augmented Reality (AR) toolkit component allows quick and easy integration
   of AR into your application for a variety of scenarios.
 
-  See AR.md for details.
+  See see \l {https://github.com/Esri/arcgis-runtime-toolkit-qt/blob/master/Common/AR/README.md}{the AR README on GitHub}
+  for details.
  */
-
-using namespace Esri::ArcGISRuntime::Toolkit;
 
 /*!
   \internal
@@ -147,7 +146,7 @@ void QmlArcGISArView::setInitialTransformation(float x, float y)
   \internal
   \brief Gets the location in the real world space corresponding to the screen point.
 */
-std::vector<qreal> QmlArcGISArView::screenToLocation(float x, float y) const
+std::vector<qreal> QmlArcGISArView::hitTest(float x, float y) const
 {
   // Converts the point from the screen space to the 3D space
   const std::array<double, 7> hitResult = ArcGISArViewInterface::hitTestInternal(x, y);

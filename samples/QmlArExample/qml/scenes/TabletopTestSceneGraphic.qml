@@ -22,6 +22,7 @@ import Esri.ArcGISRuntime 100.6
 Graphic {
     property alias x: location.x
     property alias y: location.y
+    property alias z: location.z
     property alias color: symbol.color
     property real size: 0.1
 
@@ -29,6 +30,7 @@ Graphic {
         id: location
         x: 0.0
         y: 0.0
+        z: 0.0
     }
 
     symbol: SimpleMarkerSceneSymbol {

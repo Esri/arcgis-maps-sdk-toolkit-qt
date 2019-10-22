@@ -18,6 +18,8 @@
 #include <QGeoPositionInfoSource>
 #include <QCompass>
 
+using namespace Esri::ArcGISRuntime::Toolkit;
+
 /*!
   \class Esri::ArcGISRuntime::Toolkit::LocationDataSource
   \ingroup ArcGISQtToolkitAR
@@ -80,7 +82,6 @@
   doesn't take ownership of the object.
  */
 
-using namespace Esri::ArcGISRuntime::Toolkit;
 
 /*!
   \brief A constructor that accepts an optional \a parent.
@@ -342,8 +343,8 @@ void LocationDataSource::updateObjectsAndConnections()
  */
 
 /*!
-  \fn void LocationDataSource::geoPositionSourceChangedChanged();
-  \brief Signal emitted when the \l geoPositionSourceChanged property changes.
+  \fn void LocationDataSource::geoPositionSourceChanged();
+  \brief Signal emitted when the \l geoPositionSource property changes.
  */
 
 /*!

@@ -145,7 +145,6 @@ private:
 
   // sensors
   LocationDataSource* m_locationDataSource = nullptr;
-
   ArEnums::LocationTrackingMode m_locationTrackingMode = ArEnums::LocationTrackingMode::Ignore;
 
   QMetaObject::Connection m_locationChangedConnection;

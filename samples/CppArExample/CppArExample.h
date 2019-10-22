@@ -24,6 +24,7 @@ namespace Esri {
 namespace ArcGISRuntime {
 class Scene;
 class SceneQuickView;
+class GraphicsOverlay;
 } // ArcGISRuntime namespace
 } // Esri namespace
 
@@ -34,6 +35,7 @@ class CppArExample : public QObject
   Q_PROPERTY(Esri::ArcGISRuntime::Toolkit::ArcGISArView* arcGISArView READ arcGISArView WRITE setArcGISArView
              NOTIFY arcGISArViewChanged)
   Q_PROPERTY(Esri::ArcGISRuntime::SceneQuickView* sceneView READ sceneView WRITE setSceneView NOTIFY sceneViewChanged)
+  Q_PROPERTY(bool screenToLocationMode MEMBER m_screenToLocationMode NOTIFY screenToLocationModeChanged)
 
 public:
   explicit CppArExample(QObject* parent = nullptr);
@@ -65,16 +67,27 @@ public:
 signals:
   void arcGISArViewChanged();
   void sceneViewChanged();
+  void screenToLocationModeChanged();
+
+private slots:
+  void onTouched(QMouseEvent& event);
 
 private:
   Q_DISABLE_COPY(CppArExample)
 
-  void createSurfaceWithElevation();
-  void changeScene(bool withLocationDataSource = false);
+  Esri::ArcGISRuntime::GraphicsOverlay* getOrCreateGraphicsOverlay() const;
+  void createSurfaceWithElevation() const;
+  void changeScene(bool withLocationDataSource = false) const;
 
   Esri::ArcGISRuntime::Toolkit::ArcGISArView* m_arcGISArView = nullptr;
   Esri::ArcGISRuntime::SceneQuickView* m_sceneView = nullptr;
   Esri::ArcGISRuntime::Scene* m_scene = nullptr;
+
+  // Screen to location properties
+  bool m_screenToLocationMode = false;
+  QMetaObject::Connection m_touchedConnection;
+  
+  // The origin camera set when the scene is created.
   Esri::ArcGISRuntime::Camera m_originCamera;
 };
 

@@ -94,6 +94,7 @@ ApplicationWindow {
         onContinuousTrackingClicked: arcGISArView.locationTrackingMode = ArEnums.Continuous;
         onCalibrationClicked: calibrationView.visible = !calibrationView.visible
         onResetCalibrationClicked: calibrationView.reset();
+        onScreenToLocationClicked: arSample.screenToLocationMode = !arSample.screenToLocationMode
 
         // debug options
         onShowPointCloud: arSample.showPointCloud(visible);
