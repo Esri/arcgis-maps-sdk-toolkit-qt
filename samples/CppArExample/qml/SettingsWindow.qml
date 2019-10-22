@@ -131,6 +131,7 @@ Item {
                             }
                         }
                         Button {
+                            width: buttonWidth
                             text: "Screen to location"
                             onClicked: {
                                 settings.visible = false;
