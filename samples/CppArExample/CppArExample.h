@@ -88,7 +88,6 @@ private:
 
   // Screen to location properties
   bool m_screenToLocationMode = false;
-  QMetaObject::Connection m_touchedConnection;
   
   // The origin camera set when the scene is created.
   Esri::ArcGISRuntime::Camera m_originCamera;

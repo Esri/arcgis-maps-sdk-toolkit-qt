@@ -92,11 +92,8 @@ void CppArExample::setSceneView(SceneQuickView* sceneView)
 
   m_sceneView = sceneView;
 
-  // connect the screen touch
-  if (m_touchedConnection)
-    disconnect(m_touchedConnection);
-
-  m_touchedConnection = connect(m_sceneView, &SceneQuickView::mouseClicked, this, &CppArExample::onMouseClicked);
+  // Connect the mouse clicked events.
+  connect(m_sceneView, &SceneQuickView::mouseClicked, this, &CppArExample::onMouseClicked);
 
   // Ignore move events.
   connect(m_sceneView, &SceneQuickView::mouseMoved, this, [ ](QMouseEvent& mouseEvent)
