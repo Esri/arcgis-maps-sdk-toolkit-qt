@@ -96,7 +96,21 @@ void CppArExample::setSceneView(SceneQuickView* sceneView)
   if (m_touchedConnection)
     disconnect(m_touchedConnection);
 
-  m_touchedConnection = connect(m_sceneView, &SceneQuickView::mouseClicked, this, &CppArExample::onTouched);
+  m_touchedConnection = connect(m_sceneView, &SceneQuickView::mouseClicked, this, &CppArExample::onMouseClicked);
+
+  // Ignore move events.
+  connect(m_sceneView, &SceneQuickView::mouseMoved, this, [ ](QMouseEvent& mouseEvent)
+  {
+    qDebug() << "===== SceneQuickView::mouseMoved";
+    mouseEvent.accept();
+  });
+
+  // Ignore multi-touch events.
+  connect(m_sceneView, &SceneQuickView::touched, this, [ ](QTouchEvent& touchEvent)
+  {
+    if (touchEvent.touchPoints().size() != 1)
+      touchEvent.accept();
+  });
 
   emit sceneViewChanged();
 }
@@ -350,8 +364,10 @@ void CppArExample::createTabletopTestScene()
 
 // If m_screenToLocationMode is true, create and place a 3D sphere in the scene. Otherwise set the
 // initial transformation based on the screen position.
-void CppArExample::onTouched(QMouseEvent& event)
+void CppArExample::onMouseClicked(QMouseEvent& event)
 {
+  qDebug() << "===== SceneQuickView::mouseClicked";
+
   Q_CHECK_PTR(m_arcGISArView);
   const QPoint screenPoint = event.screenPos().toPoint();
 

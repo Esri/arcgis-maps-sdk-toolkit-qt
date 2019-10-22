@@ -73,7 +73,7 @@ signals:
   void waitingInitializationChanged();
 
 private slots:
-  void onTouched(QMouseEvent& event);
+  void onMouseClicked(QMouseEvent& event);
 
 private:
   Q_DISABLE_COPY(CppArExample)
