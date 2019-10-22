@@ -61,14 +61,7 @@ ApplicationWindow {
                     return;
 
                 // Get or create graphic overlay
-                var graphicsOverlay = null;
-                if (graphicsOverlays.count === 0) {
-                  graphicsOverlay = ArcGISRuntimeEnvironment.createObject("GraphicsOverlay");
-                  graphicsOverlays.append(graphicsOverlay);
-                }
-                else {
-                    graphicsOverlay = graphicsOverlays.get(0);
-                }
+                var graphicsOverlay = getOrCreateGraphicsOverlay();
 
                 // Create and place a graphic at the real world location.
                 const sphereParams = {
@@ -87,12 +80,32 @@ ApplicationWindow {
                 arcGISArView.setInitialTransformation(mouse.x, mouse.y); // for touch screen events
             }
         }
+
+        // Get or create graphic overlay
+        function getOrCreateGraphicsOverlay() {
+            var graphicsOverlay = null;
+            if (graphicsOverlays.count === 0) {
+                graphicsOverlay = ArcGISRuntimeEnvironment.createObject("GraphicsOverlay");
+                graphicsOverlay.sceneProperties = ArcGISRuntimeEnvironment.createObject(
+                            "LayerSceneProperties", { surfacePlacement: "SurfacePlacementAbsolute" });
+                graphicsOverlays.append(graphicsOverlay);
+            }
+            else {
+                graphicsOverlay = graphicsOverlays.get(0);
+            }
+            return graphicsOverlay;
+        }
     }
 
     Loader {
         id: sceneLoader
         onLoaded: {
             originCamera = sceneLoader.item.originCamera;
+
+            // Set the graphics overlay
+            sceneView.graphicsOverlays.clear();
+            if (item.graphicsOverlay)
+                sceneView.graphicsOverlays.append(sceneLoader.item.graphicsOverlay);
         }
     }
 
@@ -179,17 +192,11 @@ ApplicationWindow {
         onBorderSceneClicked: changeScene("qrc:/qml/scenes/BorderScene.qml", borderSceneFactor);
         onBrestSceneClicked: changeScene("qrc:/qml/scenes/BrestScene.qml", brestSceneFactor);
         onBerlinSceneClicked: changeScene("qrc:/qml/scenes/BerlinScene.qml", berlinSceneFactor);
-        onTabletopTestSceneClicked: changeScene("qrc:/qml/scenes/TabletopTestScene.qml",
-                                                tabletopTestSceneFactor, false, sceneLoader.item.graphicsOverlay);
+        onTabletopTestSceneClicked: changeScene("qrc:/qml/scenes/TabletopTestScene.qml", tabletopTestSceneFactor);
 
-        function changeScene(sceneSource, factor, isTabletop = false, overlay = null) {
+        // Change the current scene and delete the old one.
+        function changeScene(sceneSource, factor, isTabletop = false) {
             tabletop = isTabletop;
-
-            // Set or clear the graphics overlay
-            if (overlay)
-                sceneView.graphicsOverlays.append(overlay);
-            else
-                sceneView.graphicsOverlays.clear()
 
             // Stop tracking
             arcGISArView.stopTracking();

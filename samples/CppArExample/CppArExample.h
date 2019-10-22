@@ -24,6 +24,7 @@ namespace Esri {
 namespace ArcGISRuntime {
 class Scene;
 class SceneQuickView;
+class GraphicsOverlay;
 } // ArcGISRuntime namespace
 } // Esri namespace
 
@@ -74,8 +75,9 @@ private slots:
 private:
   Q_DISABLE_COPY(CppArExample)
 
-  void createSurfaceWithElevation();
-  void changeScene(bool withLocationDataSource = false);
+  Esri::ArcGISRuntime::GraphicsOverlay* getOrCreateGraphicsOverlay() const;
+  void createSurfaceWithElevation() const;
+  void changeScene(bool withLocationDataSource = false) const;
 
   Esri::ArcGISRuntime::Toolkit::ArcGISArView* m_arcGISArView = nullptr;
   Esri::ArcGISRuntime::SceneQuickView* m_sceneView = nullptr;

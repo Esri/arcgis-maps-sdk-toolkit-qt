@@ -35,65 +35,73 @@ Item {
     GraphicsOverlay {
         id: graphicsOverlay
 
-        // draw a green sphere in coordinate (0,0)
+        // Draw a line of red sphere from South to North
         TabletopTestSceneGraphic {
-            x: 0.0
-            y: 0.0
+            x: 0.00001
+            color: "red"
+        }
+        TabletopTestSceneGraphic {
+            x: 0.00002
+            color: "red"
+        }
+        TabletopTestSceneGraphic {
+            x: 0.00003
+            color: "red"
+        }
+        TabletopTestSceneGraphic {
+            x: 0.00004
+            color: "red"
+        }
+        TabletopTestSceneGraphic {
+            x: 0.00005
+            color: "red"
+        }
+
+        // Draw a line of blue sphere from West to East
+        TabletopTestSceneGraphic {
+            y: 0.00001
+            color: "blue"
+        }
+        TabletopTestSceneGraphic {
+            y: 0.00002
+            color: "blue"
+        }
+        TabletopTestSceneGraphic {
+            y: 0.00003
+            color: "blue"
+        }
+        TabletopTestSceneGraphic {
+            y: 0.00004
+            color: "blue"
+        }
+        TabletopTestSceneGraphic {
+            y: 0.00005
+            color: "blue"
+        }
+
+        // Draw a line of green sphere from bottom to top
+        TabletopTestSceneGraphic {
             color: "green"
         }
-
-        // draw a line of red sphere from South to North
         TabletopTestSceneGraphic {
-            x: 0.000001
-            y: 0.0
-            color: "red"
+            z: 0.00001
+            color: "green"
         }
         TabletopTestSceneGraphic {
-            x: 0.000002
-            y: 0.0
-            color: "red"
+            z: 0.00002
+            color: "green"
         }
         TabletopTestSceneGraphic {
-            x: 0.000003
-            y: 0.0
-            color: "red"
+            z: 0.00003
+            color: "green"
         }
         TabletopTestSceneGraphic {
-            x: 0.000004
-            y: 0.0
-            color: "red"
+            z: 0.00004
+            color: "green"
         }
         TabletopTestSceneGraphic {
-            x: 0.000005
-            y: 0.0
-            color: "red"
-        }
-
-        // draw a line of blue sphere from West to East
-        TabletopTestSceneGraphic {
-            x: 0.0
-            y: 0.000001
-            color: "blue"
-        }
-        TabletopTestSceneGraphic {
-            x: 0.0
-            y: 0.000002
-            color: "blue"
-        }
-        TabletopTestSceneGraphic {
-            x: 0.0
-            y: 0.000003
-            color: "blue"
-        }
-        TabletopTestSceneGraphic {
-            x: 0.0
-            y: 0.000004
-            color: "blue"
-        }
-        TabletopTestSceneGraphic {
-            x: 0.0
-            y: 0.000005
-            color: "blue"
+            z: 0.00005
+            color: "green"
         }
     }
 
