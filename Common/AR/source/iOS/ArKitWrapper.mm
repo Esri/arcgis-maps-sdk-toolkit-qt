@@ -338,6 +338,8 @@ void ArKitWrapper::initGL()
  */
 void ArKitWrapper::updateTextures()
 {
+  m_textureSize = QSize(m_impl->arSessionDelegate.widthY, m_impl->arSessionDelegate.heightY);
+
   Q_CHECK_PTR(m_arKitFrameRenderer);
   m_arKitFrameRenderer->updateTextreDataY(static_cast<int>(m_impl->arSessionDelegate.widthY),
                                           static_cast<int>(m_impl->arSessionDelegate.heightY),
@@ -362,7 +364,8 @@ void ArKitWrapper::render()
 
   // render the AR frame
   Q_CHECK_PTR(m_arKitFrameRenderer);
-  m_arKitFrameRenderer->render();
+  const auto ratios = calculateScreenToImageRatios(m_textureSize.width(), m_textureSize.height());
+  m_arKitFrameRenderer->render(ratios.first, ratios.second);
 
   if (m_arKitPlaneRenderer)
     m_arKitPlaneRenderer->render();
@@ -445,14 +448,32 @@ void ArKitWrapper::setPlaneColor(const QColor&)
   // not implemented
 }
 
-// doc: https://developer.apple.com/documentation/arkit/arframe/2875718-hittest?language=objc
+// The image size is adapted to full the screen. If the image is wilder than the screen, the image
+// is scaled to have the same height than the screen and the image is cropped on left and right to
+// adapt the width. If the image is higher, the image is scaled to the same width than the screen
+// and the image is cropped on top and bottom to adapt the height.
+// The coordinates used to call the hitTest function are relative to the screen, but the ARKit's
+// hitTest function require the coordinates in the image space, normalized between 0 and 1.
+// Doc: https://developer.apple.com/documentation/arkit/arframe/2875718-hittest?language=objc
 std::array<double, 7> ArKitWrapper::hitTest(int x, int y) const
 {
-  // normalize the screen coordinates. The coordinates must be normalized between 0.0 and 1.0
-  // in the image space, with respect to the screen size and the aspect ratio.
-  const float xNormalized = x / m_screenSize.width() / 1.349634 + 0.174817;
+  // Normalize the screen coordinates between 0.0 and 1.0.
+  const float xNormalized = x / m_screenSize.width();
   const float yNormalized = y / m_screenSize.height();
-  const CGPoint screenPoint = CGPointMake(yNormalized, 1.0 - xNormalized);
+
+  // Calculate the ratios to applied to transforme screen coordinates to image coordinates and the
+  // crops to applied.
+  const auto ratios = calculateScreenToImageRatios(m_textureSize.width(), m_textureSize.height());
+
+  const float xOffset = (1.0f - (1.0f / ratios.first)) / 2.0f;
+  const float yOffset = (1.0f - (1.0f / ratios.second)) / 2.0f;
+
+  const float xCropped = xNormalized / ratios.first + xOffset;
+  const float yCropped = yNormalized / ratios.second + yOffset;
+
+  // X axis on iOS is vertical, from bottom to top. This corresponds to the y value.
+  // Y axis on iOS is horizontal, frol right to left. This corresponds to (1-x) value.
+  const CGPoint screenPoint = CGPointMake(yCropped, 1.0 - xCropped);
 
   // return a list of results, sorted from nearest to farthest (in distance from the camera).
   Q_CHECK_PTR(m_impl);
@@ -494,7 +515,33 @@ std::vector<float> ArKitWrapper::pointCloudData() const
 
 /*!
   \internal
- * Low access to the ARKit objects.
+  Calculate the ratio to applied between screen and image.
+ */
+std::pair<float, float> ArKitWrapper::calculateScreenToImageRatios(int textureWidth, int textureHeight) const
+{
+  // calculates ratios
+  const float windowRatio = m_screenSize.width() / m_screenSize.height();
+  const float textureRatio = static_cast<float>(textureHeight) / static_cast<float>(textureWidth);
+
+  float verticesRatioX = 1.0f;
+  float verticesRatioY = 1.0f;
+  if (textureRatio >= windowRatio)
+  {
+    verticesRatioX = textureRatio / windowRatio;
+    verticesRatioY = 1.0f;
+  }
+  else
+  {
+    verticesRatioX = 1.0f;
+    verticesRatioY = textureRatio * windowRatio;
+  }
+
+  return { verticesRatioX, verticesRatioY };
+}
+
+/*!
+  \internal
+  Low access to the ARCore objects.
  */
 template<>
 ARSession* ArKitWrapper::arRawPtr<ARSession>() const

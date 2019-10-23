@@ -127,7 +127,7 @@ void ArKitFrameRenderer::initGL()
   \internal
   This functions runs on the rendering thread.
  */
-void ArKitFrameRenderer::render()
+void ArKitFrameRenderer::render(float verticesRatioX, float verticesRatioY)
 {
   // the texture ids are not valid, do nothing
   if (m_textureY.textureId() == 0 || m_textureCbCr.textureId() == 0)
@@ -144,7 +144,7 @@ void ArKitFrameRenderer::render()
 
   glUniform1i(m_uniformTextureY, 1);
   glUniform1i(m_uniformTextureCbCr, 2);
-  calculateVerticesRatio(m_textureY.width(), m_textureY.height());
+  glUniform2f(m_uniformVerticesRatio, verticesRatioX, verticesRatioY);
 
   glActiveTexture(GL_TEXTURE1);
   glBindTexture(GL_TEXTURE_2D, m_textureY.textureId());
@@ -217,26 +217,4 @@ void ArKitFrameRenderer::updateTextreDataCbCr(int width, int height, const void*
   }
 
   m_textureCbCr.setData(QOpenGLTexture::RG, QOpenGLTexture::UInt8, data);
-}
-
-void ArKitFrameRenderer::calculateVerticesRatio(int textureWidth, int textureHeight)
-{
-  // calculates ratios
-  const float windowRatio = m_size.width() / m_size.height();
-  const float textureRatio = static_cast<float>(textureHeight) / static_cast<float>(textureWidth);
-
-  float verticesRatioX = 1.0f;
-  float verticesRatioY = 1.0f;
-  if (textureRatio >= windowRatio)
-  {
-    verticesRatioX = textureRatio / windowRatio;
-    verticesRatioY = 1.0f;
-  }
-  else
-  {
-    verticesRatioX = 1.0f;
-    verticesRatioY = textureRatio * windowRatio;
-  }
-
-  glUniform2f(m_uniformVerticesRatio, verticesRatioX, verticesRatioY);
 }

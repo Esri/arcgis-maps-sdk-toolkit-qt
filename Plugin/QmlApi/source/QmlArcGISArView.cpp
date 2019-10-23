@@ -236,7 +236,7 @@ void QmlArcGISArView::setHeadingInternal(double heading)
  */
 void QmlArcGISArView::resetTrackingInternal()
 {
-  // to implmente
+  // to implemente
 }
 
 /*!
