@@ -30,7 +30,11 @@ ApplicationWindow {
     property Camera originCamera: null
 
     // Is true if the current scene is tabletop scene.
-    property bool tabletop: false
+    property bool tabletopMode: false
+
+    // Is true before the initial transformation is not set (tabletop mode) or
+    // before the location data source starts to received data.
+    property bool waitingInitialization: false;
 
     // Is true when the screen to location mode is enabled.
     property bool screenToLocationMode: false
@@ -122,7 +126,7 @@ ApplicationWindow {
         Message {
             id: waitingInitMessage
             width: parent.width
-            visible: tabletop
+            visible: tabletopMode
             text: "Touch screen to place the tabletop scene..."
         }
 
@@ -176,9 +180,9 @@ ApplicationWindow {
         readonly property double streetsSceneFactor: 0.0000001
         readonly property double imagerySceneFactor: 0.0000001
 
-        onEmptySceneClicked: changeScene("qrc:/qml/scenes/EmptyScene.qml",emptySceneFactor, true);
-        onStreetsSceneClicked: changeScene("qrc:/qml/scenes/StreetsScene.qml", streetsSceneFactor, true);
-        onImagerySceneClicked: changeScene("qrc:/qml/scenes/ImageryScene.qml", imagerySceneFactor, true);
+        onEmptySceneClicked: changeScene("qrc:/qml/scenes/EmptyScene.qml",emptySceneFactor, false);
+        onStreetsSceneClicked: changeScene("qrc:/qml/scenes/StreetsScene.qml", streetsSceneFactor, false);
+        onImagerySceneClicked: changeScene("qrc:/qml/scenes/ImageryScene.qml", imagerySceneFactor, false);
 
         readonly property double pointCloundSceneFactor: 0.0001
         readonly property double yosemiteSceneFactor: 0.0001
@@ -187,16 +191,16 @@ ApplicationWindow {
         readonly property double berlinSceneFactor: 0.0001
         readonly property double tabletopTestSceneFactor: 0.0000001
 
-        onPointCloudSceneClicked: changeScene("qrc:/qml/scenes/PointCloudScene.qml", pointCloundSceneFactor);
-        onYosemiteSceneClicked: changeScene("qrc:/qml/scenes/YosemiteScene.qml", yosemiteSceneFactor);
-        onBorderSceneClicked: changeScene("qrc:/qml/scenes/BorderScene.qml", borderSceneFactor);
-        onBrestSceneClicked: changeScene("qrc:/qml/scenes/BrestScene.qml", brestSceneFactor);
-        onBerlinSceneClicked: changeScene("qrc:/qml/scenes/BerlinScene.qml", berlinSceneFactor);
-        onTabletopTestSceneClicked: changeScene("qrc:/qml/scenes/TabletopTestScene.qml", tabletopTestSceneFactor);
+        onPointCloudSceneClicked: changeScene("qrc:/qml/scenes/PointCloudScene.qml", pointCloundSceneFactor, true);
+        onYosemiteSceneClicked: changeScene("qrc:/qml/scenes/YosemiteScene.qml", yosemiteSceneFactor, true);
+        onBorderSceneClicked: changeScene("qrc:/qml/scenes/BorderScene.qml", borderSceneFactor, true);
+        onBrestSceneClicked: changeScene("qrc:/qml/scenes/BrestScene.qml", brestSceneFactor, true);
+        onBerlinSceneClicked: changeScene("qrc:/qml/scenes/BerlinScene.qml", berlinSceneFactor, true);
+        onTabletopTestSceneClicked: changeScene("qrc:/qml/scenes/TabletopTestScene.qml", tabletopTestSceneFactor, true);
 
         // Change the current scene and delete the old one.
-        function changeScene(sceneSource, factor, isTabletop = false) {
-            tabletop = isTabletop;
+        function changeScene(sceneSource, factor, isTabletop) {
+            tabletopMode = isTabletop;
 
             // Stop tracking
             arcGISArView.stopTracking();

@@ -92,8 +92,11 @@ private:
   // The origin camera set when the scene is created.
   Esri::ArcGISRuntime::Camera m_originCamera;
 
-  // Properties for messages
+  // Is true if the current scene is tabletop scene.
   bool m_tabletopMode = false;
+
+  // Is true before the initial transformation is not set (tabletop mode) or
+  // before the location data source starts to received data.
   bool m_waitingInitialization = false;
 
   QMetaObject::Connection m_locationDataSourceConnection;
