@@ -16,6 +16,8 @@
 
 #include "QmlArcGISArView.h"
 
+using namespace Esri::ArcGISRuntime::Toolkit;
+
 /*!
   \qmltype ArcGISArView
   \instantiates QmlArcGISArView
