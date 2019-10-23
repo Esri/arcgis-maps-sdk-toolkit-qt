@@ -249,7 +249,11 @@ void QmlArcGISArView::resetTrackingInternal()
  */
 bool QmlArcGISArView::assertClassName(QObject* object, const QString& className) const
 {
-  return object && object->metaObject()->className() == className;
+  if (!object)
+    return false;
+
+  const QString name = object->metaObject()->className();
+  return name.contains(className);
 }
 
 // signals
