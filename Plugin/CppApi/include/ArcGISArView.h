@@ -37,7 +37,7 @@ class ArcGISArView : public ArcGISArViewInterface
 
 public:
   explicit ArcGISArView(QQuickItem* parent = nullptr);
-  explicit ArcGISArView(bool renderVideoFeed, bool tryUsingArKit, QQuickItem* parent = nullptr);
+  explicit ArcGISArView(bool renderVideoFeed, QQuickItem* parent = nullptr);
   ~ArcGISArView() override;
 
   // properties
@@ -75,6 +75,8 @@ protected:
   void resetTrackingInternal() override;
 
 private:
+  Q_DISABLE_COPY(ArcGISArView)
+
   // Helpers
   static DeviceOrientation toDeviceOrientation(Qt::ScreenOrientations orientation);
   void updateTmccOriginCamera() const;

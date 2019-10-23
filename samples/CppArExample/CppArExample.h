@@ -36,6 +36,8 @@ class CppArExample : public QObject
              NOTIFY arcGISArViewChanged)
   Q_PROPERTY(Esri::ArcGISRuntime::SceneQuickView* sceneView READ sceneView WRITE setSceneView NOTIFY sceneViewChanged)
   Q_PROPERTY(bool screenToLocationMode MEMBER m_screenToLocationMode NOTIFY screenToLocationModeChanged)
+  Q_PROPERTY(bool tabletopMode MEMBER m_tabletopMode NOTIFY tabletopModeChanged)
+  Q_PROPERTY(bool waitingForInitialization MEMBER m_waitingForInitialization NOTIFY waitingForInitializationChanged)
 
 public:
   explicit CppArExample(QObject* parent = nullptr);
@@ -57,7 +59,6 @@ public:
   Q_INVOKABLE void createImageryScene();
   Q_INVOKABLE void createFullScaleTestScene();
 
-  Q_INVOKABLE void createPointCloudScene();
   Q_INVOKABLE void createYosemiteScene();
   Q_INVOKABLE void createBorderScene();
   Q_INVOKABLE void createBrestScene();
@@ -68,16 +69,18 @@ signals:
   void arcGISArViewChanged();
   void sceneViewChanged();
   void screenToLocationModeChanged();
+  void tabletopModeChanged();
+  void waitingForInitializationChanged();
 
 private slots:
-  void onTouched(QMouseEvent& event);
+  void onMouseClicked(QMouseEvent& event);
 
 private:
   Q_DISABLE_COPY(CppArExample)
 
   Esri::ArcGISRuntime::GraphicsOverlay* getOrCreateGraphicsOverlay() const;
   void createSurfaceWithElevation() const;
-  void changeScene(bool withLocationDataSource = false) const;
+  void changeScene(bool withLocationDataSource = false);
 
   Esri::ArcGISRuntime::Toolkit::ArcGISArView* m_arcGISArView = nullptr;
   Esri::ArcGISRuntime::SceneQuickView* m_sceneView = nullptr;
@@ -85,10 +88,18 @@ private:
 
   // Screen to location properties
   bool m_screenToLocationMode = false;
-  QMetaObject::Connection m_touchedConnection;
   
   // The origin camera set when the scene is created.
   Esri::ArcGISRuntime::Camera m_originCamera;
+
+  // Is true if the current scene is tabletop scene.
+  bool m_tabletopMode = false;
+
+  // Is true before the initial transformation is not set (tabletop mode) or
+  // before the location data source starts to received data.
+  bool m_waitingForInitialization = false;
+
+  QMetaObject::Connection m_locationDataSourceConnection;
 };
 
 #endif // CppArExample_H

@@ -22,6 +22,8 @@ Item {
     width: 50
     height: 50
 
+    property alias buttonWidth: referenceButton.width
+
     signal startTrackingClicked()
     signal stopTrackingClicked()
     signal resetTrackingClicked()
@@ -40,7 +42,6 @@ Item {
     signal imagerySceneClicked()
     signal fullScaleTestSceneClicked()
 
-    signal pointCloudSceneClicked()
     signal yosemiteSceneClicked()
     signal borderSceneClicked()
     signal brestSceneClicked()
@@ -84,30 +85,37 @@ Item {
                     Column {
                         spacing: 5
                         Button {
+                            width: buttonWidth
                             text: "Start tracking"
                             onClicked: startTrackingClicked();
                         }
                         Button {
+                            width: buttonWidth
                             text: "Stop tracking"
                             onClicked: stopTrackingClicked();
                         }
                         Button {
+                            width: buttonWidth
                             text: "Reset"
                             onClicked: resetTrackingClicked();
                         }
                         Button {
+                            width: buttonWidth
                             text: "Ignore tracking"
                             onClicked: ignoreTrackingClicked();
                         }
                         Button {
+                            width: buttonWidth
                             text: "Initial tracking"
                             onClicked: initialTrackingClicked();
                         }
                         Button {
+                            id: referenceButton
                             text: "Continuous tracking"
                             onClicked: continuousTrackingClicked();
                         }
                         Button {
+                            width: buttonWidth
                             text: "Calibration"
                             onClicked: {
                                 settings.visible = false;
@@ -115,6 +123,7 @@ Item {
                             }
                         }
                         Button {
+                            width: buttonWidth
                             text: "Reset calibration"
                             onClicked: {
                                 settings.visible = false;
@@ -122,6 +131,7 @@ Item {
                             }
                         }
                         Button {
+                            width: buttonWidth
                             text: "Screen to location"
                             onClicked: {
                                 settings.visible = false;
@@ -135,18 +145,22 @@ Item {
                     Column {
                         spacing: 5
                         Button {
+                            width: buttonWidth
                             text: "Show point cloud"
                             onClicked: showPointCloud(true);
                         }
                         Button {
+                            width: buttonWidth
                             text: "Hide point cloud"
                             onClicked: showPointCloud(false);
                         }
                         Button {
+                            width: buttonWidth
                             text: "Show planes"
                             onClicked: showPlanes(true);
                         }
                         Button {
+                            width: buttonWidth
                             text: "Hide planes"
                             onClicked: showPlanes(false);
                         }
@@ -161,6 +175,7 @@ Item {
                     Column {
                         spacing: 5
                         Button {
+                            width: buttonWidth
                             text: "Empty"
                             onClicked: {
                                 settings.visible = false;
@@ -168,6 +183,7 @@ Item {
                             }
                         }
                         Button {
+                            width: buttonWidth
                             text: "Streets"
                             onClicked: {
                                 settings.visible = false;
@@ -175,6 +191,7 @@ Item {
                             }
                         }
                         Button {
+                            width: buttonWidth
                             text: "Imagery"
                             onClicked: {
                                 settings.visible = false;
@@ -182,6 +199,7 @@ Item {
                             }
                         }
                         Button {
+                            width: buttonWidth
                             text: "Test"
                             onClicked: {
                                 settings.visible = false;
@@ -196,13 +214,7 @@ Item {
                     Column {
                         spacing: 5
                         Button {
-                            text: "Point cloud"
-                            onClicked: {
-                                settings.visible = false;
-                                pointCloudSceneClicked();
-                            }
-                        }
-                        Button {
+                            width: buttonWidth
                             text: "Yosemite"
                             onClicked: {
                                 settings.visible = false;
@@ -210,6 +222,7 @@ Item {
                             }
                         }
                         Button {
+                            width: buttonWidth
                             text: "Border"
                             onClicked: {
                                 settings.visible = false;
@@ -217,6 +230,7 @@ Item {
                             }
                         }
                         Button {
+                            width: buttonWidth
                             text: "Brest"
                             onClicked: {
                                 settings.visible = false;
@@ -224,6 +238,7 @@ Item {
                             }
                         }
                         Button {
+                            width: buttonWidth
                             text: "Berlin"
                             onClicked: {
                                 settings.visible = false;
@@ -231,6 +246,7 @@ Item {
                             }
                         }
                         Button {
+                            width: buttonWidth
                             text: "Test"
                             onClicked: {
                                 settings.visible = false;

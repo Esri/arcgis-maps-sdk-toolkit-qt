@@ -36,7 +36,8 @@ ApplicationWindow {
     SceneView {
         id: sceneView
         anchors.fill: parent
-        opacity: calibrationView.visible ? 0.65 : 1.0
+        property bool transparentMode: calibrationView.visible || waitingInitMessage.visible || waitingLocationMessage.visible
+        opacity: transparentMode ? 0.35 : 1.0
     }
 
     // Declare the C++ instance which creates the scene etc. and supply the view
@@ -45,27 +46,28 @@ ApplicationWindow {
         arcGISArView: arcGISArView
         sceneView: sceneView
     }
+
     Column {
         anchors {
             right: parent.right
             left: parent.left
             margins: 10
             bottom: parent.bottom
-            bottomMargin: 30
+            bottomMargin: 60
         }
         spacing: 5
 
         Message {
             id: waitingInitMessage
             width: parent.width
-            visible: true
+            visible: arSample.tabletopMode && arSample.waitingForInitialization
             text: "Touch screen to place the tabletop scene..."
         }
 
         Message {
             id: waitingLocationMessage
             width: parent.width
-            visible: true
+            visible: !arSample.tabletopMode && arSample.waitingForInitialization
             text: "Waiting for location..."
         }
 
@@ -130,10 +132,6 @@ ApplicationWindow {
         readonly property double berlinSceneFactor: 0.0001
         readonly property double tabletopTestSceneFactor: 0.0000001
 
-        onPointCloudSceneClicked: {
-            setCalibrationFactors(pointCloundSceneFactor);
-            arSample.createPointCloudScene();
-        }
         onYosemiteSceneClicked: {
             setCalibrationFactors(yosemiteSceneFactor);
             arSample.createYosemiteScene();

@@ -62,6 +62,20 @@ void CppArExample::setArcGISArView(ArcGISArView* arcGISArView)
 
   m_arcGISArView = arcGISArView;
 
+  // Connect to the isStarted signal, to update the QML messages
+  connect(m_arcGISArView, &ArcGISArView::locationDataSourceChanged, this, [this]()
+  {
+    disconnect(m_locationDataSourceConnection);
+    m_locationDataSourceConnection =  connect(m_arcGISArView->locationDataSource(), &LocationDataSource::locationChanged, this, [this]()
+    {
+      if (!m_tabletopMode)
+      {
+        m_waitingForInitialization = false;
+        emit waitingForInitializationChanged();
+      }
+    });
+  });
+
   emit arcGISArViewChanged();
 }
 
@@ -78,11 +92,21 @@ void CppArExample::setSceneView(SceneQuickView* sceneView)
 
   m_sceneView = sceneView;
 
-  // connect the screen touch
-  if (m_touchedConnection)
-    disconnect(m_touchedConnection);
+  // Connect the mouse clicked events.
+  connect(m_sceneView, &SceneQuickView::mouseClicked, this, &CppArExample::onMouseClicked);
 
-  m_touchedConnection = connect(m_sceneView, &SceneQuickView::mouseClicked, this, &CppArExample::onTouched);
+  // Ignore move events.
+  connect(m_sceneView, &SceneQuickView::mouseMoved, this, [ ](QMouseEvent& mouseEvent)
+  {
+    mouseEvent.accept();
+  });
+
+  // Ignore multi-touch events.
+  connect(m_sceneView, &SceneQuickView::touched, this, [ ](QTouchEvent& touchEvent)
+  {
+    if (touchEvent.touchPoints().size() != 1)
+      touchEvent.accept();
+  });
 
   emit sceneViewChanged();
 }
@@ -211,25 +235,7 @@ void CppArExample::createFullScaleTestScene()
   m_arcGISArView->setOriginCamera(m_originCamera);
   m_arcGISArView->setTranslationFactor(1.0);
 
-  changeScene(false);
-}
-
-// Create a scene based on a point cloud layer.
-// Mode: Tabletop AR
-void CppArExample::createPointCloudScene()
-{
-  m_scene = new Scene(this);
-  createSurfaceWithElevation();
-
-  PortalItem* item = new PortalItem("fc3f4a4919394808830cd11df4631a54", m_scene);
-  auto* layer = new PointCloudLayer(item, m_scene);
-  m_scene->operationalLayers()->append(layer);
-
-  m_originCamera = Camera(39.7712, -74.1197, 1.0, 0.0, 90.0, 0.0);
-  m_arcGISArView->setOriginCamera(m_originCamera);
-  m_arcGISArView->setTranslationFactor(18000.0);
-
-  changeScene();
+  changeScene(true);
 }
 
 // Create a scene centered on Yosemite National Park.
@@ -354,10 +360,11 @@ void CppArExample::createTabletopTestScene()
 
 // If m_screenToLocationMode is true, create and place a 3D sphere in the scene. Otherwise set the
 // initial transformation based on the screen position.
-void CppArExample::onTouched(QMouseEvent& event)
+void CppArExample::onMouseClicked(QMouseEvent& event)
 {
   Q_CHECK_PTR(m_arcGISArView);
-  const QPoint screenPoint = event.screenPos().toPoint();
+
+  const QPoint screenPoint = event.localPos().toPoint();
 
   // If "screenToLocation" mode is enabled.
   if (m_screenToLocationMode)
@@ -373,13 +380,18 @@ void CppArExample::onTouched(QMouseEvent& event)
 
     // Create and place a graphic at the real world location.
     SimpleMarkerSceneSymbol* sphere = new SimpleMarkerSceneSymbol(
-          SimpleMarkerSceneSymbolStyle::Sphere, QColor(Qt::yellow), 0.1, 0.1, 0.1,SceneSymbolAnchorPosition::Center, graphicsOverlay);
+          SimpleMarkerSceneSymbolStyle::Sphere, QColor(Qt::yellow), 0.1, 0.1, 0.1, SceneSymbolAnchorPosition::Center, graphicsOverlay);
     Graphic* sphereGraphic = new Graphic(point, sphere, graphicsOverlay);
     graphicsOverlay->graphics()->append(sphereGraphic);
   }
   else
   {
     m_arcGISArView->setInitialTransformation(screenPoint);
+    if (m_tabletopMode)
+    {
+      m_waitingForInitialization = false;
+      emit waitingForInitializationChanged();
+    }
   }
 }
 
@@ -421,8 +433,14 @@ GraphicsOverlay* CppArExample::getOrCreateGraphicsOverlay() const
 }
 
 // Change the current scene and delete the old one.
-void CppArExample::changeScene(bool withLocationDataSource) const
+void CppArExample::changeScene(bool withLocationDataSource)
 {
+  m_tabletopMode = !withLocationDataSource;
+  emit tabletopModeChanged();
+
+  m_waitingForInitialization = true;
+  emit waitingForInitializationChanged();
+
   Q_CHECK_PTR(m_sceneView);
 
   // Update the location data source
@@ -431,7 +449,6 @@ void CppArExample::changeScene(bool withLocationDataSource) const
   {
     if (!oldLocationDataSource)
       m_arcGISArView->setLocationDataSource(new LocationDataSource(m_arcGISArView));
-    // Else do nothing
   }
   else
   {

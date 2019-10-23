@@ -131,7 +131,7 @@ ArcGISArViewInternal {
     }
 
     // Resets the device tracking and related properties.
-    onResetTracking: {
+    onResetTrackingChanged: {
         const camera = ArcGISRuntimeEnvironment.createObject("Camera");
         tmcc.originCamera = camera;
 

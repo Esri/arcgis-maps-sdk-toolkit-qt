@@ -74,7 +74,7 @@ signals:
   void fieldOfViewChanged(double xFocalLength, double yFocalLength,
                           double xPrincipal, double yPrincipal,
                           double xImageSize, double yImageSize);
-  void resetTracking();
+  void resetTrackingChanged();
 
 public: // internals, used by AR wrappers
   void setTransformationMatrixInternal(double quaternionX, double quaternionY, double quaternionZ, double quaternionW,

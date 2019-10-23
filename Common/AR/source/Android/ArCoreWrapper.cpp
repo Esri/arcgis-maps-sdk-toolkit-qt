@@ -39,25 +39,25 @@ static constexpr int s_timerInterval = 33;
 
 namespace {
 // Positions of the quad vertices in clip space (X, Y).
-const GLfloat kVerticesReversePortrait[] = {
+static const GLfloat kVerticesReversePortrait[] = {
   +1.0f, +1.0f,
   -1.0f, +1.0f,
   +1.0f, -1.0f,
   -1.0f, -1.0f
 };
-const GLfloat kVerticesRightLandscape[] = {
+static const GLfloat kVerticesRightLandscape[] = {
   -1.0f, +1.0f,
   -1.0f, -1.0f,
   +1.0f, +1.0f,
   +1.0f, -1.0f
 };
-const GLfloat kVerticesLeftLandscape[] = {
+static const GLfloat kVerticesLeftLandscape[] = {
   +1.0f, -1.0f,
   +1.0f, +1.0f,
   -1.0f, -1.0f,
   -1.0f, +1.0f
 };
-const GLfloat kVerticesPortrait[] = {
+static const GLfloat kVerticesPortrait[] = {
   -1.0f, -1.0f,
   +1.0f, -1.0f,
   -1.0f, +1.0f,

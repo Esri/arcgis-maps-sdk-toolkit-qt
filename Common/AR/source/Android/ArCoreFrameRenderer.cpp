@@ -39,7 +39,7 @@ using namespace Esri::ArcGISRuntime::Toolkit::Internal;
 
 namespace {
 // positions of the quad vertices in GL space
-const GLfloat kVerticesPortrait[] = {
+static const GLfloat kVerticesPortrait[] = {
   -1.0f, -1.0f,
   +1.0f, -1.0f,
   -1.0f, +1.0f,

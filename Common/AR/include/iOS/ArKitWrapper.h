@@ -76,6 +76,9 @@ public:
 private:
   Q_DISABLE_COPY(ArKitWrapper)
 
+  std::pair<float, float> calculateScreenToImageRatios(int textureWidth, int textureHeight) const;
+  CGPoint makePointWithDeviceOrientation(float x, float y) const;
+
   bool m_renderVideoFeed = true;
 
   struct ArKitWrapperPrivate;
@@ -85,6 +88,7 @@ private:
   std::unique_ptr<ArKitPointCloudRenderer> m_arKitPointCloudRenderer;
 
   QSizeF m_screenSize;
+  QSizeF m_textureSize;
 };
 
 } // Internal namespace

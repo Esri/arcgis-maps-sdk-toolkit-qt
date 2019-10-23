@@ -82,7 +82,6 @@ using namespace Esri::ArcGISRuntime::Toolkit;
   doesn't take ownership of the object.
  */
 
-
 /*!
   \brief A constructor that accepts an optional \a parent.
  */
@@ -119,8 +118,11 @@ void LocationDataSource::start()
   updateObjectsAndConnections();
 
   // Start sensors
-  m_geoPositionSource->startUpdates();
-  m_compass->start();
+  if (m_geoPositionSource)
+    m_geoPositionSource->startUpdates();
+
+  if (m_compass)
+    m_compass->start();
 
   // update isStarted and sensorStatus properties
   m_sensorStatus = ArEnums::SensorStatus::Starting;

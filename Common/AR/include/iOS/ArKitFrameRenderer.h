@@ -38,15 +38,13 @@ public:
 
   // render the GL frames
   void initGL();
-  void render();
+  void render(float verticesRatioX, float verticesRatioY);
 
   // functions for GL textures
   void updateTextreDataY(int width, int height, const void* data);
   void updateTextreDataCbCr(int width, int height, const void* data);
 
 private:
-  void calculateVerticesRatio(int textureWidth, int textureHeight);
-
   std::unique_ptr<QOpenGLShaderProgram> m_program;
 
   QSizeF m_size;

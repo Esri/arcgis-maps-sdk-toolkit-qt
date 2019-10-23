@@ -16,6 +16,8 @@
 
 #include "QmlArcGISArView.h"
 
+using namespace Esri::ArcGISRuntime::Toolkit;
+
 /*!
   \qmltype ArcGISArView
   \instantiates QmlArcGISArView
@@ -234,7 +236,7 @@ void QmlArcGISArView::setHeadingInternal(double heading)
  */
 void QmlArcGISArView::resetTrackingInternal()
 {
-  // to implmente
+  emit resetTrackingChanged();
 }
 
 /*!
@@ -247,7 +249,11 @@ void QmlArcGISArView::resetTrackingInternal()
  */
 bool QmlArcGISArView::assertClassName(QObject* object, const QString& className) const
 {
-  return object && object->metaObject()->className() == className;
+  if (!object)
+    return false;
+
+  const QString name = object->metaObject()->className();
+  return name.contains(className);
 }
 
 // signals
