@@ -37,7 +37,7 @@ class CppArExample : public QObject
   Q_PROPERTY(Esri::ArcGISRuntime::SceneQuickView* sceneView READ sceneView WRITE setSceneView NOTIFY sceneViewChanged)
   Q_PROPERTY(bool screenToLocationMode MEMBER m_screenToLocationMode NOTIFY screenToLocationModeChanged)
   Q_PROPERTY(bool tabletopMode MEMBER m_tabletopMode NOTIFY tabletopModeChanged)
-  Q_PROPERTY(bool waitingInitialization MEMBER m_waitingInitialization NOTIFY waitingInitializationChanged)
+  Q_PROPERTY(bool waitingForInitialization MEMBER m_waitingForInitialization NOTIFY waitingForInitializationChanged)
 
 public:
   explicit CppArExample(QObject* parent = nullptr);
@@ -70,7 +70,7 @@ signals:
   void sceneViewChanged();
   void screenToLocationModeChanged();
   void tabletopModeChanged();
-  void waitingInitializationChanged();
+  void waitingForInitializationChanged();
 
 private slots:
   void onMouseClicked(QMouseEvent& event);
@@ -97,7 +97,7 @@ private:
 
   // Is true before the initial transformation is not set (tabletop mode) or
   // before the location data source starts to received data.
-  bool m_waitingInitialization = false;
+  bool m_waitingForInitialization = false;
 
   QMetaObject::Connection m_locationDataSourceConnection;
 };

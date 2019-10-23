@@ -140,7 +140,7 @@ private:
   mutable Internal::ArcGISArViewRenderer* m_arViewRenderer = nullptr;
   std::unique_ptr<Internal::ArWrapper> m_arWrapper;
 
-  bool m_tracking = false;
+  bool m_trackingEnabled = false;
   bool m_trackingPaused = false;
   bool m_renderVideoFeed = true;
   double m_translationFactor = 1.0;

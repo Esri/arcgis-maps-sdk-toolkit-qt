@@ -71,14 +71,14 @@ ArcGISArViewInterface::ArcGISArViewInterface(bool renderVideoFeed, QQuickItem* p
     switch (state)
     {
       case Qt::ApplicationSuspended:
-        if (m_tracking)
+        if (m_trackingEnabled)
         {
           stopTracking();
           m_trackingPaused = true;
         }
         break;
       case Qt::ApplicationActive:
-        if (m_tracking || m_trackingPaused)
+        if (m_trackingEnabled || m_trackingPaused)
         {
           startTracking();
           m_trackingPaused = false;
@@ -106,7 +106,7 @@ ArcGISArViewInterface::~ArcGISArViewInterface()
  */
 bool ArcGISArViewInterface::tracking() const
 {
-  return m_tracking;
+  return m_trackingEnabled;
 }
 
 /*!
@@ -261,7 +261,7 @@ void ArcGISArViewInterface::startTracking()
   if (m_locationDataSource)
     m_locationDataSource->start();
 
-  m_tracking = true;
+  m_trackingEnabled = true;
   emit trackingChanged();
 }
 
@@ -288,7 +288,7 @@ void ArcGISArViewInterface::stopTracking()
   if (m_locationDataSource)
     m_locationDataSource->stop();
 
-  m_tracking = false;
+  m_trackingEnabled = false;
   emit trackingChanged();
 }
 

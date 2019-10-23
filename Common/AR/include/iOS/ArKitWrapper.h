@@ -77,6 +77,7 @@ private:
   Q_DISABLE_COPY(ArKitWrapper)
 
   std::pair<float, float> calculateScreenToImageRatios(int textureWidth, int textureHeight) const;
+  CGPoint makePointWithDeviceOrientation(float x, float y) const;
 
   bool m_renderVideoFeed = true;
 

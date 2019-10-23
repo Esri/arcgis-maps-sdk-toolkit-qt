@@ -60,14 +60,14 @@ ApplicationWindow {
         Message {
             id: waitingInitMessage
             width: parent.width
-            visible: arSample.tabletopMode && arSample.waitingInitialization
+            visible: arSample.tabletopMode && arSample.waitingForInitialization
             text: "Touch screen to place the tabletop scene..."
         }
 
         Message {
             id: waitingLocationMessage
             width: parent.width
-            visible: !arSample.tabletopMode && arSample.waitingInitialization
+            visible: !arSample.tabletopMode && arSample.waitingForInitialization
             text: "Waiting for location..."
         }
 

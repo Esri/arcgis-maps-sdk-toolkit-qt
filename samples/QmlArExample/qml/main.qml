@@ -34,7 +34,7 @@ ApplicationWindow {
 
     // Is true before the initial transformation is not set (tabletop mode) or
     // before the location data source starts to received data.
-    property bool waitingInitialization: false;
+    property bool waitingForInitialization: false;
 
     // Is true when the screen to location mode is enabled.
     property bool screenToLocationMode: false

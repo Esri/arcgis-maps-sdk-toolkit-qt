@@ -70,8 +70,8 @@ void CppArExample::setArcGISArView(ArcGISArView* arcGISArView)
     {
       if (!m_tabletopMode)
       {
-        m_waitingInitialization = false;
-        emit waitingInitializationChanged();
+        m_waitingForInitialization = false;
+        emit waitingForInitializationChanged();
       }
     });
   });
@@ -389,8 +389,8 @@ void CppArExample::onMouseClicked(QMouseEvent& event)
     m_arcGISArView->setInitialTransformation(screenPoint);
     if (m_tabletopMode)
     {
-      m_waitingInitialization = false;
-      emit waitingInitializationChanged();
+      m_waitingForInitialization = false;
+      emit waitingForInitializationChanged();
     }
   }
 }
@@ -438,8 +438,8 @@ void CppArExample::changeScene(bool withLocationDataSource)
   m_tabletopMode = !withLocationDataSource;
   emit tabletopModeChanged();
 
-  m_waitingInitialization = true;
-  emit waitingInitializationChanged();
+  m_waitingForInitialization = true;
+  emit waitingForInitializationChanged();
 
   Q_CHECK_PTR(m_sceneView);
 

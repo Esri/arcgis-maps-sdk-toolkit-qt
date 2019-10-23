@@ -473,7 +473,7 @@ std::array<double, 7> ArKitWrapper::hitTest(int x, int y) const
 
   // X axis on iOS is vertical, from bottom to top. This corresponds to the y value.
   // Y axis on iOS is horizontal, frol right to left. This corresponds to (1-x) value.
-  const CGPoint screenPoint = CGPointMake(yCropped, 1.0 - xCropped);
+  const CGPoint screenPoint = makePointWithDeviceOrientation(xCropped, yCropped);
 
   // return a list of results, sorted from nearest to farthest (in distance from the camera).
   Q_CHECK_PTR(m_impl);
@@ -513,10 +513,7 @@ std::vector<float> ArKitWrapper::pointCloudData() const
   return std::vector<float>(rawPoints, rawPoints + (3 * size));
 }
 
-/*!
-  \internal
-  Calculate the ratio to applied between screen and image.
- */
+// Calculate the ratio to applied between screen and image.
 std::pair<float, float> ArKitWrapper::calculateScreenToImageRatios(int textureWidth, int textureHeight) const
 {
   // calculates ratios
@@ -537,6 +534,27 @@ std::pair<float, float> ArKitWrapper::calculateScreenToImageRatios(int textureWi
   }
 
   return { verticesRatioX, verticesRatioY };
+}
+
+// The CGPoint to use with hit test depends on the device orientation.
+CGPoint ArKitWrapper::makePointWithDeviceOrientation(float x, float y) const
+{
+  // get the screen orientation
+  const Qt::ScreenOrientations orientation = QGuiApplication::screens().front()->orientation();
+
+  switch (orientation)
+  {
+    case Qt::PortraitOrientation:
+      return CGPointMake(y, 1.0f - x);
+    case Qt::LandscapeOrientation:
+      return CGPointMake(x, y);
+    case Qt::InvertedPortraitOrientation:
+      return CGPointMake(1.0f - y, x);
+    case Qt::InvertedLandscapeOrientation:
+      return CGPointMake(1.0f - x, 1.0f - y);
+    default:
+      break;
+  }
 }
 
 /*!
