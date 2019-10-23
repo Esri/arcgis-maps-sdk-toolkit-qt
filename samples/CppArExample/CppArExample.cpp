@@ -235,7 +235,7 @@ void CppArExample::createFullScaleTestScene()
   m_arcGISArView->setOriginCamera(m_originCamera);
   m_arcGISArView->setTranslationFactor(1.0);
 
-  changeScene(false);
+  changeScene(true);
 }
 
 // Create a scene centered on Yosemite National Park.
@@ -363,7 +363,8 @@ void CppArExample::createTabletopTestScene()
 void CppArExample::onMouseClicked(QMouseEvent& event)
 {
   Q_CHECK_PTR(m_arcGISArView);
-  const QPoint screenPoint = event.screenPos().toPoint();
+
+  const QPoint screenPoint = event.localPos().toPoint();
 
   // If "screenToLocation" mode is enabled.
   if (m_screenToLocationMode)
@@ -379,7 +380,7 @@ void CppArExample::onMouseClicked(QMouseEvent& event)
 
     // Create and place a graphic at the real world location.
     SimpleMarkerSceneSymbol* sphere = new SimpleMarkerSceneSymbol(
-          SimpleMarkerSceneSymbolStyle::Sphere, QColor(Qt::yellow), 0.1, 0.1, 0.1,SceneSymbolAnchorPosition::Center, graphicsOverlay);
+          SimpleMarkerSceneSymbolStyle::Sphere, QColor(Qt::yellow), 0.1, 0.1, 0.1, SceneSymbolAnchorPosition::Center, graphicsOverlay);
     Graphic* sphereGraphic = new Graphic(point, sphere, graphicsOverlay);
     graphicsOverlay->graphics()->append(sphereGraphic);
   }
