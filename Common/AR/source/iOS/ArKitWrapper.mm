@@ -555,6 +555,8 @@ CGPoint ArKitWrapper::makePointWithDeviceOrientation(float x, float y) const
     default:
       break;
   }
+
+  return CGPointMake(y, 1.0f - x);
 }
 
 /*!
