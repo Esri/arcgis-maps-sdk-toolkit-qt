@@ -158,6 +158,9 @@ private:
 
   // the model-view-projection matrix
   QMatrix4x4 m_mvpMatrix;
+
+  // Keeep screen size for hit test.
+  QSize m_screenSize;
 };
 
 } // Internal namespace
