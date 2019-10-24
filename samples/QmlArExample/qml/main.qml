@@ -66,7 +66,7 @@ ApplicationWindow {
 
         // If screenToLocationMode is true, create and place a 3D sphere in the scene. Otherwise set the
         // initial transformation based on the screen position.
-        onMousePressed: {
+        onMouseClicked: {
             // If "screenToLocation" mode is enabled.
             if (screenToLocationMode) {
                 // Get the real world location for screen point from AR view.
@@ -95,6 +95,8 @@ ApplicationWindow {
                 waitingForInitialization = false;
             }
         }
+
+        onMousePositionChanged: mouse.accepted = true;
 
         // Get or create graphic overlay
         function getOrCreateGraphicsOverlay() {
