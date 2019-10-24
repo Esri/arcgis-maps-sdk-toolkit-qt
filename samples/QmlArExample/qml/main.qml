@@ -210,7 +210,9 @@ ApplicationWindow {
 
         // Change the current scene and delete the old one.
         function changeScene(sceneSource, factor, isTabletop) {
+            // Reset propreties
             calibrationView.visible = false;
+            screenToLocationMode = false;
             tabletopMode = isTabletop;
             waitingForInitialization = true;
 

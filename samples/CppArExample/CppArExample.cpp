@@ -435,6 +435,10 @@ GraphicsOverlay* CppArExample::getOrCreateGraphicsOverlay() const
 // Change the current scene and delete the old one.
 void CppArExample::changeScene(bool withLocationDataSource)
 {
+  // Reset propreties
+  m_screenToLocationMode = false;
+  emit screenToLocationModeChanged();
+
   m_tabletopMode = !withLocationDataSource;
   emit tabletopModeChanged();
 
