@@ -96,13 +96,13 @@ void CppArExample::setSceneView(SceneQuickView* sceneView)
   connect(m_sceneView, &SceneQuickView::mouseClicked, this, &CppArExample::onMouseClicked);
 
   // Ignore move events.
-  connect(m_sceneView, &SceneQuickView::mouseMoved, this, [ ](QMouseEvent& mouseEvent)
+  connect(m_sceneView, &SceneQuickView::mouseMoved, this, [](QMouseEvent& mouseEvent)
   {
     mouseEvent.accept();
   });
 
   // Ignore multi-touch events.
-  connect(m_sceneView, &SceneQuickView::touched, this, [ ](QTouchEvent& touchEvent)
+  connect(m_sceneView, &SceneQuickView::touched, this, [](QTouchEvent& touchEvent)
   {
     if (touchEvent.touchPoints().size() != 1)
       touchEvent.accept();
