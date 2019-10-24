@@ -108,18 +108,22 @@ ApplicationWindow {
         readonly property double fullScaleTestSceneFactor: 0.0000001
 
         onEmptySceneClicked: {
+            calibrationView.visible = false;
             setCalibrationFactors(emptySceneFactor);
             arSample.createEmptyScene();
         }
         onStreetsSceneClicked: {
+            calibrationView.visible = false;
             setCalibrationFactors(streetsSceneFactor);
             arSample.createStreetsScene();
         }
         onImagerySceneClicked: {
+            calibrationView.visible = false;
             setCalibrationFactors(imagerySceneFactor);
             arSample.createImageryScene();
         }
         onFullScaleTestSceneClicked: {
+            calibrationView.visible = false;
             setCalibrationFactors(fullScaleTestSceneFactor);
             arSample.createFullScaleTestScene();
         }
@@ -133,22 +137,27 @@ ApplicationWindow {
         readonly property double tabletopTestSceneFactor: 0.0000001
 
         onYosemiteSceneClicked: {
+            calibrationView.visible = false;
             setCalibrationFactors(yosemiteSceneFactor);
             arSample.createYosemiteScene();
         }
         onBorderSceneClicked: {
+            calibrationView.visible = false;
             setCalibrationFactors(borderSceneFactor);
             arSample.createBorderScene();
         }
         onBrestSceneClicked: {
+            calibrationView.visible = false;
             setCalibrationFactors(brestSceneFactor);
             arSample.createBrestScene();
         }
         onBerlinSceneClicked: {
+            calibrationView.visible = false;
             setCalibrationFactors(berlinSceneFactor);
             arSample.createBerlinScene();
         }
         onTabletopTestSceneClicked: {
+            calibrationView.visible = false;
             setCalibrationFactors(tabletopTestSceneFactor);
             arSample.createTabletopTestScene();
         }
