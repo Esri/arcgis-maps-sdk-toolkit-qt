@@ -152,7 +152,7 @@ ArcGISArViewInternal {
         const origin = tmcc.originCamera.transformationMatrix;
         const intermediateMatrix = origin.addTransformation(initialTransformationMatrix);
         const finalMatrix = intermediateMatrix.addTransformation(hitMatrix);
-        const camera = ArcGISRuntimeEnvironment.createObject("Camera", { transformationMatrix: matrix });
+        const camera = ArcGISRuntimeEnvironment.createObject("Camera", { transformationMatrix: finalMatrix });
         const location = ArcGISRuntimeEnvironment.createObject("Point", {
             x: camera.location.x * translationFactor,
             y: camera.location.y * translationFactor,
