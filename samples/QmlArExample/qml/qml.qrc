@@ -7,7 +7,6 @@
         <file>scenes/BrestScene.qml</file>
         <file>scenes/EmptyScene.qml</file>
         <file>scenes/ImageryScene.qml</file>
-        <file>scenes/PointCloudScene.qml</file>
         <file>scenes/SceneWithElevation.qml</file>
         <file>scenes/StreetsScene.qml</file>
         <file>scenes/TabletopTestScene.qml</file>
