@@ -62,7 +62,7 @@ void CppArExample::setArcGISArView(ArcGISArView* arcGISArView)
 
   m_arcGISArView = arcGISArView;
 
-  // Connect to the isStarted signal, to update the QML messages
+  // Connect to the locationChanged signal, to update the QML messages
   connect(m_arcGISArView, &ArcGISArView::locationDataSourceChanged, this, [this]()
   {
     disconnect(m_locationDataSourceConnection);

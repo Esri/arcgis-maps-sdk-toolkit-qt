@@ -46,13 +46,23 @@ ApplicationWindow {
         sceneView: sceneView
         locationDataSource: sceneLoader.item ? sceneLoader.item.locationDataSource : null
         translationFactor: sceneLoader.item ? sceneLoader.item.translationFactor : 1
+
+        // Connect to the locationChanged signal, to update the QML messages
+        Connections {
+            target: arcGISArView.locationDataSource
+            onLocationChanged: {
+                if (!tabletopMode)
+                    waitingForInitialization = false;
+            }
+        }
     }
 
     SceneView {
         id: sceneView
         anchors.fill: parent
         scene: sceneLoader.item ? sceneLoader.item.scene : null
-        opacity: calibrationView.visible ? 0.65 : 1.0
+        property bool transparentMode: calibrationView.visible || waitingInitMessage.visible || waitingLocationMessage.visible
+        opacity: transparentMode ? 0.35 : 1.0
 
         // If screenToLocationMode is true, create and place a 3D sphere in the scene. Otherwise set the
         // initial transformation based on the screen position.
@@ -70,8 +80,8 @@ ApplicationWindow {
                 // Create and place a graphic at the real world location.
                 const sphereParams = {
                     style: Enums.SimpleMarkerSceneSymbolStyleSphere, color: "yellow",
-                    width: 0.2520, height: 0.25, depth: 0.25,
-                    anchorPosition: Enums.SceneSymbolAnchorPositionBottom };
+                    width: 0.1, height: 0.1, depth: 0.1,
+                    anchorPosition: Enums.SceneSymbolAnchorPositionCenter };
                 const sphere = ArcGISRuntimeEnvironment.createObject("SimpleMarkerSceneSymbol", sphereParams);
 
                 const sphereGraphicParams = { geometry: point, symbol: sphere };
@@ -82,6 +92,7 @@ ApplicationWindow {
             else {
                 // Set the initial transformation corresponding to the screen point.
                 arcGISArView.setInitialTransformation(mouse.x, mouse.y); // for touch screen events
+                waitingForInitialization = false;
             }
         }
 
@@ -126,14 +137,14 @@ ApplicationWindow {
         Message {
             id: waitingInitMessage
             width: parent.width
-            visible: tabletopMode
+            visible: tabletopMode && waitingForInitialization
             text: "Touch screen to place the tabletop scene..."
         }
 
         Message {
             id: waitingLocationMessage
             width: parent.width
-            visible: arcGISArView.locationDataSource ? !arcGISArView.locationDataSource.started : false
+            visible: !tabletopMode && waitingForInitialization
             text: "Waiting for location..."
         }
 
@@ -191,7 +202,6 @@ ApplicationWindow {
         readonly property double berlinSceneFactor: 0.0001
         readonly property double tabletopTestSceneFactor: 0.0000001
 
-        onPointCloudSceneClicked: changeScene("qrc:/qml/scenes/PointCloudScene.qml", pointCloundSceneFactor, true);
         onYosemiteSceneClicked: changeScene("qrc:/qml/scenes/YosemiteScene.qml", yosemiteSceneFactor, true);
         onBorderSceneClicked: changeScene("qrc:/qml/scenes/BorderScene.qml", borderSceneFactor, true);
         onBrestSceneClicked: changeScene("qrc:/qml/scenes/BrestScene.qml", brestSceneFactor, true);
@@ -201,6 +211,7 @@ ApplicationWindow {
         // Change the current scene and delete the old one.
         function changeScene(sceneSource, factor, isTabletop) {
             tabletopMode = isTabletop;
+            waitingForInitialization = true;
 
             // Stop tracking
             arcGISArView.stopTracking();
