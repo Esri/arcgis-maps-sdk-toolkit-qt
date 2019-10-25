@@ -174,6 +174,7 @@ void ArCoreWrapper::setSize(const QSize& size)
                                  0, // ROTATION_0
                                  qMin(size.width(), size.height()),
                                  qMax(size.width(), size.height()));
+    m_screenSize = size;
   }
 }
 
@@ -613,7 +614,27 @@ std::array<double, 7> ArCoreWrapper::hitTest(int x, int y) const
     return {};
 
   // try to find the location point
-  ArFrame_hitTest(m_arSession, m_arFrame, x, y, hitResults);
+
+  const Qt::ScreenOrientations orientation = QGuiApplication::screens().front()->orientation();
+
+  switch (orientation)
+  {
+    case Qt::PortraitOrientation:
+      ArFrame_hitTest(m_arSession, m_arFrame, x, y, hitResults);
+      break;
+    case Qt::LandscapeOrientation:
+      ArFrame_hitTest(m_arSession, m_arFrame, m_screenSize.height() - y, x, hitResults);
+      break;
+    case Qt::InvertedPortraitOrientation:
+      ArFrame_hitTest(m_arSession, m_arFrame, x, y, hitResults);
+      break;
+    case Qt::InvertedLandscapeOrientation:
+      ArFrame_hitTest(m_arSession, m_arFrame, y, m_screenSize.width() - x, hitResults);
+      break;
+    default:
+      ArFrame_hitTest(m_arSession, m_arFrame, m_screenSize.height() - y, m_screenSize.width() - x, hitResults);
+      break;
+  }
 
   int32_t size = 0;
   ArHitResultList_getSize(m_arSession, hitResults, &size);

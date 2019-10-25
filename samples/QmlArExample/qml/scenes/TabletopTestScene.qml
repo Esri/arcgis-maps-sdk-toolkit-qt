@@ -34,48 +34,51 @@ Item {
 
     GraphicsOverlay {
         id: graphicsOverlay
+        sceneProperties: LayerSceneProperties {
+            surfacePlacement: Enums.SurfacePlacementAbsolute
+        }
 
         // Draw a line of red sphere from South to North
         TabletopTestSceneGraphic {
-            x: 0.00001
+            x: 0.000001
             color: "red"
         }
         TabletopTestSceneGraphic {
-            x: 0.00002
+            x: 0.000002
             color: "red"
         }
         TabletopTestSceneGraphic {
-            x: 0.00003
+            x: 0.000003
             color: "red"
         }
         TabletopTestSceneGraphic {
-            x: 0.00004
+            x: 0.000004
             color: "red"
         }
         TabletopTestSceneGraphic {
-            x: 0.00005
+            x: 0.000005
             color: "red"
         }
 
         // Draw a line of blue sphere from West to East
         TabletopTestSceneGraphic {
-            y: 0.00001
+            y: 0.000001
             color: "blue"
         }
         TabletopTestSceneGraphic {
-            y: 0.00002
+            y: 0.000002
             color: "blue"
         }
         TabletopTestSceneGraphic {
-            y: 0.00003
+            y: 0.000003
             color: "blue"
         }
         TabletopTestSceneGraphic {
-            y: 0.00004
+            y: 0.000004
             color: "blue"
         }
         TabletopTestSceneGraphic {
-            y: 0.00005
+            y: 0.000005
             color: "blue"
         }
 
@@ -84,23 +87,23 @@ Item {
             color: "green"
         }
         TabletopTestSceneGraphic {
-            z: 0.00001
+            z: 0.1
             color: "green"
         }
         TabletopTestSceneGraphic {
-            z: 0.00002
+            z: 0.2
             color: "green"
         }
         TabletopTestSceneGraphic {
-            z: 0.00003
+            z: 0.3
             color: "green"
         }
         TabletopTestSceneGraphic {
-            z: 0.00004
+            z: 0.4
             color: "green"
         }
         TabletopTestSceneGraphic {
-            z: 0.00005
+            z: 0.5
             color: "green"
         }
     }

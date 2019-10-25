@@ -42,7 +42,6 @@ Item {
     signal imagerySceneClicked()
     signal fullScaleTestSceneClicked()
 
-    signal pointCloudSceneClicked()
     signal yosemiteSceneClicked()
     signal borderSceneClicked()
     signal brestSceneClicked()
@@ -132,6 +131,7 @@ Item {
                             }
                         }
                         Button {
+                            width: buttonWidth
                             text: "Screen to location"
                             onClicked: {
                                 settings.visible = false;
@@ -213,14 +213,6 @@ Item {
                     title: "Tabletop scenes"
                     Column {
                         spacing: 5
-                        Button {
-                            width: buttonWidth
-                            text: "Point cloud"
-                            onClicked: {
-                                settings.visible = false;
-                                pointCloudSceneClicked();
-                            }
-                        }
                         Button {
                             width: buttonWidth
                             text: "Yosemite"

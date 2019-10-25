@@ -62,7 +62,7 @@ void CppArExample::setArcGISArView(ArcGISArView* arcGISArView)
 
   m_arcGISArView = arcGISArView;
 
-  // Connect to the isStarted signal, to update the QML messages
+  // Connect to the locationChanged signal, to update the QML messages
   connect(m_arcGISArView, &ArcGISArView::locationDataSourceChanged, this, [this]()
   {
     disconnect(m_locationDataSourceConnection);
@@ -96,13 +96,13 @@ void CppArExample::setSceneView(SceneQuickView* sceneView)
   connect(m_sceneView, &SceneQuickView::mouseClicked, this, &CppArExample::onMouseClicked);
 
   // Ignore move events.
-  connect(m_sceneView, &SceneQuickView::mouseMoved, this, [ ](QMouseEvent& mouseEvent)
+  connect(m_sceneView, &SceneQuickView::mouseMoved, this, [](QMouseEvent& mouseEvent)
   {
     mouseEvent.accept();
   });
 
   // Ignore multi-touch events.
-  connect(m_sceneView, &SceneQuickView::touched, this, [ ](QTouchEvent& touchEvent)
+  connect(m_sceneView, &SceneQuickView::touched, this, [](QTouchEvent& touchEvent)
   {
     if (touchEvent.touchPoints().size() != 1)
       touchEvent.accept();
@@ -435,6 +435,10 @@ GraphicsOverlay* CppArExample::getOrCreateGraphicsOverlay() const
 // Change the current scene and delete the old one.
 void CppArExample::changeScene(bool withLocationDataSource)
 {
+  // Reset propreties
+  m_screenToLocationMode = false;
+  emit screenToLocationModeChanged();
+
   m_tabletopMode = !withLocationDataSource;
   emit tabletopModeChanged();
 
