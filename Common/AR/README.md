@@ -56,7 +56,7 @@ heading of the scene to ensure accuracy between the device live video and the sc
   
 ### System Requirements
 
-iOS 11 is the mimumum requirement. Devices must support ARKit. For details about using ARKit, please refer to [Apple's
+iOS 11 is the minimum requirement. Devices must support ARKit. For details about using ARKit, please refer to [Apple's
 documentation](https://developer.apple.com/augmented-reality). 
 
 Android 7.0 64-bit (armv8) is the minimum requirement. 32-bit (armv7) is not supported. Devices must support ARCore. For details about using ARCore, please refer to [Google's documentation](https://developers.google.com/ar/).
