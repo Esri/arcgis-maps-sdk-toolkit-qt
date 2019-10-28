@@ -243,7 +243,7 @@ void QmlArcGISArView::resetTrackingInternal()
   \brief Verify than \a object is of the type expressed in \a className.
   \internal
 
-  This method exists because the QML API headers are not available, so it's not possible to use the concret
+  This method exists because the QML API headers are not available, so it's not possible to use the concrete
   types in the QmlArcGISArView API. Then, this API uses QObject* and this function is used to verify than
   the type of the objects passed in the parameters are correct (using the Qt's meta-object).
  */
