@@ -124,10 +124,11 @@ Item {
 
     /*!
       \qmlproperty var fullExtentLabelFormat
-      \brief The format for displaying \l Date values
+      \brief The format for displaying
+      \l {https://doc.qt.io/qt-5/qml-qtqml-date.html}{Date} values
       for the full time extent. - for example "yy/MM/dd".
 
-      The default is \c Qt.DefaultLocaleShortDate.
+      The default is \l {https://doc.qt.io/qt-5/qt.html#DateFormat-enum}{\c Qt.DefaultLocaleShortDate}.
 
       \sa Qt.formatDateTime
       */
@@ -143,12 +144,12 @@ Item {
 
     /*!
       \qmlproperty var currentExtentLabelFormat
-      \brief The format for displaying \l Date values
-      for the current time extent. - for example "yy/MM/dd".
+      \brief The format for displaying \c Date values
+      for the current time extent - for example "yy/MM/dd".
 
-      The default is \c Qt.DefaultLocaleShortDate.
+      The default is \l {https://doc.qt.io/qt-5/qt.html#DateFormat-enum}{\c Qt.DefaultLocaleShortDate}.
 
-      \sa Qt.formatDateTime
+      See also the \l {https://doc.qt.io/qt-5/qml-qtqml-qt.html#formatDateTime-method}{\c Qt.formatDateTime}.
       */
     property var currentExtentLabelFormat
 
@@ -253,9 +254,9 @@ Item {
       \brief The date format for displaying time step intervals -
       for example "yy/MM/dd".
 
-      The default is \c Qt.DefaultLocaleShortDate.
+      The default is \l {https://doc.qt.io/qt-5/qt.html#DateFormat-enum}{\c Qt.DefaultLocaleShortDate}.
 
-      \sa Qt.formatDateTime
+      See also the \l {https://doc.qt.io/qt-5/qml-qtqml-qt.html#formatDateTime-method}{\c Qt.formatDateTime}.
       */
     property var timeStepIntervalLabelFormat
 

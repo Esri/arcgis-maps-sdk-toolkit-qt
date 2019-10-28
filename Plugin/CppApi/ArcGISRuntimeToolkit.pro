@@ -24,6 +24,7 @@ DEFINES += QTRUNTIME_TOOLKIT_BUILD
 
 HEADERS += $$PWD/include/*.h \
            $$PWD/include/CoordinateConversion/*.h
+
 SOURCES += $$PWD/source/*.cpp \
            $$PWD/source/CoordinateConversion/*.cpp
 
