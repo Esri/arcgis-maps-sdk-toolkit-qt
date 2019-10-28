@@ -41,13 +41,6 @@ for getting an initial GPS location when GPS tracking is required.
 Use the `CalibrationView` class to manually change the location and
 heading of the scene to ensure accuracy between the device live video and the scene.
 
-For details about using ARKit, please refer to [Apple's
-documentation](https://developer.apple.com/augmented-reality). For ARCore,
-please refer to [Google's documentation](https://developers.google.com/ar/).
-
-ArcGIS Runtime SDK 100.6 for Qt is required to use this toolkit
-component.
-
 ### Features of the AR toolkit component
 
 - Allows display of the live camera feed
@@ -60,6 +53,15 @@ component.
   real-world coordinate
 - Eases access to ARKit, ARCore, and `LocationDataSource` delegate
   methods
+  
+### System Requirements
+
+iOS 11 64-bit is the mimumum requirement. Devices must support ARKit. For details about using ARKit, please refer to [Apple's
+documentation](https://developer.apple.com/augmented-reality). 
+
+Android 7.0 64-bit (armv8) is the minimum requirement. 32-bit (armv7) is not supported. Devices must support ARCore. For details about using ARCore, please refer to [Google's documentation](https://developers.google.com/ar/).
+
+The latest ArcGIS Runtime SDK for Qt is required to use this toolkit component.
 
 ## Creating a new AR app using ArcGIS Runtime AR toolkit
 
