@@ -28,8 +28,9 @@ HEADERS += $$PWD/include/*.h \
 SOURCES += $$PWD/source/*.cpp \
            $$PWD/source/CoordinateConversion/*.cpp
 
-INCLUDEPATH += $$PWD/include/ \
-               $$PWD/include/CoordinateConversion/
+INCLUDEPATH += $$PWD/include \
+               $$PWD/include/CoordinateConversion \
+               $$PWD/../../Common/AR/include
 
 RUNTIME_PRI = arcgis_runtime_qml_cpp.pri
 #RUNTIME_PRI = esri_runtime_qt.pri # use this for widgets
