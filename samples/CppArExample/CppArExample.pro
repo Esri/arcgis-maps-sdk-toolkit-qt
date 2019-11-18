@@ -23,14 +23,14 @@ TARGET = CppArExample
 
 equals(QT_MAJOR_VERSION, 5) {
     lessThan(QT_MINOR_VERSION, 12) { 
-        error("$$TARGET requires Qt 5.12.0")
+        error("$$TARGET requires Qt 5.12.6")
     }
-	equals(QT_MINOR_VERSION, 12) : lessThan(QT_PATCH_VERSION, 0) {
-		error("$$TARGET requires Qt 5.12.0")
+	equals(QT_MINOR_VERSION, 12) : lessThan(QT_PATCH_VERSION, 6) {
+		error("$$TARGET requires Qt 5.12.6")
 	}
 }
 
-ARCGIS_RUNTIME_VERSION = 100.6
+ARCGIS_RUNTIME_VERSION = 100.7
 include($$PWD/arcgisruntime.pri)
 
 HEADERS += \
