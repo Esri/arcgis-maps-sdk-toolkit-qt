@@ -36,5 +36,5 @@ DISTFILES += \
 
 ANDROID_LIBS = $$dirname(QMAKE_QMAKE)/../lib
 ANDROID_EXTRA_LIBS += \
-    $$ANDROID_LIBS/libssl.so \
-    $$ANDROID_LIBS/libcrypto.so
+    $$ANDROID_LIBS/libssl_1_1.so \
+    $$ANDROID_LIBS/libcrypto_1_1.so
