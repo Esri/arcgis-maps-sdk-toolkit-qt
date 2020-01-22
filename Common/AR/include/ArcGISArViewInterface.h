@@ -21,6 +21,7 @@
 #include "LocationDataSource.h"
 #include "ArEnums.h"
 #include <array>
+#include <memory>
 
 namespace Esri {
 namespace ArcGISRuntime {
