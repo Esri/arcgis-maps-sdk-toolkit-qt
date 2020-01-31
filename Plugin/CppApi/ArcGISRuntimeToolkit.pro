@@ -22,11 +22,11 @@ CONFIG += c++14 plugin
 
 DEFINES += QTRUNTIME_TOOLKIT_BUILD
 
-HEADERS += $$PWD/include/*.h \
-           $$PWD/include/CoordinateConversion/*.h
+HEADERS += $$files($$PWD/include/*.h) \
+           $$files($$PWD/include/CoordinateConversion/*.h)
 
-SOURCES += $$PWD/source/*.cpp \
-           $$PWD/source/CoordinateConversion/*.cpp
+SOURCES += $$files($$PWD/source/*.cpp) \
+           $$files($$PWD/source/CoordinateConversion/*.cpp)
 
 INCLUDEPATH += $$PWD/include \
                $$PWD/include/CoordinateConversion \
