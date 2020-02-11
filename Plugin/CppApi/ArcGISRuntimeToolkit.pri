@@ -27,6 +27,8 @@ android: {
   PLATFORM = "android"
   contains(QT_ARCH, i386) {
     ANDROID_ARCH = "x86"
+  } else:contains(QT_ARCH, arm64) {
+    ANDROID_ARCH = "arm64"
   } else {
     ANDROID_ARCH = "armv7"
   }
