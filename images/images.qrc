@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/images">
+    <qresource prefix="/esri/arcgisruntime/toolkit/images">
         <file>compass.png</file>
     </qresource>
 </RCC>

@@ -4,17 +4,7 @@
 #include <QLabel>
 #include <QPixmap>
 
-namespace Ui {
-class NorthArrow;
-}
-
-namespace Esri
-  {
-  namespace ArcGISRuntime
-    {
-    class MapGraphicsView;
-    }
-  }
+namespace Esri { namespace ArcGISRuntime { class MapGraphicsView; } }
 
 class NorthArrowController;
 
