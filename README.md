@@ -1,22 +1,22 @@
-ArcGIS Runtime API Toolkit
-==========================
+# ArcGIS Runtime Toolkit - Qt
 
-Current Release: 100.7
+[![](https://img.shields.io/badge/API_Reference-purple)](https://developers.arcgis.com/qt/latest/toolkit/api-reference/) ![Current release](https://img.shields.io/github/v/release/esri/arcgis-runtime-toolkit-qt?label=current%20release)
 
-This project contains QML source code for controls and utilities you can use with the [ArcGIS Runtime SDK for Qt](http://developers.arcgis.com/qt). There are QML examples in this repo that demonstrate the use of these controls and how they can be used as resuable building blocks for your QML-based ArcGIS applications.
+This project contains QML source code for controls and utilities you can use with the [ArcGIS Runtime SDK for Qt](http://developers.arcgis.com/qt). There are QML examples in this repo that demonstrate the use of these controls and how they can be used as reusable building blocks for your QML-based ArcGIS applications.
 
 ## Features
-- ArcGISArSceneView - A scene view for displaying ARKit/ARCore features on mobile devices. See [details about using the ArcGISArView toolkit component](https://github.com/Esri/arcgis-runtime-toolkit-qt/blob/master/Common/AR/README.md).
-- AuthenticationView Dialog - A wrapper view that will automatically display the proper authentication view for any of the supported authentication types (OAuth, Token, HTTP Basic, HTTP Digest, SAML, PKI).
-- ClientCertificateView Dialog - A dialog for handling PKI authentication.
-- OAuth2View Dialog - A dialog for handling OAuth authentication.
-- SslHandshakeView Dialog - A dialog for allowing/blocking SSL Handshake related issues.
-- UserCredentialsView Dialog - A generic dialog for handling username/password authentication.
-- Callout Control - A view for displaying information at a geographic location on the map.
-- PopupView Control - A view for displaying attributes and attachments for features.
-- TimeSlider Control - A control for visualizing temporal data by changing the currently visible time extent.
-- Compass Control (C++ only) - A compass (aka north arrow) control for indicating which direction is north.
-- Coordinate Conversion Control (C++ Only) - A tool for assisting in converting coordinates from one format to another.
+
+- **[ArcGISArView](https://github.com/Esri/arcgis-runtime-toolkit-qt/blob/master/Common/AR/README.md)** - A scene view that integrates with ARKit/ARCore features for augmented reality on mobile devices.
+- **AuthenticationView Dialog** - A wrapper view that will automatically display the proper authentication view for any of the supported authentication types (OAuth, Token, HTTP Basic, HTTP Digest, SAML, PKI).
+- **ClientCertificateView Dialog** - A dialog for handling PKI authentication.
+- **OAuth2View Dialog** - A dialog for handling OAuth authentication.
+- **SslHandshakeView Dialog** - A dialog for allowing/blocking SSL Handshake related issues.
+- **UserCredentialsView Dialog** - A generic dialog for handling username/password authentication.
+- **Callout Control** - A view for displaying information at a geographic location on the map.
+- **PopupView Control** - A view for displaying attributes and attachments for features.
+- **TimeSlider Control** - A control for visualizing temporal data by changing the currently visible time extent.
+- **Compass Control** (C++ only) - A compass (aka north arrow) control for indicating which direction is north.
+- **Coordinate Conversion Control** (C++ Only) - A tool for assisting in converting coordinates from one format to another.
 
 ## Setup instructions 
 
@@ -35,16 +35,16 @@ This project contains QML source code for controls and utilities you can use wit
 Starting with Qt 5.9.0 on iOS, the Toolkit must be imported as a plugin.
 
 1. Follow the steps above (Setup instructions ) but skip step 3 for adding the Qml import paths to your project.
-2. Include [ArcGISRuntimeToolkitPlugin.pri](Plugin/ArcGISRuntimeToolkitPlugin.pri) in your project file.
+2. Include [ArcGISRuntimeToolkitPlugin.pri](Plugin/ArcGISRuntimeToolkitPlugin.pri) in your project file. For example:
 
-For example, 
-```qmake 
-include(/Users/james/ArcGIS_SDKs/Qt100.7/sdk/toolkit/Plugin/ArcGISRuntimeToolkitPlugin.pri)
-```
+    ```qmake 
+    include(/Users/james/ArcGIS_SDKs/Qt100.7/sdk/toolkit/Plugin/ArcGISRuntimeToolkitPlugin.pri)
+    ```
 
 3. The Toolkit will now be compiled into your application directly as a plugin.
 
 ## Running the toolkit demo project
+
 The toolkit repo has a demo project located in the Examples folder. This project is not meant to be a template to base your projects off of, but rather to be a quick and easy way to test and demonstrate the capabilities of various toolkit components. You can run the demo project by doing the following steps:
 
 1. Open `Examples.qmlproject` in Qt Creator
@@ -54,10 +54,12 @@ The toolkit repo has a demo project located in the Examples folder. This project
 5. Run the app and select an example from the drop down.
 
 ## Version
+
 The Toolkit is forwards compatible with the ArcGIS Runtime API. It is not backwards compatible. This means that version 100.3 of the Toolkit can be used with version 100.4 of the Runtime API. However, version 100.4 of the Toolkit cannot be used with version 100.3 of the Runtime API, as this version of the Toolkit may require functionality from a newer version of the Runtime API.
 
 ## Use a previous version
-The `master` branch contains toolkit components for the current, most up-to-date version of ArcGIS Runtime. To access previous versions, you can checkout by a tag or commit, or alternativley you can download the source zip:
+
+The `master` branch contains toolkit components for the current, most up-to-date version of ArcGIS Runtime. To access previous versions, you can checkout by a tag or commit, or alternatively you can download the source zip:
 
 - [100.0](https://github.com/Esri/arcgis-runtime-toolkit-qt/releases/tag/1529)
 - [100.1](https://github.com/Esri/arcgis-runtime-toolkit-qt/releases/tag/1744)
@@ -67,18 +69,19 @@ The `master` branch contains toolkit components for the current, most up-to-date
 ## Resources
 
 * [ArcGIS Runtime SDK for Qt](https://developers.arcgis.com/qt/)
+* [System requirements](https://developers.arcgis.com/qt/latest/qml/guide/system-requirements.htm)
 * [Qt and QML](http://www.qt.io/)
 
 ## Issues
 
-Find a bug or want to request a new feature?  Please let us know by submitting an issue.
+Find a bug or want to request a new feature?  Please let us know by [submitting an issue](https://github.com/Esri/arcgis-runtime-toolkit-qt/issues/new).
 
 ## Contributing
 
 Anyone and everyone is welcome to contribute.
 
 ## Licensing
-Copyright 2019 Esri
+Copyright 2019-2020 Esri
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
