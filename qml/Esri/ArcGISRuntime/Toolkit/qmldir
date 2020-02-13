@@ -1,0 +1,3 @@
+module Esri.ArcGISRuntime.Toolkit
+NorthArrow 100.7 NorthArrow.qml
+NorthArrowController 100.7 NorthArrowController.qml

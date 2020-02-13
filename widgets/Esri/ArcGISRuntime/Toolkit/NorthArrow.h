@@ -4,7 +4,12 @@
 #include <QLabel>
 #include <QPixmap>
 
-namespace Esri { namespace ArcGISRuntime { class MapGraphicsView; } }
+namespace Esri {
+namespace ArcGISRuntime {
+
+class MapGraphicsView;
+
+namespace Toolkit {
 
 class NorthArrowController;
 
@@ -14,15 +19,19 @@ class NorthArrow : public QLabel
 
 public:
   explicit NorthArrow(QWidget* parent = nullptr);
-  ~NorthArrow();
+  ~NorthArrow() override;
 
-  void setMapView(Esri::ArcGISRuntime::MapGraphicsView* mapView);
+  void setMapView(MapGraphicsView* mapView);
 
   void mouseDoubleClickEvent(QMouseEvent* event) override;
 
 private:
   QPixmap m_image;
-  NorthArrowController* m_controller = nullptr;
+  MapGraphicsView* m_mapView;
 };
+
+} // Toolkit
+} // ArcGISRuntime
+} // Esri
 
 #endif // NORTHARROW_H

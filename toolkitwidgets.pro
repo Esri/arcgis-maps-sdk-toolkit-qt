@@ -1,13 +1,10 @@
+INCLUDEPATH += $$PWD/widgets $$PWD/common
 
-TEMPLATE = lib
-CONFIG += qt
-QT += widgets
+WIDGETPATH = $$PWD/widgets/Esri/ArcGISRuntime/Toolkit
 
-INCLUDEPATH += common widgets
-TARGET = ArcGISRuntimeToolkitWidgets
-RESOURCES += images/images.qrc
-ARCGIS_RUNTIME_VERSION = 100.7
+HEADERS += $$WIDGETPATH/NorthArrow.h \
+           $$WIDGETPATH/register.h
 
-include(arcgisruntime.pri)
-include(common/common.pri)
-include(widgets/widgets.pri)
+SOURCES += $$WIDGETPATH/NorthArrow.cpp
+
+RESOURCES += $$PWD/images/toolkit_images.qrc

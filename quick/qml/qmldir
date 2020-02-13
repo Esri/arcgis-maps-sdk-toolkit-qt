@@ -1,3 +1,0 @@
-module Esri.ArcGISRuntime.Toolkit
-NorthArrow 1.0 NorthArrow.qml
-plugin ArcGISRuntimeToolkitPlugin
