@@ -25,9 +25,11 @@ public:
 
   void mouseDoubleClickEvent(QMouseEvent* event) override;
 
+  NorthArrowController* controller() const;
+
 private:
   QPixmap m_image;
-  MapGraphicsView* m_mapView;
+  NorthArrowController* m_controller;
 };
 
 } // Toolkit

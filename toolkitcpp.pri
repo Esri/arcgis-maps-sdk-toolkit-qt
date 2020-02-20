@@ -1,13 +1,16 @@
-INCLUDEPATH += $$PWD/quick $$PWD/common
+INCLUDEPATH += $$PWD/cpp
 
-QUICKPATH = $$PWD/quick/Esri/ArcGISRuntime/Toolkit
+CPPPATH = $$PWD/cpp/Esri/ArcGISRuntime/Toolkit
 
-HEADERS += $$QUICKPATH/NorthArrowController.h \
-           $$QUICKPATH/register.h
+HEADERS += $$CPPPATH/GenericListModel.h \
+           $$CPPPATH/NorthArrowController.h \
+           $$CPPPATH/register.h
 
-SOURCES += $$QUICKPATH/NorthArrowController.cpp \
-           $$QUICKPATH/register.cpp
+SOURCES += $$CPPPATH/GenericListModel.cpp \
+           $$CPPPATH/NorthArrowController.cpp \
+           $$CPPPATH/register.cpp
 
+# For Qt Creator only
 QML_IMPORT_PATH += $$PWD/qml
 
 RESOURCES += $$PWD/images/toolkit_images.qrc

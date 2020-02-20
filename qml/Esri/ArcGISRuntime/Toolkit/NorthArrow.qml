@@ -18,7 +18,7 @@ Item {
         value: -controller.heading
     }
 
-    Image{
+    Image {
         id: compassImage
         anchors.fill: parent
         source: "qrc:///esri/arcgisruntime/toolkit/images/compass.png"
@@ -26,7 +26,7 @@ Item {
         visible: autoHide && (controller.heading < 1e-05 || controller.heading === 360) ? false : true
     }
 
-    MouseArea{
+    MouseArea {
         anchors.fill: parent
         onDoubleClicked: {
             if (geoView)

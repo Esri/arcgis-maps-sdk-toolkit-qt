@@ -17,7 +17,7 @@ class NorthArrowController : public QObject
   Q_OBJECT
 
 public:
-  NorthArrowController(QObject* parent = nullptr);
+  Q_INVOKABLE NorthArrowController(QObject* parent = nullptr);
   ~NorthArrowController();
 
   QObject* geoView() const;

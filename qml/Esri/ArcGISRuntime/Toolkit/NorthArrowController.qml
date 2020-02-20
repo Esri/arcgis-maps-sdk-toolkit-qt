@@ -4,6 +4,7 @@ QtObject {
   property double heading: NaN;
   property var geoView;
 
+
   Binding {
       when: geoView !== null && ("mapRotation" in geoView)
       target: this

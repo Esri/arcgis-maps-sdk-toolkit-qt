@@ -7,9 +7,9 @@ namespace Esri {
 namespace ArcGISRuntime {
 namespace Toolkit {
 
-extern const char* Namespace;
-extern int VersionMajor;
-extern int VersionMinor;
+extern const char* const Namespace;
+extern const int VersionMajor;
+extern const int VersionMinor;
 
 void registerComponents(QQmlEngine* engine);
 
