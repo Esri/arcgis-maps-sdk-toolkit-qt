@@ -64,10 +64,10 @@ void addFileSelector(QQmlEngine* engine)
 void registerComponents(QQmlEngine* engine)
 {
   addFileSelector(engine);
-  registerComponent<NorthArrowController>();
   registerComponent<CoordinateConversionController>();
   registerComponent<CoordinateConversionOption>();
   registerComponent<CoordinateConversionResult>();
+  registerComponent<NorthArrowController>();
 }
 
 } // Toolkit
