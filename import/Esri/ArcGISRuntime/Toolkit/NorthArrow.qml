@@ -3,19 +3,30 @@ import QtQuick 2.12
 import Esri.ArcGISRuntime.Toolkit 100.7
 
 Item {
-    property alias geoView: controller.geoView
-    property bool autoHide: true
+    id: compassView
+    property var geoView;
+    property bool autoHide: false
 
-    NorthArrowController {
-        id: controller
-        geoView: geoView
+    property var controller: NorthArrowController {
+    }
+
+    // Two way binding
+    Binding {
+        target: compassView
+        property: "geoView"
+        value: controller.geoView
     }
 
     Binding {
-        when: geoView !== null
+        target: controller
+        property: "geoView"
+        value: compassView.geoView
+    }
+
+    Binding {
         target: compassImage
         property: "rotation"
-        value: -controller.heading
+        value: isNaN(controller.heading) ? 0 : -controller.heading
     }
 
     Image {
@@ -30,7 +41,7 @@ Item {
         anchors.fill: parent
         onDoubleClicked: {
             if (geoView)
-                controller.heading = 0;
+                controller.setHeading(0);
         }
     }
 }

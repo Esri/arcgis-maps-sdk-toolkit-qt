@@ -28,7 +28,7 @@ namespace Toolkit {
 class NorthArrowController : public QObject
 {
   Q_PROPERTY(QObject* geoView READ geoView WRITE setGeoView NOTIFY geoViewChanged)
-  Q_PROPERTY(double heading READ heading WRITE setHeading NOTIFY headingChanged)
+  Q_PROPERTY(double heading READ heading NOTIFY headingChanged)
   Q_OBJECT
 
 public:
@@ -40,7 +40,7 @@ public:
   Q_SIGNAL void geoViewChanged();
 
   double heading() const;
-  void setHeading(double heading);
+  Q_SLOT void setHeading(double heading);
   Q_SIGNAL void headingChanged();
 
 private:
