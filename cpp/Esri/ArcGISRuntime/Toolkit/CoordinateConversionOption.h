@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2018 Esri
+ *  Copyright 2012-2020 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -13,18 +13,23 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-
 #ifndef COORDINATECONVERSIONOPTION_H
 #define COORDINATECONVERSIONOPTION_H
 
+// Qt headers
 #include <QObject>
 
+// ArcGISRuntime headers
 #include <GeometryTypes.h>
 
 namespace Esri
 {
 namespace ArcGISRuntime
 {
+
+// Forward declaration.
+class Point;
+
 namespace Toolkit
 {
 
@@ -92,7 +97,11 @@ public:
 
   GarsConversionMode garsConvesrionMode() const;
   void setGarsConversionMode(GarsConversionMode conversionMode);
-  Q_SIGNAL void gardsConversionModeChanged();
+  Q_SIGNAL void garsConversionModeChanged();
+
+  Q_INVOKABLE QString prettyPrint(const Point& point) const;
+
+  Q_INVOKABLE Point pointFromString(const QString& point, const SpatialReference& spatialReference);
 
 private:
   QString m_name;

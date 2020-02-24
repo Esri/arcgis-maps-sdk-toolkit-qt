@@ -13,23 +13,32 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_REGISTER_H
-#define ESRI_ARCGISRUNTIME_TOOLKIT_REGISTER_H
+#ifndef COORDINATECONVERSIONCONSTANTS_H
+#define COORDINATECONVERSIONCONSTANTS_H
 
-class QQmlEngine;
+#include <QString>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri
+{
+namespace ArcGISRuntime
+{
+namespace Toolkit
+{
+namespace CoordinateConversionConstants
+{
 
-extern const char* const Namespace;
-extern const int VersionMajor;
-extern const int VersionMinor;
+extern const QString DECIMAL_DEGREES_FORMAT;
+extern const QString DEGREES_DECIMAL_MINUTES_FORMAT;
+extern const QString DEGREES_MINUTES_SECONDS_FORMAT;
+extern const QString MGRS_FORMAT;
+extern const QString USNG_FORMAT;
+extern const QString UTM_FORMAT;
+extern const QString GARS_FORMAT;
+extern const QString GEOREF_FORMAT;
 
-void registerComponents(QQmlEngine* engine);
-
+} // CoordinateConversionConstants
 } // Toolkit
 } // ArcGISRuntime
 } // Esri
 
-#endif // ESRI_ARCGISRUNTIME_TOOLKIT_REGISTER_H
+#endif // COORDINATECONVERSIONCONSTANTS_H

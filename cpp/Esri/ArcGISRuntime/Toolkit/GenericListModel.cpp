@@ -1,3 +1,18 @@
+/*******************************************************************************
+ *  Copyright 2012-2020 Esri
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ ******************************************************************************/
 #include "GenericListModel.h"
 
 #include <QMetaProperty>
@@ -8,7 +23,6 @@ namespace ArcGISRuntime
 {
 namespace Toolkit
 {
-
 
 namespace
 {
@@ -104,9 +118,13 @@ QVariant GenericListModel::data(const QModelIndex& index, int role) const
     const auto property = m_elementType->property(propIndex);
     return property.read(o);
   }
+  else if (role == Qt::UserRole)
+  {
+    return QVariant::fromValue<QObject*>(o);
+  }
   else if (role >= Qt::UserRole)
   {
-    const auto propIndex = role - Qt::UserRole + m_elementType->propertyOffset();
+    const auto propIndex = role - (Qt::UserRole + 1) + m_elementType->propertyOffset();
     const auto property = m_elementType->property(propIndex);
     return property.read(o);
   }
@@ -142,7 +160,7 @@ bool GenericListModel::setData(const QModelIndex& index, const QVariant& value, 
   }
   else if (role >= Qt::UserRole)
   {
-    const auto propIndex = role - Qt::UserRole + m_elementType->propertyOffset();
+    const auto propIndex = role - (Qt::UserRole + 1) + m_elementType->propertyOffset();
     const auto property = m_elementType->property(propIndex);
     return property.write(o, value);
   }
@@ -167,11 +185,13 @@ QHash<int, QByteArray> GenericListModel::roleNames() const
     return { };
 
   QHash<int, QByteArray> output;
+  output.insert( Qt::UserRole, "modelData");
+
   const int offset = m_elementType->propertyOffset();
   for (int i = offset; i < m_elementType->propertyCount(); ++i)
   {
     auto property = m_elementType->property(i);
-    output.insert(i - offset + Qt::UserRole, property.name());
+    output.insert(i - offset + Qt::UserRole + 1, property.name());
   }
   return output;
 }
@@ -227,7 +247,7 @@ bool GenericListModel::removeRows(int row, int count, const QModelIndex& parent)
 
 void GenericListModel::setElementType(const QMetaObject* metaObject)
 {
-  beginRemoveRows(QModelIndex(), 0, rowCount());
+  beginRemoveRows(QModelIndex(), 0, std::max(0, rowCount() -1));
   qDeleteAll(m_objects);
   m_objects.clear();
   m_elementType = metaObject;
@@ -272,13 +292,13 @@ bool GenericListModel::append(QList<QObject*> objects)
     return true;
 
   auto i = rowCount();
-  beginInsertRows(QModelIndex(), i, i + objects.size() - 1);
+
+  beginInsertRows(QModelIndex(), i, i + size - 1);
   m_objects << objects;
   endInsertRows();
+
   for (; i < size; ++i)
-  {
     connectElement(index(i));
-  }
 
   return true;
 }
@@ -312,7 +332,7 @@ void GenericListModel::connectElement(QModelIndex index)
     {
       auto element = new MetaElement(
         index,
-        i - offset + Qt::UserRole,
+        i - offset + Qt::UserRole +1,
         this,
         property.name(),
         object);

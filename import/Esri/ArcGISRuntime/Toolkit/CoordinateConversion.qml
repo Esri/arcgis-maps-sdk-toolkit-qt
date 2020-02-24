@@ -42,12 +42,6 @@ Item {
     property color textColor: "black"
 
     /*!
-      \qmlproperty GeoView geoView
-      \brief The GeoView for this tool. Should be a SceneQuickView or a MapQuickView.
-     */
-    property alias geoView: controller.geoView
-
-    /*!
       \qmlproperty bool captureMode
       \brief Whether whether the tool is in capture mode.
 
@@ -61,23 +55,6 @@ Item {
       \brief The opacity of the background rectangle.
       */
     property alias backgroundOpacity: backgroundRectangle.opacity
-
-    /*!
-      \qmlproperty string inputFormat
-      \brief The input format for the tool. This can be in a user defined format or one of:
-
-      \list
-        \li \c DD. Decimal degrees.
-        \li \c DDM. Degrees decimal minutes.
-        \li \c DMS. Degrees minutes seconds.
-        \li \c MGRS.
-        \li \c USNG.
-        \li \c UTM.
-        \li \c GARS
-        \li GeoRef
-      \endlist
-     */
-    property alias inputFormat: controller.inputFormat
 
     /*!
       \qmlproperty int highlightColor
@@ -101,7 +78,7 @@ Item {
 
       The default value is \c 12.
      */
-    property alias fontSize: textMetrics.pixelSize
+    property int fontSize: 12
 
     /*!
       \qmlproperty int fontFamily
@@ -127,9 +104,49 @@ Item {
      */
     property alias radius: backgroundRectangle.radius
 
-    CoordinateConversionController {
-        id: controller
-        objectName: "coordinateConversionController"
+    readonly property bool inInputMode: editCoordinateButton.checked || captureModeButton.checked
+
+    property var inputFormat: CoordinateConversionResult {
+    }
+
+    property var controller: CoordinateConversionController {
+    }
+
+    /*!
+      \qmlproperty GeoView geoView
+      \brief The GeoView for this tool. Should be a SceneQuickView or a MapQuickView.
+     */
+    property var geoView: controller.geoView
+
+    Connections {
+        target: controller
+        onCurrentPointChanged: {
+            inputFormat.updateCoordinatePoint(point);
+        }
+    }
+
+    // Two way binding for geoView updates.
+    Binding {
+        target: controller
+        property: "geoView"
+        value: geoView
+    }
+    Binding {
+        target: coordinateConversionWindow
+        property: "geoView"
+        value: controller.geoView
+    }
+
+    // Two way binding for picking updates.
+    Binding {
+        target: captureModeButton
+        property: "checked"
+        value: controller.inPickingMode
+    }
+    Binding {
+        target: controller
+        property: "inPickingMode"
+        value: captureModeButton.checked
     }
 
     Rectangle {
@@ -163,7 +180,7 @@ Item {
         }
         height: 32
         width: textMetrics.width
-        text: coordinateConvController.inputFormat.length > 0 ? coordinateConvController.inputFormat : "Set format"
+        text: inputFormat.type ? inputFormat.name : "Set format"
         background: Rectangle {
             anchors.fill: parent
             color: "transparent"
@@ -174,7 +191,7 @@ Item {
             font {
                 bold: true
                 family: fontFamily
-                pixelSize: textMetrics.fontSize
+                pixelSize: coordinateConversionWindow.fontSize
             }
             color: textColor
             horizontalAlignment: Text.AlignHCenter
@@ -193,11 +210,11 @@ Item {
             visible: false
 
             Repeater {
-                model: coordinateConvController.coordinateFormats
+                model: coordinateConversionWindow.controller.formats
 
                 delegate: Button {
                     id: inputModeOptionButton
-                    text: modelData.toUpperCase()
+                    text: name
                     anchors {
                         left: parent.left
                     }
@@ -218,7 +235,7 @@ Item {
                         elide: Text.ElideRight
                     }
                     onClicked: {
-                        coordinateConvController.inputFormat = modelData;
+                        inputFormat.type = modelData;
                         inputModesMenu.close();
                     }
                 }
@@ -238,7 +255,7 @@ Item {
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignLeft
 
-        text: coordinateConvController.pointToConvert.length > 0 ? coordinateConvController.pointToConvert : "No position"
+        text: inputFormat.type ? inputFormat.notation : "No position"
         font{
             family: fontFamily
             pixelSize: coordinateConversionWindow.fontSize
@@ -259,7 +276,7 @@ Item {
         }
 
         placeholderText: "No position"
-        text: coordinateConvController.pointToConvert
+        text: inputFormat.type? inputFormat.notation : "No position"
         font{
             family: fontFamily
             pixelSize: coordinateConversionWindow.fontSize
@@ -267,7 +284,7 @@ Item {
         color: highlightColor
 
         onAccepted: {
-            coordinateConvController.convertNotation(text);
+            controller.setCurrentPoint(text, inputFormat.type);
             editCoordinateButton.checked = false;
         }
     }
@@ -293,10 +310,10 @@ Item {
         Image {
             fillMode: Image.PreserveAspectFit
             anchors.fill: menuButton
-            source: menuButton.checked ? (expandUpwards ? "qrc:///esri/arcgisruntime/toolkit/images/menuCollapse.png" 
-                                                        : "qrc:///esri/arcgisruntime/toolkit/images/menuExpand.png") :
-                                         (expandUpwards ? "qrc:///esri/arcgisruntime/toolkit/images/menuCollapse.png" 
-                                                        : "qrc:///esri/arcgisruntime/toolkit/images/menuExpand.png")
+            source: menuButton.checked ? (expandUpwards ? "images/menuCollapse.png" 
+                                                        : "images/menuExpand.png") :
+                                         (expandUpwards ? "images/menuCollapse.png" 
+                                                        : "images/menuExpand.png")
         }
     }
 
@@ -339,11 +356,11 @@ Item {
             visible: false
 
             Repeater {
-                model: coordinateConvController.coordinateFormats
+                model: coordinateConversionWindow.controller.formats
 
                 delegate: Button {
                     id: addConversionOptionButton
-                    text: modelData
+                    text: name
                     enabled: text !== inputModeButton.text
                     opacity: enabled ? 1.0 : 0.5
                     anchors {
@@ -362,7 +379,7 @@ Item {
                         elide: Text.ElideRight
                     }
                     onClicked: {
-                        coordinateConvController.addCoordinateFormat(modelData);
+                        coordinateConversionWindow.controller.addNewCoordinateResultForOption(modelData);
                         addConversionMenu.close();
                     }
                 }
@@ -393,7 +410,8 @@ Item {
         }
 
         onClicked: {
-            coordinateConvController.zoomTo();
+            console.log(coordinateConversionWindow.controller);
+            coordinateConversionWindow.controller.zoomToCurrentPoint();
         }
     }
 
@@ -423,7 +441,7 @@ Item {
             if (geoView === null)
                 return;
 
-            var screenPos = coordinateConvController.screenCoordinate();
+            var screenPos = coordinateConversionWindow.controller.screenCoordinate;
             if (screenPos.x === -1.0 && screenPos.y === -1.0)
                 return;
 
@@ -477,7 +495,7 @@ Item {
 
         visible: menuButton.checked
         checkable: true
-        checked: coordinateConvController.captureMode
+        //checked: controller.captureMode
 
         background: Rectangle {
             color: "transparent"
@@ -497,8 +515,8 @@ Item {
         }
 
         onCheckedChanged: {
-            if (coordinateConvController.captureMode !== checked)
-                coordinateConvController.captureMode = checked;
+            if (coordinateConversionWindow.controller.captureMode !== checked)
+                coordinateConversionWindow.controller.captureMode = checked;
         }
     }
 
@@ -513,7 +531,7 @@ Item {
 
         visible: menuButton.checked
         height: count * inputModeButton.height
-        model: coordinateConvController.results
+        model: coordinateConversionWindow.controller.results
 
         delegate:
             Item {
@@ -618,7 +636,7 @@ Item {
                         anchors.fill: parent
                         onClicked: {
                             editMenu.close();
-                            coordinateConvController.removeCoordinateFormat(editMenu.currentName);
+                            coordinateConversionWindow.controller.removeCoordinateFormat(editMenu.currentName);
                         }
                     }
                 }
@@ -635,7 +653,7 @@ Item {
                         anchors.fill: parent
                         onClicked: {
                             editMenu.close();
-                            coordinateConvController.copyToClipboard(editMenu.currentNotation);
+                            coordinateConversionWindow.controller.copyToClipboard(editMenu.currentNotation);
                         }
                     }
                 }

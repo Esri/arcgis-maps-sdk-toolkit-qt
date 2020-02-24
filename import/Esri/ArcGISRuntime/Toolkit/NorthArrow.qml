@@ -21,7 +21,7 @@ Item {
     Image {
         id: compassImage
         anchors.fill: parent
-        source: "qrc:///esri/arcgisruntime/toolkit/images/compass.png"
+        source: "images/compass.png"
         fillMode: Image.PreserveAspectFit
         visible: autoHide && (controller.heading < 1e-05 || controller.heading === 360) ? false : true
     }

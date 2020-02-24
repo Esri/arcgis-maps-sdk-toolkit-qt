@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2018 Esri
+ *  Copyright 2012-2020 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -13,12 +13,13 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-
 #ifndef GENERICLISTMODEL_H
 #define GENERICLISTMODEL_H
 
 #include <QAbstractListModel>
 #include <QMetaObject>
+
+#include <type_traits>
 
 namespace Esri
 {
@@ -62,6 +63,13 @@ public:
   Q_INVOKABLE bool append(QList<QObject*> object);
 
   Q_INVOKABLE bool append(QObject* object);
+
+  template <typename T>  
+  T* element(const QModelIndex& index) const
+  {
+    static_assert(std::is_base_of<QObject, T>::value, "Must inherit QObject");
+    return qvariant_cast<T*>(data(index, Qt::UserRole));
+  }
 
 private:
   void connectElement(QModelIndex object);

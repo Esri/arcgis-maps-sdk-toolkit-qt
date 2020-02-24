@@ -1,5 +1,0 @@
-module Esri.ArcGISRuntime.Toolkit
-NorthArrow 100.7 NorthArrow.qml
-NorthArrowController 100.7 NorthArrowController.qml
-CoordinateConversion 100.7 CoordinateConversion.qml
-CoordinateConversionController 100.7 CoordinateConversionController.qml

@@ -13,7 +13,6 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-
 #ifndef COORDINATECONVERSIONCONTROLLER_H
 #define COORDINATECONVERSIONCONTROLLER_H
 
@@ -26,6 +25,10 @@ class QAbstractListModel;
 // ArcGISRuntime headers
 #include <Point.h>
 
+#include "CoordinateConversionOption.h"
+
+Q_DECLARE_METATYPE(Esri::ArcGISRuntime::Point)
+
 namespace Esri
 {
 namespace ArcGISRuntime
@@ -33,14 +36,17 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
-class CoordinateConversionOption;
+class GenericListModel;
 
 class CoordinateConversionController : public QObject
 {
   Q_OBJECT
   Q_PROPERTY(QObject* geoView READ geoView WRITE setGeoView NOTIFY geoViewChanged)
+  Q_PROPERTY(QPointF screenCoordinate READ screenCoordinate NOTIFY screenCoordinateChanged)
+  Q_PROPERTY(double zoomToDistance READ zoomToDistance WRITE setZoomToDistance NOTIFY zoomToDistanceChanged)
   Q_PROPERTY(QAbstractListModel* formats READ coordinateFormats CONSTANT)
   Q_PROPERTY(QAbstractListModel* results READ conversionResults CONSTANT)
+  Q_PROPERTY(bool inPickingMode READ inPickingMode WRITE setInPickingMode NOTIFY inPickingModeChanged)
 public:
   Q_INVOKABLE CoordinateConversionController(QObject* parent = nullptr);
   ~CoordinateConversionController() override;
@@ -53,13 +59,36 @@ public:
 
   QAbstractListModel* conversionResults() const;
 
-  Q_INVOKABLE void zoomTo(Point p);
-  //Q_INVOKABLE QString prettyPrint(Point p, Type type);
+  Q_SLOT void setCurrentPoint(const Point& p);
+  Q_SLOT void setCurrentPoint(const QString& p, CoordinateConversionOption* option);
+  Q_SLOT void setCurrentPoint(const QString& p, const SpatialReference& spatialReference, CoordinateConversionOption* option);
+  Point currentPoint() const;
+  Q_SIGNAL void currentPointChanged(const Point& point);
+  Q_SIGNAL void currentPointChanged(QVariant point);
+
+  QPointF screenCoordinate() const;
+  Q_SIGNAL void screenCoordinateChanged();
+
+  double zoomToDistance() const;
+  void setZoomToDistance(double distance);
+  Q_SIGNAL void zoomToDistanceChanged();
+
+  bool inPickingMode() const;
+  void setInPickingMode(bool mode);
+  Q_SIGNAL void inPickingModeChanged();
+
+  Q_SLOT void zoomToCurrentPoint();
+
+  Q_SLOT void addNewCoordinateResultForOption(CoordinateConversionOption* option);
 
 private:
-  QAbstractListModel* m_coordinateFormats;
-  QAbstractListModel* m_conversionResults;
+  Point m_currentPoint;
+  double m_zoomToDistance;
+  SpatialReference m_conversionSpatialReference;
+  GenericListModel* m_coordinateFormats;
+  GenericListModel* m_conversionResults;
   QObject* m_geoView;
+  bool m_inPickingMode;
 };
 
 } // Toolkit
