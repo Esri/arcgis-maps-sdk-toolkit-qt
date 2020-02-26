@@ -18,6 +18,10 @@
 // ArcGISRuntime headers
 #include <Point.h>
 
+// Qt headers
+#include <QClipboard>
+#include <QGuiApplication>
+
 namespace Esri
 {
 namespace ArcGISRuntime
@@ -97,6 +101,13 @@ void CoordinateConversionResult::updateCoordinatePoint(const QVariant& variant)
 {
   auto geom = variant.value<Geometry>();
   updateCoordinatePoint(geometry_cast<Point>(geom));
+}
+
+void CoordinateConversionResult::copyNotationToClipboard() const
+{
+  auto clipboard = QGuiApplication::clipboard();
+  if (clipboard && !m_notation.isEmpty())
+    clipboard->setText(m_notation);
 }
 
 } // Toolkit

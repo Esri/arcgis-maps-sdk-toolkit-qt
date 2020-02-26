@@ -82,6 +82,8 @@ GenericListModel::GenericListModel(const QMetaObject* elementType, QObject* pare
   QAbstractListModel(parent),
   m_elementType(std::move(elementType))
 {
+  connect(this, &GenericListModel::rowsInserted, this, &GenericListModel::countChanged);
+  connect(this, &GenericListModel::rowsRemoved, this, &GenericListModel::countChanged);
 }
 
 GenericListModel::~GenericListModel()
@@ -236,12 +238,12 @@ bool GenericListModel::removeRows(int row, int count, const QModelIndex& parent)
     return false;
 
   beginRemoveRows(parent, row, row + count - 1);
-  for (int i = 0; i < count; ++i)
+  for (int i = count - 1; i >= row; --i)
   {
-    delete m_objects.at(row);
-    m_objects.removeAt(row);
+    delete m_objects.at(i);
+    m_objects.removeAt(i);
   }
-  endInsertRows();
+  endRemoveRows();
   return true;
 }
 
@@ -341,6 +343,11 @@ void GenericListModel::connectElement(QModelIndex index)
               element, QMetaMethod::fromSignal(&MetaElement::propertyChanged));
     }
   }
+}
+
+int GenericListModel::count() const
+{
+  return m_objects.size();
 }
 
 } // Toolkit

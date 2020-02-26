@@ -35,6 +35,7 @@ class GenericListModel : public QAbstractListModel
 public:
   Q_INVOKABLE GenericListModel(QObject* parent = nullptr);
   GenericListModel(const QMetaObject* elementType, QObject* parent = nullptr);
+  Q_PROPERTY(int count READ count NOTIFY countChanged)
 
   ~GenericListModel() override;
 
@@ -71,8 +72,10 @@ public:
     return qvariant_cast<T*>(data(index, Qt::UserRole));
   }
 
+  Q_SIGNAL void countChanged();
 private:
   void connectElement(QModelIndex object);
+  int count() const;
 
 private:
   QString m_displayPropName;

@@ -42,7 +42,6 @@ class CoordinateConversionController : public QObject
 {
   Q_OBJECT
   Q_PROPERTY(QObject* geoView READ geoView WRITE setGeoView NOTIFY geoViewChanged)
-  Q_PROPERTY(QPointF screenCoordinate READ screenCoordinate NOTIFY screenCoordinateChanged)
   Q_PROPERTY(double zoomToDistance READ zoomToDistance WRITE setZoomToDistance NOTIFY zoomToDistanceChanged)
   Q_PROPERTY(QAbstractListModel* formats READ coordinateFormats CONSTANT)
   Q_PROPERTY(QAbstractListModel* results READ conversionResults CONSTANT)
@@ -66,8 +65,7 @@ public:
   Q_SIGNAL void currentPointChanged(const Point& point);
   Q_SIGNAL void currentPointChanged(QVariant point);
 
-  QPointF screenCoordinate() const;
-  Q_SIGNAL void screenCoordinateChanged();
+  Q_INVOKABLE QPointF screenCoordinate() const;
 
   double zoomToDistance() const;
   void setZoomToDistance(double distance);
@@ -80,6 +78,7 @@ public:
   Q_SLOT void zoomToCurrentPoint();
 
   Q_SLOT void addNewCoordinateResultForOption(CoordinateConversionOption* option);
+  Q_SLOT void removeCoordinateResultAtIndex(int index);
 
 private:
   Point m_currentPoint;

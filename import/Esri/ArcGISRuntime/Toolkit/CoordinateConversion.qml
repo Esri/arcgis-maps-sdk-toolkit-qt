@@ -14,11 +14,10 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.6
-import QtQuick.Controls 2.2
-import QtQuick.Window 2.2
-import QtGraphicalEffects 1.0
-import QtQuick.Controls.Material 2.2
+import QtQuick 2.12
+
+import QtQuick.Controls 2.12
+import QtQuick.Layouts 1.12
 import Esri.ArcGISRuntime.Toolkit 100.7
 
 /*!
@@ -30,8 +29,15 @@ import Esri.ArcGISRuntime.Toolkit 100.7
     \sa {Coordinate Conversion Tool}
 */
 
-Item {
+Control {
     id: coordinateConversionWindow
+    clip: true
+
+    /*!
+      \qmlproperty GeoView geoView
+      \brief The GeoView for this tool. Should be a SceneQuickView or a MapQuickView.
+     */
+    property var geoView;
 
     /*!
       \qmlproperty int textColor
@@ -42,21 +48,6 @@ Item {
     property color textColor: "black"
 
     /*!
-      \qmlproperty bool captureMode
-      \brief Whether whether the tool is in capture mode.
-
-      If \c true, the tool will convert a point set via a mouse click.
-      If \c false, the tool will use the app's current location as the target point.
-     */
-    property bool captureMode: false
-
-    /*!
-      \qmlproperty real backgroundOpacity
-      \brief The opacity of the background rectangle.
-      */
-    property alias backgroundOpacity: backgroundRectangle.opacity
-
-    /*!
       \qmlproperty int highlightColor
       \brief The color of used to highlight UI elements in this tool.
 
@@ -65,45 +56,11 @@ Item {
     property color highlightColor: "blue"
 
     /*!
-      \qmlproperty int backgroundColor
-      \brief The color of used to for background UI elements in this tool.
+      \qmlproperty bool inInputMode
+      \brief Whether whether the tool is in input mode.
 
-      The default value is \c "blue".
+      If \c true, the tool will convert a point set via a mouse click or text entry.
      */
-    property color backgroundColor: "lightgrey"
-
-    /*!
-      \qmlproperty int fontSize
-      \brief The font size of coordinate notation text on this tool.
-
-      The default value is \c 12.
-     */
-    property int fontSize: 12
-
-    /*!
-      \qmlproperty int fontFamily
-      \brief The font family for text on this tool.
-
-      The default is \c "helvetica".
-     */
-    property string fontFamily: "helvetica"
-
-    /*!
-      \qmlproperty bool expandUpwards
-      \brief Whether the tool should expand upwards as new UI elements are added.
-
-      The default value is \c true.
-     */
-    property bool expandUpwards: true
-
-    /*!
-      \qmlproperty real radius
-      \brief This property holds the corner radius used to draw a rounded rectangle.
-
-      The default value is \c 0.
-     */
-    property alias radius: backgroundRectangle.radius
-
     readonly property bool inInputMode: editCoordinateButton.checked || captureModeButton.checked
 
     property var inputFormat: CoordinateConversionResult {
@@ -112,12 +69,6 @@ Item {
     property var controller: CoordinateConversionController {
     }
 
-    /*!
-      \qmlproperty GeoView geoView
-      \brief The GeoView for this tool. Should be a SceneQuickView or a MapQuickView.
-     */
-    property var geoView: controller.geoView
-
     Connections {
         target: controller
         onCurrentPointChanged: {
@@ -125,16 +76,10 @@ Item {
         }
     }
 
-    // Two way binding for geoView updates.
     Binding {
         target: controller
         property: "geoView"
         value: geoView
-    }
-    Binding {
-        target: coordinateConversionWindow
-        property: "geoView"
-        value: controller.geoView
     }
 
     // Two way binding for picking updates.
@@ -143,517 +88,218 @@ Item {
         property: "checked"
         value: controller.inPickingMode
     }
+
     Binding {
         target: controller
         property: "inPickingMode"
         value: captureModeButton.checked
     }
 
-    Rectangle {
-        id: backgroundRectangle
-        anchors {
-            top: menuButton.checked ? expandUpwards ? addConversionButton.top : inputModeButton.top : inputModeButton.top
-            bottom: menuButton.checked ? expandUpwards ? inputModeButton.bottom : results.bottom : inputModeButton.bottom
-            left: parent.left
-            right: parent.right
-        }
-        color: backgroundColor
+    background: Rectangle {
+        height: gridLayout.height
     }
 
-    TextMetrics {
-        id: textMetrics
-        font {
-            bold: true
-            family: fontFamily
-            pixelSize: 12
-        }
-        text: "MMMMMM"
-    }
-
-    Button {
-        id: inputModeButton
-        anchors {
-            top: expandUpwards ? undefined : parent.top
-            left: parent.left
-            bottom: expandUpwards ? parent.bottom : undefined
-            margins: 5
-        }
-        height: 32
-        width: textMetrics.width
-        text: inputFormat.type ? inputFormat.name : "Set format"
-        background: Rectangle {
-            anchors.fill: parent
-            color: "transparent"
-        }
-
-        contentItem: Text {
-            text: inputModeButton.text
-            font {
-                bold: true
-                family: fontFamily
-                pixelSize: coordinateConversionWindow.fontSize
-            }
-            color: textColor
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            elide: Text.ElideRight
-        }
-
-        onClicked: {
-            inputModesMenu.visible = true;
-        }
-
-        Menu {
-            id: inputModesMenu
-            x: inputModeButton.x
-            y: expandUpwards ? -implicitHeight : inputModeButton.height
-            visible: false
-
-            Repeater {
-                model: coordinateConversionWindow.controller.formats
-
-                delegate: Button {
-                    id: inputModeOptionButton
-                    text: name
-                    anchors {
-                        left: parent.left
-                    }
-
-                    background: Rectangle {
-                        color: text === inputModeButton.text ? highlightColor : "transparent"
-                    }
-
-                    contentItem: Text {
-                        text: inputModeOptionButton.text.toUpperCase()
-                        font {
-                            family: fontFamily
-                            pixelSize: coordinateConversionWindow.fontSize
-                        }
-                        color: textColor
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        elide: Text.ElideRight
-                    }
-                    onClicked: {
-                        inputFormat.type = modelData;
-                        inputModesMenu.close();
-                    }
-                }
-            }
-        }
-    }
-
-    Text {
-        id: pointToConvertEntry
-        visible: !editCoordinateButton.checked
-        anchors {
-            left: inputModeButton.right
-            verticalCenter: inputModeButton.verticalCenter
-            right: menuButton.left
-        }
-        height: inputModeButton.height
-        verticalAlignment: Text.AlignVCenter
-        horizontalAlignment: Text.AlignLeft
-
-        text: inputFormat.type ? inputFormat.notation : "No position"
-        font{
-            family: fontFamily
-            pixelSize: coordinateConversionWindow.fontSize
-        }
-        wrapMode: Text.Wrap
-        elide: Text.ElideRight
-        color: textColor
-    }
-
-    TextField {
-        id: editPointEntry
-        visible: editCoordinateButton.checked
-        anchors {
-            left: inputModeButton.right
-            verticalCenter: inputModeButton.verticalCenter
-            right: menuButton.left
-            leftMargin: 5
-        }
-
-        placeholderText: "No position"
-        text: inputFormat.type? inputFormat.notation : "No position"
-        font{
-            family: fontFamily
-            pixelSize: coordinateConversionWindow.fontSize
-        }
-        color: highlightColor
-
-        onAccepted: {
-            controller.setCurrentPoint(text, inputFormat.type);
-            editCoordinateButton.checked = false;
-        }
-    }
-
-    Button {
-        id: menuButton
-
-        anchors {
-            verticalCenter: inputModeButton.verticalCenter
-            right: parent.right
-            margins: 5
-        }
-        height: inputModeButton.height
-        width: height
-
-        checkable: true
-        checked: false
-        background: Rectangle {
-            anchors.fill: parent
-            color: "transparent"
-        }
-
-        Image {
-            fillMode: Image.PreserveAspectFit
-            anchors.fill: menuButton
-            source: menuButton.checked ? (expandUpwards ? "images/menuCollapse.png" 
-                                                        : "images/menuExpand.png") :
-                                         (expandUpwards ? "images/menuCollapse.png" 
-                                                        : "images/menuExpand.png")
-        }
-    }
-
-    Button {
-        id: addConversionButton
+    contentItem: ColumnLayout {
+        id: gridLayout
+        spacing: 0
         anchors {
             left: parent.left
-            bottom: expandUpwards ? results.top : undefined
-            top: expandUpwards ? undefined : inputModeButton.bottom
-            right: zoomToButton.left
-        }
-        height: inputModeButton.height
-        visible: menuButton.checked
-        clip: true
-        background: Rectangle {
-            color: addConversionButton.down ? highlightColor : "transparent"
-        }
-
-        contentItem: Text {
-            text: "Add conversion"
-            font{
-                family: fontFamily
-                pixelSize: coordinateConversionWindow.fontSize
-            }
-            color: textColor
-            horizontalAlignment: Text.AlignLeft
-            verticalAlignment: Text.AlignVCenter
-            elide: Text.ElideRight
-            wrapMode: Text.WrapAnywhere
-        }
-
-        onClicked: {
-            addConversionMenu.visible = true;
-        }
-
-        Menu {
-            id: addConversionMenu
-            x: addConversionButton.x
-            y: expandUpwards ? -implicitHeight : addConversionButton.height
-            visible: false
-
-            Repeater {
-                model: coordinateConversionWindow.controller.formats
-
-                delegate: Button {
-                    id: addConversionOptionButton
-                    text: name
-                    enabled: text !== inputModeButton.text
-                    opacity: enabled ? 1.0 : 0.5
-                    anchors {
-                        left: parent.left
-                    }
-
-                    contentItem: Text {
-                        text: addConversionOptionButton.text.toUpperCase()
-                        font{
-                            family: fontFamily
-                            pixelSize: coordinateConversionWindow.fontSize
-                        }
-                        color: textColor
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        elide: Text.ElideRight
-                    }
-                    onClicked: {
-                        coordinateConversionWindow.controller.addNewCoordinateResultForOption(modelData);
-                        addConversionMenu.close();
-                    }
-                }
-            }
-        }
-    }
-
-    Button {
-        id: zoomToButton
-
-        anchors {
-            verticalCenter: addConversionButton.verticalCenter
-            right: flashCoordinateButton.left
-        }
-        height: addConversionButton.height
-        width: height
-
-        visible: menuButton.checked
-
-        background: Rectangle {
-            color: zoomToButton.down ? highlightColor : "transparent"
-        }
-
-        Image {
-            fillMode: Image.PreserveAspectFit
-            anchors.fill: zoomToButton
-            source: "images/Zoom.png"
-        }
-
-        onClicked: {
-            console.log(coordinateConversionWindow.controller);
-            coordinateConversionWindow.controller.zoomToCurrentPoint();
-        }
-    }
-
-    Button {
-        id: flashCoordinateButton
-
-        anchors {
-            verticalCenter: addConversionButton.verticalCenter
-            right: editCoordinateButton.left
-        }
-        height: addConversionButton.height
-        width: height
-
-        visible: geoView && menuButton.checked
-
-        background: Rectangle {
-            color: flashCoordinateButton.down ? highlightColor : "transparent"
-        }
-
-        Image {
-            fillMode: Image.PreserveAspectFit
-            anchors.fill: flashCoordinateButton
-            source: "images/flash.png"
-        }
-
-        onClicked: {
-            if (geoView === null)
-                return;
-
-            var screenPos = coordinateConversionWindow.controller.screenCoordinate;
-            if (screenPos.x === -1.0 && screenPos.y === -1.0)
-                return;
-
-            var itemPos = geoView.mapToItem(coordinateConversionWindow, screenPos.x, screenPos.y);
-            flashImage.x = itemPos.x - (flashImage.width * 0.5);
-            flashImage.y = itemPos.y - (flashImage.height * 0.5);
-            flashImage.running = true;
-        }
-    }
-
-    Button {
-        id: editCoordinateButton
-
-        anchors {
-            verticalCenter: addConversionButton.verticalCenter
-            right: captureModeButton.left
-        }
-        height: addConversionButton.height
-        width: height
-
-        visible: menuButton.checked
-        checkable: true
-
-        background: Rectangle {
-            color: "transparent"
-            border {
-                color: editCoordinateButton.checked ? highlightColor : "transparent"
-                width: 1
-            }
-        }
-
-        Image {
-            fillMode: Image.PreserveAspectFit
-            anchors.centerIn: parent
-            sourceSize.height: parent.width
-            height: sourceSize.height
-            opacity: editCoordinateButton.checked ? 1.0 : 0.5
-            source: "images/Text_Editing_Mode.png"
-        }
-    }
-
-    Button {
-        id: captureModeButton
-
-        anchors {
-            verticalCenter: addConversionButton.verticalCenter
-            right: parent.right
-        }
-        height: addConversionButton.height
-        width: height
-
-        visible: menuButton.checked
-        checkable: true
-        //checked: controller.captureMode
-
-        background: Rectangle {
-            color: "transparent"
-            border {
-                color: captureModeButton.checked ? highlightColor : "transparent"
-                width: 1
-            }
-        }
-
-        Image {
-            fillMode: Image.PreserveAspectFit
-            anchors.centerIn: parent
-            sourceSize.height: parent.width
-            height: sourceSize.height
-            opacity: captureModeButton.checked ? 1.0 : 0.5
-            source: "images/Mouse_Click_Mode.png"
-        }
-
-        onCheckedChanged: {
-            if (coordinateConversionWindow.controller.captureMode !== checked)
-                coordinateConversionWindow.controller.captureMode = checked;
-        }
-    }
-
-    ListView {
-        id: results
-        anchors {
-            bottom: expandUpwards ? inputModeButton.top : undefined
-            top: expandUpwards ? undefined: addConversionButton.bottom
-            left: inputModeButton.left
             right: parent.right
         }
 
-        visible: menuButton.checked
-        height: count * inputModeButton.height
-        model: coordinateConversionWindow.controller.results
-
-        delegate:
-            Item {
-            height: inputModeButton.height
-            width: results.width
-
-            Text {
-                id: formatName
-                text: name
-                anchors {
-                    left: parent.left
-                    verticalCenter: parent.verticalCenter
-                }
-                width: inputModeButton.width
-                height: parent.height
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                font {
-                    family: fontFamily
-                    pixelSize: coordinateConversionWindow.fontSize
-                }
-                color: textColor
-                wrapMode: Text.Wrap
-                elide: Text.ElideRight
-            }
-
-            Text {
-                id: formatNotation
-                text: notation
-                anchors {
-                    left: formatName.right
-                    verticalCenter: parent.verticalCenter
-                    right: editMenuButton.left
-                }
-                height: parent.height
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignLeft
-                font{
-                    family: fontFamily
-                    pixelSize: coordinateConversionWindow.fontSize
-                }
-                wrapMode: Text.Wrap
-                elide: Text.ElideRight
-                color: textColor
-            }
-
+        RowLayout {
+            Layout.margins: 0
             Button {
-                id: editMenuButton
-                width: height
-                height: inputModeButton.height
-
-                anchors {
-                    right: parent.right
-                    verticalCenter: parent.verticalCenter
-                    margins: 5
-                }
-                background: Rectangle {
-                    anchors.fill: parent
-                    color: "transparent"
-                }
-
-                Image {
-                    fillMode: Image.PreserveAspectFit
-                    anchors.centerIn: editMenuButton
-                    sourceSize.height: editMenuButton.width
-                    height: sourceSize.height
-                    source: "images/menu.png"
-                }
-
-                onClicked: {
-                    editMenu.y = editMenuButton.y;
-                    editMenu.currentName = name;
-                    editMenu.currentNotation = notation;
-                    editMenu.open();
-                }
-            }
-        }
-
-        Menu {
-            id: editMenu
-            visible: false
-            x: results.width - width
-            property string currentName: ""
-            property string currentNotation: ""
-            width: 100
-
-            Column {
-                width: parent.width
-                anchors.margins: 10
-                spacing: 10
-                leftPadding: 10
-
-                Label {
-                    text: "Delete"
-                    font {
-                        family: fontFamily
-                        pixelSize: coordinateConversionWindow.fontSize
+                    id: inputModeButton
+                    text: inputFormat.type ? inputFormat.name : "Set format"
+                    flat: true
+                    font.bold: true
+                    onClicked: {
+                        inputModesMenu.popup();
                     }
-                    color: textColor
 
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: {
-                            editMenu.close();
-                            coordinateConversionWindow.controller.removeCoordinateFormat(editMenu.currentName);
+                    Menu {
+                        id: inputModesMenu
+                        Repeater {
+                            model: coordinateConversionWindow.controller.formats
+                            MenuItem {
+                                text: name
+                                onTriggered: {
+                                    inputFormat.type = modelData;
+                                    inputFormat.updateCoordinatePoint(
+                                        coordinateConversionWindow.controller.currentPoint())
+                                }
+                            }
                         }
                     }
                 }
 
-                Label {
-                    text: "Copy"
-                    font {
-                        family: fontFamily
-                        pixelSize: coordinateConversionWindow.fontSize
-                    }
-                    color: textColor
+                TextField {
+                    id: editPointEntry
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignBottom
+                    placeholderText: "No position"
+                    readOnly: !editCoordinateButton.checked
+                    selectByMouse: !readOnly
+                    text: inputFormat.type? inputFormat.notation : "No position"
 
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: {
-                            editMenu.close();
-                            coordinateConversionWindow.controller.copyToClipboard(editMenu.currentNotation);
+                    color: editCoordinateButton.checked ? highlightColor: textColor;
+                    onEditingFinished: {
+                        controller.setCurrentPoint(text, inputFormat.type);
+                        editCoordinateButton.checked = false;
+                    }
+                }
+
+                Button {
+                    id: menuButton
+                    checkable: true
+                    checked: false
+                    flat: true
+                    Layout.alignment: Qt.AlignRight
+                    icon.source: menuButton.checked ? "images/menuExpand.png" : "images/menuCollapse.png"
+                }
+            }
+
+            RowLayout {
+                Layout.margins: 0
+                visible: menuButton.checked
+                Button {
+                    id: addConversionButton
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignLeft
+                    text: "Add conversion"
+                    flat: true
+                    onClicked: {
+                        addConversionMenu.visible = true;
+                    }
+
+                    Menu {
+                        id: addConversionMenu
+                        Repeater {
+                            model: coordinateConversionWindow.controller.formats
+                            MenuItem {
+                                text: name
+                                enabled: text !== inputModeButton.text
+                                onTriggered: {
+                                    coordinateConversionWindow.controller.addNewCoordinateResultForOption(modelData);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Button {
+                    id: zoomToButton
+                    icon.source: "images/Zoom.png"
+                    flat: true
+                    Layout.alignment: Qt.AlignRight
+                    Layout.maximumHeight: 32
+                    Layout.maximumWidth: Layout.maximumHeight
+                    padding: 0
+                    display: AbstractButton.IconOnly
+                    onClicked: coordinateConversionWindow.controller.zoomToCurrentPoint()
+                }
+
+                Button {
+                    id: flashCoordinateButton
+                    icon.source: "images/flash.png"
+                    flat: true
+                    Layout.alignment: Qt.AlignRight
+                    Layout.maximumHeight: 32
+                    Layout.maximumWidth: Layout.maximumHeight
+                    padding: 0
+                    display: AbstractButton.IconOnly
+                    onClicked: {
+                        if (geoView === null)
+                            return;
+
+                        var screenPos = coordinateConversionWindow.controller.screenCoordinate();
+                        if (screenPos === null || (screenPos.x === -1.0 && screenPos.y === -1.0))
+                            return;
+
+                        var itemPos = geoView.mapToItem(geoView, screenPos.x, screenPos.y);
+                        checked = true;
+                        var flashImage = internal.flashImageFactory.createObject(geoView, { "x": itemPos.x, "y": itemPos.y, "color": highlightColor });
+                        flashImage.finished.connect(function() { flashCoordinateButton.checked = false; });
+                    }
+                }
+
+
+                Button {
+                    id: editCoordinateButton
+                    checkable: true
+                    flat: true
+                    icon.source: "images/Text_Editing_Mode.png"
+                    Layout.alignment: Qt.AlignRight
+                    Layout.maximumHeight: 32
+                    Layout.maximumWidth: Layout.maximumHeight
+                    padding: 0
+                }
+
+                Button {
+                    id: captureModeButton
+                    checkable: true
+                    flat: true
+                    icon.source: "images/Mouse_Click_Mode.png"
+                    Layout.alignment: Qt.AlignRight
+                    Layout.maximumHeight: 32
+                    Layout.maximumWidth: Layout.maximumHeight
+                    padding: 0
+                }
+        }
+
+        Repeater {
+            model: coordinateConversionWindow.controller.results
+            visible: menuButton.checked
+            RowLayout {
+                Label {
+                    id: formatName
+                    text: name
+                    Layout.minimumWidth: inputModeButton.width
+                    Layout.maximumWidth: inputModeButton.width
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    visible: menuButton.checked
+                    color: textColor
+                }
+
+                Label {
+                    id: formatNotation
+                    text: notation
+                    Layout.fillWidth: true
+                    visible: menuButton.checked
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignLeft
+                    color: textColor
+                }
+
+                Button {
+                    id: editMenuButton
+                    visible: menuButton.checked
+                    Layout.minimumWidth: menuButton.width
+                    Layout.maximumWidth: menuButton.width
+                    Layout.alignment: Qt.AlignRight
+                    icon.source: "images/menu.png"
+                    flat: true
+                    onClicked: editMenu.open()
+
+                    Menu {
+                        id: editMenu
+                        MenuItem {
+                            text: "Delete"
+                            onClicked: {
+                                coordinateConversionWindow.controller.removeCoordinateResultAtIndex(index);
+                            }
+                        }
+                        MenuItem {
+                            text: "Copy to clipboard"
+                            // Copy not available in pure QML API
+                            enabled: modelData.copyNotationToClipboard !== undefined
+                            visible: enabled
+                            height: enabled ? implicitHeight : 0
+                            onClicked: {
+                                modelData.copyNotationToClipboard();
+                            }
                         }
                     }
                 }
@@ -661,38 +307,8 @@ Item {
         }
     }
 
-    Rectangle {
-        id: flashImage
-        property alias running: animation.running
-
-        opacity: 0.0
-        height: 16
-        width: height
-        radius: height
-        color: highlightColor
-        border {
-            color: "transparent"
-            width: 1
-        }
-
-        SequentialAnimation {
-            id: animation
-            running: false
-            loops: 1
-            NumberAnimation {
-                target: flashImage
-                property: "opacity"
-                to: 1.0
-                duration: 500
-                easing.type: Easing.InOutQuad
-            }
-            NumberAnimation {
-                target: flashImage
-                property: "opacity"
-                to: 0.0
-                duration: 500
-                easing.type: Easing.InOutQuad
-            }
-        }
+    QtObject {
+        id: internal
+        property Component flashImageFactory: Qt.createComponent("FlashImage.qml");
     }
 }

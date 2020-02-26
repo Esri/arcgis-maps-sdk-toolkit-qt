@@ -55,6 +55,8 @@ public:
   Q_SLOT void updateCoordinatePoint(const QVariant& point);
   Q_SLOT void updateCoordinatePoint(const Point& point);
 
+  Q_INVOKABLE void copyNotationToClipboard() const;
+
 private:
   QString m_name;
   QString m_notation;

@@ -152,7 +152,6 @@ void CoordinateConversionController::setCurrentPoint(const Point& p)
   m_currentPoint = p;
   emit currentPointChanged(m_currentPoint);
   emit currentPointChanged(QVariant::fromValue(static_cast<Geometry>(m_currentPoint)));
-  emit screenCoordinateChanged();
 }
 
 void CoordinateConversionController::setCurrentPoint(const QString& p, CoordinateConversionOption* option)
@@ -236,6 +235,11 @@ void CoordinateConversionController::addNewCoordinateResultForOption(CoordinateC
   result->setType(option);
   result->updateCoordinatePoint(currentPoint());
   m_conversionResults->append(result);
+}
+
+void CoordinateConversionController::removeCoordinateResultAtIndex(int index)
+{
+  m_conversionResults->removeRow(index);
 }
 
 double CoordinateConversionController::zoomToDistance() const

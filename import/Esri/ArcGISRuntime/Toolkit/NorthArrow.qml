@@ -10,13 +10,6 @@ Item {
     property var controller: NorthArrowController {
     }
 
-    // Two way binding
-    Binding {
-        target: compassView
-        property: "geoView"
-        value: controller.geoView
-    }
-
     Binding {
         target: controller
         property: "geoView"
