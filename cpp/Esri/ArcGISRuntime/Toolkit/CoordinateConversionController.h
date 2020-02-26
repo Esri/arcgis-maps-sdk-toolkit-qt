@@ -19,6 +19,7 @@
 // Qt headers
 #include <QObject>
 #include <QString>
+#include <QPointF>
 
 class QAbstractListModel;
 

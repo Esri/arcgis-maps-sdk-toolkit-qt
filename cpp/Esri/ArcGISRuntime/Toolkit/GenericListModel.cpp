@@ -16,6 +16,7 @@
 #include "GenericListModel.h"
 
 #include <QMetaProperty>
+#include <QPointer>
 
 namespace Esri
 {

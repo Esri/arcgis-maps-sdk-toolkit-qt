@@ -21,14 +21,13 @@
 
 // ArcGISRuntime headers
 #include <GeometryTypes.h>
+#include <Point.h>
+#include <SpatialReference.h>
 
 namespace Esri
 {
 namespace ArcGISRuntime
 {
-
-// Forward declaration.
-class Point;
 
 namespace Toolkit
 {

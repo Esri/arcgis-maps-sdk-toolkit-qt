@@ -1,12 +1,15 @@
-
-include($$PWD/toolkitcpp.pri)
+include($$PWD/common.pri)
 
 INCLUDEPATH += $$PWD/widgets
 
 WIDGETPATH = $$PWD/widgets/Esri/ArcGISRuntime/Toolkit
 
-HEADERS += $$WIDGETPATH/NorthArrow.h
+HEADERS += $$WIDGETPATH/CoordinateConversion.h \
+           $$WIDGETPATH/NorthArrow.h
 
-SOURCES += $$WIDGETPATH/NorthArrow.cpp
+SOURCES += $$WIDGETPATH/CoordinateConversion.cpp \
+           $$WIDGETPATH/NorthArrow.cpp
+
+FORMS += $$WIDGETPATH/CoordinateConversion.ui
 
 RESOURCES += $$PWD/import/Esri/ArcGISRuntime/Toolkit/images/toolkit_images.qrc

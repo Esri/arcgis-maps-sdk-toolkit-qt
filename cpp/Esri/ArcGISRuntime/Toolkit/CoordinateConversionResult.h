@@ -18,6 +18,7 @@
 
 // Qt headers
 #include <QObject>
+#include <QPointer>
 
 // ArcGISRuntime headers
 #include "CoordinateConversionOption.h"

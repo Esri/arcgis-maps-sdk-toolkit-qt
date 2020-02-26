@@ -5,8 +5,16 @@
 
 // ArcGIS Headers
 #include <MapGraphicsView.h>
+#include <SceneGraphicsView.h>
 
 #include "Esri/ArcGISRuntime/Toolkit/NorthArrowController.h"
+
+namespace Esri
+{
+namespace ArcGISRuntime
+{
+namespace Toolkit
+{
 
 NorthArrow::NorthArrow(QWidget* parent) :
   QLabel(parent),
@@ -44,7 +52,11 @@ NorthArrow::~NorthArrow()
 void NorthArrow::setMapView(MapGraphicsView* mapView)
 {
   m_controller->setGeoView(mapView);
+}
 
+void NorthArrow::setSceneView(SceneGraphicsView* sceneView)
+{
+  m_controller->setGeoView(sceneView);
 }
 
 void NorthArrow::mouseDoubleClickEvent(QMouseEvent* event)
@@ -53,7 +65,11 @@ void NorthArrow::mouseDoubleClickEvent(QMouseEvent* event)
   event->accept();
 }
 
-void NorthArrowController* NorthArrow::controller() const
+NorthArrowController* NorthArrow::controller() const
 {
   return m_controller;
+}
+
+}
+}
 }
