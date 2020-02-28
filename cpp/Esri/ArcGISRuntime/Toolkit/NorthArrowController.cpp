@@ -15,11 +15,7 @@
  ******************************************************************************/
 #include "NorthArrowController.h"
 
-// ArcGISRuntime headers
-#include <MapGraphicsView.h>
-#include <MapQuickView.h>
-#include <SceneGraphicsView.h>
-#include <SceneQuickView.h>
+#include "GeoViews.h"
 
 namespace Esri {
 namespace ArcGISRuntime {
@@ -62,21 +58,15 @@ void NorthArrowController::setGeoView(QObject* geoView)
 
   m_geoView = geoView;
 
-  if (auto mapView = qobject_cast<MapQuickView*>(m_geoView))
+  if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
   {
-    connect(mapView, &MapQuickView::mapRotationChanged, this, &NorthArrowController::headingChanged);
+    connect(mapView, &MapViewToolkit::mapRotationChanged,
+            this, &NorthArrowController::headingChanged);
   }
-  else if (auto mapView = qobject_cast<MapGraphicsView*>(m_geoView))
+  else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
   {
-    connect(mapView, &MapGraphicsView::mapRotationChanged, this, &NorthArrowController::headingChanged);
-  }
-  else if (auto sceneView = qobject_cast<SceneQuickView*>(m_geoView))
-  {
-    connect(sceneView, &SceneQuickView::viewpointChanged, this, &NorthArrowController::headingChanged);
-  }
-  else if (auto sceneView = qobject_cast<SceneGraphicsView*>(m_geoView))
-  {
-    connect(sceneView, &SceneGraphicsView::viewpointChanged, this, &NorthArrowController::headingChanged);
+    connect(sceneView, &SceneViewToolkit::viewpointChanged,
+            this, &NorthArrowController::headingChanged);
   }
 
   emit geoViewChanged();

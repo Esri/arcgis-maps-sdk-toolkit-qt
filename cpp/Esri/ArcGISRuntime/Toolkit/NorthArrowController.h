@@ -37,11 +37,15 @@ public:
 
   QObject* geoView() const;
   void setGeoView(QObject* mapView);
-  Q_SIGNAL void geoViewChanged();
 
   double heading() const;
-  Q_SLOT void setHeading(double heading);
-  Q_SIGNAL void headingChanged();
+
+signals:
+  void geoViewChanged();
+  void headingChanged();
+
+public slots:
+  void setHeading(double heading);
 
 private:
   QObject* m_geoView = nullptr;

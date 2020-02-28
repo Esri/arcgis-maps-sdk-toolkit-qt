@@ -43,20 +43,22 @@ public:
   ~CoordinateConversionResult() override;
 
   QString name() const;
-  Q_SIGNAL void nameChanged();
 
   QString notation() const;
   void setNotation(const QString& name);
-  Q_SIGNAL void notationChanged();
 
   CoordinateConversionOption* type() const;
   void setType(CoordinateConversionOption* type);
-  Q_SIGNAL void typeChanged();
 
-  Q_SLOT void updateCoordinatePoint(const QVariant& point);
-  Q_SLOT void updateCoordinatePoint(const Point& point);
+signals:
+  void nameChanged();
+  void notationChanged();
+  void typeChanged();
 
-  Q_INVOKABLE void copyNotationToClipboard() const;
+public slots:
+  void updateCoordinatePoint(const QVariant& point);
+  void updateCoordinatePoint(const Point& point);
+  void copyNotationToClipboard() const;
 
 private:
   QString m_name;

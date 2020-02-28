@@ -16,10 +16,10 @@
 #include "register.h"
 
 // Toolkit Includes
-#include "CoordinateConversionController.h"
-#include "CoordinateConversionOption.h"
-#include "CoordinateConversionResult.h"
-#include "NorthArrowController.h"
+#include "Esri/ArcGISRuntime/Toolkit/CoordinateConversionController.h"
+#include "Esri/ArcGISRuntime/Toolkit/CoordinateConversionOption.h"
+#include "Esri/ArcGISRuntime/Toolkit/CoordinateConversionResult.h"
+#include "Esri/ArcGISRuntime/Toolkit/NorthArrowController.h"
 
 // Qt Includes
 #include <QQmlEngine>

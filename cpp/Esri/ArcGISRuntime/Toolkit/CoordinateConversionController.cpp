@@ -18,16 +18,13 @@
 #include "CoordinateConversionResult.h"
 #include "CoordinateOptionDefaults.h"
 #include "GenericListModel.h"
+#include "GeoViews.h"
 
 // Qt headers
 #include <QtGlobal>
 
 // ArcGISRuntime headers
 #include <CoordinateFormatter.h>
-#include <SceneQuickView.h>
-#include <MapQuickView.h>
-#include <MapGraphicsView.h>
-#include <SceneGraphicsView.h>
 
 #include <iostream>
 
@@ -42,7 +39,6 @@ namespace
 {
 constexpr double DEFAULT_ZOOMTO_DISTANCE = 1500.0;
 }
-
 
 CoordinateConversionController::CoordinateConversionController(QObject* parent):
   QObject(parent),
@@ -75,7 +71,7 @@ CoordinateConversionController::CoordinateConversionController(QObject* parent):
           auto index = m_conversionResults->index(i);
           auto result = m_conversionResults->element<CoordinateConversionResult>(index);
           if (result)
-            connect(this,   QOverload<const Point&>::of(&CoordinateConversionController::currentPointChanged),
+            connect(this, QOverload<const Point&>::of(&CoordinateConversionController::currentPointChanged),
                     result, QOverload<const Point&>::of(&CoordinateConversionResult::updateCoordinatePoint));
           else
             qWarning("Empty CoordinateConversionResult in the CoordinateConversionController results model at index %d", i);
@@ -104,9 +100,9 @@ void CoordinateConversionController::setGeoView(QObject* geoView)
 
   m_geoView = geoView;
 
-  if (auto sceneView = qobject_cast<SceneQuickView*>(m_geoView))
+  if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
   {
-    connect(sceneView, &SceneQuickView::mouseClicked, this,
+    connect(sceneView, &SceneViewToolkit::mouseClicked, this,
             [sceneView, this](QMouseEvent& event)
     {
       if (m_inPickingMode)
@@ -116,21 +112,9 @@ void CoordinateConversionController::setGeoView(QObject* geoView)
       }
     });
   }
-  else if (auto sceneView = qobject_cast<SceneGraphicsView*>(m_geoView))
+  else if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
   {
-    connect(sceneView, &SceneGraphicsView::mouseClicked, this,
-            [sceneView, this](QMouseEvent& event)
-    {
-      if (m_inPickingMode)
-      {
-        setCurrentPoint(sceneView->screenToBaseSurface(event.x(), event.y()));
-        event.accept();
-      }
-    });
-  }
-  else if (auto mapView = qobject_cast<MapGraphicsView*>(m_geoView))
-  {
-    connect(mapView, &MapGraphicsView::mouseClicked, this,
+    connect(mapView, &MapViewToolkit::mouseClicked, this,
             [mapView, this](QMouseEvent& event)
     {
       if (m_inPickingMode)
@@ -150,8 +134,7 @@ void CoordinateConversionController::setCurrentPoint(const Point& p)
     return;
 
   m_currentPoint = p;
-  emit currentPointChanged(m_currentPoint);
-  emit currentPointChanged(QVariant::fromValue(static_cast<Geometry>(m_currentPoint)));
+  forceUpdateCoordinates();
 }
 
 void CoordinateConversionController::setCurrentPoint(const QString& p, CoordinateConversionOption* option)
@@ -165,9 +148,11 @@ void CoordinateConversionController::setCurrentPoint(const QString& p, Coordinat
 void CoordinateConversionController::setCurrentPoint(const QString& p, const SpatialReference& spatialReference, CoordinateConversionOption* option)
 {
   if (!option)
-    setCurrentPoint(Point());
-  else
-    setCurrentPoint(option->pointFromString(p, spatialReference));
+    return;
+
+  auto point = option->pointFromString(p, spatialReference);
+  if (point.isValid())
+    setCurrentPoint(point);
 }
 
 QPointF CoordinateConversionController::screenCoordinate() const
@@ -268,6 +253,12 @@ void CoordinateConversionController::setInPickingMode(bool mode)
 
   m_inPickingMode = mode;
   emit inPickingModeChanged();
+}
+
+void CoordinateConversionController::forceUpdateCoordinates()
+{
+  emit currentPointChanged(m_currentPoint);
+  emit currentPointChanged(QVariant::fromValue(static_cast<Geometry>(m_currentPoint)));
 }
 
 

@@ -34,6 +34,9 @@ namespace Esri
 {
 namespace ArcGISRuntime
 {
+
+class GeoView;
+
 namespace Toolkit
 {
 
@@ -53,33 +56,39 @@ public:
 
   QObject* geoView() const;
   void setGeoView(QObject* mapView);
-  Q_SIGNAL void geoViewChanged();
 
   QAbstractListModel* coordinateFormats() const;
 
   QAbstractListModel* conversionResults() const;
 
-  Q_SLOT void setCurrentPoint(const Point& p);
-  Q_SLOT void setCurrentPoint(const QString& p, CoordinateConversionOption* option);
-  Q_SLOT void setCurrentPoint(const QString& p, const SpatialReference& spatialReference, CoordinateConversionOption* option);
   Point currentPoint() const;
-  Q_SIGNAL void currentPointChanged(const Point& point);
-  Q_SIGNAL void currentPointChanged(QVariant point);
 
   Q_INVOKABLE QPointF screenCoordinate() const;
 
   double zoomToDistance() const;
   void setZoomToDistance(double distance);
-  Q_SIGNAL void zoomToDistanceChanged();
 
   bool inPickingMode() const;
   void setInPickingMode(bool mode);
-  Q_SIGNAL void inPickingModeChanged();
 
-  Q_SLOT void zoomToCurrentPoint();
+signals:
+  void geoViewChanged();
+  void currentPointChanged(const Point& point);
+  void currentPointChanged(QVariant point);
+  void zoomToDistanceChanged();
+  void inPickingModeChanged();
 
-  Q_SLOT void addNewCoordinateResultForOption(CoordinateConversionOption* option);
-  Q_SLOT void removeCoordinateResultAtIndex(int index);
+public slots:
+  void setCurrentPoint(const Point& p);
+  void setCurrentPoint(const QString& p, CoordinateConversionOption* option);
+  void setCurrentPoint(const QString& p, const SpatialReference& spatialReference, CoordinateConversionOption* option);
+
+  void zoomToCurrentPoint();
+
+  void addNewCoordinateResultForOption(CoordinateConversionOption* option);
+  void removeCoordinateResultAtIndex(int index);
+
+  void forceUpdateCoordinates();
 
 private:
   Point m_currentPoint;

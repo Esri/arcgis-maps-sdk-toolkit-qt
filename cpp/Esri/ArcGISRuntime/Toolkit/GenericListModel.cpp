@@ -14,6 +14,7 @@
  *  limitations under the License.
  ******************************************************************************/
 #include "GenericListModel.h"
+#include "MetaElement.h"
 
 #include <QMetaProperty>
 #include <QPointer>
@@ -25,54 +26,6 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
-namespace
-{
-
-class MetaElement : public QObject
-{
-  Q_OBJECT
-public:
-  MetaElement(QModelIndex _index,
-              int _role,
-              GenericListModel* _listModel,
-              const char* _propertyName,
-              QObject* parent) :
-    QObject(parent),
-    m_trackedObject(_index),
-    m_listModel(_listModel),
-    m_propertyName(_propertyName),
-    m_role(_role)
-  {
-    connect(this, &MetaElement::propertyChanged,
-            this, &MetaElement::emitDataChanged);
-    connect(m_listModel.data(), &QObject::destroyed, this, &QObject::deleteLater);
-  }
-
-  Q_SIGNAL void propertyChanged();
-
-private:
-  Q_SLOT void emitDataChanged()
-  {
-    if (!m_listModel || !m_trackedObject.isValid())
-      return;
-
-    QVector<int> roles { m_role };
-    if (m_propertyName == m_listModel->displayPropertyName())
-      roles << Qt::DisplayRole << Qt::EditRole;
-
-      emit m_listModel->dataChanged(
-            m_trackedObject,
-            m_trackedObject,
-            roles);
-  }
-
-  QPersistentModelIndex m_trackedObject;
-  QPointer<GenericListModel> m_listModel;
-  const char* m_propertyName;
-  int m_role;
-};
-
-}
 
 GenericListModel::GenericListModel(QObject* parent) :
   GenericListModel(nullptr, parent)
@@ -81,10 +34,29 @@ GenericListModel::GenericListModel(QObject* parent) :
 
 GenericListModel::GenericListModel(const QMetaObject* elementType, QObject* parent) :
   QAbstractListModel(parent),
+  m_displayPropIndex(-1),
   m_elementType(std::move(elementType))
 {
   connect(this, &GenericListModel::rowsInserted, this, &GenericListModel::countChanged);
   connect(this, &GenericListModel::rowsRemoved, this, &GenericListModel::countChanged);
+
+  connect(this, &GenericListModel::dataChanged, this,
+    [this](const QModelIndex& topLeft, const QModelIndex& bottomRight,
+       const QVector<int>& roles)
+  {
+    if (m_displayPropIndex < 0)
+      return;
+
+    if (!m_elementType)
+      return;
+
+    if (roles.contains(Qt::DisplayRole))
+      return;
+
+    const auto offset = m_elementType->propertyOffset();
+    if (roles.contains(m_displayPropIndex - offset + Qt::UserRole +1))
+      emit dataChanged(topLeft, bottomRight, QVector<int>() << Qt::DisplayRole << Qt::EditRole);
+  });
 }
 
 GenericListModel::~GenericListModel()
@@ -105,20 +77,11 @@ QVariant GenericListModel::data(const QModelIndex& index, int role) const
     return QVariant();
   else if (!index.isValid())
     return QVariant();
-  else if (index.parent().isValid())
-    return QVariant();
-  else if (index.column() != 0)
-    return QVariant();
-  else if (index.row() < 0)
-    return QVariant();
-  else if (index.row() >= rowCount())
-    return QVariant();
 
   auto o = m_objects.at(index.row());
   if (role == Qt::DisplayRole || role == Qt::EditRole)
   {
-    const auto propIndex = m_elementType->indexOfProperty(m_displayPropName.toLatin1());
-    const auto property = m_elementType->property(propIndex);
+    const auto property = m_elementType->property(m_displayPropIndex);
     return property.read(o);
   }
   else if (role == Qt::UserRole)
@@ -143,22 +106,11 @@ bool GenericListModel::setData(const QModelIndex& index, const QVariant& value, 
     return false;
   else if (!index.isValid())
     return false;
-  else if (index.parent().isValid())
-    return false;
-  else if (index.column() != 0)
-    return false;
-  else if (index.row() < 0)
-    return false;
-  else if (index.row() >= rowCount())
-    return false;
-  else if (!value.isValid())
-    return false;
 
   auto o = m_objects.at(index.row());
   if (role == Qt::DisplayRole || role == Qt::EditRole)
   {
-    const auto propIndex = m_elementType->indexOfProperty(m_displayPropName.toLatin1());
-    const auto property = m_elementType->property(propIndex);
+    const auto property = m_elementType->property(m_displayPropIndex);
     return property.write(o, value);
   }
   else if (role >= Qt::UserRole)
@@ -209,7 +161,7 @@ bool GenericListModel::insertRows(int row, int count, const QModelIndex& parent)
     return false;
   else if (row < 0)
     return false;
-  else if (row > rowCount(parent))
+  else if (row > m_objects.size())
     return false;
 
   beginInsertRows(parent, row, row + count - 1);
@@ -223,7 +175,6 @@ bool GenericListModel::insertRows(int row, int count, const QModelIndex& parent)
   {
     connectElement(index(row));
   }
-
   return true;
 }
 
@@ -231,12 +182,16 @@ bool GenericListModel::removeRows(int row, int count, const QModelIndex& parent)
 {
   if (parent.isValid())
     return false;
-  else if (count < 1)
+  else if (count < 0)
     return false;
   else if (row < 0)
     return false;
+  else if (row >= rowCount(parent))
+    return false;
   else if (row + count > rowCount(parent))
     return false;
+  else if (count == 0)
+    return true;
 
   beginRemoveRows(parent, row, row + count - 1);
   for (int i = count - 1; i >= row; --i)
@@ -264,12 +219,15 @@ const QMetaObject* GenericListModel::elementType() const
 
 void GenericListModel::setDisplayPropertyName(QString propertyName)
 {
-  m_displayPropName = std::move(propertyName);
+  m_displayPropIndex = m_elementType->indexOfProperty(propertyName.toLatin1());
 }
 
 QString GenericListModel::displayPropertyName()
 {
-  return m_displayPropName;
+  if (m_displayPropIndex < 0)
+    return "";
+  else
+    return m_elementType->property(m_displayPropIndex).name();
 }
 
 bool GenericListModel::append(QObject* object)
@@ -312,14 +270,6 @@ void GenericListModel::connectElement(QModelIndex index)
     return;
   else if (!index.isValid())
     return;
-  else if (index.parent().isValid())
-    return;
-  else if (index.column() != 0)
-    return;
-  else if (index.row() < 0)
-    return;
-  else if (index.row() >= rowCount())
-    return;
 
   QObject* object = m_objects.at(index.row());
 
@@ -336,9 +286,8 @@ void GenericListModel::connectElement(QModelIndex index)
       auto element = new MetaElement(
         index,
         i - offset + Qt::UserRole +1,
-        this,
-        property.name(),
-        object);
+        object,
+        this);
 
       connect(object, notifySignal,
               element, QMetaMethod::fromSignal(&MetaElement::propertyChanged));
@@ -354,5 +303,3 @@ int GenericListModel::count() const
 } // Toolkit
 } // ArcGISRuntime
 } // Esri
-
-#include "GenericListModel.moc"

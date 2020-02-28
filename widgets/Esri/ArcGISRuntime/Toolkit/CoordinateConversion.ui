@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>390</width>
-    <height>300</height>
+    <width>355</width>
+    <height>184</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,53 +15,71 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <widget class="QComboBox" name="inputSelect"/>
-   </item>
-   <item row="0" column="1" colspan="3">
-    <widget class="QLineEdit" name="inputEdit"/>
-   </item>
-   <item row="1" column="0">
     <widget class="QPushButton" name="zoomTo">
      <property name="text">
       <string>Zoom to</string>
      </property>
+     <property name="icon">
+      <iconset resource="../../../../import/Esri/ArcGISRuntime/Toolkit/images/toolkit_images.qrc">
+       <normaloff>:/esri/arcgisruntime/toolkit/images/Zoom.png</normaloff>:/esri/arcgisruntime/toolkit/images/Zoom.png</iconset>
+     </property>
     </widget>
    </item>
-   <item row="1" column="1">
-    <widget class="QPushButton" name="flashCoordinate">
+   <item row="0" column="1">
+    <widget class="QPushButton" name="flash">
      <property name="text">
-      <string>Flash coordinate</string>
+      <string>Flash</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../../../../import/Esri/ArcGISRuntime/Toolkit/images/toolkit_images.qrc">
+       <normaloff>:/esri/arcgisruntime/toolkit/images/flash.png</normaloff>:/esri/arcgisruntime/toolkit/images/flash.png</iconset>
      </property>
     </widget>
    </item>
-   <item row="1" column="2">
-    <widget class="QPushButton" name="edit">
-     <property name="text">
-      <string>Edit</string>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="3">
-    <widget class="QPushButton" name="caputre">
+   <item row="0" column="2">
+    <widget class="QCheckBox" name="captureMode">
      <property name="text">
       <string>Capture</string>
      </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-     <property name="flat">
-      <bool>false</bool>
+     <property name="icon">
+      <iconset resource="../../../../import/Esri/ArcGISRuntime/Toolkit/images/toolkit_images.qrc">
+       <normaloff>:/esri/arcgisruntime/toolkit/images/Mouse_Click_Mode.png</normaloff>:/esri/arcgisruntime/toolkit/images/Mouse_Click_Mode.png</iconset>
      </property>
     </widget>
    </item>
-   <item row="2" column="0" colspan="4">
-    <widget class="QTableWidget" name="tableWidget"/>
+   <item row="0" column="3">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>55</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="0" colspan="4">
+    <widget class="QTableView" name="resultsView">
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOff</enum>
+     </property>
+     <property name="sizeAdjustPolicy">
+      <enum>QAbstractScrollArea::AdjustToContents</enum>
+     </property>
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+     <attribute name="verticalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
+    </widget>
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../../../import/Esri/ArcGISRuntime/Toolkit/images/toolkit_images.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -2,6 +2,10 @@
 #define TOOLKIT_COORDIANTECONVERSION_H
 
 #include <QFrame>
+#include <QPointer>
+
+class QGraphicsEllipseItem;
+class QMenu;
 
 namespace Ui
 {
@@ -12,7 +16,6 @@ namespace Esri
 {
 namespace ArcGISRuntime
 {
-
 class MapGraphicsView;
 class SceneGraphicsView;
 
@@ -20,6 +23,7 @@ namespace Toolkit
 {
   
 class CoordinateConversionController;
+class Flash;
 
 class CoordinateConversion : public QFrame 
 {
@@ -33,8 +37,14 @@ public:
 
   CoordinateConversionController* controller() const;
 
+private slots:
+  void addContextMenu(const QPoint& point);
+  void flash();
+
 private:
   CoordinateConversionController* m_controller;
+  QMenu* m_resultsMenu;
+  QPointer<Flash> m_flash;
   Ui::CoordinateConversion* m_ui;
 };
 

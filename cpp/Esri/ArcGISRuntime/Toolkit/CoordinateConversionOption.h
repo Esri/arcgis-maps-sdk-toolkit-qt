@@ -64,43 +64,45 @@ public:
 
   QString name() const;
   void setName(const QString& name);
-  Q_SIGNAL void nameChanged();
 
   CoordinateType outputMode() const;
   void setOutputMode(CoordinateType outputMode);
-  Q_SIGNAL void outputModeChanged();
 
   bool addSpaces() const;
   void setAddSpaces(bool addSpaces);
-  Q_SIGNAL void addSpacesChanged();
 
   int precision() const;
   void setPrecision(int precision);
-  Q_SIGNAL void precisionChanged();
 
   int decimalPlaces() const;
   void setDecimalPlaces(int decimalPlaces);
-  Q_SIGNAL void decimalPlacesChanged();
 
   MgrsConversionMode mgrsConversionMode() const;
   void setMgrsConversionMode(MgrsConversionMode mgrsConversionMode);
-  Q_SIGNAL void mgrsConversionModeChanged();
 
   LatitudeLongitudeFormat latLonFormat() const;
   void setLatLonFormat(LatitudeLongitudeFormat latLonFormat);
-  Q_SIGNAL void latLonFormatChanged();
 
   UtmConversionMode utmConversionMode() const;
   void setUtmConversionMode(UtmConversionMode utmConversionMode);
-  Q_SIGNAL void utmConversionModeChanged();
 
   GarsConversionMode garsConvesrionMode() const;
   void setGarsConversionMode(GarsConversionMode conversionMode);
-  Q_SIGNAL void garsConversionModeChanged();
 
   Q_INVOKABLE QString prettyPrint(const Point& point) const;
 
   Q_INVOKABLE Point pointFromString(const QString& point, const SpatialReference& spatialReference);
+
+signals:
+  void nameChanged();
+  void outputModeChanged();
+  void addSpacesChanged();
+  void precisionChanged();
+  void decimalPlacesChanged();
+  void mgrsConversionModeChanged();
+  void latLonFormatChanged();
+  void utmConversionModeChanged();
+  void garsConversionModeChanged();
 
 private:
   QString m_name;

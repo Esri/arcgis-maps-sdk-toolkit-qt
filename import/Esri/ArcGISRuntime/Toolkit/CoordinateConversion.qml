@@ -126,8 +126,7 @@ Control {
                                 text: name
                                 onTriggered: {
                                     inputFormat.type = modelData;
-                                    inputFormat.updateCoordinatePoint(
-                                        coordinateConversionWindow.controller.currentPoint())
+                                    coordinateConversionWindow.controller.forceUpdateCoordinates();
                                 }
                             }
                         }

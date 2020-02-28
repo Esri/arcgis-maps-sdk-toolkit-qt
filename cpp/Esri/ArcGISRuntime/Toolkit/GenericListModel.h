@@ -78,7 +78,7 @@ private:
   int count() const;
 
 private:
-  QString m_displayPropName;
+  int m_displayPropIndex;
   const QMetaObject* m_elementType;
   QList<QObject*> m_objects;
 };

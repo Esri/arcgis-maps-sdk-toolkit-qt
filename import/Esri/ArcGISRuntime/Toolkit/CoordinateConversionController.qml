@@ -148,4 +148,7 @@ QtObject {
         }
     }
 
+    function forceUpdateCoordinates() {
+        currentPointChanged(internal.currentPoint);
+    }
 }

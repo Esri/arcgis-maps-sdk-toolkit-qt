@@ -8,6 +8,9 @@ HEADERS += $$CPPPATH/CoordinateConversionConstants.h \
            $$CPPPATH/CoordinateConversionResult.h \
            $$CPPPATH/CoordinateOptionDefaults.h \
            $$CPPPATH/GenericListModel.h \
+           $$CPPPATH/GenericTableProxyModel.h \
+           $$CPPPATH/GeoViews.h \
+           $$CPPPATH/MetaElement.h \
            $$CPPPATH/NorthArrowController.h
 
 SOURCES += $$CPPPATH/CoordinateConversionConstants.cpp \
@@ -16,4 +19,6 @@ SOURCES += $$CPPPATH/CoordinateConversionConstants.cpp \
            $$CPPPATH/CoordinateConversionResult.cpp \
            $$CPPPATH/CoordinateOptionDefaults.cpp \
            $$CPPPATH/GenericListModel.cpp \
+           $$CPPPATH/GenericTableProxyModel.cpp \
+           $$CPPPATH/MetaElement.cpp \
            $$CPPPATH/NorthArrowController.cpp
