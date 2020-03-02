@@ -51,7 +51,7 @@ void CoordinateEditDelegate::setModelData(
   
   auto listModel = tableModel->sourceModel();
   auto result = listModel->element<CoordinateConversionResult>(index);
-  if (result)
+  if (result && result->notation() != lineEdit->text())
     m_controller->setCurrentPoint(lineEdit->text(), result->type());
   else
     QItemDelegate::setModelData(editor, model, index);
