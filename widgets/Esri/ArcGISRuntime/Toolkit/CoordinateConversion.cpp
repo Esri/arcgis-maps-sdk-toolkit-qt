@@ -1,10 +1,26 @@
+/*******************************************************************************
+ *  Copyright 2012-2020 Esri
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ ******************************************************************************/
 #include "CoordinateConversion.h"
-
 #include "ui_CoordinateConversion.h"
 
+// Toolkit headers
 #include "CoordinateEditDelegate.h"
 #include "Flash.h"
 
+// Toolkit Controller headers
 #include "Esri/ArcGISRuntime/Toolkit/CoordinateConversionController.h"
 #include "Esri/ArcGISRuntime/Toolkit/CoordinateConversionResult.h"
 #include "Esri/ArcGISRuntime/Toolkit/GenericListModel.h"
@@ -39,7 +55,7 @@ CoordinateConversion::CoordinateConversion(QWidget* parent) :
   m_ui->resultsView->setItemDelegate(coordinateEditDelegate);
 
   auto tableModel = new GenericTableProxyModel(this);
-  tableModel->setSourceModel(static_cast<GenericListModel*>(m_controller->conversionResults()));
+  tableModel->setSourceModel(m_controller->conversionResults());
   m_ui->resultsView->setModel(tableModel);
   m_ui->resultsView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
   m_ui->resultsView->hideColumn(2);
@@ -86,7 +102,7 @@ void CoordinateConversion::addContextMenu(const QPoint& point)
   // Create context meny for all current Options.
   QMenu* addMenu = new QMenu(menu);
   addMenu->setTitle("Add...");
-  auto formats = static_cast<GenericListModel*>(m_controller->coordinateFormats());
+  auto formats = m_controller->coordinateFormats();
   for (int i = 0; i < formats->rowCount(); ++i)
   {
     auto format = formats->element<CoordinateConversionOption>(formats->index(i));

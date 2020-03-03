@@ -13,8 +13,14 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#ifndef COORDIANTEOPTIONDEFAULTS_H
-#define COORDIANTEOPTIONDEFAULTS_H
+#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_COORDIANTEOPTIONDEFAULTS_H
+#define ESRI_ARCGISRUNTIME_TOOLKIT_COORDIANTEOPTIONDEFAULTS_H
+/*!
+* \file CoordinateOptionDefaults.h
+* This file contains several function to instantiate several kinds of common
+* CoordinateConversionOption objects used by a CoordinateConversionController.
+* \sa CoordianteConversionOption.h
+*/
 
 #include "CoordinateConversionOption.h"
 
@@ -43,4 +49,4 @@ CoordinateConversionOption* createGars(GarsConversionMode mode = GarsConversionM
 } // ArcGISRuntime
 } // Esri
 
-#endif // COORDIANTEOPTIONDEFAULTS_H
+#endif // ESRI_ARCGISRUNTIME_TOOLKIT_COORDIANTEOPTIONDEFAULTS_H

@@ -40,6 +40,10 @@ GenericListModel::GenericListModel(const QMetaObject* elementType, QObject* pare
   connect(this, &GenericListModel::rowsInserted, this, &GenericListModel::countChanged);
   connect(this, &GenericListModel::rowsRemoved, this, &GenericListModel::countChanged);
 
+  // We connect to our own `dataChanged` signal. We test to see if the properties
+  // that are updating are also the same properties associated with our
+  // Qt::DisplayRole and Qt::EditRole. If so then we need to emit dataChanged
+  // for these roles as well if they are not already emitting.
   connect(this, &GenericListModel::dataChanged, this,
     [this](const QModelIndex& topLeft, const QModelIndex& bottomRight,
        const QVector<int>& roles)
@@ -107,14 +111,29 @@ bool GenericListModel::setData(const QModelIndex& index, const QVariant& value, 
   else if (!index.isValid())
     return false;
 
-  auto o = m_objects.at(index.row());
   if (role == Qt::DisplayRole || role == Qt::EditRole)
   {
+    auto o = m_objects.at(index.row());
     const auto property = m_elementType->property(m_displayPropIndex);
     return property.write(o, value);
   }
-  else if (role >= Qt::UserRole)
+  else if (role == Qt::UserRole)
   {
+    auto newObject = qvariant_cast<QObject*>(value);
+    if (newObject && m_elementType == newObject->metaObject())
+    {
+      m_objects[index.row()] = newObject;
+      emit dataChanged(index, index);
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  }
+  else if (role > Qt::UserRole)
+  {
+    auto o = m_objects.at(index.row());
     const auto propIndex = role - (Qt::UserRole + 1) + m_elementType->propertyOffset();
     const auto property = m_elementType->property(propIndex);
     return property.write(o, value);
@@ -123,15 +142,6 @@ bool GenericListModel::setData(const QModelIndex& index, const QVariant& value, 
   {
     return false;
   }
-}
-
-Qt::ItemFlags GenericListModel::flags(const QModelIndex& index) const
-{
-  const auto flags = QAbstractListModel::flags(index);
-  if (index.isValid())
-    return flags | Qt::ItemIsEditable;
-  else
-    return flags;
 }
 
 QHash<int, QByteArray> GenericListModel::roleNames() const
@@ -191,12 +201,19 @@ bool GenericListModel::removeRows(int row, int count, const QModelIndex& parent)
   else if (row + count > rowCount(parent))
     return false;
   else if (count == 0)
-    return true;
+    return true; // A valid no-op.
 
   beginRemoveRows(parent, row, row + count - 1);
   for (int i = count - 1; i >= row; --i)
   {
-    delete m_objects.at(i);
+    auto o = m_objects.at(i);
+
+    // Ensure additional removal signals are not triggered.
+    if (o)
+      disconnect(o, &QObject::destroyed, this, nullptr);
+
+    delete o;
+
     m_objects.removeAt(i);
   }
   endRemoveRows();
@@ -205,11 +222,19 @@ bool GenericListModel::removeRows(int row, int count, const QModelIndex& parent)
 
 void GenericListModel::setElementType(const QMetaObject* metaObject)
 {
-  beginRemoveRows(QModelIndex(), 0, std::max(0, rowCount() -1));
-  qDeleteAll(m_objects);
+  beginResetModel();
+  for (auto o : m_objects)
+  {
+    // Ensure additional removal signals are not triggered.
+    if (o)
+      disconnect(o, &QObject::destroyed, this, nullptr);
+
+    delete o;
+  }
   m_objects.clear();
   m_elementType = metaObject;
-  endRemoveRows();
+  m_displayPropIndex = -1;
+  endResetModel();
 }
 
 const QMetaObject* GenericListModel::elementType() const
@@ -234,6 +259,12 @@ bool GenericListModel::append(QObject* object)
 {
   if (!m_elementType)
     return false;
+  
+  if (!object)
+    return false;
+
+  if (object->metaObject() != m_elementType)
+    return false;
 
   auto i = rowCount();
   beginInsertRows(QModelIndex(), i, i);
@@ -251,6 +282,14 @@ bool GenericListModel::append(QList<QObject*> objects)
     return false;
   if (size < 1)
     return true;
+
+  for (auto o: objects)
+  {
+    if (!o)
+      return false;
+    else if (o->metaObject() != m_elementType)
+      return false;
+  }
 
   auto i = rowCount();
 
@@ -276,6 +315,25 @@ void GenericListModel::connectElement(QModelIndex index)
   if (!object || object->metaObject() != m_elementType)
     return;
 
+  // If object is deleted externally we remove from the model.
+  connect(object, &QObject::destroyed, this,
+    [this, pIndex = QPersistentModelIndex(index)]
+    {
+      if (!pIndex.isValid())
+        return;
+
+      const auto row = pIndex.row();
+      
+      if (row < 0 || row >= m_objects.size())
+        return;
+
+      m_objects[row] = nullptr; // Prevents double delete.
+      removeRow(row, pIndex.parent());
+    }
+  );
+
+  // Connect to each property notifySignal and hook up to our dataChanged signal
+  // using MetaElement objects as drop-in replacements for lambdas.
   const auto offset = m_elementType->propertyOffset();
   for (int i = offset; i < m_elementType->propertyCount(); ++i)
   {
@@ -289,6 +347,7 @@ void GenericListModel::connectElement(QModelIndex index)
         object,
         this);
 
+      // Signal to signal connection.
       connect(object, notifySignal,
               element, QMetaMethod::fromSignal(&MetaElement::propertyChanged));
     }
@@ -298,6 +357,22 @@ void GenericListModel::connectElement(QModelIndex index)
 int GenericListModel::count() const
 {
   return m_objects.size();
+}
+
+QVariant GenericListModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+  if (!m_elementType)
+    return QVariant();
+
+  if (role != Qt::DisplayRole)
+    return QVariant();
+
+  if (Qt::Orientation::Vertical == orientation)
+    return section + 1;
+  else if (Qt::Orientation::Horizontal && section == 0)
+    return QString(m_elementType->className());
+  else
+    return "";
 }
 
 } // Toolkit

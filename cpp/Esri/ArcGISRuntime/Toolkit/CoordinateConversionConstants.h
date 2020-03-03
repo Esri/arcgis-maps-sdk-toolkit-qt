@@ -13,8 +13,15 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#ifndef COORDINATECONVERSIONCONSTANTS_H
-#define COORDINATECONVERSIONCONSTANTS_H
+#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_COORDINATECONVERSIONCONSTANTS_H
+#define ESRI_ARCGISRUNTIME_TOOLKIT_COORDINATECONVERSIONCONSTANTS_H
+
+/*!
+* \file CoordinateConversionConstants.h
+* This file contains the display-friendly names of the common coordinate
+* conversion formats.
+* \sa CoordinateOptionDefaults.h
+*/
 
 #include <QString>
 
@@ -41,4 +48,4 @@ extern const QString GEOREF_FORMAT;
 } // ArcGISRuntime
 } // Esri
 
-#endif // COORDINATECONVERSIONCONSTANTS_H
+#endif // ESRI_ARCGISRUNTIME_TOOLKIT_COORDINATECONVERSIONCONSTANTS_H

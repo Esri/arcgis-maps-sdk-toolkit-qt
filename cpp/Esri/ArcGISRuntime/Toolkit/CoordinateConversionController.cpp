@@ -17,7 +17,6 @@
 
 #include "CoordinateConversionResult.h"
 #include "CoordinateOptionDefaults.h"
-#include "GenericListModel.h"
 #include "GeoViews.h"
 
 // Qt headers
@@ -25,8 +24,6 @@
 
 // ArcGISRuntime headers
 #include <CoordinateFormatter.h>
-
-#include <iostream>
 
 namespace Esri
 {
@@ -49,6 +46,7 @@ CoordinateConversionController::CoordinateConversionController(QObject* parent):
   m_inPickingMode(false)
 {
   {
+    // Some default coordinate conversion formats to set us up with.
     m_coordinateFormats->setDisplayPropertyName("name");
     m_coordinateFormats->append(QList<QObject*>()
       << createDecimalDegrees()
@@ -66,6 +64,8 @@ CoordinateConversionController::CoordinateConversionController(QObject* parent):
     connect(m_conversionResults, &QAbstractItemModel::rowsInserted, this,
       [this](const QModelIndex& /*parent*/, int first, int last)
       {
+        // Every result owned by the controller needs to listen to the
+        // currentPointChanged signal to update its notation.
         for (int i = first; i <= last; ++i)
         {
           auto index = m_conversionResults->index(i);
@@ -137,7 +137,9 @@ void CoordinateConversionController::setCurrentPoint(const Point& p)
   forceUpdateCoordinates();
 }
 
-void CoordinateConversionController::setCurrentPoint(const QString& p, CoordinateConversionOption* option)
+void CoordinateConversionController::setCurrentPoint(
+  const QString& p,
+  CoordinateConversionOption* option)
 {
   if (auto geoView = qobject_cast<GeoView*>(m_geoView))
     setCurrentPoint(p, geoView->spatialReference(), option);
@@ -145,7 +147,10 @@ void CoordinateConversionController::setCurrentPoint(const QString& p, Coordinat
     setCurrentPoint(p, SpatialReference(), option);
 }
 
-void CoordinateConversionController::setCurrentPoint(const QString& p, const SpatialReference& spatialReference, CoordinateConversionOption* option)
+void CoordinateConversionController::setCurrentPoint(
+  const QString& p,
+  const SpatialReference& spatialReference,
+  CoordinateConversionOption* option)
 {
   if (!option)
     return;
@@ -158,7 +163,7 @@ void CoordinateConversionController::setCurrentPoint(const QString& p, const Spa
 QPointF CoordinateConversionController::screenCoordinate() const
 {
   // TODO additional work required here to show a coordinate on the "edge" of
-  // the screen if coordiante is not in the current view.
+  // the screen if coordinate is not in the current view.
   QPointF res(-1.0, -1.0);
   if (auto sceneView = qobject_cast<SceneView*>(m_geoView))
   {
@@ -188,12 +193,12 @@ Point CoordinateConversionController::currentPoint() const
   return m_currentPoint;
 }
 
-QAbstractListModel* CoordinateConversionController::coordinateFormats() const
+GenericListModel* CoordinateConversionController::coordinateFormats() const
 {
   return m_coordinateFormats;
 }
 
-QAbstractListModel* CoordinateConversionController::conversionResults() const
+GenericListModel* CoordinateConversionController::conversionResults() const
 {
   return m_conversionResults;
 }

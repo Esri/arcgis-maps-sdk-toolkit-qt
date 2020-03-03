@@ -15,17 +15,54 @@
  ******************************************************************************/
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_REGISTER_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_REGISTER_H
+/*!
+* \file register.h
+*
+* This file contains the registration function required to register the C++
+* controllers provided by the Toolkit with your application.
+*
+* If you intend to utilize the toolkit with [Map|Scene]QuickView in your
+* application, invoking registerComponents is required! Please refer to
+* README.md for more information on workflows.
+*/
 
 class QQmlEngine;
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri
+{
+namespace ArcGISRuntime
+{
+namespace Toolkit
+{
 
+/*!
+ * \brief Toolkit namespace in QML. I.E.: "Esri.ArcGISRuntime.Toolkit"
+ */
 extern const char* const Namespace;
+
+/*!
+ * \brief The current major version number of the toolkit in QML.
+ */
 extern const int VersionMajor;
+
+/*!
+ * \brief The current minor version number of the toolkit in QML.
+ */
 extern const int VersionMinor;
 
+/*!
+ * \brief This registration function is required to register all the C++
+ * controllers within your application in QML.
+ * 
+ * For example this will expose the class provided by NorthArrowController.h in
+ * QML as NorthArrowController.
+ * 
+ * Internally, this function add a new `cpp_api` selector to your QmlEngine's
+ * file selector. This is the mechanism utilized to override, say,
+ * NorthArrowController.qml with the NorthArrowController provided by C++.
+ * 
+ * \param engine The QML engine.
+ */
 void registerComponents(QQmlEngine* engine);
 
 } // Toolkit

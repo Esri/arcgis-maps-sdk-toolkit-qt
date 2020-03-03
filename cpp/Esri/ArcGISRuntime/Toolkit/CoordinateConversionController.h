@@ -13,22 +13,23 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#ifndef COORDINATECONVERSIONCONTROLLER_H
-#define COORDINATECONVERSIONCONTROLLER_H
+#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_COORDINATECONVERSIONCONTROLLER_H
+#define ESRI_ARCGISRUNTIME_TOOLKIT_COORDINATECONVERSIONCONTROLLER_H
+
+// Toolkit headers
+#include "CoordinateConversionOption.h"
+#include "GenericListModel.h"
 
 // Qt headers
 #include <QObject>
 #include <QString>
 #include <QPointF>
 
+// Qt forward declarations
 class QAbstractListModel;
 
 // ArcGISRuntime headers
 #include <Point.h>
-
-#include "CoordinateConversionOption.h"
-
-Q_DECLARE_METATYPE(Esri::ArcGISRuntime::Point)
 
 namespace Esri
 {
@@ -40,8 +41,20 @@ class GeoView;
 namespace Toolkit
 {
 
-class GenericListModel;
-
+/*!
+ * \brief In MVC architecture, this is the controller for the corresponding
+ * CoordinateConversion view.
+ * 
+ * A CoordinateConversionController stores a single point, and 0 or more
+ * textual representations of this point in a variety of user-defined formats.
+ * 
+ * CoordinateConversion also accepts a MapView or SceneView. This allows for:
+ *   - The controller to zoom to the point's location on the GeoView. 
+ *   - The user to select the point with a mouse-event on the GeoView. 
+ *   - The controller to calculate the screen coordinate of the current point
+ *     relative to the window containing the GeoView.
+ * 
+ */
 class CoordinateConversionController : public QObject
 {
   Q_OBJECT
@@ -51,49 +64,238 @@ class CoordinateConversionController : public QObject
   Q_PROPERTY(QAbstractListModel* results READ conversionResults CONSTANT)
   Q_PROPERTY(bool inPickingMode READ inPickingMode WRITE setInPickingMode NOTIFY inPickingModeChanged)
 public:
+  /*!
+   * \brief Constructor.
+   * \param parent owning parent object.
+   */
   Q_INVOKABLE CoordinateConversionController(QObject* parent = nullptr);
+
+  /*!
+   * \brief Destructor
+   */
   ~CoordinateConversionController() override;
 
+  /*!
+   * \brief Returns the GeoView as a QObject.
+   * \return The current GeoView as a QObject.
+   */
   QObject* geoView() const;
+
+  /*!
+   * \brief Set the GeoView object this Controller uses.
+   * 
+   * Internally this is cast to a MapView or SceneView using `qobject_cast`,
+   * which is why the paremeter is of form `QObject` and not `GeoView`.
+   * 
+   * \param geoView Object which must inherit from GeoView* and QObject*. 
+   */
   void setGeoView(QObject* mapView);
 
-  QAbstractListModel* coordinateFormats() const;
+  /*!
+   * \brief Known list of available coordinate conversion formats which can be
+   * consumed to generate different textual representations of the same point.
+   * Internally, this is a GenericListModel with an elementType of
+   * CoordinateConversionOption .
+   * 
+   * \sa GenericListModel
+   * 
+   * \return GenericListModel of CoordinateConversionOption elements.
+   */
+  GenericListModel* coordinateFormats() const;
 
-  QAbstractListModel* conversionResults() const;
+  /*!
+   * \brief List of textual representations of the current point in different 
+   * formats.
+   * Internally, this is a GenericListModel with an elementType of
+   * CoordinateConversionResult.
+   * 
+   * \sa GenericListModel
+   * 
+   * \return GenericListModel of CoordinateConversionResult elements.
+   */
+  GenericListModel* conversionResults() const;
 
+  /*!
+   * \brief Returns the current point.
+   * 
+   * The current point represents the one point that all elements within
+   * the conversionResults list-model are tied to.
+   * 
+   * \return Point 
+   */
   Point currentPoint() const;
 
+  /*!
+   * \brief Converts the current point held by this controller as a 2D point 
+   * relative to the current window.
+   * 
+   * \return The point returned by currentPoint as a screen coordinate. 
+   */
   Q_INVOKABLE QPointF screenCoordinate() const;
 
+  /*!
+   * \brief Distance between camera and current point when zoomToCurrentPoint
+   * is invoked.
+   * 
+   * If geoView is a SceneView, then this value represents the distance
+   * between the camera and the point returned by currentPoint when 
+   * zoomToCurrentPoint is called.
+   * 
+   * If geoView is a MapView, this value has no effect on zoom calculations.
+   * 
+   * The distance is in the units of the GeoView's SpatialReference.
+   * 
+   * Defaults to 1500.
+   * 
+   * \return distance between current point and viewpoint camera.
+   */
   double zoomToDistance() const;
+
+  /*!
+   * \brief Set the zoomTodistance.
+   * \sa zoomToDistance
+   * \param distance distance value in the units of the GeoView's
+   * SpatialReference.
+   */
   void setZoomToDistance(double distance);
 
+  /*!
+   * \brief Returns whether this controller is actively listening for mouse
+   * events.
+   * 
+   * When listening for mouse events, the Controller will update the
+   * current point to whatever point is returned by a click event on the
+   * GeoView.
+   * 
+   * \return true This controller is listening to mouse events on the GeoView
+   * and will actively update the CurrentPoint.
+   * \return false This controller is not listening to mouse events on the
+   * GeoView.
+   */
   bool inPickingMode() const;
+
+  /*!
+   * \brief Set whether the controller should actively be listening to mouse
+   * events on the GeoView.
+   * \sa inPickingMode
+   * \param mode True for listening to mouse events, false for ignoring mouse
+   * events.
+   */
   void setInPickingMode(bool mode);
 
 signals:
+  /*! \brief Emitted when the geoView has changed. */
   void geoViewChanged();
+
+  /*! \brief Emitted when the currentPoint has changed. */
   void currentPointChanged(const Point& point);
+
+  /*!
+   * \brief Emitted when the currentPoint property has changed.
+   * \note This signal is a QVariant containing the Point cast to a Geometry
+   * type. Due to technical limitations a `Point` is not a Qt MetaType
+   * and as such can not be safely consumed by QML nor can be passed in queued
+   * signals. To grab the point returned by this signal, use a
+   * qvariant_cast<Geometry> followed by a geometry_cast<Point>.
+   */
   void currentPointChanged(QVariant point);
+
+  /*!
+   * \brief Emitted when the zoomToDistance property has changed.
+   */
   void zoomToDistanceChanged();
+
+  /*!
+   * \brief Emitted when the inPickingMode property has changed.
+   */
   void inPickingModeChanged();
 
 public slots:
-  void setCurrentPoint(const Point& p);
-  void setCurrentPoint(const QString& p, CoordinateConversionOption* option);
-  void setCurrentPoint(const QString& p, const SpatialReference& spatialReference, CoordinateConversionOption* option);
+  /*!
+   * \brief Set the current point to point. This updates all textual
+   * representations owned by this controller.
+   * \param point new point to convert.
+   */
+  void setCurrentPoint(const Point& point);
 
+  /*!
+   * \brief Set the current point to point. Point is a string which will be
+   * converted as defined by the formatting hints given in option. This updates
+   * all textual representations owned by this controller.
+   * 
+   * The SpatialReference is taken from the GeoView.
+   * 
+   * If conversion fails this function is treated as a no-op.
+   * 
+   * \param point string representation of point. 
+   * \param option Option dictating hints on how to convert the string to a
+   *  point.
+   */
+  void setCurrentPoint(const QString& point, CoordinateConversionOption* option);
+
+  /*!
+   * \brief Set the current point to point. Point is a string which will be
+   * converted as defined by the formatting hints given in option. This updates
+   * all textual representations owned by this controller.
+   * 
+   * If conversion fails this function is treated as a no-op.
+   * 
+   * \param point string representation of point. 
+   * \param spatialReference An explicit SpatialReference for conversion.
+   * \param option Option dictating hints on how to convert the string to a
+   *  point.
+   */
+  void setCurrentPoint(const QString& point,
+                       const SpatialReference& spatialReference,
+                       CoordinateConversionOption* option);
+
+  /*!
+   * \brief Updates the GeoView's camera to point to the current point's
+   * location on the map.
+   * \sa zoomToDistance
+   */
   void zoomToCurrentPoint();
 
+  /*!
+   * \brief Given option, generates a new result.
+   * 
+   * A new CoordianteConversionResult is added to the list-model returned by
+   * coordinateResults. This Result is tied to the conversion parameters as
+   * given by option.
+   * 
+   * \param option option to generate result for.
+   */
   void addNewCoordinateResultForOption(CoordinateConversionOption* option);
+
+  /*!
+   * \brief Removes a given CoordinateConversionResult at index.
+   * 
+   * This function is for deleting results in the list-model returned by
+   * coordinateREsults.
+   * 
+   * \param index index of a given CoordinateConversionResult in the list-model
+   * returned by coordinateResults.
+   */
   void removeCoordinateResultAtIndex(int index);
 
+  /*!
+   * \internal
+   * \brief This is a helper function due to the inability to pass `Point` as
+   * a QML type. This forces this controller to emit the currentPointChanged
+   * signal again: which force all downstream consumers to update.
+   * 
+   * This is only an implementation detail so that the
+   * `CoordinateConversionOption` owned by the QML view can retrieve the
+   * current point when its format switches.
+   * 
+   * If Point were consumable by QML then we could just call the currentPoint
+   * getter instead.
+   */
   void forceUpdateCoordinates();
 
 private:
   Point m_currentPoint;
   double m_zoomToDistance;
-  SpatialReference m_conversionSpatialReference;
   GenericListModel* m_coordinateFormats;
   GenericListModel* m_conversionResults;
   QObject* m_geoView;
@@ -104,4 +306,4 @@ private:
 } // ArcGISRuntime
 } // Esri
 
-#endif // COORDINATECONVERSIONCONTROLLER_H
+#endif // ESRI_ARCGISRUNTIME_TOOLKIT_COORDINATECONVERSIONCONTROLLER_H

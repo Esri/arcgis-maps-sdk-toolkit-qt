@@ -36,12 +36,25 @@ namespace Toolkit
 {
 
 const char* const Namespace= "Esri.ArcGISRuntime.Toolkit";
+
 const int VersionMajor = 100;
+
 const int VersionMinor = 7;
 
 namespace
 {
 
+
+/*!
+ * \internal
+ * \brief Convenience function for registration. Registers the C++ type Foo as
+ * FooCPP in QML with the appropriate version and namespace information.
+ * 
+ * \note In QML, we alias the QML type \c FooCPP to QML type \c Foo using the
+ * qml files found in the `+cpp_api` folder of our QML directory.
+ * 
+ * @tparam T Type to register in QML.
+ */
 template <typename T>
 void registerComponent()
 {
@@ -51,6 +64,11 @@ void registerComponent()
   qmlRegisterType<T>(Namespace, VersionMajor, VersionMinor, name.toLatin1());
 }
 
+/*!
+ * \internal
+ * \brief Adds the `cpp_api` file selector to the QML engine.
+ * \param engine Engine to add the file selector to.
+ */
 void addFileSelector(QQmlEngine* engine)
 {
   auto fileSelector = QQmlFileSelector::get(engine);

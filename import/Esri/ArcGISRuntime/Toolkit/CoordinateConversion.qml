@@ -21,53 +21,68 @@ import QtQuick.Layouts 1.12
 import Esri.ArcGISRuntime.Toolkit 100.7
 
 /*!
-    \qmltype CoordinateConversion
-    \inqmlmodule Esri.ArcGISRuntime.Toolkit.Controls
-    \ingroup ToolCoordinateConversion
-    \since Esri.ArcGISRutime 100.2
-    \brief The user interface for the coordinate conversion tool.
-    \sa {Coordinate Conversion Tool}
-*/
+ * \qmltype CoordinateConversion
+ * \inqmlmodule Esri.ArcGISRuntime.Toolkit
+ * \since Esri.ArcGISRutime 100.8
+ * \brief The user interface for the coordinate conversion tool.
+ *
+ * This tool allows a user to select a point on the map or to enter a point by
+ * text entry.
+ * The point may be highlighted by zooming into that point, or by highlighting
+ * the point on the GeoView.
+ * A list of different coordinate formats represnenting the same point are
+ * available to the user.
+ */
 
 Control {
     id: coordinateConversionWindow
+
     clip: true
 
     /*!
-      \qmlproperty GeoView geoView
-      \brief The GeoView for this tool. Should be a SceneQuickView or a MapQuickView.
+     * \qmlproperty GeoView geoView
+     * \brief The GeoView for this tool. Should be a SceneView or a MapView.
      */
     property var geoView;
 
     /*!
-      \qmlproperty int textColor
-      \brief The color of coordinate notation text and labels on this tool.
-
-      The default value is \c "black".
+     * \qmlproperty int textColor
+     * \brief The color of coordinate notation text and labels on this tool.
+     *
+     * The default value is \c "black".
      */
     property color textColor: "black"
 
     /*!
-      \qmlproperty int highlightColor
-      \brief The color of used to highlight UI elements in this tool.
-
-      The default value is \c "blue".
+     * \qmlproperty int highlightColor
+     * \brief The color of used to highlight UI elements in this tool.
+     * 
+     * The default value is \c "blue".
      */
     property color highlightColor: "blue"
 
     /*!
-      \qmlproperty bool inInputMode
-      \brief Whether whether the tool is in input mode.
-
-      If \c true, the tool will convert a point set via a mouse click or text entry.
+     * \qmlproperty bool inInputMode
+     * \brief Whether whether the tool is in input mode.
+     * 
+     * If \c true, the tool will convert a point set via a mouse click or text entry.
      */
     readonly property bool inInputMode: editCoordinateButton.checked || captureModeButton.checked
 
-    property var inputFormat: CoordinateConversionResult {
-    }
+    /*!
+    * \qmlproperty CoordinateConversionResult inputFormat
+    * \brief This is the inputFormat - which dictates what format the user can
+    * edit and thereby update all the other formats in the ListModel.
+    */
+    property var inputFormat: CoordinateConversionResult { }
 
-    property var controller: CoordinateConversionController {
-    }
+    /*!
+    * \qmlproperty CoordinateConversionController controller.
+    * \brief the Controller handles connections writing/reading to the GeoView,
+    * and maintaining our list of textual representations of a single point
+    * in multiple formats.
+    */
+    property var controller: CoordinateConversionController { }
 
     Connections {
         target: controller

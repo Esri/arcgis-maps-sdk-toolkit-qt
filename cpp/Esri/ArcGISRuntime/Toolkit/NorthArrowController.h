@@ -13,38 +13,78 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#ifndef NORTHARROWCONTROLLER_H
-#define NORTHARROWCONTROLLER_H
+#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_NORTHARROWCONTROLLER_H
+#define ESRI_ARCGISRUNTIME_TOOLKIT_NORTHARROWCONTROLLER_H
 
+// Qt headers
 #include <QObject>
 
-namespace Esri {
-namespace ArcGISRuntime {
+namespace Esri
+{
+namespace ArcGISRuntime
+{
+namespace Toolkit
+{
 
-class GeoView;
-
-namespace Toolkit {
-
+/*!
+ * \brief In MVC architecture, this is the controller for the corresponding
+ * NorthArrow view.
+ * 
+ * This controller calculates the current heading from a GeoView, and allows
+ * the NorthArrow to apply a given heading to the GeoView.
+ * 
+ */
 class NorthArrowController : public QObject
 {
   Q_PROPERTY(QObject* geoView READ geoView WRITE setGeoView NOTIFY geoViewChanged)
   Q_PROPERTY(double heading READ heading NOTIFY headingChanged)
   Q_OBJECT
-
 public:
+  /*!
+   * \brief Constructor
+   * \param parent Parent owning QObject.
+   */
   Q_INVOKABLE NorthArrowController(QObject* parent = nullptr);
+
+  /*!
+   * \brief Destructor.
+   */
   ~NorthArrowController();
 
+  /*!
+   * \brief Returns the GeoView as a QObject.
+   * \return The current GeoView as a QObject.
+   */
   QObject* geoView() const;
+
+  /*!
+   * \brief Set the GeoView object this Controller uses.
+   * 
+   * Internally this is cast to a MapView or SceneView using `qobject_cast`,
+   * which is why the paremeter is of form `QObject` and not `GeoView`.
+   * 
+   * \param geoView Object which must inherit from GeoView* and QObject*. 
+   */
   void setGeoView(QObject* mapView);
 
+  /*!
+   * \brief The calculated heading of this controller.
+   * \return heading as double
+   */
   double heading() const;
 
 signals:
+  /*! Emitted when the geoView changes */
   void geoViewChanged();
+
+  /*! Emitted when the heading changes */
   void headingChanged();
 
 public slots:
+  /*!
+   * \brief Set the heading by rotating the MapView or SceneView camera to the
+   * given heading.
+   */
   void setHeading(double heading);
 
 private:
@@ -55,4 +95,4 @@ private:
 } // ArcGISRuntime
 } // Esri
 
-#endif // NORTHARROWCONTROLLER_H
+#endif // ESRI_ARCGISRUNTIME_TOOLKIT_NORTHARROWCONTROLLER_H
