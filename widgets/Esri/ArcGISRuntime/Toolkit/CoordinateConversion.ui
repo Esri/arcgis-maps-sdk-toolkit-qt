@@ -20,7 +20,7 @@
       <string>Zoom to</string>
      </property>
      <property name="icon">
-      <iconset resource="../images/toolkit_images.qrc">
+      <iconset resource="../images/esri_arcgisruntime_toolkit_images.qrc">
        <normaloff>:/Esri/ArcGISRuntime/Toolkit/images/Zoom.png</normaloff>:/Esri/ArcGISRuntime/Toolkit/images/Zoom.png</iconset>
      </property>
     </widget>
@@ -31,7 +31,7 @@
       <string>Flash</string>
      </property>
      <property name="icon">
-      <iconset resource="../images/toolkit_images.qrc">
+      <iconset resource="../images/esri_arcgisruntime_toolkit_images.qrc">
        <normaloff>:/Esri/ArcGISRuntime/Toolkit/images/flash.png</normaloff>:/Esri/ArcGISRuntime/Toolkit/images/flash.png</iconset>
      </property>
     </widget>
@@ -42,7 +42,7 @@
       <string>Capture</string>
      </property>
      <property name="icon">
-      <iconset resource="../images/toolkit_images.qrc">
+      <iconset resource="../images/esri_arcgisruntime_toolkit_images.qrc">
        <normaloff>:/Esri/ArcGISRuntime/Toolkit/images/Mouse_Click_Mode.png</normaloff>:/Esri/ArcGISRuntime/Toolkit/images/Mouse_Click_Mode.png</iconset>
      </property>
     </widget>
@@ -79,7 +79,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../images/toolkit_images.qrc"/>
+  <include location="../images/esri_arcgisruntime_toolkit_images.qrc"/>
  </resources>
  <connections/>
 </ui>
