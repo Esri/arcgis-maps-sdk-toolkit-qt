@@ -110,11 +110,20 @@ void CoordinateConversionController::setGeoView(QObject* geoView)
     connect(sceneView, &SceneViewToolkit::mouseClicked, this,
             [sceneView, this](QMouseEvent& event)
     {
-      if (m_inPickingMode)
+      if (m_inPickingMode && (!m_screenToLocationProcess.isValid() ||
+                               m_screenToLocationProcess.isDone()))
       {
-        setCurrentPoint(sceneView->screenToBaseSurface(event.x(), event.y()));
+        m_screenToLocationProcess = sceneView->screenToLocation(event.x(), event.y());
         event.accept();
       }
+    });
+
+    connect(sceneView, &SceneViewToolkit::screenToLocationCompleted, this,
+            [this](QUuid taskId, Point point)
+    {
+      if (taskId != m_screenToLocationProcess.taskId())
+        return;
+      setCurrentPoint(point);
     });
   }
   else if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))

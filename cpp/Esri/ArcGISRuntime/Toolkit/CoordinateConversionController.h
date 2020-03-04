@@ -30,6 +30,7 @@ class QAbstractListModel;
 
 // ArcGISRuntime headers
 #include <Point.h>
+#include <TaskWatcher.h>
 
 namespace Esri
 {
@@ -295,6 +296,7 @@ public slots:
 
 private:
   Point m_currentPoint;
+  TaskWatcher m_screenToLocationProcess;
   double m_zoomToDistance;
   GenericListModel* m_coordinateFormats;
   GenericListModel* m_conversionResults;
