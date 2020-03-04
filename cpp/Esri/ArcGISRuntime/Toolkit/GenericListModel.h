@@ -132,7 +132,7 @@ public:
    * 
    * \param propertyName name of property to expose as DisplayRole and EditRole.
    */
-  void setDisplayPropertyName(QString propertyName);
+  void setDisplayPropertyName(const QString& propertyName);
 
   /*!
    * \brief Returns the name of the property which has been elevated to be used

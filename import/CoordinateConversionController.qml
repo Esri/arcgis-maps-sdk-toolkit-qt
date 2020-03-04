@@ -102,13 +102,13 @@ QtObject {
             name: "USNG"
             outputMode: CoordinateConversionOption.Usng
             precision: 7
-            addSpaces: true
+            hasSpaces: true
         },
         CoordinateConversionOption {
             name: "UTM"
             outputMode: CoordinateConversionOption.Utm
             utmConversionMode: Enums.UtmConversionModeNorthSouthIndicators
-            addSpaces: true
+            hasSpaces: true
         },
         CoordinateConversionOption {
             name: "GARS"

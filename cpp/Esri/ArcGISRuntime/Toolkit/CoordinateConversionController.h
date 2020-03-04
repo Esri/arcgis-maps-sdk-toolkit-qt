@@ -198,7 +198,7 @@ signals:
    * signals. To grab the point returned by this signal, use a
    * qvariant_cast<Geometry> followed by a geometry_cast<Point>.
    */
-  void currentPointChanged(QVariant point);
+  void currentPointChanged(const QVariant& point);
 
   /*!
    * \brief Emitted when the zoomToDistance property has changed.
@@ -212,7 +212,7 @@ signals:
 
 public slots:
   /*!
-   * \brief Set the current point to point. This updates all textual
+   * \brief Set the current point to \a point. This updates all textual
    * representations owned by this controller.
    * \param point new point to convert.
    */
@@ -271,7 +271,7 @@ public slots:
    * \brief Removes a given CoordinateConversionResult at index.
    * 
    * This function is for deleting results in the list-model returned by
-   * coordinateREsults.
+   * coordinateResults.
    * 
    * \param index index of a given CoordinateConversionResult in the list-model
    * returned by coordinateResults.

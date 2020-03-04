@@ -45,12 +45,13 @@ class CoordinateConversionOption : public QObject
   Q_CLASSINFO("RegisterEnumClassesUnscoped", "false")
   Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
   Q_PROPERTY(CoordinateType outputMode READ outputMode WRITE setOutputMode NOTIFY outputModeChanged)
-  Q_PROPERTY(bool addSpaces READ addSpaces WRITE setAddSpaces NOTIFY addSpacesChanged)
+  Q_PROPERTY(bool hasSpaces READ hasSpaces WRITE setHasSpaces NOTIFY hasSpacesChanged)
   Q_PROPERTY(int precision READ precision WRITE setPrecision NOTIFY precisionChanged)
   Q_PROPERTY(int decimalPlaces READ decimalPlaces WRITE setDecimalPlaces NOTIFY decimalPlacesChanged)
   Q_PROPERTY(MgrsConversionMode mgrsConversionMode READ mgrsConversionMode WRITE setMgrsConversionMode NOTIFY mgrsConversionModeChanged)
   Q_PROPERTY(LatitudeLongitudeFormat latLonFormat READ latLonFormat WRITE setLatLonFormat NOTIFY latLonFormatChanged)
   Q_PROPERTY(UtmConversionMode utmConversionMode READ utmConversionMode WRITE setUtmConversionMode NOTIFY utmConversionModeChanged)
+  Q_PROPERTY(GarsConversionMode garsConversionMode READ garsConversionMode WRITE setGarsConversionMode NOTIFY garsConversionModeChanged)
 public:
   /*! Fundamental coordinate format. */
   enum CoordinateType
@@ -126,13 +127,13 @@ public:
   /*!
    * \brief Flags whether to add spaces in notation (if applicable).
    */
-  bool addSpaces() const;
+  bool hasSpaces() const;
 
   /*!
-   * \brief Set addSpaces.
-   * \sa addSpaces
+   * \brief Set hasSpaces.
+   * \sa hasSpaces
    */
-  void setAddSpaces(bool addSpaces);
+  void setHasSpaces(bool hasSpaces);
 
   /*!
    * \brief Precision of conversion format (if applicable).
@@ -192,7 +193,7 @@ public:
   /*!
    * \brief The GARS conversion mode (if applicable).
    */
-  GarsConversionMode garsConvesrionMode() const;
+  GarsConversionMode garsConversionMode() const;
 
   /*!
    * \brief Sets garsConversionMode
@@ -207,8 +208,8 @@ signals:
   /*! \brief Emits when outputMode property changes. */
   void outputModeChanged();
 
-  /*! \brief Emits when addSpaces property changes. */
-  void addSpacesChanged();
+  /*! \brief Emits when hasSpaces property changes. */
+  void hasSpacesChanged();
 
   /*! \brief Emits when precision property changes. */
   void precisionChanged();
@@ -231,7 +232,7 @@ signals:
 private:
   QString m_name;
   CoordinateType m_outputMode;
-  bool m_addSpaces;
+  bool m_hasSpaces;
   int m_precision;
   int m_decimalPlaces;
   MgrsConversionMode m_mgrsConversionMode;

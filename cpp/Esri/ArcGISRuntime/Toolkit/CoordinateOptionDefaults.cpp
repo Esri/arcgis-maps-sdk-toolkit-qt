@@ -66,7 +66,7 @@ CoordinateConversionOption* createUsng(int precision, bool useSpaces, QObject* p
   option->setName(CoordinateConversionConstants::USNG_FORMAT);
   option->setOutputMode(CoordinateConversionOption::CoordinateType::Usng);
   option->setPrecision(precision);
-  option->setAddSpaces(useSpaces);
+  option->setHasSpaces(useSpaces);
   return option;
 }
 
@@ -76,7 +76,7 @@ CoordinateConversionOption* createUtm(UtmConversionMode mode, bool useSpaces, QO
   option->setName(CoordinateConversionConstants::UTM_FORMAT);
   option->setOutputMode(CoordinateConversionOption::CoordinateType::Utm);
   option->setUtmConversionMode(mode);
-  option->setAddSpaces(useSpaces);
+  option->setHasSpaces(useSpaces);
   return option;
 }
 

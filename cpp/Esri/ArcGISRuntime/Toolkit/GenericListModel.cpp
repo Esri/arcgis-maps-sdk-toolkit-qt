@@ -26,7 +26,6 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
-
 GenericListModel::GenericListModel(QObject* parent) :
   GenericListModel(nullptr, parent)
 {
@@ -242,7 +241,7 @@ const QMetaObject* GenericListModel::elementType() const
   return m_elementType;
 }
 
-void GenericListModel::setDisplayPropertyName(QString propertyName)
+void GenericListModel::setDisplayPropertyName(const QString& propertyName)
 {
   m_displayPropIndex = m_elementType->indexOfProperty(propertyName.toLatin1());
 }

@@ -53,7 +53,7 @@ QtObject {
     /*!
      * \brief Flags whether to add spaces in notation (if applicable).
      */
-    property bool addSpaces: true
+    property bool hasSpaces: true
 
     /*!
      * \brief Precision of conversion format (if applicable).
@@ -102,11 +102,11 @@ QtObject {
         case CoordinateConversionOption.CoordinateType.LatLon:
             return CoordinateFormatter.toLatitudeLongitude(point, latLonFormat, decimalPlaces);
         case CoordinateConversionOption.CoordinateType.Mgrs:
-            return CoordinateFormatter.toMgrs(point, mgrsConversionMode, decimalPlaces, addSpaces);
+            return CoordinateFormatter.toMgrs(point, mgrsConversionMode, decimalPlaces, hasSpaces);
         case CoordinateConversionOption.CoordinateType.Usng:
             return CoordinateFormatter.toUsng(point, precision, decimalPlaces);
         case CoordinateConversionOption.CoordinateType.Utm:
-            return CoordinateFormatter.toUtm(point, utmConversionMode, addSpaces);
+            return CoordinateFormatter.toUtm(point, utmConversionMode, hasSpaces);
         default:
             return "";
         }

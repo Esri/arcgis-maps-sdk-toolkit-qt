@@ -15,6 +15,7 @@
  ******************************************************************************/
 #include "CoordinateConversionController.h"
 
+// Toolkit headers
 #include "CoordinateConversionResult.h"
 #include "CoordinateOptionDefaults.h"
 #include "GeoViews.h"
@@ -34,12 +35,12 @@ namespace Toolkit
 
 namespace
 {
-constexpr double DEFAULT_ZOOMTO_DISTANCE = 1500.0;
+constexpr double DEFAULT_ZOOM_TO_DISTANCE = 1500.0;
 }
 
 CoordinateConversionController::CoordinateConversionController(QObject* parent):
   QObject(parent),
-  m_zoomToDistance(DEFAULT_ZOOMTO_DISTANCE),
+  m_zoomToDistance(DEFAULT_ZOOM_TO_DISTANCE),
   m_coordinateFormats(new GenericListModel(&CoordinateConversionOption::staticMetaObject, this)),
   m_conversionResults(new GenericListModel(&CoordinateConversionResult::staticMetaObject, this)),
   m_geoView(nullptr),
@@ -71,10 +72,14 @@ CoordinateConversionController::CoordinateConversionController(QObject* parent):
           auto index = m_conversionResults->index(i);
           auto result = m_conversionResults->element<CoordinateConversionResult>(index);
           if (result)
+          {
             connect(this, QOverload<const Point&>::of(&CoordinateConversionController::currentPointChanged),
                     result, QOverload<const Point&>::of(&CoordinateConversionResult::updateCoordinatePoint));
+          }
           else
+          {
             qWarning("Empty CoordinateConversionResult in the CoordinateConversionController results model at index %d", i);
+          }
         }
       }
      );
@@ -265,7 +270,6 @@ void CoordinateConversionController::forceUpdateCoordinates()
   emit currentPointChanged(m_currentPoint);
   emit currentPointChanged(QVariant::fromValue(static_cast<Geometry>(m_currentPoint)));
 }
-
 
 } // Toolkit
 } // ArcGISRuntime

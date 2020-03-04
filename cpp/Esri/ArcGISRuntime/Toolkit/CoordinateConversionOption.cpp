@@ -29,7 +29,7 @@ namespace Toolkit
 CoordinateConversionOption::CoordinateConversionOption(QObject* parent):
   QObject(parent),
   m_outputMode(CoordinateType::Usng),
-  m_addSpaces(true),
+  m_hasSpaces(true),
   m_precision(8),
   m_decimalPlaces(6),
   m_mgrsConversionMode(MgrsConversionMode::Automatic),
@@ -74,18 +74,18 @@ void CoordinateConversionOption::setName(const QString& name)
   emit nameChanged();
 }
 
-bool CoordinateConversionOption::addSpaces() const
+bool CoordinateConversionOption::hasSpaces() const
 {
-  return m_addSpaces;
+  return m_hasSpaces;
 }
 
-void CoordinateConversionOption::setAddSpaces(bool addSpaces)
+void CoordinateConversionOption::setHasSpaces(bool hasSpaces)
 {
-  if (m_addSpaces == addSpaces)
+  if (m_hasSpaces == hasSpaces)
     return;
 
-  m_addSpaces = addSpaces;
-  emit addSpacesChanged();
+  m_hasSpaces = hasSpaces;
+  emit hasSpacesChanged();
 }
 
 int CoordinateConversionOption::precision() const
@@ -158,7 +158,7 @@ void CoordinateConversionOption::setUtmConversionMode(UtmConversionMode utmConve
   emit utmConversionModeChanged();
 }
 
-GarsConversionMode CoordinateConversionOption::garsConvesrionMode() const
+GarsConversionMode CoordinateConversionOption::garsConversionMode() const
 {
   return m_garsConvesrionMode;
 }
@@ -192,7 +192,7 @@ QString CoordinateConversionOption::prettyPrint(const Point& point) const
     case CoordinateType::Mgrs:
     {
       const auto conversionMode = mgrsConversionMode();
-      return CoordinateFormatter::toMgrs(point, conversionMode, decimalPlaces(), addSpaces());
+      return CoordinateFormatter::toMgrs(point, conversionMode, decimalPlaces(), hasSpaces());
     }
     case CoordinateType::Usng:
     {
@@ -201,7 +201,7 @@ QString CoordinateConversionOption::prettyPrint(const Point& point) const
     case CoordinateType::Utm:
     {
       const auto conversionMode = utmConversionMode();
-      return CoordinateFormatter::toUtm(point, conversionMode, addSpaces());
+      return CoordinateFormatter::toUtm(point, conversionMode, hasSpaces());
     }
     default: 
       return QString();
@@ -219,7 +219,7 @@ Point CoordinateConversionOption::pointFromString(const QString& point, const Sp
   {
     return CoordinateFormatter::fromGars(point,
                                          spatialReference,
-                                         garsConvesrionMode());
+                                         garsConversionMode());
   }
   case CoordinateType::GeoRef:
   {
