@@ -93,7 +93,7 @@ public:
    * This conversion has the chance of failing, in which case an invalid
    * default-constructed Point will be returned.
    * 
-   * \param point QString to conver to a Point.
+   * \param point QString to convert to a Point.
    * \param spatialReference SpatialReference to use in conversion.
    * \return QString as a Point. 
    */
