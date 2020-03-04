@@ -35,7 +35,7 @@ NorthArrow::NorthArrow(QWidget* parent) :
   QLabel(parent),
   m_controller(new NorthArrowController(this))
 {
-  m_image = QPixmap(":/esri/arcgisruntime/tookit/images/compass.png");
+  m_image = QPixmap(":/Esri/ArcGISRuntime/Tookit/images/compass.png");
 
   if (!m_image.isNull())
   {

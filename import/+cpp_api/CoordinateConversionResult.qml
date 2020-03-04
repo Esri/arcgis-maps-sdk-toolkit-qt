@@ -13,5 +13,5 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import Esri.ArcGISRuntime.Toolkit 100.7
-CoordinateConversionControllerCPP { }
+import Esri.ArcGISRuntime.Toolkit.CppInternal 1.0
+CoordinateConversionResultCPP { }

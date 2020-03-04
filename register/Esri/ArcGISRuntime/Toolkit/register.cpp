@@ -35,11 +35,11 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
-const char* const Namespace= "Esri.ArcGISRuntime.Toolkit";
+const char* const Namespace= "Esri.ArcGISRuntime.Toolkit.CppInternal";
 
-const int VersionMajor = 100;
+const int VersionMajor = 1;
 
-const int VersionMinor = 7;
+const int VersionMinor = 0;
 
 namespace
 {

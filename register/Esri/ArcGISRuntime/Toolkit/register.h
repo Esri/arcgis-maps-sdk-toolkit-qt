@@ -36,21 +36,6 @@ namespace Toolkit
 {
 
 /*!
- * \brief Toolkit namespace in QML. I.E.: "Esri.ArcGISRuntime.Toolkit"
- */
-extern const char* const Namespace;
-
-/*!
- * \brief The current major version number of the toolkit in QML.
- */
-extern const int VersionMajor;
-
-/*!
- * \brief The current minor version number of the toolkit in QML.
- */
-extern const int VersionMinor;
-
-/*!
  * \brief This registration function is required to register all the C++
  * controllers within your application in QML.
  * 

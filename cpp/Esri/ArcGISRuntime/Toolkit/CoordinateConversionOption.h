@@ -52,7 +52,7 @@ class CoordinateConversionOption : public QObject
   Q_PROPERTY(LatitudeLongitudeFormat latLonFormat READ latLonFormat WRITE setLatLonFormat NOTIFY latLonFormatChanged)
   Q_PROPERTY(UtmConversionMode utmConversionMode READ utmConversionMode WRITE setUtmConversionMode NOTIFY utmConversionModeChanged)
 public:
-  /*! Fundamental coordinate format.*/
+  /*! Fundamental coordinate format. */
   enum CoordinateType
   {
     Gars,

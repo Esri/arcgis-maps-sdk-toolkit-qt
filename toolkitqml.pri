@@ -11,12 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+RESOURCES += $$PWD/images/esri_arcgisruntime_toolkit_images.qrc \
+             $$PWD/import/esri_arcgisruntime_toolkit_qml.qrc
 
-module Esri.ArcGISRuntime.Toolkit
-CoordinateConversion 100.7 CoordinateConversion.qml
-CoordinateConversionController 100.7 CoordinateConversionController.qml
-CoordinateConversionOption 100.7 CoordinateConversionOption.qml
-CoordinateConversionResult 100.7 CoordinateConversionResult.qml
-internal FlashImage FlashImage.qml
-NorthArrow 100.7 NorthArrow.qml
-NorthArrowController 100.7 NorthArrowController.qml
+# For Qt Creator only
+QML_IMPORT_PATH += $$PWD/import

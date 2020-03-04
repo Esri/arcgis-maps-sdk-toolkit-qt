@@ -15,8 +15,6 @@
  ******************************************************************************/
 import QtQuick 2.12
 
-import Esri.ArcGISRuntime.Toolkit 100.7
-
 /*!
  * \qmltype NorthArrow
  * \inqmlmodule Esri.ArcGISRuntime.Toolkit
