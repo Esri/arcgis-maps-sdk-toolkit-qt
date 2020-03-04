@@ -160,7 +160,7 @@ Once you have successfully imported the toolkit, you can create individual tools
 in your own widgets files.
 
 - in your widgets code, create a new instance of the tool you wish to use and
-  add it your widgets layout. You will also normally need to pass the `GeoView`
+  add it to your widgets layout. You will also normally need to pass the `GeoView`
   which the tool is designed to work with:
 
 ```cpp

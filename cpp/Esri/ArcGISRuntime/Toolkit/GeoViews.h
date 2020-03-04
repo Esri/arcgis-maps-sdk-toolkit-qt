@@ -23,7 +23,7 @@
 * but they implement these interfaces independently due to Qt limitations with
 * multiple inheritance.
 *
-* To compound this issue: when the toolkit supports the Quick workflow we
+* In addition, when the toolkit supports the Quick workflow we
 * depend on the Qt QML module. When the toolkit supports the widgets workflow
 * we depends on the Qt Widgets module. A user who writes a Widgets app should
 * not be forced to include Quick as a dependency or vice versa.
