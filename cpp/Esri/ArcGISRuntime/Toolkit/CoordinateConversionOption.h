@@ -118,7 +118,7 @@ public:
   CoordinateType outputMode() const;
 
   /*!
-   * \brief Set converion type.
+   * \brief Set conversion type.
    * \sa outputMode
    */
   void setOutputMode(CoordinateType outputMode);
