@@ -27,15 +27,7 @@ namespace Toolkit
 {
 
 CoordinateConversionOption::CoordinateConversionOption(QObject* parent):
-  QObject(parent),
-  m_outputMode(CoordinateType::Usng),
-  m_hasSpaces(true),
-  m_precision(8),
-  m_decimalPlaces(6),
-  m_mgrsConversionMode(MgrsConversionMode::Automatic),
-  m_latLonFormat(LatitudeLongitudeFormat::DecimalDegrees),
-  m_utmConversionMode(UtmConversionMode::LatitudeBandIndicators),
-  m_garsConvesrionMode(GarsConversionMode::Center)
+  QObject(parent)
 {
 }
 

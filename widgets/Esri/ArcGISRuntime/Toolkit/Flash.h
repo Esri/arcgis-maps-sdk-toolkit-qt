@@ -119,7 +119,7 @@ private:
 private:
   QColor m_color;
   QPointF m_point;
-  int m_radius;
+  int m_radius = 0;
 };
 
 } // Toolkit

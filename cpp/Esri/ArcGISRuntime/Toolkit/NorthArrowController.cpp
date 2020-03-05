@@ -17,6 +17,9 @@
 
 #include "GeoViews.h"
 
+// std headers
+#include <cmath>
+
 namespace Esri {
 namespace ArcGISRuntime {
 namespace Toolkit {

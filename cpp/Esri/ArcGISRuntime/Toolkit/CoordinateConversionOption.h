@@ -85,7 +85,7 @@ public:
    * \return String representation of point with the current formatting options
    * applied.
    */
-  Q_INVOKABLE QString prettyPrint(const Point& point) const;
+  QString prettyPrint(const Point& point) const;
 
   /*!
    * \brief Given a string called point, converts it to a Point using the
@@ -98,8 +98,8 @@ public:
    * \param spatialReference SpatialReference to use in conversion.
    * \return QString as a Point. 
    */
-  Q_INVOKABLE Point pointFromString(const QString& point,
-                                    const SpatialReference& spatialReference);
+  Point pointFromString(const QString& point,
+                        const SpatialReference& spatialReference);
 
   /*!
    * \brief The user friendly name of this option.
@@ -231,14 +231,14 @@ signals:
 
 private:
   QString m_name;
-  CoordinateType m_outputMode;
-  bool m_hasSpaces;
-  int m_precision;
-  int m_decimalPlaces;
-  MgrsConversionMode m_mgrsConversionMode;
-  LatitudeLongitudeFormat m_latLonFormat;
-  UtmConversionMode m_utmConversionMode;
-  GarsConversionMode m_garsConvesrionMode;
+  CoordinateType m_outputMode = CoordinateType::Usng;
+  bool m_hasSpaces = true;
+  int m_precision = 8;
+  int m_decimalPlaces = 6;
+  MgrsConversionMode m_mgrsConversionMode = MgrsConversionMode::Automatic;
+  LatitudeLongitudeFormat m_latLonFormat = LatitudeLongitudeFormat::DecimalDegrees;
+  UtmConversionMode m_utmConversionMode = UtmConversionMode::LatitudeBandIndicators;
+  GarsConversionMode m_garsConvesrionMode = GarsConversionMode::Center;
 };
 
 } // Toolkit

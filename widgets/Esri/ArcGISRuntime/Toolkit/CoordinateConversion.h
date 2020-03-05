@@ -97,10 +97,10 @@ private slots:
   void flash();
 
 private:
-  CoordinateConversionController* m_controller;
-  QMenu* m_resultsMenu;
+  CoordinateConversionController* m_controller = nullptr;
+  QMenu* m_resultsMenu = nullptr;
   QPointer<Flash> m_flash;
-  Ui::CoordinateConversion* m_ui;
+  Ui::CoordinateConversion* m_ui = nullptr;
 };
 
 } // Toolkit

@@ -32,7 +32,6 @@ namespace Toolkit
  * 
  * This controller calculates the current heading from a GeoView, and allows
  * the NorthArrow to apply a given heading to the GeoView.
- * 
  */
 class NorthArrowController : public QObject
 {
@@ -65,10 +64,10 @@ public:
    * 
    * \param geoView Object which must inherit from GeoView* and QObject*. 
    */
-  void setGeoView(QObject* mapView);
+  void setGeoView(QObject* geoView);
 
   /*!
-   * \brief The calculated heading of this controller.
+   * \brief The calculated heading of this controller in degrees.
    * \return heading as double
    */
   double heading() const;
@@ -83,7 +82,7 @@ signals:
 public slots:
   /*!
    * \brief Set the heading by rotating the MapView or SceneView camera to the
-   * given heading.
+   * given heading (in degrees).
    */
   void setHeading(double heading);
 

@@ -88,9 +88,9 @@ private slots:
 
 private:
   QPersistentModelIndex m_index;
-  int m_customRole;
+  int m_customRole = -1;
   QPointer<QObject> m_trackedObject;
-  QAbstractItemModel* m_parentModel;
+  QAbstractItemModel* m_parentModel = nullptr;
 };
 
 } // Esri

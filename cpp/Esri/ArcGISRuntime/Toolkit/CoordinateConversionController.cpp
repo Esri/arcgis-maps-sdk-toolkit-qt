@@ -42,9 +42,7 @@ CoordinateConversionController::CoordinateConversionController(QObject* parent):
   QObject(parent),
   m_zoomToDistance(DEFAULT_ZOOM_TO_DISTANCE),
   m_coordinateFormats(new GenericListModel(&CoordinateConversionOption::staticMetaObject, this)),
-  m_conversionResults(new GenericListModel(&CoordinateConversionResult::staticMetaObject, this)),
-  m_geoView(nullptr),
-  m_inPickingMode(false)
+  m_conversionResults(new GenericListModel(&CoordinateConversionResult::staticMetaObject, this))
 {
   {
     // Some default coordinate conversion formats to set us up with.

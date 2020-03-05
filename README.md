@@ -64,7 +64,7 @@ MapView {
         height: 32
         anchors {
             right: parent.right
-            bottom: view.bottom
+            bottom: parent.bottom
         }
         geoView: mapView
     }
@@ -114,15 +114,10 @@ in your own QML files.
   `GeoView` etc. you wish the tool to work with. For example, to add a `NorthArrow`:
 
 ```qml
-import Esri.ArcGISRuntime 100.8
 import "qrc:///Esri/ArcGISRuntime/Toolkit" as ArcGISRuntimeToolkit
 
 MapView {
     id: mapView
-
-    Map {
-      BasemapTopographic {}
-    }
 
     // A visible compass is now embedded in the mapView and hooked up!
     ArcGISRuntimeToolkit.NorthArrow {
@@ -131,7 +126,7 @@ MapView {
         height: 32
         anchors {
             right: parent.right
-            bottom: view.bottom
+            bottom: parent.bottom
         }
         geoView: mapView
     }
@@ -166,7 +161,8 @@ in your own widgets files.
 ```cpp
   #include "Esri/ArcGISRuntime/Toolkit/NorthArrow.h"
   ...
-  auto northArrow = new NorthArrow(this);
+  auto northArrow = new Esri::ArcGISRuntime::Toolkit::NorthArrow(this);
   northArrow->setMapView(m_mapView);
+  // Add your NorthArrow to your UI here!
   northArrow->show();
 ```

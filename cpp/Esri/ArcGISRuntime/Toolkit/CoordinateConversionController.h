@@ -297,11 +297,11 @@ public slots:
 private:
   Point m_currentPoint;
   TaskWatcher m_screenToLocationProcess;
-  double m_zoomToDistance;
-  GenericListModel* m_coordinateFormats;
-  GenericListModel* m_conversionResults;
-  QObject* m_geoView;
-  bool m_inPickingMode;
+  double m_zoomToDistance = 0.0;
+  GenericListModel* m_coordinateFormats = nullptr;
+  GenericListModel* m_conversionResults = nullptr;
+  QObject* m_geoView = nullptr;
+  bool m_inPickingMode = false;
 };
 
 } // Toolkit

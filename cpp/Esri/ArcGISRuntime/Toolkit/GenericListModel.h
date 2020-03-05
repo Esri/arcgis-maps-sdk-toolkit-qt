@@ -87,7 +87,7 @@ public:
    * \brief Constructor
    * \param parent Owning parent QObject.
    */
-  Q_INVOKABLE GenericListModel(QObject* parent = nullptr);
+  explicit Q_INVOKABLE GenericListModel(QObject* parent = nullptr);
 
   /*!
    * \brief Constructor
@@ -331,8 +331,8 @@ private:
   int count() const;
 
 private:
-  int m_displayPropIndex;
-  const QMetaObject* m_elementType;
+  int m_displayPropIndex = -1;
+  const QMetaObject* m_elementType = nullptr;
   QList<QObject*> m_objects;
 };
 

@@ -82,7 +82,7 @@ protected:
 
 private:
   QPixmap m_image;
-  NorthArrowController* m_controller;
+  NorthArrowController* m_controller = nullptr;
 };
 
 } // Toolkit

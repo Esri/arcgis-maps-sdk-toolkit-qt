@@ -33,8 +33,7 @@ GenericListModel::GenericListModel(QObject* parent) :
 
 GenericListModel::GenericListModel(const QMetaObject* elementType, QObject* parent) :
   QAbstractListModel(parent),
-  m_displayPropIndex(-1),
-  m_elementType(std::move(elementType))
+  m_elementType(elementType)
 {
   connect(this, &GenericListModel::rowsInserted, this, &GenericListModel::countChanged);
   connect(this, &GenericListModel::rowsRemoved, this, &GenericListModel::countChanged);
@@ -97,10 +96,8 @@ QVariant GenericListModel::data(const QModelIndex& index, int role) const
     const auto property = m_elementType->property(propIndex);
     return property.read(o);
   }
-  else
-  {
-    return QVariant();
-  }
+
+  return QVariant();
 }
 
 bool GenericListModel::setData(const QModelIndex& index, const QVariant& value, int role)
@@ -137,10 +134,8 @@ bool GenericListModel::setData(const QModelIndex& index, const QVariant& value, 
     const auto property = m_elementType->property(propIndex);
     return property.write(o, value);
   }
-  else
-  {
-    return false;
-  }
+
+  return false;
 }
 
 QHash<int, QByteArray> GenericListModel::roleNames() const
@@ -154,6 +149,9 @@ QHash<int, QByteArray> GenericListModel::roleNames() const
   const int offset = m_elementType->propertyOffset();
   for (int i = offset; i < m_elementType->propertyCount(); ++i)
   {
+    // Each property has a name and an index which starts from an arbitrary
+    // offset. So we have properties at indices: OFFSET, OFFSET+1, OFFSET+2....
+    // We map OFFSET to, Qt::UserRole+1, OFFSET+1 to Qt::UserRole+2 and so on.
     auto property = m_elementType->property(i);
     output.insert(i - offset + Qt::UserRole + 1, property.name());
   }
@@ -337,8 +335,7 @@ void GenericListModel::connectElement(QModelIndex index)
   for (int i = offset; i < m_elementType->propertyCount(); ++i)
   {
     auto property = m_elementType->property(i);
-    auto notifySignal = property.notifySignal();
-    if (notifySignal.isValid())
+    if (property.hasNotifySignal())
     {
       auto element = new MetaElement(
         index,
@@ -347,7 +344,7 @@ void GenericListModel::connectElement(QModelIndex index)
         this);
 
       // Signal to signal connection.
-      connect(object, notifySignal,
+      connect(object, property.notifySignal(),
               element, QMetaMethod::fromSignal(&MetaElement::propertyChanged));
     }
   }

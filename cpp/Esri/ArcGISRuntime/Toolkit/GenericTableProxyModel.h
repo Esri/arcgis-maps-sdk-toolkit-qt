@@ -192,7 +192,7 @@ public:
   void setSourceModel(GenericListModel* listModel);
 
 private:
-  GenericListModel* m_sourceModel;
+  GenericListModel* m_sourceModel = nullptr;
 };
 
 } // Toolkit
