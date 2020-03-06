@@ -11,5 +11,7 @@
         <file>FlashImage.qml</file>
         <file>NorthArrow.qml</file>
         <file>NorthArrowController.qml</file>
+        <file>PopupStackView.qml</file>
+        <file>PopupViewBase.qml</file>
     </qresource>
 </RCC>

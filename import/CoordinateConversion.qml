@@ -109,9 +109,7 @@ Control {
         value: captureModeButton.checked
     }
 
-    background: Rectangle {
-        height: gridLayout.height
-    }
+    background: Rectangle { }
 
     contentItem: ColumnLayout {
         id: gridLayout
