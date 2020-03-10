@@ -17,18 +17,18 @@ RESOURCES += $$PWD/images/esri_arcgisruntime_toolkit_images.qrc
 
 DEFINES += WIDGETS_ARCGISRUNTIME_TOOLKIT
 
-INCLUDEPATH += $$PWD/widgets
-
 WIDGETPATH = $$PWD/widgets/Esri/ArcGISRuntime/Toolkit
 
-HEADERS += $$WIDGETPATH/CoordinateEditDelegate.h \
-           $$WIDGETPATH/CoordinateConversion.h \
-           $$WIDGETPATH/Flash.h \
+INCLUDEPATH += $$PWD/widgets $$WIDGETPATH
+
+HEADERS += $$WIDGETPATH/CoordinateConversion.h \
+           $$WIDGETPATH/Internal/CoordinateEditDelegate.h \
+           $$WIDGETPATH/Internal/Flash.h \
            $$WIDGETPATH/NorthArrow.h
 
-SOURCES += $$WIDGETPATH/CoordinateEditDelegate.cpp \ 
-           $$WIDGETPATH/CoordinateConversion.cpp \
-           $$WIDGETPATH/Flash.cpp \
+SOURCES += $$WIDGETPATH/CoordinateConversion.cpp \
+           $$WIDGETPATH/Internal/CoordinateEditDelegate.cpp \ 
+           $$WIDGETPATH/Internal/Flash.cpp \
            $$WIDGETPATH/NorthArrow.cpp
 
 FORMS += $$WIDGETPATH/CoordinateConversion.ui

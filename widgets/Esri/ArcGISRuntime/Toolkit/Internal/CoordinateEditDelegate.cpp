@@ -15,10 +15,11 @@
  ******************************************************************************/
 #include "CoordinateEditDelegate.h"
 
-#include "Esri/ArcGISRuntime/Toolkit/CoordinateConversionResult.h"
-#include "Esri/ArcGISRuntime/Toolkit/CoordinateConversionController.h"
-#include "Esri/ArcGISRuntime/Toolkit/GenericListModel.h"
-#include "Esri/ArcGISRuntime/Toolkit/GenericTableProxyModel.h"
+// Toolkit headers
+#include "CoordinateConversionResult.h"
+#include "CoordinateConversionController.h"
+#include "Internal/GenericListModel.h"
+#include "Internal/GenericTableProxyModel.h"
 
 //Qt headers
 #include <QLineEdit>

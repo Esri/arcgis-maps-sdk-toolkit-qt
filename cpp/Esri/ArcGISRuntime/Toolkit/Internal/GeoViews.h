@@ -13,8 +13,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_GEOVIEWS_H
-#define ESRI_ARCGISRUNTIME_TOOLKIT_GEOVIEWS_H
+#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_GEOVIEWS_H
+#define ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_GEOVIEWS_H
 /*!
 * \internal
 * \file GeoViews.h
@@ -55,4 +55,4 @@
   } } }
 #endif
 
-#endif // ESRI_ARCGISRUNTIME_TOOLKIT_GEOVIEWS_H
+#endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_GEOVIEWS_H

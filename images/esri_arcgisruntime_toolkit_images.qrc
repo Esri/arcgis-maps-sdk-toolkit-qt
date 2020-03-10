@@ -3,10 +3,10 @@
         <file>compass.png</file>
         <file>flash.png</file>
         <file>menu.png</file>
-        <file>menuCollapse.png</file>
-        <file>menuExpand.png</file>
-        <file>Mouse_Click_Mode.png</file>
-        <file>Text_Editing_Mode.png</file>
-        <file>Zoom.png</file>
+        <file>menu_collapse.png</file>
+        <file>menu_expand.png</file>
+        <file>mouse_click_mode.png</file>
+        <file>text_editing_mode.png</file>
+        <file>zoom.png</file>
     </qresource>
 </RCC>

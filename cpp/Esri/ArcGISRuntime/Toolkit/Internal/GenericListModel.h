@@ -13,8 +13,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_GENERICLISTMODEL_H
-#define ESRI_ARCGISRUNTIME_TOOLKIT_GENERICLISTMODEL_H
+#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_GENERICLISTMODEL_H
+#define ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_GENERICLISTMODEL_H
 
 #include <QAbstractListModel>
 #include <QMetaObject>
@@ -340,4 +340,4 @@ private:
 } // ArcGISRuntime
 } // Esri
 
-#endif // ESRI_ARCGISRUNTIME_TOOLKIT_GENERICLISTMODEL_H
+#endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_GENERICLISTMODEL_H

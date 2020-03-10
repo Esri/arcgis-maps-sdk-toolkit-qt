@@ -13,8 +13,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_FLASH_H
-#define ESRI_ARCGISRUNTIME_TOOLKIT_FLASH_H
+#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_FLASH_H
+#define ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_FLASH_H
 
 // Qt headers
 #include <QWidget>
@@ -126,4 +126,4 @@ private:
 } // ArcGISRuntime
 } // Esri
 
-#endif // ESRI_ARCGISRUNTIME_TOOLKIT_FLASH_H
+#endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_FLASH_H

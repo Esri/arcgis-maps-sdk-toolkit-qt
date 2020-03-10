@@ -13,9 +13,12 @@
 # limitations under the License.
 include($$PWD/common.pri)
 
-INCLUDEPATH += $$PWD/register
-HEADERS += $$PWD/register/Esri/ArcGISRuntime/Toolkit/register.h
-SOURCES += $$PWD/register/Esri/ArcGISRuntime/Toolkit/register.cpp
+REGISTERPATH = $$PWD/register/Esri/ArcGISRuntime/Toolkit
+
+INCLUDEPATH += $$PWD/register $$REGISTERPATH
+
+HEADERS += $$REGISTERPATH/register.h
+SOURCES += $$REGISTERPATH/register.cpp
 
 RESOURCES += $$PWD/images/esri_arcgisruntime_toolkit_images.qrc \
              $$PWD/import/esri_arcgisruntime_toolkit_qml.qrc

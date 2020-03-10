@@ -13,8 +13,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_METAELEMENT_H
-#define ESRI_ARCGISRUNTIME_TOOLKIT_METAELEMENT_H
+#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_METAELEMENT_H
+#define ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_METAELEMENT_H
 
 // Qt headers
 #include <QObject>
@@ -97,4 +97,4 @@ private:
 } // ArcGISRuntime
 } // Toolkit
 
-#endif // ESRI_ARCGISRUNTIME_TOOLKIT_METAELEMENT_H
+#endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_METAELEMENT_H

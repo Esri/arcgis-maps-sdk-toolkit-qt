@@ -16,10 +16,10 @@
 #include "register.h"
 
 // Toolkit includes
-#include "Esri/ArcGISRuntime/Toolkit/CoordinateConversionController.h"
-#include "Esri/ArcGISRuntime/Toolkit/CoordinateConversionOption.h"
-#include "Esri/ArcGISRuntime/Toolkit/CoordinateConversionResult.h"
-#include "Esri/ArcGISRuntime/Toolkit/NorthArrowController.h"
+#include "CoordinateConversionController.h"
+#include "CoordinateConversionOption.h"
+#include "CoordinateConversionResult.h"
+#include "NorthArrowController.h"
 
 // ArcGIS includes
 #include <Point.h>

@@ -169,7 +169,7 @@ Control {
                 checked: false
                 flat: true
                 Layout.alignment: Qt.AlignRight
-                icon.source: menuButton.checked ? "images/menuExpand.png" : "images/menuCollapse.png"
+                icon.source: menuButton.checked ? "images/menu_expand.png" : "images/menu_collapse.png"
             }
         }
 
@@ -203,7 +203,7 @@ Control {
 
             Button {
                 id: zoomToButton
-                icon.source: "images/Zoom.png"
+                icon.source: "images/zoom.png"
                 flat: true
                 Layout.alignment: Qt.AlignRight
                 Layout.maximumHeight: 32
@@ -241,7 +241,7 @@ Control {
                 id: editCoordinateButton
                 checkable: true
                 flat: true
-                icon.source: "images/Text_Editing_Mode.png"
+                icon.source: "images/text_editing_mode.png"
                 Layout.alignment: Qt.AlignRight
                 Layout.maximumHeight: 32
                 Layout.maximumWidth: Layout.maximumHeight
@@ -252,7 +252,7 @@ Control {
                 id: captureModeButton
                 checkable: true
                 flat: true
-                icon.source: "images/Mouse_Click_Mode.png"
+                icon.source: "images/mouse_click_mode.png"
                 Layout.alignment: Qt.AlignRight
                 Layout.maximumHeight: 32
                 Layout.maximumWidth: Layout.maximumHeight

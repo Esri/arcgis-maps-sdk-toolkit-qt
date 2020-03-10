@@ -18,7 +18,7 @@
 // Toolkit headers
 #include "CoordinateConversionResult.h"
 #include "CoordinateOptionDefaults.h"
-#include "GeoViews.h"
+#include "Internal/GeoViews.h"
 
 // Qt headers
 #include <QtGlobal>

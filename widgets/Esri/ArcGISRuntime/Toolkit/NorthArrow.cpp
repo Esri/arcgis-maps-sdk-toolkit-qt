@@ -16,7 +16,7 @@
 #include "NorthArrow.h"
 
 // Toolkit headers
-#include "Esri/ArcGISRuntime/Toolkit/NorthArrowController.h"
+#include "NorthArrowController.h"
 
 // ArcGISRuntime headers
 #include <MapGraphicsView.h>

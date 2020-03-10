@@ -18,7 +18,7 @@
 
 // Toolkit headers
 #include "CoordinateConversionOption.h"
-#include "GenericListModel.h"
+#include "Internal/GenericListModel.h"
 
 // Qt headers
 #include <QObject>

@@ -17,14 +17,14 @@
 #include "ui_CoordinateConversion.h"
 
 // Toolkit headers
-#include "CoordinateEditDelegate.h"
-#include "Flash.h"
+#include "Internal/CoordinateEditDelegate.h"
+#include "Internal/Flash.h"
 
 // Toolkit Controller headers
-#include "Esri/ArcGISRuntime/Toolkit/CoordinateConversionController.h"
-#include "Esri/ArcGISRuntime/Toolkit/CoordinateConversionResult.h"
-#include "Esri/ArcGISRuntime/Toolkit/GenericListModel.h"
-#include "Esri/ArcGISRuntime/Toolkit/GenericTableProxyModel.h"
+#include "CoordinateConversionController.h"
+#include "CoordinateConversionResult.h"
+#include "Internal/GenericListModel.h"
+#include "Internal/GenericTableProxyModel.h"
 
 // ArcGISRuntime headers
 #include <MapGraphicsView.h>

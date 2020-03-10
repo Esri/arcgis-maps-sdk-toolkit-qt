@@ -21,7 +21,7 @@
      </property>
      <property name="icon">
       <iconset resource="../images/esri_arcgisruntime_toolkit_images.qrc">
-       <normaloff>:/Esri/ArcGISRuntime/Toolkit/images/Zoom.png</normaloff>:/Esri/ArcGISRuntime/Toolkit/images/Zoom.png</iconset>
+       <normaloff>:/Esri/ArcGISRuntime/Toolkit/images/zoom.png</normaloff>:/Esri/ArcGISRuntime/Toolkit/images/zoom.png</iconset>
      </property>
     </widget>
    </item>
@@ -43,7 +43,7 @@
      </property>
      <property name="icon">
       <iconset resource="../images/esri_arcgisruntime_toolkit_images.qrc">
-       <normaloff>:/Esri/ArcGISRuntime/Toolkit/images/Mouse_Click_Mode.png</normaloff>:/Esri/ArcGISRuntime/Toolkit/images/Mouse_Click_Mode.png</iconset>
+       <normaloff>:/Esri/ArcGISRuntime/Toolkit/images/mouse_click_mode.png</normaloff>:/Esri/ArcGISRuntime/Toolkit/images/mouse_click_mode.png</iconset>
      </property>
     </widget>
    </item>

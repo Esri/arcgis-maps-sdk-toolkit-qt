@@ -15,7 +15,7 @@
  ******************************************************************************/
 #include "NorthArrowController.h"
 
-#include "GeoViews.h"
+#include "Internal/GeoViews.h"
 
 // std headers
 #include <cmath>

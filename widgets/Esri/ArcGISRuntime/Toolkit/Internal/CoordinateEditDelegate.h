@@ -13,8 +13,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_COORDIANTEEDITDELEGATE_H
-#define ESRI_ARCGISRUNTIME_TOOLKIT_COORDIANTEEDITDELEGATE_H
+#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_COORDIANTEEDITDELEGATE_H
+#define ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_COORDIANTEEDITDELEGATE_H
 
 // Qt headers
 #include <QItemDelegate>
@@ -83,4 +83,4 @@ private:
 } // ArcGISRuntime
 } // Esri
 
-#endif // ESRI_ARCGISRUNTIME_TOOLKIT_COORDIANTEEDITDELEGATE_H
+#endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_COORDIANTEEDITDELEGATE_H
