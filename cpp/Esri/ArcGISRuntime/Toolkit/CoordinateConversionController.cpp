@@ -121,6 +121,7 @@ void CoordinateConversionController::setGeoView(QObject* geoView)
     {
       if (taskId != m_screenToLocationTask.taskId())
         return;
+
       setCurrentPoint(point);
     });
   }

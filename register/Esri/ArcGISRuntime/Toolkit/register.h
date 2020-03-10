@@ -46,7 +46,6 @@ namespace Toolkit
  * file selector. This is the mechanism utilized to override, say,
  * NorthArrowController.qml with the NorthArrowController provided by C++.
  *
- *
  * This register function also registers the following ArcGISRuntime
  * types in the Qt Metatype system.
  *
