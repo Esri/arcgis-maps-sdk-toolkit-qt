@@ -13,5 +13,6 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
+// This file is an alias to expose a C++ type as a QML type use file-selectors.
 import Esri.ArcGISRuntime.Toolkit.CppInternal 1.0
 CoordinateConversionOptionCPP { }

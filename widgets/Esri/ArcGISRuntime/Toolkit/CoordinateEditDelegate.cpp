@@ -68,8 +68,8 @@ void CoordinateEditDelegate::setModelData(
   auto result = listModel->element<CoordinateConversionResult>(index);
   if (result)
   {
-    // If text is exactly the same do not commit - otherwise what looks like a
-    // no-change will cause a change due to differences in format accuracies.
+    // Only commit if text differs - otherwise what looks like a
+    // non-change will cause a change due to differences in format accuracies.
     if (result->notation() != lineEdit->text())
       m_controller->setCurrentPoint(lineEdit->text(), result->type());
   }

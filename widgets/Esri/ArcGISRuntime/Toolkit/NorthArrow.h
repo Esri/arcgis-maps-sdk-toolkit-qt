@@ -37,7 +37,7 @@ class NorthArrowController;
  * compass heading matching the current rotation of the MapView, or Camera
  * heading of the SceneView. 
  * Double clicking on the NorthArrow triggers the heading of the connected
- * GeoView to be orientainted to 0.
+ * GeoView to be orientated to 0 (North).
  */
 class NorthArrow : public QLabel
 {

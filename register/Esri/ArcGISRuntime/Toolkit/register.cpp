@@ -15,11 +15,14 @@
  ******************************************************************************/
 #include "register.h"
 
-// Toolkit Includes
+// Toolkit includes
 #include "Esri/ArcGISRuntime/Toolkit/CoordinateConversionController.h"
 #include "Esri/ArcGISRuntime/Toolkit/CoordinateConversionOption.h"
 #include "Esri/ArcGISRuntime/Toolkit/CoordinateConversionResult.h"
 #include "Esri/ArcGISRuntime/Toolkit/NorthArrowController.h"
+
+// ArcGIS includes
+#include <Point.h>
 
 // Qt Includes
 #include <QQmlEngine>
@@ -35,19 +38,17 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
-const char* const Namespace= "Esri.ArcGISRuntime.Toolkit.CppInternal";
+constexpr char const* NAMESPACE = "Esri.ArcGISRuntime.Toolkit.CppInternal";
 
-const int VersionMajor = 1;
+constexpr int VERSION_MAJOR = 1;
 
-const int VersionMinor = 0;
+constexpr int VERSION_MINOR = 0;
 
 namespace
 {
-
-
 /*!
  * \internal
- * \brief Convenience function for registration. Registers the C++ type Foo as
+ * \brief Function for registration. Registers the C++ type Foo as
  * FooCPP in QML with the appropriate version and namespace information.
  * 
  * \note In QML, we alias the QML type \c FooCPP to QML type \c Foo using the
@@ -61,7 +62,7 @@ void registerComponent()
   static_assert(std::is_base_of<QObject, T>::value, "Must inherit QObject");
   auto name = QString("%1CPP").arg(T::staticMetaObject.className());
   name.remove("Esri::ArcGISRuntime::Toolkit::");
-  qmlRegisterType<T>(Namespace, VersionMajor, VersionMinor, name.toLatin1());
+  qmlRegisterType<T>(NAMESPACE, VERSION_MAJOR, VERSION_MINOR, name.toLatin1());
 }
 
 /*!
@@ -74,10 +75,11 @@ void addFileSelector(QQmlEngine* engine)
   auto fileSelector = QQmlFileSelector::get(engine);
   if (!fileSelector)
     fileSelector = new QQmlFileSelector(engine, engine);
+
   fileSelector->setExtraSelectors({"cpp_api"});
 }
 
-}
+} // namespace
 
 void registerComponents(QQmlEngine* engine)
 {
@@ -86,6 +88,8 @@ void registerComponents(QQmlEngine* engine)
   registerComponent<CoordinateConversionOption>();
   registerComponent<CoordinateConversionResult>();
   registerComponent<NorthArrowController>();
+
+  qRegisterMetaType<Point>("Esri::ArcGISRuntime::Point");
 }
 
 } // Toolkit

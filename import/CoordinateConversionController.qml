@@ -14,7 +14,7 @@
  *  limitations under the License.
  ******************************************************************************/
 import QtQml 2.12
-import Esri.ArcGISRuntime 100.7
+import Esri.ArcGISRuntime 100.8
 
 /*!
  * \qmltype CoordinateConversionController
@@ -142,8 +142,8 @@ QtObject {
         let point = geoView.locationToScreen(internal.currentPoint);
         if (point && geoView.geoViewType === Enums.GeoViewTypeSceneView)
             return point.screenPoint;
-        else
-            return point;
+
+        return point;
     }
 
     /*!
@@ -205,7 +205,7 @@ QtObject {
 
     /*!
     * \brief Updates the GeoView's camera to point to the current point's
-    * location on the map.
+    * location on the map or scene.
     * \sa zoomToDistance
     */
     function zoomToCurrentPoint() {
@@ -221,7 +221,6 @@ QtObject {
                 "heading": camera.heading,
                 "roll": camera.roll,
                 "pitch": camera.pitch
-
             });
             geoView.setViewpointCameraAndSeconds(newCamera, 1.0);
         }
@@ -234,21 +233,6 @@ QtObject {
             });
             geoView.setViewpointAndSeconds(newViewpoint, 1.0);
         }
-    }
-
-    /*!
-    * \internal
-    * \brief This is a helper function to keep parity with the C++
-    * CoordinateConversionController. That controller can not pass `Point` 
-    * through QML to other controller objects.
-    * So this forces _that_ controller to emit the currentPointChanged
-    * signal again: which force all downstream consumers to update.
-    * 
-    * If a C++ point were consumable in QML then we would just call the point
-    * getter instead. But we need this interface to maintain 1-to-1 parity.
-    */
-    function forceUpdateCoordinates() {
-        currentPointChanged(internal.currentPoint);
     }
 
     property QtObject internal: QtObject {
@@ -273,5 +257,4 @@ QtObject {
             }
         }
     }
-
 }

@@ -248,8 +248,8 @@ QString GenericListModel::displayPropertyName()
 {
   if (m_displayPropIndex < 0)
     return "";
-  else
-    return m_elementType->property(m_displayPropIndex).name();
+
+  return m_elementType->property(m_displayPropIndex).name();
 }
 
 bool GenericListModel::append(QObject* object)
@@ -302,9 +302,7 @@ bool GenericListModel::append(QList<QObject*> objects)
 
 void GenericListModel::connectElement(QModelIndex index)
 {
-  if (!m_elementType)
-    return;
-  else if (!index.isValid())
+  if (!m_elementType || !index.isValid())
     return;
 
   QObject* object = m_objects.at(index.row());

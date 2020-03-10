@@ -15,14 +15,15 @@
  ******************************************************************************/
 #include "NorthArrow.h"
 
-// Qt headers
-#include <QMouseEvent>
+// Toolkit headers
+#include "Esri/ArcGISRuntime/Toolkit/NorthArrowController.h"
 
-// ArcGIS Headers
+// ArcGISRuntime headers
 #include <MapGraphicsView.h>
 #include <SceneGraphicsView.h>
 
-#include "Esri/ArcGISRuntime/Toolkit/NorthArrowController.h"
+// Qt headers
+#include <QMouseEvent>
 
 namespace Esri
 {
@@ -76,6 +77,7 @@ void NorthArrow::setSceneView(SceneGraphicsView* sceneView)
 
 void NorthArrow::mouseDoubleClickEvent(QMouseEvent* event)
 {
+  // Rotate back to North.
   m_controller->setHeading(0);
   event->accept();
 }

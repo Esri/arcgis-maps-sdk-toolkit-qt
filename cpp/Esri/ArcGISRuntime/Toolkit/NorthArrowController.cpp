@@ -81,8 +81,8 @@ double NorthArrowController::heading() const
     return mapView->mapRotation();
   else if (auto sceneView = qobject_cast<SceneView*>(m_geoView))
     return sceneView->currentViewpointCamera().heading();
-  else
-    return static_cast<double>(NAN);
+
+  return static_cast<double>(NAN);
 }
 
 } // Toolkit

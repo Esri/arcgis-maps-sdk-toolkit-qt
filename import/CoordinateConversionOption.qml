@@ -15,7 +15,7 @@
  ******************************************************************************/
 import QtQml 2.12
 
-import Esri.ArcGISRuntime 100.7
+import Esri.ArcGISRuntime 100.8
 
 /*!
  * \qmltype CoordinateConversionOption
@@ -124,7 +124,10 @@ QtObject {
     */
     function pointFromString(point, spatialReference) {
         if (!spatialReference)
+        {
             console.warn("The spatial reference property is empty: conversions will fail.");
+            return null;
+        }
 
         switch (outputMode) {
         case CoordinateConversionOption.CoordinateType.Gars:

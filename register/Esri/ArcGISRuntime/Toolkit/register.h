@@ -45,6 +45,14 @@ namespace Toolkit
  * Internally, this function add a new `cpp_api` selector to your QmlEngine's
  * file selector. This is the mechanism utilized to override, say,
  * NorthArrowController.qml with the NorthArrowController provided by C++.
+ *
+ *
+ * This register function also registers the following ArcGISRuntime
+ * types in the Qt Metatype system.
+ *
+ * \list
+ * \li Esri::ArcGISRuntime::Point
+ * \endlist
  * 
  * \param engine The QML engine.
  */

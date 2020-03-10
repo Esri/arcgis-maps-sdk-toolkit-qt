@@ -97,12 +97,6 @@ void CoordinateConversionResult::updateCoordinatePoint(const Point& point)
   emit notationChanged();
 }
 
-void CoordinateConversionResult::updateCoordinatePoint(const QVariant& variant)
-{
-  auto geom = variant.value<Geometry>();
-  updateCoordinatePoint(geometry_cast<Point>(geom));
-}
-
 void CoordinateConversionResult::copyNotationToClipboard() const
 {
   auto clipboard = QGuiApplication::clipboard();

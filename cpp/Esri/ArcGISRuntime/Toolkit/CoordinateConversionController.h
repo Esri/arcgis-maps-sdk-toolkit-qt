@@ -177,7 +177,7 @@ public:
 
   /*!
    * \brief Set whether the controller should actively be listening to mouse
-   * events on the GeoView.
+   * and/or touch events on the GeoView.
    * \sa inPickingMode
    * \param mode True for listening to mouse events, false for ignoring mouse
    * events.
@@ -189,17 +189,7 @@ signals:
   void geoViewChanged();
 
   /*! \brief Emitted when the currentPoint has changed. */
-  void currentPointChanged(const Point& point);
-
-  /*!
-   * \brief Emitted when the currentPoint property has changed.
-   * \note This signal is a QVariant containing the Point cast to a Geometry
-   * type. Due to technical limitations a `Point` is not a Qt MetaType
-   * and as such can not be safely consumed by QML nor can be passed in queued
-   * signals. To grab the point returned by this signal, use a
-   * qvariant_cast<Geometry> followed by a geometry_cast<Point>.
-   */
-  void currentPointChanged(const QVariant& point);
+  void currentPointChanged(const Esri::ArcGISRuntime::Point& point);
 
   /*!
    * \brief Emitted when the zoomToDistance property has changed.
@@ -217,7 +207,7 @@ public slots:
    * representations owned by this controller.
    * \param point new point to convert.
    */
-  void setCurrentPoint(const Point& point);
+  void setCurrentPoint(const Esri::ArcGISRuntime::Point& point);
 
   /*!
    * \brief Set the current point to point. Point is a string which will be
@@ -279,24 +269,9 @@ public slots:
    */
   void removeCoordinateResultAtIndex(int index);
 
-  /*!
-   * \internal
-   * \brief This is a helper function due to the inability to pass `Point` as
-   * a QML type. This forces this controller to emit the currentPointChanged
-   * signal again: which force all downstream consumers to update.
-   * 
-   * This is only an implementation detail so that the
-   * `CoordinateConversionOption` owned by the QML view can retrieve the
-   * current point when its format switches.
-   * 
-   * If Point were consumable by QML then we could just call the currentPoint
-   * getter instead.
-   */
-  void forceUpdateCoordinates();
-
 private:
   Point m_currentPoint;
-  TaskWatcher m_screenToLocationProcess;
+  TaskWatcher m_screenToLocationTask;
   double m_zoomToDistance = 0.0;
   GenericListModel* m_coordinateFormats = nullptr;
   GenericListModel* m_conversionResults = nullptr;

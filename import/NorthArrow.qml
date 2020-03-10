@@ -65,14 +65,14 @@ Item {
         anchors.fill: parent
         source: "images/compass.png"
         fillMode: Image.PreserveAspectFit
-        visible: autoHide && (controller.heading < 1e-05 || controller.heading === 360) ? false : true
+        visible: autoHide && (controller.heading  % 360 < 1e-05) ? false : true
     }
 
     MouseArea {
         anchors.fill: parent
         onDoubleClicked: {
             if (geoView)
-                controller.setHeading(0);
+                controller.setHeading(0); // Rotate back to north.
         }
     }
 }

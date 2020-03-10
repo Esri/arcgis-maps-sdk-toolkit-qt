@@ -55,7 +55,7 @@ Control {
     /*!
      * \qmlproperty int highlightColor
      * \brief The color of used to highlight UI elements in this tool.
-     * 
+     *
      * The default value is \c "blue".
      */
     property color highlightColor: "blue"
@@ -63,7 +63,7 @@ Control {
     /*!
      * \qmlproperty bool inInputMode
      * \brief Whether whether the tool is in input mode.
-     * 
+     *
      * If \c true, the tool will convert a point set via a mouse click or text entry.
      */
     readonly property bool inInputMode: editCoordinateButton.checked || captureModeButton.checked
@@ -124,141 +124,140 @@ Control {
         RowLayout {
             Layout.margins: 0
             Button {
-                    id: inputModeButton
-                    text: inputFormat.type ? inputFormat.name : "Set format"
-                    flat: true
-                    font.bold: true
-                    onClicked: {
-                        inputModesMenu.popup();
-                    }
+                id: inputModeButton
+                text: inputFormat.type ? inputFormat.name : "Set format"
+                flat: true
+                font.bold: true
+                onClicked: {
+                    inputModesMenu.popup();
+                }
 
-                    Menu {
-                        id: inputModesMenu
-                        Repeater {
-                            model: coordinateConversionWindow.controller.formats
-                            MenuItem {
-                                text: name
-                                onTriggered: {
-                                    inputFormat.type = modelData;
-                                    coordinateConversionWindow.controller.forceUpdateCoordinates();
-                                }
+                Menu {
+                    id: inputModesMenu
+                    Repeater {
+                        model: coordinateConversionWindow.controller.formats
+                        MenuItem {
+                            text: name
+                            onTriggered: {
+                                inputFormat.type = modelData;
+                                inputFormat.updateCoordinatePoint(coordinateConversionWindow.controller.currentPoint());
                             }
                         }
                     }
-                }
-
-                TextField {
-                    id: editPointEntry
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignBottom
-                    placeholderText: "No position"
-                    readOnly: !editCoordinateButton.checked
-                    selectByMouse: !readOnly
-                    text: inputFormat.type? inputFormat.notation : "No position"
-
-                    color: editCoordinateButton.checked ? highlightColor: textColor;
-                    onEditingFinished: {
-                        controller.setCurrentPoint(text, inputFormat.type);
-                        editCoordinateButton.checked = false;
-                    }
-                }
-
-                Button {
-                    id: menuButton
-                    checkable: true
-                    checked: false
-                    flat: true
-                    Layout.alignment: Qt.AlignRight
-                    icon.source: menuButton.checked ? "images/menuExpand.png" : "images/menuCollapse.png"
                 }
             }
 
-            RowLayout {
-                Layout.margins: 0
-                visible: menuButton.checked
-                Button {
-                    id: addConversionButton
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignLeft
-                    text: "Add conversion"
-                    flat: true
-                    onClicked: {
-                        addConversionMenu.visible = true;
-                    }
+            TextField {
+                id: editPointEntry
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignBottom
+                placeholderText: "No position"
+                readOnly: !editCoordinateButton.checked
+                selectByMouse: !readOnly
+                text: inputFormat.type? inputFormat.notation : "No position"
 
-                    Menu {
-                        id: addConversionMenu
-                        Repeater {
-                            model: coordinateConversionWindow.controller.formats
-                            MenuItem {
-                                text: name
-                                enabled: text !== inputModeButton.text
-                                onTriggered: {
-                                    coordinateConversionWindow.controller.addNewCoordinateResultForOption(modelData);
-                                }
+                color: editCoordinateButton.checked ? highlightColor: textColor;
+                onEditingFinished: {
+                    controller.setCurrentPoint(text, inputFormat.type);
+                    editCoordinateButton.checked = false;
+                }
+            }
+
+            Button {
+                id: menuButton
+                checkable: true
+                checked: false
+                flat: true
+                Layout.alignment: Qt.AlignRight
+                icon.source: menuButton.checked ? "images/menuExpand.png" : "images/menuCollapse.png"
+            }
+        }
+
+        RowLayout {
+            Layout.margins: 0
+            visible: menuButton.checked
+            Button {
+                id: addConversionButton
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignLeft
+                text: "Add conversion"
+                flat: true
+                onClicked: {
+                    addConversionMenu.visible = true;
+                }
+
+                Menu {
+                    id: addConversionMenu
+                    Repeater {
+                        model: coordinateConversionWindow.controller.formats
+                        MenuItem {
+                            text: name
+                            enabled: text !== inputModeButton.text
+                            onTriggered: {
+                                coordinateConversionWindow.controller.addNewCoordinateResultForOption(modelData);
                             }
                         }
                     }
                 }
+            }
 
-                Button {
-                    id: zoomToButton
-                    icon.source: "images/Zoom.png"
-                    flat: true
-                    Layout.alignment: Qt.AlignRight
-                    Layout.maximumHeight: 32
-                    Layout.maximumWidth: Layout.maximumHeight
-                    padding: 0
-                    display: AbstractButton.IconOnly
-                    onClicked: coordinateConversionWindow.controller.zoomToCurrentPoint()
+            Button {
+                id: zoomToButton
+                icon.source: "images/Zoom.png"
+                flat: true
+                Layout.alignment: Qt.AlignRight
+                Layout.maximumHeight: 32
+                Layout.maximumWidth: Layout.maximumHeight
+                padding: 0
+                display: AbstractButton.IconOnly
+                onClicked: coordinateConversionWindow.controller.zoomToCurrentPoint()
+            }
+
+            Button {
+                id: flashCoordinateButton
+                icon.source: "images/flash.png"
+                flat: true
+                Layout.alignment: Qt.AlignRight
+                Layout.maximumHeight: 32
+                Layout.maximumWidth: Layout.maximumHeight
+                padding: 0
+                display: AbstractButton.IconOnly
+                onClicked: {
+                    if (!geoView)
+                        return;
+
+                    var screenPos = coordinateConversionWindow.controller.screenCoordinate();
+                    if (screenPos === null || (screenPos.x === -1.0 && screenPos.y === -1.0))
+                        return;
+
+                    var itemPos = geoView.mapToItem(geoView, screenPos.x, screenPos.y);
+                    checked = true;
+                    var flashImage = internal.flashImageFactory.createObject(geoView, { "x": itemPos.x, "y": itemPos.y, "color": highlightColor });
+                    flashImage.finished.connect(function() { flashCoordinateButton.checked = false; });
                 }
+            }
 
-                Button {
-                    id: flashCoordinateButton
-                    icon.source: "images/flash.png"
-                    flat: true
-                    Layout.alignment: Qt.AlignRight
-                    Layout.maximumHeight: 32
-                    Layout.maximumWidth: Layout.maximumHeight
-                    padding: 0
-                    display: AbstractButton.IconOnly
-                    onClicked: {
-                        if (geoView === null)
-                            return;
+            Button {
+                id: editCoordinateButton
+                checkable: true
+                flat: true
+                icon.source: "images/Text_Editing_Mode.png"
+                Layout.alignment: Qt.AlignRight
+                Layout.maximumHeight: 32
+                Layout.maximumWidth: Layout.maximumHeight
+                padding: 0
+            }
 
-                        var screenPos = coordinateConversionWindow.controller.screenCoordinate();
-                        if (screenPos === null || (screenPos.x === -1.0 && screenPos.y === -1.0))
-                            return;
-
-                        var itemPos = geoView.mapToItem(geoView, screenPos.x, screenPos.y);
-                        checked = true;
-                        var flashImage = internal.flashImageFactory.createObject(geoView, { "x": itemPos.x, "y": itemPos.y, "color": highlightColor });
-                        flashImage.finished.connect(function() { flashCoordinateButton.checked = false; });
-                    }
-                }
-
-
-                Button {
-                    id: editCoordinateButton
-                    checkable: true
-                    flat: true
-                    icon.source: "images/Text_Editing_Mode.png"
-                    Layout.alignment: Qt.AlignRight
-                    Layout.maximumHeight: 32
-                    Layout.maximumWidth: Layout.maximumHeight
-                    padding: 0
-                }
-
-                Button {
-                    id: captureModeButton
-                    checkable: true
-                    flat: true
-                    icon.source: "images/Mouse_Click_Mode.png"
-                    Layout.alignment: Qt.AlignRight
-                    Layout.maximumHeight: 32
-                    Layout.maximumWidth: Layout.maximumHeight
-                    padding: 0
-                }
+            Button {
+                id: captureModeButton
+                checkable: true
+                flat: true
+                icon.source: "images/Mouse_Click_Mode.png"
+                Layout.alignment: Qt.AlignRight
+                Layout.maximumHeight: 32
+                Layout.maximumWidth: Layout.maximumHeight
+                padding: 0
+            }
         }
 
         Repeater {

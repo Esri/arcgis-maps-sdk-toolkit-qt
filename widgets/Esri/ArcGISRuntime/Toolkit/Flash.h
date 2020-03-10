@@ -37,7 +37,7 @@ namespace Toolkit
 class Flash : public QWidget
 {
   Q_OBJECT
-  Q_PROPERTY(int alpha READ alpha WRITE setAlpha NOTIFY alphaChanged)
+  Q_PROPERTY(int alpha READ alpha_ WRITE setAlpha_ NOTIFY alphaChanged)
   Q_PROPERTY(QPointF point READ point WRITE setPoint NOTIFY pointChanged)
   Q_PROPERTY(int radius READ radius WRITE setRadius NOTIFY radiusChanged)
 public:
@@ -73,7 +73,7 @@ public:
 
   /*!
    * \brief Set the radius of the circle of this flash.
-   * \param radius  Size of radius.
+   * \param radius Size of radius.
    */
   void setRadius(int radius);
 
@@ -111,10 +111,10 @@ protected:
 
 private:
   /*! \brief Sets the current alpha (for animation) */
-  void setAlpha(int alpha);
+  void setAlpha_(int alpha);
 
   /*! \brief Gets the current alpha (for animation) */
-  int alpha() const;
+  int alpha_() const;
 
 private:
   QColor m_color;

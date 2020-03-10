@@ -26,14 +26,17 @@
 #include "Esri/ArcGISRuntime/Toolkit/GenericListModel.h"
 #include "Esri/ArcGISRuntime/Toolkit/GenericTableProxyModel.h"
 
+// ArcGISRuntime headers
+#include <MapGraphicsView.h>
+#include <SceneGraphicsView.h>
+
 // Qt headers
 #include <QGraphicsEllipseItem>
 #include <QItemDelegate>
 #include <QMenu>
 
-// ArcGISRuntime headers
-#include <MapGraphicsView.h>
-#include <SceneGraphicsView.h>
+// std headers
+#include <cmath>
 
 namespace Esri
 {
@@ -72,7 +75,6 @@ CoordinateConversion::CoordinateConversion(QWidget* parent) :
 
   connect(m_ui->flash, &QPushButton::clicked, this,
           &CoordinateConversion::flash);
-
 }
 
 CoordinateConversion::~CoordinateConversion()
@@ -103,13 +105,16 @@ void CoordinateConversion::addContextMenu(const QPoint& point)
   QMenu* addMenu = new QMenu(menu);
   addMenu->setTitle("Add...");
   auto formats = m_controller->coordinateFormats();
-  for (int i = 0; i < formats->rowCount(); ++i)
+  const int rowCount = formats->rowCount();
+  for (int i = 0; i < rowCount; ++i)
   {
     auto format = formats->element<CoordinateConversionOption>(formats->index(i));
     addMenu->addAction(format->name(), m_controller,
     [this, menu, f(QPointer<CoordinateConversionOption>(format))]()
     {
-      if (f) m_controller->addNewCoordinateResultForOption(f.data());
+      if (f)
+        m_controller->addNewCoordinateResultForOption(f.data());
+
       menu->deleteLater();
     });
   }

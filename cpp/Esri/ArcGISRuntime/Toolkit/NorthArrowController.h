@@ -35,9 +35,9 @@ namespace Toolkit
  */
 class NorthArrowController : public QObject
 {
+  Q_OBJECT
   Q_PROPERTY(QObject* geoView READ geoView WRITE setGeoView NOTIFY geoViewChanged)
   Q_PROPERTY(double heading READ heading NOTIFY headingChanged)
-  Q_OBJECT
 public:
   /*!
    * \brief Constructor

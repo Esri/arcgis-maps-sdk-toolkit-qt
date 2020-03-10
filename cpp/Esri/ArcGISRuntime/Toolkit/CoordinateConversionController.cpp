@@ -71,8 +71,8 @@ CoordinateConversionController::CoordinateConversionController(QObject* parent):
           auto result = m_conversionResults->element<CoordinateConversionResult>(index);
           if (result)
           {
-            connect(this, QOverload<const Point&>::of(&CoordinateConversionController::currentPointChanged),
-                    result, QOverload<const Point&>::of(&CoordinateConversionResult::updateCoordinatePoint));
+            connect(this, &CoordinateConversionController::currentPointChanged,
+                    result, &CoordinateConversionResult::updateCoordinatePoint);
           }
           else
           {
@@ -108,10 +108,10 @@ void CoordinateConversionController::setGeoView(QObject* geoView)
     connect(sceneView, &SceneViewToolkit::mouseClicked, this,
             [sceneView, this](QMouseEvent& event)
     {
-      if (m_inPickingMode && (!m_screenToLocationProcess.isValid() ||
-                               m_screenToLocationProcess.isDone()))
+      if (m_inPickingMode && (!m_screenToLocationTask.isValid() ||
+                               m_screenToLocationTask.isDone()))
       {
-        m_screenToLocationProcess = sceneView->screenToLocation(event.x(), event.y());
+        m_screenToLocationTask = sceneView->screenToLocation(event.x(), event.y());
         event.accept();
       }
     });
@@ -119,7 +119,7 @@ void CoordinateConversionController::setGeoView(QObject* geoView)
     connect(sceneView, &SceneViewToolkit::screenToLocationCompleted, this,
             [this](QUuid taskId, Point point)
     {
-      if (taskId != m_screenToLocationProcess.taskId())
+      if (taskId != m_screenToLocationTask.taskId())
         return;
       setCurrentPoint(point);
     });
@@ -146,7 +146,7 @@ void CoordinateConversionController::setCurrentPoint(const Point& p)
     return;
 
   m_currentPoint = p;
-  forceUpdateCoordinates();
+  emit currentPointChanged(p);
 }
 
 void CoordinateConversionController::setCurrentPoint(
@@ -270,12 +270,6 @@ void CoordinateConversionController::setInPickingMode(bool mode)
 
   m_inPickingMode = mode;
   emit inPickingModeChanged();
-}
-
-void CoordinateConversionController::forceUpdateCoordinates()
-{
-  emit currentPointChanged(m_currentPoint);
-  emit currentPointChanged(QVariant::fromValue(static_cast<Geometry>(m_currentPoint)));
 }
 
 } // Toolkit

@@ -20,8 +20,6 @@
 #include <QPropertyAnimation>
 #include <QTimer>
 
-#include <QDebug>
-
 namespace Esri
 {
 namespace ArcGISRuntime
@@ -49,19 +47,20 @@ void Flash::paintEvent(QPaintEvent* /*event*/)
 
 void Flash::setTargetColor(QColor color)
 {
-  m_color = color;
+  m_color = std::move(color);
 }
 
-void Flash::setAlpha(int alpha)
+void Flash::setAlpha_(int alpha)
 {
   if (m_color.alpha() == alpha)
     return;
+
   m_color.setAlpha(alpha);
   emit alphaChanged();
   update();
 }
 
-int Flash::alpha() const
+int Flash::alpha_() const
 {
   return m_color.alpha();
 }
@@ -71,7 +70,7 @@ void Flash::setPoint(QPointF point)
   if (m_point == point)
     return;
 
-  m_point = point;
+  m_point = std::move(point);
   emit pointChanged();
   update();
 }

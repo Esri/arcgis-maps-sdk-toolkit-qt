@@ -41,8 +41,8 @@ void MetaElement::emitDataChanged()
 {
   if (!m_trackedObject || !m_index.isValid())
     return;
-  else
-    emit m_parentModel->dataChanged(m_index, m_index, { Qt::UserRole, m_customRole });
+
+  emit m_parentModel->dataChanged(m_index, m_index, { Qt::UserRole, m_customRole });
 }
 
 } // Esri

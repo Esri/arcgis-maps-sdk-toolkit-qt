@@ -13,6 +13,3 @@
 # limitations under the License.
 RESOURCES += $$PWD/images/esri_arcgisruntime_toolkit_images.qrc \
              $$PWD/import/esri_arcgisruntime_toolkit_qml.qrc
-
-# For Qt Creator only
-QML_IMPORT_PATH += $$PWD/import

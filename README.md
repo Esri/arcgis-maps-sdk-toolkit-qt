@@ -31,7 +31,7 @@ get added to QtCreator when you install the ArcGIS Runime SDK for Qt.
 - in the `.pro` file of your new app, add a line to add the toolkit for your
   QML application. For example:
 
-```pro
+```qmake
 include(path/to/toolkitqml.pri)
 ```
 
@@ -83,7 +83,7 @@ get added to QtCreator when you install the ArcGIS Runime SDK for Qt.
 - in the `.pro` file of your new app, add a line to add the library for your QML
   plugin - for example:
 
-```pro
+```qmake
 include(path/to/toolkitcpp.pri)
 ```
 
@@ -145,7 +145,7 @@ get added to QtCreator when you install the ArcGIS Runtime SDK for Qt.
 - in the `.pro` file of your new app, add a line to add the library for your QML
   plugin - for example:
 
-```pro
+```qmake
 include(path/to/toolkitwidgets.pri)
 ```
 

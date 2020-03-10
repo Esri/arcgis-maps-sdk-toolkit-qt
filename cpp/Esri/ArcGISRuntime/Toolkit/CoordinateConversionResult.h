@@ -110,15 +110,7 @@ public slots:
    * in type.
    * \param point to store in notation field.
    */
-  void updateCoordinatePoint(const Point& point);
-
-  /*!
-   * \brief Overload of updateCoordiantePoint that accepts a QVariant type.
-   * \sa updateCoordinatePoint(const Point&)
-   * \sa CoordinateConversionController::currentPointChanged(QVariant point)
-   * \param point point object to store in notation field.
-   */
-  void updateCoordinatePoint(const QVariant& point);
+  void updateCoordinatePoint(const Esri::ArcGISRuntime::Point& point);
 
   /*!
    * \brief Takes the current string stored in notation and store it in the
