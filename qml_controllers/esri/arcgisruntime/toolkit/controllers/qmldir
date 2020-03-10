@@ -1,3 +1,0 @@
-module esri.arcgisruntime.toolkit.controllers
-NorthArrowController 1.0 NorthArrow/NorthArrowController.qml
-SouthArrowController 1.0 SouthArrow/SouthArrowController.qml

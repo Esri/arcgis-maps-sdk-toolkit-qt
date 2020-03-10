@@ -11,5 +11,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+include($$PWD/common.pri)
+
+REGISTERPATH = $$PWD/register/Esri/ArcGISRuntime/Toolkit
+
+INCLUDEPATH += $$PWD/register $$REGISTERPATH
+
+HEADERS += $$REGISTERPATH/register.h
+SOURCES += $$REGISTERPATH/register.cpp
+
 RESOURCES += $$PWD/images/esri_arcgisruntime_toolkit_images.qrc \
              $$PWD/import/esri_arcgisruntime_toolkit_qml.qrc

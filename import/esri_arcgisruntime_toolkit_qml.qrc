@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="Esri/ArcGISRuntime/Toolkit">
+        <file>+cpp_api/CoordinateConversionController.qml</file>
+        <file>+cpp_api/CoordinateConversionOption.qml</file>
+        <file>+cpp_api/CoordinateConversionResult.qml</file>
+        <file>+cpp_api/NorthArrowController.qml</file>
+        <file>CoordinateConversion.qml</file>
+        <file>CoordinateConversionController.qml</file>
+        <file>CoordinateConversionOption.qml</file>
+        <file>CoordinateConversionResult.qml</file>
+        <file>FlashImage.qml</file>
+        <file>NorthArrow.qml</file>
+        <file>NorthArrowController.qml</file>
+    </qresource>
+</RCC>
