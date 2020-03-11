@@ -15,242 +15,140 @@
  ******************************************************************************/
 
 import QtQuick 2.11
+import QtQuick.Controls 2.11
 import QtQuick.Dialogs 1.2
 import QtQuick.Window 2.11
+import QtQuick.Layouts 1.3
 
-/*!
-    \qmltype PopupView
-    \ingroup ArcGISQtToolkit
-    \ingroup ArcGISQtToolkitCppApi
-    \ingroup ArcGISQtToolkitQmlApi
-    \inqmlmodule Esri.ArcGISRuntime.Toolkit.Controls
-    \since Esri.ArcGISRutime 100.1
-    \brief A view for displaying and editing information about a feature.
-
-    A PopupView can be used to display information for any type that
-    implements the PopupSource interface. For example, FeatureLayer
-    implements PopupSource. This means that it has a PopupDefinition,
-    which defines how the Popup should look for any features in that
-    layer.
-
-    An example workflow for displaying a PopupView for a feature in a
-    FeatureLayer would be:
-
-    \list
-      \li Declare a PopupView and anchor it to a desired location.
-      \li Perform an identify operation on a GeoView and select a
-      Feature from the identify result.
-      \li Create a Popup from the Feature.
-      \li Optionally obtain the Popup's PopupDefinition and set the
-      title, whether to show attachments, and so on.
-      \li Create a PopupManager from the Popup.
-      \li Assign the PopupView's \c popupManager property the PopupManager
-      created in the previous step.
-      \li Call the \c show() method to display the PopupView.
-      \li Call the \c dismiss() method to hide the PopupView.
-    \endlist
-
-    The PopupView is a QML Item that can be anchored, given to a dialog,
-    or positioned using XY screen coordinates. Transform, Transition, and
-    other QML animation types can be used to animate the showing and
-    dismissing of the view.
-
-    For more information, please see the Popup and PopupManager
-    documentation.
-
-    \note Each time a change is made to the Popup, PopupDefinition,
-    PopupManager, or any of their properties, the PopupManager must
-    be re-set to the PopupView.
-*/
 Control {
-    id: popupView
+    id: popupViewBase
 
-    /*========================================
-         Configurable properties
-    ========================================*/
+    property alias popupManager: internal.popupManager
+    readonly property alias attachments: internal.attachments
 
-    /*!
-        \brief The PopupManager that controls the information being displayed in the view.
+    signal attachmentThumbnailClicked(var index)
 
-        The PopupManager should be created from a Popup. See the example workflow that is
-        highlighted in the description of this type.
-    */
-    property var popupManager: null
+    implicitWidth: 300 + padding
+    implicitHeight: 300 + padding
+    padding: 5
 
-    /*!
-        \brief The title text color of the PopupView.
-
-        The default color is \c "black".
-    */
-    property color titleTextColor: "black"
-
-    /*!
-        \brief The title text size of the PopupView.
-
-        The default size is \c 13.
-    */
-    property real titleTextSize: 13
-
-    /*!
-        \brief The attribute name color of the PopupView.
-
-        The default color is \c "gray".
-    */
-    property color attributeNameTextColor: "gray"
-
-    /*!
-        \brief The attribute value color of the PopupView.
-
-        The default color is \c "4f4f4f".
-    */
-    property color attributeValueTextColor: "#4f4f4f"
-
-    /*!
-        \brief The animation duration for the slideHorizontal and slideVertical methods in milliseconds.
-
-        The default duration is \c 250 milliseconds.
-    */
-    property real animationDuration: 250
-
-    /*!
-        \brief The animation easing type for the slideHorizontal and slideVertical methods.
-
-        \sa {http://links.esri.com/qtEasingProperties}{Property Animation QML Type}
-
-        The default animationEasingType is \c Easing.OutQuad.
-    */
-    property real animationEasingType: Easing.OutQuad
-
-    /*!
-        \brief The color used for the close button.
-
-        The default color is \c "gray".
-    */
-    property color closeButtonColor: "gray"
-
-    /*!
-        \brief The visibility of the PopupView.
-
-        The default visibility is \c false.
-    */
-    visible: false
+    QtObject {
+        id: internal
+        property var popupManager: null
+        property var attachments: null
+        onPopupManagerChanged: {
+            if (popupManager && popupManager.attachmentManager) {
+                attachments = popupManager.attachmentManager.attachmentsModel;
+            } else {
+                attachments = null;
+            }
+        }
+    }
 
     background: Rectangle {
-        color: "#f2f3f4"
+        color: palette.base
         border {
-            color: "#4f4f4f"
+            color: palette.shadow
             width: 2
         }
         radius: 2
     }
 
-    /*!
-        \brief Show the PopupView.
-    */
-    function show() {
-        visible = true;
-    }
+    contentItem: Flickable {
+        id: flickable
+        clip: true
+        contentHeight: fieldsLayout.height
+        GridLayout {
+            id: fieldsLayout
+            flow: GridLayout.TopToBottom
+            anchors {
+                left: parent.left
+                right: parent.right
+            }
 
-    /*!
-        \brief Hide the PopupView.
-    */
-    function dismiss() {
-        visible = false;
-    }
+            rows: getRows()
 
-    /*!
-        \brief Slide the PopupView horizontally with animation.
+            function getRows() {
+                let a = attachments ? attachments.rowCount() : 0;
+                let b = popupManager ? popupManager.displayedFields.rowCount() : 0;
+                return a + b + 2;
+            }
 
-        \list
-          \li fromX - The x-value of the top-left corner to move the PopupView from.
-          \li toX - The x-value of the top-left corner to move the PopupView to.
-        \endlist
+            Connections {
+                target: attachments
+                onRowsInserted: fieldsLayout.rows = fieldsLayout.getRows();
+                onRowsRemoved: fieldsLayout.rows = fieldsLayout.getRows();
+            }
 
-        If using this method, the left and right anchors cannot be set on the PopupView.
-        Rather, anchor the top and bottom only, so that the x-value can be changed.
+            Connections {
+                target: popupManager ? popupManager.displayedFields: null
+                onRowsInserted: fieldsLayout.rows = fieldsLayout.getRows();
+                onRowsRemoved: fieldsLayout.rows = fieldsLayout.getRows();
+            }
 
-        Set the animationDuration and animationEasingType properties for finer-grained
-        control of the animation.
-    */
-    function slideHorizontal(fromX, toX) {
-        visible = true;
-        animateHorizontal.from = fromX;
-        animateHorizontal.to = toX;
-        animateHorizontal.start();
-    }
+            // Title
+            Text {
+                Layout.columnSpan: 2
+                Layout.fillWidth: true
+                textFormat: Text.StyledText
+                text: `<h2>${popupManager ? popupManager.title : ""}</h2>`
+                color: palette.text
+            }
 
-    /*!
-        \brief Slide the PopupView vertically with animation.
+            // Field names
+            Repeater {
+                model: popupManager ? popupManager.displayedFields : null;
+                Text {
+                    Layout.fillWidth: true
+                    text: fieldName ? fieldName : ""
+                    wrapMode: Text.WrapAnywhere
+                    color: palette.text
+                }
+            }
 
-        \list
-          \li fromY - The y-value of the top-left corner to move the PopupView from.
-          \li toY - The y-value of the top-left corner to move the PopupView to.
-        \endlist
+            // Attachments header
+            Text {
+                Layout.columnSpan: 2
+                Layout.fillWidth: true
+                textFormat: Text.StyledText
+                visible: attachments
+                text: "<h2>Attachments</h2>"
+                color: palette.text
+            }
 
-        If using this method, the top and bottom anchors cannot be set on the PopupView.
-        Rather, anchor the left or right only, so that the y-value can be changed.
+            // Attachment names
+            Repeater {
+                model: attachments
+                Text {
+                    Layout.fillWidth: true
+                    text: name
+                    wrapMode: Text.WrapAnywhere
+                    color: palette.text
+                }
+            }
 
-        Set the animationDuration and animationEasingType properties for finer-grained
-        control of the animation.
-    */
-    function slideVertical(fromY, toY) {
-        visible = true;
-        animateVertical.from = fromY;
-        animateVertical.to = toY;
-        animateVertical.start();
-    }
+            // Field contents
+            Repeater {
+                model: popupManager ? popupManager.displayedFields : null;
+                Text {
+                    Layout.fillWidth: true
+                    text: formattedValue
+                    wrapMode: Text.WrapAnywhere
+                    color: palette.text
+                }
+            }
 
-    /*! internal */
-    NumberAnimation {
-        id: animateHorizontal
-        target: popupView
-        properties: "x"
-        duration: animationDuration
-        easing.type: animationEasingType
-    }
-
-    /*! internal */
-    NumberAnimation {
-        id: animateVertical
-        target: popupView
-        properties: "y"
-        duration: animationDuration
-        easing.type: animationEasingType
-    }
-
-    /*!
-        \brief Signal emitted when an attachment thumbnail is clicked.
-
-        The \a index of the PopupAttachment in the PopupAttachmentListModel
-        is passed so that the PopupAttachment can be obtained. An example
-        workflow would be to:
-
-        \list
-          \li Set up a signal handler for this signal.
-          \li When the signal emits, use the index to obtain the PopupAttachment
-          from the PopupAttachmentListModel.
-          \li Load the PopupAttachment.
-          \li Display the full image of the PopupAttachment in a dialog or window using
-           the \c fullImageUrl.
-        \endlist
-    */
-    signal attachmentThumbnailClicked(var index)
-
-    /*! internal */
-    PopupViewBase {
-        anchors.fill: parent
-        popupManagerInternal: popupManager
-        backgroundColorInternal: backgroundColor
-        borderColorInternal: borderColor
-        borderWidthInternal: borderWidth
-        radiusInternal: radius
-        titleTextSizeInternal: titleTextSize
-        attributeNameTextColorInternal: attributeNameTextColor
-        attributeValueTextColorInternal: attributeValueTextColor
-        titleTextColorInternal: titleTextColor
-        closeButtonColorInternal: closeButtonColor
-
-        onAttachmentThumbnailClickedInternal: attachmentThumbnailClicked(index)
-        onPopupViewDismissed: dismiss();
+            // Attachment images
+            Repeater {
+                model: attachments
+                Image {
+                    source: thumbnailUrl
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: attachmentThumbnailClicked(index)
+                    }
+                }
+            }
+        }
     }
 }

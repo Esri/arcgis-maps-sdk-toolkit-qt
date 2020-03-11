@@ -16,6 +16,7 @@
 
 import QtQuick 2.11
 import QtQuick.Controls 2.4
+import QtQuick.Layouts 1.12
 
 /*!
     \qmltype PopupStackView
@@ -62,388 +63,45 @@ import QtQuick.Controls 2.4
 */
 Control {
     id: popupStackView
+    clip: true
+    width: 300
+    height: 300
+    property var popupManagers: []
 
-    /*========================================
-         Configurable properties
-    ========================================*/
+    onPopupManagersChanged: {
+        console.log(popupManagers)
+    }
 
-    /*!
-        \brief A list of PopupManagers that controls the information being displayed in a PopupStackView.
-
-        A PopupManager should be created from a Popup. See the example workflow that is
-        highlighted in the description of this type.
-    */
-    property var popupManagers: null
-
-    /*!
-        \brief The title text color of the PopupStackView.
-
-        The default color is \c "black".
-    */
-    property color titleTextColor: "black"
-
-    /*!
-        \brief The title text size of the PopupStackView.
-
-        The default size is \c 13.
-    */
-    property real titleTextSize: 13
-
-    /*!
-        \brief The attribute name color of the PopupStackView.
-
-        The default color is \c "gray".
-    */
-    property color attributeNameTextColor: "gray"
-
-    /*!
-        \brief The attribute value color of the PopupStackView.
-
-        The default color is \c "4f4f4f".
-    */
-    property color attributeValueTextColor: "#4f4f4f"
-
-    /*!
-        \brief The color of the navigation buttons used to change the viewed Popup.
-
-        The default color is \c "gray".
-    */
-    property color buttonColor: "gray"
-
-    /*!
-        \brief The animation duration for the slideHorizontal and slideVertical methods in milliseconds.
-
-        The default duration is \c 250 milliseconds.
-    */
-    property real animationDuration: 250
-
-    /*!
-        \brief The animation easing type for the slideHorizontal and slideVertical methods.
-
-        \sa {http://links.esri.com/qtEasingProperties}{Property Animation QML Type}
-
-        The default animationEasingType is \c Easing.OutQuad.
-    */
-    property real animationEasingType: Easing.OutQuad
-
-    /*!
-        \brief The index of the PopupManager in \c popupManagers that is being displayed
-    */
-    property int currentIndex: 0
-
-    /*!
-        \brief The color used for the close button.
-
-        The default color is \c "gray".
-    */
-    property color closeButtonColor: "gray"
-
-    /*!
-        \brief The visibility of the PopupStackView.
-
-        The default visibility is \c false.
-    */
-    visible: false
-
-    background: Rectangle {
-        color: "#f2f3f4"
-        border {
-            color: "#4f4f4f"
-            width: 2
+    contentItem: GridLayout {
+        columns: 2
+        anchors.fill: parent
+        Button {
+            text: "Prev"
+            onClicked: stack.pop()
+            Layout.alignment: Qt.AlignLeft
+            Layout.fillWidth: true
         }
-        radius: 2
-    }
-
-    /*!
-        \brief Show the PopupStackView.
-    */
-    function show() {
-        if (popupStack.busy)
-            return;
-
-        currentIndex = 0;
-        if (popupManagers !== null && popupManagers.length > 0) {
-            swapPopups(popupStack.currentItem === popup1 ? popup1 : popup2,
-                       popupStack.currentItem === popup1 ? popup2 : popup1);
+        Button {
+            text: "Next"
+            onClicked: stack.push(popupViewPage)
+            Layout.alignment: Qt.AlignRight
+            Layout.fillWidth: true
         }
-        visible = true;
-    }
-
-    /*!
-        \brief Hide the PopupStackView.
-    */
-    function dismiss() {
-        currentIndex = 0;
-        visible = false;
-    }
-
-    /*!
-        \brief Slide the PopupStackView horizontally with animation.
-
-        \list
-          \li fromX - The x-value of the top-left corner to move the PopupStackView from.
-          \li toX - The x-value of the top-left corner to move the PopupStackView to.
-        \endlist
-
-        If using this method, the left and right anchors cannot be set on the PopupStackView.
-        Rather, anchor the top and bottom only, so that the x-value can be changed.
-
-        Set the animationDuration and animationEasingType properties for finer-grained
-        control of the animation.
-    */
-    function slideHorizontal(fromX, toX) {
-        show();
-        animateHorizontal.from = fromX;
-        animateHorizontal.to = toX;
-        animateHorizontal.start();
-    }
-
-    /*!
-        \brief Slide the PopupStackView vertically with animation.
-
-        \list
-          \li fromY - The y-value of the top-left corner to move the PopupStackView from.
-          \li toY - The y-value of the top-left corner to move the PopupStackView to.
-        \endlist
-
-        If using this method, the top and bottom anchors cannot be set on the PopupStackView.
-        Rather, anchor the left or right only, so that the y-value can be changed.
-
-        Set the animationDuration and animationEasingType properties for finer-grained
-        control of the animation.
-    */
-    function slideVertical(fromY, toY) {
-        show();
-        animateVertical.from = fromY;
-        animateVertical.to = toY;
-        animateVertical.start();
-    }
-
-    /*! internal */
-    NumberAnimation {
-        id: animateHorizontal
-        target: popupStackView
-        properties: "x"
-        duration: animationDuration
-        easing.type: animationEasingType
-    }
-
-    /*! internal */
-    NumberAnimation {
-        id: animateVertical
-        target: popupStackView
-        properties: "y"
-        duration: animationDuration
-        easing.type: animationEasingType
-    }
-
-    /*!
-        \brief Signal emitted when an attachment thumbnail is clicked.
-
-        The \a index of the PopupAttachment in the PopupAttachmentListModel
-        is passed so that the PopupAttachment can be obtained. An example
-        workflow would be to:
-
-        \list
-          \li Set up a signal handler for this signal.
-          \li When the signal emits, use the index to obtain the PopupAttachment
-          from the PopupAttachmentListModel.
-          \li Load the PopupAttachment.
-          \li Display the full image of the PopupAttachment in a dialog or window using
-           the \c fullImageUrl.
-        \endlist
-    */
-    signal attachmentThumbnailClicked(var index)
-
-    /*! internal */
-    function nextPopup() {
-        if (popupStack.busy)
-            return;
-
-        if (currentIndex + 1 === popupManagers.length)
-            return;
-
-        currentIndex += 1;
-
-        if (popupStack.currentItem === popup1) {
-            swapPopups(popup1, popup2);
-        } else {
-            swapPopups(popup2, popup1);
-        }
-    }
-
-    /*! internal */
-    function previousPopup() {
-        if (popupStack.busy)
-            return;
-
-        if (currentIndex === 0)
-            return;
-
-        currentIndex -= 1;
-
-        if (popupStack.currentItem === popup1) {
-            swapPopups(popup1, popup2);
-        }
-        else {
-            swapPopups(popup2, popup1);
-        }
-    }
-
-    function swapPopups(frontPopup, backPopup) {
-        backPopup.popupManager = popupManagers[currentIndex];
-        popupStack.replace(frontPopup, backPopup);
-    }
-
-    /*! internal */
-    function drawButton(canvas) {
-        var ctx = canvas.getContext("2d");
-        ctx.strokeStyle = buttonColor;
-        ctx.lineWidth = canvas.height / 10;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.save();
-
-        // place in middle
-        ctx.translate(0.5 * canvas.width - 0.5 * canvas.height / 2, 0.5 * canvas.height - 0.5 * canvas.height / 2);
-
-        // start drawing the triangle
-        ctx.beginPath();
-
-        // top point of the triangle
-        ctx.moveTo(canvas.height / 4, 0);
-
-        // middle point
-        ctx.lineTo(0, canvas.height / 4);
-
-        // bottom point
-        ctx.lineTo(canvas.height / 4, canvas.height / 2);
-
-        ctx.stroke();
-        ctx.restore();
-    }
-
-    // Create two PopupView and cycle between the two to act as StackView.
-    /*! internal */
-    PopupViewBase {
-        id: popup1
-        visible: false
-        onAttachmentThumbnailClicked: attachmentThumbnailClicked(index)
-        onPopupViewDismissed: dismiss();
-    }
-
-    /*! internal */
-    PopupViewBase {
-        id: popup2
-        visible: false
-        onAttachmentThumbnailClicked: attachmentThumbnailClicked(index)
-        onPopupViewDismissed: dismiss();
-    }
-
-    Column {
-        height: parent.height
-        width: parent.width
-        clip: true
-
-        Rectangle {
-            id: navButtonsRectangle
-            color: background.color
-            border {
-                color: background.border.color
-                width: background.border.width
-            }
-            radius: background.width
-            visible: popupManagers !== null && popupManagers.length > 1
-
-            Canvas {
-                id: previousButtonCanvas
-                anchors {
-                    left: parent.left
-                    verticalCenter: parent.verticalCenter
-                    margins: 2
-                }
-                antialiasing: true
-                height: parent.height
-                width: height
-
-                onPaint: {
-                    drawButton(previousButtonCanvas);
-                }
-
-                Component.onCompleted: {
-                    if (Qt.platform.os === "ios")
-                        renderTarget = Canvas.Image;
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        previousPopup();
-                    }
-                }
-            }
-
-            Text {
-                anchors {
-                    verticalCenter: parent.verticalCenter
-                    horizontalCenter: parent.horizontalCenter
-                    margins: 5
-                }
-                color: attributeNameTextColor
-                text: popupManagers !== null && popupManagers.length > 0 ? (currentIndex + 1) + " of " + popupManagers.length : ""
-            }
-
-            Canvas {
-                id: forwardButtonCanvas
-                anchors {
-                    right: parent.right
-                    verticalCenter: parent.verticalCenter
-                    margins: 2
-                }
-                antialiasing: true
-                height: parent.height
-                width: height
-                rotation: 180
-
-                onPaint: {
-                    drawButton(forwardButtonCanvas);
-                }
-
-                Component.onCompleted: {
-                    if (Qt.platform.os === "ios")
-                        renderTarget = Canvas.Image;
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        nextPopup();
-                    }
+        StackView {
+            id: stack
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            initialItem: Component {
+                id: popupViewPage
+                PopupView {
+                    popupManager: popupManagers && popupManagers.length >= StackView.index ? popupManagers[StackView.index] : null
+                    //palette: popupStackView.palette
+                    //background: popupStackView.background
+                    //width: 300
+                    //height: 300
                 }
             }
         }
-
-        Item {
-            height: navButtonsRectangle.visible ? parent.height - navButtonsRectangle.height : parent.height
-            width: parent.width
-
-            StackView {
-                id: popupStack
-                anchors.fill: parent
-
-                Component.onCompleted: {
-                    push(popup1);
-                }
-            }
-
-            Rectangle {
-                anchors.fill: parent
-                color: "transparent"
-            }
-        }
-    }
-
-    onButtonColorChanged: {
-        forwardButtonCanvas.requestPaint();
-        previousButtonCanvas.requestPaint();
     }
 }

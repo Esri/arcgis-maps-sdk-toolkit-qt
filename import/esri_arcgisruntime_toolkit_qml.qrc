@@ -12,6 +12,6 @@
         <file>NorthArrow.qml</file>
         <file>NorthArrowController.qml</file>
         <file>PopupStackView.qml</file>
-        <file>PopupViewBase.qml</file>
+        <file>PopupView.qml</file>
     </qresource>
 </RCC>
