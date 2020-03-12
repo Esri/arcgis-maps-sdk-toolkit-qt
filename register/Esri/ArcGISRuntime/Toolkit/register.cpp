@@ -20,6 +20,7 @@
 #include "CoordinateConversionOption.h"
 #include "CoordinateConversionResult.h"
 #include "NorthArrowController.h"
+#include "PopupViewController.h"
 
 // ArcGIS includes
 #include <Point.h>
@@ -88,6 +89,7 @@ void registerComponents(QQmlEngine* engine)
   registerComponent<CoordinateConversionOption>();
   registerComponent<CoordinateConversionResult>();
   registerComponent<NorthArrowController>();
+  registerComponent<PopupViewController>();
 
   qRegisterMetaType<Point>("Esri::ArcGISRuntime::Point");
 }

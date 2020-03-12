@@ -24,11 +24,14 @@ INCLUDEPATH += $$PWD/widgets $$WIDGETPATH
 HEADERS += $$WIDGETPATH/CoordinateConversion.h \
            $$WIDGETPATH/Internal/CoordinateEditDelegate.h \
            $$WIDGETPATH/Internal/Flash.h \
-           $$WIDGETPATH/NorthArrow.h
+           $$WIDGETPATH/NorthArrow.h \
+           $$WIDGETPATH/PopupView.h 
 
 SOURCES += $$WIDGETPATH/CoordinateConversion.cpp \
            $$WIDGETPATH/Internal/CoordinateEditDelegate.cpp \ 
            $$WIDGETPATH/Internal/Flash.cpp \
-           $$WIDGETPATH/NorthArrow.cpp
+           $$WIDGETPATH/NorthArrow.cpp \
+           $$WIDGETPATH/PopupView.cpp 
 
-FORMS += $$WIDGETPATH/CoordinateConversion.ui
+FORMS += $$WIDGETPATH/CoordinateConversion.ui \
+         $$WIDGETPATH/PopupView.ui

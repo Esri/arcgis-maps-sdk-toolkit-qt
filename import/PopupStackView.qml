@@ -63,29 +63,68 @@ import QtQuick.Layouts 1.12
 */
 Control {
     id: popupStackView
-    clip: true
-    width: 300
-    height: 300
-    property var popupManagers: []
 
-    onPopupManagersChanged: {
-        console.log(popupManagers)
+    property var popupManagers: null
+
+    property alias currentItem: stack.currentItem
+
+    property alias depth: stack.depth
+
+    property alias busy: stack.busy
+
+    property alias popEnter: stack.popEnter
+
+    property alias popExit: stack.popExit
+
+    property alias pushEnter: stack.pushEnter
+
+    property alias pushExit: stack.pushExit
+
+    signal attachmentThumbnailClicked(var index)
+
+    clip: true
+
+    implicitWidth: 300 + padding
+
+    implicitHeight: 300 + padding
+
+    padding: 5
+
+    background: Rectangle {
+        color: palette.base
+        border {
+            color: palette.shadow
+            width: 2
+        }
+        radius: 2
     }
 
     contentItem: GridLayout {
         columns: 2
-        anchors.fill: parent
+        anchors {
+            fill: parent
+            margins: 5
+        }
         Button {
             text: "Prev"
             onClicked: stack.pop()
             Layout.alignment: Qt.AlignLeft
             Layout.fillWidth: true
+            enabled: popupManagers ? stack.depth > 1 : false
         }
         Button {
             text: "Next"
             onClicked: stack.push(popupViewPage)
             Layout.alignment: Qt.AlignRight
             Layout.fillWidth: true
+            enabled: popupManagers ? stack.depth < popupManagers.length : false
+        }
+        Text {
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            horizontalAlignment: Text.AlignHCenter
+            text: popupManagers && popupManagers.length > 0 ? `${stack.depth} of ${popupManagers.length}` : ""
+            color: palette.text
         }
         StackView {
             id: stack
@@ -96,10 +135,11 @@ Control {
                 id: popupViewPage
                 PopupView {
                     popupManager: popupManagers && popupManagers.length >= StackView.index ? popupManagers[StackView.index] : null
-                    //palette: popupStackView.palette
-                    //background: popupStackView.background
-                    //width: 300
-                    //height: 300
+                    palette: popupStackView.palette
+                    background: null
+                    onAttachmentThumbnailClicked: {
+                        popupStackView.attachmentThumbnailClicked(index);
+                    }
                 }
             }
         }

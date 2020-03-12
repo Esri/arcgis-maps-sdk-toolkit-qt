@@ -26,7 +26,8 @@ HEADERS += $$CPPPATH/CoordinateConversionConstants.h \
            $$CPPPATH/Internal/GenericTableProxyModel.h \
            $$CPPPATH/Internal/GeoViews.h \
            $$CPPPATH/Internal/MetaElement.h \
-           $$CPPPATH/NorthArrowController.h
+           $$CPPPATH/NorthArrowController.h \
+           $$CPPPATH/PopupViewController.h
 
 SOURCES += $$CPPPATH/CoordinateConversionConstants.cpp \
            $$CPPPATH/CoordinateConversionController.cpp \
@@ -36,4 +37,5 @@ SOURCES += $$CPPPATH/CoordinateConversionConstants.cpp \
            $$CPPPATH/Internal/GenericListModel.cpp \
            $$CPPPATH/Internal/GenericTableProxyModel.cpp \
            $$CPPPATH/Internal/MetaElement.cpp \
-           $$CPPPATH/NorthArrowController.cpp
+           $$CPPPATH/NorthArrowController.cpp \
+           $$CPPPATH/PopupViewController.cpp

@@ -23,27 +23,27 @@ import QtQuick.Layouts 1.3
 Control {
     id: popupViewBase
 
-    property alias popupManager: internal.popupManager
-    readonly property alias attachments: internal.attachments
+    property var popupManager: null
 
     signal attachmentThumbnailClicked(var index)
 
-    implicitWidth: 300 + padding
-    implicitHeight: 300 + padding
-    padding: 5
+    /*!
+    * \qmlproperty PopupViewController controller
+    * \brief the Controller handles connections writing/reading to the popupManager.
+    */
+    property var controller: PopupViewController { }
 
-    QtObject {
-        id: internal
-        property var popupManager: null
-        property var attachments: null
-        onPopupManagerChanged: {
-            if (popupManager && popupManager.attachmentManager) {
-                attachments = popupManager.attachmentManager.attachmentsModel;
-            } else {
-                attachments = null;
-            }
-        }
+    Binding {
+        target: controller
+        property: "popupManager"
+        value: popupViewBase.popupManager
     }
+
+    implicitWidth: 300 + padding
+
+    implicitHeight: 300 + padding
+
+    padding: 5
 
     background: Rectangle {
         color: palette.base
@@ -65,39 +65,21 @@ Control {
                 left: parent.left
                 right: parent.right
             }
-
-            rows: getRows()
-
-            function getRows() {
-                let a = attachments ? attachments.rowCount() : 0;
-                let b = popupManager ? popupManager.displayedFields.rowCount() : 0;
-                return a + b + 2;
-            }
-
-            Connections {
-                target: attachments
-                onRowsInserted: fieldsLayout.rows = fieldsLayout.getRows();
-                onRowsRemoved: fieldsLayout.rows = fieldsLayout.getRows();
-            }
-
-            Connections {
-                target: popupManager ? popupManager.displayedFields: null
-                onRowsInserted: fieldsLayout.rows = fieldsLayout.getRows();
-                onRowsRemoved: fieldsLayout.rows = fieldsLayout.getRows();
-            }
+            rows: controller.fieldCount + controller.attachmentCount + 2
 
             // Title
             Text {
                 Layout.columnSpan: 2
                 Layout.fillWidth: true
                 textFormat: Text.StyledText
+                visible: controller.fieldCount > 0
                 text: `<h2>${popupManager ? popupManager.title : ""}</h2>`
                 color: palette.text
             }
 
             // Field names
             Repeater {
-                model: popupManager ? popupManager.displayedFields : null;
+                model: controller.displayFields
                 Text {
                     Layout.fillWidth: true
                     text: fieldName ? fieldName : ""
@@ -111,14 +93,14 @@ Control {
                 Layout.columnSpan: 2
                 Layout.fillWidth: true
                 textFormat: Text.StyledText
-                visible: attachments
+                visible: controller.attachmentCount > 0
                 text: "<h2>Attachments</h2>"
                 color: palette.text
             }
 
             // Attachment names
             Repeater {
-                model: attachments
+                model: controller.attachments
                 Text {
                     Layout.fillWidth: true
                     text: name
@@ -129,7 +111,7 @@ Control {
 
             // Field contents
             Repeater {
-                model: popupManager ? popupManager.displayedFields : null;
+                model: controller.displayFields
                 Text {
                     Layout.fillWidth: true
                     text: formattedValue
@@ -140,12 +122,14 @@ Control {
 
             // Attachment images
             Repeater {
-                model: attachments
+                model: controller.attachments
                 Image {
                     source: thumbnailUrl
                     MouseArea {
                         anchors.fill: parent
-                        onClicked: attachmentThumbnailClicked(index)
+                        onClicked: {
+                            attachmentThumbnailClicked(index)
+                        }
                     }
                 }
             }
