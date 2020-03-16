@@ -16,7 +16,7 @@
 
 import QtQuick 2.6
 import QtQuick.Controls 2.2
-import Esri.ArcGISRuntime 100.6
+import Esri.ArcGISRuntime 100.8
 import Esri.ArcGISArToolkit 1.0
 
 ApplicationWindow {
@@ -156,6 +156,13 @@ ApplicationWindow {
             visible: false
             onTriggered: updateOriginCamera(latitude, longitude, altitude, heading);
         }
+
+        ClippingView {
+            id: clippingView
+            width: parent.width
+            visible: false
+            onClippingDistanceChanged: arcGISArView.clippingDistance = clippingDistance;
+        }
     }
 
     SettingsWindow {
@@ -171,6 +178,7 @@ ApplicationWindow {
         onIgnoreTrackingClicked: arcGISArView.locationTrackingMode = ArEnums.Ignore;
         onInitialTrackingClicked: arcGISArView.locationTrackingMode = ArEnums.Initial;
         onContinuousTrackingClicked: arcGISArView.locationTrackingMode = ArEnums.Continuous;
+        onClippingClicked: clippingView.visible = !clippingView.visible;
         onCalibrationClicked: calibrationView.visible = !calibrationView.visible;
         onResetCalibrationClicked: calibrationView.reset();
         onScreenToLocationClicked: screenToLocationMode = !screenToLocationMode;

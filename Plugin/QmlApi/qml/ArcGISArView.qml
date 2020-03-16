@@ -16,11 +16,14 @@
 
 import QtQuick 2.12
 import QtQuick.Window 2.12
-import Esri.ArcGISRuntime 100.6
+import Esri.ArcGISRuntime 100.8
 import Esri.ArcGISArToolkit 1.0
 
 ArcGISArViewInternal {
     id: root
+
+    // The clipping distance in meters around the originCamera.
+    property alias clippingDistance: tmcc.clippingDistance
 
     // This QML component is used to create the QML's TMCC object from the C++.
     transformationMatrixCameraController: TransformationMatrixCameraController {

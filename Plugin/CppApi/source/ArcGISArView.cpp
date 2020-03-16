@@ -130,6 +130,39 @@ void ArcGISArView::setSceneView(SceneQuickView* sceneView)
 }
 
 /*!
+  \brief Gets the clipping distance in meters around the \l originCamera.
+
+  The default value is \c 0.0.
+
+  \since Esri::ArcGISRuntime 100.8
+ */
+double ArcGISArView::clippingDistance() const
+{
+  Q_CHECK_PTR(m_tmcc);
+  return m_tmcc->clippingDistance();
+}
+
+/*!
+  \brief Sets the clipping distance to \a clippingDistance in meters around the \l originCamera.
+
+  The default value is \c 0.0.
+
+  When the value is set to \c 0.0, there is no enforced clipping distance and therefore no limiting of displayed data.
+  Setting the value to \c 10.0 will only render data 10 meters around the \l originCamera.
+
+  \since Esri::ArcGISRuntime 100.8
+ */
+void ArcGISArView::setClippingDistance(double clippingDistance)
+{
+  Q_CHECK_PTR(m_tmcc);
+  if (m_tmcc->clippingDistance() == clippingDistance)
+    return;
+
+  m_tmcc->setClippingDistance(clippingDistance);
+  emit clippingDistanceChanged();
+}
+
+/*!
   \brief Sets the initial transformation used to offset the \l originCamera.
 
   The initial transformation is based on an AR point determined via existing plane hit detection

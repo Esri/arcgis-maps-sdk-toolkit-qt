@@ -77,6 +77,13 @@ ApplicationWindow {
             visible: false
             onTriggered: arSample.updateOriginCamera(latitude, longitude, altitude, heading);
         }
+
+        ClippingView {
+            id: clippingView
+            width: parent.width
+            visible: false
+            onClippingDistanceChanged: arSample.setClippingDistance(clippingDistance);
+        }
     }
 
     SettingsWindow {
@@ -93,6 +100,7 @@ ApplicationWindow {
         onIgnoreTrackingClicked: arcGISArView.locationTrackingMode = ArEnums.Ignore;
         onInitialTrackingClicked: arcGISArView.locationTrackingMode = ArEnums.Initial;
         onContinuousTrackingClicked: arcGISArView.locationTrackingMode = ArEnums.Continuous;
+        onClippingClicked: clippingView.visible = !clippingView.visible
         onCalibrationClicked: calibrationView.visible = !calibrationView.visible
         onResetCalibrationClicked: calibrationView.reset();
         onScreenToLocationClicked: arSample.screenToLocationMode = !arSample.screenToLocationMode

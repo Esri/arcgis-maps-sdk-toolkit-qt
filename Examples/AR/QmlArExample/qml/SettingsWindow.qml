@@ -30,6 +30,7 @@ Item {
     signal ignoreTrackingClicked()
     signal initialTrackingClicked()
     signal continuousTrackingClicked()
+    signal clippingClicked()
     signal calibrationClicked()
     signal resetCalibrationClicked()
     signal screenToLocationClicked()
@@ -113,6 +114,14 @@ Item {
                             id: referenceButton
                             text: "Continuous tracking"
                             onClicked: continuousTrackingClicked();
+                        }
+                        Button {
+                            width: buttonWidth
+                            text: "Clipping distance"
+                            onClicked: {
+                                settings.visible = false;
+                                clippingClicked();
+                            }
                         }
                         Button {
                             width: buttonWidth
