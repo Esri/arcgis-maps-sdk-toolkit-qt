@@ -26,11 +26,10 @@ import QtQuick.Controls 2.2
     \ingroup ArcGISQtToolkitCppApi
     \ingroup ArcGISQtToolkitQmlApi
     \inqmlmodule Esri.ArcGISRuntime.Toolkit.AR
-    \since Esri.ArcGISRutime 100.6
-    \brief A item displaying controls for adjusting a scene view's location, heading, and elevation.
+    \since Esri.ArcGISRutime 100.8
+    \brief A item displaying controls for adjusting a scene view's clipping distance.
 
-    This item can be used to change manually the location and heading of the scene, to ensure
-    accuracy between the device live video and the scene.
+    This item can be used to change manually the clipping distance of the scene.
 */
 
 Item {
