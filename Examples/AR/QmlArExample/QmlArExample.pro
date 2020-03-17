@@ -31,12 +31,12 @@ TEMPLATE = app
 TARGET = QmlArExample
 
 equals(QT_MAJOR_VERSION, 5) {
-    lessThan(QT_MINOR_VERSION, 12) { 
+    lessThan(QT_MINOR_VERSION, 12) {
         error("$$TARGET requires Qt 5.12.6")
     }
-	equals(QT_MINOR_VERSION, 12) : lessThan(QT_PATCH_VERSION, 6) {
-		error("$$TARGET requires Qt 5.12.6")
-	}
+    equals(QT_MINOR_VERSION, 12) : lessThan(QT_PATCH_VERSION, 6) {
+        error("$$TARGET requires Qt 5.12.6")
+    }
 }
 
 #-------------------------------------------------------------------------------

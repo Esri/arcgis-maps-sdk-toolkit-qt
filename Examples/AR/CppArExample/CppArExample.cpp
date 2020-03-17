@@ -61,6 +61,7 @@ void CppArExample::setArcGISArView(ArcGISArView* arcGISArView)
     return;
 
   m_arcGISArView = arcGISArView;
+  m_arcGISArView->setClippingDistance(m_clippingDistance);
 
   // Connect to the locationChanged signal, to update the QML messages
   connect(m_arcGISArView, &ArcGISArView::locationDataSourceChanged, this, [this]()
@@ -109,6 +110,12 @@ void CppArExample::setSceneView(SceneQuickView* sceneView)
   });
 
   emit sceneViewChanged();
+}
+
+void CppArExample::setClippingDistance(double clippingDistance)
+{
+  m_clippingDistance = clippingDistance;
+  m_arcGISArView->setClippingDistance(m_clippingDistance);
 }
 
 // Update the origin camera using the values sent by the calibration view.
