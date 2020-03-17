@@ -25,7 +25,6 @@ import QtQml 2.12
  * This controller calculates the current heading from a GeoView, and allows
  * the NorthArrow to apply a given heading to the GeoView.
  */
-
 QtObject {
     id: controller
 

@@ -19,67 +19,115 @@ import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.12
 
 /*!
-    \qmltype PopupStackView
-    \ingroup ArcGISQtToolkit
-    \ingroup ArcGISQtToolkitCppApi
-    \ingroup ArcGISQtToolkitQmlApi
-    \inqmlmodule Esri.ArcGISRuntime.Toolkit.Controls
-    \since Esri.ArcGISRutime 100.2
-    \brief A view for displaying and editing information of Features.
-
-    A PopupStackView can be used to display information for any type that
-    implements the PopupSource interface. For example, FeatureLayer
-    implements PopupSource. This means that it has a PopupDefinition,
-    which defines how the Popup should look for any features in that
-    layer.
-
-    An example workflow for displaying a PopupStackView for features in a
-    FeatureLayer would be:
-
-    \list
-      \li Declare a PopupStackView and anchor it to a desired location.
-      \li Perform an identify operation on a GeoView and select the desired
-      Features from the identify result.
-      \li Create Popups from the Features.
-      \li Optionally obtain the Popup's PopupDefinition and set the
-      title, whether to show attachments, and so on.
-      \li Create a PopupManager from the Popup and add it to a list of PopupManagers
-      \li Assign the list mentioned in the above step to the PopupStackView's \c popupManagers property
-      \li Call the \c show() method to display the PopupStackView.
-      \li Call the \c dismiss() method to hide the PopupStackView.
-    \endlist
-
-    The PopupStackView is a QML Item that can be anchored, given to a dialog,
-    or positioned using XY screen coordinates. Transform, Transition, and
-    other QML animation types can be used to animate the showing and
-    dismissing of the view.
-
-    For more information, please see the Popup and PopupManager
-    documentation.
-
-    \note Each time a change is made to the Popup, PopupDefinition,
-    PopupManager, or any of their properties, the popupManagers must be
-    re-set to the PopupStackView.
-*/
+ * \qmltype PopupStackView
+ * \ingroup ArcGISQtToolkit
+ * \inqmlmodule Esri.ArcGISRuntime.Toolkit
+ * \since Esri.ArcGISRutime 100.8
+ * \brief A view for displaying and editing information of Features.
+ * 
+ * A PopupStackView can be used to display information for any type that
+ * implements the PopupSource interface. For example, FeatureLayer
+ * implements PopupSource. This means that it has a PopupDefinition,
+ * which defines how the Popup should look for any features in that
+ * layer.
+ * 
+ * An example workflow for displaying a PopupStackView for features in a
+ * FeatureLayer would be:
+ * 
+ * \list
+ *   \li Declare a PopupStackView and anchor it to a desired location.
+ *   \li Perform an identify operation on a GeoView and select the desired
+ *   Features from the identify result.
+ *   \li Create Popups from the Features.
+ *   \li Optionally obtain the Popup's PopupDefinition and set the
+ *   title, whether to show attachments, and so on.
+ *   \li Create a PopupManager from the Popup and add it to a list of 
+ *   PopupManagers
+ *   \li Assign the list mentioned in the above step to the PopupStackView's
+ *   \c popupManagers property
+ * \endlist
+ * 
+ * The PopupStackView is a QML Item that can be anchored, given to a dialog,
+ * or positioned using XY screen coordinates. Transform, Transition, and
+ * other QML animation types can be used to animate the showing and
+ * dismissing of the view.
+ * 
+ * For more information, please see the Popup and PopupManager
+ * documentation.
+ * 
+ * \note Each time a change is made to the Popup, PopupDefinition,
+ * PopupManager, or any of their properties, the popupManagers must be
+ * re-set to the PopupStackView.
+ */
 Control {
     id: popupStackView
 
+    /*!
+     * \brief A list of PopupManagers that controls the information being 
+     * displayed in a PopupStackView.
+     * \qmlproperty list<PopupManager> popupManagers
+     */
     property var popupManagers: null
 
+    /*!
+     * \brief This property holds the current top-most item in the stack.
+     * \qmlproperty PopupView currentItem
+     * \sa Stack
+     */
     property alias currentItem: stack.currentItem
 
+    /*!
+     * \brief This property holds the number of items currently pushed onto the 
+     * stack.
+     * \qmlproperty int depth
+     * \sa Stack
+     */
     property alias depth: stack.depth
 
+    /*!
+     * \brief This property holds whether a transition is running.
+     * \qmlproperty bool busy
+     * \sa Stack
+     */
     property alias busy: stack.busy
 
+    /*!
+     * \brief This property holds the transition that is applied to the item 
+     * that enters the stack when another item is popped off of it.
+     * \qmlproperty Transition popEnter
+     * \sa Stack
+     */
     property alias popEnter: stack.popEnter
 
+    /*!
+     * \brief This property holds the transition that is applied to the item 
+     * that exits the stack when the item is popped off of it.
+     * \qmlproperty Transition popExit
+     * \sa Stack
+     */
     property alias popExit: stack.popExit
 
+    /*!
+     * \brief This property holds the transition that is applied to the item 
+     * that enters the stack when the item is pushed onto it.
+     * \qmlproperty Transition pushEnter
+     * \sa Stack
+     */
     property alias pushEnter: stack.pushEnter
 
+    /*!
+     * \brief This property holds the transition that is applied to the item 
+     * that exits the stack when another item is pushed onto it.
+     * \qmlproperty Transition pushExit
+     * \sa Stack
+     */
     property alias pushExit: stack.pushExit
 
+    /*!
+     * \brief Signal emitted when an attachment thumbnail is clicked.
+     * The \a index of the PopupAttachment in the PopupAttachmentListModel
+     * of the currently displayed PopupView.
+     */
     signal attachmentThumbnailClicked(var index)
 
     clip: true
@@ -106,7 +154,7 @@ Control {
             margins: 5
         }
         Button {
-            text: "Prev"
+            text: "Previous"
             onClicked: stack.pop()
             Layout.alignment: Qt.AlignLeft
             Layout.fillWidth: true

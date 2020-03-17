@@ -99,6 +99,11 @@ int PopupViewController::attachmentCount_() const
   return 0;
 }
 
+QString PopupViewController::title() const
+{
+  return m_popupManager ? m_popupManager->title() : nullptr;
+}
+
 } // Toolkit
 } // ArcGISRuntime
 } // Esri

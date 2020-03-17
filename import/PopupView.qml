@@ -20,23 +20,71 @@ import QtQuick.Dialogs 1.2
 import QtQuick.Window 2.11
 import QtQuick.Layouts 1.3
 
+/*!
+ * \qmltype PopupView
+ * \ingroup ArcGISQtToolkit
+ * \inqmlmodule Esri.ArcGISRuntime.Toolkit
+ * \since Esri.ArcGISRutime 100.8
+ * \brief A view for displaying and editing information about a feature.
+ * A PopupView can be used to display information for any type that
+ * implements the PopupSource interface. For example, FeatureLayer
+ * implements PopupSource. This means that it has a PopupDefinition,
+ * which defines how the Popup should look for any features in that
+ * layer.
+ * An example workflow for displaying a PopupView for a feature in a
+ * FeatureLayer would be:
+ * \list
+ *   \li Declare a PopupView and anchor it to a desired location.
+ *   \li Perform an identify operation on a GeoView and select a
+ *   Feature from the identify result.
+ *   \li Create a Popup from the Feature.
+ *   \li Optionally obtain the Popup's PopupDefinition and set the
+ *   title, whether to show attachments, and so on.
+ *   \li Create a PopupManager from the Popup.
+ *   \li Assign the PopupView's \c popupManager property the PopupManager
+ *   created in the previous step.
+ * \endlist
+ * The PopupView is a QML Item that can be anchored, given to a dialog,
+ * or positioned using XY screen coordinates. Transform, Transition, and
+ * other QML animation types can be used to animate the showing and
+ * dismissing of the view.
+ * For more information, please see the Popup and PopupManager
+ * documentation.
+ * \note Each time a change is made to the Popup, PopupDefinition,
+ * PopupManager, or any of their properties, the PopupManager must
+ * be re-set to the PopupView.
+ */
 Control {
-    id: popupViewBase
-
-    property var popupManager: null
-
-    signal attachmentThumbnailClicked(var index)
+    id: popupView
 
     /*!
+     * \brief The PopupManager that controls the information being displayed in
+     * the view.
+     * 
+     * The PopupManager should be created from a Popup.
+     * \qmlproperty PopupManager popupManager
+     */
+    property var popupManager: null
+    
+    /*!
     * \qmlproperty PopupViewController controller
-    * \brief the Controller handles connections writing/reading to the popupManager.
+    * \brief the Controller handles reading from the PopupManager and monitoring
+    * the list-models.
+    * \qmlproperty PopupViewController controller
     */
     property var controller: PopupViewController { }
+
+    /*!
+     * \brief Signal emitted when an attachment thumbnail is clicked.
+     * The \a index of the PopupAttachment in the PopupAttachmentListModel
+     * that was clicked on by the user.
+     */
+    signal attachmentThumbnailClicked(var index)
 
     Binding {
         target: controller
         property: "popupManager"
-        value: popupViewBase.popupManager
+        value: popupView.popupManager
     }
 
     implicitWidth: 300 + padding
@@ -73,7 +121,7 @@ Control {
                 Layout.fillWidth: true
                 textFormat: Text.StyledText
                 visible: controller.fieldCount > 0
-                text: `<h2>${popupManager ? popupManager.title : ""}</h2>`
+                text: `<h2>${controller.title}</h2>`
                 color: palette.text
             }
 
