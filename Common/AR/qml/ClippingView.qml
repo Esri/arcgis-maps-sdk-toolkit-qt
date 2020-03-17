@@ -27,7 +27,7 @@ import QtQuick.Controls 2.2
     \ingroup ArcGISQtToolkitQmlApi
     \inqmlmodule Esri.ArcGISRuntime.Toolkit.AR
     \since Esri.ArcGISRutime 100.8
-    \brief A item displaying controls for adjusting a scene view's clipping distance.
+    \brief An item displaying controls for adjusting a scene view's clipping distance.
 
     This item can be used to change manually the clipping distance of the scene.
 */
