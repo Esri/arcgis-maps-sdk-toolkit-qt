@@ -22,7 +22,7 @@
 // Qt headers
 #include <QAbstractListModel>
 #include <QObject>
-
+#include <QPointer>
 
 namespace Esri
 {
@@ -43,12 +43,14 @@ namespace Toolkit
 class PopupViewController : public QObject
 {
   Q_OBJECT
+
   Q_PROPERTY(PopupManager* popupManager READ popupManager WRITE setPopupManager NOTIFY popupManagerChanged)
   Q_PROPERTY(QAbstractListModel* displayFields READ displayFields NOTIFY popupManagerChanged)
-  Q_PROPERTY(int fieldCount READ fieldCount_ NOTIFY fieldCountChanged)
+  Q_PROPERTY(int fieldCount READ fieldCount NOTIFY fieldCountChanged)
   Q_PROPERTY(QAbstractListModel* attachments READ attachments NOTIFY popupManagerChanged)
-  Q_PROPERTY(int attachmentCount READ attachmentCount_ NOTIFY attachmentCountChanged)
+  Q_PROPERTY(int attachmentCount READ attachmentCount NOTIFY attachmentCountChanged)
   Q_PROPERTY(QString title READ title NOTIFY popupManagerChanged)
+
 public:
   /*!
    * \brief Constructor
@@ -89,9 +91,6 @@ public:
 
   /*!
    * \brief Returns the title of the PopupManager.
-   * \note This is re-exposed from PopupManager as PopupManager does not have
-   * NOTIFY/CONSTANT modifiers on its title property, so the Controller
-   * re-exposes title to suppress warnings about ths.
    */
   QString title() const;
 
@@ -119,17 +118,17 @@ private:
    * Exposes the number of rows in the list model returned by `displayFields`.
    * This is a property for QML. In C++ code call `displayFields()->rowCount()`.
    */
-  int fieldCount_() const;
+  int fieldCount() const;
 
   /*!
    * \internal
    * Exposes the number of rows in the list model returned by `attachments`.
    * This is a property for QML. In C++ code call `attachments()->rowCount()`.
    */
-  int attachmentCount_() const;
+  int attachmentCount() const;
 
 private:
-  PopupManager* m_popupManager = nullptr;
+  QPointer<PopupManager> m_popupManager = nullptr;
 };
 
 } // Toolkit

@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2018 Esri
+ *  Copyright 2012-2020 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import QtQuick.Layouts 1.3
  * \inqmlmodule Esri.ArcGISRuntime.Toolkit
  * \since Esri.ArcGISRutime 100.8
  * \brief A view for displaying and editing information about a feature.
+ *
  * A PopupView can be used to display information for any type that
  * implements the PopupSource interface. For example, FeatureLayer
  * implements PopupSource. This means that it has a PopupDefinition,
@@ -47,7 +48,7 @@ import QtQuick.Layouts 1.3
  * The PopupView is a QML Item that can be anchored, given to a dialog,
  * or positioned using XY screen coordinates. Transform, Transition, and
  * other QML animation types can be used to animate the showing and
- * dismissing of the view.
+ * dissmisal of the view.
  * For more information, please see the Popup and PopupManager
  * documentation.
  * \note Each time a change is made to the Popup, PopupDefinition,

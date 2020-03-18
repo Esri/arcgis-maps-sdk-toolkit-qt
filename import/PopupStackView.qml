@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2018 Esri
+ *  Copyright 2012-2020 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,7 +23,8 @@ import QtQuick.Layouts 1.12
  * \ingroup ArcGISQtToolkit
  * \inqmlmodule Esri.ArcGISRuntime.Toolkit
  * \since Esri.ArcGISRutime 100.8
- * \brief A view for displaying and editing information of Features.
+ * \brief A view for displaying and editing information of GeoElements,
+ * including Features and Graphics.
  * 
  * A PopupStackView can be used to display information for any type that
  * implements the PopupSource interface. For example, FeatureLayer

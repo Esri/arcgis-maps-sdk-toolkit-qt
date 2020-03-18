@@ -41,24 +41,30 @@ void PopupViewController::setPopupManager(PopupManager* popupManager)
   if (popupManager == m_popupManager)
     return;
 
-  if (auto a = attachments())
-    disconnect(a, nullptr, this, nullptr);
+  if (m_popupManager)
+    disconnect(m_popupManager.data(), nullptr, this, nullptr);
 
-  if (auto d = displayFields())
-    disconnect(d, nullptr, this, nullptr);
+  if (auto attachments_ = attachments())
+    disconnect(attachments_, nullptr, this, nullptr);
+
+  if (auto displayFields_ = displayFields())
+    disconnect(displayFields_, nullptr, this, nullptr);
 
   m_popupManager = popupManager;
 
-  if (auto a = attachments())
+  if (m_popupManager)
+    connect(m_popupManager.data(), &QObject::destroyed, this, &PopupViewController::popupManagerChanged);
+
+  if (auto attachments_ = attachments())
   {
-    connect(a, &QAbstractListModel::rowsInserted , this, &PopupViewController::attachmentCountChanged);
-    connect(a, &QAbstractListModel::rowsRemoved , this, &PopupViewController::attachmentCountChanged);
+    connect(attachments_, &QAbstractListModel::rowsInserted , this, &PopupViewController::attachmentCountChanged);
+    connect(attachments_, &QAbstractListModel::rowsRemoved , this, &PopupViewController::attachmentCountChanged);
   }
 
-  if (auto d = displayFields())
+  if (auto displayFields_ = displayFields())
   {
-    connect(d, &QAbstractListModel::rowsInserted , this, &PopupViewController::fieldCountChanged);
-    connect(d, &QAbstractListModel::rowsRemoved , this, &PopupViewController::fieldCountChanged);
+    connect(displayFields_, &QAbstractListModel::rowsInserted , this, &PopupViewController::fieldCountChanged);
+    connect(displayFields_, &QAbstractListModel::rowsRemoved , this, &PopupViewController::fieldCountChanged);
   }
 
   emit popupManagerChanged();
@@ -83,15 +89,15 @@ QAbstractListModel* PopupViewController::attachments() const
   return attachmentManager->attachmentsModel();
 }
 
-int PopupViewController::fieldCount_() const
+int PopupViewController::fieldCount() const
 {
-  if (auto d = displayFields()) {
-    return d->rowCount();
-  }
+  if (auto displayFields_ = displayFields())
+    return displayFields_->rowCount();
+
   return 0;
 }
 
-int PopupViewController::attachmentCount_() const
+int PopupViewController::attachmentCount() const
 {
   if (auto a = attachments())
     return a->rowCount();
@@ -101,6 +107,9 @@ int PopupViewController::attachmentCount_() const
 
 QString PopupViewController::title() const
 {
+  // This is re-exposed from PopupManager as PopupManager does not have
+  // NOTIFY/CONSTANT modifiers on its title property, so the Controller
+  // re-exposes title to suppress warnings about ths.
   return m_popupManager ? m_popupManager->title() : nullptr;
 }
 
