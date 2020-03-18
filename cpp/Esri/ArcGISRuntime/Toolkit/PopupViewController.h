@@ -91,7 +91,7 @@ public:
    * \brief Returns the title of the PopupManager.
    * \note This is re-exposed from PopupManager as PopupManager does not have
    * NOTIFY/CONSTANT modifiers on its title property, so the Controller
-   * re-exposes title to suppress warnings about ths.
+   * re-exposes title to suppress warnings about this.
    */
   QString title() const;
 
