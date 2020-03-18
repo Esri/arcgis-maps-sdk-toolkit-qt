@@ -19,7 +19,7 @@ import QtQml 2.12
 /*!
  * \qmltype PopupViewController
  * \inqmlmodule Esri.ArcGISRuntime.Toolkit
- * \since Esri.ArcGISRutime 100.8
+ * \since Esri.ArcGISRuntime 100.8
  * \brief In MVC architecture, this is the controller for the corresponding
  * PopupVIew.
  * 
