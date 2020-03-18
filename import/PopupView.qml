@@ -24,7 +24,7 @@ import QtQuick.Layouts 1.3
  * \qmltype PopupView
  * \ingroup ArcGISQtToolkit
  * \inqmlmodule Esri.ArcGISRuntime.Toolkit
- * \since Esri.ArcGISRutime 100.8
+ * \since Esri.ArcGISRuntime 100.8
  * \brief A view for displaying and editing information about a feature.
  * A PopupView can be used to display information for any type that
  * implements the PopupSource interface. For example, FeatureLayer
