@@ -181,13 +181,31 @@ Control {
         return stack.pop(...args);
     }
 
+    /*!
+     * \brief Attempts to show the previous item in the list of 
+     * PopupManagers.
+     */
     function gotoPrevious() {
         stack.pop();
     }
 
+    /*!
+     * \brief Attempts to show the next item in the list of 
+     * PopupManagers.
+     */
     function gotoNext() {
+        // We want a transition on show, so we force the first item to 
+        // transition.
         stack.push(popupViewPage, StackView.PushTransition);
     } 
+
+    onVisibleChanged: {
+        // Always display with a transition and on page 1.
+        if (visible) {
+            clear();
+            gotoNext();
+        }
+    }
     
     clip: true
 
@@ -204,13 +222,6 @@ Control {
             width: 2
         }
         radius: 2
-    }
-
-    onVisibleChanged: {
-        if (visible) {
-            clear();
-            gotoNext();
-        }
     }
 
     contentItem: GridLayout {
