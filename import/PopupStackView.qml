@@ -125,12 +125,70 @@ Control {
     property alias pushExit: stack.pushExit
 
     /*!
+     * \brief Callback function called when the close button is closed. When
+     * this property is set to null the close button does not render. When
+     * the close button is clicked the function in this property is called.
+     * Defaults to setting visible to false.
+     */
+    property var closeCallback: function() {
+        popupStackView.visible = false;
+    }
+
+    /*!
      * \brief Signal emitted when an attachment thumbnail is clicked.
      * The \a index of the PopupAttachment in the PopupAttachmentListModel
      * of the currently displayed PopupView.
      */
     signal attachmentThumbnailClicked(var index)
 
+    /*!
+     * \brief Removes all items from the stack.
+     * \sa StackView.clear
+     */
+    function clear(...args) {
+        return stack.clear(...args);
+    }
+
+    /*!
+     * \brief Search for a specific item inside the stack. The callback function
+     * is called for each item in the stack (with the item and index as 
+     * arguments) until the callback function returns true. The return value is
+     * the item found.
+     * \sa StackView.find
+     */
+    function find(...args) {
+        return stack.find(...args);
+    }
+
+    /*!
+     * \brief Returns the item at position index in the stack, or null if the 
+     * index is out of bounds.
+     * \sa StackView.get
+     */
+    function get(...args) {
+        return stack.get(...args);
+    }
+    
+    /*!
+     * \brief Pops one or more items off the stack. Returns the last item 
+     * removed from the stack. If the item argument is specified, all items down
+     * to (but not including) item will be popped. If item is null, all items 
+     * down to (but not including) the first item is popped. If not specified, 
+     * only the current item is popped.
+     * \sa StackView.pop
+     */
+    function pop(...args) {
+        return stack.pop(...args);
+    }
+
+    function gotoPrevious() {
+        stack.pop();
+    }
+
+    function gotoNext() {
+        stack.push(popupViewPage, StackView.PushTransition);
+    } 
+    
     clip: true
 
     implicitWidth: 300 + padding
@@ -148,47 +206,57 @@ Control {
         radius: 2
     }
 
+    onVisibleChanged: {
+        if (visible) {
+            clear();
+            gotoNext();
+        }
+    }
+
     contentItem: GridLayout {
-        columns: 2
+        columns: 3
         anchors {
             fill: parent
             margins: 5
         }
+
         Button {
             text: "Previous"
-            onClicked: stack.pop()
+            onClicked: gotoPrevious();
             Layout.alignment: Qt.AlignLeft
-            Layout.fillWidth: true
             enabled: popupManagers ? stack.depth > 1 : false
         }
-        Button {
-            text: "Next"
-            onClicked: stack.push(popupViewPage)
-            Layout.alignment: Qt.AlignRight
-            Layout.fillWidth: true
-            enabled: popupManagers ? stack.depth < popupManagers.length : false
-        }
+
         Text {
-            Layout.columnSpan: 2
             Layout.fillWidth: true
             horizontalAlignment: Text.AlignHCenter
             text: popupManagers && popupManagers.length > 0 ? `${stack.depth} of ${popupManagers.length}` : ""
             color: palette.text
         }
+
+        Button {
+            text: "Next"
+            onClicked: gotoNext();
+            Layout.alignment: Qt.AlignRight
+            enabled: popupManagers ? stack.depth < popupManagers.length : false
+        }
+
         StackView {
             id: stack
-            Layout.columnSpan: 2
+            Layout.columnSpan: 3
             Layout.fillWidth: true
             Layout.fillHeight: true
-            initialItem: Component {
-                id: popupViewPage
-                PopupView {
-                    popupManager: popupManagers && popupManagers.length >= StackView.index ? popupManagers[StackView.index] : null
-                    palette: popupStackView.palette
-                    background: null
-                    onAttachmentThumbnailClicked: {
-                        popupStackView.attachmentThumbnailClicked(index);
-                    }
+        }
+
+        Component {
+            id: popupViewPage
+            PopupView {
+                popupManager: popupManagers && popupManagers.length >= StackView.index ? popupManagers[StackView.index] : null
+                palette: popupStackView.palette
+                background: null
+                closeCallback: popupStackView.closeCallback
+                onAttachmentThumbnailClicked: {
+                    popupStackView.attachmentThumbnailClicked(index);
                 }
             }
         }

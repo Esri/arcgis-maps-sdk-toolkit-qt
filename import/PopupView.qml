@@ -76,6 +76,16 @@ Control {
     property var controller: PopupViewController { }
 
     /*!
+     * \brief Callback function called when the close button is closed. When
+     * this property is set to null the close button does not render. When
+     * the close button is clicked the function in this property is called.
+     * Defaults to setting visible to false.
+     */
+    property var closeCallback: function() {
+        popupView.visible = false;
+    }
+
+    /*!
      * \brief Signal emitted when an attachment thumbnail is clicked.
      * The \a index of the PopupAttachment in the PopupAttachmentListModel
      * that was clicked on by the user.
@@ -116,12 +126,10 @@ Control {
             }
             rows: controller.fieldCount + controller.attachmentCount + 2
 
-            // Title
+            // Title Header
             Text {
-                Layout.columnSpan: 2
                 Layout.fillWidth: true
                 textFormat: Text.StyledText
-                visible: controller.fieldCount > 0
                 text: `<h2>${controller.title}</h2>`
                 color: palette.text
             }
@@ -142,8 +150,7 @@ Control {
                 Layout.columnSpan: 2
                 Layout.fillWidth: true
                 textFormat: Text.StyledText
-                visible: controller.attachmentCount > 0
-                text: "<h2>Attachments</h2>"
+                text: controller.attachmentCount > 0 ? "<h2>Attachments</h2>" : ""
                 color: palette.text
             }
 
@@ -155,6 +162,15 @@ Control {
                     text: name
                     wrapMode: Text.WrapAnywhere
                     color: palette.text
+                }
+            }
+
+            Button {
+                text: "Close"
+                Layout.alignment: Qt.AlignRight
+                onClicked: {
+                    if (popupView.closeCallback)
+                        popupView.closeCallback();
                 }
             }
 
