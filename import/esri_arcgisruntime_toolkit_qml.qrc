@@ -1,14 +1,20 @@
 <RCC>
     <!-- This section contains all view components (shared by C++ and QML APIs) -->
     <qresource prefix="Esri/ArcGISRuntime/Toolkit">
+      <file>AuthenticationView.qml</file>
+      <file>ClientCertificateView.qml</file>
       <file>CoordinateConversion.qml</file>
       <file>FlashImage.qml</file>
       <file>NorthArrow.qml</file>
+      <file>OAuth2View.qml</file>
       <file>PopupStackView.qml</file>
       <file>PopupView.qml</file>
+      <file>SslHandshakeView.qml</file>
+      <file>UserCredentialsView.qml</file>
     </qresource>
     <!-- This section contains all QML API controller components. -->
     <qresource prefix="Esri/ArcGISRuntime/Toolkit">
+      <file>AuthenticationController.qml</file>
       <file>CoordinateConversionController.qml</file>
       <file>CoordinateConversionOption.qml</file>
       <file>CoordinateConversionResult.qml</file>
@@ -17,6 +23,7 @@
     </qresource>
     <!-- This section contains all C++ API controller components overriding the QML equivalents -->
     <qresource prefix="Esri/ArcGISRuntime/Toolkit">
+      <file>+cpp_api/AuthenticationController.qml</file>
       <file>+cpp_api/CoordinateConversionController.qml</file>
       <file>+cpp_api/CoordinateConversionOption.qml</file>
       <file>+cpp_api/CoordinateConversionResult.qml</file>

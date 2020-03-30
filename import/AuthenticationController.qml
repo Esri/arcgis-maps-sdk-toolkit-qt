@@ -1,0 +1,3 @@
+QtObject {
+    id: authenticationController
+}
