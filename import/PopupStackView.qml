@@ -71,7 +71,8 @@ Control {
     property var popupManagers: null
 
     /*!
-     * \brief This property holds the current top-most item in the stack.
+     * \brief This property holds the current top-most item in the stack. I.E.
+     * the current popup from the list of popup managers.
      * \qmlproperty PopupView currentItem
      * \sa Stack
      */

@@ -44,27 +44,27 @@ void PopupViewController::setPopupManager(PopupManager* popupManager)
   if (m_popupManager)
     disconnect(m_popupManager.data(), nullptr, this, nullptr);
 
-  if (auto attachments_ = attachments())
-    disconnect(attachments_, nullptr, this, nullptr);
+  if (auto attachments = this->attachments())
+    disconnect(attachments, nullptr, this, nullptr);
 
-  if (auto displayFields_ = displayFields())
-    disconnect(displayFields_, nullptr, this, nullptr);
+  if (auto displayFields = this->displayFields())
+    disconnect(displayFields, nullptr, this, nullptr);
 
   m_popupManager = popupManager;
 
   if (m_popupManager)
     connect(m_popupManager.data(), &QObject::destroyed, this, &PopupViewController::popupManagerChanged);
 
-  if (auto attachments_ = attachments())
+  if (auto attachments = this->attachments())
   {
-    connect(attachments_, &QAbstractListModel::rowsInserted , this, &PopupViewController::attachmentCountChanged);
-    connect(attachments_, &QAbstractListModel::rowsRemoved , this, &PopupViewController::attachmentCountChanged);
+    connect(attachments, &QAbstractListModel::rowsInserted , this, &PopupViewController::attachmentCountChanged);
+    connect(attachments, &QAbstractListModel::rowsRemoved , this, &PopupViewController::attachmentCountChanged);
   }
 
-  if (auto displayFields_ = displayFields())
+  if (auto displayFields = this->displayFields())
   {
-    connect(displayFields_, &QAbstractListModel::rowsInserted , this, &PopupViewController::fieldCountChanged);
-    connect(displayFields_, &QAbstractListModel::rowsRemoved , this, &PopupViewController::fieldCountChanged);
+    connect(displayFields, &QAbstractListModel::rowsInserted , this, &PopupViewController::fieldCountChanged);
+    connect(displayFields, &QAbstractListModel::rowsRemoved , this, &PopupViewController::fieldCountChanged);
   }
 
   emit popupManagerChanged();
@@ -91,16 +91,16 @@ QAbstractListModel* PopupViewController::attachments() const
 
 int PopupViewController::fieldCount() const
 {
-  if (auto displayFields_ = displayFields())
-    return displayFields_->rowCount();
+  if (auto displayFields = this->displayFields())
+    return displayFields->rowCount();
 
   return 0;
 }
 
 int PopupViewController::attachmentCount() const
 {
-  if (auto a = attachments())
-    return a->rowCount();
+  if (auto attachments = this->attachments())
+    return attachments->rowCount();
 
   return 0;
 }

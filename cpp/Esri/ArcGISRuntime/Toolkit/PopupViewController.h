@@ -56,7 +56,7 @@ public:
    * \brief Constructor
    * \param parent Parent owning QObject.
    */
-  explicit Q_INVOKABLE PopupViewController(QObject* parent = nullptr);
+  Q_INVOKABLE explicit PopupViewController(QObject* parent = nullptr);
 
   /*!
    * \brief Destructor.
