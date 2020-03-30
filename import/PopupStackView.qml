@@ -125,7 +125,7 @@ Control {
     property alias pushExit: stack.pushExit
 
     /*!
-     * \brief Callback function called when the close button is closed. When
+     * \brief Callback function called when the close button is clicked. When
      * this property is set to null the close button does not render. When
      * the close button is clicked the function in this property is called.
      * Defaults to setting visible to false.
