@@ -128,7 +128,7 @@ private:
   int attachmentCount() const;
 
 private:
-  QPointer<PopupManager> m_popupManager = nullptr;
+  QPointer<PopupManager> m_popupManager;
 };
 
 } // Toolkit
