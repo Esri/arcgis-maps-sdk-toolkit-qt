@@ -45,22 +45,6 @@ Control {
     property var geoView;
 
     /*!
-     * \qmlproperty int textColor
-     * \brief The color of coordinate notation text and labels on this tool.
-     *
-     * The default value is \c "black".
-     */
-    property color textColor: "black"
-
-    /*!
-     * \qmlproperty int highlightColor
-     * \brief The color of used to highlight UI elements in this tool.
-     *
-     * The default value is \c "blue".
-     */
-    property color highlightColor: "blue"
-
-    /*!
      * \qmlproperty bool inInputMode
      * \brief Whether whether the tool is in input mode.
      *
@@ -109,9 +93,7 @@ Control {
         value: captureModeButton.checked
     }
 
-    background: Rectangle {
-        height: gridLayout.height
-    }
+    background: Rectangle { }
 
     contentItem: ColumnLayout {
         id: gridLayout
@@ -156,7 +138,7 @@ Control {
                 selectByMouse: !readOnly
                 text: inputFormat.type? inputFormat.notation : "No position"
 
-                color: editCoordinateButton.checked ? highlightColor: textColor;
+                color: editCoordinateButton.checked ? palette.highlight: palette.text;
                 onEditingFinished: {
                     controller.setCurrentPoint(text, inputFormat.type);
                     editCoordinateButton.checked = false;
@@ -232,7 +214,7 @@ Control {
 
                     var itemPos = geoView.mapToItem(geoView, screenPos.x, screenPos.y);
                     checked = true;
-                    var flashImage = internal.flashImageFactory.createObject(geoView, { "x": itemPos.x, "y": itemPos.y, "color": highlightColor });
+                    var flashImage = internal.flashImageFactory.createObject(geoView, { "x": itemPos.x, "y": itemPos.y, "color": palette.highlight });
                     flashImage.finished.connect(function() { flashCoordinateButton.checked = false; });
                 }
             }
@@ -272,7 +254,7 @@ Control {
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     visible: menuButton.checked
-                    color: textColor
+                    color: palette.text
                 }
 
                 Label {
@@ -282,7 +264,7 @@ Control {
                     visible: menuButton.checked
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignLeft
-                    color: textColor
+                    color: palette.text
                 }
 
                 Button {
