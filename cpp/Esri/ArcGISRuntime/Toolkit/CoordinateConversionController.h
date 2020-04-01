@@ -65,7 +65,7 @@ public:
 
   GenericListModel* conversionResults() const;
 
-  Point currentPoint() const;
+  Q_INVOKABLE Esri::ArcGISRuntime::Point currentPoint() const;
 
   Q_INVOKABLE QPointF screenCoordinate() const;
 

@@ -224,7 +224,7 @@ void CoordinateConversionController::setCurrentPoint(
   CoordinateConversionOption* option)
 {
   if (auto geoView = qobject_cast<GeoView*>(m_geoView))
-    setCurrentPoint(p, geoView->spatialReference(), option);
+    setCurrentPoint(point, geoView->spatialReference(), option);
   else
     setCurrentPoint(point, SpatialReference(), option);
 }
@@ -251,9 +251,9 @@ void CoordinateConversionController::setCurrentPoint(
   if (!option)
     return;
 
-  auto point = option->pointFromString(p, spatialReference);
-  if (point.isValid())
-    setCurrentPoint(point);
+  auto p = option->pointFromString(point, spatialReference);
+  if (p.isValid())
+    setCurrentPoint(p);
 }
 
 /*!
@@ -291,8 +291,8 @@ QPointF CoordinateConversionController::screenCoordinate() const
 }
 
 /*!
+  \fn Esri::ArcGISRuntime::Point Esri::ArcGISRuntime::Toolkit::CoordinateConversionController::currentPoint() const
   \brief Returns the current point.
-  
   The current point represents the one point that all elements within
   the conversionResults list-model are tied to.
  */
