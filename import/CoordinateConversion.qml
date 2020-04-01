@@ -39,31 +39,31 @@ Control {
     clip: true
 
     /*!
-     * \qmlproperty GeoView geoView
-     * \brief The GeoView for this tool. Should be a SceneView or a MapView.
+       \qmlproperty GeoView geoView
+       \brief The GeoView for this tool. Should be a SceneView or a MapView.
      */
     property var geoView;
 
     /*!
-     * \qmlproperty bool inInputMode
-     * \brief Whether whether the tool is in input mode.
-     *
-     * If \c true, the tool will convert a point set via a mouse click or text entry.
+       \qmlproperty bool inInputMode
+       \brief Whether whether the tool is in input mode.
+      
+       If \c true, the tool will convert a point set via a mouse click or text entry.
      */
     readonly property bool inInputMode: editCoordinateButton.checked || captureModeButton.checked
 
     /*!
-    * \qmlproperty CoordinateConversionResult inputFormat
-    * \brief This is the inputFormat - which dictates what format the user can
-    * edit and thereby update all the other formats in the ListModel.
+      \qmlproperty CoordinateConversionResult inputFormat
+      \brief This is the inputFormat - which dictates what format the user can
+      edit and thereby update all the other formats in the ListModel.
     */
     property var inputFormat: CoordinateConversionResult { }
 
     /*!
-    * \qmlproperty CoordinateConversionController controller.
-    * \brief the Controller handles connections writing/reading to the GeoView,
-    * and maintaining our list of textual representations of a single point
-    * in multiple formats.
+      \qmlproperty CoordinateConversionController controller.
+      \brief the Controller handles connections writing/reading to the GeoView,
+      and maintaining our list of textual representations of a single point
+      in multiple formats.
     */
     property var controller: CoordinateConversionController { }
 

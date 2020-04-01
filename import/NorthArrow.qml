@@ -16,35 +16,35 @@
 import QtQuick 2.12
 
 /*!
- * \qmltype NorthArrow
- * \inqmlmodule Esri.ArcGISRuntime.Toolkit
- * \since Esri.ArcGISRutime 100.8
- * \brief The NorthArrow displays a compass overlaid on the GeoView, with the
- * compass heading matching the current rotation of the MapView, or Camera
- * heading of the SceneView. 
- * Double clicking on the NorthArrow triggers the heading of the connected
- * GeoView to be orientainted to 0.
+   \qmltype NorthArrow
+   \inqmlmodule Esri.ArcGISRuntime.Toolkit
+   \since Esri.ArcGISRutime 100.8
+   \brief The NorthArrow displays a compass overlaid on the GeoView, with the
+   compass heading matching the current rotation of the MapView, or Camera
+   heading of the SceneView. 
+   Double clicking on the NorthArrow triggers the heading of the connected
+   GeoView to be orientainted to 0.
  */
 
 Item {
     id: northArrow
 
     /*!
-     * \qmlproperty GeoView geoView
-     * \brief The GeoView for this tool. Should be a SceneView or a MapView.
+       \qmlproperty GeoView geoView
+       \brief The GeoView for this tool. Should be a SceneView or a MapView.
      */
     property var geoView;
 
     /*!
-     * \qmlproperty bool autoHide
-     * \brief When autohide is true, this view is only visible when the heading
-     * is a non-zero value.
+       \qmlproperty bool autoHide
+       \brief When autohide is true, this view is only visible when the heading
+       is a non-zero value.
      */
     property bool autoHide: false
 
     /*!
-    * \qmlproperty NorthArrowController controller
-    * \brief the Controller handles connections writing/reading to the GeoView.
+      \qmlproperty NorthArrowController controller
+      \brief the Controller handles connections writing/reading to the GeoView.
     */
     property var controller: NorthArrowController { }
 

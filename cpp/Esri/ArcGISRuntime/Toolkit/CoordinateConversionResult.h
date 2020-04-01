@@ -33,11 +33,7 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
-/*!
- * \brief a CoordinateConversionResult stores the textual representation of a
- * a point converted to a string using the formatting given in a 
- * CoordinateConversionOption.
- */
+
 class CoordinateConversionResult : public QObject
 {
   Q_OBJECT
@@ -45,77 +41,31 @@ class CoordinateConversionResult : public QObject
   Q_PROPERTY(QString notation READ notation WRITE setNotation NOTIFY notationChanged)
   Q_PROPERTY(CoordinateConversionOption* type READ type WRITE setType NOTIFY typeChanged)
 public:
-  /*!
-   * \brief Constructor
-   * \param parent Owning parent QObject.
-   */
   Q_INVOKABLE CoordinateConversionResult(QObject* parent = nullptr);
 
-  /*!
-   * \brief Destructor
-   */
   ~CoordinateConversionResult() override;
 
-  /*!
-   * \brief Returns the name of this result. The name is the name as given
-   * by the associated CoordinateConversionOption.
-   * \sa type
-   * \return name of result as dictated by the associated type.
-   */
   QString name() const;
 
-  /*!
-   * \brief The textual representation of a point.
-   * \return String representing a point.
-   */
   QString notation() const;
 
-  /*!
-   * \brief Set the notation of this object.
-   * \note This object performs no checks on setNotation when called explicitly,
-   * and can contain any string data. E.g. A string containing the message
-   * "No point set."
-   * \param notation String to set.
-   */
   void setNotation(const QString& notation);
 
-  /*!
-   * \brief The CoordinateConversionOption used to format points passed into
-   * this object.
-   * \return The current associated CoordinateConversionOption.
-   */
   CoordinateConversionOption* type() const;
 
-  /*!
-   * \brief Set the CoordinateConversionOption used to format results.
-   * \note Setting this clears the currently set notation string to a blank
-   * string.
-   */
   void setType(CoordinateConversionOption* type);
 
 signals:
-  /*! Emitted when the type changes or type name changes. */
   void nameChanged();
 
-  /*! Emitted when the notation string changes. */
   void notationChanged();
 
-  /*! Emitted when the type changes */
   void typeChanged();
 
 public slots:
-  /*!
-   * \brief Given a point, updates the notation of this object to the textual
-   * representation of the point as dictated by the formatting options given
-   * in type.
-   * \param point to store in notation field.
-   */
+
   void updateCoordinatePoint(const Esri::ArcGISRuntime::Point& point);
 
-  /*!
-   * \brief Takes the current string stored in notation and store it in the
-   * clipboard as if the user had copied the text themselves.
-   */
   void copyNotationToClipboard() const;
 
 private:

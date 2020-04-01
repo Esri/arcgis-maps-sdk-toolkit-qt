@@ -45,6 +45,24 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
+/*!
+  \class Esri::ArcGISRuntime::Toolkit::CoordinateConversion 
+  \inmodule EsriArcGISRuntimeToolkit
+  \brief The user interface for the coordinate conversion tool.
+  This tool allows a user to select a point on the map or to enter a point by
+  text entry.
+  The point may be highlighted by zooming into that point, or by highlighting
+  the point on the \c GeoView.
+  A list of different coordinate formats represnenting the same point are
+  available to the user.
+ */
+
+/*!
+  \brief Constructor.
+  \list
+    \li \a parent Parent widget.
+  \endlist
+ */
 CoordinateConversion::CoordinateConversion(QWidget* parent) :
   QFrame(parent),
   m_controller(new CoordinateConversionController(this)),
@@ -77,26 +95,51 @@ CoordinateConversion::CoordinateConversion(QWidget* parent) :
           &CoordinateConversion::flash);
 }
 
+/*!
+  \brief Destructor.
+ */
 CoordinateConversion::~CoordinateConversion()
 {
   delete m_ui;
 }
 
+/*!
+  \brief Set the \c GeoView.
+  \list
+    \li \a mapView Sets the GeoView to a \c MapView.
+  \endlist
+ */
 void CoordinateConversion::setMapView(MapGraphicsView* mapView)
 {
   m_controller->setGeoView(mapView);
 }
 
+/*!
+  \brief Set the \c GeoView.
+  \list
+  \li \a sceneView Sets the \c GeoView to a \c SceneView.
+  \endlist
+ */
 void CoordinateConversion::setSceneView(SceneGraphicsView* sceneView)
 {
   m_controller->setGeoView(sceneView);
 }
 
+/*!
+  \brief Returns the controller object driving this widget.
+ */
 CoordinateConversionController* CoordinateConversion::controller() const
 {
   return m_controller;
 }
 
+/*!
+  \internal
+  \brief Bring up the context menu at the given point.
+  \list
+  \li \a point Point to show menu
+  \endlist
+ */
 void CoordinateConversion::addContextMenu(const QPoint& point)
 {
   auto menu = new QMenu(m_ui->resultsView);
@@ -138,6 +181,10 @@ void CoordinateConversion::addContextMenu(const QPoint& point)
   menu->popup(m_ui->resultsView->mapToGlobal(point));
 }
 
+/*!
+  \internal
+  \brief Flash the dot on the screen at current location.
+ */
 void CoordinateConversion::flash()
 {
   delete m_flash;

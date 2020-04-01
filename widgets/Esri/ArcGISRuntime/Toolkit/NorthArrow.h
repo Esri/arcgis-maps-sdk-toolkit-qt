@@ -32,52 +32,21 @@ namespace Toolkit
 
 class NorthArrowController;
 
-/*!
- * \brief The NorthArrow displays a compass overlaid on the GeoView, with the
- * compass heading matching the current rotation of the MapView, or Camera
- * heading of the SceneView. 
- * Double clicking on the NorthArrow triggers the heading of the connected
- * GeoView to be orientated to 0 (North).
- */
 class NorthArrow : public QLabel
 {
   Q_OBJECT
 public:
-  /*!
-   * \brief Constructor
-   * \param parent Parent widget.
-   */
   explicit NorthArrow(QWidget* parent = nullptr);
 
-  /*!
-   * \brief Destructor
-   */
   ~NorthArrow() override;
 
-  /*!
-   * \brief Set the GeoView.
-   * \param mapView Sets the GeoView to a MapView.
-   */
   void setMapView(MapGraphicsView* mapView);
 
-  /*!
-   * \brief Set the GeoView.
-   * \param mapView Sets the GeoView to a SceneView.
-   */
   void setSceneView(SceneGraphicsView* mapView);
 
-  /*!
-   * \brief Returns the controller object driving this widget.
-   */
   NorthArrowController* controller() const;
 
 protected:
-  /*!
-   * \internal
-   * \brief When triggered this will orient the GeoView such that this
-   * NorthArrow has a heading of 0.
-   * \param event MouseEvent to accept.
-   */
   void mouseDoubleClickEvent(QMouseEvent* event) override;
 
 private:

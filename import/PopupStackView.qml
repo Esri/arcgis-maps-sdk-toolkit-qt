@@ -19,180 +19,180 @@ import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.12
 
 /*!
- * \qmltype PopupStackView
- * \ingroup ArcGISQtToolkit
- * \inqmlmodule Esri.ArcGISRuntime.Toolkit
- * \since Esri.ArcGISRuntime 100.8
- * \brief A view for displaying and editing information of GeoElements,
- * including Features and Graphics.
- * 
- * A PopupStackView can be used to display information for any type that
- * implements the PopupSource interface. For example, FeatureLayer
- * implements PopupSource. This means that it has a PopupDefinition,
- * which defines how the Popup should look for any features in that
- * layer.
- * 
- * An example workflow for displaying a PopupStackView for features in a
- * FeatureLayer would be:
- * 
- * \list
- *   \li Declare a PopupStackView and anchor it to a desired location.
- *   \li Perform an identify operation on a GeoView and select the desired
- *   Features from the identify result.
- *   \li Create Popups from the Features.
- *   \li Optionally obtain the Popup's PopupDefinition and set the
- *   title, whether to show attachments, and so on.
- *   \li Create a PopupManager from the Popup and add it to a list of 
- *   PopupManagers
- *   \li Assign the list mentioned in the above step to the PopupStackView's
- *   \c popupManagers property
- * \endlist
- * 
- * The PopupStackView is a QML Item that can be anchored, given to a dialog,
- * or positioned using XY screen coordinates. Transform, Transition, and
- * other QML animation types can be used to animate the showing and
- * dismissing of the view.
- * 
- * For more information, please see the Popup and PopupManager
- * documentation.
- * 
- * \note Each time a change is made to the Popup, PopupDefinition,
- * PopupManager, or any of their properties, the popupManagers must be
- * re-set to the PopupStackView.
+   \qmltype PopupStackView
+   \ingroup ArcGISQtToolkit
+   \inqmlmodule Esri.ArcGISRuntime.Toolkit
+   \since Esri.ArcGISRuntime 100.8
+   \brief A view for displaying and editing information of GeoElements,
+   including Features and Graphics.
+   
+   A PopupStackView can be used to display information for any type that
+   implements the PopupSource interface. For example, FeatureLayer
+   implements PopupSource. This means that it has a PopupDefinition,
+   which defines how the Popup should look for any features in that
+   layer.
+   
+   An example workflow for displaying a PopupStackView for features in a
+   FeatureLayer would be:
+   
+   \list
+     \li Declare a PopupStackView and anchor it to a desired location.
+     \li Perform an identify operation on a GeoView and select the desired
+     Features from the identify result.
+     \li Create Popups from the Features.
+     \li Optionally obtain the Popup's PopupDefinition and set the
+     title, whether to show attachments, and so on.
+     \li Create a PopupManager from the Popup and add it to a list of 
+     PopupManagers
+     \li Assign the list mentioned in the above step to the PopupStackView's
+     \c popupManagers property
+   \endlist
+   
+   The PopupStackView is a QML Item that can be anchored, given to a dialog,
+   or positioned using XY screen coordinates. Transform, Transition, and
+   other QML animation types can be used to animate the showing and
+   dismissing of the view.
+   
+   For more information, please see the Popup and PopupManager
+   documentation.
+   
+   \note Each time a change is made to the Popup, PopupDefinition,
+   PopupManager, or any of their properties, the popupManagers must be
+   re-set to the PopupStackView.
  */
 Control {
     id: popupStackView
 
     /*!
-     * \brief A list of PopupManagers that controls the information being 
-     * displayed in a PopupStackView.
-     * \qmlproperty list<PopupManager> popupManagers
+       \brief A list of PopupManagers that controls the information being 
+       displayed in a PopupStackView.
+       \qmlproperty list<PopupManager> popupManagers
      */
     property var popupManagers: null
 
     /*!
-     * \brief This property holds the current top-most item in the stack. I.E.
-     * the current popup from the list of popup managers.
-     * \qmlproperty PopupView currentItem
-     * \sa Stack
+       \brief This property holds the current top-most item in the stack. I.E.
+       the current popup from the list of popup managers.
+       \qmlproperty PopupView currentItem
+       \sa Stack
      */
     property alias currentItem: stack.currentItem
 
     /*!
-     * \brief This property holds the number of items currently pushed onto the 
-     * stack.
-     * \qmlproperty int depth
-     * \sa Stack
+       \brief This property holds the number of items currently pushed onto the 
+       stack.
+       \qmlproperty int depth
+       \sa Stack
      */
     property alias depth: stack.depth
 
     /*!
-     * \brief This property holds whether a transition is running.
-     * \qmlproperty bool busy
-     * \sa Stack
+       \brief This property holds whether a transition is running.
+       \qmlproperty bool busy
+       \sa Stack
      */
     property alias busy: stack.busy
 
     /*!
-     * \brief This property holds the transition that is applied to the item 
-     * that enters the stack when another item is popped off of it.
-     * \qmlproperty Transition popEnter
-     * \sa Stack
+      \brief This property holds the transition that is applied to the item 
+      that enters the stack when another item is popped off of it.
+      \qmlproperty Transition popEnter
+      \sa Stack
      */
     property alias popEnter: stack.popEnter
 
     /*!
-     * \brief This property holds the transition that is applied to the item 
-     * that exits the stack when the item is popped off of it.
-     * \qmlproperty Transition popExit
-     * \sa Stack
+       \brief This property holds the transition that is applied to the item 
+       that exits the stack when the item is popped off of it.
+       \qmlproperty Transition popExit
+       \sa Stack
      */
     property alias popExit: stack.popExit
 
     /*!
-     * \brief This property holds the transition that is applied to the item 
-     * that enters the stack when the item is pushed onto it.
-     * \qmlproperty Transition pushEnter
-     * \sa Stack
+       \brief This property holds the transition that is applied to the item 
+       that enters the stack when the item is pushed onto it.
+       \qmlproperty Transition pushEnter
+       \sa Stack
      */
     property alias pushEnter: stack.pushEnter
 
     /*!
-     * \brief This property holds the transition that is applied to the item 
-     * that exits the stack when another item is pushed onto it.
-     * \qmlproperty Transition pushExit
-     * \sa Stack
+       \brief This property holds the transition that is applied to the item 
+       that exits the stack when another item is pushed onto it.
+       \qmlproperty Transition pushExit
+       \sa Stack
      */
     property alias pushExit: stack.pushExit
 
     /*!
-     * \brief Callback function called when the close button is clicked. When
-     * this property is set to null the close button does not render. When
-     * the close button is clicked the function in this property is called.
-     * Defaults to setting visible to false.
+       \brief Callback function called when the close button is clicked. When
+       this property is set to null the close button does not render. When
+       the close button is clicked the function in this property is called.
+       Defaults to setting visible to false.
      */
     property var closeCallback: function() {
         popupStackView.visible = false;
     }
 
     /*!
-     * \brief Signal emitted when an attachment thumbnail is clicked.
-     * The \a index of the PopupAttachment in the PopupAttachmentListModel
-     * of the currently displayed PopupView.
+       \brief Signal emitted when an attachment thumbnail is clicked.
+       The \a index of the PopupAttachment in the PopupAttachmentListModel
+       of the currently displayed PopupView.
      */
     signal attachmentThumbnailClicked(var index)
 
     /*!
-     * \brief Removes all items from the stack.
-     * \sa StackView.clear
+       \brief Removes all items from the stack.
+       \sa StackView.clear
      */
     function clear(...args) {
         return stack.clear(...args);
     }
 
     /*!
-     * \brief Search for a specific item inside the stack. The callback function
-     * is called for each item in the stack (with the item and index as 
-     * arguments) until the callback function returns true. The return value is
-     * the item found.
-     * \sa StackView.find
+       \brief Search for a specific item inside the stack. The callback function
+       is called for each item in the stack (with the item and index as 
+       arguments) until the callback function returns true. The return value is
+       the item found.
+       \sa StackView.find
      */
     function find(...args) {
         return stack.find(...args);
     }
 
     /*!
-     * \brief Returns the item at position index in the stack, or null if the 
-     * index is out of bounds.
-     * \sa StackView.get
+       \brief Returns the item at position index in the stack, or null if the 
+       index is out of bounds.
+       \sa StackView.get
      */
     function get(...args) {
         return stack.get(...args);
     }
     
     /*!
-     * \brief Pops one or more items off the stack. Returns the last item 
-     * removed from the stack. If the item argument is specified, all items down
-     * to (but not including) item will be popped. If item is null, all items 
-     * down to (but not including) the first item is popped. If not specified, 
-     * only the current item is popped.
-     * \sa StackView.pop
+       \brief Pops one or more items off the stack. Returns the last item 
+       removed from the stack. If the item argument is specified, all items down
+       to (but not including) item will be popped. If item is null, all items 
+       down to (but not including) the first item is popped. If not specified, 
+       only the current item is popped.
+       \sa StackView.pop
      */
     function pop(...args) {
         return stack.pop(...args);
     }
 
     /*!
-     * \brief Attempts to show the previous item in the list of 
-     * PopupManagers.
+       \brief Attempts to show the previous item in the list of 
+       PopupManagers.
      */
     function gotoPrevious() {
         stack.pop();
     }
 
     /*!
-     * \brief Attempts to show the next item in the list of 
-     * PopupManagers.
+       \brief Attempts to show the next item in the list of 
+       PopupManagers.
      */
     function gotoNext() {
         // We want a transition on show, so we force the first item to 

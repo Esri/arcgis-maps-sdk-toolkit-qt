@@ -16,13 +16,6 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_COORDINATECONVERSIONCONSTANTS_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_COORDINATECONVERSIONCONSTANTS_H
 
-/*!
-* \file CoordinateConversionConstants.h
-* This file contains the display-friendly names of the common coordinate
-* conversion formats.
-* \sa CoordinateOptionDefaults.h
-*/
-
 #include <QString>
 
 namespace Esri
