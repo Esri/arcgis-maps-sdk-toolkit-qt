@@ -55,3 +55,4 @@
   \brief If \c WIDGETS_ARCGISRUNTIME_TOOLKIT is defined then this type is
   \c MapGraphicsView, otherwise it is \c MapQuickView. 
  */
+ 
