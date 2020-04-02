@@ -31,25 +31,66 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
+/*!
+   \internal
+   \class Esri::ArcGISRuntime::Toolkit::CoordinateEditDelegate
+   \inmodule EsriArcGISRuntimeToolkit
+   \brief This is an implementation detail of table-view editing for the
+   \c CoordinateConversion tool.
+   
+   When a coordinate is edited by the user, this tool triggers an update of the
+   current point on the controller, as opposed to just editing the value in
+   the cell as would normally happen.
+ */
+
+ /*!
+    \brief Constructor
+    \list
+    \li \a parent Owning parent object.
+    \endlist
+  */
 CoordinateEditDelegate::CoordinateEditDelegate(QObject* parent):
   QItemDelegate(parent) 
 {
 }
 
+/*!
+  \brief Destructor
+ */
 CoordinateEditDelegate::~CoordinateEditDelegate()
 {
 }
 
+/*!
+  \brief Set the Controller object that will be updated when a user commits
+  an edit.
+
+  \list
+  \li \a c Controller to update on an edit completing.
+  \endlist
+ */
 void CoordinateEditDelegate::setController(CoordinateConversionController* c)
 {
   m_controller = c;
 }
 
+/*!
+  \brief Returns the controller object that will be updated when the user
+  commits an edit.
+ */
 CoordinateConversionController* CoordinateEditDelegate::controller() const
 {
   return m_controller;
 }
 
+/*!
+  \brief Called when the user commits data to the model.
+  \list
+    \li \a editor Editing widget
+    \li \a model Model to update.
+    \li \a index Index in model to update.
+  \endlist
+ */
 void CoordinateEditDelegate::setModelData(
   QWidget* editor,
   QAbstractItemModel* model,

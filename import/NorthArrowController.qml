@@ -16,32 +16,32 @@
 import QtQml 2.12
 
 /*!
- * \qmltype NorthArrowController
- * \inqmlmodule Esri.ArcGISRuntime.Toolkit
- * \since Esri.ArcGISRutime 100.8
- * \brief In MVC architecture, this is the controller for the corresponding
- * NorthArrow view.
- * 
- * This controller calculates the current heading from a GeoView, and allows
- * the NorthArrow to apply a given heading to the GeoView.
+   \qmltype NorthArrowController
+   \inqmlmodule Esri.ArcGISRuntime.Toolkit
+   \since Esri.ArcGISRutime 100.8
+   \brief In MVC architecture, this is the controller for the corresponding
+   NorthArrow view.
+   
+   This controller calculates the current heading from a GeoView, and allows
+   the NorthArrow to apply a given heading to the GeoView.
  */
 QtObject {
     id: controller
 
     /*!
-    * \qmlproperty double heading
-    * \brief The calculated heading of this controller.
+      \qmlproperty double heading
+      \brief The calculated heading of this controller.
     */
     readonly property alias heading: internal.heading;
 
    /*!
-    * \brief The GeoView object this Controller uses.
+      \brief The GeoView object this Controller uses.
     */
     property var geoView;
 
     /*!
-     * \brief Set the heading by rotating the MapView or SceneView camera to the
-     * given heading.
+       \brief Set the heading by rotating the MapView or SceneView camera to the
+       given heading.
      */
     function setHeading(newHeading) {
         if (geoView === null)
@@ -60,6 +60,7 @@ QtObject {
     }
 
     // Keep the heading read only for external consumers.
+    /*! \internal */
     property QtObject internal: QtObject {
         id: internal
         property double heading: NaN;

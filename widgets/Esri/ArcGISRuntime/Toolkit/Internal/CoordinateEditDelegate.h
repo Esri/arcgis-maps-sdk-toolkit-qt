@@ -29,49 +29,18 @@ namespace Toolkit
 
 class CoordinateConversionController;
 
-/*!
- * \internal
- * \brief This is an implementation detail of table-view editing for the
- * CoordinateConversion tool.
- * 
- * When a coordinate is edited by the user, this tool triggers an update of the
- * current point on the controller, as opposed to just editing the value in
- * the cell as would normally happen.
- */
 class CoordinateEditDelegate : public QItemDelegate
 {
   Q_OBJECT
 public:
-  /*!
-   * \brief Constructor
-   * \param parent Owning parent object.
-   */
   CoordinateEditDelegate(QObject* parent = nullptr);
 
-  /*!
-   * \brief Destructor
-   */
   ~CoordinateEditDelegate() override;
 
-  /*!
-   * \brief Set the Controller object that will be updated when a user commits
-   * an edit.
-   * \param c Controller to update on an edit completing. 
-   */
   void setController(CoordinateConversionController* c);
 
-  /*!
-   * \brief Returns the controller object that will be updated when the user
-   * commits an edit.
-   */
   CoordinateConversionController* controller() const;
 
-  /*!
-   * \brief Called when the user commits data to the model.
-   * \param editor Editing widget
-   * \param model Model to update.
-   * \param index Index in model to update.
-   */
   void setModelData(QWidget* editor, QAbstractItemModel* model,
                     const QModelIndex& index) const override;
 

@@ -28,12 +28,6 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
-/*!
- * \internal
- * \brief a Flash just exists to display a flashing blue dot on a map
- * for the CoordinateConversion tool, then delete itself after its animation
- * is complete.
- */
 class Flash : public QWidget
 {
   Q_OBJECT
@@ -42,78 +36,36 @@ class Flash : public QWidget
   Q_PROPERTY(int radius READ radius WRITE setRadius NOTIFY radiusChanged)
 public:
 
-  /*!
-   * \brief Constructor
-   * \param parent Parent widget
-   */
   Flash(QWidget* parent = nullptr);
 
-  /*!
-   * \brief Destructor.
-   */
   ~Flash() override;
 
-  /*!
-   * \brief Set color this object will flash as.
-   * \param color Color to set. Alpha value is overridden.
-   */
   void setTargetColor(QColor color);
 
-  /*!
-   * \brief Set the point on the screen the flash will appear relative to the
-   * parent.
-   * \param point Point to appear. 
-   */
   void setPoint(QPointF point);
 
-  /*!
-   * \brief Returns the point this image appears at.
-   */
   QPointF point() const;
 
-  /*!
-   * \brief Set the radius of the circle of this flash.
-   * \param radius Size of radius.
-   */
   void setRadius(int radius);
 
-  /*!
-   * \brief Returns the radius of this circle.
-   */
   int radius() const;
 
 public slots:
-  /*!
-   * \brief When called will begin animating this flash.
-   * 
-   * After the animation is finished this object will delete itself.
-   * 
-   * \param duration Lifetime of animation in ms.
-   */
   void play(int duration);
 
 signals:
-  /*! \brief emitted when the alpha changes. */
   void alphaChanged();
 
-  /*! \brief emitted when the point changes. */
   void pointChanged();
 
-  /*! \brief emitted when the radius changes. */
   void radiusChanged();
 
 protected:
-  /*!
-   * \brief Paints this widget
-   * \param event paintEvent. Not used.
-   */
-  void paintEvent(QPaintEvent *event) override;
+  void paintEvent(QPaintEvent* event) override;
 
 private:
-  /*! \brief Sets the current alpha (for animation) */
   void setAlpha_(int alpha);
 
-  /*! \brief Gets the current alpha (for animation) */
   int alpha_() const;
 
 private:

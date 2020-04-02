@@ -16,39 +16,42 @@
 import QtQml 2.12
 
 /*!
- * \qmltype CoordinateConversionResult
- * \inqmlmodule Esri.ArcGISRuntime.Toolkit
- * \since Esri.ArcGISRutime 100.8
- * \brief a CoordinateConversionResult stores the textual representation of a
- * a point converted to a string using the formatting given in a 
- * CoordinateConversionOption.
+   \qmltype CoordinateConversionResult
+   \inqmlmodule Esri.ArcGISRuntime.Toolkit
+   \since Esri.ArcGISRutime 100.8
+   \brief a CoordinateConversionResult stores the textual representation of a
+   a point converted to a string using the formatting given in a 
+   CoordinateConversionOption.
  */
 
 QtObject {
    /*!
-    * \brief The the name of this result. The name is the name as given
-    * by the associated CoordinateConversionOption.
-    * \sa type
+      \brief The the name of this result. The name is the name as given
+      by the associated CoordinateConversionOption.
+      \sa type
     */
     readonly property alias name: internal.name;
 
    /*!
-    * \brief The CoordinateConversionOption used to format points passed into
-    * this object.
-    * \return The current associated CoordinateConversionOption.
+      \brief The CoordinateConversionOption used to format points passed into
+      this object.
+      Returns the current associated CoordinateConversionOption.
     */
     property CoordinateConversionOption type;
 
    /*!
-    * \brief The textual representation of a point.
+      \brief The textual representation of a point.
     */
     property string notation: "";
 
     /*!
-     * \brief Given a point, updates the notation of this object to the textual
-     * representation of the point as dictated by the formatting options given
-     * in type.
-     * \param point to store in notation field.
+       \brief Given a point, updates the notation of this object to the textual
+       representation of the point as dictated by the formatting options given
+       in type.
+
+       \list
+       \li \a point to store in notation field.
+       \endlist
      */
     function updateCoordinatePoint(point) {
       if (type)
@@ -62,6 +65,7 @@ QtObject {
       internal.name = type ?  type.name : "";
     }
 
+    /*! \internal */
     property QtObject internal: QtObject {
         id: internal
         property string name: "";

@@ -13,22 +13,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_REGISTER_H
-#define ESRI_ARCGISRUNTIME_TOOLKIT_REGISTER_H
 
-class QQmlEngine;
-
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
-
-void registerComponents(QQmlEngine* engine);
-
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
-
-#endif // ESRI_ARCGISRUNTIME_TOOLKIT_REGISTER_H
+/*!
+  \inmodule EsriArcGISRuntimeToolkit
+  \namespace Esri::ArcGISRuntime::Toolkit::CoordinateConversionConstants
+  \brief Contains the constants related to the coordinate conversion tool.
+ */

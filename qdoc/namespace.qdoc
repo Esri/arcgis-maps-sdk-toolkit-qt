@@ -1,0 +1,18 @@
+/*!
+ * \inmodule EsriArcGISRuntimeToolkit
+ * \namespace Esri
+ * \internal
+ */
+
+/*!
+ * \inmodule EsriArcGISRuntimeToolkit
+ * \namespace Esri::ArcGISRuntime
+ * \internal
+ */
+
+/*!
+ * \inmodule EsriArcGISRuntimeToolkit
+ * \namespace Esri::ArcGISRuntime::Toolkit
+ * \brief The C++ namespace for the ArcGISRuntime Qt SDK Toolkit.
+ */
+ 

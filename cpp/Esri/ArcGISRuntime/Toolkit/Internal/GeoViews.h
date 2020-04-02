@@ -15,44 +15,41 @@
  ******************************************************************************/
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_GEOVIEWS_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_GEOVIEWS_H
-/*!
-* \internal
-* \file GeoViews.h
-* This file is an implementation detail for some controllers in the Toolkit.
-* A [Map|Scene]GraphicsView has the same interface as a [Map|Scene]QuickView,
-* but they implement these interfaces independently due to Qt limitations with
-* multiple inheritance.
-*
-* In addition, when the toolkit supports the Quick workflow we
-* depend on the Qt QML module. When the toolkit supports the widgets workflow
-* we depends on the Qt Widgets module. A user who writes a Widgets app should
-* not be forced to include Quick as a dependency or vice versa.
-*
-* This include will include the correct set of Views depending on 
-* whether flag \c WIDGETS_ARCGISRUNTIME_TOOLKIT is defined or not.
-*
-* Implicitly, this means we assume the user will not need a combination of
-* Widget and Quick GeoViews in their app at the same time, but this is an
-* unlikely scenario -- even if the user had both quick and widgets in
-* their app, they would still likely default to one set of views, e.g.
-* [Map|Scene]QuickView.
-*/
+
 #ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
+
 #  include <MapGraphicsView.h>
 #  include <SceneGraphicsView.h>
 
-  namespace Esri { namespace ArcGISRuntime { namespace Toolkit {
-    using SceneViewToolkit = SceneGraphicsView;
-    using MapViewToolkit = MapGraphicsView;
-  } } }
+namespace Esri 
+{ 
+namespace ArcGISRuntime
+{ 
+namespace Toolkit
+{
+    typedef SceneGraphicsView SceneViewToolkit;
+    typedef MapGraphicsView MapViewToolkit;
+} // Toolkit
+} // ArcGISRuntime
+} // Esri
+
 #else 
+
 #  include <MapQuickView.h>
 #  include <SceneQuickView.h>
 
-  namespace Esri { namespace ArcGISRuntime { namespace Toolkit {
-    using SceneViewToolkit = SceneQuickView;
-    using MapViewToolkit = MapQuickView;
-  } } }
+namespace Esri 
+{ 
+namespace ArcGISRuntime
+{ 
+namespace Toolkit 
+{
+  typedef SceneQuickView SceneViewToolkit;
+  typedef MapQuickView MapViewToolkit;
+} // Toolkit
+} // ArcGISRuntime
+} // Esri
+
 #endif
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_GEOVIEWS_H
