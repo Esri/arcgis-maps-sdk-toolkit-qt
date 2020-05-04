@@ -20,4 +20,4 @@ TimeSlider 100.3 TimeSlider1003.qml
 TimeSlider 100.5 TimeSlider.qml
 internal TimeSlider1003 TimeSliderController1003.qml
 internal TimeSlider TimeSliderController.qml
-CurrentVersion 100.8 CurrentVersion.qml
+CurrentVersion 100.9 CurrentVersion.qml
