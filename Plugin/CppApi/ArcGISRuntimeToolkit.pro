@@ -34,7 +34,7 @@ INCLUDEPATH += $$PWD/include \
 
 RUNTIME_PRI = arcgis_runtime_qml_cpp.pri
 #RUNTIME_PRI = esri_runtime_qt.pri # use this for widgets
-ARCGIS_RUNTIME_VERSION = 100.8
+ARCGIS_RUNTIME_VERSION = 100.9
 
 !CONFIG(daily) {
   include($$PWD/arcgisruntime.pri)
