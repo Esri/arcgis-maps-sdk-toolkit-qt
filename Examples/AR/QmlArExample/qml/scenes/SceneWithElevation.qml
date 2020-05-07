@@ -15,25 +15,16 @@
  ******************************************************************************/
 
 import QtQuick 2.6
-import Esri.ArcGISRuntime 100.6
-import Esri.ArcGISArToolkit 1.0
+import Esri.ArcGISRuntime 100.8
 
-// Creates a scene based on the ImageryWithLabels base map.
-// Mode: Full-Scale AR
-
-Item {
-    property alias scene: scene
-    property Camera originCamera: null
-    property alias locationDataSource: locationDataSource
-    property double translationFactor: 1.0
-
-    SceneWithElevation {
-        id:scene
-        BasemapImageryWithLabels {
+Scene {
+    Surface {
+        navigationConstraint: Enums.NavigationConstraintNone
+        backgroundGrid: BackgroundGrid {
+            visible: false
         }
-    }
-
-    LocationDataSource {
-        id: locationDataSource
+        ArcGISTiledElevationSource {
+            url: "http://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer"
+        }
     }
 }

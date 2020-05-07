@@ -15,31 +15,35 @@
  ******************************************************************************/
 
 import QtQuick 2.6
-import Esri.ArcGISRuntime 100.6
+import Esri.ArcGISRuntime 100.8
+import Esri.ArcGISArToolkit 1.0
 
-// Creates a graphic with sympbol for the tabletop test scene.
+// Creates a scene centered on Berlin (Germany)
+// Mode: Tabletop AR
 
-Graphic {
-    property alias x: location.x
-    property alias y: location.y
-    property alias z: location.z
-    property alias color: symbol.color
-    property real size: 0.1
+Item {
+    property alias scene: scene
+    property alias originCamera: originCamera
+    property LocationDataSource locationDataSource: null
+    property double translationFactor: 1000.0
 
-    Point {
-        id: location
-        x: 0.0
-        y: 0.0
-        z: 0.0
+    SceneWithElevation {
+        id:scene
+        ArcGISSceneLayer {
+            id: layer
+            url: "https://tiles.arcgis.com/tiles/P3ePLMYs2RVChkJx/arcgis/rest/services/Buildings_Berlin/SceneServer"
+        }
     }
 
-    symbol: SimpleMarkerSceneSymbol {
-        id: symbol
-        style: "SimpleMarkerSceneSymbolStyleSphere"
-        anchorPosition: Enums.SceneSymbolAnchorPositionCenter
-        color: "green"
-        width: size
-        height: size
-        depth: size
+    Camera {
+        id: originCamera
+        location: Point {
+            y: 52.4993
+            x: 13.4215
+            z: 38.0
+        }
+        heading: 0.0
+        pitch: 90.0
+        roll: 0.0
     }
 }

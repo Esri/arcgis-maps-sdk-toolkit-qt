@@ -256,6 +256,19 @@ bool QmlArcGISArView::assertClassName(QObject* object, const QString& className)
   return name.contains(className);
 }
 
+// This property is defined in ArcGISArView.qml
+/*!
+  \qmlproperty double ArcGISArView::clippingDistance
+  \brief The clipping distance in meters around the \l originCamera.
+
+  The default value is \c 0.0.
+
+  When the value is set to \c 0.0, there is no enforced clipping distance and therefore no limiting of displayed data.
+  Setting the value to \c 10.0 will only render data 10 meters around the \l originCamera.
+
+  \since Esri.ArcGISRuntime 100.8
+ */
+
 // signals
 
 /*!

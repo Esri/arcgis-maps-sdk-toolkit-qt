@@ -32,8 +32,7 @@ class CppArExample : public QObject
 {
   Q_OBJECT
 
-  Q_PROPERTY(Esri::ArcGISRuntime::Toolkit::ArcGISArView* arcGISArView READ arcGISArView WRITE setArcGISArView
-             NOTIFY arcGISArViewChanged)
+  Q_PROPERTY(Esri::ArcGISRuntime::Toolkit::ArcGISArView* arcGISArView READ arcGISArView WRITE setArcGISArView NOTIFY arcGISArViewChanged)
   Q_PROPERTY(Esri::ArcGISRuntime::SceneQuickView* sceneView READ sceneView WRITE setSceneView NOTIFY sceneViewChanged)
   Q_PROPERTY(bool screenToLocationMode MEMBER m_screenToLocationMode NOTIFY screenToLocationModeChanged)
   Q_PROPERTY(bool tabletopMode MEMBER m_tabletopMode NOTIFY tabletopModeChanged)
@@ -48,6 +47,8 @@ public:
 
   Esri::ArcGISRuntime::SceneQuickView* sceneView() const;
   void setSceneView(Esri::ArcGISRuntime::SceneQuickView* sceneView);
+
+  Q_INVOKABLE void setClippingDistance(double clippingDistance);
 
   Q_INVOKABLE void updateOriginCamera(double latitude, double longitude, double altitude, double heading);
 
@@ -86,9 +87,12 @@ private:
   Esri::ArcGISRuntime::SceneQuickView* m_sceneView = nullptr;
   Esri::ArcGISRuntime::Scene* m_scene = nullptr;
 
+  // Clipping distance to origin camera.
+  double m_clippingDistance = 0.0;
+
   // Screen to location properties
   bool m_screenToLocationMode = false;
-  
+
   // The origin camera set when the scene is created.
   Esri::ArcGISRuntime::Camera m_originCamera;
 

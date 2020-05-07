@@ -15,16 +15,34 @@
  ******************************************************************************/
 
 import QtQuick 2.6
-import Esri.ArcGISRuntime 100.6
+import Esri.ArcGISRuntime 100.8
+import Esri.ArcGISArToolkit 1.0
 
-Scene {
-    Surface {
-        navigationConstraint: Enums.NavigationConstraintNone
-        backgroundGrid: BackgroundGrid {
-            visible: false
+// Creates a scene centered on Brest (France)
+// Mode: Tabletop AR
+
+Item {
+    property alias scene: scene
+    property alias originCamera: originCamera
+    property LocationDataSource locationDataSource: null
+    property double translationFactor: 500.0
+
+    SceneWithElevation {
+        id:scene
+        ArcGISSceneLayer {
+            url: "https://tiles.arcgis.com/tiles/P3ePLMYs2RVChkJx/arcgis/rest/services/Buildings_Brest/SceneServer/layers/0"
         }
-        ArcGISTiledElevationSource {
-            url: "http://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer"
+    }
+
+    Camera {
+        id: originCamera
+        Point {
+            y: 48.3808
+            x: -4.49492
+            z: 48.2511
         }
+        heading: 0.0
+        pitch: 90.0
+        roll: 0.0
     }
 }

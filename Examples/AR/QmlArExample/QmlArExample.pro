@@ -24,19 +24,19 @@ CONFIG += c++11
 
 QT += core gui opengl network positioning sensors qml quick
 
-ARCGIS_RUNTIME_VERSION = 100.7
+ARCGIS_RUNTIME_VERSION = 100.8
 include($$PWD/arcgisruntime.pri)
 
 TEMPLATE = app
 TARGET = QmlArExample
 
 equals(QT_MAJOR_VERSION, 5) {
-    lessThan(QT_MINOR_VERSION, 12) { 
+    lessThan(QT_MINOR_VERSION, 12) {
         error("$$TARGET requires Qt 5.12.6")
     }
-	equals(QT_MINOR_VERSION, 12) : lessThan(QT_PATCH_VERSION, 6) {
-		error("$$TARGET requires Qt 5.12.6")
-	}
+    equals(QT_MINOR_VERSION, 12) : lessThan(QT_PATCH_VERSION, 6) {
+        error("$$TARGET requires Qt 5.12.6")
+    }
 }
 
 #-------------------------------------------------------------------------------

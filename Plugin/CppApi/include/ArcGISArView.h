@@ -34,6 +34,7 @@ class ArcGISArView : public ArcGISArViewInterface
 
   Q_PROPERTY(Camera originCamera READ originCamera WRITE setOriginCamera NOTIFY originCameraChanged)
   Q_PROPERTY(SceneQuickView* sceneView READ sceneView WRITE setSceneView NOTIFY sceneViewChanged)
+  Q_PROPERTY(double clippingDistance READ clippingDistance WRITE setClippingDistance NOTIFY clippingDistanceChanged)
 
 public:
   explicit ArcGISArView(QQuickItem* parent = nullptr);
@@ -47,6 +48,9 @@ public:
   SceneQuickView* sceneView() const;
   void setSceneView(SceneQuickView* sceneView);
 
+  double clippingDistance() const;
+  void setClippingDistance(double clippingDistance);
+
   // methods
   Q_INVOKABLE void setInitialTransformation(const QPoint& screenPoint);
   Q_INVOKABLE Point screenToLocation(const QPoint& screenPoint) const;
@@ -57,6 +61,7 @@ public:
 signals:
   void originCameraChanged();
   void sceneViewChanged();
+  void clippingDistanceChanged();
 
 public: // internals, used by AR wrappers
   void setTransformationMatrixInternal(double quaternionX, double quaternionY, double quaternionZ, double quaternionW,

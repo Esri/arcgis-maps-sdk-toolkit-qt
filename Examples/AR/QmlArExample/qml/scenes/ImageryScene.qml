@@ -15,34 +15,25 @@
  ******************************************************************************/
 
 import QtQuick 2.6
-import Esri.ArcGISRuntime 100.6
+import Esri.ArcGISRuntime 100.8
 import Esri.ArcGISArToolkit 1.0
 
-// Creates a scene centered on Brest (France)
-// Mode: Tabletop AR
+// Creates a scene based on the ImageryWithLabels base map.
+// Mode: Full-Scale AR
 
 Item {
     property alias scene: scene
-    property alias originCamera: originCamera
-    property LocationDataSource locationDataSource: null
-    property double translationFactor: 500.0
+    property Camera originCamera: null
+    property alias locationDataSource: locationDataSource
+    property double translationFactor: 1.0
 
     SceneWithElevation {
         id:scene
-        ArcGISSceneLayer {
-            url: "https://tiles.arcgis.com/tiles/P3ePLMYs2RVChkJx/arcgis/rest/services/Buildings_Brest/SceneServer/layers/0"
+        BasemapImageryWithLabels {
         }
     }
 
-    Camera {
-        id: originCamera
-        Point {
-            y: 48.3808
-            x: -4.49492
-            z: 48.2511
-        }
-        heading: 0.0
-        pitch: 90.0
-        roll: 0.0
+    LocationDataSource {
+        id: locationDataSource
     }
 }
