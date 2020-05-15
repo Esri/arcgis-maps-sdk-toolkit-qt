@@ -280,6 +280,7 @@ Item {
             coordinateConvController.convertNotation(text);
             editCoordinateButton.checked = false;
         }
+        selectByMouse: true
     }
 
     Button {
