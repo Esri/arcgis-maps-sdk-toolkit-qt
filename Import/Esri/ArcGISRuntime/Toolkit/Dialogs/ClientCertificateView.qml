@@ -380,6 +380,7 @@ Rectangle {
                 width: parent.width
                 placeholderText: qsTr("password")
                 echoMode: TextInput.Password
+                selectByMouse: true
             }
 
             Row {
