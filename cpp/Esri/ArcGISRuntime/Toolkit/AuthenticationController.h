@@ -17,6 +17,7 @@
 #define ESRI_ARCGISRUNTIME_TOOLKIT_AUTHENTICATIONCONTROLLER_H
 
 // ArcGISRuntime headers
+#include <AuthenticationChallenge.h>
 #include <CoreTypes.h>
 
 // Qt headers
@@ -27,41 +28,69 @@ namespace Esri
 {
 namespace ArcGISRuntime
 {
+
 namespace Toolkit
 {
 
-/*!
- * \brief In MVC architecture, this is the controller for the corresponding
- * PopupView.
- * 
- * This controller is a thin wrapper around a PopupManager. It re-exposes some
- * PopupManager properties, including the number of total rows to render as a 
- * property.
- */
 class AuthenticationController : public QObject
 {
   Q_OBJECT
-  Q_PROPERTY(ChallengeType currentChallenge READ currentChallenge NOTIFY challengeChanged)
+  Q_PROPERTY(QUrl currentChallengeUrl READ currentChallengeUrl NOTIFY challengeChanged)
+  Q_PROPERTY(QString currentAuthenticatingHost READ currentAuthenticatingHost NOTIFY challengeChanged)
+  Q_PROPERTY(int currentChallengeType READ currentChallengeType NOTIFY challengeChanged)
+  Q_PROPERTY(int currentChallengeFailureCount READ currentChallengeFailureCount NOTIFY challengeChanged)
+  Q_PROPERTY(QStringList clientCertificateInfos READ clientCertificateInfos NOTIFY clientCertificateInfosChanged)
 
 public:
-  /*!
-   * \brief Constructor
-   * \param parent Parent owning QObject.
-   */
+
   explicit Q_INVOKABLE AuthenticationController(QObject* parent = nullptr);
 
-  /*!
-   * \brief Destructor.
-   */
   ~AuthenticationController() override;
 
+  // General methods
+
+  Q_INVOKABLE void addClientCertificate(const QUrl& clientCertificate, const QString& password = QString{});
+
+  QStringList clientCertificateInfos() const;
+
+  void setDeleteChallengeOnProcessed(bool deleteFlag);
+
+  bool deleteChallengeOnProcessed() const;
+
+  // Current challenge methods
+
+  int currentChallengeType() const;
+
+  QUrl currentChallengeUrl() const;
+
+  QString currentAuthenticatingHost() const;
+
+  int currentChallengeFailureCount() const;
+
   AuthenticationChallenge* currentChallenge() const;
+
+  Q_INVOKABLE void continueWithUsernamePassword(const QString& username, const QString& password);
+
+  Q_INVOKABLE void continueWithOAuthAuthorizationCode(const QString& oAuthAuthorizationCode);
+
+  Q_INVOKABLE void continueWithClientCertificate(int clientCertificateIndex);
+
+  Q_INVOKABLE void continueWithSslHandshake(bool trust, bool remember);
+
+  Q_INVOKABLE void cancel();
 
 signals:
     void challengeChanged();
 
+    void clientCertificateInfosChanged();
+
+    void clientCertificatePasswordRequired(QUrl certificate);
+
+private:
+  void processed();
 private:
     QPointer<AuthenticationChallenge> m_currentChallenge;
+    bool m_deleteChallengeOnProcessed = true;
 };
 
 } // Toolkit

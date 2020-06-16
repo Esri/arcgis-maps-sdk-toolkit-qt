@@ -17,7 +17,8 @@ CPPPATH = $$PWD/cpp/Esri/ArcGISRuntime/Toolkit
 INCLUDEPATH += $$PWD/cpp $$CPPPATH
 
 
-HEADERS += $$CPPPATH/CoordinateConversionConstants.h \
+HEADERS += $$CPPPATH/AuthenticationController.h \
+           $$CPPPATH/CoordinateConversionConstants.h \
            $$CPPPATH/CoordinateConversionController.h \
            $$CPPPATH/CoordinateConversionOption.h \
            $$CPPPATH/CoordinateConversionResult.h \
@@ -29,7 +30,8 @@ HEADERS += $$CPPPATH/CoordinateConversionConstants.h \
            $$CPPPATH/NorthArrowController.h \
            $$CPPPATH/PopupViewController.h
 
-SOURCES += $$CPPPATH/CoordinateConversionConstants.cpp \
+SOURCES += $$CPPPATH/AuthenticationController.cpp \
+           $$CPPPATH/CoordinateConversionConstants.cpp \
            $$CPPPATH/CoordinateConversionController.cpp \
            $$CPPPATH/CoordinateConversionOption.cpp \
            $$CPPPATH/CoordinateConversionResult.cpp \

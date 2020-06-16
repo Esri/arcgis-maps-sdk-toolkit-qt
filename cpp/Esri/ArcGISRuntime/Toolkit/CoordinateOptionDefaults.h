@@ -15,12 +15,6 @@
  ******************************************************************************/
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_COORDIANTEOPTIONDEFAULTS_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_COORDIANTEOPTIONDEFAULTS_H
-/*!
-* \file CoordinateOptionDefaults.h
-* This file contains several function to instantiate several kinds of common
-* CoordinateConversionOption objects used by a CoordinateConversionController.
-* \sa CoordianteConversionOption.h
-*/
 
 #include "CoordinateConversionOption.h"
 

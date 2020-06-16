@@ -17,58 +17,58 @@
 import QtQml 2.12
 
 /*!
- * \qmltype PopupViewController
- * \inqmlmodule Esri.ArcGISRuntime.Toolkit
- * \since Esri.ArcGISRuntime 100.8
- * \brief In MVC architecture, this is the controller for the corresponding
- * PopupVIew.
- * 
- * This controller is a thin wrapper around a PopupManager. It re-exposes some
- * PopupManager properties, including the number of total rows to render as a 
- * property.
+   \qmltype PopupViewController
+   \inqmlmodule Esri.ArcGISRuntime.Toolkit
+   \since Esri.ArcGISRuntime 100.8
+   \brief In MVC architecture, this is the controller for the corresponding
+   PopupVIew.
+   
+   This controller is a thin wrapper around a PopupManager. It re-exposes some
+   PopupManager properties, including the number of total rows to render as a 
+   property.
  */
 QtObject {
     id: controller
 
     /*!
-    * \brief The PopupManager that populates this controller with data.
+      \brief The PopupManager that populates this controller with data.
     */
     property var popupManager: null
 
     /*!
-    * \brief A list model containing the key/value fields of the
-    * Popup associated with this PopupManager.
-    * \note This can be null.
+      \brief A list model containing the key/value fields of the
+      Popup associated with this PopupManager.
+      \note This can be null.
     */
     readonly property alias displayFields: internal.displayFields
 
     /*!
-    * \internal
-    * Exposes the number of rows in the list model returned by `displayFields`.
+      Exposes the number of rows in the list model returned by `displayFields`.
     */
     readonly property alias fieldCount: internal.fieldCount
 
   /*!
-   * \brief A list model containing the attachment images of the
-   * Popup associated with this PopupManager. 
-   * \note This can be null.
+     \brief A list model containing the attachment images of the
+     Popup associated with this PopupManager. 
+     \note This can be null.
    */
     readonly property alias attachments: internal.attachments
 
     /*!
-    * \brief Exposes the number of rows in the list model returned by 
-    * `attachments`.
+      \brief Exposes the number of rows in the list model returned by 
+      `attachments`.
     */
     readonly property alias attachmentCount: internal.attachmentCount
 
     /*!
-    * \brief Returns the title of the PopupManager.
-    * \note This is re-exposed from PopupManager as PopupManager does not have
-    * NOTIFY/CONSTANT modifiers on its title property, so the Controller
-    * re-exposes title to suppress warnings about ths.
+      \brief Returns the title of the PopupManager.
+      \note This is re-exposed from PopupManager as PopupManager does not have
+      NOTIFY/CONSTANT modifiers on its title property, so the Controller
+      re-exposes title to suppress warnings about ths.
     */
     readonly property alias title: internal.title
 
+    /*! \internal */
     property QtObject internal : QtObject {
       id: internal
 

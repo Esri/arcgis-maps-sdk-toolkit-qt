@@ -18,14 +18,14 @@ import QtQml 2.12
 import Esri.ArcGISRuntime 100.8
 
 /*!
- * \qmltype CoordinateConversionOption
- * \inqmlmodule Esri.ArcGISRuntime.Toolkit
- * \since Esri.ArcGISRutime 100.8
- * \brief a CoordinateConversionOption is a collection of properties that
- * dictates how a Point should be converted to and from a string.
- * 
- * a CoordinateConversionOption is able to convert between Point <--> string
- * using the formatting options it is currently set with.
+   \qmltype CoordinateConversionOption
+   \inqmlmodule Esri.ArcGISRuntime.Toolkit
+   \since Esri.ArcGISRutime 100.8
+   \brief a CoordinateConversionOption is a collection of properties that
+   dictates how a Point should be converted to and from a string.
+   
+   a CoordinateConversionOption is able to convert between Point <--> string
+   using the formatting options it is currently set with.
  */
 
 QtObject {
@@ -41,57 +41,60 @@ QtObject {
     }
 
     /*!
-     * \brief The user friendly name of this option.
+       \brief The user friendly name of this option.
      */
     property string name : ""
 
     /*!
-     * \brief The conversion type of this option.
+       \brief The conversion type of this option.
      */
     property int outputMode : CoordinateConversionOption.CoordinateType.Usng
 
     /*!
-     * \brief Flags whether to add spaces in notation (if applicable).
+       \brief Flags whether to add spaces in notation (if applicable).
      */
     property bool hasSpaces: true
 
     /*!
-     * \brief Precision of conversion format (if applicable).
+       \brief Precision of conversion format (if applicable).
      */
     property int precision: 8
 
     /*!
-     * \brief The number of decimal spaces in the format (if applicable).
+       \brief The number of decimal spaces in the format (if applicable).
      */
     property int decimalPlaces: 6
 
     /*!
-     * \brief The MGRS conversion mode (if applicable).
+       \brief The MGRS conversion mode (if applicable).
      */
     property int mgrsConversionMode: Enums.MgrsConversionModeAutomatic
 
     /*!
-     * \brief The Latitude and Longitude format (if applicable).
+       \brief The Latitude and Longitude format (if applicable).
      */
     property int latLonFormat: Enums.LatitudeLongitudeFormatDecimalDegrees
 
     /*!
-     * \brief The UTM conversion mode (if applicable).
+       \brief The UTM conversion mode (if applicable).
      */
     property int utmConversionMode: Enums.UtmConversionModeLatitudeBandIndicators
 
     /*!
-     * \brief The GARS conversion mode (if applicable).
+       \brief The GARS conversion mode (if applicable).
      */
     property int garsConversionMode: Enums.GarsConversionModeCenter
 
    /*!
-    * \brief Converts a Point to a string based on the properties set in this
-    * CoordinateConversionOption
-    * 
-    * \param point Point to convert to string.
-    * \return string representation of point with the current formatting options
-    * applied.
+      \brief Converts a Point to a string based on the properties set in this
+      CoordinateConversionOption
+      
+      \list
+      \li \a point Point to convert to string.
+      \endlist
+
+      Returns string representation of point with the current formatting options
+      applied.
     */
     function prettyPrint(point) {
         switch (outputMode) {
@@ -113,14 +116,17 @@ QtObject {
     }
 
    /*!
-    * \brief Given a string called point, converts it to a Point using the
-    * current formatting options applied.
-    * 
-    * This conversion has the chance of failing, in which case null is returned.
-    * 
-    * \param point string to conver to a Point.
-    * \param spatialReference SpatialReference to use in conversion.
-    * \return string as a Point. 
+      \brief Given a string called point, converts it to a Point using the
+      current formatting options applied.
+      
+      This conversion has the chance of failing, in which case null is returned.
+      
+      \list
+      \li \a point string to conver to a Point.
+      \li \a spatialReference SpatialReference to use in conversion.
+      \endlist
+
+      Returns string as a Point. 
     */
     function pointFromString(point, spatialReference) {
         if (!spatialReference)

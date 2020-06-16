@@ -32,17 +32,9 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
-/*!
- * \brief a CoordinateConversionOption is a collection of properties that
- * dictates how a Point should be converted to and from a string.
- * 
- * a CoordinateConversionOption is able to convert between Point <--> QString
- * using the formatting options it is currently set with.
- */
 class CoordinateConversionOption : public QObject
 {
   Q_OBJECT
-  Q_CLASSINFO("RegisterEnumClassesUnscoped", "false")
   Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
   Q_PROPERTY(CoordinateType outputMode READ outputMode WRITE setOutputMode NOTIFY outputModeChanged)
   Q_PROPERTY(bool hasSpaces READ hasSpaces WRITE setHasSpaces NOTIFY hasSpacesChanged)
@@ -52,8 +44,9 @@ class CoordinateConversionOption : public QObject
   Q_PROPERTY(LatitudeLongitudeFormat latLonFormat READ latLonFormat WRITE setLatLonFormat NOTIFY latLonFormatChanged)
   Q_PROPERTY(UtmConversionMode utmConversionMode READ utmConversionMode WRITE setUtmConversionMode NOTIFY utmConversionModeChanged)
   Q_PROPERTY(GarsConversionMode garsConversionMode READ garsConversionMode WRITE setGarsConversionMode NOTIFY garsConversionModeChanged)
+  Q_CLASSINFO("RegisterEnumClassesUnscoped", "false")
 public:
-  /*! Fundamental coordinate format. */
+
   enum CoordinateType
   {
     Gars,
@@ -66,167 +59,68 @@ public:
   Q_ENUM(CoordinateType)
 
 public:
-  /*!
-   * \brief Constructor
-   * \param parent Owning parent QObject.
-   */
   Q_INVOKABLE CoordinateConversionOption(QObject* parent = nullptr);
 
-  /*!
-   * \brief Destructor
-   */
   ~CoordinateConversionOption() override;
 
-  /*!
-   * \brief Converts a Point to a QString based on the properties set in this
-   * CoordinateConversionOption
-   * 
-   * \param point Point to convert to string.
-   * \return String representation of point with the current formatting options
-   * applied.
-   */
   QString prettyPrint(const Point& point) const;
 
-  /*!
-   * \brief Given a string called point, converts it to a Point using the
-   * current formatting options applied.
-   * 
-   * This conversion has the chance of failing, in which case an invalid
-   * default-constructed Point will be returned.
-   * 
-   * \param point QString to convert to a Point.
-   * \param spatialReference SpatialReference to use in conversion.
-   * \return QString as a Point. 
-   */
   Point pointFromString(const QString& point,
                         const SpatialReference& spatialReference);
 
-  /*!
-   * \brief The user friendly name of this option.
-   */
   QString name() const;
 
-  /*!
-   * \brief Set name.
-   * \sa name
-   */
   void setName(const QString& name);
 
-  /*!
-   * \brief The conversion type of this option.
-   * \return CoordinateType 
-   */
   CoordinateType outputMode() const;
 
-  /*!
-   * \brief Set conversion type.
-   * \sa outputMode
-   */
   void setOutputMode(CoordinateType outputMode);
 
-  /*!
-   * \brief Flags whether to add spaces in notation (if applicable).
-   */
   bool hasSpaces() const;
 
-  /*!
-   * \brief Set hasSpaces.
-   * \sa hasSpaces
-   */
   void setHasSpaces(bool hasSpaces);
 
-  /*!
-   * \brief Precision of conversion format (if applicable).
-   */
   int precision() const;
 
-  /*!
-   * \brief Set the precision.
-   * \sa precision
-   */
   void setPrecision(int precision);
 
-  /*!
-   * \brief The number of decimal spaces in the format (if applicable).
-   */
   int decimalPlaces() const;
 
-  /*!
-   * \brief Set decimalPlaces
-   * \sa decimalPlaces
-   */
   void setDecimalPlaces(int decimalPlaces);
 
-  /*!
-   * \brief The MGRS conversion mode (if applicable).
-   */
   MgrsConversionMode mgrsConversionMode() const;
 
-  /*!
-   * \brief Set mgrsConversionMode
-   * \sa mgrsConversionMode
-   */
   void setMgrsConversionMode(MgrsConversionMode mgrsConversionMode);
 
-  /*!
-   * \brief The Latitude and Longitude format (if applicable).
-   */
   LatitudeLongitudeFormat latLonFormat() const;
 
-  /*!
-   * \brief Sets latLonFormat
-   * \sa latLonFormat
-   */
   void setLatLonFormat(LatitudeLongitudeFormat latLonFormat);
 
-  /*!
-   * \brief The UTM conversion mode (if applicable).
-   */
   UtmConversionMode utmConversionMode() const;
 
-  /*!
-   * \brief Sets utmConversionMode
-   * \sa utmConversionMode
-   */
   void setUtmConversionMode(UtmConversionMode utmConversionMode);
 
-  /*!
-   * \brief The GARS conversion mode (if applicable).
-   */
   GarsConversionMode garsConversionMode() const;
 
-  /*!
-   * \brief Sets garsConversionMode
-   * \sa garsConversionMode
-   */
   void setGarsConversionMode(GarsConversionMode conversionMode);
 
 signals:
-  /*! \brief Emits when name property changes. */
   void nameChanged();
 
-  /*! \brief Emits when outputMode property changes. */
   void outputModeChanged();
 
-  /*! \brief Emits when hasSpaces property changes. */
   void hasSpacesChanged();
 
-  /*! \brief Emits when precision property changes. */
   void precisionChanged();
 
-  /*! \brief Emits when decimalPlaces property changes. */
   void decimalPlacesChanged();
 
-  /*! \brief Emits when mgrsConversionMode property changes. */
   void mgrsConversionModeChanged();
 
-  /*! \brief Emits when latLonFormat property changes. */
   void latLonFormatChanged();
 
-  /*! \brief Emits when utmConversionMode property changes. */
   void utmConversionModeChanged();
 
-  /*! \brief Emits when garsConversionMode property changes. */
   void garsConversionModeChanged();
 
 private:

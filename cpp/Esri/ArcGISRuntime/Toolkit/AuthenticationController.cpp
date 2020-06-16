@@ -15,6 +15,11 @@
  ******************************************************************************/
 #include "AuthenticationController.h"
 
+// ArcGISRuntime headers
+#include <AuthenticationManager.h>
+
+#include <QDebug>
+
 namespace Esri
 {
 namespace ArcGISRuntime
@@ -22,6 +27,19 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
+/*!
+ \class Esri::ArcGISRuntime::Toolkit::CoordinateConversionController
+ \inmodule EsriArcGISRuntimeToolkit
+ \brief In MVC architecture, this is the controller for the corresponding
+ AuthenticationView.
+  
+ This controller is a thin wrapper around a AuthenticationManager.
+ */
+
+/*!
+  \brief Constructor
+  \param parent Parent owning QObject.
+ */
 AuthenticationController::AuthenticationController(QObject* parent) :
   QObject(parent)
 {
@@ -31,17 +49,126 @@ AuthenticationController::AuthenticationController(QObject* parent) :
     {
       m_currentChallenge = challenge;
       emit challengeChanged();
-    });
+    }, Qt::QueuedConnection
+  );
+
+  connect(AuthenticationManager::instance(), &AuthenticationManager::clientCertificateInfosChanged,
+          this, &AuthenticationController::clientCertificateInfosChanged);
+
+  connect(AuthenticationManager::instance(), &AuthenticationManager::clientCertificatePasswordRequired,
+          this, &AuthenticationController::clientCertificatePasswordRequired);
 }
 
+/*!
+  \brief Destructor.
+ */
 AuthenticationController::~AuthenticationController()
 {
 }
 
+void AuthenticationController::addClientCertificate(const QUrl& clientCertificate, const QString& password)
+{
+  AuthenticationManager::instance()->addClientCertificate(clientCertificate, password);
+}
+
+QStringList AuthenticationController::clientCertificateInfos() const
+{
+  return AuthenticationManager::instance()->clientCertificateInfos();
+}
 
 AuthenticationChallenge* AuthenticationController::currentChallenge() const
 {
   return m_currentChallenge.data();
+}
+
+QUrl AuthenticationController::currentChallengeUrl() const
+{
+    return m_currentChallenge ? m_currentChallenge->authorizationUrl() : QUrl{};
+}
+
+QString AuthenticationController::currentAuthenticatingHost() const
+{
+  return m_currentChallenge ? m_currentChallenge->authenticatingHost().toString(): QString{};
+}
+
+int AuthenticationController::currentChallengeType() const
+{
+  if (m_currentChallenge)
+      return static_cast<int>(m_currentChallenge->authenticationChallengeType());
+  else
+      return static_cast<int>(AuthenticationChallengeType::Unknown);
+}
+
+int AuthenticationController::currentChallengeFailureCount() const
+{
+  return m_currentChallenge ? m_currentChallenge->failureCount() : 0;
+}
+
+void AuthenticationController::setDeleteChallengeOnProcessed(bool deleteFlag)
+{
+  m_deleteChallengeOnProcessed = deleteFlag;
+}
+
+bool AuthenticationController::deleteChallengeOnProcessed() const
+{
+  return m_deleteChallengeOnProcessed;
+}
+
+void AuthenticationController::continueWithUsernamePassword(const QString& username, const QString& password)
+{
+  if (!m_currentChallenge)
+    return;
+
+  m_currentChallenge->continueWithUsernamePassword(username, password);
+  processed();
+}
+
+void AuthenticationController::continueWithOAuthAuthorizationCode(const QString& oAuthAuthorizationCode)
+{
+  if (!m_currentChallenge)
+    return;
+
+  m_currentChallenge->continueWithOAuthAuthorizationCode(oAuthAuthorizationCode);
+  processed();
+}
+
+void AuthenticationController::continueWithClientCertificate(int clientCertificateIndex)
+{
+  if (!m_currentChallenge)
+    return;
+
+  m_currentChallenge->continueWithClientCertificate(clientCertificateIndex);
+  processed();
+}
+
+void AuthenticationController::continueWithSslHandshake(bool trust, bool remember)
+{
+  if (!m_currentChallenge)
+    return;
+
+  m_currentChallenge->continueWithSslHandshake(trust, remember);
+  processed();
+}
+
+void AuthenticationController::cancel()
+{
+  if (!m_currentChallenge)
+    return;
+
+  m_currentChallenge->cancel();
+  processed();
+}
+
+void AuthenticationController::processed()
+{
+  // This controller has the option of
+  // "owning" the challenge and may delete
+  // it after use.
+  if (m_deleteChallengeOnProcessed) 
+    delete m_currentChallenge;
+  m_currentChallenge = nullptr;
+
+  emit challengeChanged();
 }
 
 } // Toolkit

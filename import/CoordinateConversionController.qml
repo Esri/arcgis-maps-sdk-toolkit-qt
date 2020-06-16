@@ -17,11 +17,11 @@ import QtQml 2.12
 import Esri.ArcGISRuntime 100.8
 
 /*!
- * \qmltype CoordinateConversionController
- * \inqmlmodule Esri.ArcGISRuntime.Toolkit
- * \since Esri.ArcGISRutime 100.8
- * \brief In MVC architecture, this is the controller for the 
- * CoordinateConversion view.
+   \qmltype CoordinateConversionController
+   \inqmlmodule Esri.ArcGISRuntime.Toolkit
+   \since Esri.ArcGISRutime 100.8
+   \brief In MVC architecture, this is the controller for the 
+   CoordinateConversion view.
  */
 
 QtObject {
@@ -34,39 +34,39 @@ QtObject {
     property var geoView: null;
 
     /*!
-     * \brief Distance between camera and current point when zoomToCurrentPoint
-     * is invoked.
-     * 
-     * If geoView is a SceneView, then this value represents the distance
-     * between the camera and the point returned by currentPoint when 
-     * zoomToCurrentPoint is called.
-     * 
-     * If geoView is a MapView, this value has no effect on zoom calculations.
-     * 
-     * The distance is in the units of the GeoView's SpatialReference.
-     * 
-     * Defaults to 1500.
+       \brief Distance between camera and current point when zoomToCurrentPoint
+       is invoked.
+       
+       If geoView is a SceneView, then this value represents the distance
+       between the camera and the point returned by currentPoint when 
+       zoomToCurrentPoint is called.
+       
+       If geoView is a MapView, this value has no effect on zoom calculations.
+       
+       The distance is in the units of the GeoView's SpatialReference.
+       
+       Defaults to 1500.
      */
     property double zoomToDistance: 1500.0
 
     /*!
-     * \brief Whether this controller is actively listening for mouse
-     * events.
-     * 
-     * When listening for mouse events, the Controller will update the
-     * current point to whatever point is returned by a click event on the
-     * GeoView.
-     * 
-     * When true this controller is listening to mouse events on the GeoView
-     * and will actively update the CurrentPoint.
-     * When false this controller is not listening to mouse events on the
-     * GeoView.
+       \brief Whether this controller is actively listening for mouse
+       events.
+       
+       When listening for mouse events, the Controller will update the
+       current point to whatever point is returned by a click event on the
+       GeoView.
+       
+       When true this controller is listening to mouse events on the GeoView
+       and will actively update the CurrentPoint.
+       When false this controller is not listening to mouse events on the
+       GeoView.
      */
     property bool inPickingMode: false
 
     /*!
-     * \brief List of textual representations of the current point in different 
-     * formats.
+       \brief List of textual representations of the current point in different 
+       formats.
      */
     property list<CoordinateConversionResult> results
 
@@ -74,8 +74,8 @@ QtObject {
     signal currentPointChanged(Point point)
 
     /*!
-    * \brief Known list of available coordinate conversion formats which can be
-    * consumed to generate different textual representations of the same point.
+      \brief Known list of available coordinate conversion formats which can be
+      consumed to generate different textual representations of the same point.
     */
     property list<CoordinateConversionOption> formats: [
         CoordinateConversionOption {
@@ -118,22 +118,20 @@ QtObject {
     ]
 
     /*!
-    * \brief Returns the current point.
-    * 
-    * The current point represents the one point that all elements within
-    * the conversionResults list-model are tied to.
-    * 
-    * \return Point 
+      \brief Returns the current point.
+      
+      The current point represents the one point that all elements within
+      the conversionResults list-model are tied to.
     */
     function currentPoint() {
         return internal.currentPoint;
     }
 
     /*!
-    * \brief Converts the current point held by this controller as a 2D point 
-    * relative to the current window.
-    * 
-    * \return The point returned by currentPoint as a screen coordinate. 
+      \brief Converts the current point held by this controller as a 2D point 
+      relative to the current window.
+      
+      Returns the point returned by currentPoint as a screen coordinate. 
     */
     function screenCoordinate() {
         if (!geoView)
@@ -147,11 +145,14 @@ QtObject {
     }
 
     /*!
-    * \brief Set the current point to point. This updates all textual
-    * representations owned by this controller.
-    * \param point new point to convert.
-    * \param option Option dictating hints on how to convert the string to a
-    * point.
+      \brief Set the current point to point. This updates all textual
+      representations owned by this controller.
+
+      \list
+      \li \a point new point to convert.
+      \li \a option Option dictating hints on how to convert the string to a
+      point.
+      \endlist
     */
     function setCurrentPoint(point, option = undefined) {
         if (point instanceof String || typeof point == 'string') {
@@ -171,13 +172,15 @@ QtObject {
     }
 
     /*!
-    * \brief Given option, generates a new result.
-    * 
-    * A new CoordianteConversionResult is added to the list-model returned by
-    * coordinateResults. This Result is tied to the conversion parameters as
-    * given by option.
-    * 
-    * \param option option to generate result for.
+      \brief Given option, generates a new result.
+      
+      A new CoordianteConversionResult is added to the list-model returned by
+      coordinateResults. This Result is tied to the conversion parameters as
+      given by option.
+      
+      \list
+      \li \a option option to generate result for.
+      \endlist
     */
     function addNewCoordinateResultForOption(option) {
         let result = internal.resultBuilder.createObject(this, { type: option });
@@ -189,13 +192,15 @@ QtObject {
     }
 
     /*!
-    * \brief Removes a given CoordinateConversionResult at index.
-    * 
-    * This function is for deleting results in the list-model returned by
-    * coordinateREsults.
-    * 
-    * \param index index of a given CoordinateConversionResult in the list-model
-    * returned by coordinateResults.
+      \brief Removes a given CoordinateConversionResult at index.
+      
+      This function is for deleting results in the list-model returned by
+      coordinateREsults.
+      
+      \list
+      \li \a index index of a given CoordinateConversionResult in the list-model
+      returned by coordinateResults.
+      \endlist
     */
     function removeCoordinateResultAtIndex(index) {
         internal.results.splice(index, 1);
@@ -204,9 +209,9 @@ QtObject {
     }
 
     /*!
-    * \brief Updates the GeoView's camera to point to the current point's
-    * location on the map or scene.
-    * \sa zoomToDistance
+      \brief Updates the GeoView's camera to point to the current point's
+      location on the map or scene.
+      \sa zoomToDistance
     */
     function zoomToCurrentPoint() {
         if (geoView === null)
@@ -235,6 +240,7 @@ QtObject {
         }
     }
 
+    /*! \internal */
     property QtObject internal: QtObject {
         property Point currentPoint: null
         property Component resultBuilder: Qt.createComponent("CoordinateConversionResult.qml")

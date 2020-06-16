@@ -27,11 +27,24 @@ import QtQuick 2.12
 
 Item {
     id: flashImage
-    property alias running: animation.running
-    property color color;
-    opacity: 0
 
+    /*!
+      \qmlproperty bool running
+      \brief Read-only flag stating if the flashing animation is running or not.
+     */
+    property alias running: animation.running
+    
+    /*!
+      \brief Color of the flashing image.
+     */
+    property color color;
+
+    /*!
+      \brief This signal is called when the animation completes.
+     */
     signal finished();
+
+    opacity: 0
 
     Rectangle {
       height: 16

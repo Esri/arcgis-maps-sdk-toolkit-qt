@@ -32,6 +32,22 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
+/*!
+  \class Esri::ArcGISRuntime::Toolkit::NorthArrow
+  \inmodule EsriArcGISRuntimeToolkit
+  \brief The \c NorthArrow displays a compass overlaid on the \c GeoView, with 
+  the compass heading matching the current rotation of the \c MapView, or 
+  \c Camera heading of the \c SceneView. 
+  Double-clicking on the \c NorthArrow triggers the heading of the connected
+  \c GeoView to be orientated to 0 (North).
+ */
+
+/*!
+  \brief Constructor
+  \list
+  \li \a parent Parent widget.
+  \endlist
+ */
 NorthArrow::NorthArrow(QWidget* parent) :
   QLabel(parent),
   m_controller(new NorthArrowController(this))
@@ -61,20 +77,43 @@ NorthArrow::NorthArrow(QWidget* parent) :
   });
 }
 
+/*!
+  \brief Destructor
+ */
 NorthArrow::~NorthArrow()
 {
 }
 
+/*!
+  \brief Set the \c GeoView.
+  \list
+  \li \a mapView Sets the \c GeoView to a \c MapView.
+  \endlist
+ */
 void NorthArrow::setMapView(MapGraphicsView* mapView)
 {
   m_controller->setGeoView(mapView);
 }
 
+/*!
+  \brief Set the \c GeoView.
+  \list
+    \li \a sceneView Sets the \c GeoView to a \c SceneView.
+  \endlist
+ */
 void NorthArrow::setSceneView(SceneGraphicsView* sceneView)
 {
   m_controller->setGeoView(sceneView);
 }
 
+/*!
+  \internal
+  \brief When triggered this will orient the \c GeoView such that this
+  \c NorthArrow has a heading of \c 0.
+  \list
+    \li \a event MouseEvent to accept.
+  \endlist
+ */
 void NorthArrow::mouseDoubleClickEvent(QMouseEvent* event)
 {
   // Rotate back to North.
@@ -82,6 +121,9 @@ void NorthArrow::mouseDoubleClickEvent(QMouseEvent* event)
   event->accept();
 }
 
+/*!
+  \brief Returns the controller object driving this widget.
+ */
 NorthArrowController* NorthArrow::controller() const
 {
   return m_controller;
