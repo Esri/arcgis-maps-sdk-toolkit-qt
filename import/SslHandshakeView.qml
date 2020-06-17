@@ -6,15 +6,11 @@ Page {
 
     property AuthenticationController controller: AuthenticationController {}
 
-    title: controller.currentAuthenticatingHost
+    title: "Untrusted Host"
 
     header: Label {
-        text: title
+        text: `<h1>${title}</h1>`
         horizontalAlignment: Text.AlignHCenter
-        color: palette.windowText
-        background: Rectangle {
-            color: palette.window
-        }
     }
 
     footer: DialogButtonBox {
@@ -27,26 +23,38 @@ Page {
             DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
         }
 
-        onAccepted: controller.continueWithSslHandshake(true, rememberCheckbox.checked);
+        onAccepted: controller.continueWithSslHandshake(
+            true, rememberCheckbox.checked);
 
-        onRejected: controller.continueWithSslHandshake(false, rememberCheckbox.checked);
+        onRejected: controller.continueWithSslHandshake(
+            false, rememberCheckbox.checked);
     }
 
-    height: contentHeight + implicitFooterHeight + implicitHeaderHeight
-    width: contentWidth
-
     ColumnLayout {
+        anchors.centerIn: parent
         Label {
-                text: qsTr("The server could not prove itself; its security certificate "
-                         + "is not trusted by your OS. Would you like to continue anyway?")
+            text: controller.currentAuthenticatingHost
+            horizontalAlignment: Qt.AlignHCenter
+            Layout.fillWidth: true
+            Layout.margins: 5
+            font.weight: Font.Bold
+        }
+        Label {
+                text: qsTr("The server could not prove itself; its security "
+                         + "certificate is not trusted by your OS. Would you "
+                         + "like to continue anyway?")
+                horizontalAlignment: Qt.AlignHCenter
+                wrapMode: Text.Wrap
+                Layout.preferredWidth: 400
                 Layout.fillWidth: true
-                Layout.alignment: Qt.AlignHCenter
+                Layout.margins: 5
             }
         CheckBox {
                 id: rememberCheckbox
                 text: qsTr("Remember")
-                Layout.fillWidth: true
                 checked: true
+                Layout.alignment: Qt.AlignHCenter
+                Layout.margins: 5
             }
     }
 }

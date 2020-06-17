@@ -87,7 +87,7 @@ signals:
     void clientCertificatePasswordRequired(QUrl certificate);
 
 private:
-  void processed();
+  void cleanup();
 private:
     QPointer<AuthenticationChallenge> m_currentChallenge;
     bool m_deleteChallengeOnProcessed = true;

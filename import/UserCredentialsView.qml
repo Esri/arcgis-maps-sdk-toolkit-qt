@@ -10,12 +10,9 @@ Page {
     title: qsTr("Authentication required")
 
     header: Label {
-        text: title
+        text: `<h1>${title}</h1>`
         horizontalAlignment: Text.AlignHCenter
-        color: palette.windowText
-        background: Rectangle {
-            color: palette.window
-        }
+        padding: 5
     }
 
     footer: DialogButtonBox {
@@ -35,48 +32,52 @@ Page {
         onRejected: userCredentialsView.reject();
     }
 
-    height: contentHeight + implicitFooterHeight + implicitHeaderHeight
-    width: contentWidth
-
     ColumnLayout {
+        anchors.centerIn: parent
         Label {
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignHCenter
-            horizontalAlignment: Text.AlignHCenter
-            visible: controller.currentChallengeFailureCount > 1
             text: qsTr("Invalid username or password.")
-            color: palette.toolTipBase
+            horizontalAlignment: Qt.AlignHCenter
+            visible: controller.currentChallengeFailureCount > 1
+            color: "red"
             background:  Rectangle {
-                color: palette.toolTipText
+                color: "#FFCCCC"
                 radius: 5
             }
-        }
-
-        Label {
-            text: qsTr("You need to sign in to access the resource at:")
             Layout.fillWidth: true
-            wrapMode: Text.Wrap
+            Layout.margins: 5
         }
 
         Label {
             text: controller.currentAuthenticatingHost
+            horizontalAlignment: Qt.AlignHCenter
+            font.weight: Font.Bold
             Layout.fillWidth: true
+            Layout.margins: 5
+        }
+
+        Label {
+            text: "You need to sign in to access this resource."
+            horizontalAlignment: Qt.AlignHCenter
             wrapMode: Text.Wrap
+            Layout.fillWidth: true
+            Layout.margins: 5
         }
 
         TextField {
             id: usernameTextField
-            Layout.fillWidth: true
             placeholderText: qsTr("username")
             onAccepted: userCredentialsView.accept();
+            Layout.fillWidth: true
+            Layout.margins: 5
         }
 
         TextField {
             id: passwordTextField
-            Layout.fillWidth: true
             placeholderText: qsTr("password")
             onAccepted: userCredentialsView.accept();
             echoMode: TextInput.Password
+            Layout.fillWidth: true
+            Layout.margins: 5
         }
     }
 

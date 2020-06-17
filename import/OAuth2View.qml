@@ -1,3 +1,4 @@
+import QtQuick 2.11
 import QtQuick.Controls 2.11
 import QtWebView 1.1
 import QtQuick.Window 2.12
@@ -9,12 +10,8 @@ Page {
     title: oAuthView.title
 
     header: Label {
-        text: oAuthView.title
-        horizontalAlignment: Qt.AlignHCenter
-        color: palette.windowText
-        background: Rectangle {
-            color: palette.window
-        }
+        text: `<h2>${oAuthView.title}</h2>`
+        horizontalAlignment: Text.AlignHCenter
     }
     
     footer: DialogButtonBox {
@@ -22,12 +19,15 @@ Page {
         onRejected: controller.cancel();
     }
 
-    implicitWidth: Screen.width 
+    implicitWidth: Screen.width
     implicitHeight: Screen.height
 
     WebView {
         id: oAuthView
-        anchors.fill: parent
+        anchors {
+            centerIn: parent
+            fill: parent
+        }
         
         url: controller.currentChallengeUrl
 

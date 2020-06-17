@@ -22,10 +22,11 @@ Popup {
         }
 
         onChallengeChanged: {
-            if (controller.currentChallengeType === 0)
+            if (controller.currentChallengeType === 0) {
                 authenticationView.close();
-            else
+            } else {
                 authenticationView.open();
+            }
         }
     }
 

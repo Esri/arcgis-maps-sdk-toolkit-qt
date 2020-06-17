@@ -47,6 +47,19 @@ AuthenticationController::AuthenticationController(QObject* parent) :
           &AuthenticationManager::authenticationChallenge, this,
     [this](AuthenticationChallenge* challenge)
     {
+      if (challenge == m_currentChallenge)
+          return;
+
+      qDebug() << "CHALLENGE POINTER:" << challenge;
+      // Auth manager normally only emits a challenge after previous one has
+      // been processed. But if it starts hammering us here we will clean up the 
+      // unprocessed challenges.
+      if (m_currentChallenge) {
+        m_currentChallenge->cancel();
+        if (m_deleteChallengeOnProcessed)
+          m_currentChallenge->deleteLater();
+      }
+
       m_currentChallenge = challenge;
       emit challengeChanged();
     }, Qt::QueuedConnection
@@ -119,8 +132,9 @@ void AuthenticationController::continueWithUsernamePassword(const QString& usern
   if (!m_currentChallenge)
     return;
 
-  m_currentChallenge->continueWithUsernamePassword(username, password);
-  processed();
+  auto c = m_currentChallenge;
+  cleanup();
+  c->continueWithUsernamePassword(username, password);
 }
 
 void AuthenticationController::continueWithOAuthAuthorizationCode(const QString& oAuthAuthorizationCode)
@@ -128,8 +142,9 @@ void AuthenticationController::continueWithOAuthAuthorizationCode(const QString&
   if (!m_currentChallenge)
     return;
 
-  m_currentChallenge->continueWithOAuthAuthorizationCode(oAuthAuthorizationCode);
-  processed();
+  auto c = m_currentChallenge;
+  cleanup();
+  c->continueWithOAuthAuthorizationCode(oAuthAuthorizationCode);
 }
 
 void AuthenticationController::continueWithClientCertificate(int clientCertificateIndex)
@@ -137,8 +152,9 @@ void AuthenticationController::continueWithClientCertificate(int clientCertifica
   if (!m_currentChallenge)
     return;
 
-  m_currentChallenge->continueWithClientCertificate(clientCertificateIndex);
-  processed();
+  auto c = m_currentChallenge;
+  cleanup();
+  c->continueWithClientCertificate(clientCertificateIndex);
 }
 
 void AuthenticationController::continueWithSslHandshake(bool trust, bool remember)
@@ -146,8 +162,9 @@ void AuthenticationController::continueWithSslHandshake(bool trust, bool remembe
   if (!m_currentChallenge)
     return;
 
-  m_currentChallenge->continueWithSslHandshake(trust, remember);
-  processed();
+  auto c = m_currentChallenge;
+  cleanup();
+  c->continueWithSslHandshake(trust, remember);
 }
 
 void AuthenticationController::cancel()
@@ -155,19 +172,20 @@ void AuthenticationController::cancel()
   if (!m_currentChallenge)
     return;
 
-  m_currentChallenge->cancel();
-  processed();
+  auto c = m_currentChallenge;
+  cleanup();
+  c->cancel();
 }
 
-void AuthenticationController::processed()
+void AuthenticationController::cleanup()
 {
   // This controller has the option of
   // "owning" the challenge and may delete
   // it after use.
   if (m_deleteChallengeOnProcessed) 
-    delete m_currentChallenge;
-  m_currentChallenge = nullptr;
+    m_currentChallenge->deleteLater();
 
+  m_currentChallenge = nullptr;
   emit challengeChanged();
 }
 
