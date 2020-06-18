@@ -3,14 +3,17 @@ import QtQuick.Controls 2.11
 import QtWebView 1.1
 import QtQuick.Window 2.12
 
-Page {
+Dialog {
+    id: oAuthView
 
     property AuthenticationController controller: AuthenticationController {}
 
-    title: oAuthView.title
+    title: webView.title
+
+    closePolicy: Popup.NoAutoClose
 
     header: Label {
-        text: `<h2>${oAuthView.title}</h2>`
+        text: `<h2>${webView.title}</h2>`
         horizontalAlignment: Text.AlignHCenter
     }
     
@@ -23,7 +26,7 @@ Page {
     implicitHeight: Screen.height
 
     WebView {
-        id: oAuthView
+        id: webView
         anchors {
             centerIn: parent
             fill: parent
@@ -42,8 +45,9 @@ Page {
             if (title.indexOf("SUCCESS code=") > -1) {
                 var authCode = title.replace("SUCCESS code=", "");
                 controller.continueWithOAuthAuthorizationCode(authCode);
+                oAuthView.accept();
             } else if (title.indexOf("Denied error=") > -1) {
-                reject();
+                oAuthView.reject();
             }
         }
     }

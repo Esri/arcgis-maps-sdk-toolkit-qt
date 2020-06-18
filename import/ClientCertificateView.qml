@@ -3,11 +3,13 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 import Qt.labs.platform 1.1 as P
 
-Page {
+Dialog {
     id: clientCertificateView
     property AuthenticationController controller: AuthenticationController {}
     
     title: qsTr("Client certificate requested")
+
+    closePolicy: Popup.NoAutoClose
 
     header: Label {
         text: `<h1>${title}</h1>`
@@ -101,9 +103,8 @@ Page {
 
         onClientCertificatePasswordRequired: {
             const dialog = passwordDialog.createObject(
-                             clientCertificateView, { certificate: certificate});
+                             clientCertificateView.parent, { certificate: certificate});
             dialog.open();
-            dialog.closed.connect(() => dialog.destroy());
         }
     }
 
@@ -138,6 +139,9 @@ Page {
                     onAccepted: pD.accept();
                     echoMode: TextInput.Password
                 }
+            }
+            onClosed: {
+                this.destroy();
             }
         }
     }

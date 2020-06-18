@@ -2,12 +2,14 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 
-Page {
+Dialog {
     id: userCredentialsView
 
     property AuthenticationController controller: AuthenticationController {}
 
     title: qsTr("Authentication required")
+
+    closePolicy: Popup.NoAutoClose
 
     header: Label {
         text: `<h1>${title}</h1>`
@@ -27,9 +29,14 @@ Page {
             DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
         }
 
-        onAccepted: userCredentialsView.accept();
+        onAccepted: {
+            controller.continueWithUsernamePassword(usernameTextField.text,
+                                                    passwordTextField.text);
+        }
 
-        onRejected: userCredentialsView.reject();
+        onRejected: {
+            controller.cancel();
+        }
     }
 
     ColumnLayout {
@@ -79,14 +86,5 @@ Page {
             Layout.fillWidth: true
             Layout.margins: 5
         }
-    }
-
-    function accept() {
-        controller.continueWithUsernamePassword(usernameTextField.text,
-                                                passwordTextField.text);
-    }
-
-    function reject() {
-        controller.cancel();
     }
 }

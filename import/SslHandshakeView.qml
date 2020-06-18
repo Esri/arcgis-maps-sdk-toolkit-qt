@@ -2,11 +2,13 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 
-Page {
+Dialog {
 
     property AuthenticationController controller: AuthenticationController {}
 
     title: "Untrusted Host"
+
+    closePolicy: Popup.NoAutoClose
 
     header: Label {
         text: `<h1>${title}</h1>`
