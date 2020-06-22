@@ -26,7 +26,7 @@ namespace Toolkit
 {
 
 /*!
- \class Esri::ArcGISRuntime::Toolkit::CoordinateConversionController
+ \class Esri::ArcGISRuntime::Toolkit::AuthenticationController
  \inmodule EsriArcGISRuntimeToolkit
  \brief In MVC architecture, this is the controller for the corresponding
  AuthenticationView.
