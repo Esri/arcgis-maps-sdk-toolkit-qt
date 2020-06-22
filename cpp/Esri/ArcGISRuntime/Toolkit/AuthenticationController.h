@@ -67,8 +67,6 @@ public:
 
   int currentChallengeFailureCount() const;
 
-  AuthenticationChallenge* currentChallenge() const;
-
   Q_INVOKABLE void continueWithUsernamePassword(const QString& username, const QString& password);
 
   Q_INVOKABLE void continueWithOAuthAuthorizationCode(const QString& oAuthAuthorizationCode);

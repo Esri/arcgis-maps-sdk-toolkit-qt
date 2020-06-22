@@ -1,10 +1,60 @@
+/*******************************************************************************
+ *  Copyright 2012-2020 Esri
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ ******************************************************************************/
+
 import QtQml 2.12
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 
+/*!
+  \qmltype AuthenticationView
+  \inqmlmodule Esri.ArcGISRuntime.Toolkit
+  \since Esri.ArcGISRutime 100.9
+  \brief A view for handling authentication challenges and automatically 
+  launching the appropriate UI for each type of authentication.
+    
+  Declare an AuthenticationView in your QML file. The AuthenticationView 
+  will then be connected to all authentication challenges, and will
+  automatically launch the appropriate view for the type of
+  challenge. Supported security formats include:
+
+  \list
+    \li ArcGIS Token (UserCredentialsView)
+    \li HTTP Basic (UserCredentialsView)
+    \li HTTP Digest (UserCredentialsView)
+    \li IWA (UserCredentialsView)
+    \li OAuth 2.0 (OAuth2View)
+    \li SAML (OAuth2View)
+    \li PKI (ClientCertificateView)
+    \li SSL Handshake Warnings (SslHandshakeView)
+  \endlist
+  
+  \note OAuth 2.0 uses a WebView. To use an OAuthView you must call
+        \c{QtWebView::initialize()} immediately after the \c{QGuiApplication} 
+        instance is created. See \l{https://doc.qt.io/qt-5/qtwebview-index.html}
+        {Qt WebView}.
+ */
+
 Item {
     id: authenticationView
 
+    /*!
+      \qmlproperty AuthenticationController controller.
+      \brief the Controller handles references to challenge semitted by the 
+      \c AuthenticationManager.
+    */
     property var controller: AuthenticationController { }
 
     Connections {
