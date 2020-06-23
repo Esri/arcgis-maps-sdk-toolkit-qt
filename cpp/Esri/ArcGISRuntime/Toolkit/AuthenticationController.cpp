@@ -39,7 +39,9 @@ namespace Toolkit
 
 /*!
   \brief Constructor
-  \param parent Owning QObject.
+  \list
+    \li \a parent Owning QObject.
+  \endlist
  */
 AuthenticationController::AuthenticationController(QObject* parent) :
   QObject(parent)
@@ -122,6 +124,28 @@ QString AuthenticationController::currentAuthenticatingHost() const
 
 /*!
  \brief Returns the type of the current challenge as an int.
+
+  \table
+  \header
+      \li Challenge type
+      \li Constant
+  \row
+      \li \c Unknown
+      \li \c 0
+  \row
+      \li \c UsernamePassword 
+      \li \c 1
+  \row
+      \li \c OAuth 
+      \li \c 2
+  \row
+      \li \c ClientCertificate  
+      \li \c 3
+  \row
+      \li \c SslHandshake   
+      \li \c 4
+  \endtable
+
  */
 int AuthenticationController::currentChallengeType() const
 {
@@ -156,8 +180,8 @@ void AuthenticationController::setDeleteChallengeOnProcessed(bool deleteFlag)
 
 /*!
  \brief After a challenge has been processed, the AuthenticationController
- clears the reference to the currently held challenge. When this flag
- is true then the challenge is also deleted when the reference is cleared.
+ clears the reference to the currently held challenge. When the returned value
+ is \c true then the challenge is also deleted when the reference is cleared.
 
  In most cases it is desired to for the controller to clean up challenges that
  have been processed, but this options may be turned off in cases where there
@@ -287,7 +311,7 @@ void AuthenticationController::cleanup()
 
 /*!
   \fn void Esri::ArcGISRuntime::Toolkit::AuthenticationController::clientCertificatePasswordRequired(QUrl certificate)
-  \brief Emitted when a certificate that was added to the AuthenticationManager requires a password.
+  \brief Emitted when a \a certificate that was added to the AuthenticationManager requires a password.
   \sa addClientCertificate
  */
 

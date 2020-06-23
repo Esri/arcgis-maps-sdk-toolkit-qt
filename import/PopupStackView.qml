@@ -74,7 +74,7 @@ Control {
        \brief This property holds the current top-most item in the stack. I.E.
        the current popup from the list of popup managers.
        \qmlproperty PopupView currentItem
-       \sa Stack
+       \sa {https://doc.qt.io/qt-5/qml-qtquick-controls2-stackview.html}{StackView}
      */
     property alias currentItem: stack.currentItem
 
@@ -82,14 +82,14 @@ Control {
        \brief This property holds the number of items currently pushed onto the 
        stack.
        \qmlproperty int depth
-       \sa Stack
+       \sa {https://doc.qt.io/qt-5/qml-qtquick-controls2-stackview.html}{StackView}
      */
     property alias depth: stack.depth
 
     /*!
        \brief This property holds whether a transition is running.
        \qmlproperty bool busy
-       \sa Stack
+       \sa {https://doc.qt.io/qt-5/qml-qtquick-controls2-stackview.html}{StackView}
      */
     property alias busy: stack.busy
 
@@ -97,7 +97,7 @@ Control {
       \brief This property holds the transition that is applied to the item 
       that enters the stack when another item is popped off of it.
       \qmlproperty Transition popEnter
-      \sa Stack
+      \sa {https://doc.qt.io/qt-5/qml-qtquick-controls2-stackview.html}{StackView}
      */
     property alias popEnter: stack.popEnter
 
@@ -105,7 +105,7 @@ Control {
        \brief This property holds the transition that is applied to the item 
        that exits the stack when the item is popped off of it.
        \qmlproperty Transition popExit
-       \sa Stack
+       \sa {https://doc.qt.io/qt-5/qml-qtquick-controls2-stackview.html}{StackView}
      */
     property alias popExit: stack.popExit
 
@@ -113,7 +113,7 @@ Control {
        \brief This property holds the transition that is applied to the item 
        that enters the stack when the item is pushed onto it.
        \qmlproperty Transition pushEnter
-       \sa Stack
+       \sa {https://doc.qt.io/qt-5/qml-qtquick-controls2-stackview.html}{StackView}
      */
     property alias pushEnter: stack.pushEnter
 
@@ -121,7 +121,7 @@ Control {
        \brief This property holds the transition that is applied to the item 
        that exits the stack when another item is pushed onto it.
        \qmlproperty Transition pushExit
-       \sa Stack
+       \sa {https://doc.qt.io/qt-5/qml-qtquick-controls2-stackview.html}{StackView}
      */
     property alias pushExit: stack.pushExit
 
@@ -136,15 +136,16 @@ Control {
     }
 
     /*!
+       \qmlsignal PopupStackView::attachmentThumbnailClicked(int index)
        \brief Signal emitted when an attachment thumbnail is clicked.
-       The \a index of the PopupAttachment in the PopupAttachmentListModel
+       The \e index of the PopupAttachment in the PopupAttachmentListModel
        of the currently displayed PopupView.
      */
     signal attachmentThumbnailClicked(var index)
 
     /*!
        \brief Removes all items from the stack.
-       \sa StackView.clear
+       \sa {https://doc.qt.io/qt-5/qml-qtquick-controls2-stackview.html}{StackView}
      */
     function clear(...args) {
         return stack.clear(...args);
@@ -155,7 +156,7 @@ Control {
        is called for each item in the stack (with the item and index as 
        arguments) until the callback function returns true. The return value is
        the item found.
-       \sa StackView.find
+       \sa {https://doc.qt.io/qt-5/qml-qtquick-controls2-stackview.html}{StackView}
      */
     function find(...args) {
         return stack.find(...args);
@@ -164,7 +165,7 @@ Control {
     /*!
        \brief Returns the item at position index in the stack, or null if the 
        index is out of bounds.
-       \sa StackView.get
+       \sa {https://doc.qt.io/qt-5/qml-qtquick-controls2-stackview.html}{StackView}
      */
     function get(...args) {
         return stack.get(...args);
@@ -176,7 +177,7 @@ Control {
        to (but not including) item will be popped. If item is null, all items 
        down to (but not including) the first item is popped. If not specified, 
        only the current item is popped.
-       \sa StackView.pop
+       \sa {https://doc.qt.io/qt-5/qml-qtquick-controls2-stackview.html}{StackView}
      */
     function pop(...args) {
         return stack.pop(...args);

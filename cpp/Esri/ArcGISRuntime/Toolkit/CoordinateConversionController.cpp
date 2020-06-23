@@ -308,8 +308,6 @@ Point CoordinateConversionController::currentPoint() const
   
   Internally, this is a \c GenericListModel with an \c elementType of
   \c CoordinateConversionOption.
-  
-  \sa Esri::ArcGISRuntime::Toolkit::GenericListModel
  */
 GenericListModel* CoordinateConversionController::coordinateFormats() const
 {
@@ -322,8 +320,6 @@ GenericListModel* CoordinateConversionController::coordinateFormats() const
   
   Internally, this is a \c GenericListModel with an \c elementType of 
   \c CoordinateConversionResult.
-  
-  \sa Esri::ArcGISRuntime::Toolkit::GenericListModel
  */
 GenericListModel* CoordinateConversionController::conversionResults() const
 {

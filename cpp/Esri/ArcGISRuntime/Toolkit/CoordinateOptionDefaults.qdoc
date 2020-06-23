@@ -7,18 +7,15 @@
 
 /*!
   \fn CoordinateConversionOption* Esri::ArcGISRuntime::Toolkit::createDecimalDegrees(QObject* parent = nullptr)
-  \relates Esri/ArcGISRuntime/Toolkit/CoordinateOptionDefaults
   \brief Creates a new \c CoordinateConversionOption set up to format \c DD with parent \a parent.
  */
 
 /*!
   \fn CoordinateConversionOption* Esri::ArcGISRuntime::Toolkit::createDegreesDecimalMinutes(QObject* parent = nullptr)
-  \relates Esri/ArcGISRuntime/Toolkit/CoordinateOptionDefaults
   \brief Creates a new \c CoordinateConversionOption set up to format \c DDM with parent \a parent.
 
  /*!
   \fn CoordinateConversionOption* Esri::ArcGISRuntime::Toolkit::createDegreesMinutesSeconds(QObject* parent = nullptr)
-  \relates Esri/ArcGISRuntime/Toolkit/CoordinateOptionDefaults
   \brief Creates a new \c CoordinateConversionOption set up to format \c DMS with parent \a parent.
  */
 

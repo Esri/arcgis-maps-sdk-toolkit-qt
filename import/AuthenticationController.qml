@@ -32,28 +32,50 @@ import Esri.ArcGISRuntime 100.8
 
 QtObject {
     id: authenticationController
+
     /*!
-      \qmlproperty url currentChallengeUrl
-      \brief The authorization url of the current AuthenticationChallenge.
-     */
+    \qmlproperty url currentChallengeUrl
+    \brief The authorization url of the current AuthenticationChallenge.
+    */
     property url currentChallengeUrl: internal.currentChallenge ? internal.currentChallenge.authorizationUrl : "";
     
     /*!
-        \qmlproperty string currentAuthenticatingHost
-        \brief Returns the authorization hostname of the current 
-        AuthenticationChallenge.
+    \qmlproperty string currentAuthenticatingHost
+    \brief Returns the authorization hostname of the current
+    AuthenticationChallenge.
     */
     property string currentAuthenticatingHost: internal.currentChallenge ? internal.currentChallenge.authenticatingHost.toString() : "";
     
     /*!
-        \qmlproperty int currentChallengeType
-        \brief The type of the current challenge as an int.
+    \qmlproperty int currentChallengeType
+    \brief The type of the current challenge as an int.
+
+    \table
+    \header
+        \li Challenge type
+        \li Constant
+    \row
+        \li \c Unknown
+        \li \c 0
+    \row
+        \li \c UsernamePassword 
+        \li \c 1
+    \row
+        \li \c OAuth 
+        \li \c 2
+    \row
+        \li \c ClientCertificate  
+        \li \c 3
+    \row
+        \li \c SslHandshake   
+        \li \c 4
+    \endtable
     */
     property int currentChallengeType: internal.currentChallenge ? internal.currentChallenge.authenticationChallengeType : Enums.AuthenticationChallengeTypeUnknown;
     
     /*!
-        \qmlproperty int currentChallengeFailureCount
-        \brief The failure count of the current AuthenticationChallenge.
+    \qmlproperty int currentChallengeFailureCount
+    \brief The failure count of the current AuthenticationChallenge.
     */
     property int currentChallengeFailureCount: internal.currentChallenge ? internal.currentChallenge.failureCount : 0;
     
@@ -65,13 +87,18 @@ QtObject {
     property var clientCertificateInfos: AuthenticationManager.clientCertificateInfos
 
     /*!
-    \signal clientCertificatePasswordRequired(url certificate)
+    \qmlsignal clientCertificatePasswordRequired(url certificate)
     \brief Emitted when a certificate that was added to the 
     AuthenticationManager requires a password.
-    \sa addClientCertificate
+    \sa AuthenticationController::addClientCertificate
     */
     signal clientCertificatePasswordRequired(url certificate);
-  
+
+    /*!
+     \qmlmethod AuthenticationController::addClientCertificate(url certificate, string password)
+     \brief Calls \c addClientCertificate on the current challenge using the given \a certificate and
+     \a password. Then clears the current challenge.
+     */
     function addClientCertificate(...args) {
         return AuthenticationManager.addClientCertificate(...args);
     }

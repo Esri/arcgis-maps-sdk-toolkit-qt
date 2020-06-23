@@ -86,8 +86,9 @@ Control {
     }
 
     /*!
+       \qmlsignal PopupView::attachmentThumbnailClicked(var index)
        \brief Signal emitted when an attachment thumbnail is clicked.
-       The \a index of the PopupAttachment in the PopupAttachmentListModel
+       The \e index of the PopupAttachment in the PopupAttachmentListModel
        that was clicked on by the user.
      */
     signal attachmentThumbnailClicked(var index)
@@ -201,3 +202,4 @@ Control {
         }
     }
 }
+

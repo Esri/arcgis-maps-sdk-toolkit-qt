@@ -45,6 +45,7 @@ QtObject {
     property string notation: "";
 
     /*!
+       \qmlmethod CoordinateConversionResult::updateCoordinatePoint(Point point)
        \brief Given a point, updates the notation of this object to the textual
        representation of the point as dictated by the formatting options given
        in type.
