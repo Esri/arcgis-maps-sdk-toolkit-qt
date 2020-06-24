@@ -306,7 +306,7 @@ void AuthenticationController::cleanup()
 /*!
   \fn void Esri::ArcGISRuntime::Toolkit::AuthenticationController::clientCertificateInfosChanged()
   \brief Emitted when the clientCertificateInfos updates.
-  \sa clientCertificateInfosChanged
+  \sa clientCertificateInfos
  */
 
 /*!
