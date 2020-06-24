@@ -317,7 +317,7 @@ void AuthenticationController::cleanup()
 
 /*!
   \property Esri::ArcGISRuntime::Toolkit::AuthenticationController::currentChallengeUrl
-  \brief Url of current challenge.
+  \brief The Url of the current challenge.
  */
 
 /*!
