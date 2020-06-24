@@ -29,7 +29,7 @@ import QtQuick.Layouts 1.12
  text entry.
  The point may be highlighted by zooming into that point, or by highlighting
  the point on the GeoView.
- A list of different coordinate formats represnenting the same point are
+ A list of different coordinate formats representing the same point are
  available to the user.
  */
 
