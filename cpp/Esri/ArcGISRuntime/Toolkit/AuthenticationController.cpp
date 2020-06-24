@@ -64,7 +64,7 @@ AuthenticationController::AuthenticationController(QObject* parent) :
       }
 
       m_currentChallenge = challenge;
-      emit challengeChanged();
+      emit currentChallengeChanged();
     }, Qt::QueuedConnection
   );
 
@@ -92,7 +92,7 @@ AuthenticationController::~AuthenticationController()
  */
 void AuthenticationController::addClientCertificate(const QUrl& clientCertificate, const QString& password)
 {
-  AuthenticationManager::instance()->addClientCertificate(clientCertificate, password);
+  AuthenticationManager::addClientCertificate(clientCertificate, password);
 }
 
 /*!
@@ -102,7 +102,7 @@ void AuthenticationController::addClientCertificate(const QUrl& clientCertificat
  */
 QStringList AuthenticationController::clientCertificateInfos() const
 {
-  return AuthenticationManager::instance()->clientCertificateInfos();
+  return AuthenticationManager::clientCertificateInfos();
 }
 
 /*!
@@ -299,8 +299,8 @@ void AuthenticationController::cleanup()
 }
 
 /*!
-  \fn void Esri::ArcGISRuntime::Toolkit::AuthenticationController::challengeChanged()
-  \brief Emitted when the challenge changes.
+  \fn void Esri::ArcGISRuntime::Toolkit::AuthenticationController::currentChallengeChanged()
+  \brief Emitted when the reference to the current challenge changes.
  */
 
 /*!

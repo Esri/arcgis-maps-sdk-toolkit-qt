@@ -35,10 +35,10 @@ namespace Toolkit
 class AuthenticationController : public QObject
 {
   Q_OBJECT
-  Q_PROPERTY(QUrl currentChallengeUrl READ currentChallengeUrl NOTIFY challengeChanged)
-  Q_PROPERTY(QString currentAuthenticatingHost READ currentAuthenticatingHost NOTIFY challengeChanged)
-  Q_PROPERTY(int currentChallengeType READ currentChallengeType NOTIFY challengeChanged)
-  Q_PROPERTY(int currentChallengeFailureCount READ currentChallengeFailureCount NOTIFY challengeChanged)
+  Q_PROPERTY(QUrl currentChallengeUrl READ currentChallengeUrl NOTIFY currentChallengeChanged)
+  Q_PROPERTY(QString currentAuthenticatingHost READ currentAuthenticatingHost NOTIFY currentChallengeChanged)
+  Q_PROPERTY(int currentChallengeType READ currentChallengeType NOTIFY currentChallengeChanged)
+  Q_PROPERTY(int currentChallengeFailureCount READ currentChallengeFailureCount NOTIFY currentChallengeChanged)
   Q_PROPERTY(QStringList clientCertificateInfos READ clientCertificateInfos NOTIFY clientCertificateInfosChanged)
 
 public:
@@ -78,7 +78,7 @@ public:
   Q_INVOKABLE void cancel();
 
 signals:
-    void challengeChanged();
+    void currentChallengeChanged();
 
     void clientCertificateInfosChanged();
 
