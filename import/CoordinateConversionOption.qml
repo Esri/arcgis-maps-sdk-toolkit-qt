@@ -86,6 +86,7 @@ QtObject {
     property int garsConversionMode: Enums.GarsConversionModeCenter
 
    /*!
+      \qmlmethod CoordinateConversionOption::prettyPrint(Point point)
       \brief Converts a Point to a string based on the properties set in this
       CoordinateConversionOption
       
@@ -116,6 +117,7 @@ QtObject {
     }
 
    /*!
+      \qmlmethod void CoordinateConversionOption::pointFromString(Point point, SpatialReference spatialReference)
       \brief Given a string called point, converts it to a Point using the
       current formatting options applied.
       

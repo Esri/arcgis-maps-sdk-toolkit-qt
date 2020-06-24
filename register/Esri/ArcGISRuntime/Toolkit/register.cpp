@@ -16,6 +16,7 @@
 #include "register.h"
 
 // Toolkit includes
+#include "AuthenticationController.h"
 #include "CoordinateConversionController.h"
 #include "CoordinateConversionOption.h"
 #include "CoordinateConversionResult.h"
@@ -120,6 +121,7 @@ void addFileSelector(QQmlEngine* engine)
 void registerComponents(QQmlEngine* engine)
 {
   addFileSelector(engine);
+  registerComponent<AuthenticationController>();
   registerComponent<CoordinateConversionController>();
   registerComponent<CoordinateConversionOption>();
   registerComponent<CoordinateConversionResult>();

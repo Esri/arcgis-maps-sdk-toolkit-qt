@@ -20,17 +20,17 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 
 /*!
- * \qmltype CoordinateConversion
- * \inqmlmodule Esri.ArcGISRuntime.Toolkit
- * \since Esri.ArcGISRutime 100.8
- * \brief The user interface for the coordinate conversion tool.
- *
- * This tool allows a user to select a point on the map or to enter a point by
- * text entry.
- * The point may be highlighted by zooming into that point, or by highlighting
- * the point on the GeoView.
- * A list of different coordinate formats represnenting the same point are
- * available to the user.
+ \qmltype CoordinateConversion
+ \inqmlmodule Esri.ArcGISRuntime.Toolkit
+ \since Esri.ArcGISRutime 100.8
+ \brief The user interface for the coordinate conversion tool.
+
+ This tool allows a user to select a point on the map or to enter a point by
+ text entry.
+ The point may be highlighted by zooming into that point, or by highlighting
+ the point on the GeoView.
+ A list of different coordinate formats representing the same point are
+ available to the user.
  */
 
 Control {

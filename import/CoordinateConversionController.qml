@@ -145,13 +145,14 @@ QtObject {
     }
 
     /*!
+      \qmlmethod CoordinateConversionController::setCurrentPoint(Point point, CoordinateConversionOption option)
       \brief Set the current point to point. This updates all textual
       representations owned by this controller.
 
       \list
       \li \a point new point to convert.
       \li \a option Option dictating hints on how to convert the string to a
-      point.
+          point.
       \endlist
     */
     function setCurrentPoint(point, option = undefined) {
@@ -172,6 +173,7 @@ QtObject {
     }
 
     /*!
+      \qmlmethod CoordinateConversionController::addNewCoordinateResultForOption(CoordinateConversionOption option)
       \brief Given option, generates a new result.
       
       A new CoordianteConversionResult is added to the list-model returned by
@@ -192,6 +194,7 @@ QtObject {
     }
 
     /*!
+      \qmlmethod CoordinateConversionController::removeCoordinateResultAtIndex(int index)
       \brief Removes a given CoordinateConversionResult at index.
       
       This function is for deleting results in the list-model returned by
