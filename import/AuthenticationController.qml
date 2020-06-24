@@ -24,7 +24,7 @@ import Esri.ArcGISRuntime 100.8
   \brief In MVC architecture, this is the controller for the corresponding
   AuthenticationView.  
   
-  This controller is a thin wrapper around a AuthenticationManager. As
+  This controller is a thin wrapper around the AuthenticationManager. As
   AuthenticationManager challenges are queued, the controller holds onto a 
   "current" challenge, which is the challenge the user is presented with, which
   will be discarded once the user chooses an action to perform on the challenge.
