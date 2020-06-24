@@ -52,7 +52,7 @@ Item {
 
     /*!
       \qmlproperty AuthenticationController controller.
-      \brief the Controller handles references to challenge semitted by the 
+      \brief the Controller handles references to challenges emitted by the 
       \c AuthenticationManager.
     */
     property var controller: AuthenticationController { }
