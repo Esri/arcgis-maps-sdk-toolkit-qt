@@ -295,7 +295,7 @@ void AuthenticationController::cleanup()
     m_currentChallenge->deleteLater();
 
   m_currentChallenge = nullptr;
-  emit challengeChanged();
+  emit currentChallengeChanged();
 }
 
 /*!
