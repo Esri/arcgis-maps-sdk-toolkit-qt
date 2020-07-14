@@ -182,7 +182,6 @@ Control {
             snapMode: RangeSlider.SnapAlways
             from: 0
             to: controller.numberOfSteps
-            height: background.height
             first {
                 handle: Rectangle {
                     x: slider.leftPadding + slider.first.visualPosition * (slider.availableWidth) - width /2
@@ -227,7 +226,10 @@ Control {
             }
             background:  Item {
                 id: sliderBackground
-                anchors { left: parent.left; right: parent.right }
+                anchors {
+                    left: parent.left;
+                    right: parent.right
+                }
                 height: childrenRect.height
                 y: slider.topPadding
                 Rectangle {
@@ -295,7 +297,7 @@ Control {
 
                             property real defaultLabelX: {
                                 const minX = -tickHold.x;
-                                const maxX = -tickHold.x + sliderBackground.width - defaultLabelWidth;
+                                const maxX = -tickHold.x + sliderBackground.width - width;
                                 return Math.min(maxX, Math.max(-defaultLabelWidth/2, minX));
                             }
 
@@ -338,16 +340,26 @@ Control {
                             Connections {
                                 target: slider.first
                                 onValueChanged: {
-                                    if (index === slider.first.value) {
-                                        repeater.firstHandleLabel = tickLabel;
+                                    if (index === slider.first.value &&
+                                        labelMode === TimeSlider.LabelMode.Thumbs) {
+                                        if (index > 0 && index < repeater.marks) {
+                                            repeater.firstHandleLabel = tickLabel;
+                                        } else {
+                                            repeater.firstHandleLabel = null;
+                                        }
                                     }
                                 }
                             }
                             Connections {
                                 target: slider.second
                                 onValueChanged: {
-                                    if (index === slider.second.value) {
-                                        repeater.secondHandleLabel = tickLabel;
+                                    if (index === slider.second.value &&
+                                        labelMode === TimeSlider.LabelMode.Thumbs) {
+                                        if (index > 0 && index < repeater.marks) {
+                                            repeater.secondHandleLabel = tickLabel;
+                                        } else {
+                                            repeater.secondHandleLabel = null;
+                                        }
                                     }
                                 }
                             }
@@ -415,7 +427,6 @@ Control {
             Layout.minimumHeight: sliderBackground.height
         }
     }
-
 
     Binding {
         target: controller
