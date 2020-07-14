@@ -22,6 +22,7 @@
 #include "CoordinateConversionResult.h"
 #include "NorthArrowController.h"
 #include "PopupViewController.h"
+#include "TimeSliderController.h"
 
 // ArcGIS includes
 #include <Point.h>
@@ -127,6 +128,7 @@ void registerComponents(QQmlEngine* engine)
   registerComponent<CoordinateConversionResult>();
   registerComponent<NorthArrowController>();
   registerComponent<PopupViewController>();
+  registerComponent<TimeSliderController>();
 
   qRegisterMetaType<Point>("Esri::ArcGISRuntime::Point");
 }
