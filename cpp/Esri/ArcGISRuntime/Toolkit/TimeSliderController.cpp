@@ -34,6 +34,18 @@ namespace Toolkit
 
 namespace
 {
+  /*
+   \internal
+   \brief Calls `std::accumlate` on a \c LayerListModel, but filters out
+          layers in the list-model that are not TimeAware.
+          The type \c T must be default-constructible.
+   \list
+   \li \a listModel ListModel to accummalate.
+   \li \a f Accumulation function that takes the current \c T and a \c TimeAware 
+       object.
+   \endlist 
+   Returns the accumulation of \c T.
+   */
   template <class T, class BinaryOperation>
   T accumulateTimeAware(LayerListModel* listModel, BinaryOperation f)
   {
@@ -60,6 +72,14 @@ namespace
     );
   }
 
+  /*
+   \internal
+   \brief Converts a \c TimeValue to a double in milliseconds.
+   \list
+   \li \a timeValue \c TimeValue to convert.
+   \endlist
+   Returns TimeValue as double in milliseconds.
+   */
   double toMilliseconds(const TimeValue& timeValue)
   {
     constexpr double millisecondsPerDay = 86400000.0;
@@ -98,6 +118,15 @@ namespace
     }
   }
 
+  /*
+   \internal
+   \brief Compares two \c TimeValue objects and returns the smallest one.
+   \list
+     \li \a a First \c TimeValue.
+     \li \a b Second \c TimeValue.
+   \endlist
+   Returns smallest \c TimeValue.
+   */
   TimeValue minTimeValue(const TimeValue& a, const TimeValue& b)
   {
     if (a.unit() == b.unit())
@@ -107,11 +136,34 @@ namespace
   }
 }
 
+/*!
+  \class Esri::ArcGISRuntime::Toolkit::TimeSliderController
+  \inmodule ArcGISRuntimeToolkit
+  \brief In MVC architecture, this is the controller for the corresponding
+  \c TimeSlider.
+  
+  This controller calculates interval steps and the range of the full extent for
+  the \c TimeSlider. This is based on the combined extents of time-aware layers 
+  in the given \c GeoView.
+
+  The time-extent of the GeoView itself can be manipulated using steps with
+  calls to \l TimeSliderController::setSteps. 
+ */
+
+/*!
+ \brief Constructor
+ \list
+   \li \a parent Parent owning \c QObject.
+ \endlist
+ */
 TimeSliderController::TimeSliderController(QObject* parent) :
   QObject(parent)
 {
 }
 
+/*!
+  \brief Destructor.
+ */
 TimeSliderController::~TimeSliderController()
 {
 }
@@ -163,6 +215,11 @@ void TimeSliderController::setGeoView(QObject* geoView)
   initializeTimeProperties();
 }
 
+/*!
+ \internal
+ \brief Disconnects from all current layers being tracked via Qt-connections for
+ updates.
+ */
 void TimeSliderController::disconnectAllLayers()
 {
   if (!m_operationalLayers)
@@ -173,6 +230,12 @@ void TimeSliderController::disconnectAllLayers()
     disconnect(layer, nullptr, this, nullptr);
 }
 
+/*!
+ \internal
+ \brief Overload that extracts the operational layers from the current 
+ \c GeoView and calls our initialization calls on the resultant 
+ \c LayerListModel.
+ */
 void TimeSliderController::initializeTimeProperties()
 {
   LayerListModel* model = nullptr;
@@ -190,6 +253,15 @@ void TimeSliderController::initializeTimeProperties()
   initializeTimeProperties(model);
 }
 
+/*!
+ \internal
+ \brief Resets internally what is being tracked. Begins tracking the layers in
+ \a opLayers instead, which are now used for calculating \l fullTimeExtent and
+ \l timeInterval.
+ \list
+   \li \a opLayers collection of layers to now track. Can be null.
+ \endlist
+ */
 void TimeSliderController::initializeTimeProperties(LayerListModel* opLayers)
 {
   disconnectAllLayers();
@@ -218,6 +290,11 @@ void TimeSliderController::initializeTimeProperties(LayerListModel* opLayers)
   emit stepsChanged();
 }
 
+/*!
+ \brief Calculates the union of all extents of all \c TimeAware layers in the
+ current \c GeoView.
+ Returns a \c TimeExtent covering the combined range of all extents.
+ */
 TimeExtent TimeSliderController::fullTimeExtent() const
 {
   return accumulateTimeAware<TimeExtent>(
@@ -236,6 +313,12 @@ TimeExtent TimeSliderController::fullTimeExtent() const
   );
 }
 
+/*!
+ \brief Calculates the time-interval as a \c TimeValue, which is the smallest
+  possible interval of all \c TimeAware layers in the current \c GeoView.
+ 
+ Returns a \c TimeValue which is the minimum time-interval of all intervals.
+ */
 TimeValue TimeSliderController::timeInterval() const
 {
   return accumulateTimeAware<TimeValue>(
@@ -253,6 +336,11 @@ TimeValue TimeSliderController::timeInterval() const
   );
 }
 
+/*!
+ \brief Calculates the number of steps the TimeSlider should display based on 
+ \l fullTimeExtent dividied by \l timeInterval.
+ Returns number of steps for TimeSlider.
+ */
 int TimeSliderController::numberOfSteps() const
 {
   const auto extent = fullTimeExtent();
@@ -269,21 +357,49 @@ int TimeSliderController::numberOfSteps() const
   return ceil(range / intervalMS) ;
 }
 
+/*!
+ \brief Returns the current start step.
+ */
 int TimeSliderController::startStep() const
 {
   return std::get<0>(m_steps);
 }
 
+/*!
+ \brief Returns the current end step.
+ */
 int TimeSliderController::endStep() const
 {
   return std::get<1>(m_steps);
 }
 
+/*!
+ \brief Sets the current steps.
+
+ Setting steps changes the current time-extent of the \c GeoView to a
+ \c TimeExtent range calculated by the current steps using \l timeForStep.
+ 
+ \list
+ \li \a s start-step to set. 
+ \li \a e end-step to set.
+ \endlist
+ */
 void TimeSliderController::setSteps(int s, int e)
 {
   setSteps(std::make_pair(s, e));
 }
 
+
+/*!
+ \brief Sets the current steps.
+
+ Setting steps changes the current time-extent of the \c GeoView to a
+ \c TimeExtent range calculated by the current steps using \l timeForStep.
+ 
+ \list
+ \li \a steps Pair of start end steps.
+ \endlist
+ */
 void TimeSliderController::setSteps(std::pair<int, int> steps)
 {
   if (steps == m_steps)
@@ -300,6 +416,19 @@ void TimeSliderController::setSteps(std::pair<int, int> steps)
   emit stepsChanged();
 }
 
+/*!
+ \brief Calculates a \c QDateTIme from a step.
+
+ Given \a step and \l numberOfSteps we can calculate the date-time for
+ an arbitrary step \a step interpolated between the start and end times of 
+ \l fullTimeExtent.
+ 
+ \list
+ \li \a step Step to calculate a time for.
+ \endlist
+
+ Returns a \c QDateTime that is the time calculated for \a step.
+ */
 QDateTime TimeSliderController::timeForStep(int step) const
 {
   const auto extent = fullTimeExtent();
@@ -314,6 +443,17 @@ QDateTime TimeSliderController::timeForStep(int step) const
   return extent.startTime().addMSecs(step * intervalMS);
 }
 
+/*!
+ \internal
+ \brief Calculates the start and end steps derived from the \c GeoView object's
+ current \c TimeExtent.
+
+ When \c GeoView has an empty extent, this is equivalent to "show everything"
+ and the steps returned are \c{[0, numberOfSteps()]} (inclusive).
+
+ Returns a pair of steps derived from the current \c GeoView time-extent.
+ \sa TimeSliderController::timeForStep
+ */
 std::pair<int, int> TimeSliderController::stepsForGeoViewExtent() const
 {
   auto geoView = qobject_cast<GeoView*>(m_geoView);
@@ -345,6 +485,37 @@ std::pair<int, int> TimeSliderController::stepsForGeoViewExtent() const
 
   return std::make_pair(s, e);
 }
+
+/*!
+  \fn void Esri::ArcGISRuntime::Toolkit::TimeSliderController::geoViewChanged()
+  \brief Emitted when the geoView changes.
+ */
+
+/*!
+  \fn void Esri::ArcGISRuntime::Toolkit::TimeSliderController::extentsChanged()
+  \brief Emitted when the extents of any \c TimeAware layer changes.
+ */
+
+/*!
+  \fn void Esri::ArcGISRuntime::Toolkit::TimeSliderController::stepsChanged()
+  \brief Emitted when either the start or end step changes.
+ */
+
+/*!
+  \property Esri::ArcGISRuntime::Toolkit::TimeSliderController::geoView
+ */
+
+/*!
+  \property Esri::ArcGISRuntime::Toolkit::TimeSliderController::numberOfSteps
+ */
+
+/*!
+  \property Esri::ArcGISRuntime::Toolkit::TimeSliderController::startStep
+ */
+
+/*!
+  \property Esri::ArcGISRuntime::Toolkit::TimeSliderController::endStep
+ */
 
 } // Toolkit
 } // ArcGISRuntime

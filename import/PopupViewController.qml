@@ -21,7 +21,7 @@ import QtQml 2.12
    \inqmlmodule Esri.ArcGISRuntime.Toolkit
    \since Esri.ArcGISRuntime 100.8
    \brief In MVC architecture, this is the controller for the corresponding
-   PopupVIew.
+   PopupView.
    
    This controller is a thin wrapper around a PopupManager. It re-exposes some
    PopupManager properties, including the number of total rows to render as a 
