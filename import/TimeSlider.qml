@@ -185,8 +185,8 @@ Control {
             first {
                 handle: Rectangle {
                     x: slider.leftPadding + slider.first.visualPosition * (slider.availableWidth) - width /2
-                    y: slider.topPadding - width/2
-                    implicitWidth: enabled ? 26 : 4
+                    y: slider.topPadding - height/2
+                    implicitWidth: enabled ? 26 : 15
                     implicitHeight: 26
                     radius: enabled ? 13 : 1
                     color: slider.first.pressed && enabled ? slider.palette.midlight
@@ -206,8 +206,8 @@ Control {
             second {
                 handle: Rectangle {
                     x: slider.leftPadding + slider.second.visualPosition * (slider.availableWidth) - width/2
-                    y: slider.topPadding - width/2
-                    implicitWidth: enabled ? 26 : 4
+                    y: slider.topPadding - height/2
+                    implicitWidth: enabled ? 26 : 15
                     implicitHeight: 26
                     radius: enabled ? 13 : 1
                     color: slider.second.pressed && enabled ? slider.palette.midlight
@@ -263,6 +263,7 @@ Control {
                         x: (slider.availableWidth  - width)
                            * (index / repeater.marks) + slider.leftPadding
                         width: tickMark.width
+                        height: childrenRect.height
                         Rectangle  {
                             id: tickMark
                             anchors.top: parent.top
@@ -276,7 +277,6 @@ Control {
                             anchors {
                                 top: tickMark.bottom
                                 topMargin: index % labelSliderTickInterval === 0 ? 0 : 10
-                                bottom: parent.bottom
                             }
 
                             property string defaultLabelText:
@@ -284,33 +284,41 @@ Control {
                                     controller.timeForStep(index),
                                     timeStepIntervalLabelFormat);
 
-                            property string combinedLabelText: `${
+                            property int tickIndex: index;
+
+                            property string combinedLabelText: repeater.secondHandleLabel ? `${
                                 Qt.formatDateTime(
-                                    controller.timeForStep(index),
+                                    controller.timeForStep(tickIndex),
                                     timeStepIntervalLabelFormat)} - ${
                                 Qt.formatDateTime(
-                                    controller.timeForStep(index + 1),
-                                    timeStepIntervalLabelFormat)}`;
+                                    controller.timeForStep(repeater.secondHandleLabel.tickIndex),
+                                    timeStepIntervalLabelFormat)}` : "";
 
                             property real defaultLabelWidth: 
                                 fontMetric.boundingRect(defaultLabelText).width;
 
                             property real defaultLabelX: {
                                 const minX = -tickHold.x;
+                                const maxX = -tickHold.x + sliderBackground.width - defaultLabelWidth;
+                                return Math.min(maxX, Math.max(-defaultLabelWidth/2, minX));
+                            }
+
+                            x: {
+                                const minX = -tickHold.x;
                                 const maxX = -tickHold.x + sliderBackground.width - width;
                                 return Math.min(maxX, Math.max(-defaultLabelWidth/2, minX));
                             }
 
-                            x: defaultLabelX
-
                             text: defaultLabelText;
 
                             palette: slider.palette
+                            font: slider.font
 
                             visible: index > 0 &&
                                      index < repeater.marks &&
                                      index % labelSliderTickInterval === 0 &&
                                      labelMode === TimeSlider.LabelMode.Ticks 
+
 
                             states: [
                                 State {
@@ -332,34 +340,39 @@ Control {
                                 }
                             ]
 
-                            FontMetrics {
-                                id: fontMetric
-                                font: tickLabel.font
-                            }
-
                             Connections {
                                 target: slider.first
                                 onValueChanged: {
-                                    if (index === slider.first.value &&
-                                        labelMode === TimeSlider.LabelMode.Thumbs) {
-                                        if (index > 0 && index < repeater.marks) {
-                                            repeater.firstHandleLabel = tickLabel;
-                                        } else {
-                                            repeater.firstHandleLabel = null;
-                                        }
+                                    if (labelMode !== TimeSlider.LabelMode.Thumbs) {
+                                        return;
+                                    }
+
+                                    if (index !== slider.first.value) {
+                                        return;
+                                    }
+
+                                    if (index > 0 && index < repeater.marks) {
+                                        repeater.firstHandleLabel = tickLabel;
+                                    } else {
+                                        repeater.firstHandleLabel = null;
                                     }
                                 }
                             }
                             Connections {
                                 target: slider.second
                                 onValueChanged: {
-                                    if (index === slider.second.value &&
-                                        labelMode === TimeSlider.LabelMode.Thumbs) {
-                                        if (index > 0 && index < repeater.marks) {
-                                            repeater.secondHandleLabel = tickLabel;
-                                        } else {
-                                            repeater.secondHandleLabel = null;
-                                        }
+                                    if (labelMode !== TimeSlider.LabelMode.Thumbs) {
+                                        return;
+                                    }
+
+                                    if (index !== slider.second.value) {
+                                        return;
+                                    }
+
+                                    if (index > 0 && index < repeater.marks) {
+                                        repeater.secondHandleLabel = tickLabel;
+                                    } else {
+                                        repeater.secondHandleLabel = null;
                                     }
                                 }
                             }
@@ -383,11 +396,10 @@ Control {
                     onFirstHandleLabelChanged: handlesChanged()
                     onSecondHandleLabelChanged: handlesChanged()
                     function handlesChanged() {
-                        if (firstHandleLabel &&
-                            firstHandleLabel == secondHandleLabel) {
+                        if (firstHandleLabel && firstHandleLabel == secondHandleLabel) {
                             firstHandleLabel.state = "singleVisible";
-                        } else if (firstHandleLabel && secondHandleLabel && 
-                            horizontalOverlaps(firstHandleLabel, secondHandleLabel)) {
+                        } else if (firstHandleLabel && secondHandleLabel 
+                                   && horizontalOverlaps(firstHandleLabel, secondHandleLabel)) {
                             firstHandleLabel.state = "combinedVisible";
                             secondHandleLabel.state = "";
                         } else {
@@ -399,13 +411,14 @@ Control {
                         }
                     }
                     function horizontalOverlaps(item1, item2) {
-                        const r1 = item1.mapToItem(
-                            this, item1.defaultLabelX, item1.y,
-                            item1.defaultLabelWidth, item1.height);
-                        const r2 = item2.mapToItem(
-                            this, item2.defaultLabelX, item2.y,
-                            item2.defaultLabelWidth, item2.height);
-
+                        const r1 = Qt.rect(
+                            item1.parent.x + item1.defaultLabelX, item1.y,
+                            item1.defaultLabelWidth, item1.height
+                        );
+                        const r2 = Qt.rect(
+                            item2.parent.x + item2.defaultLabelX, item2.y,
+                            item2.defaultLabelWidth, item2.height
+                        );
                         if (r1.right < r2.left) {
                             return false;
                         }
@@ -414,6 +427,10 @@ Control {
                         }
                         return true;
                     }
+                }
+                FontMetrics {
+                    id: fontMetric
+                        font: slider.font
                 }
             }
             Connections {
