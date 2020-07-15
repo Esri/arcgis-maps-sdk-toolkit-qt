@@ -50,7 +50,7 @@ ApplicationWindow {
         // Connect to the locationChanged signal, to update the QML messages
         Connections {
             target: arcGISArView.locationDataSource
-            onLocationChanged: {
+            function onLocationChanged(location) {
                 if (!tabletopMode)
                     waitingForInitialization = false;
             }

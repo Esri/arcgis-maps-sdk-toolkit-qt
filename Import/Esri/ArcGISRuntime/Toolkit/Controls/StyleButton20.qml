@@ -95,12 +95,12 @@ Button {
 
             Connections {
                 target: control
-                onPressedChanged: {
+                function onPressedChanged() {
                     if (control.pressed)
                         fader.start();
                 }
 
-                onHoveredChanged: {
+                function onHoveredChanged() {
                     if (control.hovered)
                         fader.stop();
                     else

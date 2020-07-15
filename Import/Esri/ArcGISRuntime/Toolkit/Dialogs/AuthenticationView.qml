@@ -105,7 +105,7 @@ Item {
     Connections {
         target: authenticationManager
 
-        onAuthenticationChallenge: {
+        function onAuthenticationChallenge(challenge) {
             authChallenge = challenge;
 
             if (Number(challenge.authenticationChallengeType) === 1) {
