@@ -31,6 +31,29 @@ import Esri.ArcGISRuntime 100.9
 
   The time-extent of the GeoView itself can be manipulated using steps with
   calls to \l setSteps. 
+
+  Here is an example of how to use the TimeSlider from QML.
+    \code
+        import "qrc:///Esri/ArcGISRuntime/Toolkit" as Toolkit
+        // add a mapView component (the geoView)
+        MapView {
+            anchors.fill: parent
+            id: mapView
+            Map {
+                ...
+            }
+            // declare a TimeSlider and bind it to the geoView
+            Toolkit.TimeSlider {
+                id: timeSlider
+                anchors {
+                    left: mapView.left
+                    right: mapView.right
+                    bottom: mapView.attributionTop
+                }
+                geoView: mapView
+            }
+        }
+    \endcode
  */
 QtObject {
     id: timeSliderController
@@ -283,9 +306,7 @@ QtObject {
             }
 
             let layers = [];
-            for (let i = 0; i < layerList.count; i++) {
-                layers.push(layerList.get(i));
-            }
+            layerList.forEach(opLayer => layers.push(opLayer));
 
             return layers.reduce((val, layer) => {
                  if (!layer) {
@@ -311,28 +332,39 @@ QtObject {
           \brief Converts a TimeValue to the number of milliseconds elapsed.
          */
         function toMilliseconds(timeValue) {
+
+            const millisecondsPerDay = 86400000.0;
+            const daysPerCentury = 36500.0;
+            const daysPerDecade = 3650.0;
+            const daysPerYear = 365.0;
+            const mothsPerYear = 12;
+            const millisecondsPerHour = 3600000.0;
+            const millisecondsPerMinute = 60000.0;
+            const millisecondsPerSecond = 1000.0;
+            const millisecondsPerWeek = 604800000;
+
             switch (timeValue.unit)
             {
-            case Enums.TimeUnitCenturies:
-                return timeValue.duration * 86400000 * 36500.0;
-            case Enums.TimeUnitDecades:
-                return timeValue.duration * 86400000 * 3650.0;
-            case Enums.TimeUnitYears:
-                return timeValue.duration * 86400000 * 365.0;
-            case Enums.TimeUnitMonths:
-                return timeValue.duration * (365.0 / 12) * 86400000;
-            case Enums.TimeUnitWeeks:
-                return timeValue.duration * 604800000;
-            case Enums.TimeUnitDays:
-                return timeValue.duration * 86400000;
-            case Enums.TimeUnitHours:
-                return timeValue.duration * 3600000;
-            case Enums.TimeUnitMinutes:
-                return timeValue.duration * 60000;
-            case Enums.TimeUnitSeconds:
-                return timeValue.duration * 1000;
             case Enums.TimeUnitMilliseconds:
                 return timeValue.duration;
+            case Enums.TimeUnitCenturies:
+                return timeValue.duration * millisecondsPerDay * daysPerCentury;
+            case Enums.TimeUnitDecades:
+                return timeValue.duration * millisecondsPerDay * daysPerDecade;
+            case Enums.TimeUnitYears:
+                return timeValue.duration * millisecondsPerDay * daysPerYear;
+            case Enums.TimeUnitMonths:
+                return timeValue.duration * (daysPerYear / mothsPerYear) * millisecondsPerDay;
+            case Enums.TimeUnitWeeks:
+                return timeValue.duration * millisecondsPerWeek;
+            case Enums.TimeUnitDays:
+                return timeValue.duration * millisecondsPerDay;
+            case Enums.TimeUnitHours:
+                return timeValue.duration * millisecondsPerHour;
+            case Enums.TimeUnitMinutes:
+                return timeValue.duration * millisecondsPerMinute;
+            case Enums.TimeUnitSeconds:
+                return timeValue.duration * millisecondsPerSecond;
             default:
                 return timeValue.duration;
             }

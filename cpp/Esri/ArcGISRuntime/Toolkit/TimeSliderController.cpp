@@ -56,18 +56,18 @@ namespace
       listModel->cbegin(),
       listModel->cend(),
       T{},
-      [f{std::move(f)}](const T& val, Layer* o)
+      [f{std::move(f)}](const T& val, Layer* layer)
       {
-        if (!o || o->loadStatus() != LoadStatus::Loaded)
+        if (!layer || layer->loadStatus() != LoadStatus::Loaded)
           return val;
 
-        auto tLayer = dynamic_cast<TimeAware*>(o);
-        if (!tLayer || !tLayer->isTimeFilteringEnabled())
+        auto timeAware = dynamic_cast<TimeAware*>(layer);
+        if (!timeAware || !timeAware->isTimeFilteringEnabled())
           return val;
 
         // TODO test for visible here.
 
-        return f(val, tLayer);
+        return f(val, timeAware);
       }
     );
   }
@@ -90,6 +90,7 @@ namespace
     constexpr double millisecondsPerHour = 3600000.0;
     constexpr double millisecondsPerMinute = 60000.0;
     constexpr double millisecondsPerSecond = 1000.0;
+    constexpr double millisecondsPerWeek = 604800000;
 
     switch (timeValue.unit())
     {
@@ -104,7 +105,7 @@ namespace
     case TimeUnit::Months:
         return timeValue.duration() * (daysPerYear / mothsPerYear) * millisecondsPerDay;
     case TimeUnit::Weeks:
-        return timeValue.duration() * 604800000;
+        return timeValue.duration() * millisecondsPerWeek;
     case TimeUnit::Days:
         return timeValue.duration() * millisecondsPerDay;
     case TimeUnit::Hours:
@@ -196,8 +197,11 @@ void TimeSliderController::setGeoView(QObject* geoView)
 
   m_geoView = geoView;
 
-  if (!m_geoView)
+  if (!m_geoView) 
+  {
+    emit geoViewChanged();
     return;
+  }
 
   if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView.data()))
   {

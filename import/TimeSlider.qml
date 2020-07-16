@@ -28,28 +28,6 @@ import QtQuick.Layouts 1.12
     (\c MapView or \c SceneView) to allow filtering on temporal data.
     The time extents of all layers in the map will be used to set up the
     slider with the full temporal range and the current time extent.
-    Here is an example of how to use this control from QML.
-    \code
-        import "qrc:///Esri/ArcGISRuntime/Toolkit" as Toolkit
-        // add a mapView component (the geoView)
-        MapView {
-            anchors.fill: parent
-            id: mapView
-            Map {
-                ...
-            }
-            // declare a TimeSlider and bind it to the geoView
-            Toolkit.TimeSlider {
-                id: timeSlider
-                anchors {
-                    left: mapView.left
-                    right: mapView.right
-                    bottom: mapView.attributionTop
-                }
-                geoView: mapView
-            }
-        }
-    \endcode
 */
 Control {
     id: timeSlider
@@ -98,6 +76,8 @@ Control {
       \qmlproperty TimeSliderController controller
       \brief The controller handles calculating steps and setting extents on the
        GeoView.
+
+       A default TImeSliderController is provided.
     */
     property var controller: TimeSliderController { }
 
@@ -166,6 +146,21 @@ Control {
     */
     property alias playbackInterval : playAnimation.interval
 
+    /*!
+     \qmlproperty icon The icon for the step-back button.
+     */
+    property alias stepBackIcon: stepBackButton.icon
+
+    /*!
+     \qmlproperty icon The icon for the play button.
+     */
+    property alias playIcon: playButton.icon
+
+    /*!
+     \qmlproperty icon The icon for the step-forward button.
+     */
+    property alias stepForwardIcon: stepForwardButton.icon
+
     background: Rectangle { }
 
     contentItem: GridLayout {
@@ -189,6 +184,7 @@ Control {
         }
 
         Button {
+            id: stepBackButton
             icon.source: "images/step_back.png"
             enabled: !startTimePinned || !endTimePinned
             palette: timeSlider.palette
@@ -198,6 +194,7 @@ Control {
         }
 
         Button {
+            id: playButton
             icon.source: checked ? "images/pause.png"
                                  : "images/play.png"
             enabled: !startTimePinned || !endTimePinned
@@ -215,6 +212,7 @@ Control {
         }
 
         Button {
+            id: stepForwardButton
             icon.source: "images/step.png"
             enabled: !startTimePinned || !endTimePinned
             palette: timeSlider.palette
@@ -255,10 +253,11 @@ Control {
                 }
                 onValueChanged: {
                     if (slider.first.pressed) {
-                        if (slider.first.handle.enabled)
+                        if (slider.first.handle.enabled) {
                             controller.setSteps(first.value, controller.endStep);
-                        else // Reset
+                        } else { // Reset
                             slider.first.value = controller.startStep;
+                        }
                     }
                 }
             }
@@ -276,10 +275,11 @@ Control {
                 }
                 onValueChanged: {
                     if (slider.second.pressed) {
-                        if (slider.second.handle.enabled)
+                        if (slider.second.handle.enabled) {
                             controller.setSteps(controller.startStep, second.value);
-                        else // Reset
+                        } else { // Reset
                             slider.second.value = controller.endStep;
+                        }
                     }
                 }
             }
@@ -476,11 +476,13 @@ Control {
                             firstHandleLabel.state = "combinedVisible";
                             secondHandleLabel.state = "";
                         } else {
-                            if (firstHandleLabel)
+                            if (firstHandleLabel) {
                                 firstHandleLabel.state = "singleVisible";
+                            }
 
-                            if (secondHandleLabel)
+                            if (secondHandleLabel) {
                                 secondHandleLabel.state = "singleVisible";
+                            }
                         }
                     }
                     function horizontalOverlaps(item1, item2) {
