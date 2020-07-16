@@ -18,14 +18,59 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 
+/*!
+    \qmltype TimeSlider
+    \inqmlmodule Esri.ArcGISRuntime.Toolkit
+    \since Esri.ArcGISRutime 100.9
+    \brief The slider provides a user interface for manually setting or animating
+    changes to the current time extent of the \c GeoView.
+    A time slider can be bound to a geoView
+    (\c MapView or \c SceneView) to allow filtering on temporal data.
+    The time extents of all layers in the map will be used to set up the
+    slider with the full temporal range and the current time extent.
+    Here is an example of how to use this control from QML.
+    \code
+        import "qrc:///Esri/ArcGISRuntime/Toolkit" as Toolkit
+        // add a mapView component (the geoView)
+        MapView {
+            anchors.fill: parent
+            id: mapView
+            Map {
+                ...
+            }
+            // declare a TimeSlider and bind it to the geoView
+            Toolkit.TimeSlider {
+                id: timeSlider
+                anchors {
+                    left: mapView.left
+                    right: mapView.right
+                    bottom: mapView.attributionTop
+                }
+                geoView: mapView
+            }
+        }
+    \endcode
+*/
 Control {
     id: timeSlider
 
+    /*!
+      \brief Options for Slider label styling.
+
+      Valid options are:
+
+      \value LabelMode.Node No labels are applied
+      \value LabelMode.Thumbs Labels are applied to the slider thumbs.
+      \value LabelMode.Ticks Labels are applied to the slider tick marks.
+
+      The default is \c LabelMode.Thumbs.
+      */
     enum LabelMode { None, Thumbs, Ticks }
 
     /*!
       \qmlproperty enum labelMode
-      \brief How to apply labels to the Slider.
+      \brief Current option for applying labels to the Slider.
+
       Valid options are:
 
       \value LabelMode.Node No labels are applied
@@ -39,7 +84,7 @@ Control {
     /*!
       \qmlproperty int labelSliderTickInterval
       \brief The interval at which slider ticks should be labelled
-      The default is \c 10.
+      The default is \c 20.
      */
     property int labelSliderTickInterval: 20
 
@@ -49,6 +94,11 @@ Control {
      */
     property var geoView;
 
+    /*!
+      \qmlproperty TimeSliderController controller
+      \brief The controller handles calculating steps and setting extents on the
+       GeoView.
+    */
     property var controller: TimeSliderController { }
 
     /*!
@@ -108,6 +158,14 @@ Control {
     */
     property bool playbackReverse: false
 
+    /*!
+    \qmlproperty int playbackInterval
+    \brief The amount of time (in milliseconds) during playback
+    that will elapse before the slider advances to the next time step
+    The default is \c 500.
+    */
+    property alias playbackInterval : playAnimation.interval
+
     background: Rectangle { }
 
     contentItem: GridLayout {
@@ -148,6 +206,7 @@ Control {
             Layout.alignment: Qt.AlignHCenter
             Layout.margins: 5
             Timer {
+                id: playAnimation
                 running: parent.checked
                 repeat: true
                 interval: 500
@@ -232,7 +291,7 @@ Control {
                 }
                 height: childrenRect.height
                 y: slider.topPadding
-                Rectangle {
+                Rectangle { // The bar itself.
                     id: sliderBar
                     anchors {
                         top: parent.top
@@ -243,7 +302,7 @@ Control {
                     height: implicitHeight
                     radius: 2
                     color: slider.palette.midlight
-                    Rectangle {
+                    Rectangle { // The "filled in" portion.
                         x: slider.first.visualPosition * parent.width
                         width: slider.second.visualPosition * parent.width - x
                         height: parent.height
@@ -257,14 +316,14 @@ Control {
                     property var firstHandleLabel: null;
                     property var secondHandleLabel: null;
                     model: marks > 0 ? marks + 1 : 0
-                    Item {
+                    Item { // Holds a tickmark and the label for that mark.
                         id: tickHold
                         anchors.top: sliderBar.bottom
                         x: (slider.availableWidth  - width)
                            * (index / repeater.marks) + slider.leftPadding
                         width: tickMark.width
                         height: childrenRect.height
-                        Rectangle  {
+                        Rectangle  { // Mark itself.
                             id: tickMark
                             anchors.top: parent.top
                             width: 2
@@ -272,7 +331,7 @@ Control {
                                                                           : 10
                             color: slider.palette.midlight
                         }
-                        Label {
+                        Label { // Tickmark label
                             id: tickLabel
                             anchors {
                                 top: tickMark.bottom
@@ -286,6 +345,9 @@ Control {
 
                             property int tickIndex: index;
 
+                            // For the handles case where two handles are close
+                            // together, we combine the info of two handles into
+                            // one variable label.
                             property string combinedLabelText: repeater.secondHandleLabel ? `${
                                 Qt.formatDateTime(
                                     controller.timeForStep(tickIndex),
@@ -314,13 +376,16 @@ Control {
                             palette: slider.palette
                             font: slider.font
 
+                            // By default the label mark is only visible on
+                            // the "long" ticks.
                             visible: index > 0 &&
                                      index < repeater.marks &&
                                      index % labelSliderTickInterval === 0 &&
                                      labelMode === TimeSlider.LabelMode.Ticks 
 
-
                             states: [
+                                // Change the state of this single label to 
+                                // visible if not an endpoint.
                                 State {
                                     name: "singleVisible"
                                     PropertyChanges {
@@ -329,6 +394,9 @@ Control {
                                                  index < repeater.marks
                                     }
                                 },
+                                // Change the state of this label to visible and
+                                // have it represented a "combined" label of 
+                                // this and the second handle position(s).
                                 State {
                                     name: "combinedVisible"
                                     PropertyChanges {
@@ -340,6 +408,8 @@ Control {
                                 }
                             ]
 
+                            // If the sliders change value, test to see if this
+                            // label becomes the handle that is now pointed-to.
                             Connections {
                                 target: slider.first
                                 onValueChanged: {
@@ -376,6 +446,9 @@ Control {
                                     }
                                 }
                             }
+
+                            // If the current handle labels change, reset this
+                            // state of all other labels back to default.
                             Connections {
                                 target: repeater
                                 onFirstHandleLabelChanged: {
@@ -451,6 +524,10 @@ Control {
         value: timeSlider.geoView
     }
 
+    /*!
+     \brief Increments both handles by count. 
+     Count may be negative to decrement the handles.
+     */
     function incrementFrame(count) {
         const s = startTimePinned ? controller.startStep
                                   : controller.startStep + count;
@@ -466,6 +543,14 @@ Control {
         }
     }
 
+    /*!
+     \internal 
+     \brief Increments/decrements both handles by 1 or -1 depending on the
+            value of \l playbackReverse.
+
+            If \l playbackLoop is true (and there are no pinned handles), the 
+            playback loops around to the start of the animation once again.
+     */
     function play() {
         const success = incrementFrame(playbackReverse ? -1 : 1);
         const loops = playbackLoop && !(startTimePinned || endTimePinned);
