@@ -65,7 +65,7 @@ QtObject {
 
     /*!
     \brief The number of steps the TimeSlider should display based on 
-    on the  fullTimeExtent dividied by smallest timeInterval.
+    on the fullTimeExtent dividied by smallest timeInterval.
     */
     readonly property alias numberOfSteps: internal.nSteps;
 
