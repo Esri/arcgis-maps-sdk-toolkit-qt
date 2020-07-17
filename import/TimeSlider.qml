@@ -128,6 +128,7 @@ Control {
       \qmlproperty bool playbackLoop
       \brief Whether to loop when the animation reaches the
       end of the slider.
+      
       The default is \c "true".
     */
     property bool playbackLoop: true
