@@ -24,6 +24,7 @@ import QtQuick.Layouts 1.12
     \since Esri.ArcGISRutime 100.9
     \brief The slider provides a user interface for manually setting or animating
     changes to the current time extent of the \c GeoView.
+    
     A time slider can be bound to a geoView
     (\c MapView or \c SceneView) to allow filtering on temporal data.
     The time extents of all layers in the map or scene will be used to set up the
