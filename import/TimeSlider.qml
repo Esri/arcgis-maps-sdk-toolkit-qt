@@ -51,7 +51,7 @@ Control {
 
       Valid options are:
 
-      \value LabelMode.Node No labels are applied
+      \value LabelMode.Node No labels are applied.
       \value LabelMode.Thumbs Labels are applied to the slider thumbs.
       \value LabelMode.Ticks Labels are applied to the slider tick marks.
 
