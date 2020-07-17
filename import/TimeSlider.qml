@@ -137,6 +137,7 @@ Control {
       \qmlproperty bool playbackReverse
       \brief Whether to reverse the animation direction when
       the animation reaches the end of the slider.
+      
       \note This property has no effect if \l playbackLoop
       is \c false.
       The default is \c false.
