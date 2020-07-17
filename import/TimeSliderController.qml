@@ -273,6 +273,7 @@ QtObject {
         \internal
         \brief Calculates the number of steps the TimeSlider should display 
         based on \l fullTimeExtent dividied by \l timeInterval.
+
         Returns number of steps for TimeSlider.
         */
         function numberOfSteps() {
