@@ -536,6 +536,7 @@ Control {
 
     /*!
      \brief Increments both handles by count. 
+     
      Count may be negative to decrement the handles.
      */
     function incrementFrame(count) {
