@@ -147,7 +147,8 @@ Control {
     /*!
     \qmlproperty int playbackInterval
     \brief The amount of time (in milliseconds) during playback
-    that will elapse before the slider advances to the next time step
+    that will elapse before the slider advances to the next time step.
+    
     The default is \c 500.
     */
     property alias playbackInterval : playAnimation.interval
