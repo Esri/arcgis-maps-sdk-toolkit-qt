@@ -109,7 +109,8 @@ Control {
     /*!
       \qmlproperty bool startTimePinned
       \brief Whether the start time of the time window can
-      be manipulated
+      be manipulated.
+      
       The default is \c false.
     */
     property bool startTimePinned: false
