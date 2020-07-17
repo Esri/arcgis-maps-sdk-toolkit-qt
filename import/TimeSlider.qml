@@ -88,6 +88,7 @@ Control {
       \brief The format for displaying
       \l {https://doc.qt.io/qt-5/qml-qtqml-date.html}{Date} values
       for the full time extent. - for example "yy/MM/dd".
+
       The default is \l {https://doc.qt.io/qt-5/qt.html#DateFormat-enum}
       {\c Qt.DefaultLocaleShortDate}.
       \sa Qt.formatDateTime
