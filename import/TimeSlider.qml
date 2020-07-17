@@ -98,7 +98,7 @@ Control {
     /*!
       \qmlproperty var timeStepIntervalLabelFormat
       \brief The date format for displaying time step intervals, 
-      for example "yy/MM/dd".
+      for example: "yy/MM/dd".
       The default is \l {https://doc.qt.io/qt-5/qt.html#DateFormat-enum}
       {\c Qt.DefaultLocaleShortDate}.
       \sa Qt.formatDateTime
