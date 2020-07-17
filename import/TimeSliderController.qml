@@ -92,7 +92,7 @@ QtObject {
     /*!
     \brief Calculates a \c date from a step.
 
-    Given "step" and \l numberOfSteps we can calculate the date-time for
+    Given "step" and \l numberOfSteps, we can calculate the date-time for
     an arbitrary step interpolated between the start and end times of
     the full time extent.
     
