@@ -62,7 +62,8 @@ Control {
 
     /*!
       \qmlproperty int labelSliderTickInterval
-      \brief The interval at which slider ticks should be labelled
+      \brief The interval at which slider ticks should be labeled.
+      
       The default is \c 20.
      */
     property int labelSliderTickInterval: 20
