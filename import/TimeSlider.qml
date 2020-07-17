@@ -118,7 +118,8 @@ Control {
     /*!
       \qmlproperty bool endTimePinned
       \brief Whether the end time of the time window can
-      be manipulated
+      be manipulated.
+      
       The default is \c false.
     */
     property bool endTimePinned: false
