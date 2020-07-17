@@ -12,6 +12,7 @@
       <file>PopupStackView.qml</file>
       <file>PopupView.qml</file>
       <file>SslHandshakeView.qml</file>
+      <file>TimeSlider.qml</file>
       <file>UserCredentialsView.qml</file>
     </qresource>
     <!-- This section contains all QML API controller components. -->
@@ -22,6 +23,7 @@
       <file>CoordinateConversionResult.qml</file>
       <file>NorthArrowController.qml</file>
       <file>PopupViewController.qml</file>
+      <file>TimeSliderController.qml</file>
     </qresource>
     <!-- This section contains all C++ API controller components overriding the QML equivalents -->
     <qresource prefix="Esri/ArcGISRuntime/Toolkit">
@@ -31,5 +33,6 @@
       <file>+cpp_api/CoordinateConversionResult.qml</file>
       <file>+cpp_api/NorthArrowController.qml</file>
       <file>+cpp_api/PopupViewController.qml</file>
+      <file>+cpp_api/TimeSliderController.qml</file>
     </qresource>
 </RCC>
