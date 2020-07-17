@@ -224,6 +224,7 @@ QtObject {
         \internal
         \brief Calculates the union of all extents of all \c TimeAware layers in
         the current \c GeoView.
+
         Returns a \c TimeExtent covering the combined range of all extents.
         */
         function fullTimeExtent() {
