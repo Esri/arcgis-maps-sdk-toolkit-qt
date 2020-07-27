@@ -11,17 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-include($$PWD/common.pri)
-
-REGISTERPATH = $$PWD/register/Esri/ArcGISRuntime/Toolkit
-
-INCLUDEPATH += $$PWD/register $$REGISTERPATH
-
-HEADERS += $$REGISTERPATH/register.h
-SOURCES += $$REGISTERPATH/register.cpp
-
-RESOURCES += \
-  $$PWD/images/esri_arcgisruntime_toolkit_images.qrc \
-  $$PWD/import/Esri/ArcGISRuntime/Toolkit/esri_arcgisruntime_toolkit_view.qrc
-
-QML_IMPORT_PATH += $$PWD/import
+module Esri.ArcGISRuntime.Toolkit.Controller
+# Controller components
+AuthenticationController 100.9 AuthenticationController.qml
+CoordinateConversionController 100.9 CoordinateConversionController.qml
+CoordinateConversionOption 100.9 CoordinateConversionOption.qml
+CoordinateConversionResult 100.9 CoordinateConversionResult.qml
+NorthArrowController 100.9 NorthArrowController.qml
+PopupViewController 100.9 PopupViewController.qml
+TimeSliderController 100.9 TimeSliderController.qml

@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="Esri/ArcGISRuntime/Toolkit/images">
+    <qresource prefix="/qt-project.org/imports/Esri/ArcGISRuntime/Toolkit/images">
         <file>add_encircled.png</file>
         <file>compass.png</file>
         <file>flash.png</file>

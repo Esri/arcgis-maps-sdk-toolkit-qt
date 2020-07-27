@@ -14,6 +14,8 @@
  *  limitations under the License.
  ******************************************************************************/
 
+import Esri.ArcGISRuntime.Toolkit.Controller 100.9
+
 import QtQuick 2.11
 import QtQuick.Controls 2.11
 import QtWebView 1.1

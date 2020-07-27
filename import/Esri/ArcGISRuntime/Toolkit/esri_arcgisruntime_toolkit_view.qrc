@@ -1,0 +1,19 @@
+<RCC>
+  <!-- This section contains all view components (shared by C++ and QML APIs) -->
+  <qresource prefix="/qt-project.org/imports/Esri/ArcGISRuntime/Toolkit/">
+    <file>AuthenticationView.qml</file>
+    <file>Callout.qml</file>
+    <file>ClientCertificateView.qml</file>
+    <file>CoordinateConversion.qml</file>
+    <file>FlashImage.qml</file>
+    <file>LeaderPosition.js</file>
+    <file>NorthArrow.qml</file>
+    <file>OAuth2View.qml</file>
+    <file>PopupStackView.qml</file>
+    <file>PopupView.qml</file>
+    <file>SslHandshakeView.qml</file>
+    <file>TimeSlider.qml</file>
+    <file>UserCredentialsView.qml</file>
+    <file>qmldir</file>
+  </qresource>
+</RCC>

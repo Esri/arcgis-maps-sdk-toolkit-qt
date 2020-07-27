@@ -1,0 +1,29 @@
+# Copyright 2012-2020 Esri
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+module Esri.ArcGISRuntime.Toolkit
+depends Esri.ArcGISRuntime.Toolkit.Controller 100.9
+# View components
+AuthenticationView 100.9 AuthenticationView.qml
+Callout 100.9 Callout.qml
+ClientCertificateView 100.9 ClientCertificateView.qml
+CoordinateConversion 100.9 CoordinateConversion.qml
+internal FlashImage FlashImage.qml
+LeaderPosition 100.9 LeaderPosition.js
+NorthArrow 100.9 NorthArrow.qml
+OAuth2View 100.9 OAuth2View.qml
+PopupStackView 100.9 PopupStackView.qml
+PopupView 100.9 PopupView.qml
+SslHandshakeView 100.9 SslHandshakeView.qml
+TimeSlider 100.9 TimeSlider.qml
+UserCredentialsView 100.9 UserCredentialsView.qml

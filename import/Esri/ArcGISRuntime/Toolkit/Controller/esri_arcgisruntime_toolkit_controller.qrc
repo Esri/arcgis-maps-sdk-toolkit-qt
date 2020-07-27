@@ -1,0 +1,14 @@
+<RCC>
+    <!-- This section contains all QML API controller components. -->
+    <qresource prefix="/qt-project.org/imports/Esri/ArcGISRuntime/Toolkit/Controller">
+      <file>AuthenticationController.qml</file>
+      <file>CoordinateConversionController.qml</file>
+      <file>CoordinateConversionOption.qml</file>
+      <file>CoordinateConversionResult.qml</file>
+      <file>NorthArrowController.qml</file>
+      <file>PopupViewController.qml</file>
+      <file>TimeSliderController.qml</file>
+      <file>TimeSliderController.qml</file>
+      <file>qmldir</file>
+    </qresource>
+</RCC>
