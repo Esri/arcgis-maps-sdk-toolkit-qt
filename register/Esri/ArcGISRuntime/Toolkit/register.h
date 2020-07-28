@@ -25,7 +25,7 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
-void registerComponents(QQmlEngine* engine);
+void registerComponents();
 
 } // Toolkit
 } // ArcGISRuntime

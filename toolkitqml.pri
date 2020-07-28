@@ -11,5 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-RESOURCES += $$PWD/images/esri_arcgisruntime_toolkit_images.qrc \
-             $$PWD/import/esri_arcgisruntime_toolkit_qml.qrc
+RESOURCES += \
+  $$PWD/images/esri_arcgisruntime_toolkit_images.qrc \
+  $$PWD/import/Esri/ArcGISRuntime/Toolkit/esri_arcgisruntime_toolkit_view.qrc \
+  $$PWD/import/Esri/ArcGISRuntime/Toolkit/Controller/esri_arcgisruntime_toolkit_controller.qrc
+
+QML_IMPORT_PATH += $$PWD/import

@@ -52,11 +52,10 @@ namespace Toolkit
   \c README.md for more information on workflows.
 */
 
-constexpr char const* NAMESPACE = "Esri.ArcGISRuntime.Toolkit.CppInternal";
+constexpr char const* NAMESPACE = "Esri.ArcGISRuntime.Toolkit.Controller";
 
-constexpr int VERSION_MAJOR = 1;
-
-constexpr int VERSION_MINOR = 0;
+constexpr int VERSION_MAJOR = 100;
+constexpr int VERSION_MINOR = 9;
 
 namespace
 {
@@ -76,25 +75,9 @@ template <typename T>
 void registerComponent()
 {
   static_assert(std::is_base_of<QObject, T>::value, "Must inherit QObject");
-  auto name = QString("%1CPP").arg(T::staticMetaObject.className());
+  auto name = QString{T::staticMetaObject.className()};
   name.remove("Esri::ArcGISRuntime::Toolkit::");
   qmlRegisterType<T>(NAMESPACE, VERSION_MAJOR, VERSION_MINOR, name.toLatin1());
-}
-
-/*
- \internal
- \brief Adds the \c cpp_api file selector to the QML engine.
- \list
-   \li \a engine Engine to add the file selector to.
- \endlist
- */
-void addFileSelector(QQmlEngine* engine)
-{
-  auto fileSelector = QQmlFileSelector::get(engine);
-  if (!fileSelector)
-    fileSelector = new QQmlFileSelector(engine, engine);
-
-  fileSelector->setExtraSelectors({"cpp_api"});
 }
 
 } // namespace
@@ -107,11 +90,7 @@ void addFileSelector(QQmlEngine* engine)
 
   For example this will expose the class provided by \c NorthArrowController.h
   in QML as \c NorthArrowController.
-  
-  Internally, this function add a new \c cpp_api selector to the file selector
-  of \a engine. This is the mechanism utilized to override, say,
-  \c NorthArrowController.qml with the \c NorthArrowController provided by C++.
- 
+
   This register function also registers the following ArcGISRuntime
   types in the Qt Metatype system.
  
@@ -119,9 +98,8 @@ void addFileSelector(QQmlEngine* engine)
   \li \c Esri::ArcGISRuntime::Point
   \endlist
  */
-void registerComponents(QQmlEngine* engine)
+void registerComponents()
 {
-  addFileSelector(engine);
   registerComponent<AuthenticationController>();
   registerComponent<CoordinateConversionController>();
   registerComponent<CoordinateConversionOption>();

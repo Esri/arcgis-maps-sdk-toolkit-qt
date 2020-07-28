@@ -1,0 +1,3 @@
+Note that this folder contains only the QML implementations of the  
+"Esri.ArcGISRuntime.Toolkit.Controller" module. For the C++ API
+sources look in "root/cpp".
