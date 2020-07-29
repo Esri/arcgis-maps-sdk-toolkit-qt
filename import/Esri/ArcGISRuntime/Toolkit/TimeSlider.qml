@@ -182,7 +182,7 @@ Control {
             palette: timeSlider.palette
             Connections {
                 target: controller
-                onExtentsChanged: {
+                function onExtentsChanged() {
                     startLabel.text = Qt.formatDateTime(
                                 controller.timeForStep(0),
                                 fullExtentLabelFormat);
@@ -422,7 +422,7 @@ Control {
                             // label becomes the handle that is now pointed-to.
                             Connections {
                                 target: slider.first
-                                onValueChanged: {
+                                function onValueChanged() {
                                     if (labelMode !== TimeSlider.LabelMode.Thumbs) {
                                         return;
                                     }
@@ -440,7 +440,7 @@ Control {
                             }
                             Connections {
                                 target: slider.second
-                                onValueChanged: {
+                                function onValueChanged() {
                                     if (labelMode !== TimeSlider.LabelMode.Thumbs) {
                                         return;
                                     }
@@ -461,13 +461,13 @@ Control {
                             // state of all other labels back to default.
                             Connections {
                                 target: repeater
-                                onFirstHandleLabelChanged: {
+                                function onFirstHandleLabelChanged() {
                                     if (tickLabel !== repeater.firstHandleLabel &&
                                         tickLabel !== repeater.secondHandleLabel) {
                                         tickLabel.state = "";
                                     }
                                 }
-                                onSecondHandleLabelChanged: {
+                                function onSecondHandleLabelChanged() {
                                     if (tickLabel !== repeater.firstHandleLabel &&
                                         tickLabel !== repeater.secondHandleLabel) {
                                         tickLabel.state = "";
@@ -520,8 +520,10 @@ Control {
             }
             Connections {
                 target: controller
-                onStepsChanged: slider.setValues(controller.startStep,
-                                                 controller.endStep);
+                function onStepsChanged() { 
+                    slider.setValues(controller.startStep,
+                                     controller.endStep);
+                }
             }
             Layout.columnSpan: 5
             Layout.fillWidth: true

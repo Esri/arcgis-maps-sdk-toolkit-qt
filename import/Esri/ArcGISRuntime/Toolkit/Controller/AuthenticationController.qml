@@ -134,13 +134,13 @@ QtObject {
         property Connections managerConnection: Connections {
             target: AuthenticationManager
             ignoreUnknownSignals: false
-            onAuthenticationChallenge: {
+            function onAuthenticationChallenge() {
                 if (internal.challenge)
                   internal.challenge.cancel();
   
                 internal.currentChallenge = challenge;
             }
-            onClientCertificatePasswordRequired: {
+            function onClientCertificatePasswordRequired() {
                 authenticationController.clientCertificatePasswordRequired(certificate);
             }
         }

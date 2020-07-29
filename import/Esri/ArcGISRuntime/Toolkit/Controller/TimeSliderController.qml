@@ -166,8 +166,12 @@ QtObject {
         property Connections geoViewConnection: Connections {
             target: geoView
             ignoreUnknownSignals: true
-            onSceneChanged: internal.initializeTimeProperties();
-            onMapChanged: internal.initializeTimeProperties();
+            function onSceneChanged() {
+                internal.initializeTimeProperties();
+            }
+            function onMapChanged() {
+                internal.initializeTimeProperties();
+            }
         }
 
         // Recalculate on any operational layer changes.
@@ -177,7 +181,9 @@ QtObject {
                                                             : null))
                             : null
             ignoreUnknownSignals: true
-            onOperationalLayersChanged: internal.initializeTimeProperties();
+            function onOperationalLayersChanged() {
+                internal.initializeTimeProperties();
+            }
         }
 
         // Grabs the operational layers from the geoview.

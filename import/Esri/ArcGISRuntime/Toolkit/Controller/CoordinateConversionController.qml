@@ -251,7 +251,7 @@ QtObject {
 
         property Connections geoViewConnections: Connections {
             target: controller.geoView
-            onMouseClicked: {
+            function onMouseClicked() {
                 if (!inPickingMode)
                     return;
 
