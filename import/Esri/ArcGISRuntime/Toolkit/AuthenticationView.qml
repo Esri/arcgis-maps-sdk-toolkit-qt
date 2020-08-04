@@ -60,7 +60,7 @@ Item {
 
     Connections {
         target: controller
-        onCurrentChallengeTypeChanged: {
+        function onCurrentChallengeTypeChanged() {
             const component = internal.viewNameForChallengeType(controller.currentChallengeType);
             if (component) {
                 const incubator = component.incubateObject(authenticationView);
@@ -80,7 +80,7 @@ Item {
             controller: authenticationView.controller
             Connections {
                 target: controller
-                onCurrentChallengeTypeChanged: {
+                function onCurrentChallengeTypeChanged() {
                     reject();
                 }
             }
@@ -97,7 +97,7 @@ Item {
             controller: authenticationView.controller
             Connections {
                 target: controller
-                onCurrentChallengeTypeChanged: {
+                function onCurrentChallengeTypeChanged() {
                     reject();
                 }
             }
@@ -114,7 +114,7 @@ Item {
             controller: authenticationView.controller
             Connections {
                 target: controller
-                onCurrentChallengeTypeChanged: {
+                function onCurrentChallengeTypeChanged() {
                     reject();
                 }
             }
@@ -131,7 +131,7 @@ Item {
             controller: authenticationView.controller
             Connections {
                 target: controller
-                onCurrentChallengeTypeChanged: {
+                function onCurrentChallengeTypeChanged() {
                     reject();
                 }
             }

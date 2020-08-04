@@ -134,7 +134,7 @@ QtObject {
         property Connections managerConnection: Connections {
             target: AuthenticationManager
             ignoreUnknownSignals: false
-            function onAuthenticationChallenge() {
+            function onAuthenticationChallenge(challenge) {
                 if (internal.challenge)
                   internal.challenge.cancel();
   
