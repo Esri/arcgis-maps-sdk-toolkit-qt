@@ -62,8 +62,6 @@ CONFIG(release, debug|release) {
   BUILDTYPE = debug
 }
 
-!android:!win32: PLATFORM_OUTPUT = $$PLATFORM
-android: PLATFORM_OUTPUT = $$PLATFORM/$$ANDROID_ARCH
 win32: {
   contains(QMAKE_TARGET.arch, x86_64): {
     PLATFORM_OUTPUT = $$PLATFORM/x64
@@ -71,8 +69,8 @@ win32: {
     PLATFORM_OUTPUT = $$PLATFORM/x86
   }
 }
+else: {
+    PLATFORM_OUTPUT = $$PLATFORM
+}
 
 DESTDIR = $$PWD/output/$$PLATFORM_OUTPUT
-OBJECTS_DIR = $$DESTDIR/$$BUILDTYPE/obj
-MOC_DIR = $$DESTDIR/$$BUILDTYPE/moc
-RCC_DIR = $$DESTDIR/$$BUILDTYPE/qrc
