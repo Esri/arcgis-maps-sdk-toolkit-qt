@@ -1,168 +1,46 @@
-# Prototype repo for new qt toolkit
+# ArcGIS Runtime Toolkit - Qt 
+
+[![API reference](https://img.shields.io/badge/API_Reference-purple)](https://developers.arcgis.com/qt/latest/toolkit/api-reference/) ![Current release](https://img.shields.io/github/v/release/esri/arcgis-runtime-toolkit-qt?label=current%20release)
+
 
 ## Introduction
 
 This toolkit is an open source resource intended for use with the ArcGIS Runtime
-SDK for Qt. It provides ready made UI components to complement mapping and GIS
+SDK for Qt. It provides ready made components to complement mapping and GIS
 applications. Because it is open source you are encouraged to modify these tools
 and add your own.
 
-## Structure
+## Resources
 
-This repo contains 3 toolkit projects, each intended for use with a different
-flavor of the ArcGIS Runtime SDK for Qt:
+* [ArcGIS Runtime SDK for Qt](https://developers.arcgis.com/qt/)
+* [System requirements](https://developers.arcgis.com/qt/latest/qml/guide/system-requirements.htm)
+* [Qt and QML](http://www.qt.io/)
 
-- toolkitqml (for use with QML only apps)
-- toolkitcpp (for use with C++ apps which use a QtQuick UI)
-- toolkitwidgets (for use with C++ apps which use a QWidgets UI)
+## Issues
 
-You need to clone this repository locally to incorporate it into your own
-project.
+Find a bug or want to request a new feature?  Please let us know by [submitting an issue](https://github.com/Esri/arcgis-runtime-toolkit-qt/issues/new).
 
-### toolkitqml.pri
+## Contributing
 
-#### Importing the toolkit (toolkitqml.pri)
+Anyone and everyone is welcome to contribute.
 
-A good way to start using the toolkit is to use one of the template apps which
-get added to QtCreator when you install the ArcGIS Runime SDK for Qt.
+## Licensing
+Copyright 2019-2020 Esri
 
-- In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Runtime 100.9 Quick QML App`
-- choose settings to match the platform etc. you are building for
-- in the `.pro` file of your new app, add a line to add the toolkit for your
-  QML application. For example:
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-```qmake
-include(path/to/toolkitqml.pri)
-```
+http://www.apache.org/licenses/LICENSE-2.0
 
-#### Using a tool from the toolkit (toolkitqml.pri)
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 
-Once you have successfully imported the toolkit, you can access individual tools
-in your own QML files.
+A copy of the license is available in the repository's [LICENSE](LICENSE) file.
 
-- add an import statement for the toolkit:
-  `import Esri.ArcGISRuntime.Toolkit 100.9`
-- declare the tool you wish to use. Generally you will also have to supply the
-  `GeoView` etc. you wish the tool to work with. For example, to add a
-  `NorthArrow`:
+Some files (ios_config.prf) are from the Qt SDK and modified to support the Toolkit.
+See https://www.qt.io/terms-conditions/ for license details for those files.
 
-```qml
-import Esri.ArcGISRuntime 100.9
-import Esri.ArcGISRuntime.Toolkit 100.9
-
-MapView {
-    id: mapView
-
-    Map {
-      BasemapTopographic {}
-    }
-
-    // A visible compass is now embedded in the mapView and hooked up!
-    NorthArrow {
-        id: arrow
-        width: 32
-        height: 32
-        anchors {
-            right: parent.right
-            bottom: parent.bottom
-        }
-        geoView: mapView
-    }
-}
-```
-
-### toolkitcpp.pri
-
-#### Importing the toolkit (toolkitcpp.pri)
-
-A good way to start using the toolkit is to use one of the template apps which
-get added to QtCreator when you install the ArcGIS Runime SDK for Qt.
-
-- In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Runtime 100.9 Qt Quick C++ App`
-- choose settings to match the platform etc. you are building for
-- in the `.pro` file of your new app, add a line to add the library for your QML
-  plugin - for example:
-
-```qmake
-include(path/to/toolkitcpp.pri)
-```
-
-- in the Run environment settings for the app, add a new environment variable to
-  import the QML module - e.g:
-
-- in `main.cpp` add a line to import the toolkit registration function.
-
-```cpp
-#include "Esri/ArcGISRuntime/Toolkit/register.h"
-```
-
-- in `main.cpp` (inside the main function) call the registration function.
-
-```cpp
-QQmlApplicationEngine engine; // The engine driving your QML application.
-Esri::ArcGISRuntime::Toolkit::registerComponents(&engine);
-```
-
-#### Using a tool from the toolkit (toolkitcpp.pri)
-
-Once you have successfully imported the toolkit, you can access individual tools
-in your own QML files.
-
-- add an import statement for the toolkit:
-`import Esri.ArcGISRuntime.Toolkit 100.9`
-- declare the tool you wish to use. Generally you will also have to supply the
-  `GeoView` etc. you wish the tool to work with. For example, to add a `NorthArrow`:
-
-```qml
-import Esri.ArcGISRuntime.Toolkit 100.9
-
-MapView {
-    id: mapView
-
-    // A visible compass is now embedded in the mapView and hooked up!
-    NorthArrow {
-        id: arrow
-        width: 32
-        height: 32
-        anchors {
-            right: parent.right
-            bottom: parent.bottom
-        }
-        geoView: mapView
-    }
-}
-```
-
-### toolkitwidgets.pri
-
-#### Importing the toolkit (toolkitwidgets.pri)
-
-A good way to start using the toolkit is to use one of the template apps which
-get added to QtCreator when you install the ArcGIS Runtime SDK for Qt.
-
-- In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Runtime 100.9 Qt Widgets App`
-- choose settings to match the platform etc. you are building for
-- in the `.pro` file of your new app, add a line to add the library for your QML
-  plugin - for example:
-
-```qmake
-include(path/to/toolkitwidgets.pri)
-```
-
-#### Using a tool from the toolkit (toolkitwidgets.pri)
-
-Once you have successfully imported the toolkit, you can create individual tools
-in your own widgets files.
-
-- in your widgets code, create a new instance of the tool you wish to use and
-  add it to your widgets layout. You will also normally need to pass the `GeoView`
-  which the tool is designed to work with:
-
-```cpp
-  #include "Esri/ArcGISRuntime/Toolkit/NorthArrow.h"
-  ...
-  auto northArrow = new Esri::ArcGISRuntime::Toolkit::NorthArrow(this);
-  northArrow->setMapView(m_mapView);
-  // Add your NorthArrow to your UI here!
-  northArrow->show();
-```
