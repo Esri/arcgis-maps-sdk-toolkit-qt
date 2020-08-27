@@ -23,22 +23,11 @@ macx: PLATFORM = "macOS"
 unix:!macx:!android:!ios: PLATFORM = "linux"
 win32: PLATFORM = "windows"
 ios: PLATFORM = "iOS"
-android: {
-  PLATFORM = "android"
-  contains(QT_ARCH, i386) {
-    ANDROID_ARCH = "x86"
-  } else:contains(QT_ARCH, arm64) {
-    ANDROID_ARCH = "arm64"
-  } else {
-    ANDROID_ARCH = "armv7"
-  }
-}
+android: PLATFORM = "android"
 
 INCLUDEPATH += $$PWD/include \
                $$PWD/include/CoordinateConversion
 
-!android:!win32: PLATFORM_OUTPUT = $$PLATFORM
-android: PLATFORM_OUTPUT = $$PLATFORM/$$ANDROID_ARCH
 win32: {
   contains(QT_ARCH, x86_64): {
     PLATFORM_OUTPUT = $$PLATFORM/x64
@@ -46,10 +35,16 @@ win32: {
     PLATFORM_OUTPUT = $$PLATFORM/x86
   }
 }
+else: {
+  PLATFORM_OUTPUT = $$PLATFORM
+}
 
 # make sure the local toolkit libs come first on the link line
 ARCGIS_RT_SDK_LIBS = $$LIBS
-LIBS = -L$$PWD/output/$$PLATFORM_OUTPUT -lArcGISRuntimeToolkitCppApi$${ToolkitPrefix}$${DebugSuffix} $$ARCGIS_RT_SDK_LIBS
+
+TOOLKIT_SUFFIX = $${ToolkitPrefix}$${DebugSuffix}
+android:TOOLKIT_SUFFIX = $${TOOLKIT_SUFFIX}_$${QT_ARCH}
+LIBS = -L$$PWD/output/$$PLATFORM_OUTPUT -lArcGISRuntimeToolkitCppApi$${TOOLKIT_SUFFIX} $$ARCGIS_RT_SDK_LIBS
 
 # unset the previous toolkit defines and import paths
 DEFINES -= ARCGIS_TOOLKIT_IMPORT_PATH=\"$$ARCGIS_TOOLKIT_IMPORT_PATH\"

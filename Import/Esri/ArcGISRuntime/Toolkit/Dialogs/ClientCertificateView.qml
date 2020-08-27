@@ -380,6 +380,7 @@ Rectangle {
                 width: parent.width
                 placeholderText: qsTr("password")
                 echoMode: TextInput.Password
+                selectByMouse: true
             }
 
             Row {
@@ -414,7 +415,7 @@ Rectangle {
     Connections {
         target: authView.authenticationManager
 
-        onClientCertificatePasswordRequired: {
+        function onClientCertificatePasswordRequired(certificate) {
             certificatePasswordPage.certificateFile = certificate;
 
             certificateFilename = certificatePasswordPage.certificateFile.toString().split("/").pop();

@@ -16,7 +16,7 @@
 
 import QtQuick 2.12
 import QtQuick.Window 2.12
-import Esri.ArcGISRuntime 100.8
+import Esri.ArcGISRuntime 100.9
 import Esri.ArcGISArToolkit 1.0
 
 ArcGISArViewInternal {
@@ -47,23 +47,23 @@ ArcGISArViewInternal {
 
     onInitialTransformationChanged: {
         // Set the `initialTransformationMatrix` as the TransformationMatrix.identity - hit test matrix.
-        const hitMatrix = TransformationMatrix.createWithQuaternionAndTranslation(
+        const hitMatrix = Factory.TransformationMatrix.createWithQuaternionAndTranslation(
                     quaternionX, quaternionY, quaternionZ, quaternionW,
                     translationX, translationY, translationZ);
 
-        const identityTransformationMatrix = TransformationMatrix.createIdentityMatrix();
+        const identityTransformationMatrix = Factory.TransformationMatrix.createIdentityMatrix();
         initialTransformationMatrix = identityTransformationMatrix.subtractTransformation(hitMatrix);
     }
 
     // It's not possible to create the TransformationMatrix object directly in C++. This function
     // is used to create the TM object and assign it to the TMCC.
     onTransformationMatrixChanged: {
-        const matrix = TransformationMatrix.createWithQuaternionAndTranslation(
+        const matrix = Factory.TransformationMatrix.createWithQuaternionAndTranslation(
                     quaternionX, quaternionY, quaternionZ, quaternionW,
                     translationX, translationY, translationZ);
 
         if (!initialTransformationMatrix)
-            initialTransformationMatrix = TransformationMatrix.createIdentityMatrix();
+            initialTransformationMatrix = Factory.TransformationMatrix.createIdentityMatrix();
 
         const finalMatrix = initialTransformationMatrix.addTransformation(matrix);
         tmcc.transformationMatrix = finalMatrix;
@@ -138,8 +138,8 @@ ArcGISArViewInternal {
         const camera = ArcGISRuntimeEnvironment.createObject("Camera");
         tmcc.originCamera = camera;
 
-        initialTransformationMatrix = TransformationMatrix.createIdentityMatrix();
-        tmcc.transformationMatrix = TransformationMatrix.createIdentityMatrix();
+        initialTransformationMatrix = Factory.TransformationMatrix.createIdentityMatrix();
+        tmcc.transformationMatrix = Factory.TransformationMatrix.createIdentityMatrix();
     }
 
     /*!
@@ -148,7 +148,7 @@ ArcGISArViewInternal {
     function screenToLocation(x, y) {
         const hitTest = root.hitTest(x, y);
 
-        const hitMatrix = TransformationMatrix.createWithQuaternionAndTranslation(
+        const hitMatrix = Factory.TransformationMatrix.createWithQuaternionAndTranslation(
                             hitTest[0], hitTest[1], hitTest[2], hitTest[3], // quaternionX, quaternionY, quaternionZ, quaternionW
                             hitTest[4], hitTest[5], hitTest[6]); // translationX, translationY, translationZ
 

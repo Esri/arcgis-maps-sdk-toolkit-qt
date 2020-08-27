@@ -89,7 +89,7 @@ Item {
     Connections {
         target: parentMapview
 
-        onVisibleAreaChanged: {
+        function onVisibleAreaChanged() {
             updateView();
         }
     }

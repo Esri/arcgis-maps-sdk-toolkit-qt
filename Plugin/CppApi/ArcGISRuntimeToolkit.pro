@@ -34,7 +34,7 @@ INCLUDEPATH += $$PWD/include \
 
 RUNTIME_PRI = arcgis_runtime_qml_cpp.pri
 #RUNTIME_PRI = esri_runtime_qt.pri # use this for widgets
-ARCGIS_RUNTIME_VERSION = 100.8
+ARCGIS_RUNTIME_VERSION = 100.9
 
 !CONFIG(daily) {
   include($$PWD/arcgisruntime.pri)
@@ -62,8 +62,6 @@ CONFIG(release, debug|release) {
   BUILDTYPE = debug
 }
 
-!android:!win32: PLATFORM_OUTPUT = $$PLATFORM
-android: PLATFORM_OUTPUT = $$PLATFORM/$$ANDROID_ARCH
 win32: {
   contains(QMAKE_TARGET.arch, x86_64): {
     PLATFORM_OUTPUT = $$PLATFORM/x64
@@ -71,8 +69,8 @@ win32: {
     PLATFORM_OUTPUT = $$PLATFORM/x86
   }
 }
+else: {
+    PLATFORM_OUTPUT = $$PLATFORM
+}
 
 DESTDIR = $$PWD/output/$$PLATFORM_OUTPUT
-OBJECTS_DIR = $$DESTDIR/$$BUILDTYPE/obj
-MOC_DIR = $$DESTDIR/$$BUILDTYPE/moc
-RCC_DIR = $$DESTDIR/$$BUILDTYPE/qrc

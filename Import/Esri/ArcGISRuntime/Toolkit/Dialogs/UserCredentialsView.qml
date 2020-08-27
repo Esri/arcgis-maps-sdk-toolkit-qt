@@ -197,6 +197,7 @@ Rectangle {
                 placeholderText: qsTr("username")
                 placeholderTextColor: "darkgray"
                 color: "black"
+                selectByMouse: true
             }
 
             TextField {
@@ -208,6 +209,7 @@ Rectangle {
                 placeholderTextColor: "darkgray"
                 echoMode: TextInput.Password
                 color: "black"
+                selectByMouse: true
             }
 
             Button {
