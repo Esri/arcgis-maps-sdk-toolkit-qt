@@ -20,7 +20,7 @@ import QtPositioning 5.8
 import QtSensors 5.9
 import Esri.ArcGISRuntime 100.10
 import Esri.ArcGISExtras 1.1
-import Esri.ArcGISRuntime.Toolkit.Controls 100.9
+import Esri.ArcGISRuntime.Toolkit.Controls 100.10
 
 Rectangle {
     width: 800
