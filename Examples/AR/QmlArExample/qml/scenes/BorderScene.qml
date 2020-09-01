@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 import QtQuick 2.6
-import Esri.ArcGISRuntime 100.9
+import Esri.ArcGISRuntime 100.10
 import Esri.ArcGISArToolkit 1.0
 
 // Creates a scene centered on the US-Mexico border.
