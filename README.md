@@ -27,8 +27,8 @@ This project contains QML source code for controls and utilities you can use wit
   - Add a qmake variable - `QML_IMPORT_PATH+=<path_to_repo>/Import`
   - Add the path to the QML Engine's path list in C++ code - `QQmlEngine::addImportPath("<path_to_repo>/Import");`
 4. Import the QML plugin modules in your project. For example:
-  - `import Esri.ArcGISRuntime.Toolkit.Controls 100.9`
-  - `import Esri.ArcGISRuntime.Toolkit.Dialogs 100.9`
+  - `import Esri.ArcGISRuntime.Toolkit.Controls 100.10`
+  - `import Esri.ArcGISRuntime.Toolkit.Dialogs 100.10`
 
 ## Alternate Setup instructions (importing the Toolkit as a plugin)
 
@@ -38,7 +38,7 @@ Starting with Qt 5.9.0 on iOS, the Toolkit must be imported as a plugin.
 2. Include [ArcGISRuntimeToolkitPlugin.pri](Plugin/ArcGISRuntimeToolkitPlugin.pri) in your project file. For example:
 
     ```qmake 
-    include(/Users/james/ArcGIS_SDKs/Qt100.9/sdk/toolkit/Plugin/ArcGISRuntimeToolkitPlugin.pri)
+    include(/Users/james/ArcGIS_SDKs/Qt100.10/sdk/toolkit/Plugin/ArcGISRuntimeToolkitPlugin.pri)
     ```
 
 3. The Toolkit will now be compiled into your application directly as a plugin.
@@ -48,8 +48,8 @@ Starting with Qt 5.9.0 on iOS, the Toolkit must be imported as a plugin.
 The toolkit repo has a demo project located in the Examples folder. This project is not meant to be a template to base your projects off of, but rather to be a quick and easy way to test and demonstrate the capabilities of various toolkit components. You can run the demo project by doing the following steps:
 
 1. Open `Examples.qmlproject` in Qt Creator
-2. Go to Projects > Run, and add a new variable called QML2_IMPORT_PATH, and set the value equal to the path of ArcGIS Runtime and the Toolkit. For example, `QML2_IMPORT_PATH=/Users/<username>/ArcGIS_SDKs/Qt100.9/sdk/macOS/x64/qml:/Users/<username>/ArcGIS_SDKs/Qt100.9/sdk/toolkit/Import`
-3. Depending on your system, you may additionally need to add the path to the EsriCommonQt library into an environment variable. On Windows, add it to the PATH, on Linux, add it to LD_LIBRARY_PATH, and on macOS, add it to DYLD_LIBRARY_PATH. For example, `PATH=C:\Program Files (x86)\ArcGIS SDKs\Qt100.9\sdk\windows\x64\bin`.
+2. Go to Projects > Run, and add a new variable called QML2_IMPORT_PATH, and set the value equal to the path of ArcGIS Runtime and the Toolkit. For example, `QML2_IMPORT_PATH=/Users/<username>/ArcGIS_SDKs/Qt100.10/sdk/macOS/x64/qml:/Users/<username>/ArcGIS_SDKs/Qt100.10/sdk/toolkit/Import`
+3. Depending on your system, you may additionally need to add the path to the EsriCommonQt library into an environment variable. On Windows, add it to the PATH, on Linux, add it to LD_LIBRARY_PATH, and on macOS, add it to DYLD_LIBRARY_PATH. For example, `PATH=C:\Program Files (x86)\ArcGIS SDKs\Qt100.10\sdk\windows\x64\bin`.
 4. The qmlscene application on Windows and Linux require that the path to the Qt libraries be specified in the PATH and LD_LIBRARY_PATH, respectively. For example, `PATH=C:\Qt5.12.6\msvc2017_64\bin`.
 5. Run the app and select an example from the drop down.
 
