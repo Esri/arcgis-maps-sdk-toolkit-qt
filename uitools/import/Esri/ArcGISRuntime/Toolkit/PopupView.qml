@@ -135,6 +135,7 @@ Control {
                 textFormat: Text.StyledText
                 text: `<h2>${controller.title}</h2>`
                 color: palette.text
+                font: popupView.font
             }
 
             // Field names
@@ -155,6 +156,7 @@ Control {
                 textFormat: Text.StyledText
                 text: controller.attachmentCount > 0 ? "<h2>Attachments</h2>" : ""
                 color: palette.text
+                font: popupView.font
             }
 
             // Attachment names
