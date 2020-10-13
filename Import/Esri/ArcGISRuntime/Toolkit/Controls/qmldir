@@ -1,0 +1,45 @@
+################################################################################
+#  Copyright 2012-2018 Esri
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#  http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+################################################################################
+
+module Esri.ArcGISRuntime.Toolkit.Controls
+
+AttachmentListView 2.0 AttachmentListView20.qml
+AttributeListView 2.0 AttributeListView20.qml
+Callout 2.0 Callout20.qml
+Callout 100.0 Callout100.qml
+Callout 100.1 Callout1001.qml
+Callout 100.5 Callout.qml
+CurrentVersion 100.10 CurrentVersion.qml
+Fader 2.0 Fader20.qml
+HomeButton 2.0 HomeButton20.qml
+ImageButton 2.0 ImageButton20.qml
+LocationButton 2.0 LocationButton20.qml
+NavigationToolbar 2.0 NavigationToolbar20.qml
+NorthArrow 2.0 NorthArrow20.qml
+OverviewMap 2.0 OverviewMap20.qml
+PopupView 100.1 PopupView1001.qml
+PopupView 100.5 PopupView.qml
+internal PopupViewBase101 PopupViewBase1001.qml
+internal PopupViewBase PopupViewBase.qml
+PopupStackView 100.2 PopupStackView1002.qml
+PopupStackView 100.4 PopupStackView1004.qml
+PopupStackView 100.5 PopupStackView.qml
+RotationToolbar 2.0 RotationToolbar20.qml
+SearchBox 2.0 SearchBox20.qml
+StyleButton 2.0 StyleButton20.qml
+StyleToolbar 2.0 StyleToolbar20.qml
+ZoomInButton 2.0 ZoomInButton20.qml
+ZoomOutButton 2.0 ZoomOutButton20.qml
