@@ -80,4 +80,3 @@ ios {
 android {
     include (Android/Android.pri)
 }
-android: include(/Users/jame5907/Library/Android/sdk/android_openssl/openssl.pri)
