@@ -143,7 +143,7 @@ ArcGISArViewInternal {
     }
 
     /*!
-        \brief Gets the location in the real world space corresponding to the screen point \a screenPoint.
+        \brief Gets the location in the real world space corresponding to \a x and \a y.
      */
     function screenToLocation(x, y) {
         const hitTest = root.hitTest(x, y);

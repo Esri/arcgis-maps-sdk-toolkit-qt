@@ -88,7 +88,7 @@ QtObject {
 
     /*!
     \qmlsignal clientCertificatePasswordRequired(url certificate)
-    \brief Emitted when a certificate that was added to the 
+    \brief Emitted when a \a certificate that was added to the
     AuthenticationManager requires a password.
     \sa AuthenticationController::addClientCertificate
     */

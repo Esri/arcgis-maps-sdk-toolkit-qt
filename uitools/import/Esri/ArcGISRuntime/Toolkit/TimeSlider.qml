@@ -157,17 +157,17 @@ Control {
     property alias playbackInterval : playAnimation.interval
 
     /*!
-     \qmlproperty icon The icon for the step-back button.
+     \qmlproperty stepBackIcon The icon for the step-back button.
      */
     property alias stepBackIcon: stepBackButton.icon
 
     /*!
-     \qmlproperty icon The icon for the play button.
+     \qmlproperty playIcon The icon for the play button.
      */
     property alias playIcon: playButton.icon
 
     /*!
-     \qmlproperty icon The icon for the step-forward button.
+     \qmlproperty stepForwardIcon The icon for the step-forward button.
      */
     property alias stepForwardIcon: stepForwardButton.icon
 
@@ -539,7 +539,7 @@ Control {
     }
 
     /*!
-     \brief Increments both handles by count. 
+     \brief Increments both handles by \a count.
      
      Count may be negative to decrement the handles.
      */

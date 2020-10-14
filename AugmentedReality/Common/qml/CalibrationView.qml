@@ -77,6 +77,13 @@ Item {
       \qmlsignal triggered(double latitude, double longitude, double altitude, double heading)
       \brief Sends the updated values for location and heading.
 
+      \list
+        \li \a latitude the latitude
+        \li \a longitude the longitude
+        \li \a altitude the altitude
+        \li \a heading the heading
+      \endlist
+
       This signal is emitted every time the timer is triggered.
      */
     signal triggered(double latitude, double longitude, double altitude, double heading);

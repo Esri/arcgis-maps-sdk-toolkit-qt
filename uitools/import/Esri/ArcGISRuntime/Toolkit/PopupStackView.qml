@@ -138,13 +138,14 @@ Control {
     /*!
        \qmlsignal PopupStackView::attachmentThumbnailClicked(int index)
        \brief Signal emitted when an attachment thumbnail is clicked.
-       The \e index of the PopupAttachment in the PopupAttachmentListModel
+       The \a index of the PopupAttachment in the PopupAttachmentListModel
        of the currently displayed PopupView.
      */
     signal attachmentThumbnailClicked(var index)
 
     /*!
        \brief Removes all items from the stack.
+       \a args all args passed
        \sa {https://doc.qt.io/qt-5/qml-qtquick-controls2-stackview.html}{StackView}
      */
     function clear(...args) {
@@ -156,6 +157,7 @@ Control {
        is called for each item in the stack (with the item and index as 
        arguments) until the callback function returns true. The return value is
        the item found.
+       \a args all args passed
        \sa {https://doc.qt.io/qt-5/qml-qtquick-controls2-stackview.html}{StackView}
      */
     function find(...args) {
@@ -165,6 +167,7 @@ Control {
     /*!
        \brief Returns the item at position index in the stack, or null if the 
        index is out of bounds.
+       \a args all args passed
        \sa {https://doc.qt.io/qt-5/qml-qtquick-controls2-stackview.html}{StackView}
      */
     function get(...args) {
@@ -177,6 +180,7 @@ Control {
        to (but not including) item will be popped. If item is null, all items 
        down to (but not including) the first item is popped. If not specified, 
        only the current item is popped.
+       \a args all args passed
        \sa {https://doc.qt.io/qt-5/qml-qtquick-controls2-stackview.html}{StackView}
      */
     function pop(...args) {
