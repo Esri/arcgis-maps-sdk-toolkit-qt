@@ -14,48 +14,39 @@
 # limitations under the License.
 ###############################################################################
 
-mac {
-    cache()
-}
+TEMPLATE = app
 
-#-------------------------------------------------------------------------------
-
+QT += core gui opengl network positioning sensors qml quick multimedia
 CONFIG += c++11
 
-QT += core gui opengl network positioning sensors qml quick
+TARGET = CppArExample
+
+equals(QT_MAJOR_VERSION, 5) {
+    lessThan(QT_MINOR_VERSION, 12) {
+        error("$$TARGET requires Qt 5.15.1")
+    }
+    equals(QT_MINOR_VERSION, 12) : lessThan(QT_PATCH_VERSION, 6) {
+        error("$$TARGET requires Qt 5.15.1")
+    }
+}
 
 ARCGIS_RUNTIME_VERSION = 100.10
 include($$PWD/arcgisruntime.pri)
 
-TEMPLATE = app
-TARGET = QmlArExample
-
-equals(QT_MAJOR_VERSION, 5) {
-    lessThan(QT_MINOR_VERSION, 15) {
-        error("$$TARGET requires Qt 5.15.1")
-    }
-    equals(QT_MINOR_VERSION, 15) : lessThan(QT_PATCH_VERSION, 1) {
-        error("$$TARGET requires Qt 5.15.1")
-    }
-}
-
-#-------------------------------------------------------------------------------
-
 HEADERS += \
-    AppInfo.h
+    AppInfo.h \
+    CppArExample.h
 
 SOURCES += \
-    main.cpp
+    main.cpp \
+    CppArExample.cpp
 
 RESOURCES += \
     qml/qml.qrc \
     Resources/Resources.qrc
 
 OTHER_FILES += \
-    wizard.xml \
-    wizard.png \
     qml/*.qml \
-    qml/scenes/*.qml \
     qml/*.js
 
 #-------------------------------------------------------------------------------
@@ -70,7 +61,7 @@ isEmpty(ARCGIS_TOOLKIT_PATH) {
     error(ARCGIS_TOOLKIT_PATH is not set)
 }
 
-include($$ARCGIS_TOOLKIT_PATH/AugmentedReality/QmlApi/ArQmlApi.pri)
+include($$ARCGIS_TOOLKIT_PATH/augmentedreality/CppApi/ArCppApi.pri)
 
 #-------------------------------------------------------------------------------
 

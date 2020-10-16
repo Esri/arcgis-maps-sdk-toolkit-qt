@@ -15,32 +15,26 @@
 ###############################################################################
 
 # This file is a part of the AR features provides in the toolkit.
-# This file must be imported in the project to use the QML API of the
+# This file must be imported in the project to use the C++ API of the
 # ArcGIS Runtime SDK for Qt. See AR.md for details.
 
 isEmpty(ARCGIS_TOOLKIT_PATH) {
     error(ARCGIS_TOOLKIT_PATH is not set)
 }
 
-AUGMENTED_REALITY_PATH = $$ARCGIS_TOOLKIT_PATH/AugmentedReality
+AUGMENTED_REALITY_PATH = $$ARCGIS_TOOLKIT_PATH/augmentedreality
 
 include($$AUGMENTED_REALITY_PATH/Common/AR.pri)
 
 HEADERS += \
-    $$AUGMENTED_REALITY_PATH/QmlApi/include/QmlArcGISArView.h
+    $$AUGMENTED_REALITY_PATH/CppApi/include/ArcGISArView.h
 
 SOURCES += \
-    $$AUGMENTED_REALITY_PATH/QmlApi/source/QmlArcGISArView.cpp
-
-OTHER_FILES += \
-    $$AUGMENTED_REALITY_PATH/QmlApi/qml/ArcGISArView.qml
-
-RESOURCES += \
-    $$AUGMENTED_REALITY_PATH/QmlApi/qml/ArQmlApi.qrc
+    $$AUGMENTED_REALITY_PATH/CppApi/source/ArcGISArView.cpp
 
 INCLUDEPATH += $$AUGMENTED_REALITY_PATH/Common/include \
-               $$AUGMENTED_REALITY_PATH/QmlApi/include
-DEPENDPATH += $$AUGMENTED_REALITY_PATH/QmlApi/include
+               $$AUGMENTED_REALITY_PATH/CppApi/include
+DEPENDPATH += $$AUGMENTED_REALITY_PATH/CppApi/include
 
 # only arm64-v8a supported for Android
 ANDROID_ABIS = arm64-v8a
