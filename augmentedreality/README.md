@@ -57,7 +57,7 @@ heading of the scene to ensure accuracy between the device live video and the sc
 ### System Requirements
 
 iOS 11 is the minimum requirement. Devices must support ARKit. For details about using ARKit, please refer to [Apple's
-documentation](https://developer.apple.com/augmented-reality). 
+documentation](https://developer.apple.com/augmented-reality).
 
 Android 7.0 64-bit (armv8) is the minimum requirement. 32-bit (armv7) is not supported. Devices must support ARCore. For details about using ARCore, please refer to [Google's documentation](https://developers.google.com/ar/).
 
@@ -68,7 +68,7 @@ The latest ArcGIS Runtime SDK for Qt is required to use this toolkit component.
 ### Creating a new C++ app
 
 An example C++ app with AR support can be found in the folder
-`Examples\AR\CppArExample` in the toolkit repo.
+`Examples\CppArExample` in the toolkit repo.
 
 Note: In the following explanation, `<ProjectName>` refers to the project name
 used to create the Qt project.
@@ -88,9 +88,9 @@ for details.
 file, making sure to use the correct path to the ArcGIS Toolkit source folder
 on your development machine.
 
-```
-AR_TOOLKIT_SOURCE_PATH = # must be set to the path to toolkit sources
-include($$AR_TOOLKIT_SOURCE_PATH/Plugin/CppApi/ArCppApi.pri)
+```qmake
+ARCGIS_TOOLKIT_PATH = # must be set to the root path of the toolkit folder
+include($$ARCGIS_TOOLKIT_PATH/augmentedreality/CppApi/ArCppApi.pri)
 ```
 
 5. In the `main.cpp` file, make the following changes:
@@ -211,7 +211,7 @@ ArcGISArView {
 ### Creating a new QML app with AR support
 
 An example of QML app with AR support can be found in the folder
-`Examples\AR\QmlArExample` in the toolkit repo.
+`Examples\QmlArExample` in the toolkit repo.
 
 1. Install the ArcGIS Runtime SDK for Qt. See
 [ArcGIS Runtime SDK for Qt Guide](https://developers.arcgis.com/qt/latest/qml/guide/arcgis-runtime-sdk-for-qt.htm)
@@ -226,9 +226,9 @@ Select the option "3D project" in the "Details" step.
 (`.pro`) file. Make sure to set the correct path to the ArcGIS Toolkit source
 folder.
 
-```
-AR_TOOLKIT_SOURCE_PATH = # must be set to the path to toolkit sources
-include($$AR_TOOLKIT_SOURCE_PATH/Plugin/QmlApi/ArQmlApi.pri)
+```qmake
+ARCGIS_TOOLKIT_PATH = # must be set to the root path of the toolkit folder
+include($$ARCGIS_TOOLKIT_PATH/augmentedreality/QmlApi/ArQmlApi.pri)
 ```
 
 5. In the `main.cpp` file, make the following changes:
