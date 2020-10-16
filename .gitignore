@@ -34,6 +34,9 @@ html/
 *.so
 *.dylib
 
+# exceptions for AR
+!libarcore*.so
+
 # Compiled Static libraries
 *.lai
 *.la

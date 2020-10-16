@@ -280,7 +280,7 @@ Item {
     Connections {
         id: calloutConnection
         target: calloutData
-        onScreenPointChanged: {
+        function onScreenPointChanged() {
             anchorPointx = calloutData.screenPoint.x;
             anchorPointy = calloutData.screenPoint.y;
 
@@ -293,7 +293,7 @@ Item {
                 showCallout();
         }
 
-        onVisibleChanged: {
+        function onVisibleChanged() {
             if (calloutData.visible) {
                 showCallout();
             }
@@ -302,7 +302,7 @@ Item {
             }
         }
 
-        onTitleChanged: {
+        function onTitleChanged() {
             if (calloutVisible)
                 showCallout();
         }
