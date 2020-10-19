@@ -1,6 +1,7 @@
-# ArcGIS Runtime Toolkit - Qt
+# ArcGIS Runtime Toolkit - Qt 
 
 [![API reference](https://img.shields.io/badge/API_Reference-purple)](https://developers.arcgis.com/qt/latest/toolkit/api-reference/) ![Current release](https://img.shields.io/github/v/release/esri/arcgis-runtime-toolkit-qt?label=current%20release)
+
 
 ## Introduction
 
@@ -24,7 +25,6 @@ Find a bug or want to request a new feature?  Please let us know by [submitting 
 Anyone and everyone is welcome to contribute.
 
 ## Licensing
-
 Copyright 2019-2020 Esri
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,3 +43,4 @@ A copy of the license is available in the repository's [LICENSE](LICENSE) file.
 
 Some files (ios_config.prf) are from the Qt SDK and modified to support the Toolkit.
 See https://www.qt.io/terms-conditions/ for license details for those files.
+
