@@ -13,6 +13,7 @@
 /*!
   \fn CoordinateConversionOption* Esri::ArcGISRuntime::Toolkit::createDegreesDecimalMinutes(QObject* parent = nullptr)
   \brief Creates a new \c CoordinateConversionOption set up to format \c DDM with parent \a parent.
+ */
 
  /*!
   \fn CoordinateConversionOption* Esri::ArcGISRuntime::Toolkit::createDegreesMinutesSeconds(QObject* parent = nullptr)

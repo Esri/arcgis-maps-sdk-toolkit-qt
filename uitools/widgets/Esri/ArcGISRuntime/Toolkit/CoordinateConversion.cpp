@@ -46,7 +46,7 @@ namespace Toolkit
 {
 
 /*!
-  \class Esri::ArcGISRuntime::Toolkit::CoordinateConversion 
+  \class Esri::ArcGISRuntime::Toolkit::CoordinateConversion
   \inmodule EsriArcGISRuntimeToolkit
   \brief The user interface for the coordinate conversion tool.
   This tool allows a user to select a point on the map or to enter a point by
