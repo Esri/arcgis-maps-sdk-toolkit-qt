@@ -467,6 +467,7 @@ Item {
                         top: parent.top
                     }
                     height: calloutHeight
+                    width: calloutWidth
                     columns: 3
                     rows: 2
                     columnSpacing: 7
