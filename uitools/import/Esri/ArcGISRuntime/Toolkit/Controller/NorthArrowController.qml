@@ -41,7 +41,7 @@ QtObject {
 
     /*!
        \brief Set the heading by rotating the MapView or SceneView camera to the
-       given heading.
+       given \a newHeading.
      */
     function setHeading(newHeading) {
         if (geoView === null)

@@ -97,7 +97,7 @@ QtObject {
     the full time extent.
     
     \list
-    \li step Step to calculate a time for.
+    \li \a step Step to calculate a time for.
     \endlist
 
     Returns a \c date that is the time calculated for the step.
@@ -124,8 +124,8 @@ QtObject {
       \c TimeExtent range calculated by the current steps using \l timeForStep.
       
       \list
-      \li startStep start-step to set.
-      \li endStep end-step to set.
+      \li \a startStep start-step to set.
+      \li \a endStep end-step to set.
       \endlist
     */
     function setSteps(startStep, endStep) {
