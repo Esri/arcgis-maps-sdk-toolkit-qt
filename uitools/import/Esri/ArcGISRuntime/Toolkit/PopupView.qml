@@ -14,7 +14,7 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import Esri.ArcGISRuntime.Toolkit.Controller 100.9
+import Esri.ArcGISRuntime.Toolkit.Controller 100.10
 
 import QtQuick 2.11
 import QtQuick.Controls 2.11
