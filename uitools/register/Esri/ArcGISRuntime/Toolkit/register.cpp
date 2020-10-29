@@ -55,7 +55,7 @@ namespace Toolkit
 constexpr char const* NAMESPACE = "Esri.ArcGISRuntime.Toolkit.Controller";
 
 constexpr int VERSION_MAJOR = 100;
-constexpr int VERSION_MINOR = 9;
+constexpr int VERSION_MINOR = 10;
 
 namespace
 {
