@@ -23,6 +23,8 @@
 #include <Scene.h>
 #include <TimeAware.h>
 
+#include <cmath>
+
 #include <QDebug>
 
 namespace Esri
@@ -358,7 +360,7 @@ int TimeSliderController::numberOfSteps() const
   const auto range = extent.startTime().msecsTo(extent.endTime());
   const auto intervalMS = toMilliseconds(interval);
 
-  return ceil(range / intervalMS) ;
+  return std::ceil(range / intervalMS);
 }
 
 /*!
@@ -479,13 +481,13 @@ std::pair<int, int> TimeSliderController::stepsForGeoViewExtent() const
   if (geoExtent.isEmpty())
   {
     auto range = fullExtent.startTime().msecsTo(fullExtent.endTime());
-    return std::make_pair(0, ceil(range / intervalMS));
+    return std::make_pair(0, std::ceil(range / intervalMS));
   }
 
-  const int s = ceil(fullExtent.startTime().msecsTo(
-                       geoExtent.startTime())  / intervalMS);
-  const int e = ceil(geoExtent.endTime().msecsTo(
-                       fullExtent.endTime()) / intervalMS);
+  const int s = std::ceil(fullExtent.startTime().msecsTo(
+                          geoExtent.startTime())  / intervalMS);
+  const int e = std::ceil(geoExtent.endTime().msecsTo(
+                          fullExtent.endTime()) / intervalMS);
 
   return std::make_pair(s, e);
 }
