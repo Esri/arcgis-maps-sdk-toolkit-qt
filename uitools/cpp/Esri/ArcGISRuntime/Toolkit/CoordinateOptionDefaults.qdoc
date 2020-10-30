@@ -1,0 +1,63 @@
+/*!
+* \headerfile Esri/ArcGISRuntime/Toolkit/CoordinateOptionDefaults
+* This file contains several function to instantiate several kinds of common
+* CoordinateConversionOption objects used by a CoordinateConversionController.
+* \sa Esri::ArcGISRuntime::Toolkit::CoordinateConversionOption
+*/
+
+/*!
+  \fn CoordinateConversionOption* Esri::ArcGISRuntime::Toolkit::createDecimalDegrees(QObject* parent = nullptr)
+  \brief Creates a new \c CoordinateConversionOption set up to format \c DD with parent \a parent.
+ */
+
+/*!
+  \fn CoordinateConversionOption* Esri::ArcGISRuntime::Toolkit::createDegreesDecimalMinutes(QObject* parent = nullptr)
+  \brief Creates a new \c CoordinateConversionOption set up to format \c DDM with parent \a parent.
+ */
+
+ /*!
+  \fn CoordinateConversionOption* Esri::ArcGISRuntime::Toolkit::createDegreesMinutesSeconds(QObject* parent = nullptr)
+  \brief Creates a new \c CoordinateConversionOption set up to format \c DMS with parent \a parent.
+ */
+
+ /*!
+  \fn CoordinateConversionOption* Esri::ArcGISRuntime::Toolkit::createMgrs(MgrsConversionMode mode = MgrsConversionMode::Automatic, QObject* parent = nullptr)
+  \relates Esri/ArcGISRuntime/Toolkit/CoordinateOptionDefaults
+  \brief Creates a new \c CoordinateConversionOption set up to format \c MGRS with parent \a parent.
+
+  \list
+    \li \a mode Conversion mode.
+  \endlist
+ */
+
+ /*!
+  \fn CoordinateConversionOption* Esri::ArcGISRuntime::Toolkit::createUsng(int precision = 7, bool useSpaces = true, QObject* parent = nullptr)
+  \relates Esri/ArcGISRuntime/Toolkit/CoordinateOptionDefaults
+  \brief Creates a new \c CoordinateConversionOption set up to format \c USGN with parent \a parent.
+
+  \list
+    \li \a precision Numerical precision.
+    \li \a useSpaces Dictates if formatted output should contain spaces or not.
+  \endlist
+ */
+
+ /*!
+  \fn CoordinateConversionOption* Esri::ArcGISRuntime::Toolkit::createUtm(UtmConversionMode mode = UtmConversionMode::NorthSouthIndicators, bool useSpaces = true, QObject* parent = nullptr)
+  \relates Esri/ArcGISRuntime/Toolkit/CoordinateOptionDefaults
+  \brief Creates a new \c CoordinateConversionOption set up to format \c UTM with parent \a parent.
+
+  \list
+    \li \a mode Conversion mode.
+    \li \a useSpaces Dictates if formatted output should contain spaces or not.
+  \endlist
+ */
+
+ /*!
+  \fn CoordinateConversionOption* Esri::ArcGISRuntime::Toolkit::createGars(GarsConversionMode mode = GarsConversionMode::Center, QObject* parent = nullptr)
+  \relates Esri/ArcGISRuntime/Toolkit/CoordinateOptionDefaults
+  \brief Creates a new \c CoordinateConversionOption set up to format \c Gars with parent \a parent.
+
+    \list
+    \li \a mode Conversion mode.
+  \endlist
+ */
