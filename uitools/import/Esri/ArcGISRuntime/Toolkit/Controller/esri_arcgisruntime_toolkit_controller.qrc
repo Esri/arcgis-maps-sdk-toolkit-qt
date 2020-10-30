@@ -8,7 +8,6 @@
       <file>NorthArrowController.qml</file>
       <file>PopupViewController.qml</file>
       <file>TimeSliderController.qml</file>
-      <file>TimeSliderController.qml</file>
       <file>qmldir</file>
     </qresource>
 </RCC>
