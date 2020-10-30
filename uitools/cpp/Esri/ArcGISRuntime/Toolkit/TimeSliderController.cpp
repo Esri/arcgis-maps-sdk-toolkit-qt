@@ -485,9 +485,9 @@ std::pair<int, int> TimeSliderController::stepsForGeoViewExtent() const
   }
 
   const int s = std::ceil(fullExtent.startTime().msecsTo(
-                       geoExtent.startTime())  / intervalMS);
+                          geoExtent.startTime())  / intervalMS);
   const int e = std::ceil(geoExtent.endTime().msecsTo(
-                       fullExtent.endTime()) / intervalMS);
+                          fullExtent.endTime()) / intervalMS);
 
   return std::make_pair(s, e);
 }
