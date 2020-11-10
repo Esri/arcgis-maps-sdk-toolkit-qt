@@ -97,21 +97,17 @@ int main(int argc, char *argv[])
   QQmlApplicationEngine appEngine;
   appEngine.addImportPath(QDir(QCoreApplication::applicationDirPath()).filePath("qml"));
 
-  QString arcGISRuntimeImportPath = QUOTE(ARCGIS_RUNTIME_IMPORT_PATH);
-  QString arcGISToolkitImportPath = QUOTE(ARCGIS_TOOLKIT_IMPORT_PATH);
+  QString arcGISRuntimeImportPath = QUOTE(ARCGIS_RUNTIME_IMPORT_PATH);  
 
 #if defined(LINUX_PLATFORM_REPLACEMENT)
   // On some Linux platforms the string 'linux' is replaced with 1
   // Fix the created replacement paths
   QString replaceString = QUOTE(LINUX_PLATFORM_REPLACEMENT);
   arcGISRuntimeImportPath = arcGISRuntimeImportPath.replace(replaceString, "linux", Qt::CaseSensitive);
-  arcGISToolkitImportPath = arcGISToolkitImportPath.replace(replaceString, "linux", Qt::CaseSensitive);
 #endif
 
   // Add the Runtime and Extras paths
-  appEngine.addImportPath(arcGISRuntimeImportPath);
-  // Add the Toolkit path
-  appEngine.addImportPath(arcGISToolkitImportPath);
+  appEngine.addImportPath(arcGISRuntimeImportPath);  
 
   appEngine.load(QUrl(kApplicationSourceUrl));
 

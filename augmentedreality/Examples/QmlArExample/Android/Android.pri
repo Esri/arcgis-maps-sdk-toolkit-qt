@@ -33,8 +33,3 @@ DISTFILES += \
     $$ANDROID_PACKAGE_SOURCE_DIR/build.gradle \
     $$ANDROID_PACKAGE_SOURCE_DIR/gradle/wrapper/gradle-wrapper.properties \
     $$ANDROID_PACKAGE_SOURCE_DIR/gradlew.bat
-
-ANDROID_LIBS = $$dirname(QMAKE_QMAKE)/../lib
-ANDROID_EXTRA_LIBS += \
-    $$ANDROID_LIBS/libssl_1_1.so \
-    $$ANDROID_LIBS/libcrypto_1_1.so

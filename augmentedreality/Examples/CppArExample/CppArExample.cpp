@@ -245,45 +245,6 @@ void CppArExample::createFullScaleTestScene()
   changeScene(true);
 }
 
-// Create a scene centered on Yosemite National Park.
-// Mode: Tabletop AR
-void CppArExample::createYosemiteScene()
-{
-  m_scene = new Scene(this);
-  createSurfaceWithElevation();
-
-  const QUrl yosemiteUrl("https://tiles.arcgis.com/tiles/FQD0rKU8X5sAQfh8/arcgis/rest/services/"
-                         "VRICON_Yosemite_Sample_Integrated_Mesh_scene_layer/SceneServer");
-  auto* layer = new IntegratedMeshLayer(yosemiteUrl, m_scene);
-  m_scene->operationalLayers()->append(layer);
-
-  m_originCamera = Camera(37.7308, -119.612, 1212.0, 0.0, 90.0, 0.0);
-  m_arcGISArView->setOriginCamera(m_originCamera);
-  m_arcGISArView->setTranslationFactor(18000.0);
-
-  changeScene();
-}
-
-// Create a scene centered on the US-Mexico border.
-// Mode: Tabletop AR
-void CppArExample::createBorderScene()
-{
-  m_scene = new Scene(this);
-  createSurfaceWithElevation();
-
-  const QUrl borderUrl("https://tiles.arcgis.com/tiles/FQD0rKU8X5sAQfh8/arcgis/rest/services/"
-                       "VRICON_SW_US_Sample_Integrated_Mesh_scene_layer/SceneServer");
-  auto* layer = new IntegratedMeshLayer(borderUrl, m_scene);
-  m_scene->operationalLayers()->append(layer);
-
-  // Set origin camera
-  m_originCamera = Camera(32.5337, -116.925, 126.0, 0.0, 90.0, 0.0);
-  m_arcGISArView->setOriginCamera(m_originCamera);
-  m_arcGISArView->setTranslationFactor(10000.0);
-
-  changeScene();
-}
-
 // Create a scene centered on Brest (France)
 // Mode: Tabletop AR
 void CppArExample::createBrestScene()
