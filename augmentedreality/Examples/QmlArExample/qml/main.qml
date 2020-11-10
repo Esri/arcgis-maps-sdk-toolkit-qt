@@ -205,15 +205,11 @@ ApplicationWindow {
         onStreetsSceneClicked: changeScene("qrc:/qml/scenes/StreetsScene.qml", streetsSceneFactor, false);
         onImagerySceneClicked: changeScene("qrc:/qml/scenes/ImageryScene.qml", imagerySceneFactor, false);
 
-        readonly property double pointCloundSceneFactor: 0.0001
-        readonly property double yosemiteSceneFactor: 0.0001
-        readonly property double borderSceneFactor: 0.0001
+        readonly property double pointCloundSceneFactor: 0.0001        
         readonly property double brestSceneFactor: 0.00001
         readonly property double berlinSceneFactor: 0.0001
         readonly property double tabletopTestSceneFactor: 0.0000001
 
-        onYosemiteSceneClicked: changeScene("qrc:/qml/scenes/YosemiteScene.qml", yosemiteSceneFactor, true);
-        onBorderSceneClicked: changeScene("qrc:/qml/scenes/BorderScene.qml", borderSceneFactor, true);
         onBrestSceneClicked: changeScene("qrc:/qml/scenes/BrestScene.qml", brestSceneFactor, true);
         onBerlinSceneClicked: changeScene("qrc:/qml/scenes/BerlinScene.qml", berlinSceneFactor, true);
         onTabletopTestSceneClicked: changeScene("qrc:/qml/scenes/TabletopTestScene.qml", tabletopTestSceneFactor, true);

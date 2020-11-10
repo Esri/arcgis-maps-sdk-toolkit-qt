@@ -43,8 +43,6 @@ Item {
     signal imagerySceneClicked()
     signal fullScaleTestSceneClicked()
 
-    signal yosemiteSceneClicked()
-    signal borderSceneClicked()
     signal brestSceneClicked()
     signal berlinSceneClicked()
     signal tabletopTestSceneClicked()
@@ -222,22 +220,6 @@ Item {
                     title: "Tabletop scenes"
                     Column {
                         spacing: 5
-                        Button {
-                            width: buttonWidth
-                            text: "Yosemite"
-                            onClicked: {
-                                settings.visible = false;
-                                yosemiteSceneClicked();
-                            }
-                        }
-                        Button {
-                            width: buttonWidth
-                            text: "Border"
-                            onClicked: {
-                                settings.visible = false;
-                                borderSceneClicked();
-                            }
-                        }
                         Button {
                             width: buttonWidth
                             text: "Brest"

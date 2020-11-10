@@ -60,8 +60,6 @@ public:
   Q_INVOKABLE void createImageryScene();
   Q_INVOKABLE void createFullScaleTestScene();
 
-  Q_INVOKABLE void createYosemiteScene();
-  Q_INVOKABLE void createBorderScene();
   Q_INVOKABLE void createBrestScene();
   Q_INVOKABLE void createBerlinScene();
   Q_INVOKABLE void createTabletopTestScene();

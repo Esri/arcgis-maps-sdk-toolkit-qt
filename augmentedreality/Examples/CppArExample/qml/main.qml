@@ -138,22 +138,10 @@ ApplicationWindow {
 
         // tabletop scenes
         readonly property double pointCloundSceneFactor: 0.0001
-        readonly property double yosemiteSceneFactor: 0.0001
-        readonly property double borderSceneFactor: 0.0001
         readonly property double brestSceneFactor: 0.00001
         readonly property double berlinSceneFactor: 0.0001
         readonly property double tabletopTestSceneFactor: 0.0000001
 
-        onYosemiteSceneClicked: {
-            calibrationView.visible = false;
-            setCalibrationFactors(yosemiteSceneFactor);
-            arSample.createYosemiteScene();
-        }
-        onBorderSceneClicked: {
-            calibrationView.visible = false;
-            setCalibrationFactors(borderSceneFactor);
-            arSample.createBorderScene();
-        }
         onBrestSceneClicked: {
             calibrationView.visible = false;
             setCalibrationFactors(brestSceneFactor);
