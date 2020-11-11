@@ -9,6 +9,55 @@ SDK for Qt. It provides ready made components to complement mapping and GIS
 applications. Because it is open source you are encouraged to modify these tools
 and add your own.
 
+## Integrating with QML
+
+* Clone the Toolkit repo
+* In your project's .pro file, include the QML toolkit .pri file - `include(/arcgis-runtime-toolkit-qt/uitools/toolkitqml.pri)`
+* Open your main.qml and import the toolkit - `import Esri.ArcGISRuntime.Toolkit 100.10`
+* Declare a toolkit component:
+
+```qml
+NorthArrow {
+    width: 30
+    height: width
+    geoView: mapView
+}
+```
+
+## Integrating with Qt Quick C++
+
+* Clone the Toolkit repo
+* In your project's .pro file, include the C++ toolkit .pri file - `include(/arcgis-runtime-toolkit-qt/uitools/toolkitcpp.pri)`
+* In your project's main.cpp, add `#include "Esri/ArcGISRuntime/Toolkit/register.h"`
+* In your project's main.cpp, add the following before the engine is loaded `Esri::ArcGISRuntime::Toolkit::registerComponents();`
+* Open your main.qml and import the toolkit - `import Esri.ArcGISRuntime.Toolkit 100.10`
+* Declare a toolkit component:
+
+```qml
+NorthArrow {
+    width: 30
+    height: width
+    geoView: mapView
+}
+```
+
+## Integrating with Qt Widgets C++
+
+* Clone the Toolkit repo
+* In your project's .pro file, include the Widgets toolkit .pri file - `include(/arcgis-runtime-toolkit-qt/uitools/toolkitwidgets.pri)`
+* In your project's QWidget derived class, add `#include "NorthArrow.h"`
+* Create the NorthArrow widget and add it to a layout:
+
+```cpp
+Esri::ArcGISRuntime::Toolkit::NorthArrow* northArrow = new Esri::ArcGISRuntime::Toolkit::NorthArrow(this);
+northArrow->setFixedSize(100, 100);
+northArrow->setMapView(m_mapView);
+
+QVBoxLayout* layout = new QVBoxLayout(this);    
+layout->addWidget(northArrow);
+setLayout(layout);
+```
+
 ## Resources
 
 * [ArcGIS Runtime SDK for Qt](https://developers.arcgis.com/qt/)
