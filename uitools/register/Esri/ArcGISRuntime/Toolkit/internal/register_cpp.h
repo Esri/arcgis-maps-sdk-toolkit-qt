@@ -13,8 +13,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_REGISTER_H
-#define ESRI_ARCGISRUNTIME_TOOLKIT_REGISTER_H
+#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_REGISTER_CPP_H
+#define ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_REGISTER_CPP_H
 
 class QQmlEngine;
 
@@ -25,10 +25,10 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
-void registerComponents(QQmlEngine& engine);
+void registerComponents_cpp_(QQmlEngine& qmlEngine);
 
 } // Toolkit
 } // ArcGISRuntime
 } // Esri
 
-#endif // ESRI_ARCGISRUNTIME_TOOLKIT_REGISTER_H
+#endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_REGISTER_CPP_H

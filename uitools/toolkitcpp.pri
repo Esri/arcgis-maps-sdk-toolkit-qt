@@ -17,11 +17,16 @@ REGISTERPATH = $$PWD/register/Esri/ArcGISRuntime/Toolkit
 
 INCLUDEPATH += $$PWD/register $$REGISTERPATH
 
-HEADERS += $$REGISTERPATH/register.h
-SOURCES += $$REGISTERPATH/register.cpp
+HEADERS += $$REGISTERPATH/register.h \
+           $$REGISTERPATH/internal/register_cpp.h
+
+SOURCES += $$REGISTERPATH/register.cpp \
+           $$REGISTERPATH/internal/register_cpp.cpp
 
 RESOURCES += \
   $$PWD/images/esri_arcgisruntime_toolkit_images.qrc \
   $$PWD/import/Esri/ArcGISRuntime/Toolkit/esri_arcgisruntime_toolkit_view.qrc
 
 QML_IMPORT_PATH += $$PWD/import
+
+DEFINES += CPP_ARCGISRUNTIME_TOOLKIT

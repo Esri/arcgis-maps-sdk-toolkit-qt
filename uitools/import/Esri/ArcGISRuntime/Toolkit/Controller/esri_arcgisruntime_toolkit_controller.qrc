@@ -1,6 +1,6 @@
 <RCC>
     <!-- This section contains all QML API controller components. -->
-    <qresource prefix="/qt-project.org/imports/Esri/ArcGISRuntime/Toolkit/Controller">
+    <qresource prefix="/esri.com/imports/Esri/ArcGISRuntime/Toolkit/Controller">
       <file>AuthenticationController.qml</file>
       <file>CoordinateConversionController.qml</file>
       <file>CoordinateConversionOption.qml</file>
