@@ -44,7 +44,7 @@ namespace Toolkit
 namespace
 {
 
-const QString ESRI_COM_PATH = ":/esri.com/imports";
+const QString ESRI_COM_PATH = QStringLiteral(":/esri.com/imports");
 
 constexpr char const* NAMESPACE = "Esri.ArcGISRuntime.Toolkit.Controller";
 

@@ -27,7 +27,7 @@ namespace Toolkit
 
 namespace
 {
-  const QString ESRI_COM_PATH = ":/esri.com/imports";
+const QString ESRI_COM_PATH = QStringLiteral(":/esri.com/imports");
 }
 
 void registerComponents_qml_(QQmlEngine& appEngine)
