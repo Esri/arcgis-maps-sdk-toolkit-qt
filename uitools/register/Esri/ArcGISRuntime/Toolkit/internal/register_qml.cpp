@@ -13,10 +13,10 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_REGISTER_H
-#define ESRI_ARCGISRUNTIME_TOOLKIT_REGISTER_H
+#include "register_qml.h"
 
-class QQmlEngine;
+#include <QString>
+#include <QQmlEngine>
 
 namespace Esri
 {
@@ -25,10 +25,16 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
-void registerComponents(QQmlEngine& engine);
+namespace
+{
+const QString ESRI_COM_PATH = QStringLiteral(":/esri.com/imports");
+}
+
+void registerComponents_qml_(QQmlEngine& appEngine)
+{
+  appEngine.addImportPath(ESRI_COM_PATH);
+}
 
 } // Toolkit
 } // ArcGISRuntime
 } // Esri
-
-#endif // ESRI_ARCGISRUNTIME_TOOLKIT_REGISTER_H

@@ -15,24 +15,27 @@
  ******************************************************************************/
 #include "register.h"
 
-// Toolkit includes
-#include "AuthenticationController.h"
-#include "CoordinateConversionController.h"
-#include "CoordinateConversionOption.h"
-#include "CoordinateConversionResult.h"
-#include "NorthArrowController.h"
-#include "PopupViewController.h"
-#include "TimeSliderController.h"
+/*!
+  \headerfile Esri/ArcGISRuntime/Toolkit/register
+  
+  This file contains the registration function required to register the toolkit
+  with the `QQmlEngine`.
+  
+  Please refer to
+  \c README.md for more information on workflows.
+*/
 
-// ArcGIS includes
-#include <Point.h>
+/*!
+  \fn void Esri::ArcGISRuntime::Toolkit::registerComponents(QmlEngine&)
+  \relates Esri/ArcGISRuntime/Toolkit/register
+  \brief This registration function must be called after the QmlEngine has been
+  declared, but before it is run. This sets up resources and component registration
+  with the `QQmlEngine` and the toolkit.
+ */
 
-// Qt Includes
-#include <QQmlEngine>
-#include <QQmlFileSelector>
 
-// std includes
-#include <type_traits>
+#if defined(CPP_ARCGISRUNTIME_TOOLKIT)
+#  include "internal/register_cpp.h"
 
 namespace Esri
 {
@@ -41,76 +44,32 @@ namespace ArcGISRuntime
 namespace Toolkit
 {
 
-/*!
-  \headerfile Esri/ArcGISRuntime/Toolkit/register
-  
-  This file contains the registration function required to register the C++
-  controllers provided by the Toolkit with your application.
-  
-   If you intend to utilize the toolkit with [Map|Scene]QuickView in your
-  application, invoking registerComponents is required! Please refer to
-  \c README.md for more information on workflows.
-*/
-
-constexpr char const* NAMESPACE = "Esri.ArcGISRuntime.Toolkit.Controller";
-
-constexpr int VERSION_MAJOR = 100;
-constexpr int VERSION_MINOR = 10;
-
-namespace
+void registerComponents(QQmlEngine& engine)
 {
-/*
- \internal
- \brief Function for registration. Registers the C++ type Foo as
- FooCPP in QML with the appropriate version and namespace information.
- 
- \note In QML, we alias the QML type \c FooCPP to QML type \c Foo using the
- qml files found in the `+cpp_api` folder of our QML directory.
- 
- \list
-  \li \c T Type to register in QML.
- \endlist
- */
-template <typename T>
-void registerComponent()
-{
-  static_assert(std::is_base_of<QObject, T>::value, "Must inherit QObject");
-  auto name = QString{T::staticMetaObject.className()};
-  name.remove("Esri::ArcGISRuntime::Toolkit::");
-  qmlRegisterType<T>(NAMESPACE, VERSION_MAJOR, VERSION_MINOR, name.toLatin1());
-}
-
-} // namespace
-
-/*!
-  \fn void Esri::ArcGISRuntime::Toolkit::registerComponents(QQmlEngine* engine)
-  \relates Esri/ArcGISRuntime/Toolkit/register
-  \brief This registration function is required to register all the C++
-  controllers within your application in QML.
-
-  For example this will expose the class provided by \c NorthArrowController.h
-  in QML as \c NorthArrowController.
-
-  This register function also registers the following ArcGISRuntime
-  types in the Qt Metatype system.
- 
-  \list
-  \li \c Esri::ArcGISRuntime::Point
-  \endlist
- */
-void registerComponents()
-{
-  registerComponent<AuthenticationController>();
-  registerComponent<CoordinateConversionController>();
-  registerComponent<CoordinateConversionOption>();
-  registerComponent<CoordinateConversionResult>();
-  registerComponent<NorthArrowController>();
-  registerComponent<PopupViewController>();
-  registerComponent<TimeSliderController>();
-
-  qRegisterMetaType<Point>("Esri::ArcGISRuntime::Point");
+  registerComponents_cpp_(engine);
 }
 
 } // Toolkit
 } // ArcGISRuntime
 } // Esri
+
+#elif defined(QML_ARCGISRUNTIME_TOOLKIT)
+#  include "internal/register_qml.h"
+
+namespace Esri
+{
+namespace ArcGISRuntime
+{
+namespace Toolkit
+{
+
+void registerComponents(QQmlEngine& engine)
+{
+  registerComponents_qml_(engine);
+}
+
+} // Toolkit
+} // ArcGISRuntime
+} // Esri
+
+#endif
