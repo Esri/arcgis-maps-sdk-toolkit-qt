@@ -35,6 +35,7 @@ namespace Toolkit
 /*!
   \class Esri::ArcGISRuntime::Toolkit::NorthArrow
   \inmodule EsriArcGISRuntimeToolkit
+  \ingroup ArcGISQtToolkitUiCppWidgetsViews
   \brief The \c NorthArrow displays a compass overlaid on the \c GeoView, with 
   the compass heading matching the current rotation of the \c MapView, or 
   \c Camera heading of the \c SceneView. 

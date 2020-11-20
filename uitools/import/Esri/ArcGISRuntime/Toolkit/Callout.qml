@@ -23,8 +23,9 @@ import "LeaderPosition.js" as Enums
     \qmltype Callout
     \ingroup ArcGISQtToolkit
     \ingroup ArcGISQtToolkitQmlApi
+    \ingroup ArcGISQtToolkitUiQmlViews
     \inqmlmodule Esri.ArcGISRuntime.Toolkit.Controls
-    \since Esri.ArcGISRutime 100.9
+    \since Esri.ArcGISRutime 100.10
     \brief A view for displaying information at a geographic location on a Map.
 
      A Callout can be displayed for several different scenarios:

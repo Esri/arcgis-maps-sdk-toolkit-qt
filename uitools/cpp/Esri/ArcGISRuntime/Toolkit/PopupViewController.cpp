@@ -25,6 +25,7 @@ namespace Toolkit
 /*!
   \class Esri::ArcGISRuntime::Toolkit::PopupViewController
   \inmodule ArcGISRuntimeToolkit
+  \ingroup ArcGISQtToolkitUiCppControllers
   \brief In MVC architecture, this is the controller for the corresponding
   \c PopupView.
   

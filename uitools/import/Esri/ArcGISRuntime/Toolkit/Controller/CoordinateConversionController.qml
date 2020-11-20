@@ -19,7 +19,8 @@ import Esri.ArcGISRuntime 100.8
 /*!
    \qmltype CoordinateConversionController
    \inqmlmodule Esri.ArcGISRuntime.Toolkit
-   \since Esri.ArcGISRutime 100.8
+   \since Esri.ArcGISRutime 100.10
+   \ingroup ArcGISQtToolkitUiQmlControllers
    \brief In MVC architecture, this is the controller for the 
    CoordinateConversion view.
  */

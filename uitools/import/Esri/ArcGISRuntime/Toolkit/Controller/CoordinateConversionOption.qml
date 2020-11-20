@@ -20,7 +20,8 @@ import Esri.ArcGISRuntime 100.8
 /*!
    \qmltype CoordinateConversionOption
    \inqmlmodule Esri.ArcGISRuntime.Toolkit
-   \since Esri.ArcGISRutime 100.8
+   \since Esri.ArcGISRutime 100.10
+   \ingroup ArcGISQtToolkitUiQmlControllers
    \brief a CoordinateConversionOption is a collection of properties that
    dictates how a Point should be converted to and from a string.
    

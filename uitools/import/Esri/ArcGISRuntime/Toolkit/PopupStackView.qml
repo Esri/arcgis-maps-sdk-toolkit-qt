@@ -22,7 +22,8 @@ import QtQuick.Layouts 1.12
    \qmltype PopupStackView
    \ingroup ArcGISQtToolkit
    \inqmlmodule Esri.ArcGISRuntime.Toolkit
-   \since Esri.ArcGISRuntime 100.8
+   \ingroup ArcGISQtToolkitUiQmlViews
+   \since Esri.ArcGISRuntime 100.10
    \brief A view for displaying and editing information of GeoElements,
    including Features and Graphics.
    

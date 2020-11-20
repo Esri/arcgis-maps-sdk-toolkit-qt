@@ -327,36 +327,36 @@ void LocationDataSource::updateObjectsAndConnections()
 // signals
 
 /*!
-  \fn void LocationDataSource::headingChanged(double heading);
+  \fn void Esri::ArcGISRuntime::Toolkit::LocationDataSource::headingChanged(double heading);
   \brief Signal emitted when the heading value changes.
  */
 
 /*!
-  \fn void LocationDataSource::isStartedChanged();
+  \fn void Esri::ArcGISRuntime::Toolkit::LocationDataSource::isStartedChanged();
   \brief Signal emitted when the \l isStarted property changes.
  */
 
 /*!
-  \fn void LocationDataSource::locationChanged(double latitude, double longitude, double altitude);
+  \fn void Esri::ArcGISRuntime::Toolkit::LocationDataSource::locationChanged(double latitude, double longitude, double altitude);
   \brief Signal emitted when the location values change.
  */
 
 /*!
-  \fn void LocationDataSource::geoPositionSourceChanged();
+  \fn void Esri::ArcGISRuntime::Toolkit::LocationDataSource::geoPositionSourceChanged();
   \brief Signal emitted when the \l geoPositionSource property changes.
  */
 
 /*!
-  \fn void LocationDataSource::compassChanged();
+  \fn void Esri::ArcGISRuntime::Toolkit::LocationDataSource::compassChanged();
   \brief Signal emitted when the \l compass property changes.
  */
 
 /*!
-  \fn void LocationDataSource::sensorStatusChanged();
+  \fn void Esri::ArcGISRuntime::Toolkit::LocationDataSource::sensorStatusChanged();
   \brief Signal emitted when the \l sensorStatus property changes.
  */
 
 /*!
-  \fn void LocationDataSource::locationTrackingModeChanged();
+  \fn void Esri::ArcGISRuntime::Toolkit::LocationDataSource::locationTrackingModeChanged();
   \brief Signal emitted when the \l locationTrackingMode property changes.
  */
