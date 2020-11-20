@@ -21,7 +21,8 @@ import Esri.ArcGISRuntime 100.9
 /*!
    \qmltype TimeSliderController
    \inqmlmodule Esri.ArcGISRuntime.Toolkit
-   \since Esri.ArcGISRuntime 100.9
+   \since Esri.ArcGISRuntime 100.10
+   \ingroup ArcGISQtToolkitUiQmlControllers
    \brief In MVC architecture, this is the controller for the corresponding
    TimeSlider.
    

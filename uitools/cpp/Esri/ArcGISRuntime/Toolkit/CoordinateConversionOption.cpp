@@ -29,6 +29,7 @@ namespace Toolkit
 /*!
   \class Esri::ArcGISRuntime::Toolkit::CoordinateConversionOption
   \inmodule ArcGISRuntimeToolkit
+  \ingroup ArcGISQtToolkitUiCppControllers
   \brief a \c CoordinateConversionOption is a collection of properties that
   dictates how a \c Point should be converted to and from a string.
   

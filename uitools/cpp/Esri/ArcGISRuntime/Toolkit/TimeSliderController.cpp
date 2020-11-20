@@ -142,6 +142,7 @@ namespace
 /*!
   \class Esri::ArcGISRuntime::Toolkit::TimeSliderController
   \inmodule ArcGISRuntimeToolkit
+  \ingroup ArcGISQtToolkitUiCppControllers
   \brief In MVC architecture, this is the controller for the corresponding
   \c TimeSlider.
   

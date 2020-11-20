@@ -18,7 +18,8 @@ import QtQml 2.12
 /*!
    \qmltype NorthArrowController
    \inqmlmodule Esri.ArcGISRuntime.Toolkit
-   \since Esri.ArcGISRutime 100.8
+   \since Esri.ArcGISRutime 100.10
+   \ingroup ArcGISQtToolkitUiQmlControllers
    \brief In MVC architecture, this is the controller for the corresponding
    NorthArrow view.
    

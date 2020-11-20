@@ -18,7 +18,8 @@ import QtQml 2.12
 /*!
    \qmltype CoordinateConversionResult
    \inqmlmodule Esri.ArcGISRuntime.Toolkit
-   \since Esri.ArcGISRutime 100.8
+   \ingroup ArcGISQtToolkitUiQmlControllers
+   \since Esri.ArcGISRutime 100.10
    \brief a CoordinateConversionResult stores the textual representation of a
    a point converted to a string using the formatting given in a 
    CoordinateConversionOption.

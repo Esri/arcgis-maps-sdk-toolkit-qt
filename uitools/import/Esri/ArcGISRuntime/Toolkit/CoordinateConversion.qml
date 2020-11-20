@@ -23,7 +23,8 @@ import QtQuick.Layouts 1.12
 /*!
  \qmltype CoordinateConversion
  \inqmlmodule Esri.ArcGISRuntime.Toolkit
- \since Esri.ArcGISRutime 100.8
+ \ingroup ArcGISQtToolkitUiQmlViews
+ \since Esri.ArcGISRutime 100.10
  \brief The user interface for the coordinate conversion tool.
 
  This tool allows a user to select a point on the map or to enter a point by

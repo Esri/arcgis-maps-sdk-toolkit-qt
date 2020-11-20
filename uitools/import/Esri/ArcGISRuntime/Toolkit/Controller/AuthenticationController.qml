@@ -20,7 +20,8 @@ import Esri.ArcGISRuntime 100.8
 /*!
   \qmltype AuthenticationController
   \inqmlmodule Esri.ArcGISRuntime.Toolkit
-  \since Esri.ArcGISRutime 100.9
+  \since Esri.ArcGISRutime 100.10
+  \ingroup ArcGISQtToolkitUiQmlControllers
   \brief In MVC architecture, this is the controller for the corresponding
   AuthenticationView.  
   

@@ -27,7 +27,7 @@ using namespace Esri::ArcGISRuntime::Toolkit;
   \ingroup ArcGISQtToolkit
   \ingroup ArcGISQtToolkitQmlApi
   \inmodule ArcGISQtToolkit
-  \since Esri::ArcGISRuntime 100.6
+  \since Esri::ArcGISArToolkit  100.6
   \brief A scene view for displaying ARKit/ARCore features on mobile devices
    using the QML API.
 

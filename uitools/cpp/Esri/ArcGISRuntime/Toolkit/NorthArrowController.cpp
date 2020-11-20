@@ -30,6 +30,7 @@ namespace Toolkit
 /*!
   \class Esri::ArcGISRuntime::Toolkit::NorthArrowController
   \inmodule EsriArcGISRuntimeToolkit
+  \ingroup ArcGISQtToolkitUiCppControllers
   \brief In MVC architecture, this is the controller for the corresponding
   \c NorthArrow view.
   
