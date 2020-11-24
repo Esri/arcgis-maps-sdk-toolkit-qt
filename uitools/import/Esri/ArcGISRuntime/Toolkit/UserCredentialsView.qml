@@ -46,15 +46,15 @@ Dialog {
             text: qsTr("Continue")
             DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
         }
+    }
 
-        onAccepted: {
-            controller.continueWithUsernamePassword(usernameTextField.text,
-                                                    passwordTextField.text);
-        }
+    onAccepted: {
+        controller.continueWithUsernamePassword(usernameTextField.text,
+                                                passwordTextField.text);
+    }
 
-        onRejected: {
-            controller.cancel();
-        }
+    onRejected: {
+        controller.cancel();
     }
 
     ColumnLayout {
