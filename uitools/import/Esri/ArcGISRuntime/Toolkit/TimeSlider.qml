@@ -158,17 +158,20 @@ Control {
     property alias playbackInterval : playAnimation.interval
 
     /*!
-     \qmlproperty stepBackIcon The icon for the step-back button.
+     \qmlproperty icon TimeSlider::stepBackIcon
+     \brief The icon for the step-back button.
      */
     property alias stepBackIcon: stepBackButton.icon
 
     /*!
-     \qmlproperty playIcon The icon for the play button.
+     \qmlproperty icon icon TimeSlider::playIcon
+     \brief The icon for the play button.
      */
     property alias playIcon: playButton.icon
 
     /*!
-     \qmlproperty stepForwardIcon The icon for the step-forward button.
+     \qmlproperty icon TimeSlider::stepForwardIcon
+     \brief The icon for the step-forward button.
      */
     property alias stepForwardIcon: stepForwardButton.icon
 
