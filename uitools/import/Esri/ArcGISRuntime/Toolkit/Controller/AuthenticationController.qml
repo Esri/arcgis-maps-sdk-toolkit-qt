@@ -81,7 +81,7 @@ QtObject {
     property int currentChallengeFailureCount: internal.currentChallenge ? internal.currentChallenge.failureCount : 0;
     
     /*!
-    \qmlproperty int clientCertificateInfos
+    \qmlproperty list<string> clientCertificateInfos
     \brief The list of ClientCertificateInfo strings currently held by the
     AuthenticationManager.
     */
@@ -141,7 +141,7 @@ QtObject {
   
                 internal.currentChallenge = challenge;
             }
-            function onClientCertificatePasswordRequired() {
+            function onClientCertificatePasswordRequired(certificate) {
                 authenticationController.clientCertificatePasswordRequired(certificate);
             }
         }
