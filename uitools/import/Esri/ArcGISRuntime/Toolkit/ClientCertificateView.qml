@@ -118,7 +118,7 @@ Dialog {
     Connections {
         target: controller
 
-        onClientCertificatePasswordRequired: {
+        function onClientCertificatePasswordRequired(certificate) {
             const dialog = passwordDialog.createObject(
                              clientCertificateView.parent, { certificate: certificate});
             dialog.open();
