@@ -163,7 +163,7 @@ int PopupViewController::attachmentCount() const
 }
 
 /*!
-  \brief Returns whether attachments should be displayed dor not
+  \brief Returns whether attachments should be displayed or not
   according to the PopupManager.
  */
 bool PopupViewController::isShowAttachments() const
