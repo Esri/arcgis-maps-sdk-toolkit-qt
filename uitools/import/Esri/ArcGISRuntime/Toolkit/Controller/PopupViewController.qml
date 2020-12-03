@@ -67,7 +67,7 @@ QtObject {
     property alias attachmentThumbnailWidth: internal.attachmentThumbnailWidth
 
     /*!
-      \brief The mimimum attachment thumbnail height.
+      \brief The minimum attachment thumbnail height.
      */
     property alias attachmentThumbnailHeight: internal.attachmentThumbnailHeight
 
