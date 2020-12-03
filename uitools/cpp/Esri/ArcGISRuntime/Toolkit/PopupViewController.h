@@ -42,6 +42,7 @@ class PopupViewController : public QObject
   Q_PROPERTY(QAbstractListModel* attachments READ attachments NOTIFY popupManagerChanged)
   Q_PROPERTY(int attachmentCount READ attachmentCount NOTIFY attachmentCountChanged)
   Q_PROPERTY(QString title READ title NOTIFY popupManagerChanged)
+  Q_PROPERTY(bool showAttachments READ isShowAttachments NOTIFY popupManagerChanged)
 
 public:
   Q_INVOKABLE explicit PopupViewController(QObject* parent = nullptr);
@@ -57,6 +58,8 @@ public:
   QAbstractListModel* attachments() const;
 
   QString title() const;
+
+  bool isShowAttachments() const;
 
 signals:
 

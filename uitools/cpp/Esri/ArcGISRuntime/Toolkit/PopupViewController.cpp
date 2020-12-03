@@ -159,6 +159,18 @@ int PopupViewController::attachmentCount() const
 }
 
 /*!
+  \brief Returns whether attachments should be displayed dor not
+  according to the PopupManager.
+ */
+bool PopupViewController::isShowAttachments() const
+{
+  // This is re-exposed from PopupManager as PopupManager does not have
+  // NOTIFY/CONSTANT modifiers on its showAttachments property, so the Controller
+  // re-exposes showAttachments to suppress warnings about this.
+  return m_popupManager ? m_popupManager->isShowAttachments() : false;
+}
+
+/*!
   \brief Returns the title of the \c PopupManager.
  */
 QString PopupViewController::title() const
@@ -184,6 +196,10 @@ QString PopupViewController::title() const
   \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::attachmentCountChanged()
   \brief Signal emitted when the number of rows in the attachments list-model 
   changes.
+ */
+
+/*!
+  \property Esri::ArcGISRuntime::Toolkit::PopupViewController::showAttachments
  */
 
 /*!

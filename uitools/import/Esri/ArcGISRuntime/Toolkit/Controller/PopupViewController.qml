@@ -33,32 +33,32 @@ QtObject {
 
     /*!
       \brief The PopupManager that populates this controller with data.
-    */
+     */
     property var popupManager: null
 
     /*!
       \brief A list model containing the key/value fields of the
       Popup associated with this PopupManager.
       \note This can be null.
-    */
+     */
     readonly property alias displayFields: internal.displayFields
 
     /*!
       Exposes the number of rows in the list model returned by `displayFields`.
-    */
+     */
     readonly property alias fieldCount: internal.fieldCount
 
-  /*!
-     \brief A list model containing the attachment images of the
-     Popup associated with this PopupManager. 
-     \note This can be null.
-   */
+    /*!
+      \brief A list model containing the attachment images of the
+      Popup associated with this PopupManager. 
+      \note This can be null.
+     */
     readonly property alias attachments: internal.attachments
 
     /*!
       \brief Exposes the number of rows in the list model returned by 
       `attachments`.
-    */
+     */
     readonly property alias attachmentCount: internal.attachmentCount
 
     /*!
@@ -66,8 +66,16 @@ QtObject {
       \note This is re-exposed from PopupManager as PopupManager does not have
       NOTIFY/CONSTANT modifiers on its title property, so the Controller
       re-exposes title to suppress warnings about ths.
-    */
+     */
     readonly property alias title: internal.title
+
+    /*!
+      \brief Returns the showAttachments flag of the PopupManager.
+      \note This is re-exposed from PopupManager as PopupManager does not have
+      NOTIFY/CONSTANT modifiers on its showAttachments property, so the Controller
+      re-exposes showAttachments to suppress warnings about ths.
+     */
+    readonly property alias showAttachments: internal.showAttachments
 
     /*! \internal */
     property QtObject internal : QtObject {
@@ -83,6 +91,8 @@ QtObject {
 
       property string title: ""
 
+      property bool showAttachments: false
+
       property Connections attachmentConnection: Connections {
           target: attachments
           onRowsInserted: internal.attachmentCount = attachments.rowCount();
@@ -97,6 +107,9 @@ QtObject {
     }
 
     onPopupManagerChanged: {
+        // PopupManager properties have no NOTIFY or CONST properties.
+        // To avoid property warnings we will instead cache 
+        // what comes out of PopupManager.
         if (popupManager) {
             if (popupManager.attachmentManager) {
                 internal.attachments = popupManager.attachmentManager.attachmentsModel;
@@ -109,7 +122,7 @@ QtObject {
             internal.displayFields = popupManager.displayedFields;
             internal.fieldCount = displayFields.rowCount();
             internal.title = popupManager.title;
-
+            internal.showAttachments = popupManager.showAttachments;
         } else {
             internal.attachments = null;
             internal.attachmentCount = 0;
@@ -118,6 +131,8 @@ QtObject {
             internal.fieldCount = 0;
 
             internal.title = "";
+
+            internal.showAttachments = false;
         }
     }
 }

@@ -128,7 +128,10 @@ Control {
                 left: parent.left
                 right: parent.right
             }
-            rows: controller.fieldCount + controller.attachmentCount + 2
+
+            // We must account for what is visible, including title headers as rows.
+            rows: controller.showAttachments ? controller.fieldCount + controller.attachmentCount + 2
+                                             : controller.fieldCount + 1
 
             // Title Header
             Text {
@@ -154,6 +157,8 @@ Control {
             Text {
                 Layout.columnSpan: 2
                 Layout.fillWidth: true
+                visible: controller.showAttachments
+                enabled: visible
                 textFormat: Text.StyledText
                 text: controller.attachmentCount > 0 ? "<h2>Attachments</h2>" : ""
                 color: palette.text
@@ -164,6 +169,8 @@ Control {
             Repeater {
                 model: controller.attachments
                 Text {
+                    visible: controller.showAttachments
+                    enabled: visible
                     Layout.fillWidth: true
                     text: name
                     wrapMode: Text.WrapAnywhere
@@ -195,6 +202,9 @@ Control {
             Repeater {
                 model: controller.attachments
                 Image {
+                    Layout.fillHeight: true
+                    visible: controller.showAttachments
+                    enabled: visible
                     source: thumbnailUrl
                     MouseArea {
                         anchors.fill: parent
