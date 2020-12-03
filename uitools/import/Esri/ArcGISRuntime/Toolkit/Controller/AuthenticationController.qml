@@ -105,28 +105,38 @@ QtObject {
     }
   
     function continueWithUsernamePassword(...args) {
-        internal.currentChallenge.continueWithUsernamePassword(...args);
-        internal.currentChallenge = null;
+        if (internal.currentChallenge) {
+            internal.currentChallenge.continueWithUsernamePassword(...args);
+            internal.currentChallenge = null;
+        }
     }
   
     function continueWithOAuthAuthorizationCode(...args) {
-        internal.currentChallenge.continueWithOAuthAuthorizationCode(...args);
-        internal.currentChallenge = null;
+        if (internal.currentChallenge) {
+            internal.currentChallenge.continueWithOAuthAuthorizationCode(...args);
+            internal.currentChallenge = null;
+        }
     }
   
     function continueWithClientCertificate(...args) {
-        internal.currentChallenge.continueWithClientCertificate(...args);
-        internal.currentChallenge = null;
+        if (internal.currentChallenge) {
+            internal.currentChallenge.continueWithClientCertificate(...args);
+            internal.currentChallenge = null;
+        }
     }
   
     function continueWithSslHandshake(...args) {
-        internal.currentChallenge.continueWithSslHandshake(...args);
-        internal.currentChallenge = null;
+        if (internal.currentChallenge) {
+            internal.currentChallenge.continueWithSslHandshake(...args);
+            internal.currentChallenge = null;
+        }
     }
   
     function cancel(...args) {
-        internal.currentChallenge.cancel(...args);
-        internal.currentChallenge = null;
+        if (internal.currentChallenge) {
+            internal.currentChallenge.cancel(...args);
+            internal.currentChallenge = null;
+        }
     }
     
     property QtObject internal: QtObject {

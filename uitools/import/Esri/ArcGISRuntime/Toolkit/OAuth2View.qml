@@ -64,7 +64,7 @@ Dialog {
                 controller.continueWithOAuthAuthorizationCode(authCode);
                 oAuthView.accept();
             } else if (title.indexOf("Denied error=") > -1) {
-                oAuthView.reject();
+                controller.cancel();
             }
         }
     }
