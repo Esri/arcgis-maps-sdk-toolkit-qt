@@ -83,7 +83,7 @@ QtObject {
       \brief Returns the showAttachments flag of the PopupManager.
       \note This is re-exposed from PopupManager as PopupManager does not have
       NOTIFY/CONSTANT modifiers on its showAttachments property, so the Controller
-      re-exposes showAttachments to suppress warnings about ths.
+      re-exposes showAttachments to suppress warnings about this.
      */
     readonly property alias showAttachments: internal.showAttachments
 
