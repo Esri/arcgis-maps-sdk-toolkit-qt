@@ -37,7 +37,6 @@ Dialog {
 
     footer: DialogButtonBox {
         Button {
-            id: bBox
             text: qsTr("Skip")
             DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
         }
@@ -46,15 +45,14 @@ Dialog {
             text: qsTr("Continue")
             DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
         }
-    }
 
-    onAccepted: {
-        controller.continueWithUsernamePassword(usernameTextField.text,
-                                                passwordTextField.text);
-    }
+        onAccepted: {
+            acceptWithCurrentUsernameAndPassword();
+        }
 
-    onRejected: {
-        controller.cancel();
+        onRejected: {
+            controller.cancel();
+        }
     }
 
     ColumnLayout {
@@ -91,7 +89,7 @@ Dialog {
         TextField {
             id: usernameTextField
             placeholderText: qsTr("username")
-            onAccepted: userCredentialsView.accept();
+            onAccepted: acceptWithCurrentUsernameAndPassword()
             Layout.fillWidth: true
             Layout.margins: 5
         }
@@ -99,10 +97,20 @@ Dialog {
         TextField {
             id: passwordTextField
             placeholderText: qsTr("password")
-            onAccepted: userCredentialsView.accept();
+            onAccepted: acceptWithCurrentUsernameAndPassword()
             echoMode: TextInput.Password
             Layout.fillWidth: true
             Layout.margins: 5
         }
+    }
+
+    /*!
+     \internal
+     \brief Attempts to apply the current username and password to
+     the token.
+     */
+    function acceptWithCurrentUsernameAndPassword() {
+        controller.continueWithUsernamePassword(usernameTextField.text,
+                                                passwordTextField.text);
     }
 }

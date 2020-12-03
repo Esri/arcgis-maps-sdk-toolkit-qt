@@ -35,7 +35,6 @@ Dialog {
 
     footer: DialogButtonBox {
         Button {
-            id: bBox
             text: qsTr("Skip")
             DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
         }
