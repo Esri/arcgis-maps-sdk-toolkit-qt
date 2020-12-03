@@ -62,7 +62,7 @@ QtObject {
     readonly property alias attachmentCount: internal.attachmentCount
 
     /*!
-      \brief The mimimum attachment thumbnail width.
+      \brief The minimum attachment thumbnail width.
      */
     property alias attachmentThumbnailWidth: internal.attachmentThumbnailWidth
 
