@@ -90,6 +90,8 @@ void PopupViewController::setPopupManager(PopupManager* popupManager)
   {
     connect(attachments, &QAbstractListModel::rowsInserted , this, &PopupViewController::attachmentCountChanged);
     connect(attachments, &QAbstractListModel::rowsRemoved , this, &PopupViewController::attachmentCountChanged);
+    connect(attachments, &PopupAttachmentListModel::thumbnailWidthChanged , this, &PopupViewController::attachmentThumbnailWidthChanged);
+    connect(attachments, &PopupAttachmentListModel::thumbnailHeightChanged , this, &PopupViewController::attachmentThumbnailHeightChanged);
   }
 
   if (auto displayFields = this->displayFields())
@@ -101,6 +103,8 @@ void PopupViewController::setPopupManager(PopupManager* popupManager)
   emit popupManagerChanged();
   emit fieldCountChanged();
   emit attachmentCountChanged();
+  emit attachmentThumbnailHeightChanged();
+  emit attachmentThumbnailWidthChanged();
 }
 
 /*!
@@ -118,7 +122,7 @@ QAbstractListModel* PopupViewController::displayFields() const
   Popup associated with this PopupManager. 
   \note This can be null.
  */
-QAbstractListModel* PopupViewController::attachments() const
+PopupAttachmentListModel* PopupViewController::attachments() const
 {
   if (!m_popupManager)
     return nullptr;
@@ -159,6 +163,18 @@ int PopupViewController::attachmentCount() const
 }
 
 /*!
+  \brief Returns whether attachments should be displayed or not
+  according to the PopupManager.
+ */
+bool PopupViewController::isShowAttachments() const
+{
+  // This is re-exposed from PopupManager as PopupManager does not have
+  // NOTIFY/CONSTANT modifiers on its showAttachments property, so the Controller
+  // re-exposes showAttachments to suppress warnings about this.
+  return m_popupManager ? m_popupManager->isShowAttachments() : false;
+}
+
+/*!
   \brief Returns the title of the \c PopupManager.
  */
 QString PopupViewController::title() const
@@ -167,6 +183,54 @@ QString PopupViewController::title() const
   // NOTIFY/CONSTANT modifiers on its title property, so the Controller
   // re-exposes title to suppress warnings about this.
   return m_popupManager ? m_popupManager->title() : nullptr;
+}
+
+/*!
+  \brief Returns the minimum attachment thumbnail width.
+ */
+int PopupViewController::attachmentThumbnailWidth() const
+{
+  auto attachmentModel = attachments();
+  if (!attachmentModel)
+    return 0;
+
+  return attachmentModel->thumbnailWidth();
+}
+
+/*!
+  \brief Sets the minimum attachment thumbnail width.
+ */
+void PopupViewController::setAttachmentThumbnailWidth(int width)
+{
+  auto attachmentModel = attachments();
+  if (!attachmentModel)
+    return;
+
+  attachmentModel->setThumbnailWidth(width);
+}
+
+/*!
+  \brief Returns the minimum attachment thumbnail width.
+ */
+int PopupViewController::attachmentThumbnailHeight() const
+{
+  auto attachmentModel = attachments();
+  if (!attachmentModel)
+    return 0;
+
+  return attachmentModel->thumbnailHeight();
+}
+
+/*!
+  \brief Sets the minimum attachment thumbnail height.
+ */
+void PopupViewController::setAttachmentThumbnailHeight(int height)
+{
+  auto attachmentModel = attachments();
+  if (!attachmentModel)
+    return;
+
+  attachmentModel->setThumbnailHeight(height);
 }
 
 /*!
@@ -184,6 +248,29 @@ QString PopupViewController::title() const
   \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::attachmentCountChanged()
   \brief Signal emitted when the number of rows in the attachments list-model 
   changes.
+ */
+
+/*!
+  \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::attachmentWidthChanged()
+  \brief Signal emitted when the attachment minimum width changes.
+ */
+
+/*!
+  \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::attachmentHeightChanged()
+  \brief Signal emitted when the attachment minimum height changes.
+ */
+
+
+/*!
+  \property Esri::ArcGISRuntime::Toolkit::PopupViewController::showAttachments
+ */
+
+/*!
+  \property Esri::ArcGISRuntime::Toolkit::PopupViewController::attachmentThumbnailWidth
+ */
+
+/*!
+  \property Esri::ArcGISRuntime::Toolkit::PopupViewController::attachmentThumbnailHeight
  */
 
 /*!

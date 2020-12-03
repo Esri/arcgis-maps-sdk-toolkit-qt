@@ -35,13 +35,15 @@ namespace Toolkit
 class PopupViewController : public QObject
 {
   Q_OBJECT
-
   Q_PROPERTY(PopupManager* popupManager READ popupManager WRITE setPopupManager NOTIFY popupManagerChanged)
+  Q_PROPERTY(QString title READ title NOTIFY popupManagerChanged)
   Q_PROPERTY(QAbstractListModel* displayFields READ displayFields NOTIFY popupManagerChanged)
   Q_PROPERTY(int fieldCount READ fieldCount NOTIFY fieldCountChanged)
   Q_PROPERTY(QAbstractListModel* attachments READ attachments NOTIFY popupManagerChanged)
   Q_PROPERTY(int attachmentCount READ attachmentCount NOTIFY attachmentCountChanged)
-  Q_PROPERTY(QString title READ title NOTIFY popupManagerChanged)
+  Q_PROPERTY(bool showAttachments READ isShowAttachments NOTIFY popupManagerChanged)
+  Q_PROPERTY(int attachmentThumbnailWidth READ attachmentThumbnailWidth WRITE setAttachmentThumbnailWidth NOTIFY attachmentThumbnailWidthChanged)
+  Q_PROPERTY(int attachmentThumbnailHeight READ attachmentThumbnailHeight WRITE setAttachmentThumbnailHeight NOTIFY attachmentThumbnailHeightChanged)
 
 public:
   Q_INVOKABLE explicit PopupViewController(QObject* parent = nullptr);
@@ -54,9 +56,17 @@ public:
 
   QAbstractListModel* displayFields() const;
   
-  QAbstractListModel* attachments() const;
+  PopupAttachmentListModel* attachments() const;
 
   QString title() const;
+
+  bool isShowAttachments() const;
+
+  int attachmentThumbnailWidth() const;
+  void setAttachmentThumbnailWidth(int width);
+
+  int attachmentThumbnailHeight() const;
+  void setAttachmentThumbnailHeight(int height);
 
 signals:
 
@@ -65,6 +75,10 @@ signals:
   void fieldCountChanged();
 
   void attachmentCountChanged();
+
+  void attachmentThumbnailWidthChanged();
+
+  void attachmentThumbnailHeightChanged();
 
 private:
   int fieldCount() const;
