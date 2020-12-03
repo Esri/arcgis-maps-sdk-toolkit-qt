@@ -203,6 +203,8 @@ Control {
                 model: controller.attachments
                 Image {
                     Layout.fillHeight: true
+                    Layout.minimumWidth: controller.attachmentThumbnailWidth
+                    Layout.minimumHeight: controller.attachmentThumbnailHeight
                     visible: controller.showAttachments
                     enabled: visible
                     source: thumbnailUrl

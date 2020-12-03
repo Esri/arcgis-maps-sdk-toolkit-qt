@@ -62,6 +62,16 @@ QtObject {
     readonly property alias attachmentCount: internal.attachmentCount
 
     /*!
+      \brief The mimimum attachment thumbnail width.
+     */
+    property alias attachmentThumbnailWidth: internal.attachmentThumbnailWidth
+
+    /*!
+      \brief The mimimum attachment thumbnail height.
+     */
+    property alias attachmentThumbnailHeight: internal.attachmentThumbnailHeight
+
+    /*!
       \brief Returns the title of the PopupManager.
       \note This is re-exposed from PopupManager as PopupManager does not have
       NOTIFY/CONSTANT modifiers on its title property, so the Controller
@@ -93,16 +103,28 @@ QtObject {
 
       property bool showAttachments: false
 
+      property int attachmentThumbnailWidth: 0
+
+      property int attachmentThumbnailHeight: 0
+
       property Connections attachmentConnection: Connections {
           target: attachments
-          onRowsInserted: internal.attachmentCount = attachments.rowCount();
-          onRowsRemoved: internal.attachmentCount = attachments.rowCount();
+          function onRowsInserted() {
+              internal.attachmentCount = attachments.rowCount();
+          }
+          function onRowsRemoved() {
+              internal.attachmentCount = attachments.rowCount();
+          }
       }
 
       property Connections fieldsConnection: Connections {
           target: displayFields
-          onRowsInserted: internal.fieldCount = displayFields.rowCount();
-          onRowsRemoved: internal.fieldCount = displayFields.rowCount();
+          function onRowsInserted() {
+              internal.fieldCount = displayFields.rowCount();
+          }
+          function onRowsRemoved() {
+              internal.fieldCount = displayFields.rowCount();
+          }
       }
     }
 
@@ -114,9 +136,13 @@ QtObject {
             if (popupManager.attachmentManager) {
                 internal.attachments = popupManager.attachmentManager.attachmentsModel;
                 internal.attachmentCount = attachments.rowCount();
+                internal.attachmentThumbnailWidth = Qt.binding(() => internal.attachments.thumbnailWidth);
+                internal.attachmentThumbnailHeight = Qt.binding(() => internal.attachments.thumbnailHeight);
             } else {
                 internal.attachments = null;
                 internal.attachmentCount = 0;
+                internal.attachmentThumbnailWidth = 0;
+                internal.attachmentThumbnailHeight = 0;
             }
 
             internal.displayFields = popupManager.displayedFields;
@@ -126,12 +152,11 @@ QtObject {
         } else {
             internal.attachments = null;
             internal.attachmentCount = 0;
-
             internal.displayFields = null;
             internal.fieldCount = 0;
-
+            internal.attachmentThumbnailWidth = 0;
+            internal.attachmentThumbnailHeight = 0;
             internal.title = "";
-
             internal.showAttachments = false;
         }
     }
