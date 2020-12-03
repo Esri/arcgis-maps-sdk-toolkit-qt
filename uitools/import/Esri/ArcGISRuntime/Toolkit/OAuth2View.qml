@@ -62,7 +62,6 @@ Dialog {
             if (title.indexOf("SUCCESS code=") > -1) {
                 var authCode = title.replace("SUCCESS code=", "");
                 controller.continueWithOAuthAuthorizationCode(authCode);
-                oAuthView.accept();
             } else if (title.indexOf("Denied error=") > -1) {
                 controller.cancel();
             }
