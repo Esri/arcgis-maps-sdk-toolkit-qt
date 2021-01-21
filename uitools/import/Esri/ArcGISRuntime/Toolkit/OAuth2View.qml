@@ -55,15 +55,21 @@ Dialog {
         onLoadingChanged: {
             if (loadRequest.status === WebView.LoadSucceededStatus) {
                 forceActiveFocus();
+            } else if (loadRequest.status === WebView.LoadFailedStatus) {
+                controller.cancel("Failed to load");
             }
         }
 
         onTitleChanged: {
             if (title.indexOf("SUCCESS code=") > -1) {
-                var authCode = title.replace("SUCCESS code=", "");
+                const authCode = title.replace("SUCCESS code=", "");
                 controller.continueWithOAuthAuthorizationCode(authCode);
             } else if (title.indexOf("Denied error=") > -1) {
-                controller.cancel();
+                const errorString = title.replace("Denied error=", "");
+                controller.cancel(errorString);
+            } else if (title.indexOf("Error: ") > -1) {
+                const errorString = title.replace("Error: ", "");
+                controller.cancel(errorString);
             }
         }
     }
