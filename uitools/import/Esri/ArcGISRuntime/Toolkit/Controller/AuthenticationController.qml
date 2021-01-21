@@ -138,6 +138,13 @@ QtObject {
             internal.currentChallenge = null;
         }
     }
+
+    function cancelWithError(...args) {
+        if (internal.currentChallenge) {
+            internal.currentChallenge.cancelWithError(...args);
+            internal.currentChallenge = null;
+        }
+    }
     
     property QtObject internal: QtObject {
         property AuthenticationChallenge currentChallenge: null;

@@ -56,7 +56,7 @@ Dialog {
             if (loadRequest.status === WebView.LoadSucceededStatus) {
                 forceActiveFocus();
             } else if (loadRequest.status === WebView.LoadFailedStatus) {
-                controller.cancel("Failed to load");
+                controller.cancelWithError("Failed to load");
             }
         }
 
@@ -66,10 +66,10 @@ Dialog {
                 controller.continueWithOAuthAuthorizationCode(authCode);
             } else if (title.indexOf("Denied error=") > -1) {
                 const errorString = title.replace("Denied error=", "");
-                controller.cancel(errorString);
+                controller.cancelWithError(errorString);
             } else if (title.indexOf("Error: ") > -1) {
                 const errorString = title.replace("Error: ", "");
-                controller.cancel(errorString);
+                controller.cancelWithError(errorString);
             }
         }
     }
