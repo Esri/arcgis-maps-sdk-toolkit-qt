@@ -12,6 +12,12 @@
 *.qmlc
 
 #################
+## QDoc output
+#################
+
+html/
+
+#################
 ## *nux
 #################
 
@@ -27,6 +33,9 @@
 # Compiled Dynamic libraries
 *.so
 *.dylib
+
+# exceptions for AR
+!libarcore*.so
 
 # Compiled Static libraries
 *.lai
