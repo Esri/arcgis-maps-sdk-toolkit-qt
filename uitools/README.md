@@ -1,5 +1,3 @@
-# Prototype repo for new qt toolkit
-
 ## Introduction
 
 This toolkit is an open source resource intended for use with the ArcGIS Runtime
