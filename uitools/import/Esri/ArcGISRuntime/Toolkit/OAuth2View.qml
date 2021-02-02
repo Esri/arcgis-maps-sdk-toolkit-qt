@@ -66,11 +66,9 @@ Dialog {
                 const authCode = title.replace("SUCCESS code=", "");
                 controller.continueWithOAuthAuthorizationCode(authCode);
                 return;
-            }
-
-            // If the title contains "Denied error=invalid_request", get the HTML content.
-            else if (isInvalidRequest()) {
-                getHtmlContent();
+            } else if (isInvalidRequest()) {
+                // If the title contains "Denied error=invalid_request", get the HTML content.
+                readHtmlContent();
                 return;
             }
 
@@ -99,7 +97,7 @@ Dialog {
             return (title.indexOf("Denied error=") > -1) || (title.indexOf("Error: ") > -1);
         }
 
-        function getHtmlContent() {
+        function readHtmlContent() {
             const js = "document.documentElement.outerHTML";
             webview.runJavaScript(js, function(result) { html = result; });
         }
