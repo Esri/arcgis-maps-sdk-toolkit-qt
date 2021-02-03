@@ -23,10 +23,10 @@ import Esri.ArcGISRuntime 100.8
   \since Esri.ArcGISRutime 100.10
   \ingroup ArcGISQtToolkitUiQmlControllers
   \brief In MVC architecture, this is the controller for the corresponding
-  AuthenticationView.  
-  
+  AuthenticationView.
+
   This controller is a thin wrapper around the AuthenticationManager. As
-  AuthenticationManager challenges are queued, the controller holds onto a 
+  AuthenticationManager challenges are queued, the controller holds onto a
   "current" challenge, which is the challenge the user is presented with, which
   will be discarded once the user chooses an action to perform on the challenge.
  */
@@ -39,14 +39,14 @@ QtObject {
     \brief The authorization url of the current AuthenticationChallenge.
     */
     property url currentChallengeUrl: internal.currentChallenge ? internal.currentChallenge.authorizationUrl : "";
-    
+
     /*!
     \qmlproperty string currentAuthenticatingHost
     \brief Returns the authorization hostname of the current
     AuthenticationChallenge.
     */
     property string currentAuthenticatingHost: internal.currentChallenge ? internal.currentChallenge.authenticatingHost.toString() : "";
-    
+
     /*!
     \qmlproperty int currentChallengeType
     \brief The type of the current challenge as an int.
@@ -59,27 +59,27 @@ QtObject {
         \li \c Unknown
         \li \c 0
     \row
-        \li \c UsernamePassword 
+        \li \c UsernamePassword
         \li \c 1
     \row
-        \li \c OAuth 
+        \li \c OAuth
         \li \c 2
     \row
-        \li \c ClientCertificate  
+        \li \c ClientCertificate
         \li \c 3
     \row
-        \li \c SslHandshake   
+        \li \c SslHandshake
         \li \c 4
     \endtable
     */
     property int currentChallengeType: internal.currentChallenge ? internal.currentChallenge.authenticationChallengeType : Enums.AuthenticationChallengeTypeUnknown;
-    
+
     /*!
     \qmlproperty int currentChallengeFailureCount
     \brief The failure count of the current AuthenticationChallenge.
     */
     property int currentChallengeFailureCount: internal.currentChallenge ? internal.currentChallenge.failureCount : 0;
-    
+
     /*!
     \qmlproperty list<string> clientCertificateInfos
     \brief The list of ClientCertificateInfo strings currently held by the
@@ -103,52 +103,59 @@ QtObject {
     function addClientCertificate(...args) {
         return AuthenticationManager.addClientCertificate(...args);
     }
-  
+
     function continueWithUsernamePassword(...args) {
         if (internal.currentChallenge) {
             internal.currentChallenge.continueWithUsernamePassword(...args);
             internal.currentChallenge = null;
         }
     }
-  
+
     function continueWithOAuthAuthorizationCode(...args) {
         if (internal.currentChallenge) {
             internal.currentChallenge.continueWithOAuthAuthorizationCode(...args);
             internal.currentChallenge = null;
         }
     }
-  
+
     function continueWithClientCertificate(...args) {
         if (internal.currentChallenge) {
             internal.currentChallenge.continueWithClientCertificate(...args);
             internal.currentChallenge = null;
         }
     }
-  
+
     function continueWithSslHandshake(...args) {
         if (internal.currentChallenge) {
             internal.currentChallenge.continueWithSslHandshake(...args);
             internal.currentChallenge = null;
         }
     }
-  
+
     function cancel(...args) {
         if (internal.currentChallenge) {
             internal.currentChallenge.cancel(...args);
             internal.currentChallenge = null;
         }
     }
-    
+
+    function cancelWithError(...args) {
+        if (internal.currentChallenge) {
+            internal.currentChallenge.cancelWithError(...args);
+            internal.currentChallenge = null;
+        }
+    }
+
     property QtObject internal: QtObject {
         property AuthenticationChallenge currentChallenge: null;
-  
+
         property Connections managerConnection: Connections {
             target: AuthenticationManager
             ignoreUnknownSignals: false
             function onAuthenticationChallenge(challenge) {
                 if (internal.challenge)
                   internal.challenge.cancel();
-  
+
                 internal.currentChallenge = challenge;
             }
             function onClientCertificatePasswordRequired(certificate) {

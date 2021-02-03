@@ -34,7 +34,7 @@ Dialog {
         text: `<h2>${webView.title}</h2>`
         horizontalAlignment: Text.AlignHCenter
     }
-    
+
     footer: DialogButtonBox {
         standardButtons: +DialogButtonBox.Close
         onRejected: controller.cancel();
@@ -49,23 +49,57 @@ Dialog {
             centerIn: parent
             fill: parent
         }
-        
+
         url: controller.currentChallengeUrl
 
         onLoadingChanged: {
             if (loadRequest.status === WebView.LoadSucceededStatus) {
                 forceActiveFocus();
+            } else if (loadRequest.status === WebView.LoadFailedStatus) {
+                controller.cancelWithError("Failed to load");
             }
         }
 
         onTitleChanged: {
-            if (title.indexOf("SUCCESS code=") > -1) {
-                var authCode = title.replace("SUCCESS code=", "");
+            // If the title contains "SUCCESS", get the authorization code from the title and continue authenticationChallenge.
+            if (isSuccess()) {
+                const authCode = title.replace("SUCCESS code=", "");
                 controller.continueWithOAuthAuthorizationCode(authCode);
-            } else if (title.indexOf("Denied error=") > -1) {
-                controller.cancel();
+                return;
+            } else if (isInvalidRequest()) {
+                // If the title contains "Denied error=invalid_request", get the HTML content.
+                readHtmlContent();
+                return;
             }
+
+            // If there is an error, cancel with error.
+            if (isError()) {
+                controller.cancelWithError(title, html);
+            }
+        }
+
+        // Property to get HTML content when necessary.
+        property string html: ""
+        onHtmlChanged: {
+            controller.cancelWithError(title, html);
+        }
+
+        // Helper functions
+        function isSuccess() {
+            return title.indexOf("SUCCESS code=") > -1;
+        }
+
+        function isInvalidRequest() {
+            return (title.indexOf("Denied error=invalid_request") > -1);
+        }
+
+        function isError() {
+            return (title.indexOf("Denied error=") > -1) || (title.indexOf("Error: ") > -1);
+        }
+
+        function readHtmlContent() {
+            const js = "document.documentElement.outerHTML";
+            webview.runJavaScript(js, function(result) { html = result; });
         }
     }
 }
-
