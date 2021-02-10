@@ -17,18 +17,9 @@
 TEMPLATE = app
 
 QT += core gui opengl network positioning sensors qml quick multimedia
-CONFIG += c++11
+CONFIG += c++14
 
 TARGET = CppArExample
-
-equals(QT_MAJOR_VERSION, 5) {
-    lessThan(QT_MINOR_VERSION, 12) {
-        error("$$TARGET requires Qt 5.15.1")
-    }
-    equals(QT_MINOR_VERSION, 12) : lessThan(QT_PATCH_VERSION, 6) {
-        error("$$TARGET requires Qt 5.15.1")
-    }
-}
 
 ARCGIS_RUNTIME_VERSION = 100.11
 include($$PWD/arcgisruntime.pri)
