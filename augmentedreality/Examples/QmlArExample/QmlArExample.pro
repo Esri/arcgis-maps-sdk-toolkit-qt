@@ -20,7 +20,7 @@ mac {
 
 #-------------------------------------------------------------------------------
 
-CONFIG += c++11
+CONFIG += c++14
 
 QT += core gui opengl network positioning sensors qml quick
 
@@ -29,17 +29,6 @@ include($$PWD/arcgisruntime.pri)
 
 TEMPLATE = app
 TARGET = QmlArExample
-
-equals(QT_MAJOR_VERSION, 5) {
-    lessThan(QT_MINOR_VERSION, 15) {
-        error("$$TARGET requires Qt 5.15.1")
-    }
-    equals(QT_MINOR_VERSION, 15) : lessThan(QT_PATCH_VERSION, 1) {
-        error("$$TARGET requires Qt 5.15.1")
-    }
-}
-
-#-------------------------------------------------------------------------------
 
 HEADERS += \
     AppInfo.h
