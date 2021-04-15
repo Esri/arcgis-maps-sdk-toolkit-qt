@@ -49,7 +49,7 @@ const QString ESRI_COM_PATH = QStringLiteral(":/esri.com/imports");
 constexpr char const* NAMESPACE = "Esri.ArcGISRuntime.Toolkit.Controller";
 
 constexpr int VERSION_MAJOR = 100;
-constexpr int VERSION_MINOR = 11;
+constexpr int VERSION_MINOR = 12;
 
 /*
  \internal
