@@ -77,6 +77,8 @@ public:
 
   Q_INVOKABLE void cancel();
 
+  Q_INVOKABLE void cancelWithError(const QString& title, const QString& html);
+
 signals:
     void currentChallengeChanged();
 

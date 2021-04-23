@@ -33,7 +33,7 @@ namespace Toolkit
  AuthenticationView.
 
  This controller is a thin wrapper around the AuthenticationManager. As
- AuthenticationManager challenges are queued, the controller holds onto a 
+ AuthenticationManager challenges are queued, the controller holds onto a
  "current" challenge, which is the challenge the user is presented with, which
  will be discarded once the user chooses an action to perform on the challenge.
  */
@@ -55,7 +55,7 @@ AuthenticationController::AuthenticationController(QObject* parent) :
           return;
 
       // Auth manager normally only emits a challenge after previous one has
-      // been processed. But if it starts hammering us here we will clean up the 
+      // been processed. But if it starts hammering us here we will clean up the
       // unprocessed challenges.
       if (m_currentChallenge)
       {
@@ -115,7 +115,7 @@ QUrl AuthenticationController::currentChallengeUrl() const
 }
 
 /*!
- \brief Returns the authorization hostname of the current 
+ \brief Returns the authorization hostname of the current
  AuthenticationChallenge.
  */
 QString AuthenticationController::currentAuthenticatingHost() const
@@ -134,16 +134,16 @@ QString AuthenticationController::currentAuthenticatingHost() const
       \li \c Unknown
       \li \c 0
   \row
-      \li \c UsernamePassword 
+      \li \c UsernamePassword
       \li \c 1
   \row
-      \li \c OAuth 
+      \li \c OAuth
       \li \c 2
   \row
-      \li \c ClientCertificate  
+      \li \c ClientCertificate
       \li \c 3
   \row
-      \li \c SslHandshake   
+      \li \c SslHandshake
       \li \c 4
   \endtable
 
@@ -191,7 +191,7 @@ void AuthenticationController::setDeleteChallengeOnProcessed(bool deleteFlag)
 
  Defaults to \c true.
 
- \sa setDeleteChallengeOnProcessed 
+ \sa setDeleteChallengeOnProcessed
  */
 bool AuthenticationController::deleteChallengeOnProcessed() const
 {
@@ -200,7 +200,7 @@ bool AuthenticationController::deleteChallengeOnProcessed() const
 
 /*!
  \brief Calls \c continueWithUsernamePassword on the current challenge.
- 
+
  \list
  \li \a username Username string.
  \li \a password Password string.
@@ -218,7 +218,7 @@ void AuthenticationController::continueWithUsernamePassword(const QString& usern
 
 /*!
  \brief Calls \c continueWithOAuthAuthorizationCode on the current challenge.
- 
+
  \list
  \li \a oAuthAuthorizationCode Authorization code.
  \endlist
@@ -235,7 +235,7 @@ void AuthenticationController::continueWithOAuthAuthorizationCode(const QString&
 
 /*!
  \brief Calls \c continueWithClientCertificate on the current challenge.
- 
+
  \list
  \li \a clientCertificateIndex The index is the index of the certificate
      as seen in \l clientCertificateInfos.
@@ -253,7 +253,7 @@ void AuthenticationController::continueWithClientCertificate(int clientCertifica
 
 /*!
  \brief Calls \c continueWithSslHandshake on the current challenge.
- 
+
  \list
  \li \a trust When true, trusts the misconfigured resource.
  \li \a remember Remember the user's preferences this session.
@@ -283,6 +283,20 @@ void AuthenticationController::cancel()
 }
 
 /*!
+ \brief Calls \c cancelWithError on the current challenge, with the \a title
+ and the \a html content from the web view.
+ */
+void AuthenticationController::cancelWithError(const QString& title, const QString& html)
+{
+  if (!m_currentChallenge)
+    return;
+
+  auto c = m_currentChallenge;
+  cleanup();
+  c->cancelWithError(title, html);
+}
+
+/*!
  \internal
  \brief Clears the reference to the current challenge. Also deletes the current
  challenge where applicable.
@@ -292,7 +306,7 @@ void AuthenticationController::cleanup()
   // This controller has the option of
   // "owning" the challenge and may delete
   // it after use.
-  if (m_deleteChallengeOnProcessed) 
+  if (m_deleteChallengeOnProcessed)
     m_currentChallenge->deleteLater();
 
   m_currentChallenge = nullptr;
@@ -338,7 +352,7 @@ void AuthenticationController::cleanup()
 
 /*!
   \property Esri::ArcGISRuntime::Toolkit::AuthenticationController::clientCertificateInfos
-  \brief List of strings representing the certificates held by the AuthenticationManager. 
+  \brief List of strings representing the certificates held by the AuthenticationManager.
  */
 
 } // Toolkit

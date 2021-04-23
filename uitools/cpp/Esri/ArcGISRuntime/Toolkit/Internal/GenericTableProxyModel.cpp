@@ -43,7 +43,7 @@ namespace
  */
 QString toTitleCase(const QString& string)
 {
-  QStringList parts = string.split(' ', QString::SkipEmptyParts);
+  QStringList parts = string.split(' ', Qt::SkipEmptyParts);
   for (auto& part: parts)
   {
     part.replace(0, 1, part.at(0).toUpper());
