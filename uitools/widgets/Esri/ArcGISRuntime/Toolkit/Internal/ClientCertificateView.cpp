@@ -75,6 +75,9 @@ ClientCertificateView::ClientCertificateView(AuthenticationController* controlle
   connect(m_ui->addCertificateButton, &QPushButton::pressed, this,
           [this]
           {
+            if (!m_controller)
+              return;
+
             auto fileUrl = QFileDialog::getOpenFileUrl(
                 this,
                 tr("Add certificate"),
@@ -91,9 +94,28 @@ ClientCertificateView::ClientCertificateView(AuthenticationController* controlle
   connect(m_controller, &AuthenticationController::clientCertificatePasswordRequired, this,
           [this](QUrl certificate)
           {
+            if (!m_controller)
+              return;
+
             auto dialog = new ClientCertificatePasswordDialog(std::move(certificate), m_controller, this);
             dialog->exec();
           }, Qt::QueuedConnection);
+
+  connect(m_ui->buttonBox, &QDialogButtonBox::accepted, this,
+          [this, model, selection_model]
+          {
+            auto index = selection_model->currentIndex();
+            if (m_controller && index.isValid())
+            {
+              m_controller->continueWithClientCertificate(index.row());
+            }
+          });
+
+  connect(m_ui->buttonBox, &QDialogButtonBox::rejected, this,
+          [this]
+          {
+            m_controller->cancel();
+          });
 }
 
 ClientCertificateView::~ClientCertificateView()
