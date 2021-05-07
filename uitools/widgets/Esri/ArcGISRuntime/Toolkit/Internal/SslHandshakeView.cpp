@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2020 Esri
+ *  Copyright 2012-2021 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,49 +14,49 @@
  *  limitations under the License.
  ******************************************************************************/
 #include "SslHandshakeView.h"
+
 #include "ui_SslHandshakeView.h"
 
-#include "AuthenticationController.h"
+namespace Esri {
+namespace ArcGISRuntime {
+namespace Toolkit {
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
-
-/*!
+  /*!
   \brief Constructor.
   \list
     \li \a parent Parent widget.
   \endlist
  */
-SslHandshakeView::SslHandshakeView(AuthenticationController* controller, QWidget* parent) :
-  QWidget(parent),
-  m_controller(controller),
-  m_ui(new Ui::SslHandshakeView)
-{
-  m_ui->setupUi(this);
-  connect(m_ui->buttonBox, &QDialogButtonBox::accepted, this, 
-          [this]
-          {
-            if (m_controller)
-              m_controller->continueWithSslHandshake(
-                  true, m_ui->rememberBox->isChecked());
-          });
-  connect(m_ui->buttonBox, &QDialogButtonBox::rejected, this,
-          [this]
-          {
-            if (m_controller)
-              m_controller->continueWithSslHandshake(
-                false, m_ui->rememberBox->isChecked());
-          });
-}
+  SslHandshakeView::SslHandshakeView(AuthenticationController* controller, QWidget* parent) :
+    QWidget(parent),
+    m_controller(controller),
+    m_ui(new Ui::SslHandshakeView)
+  {
+    Q_ASSERT(controller);
+    m_ui->setupUi(this);
 
-SslHandshakeView::~SslHandshakeView()
-{
-  delete m_ui;
-}
+    m_ui->authUrlLabel->setText(m_controller->currentAuthenticatingHost());
+
+    connect(m_ui->buttonBox, &QDialogButtonBox::accepted, this,
+            [this]
+            {
+              if (m_controller)
+                m_controller->continueWithSslHandshake(
+                    true, m_ui->rememberBox->isChecked());
+            });
+    connect(m_ui->buttonBox, &QDialogButtonBox::rejected, this,
+            [this]
+            {
+              if (m_controller)
+                m_controller->continueWithSslHandshake(
+                    false, m_ui->rememberBox->isChecked());
+            });
+  }
+
+  SslHandshakeView::~SslHandshakeView()
+  {
+    delete m_ui;
+  }
 
 } // Toolkit
 } // ArcGISRuntime

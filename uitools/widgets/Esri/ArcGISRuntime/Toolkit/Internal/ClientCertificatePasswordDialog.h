@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2020 Esri
+ *  Copyright 2012-2021 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,35 +17,33 @@
 #define ESRI_ARCGISRUNTIME_CLIENTCERTIFICATEPASSWORDDIALOG_H
 
 #include <QDialog>
+#include <QPointer>
 #include <QUrl>
 
-namespace Ui
-{
-class ClientCertificatePasswordDialog;
+// Toolkit headers.
+#include "AuthenticationController.h"
+
+namespace Ui {
+  class ClientCertificatePasswordDialog;
 }
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
+namespace Esri {
+namespace ArcGISRuntime {
 
-namespace Toolkit
-{
+namespace Toolkit {
 
-class AuthenticationController;
+  class ClientCertificatePasswordDialog : public QDialog
+  {
+    Q_OBJECT
+  public:
+    explicit ClientCertificatePasswordDialog(QUrl certificateFile, AuthenticationController* controller, QWidget* parent = nullptr);
+    ~ClientCertificatePasswordDialog() override;
 
-class ClientCertificatePasswordDialog : public QDialog 
-{
-  Q_OBJECT
-public:
-  explicit ClientCertificatePasswordDialog(QUrl certificateFile, AuthenticationController* controller, QWidget* parent = nullptr);
-  ~ClientCertificatePasswordDialog() override;
-
-private:
-  QUrl m_certificateFile{};
-  AuthenticationController* m_controller;
-  Ui::ClientCertificatePasswordDialog* m_ui = nullptr;
-};
+  private:
+    QUrl m_certificateFile{};
+    QPointer<AuthenticationController> m_controller;
+    Ui::ClientCertificatePasswordDialog* m_ui = nullptr;
+  };
 
 } // Toolkit
 } // ArcGISRuntime

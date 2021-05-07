@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2020 Esri
+ *  Copyright 2012-2021 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,57 +14,70 @@
  *  limitations under the License.
  ******************************************************************************/
 #include "UserCredentialView.h"
+
 #include "ui_UserCredentialView.h"
 
-#include "AuthenticationController.h"
+#include <QPushButton>
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri {
+namespace ArcGISRuntime {
+namespace Toolkit {
 
-/*!
+  /*!
   \brief Constructor.
   \list
     \li \a parent Parent widget.
   \endlist
  */
-UserCredentialView::UserCredentialView(AuthenticationController* controller, QWidget* parent) :
-  QWidget(parent),
-  m_controller(controller),
-  m_ui(new Ui::UserCredentialView)
-{
-  m_ui->setupUi(this);
-  if (m_controller && m_controller->currentChallengeFailureCount() < 2)
+  UserCredentialView::UserCredentialView(AuthenticationController* controller, QWidget* parent) :
+    QWidget(parent),
+    m_controller(controller),
+    m_ui(new Ui::UserCredentialView)
   {
-    m_ui->incorrectMessage->setVisible(false);
+    Q_ASSERT(controller);
+    m_ui->setupUi(this);
+
+    m_ui->authUrlLabel->setText(m_controller->currentAuthenticatingHost());
+
+    m_ui->buttonBox->button(QDialogButtonBox::Ok)->setDisabled(true);
+
+    if (m_controller && m_controller->currentChallengeFailureCount() < 2)
+    {
+      m_ui->incorrectMessage->setVisible(false);
+    }
+
+    connect(m_ui->usernameEdit, &QLineEdit::textChanged, this, &UserCredentialView::enableOkButton);
+    connect(m_ui->passwordEdit, &QLineEdit::textChanged, this, &UserCredentialView::enableOkButton);
+
+    connect(m_ui->usernameEdit, &QLineEdit::returnPressed, this, &UserCredentialView::acceptWithUsernamePassword);
+    connect(m_ui->passwordEdit, &QLineEdit::returnPressed, this, &UserCredentialView::acceptWithUsernamePassword);
+
+    connect(m_ui->buttonBox, &QDialogButtonBox::accepted, this, &UserCredentialView::acceptWithUsernamePassword);
+    connect(m_ui->buttonBox, &QDialogButtonBox::rejected,
+            [this]
+            {
+              m_controller ? m_controller->cancel() : void();
+            });
   }
 
-  connect(m_ui->usernameEdit, &QLineEdit::returnPressed, this, &UserCredentialView::acceptWithUsernamePassword);
-  connect(m_ui->passwordEdit, &QLineEdit::returnPressed, this, &UserCredentialView::acceptWithUsernamePassword);
-  connect(m_ui->buttonBox, &QDialogButtonBox::accepted, this, &UserCredentialView::acceptWithUsernamePassword);
-  connect(m_ui->buttonBox, &QDialogButtonBox::rejected,
-          [this]
-          {
-            m_controller ? m_controller->cancel() : void();
-          });
-}
-
-UserCredentialView::~UserCredentialView()
-{
-  delete m_ui;
-}
-
-void UserCredentialView::acceptWithUsernamePassword()
-{
-  if (!m_controller)
+  UserCredentialView::~UserCredentialView()
   {
-    return;
+    delete m_ui;
   }
-  m_controller->continueWithUsernamePassword(m_ui->usernameEdit->text(), m_ui->passwordEdit->text());
-}
+
+  void UserCredentialView::acceptWithUsernamePassword()
+  {
+    if (!m_controller || m_ui->usernameEdit->text().isEmpty() || m_ui->passwordEdit->text().isEmpty())
+    {
+      return;
+    }
+    m_controller->continueWithUsernamePassword(m_ui->usernameEdit->text(), m_ui->passwordEdit->text());
+  }
+
+  void UserCredentialView::enableOkButton()
+  {
+    m_ui->buttonBox->button(QDialogButtonBox::Ok)->setDisabled(m_ui->usernameEdit->text().isEmpty() || m_ui->passwordEdit->text().isEmpty());
+  }
 
 } // Toolkit
 } // ArcGISRuntime

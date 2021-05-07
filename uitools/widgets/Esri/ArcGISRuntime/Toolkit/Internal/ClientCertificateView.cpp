@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2020 Esri
+ *  Copyright 2012-2021 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,114 +14,112 @@
  *  limitations under the License.
  ******************************************************************************/
 #include "ClientCertificateView.h"
-#include "ui_ClientCertificateView.h"
 
 #include "ClientCertificatePasswordDialog.h"
+#include "ui_ClientCertificateView.h"
 
-#include "AuthenticationController.h"
-
-#include <QStringListModel>
 #include <QFileDialog>
 #include <QStandardPaths>
+#include <QStringListModel>
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri {
+namespace ArcGISRuntime {
+namespace Toolkit {
 
-/*!
+  /*!
   \brief Constructor.
   \list
     \li \a parent Parent widget.
   \endlist
  */
-ClientCertificateView::ClientCertificateView(AuthenticationController* controller, QWidget* parent) :
-  QWidget(parent),
-  m_controller(controller),
-  m_ui(new Ui::ClientCertificateView)
-{
-  m_ui->setupUi(this);
-
-  // Show the appropriate certificate preable.
-  m_ui->preamble->setText(QString(tr("The service has requested a client certificate to authenticate you. "
-                                     "The app has identified the requesting server as "
-                                     "'%1', but you "
-                                     "should only give the app access to the certificate if you trust it."))
-                              .arg(m_controller->currentAuthenticatingHost()));
-
-  // Setup ListView to show live client certificate infos.
-  auto model = new QStringListModel(m_controller->clientCertificateInfos(), this);
-  connect (m_controller, &AuthenticationController::clientCertificateInfosChanged, model, [this, model]()
+  ClientCertificateView::ClientCertificateView(AuthenticationController* controller, QWidget* parent) :
+    QWidget(parent),
+    m_controller(controller),
+    m_ui(new Ui::ClientCertificateView)
   {
-      model->setStringList(m_controller->clientCertificateInfos());
-  });
-  m_ui->certificatesView->setModel(model);
+    Q_ASSERT(m_controller);
+    m_ui->setupUi(this);
 
-  // Setup the Ok button to only enable when a certificate is selected.
-  auto ok_button =  m_ui->buttonBox->button(QDialogButtonBox::StandardButton::Ok);
-  Q_ASSERT(ok_button);
-  ok_button->setEnabled(false);
-  auto selection_model = m_ui->certificatesView->selectionModel();
-  selection_model->clearSelection();
-  connect(selection_model, &QItemSelectionModel::currentChanged, ok_button,
-          [ok_button](const QModelIndex& current)
-          {
-            ok_button->setEnabled(current.isValid());
-          });
+    // Show the appropriate certificate preable.
+    m_ui->preamble->setText(tr("The service has requested a client certificate to authenticate you. "
+                               "The app has identified the requesting server as "
+                               "'%1', but you "
+                               "should only give the app access to the certificate if you trust it.")
+                                .arg(m_controller->currentAuthenticatingHost()));
 
-  // Add a client certificate on request.
-  connect(m_ui->addCertificateButton, &QPushButton::pressed, this,
-          [this]
-          {
-            if (!m_controller)
-              return;
-
-            auto fileUrl = QFileDialog::getOpenFileUrl(
-                this,
-                tr("Add certificate"),
-                QStandardPaths::writableLocation(QStandardPaths::StandardLocation::DocumentsLocation));
-
-            if (fileUrl.isEmpty())
+    // Setup ListView to show live client certificate infos.
+    auto model = new QStringListModel(m_controller->clientCertificateInfos(), this);
+    connect(m_controller, &AuthenticationController::clientCertificateInfosChanged, model, [this, model]()
             {
-              return;
-            }
-            m_controller->addClientCertificate(fileUrl);
-          }, Qt::QueuedConnection);
+              model->setStringList(m_controller->clientCertificateInfos());
+            });
+    m_ui->certificatesView->setModel(model);
 
-  // Prompt for a password when required.
-  connect(m_controller, &AuthenticationController::clientCertificatePasswordRequired, this,
-          [this](QUrl certificate)
-          {
-            if (!m_controller)
-              return;
-
-            auto dialog = new ClientCertificatePasswordDialog(std::move(certificate), m_controller, this);
-            dialog->exec();
-          }, Qt::QueuedConnection);
-
-  connect(m_ui->buttonBox, &QDialogButtonBox::accepted, this,
-          [this, model, selection_model]
-          {
-            auto index = selection_model->currentIndex();
-            if (m_controller && index.isValid())
+    // Setup the Ok button to only enable when a certificate is selected.
+    auto ok_button = m_ui->buttonBox->button(QDialogButtonBox::StandardButton::Ok);
+    Q_ASSERT(ok_button);
+    ok_button->setEnabled(false);
+    auto selection_model = m_ui->certificatesView->selectionModel();
+    selection_model->clearSelection();
+    connect(selection_model, &QItemSelectionModel::currentChanged, ok_button,
+            [ok_button](const QModelIndex& current)
             {
-              m_controller->continueWithClientCertificate(index.row());
-            }
-          });
+              ok_button->setEnabled(current.isValid());
+            });
 
-  connect(m_ui->buttonBox, &QDialogButtonBox::rejected, this,
-          [this]
+    // Add a client certificate on request.
+    connect(
+        m_ui->addCertificateButton, &QPushButton::pressed, this,
+        [this]
+        {
+          if (!m_controller)
+            return;
+
+          auto fileUrl = QFileDialog::getOpenFileUrl(
+              this,
+              tr("Add certificate"),
+              QStandardPaths::writableLocation(QStandardPaths::StandardLocation::DocumentsLocation));
+
+          if (fileUrl.isEmpty())
           {
-            m_controller->cancel();
-          });
-}
+            return;
+          }
+          m_controller->addClientCertificate(fileUrl);
+        },
+        Qt::QueuedConnection);
 
-ClientCertificateView::~ClientCertificateView()
-{
-  delete m_ui;
-}
+    // Prompt for a password when required.
+    connect(
+        m_controller, &AuthenticationController::clientCertificatePasswordRequired, this,
+        [this](QUrl certificate)
+        {
+          auto dialog = new ClientCertificatePasswordDialog(std::move(certificate), m_controller, this);
+          dialog->exec();
+        },
+        Qt::QueuedConnection);
+
+    connect(m_ui->buttonBox, &QDialogButtonBox::accepted, this,
+            [this, selection_model]
+            {
+              auto index = selection_model->currentIndex();
+              if (m_controller && index.isValid())
+              {
+                m_controller->continueWithClientCertificate(index.row());
+              }
+            });
+
+    connect(m_ui->buttonBox, &QDialogButtonBox::rejected, this,
+            [this]
+            {
+              if (m_controller)
+                m_controller->cancel();
+            });
+  }
+
+  ClientCertificateView::~ClientCertificateView()
+  {
+    delete m_ui;
+  }
 
 } // Toolkit
 } // ArcGISRuntime

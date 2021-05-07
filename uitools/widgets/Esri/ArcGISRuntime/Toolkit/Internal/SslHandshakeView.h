@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2020 Esri
+ *  Copyright 2012-2021 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,34 +16,32 @@
 #ifndef ESRI_ARCGISRUNTIME_SSLHANDSHAKEVIEW_H
 #define ESRI_ARCGISRUNTIME_SSLHANDSHAKEVIEW_H
 
+#include <QPointer>
 #include <QWidget>
 
-namespace Ui
-{
-class SslHandshakeView;
+// Toolkit headers.
+#include "AuthenticationController.h"
+
+namespace Ui {
+  class SslHandshakeView;
 }
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
+namespace Esri {
+namespace ArcGISRuntime {
 
-namespace Toolkit
-{
+namespace Toolkit {
 
-class AuthenticationController;
+  class SslHandshakeView : public QWidget
+  {
+    Q_OBJECT
+  public:
+    explicit SslHandshakeView(AuthenticationController* controller, QWidget* parent = nullptr);
+    ~SslHandshakeView() override;
 
-class SslHandshakeView : public QWidget
-{
-  Q_OBJECT
-public:
-  explicit SslHandshakeView(AuthenticationController* controller, QWidget* parent = nullptr);
-  ~SslHandshakeView() override;
-
-private:
-  AuthenticationController* m_controller = nullptr;
-  Ui::SslHandshakeView* m_ui = nullptr;
-};
+  private:
+    QPointer<AuthenticationController> m_controller = nullptr;
+    Ui::SslHandshakeView* m_ui = nullptr;
+  };
 
 } // Toolkit
 } // ArcGISRuntime

@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2020 Esri
+ *  Copyright 2012-2021 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,58 +14,47 @@
  *  limitations under the License.
  ******************************************************************************/
 #include "AuthenticationView.h"
+
 #include "ui_AuthenticationView.h"
 
-// Toolkit Controller headers
-#include "AuthenticationController.h"
-
 // Toolkit widget headers
-#include "Internal/UserCredentialView.h"
-#include "Internal/OAuth2View.h"
 #include "Internal/ClientCertificateView.h"
+#include "Internal/OAuth2View.h"
 #include "Internal/SslHandshakeView.h"
+#include "Internal/UserCredentialView.h"
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri {
+namespace ArcGISRuntime {
+namespace Toolkit {
 
-namespace 
-{
-  QWidget* createWidgetView(AuthenticationController* controller, AuthenticationView* view)
-  {
-    Q_ASSERT(controller);
-    auto challengeType = static_cast<AuthenticationChallengeType>(controller->currentChallengeType());
+  namespace {
+    QWidget* createWidgetView(AuthenticationController* controller, AuthenticationView* view)
+    {
+      Q_ASSERT(controller);
+      const auto challengeType = static_cast<AuthenticationChallengeType>(controller->currentChallengeType());
 
-    if (challengeType == AuthenticationChallengeType::UsernamePassword) {
-      // ArcGIS token, HTTP Basic/Digest, IWA
-      return new UserCredentialView(controller, view);
-    } 
-    else if (challengeType == AuthenticationChallengeType::OAuth)
-    {
-      // OAuth 2
-      return new OAuth2View(controller, view);
-    }
-    else if (challengeType == AuthenticationChallengeType::ClientCertificate)
-    {
-      // Client Certificate
-      return new ClientCertificateView(controller, view);
-    }
-    else if (challengeType == AuthenticationChallengeType::SslHandshake) {
-      // SSL Handshake - Self-signed certificate
-      return new SslHandshakeView(controller, view);
-    }
-    else
-    {
-      // Load nothing, challenge not understood.
-      return nullptr;
+      switch (challengeType)
+      {
+      case AuthenticationChallengeType::UsernamePassword:
+        // ArcGIS token, HTTP Basic/Digest, IWA
+        return new UserCredentialView(controller, view);
+      case AuthenticationChallengeType::OAuth:
+        // OAuth 2
+        return new OAuth2View(controller, view);
+      case AuthenticationChallengeType::ClientCertificate:
+        // Client Certificate
+        return new ClientCertificateView(controller, view);
+      case AuthenticationChallengeType::SslHandshake:
+        // SSL Handshake - Self-signed certificate
+        return new SslHandshakeView(controller, view);
+      default:
+        // Load nothing, challenge not understood.
+        return nullptr;
+      }
     }
   }
-}
 
-/*!
+  /*!
   \class Esri::ArcGISRuntime::Toolkit::AuthenticationView
   \inmodule EsriArcGISRuntimeToolkit
   \ingroup ArcGISQtToolkitUiCppWidgetsViews
@@ -94,7 +83,7 @@ namespace
         See \l{https://doc.qt.io/qt-5/qwebengineview.html}{QWebEngineView}.
  */
 
-/*!
+  /*!
   \brief Constructor.
   \list
     \li \a parent Parent widget.
@@ -102,84 +91,107 @@ namespace
 
   Internally the view will create and maintain its own \l AuthenticationController.
  */
-AuthenticationView::AuthenticationView(QWidget* parent) :
-  AuthenticationView(nullptr, parent)
-{
-  setController(new AuthenticationController(this));
-}
+  AuthenticationView::AuthenticationView(QWidget* parent) :
+    AuthenticationView(nullptr, parent)
+  {
+    setController(new AuthenticationController(this));
+  }
 
-/*!
+  /*!
   \brief Constructor.
   \list
     \li \a controller AuthenticationController which will drive the view.
     \li \a parent Parent widget.
   \endlist
  */
-AuthenticationView::AuthenticationView(AuthenticationController* controller, QWidget* parent) :
-  QDialog(parent),
-  m_controller(controller),
-  m_ui(new Ui::AuthenticationView)
-{
-  m_ui->setupUi(this);
-  connect(this, &QDialog::rejected, this, [this] { m_controller ? m_controller->cancel() : void();});
-  setModal(true);
-}
+  AuthenticationView::AuthenticationView(AuthenticationController* controller, QWidget* parent) :
+    QDialog(parent),
+    m_controller(controller),
+    m_ui(new Ui::AuthenticationView)
+  {
+    m_ui->setupUi(this);
+    connect(this, &QDialog::rejected, this, [this]
+            {
+              m_controller ? m_controller->cancel() : void();
+            });
+    setModal(true);
+  }
 
-/*!
+  /*!
   \brief Destructor.
  */
-AuthenticationView::~AuthenticationView()
-{
-  delete m_ui;
-}
+  AuthenticationView::~AuthenticationView()
+  {
+    delete m_ui;
+  }
 
-/*!
+  /*!
   \brief Returns the controller.
  */
-AuthenticationController* AuthenticationView::controller() const
-{
-  return m_controller;
-}
+  AuthenticationController* AuthenticationView::controller() const
+  {
+    return m_controller;
+  }
 
-/*!
+  /*!
   \brief Sets the controller.
  */
-void AuthenticationView::setController(AuthenticationController* controller)
-{
-  if (controller != m_controller)
+  void AuthenticationView::setController(AuthenticationController* controller)
   {
-    // Disconnect from everything.
-    if (m_controller)
+    if (controller != m_controller)
     {
-      disconnect(m_controller, nullptr, this, nullptr);
-      m_controller->cancel();
-    }
-    m_controller = controller;
+      // Disconnect from everything.
+      if (m_controller)
+      {
+        disconnect(m_controller, nullptr, this, nullptr);
+        m_controller->cancel();
+      }
+      m_controller = controller;
 
-    connect(m_controller, &AuthenticationController::currentChallengeChanged, this, 
-            [this]{
-              auto view = createWidgetView(m_controller, this);
-              if (!view)
+      // If controller is destroyed we stop showing a challenge.
+      connect(
+          m_controller, &AuthenticationController::destroyed, this, [this]
+          {
+            this->hide();
+          });
+
+      connect(m_controller, &AuthenticationController::currentChallengeChanged, this,
+              [this]
               {
-                this->hide();
-                return;
-              }
+                auto view = createWidgetView(m_controller, this);
+                if (!view)
+                {
+                  this->hide();
+                  return;
+                }
 
-              // Delete view if the challenge changes during its lifetime.
-              connect(m_controller, &AuthenticationController::currentChallengeChanged, view, [view]() { view->deleteLater(); });
+                // Delete view if the controller changes during its lifetime.
+                connect(m_controller, &AuthenticationController::currentChallengeChanged, view, [view]()
+                        {
+                          view->deleteLater();
+                        });
 
-              m_ui->viewContent->addWidget(view);
+                // Delete view if the challenge changes during its lifetime.
+                connect(m_controller, &AuthenticationController::destroyed, view, [view]()
+                        {
+                          view->deleteLater();
+                        });
 
-              setWindowTitle(view->windowTitle());
-              connect(view, &QWidget::windowTitleChanged, this, [this](const QString& title) { setWindowTitle(title); });
+                m_ui->viewContent->addWidget(view);
 
-              this->show();
-            });
+                setWindowTitle(view->windowTitle());
+                connect(view, &QWidget::windowTitleChanged, this, [this](const QString& title)
+                        {
+                          setWindowTitle(title);
+                        });
+
+                this->show();
+              });
+      emit authenticationControllerChanged();
+    }
   }
-  emit authenticationControllerChanged();
-}
 
-/*!
+  /*!
   \fn void Esri::ArcGISRuntime::Toolkit::AuthenticationView::authenticationControllerChanged()
   \brief Emitted when the controller used to drive the view changes.
  */

@@ -16,34 +16,32 @@
 #ifndef ESRI_ARCGISRUNTIME_CLIENTCERTIFICATEVIEW_H
 #define ESRI_ARCGISRUNTIME_CLIENTCERTIFICATEVIEW_H
 
+#include <QPointer>
 #include <QWidget>
 
-namespace Ui
-{
-class ClientCertificateView;
+// Toolkit headers.
+#include "AuthenticationController.h"
+
+namespace Ui {
+  class ClientCertificateView;
 }
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
+namespace Esri {
+namespace ArcGISRuntime {
 
-namespace Toolkit
-{
+namespace Toolkit {
 
-class AuthenticationController;
+  class ClientCertificateView : public QWidget
+  {
+    Q_OBJECT
+  public:
+    explicit ClientCertificateView(AuthenticationController* controller, QWidget* parent = nullptr);
+    ~ClientCertificateView() override;
 
-class ClientCertificateView : public QWidget
-{
-  Q_OBJECT
-public:
-  explicit ClientCertificateView(AuthenticationController* controller, QWidget* parent = nullptr);
-  ~ClientCertificateView() override;
-
-private:
-  AuthenticationController* m_controller = nullptr;
-  Ui::ClientCertificateView* m_ui = nullptr;
-};
+  private:
+    QPointer<AuthenticationController> m_controller = nullptr;
+    Ui::ClientCertificateView* m_ui = nullptr;
+  };
 
 } // Toolkit
 } // ArcGISRuntime

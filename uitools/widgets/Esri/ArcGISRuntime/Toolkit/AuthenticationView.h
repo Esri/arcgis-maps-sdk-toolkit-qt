@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2020 Esri
+ *  Copyright 2012-2021 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,40 +17,40 @@
 #define ESRI_ARCGISRUNTIME_AUTHENTICATIONVIEW_H
 
 #include <QDialog>
+#include <QPointer>
 
-namespace Ui
-{
-class AuthenticationView;
+// Toolkit headers.
+#include "AuthenticationController.h"
+
+namespace Ui {
+  class AuthenticationView;
 }
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
+namespace Esri {
+namespace ArcGISRuntime {
 
-namespace Toolkit
-{
+namespace Toolkit {
 
-class AuthenticationController;
+  class AuthenticationController;
 
-class AuthenticationView : public QDialog 
-{
-  Q_OBJECT
-public:
-  explicit AuthenticationView(AuthenticationController* controller, QWidget* parent = nullptr);
-  explicit AuthenticationView(QWidget* parent = nullptr);
-  ~AuthenticationView() override;
+  class AuthenticationView : public QDialog
+  {
+    Q_OBJECT
+  public:
+    explicit AuthenticationView(AuthenticationController* controller, QWidget* parent = nullptr);
+    explicit AuthenticationView(QWidget* parent = nullptr);
+    ~AuthenticationView() override;
 
-  AuthenticationController* controller() const;
-  void setController(AuthenticationController* controller);
+    AuthenticationController* controller() const;
+    void setController(AuthenticationController* controller);
 
-signals:
-  void authenticationControllerChanged();
+  signals:
+    void authenticationControllerChanged();
 
-private:
-  AuthenticationController* m_controller = nullptr;
-  Ui::AuthenticationView* m_ui = nullptr;
-};
+  private:
+    QPointer<AuthenticationController> m_controller = nullptr;
+    Ui::AuthenticationView* m_ui = nullptr;
+  };
 
 } // Toolkit
 } // ArcGISRuntime

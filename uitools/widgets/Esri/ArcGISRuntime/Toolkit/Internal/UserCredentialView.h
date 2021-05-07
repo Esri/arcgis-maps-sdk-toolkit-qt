@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2020 Esri
+ *  Copyright 2012-2021 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,37 +16,36 @@
 #ifndef ESRI_ARCGISRUNTIME_USERCREDENTIALVIEW_H
 #define ESRI_ARCGISRUNTIME_USERCREDENTIALVIEW_H
 
+#include <QPointer>
 #include <QWidget>
 
-namespace Ui
-{
-class UserCredentialView;
+// Toolkit headers.
+#include "AuthenticationController.h"
+
+namespace Ui {
+  class UserCredentialView;
 }
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
+namespace Esri {
+namespace ArcGISRuntime {
 
-namespace Toolkit
-{
+namespace Toolkit {
 
-class AuthenticationController;
+  class UserCredentialView : public QWidget
+  {
+    Q_OBJECT
+  public:
+    explicit UserCredentialView(AuthenticationController* controller, QWidget* parent = nullptr);
+    ~UserCredentialView() override;
 
-class UserCredentialView : public QWidget 
-{
-  Q_OBJECT
-public:
-  explicit UserCredentialView(AuthenticationController* controller, QWidget* parent = nullptr);
-  ~UserCredentialView() override;
-  
-private slots:
-  void acceptWithUsernamePassword();
+  private slots:
+    void acceptWithUsernamePassword();
+    void enableOkButton();
 
-private:
-  AuthenticationController* m_controller = nullptr;
-  Ui::UserCredentialView* m_ui = nullptr;
-};
+  private:
+    QPointer<AuthenticationController> m_controller = nullptr;
+    Ui::UserCredentialView* m_ui = nullptr;
+  };
 
 } // Toolkit
 } // ArcGISRuntime

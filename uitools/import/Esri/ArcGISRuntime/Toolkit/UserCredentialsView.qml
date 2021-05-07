@@ -43,6 +43,7 @@ Dialog {
 
         Button {
             text: qsTr("Continue")
+            enabled: hasValidInput()
             DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
         }
 
@@ -104,13 +105,18 @@ Dialog {
         }
     }
 
+    function hasValidInput() {
+        return usernameTextField.text !== "" && passwordTextField.text !== "";
+    }
+
     /*!
      \internal
      \brief Attempts to apply the current username and password to
      the token.
      */
     function acceptWithCurrentUsernameAndPassword() {
-        controller.continueWithUsernamePassword(usernameTextField.text,
-                                                passwordTextField.text);
+        if (hasValidInput())
+            controller.continueWithUsernamePassword(usernameTextField.text,
+                                                    passwordTextField.text);
     }
 }
