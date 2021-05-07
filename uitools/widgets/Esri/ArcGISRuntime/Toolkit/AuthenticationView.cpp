@@ -54,7 +54,7 @@ namespace Toolkit {
     }
   }
 
-  /*!
+/*!
   \class Esri::ArcGISRuntime::Toolkit::AuthenticationView
   \inmodule EsriArcGISRuntimeToolkit
   \ingroup ArcGISQtToolkitUiCppWidgetsViews
@@ -84,13 +84,13 @@ namespace Toolkit {
  */
 
   /*!
-  \brief Constructor.
-  \list
-    \li \a parent Parent widget.
-  \endlist
+    \brief Constructor.
+    \list
+      \li \a parent Parent widget.
+    \endlist
 
-  Internally the view will create and maintain its own \l AuthenticationController.
- */
+    Internally the view will create and maintain its own \l AuthenticationController.
+   */
   AuthenticationView::AuthenticationView(QWidget* parent) :
     AuthenticationView(nullptr, parent)
   {
@@ -118,24 +118,24 @@ namespace Toolkit {
   }
 
   /*!
-  \brief Destructor.
- */
+    \brief Destructor.
+   */
   AuthenticationView::~AuthenticationView()
   {
     delete m_ui;
   }
 
   /*!
-  \brief Returns the controller.
- */
+    \brief Returns the controller.
+   */
   AuthenticationController* AuthenticationView::controller() const
   {
     return m_controller;
   }
 
   /*!
-  \brief Sets the controller.
- */
+    \brief Sets the controller.
+   */
   void AuthenticationView::setController(AuthenticationController* controller)
   {
     if (controller != m_controller)
@@ -192,9 +192,9 @@ namespace Toolkit {
   }
 
   /*!
-  \fn void Esri::ArcGISRuntime::Toolkit::AuthenticationView::authenticationControllerChanged()
-  \brief Emitted when the controller used to drive the view changes.
- */
+    \fn void Esri::ArcGISRuntime::Toolkit::AuthenticationView::authenticationControllerChanged()
+    \brief Emitted when the controller used to drive the view changes.
+   */
 
 } // Toolkit
 } // ArcGISRuntime
