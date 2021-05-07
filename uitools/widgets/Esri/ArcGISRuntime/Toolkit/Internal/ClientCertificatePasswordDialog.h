@@ -29,7 +29,6 @@ namespace Ui {
 
 namespace Esri {
 namespace ArcGISRuntime {
-
 namespace Toolkit {
 
   class ClientCertificatePasswordDialog : public QDialog

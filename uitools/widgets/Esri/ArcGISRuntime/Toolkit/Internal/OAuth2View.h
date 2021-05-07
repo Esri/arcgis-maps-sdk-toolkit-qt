@@ -28,7 +28,6 @@ namespace Ui {
 
 namespace Esri {
 namespace ArcGISRuntime {
-
 namespace Toolkit {
 
   class OAuth2View : public QWidget

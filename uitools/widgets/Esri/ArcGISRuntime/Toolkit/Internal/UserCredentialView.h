@@ -28,7 +28,6 @@ namespace Ui {
 
 namespace Esri {
 namespace ArcGISRuntime {
-
 namespace Toolkit {
 
   class UserCredentialView : public QWidget
