@@ -92,9 +92,9 @@ namespace Toolkit {
     Internally the view will create and maintain its own \l AuthenticationController.
    */
   AuthenticationView::AuthenticationView(QWidget* parent) :
-    AuthenticationView(nullptr, parent)
+    AuthenticationView(new AuthenticationController{}, parent)
   {
-    setController(new AuthenticationController(this));
+    m_controller->setParent(this);
   }
 
   /*!
@@ -106,15 +106,15 @@ namespace Toolkit {
  */
   AuthenticationView::AuthenticationView(AuthenticationController* controller, QWidget* parent) :
     QDialog(parent),
-    m_controller(controller),
     m_ui(new Ui::AuthenticationView)
   {
     m_ui->setupUi(this);
+    setModal(true);
     connect(this, &QDialog::rejected, this, [this]
             {
               m_controller ? m_controller->cancel() : void();
             });
-    setModal(true);
+    setController(controller);
   }
 
   /*!
