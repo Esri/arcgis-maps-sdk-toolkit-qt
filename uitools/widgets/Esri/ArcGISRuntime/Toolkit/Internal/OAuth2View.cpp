@@ -79,8 +79,9 @@ namespace Toolkit {
               }
               else if (isInvalidRequest(title))
               {
+                auto self = QPointer<OAuth2View>(this);
                 m_ui->webView->page()->toHtml(
-                    [self{QPointer<OAuth2View>(this)}, title](const QString& html)
+                    [self, title](const QString& html)
                     {
                       if (self && self->m_controller)
                         self->m_controller->cancelWithError(title, html);
@@ -88,8 +89,9 @@ namespace Toolkit {
               }
               else if (isError(title))
               {
+                auto self = QPointer<OAuth2View>(this);
                 m_ui->webView->page()->toHtml(
-                    [self{QPointer<OAuth2View>(this)}, title](const QString& html)
+                    [self, title](const QString& html)
                     {
                       if (self && self->m_controller)
                         self->m_controller->cancelWithError(title, html);
