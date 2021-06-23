@@ -2,6 +2,8 @@
     <!-- This section contains all QML API controller components. -->
     <qresource prefix="/esri.com/imports/Esri/ArcGISRuntime/Toolkit/Controller">
       <file>AuthenticationController.qml</file>
+      <file>BasemapGalleryController.qml</file>
+      <file>BasemapGalleryItem.qml</file>
       <file>CoordinateConversionController.qml</file>
       <file>CoordinateConversionOption.qml</file>
       <file>CoordinateConversionResult.qml</file>
