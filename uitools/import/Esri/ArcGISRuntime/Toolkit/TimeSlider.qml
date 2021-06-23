@@ -24,7 +24,7 @@ import QtQuick.Layouts 1.12
     \qmltype TimeSlider
     \inqmlmodule Esri.ArcGISRuntime.Toolkit
     \ingroup ArcGISQtToolkitUiQmlViews
-    \since Esri.ArcGISRutime 100.10
+    \since Esri.ArcGISRuntime 100.10
     \brief The slider provides a user interface for manually setting or animating
     changes to the current time extent of the \c GeoView.
     

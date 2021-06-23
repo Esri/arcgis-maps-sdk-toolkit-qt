@@ -19,7 +19,7 @@ import QtQuick 2.12
  * \internal
  * \qmltype FlashImage
  * \inqmlmodule Esri.ArcGISRuntime.Toolkit
- * \since Esri.ArcGISRutime 100.10
+ * \since Esri.ArcGISRuntime 100.10
  * \brief a FlashImage just exists to display a flashing blue dot on a map
  * for the CoordinateConversion tool, then delete itself after its animation
  * is complete.

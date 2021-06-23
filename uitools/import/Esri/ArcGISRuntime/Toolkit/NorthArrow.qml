@@ -21,7 +21,7 @@ import QtQuick 2.12
    \qmltype NorthArrow
    \inqmlmodule Esri.ArcGISRuntime.Toolkit
    \ingroup ArcGISQtToolkitUiQmlViews
-   \since Esri.ArcGISRutime 100.10
+   \since Esri.ArcGISRuntime 100.10
    \brief The NorthArrow displays a compass overlaid on the GeoView, with the
    compass heading matching the current rotation of the MapView, or Camera
    heading of the SceneView. 
