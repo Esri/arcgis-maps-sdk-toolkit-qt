@@ -549,10 +549,10 @@ namespace Toolkit {
   \li \a basemap Basemap to add to the gallery.
   \endlist
 
-      This is equivelent to calling
+  This is equivelent to calling
 
   \code
-          controller->gallery()->append(new BasemapGalleryItem(basemap), controller);
+  controller->gallery()->append(new BasemapGalleryItem(basemap), controller);
   \endcode
 
   Returns \c true if successfully added, false otherwise.
