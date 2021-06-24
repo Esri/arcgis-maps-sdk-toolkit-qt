@@ -247,7 +247,7 @@ QString BasemapGalleryItem::tooltip() const
  \brief Returns the tooltip of this item which overrides
         the basemap's items' description in the gallery.
  \sa BasemapGalleryItem::tooltip
-            */
+ */
 QString BasemapGalleryItem::tooltipOverride() const
 {
   return m_tooltip;
