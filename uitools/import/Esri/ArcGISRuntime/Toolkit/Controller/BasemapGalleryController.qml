@@ -139,7 +139,7 @@ QtObject {
         // pointer comparisons.
         for (let i = 0; i < gallery.count; i++) {
             let b = gallery.get(i).modelData;
-            if (b &&  b.basemap && b.basemap.name === basemap.name) {
+            if (b && b.basemap && b.basemap.name === basemap.name) {
                 // If there is an item involved, we can check the itemId to confirm the sameness.
                 if ((b.basemap.item && basemap.item && b.basemap.item.itemId === basemap.item.itemId)
                         || (b.basemap.item === null && basemap.item === null))
