@@ -81,7 +81,7 @@ namespace Toolkit {
     template <typename T>
     void connectToMapScene(BasemapGalleryController* self, T* mapOrScene)
     {
-      static_assert(std::is_same<T, Scene>::value || std::is_same<T, Map>::value, "Type must be a MapView or SceneView.");
+      static_assert(std::is_same<T, Scene>::value || std::is_same<T, Map>::value, "Type must be a Map or Scene.");
 
       if (!mapOrScene)
         return;
