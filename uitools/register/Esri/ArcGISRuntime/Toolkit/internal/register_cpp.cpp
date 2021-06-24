@@ -17,12 +17,17 @@
 
 // Toolkit includes
 #include "AuthenticationController.h"
+#include "BasemapGalleryController.h"
+#include "BasemapGalleryItem.h"
 #include "CoordinateConversionController.h"
 #include "CoordinateConversionOption.h"
 #include "CoordinateConversionResult.h"
 #include "NorthArrowController.h"
 #include "PopupViewController.h"
 #include "TimeSliderController.h"
+
+// Internal includes
+#include "Internal/BasemapGalleryImageProvider.h"
 
 // ArcGIS includes
 #include <Point.h>
@@ -76,8 +81,11 @@ void registerComponent()
 
 void registerComponents_cpp_(QQmlEngine& appEngine)
 {
+  appEngine.addImageProvider(BasemapGalleryImageProvider::PROVIDER_ID, BasemapGalleryImageProvider::instance());
   appEngine.addImportPath(ESRI_COM_PATH);
   registerComponent<AuthenticationController>();
+  registerComponent<BasemapGalleryController>();
+  registerComponent<BasemapGalleryItem>();
   registerComponent<CoordinateConversionController>();
   registerComponent<CoordinateConversionOption>();
   registerComponent<CoordinateConversionResult>();

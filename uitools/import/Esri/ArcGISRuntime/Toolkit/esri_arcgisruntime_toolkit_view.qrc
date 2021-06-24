@@ -2,6 +2,7 @@
   <!-- This section contains all view components (shared by C++ and QML APIs) -->
   <qresource prefix="/esri.com/imports/Esri/ArcGISRuntime/Toolkit/">
     <file>AuthenticationView.qml</file>
+    <file>BasemapGallery.qml</file>
     <file>Callout.qml</file>
     <file>ClientCertificateView.qml</file>
     <file>CoordinateConversion.qml</file>

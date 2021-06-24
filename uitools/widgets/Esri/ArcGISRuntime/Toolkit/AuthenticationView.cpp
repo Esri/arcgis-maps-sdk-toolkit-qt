@@ -134,7 +134,7 @@ namespace Toolkit {
   }
 
   /*!
-    \brief Sets the controller.
+    \brief Sets the controller to \a controller.
    */
   void AuthenticationView::setController(AuthenticationController* controller)
   {

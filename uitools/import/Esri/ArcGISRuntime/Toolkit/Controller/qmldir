@@ -15,6 +15,8 @@
 module Esri.ArcGISRuntime.Toolkit.Controller
 # Controller components
 AuthenticationController 100.12 AuthenticationController.qml
+BasemapGalleryController 100.12 BasemapGalleryController.qml
+BasemapGalleryItem 100.12 BasemapGalleryItem.qml
 CoordinateConversionController 100.12 CoordinateConversionController.qml
 CoordinateConversionOption 100.12 CoordinateConversionOption.qml
 CoordinateConversionResult 100.12 CoordinateConversionResult.qml
