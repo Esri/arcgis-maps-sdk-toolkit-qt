@@ -76,7 +76,7 @@ QtObject {
     readonly property alias gallery: internal.gallery
 
     /*!
-       \qmlmethod BasemapGalleryController::setCurrentBasemap(Basemap basemap)
+       \qmlmethod void BasemapGalleryController::setCurrentBasemap(Basemap basemap)
        \brief Sets the current basemap associated with the map/scene
        of the given GeoView to \a basemap.
 
@@ -97,15 +97,15 @@ QtObject {
     }
 
     /*!
-        \qmlmethod BasemapGalleryController::append(Basemap basemap, url thumbnailUrl, string tooltip)
-        \brief Convenience function that appends a basemap to the gallery with an overloaded
-        thumbnail and tooltip.
+      \qmlmethod bool BasemapGalleryController::append(Basemap basemap, url thumbnailUrl, string tooltip)
+      \brief Convenience function that appends a basemap to the gallery with an overloaded
+      thumbnail and tooltip.
 
-        \list
-        \li \a basemap Basemap to add to the gallery.
-        \li \a thumbnailUrl Thumbnail to display in the gallery. Optional.
-        \li \a tooltip Tooltip to show when mouse hovers over the gallery item. Optional.
-        \endlist
+      \list
+      \li \a basemap Basemap to add to the gallery.
+      \li \a thumbnailUrl Thumbnail to display in the gallery. Optional.
+      \li \a tooltip Tooltip to show when mouse hovers over the gallery item. Optional.
+      \endlist
      */
     function append(basemap, thumbnailUrl, tooltip) {
         if (basemap === null) {
@@ -124,11 +124,11 @@ QtObject {
     }
 
     /*!
-        \internal
-        \qmlmethod BasemapGalleryController::basemapIndex(Basemap basemap)
-        \brief Given a \a basemap, returns the index of the basemap within the gallery.
-        This comparison is performed via name and itemId comparison (if available).
-        If the basemap is not found then \c{-1} is returned.
+      \internal
+      \qmlmethod int BasemapGalleryController::basemapIndex(Basemap basemap)
+      \brief Given a \a basemap, returns the index of the basemap within the gallery.
+      This comparison is performed via name and itemId comparison (if available).
+      If the basemap is not found then \c{-1} is returned.
      */
     function basemapIndex(basemap) {
         if (basemap === null) {
@@ -151,7 +151,7 @@ QtObject {
 
     /*!
       \internal
-      \qmlmethod BasemapGalleryController::basemapMatchesCurrentSpatialReference(Basemap basemap)
+      \qmlmethod bool BasemapGalleryController::basemapMatchesCurrentSpatialReference(Basemap basemap)
       \brief Given a \a basemap, returns whether the spatial reference of its layers
       match the spatial reference of the GeoView (and therefore if it appropriate to apply
       as the current basemap.)

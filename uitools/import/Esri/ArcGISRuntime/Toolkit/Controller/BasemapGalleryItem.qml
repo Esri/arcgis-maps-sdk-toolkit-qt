@@ -66,7 +66,7 @@ QtObject {
             return internal.item.thumbnailUrl;
         }
 
-        return "qrc:///esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/no_map_thumbnail.png";
+        return "qrc:///esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/generic_basemap_thumbnail.png";
     }
 
     /*!
@@ -86,6 +86,6 @@ QtObject {
         // This is a workaround for undesirable behaviour.
         // `basemap.item` will be deleted after access unless we store it in a temp.
         // We don't want it to delete itself as we also lose the thumbnail when it does.
-        property ArcGISItem item: basemap ? basemap.item: null;
+        property ArcGISItem item: basemap ? basemap.item : null;
     }
 }

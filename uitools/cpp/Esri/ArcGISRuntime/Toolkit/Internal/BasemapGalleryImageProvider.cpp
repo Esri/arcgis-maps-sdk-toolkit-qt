@@ -28,12 +28,12 @@ namespace Toolkit {
   namespace {
 
     /*!
-    \internal
-    \inmodule EsriArcGISRuntimeToolkit
-    \class Esri::ArcGISRuntime::Toolkit::BasemapGalleryImageResponse
-    \brief A response object which grabs the thumbnail image from a GalleryItem when it becomes
-    available. Think of this like a poor man's future/promise.
-    */
+      \internal
+      \inmodule EsriArcGISRuntimeToolkit
+      \class Esri::ArcGISRuntime::Toolkit::BasemapGalleryImageResponse
+      \brief A response object which grabs the thumbnail image from a GalleryItem when it becomes
+      available. Think of this like a poor man's future/promise.
+     */
     class BasemapGalleryImageResponse : public QQuickImageResponse
     {
     public:
@@ -47,15 +47,15 @@ namespace Toolkit {
     };
 
     /*!
-     \internal
-     \brief Constructor.
-     \list
-     \li \a galleryItem The item to grab a thumbnail for.
-     \li \a galleryItem The size of image requested.
-     \endlist
+      \internal
+      \brief Constructor.
+      \list
+      \li \a galleryItem The item to grab a thumbnail for.
+      \li \a galleryItem The size of image requested.
+      \endlist
 
       Internally, we test the state of the GalleryItem. If there is a thumbnail available we return this immediately,
-          otherwise we will attempt to fetch the thumbnail from the associated \c{Item} if and when it is available.
+      otherwise we will attempt to fetch the thumbnail from the associated \c{Item} if and when it is available.
      */
     BasemapGalleryImageResponse::BasemapGalleryImageResponse(BasemapGalleryItem* galleryItem, QSize requestedSize) :
       m_galleryItem(galleryItem),
@@ -123,9 +123,9 @@ namespace Toolkit {
     }
 
     /*!
-     \internal
-     \brief Returns the thumbnail as a TextureFactory. If the thumbnail is null, returns a default
-     image instead.
+      \internal
+      \brief Returns the thumbnail as a TextureFactory. If the thumbnail is null, returns a default
+      image instead.
      */
     QQuickTextureFactory* BasemapGalleryImageResponse::textureFactory() const
     {
@@ -135,39 +135,38 @@ namespace Toolkit {
         thumbnail = m_galleryItem->thumbnail();
 
       if (thumbnail.isNull())
-        thumbnail = QImage{QStringLiteral(":/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/no_map_thumbnail.png")};
+        thumbnail = QImage{QStringLiteral(":/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/generic_basemap_thumbnail.png")};
 
       return QQuickTextureFactory::textureFactoryForImage(m_requestedSize.isValid() ? thumbnail.scaled(m_requestedSize) : thumbnail);
     }
   }
 
   /*!
-  \internal
-  \inmodule EsriArcGISRuntimeToolkit
-  \class Esri::ArcGISRuntime::Toolkit::BasemapGalleryImageProvider
-  \brief An asynchronous image provider, that when supplied an ID will fetch the appropriate
-  basemap thumbnail. See \l QQuickImageProvider for a comprehensive overview.
-  */
+    \internal
+    \inmodule EsriArcGISRuntimeToolkit
+    \class Esri::ArcGISRuntime::Toolkit::BasemapGalleryImageProvider
+    \brief An asynchronous image provider, that when supplied an ID will fetch the appropriate
+    basemap thumbnail. See \l QQuickImageProvider for a comprehensive overview.
+   */
 
   /*!
-   \internal
-   \brief Images URL identifier.
+    \internal
+    \brief Images URL identifier.
    */
   const QString BasemapGalleryImageProvider::PROVIDER_ID = QStringLiteral("BasemapGalleryItems");
 
   /*!
-   \internal
-   \brief Returns the singleton instance of the BasemapGalleryImageProvider.
+    \internal
+    \brief Returns the singleton instance of the BasemapGalleryImageProvider.
 
-   Note that it is expected that the instance is passed to the QmlEngine like so:
+    Note that it is expected that the instance is passed to the QmlEngine like so:
 
-  \code
-   appEngine.addImageProvider(BasemapGalleryImageProvider::PROVIDER_ID, BasemapGalleryImageProvider::instance());
-   \endcode
+    \code
+    appEngine.addImageProvider(BasemapGalleryImageProvider::PROVIDER_ID, BasemapGalleryImageProvider::instance());
+    \endcode
 
-  making the instance owned by and QmlEngine which will destroy this instance when the application
-  closes.
-
+    making the instance owned by and QmlEngine which will destroy this instance when the application
+    closes.
    */
   BasemapGalleryImageProvider* BasemapGalleryImageProvider::instance()
   {
@@ -178,8 +177,8 @@ namespace Toolkit {
   }
 
   /*!
-   \internal
-   \brief Private constructor of singleton.
+    \internal
+    \brief Private constructor of singleton.
    */
   BasemapGalleryImageProvider::BasemapGalleryImageProvider() :
     m_internalObject(new QObject)
@@ -187,8 +186,8 @@ namespace Toolkit {
   }
 
   /*!
-   \internal
-   \brief Destructor.
+    \internal
+    \brief Destructor.
    */
   BasemapGalleryImageProvider::~BasemapGalleryImageProvider()
   {
@@ -196,9 +195,9 @@ namespace Toolkit {
   }
 
   /*!
-   \internal
-   \brief Registers a BasemapGalleryItem with the image provider. This is done
-   when the BasemapGalleryItem is constructed.
+    \internal
+    \brief Registers a BasemapGalleryItem with the image provider. This is done
+    when the BasemapGalleryItem is constructed.
    */
   bool BasemapGalleryImageProvider::registerItem(BasemapGalleryItem* item)
   {
@@ -219,9 +218,9 @@ namespace Toolkit {
   }
 
   /*!
-   \internal
-   \brief Unregisteers a BasemapGalleryItem with the image provider. This is done
-   when the BasemapGalleryItem is destructed.
+    \internal
+    \brief Unregisteers a BasemapGalleryItem with the image provider. This is done
+    when the BasemapGalleryItem is destructed.
    */
   bool BasemapGalleryImageProvider::deregisterItem(BasemapGalleryItem* item)
   {
@@ -232,8 +231,8 @@ namespace Toolkit {
   }
 
   /*!
-   \internal
-   \brief Called when the QmlEngine requests an image.
+    \internal
+    \brief Called when the QmlEngine requests an image.
    */
   QQuickImageResponse* BasemapGalleryImageProvider::requestImageResponse(const QString& id, const QSize& requestedSize)
   {

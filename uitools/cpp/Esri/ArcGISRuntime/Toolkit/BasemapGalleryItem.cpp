@@ -32,9 +32,9 @@ namespace Toolkit {
 namespace {
 #ifdef CPP_ARCGISRUNTIME_TOOLKIT
   /*!
-   \internal
-   \brief Given a BasemapGalleryItem, \a self, registers it with the BasemapGalleryImageProvider
-   for thumbnail URLs.
+    \internal
+    \brief Given a BasemapGalleryItem, \a self, registers it with the BasemapGalleryImageProvider
+    for thumbnail URLs.
    */
   void registerItem(BasemapGalleryItem* self)
   {
@@ -42,9 +42,9 @@ namespace {
   }
 
   /*!
-   \internal
-   \brief Given a BasemapGalleryItem, \a self, unregisters it with the BasemapGalleryImageProvider
-   for thumbnail URLs.
+    \internal
+    \brief Given a BasemapGalleryItem, \a self, unregisters it with the BasemapGalleryImageProvider
+    for thumbnail URLs.
    */
   void deregisterItem(BasemapGalleryItem* self)
   {
@@ -52,16 +52,16 @@ namespace {
   }
 #else
   /*!
-   \internal
-   \brief No-op. Thumbnail Urls are not required in the Widget's case.
+    \internal
+    \brief No-op. Thumbnail Urls are not required in the Widget's case.
    */
   void registerItem(BasemapGalleryItem* /*self*/)
   {
   }
 
   /*!
-   \internal
-   \brief No-op. Thumbnail Urls are not required in the Widget's case.
+    \internal
+    \brief No-op. Thumbnail Urls are not required in the Widget's case.
    */
   void deregisterItem(BasemapGalleryItem* /*self*/)
   {
@@ -86,7 +86,7 @@ namespace {
   */
 
 /*!
- \brief Constructor. Takes a \a parent object.
+  \brief Constructor. Takes a \a parent object.
   Constructs an empty item.
  */
 BasemapGalleryItem::BasemapGalleryItem(QObject* parent) :
@@ -95,7 +95,7 @@ BasemapGalleryItem::BasemapGalleryItem(QObject* parent) :
 }
 
 /*!
- \brief Constructor. Takes a \a basemap and \a parent object.
+  \brief Constructor. Takes a \a basemap and \a parent object.
   Constructs an item that represents the given basemap in the gallery.
  */
 BasemapGalleryItem::BasemapGalleryItem(Basemap* basemap, QObject* parent) :
@@ -104,11 +104,11 @@ BasemapGalleryItem::BasemapGalleryItem(Basemap* basemap, QObject* parent) :
 }
 
 /*!
- \brief Constructor. Takes a \a basemap, \a thumbnail, \a tooltip, and \a parent object.
+  \brief Constructor. Takes a \a basemap, \a thumbnail, \a tooltip, and \a parent object.
 
- Constructs an item that represents the given basemap in the gallery.
- The thumbnail and tooltip objects provided are used in place of the thumbnail and description
- of the basemap's item, if provided.
+  Constructs an item that represents the given basemap in the gallery.
+  The thumbnail and tooltip objects provided are used in place of the thumbnail and description
+  of the basemap's item, if provided.
  */
 BasemapGalleryItem::BasemapGalleryItem(Basemap* basemap, QImage thumbnail, QString tooltip, QObject* parent) :
   QObject(parent),
@@ -125,7 +125,7 @@ BasemapGalleryItem::BasemapGalleryItem(Basemap* basemap, QImage thumbnail, QStri
 }
 
 /*!
- \brief Destructor.
+  \brief Destructor.
  */
 BasemapGalleryItem::~BasemapGalleryItem()
 {
@@ -133,7 +133,7 @@ BasemapGalleryItem::~BasemapGalleryItem()
 }
 
 /*!
- \brief Returns the basemap this gallery item represents.
+  \brief Returns the basemap this gallery item represents.
  */
 Basemap* BasemapGalleryItem::basemap() const
 {
@@ -141,7 +141,7 @@ Basemap* BasemapGalleryItem::basemap() const
 }
 
 /*!
- \brief Sets the \a basemap this gallery item represents.
+  \brief Sets the \a basemap this gallery item represents.
  */
 void BasemapGalleryItem::setBasemap(Basemap* basemap)
 {
@@ -178,7 +178,7 @@ void BasemapGalleryItem::setBasemap(Basemap* basemap)
 
 
 /*!
- \brief Returns the name of the basemap.
+  \brief Returns the name of the basemap.
  */
 QString BasemapGalleryItem::name() const
 {
@@ -186,9 +186,9 @@ QString BasemapGalleryItem::name() const
 }
 
 /*!
- \brief Returns the thumbnail override of this item if valid. Otherwise
-        returns the thumbnail on the basemap's item, if available.
- \sa BasemapGalleryItem::thumbnailOverride
+  \brief Returns the thumbnail override of this item if valid. Otherwise
+  returns the thumbnail on the basemap's item, if available.
+  \sa BasemapGalleryItem::thumbnailOverride
  */
 QImage BasemapGalleryItem::thumbnail() const
 {
@@ -203,9 +203,9 @@ QImage BasemapGalleryItem::thumbnail() const
 }
 
 /*!
- \brief Returns the thumbnail of this item which overrides
- the basemap's items' thumbnail in the gallery.
- \sa BasemapGalleryItem::thumbnail
+  \brief Returns the thumbnail of this item which overrides
+  the basemap's items' thumbnail in the gallery.
+  \sa BasemapGalleryItem::thumbnail
  */
 QImage BasemapGalleryItem::thumbnailOverride() const
 {
@@ -213,8 +213,8 @@ QImage BasemapGalleryItem::thumbnailOverride() const
 }
 
 /*!
- \brief Sets the \a thumbnail override of this item, which replaces the
- thumbnail of the basemap when rendering the gallery.
+  \brief Sets the \a thumbnail override of this item, which replaces the
+  thumbnail of the basemap when rendering the gallery.
  */
 void BasemapGalleryItem::setThumbnailOverride(QImage thumbnail)
 {
@@ -226,9 +226,9 @@ void BasemapGalleryItem::setThumbnailOverride(QImage thumbnail)
 }
 
 /*!
- \brief Returns the tooltip override of this item if non-empty. Otherwise
-        returns the description on the basemap's item, if available.
- \sa BasemapGalleryItem::tooltipOverride
+  \brief Returns the tooltip override of this item if non-empty. Otherwise
+  returns the description on the basemap's item, if available.
+  \sa BasemapGalleryItem::tooltipOverride
  */
 QString BasemapGalleryItem::tooltip() const
 {
@@ -244,9 +244,9 @@ QString BasemapGalleryItem::tooltip() const
 }
 
 /*!
- \brief Returns the tooltip of this item which overrides
-        the basemap's items' description in the gallery.
- \sa BasemapGalleryItem::tooltip
+  \brief Returns the tooltip of this item which overrides
+  the basemap's items' description in the gallery.
+  \sa BasemapGalleryItem::tooltip
  */
 QString BasemapGalleryItem::tooltipOverride() const
 {
@@ -254,8 +254,8 @@ QString BasemapGalleryItem::tooltipOverride() const
 }
 
 /*!
- \brief Sets the \a tooltip override of this item, which replaces the
- tooltip of the basemap when rendering the gallery.
+  \brief Sets the \a tooltip override of this item, which replaces the
+  tooltip of the basemap when rendering the gallery.
  */
 void BasemapGalleryItem::setTooltipOverride(QString tooltip)
 {
@@ -268,8 +268,8 @@ void BasemapGalleryItem::setTooltipOverride(QString tooltip)
 
 #ifdef CPP_ARCGISRUNTIME_TOOLKIT
 /*!
- \internal
- \brief Returns a URL that points to the thumbnail that can be consumed by QML. Only needed in the C++/QML case.
+  \internal
+  \brief Returns a URL that points to the thumbnail that can be consumed by QML. Only needed in the C++/QML case.
  */
 QUrl BasemapGalleryItem::thumbnailUrl() const
 {
@@ -278,8 +278,8 @@ QUrl BasemapGalleryItem::thumbnailUrl() const
 #endif // CPP_ARCGISRUNTIME_TOOLKIT
 
 /*!
- \internal
- \brief Returns an ID that identifies the uniqueness of this item.
+  \internal
+  \brief Returns an ID that identifies the uniqueness of this item.
  */
 QUuid BasemapGalleryItem::id() const
 {
@@ -287,73 +287,72 @@ QUuid BasemapGalleryItem::id() const
 }
 
 /*!
- \fn void Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::basemapChanged()
- \brief Emitted when the basemap has changed.
+  \fn void Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::basemapChanged()
+  \brief Emitted when the basemap has changed.
 */
 
 /*!
- \fn void Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::tooltipChanged()
- \brief Emitted when the toolip has changed.
+  \fn void Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::tooltipChanged()
+  \brief Emitted when the toolip has changed.
 */
 
 /*!
- \fn void Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::tooltipOverrideChanged()
- \brief Emitted when the toolip override has changed.
+  \fn void Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::tooltipOverrideChanged()
+  \brief Emitted when the toolip override has changed.
 */
 
 /*!
- \fn void Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::thumbnailChanged()
- \brief Emitted when the thumbnail has changed.
+  \fn void Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::thumbnailChanged()
+  \brief Emitted when the thumbnail has changed.
 */
 
 /*!
- \fn void Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::thumbnailOverrideChanged()
- \brief Emitted when the thumbnail override has changed.
+  \fn void Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::thumbnailOverrideChanged()
+  \brief Emitted when the thumbnail override has changed.
 */
 
 /*!
-\property Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::basemap
-\brief The basemap this item represents.
-\sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::basemap()
-*/
+  \property Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::basemap
+  \brief The basemap this item represents.
+  \sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::basemap()
+ */
 
 /*!
-\property Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::name
-\brief The name of the basemap, if set.
-\sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::name()
-*/
+  \property Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::name
+  \brief The name of the basemap, if set.
+  \sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::name()
+ */
 
 /*!
-\property Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::tooltip
-\brief The tooltip the item will display in the gallery.
-\sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::tooltip()
-*/
+  \property Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::tooltip
+  \brief The tooltip the item will display in the gallery.
+  \sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::tooltip()
+ */
 
 /*!
-\property Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::tooltipOverride
-\brief A tooltip the developer can set to replace the default tooltip.
-\sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::tooltipOverride()
-*/
+  \property Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::tooltipOverride
+  \brief A tooltip the developer can set to replace the default tooltip.
+  \sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::tooltipOverride()
+ */
 
 /*!
-\property Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::thumbnail
-\brief The thumbnail the item will display in the gallery.
-\sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::thumbnail()
-*/
+  \property Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::thumbnail
+  \brief The thumbnail the item will display in the gallery.
+  \sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::thumbnail()
+ */
 
 /*!
-\property Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::thumbnailOverride
-\brief A thumbnail the developer can set to replace the default thumbnail.
-\sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::thumbnailOverride()
-*/
+  \property Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::thumbnailOverride
+  \brief A thumbnail the developer can set to replace the default thumbnail.
+  \sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::thumbnailOverride()
+ */
 
 /*!
-\internal
-\property Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::thumbnailUrl
-\brief A thumbnail URL for QML rendering of images.
-\sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::thumbnailUrl()
+  \internal
+  \property Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::thumbnailUrl
+  \brief A thumbnail URL for QML rendering of images.
+  \sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::thumbnailUrl()
 */
-
 
 } // Toolkit
 } // ArcGISRuntime

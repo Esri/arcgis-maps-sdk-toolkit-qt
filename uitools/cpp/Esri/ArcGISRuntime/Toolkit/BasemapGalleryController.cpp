@@ -33,7 +33,7 @@ namespace Toolkit {
   namespace {
     /*! 
      \internal
-     \brief Convenience template which returns a Map or Scene based on the type of `T`.
+     \brief Convenience template which returns a Map or Scene based on the type of \c{T}.
      */
     template <typename T>
     auto getMapOrScene(T* item);
@@ -59,8 +59,9 @@ namespace Toolkit {
     }
 
     /*! 
-     \internal
-     Convenience function which creates a QPointer for a given type T which avoids explicitly stating what T is.
+      \internal
+      \brief Convenience function which creates a QPointer for a given type \c{T} 
+      which avoids explicitly stating what \c{T} is.
      */
     template <typename T>
     auto qPointerFrom(T* t)
@@ -69,14 +70,14 @@ namespace Toolkit {
     }
 
     /*!
-     \internal
-     Takes a map or scene, and connects to it and its basemap.
-     Emits a basemapChanged signal when:
-       - The map/scene basemapChanged signal fires.
-       - The basemap load status has changed.
+      \internal
+      Takes a map or scene, and connects to it and its basemap.
+      Emits a basemapChanged signal when:
+        - The map/scene basemapChanged signal fires.
+        - The basemap load status has changed.
 
-     We automatically disconnect from the map/scene's old basemap if the
-     map/scene basemapChanged signal is fired.
+      We automatically disconnect from the map/scene's old basemap if the
+      map/scene basemapChanged signal is fired.
      */
     template <typename T>
     void connectToMapScene(BasemapGalleryController* self, T* mapOrScene)
@@ -109,13 +110,13 @@ namespace Toolkit {
     }
 
     /*!
-     \internal
-     Connect to [Scene/Map]View and associated Map/Scene and associated Basemap.
+      \internal
+      Connect to [Scene/Map]View and associated Map/Scene and associated Basemap.
 
-     1. We Connect up to the current map/scene.
-     2. If the map/scene changes we disconnect from the old one.
-     3. We connect up to the new map/scene.
-     4. We emit a basemapChanged signal whenever the map or scene changes.
+      1. We Connect up to the current map/scene.
+      2. If the map/scene changes we disconnect from the old one.
+      3. We connect up to the new map/scene.
+      4. We emit a basemapChanged signal whenever the map or scene changes.
      */
     template <typename T, typename F>
     void connectToView(BasemapGalleryController* self, T* view, F mapOrSceneChangedSignal)
@@ -145,10 +146,10 @@ namespace Toolkit {
     }
 
     /*!
-     \internal
-     1. Disconnect from [Scene/Map]View.
-     2. Disconnect from the associated Map/Scene.
-     3. Disconnect from the associated Basemap.
+      \internal
+      1. Disconnect from [Scene/Map]View.
+      2. Disconnect from the associated Map/Scene.
+      3. Disconnect from the associated Basemap.
      */
     template <typename T>
     void disconnectFromView(BasemapGalleryController* self, T* view)
@@ -169,13 +170,13 @@ namespace Toolkit {
     }
 
     /*!
-     \internal
-     Triggered when a basemap is added to the gallery.
+      \internal
+      Triggered when a basemap is added to the gallery.
 
-     1. We listen for GalleryItem changes.
-     2. We force the basemap to load if not already.
-     3. We emit `currentBasemapChanged` if the current basemap was
-        added to the gallery.
+      1. We listen for GalleryItem changes.
+      2. We force the basemap to load if not already.
+      3. We emit BasemapGalleryController::currentBasemapChanged if the current basemap was
+         added to the gallery.
      */
     void onBasemapAddedToGallery(BasemapGalleryController* self, GenericListModel* gallery, const QModelIndex& index, BasemapGalleryItem* galleryItem)
     {
@@ -204,21 +205,21 @@ namespace Toolkit {
 
       if (self->currentBasemap() == basemap)
       {
-        // If the currently active basemap was added to the gallery, we let
-        // downstream consumers know the currently active basemap has changed also to
+        // If the currently active basemap was added to the gallery, we notify
+        // downstream consumers that the currently active basemap has changed also to
         // trigger UI updates.
         emit self->currentBasemapChanged();
       }
     }
 
     /*!
-     \internal
-     Triggered when a basemap is removed from the gallery.
+      \internal
+      Triggered when a basemap is removed from the gallery.
 
-     1. We disconnect from the GalleryItem.
-     2. We emit `currentBasemapChanged` if the current basemap was
-        removed from the gallery.
-     3. We delete the GalerryItem if we are the parent.
+      1. We disconnect from the GalleryItem.
+      2. We emit BasemapGalleryController::currentBasemapChanged if the current basemap was
+         removed from the gallery.
+      3. We delete the GalerryItem if we are the parent.
      */
     void onBasemapRemovedFromGallery(BasemapGalleryController* self, BasemapGalleryItem* galleryItem)
     {
@@ -242,12 +243,12 @@ namespace Toolkit {
     }
 
     /*!
-     \internal
-     Calls `Portal::fetchDeveloperBasemaps` on the portal. Note that we do
-     not call `Portal::fetchBasemaps`. The former call is for retrieving the modern API-key
-     metered basemaps, while the latter returns older-style basemaps. The latter is required
-     only when the user applies a custom portal, as it is also the call for retrieving an
-     enterprises's custom basemaps if set.
+      \internal
+      Calls Portal::fetchDeveloperBasemaps on the portal. Note that we do
+      not call Portal::fetchBasemaps. The former call is for retrieving the modern API-key
+      metered basemaps, while the latter returns older-style basemaps. The latter is required
+      only when the user applies a custom portal, as it is also the call for retrieving an
+      enterprises's custom basemaps if set.
      */
     void setToDefaultBasemaps(BasemapGalleryController* self, Portal* portal)
     {
@@ -275,18 +276,19 @@ namespace Toolkit {
   }
 
   /*!
-  \inmodule EsriArcGISRuntimeToolkit
-  \class Esri::ArcGISRuntime::Toolkit::BasemapGalleryController
-  \brief The controller part of a BasemapGallery. This class handles the
-  management of the BasemapGalleryItem objects, and listening to changes to the current
-  Basemap of an associated GeoView.
-  */
+    \inmodule EsriArcGISRuntimeToolkit
+    \class Esri::ArcGISRuntime::Toolkit::BasemapGalleryController
+    \brief The controller part of a BasemapGallery. This class handles the
+    management of the BasemapGalleryItem objects, and listening to changes to the current
+    Basemap of an associated GeoView.
+   */
 
   /*!
-   Constructs a new controller object with a given \a parent.
-   The controller will automatically populate itself with the deveoper basemaps from AGOL.
+    \brief Constructs a new controller object with a given \a parent.
 
-   The given default basemaps require either an API key or named-user to be signed into the app.
+    The controller will automatically populate itself with the deveoper basemaps from AGOL.
+
+     The given default basemaps require either an API key or named-user to be signed into the app.
    */
   BasemapGalleryController::BasemapGalleryController(QObject* parent) :
     QObject(parent),
@@ -335,7 +337,7 @@ namespace Toolkit {
   }
 
   /*!
-   \brief Destructor
+   \brief Destructor.
    */
   BasemapGalleryController::~BasemapGalleryController()
   {
@@ -394,9 +396,9 @@ namespace Toolkit {
   }
 
   /*!
-  \brief Returns the known list of available basemaps.
-  Internally, this is a \c GenericListModel with an \c elementType of
-  \c Basemap.
+    \brief Returns the known list of available basemaps.
+    Internally, this is a \c GenericListModel with an \c elementType of
+    \c Basemap.
  */
   GenericListModel* BasemapGalleryController::gallery() const
   {
@@ -404,7 +406,7 @@ namespace Toolkit {
   }
 
   /*!
-  \brief Returns the current portal if set.
+    \brief Returns the current portal if set.
  */
   Portal* BasemapGalleryController::portal() const
   {
@@ -412,19 +414,19 @@ namespace Toolkit {
   }
 
   /*!
-  \brief Sets the current portal. This resets the gallery.
+    \brief Sets the current portal. This resets the gallery.
 
-  When \a portal is set, the basemaps of the Portal
-  are fetched via \c{Portal::fetchBasemaps}.
+    When \a portal is set, the basemaps of the Portal
+    are fetched via \c{Portal::fetchBasemaps}.
 
-  This is useful for displaying an organization's basemaps or to display a gallery of the old-style basemaps
-  (which do not require an API key or named user.)
+    This is useful for displaying an organization's basemaps or to display a gallery of the old-style basemaps
+    (which do not require an API key or named user.)
 
-  To display the old-style basemaps do the following:
+    To display the old-style basemaps do the following:
 
-  \code
-  controller->setPortal(new Portal(QUrl("https://arcgis.com"), this));
-  \endcode
+    \code
+    controller->setPortal(new Portal(QUrl("https://arcgis.com"), this));
+    \endcode
  */
   void BasemapGalleryController::setPortal(Portal* portal)
   {
@@ -492,10 +494,10 @@ namespace Toolkit {
   }
 
   /*!
-   * \brief Returns the current basemap associated with the map/scene
-   * of the given GeoView.
-   *
-   * It is possible for the current basemap to not be in the gallery.
+    \brief Returns the current basemap associated with the map/scene
+    of the given GeoView.
+   
+    It is possible for the current basemap to not be in the gallery.
    */
   Basemap* BasemapGalleryController::currentBasemap() const
   {
@@ -517,10 +519,10 @@ namespace Toolkit {
   }
 
   /*!
-   * \brief Sets the current basemap associated with the map/scene
-   * of the given GeoView to \a basemap.
-   *
-   * It is possible for the current basemap to not be in the gallery.
+    \brief Sets the current basemap associated with the map/scene
+    of the given GeoView to \a basemap.
+   
+    It is possible for the current basemap to not be in the gallery.
    */
   void BasemapGalleryController::setCurrentBasemap(Basemap* basemap)
   {
@@ -543,19 +545,19 @@ namespace Toolkit {
   }
 
   /*!
-  \brief Convenience function that appends a basemap to the gallery.
+    \brief Convenience function that appends a basemap to the gallery.
 
-  \list
-  \li \a basemap Basemap to add to the gallery.
-  \endlist
+    \list
+    \li \a basemap Basemap to add to the gallery.
+    \endlist
 
-      This is equivelent to calling
+    This is equivelent to calling
 
-  \code
-          controller->gallery()->append(new BasemapGalleryItem(basemap), controller);
-  \endcode
+    \code
+    controller->gallery()->append(new BasemapGalleryItem(basemap), controller);
+    \endcode
 
-  Returns \c true if successfully added, false otherwise.
+    Returns \c true if successfully added, false otherwise.
   */
   bool BasemapGalleryController::append(Basemap* basemap)
   {
@@ -572,10 +574,10 @@ namespace Toolkit {
     \li \a tooltip Tooltip to show when mouse hovers over the gallery item.
     \endlist
 
-        This is equivelent to calling
+    This is equivelent to calling:
 
     \code
-            controller->gallery()->append(new BasemapGalleryItem(basemap, thumbnail, tooltip), controller);
+    controller->gallery()->append(new BasemapGalleryItem(basemap, thumbnail, tooltip), controller);
     \endcode
    */
    bool BasemapGalleryController::append(Basemap* basemap, QImage thumbnail, QString tooltip)
@@ -584,10 +586,10 @@ namespace Toolkit {
   }
 
   /*!
-   \internal
-   \brief Given a \a basemap, returns the index of the basemap within the gallery.
-   This comparison is performed via pointer comparison.
-   If the basemap is not found then \c{-1} is returned.
+    \internal
+    \brief Given a \a basemap, returns the index of the basemap within the gallery.
+    This comparison is performed via pointer comparison.
+    If the basemap is not found then \c{-1} is returned.
    */
   int BasemapGalleryController::basemapIndex(Basemap* basemap) const
   {
@@ -635,10 +637,10 @@ namespace Toolkit {
       return true;
 
     // Test if all layers match the spatial reference.
-    // From the spec we are guaranteed the homogenity of the spatial references of these layers.
+    // From the spec we are guaranteed the homogeneity of the spatial references of these layers.
     // https://developers.arcgis.com/web-map-specification/objects/spatialReference/
-    const auto& layers = *basemap->baseLayers();
-    return std::all_of(std::begin(layers), std::end(layers), [&sp](Layer* layer)
+    const auto layers = basemap->baseLayers();
+    return std::all_of(std::cbegin(*layers), std::cend(*layers), [&sp](Layer* layer)
                        {
                          const auto sp2 = layer->spatialReference();
                          return sp2.isEmpty() || sp == sp2;
@@ -646,43 +648,43 @@ namespace Toolkit {
   }
 
 /*!
- \fn void Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::geoViewChanged()
- \brief Emitted when the geoView has changed.
-*/
+  \fn void Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::geoViewChanged()
+  \brief Emitted when the geoView has changed.
+ */
 
 /*!
- \fn void Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::portalChanged()
- \brief Emitted when the portal has changed.
-*/
+  \fn void Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::portalChanged()
+  \brief Emitted when the portal has changed.
+ */
 
 /*!
- \fn void Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::currentBasemapChanged()
- \brief Emitted when the current basemap has changed.
-*/
+  \fn void Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::currentBasemapChanged()
+  \brief Emitted when the current basemap has changed.
+ */
 
 /*!
-\property Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::geoView
-\brief The geoview the controller is listening for basemap changes.
-\sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::geoView()
-*/
+  \property Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::geoView
+  \brief The geoview the controller is listening for basemap changes.
+  \sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::geoView()
+ */
 
 /*!
-\property Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::portal
-\brief The optional portal the controller queries for basemaps
-\sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::portal()
-*/
+  \property Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::portal
+  \brief The optional portal the controller queries for basemaps
+  \sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::portal()
+ */
 
 /*!
-\property Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::currentBasemap
-\brief The current basemap of the scene/map in the current geoView.
-\sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::currentBasemap()
-*/
+  \property Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::currentBasemap
+  \brief The current basemap of the scene/map in the current geoView.
+  \sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::currentBasemap()
+ */
 
 /*!
-\property Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::gallery
-\brief The gallery of BasemapGalleryItem objects.
-\sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::gallery()
-*/
+  \property Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::gallery
+  \brief The gallery of BasemapGalleryItem objects.
+  \sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::gallery()
+ */
 
 } // Toolkit
 } // ArcGISRuntime

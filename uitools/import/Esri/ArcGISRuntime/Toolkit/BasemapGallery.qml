@@ -47,7 +47,7 @@ Control {
       \value ViewStyle.List The BasemapGallery will display as a list.
 
       The default is \c ViewStyle.Automatic.
-      */
+     */
     enum ViewStyle {
         Automatic,
         Grid,
@@ -57,7 +57,7 @@ Control {
     /*!
       \qmlproperty BasemapGalleryController controller.
       \brief The controller handles binding logic between the BasemapGallery and
-             the \c GeoView and the \c Portal where applicable.
+      the \c GeoView and the \c Portal where applicable.
     */
     property var controller: BasemapGalleryController { }
 
@@ -70,9 +70,9 @@ Control {
     /*!
        \qmlproperty Portal portal
        \brief The \c Portal contains basemaps which will be fetched and displayed in the gallery if applicable.
-               When a valid Portal is set then `Portal.fetchBasemaps` is immediately called.
+       When a valid Portal is set then `Portal.fetchBasemaps` is immediately called.
 
-               Note: Changing the current active portal will reset the contents of the gallery.
+       Note: Changing the current active portal will reset the contents of the gallery.
      */
     property var portal;
 
@@ -86,24 +86,25 @@ Control {
     /*!
        \qmlproperty Basemap currentBasemap
        \brief Currently applied basemap on the associated \c GeoView. This may be a basemap
-              which does not exist in the gallery.
-    */
+       which does not exist in the gallery.
+     */
     property var currentBasemap;
 
     /*!
        \qmlproperty ViewStyle style
        \brief The style of the basemap gallery. The gallery can be displayed as a list, grid, or automatically switch
-                  between the two based on screen real estate.
+       between the two based on screen real estate.
 
-              Defaults to \c{ViewStyle.Automatic}.
-    */
+       Defaults to \c{ViewStyle.Automatic}.
+     */
     property int style: BasemapGallery.ViewStyle.Automatic
 
     /*!
        \qmlproperty bool allowTooltips
        \brief When this property is true, mouse-hover tooltips are enabled for gallery items.
-              Defaults to \c{true}.
-    */
+       
+       Defaults to \c{true}.
+     */
     property bool allowTooltips: true
 
     implicitWidth: style === BasemapGallery.ViewStyle.List ? view.cellWidth
