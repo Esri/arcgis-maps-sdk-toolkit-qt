@@ -85,7 +85,7 @@ QtObject {
     property QtObject internal: QtObject {
         // This is a workaround for undesirable behaviour.
         // `basemap.item` will be deleted after access unless we store it in a temp.
-        // We don't want it delete itself as we also lose the thumbnail when it does.
+        // We don't want it to delete itself as we also lose the thumbnail when it does.
         property ArcGISItem item: basemap ? basemap.item: null;
     }
 }
