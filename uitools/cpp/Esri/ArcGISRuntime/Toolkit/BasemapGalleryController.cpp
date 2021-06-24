@@ -219,7 +219,7 @@ namespace Toolkit {
       1. We disconnect from the GalleryItem.
       2. We emit BasemapGalleryController::currentBasemapChanged if the current basemap was
          removed from the gallery.
-      3. We delete the GalerryItem if we are the parent.
+      3. We delete the GalleryItem if we are the parent.
      */
     void onBasemapRemovedFromGallery(BasemapGalleryController* self, BasemapGalleryItem* galleryItem)
     {
@@ -286,7 +286,7 @@ namespace Toolkit {
   /*!
     \brief Constructs a new controller object with a given \a parent.
 
-    The controller will automatically populate itself with the deveoper basemaps from AGOL.
+    The controller will automatically populate itself with the developer basemaps from AGOL.
 
      The given default basemaps require either an API key or named-user to be signed into the app.
    */
@@ -574,7 +574,7 @@ namespace Toolkit {
     \li \a tooltip Tooltip to show when mouse hovers over the gallery item.
     \endlist
 
-    This is equivelent to calling:
+    This is equivelent to calling
 
     \code
     controller->gallery()->append(new BasemapGalleryItem(basemap, thumbnail, tooltip, controller));

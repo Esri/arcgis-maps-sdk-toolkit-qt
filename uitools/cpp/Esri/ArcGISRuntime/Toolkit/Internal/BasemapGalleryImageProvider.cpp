@@ -51,7 +51,7 @@ namespace Toolkit {
       \brief Constructor.
       \list
       \li \a galleryItem The item to grab a thumbnail for.
-      \li \a galleryItem The size of image requested.
+      \li \a requestedSize The size of image requested.
       \endlist
 
       Internally, we test the state of the GalleryItem. If there is a thumbnail available we return this immediately,
@@ -219,7 +219,7 @@ namespace Toolkit {
 
   /*!
     \internal
-    \brief Unregisteers a BasemapGalleryItem with the image provider. This is done
+    \brief Unregisters a BasemapGalleryItem with the image provider. This is done
     when the BasemapGalleryItem is destructed.
    */
   bool BasemapGalleryImageProvider::deregisterItem(BasemapGalleryItem* item)
