@@ -205,7 +205,7 @@ namespace Toolkit {
       if (self->currentBasemap() == basemap)
       {
         // If the currently active basemap was added to the gallery, we let
-        // downstream consumers the currently active basemap has changed also to
+        // downstream consumers know the currently active basemap has changed also to
         // trigger UI updates.
         emit self->currentBasemapChanged();
       }
