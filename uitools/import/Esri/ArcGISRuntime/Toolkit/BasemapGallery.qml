@@ -119,6 +119,7 @@ Control {
         property: "portal"
         value: portal
     }
+
     Binding {
         target: basemapGallery
         property: "portal"
