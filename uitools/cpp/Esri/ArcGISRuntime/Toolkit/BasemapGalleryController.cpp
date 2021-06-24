@@ -554,7 +554,7 @@ namespace Toolkit {
     This is equivelent to calling
 
     \code
-    controller->gallery()->append(new BasemapGalleryItem(basemap), controller);
+    controller->gallery()->append(new BasemapGalleryItem(basemap, controller));
     \endcode
 
     Returns \c true if successfully added, false otherwise.
@@ -577,7 +577,7 @@ namespace Toolkit {
     This is equivelent to calling:
 
     \code
-    controller->gallery()->append(new BasemapGalleryItem(basemap, thumbnail, tooltip), controller);
+    controller->gallery()->append(new BasemapGalleryItem(basemap, thumbnail, tooltip, controller));
     \endcode
    */
    bool BasemapGalleryController::append(Basemap* basemap, QImage thumbnail, QString tooltip)
