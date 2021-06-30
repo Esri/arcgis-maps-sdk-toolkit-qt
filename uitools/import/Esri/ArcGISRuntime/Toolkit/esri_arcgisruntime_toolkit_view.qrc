@@ -5,6 +5,7 @@
     <file>Callout.qml</file>
     <file>ClientCertificateView.qml</file>
     <file>CoordinateConversion.qml</file>
+    <file>CurrentVersion.qml</file>
     <file>FlashImage.qml</file>
     <file>LeaderPosition.js</file>
     <file>NorthArrow.qml</file>
