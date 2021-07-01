@@ -66,15 +66,28 @@ constexpr int VERSION_MINOR = 12;
  
  \list
   \li \c T Type to register in QML.
+  \li \a minorVersion The version at which the component was created.
  \endlist
  */
 template <typename T>
-void registerComponent()
+void registerComponent(int minorVersion)
 {
   static_assert(std::is_base_of<QObject, T>::value, "Must inherit QObject");
   auto name = QString{T::staticMetaObject.className()};
   name.remove("Esri::ArcGISRuntime::Toolkit::");
-  qmlRegisterType<T>(NAMESPACE, VERSION_MAJOR, VERSION_MINOR, name.toLatin1());
+  qmlRegisterType<T>(NAMESPACE, VERSION_MAJOR, minorVersion, name.toLatin1());
+}
+
+/*
+ \internal
+ \brief Ensures a Module revision is available from 100.10 onwards 
+ to the current version of the Toolkit.
+ */
+void registerModuleRevisions()
+{
+  constexpr int START_VERSION = 10;
+  for (int i = START_VERSION; i <= VERSION_MINOR; ++i)
+    qmlRegisterModule(NAMESPACE, VERSION_MAJOR, i);
 }
 
 } // namespace
@@ -83,15 +96,16 @@ void registerComponents_cpp_(QQmlEngine& appEngine)
 {
   appEngine.addImageProvider(BasemapGalleryImageProvider::PROVIDER_ID, BasemapGalleryImageProvider::instance());
   appEngine.addImportPath(ESRI_COM_PATH);
-  registerComponent<AuthenticationController>();
-  registerComponent<BasemapGalleryController>();
-  registerComponent<BasemapGalleryItem>();
-  registerComponent<CoordinateConversionController>();
-  registerComponent<CoordinateConversionOption>();
-  registerComponent<CoordinateConversionResult>();
-  registerComponent<NorthArrowController>();
-  registerComponent<PopupViewController>();
-  registerComponent<TimeSliderController>();
+  registerModuleRevisions();
+  registerComponent<AuthenticationController>(10);
+  registerComponent<BasemapGalleryController>(12);
+  registerComponent<BasemapGalleryItem>(12);
+  registerComponent<CoordinateConversionController>(10);
+  registerComponent<CoordinateConversionOption>(10);
+  registerComponent<CoordinateConversionResult>(10);
+  registerComponent<NorthArrowController>(10);
+  registerComponent<PopupViewController>(10);
+  registerComponent<TimeSliderController>(10);
 
   qRegisterMetaType<Point>("Esri::ArcGISRuntime::Point");
 }
