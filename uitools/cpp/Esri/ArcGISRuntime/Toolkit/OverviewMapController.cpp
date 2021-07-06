@@ -35,10 +35,10 @@ namespace Toolkit {
   namespace {
 
     /*!
-    \internal
-    Connect to MapView's viewpointChanged. Note, we display the visible area as the
-    graphic, and we apply viewpoint rotations.
-   */
+      \internal
+      Connect to MapView's viewpointChanged. Note, we display the visible area as the
+      graphic, and we apply viewpoint rotations.
+     */
     void connectToMapView(OverviewMapController* self, MapViewToolkit* view, Graphic* reticle)
     {
       QObject::connect(view, &MapViewToolkit::viewpointChanged, self,
@@ -58,10 +58,10 @@ namespace Toolkit {
     }
 
     /*!
-    \internal
-    Connect to SceneView's viewpointChanged. Note, we display centre and scale as the
-    graphic, and we ignore viewpoint rotations.
-   */
+      \internal
+      Connect to SceneView's viewpointChanged. Note, we display centre and scale as the
+      graphic, and we ignore viewpoint rotations.
+     */
     void connectToSceneView(OverviewMapController* self, SceneViewToolkit* view, Graphic* reticle)
     {
       QObject::connect(view, &SceneViewToolkit::viewpointChanged, self,

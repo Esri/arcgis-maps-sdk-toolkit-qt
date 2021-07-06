@@ -16,19 +16,22 @@ module Esri.ArcGISRuntime.Toolkit
 
 depends Esri.ArcGISRuntime.Toolkit.Controller 100.12
 
+# Current version increment
+CurrentVersion 100.12 CurrentVersion.qml
+
 # View components
-AuthenticationView 100.12 AuthenticationView.qml
+AuthenticationView 100.10 AuthenticationView.qml
 BasemapGallery 100.12 BasemapGallery.qml
-Callout 100.12 Callout.qml
-ClientCertificateView 100.12 ClientCertificateView.qml
-CoordinateConversion 100.12 CoordinateConversion.qml
+Callout 100.10 Callout.qml
+ClientCertificateView 100.10 ClientCertificateView.qml
+CoordinateConversion 100.10 CoordinateConversion.qml
 internal FlashImage FlashImage.qml
-LeaderPosition 100.12 LeaderPosition.js
-NorthArrow 100.12 NorthArrow.qml
-OAuth2View 100.12 OAuth2View.qml
+LeaderPosition 100.10 LeaderPosition.js
+NorthArrow 100.10 NorthArrow.qml
+OAuth2View 100.10 OAuth2View.qml
 OverviewMap 100.12 OverviewMap.qml
-PopupStackView 100.12 PopupStackView.qml
-PopupView 100.12 PopupView.qml
-SslHandshakeView 100.12 SslHandshakeView.qml
-TimeSlider 100.12 TimeSlider.qml
-UserCredentialsView 100.12 UserCredentialsView.qml
+PopupStackView 100.10 PopupStackView.qml
+PopupView 100.10 PopupView.qml
+SslHandshakeView 100.10 SslHandshakeView.qml
+TimeSlider 100.10 TimeSlider.qml
+UserCredentialsView 100.10 UserCredentialsView.qml

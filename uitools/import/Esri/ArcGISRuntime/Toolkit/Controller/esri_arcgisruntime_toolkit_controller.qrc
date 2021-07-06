@@ -7,6 +7,7 @@
       <file>CoordinateConversionController.qml</file>
       <file>CoordinateConversionOption.qml</file>
       <file>CoordinateConversionResult.qml</file>
+      <file>CurrentVersion.qml</file>
       <file>NorthArrowController.qml</file>
       <file>OverviewMapController.qml</file>
       <file>PopupViewController.qml</file>
