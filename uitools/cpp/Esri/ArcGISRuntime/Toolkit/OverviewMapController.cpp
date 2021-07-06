@@ -80,6 +80,11 @@ namespace Toolkit {
     }
   }
 
+  /*!
+    \internal
+    \brief If the inset view was navigated by the user, then this is called
+    to update the geoView viewpoint if it is a MapView.
+   */
   void applyInsetNavigationToMapView(OverviewMapController* self, MapViewToolkit* view)
   {
     auto insetView = self->insetView();
@@ -91,6 +96,11 @@ namespace Toolkit {
     view->setViewpoint(newView, 0);
   }
 
+  /*!
+    \internal
+    \brief If the inset view was navigated by the user, then this is called
+    to update the geoView viewpoint if it is a SceneView.
+   */
   void applyInsetNavigationToSceneView(OverviewMapController* self, SceneViewToolkit* view)
   {
     auto insetView = self->insetView();

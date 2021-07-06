@@ -36,8 +36,6 @@ namespace Esri {
 namespace ArcGISRuntime {
 namespace Toolkit {
 
-  class InsetMapView;
-
   class OverviewMapController : public QObject
   {
     Q_OBJECT
