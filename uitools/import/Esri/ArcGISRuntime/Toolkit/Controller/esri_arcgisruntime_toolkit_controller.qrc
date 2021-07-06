@@ -8,6 +8,7 @@
       <file>CoordinateConversionOption.qml</file>
       <file>CoordinateConversionResult.qml</file>
       <file>NorthArrowController.qml</file>
+      <file>OverviewMapController.qml</file>
       <file>PopupViewController.qml</file>
       <file>TimeSliderController.qml</file>
       <file>qmldir</file>

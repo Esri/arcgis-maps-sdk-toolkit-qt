@@ -26,6 +26,7 @@ internal FlashImage FlashImage.qml
 LeaderPosition 100.12 LeaderPosition.js
 NorthArrow 100.12 NorthArrow.qml
 OAuth2View 100.12 OAuth2View.qml
+OverviewMap 100.12 OverviewMap.qml
 PopupStackView 100.12 PopupStackView.qml
 PopupView 100.12 PopupView.qml
 SslHandshakeView 100.12 SslHandshakeView.qml

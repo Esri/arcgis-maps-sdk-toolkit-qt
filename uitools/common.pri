@@ -31,6 +31,7 @@ HEADERS += $$CPPPATH/AuthenticationController.h \
            $$CPPPATH/Internal/GeoViews.h \
            $$CPPPATH/Internal/MetaElement.h \
            $$CPPPATH/NorthArrowController.h \
+           $$CPPPATH/OverviewMapController.h \
            $$CPPPATH/PopupViewController.h \
            $$CPPPATH/TimeSliderController.h
 
@@ -47,5 +48,6 @@ SOURCES += $$CPPPATH/AuthenticationController.cpp \
            $$CPPPATH/Internal/GenericTableProxyModel.cpp \
            $$CPPPATH/Internal/MetaElement.cpp \
            $$CPPPATH/NorthArrowController.cpp \
+           $$CPPPATH/OverviewMapController.cpp \
            $$CPPPATH/PopupViewController.cpp \
            $$CPPPATH/TimeSliderController.cpp

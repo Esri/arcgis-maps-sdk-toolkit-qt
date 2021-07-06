@@ -23,6 +23,7 @@
 #include "CoordinateConversionOption.h"
 #include "CoordinateConversionResult.h"
 #include "NorthArrowController.h"
+#include "OverviewMapController.h"
 #include "PopupViewController.h"
 #include "TimeSliderController.h"
 
@@ -31,6 +32,7 @@
 
 // ArcGIS includes
 #include <Point.h>
+#include <MapQuickView.h>
 
 // Qt Includes
 #include <QQmlEngine>
@@ -90,10 +92,13 @@ void registerComponents_cpp_(QQmlEngine& appEngine)
   registerComponent<CoordinateConversionOption>();
   registerComponent<CoordinateConversionResult>();
   registerComponent<NorthArrowController>();
+  registerComponent<OverviewMapController>();
   registerComponent<PopupViewController>();
   registerComponent<TimeSliderController>();
 
+  // Register ArcGISRuntime types with toolkit.
   qRegisterMetaType<Point>("Esri::ArcGISRuntime::Point");
+  qmlRegisterAnonymousType<MapQuickView>(NAMESPACE, 12);
 }
 
 } // Toolkit

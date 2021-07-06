@@ -27,7 +27,6 @@ import QtQml.Models 2.15
    Basemap of an associated GeoView.
  */
 
-
 QtObject {
     id: controller
     /*!
