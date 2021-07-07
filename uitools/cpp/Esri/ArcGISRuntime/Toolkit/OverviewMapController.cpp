@@ -39,7 +39,7 @@ namespace Toolkit {
 
     /*!
       \internal
-      Connect to MapView's viewpointChanged. Updates insetView when MapView viewpoint changes.
+      Connect to geoView's viewpointChanged. Updates insetView when MapView-geoView viewpoint changes.
       Note, we display the visible area as the reticle, and we apply viewpoint rotations.
      */
     void connectToMapView(OverviewMapController* self, MapViewToolkit* view, Graphic* reticle)
@@ -64,7 +64,7 @@ namespace Toolkit {
 
     /*!
       \internal
-      Connect to SceneView's viewpointChanged. Updates insetView when MapView viewpoint changes.
+      Connect to geoViews's viewpointChanged. Updates insetView when the SceneView-geoView viewpoint changes.
       Note, we display center and scale as the reticle, and we ignore viewpoint rotations.
      */
     void connectToSceneView(OverviewMapController* self, SceneViewToolkit* view, Graphic* reticle)
@@ -385,7 +385,7 @@ namespace Toolkit {
 
   /*!
   \property Esri::ArcGISRuntime::Toolkit::OverviewMapController::geoView
-  \brief The geoview the controller is listening to for view changes.
+  \brief The geoview the controller is listening to for viewpoint changes.
   \sa Esri::ArcGISRuntime::Toolkit::OverviewMapController::geoView()
  */
 
