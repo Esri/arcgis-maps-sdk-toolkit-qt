@@ -71,7 +71,7 @@ namespace Toolkit {
     QObject* m_geoView = nullptr;
     Graphic* m_reticle = nullptr;
     double m_scaleFactor = 25.0;
-    bool m_insetHasMouse;
+    bool m_insetHasMouse = false;
   };
 
 } // Toolkit

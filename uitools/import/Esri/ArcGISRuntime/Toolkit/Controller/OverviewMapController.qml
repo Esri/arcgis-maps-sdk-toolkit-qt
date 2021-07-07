@@ -89,7 +89,7 @@ QtObject {
             }
         }
 
-        // By default the inset does not have navigation enabled
+        // By default the inset does not have attribution visible.
         attributionTextVisible: false
 
         // If an inset viewpoint change is driven by user navigation, then

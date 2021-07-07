@@ -28,6 +28,9 @@
 #include <SimpleMarkerSymbol.h>
 #include <Viewpoint.h>
 
+// Qt headers
+#include <QtGlobal>
+
 namespace Esri {
 namespace ArcGISRuntime {
 namespace Toolkit {
@@ -36,8 +39,8 @@ namespace Toolkit {
 
     /*!
       \internal
-      Connect to MapView's viewpointChanged. Note, we display the visible area as the
-      graphic, and we apply viewpoint rotations.
+      Connect to MapView's viewpointChanged. Updates insetView when MapView viewpoint changes.
+      Note, we display the visible area as the reticle, and we apply viewpoint rotations.
      */
     void connectToMapView(OverviewMapController* self, MapViewToolkit* view, Graphic* reticle)
     {
@@ -47,34 +50,38 @@ namespace Toolkit {
                          reticle->setGeometry(view->visibleArea());
                          if (view->isNavigating())
                          {
-                           const Viewpoint v = view->currentViewpoint(ViewpointType::CenterAndScale);
-                           Viewpoint newView{
-                               geometry_cast<Point>(v.targetGeometry()),
-                               v.targetScale() * self->scaleFactor(),
-                               v.rotation()};
-                           self->insetView()->setViewpoint(newView, 0);
+                           const Viewpoint viewpoint = view->currentViewpoint(ViewpointType::CenterAndScale);
+                           const Viewpoint newViewpoint{
+                               geometry_cast<Point>(viewpoint.targetGeometry()),
+                               viewpoint.targetScale() * self->scaleFactor(),
+                               viewpoint.rotation()};
+
+                           constexpr float animationDuration {0};
+                           self->insetView()->setViewpoint(newViewpoint, animationDuration);
                          }
                        });
     }
 
     /*!
       \internal
-      Connect to SceneView's viewpointChanged. Note, we display centre and scale as the
-      graphic, and we ignore viewpoint rotations.
+      Connect to SceneView's viewpointChanged. Updates insetView when MapView viewpoint changes.
+      Note, we display center and scale as the reticle, and we ignore viewpoint rotations.
      */
     void connectToSceneView(OverviewMapController* self, SceneViewToolkit* view, Graphic* reticle)
     {
       QObject::connect(view, &SceneViewToolkit::viewpointChanged, self,
                        [self, view, reticle]
                        {
-                         const Viewpoint v = view->currentViewpoint(ViewpointType::CenterAndScale);
-                         reticle->setGeometry(v.targetGeometry());
+                         const Viewpoint viewpoint = view->currentViewpoint(ViewpointType::CenterAndScale);
+                         reticle->setGeometry(viewpoint.targetGeometry());
                          if (view->isNavigating())
                          {
-                           Viewpoint newView{
-                               geometry_cast<Point>(v.targetGeometry()),
-                               v.targetScale() * self->scaleFactor()};
-                           self->insetView()->setViewpoint(newView, 0);
+                           const Viewpoint newViewpoint{
+                               geometry_cast<Point>(viewpoint.targetGeometry()),
+                               viewpoint.targetScale() * self->scaleFactor()};
+
+                           constexpr float animationDuration {0};
+                           self->insetView()->setViewpoint(newViewpoint, animationDuration);
                          }
                        });
     }
@@ -88,12 +95,14 @@ namespace Toolkit {
   void applyInsetNavigationToMapView(OverviewMapController* self, MapViewToolkit* view)
   {
     auto insetView = self->insetView();
-    const Viewpoint v = insetView->currentViewpoint(ViewpointType::CenterAndScale);
-    Viewpoint newView{
-        geometry_cast<Point>(v.targetGeometry()),
+    const Viewpoint viewpoint = insetView->currentViewpoint(ViewpointType::CenterAndScale);
+    const Viewpoint newViewpoint{
+        geometry_cast<Point>(viewpoint.targetGeometry()),
         view->currentViewpoint(ViewpointType::CenterAndScale).targetScale(),
-        v.rotation()};
-    view->setViewpoint(newView, 0);
+        viewpoint.rotation()};
+
+    constexpr float animationDuration {0};
+    view->setViewpoint(newViewpoint, animationDuration);
   }
 
   /*!
@@ -104,11 +113,13 @@ namespace Toolkit {
   void applyInsetNavigationToSceneView(OverviewMapController* self, SceneViewToolkit* view)
   {
     auto insetView = self->insetView();
-    const Viewpoint v = insetView->currentViewpoint(ViewpointType::CenterAndScale);
-    Viewpoint newView{
-        geometry_cast<Point>(v.targetGeometry()),
+    const Viewpoint viewpoint = insetView->currentViewpoint(ViewpointType::CenterAndScale);
+    const Viewpoint newViewpoint{
+        geometry_cast<Point>(viewpoint.targetGeometry()),
         view->currentViewpoint(ViewpointType::CenterAndScale).targetScale()};
-    view->setViewpoint(newView, 0);
+
+    constexpr float animationDuration {0};
+    view->setViewpoint(newViewpoint, animationDuration);
   }
 
   /*!
@@ -261,7 +272,7 @@ namespace Toolkit {
 
     if (m_reticle->symbol() && m_reticle->symbol()->parent() == this)
     {
-      // If we own the set symbol, delete it.
+      // If we own the symbol, delete it.
       m_reticle->symbol()->deleteLater();
     }
 
@@ -346,11 +357,11 @@ namespace Toolkit {
                        e.accept();
                      });
 #else
-    QObject::connect(m_insetView, &MapViewToolkit::mousePressed, this, [this](QMouseEvent& e)
+    QObject::connect(m_insetView, &MapViewToolkit::mousePressed, this, [this](QMouseEvent& /*e*/)
                      {
                        m_insetHasMouse = true;
                      });
-    QObject::connect(m_insetView, &MapViewToolkit::mouseReleased, this, [this](QMouseEvent& e)
+    QObject::connect(m_insetView, &MapViewToolkit::mouseReleased, this, [this](QMouseEvent& /*e*/)
                      {
                        m_insetHasMouse = false;
                      });
