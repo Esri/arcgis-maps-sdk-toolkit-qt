@@ -66,7 +66,7 @@ namespace Toolkit {
     connect(m_insetView, &MapViewToolkit::viewpointChanged, this,
             [this]
             {
-              if (m_insetView->isNavigating() && m_updateGeoViewTask.isDone())
+              if (m_insetView->isNavigating() && (m_updateGeoViewpointTask.isDone() || !m_updateGeoViewpointTask.isValid()))
               {
                 if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
                 {
@@ -132,7 +132,7 @@ namespace Toolkit {
                        {
                          const Viewpoint viewpoint = sceneView->currentViewpoint(ViewpointType::CenterAndScale);
                          m_reticle->setGeometry(viewpoint.targetGeometry());
-                         if (sceneView->isNavigating() && m_updateInsetViewTask.isDone())
+                         if (sceneView->isNavigating() && (m_updateInsetViewpointTask.isDone() || !m_updateInsetViewpointTask.isValid()))
                          {
                            applySceneNavigationToInset(sceneView);
                          }
@@ -153,7 +153,7 @@ namespace Toolkit {
                        [this, mapView]
                        {
                          m_reticle->setGeometry(mapView->visibleArea());
-                         if (mapView->isNavigating() && m_updateInsetViewTask.isDone())
+                         if (mapView->isNavigating() && (m_updateInsetViewpointTask.isDone() || !m_updateInsetViewpointTask.isValid()))
                          {
                            applyMapNavigationToInset(mapView);
                          }
@@ -255,7 +255,7 @@ namespace Toolkit {
         viewpoint.rotation()};
 
     constexpr float animationDuration{0};
-    m_updateGeoViewTask = view->setViewpoint(newViewpoint, animationDuration);
+    m_updateGeoViewpointTask = view->setViewpoint(newViewpoint, animationDuration);
   }
 
   /*!
@@ -272,7 +272,7 @@ namespace Toolkit {
         viewpoint.targetScale() / scaleFactor()};
 
     constexpr float animationDuration{0};
-    m_updateGeoViewTask = view->setViewpoint(newViewpoint, animationDuration);
+    m_updateGeoViewpointTask = view->setViewpoint(newViewpoint, animationDuration);
   }
 
   /*!
@@ -290,7 +290,7 @@ namespace Toolkit {
         viewpoint.rotation()};
 
     constexpr float animationDuration{0};
-    m_updateInsetViewTask = m_insetView->setViewpoint(newViewpoint, animationDuration);
+    m_updateInsetViewpointTask = m_insetView->setViewpoint(newViewpoint, animationDuration);
   }
 
   /*!
@@ -307,7 +307,7 @@ namespace Toolkit {
         viewpoint.targetScale() * scaleFactor()};
 
     constexpr float animationDuration{0};
-    m_updateInsetViewTask = m_insetView->setViewpoint(newViewpoint, animationDuration);
+    m_updateInsetViewpointTask = m_insetView->setViewpoint(newViewpoint, animationDuration);
   }
 
   /*!

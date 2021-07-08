@@ -77,8 +77,8 @@ namespace Toolkit {
     QObject* m_geoView = nullptr;
     Graphic* m_reticle = nullptr;
     double m_scaleFactor = 25.0;
-    TaskWatcher m_updateInsetViewTask;
-    TaskWatcher m_updateGeoViewTask;
+    TaskWatcher m_updateInsetViewpointTask;
+    TaskWatcher m_updateGeoViewpointTask;
   };
 
 } // Toolkit

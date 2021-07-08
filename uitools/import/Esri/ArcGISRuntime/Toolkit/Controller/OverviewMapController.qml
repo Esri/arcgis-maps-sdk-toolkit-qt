@@ -95,7 +95,7 @@ QtObject {
         // If an inset viewpoint change is driven by user navigation, then
         // update the geoView viewpoint if and when applicable.
         onViewpointChanged: {
-            if (navigating && !internal.updateInsetViewTaskInProgress) {
+            if (navigating && !internal.updateInsetViewpointTaskInProgress) {
                 if (geoView instanceof MapView) {
                     let v = currentViewpointCenter;
                     let newV = internal.viewpoint.createObject(null, {
@@ -103,7 +103,7 @@ QtObject {
                                                                    targetScale:  v.targetScale / overviewMapController.scaleFactor,
                                                                    rotation: v.rotation
                                                                });
-                    internal.updateGeoViewTaskInProgress = true;
+                    internal.updateGeoViewpointTaskInProgress = true;
                     geoView.setViewpointAndSeconds(newV, 0);
                 } else if (geoView instanceof SceneView) {
                     let v = currentViewpointCenter;
@@ -111,14 +111,14 @@ QtObject {
                                                                    center: v.center,
                                                                    targetScale:  v.targetScale / overviewMapController.scaleFactor
                                                                });
-                    internal.updateGeoViewTaskInProgress = true;
+                    internal.updateGeoViewpointTaskInProgress = true;
                     geoView.setViewpointAndSeconds(newV, 0);
                 }
             }
         }
 
         onSetViewpointCompleted: {
-            internal.updateInsetViewTaskInProgress = false;
+            internal.updateInsetViewpointTaskInProgress = false;
         }
 
         onKeyPressed: {
@@ -167,10 +167,11 @@ QtObject {
     }
 
     property QtObject internal: QtObject {
-        // Keeps track of the progress of progmatic updates to the insetView.
-        property bool updateInsetViewTaskInProgress: false;
-        // Keeps track of the progress of progmatic updates to the geoView.
-        property bool updateGeoViewTaskInProgress: false;
+        // Keeps track of the progress of custom (non-navigaton) updates to the insetView viewpoint.
+        property bool updateInsetViewpointTaskInProgress: false;
+
+        // Keeps track of the progress of custom (non-navigaton) updates to the geoView viewpoint.
+        property bool updateGeoViewpointTaskInProgress: false;
 
         // Track geoView changes, and update the insetView as applicable.
         // Note that we apply slightly different calculations between MapView and SceneView.
@@ -182,19 +183,19 @@ QtObject {
             function onViewpointChanged() {
                 if (geoView instanceof MapView) {
                     reticle.geometry = geoView.visibleArea;
-                    if (geoView.navigating && !internal.updateGeoViewTaskInProgress) {
+                    if (geoView.navigating && !internal.updateGeoViewpointTaskInProgress) {
                         let v = geoView.currentViewpointCenter;
                         let newV = internal.viewpoint.createObject(null, {rotation: v.rotation});
-                        internal.updateInsetViewTaskInProgress = true;
+                        internal.updateInsetViewpointTaskInProgress = true;
                         insetView.setViewpointAndSeconds(newV, 0);
                     }
                 } else if (geoView instanceof SceneView) {
                     let v = geoView.currentViewpointCenter;
                     if (v) { // Sometimes currentViewpointCenter can come back as null.
                         reticle.geometry = v.center;
-                        if (geoView.navigating && !internal.updateGeoViewTaskInProgress) {
+                        if (geoView.navigating && !internal.updateGeoViewpointTaskInProgress) {
                             let newV = internal.viewpoint.createObject(null);
-                            internal.updateInsetViewTaskInProgress = true;
+                            internal.updateInsetViewpointTaskInProgress = true;
                             insetView.setViewpointAndSeconds(newV, 0);
                         }
                     }
@@ -204,7 +205,7 @@ QtObject {
             }
 
             function onSetViewpointCompleted(succeeded) {
-                internal.updateGeoViewTaskInProgress = false;
+                internal.updateGeoViewpointTaskInProgress = false;
             }
         }
 
