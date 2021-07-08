@@ -95,24 +95,30 @@ QtObject {
         // If an inset viewpoint change is driven by user navigation, then
         // update the geoView viewpoint if and when applicable.
         onViewpointChanged: {
-            if (navigating && internal.insetHasMouse) {
+            if (navigating && !internal.updateInsetViewTaskInProgress) {
                 if (geoView instanceof MapView) {
                     let v = currentViewpointCenter;
                     let newV = internal.viewpoint.createObject(null, {
                                                                    center: v.center,
-                                                                   targetScale: geoView.currentViewpointCenter.targetScale,
+                                                                   targetScale:  v.targetScale / overviewMapController.scaleFactor,
                                                                    rotation: v.rotation
                                                                });
+                    internal.updateGeoViewTaskInProgress = true;
                     geoView.setViewpointAndSeconds(newV, 0);
                 } else if (geoView instanceof SceneView) {
                     let v = currentViewpointCenter;
                     let newV = internal.viewpoint.createObject(null, {
                                                                    center: v.center,
-                                                                   targetScale: geoView.currentViewpointCenter.targetScale
+                                                                   targetScale:  v.targetScale / overviewMapController.scaleFactor
                                                                });
+                    internal.updateGeoViewTaskInProgress = true;
                     geoView.setViewpointAndSeconds(newV, 0);
                 }
             }
+        }
+
+        onSetViewpointCompleted: {
+            internal.updateInsetViewTaskInProgress = false;
         }
 
         onKeyPressed: {
@@ -124,8 +130,9 @@ QtObject {
             key.accepted = true;
         }
         onMouseWheelChanged: {
-            // Disable all wheel events
-            wheel.accepted = true;
+            // Disable all wheel events if navigation is not enabled.
+            if (!navigationEnabled)
+                wheel.accepted = true;
         }
         onMouseClicked: {
             // Disable mouse clicks if navigation is not enabled.
@@ -148,25 +155,22 @@ QtObject {
                 mouse.accepted = true;
         }
         onMousePressed: {
-            // Disable mouse press, if navigation is not enabled,
-            // otherwise toggle our mouse grab flag.
-            if (navigationEnabled)
-                internal.insetHasMouse = true;
-            else
+            // Disable mouse press, if navigation is not enabled.
+            if (!navigationEnabled)
                 mouse.accepted = true;
         }
         onMouseReleased: {
-            // Untoggle our mouse grab flag, then disable mouse release if
-            // navigation is not enabled.
-            internal.insetHasMouse = false;
+            // Disable mouse release if navigation is not enabled.
             if (!navigationEnabled)
                 mouse.accepted = true;
         }
     }
 
     property QtObject internal: QtObject {
-        // Keep track of when the user is interacting with the insetView with this flag.
-        property bool insetHasMouse: false;
+        // Keeps track of the progress of progmatic updates to the insetView.
+        property bool updateInsetViewTaskInProgress: false;
+        // Keeps track of the progress of progmatic updates to the geoView.
+        property bool updateGeoViewTaskInProgress: false;
 
         // Track geoView changes, and update the insetView as applicable.
         // Note that we apply slightly different calculations between MapView and SceneView.
@@ -178,23 +182,29 @@ QtObject {
             function onViewpointChanged() {
                 if (geoView instanceof MapView) {
                     reticle.geometry = geoView.visibleArea;
-                    if (geoView.navigating) {
+                    if (geoView.navigating && !internal.updateGeoViewTaskInProgress) {
                         let v = geoView.currentViewpointCenter;
                         let newV = internal.viewpoint.createObject(null, {rotation: v.rotation});
+                        internal.updateInsetViewTaskInProgress = true;
                         insetView.setViewpointAndSeconds(newV, 0);
                     }
                 } else if (geoView instanceof SceneView) {
                     let v = geoView.currentViewpointCenter;
                     if (v) { // Sometimes currentViewpointCenter can come back as null.
                         reticle.geometry = v.center;
-                        if (geoView.navigating) {
+                        if (geoView.navigating && !internal.updateGeoViewTaskInProgress) {
                             let newV = internal.viewpoint.createObject(null);
+                            internal.updateInsetViewTaskInProgress = true;
                             insetView.setViewpointAndSeconds(newV, 0);
                         }
                     }
                 } else {
                     console.error("Unknown GeoView type passed to OverViewMapController.");
                 }
+            }
+
+            function onSetViewpointCompleted(succeeded) {
+                internal.updateGeoViewTaskInProgress = false;
             }
         }
 

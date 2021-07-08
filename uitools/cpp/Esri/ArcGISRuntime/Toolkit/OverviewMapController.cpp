@@ -15,9 +15,6 @@
  ******************************************************************************/
 #include "OverviewMapController.h"
 
-// Toolkit headers
-#include "Internal/GeoViews.h"
-
 // ArcGISRuntime headers
 #include <Graphic.h>
 #include <GraphicsOverlay.h>
@@ -34,93 +31,6 @@
 namespace Esri {
 namespace ArcGISRuntime {
 namespace Toolkit {
-
-  namespace {
-
-    /*!
-      \internal
-      Connect to geoView's viewpointChanged. Updates insetView when MapView-geoView viewpoint changes.
-      Note, we display the visible area as the reticle, and we apply viewpoint rotations.
-     */
-    void connectToMapView(OverviewMapController* self, MapViewToolkit* view, Graphic* reticle)
-    {
-      QObject::connect(view, &MapViewToolkit::viewpointChanged, self,
-                       [self, view, reticle]
-                       {
-                         reticle->setGeometry(view->visibleArea());
-                         if (view->isNavigating())
-                         {
-                           const Viewpoint viewpoint = view->currentViewpoint(ViewpointType::CenterAndScale);
-                           const Viewpoint newViewpoint{
-                               geometry_cast<Point>(viewpoint.targetGeometry()),
-                               viewpoint.targetScale() * self->scaleFactor(),
-                               viewpoint.rotation()};
-
-                           constexpr float animationDuration {0};
-                           self->insetView()->setViewpoint(newViewpoint, animationDuration);
-                         }
-                       });
-    }
-
-    /*!
-      \internal
-      Connect to geoViews's viewpointChanged. Updates insetView when the SceneView-geoView viewpoint changes.
-      Note, we display center and scale as the reticle, and we ignore viewpoint rotations.
-     */
-    void connectToSceneView(OverviewMapController* self, SceneViewToolkit* view, Graphic* reticle)
-    {
-      QObject::connect(view, &SceneViewToolkit::viewpointChanged, self,
-                       [self, view, reticle]
-                       {
-                         const Viewpoint viewpoint = view->currentViewpoint(ViewpointType::CenterAndScale);
-                         reticle->setGeometry(viewpoint.targetGeometry());
-                         if (view->isNavigating())
-                         {
-                           const Viewpoint newViewpoint{
-                               geometry_cast<Point>(viewpoint.targetGeometry()),
-                               viewpoint.targetScale() * self->scaleFactor()};
-
-                           constexpr float animationDuration {0};
-                           self->insetView()->setViewpoint(newViewpoint, animationDuration);
-                         }
-                       });
-    }
-  }
-
-  /*!
-    \internal
-    \brief If the inset view was navigated by the user, then this is called
-    to update the geoView viewpoint if it is a MapView.
-   */
-  void applyInsetNavigationToMapView(OverviewMapController* self, MapViewToolkit* view)
-  {
-    auto insetView = self->insetView();
-    const Viewpoint viewpoint = insetView->currentViewpoint(ViewpointType::CenterAndScale);
-    const Viewpoint newViewpoint{
-        geometry_cast<Point>(viewpoint.targetGeometry()),
-        view->currentViewpoint(ViewpointType::CenterAndScale).targetScale(),
-        viewpoint.rotation()};
-
-    constexpr float animationDuration {0};
-    view->setViewpoint(newViewpoint, animationDuration);
-  }
-
-  /*!
-    \internal
-    \brief If the inset view was navigated by the user, then this is called
-    to update the geoView viewpoint if it is a SceneView.
-   */
-  void applyInsetNavigationToSceneView(OverviewMapController* self, SceneViewToolkit* view)
-  {
-    auto insetView = self->insetView();
-    const Viewpoint viewpoint = insetView->currentViewpoint(ViewpointType::CenterAndScale);
-    const Viewpoint newViewpoint{
-        geometry_cast<Point>(viewpoint.targetGeometry()),
-        view->currentViewpoint(ViewpointType::CenterAndScale).targetScale()};
-
-    constexpr float animationDuration {0};
-    view->setViewpoint(newViewpoint, animationDuration);
-  }
 
   /*!
     \inmodule EsriArcGISRuntimeToolkit
@@ -144,27 +54,27 @@ namespace Toolkit {
     // Disable keyboard interactions, and mouse
     // interactions on devices. Keep track of mouse
     // touches.
-    handleInteractions();
+    disableInteractions();
 
     // Add the Graphic to the insetView.
     auto graphicsOverlay = new GraphicsOverlay(m_insetView);
     graphicsOverlay->graphics()->append(m_reticle);
     m_insetView->graphicsOverlays()->append(graphicsOverlay);
 
-    // If the user navigates the inset, apply navigation changes 
+    // If the user navigates the inset, apply navigation changes
     // to the main GeoView if applicable.
     connect(m_insetView, &MapViewToolkit::viewpointChanged, this,
             [this]
             {
-              if (m_insetView->isNavigating() && m_insetHasMouse)
+              if (m_insetView->isNavigating() && m_updateGeoViewTask.isDone())
               {
                 if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
                 {
-                  applyInsetNavigationToSceneView(this, sceneView);
+                  applyInsetNavigationToSceneView(sceneView);
                 }
                 else if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
                 {
-                  applyInsetNavigationToMapView(this, mapView);
+                  applyInsetNavigationToMapView(mapView);
                 }
               }
             });
@@ -216,7 +126,17 @@ namespace Toolkit {
       {
         setSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle::Cross, Qt::GlobalColor::red, 16.0f, this));
       }
-      connectToSceneView(this, sceneView, m_reticle);
+      // Connect to geoViews's viewpointChanged. Updates insetView when the SceneView-geoView viewpoint changes.
+      QObject::connect(sceneView, &SceneViewToolkit::viewpointChanged, this,
+                       [this, sceneView]
+                       {
+                         const Viewpoint viewpoint = sceneView->currentViewpoint(ViewpointType::CenterAndScale);
+                         m_reticle->setGeometry(viewpoint.targetGeometry());
+                         if (sceneView->isNavigating() && m_updateInsetViewTask.isDone())
+                         {
+                           applySceneNavigationToInset(sceneView);
+                         }
+                       });
     }
     else if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
@@ -228,7 +148,16 @@ namespace Toolkit {
         symbol->setOutline(new SimpleLineSymbol(SimpleLineSymbolStyle::Solid, Qt::GlobalColor::red, 1.0f, symbol));
         setSymbol(symbol);
       }
-      connectToMapView(this, mapView, m_reticle);
+      // Connect to geoView's viewpointChanged. Updates insetView when MapView-geoView viewpoint changes.
+      QObject::connect(mapView, &MapViewToolkit::viewpointChanged, this,
+                       [this, mapView]
+                       {
+                         m_reticle->setGeometry(mapView->visibleArea());
+                         if (mapView->isNavigating() && m_updateInsetViewTask.isDone())
+                         {
+                           applyMapNavigationToInset(mapView);
+                         }
+                       });
     }
     emit geoViewChanged();
   }
@@ -313,9 +242,79 @@ namespace Toolkit {
 
   /*!
     \internal
+    \brief If the inset view was navigated by the user, then this is called
+    to update the geoView viewpoint if it is a MapView.
+   */
+  void OverviewMapController::applyInsetNavigationToMapView(MapViewToolkit* view)
+  {
+    // Note we care about rotation in the mapView case.
+    const Viewpoint viewpoint = m_insetView->currentViewpoint(ViewpointType::CenterAndScale);
+    const Viewpoint newViewpoint{
+        geometry_cast<Point>(viewpoint.targetGeometry()),
+        viewpoint.targetScale() / scaleFactor(),
+        viewpoint.rotation()};
+
+    constexpr float animationDuration{0};
+    m_updateGeoViewTask = view->setViewpoint(newViewpoint, animationDuration);
+  }
+
+  /*!
+    \internal
+    \brief If the inset view was navigated by the user, then this is called
+    to update the geoView viewpoint if it is a SceneView.
+   */
+  void OverviewMapController::applyInsetNavigationToSceneView(SceneViewToolkit* view)
+  {
+    // Note we do not care about rotation in the sceneView case.
+    const Viewpoint viewpoint = m_insetView->currentViewpoint(ViewpointType::CenterAndScale);
+    const Viewpoint newViewpoint{
+        geometry_cast<Point>(viewpoint.targetGeometry()),
+        viewpoint.targetScale() / scaleFactor()};
+
+    constexpr float animationDuration{0};
+    m_updateGeoViewTask = view->setViewpoint(newViewpoint, animationDuration);
+  }
+
+  /*!
+    \internal
+    \brief If the geoView view was navigated by the user, and is a mapView,
+     then this is called to update the insetView viewpoint.
+   */
+  void OverviewMapController::applyMapNavigationToInset(MapViewToolkit* view)
+  {
+    // Note we care about rotation in the mapView case.
+    const Viewpoint viewpoint = view->currentViewpoint(ViewpointType::CenterAndScale);
+    const Viewpoint newViewpoint{
+        geometry_cast<Point>(viewpoint.targetGeometry()),
+        viewpoint.targetScale() * scaleFactor(),
+        viewpoint.rotation()};
+
+    constexpr float animationDuration{0};
+    m_updateInsetViewTask = m_insetView->setViewpoint(newViewpoint, animationDuration);
+  }
+
+  /*!
+    \internal
+    \brief If the geoView view was navigated by the user, and is a sceneView,
+     then this is called to update the insetView viewpoint.
+   */
+  void OverviewMapController::applySceneNavigationToInset(SceneViewToolkit* view)
+  {
+    // Note we do not care about rotation in the sceneView case.
+    const Viewpoint viewpoint = view->currentViewpoint(ViewpointType::CenterAndScale);
+    const Viewpoint newViewpoint{
+        geometry_cast<Point>(viewpoint.targetGeometry()),
+        viewpoint.targetScale() * scaleFactor()};
+
+    constexpr float animationDuration{0};
+    m_updateInsetViewTask = m_insetView->setViewpoint(newViewpoint, animationDuration);
+  }
+
+  /*!
+    \internal
     Disables certain interactions on the insetView.
    */
-  void OverviewMapController::handleInteractions()
+  void OverviewMapController::disableInteractions()
   {
     // Disable all keyboard interactions
     QObject::connect(m_insetView, &MapViewToolkit::keyPressed, this, [](QKeyEvent& e)
@@ -323,10 +322,6 @@ namespace Toolkit {
                        e.accept();
                      });
     QObject::connect(m_insetView, &MapViewToolkit::keyReleased, this, [](QKeyEvent& e)
-                     {
-                       e.accept();
-                     });
-    QObject::connect(m_insetView, &MapViewToolkit::mouseWheelChanged, this, [](QWheelEvent& e)
                      {
                        e.accept();
                      });
@@ -356,14 +351,9 @@ namespace Toolkit {
                      {
                        e.accept();
                      });
-#else
-    QObject::connect(m_insetView, &MapViewToolkit::mousePressed, this, [this](QMouseEvent& /*e*/)
+    QObject::connect(m_insetView, &MapViewToolkit::mouseWheelChanged, this, [](QWheelEvent& e)
                      {
-                       m_insetHasMouse = true;
-                     });
-    QObject::connect(m_insetView, &MapViewToolkit::mouseReleased, this, [this](QMouseEvent& /*e*/)
-                     {
-                       m_insetHasMouse = false;
+                       e.accept();
                      });
 #endif
   }

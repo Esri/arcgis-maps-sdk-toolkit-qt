@@ -16,7 +16,7 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_OVERVIEWMAPCONTROLLER_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_OVERVIEWMAPCONTROLLER_H
 
-// Toolkit headers
+// ArcGISRUntime Toolkit headers
 #include "Internal/GeoViews.h"
 
 // ArcGISRuntime headers
@@ -64,14 +64,21 @@ namespace Toolkit {
     void symbolChanged();
 
   private:
-    void handleInteractions();
+    void applyInsetNavigationToMapView(MapViewToolkit* view);
+    void applyInsetNavigationToSceneView(SceneViewToolkit* view);
+
+    void applyMapNavigationToInset(MapViewToolkit* view);
+    void applySceneNavigationToInset(SceneViewToolkit* viiew);
+
+    void disableInteractions();
 
   private:
     MapViewToolkit* m_insetView = nullptr;
     QObject* m_geoView = nullptr;
     Graphic* m_reticle = nullptr;
     double m_scaleFactor = 25.0;
-    bool m_insetHasMouse = false;
+    TaskWatcher m_updateInsetViewTask;
+    TaskWatcher m_updateGeoViewTask;
   };
 
 } // Toolkit
