@@ -22,8 +22,10 @@
 // ArcGISRuntime headers
 #include <Basemap.h>
 
+#ifdef CPP_ARCGISRUNTIME_TOOLKIT
 // Qt headers
 #include <QQmlContext>
+#endif // CPP_ARCGISRUNTIME_TOOLKIT
 
 namespace Esri {
 namespace ArcGISRuntime {

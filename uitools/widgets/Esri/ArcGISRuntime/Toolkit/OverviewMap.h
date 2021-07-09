@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2020 Esri
+ *  Copyright 2012-2021 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -13,43 +13,49 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_GEOVIEWS_H
-#define ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_GEOVIEWS_H
+#ifndef ESRI_ARCGISRUNTIME_OVERVIEWMAP_H
+#define ESRI_ARCGISRUNTIME_OVERVIEWMAP_H
 
-#ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
+#include <QWidget>
 
-#  include <MapGraphicsView.h>
-#  include <SceneGraphicsView.h>
+namespace Ui {
+  class OverviewMap;
+}
 
-namespace Esri 
-{ 
+namespace Esri
+{
 namespace ArcGISRuntime
-{ 
+{
+
+class MapGraphicsView;
+class SceneGraphicsView;
+
 namespace Toolkit
 {
-    using SceneViewToolkit = SceneGraphicsView;
-    using MapViewToolkit = MapGraphicsView;
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
 
-#else 
+class OverviewMapController;
 
-#  include <MapQuickView.h>
-#  include <SceneQuickView.h>
-
-namespace Esri 
-{ 
-namespace ArcGISRuntime
-{ 
-namespace Toolkit 
+class OverviewMap : public QWidget
 {
-  using SceneViewToolkit = SceneQuickView;
-  using MapViewToolkit = MapQuickView;
+  Q_OBJECT
+public:
+  explicit OverviewMap(QWidget* parent = nullptr);
+
+  ~OverviewMap() override;
+
+  void setGeoView(MapGraphicsView* mapView);
+
+  void setGeoView(SceneGraphicsView* mapView);
+
+  OverviewMapController* controller() const;
+
+private:
+  Ui::OverviewMap* m_ui;
+  OverviewMapController* m_controller = nullptr;
+};
+
 } // Toolkit
 } // ArcGISRuntime
 } // Esri
 
-#endif
-
-#endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_GEOVIEWS_H
+#endif // ESRI_ARCGISRUNTIME_OVERVIEWMAP_H
