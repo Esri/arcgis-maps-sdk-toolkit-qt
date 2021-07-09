@@ -107,9 +107,19 @@ Control {
      */
     property bool allowTooltips: true
 
-    implicitWidth: style === BasemapGallery.ViewStyle.List ? view.cellWidth
-                                                           : view.cellWidth * 3
-    implicitHeight: view.cellHeight * 2
+    implicitWidth: style === BasemapGallery.ViewStyle.List ? internal.defaultCellWidthList
+                                                           : internal.defaultCellWidthGrid * 3
+
+    implicitHeight: style === BasemapGallery.ViewStyle.List ? internal.defaultCellHeightList * 2
+                                                            : internal.defaultCellHeightGrid * 2
+
+    width: {
+        if (style === BasemapGallery.ViewStyle.Automatic && internal.calculatedStyle === BasemapGallery.ViewStyle.List) {
+            return internal.defaultCellWidthList;
+        } else {
+            return implicitWidth;
+        }
+    }
 
     background: Rectangle {
         color: basemapGallery.palette.base
@@ -152,8 +162,10 @@ Control {
     contentItem: GridView {
         id: view
         model: controller.gallery
-        cellWidth: 208 // Thumbnail width + 8 padding
-        cellHeight: 141 //Thumbnail height + 8 padding
+        cellWidth: basemapGallery.internal.calculatedStyle === BasemapGallery.ViewStyle.Grid ? basemapGallery.internal.defaultCellWidthGrid
+                                                                                             : basemapGallery.internal.defaultCellWidthList
+        cellHeight: basemapGallery.internal.calculatedStyle === BasemapGallery.ViewStyle.Grid ? basemapGallery.internal.defaultCellHeightGrid
+                                                                                              : basemapGallery.internal.defaultCellHeightList
         clip: true
         snapMode: GridView.SnapToRow
         currentIndex: controller.basemapIndex(controller.currentBasemap)
@@ -162,35 +174,49 @@ Control {
             width: view.cellWidth
             height: view.cellHeight
             enabled: controller.basemapMatchesCurrentSpatialReference(modelData.basemap)
-            Image {
-                anchors.centerIn: parent
-                id: thumbnailItem
-                width: 200
-                height: 133
-                source: modelData.thumbnailUrl
-                cache: false
+            ToolTip.visible: allowTooltips && mouseArea.containsMouse && modelData.tooltip !== ""
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.text: modelData.tooltip
+            GridLayout {
+                anchors.fill: parent
+                anchors.margins: 8
+                flow:  {
+                    if (basemapGallery.internal.calculatedStyle === BasemapGallery.ViewStyle.List) {
+                        return GridLayout.LeftToRight;
+                    } else if (basemapGallery.internal.calculatedStyle === BasemapGallery.ViewStyle.Grid) {
+                        return GridLayout.TopToBottom;
+                    }
+                }
+                Image {
+                    id: thumbnailItem
+                    source: modelData.thumbnailUrl
+                    cache: false
+                    fillMode: Image.PreserveAspectCrop
+                    clip: true
+                    Layout.maximumWidth: basemapGallery.internal.defaultCellSize
+                    Layout.maximumHeight: Layout.maximumWidth
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+                }
                 Text {
                     id: itemText
-                    anchors.fill: parent
-                    style: Text.Outline
-                    styleColor: "black"
-                    color: "white"
+                    color: GridView.isCurrentItem ? palette.highlightedText : palette.text
                     text: modelData.name === "" ? "Unnamed basemap" : modelData.name
                     horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
+                    verticalAlignment:  (basemapGallery.internal.calculatedStyle === BasemapGallery.ViewStyle.Grid) ? Qt.AlignTop
+                                                                                                                    : Qt.AlignVCenter
                     minimumPointSize: 16
                     wrapMode: Text.WordWrap
                     font: basemapGallery.font
+                    elide: Text.ElideRight
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
                 }
-                MouseArea {
-                    id: mouseArea
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    onClicked: controller.setCurrentBasemap(modelData.basemap)
-                }
-                ToolTip.visible: allowTooltips && mouseArea.containsMouse && modelData.tooltip !== ""
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.text: modelData.tooltip
+            }
+            MouseArea {
+                id: mouseArea
+                anchors.fill: parent
+                hoverEnabled: true
+                onClicked: controller.setCurrentBasemap(modelData.basemap)
             }
         }
         highlightFollowsCurrentItem: false
@@ -205,16 +231,28 @@ Control {
         }
     }
 
-    // If we have automatic styling, resize the the view between grid/list based
-    // on available space in the parent.
-    Connections {
-        target: parent
-        enabled: style === BasemapGallery.ViewStyle.Automatic
-        function onWidthChanged() {
-            if (parent.width < implicitWidth) {
-                width = view.cellWidth;
-            } else {
-                width = implicitWidth;
+    property QtObject internal: QtObject {
+        property int defaultCellSize: 100;
+
+        property int defaultCellHeightGrid: defaultCellSize + 86;
+        property int defaultCellWidthGrid: defaultCellSize + 16;
+
+        property int defaultCellHeightList: defaultCellSize + 16;
+        property int defaultCellWidthList: defaultCellSize + 116;
+
+        property int calculatedStyle: {
+            switch(basemapGallery.style) {
+            case BasemapGallery.ViewStyle.List:
+                return BasemapGallery.ViewStyle.List;
+            case BasemapGallery.ViewStyle.Grid:
+                return BasemapGallery.ViewStyle.Grid;
+            case BasemapGallery.ViewStyle.Automatic:
+                if (basemapGallery.parent.width < basemapGallery.implicitWidth) {
+                    return BasemapGallery.ViewStyle.List;
+                } else {
+                    return BasemapGallery.ViewStyle.Grid;
+                }
+
             }
         }
     }
