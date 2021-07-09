@@ -182,9 +182,9 @@ Control {
                 anchors.margins: 8
                 flow:  {
                     if (basemapGallery.internal.calculatedStyle === BasemapGallery.ViewStyle.List) {
-                        return GridLayout.TopToBottom;
-                    } else if (basemapGallery.internal.calculatedStyle === BasemapGallery.ViewStyle.Grid) {
                         return GridLayout.LeftToRight;
+                    } else if (basemapGallery.internal.calculatedStyle === BasemapGallery.ViewStyle.Grid) {
+                        return GridLayout.TopToBottom;
                     }
                 }
                 Image {
@@ -202,8 +202,8 @@ Control {
                     color: GridView.isCurrentItem ? palette.highlightedText : palette.text
                     text: modelData.name === "" ? "Unnamed basemap" : modelData.name
                     horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment:  (basemapGallery.internal.calculatedStyle === BasemapGallery.ViewStyle.Grid) ? Qt.AlignVCenter
-                                                                                                                    : Qt.AlignTop
+                    verticalAlignment:  (basemapGallery.internal.calculatedStyle === BasemapGallery.ViewStyle.Grid) ? Qt.AlignTop
+                                                                                                                    : Qt.AlignVCenter
                     minimumPointSize: 16
                     wrapMode: Text.WordWrap
                     font: basemapGallery.font
@@ -234,11 +234,11 @@ Control {
     property QtObject internal: QtObject {
         property int defaultCellSize: 100;
 
-        property int defaultCellHeightList: defaultCellSize + 86;
-        property int defaultCellWidthList: defaultCellSize + 16;
+        property int defaultCellHeightGrid: defaultCellSize + 86;
+        property int defaultCellWidthGrid: defaultCellSize + 16;
 
-        property int defaultCellHeightGrid: defaultCellSize + 16;
-        property int defaultCellWidthGrid: defaultCellSize + 116;
+        property int defaultCellHeightList: defaultCellSize + 16;
+        property int defaultCellWidthList: defaultCellSize + 116;
 
         property int calculatedStyle: {
             switch(basemapGallery.style) {
