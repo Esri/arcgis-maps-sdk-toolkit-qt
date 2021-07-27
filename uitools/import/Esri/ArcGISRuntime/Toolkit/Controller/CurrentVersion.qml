@@ -16,7 +16,7 @@
 
 import QtQml 2.12
 
-/*!
+/*
   \internal
   This QML file is only used for incrementing the current version of the toolkit and
   should not be used in your application.
