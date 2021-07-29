@@ -17,6 +17,25 @@ import QtQml 2.12
 import QtQuick 2.12
 import Esri.ArcGISRuntime 100.12
 
+/*!
+   \qmltype BasemapGalleryItem
+   \inqmlmodule Esri.ArcGISRuntime.Toolkit
+   \since Esri.ArcGISRutime 100.12
+   \ingroup ArcGISQtToolkitUiQmlControllers
+   \brief Represents the contents of a BasemapGallery. Can be accessed via
+   \c{BasemapGalleryController.gallery}.
+
+  The BasemapGalleryItem is a wrapper around a Basemap, along with any additional
+  meta-information.
+
+  The BasemapGalleryItem allows for the optional application of a thumbnail and tooltip,
+  which override the given thumbnail/tooltip of the Basemap.
+
+  This is handy when creating Basemaps on the fly from a BasemapStyle or other means, as
+  these basemaps do not come with a thumbnail or tooltip by default.
+ */
+
+
 QtObject {
     id: galleryItem
     /*!

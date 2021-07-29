@@ -25,7 +25,6 @@ namespace ArcGISRuntime {
 namespace Toolkit {
 
   /*!
- \internal 
  \inmodule EsriArcGISRuntimeToolkit
  \class Esri::ArcGISRuntime::Toolkit::GenericListModel
  
