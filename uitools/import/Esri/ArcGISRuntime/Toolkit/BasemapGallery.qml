@@ -175,7 +175,7 @@ Control {
             height: view.cellHeight
             enabled: controller.basemapMatchesCurrentSpatialReference(modelData.basemap)
             ToolTip.visible: allowTooltips && mouseArea.containsMouse && modelData.tooltip !== ""
-            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval * 2
             ToolTip.text: modelData.tooltip
             GridLayout {
                 anchors.fill: parent
