@@ -192,7 +192,10 @@ namespace Toolkit {
   }
 
   /*!
-    \brief Sets the symbol used to represent the GeoView's current viewpoint.
+    \brief Sets the \a symbol used to represent the GeoView's current viewpoint.
+
+     For MapView, the default is an empty SimpleFillSymbol with a 1 point red outline;
+     for SceneView, it will be a red, cross-hair SimpleMarkerSymbol.
    */
   void OverviewMapController::setSymbol(Symbol* symbol)
   {
@@ -220,6 +223,10 @@ namespace Toolkit {
 
   /*!
     \brief Sets the amount to scale the OverviewMap compared to the geoView.
+
+    \list
+      \li \a scaleFactor The scale factor. Defaults to 25.0.
+    \endlist
    */
   void OverviewMapController::setScaleFactor(double scaleFactor)
   {

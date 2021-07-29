@@ -100,6 +100,8 @@ QtObject {
       \brief Convenience function that appends a basemap to the gallery with an overloaded
       thumbnail and tooltip.
 
+      Returns whether the append was successful.
+
       \list
       \li \a basemap Basemap to add to the gallery.
       \li \a thumbnailUrl Thumbnail to display in the gallery. Optional.

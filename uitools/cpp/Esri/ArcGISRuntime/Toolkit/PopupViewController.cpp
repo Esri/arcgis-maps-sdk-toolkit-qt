@@ -251,12 +251,12 @@ void PopupViewController::setAttachmentThumbnailHeight(int height)
  */
 
 /*!
-  \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::attachmentWidthChanged()
+  \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::attachmentThumbnailWidthChanged()
   \brief Signal emitted when the attachment minimum width changes.
  */
 
 /*!
-  \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::attachmentHeightChanged()
+  \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::attachmentThumbnailHeightChanged()
   \brief Signal emitted when the attachment minimum height changes.
  */
 
