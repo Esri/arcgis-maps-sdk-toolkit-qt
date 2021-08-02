@@ -15,9 +15,9 @@
  ******************************************************************************/
 import Esri.ArcGISRuntime.Toolkit.Controller 100.12
 
-import QtQml 2.12
-import QtQuick 2.12
-import QtQuick.Controls 2.12
+import QtQuick 2.15
+import QtQml 2.15
+import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
 /*!
@@ -32,7 +32,7 @@ import QtQuick.Layouts 1.15
  geoview is removed from the given map/scene and replaced with the basemap selected in the gallery.
  */
 
-Control {
+Pane {
     id: basemapGallery
 
     /*!
@@ -75,6 +75,12 @@ Control {
        Note: Changing the current active portal will reset the contents of the gallery.
      */
     property var portal;
+
+    onPortalChanged: {
+        if (controller) {
+            controller.portal = portal;
+        }
+    }
 
     /*!
        \qmlproperty GenericListModel gallery
@@ -121,20 +127,13 @@ Control {
         }
     }
 
-    background: Rectangle {
-        color: basemapGallery.palette.base
-    }
+    padding: 0
 
     Binding {
+        restoreMode: Binding.RestoreNone
         target: controller
         property: "portal"
         value: portal
-    }
-
-    Binding {
-        target: basemapGallery
-        property: "portal"
-        value: controller.portal
     }
 
     Binding {
@@ -159,7 +158,7 @@ Control {
         return controller.setCurrentBasemap(...args);
     }
 
-    contentItem: GridView {
+    contentItem:  GridView {
         id: view
         model: controller.gallery
         cellWidth: basemapGallery.internal.calculatedStyle === BasemapGallery.ViewStyle.Grid ? basemapGallery.internal.defaultCellWidthGrid
@@ -175,7 +174,7 @@ Control {
             height: view.cellHeight
             enabled: controller.basemapMatchesCurrentSpatialReference(modelData.basemap)
             ToolTip.visible: allowTooltips && mouseArea.containsMouse && modelData.tooltip !== ""
-            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval * 2
             ToolTip.text: modelData.tooltip
             GridLayout {
                 anchors.fill: parent

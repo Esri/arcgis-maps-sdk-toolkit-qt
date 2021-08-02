@@ -49,6 +49,10 @@ Item {
      */
     property real scaleFactor: 25;
 
+    implicitWidth: 300
+
+    implicitHeight: 200
+
     children: [
         controller.insetView
     ]

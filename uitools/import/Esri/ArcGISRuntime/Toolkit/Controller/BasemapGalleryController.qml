@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import QtQml 2.12
+import QtQml 2.15
 import Esri.ArcGISRuntime 100.12
 import QtQml.Models 2.15
 
@@ -41,7 +41,6 @@ QtObject {
      */
     property Portal portal: Portal {
         url: "https://arcgis.com"
-
         // On startup with the default portal,
         // get the developer basemaps.
         Component.onCompleted: {
@@ -226,21 +225,24 @@ QtObject {
         property var currentBasemap: null;
 
         property Binding mapBinding: Binding {
-            when: geoView !== null && geoView.map !== undefined
+            restoreMode: Binding.RestoreNone
+            when: geoView && geoView.map !== undefined
             target: internal
             property: "currentBasemap"
-            value: geoView.map.basemap
+            value: geoView === null ? null : geoView.map ? geoView.map.basemap : null
         }
 
         property Binding sceneBinding: Binding {
-            when: geoView !== null && geoView.scene !== undefined
+            restoreMode: Binding.RestoreNone
+            when: geoView && geoView.scene !== undefined
             target: internal
             property: "currentBasemap"
-            value: geoView.scene ? geoView.scene.basemap : null
+            value: geoView === null ? null : geoView.scene ? geoView.scene.basemap : null
         }
 
         property Binding nullBinding: Binding {
-            when: geoView === null
+            restoreMode: Binding.RestoreNone
+            when: !geoView
             target: internal
             property: "currentBasemap"
             value: null
