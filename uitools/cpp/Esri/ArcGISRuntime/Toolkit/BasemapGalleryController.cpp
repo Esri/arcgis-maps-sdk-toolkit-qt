@@ -532,7 +532,7 @@ namespace Toolkit {
   /*!
    \internal
    \brief Given a \a basemap, returns whether the spatial reference of its layers
-   match the spatial reference of the GeoModel (and therefore if it appropriate to apply
+   match the spatial reference of the GeoModel (and therefore if it is appropriate to apply
    as the current basemap.)
    */
   bool BasemapGalleryController::basemapMatchesCurrentSpatialReference(Basemap* basemap) const
@@ -565,7 +565,7 @@ namespace Toolkit {
    \brief Convenience function for QML/C++ users which allows the map/scene to be extracted from a
    SceneView or MapView assigned to \a view in QML code.
 
-  This is only a concern as [Map/Scene]QuickView does not expose a [Map/Scene] property in QML.
+   This is only a concern as [Map/Scene]QuickView does not expose a [Map/Scene] property in QML.
 
    For example, to hook up BasemapGallery with a MapQuickView (which does not expose a map property):
 
