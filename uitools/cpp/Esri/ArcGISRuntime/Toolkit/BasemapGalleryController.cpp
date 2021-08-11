@@ -53,16 +53,16 @@ namespace Toolkit {
       map/scene basemapChanged signal is fired.
      */
     template <typename T>
-    void connectToBasemap(BasemapGalleryController* self, T* mapOrScene)
+    void connectToBasemap(BasemapGalleryController* self, T* geoModel)
     {
       static_assert(std::is_base_of<GeoModel, T>::value, "Must be a GeoModel.");
 
-      if (!mapOrScene)
+      if (!geoModel)
         return;
 
-      auto listenToLoadSignals = [self, mapOrScene]
+      auto listenToLoadSignals = [self](Basemap* basemap)
       {
-        if (auto basemap = mapOrScene->basemap())
+        if (basemap)
         {
           if (basemap->loadStatus() != LoadStatus::Loaded)
             QObject::connect(basemap, &Basemap::doneLoading, self, &BasemapGalleryController::currentBasemapChanged);
@@ -71,15 +71,16 @@ namespace Toolkit {
 
       // If basemap changes on map or scene, disconnect from basemap and
       // signal that basemap has changed.
-      QObject::connect(mapOrScene, &T::basemapChanged, self,
-                       [self, listenToLoadSignals, mapOrScene](Basemap* oldBasemap)
+      QObject::connect(geoModel, &T::basemapChanged, self,
+                       [self, listenToLoadSignals, geoModel](Basemap* oldBasemap)
                        {
                          QObject::disconnect(self, nullptr, oldBasemap, nullptr);
-                         listenToLoadSignals(); // Connect to new basemap.
-                         self->setCurrentBasemap(mapOrScene->basemap());
+                         auto newBasemap = geoModel->basemap();
+                         listenToLoadSignals(newBasemap); // Connect to new basemap.
+                         self->setCurrentBasemap(newBasemap);
                        });
 
-      listenToLoadSignals();
+      listenToLoadSignals(geoModel->basemap());
     }
 
     /*!
@@ -87,8 +88,8 @@ namespace Toolkit {
       Connect to [Scene/Map].
 
       1. Update our cached basemap with the Scene/Map basemap.
-      1. Discover the runtime type of GeoModel
-      2. Connect to that type's basemapChanged signal.
+      2. Discover the runtime type of GeoModel
+      3. Connect to that type's basemapChanged signal.
      */
     void connectToGeoModel(BasemapGalleryController* self, GeoModel* geoModel)
     {
@@ -107,6 +108,8 @@ namespace Toolkit {
                          });
       }
 
+      // TODO: Cleanup this when GeoModel itself exposes the
+      // basemapChanged signal.
       if (auto scene = qobject_cast<Scene*>(geoModel))
       {
         connectToBasemap(self, scene);
@@ -463,14 +466,7 @@ namespace Toolkit {
 
     if (m_geoModel)
     {
-      if (auto scene = qobject_cast<Scene*>(m_geoModel))
-      {
-        scene->setBasemap(m_currentBasemap);
-      }
-      else if (auto map = qobject_cast<Map*>(m_geoModel))
-      {
-        map->setBasemap(m_currentBasemap);
-      }
+      m_geoModel->setBasemap(m_currentBasemap);
     }
   }
 
