@@ -32,33 +32,6 @@ namespace Toolkit {
 
   namespace {
     /*! 
-     \internal
-     \brief Convenience template which returns a Map or Scene based on the type of \c{T}.
-     */
-    template <typename T>
-    auto getMapOrScene(T* item);
-
-    /*!
-     \internal
-     \brief Variant that returns a map.
-     */
-    template <>
-    auto getMapOrScene(MapViewToolkit* item)
-    {
-      return item->map();
-    }
-
-    /*!
-     \internal
-     \brief Variant that returns a scene.
-     */
-    template <>
-    auto getMapOrScene(SceneViewToolkit* item)
-    {
-      return item->arcGISScene();
-    }
-
-    /*! 
       \internal
       \brief Convenience function which creates a QPointer for a given type \c{T} 
       which avoids explicitly stating what \c{T} is.
@@ -80,9 +53,9 @@ namespace Toolkit {
       map/scene basemapChanged signal is fired.
      */
     template <typename T>
-    void connectToMapScene(BasemapGalleryController* self, T* mapOrScene)
+    void connectToBasemap(BasemapGalleryController* self, T* mapOrScene)
     {
-      static_assert(std::is_same<T, Scene>::value || std::is_same<T, Map>::value, "Type must be a Map or Scene.");
+      static_assert(std::is_base_of<GeoModel, T>::value, "Must be a GeoModel.");
 
       if (!mapOrScene)
         return;
@@ -99,11 +72,11 @@ namespace Toolkit {
       // If basemap changes on map or scene, disconnect from basemap and
       // signal that basemap has changed.
       QObject::connect(mapOrScene, &T::basemapChanged, self,
-                       [self, listenToLoadSignals](Basemap* oldBasemap)
+                       [self, listenToLoadSignals, mapOrScene](Basemap* oldBasemap)
                        {
                          QObject::disconnect(self, nullptr, oldBasemap, nullptr);
                          listenToLoadSignals(); // Connect to new basemap.
-                         emit self->currentBasemapChanged();
+                         self->setCurrentBasemap(mapOrScene->basemap());
                        });
 
       listenToLoadSignals();
@@ -111,61 +84,50 @@ namespace Toolkit {
 
     /*!
       \internal
-      Connect to [Scene/Map]View and associated Map/Scene and associated Basemap.
+      Connect to [Scene/Map].
 
-      1. We Connect up to the current map/scene.
-      2. If the map/scene changes we disconnect from the old one.
-      3. We connect up to the new map/scene.
-      4. We emit a basemapChanged signal whenever the map or scene changes.
+      1. Update our cached basemap with the Scene/Map basemap.
+      1. Discover the runtime type of GeoModel
+      2. Connect to that type's basemapChanged signal.
      */
-    template <typename T, typename F>
-    void connectToView(BasemapGalleryController* self, T* view, F mapOrSceneChangedSignal)
+    void connectToGeoModel(BasemapGalleryController* self, GeoModel* geoModel)
     {
-      static_assert(std::is_same<T, SceneViewToolkit>::value || std::is_same<T, MapViewToolkit>::value, "Type must be a MapView or SceneView.");
-
-      auto item = getMapOrScene(view);
-      connectToMapScene(self, item);
-
-      // If the current map/scene changes, disconnect all connections to the old ones.
-      auto oldItem = qPointerFrom(item);
-      QObject::connect(view, mapOrSceneChangedSignal, self,
-                       [oldItem, self, view]
-                       {
-                         if (oldItem)
+      if (geoModel->loadStatus() == LoadStatus::Loaded)
+      {
+        self->setCurrentBasemap(geoModel->basemap());
+      }
+      else
+      {
+        QObject::connect(geoModel, &GeoModel::doneLoading, self, [self, geoModel](Error e)
                          {
-                           QObject::disconnect(oldItem, nullptr, self, nullptr);
-                           if (Basemap* basemap = oldItem->basemap())
+                           if (e.isEmpty())
                            {
-                             QObject::disconnect(basemap, nullptr, self, nullptr);
+                             self->setCurrentBasemap(geoModel->basemap());
                            }
-                         }
-                         // Connect up to new signals.
-                         connectToMapScene(self, getMapOrScene(view));
-                         emit self->currentBasemapChanged();
-                       });
+                         });
+      }
+
+      if (auto scene = qobject_cast<Scene*>(geoModel))
+      {
+        connectToBasemap(self, scene);
+      }
+      else if (auto map = qobject_cast<Map*>(geoModel))
+      {
+        connectToBasemap(self, map);
+      }
     }
 
     /*!
       \internal
-      1. Disconnect from [Scene/Map]View.
-      2. Disconnect from the associated Map/Scene.
-      3. Disconnect from the associated Basemap.
+      1. Disconnect from the associated Map/Scene.
+      2. Disconnect from the associated Basemap.
      */
-    template <typename T>
-    void disconnectFromView(BasemapGalleryController* self, T* view)
+    void disconnectFromGeoModel(BasemapGalleryController* self, GeoModel* geoModel)
     {
-      static_assert(std::is_same<T, SceneViewToolkit>::value || std::is_same<T, MapViewToolkit>::value, "Type must be a MapView or SceneView.");
-      if (view)
+      QObject::disconnect(geoModel, nullptr, self, nullptr);
+      if (Basemap* basemap = geoModel->basemap())
       {
-        QObject::disconnect(view, nullptr, self, nullptr);
-        if (auto mapOrScene = getMapOrScene(view))
-        {
-          QObject::disconnect(mapOrScene, nullptr, self, nullptr);
-          if (Basemap* basemap = mapOrScene->basemap())
-          {
-            QObject::disconnect(basemap, nullptr, self, nullptr);
-          }
-        }
+        QObject::disconnect(basemap, nullptr, self, nullptr);
       }
     }
 
@@ -295,7 +257,7 @@ namespace Toolkit {
     m_portal(new Portal(QUrl("https://arcgis.com"), this)),
     m_gallery(new GenericListModel(&BasemapGalleryItem::staticMetaObject, this))
   {
-    connect(this, &BasemapGalleryController::geoViewChanged, this, &BasemapGalleryController::currentBasemapChanged);
+    connect(this, &BasemapGalleryController::geoModelChanged, this, &BasemapGalleryController::currentBasemapChanged);
 
     // Listen in to items added to the gallery.
     connect(m_gallery, &GenericListModel::rowsInserted, this, [this](const QModelIndex& parent, int first, int last)
@@ -344,55 +306,34 @@ namespace Toolkit {
   }
 
   /*!
-  \brief Returns the \c GeoView as a \c QObject.
+  \brief Returns the \c GeoModel.
  */
-  QObject* BasemapGalleryController::geoView() const
+  GeoModel* BasemapGalleryController::geoModel() const
   {
-    return m_geoView;
+    return m_geoModel;
   }
 
   /*!
-  \brief Set the GeoView object this Controller uses.
-  
-  Internally this is cast to a \c MapView or \c SceneView using \c qobject_cast,
-  which is why the paremeter is of form \c QObject and not \c GeoView.
-  
-  \list
-    \li \a geoView \c Object which must inherit from \c{GeoView*} and 
-        \c{QObject*}. 
-  \endlist
+  \brief Set the GeoModel object this Controller uses to \a geoModel.
  */
-  void BasemapGalleryController::setGeoView(QObject* geoView)
+  void BasemapGalleryController::setGeoModel(GeoModel* geoModel)
   {
-    if (geoView == m_geoView)
+    if (geoModel == m_geoModel)
       return;
 
-    if (m_geoView)
+    if (m_geoModel)
     {
-      disconnect(m_geoView, nullptr, this, nullptr);
-
-      // Disconnect from old map/scene if it exists.
-      if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
-      {
-        disconnectFromView(this, sceneView);
-      }
-      else if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
-      {
-        disconnectFromView(this, mapView);
-      }
+      disconnectFromGeoModel(this, geoModel);
     }
 
-    m_geoView = geoView;
+    m_geoModel = geoModel;
 
-    if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+    if (m_geoModel)
     {
-      connectToView(this, sceneView, &SceneViewToolkit::sceneChanged);
+      connectToGeoModel(this, m_geoModel);
     }
-    else if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
-    {
-      connectToView(this, mapView, &MapViewToolkit::mapChanged);
-    }
-    emit geoViewChanged();
+
+    emit geoModelChanged();
   }
 
   /*!
@@ -501,21 +442,7 @@ namespace Toolkit {
    */
   Basemap* BasemapGalleryController::currentBasemap() const
   {
-    if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
-    {
-      if (auto scene = sceneView->arcGISScene())
-      {
-        return scene->basemap();
-      }
-    }
-    else if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
-    {
-      if (auto map = mapView->map())
-      {
-        return map->basemap();
-      }
-    }
-    return nullptr;
+    return m_currentBasemap;
   }
 
   /*!
@@ -526,20 +453,21 @@ namespace Toolkit {
    */
   void BasemapGalleryController::setCurrentBasemap(Basemap* basemap)
   {
-    if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+    if (basemap == m_currentBasemap)
+      return;
+
+    m_currentBasemap = basemap;
+    emit currentBasemapChanged();
+
+    if (m_geoModel)
     {
-      auto scene = sceneView->arcGISScene();
-      if (scene)
+      if (auto scene = qobject_cast<Scene*>(m_geoModel))
       {
-        scene->setBasemap(basemap);
+        scene->setBasemap(m_currentBasemap);
       }
-    }
-    else if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
-    {
-      auto map = mapView->map();
-      if (map)
+      else if (auto map = qobject_cast<Map*>(m_geoModel))
       {
-        map->setBasemap(basemap);
+        map->setBasemap(m_currentBasemap);
       }
     }
   }
@@ -580,7 +508,7 @@ namespace Toolkit {
     controller->gallery()->append(new BasemapGalleryItem(basemap, thumbnail, tooltip, controller));
     \endcode
    */
-   bool BasemapGalleryController::append(Basemap* basemap, QImage thumbnail, QString tooltip)
+  bool BasemapGalleryController::append(Basemap* basemap, QImage thumbnail, QString tooltip)
   {
     return m_gallery->append(new BasemapGalleryItem(basemap, std::move(thumbnail), std::move(tooltip), this));
   }
@@ -615,21 +543,9 @@ namespace Toolkit {
       return false;
 
     SpatialReference sp;
-    if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+    if (m_geoModel)
     {
-      auto scene = sceneView->arcGISScene();
-      if (scene)
-      {
-        sp = scene->spatialReference();
-      }
-    }
-    else if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
-    {
-      auto map = mapView->map();
-      if (map)
-      {
-        sp = map->spatialReference();
-      }
+      sp = m_geoModel->spatialReference();
     }
 
     // If no spatial reference is set, any basemap can be applied.
@@ -647,40 +563,74 @@ namespace Toolkit {
                        });
   }
 
-/*!
+  /*!
+   \brief Convenience function for QML/C++ users which allows the map/scene to be extracted from a
+   SceneView or MapView assigned to \a view in QML code.
+
+  This is only a concern as [Map/Scene]QuickView does not expose a [Map/Scene] property in QML.
+
+   For example, to hook up BasemapGallery with a MapQuickView (which does not expose a map property):
+
+    \code
+     MapView {
+        BasemapGallery {
+            id: gallery
+            anchors {
+                left: view.left
+                top: view.top
+                margins: 5
+        }
+        onMapChanged: gallery.setGeoModelFromGeoView(this)
+     }
+    \endcode
+  */
+  void BasemapGalleryController::setGeoModelFromGeoView(QObject* view)
+  {
+    //  Workaround as MapQuickView does not expose the map property in QML.
+    if (auto sceneView = qobject_cast<SceneViewToolkit*>(view))
+    {
+      setGeoModel(sceneView->arcGISScene());
+    }
+    else if (auto mapView = qobject_cast<MapViewToolkit*>(view))
+    {
+      setGeoModel(mapView->map());
+    }
+  }
+
+  /*!
   \fn void Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::geoViewChanged()
   \brief Emitted when the geoView has changed.
  */
 
-/*!
+  /*!
   \fn void Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::portalChanged()
   \brief Emitted when the portal has changed.
  */
 
-/*!
+  /*!
   \fn void Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::currentBasemapChanged()
   \brief Emitted when the current basemap has changed.
  */
 
-/*!
-  \property Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::geoView
-  \brief The geoview the controller is listening for basemap changes.
-  \sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::geoView()
+  /*!
+  \property Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::geoModel
+  \brief The geoModel the controller is listening for basemap changes.
+  \sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::geoModel()
  */
 
-/*!
+  /*!
   \property Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::portal
   \brief The optional portal the controller queries for basemaps
   \sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::portal()
  */
 
-/*!
+  /*!
   \property Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::currentBasemap
   \brief The current basemap of the scene/map in the current geoView.
   \sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::currentBasemap()
  */
 
-/*!
+  /*!
   \property Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::gallery
   \brief The gallery of BasemapGalleryItem objects.
   \sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::gallery()

@@ -23,6 +23,7 @@
 // ArcGISRuntime headers
 #include <Basemap.h>
 #include <Portal.h>
+#include <GeoModel.h>
 
 // Qt headers
 #include <QObject>
@@ -40,7 +41,7 @@ namespace Toolkit
 class BasemapGalleryController : public QObject
 {
   Q_OBJECT
-  Q_PROPERTY(QObject* geoView READ geoView WRITE setGeoView NOTIFY geoViewChanged)
+  Q_PROPERTY(GeoModel* geoModel READ geoModel WRITE setGeoModel NOTIFY geoModelChanged)
   Q_PROPERTY(Portal* portal READ portal WRITE setPortal NOTIFY portalChanged)
   Q_PROPERTY(Basemap* currentBasemap READ currentBasemap NOTIFY currentBasemapChanged)
   Q_PROPERTY(QAbstractListModel* gallery READ gallery CONSTANT)
@@ -49,9 +50,9 @@ public:
 
   ~BasemapGalleryController() override;
 
-  QObject* geoView() const;
+  GeoModel* geoModel() const;
 
-  void setGeoView(QObject* mapView);
+  void setGeoModel(GeoModel* mapView);
 
   Portal* portal() const;
 
@@ -71,13 +72,16 @@ public:
 
   Q_INVOKABLE bool basemapMatchesCurrentSpatialReference(Basemap* basemap) const;
 
+  Q_INVOKABLE void setGeoModelFromGeoView(QObject* view);
+
 signals:
-  void geoViewChanged();
+  void geoModelChanged();
   void portalChanged();
   void currentBasemapChanged();
 
 private:
-  QObject* m_geoView = nullptr;
+  Basemap* m_currentBasemap = nullptr;
+  GeoModel* m_geoModel = nullptr;
   Portal* m_portal = nullptr;
   GenericListModel* m_gallery = nullptr;
 };

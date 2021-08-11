@@ -29,7 +29,7 @@ import QtQuick.Layouts 1.15
 
  The BasemapGallery displays a collection of items representing basemaps from either ArcGIS Online, a user-defined portal,
  or an array of Basemaps. When the user selects a basemap from the BasemapGallery, the  basemap rendered in the current
- geoview is removed from the given map/scene and replaced with the basemap selected in the gallery.
+ geoModel is removed from the given map/scene and replaced with the basemap selected in the gallery.
  */
 
 Pane {
@@ -57,15 +57,15 @@ Pane {
     /*!
       \qmlproperty BasemapGalleryController controller.
       \brief The controller handles binding logic between the BasemapGallery and
-      the \c GeoView and the \c Portal where applicable.
+      the \c GeoModel and the \c Portal where applicable.
     */
     property var controller: BasemapGalleryController { }
 
     /*!
-       \qmlproperty GeoView geoView
-       \brief The \c GeoView for this tool. Should be a \c SceneView or a \c MapView.
+       \qmlproperty GeoModel geoModel
+       \brief The \c GeoModel for this tool. Should be a \c Scene or a \c Map.
      */
-    property var geoView;
+    property var geoModel;
 
     /*!
        \qmlproperty Portal portal
@@ -91,7 +91,7 @@ Pane {
 
     /*!
        \qmlproperty Basemap currentBasemap
-       \brief Currently applied basemap on the associated \c GeoView. This may be a basemap
+       \brief Currently applied basemap on the associated \c GeoModel. This may be a basemap
        which does not exist in the gallery.
      */
     property var currentBasemap;
@@ -138,8 +138,8 @@ Pane {
 
     Binding {
         target: controller
-        property: "geoView"
-        value: geoView
+        property: "geoModel"
+        value: geoModel
     }
 
     Binding {
@@ -158,7 +158,32 @@ Pane {
         return controller.setCurrentBasemap(...args);
     }
 
-    contentItem:  GridView {
+    /*!
+     \brief Convenience function for QML/C++ users which allows the map/scene to be extracted from a
+     SceneView or MapView assigned to \a view in QML code.
+
+    This is only a concern as [Map/Scene]QuickView does not expose a [Map/Scene] property in QML.
+
+     For example, to hook up BasemapGallery with a MapQuickView:
+
+      \code
+       MapView {
+          BasemapGallery {
+              id: gallery
+              anchors {
+                  left: view.left
+                  top: view.top
+                  margins: 5
+          }
+          onMapChanged: gallery.setGeoModelFromGeoView(this)
+       }
+      \endcode
+     */
+    function setGeoModelFromGeoView(...args) {
+        return controller.setGeoModelFromGeoView(...args);
+    }
+
+    contentItem: GridView {
         id: view
         model: controller.gallery
         cellWidth: basemapGallery.internal.calculatedStyle === BasemapGallery.ViewStyle.Grid ? basemapGallery.internal.defaultCellWidthGrid

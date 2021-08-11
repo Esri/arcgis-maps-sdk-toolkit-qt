@@ -153,6 +153,7 @@ namespace Toolkit {
                        [this, mapView]
                        {
                          m_reticle->setGeometry(mapView->visibleArea());
+                         qDebug() << "Is navigating: " << mapView->isNavigating();
                          if (mapView->isNavigating() && (m_updateInsetViewpointTask.isDone() || !m_updateInsetViewpointTask.isValid()))
                          {
                            applyMapNavigationToInset(mapView);
