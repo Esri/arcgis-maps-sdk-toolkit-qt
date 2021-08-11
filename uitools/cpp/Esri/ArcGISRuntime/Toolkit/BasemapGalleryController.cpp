@@ -242,7 +242,7 @@ namespace Toolkit {
     \class Esri::ArcGISRuntime::Toolkit::BasemapGalleryController
     \brief The controller part of a BasemapGallery. This class handles the
     management of the BasemapGalleryItem objects, and listening to changes to the current
-    Basemap of an associated GeoView.
+    Basemap of an associated GeoModel.
    */
 
   /*!
@@ -435,8 +435,10 @@ namespace Toolkit {
   }
 
   /*!
-    \brief Returns the current basemap associated with the map/scene
-    of the given GeoView.
+    \brief Returns the current basemap selected in the BasemapGallery.
+
+    If a GeoModel is set, this is also the basemap applied to that
+    GeoModel.
    
     It is possible for the current basemap to not be in the gallery.
    */
@@ -447,7 +449,7 @@ namespace Toolkit {
 
   /*!
     \brief Sets the current basemap associated with the map/scene
-    of the given GeoView to \a basemap.
+    of the given GeoModel to \a basemap.
    
     It is possible for the current basemap to not be in the gallery.
    */
@@ -534,7 +536,7 @@ namespace Toolkit {
   /*!
    \internal
    \brief Given a \a basemap, returns whether the spatial reference of its layers
-   match the spatial reference of the GeoView (and therefore if it appropriate to apply
+   match the spatial reference of the GeoModel (and therefore if it appropriate to apply
    as the current basemap.)
    */
   bool BasemapGalleryController::basemapMatchesCurrentSpatialReference(Basemap* basemap) const
@@ -598,8 +600,8 @@ namespace Toolkit {
   }
 
   /*!
-  \fn void Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::geoViewChanged()
-  \brief Emitted when the geoView has changed.
+  \fn void Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::geoModelChanged()
+  \brief Emitted when the geoModel has changed.
  */
 
   /*!
@@ -626,7 +628,7 @@ namespace Toolkit {
 
   /*!
   \property Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::currentBasemap
-  \brief The current basemap of the scene/map in the current geoView.
+  \brief The current basemap of in the current geoModel.
   \sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::currentBasemap()
  */
 
