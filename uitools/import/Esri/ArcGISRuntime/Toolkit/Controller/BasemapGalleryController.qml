@@ -86,7 +86,7 @@ QtObject {
     }
 
     /*!
-       \brief Convenience method that takes a GeoView and set this controller's
+       \brief Convenience method that takes a GeoView and sets this controller's
        geoModel to the scene or map contained within. This method is for QML/C++ layer
        compatibility. It is better to set \c{BasemapGalleryController.geoModel} directly.
      */
