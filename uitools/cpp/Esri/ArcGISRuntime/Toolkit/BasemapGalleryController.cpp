@@ -536,7 +536,7 @@ namespace Toolkit {
   /*!
    \internal
    \brief Given a \a basemap, returns whether the spatial reference of its layers
-   match the spatial reference of the GeoModel (and therefore if it appropriate to apply
+   match the spatial reference of the GeoModel (and therefore if it is appropriate to apply
    as the current basemap.)
    */
   bool BasemapGalleryController::basemapMatchesCurrentSpatialReference(Basemap* basemap) const
