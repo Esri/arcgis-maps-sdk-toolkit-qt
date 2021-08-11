@@ -569,7 +569,7 @@ namespace Toolkit {
    \brief Convenience function for QML/C++ users which allows the map/scene to be extracted from a
    SceneView or MapView assigned to \a view in QML code.
 
-  This is only a concern as [Map/Scene]QuickView does not expose a [Map/Scene] property in QML.
+   This is only a concern as [Map/Scene]QuickView does not expose a [Map/Scene] property in QML.
 
    For example, to hook up BasemapGallery with a MapQuickView (which does not expose a map property):
 
