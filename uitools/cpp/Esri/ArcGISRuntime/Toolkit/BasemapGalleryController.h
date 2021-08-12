@@ -22,6 +22,7 @@
 
 // ArcGISRuntime headers
 #include <Basemap.h>
+#include <GeoModel.h>
 #include <Portal.h>
 
 // Qt headers
@@ -30,57 +31,57 @@
 // Qt forward declarations
 class QAbstractListModel;
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri {
+namespace ArcGISRuntime {
+namespace Toolkit {
 
-class BasemapGalleryController : public QObject
-{
-  Q_OBJECT
-  Q_PROPERTY(QObject* geoView READ geoView WRITE setGeoView NOTIFY geoViewChanged)
-  Q_PROPERTY(Portal* portal READ portal WRITE setPortal NOTIFY portalChanged)
-  Q_PROPERTY(Basemap* currentBasemap READ currentBasemap NOTIFY currentBasemapChanged)
-  Q_PROPERTY(QAbstractListModel* gallery READ gallery CONSTANT)
-public:
-  Q_INVOKABLE BasemapGalleryController(QObject* parent = nullptr);
+  class BasemapGalleryController : public QObject
+  {
+    Q_OBJECT
+    Q_PROPERTY(GeoModel* geoModel READ geoModel WRITE setGeoModel NOTIFY geoModelChanged)
+    Q_PROPERTY(Portal* portal READ portal WRITE setPortal NOTIFY portalChanged)
+    Q_PROPERTY(Basemap* currentBasemap READ currentBasemap NOTIFY currentBasemapChanged)
+    Q_PROPERTY(QAbstractListModel* gallery READ gallery CONSTANT)
+  public:
+    Q_INVOKABLE BasemapGalleryController(QObject* parent = nullptr);
 
-  ~BasemapGalleryController() override;
+    ~BasemapGalleryController() override;
 
-  QObject* geoView() const;
+    GeoModel* geoModel() const;
 
-  void setGeoView(QObject* mapView);
+    void setGeoModel(GeoModel* mapView);
 
-  Portal* portal() const;
+    Portal* portal() const;
 
-  void setPortal(Portal* portal);
+    void setPortal(Portal* portal);
 
-  Basemap* currentBasemap() const;
-  
-  GenericListModel* gallery() const;
+    Basemap* currentBasemap() const;
 
-  Q_INVOKABLE void setCurrentBasemap(Basemap* basemap);
+    GenericListModel* gallery() const;
 
-  Q_INVOKABLE bool append(Basemap* basemap);
+    Q_INVOKABLE void setCurrentBasemap(Basemap* basemap);
 
-  Q_INVOKABLE bool append(Basemap* basemap, QImage thumbnail, QString tooltip = {});
+    Q_INVOKABLE bool append(Basemap* basemap);
 
-  Q_INVOKABLE int basemapIndex(Basemap* basemap) const;
+    Q_INVOKABLE bool append(Basemap* basemap, QImage thumbnail, QString tooltip = {});
 
-  Q_INVOKABLE bool basemapMatchesCurrentSpatialReference(Basemap* basemap) const;
+    Q_INVOKABLE int basemapIndex(Basemap* basemap) const;
 
-signals:
-  void geoViewChanged();
-  void portalChanged();
-  void currentBasemapChanged();
+    Q_INVOKABLE bool basemapMatchesCurrentSpatialReference(Basemap* basemap) const;
 
-private:
-  QObject* m_geoView = nullptr;
-  Portal* m_portal = nullptr;
-  GenericListModel* m_gallery = nullptr;
-};
+    Q_INVOKABLE void setGeoModelFromGeoView(QObject* view);
+
+  signals:
+    void geoModelChanged();
+    void portalChanged();
+    void currentBasemapChanged();
+
+  private:
+    Basemap* m_currentBasemap = nullptr;
+    GeoModel* m_geoModel = nullptr;
+    Portal* m_portal = nullptr;
+    GenericListModel* m_gallery = nullptr;
+  };
 
 } // Toolkit
 } // ArcGISRuntime

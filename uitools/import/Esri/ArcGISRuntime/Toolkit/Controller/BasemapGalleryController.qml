@@ -24,16 +24,16 @@ import QtQml.Models 2.15
    \ingroup ArcGISQtToolkitUiQmlControllers
    \brief The controller part of a BasemapGallery. This class handles the
    management of the BasemapGalleryItem objects, and listening to changes to the current
-   Basemap of an associated GeoView.
+   Basemap of an associated GeoModel.
  */
 
 QtObject {
     id: controller
     /*!
-      \qmlproperty GeoView geoView
-      \brief The geoview the controller is listening for basemap changes.
+      \qmlproperty GeoModel geoModel
+      \brief The geomodel the controller is listening for basemap changes.
      */
-    property var geoView: null;
+    property var geoModel: null;
 
     /*!
       \qmlproperty Portal portal
@@ -60,7 +60,7 @@ QtObject {
 
     /*!
       \qmlproperty Basemap currentBasemap
-      \brief The current basemap of the scene/map in the current geoView.
+      \brief The current basemap of the scene/map in the current geoModel.
      */
     readonly property alias currentBasemap: internal.currentBasemap
 
@@ -76,21 +76,25 @@ QtObject {
     /*!
        \qmlmethod void BasemapGalleryController::setCurrentBasemap(Basemap basemap)
        \brief Sets the current basemap associated with the map/scene
-       of the given GeoView to \a basemap.
+       of the given GeoModel to \a basemap.
 
        It is possible for the current basemap to not be in the gallery.
      */
     function setCurrentBasemap(basemap) {
-        if (geoView === null)
-            return;
+        internal.currentBasemap = basemap;
+        geoModel.basemap = internal.currentBasemap;
+    }
 
-        if (geoView.map !== undefined) {
-            // This is a MapView.
-            geoView.map.basemap = basemap;
-        }
-        else if (geoView.scene !== undefined) {
-            // This is a SceneView.
-            geoView.scene.basemap = basemap;
+    /*!
+       \brief Convenience method that takes a GeoView and sets this controller's
+       geoModel to the scene or map contained within. This method is for QML/C++ layer
+       compatibility. It is better to set \c{BasemapGalleryController.geoModel} directly.
+     */
+    function setGeoModelFromGeoView(view) {
+        if (view instanceof SceneView) {
+            setCurrentBasemap(view.scene);
+        } else if (view instanceof MapView) {
+            setCurrentBasemap(view.map);
         }
     }
 
@@ -153,7 +157,7 @@ QtObject {
       \internal
       \qmlmethod bool BasemapGalleryController::basemapMatchesCurrentSpatialReference(Basemap basemap)
       \brief Given a \a basemap, returns whether the spatial reference of its layers
-      match the spatial reference of the GeoView (and therefore if it appropriate to apply
+      match the spatial reference of the GeoModel (and therefore if it appropriate to apply
       as the current basemap.)
      */
     function basemapMatchesCurrentSpatialReference(basemap) {
@@ -161,20 +165,11 @@ QtObject {
             return false;
         }
 
-        if (geoView === null) {
+        if (geoModel === null) {
             return false;
         }
 
-        let sp1 = null;
-
-        if (geoView.map !== undefined) {
-            // This is a MapView.
-            sp1 = geoView.map.spatialReference;
-        }
-        else if (geoView.scene !== undefined) {
-            // This is a SceneView.
-            sp1 = geoView.scene.spatialReference;
-        }
+        let sp1 = geoModel.spatialReference;
 
         if (sp1 === null) {
             return true;
@@ -221,32 +216,14 @@ QtObject {
                 }
             }
         }
+        property Connections geoModelConenctions: Connections {
+            target: geoModel
+            function onBasemapChanged() {
+                internal.currentBasemap = geoModel.basemap;
+            }
+        }
 
         property var currentBasemap: null;
-
-        property Binding mapBinding: Binding {
-            restoreMode: Binding.RestoreNone
-            when: geoView && geoView.map !== undefined
-            target: internal
-            property: "currentBasemap"
-            value: geoView === null ? null : geoView.map ? geoView.map.basemap : null
-        }
-
-        property Binding sceneBinding: Binding {
-            restoreMode: Binding.RestoreNone
-            when: geoView && geoView.scene !== undefined
-            target: internal
-            property: "currentBasemap"
-            value: geoView === null ? null : geoView.scene ? geoView.scene.basemap : null
-        }
-
-        property Binding nullBinding: Binding {
-            restoreMode: Binding.RestoreNone
-            when: !geoView
-            target: internal
-            property: "currentBasemap"
-            value: null
-        }
 
         property ListModel gallery: ListModel { }
 
