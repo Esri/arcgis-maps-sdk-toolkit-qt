@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import Esri.ArcGISRuntime.Toolkit.Controller 100.12
+import Esri.ArcGISRuntime.Toolkit.Controller 100.13
 
 import QtQuick 2.12
 import QtQuick.Controls 2.12

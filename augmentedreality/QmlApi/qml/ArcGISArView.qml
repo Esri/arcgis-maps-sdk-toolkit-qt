@@ -16,7 +16,7 @@
 
 import QtQuick 2.12
 import QtQuick.Window 2.12
-import Esri.ArcGISRuntime 100.12
+import Esri.ArcGISRuntime 100.13
 import Esri.ArcGISArToolkit 1.0
 
 ArcGISArViewInternal {
