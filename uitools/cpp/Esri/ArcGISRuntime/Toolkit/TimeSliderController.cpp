@@ -58,7 +58,7 @@ namespace
       listModel->cbegin(),
       listModel->cend(),
       T{},
-      [f{std::move(f)}](const T& val, Layer* layer)
+      [f = std::move(f)](const T& val, Layer* layer)
       {
         if (!layer || layer->loadStatus() != LoadStatus::Loaded)
           return val;
