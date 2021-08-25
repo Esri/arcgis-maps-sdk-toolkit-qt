@@ -26,7 +26,7 @@
 */
 
 /*!
-  \fn void Esri::ArcGISRuntime::Toolkit::registerComponents(QmlEngine&)
+  \fn void Esri::ArcGISRuntime::Toolkit::registerComponents(QmlEngine& engine)
   \relates Esri/ArcGISRuntime/Toolkit/register
   \brief This registration function must be called after the QmlEngine has been
   declared, but before it is run. This sets up resources and component registration

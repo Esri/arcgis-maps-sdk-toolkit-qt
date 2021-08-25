@@ -58,7 +58,7 @@ namespace
       listModel->cbegin(),
       listModel->cend(),
       T{},
-      [f{std::move(f)}](const T& val, Layer* layer)
+      [f = std::move(f)](const T& val, Layer* layer)
       {
         if (!layer || layer->loadStatus() != LoadStatus::Loaded)
           return val;
@@ -283,7 +283,7 @@ void TimeSliderController::initializeTimeProperties(LayerListModel* opLayers)
   connect(m_operationalLayers.data(), &LayerListModel::layerRemoved,
           this, qOverload<>(&TimeSliderController::initializeTimeProperties));
 
-  for (const auto& layer : *m_operationalLayers)
+  for (auto layer : *m_operationalLayers)
   {
     if (auto tLayer = dynamic_cast<TimeAware*>(layer))
     {

@@ -17,15 +17,22 @@
 
 // Toolkit includes
 #include "AuthenticationController.h"
+#include "BasemapGalleryController.h"
+#include "BasemapGalleryItem.h"
 #include "CoordinateConversionController.h"
 #include "CoordinateConversionOption.h"
 #include "CoordinateConversionResult.h"
 #include "NorthArrowController.h"
+#include "OverviewMapController.h"
 #include "PopupViewController.h"
 #include "TimeSliderController.h"
 
+// Internal includes
+#include "Internal/BasemapGalleryImageProvider.h"
+
 // ArcGIS includes
 #include <Point.h>
+#include <MapQuickView.h>
 
 // Qt Includes
 #include <QQmlEngine>
@@ -49,7 +56,7 @@ const QString ESRI_COM_PATH = QStringLiteral(":/esri.com/imports");
 constexpr char const* NAMESPACE = "Esri.ArcGISRuntime.Toolkit.Controller";
 
 constexpr int VERSION_MAJOR = 100;
-constexpr int VERSION_MINOR = 11;
+constexpr int VERSION_MINOR = 12;
 
 /*
  \internal
@@ -89,17 +96,23 @@ void registerModuleRevisions()
 
 void registerComponents_cpp_(QQmlEngine& appEngine)
 {
+  appEngine.addImageProvider(BasemapGalleryImageProvider::PROVIDER_ID, BasemapGalleryImageProvider::instance());
   appEngine.addImportPath(ESRI_COM_PATH);
   registerModuleRevisions();
   registerComponent<AuthenticationController>(10);
+  registerComponent<BasemapGalleryController>(12);
+  registerComponent<BasemapGalleryItem>(12);
   registerComponent<CoordinateConversionController>(10);
   registerComponent<CoordinateConversionOption>(10);
   registerComponent<CoordinateConversionResult>(10);
   registerComponent<NorthArrowController>(10);
+  registerComponent<OverviewMapController>(12);
   registerComponent<PopupViewController>(10);
   registerComponent<TimeSliderController>(10);
 
+  // Register ArcGISRuntime types with toolkit.
   qRegisterMetaType<Point>("Esri::ArcGISRuntime::Point");
+  qmlRegisterAnonymousType<MapQuickView>(NAMESPACE, 12);
 }
 
 } // Toolkit

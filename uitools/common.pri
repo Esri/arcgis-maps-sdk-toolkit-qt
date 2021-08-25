@@ -18,28 +18,36 @@ INCLUDEPATH += $$PWD/cpp $$CPPPATH
 
 
 HEADERS += $$CPPPATH/AuthenticationController.h \
+           $$CPPPATH/BasemapGalleryController.h \
+           $$CPPPATH/BasemapGalleryItem.h \
            $$CPPPATH/CoordinateConversionConstants.h \
            $$CPPPATH/CoordinateConversionController.h \
            $$CPPPATH/CoordinateConversionOption.h \
            $$CPPPATH/CoordinateConversionResult.h \
            $$CPPPATH/CoordinateOptionDefaults.h \
+           $$CPPPATH/Internal/BasemapGalleryImageProvider.h \
            $$CPPPATH/Internal/GenericListModel.h \
            $$CPPPATH/Internal/GenericTableProxyModel.h \
            $$CPPPATH/Internal/GeoViews.h \
            $$CPPPATH/Internal/MetaElement.h \
            $$CPPPATH/NorthArrowController.h \
+           $$CPPPATH/OverviewMapController.h \
            $$CPPPATH/PopupViewController.h \
            $$CPPPATH/TimeSliderController.h
 
 SOURCES += $$CPPPATH/AuthenticationController.cpp \
+           $$CPPPATH/BasemapGalleryController.cpp \
+           $$CPPPATH/BasemapGalleryItem.cpp \
            $$CPPPATH/CoordinateConversionConstants.cpp \
            $$CPPPATH/CoordinateConversionController.cpp \
            $$CPPPATH/CoordinateConversionOption.cpp \
            $$CPPPATH/CoordinateConversionResult.cpp \
            $$CPPPATH/CoordinateOptionDefaults.cpp \
+           $$CPPPATH/Internal/BasemapGalleryImageProvider.cpp \
            $$CPPPATH/Internal/GenericListModel.cpp \
            $$CPPPATH/Internal/GenericTableProxyModel.cpp \
            $$CPPPATH/Internal/MetaElement.cpp \
            $$CPPPATH/NorthArrowController.cpp \
+           $$CPPPATH/OverviewMapController.cpp \
            $$CPPPATH/PopupViewController.cpp \
            $$CPPPATH/TimeSliderController.cpp

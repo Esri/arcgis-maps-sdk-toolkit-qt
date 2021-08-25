@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import Esri.ArcGISRuntime.Toolkit.Controller 100.11
+import Esri.ArcGISRuntime.Toolkit.Controller 100.12
 
 import QtQml 2.12
 import QtQuick 2.12
@@ -23,7 +23,7 @@ import QtQuick.Controls 2.12
   \qmltype AuthenticationView
   \inqmlmodule Esri.ArcGISRuntime.Toolkit
   \ingroup ArcGISQtToolkitUiQmlViews
-  \since Esri.ArcGISRutime 100.10
+  \since Esri.ArcGISRuntime 100.10
   \brief A view for handling authentication challenges and automatically 
   launching the appropriate UI for each type of authentication.
     
