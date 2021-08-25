@@ -13,11 +13,15 @@
 # limitations under the License.
 
 module Esri.ArcGISRuntime.Toolkit
-depends Esri.ArcGISRuntime.Toolkit.Controller 100.11
+
+depends Esri.ArcGISRuntime.Toolkit.Controller 100.12
+
 # Current version increment
-CurrentVersion 100.11 CurrentVersion.qml
+CurrentVersion 100.12 CurrentVersion.qml
+
 # View components
 AuthenticationView 100.10 AuthenticationView.qml
+BasemapGallery 100.12 BasemapGallery.qml
 Callout 100.10 Callout.qml
 ClientCertificateView 100.10 ClientCertificateView.qml
 CoordinateConversion 100.10 CoordinateConversion.qml
@@ -25,6 +29,7 @@ internal FlashImage FlashImage.qml
 LeaderPosition 100.10 LeaderPosition.js
 NorthArrow 100.10 NorthArrow.qml
 OAuth2View 100.10 OAuth2View.qml
+OverviewMap 100.12 OverviewMap.qml
 PopupStackView 100.10 PopupStackView.qml
 PopupView 100.10 PopupView.qml
 SslHandshakeView 100.10 SslHandshakeView.qml

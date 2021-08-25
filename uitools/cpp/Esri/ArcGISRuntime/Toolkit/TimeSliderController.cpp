@@ -283,7 +283,7 @@ void TimeSliderController::initializeTimeProperties(LayerListModel* opLayers)
   connect(m_operationalLayers.data(), &LayerListModel::layerRemoved,
           this, qOverload<>(&TimeSliderController::initializeTimeProperties));
 
-  for (const auto& layer : *m_operationalLayers)
+  for (auto layer : *m_operationalLayers)
   {
     if (auto tLayer = dynamic_cast<TimeAware*>(layer))
     {

@@ -198,7 +198,7 @@ int PopupViewController::attachmentThumbnailWidth() const
 }
 
 /*!
-  \brief Sets the minimum attachment thumbnail width.
+  \brief Sets the minimum attachment thumbnail width to \a width.
  */
 void PopupViewController::setAttachmentThumbnailWidth(int width)
 {
@@ -222,7 +222,7 @@ int PopupViewController::attachmentThumbnailHeight() const
 }
 
 /*!
-  \brief Sets the minimum attachment thumbnail height.
+  \brief Sets the minimum attachment thumbnail height to \a height.
  */
 void PopupViewController::setAttachmentThumbnailHeight(int height)
 {
@@ -251,12 +251,12 @@ void PopupViewController::setAttachmentThumbnailHeight(int height)
  */
 
 /*!
-  \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::attachmentWidthChanged()
+  \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::attachmentThumbnailWidthChanged()
   \brief Signal emitted when the attachment minimum width changes.
  */
 
 /*!
-  \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::attachmentHeightChanged()
+  \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::attachmentThumbnailHeightChanged()
   \brief Signal emitted when the attachment minimum height changes.
  */
 

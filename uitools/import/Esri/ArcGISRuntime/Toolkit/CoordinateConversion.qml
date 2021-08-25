@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import Esri.ArcGISRuntime.Toolkit.Controller 100.11
+import Esri.ArcGISRuntime.Toolkit.Controller 100.12
 
 import QtQuick 2.12
 
@@ -24,7 +24,7 @@ import QtQuick.Layouts 1.12
  \qmltype CoordinateConversion
  \inqmlmodule Esri.ArcGISRuntime.Toolkit
  \ingroup ArcGISQtToolkitUiQmlViews
- \since Esri.ArcGISRutime 100.10
+ \since Esri.ArcGISRuntime 100.12
  \brief The user interface for the coordinate conversion tool.
 
  This tool allows a user to select a point on the map or to enter a point by

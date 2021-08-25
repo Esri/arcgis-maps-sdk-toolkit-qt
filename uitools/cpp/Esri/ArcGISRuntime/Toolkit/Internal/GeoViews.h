@@ -27,8 +27,8 @@ namespace ArcGISRuntime
 { 
 namespace Toolkit
 {
-    typedef SceneGraphicsView SceneViewToolkit;
-    typedef MapGraphicsView MapViewToolkit;
+    using SceneViewToolkit = SceneGraphicsView;
+    using MapViewToolkit = MapGraphicsView;
 } // Toolkit
 } // ArcGISRuntime
 } // Esri
@@ -44,8 +44,8 @@ namespace ArcGISRuntime
 { 
 namespace Toolkit 
 {
-  typedef SceneQuickView SceneViewToolkit;
-  typedef MapQuickView MapViewToolkit;
+  using SceneViewToolkit = SceneQuickView;
+  using MapViewToolkit = MapQuickView;
 } // Toolkit
 } // ArcGISRuntime
 } // Esri

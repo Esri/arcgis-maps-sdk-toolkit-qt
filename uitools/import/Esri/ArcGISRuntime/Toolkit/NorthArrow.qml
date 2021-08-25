@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import Esri.ArcGISRuntime.Toolkit.Controller 100.11
+import Esri.ArcGISRuntime.Toolkit.Controller 100.12
 
 import QtQuick 2.12
 
@@ -21,7 +21,7 @@ import QtQuick 2.12
    \qmltype NorthArrow
    \inqmlmodule Esri.ArcGISRuntime.Toolkit
    \ingroup ArcGISQtToolkitUiQmlViews
-   \since Esri.ArcGISRutime 100.10
+   \since Esri.ArcGISRuntime 100.10
    \brief The NorthArrow displays a compass overlaid on the GeoView, with the
    compass heading matching the current rotation of the MapView, or Camera
    heading of the SceneView. 

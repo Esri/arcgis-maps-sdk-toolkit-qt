@@ -2,6 +2,7 @@
   <!-- This section contains all view components (shared by C++ and QML APIs) -->
   <qresource prefix="/esri.com/imports/Esri/ArcGISRuntime/Toolkit/">
     <file>AuthenticationView.qml</file>
+    <file>BasemapGallery.qml</file>
     <file>Callout.qml</file>
     <file>ClientCertificateView.qml</file>
     <file>CoordinateConversion.qml</file>
@@ -10,6 +11,7 @@
     <file>LeaderPosition.js</file>
     <file>NorthArrow.qml</file>
     <file>OAuth2View.qml</file>
+    <file>OverviewMap.qml</file>
     <file>PopupStackView.qml</file>
     <file>PopupView.qml</file>
     <file>SslHandshakeView.qml</file>

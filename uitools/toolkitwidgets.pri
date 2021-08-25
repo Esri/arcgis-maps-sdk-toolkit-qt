@@ -21,14 +21,35 @@ WIDGETPATH = $$PWD/widgets/Esri/ArcGISRuntime/Toolkit
 
 INCLUDEPATH += $$PWD/widgets $$WIDGETPATH
 
-HEADERS += $$WIDGETPATH/CoordinateConversion.h \
+HEADERS += $$WIDGETPATH/AuthenticationView.h \
+           $$WIDGETPATH/CoordinateConversion.h \
+           $$WIDGETPATH/Internal/ClientCertificatePasswordDialog.h \
+           $$WIDGETPATH/Internal/ClientCertificateView.h \
            $$WIDGETPATH/Internal/CoordinateEditDelegate.h \
            $$WIDGETPATH/Internal/Flash.h \
-           $$WIDGETPATH/NorthArrow.h
+           $$WIDGETPATH/Internal/OAuth2View.h \
+           $$WIDGETPATH/Internal/SslHandshakeView.h \
+           $$WIDGETPATH/Internal/UserCredentialView.h \
+           $$WIDGETPATH/NorthArrow.h \
+           $$WIDGETPATH/OverviewMap.h
 
-SOURCES += $$WIDGETPATH/CoordinateConversion.cpp \
+SOURCES += $$WIDGETPATH/AuthenticationView.cpp \
+           $$WIDGETPATH/CoordinateConversion.cpp \
+           $$WIDGETPATH/Internal/ClientCertificatePasswordDialog.cpp \
+           $$WIDGETPATH/Internal/ClientCertificateView.cpp \
            $$WIDGETPATH/Internal/CoordinateEditDelegate.cpp \ 
            $$WIDGETPATH/Internal/Flash.cpp \
-           $$WIDGETPATH/NorthArrow.cpp
+           $$WIDGETPATH/Internal/OAuth2View.cpp \
+           $$WIDGETPATH/Internal/SslHandshakeView.cpp \
+           $$WIDGETPATH/Internal/UserCredentialView.cpp \
+           $$WIDGETPATH/NorthArrow.cpp \
+           $$WIDGETPATH/OverviewMap.cpp
 
-FORMS += $$WIDGETPATH/CoordinateConversion.ui
+FORMS += $$WIDGETPATH/AuthenticationView.ui \
+         $$WIDGETPATH/Internal/ClientCertificatePasswordDialog.ui \
+         $$WIDGETPATH/Internal/ClientCertificateView.ui \
+         $$WIDGETPATH/Internal/OAuth2View.ui \
+         $$WIDGETPATH/Internal/SslHandshakeView.ui \
+         $$WIDGETPATH/Internal/UserCredentialView.ui \
+         $$WIDGETPATH/CoordinateConversion.ui \
+         $$WIDGETPATH/OverviewMap.ui
