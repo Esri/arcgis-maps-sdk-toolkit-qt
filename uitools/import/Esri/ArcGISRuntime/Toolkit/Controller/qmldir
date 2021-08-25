@@ -15,7 +15,7 @@
 module Esri.ArcGISRuntime.Toolkit.Controller
 
 # Current version increment
-CurrentVersion 100.12 CurrentVersion.qml
+CurrentVersion 100.13 CurrentVersion.qml
 
 # Controller components
 AuthenticationController 100.10 AuthenticationController.qml
