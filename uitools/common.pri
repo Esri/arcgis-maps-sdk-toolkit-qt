@@ -33,6 +33,7 @@ HEADERS += $$CPPPATH/AuthenticationController.h \
            $$CPPPATH/NorthArrowController.h \
            $$CPPPATH/OverviewMapController.h \
            $$CPPPATH/PopupViewController.h \
+           $$CPPPATH/ScalelineController.h \
            $$CPPPATH/TimeSliderController.h
 
 SOURCES += $$CPPPATH/AuthenticationController.cpp \
@@ -50,4 +51,5 @@ SOURCES += $$CPPPATH/AuthenticationController.cpp \
            $$CPPPATH/NorthArrowController.cpp \
            $$CPPPATH/OverviewMapController.cpp \
            $$CPPPATH/PopupViewController.cpp \
+           $$CPPPATH/ScalelineController.cpp \
            $$CPPPATH/TimeSliderController.cpp

@@ -25,6 +25,7 @@
 #include "NorthArrowController.h"
 #include "OverviewMapController.h"
 #include "PopupViewController.h"
+#include "ScalelineController.h"
 #include "TimeSliderController.h"
 
 // Internal includes
@@ -56,7 +57,7 @@ const QString ESRI_COM_PATH = QStringLiteral(":/esri.com/imports");
 constexpr char const* NAMESPACE = "Esri.ArcGISRuntime.Toolkit.Controller";
 
 constexpr int VERSION_MAJOR = 100;
-constexpr int VERSION_MINOR = 12;
+constexpr int VERSION_MINOR = 13;
 
 /*
  \internal
@@ -108,6 +109,7 @@ void registerComponents_cpp_(QQmlEngine& appEngine)
   registerComponent<NorthArrowController>(10);
   registerComponent<OverviewMapController>(12);
   registerComponent<PopupViewController>(10);
+  registerComponent<ScalelineController>(13);
   registerComponent<TimeSliderController>(10);
 
   // Register ArcGISRuntime types with toolkit.
