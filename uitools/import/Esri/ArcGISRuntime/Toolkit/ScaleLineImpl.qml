@@ -5,20 +5,27 @@ import QtQuick.Shapes 1.15
 
 import Esri.ArcGISRuntime.Toolkit.Controller 100.13
 
+/*!
+  \internal
+  This is the display portion of a Scaleline. A single scaleline can be
+  composed of multiple display portions (i.e. showing imperial and metric scalelines side
+  by side).
+ */
 Control {
     id: scaleLine
 
     /*!
-  \qmlproperty ScalelineController controller
-  \brief
-  */
+      \qmlproperty ScalelineController controller
+      \brief The controller used for calculations based on the mapView.
+    */
     property var controller: null
 
+    /*!
+      \qmlproperty unitSystem
+      \brief UnitSystem for the Scaleline. For this display portion,
+      only metric and imperial are valid values.
+    */
     property int unitSystem
-
-    spacing: 5
-    implicitWidth: 100
-    implicitHeight: font.pixelSize + spacing
 
     contentItem: Shape {
         anchors.fill:parent
@@ -26,10 +33,10 @@ Control {
             strokeColor: "black"
             strokeWidth: 3
             fillColor: Qt.rgba(255, 255, 255, 0.5)
-            startX: 0; startY: scaleLine.height
-            PathLine { x: 0; y: 0 }
-            PathLine { x: internal.displayWidth; y: 0 }
+            startX: 0; startY: 0
+            PathLine { x: 0; y: scaleLine.height }
             PathLine { x: internal.displayWidth; y: scaleLine.height }
+            PathLine { x: internal.displayWidth; y: 0 }
         }
         Label {
             anchors {

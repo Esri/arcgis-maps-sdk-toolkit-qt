@@ -34,7 +34,7 @@ namespace Toolkit {
   {
     Q_OBJECT
     Q_PROPERTY(QObject* mapView READ mapView WRITE setMapView NOTIFY mapViewChanged)
-    Q_PROPERTY(int unitSystem READ unitSystem WRITE setUnitSystem NOTIFY unitSystemChanged)
+    Q_PROPERTY(UnitSystem unitSystem READ unitSystem WRITE setUnitSystem NOTIFY unitSystemChanged)
   public:
     Q_INVOKABLE ScalelineController(QObject* parent = nullptr);
 
@@ -43,8 +43,8 @@ namespace Toolkit {
     QObject* mapView() const;
     void setMapView(QObject* geoView);
 
-    int unitSystem();
-    void setUnitSystem(int unitSystem);
+    UnitSystem unitSystem();
+    void setUnitSystem(UnitSystem unitSystem);
 
     double calculateBestScalebarLength(double maxLength, LinearUnit units);
 
@@ -54,8 +54,7 @@ namespace Toolkit {
 
     Q_INVOKABLE double calculateDisplayWidth(double displayDistance, double maximumDistance, double availableWidth);
 
-    Q_INVOKABLE QString calculateDistanceInDisplayUnits(double distance, int unitSystem);
-    QString calculateDistanceInDisplayUnits(double distance, UnitSystem unitSystem);
+    Q_INVOKABLE QString calculateDistanceInDisplayUnits(double distance, UnitSystem unitSystem);
 
   signals:
     void mapViewChanged();
