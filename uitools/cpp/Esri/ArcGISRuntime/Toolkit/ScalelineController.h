@@ -34,7 +34,7 @@ namespace Toolkit {
   {
     Q_OBJECT
     Q_PROPERTY(QObject* mapView READ mapView WRITE setMapView NOTIFY mapViewChanged)
-    Q_PROPERTY(UnitSystem unitSystem READ unitSystem WRITE setUnitSystem NOTIFY unitSystemChanged)
+    Q_PROPERTY(Esri::ArcGISRuntime::UnitSystem unitSystem READ unitSystem WRITE setUnitSystem NOTIFY unitSystemChanged)
   public:
     Q_INVOKABLE explicit ScalelineController(QObject* parent = nullptr);
 
@@ -54,7 +54,7 @@ namespace Toolkit {
 
     Q_INVOKABLE double calculateDisplayWidth(double displayDistance, double maximumDistance, double availableWidth);
 
-    Q_INVOKABLE QString calculateDistanceInDisplayUnits(double distance, UnitSystem unitSystem);
+    Q_INVOKABLE QString calculateDistanceInDisplayUnits(double distance, Esri::ArcGISRuntime::UnitSystem unitSystem);
 
   signals:
     void mapViewChanged();
