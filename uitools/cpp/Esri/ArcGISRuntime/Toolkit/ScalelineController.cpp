@@ -76,7 +76,7 @@ namespace Toolkit {
     */
     double calculateMagnitude(double distance)
     {
-      return pow(10, floor(log10(distance)));
+      return std::pow(10, std::floor(std::log10(distance)));
     }
 
     /*
@@ -89,7 +89,7 @@ namespace Toolkit {
       switch (unitSystem)
       {
       case UnitSystem::Imperial:
-        // use MILES if at least half a mile
+        // use miles if at least half a mile
         if (distance >= 2640)
         {
           return LinearUnit{LinearUnitId::Miles};
@@ -98,7 +98,7 @@ namespace Toolkit {
 
       case UnitSystem::Metric:
       default:
-        // use KILOMETERS if at least one kilometer
+        // use kilometers if at least one kilometer
         if (distance >= 1000)
         {
           return LinearUnit{LinearUnitId::Kilometers};
@@ -216,8 +216,8 @@ namespace Toolkit {
    */
   double ScalelineController::calculateBestScalebarLength(double maxLength, LinearUnit unit)
   {
-    double magnitude = calculateMagnitude(maxLength);
-    double multiplier = selectMultiplierData(maxLength, magnitude);
+    const double magnitude = calculateMagnitude(maxLength);
+    const double multiplier = selectMultiplierData(maxLength, magnitude);
 
     double bestLength = multiplier * magnitude;
 
@@ -283,7 +283,10 @@ namespace Toolkit {
   /*!
    \brief Returns the distance text to display in a scaleBar, given a \a distance and \a unitSystem.
 
-   Will appropriately choose miles/feet or kilometers/meters based on size of distance.
+   If \a unitSystem is metric, \a distance is assumed to be in metres, if \a unitSystem is imperial,
+   \a distance is assumed to be in feet.
+
+   Will appropriately return miles/feet or kilometers/meters based on size of distance given.
    */
   QString ScalelineController::calculateDistanceInDisplayUnits(double distance, UnitSystem unitSystem)
   {

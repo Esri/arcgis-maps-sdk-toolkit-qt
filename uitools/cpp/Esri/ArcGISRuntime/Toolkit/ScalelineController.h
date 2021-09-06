@@ -36,7 +36,7 @@ namespace Toolkit {
     Q_PROPERTY(QObject* mapView READ mapView WRITE setMapView NOTIFY mapViewChanged)
     Q_PROPERTY(UnitSystem unitSystem READ unitSystem WRITE setUnitSystem NOTIFY unitSystemChanged)
   public:
-    Q_INVOKABLE ScalelineController(QObject* parent = nullptr);
+    Q_INVOKABLE explicit ScalelineController(QObject* parent = nullptr);
 
     ~ScalelineController();
 

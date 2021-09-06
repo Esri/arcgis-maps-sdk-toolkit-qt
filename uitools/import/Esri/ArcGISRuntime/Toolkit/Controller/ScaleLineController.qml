@@ -34,6 +34,6 @@ QtObject {
   property var unitSystem;
 
   Component.onCompleted: {
-    console.error("Sorry, Scaleline has not been implemented for QML.")
+    console.error("Scaleline has not been implemented for QML.")
   }
 }
