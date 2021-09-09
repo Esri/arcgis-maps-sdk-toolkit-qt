@@ -7,22 +7,22 @@ import Esri.ArcGISRuntime.Toolkit.Controller 100.13
 
 /*!
   \internal
-  This is the display portion of a Scaleline. A single scaleline can be
-  composed of multiple display portions (i.e. showing imperial and metric scalelines side
+  This is the display portion of a Scalebar. A single scalebar can be
+  composed of multiple display portions (i.e. showing imperial and metric scalebars side
   by side).
  */
 Control {
-    id: scaleLine
+    id: scalebar
 
     /*!
-      \qmlproperty ScalelineController controller
+      \qmlproperty ScalebarController controller
       \brief The controller used for calculations based on the mapView.
     */
     property var controller: null
 
     /*!
       \qmlproperty unitSystem
-      \brief UnitSystem for the Scaleline. For this display portion,
+      \brief UnitSystem for the Scalebar. For this display portion,
       only metric and imperial are valid values.
     */
     property int unitSystem
@@ -34,18 +34,18 @@ Control {
             strokeWidth: 3
             fillColor: Qt.rgba(255, 255, 255, 0.5)
             startX: 0; startY: 0
-            PathLine { x: 0; y: scaleLine.height }
-            PathLine { x: internal.displayWidth; y: scaleLine.height }
+            PathLine { x: 0; y: scalebar.height }
+            PathLine { x: internal.displayWidth; y: scalebar.height }
             PathLine { x: internal.displayWidth; y: 0 }
         }
         Label {
             anchors {
                 left: parent.left
                 verticalCenter: parent.verticalCenter
-                leftMargin: scaleLine.spacing
+                leftMargin: scalebar.spacing
             }
-            font: scaleLine.font
-            palette: scaleLine.palette
+            font: scalebar.font
+            palette: scalebar.palette
             text: internal.displayDistance
         }
     }
@@ -64,7 +64,7 @@ Control {
 
         function calculateScale() {
             // Get the total scalebar width in pixels.
-            const availableWidth = scaleLine.width;
+            const availableWidth = scalebar.width;
             // Get the possible longest distance the scalebar would cover.
             const maxDistance = controller.calculateDistance(availableWidth);
             // Select the most appropriate distance the scalebar should cover.

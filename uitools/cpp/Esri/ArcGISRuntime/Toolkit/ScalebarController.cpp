@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#include "ScalelineController.h"
+#include "ScalebarController.h"
 
 // C++ headers
 #include <cmath>
@@ -28,7 +28,7 @@ namespace Toolkit {
 
   namespace {
     /*
-      List of "good" multipliers in which it is appropriate to scale a scaleline
+      List of "good" multipliers in which it is appropriate to scale a scalebar
       by.
      */
     constexpr double MULTIPLIERS[] = {
@@ -109,14 +109,14 @@ namespace Toolkit {
   }
 
   /*!
-  \class Esri::ArcGISRuntime::Toolkit::ScalelineController
+  \class Esri::ArcGISRuntime::Toolkit::ScalebarController
   \inmodule EsriArcGISRuntimeToolkit
   \ingroup ArcGISQtToolkitUiCppControllers
   \brief In MVC architecture, this is the controller for the corresponding
-  \c Scaleline view.
+  \c Scalebar view.
 
-  This controller object handles the Scaleline calculations for a Scaleline's width
-  and display units, based on a given mapview and owning scaleline's bounds.
+  This controller object handles the Scalebar calculations for a Scalebar's width
+  and display units, based on a given mapview and owning scalebar's bounds.
  */
 
   /*!
@@ -125,7 +125,7 @@ namespace Toolkit {
     \li \a parent Parent owning \c QObject.
   \endlist
  */
-  ScalelineController::ScalelineController(QObject* parent) :
+  ScalebarController::ScalebarController(QObject* parent) :
     QObject(parent)
   {
   }
@@ -133,14 +133,14 @@ namespace Toolkit {
   /*!
   \brief Destructor.
  */
-  ScalelineController::~ScalelineController()
+  ScalebarController::~ScalebarController()
   {
   }
 
   /*!
     \brief Returns the \c MapView as a \c QObject.
   */
-  QObject* ScalelineController::mapView() const
+  QObject* ScalebarController::mapView() const
   {
     return m_mapView;
   }
@@ -154,7 +154,7 @@ namespace Toolkit {
     \li \a mapView MapView Object.
     \endlist
    */
-  void ScalelineController::setMapView(QObject* qObject)
+  void ScalebarController::setMapView(QObject* qObject)
   {
     auto mapView = qobject_cast<MapViewToolkit*>(qObject);
 
@@ -168,19 +168,19 @@ namespace Toolkit {
   /*!
      \brief Returns thee \c UnitSystem this controller uses for calculations.
    */
-  UnitSystem ScalelineController::unitSystem()
+  UnitSystem ScalebarController::unitSystem()
   {
     return m_unitSystem;
   }
 
-  // TODO For dual scaleline rendering purposes the Controller should not store
+  // TODO For dual scalebar rendering purposes the Controller should not store
   // a copy of the UnitSystem but should instead be passed the UnitSystem in the
   // calculation calls.
   /*!
      \brief Sets the active \c UnitSystem to \a unitSystem. This affects width and
      distance calculations.
    */
-  void ScalelineController::setUnitSystem(UnitSystem unitSystem)
+  void ScalebarController::setUnitSystem(UnitSystem unitSystem)
   {
     if (m_unitSystem == unitSystem)
       return;
@@ -205,7 +205,7 @@ namespace Toolkit {
    \brief Given a maximum length \a maxLength, calculate the appropriate length value to
    display, which will be equal to or less than maxLength, rounded appropriately.
    */
-  double ScalelineController::calculateBestScalebarLength(double maxLength)
+  double ScalebarController::calculateBestScalebarLength(double maxLength)
   {
     return calculateBestScalebarLength(maxLength, m_baseUnit);
   }
@@ -214,7 +214,7 @@ namespace Toolkit {
    \brief Given a maximum length \a maxLength and unit system \a unit, calculate the best length value
    to display, which will be equal to or less than maxLength, rounded appropriately.
    */
-  double ScalelineController::calculateBestScalebarLength(double maxLength, LinearUnit unit)
+  double ScalebarController::calculateBestScalebarLength(double maxLength, LinearUnit unit)
   {
     const double magnitude = calculateMagnitude(maxLength);
     const double multiplier = selectMultiplierData(maxLength, magnitude);
@@ -237,10 +237,10 @@ namespace Toolkit {
   }
 
   /*!
-   \brief Given the \a width of a scaleline in screen coordinates, returns the distance the width
+   \brief Given the \a width of a scalebar in screen coordinates, returns the distance the width
    represents by projecting that width onto the mapView and returning the result.
    */
-  double ScalelineController::calculateDistance(double width)
+  double ScalebarController::calculateDistance(double width)
   {
     double distance = 0.0;
 
@@ -275,7 +275,7 @@ namespace Toolkit {
    \brief Returns the width a scalebar should be, based on a fraction of \a availableWidth calculated by the ratio
    of \a displayDistance by \a maximumDistance.
    */
-  double ScalelineController::calculateDisplayWidth(double displayDistance, double maximumDistance, double availableWidth)
+  double ScalebarController::calculateDisplayWidth(double displayDistance, double maximumDistance, double availableWidth)
   {
     return displayDistance / maximumDistance * availableWidth;
   }
@@ -288,7 +288,7 @@ namespace Toolkit {
 
    Will appropriately return miles/feet or kilometers/meters based on size of distance given.
    */
-  QString ScalelineController::calculateDistanceInDisplayUnits(double distance, UnitSystem unitSystem)
+  QString ScalebarController::calculateDistanceInDisplayUnits(double distance, UnitSystem unitSystem)
   {
     double displayDistance = distance;
     LinearUnit displayUnit = selectLinearUnit(distance, unitSystem);
@@ -301,27 +301,27 @@ namespace Toolkit {
   }
 
   /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::ScalelineController::mapViewChanged()
+    \fn void Esri::ArcGISRuntime::Toolkit::ScalebarController::mapViewChanged()
     \brief Emitted when the geoView changes.
    */
 
   /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::ScalelineController::unitsSystemChanged()
+    \fn void Esri::ArcGISRuntime::Toolkit::ScalebarController::unitsSystemChanged()
     \brief Emitted when the unitsSystem changes.
    */
 
   /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::ScalelineController::viewpointChanged()
+    \fn void Esri::ArcGISRuntime::Toolkit::ScalebarController::viewpointChanged()
     \brief Emitted when the viewpoint changes.
    */
 
   /*!
-    \property Esri::ArcGISRuntime::Toolkit::ScalelineController::mapView
-    \brief the \c{MapView} object which scaleline calculations are based on.
+    \property Esri::ArcGISRuntime::Toolkit::ScalebarController::mapView
+    \brief the \c{MapView} object which scalebar calculations are based on.
   */
 
   /*!
-    \property Esri::ArcGISRuntime::Toolkit::ScalelineController::unitSystem
+    \property Esri::ArcGISRuntime::Toolkit::ScalebarController::unitSystem
     \brief The current units system of this controller. Can be imperial or metric.
   */
 

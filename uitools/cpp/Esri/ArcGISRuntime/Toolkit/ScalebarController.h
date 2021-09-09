@@ -13,8 +13,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_SCALELINECONTROLLER_H
-#define ESRI_ARCGISRUNTIME_TOOLKIT_SCALELINECONTROLLER_H
+#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_SCALEBARCONTROLLER_H
+#define ESRI_ARCGISRUNTIME_TOOLKIT_SCALEBARCONTROLLER_H
 
 // Qt headers
 #include <QObject>
@@ -30,15 +30,15 @@ namespace Esri {
 namespace ArcGISRuntime {
 namespace Toolkit {
 
-  class ScalelineController : public QObject
+  class ScalebarController : public QObject
   {
     Q_OBJECT
     Q_PROPERTY(QObject* mapView READ mapView WRITE setMapView NOTIFY mapViewChanged)
     Q_PROPERTY(Esri::ArcGISRuntime::UnitSystem unitSystem READ unitSystem WRITE setUnitSystem NOTIFY unitSystemChanged)
   public:
-    Q_INVOKABLE explicit ScalelineController(QObject* parent = nullptr);
+    Q_INVOKABLE explicit ScalebarController(QObject* parent = nullptr);
 
-    ~ScalelineController();
+    ~ScalebarController();
 
     QObject* mapView() const;
     void setMapView(QObject* geoView);

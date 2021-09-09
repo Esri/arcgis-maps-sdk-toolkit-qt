@@ -22,10 +22,10 @@ import QtQml 2.12
    \since Esri.ArcGISRuntime 100.13
    \ingroup ArcGISQtToolkitUiQmlControllers
    \brief In MVC architecture, this is the controller for the corresponding
-    \c Scaleline view.
+    \c Scalebar view.
 
-    This controller object handles the Scaleline calculations for a Scaleline's width
-    and display units, based on a given mapview and owning scaleline's bounds.
+    This controller object handles the Scalebar calculations for a Scalebar's width
+    and display units, based on a given mapview and owning scalebar's bounds.
  */
 QtObject {
 
@@ -34,6 +34,6 @@ QtObject {
   property var unitSystem;
 
   Component.onCompleted: {
-    console.error("Scaleline has not been implemented for QML.")
+    console.error("Scalebar has not been implemented for QML.")
   }
 }

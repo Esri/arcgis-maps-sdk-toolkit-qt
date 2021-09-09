@@ -23,32 +23,32 @@ import Esri.ArcGISRuntime.Toolkit 100.13
 import Esri.ArcGISRuntime.Toolkit.Controller 100.13
 
 /*!
-   \qmltype Scaleline
+   \qmltype Scalebar
    \ingroup ArcGISQtToolkit
    \ingroup ArcGISQtToolkitUiQmlViews
    \inqmlmodule Esri.ArcGISRuntime.Toolkit
    \since Esri.ArcGISRuntime 100.13
-   \brief A Scaleline control that shows an accurate distance that can be used to visually gauge distances on a map view. The
+   \brief A Scalebar control that shows an accurate distance that can be used to visually gauge distances on a map view. The
     measurement system used is controlled by \l{unitSystem}. The units used will be appropriate to the
     distance being shown e.g. \c{km} for long distances and \c{m} for shorter distances.
  */
 Control {
-    id: scaleLine
+    id: scalebar
 
     /*!
      \qmlproperty MapView mapView
      \brief The mapView in which the displayed distance and width
-     of this Scaleline are calculated from.
+     of this Scalebar are calculated from.
      */
     property var mapView;
 
     /*!
-     \qmlproperty ScalelineController controller
-      \brief The controller portion of the Scaleline which handles
+     \qmlproperty ScalebarController controller
+      \brief The controller portion of the Scalebar which handles
       distance calculations based on the visual properties of the given
       \l{mapView}.
      */
-    property var controller: ScalelineController { }
+    property var controller: ScalebarController { }
 
     spacing: 5
     implicitWidth: 100
@@ -57,12 +57,12 @@ Control {
     // TODO: Implement and remove `\internal`.
     /*
       \internal
-      \brief The Styles of the Scaleline.
+      \brief The Styles of the Scalebar.
 
       Valid options are:
 
-      \value Style.Ruler The Scaleline is displayed as a ruler.
-      \value Style.Line The Scaleline is displayed as a line.
+      \value Style.Ruler The Scalebar is displayed as a ruler.
+      \value Style.Line The Scalebar is displayed as a line.
 
       The default is \c Style.Line.
      */
@@ -76,7 +76,7 @@ Control {
     // the values map to the `UnitSystem` enumeration.
     // Which is why `Dual` is a high value as not to conflict.
     /*
-      \brief The Unitss of the Scaleline.
+      \brief The Unitss of the Scalebar.
 
       Valid options are:
 
@@ -93,20 +93,20 @@ Control {
 
     /*!
      \qmlproperty UnitSystem unitSystem
-      \brief The display units of the Scaleline, can be metric, imperial.
+      \brief The display units of the Scalebar, can be metric, imperial.
              The default is \c UnitSystem.Metric.
      */
-    property int unitSystem: Scaleline.UnitSystem.Metric
+    property int unitSystem: Scalebar.UnitSystem.Metric
 
     contentItem: Column {
-        ScalelineImpl {
-            spacing: scaleLine.spacing
-            implicitWidth: scaleLine.implicitWidth
-            implicitHeight: scaleLine.implicitHeight
-            font: scaleLine.font
-            palette: scaleLine.palette
-            controller: scaleLine.controller
-            unitSystem: unitSystem === unitSystem.Dual ? Scaleline.UnitSystem.Metric : unitSystem
+        ScalebarImpl {
+            spacing: scalebar.spacing
+            implicitWidth: scalebar.implicitWidth
+            implicitHeight: scalebar.implicitHeight
+            font: scalebar.font
+            palette: scalebar.palette
+            controller: scalebar.controller
+            unitSystem: unitSystem === unitSystem.Dual ? Scalebar.UnitSystem.Metric : unitSystem
         }
     }
 

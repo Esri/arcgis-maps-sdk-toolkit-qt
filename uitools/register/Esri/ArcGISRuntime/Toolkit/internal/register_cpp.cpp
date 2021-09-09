@@ -25,7 +25,7 @@
 #include "NorthArrowController.h"
 #include "OverviewMapController.h"
 #include "PopupViewController.h"
-#include "ScalelineController.h"
+#include "ScalebarController.h"
 #include "TimeSliderController.h"
 
 // Internal includes
@@ -109,7 +109,7 @@ void registerComponents_cpp_(QQmlEngine& appEngine)
   registerComponent<NorthArrowController>(10);
   registerComponent<OverviewMapController>(12);
   registerComponent<PopupViewController>(10);
-  registerComponent<ScalelineController>(13);
+  registerComponent<ScalebarController>(13);
   registerComponent<TimeSliderController>(10);
 
   // Register ArcGISRuntime types with toolkit.
