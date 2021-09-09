@@ -283,7 +283,7 @@ namespace Toolkit {
   /*!
    \brief Returns the distance text to display in a scaleBar, given a \a distance and \a unitSystem.
 
-   If \a unitSystem is metric, \a distance is assumed to be in metres, if \a unitSystem is imperial,
+   If \a unitSystem is metric, \a distance is assumed to be in meters, if \a unitSystem is imperial,
    \a distance is assumed to be in feet.
 
    Will appropriately return miles/feet or kilometers/meters based on size of distance given.

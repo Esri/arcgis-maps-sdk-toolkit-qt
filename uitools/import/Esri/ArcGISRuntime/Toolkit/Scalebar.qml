@@ -76,7 +76,7 @@ Control {
     // the values map to the `UnitSystem` enumeration.
     // Which is why `Dual` is a high value as not to conflict.
     /*
-      \brief The Unitss of the Scalebar.
+      \brief The Units of the Scalebar.
 
       Valid options are:
 
