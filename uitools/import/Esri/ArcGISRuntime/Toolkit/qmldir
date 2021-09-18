@@ -32,6 +32,7 @@ OAuth2View 100.10 OAuth2View.qml
 OverviewMap 100.12 OverviewMap.qml
 PopupStackView 100.10 PopupStackView.qml
 PopupView 100.10 PopupView.qml
+SearchView 100.13 SearchView.qml
 SslHandshakeView 100.10 SslHandshakeView.qml
 TimeSlider 100.10 TimeSlider.qml
 UserCredentialsView 100.10 UserCredentialsView.qml

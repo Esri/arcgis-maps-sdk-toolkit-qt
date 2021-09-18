@@ -4,16 +4,21 @@
         <file>compass.png</file>
         <file>flash.png</file>
         <file>info_encircled.png</file>
+        <file>map_pin.png</file>
         <file>menu.png</file>
         <file>menu_collapse.png</file>
         <file>menu_expand.png</file>
         <file>mouse_click_mode.png</file>
         <file>generic_basemap_thumbnail.png</file>
         <file>pause.png</file>
+        <file>pin.svg</file>
+        <file>pins.svg</file>
         <file>play.png</file>
+        <file>search.png</file>
         <file>step.png</file>
         <file>step_back.png</file>
         <file>text_editing_mode.png</file>
+        <file>x.png</file>
         <file>zoom.png</file>
     </qresource>
 </RCC>

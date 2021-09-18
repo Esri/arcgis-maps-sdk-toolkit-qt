@@ -25,7 +25,13 @@
 #include "NorthArrowController.h"
 #include "OverviewMapController.h"
 #include "PopupViewController.h"
+#include "SearchResult.h"
+#include "SearchSourceInterface.h"
+#include "SearchSuggestion.h"
+#include "SearchViewController.h"
+#include "SmartLocatorSearchSource.h"
 #include "TimeSliderController.h"
+#include "LocatorSearchSource.h"
 
 // Internal includes
 #include "Internal/BasemapGalleryImageProvider.h"
@@ -105,10 +111,18 @@ void registerComponents_cpp_(QQmlEngine& appEngine)
   registerComponent<CoordinateConversionController>(10);
   registerComponent<CoordinateConversionOption>(10);
   registerComponent<CoordinateConversionResult>(10);
+  //registerComponent<LocatorSearchSource>(13);
   registerComponent<NorthArrowController>(10);
   registerComponent<OverviewMapController>(12);
   registerComponent<PopupViewController>(10);
+  registerComponent<SearchResult>(13);
+  registerComponent<SearchSuggestion>(13);
+  registerComponent<SearchViewController>(13);
+  //registerComponent<SmartLocatorSearchSource>(13);
   registerComponent<TimeSliderController>(10);
+
+  // Interfaces
+  qmlRegisterInterface<SearchSourceInterface>(NAMESPACE, VERSION_MAJOR);
 
   // Register ArcGISRuntime types with toolkit.
   qRegisterMetaType<Point>("Esri::ArcGISRuntime::Point");
