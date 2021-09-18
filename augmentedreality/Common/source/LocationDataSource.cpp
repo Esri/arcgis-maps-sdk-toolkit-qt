@@ -328,7 +328,7 @@ void LocationDataSource::updateObjectsAndConnections()
 
 /*!
   \fn void Esri::ArcGISRuntime::Toolkit::LocationDataSource::headingChanged(double heading);
-  \brief Signal emitted when the heading value changes.
+  \brief Signal emitted when the \a heading value changes.
  */
 
 /*!

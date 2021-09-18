@@ -342,7 +342,7 @@ Point CoordinateConversionOption::pointFromString(const QString& point, const Sp
 
 /*!
   \enum Esri::ArcGISRuntime::Toolkit::CoordinateConversionOption::CoordinateType
-  \brief The traget coordinate output format.
+  \brief The target coordinate output format.
   \value Gars Output format is GARS.
   \value GeoRef Output format is GeoRef.
   \value LatLon Output format is LatLon.

@@ -98,13 +98,13 @@ namespace Toolkit {
 
   /*!
   \brief Set the GeoView object this Controller uses.
-  
+
   Internally this is cast to a \c MapView or \c SceneView using \c qobject_cast,
   which is why the paremeter is of form \c QObject and not \c GeoView.
-  
+
   \list
-    \li \a geoView \c Object which must inherit from \c{GeoView*} and 
-        \c{QObject*}. 
+    \li \a geoView \c Object which must inherit from \c{GeoView*} and
+        \c{QObject*}.
   \endlist
   */
   void OverviewMapController::setGeoView(QObject* geoView)
@@ -163,10 +163,10 @@ namespace Toolkit {
   }
 
   /*!
-    \brief Returns a MapView owned by this controller which represents the 
+    \brief Returns a MapView owned by this controller which represents the
     underlying inset of the OverviewMap tool.
 
-    For the C++/Quick toolkit this is a MapQuickView, for the C++/Widgets toolkit 
+    For the C++/Quick toolkit this is a MapQuickView, for the C++/Widgets toolkit
     this is a MapGraphicsView.
    */
   MapViewToolkit* OverviewMapController::insetView() const
@@ -177,10 +177,10 @@ namespace Toolkit {
   /*!
     \brief Returns the symbol used to represent the GeoView's current viewpoint.
 
-    If \l OverviewMapController::geoView is not set, then the symbol will 
-    return \c{nullptr} by default. 
-    
-    If \l OverviewMapController::geoView is set, and a custom symbol was not applied, 
+    If \l OverviewMapController::geoView is not set, then the symbol will
+    return \c{nullptr} by default.
+
+    If \l OverviewMapController::geoView is set, and a custom symbol was not applied,
     then a default will be provided.
 
     For MapView, the default is an empty SimpleFillSymbol with a 1 point red outline;
