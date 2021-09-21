@@ -144,7 +144,7 @@ Control {
        Defaults to setting visible to false.
      */
     property var closeCallback: function () {
-        popupStackView.visible = false
+        popupStackView.visible = false;
     }
 
 
@@ -163,7 +163,7 @@ Control {
        \sa {https://doc.qt.io/qt-5/qml-qtquick-controls2-stackview.html}{StackView}
      */
     function clear(...args) {
-        return stack.clear(...args)
+        return stack.clear(...args);
     }
 
 
@@ -176,7 +176,7 @@ Control {
        \sa {https://doc.qt.io/qt-5/qml-qtquick-controls2-stackview.html}{StackView}
      */
     function find(...args) {
-        return stack.find(...args)
+        return stack.find(...args);
     }
 
 
@@ -187,7 +187,7 @@ Control {
        \sa {https://doc.qt.io/qt-5/qml-qtquick-controls2-stackview.html}{StackView}
      */
     function get(...args) {
-        return stack.get(...args)
+        return stack.get(...args);
     }
 
 
@@ -201,7 +201,7 @@ Control {
        \sa {https://doc.qt.io/qt-5/qml-qtquick-controls2-stackview.html}{StackView}
      */
     function pop(...args) {
-        return stack.pop(...args)
+        return stack.pop(...args);
     }
 
 
@@ -210,7 +210,7 @@ Control {
        PopupManagers.
      */
     function gotoPrevious() {
-        stack.pop()
+        stack.pop();
     }
 
 
@@ -221,14 +221,14 @@ Control {
     function gotoNext() {
         // We want a transition on show, so we force the first item to
         // transition.
-        stack.push(popupViewPage, StackView.PushTransition)
+        stack.push(popupViewPage, StackView.PushTransition);
     }
 
     onVisibleChanged: {
         // Always display with a transition and on page 1.
         if (visible) {
-            clear()
-            gotoNext()
+            clear();
+            gotoNext();
         }
     }
 
@@ -259,8 +259,7 @@ Control {
         Text {
             Layout.fillWidth: true
             horizontalAlignment: Text.AlignRight
-            text: popupManagers
-                  && popupManagers.length > 0 ? `${stack.depth} of ${popupManagers.length}` : ""
+            text: popupManagers && popupManagers.length > 0 ? `${stack.depth} of ${popupManagers.length}` : ""
             color: palette.text
         }
 
@@ -274,8 +273,7 @@ Control {
         Component {
             id: popupViewPage
             PopupView {
-                popupManager: popupManagers && popupManagers.length
-                              >= StackView.index ? popupManagers[StackView.index] : null
+                popupManager: popupManagers && popupManagers.length >= StackView.index ? popupManagers[StackView.index] : null
                 palette: popupStackView.palette
                 background: null
                 closeCallback: popupStackView.closeCallback

@@ -90,7 +90,7 @@ Control {
        Defaults to setting visible to false.
      */
     property var closeCallback: function () {
-        popupView.visible = false
+        popupView.visible = false;
     }
 
 
