@@ -133,7 +133,7 @@ namespace Toolkit {
     // the search with the area constraint removed.
     if (!area.isEmpty() && repeatSearchResultThreshold() > 0)
     {
-      auto connection = std::make_shared<QMetaObject::Connection>(QMetaObject::Connection{});
+      auto connection = std::make_shared<QMetaObject::Connection>();
       *connection = connect(locator(),
                             &LocatorTask::geocodeCompleted,
                             this,
