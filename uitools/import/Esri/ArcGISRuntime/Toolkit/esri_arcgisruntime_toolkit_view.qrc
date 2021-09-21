@@ -14,6 +14,8 @@
     <file>OverviewMap.qml</file>
     <file>PopupStackView.qml</file>
     <file>PopupView.qml</file>
+    <file>Scalebar.qml</file>
+    <file>ScalebarImpl.qml</file>
     <file>SslHandshakeView.qml</file>
     <file>TimeSlider.qml</file>
     <file>UserCredentialsView.qml</file>

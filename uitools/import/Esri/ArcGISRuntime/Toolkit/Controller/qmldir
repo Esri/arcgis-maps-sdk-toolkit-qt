@@ -27,4 +27,5 @@ CoordinateConversionResult 100.10 CoordinateConversionResult.qml
 NorthArrowController 100.10 NorthArrowController.qml
 OverviewMapController 100.12 OverviewMapController.qml
 PopupViewController 100.10 PopupViewController.qml
+ScalebarController 100.13 ScalebarController.qml
 TimeSliderController 100.10 TimeSliderController.qml
