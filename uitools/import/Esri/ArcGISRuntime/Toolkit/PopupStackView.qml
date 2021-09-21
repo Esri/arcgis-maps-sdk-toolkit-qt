@@ -254,11 +254,28 @@ Control {
             margins: 5
         }
 
+        Button {
+            text: "Previous"
+            onClicked: gotoPrevious();
+            Layout.alignment: Qt.AlignLeft
+            visible: popupManagers && popupManagers.length > 1
+            enabled: popupManagers ? stack.depth > 1 : false
+        }
+
         Text {
             Layout.fillWidth: true
-            horizontalAlignment: Text.AlignRight
+            Layout.columnSpan: popupManagers && popupManagers.length > 1 ? 1 : 3
+            horizontalAlignment: Text.AlignHCenter
             text: popupManagers && popupManagers.length > 0 ? `${stack.depth} of ${popupManagers.length}` : ""
             color: palette.text
+        }
+
+        Button {
+            text: "Next"
+            onClicked: gotoNext();
+            Layout.alignment: Qt.AlignRight
+            visible: popupManagers && popupManagers.length > 1
+            enabled: popupManagers ? stack.depth < popupManagers.length : false
         }
 
         StackView {
