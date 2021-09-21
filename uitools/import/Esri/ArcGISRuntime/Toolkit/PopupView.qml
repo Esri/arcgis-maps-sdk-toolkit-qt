@@ -89,7 +89,7 @@ Control {
        the close button is clicked the function in this property is called.
        Defaults to setting visible to false.
      */
-    property var closeCallback: function () {
+    property var closeCallback: function() {
         popupView.visible = false;
     }
 

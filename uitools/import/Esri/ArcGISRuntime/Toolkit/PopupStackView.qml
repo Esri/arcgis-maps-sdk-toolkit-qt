@@ -278,7 +278,7 @@ Control {
                 background: null
                 closeCallback: popupStackView.closeCallback
                 onAttachmentThumbnailClicked: {
-                    popupStackView.attachmentThumbnailClicked(index)
+                    popupStackView.attachmentThumbnailClicked(index);
                 }
             }
         }
