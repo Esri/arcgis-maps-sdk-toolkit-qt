@@ -144,6 +144,7 @@ Control {
                 Layout.fillWidth: true
                 textFormat: Text.StyledText
                 text: `<h2>${controller.title}</h2>`
+                wrapMode: Text.Wrap
                 color: palette.text
                 font: popupView.font
             }
