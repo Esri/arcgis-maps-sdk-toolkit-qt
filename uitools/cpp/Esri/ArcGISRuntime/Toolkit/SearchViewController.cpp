@@ -188,8 +188,8 @@ namespace Toolkit {
 
                                 if (auto geoView = qobject_cast<GeoView*>(m_geoView))
                                 {
-                                  const auto ex = m_graphicsOverlay->extent();
-                                  EnvelopeBuilder b{ex};
+                                  const auto extent = m_graphicsOverlay->extent();
+                                  EnvelopeBuilder b{extent};
                                   b.expandByFactor(1.2); // Give some margins to the view.
                                   geoView->setViewpoint(b.toEnvelope(), 0);
                                 }
