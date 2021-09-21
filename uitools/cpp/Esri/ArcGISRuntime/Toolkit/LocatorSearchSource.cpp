@@ -32,7 +32,7 @@ namespace Toolkit {
     constexpr const int DEFAULT_MAXIMUM_RESULTS = 6;
     constexpr const int DEFAULT_MAXIMUM_SUGGESTIONS = 6;
 
-    // Helper method that takes a GeoCodeResult and the source that generated the result, and produces our UI-friendly
+    // Helper method that takes a GeocodeResult and the source that generated the result, and produces our UI-friendly
     // SearchResult.
     SearchResult* resultFromGeocodeResult(const GeocodeResult& g, SearchSourceInterface* owningSource)
     {
