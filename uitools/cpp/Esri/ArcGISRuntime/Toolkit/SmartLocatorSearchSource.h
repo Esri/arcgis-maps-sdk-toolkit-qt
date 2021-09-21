@@ -54,7 +54,7 @@ namespace Toolkit {
 
   private:
     int m_repeatSearchResultThreshold;
-     int m_repeatSearchSuggestThreshold;
+    int m_repeatSearchSuggestThreshold;
   };
 
 } // Toolkit
