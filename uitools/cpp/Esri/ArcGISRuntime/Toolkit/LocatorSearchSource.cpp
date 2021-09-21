@@ -65,8 +65,6 @@ namespace Toolkit {
                          symbol->setLeaderOffsetY(symbol->height() / 2);
                        });
       symbol->load();
-
-
       graphic->setSymbol(symbol);
       searchResult->setGeoElement(graphic);
       return searchResult;
