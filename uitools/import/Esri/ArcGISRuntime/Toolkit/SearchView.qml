@@ -389,7 +389,7 @@ Pane {
     Connections {
         target:controller
         function onCurrentQueryChanged() {
-            // Create a two-way binding by lisetning to any changes to the search box
+            // Create a two-way binding by listening to any changes to the search box
             // from the controller.
             textField.setControllerText(controller.currentQuery);
         }
