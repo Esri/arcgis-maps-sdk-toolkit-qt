@@ -325,7 +325,7 @@ Pane {
                     }
                 }
             }
-            // Simple highlt rectangle for selected result.
+            // Simple highlight rectangle for selected result.
             highlightFollowsCurrentItem: false
             highlight: Rectangle {
                 x: list.x
