@@ -213,15 +213,20 @@ Control {
                 }
             }
         }
-    }
 
-    Button {
-        text: "Close"
-        anchors.centerIn: parent
+        Button {
+            anchors {
+                top: fieldsLayout.bottom
+                topMargin: 20
+                horizontalCenter: parent.horizontalCenter
+            }
+            Layout.alignment: Qt.AlignHCenter
+            text: "Close"
 
-        onClicked: {
-            if (popupView.closeCallback)
-                popupView.closeCallback()
+            onClicked: {
+                if (popupView.closeCallback)
+                    popupView.closeCallback()
+            }
         }
     }
 }
