@@ -1,3 +1,5 @@
+
+
 /*******************************************************************************
  *  Copyright 2012-2020 Esri
  *
@@ -22,6 +24,7 @@ import QtQuick.Dialogs 1.2
 import QtQuick.Window 2.11
 import QtQuick.Layouts 1.3
 
+
 /*!
    \qmltype PopupView
    \ingroup ArcGISQtToolkit
@@ -29,7 +32,7 @@ import QtQuick.Layouts 1.3
    \inqmlmodule Esri.ArcGISRuntime.Toolkit
    \since Esri.ArcGISRuntime 100.10
    \brief A view for displaying and editing information about a feature.
-  
+
    A PopupView can be used to display information for any type that
    implements the PopupSource interface. For example, FeatureLayer
    implements PopupSource. This means that it has a PopupDefinition,
@@ -61,21 +64,24 @@ import QtQuick.Layouts 1.3
 Control {
     id: popupView
 
+
     /*!
        \brief The PopupManager that controls the information being displayed in
        the view.
-       
+
        The PopupManager should be created from a Popup.
        \qmlproperty PopupManager popupManager
      */
     property var popupManager: null
-    
+
+
     /*!
       \qmlproperty PopupViewController controller
       \brief the Controller handles reading from the PopupManager and monitoring
       the list-models.
     */
-    property var controller: PopupViewController { }
+    property var controller: PopupViewController {}
+
 
     /*!
        \brief Callback function called when the close button is clicked. When
@@ -83,9 +89,10 @@ Control {
        the close button is clicked the function in this property is called.
        Defaults to setting visible to false.
      */
-    property var closeCallback: function() {
-        popupView.visible = false;
+    property var closeCallback: function () {
+        popupView.visible = false
     }
+
 
     /*!
        \qmlsignal PopupView::attachmentThumbnailClicked(var index)
@@ -129,8 +136,8 @@ Control {
             }
 
             // We must account for what is visible, including title headers as rows.
-            rows: controller.showAttachments ? controller.fieldCount + controller.attachmentCount + 2
-                                             : controller.fieldCount + 1
+            rows: controller.showAttachments ? controller.fieldCount + controller.attachmentCount
+                                               + 1 : controller.fieldCount
 
             // Title Header
             Text {
@@ -177,15 +184,6 @@ Control {
                 }
             }
 
-            Button {
-                text: "Close"
-                Layout.alignment: Qt.AlignRight
-                onClicked: {
-                    if (popupView.closeCallback)
-                        popupView.closeCallback();
-                }
-            }
-
             // Field contents
             Repeater {
                 model: controller.displayFields
@@ -217,5 +215,14 @@ Control {
             }
         }
     }
-}
 
+    Button {
+        text: "Close"
+        anchors.centerIn: parent
+
+        onClicked: {
+            if (popupView.closeCallback)
+                popupView.closeCallback()
+        }
+    }
+}
