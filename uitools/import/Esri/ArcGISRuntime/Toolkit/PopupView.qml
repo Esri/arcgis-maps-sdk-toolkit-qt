@@ -1,5 +1,3 @@
-
-
 /*******************************************************************************
  *  Copyright 2012-2020 Esri
  *
@@ -136,8 +134,8 @@ Control {
             }
 
             // We must account for what is visible, including title headers as rows.
-            rows: controller.showAttachments ? controller.fieldCount + controller.attachmentCount
-                                               + 1 : controller.fieldCount
+            rows: controller.showAttachments ? controller.fieldCount + controller.attachmentCount + 1
+                                             : controller.fieldCount
 
             // Title Header
             Text {
