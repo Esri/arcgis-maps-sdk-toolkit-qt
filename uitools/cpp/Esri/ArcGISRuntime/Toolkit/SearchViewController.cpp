@@ -115,7 +115,7 @@ namespace Toolkit {
                   disconnect(source, nullptr, this, nullptr);
                   disconnect(source->suggestions(), nullptr, this, nullptr);
 
-                  // for any suggesion that comes from a removed source, remove that
+                  // for any suggestion that comes from a removed source, remove that
                   // suggestion from the list model.
                   const int rowCount = m_suggestions->rowCount();
                   if (rowCount > 0)
