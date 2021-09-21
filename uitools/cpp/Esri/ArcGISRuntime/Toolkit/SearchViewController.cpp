@@ -615,7 +615,7 @@ namespace Toolkit {
   /*!
       \brief Returns whether the user can perform a requery.
       A requery will perform the search at the same location, but will only look at results
-      that exist within the current exist, ignoring all other results.
+      that exist within the current extent, ignoring all other results.
    */
   bool SearchViewController::isEligableForRequery() const
   {
