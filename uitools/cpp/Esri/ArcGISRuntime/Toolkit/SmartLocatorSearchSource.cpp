@@ -102,7 +102,7 @@ namespace Toolkit {
     \brief Returns the minimum number of suggestions to attempt to retrieve. If there are too few results, the search is repeated with
     loosened parameters until enough suggesttions are accumulated.
 
-    \note If no search is successful, it is still possible to have a total number of sugggestions less than this threshold.
+    \note If no search is successful, it is still possible to have a total number of suggestions less than this threshold.
     Set to zero to disable search repeat behavior. Defaults to 6.
    */
   int SmartLocatorSearchSource::repeatSuggestResultThreshold() const
