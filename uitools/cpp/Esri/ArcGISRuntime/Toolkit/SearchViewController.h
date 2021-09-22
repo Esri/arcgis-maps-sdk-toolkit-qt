@@ -19,16 +19,14 @@
 // Toolkit headers
 #include "Internal/GenericListModel.h"
 #include "SearchResult.h"
-#include "SearchSuggestion.h"
 #include "SearchSourceInterface.h"
+#include "SearchSuggestion.h"
 
 // ArcGISRuntime headers
 #include <Geometry.h>
 
 // Qt headers
 #include <QAbstractListModel>
-#include <QFuture>
-#include <QList>
 #include <QObject>
 #include <QPointer>
 
@@ -41,11 +39,6 @@ namespace ArcGISRuntime {
   class GeocodeResult;
   class Graphic;
   class GraphicsOverlay;
-
-  namespace Toolkit {
-    class SearchResultListModel;
-    class GenericListModel;
-  }
 }
 }
 
@@ -133,6 +126,11 @@ namespace Toolkit {
     void selectedResultChanged();
     void isEligableForRequeryChanged();
     void isAutomaticConfigurationEnabledChanged();
+
+  private:
+    void onQueryChanged();
+    void onSourcesAdded(const QModelIndex& parent, int firstSource, int lastSource);
+    void onSourcesRemoved(const QModelIndex& parent, int firstSource, int lastSource);
 
   private:
     QObject* m_geoView{nullptr};

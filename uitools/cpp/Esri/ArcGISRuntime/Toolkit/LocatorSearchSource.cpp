@@ -270,7 +270,7 @@ namespace Toolkit {
   /*!
       \reimp
    */
-  void LocatorSearchSource::search(const SuggestResult& suggestion, const Geometry area)
+  void LocatorSearchSource::search(const SuggestResult& suggestion, Geometry area)
   {
     m_searchTask.cancel();
 
@@ -278,28 +278,12 @@ namespace Toolkit {
     m_searchTask = m_locatorTask->geocodeWithSuggestResultAndParameters(suggestion, params);
   }
 
-  void LocatorSearchSource::search(const QString& searchString, const Geometry area)
+  void LocatorSearchSource::search(const QString& searchString, Geometry area)
   {
     m_searchTask.cancel();
 
     auto params = normalizeGeometryParams(m_geocodeParameters, area);
     m_searchTask = m_locatorTask->geocodeWithParameters(searchString, params);
-  }
-
-  /*!
-      \internal
-   */
-  TaskWatcher& LocatorSearchSource::searchTask()
-  {
-    return m_searchTask;
-  }
-
-  /*!
-      \internal
-   */
-  const TaskWatcher& LocatorSearchSource::searchTask() const
-  {
-    return m_searchTask;
   }
 
 } // Toolkit

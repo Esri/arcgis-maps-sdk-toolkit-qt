@@ -22,7 +22,6 @@
 #include <TaskWatcher.h>
 
 // Qt headers
-#include <QFuture>
 #include <QList>
 #include <QObject>
 #include <QString>
@@ -65,9 +64,9 @@ namespace Toolkit {
 
     virtual SuggestListModel* suggestions() const = 0;
 
-    virtual void search(const SuggestResult& suggestion, const Geometry area = Geometry{}) = 0;
+    virtual void search(const SuggestResult& suggestion, Geometry area = Geometry{}) = 0;
 
-    virtual void search(const QString& query, const Geometry area = Geometry{}) = 0;
+    virtual void search(const QString& query, Geometry area = Geometry{}) = 0;
 
   signals:
     void displayNameChanged();

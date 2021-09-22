@@ -59,19 +59,17 @@ namespace Toolkit {
 
     SuggestListModel* suggestions() const override;
 
-    void search(const SuggestResult& suggestion, const Geometry area = Geometry{}) override;
+    void search(const SuggestResult& suggestion, Geometry area = Geometry{}) override;
 
-    void search(const QString& searchString, const Geometry area = Geometry{}) override;
+    void search(const QString& searchString, Geometry area = Geometry{}) override;
 
   protected:
-    TaskWatcher& searchTask();
-
-    const TaskWatcher& searchTask() const;
+    TaskWatcher m_searchTask;
 
   private:
     LocatorTask* m_locatorTask;
     GeocodeParameters m_geocodeParameters;
-    TaskWatcher m_searchTask;
+
   };
 
 } // Toolkit

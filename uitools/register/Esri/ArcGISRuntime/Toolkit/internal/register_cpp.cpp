@@ -22,6 +22,7 @@
 #include "CoordinateConversionController.h"
 #include "CoordinateConversionOption.h"
 #include "CoordinateConversionResult.h"
+#include "LocatorSearchSource.h"
 #include "NorthArrowController.h"
 #include "OverviewMapController.h"
 #include "PopupViewController.h"
@@ -31,14 +32,13 @@
 #include "SearchViewController.h"
 #include "SmartLocatorSearchSource.h"
 #include "TimeSliderController.h"
-#include "LocatorSearchSource.h"
 
 // Internal includes
 #include "Internal/BasemapGalleryImageProvider.h"
 
 // ArcGIS includes
-#include <Point.h>
 #include <MapQuickView.h>
+#include <Point.h>
 
 // Qt Includes
 #include <QQmlEngine>
@@ -47,87 +47,140 @@
 // std includes
 #include <type_traits>
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri {
+namespace ArcGISRuntime {
+namespace Toolkit {
 
-namespace
-{
+  namespace {
 
-const QString ESRI_COM_PATH = QStringLiteral(":/esri.com/imports");
+    const QString ESRI_COM_PATH = QStringLiteral(":/esri.com/imports");
 
-constexpr char const* NAMESPACE = "Esri.ArcGISRuntime.Toolkit.Controller";
+    constexpr char const* NAMESPACE = "Esri.ArcGISRuntime.Toolkit.Controller";
 
-constexpr int VERSION_MAJOR = 100;
-constexpr int VERSION_MINOR = 13;
+    constexpr int VERSION_MAJOR = 100;
+    constexpr int VERSION_MINOR = 13;
 
-/*
- \internal
- \brief Function for registration. Registers the C++ type Foo as
- FooCPP in QML with the appropriate version and namespace information.
- 
- \note In QML, we alias the QML type \c FooCPP to QML type \c Foo using the
- qml files found in the `+cpp_api` folder of our QML directory.
- 
- \list
-  \li \c T Type to register in QML.
-  \li \a minorVersion The version at which the component was created.
- \endlist
- */
-template <typename T>
-void registerComponent(int minorVersion)
-{
-  static_assert(std::is_base_of<QObject, T>::value, "Must inherit QObject");
-  auto name = QString{T::staticMetaObject.className()};
-  name.remove("Esri::ArcGISRuntime::Toolkit::");
-  qmlRegisterType<T>(NAMESPACE, VERSION_MAJOR, minorVersion, name.toLatin1());
-}
+    /*
+      \internal
+      \brief This namespace is an implementation detail for how to register types with QML.
 
-/*
- \internal
- \brief Ensures a Module revision is available from 100.10 onwards 
- to the current version of the Toolkit.
- */
-void registerModuleRevisions()
-{
-  constexpr int START_VERSION = 10;
-  for (int i = START_VERSION; i <= VERSION_MINOR; ++i)
-    qmlRegisterModule(NAMESPACE, VERSION_MAJOR, i);
-}
+      For usage see `registerComponent`.
 
-} // namespace
+      Provided is the overloaded method:
 
-void registerComponents_cpp_(QQmlEngine& appEngine)
-{
-  appEngine.addImageProvider(BasemapGalleryImageProvider::PROVIDER_ID, BasemapGalleryImageProvider::instance());
-  appEngine.addImportPath(ESRI_COM_PATH);
-  registerModuleRevisions();
-  registerComponent<AuthenticationController>(10);
-  registerComponent<BasemapGalleryController>(12);
-  registerComponent<BasemapGalleryItem>(12);
-  registerComponent<CoordinateConversionController>(10);
-  registerComponent<CoordinateConversionOption>(10);
-  registerComponent<CoordinateConversionResult>(10);
-  //registerComponent<LocatorSearchSource>(13);
-  registerComponent<NorthArrowController>(10);
-  registerComponent<OverviewMapController>(12);
-  registerComponent<PopupViewController>(10);
-  registerComponent<SearchResult>(13);
-  registerComponent<SearchSuggestion>(13);
-  registerComponent<SearchViewController>(13);
-  //registerComponent<SmartLocatorSearchSource>(13);
-  registerComponent<TimeSliderController>(10);
+      \code
+      void registerComponentImpl(<CreationType> creationType, int minorVersion, const char* name)
+      \endcode
 
-  // Interfaces
-  qmlRegisterInterface<SearchSourceInterface>(NAMESPACE, VERSION_MAJOR);
+      And the three currently accepted values for the \a creationType parameter.
 
-  // Register ArcGISRuntime types with toolkit.
-  qRegisterMetaType<Point>("Esri::ArcGISRuntime::Point");
-  qmlRegisterAnonymousType<MapQuickView>(NAMESPACE, 12);
-}
+      \value CreationType::Creatable for types that can be created in QML.
+      \value CreationType::Uncreatable for types that can be referenced but not used in QML.
+      \value CreationType::Interface for types that are interfaces for more concrete QML types.
+     */
+    namespace CreationType {
+      struct Creatable_
+      {
+      };
+
+      template <class T>
+      void registerComponentImpl(CreationType::Creatable_, int minorVersion, const char* name)
+      {
+        qmlRegisterType<T>(NAMESPACE, VERSION_MAJOR, minorVersion, name);
+      }
+
+      constexpr Creatable_ Creatable = Creatable_{};
+
+      struct Uncreatable_
+      {
+      };
+
+      template <class T>
+      void registerComponentImpl(CreationType::Uncreatable_, int minorVersion, const char* name)
+      {
+        qmlRegisterUncreatableType<T>(NAMESPACE, VERSION_MAJOR, minorVersion, name, "Cannot instantiate type in QML.");
+      }
+
+      constexpr Uncreatable_ Uncreatable = Uncreatable_{};
+
+      struct Interface_
+      {
+      };
+
+      template <class T>
+      void registerComponentImpl(CreationType::Interface_, int /*minorVersion*/, const char* /*name*/)
+      {
+        qmlRegisterInterface<T>(NAMESPACE, VERSION_MAJOR);
+      }
+
+      constexpr Interface_ Interface = Interface_{};
+    }
+
+    /*
+     \internal
+     \brief Function for registration. Registers the C++ type Foo as
+     Foo in QML with the appropriate version and namespace information.
+
+     \list
+      \li \a minorVersion The version at which the component was created.
+      \li \a Determines how the type is instantiated in QML. Choose between CreationType::Creatable, CreationType::Uncreatable and CreationType::Interface.
+          CreationType::Creatable is assumed by default if not provided.
+     \endlist
+
+      Example call:
+      \code
+      registerComponent<LocatorSearchSource>(13, CreationType::Uncreatable);
+      \endcode
+     */
+    template <typename T, typename CType = CreationType::Creatable_>
+    void registerComponent(int minorVersion, CType creationType = CType{})
+    {
+      static_assert(std::is_base_of<QObject, T>::value, "Must inherit QObject");
+      auto name = QString{T::staticMetaObject.className()};
+      name.remove("Esri::ArcGISRuntime::Toolkit::");
+      CreationType::registerComponentImpl<T>(creationType, minorVersion, name.toLatin1());
+    }
+
+    /*
+     \internal
+     \brief Ensures a Module revision is available from 100.10 onwards
+     to the current version of the Toolkit.
+     */
+    void registerModuleRevisions()
+    {
+      constexpr int START_VERSION = 10;
+      for (int i = START_VERSION; i <= VERSION_MINOR; ++i)
+        qmlRegisterModule(NAMESPACE, VERSION_MAJOR, i);
+    }
+
+  } // namespace
+
+  void registerComponents_cpp_(QQmlEngine& appEngine)
+  {
+    appEngine.addImageProvider(BasemapGalleryImageProvider::PROVIDER_ID, BasemapGalleryImageProvider::instance());
+    appEngine.addImportPath(ESRI_COM_PATH);
+    registerModuleRevisions();
+    registerComponent<AuthenticationController>(10);
+    registerComponent<BasemapGalleryController>(12);
+    registerComponent<BasemapGalleryItem>(12);
+    registerComponent<CoordinateConversionController>(10);
+    registerComponent<CoordinateConversionOption>(10);
+    registerComponent<CoordinateConversionResult>(10);
+    registerComponent<LocatorSearchSource>(13, CreationType::Uncreatable);
+    registerComponent<NorthArrowController>(10);
+    registerComponent<OverviewMapController>(12);
+    registerComponent<PopupViewController>(10);
+    registerComponent<SearchResult>(13);
+    registerComponent<SearchSourceInterface>(13, CreationType::Interface);
+    registerComponent<SearchSuggestion>(13);
+    registerComponent<SearchViewController>(13, CreationType::Creatable);
+    registerComponent<SmartLocatorSearchSource>(13, CreationType::Uncreatable);
+    registerComponent<TimeSliderController>(10);
+
+    // Register ArcGISRuntime types with toolkit.
+    qRegisterMetaType<Point>("Esri::ArcGISRuntime::Point");
+    qmlRegisterAnonymousType<MapQuickView>(NAMESPACE, 12);
+  }
 
 } // Toolkit
 } // ArcGISRuntime

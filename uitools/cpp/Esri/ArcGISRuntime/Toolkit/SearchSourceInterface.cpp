@@ -103,14 +103,14 @@ namespace Toolkit {
    */
 
   /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::SearchSourceInterface::search(const Esri::ArcGISRuntime::SuggestResult& suggestion, const Esri::ArcGISRuntime::Geometry area)
+    \fn void Esri::ArcGISRuntime::Toolkit::SearchSourceInterface::search(const Esri::ArcGISRuntime::SuggestResult& suggestion, Esri::ArcGISRuntime::Geometry area)
     \brief Gets search results using \a suggestion as input.
 
     If \a area is not default constructed, search is restricted to that area.
    */
 
   /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::SearchSourceInterface::search(const QString& query, const Esri::ArcGISRuntime::Geometry area)
+    \fn void Esri::ArcGISRuntime::Toolkit::SearchSourceInterface::search(const QString& query, Esri::ArcGISRuntime::Geometry area)
     \brief Gets search results using \a query as input.
 
     If \a area is not default constructed, search is restricted to that area.

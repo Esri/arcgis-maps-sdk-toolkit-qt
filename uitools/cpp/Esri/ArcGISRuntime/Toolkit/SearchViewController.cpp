@@ -85,155 +85,13 @@ namespace Toolkit {
   {
     // Detect any and all changes to the current Query text, and update all the applicable
     // sources in the controller.
-    connect(this, &SearchViewController::currentQueryChanged, this, [this]
-            {
-              setIsEligableForRequery(false);
-              const int rowCount = m_sources->rowCount();
-              for (int i = 0; i < rowCount; ++i)
-              {
-                auto source = m_sources->element<SearchSourceInterface>(m_sources->index(i));
-                if (source)
-                {
-                  source->suggestions()->setSearchText(currentQuery());
-                }
-              }
-            });
+    connect(this, &SearchViewController::currentQueryChanged, this, &SearchViewController::onQueryChanged);
 
     // Detect the deletion of sources from the controller, and perform the cleanup code.
-    connect(m_sources, &QAbstractItemModel::rowsAboutToBeRemoved, this, [this](const QModelIndex& parent, int first, int last)
-            {
-              if (parent.isValid())
-                return;
-
-              // Go through all removed sources.
-              for (int i = first; i <= last; ++i)
-              {
-                auto source = m_sources->element<SearchSourceInterface>(m_sources->index(i));
-                if (source)
-                {
-                  // disconnect from sources and their suggestions
-                  disconnect(source, nullptr, this, nullptr);
-                  disconnect(source->suggestions(), nullptr, this, nullptr);
-
-                  // for any suggestion that comes from a removed source, remove that
-                  // suggestion from the list model.
-                  const int rowCount = m_suggestions->rowCount();
-                  if (rowCount > 0)
-                  {
-                    for (int j = rowCount - 1; j >= 0; --j)
-                    {
-                      auto index = m_suggestions->index(j);
-                      auto suggestion = m_suggestions->element<SearchSuggestion>(index);
-                      if (suggestion->owningSource() == source)
-                      {
-                        m_suggestions->removeRow(j);
-                      }
-                    }
-                  }
-                }
-              }
-            });
+    connect(m_sources, &QAbstractItemModel::rowsAboutToBeRemoved, this, &SearchViewController::onSourcesRemoved);
 
     // Whenever a source is added, perform the connection setup.
-    connect(m_sources, &QAbstractItemModel::rowsInserted, this, [this](const QModelIndex& parent, int firstSource, int lastSource)
-            {
-              if (parent.isValid())
-                return;
-
-              for (int i = firstSource; i <= lastSource; ++i)
-              {
-                auto source = m_sources->element<SearchSourceInterface>(m_sources->index(i));
-                if (source)
-                {
-                  // Handle search results coming from the source.
-                  connect(source, &SearchSourceInterface::searchCompleted, this, [this](QList<SearchResult*> results)
-                          {
-                            if (results.empty())
-                              return;
-
-                            // If only one result needs be applicable, automatically accept it, otherwise,
-                            // add all results to the list model.
-                            if (m_resultMode == SearchResultMode::Single ||
-                                (results.size() == 1 && m_resultMode != SearchResultMode::Multiple))
-                            {
-                              auto it = std::begin(results);
-                              // Take only first element.
-                              auto f = *it++;
-                              setSelectedResult(f);
-
-                              // Discard remaining elements.
-                              for (; it != std::end(results); ++it)
-                              {
-                                (*it)->deleteLater();
-                              }
-                            }
-                            else
-                            {
-                              // Take ownership of all elements.
-                              for (auto r : qAsConst(results))
-                              {
-                                r->setParent(m_results);
-                                m_results->append(r);
-                              }
-
-                              // Render all possible results on the geoView.
-                              if (m_graphicsOverlay)
-                              {
-                                m_graphicsOverlay->graphics()->clear();
-
-                                for (auto r : qAsConst(results))
-                                {
-                                  addGeoElementToOverlay(m_graphicsOverlay, r->geoElement());
-                                }
-
-                                if (auto geoView = qobject_cast<GeoView*>(m_geoView))
-                                {
-                                  const auto extent = m_graphicsOverlay->extent();
-                                  EnvelopeBuilder b{extent};
-                                  b.expandByFactor(1.2); // Give some margins to the view.
-                                  geoView->setViewpoint(b.toEnvelope(), 0);
-                                }
-                              }
-                            }
-                          });
-
-                  // Handle suggestion updates coming the source.
-                  auto suggestionModel = source->suggestions();
-                  connect(suggestionModel, &QAbstractItemModel::rowsInserted, this, [source, suggestionModel, this](const QModelIndex& parent, int firstSugggest, int lastSuggest)
-                          {
-                            if (parent.isValid())
-                              return;
-
-                            const auto suggestResults = suggestionModel->suggestResults();
-                            for (int i = firstSugggest; i <= lastSuggest; ++i)
-                            {
-                              // Wrap a SuggestResult in our SearchSuggestion type.
-                              const auto suggestion = suggestResults.at(i);
-                              auto searchSuggestion = new SearchSuggestion(m_suggestions);
-                              searchSuggestion->setSuggestResult(suggestion);
-                              searchSuggestion->setOwningSource(source);
-                              m_suggestions->append(searchSuggestion);
-                              // Remove suggestion from our aggregate mode if it removed from the current source's suggestion model.
-                              // Note that we keep track of the "true" position in the model via a QPersistentModelIndex.
-                              QPersistentModelIndex pIndex = m_suggestions->index(m_suggestions->rowCount() - 1);
-                              connect(suggestionModel, &QAbstractItemModel::rowsAboutToBeRemoved, this, [searchSuggestion, pIndex](const QModelIndex& parent, int first, int last)
-                                      {
-                                        if (parent.isValid())
-                                          return;
-
-                                        for (int i = first; i <= last; ++i)
-                                        {
-                                          if (i == pIndex.row())
-                                          {
-                                            searchSuggestion->deleteLater();
-                                          }
-                                        }
-                                      });
-                            }
-                          });
-                }
-              }
-            });
+    connect(m_sources, &QAbstractItemModel::rowsInserted, this, &SearchViewController::onSourcesAdded);
   }
 
   /*!
@@ -624,7 +482,7 @@ namespace Toolkit {
 
   /*!
       \brief Sets whether the user can perform a requery to \a isEligableForRequery.
-      When \l automaticConfigurationEnabled is \c true, and the user moves the extent, this is automatically set to
+      When \l automaticConfigurationEnabled is \c true, and the user changes the viewpoint, this is automatically set to
       \c true. Clearing or changing the current query will set this property to \c false.
    */
   void SearchViewController::setIsEligableForRequery(bool isEligableForRequery)
@@ -721,6 +579,165 @@ namespace Toolkit {
 
     m_isAutomaticConfigurationEnabled = isAutomaticConfigurationEnabled;
     emit isAutomaticConfigurationEnabledChanged();
+  }
+
+  /*!
+    \internal
+    \brief User has updated the query, update the sources.
+   */
+  void SearchViewController::onQueryChanged()
+  {
+    setIsEligableForRequery(false);
+    const int rowCount = m_sources->rowCount();
+    for (int i = 0; i < rowCount; ++i)
+    {
+      auto source = m_sources->element<SearchSourceInterface>(m_sources->index(i));
+      if (source)
+      {
+        source->suggestions()->setSearchText(currentQuery());
+      }
+    }
+  }
+
+  /*!
+    \internal
+    \brief User has added one or more sources to the sources list, we hook up and listen to this source.
+   */
+  void SearchViewController::onSourcesAdded(const QModelIndex& parent, int firstSource, int lastSource)
+  {
+    if (parent.isValid())
+      return;
+
+    for (int i = firstSource; i <= lastSource; ++i)
+    {
+      auto source = m_sources->element<SearchSourceInterface>(m_sources->index(i));
+      if (source)
+      {
+        // Handle search results coming from the source.
+        connect(source, &SearchSourceInterface::searchCompleted, this, [this](QList<SearchResult*> results)
+                {
+                  if (results.empty())
+                    return;
+
+                  // If only one result needs be applicable, automatically accept it, otherwise,
+                  // add all results to the list model.
+                  if (m_resultMode == SearchResultMode::Single ||
+                      (results.size() == 1 && m_resultMode != SearchResultMode::Multiple))
+                  {
+                    auto it = std::begin(results);
+                    // Take only first element.
+                    auto f = *it++;
+                    setSelectedResult(f);
+
+                    // Discard remaining elements.
+                    for (; it != std::end(results); ++it)
+                    {
+                      (*it)->deleteLater();
+                    }
+                  }
+                  else
+                  {
+                    // Take ownership of all elements.
+                    for (auto r : qAsConst(results))
+                    {
+                      r->setParent(m_results);
+                      m_results->append(r);
+                    }
+
+                    // Render all possible results on the geoView.
+                    if (m_graphicsOverlay)
+                    {
+                      m_graphicsOverlay->graphics()->clear();
+
+                      for (auto r : qAsConst(results))
+                      {
+                        addGeoElementToOverlay(m_graphicsOverlay, r->geoElement());
+                      }
+
+                      if (auto geoView = qobject_cast<GeoView*>(m_geoView))
+                      {
+                        const auto extent = m_graphicsOverlay->extent();
+                        EnvelopeBuilder b{extent};
+                        b.expandByFactor(1.2); // Give some margins to the view.
+                        geoView->setViewpoint(b.toEnvelope(), 0);
+                      }
+                    }
+                  }
+                });
+
+        // Handle suggestion updates coming the source.
+        auto suggestionModel = source->suggestions();
+        connect(suggestionModel, &QAbstractItemModel::rowsInserted, this, [source, suggestionModel, this](const QModelIndex& parent, int firstSugggest, int lastSuggest)
+                {
+                  if (parent.isValid())
+                    return;
+
+                  const auto suggestResults = suggestionModel->suggestResults();
+                  for (int i = firstSugggest; i <= lastSuggest; ++i)
+                  {
+                    // Wrap a SuggestResult in our SearchSuggestion type.
+                    const auto suggestion = suggestResults.at(i);
+                    auto searchSuggestion = new SearchSuggestion(m_suggestions);
+                    searchSuggestion->setSuggestResult(suggestion);
+                    searchSuggestion->setOwningSource(source);
+                    m_suggestions->append(searchSuggestion);
+                    // Remove suggestion from our aggregate mode if it removed from the current source's suggestion model.
+                    // Note that we keep track of the "true" position in the model via a QPersistentModelIndex.
+                    QPersistentModelIndex pIndex = m_suggestions->index(m_suggestions->rowCount() - 1);
+                    connect(suggestionModel, &QAbstractItemModel::rowsAboutToBeRemoved, this, [searchSuggestion, pIndex](const QModelIndex& parent, int first, int last)
+                            {
+                              if (parent.isValid())
+                                return;
+
+                              for (int i = first; i <= last; ++i)
+                              {
+                                if (i == pIndex.row())
+                                {
+                                  searchSuggestion->deleteLater();
+                                }
+                              }
+                            });
+                  }
+                });
+      }
+    }
+  }
+  /*!
+    \internal
+    \brief User has removed one or more sources from the sources list, requiring cleanup.
+   */
+  void SearchViewController::onSourcesRemoved(const QModelIndex& parent, int firstSource, int lastSource)
+  {
+    if (parent.isValid())
+      return;
+
+    // Go through all removed sources.
+    for (int i = firstSource; i <= lastSource; ++i)
+    {
+      auto source = m_sources->element<SearchSourceInterface>(m_sources->index(i));
+      if (source)
+      {
+        // disconnect from sources and their suggestions
+        disconnect(source, nullptr, this, nullptr);
+        disconnect(source->suggestions(), nullptr, this, nullptr);
+
+        // for any suggesion that comes from a removed source, remove that
+        // suggestion from the list model.
+        const int rowCount = m_suggestions->rowCount();
+        if (rowCount > 0)
+        {
+          for (int j = rowCount - 1; j >= 0; --j)
+          {
+            auto index = m_suggestions->index(j);
+            auto suggestion = m_suggestions->element<SearchSuggestion>(index);
+            if (suggestion->owningSource() == source)
+            {
+              m_suggestions->removeRow(j);
+            }
+          }
+        }
+      }
+    }
   }
 
   /*!

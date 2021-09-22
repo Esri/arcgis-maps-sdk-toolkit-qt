@@ -146,14 +146,14 @@ namespace Toolkit {
                               // an unlikely scenario.
                               QObject::disconnect(*connection);
 
-                              if (searchTask().taskId() != taskId)
+                              if (m_searchTask.taskId() != taskId)
                                 return;
 
                               if (geocodeResults.length() < repeatSearchResultThreshold())
                               {
                                 auto params = geocodeParameters();
                                 params.setMaxResults(params.maxResults() - geocodeResults.length());
-                                searchTask() = locator()->geocodeWithSuggestResultAndParameters(suggestion, params);
+                                m_searchTask = locator()->geocodeWithSuggestResultAndParameters(suggestion, params);
                               }
                             });
     }
@@ -183,14 +183,14 @@ namespace Toolkit {
                               // an unlikely scenario.
                               QObject::disconnect(*connection);
 
-                              if (searchTask().taskId() != taskId)
+                              if (m_searchTask.taskId() != taskId)
                                 return;
 
                               if (geocodeResults.length() < repeatSearchResultThreshold())
                               {
                                 auto params = geocodeParameters();
                                 params.setMaxResults(params.maxResults() - geocodeResults.length());
-                                searchTask() = locator()->geocodeWithParameters(searchString, params);
+                                m_searchTask = locator()->geocodeWithParameters(searchString, params);
                               }
                             });
     }
