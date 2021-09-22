@@ -217,10 +217,9 @@ Control {
         Button {
             anchors {
                 top: fieldsLayout.bottom
-                topMargin: 20
+                topMargin: 30
                 horizontalCenter: parent.horizontalCenter
             }
-            Layout.alignment: Qt.AlignHCenter
             text: "Close"
 
             onClicked: {
