@@ -12,6 +12,7 @@
       <file>OverviewMapController.qml</file>
       <file>PopupViewController.qml</file>
       <file>ScalebarController.qml</file>
+      <file>SearchViewController.qml</file>
       <file>TimeSliderController.qml</file>
       <file>qmldir</file>
     </qresource>

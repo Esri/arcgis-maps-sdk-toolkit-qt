@@ -16,6 +16,7 @@
     <file>PopupView.qml</file>
     <file>Scalebar.qml</file>
     <file>ScalebarImpl.qml</file>
+    <file>SearchView.qml</file>
     <file>SslHandshakeView.qml</file>
     <file>TimeSlider.qml</file>
     <file>UserCredentialsView.qml</file>

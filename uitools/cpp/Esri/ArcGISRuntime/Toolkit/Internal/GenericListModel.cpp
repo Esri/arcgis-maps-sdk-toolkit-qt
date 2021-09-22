@@ -87,8 +87,6 @@ namespace Toolkit {
  a constructor of form \c{Q_INVOKABLE Foo(QObject* parent = nullptr)}.
  An ElementType that does not have this form of constructor will trigger
  undefined behaviour when insertRows is called.
- 
- \sa Esri::ArcGISRuntime::Toolkit::GenericTableProxyModel
  */
 
   /*!
@@ -201,7 +199,7 @@ namespace Toolkit {
     }
     else if (role == Qt::UserRole)
     {
-      return QVariant::fromValue<QObject*>(o);
+      return QVariant::fromValue(o);
     }
     else if (role >= Qt::UserRole)
     {
@@ -254,7 +252,7 @@ namespace Toolkit {
     else if (role == Qt::UserRole)
     {
       auto newObject = qvariant_cast<QObject*>(value);
-      if (newObject && m_elementType == newObject->metaObject())
+      if (newObject && newObject->metaObject()->inherits(m_elementType))
       {
         m_objects[index.row()] = newObject;
         emit dataChanged(index, index);
@@ -411,10 +409,11 @@ namespace Toolkit {
       auto o = m_objects.at(i);
 
       // Ensure additional removal signals are not triggered.
-      if (o)
+      if (o && o->parent() == this)
+      {
         disconnect(o, &QObject::destroyed, this, nullptr);
-
-      delete o;
+        delete o;
+      }
 
       m_objects.removeAt(i);
     }
@@ -439,10 +438,11 @@ namespace Toolkit {
     for (auto o : m_objects)
     {
       // Ensure additional removal signals are not triggered.
-      if (o)
+      if (o && o->parent() == this)
+      {
         disconnect(o, &QObject::destroyed, this, nullptr);
-
-      delete o;
+        delete o;
+      }
     }
     m_objects.clear();
     m_elementType = metaObject;
@@ -514,7 +514,7 @@ namespace Toolkit {
     if (!object)
       return false;
 
-    if (object->metaObject() != m_elementType)
+    if (!object->metaObject()->inherits(m_elementType))
       return false;
 
     auto i = rowCount();
@@ -550,7 +550,7 @@ namespace Toolkit {
     {
       if (!o)
         return false;
-      else if (o->metaObject() != m_elementType)
+      else if (!o->metaObject()->inherits(m_elementType))
         return false;
     }
 
@@ -588,7 +588,7 @@ namespace Toolkit {
 
     QObject* object = m_objects.at(index.row());
 
-    if (!object || object->metaObject() != m_elementType)
+    if (!object || !object->metaObject()->inherits(m_elementType))
       return;
 
     // If object is deleted externally we remove from the model.
@@ -667,6 +667,16 @@ namespace Toolkit {
       return QString(m_elementType->className());
     else
       return "";
+  }
+
+  QObject* GenericListModel::element(const QModelIndex& index)
+  {
+    return qvariant_cast<QObject*>(data(index, Qt::UserRole));
+  }
+
+  bool GenericListModel::clear()
+  {
+    return removeRows(0, count());
   }
 
   /*!
