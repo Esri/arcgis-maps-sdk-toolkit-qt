@@ -34,6 +34,7 @@ HEADERS += $$CPPPATH/AuthenticationController.h \
            $$CPPPATH/NorthArrowController.h \
            $$CPPPATH/OverviewMapController.h \
            $$CPPPATH/PopupViewController.h \
+           $$CPPPATH/ScalebarController.h \
            $$CPPPATH/SearchResult.h \
            $$CPPPATH/SearchSourceInterface.h \
            $$CPPPATH/SearchSuggestion.h \
@@ -57,6 +58,7 @@ SOURCES += $$CPPPATH/AuthenticationController.cpp \
            $$CPPPATH/NorthArrowController.cpp \
            $$CPPPATH/OverviewMapController.cpp \
            $$CPPPATH/PopupViewController.cpp \
+           $$CPPPATH/ScalebarController.cpp \
            $$CPPPATH/SearchResult.cpp \
            $$CPPPATH/SearchSourceInterface.cpp \
            $$CPPPATH/SearchSuggestion.cpp \

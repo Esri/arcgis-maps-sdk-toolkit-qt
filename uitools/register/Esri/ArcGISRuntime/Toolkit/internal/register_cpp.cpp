@@ -26,6 +26,7 @@
 #include "NorthArrowController.h"
 #include "OverviewMapController.h"
 #include "PopupViewController.h"
+#include "ScalebarController.h"
 #include "SearchResult.h"
 #include "SearchSourceInterface.h"
 #include "SearchSuggestion.h"
@@ -170,6 +171,7 @@ namespace Toolkit {
     registerComponent<NorthArrowController>(10);
     registerComponent<OverviewMapController>(12);
     registerComponent<PopupViewController>(10);
+    registerComponent<ScalebarController>(13);
     registerComponent<SearchResult>(13);
     registerComponent<SearchSourceInterface>(13, CreationType::Interface);
     registerComponent<SearchSuggestion>(13);
