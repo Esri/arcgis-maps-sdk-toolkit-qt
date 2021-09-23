@@ -52,7 +52,7 @@ Item {
     */
     property var controller: NorthArrowController { }
 
-    implicitWidth: 32
+    implicitWidth: 48
 
     implicitHeight: implicitWidth
 
