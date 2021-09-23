@@ -27,6 +27,7 @@ import QtQuick 2.12
    heading of the SceneView. 
    Double clicking on the NorthArrow triggers the heading of the connected
    GeoView to be orientainted to 0.
+   \note default width and height is 48.
  */
 
 Item {
@@ -50,6 +51,10 @@ Item {
       \brief the Controller handles connections writing/reading to the GeoView.
     */
     property var controller: NorthArrowController { }
+
+    implicitWidth: 48
+
+    implicitHeight: implicitWidth
 
     Binding {
         target: controller
