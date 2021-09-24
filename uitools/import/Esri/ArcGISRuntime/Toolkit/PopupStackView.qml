@@ -63,7 +63,6 @@ import QtQuick.Layouts 1.12
  */
 Pane {
     id: popupStackView
-    spacing: 20
 
     /*!
        \brief A list of PopupManagers that controls the information being
@@ -237,15 +236,6 @@ Pane {
     implicitHeight: 300 + padding
 
     padding: 5
-
-//    background: Rectangle {
-//        color: palette.base
-//        border {
-//            color: palette.shadow
-//            width: 2
-//        }
-//        radius: 2
-//    }
 
     contentItem: GridLayout {
         columns: 3
