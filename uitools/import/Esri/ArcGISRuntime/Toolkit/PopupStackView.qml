@@ -61,9 +61,9 @@ import QtQuick.Layouts 1.12
    PopupManager, or any of their properties, the popupManagers must be
    re-set to the PopupStackView.
  */
-Control {
+Pane {
     id: popupStackView
-
+    spacing: 20
 
     /*!
        \brief A list of PopupManagers that controls the information being
@@ -238,14 +238,14 @@ Control {
 
     padding: 5
 
-    background: Rectangle {
-        color: palette.base
-        border {
-            color: palette.shadow
-            width: 2
-        }
-        radius: 2
-    }
+//    background: Rectangle {
+//        color: palette.base
+//        border {
+//            color: palette.shadow
+//            width: 2
+//        }
+//        radius: 2
+//    }
 
     contentItem: GridLayout {
         columns: 3

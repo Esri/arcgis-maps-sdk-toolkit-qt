@@ -59,7 +59,7 @@ import QtQuick.Layouts 1.3
    PopupManager, or any of their properties, the PopupManager must
    be re-set to the PopupView.
  */
-Control {
+Pane {
     id: popupView
 
 
@@ -112,18 +112,10 @@ Control {
 
     padding: 5
 
-    background: Rectangle {
-        color: palette.base
-        border {
-            color: palette.shadow
-            width: 2
-        }
-        radius: 2
-    }
-
     contentItem: Flickable {
         id: flickable
         clip: true
+        topMargin: popupView.spacing
         contentHeight: fieldsLayout.height
         GridLayout {
             id: fieldsLayout
@@ -217,8 +209,8 @@ Control {
         Button {
             anchors {
                 top: fieldsLayout.bottom
-                topMargin: 30
                 horizontalCenter: parent.horizontalCenter
+                topMargin: 20
             }
             text: "Close"
 
