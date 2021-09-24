@@ -38,14 +38,12 @@ public:
   ~NorthArrowController();
 
   QObject* geoView() const;
-
   void setGeoView(QObject* geoView);
 
   double heading() const;
 
 signals:
   void geoViewChanged();
-
   void headingChanged();
 
 public slots:

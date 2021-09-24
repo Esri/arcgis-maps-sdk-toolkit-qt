@@ -14,7 +14,7 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import Esri.ArcGISRuntime.Toolkit.Controller 100.12
+import Esri.ArcGISRuntime.Toolkit.Controller 100.13
 
 import QtQuick 2.12
 import QtQuick.Controls 2.12
@@ -82,7 +82,7 @@ Control {
       \brief The controller handles calculating steps and setting extents on the
        GeoView.
 
-       A default TImeSliderController is provided.
+       A default TimeSliderController is provided.
     */
     property var controller: TimeSliderController { }
 

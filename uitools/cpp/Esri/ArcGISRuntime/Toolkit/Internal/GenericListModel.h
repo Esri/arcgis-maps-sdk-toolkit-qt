@@ -67,12 +67,16 @@ public:
 
   Q_INVOKABLE bool append(QObject* object);
 
+  Q_INVOKABLE bool clear();
+
   template <typename T>  
   T* element(const QModelIndex& index) const
   {
     static_assert(std::is_base_of<QObject, T>::value, "Must inherit QObject");
     return qvariant_cast<T*>(data(index, Qt::UserRole));
   }
+
+  Q_INVOKABLE QObject* element(const QModelIndex& index);
 
 signals:
   void countChanged();

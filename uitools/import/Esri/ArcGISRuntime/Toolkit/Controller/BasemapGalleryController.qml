@@ -14,7 +14,7 @@
  *  limitations under the License.
  ******************************************************************************/
 import QtQml 2.15
-import Esri.ArcGISRuntime 100.12
+import Esri.ArcGISRuntime 100.13
 import QtQml.Models 2.15
 
 /*!
@@ -86,15 +86,15 @@ QtObject {
     }
 
     /*!
-       \brief Convenience method that takes a GeoView and sets this controller's
+       \brief Convenience method that takes a GeoView \a view and sets this controller's
        geoModel to the scene or map contained within. This method is for QML/C++ layer
        compatibility. It is better to set \c{BasemapGalleryController.geoModel} directly.
      */
     function setGeoModelFromGeoView(view) {
         if (view instanceof SceneView) {
-            setCurrentBasemap(view.scene);
+            setCurrentBasemap(view.scene ? view.scene.basemap : null);
         } else if (view instanceof MapView) {
-            setCurrentBasemap(view.map);
+            setCurrentBasemap(view.map ? view.map.basemap : null);
         }
     }
 
@@ -216,7 +216,7 @@ QtObject {
                 }
             }
         }
-        property Connections geoModelConenctions: Connections {
+        property Connections geoModelConnections: Connections {
             target: geoModel
             function onBasemapChanged() {
                 internal.currentBasemap = geoModel.basemap;
