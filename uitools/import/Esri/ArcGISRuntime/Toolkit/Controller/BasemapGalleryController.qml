@@ -92,9 +92,9 @@ QtObject {
      */
     function setGeoModelFromGeoView(view) {
         if (view instanceof SceneView) {
-            setCurrentBasemap(view.scene);
+            setCurrentBasemap(view.scene ? view.scene.basemap : null);
         } else if (view instanceof MapView) {
-            setCurrentBasemap(view.map);
+            setCurrentBasemap(view.map ? view.map.basemap : null);
         }
     }
 
@@ -216,7 +216,7 @@ QtObject {
                 }
             }
         }
-        property Connections geoModelConenctions: Connections {
+        property Connections geoModelConnections: Connections {
             target: geoModel
             function onBasemapChanged() {
                 internal.currentBasemap = geoModel.basemap;
