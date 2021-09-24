@@ -216,7 +216,7 @@ QtObject {
                 }
             }
         }
-        property Connections geoModelConenctions: Connections {
+        property Connections geoModelConnections: Connections {
             target: geoModel
             function onBasemapChanged() {
                 internal.currentBasemap = geoModel.basemap;
