@@ -20,130 +20,130 @@
 // std headers
 #include <cmath>
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri {
+namespace ArcGISRuntime {
+namespace Toolkit {
 
-/*!
-  \class Esri::ArcGISRuntime::Toolkit::NorthArrowController
-  \inmodule EsriArcGISRuntimeToolkit
-  \ingroup ArcGISQtToolkitUiCppControllers
-  \brief In MVC architecture, this is the controller for the corresponding
-  \c NorthArrow view.
-  
-  This controller calculates the current heading from a GeoView, and allows
-  the \c NorthArrow to apply a given heading to the GeoView.
- */
+  /*!
+    \class Esri::ArcGISRuntime::Toolkit::NorthArrowController
+    \inmodule EsriArcGISRuntimeToolkit
+    \ingroup ArcGISQtToolkitUiCppControllers
+    \brief In MVC architecture, this is the controller for the corresponding
+    \c NorthArrow view.
 
-/*!
-  \brief Constructor
-  \list
-    \li \a parent Parent owning \c QObject.
-  \endlist
- */
-NorthArrowController::NorthArrowController(QObject* parent):
-  QObject(parent)
-{
-}
+    This controller calculates the current heading from a GeoView, and allows
+    the \c NorthArrow to apply a given heading to the GeoView.
+   */
 
-/*!
-  \brief Destructor.
- */
-NorthArrowController::~NorthArrowController()
-{
-}
-
-/*!
-  \brief Set the heading by rotating the \c MapView or \c SceneView camera 
-  to the given \a heading (in degrees).
- */
-void NorthArrowController::setHeading(double heading)
-{
-  if (auto mapView = qobject_cast<MapView*>(m_geoView))
+  /*!
+    \brief Constructor
+    \list
+      \li \a parent Parent owning \c QObject.
+    \endlist
+   */
+  NorthArrowController::NorthArrowController(QObject* parent) :
+    QObject(parent)
   {
-    mapView->setViewpointRotation(heading);
-  }
-  else if (auto sceneView = qobject_cast<SceneView*>(m_geoView))
-  {
-    Camera currentCamera = sceneView->currentViewpointCamera();
-    Camera updatedCamera = currentCamera.rotateTo(heading, currentCamera.pitch(), currentCamera.roll());
-    sceneView->setViewpointCamera(updatedCamera, 0.50);
-  }
-}
-/*!
-  \brief Returns the calculated heading of this controller in degrees.
- */
-double NorthArrowController::heading() const
-{
-  if (auto mapView = qobject_cast<MapView*>(m_geoView))
-    return mapView->mapRotation();
-  else if (auto sceneView = qobject_cast<SceneView*>(m_geoView))
-    return sceneView->currentViewpointCamera().heading();
-
-  return static_cast<double>(NAN);
-}
-
-/*!
-  \brief Returns the \c GeoView as a \c QObject.
- */
-QObject* NorthArrowController::geoView() const
-{
-  return m_geoView;
-}
-
-/*!
-  \brief Set the \c GeoView object this Controller uses.
-  
-  Internally this is cast to a \c MapView or SceneView using \c qobject_cast,
-  which is why the paremeter is of form \c QObject and not \c GeoView.
-  
-  \list
-  \li \a geoView Object which must inherit from \c GeoView* and \c QObject*. 
-  \endlist
- */
-void NorthArrowController::setGeoView(QObject* geoView)
-{
-  if (geoView == m_geoView)
-    return;
-
-  disconnect(this, nullptr, m_geoView, nullptr);
-
-  m_geoView = geoView;
-
-  if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
-  {
-    connect(mapView, &MapViewToolkit::mapRotationChanged,
-            this, &NorthArrowController::headingChanged);
-  }
-  else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
-  {
-    connect(sceneView, &SceneViewToolkit::viewpointChanged,
-            this, &NorthArrowController::headingChanged);
   }
 
-  emit geoViewChanged();
-}
+  /*!
+    \brief Destructor.
+   */
+  NorthArrowController::~NorthArrowController()
+  {
+  }
 
-/*!
-  \fn void Esri::ArcGISRuntime::Toolkit::NorthArrowController::geoViewChanged()
-  \brief Emitted when the geoView changes.
- */
+  /*!
+    \brief Set the heading by rotating the \c MapView or \c SceneView camera
+    to the given \a heading (in degrees).
+   */
+  void NorthArrowController::setHeading(double heading)
+  {
+    if (auto mapView = qobject_cast<MapView*>(m_geoView))
+    {
+      mapView->setViewpointRotation(heading);
+    }
+    else if (auto sceneView = qobject_cast<SceneView*>(m_geoView))
+    {
+      Camera currentCamera = sceneView->currentViewpointCamera();
+      Camera updatedCamera = currentCamera.rotateTo(heading, currentCamera.pitch(), currentCamera.roll());
+      sceneView->setViewpointCamera(updatedCamera, 0.50);
+    }
+  }
+  /*!
+    \brief Returns the calculated heading of this controller in degrees.
+   */
+  double NorthArrowController::heading() const
+  {
+    if (auto mapView = qobject_cast<MapView*>(m_geoView))
+      return mapView->mapRotation();
+    else if (auto sceneView = qobject_cast<SceneView*>(m_geoView))
+      return sceneView->currentViewpointCamera().heading();
 
-/*!
-  \fn void Esri::ArcGISRuntime::Toolkit::NorthArrowController::headingChanged()
-  \brief Emitted when the heading changes.
- */
+    return static_cast<double>(NAN);
+  }
 
-/*!
-  \property Esri::ArcGISRuntime::Toolkit::NorthArrowController::geoView
- */
+  /*!
+    \brief Returns the \c GeoView as a \c QObject.
+   */
+  QObject* NorthArrowController::geoView() const
+  {
+    return m_geoView;
+  }
 
-/*!
-  \property Esri::ArcGISRuntime::Toolkit::NorthArrowController::heading
- */
+  /*!
+    \brief Set the \c GeoView object this Controller uses.
+
+    Internally this is cast to a \c MapView or SceneView using \c qobject_cast,
+    which is why the paremeter is of form \c QObject and not \c GeoView.
+
+    \list
+      \li \a geoView Object which must inherit from \c GeoView* and \c QObject*.
+    \endlist
+  */
+  void NorthArrowController::setGeoView(QObject* geoView)
+  {
+    if (geoView == m_geoView)
+      return;
+
+    if (m_geoView)
+    {
+      disconnect(m_geoView, nullptr, this, nullptr);
+    }
+
+    m_geoView = geoView;
+
+    if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
+    {
+      connect(mapView, &MapViewToolkit::mapRotationChanged,
+              this, &NorthArrowController::headingChanged);
+    }
+    else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+    {
+      connect(sceneView, &SceneViewToolkit::viewpointChanged,
+              this, &NorthArrowController::headingChanged);
+    }
+
+    emit geoViewChanged();
+  }
+
+  /*!
+    \fn void Esri::ArcGISRuntime::Toolkit::NorthArrowController::geoViewChanged()
+    \brief Emitted when the geoView changes.
+   */
+
+  /*!
+    \fn void Esri::ArcGISRuntime::Toolkit::NorthArrowController::headingChanged()
+    \brief Emitted when the heading changes.
+   */
+
+  /*!
+    \property Esri::ArcGISRuntime::Toolkit::NorthArrowController::geoView
+   */
+
+  /*!
+    \property Esri::ArcGISRuntime::Toolkit::NorthArrowController::heading
+   */
 
 } // Toolkit
 } // ArcGISRuntime
