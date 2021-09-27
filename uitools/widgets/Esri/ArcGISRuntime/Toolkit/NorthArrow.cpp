@@ -25,6 +25,7 @@
 // Qt headers
 #include <QMouseEvent>
 
+
 namespace Esri
 {
 namespace ArcGISRuntime
@@ -57,7 +58,8 @@ NorthArrow::NorthArrow(QWidget* parent) :
 
   if (!m_image.isNull())
   {
-    this->setPixmap(m_image);
+    const QSize defaultSize(48,48);
+    this->setPixmap(m_image.scaled(defaultSize, Qt::IgnoreAspectRatio));
   }
 
   connect(m_controller, &NorthArrowController::headingChanged, this, [this]()
