@@ -42,6 +42,7 @@ namespace Toolkit
   \c Camera heading of the \c SceneView. 
   Double-clicking on the \c NorthArrow triggers the heading of the connected
   \c GeoView to be orientated to 0 (North).
+  \note default width and height is 48.
  */
 
 /*!
@@ -56,6 +57,7 @@ NorthArrow::NorthArrow(QWidget* parent) :
 {
   m_image = QPixmap(":/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/compass.png");
   setAttribute(Qt::WA_TranslucentBackground);
+    
   if (!m_image.isNull())
   {
     const QSize defaultSize(48,48);
