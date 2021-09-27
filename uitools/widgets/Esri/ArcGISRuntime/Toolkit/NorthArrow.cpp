@@ -42,6 +42,7 @@ namespace Toolkit
   \c Camera heading of the \c SceneView. 
   Double-clicking on the \c NorthArrow triggers the heading of the connected
   \c GeoView to be orientated to 0 (North).
+  \note default width and height is 48.
  */
 
 /*!
