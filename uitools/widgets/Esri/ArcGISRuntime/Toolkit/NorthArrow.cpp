@@ -56,7 +56,8 @@ NorthArrow::NorthArrow(QWidget* parent) :
   m_controller(new NorthArrowController(this))
 {
   m_image = QPixmap(":/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/compass.png");
-
+  setAttribute(Qt::WA_TranslucentBackground);
+    
   if (!m_image.isNull())
   {
     const QSize defaultSize(48,48);
