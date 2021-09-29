@@ -184,7 +184,7 @@ namespace Toolkit {
         {
           auto vp = sceneView->currentViewpoint(ViewpointType::CenterAndScale);
           setQueryCenter(vp.targetGeometry());
-          setQueryArea(vp.targetGeometry());
+          setQueryArea({});
 
           if (sceneView->isNavigating())
           {
