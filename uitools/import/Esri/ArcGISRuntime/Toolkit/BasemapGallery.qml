@@ -200,7 +200,7 @@ Pane {
             enabled: controller.basemapMatchesCurrentSpatialReference(modelData.basemap)
             ToolTip.visible: allowTooltips && mouseArea.containsMouse && modelData.tooltip !== ""
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval * 2
-            ToolTip.text: modelData.tooltip
+            ToolTip.text: modelData.tooltip.replace(/(<([^>]+)>)/ig," ").replace(/\s+/g," ")    // html tags removed using regex (links dont work in tooltips)
             GridLayout {
                 anchors.fill: parent
                 anchors.margins: 8
