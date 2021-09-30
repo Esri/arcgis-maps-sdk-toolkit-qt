@@ -19,6 +19,8 @@
 
 #include <QMetaProperty>
 #include <QPointer>
+#include <QPixmap>
+#include "Esri/ArcGISRuntime/Toolkit/BasemapGalleryItem.h"
 
 namespace Esri {
 namespace ArcGISRuntime {
@@ -135,6 +137,8 @@ namespace Toolkit {
               const auto offset = m_elementType->propertyOffset();
               if (roles.contains(m_displayPropIndex - offset + Qt::UserRole + 1))
                 emit dataChanged(topLeft, bottomRight, QVector<int>() << Qt::DisplayRole << Qt::EditRole);
+              if (roles.contains(m_ImagePropIndex - offset + Qt::UserRole + 1))
+                emit dataChanged(topLeft, bottomRight, QVector<int>() << Qt::DecorationRole);
             });
   }
 
@@ -197,6 +201,12 @@ namespace Toolkit {
       const auto property = m_elementType->property(m_displayPropIndex);
       return property.read(o);
     }
+    else if(role == Qt::DecorationRole){
+      const auto property = m_elementType->property(m_ImagePropIndex);
+      auto p = property.read(o);
+      return p;
+    }
+
     else if (role == Qt::UserRole)
     {
       return QVariant::fromValue(o);
@@ -480,6 +490,9 @@ namespace Toolkit {
     m_displayPropIndex = m_elementType->indexOfProperty(propertyName.toLatin1());
   }
 
+  void GenericListModel::setImagePropertyName(const QString& propertyName){
+     m_ImagePropIndex = m_elementType->indexOfProperty(propertyName.toLatin1());
+  }
   /*!
   \brief Returns the name of the property which has been elevated to be used
   as the \c Qt::DisplayRole and Qt::EditRole in this model.
