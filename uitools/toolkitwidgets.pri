@@ -31,7 +31,8 @@ HEADERS += $$WIDGETPATH/AuthenticationView.h \
            $$WIDGETPATH/Internal/SslHandshakeView.h \
            $$WIDGETPATH/Internal/UserCredentialView.h \
            $$WIDGETPATH/NorthArrow.h \
-           $$WIDGETPATH/OverviewMap.h
+           $$WIDGETPATH/OverviewMap.h \
+           $$WIDGETPATH/BasemapGallery.h
 
 SOURCES += $$WIDGETPATH/AuthenticationView.cpp \
            $$WIDGETPATH/CoordinateConversion.cpp \
@@ -43,7 +44,8 @@ SOURCES += $$WIDGETPATH/AuthenticationView.cpp \
            $$WIDGETPATH/Internal/SslHandshakeView.cpp \
            $$WIDGETPATH/Internal/UserCredentialView.cpp \
            $$WIDGETPATH/NorthArrow.cpp \
-           $$WIDGETPATH/OverviewMap.cpp
+           $$WIDGETPATH/OverviewMap.cpp \
+           $$WIDGETPATH/BasemapGallery.cpp
 
 FORMS += $$WIDGETPATH/AuthenticationView.ui \
          $$WIDGETPATH/Internal/ClientCertificatePasswordDialog.ui \
@@ -52,4 +54,5 @@ FORMS += $$WIDGETPATH/AuthenticationView.ui \
          $$WIDGETPATH/Internal/SslHandshakeView.ui \
          $$WIDGETPATH/Internal/UserCredentialView.ui \
          $$WIDGETPATH/CoordinateConversion.ui \
-         $$WIDGETPATH/OverviewMap.ui
+         $$WIDGETPATH/OverviewMap.ui \
+         $$WIDGETPATH/BasemapGallery.ui
