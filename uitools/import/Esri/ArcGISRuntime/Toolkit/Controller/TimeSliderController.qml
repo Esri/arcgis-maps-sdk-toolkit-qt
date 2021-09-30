@@ -185,6 +185,12 @@ QtObject {
             function onOperationalLayersChanged() {
                 internal.initializeTimeProperties();
             }
+
+            function onLoadStatusChanged() {
+                if ((geoView.scene ?? geoView.map).loadStatus !== Enums.LoadStatusLoaded)
+                    return;
+                internal.initializeTimeProperties();
+            }
         }
 
         // Grabs the operational layers from the geoview.
