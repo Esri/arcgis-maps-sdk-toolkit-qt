@@ -206,7 +206,11 @@ namespace Toolkit {
       auto p = property.read(o);
       return p;
     }
-
+    else if(role == Qt::ToolTipRole){
+      const auto property = m_elementType->property(m_tooltipPropIndex);
+      auto p = property.read(o);
+      return p;
+    }
     else if (role == Qt::UserRole)
     {
       return QVariant::fromValue(o);
@@ -492,6 +496,10 @@ namespace Toolkit {
 
   void GenericListModel::setDecorationPropertyName(const QString& propertyName){
      m_decorationPropIndex = m_elementType->indexOfProperty(propertyName.toLatin1());
+  }
+
+  void GenericListModel::setTooltipPropertyName(const QString& propertyName){
+    m_tooltipPropIndex = m_elementType->indexOfProperty(propertyName.toLatin1());
   }
   /*!
   \brief Returns the name of the property which has been elevated to be used
