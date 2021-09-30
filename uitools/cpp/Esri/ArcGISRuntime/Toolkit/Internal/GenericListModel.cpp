@@ -137,7 +137,7 @@ namespace Toolkit {
               const auto offset = m_elementType->propertyOffset();
               if (roles.contains(m_displayPropIndex - offset + Qt::UserRole + 1))
                 emit dataChanged(topLeft, bottomRight, QVector<int>() << Qt::DisplayRole << Qt::EditRole);
-              if (roles.contains(m_ImagePropIndex - offset + Qt::UserRole + 1))
+              if (roles.contains(m_decorationPropIndex - offset + Qt::UserRole + 1))
                 emit dataChanged(topLeft, bottomRight, QVector<int>() << Qt::DecorationRole);
             });
   }
@@ -202,7 +202,7 @@ namespace Toolkit {
       return property.read(o);
     }
     else if(role == Qt::DecorationRole){
-      const auto property = m_elementType->property(m_ImagePropIndex);
+      const auto property = m_elementType->property(m_decorationPropIndex);
       auto p = property.read(o);
       return p;
     }
@@ -490,8 +490,8 @@ namespace Toolkit {
     m_displayPropIndex = m_elementType->indexOfProperty(propertyName.toLatin1());
   }
 
-  void GenericListModel::setImagePropertyName(const QString& propertyName){
-     m_ImagePropIndex = m_elementType->indexOfProperty(propertyName.toLatin1());
+  void GenericListModel::setDecorationPropertyName(const QString& propertyName){
+     m_decorationPropIndex = m_elementType->indexOfProperty(propertyName.toLatin1());
   }
   /*!
   \brief Returns the name of the property which has been elevated to be used

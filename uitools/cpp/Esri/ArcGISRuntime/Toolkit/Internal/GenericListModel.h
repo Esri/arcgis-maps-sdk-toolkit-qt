@@ -45,7 +45,9 @@ public:
   const QMetaObject* elementType() const;
 
   void setDisplayPropertyName(const QString& propertyName);
-  void setImagePropertyName(const QString& propertyName);
+
+  void setDecorationPropertyName(const QString& propertyName);
+
   QString displayPropertyName();
 
   int rowCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -88,7 +90,7 @@ private:
 
 private:
   int m_displayPropIndex = -1;
-  int m_ImagePropIndex = -1;
+  int m_decorationPropIndex = -1;
   const QMetaObject* m_elementType = nullptr;
   QList<QObject*> m_objects;
 };
