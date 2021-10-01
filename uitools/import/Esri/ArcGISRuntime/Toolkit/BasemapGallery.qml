@@ -246,6 +246,34 @@ Pane {
                 anchors.fill: parent
                 hoverEnabled: true
                 onClicked: controller.setCurrentBasemap(modelData.basemap)
+
+                // When mouse enters thumbnail area, use timer to delay showing of tooltip.
+                onEntered: {
+                    timerOnEntered.start();
+                }
+                // When mouse exits thumbnail area, use timer to delay hiding of tooltip.
+                onExited: {
+                    timerOnExited.start();
+                }
+
+                Timer {
+                    id: timerOnEntered
+                    interval: 1000
+                    repeat: false
+                    onTriggered: {
+                        if (allowTooltips && mouseArea.containsMouse && modelData.tooltip !== "")
+                            basemapDelegate.ToolTip.visible = true;
+                    }
+                }
+
+                Timer {
+                    id: timerOnExited
+                    interval: 1000
+                    repeat: false
+                    onTriggered: {
+                        basemapDelegate.ToolTip.visible = false;
+                    }
+                }
             }
         }
         highlightFollowsCurrentItem: false
