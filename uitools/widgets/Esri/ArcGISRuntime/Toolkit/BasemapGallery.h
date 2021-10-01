@@ -2,7 +2,8 @@
 #define ESRI_ARCGISRUNTIME_BASEMAPGALLERY_H
 
 #include <QFrame>
-
+#include "Basemap.h"
+#include "BasemapGalleryController.h"
 namespace Ui {
 class BasemapGallery;
 }
@@ -17,17 +18,16 @@ class BasemapGallery : public QFrame
   Q_OBJECT
 
 public:
-  explicit BasemapGallery(QWidget *parent = nullptr);
+  explicit BasemapGallery(GeoModel* basemap, QWidget *parent = nullptr);
   ~BasemapGallery();
 
   BasemapGalleryController* controller() const;
-  //DEBUG
-  void tests(){
-    qDebug("signal called");
-  }
+
+  void clickedItem(const QModelIndex &index);
 private:
   BasemapGalleryController* m_controller = nullptr;
   Ui::BasemapGallery *m_ui;
+  Basemap* _currentBasemap = nullptr;
 };
 
 
