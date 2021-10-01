@@ -16,11 +16,11 @@ BasemapGallery::BasemapGallery(QWidget *parent) :
   m_ui->listView->setModel(model);
   model->setDisplayPropertyName("name");
   model->setDecorationPropertyName("thumbnail");
-  //connect(m_controller, &BasemapGalleryController::currentBasemapChanged, this, &BasemapGallery::tests);
-
+  model->setTooltipPropertyName("tooltip");
   //delegate
 
   //signal-slots
+  connect(m_ui->listView, &QListView::clicked, this, &BasemapGallery::tests);
   }
 
   BasemapGallery::~BasemapGallery()
