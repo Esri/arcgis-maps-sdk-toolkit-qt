@@ -23,11 +23,12 @@ public:
 
   BasemapGalleryController* controller() const;
 
+  //signals
   void clickedItem(const QModelIndex &index);
+
 private:
   BasemapGalleryController* m_controller = nullptr;
   Ui::BasemapGallery *m_ui;
-  Basemap* _currentBasemap = nullptr;
 };
 
 

@@ -43,7 +43,6 @@ BasemapGallery::BasemapGallery(GeoModel* geomodel, QWidget *parent) :
    **/
   void BasemapGallery::clickedItem(const QModelIndex &index){
     QObject* qvar = m_controller->gallery()->element(index);
-        //data(index, Qt::UserRole);
     BasemapGalleryItem* item = qobject_cast<BasemapGalleryItem*>(qvar);
     //setting the basemap calculated from the current index. this will also modify the geoview
     m_controller->setCurrentBasemap(item->basemap());
