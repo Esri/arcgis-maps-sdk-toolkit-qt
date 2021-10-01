@@ -195,12 +195,17 @@ Pane {
         currentIndex: controller.basemapIndex(controller.currentBasemap)
         ScrollBar.vertical: ScrollBar { }
         delegate: Item {
+            id: basemapDelegate
             width: view.cellWidth
             height: view.cellHeight
             enabled: controller.basemapMatchesCurrentSpatialReference(modelData.basemap)
-            ToolTip.visible: allowTooltips && mouseArea.containsMouse && modelData.tooltip !== ""
-            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval * 2
-            ToolTip.text: modelData.tooltip.replace(/(<([^>]+)>)/ig," ").replace(/\s+/g," ")    // html tags removed using regex (links dont work in tooltips)
+            Connections {
+                target: basemapDelegate.ToolTip.toolTip.contentItem
+                enabled: basemapDelegate.ToolTip.visible
+                function onLinkActivated(link){Qt.openUrlExternally(link)}
+            }
+            ToolTip.text: modelData.tooltip
+
             GridLayout {
                 anchors.fill: parent
                 anchors.margins: 8
