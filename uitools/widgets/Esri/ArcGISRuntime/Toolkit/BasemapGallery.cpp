@@ -29,12 +29,6 @@ namespace Toolkit {
     GenericListModel* model = m_controller->gallery();
     m_ui->listView->setModel(model);
 
-    /*have to set the property names, so the controller will know how to match the properties from
-    basemapgalleryitem with the specific Qt::<namespace> invoked in the .data() from the View (ListView) obj*/
-    model->setDisplayPropertyName("name");
-    model->setDecorationPropertyName("thumbnail");
-    model->setTooltipPropertyName("tooltip");
-
     //signal-slots
     connect(m_ui->listView, &QListView::clicked, this, &BasemapGallery::clickedItem);
   }
