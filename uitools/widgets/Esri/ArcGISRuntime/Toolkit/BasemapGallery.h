@@ -13,8 +13,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#ifndef ESRI_ARCGISRUNTIME_BASEMAPGALLERY_H
-#define ESRI_ARCGISRUNTIME_BASEMAPGALLERY_H
+#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_BASEMAPGALLERY_H
+#define ESRI_ARCGISRUNTIME_TOOLKIT_BASEMAPGALLERY_H
 
 #include "Basemap.h"
 #include "BasemapGalleryController.h"
@@ -34,9 +34,10 @@ namespace Toolkit {
     Q_OBJECT
 
   public:
-    explicit BasemapGallery(QWidget* parent = nullptr);
-    explicit BasemapGallery(GeoModel* basemap, QWidget* parent = nullptr);
-    ~BasemapGallery();
+    Q_INVOKABLE explicit BasemapGallery(QWidget* parent = nullptr);
+    Q_INVOKABLE explicit BasemapGallery(GeoModel* basemap, QWidget* parent = nullptr);
+
+    ~BasemapGallery() override;
 
     BasemapGalleryController* controller() const;
     void setGeoModel(GeoModel* geomodel);
