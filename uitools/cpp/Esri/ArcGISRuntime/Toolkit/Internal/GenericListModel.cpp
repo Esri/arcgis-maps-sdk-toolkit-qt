@@ -520,6 +520,34 @@ namespace Toolkit {
   }
 
   /*!
+  \brief Returns the name of the property which has been elevated to be used
+  as the \c Qt::DecorationRole in this model.
+  
+  Returns name of property.
+          */
+  QString GenericListModel::decorationPropertyName()
+  {
+    if (m_decorationPropIndex < 0)
+      return "";
+
+    return m_elementType->property(m_decorationPropIndex).name();
+  }
+
+  /*!
+  \brief Returns the name of the property which has been elevated to be used
+  as the \c Qt::ToolTipRole in this model.
+  
+  Returns name of property.
+          */
+  QString GenericListModel::tooltipPropertyName()
+  {
+    if (m_tooltipPropIndex < 0)
+      return "";
+
+    return m_elementType->property(m_tooltipPropIndex).name();
+  }
+
+  /*!
   \brief Helper function append an additional object to this list.
   
   The append will fail if \a object is null.

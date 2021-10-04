@@ -46,11 +46,15 @@ public:
 
   void setDisplayPropertyName(const QString& propertyName);
 
+  QString displayPropertyName();
+
   void setDecorationPropertyName(const QString& propertyName);
+
+  QString decorationPropertyName();
 
   void setTooltipPropertyName(const QString& propertyName);
 
-  QString displayPropertyName();
+  QString tooltipPropertyName();
 
   int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 
