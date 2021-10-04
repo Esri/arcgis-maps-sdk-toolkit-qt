@@ -19,8 +19,6 @@
 
 #include <QMetaProperty>
 #include <QPointer>
-#include <QPixmap>
-#include "Esri/ArcGISRuntime/Toolkit/BasemapGalleryItem.h"
 
 namespace Esri {
 namespace ArcGISRuntime {
@@ -119,7 +117,7 @@ namespace Toolkit {
 
     // We connect to our own `dataChanged` signal. We test to see if the properties
     // that are updating are also the same properties associated with our
-    // Qt::DisplayRole and Qt::EditRole. If so then we need to emit dataChanged
+    // Qt::DisplayRole and Qt::EditRole or Qt::DecorationRole or Qt::ToolTipRole. If so then we need to emit dataChanged
     // for these roles as well if they are not already emitting.
     connect(this, &GenericListModel::dataChanged, this,
             [this](const QModelIndex& topLeft, const QModelIndex& bottomRight,
@@ -139,6 +137,8 @@ namespace Toolkit {
                 emit dataChanged(topLeft, bottomRight, QVector<int>() << Qt::DisplayRole << Qt::EditRole);
               if (roles.contains(m_decorationPropIndex - offset + Qt::UserRole + 1))
                 emit dataChanged(topLeft, bottomRight, QVector<int>() << Qt::DecorationRole);
+              if (roles.contains(m_tooltipPropIndex - offset + Qt::UserRole + 1))
+                emit dataChanged(topLeft, bottomRight, QVector<int>() << Qt::ToolTipRole);
             });
   }
 
@@ -201,12 +201,14 @@ namespace Toolkit {
       const auto property = m_elementType->property(m_displayPropIndex);
       return property.read(o);
     }
-    else if(role == Qt::DecorationRole){
+    else if (role == Qt::DecorationRole)
+    {
       const auto property = m_elementType->property(m_decorationPropIndex);
       auto p = property.read(o);
       return p;
     }
-    else if(role == Qt::ToolTipRole){
+    else if (role == Qt::ToolTipRole)
+    {
       const auto property = m_elementType->property(m_tooltipPropIndex);
       auto p = property.read(o);
       return p;
@@ -494,11 +496,13 @@ namespace Toolkit {
     m_displayPropIndex = m_elementType->indexOfProperty(propertyName.toLatin1());
   }
 
-  void GenericListModel::setDecorationPropertyName(const QString& propertyName){
-     m_decorationPropIndex = m_elementType->indexOfProperty(propertyName.toLatin1());
+  void GenericListModel::setDecorationPropertyName(const QString& propertyName)
+  {
+    m_decorationPropIndex = m_elementType->indexOfProperty(propertyName.toLatin1());
   }
 
-  void GenericListModel::setTooltipPropertyName(const QString& propertyName){
+  void GenericListModel::setTooltipPropertyName(const QString& propertyName)
+  {
     m_tooltipPropIndex = m_elementType->indexOfProperty(propertyName.toLatin1());
   }
   /*!
