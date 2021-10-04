@@ -103,7 +103,7 @@ QtObject {
       \brief The mode which dictates how results are displayed.
 
       With \c{Automatic},
-      if only a single result is found then this is automatically set as the selected result, otherwise when the is more than
+      if only a single result is found, then this is automatically set as the selected result. Otherwise when there is more than
       one possible result then the \l results property is populated with all possible results.
 
       With \c{Multiple}, the \l results property is
