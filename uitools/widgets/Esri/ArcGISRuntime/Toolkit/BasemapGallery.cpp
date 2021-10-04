@@ -70,13 +70,9 @@ namespace Toolkit {
     return m_controller->geoModel();
   }
 
-  /*slot used to receive the clicked event on the listview
-   *
-   **/
   void BasemapGallery::clickedItem(const QModelIndex& index)
   {
-    QObject* qvar = m_controller->gallery()->element(index);
-    BasemapGalleryItem* item = qobject_cast<BasemapGalleryItem*>(qvar);
+    BasemapGalleryItem* item = m_controller->gallery()->element<BasemapGalleryItem>(index);
     //setting the basemap calculated from the current index. this will also modify the geoview
     m_controller->setCurrentBasemap(item->basemap());
   }
