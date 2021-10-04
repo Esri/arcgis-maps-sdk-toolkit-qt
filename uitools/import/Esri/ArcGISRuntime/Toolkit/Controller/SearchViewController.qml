@@ -226,7 +226,7 @@ QtObject {
       \brief Flag for whether automatic configuration is enabled or not.
        Determines whether the view will update its configuration based on the attached
        geoview's geomodel automatically. This includes such properties as \l queryCenter,
-       \l queryArea, and \l isEligableForRequery.
+       \l queryArea, and \l eligableForRequery.
 
        Defaults to true.
      */
