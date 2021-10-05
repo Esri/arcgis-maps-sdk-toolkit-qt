@@ -510,7 +510,7 @@ namespace Toolkit {
   as the \c Qt::DisplayRole and Qt::EditRole in this model.
   
   Returns name of property.
-  */
+ */
   QString GenericListModel::displayPropertyName()
   {
     if (m_displayPropIndex < 0)
@@ -524,7 +524,7 @@ namespace Toolkit {
   as the \c Qt::DecorationRole in this model.
   
   Returns name of property.
-          */
+ */
   QString GenericListModel::decorationPropertyName()
   {
     if (m_decorationPropIndex < 0)
@@ -538,7 +538,7 @@ namespace Toolkit {
   as the \c Qt::ToolTipRole in this model.
   
   Returns name of property.
-          */
+ */
   QString GenericListModel::tooltipPropertyName()
   {
     if (m_tooltipPropIndex < 0)

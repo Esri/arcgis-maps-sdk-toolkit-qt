@@ -70,6 +70,8 @@ namespace Toolkit {
   {
     m_controller->setCurrentBasemap(geomodel->basemap());
     m_controller->setGeoModel(geomodel);
+    //highlight the intial one
+    QString basemapName = geomodel->basemap()->name();
   }
 
   /*!
@@ -89,8 +91,8 @@ namespace Toolkit {
   }
 
   /*!
-    \brief Setting the controller currentbasemap and geomodel.
-    \a geomodel Geomodel
+    \brief Sets the \a geomodel used by the controller/ This will reset the active basemap
+    \sa currentBasemap
    */
   void BasemapGallery::setGeoModel(GeoModel* geomodel)
   {
@@ -105,12 +107,12 @@ namespace Toolkit {
     \brief Getter of current \c GeoModel .
     returns \c GeoModel stored in the model managed by the controller.
    */
-  GeoModel* BasemapGallery::getCurrentGeoModel()
+  GeoModel* BasemapGallery::geoModel()
   {
     return m_controller->geoModel();
   }
 
-/*!
+  /*!
   \brief Slot that sets the current basemap with \a index.
   Once linked to the clicked Listview event, receives \c QModelIndex \a index and uses it
   to set its basemap into the controller.

@@ -16,11 +16,12 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_BASEMAPGALLERY_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_BASEMAPGALLERY_H
 
-#include "Basemap.h"
 #include "BasemapGalleryController.h"
 
 #include <QFrame>
+
 namespace Ui {
+
   class BasemapGallery;
 }
 
@@ -35,13 +36,13 @@ namespace Toolkit {
 
   public:
     Q_INVOKABLE explicit BasemapGallery(QWidget* parent = nullptr);
-    Q_INVOKABLE explicit BasemapGallery(GeoModel* basemap, QWidget* parent = nullptr);
+    Q_INVOKABLE explicit BasemapGallery(GeoModel* geoModel, QWidget* parent = nullptr);
 
     ~BasemapGallery() override;
 
     BasemapGalleryController* controller() const;
     void setGeoModel(GeoModel* geomodel);
-    GeoModel* getCurrentGeoModel();
+    GeoModel* geoModel();
 
     //signals
     void clickedItem(const QModelIndex& index);

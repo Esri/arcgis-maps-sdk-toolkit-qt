@@ -299,8 +299,8 @@ namespace Toolkit {
             });
 
     setToDefaultBasemaps(this, m_portal);
-    //have to set the property names, so the controller will know how to match the properties from
-    //basemapgalleryitem with the specific Qt::<namespace> invoked in the .data() from the View (ListView) obj
+    // Have to set the property names, so the controller will know how to match the properties from
+    // basemapgalleryitem with the specific Qt::<namespace> invoked in the .data() from the View (ListView) obj
     m_gallery->setDisplayPropertyName("name");
     m_gallery->setDecorationPropertyName("thumbnail");
     m_gallery->setTooltipPropertyName("tooltip");
