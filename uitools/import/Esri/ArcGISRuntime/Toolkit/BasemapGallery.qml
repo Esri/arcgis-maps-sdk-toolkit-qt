@@ -250,29 +250,23 @@ Pane {
                 onClicked: controller.setCurrentBasemap(modelData.basemap)
 
                 // When mouse enters thumbnail area, use timer to delay showing of tooltip.
-                onEntered: timerOnEntered.start();
+                onEntered: {
+                    // Create a definition for the showTooltipFn property of timerOnEntered
+                    timerOnEntered.showTooltipFn = () => {
+                        if (allowTooltips && mouseArea.containsMouse && modelData.tooltip !== "")
+                            basemapDelegate.ToolTip.visible = true;
+                    }
+                    timerOnEntered.start();
+                }
 
                 // When mouse exits thumbnail area, use timer to delay hiding of tooltip.
                 onExited: {
                     timerOnEntered.stop();
-                    timerOnExited.start();
-                }
-
-                Timer {
-                    id: timerOnEntered
-                    interval: Qt.styleHints.mousePressAndHoldInterval * 2
-                    repeat: false
-                    onTriggered: {
-                        if (allowTooltips && mouseArea.containsMouse && modelData.tooltip !== "")
-                            basemapDelegate.ToolTip.visible = true;
+                    // Create a definition for the hideTooltipFn property of timerOnExited
+                    timerOnExited.hideTooltipFn = () => {
+                        basemapDelegate.ToolTip.visible = false;
                     }
-                }
-
-                Timer {
-                    id: timerOnExited
-                    interval: Qt.styleHints.mousePressAndHoldInterval * 1.9
-                    repeat: false
-                    onTriggered: basemapDelegate.ToolTip.visible = false;
+                    timerOnExited.start();
                 }
             }
         }
@@ -286,6 +280,26 @@ Pane {
             color: palette.highlight
             radius: 5
         }
+    }
+
+    Timer {
+        id: timerOnEntered
+
+        property var showTooltipFn: null;
+
+        interval: Qt.styleHints.mousePressAndHoldInterval * 2
+        repeat: false
+        onTriggered: showTooltipFn();
+    }
+
+    Timer {
+        id: timerOnExited
+
+        property var hideTooltipFn: null;
+
+        interval: Qt.styleHints.mousePressAndHoldInterval * 1.9
+        repeat: false
+        onTriggered: hideTooltipFn();
     }
 
     property QtObject internal: QtObject {
