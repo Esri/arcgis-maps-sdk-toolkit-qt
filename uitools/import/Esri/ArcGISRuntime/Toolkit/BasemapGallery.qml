@@ -303,7 +303,7 @@ Pane {
         interval: Qt.styleHints.mousePressAndHoldInterval * 1.9
         repeat: false
         onTriggered: {
-            if (hideTooltipFn())
+            if (hideTooltipFn)
                 hideTooltipFn();
         }
     }
