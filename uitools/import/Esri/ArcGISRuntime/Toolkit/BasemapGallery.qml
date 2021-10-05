@@ -195,12 +195,19 @@ Pane {
         currentIndex: controller.basemapIndex(controller.currentBasemap)
         ScrollBar.vertical: ScrollBar { }
         delegate: Item {
+            id: basemapDelegate
             width: view.cellWidth
             height: view.cellHeight
             enabled: controller.basemapMatchesCurrentSpatialReference(modelData.basemap)
-            ToolTip.visible: allowTooltips && mouseArea.containsMouse && modelData.tooltip !== ""
-            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval * 2
+            Connections {
+                target: basemapDelegate.ToolTip.toolTip.contentItem
+                enabled: basemapDelegate.ToolTip.visible
+                function onLinkActivated(link) {
+                    Qt.openUrlExternally(link)
+                }
+            }
             ToolTip.text: modelData.tooltip
+
             GridLayout {
                 anchors.fill: parent
                 anchors.margins: 8
@@ -241,6 +248,26 @@ Pane {
                 anchors.fill: parent
                 hoverEnabled: true
                 onClicked: controller.setCurrentBasemap(modelData.basemap)
+
+                // When mouse enters thumbnail area, use timer to delay showing of tooltip.
+                onEntered: {
+                    // Create a definition for the showTooltipFn property of timerOnEntered
+                    timerOnEntered.showTooltipFn = () => {
+                        if (allowTooltips && mouseArea.containsMouse && modelData.tooltip !== "")
+                            basemapDelegate.ToolTip.visible = true;
+                    }
+                    timerOnEntered.start();
+                }
+
+                // When mouse exits thumbnail area, use timer to delay hiding of tooltip.
+                onExited: {
+                    timerOnEntered.stop();
+                    // Create a definition for the hideTooltipFn property of timerOnExited
+                    timerOnExited.hideTooltipFn = () => {
+                        basemapDelegate.ToolTip.visible = false;
+                    }
+                    timerOnExited.start();
+                }
             }
         }
         highlightFollowsCurrentItem: false
@@ -252,6 +279,32 @@ Pane {
             height: view.cellHeight
             color: palette.highlight
             radius: 5
+        }
+    }
+
+    Timer {
+        id: timerOnEntered
+
+        property var showTooltipFn: null;
+
+        interval: Qt.styleHints.mousePressAndHoldInterval * 2
+        repeat: false
+        onTriggered: {
+            if (showTooltipFn)
+                showTooltipFn();
+        }
+    }
+
+    Timer {
+        id: timerOnExited
+
+        property var hideTooltipFn: null;
+
+        interval: Qt.styleHints.mousePressAndHoldInterval * 1.9
+        repeat: false
+        onTriggered: {
+            if (hideTooltipFn())
+                hideTooltipFn();
         }
     }
 
