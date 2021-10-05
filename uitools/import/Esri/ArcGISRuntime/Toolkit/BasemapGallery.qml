@@ -202,7 +202,9 @@ Pane {
             Connections {
                 target: basemapDelegate.ToolTip.toolTip.contentItem
                 enabled: basemapDelegate.ToolTip.visible
-                function onLinkActivated(link){Qt.openUrlExternally(link)}
+                function onLinkActivated(link){
+                    Qt.openUrlExternally(link)
+                }
             }
             ToolTip.text: modelData.tooltip
 
@@ -248,17 +250,17 @@ Pane {
                 onClicked: controller.setCurrentBasemap(modelData.basemap)
 
                 // When mouse enters thumbnail area, use timer to delay showing of tooltip.
-                onEntered: {
-                    timerOnEntered.start();
-                }
+                onEntered: timerOnEntered.start();
+
                 // When mouse exits thumbnail area, use timer to delay hiding of tooltip.
                 onExited: {
+                    timerOnEntered.stop();
                     timerOnExited.start();
                 }
 
                 Timer {
                     id: timerOnEntered
-                    interval: 1000
+                    interval: Qt.styleHints.mousePressAndHoldInterval * 2
                     repeat: false
                     onTriggered: {
                         if (allowTooltips && mouseArea.containsMouse && modelData.tooltip !== "")
@@ -268,11 +270,9 @@ Pane {
 
                 Timer {
                     id: timerOnExited
-                    interval: 1000
+                    interval: Qt.styleHints.mousePressAndHoldInterval * 1.9
                     repeat: false
-                    onTriggered: {
-                        basemapDelegate.ToolTip.visible = false;
-                    }
+                    onTriggered: basemapDelegate.ToolTip.visible = false;
                 }
             }
         }
