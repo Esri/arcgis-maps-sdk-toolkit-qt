@@ -113,6 +113,7 @@ namespace Toolkit {
   }
 
   /*!
+  \internal
   \brief Slot that sets the current basemap with \a index.
   Once linked to the clicked Listview event, receives \c QModelIndex \a index and uses it
   to set its basemap into the controller.

@@ -44,7 +44,7 @@ namespace Toolkit {
     void setGeoModel(GeoModel* geomodel);
     GeoModel* geoModel();
 
-    //signals
+  private slots:
     void clickedItem(const QModelIndex& index);
 
   private:
