@@ -70,8 +70,9 @@ namespace Toolkit {
   {
     m_controller->setCurrentBasemap(geomodel->basemap());
     m_controller->setGeoModel(geomodel);
+    //set slot for inital basemap loaded
+    connect(geomodel->basemap(), &Basemap::doneLoading, this, &BasemapGallery::initialBasemapLoaded);
     //highlight the intial one
-    QString basemapName = geomodel->basemap()->name();
   }
 
   /*!
@@ -123,6 +124,24 @@ namespace Toolkit {
     BasemapGalleryItem* item = m_controller->gallery()->element<BasemapGalleryItem>(index);
     //setting the basemap calculated from the current index. this will also modify the geoview
     m_controller->setCurrentBasemap(item->basemap());
+  }
+
+  //assuming currentbasemap in controller is initial one
+  void BasemapGallery::initialBasemapLoaded()
+  {
+    Basemap* initial = m_controller->currentBasemap();
+    auto model = m_controller->gallery();
+    qDebug() << model->rowCount();
+    auto index = model->index(2, 0);
+    if (index.isValid())
+      m_ui->listView->selectionModel()->select(index, QItemSelectionModel::Select);
+
+    //    for(int i = 0; i < model->rowCount(); ++i){
+    //      auto index = model->index(i, 0);
+    //      if ( index.isValid() )
+    //        m_ui->listView->selectionModel()->select(index, QItemSelectionModel::Select);
+    //        model->selectionModel()->select( index, QItemSelectionModel::Select );
+    //    }
   }
 } //Toolkit
 } //ArcGISRuntime

@@ -46,6 +46,7 @@ namespace Toolkit {
 
   private slots:
     void clickedItem(const QModelIndex& index);
+    void initialBasemapLoaded();
 
   private:
     BasemapGalleryController* m_controller = nullptr;
