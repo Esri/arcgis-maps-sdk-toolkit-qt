@@ -202,7 +202,7 @@ Pane {
             Connections {
                 target: basemapDelegate.ToolTip.toolTip.contentItem
                 enabled: basemapDelegate.ToolTip.visible
-                function onLinkActivated(link){
+                function onLinkActivated(link) {
                     Qt.openUrlExternally(link)
                 }
             }
@@ -289,7 +289,10 @@ Pane {
 
         interval: Qt.styleHints.mousePressAndHoldInterval * 2
         repeat: false
-        onTriggered: showTooltipFn();
+        onTriggered: {
+            if (showTooltipFn)
+                showTooltipFn();
+        }
     }
 
     Timer {
@@ -299,7 +302,10 @@ Pane {
 
         interval: Qt.styleHints.mousePressAndHoldInterval * 1.9
         repeat: false
-        onTriggered: hideTooltipFn();
+        onTriggered: {
+            if (hideTooltipFn())
+                hideTooltipFn();
+        }
     }
 
     property QtObject internal: QtObject {
