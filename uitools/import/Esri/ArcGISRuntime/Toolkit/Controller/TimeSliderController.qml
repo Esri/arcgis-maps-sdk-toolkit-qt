@@ -147,8 +147,10 @@ QtObject {
         const startMS = extent.startTime.getTime();
         const s = new Date(startMS + startStep * intervalMS);
         const e = new Date(startMS + endStep * intervalMS);
-        geoView.timeExtent = ArcGISRuntimeEnvironment.createObject(
+        const timeExtent = ArcGISRuntimeEnvironment.createObject(
                     "TimeExtent", { startTime: s, endTime: e });
+                    
+        geoView.timeExtent = timeExtent;            
         stepsChanged();
     }
 
