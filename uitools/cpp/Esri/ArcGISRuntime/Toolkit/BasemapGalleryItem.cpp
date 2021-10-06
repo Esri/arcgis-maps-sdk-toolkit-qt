@@ -116,7 +116,8 @@ BasemapGalleryItem::BasemapGalleryItem(Basemap* basemap, QImage thumbnail, QStri
   QObject(parent),
   m_thumbnail{std::move(thumbnail)},
   m_tooltip{std::move(tooltip)},
-  m_id{QUuid::createUuid()}
+  m_id{QUuid::createUuid()},
+  m_flags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemNeverHasChildren)
 {
   registerItem(this);
   connect(this, &BasemapGalleryItem::basemapChanged, this, &BasemapGalleryItem::thumbnailChanged);
@@ -285,6 +286,16 @@ void BasemapGalleryItem::setTooltipOverride(QString tooltip)
 
   m_tooltip = std::move(tooltip);
   emit tooltipOverrideChanged();
+}
+
+Qt::ItemFlags BasemapGalleryItem::flags()
+{
+  return m_flags;
+}
+
+void BasemapGalleryItem::setFlags(Qt::ItemFlags flags)
+{
+  m_flags = flags;
 }
 
 #ifdef CPP_ARCGISRUNTIME_TOOLKIT
