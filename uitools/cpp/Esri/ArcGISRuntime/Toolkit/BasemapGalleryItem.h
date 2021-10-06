@@ -65,6 +65,8 @@ namespace Toolkit {
 
     Qt::ItemFlags flags();
     void setFlags(Qt::ItemFlags flags);
+    void setFlagsDisabled();
+    void setFlagsEnabled();
 #ifdef CPP_ARCGISRUNTIME_TOOLKIT
         QUrl thumbnailUrl() const;
 #endif // CPP_ARCGISRUNTIME_TOOLKIT

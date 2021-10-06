@@ -163,16 +163,25 @@ namespace Toolkit {
       QObject::connect(galleryItem, &BasemapGalleryItem::tooltipChanged, self, notifyChange);
 
       auto basemap = galleryItem->basemap();
+
       if (basemap && basemap->loadStatus() != LoadStatus::Loaded)
       {
         basemap->load();
       }
+      //check the added item added is suitable with the currentgeoview
+
+      if (!self->basemapMatchesCurrentSpatialReference(galleryItem->basemap()))
+      {
+        galleryItem->setFlagsDisabled();
+      }
+      else
+        galleryItem->setFlagsEnabled();
 
       if (self->currentBasemap() == basemap)
       {
         // If the currently active basemap was added to the gallery, we notify
         // downstream consumers that the currently active basemap has changed also to
-        // trigger UI updates.
+        // trigger UI updates
         emit self->currentBasemapChanged();
       }
     }

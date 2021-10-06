@@ -298,6 +298,18 @@ void BasemapGalleryItem::setFlags(Qt::ItemFlags flags)
   m_flags = flags;
 }
 
+void BasemapGalleryItem::setFlagsDisabled()
+{
+  Qt::ItemFlags disabledFlags(Qt::NoItemFlags);
+  setFlags(disabledFlags);
+}
+
+void BasemapGalleryItem::setFlagsEnabled()
+{
+  Qt::ItemFlags enabledFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+  setFlags(enabledFlags);
+}
+
 #ifdef CPP_ARCGISRUNTIME_TOOLKIT
 /*!
   \internal
