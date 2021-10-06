@@ -304,6 +304,7 @@ namespace Toolkit {
     m_gallery->setDisplayPropertyName("name");
     m_gallery->setDecorationPropertyName("thumbnail");
     m_gallery->setTooltipPropertyName("tooltip");
+    m_gallery->setFlagsPropertyName("flags");
   }
 
   /*!

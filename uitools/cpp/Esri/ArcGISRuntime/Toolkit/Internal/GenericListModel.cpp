@@ -547,6 +547,19 @@ namespace Toolkit {
     return m_elementType->property(m_tooltipPropIndex).name();
   }
 
+  void GenericListModel::setFlagsPropertyName(const QString& propertyName)
+  {
+    m_flagsPropIndex = m_elementType->indexOfProperty(propertyName.toLatin1());
+  }
+
+  QString GenericListModel::flagsPropertyName()
+  {
+    if (m_flagsPropIndex < 0)
+      return "";
+
+    return m_elementType->property(m_flagsPropIndex).name();
+  }
+
   /*!
   \brief Helper function append an additional object to this list.
   
@@ -720,6 +733,15 @@ namespace Toolkit {
       return QString(m_elementType->className());
     else
       return "";
+  }
+
+  Qt::ItemFlags GenericListModel::flags(const QModelIndex& index) const
+  {
+    auto o = m_objects.at(index.row());
+    const auto property = m_elementType->property(m_flagsPropIndex);
+    QVariant qv = property.read(o);
+    Qt::ItemFlags flags = qvariant_cast<Qt::ItemFlags>(qv);
+    return flags;
   }
 
   QObject* GenericListModel::element(const QModelIndex& index)
