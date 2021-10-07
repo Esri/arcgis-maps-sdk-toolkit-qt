@@ -77,7 +77,7 @@ public:
 
   Qt::ItemFlags flags(const QModelIndex& index) const override;
 
-  void setFlagsCallback(std::function<FlagsCallback> f);
+  //void setFlagsCallback(std::function<FlagsCallback> f);
 
   template <typename Func>
   void setFlagsCallback(Func&& f)

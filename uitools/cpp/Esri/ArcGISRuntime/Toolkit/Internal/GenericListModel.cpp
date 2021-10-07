@@ -737,13 +737,16 @@ namespace Toolkit {
 
   Qt::ItemFlags GenericListModel::flags(const QModelIndex& index) const
   {
-    return m_flagsCallback(index);
+    if (m_flagsCallback)
+      return m_flagsCallback(index);
+    // call default base class .flags()
+    return QAbstractItemModel::flags(index);
   }
 
-  void GenericListModel::setFlagsCallback(std::function<FlagsCallback> f)
-  {
-    m_flagsCallback = std::move(f);
-  }
+  //  void GenericListModel::setFlagsCallback(std::function<FlagsCallback> f)
+  //  {
+  //    m_flagsCallback = std::move(f);
+  //  }
 
   QObject* GenericListModel::element(const QModelIndex& index)
   {
