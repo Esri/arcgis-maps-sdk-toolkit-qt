@@ -135,6 +135,40 @@ namespace Toolkit {
     }
 
     /*!
+     \internal
+      After a new item is added, check if it suitable with the currentspatial reference and set its visiblity flags as appropriate
+     */
+    void setItemVisibility(BasemapGalleryController* self, BasemapGalleryItem* galleryItem)
+    {
+      if (!self->basemapMatchesCurrentSpatialReference(galleryItem->basemap()))
+      {
+        galleryItem->setFlagsDisabled();
+      }
+      else
+        galleryItem->setFlagsEnabled();
+    }
+
+    /*!
+     Check all the items in the gallery if they are suitable with the current geomodel 
+    */
+    void setItemsVisibility(BasemapGalleryController* self)
+    {
+      //todo: this might be better as a slot or extension of geomodelchanged signal
+      GenericListModel* gallery = self->gallery();
+      if (!gallery)
+        return;
+      int last = gallery->rowCount();
+      for (auto i = 0; i <= last; ++i)
+      {
+        auto index = gallery->index(i);
+        if (auto galleryItem = gallery->element<BasemapGalleryItem>(index))
+        {
+          setItemVisibility(self, galleryItem);
+        }
+      }
+    }
+
+    /*!
       \internal
       Triggered when a basemap is added to the gallery.
 
@@ -168,14 +202,9 @@ namespace Toolkit {
       {
         basemap->load();
       }
-      //check the added item added is suitable with the currentgeoview
 
-      if (!self->basemapMatchesCurrentSpatialReference(galleryItem->basemap()))
-      {
-        galleryItem->setFlagsDisabled();
-      }
-      else
-        galleryItem->setFlagsEnabled();
+      //check the added item added is suitable with the currentgeoview
+      setItemVisibility(self, galleryItem);
 
       if (self->currentBasemap() == basemap)
       {
@@ -270,7 +299,7 @@ namespace Toolkit {
     m_gallery(new GenericListModel(&BasemapGalleryItem::staticMetaObject, this))
   {
     connect(this, &BasemapGalleryController::geoModelChanged, this, &BasemapGalleryController::currentBasemapChanged);
-
+    emit geoModel();
     // Listen in to items added to the gallery.
     connect(m_gallery, &GenericListModel::rowsInserted, this, [this](const QModelIndex& parent, int first, int last)
             {
