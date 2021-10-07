@@ -72,7 +72,6 @@ namespace Toolkit {
     m_controller->setGeoModel(geomodel);
     //set slot for inital basemap loaded
     connect(geomodel->basemap(), &Basemap::doneLoading, this, &BasemapGallery::initialBasemapLoaded);
-    //highlight the intial one
   }
 
   /*!
