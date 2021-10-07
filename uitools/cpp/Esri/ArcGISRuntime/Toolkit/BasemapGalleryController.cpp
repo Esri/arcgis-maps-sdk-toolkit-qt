@@ -135,40 +135,6 @@ namespace Toolkit {
     }
 
     /*!
-     \internal
-      After a new item is added, check if it suitable with the currentspatial reference and set its visiblity flags as appropriate
-     */
-    void setItemVisibility(BasemapGalleryController* self, BasemapGalleryItem* galleryItem)
-    {
-      if (!self->basemapMatchesCurrentSpatialReference(galleryItem->basemap()))
-      {
-        galleryItem->setFlagsDisabled();
-      }
-      else
-        galleryItem->setFlagsEnabled();
-    }
-
-    /*!
-     Check all the items in the gallery if they are suitable with the current geomodel 
-    */
-    void setItemsVisibility(BasemapGalleryController* self)
-    {
-      //todo: this might be better as a slot or extension of geomodelchanged signal
-      GenericListModel* gallery = self->gallery();
-      if (!gallery)
-        return;
-      int last = gallery->rowCount();
-      for (auto i = 0; i <= last; ++i)
-      {
-        auto index = gallery->index(i);
-        if (auto galleryItem = gallery->element<BasemapGalleryItem>(index))
-        {
-          setItemVisibility(self, galleryItem);
-        }
-      }
-    }
-
-    /*!
       \internal
       Triggered when a basemap is added to the gallery.
 
@@ -202,9 +168,6 @@ namespace Toolkit {
       {
         basemap->load();
       }
-
-      //check the added item added is suitable with the currentgeoview
-      setItemVisibility(self, galleryItem);
 
       if (self->currentBasemap() == basemap)
       {
@@ -335,7 +298,21 @@ namespace Toolkit {
                 }
               }
             });
-
+    m_gallery->setFlagsCallback([this](const QModelIndex& index)
+                                {
+                                  QObject* o = m_gallery->element(index);
+                                  BasemapGalleryItem* galleryItem = qobject_cast<BasemapGalleryItem*>(o); // can cast it from the m_gallery->m_elementType? more flexible
+                                  if (!basemapMatchesCurrentSpatialReference(galleryItem->basemap()))
+                                  {
+                                    //disabled item flags
+                                    return Qt::ItemFlags(Qt::NoItemFlags);
+                                  }
+                                  else
+                                  {
+                                    //enabled and selectable item flags
+                                    return Qt::ItemFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+                                  }
+                                });
     setToDefaultBasemaps(this, m_portal);
     // Have to set the property names, so the controller will know how to match the properties from
     // basemapgalleryitem with the specific Qt::<namespace> invoked in the .data() from the View (ListView) obj

@@ -737,11 +737,12 @@ namespace Toolkit {
 
   Qt::ItemFlags GenericListModel::flags(const QModelIndex& index) const
   {
-    auto o = m_objects.at(index.row());
-    const auto property = m_elementType->property(m_flagsPropIndex);
-    QVariant qv = property.read(o);
-    Qt::ItemFlags flags = qvariant_cast<Qt::ItemFlags>(qv);
-    return flags;
+    return m_flagsCallback(index);
+  }
+
+  void GenericListModel::setFlagsCallback(std::function<FlagsCallback> f)
+  {
+    m_flagsCallback = std::move(f);
   }
 
   QObject* GenericListModel::element(const QModelIndex& index)

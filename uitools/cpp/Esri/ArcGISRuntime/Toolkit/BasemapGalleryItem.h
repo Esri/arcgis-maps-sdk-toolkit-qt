@@ -39,7 +39,6 @@ namespace Toolkit {
     Q_PROPERTY(QString tooltipOverride READ tooltipOverride WRITE setTooltipOverride NOTIFY tooltipOverrideChanged)
     Q_PROPERTY(QImage thumbnail READ thumbnail NOTIFY thumbnailChanged)
     Q_PROPERTY(QImage thumbnailOverride READ thumbnailOverride WRITE setThumbnailOverride NOTIFY thumbnailOverrideChanged)
-    Q_PROPERTY(Qt::ItemFlags flags READ flags WRITE setFlags)
 #ifdef CPP_ARCGISRUNTIME_TOOLKIT
     Q_PROPERTY(QUrl thumbnailUrl READ thumbnailUrl NOTIFY thumbnailChanged)
 #endif // CPP_ARCGISRUNTIME_TOOLKIT
@@ -63,10 +62,6 @@ namespace Toolkit {
     QString tooltipOverride() const;
     void setTooltipOverride(QString tooltip);
 
-    Qt::ItemFlags flags();
-    void setFlags(Qt::ItemFlags flags);
-    void setFlagsDisabled();
-    void setFlagsEnabled();
 #ifdef CPP_ARCGISRUNTIME_TOOLKIT
         QUrl thumbnailUrl() const;
 #endif // CPP_ARCGISRUNTIME_TOOLKIT

@@ -125,7 +125,7 @@ namespace Toolkit {
     // setting the basemap calculated from the current index. this will also modify the geoview.
     // have to manually check that the flag is noitem because the click from the listview will still be fired
     // by not querying any flag.
-    if (item->flags() != Qt::NoItemFlags)
+    if (m_controller->gallery()->flags(index) != Qt::NoItemFlags)
       m_controller->setCurrentBasemap(item->basemap());
   }
 
