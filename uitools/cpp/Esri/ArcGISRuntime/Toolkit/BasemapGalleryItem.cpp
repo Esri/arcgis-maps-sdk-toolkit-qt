@@ -116,8 +116,7 @@ BasemapGalleryItem::BasemapGalleryItem(Basemap* basemap, QImage thumbnail, QStri
   QObject(parent),
   m_thumbnail{std::move(thumbnail)},
   m_tooltip{std::move(tooltip)},
-  m_id{QUuid::createUuid()},
-  m_flags(Qt::ItemIsSelectable | Qt::ItemIsEnabled)
+  m_id{QUuid::createUuid()}
 {
   registerItem(this);
   connect(this, &BasemapGalleryItem::basemapChanged, this, &BasemapGalleryItem::thumbnailChanged);

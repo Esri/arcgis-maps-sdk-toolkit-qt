@@ -56,10 +56,6 @@ public:
 
   QString tooltipPropertyName();
 
-  void setFlagsPropertyName(const QString& propertyName);
-
-  QString flagsPropertyName();
-
   int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 
   QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
@@ -76,8 +72,6 @@ public:
                       int role = Qt::DisplayRole) const override;
 
   Qt::ItemFlags flags(const QModelIndex& index) const override;
-
-  //void setFlagsCallback(std::function<FlagsCallback> f);
 
   template <typename Func>
   void setFlagsCallback(Func&& f)
@@ -112,7 +106,6 @@ private:
   int m_displayPropIndex = -1;
   int m_decorationPropIndex = -1;
   int m_tooltipPropIndex = -1;
-  int m_flagsPropIndex = -1;
   const QMetaObject* m_elementType = nullptr;
   QList<QObject*> m_objects;
   std::function<FlagsCallback> m_flagsCallback;

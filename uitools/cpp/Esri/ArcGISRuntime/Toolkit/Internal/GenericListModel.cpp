@@ -547,19 +547,6 @@ namespace Toolkit {
     return m_elementType->property(m_tooltipPropIndex).name();
   }
 
-  void GenericListModel::setFlagsPropertyName(const QString& propertyName)
-  {
-    m_flagsPropIndex = m_elementType->indexOfProperty(propertyName.toLatin1());
-  }
-
-  QString GenericListModel::flagsPropertyName()
-  {
-    if (m_flagsPropIndex < 0)
-      return "";
-
-    return m_elementType->property(m_flagsPropIndex).name();
-  }
-
   /*!
   \brief Helper function append an additional object to this list.
   
@@ -735,6 +722,18 @@ namespace Toolkit {
       return "";
   }
 
+  /*!
+  \brief Overriden \l QAbstractListModel function. Sets the \l Qt::ItemFlags for each item in the list.
+
+  Returns flags from the \variable m_flagsCallback, which if it is not set, will use the default \l QAbstractListModel::flags will be called.
+  Flags returned are used from the \l QListView to apply visual properties.
+
+  \list
+  \li \a index Index of item
+  \endlist
+  \sa Qt::ItemFlags QFlags
+  */
+
   Qt::ItemFlags GenericListModel::flags(const QModelIndex& index) const
   {
     if (m_flagsCallback)
@@ -742,11 +741,6 @@ namespace Toolkit {
     // call default base class .flags()
     return QAbstractItemModel::flags(index);
   }
-
-  //  void GenericListModel::setFlagsCallback(std::function<FlagsCallback> f)
-  //  {
-  //    m_flagsCallback = std::move(f);
-  //  }
 
   QObject* GenericListModel::element(const QModelIndex& index)
   {
@@ -758,6 +752,15 @@ namespace Toolkit {
     return removeRows(0, count());
   }
 
+  /*!
+  \fn void Esri::ArcGISRuntime::Toolkit::GenericListModel::setFlagsCallback(Func&& f)
+  \brief Template member function used to set the callback function which calculates each item \c Qt::ItemFlags.
+
+  \list
+  \li \c Func Signature type that is accepted. Should be implicitly convertible to \variable m_flagsCallback.
+  \li \a f Function which handles the return of \c Qt::ItemFlags for each item in the collection \c QList<QObject*>
+  \endlist
+  */
   /*!
   \fn T* Esri::ArcGISRuntime::Toolkit::GenericListModel::element(const QModelIndex& index) const
   

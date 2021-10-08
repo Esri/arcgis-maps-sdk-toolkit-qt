@@ -80,7 +80,6 @@ namespace Toolkit {
     QImage m_thumbnail;
     QString m_tooltip;
     QUuid m_id;
-    Qt::ItemFlags m_flags;
   };
 
 } // Toolkit
