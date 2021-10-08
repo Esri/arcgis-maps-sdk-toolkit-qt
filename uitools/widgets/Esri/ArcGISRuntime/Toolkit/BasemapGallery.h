@@ -52,7 +52,7 @@ namespace Toolkit {
   private:
     BasemapGalleryController* m_controller = nullptr;
     Ui::BasemapGallery* m_ui;
-    bool initialBasemapSelected = false;
+    bool m_initialBasemapSelected = false;
     void setSelectedInitalBasemap(const QModelIndex& index);
   };
 

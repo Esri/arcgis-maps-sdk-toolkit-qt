@@ -105,6 +105,7 @@ namespace Toolkit {
     {
       m_controller->setCurrentBasemap(geomodel->basemap());
       m_controller->setGeoModel(geomodel);
+      m_initialBasemapSelected = false;
     }
   }
 
@@ -137,7 +138,7 @@ namespace Toolkit {
   void BasemapGallery::geoModelChanged()
   {
     // if this flag is set, no need to select again the basemap.
-    if (initialBasemapSelected)
+    if (m_initialBasemapSelected)
       return;
     GeoModel* geomodel = geoModel();
     if (!geomodel || !geomodel->basemap())
@@ -150,7 +151,7 @@ namespace Toolkit {
   // used to set the inital visually selected geomodel(blue background). should be set off when a new galleryitem is added
   void BasemapGallery::galleryItemAdded(const QModelIndex& index)
   {
-    if (initialBasemapSelected || !index.isValid() || !geoModel() || !geoModel()->basemap())
+    if (m_initialBasemapSelected || !index.isValid() || !geoModel() || !geoModel()->basemap())
       return;
     //debug
     auto b = m_controller->gallery()->element<BasemapGalleryItem>(index);
@@ -165,7 +166,7 @@ namespace Toolkit {
   {
     qDebug() << "setting the intial basemap selection";
     m_ui->listView->selectionModel()->select(index, QItemSelectionModel::Select);
-    initialBasemapSelected = true;
+    m_initialBasemapSelected = true;
   }
 } //Toolkit
 } //ArcGISRuntime
