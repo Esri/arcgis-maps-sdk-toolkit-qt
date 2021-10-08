@@ -159,6 +159,7 @@ Pane {
     }
 
     /*!
+     \qmlmethod void BasemapGallery::setGeoModelFromGeoView(GeoView view)
      \brief Convenience function for QML/C++ users which allows the map/scene to be extracted from a
      SceneView or MapView assigned to \a view in QML code.
 
@@ -179,8 +180,8 @@ Pane {
        }
       \endcode
      */
-    function setGeoModelFromGeoView(...args) {
-        return controller.setGeoModelFromGeoView(...args);
+    function setGeoModelFromGeoView(view) {
+        return controller.setGeoModelFromGeoView(view);
     }
 
     contentItem: GridView {

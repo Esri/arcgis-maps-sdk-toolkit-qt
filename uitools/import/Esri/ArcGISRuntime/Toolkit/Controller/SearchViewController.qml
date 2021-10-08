@@ -46,7 +46,8 @@ QtObject {
 
     /*!
       \qmlproperty GeoModel geoModel
-      \brief The geomodel the controller is listening for basemap changes.
+      \brief The geoView the controller may optionally use for setting results, and for
+      updating the active search area and preferred search location.
      */
     property var geoView: null;
 
@@ -76,10 +77,10 @@ QtObject {
       \brief  The search area to be used for the current query.
 
       Ignored in most queries, unless the \c{restrictToArea} flag is set to true when calling
-      \l SearchViewController.commitSearch.
+      \l SearchViewController::commitSearch.
 
       This property should be updated as the user navigates the map/scene, or at minimum before calling
-      \l SearchViewController.commitSearch.
+      \l SearchViewController::commitSearch.
 
       Defaults to null
      */

@@ -131,7 +131,7 @@ QtObject {
     }
 
     /*!
-      \qmlsignal LocatorSearchSource::searchCompleted(list<ListElement> searchResults)
+      \qmlsignal LocatorSearchSource::searchCompleted(list searchResults)
       Signal emitted when the search completes, giving the found search results as \a searchResults.
 
       A result is a ListElement with the following fields.
