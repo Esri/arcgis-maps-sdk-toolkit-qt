@@ -53,6 +53,10 @@ namespace Toolkit {
 
     //signal-slots
     connect(m_ui->listView, &QListView::clicked, this, &BasemapGallery::clickedItem);
+    // both are needed for setting the inital basemap or in case a new basemap is loaded by changing the geomodel.
+    // datachanged is also needed because the items from the portal are loaded async, so when a new basemap is set intially, the items are not ready
+    connect(m_controller->gallery(), &GenericListModel::dataChanged, this, &BasemapGallery::galleryItemAdded); //this might use a different signal (xes countchanged())
+    connect(m_controller, &BasemapGalleryController::geoModelChanged, this, &BasemapGallery::geoModelChanged);
   }
 
   /*!
@@ -70,8 +74,9 @@ namespace Toolkit {
   {
     m_controller->setCurrentBasemap(geomodel->basemap());
     m_controller->setGeoModel(geomodel);
+    //todo: might not be needed, since it is set already in the other constructor a similar connection
     //set slot for inital basemap loaded
-    connect(geomodel->basemap(), &Basemap::doneLoading, this, &BasemapGallery::initialBasemapLoaded);
+    //connect(geomodel->basemap(), &Basemap::doneLoading, this, &BasemapGallery::setSelectedInitalBasemap);
   }
 
   /*!
@@ -128,22 +133,39 @@ namespace Toolkit {
       m_controller->setCurrentBasemap(item->basemap());
   }
 
-  //assuming currentbasemap in controller is initial one
-  void BasemapGallery::initialBasemapLoaded()
+  // used to set the inital visually selected geomodel (blue background)
+  void BasemapGallery::geoModelChanged()
   {
-    Basemap* initial = m_controller->currentBasemap();
-    auto model = m_controller->gallery();
-    qDebug() << model->rowCount();
-    auto index = model->index(2, 0);
-    if (index.isValid())
-      m_ui->listView->selectionModel()->select(index, QItemSelectionModel::Select);
+    // if this flag is set, no need to select again the basemap.
+    if (initialBasemapSelected)
+      return;
+    GeoModel* geomodel = geoModel();
+    if (!geomodel || !geomodel->basemap())
+      return;
+    int idx = m_controller->basemapIndexByName(geomodel->basemap());
+    if (idx != -1)
+      setSelectedInitalBasemap(m_controller->gallery()->index(idx));
+  }
 
-    //    for(int i = 0; i < model->rowCount(); ++i){
-    //      auto index = model->index(i, 0);
-    //      if ( index.isValid() )
-    //        m_ui->listView->selectionModel()->select(index, QItemSelectionModel::Select);
-    //        model->selectionModel()->select( index, QItemSelectionModel::Select );
-    //    }
+  // used to set the inital visually selected geomodel(blue background). should be set off when a new galleryitem is added
+  void BasemapGallery::galleryItemAdded(const QModelIndex& index)
+  {
+    if (initialBasemapSelected || !index.isValid() || !geoModel() || !geoModel()->basemap())
+      return;
+    //debug
+    auto b = m_controller->gallery()->element<BasemapGalleryItem>(index);
+    QString name = b->name();
+    qDebug() << name << " " << geoModel()->basemap()->name();
+    if (b->name() == geoModel()->basemap()->name())
+      setSelectedInitalBasemap(index);
+  }
+
+  // assuming currentbasemap in controller is initial one
+  void BasemapGallery::setSelectedInitalBasemap(const QModelIndex& index)
+  {
+    qDebug() << "setting the intial basemap selection";
+    m_ui->listView->selectionModel()->select(index, QItemSelectionModel::Select);
+    initialBasemapSelected = true;
   }
 } //Toolkit
 } //ArcGISRuntime

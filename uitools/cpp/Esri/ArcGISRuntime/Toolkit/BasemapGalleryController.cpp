@@ -552,6 +552,27 @@ namespace Toolkit {
   }
 
   /*!
+    \internal
+    \brief Given a \a basemap, returns the index of the basemap within the gallery.
+    This comparison is performed via name comparison.
+    If the basemap is not found then \c{-1} is returned.
+   */
+  int BasemapGalleryController::basemapIndexByName(Basemap* basemap) const
+  {
+    QString name = basemap->name();
+    for (int i = 0; i < m_gallery->rowCount(); ++i)
+    {
+      auto index = m_gallery->index(i);
+      auto b = m_gallery->element<BasemapGalleryItem>(index);
+      QString name = b->name();
+      qDebug() << name << " " << basemap->name();
+      if (name == b->basemap()->name())
+        return i;
+    }
+    return -1;
+  }
+
+  /*!
    \internal
    \brief Given a \a basemap, returns whether the spatial reference of its layers
    match the spatial reference of the GeoModel (and therefore if it is appropriate to apply
