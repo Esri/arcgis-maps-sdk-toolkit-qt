@@ -46,14 +46,11 @@ namespace Toolkit {
 
   private slots:
     void clickedItem(const QModelIndex& index);
-    void geoModelChanged();
-    void galleryItemAdded(const QModelIndex& index);
+    void selectInitalBasemap();
 
   private:
     BasemapGalleryController* m_controller = nullptr;
     Ui::BasemapGallery* m_ui;
-    bool m_initialBasemapSelected = false;
-    void setSelectedInitalBasemap(const QModelIndex& index);
   };
 
 }
