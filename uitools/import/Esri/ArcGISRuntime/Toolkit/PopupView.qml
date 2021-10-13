@@ -115,7 +115,6 @@ Pane {
     contentItem: Flickable {
         id: flickable
         clip: true
-        topMargin: popupView.spacing
         contentHeight: fieldsLayout.height
         GridLayout {
             id: fieldsLayout
@@ -210,7 +209,7 @@ Pane {
             anchors {
                 top: fieldsLayout.bottom
                 horizontalCenter: parent.horizontalCenter
-                topMargin: 20
+                topMargin: popupView.spacing
             }
             text: "Close"
 
