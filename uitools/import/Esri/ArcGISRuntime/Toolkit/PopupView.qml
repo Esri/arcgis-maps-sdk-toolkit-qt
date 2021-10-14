@@ -22,6 +22,7 @@ import QtQuick.Dialogs 1.2
 import QtQuick.Window 2.11
 import QtQuick.Layouts 1.3
 
+
 /*!
    \qmltype PopupView
    \ingroup ArcGISQtToolkit
@@ -29,7 +30,7 @@ import QtQuick.Layouts 1.3
    \inqmlmodule Esri.ArcGISRuntime.Toolkit
    \since Esri.ArcGISRuntime 100.10
    \brief A view for displaying and editing information about a feature.
-  
+
    A PopupView can be used to display information for any type that
    implements the PopupSource interface. For example, FeatureLayer
    implements PopupSource. This means that it has a PopupDefinition,
@@ -58,24 +59,27 @@ import QtQuick.Layouts 1.3
    PopupManager, or any of their properties, the PopupManager must
    be re-set to the PopupView.
  */
-Control {
+Pane {
     id: popupView
+
 
     /*!
        \brief The PopupManager that controls the information being displayed in
        the view.
-       
+
        The PopupManager should be created from a Popup.
        \qmlproperty PopupManager popupManager
      */
     property var popupManager: null
-    
+
+
     /*!
       \qmlproperty PopupViewController controller
       \brief the Controller handles reading from the PopupManager and monitoring
       the list-models.
     */
-    property var controller: PopupViewController { }
+    property var controller: PopupViewController {}
+
 
     /*!
        \brief Callback function called when the close button is clicked. When
@@ -86,6 +90,7 @@ Control {
     property var closeCallback: function() {
         popupView.visible = false;
     }
+
 
     /*!
        \qmlsignal PopupView::attachmentThumbnailClicked(var index)
@@ -107,15 +112,6 @@ Control {
 
     padding: 5
 
-    background: Rectangle {
-        color: palette.base
-        border {
-            color: palette.shadow
-            width: 2
-        }
-        radius: 2
-    }
-
     contentItem: Flickable {
         id: flickable
         clip: true
@@ -129,14 +125,15 @@ Control {
             }
 
             // We must account for what is visible, including title headers as rows.
-            rows: controller.showAttachments ? controller.fieldCount + controller.attachmentCount + 2
-                                             : controller.fieldCount + 1
+            rows: controller.showAttachments ? controller.fieldCount + controller.attachmentCount + 1
+                                             : controller.fieldCount
 
             // Title Header
             Text {
                 Layout.fillWidth: true
                 textFormat: Text.StyledText
                 text: `<h2>${controller.title}</h2>`
+                wrapMode: Text.Wrap
                 color: palette.text
                 font: popupView.font
             }
@@ -177,15 +174,6 @@ Control {
                 }
             }
 
-            Button {
-                text: "Close"
-                Layout.alignment: Qt.AlignRight
-                onClicked: {
-                    if (popupView.closeCallback)
-                        popupView.closeCallback();
-                }
-            }
-
             // Field contents
             Repeater {
                 model: controller.displayFields
@@ -216,6 +204,19 @@ Control {
                 }
             }
         }
+
+        Button {
+            anchors {
+                top: fieldsLayout.bottom
+                horizontalCenter: parent.horizontalCenter
+                topMargin: popupView.spacing
+            }
+            text: "Close"
+
+            onClicked: {
+                if (popupView.closeCallback)
+                    popupView.closeCallback()
+            }
+        }
     }
 }
-
