@@ -39,23 +39,23 @@ namespace Toolkit {
   \endlist
 
   View mantains its associated controller, sets up the view itself, its model from the controller and 
-  connects listview clicked event to \l BasemapGallery::clickedItem.
+  connects listview clicked event to \internal \l BasemapGallery::clickedItem.
   \note geomodel should be manually set by calling \l setGeoModel.
   */
-  BasemapGallery::BasemapGallery(QWidget* parent) :
-    QFrame(parent),
-    m_ui(new Ui::BasemapGallery),
-    m_controller(new BasemapGalleryController(this))
-  {
-    m_ui->setupUi(this);
-    GenericListModel* model = m_controller->gallery();
-    m_ui->listView->setModel(model);
+ BasemapGallery::BasemapGallery(QWidget* parent) :
+   QFrame(parent),
+   m_ui(new Ui::BasemapGallery),
+   m_controller(new BasemapGalleryController(this))
+ {
+   m_ui->setupUi(this);
+   GenericListModel* model = m_controller->gallery();
+   m_ui->listView->setModel(model);
 
-    //signal-slots
-    connect(m_ui->listView, &QListView::clicked, this, &BasemapGallery::clickedItem);
-    // both are needed for setting the inital basemap or in case a new basemap is loaded by changing the geomodel.
-    // datachanged is also needed because the items from the portal are loaded async, so when a new basemap is set intially, the items are not ready
-    connect(m_controller, &BasemapGalleryController::currentBasemapChanged, this, &BasemapGallery::selectInitalBasemap);
+   //signal-slots
+   connect(m_ui->listView, &QListView::clicked, this, &BasemapGallery::clickedItem);
+   // both are needed for setting the inital basemap or in case a new basemap is loaded by changing the geomodel.
+   // datachanged is also needed because the items from the portal are loaded async, so when a new basemap is set intially, the items are not ready
+   connect(m_controller, &BasemapGalleryController::currentBasemapChanged, this, &BasemapGallery::selectInitalBasemap);
   }
 
   /*!
@@ -73,9 +73,6 @@ namespace Toolkit {
   {
     m_controller->setCurrentBasemap(geomodel->basemap());
     m_controller->setGeoModel(geomodel);
-    //todo: might not be needed, since it is set already in the other constructor a similar connection
-    //set slot for inital basemap loaded
-    //connect(geomodel->basemap(), &Basemap::doneLoading, this, &BasemapGallery::setSelectedInitalBasemap);
   }
 
   /*!
