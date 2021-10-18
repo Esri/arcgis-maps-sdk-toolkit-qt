@@ -67,8 +67,6 @@ namespace Toolkit {
 
     Q_INVOKABLE int basemapIndex(Basemap* basemap) const;
 
-    int basemapIndexByName(Basemap* basemap) const;
-
     Q_INVOKABLE bool basemapMatchesCurrentSpatialReference(Basemap* basemap) const;
 
     Q_INVOKABLE void setGeoModelFromGeoView(QObject* view);

@@ -17,7 +17,6 @@
 
 #include "MetaElement.h"
 
-#include <QDebug>
 #include <QMetaProperty>
 #include <QPointer>
 namespace Esri {
