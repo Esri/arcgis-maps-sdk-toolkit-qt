@@ -338,6 +338,7 @@ namespace Toolkit {
 
   /*!
   \brief Set the GeoModel object this Controller uses to \a geoModel.
+  This function will also extract the basemap from the Geomodel and set it as the current one.
  */
   void BasemapGalleryController::setGeoModel(GeoModel* geoModel)
   {
@@ -355,7 +356,7 @@ namespace Toolkit {
     {
       connectToGeoModel(this, m_geoModel);
     }
-
+    setCurrentBasemap(geoModel->basemap());
     emit geoModelChanged();
     //forcing all the items in the gallery to recalculate the ::ItemFlags for the view.
     emit m_gallery->dataChanged(m_gallery->index(0), m_gallery->index(std::max(m_gallery->rowCount() - 1, 0)));
@@ -486,7 +487,7 @@ namespace Toolkit {
     m_currentBasemap = basemap;
     emit currentBasemapChanged();
 
-    if (m_geoModel)
+    if (m_geoModel && m_geoModel->basemap() != m_currentBasemap)
     {
       m_geoModel->setBasemap(m_currentBasemap);
     }
