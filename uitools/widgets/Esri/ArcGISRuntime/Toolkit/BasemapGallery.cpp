@@ -39,7 +39,7 @@ namespace Toolkit {
   \endlist
 
   View mantains its associated controller, sets up the view itself, its model from the controller and 
-  connects listview clicked event to \internal \l BasemapGallery::clickedItem.
+  connects listview clicked event to \internal \l BasemapGallery::onItemSelected.
   \note geomodel should be manually set by calling \l setGeoModel.
   */
  BasemapGallery::BasemapGallery(QWidget* parent) :
@@ -52,10 +52,10 @@ namespace Toolkit {
    m_ui->listView->setModel(model);
 
    //signal-slots
-   connect(m_ui->listView, &QListView::clicked, this, &BasemapGallery::clickedItem);
+   connect(m_ui->listView->selectionModel(), &QItemSelectionModel::currentChanged, this, &BasemapGallery::onItemSelected);
    // both are needed for setting the inital basemap or in case a new basemap is loaded by changing the geomodel.
    // datachanged is also needed because the items from the portal are loaded async, so when a new basemap is set intially, the items are not ready
-   connect(m_controller, &BasemapGalleryController::currentBasemapChanged, this, &BasemapGallery::selectInitalBasemap);
+   connect(m_controller, &BasemapGalleryController::currentBasemapChanged, this, &BasemapGallery::onCurrentBasemapChanged);
   }
 
   /*!
@@ -119,7 +119,7 @@ namespace Toolkit {
   Once linked to the clicked Listview event, receives \c QModelIndex \a index and uses it
   to set its basemap into the controller.
   */
-  void BasemapGallery::clickedItem(const QModelIndex& index)
+  void BasemapGallery::onItemSelected(const QModelIndex& index)
   {
     BasemapGalleryItem* item = m_controller->gallery()->element<BasemapGalleryItem>(index);
     // setting the basemap calculated from the current index. this will also modify the geoview.
@@ -130,9 +130,10 @@ namespace Toolkit {
   }
 
   /*!
+   * \internal
    * \brief Setting the selected blue background in the graphical view of the first basemap loaded with the basemapgallery
    */
-  void BasemapGallery::selectInitalBasemap()
+  void BasemapGallery::onCurrentBasemapChanged()
   {
     auto idx = m_controller->basemapIndex(m_controller->currentBasemap());
     auto index = m_controller->gallery()->index(idx);

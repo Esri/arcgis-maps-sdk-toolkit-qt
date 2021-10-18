@@ -30,10 +30,10 @@ namespace Toolkit
 
 class GenericListModel : public QAbstractListModel
 {
-  typedef QFlags<Qt::ItemFlag>(FlagsCallback)(const QModelIndex& index);
   Q_OBJECT
   Q_PROPERTY(int count READ count NOTIFY countChanged)
 public:
+  typedef QFlags<Qt::ItemFlag>(FlagsCallback)(const QModelIndex& index);
   explicit Q_INVOKABLE GenericListModel(QObject* parent = nullptr);
 
   GenericListModel(const QMetaObject* elementType, QObject* parent = nullptr);
