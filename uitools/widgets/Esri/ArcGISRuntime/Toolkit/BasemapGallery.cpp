@@ -39,7 +39,7 @@ namespace Toolkit {
   \endlist
 
   View mantains its associated controller, sets up the view itself, its model from the controller and 
-  connects listview clicked event to \internal \l BasemapGallery::onItemSelected.
+  connects \l QListView::clicked event to internal clickedItem.
   \note geomodel should be manually set by calling \l setGeoModel.
   */
  BasemapGallery::BasemapGallery(QWidget* parent) :
@@ -92,7 +92,7 @@ namespace Toolkit {
 
   /*!
     \brief Sets the \a geomodel used by the controller/ This will reset the active basemap
-    \sa currentBasemap
+    \sa BasemapGalleryController::currentBasemap    
    */
   void BasemapGallery::setGeoModel(GeoModel* geomodel)
   {
