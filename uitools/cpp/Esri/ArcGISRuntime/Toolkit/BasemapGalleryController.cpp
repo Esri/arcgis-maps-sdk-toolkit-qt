@@ -358,7 +358,7 @@ namespace Toolkit {
 
     emit geoModelChanged();
     //forcing all the items in the gallery to recalculate the ::ItemFlags for the view.
-    emit m_gallery->dataChanged(m_gallery->index(0), m_gallery->index(m_gallery->rowCount()));
+    emit m_gallery->dataChanged(m_gallery->index(0), m_gallery->index(std::max(m_gallery->rowCount() - 1, 0)));
   }
 
   /*!
