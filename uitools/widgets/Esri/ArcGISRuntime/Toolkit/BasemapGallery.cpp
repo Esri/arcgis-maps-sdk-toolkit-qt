@@ -71,7 +71,6 @@ namespace Toolkit {
   BasemapGallery::BasemapGallery(GeoModel* geomodel, QWidget* parent) :
     BasemapGallery(parent)
   {
-    m_controller->setCurrentBasemap(geomodel->basemap());
     m_controller->setGeoModel(geomodel);
   }
 
