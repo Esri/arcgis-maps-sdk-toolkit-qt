@@ -117,11 +117,7 @@ namespace Toolkit {
   void BasemapGallery::onItemSelected(const QModelIndex& index)
   {
     BasemapGalleryItem* item = m_controller->gallery()->element<BasemapGalleryItem>(index);
-    // setting the basemap calculated from the current index. this will also modify the geoview.
-    // have to manually check that the flag is noitem because the click from the listview will still be fired
-    // by not querying any flag.
-    if (m_controller->gallery()->flags(index) != Qt::NoItemFlags)
-      m_controller->setCurrentBasemap(item->basemap());
+    m_controller->setCurrentBasemap(item->basemap());
   }
 
   /*!

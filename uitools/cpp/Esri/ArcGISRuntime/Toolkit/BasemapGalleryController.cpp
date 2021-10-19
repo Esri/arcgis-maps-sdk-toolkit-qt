@@ -261,8 +261,6 @@ namespace Toolkit {
     m_portal(new Portal(QUrl("https://arcgis.com"), this)),
     m_gallery(new GenericListModel(&BasemapGalleryItem::staticMetaObject, this))
   {
-    connect(this, &BasemapGalleryController::geoModelChanged, this, &BasemapGalleryController::currentBasemapChanged);
-
     // Listen in to items added to the gallery.
     connect(m_gallery, &GenericListModel::rowsInserted, this, [this](const QModelIndex& parent, int first, int last)
             {
@@ -575,7 +573,14 @@ namespace Toolkit {
     // If no spatial reference is set, any basemap can be applied.
     if (sp.isEmpty())
       return true;
+    auto item = basemap->item();
 
+    if (item)
+    {
+      auto it_sp = item->spatialReference();
+      if (item && !it_sp.isEmpty())
+        return sp == item->spatialReference();
+    }
     // Test if all layers match the spatial reference.
     // From the spec we are guaranteed the homogeneity of the spatial references of these layers.
     // https://developers.arcgis.com/web-map-specification/objects/spatialReference/
