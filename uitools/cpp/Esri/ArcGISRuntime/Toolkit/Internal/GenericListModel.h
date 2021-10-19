@@ -79,6 +79,11 @@ public:
     m_flagsCallback = std::forward<Func>(f);
   }
 
+  template <typename T>
+  void setFlagsCallback1(T* f)
+  {
+  }
+
   Q_INVOKABLE bool append(QList<QObject*> object);
 
   Q_INVOKABLE bool append(QObject* object);
