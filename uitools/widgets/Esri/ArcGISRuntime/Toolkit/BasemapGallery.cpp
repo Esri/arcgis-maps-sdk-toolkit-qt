@@ -38,8 +38,7 @@ namespace Toolkit {
     \li \a parent Parent widget.
   \endlist
 
-  View mantains its associated controller, sets up the view itself, its model from the controller and 
-  connects \l QListView::clicked event to internal clickedItem.
+  View mantains its associated controller, sets up the view itself and its model.
   \note geomodel should be manually set by calling \l setGeoModel.
   */
  BasemapGallery::BasemapGallery(QWidget* parent) :
