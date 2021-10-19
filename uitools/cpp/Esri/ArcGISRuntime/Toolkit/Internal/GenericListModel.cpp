@@ -19,7 +19,6 @@
 
 #include <QMetaProperty>
 #include <QPointer>
-
 namespace Esri {
 namespace ArcGISRuntime {
 namespace Toolkit {
@@ -722,6 +721,25 @@ namespace Toolkit {
       return "";
   }
 
+    /*!
+  \brief Overriden \l QAbstractListModel function. Returns the \l Qt::ItemFlags for each item in the list.
+
+  If \l setFlagsCallback is set, Qt::ItemsFlags are returned from the call-back. Otherwise, the default \l QAbstractListModel::flags will be called.
+  Flags returned are used from the \l QListView to apply visual properties.
+
+  \list
+  \li \a index Index of item
+  \endlist
+  \sa Qt::ItemFlags QFlags
+  */
+  Qt::ItemFlags GenericListModel::flags(const QModelIndex& index) const
+  {
+    if (m_flagsCallback)
+      return m_flagsCallback(index);
+    // call default base class .flags()
+    return QAbstractItemModel::flags(index);
+  }
+
   QObject* GenericListModel::element(const QModelIndex& index)
   {
     return qvariant_cast<QObject*>(data(index, Qt::UserRole));
@@ -731,6 +749,22 @@ namespace Toolkit {
   {
     return removeRows(0, count());
   }
+
+  /*!
+   \typedef Esri::ArcGISRuntime::Toolkit::GenericListModel::FlagsCallback
+  This is a typedef for a pointer to a function with the following signature
+  
+  */
+
+  /*! 
+  \fn template<typename Func> void Esri::ArcGISRuntime::Toolkit::GenericListModel::setFlagsCallback(Func&& f)
+  \brief Template member function used to set the callback function which calculates each item \c Qt::ItemFlags.
+
+  \list
+  \li \c Func Signature type that is accepted. Should be implicitly convertible to \l Esri::ArcGISRuntime::Toolkit::GenericListModel::FlagsCallback.
+  \li \a f Function which handles the return of \c Qt::ItemFlags for each item in the collection \c QList<QObject*>
+  \endlist
+  */
 
   /*!
   \fn T* Esri::ArcGISRuntime::Toolkit::GenericListModel::element(const QModelIndex& index) const

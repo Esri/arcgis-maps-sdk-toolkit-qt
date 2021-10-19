@@ -163,6 +163,7 @@ namespace Toolkit {
       QObject::connect(galleryItem, &BasemapGalleryItem::tooltipChanged, self, notifyChange);
 
       auto basemap = galleryItem->basemap();
+
       if (basemap && basemap->loadStatus() != LoadStatus::Loaded)
       {
         basemap->load();
@@ -172,7 +173,7 @@ namespace Toolkit {
       {
         // If the currently active basemap was added to the gallery, we notify
         // downstream consumers that the currently active basemap has changed also to
-        // trigger UI updates.
+        // trigger UI updates
         emit self->currentBasemapChanged();
       }
     }
@@ -260,8 +261,6 @@ namespace Toolkit {
     m_portal(new Portal(QUrl("https://arcgis.com"), this)),
     m_gallery(new GenericListModel(&BasemapGalleryItem::staticMetaObject, this))
   {
-    connect(this, &BasemapGalleryController::geoModelChanged, this, &BasemapGalleryController::currentBasemapChanged);
-
     // Listen in to items added to the gallery.
     connect(m_gallery, &GenericListModel::rowsInserted, this, [this](const QModelIndex& parent, int first, int last)
             {
@@ -297,7 +296,21 @@ namespace Toolkit {
                 }
               }
             });
+    m_gallery->setFlagsCallback([this](const QModelIndex& index)
+                                {
+                                  BasemapGalleryItem* galleryItem = m_gallery->element<BasemapGalleryItem>(index);
 
+                                  if (!basemapMatchesCurrentSpatialReference(galleryItem->basemap()))
+                                  {
+                                    //disabled item flags
+                                    return Qt::ItemFlags(Qt::NoItemFlags);
+                                  }
+                                  else
+                                  {
+                                    //enabled and selectable item flags
+                                    return Qt::ItemFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+                                  }
+                                });
     setToDefaultBasemaps(this, m_portal);
     // Have to set the property names, so the controller will know how to match the properties from
     // basemapgalleryitem with the specific Qt::<namespace> invoked in the .data() from the View (ListView) obj
@@ -323,6 +336,8 @@ namespace Toolkit {
 
   /*!
   \brief Set the GeoModel object this Controller uses to \a geoModel.
+  This function will also extract the basemap from the Geomodel and set it as the current one.
+  Passing a \p geomodel \c nullptr, will unset the current geomodel loaded.
  */
   void BasemapGalleryController::setGeoModel(GeoModel* geoModel)
   {
@@ -331,7 +346,7 @@ namespace Toolkit {
 
     if (m_geoModel)
     {
-      disconnectFromGeoModel(this, geoModel);
+      disconnectFromGeoModel(this, m_geoModel);
     }
 
     m_geoModel = geoModel;
@@ -339,9 +354,13 @@ namespace Toolkit {
     if (m_geoModel)
     {
       connectToGeoModel(this, m_geoModel);
+      // guard from nullptr direct access
+      setCurrentBasemap(geoModel->basemap());
     }
 
     emit geoModelChanged();
+    //forcing all the items in the gallery to recalculate the ::ItemFlags for the view.
+    emit m_gallery->dataChanged(m_gallery->index(0), m_gallery->index(std::max(m_gallery->rowCount() - 1, 0)));
   }
 
   /*!
@@ -469,7 +488,7 @@ namespace Toolkit {
     m_currentBasemap = basemap;
     emit currentBasemapChanged();
 
-    if (m_geoModel)
+    if (m_geoModel && m_geoModel->basemap() != m_currentBasemap)
     {
       m_geoModel->setBasemap(m_currentBasemap);
     }
@@ -554,7 +573,14 @@ namespace Toolkit {
     // If no spatial reference is set, any basemap can be applied.
     if (sp.isEmpty())
       return true;
+    auto item = basemap->item();
 
+    if (item)
+    {
+      auto it_sp = item->spatialReference();
+      if (item && !it_sp.isEmpty())
+        return sp == item->spatialReference();
+    }
     // Test if all layers match the spatial reference.
     // From the spec we are guaranteed the homogeneity of the spatial references of these layers.
     // https://developers.arcgis.com/web-map-specification/objects/spatialReference/

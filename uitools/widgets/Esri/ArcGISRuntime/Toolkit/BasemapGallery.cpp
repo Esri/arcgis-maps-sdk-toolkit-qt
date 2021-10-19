@@ -38,21 +38,23 @@ namespace Toolkit {
     \li \a parent Parent widget.
   \endlist
 
-  View mantains its associated controller, sets up the view itself, its model from the controller and 
-  connects listview clicked event to \l BasemapGallery::clickedItem.
+  View mantains its associated controller, sets up the view itself and its model.
   \note geomodel should be manually set by calling \l setGeoModel.
   */
-  BasemapGallery::BasemapGallery(QWidget* parent) :
-    QFrame(parent),
-    m_ui(new Ui::BasemapGallery),
-    m_controller(new BasemapGalleryController(this))
-  {
-    m_ui->setupUi(this);
-    GenericListModel* model = m_controller->gallery();
-    m_ui->listView->setModel(model);
+ BasemapGallery::BasemapGallery(QWidget* parent) :
+   QFrame(parent),
+   m_ui(new Ui::BasemapGallery),
+   m_controller(new BasemapGalleryController(this))
+ {
+   m_ui->setupUi(this);
+   GenericListModel* model = m_controller->gallery();
+   m_ui->listView->setModel(model);
 
-    //signal-slots
-    connect(m_ui->listView, &QListView::clicked, this, &BasemapGallery::clickedItem);
+   //signal-slots
+   connect(m_ui->listView->selectionModel(), &QItemSelectionModel::currentChanged, this, &BasemapGallery::onItemSelected);
+   // both are needed for setting the inital basemap or in case a new basemap is loaded by changing the geomodel.
+   // datachanged is also needed because the items from the portal are loaded async, so when a new basemap is set intially, the items are not ready
+   connect(m_controller, &BasemapGalleryController::currentBasemapChanged, this, &BasemapGallery::onCurrentBasemapChanged);
   }
 
   /*!
@@ -68,10 +70,7 @@ namespace Toolkit {
   BasemapGallery::BasemapGallery(GeoModel* geomodel, QWidget* parent) :
     BasemapGallery(parent)
   {
-    m_controller->setCurrentBasemap(geomodel->basemap());
     m_controller->setGeoModel(geomodel);
-    //highlight the intial one
-    QString basemapName = geomodel->basemap()->name();
   }
 
   /*!
@@ -91,16 +90,13 @@ namespace Toolkit {
   }
 
   /*!
-    \brief Sets the \a geomodel used by the controller/ This will reset the active basemap
-    \sa currentBasemap
+    \brief Sets the \a geomodel used by the controller/ This will reset the active basemap.
+    If \p geomodel is passed as \c nullptr, the current geomodel is unset.
+    \sa BasemapGalleryController::currentBasemap    
    */
   void BasemapGallery::setGeoModel(GeoModel* geomodel)
   {
-    if (geomodel != nullptr)
-    {
-      m_controller->setCurrentBasemap(geomodel->basemap());
-      m_controller->setGeoModel(geomodel);
-    }
+    m_controller->setGeoModel(geomodel);
   }
 
 /*!
@@ -118,11 +114,24 @@ namespace Toolkit {
   Once linked to the clicked Listview event, receives \c QModelIndex \a index and uses it
   to set its basemap into the controller.
   */
-  void BasemapGallery::clickedItem(const QModelIndex& index)
+  void BasemapGallery::onItemSelected(const QModelIndex& index)
   {
     BasemapGalleryItem* item = m_controller->gallery()->element<BasemapGalleryItem>(index);
-    //setting the basemap calculated from the current index. this will also modify the geoview
     m_controller->setCurrentBasemap(item->basemap());
+  }
+
+  /*!
+   * \internal
+   * \brief Setting the selected blue background in the graphical view of the first basemap loaded with the basemapgallery
+   */
+  void BasemapGallery::onCurrentBasemapChanged()
+  {
+    auto idx = m_controller->basemapIndex(m_controller->currentBasemap());
+    auto index = m_controller->gallery()->index(idx);
+    //index can be invalid in case the currentbase map is not part of the galleryitems (idx = -1)
+    if (!index.isValid())
+      return;
+    m_ui->listView->selectionModel()->select(index, QItemSelectionModel::Select);
   }
 } //Toolkit
 } //ArcGISRuntime

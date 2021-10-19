@@ -45,7 +45,8 @@ namespace Toolkit {
     GeoModel* geoModel();
 
   private slots:
-    void clickedItem(const QModelIndex& index);
+    void onItemSelected(const QModelIndex& index);
+    void onCurrentBasemapChanged();
 
   private:
     BasemapGalleryController* m_controller = nullptr;
