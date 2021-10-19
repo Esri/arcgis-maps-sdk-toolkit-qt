@@ -339,6 +339,7 @@ namespace Toolkit {
   /*!
   \brief Set the GeoModel object this Controller uses to \a geoModel.
   This function will also extract the basemap from the Geomodel and set it as the current one.
+  Passing a \p geomodel \c nullptr, will unset the current geomodel loaded.
  */
   void BasemapGalleryController::setGeoModel(GeoModel* geoModel)
   {
@@ -347,7 +348,7 @@ namespace Toolkit {
 
     if (m_geoModel)
     {
-      disconnectFromGeoModel(this, geoModel);
+      disconnectFromGeoModel(this, m_geoModel);
     }
 
     m_geoModel = geoModel;
@@ -355,8 +356,10 @@ namespace Toolkit {
     if (m_geoModel)
     {
       connectToGeoModel(this, m_geoModel);
+      // guard from nullptr direct access
+      setCurrentBasemap(geoModel->basemap());
     }
-    setCurrentBasemap(geoModel->basemap());
+
     emit geoModelChanged();
     //forcing all the items in the gallery to recalculate the ::ItemFlags for the view.
     emit m_gallery->dataChanged(m_gallery->index(0), m_gallery->index(std::max(m_gallery->rowCount() - 1, 0)));
