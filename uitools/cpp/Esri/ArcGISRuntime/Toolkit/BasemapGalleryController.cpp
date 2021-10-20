@@ -337,7 +337,7 @@ namespace Toolkit {
   /*!
   \brief Set the GeoModel object this Controller uses to \a geoModel.
   This function will also extract the basemap from the Geomodel and set it as the current one.
-  Passing a \p geomodel \c nullptr, will unset the current geomodel loaded.
+  Passing a \a geoModel \c nullptr, will unset the current geomodel loaded.
  */
   void BasemapGalleryController::setGeoModel(GeoModel* geoModel)
   {

@@ -91,7 +91,7 @@ namespace Toolkit {
 
   /*!
     \brief Sets the \a geomodel used by the controller/ This will reset the active basemap.
-    If \p geomodel is passed as \c nullptr, the current geomodel is unset.
+    If \a geomodel is passed as \c nullptr, the current geomodel is unset.
     \sa BasemapGalleryController::currentBasemap    
    */
   void BasemapGallery::setGeoModel(GeoModel* geomodel)
