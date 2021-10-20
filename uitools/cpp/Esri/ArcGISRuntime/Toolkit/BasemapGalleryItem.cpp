@@ -208,7 +208,8 @@ QString BasemapGalleryItem::name() const
 
 /*!
   \brief Returns the thumbnail override of this item if valid. Otherwise
-  returns the thumbnail on the basemap's item, if available.
+  returns the thumbnail on the basemap's item, if available. Otherwise, return
+  the default thumbnail.
   \sa BasemapGalleryItem::thumbnailOverride
  */
 QImage BasemapGalleryItem::thumbnail() const
@@ -218,7 +219,11 @@ QImage BasemapGalleryItem::thumbnail() const
     if (auto item = m_basemap->item())
     {
       return item->thumbnail();
-    }  
+    }
+    else
+    {
+      return QImage(QStringLiteral(":/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/generic_basemap_thumbnail.png"));
+    }
   }
   return m_thumbnail;
 }
