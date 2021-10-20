@@ -208,7 +208,8 @@ QString BasemapGalleryItem::name() const
 
 /*!
   \brief Returns the thumbnail override of this item if valid. Otherwise
-  returns the thumbnail on the basemap's item, if available.
+  returns the thumbnail on the basemap's item, if available. Otherwise, return
+  the default thumbnail.
   \sa BasemapGalleryItem::thumbnailOverride
  */
 QImage BasemapGalleryItem::thumbnail() const
