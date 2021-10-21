@@ -71,7 +71,7 @@ Control {
 
     Connections {
         target: controller
-        onCurrentPointChanged: {
+        function onCurrentPointChanged(point) {
             inputFormat.updateCoordinatePoint(point);
         }
     }

@@ -437,16 +437,16 @@ ArRawPtr* ArcGISArViewInterface::arRawPtr() const
 // signals
 
 /*!
-  \fn void ArcGISArViewInterface::translationFactorChanged();
+  \fn void ArcGISArViewInterface::translationFactorChanged()
   \brief Signal emitted when the \l translationFactor property changes.
  */
 
 /*!
-  \fn void ArcGISArViewInterface::renderVideoFeedChanged();
+  \fn void ArcGISArViewInterface::renderVideoFeedChanged()
   \brief Signal emitted when the \l renderVideoFeed property changes.
  */
 
 /*!
-  \fn void ArcGISArViewInterface::trackingChanged();
+  \fn void ArcGISArViewInterface::trackingChanged()
   \brief Signal emitted when the \l tracking property changes.
  */

@@ -21,7 +21,7 @@ Control {
     property var controller: null
 
     /*!
-      \qmlproperty unitSystem
+      \qmlproperty int unitSystem
       \brief UnitSystem for the Scalebar. For this display portion,
       only metric and imperial are valid values.
     */

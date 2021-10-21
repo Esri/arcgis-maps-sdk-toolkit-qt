@@ -154,14 +154,14 @@ namespace Toolkit {
     \li \a mapView MapView Object.
     \endlist
    */
-  void ScalebarController::setMapView(QObject* qObject)
+  void ScalebarController::setMapView(QObject* mapView)
   {
-    auto mapView = qobject_cast<MapViewToolkit*>(qObject);
+    auto mapView2 = qobject_cast<MapViewToolkit*>(mapView);
 
-    if (m_mapView == mapView)
+    if (m_mapView == mapView2)
       return;
 
-    m_mapView = mapView;
+    m_mapView = mapView2;
     emit mapViewChanged();
   }
 
@@ -306,7 +306,7 @@ namespace Toolkit {
    */
 
   /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::ScalebarController::unitsSystemChanged()
+    \fn void Esri::ArcGISRuntime::Toolkit::ScalebarController::unitSystemChanged()
     \brief Emitted when the unitsSystem changes.
    */
 
