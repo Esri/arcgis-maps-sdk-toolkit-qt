@@ -722,7 +722,7 @@ namespace Toolkit {
   }
 
     /*!
-  \brief Overriden \l QAbstractListModel function. Returns the \l Qt::ItemFlags for each item in the list.
+  \brief Overridden \l QAbstractListModel function. Returns the \l Qt::ItemFlags for each item in the list.
 
   If \l setFlagsCallback is set, Qt::ItemsFlags are returned from the call-back. Otherwise, the default \l QAbstractListModel::flags will be called.
   Flags returned are used from the \l QListView to apply visual properties.
