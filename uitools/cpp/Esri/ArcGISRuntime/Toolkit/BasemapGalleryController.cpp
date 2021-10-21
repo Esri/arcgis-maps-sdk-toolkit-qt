@@ -221,9 +221,18 @@ namespace Toolkit {
       QObject::connect(
           portal, &Portal::developerBasemapsChanged, self, [portal, self]()
           {
-            auto basemaps = portal->developerBasemaps();
+            BasemapListModel* basemaps = portal->developerBasemaps();
+
+            // Convert BasemapListModel into a Basemap* vector and sort basemaps alphabetically using the title
+            std::vector<Basemap*> basemapsVector;
+            basemapsVector.reserve(basemaps->rowCount());
+            std::copy(std::cbegin(*basemaps), std::cend(*basemaps), std::back_inserter(basemapsVector));
+            std::sort(std::begin(basemapsVector), std::end(basemapsVector), [](Basemap* b1,Basemap* b2){
+              return b1->item()->title() < b2->item()->title();
+            });
+
             // For each discovered map, add it to our gallery.
-            for (auto basemap : *basemaps)
+            for (auto basemap : basemapsVector)
             {
               self->append(basemap);
             }
@@ -409,7 +418,17 @@ namespace Toolkit {
         {
           connect(m_portal, &Portal::basemapsChanged, this, [this]
                   {
-                    for (auto basemap : *m_portal->basemaps())
+                    BasemapListModel* basemaps = m_portal->basemaps();
+
+                    // Convert BasemapListModel into a Basemap* vector and sort basemaps alphabetically using the title
+                    std::vector<Basemap*> basemapsVector;
+                    basemapsVector.reserve(basemaps->rowCount());
+                    std::copy(std::cbegin(*basemaps), std::cend(*basemaps), std::back_inserter(basemapsVector));
+                    std::sort(std::begin(basemapsVector), std::end(basemapsVector), [](Basemap* b1,Basemap* b2){
+                      return b1->item()->title() < b2->item()->title();
+                    });
+
+                    for (auto basemap : basemapsVector)
                     {
                       append(basemap);
                     }
