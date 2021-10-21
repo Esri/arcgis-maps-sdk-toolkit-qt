@@ -45,8 +45,8 @@ QtObject {
     }
 
     /*!
-      \qmlproperty GeoModel geoModel
-      \brief The geomodel the controller is listening for basemap changes.
+      \qmlproperty GeoView geoView
+      \brief The geoView the controller is listening for basemap changes.
      */
     property var geoView: null;
 
