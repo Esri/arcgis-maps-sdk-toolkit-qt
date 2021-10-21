@@ -28,7 +28,7 @@ namespace Toolkit {
   \since Esri.ArcGISRuntime 100.13
   \brief The user interface for the BasemapGallery.
   The BasemapGallery displays a collection of items representing basemaps from either ArcGIS Online, a user-defined portal,
-  or an array of Basemaps. When the user selects a basemap from the BasemapGallery, the  basemap rendered in the current
+  or an array of Basemaps. When the user selects a basemap from the BasemapGallery, the basemap rendered in the current
   geoModel is removed from the given map/scene and replaced with the basemap selected in the gallery.
   */
 
@@ -58,14 +58,13 @@ namespace Toolkit {
   }
 
   /*!
-  \brief Constructor with geomodel parameter.
+  \brief Constructor that takes a GeoModel.
   \list
-    \li \a geomodel Geomodel.
+    \li \a geomodel GeoModel.
     \li \a parent Parent widget.
   \endlist
 
-  Calls single QWidget constructor and sets the currentBasemap in the controller as the \a geomodel basemap passed. 
-  Sets the geomodel in the controller as \a geomodel.
+  The provided GeoModel's basemap will be set as the BasemapGallery's currentBasemap.
   */
   BasemapGallery::BasemapGallery(GeoModel* geomodel, QWidget* parent) :
     BasemapGallery(parent)
@@ -90,8 +89,12 @@ namespace Toolkit {
   }
 
   /*!
-    \brief Sets the \a geomodel used by the controller/ This will reset the active basemap.
-    If \a geomodel is passed as \c nullptr, the current geomodel is unset.
+    \brief Sets the \a geomodel used by the controller.
+    
+    Setting this will reset the active basemap in the gallery. When a new basemap
+    item is selected from the gallery, the GeoModel will be updated with the associated
+    basemap.
+    \note If \a geomodel is passed as \c nullptr, the current geomodel is unset.
     \sa BasemapGalleryController::currentBasemap    
    */
   void BasemapGallery::setGeoModel(GeoModel* geomodel)
@@ -100,8 +103,8 @@ namespace Toolkit {
   }
 
 /*!
-    \brief Getter of current \c GeoModel .
-    returns \c GeoModel stored in the model managed by the controller.
+    \brief Returns the current \c GeoModel used by the BasemapGallery.
+    \sa setGeoModel.
    */
   GeoModel* BasemapGallery::geoModel()
   {
@@ -111,7 +114,7 @@ namespace Toolkit {
   /*!
   \internal
   \brief Slot that sets the current basemap with \a index.
-  Once linked to the clicked Listview event, receives \c QModelIndex \a index and uses it
+  Once linked to the clicked ListView event, this slot receives \c QModelIndex \a index and uses it
   to set its basemap into the controller.
   */
   void BasemapGallery::onItemSelected(const QModelIndex& index)
@@ -121,14 +124,14 @@ namespace Toolkit {
   }
 
   /*!
-   * \internal
-   * \brief Setting the selected blue background in the graphical view of the first basemap loaded with the basemapgallery
+   \internal
+   \brief Slot that sets the selection on the BasemapGallery view when the current basemap changes.
    */
   void BasemapGallery::onCurrentBasemapChanged()
   {
     auto idx = m_controller->basemapIndex(m_controller->currentBasemap());
     auto index = m_controller->gallery()->index(idx);
-    //index can be invalid in case the currentbase map is not part of the galleryitems (idx = -1)
+    //index can be invalid in case the current basemap is not part of the gallery items (idx = -1)
     if (!index.isValid())
       return;
     m_ui->listView->selectionModel()->select(index, QItemSelectionModel::Select);
