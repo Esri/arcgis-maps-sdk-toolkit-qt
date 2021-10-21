@@ -753,6 +753,9 @@ namespace Toolkit {
   /*!
    \typedef Esri::ArcGISRuntime::Toolkit::GenericListModel::FlagsCallback
   This is a typedef for a pointer to a function with the following signature
+  \code
+    QFlags<Qt::ItemFlag> myFlagsCallback(const QModelIndex& index);
+  \endcode
   
   */
 
