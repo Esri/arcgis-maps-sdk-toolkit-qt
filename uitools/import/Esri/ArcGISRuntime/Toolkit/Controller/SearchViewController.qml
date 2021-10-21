@@ -46,7 +46,8 @@ QtObject {
 
     /*!
       \qmlproperty GeoView geoView
-      \brief The geoView the controller is listening for basemap changes.
+      \brief The geoView the controller may optionally use for setting results, and for
+      updating the active search area and preferred search location.
      */
     property var geoView: null;
 
@@ -76,10 +77,10 @@ QtObject {
       \brief  The search area to be used for the current query.
 
       Ignored in most queries, unless the \c{restrictToArea} flag is set to true when calling
-      \l SearchViewController.commitSearch.
+      \l SearchViewController::commitSearch.
 
       This property should be updated as the user navigates the map/scene, or at minimum before calling
-      \l SearchViewController.commitSearch.
+      \l SearchViewController::commitSearch.
 
       Defaults to null
      */
@@ -103,7 +104,7 @@ QtObject {
       \brief The mode which dictates how results are displayed.
 
       With \c{Automatic},
-      if only a single result is found then this is automatically set as the selected result, otherwise when the is more than
+      if only a single result is found, then this is automatically set as the selected result. Otherwise when there is more than
       one possible result then the \l results property is populated with all possible results.
 
       With \c{Multiple}, the \l results property is
@@ -226,7 +227,7 @@ QtObject {
       \brief Flag for whether automatic configuration is enabled or not.
        Determines whether the view will update its configuration based on the attached
        geoview's geomodel automatically. This includes such properties as \l queryCenter,
-       \l queryArea, and \l isEligableForRequery.
+       \l queryArea, and \l eligableForRequery.
 
        Defaults to true.
      */

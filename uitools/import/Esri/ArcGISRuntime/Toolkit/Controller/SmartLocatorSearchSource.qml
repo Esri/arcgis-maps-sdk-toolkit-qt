@@ -26,7 +26,7 @@ import QtQml.Models 2.15
     \brief Extends LocatorSearchSource with intelligent search behaviors; adds support for repeated search.
 
     \note Advanced functionality requires knowledge of the underlying locator to be used well; this class implements
-    behaviors that make assumptions about the locator being the world geocode service.
+    behaviors that make assumptions about the locator being the \l{https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm}{ArcGIS World Geocoding Service}.
  */
 LocatorSearchSource {
     id: smartLocatorSearchSource
