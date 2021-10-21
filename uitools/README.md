@@ -5,6 +5,18 @@ SDK for Qt. It provides ready made UI components to complement mapping and GIS
 applications. Because it is open source you are encouraged to modify these tools
 and add your own.
 
+|Tool|[C++ (QtQuick)](https://developers.arcgis.com/qt/toolkit/api-reference/cppquickuitools.html)|[QML](https://developers.arcgis.com/qt/toolkit/api-reference/qmluitools.html)|[QtWidgets](https://developers.arcgis.com/qt/toolkit/api-reference/cppwidgetsuitools.html)|
+|--|--|--|--|
+|Authentication View|:white_check_mark: | :white_check_mark: | :white_check_mark: |
+|Basemap Gallery|:white_check_mark:|:white_check_mark:||
+|Callout|:white_check_mark:|:white_check_mark:||
+|Coordinate Conversion|:white_check_mark:|:white_check_mark:|:white_check_mark:|
+|NorthArrow|:white_check_mark:|:white_check_mark:|:white_check_mark:|
+|Overview Map|:white_check_mark:|:white_check_mark:|:white_check_mark:|
+|Popup Stack View|:white_check_mark:|:white_check_mark:||
+|Popup View|:white_check_mark:|:white_check_mark:||
+|Time slider|:white_check_mark:|:white_check_mark:||
+
 ## Structure
 
 This repo contains 3 toolkit projects, each intended for use with a different
