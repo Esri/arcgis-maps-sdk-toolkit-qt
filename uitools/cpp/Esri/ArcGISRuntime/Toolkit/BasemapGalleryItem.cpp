@@ -164,17 +164,36 @@ void BasemapGalleryItem::setBasemap(Basemap* basemap)
 
   if (m_basemap)
   {
-    if (auto item = m_basemap->item())
+    auto doFetch = [this, basemap]
     {
-      connect(item, &Item::fetchThumbnailCompleted, this, &BasemapGalleryItem::thumbnailChanged);
-    }
+      emit basemapChanged();
+      auto item = basemap->item();
+      if (!item)
+      {
+       return;
+      }
+
+      auto itemThumbnail = item->thumbnail();
+      if (!itemThumbnail.isNull())
+      {
+        // We have a good thumbnail.
+
+        return;
+      }
+      connect(item, &Item::fetchThumbnailCompleted, this, &BasemapGalleryItem::basemapChanged);
+      item->fetchThumbnail();
+    };
 
     if (m_basemap->loadStatus() != LoadStatus::Loaded)
     {
-      connect(m_basemap, &Basemap::doneLoading, this, &BasemapGalleryItem::basemapChanged);
+      connect(m_basemap, &Basemap::doneLoading, this, doFetch);
+      m_basemap->load();
+    }
+    else
+    {
+      doFetch();
     }
   }
-
   emit basemapChanged(); 
 }
 
@@ -189,7 +208,8 @@ QString BasemapGalleryItem::name() const
 
 /*!
   \brief Returns the thumbnail override of this item if valid. Otherwise
-  returns the thumbnail on the basemap's item, if available.
+  returns the thumbnail on the basemap's item, if available. Otherwise, returns
+  the default thumbnail.
   \sa BasemapGalleryItem::thumbnailOverride
  */
 QImage BasemapGalleryItem::thumbnail() const
@@ -199,7 +219,11 @@ QImage BasemapGalleryItem::thumbnail() const
     if (auto item = m_basemap->item())
     {
       return item->thumbnail();
-    }  
+    }
+    else
+    {
+      return QImage(QStringLiteral(":/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/generic_basemap_thumbnail.png"));
+    }
   }
   return m_thumbnail;
 }

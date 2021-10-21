@@ -33,7 +33,7 @@ class GenericListModel : public QAbstractListModel
   Q_OBJECT
   Q_PROPERTY(int count READ count NOTIFY countChanged)
 public:
-
+  typedef QFlags<Qt::ItemFlag>(FlagsCallback)(const QModelIndex& index);
   explicit Q_INVOKABLE GenericListModel(QObject* parent = nullptr);
 
   GenericListModel(const QMetaObject* elementType, QObject* parent = nullptr);
@@ -47,6 +47,14 @@ public:
   void setDisplayPropertyName(const QString& propertyName);
 
   QString displayPropertyName();
+
+  void setDecorationPropertyName(const QString& propertyName);
+
+  QString decorationPropertyName();
+
+  void setTooltipPropertyName(const QString& propertyName);
+
+  QString tooltipPropertyName();
 
   int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 
@@ -62,6 +70,14 @@ public:
 
   QVariant headerData(int section, Qt::Orientation orientation,
                       int role = Qt::DisplayRole) const override;
+
+  Qt::ItemFlags flags(const QModelIndex& index) const override;
+
+  template <typename Func>
+  void setFlagsCallback(Func&& f)
+  {
+    m_flagsCallback = std::forward<Func>(f);
+  }
 
   Q_INVOKABLE bool append(QList<QObject*> object);
 
@@ -88,8 +104,11 @@ private:
 
 private:
   int m_displayPropIndex = -1;
+  int m_decorationPropIndex = -1;
+  int m_tooltipPropIndex = -1;
   const QMetaObject* m_elementType = nullptr;
   QList<QObject*> m_objects;
+  std::function<FlagsCallback> m_flagsCallback;
 };
 
 } // Toolkit
