@@ -33,13 +33,13 @@ namespace Toolkit {
   */
 
  /*!
-  \brief Constructor.
+  \brief Default constructor.
   \list
     \li \a parent Parent widget.
   \endlist
 
   View mantains its associated controller, sets up the view itself and its model.
-  \note geomodel should be manually set by calling \l setGeoModel.
+  \note If this constructor is used, a \c GeoModel must be set separately using \l setGeoModel.
   */
  BasemapGallery::BasemapGallery(QWidget* parent) :
    QFrame(parent),
@@ -51,9 +51,8 @@ namespace Toolkit {
    m_ui->listView->setModel(model);
 
    //signal-slots
+   // both are needed for setting the initial basemap or in case a new basemap is loaded by changing the geomodel.
    connect(m_ui->listView->selectionModel(), &QItemSelectionModel::currentChanged, this, &BasemapGallery::onItemSelected);
-   // both are needed for setting the inital basemap or in case a new basemap is loaded by changing the geomodel.
-   // datachanged is also needed because the items from the portal are loaded async, so when a new basemap is set intially, the items are not ready
    connect(m_controller, &BasemapGalleryController::currentBasemapChanged, this, &BasemapGallery::onCurrentBasemapChanged);
   }
 
