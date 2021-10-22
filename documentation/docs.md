@@ -1,9 +1,9 @@
 # Authentication View
 AuthenticationView provides a dialog for the user to input credentials whenever an authentication challenges is produced by ArcGISRuntime. This dialog is context sensitive and will change based on the type of challenge that is produced by ArcGIS runtime.
-+screenshot
+td+screenshot
 OAuth 2.0 uses QWebEngineView. To use OAuth you must add ```QT += webenginewidgets``` to qmake in your ```.pro``` file
 
-### C++ Quick and QML example code
+### C++ QtQuick and QML example code
 ```c++
 import Esri.ArcGISRuntime 100.12
 import Esri.ArcGISRuntime.Toolkit 100.12
@@ -40,8 +40,8 @@ The NorthArrow tool is a UI component that always points North with reference to
 Double click it and will reset the map to the original orientation.
 +screenshot
 
-### C++ Quick and QML example code
-```c++
+### C++ QtQuick and QML example code
+```qml
 import Esri.ArcGISRuntime 100.12
 import Esri.ArcGISRuntime.Toolkit 100.12
 
@@ -77,3 +77,38 @@ MapView {
 ```
 
 # Time Slider
+The slider provides a user interface for manually setting or animating changes to the current time extent of the GeoView.
+A time slider can be bound to a geoView (MapView or SceneView) to allow filtering on temporal data. The time extents of all layers in the map or scene will be used to set up the slider with the full temporal range and the current time extent.
+![timeslider](timeslider.gif)
+
+### C++ QtQuick and QML example code
+td+Qml could be different to set up. check
+```qml
+MapView {
+        id: view
+        anchors.fill: parent
+        // set focus to enable keyboard navigation
+        focus: true
+
+        TimeSlider {
+            anchors {
+                left: parent.left
+                right: parent.right
+                bottom: parent.bottom
+            }
+
+            geoView: view
+        }
+    }
+```
+Add time enabled layer in the constructor of your project component (mine is Toolkit_TimeSlider_Test), for example [Hurricanes](https://sampleserver6.arcgisonline.com/arcgis/rest/services/Hurricanes/MapServer)
+```c++
+using namespace Esri::ArcGISRuntime;
+Toolkit_TimeSlider_Test::Toolkit_TimeSlider_Test(QObject* parent /* = nullptr */) :
+  QObject(parent),
+  m_map(new Map(Basemap::streets(this), this))
+{
+  auto imgLyr = new ArcGISMapImageLayer(QUrl("https://sampleserver6.arcgisonline.com/arcgis/rest/services/Hurricanes/MapServer"), this);
+  m_map->operationalLayers()->append(imgLyr);
+}
+```
