@@ -1,0 +1,41 @@
+<RCC>
+  <!-- This section contains all view components (shared by C++ and QML APIs) -->
+  <qresource prefix="/esri.com/imports/Calcite/">
+    <file>ApplicationWindow.qml</file>
+    <file>BusyIndicator.qml</file>
+    <file>BusyIndicatorAnim.qml</file>
+    <file>Button.qml</file>
+    <file>Calcite.qml</file>
+    <file>CheckBox.qml</file>
+    <file>CheckDelegate.qml</file>
+    <file>CheckIndicator.qml</file>
+    <file>ComboBox.qml</file>
+    <file>Dial.qml</file>
+    <file>Dialog.qml</file>
+    <file>DialogButtonBox.qml</file>
+    <file>Drawer.qml</file>
+    <file>Frame.qml</file>
+    <file>GroupBox.qml</file>
+    <file>ItemDelegate.qml</file>
+    <file>Label.qml</file>
+    <file>Menu.qml</file>
+    <file>MenuItem.qml</file>
+    <file>MenuSeparator.qml</file>
+    <file>Page.qml</file>
+    <file>PageIndicator.qml</file>
+    <file>Pane.qml</file>
+    <file>Popup.qml</file>
+    <file>ProgressBar.qml</file>
+    <file>qmldir</file>
+    <file>RadioButton.qml</file>
+    <file>RadioDelegate.qml</file>
+    <file>RadioIndicator.qml</file>
+    <file>RangeSlider.qml</file>
+    <file>Slider.qml</file>
+    <file>Switch.qml</file>
+    <file>TextField.qml</file>
+  </qresource>
+  <qresource prefix="/esri.com/imports/Calcite">
+    <file>images/check.svg</file>
+  </qresource>
+</RCC>
