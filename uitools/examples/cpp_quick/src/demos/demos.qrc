@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/demos">
+        <file>NorthArrowDemo.qml</file>
+    </qresource>
+</RCC>
