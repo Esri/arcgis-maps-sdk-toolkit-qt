@@ -35,7 +35,7 @@ import QtQuick.Layouts 1.12
  available to the user.
  */
 
-Control {
+Pane {
     id: coordinateConversionWindow
 
     clip: true
@@ -95,8 +95,6 @@ Control {
         value: captureModeButton.checked
     }
 
-    background: Rectangle { }
-
     contentItem: ColumnLayout {
         id: gridLayout
         spacing: 0
@@ -139,8 +137,6 @@ Control {
                 readOnly: !editCoordinateButton.checked
                 selectByMouse: !readOnly
                 text: inputFormat.type? inputFormat.notation : "No position"
-
-                color: editCoordinateButton.checked ? palette.highlight: palette.text;
                 onEditingFinished: {
                     controller.setCurrentPoint(text, inputFormat.type);
                     editCoordinateButton.checked = false;
@@ -256,7 +252,6 @@ Control {
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     visible: menuButton.checked
-                    color: palette.text
                 }
 
                 Label {
@@ -266,7 +261,6 @@ Control {
                     visible: menuButton.checked
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignLeft
-                    color: palette.text
                 }
 
                 Button {
