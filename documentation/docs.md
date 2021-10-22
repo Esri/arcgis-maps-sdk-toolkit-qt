@@ -38,7 +38,7 @@ MapView {
 # North Arrow
 The NorthArrow tool is a UI component that always points North with reference to the orientation of your SceneView/MapView.
 Double click it and will reset the map to the original orientation.
-+screenshot
+![northarrow](northarrow.gif)
 
 ### C++ QtQuick and QML example code
 ```qml
@@ -46,24 +46,20 @@ import Esri.ArcGISRuntime 100.12
 import Esri.ArcGISRuntime.Toolkit 100.12
 
 MapView {
-    id: mapView
+    id: view
+    anchors.fill: parent
 
-    Map {
-      BasemapTopographic {}
-    }
-
-    // A visible compass is now embedded in the mapView and hooked up!
     NorthArrow {
-        id: arrow
-        width: 32
-        height: 32
-        anchors {
-            right: parent.right
-            bottom: parent.bottom
+            id: arrow
+            width: 48
+            height: 48
+            anchors {
+                right: parent.right
+                top: parent.top
+            }
+            geoView: view
         }
-        geoView: mapView
-    }
-}
+        }
 ```
 
 ### QWidget example code
