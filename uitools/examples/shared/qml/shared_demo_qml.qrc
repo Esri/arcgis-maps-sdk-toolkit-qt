@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="shared/qml">
+        <file>DemoPage.qml</file>
+        <file>main.qml</file>
+        <file>tools.js</file>
+    </qresource>
+</RCC>
