@@ -1,9 +1,20 @@
 # Authentication View
 AuthenticationView provides a dialog for the user to input credentials whenever an authentication challenges is produced by ArcGISRuntime. This dialog is context sensitive and will change based on the type of challenge that is produced by ArcGIS runtime.
-td+screenshot
-OAuth 2.0 uses QWebEngineView. To use OAuth you must add ```QT += webenginewidgets``` to qmake in your ```.pro``` file
+![authenticationview](authenticationview_qml.png)
+OAuth 2.0 uses QWebEngineView. To use OAuth you must add ```QT += webenginewidgets``` to qmake in your ```.pro``` file.
+td+check Qml OAuth 2.0 needs  QT += webview
 
-### C++ QtQuick and QML example code
+### QML example code
+OAuth 2.0 uses a WebView. To use an OAuthView you must call QtWebView::initialize() immediately after the QGuiApplication instance is created and must add ```QT += webview``` to qmake in your ```.pro``` file.
+
+```c++
+#include <QtWebView>
+...
+int main(int argc, char *argv[]){
+  QGuiApplication app(argc, argv);
+  QtWebView::initialize();
+}
+```
 ```c++
 import Esri.ArcGISRuntime 100.12
 import Esri.ArcGISRuntime.Toolkit 100.12
