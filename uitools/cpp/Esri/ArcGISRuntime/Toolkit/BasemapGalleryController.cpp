@@ -209,6 +209,27 @@ namespace Toolkit {
 
     /*!
       \internal
+
+     */
+    void sortBasemapsAndAddToGallery(BasemapGalleryController* self, BasemapListModel* basemaps)
+    {
+      // Convert BasemapListModel into a Basemap* vector and sort basemaps alphabetically using the title
+      std::vector<Basemap*> basemapsVector;
+      basemapsVector.reserve(basemaps->rowCount());
+      std::copy(std::cbegin(*basemaps), std::cend(*basemaps), std::back_inserter(basemapsVector));
+      std::sort(std::begin(basemapsVector), std::end(basemapsVector), [](Basemap* b1,Basemap* b2){
+        return b1->item()->title() < b2->item()->title();
+      });
+
+      // For each discovered map, add it to our gallery.
+      for (auto basemap : basemapsVector)
+      {
+        self->append(basemap);
+      }
+    }
+
+    /*!
+      \internal
       Calls Portal::fetchDeveloperBasemaps on the portal. Note that we do
       not call Portal::fetchBasemaps. The former call is for retrieving the modern API-key
       metered basemaps, while the latter returns older-style basemaps. The latter is required
@@ -223,19 +244,7 @@ namespace Toolkit {
           {
             BasemapListModel* basemaps = portal->developerBasemaps();
 
-            // Convert BasemapListModel into a Basemap* vector and sort basemaps alphabetically using the title
-            std::vector<Basemap*> basemapsVector;
-            basemapsVector.reserve(basemaps->rowCount());
-            std::copy(std::cbegin(*basemaps), std::cend(*basemaps), std::back_inserter(basemapsVector));
-            std::sort(std::begin(basemapsVector), std::end(basemapsVector), [](Basemap* b1,Basemap* b2){
-              return b1->item()->title() < b2->item()->title();
-            });
-
-            // For each discovered map, add it to our gallery.
-            for (auto basemap : basemapsVector)
-            {
-              self->append(basemap);
-            }
+            sortBasemapsAndAddToGallery(self, basemaps);
           });
 
       // Load the portal and kick-off the group discovery.
@@ -420,18 +429,7 @@ namespace Toolkit {
                   {
                     BasemapListModel* basemaps = m_portal->basemaps();
 
-                    // Convert BasemapListModel into a Basemap* vector and sort basemaps alphabetically using the title
-                    std::vector<Basemap*> basemapsVector;
-                    basemapsVector.reserve(basemaps->rowCount());
-                    std::copy(std::cbegin(*basemaps), std::cend(*basemaps), std::back_inserter(basemapsVector));
-                    std::sort(std::begin(basemapsVector), std::end(basemapsVector), [](Basemap* b1,Basemap* b2){
-                      return b1->item()->title() < b2->item()->title();
-                    });
-
-                    for (auto basemap : basemapsVector)
-                    {
-                      append(basemap);
-                    }
+                    sortBasemapsAndAddToGallery(this, basemaps);
                   });
           m_portal->fetchBasemaps();
         }
