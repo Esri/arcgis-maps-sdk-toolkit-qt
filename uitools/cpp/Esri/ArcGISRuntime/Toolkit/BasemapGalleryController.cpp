@@ -221,7 +221,13 @@ namespace Toolkit {
       basemapsVector.reserve(basemaps->rowCount());
       std::copy(std::cbegin(*basemaps), std::cend(*basemaps), std::back_inserter(basemapsVector));
       std::sort(std::begin(basemapsVector), std::end(basemapsVector), [](Basemap* b1,Basemap* b2){
-        return b1->item()->title() < b2->item()->title();
+        // Check validity of basemap->item() and if title() is empty. If either is true, push to end of list.
+        if (!b1->item() || b1->item()->title() == "")
+          return false;
+        else if (!b2->item() || b2->item()->title() == "")
+          return true;
+        else
+          return b1->item()->title() < b2->item()->title();
       });
 
       // For each discovered map, add it to our gallery.

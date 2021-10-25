@@ -239,8 +239,15 @@ QtObject {
 
             // Sort the basemaps in basemapVector alphabetically using the title.
             basemapsArray.sort(function(b1, b2) {
-                // localeCompare returns 1 if b1 > b2, 0 if b1 = b2, and -1 if b1 < b2.
-                return b1.item.title.localeCompare(b2.item.title)
+                // Check validity of basemap.item and if title is empty. If either is true, push to end of list.
+                if (!b1.item || b1.item.title === "")
+                    return 1;
+                else if (!b2.item || b2.item.title === "")
+                    return -1;
+                else {
+                    // localeCompare returns 1 if b1 > b2, 0 if b1 = b2, and -1 if b1 < b2.
+                    return b1.item.title.localeCompare(b2.item.title)
+                }
             });
 
             // Add each basemap to the Basemap Gallery.
