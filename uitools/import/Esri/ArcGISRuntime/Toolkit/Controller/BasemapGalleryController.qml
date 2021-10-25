@@ -203,14 +203,14 @@ QtObject {
                 if (controller.portal.fetchDeveloperBasemapsStatus === Enums.TaskStatusCompleted) {
                     let basemaps = controller.portal.developerBasemaps;
 
-                    sortBasemapsAndAddToGallery(basemaps);
+                    internal.sortBasemapsAndAddToGallery(basemaps);
                 }
             }
             function onFetchBasemapsStatusChanged() {
                 if (controller.portal.fetchBasemapsStatus === Enums.TaskStatusCompleted) {
                     let basemaps = controller.portal.basemaps;
 
-                    sortBasemapsAndAddToGallery(basemaps);
+                    internal.sortBasemapsAndAddToGallery(basemaps);
                 }
             }
         }
@@ -227,6 +227,25 @@ QtObject {
 
         property Component galleryItem: Component {
             BasemapGalleryItem { }
+        }
+
+        function sortBasemapsAndAddToGallery(basemaps)
+        {
+            // Copy each element of the BasemapListModel from the portal (i.e. basemaps) into a new array.
+            let basemapsArray = [];
+            basemaps.forEach(element => basemapsArray.push(element));
+
+            // Copy the array to ensure that elements are not deleted prematurely by the garbage collector
+            basemapsArray = basemapsArray.map(element => { return {element: element, item: element.item}});
+
+            // Sort the basemaps in basemapVector alphabetically using the title.
+            basemapsArray.sort(function(b1, b2) {
+                // localeCompare returns 1 if b1 > b2, 0 if b1 = b2, and -1 if b1 < b2.
+                return b1.item.title.localeCompare(b2.item.title)
+            });
+
+            // Add each basemap to the Basemap Gallery.
+            basemapsArray.forEach(element => controller.append(element.element));
         }
     }
 
@@ -256,24 +275,5 @@ QtObject {
                         });
             portal.load();
         }
-    }
-
-    function sortBasemapsAndAddToGallery(basemaps)
-    {
-        // Copy each element of the BasemapListModel from the portal (i.e. basemaps) into a new array.
-        let basemapsArray = [];
-        basemaps.forEach(element => basemapsArray.push(element));
-
-        // Copy the array to ensure that elements are not deleted prematurely by the garbage collector
-        basemapsArray = basemapsArray.map(element => { return {element: element, item: element.item}});
-
-        // Sort the basemaps in basemapVector alphabetically using the title.
-        basemapsArray.sort(function(b1, b2) {
-            // localeCompare returns 1 if b1 > b2, 0 if b1 = b2, and -1 if b1 < b2.
-            return b1.item.title.localeCompare(b2.item.title)
-        });
-
-        // Add each basemap to the Basemap Gallery.
-        basemapsArray.forEach(element => controller.append(element.element));
     }
 }
