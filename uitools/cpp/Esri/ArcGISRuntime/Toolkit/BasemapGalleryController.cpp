@@ -209,7 +209,10 @@ namespace Toolkit {
 
     /*!
       \internal
+      Takes a BasemapListModel*, sorts them alphabetically, and adds them to the basemap gallery.
 
+      Because the basemaps are initially unloaded, Basemap->item() must be used to access the
+      basemap metadata. The basemaps are sorted using Basemap->item()->title().
      */
     void sortBasemapsAndAddToGallery(BasemapGalleryController* self, BasemapListModel* basemaps)
     {
