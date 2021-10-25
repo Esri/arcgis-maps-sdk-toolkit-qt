@@ -1,9 +1,33 @@
 # Authentication View
 AuthenticationView provides a dialog for the user to input credentials whenever an authentication challenges is produced by ArcGISRuntime. This dialog is context sensitive and will change based on the type of challenge that is produced by ArcGIS runtime.
 ![authenticationview](authenticationview_qml.png)
+
 OAuth 2.0 uses QWebEngineView. To use OAuth you must add ```QT += webenginewidgets``` to qmake in your ```.pro``` file.
 td+check Qml OAuth 2.0 needs  QT += webview
 
+### C++ QtQuick example code
+OAuth 2.0 uses a WebView. To use an OAuthView you must call QtWebView::initialize() immediately after the QGuiApplication instance is created and must add ```QT += webview``` to qmake in your ```.pro``` file.
+```c++
+#include <QtWebView>
+...
+int main(int argc, char *argv[]){
+  QtWebView::initialize();
+  QGuiApplication app(argc, argv);
+}
+```
+
+Add an additional layer to the map with requires authentication
+```c++
+using namespace Esri::ArcGISRuntime;
+Toolkit_AuthenticationView_Test::Toolkit_AuthenticationView_Test(QObject* parent /* = nullptr */) :
+  QObject(parent),
+  m_map(new Map(Basemap::streets(this), this))
+{
+    ArcGISMapImageLayer *l = new ArcGISMapImageLayer(QUrl(QString(
+        "https://sampleserver6.arcgisonline.com/arcgis/rest/services/USA_secure_user1/MapServer")));
+        m_map->operationalLayers()->append(l);
+}
+```
 ### QML example code
 OAuth 2.0 uses a WebView. To use an OAuthView you must call QtWebView::initialize() immediately after the QGuiApplication instance is created and must add ```QT += webview``` to qmake in your ```.pro``` file.
 
@@ -11,8 +35,8 @@ OAuth 2.0 uses a WebView. To use an OAuthView you must call QtWebView::initializ
 #include <QtWebView>
 ...
 int main(int argc, char *argv[]){
-  QGuiApplication app(argc, argv);
   QtWebView::initialize();
+  QGuiApplication app(argc, argv);
 }
 ```
 ```c++
