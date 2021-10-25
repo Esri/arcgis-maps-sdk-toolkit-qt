@@ -135,7 +135,17 @@ MapView {
 ```
 
 ### QtWidget
+```c++
+#include "Esri/ArcGISRuntime/Toolkit/BasemapGallery.h"
+...
+// Create the Widget view underneath everything
+m_map = new Map(Basemap::streetsVector(), this);
+m_mapView = new MapGraphicsView(this);
 
+BasemapGallery* basemapgallery = new BasemapGallery(m_map, this);
+m_mapView->setMap(m_map);
+setCentralWidget(m_mapView);
+```
 
 # North Arrow
 The NorthArrow tool is a UI component that always points North with reference to the orientation of your SceneView/MapView.
