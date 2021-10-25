@@ -6,6 +6,7 @@ OAuth 2.0 uses QWebEngineView. To use OAuth you must add ```QT += webenginewidge
 td+check Qml OAuth 2.0 needs  QT += webview
 
 ### C++ QtQuick example code
+td+: problem, "QtWebEngine::initialize() called with QCoreApplication object already created and should be call before. This is depreciated and may fail in the future". where is created the qcoreapplication?
 OAuth 2.0 uses a WebView. To use an OAuthView you must call QtWebView::initialize() immediately after the QGuiApplication instance is created and must add ```QT += webview``` to qmake in your ```.pro``` file.
 ```c++
 #include <QtWebView>
@@ -66,8 +67,21 @@ MapView {
 ```
 
 ### QWidget example code
-+add code
-```
+td+: fix leaking memory from authentication view
+```c++
+#include "Esri/ArcGISRuntime/Toolkit/AuthenticationView.h"
+#include "ArcGISMapImageLayer.h"
+...
+// Create the Widget view underneath everything
+m_mapView = new MapGraphicsView(this);
+
+m_map = new Map(Basemap::streets(), this);
+m_mapView->setMap(m_map);
+setCentralWidget(m_mapView);
+AuthenticationView *aw = new AuthenticationView(new AuthenticationController(this), this);
+auto layer = new ArcGISMapImageLayer(QUrl(
+    "https://sampleserver6.arcgisonline.com/arcgis/rest/services/USA_secure_user1/MapServer"));
+m_map->operationalLayers()->append(layer);
 ```
 
 # North Arrow
