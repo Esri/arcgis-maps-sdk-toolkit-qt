@@ -229,8 +229,7 @@ QtObject {
             BasemapGalleryItem { }
         }
 
-        function sortBasemapsAndAddToGallery(basemaps)
-        {
+        function sortBasemapsAndAddToGallery(basemaps) {
             // Copy each element of the BasemapListModel from the portal (i.e. basemaps) into a new array.
             let basemapsArray = [];
             basemaps.forEach(element => basemapsArray.push(element));
