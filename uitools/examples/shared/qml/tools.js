@@ -10,5 +10,9 @@ const TOOLS = [
   {
     "name": "Coordinate conversion",
     "url": "qrc:///demos/CoordinateConversionDemo.qml"
+  },
+  {
+    "name": "Authentication view",
+    "url": "qrc:///demos/AuthenticationViewDemo.qml"
   }
 ];

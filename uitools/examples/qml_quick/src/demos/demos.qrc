@@ -3,5 +3,6 @@
         <file>CoordinateConversionDemo.qml</file>
         <file>NorthArrowDemo.qml</file>
         <file>BasemapGalleryDemo.qml</file>
+        <file>AuthenticationViewDemo.qml</file>
     </qresource>
 </RCC>
