@@ -210,6 +210,36 @@ namespace Toolkit {
 
     /*!
       \internal
+      Takes a BasemapListModel*, sorts them alphabetically, and adds them to the basemap gallery.
+
+      Because the basemaps are initially unloaded, Basemap->item() must be used to access the
+      basemap metadata. The basemaps are sorted using Basemap->item()->title().
+     */
+    void sortBasemapsAndAddToGallery(BasemapGalleryController* self, BasemapListModel* basemaps)
+    {
+      // Convert BasemapListModel into a Basemap* vector and sort basemaps alphabetically using the title
+      std::vector<Basemap*> basemapsVector;
+      basemapsVector.reserve(basemaps->rowCount());
+      std::copy(std::cbegin(*basemaps), std::cend(*basemaps), std::back_inserter(basemapsVector));
+      std::sort(std::begin(basemapsVector), std::end(basemapsVector), [](Basemap* b1,Basemap* b2){
+        // Check validity of basemap->item() and if title() is empty. If either is true, push to end of list.
+        if (!b1->item() || b1->item()->title() == "")
+          return false;
+        else if (!b2->item() || b2->item()->title() == "")
+          return true;
+        else
+          return b1->item()->title() < b2->item()->title();
+      });
+
+      // For each discovered map, add it to our gallery.
+      for (auto basemap : basemapsVector)
+      {
+        self->append(basemap);
+      }
+    }
+
+    /*!
+      \internal
       Calls Portal::fetchDeveloperBasemaps on the portal. Note that we do
       not call Portal::fetchBasemaps. The former call is for retrieving the modern API-key
       metered basemaps, while the latter returns older-style basemaps. The latter is required
@@ -222,12 +252,9 @@ namespace Toolkit {
       QObject::connect(
           portal, &Portal::developerBasemapsChanged, self, [portal, self]()
           {
-            auto basemaps = portal->developerBasemaps();
-            // For each discovered map, add it to our gallery.
-            for (auto basemap : *basemaps)
-            {
-              self->append(basemap);
-            }
+            BasemapListModel* basemaps = portal->developerBasemaps();
+
+            sortBasemapsAndAddToGallery(self, basemaps);
           });
 
       // Load the portal and kick-off the group discovery.
@@ -433,10 +460,9 @@ namespace Toolkit {
         {
           connect(m_portal, &Portal::basemapsChanged, this, [this]
                   {
-                    for (auto basemap : *m_portal->basemaps())
-                    {
-                      append(basemap);
-                    }
+                    BasemapListModel* basemaps = m_portal->basemaps();
+
+                    sortBasemapsAndAddToGallery(this, basemaps);
                   });
           m_portal->fetchBasemaps();
         }
