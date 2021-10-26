@@ -14,5 +14,9 @@ const TOOLS = [
   {
     "name": "Authentication view",
     "url": "qrc:///demos/AuthenticationViewDemo.qml"
+  },
+  {
+    "name": "Time slider",
+    "url": "qrc:///demos/TimeSliderDemo.qml"
   }
 ];

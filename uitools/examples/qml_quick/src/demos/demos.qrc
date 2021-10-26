@@ -4,5 +4,6 @@
         <file>NorthArrowDemo.qml</file>
         <file>BasemapGalleryDemo.qml</file>
         <file>AuthenticationViewDemo.qml</file>
+        <file>TimeSliderDemo.qml</file>
     </qresource>
 </RCC>
