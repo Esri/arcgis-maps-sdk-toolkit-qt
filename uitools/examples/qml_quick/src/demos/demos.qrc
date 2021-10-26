@@ -5,5 +5,6 @@
         <file>BasemapGalleryDemo.qml</file>
         <file>AuthenticationViewDemo.qml</file>
         <file>TimeSliderDemo.qml</file>
+        <file>CalloutDemo.qml</file>
     </qresource>
 </RCC>
