@@ -1,30 +1,30 @@
 const TOOLS = [
   {
     "name": "North arrow",
-    "url": "qrc:///demos/NorthArrowDemo.qml"
+    "url": "NorthArrowDemo.qml"
   },
   {
     "name": "Basemap gallery",
-    "url": "qrc:///demos/BasemapGalleryDemo.qml"
+    "url": "BasemapGalleryDemo.qml"
   },
   {
     "name": "Coordinate conversion",
-    "url": "qrc:///demos/CoordinateConversionDemo.qml"
+    "url": "CoordinateConversionDemo.qml"
   },
   {
     "name": "Authentication view",
-    "url": "qrc:///demos/AuthenticationViewDemo.qml"
+    "url": "AuthenticationViewDemo.qml"
   },
   {
     "name": "Time slider",
-    "url": "qrc:///demos/TimeSliderDemo.qml"
+    "url": "TimeSliderDemo.qml"
   },
   {
     "name": "Callout",
-    "url": "qrc:///demos/CalloutDemo.qml"
+    "url": "CalloutDemo.qml"
   },
   {
    "name": "Popup View",
-   "url": "qrc:///demos/PopupViewDemo.qml"
+   "url": "PopupViewDemo.qml"
   }
 ];

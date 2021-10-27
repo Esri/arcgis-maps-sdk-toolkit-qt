@@ -14,19 +14,12 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import Esri.ArcGISRuntime 100.13
 import Esri.ArcGISRuntime.Toolkit 100.13
-import DemoPage 1.0
+import DemoApp 1.0
 
-// add a mapView component
 DemoPage {
-    anchors.fill: parent
-    // set focus to enable keyboard navigation
-    focus: true
-
     sceneViewContents: Component {
         SceneView {
-            Scene {
-                initBasemapStyle: Enums.BasemapStyleArcGISDarkGray
-            }
+            id: view
             NorthArrow {
                 geoView: parent
                 anchors {
@@ -34,14 +27,15 @@ DemoPage {
                     bottom: parent.attributionTop
                 }
             }
+            NorthArrowDemoModel {
+                geoView: view
+            }
         }
     }
 
     mapViewContents: Component {
         MapView {
-            Map {
-                initBasemapStyle: Enums.BasemapStyleArcGISDarkGray
-            }
+            id: view
             NorthArrow {
                 geoView: parent
                 anchors {
@@ -49,6 +43,9 @@ DemoPage {
                     margins: 10
                     bottom: parent.attributionTop
                 }
+            }
+            NorthArrowDemoModel {
+                geoView: view
             }
         }
     }

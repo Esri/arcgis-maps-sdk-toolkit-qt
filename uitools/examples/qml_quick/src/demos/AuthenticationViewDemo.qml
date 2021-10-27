@@ -14,11 +14,8 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import Esri.ArcGISRuntime 100.13
 import Esri.ArcGISRuntime.Toolkit 100.13
-import DemoPage 1.0
 
 DemoPage {
-    anchors.fill: parent
-    focus: true
     sceneViewContents: Component {
         Scene {
             initBasemapStyle: Enums.BasemapStyleArcGISDarkGray

@@ -53,6 +53,8 @@ RESOURCES += \
     $$absolute_path($$PWD/../../../calcite-qml/Calcite/calcite.qrc) \
     $$absolute_path($$PWD/../shared/qml/shared_demo_qml.qrc)
 
+QML_IMPORT_PATH += $$absolute_path($$PWD/../shared/qml)
+
 OTHER_FILES += \
     wizard.xml \
     wizard.png

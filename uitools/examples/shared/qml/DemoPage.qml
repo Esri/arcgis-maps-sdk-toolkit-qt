@@ -1,7 +1,7 @@
-import QtQuick 2.0
-
-import QtQuick.Controls 2.12
-import QtQuick.Layouts 1.12
+import QtQml 2.15
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 import Esri.ArcGISRuntime 100.13
 import Esri.ArcGISRuntime.Toolkit 100.13
 import Calcite 1.0 as C

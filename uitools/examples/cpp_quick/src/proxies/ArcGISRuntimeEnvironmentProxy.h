@@ -3,7 +3,8 @@
 
 #include <QObject>
 
-class ArcGISRuntimeEnvironmentProxy : public QObject {
+class ArcGISRuntimeEnvironmentProxy : public QObject
+{
   Q_OBJECT
   Q_PROPERTY(QString apiKey READ apiKey WRITE setApiKey NOTIFY apiKeyChanged)
 public:
