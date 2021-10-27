@@ -22,5 +22,9 @@ const TOOLS = [
   {
     "name": "Callout",
     "url": "qrc:///demos/CalloutDemo.qml"
+  },
+  {
+   "name": "Popup View",
+   "url": "qrc:///demos/PopupViewDemo.qml"
   }
 ];
