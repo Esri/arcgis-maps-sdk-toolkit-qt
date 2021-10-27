@@ -45,15 +45,13 @@ int main(int argc, char* argv[])
   QQuickStyle::addStylePath("qrc:///esri.com/imports/");
 
   // Intialize application window
-  qmlRegisterType(QUrl("qrc:/shared/qml/DemoPage.qml"), "DemoPage", 1, 0, "DemoPage");
   QQmlApplicationEngine engine;
   Esri::ArcGISRuntime::Toolkit::registerComponents(engine);
-  engine.addImportPath("qrc:/demos");
 
 #ifdef ARCGIS_RUNTIME_IMPORT_PATH_2
   engine.addImportPath(ARCGIS_RUNTIME_IMPORT_PATH_2);
 #endif
 
-  engine.load(QUrl("qrc:/shared/qml/main.qml"));
+  engine.load(QUrl("qrc:/demo_app/qml/main.qml"));
   return app.exec();
 }

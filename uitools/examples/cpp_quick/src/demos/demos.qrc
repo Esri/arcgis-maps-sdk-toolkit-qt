@@ -1,5 +1,7 @@
 <RCC>
-    <qresource prefix="/demos">
+    <qresource prefix="demo_app/qml">
+        <file>BasemapGalleryDemo.qml</file>
+        <file>CoordinateConversionDemo.qml</file>
         <file>NorthArrowDemo.qml</file>
     </qresource>
 </RCC>

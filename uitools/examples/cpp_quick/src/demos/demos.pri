@@ -1,6 +1,12 @@
 
+INCLUDEPATH += $$PWD
+
 RESOURCES += $$PWD/demos.qrc
 
-HEADERS += NorthArrowDemo.h
+HEADERS += $$PWD/BasemapGalleryDemoModel.h \
+           $$PWD/CoordinateConversionDemoModel.h \
+           $$PWD/NorthArrowDemoModel.h
 
-SOURCES += NorthArrowDemo.cpp
+SOURCES += $$PWD/BasemapGalleryDemoModel.cpp \
+           $$PWD/CoordinateConversionDemoModel.cpp \
+           $$PWD/NorthArrowDemoModel.cpp

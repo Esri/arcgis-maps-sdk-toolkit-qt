@@ -2,4 +2,7 @@
     <qresource prefix="/">
         <file>qtquickcontrols2.conf</file>
     </qresource>
+    <qresource prefix="demo_app/qml">
+        <file alias="main.qml">src/main.qml</file>
+    </qresource>
 </RCC>

@@ -16,16 +16,10 @@ import Esri.ArcGISRuntime 100.13
 import Esri.ArcGISRuntime.Toolkit 100.13
 import "tools.js" as T
 
-ApplicationWindow {
-    id: appWindow
-    width: 800
-    height: 600
-    title: "QML Quick Toolkit Demo App"
-    visible: true
-
+Item {
     Drawer {
         id: drawer
-        height: appWindow.height
+        height: parent.height
         implicitWidth: 300
         clip: true
         dragMargin: 0
@@ -66,5 +60,4 @@ ApplicationWindow {
         focus: true
         source: viewList.currentIndex >= 0 ? listModel.get(viewList.currentIndex).url : ""
     }
-
 }

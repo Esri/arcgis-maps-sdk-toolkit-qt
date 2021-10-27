@@ -11,8 +11,10 @@
 //
 
 #include "Esri/ArcGISRuntime/Toolkit/register.h"
-
-#include "util/ArcGISRuntimeEnvironmentProxy.h"
+#include "proxies/ArcGISRuntimeEnvironmentProxy.h"
+#include "proxies/GeoModelProxy.h"
+#include "proxies/MapQuickViewProxy.h"
+#include "proxies/SceneQuickViewProxy.h"
 
 #include <QDir>
 #include <QGuiApplication>
@@ -20,13 +22,12 @@
 #include <QQuickStyle>
 
 #include <ArcGISRuntimeEnvironment.h>
+#include <Map.h>
 #include <MapQuickView.h>
+#include <Scene.h>
 #include <SceneQuickView.h>
 
 //------------------------------------------------------------------------------
-
-using namespace Esri::ArcGISRuntime;
-
 int main(int argc, char* argv[])
 {
   QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
@@ -46,21 +47,36 @@ int main(int argc, char* argv[])
   const QString apiKey = QString("");
   if (!apiKey.isEmpty())
   {
-    ArcGISRuntimeEnvironment::setApiKey(apiKey);
+    Esri::ArcGISRuntime::ArcGISRuntimeEnvironment::setApiKey(apiKey);
   }
 
   QQuickStyle::addStylePath("qrc:///esri.com/imports/");
 
-  // Register the map view for QML
-  qmlRegisterType<MapQuickView>("Esri.ArcGISRuntime", 100, 13, "MapView");
-  qmlRegisterType<SceneQuickView>("Esri.ArcGISRuntime", 100, 13, "SceneView");
-  qmlRegisterType<ArcGISRuntimeEnvironmentProxy>("Esri.ArcGISRuntime", 100, 13, "ArcGISRuntimeEnvironment");
-  qmlRegisterType(QUrl("qrc:/shared/qml/DemoPage.qml"), "DemoPage", 1, 0, "DemoPage");
+  // Register ArcGIS types with QML.
+  qmlRegisterExtendedType<Esri::ArcGISRuntime::MapQuickView, MapQuickViewProxy>("Esri.ArcGISRuntime", 100, 13, "MapView");
+  qmlRegisterExtendedType<Esri::ArcGISRuntime::SceneQuickView, SceneQuickViewProxy>("Esri.ArcGISRuntime", 100, 13, "SceneView");
+  qmlRegisterUncreatableType<GeoModelProxy>("Esri.ArcGISRuntime", 100, 13, "Map", "Map not creatable in QML.");
+  qmlRegisterUncreatableType<GeoModelProxy>("Esri.ArcGISRuntime", 100, 13, "Scene", "Scene not creatable in QML.");
+
+  qmlRegisterSingletonType<ArcGISRuntimeEnvironmentProxy>(
+      "Esri.ArcGISRuntime", 100, 13, "ArcGISRuntimeEnvironment",
+      [](QQmlEngine* engine, QJSEngine*) -> QObject*
+      {
+        return new ArcGISRuntimeEnvironmentProxy(engine);
+      });
+
+  qmlRegisterSingletonType<EnumsProxy>(
+      "Esri.ArcGISRuntime", 100, 13, "Enums",
+      [](QQmlEngine* engine, QJSEngine*) -> QObject*
+      {
+        return new EnumsProxy(engine);
+      });
+
+  // Register Own types with QML.
   // Initialize application view
   QQmlApplicationEngine engine;
   Esri::ArcGISRuntime::Toolkit::registerComponents(engine);
-
-  engine.load(QUrl("qrc:/shared/qml/main.qml"));
+  engine.load(QUrl("qrc:/demo_app/qml/main.qml"));
   return app.exec();
 }
 

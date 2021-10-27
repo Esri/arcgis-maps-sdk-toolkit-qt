@@ -13,20 +13,23 @@
 
 TEMPLATE = app
 
-CONFIG += c++14
+CONFIG += c++14 qmltypes
 
 # additional modules are pulled in via arcgisruntime.pri
 QT += opengl qml quick quickcontrols2
 
+QML_IMPORT_NAME = "DemoApp"
+QML_IMPORT_MAJOR_VERSION = 1
+
 TARGET = cpp_quick
 
 equals(QT_MAJOR_VERSION, 5) {
-    lessThan(QT_MINOR_VERSION, 15) { 
+    lessThan(QT_MINOR_VERSION, 15) {
         error("$$TARGET requires Qt 5.15.2")
     }
-	equals(QT_MINOR_VERSION, 15) : lessThan(QT_PATCH_VERSION, 2) {
-		error("$$TARGET requires Qt 5.15.2")
-	}
+        equals(QT_MINOR_VERSION, 15) : lessThan(QT_PATCH_VERSION, 2) {
+                error("$$TARGET requires Qt 5.15.2")
+        }
 }
 
 equals(QT_MAJOR_VERSION, 6) {
@@ -37,16 +40,23 @@ ARCGIS_RUNTIME_VERSION = 100.13
 include($$PWD/arcgisruntime.pri)
 include($$PWD/../../toolkitcpp.pri)
 
+INCLUDEPATH += $$PWD/src
+
+HEADERS += \
+    src/BaseDemoModel.h
+
 SOURCES += \
-    src/main.cpp
+    src/main.cpp \
+    src/BaseDemoModel.cpp
 
 RESOURCES += \
     qtquick.qrc \
     $$absolute_path($$PWD/../../../calcite-qml/Calcite/calcite.qrc) \
     $$absolute_path($$PWD/../shared/qml/shared_demo_qml.qrc)
 
-include(src/util/util.pri)
+
 include(src/demos/demos.pri)
+include(src/proxies/proxies.pri)
 
 #-------------------------------------------------------------------------------
 
