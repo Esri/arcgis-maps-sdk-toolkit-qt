@@ -14,13 +14,8 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import Esri.ArcGISRuntime 100.13
 import Esri.ArcGISRuntime.Toolkit 100.13
-import DemoPage 1.0
 
 DemoPage {
-    anchors.fill: parent
-    // set focus to enable keyboard navigation
-    focus: true
-
     property real xClickLoc
     property real yClickLoc
 
@@ -47,7 +42,7 @@ DemoPage {
             }
             onMouseClicked : function(mouse){
                 if(callout.calloutVisible){
-                    call.dismiss();
+                    callout.dismiss();
                 }
                 else {
                     xClickLoc = mouse.mapPoint.x.toFixed(2);

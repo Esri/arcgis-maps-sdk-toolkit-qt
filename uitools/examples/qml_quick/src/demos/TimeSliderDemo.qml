@@ -15,13 +15,7 @@ import QtQuick.Controls 2.12
 import Esri.ArcGISRuntime 100.13
 import Esri.ArcGISRuntime.Toolkit 100.13
 
-import DemoPage 1.0
-
 DemoPage {
-    anchors.fill: parent
-    // set focus to enable keyboard navigation
-    focus: true
-
     sceneViewContents: Component {
         SceneView {
             Scene {
