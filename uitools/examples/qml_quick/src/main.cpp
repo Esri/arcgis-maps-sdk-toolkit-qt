@@ -17,29 +17,30 @@
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
 #include <QQuickWindow>
+#include <QtWebView>
 
 //------------------------------------------------------------------------------
 
 int main(int argc, char* argv[])
 {
-  QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-  QGuiApplication app(argc, argv);
+    QtWebView::initialize();
+    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QGuiApplication app(argc, argv);
 
-  // Use of Esri location services, including basemaps and geocoding, requires
-  // either an ArcGIS identity or an API key. For more information see
-  // https://links.esri.com/arcgis-runtime-security-auth.
+    // Use of Esri location services, including basemaps and geocoding, requires
+    // either an ArcGIS identity or an API key. For more information see
+    // https://links.esri.com/arcgis-runtime-security-auth.
 
-  // 1. ArcGIS identity: An ArcGIS named user account that is a member of an
-  // organization in ArcGIS Online or ArcGIS Enterprise.
+    // 1. ArcGIS identity: An ArcGIS named user account that is a member of an
+    // organization in ArcGIS Online or ArcGIS Enterprise.
 
-  // 2. API key: A permanent key that gives your application access to Esri
-  // location services. Create a new API key or access existing API keys from
-  // your ArcGIS for Developers dashboard (https://links.esri.com/arcgis-api-keys).
+    // 2. API key: A permanent key that gives your application access to Esri
+    // location services. Create a new API key or access existing API keys from
+    // your ArcGIS for Developers dashboard (https://links.esri.com/arcgis-api-keys).
 
-  const QString apiKey = QString("");
-  if (!apiKey.isEmpty())
-  {
-    QCoreApplication::instance()->setProperty("Esri.ArcGISRuntime.apiKey", apiKey);
+    const QString apiKey = QString("");
+    if (!apiKey.isEmpty()) {
+        QCoreApplication::instance()->setProperty("Esri.ArcGISRuntime.apiKey", apiKey);
   }
 
   QQuickStyle::addStylePath("qrc:///esri.com/imports/");

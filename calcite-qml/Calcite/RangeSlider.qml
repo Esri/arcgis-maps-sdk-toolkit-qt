@@ -1,5 +1,5 @@
-import QtQuick 2.12
-import QtQuick.Templates 2.1 as T
+import QtQuick 2.15
+import QtQuick.Templates 2.15 as T
 
 T.RangeSlider {
     id: control
