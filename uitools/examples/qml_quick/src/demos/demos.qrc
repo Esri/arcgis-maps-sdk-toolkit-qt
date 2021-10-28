@@ -8,5 +8,6 @@
         <file>CalloutDemo.qml</file>
         <file>PopupViewDemo.qml</file>
         <file>SearchViewDemo.qml</file>
+        <file>OverviewMapDemo.qml</file>
     </qresource>
 </RCC>
