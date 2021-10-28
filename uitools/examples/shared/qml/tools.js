@@ -26,5 +26,9 @@ const TOOLS = [
   {
    "name": "Popup View",
    "url": "PopupViewDemo.qml"
+  },
+  {
+    "name": "Search View",
+    "url": "SearchViewDemo.qml"
   }
 ];
