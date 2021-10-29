@@ -1,9 +1,5 @@
 const TOOLS = [
   {
-    "name": "Authentication view",
-    "url": "AuthenticationViewDemo.qml"
-  },
-  {
     "name": "Basemap gallery",
     "url": "BasemapGalleryDemo.qml"
   },
@@ -34,5 +30,9 @@ const TOOLS = [
   {
     "name": "Time slider",
     "url": "TimeSliderDemo.qml"
+  },
+  {
+    "name": "Authentication view",
+    "url": "AuthenticationViewDemo.qml"
   }
 ];

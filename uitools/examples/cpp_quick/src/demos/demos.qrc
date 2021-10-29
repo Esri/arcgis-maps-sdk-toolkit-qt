@@ -1,7 +1,8 @@
 <RCC>
-    <qresource prefix="demo_app/qml">
+    <qresource prefix="/demo_app/qml">
         <file>BasemapGalleryDemo.qml</file>
         <file>CoordinateConversionDemo.qml</file>
         <file>NorthArrowDemo.qml</file>
+        <file>SearchViewDemo.qml</file>
     </qresource>
 </RCC>
