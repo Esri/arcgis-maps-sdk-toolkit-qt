@@ -1,5 +1,9 @@
 const TOOLS = [
   {
+    "name": "Overview Map",
+    "url": "OverviewMapDemo.qml"
+  },
+  {
     "name": "Basemap gallery",
     "url": "BasemapGalleryDemo.qml"
   },
@@ -14,10 +18,6 @@ const TOOLS = [
   {
     "name": "North arrow",
     "url": "NorthArrowDemo.qml"
-  },
-  {
-    "name": "Overview Map",
-    "url": "OverviewMapDemo.qml"
   },
   {
     "name": "Popup View",
