@@ -7,5 +7,6 @@
         <file>CalloutDemo.qml</file>
         <file>OverviewMapDemo.qml</file>
         <file>TimeSliderDemo.qml</file>
+        <file>PopupViewDemo.qml</file>
     </qresource>
 </RCC>
