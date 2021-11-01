@@ -4,5 +4,8 @@
         <file>CoordinateConversionDemo.qml</file>
         <file>NorthArrowDemo.qml</file>
         <file>SearchViewDemo.qml</file>
+        <file>CalloutDemo.qml</file>
+        <file>OverviewMapDemo.qml</file>
+        <file>TimeSliderDemo.qml</file>
     </qresource>
 </RCC>
