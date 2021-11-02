@@ -29,11 +29,13 @@ DemoPage {
                      bottom: parent.bottom
                 }
                 visible: false
-
+                popupManager: model.popupManager
             }
 
             PopupViewDemoModel{
+                id:model
                 geoView : view
+                onPopupManagerChanged : {console.log("setting visible");popupView.visible = true;}
             }
         }
     }

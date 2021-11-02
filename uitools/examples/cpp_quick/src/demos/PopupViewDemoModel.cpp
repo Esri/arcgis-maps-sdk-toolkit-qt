@@ -3,7 +3,9 @@
 #include "Map.h"
 #include "MapQuickView.h"
 #include "PopupManager.h"
+#include "Scene.h"
 #include "SceneQuickView.h"
+#include "ServiceFeatureTable.h"
 #include <QList>
 
 using namespace Esri::ArcGISRuntime;
@@ -19,6 +21,18 @@ Esri::ArcGISRuntime::Map *PopupViewDemoModel::initMap_(QObject *parent) const
 {
     return new Map(QUrl("https://runtime.maps.arcgis.com/home/webmap/"
                         "viewer.html?webmap=e4c6eb667e6c43b896691f10cc2f1580"));
+}
+
+Scene *PopupViewDemoModel::initScene_(QObject *parent) const
+{
+    Scene *scene = BaseDemoModel::initScene_(parent);
+    FeatureLayer *fl
+        = new FeatureLayer(new ServiceFeatureTable(
+                               QUrl("https://sampleserver6.arcgisonline.com/arcgis/rest/services/"
+                                    "SF311/FeatureServer/0")),
+                           parent);
+    scene->operationalLayers()->append(fl);
+    return scene;
 }
 
 QObject *PopupViewDemoModel::popupManager_()
@@ -43,8 +57,12 @@ void PopupViewDemoModel::setUp()
                     mapQuickView->map()->operationalLayers()->first());
                 mapQuickView->identifyLayer(featureLayer, mouse.x(), mouse.y(), 12, false);
                 qDebug() << (featureLayer == nullptr);
+            } else if (SceneQuickView *sceneQuickView = qobject_cast<SceneQuickView *>(geoView)) {
+                featureLayer = static_cast<FeatureLayer *>(
+                    sceneQuickView->arcGISScene()->operationalLayers()->first());
+                sceneQuickView->identifyLayer(featureLayer, mouse.x(), mouse.y(), 12, false);
             } else {
-                qDebug() << "not a mapquickview";
+                qDebug() << "not a mapquickview or scenequickview";
             }
         });
 
@@ -52,8 +70,6 @@ void PopupViewDemoModel::setUp()
                 &ViewType::identifyLayerCompleted,
                 this,
                 [this, &featureLayer, geoView](QUuid, IdentifyLayerResult *rawIdentifyResult) {
-                    qDebug() << (featureLayer == nullptr);
-                    qDebug() << (this->featureLayer == nullptr);
                     // managed by smart pointer
                     auto identifyResult = std::unique_ptr<IdentifyLayerResult>(rawIdentifyResult);
                     if (!identifyResult)
@@ -75,15 +91,15 @@ void PopupViewDemoModel::setUp()
                             featureLayer->selectFeature(feature);
                         }
                     }
-
-                    if (!identifyResult->popups().isEmpty()) {
-                        auto popup = identifyResult->popups().first();
-                        // create a popup manager
-                        PopupManager *popupManager = new PopupManager{popup, this};
-                        m_popupManager = popupManager;
-                        //letting know qml that this property was changed, so update all the other linked to it
-                        emit popupManagerChanged();
+                    if (identifyResult->geoElements().length() == 0) {
+                        qDebug() << "no geoElements";
+                        return;
                     }
+                    Popup *popup = new Popup(identifyResult->geoElements().first(), this->parent());
+                    popup->popupDefinition()->setTitle(identifyResult->layerContent()->name());
+                    PopupManager *popupManager = new PopupManager{popup, this};
+                    m_popupManager = popupManager;
+                    emit popupManagerChanged();
                 });
     });
 }
