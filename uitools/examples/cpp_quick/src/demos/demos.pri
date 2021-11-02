@@ -4,6 +4,7 @@ INCLUDEPATH += $$PWD
 RESOURCES += $$PWD/demos.qrc
 
 HEADERS += $$PWD/BasemapGalleryDemoModel.h \
+           $$PWD/AuthenticationViewDemoModel.h \
            $$PWD/CalloutDemoModel.h \
            $$PWD/CoordinateConversionDemoModel.h \
            $$PWD/NorthArrowDemoModel.h \
@@ -13,6 +14,7 @@ HEADERS += $$PWD/BasemapGalleryDemoModel.h \
            $$PWD/TimeSliderDemoModel.h
 
 SOURCES += $$PWD/BasemapGalleryDemoModel.cpp \
+           $$PWD/AuthenticationViewDemoModel.cpp \
            $$PWD/CalloutDemoModel.cpp \
            $$PWD/CoordinateConversionDemoModel.cpp \
            $$PWD/NorthArrowDemoModel.cpp \

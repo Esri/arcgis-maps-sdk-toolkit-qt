@@ -8,5 +8,7 @@
         <file>OverviewMapDemo.qml</file>
         <file>TimeSliderDemo.qml</file>
         <file>PopupViewDemo.qml</file>
+        <file>AuthenticationViewDemo.qml</file>
     </qresource>
+    <qresource prefix="/"/>
 </RCC>
