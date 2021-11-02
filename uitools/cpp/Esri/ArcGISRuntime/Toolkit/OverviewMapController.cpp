@@ -137,7 +137,7 @@ namespace Toolkit {
                            applySceneNavigationToInset(sceneView);
                          }
                        });
-      // Create single-shot connection to geoView's drawStatusChanged to ensure OverviewMap updates when SceneView initially loads.
+      // Create single-shot connection to geoView's drawStatusChanged to ensure OverviewMap updates when the scene initially loads.
       QMetaObject::Connection* const sceneViewDrawStatusConnection = new QMetaObject::Connection;
       *sceneViewDrawStatusConnection = connect(sceneView, &SceneViewToolkit::drawStatusChanged, this,
                        [this, sceneView, sceneViewDrawStatusConnection] (DrawStatus status)
@@ -169,7 +169,7 @@ namespace Toolkit {
                            applyMapNavigationToInset(mapView);
                          }
                        });
-      // Create single-shot connection to geoView's drawStatusChanged to ensure OverviewMap updates when MapView initially loads.
+      // Create single-shot connection to geoView's drawStatusChanged to ensure OverviewMap updates when the map initially loads.
       QMetaObject::Connection* const mapViewDrawStatusConnection = new QMetaObject::Connection;
       *mapViewDrawStatusConnection = connect(mapView, &MapViewToolkit::drawStatusChanged, this,
                                   [this, mapView, mapViewDrawStatusConnection](DrawStatus status)
