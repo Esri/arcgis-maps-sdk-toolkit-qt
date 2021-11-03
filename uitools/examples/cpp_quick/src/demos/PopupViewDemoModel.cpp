@@ -52,11 +52,9 @@ void PopupViewDemoModel::setUp()
         auto &featureLayer = this->featureLayer;
         connect(geoView, &ViewType::mouseClicked, this, [&featureLayer, geoView](QMouseEvent &mouse) {
             if (MapQuickView *mapQuickView = qobject_cast<MapQuickView *>(geoView)) {
-                qDebug() << "is a mapquickview";
                 featureLayer = static_cast<FeatureLayer *>(
                     mapQuickView->map()->operationalLayers()->first());
                 mapQuickView->identifyLayer(featureLayer, mouse.x(), mouse.y(), 12, false);
-                qDebug() << (featureLayer == nullptr);
             } else if (SceneQuickView *sceneQuickView = qobject_cast<SceneQuickView *>(geoView)) {
                 featureLayer = static_cast<FeatureLayer *>(
                     sceneQuickView->arcGISScene()->operationalLayers()->first());
