@@ -35,8 +35,9 @@ void CalloutDemoModel::setUp()
                 if (callData->isVisible())
                     callData->setVisible(false);
                 else {
+                    Point mapPoint(mapViewQuick->screenToLocation(mouse.x(),mouse.y()));
                     //atm the position is not working correctly with the setLocation
-                    callData->setLocation(Point(mouse.localPos().x(), mouse.localPos().y()));
+                    callData->setLocation(mapPoint);
                     callData->setDetail("x: " + QString::number(mouse.x())
                                         + " y: " + QString::number(mouse.y()));
                     callData->setVisible(true);
