@@ -6,6 +6,7 @@ OAuth 2.0 uses QWebEngineView. To use OAuth you must add ```QT += webenginewidge
 td+check Qml OAuth 2.0 needs  QT += webview
 
 ### C++ QtQuick example code
+td+: problem, "QtWebEngine::initialize() called with QCoreApplication object already created and should be call before. This is depreciated and may fail in the future". where is created the qcoreapplication?
 OAuth 2.0 uses a WebView. To use an OAuthView you must call QtWebView::initialize() immediately after the QGuiApplication instance is created and must add ```QT += webview``` to qmake in your ```.pro``` file.
 ```c++
 #include <QtWebView>
@@ -40,8 +41,8 @@ int main(int argc, char *argv[]){
 }
 ```
 ```c++
-import Esri.ArcGISRuntime 100.12
-import Esri.ArcGISRuntime.Toolkit 100.12
+import Esri.ArcGISRuntime 100.13
+import Esri.ArcGISRuntime.Toolkit 100.13
 AuthenticationView {
 
     anchors.centerIn: parent
@@ -65,9 +66,85 @@ MapView {
 }
 ```
 
-### QWidget example code
-+add code
+### QtWidget example code
+td+: fix leaking memory from authentication view
+```c++
+#include "Esri/ArcGISRuntime/Toolkit/AuthenticationView.h"
+#include "ArcGISMapImageLayer.h"
+...
+// Create the Widget view underneath everything
+m_mapView = new MapGraphicsView(this);
+
+m_map = new Map(Basemap::streets(), this);
+m_mapView->setMap(m_map);
+setCentralWidget(m_mapView);
+AuthenticationView *aw = new AuthenticationView(new AuthenticationController(this), this);
+auto layer = new ArcGISMapImageLayer(QUrl(
+    "https://sampleserver6.arcgisonline.com/arcgis/rest/services/USA_secure_user1/MapServer"));
+m_map->operationalLayers()->append(layer);
 ```
+# Basemap Gallery
+The BasemapGallery displays a collection of items representing basemaps from either ArcGIS Online, a user-defined portal, or an array of Basemaps. When the user selects a basemap from the BasemapGallery, the basemap rendered in the current geoModel is removed from the given map/scene and replaced with the basemap selected in the gallery.
+
+### C++ QtQuick
+```qml
+import Esri.ArcGISRuntime 100.13
+import Esri.ArcGISRuntime.Toolkit 100.13
+Item{
+  MapView {
+          id:view
+          anchors.fill: parent
+          BasemapGallery {
+              id: gallery
+              anchors {
+                left: view.left
+                top: view.top
+                margins: 5
+              }
+          }
+          onMapChanged: gallery.setGeoModelFromGeoView(this)
+      }
+    }
+    ...
+```
+
+### QML
+```qml
+import Esri.ArcGISRuntime 100.13
+import Esri.ArcGISRuntime.Toolkit 100.13
+...
+MapView {
+    anchors.fill: parent
+  Map {
+    id:map
+    BasemapTopographic{}
+
+  }
+  BasemapGallery{
+    id: gallery
+    anchors {
+                left: parent.left
+                top: parent.top
+                margins: 5
+    }
+    geoModel: map
+  }
+  //onMapChanged: gallery.setGeoModelFromGeoView(this) //td+: seems that the qml version, needs the geomodel set manually. //only setting onmapchanged has problems with spatial references
+  }
+}
+```
+
+### QtWidget
+```c++
+#include "Esri/ArcGISRuntime/Toolkit/BasemapGallery.h"
+...
+// Create the Widget view underneath everything
+m_map = new Map(Basemap::streetsVector(), this);
+m_mapView = new MapGraphicsView(this);
+
+BasemapGallery* basemapgallery = new BasemapGallery(m_map, this);
+m_mapView->setMap(m_map);
+setCentralWidget(m_mapView);
 ```
 
 # North Arrow
@@ -77,8 +154,8 @@ Double click it and will reset the map to the original orientation.
 
 ### C++ QtQuick and QML example code
 ```qml
-import Esri.ArcGISRuntime 100.12
-import Esri.ArcGISRuntime.Toolkit 100.12
+import Esri.ArcGISRuntime 100.13
+import Esri.ArcGISRuntime.Toolkit 100.13
 
 MapView {
     id: view
@@ -97,7 +174,7 @@ MapView {
         }
 ```
 
-### QWidget example code
+### QtWidget example code
 ```c++
   #include "Esri/ArcGISRuntime/Toolkit/NorthArrow.h"
   ...
