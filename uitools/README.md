@@ -29,7 +29,7 @@ flavor of the ArcGIS Runtime SDK for Qt:
 You need to clone this repository locally to incorporate it into your own
 project.
 
-### toolkitqml.pri
+## toolkitqml.pri (QML QtQuick)
 
 #### Importing the toolkit (toolkitqml.pri)
 
@@ -92,9 +92,8 @@ MapView {
         geoView: mapView
     }
 }
-```
-
-### toolkitcpp.pri
+``` 
+## toolkitcpp.pri (C++ QtQuick)
 
 #### Importing the toolkit (toolkitcpp.pri)
 
@@ -155,8 +154,7 @@ MapView {
     }
 }
 ```
-
-### toolkitwidgets.pri
+## toolkitwidgets.pri (QtWidgets)
 
 #### Importing the toolkit (toolkitwidgets.pri)
 
