@@ -7,15 +7,15 @@ and add your own.
 
 |Tool|[C++ (QtQuick)](https://developers.arcgis.com/qt/toolkit/api-reference/cppquickuitools.html)|[QML](https://developers.arcgis.com/qt/toolkit/api-reference/qmluitools.html)|[QtWidgets](https://developers.arcgis.com/qt/toolkit/api-reference/cppwidgetsuitools.html)|
 |--|--|--|--|
-|Authentication View|[:white_check_mark:](https://developers.arcgis.com/qt/toolkit/api-reference/qml-authenticationview.html) | [:white_check_mark:](https://developers.arcgis.com/qt/toolkit/api-reference/qml-authenticationview.html) | [:white_check_mark:](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-authenticationview.html) |
-|Basemap Gallery|[:white_check_mark:](https://developers.arcgis.com/qt/toolkit/api-reference/qml-basemapgallery.html)|[:white_check_mark:](https://developers.arcgis.com/qt/toolkit/api-reference/qml-basemapgallery.html)||
-|Callout|[:white_check_mark:](https://developers.arcgis.com/qt/toolkit/api-reference/qml-callout.html)|[:white_check_mark:](https://developers.arcgis.com/qt/toolkit/api-reference/qml-callout.html)||
-|Coordinate Conversion|[:white_check_mark:](https://developers.arcgis.com/qt/toolkit/api-reference/qml-coordinateconversion.html)|[:white_check_mark:](https://developers.arcgis.com/qt/toolkit/api-reference/qml-coordinateconversion.html)|[:white_check_mark:](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-coordinateconversion.html)|
-|NorthArrow|[:white_check_mark:](https://developers.arcgis.com/qt/toolkit/api-reference/qml-northarrow.html)|[:white_check_mark:](https://developers.arcgis.com/qt/toolkit/api-reference/qml-northarrow.html)|[:white_check_mark:](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-northarrow.html)|
-|Overview Map|[:white_check_mark:](https://developers.arcgis.com/qt/toolkit/api-reference/qml-overviewmap.html)|[:white_check_mark:](https://developers.arcgis.com/qt/toolkit/api-reference/qml-overviewmap.html)|[:white_check_mark:](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-overviewmap.html)|
-|Popup Stack View|[:white_check_mark:](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupstackview.html)|[:white_check_mark:](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupstackview.html)||
-|Popup View|[:white_check_mark:](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupview.html)|[:white_check_mark:](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupview.html)||
-|Time slider|[:white_check_mark:](https://developers.arcgis.com/qt/toolkit/api-reference/qml-timeslider.html)|[:white_check_mark:](https://developers.arcgis.com/qt/toolkit/api-reference/qml-timeslider.html)||
+|Authentication View|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-authenticationview.html) | [✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-authenticationview.html) | [✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-authenticationview.html) |
+|Basemap Gallery|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-basemapgallery.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-basemapgallery.html)||
+|Callout|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-callout.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-callout.html)||
+|Coordinate Conversion|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-coordinateconversion.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-coordinateconversion.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-coordinateconversion.html)|
+|NorthArrow|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-northarrow.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-northarrow.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-northarrow.html)|
+|Overview Map|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-overviewmap.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-overviewmap.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-overviewmap.html)|
+|Popup Stack View|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupstackview.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupstackview.html)||
+|Popup View|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupview.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupview.html)||
+|Time slider|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-timeslider.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-timeslider.html)||
 
 ## Structure
 
