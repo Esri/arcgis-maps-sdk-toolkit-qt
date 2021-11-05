@@ -26,6 +26,8 @@ Esri::ArcGISRuntime::Map *PopupViewDemoModel::initMap_(QObject *parent) const
 Scene *PopupViewDemoModel::initScene_(QObject *parent) const
 {
     Scene *scene = BaseDemoModel::initScene_(parent);
+    Viewpoint viewPoint(Envelope(-122.5277, 37.7204, -122.3511, 37.7956, SpatialReference(4236)));
+    scene->setInitialViewpoint(viewPoint);
     FeatureLayer *fl
         = new FeatureLayer(new ServiceFeatureTable(
                                QUrl("https://sampleserver6.arcgisonline.com/arcgis/rest/services/"
