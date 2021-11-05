@@ -15,6 +15,7 @@ and add your own.
 |Overview Map|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-overviewmap.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-overviewmap.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-overviewmap.html)|
 |Popup Stack View|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupstackview.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupstackview.html)||
 |Popup View|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupview.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupview.html)||
+|Search View|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-searchview.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-searchview.html)||
 |Time slider|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-timeslider.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-timeslider.html)||
 
 ## Structure
