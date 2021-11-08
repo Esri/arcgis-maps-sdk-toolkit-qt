@@ -7,6 +7,7 @@ import Esri.ArcGISRuntime.Toolkit 100.13
 import Calcite 1.0 as C
 
 Control {
+    property bool handlesOwnAuthentication : false
     enum ViewType {
         Scene,
         Map
@@ -80,8 +81,13 @@ Control {
         }
     }
 
-    AuthenticationView {
-        anchors.centerIn: parent
+    Loader {
+        sourceComponent: Component {
+            AuthenticationView {
+                anchors.centerIn: parent
+            }
+        }
+        active: !handlesOwnAuthentication
     }
 
     contentItem: GridLayout {

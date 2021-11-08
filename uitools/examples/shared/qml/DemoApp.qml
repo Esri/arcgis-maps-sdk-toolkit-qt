@@ -59,5 +59,6 @@ Item {
         anchors.fill: parent
         focus: true
         source: viewList.currentIndex >= 0 ? listModel.get(viewList.currentIndex).url : ""
+        onLoaded: {item.handlesOwnAuthentication = listModel.get(viewList.currentIndex).handlesOwnAuthentication ?? false;}
     }
 }

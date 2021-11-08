@@ -9,12 +9,10 @@ AuthenticationViewDemoModel::~AuthenticationViewDemoModel() {}
 Esri::ArcGISRuntime::Map *AuthenticationViewDemoModel::initMap_(QObject *parent) const
 {
     //return a map that requires authentication
-    return new Esri::ArcGISRuntime::Map(QUrl(QStringLiteral(
-        "https://sampleserver6.arcgisonline.com/arcgis/rest/services/USA_secure_user1/MapServer")));
+    return new Esri::ArcGISRuntime::Map(new Esri::ArcGISRuntime::PortalItem(QStringLiteral("e5039444ef3c48b8a8fdc9227f9be7c1"), parent));
 }
 
 Esri::ArcGISRuntime::Scene *AuthenticationViewDemoModel::initScene_(QObject *parent) const
 {
-    return new Esri::ArcGISRuntime::Scene(QUrl(QStringLiteral(
-        "https://sampleserver6.arcgisonline.com/arcgis/rest/services/USA_secure_user1/MapServer")));
+    return new Esri::ArcGISRuntime::Scene(new Esri::ArcGISRuntime::PortalItem(QStringLiteral("e5039444ef3c48b8a8fdc9227f9be7c1"), parent));
 }

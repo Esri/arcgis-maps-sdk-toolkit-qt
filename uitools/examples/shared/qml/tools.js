@@ -1,8 +1,8 @@
 const TOOLS = [
-                {
-                  "name": "Popup View",
-                  "url": "PopupViewDemo.qml"
-                  },
+  {
+    "name": "Popup View",
+    "url": "PopupViewDemo.qml"
+  },
   {
     "name": "Overview Map",
     "url": "OverviewMapDemo.qml"
@@ -34,6 +34,7 @@ const TOOLS = [
   },
   {
     "name": "Authentication view",
-    "url": "AuthenticationViewDemo.qml"
+    "url": "AuthenticationViewDemo.qml",
+    "handlesOwnAuthentication" : true
   }
 ];
