@@ -2,6 +2,7 @@
 
 #include "Esri/ArcGISRuntime/Toolkit/BasemapGalleryController.h"
 
+#include <MapView.h>
 #include <GeoView.h>
 #include <Map.h>
 #include <Portal.h>

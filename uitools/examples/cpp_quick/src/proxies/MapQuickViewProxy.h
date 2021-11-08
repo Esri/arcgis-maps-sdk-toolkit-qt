@@ -15,7 +15,7 @@ namespace ArcGISRuntime {
 class MapQuickViewProxy : public QObject
 {
   Q_OBJECT
-  Q_PROPERTY(GeoModelProxy* map READ map NOTIFY mapChanged)
+  Q_PROPERTY(GeoModelProxy* map READ map NOTIFY mapChangedProxy)
 public:
   Q_INVOKABLE explicit MapQuickViewProxy(QObject* parent = nullptr);
   ~MapQuickViewProxy() override;
@@ -24,7 +24,7 @@ private:
   GeoModelProxy* map();
 
 signals:
-  void mapChanged();
+  void mapChangedProxy();
 
 private:
   Esri::ArcGISRuntime::MapQuickView* m_mapQuickView;

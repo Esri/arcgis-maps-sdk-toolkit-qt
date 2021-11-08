@@ -15,7 +15,7 @@ namespace ArcGISRuntime {
 class SceneQuickViewProxy : public QObject
 {
   Q_OBJECT
-  Q_PROPERTY(GeoModelProxy* scene READ scene NOTIFY sceneChanged)
+  Q_PROPERTY(GeoModelProxy* scene READ scene NOTIFY sceneChangedProxy)
 public:
   Q_INVOKABLE explicit SceneQuickViewProxy(QObject* parent = nullptr);
   ~SceneQuickViewProxy() override;
@@ -24,7 +24,7 @@ private:
   GeoModelProxy* scene();
 
 signals:
-  void sceneChanged();
+  void sceneChangedProxy();
 
 private:
   Esri::ArcGISRuntime::SceneQuickView* m_sceneQuickView;
