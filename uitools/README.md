@@ -6,9 +6,9 @@ applications. Because it is open source you are encouraged to modify these tools
 and add your own.
 
 |Tool|[C++ (QtQuick)](https://developers.arcgis.com/qt/toolkit/api-reference/cppquickuitools.html)|[QML](https://developers.arcgis.com/qt/toolkit/api-reference/qmluitools.html)|[QtWidgets](https://developers.arcgis.com/qt/toolkit/api-reference/cppwidgetsuitools.html)|
-|--|--|--|--|
+|:--:|:--:|:--:|:--:|
 |Authentication View|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-authenticationview.html) | [✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-authenticationview.html) | [✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-authenticationview.html) |
-|Basemap Gallery|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-basemapgallery.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-basemapgallery.html)||
+|Basemap Gallery|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-basemapgallery.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-basemapgallery.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-basemapgallery.html)|
 |Callout|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-callout.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-callout.html)||
 |Coordinate Conversion|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-coordinateconversion.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-coordinateconversion.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-coordinateconversion.html)|
 |NorthArrow|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-northarrow.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-northarrow.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-northarrow.html)|

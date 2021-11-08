@@ -26,7 +26,7 @@ Anyone and everyone is welcome to contribute.
 ## Contributors
 [![All Contributors](https://img.shields.io/badge/all_contributors-20-orange.svg?style=flat-square)](#contributors-)
 ||||
-|--|--|--|
+|:--:|:--:|:--:|
 |<img src="https://avatars.githubusercontent.com/u/19823035?v=4&s=100" width=100></img></br>[Luke Smallwood](https://github.com/lsmallwood)|<img src="https://avatars.githubusercontent.com/u/5695392?v=4" width=100></img></br>[James Ballard](https://github.com/JamesMBallard)|<img src="https://avatars.githubusercontent.com/u/1651508?&v=4" width=100></img></br>[Guillaume Belz](https://github.com/GuillaumeBelz)|
 |<img src="https://avatars.githubusercontent.com/u/4107363?v=4" width=100></img></br>[Lucas Danzinger](https://github.com/ldanzinger)|<img src="https://avatars.githubusercontent.com/u/30637561?v=4" width=100></img></br>[Ryan Kim](https://github.com/ryankim923)|<img src="https://avatars.githubusercontent.com/u/3836983?v=4" width=100></img></br>[Thomas Dunn](https://github.com/tdunn)
 |<img src="https://avatars.githubusercontent.com/u/42203545?v=4" width=100></img></br>[Archibald Neil MacDonald](https://github.com/anmacdonald)|<img src="https://avatars.githubusercontent.com/u/4101783?v=4" width=100></img></br>[Siddesh Pillai](https://github.com/siddeshpillai)|<img src="https://avatars.githubusercontent.com/u/5704590?v=4" width=100></img></br>[Nandini](https://github.com/nandinirao)
