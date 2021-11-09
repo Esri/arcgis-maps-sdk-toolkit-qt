@@ -51,21 +51,16 @@ protected:
   template <typename Func>
   auto apply(Func&& f)
   {
-    using namespace Esri::ArcGISRuntime;
-    if (auto mapView = qobject_cast<MapQuickView*>(m_geoView))
-    {
-      return f(mapView);
-    }
-    else if (auto sceneView = qobject_cast<SceneQuickView*>(m_geoView))
-    {
-      return f(sceneView);
-    }
-    else
-    {
-      // Since `f` is for agnostic calls the type of the nullptr
-      // doesn't matter if it's a MapQuickView or SceneQuickView.
-      return f(static_cast<MapQuickView*>(nullptr));
-    }
+      using namespace Esri::ArcGISRuntime;
+      if (auto mapView = qobject_cast<MapQuickView *>(m_geoView)) {
+          return f(mapView);
+      } else if (auto sceneView = qobject_cast<SceneQuickView *>(m_geoView)) {
+          return f(sceneView);
+      } else {
+          // Since `f` is for agnostic calls the type of the nullptr
+          // doesn't matter if it's a MapQuickView or SceneQuickView.
+          return f(static_cast<MapQuickView *>(nullptr));
+      }
   }
 
 private:

@@ -11,7 +11,7 @@ MapQuickViewProxy::MapQuickViewProxy(QObject* parent) :
   if (m_mapQuickView)
   {
     using namespace Esri::ArcGISRuntime;
-    connect(m_mapQuickView, &MapQuickView::mapChanged, this, &MapQuickViewProxy::mapChanged);
+    connect(m_mapQuickView, &MapQuickView::mapChanged, this, &MapQuickViewProxy::mapChangedProxy);
   }
 }
 

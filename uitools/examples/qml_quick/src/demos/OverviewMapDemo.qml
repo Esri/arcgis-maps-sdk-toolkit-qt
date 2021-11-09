@@ -8,50 +8,44 @@
 // notice and use restrictions.
 //
 // See the Sample code usage restrictions document for further information.
+//
+
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import Esri.ArcGISRuntime 100.13
 import Esri.ArcGISRuntime.Toolkit 100.13
-import DemoApp 1.0
+
 
 DemoPage {
+    anchors.fill: parent
+    // set focus to enable keyboard navigation
+    focus: true
     sceneViewContents: Component {
         SceneView {
-            id: view
-            BasemapGallery {
-                id: gallery
-                controller: demoModel.controller
+            Scene {
+                initBasemapStyle: Enums.BasemapStyleArcGISDarkGray
+            }
+            OverviewMap {
                 anchors {
-                    right: parent.right
                     top: parent.top
-                    margins: 10
+                    left: parent.left
                 }
+                geoView: parent
             }
-            BasemapGalleryDemoModel {
-                id: demoModel
-                geoView: view
-            }
-            onSceneChanged: {gallery.setGeoModelFromGeoView(view)}
         }
     }
-
-    mapViewContents: Component {
+    mapViewContents : Component {
         MapView {
-            id: view
-            BasemapGallery {
-                id: gallery
-                controller: demoModel.controller
+            Map {
+                initBasemapStyle: Enums.BasemapStyleArcGISDarkGray
+            }
+            OverviewMap {
                 anchors {
-                    right: parent.right
                     top: parent.top
-                    margins: 10
+                    left: parent.left
                 }
+                geoView: parent
             }
-            BasemapGalleryDemoModel {
-                id: demoModel
-                geoView: view
-            }
-            onMapChanged: {gallery.setGeoModelFromGeoView(view)}
         }
     }
 }

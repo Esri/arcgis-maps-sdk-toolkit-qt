@@ -11,7 +11,7 @@ SceneQuickViewProxy::SceneQuickViewProxy(QObject* parent) :
   if (m_sceneQuickView)
   {
     using namespace Esri::ArcGISRuntime;
-    connect(m_sceneQuickView, &SceneQuickView::sceneChanged, this, &SceneQuickViewProxy::sceneChanged);
+    connect(m_sceneQuickView, &SceneQuickView::sceneChanged, this, &SceneQuickViewProxy::sceneChangedProxy);
   }
 }
 

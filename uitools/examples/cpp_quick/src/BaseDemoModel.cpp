@@ -5,6 +5,7 @@
 #include <MapViewTypes.h>
 #include <Scene.h>
 #include <SceneQuickView.h>
+#include <stdexcept>
 
 BaseDemoModel::BaseDemoModel(QObject* parent) :
   QObject(parent),

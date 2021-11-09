@@ -8,6 +8,8 @@
 // notice and use restrictions.
 //
 // See the Sample code usage restrictions document for further information.
+//
+
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import Esri.ArcGISRuntime 100.13
@@ -18,40 +20,31 @@ DemoPage {
     sceneViewContents: Component {
         SceneView {
             id: view
-            BasemapGallery {
-                id: gallery
-                controller: demoModel.controller
+            OverviewMap {
                 anchors {
-                    right: parent.right
                     top: parent.top
-                    margins: 10
+                    left: parent.left
                 }
+                geoView: parent
             }
-            BasemapGalleryDemoModel {
-                id: demoModel
+            OverviewMapDemoModel {
                 geoView: view
             }
-            onSceneChanged: {gallery.setGeoModelFromGeoView(view)}
         }
     }
-
     mapViewContents: Component {
         MapView {
             id: view
-            BasemapGallery {
-                id: gallery
-                controller: demoModel.controller
+            OverviewMap {
                 anchors {
-                    right: parent.right
                     top: parent.top
-                    margins: 10
+                    left: parent.left
                 }
+                geoView: parent
             }
-            BasemapGalleryDemoModel {
-                id: demoModel
+            OverviewMapDemoModel {
                 geoView: view
             }
-            onMapChanged: {gallery.setGeoModelFromGeoView(view)}
         }
     }
 }

@@ -8,6 +8,8 @@
 // notice and use restrictions.
 //
 // See the Sample code usage restrictions document for further information.
+//
+
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import Esri.ArcGISRuntime 100.13
@@ -18,40 +20,47 @@ DemoPage {
     sceneViewContents: Component {
         SceneView {
             id: view
-            BasemapGallery {
-                id: gallery
-                controller: demoModel.controller
+
+            PopupView {
+                id:popupView
                 anchors {
-                    right: parent.right
-                    top: parent.top
-                    margins: 10
+                     left: parent.left
+                     top: parent.top
+                     bottom: parent.bottom
                 }
+                visible: false
+                popupManager: model.popupManager
             }
-            BasemapGalleryDemoModel {
-                id: demoModel
-                geoView: view
+
+            PopupViewDemoModel{
+                id:model
+                geoView : view
+                onPopupManagerChanged : {console.log("setting visible");popupView.visible = true;}
             }
-            onSceneChanged: {gallery.setGeoModelFromGeoView(view)}
         }
     }
 
     mapViewContents: Component {
         MapView {
             id: view
-            BasemapGallery {
-                id: gallery
-                controller: demoModel.controller
+
+            PopupView {
+                id:popupView
                 anchors {
-                    right: parent.right
-                    top: parent.top
-                    margins: 10
+                     left: parent.left
+                     top: parent.top
+                     bottom: parent.bottom
                 }
+                popupManager: model.popupManager
+
             }
-            BasemapGalleryDemoModel {
-                id: demoModel
-                geoView: view
+
+            PopupViewDemoModel{
+                id: model
+                geoView : view
+
+                onPopupManagerChanged : {popupView.visible = true;}
             }
-            onMapChanged: {gallery.setGeoModelFromGeoView(view)}
         }
     }
 }

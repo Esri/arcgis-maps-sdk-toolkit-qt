@@ -18,40 +18,32 @@ DemoPage {
     sceneViewContents: Component {
         SceneView {
             id: view
-            BasemapGallery {
-                id: gallery
-                controller: demoModel.controller
+            SearchView {
+                geoView: parent
                 anchors {
-                    right: parent.right
                     top: parent.top
-                    margins: 10
+                    right: parent.right
                 }
             }
-            BasemapGalleryDemoModel {
-                id: demoModel
+            SearchViewDemoModel {
                 geoView: view
             }
-            onSceneChanged: {gallery.setGeoModelFromGeoView(view)}
         }
     }
 
     mapViewContents: Component {
         MapView {
             id: view
-            BasemapGallery {
-                id: gallery
-                controller: demoModel.controller
+            SearchView {
+                geoView: parent
                 anchors {
-                    right: parent.right
                     top: parent.top
-                    margins: 10
+                    right: parent.right
                 }
             }
-            BasemapGalleryDemoModel {
-                id: demoModel
+            SearchViewDemoModel {
                 geoView: view
             }
-            onMapChanged: {gallery.setGeoModelFromGeoView(view)}
         }
     }
 }
