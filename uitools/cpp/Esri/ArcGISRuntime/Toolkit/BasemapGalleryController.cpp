@@ -508,16 +508,39 @@ namespace Toolkit {
    */
   void BasemapGalleryController::setCurrentBasemap(Basemap* basemap)
   {
-    if (basemap == m_currentBasemap)
-      return;
+      auto connection = new QMetaObject::Connection();
 
-    m_currentBasemap = basemap;
-    emit currentBasemapChanged();
+      auto apply = [basemap, this, connection](Error e){
+        if(e.isEmpty()){
+            if (basemap == m_currentBasemap)
+                  return;
+            if(!basemapMatchesCurrentSpatialReference(basemap)){
+                //add signal to trigger the re-draw of items in the listview
+                return;
+            }
+            m_currentBasemap = basemap;
+            emit currentBasemapChanged();
 
-    if (m_geoModel && m_geoModel->basemap() != m_currentBasemap)
-    {
-      m_geoModel->setBasemap(m_currentBasemap);
-    }
+            if (m_geoModel && m_geoModel->basemap() != m_currentBasemap)
+            {
+              m_geoModel->setBasemap(m_currentBasemap);
+            }
+            disconnect(*connection);
+        }
+        else {
+            qDebug() << "problem in loading the layer";
+        }
+        delete connection;
+      };
+      if(basemap->baseLayers()->first()->loadStatus() != LoadStatus::Loaded){
+          qDebug() << "setting lambda";
+          connect(basemap->baseLayers()->first(), &Layer::doneLoading, this, apply);
+          basemap->baseLayers()->first()->load();
+      }
+      else {
+          apply(Error());
+          qDebug() << "already loaded" << static_cast<int>(basemap->baseLayers()->first()->loadStatus());
+      }
   }
 
   /*!
