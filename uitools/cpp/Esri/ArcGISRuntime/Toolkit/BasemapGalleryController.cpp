@@ -533,13 +533,11 @@ namespace Toolkit {
         delete connection;
       };
       if(basemap->baseLayers()->first()->loadStatus() != LoadStatus::Loaded){
-          qDebug() << "setting lambda";
           connect(basemap->baseLayers()->first(), &Layer::doneLoading, this, apply);
           basemap->baseLayers()->first()->load();
       }
       else {
           apply(Error());
-          qDebug() << "already loaded" << static_cast<int>(basemap->baseLayers()->first()->loadStatus());
       }
   }
 
@@ -634,11 +632,13 @@ namespace Toolkit {
     // From the spec we are guaranteed the homogeneity of the spatial references of these layers.
     // https://developers.arcgis.com/web-map-specification/objects/spatialReference/
     const auto layers = basemap->baseLayers();
-    return std::all_of(std::cbegin(*layers), std::cend(*layers), [&sp](Layer* layer)
-                       {
-                         const auto sp2 = layer->spatialReference();
-                         return sp2.isEmpty() || sp == sp2;
-                       });
+    if(layers->size() > 0){
+        const auto layer = layers->first();
+        const auto sp2 = layer->spatialReference();
+        return sp2.isEmpty() || sp == sp2;
+    }
+    return false;
+
   }
 
   /*!
