@@ -1,5 +1,5 @@
-import QtQuick 2.12
-import QtQuick.Templates 2.12 as T
+import QtQuick 2.15
+import QtQuick.Templates 2.15 as T
 
 T.Switch {
     id: control
@@ -45,7 +45,7 @@ T.Switch {
             color: Calcite.foreground1
             border {
                 width: 2
-                color: control.checked ? Calcite.brandPress : control.activeFocus || control.hovered ? Calcite.brandPress : Calcite.borderInput
+                color: control.checked ? Calcite.brandPress : control.activeFocus || control.hovered ? Calcite.brandHover : Calcite.borderInput
             }
 
             Behavior on x {
