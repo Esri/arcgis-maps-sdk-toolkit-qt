@@ -208,6 +208,7 @@ Pane {
                 source: modelData.thumbnailUrl
                 width: basemapGallery.internal.defaultCellSize
                 height: basemapGallery.internal.defaultCellSize
+                color: "transparent"
             }
             text: modelData.name === "" ? "Unnamed basemap" : modelData.name
             display: {
