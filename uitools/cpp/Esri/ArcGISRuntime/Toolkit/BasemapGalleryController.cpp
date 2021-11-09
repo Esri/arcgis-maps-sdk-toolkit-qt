@@ -515,7 +515,8 @@ namespace Toolkit {
             if (basemap == m_currentBasemap)
                   return;
             if(!basemapMatchesCurrentSpatialReference(basemap)){
-                //add signal to trigger the re-draw of items in the listview
+                //force redraw for all the lsitview items.
+                emit m_gallery->dataChanged(m_gallery->index(0), m_gallery->index(std::max(m_gallery->rowCount() - 1, 0)));
                 return;
             }
             m_currentBasemap = basemap;
