@@ -188,10 +188,13 @@ ApplicationWindow {
                     Layout.alignment: Qt.AlignHCenter
                 }
 
+                Slider {
+                    Layout.alignment: Qt.AlignHCenter
+                }
 
-//                Slider {
-//                    Layout.alignment: Qt.AlignHCenter
-//                }
+                RangeSlider {
+                    Layout.alignment: Qt.AlignHCenter
+                }
 
                 ProgressBar {
                     id: progressBar
