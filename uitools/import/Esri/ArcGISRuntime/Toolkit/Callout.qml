@@ -17,6 +17,7 @@
 import QtQuick 2.11
 import QtQuick.Window 2.11
 import QtQuick.Layouts 1.3
+import QtQuick.Controls 2.15
 import "LeaderPosition.js" as Enums
 
 /*!
@@ -490,7 +491,7 @@ Item {
                         }
                     }
 
-                    Text {
+                    Label {
                         id: title
                         text: calloutData ? calloutData.title : ""
                         wrapMode: Text.NoWrap
@@ -530,7 +531,7 @@ Item {
                         }
                     }
 
-                    Text {
+                    Label {
                         id: detail
                         text: calloutData ? calloutData.detail : ""
                         renderType: Text.NativeRendering
