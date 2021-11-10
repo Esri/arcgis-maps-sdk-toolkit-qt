@@ -1,63 +1,45 @@
-import QtQuick 2.15
+import QtQuick 2.12
 import QtQuick.Templates 2.15 as T
+import QtQuick.Controls 2.15
 
 T.RangeSlider {
     id: control
 
-    implicitWidth: Math.max(background ? background.implicitWidth : 0,
-        Math.max(first.handle ? first.handle.implicitWidth : 0,
-                 second.handle ? second.handle.implicitWidth : 0) + leftPadding + rightPadding)
-    implicitHeight: Math.max(background ? background.implicitHeight : 0,
-        Math.max(first.handle ? first.handle.implicitHeight : 0,
-                 second.handle ? second.handle.implicitHeight : 0) + topPadding + bottomPadding)
+    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
+                            Math.max(first.implicitHandleWidth,
+                                     second.implicitHandleWidth) + leftPadding + rightPadding)
+    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
+                             Math.max(first.implicitHandleHeight,
+                                      second.implicitHandleHeight) + topPadding + bottomPadding)
 
-    padding: 6
+    first.handle: SliderHandle {
+        x: control.leftPadding + Math.round(control.horizontal ? control.first.visualPosition * (control.availableWidth - width) : (control.availableWidth - width) / 2)
+        y: control.topPadding + Math.round(control.horizontal ? (control.availableHeight - height) / 2 : control.first.visualPosition * (control.availableHeight - height))
 
-    first.handle: Rectangle {
-        x: control.leftPadding + (horizontal ? control.first.visualPosition * (control.availableWidth - width) : (control.availableWidth - width) / 2)
-        y: control.topPadding + (horizontal ? (control.availableHeight - height) / 2 : control.first.visualPosition * (control.availableHeight - height))
-        implicitWidth: 28
-        implicitHeight: 28
-        radius: width / 2
-        border.width: activeFocus ? 2 : 1
-        border.color: control.enabled ? (activeFocus
-            ? Default.focusColor
-            : (control.first.pressed ? Default.indicatorFramePressedColor : Default.indicatorFrameColor)) : Default.indicatorFrameDisabledColor
-        color: control.enabled ? (first.pressed
-            ? (activeFocus ? Default.focusPressedColor : Default.indicatorPressedColor)
-            : (activeFocus ? Default.focusLightColor : Default.backgroundColor)) : Default.indicatorDisabledColor
-
-        readonly property bool horizontal: control.orientation === Qt.Horizontal
+        palette: control.palette
+        pressed: control.first.pressed
+        hovered: control.hovered
+        vertical: control.vertical
+        visualFocus: visualFocus
+        lingeringFocus: false
     }
 
-    second.handle: Rectangle {
-        x: control.leftPadding + (horizontal ? control.second.visualPosition * (control.availableWidth - width) : (control.availableWidth - width) / 2)
-        y: control.topPadding + (horizontal ? (control.availableHeight - height) / 2 : control.second.visualPosition * (control.availableHeight - height))
-        implicitWidth: 28
-        implicitHeight: 28
-        radius: width / 2
-        border.width: activeFocus ? 2 : 1
-        border.color: control.enabled ? (activeFocus
-            ? Default.focusColor
-            : (control.first.pressed ? Default.indicatorFramePressedColor : Default.indicatorFrameColor)) : Default.indicatorFrameDisabledColor
-        color: control.enabled ? (second.pressed
-            ? (activeFocus ? Default.focusPressedColor : Default.indicatorPressedColor)
-            : (activeFocus ? Default.focusLightColor : Default.backgroundColor)) : Default.indicatorDisabledColor
+    second.handle: SliderHandle {
+        x: control.leftPadding + Math.round(control.horizontal ? control.second.visualPosition * (control.availableWidth - width) : (control.availableWidth - width) / 2)
+        y: control.topPadding + Math.round(control.horizontal ? (control.availableHeight - height) / 2 : control.second.visualPosition * (control.availableHeight - height))
 
-        readonly property bool horizontal: control.orientation === Qt.Horizontal
+        palette: control.palette
+        pressed: control.second.pressed
+        hovered: control.hovered
+        vertical: control.vertical
+        visualFocus: visualFocus
+        lingeringFocus: false
     }
 
-    background: Rectangle {
-        x: control.leftPadding + (horizontal ? 0 : (control.availableWidth - width) / 2)
-        y: control.topPadding + (horizontal ? (control.availableHeight - height) / 2 : 0)
-        implicitWidth: horizontal ? 200 : 6
-        implicitHeight: horizontal ? 6 : 200
-        width: horizontal ? control.availableWidth : implicitWidth
-        height: horizontal ? implicitHeight : control.availableHeight
-        radius: 3
-        color: Default.buttonColor
-        scale: horizontal && control.mirrored ? -1 : 1
-
-        readonly property bool horizontal: control.orientation === Qt.Horizontal
+    background: SliderGroove {
+        control: control
+        offset: control.first.position
+        progress: control.second.position
+        visualProgress: control.second.visualPosition
     }
 }

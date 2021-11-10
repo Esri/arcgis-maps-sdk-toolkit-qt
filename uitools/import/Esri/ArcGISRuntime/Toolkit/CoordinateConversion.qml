@@ -105,33 +105,27 @@ Pane {
 
         RowLayout {
             Layout.margins: 0
-            Button {
+            ComboBox {
+                Layout.leftMargin: 5
                 id: inputModeButton
-                text: inputFormat.type ? inputFormat.name : "Set format"
-                flat: true
-                font.bold: true
-                onClicked: {
-                    inputModesMenu.popup();
-                }
-
-                Menu {
-                    id: inputModesMenu
-                    Repeater {
-                        model: coordinateConversionWindow.controller.formats
-                        MenuItem {
-                            text: name
-                            onTriggered: {
-                                inputFormat.type = modelData;
-                                inputFormat.updateCoordinatePoint(coordinateConversionWindow.controller.currentPoint());
-                            }
-                        }
+                model: coordinateConversionWindow.controller.formats
+                textRole: "name"
+                onCurrentIndexChanged: {
+                    const index = currentIndex;
+                    const formats = coordinateConversionWindow.controller.formats;
+                    let modelData = formats[index];
+                    if (modelData === undefined) {
+                        modelData = formats.element(formats.index(index, 0));
                     }
+                    inputFormat.type = modelData;
+                    inputFormat.updateCoordinatePoint(coordinateConversionWindow.controller.currentPoint());
                 }
             }
 
             TextField {
                 id: editPointEntry
                 Layout.fillWidth: true
+                Layout.fillHeight: true
                 Layout.alignment: Qt.AlignBottom
                 placeholderText: "No position"
                 readOnly: !editCoordinateButton.checked
@@ -186,7 +180,7 @@ Pane {
                 icon.source: "images/zoom.png"
                 flat: true
                 Layout.alignment: Qt.AlignRight
-                Layout.maximumHeight: 32
+
                 Layout.maximumWidth: Layout.maximumHeight
                 padding: 0
                 display: AbstractButton.IconOnly
@@ -198,7 +192,6 @@ Pane {
                 icon.source: "images/flash.png"
                 flat: true
                 Layout.alignment: Qt.AlignRight
-                Layout.maximumHeight: 32
                 Layout.maximumWidth: Layout.maximumHeight
                 padding: 0
                 display: AbstractButton.IconOnly
@@ -223,7 +216,6 @@ Pane {
                 flat: true
                 icon.source: "images/text_editing_mode.png"
                 Layout.alignment: Qt.AlignRight
-                Layout.maximumHeight: 32
                 Layout.maximumWidth: Layout.maximumHeight
                 padding: 0
             }
@@ -234,7 +226,6 @@ Pane {
                 flat: true
                 icon.source: "images/mouse_click_mode.png"
                 Layout.alignment: Qt.AlignRight
-                Layout.maximumHeight: 32
                 Layout.maximumWidth: Layout.maximumHeight
                 padding: 0
             }

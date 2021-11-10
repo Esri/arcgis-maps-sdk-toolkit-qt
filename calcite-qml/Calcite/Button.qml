@@ -3,7 +3,7 @@ import QtQuick.Controls.impl 2.15
 import QtQuick.Templates 2.15 as T
 
 T.Button {
-  id: control
+    id: control
 
     implicitWidth: Math.max(background ? background.implicitWidth : 0,
                             contentItem.implicitWidth + leftPadding + rightPadding)
@@ -16,24 +16,11 @@ T.Button {
     rightPadding: 16
     spacing: 6
 
-    icon.width: 78
-    icon.height: 78
+    icon.width: 24
+    icon.height: 24
 
-    // contentItem: Text {
-    //     id: textItem
-    //     text: control.text
-    //     color: control.flat ? control.enabled ? Calcite.textLink : Calcite.text3 : Calcite.textInverse
-    //     horizontalAlignment: Text.AlignHCenter
-    //     verticalAlignment: Text.AlignVCenter
-    //     elide: Text.ElideRight
-    //     lineHeight: 1.5
-    //     font: control.font
-    //     Binding {
-    //         target: textItem
-    //         property: "font.bold"
-    //         value: control.flat && control.checked ? true: false
-    //     }
-    // }
+    property color color: control.flat ? control.enabled ? Calcite.textLink : Calcite.text3 : Calcite.textInverse
+    icon.color: color
 
     contentItem: IconLabel {
         id: textItem
@@ -44,7 +31,7 @@ T.Button {
         icon: control.icon
         text: control.text
         font: control.font
-        color: control.flat ? control.enabled ? Calcite.textLink : Calcite.text3 : Calcite.textInverse
+        color: control.color
         Binding {
             target: textItem
             property: "font.bold"
@@ -54,25 +41,28 @@ T.Button {
 
     background: Rectangle {
         radius: 0
+        implicitWidth: 80
+        implicitHeight: 24
         border {
             color: control.flat ? "transparent" : control.hovered ? Calcite.brandHover : Calcite.brand
-            width: 1
+            width: control.flat ? 0 : 1
         }
 
         height: control.flat ? control.checked ? 2 : 1 : undefined
-        y: control.flat ? textItem.height : 0
+        x: control.flat? textItem.x : 0
+        y: control.flat ? control.baselineOffset + height : 0
+        width: control.flat ? textItem.width: undefined
 
         opacity: control.enabled ? 1.0 : 0.3
         color: {
-         if (control.flat) {
-            return control.hovered ? Calcite.textLink : "transparent"
-         }  else {
-            return control.pressed || control.Checked ? Calcite.brandPress
-                                    : control.hovered ? Calcite.brandHover 
-                                                      : Calcite.brand
-         }   
+            if (control.flat) {
+                return control.hovered || control.checked ? Calcite.textLink : "transparent"
+            }  else {
+                return control.pressed || control.checked ? Calcite.brandPress
+                                                          : control.hovered ? Calcite.brandHover
+                                                                            : Calcite.brand
+            }
         }
-
         Behavior on color {
             ColorAnimation {
                 duration: 50
