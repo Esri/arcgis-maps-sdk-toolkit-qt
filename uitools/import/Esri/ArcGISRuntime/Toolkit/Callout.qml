@@ -17,7 +17,6 @@
 import QtQuick 2.11
 import QtQuick.Window 2.11
 import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.15
 import "LeaderPosition.js" as Enums
 
 /*!
@@ -405,21 +404,14 @@ Item {
         calloutFrame.visible = false;
     }
 
-    Pane {
+    Rectangle {
         id: calloutFrame
         width: (rectWidth + 2 * leaderWidth + edgeBuffer)
         height: (rectHeight + 2 * leaderHeight + edgeBuffer)
         visible: false
         z: 100
         clip: true
-        leftPadding: 0
-        rightPadding: 0
-        topPadding: 0
-        bottomPadding: 0
-
-        background : Rectangle {
-            color: "transparent"
-        }
+        color: "transparent"
 
         Canvas {
             id: canvas
@@ -461,20 +453,13 @@ Item {
                 sourceComponent: calloutContent
             }
 
-            Pane {
+            Rectangle {
                 id: calloutContentFrame
                 anchors {
                     left: parent.left
                     top: parent.top
                 }
                 visible: !calloutContent
-                background : Rectangle {
-                    color: "transparent"
-                }
-                leftPadding: 0
-                rightPadding: 0
-                topPadding: 0
-                bottomPadding: 0
 
                 GridLayout {
                     id: calloutLayout
@@ -488,17 +473,11 @@ Item {
                     rows: 2
                     columnSpacing: 7
 
-                    Pane {
+                    Rectangle {
                         id: imageRect
                         width: 40
                         height: width
-                        background : Rectangle {
-                            color: "transparent"
-                        }
-                        leftPadding: 0
-                        rightPadding: 0
-                        topPadding: 0
-                        bottomPadding: 0
+                        color: "transparent"
                         Layout.rowSpan: 2
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
@@ -511,7 +490,7 @@ Item {
                         }
                     }
 
-                    Label {
+                    Text {
                         id: title
                         text: calloutData ? calloutData.title : ""
                         wrapMode: Text.NoWrap
@@ -527,17 +506,11 @@ Item {
                         Layout.maximumWidth: !autoAdjustWidth ? titleWidth : Math.max(0, adjustedMaxWidth - 90) // resets to implicit width if non-autoAdjust
                     }
 
-                    Pane {
+                    Rectangle {
                         id: accessoryButton
                         width: 40
                         height: width
-                        background : Rectangle {
-                            color: "transparent"
-                        }
-                        leftPadding: 0
-                        rightPadding: 0
-                        topPadding: 0
-                        bottomPadding: 0
+                        color: "transparent"
                         Layout.rowSpan: 2
 
                         Image {
@@ -557,7 +530,7 @@ Item {
                         }
                     }
 
-                    Label {
+                    Text {
                         id: detail
                         text: calloutData ? calloutData.detail : ""
                         renderType: Text.NativeRendering
