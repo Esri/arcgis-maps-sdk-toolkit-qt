@@ -405,14 +405,21 @@ Item {
         calloutFrame.visible = false;
     }
 
-    Rectangle {
+    Pane {
         id: calloutFrame
         width: (rectWidth + 2 * leaderWidth + edgeBuffer)
         height: (rectHeight + 2 * leaderHeight + edgeBuffer)
         visible: false
         z: 100
         clip: true
-        color: "transparent"
+        leftPadding: 0
+        rightPadding: 0
+        topPadding: 0
+        bottomPadding: 0
+
+        background : Rectangle {
+            color: "transparent"
+        }
 
         Canvas {
             id: canvas
@@ -454,13 +461,20 @@ Item {
                 sourceComponent: calloutContent
             }
 
-            Rectangle {
+            Pane {
                 id: calloutContentFrame
                 anchors {
                     left: parent.left
                     top: parent.top
                 }
                 visible: !calloutContent
+                background : Rectangle {
+                    color: "transparent"
+                }
+                leftPadding: 0
+                rightPadding: 0
+                topPadding: 0
+                bottomPadding: 0
 
                 GridLayout {
                     id: calloutLayout
@@ -474,11 +488,17 @@ Item {
                     rows: 2
                     columnSpacing: 7
 
-                    Rectangle {
+                    Pane {
                         id: imageRect
                         width: 40
                         height: width
-                        color: "transparent"
+                        background : Rectangle {
+                            color: "transparent"
+                        }
+                        leftPadding: 0
+                        rightPadding: 0
+                        topPadding: 0
+                        bottomPadding: 0
                         Layout.rowSpan: 2
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
@@ -507,11 +527,17 @@ Item {
                         Layout.maximumWidth: !autoAdjustWidth ? titleWidth : Math.max(0, adjustedMaxWidth - 90) // resets to implicit width if non-autoAdjust
                     }
 
-                    Rectangle {
+                    Pane {
                         id: accessoryButton
                         width: 40
                         height: width
-                        color: "transparent"
+                        background : Rectangle {
+                            color: "transparent"
+                        }
+                        leftPadding: 0
+                        rightPadding: 0
+                        topPadding: 0
+                        bottomPadding: 0
                         Layout.rowSpan: 2
 
                         Image {

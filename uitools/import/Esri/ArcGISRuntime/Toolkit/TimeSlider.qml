@@ -259,7 +259,7 @@ Control {
                     y: slider.topPadding - height/2
                     implicitWidth: enabled ? 26 : 15
                     implicitHeight: 26
-                    radius: enabled ? 13 : 1
+                    //radius: enabled ? 13 : 1
                     color: slider.first.pressed && enabled ? slider.palette.midlight
                                                            : slider.palette.base
                     border.color: slider.palette.mid
