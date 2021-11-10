@@ -275,7 +275,7 @@ Pane {
                         sourceSize.height: 32
                         Layout.rowSpan: 2
                     }
-                    Text {
+                    Label {
                         Layout.fillHeight: true
                         Layout.fillWidth: true
                         text: displayTitle
@@ -284,7 +284,7 @@ Pane {
                         elide: Text.ElideRight
                         Layout.rowSpan: displaySubtitle === "" ? 2 : 1
                     }
-                    Text {
+                    Label {
                         Layout.fillWidth: true
                         text: displaySubtitle
                         font: searchView.font
@@ -316,7 +316,7 @@ Pane {
                     background: Rectangle {
                         color: searchView.palette.alternateBase
                     }
-                    contentItem: Text {
+                    contentItem: Label {
                         text: section
                         color: searchView.palette.text
                         horizontalAlignment: Text.AlignHCenter
@@ -332,7 +332,7 @@ Pane {
                 width: list.width
                 y: list.currentItem ? list.currentItem.y : 0
                 height: list.currentItem ? list.currentItem.height : 0
-                color: searchView.palette.highlight
+                    color: searchView.palette.highlight
             }
         }
 

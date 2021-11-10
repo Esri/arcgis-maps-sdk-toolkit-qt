@@ -252,12 +252,11 @@ Pane {
             enabled: popupManagers ? stack.depth > 1 : false
         }
 
-        Text {
+        Label {
             Layout.fillWidth: true
             Layout.columnSpan: popupManagers && popupManagers.length > 1 ? 1 : 3
             horizontalAlignment: Text.AlignHCenter
             text: popupManagers && popupManagers.length > 0 ? `${stack.depth} of ${popupManagers.length}` : ""
-            color: palette.text
         }
 
         Button {
