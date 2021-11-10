@@ -327,19 +327,12 @@ Pane {
             }
             // Simple highlight rectangle for selected result.
             highlightFollowsCurrentItem: false
-            highlight: Pane {
+            highlight: Rectangle {
                 x: list.x
                 width: list.width
                 y: list.currentItem ? list.currentItem.y : 0
                 height: list.currentItem ? list.currentItem.height : 0
-                background: Rectangle {
                     color: searchView.palette.highlight
-                }
-                leftPadding: 0
-                rightPadding: 0
-                topPadding: 0
-                bottomPadding: 0
-
             }
         }
 
