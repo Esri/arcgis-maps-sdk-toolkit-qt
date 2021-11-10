@@ -52,7 +52,7 @@ DemoPage {
                     bottom: parent.bottom
                 }
             }
+
         }
     }
-
 }

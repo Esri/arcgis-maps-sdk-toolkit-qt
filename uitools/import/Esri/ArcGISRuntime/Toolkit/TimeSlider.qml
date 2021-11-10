@@ -33,7 +33,7 @@ import QtQuick.Layouts 1.12
     The time extents of all layers in the map or scene will be used to set up the
     slider with the full temporal range and the current time extent.
 */
-Control {
+Pane {
     id: timeSlider
 
     /*!
@@ -101,7 +101,7 @@ Control {
 
     /*!
       \qmlproperty var timeStepIntervalLabelFormat
-      \brief The date format for displaying time step intervals, 
+      \brief The date format for displaying time step intervals,
       for example: "yy/MM/dd".
       The default is \l {https://doc.qt.io/qt-5/qt.html#DateFormat-enum}
       {\c Qt.DefaultLocaleShortDate}.
@@ -175,8 +175,6 @@ Control {
      */
     property alias stepForwardIcon: stepForwardButton.icon
 
-    background: Rectangle { }
-
     contentItem: GridLayout {
         columns: 5
 
@@ -246,293 +244,282 @@ Control {
             Layout.margins: 5
         }
 
-        RangeSlider {
-            id: slider
-            stepSize: 1.0
-            palette: timeSlider.palette
-            snapMode: RangeSlider.SnapAlways
-            from: 0
-            to: controller.numberOfSteps
-            first {
-                handle: Rectangle {
-                    x: slider.leftPadding + slider.first.visualPosition * (slider.availableWidth) - width /2
-                    y: slider.topPadding - height/2
-                    implicitWidth: enabled ? 26 : 15
-                    implicitHeight: 26
-                    radius: enabled ? 13 : 1
-                    color: slider.first.pressed && enabled ? slider.palette.midlight
-                                                           : slider.palette.base
-                    border.color: slider.palette.mid
-                    enabled: !startTimePinned
-                }
-                onValueChanged: {
-                    if (slider.first.pressed) {
-                        if (slider.first.handle.enabled) {
-                            controller.setSteps(first.value, controller.endStep);
-                        } else { // Reset
-                            slider.first.value = controller.startStep;
-                        }
-                    }
-                }
-            }
-            second {
-                handle: Rectangle {
-                    x: slider.leftPadding + slider.second.visualPosition * (slider.availableWidth) - width/2
-                    y: slider.topPadding - height/2
-                    implicitWidth: enabled ? 26 : 15
-                    implicitHeight: 26
-                    radius: enabled ? 13 : 1
-                    color: slider.second.pressed && enabled ? slider.palette.midlight
-                                                            : slider.palette.base
-                    border.color: slider.palette.mid
-                    enabled: !endTimePinned
-                }
-                onValueChanged: {
-                    if (slider.second.pressed) {
-                        if (slider.second.handle.enabled) {
-                            controller.setSteps(controller.startStep, second.value);
-                        } else { // Reset
-                            slider.second.value = controller.endStep;
-                        }
-                    }
-                }
-            }
-            background:  Item {
-                id: sliderBackground
-                anchors {
-                    left: parent.left;
-                    right: parent.right
-                }
-                height: childrenRect.height
-                y: slider.topPadding
-                Rectangle { // The bar itself.
-                    id: sliderBar
-                    anchors {
-                        top: parent.top
-                        left: parent.left
-                        right: parent.right
-                    }
-                    implicitHeight: 4
-                    height: implicitHeight
-                    radius: 2
-                    color: slider.palette.midlight
-                    Rectangle { // The "filled in" portion.
-                        x: slider.first.visualPosition * parent.width
-                        width: slider.second.visualPosition * parent.width - x
-                        height: parent.height
-                        color: slider.palette.shadow
-                        radius: 2
-                    }
-                }
-                Repeater {
-                    id: repeater
-                    property int marks: slider.to - slider.from
-                    property var firstHandleLabel: null;
-                    property var secondHandleLabel: null;
-                    model: marks > 0 ? marks + 1 : 0
-                    Item { // Holds a tickmark and the label for that mark.
-                        id: tickHold
-                        anchors.top: sliderBar.bottom
-                        x: (slider.availableWidth  - width)
-                           * (index / repeater.marks) + slider.leftPadding
-                        width: tickMark.width
-                        height: childrenRect.height
-                        Rectangle  { // Mark itself.
-                            id: tickMark
-                            anchors.top: parent.top
-                            width: 2
-                            height: index % labelSliderTickInterval === 0 ? 20 
-                                                                          : 10
-                            color: slider.palette.midlight
-                        }
-                        Label { // Tickmark label
-                            id: tickLabel
-                            anchors {
-                                top: tickMark.bottom
-                                topMargin: index % labelSliderTickInterval === 0 ? 0 : 10
-                            }
-
-                            property string defaultLabelText:
-                                Qt.formatDateTime(
-                                    controller.timeForStep(index),
-                                    timeStepIntervalLabelFormat);
-
-                            property int tickIndex: index;
-
-                            // For the handles case where two handles are close
-                            // together, we combine the info of two handles into
-                            // one variable label.
-                            property string combinedLabelText: repeater.secondHandleLabel ? `${
-                                Qt.formatDateTime(
-                                    controller.timeForStep(tickIndex),
-                                    timeStepIntervalLabelFormat)} - ${
-                                Qt.formatDateTime(
-                                    controller.timeForStep(repeater.secondHandleLabel.tickIndex),
-                                    timeStepIntervalLabelFormat)}` : "";
-
-                            property real defaultLabelWidth: 
-                                fontMetric.boundingRect(defaultLabelText).width;
-
-                            property real defaultLabelX: {
-                                const minX = -tickHold.x;
-                                const maxX = -tickHold.x + sliderBackground.width - defaultLabelWidth;
-                                return Math.min(maxX, Math.max(-defaultLabelWidth/2, minX));
-                            }
-
-                            x: {
-                                const minX = -tickHold.x;
-                                const maxX = -tickHold.x + sliderBackground.width - width;
-                                return Math.min(maxX, Math.max(-defaultLabelWidth/2, minX));
-                            }
-
-                            text: defaultLabelText;
-
-                            palette: slider.palette
-                            font: slider.font
-
-                            // By default the label mark is only visible on
-                            // the "long" ticks.
-                            visible: index > 0 &&
-                                     index < repeater.marks &&
-                                     index % labelSliderTickInterval === 0 &&
-                                     labelMode === TimeSlider.LabelMode.Ticks 
-
-                            states: [
-                                // Change the state of this single label to 
-                                // visible if not an endpoint.
-                                State {
-                                    name: "singleVisible"
-                                    PropertyChanges {
-                                        target: tickLabel
-                                        visible: index > 0 && 
-                                                 index < repeater.marks
-                                    }
-                                },
-                                // Change the state of this label to visible and
-                                // have it represented a "combined" label of 
-                                // this and the second handle position(s).
-                                State {
-                                    name: "combinedVisible"
-                                    PropertyChanges {
-                                        target: tickLabel
-                                        text: tickLabel.combinedLabelText
-                                        visible: index > 0 && 
-                                                 index < repeater.marks
-                                    }
-                                }
-                            ]
-
-                            // If the sliders change value, test to see if this
-                            // label becomes the handle that is now pointed-to.
-                            Connections {
-                                target: slider.first
-                                function onValueChanged() {
-                                    if (labelMode !== TimeSlider.LabelMode.Thumbs) {
-                                        return;
-                                    }
-
-                                    if (index !== slider.first.value) {
-                                        return;
-                                    }
-
-                                    if (index > 0 && index < repeater.marks) {
-                                        repeater.firstHandleLabel = tickLabel;
-                                    } else {
-                                        repeater.firstHandleLabel = null;
-                                    }
-                                }
-                            }
-                            Connections {
-                                target: slider.second
-                                function onValueChanged() {
-                                    if (labelMode !== TimeSlider.LabelMode.Thumbs) {
-                                        return;
-                                    }
-
-                                    if (index !== slider.second.value) {
-                                        return;
-                                    }
-
-                                    if (index > 0 && index < repeater.marks) {
-                                        repeater.secondHandleLabel = tickLabel;
-                                    } else {
-                                        repeater.secondHandleLabel = null;
-                                    }
-                                }
-                            }
-
-                            // If the current handle labels change, reset this
-                            // state of all other labels back to default.
-                            Connections {
-                                target: repeater
-                                function onFirstHandleLabelChanged() {
-                                    if (tickLabel !== repeater.firstHandleLabel &&
-                                        tickLabel !== repeater.secondHandleLabel) {
-                                        tickLabel.state = "";
-                                    }
-                                }
-                                function onSecondHandleLabelChanged() {
-                                    if (tickLabel !== repeater.firstHandleLabel &&
-                                        tickLabel !== repeater.secondHandleLabel) {
-                                        tickLabel.state = "";
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    onFirstHandleLabelChanged: handlesChanged()
-                    onSecondHandleLabelChanged: handlesChanged()
-                    function handlesChanged() {
-                        if (firstHandleLabel && firstHandleLabel == secondHandleLabel) {
-                            firstHandleLabel.state = "singleVisible";
-                        } else if (firstHandleLabel && secondHandleLabel 
-                                   && horizontalOverlaps(firstHandleLabel, secondHandleLabel)) {
-                            firstHandleLabel.state = "combinedVisible";
-                            secondHandleLabel.state = "";
-                        } else {
-                            if (firstHandleLabel) {
-                                firstHandleLabel.state = "singleVisible";
-                            }
-
-                            if (secondHandleLabel) {
-                                secondHandleLabel.state = "singleVisible";
-                            }
-                        }
-                    }
-                    function horizontalOverlaps(item1, item2) {
-                        const r1 = Qt.rect(
-                            item1.parent.x + item1.defaultLabelX, item1.y,
-                            item1.defaultLabelWidth, item1.height
-                        );
-                        const r2 = Qt.rect(
-                            item2.parent.x + item2.defaultLabelX, item2.y,
-                            item2.defaultLabelWidth, item2.height
-                        );
-                        if (r1.right < r2.left) {
-                            return false;
-                        }
-                        else if (r2.right < r1.left) {
-                            return false;
-                        }
-                        return true;
-                    }
-                }
-                FontMetrics {
-                    id: fontMetric
-                        font: slider.font
-                }
-            }
-            Connections {
-                target: controller
-                function onStepsChanged() { 
-                    slider.setValues(controller.startStep,
-                                     controller.endStep);
-                }
-            }
+        Control {
             Layout.columnSpan: 5
             Layout.fillWidth: true
             Layout.margins: 5
+            Layout.topMargin: 30
             Layout.minimumHeight: sliderBackground.height
+            leftPadding: 0
+            topPadding: -40
+            contentItem: RangeSlider {
+                id: slider
+                padding: 0
+                stepSize: 1.0
+                palette: timeSlider.palette
+                snapMode: RangeSlider.SnapAlways
+                from: 0
+                to: controller.numberOfSteps
+                first {
+                    onValueChanged: {
+                        if (slider.first.pressed) {
+                            if (slider.first.handle.enabled) {
+                                controller.setSteps(first.value, controller.endStep);
+                            } else { // Reset
+                                slider.first.value = controller.startStep;
+                            }
+                        }
+                    }
+                }
+                second {
+                    onValueChanged: {
+                        if (slider.second.pressed) {
+                            if (slider.second.handle.enabled) {
+                                controller.setSteps(controller.startStep, second.value);
+                            } else { // Reset
+                                slider.second.value = controller.endStep;
+                            }
+                        }
+                    }
+                }
+                Connections {
+                    target: controller
+                    function onStepsChanged() { 
+                        slider.setValues(controller.startStep,
+                                        controller.endStep);
+                    }
+                }
+
+                Binding {
+                    target: slider.first.handle
+                    property: "enabled"
+                    value: !startTimePinned
+                }
+
+                Binding {
+                    target: slider.first.handle
+                    property: "width"
+                    value: startTimePinned ? 2 : undefined
+                }
+
+                Binding {
+                    target: slider.second.handle
+                    property: "enabled"
+                    value: !endTimePinned
+                }
+
+                Binding {
+                    target: slider.second.handle
+                    property: "width"
+                    value: endTimePinned ? 2 : undefined
+                }
+            }
+
+            background: Item {
+                    id: sliderBackground
+                    height: childrenRect.height
+                    Repeater {
+                        id: repeater
+                        property real marks: slider.to - slider.from
+                        property var firstHandleLabel: null;
+                        property var secondHandleLabel: null;
+                        model: Math.round(marks)
+                        Item { // Holds a tickmark and the label for that mark.
+                            id: tickHold
+                            x: {
+                                const h = Math.max(slider.first.handle.width, slider.second.handle.width)/2 - width;
+                                const v = slider.stepSize * index;
+                                const p = (v - slider.from) / (slider.to - slider.from);
+                                const x = h + p * (slider.availableWidth - (h*2));
+                                return x;
+                            }
+                            width: tickMark.width
+                            height: childrenRect.height
+                            Rectangle  { // Mark itself.
+                                id: tickMark
+                                anchors.top: parent.top
+                                width: 2
+                                height: index % labelSliderTickInterval === 0 ? 20
+                                                                              : 10
+                                color: slider.background.color
+                            }
+                            Label { // Tickmark label
+                                id: tickLabel
+                                anchors {
+                                    top: tickMark.bottom
+                                    topMargin: index % labelSliderTickInterval === 0 ? 0 : 10
+                                }
+
+                                property string defaultLabelText:
+                                    Qt.formatDateTime(
+                                        controller.timeForStep(index),
+                                        timeStepIntervalLabelFormat);
+
+                                property int tickIndex: index;
+
+                                // For the handles case where two handles are close
+                                // together, we combine the info of two handles into
+                                // one variable label.
+                                property string combinedLabelText: repeater.secondHandleLabel ? `${
+                                    Qt.formatDateTime(
+                                        controller.timeForStep(tickIndex),
+                                        timeStepIntervalLabelFormat)} - ${
+                                    Qt.formatDateTime(
+                                        controller.timeForStep(repeater.secondHandleLabel.tickIndex),
+                                        timeStepIntervalLabelFormat)}` : "";
+
+                                property real defaultLabelWidth: 
+                                    fontMetric.boundingRect(defaultLabelText).width;
+
+                                property real defaultLabelX: {
+                                    const minX = -tickHold.x;
+                                    const maxX = -tickHold.x + sliderBackground.width - defaultLabelWidth;
+                                    return Math.min(maxX, Math.max(-defaultLabelWidth/2, minX));
+                                }
+
+                                x: {
+                                    const minX = -tickHold.x;
+                                    const maxX = -tickHold.x + sliderBackground.width - width;
+                                    return Math.min(maxX, Math.max(-defaultLabelWidth/2, minX));
+                                }
+
+                                text: defaultLabelText;
+
+                                palette: slider.palette
+                                font: slider.font
+
+                                // By default the label mark is only visible on
+                                // the "long" ticks.
+                                visible: index > 0 &&
+                                        index < repeater.marks &&
+                                        index % labelSliderTickInterval === 0 &&
+                                        labelMode === TimeSlider.LabelMode.Ticks 
+
+                                states: [
+                                    // Change the state of this single label to 
+                                    // visible if not an endpoint.
+                                    State {
+                                        name: "singleVisible"
+                                        PropertyChanges {
+                                            target: tickLabel
+                                            visible: index > 0 && 
+                                                    index < repeater.marks
+                                        }
+                                    },
+                                    // Change the state of this label to visible and
+                                    // have it represented a "combined" label of 
+                                    // this and the second handle position(s).
+                                    State {
+                                        name: "combinedVisible"
+                                        PropertyChanges {
+                                            target: tickLabel
+                                            text: tickLabel.combinedLabelText
+                                            visible: index > 0 && 
+                                                    index < repeater.marks
+                                        }
+                                    }
+                                ]
+
+                                // If the sliders change value, test to see if this
+                                // label becomes the handle that is now pointed-to.
+                                Connections {
+                                    target: slider.first
+                                    function onValueChanged() {
+                                        if (labelMode !== TimeSlider.LabelMode.Thumbs) {
+                                            return;
+                                        }
+
+                                        if (index !== slider.first.value) {
+                                            return;
+                                        }
+
+                                        if (index > 0 && index < repeater.marks) {
+                                            repeater.firstHandleLabel = tickLabel;
+                                        } else {
+                                            repeater.firstHandleLabel = null;
+                                        }
+                                    }
+                                }
+                                Connections {
+                                    target: slider.second
+                                    function onValueChanged() {
+                                        if (labelMode !== TimeSlider.LabelMode.Thumbs) {
+                                            return;
+                                        }
+
+                                        if (index !== slider.second.value) {
+                                            return;
+                                        }
+
+                                        if (index > 0 && index < repeater.marks) {
+                                            repeater.secondHandleLabel = tickLabel;
+                                        } else {
+                                            repeater.secondHandleLabel = null;
+                                        }
+                                    }
+                                }
+
+                                // If the current handle labels change, reset this
+                                // state of all other labels back to default.
+                                Connections {
+                                    target: repeater
+                                    function onFirstHandleLabelChanged() {
+                                        if (tickLabel !== repeater.firstHandleLabel &&
+                                            tickLabel !== repeater.secondHandleLabel) {
+                                            tickLabel.state = "";
+                                        }
+                                    }
+                                    function onSecondHandleLabelChanged() {
+                                        if (tickLabel !== repeater.firstHandleLabel &&
+                                            tickLabel !== repeater.secondHandleLabel) {
+                                            tickLabel.state = "";
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        onFirstHandleLabelChanged: handlesChanged()
+                        onSecondHandleLabelChanged: handlesChanged()
+                        function handlesChanged() {
+                            if (firstHandleLabel && firstHandleLabel == secondHandleLabel) {
+                                firstHandleLabel.state = "singleVisible";
+                            } else if (firstHandleLabel && secondHandleLabel 
+                                    && horizontalOverlaps(firstHandleLabel, secondHandleLabel)) {
+                                firstHandleLabel.state = "combinedVisible";
+                                secondHandleLabel.state = "";
+                            } else {
+                                if (firstHandleLabel) {
+                                    firstHandleLabel.state = "singleVisible";
+                                }
+
+                                if (secondHandleLabel) {
+                                    secondHandleLabel.state = "singleVisible";
+                                }
+                            }
+                        }
+                        function horizontalOverlaps(item1, item2) {
+                            const r1 = Qt.rect(
+                                item1.parent.x + item1.defaultLabelX, item1.y,
+                                item1.defaultLabelWidth, item1.height
+                            );
+                            const r2 = Qt.rect(
+                                item2.parent.x + item2.defaultLabelX, item2.y,
+                                item2.defaultLabelWidth, item2.height
+                            );
+                            if (r1.right < r2.left) {
+                                return false;
+                            }
+                            else if (r2.right < r1.left) {
+                                return false;
+                            }
+                            return true;
+                        }
+                    }
+                    FontMetrics {
+                        id: fontMetric
+                            font: slider.font
+                    }
+                }
         }
     }
 
