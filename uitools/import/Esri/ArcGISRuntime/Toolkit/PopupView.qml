@@ -129,59 +129,54 @@ Pane {
                                              : controller.fieldCount
 
             // Title Header
-            Text {
+            Label {
                 Layout.fillWidth: true
                 textFormat: Text.StyledText
                 text: `<h2>${controller.title}</h2>`
                 wrapMode: Text.Wrap
-                color: palette.text
                 font: popupView.font
             }
 
             // Field names
             Repeater {
                 model: controller.displayFields
-                Text {
+                Label {
                     Layout.fillWidth: true
                     text: fieldName ? fieldName : ""
                     wrapMode: Text.WrapAnywhere
-                    color: palette.text
                 }
             }
 
             // Attachments header
-            Text {
+            Label {
                 Layout.columnSpan: 2
                 Layout.fillWidth: true
                 visible: controller.showAttachments
                 enabled: visible
                 textFormat: Text.StyledText
                 text: controller.attachmentCount > 0 ? "<h2>Attachments</h2>" : ""
-                color: palette.text
                 font: popupView.font
             }
 
             // Attachment names
             Repeater {
                 model: controller.attachments
-                Text {
+                Label {
                     visible: controller.showAttachments
                     enabled: visible
                     Layout.fillWidth: true
                     text: name
                     wrapMode: Text.WrapAnywhere
-                    color: palette.text
                 }
             }
 
             // Field contents
             Repeater {
                 model: controller.displayFields
-                Text {
+                Label {
                     Layout.fillWidth: true
                     text: formattedValue
                     wrapMode: Text.WrapAnywhere
-                    color: palette.text
                 }
             }
 
