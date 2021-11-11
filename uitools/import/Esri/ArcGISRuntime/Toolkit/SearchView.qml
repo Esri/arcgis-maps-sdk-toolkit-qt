@@ -272,10 +272,11 @@ Pane {
                     width: parent.width
                     Image {
                         source: markerImageUrl
-                        sourceSize.height: 32
+                        sourceSize.height: 24
                         Layout.rowSpan: 2
+                        verticalAlignment: Image.AlignVCenter
                     }
-                    Text {
+                    Label {
                         Layout.fillHeight: true
                         Layout.fillWidth: true
                         text: displayTitle
@@ -283,8 +284,9 @@ Pane {
                         color: searchView.palette.text
                         elide: Text.ElideRight
                         Layout.rowSpan: displaySubtitle === "" ? 2 : 1
+                        verticalAlignment: Label.AlignVCenter
                     }
-                    Text {
+                    Label {
                         Layout.fillWidth: true
                         text: displaySubtitle
                         font: searchView.font
@@ -316,7 +318,7 @@ Pane {
                     background: Rectangle {
                         color: searchView.palette.alternateBase
                     }
-                    contentItem: Text {
+                    contentItem: Label {
                         text: section
                         color: searchView.palette.text
                         horizontalAlignment: Text.AlignHCenter
