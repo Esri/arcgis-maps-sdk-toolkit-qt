@@ -506,18 +506,24 @@ namespace Toolkit {
    
     It is possible for the current basemap to not be in the gallery.
    */
-  void BasemapGalleryController::setCurrentBasemap(Basemap* basemap)
+  void BasemapGalleryController::setCurrentBasemap(Basemap *basemap)
   {
-      auto connection = new QMetaObject::Connection();
+    auto connection =
+        std::make_shared<QMetaObject::Connection>(QMetaObject::Connection());
 
-      auto apply = [basemap, this, connection](Error e){
-        if(e.isEmpty()){
+    auto apply =
+        [basemap, this, connection](Error e)
+    {
+          if (e.isEmpty()) {
             if (basemap == m_currentBasemap)
-                  return;
-            if(!basemapMatchesCurrentSpatialReference(basemap)){
-                //force redraw for all the lsitview items.
-                emit m_gallery->dataChanged(m_gallery->index(0), m_gallery->index(std::max(m_gallery->rowCount() - 1, 0)));
-                return;
+              return;
+            if (!basemapMatchesCurrentSpatialReference(basemap))
+            {
+              // force redraw for all the listview items.
+              emit m_gallery->dataChanged(
+                  m_gallery->index(0),
+                  m_gallery->index(std::max(m_gallery->rowCount() - 1, 0)));
+              return;
             }
             m_currentBasemap = basemap;
             emit currentBasemapChanged();
@@ -527,19 +533,21 @@ namespace Toolkit {
               m_geoModel->setBasemap(m_currentBasemap);
             }
             disconnect(*connection);
-        }
-        else {
+          } else
+          {
             qDebug() << "problem in loading the layer";
-        }
-        delete connection;
-      };
-      if(basemap->baseLayers()->first()->loadStatus() != LoadStatus::Loaded){
-          connect(basemap->baseLayers()->first(), &Layer::doneLoading, this, apply);
-          basemap->baseLayers()->first()->load();
-      }
-      else {
-          apply(Error());
-      }
+          }
+          // delete connection;
+        };
+    if (basemap->baseLayers()->first()->loadStatus() != LoadStatus::Loaded)
+    {
+      *connection = connect(basemap->baseLayers()->first(), &Layer::doneLoading,
+                            this, apply);
+      basemap->baseLayers()->first()->load();
+    } else
+    {
+      apply(Error());
+    }
   }
 
   /*!
