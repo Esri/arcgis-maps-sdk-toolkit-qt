@@ -326,7 +326,7 @@ namespace Toolkit {
     m_gallery->setFlagsCallback([this](const QModelIndex& index)
                                 {
                                   BasemapGalleryItem* galleryItem = m_gallery->element<BasemapGalleryItem>(index);
-
+                                  qDebug() << index.row() << "," << index.column();
                                   if (!basemapMatchesCurrentSpatialReference(galleryItem->basemap()))
                                   {
                                     //disabled item flags
@@ -539,14 +539,17 @@ namespace Toolkit {
           }
           // delete connection;
         };
-    if (basemap->baseLayers()->first()->loadStatus() != LoadStatus::Loaded)
+    if(basemap->baseLayers()->size() > 0)
     {
-      *connection = connect(basemap->baseLayers()->first(), &Layer::doneLoading,
-                            this, apply);
-      basemap->baseLayers()->first()->load();
-    } else
-    {
-      apply(Error{});
+        if (basemap->baseLayers()->first()->loadStatus() != LoadStatus::Loaded)
+        {
+          *connection = connect(basemap->baseLayers()->first(), &Layer::doneLoading,
+                                this, apply);
+          basemap->baseLayers()->first()->load();
+        } else
+        {
+          apply(Error{});
+        }
     }
   }
 
@@ -624,6 +627,7 @@ namespace Toolkit {
     if (m_geoModel)
     {
       sp = m_geoModel->spatialReference();
+
     }
 
     // If no spatial reference is set, any basemap can be applied.
@@ -637,15 +641,44 @@ namespace Toolkit {
       if (item && !it_sp.isEmpty())
         return sp == item->spatialReference();
     }
+
+    //scene case:
+    const auto layers = basemap->baseLayers();
+    if(layers->size() <= 0)
+      return false;
+
+    if(auto sceneView = static_cast<Scene*>(m_geoModel))
+    {
+
+      const auto sp2 = basemap->baseLayers()->first()->spatialReference();
+      if(sp2.isEmpty()) //case used by the listview painter
+        return true;
+      auto svts = sceneView->sceneViewTilingScheme();
+      switch (svts)
+      {
+        case SceneViewTilingScheme::Geographic:
+          return sp2.isGeographic();
+
+        case SceneViewTilingScheme::WebMercator:
+          return sp2 == SpatialReference::webMercator();
+
+        default:
+          qDebug() << "a new sceneviewTilingScheme has been used";
+          break;
+      }
+      return false;
+    }
+
     // Test if all layers match the spatial reference.
     // From the spec we are guaranteed the homogeneity of the spatial references of these layers.
     // https://developers.arcgis.com/web-map-specification/objects/spatialReference/
-    const auto layers = basemap->baseLayers();
-    if(layers->size() > 0){
-        const auto layer = layers->first();
-        const auto sp2 = layer->spatialReference();
-        return sp2.isEmpty() || sp == sp2;
-    }
+
+    const auto layer = layers->first();
+    const auto sp2 = layer->spatialReference();
+    qDebug() << "sp1 " << sp.toJson();
+    qDebug() << "sp2 "<< sp2.toJson();
+    return sp2.isEmpty() || sp == sp2;
+
     return false;
 
   }
