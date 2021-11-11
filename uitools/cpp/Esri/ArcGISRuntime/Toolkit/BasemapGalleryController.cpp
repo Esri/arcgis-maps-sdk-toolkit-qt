@@ -546,7 +546,7 @@ namespace Toolkit {
       basemap->baseLayers()->first()->load();
     } else
     {
-      apply(Error());
+      apply(Error{});
     }
   }
 
