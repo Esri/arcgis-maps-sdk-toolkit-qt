@@ -24,8 +24,6 @@ CheckBox 1.0 CheckBox.qml
 CheckDelegate 1.0 CheckDelegate.qml
 internal CheckIndicator CheckIndicator.qml
 ComboBox 1.0 ComboBox.qml
-# DelayButton.qml
-# Dial 1.0 Dial.qml
 Dialog 1.0 Dialog.qml
 DialogButtonBox 1.0 DialogButtonBox.qml
 Drawer 1.0 Drawer.qml
@@ -41,7 +39,7 @@ Pane 1.0 Pane.qml
 Popup 1.0 Popup.qml
 ProgressBar 1.0 ProgressBar.qml
 MenuSeparator 1.0 MenuSeparator.qml
-# RangeSlider 1.0 RangeSlider.qml
+RangeSlider 1.0 RangeSlider.qml
 RadioButton 1.0 RadioButton.qml
 RadioDelegate 1.0 RadioDelegate.qml
 internal RadioIndicator RadioIndicator.qml
