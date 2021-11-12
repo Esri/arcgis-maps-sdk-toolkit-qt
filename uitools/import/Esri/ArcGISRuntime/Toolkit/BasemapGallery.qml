@@ -228,6 +228,15 @@ Pane {
                     Layout.maximumWidth: basemapGallery.internal.defaultCellSize
                     Layout.maximumHeight: Layout.maximumWidth
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+                    BusyIndicator {
+                         id: busyIndicator
+                         anchors.centerIn: parent
+                         running: false
+                    }
+                    Connections {
+                        target: controller
+                        function onCurrentBasemapChanged() { busyIndicator.running = false;}
+                    }
                 }
                 Text {
                     id: itemText
@@ -248,7 +257,11 @@ Pane {
                 id: mouseArea
                 anchors.fill: parent
                 hoverEnabled: true
-                onClicked: controller.setCurrentBasemap(modelData.basemap)
+                onClicked: {
+                    if(controller.currentBasemap !== modelData.basemap)
+                        busyIndicator.running = true;
+                    controller.setCurrentBasemap(modelData.basemap);
+                }
 
                 // When mouse enters thumbnail area, use timer to delay showing of tooltip.
                 onEntered: {

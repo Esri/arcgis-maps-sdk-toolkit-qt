@@ -669,7 +669,7 @@ namespace Toolkit {
       return false;
     }
 
-    // Test if all layers match the spatial reference.
+    // Test if first layer matches the spatial reference.
     // From the spec we are guaranteed the homogeneity of the spatial references of these layers.
     // https://developers.arcgis.com/web-map-specification/objects/spatialReference/
 

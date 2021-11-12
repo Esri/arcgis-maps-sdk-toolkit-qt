@@ -169,28 +169,32 @@ QtObject {
             return false;
         }
 
-        let sp1 = geoModel.spatialReference;
+        let sp = geoModel.spatialReference;
 
-        if (sp1 === null) {
+        if (sp === null) {
             return true;
         }
-
-        for (let i = 0; i < basemap.baseLayers.count; i++) {
-            let layer = basemap.baseLayers.get(i);
-            if (layer === null) {
-                continue;
-            }
-
-            let sp2 = layer.spatialReference;
-            if (sp2 === null) {
-                continue;
-            }
-
-            if (!sp2.equals(sp1)) {
-                return false;
+        let item = basemap.item;
+        if(item !== null){
+            let it_sp = item.spatialReference;
+            if(item !== null && it_sp !== null){
+                return sp.equals(item.spatialReference);
             }
         }
-        return true;
+
+        let layers = basemap.baseLayers;
+        if(layers.count <= 0)
+            return false;
+
+        //scene case
+        if(geoModel instanceof Scene){
+            console.log("add scene case!");
+        }
+
+        let layer = layers.get(0);
+        //check layer null?
+        let sp2 = layer.spatialReference;
+        return sp2 === null || sp.equals(sp2);
     }
 
     /*! \internal */
