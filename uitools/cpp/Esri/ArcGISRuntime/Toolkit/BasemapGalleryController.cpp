@@ -326,7 +326,6 @@ namespace Toolkit {
     m_gallery->setFlagsCallback([this](const QModelIndex& index)
                                 {
                                   BasemapGalleryItem* galleryItem = m_gallery->element<BasemapGalleryItem>(index);
-                                  qDebug() << index.row() << "," << index.column();
                                   if (!basemapMatchesCurrentSpatialReference(galleryItem->basemap()))
                                   {
                                     //disabled item flags
@@ -509,12 +508,14 @@ namespace Toolkit {
   void BasemapGalleryController::setCurrentBasemap(Basemap *basemap)
   {
     auto connection =
-        std::make_shared<QMetaObject::Connection>(QMetaObject::Connection());
+        std::make_shared<QMetaObject::Connection>();
 
     auto apply =
         [basemap, this, connection](Error e)
     {
           if (e.isEmpty()) {
+            disconnect(*connection);
+
             if (basemap == m_currentBasemap)
               return;
             if (!basemapMatchesCurrentSpatialReference(basemap))
@@ -532,7 +533,6 @@ namespace Toolkit {
             {
               m_geoModel->setBasemap(m_currentBasemap);
             }
-            disconnect(*connection);
           } else
           {
             qDebug() << "problem in loading the layer";
@@ -642,18 +642,18 @@ namespace Toolkit {
         return sp == item->spatialReference();
     }
 
-    //scene case:
+
     const auto layers = basemap->baseLayers();
     if(layers->size() <= 0)
       return false;
 
-    if(auto sceneView = static_cast<Scene*>(m_geoModel))
+    //scene case:
+    if(auto scene = qobject_cast<Scene*>(m_geoModel))
     {
-
       const auto sp2 = basemap->baseLayers()->first()->spatialReference();
       if(sp2.isEmpty()) //case used by the listview painter
         return true;
-      auto svts = sceneView->sceneViewTilingScheme();
+      auto svts = scene->sceneViewTilingScheme();
       switch (svts)
       {
         case SceneViewTilingScheme::Geographic:
@@ -675,8 +675,6 @@ namespace Toolkit {
 
     const auto layer = layers->first();
     const auto sp2 = layer->spatialReference();
-    qDebug() << "sp1 " << sp.toJson();
-    qDebug() << "sp2 "<< sp2.toJson();
     return sp2.isEmpty() || sp == sp2;
 
     return false;
