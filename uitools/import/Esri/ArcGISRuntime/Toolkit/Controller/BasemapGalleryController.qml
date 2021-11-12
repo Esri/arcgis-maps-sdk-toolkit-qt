@@ -188,7 +188,19 @@ QtObject {
 
         //scene case
         if(geoModel instanceof Scene){
-            console.log("add scene case!");
+            let sp2 = basemap.baselayers.get(0).spatialReference;
+            if(sp2 === null)
+                return true;
+            let svts = geoModel.sceneViewTilingScheme;
+            switch(svts){
+            case Enums.SceneViewTilingSchemeGeographic:
+                return sp2.isGeographic;
+            case Enums.SceneViewTilingScheme:
+                return sp2.equals(Factory.SpatialReference.createWebMercator());
+            default:
+                console.log("a new sceneViewTilingScheme has been used!");
+            }
+            return false;
         }
 
         let layer = layers.get(0);
