@@ -16,22 +16,12 @@ import Esri.ArcGISRuntime 100.13
 import Esri.ArcGISRuntime.Toolkit 100.13
 
 DemoPage {
-    sceneViewContents: Component {
-        Scene {
-            initBasemapStyle: Enums.BasemapStyleArcGISDarkGray
-            ArcGISMapImageLayer {
-                url: "https://sampleserver6.arcgisonline.com/arcgis/rest/services/USA_secure_user1/MapServer"
-            }
-        }
-    }
+    readonly property string url: "https://www.arcgis.com/sharing/rest/content/items/e5039444ef3c48b8a8fdc9227f9be7c1/data"
 
     mapViewContents: Component {
         MapView {
             Map {
-                initBasemapStyle: Enums.BasemapStyleArcGISDarkGray
-                ArcGISMapImageLayer {
-                    url: "https://sampleserver6.arcgisonline.com/arcgis/rest/services/USA_secure_user1/MapServer"
-                }
+                initUrl: url
             }
             AuthenticationView {
                 anchors.centerIn: parent

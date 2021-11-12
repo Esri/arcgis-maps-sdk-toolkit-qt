@@ -30,6 +30,7 @@ DemoPage {
                 anchors {
                     top: parent.top
                     right: parent.right
+                    margins: 10
                 }
             }
         }
@@ -44,6 +45,7 @@ DemoPage {
                 anchors {
                     top: parent.top
                     right: parent.right
+                    margins: 10
                 }
             }
         }

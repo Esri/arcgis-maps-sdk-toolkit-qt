@@ -25,6 +25,7 @@ DemoPage {
                 anchors {
                     right: parent.right
                     bottom: parent.attributionTop
+                    margins: 10
                 }
             }
             NorthArrowDemoModel {
@@ -40,8 +41,8 @@ DemoPage {
                 geoView: parent
                 anchors {
                     right: parent.right
-                    margins: 10
                     bottom: parent.attributionTop
+                    margins: 10
                 }
             }
             NorthArrowDemoModel {

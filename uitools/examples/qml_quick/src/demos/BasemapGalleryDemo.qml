@@ -19,14 +19,27 @@ DemoPage {
     sceneViewContents: Component {
         SceneView {
             Scene {
-                initBasemapStyle: Enums.BasemapStyleArcGISDarkGray
+                id: scene
             }
             BasemapGallery {
-                geoModel: parent.scene
+                id: gallery
+                geoModel: scene
                 anchors {
                     right: parent.right
                     top: parent.top
                     margins: 10
+                }
+            }
+
+            Connections {
+                // On startup choose an appropriate basemap from the gallery
+                // to be initially selected.
+                target: gallery.controller.portal
+                function onFetchDeveloperBasemapsStatusChanged() {
+                    const basemaps = gallery.controller.portal.developerBasemaps;
+                    if (basemaps.count > 0) {
+                        scene.basemap = basemaps.get(0);
+                    }
                 }
             }
         }
@@ -35,14 +48,27 @@ DemoPage {
     mapViewContents: Component {
         MapView {
             Map {
-                initBasemapStyle: Enums.BasemapStyleArcGISDarkGray
+                id: map
             }
             BasemapGallery {
-                geoModel: parent.map
+                id: gallery
+                geoModel: map
                 anchors {
                     right: parent.right
                     top: parent.top
                     margins: 10
+                }
+            }
+
+            Connections {
+                // On startup choose an appropriate basemap from the gallery
+                // to be initially selected.
+                target: gallery.controller.portal
+                function onFetchDeveloperBasemapsStatusChanged() {
+                    const basemaps = gallery.controller.portal.developerBasemaps;
+                    if (basemaps.count > 0) {
+                        map.basemap = basemaps.get(0);
+                    }
                 }
             }
         }

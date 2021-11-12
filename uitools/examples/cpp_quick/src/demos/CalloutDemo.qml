@@ -17,22 +17,16 @@ import Esri.ArcGISRuntime.Toolkit 100.13
 import DemoApp 1.0
 
 DemoPage {
-    property real xClickLoc
-    property real yClickLoc
-
     mapViewContents: Component {
         MapView {
             id:view
 
             Callout {
-                id:callout
-                calloutData :  parent.calloutData //binding to parent. Any change is reflected on this
+                calloutData : parent.calloutData //binding to parent. Any change is reflected on this
                 calloutHeight: 150
                 calloutWidth: 250
                 accessoryButtonHidden: true
                 leaderPosition: leaderPositionEnum.Automatic
-
-                //property Point location;
             }
 
             CalloutDemoModel {

@@ -16,12 +16,15 @@ import Esri.ArcGISRuntime 100.13
 import Esri.ArcGISRuntime.Toolkit 100.13
 
 DemoPage {
+    readonly property string dataUrl: "https://sampleserver6.arcgisonline.com/arcgis/rest/services/Hurricanes/MapServer"
+
+
     sceneViewContents: Component {
         SceneView {
             Scene {
                 initBasemapStyle: Enums.BasemapStyleArcGISDarkGray
                 ArcGISMapImageLayer {
-                    url: "https://sampleserver6.arcgisonline.com/arcgis/rest/services/Hurricanes/MapServer"
+                    url: dataUrl
                 }
             }
             TimeSlider {
@@ -40,7 +43,7 @@ DemoPage {
             Map {
                 initBasemapStyle: Enums.BasemapStyleArcGISDarkGray
                 ArcGISMapImageLayer {
-                    url: "https://sampleserver6.arcgisonline.com/arcgis/rest/services/Hurricanes/MapServer"
+                    url: dataUrl
                 }
 
             }

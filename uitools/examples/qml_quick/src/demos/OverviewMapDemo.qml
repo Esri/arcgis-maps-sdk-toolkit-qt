@@ -23,12 +23,13 @@ DemoPage {
     sceneViewContents: Component {
         SceneView {
             Scene {
-                initBasemapStyle: Enums.BasemapStyleArcGISDarkGray
+                initBasemapStyle: Enums.BasemapStyleArcGISCommunity
             }
             OverviewMap {
                 anchors {
                     top: parent.top
                     left: parent.left
+                    margins: 10
                 }
                 geoView: parent
             }
@@ -37,12 +38,13 @@ DemoPage {
     mapViewContents : Component {
         MapView {
             Map {
-                initBasemapStyle: Enums.BasemapStyleArcGISDarkGray
+                initBasemapStyle: Enums.BasemapStyleArcGISCommunity
             }
             OverviewMap {
                 anchors {
                     top: parent.top
                     left: parent.left
+                    margins: 10
                 }
                 geoView: parent
             }

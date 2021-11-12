@@ -31,7 +31,7 @@ DemoPage {
                 id: demoModel
                 geoView: view
             }
-            onSceneChanged: {gallery.setGeoModelFromGeoView(view)}
+            onSceneChanged: gallery.setGeoModelFromGeoView(view)
         }
     }
 
@@ -51,7 +51,7 @@ DemoPage {
                 id: demoModel
                 geoView: view
             }
-            onMapChanged: {gallery.setGeoModelFromGeoView(view)}
+            onMapChanged: gallery.setGeoModelFromGeoView(view)
         }
     }
 }

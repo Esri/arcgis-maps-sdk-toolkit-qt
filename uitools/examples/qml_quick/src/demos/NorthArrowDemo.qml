@@ -25,6 +25,7 @@ DemoPage {
                 geoView: parent
                 anchors {
                     right: parent.right
+                    margins: 10
                     bottom: parent.attributionTop
                 }
             }

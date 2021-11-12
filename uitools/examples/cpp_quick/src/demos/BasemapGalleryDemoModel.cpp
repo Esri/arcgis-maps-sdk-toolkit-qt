@@ -2,9 +2,9 @@
 
 #include "Esri/ArcGISRuntime/Toolkit/BasemapGalleryController.h"
 
-#include <MapView.h>
 #include <GeoView.h>
 #include <Map.h>
+#include <MapView.h>
 #include <Portal.h>
 #include <Scene.h>
 

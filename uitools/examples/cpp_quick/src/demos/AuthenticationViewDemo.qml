@@ -17,20 +17,6 @@ import Esri.ArcGISRuntime.Toolkit 100.13
 import DemoApp 1.0
 
 DemoPage {
-    sceneViewContents: Component {
-        SceneView {
-            id: view
-
-            AuthenticationView {
-                anchors.centerIn: parent
-            }
-
-            AuthenticationViewDemoModel {
-                geoView: view;
-            }
-        }
-    }
-
     mapViewContents: Component {
         MapView {
             id: view

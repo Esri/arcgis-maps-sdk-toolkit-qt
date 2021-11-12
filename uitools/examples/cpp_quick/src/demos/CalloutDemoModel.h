@@ -8,16 +8,18 @@
 
 class CalloutDemoModel : public BaseDemoModel
 {
-    Q_OBJECT
-    QML_ELEMENT
+  Q_OBJECT
+  QML_ELEMENT
 public:
-    CalloutDemoModel(QObject *parent = nullptr);
-    ~CalloutDemoModel() override;
-    void setUp();
+  CalloutDemoModel(QObject* parent = nullptr);
+  ~CalloutDemoModel() override;
+
+private slots:
+  void setUp();
 
 private:
-    double m_xClickLoc;
-    double m_yClickLoc;
+  double m_xClickLoc = 0.0;
+  double m_yClickLoc = 0.0;
 };
 
 #endif // ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_CALLOUTDEMOMODEL_H

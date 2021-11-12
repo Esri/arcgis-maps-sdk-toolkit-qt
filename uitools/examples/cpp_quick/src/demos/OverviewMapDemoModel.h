@@ -8,11 +8,11 @@
 
 class OverviewMapDemoModel : public BaseDemoModel
 {
-    Q_OBJECT
-    QML_ELEMENT
+  Q_OBJECT
+  QML_ELEMENT
 public:
-    OverviewMapDemoModel(QObject *parent = nullptr);
-    ~OverviewMapDemoModel() override;
+  OverviewMapDemoModel(QObject* parent = nullptr);
+  ~OverviewMapDemoModel() override;
 };
 
 #endif // ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_OVERVIEWMAPDEMOMODEL_H

@@ -8,13 +8,15 @@
 
 class AuthenticationViewDemoModel : public BaseDemoModel
 {
-    Q_OBJECT
-    QML_ELEMENT
+  Q_OBJECT
+  QML_ELEMENT
 public:
-    AuthenticationViewDemoModel(QObject *parent = nullptr);
-    ~AuthenticationViewDemoModel();
-    Esri::ArcGISRuntime::Map *initMap_(QObject *parent) const override;
-    Esri::ArcGISRuntime::Scene *initScene_(QObject *parent) const override;
+  AuthenticationViewDemoModel(QObject* parent = nullptr);
+  ~AuthenticationViewDemoModel();
+
+protected:
+  Esri::ArcGISRuntime::Map* initMap_(QObject* parent) const override;
+  Esri::ArcGISRuntime::Scene* initScene_(QObject* parent) const override;
 };
 
 #endif // ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_AUTHENTICATIONVIEWDEMOMODEL_H

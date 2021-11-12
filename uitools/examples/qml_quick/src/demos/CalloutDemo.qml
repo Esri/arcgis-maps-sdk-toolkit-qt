@@ -40,11 +40,10 @@ DemoPage {
 
                 property Point location;
             }
-            onMouseClicked : function(mouse){
-                if(callout.calloutVisible){
+            onMouseClicked : {
+                if (callout.calloutVisible) {
                     callout.dismiss();
-                }
-                else {
+                } else {
                     xClickLoc = mouse.mapPoint.x.toFixed(2);
                     yClickLoc = mouse.mapPoint.y.toFixed(2);
                     calloutData.location = mouse.mapPoint

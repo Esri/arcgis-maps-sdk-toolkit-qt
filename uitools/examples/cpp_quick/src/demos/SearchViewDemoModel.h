@@ -8,11 +8,11 @@
 
 class SearchViewDemoModel : public BaseDemoModel
 {
-    Q_OBJECT
-    QML_ELEMENT
+  Q_OBJECT
+  QML_ELEMENT
 public:
-    SearchViewDemoModel(QObject *parent = nullptr);
-    ~SearchViewDemoModel() override;
+  SearchViewDemoModel(QObject* parent = nullptr);
+  ~SearchViewDemoModel() override;
 };
 
 #endif
