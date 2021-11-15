@@ -73,6 +73,7 @@ QtObject {
      */
     readonly property alias gallery: internal.gallery
 
+    property var basemapToSet : null
     /*!
        \qmlmethod void BasemapGalleryController::setCurrentBasemap(Basemap basemap)
        \brief Sets the current basemap associated with the map/scene
@@ -81,8 +82,19 @@ QtObject {
        It is possible for the current basemap to not be in the gallery.
      */
     function setCurrentBasemap(basemap) {
-        internal.currentBasemap = basemap;
-        geoModel.basemap = internal.currentBasemap;
+        //set connection with matchescurrentsp to run after the basemap is loaded
+//        internal.setBasemapConnections.target = basemap.baseLayers.first;
+//        internal.enabled = true;
+        controller.basemapToSet = basemap;
+        var layer = basemap.baseLayers.get(0);
+        console.log(layer);
+        internal.setBasemapConnections.target = basemap.baseLayers.get(0);
+        internal.setBasemapConnections.enabled = true;
+        basemap.baseLayers.get(0).load();
+//        if(!basemapMatchesCurrentSpatialReference(basemap))
+//            return;
+//        internal.currentBasemap = basemap;
+//        geoModel.basemap = internal.currentBasemap;
     }
 
     /*!
@@ -183,19 +195,23 @@ QtObject {
         }
 
         let layers = basemap.baseLayers;
+
         if(layers.count <= 0)
             return false;
 
         //scene case
         if(geoModel instanceof Scene){
-            let sp2 = basemap.baselayers.get(0).spatialReference;
+            let layer = basemap.baseLayers.get(0);
+//            console.log("layer status" + layer.loadStatus);
+//            console.log(layer.loadStatus.spatialReference);
+            let sp2 = basemap.baseLayers.get(0).spatialReference;
             if(sp2 === null)
                 return true;
             let svts = geoModel.sceneViewTilingScheme;
             switch(svts){
             case Enums.SceneViewTilingSchemeGeographic:
                 return sp2.isGeographic;
-            case Enums.SceneViewTilingScheme:
+            case Enums.SceneViewTilingSchemeWebMercator:
                 return sp2.equals(Factory.SpatialReference.createWebMercator());
             default:
                 console.log("a new sceneViewTilingScheme has been used!");
@@ -234,6 +250,23 @@ QtObject {
             target: geoModel
             function onBasemapChanged() {
                 internal.currentBasemap = geoModel.basemap;
+            }
+        }
+
+        property Connections setBasemapConnections : Connections {
+            enabled: false
+            ignoreUnknownSignals:  true
+            function onLoadStatusChanged() {
+
+                var loadStatus = basemapToSet.baseLayers.get(0).loadStatus;
+                console.log("onloaded called " + loadStatus);
+                if(loadStatus === Enums.LoadStatusLoaded || loadStatus === Enums.LoadStatusLoaded) {
+                    if(!basemapMatchesCurrentSpatialReference(basemapToSet))
+                        return;
+                    internal.currentBasemap = basemapToSet;
+                    geoModel.basemap = internal.currentBasemap;
+                    enabled = false;
+                }
             }
         }
 

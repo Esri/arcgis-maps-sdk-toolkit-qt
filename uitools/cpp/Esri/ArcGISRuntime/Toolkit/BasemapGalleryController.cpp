@@ -221,15 +221,16 @@ namespace Toolkit {
       std::vector<Basemap*> basemapsVector;
       basemapsVector.reserve(basemaps->rowCount());
       std::copy(std::cbegin(*basemaps), std::cend(*basemaps), std::back_inserter(basemapsVector));
-      std::sort(std::begin(basemapsVector), std::end(basemapsVector), [](Basemap* b1,Basemap* b2){
-        // Check validity of basemap->item() and if title() is empty. If either is true, push to end of list.
-        if (!b1->item() || b1->item()->title() == "")
-          return false;
-        else if (!b2->item() || b2->item()->title() == "")
-          return true;
-        else
-          return b1->item()->title() < b2->item()->title();
-      });
+      std::sort(std::begin(basemapsVector), std::end(basemapsVector), [](Basemap* b1, Basemap* b2)
+                {
+                  // Check validity of basemap->item() and if title() is empty. If either is true, push to end of list.
+                  if (!b1->item() || b1->item()->title() == "")
+                    return false;
+                  else if (!b2->item() || b2->item()->title() == "")
+                    return true;
+                  else
+                    return b1->item()->title() < b2->item()->title();
+                });
 
       // For each discovered map, add it to our gallery.
       for (auto basemap : basemapsVector)
@@ -505,51 +506,54 @@ namespace Toolkit {
    
     It is possible for the current basemap to not be in the gallery.
    */
-  void BasemapGalleryController::setCurrentBasemap(Basemap *basemap)
+  void
+  BasemapGalleryController::setCurrentBasemap(Basemap* basemap)
   {
     auto connection =
         std::make_shared<QMetaObject::Connection>();
 
-    auto apply =
-        [basemap, this, connection](Error e)
+    auto apply = [basemap, this, connection](Error e)
     {
-          if (e.isEmpty()) {
-            disconnect(*connection);
+      if (e.isEmpty())
+      {
+        disconnect(*connection);
 
-            if (basemap == m_currentBasemap)
-              return;
-            if (!basemapMatchesCurrentSpatialReference(basemap))
-            {
-              // force redraw for all the listview items.
-              emit m_gallery->dataChanged(
-                  m_gallery->index(0),
-                  m_gallery->index(std::max(m_gallery->rowCount() - 1, 0)));
-              return;
-            }
-            m_currentBasemap = basemap;
-            emit currentBasemapChanged();
-
-            if (m_geoModel && m_geoModel->basemap() != m_currentBasemap)
-            {
-              m_geoModel->setBasemap(m_currentBasemap);
-            }
-          } else
-          {
-            qDebug() << "problem in loading the layer";
-          }
-          // delete connection;
-        };
-    if(basemap->baseLayers()->size() > 0)
-    {
-        if (basemap->baseLayers()->first()->loadStatus() != LoadStatus::Loaded)
+        if (basemap == m_currentBasemap)
+          return;
+        if (!basemapMatchesCurrentSpatialReference(basemap))
         {
-          *connection = connect(basemap->baseLayers()->first(), &Layer::doneLoading,
-                                this, apply);
-          basemap->baseLayers()->first()->load();
-        } else
-        {
-          apply(Error{});
+          // force redraw for all the listview items.
+          emit m_gallery->dataChanged(
+              m_gallery->index(0),
+              m_gallery->index(std::max(m_gallery->rowCount() - 1, 0)));
+          return;
         }
+        m_currentBasemap = basemap;
+        emit currentBasemapChanged();
+
+        if (m_geoModel && m_geoModel->basemap() != m_currentBasemap)
+        {
+          m_geoModel->setBasemap(m_currentBasemap);
+        }
+      }
+      else
+      {
+        qDebug() << "problem in loading the layer";
+      }
+      // delete connection;
+    };
+    if (basemap->baseLayers()->size() > 0)
+    {
+      if (basemap->baseLayers()->first()->loadStatus() != LoadStatus::Loaded)
+      {
+        *connection = connect(
+            basemap->baseLayers()->first(), &Layer::doneLoading, this, apply);
+        basemap->baseLayers()->first()->load();
+      }
+      else
+      {
+        apply(Error{});
+      }
     }
   }
 
@@ -627,7 +631,6 @@ namespace Toolkit {
     if (m_geoModel)
     {
       sp = m_geoModel->spatialReference();
-
     }
 
     // If no spatial reference is set, any basemap can be applied.
@@ -642,29 +645,28 @@ namespace Toolkit {
         return sp == item->spatialReference();
     }
 
-
     const auto layers = basemap->baseLayers();
-    if(layers->size() <= 0)
+    if (layers->size() <= 0)
       return false;
 
     //scene case:
-    if(auto scene = qobject_cast<Scene*>(m_geoModel))
+    if (auto scene = qobject_cast<Scene*>(m_geoModel))
     {
       const auto sp2 = basemap->baseLayers()->first()->spatialReference();
-      if(sp2.isEmpty()) //case used by the listview painter
+      if (sp2.isEmpty()) //case used by the listview painter
         return true;
       auto svts = scene->sceneViewTilingScheme();
       switch (svts)
       {
-        case SceneViewTilingScheme::Geographic:
-          return sp2.isGeographic();
+      case SceneViewTilingScheme::Geographic:
+        return sp2.isGeographic();
 
-        case SceneViewTilingScheme::WebMercator:
-          return sp2 == SpatialReference::webMercator();
+      case SceneViewTilingScheme::WebMercator:
+        return sp2 == SpatialReference::webMercator();
 
-        default:
-          qDebug() << "a new sceneviewTilingScheme has been used";
-          break;
+      default:
+        qDebug() << "a new sceneviewTilingScheme has been used";
+        break;
       }
       return false;
     }
@@ -678,7 +680,6 @@ namespace Toolkit {
     return sp2.isEmpty() || sp == sp2;
 
     return false;
-
   }
 
   /*!
