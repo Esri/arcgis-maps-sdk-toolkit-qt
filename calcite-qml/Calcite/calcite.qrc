@@ -28,6 +28,7 @@
         <file>RadioDelegate.qml</file>
         <file>RadioIndicator.qml</file>
         <file>RangeSlider.qml</file>
+        <file>RoundButton.qml</file>
         <file>Slider.qml</file>
         <file>SliderHandle.qml</file>
         <file>SliderGroove.qml</file>

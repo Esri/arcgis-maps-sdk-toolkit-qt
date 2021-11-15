@@ -23,6 +23,7 @@ DemoPage {
                 anchors {
                     top: parent.top
                     right: parent.right
+                    margins: 10
                 }
             }
             SearchViewDemoModel {
@@ -39,6 +40,7 @@ DemoPage {
                 anchors {
                     top: parent.top
                     right: parent.right
+                    margins: 10
                 }
             }
             SearchViewDemoModel {

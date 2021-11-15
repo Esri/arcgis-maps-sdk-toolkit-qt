@@ -35,6 +35,7 @@ T.ItemDelegate {
     icon.height: 16
 
     property color color : control.enabled ? control.hovered || control.down ? Calcite.offWhite : Calcite.text1 : Calcite.text3
+    icon.color: color
 
     indicator: Image {
         id: indicator
@@ -43,15 +44,13 @@ T.ItemDelegate {
 
         visible: control.highlighted
         source: "images/check.svg"
+        ColorOverlay {
+            anchors.fill: indicator
+            source: indicator
+            color: control.color
+            visible: indicator.visible
+        }
     }
-
-    ColorOverlay {
-        anchors.fill: indicator
-        source: indicator
-        color: control.color
-        visible: indicator.visible
-    }
-
     contentItem: IconLabel {
         spacing: control.spacing
         mirrored: control.mirrored

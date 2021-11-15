@@ -155,6 +155,17 @@ ApplicationWindow {
                         contextMenu.popup()
                     }
                 }
+                RoundButton {
+                    Layout.alignment: Qt.AlignHCenter
+                    text: "Round button "
+
+                }
+                RoundButton {
+                    Layout.alignment: Qt.AlignHCenter
+                    text: "Round button flat"
+                    flat: true
+
+                }
                 GroupBox {
                     title: "Group box"
                     RowLayout {

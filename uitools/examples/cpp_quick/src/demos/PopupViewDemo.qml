@@ -35,7 +35,7 @@ DemoPage {
             PopupViewDemoModel{
                 id:model
                 geoView : view
-                onPopupManagerChanged : {console.log("setting visible");popupView.visible = true;}
+                onPopupManagerChanged : popupView.visible = true;
             }
         }
     }
@@ -51,6 +51,7 @@ DemoPage {
                      top: parent.top
                      bottom: parent.bottom
                 }
+                visible: false
                 popupManager: model.popupManager
 
             }
@@ -58,8 +59,7 @@ DemoPage {
             PopupViewDemoModel{
                 id: model
                 geoView : view
-
-                onPopupManagerChanged : {popupView.visible = true;}
+                onPopupManagerChanged: popupView.visible = true;
             }
         }
     }

@@ -106,7 +106,7 @@ Pane {
         RowLayout {
             Layout.margins: 0
             ComboBox {
-                Layout.leftMargin: 5
+                Layout.margins: 5
                 id: inputModeButton
                 model: coordinateConversionWindow.controller.formats
                 textRole: "name"
@@ -127,6 +127,7 @@ Pane {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.alignment: Qt.AlignBottom
+                Layout.margins: 5
                 placeholderText: "No position"
                 readOnly: !editCoordinateButton.checked
                 selectByMouse: !readOnly
@@ -142,6 +143,7 @@ Pane {
                 checkable: true
                 checked: false
                 flat: true
+                Layout.margins: 5
                 Layout.alignment: Qt.AlignRight
                 icon.source: menuButton.checked ? "images/menu_expand.png" : "images/menu_collapse.png"
             }
@@ -154,6 +156,7 @@ Pane {
                 id: addConversionButton
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignLeft
+                Layout.margins: 5
                 text: "Add conversion"
                 flat: true
                 onClicked: {
@@ -227,6 +230,7 @@ Pane {
                 icon.source: "images/mouse_click_mode.png"
                 Layout.alignment: Qt.AlignRight
                 Layout.maximumWidth: Layout.maximumHeight
+                Layout.margins: 5
                 padding: 0
             }
         }
@@ -260,6 +264,7 @@ Pane {
                     Layout.minimumWidth: menuButton.width
                     Layout.maximumWidth: menuButton.width
                     Layout.alignment: Qt.AlignRight
+                    Layout.margins: 5
                     icon.source: "images/menu.png"
                     flat: true
                     onClicked: editMenu.open()

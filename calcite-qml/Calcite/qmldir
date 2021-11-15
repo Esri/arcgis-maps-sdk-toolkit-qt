@@ -43,6 +43,7 @@ RangeSlider 1.0 RangeSlider.qml
 RadioButton 1.0 RadioButton.qml
 RadioDelegate 1.0 RadioDelegate.qml
 internal RadioIndicator RadioIndicator.qml
+RoundButton 1.0 RoundButton.qml
 Slider 1.0 Slider.qml
 internal SliderHandle SliderHandle.qml
 internal SliderGroove SliderGroove.qml

@@ -81,7 +81,7 @@ For further details see [Calcite Web TypeFaces](https://esri.github.io/calcite-w
   - [x] RadioButton
   - [x] RadioDelegate
   - [x] RangeSlider
-  - [ ] RoundButton
+  - [x] RoundButton
   - [ ] Scrollbar
   - [ ] ScrollIndicator
   - [x] Slider
