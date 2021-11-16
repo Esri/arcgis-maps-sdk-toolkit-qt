@@ -229,9 +229,9 @@ Pane {
                     Layout.maximumHeight: Layout.maximumWidth
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
                     BusyIndicator {
-                         id: busyIndicator
-                         anchors.centerIn: parent
-                         running: false
+                        id: busyIndicator
+                        anchors.centerIn: parent
+                        running: false
                     }
                     Connections {
                         target: controller
@@ -268,7 +268,7 @@ Pane {
                     // Create a definition for the showTooltipFn property of timerOnEntered
                     timerOnEntered.showTooltipFn = () => {
                         if (allowTooltips && mouseArea.containsMouse && modelData.tooltip !== "")
-                            basemapDelegate.ToolTip.visible = true;
+                        basemapDelegate.ToolTip.visible = true;
                     }
                     timerOnEntered.start();
                 }
