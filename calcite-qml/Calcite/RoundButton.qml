@@ -70,7 +70,7 @@ T.RoundButton {
                 return control.pressed || control.checked ? Calcite.foreground3 :
                                                             control.hovered ? Calcite.foreground2
                                                                             : "transparent"
-            }  else {
+            } else {
                 return control.pressed || control.checked ? Calcite.brandPress
                                                           : control.hovered ? Calcite.brandHover
                                                                             : Calcite.brand

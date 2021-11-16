@@ -298,6 +298,7 @@ Pane {
                         palette: searchView.palette
                         font: searchView.font
                         Layout.rowSpan: displaySubtitle === "" ? 2 : 1
+                        verticalAlignment: Label.AlignVCenter
                     }
                     Label {
                         Layout.fillWidth: true
@@ -318,25 +319,25 @@ Pane {
                 }
             }
             // Group suggestions by the owning source's name.
-            section {
-                // TODO: Re-enable in a later release when we have multiple source capabilities.
-                // property: "owningSource.displayName"
-                labelPositioning: ViewSection.CurrentLabelAtStart
-                criteria: ViewSection.FullString
-                delegate: Frame {
-                    anchors {
-                        left: parent.left
-                        right: parent.right
-                    }
-                    contentItem: Label {
-                        text: section
-                        palette: searchView.palette
-                        horizontalAlignment: Text.AlignHCenter
-                        elide: Text.ElideRight
-                        font.italic: true
-                    }
-                }
-            }
+            // TODO: Re-enable in a later release when we have multiple source capabilities.
+//            section {
+//                property: "owningSource.displayName"
+//                labelPositioning: ViewSection.CurrentLabelAtStart
+//                criteria: ViewSection.FullString
+//                delegate: Frame {
+//                    anchors {
+//                        left: parent.left
+//                        right: parent.right
+//                    }
+//                    contentItem: Label {
+//                        text: section
+//                        palette: searchView.palette
+//                        horizontalAlignment: Text.AlignHCenter
+//                        elide: Text.ElideRight
+//                        font.italic: true
+//                    }
+//                }
+//            }
             // Simple highlight rectangle for selected result.
             highlightFollowsCurrentItem: false
         }
