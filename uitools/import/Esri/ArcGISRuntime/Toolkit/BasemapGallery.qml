@@ -199,26 +199,28 @@ Pane {
             id: basemapDelegate
             width: view.cellWidth
             height: view.cellHeight
-            indicator: Item { }
+            indicator: BusyIndicator {
+                id: busyIndicator
+                anchors.centerIn: parent
+                running: false
+                z: 1
+            }
             enabled: controller.basemapMatchesCurrentSpatialReference(modelData.basemap)
             onClicked: controller.setCurrentBasemap(modelData.basemap)
             down: GridView.isCurrentItem
+
+            Connections {
+                target: controller
+                function onCurrentBasemapChanged() { busyIndicator.running = false;}
+            }
             icon {
                 cache: false
                 source: modelData.thumbnailUrl
                 width: basemapGallery.internal.defaultCellSize
                 height: basemapGallery.internal.defaultCellSize
                 color: "transparent"
-                BusyIndicator {
-                    id: busyIndicator
-                    anchors.centerIn: parent
-                    running: false
-                }
-                Connections {
-                    target: controller
-                    function onCurrentBasemapChanged() { busyIndicator.running = false;}
-                }
             }
+
             text: modelData.name === "" ? "Unnamed basemap" : modelData.name
             display: {
                 if (basemapGallery.internal.calculatedStyle === BasemapGallery.ViewStyle.List) {
@@ -237,6 +239,7 @@ Pane {
             ToolTip.text: modelData.tooltip
             MouseArea {
                 id: mouseArea
+                z : 2
                 anchors.fill: parent
                 hoverEnabled: true
                 onClicked: {
