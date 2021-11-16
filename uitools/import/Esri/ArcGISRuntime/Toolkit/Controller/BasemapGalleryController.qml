@@ -88,9 +88,16 @@ QtObject {
         controller.basemapToSet = basemap;
         var layer = basemap.baseLayers.get(0);
         console.log(layer);
-        internal.setBasemapConnections.target = basemap.baseLayers.get(0);
-        internal.setBasemapConnections.enabled = true;
-        basemap.baseLayers.get(0).load();
+        if(layer.loadStatus !== Enums.LoadStatusLoaded) {
+            internal.setBasemapConnections.target = basemap.baseLayers.get(0);
+            internal.setBasemapConnections.enabled = true;
+            basemap.baseLayers.get(0).load();
+        }
+        else {
+            //call directly without waiting. Layer is already loaded
+            internal.setCurrentBasemapMatchingSp();
+        }
+
 //        if(!basemapMatchesCurrentSpatialReference(basemap))
 //            return;
 //        internal.currentBasemap = basemap;
@@ -202,8 +209,6 @@ QtObject {
         //scene case
         if(geoModel instanceof Scene){
             let layer = basemap.baseLayers.get(0);
-//            console.log("layer status" + layer.loadStatus);
-//            console.log(layer.loadStatus.spatialReference);
             let sp2 = basemap.baseLayers.get(0).spatialReference;
             if(sp2 === null)
                 return true;
@@ -219,6 +224,7 @@ QtObject {
             return false;
         }
 
+        //map case
         let layer = layers.get(0);
         //check layer null?
         let sp2 = layer.spatialReference;
@@ -253,20 +259,29 @@ QtObject {
             }
         }
 
+        function setCurrentBasemapMatchingSp() {
+            var loadStatus = basemapToSet.baseLayers.get(0).loadStatus;
+            console.log("onloaded called " + loadStatus);
+            if(loadStatus === Enums.LoadStatusLoaded) {
+                if(!basemapMatchesCurrentSpatialReference(basemapToSet)){
+                    console.log("here");
+                    //manually setting the currbasemap to trigger the event onCurrentBasemapChaged
+                    internal.currentBasemap = internal.currentBasemap;
+                    geoModel.basemap = geoModel.basemap;
+                    return;
+                }
+                internal.currentBasemap = basemapToSet;
+                geoModel.basemap = internal.currentBasemap;
+                basemapConnections.enabled = false;
+            }
+        }
+
         property Connections setBasemapConnections : Connections {
+            id: basemapConnections
             enabled: false
             ignoreUnknownSignals:  true
             function onLoadStatusChanged() {
-
-                var loadStatus = basemapToSet.baseLayers.get(0).loadStatus;
-                console.log("onloaded called " + loadStatus);
-                if(loadStatus === Enums.LoadStatusLoaded || loadStatus === Enums.LoadStatusLoaded) {
-                    if(!basemapMatchesCurrentSpatialReference(basemapToSet))
-                        return;
-                    internal.currentBasemap = basemapToSet;
-                    geoModel.basemap = internal.currentBasemap;
-                    enabled = false;
-                }
+                internal.setCurrentBasemapMatchingSp();
             }
         }
 
