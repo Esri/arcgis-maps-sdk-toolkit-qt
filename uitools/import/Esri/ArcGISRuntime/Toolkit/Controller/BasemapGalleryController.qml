@@ -73,7 +73,6 @@ QtObject {
      */
     readonly property alias gallery: internal.gallery
 
-    property var basemapToSet : null
     /*!
        \qmlmethod void BasemapGalleryController::setCurrentBasemap(Basemap basemap)
        \brief Sets the current basemap associated with the map/scene
@@ -83,25 +82,15 @@ QtObject {
      */
     function setCurrentBasemap(basemap) {
         //set connection with matchescurrentsp to run after the basemap is loaded
-//        internal.setBasemapConnections.target = basemap.baseLayers.first;
-//        internal.enabled = true;
-        controller.basemapToSet = basemap;
-        var layer = basemap.baseLayers.get(0);
-        console.log(layer);
-        if(layer.loadStatus !== Enums.LoadStatusLoaded) {
-            internal.setBasemapConnections.target = basemap.baseLayers.get(0);
-            internal.setBasemapConnections.enabled = true;
+        basemap.baseLayers.get(0).loadStatusChanged.connect(internal.setCurrentBasemapMatchingSp.bind(null, basemap));
+        if(basemap.baseLayers.get(0).loadStatus !== Enums.LoadStatusLoaded) {
             basemap.baseLayers.get(0).load();
         }
         else {
             //call directly without waiting. Layer is already loaded
-            internal.setCurrentBasemapMatchingSp();
+            console.log("already loaded");
+            internal.setCurrentBasemapMatchingSp(basemap);
         }
-
-//        if(!basemapMatchesCurrentSpatialReference(basemap))
-//            return;
-//        internal.currentBasemap = basemap;
-//        geoModel.basemap = internal.currentBasemap;
     }
 
     /*!
@@ -259,29 +248,19 @@ QtObject {
             }
         }
 
-        function setCurrentBasemapMatchingSp() {
-            var loadStatus = basemapToSet.baseLayers.get(0).loadStatus;
-            console.log("onloaded called " + loadStatus);
-            if(loadStatus === Enums.LoadStatusLoaded) {
-                if(!basemapMatchesCurrentSpatialReference(basemapToSet)){
-                    console.log("here");
+        function setCurrentBasemapMatchingSp(basemap) {
+            console.log("onloaded called " + basemap.baseLayers.get(0).loadStatus);
+            if(basemap.baseLayers.get(0).loadStatus === Enums.LoadStatusLoaded) {
+                if(!basemapMatchesCurrentSpatialReference(basemap)){
+                    console.log("didnt match sp");
                     //manually setting the currbasemap to trigger the event onCurrentBasemapChaged
                     internal.currentBasemap = internal.currentBasemap;
                     geoModel.basemap = geoModel.basemap;
                     return;
                 }
-                internal.currentBasemap = basemapToSet;
+                internal.currentBasemap = basemap;
                 geoModel.basemap = internal.currentBasemap;
-                basemapConnections.enabled = false;
-            }
-        }
-
-        property Connections setBasemapConnections : Connections {
-            id: basemapConnections
-            enabled: false
-            ignoreUnknownSignals:  true
-            function onLoadStatusChanged() {
-                internal.setCurrentBasemapMatchingSp();
+                basemap.baseLayers.get(0).loadStatusChanged.disconnect(setCurrentBasemapMatchingSp);
             }
         }
 
