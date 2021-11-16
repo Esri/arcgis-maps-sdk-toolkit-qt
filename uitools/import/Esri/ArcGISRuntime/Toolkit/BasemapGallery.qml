@@ -199,7 +199,7 @@ Pane {
             id: basemapDelegate
             width: view.cellWidth
             height: view.cellHeight
-            enabled: return controller.basemapMatchesCurrentSpatialReference(modelData.basemap);
+            enabled: controller.basemapMatchesCurrentSpatialReference(modelData.basemap);
             Connections {
                 target: basemapDelegate.ToolTip.toolTip.contentItem
                 enabled: basemapDelegate.ToolTip.visible
