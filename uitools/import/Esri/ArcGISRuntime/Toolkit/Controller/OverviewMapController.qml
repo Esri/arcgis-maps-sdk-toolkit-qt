@@ -209,6 +209,38 @@ QtObject {
             }
         }
 
+        // Create a connection that ensures the OverviewMap updates to the geoView viewpoint at initialisation.
+        // A single-shot connection is used. Essentially, when drawStatus = completed, the OverviewMap is updated
+        // and to prevent the slot being accesed again, the target for the connection is set to null.
+        property Connections overviewMapInitialisationConnection: Connections {
+            id: updateOverviewMapAtInitialisation
+            target: geoView
+            function onDrawStatusChanged() {
+                if (geoView.drawStatus === Enums.DrawStatusCompleted) {
+                    if (geoView instanceof MapView) {
+                        let v = geoView.currentViewpointCenter;
+                        let newV = internal.viewpoint.createObject(null, {rotation: v.rotation});
+                        internal.updateInsetViewpointTaskInProgress = true;
+                        insetView.setViewpointAndSeconds(newV, 0);
+
+                        // Set target to null to prevent the slot being accessed again.
+                        updateOverviewMapAtInitialisation.target = null;
+                    }
+                    else if (geoView instanceof SceneView) {
+                        let newV = internal.viewpoint.createObject(null);
+                        internal.updateInsetViewpointTaskInProgress = true;
+                        insetView.setViewpointAndSeconds(newV, 0);
+
+                        // Set target to null to prevent the slot being accessed again.
+                        updateOverviewMapAtInitialisation.target = null;
+                    }
+                    else {
+                        console.error("Unknown GeoView type passed to OverViewMapController.");
+                    }
+                }
+            }
+        }
+
         // Default reticle symbol for SceneView.
         property SimpleMarkerSymbol defaultSceneSymbol: SimpleMarkerSymbol {
             style: Enums.SimpleMarkerSymbolStyleCross

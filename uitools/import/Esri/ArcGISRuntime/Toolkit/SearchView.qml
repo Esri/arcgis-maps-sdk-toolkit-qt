@@ -298,6 +298,7 @@ Pane {
                         palette: searchView.palette
                         font: searchView.font
                         Layout.rowSpan: displaySubtitle === "" ? 2 : 1
+                        verticalAlignment: Label.AlignVCenter
                     }
                     Label {
                         Layout.fillWidth: true
