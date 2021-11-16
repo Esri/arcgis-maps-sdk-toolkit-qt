@@ -33,7 +33,7 @@ QtObject {
       \qmlproperty GeoModel geoModel
       \brief The geomodel the controller is listening for basemap changes.
      */
-    property var geoModel: null;
+    property GeoModel geoModel: null;
 
     /*!
       \qmlproperty Portal portal
@@ -82,14 +82,14 @@ QtObject {
      */
     function setCurrentBasemap(basemap) {
         //set connection with matchescurrentsp to run after the basemap is loaded
-        basemap.baseLayers.get(0).loadStatusChanged.connect(internal.setCurrentBasemapMatchingSp.bind(null, basemap));
-        if(basemap.baseLayers.get(0).loadStatus !== Enums.LoadStatusLoaded) {
-            basemap.baseLayers.get(0).load();
+        const layer = basemap.baseLayers.get(0);
+        layer.loadStatusChanged.connect(internal.setCurrentBasemapMatchingSp.bind(null, basemap, layer));
+        if(layer.loadStatus !== Enums.LoadStatusLoaded) {
+            layer.load();
         }
         else {
             //call directly without waiting. Layer is already loaded
-            console.log("already loaded");
-            internal.setCurrentBasemapMatchingSp(basemap);
+            internal.setCurrentBasemapMatchingSp(basemap, layer);
         }
     }
 
@@ -197,8 +197,8 @@ QtObject {
 
         //scene case
         if(geoModel instanceof Scene){
-            let layer = basemap.baseLayers.get(0);
-            let sp2 = basemap.baseLayers.get(0).spatialReference;
+            let layer = layers.get(0);
+            let sp2 = layer.spatialReference;
             if(sp2 === null)
                 return true;
             let svts = geoModel.sceneViewTilingScheme;
@@ -248,19 +248,18 @@ QtObject {
             }
         }
 
-        function setCurrentBasemapMatchingSp(basemap) {
-            console.log("onloaded called " + basemap.baseLayers.get(0).loadStatus);
-            if(basemap.baseLayers.get(0).loadStatus === Enums.LoadStatusLoaded) {
+        function setCurrentBasemapMatchingSp(basemap, layer) {
+            if(layer.loadStatus === Enums.LoadStatusLoaded) {
                 if(!basemapMatchesCurrentSpatialReference(basemap)){
-                    console.log("didnt match sp");
                     //manually setting the currbasemap to trigger the event onCurrentBasemapChaged
                     internal.currentBasemap = internal.currentBasemap;
                     geoModel.basemap = geoModel.basemap;
+                    internal.gallery.dataChanged(internal.gallery.index(basemapIndex(basemap), 0), internal.gallery.index(basemapIndex(basemap), 0));
                     return;
                 }
                 internal.currentBasemap = basemap;
                 geoModel.basemap = internal.currentBasemap;
-                basemap.baseLayers.get(0).loadStatusChanged.disconnect(setCurrentBasemapMatchingSp);
+                layer.loadStatusChanged.disconnect(setCurrentBasemapMatchingSp);
             }
         }
 

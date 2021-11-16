@@ -195,11 +195,11 @@ Pane {
         snapMode: GridView.SnapToRow
         currentIndex: controller.basemapIndex(controller.currentBasemap)
         ScrollBar.vertical: ScrollBar { }
-        delegate: Item {
+        delegate: ItemDelegate {
             id: basemapDelegate
             width: view.cellWidth
             height: view.cellHeight
-            enabled: controller.basemapMatchesCurrentSpatialReference(modelData.basemap)
+            enabled: return controller.basemapMatchesCurrentSpatialReference(modelData.basemap);
             Connections {
                 target: basemapDelegate.ToolTip.toolTip.contentItem
                 enabled: basemapDelegate.ToolTip.visible
