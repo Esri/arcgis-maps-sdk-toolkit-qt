@@ -84,10 +84,9 @@ QtObject {
         //set connection with matchescurrentsp to run after the basemap is loaded
         const layer = basemap.baseLayers.get(0);
         layer.loadStatusChanged.connect(internal.setCurrentBasemapMatchingSp.bind(null, basemap, layer));
-        if(layer.loadStatus !== Enums.LoadStatusLoaded) {
+        if (layer.loadStatus !== Enums.LoadStatusLoaded) {
             layer.load();
-        }
-        else {
+        } else {
             //call directly without waiting. Layer is already loaded
             internal.setCurrentBasemapMatchingSp(basemap, layer);
         }
@@ -183,26 +182,26 @@ QtObject {
             return true;
         }
         let item = basemap.item;
-        if(item !== null){
+        if (item !== null) {
             let it_sp = item.spatialReference;
-            if(item !== null && it_sp !== null){
+            if (item !== null && it_sp !== null) {
                 return sp.equals(item.spatialReference);
             }
         }
 
         let layers = basemap.baseLayers;
 
-        if(layers.count <= 0)
+        if (layers.count <= 0)
             return false;
 
-        //scene case
-        if(geoModel instanceof Scene){
+        // scene case
+        if (geoModel instanceof Scene) {
             let layer = layers.get(0);
             let sp2 = layer.spatialReference;
-            if(sp2 === null)
+            if (sp2 === null)
                 return true;
             let svts = geoModel.sceneViewTilingScheme;
-            switch(svts){
+            switch(svts) {
             case Enums.SceneViewTilingSchemeGeographic:
                 return sp2.isGeographic;
             case Enums.SceneViewTilingSchemeWebMercator:
@@ -213,7 +212,7 @@ QtObject {
             return false;
         }
 
-        //map case
+        // map case
         let layer = layers.get(0);
         //check layer null?
         let sp2 = layer.spatialReference;
@@ -249,9 +248,9 @@ QtObject {
         }
 
         function setCurrentBasemapMatchingSp(basemap, layer) {
-            if(layer.loadStatus === Enums.LoadStatusLoaded) {
-                if(!basemapMatchesCurrentSpatialReference(basemap)){
-                    //manually setting the currbasemap to trigger the event onCurrentBasemapChaged
+            if (layer.loadStatus === Enums.LoadStatusLoaded) {
+                if (!basemapMatchesCurrentSpatialReference(basemap)) {
+                    // manually setting the currbasemap to trigger the event onCurrentBasemapChaged
                     internal.currentBasemap = internal.currentBasemap;
                     geoModel.basemap = geoModel.basemap;
                     internal.gallery.dataChanged(internal.gallery.index(basemapIndex(basemap), 0), internal.gallery.index(basemapIndex(basemap), 0));
