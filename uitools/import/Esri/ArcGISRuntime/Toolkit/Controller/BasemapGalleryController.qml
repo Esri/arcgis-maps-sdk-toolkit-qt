@@ -33,7 +33,7 @@ QtObject {
       \qmlproperty GeoModel geoModel
       \brief The geomodel the controller is listening for basemap changes.
      */
-    property var geoModel: null;
+    property GeoModel geoModel: null;
 
     /*!
       \qmlproperty Portal portal
@@ -81,8 +81,15 @@ QtObject {
        It is possible for the current basemap to not be in the gallery.
      */
     function setCurrentBasemap(basemap) {
-        internal.currentBasemap = basemap;
-        geoModel.basemap = internal.currentBasemap;
+        //set connection with matchescurrentsp to run after the basemap is loaded
+        const layer = basemap.baseLayers.get(0);
+        layer.loadStatusChanged.connect(internal.setCurrentBasemapMatchingSp.bind(null, basemap, layer));
+        if (layer.loadStatus !== Enums.LoadStatusLoaded) {
+            layer.load();
+        } else {
+            //call directly without waiting. Layer is already loaded
+            internal.setCurrentBasemapMatchingSp(basemap, layer);
+        }
     }
 
     /*!
@@ -169,28 +176,47 @@ QtObject {
             return false;
         }
 
-        let sp1 = geoModel.spatialReference;
+        let sp = geoModel.spatialReference;
 
-        if (sp1 === null) {
+        if (sp === null) {
             return true;
         }
-
-        for (let i = 0; i < basemap.baseLayers.count; i++) {
-            let layer = basemap.baseLayers.get(i);
-            if (layer === null) {
-                continue;
-            }
-
-            let sp2 = layer.spatialReference;
-            if (sp2 === null) {
-                continue;
-            }
-
-            if (!sp2.equals(sp1)) {
-                return false;
+        let item = basemap.item;
+        if (item !== null) {
+            let it_sp = item.spatialReference;
+            if (item !== null && it_sp !== null) {
+                return sp.equals(item.spatialReference);
             }
         }
-        return true;
+
+        let layers = basemap.baseLayers;
+
+        if (layers.count <= 0)
+            return false;
+
+        let layer = layers.get(0);
+
+        // scene case
+        if (geoModel instanceof Scene) {
+            let sp2 = layer.spatialReference;
+            if (sp2 === null)
+                return true;
+            let svts = geoModel.sceneViewTilingScheme;
+            switch(svts) {
+            case Enums.SceneViewTilingSchemeGeographic:
+                return sp2.isGeographic;
+            case Enums.SceneViewTilingSchemeWebMercator:
+                return sp2.equals(Factory.SpatialReference.createWebMercator());
+            default:
+                console.log("a new sceneViewTilingScheme has been used!");
+            }
+            return false;
+        }
+
+        // map case
+        //check layer null?
+        let sp2 = layer.spatialReference;
+        return sp2 === null || sp.equals(sp2);
     }
 
     /*! \internal */
@@ -218,6 +244,19 @@ QtObject {
             target: geoModel
             function onBasemapChanged() {
                 internal.currentBasemap = geoModel.basemap;
+            }
+        }
+
+        function setCurrentBasemapMatchingSp(basemap, layer) {
+            if (layer.loadStatus === Enums.LoadStatusLoaded) {
+                layer.loadStatusChanged.disconnect(setCurrentBasemapMatchingSp);
+                if (!basemapMatchesCurrentSpatialReference(basemap)) {
+                    // manually setting the currbasemap to trigger the event onCurrentBasemapChanged
+                    internal.currentBasemap = internal.currentBasemap;
+                    internal.gallery.dataChanged(internal.gallery.index(basemapIndex(basemap), 0), internal.gallery.index(basemapIndex(basemap), 0));
+                } else {
+                    geoModel.basemap = basemap;
+                }
             }
         }
 
