@@ -80,7 +80,7 @@ namespace Toolkit {
     }
     else if (m_suggestResult.isCollection())
     {
-      return QUrl{QStringLiteral("qrc:///esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/search.png")};
+      return QUrl{QStringLiteral("qrc:///esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/search.svg")};
     }
     else
     {
