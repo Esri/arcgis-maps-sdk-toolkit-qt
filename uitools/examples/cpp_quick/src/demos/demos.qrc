@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/demo_app/qml">
+        <file>BasemapGalleryDemo.qml</file>
+        <file>CoordinateConversionDemo.qml</file>
+        <file>NorthArrowDemo.qml</file>
+        <file>SearchViewDemo.qml</file>
+        <file>CalloutDemo.qml</file>
+        <file>OverviewMapDemo.qml</file>
+        <file>TimeSliderDemo.qml</file>
+        <file>PopupViewDemo.qml</file>
+        <file>AuthenticationViewDemo.qml</file>
+    </qresource>
+    <qresource prefix="/"/>
+</RCC>
