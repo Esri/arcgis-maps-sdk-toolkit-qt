@@ -211,7 +211,9 @@ Pane {
 
             Connections {
                 target: controller
-                function onCurrentBasemapChanged() { busyIndicator.running = false;}
+                function onCurrentBasemapChanged() { 
+                    busyIndicator.running = false;
+                }
             }
             icon {
                 cache: false
@@ -243,7 +245,7 @@ Pane {
                 anchors.fill: parent
                 hoverEnabled: true
                 onClicked: {
-                    if(controller.currentBasemap !== modelData.basemap)
+                    if (controller.currentBasemap !== modelData.basemap)
                         busyIndicator.running = true;
                     controller.setCurrentBasemap(modelData.basemap);
                 }
@@ -253,7 +255,7 @@ Pane {
                     // Create a definition for the showTooltipFn property of timerOnEntered
                     timerOnEntered.showTooltipFn = () => {
                         if (allowTooltips && mouseArea.containsMouse && modelData.tooltip !== "")
-                        basemapDelegate.ToolTip.visible = true;
+                            basemapDelegate.ToolTip.visible = true;
                     }
                     timerOnEntered.start();
                 }
