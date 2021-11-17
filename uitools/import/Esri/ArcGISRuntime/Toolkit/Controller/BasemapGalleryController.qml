@@ -251,8 +251,8 @@ QtObject {
             if (layer.loadStatus === Enums.LoadStatusLoaded) {
                 layer.loadStatusChanged.disconnect(setCurrentBasemapMatchingSp);
                 if (!basemapMatchesCurrentSpatialReference(basemap)) {
-                    // manually setting the currbasemap to trigger the event onCurrentBasemapChaged
-                    geoModel.basemap = geoModel.basemap;
+                    // manually setting the currbasemap to trigger the event onCurrentBasemapChanged
+                    internal.currentBasemap = internal.currentBasemap;
                     internal.gallery.dataChanged(internal.gallery.index(basemapIndex(basemap), 0), internal.gallery.index(basemapIndex(basemap), 0));
                 } else {
                     geoModel.basemap = basemap;
