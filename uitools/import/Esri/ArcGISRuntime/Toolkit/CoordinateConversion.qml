@@ -35,7 +35,7 @@ import QtQuick.Layouts 1.12
  available to the user.
  */
 
-Control {
+Pane {
     id: coordinateConversionWindow
 
     clip: true
@@ -95,8 +95,6 @@ Control {
         value: captureModeButton.checked
     }
 
-    background: Rectangle { }
-
     contentItem: ColumnLayout {
         id: gridLayout
         spacing: 0
@@ -107,40 +105,33 @@ Control {
 
         RowLayout {
             Layout.margins: 0
-            Button {
+            ComboBox {
+                Layout.margins: 5
                 id: inputModeButton
-                text: inputFormat.type ? inputFormat.name : "Set format"
-                flat: true
-                font.bold: true
-                onClicked: {
-                    inputModesMenu.popup();
-                }
-
-                Menu {
-                    id: inputModesMenu
-                    Repeater {
-                        model: coordinateConversionWindow.controller.formats
-                        MenuItem {
-                            text: name
-                            onTriggered: {
-                                inputFormat.type = modelData;
-                                inputFormat.updateCoordinatePoint(coordinateConversionWindow.controller.currentPoint());
-                            }
-                        }
+                model: coordinateConversionWindow.controller.formats
+                textRole: "name"
+                onCurrentIndexChanged: {
+                    const index = currentIndex;
+                    const formats = coordinateConversionWindow.controller.formats;
+                    let modelData = formats[index];
+                    if (modelData === undefined) {
+                        modelData = formats.element(formats.index(index, 0));
                     }
+                    inputFormat.type = modelData;
+                    inputFormat.updateCoordinatePoint(coordinateConversionWindow.controller.currentPoint());
                 }
             }
 
             TextField {
                 id: editPointEntry
                 Layout.fillWidth: true
+                Layout.fillHeight: true
                 Layout.alignment: Qt.AlignBottom
+                Layout.margins: 5
                 placeholderText: "No position"
                 readOnly: !editCoordinateButton.checked
                 selectByMouse: !readOnly
                 text: inputFormat.type? inputFormat.notation : "No position"
-
-                color: editCoordinateButton.checked ? palette.highlight: palette.text;
                 onEditingFinished: {
                     controller.setCurrentPoint(text, inputFormat.type);
                     editCoordinateButton.checked = false;
@@ -152,6 +143,7 @@ Control {
                 checkable: true
                 checked: false
                 flat: true
+                Layout.margins: 5
                 Layout.alignment: Qt.AlignRight
                 icon.source: menuButton.checked ? "images/menu_expand.png" : "images/menu_collapse.png"
             }
@@ -164,6 +156,7 @@ Control {
                 id: addConversionButton
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignLeft
+                Layout.margins: 5
                 text: "Add conversion"
                 flat: true
                 onClicked: {
@@ -190,7 +183,7 @@ Control {
                 icon.source: "images/zoom.png"
                 flat: true
                 Layout.alignment: Qt.AlignRight
-                Layout.maximumHeight: 32
+
                 Layout.maximumWidth: Layout.maximumHeight
                 padding: 0
                 display: AbstractButton.IconOnly
@@ -202,7 +195,6 @@ Control {
                 icon.source: "images/flash.png"
                 flat: true
                 Layout.alignment: Qt.AlignRight
-                Layout.maximumHeight: 32
                 Layout.maximumWidth: Layout.maximumHeight
                 padding: 0
                 display: AbstractButton.IconOnly
@@ -227,7 +219,6 @@ Control {
                 flat: true
                 icon.source: "images/text_editing_mode.png"
                 Layout.alignment: Qt.AlignRight
-                Layout.maximumHeight: 32
                 Layout.maximumWidth: Layout.maximumHeight
                 padding: 0
             }
@@ -238,8 +229,8 @@ Control {
                 flat: true
                 icon.source: "images/mouse_click_mode.png"
                 Layout.alignment: Qt.AlignRight
-                Layout.maximumHeight: 32
                 Layout.maximumWidth: Layout.maximumHeight
+                Layout.margins: 5
                 padding: 0
             }
         }
@@ -256,7 +247,6 @@ Control {
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     visible: menuButton.checked
-                    color: palette.text
                 }
 
                 Label {
@@ -266,7 +256,6 @@ Control {
                     visible: menuButton.checked
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignLeft
-                    color: palette.text
                 }
 
                 Button {
@@ -275,6 +264,7 @@ Control {
                     Layout.minimumWidth: menuButton.width
                     Layout.maximumWidth: menuButton.width
                     Layout.alignment: Qt.AlignRight
+                    Layout.margins: 5
                     icon.source: "images/menu.png"
                     flat: true
                     onClicked: editMenu.open()
