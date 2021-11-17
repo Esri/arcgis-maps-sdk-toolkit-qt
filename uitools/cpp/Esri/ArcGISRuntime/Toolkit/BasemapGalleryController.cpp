@@ -514,18 +514,16 @@ namespace Toolkit {
 
     auto apply = [basemap, this, connection](Error e)
     {
+      disconnect(*connection);
       if (e.isEmpty())
       {
-        disconnect(*connection);
-
         if (basemap == m_currentBasemap)
           return;
         if (!basemapMatchesCurrentSpatialReference(basemap))
         {
-          // force redraw for all the listview items.
+          // force redraw for the single basemapGalleryItem updated
           emit m_gallery->dataChanged(
-              m_gallery->index(0),
-              m_gallery->index(std::max(m_gallery->rowCount() - 1, 0)));
+              m_gallery->index(basemapIndex(basemap)), m_gallery->index(basemapIndex(basemap)));
           return;
         }
         m_currentBasemap = basemap;
