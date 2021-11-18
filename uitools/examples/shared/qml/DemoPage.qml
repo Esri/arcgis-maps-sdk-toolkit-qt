@@ -7,6 +7,7 @@ import Esri.ArcGISRuntime.Toolkit 100.13
 import Calcite 1.0 as C
 
 Control {
+    id: demoPage
     property bool handlesOwnAuthentication : false
     enum ViewType {
         Scene,
@@ -49,7 +50,7 @@ Control {
     Keys.forwardTo: [geoView]
 
     BusyIndicator {
-        anchors.centerIn: parent
+        anchors.centerIn: demoPage
         running: geoModel && geoModel.loadStatus === Enums.LoadStatusLoading
         visible: running && ArcGISRuntimeEnvironment.apiKey !== ""
     }
@@ -62,7 +63,7 @@ Control {
             id: apiKeyInput
             placeholderText: "Enter your API Key here."
         }
-        anchors.centerIn: parent
+        anchors.centerIn: demoPage
         standardButtons: Dialog.Ok | Dialog.Cancel
         closePolicy: Popup.NoAutoClose
         onOpened: {
@@ -82,12 +83,11 @@ Control {
     }
 
     Loader {
-        sourceComponent: Component {
-            AuthenticationView {
-                anchors.centerIn: parent
-            }
-        }
+        anchors.centerIn: demoPage
         active: !handlesOwnAuthentication
+        sourceComponent: Component {
+            AuthenticationView { }
+        }
     }
 
     contentItem: GridLayout {

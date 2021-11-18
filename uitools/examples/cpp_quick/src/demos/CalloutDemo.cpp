@@ -1,4 +1,4 @@
-#include "CalloutDemoModel.h"
+#include "CalloutDemo.h"
 
 #include "GeoView.h"
 #include "MapQuickView.h"
@@ -7,17 +7,17 @@
 
 using namespace Esri::ArcGISRuntime;
 
-CalloutDemoModel::CalloutDemoModel(QObject* parent) :
-  BaseDemoModel(parent)
+CalloutDemo::CalloutDemo(QObject* parent) :
+  BaseDemo(parent)
 {
-  connect(this, &BaseDemoModel::geoViewChanged, this, &CalloutDemoModel::setUp);
+  connect(this, &BaseDemo::geoViewChanged, this, &CalloutDemo::setUp);
 }
 
-CalloutDemoModel::~CalloutDemoModel()
+CalloutDemo::~CalloutDemo()
 {
 }
 
-void CalloutDemoModel::setUp()
+void CalloutDemo::setUp()
 {
   //initialize the callout
   MapQuickView* mv = static_cast<MapQuickView*>(geoView());

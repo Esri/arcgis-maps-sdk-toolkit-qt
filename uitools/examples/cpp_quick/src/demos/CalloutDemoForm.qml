@@ -29,7 +29,7 @@ DemoPage {
                 leaderPosition: leaderPositionEnum.Automatic
             }
 
-            CalloutDemoModel {
+            CalloutDemo {
                 geoView: view
             }
         }

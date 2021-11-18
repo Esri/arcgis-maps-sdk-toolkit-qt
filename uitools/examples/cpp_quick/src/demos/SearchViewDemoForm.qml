@@ -8,8 +8,6 @@
 // notice and use restrictions.
 //
 // See the Sample code usage restrictions document for further information.
-//
-
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import Esri.ArcGISRuntime 100.13
@@ -20,22 +18,16 @@ DemoPage {
     sceneViewContents: Component {
         SceneView {
             id: view
-
-            PopupView {
-                id:popupView
+            SearchView {
+                geoView: parent
                 anchors {
-                     left: parent.left
-                     top: parent.top
-                     bottom: parent.bottom
+                    top: parent.top
+                    right: parent.right
+                    margins: 10
                 }
-                visible: false
-                popupManager: model.popupManager
             }
-
-            PopupViewDemoModel{
-                id:model
-                geoView : view
-                onPopupManagerChanged : popupView.visible = true;
+            SearchViewDemo {
+                geoView: view
             }
         }
     }
@@ -43,22 +35,16 @@ DemoPage {
     mapViewContents: Component {
         MapView {
             id: view
-
-            PopupView {
-                id:popupView
+            SearchView {
+                geoView: parent
                 anchors {
-                     left: parent.left
-                     top: parent.top
-                     bottom: parent.bottom
+                    top: parent.top
+                    right: parent.right
+                    margins: 10
                 }
-                visible: false
-                popupManager: model.popupManager
             }
-
-            PopupViewDemoModel{
-                id: model
-                geoView : view
-                onPopupManagerChanged: popupView.visible = true;
+            SearchViewDemo {
+                geoView: view
             }
         }
     }

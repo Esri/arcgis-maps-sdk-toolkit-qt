@@ -18,35 +18,40 @@ DemoPage {
     sceneViewContents: Component {
         SceneView {
             id: view
-            CoordinateConversion {
+            BasemapGallery {
                 id: gallery
-                geoView: parent
+                controller: demo.controller
                 anchors {
                     right: parent.right
+                    top: parent.top
                     margins: 10
-                    bottom: parent.attributionTop
                 }
             }
-            CoordinateConversionDemoModel {
+            BasemapGalleryDemo {
+                id: demo
                 geoView: view
             }
+            onSceneChanged: gallery.setGeoModelFromGeoView(view)
         }
     }
 
     mapViewContents: Component {
         MapView {
             id: view
-            CoordinateConversion {
-                geoView: parent
+            BasemapGallery {
+                id: gallery
+                controller: demo.controller
                 anchors {
                     right: parent.right
+                    top: parent.top
                     margins: 10
-                    bottom: parent.attributionTop
                 }
             }
-            CoordinateConversionDemoModel {
+            BasemapGalleryDemo {
+                id: demo
                 geoView: view
             }
+            onMapChanged: gallery.setGeoModelFromGeoView(view)
         }
     }
 }

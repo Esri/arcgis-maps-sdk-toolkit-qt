@@ -25,7 +25,7 @@ DemoPage {
                 anchors.centerIn: parent
             }
 
-            AuthenticationViewDemoModel {
+            AuthenticationViewDemo {
                 geoView: view;
             }
         }

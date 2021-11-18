@@ -1,4 +1,4 @@
-#include "PopupViewDemoModel.h"
+#include "PopupViewDemo.h"
 
 #include "GeoView.h"
 #include "Map.h"
@@ -12,26 +12,26 @@
 
 using namespace Esri::ArcGISRuntime;
 
-PopupViewDemoModel::PopupViewDemoModel(QObject* parent) :
-  BaseDemoModel(parent)
+PopupViewDemo::PopupViewDemo(QObject* parent) :
+  BaseDemo(parent)
 {
-  connect(this, &BaseDemoModel::geoViewChanged, this, &PopupViewDemoModel::setUp);
+  connect(this, &BaseDemo::geoViewChanged, this, &PopupViewDemo::setUp);
 }
 
-PopupViewDemoModel::~PopupViewDemoModel()
+PopupViewDemo::~PopupViewDemo()
 {
 }
 
-Esri::ArcGISRuntime::Map* PopupViewDemoModel::initMap_(QObject* parent) const
+Esri::ArcGISRuntime::Map* PopupViewDemo::initMap_(QObject* parent) const
 {
   return new Map(QUrl("https://runtime.maps.arcgis.com/home/webmap/"
                       "viewer.html?webmap=e4c6eb667e6c43b896691f10cc2f1580"),
                  parent);
 }
 
-Scene* PopupViewDemoModel::initScene_(QObject* parent) const
+Scene* PopupViewDemo::initScene_(QObject* parent) const
 {
-  Scene* scene = BaseDemoModel::initScene_(parent);
+  Scene* scene = BaseDemo::initScene_(parent);
   Viewpoint viewPoint(Envelope(-122.5277, 37.7204, -122.3511, 37.7956, SpatialReference(4326)));
   scene->setInitialViewpoint(viewPoint);
   FeatureLayer* fl = new FeatureLayer(new ServiceFeatureTable(
@@ -43,12 +43,12 @@ Scene* PopupViewDemoModel::initScene_(QObject* parent) const
   return scene;
 }
 
-QObject* PopupViewDemoModel::popupManager_()
+QObject* PopupViewDemo::popupManager_()
 {
   return m_popupManager;
 }
 
-void PopupViewDemoModel::setPopupManager_(QObject* popupManager)
+void PopupViewDemo::setPopupManager_(QObject* popupManager)
 {
   if (popupManager == m_popupManager)
     return;
@@ -59,7 +59,7 @@ void PopupViewDemoModel::setPopupManager_(QObject* popupManager)
   delete oldManager;
 }
 
-void PopupViewDemoModel::setUp()
+void PopupViewDemo::setUp()
 {
   apply([this](auto geoView)
         {

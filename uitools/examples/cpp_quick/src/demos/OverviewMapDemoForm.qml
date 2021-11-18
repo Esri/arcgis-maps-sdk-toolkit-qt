@@ -20,15 +20,15 @@ DemoPage {
     sceneViewContents: Component {
         SceneView {
             id: view
-            TimeSlider {
-                geoView: parent
+            OverviewMap {
                 anchors {
+                    top: parent.top
                     left: parent.left
-                    right: parent.right
-                    bottom: parent.bottom
+                    margins: 10
                 }
+                geoView: parent
             }
-            OverviewMapDemoModel {
+            OverviewMapDemo {
                 geoView: view
             }
         }
@@ -36,15 +36,15 @@ DemoPage {
     mapViewContents: Component {
         MapView {
             id: view
-            TimeSlider {
-                geoView: parent
+            OverviewMap {
                 anchors {
+                    top: parent.top
                     left: parent.left
-                    right: parent.right
-                    bottom: parent.bottom
+                    margins: 10
                 }
+                geoView: parent
             }
-            OverviewMapDemoModel {
+            OverviewMapDemo {
                 geoView: view
             }
         }

@@ -1,4 +1,4 @@
-#include "BaseDemoModel.h"
+#include "BaseDemo.h"
 
 #include <Map.h>
 #include <MapQuickView.h>
@@ -9,17 +9,17 @@
 
 using namespace Esri::ArcGISRuntime;
 
-BaseDemoModel::BaseDemoModel(QObject* parent) :
+BaseDemo::BaseDemo(QObject* parent) :
   QObject(parent),
   m_geoView(nullptr)
 {
 }
 
-BaseDemoModel::~BaseDemoModel()
+BaseDemo::~BaseDemo()
 {
 }
 
-Esri::ArcGISRuntime::GeoView* BaseDemoModel::geoView() const
+Esri::ArcGISRuntime::GeoView* BaseDemo::geoView() const
 {
   if (auto mapView = qobject_cast<MapQuickView*>(m_geoView))
   {
@@ -32,12 +32,12 @@ Esri::ArcGISRuntime::GeoView* BaseDemoModel::geoView() const
   return nullptr;
 }
 
-QObject* BaseDemoModel::geoView_() const
+QObject* BaseDemo::geoView_() const
 {
   return m_geoView;
 }
 
-void BaseDemoModel::setGeoView(Esri::ArcGISRuntime::GeoView* geoView)
+void BaseDemo::setGeoView(Esri::ArcGISRuntime::GeoView* geoView)
 {
   if (geoView == nullptr)
   {
@@ -60,7 +60,7 @@ void BaseDemoModel::setGeoView(Esri::ArcGISRuntime::GeoView* geoView)
   }
 }
 
-void BaseDemoModel::setGeoView_(QObject* geoView)
+void BaseDemo::setGeoView_(QObject* geoView)
 {
   if (m_geoView == geoView)
   {
@@ -88,7 +88,7 @@ void BaseDemoModel::setGeoView_(QObject* geoView)
   emit geoViewChanged();
 }
 
-Esri::ArcGISRuntime::GeoModel* BaseDemoModel::geoModel() const
+Esri::ArcGISRuntime::GeoModel* BaseDemo::geoModel() const
 {
   if (auto mapView = qobject_cast<MapQuickView*>(m_geoView))
   {
@@ -101,7 +101,7 @@ Esri::ArcGISRuntime::GeoModel* BaseDemoModel::geoModel() const
   return nullptr;
 }
 
-bool BaseDemoModel::setGeoModel(Esri::ArcGISRuntime::Map* map)
+bool BaseDemo::setGeoModel(Esri::ArcGISRuntime::Map* map)
 {
   if (auto mapView = qobject_cast<MapQuickView*>(m_geoView))
   {
@@ -111,7 +111,7 @@ bool BaseDemoModel::setGeoModel(Esri::ArcGISRuntime::Map* map)
   return false;
 }
 
-bool BaseDemoModel::setGeoModel(Esri::ArcGISRuntime::Scene* scene)
+bool BaseDemo::setGeoModel(Esri::ArcGISRuntime::Scene* scene)
 {
   if (auto sceneView = qobject_cast<SceneQuickView*>(m_geoView))
   {
@@ -121,12 +121,12 @@ bool BaseDemoModel::setGeoModel(Esri::ArcGISRuntime::Scene* scene)
   return false;
 }
 
-Esri::ArcGISRuntime::Map* BaseDemoModel::initMap_(QObject* parent) const
+Esri::ArcGISRuntime::Map* BaseDemo::initMap_(QObject* parent) const
 {
   return new Map(BasemapStyle::ArcGISCommunity, parent);
 }
 
-Esri::ArcGISRuntime::Scene* BaseDemoModel::initScene_(QObject* parent) const
+Esri::ArcGISRuntime::Scene* BaseDemo::initScene_(QObject* parent) const
 {
   return new Scene(BasemapStyle::ArcGISCommunity, parent);
 }

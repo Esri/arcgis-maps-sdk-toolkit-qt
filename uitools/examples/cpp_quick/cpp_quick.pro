@@ -43,11 +43,11 @@ include($$PWD/../../toolkitcpp.pri)
 INCLUDEPATH += $$PWD/src
 
 HEADERS += \
-    src/BaseDemoModel.h
+    src/BaseDemol.h
 
 SOURCES += \
     src/main.cpp \
-    src/BaseDemoModel.cpp
+    src/BaseDemo.cpp
 
 RESOURCES += \
     qtquick.qrc \
