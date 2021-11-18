@@ -54,10 +54,7 @@ T.BusyIndicator {
             id: rect2
             width: rects.rectWidth
             height: rects.rectHeight
-            anchors {
-              horizontalCenter: parent.horizontalCenter
-              verticalCenter: parent.verticalCenter
-            }
+            anchors.centerIn: parent
             color: Calcite.brand
             BusyIndicatorAnim {
                 id: anim2
