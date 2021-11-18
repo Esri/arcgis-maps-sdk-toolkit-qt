@@ -43,7 +43,7 @@ include($$PWD/../../toolkitcpp.pri)
 INCLUDEPATH += $$PWD/src
 
 HEADERS += \
-    src/BaseDemol.h
+    src/BaseDemo.h
 
 SOURCES += \
     src/main.cpp \
