@@ -31,8 +31,8 @@ DemoPage {
             }
         }
     }
-//! [Set up Coordinate Conversion QML]
     mapViewContents: Component {
+//! [Set up Coordinate Conversion QML]
         MapView {
             Map {
                 initBasemapStyle: Enums.BasemapStyleArcGISDarkGray
@@ -46,6 +46,6 @@ DemoPage {
                 }
             }
         }
-    }
 //! [Set up Coordinate Conversion QML]
+    }
 }
