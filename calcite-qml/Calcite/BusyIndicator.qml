@@ -76,7 +76,7 @@ T.BusyIndicator {
             BusyIndicatorAnim {
                 id: anim3
                 target: rect3
-              delay: 320
+                delay: 320
                 running: control.visible && control.running
             }
         }
