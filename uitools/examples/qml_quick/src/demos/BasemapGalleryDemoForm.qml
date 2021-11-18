@@ -46,6 +46,7 @@ DemoPage {
     }
 
     mapViewContents: Component {
+        //! [Set up BasemapGallery QML]
         MapView {
             Map {
                 id: map
@@ -72,5 +73,6 @@ DemoPage {
                 }
             }
         }
+        //! [Set up BasemapGallery QML]
     }
 }

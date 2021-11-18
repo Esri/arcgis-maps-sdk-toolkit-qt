@@ -36,6 +36,7 @@ DemoPage {
         }
     }
     mapViewContents : Component {
+//! [Set up Search View QML]
         MapView {
             Map {
                 initBasemapStyle: Enums.BasemapStyleArcGISDarkGray
@@ -49,5 +50,6 @@ DemoPage {
                 }
             }
         }
+//! [Set up Search View QML]
     }
 }

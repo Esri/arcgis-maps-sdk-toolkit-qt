@@ -33,6 +33,7 @@ DemoPage {
     }
 
     mapViewContents: Component {
+//! [Set up North Arrow QML]
         MapView {
             Map {
                 initBasemapStyle: Enums.BasemapStyleArcGISDarkGray
@@ -47,4 +48,5 @@ DemoPage {
             }
         }
     }
+//! [Set up North Arrow QML]
 }

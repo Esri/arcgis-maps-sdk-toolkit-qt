@@ -39,6 +39,9 @@ import "LeaderPosition.js" as Enums
      \endlist
 
      For more information, please see the CalloutData documentation.
+     \image docs/callout.png
+     Example code:
+     \snippet qml_quick/src/demos/CalloutDemo.qml Set up Callout QML
 */
 Item {
     id: root
