@@ -68,7 +68,7 @@ void BaseDemoModel::setGeoView_(QObject* geoView)
   }
   m_geoView = geoView;
 
-  // If the GeoView has no map or scene applied, we apply our ow using the
+  // If the GeoView has no map or scene applied, we apply our own using the
   // `initMap_`/`initScene_` overloads.
   if (auto mapView = qobject_cast<MapQuickView*>(m_geoView))
   {
