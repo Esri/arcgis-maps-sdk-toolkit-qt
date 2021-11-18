@@ -2,7 +2,7 @@
     <qresource prefix="/esri.com/imports/Calcite">
         <file>ApplicationWindow.qml</file>
         <file>BusyIndicator.qml</file>
-        <file>BusyIndicatorAnim.qml</file>
+        <file>BusyIndicatorAnimation.qml</file>
         <file>Button.qml</file>
         <file>Calcite.qml</file>
         <file>CheckBox.qml</file>

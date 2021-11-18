@@ -39,13 +39,15 @@ ApplicationWindow {
 
         // add a map to the mapview
         Map {
-            // add the ArcGISStreets basemap to the map
+            // add the BasemapImagery basemap to the map
             BasemapImagery { }
         }
 
         Pane {
-            anchors.right: parent.right
-            anchors.top: parent.top
+            anchors {
+                right: parent.right
+                top: parent.top
+            }
             ColumnLayout {
                 Switch {
                     id: themeSwitch

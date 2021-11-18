@@ -44,11 +44,11 @@ equals(QT_MAJOR_VERSION, 6) {
 
 #-------------------------------------------------------------------------------
 
-QML_IMPORT_PATH += /Users/neil9879/codebases/calcite-qml
-
 SOURCES += \
     main.cpp
 
+# Note: this is how we integrate the Calcite theme into the app binary!
+# See `README.md` for setup details.
 RESOURCES += \
     qml/qml.qrc \
     Resources/Resources.qrc \

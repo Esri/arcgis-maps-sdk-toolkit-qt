@@ -43,7 +43,7 @@ T.BusyIndicator {
                 left: parent.left
                 verticalCenter: parent.verticalCenter
             }
-            BusyIndicatorAnim {
+            BusyIndicatorAnimation {
                 id: anim1
                 target: rect1
                 running: control.visible && control.running
@@ -56,7 +56,7 @@ T.BusyIndicator {
             height: rects.rectHeight
             anchors.centerIn: parent
             color: Calcite.brand
-            BusyIndicatorAnim {
+            BusyIndicatorAnimation {
                 id: anim2
                 target: rect2
                 delay: 160
@@ -73,7 +73,7 @@ T.BusyIndicator {
                 right: parent.right
                 verticalCenter: parent.verticalCenter
             }
-            BusyIndicatorAnim {
+            BusyIndicatorAnimation {
                 id: anim3
                 target: rect3
                 delay: 320

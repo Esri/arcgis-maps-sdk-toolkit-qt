@@ -1,8 +1,8 @@
-# ESRI Calcite Style
+# Esri Calcite Style
 
 Esri’s design system ([Calcite](https://esri.github.io/calcite-web/)) enables you to create beautiful, easy to use, and consistent experiences across apps with minimal effort.
 
-This is a WIP module which contains a port of ESRI's Calcite Web Style that is QML compatible.
+This is a WIP module which contains a port of Esri's Calcite Web Style that is QML compatible.
 
 ## Light Mode
 
@@ -13,7 +13,7 @@ This is a WIP module which contains a port of ESRI's Calcite Web Style that is Q
 ![dark mode screenshot](docs/dark_mode.png)
 
 ## Integration
-
+ 
 To integrate Calcite into your app, add the following lines to your `*.pro` file:
 
 ```pro
@@ -47,7 +47,7 @@ Calcite Web primarily uses Avenir Next. For best results your app should use Ave
 
 #### Licensing
 
-If you are a developer outside ESRI, it is your responsibility to ensure you are complaint with
+If you are a developer outside Esri, it is your responsibility to ensure you are complaint with
 the font license agreement of any font you use.
 
 For further details see [Calcite Web TypeFaces](https://esri.github.io/calcite-web/documentation/type/).
