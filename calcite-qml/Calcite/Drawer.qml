@@ -37,7 +37,7 @@ T.Drawer {
     exit: Transition { SmoothedAnimation { velocity: 5 } }
 
     background: Rectangle {
-      color: Calcite.background
+        color: Calcite.background
         Rectangle {
             readonly property bool horizontal: control.edge === Qt.LeftEdge || control.edge === Qt.RightEdge
             width: horizontal ? 1 : parent.width
