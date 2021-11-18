@@ -1,4 +1,4 @@
-#include "BasemapGalleryDemoModel.h"
+#include "BasemapGalleryDemo.h"
 
 #include "Esri/ArcGISRuntime/Toolkit/BasemapGalleryController.h"
 
@@ -8,8 +8,8 @@
 #include <Portal.h>
 #include <Scene.h>
 
-BasemapGalleryDemoModel::BasemapGalleryDemoModel(QObject* parent) :
-  BaseDemoModel(parent),
+BasemapGalleryDemo::BasemapGalleryDemo(QObject* parent) :
+  BaseDemo(parent),
   m_controller(new Esri::ArcGISRuntime::Toolkit::BasemapGalleryController(this))
 {
   using namespace Esri::ArcGISRuntime;
@@ -34,22 +34,22 @@ BasemapGalleryDemoModel::BasemapGalleryDemoModel(QObject* parent) :
           });
 }
 
-BasemapGalleryDemoModel::~BasemapGalleryDemoModel()
+BasemapGalleryDemo::~BasemapGalleryDemo()
 {
 }
 
-Esri::ArcGISRuntime::Toolkit::BasemapGalleryController* BasemapGalleryDemoModel::controller() const
+Esri::ArcGISRuntime::Toolkit::BasemapGalleryController* BasemapGalleryDemo::controller() const
 {
   return m_controller;
 }
 
-Esri::ArcGISRuntime::Map* BasemapGalleryDemoModel::initMap_(QObject*) const
+Esri::ArcGISRuntime::Map* BasemapGalleryDemo::initMap_(QObject*) const
 {
   // Don't create a default map. We derive our map from the BasemapGallery.
   return nullptr;
 }
 
-Esri::ArcGISRuntime::Scene* BasemapGalleryDemoModel::initScene_(QObject*) const
+Esri::ArcGISRuntime::Scene* BasemapGalleryDemo::initScene_(QObject*) const
 {
   // Don't create a default scene. We derive our scene from the BasemapGallery.
   return nullptr;

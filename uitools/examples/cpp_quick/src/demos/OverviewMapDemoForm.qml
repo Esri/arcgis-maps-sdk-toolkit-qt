@@ -17,19 +17,34 @@ import Esri.ArcGISRuntime.Toolkit 100.13
 import DemoApp 1.0
 
 DemoPage {
+    sceneViewContents: Component {
+        SceneView {
+            id: view
+            OverviewMap {
+                anchors {
+                    top: parent.top
+                    left: parent.left
+                    margins: 10
+                }
+                geoView: parent
+            }
+            OverviewMapDemo {
+                geoView: view
+            }
+        }
+    }
     mapViewContents: Component {
         MapView {
-            id:view
-
-            Callout {
-                calloutData : parent.calloutData //binding to parent. Any change is reflected on this
-                calloutHeight: 150
-                calloutWidth: 250
-                accessoryButtonHidden: true
-                leaderPosition: leaderPositionEnum.Automatic
+            id: view
+            OverviewMap {
+                anchors {
+                    top: parent.top
+                    left: parent.left
+                    margins: 10
+                }
+                geoView: parent
             }
-
-            CalloutDemoModel {
+            OverviewMapDemo {
                 geoView: view
             }
         }

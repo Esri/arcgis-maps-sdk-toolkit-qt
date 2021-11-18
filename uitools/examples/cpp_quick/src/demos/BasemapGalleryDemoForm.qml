@@ -8,8 +8,6 @@
 // notice and use restrictions.
 //
 // See the Sample code usage restrictions document for further information.
-//
-
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import Esri.ArcGISRuntime 100.13
@@ -20,47 +18,40 @@ DemoPage {
     sceneViewContents: Component {
         SceneView {
             id: view
-
-            PopupView {
-                id:popupView
+            BasemapGallery {
+                id: gallery
+                controller: demo.controller
                 anchors {
-                     left: parent.left
-                     top: parent.top
-                     bottom: parent.bottom
+                    right: parent.right
+                    top: parent.top
+                    margins: 10
                 }
-                visible: false
-                popupManager: model.popupManager
             }
-
-            PopupViewDemoModel{
-                id:model
-                geoView : view
-                onPopupManagerChanged : popupView.visible = true;
+            BasemapGalleryDemo {
+                id: demo
+                geoView: view
             }
+            onSceneChanged: gallery.setGeoModelFromGeoView(view)
         }
     }
 
     mapViewContents: Component {
         MapView {
             id: view
-
-            PopupView {
-                id:popupView
+            BasemapGallery {
+                id: gallery
+                controller: demo.controller
                 anchors {
-                     left: parent.left
-                     top: parent.top
-                     bottom: parent.bottom
+                    right: parent.right
+                    top: parent.top
+                    margins: 10
                 }
-                visible: false
-                popupManager: model.popupManager
-
             }
-
-            PopupViewDemoModel{
-                id: model
-                geoView : view
-                onPopupManagerChanged: popupView.visible = true;
+            BasemapGalleryDemo {
+                id: demo
+                geoView: view
             }
+            onMapChanged: gallery.setGeoModelFromGeoView(view)
         }
     }
 }

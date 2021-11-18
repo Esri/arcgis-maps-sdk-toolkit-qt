@@ -1,5 +1,5 @@
-#ifndef ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_BASEDEMOMODEL_H
-#define ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_BASEDEMOMODEL_H
+#ifndef ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_BASEDEMO_H
+#define ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_BASEDEMO_H
 
 #include <QObject>
 #include <QQmlEngine>
@@ -15,14 +15,14 @@ namespace ArcGISRuntime {
 }
 }
 
-class BaseDemoModel : public QObject
+class BaseDemo : public QObject
 {
   Q_OBJECT
   Q_PROPERTY(QObject* geoView READ geoView_ WRITE setGeoView_ NOTIFY geoViewChanged)
   QML_ELEMENT
 public:
-  Q_INVOKABLE explicit BaseDemoModel(QObject* parent = nullptr);
-  ~BaseDemoModel() override;
+  Q_INVOKABLE explicit BaseDemo(QObject* parent = nullptr);
+  ~BaseDemo() override;
 
   Esri::ArcGISRuntime::GeoView* geoView() const;
   void setGeoView(Esri::ArcGISRuntime::GeoView* geoView);
@@ -79,4 +79,4 @@ private:
   QObject* m_geoView;
 };
 
-#endif // #ifndef #ifndef ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_BASEDEMOMODEL_H
+#endif // #ifndef #ifndef ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_BASEDEMO_H

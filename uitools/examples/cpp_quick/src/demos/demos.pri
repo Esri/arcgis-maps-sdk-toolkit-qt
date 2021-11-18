@@ -3,22 +3,22 @@ INCLUDEPATH += $$PWD
 
 RESOURCES += $$PWD/demos.qrc
 
-HEADERS += $$PWD/BasemapGalleryDemoModel.h \
-           $$PWD/AuthenticationViewDemoModel.h \
-           $$PWD/CalloutDemoModel.h \
-           $$PWD/CoordinateConversionDemoModel.h \
-           $$PWD/NorthArrowDemoModel.h \
-           $$PWD/OverviewMapDemoModel.h \
-           $$PWD/PopupViewDemoModel.h \
-           $$PWD/SearchViewDemoModel.h \
-           $$PWD/TimeSliderDemoModel.h
+HEADERS += $$PWD/BasemapGalleryDemo.h \
+           $$PWD/AuthenticationViewDemo.h \
+           $$PWD/CalloutDemo.h \
+           $$PWD/CoordinateConversionDemo.h \
+           $$PWD/NorthArrowDemo.h \
+           $$PWD/OverviewMapDemo.h \
+           $$PWD/PopupViewDemo.h \
+           $$PWD/SearchViewDemo.h \
+           $$PWD/TimeSliderDemo.h
 
-SOURCES += $$PWD/BasemapGalleryDemoModel.cpp \
-           $$PWD/AuthenticationViewDemoModel.cpp \
-           $$PWD/CalloutDemoModel.cpp \
-           $$PWD/CoordinateConversionDemoModel.cpp \
-           $$PWD/NorthArrowDemoModel.cpp \
-           $$PWD/OverviewMapDemoModel.cpp \
-           $$PWD/PopupViewDemoModel.cpp \
-           $$PWD/SearchViewDemoModel.cpp \
-           $$PWD/TimeSliderDemoModel.cpp
+SOURCES += $$PWD/BasemapGalleryDemo.cpp \
+           $$PWD/AuthenticationViewDemo.cpp \
+           $$PWD/CalloutDemo.cpp \
+           $$PWD/CoordinateConversionDemo.cpp \
+           $$PWD/NorthArrowDemo.cpp \
+           $$PWD/OverviewMapDemo.cpp \
+           $$PWD/PopupViewDemo.cpp \
+           $$PWD/SearchViewDemo.cpp \
+           $$PWD/TimeSliderDemo.cpp

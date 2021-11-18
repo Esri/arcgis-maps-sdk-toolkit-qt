@@ -8,45 +8,55 @@
 // notice and use restrictions.
 //
 // See the Sample code usage restrictions document for further information.
+//
+
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import Esri.ArcGISRuntime 100.13
 import Esri.ArcGISRuntime.Toolkit 100.13
-import DemoApp 1.0
 
 DemoPage {
+    readonly property string dataUrl: "https://sampleserver6.arcgisonline.com/arcgis/rest/services/Hurricanes/MapServer"
+
     sceneViewContents: Component {
         SceneView {
-            id: view
-            CoordinateConversion {
-                id: gallery
-                geoView: parent
-                anchors {
-                    right: parent.right
-                    margins: 10
-                    bottom: parent.attributionTop
+            Scene {
+                initBasemapStyle: Enums.BasemapStyleArcGISDarkGray
+                ArcGISMapImageLayer {
+                    url: dataUrl
                 }
             }
-            CoordinateConversionDemoModel {
-                geoView: view
+            TimeSlider {
+                geoView: parent
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    bottom: parent.bottom
+                }
             }
+
         }
     }
-
     mapViewContents: Component {
+//! [Set up Time Slider]
         MapView {
-            id: view
-            CoordinateConversion {
+            Map {
+                initBasemapStyle: Enums.BasemapStyleArcGISDarkGray
+                ArcGISMapImageLayer {
+                    url: dataUrl
+                }
+
+            }
+            TimeSlider {
                 geoView: parent
                 anchors {
+                    left: parent.left
                     right: parent.right
-                    margins: 10
-                    bottom: parent.attributionTop
+                    bottom: parent.bottom
                 }
             }
-            CoordinateConversionDemoModel {
-                geoView: view
-            }
+
         }
+//! [Set up Time Slider]
     }
 }

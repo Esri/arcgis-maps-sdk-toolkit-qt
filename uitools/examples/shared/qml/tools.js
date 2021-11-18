@@ -1,40 +1,40 @@
 const TOOLS = [
   {
     "name": "Popup View",
-    "url": "PopupViewDemo.qml"
+    "url": "PopupViewDemoForm.qml"
   },
   {
     "name": "Overview Map",
-    "url": "OverviewMapDemo.qml"
+    "url": "OverviewMapDemoForm.qml"
   },
   {
     "name": "Basemap gallery",
-    "url": "BasemapGalleryDemo.qml"
+    "url": "BasemapGalleryDemoForm.qml"
   },
   {
     "name": "Callout",
-    "url": "CalloutDemo.qml"
+    "url": "CalloutDemoForm.qml"
   },
   {
     "name": "Coordinate conversion",
-    "url": "CoordinateConversionDemo.qml"
+    "url": "CoordinateConversionDemoForm.qml"
   },
   {
     "name": "North arrow",
-    "url": "NorthArrowDemo.qml"
+    "url": "NorthArrowDemoForm.qml"
   },
 
   {
     "name": "Search View",
-    "url": "SearchViewDemo.qml"
+    "url": "SearchViewDemoForm.qml"
   },
   {
     "name": "Time slider",
-    "url": "TimeSliderDemo.qml"
+    "url": "TimeSliderDemoForm.qml"
   },
   {
     "name": "Authentication view",
-    "url": "AuthenticationViewDemo.qml",
+    "url": "AuthenticationViewDemoForm.qml",
     "handlesOwnAuthentication" : true
   }
 ];

@@ -20,32 +20,31 @@ DemoPage {
     sceneViewContents: Component {
         SceneView {
             id: view
-            NorthArrow {
+            TimeSlider {
                 geoView: parent
                 anchors {
+                    left: parent.left
                     right: parent.right
-                    bottom: parent.attributionTop
-                    margins: 10
+                    bottom: parent.bottom
                 }
             }
-            NorthArrowDemoModel {
+            TimeSliderDemo {
                 geoView: view
             }
         }
     }
-
     mapViewContents: Component {
         MapView {
             id: view
-            NorthArrow {
+            TimeSlider {
                 geoView: parent
                 anchors {
+                    left: parent.left
                     right: parent.right
-                    bottom: parent.attributionTop
-                    margins: 10
+                    bottom: parent.bottom
                 }
             }
-            NorthArrowDemoModel {
+            TimeSliderDemo {
                 geoView: view
             }
         }

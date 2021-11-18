@@ -8,6 +8,8 @@
 // notice and use restrictions.
 //
 // See the Sample code usage restrictions document for further information.
+//
+
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import Esri.ArcGISRuntime 100.13
@@ -18,15 +20,15 @@ DemoPage {
     sceneViewContents: Component {
         SceneView {
             id: view
-            SearchView {
+            NorthArrow {
                 geoView: parent
                 anchors {
-                    top: parent.top
                     right: parent.right
+                    bottom: parent.attributionTop
                     margins: 10
                 }
             }
-            SearchViewDemoModel {
+            NorthArrowDemo {
                 geoView: view
             }
         }
@@ -35,15 +37,15 @@ DemoPage {
     mapViewContents: Component {
         MapView {
             id: view
-            SearchView {
+            NorthArrow {
                 geoView: parent
                 anchors {
-                    top: parent.top
                     right: parent.right
+                    bottom: parent.attributionTop
                     margins: 10
                 }
             }
-            SearchViewDemoModel {
+            NorthArrowDemo {
                 geoView: view
             }
         }

@@ -1,7 +1,7 @@
-#ifndef ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_BASEMAPGALLERYDEMOMODEL_H
-#define ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_BASEMAPGALLERYDEMOMODEL_H
+#ifndef ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_BASEMAPGALLERYDEMO_H
+#define ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_BASEMAPGALLERYDEMO_H
 
-#include "BaseDemoModel.h"
+#include "BaseDemo.h"
 
 #include <QObject>
 #include <QQmlEngine>
@@ -14,14 +14,14 @@ namespace Toolkit {
 }
 }
 
-class BasemapGalleryDemoModel : public BaseDemoModel
+class BasemapGalleryDemo : public BaseDemo
 {
   Q_OBJECT
   QML_ELEMENT
   Q_PROPERTY(Esri::ArcGISRuntime::Toolkit::BasemapGalleryController* controller READ controller CONSTANT)
 public:
-  BasemapGalleryDemoModel(QObject* parent = nullptr);
-  ~BasemapGalleryDemoModel() override;
+  Q_INVOKABLE BasemapGalleryDemo(QObject* parent = nullptr);
+  ~BasemapGalleryDemo() override;
 
   Esri::ArcGISRuntime::Toolkit::BasemapGalleryController* controller() const;
 
@@ -33,4 +33,4 @@ private:
   Esri::ArcGISRuntime::Toolkit::BasemapGalleryController* m_controller;
 };
 
-#endif // ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_BASEMAPGALLERYDEMOMODEL_H
+#endif // ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_BASEMAPGALLERYDEMO_H

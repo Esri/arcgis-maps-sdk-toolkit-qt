@@ -20,32 +20,46 @@ DemoPage {
     sceneViewContents: Component {
         SceneView {
             id: view
-            TimeSlider {
-                geoView: parent
+
+            PopupView {
+                id:popupView
                 anchors {
-                    left: parent.left
-                    right: parent.right
-                    bottom: parent.bottom
+                     left: parent.left
+                     top: parent.top
+                     bottom: parent.bottom
                 }
+                visible: false
+                popupManager: model.popupManager
             }
-            OverviewMapDemoModel {
-                geoView: view
+
+            PopupViewDemo {
+                id: model
+                geoView : view
+                onPopupManagerChanged : popupView.visible = true;
             }
         }
     }
+
     mapViewContents: Component {
         MapView {
             id: view
-            TimeSlider {
-                geoView: parent
+
+            PopupView {
+                id:popupView
                 anchors {
-                    left: parent.left
-                    right: parent.right
-                    bottom: parent.bottom
+                     left: parent.left
+                     top: parent.top
+                     bottom: parent.bottom
                 }
+                visible: false
+                popupManager: model.popupManager
+
             }
-            OverviewMapDemoModel {
-                geoView: view
+
+            PopupViewDemo {
+                id: model
+                geoView : view
+                onPopupManagerChanged: popupView.visible = true;
             }
         }
     }
