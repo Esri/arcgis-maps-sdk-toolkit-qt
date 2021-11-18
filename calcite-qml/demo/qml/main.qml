@@ -15,7 +15,7 @@
  ******************************************************************************/
 import QtQuick 2.12
 import QtQuick.Controls 2.12
-import Esri.ArcGISRuntime 100.12
+import Esri.ArcGISRuntime 100.13
 import Calcite 1.0 as C
 import QtQuick.Layouts 1.12
 
