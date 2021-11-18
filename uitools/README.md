@@ -5,6 +5,8 @@ SDK for Qt. It provides ready made UI components to complement mapping and GIS
 applications. Because it is open source you are encouraged to modify these tools
 and add your own.
 
+In the [API Documentation](https://developers.arcgis.com/qt/toolkit/api-reference/), it can be found a visual representation for each of the components in the below table. A set up example code is also available in the docs to help in quickly utilize the tools.
+
 |Tool|[C++ (QtQuick)](https://developers.arcgis.com/qt/toolkit/api-reference/cppquickuitools.html)|[QML](https://developers.arcgis.com/qt/toolkit/api-reference/qmluitools.html)|[QtWidgets](https://developers.arcgis.com/qt/toolkit/api-reference/cppwidgetsuitools.html)|
 |:--:|:--:|:--:|:--:|
 |Authentication View|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-authenticationview.html) | [✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-authenticationview.html) | [✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-authenticationview.html) |
@@ -17,6 +19,10 @@ and add your own.
 |Popup View|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupview.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupview.html)||
 |Search View|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-searchview.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-searchview.html)||
 |Time slider|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-timeslider.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-timeslider.html)||
+
+## Showcase - Demo app
+
+In the [examples](/examples) folder, there can be found three demo applications projects to be built that showcase the tools implemented.
 
 ## Structure
 
