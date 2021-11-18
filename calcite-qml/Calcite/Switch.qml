@@ -25,7 +25,6 @@ T.Switch {
                              Math.max(contentItem.implicitHeight,
                                       indicator ? indicator.implicitHeight : 0) + topPadding + bottomPadding)
 
-
     spacing: 16
 
     indicator:  Item {
