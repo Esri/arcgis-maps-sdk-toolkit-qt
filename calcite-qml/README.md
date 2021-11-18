@@ -1,4 +1,4 @@
-# ESRI Calcite Style
+# Esri Calcite Style
 
 Esri’s design system ([Calcite](https://esri.github.io/calcite-web/)) enables you to create beautiful, easy to use, and consistent experiences across apps with minimal effort.
 
