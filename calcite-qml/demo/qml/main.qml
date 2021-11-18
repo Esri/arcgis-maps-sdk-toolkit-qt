@@ -39,8 +39,10 @@ ApplicationWindow {
 
         // add a map to the mapview
         Map {
-            // add the BasemapImagery basemap to the map
-            BasemapImagery { }
+            // add the OpenStreetMapLayer basemap to the map
+            Basemap {
+                OpenStreetMapLayer { }
+            }
         }
 
         Pane {
