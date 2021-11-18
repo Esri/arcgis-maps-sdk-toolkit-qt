@@ -11,7 +11,7 @@ class CoordinateConversionDemoModel : public BaseDemoModel
   Q_OBJECT
   QML_ELEMENT
 public:
-  CoordinateConversionDemoModel(QObject* parent = nullptr);
+  Q_INVOKABLE CoordinateConversionDemoModel(QObject* parent = nullptr);
   ~CoordinateConversionDemoModel() override;
 };
 

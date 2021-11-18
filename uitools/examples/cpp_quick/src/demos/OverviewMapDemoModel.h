@@ -11,7 +11,7 @@ class OverviewMapDemoModel : public BaseDemoModel
   Q_OBJECT
   QML_ELEMENT
 public:
-  OverviewMapDemoModel(QObject* parent = nullptr);
+  Q_INVOKABLE OverviewMapDemoModel(QObject* parent = nullptr);
   ~OverviewMapDemoModel() override;
 };
 

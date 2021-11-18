@@ -20,7 +20,7 @@ class BasemapGalleryDemoModel : public BaseDemoModel
   QML_ELEMENT
   Q_PROPERTY(Esri::ArcGISRuntime::Toolkit::BasemapGalleryController* controller READ controller CONSTANT)
 public:
-  BasemapGalleryDemoModel(QObject* parent = nullptr);
+  Q_INVOKABLE BasemapGalleryDemoModel(QObject* parent = nullptr);
   ~BasemapGalleryDemoModel() override;
 
   Esri::ArcGISRuntime::Toolkit::BasemapGalleryController* controller() const;

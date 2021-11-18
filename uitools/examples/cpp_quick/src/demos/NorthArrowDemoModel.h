@@ -11,7 +11,7 @@ class NorthArrowDemoModel : public BaseDemoModel
   Q_OBJECT
   QML_ELEMENT
 public:
-  NorthArrowDemoModel(QObject* parent = nullptr);
+  Q_INVOKABLE NorthArrowDemoModel(QObject* parent = nullptr);
   ~NorthArrowDemoModel() override;
 };
 

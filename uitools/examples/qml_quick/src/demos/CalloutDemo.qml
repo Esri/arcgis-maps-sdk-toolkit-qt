@@ -25,10 +25,10 @@ DemoPage {
                 initBasemapStyle: Enums.BasemapStyleArcGISDarkGray
             }
             calloutData {
-                        imageUrl: "qrc:///esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/map_pin.png"
-                        title: "This is the location callout"
-                        detail: "x: " + xClickLoc + " y: " + yClickLoc
-                    }
+                imageUrl: "qrc:///esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/map_pin.png"
+                title: "This is the location callout"
+                detail: "x: " + xClickLoc + " y: " + yClickLoc
+            }
 
             Callout{
                 id:callout

@@ -14,7 +14,7 @@ class PopupViewDemoModel : public BaseDemoModel
   Q_PROPERTY(QObject* popupManager READ popupManager_ WRITE setPopupManager_ NOTIFY popupManagerChanged)
   QML_ELEMENT
 public:
-  PopupViewDemoModel(QObject* parent = nullptr);
+  Q_INVOKABLE PopupViewDemoModel(QObject* parent = nullptr);
   ~PopupViewDemoModel() override;
 
 protected:

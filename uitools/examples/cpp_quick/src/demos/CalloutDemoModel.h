@@ -11,7 +11,7 @@ class CalloutDemoModel : public BaseDemoModel
   Q_OBJECT
   QML_ELEMENT
 public:
-  CalloutDemoModel(QObject* parent = nullptr);
+  Q_INVOKABLE CalloutDemoModel(QObject* parent = nullptr);
   ~CalloutDemoModel() override;
 
 private slots:

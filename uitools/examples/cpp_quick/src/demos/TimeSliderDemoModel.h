@@ -11,7 +11,7 @@ class TimeSliderDemoModel : public BaseDemoModel
   Q_OBJECT
   QML_ELEMENT
 public:
-  TimeSliderDemoModel(QObject* parent = nullptr);
+  Q_INVOKABLE TimeSliderDemoModel(QObject* parent = nullptr);
   ~TimeSliderDemoModel() override;
 };
 

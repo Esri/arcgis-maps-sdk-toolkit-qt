@@ -11,7 +11,7 @@ class SearchViewDemoModel : public BaseDemoModel
   Q_OBJECT
   QML_ELEMENT
 public:
-  SearchViewDemoModel(QObject* parent = nullptr);
+  Q_INVOKABLE SearchViewDemoModel(QObject* parent = nullptr);
   ~SearchViewDemoModel() override;
 };
 

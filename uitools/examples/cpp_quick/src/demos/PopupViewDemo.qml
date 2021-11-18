@@ -53,7 +53,6 @@ DemoPage {
                 }
                 visible: false
                 popupManager: model.popupManager
-
             }
 
             PopupViewDemoModel{

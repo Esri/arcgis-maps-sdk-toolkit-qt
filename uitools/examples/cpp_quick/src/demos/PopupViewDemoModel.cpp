@@ -66,8 +66,16 @@ void PopupViewDemoModel::setUp()
           using ViewType = std::remove_pointer_t<decltype(geoView)>;
           connect(geoView, &ViewType::mouseClicked, this, [this, geoView](QMouseEvent& mouse)
                   {
-                    m_featureLayer = static_cast<FeatureLayer*>(geoModel()->operationalLayers()->first());
-                    geoView->identifyLayer(m_featureLayer, mouse.x(), mouse.y(), 12, false);
+                    auto layer = geoModel()->operationalLayers()->first();
+                    if (layer->layerType() == LayerType::FeatureLayer)
+                    {
+                      m_featureLayer = static_cast<FeatureLayer*>(layer);
+                      geoView->identifyLayer(m_featureLayer, mouse.x(), mouse.y(), 12, false);
+                    }
+                    else
+                    {
+                      qDebug() << "Unexpected layer type taken from click.";
+                    }
                   });
 
           connect(geoView,
