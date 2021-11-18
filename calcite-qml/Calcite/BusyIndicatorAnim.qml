@@ -17,8 +17,7 @@ import QtQuick 2.15
 
 SequentialAnimation {
     id: anim
-    property var target;
-    property var delay: 0;
+    property int delay: 0;
     PauseAnimation {
         duration: anim.delay
     }
