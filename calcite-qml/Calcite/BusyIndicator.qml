@@ -27,7 +27,7 @@ T.BusyIndicator {
 
     contentItem: Item {
         id: rects
-        implicitWidth: 3*(rectWidth + spacing)
+        implicitWidth: 3 * (rectWidth + spacing)
         implicitHeight: rectMaxHeight
 
         readonly property double rectWidth: 13.6
