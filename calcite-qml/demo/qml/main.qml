@@ -45,7 +45,7 @@ ApplicationWindow {
 
         Pane {
             anchors.right: parent.right
-            anchors.top: parent.to
+            anchors.top: parent.top
             ColumnLayout {
                 Switch {
                     id: themeSwitch
