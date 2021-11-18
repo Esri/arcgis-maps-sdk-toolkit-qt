@@ -33,6 +33,8 @@ import QtQuick.Layouts 1.12
  the point on the GeoView.
  A list of different coordinate formats representing the same point are
  available to the user.
+ \image docs/coordinateConversion.gif coordinate_conversion
+ \snippet qml_quick/src/demos/CoordinateConversionDemo.qml Set up Coordinate Conversion QML
  */
 
 Pane {

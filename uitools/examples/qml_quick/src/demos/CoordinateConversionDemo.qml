@@ -31,7 +31,7 @@ DemoPage {
             }
         }
     }
-
+//! [Set up Coordinate Conversion QML]
     mapViewContents: Component {
         MapView {
             Map {
@@ -47,4 +47,5 @@ DemoPage {
             }
         }
     }
+//! [Set up Coordinate Conversion QML]
 }

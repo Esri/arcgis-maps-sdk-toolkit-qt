@@ -16,6 +16,7 @@ import Esri.ArcGISRuntime 100.13
 import Esri.ArcGISRuntime.Toolkit 100.13
 
 DemoPage {
+    //! [Set up Callout QML]
     property real xClickLoc
     property real yClickLoc
 
@@ -52,4 +53,5 @@ DemoPage {
             }
         }
     }
+    //! [Set up Callout QML]
 }

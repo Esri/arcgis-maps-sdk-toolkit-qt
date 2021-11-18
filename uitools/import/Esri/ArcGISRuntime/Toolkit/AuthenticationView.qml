@@ -47,6 +47,10 @@ import QtQuick.Controls 2.12
         \c{QtWebView::initialize()} immediately after the \c{QGuiApplication} 
         instance is created. See \l{https://doc.qt.io/qt-5/qtwebview-index.html}
         {Qt WebView}.
+
+  \image docs/authenticationview_qml.png authentication_view
+  Example code:
+  \snippet qml_quick/src/demos/AuthenticationViewDemo.qml Set up Authentication View QML
  */
 
 Item {

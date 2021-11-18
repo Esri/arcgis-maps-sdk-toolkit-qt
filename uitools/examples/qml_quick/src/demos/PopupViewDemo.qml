@@ -67,6 +67,7 @@ DemoPage {
     }
 
     mapViewContents: Component {
+//! [Set up Popup View]
         MapView {
             id:mapView
             property var featureLayer : null
@@ -120,4 +121,5 @@ DemoPage {
         popupView.popupManager = popupManager;
         popupView.visible = true;
     }
+//! [Set up Popup View]
 }

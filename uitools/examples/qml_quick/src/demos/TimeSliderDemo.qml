@@ -39,6 +39,7 @@ DemoPage {
         }
     }
     mapViewContents: Component {
+//! [Set up Time Slider]
         MapView {
             Map {
                 initBasemapStyle: Enums.BasemapStyleArcGISDarkGray
@@ -57,5 +58,6 @@ DemoPage {
             }
 
         }
+//! [Set up Time Slider]
     }
 }
