@@ -8,8 +8,6 @@
 // notice and use restrictions.
 //
 // See the Sample code usage restrictions document for further information.
-//
-
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import Esri.ArcGISRuntime 100.13
