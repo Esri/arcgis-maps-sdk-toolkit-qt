@@ -65,7 +65,7 @@ void BaseDemo::setGeoView(Esri::ArcGISRuntime::GeoView* geoView)
     }
     else
     {
-      throw std::runtime_error("Unknown type of GeoView");
+      qFatal("BaseDemo::setGeoView: unknown type of GeoView");
     }
   }
 }
