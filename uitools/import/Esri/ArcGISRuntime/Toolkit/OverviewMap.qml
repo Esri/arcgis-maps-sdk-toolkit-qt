@@ -26,7 +26,7 @@ import Esri.ArcGISRuntime.Toolkit.Controller 100.13
    For MapViews, the current viewpoint will be represented by a polygon displaying the visible area of the MapView. For SceneViews,
    the current viewpoint will be represented by a reticle (crosshairs) displaying the viewpoint center.
    \image docs/overviewmap.png overviewmap
-   \snippet qml_quick/src/demos/OverviewMapDemo.qml Set up Overview Map QML
+   \snippet qml_quick/src/demos/OverviewMapDemoForm.qml Set up Overview Map QML
  */
 
 Item {
