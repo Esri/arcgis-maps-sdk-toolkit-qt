@@ -234,6 +234,7 @@ Pane {
             id: list
             clip: true
             spacing: searchView.spacing
+            cacheBuffer: Math.max(0, Math.ceil(contentHeight))
             model: {
                 if (searchView.state === "resultSelected") {
                     return null;

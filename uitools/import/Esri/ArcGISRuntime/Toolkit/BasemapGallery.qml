@@ -192,7 +192,7 @@ Pane {
         cellHeight: basemapGallery.internal.calculatedStyle === BasemapGallery.ViewStyle.Grid ? basemapGallery.internal.defaultCellHeightGrid
                                                                                               : basemapGallery.internal.defaultCellHeightList
         clip: true
-        cacheBuffer: Math.ceil(contentHeight)
+        cacheBuffer: Math.max(0, Math.ceil(contentHeight))
         snapMode: GridView.SnapToRow
         currentIndex: controller.basemapIndex(controller.currentBasemap)
         ScrollBar.vertical: ScrollBar { }
