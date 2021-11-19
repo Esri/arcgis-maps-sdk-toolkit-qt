@@ -29,7 +29,7 @@ import QtQuick 2.12
    GeoView to be orientainted to 0.
    \note default width and height is 48.
    \image  docs/northarrow.gif northarrow
-   \snippet qml_quick/src/demos/NorthArrowDemo.qml Set up North Arrow QML
+   \snippet qml_quick/src/demos/NorthArrowDemoForm.qml Set up North Arrow QML
  */
 
 Item {
