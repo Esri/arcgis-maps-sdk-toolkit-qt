@@ -192,14 +192,50 @@ Pane {
         cellHeight: basemapGallery.internal.calculatedStyle === BasemapGallery.ViewStyle.Grid ? basemapGallery.internal.defaultCellHeightGrid
                                                                                               : basemapGallery.internal.defaultCellHeightList
         clip: true
+        cacheBuffer: Math.max(0, Math.ceil(contentHeight))
         snapMode: GridView.SnapToRow
         currentIndex: controller.basemapIndex(controller.currentBasemap)
         ScrollBar.vertical: ScrollBar { }
-        delegate: Item {
+
+        delegate: ItemDelegate {
             id: basemapDelegate
             width: view.cellWidth
             height: view.cellHeight
             enabled: controller.basemapMatchesCurrentSpatialReference(modelData.basemap)
+            onClicked: controller.setCurrentBasemap(modelData.basemap)
+            indicator: Item { }
+            down: GridView.isCurrentItem
+
+            BusyIndicator {
+                id: busyIndicator
+                anchors.centerIn: parent
+                running: false
+                visible: running
+                z: 1
+            }
+
+            Connections {
+                target: controller
+                function onCurrentBasemapChanged() {
+                    busyIndicator.running = false;
+                }
+            }
+            icon {
+                cache: false
+                source: modelData.thumbnailUrl
+                width: basemapGallery.internal.defaultCellSize
+                height: basemapGallery.internal.defaultCellSize
+                color: "transparent"
+            }
+
+            text: modelData.name === "" ? "Unnamed basemap" : modelData.name
+            display: {
+                if (basemapGallery.internal.calculatedStyle === BasemapGallery.ViewStyle.List) {
+                    return AbstractButton.TextBesideIcon;
+                } else if (basemapGallery.internal.calculatedStyle === BasemapGallery.ViewStyle.Grid) {
+                    return AbstractButton.TextUnderIcon;
+                }
+            }
             Connections {
                 target: basemapDelegate.ToolTip.toolTip.contentItem
                 enabled: basemapDelegate.ToolTip.visible
@@ -208,54 +244,23 @@ Pane {
                 }
             }
             ToolTip.text: modelData.tooltip
-
-            GridLayout {
-                anchors.fill: parent
-                anchors.margins: 8
-                flow:  {
-                    if (basemapGallery.internal.calculatedStyle === BasemapGallery.ViewStyle.List) {
-                        return GridLayout.LeftToRight;
-                    } else if (basemapGallery.internal.calculatedStyle === BasemapGallery.ViewStyle.Grid) {
-                        return GridLayout.TopToBottom;
-                    }
-                }
-                Image {
-                    id: thumbnailItem
-                    source: modelData.thumbnailUrl
-                    cache: false
-                    fillMode: Image.PreserveAspectCrop
-                    clip: true
-                    Layout.maximumWidth: basemapGallery.internal.defaultCellSize
-                    Layout.maximumHeight: Layout.maximumWidth
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
-                }
-                Text {
-                    id: itemText
-                    color: GridView.isCurrentItem ? palette.highlightedText : palette.text
-                    text: modelData.name === "" ? "Unnamed basemap" : modelData.name
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment:  (basemapGallery.internal.calculatedStyle === BasemapGallery.ViewStyle.Grid) ? Qt.AlignTop
-                                                                                                                    : Qt.AlignVCenter
-                    minimumPointSize: 16
-                    wrapMode: Text.WordWrap
-                    font: basemapGallery.font
-                    elide: Text.ElideRight
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                }
-            }
             MouseArea {
                 id: mouseArea
+                z : 2
                 anchors.fill: parent
                 hoverEnabled: true
-                onClicked: controller.setCurrentBasemap(modelData.basemap)
+                onClicked: {
+                    if (controller.currentBasemap !== modelData.basemap)
+                        busyIndicator.running = true;
+                    controller.setCurrentBasemap(modelData.basemap);
+                }
 
                 // When mouse enters thumbnail area, use timer to delay showing of tooltip.
                 onEntered: {
                     // Create a definition for the showTooltipFn property of timerOnEntered
                     timerOnEntered.showTooltipFn = () => {
                         if (allowTooltips && mouseArea.containsMouse && modelData.tooltip !== "")
-                            basemapDelegate.ToolTip.visible = true;
+                        basemapDelegate.ToolTip.visible = true;
                     }
                     timerOnEntered.start();
                 }
@@ -272,15 +277,6 @@ Pane {
             }
         }
         highlightFollowsCurrentItem: false
-        highlight: Rectangle {
-            x: view.currentItem ? view.currentItem.x : NaN
-            y: view.currentItem ? view.currentItem.y : NaN
-            visible: view.currentIndex >= 0
-            width: view.cellWidth
-            height: view.cellHeight
-            color: palette.highlight
-            radius: 5
-        }
     }
 
     Timer {
@@ -312,8 +308,8 @@ Pane {
     property QtObject internal: QtObject {
         property int defaultCellSize: 100;
 
-        property int defaultCellHeightGrid: defaultCellSize + 86;
-        property int defaultCellWidthGrid: defaultCellSize + 16;
+        property int defaultCellHeightGrid: defaultCellSize + 46;
+        property int defaultCellWidthGrid: defaultCellSize + 56;
 
         property int defaultCellHeightList: defaultCellSize + 16;
         property int defaultCellWidthList: defaultCellSize + 116;

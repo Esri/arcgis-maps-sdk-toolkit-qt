@@ -377,9 +377,6 @@ QtObject {
                     controller.eligableForRequery = true;
                 }
             }
-            function onNavigatingChanged() {
-                console.log("Navigating", geoView.navigating);
-            }
         }
 
         property Component defaultWorldGeocoderSource: Component {

@@ -311,7 +311,7 @@ QtObject {
                 for (let i = first; i <= last; i++) {
                     const suggestion = locatorSearchSource.locatorTask.suggestions.get(i);
                     if (suggestion) {
-                        const markerUrl = suggestion.isCollection ? 'qrc:///esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/search.png'
+                        const markerUrl = suggestion.isCollection ? 'qrc:///esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/search.svg'
                                                                   : 'qrc:///esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/pin.svg';
                         locatorSearchSource.suggestions.insert(i, {
                                                                    displayTitle: suggestion.label,

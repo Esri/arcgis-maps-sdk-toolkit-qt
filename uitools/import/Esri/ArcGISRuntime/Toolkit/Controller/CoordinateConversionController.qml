@@ -159,7 +159,7 @@ QtObject {
     function setCurrentPoint(point, option = undefined) {
         if (point instanceof String || typeof point == 'string') {
             // Point is  a string, so convert to a point using the option param.
-            if (option !== undefined) {
+            if (option !== null && option !== undefined) {
                 let sp = geoView ?  geoView.spatialReference : undefined;
                 internal.currentPoint = option.pointFromString(point, sp);
             } else {
