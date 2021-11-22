@@ -44,7 +44,6 @@ INCLUDEPATH += $$PWD/src
 
 HEADERS += \
     src/BaseDemo.h
-    src/BaseDemol.h
 
 SOURCES += \
     src/main.cpp \
