@@ -29,6 +29,7 @@ import QtGraphicalEffects 1.15
     \brief SearchView enables users to search for one or more locations or features,
     from a variety of sources, with suggestions.
     \image docs/search.png search
+    Example code in the QML API (C++ API might differ):
     \snippet qml_quick/src/demos/SearchViewDemoForm.qml Set up Search View QML
 */
 Pane {

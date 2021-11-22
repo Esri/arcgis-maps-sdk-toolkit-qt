@@ -34,6 +34,7 @@ import QtQuick.Layouts 1.12
  A list of different coordinate formats representing the same point are
  available to the user.
  \image docs/coordinateConversion.png coordinate_conversion
+ Example code in the QML API (C++ API might differ):
  \snippet qml_quick/src/demos/CoordinateConversionDemoForm.qml Set up Coordinate Conversion QML
  */
 

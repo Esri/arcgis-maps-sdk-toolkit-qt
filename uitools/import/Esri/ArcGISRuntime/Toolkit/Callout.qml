@@ -40,7 +40,7 @@ import "LeaderPosition.js" as Enums
 
      For more information, please see the CalloutData documentation.
      \image docs/callout.png
-     Example code:
+     Example code in the QML API (C++ API might differ):
      \snippet qml_quick/src/demos/CalloutDemoForm.qml Set up Callout QML
 */
 Item {
