@@ -23,7 +23,7 @@ In the [API Documentation](https://developers.arcgis.com/qt/toolkit/api-referenc
 
 ## Showcase - Demo app
 
-In the [examples](/examples) folder, there can be found three demo applications projects to be built that showcase the tools implemented.
+In the [examples](examples) folder, there can be found three demo applications projects to be built that showcase the tools implemented.
 
 ## Structure
 
