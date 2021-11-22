@@ -20,7 +20,7 @@ DemoPage {
     property real yClickLoc
 
     mapViewContents: Component {
-        //! [Set up Callout QML]
+//! [Set up Callout QML]
         MapView {
             Map {
                 initBasemapStyle: Enums.BasemapStyleArcGISDarkGray

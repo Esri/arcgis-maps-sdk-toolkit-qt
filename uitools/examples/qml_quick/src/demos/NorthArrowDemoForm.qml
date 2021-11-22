@@ -47,6 +47,6 @@ DemoPage {
                 }
             }
         }
-    }
 //! [Set up North Arrow QML]
+    }
 }

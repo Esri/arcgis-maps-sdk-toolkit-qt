@@ -16,18 +16,18 @@ import Esri.ArcGISRuntime 100.13
 import Esri.ArcGISRuntime.Toolkit 100.13
 
 DemoPage {
-    //! [Set up Authentication View QML]
-    readonly property string url: "https://www.arcgis.com/sharing/rest/content/items/e5039444ef3c48b8a8fdc9227f9be7c1/data"
+    readonly property string exampleUrl: "https://www.arcgis.com/sharing/rest/content/items/e5039444ef3c48b8a8fdc9227f9be7c1/data"
 
     mapViewContents: Component {
+//! [Set up Authentication View QML]
         MapView {
             Map {
-                initUrl: url
+                initUrl: exampleUrl
             }
             AuthenticationView {
                 anchors.centerIn: parent
             }
         }
+//! [Set up Authentication View QML]
     }
-    //! [Set up Authentication View QML]
 }
