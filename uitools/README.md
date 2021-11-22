@@ -5,6 +5,26 @@ SDK for Qt. It provides ready made UI components to complement mapping and GIS
 applications. Because it is open source you are encouraged to modify these tools
 and add your own.
 
+In the [API Documentation](https://developers.arcgis.com/qt/toolkit/api-reference/), it can be found a visual representation for each of the components in the below table. A set up example code is also available in the docs to help in quickly utilize the tools.
+
+|Tool|[C++ (QtQuick)](https://developers.arcgis.com/qt/toolkit/api-reference/cppquickuitools.html)|[QML](https://developers.arcgis.com/qt/toolkit/api-reference/qmluitools.html)|[QtWidgets](https://developers.arcgis.com/qt/toolkit/api-reference/cppwidgetsuitools.html)|
+|:--:|:--:|:--:|:--:|
+|Authentication view|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-authenticationview.html) | [✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-authenticationview.html) | [✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-authenticationview.html) |
+|Basemap gallery|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-basemapgallery.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-basemapgallery.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-basemapgallery.html)|
+|Callout|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-callout.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-callout.html)||
+|Coordinate conversion|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-coordinateconversion.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-coordinateconversion.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-coordinateconversion.html)|
+|North arrow|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-northarrow.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-northarrow.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-northarrow.html)|
+|Overview map|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-overviewmap.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-overviewmap.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-overviewmap.html)|
+|Popup stack view|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupstackview.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupstackview.html)||
+|Popup view|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupview.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupview.html)||
+|Scalebar|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-scalebar.html)|||
+|Search view|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-searchview.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-searchview.html)||
+|Time slider|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-timeslider.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-timeslider.html)||
+
+## Showcase - Demo app
+
+In the [examples](examples) folder, there can be found three demo applications projects to be built that showcase the tools implemented.
+
 ## Structure
 
 This repo contains 3 toolkit projects, each intended for use with a different
@@ -17,7 +37,7 @@ flavor of the ArcGIS Runtime SDK for Qt:
 You need to clone this repository locally to incorporate it into your own
 project.
 
-### toolkitqml.pri
+## toolkitqml.pri (QML QtQuick)
 
 #### Importing the toolkit (toolkitqml.pri)
 
@@ -80,9 +100,8 @@ MapView {
         geoView: mapView
     }
 }
-```
-
-### toolkitcpp.pri
+``` 
+## toolkitcpp.pri (C++ QtQuick)
 
 #### Importing the toolkit (toolkitcpp.pri)
 
@@ -143,8 +162,7 @@ MapView {
     }
 }
 ```
-
-### toolkitwidgets.pri
+## toolkitwidgets.pri (QtWidgets)
 
 #### Importing the toolkit (toolkitwidgets.pri)
 
