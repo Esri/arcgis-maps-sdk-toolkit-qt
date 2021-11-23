@@ -28,6 +28,9 @@ import QtQuick 2.12
    Double clicking on the NorthArrow triggers the heading of the connected
    GeoView to be orientainted to 0.
    \note default width and height is 48.
+   \image  docs/northarrow.gif northarrow
+   Example code in the QML API (C++ API might differ):
+   \snippet qml_quick/src/demos/NorthArrowDemoForm.qml Set up North Arrow QML
  */
 
 Item {

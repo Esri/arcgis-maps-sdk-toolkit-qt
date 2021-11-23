@@ -30,6 +30,9 @@ import QtQuick.Layouts 1.15
  The BasemapGallery displays a collection of items representing basemaps from either ArcGIS Online, a user-defined portal,
  or an array of Basemaps. When the user selects a basemap from the BasemapGallery, the  basemap rendered in the current
  geoModel is removed from the given map/scene and replaced with the basemap selected in the gallery.
+ \image docs/basemap.gif
+ Example code in the QML API (C++ API might differ):
+ \snippet qml_quick/src/demos/BasemapGalleryDemoForm.qml Set up BasemapGallery QML
  */
 
 Pane {

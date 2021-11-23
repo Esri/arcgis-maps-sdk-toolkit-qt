@@ -25,6 +25,9 @@ import Esri.ArcGISRuntime.Toolkit.Controller 100.13
    \brief Defines a small "overview" (or "inset") map displaying a representation of the current viewpoint of the given GeoView.
    For MapViews, the current viewpoint will be represented by a polygon displaying the visible area of the MapView. For SceneViews,
    the current viewpoint will be represented by a reticle (crosshairs) displaying the viewpoint center.
+   \image docs/overviewmap.png overviewmap
+   Example code in the QML API (C++ API might differ):
+   \snippet qml_quick/src/demos/OverviewMapDemoForm.qml Set up Overview Map QML
  */
 
 Item {

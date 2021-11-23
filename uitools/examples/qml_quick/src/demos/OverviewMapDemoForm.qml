@@ -36,6 +36,7 @@ DemoPage {
         }
     }
     mapViewContents : Component {
+//! [Set up Overview Map QML]
         MapView {
             Map {
                 initBasemapStyle: Enums.BasemapStyleArcGISCommunity
@@ -49,5 +50,6 @@ DemoPage {
                 geoView: parent
             }
         }
+//! [Set up Overview Map QML]
     }
 }
