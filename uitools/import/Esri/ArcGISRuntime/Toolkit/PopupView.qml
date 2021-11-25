@@ -154,6 +154,7 @@ Page {
                     Layout.fillWidth: true
                     text: fieldName ?? ""
                     wrapMode: Text.WrapAnywhere
+                    horizontalAlignment: Text.AlignLeft
                     font: popupView.font
                     palette: popupView.palette
                 }
@@ -179,6 +180,7 @@ Page {
                     visible: controller.showAttachments
                     enabled: visible
                     Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignLeft
                     text: name
                     wrapMode: Text.WrapAnywhere
                     palette: popupView.palette
@@ -195,6 +197,7 @@ Page {
                     wrapMode: Text.WrapAnywhere
                     palette: popupView.palette
                     font: popupView.font
+                    horizontalAlignment: Text.AlignRight
                 }
             }
 
