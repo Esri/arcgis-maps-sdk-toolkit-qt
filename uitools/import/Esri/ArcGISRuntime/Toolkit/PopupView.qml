@@ -146,7 +146,7 @@ Pane {
                 model: controller.displayFields
                 Label {
                     Layout.fillWidth: true
-                    text: fieldName ?? ""
+                    text: label ?? fieldName ?? ""
                     wrapMode: Text.WrapAnywhere
                 }
             }
