@@ -128,8 +128,8 @@ Pane {
             }
 
             // We must account for what is visible, including title headers as rows.
-            rows: controller.showAttachments ? controller.fieldCount + controller.attachmentCount + 2
-                                             : controller.fieldCount + 1
+            rows: controller.showAttachments ? controller.fieldCount + controller.attachmentCount + 3
+                                             : controller.fieldCount + 2
 
             // Title Header
             Label {
@@ -174,6 +174,16 @@ Pane {
                 }
             }
 
+            Button {
+                Layout.columnSpan: 2
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                text: "Close"
+                onClicked: {
+                    if (popupView.closeCallback)
+                        popupView.closeCallback()
+                }
+            }
+
             // Field contents
             Repeater {
                 model: controller.displayFields
@@ -201,20 +211,6 @@ Pane {
                         }
                     }
                 }
-            }
-        }
-
-        Button {
-            anchors {
-                top: fieldsLayout.bottom
-                horizontalCenter: parent.horizontalCenter
-                topMargin: popupView.spacing
-            }
-            text: "Close"
-
-            onClicked: {
-                if (popupView.closeCallback)
-                    popupView.closeCallback()
             }
         }
     }
