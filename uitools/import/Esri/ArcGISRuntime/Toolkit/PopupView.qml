@@ -205,6 +205,7 @@ Page {
                 model: controller.attachments
                 Image {
                     Layout.fillHeight: true
+                    Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
                     Layout.minimumWidth: controller.attachmentThumbnailWidth
                     Layout.minimumHeight: controller.attachmentThumbnailHeight
                     visible: controller.showAttachments
