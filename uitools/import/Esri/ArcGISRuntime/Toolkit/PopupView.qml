@@ -113,6 +113,8 @@ Page {
     implicitHeight: 300 + padding
 
     spacing: 5
+    leftPadding: popupView.spacing
+    rightPadding: popupView.spacing
 
     title: controller.title
 
@@ -133,8 +135,6 @@ Page {
         id: flickable
         clip: true
         contentHeight: fieldsLayout.height
-        leftMargin: popupView.spacing
-        rightMargin: popupView.spacing
         GridLayout {
             id: fieldsLayout
             flow: GridLayout.TopToBottom
@@ -151,9 +151,8 @@ Page {
             Repeater {
                 model: controller.displayFields
                 Label {
-                    Layout.fillWidth: true
                     text: fieldName ?? ""
-                    wrapMode: Text.WrapAnywhere
+                    wrapMode: Text.Wrap
                     horizontalAlignment: Text.AlignLeft
                     font: popupView.font
                     palette: popupView.palette
@@ -194,7 +193,7 @@ Page {
                 Label {
                     Layout.fillWidth: true
                     text: formattedValue
-                    wrapMode: Text.WrapAnywhere
+                    wrapMode: Text.Wrap
                     palette: popupView.palette
                     font: popupView.font
                     horizontalAlignment: Text.AlignRight
