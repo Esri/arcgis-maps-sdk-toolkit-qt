@@ -62,9 +62,8 @@ import QtQuick.Layouts 1.3
    Example code in the QML API (C++ API might differ):
    \snippet qml_quick/src/demos/PopupViewDemoForm.qml Set up Popup View
  */
-Pane {
+Page {
     id: popupView
-
 
     /*!
        \brief The PopupManager that controls the information being displayed in
@@ -113,12 +112,29 @@ Pane {
 
     implicitHeight: 300 + padding
 
-    padding: 5
+    spacing: 5
+
+    title: controller.title
+
+    // Title Header
+    header: Label {
+        textFormat: Text.StyledText
+        text: `<h2>${popupView.title}</h2>`
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        wrapMode: Text.Wrap
+        font: popupView.font
+        palette: popupView.palette
+        leftPadding: popupView.spacing
+        rightPadding: popupView.spacing
+    }
 
     contentItem: Flickable {
         id: flickable
         clip: true
         contentHeight: fieldsLayout.height
+        leftMargin: popupView.spacing
+        rightMargin: popupView.spacing
         GridLayout {
             id: fieldsLayout
             flow: GridLayout.TopToBottom
@@ -128,19 +144,9 @@ Pane {
             }
 
             // We must account for what is visible, including title headers as rows.
-            rows: controller.showAttachments ? controller.fieldCount + controller.attachmentCount + 3
-                                             : controller.fieldCount + 2
-
-            // Title Header
-            Label {
-                Layout.columnSpan: 2
-                Layout.fillWidth: true
-                textFormat: Text.StyledText
-                text: `<h2>${controller.title}</h2>`
-                wrapMode: Text.Wrap
-                font: popupView.font
-            }
-
+            rows: controller.showAttachments ? controller.fieldCount + controller.attachmentCount + 1
+                                             : controller.fieldCount
+            rowSpacing: popupView.spacing
             // Field names
             Repeater {
                 model: controller.displayFields
@@ -148,6 +154,8 @@ Pane {
                     Layout.fillWidth: true
                     text: fieldName ?? ""
                     wrapMode: Text.WrapAnywhere
+                    font: popupView.font
+                    palette: popupView.palette
                 }
             }
 
@@ -158,8 +166,10 @@ Pane {
                 visible: controller.showAttachments
                 enabled: visible
                 textFormat: Text.StyledText
+                horizontalAlignment: Text.AlignHCenter
                 text: controller.attachmentCount > 0 ? "<h2>Attachments</h2>" : ""
                 font: popupView.font
+                palette: popupView.palette
             }
 
             // Attachment names
@@ -171,16 +181,8 @@ Pane {
                     Layout.fillWidth: true
                     text: name
                     wrapMode: Text.WrapAnywhere
-                }
-            }
-
-            Button {
-                Layout.columnSpan: 2
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                text: "Close"
-                onClicked: {
-                    if (popupView.closeCallback)
-                        popupView.closeCallback()
+                    palette: popupView.palette
+                    font: popupView.font
                 }
             }
 
@@ -191,6 +193,8 @@ Pane {
                     Layout.fillWidth: true
                     text: formattedValue
                     wrapMode: Text.WrapAnywhere
+                    palette: popupView.palette
+                    font: popupView.font
                 }
             }
 
@@ -212,6 +216,18 @@ Pane {
                     }
                 }
             }
+        }
+    }
+
+    footer: ColumnLayout {
+        Button {
+            text: "Close"
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            onClicked: {
+                if (popupView.closeCallback)
+                    popupView.closeCallback()
+            }
+            Layout.bottomMargin: popupView.spacing
         }
     }
 }
