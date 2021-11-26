@@ -147,13 +147,14 @@ Page {
             rows: controller.showAttachments ? controller.fieldCount + controller.attachmentCount + 1
                                              : controller.fieldCount
             rowSpacing: popupView.spacing
+            columnSpacing: 30
             // Field names
             Repeater {
                 model: controller.displayFields
                 Label {
                     text: fieldName ?? ""
+                    Layout.maximumWidth: flickable.contentWidth / 2
                     wrapMode: Text.Wrap
-                    horizontalAlignment: Text.AlignLeft
                     font: popupView.font
                     palette: popupView.palette
                 }
@@ -176,12 +177,11 @@ Page {
             Repeater {
                 model: controller.attachments
                 Label {
+                    Layout.fillWidth: true
                     visible: controller.showAttachments
                     enabled: visible
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignLeft
                     text: name
-                    wrapMode: Text.WrapAnywhere
+                    wrapMode: Text.Wrap
                     palette: popupView.palette
                     font: popupView.font
                 }
@@ -196,7 +196,6 @@ Page {
                     wrapMode: Text.Wrap
                     palette: popupView.palette
                     font: popupView.font
-                    horizontalAlignment: Text.AlignRight
                 }
             }
 
@@ -205,7 +204,6 @@ Page {
                 model: controller.attachments
                 Image {
                     Layout.fillHeight: true
-                    Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
                     Layout.minimumWidth: controller.attachmentThumbnailWidth
                     Layout.minimumHeight: controller.attachmentThumbnailHeight
                     visible: controller.showAttachments
