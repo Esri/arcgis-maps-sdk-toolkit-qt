@@ -153,7 +153,7 @@ Page {
                 model: controller.displayFields
                 Label {
                     text: fieldName ?? ""
-                    Layout.maximumWidth: flickable.contentWidth / 2
+                    Layout.maximumWidth: flickable.width / 2
                     wrapMode: Text.Wrap
                     font: popupView.font
                     palette: popupView.palette
