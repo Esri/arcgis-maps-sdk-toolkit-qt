@@ -182,9 +182,9 @@ namespace Toolkit {
       {
         if (isAutomaticConfigurationEnabled())
         {
-          auto vp = sceneView->currentViewpoint(ViewpointType::CenterAndScale);
-          setQueryCenter(vp.targetGeometry());
-          setQueryArea({});
+          auto vp = sceneView->currentViewpoint(ViewpointType::BoundingGeometry);
+          setQueryCenter(vp.targetGeometry().extent().center());
+          setQueryArea(vp.targetGeometry());
 
           if (sceneView->isNavigating())
           {
@@ -505,6 +505,7 @@ namespace Toolkit {
     setIsEligableForRequery(false);
 
     auto queryRestrictionArea = restrictToArea ? queryArea() : Geometry{};
+    qDebug() << queryRestrictionArea.extent().toJson();
     for (int i = 0; i <= m_sources->rowCount(); ++i)
     {
       auto source = m_sources->element<SearchSourceInterface>(m_sources->index((i)));
