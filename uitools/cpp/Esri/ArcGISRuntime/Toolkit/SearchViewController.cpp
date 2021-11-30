@@ -505,7 +505,6 @@ namespace Toolkit {
     setIsEligableForRequery(false);
 
     auto queryRestrictionArea = restrictToArea ? queryArea() : Geometry{};
-    qDebug() << queryRestrictionArea.extent().toJson();
     for (int i = 0; i <= m_sources->rowCount(); ++i)
     {
       auto source = m_sources->element<SearchSourceInterface>(m_sources->index((i)));
