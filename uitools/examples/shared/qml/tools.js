@@ -10,6 +10,10 @@
 // See the Sample code usage restrictions document for further information.
 const TOOLS = [
   {
+   "name": "North arrow",
+   "url": "NorthArrowDemoForm.qml"
+  },
+  {
     "name": "Popup View",
     "url": "PopupViewDemoForm.qml"
   },
@@ -29,11 +33,6 @@ const TOOLS = [
     "name": "Coordinate conversion",
     "url": "CoordinateConversionDemoForm.qml"
   },
-  {
-    "name": "North arrow",
-    "url": "NorthArrowDemoForm.qml"
-  },
-
   {
     "name": "Search View",
     "url": "SearchViewDemoForm.qml"
