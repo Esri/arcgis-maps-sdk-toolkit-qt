@@ -152,7 +152,7 @@ Page {
             Repeater {
                 model: controller.displayFields
                 Label {
-                    text: fieldName ?? ""
+                    text: label ?? fieldName ?? ""
                     Layout.maximumWidth: flickable.width / 2
                     wrapMode: Text.Wrap
                     font: popupView.font
