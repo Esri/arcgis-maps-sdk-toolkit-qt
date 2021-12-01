@@ -75,7 +75,7 @@ QtObject {
       \qmlproperty MapView insetView
       \brief MapView which represents an overview/inset of the current viewpoint of the geoView.
      */
-    readonly property MapView insetView: MapView {
+    readonly property var insetView: MapView {
         // Default map to show in the inset.
         Map {
             initBasemapStyle: Enums.BasemapStyleArcGISTopographic
