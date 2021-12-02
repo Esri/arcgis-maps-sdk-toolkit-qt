@@ -46,6 +46,7 @@ DemoPage {
                     bottom: parent.attributionTop
                 }
             }
+            rotationByPinchingEnabled: true
         }
 //! [Set up North Arrow QML]
     }
