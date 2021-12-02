@@ -40,7 +40,7 @@ using namespace Esri::ArcGISRuntime::Toolkit;
   are emitted every time the values change.
 
   Most of the time, it's not necessary to create an object of this class. A default LocationDataSource
-  is created automatically by \l ArcGISArSceneView when this is necessary. This class is public to
+  is created automatically by \l ArcGISArView when this is necessary. This class is public to
   give the possibility to override the class QGeoPositionInfoSource to support a custom GPS device.
 
   See also {http://doc.qt.io/qt-5/qtpositioning-plugins.html}{Qt Positioning service plugins}.
@@ -339,6 +339,11 @@ void LocationDataSource::updateObjectsAndConnections()
 /*!
   \fn void Esri::ArcGISRuntime::Toolkit::LocationDataSource::locationChanged(double latitude, double longitude, double altitude);
   \brief Signal emitted when the location values change.
+  \list
+     \li \a latitude latitude changed
+     \li \a longitude longitude changed
+     \li \a altitude altitude changed
+  \endlist
  */
 
 /*!
