@@ -22,6 +22,7 @@ DemoPage {
     mapViewContents: Component {
 //! [Set up Callout QML]
         MapView {
+            id: view
             Map {
                 initBasemapStyle: Enums.BasemapStyleArcGISDarkGray
             }
@@ -33,16 +34,11 @@ DemoPage {
 
             Callout{
                 id:callout
-                calloutData :  parent.calloutData
-                calloutHeight: 150
-                calloutWidth: 250
-                accessoryButtonHidden: true
-                leaderPosition: leaderPositionEnum.Automatic
-
-                property Point location;
+                calloutData: view.calloutData
+                accessoryButtonVisible: false
             }
             onMouseClicked : {
-                if (callout.calloutVisible) {
+                if (calloutData.visible) {
                     callout.dismiss();
                 } else {
                     xClickLoc = mouse.mapPoint.x.toFixed(2);
