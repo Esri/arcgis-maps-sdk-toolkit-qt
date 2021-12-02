@@ -165,37 +165,51 @@ Pane {
         CalloutData is obtained from the MapView.
     */
     property var calloutData: null
+    onCalloutDataChanged: {
+        if (calloutData === null) {
+            dismiss();
+        } else if (calloutData.visible) {
+            showCallout();
+        }
+    }
 
     /*!
-        \obsolete
-        Use \c{implicitWidth} instead.
+      When \c true, the width of the callout content automatically resizes up
+      to the value of \l maxWidth. To explicitly set the width
+      set autoAdjustWidth to \c false, and explicitly set \l implicitWidth.
+
+      This property defaults to \c true.
     */
     property bool autoAdjustWidth: true
 
+    /*!
+      Maximum width of the Callout's conteent when `autoAdjustWidth` is true.
+
+      This property defaults to \c 300.
+    */
+    property real maxWidth: 300
 
     /*!
         \obsolete
         Use \c{implicitWidth} instead.
     */
-    property real maxWidth: 150
-
-    /*!
-        \obsolete
-        Use \c{implicitWidth} instead.
-    */
-    property real calloutWidth
+    property alias calloutWidth: root.implicitWidth
 
     /*!
         \obsolete
         Use \c{implicitHeight} instead.
     */
-    property real calloutHeight
+    property alias calloutHeight: root.implicitHeight
 
     /*!
         \obsolete
         Use \c{background.border.color} instead.
     */
     property color borderColor
+    onBorderColorChanged: {
+        background.border.color = borderColor;
+        tail.strokeColor = borderColor;
+    }
 
     /*!
         \obsolete
@@ -218,42 +232,52 @@ Pane {
         Use \c{background.border.width} instead.
     */
     property int borderWidth
+    onBorderWidthChanged: {
+        background.border.width = borderWidth;
+        tail.strokeWidth = borderWidth;
+    }
 
     /*!
         \obsolete
         Use \c{background.color} instead.
     */
     property color backgroundColor
+    onBackgroundColorChanged: background.color = backgroundColor
 
     /*!
         \obsolete
-        Use \c{palette.text} instead.
+        Use \c{palette.windowText} instead.
     */
     property color titleTextColor
+    onTitleTextColorChanged: palette.windowText = titleTextColor
 
     /*!
         \obsolete
-        Use \c{palette.text} instead.
+        Use \c{palette.windowText} instead.
     */
     property color detailTextColor
+    onDetailTextColorChanged: palette.windowText = detailTextColor
 
     /*!
         \obsolete
         Use \c{accessoryButtonVisible} instead.
     */
-    property bool accessoryButtonHidden
+    property bool accessoryButtonHidden: false
+    onAccessoryButtonHiddenChanged: accessoryButtonVisible = !accessoryButtonHidden
 
     /*!
         \obsolete
         Use \c{background.radius} instead.
     */
     property int cornerRadius
+    onCornerRadiusChanged: background.radius = cornerRadius
 
     /*!
         \brief The signal emitted when the accessory button is clicked.
     */
     signal accessoryButtonClicked()
 
+    onImplicitWidthChanged: autoAdjustWidth = false
     implicitHeight: 100
     visible: false
 
@@ -269,9 +293,9 @@ Pane {
         case Callout.LeaderPosition.Bottom:
             return internal.anchorPointX - root.width / 2;
         case Callout.LeaderPosition.Left:
-            return internal.anchorPointX + root.leaderHeight + background.border.width;
+            return internal.anchorPointX + root.leaderHeight;
         case Callout.LeaderPosition.Right:
-            return internal.anchorPointX - root.leaderHeight - root.width - background.border.width;
+            return internal.anchorPointX - root.leaderHeight - root.width;
         }
     }
 
@@ -280,11 +304,11 @@ Pane {
         case Callout.LeaderPosition.UpperLeft:
         case Callout.LeaderPosition.Top:
         case Callout.LeaderPosition.UpperRight:
-            return internal.anchorPointY + leaderHeight + background.border.width;
+            return internal.anchorPointY + leaderHeight;
         case Callout.LeaderPosition.LowerRight:
         case Callout.LeaderPosition.Bottom:
         case Callout.LeaderPosition.LowerLeft:
-            return internal.anchorPointY - height - leaderHeight - background.border.width;
+            return internal.anchorPointY - height - leaderHeight;
         case Callout.LeaderPosition.Left:
         case Callout.LeaderPosition.Right:
             return internal.anchorPointY - height / 2;
@@ -315,14 +339,6 @@ Pane {
         root.visible = false;
     }
 
-    onCalloutDataChanged: {
-        if (calloutData === null) {
-            dismiss();
-        } else if (calloutData.visible) {
-            showCallout();
-        }
-    }
-
     contentItem: GridLayout {
         id: calloutLayout
         columns: 3
@@ -337,7 +353,7 @@ Pane {
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.preferredWidth: root.implictWidth ?? maxWidth
-            visible: calloutContent
+                                                        visible: calloutContent
         }
         Image {
             id: image
@@ -347,7 +363,7 @@ Pane {
             Layout.fillHeight: true
             Layout.preferredWidth: 40
             fillMode : Image.PreserveAspectFit
-            visible: !calloutContent
+            visible: !calloutContent && source !== ""
         }
         Label {
             id: title
@@ -360,7 +376,7 @@ Pane {
             Layout.fillWidth: !autoAdjustWidth
             Layout.fillHeight: true
             Layout.columnSpan: accessoryButton.visible ? 1 : 2
-            Layout.maximumWidth: maxWidth - image.width - accessoryButton.width
+            Layout.maximumWidth: maxWidth - image.width - (accessoryButton.visible ? accessoryButton.width : 0)
         }
         RoundButton {
             id: accessoryButton
@@ -374,7 +390,7 @@ Pane {
             rightPadding: 0
             flat: true
             radius: 32
-            visible: accessoryButtonVisible && !calloutContent
+            visible: accessoryButtonVisible && !calloutContent && icon.source !== ""
             onClicked: accessoryButtonClicked()
             icon.source: {
                 if (accessoryButtonType === "Info")
@@ -397,28 +413,97 @@ Pane {
             Layout.fillWidth: !autoAdjustWidth
             Layout.fillHeight: true
             Layout.columnSpan: accessoryButton.visible ? 1 : 2
-            Layout.maximumWidth: maxWidth - image.width - accessoryButton.width
+            Layout.maximumWidth: maxWidth - image.width - (accessoryButton.visible ? accessoryButton.width : 0)
         }
     }
 
     Shape {
         x: -leftPadding
         y: -topPadding
+        z: 1
         ShapePath {
+            // Hides the border of the Pane.
+            startX: {
+                switch(internal.leaderPosition) {
+                case Callout.LeaderPosition.UpperLeft:
+                case Callout.LeaderPosition.Top:
+                case Callout.LeaderPosition.UpperRight:
+                case Callout.LeaderPosition.LowerRight:
+                case Callout.LeaderPosition.Bottom:
+                case Callout.LeaderPosition.LowerLeft:
+                    return tail.startX + background.border.width;
+                case Callout.LeaderPosition.Left:
+                    return tail.startX + background.border.width / 2;
+                case Callout.LeaderPosition.Right:
+                    return tail.startX - background.border.width / 2;
+                }
+            }
+            startY: {
+                switch(internal.leaderPosition) {
+                case Callout.LeaderPosition.UpperLeft:
+                case Callout.LeaderPosition.Top:
+                case Callout.LeaderPosition.UpperRight:
+                    return tail.startY + background.border.width / 2;
+                case Callout.LeaderPosition.LowerRight:
+                case Callout.LeaderPosition.Bottom:
+                case Callout.LeaderPosition.LowerLeft:
+                    return tail.startY - background.border.width / 2;
+                case Callout.LeaderPosition.Left:
+                case Callout.LeaderPosition.Right:
+                    return tail.startY + background.border.width;
+                }
+            }
+            strokeColor: tail.fillColor
+            strokeWidth: tail.strokeWidth
+            PathLine {
+                relativeX: {
+                    switch(internal.leaderPosition) {
+                    case Callout.LeaderPosition.UpperLeft:
+                    case Callout.LeaderPosition.Top:
+                    case Callout.LeaderPosition.UpperRight:
+                    case Callout.LeaderPosition.LowerRight:
+                    case Callout.LeaderPosition.Bottom:
+                    case Callout.LeaderPosition.LowerLeft:
+                        return root.leaderWidth - background.border.width*2;
+                    case Callout.LeaderPosition.Left:
+                    case Callout.LeaderPosition.Right:
+                        return 0;
+                    }
+                }
+                relativeY: {
+                    switch(internal.leaderPosition) {
+                    case Callout.LeaderPosition.UpperLeft:
+                    case Callout.LeaderPosition.Top:
+                    case Callout.LeaderPosition.UpperRight:
+                    case Callout.LeaderPosition.LowerRight:
+                    case Callout.LeaderPosition.Bottom:
+                    case Callout.LeaderPosition.LowerLeft:
+                        return 0;
+                    case Callout.LeaderPosition.Left:
+                    case Callout.LeaderPosition.Right:
+                        return root.leaderWidth - background.border.width*2;
+                    }
+                }
+            }
+        }
+        ShapePath {
+            // Draws the tail portion emitting from the pane.
+            id: tail
             fillColor: root.background.color
             strokeColor: "transparent"
+            strokeWidth: background.border.width
             startX: {
                 switch(internal.leaderPosition) {
                 case Callout.LeaderPosition.UpperLeft:
                 case Callout.LeaderPosition.LowerLeft:
                     return padding;
-                case Callout.LeaderPosition.Left:
-                    return background.border.width;
                 case Callout.LeaderPosition.UpperRight:
                 case Callout.LeaderPosition.LowerRight:
                     return root.width - root.leaderWidth - padding;
+                case Callout.LeaderPosition.Left:
+                    return background.border.width/2;
                 case Callout.LeaderPosition.Right:
-                    return root.width - background.border.width;
+                    return root.width - background.border.width/2;
                 case Callout.LeaderPosition.Top:
                 case Callout.LeaderPosition.Bottom:
                     return root.width / 2 - root.leaderWidth / 2;
@@ -429,11 +514,11 @@ Pane {
                 case Callout.LeaderPosition.UpperLeft:
                 case Callout.LeaderPosition.Top:
                 case Callout.LeaderPosition.UpperRight:
-                    return background.border.width;
+                    return background.border.width/2;
                 case Callout.LeaderPosition.LowerRight:
                 case Callout.LeaderPosition.Bottom:
                 case Callout.LeaderPosition.LowerLeft:
-                    return root.height - background.border.width;
+                    return root.height - background.border.width/2;
                 case Callout.LeaderPosition.Left:
                 case Callout.LeaderPosition.Right:
                     return root.height / 2 - root.leaderWidth / 2;
