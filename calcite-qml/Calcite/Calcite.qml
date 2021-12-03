@@ -19,7 +19,6 @@ import QtQuick 2.0
 
 /*!
  \qmltype Calcite
- \inqmlmodule Esri.ArcGISRuntime.Toolkit
  \brief Naming conventions and colors taken directly from
     \l{https://developers.arcgis.com/calcite-design-system/foundations/colors}
     {Calcite colors and themes}.
