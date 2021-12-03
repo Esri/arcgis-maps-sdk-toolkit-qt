@@ -365,3 +365,8 @@ void LocationDataSource::updateObjectsAndConnections()
   \fn void Esri::ArcGISRuntime::Toolkit::LocationDataSource::locationTrackingModeChanged();
   \brief Signal emitted when the \l locationTrackingMode property changes.
  */
+
+/*!
+  \property LocationDataSource::started
+  \brief Holds the property that indicates if the tracking has started.
+*/
