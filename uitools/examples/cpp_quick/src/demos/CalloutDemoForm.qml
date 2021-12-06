@@ -26,9 +26,6 @@ DemoPage {
                 id: callout
                 calloutData : view.calloutData //binding to parent. Any change is reflected on this
                 accessoryButtonVisible: false
-                cornerRadius: 5
-                borderColor: "black"
-                borderWidth: 5
             }
             CalloutDemo {
                 geoView: view

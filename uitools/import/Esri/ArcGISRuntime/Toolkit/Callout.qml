@@ -213,7 +213,7 @@ Pane {
 
     /*!
         \obsolete
-        Use \c{LeaderPosition} instead.
+        Use \c{Callout.LeaderPosition} instead.
     */
     property var leaderPositionEnum: { return {
             UpperLeft: 0,
@@ -353,7 +353,7 @@ Pane {
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.preferredWidth: root.implictWidth ?? maxWidth
-                                                        visible: calloutContent
+            visible: calloutContent
         }
         Image {
             id: image
@@ -363,7 +363,7 @@ Pane {
             Layout.fillHeight: true
             Layout.preferredWidth: 40
             fillMode : Image.PreserveAspectFit
-            visible: !calloutContent && source !== ""
+            visible: !calloutContent && source && source.toString() !== ""
         }
         Label {
             id: title
@@ -375,8 +375,15 @@ Pane {
             Layout.alignment: Qt.AlignVCenter
             Layout.fillWidth: !autoAdjustWidth
             Layout.fillHeight: true
-            Layout.columnSpan: accessoryButton.visible ? 1 : 2
-            Layout.maximumWidth: maxWidth - image.width - (accessoryButton.visible ? accessoryButton.width : 0)
+            Layout.columnSpan: {
+                let span = 1;
+                if (!accessoryButton.visible)
+                    span++;
+                if (!image.visible)
+                    span++;
+                return span;
+            }
+            Layout.maximumWidth: maxWidth - (image.visible ? image.width : 0 ) - (accessoryButton.visible ? accessoryButton.width : 0)
         }
         RoundButton {
             id: accessoryButton
@@ -390,7 +397,7 @@ Pane {
             rightPadding: 0
             flat: true
             radius: 32
-            visible: accessoryButtonVisible && !calloutContent && icon.source !== ""
+            visible: accessoryButtonVisible && !calloutContent && icon.source.toString() !== ""
             onClicked: accessoryButtonClicked()
             icon.source: {
                 if (accessoryButtonType === "Info")
@@ -412,8 +419,15 @@ Pane {
             Layout.alignment: Qt.AlignVCenter
             Layout.fillWidth: !autoAdjustWidth
             Layout.fillHeight: true
-            Layout.columnSpan: accessoryButton.visible ? 1 : 2
-            Layout.maximumWidth: maxWidth - image.width - (accessoryButton.visible ? accessoryButton.width : 0)
+            Layout.columnSpan: {
+                let span = 1;
+                if (!accessoryButton.visible)
+                    span++;
+                if (!image.visible)
+                    span++;
+                return span;
+            }
+            Layout.maximumWidth: maxWidth - (image.visible ? image.width : 0 ) - (accessoryButton.visible ? accessoryButton.width : 0)
         }
     }
 
@@ -423,6 +437,8 @@ Pane {
         z: 1
         ShapePath {
             // Hides the border of the Pane.
+            strokeColor: tail.fillColor
+            strokeWidth: tail.strokeWidth
             startX: {
                 switch(internal.leaderPosition) {
                 case Callout.LeaderPosition.UpperLeft:
@@ -453,8 +469,6 @@ Pane {
                     return tail.startY + background.border.width;
                 }
             }
-            strokeColor: tail.fillColor
-            strokeWidth: tail.strokeWidth
             PathLine {
                 relativeX: {
                     switch(internal.leaderPosition) {
