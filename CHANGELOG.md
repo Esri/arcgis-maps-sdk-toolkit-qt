@@ -11,6 +11,7 @@ In this file, all the changes are listed by release.
 * Introduction demo app (C++ and QML versions).
 * Tools docs added image and code set up snippets extracted from the demo app.
 * Readme cleanp and addition of tools table, changelog and contributors.
+* SceneView 3D Scene fix to not zoom out after a "research"
 
 ## 100.12
 
