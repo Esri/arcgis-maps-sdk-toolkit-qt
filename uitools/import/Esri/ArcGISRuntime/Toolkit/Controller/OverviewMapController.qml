@@ -14,7 +14,7 @@
  *  limitations under the License.
  ******************************************************************************/
 import QtQml 2.12
-import Esri.ArcGISRuntime 100.13
+import Esri.ArcGISRuntime 100.14
 
 /*!
    \qmltype OverviewMapController

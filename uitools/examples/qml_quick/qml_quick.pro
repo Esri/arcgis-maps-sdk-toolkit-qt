@@ -22,7 +22,7 @@ CONFIG += c++14
 # additional modules are pulled in via arcgisruntime.pri
 QT += opengl qml quick quickcontrols2 webview
 
-ARCGIS_RUNTIME_VERSION = 100.13
+ARCGIS_RUNTIME_VERSION = 100.14
 include($$PWD/arcgisruntime.pri)
 include($$PWD/../../toolkitqml.pri)
 
