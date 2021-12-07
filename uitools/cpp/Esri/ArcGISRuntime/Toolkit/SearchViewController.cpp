@@ -22,6 +22,7 @@
 
 // ArcGISRuntime headers
 #include <EnvelopeBuilder.h>
+#include <GeometryEngine.h>
 #include <Graphic.h>
 #include <PictureMarkerSymbol.h>
 #include <SuggestListModel.h>
@@ -139,7 +140,6 @@ namespace Toolkit {
       setCurrentQuery({});
       setActiveSource(nullptr);
       setDefaultPlaceholder(DEFAULT_DEFAULT_PLACEHOLDER);
-
       // Reset sources to default.
       {
         sources()->clear();
@@ -160,6 +160,10 @@ namespace Toolkit {
     {
       auto setViewpoint = [mapView, this]
       {
+        //setting the lastsearcharea with the inital geoview extent
+        if (lastSearchArea().isEmpty())
+          setLastSearchArea(mapView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry());
+
         if (isAutomaticConfigurationEnabled())
         {
           auto vp = mapView->currentViewpoint(ViewpointType::BoundingGeometry);
@@ -168,7 +172,21 @@ namespace Toolkit {
 
           if (mapView->isNavigating())
           {
-            setIsEligableForRequery(true);
+            // Check extent difference.
+            double widthDiff = abs(queryArea().extent().width() - lastSearchArea().extent().width());
+            double heightDiff = abs(queryArea().extent().width() - lastSearchArea().extent().width());
+
+            double widthThreshold = lastSearchArea().extent().width() * 0.25;
+            double heightThreshold = lastSearchArea().extent().height() * 0.25;
+            if (widthDiff > widthThreshold || heightDiff > heightThreshold)
+              setIsEligableForRequery(true);
+
+            // Check center difference.
+            double centerDiff = ArcGISRuntime::GeometryEngine::distance(lastSearchArea().extent().center(), queryArea().extent().center());
+            double currentExtentAvg = (lastSearchArea().extent().width() + lastSearchArea().extent().height()) / 2;
+            double threshold = currentExtentAvg * 0.25;
+            if (centerDiff > threshold)
+              setIsEligableForRequery(true);
           }
         }
       };
@@ -180,6 +198,9 @@ namespace Toolkit {
     {
       auto setViewpoint = [sceneView, this]
       {
+        if (lastSearchArea().isEmpty())
+          setLastSearchArea(sceneView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry());
+
         if (isAutomaticConfigurationEnabled())
         {
           auto vp = sceneView->currentViewpoint(ViewpointType::BoundingGeometry);
@@ -188,7 +209,13 @@ namespace Toolkit {
 
           if (sceneView->isNavigating())
           {
-            setIsEligableForRequery(true);
+            auto widthDiff = queryArea().extent().width() - lastSearchArea().extent().width();
+            auto heightDiff = queryArea().extent().width() - lastSearchArea().extent().width();
+
+            auto widthThreshold = lastSearchArea().extent().width() * 0.25;
+            auto heightThreshold = lastSearchArea().extent().height() * 0.25;
+            if (widthDiff > widthThreshold || heightDiff > heightThreshold)
+              setIsEligableForRequery(true);
           }
         }
       };
@@ -299,6 +326,16 @@ namespace Toolkit {
 
     m_queryArea = std::move(queryArea);
     emit queryAreaChanged();
+  }
+
+  Geometry SearchViewController::lastSearchArea()
+  {
+    return m_lastSearchArea;
+  }
+
+  void SearchViewController::setLastSearchArea(Geometry searchArea)
+  {
+    m_lastSearchArea = searchArea;
   }
 
   /*!
