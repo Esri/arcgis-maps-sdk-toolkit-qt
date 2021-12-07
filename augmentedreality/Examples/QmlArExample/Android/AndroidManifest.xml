@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <manifest package="com.esri.arcgisruntime.qt.qml.ar.example" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="-- %%INSERT_VERSION_NAME%% --" android:versionCode="-- %%INSERT_VERSION_CODE%% --" android:installLocation="auto">
-    <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="28"/>
+    <uses-sdk android:minSdkVersion="26" android:targetSdkVersion="28"/>
 
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
          Remove the comment if you do not require these default permissions. -->
@@ -12,6 +12,11 @@
     <uses-feature android:name="android.hardware.camera.ar" android:required="true"/>
 
     <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true"/>
+
+    <!-- required at targetSdkVersion=30 to check for arcore support -->
+    <queries>
+      <package android:name="com.google.ar.core"/>
+    </queries>
 
     <application android:hardwareAccelerated="true" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="-- %%INSERT_APP_NAME%% --" android:icon="@drawable/icon" android:extractNativeLibs="true">
         <activity android:configChanges="locale|fontScale|keyboard|keyboardHidden|layoutDirection|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|touchscreen|uiMode" android:name="org.qtproject.qt5.android.bindings.QtActivity" android:label="-- %%INSERT_APP_NAME%% --" android:screenOrientation="unspecified" android:launchMode="singleTop">
