@@ -9,6 +9,10 @@
 //
 // See the Sample code usage restrictions document for further information.
 const TOOLS = [
+                {
+                  "name": "Search View",
+                  "url": "SearchViewDemoForm.qml"
+                },
   {
     "name": "Popup View",
     "url": "PopupViewDemoForm.qml"
@@ -34,10 +38,7 @@ const TOOLS = [
     "url": "NorthArrowDemoForm.qml"
   },
 
-  {
-    "name": "Search View",
-    "url": "SearchViewDemoForm.qml"
-  },
+
   {
     "name": "Time slider",
     "url": "TimeSliderDemoForm.qml"
