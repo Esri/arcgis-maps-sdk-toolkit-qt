@@ -172,26 +172,28 @@ namespace Toolkit {
 
           if (mapView->isNavigating())
           {
-            qDebug() << lastSearchArea().extent().width() << " " << queryArea().extent().width();
+            qDebug() << "last: " << lastSearchArea().extent().width() << " current: " << queryArea().extent().width();
             // Check extent difference.
             double widthDiff = abs(queryArea().extent().width() - lastSearchArea().extent().width());
             double heightDiff = abs(queryArea().extent().width() - lastSearchArea().extent().width());
 
-            double widthThreshold = lastSearchArea().extent().width() * 2;
-            double heightThreshold = lastSearchArea().extent().height() * 2;
-            //qDebug() << widthDiff << " " << widthThreshold;
+            double widthThreshold = lastSearchArea().extent().width() * m_thresholdRatioRepeatSearch;
+            double heightThreshold = lastSearchArea().extent().height() * m_thresholdRatioRepeatSearch;
+            qDebug() << "diff: " << widthDiff << " threshold: " << widthThreshold;
             if (widthDiff > widthThreshold || heightDiff > heightThreshold)
+            {
+              qDebug() << "setting width/height true";
               setIsEligableForRequery(true);
-            //            else
-            //              qDebug() << "not enough";
+            }
             // Check center difference.
             double centerDiff = ArcGISRuntime::GeometryEngine::distance(lastSearchArea().extent().center(), queryArea().extent().center());
             double currentExtentAvg = (lastSearchArea().extent().width() + lastSearchArea().extent().height()) / 2;
-            double threshold = currentExtentAvg * 2;
+            double threshold = currentExtentAvg * m_thresholdRatioRepeatSearch;
             if (centerDiff > threshold)
+            {
+              qDebug() << "setting center true";
               setIsEligableForRequery(true);
-            //            else
-            //              qDebug() << "not enough";
+            }
           }
         }
       };
@@ -640,6 +642,16 @@ namespace Toolkit {
 
     m_isAutomaticConfigurationEnabled = isAutomaticConfigurationEnabled;
     emit isAutomaticConfigurationEnabledChanged();
+  }
+
+  double SearchViewController::thresholdRatioRepeatSearch()
+  {
+    return m_thresholdRatioRepeatSearch;
+  }
+
+  void SearchViewController::setThresholdRatioRepeatSearch(double rate)
+  {
+    m_thresholdRatioRepeatSearch = rate;
   }
 
   /*!

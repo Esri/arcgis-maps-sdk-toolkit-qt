@@ -60,6 +60,7 @@ namespace Toolkit {
     Q_PROPERTY(QAbstractListModel* suggestions READ suggestions CONSTANT)
     Q_PROPERTY(bool eligableForRequery READ isEligableForRequery WRITE setIsEligableForRequery NOTIFY isEligableForRequeryChanged)
     Q_PROPERTY(bool automaticConfigurationEnabled READ isAutomaticConfigurationEnabled WRITE setIsAutomaticConfigurationEnabled NOTIFY isAutomaticConfigurationEnabledChanged)
+    Q_PROPERTY(double thresholdRatioRepeatSearch READ thresholdRatioRepeatSearch WRITE setThresholdRatioRepeatSearch NOTIFY thresholdRatioRepeatSearchChanged)
   public:
     enum class SearchResultMode
     {
@@ -112,6 +113,9 @@ namespace Toolkit {
     bool isAutomaticConfigurationEnabled() const;
     void setIsAutomaticConfigurationEnabled(bool isAutomaticConfigurationEnabled);
 
+    double thresholdRatioRepeatSearch();
+    void setThresholdRatioRepeatSearch(double);
+
     Q_INVOKABLE void commitSearch(bool restrictToArea);
 
     Q_INVOKABLE void acceptSuggestion(SearchSuggestion* searchSuggestion);
@@ -129,6 +133,7 @@ namespace Toolkit {
     void selectedResultChanged();
     void isEligableForRequeryChanged();
     void isAutomaticConfigurationEnabledChanged();
+    void thresholdRatioRepeatSearchChanged();
 
   private:
     void onQueryChanged();
@@ -151,6 +156,7 @@ namespace Toolkit {
     Point m_queryCenter;
     Geometry m_queryArea;
     Geometry m_lastSearchArea;
+    double m_thresholdRatioRepeatSearch{0.25};
   };
 
 } // Toolkit
