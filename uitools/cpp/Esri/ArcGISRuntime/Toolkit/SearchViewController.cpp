@@ -172,17 +172,14 @@ namespace Toolkit {
 
           if (mapView->isNavigating())
           {
-            qDebug() << "last: " << lastSearchArea().extent().width() << " current: " << queryArea().extent().width();
             // Check extent difference.
             double widthDiff = abs(queryArea().extent().width() - lastSearchArea().extent().width());
             double heightDiff = abs(queryArea().extent().width() - lastSearchArea().extent().width());
 
             double widthThreshold = lastSearchArea().extent().width() * m_thresholdRatioRepeatSearch;
             double heightThreshold = lastSearchArea().extent().height() * m_thresholdRatioRepeatSearch;
-            qDebug() << "diff: " << widthDiff << " threshold: " << widthThreshold;
             if (widthDiff > widthThreshold || heightDiff > heightThreshold)
             {
-              qDebug() << "setting width/height true";
               setIsEligableForRequery(true);
             }
             // Check center difference.
@@ -191,7 +188,6 @@ namespace Toolkit {
             double threshold = currentExtentAvg * m_thresholdRatioRepeatSearch;
             if (centerDiff > threshold)
             {
-              qDebug() << "setting center true";
               setIsEligableForRequery(true);
             }
           }
@@ -475,7 +471,6 @@ namespace Toolkit {
                               {
                                 disconnect(*connection);
                                 auto extent = sceneView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
-                                qDebug() << extent.toJson();
                                 setLastSearchArea(extent);
                               });
         // Set sceneView viewpoint to where graphic is.
@@ -488,7 +483,6 @@ namespace Toolkit {
                               {
                                 disconnect(*connection);
                                 auto extent = mapView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
-                                qDebug() << extent.toJson();
                                 setLastSearchArea(extent);
                               });
         // Set mapView callout and zoom to where graphic + callout are (if applicable.)
@@ -691,7 +685,6 @@ namespace Toolkit {
                 {
                   if (results.empty())
                     return;
-                  qDebug() << "search completed";
                   auto connection = std::make_shared<QMetaObject::Connection>();
                   //connect either to a scene or a map event changedviewpoint
                   if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
@@ -700,7 +693,6 @@ namespace Toolkit {
                                           {
                                             disconnect(*connection);
                                             auto extent = mapView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
-                                            qDebug() << extent.toJson();
                                             setLastSearchArea(extent);
                                           });
                   }
@@ -743,12 +735,10 @@ namespace Toolkit {
 
                       if (auto geoView = qobject_cast<GeoView*>(m_geoView))
                       {
-                        qDebug() << "envelope";
                         const auto extent = m_graphicsOverlay->extent();
                         EnvelopeBuilder b{extent};
                         b.expandByFactor(1.2); // Give some margins to the view.
                         geoView->setViewpoint(b.toEnvelope(), 0);
-                        qDebug() << b.toEnvelope().toJson();
                       }
                     }
                   }
