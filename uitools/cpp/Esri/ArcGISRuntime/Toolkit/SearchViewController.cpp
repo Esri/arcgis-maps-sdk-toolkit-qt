@@ -696,7 +696,15 @@ namespace Toolkit {
                                             setLastSearchArea(extent);
                                           });
                   }
-                  //TODO: add the scene case
+                  else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+                  {
+                    *connection = connect(sceneView, &SceneViewToolkit::viewpointChanged, this, [mapView, connection, this]()
+                                          {
+                                            disconnect(*connection);
+                                            auto extent = mapView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
+                                            setLastSearchArea(extent);
+                                          });
+                  }
 
                   // If only one result needs be applicable, automatically accept it, otherwise,
                   // add all results to the list model.
