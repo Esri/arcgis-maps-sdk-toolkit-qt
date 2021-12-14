@@ -137,6 +137,9 @@ namespace Toolkit {
     void onSourcesAdded(const QModelIndex& parent, int firstSource, int lastSource);
     void onSourcesRemoved(const QModelIndex& parent, int firstSource, int lastSource);
 
+    bool checkPanningDifferenceLastSearch(Geometry& geom);
+    bool checkZoomingDifferenceLastSearch(Geometry& geom);
+
   private:
     QObject* m_geoView{nullptr};
     GenericListModel* m_suggestions{nullptr};

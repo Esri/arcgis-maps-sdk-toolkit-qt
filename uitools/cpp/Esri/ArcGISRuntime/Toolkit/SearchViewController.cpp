@@ -169,24 +169,11 @@ namespace Toolkit {
 
           if (geoView->isNavigating())
           {
-            // Check extent difference.
-            double widthDiff = abs(queryArea().extent().width() - m_lastSearchArea.extent().width());
-            double heightDiff = abs(queryArea().extent().height() - m_lastSearchArea.extent().height());
-
-            double widthThreshold = m_lastSearchArea.extent().width() * m_thresholdRatioRepeatSearch;
-            double heightThreshold = m_lastSearchArea.extent().height() * m_thresholdRatioRepeatSearch;
-            if (widthDiff > widthThreshold || heightDiff > heightThreshold)
-            {
+            // m_queryArea at this point is effectively the currentviewpoint geometry.
+            if (checkZoomingDifferenceLastSearch(m_queryArea))
               setIsEligableForRequery(true);
-            }
-            // Check center difference.
-            double centerDiff = ArcGISRuntime::GeometryEngine::distance(m_lastSearchArea.extent().center(), queryArea().extent().center());
-            double currentExtentAvg = (m_lastSearchArea.extent().width() + m_lastSearchArea.extent().height()) / 2;
-            double threshold = currentExtentAvg * m_thresholdRatioRepeatSearch;
-            if (centerDiff > threshold)
-            {
+            if (checkPanningDifferenceLastSearch(m_queryArea))
               setIsEligableForRequery(true);
-            }
           }
         }
       };
@@ -795,6 +782,36 @@ namespace Toolkit {
         }
       }
     }
+  }
+
+  /*!
+   * \internal
+   * \brief Compares the last search viewpoint with the \a geom and checks they are not more different than a specified panning difference.
+   * The percentage used for the check is the variable returned from \l thresholdRatioRepeatSearch
+   */
+  bool SearchViewController::checkPanningDifferenceLastSearch(Geometry& geom)
+  {
+    // Check center difference.
+    double centerDiff = ArcGISRuntime::GeometryEngine::distance(m_lastSearchArea.extent().center(), geom.extent().center());
+    double currentExtentAvg = (m_lastSearchArea.extent().width() + m_lastSearchArea.extent().height()) / 2;
+    double threshold = currentExtentAvg * m_thresholdRatioRepeatSearch;
+    return centerDiff > threshold;
+  }
+
+  /*!
+   * \internal
+   * \brief Compares the last search viewpoint with the \a geom and checks they are not more different than a specified zooming difference.
+   * The percentage used for the check the variable returned from \l thresholdRatioRepeatSearch
+   */
+  bool SearchViewController::checkZoomingDifferenceLastSearch(Geometry& geom)
+  {
+    // Check extent difference.
+    double widthDiff = abs(geom.extent().width() - m_lastSearchArea.extent().width());
+    double heightDiff = abs(geom.extent().height() - m_lastSearchArea.extent().height());
+
+    double widthThreshold = m_lastSearchArea.extent().width() * m_thresholdRatioRepeatSearch;
+    double heightThreshold = m_lastSearchArea.extent().height() * m_thresholdRatioRepeatSearch;
+    return widthDiff > widthThreshold || heightDiff > heightThreshold;
   }
 
   /*!
