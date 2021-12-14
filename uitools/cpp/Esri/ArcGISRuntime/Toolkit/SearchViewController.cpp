@@ -154,23 +154,20 @@ namespace Toolkit {
     {
       m_graphicsOverlay = new GraphicsOverlay(this);
       geoView->graphicsOverlays()->append(m_graphicsOverlay);
-    }
 
-    if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
-    {
-      auto setViewpoint = [mapView, this]
+      auto setViewpoint = [geoView, this]
       {
-        //setting the lastsearcharea with the inital geoview extent
+        //setting the lastsearcharea with the inital geoViewCast extent
         if (m_lastSearchArea.isEmpty())
-          m_lastSearchArea = mapView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry();
+          m_lastSearchArea = geoView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry();
 
         if (isAutomaticConfigurationEnabled())
         {
-          auto vp = mapView->currentViewpoint(ViewpointType::BoundingGeometry);
+          auto vp = geoView->currentViewpoint(ViewpointType::BoundingGeometry);
           setQueryCenter(vp.targetGeometry().extent().center());
           setQueryArea(vp.targetGeometry());
 
-          if (mapView->isNavigating())
+          if (geoView->isNavigating())
           {
             // Check extent difference.
             double widthDiff = abs(queryArea().extent().width() - m_lastSearchArea.extent().width());
@@ -194,37 +191,16 @@ namespace Toolkit {
         }
       };
 
-      connect(mapView, &MapViewToolkit::viewpointChanged, this, setViewpoint);
-      setViewpoint();
-    }
-    else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
-    {
-      auto setViewpoint = [sceneView, this]
+      if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
       {
-        if (m_lastSearchArea.isEmpty())
-          m_lastSearchArea = sceneView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry();
-
-        if (isAutomaticConfigurationEnabled())
-        {
-          auto vp = sceneView->currentViewpoint(ViewpointType::BoundingGeometry);
-          setQueryCenter(vp.targetGeometry().extent().center());
-          setQueryArea(vp.targetGeometry());
-
-          if (sceneView->isNavigating())
-          {
-            auto widthDiff = queryArea().extent().width() - m_lastSearchArea.extent().width();
-            auto heightDiff = queryArea().extent().height() - m_lastSearchArea.extent().height();
-
-            auto widthThreshold = m_lastSearchArea.extent().width() * 0.25;
-            auto heightThreshold = m_lastSearchArea.extent().height() * 0.25;
-            if (widthDiff > widthThreshold || heightDiff > heightThreshold)
-              setIsEligableForRequery(true);
-          }
-        }
-      };
-
-      connect(sceneView, &SceneViewToolkit::viewpointChanged, this, setViewpoint);
-      setViewpoint();
+        connect(mapView, &MapViewToolkit::viewpointChanged, this, setViewpoint);
+        setViewpoint();
+      }
+      else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+      {
+        connect(sceneView, &SceneViewToolkit::viewpointChanged, this, setViewpoint);
+        setViewpoint();
+      }
     }
 
     emit geoViewChanged();
@@ -688,10 +664,10 @@ namespace Toolkit {
                   }
                   else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
                   {
-                    *connection = connect(sceneView, &SceneViewToolkit::viewpointChanged, this, [mapView, connection, this]()
+                    *connection = connect(sceneView, &SceneViewToolkit::viewpointChanged, this, [sceneView, connection, this]()
                                           {
                                             disconnect(*connection);
-                                            auto extent = mapView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
+                                            auto extent = sceneView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
                                             m_lastSearchArea = extent;
                                           });
                   }
