@@ -611,7 +611,11 @@ namespace Toolkit {
 
   void SearchViewController::setThresholdRatioRepeatSearch(double rate)
   {
+    if (m_thresholdRatioRepeatSearch == rate)
+      return;
+
     m_thresholdRatioRepeatSearch = rate;
+    emit thresholdRatioRepeatSearchChanged();
   }
 
   /*!
