@@ -161,8 +161,8 @@ namespace Toolkit {
       auto setViewpoint = [mapView, this]
       {
         //setting the lastsearcharea with the inital geoview extent
-        if (lastSearchArea().isEmpty())
-          setLastSearchArea(mapView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry());
+        if (m_lastSearchArea.isEmpty())
+          m_lastSearchArea = mapView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry();
 
         if (isAutomaticConfigurationEnabled())
         {
@@ -173,18 +173,18 @@ namespace Toolkit {
           if (mapView->isNavigating())
           {
             // Check extent difference.
-            double widthDiff = abs(queryArea().extent().width() - lastSearchArea().extent().width());
-            double heightDiff = abs(queryArea().extent().height() - lastSearchArea().extent().height());
+            double widthDiff = abs(queryArea().extent().width() - m_lastSearchArea.extent().width());
+            double heightDiff = abs(queryArea().extent().height() - m_lastSearchArea.extent().height());
 
-            double widthThreshold = lastSearchArea().extent().width() * m_thresholdRatioRepeatSearch;
-            double heightThreshold = lastSearchArea().extent().height() * m_thresholdRatioRepeatSearch;
+            double widthThreshold = m_lastSearchArea.extent().width() * m_thresholdRatioRepeatSearch;
+            double heightThreshold = m_lastSearchArea.extent().height() * m_thresholdRatioRepeatSearch;
             if (widthDiff > widthThreshold || heightDiff > heightThreshold)
             {
               setIsEligableForRequery(true);
             }
             // Check center difference.
-            double centerDiff = ArcGISRuntime::GeometryEngine::distance(lastSearchArea().extent().center(), queryArea().extent().center());
-            double currentExtentAvg = (lastSearchArea().extent().width() + lastSearchArea().extent().height()) / 2;
+            double centerDiff = ArcGISRuntime::GeometryEngine::distance(m_lastSearchArea.extent().center(), queryArea().extent().center());
+            double currentExtentAvg = (m_lastSearchArea.extent().width() + m_lastSearchArea.extent().height()) / 2;
             double threshold = currentExtentAvg * m_thresholdRatioRepeatSearch;
             if (centerDiff > threshold)
             {
@@ -201,8 +201,8 @@ namespace Toolkit {
     {
       auto setViewpoint = [sceneView, this]
       {
-        if (lastSearchArea().isEmpty())
-          setLastSearchArea(sceneView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry());
+        if (m_lastSearchArea.isEmpty())
+          m_lastSearchArea = sceneView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry();
 
         if (isAutomaticConfigurationEnabled())
         {
@@ -212,11 +212,11 @@ namespace Toolkit {
 
           if (sceneView->isNavigating())
           {
-            auto widthDiff = queryArea().extent().width() - lastSearchArea().extent().width();
-            auto heightDiff = queryArea().extent().height() - lastSearchArea().extent().height();
+            auto widthDiff = queryArea().extent().width() - m_lastSearchArea.extent().width();
+            auto heightDiff = queryArea().extent().height() - m_lastSearchArea.extent().height();
 
-            auto widthThreshold = lastSearchArea().extent().width() * 0.25;
-            auto heightThreshold = lastSearchArea().extent().height() * 0.25;
+            auto widthThreshold = m_lastSearchArea.extent().width() * 0.25;
+            auto heightThreshold = m_lastSearchArea.extent().height() * 0.25;
             if (widthDiff > widthThreshold || heightDiff > heightThreshold)
               setIsEligableForRequery(true);
           }
@@ -329,16 +329,6 @@ namespace Toolkit {
 
     m_queryArea = std::move(queryArea);
     emit queryAreaChanged();
-  }
-
-  Geometry SearchViewController::lastSearchArea()
-  {
-    return m_lastSearchArea;
-  }
-
-  void SearchViewController::setLastSearchArea(Geometry searchArea)
-  {
-    m_lastSearchArea = searchArea;
   }
 
   /*!
@@ -471,7 +461,7 @@ namespace Toolkit {
                               {
                                 disconnect(*connection);
                                 auto extent = sceneView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
-                                setLastSearchArea(extent);
+                                m_lastSearchArea = extent;
                               });
         // Set sceneView viewpoint to where graphic is.
         sceneView->setViewpoint(m_selectedResult->selectionViewpoint(), 0);
@@ -483,7 +473,7 @@ namespace Toolkit {
                               {
                                 disconnect(*connection);
                                 auto extent = mapView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
-                                setLastSearchArea(extent);
+                                m_lastSearchArea = extent;
                               });
         // Set mapView callout and zoom to where graphic + callout are (if applicable.)
         mapView->calloutData()->setTitle(m_selectedResult->displayTitle());
@@ -693,7 +683,7 @@ namespace Toolkit {
                                           {
                                             disconnect(*connection);
                                             auto extent = mapView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
-                                            setLastSearchArea(extent);
+                                            m_lastSearchArea = extent;
                                           });
                   }
                   else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
@@ -702,7 +692,7 @@ namespace Toolkit {
                                           {
                                             disconnect(*connection);
                                             auto extent = mapView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
-                                            setLastSearchArea(extent);
+                                            m_lastSearchArea = extent;
                                           });
                   }
 

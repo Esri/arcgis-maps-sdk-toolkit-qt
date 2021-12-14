@@ -89,9 +89,6 @@ namespace Toolkit {
     Geometry queryArea() const;
     void setQueryArea(Geometry queryArea);
 
-    Geometry lastSearchArea();
-    void setLastSearchArea(Geometry);
-
     Point queryCenter() const;
     void setQueryCenter(Point queryCenter);
 
