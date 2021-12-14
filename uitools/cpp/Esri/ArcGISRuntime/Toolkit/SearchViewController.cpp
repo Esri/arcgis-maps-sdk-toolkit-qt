@@ -174,7 +174,7 @@ namespace Toolkit {
           {
             // Check extent difference.
             double widthDiff = abs(queryArea().extent().width() - lastSearchArea().extent().width());
-            double heightDiff = abs(queryArea().extent().width() - lastSearchArea().extent().width());
+            double heightDiff = abs(queryArea().extent().height() - lastSearchArea().extent().height());
 
             double widthThreshold = lastSearchArea().extent().width() * m_thresholdRatioRepeatSearch;
             double heightThreshold = lastSearchArea().extent().height() * m_thresholdRatioRepeatSearch;
@@ -213,7 +213,7 @@ namespace Toolkit {
           if (sceneView->isNavigating())
           {
             auto widthDiff = queryArea().extent().width() - lastSearchArea().extent().width();
-            auto heightDiff = queryArea().extent().width() - lastSearchArea().extent().width();
+            auto heightDiff = queryArea().extent().height() - lastSearchArea().extent().height();
 
             auto widthThreshold = lastSearchArea().extent().width() * 0.25;
             auto heightThreshold = lastSearchArea().extent().height() * 0.25;
