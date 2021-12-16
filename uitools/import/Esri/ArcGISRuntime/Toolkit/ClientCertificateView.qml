@@ -23,7 +23,7 @@ import Qt.labs.platform 1.1 as P
 Dialog {
     id: clientCertificateView
     property AuthenticationController controller: AuthenticationController {}
-    
+
     title: qsTr("Client certificate requested")
 
     closePolicy: Popup.NoAutoClose

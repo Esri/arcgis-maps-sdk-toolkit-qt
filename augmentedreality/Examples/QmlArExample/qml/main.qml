@@ -205,7 +205,7 @@ ApplicationWindow {
         onStreetsSceneClicked: changeScene("qrc:/qml/scenes/StreetsScene.qml", streetsSceneFactor, false);
         onImagerySceneClicked: changeScene("qrc:/qml/scenes/ImageryScene.qml", imagerySceneFactor, false);
 
-        readonly property double pointCloundSceneFactor: 0.0001        
+        readonly property double pointCloundSceneFactor: 0.0001
         readonly property double brestSceneFactor: 0.00001
         readonly property double berlinSceneFactor: 0.0001
         readonly property double tabletopTestSceneFactor: 0.0000001

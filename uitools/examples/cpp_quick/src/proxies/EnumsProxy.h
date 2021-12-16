@@ -22,7 +22,7 @@ public:
   Q_INVOKABLE explicit EnumsProxy(QObject* parent = nullptr);
   ~EnumsProxy() override;
 
-  enum class LoadStatus 
+  enum class LoadStatus
   {
     LoadStatusLoaded = static_cast<int>(Esri::ArcGISRuntime::LoadStatus::Loaded),
     LoadStatusLoading = static_cast<int>(Esri::ArcGISRuntime::LoadStatus::Loading),

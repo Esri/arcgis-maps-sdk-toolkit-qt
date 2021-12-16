@@ -38,7 +38,7 @@ namespace
 constexpr double DEFAULT_ZOOM_TO_DISTANCE = 1500.0;
 }
 
-/*!  
+/*!
   \class Esri::ArcGISRuntime::Toolkit::CoordinateConversionController
   \ingroup ArcGISQtToolkitUiCppControllers
   \inmodule EsriArcGISRuntimeToolkit
@@ -46,7 +46,7 @@ constexpr double DEFAULT_ZOOM_TO_DISTANCE = 1500.0;
   \brief In MVC architecture, this is the controller for the corresponding
   \c CoordinateConversion view.
 
-  
+
   A \c CoordinateConversionController stores a single point, and \c 0 or more
   textual representations of this point in a variety of user-defined formats.
 
@@ -54,9 +54,9 @@ constexpr double DEFAULT_ZOOM_TO_DISTANCE = 1500.0;
   for:
 
   \list
-    \li The controller to zoom to the point's location on the GeoView. 
-    \li The user to select the point with a mouse-event on the GeoView. 
-    \li The controller to calculate the screen coordinate of the current 
+    \li The controller to zoom to the point's location on the GeoView.
+    \li The user to select the point with a mouse-event on the GeoView.
+    \li The controller to calculate the screen coordinate of the current
         point relative to the window containing the GeoView.
   \endlist
  */
@@ -130,13 +130,13 @@ QObject* CoordinateConversionController::geoView() const
 
 /*!
   \brief Set the GeoView object this Controller uses.
-  
+
   Internally this is cast to a \c MapView or \c SceneView using \c qobject_cast,
   which is why the paremeter is of form \c QObject and not \c GeoView.
-  
+
   \list
-    \li \a geoView \c Object which must inherit from \c{GeoView*} and 
-        \c{QObject*}. 
+    \li \a geoView \c Object which must inherit from \c{GeoView*} and
+        \c{QObject*}.
   \endlist
  */
 void CoordinateConversionController::setGeoView(QObject* geoView)
@@ -209,14 +209,14 @@ void CoordinateConversionController::setCurrentPoint(const Point& point)
   \brief Set the current point to point. Point is a string which will be
   converted as defined by the formatting hints given in option. This updates
   all textual representations owned by this controller.
- 
+
   The \c SpatialReference is taken from the \c GeoView.
-   
+
   If conversion fails this function is treated as a no-op.
-   
+
   \list
-    \li \a point string representation of point. 
-    \li \a option Option dictating hints on how to convert the string to a 
+    \li \a point string representation of point.
+    \li \a option Option dictating hints on how to convert the string to a
     point.
   \endlist
  */
@@ -234,13 +234,13 @@ void CoordinateConversionController::setCurrentPoint(
   \brief Set the current point to \a point. \a point is a string which will be
   converted as defined by the formatting hints given in option. This updates
   all textual representations owned by this controller.
-  
+
   If conversion fails this function is treated as a no-op.
-  
+
   \list
-    \li \a point string representation of point. 
+    \li \a point string representation of point.
     \li \a spatialReference An explicit SpatialReference for conversion.
-    \li \a option Option dictating hints on how to convert the string to a 
+    \li \a option Option dictating hints on how to convert the string to a
         \c Point.
   \endlist
  */
@@ -258,10 +258,10 @@ void CoordinateConversionController::setCurrentPoint(
 }
 
 /*!
-  \brief Converts the current point held by this controller as a 2D point 
+  \brief Converts the current point held by this controller as a 2D point
   relative to the current window.
-  
-  Returns the point returned by currentPoint as a screen coordinate. 
+
+  Returns the point returned by currentPoint as a screen coordinate.
  */
 QPointF CoordinateConversionController::screenCoordinate() const
 {
@@ -304,9 +304,9 @@ Point CoordinateConversionController::currentPoint() const
 
 /*!
   \brief Returns the known list of available coordinate conversion formats which
-  can be consumed to generate different textual representations of the same 
+  can be consumed to generate different textual representations of the same
   point.
-  
+
   Internally, this is a \c GenericListModel with an \c elementType of
   \c CoordinateConversionOption.
  */
@@ -318,8 +318,8 @@ GenericListModel* CoordinateConversionController::coordinateFormats() const
 /*!
   \brief Returns the list of textual representations of the current point in
   different formats.
-  
-  Internally, this is a \c GenericListModel with an \c elementType of 
+
+  Internally, this is a \c GenericListModel with an \c elementType of
   \c CoordinateConversionResult.
  */
 GenericListModel* CoordinateConversionController::conversionResults() const
@@ -330,7 +330,7 @@ GenericListModel* CoordinateConversionController::conversionResults() const
 /*!
  \brief Updates the \c GeoView camera to point to the current point's
  location on the map.
- 
+
  \sa zoomToDistance
  */
 void CoordinateConversionController::zoomToCurrentPoint()
@@ -351,11 +351,11 @@ void CoordinateConversionController::zoomToCurrentPoint()
 
 /*!
   \brief Given option, generates a new result.
-  
+
   A new \c CoordinateConversionResult is added to the list-model returned by
   coordinateResults. This result is tied to the conversion parameters as
   given by option.
-  
+
   \list
   \li \a option option to generate result for.
   \endlist
@@ -370,10 +370,10 @@ void CoordinateConversionController::addNewCoordinateResultForOption(CoordinateC
 
 /*!
  * \brief Removes a given \c CoordinateConversionResult at index.
- * 
+ *
  * This function is for deleting results in the list-model returned by
  * coordinateResults.
- * 
+ *
  * \list
  *   \li \a index index of a given CoordinateConversionResult in the list-model
  *       returned by coordinateResults.
@@ -387,17 +387,17 @@ void CoordinateConversionController::removeCoordinateResultAtIndex(int index)
 /*!
   \brief Distance between camera and current point when \c zoomToCurrentPoint
   is invoked.
-  
+
   If \c geoView is a \c SceneView, then this value represents the distance
-  between the camera and the point returned by \c currentPoint when 
+  between the camera and the point returned by \c currentPoint when
   \c zoomToCurrentPoint is called.
-  
+
   If \c geoView is a \c MapView, this value has no effect on zoom calculations.
-  
+
   The distance is in the units of the \c GeoView \c SpatialReference.
-  
+
   Defaults to 1500.
-  
+
   Returns distance between current point and viewpoint camera.
  */
 double CoordinateConversionController::zoomToDistance() const
@@ -409,7 +409,7 @@ double CoordinateConversionController::zoomToDistance() const
   \brief Set the \c zoomToDistance.
   \sa zoomToDistance
   \list
-  \li \a distance distance value in the units of the \c GeoView 
+  \li \a distance distance value in the units of the \c GeoView
       \c SpatialReference.
   \endlist
  */
@@ -425,12 +425,12 @@ void CoordinateConversionController::setZoomToDistance(double distance)
 /*!
   \brief Returns whether this controller is actively listening for mouse
   events.
-  
+
   When listening for mouse events, this controller will update the
   current point to whatever point is returned by a click event on the
   \c GeoView.
-  
-  Returns true if this controller is listening to mouse events on the \c 
+
+  Returns true if this controller is listening to mouse events on the \c
   GeoView.
  */
 bool CoordinateConversionController::inPickingMode() const
@@ -458,12 +458,12 @@ void CoordinateConversionController::setInPickingMode(bool mode)
   emit inPickingModeChanged();
 }
 
-/*! 
+/*!
   \fn void Esri::ArcGISRuntime::Toolkit::CoordinateConversionController::geoViewChanged()
   \brief Emitted when the geoView has changed.
  */
 
-/*! 
+/*!
   \fn void Esri::ArcGISRuntime::Toolkit::CoordinateConversionController::currentPointChanged(const Esri::ArcGISRuntime::Point& point)
   \brief Emitted when the currentPoint has changed. \a point represents the new point.
  */

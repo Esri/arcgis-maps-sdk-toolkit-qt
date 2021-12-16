@@ -21,10 +21,10 @@
 #  include <MapGraphicsView.h>
 #  include <SceneGraphicsView.h>
 
-namespace Esri 
-{ 
+namespace Esri
+{
 namespace ArcGISRuntime
-{ 
+{
 namespace Toolkit
 {
     using SceneViewToolkit = SceneGraphicsView;
@@ -33,16 +33,16 @@ namespace Toolkit
 } // ArcGISRuntime
 } // Esri
 
-#else 
+#else
 
 #  include <MapQuickView.h>
 #  include <SceneQuickView.h>
 
-namespace Esri 
-{ 
+namespace Esri
+{
 namespace ArcGISRuntime
-{ 
-namespace Toolkit 
+{
+namespace Toolkit
 {
   using SceneViewToolkit = SceneQuickView;
   using MapViewToolkit = MapQuickView;

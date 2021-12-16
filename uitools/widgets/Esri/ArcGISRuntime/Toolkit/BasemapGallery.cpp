@@ -89,12 +89,12 @@ namespace Toolkit {
 
   /*!
     \brief Sets the \a geomodel used by the controller.
-    
+
     Setting this will reset the active basemap in the gallery. When a new basemap
     item is selected from the gallery, the GeoModel will be updated with the associated
     basemap.
     \note If \a geomodel is passed as \c nullptr, the current geomodel is unset.
-    \sa BasemapGalleryController::currentBasemap    
+    \sa BasemapGalleryController::currentBasemap
    */
   void BasemapGallery::setGeoModel(GeoModel* geomodel)
   {

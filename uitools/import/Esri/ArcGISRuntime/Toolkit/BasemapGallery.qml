@@ -111,7 +111,7 @@ Pane {
     /*!
        \qmlproperty bool allowTooltips
        \brief When this property is true, mouse-hover tooltips are enabled for gallery items.
-       
+
        Defaults to \c{true}.
      */
     property bool allowTooltips: true

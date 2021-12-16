@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
   QQmlApplicationEngine appEngine;
   appEngine.addImportPath(QDir(QCoreApplication::applicationDirPath()).filePath("qml"));
 
-  QString arcGISRuntimeImportPath = QUOTE(ARCGIS_RUNTIME_IMPORT_PATH);  
+  QString arcGISRuntimeImportPath = QUOTE(ARCGIS_RUNTIME_IMPORT_PATH);
 
 #if defined(LINUX_PLATFORM_REPLACEMENT)
   // On some Linux platforms the string 'linux' is replaced with 1
@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
 #endif
 
   // Add the Runtime and Extras paths
-  appEngine.addImportPath(arcGISRuntimeImportPath);  
+  appEngine.addImportPath(arcGISRuntimeImportPath);
 
   appEngine.load(QUrl(kApplicationSourceUrl));
 

@@ -85,7 +85,7 @@ public:
 
   Q_INVOKABLE bool clear();
 
-  template <typename T>  
+  template <typename T>
   T* element(const QModelIndex& index) const
   {
     static_assert(std::is_base_of<QObject, T>::value, "Must inherit QObject");

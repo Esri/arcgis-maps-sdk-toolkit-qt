@@ -33,7 +33,7 @@ namespace Toolkit
   \class Esri::ArcGISRuntime::Toolkit::CoordinateConversionResult
   \inmodule EsriArcGISRuntimeToolkit
   \brief A \c CoordinateConversionResult stores the textual representation of a
-  a point converted to a string using the formatting given in a 
+  a point converted to a string using the formatting given in a
   \c CoordinateConversionOption.
   \sa Esri::ArcGISRuntime::Toolkit::CoordinateConversionOption
  */
@@ -82,7 +82,7 @@ CoordinateConversionOption* CoordinateConversionResult::type() const
 }
 
 /*!
-  \brief Set the \c CoordinateConversionOption used to format results to 
+  \brief Set the \c CoordinateConversionOption used to format results to
   \a type.
   \note Setting this clears the currently set notation string to a blank
   string.
@@ -160,17 +160,17 @@ void CoordinateConversionResult::copyNotationToClipboard() const
     clipboard->setText(m_notation);
 }
 
-/*! 
+/*!
   \fn void Esri::ArcGISRuntime::Toolkit::CoordinateConversionResult::nameChanged()
-  \brief Emitted when the type changes or type name changes. 
+  \brief Emitted when the type changes or type name changes.
  */
 
-/*! 
+/*!
   \fn void Esri::ArcGISRuntime::Toolkit::CoordinateConversionResult::notationChanged()
   \brief Emitted when the notation string changes.
  */
 
-/*! 
+/*!
   \fn void Esri::ArcGISRuntime::Toolkit::CoordinateConversionResult::typeChanged()
   \brief Emitted when the type changes.
  */
