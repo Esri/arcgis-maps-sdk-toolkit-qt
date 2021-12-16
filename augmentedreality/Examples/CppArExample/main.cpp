@@ -122,7 +122,7 @@ int main(int argc, char *argv[])
 #endif
 
   // Add the Runtime and Extras path
-  engine.addImportPath(arcGISRuntimeImportPath);  
+  engine.addImportPath(arcGISRuntimeImportPath);
 
   // Set the source
   engine.load(QUrl(kApplicationSourceUrl));

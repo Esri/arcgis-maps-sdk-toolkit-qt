@@ -41,7 +41,7 @@ SOURCES += $$WIDGETPATH/AuthenticationView.cpp \
            $$WIDGETPATH/OverviewMap.cpp \
            $$WIDGETPATH/Internal/ClientCertificatePasswordDialog.cpp \
            $$WIDGETPATH/Internal/ClientCertificateView.cpp \
-           $$WIDGETPATH/Internal/CoordinateEditDelegate.cpp \ 
+           $$WIDGETPATH/Internal/CoordinateEditDelegate.cpp \
            $$WIDGETPATH/Internal/Flash.cpp \
            $$WIDGETPATH/Internal/OAuth2View.cpp \
            $$WIDGETPATH/Internal/SslHandshakeView.cpp \

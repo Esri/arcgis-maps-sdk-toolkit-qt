@@ -30,7 +30,7 @@ TEMPLATE = app
 TARGET = calite_test
 
 equals(QT_MAJOR_VERSION, 5) {
-    lessThan(QT_MINOR_VERSION, 15) { 
+    lessThan(QT_MINOR_VERSION, 15) {
         error("$$TARGET requires Qt 5.15.2")
     }
 	equals(QT_MINOR_VERSION, 15) : lessThan(QT_PATCH_VERSION, 2) {

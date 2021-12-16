@@ -100,7 +100,7 @@ MapView {
         geoView: mapView
     }
 }
-``` 
+```
 ## toolkitcpp.pri (C++ QtQuick)
 
 #### Importing the toolkit (toolkitcpp.pri)

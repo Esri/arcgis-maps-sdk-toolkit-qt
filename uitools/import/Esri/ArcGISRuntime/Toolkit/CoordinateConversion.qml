@@ -52,7 +52,7 @@ Pane {
     /*!
        \qmlproperty bool inInputMode
        \brief Whether whether the tool is in input mode.
-      
+
        If \c true, the tool will convert a point set via a mouse click or text entry.
      */
     readonly property bool inInputMode: editCoordinateButton.checked || captureModeButton.checked

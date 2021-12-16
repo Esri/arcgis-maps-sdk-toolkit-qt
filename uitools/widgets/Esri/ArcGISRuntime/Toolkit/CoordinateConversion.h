@@ -36,11 +36,11 @@ class SceneGraphicsView;
 
 namespace Toolkit
 {
-  
+
 class CoordinateConversionController;
 class Flash;
 
-class CoordinateConversion : public QFrame 
+class CoordinateConversion : public QFrame
 {
   Q_OBJECT
 public:

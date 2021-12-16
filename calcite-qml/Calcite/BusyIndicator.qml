@@ -39,7 +39,7 @@ T.BusyIndicator {
             color: Calcite.brand
             width: rects.rectWidth
             height: rects.rectHeight
-            anchors { 
+            anchors {
                 left: parent.left
                 verticalCenter: parent.verticalCenter
             }
@@ -69,7 +69,7 @@ T.BusyIndicator {
             width: rects.rectWidth
             height: rects.rectHeight
             color: Calcite.brand
-            anchors { 
+            anchors {
                 right: parent.right
                 verticalCenter: parent.verticalCenter
             }

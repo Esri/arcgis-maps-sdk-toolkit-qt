@@ -38,8 +38,8 @@ HEADERS += $$CPPPATH/AuthenticationController.h \
            $$CPPPATH/SearchResult.h \
            $$CPPPATH/SearchSourceInterface.h \
            $$CPPPATH/SearchSuggestion.h \
-           $$CPPPATH/SearchViewController.h \  
-           $$CPPPATH/SmartLocatorSearchSource.h \        
+           $$CPPPATH/SearchViewController.h \
+           $$CPPPATH/SmartLocatorSearchSource.h \
            $$CPPPATH/TimeSliderController.h
 
 SOURCES += $$CPPPATH/AuthenticationController.cpp \
@@ -62,6 +62,6 @@ SOURCES += $$CPPPATH/AuthenticationController.cpp \
            $$CPPPATH/SearchResult.cpp \
            $$CPPPATH/SearchSourceInterface.cpp \
            $$CPPPATH/SearchSuggestion.cpp \
-           $$CPPPATH/SearchViewController.cpp \  
-           $$CPPPATH/SmartLocatorSearchSource.cpp \   
+           $$CPPPATH/SearchViewController.cpp \
+           $$CPPPATH/SmartLocatorSearchSource.cpp \
            $$CPPPATH/TimeSliderController.cpp

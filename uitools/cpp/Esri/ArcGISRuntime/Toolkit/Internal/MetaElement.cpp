@@ -24,40 +24,40 @@ namespace Toolkit
 
 /*!
   \internal
-  
+
   \inmodule EsriArcGISRuntimeToolkit
   \class Esri::ArcGISRuntime::Toolkit::MetaElement
 
-  \brief The \c MetaElement is an implementation detail of \c GenericListModel 
+  \brief The \c MetaElement is an implementation detail of \c GenericListModel
   that deals with helping the model emit dataChanged signals when a property
   updates.
-   
+
   A \c MetaElement tracks an object in the \c GenericListModel, and updates for
   the given stored index/role fields when the \c propertyChanged signal is
   called.
-   
+
   Qt connection functions do not allow for connecting a lambda to a
   \c QMetaMethod. This object takes the role of a lambda to track state
   information that needs triggered on a property changed signal.
-   
+
   \sa Esri::ArcGISRuntime::Toolkit::GenericListModel
  */
 
 /*!
   \brief Constructs a new \c MetaElement.
-  
+
   \list
   \li \a index When emitDataChanged is called, this is the index used to
   trigger a dataChanged signal on the parent GenericListModel. This is stored
   internally as a QPersistentModelIndex so the index is correctly tracked.
-  
+
   \li \a customRole When emitDataChanged is called, this is the role enum
   used to trigger a dataChanged signal on the parent GenericListModel.
   Qt::UserRole is always emitted along with this role.
-       
+
   \li \a trackedObject This is the associated element in the GenericListModel
   which we are tracking.
-  
+
   \li \a parent The parent ListModel.
   \endlist
  */
@@ -91,10 +91,10 @@ void MetaElement::emitDataChanged()
 /*!
   \fn void Esri::ArcGISRuntime::Toolkit::MetaElement::propertyChanged()
   \brief Signal that when called will trigger the \c emitDataChanged slot.
-  
+
   In reality this signal takes on the role of a slot as it is invoked by the
   tracked object's property's notify signal.
-  
+
   This is due to the fact that there is QMetaMethod::fromSignal method but
   no slot equivalent, so this signal takes on the role of a slot for
   \c QMetaMethod connection purposes.

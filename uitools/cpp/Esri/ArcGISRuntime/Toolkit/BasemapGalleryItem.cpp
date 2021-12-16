@@ -194,7 +194,7 @@ void BasemapGalleryItem::setBasemap(Basemap* basemap)
       doFetch();
     }
   }
-  emit basemapChanged(); 
+  emit basemapChanged();
 }
 
 
@@ -263,7 +263,7 @@ QString BasemapGalleryItem::tooltip() const
     if (auto item = m_basemap->item())
     {
       return item->description();
-    }  
+    }
   }
 
   return m_tooltip;
