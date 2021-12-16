@@ -19,7 +19,6 @@
 
 #include <QMetaProperty>
 #include <QPointer>
-
 namespace Esri {
 namespace ArcGISRuntime {
 namespace Toolkit {
@@ -87,8 +86,6 @@ namespace Toolkit {
  a constructor of form \c{Q_INVOKABLE Foo(QObject* parent = nullptr)}.
  An ElementType that does not have this form of constructor will trigger
  undefined behaviour when insertRows is called.
- 
- \sa Esri::ArcGISRuntime::Toolkit::GenericTableProxyModel
  */
 
   /*!
@@ -119,7 +116,7 @@ namespace Toolkit {
 
     // We connect to our own `dataChanged` signal. We test to see if the properties
     // that are updating are also the same properties associated with our
-    // Qt::DisplayRole and Qt::EditRole. If so then we need to emit dataChanged
+    // Qt::DisplayRole and Qt::EditRole or Qt::DecorationRole or Qt::ToolTipRole. If so then we need to emit dataChanged
     // for these roles as well if they are not already emitting.
     connect(this, &GenericListModel::dataChanged, this,
             [this](const QModelIndex& topLeft, const QModelIndex& bottomRight,
@@ -137,6 +134,10 @@ namespace Toolkit {
               const auto offset = m_elementType->propertyOffset();
               if (roles.contains(m_displayPropIndex - offset + Qt::UserRole + 1))
                 emit dataChanged(topLeft, bottomRight, QVector<int>() << Qt::DisplayRole << Qt::EditRole);
+              if (roles.contains(m_decorationPropIndex - offset + Qt::UserRole + 1))
+                emit dataChanged(topLeft, bottomRight, QVector<int>() << Qt::DecorationRole);
+              if (roles.contains(m_tooltipPropIndex - offset + Qt::UserRole + 1))
+                emit dataChanged(topLeft, bottomRight, QVector<int>() << Qt::ToolTipRole);
             });
   }
 
@@ -199,9 +200,21 @@ namespace Toolkit {
       const auto property = m_elementType->property(m_displayPropIndex);
       return property.read(o);
     }
+    else if (role == Qt::DecorationRole)
+    {
+      const auto property = m_elementType->property(m_decorationPropIndex);
+      auto p = property.read(o);
+      return p;
+    }
+    else if (role == Qt::ToolTipRole)
+    {
+      const auto property = m_elementType->property(m_tooltipPropIndex);
+      auto p = property.read(o);
+      return p;
+    }
     else if (role == Qt::UserRole)
     {
-      return QVariant::fromValue<QObject*>(o);
+      return QVariant::fromValue(o);
     }
     else if (role >= Qt::UserRole)
     {
@@ -254,7 +267,7 @@ namespace Toolkit {
     else if (role == Qt::UserRole)
     {
       auto newObject = qvariant_cast<QObject*>(value);
-      if (newObject && m_elementType == newObject->metaObject())
+      if (newObject && newObject->metaObject()->inherits(m_elementType))
       {
         m_objects[index.row()] = newObject;
         emit dataChanged(index, index);
@@ -411,10 +424,11 @@ namespace Toolkit {
       auto o = m_objects.at(i);
 
       // Ensure additional removal signals are not triggered.
-      if (o)
+      if (o && o->parent() == this)
+      {
         disconnect(o, &QObject::destroyed, this, nullptr);
-
-      delete o;
+        delete o;
+      }
 
       m_objects.removeAt(i);
     }
@@ -439,10 +453,11 @@ namespace Toolkit {
     for (auto o : m_objects)
     {
       // Ensure additional removal signals are not triggered.
-      if (o)
+      if (o && o->parent() == this)
+      {
         disconnect(o, &QObject::destroyed, this, nullptr);
-
-      delete o;
+        delete o;
+      }
     }
     m_objects.clear();
     m_elementType = metaObject;
@@ -480,18 +495,55 @@ namespace Toolkit {
     m_displayPropIndex = m_elementType->indexOfProperty(propertyName.toLatin1());
   }
 
+  void GenericListModel::setDecorationPropertyName(const QString& propertyName)
+  {
+    m_decorationPropIndex = m_elementType->indexOfProperty(propertyName.toLatin1());
+  }
+
+  void GenericListModel::setTooltipPropertyName(const QString& propertyName)
+  {
+    m_tooltipPropIndex = m_elementType->indexOfProperty(propertyName.toLatin1());
+  }
   /*!
   \brief Returns the name of the property which has been elevated to be used
   as the \c Qt::DisplayRole and Qt::EditRole in this model.
   
   Returns name of property.
-  */
+ */
   QString GenericListModel::displayPropertyName()
   {
     if (m_displayPropIndex < 0)
       return "";
 
     return m_elementType->property(m_displayPropIndex).name();
+  }
+
+  /*!
+  \brief Returns the name of the property which has been elevated to be used
+  as the \c Qt::DecorationRole in this model.
+  
+  Returns name of property.
+ */
+  QString GenericListModel::decorationPropertyName()
+  {
+    if (m_decorationPropIndex < 0)
+      return "";
+
+    return m_elementType->property(m_decorationPropIndex).name();
+  }
+
+  /*!
+  \brief Returns the name of the property which has been elevated to be used
+  as the \c Qt::ToolTipRole in this model.
+  
+  Returns name of property.
+ */
+  QString GenericListModel::tooltipPropertyName()
+  {
+    if (m_tooltipPropIndex < 0)
+      return "";
+
+    return m_elementType->property(m_tooltipPropIndex).name();
   }
 
   /*!
@@ -514,7 +566,7 @@ namespace Toolkit {
     if (!object)
       return false;
 
-    if (object->metaObject() != m_elementType)
+    if (!object->metaObject()->inherits(m_elementType))
       return false;
 
     auto i = rowCount();
@@ -550,7 +602,7 @@ namespace Toolkit {
     {
       if (!o)
         return false;
-      else if (o->metaObject() != m_elementType)
+      else if (!o->metaObject()->inherits(m_elementType))
         return false;
     }
 
@@ -588,7 +640,7 @@ namespace Toolkit {
 
     QObject* object = m_objects.at(index.row());
 
-    if (!object || object->metaObject() != m_elementType)
+    if (!object || !object->metaObject()->inherits(m_elementType))
       return;
 
     // If object is deleted externally we remove from the model.
@@ -668,6 +720,54 @@ namespace Toolkit {
     else
       return "";
   }
+
+    /*!
+  \brief Overridden \l QAbstractListModel function. Returns the \l Qt::ItemFlags for each item in the list.
+
+  If \l setFlagsCallback is set, Qt::ItemsFlags are returned from the call-back. Otherwise, the default \l QAbstractListModel::flags will be called.
+  Flags returned are used from the \l QListView to apply visual properties.
+
+  \list
+  \li \a index Index of item
+  \endlist
+  \sa Qt::ItemFlags QFlags
+  */
+  Qt::ItemFlags GenericListModel::flags(const QModelIndex& index) const
+  {
+    if (m_flagsCallback)
+      return m_flagsCallback(index);
+    // call default base class .flags()
+    return QAbstractItemModel::flags(index);
+  }
+
+  QObject* GenericListModel::element(const QModelIndex& index)
+  {
+    return qvariant_cast<QObject*>(data(index, Qt::UserRole));
+  }
+
+  bool GenericListModel::clear()
+  {
+    return removeRows(0, count());
+  }
+
+  /*!
+   \typedef Esri::ArcGISRuntime::Toolkit::GenericListModel::FlagsCallback
+  This is a typedef for a pointer to a function with the following signature
+  \code
+    QFlags<Qt::ItemFlag> myFlagsCallback(const QModelIndex& index);
+  \endcode
+  
+  */
+
+  /*! 
+  \fn template<typename Func> void Esri::ArcGISRuntime::Toolkit::GenericListModel::setFlagsCallback(Func&& f)
+  \brief Template member function used to set the callback function which calculates each item \c Qt::ItemFlags.
+
+  \list
+  \li \c Func Signature type that is accepted. Should be implicitly convertible to \l Esri::ArcGISRuntime::Toolkit::GenericListModel::FlagsCallback.
+  \li \a f Function which handles the return of \c Qt::ItemFlags for each item in the collection \c QList<QObject*>
+  \endlist
+  */
 
   /*!
   \fn T* Esri::ArcGISRuntime::Toolkit::GenericListModel::element(const QModelIndex& index) const

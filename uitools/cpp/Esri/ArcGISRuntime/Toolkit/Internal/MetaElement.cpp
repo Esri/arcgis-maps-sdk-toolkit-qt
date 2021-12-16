@@ -28,7 +28,7 @@ namespace Toolkit
   \inmodule EsriArcGISRuntimeToolkit
   \class Esri::ArcGISRuntime::Toolkit::MetaElement
 
-  \brief The \c MetaElement is an implementation detail of zc GenericListModel 
+  \brief The \c MetaElement is an implementation detail of \c GenericListModel 
   that deals with helping the model emit dataChanged signals when a property
   updates.
    

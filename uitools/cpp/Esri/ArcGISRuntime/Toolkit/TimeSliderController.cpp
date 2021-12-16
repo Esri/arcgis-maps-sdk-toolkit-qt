@@ -233,7 +233,7 @@ void TimeSliderController::disconnectAllLayers()
     return;
 
   disconnect(m_operationalLayers, nullptr, this, nullptr);
-  for (const auto& layer : *m_operationalLayers)
+  for (const auto* layer : *m_operationalLayers)
     disconnect(layer, nullptr, this, nullptr);
 }
 

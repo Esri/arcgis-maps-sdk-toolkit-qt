@@ -14,7 +14,7 @@
  *  limitations under the License.
  ******************************************************************************/
 import QtQml 2.15
-import Esri.ArcGISRuntime 100.12
+import Esri.ArcGISRuntime 100.13
 import QtQml.Models 2.15
 
 /*!
@@ -33,7 +33,7 @@ QtObject {
       \qmlproperty GeoModel geoModel
       \brief The geomodel the controller is listening for basemap changes.
      */
-    property var geoModel: null;
+    property GeoModel geoModel: null;
 
     /*!
       \qmlproperty Portal portal
@@ -81,20 +81,27 @@ QtObject {
        It is possible for the current basemap to not be in the gallery.
      */
     function setCurrentBasemap(basemap) {
-        internal.currentBasemap = basemap;
-        geoModel.basemap = internal.currentBasemap;
+        //set connection with matchescurrentsp to run after the basemap is loaded
+        const layer = basemap.baseLayers.get(0);
+        layer.loadStatusChanged.connect(internal.setCurrentBasemapMatchingSp.bind(null, basemap, layer));
+        if (layer.loadStatus !== Enums.LoadStatusLoaded) {
+            layer.load();
+        } else {
+            //call directly without waiting. Layer is already loaded
+            internal.setCurrentBasemapMatchingSp(basemap, layer);
+        }
     }
 
     /*!
-       \brief Convenience method that takes a GeoView and sets this controller's
+       \brief Convenience method that takes a GeoView \a view and sets this controller's
        geoModel to the scene or map contained within. This method is for QML/C++ layer
        compatibility. It is better to set \c{BasemapGalleryController.geoModel} directly.
      */
     function setGeoModelFromGeoView(view) {
         if (view instanceof SceneView) {
-            setCurrentBasemap(view.scene);
+            setCurrentBasemap(view.scene ? view.scene.basemap : null);
         } else if (view instanceof MapView) {
-            setCurrentBasemap(view.map);
+            setCurrentBasemap(view.map ? view.map.basemap : null);
         }
     }
 
@@ -169,28 +176,47 @@ QtObject {
             return false;
         }
 
-        let sp1 = geoModel.spatialReference;
+        let sp = geoModel.spatialReference;
 
-        if (sp1 === null) {
+        if (sp === null) {
             return true;
         }
-
-        for (let i = 0; i < basemap.baseLayers.count; i++) {
-            let layer = basemap.baseLayers.get(i);
-            if (layer === null) {
-                continue;
-            }
-
-            let sp2 = layer.spatialReference;
-            if (sp2 === null) {
-                continue;
-            }
-
-            if (!sp2.equals(sp1)) {
-                return false;
+        let item = basemap.item;
+        if (item !== null) {
+            let it_sp = item.spatialReference;
+            if (item !== null && it_sp !== null) {
+                return sp.equals(item.spatialReference);
             }
         }
-        return true;
+
+        let layers = basemap.baseLayers;
+
+        if (layers.count <= 0)
+            return false;
+
+        let layer = layers.get(0);
+
+        // scene case
+        if (geoModel instanceof Scene) {
+            let sp2 = layer.spatialReference;
+            if (sp2 === null)
+                return true;
+            let svts = geoModel.sceneViewTilingScheme;
+            switch(svts) {
+            case Enums.SceneViewTilingSchemeGeographic:
+                return sp2.isGeographic;
+            case Enums.SceneViewTilingSchemeWebMercator:
+                return sp2.equals(Factory.SpatialReference.createWebMercator());
+            default:
+                console.log("a new sceneViewTilingScheme has been used!");
+            }
+            return false;
+        }
+
+        // map case
+        //check layer null?
+        let sp2 = layer.spatialReference;
+        return sp2 === null || sp.equals(sp2);
     }
 
     /*! \internal */
@@ -202,24 +228,35 @@ QtObject {
             function onFetchDeveloperBasemapsStatusChanged() {
                 if (controller.portal.fetchDeveloperBasemapsStatus === Enums.TaskStatusCompleted) {
                     let basemaps = controller.portal.developerBasemaps;
-                    for (let i = 0; i < basemaps.count; i++) {
-                        controller.append(basemaps.get(i));
-                    }
+
+                    internal.sortBasemapsAndAddToGallery(basemaps);
                 }
             }
             function onFetchBasemapsStatusChanged() {
                 if (controller.portal.fetchBasemapsStatus === Enums.TaskStatusCompleted) {
                     let basemaps = controller.portal.basemaps;
-                    for (let i = 0; i < basemaps.count; i++) {
-                        controller.append(basemaps.get(i));
-                    }
+
+                    internal.sortBasemapsAndAddToGallery(basemaps);
                 }
             }
         }
-        property Connections geoModelConenctions: Connections {
+        property Connections geoModelConnections: Connections {
             target: geoModel
             function onBasemapChanged() {
                 internal.currentBasemap = geoModel.basemap;
+            }
+        }
+
+        function setCurrentBasemapMatchingSp(basemap, layer) {
+            if (layer.loadStatus === Enums.LoadStatusLoaded) {
+                layer.loadStatusChanged.disconnect(setCurrentBasemapMatchingSp);
+                if (!basemapMatchesCurrentSpatialReference(basemap)) {
+                    // manually setting the currbasemap to trigger the event onCurrentBasemapChanged
+                    internal.currentBasemap = internal.currentBasemap;
+                    internal.gallery.dataChanged(internal.gallery.index(basemapIndex(basemap), 0), internal.gallery.index(basemapIndex(basemap), 0));
+                } else {
+                    geoModel.basemap = basemap;
+                }
             }
         }
 
@@ -229,6 +266,31 @@ QtObject {
 
         property Component galleryItem: Component {
             BasemapGalleryItem { }
+        }
+
+        function sortBasemapsAndAddToGallery(basemaps) {
+            // Copy each element of the BasemapListModel from the portal (i.e. basemaps) into a new array.
+            let basemapsArray = [];
+            basemaps.forEach(element => basemapsArray.push(element));
+
+            // Copy the array to ensure that elements are not deleted prematurely by the garbage collector
+            basemapsArray = basemapsArray.map(element => { return {element: element, item: element.item}});
+
+            // Sort the basemaps in basemapVector alphabetically using the title.
+            basemapsArray.sort(function(b1, b2) {
+                // Check validity of basemap.item and if title is empty. If either is true, push to end of list.
+                if (!b1.item || b1.item.title === "")
+                    return 1;
+                else if (!b2.item || b2.item.title === "")
+                    return -1;
+                else {
+                    // localeCompare returns 1 if b1 > b2, 0 if b1 = b2, and -1 if b1 < b2.
+                    return b1.item.title.localeCompare(b2.item.title)
+                }
+            });
+
+            // Add each basemap to the Basemap Gallery.
+            basemapsArray.forEach(element => controller.append(element.element));
         }
     }
 

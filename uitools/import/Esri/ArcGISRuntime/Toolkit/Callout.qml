@@ -17,6 +17,7 @@
 import QtQuick 2.11
 import QtQuick.Window 2.11
 import QtQuick.Layouts 1.3
+import QtQuick.Controls 2.15
 import "LeaderPosition.js" as Enums
 
 /*!
@@ -38,6 +39,9 @@ import "LeaderPosition.js" as Enums
      \endlist
 
      For more information, please see the CalloutData documentation.
+     \image docs/callout.png
+     Example code in the QML API (C++ API might differ):
+     \snippet qml_quick/src/demos/CalloutDemoForm.qml Set up Callout QML
 */
 Item {
     id: root
@@ -490,7 +494,7 @@ Item {
                         }
                     }
 
-                    Text {
+                    Label {
                         id: title
                         text: calloutData ? calloutData.title : ""
                         wrapMode: Text.NoWrap
@@ -530,7 +534,7 @@ Item {
                         }
                     }
 
-                    Text {
+                    Label {
                         id: detail
                         text: calloutData ? calloutData.detail : ""
                         renderType: Text.NativeRendering

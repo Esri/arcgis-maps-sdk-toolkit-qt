@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import Esri.ArcGISRuntime.Toolkit.Controller 100.12
+import Esri.ArcGISRuntime.Toolkit.Controller 100.13
 
 import QtQuick 2.12
 
@@ -33,9 +33,12 @@ import QtQuick.Layouts 1.12
  the point on the GeoView.
  A list of different coordinate formats representing the same point are
  available to the user.
+ \image docs/coordinateConversion.png coordinate_conversion
+ Example code in the QML API (C++ API might differ):
+ \snippet qml_quick/src/demos/CoordinateConversionDemoForm.qml Set up Coordinate Conversion QML
  */
 
-Control {
+Pane {
     id: coordinateConversionWindow
 
     clip: true
@@ -71,7 +74,7 @@ Control {
 
     Connections {
         target: controller
-        onCurrentPointChanged: {
+        function onCurrentPointChanged(point) {
             inputFormat.updateCoordinatePoint(point);
         }
     }
@@ -95,8 +98,6 @@ Control {
         value: captureModeButton.checked
     }
 
-    background: Rectangle { }
-
     contentItem: ColumnLayout {
         id: gridLayout
         spacing: 0
@@ -107,40 +108,33 @@ Control {
 
         RowLayout {
             Layout.margins: 0
-            Button {
+            ComboBox {
+                Layout.margins: 5
                 id: inputModeButton
-                text: inputFormat.type ? inputFormat.name : "Set format"
-                flat: true
-                font.bold: true
-                onClicked: {
-                    inputModesMenu.popup();
-                }
-
-                Menu {
-                    id: inputModesMenu
-                    Repeater {
-                        model: coordinateConversionWindow.controller.formats
-                        MenuItem {
-                            text: name
-                            onTriggered: {
-                                inputFormat.type = modelData;
-                                inputFormat.updateCoordinatePoint(coordinateConversionWindow.controller.currentPoint());
-                            }
-                        }
+                model: coordinateConversionWindow.controller.formats
+                textRole: "name"
+                onCurrentIndexChanged: {
+                    const index = currentIndex;
+                    const formats = coordinateConversionWindow.controller.formats;
+                    let modelData = formats[index];
+                    if (modelData === undefined) {
+                        modelData = formats.element(formats.index(index, 0));
                     }
+                    inputFormat.type = modelData;
+                    inputFormat.updateCoordinatePoint(coordinateConversionWindow.controller.currentPoint());
                 }
             }
 
             TextField {
                 id: editPointEntry
                 Layout.fillWidth: true
+                Layout.fillHeight: true
                 Layout.alignment: Qt.AlignBottom
+                Layout.margins: 5
                 placeholderText: "No position"
                 readOnly: !editCoordinateButton.checked
                 selectByMouse: !readOnly
                 text: inputFormat.type? inputFormat.notation : "No position"
-
-                color: editCoordinateButton.checked ? palette.highlight: palette.text;
                 onEditingFinished: {
                     controller.setCurrentPoint(text, inputFormat.type);
                     editCoordinateButton.checked = false;
@@ -152,6 +146,7 @@ Control {
                 checkable: true
                 checked: false
                 flat: true
+                Layout.margins: 5
                 Layout.alignment: Qt.AlignRight
                 icon.source: menuButton.checked ? "images/menu_expand.png" : "images/menu_collapse.png"
             }
@@ -164,6 +159,7 @@ Control {
                 id: addConversionButton
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignLeft
+                Layout.margins: 5
                 text: "Add conversion"
                 flat: true
                 onClicked: {
@@ -190,7 +186,7 @@ Control {
                 icon.source: "images/zoom.png"
                 flat: true
                 Layout.alignment: Qt.AlignRight
-                Layout.maximumHeight: 32
+
                 Layout.maximumWidth: Layout.maximumHeight
                 padding: 0
                 display: AbstractButton.IconOnly
@@ -202,7 +198,6 @@ Control {
                 icon.source: "images/flash.png"
                 flat: true
                 Layout.alignment: Qt.AlignRight
-                Layout.maximumHeight: 32
                 Layout.maximumWidth: Layout.maximumHeight
                 padding: 0
                 display: AbstractButton.IconOnly
@@ -227,7 +222,6 @@ Control {
                 flat: true
                 icon.source: "images/text_editing_mode.png"
                 Layout.alignment: Qt.AlignRight
-                Layout.maximumHeight: 32
                 Layout.maximumWidth: Layout.maximumHeight
                 padding: 0
             }
@@ -238,8 +232,8 @@ Control {
                 flat: true
                 icon.source: "images/mouse_click_mode.png"
                 Layout.alignment: Qt.AlignRight
-                Layout.maximumHeight: 32
                 Layout.maximumWidth: Layout.maximumHeight
+                Layout.margins: 5
                 padding: 0
             }
         }
@@ -256,7 +250,6 @@ Control {
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     visible: menuButton.checked
-                    color: palette.text
                 }
 
                 Label {
@@ -266,7 +259,6 @@ Control {
                     visible: menuButton.checked
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignLeft
-                    color: palette.text
                 }
 
                 Button {
@@ -275,6 +267,7 @@ Control {
                     Layout.minimumWidth: menuButton.width
                     Layout.maximumWidth: menuButton.width
                     Layout.alignment: Qt.AlignRight
+                    Layout.margins: 5
                     icon.source: "images/menu.png"
                     flat: true
                     onClicked: editMenu.open()

@@ -163,6 +163,7 @@ namespace Toolkit {
       QObject::connect(galleryItem, &BasemapGalleryItem::tooltipChanged, self, notifyChange);
 
       auto basemap = galleryItem->basemap();
+
       if (basemap && basemap->loadStatus() != LoadStatus::Loaded)
       {
         basemap->load();
@@ -172,7 +173,7 @@ namespace Toolkit {
       {
         // If the currently active basemap was added to the gallery, we notify
         // downstream consumers that the currently active basemap has changed also to
-        // trigger UI updates.
+        // trigger UI updates
         emit self->currentBasemapChanged();
       }
     }
@@ -209,6 +210,37 @@ namespace Toolkit {
 
     /*!
       \internal
+      Takes a BasemapListModel*, sorts them alphabetically, and adds them to the basemap gallery.
+
+      Because the basemaps are initially unloaded, Basemap->item() must be used to access the
+      basemap metadata. The basemaps are sorted using Basemap->item()->title().
+     */
+    void sortBasemapsAndAddToGallery(BasemapGalleryController* self, BasemapListModel* basemaps)
+    {
+      // Convert BasemapListModel into a Basemap* vector and sort basemaps alphabetically using the title
+      std::vector<Basemap*> basemapsVector;
+      basemapsVector.reserve(basemaps->rowCount());
+      std::copy(std::cbegin(*basemaps), std::cend(*basemaps), std::back_inserter(basemapsVector));
+      std::sort(std::begin(basemapsVector), std::end(basemapsVector), [](Basemap* b1, Basemap* b2)
+                {
+                  // Check validity of basemap->item() and if title() is empty. If either is true, push to end of list.
+                  if (!b1->item() || b1->item()->title() == "")
+                    return false;
+                  else if (!b2->item() || b2->item()->title() == "")
+                    return true;
+                  else
+                    return b1->item()->title() < b2->item()->title();
+                });
+
+      // For each discovered map, add it to our gallery.
+      for (auto basemap : basemapsVector)
+      {
+        self->append(basemap);
+      }
+    }
+
+    /*!
+      \internal
       Calls Portal::fetchDeveloperBasemaps on the portal. Note that we do
       not call Portal::fetchBasemaps. The former call is for retrieving the modern API-key
       metered basemaps, while the latter returns older-style basemaps. The latter is required
@@ -221,12 +253,9 @@ namespace Toolkit {
       QObject::connect(
           portal, &Portal::developerBasemapsChanged, self, [portal, self]()
           {
-            auto basemaps = portal->developerBasemaps();
-            // For each discovered map, add it to our gallery.
-            for (auto basemap : *basemaps)
-            {
-              self->append(basemap);
-            }
+            BasemapListModel* basemaps = portal->developerBasemaps();
+
+            sortBasemapsAndAddToGallery(self, basemaps);
           });
 
       // Load the portal and kick-off the group discovery.
@@ -260,8 +289,6 @@ namespace Toolkit {
     m_portal(new Portal(QUrl("https://arcgis.com"), this)),
     m_gallery(new GenericListModel(&BasemapGalleryItem::staticMetaObject, this))
   {
-    connect(this, &BasemapGalleryController::geoModelChanged, this, &BasemapGalleryController::currentBasemapChanged);
-
     // Listen in to items added to the gallery.
     connect(m_gallery, &GenericListModel::rowsInserted, this, [this](const QModelIndex& parent, int first, int last)
             {
@@ -297,8 +324,26 @@ namespace Toolkit {
                 }
               }
             });
-
+    m_gallery->setFlagsCallback([this](const QModelIndex& index)
+                                {
+                                  BasemapGalleryItem* galleryItem = m_gallery->element<BasemapGalleryItem>(index);
+                                  if (!basemapMatchesCurrentSpatialReference(galleryItem->basemap()))
+                                  {
+                                    //disabled item flags
+                                    return Qt::ItemFlags(Qt::NoItemFlags);
+                                  }
+                                  else
+                                  {
+                                    //enabled and selectable item flags
+                                    return Qt::ItemFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+                                  }
+                                });
     setToDefaultBasemaps(this, m_portal);
+    // Have to set the property names, so the controller will know how to match the properties from
+    // basemapgalleryitem with the specific Qt::<namespace> invoked in the .data() from the View (ListView) obj
+    m_gallery->setDisplayPropertyName("name");
+    m_gallery->setDecorationPropertyName("thumbnail");
+    m_gallery->setTooltipPropertyName("tooltip");
   }
 
   /*!
@@ -318,6 +363,8 @@ namespace Toolkit {
 
   /*!
   \brief Set the GeoModel object this Controller uses to \a geoModel.
+  This function will also extract the basemap from the Geomodel and set it as the current one.
+  Passing a \a geoModel \c nullptr, will unset the current geomodel loaded.
  */
   void BasemapGalleryController::setGeoModel(GeoModel* geoModel)
   {
@@ -326,7 +373,7 @@ namespace Toolkit {
 
     if (m_geoModel)
     {
-      disconnectFromGeoModel(this, geoModel);
+      disconnectFromGeoModel(this, m_geoModel);
     }
 
     m_geoModel = geoModel;
@@ -334,9 +381,13 @@ namespace Toolkit {
     if (m_geoModel)
     {
       connectToGeoModel(this, m_geoModel);
+      // guard from nullptr direct access
+      setCurrentBasemap(geoModel->basemap());
     }
 
     emit geoModelChanged();
+    //forcing all the items in the gallery to recalculate the ::ItemFlags for the view.
+    emit m_gallery->dataChanged(m_gallery->index(0), m_gallery->index(std::max(m_gallery->rowCount() - 1, 0)));
   }
 
   /*!
@@ -409,10 +460,9 @@ namespace Toolkit {
         {
           connect(m_portal, &Portal::basemapsChanged, this, [this]
                   {
-                    for (auto basemap : *m_portal->basemaps())
-                    {
-                      append(basemap);
-                    }
+                    BasemapListModel* basemaps = m_portal->basemaps();
+
+                    sortBasemapsAndAddToGallery(this, basemaps);
                   });
           m_portal->fetchBasemaps();
         }
@@ -456,17 +506,52 @@ namespace Toolkit {
    
     It is possible for the current basemap to not be in the gallery.
    */
-  void BasemapGalleryController::setCurrentBasemap(Basemap* basemap)
+  void
+  BasemapGalleryController::setCurrentBasemap(Basemap* basemap)
   {
-    if (basemap == m_currentBasemap)
-      return;
+    auto connection =
+        std::make_shared<QMetaObject::Connection>();
 
-    m_currentBasemap = basemap;
-    emit currentBasemapChanged();
-
-    if (m_geoModel)
+    auto apply = [basemap, this, connection](Error e)
     {
-      m_geoModel->setBasemap(m_currentBasemap);
+      disconnect(*connection);
+      if (e.isEmpty())
+      {
+        if (basemap == m_currentBasemap)
+          return;
+        if (!basemapMatchesCurrentSpatialReference(basemap))
+        {
+          // force redraw for the single basemapGalleryItem updated
+          emit m_gallery->dataChanged(
+              m_gallery->index(basemapIndex(basemap)), m_gallery->index(basemapIndex(basemap)));
+          return;
+        }
+        m_currentBasemap = basemap;
+        emit currentBasemapChanged();
+
+        if (m_geoModel && m_geoModel->basemap() != m_currentBasemap)
+        {
+          m_geoModel->setBasemap(m_currentBasemap);
+        }
+      }
+      else
+      {
+        qDebug() << "problem in loading the layer";
+      }
+      // delete connection;
+    };
+    if (basemap->baseLayers()->size() > 0)
+    {
+      if (basemap->baseLayers()->first()->loadStatus() != LoadStatus::Loaded)
+      {
+        *connection = connect(
+            basemap->baseLayers()->first(), &Layer::doneLoading, this, apply);
+        basemap->baseLayers()->first()->load();
+      }
+      else
+      {
+        apply(Error{});
+      }
     }
   }
 
@@ -549,16 +634,50 @@ namespace Toolkit {
     // If no spatial reference is set, any basemap can be applied.
     if (sp.isEmpty())
       return true;
+    auto item = basemap->item();
 
-    // Test if all layers match the spatial reference.
+    if (item)
+    {
+      auto it_sp = item->spatialReference();
+      if (item && !it_sp.isEmpty())
+        return sp == item->spatialReference();
+    }
+
+    const auto layers = basemap->baseLayers();
+    if (layers->size() <= 0)
+      return false;
+
+    //scene case:
+    if (auto scene = qobject_cast<Scene*>(m_geoModel))
+    {
+      const auto sp2 = basemap->baseLayers()->first()->spatialReference();
+      if (sp2.isEmpty()) //case used by the listview painter
+        return true;
+      auto svts = scene->sceneViewTilingScheme();
+      switch (svts)
+      {
+      case SceneViewTilingScheme::Geographic:
+        return sp2.isGeographic();
+
+      case SceneViewTilingScheme::WebMercator:
+        return sp2 == SpatialReference::webMercator();
+
+      default:
+        qDebug() << "a new sceneviewTilingScheme has been used";
+        break;
+      }
+      return false;
+    }
+
+    // Test if first layer matches the spatial reference.
     // From the spec we are guaranteed the homogeneity of the spatial references of these layers.
     // https://developers.arcgis.com/web-map-specification/objects/spatialReference/
-    const auto layers = basemap->baseLayers();
-    return std::all_of(std::cbegin(*layers), std::cend(*layers), [&sp](Layer* layer)
-                       {
-                         const auto sp2 = layer->spatialReference();
-                         return sp2.isEmpty() || sp == sp2;
-                       });
+
+    const auto layer = layers->first();
+    const auto sp2 = layer->spatialReference();
+    return sp2.isEmpty() || sp == sp2;
+
+    return false;
   }
 
   /*!

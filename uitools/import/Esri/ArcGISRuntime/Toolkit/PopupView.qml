@@ -14,13 +14,14 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import Esri.ArcGISRuntime.Toolkit.Controller 100.12
+import Esri.ArcGISRuntime.Toolkit.Controller 100.13
 
 import QtQuick 2.11
 import QtQuick.Controls 2.11
 import QtQuick.Dialogs 1.2
 import QtQuick.Window 2.11
 import QtQuick.Layouts 1.3
+
 
 /*!
    \qmltype PopupView
@@ -29,7 +30,7 @@ import QtQuick.Layouts 1.3
    \inqmlmodule Esri.ArcGISRuntime.Toolkit
    \since Esri.ArcGISRuntime 100.10
    \brief A view for displaying and editing information about a feature.
-  
+
    A PopupView can be used to display information for any type that
    implements the PopupSource interface. For example, FeatureLayer
    implements PopupSource. This means that it has a PopupDefinition,
@@ -57,26 +58,30 @@ import QtQuick.Layouts 1.3
    \note Each time a change is made to the Popup, PopupDefinition,
    PopupManager, or any of their properties, the PopupManager must
    be re-set to the PopupView.
+   \image docs/popupview.png popupview
+   Example code in the QML API (C++ API might differ):
+   \snippet qml_quick/src/demos/PopupViewDemoForm.qml Set up Popup View
  */
-Control {
+Page {
     id: popupView
 
     /*!
        \brief The PopupManager that controls the information being displayed in
        the view.
-       
+
        The PopupManager should be created from a Popup.
        \qmlproperty PopupManager popupManager
      */
     property var popupManager: null
-    
+
+
     /*!
       \qmlproperty PopupViewController controller
       \brief the Controller handles reading from the PopupManager and monitoring
       the list-models.
-      \qmlproperty PopupViewController controller
     */
-    property var controller: PopupViewController { }
+    property var controller: PopupViewController {}
+
 
     /*!
        \brief Callback function called when the close button is clicked. When
@@ -87,6 +92,7 @@ Control {
     property var closeCallback: function() {
         popupView.visible = false;
     }
+
 
     /*!
        \qmlsignal PopupView::attachmentThumbnailClicked(var index)
@@ -106,15 +112,23 @@ Control {
 
     implicitHeight: 300 + padding
 
-    padding: 5
+    spacing: 5
+    leftPadding: popupView.spacing
+    rightPadding: popupView.spacing
 
-    background: Rectangle {
-        color: palette.base
-        border {
-            color: palette.shadow
-            width: 2
-        }
-        radius: 2
+    title: controller.title
+
+    // Title Header
+    header: Label {
+        textFormat: Text.StyledText
+        text: `<h2>${popupView.title}</h2>`
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        wrapMode: Text.Wrap
+        font: popupView.font
+        palette: popupView.palette
+        leftPadding: popupView.spacing
+        rightPadding: popupView.spacing
     }
 
     contentItem: Flickable {
@@ -130,71 +144,58 @@ Control {
             }
 
             // We must account for what is visible, including title headers as rows.
-            rows: controller.showAttachments ? controller.fieldCount + controller.attachmentCount + 2
-                                             : controller.fieldCount + 1
-
-            // Title Header
-            Text {
-                Layout.fillWidth: true
-                textFormat: Text.StyledText
-                text: `<h2>${controller.title}</h2>`
-                color: palette.text
-                font: popupView.font
-            }
-
+            rows: controller.showAttachments ? controller.fieldCount + controller.attachmentCount + 1
+                                             : controller.fieldCount
+            rowSpacing: popupView.spacing
+            columnSpacing: 30
             // Field names
             Repeater {
                 model: controller.displayFields
-                Text {
-                    Layout.fillWidth: true
-                    text: fieldName ? fieldName : ""
-                    wrapMode: Text.WrapAnywhere
-                    color: palette.text
+                Label {
+                    text: label ?? fieldName ?? ""
+                    Layout.maximumWidth: flickable.width / 2
+                    wrapMode: Text.Wrap
+                    font: popupView.font
+                    palette: popupView.palette
                 }
             }
 
             // Attachments header
-            Text {
+            Label {
                 Layout.columnSpan: 2
                 Layout.fillWidth: true
                 visible: controller.showAttachments
                 enabled: visible
                 textFormat: Text.StyledText
+                horizontalAlignment: Text.AlignHCenter
                 text: controller.attachmentCount > 0 ? "<h2>Attachments</h2>" : ""
-                color: palette.text
                 font: popupView.font
+                palette: popupView.palette
             }
 
             // Attachment names
             Repeater {
                 model: controller.attachments
-                Text {
+                Label {
+                    Layout.fillWidth: true
                     visible: controller.showAttachments
                     enabled: visible
-                    Layout.fillWidth: true
                     text: name
-                    wrapMode: Text.WrapAnywhere
-                    color: palette.text
-                }
-            }
-
-            Button {
-                text: "Close"
-                Layout.alignment: Qt.AlignRight
-                onClicked: {
-                    if (popupView.closeCallback)
-                        popupView.closeCallback();
+                    wrapMode: Text.Wrap
+                    palette: popupView.palette
+                    font: popupView.font
                 }
             }
 
             // Field contents
             Repeater {
                 model: controller.displayFields
-                Text {
+                Label {
                     Layout.fillWidth: true
                     text: formattedValue
-                    wrapMode: Text.WrapAnywhere
-                    color: palette.text
+                    wrapMode: Text.Wrap
+                    palette: popupView.palette
+                    font: popupView.font
                 }
             }
 
@@ -218,5 +219,16 @@ Control {
             }
         }
     }
-}
 
+    footer: ColumnLayout {
+        Button {
+            text: "Close"
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            onClicked: {
+                if (popupView.closeCallback)
+                    popupView.closeCallback()
+            }
+            Layout.bottomMargin: popupView.spacing
+        }
+    }
+}

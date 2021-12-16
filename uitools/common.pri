@@ -25,6 +25,7 @@ HEADERS += $$CPPPATH/AuthenticationController.h \
            $$CPPPATH/CoordinateConversionOption.h \
            $$CPPPATH/CoordinateConversionResult.h \
            $$CPPPATH/CoordinateOptionDefaults.h \
+           $$CPPPATH/LocatorSearchSource.h \
            $$CPPPATH/Internal/BasemapGalleryImageProvider.h \
            $$CPPPATH/Internal/GenericListModel.h \
            $$CPPPATH/Internal/GenericTableProxyModel.h \
@@ -33,6 +34,12 @@ HEADERS += $$CPPPATH/AuthenticationController.h \
            $$CPPPATH/NorthArrowController.h \
            $$CPPPATH/OverviewMapController.h \
            $$CPPPATH/PopupViewController.h \
+           $$CPPPATH/ScalebarController.h \
+           $$CPPPATH/SearchResult.h \
+           $$CPPPATH/SearchSourceInterface.h \
+           $$CPPPATH/SearchSuggestion.h \
+           $$CPPPATH/SearchViewController.h \  
+           $$CPPPATH/SmartLocatorSearchSource.h \        
            $$CPPPATH/TimeSliderController.h
 
 SOURCES += $$CPPPATH/AuthenticationController.cpp \
@@ -43,6 +50,7 @@ SOURCES += $$CPPPATH/AuthenticationController.cpp \
            $$CPPPATH/CoordinateConversionOption.cpp \
            $$CPPPATH/CoordinateConversionResult.cpp \
            $$CPPPATH/CoordinateOptionDefaults.cpp \
+           $$CPPPATH/LocatorSearchSource.cpp \
            $$CPPPATH/Internal/BasemapGalleryImageProvider.cpp \
            $$CPPPATH/Internal/GenericListModel.cpp \
            $$CPPPATH/Internal/GenericTableProxyModel.cpp \
@@ -50,4 +58,10 @@ SOURCES += $$CPPPATH/AuthenticationController.cpp \
            $$CPPPATH/NorthArrowController.cpp \
            $$CPPPATH/OverviewMapController.cpp \
            $$CPPPATH/PopupViewController.cpp \
+           $$CPPPATH/ScalebarController.cpp \
+           $$CPPPATH/SearchResult.cpp \
+           $$CPPPATH/SearchSourceInterface.cpp \
+           $$CPPPATH/SearchSuggestion.cpp \
+           $$CPPPATH/SearchViewController.cpp \  
+           $$CPPPATH/SmartLocatorSearchSource.cpp \   
            $$CPPPATH/TimeSliderController.cpp

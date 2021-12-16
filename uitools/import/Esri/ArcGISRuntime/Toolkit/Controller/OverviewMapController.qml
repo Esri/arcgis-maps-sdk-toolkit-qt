@@ -14,7 +14,7 @@
  *  limitations under the License.
  ******************************************************************************/
 import QtQml 2.12
-import Esri.ArcGISRuntime 100.12
+import Esri.ArcGISRuntime 100.13
 
 /*!
    \qmltype OverviewMapController
@@ -75,7 +75,7 @@ QtObject {
       \qmlproperty MapView insetView
       \brief MapView which represents an overview/inset of the current viewpoint of the geoView.
      */
-    readonly property MapView insetView: MapView {
+    readonly property var insetView: MapView {
         // Default map to show in the inset.
         Map {
             initBasemapStyle: Enums.BasemapStyleArcGISTopographic
@@ -206,6 +206,38 @@ QtObject {
 
             function onSetViewpointCompleted(succeeded) {
                 internal.updateGeoViewpointTaskInProgress = false;
+            }
+        }
+
+        // Create a connection that ensures the OverviewMap updates to the geoView viewpoint at initialisation.
+        // A single-shot connection is used. Essentially, when drawStatus = completed, the OverviewMap is updated
+        // and to prevent the slot being accesed again, the target for the connection is set to null.
+        property Connections overviewMapInitialisationConnection: Connections {
+            id: updateOverviewMapAtInitialisation
+            target: geoView
+            function onDrawStatusChanged() {
+                if (geoView.drawStatus === Enums.DrawStatusCompleted) {
+                    if (geoView instanceof MapView) {
+                        let v = geoView.currentViewpointCenter;
+                        let newV = internal.viewpoint.createObject(null, {rotation: v.rotation});
+                        internal.updateInsetViewpointTaskInProgress = true;
+                        insetView.setViewpointAndSeconds(newV, 0);
+
+                        // Set target to null to prevent the slot being accessed again.
+                        updateOverviewMapAtInitialisation.target = null;
+                    }
+                    else if (geoView instanceof SceneView) {
+                        let newV = internal.viewpoint.createObject(null);
+                        internal.updateInsetViewpointTaskInProgress = true;
+                        insetView.setViewpointAndSeconds(newV, 0);
+
+                        // Set target to null to prevent the slot being accessed again.
+                        updateOverviewMapAtInitialisation.target = null;
+                    }
+                    else {
+                        console.error("Unknown GeoView type passed to OverViewMapController.");
+                    }
+                }
             }
         }
 

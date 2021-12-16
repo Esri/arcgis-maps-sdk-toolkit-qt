@@ -25,6 +25,7 @@
 // Qt headers
 #include <QMouseEvent>
 
+
 namespace Esri
 {
 namespace ArcGISRuntime
@@ -41,6 +42,7 @@ namespace Toolkit
   \c Camera heading of the \c SceneView. 
   Double-clicking on the \c NorthArrow triggers the heading of the connected
   \c GeoView to be orientated to 0 (North).
+  \note default width and height is 48.
  */
 
 /*!
@@ -53,11 +55,13 @@ NorthArrow::NorthArrow(QWidget* parent) :
   QLabel(parent),
   m_controller(new NorthArrowController(this))
 {
-  m_image = QPixmap(":/esri.com/imports/Esri/ArcGISRuntime/Tookit/images/compass.png");
-
+  m_image = QPixmap(":/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/compass.png");
+  setAttribute(Qt::WA_TranslucentBackground);
+    
   if (!m_image.isNull())
   {
-    this->setPixmap(m_image);
+    const QSize defaultSize(48,48);
+    this->setPixmap(m_image.scaled(defaultSize, Qt::IgnoreAspectRatio));
   }
 
   connect(m_controller, &NorthArrowController::headingChanged, this, [this]()

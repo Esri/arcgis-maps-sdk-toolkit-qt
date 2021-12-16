@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import Esri.ArcGISRuntime.Toolkit.Controller 100.12
+import Esri.ArcGISRuntime.Toolkit.Controller 100.13
 
 import QtQml 2.12
 import QtQuick 2.12
@@ -47,6 +47,10 @@ import QtQuick.Controls 2.12
         \c{QtWebView::initialize()} immediately after the \c{QGuiApplication} 
         instance is created. See \l{https://doc.qt.io/qt-5/qtwebview-index.html}
         {Qt WebView}.
+
+  \image docs/authenticationview_qml.png authentication_view
+  Example code in the QML API (C++ API might differ):
+  \snippet qml_quick/src/demos/AuthenticationViewDemoForm.qml Set up Authentication View QML
  */
 
 Item {
