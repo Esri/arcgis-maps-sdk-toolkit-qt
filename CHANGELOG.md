@@ -1,5 +1,7 @@
 # Changelog
 
+## 100.14
+
 ## 100.13
 
 * (SearchView) Introduction of new SearchView tool (C++/Quick and QML/Quick only).
