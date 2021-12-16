@@ -351,6 +351,14 @@ permission to access the camera to ARCore.
 <uses-feature android:name="android.hardware.camera.ar" android:required="true"/>
 ```
 
+  - Indicate that your app will be checking for the existence of arcore.
+```
+<!-- required at targetSdkVersion=30 to check for arcore support -->
+<queries>
+  <package android:name="com.google.ar.core"/>
+</queries>
+```
+
   - Set the minimum SDK version `android:minSdkVersion` to 24 for AR required app and 14 for
 AR optional app.
 ```
