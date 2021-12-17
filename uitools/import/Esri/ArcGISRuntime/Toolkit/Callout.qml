@@ -100,14 +100,14 @@ Pane {
 
         The default leader height is \c 10.
     */
-    property int leaderHeight: 10
+    property int leaderHeight: 15
 
     /*!
         \brief The width of the leader line in the Callout.
 
         The default leader width is \c 20.
     */
-    property int leaderWidth: 20
+    property int leaderWidth: 30
 
     /*!
         \brief The x offset of the placement of the Callout.
@@ -183,17 +183,20 @@ Pane {
     property bool autoAdjustWidth: true
 
     /*!
-      Maximum width of the Callout's conteent when `autoAdjustWidth` is true.
+        When \l{autoAdjustWidth} is \c{false}, the callout has a fixed width
+        equal to this value.
+
+        This property defaults to \c 300.
+     */
+    property real calloutWidth: 300 // In an ideal world, calloutWidth and maxWidth would be the same property with
+    //                                 `autoAdjustWidth` dictating the behaviour. Possible Qt 6 breaking change?
+
+    /*!
+      Maximum width of the Callout's content when `autoAdjustWidth` is true.
 
       This property defaults to \c 300.
     */
     property real maxWidth: 300
-
-    /*!
-        \obsolete
-        Use \c{implicitWidth} instead.
-    */
-    property alias calloutWidth: root.implicitWidth
 
     /*!
         \obsolete
@@ -208,7 +211,7 @@ Pane {
     property color borderColor
     onBorderColorChanged: {
         background.border.color = borderColor;
-        tail.strokeColor = borderColor;
+        internal.leaderColor = borderColor;
     }
 
     /*!
@@ -232,10 +235,7 @@ Pane {
         Use \c{background.border.width} instead.
     */
     property int borderWidth
-    onBorderWidthChanged: {
-        background.border.width = borderWidth;
-        tail.strokeWidth = borderWidth;
-    }
+    onBorderWidthChanged: background.border.width = borderWidth;
 
     /*!
         \obsolete
@@ -277,7 +277,6 @@ Pane {
     */
     signal accessoryButtonClicked()
 
-    onImplicitWidthChanged: autoAdjustWidth = false
     implicitHeight: 100
     visible: false
 
@@ -339,12 +338,15 @@ Pane {
         root.visible = false;
     }
 
+    Component.onCompleted: {
+        background.children.push(shapeTail.createObject())
+    }
+
     contentItem: GridLayout {
         id: calloutLayout
         columns: 3
         rows: 2
         columnSpacing: 7
-
         Loader {
             sourceComponent: calloutContent
             clip: true
@@ -352,7 +354,7 @@ Pane {
             Layout.rowSpan: 2
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.preferredWidth: root.implictWidth ?? maxWidth
+            Layout.preferredWidth: root.autoAdjustWidth ? root.maxWidth : root.calloutWidth
             visible: calloutContent
         }
         Image {
@@ -371,10 +373,14 @@ Pane {
             wrapMode: Text.Wrap
             clip: true
             elide: Text.ElideRight
-            visible: !calloutContent
+            // Is visible (even when empty) if detail is visible, otherise
+            // row & columnspan offsets go askew.
+            visible: !calloutContent && (text || detail.visible)
             Layout.alignment: Qt.AlignVCenter
-            Layout.fillWidth: !autoAdjustWidth
+            Layout.fillWidth: true
             Layout.fillHeight: true
+            Layout.preferredWidth: autoAdjustWidth ? -1 : internal.labelWidthFrom.bind(this)(root.calloutWidth)
+            Layout.maximumWidth: autoAdjustWidth ? internal.labelWidthFrom.bind(this)(root.maxWidth) : -1
             Layout.columnSpan: {
                 let span = 1;
                 if (!accessoryButton.visible)
@@ -383,13 +389,25 @@ Pane {
                     span++;
                 return span;
             }
-            Layout.maximumWidth: maxWidth - (image.visible ? image.width : 0 ) - (accessoryButton.visible ? accessoryButton.width : 0)
+            Layout.rowSpan: {
+                let span = 1;
+                if (!detail.visible)
+                    span++;
+                return span;
+            }
         }
         RoundButton {
             id: accessoryButton
             Layout.rowSpan: 2
             Layout.alignment: Qt.AlignVCenter
             Layout.preferredWidth: 40
+            Layout.columnSpan: {
+                let span = 1;
+                if (!title.visible && detail.visible) {
+                    span++;
+                }
+                return span;
+            }
             display: AbstractButton.IconOnly
             topPadding: 0
             bottomPadding: 0
@@ -415,190 +433,191 @@ Pane {
             text: calloutData ? calloutData.detail : ""
             wrapMode: Text.Wrap
             elide: Text.ElideRight
-            visible: !calloutContent
+            clip: true
+            visible: !calloutContent && text
             Layout.alignment: Qt.AlignVCenter
-            Layout.fillWidth: !autoAdjustWidth
+            Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.columnSpan: {
-                let span = 1;
-                if (!accessoryButton.visible)
-                    span++;
-                if (!image.visible)
-                    span++;
-                return span;
-            }
-            Layout.maximumWidth: maxWidth - (image.visible ? image.width : 0 ) - (accessoryButton.visible ? accessoryButton.width : 0)
+            Layout.preferredWidth: autoAdjustWidth ? -1 : internal.labelWidthFrom.bind(this)(root.calloutWidth)
+            Layout.maximumWidth: autoAdjustWidth ? internal.labelWidthFrom.bind(this)(root.maxWidth) : -1
         }
     }
 
-    Shape {
-        x: -leftPadding
-        y: -topPadding
-        z: 1
-        ShapePath {
-            // Hides the border of the Pane.
-            strokeColor: tail.fillColor
-            strokeWidth: tail.strokeWidth
-            startX: {
-                switch(internal.leaderPosition) {
-                case Callout.LeaderPosition.UpperLeft:
-                case Callout.LeaderPosition.Top:
-                case Callout.LeaderPosition.UpperRight:
-                case Callout.LeaderPosition.LowerRight:
-                case Callout.LeaderPosition.Bottom:
-                case Callout.LeaderPosition.LowerLeft:
-                    return tail.startX + background.border.width;
-                case Callout.LeaderPosition.Left:
-                    return tail.startX + background.border.width / 2;
-                case Callout.LeaderPosition.Right:
-                    return tail.startX - background.border.width / 2;
-                }
-            }
-            startY: {
-                switch(internal.leaderPosition) {
-                case Callout.LeaderPosition.UpperLeft:
-                case Callout.LeaderPosition.Top:
-                case Callout.LeaderPosition.UpperRight:
-                    return tail.startY + background.border.width / 2;
-                case Callout.LeaderPosition.LowerRight:
-                case Callout.LeaderPosition.Bottom:
-                case Callout.LeaderPosition.LowerLeft:
-                    return tail.startY - background.border.width / 2;
-                case Callout.LeaderPosition.Left:
-                case Callout.LeaderPosition.Right:
-                    return tail.startY + background.border.width;
-                }
-            }
-            PathLine {
-                relativeX: {
+    Component {
+        id: shapeTail
+        Shape {
+            z: 1
+            ShapePath {
+                id: hideLine
+                // Hides the border of the Pane.
+                strokeColor: tail.fillColor
+                // Only draw the line when a leaderWidth is available.
+                strokeWidth: root.leaderWidth <= 0 ? -1 : (tail.strokeWidth)
+                capStyle: ShapePath.RoundCap
+                readonly property real leaderAngle: Math.atan(leaderHeight * 2 / leaderWidth)
+                readonly property real leaderXOffset: Math.cos(leaderAngle) * (tail.strokeWidth / 2)
+                startX: {
                     switch(internal.leaderPosition) {
                     case Callout.LeaderPosition.UpperLeft:
-                    case Callout.LeaderPosition.Top:
+                    case Callout.LeaderPosition.LowerLeft:
                     case Callout.LeaderPosition.UpperRight:
                     case Callout.LeaderPosition.LowerRight:
+                    case Callout.LeaderPosition.Top:
                     case Callout.LeaderPosition.Bottom:
-                    case Callout.LeaderPosition.LowerLeft:
-                        return root.leaderWidth - background.border.width*2;
+                        return tail.startX + leaderXOffset;
                     case Callout.LeaderPosition.Left:
+                        return tail.startX + background.border.width / 2;
                     case Callout.LeaderPosition.Right:
-                        return 0;
+                        return tail.startX - background.border.width / 2;
                     }
                 }
-                relativeY: {
+                startY: {
                     switch(internal.leaderPosition) {
                     case Callout.LeaderPosition.UpperLeft:
                     case Callout.LeaderPosition.Top:
                     case Callout.LeaderPosition.UpperRight:
+                        return tail.startY + background.border.width / 2;
                     case Callout.LeaderPosition.LowerRight:
                     case Callout.LeaderPosition.Bottom:
                     case Callout.LeaderPosition.LowerLeft:
-                        return 0;
+                        return tail.startY - background.border.width / 2;
                     case Callout.LeaderPosition.Left:
                     case Callout.LeaderPosition.Right:
-                        return root.leaderWidth - background.border.width*2;
+                        return tail.startY + leaderXOffset;
                     }
                 }
-            }
-        }
-        ShapePath {
-            // Draws the tail portion emitting from the pane.
-            id: tail
-            fillColor: root.background.color
-            strokeColor: "transparent"
-            strokeWidth: background.border.width
-            startX: {
-                switch(internal.leaderPosition) {
-                case Callout.LeaderPosition.UpperLeft:
-                case Callout.LeaderPosition.LowerLeft:
-                    return padding;
-                case Callout.LeaderPosition.UpperRight:
-                case Callout.LeaderPosition.LowerRight:
-                    return root.width - root.leaderWidth - padding;
-                case Callout.LeaderPosition.Left:
-                    return background.border.width/2;
-                case Callout.LeaderPosition.Right:
-                    return root.width - background.border.width/2;
-                case Callout.LeaderPosition.Top:
-                case Callout.LeaderPosition.Bottom:
-                    return root.width / 2 - root.leaderWidth / 2;
-                }
-            }
-            startY: {
-                switch(internal.leaderPosition) {
-                case Callout.LeaderPosition.UpperLeft:
-                case Callout.LeaderPosition.Top:
-                case Callout.LeaderPosition.UpperRight:
-                    return background.border.width/2;
-                case Callout.LeaderPosition.LowerRight:
-                case Callout.LeaderPosition.Bottom:
-                case Callout.LeaderPosition.LowerLeft:
-                    return root.height - background.border.width/2;
-                case Callout.LeaderPosition.Left:
-                case Callout.LeaderPosition.Right:
-                    return root.height / 2 - root.leaderWidth / 2;
-                }
-            }
-            PathLine {
-                relativeX: {
-                    switch(internal.leaderPosition) {
-                    case Callout.LeaderPosition.UpperLeft:
-                    case Callout.LeaderPosition.Top:
-                    case Callout.LeaderPosition.UpperRight:
-                    case Callout.LeaderPosition.LowerRight:
-                    case Callout.LeaderPosition.Bottom:
-                    case Callout.LeaderPosition.LowerLeft:
-                        return root.leaderWidth / 2;
-                    case Callout.LeaderPosition.Left:
-                        return -root.leaderHeight;
-                    case Callout.LeaderPosition.Right:
-                        return root.leaderHeight;
+                PathLine {
+                    relativeX: {
+                        switch(internal.leaderPosition) {
+                        case Callout.LeaderPosition.UpperLeft:
+                        case Callout.LeaderPosition.Top:
+                        case Callout.LeaderPosition.UpperRight:
+                        case Callout.LeaderPosition.LowerRight:
+                        case Callout.LeaderPosition.Bottom:
+                        case Callout.LeaderPosition.LowerLeft:
+                            return root.leaderWidth - hideLine.leaderXOffset * 2;
+                        case Callout.LeaderPosition.Left:
+                        case Callout.LeaderPosition.Right:
+                            return 0;
+                        }
                     }
-                }
-                relativeY: {
-                    switch(internal.leaderPosition) {
-                    case Callout.LeaderPosition.UpperLeft:
-                    case Callout.LeaderPosition.Top:
-                    case Callout.LeaderPosition.UpperRight:
-                        return -root.leaderHeight;
-                    case Callout.LeaderPosition.LowerRight:
-                    case Callout.LeaderPosition.Bottom:
-                    case Callout.LeaderPosition.LowerLeft:
-                        return root.leaderHeight;
-                    case Callout.LeaderPosition.Left:
-                    case Callout.LeaderPosition.Right:
-                        return root.leaderWidth / 2;
+                    relativeY: {
+                        switch(internal.leaderPosition) {
+                        case Callout.LeaderPosition.UpperLeft:
+                        case Callout.LeaderPosition.Top:
+                        case Callout.LeaderPosition.UpperRight:
+                        case Callout.LeaderPosition.LowerRight:
+                        case Callout.LeaderPosition.Bottom:
+                        case Callout.LeaderPosition.LowerLeft:
+                            return 0;
+                        case Callout.LeaderPosition.Left:
+                        case Callout.LeaderPosition.Right:
+                            return root.leaderWidth - hideLine.leaderXOffset * 2;
+                        }
                     }
                 }
             }
-            PathLine {
-                relativeX: {
+            ShapePath {
+                // Draws the tail portion emitting from the pane.
+                id: tail
+                fillColor: root.background.color
+                strokeColor: internal.leaderColor
+                strokeWidth: parent.border.width
+                capStyle: ShapePath.RoundCap
+                startX: {
                     switch(internal.leaderPosition) {
                     case Callout.LeaderPosition.UpperLeft:
-                    case Callout.LeaderPosition.Top:
+                    case Callout.LeaderPosition.LowerLeft:
+                        return padding;
                     case Callout.LeaderPosition.UpperRight:
                     case Callout.LeaderPosition.LowerRight:
-                    case Callout.LeaderPosition.Bottom:
-                    case Callout.LeaderPosition.LowerLeft:
-                        return root.leaderWidth / 2;
+                        return root.width - root.leaderWidth - padding;
                     case Callout.LeaderPosition.Left:
-                        return root.leaderHeight;
+                        return background.border.width/2;
                     case Callout.LeaderPosition.Right:
-                        return -root.leaderHeight;
+                        return root.width - background.border.width/2;
+                    case Callout.LeaderPosition.Top:
+                    case Callout.LeaderPosition.Bottom:
+                        return root.width / 2 - root.leaderWidth / 2;
                     }
                 }
-                relativeY: {
+                startY: {
                     switch(internal.leaderPosition) {
                     case Callout.LeaderPosition.UpperLeft:
                     case Callout.LeaderPosition.Top:
                     case Callout.LeaderPosition.UpperRight:
-                        return root.leaderHeight;
+                        return background.border.width/2;
                     case Callout.LeaderPosition.LowerRight:
                     case Callout.LeaderPosition.Bottom:
                     case Callout.LeaderPosition.LowerLeft:
-                        return -root.leaderHeight;
+                        return root.height - background.border.width/2;
                     case Callout.LeaderPosition.Left:
                     case Callout.LeaderPosition.Right:
-                        return root.leaderWidth / 2;
+                        return root.height / 2 - root.leaderWidth / 2;
+                    }
+                }
+                PathLine {
+                    relativeX: {
+                        switch(internal.leaderPosition) {
+                        case Callout.LeaderPosition.UpperLeft:
+                        case Callout.LeaderPosition.Top:
+                        case Callout.LeaderPosition.UpperRight:
+                        case Callout.LeaderPosition.LowerRight:
+                        case Callout.LeaderPosition.Bottom:
+                        case Callout.LeaderPosition.LowerLeft:
+                            return root.leaderWidth / 2;
+                        case Callout.LeaderPosition.Left:
+                            return -root.leaderHeight;
+                        case Callout.LeaderPosition.Right:
+                            return root.leaderHeight;
+                        }
+                    }
+                    relativeY: {
+                        switch(internal.leaderPosition) {
+                        case Callout.LeaderPosition.UpperLeft:
+                        case Callout.LeaderPosition.Top:
+                        case Callout.LeaderPosition.UpperRight:
+                            return -root.leaderHeight;
+                        case Callout.LeaderPosition.LowerRight:
+                        case Callout.LeaderPosition.Bottom:
+                        case Callout.LeaderPosition.LowerLeft:
+                            return root.leaderHeight;
+                        case Callout.LeaderPosition.Left:
+                        case Callout.LeaderPosition.Right:
+                            return root.leaderWidth / 2;
+                        }
+                    }
+                }
+                PathLine {
+                    relativeX: {
+                        switch(internal.leaderPosition) {
+                        case Callout.LeaderPosition.UpperLeft:
+                        case Callout.LeaderPosition.Top:
+                        case Callout.LeaderPosition.UpperRight:
+                        case Callout.LeaderPosition.LowerRight:
+                        case Callout.LeaderPosition.Bottom:
+                        case Callout.LeaderPosition.LowerLeft:
+                            return root.leaderWidth / 2;
+                        case Callout.LeaderPosition.Left:
+                            return root.leaderHeight;
+                        case Callout.LeaderPosition.Right:
+                            return -root.leaderHeight;
+                        }
+                    }
+                    relativeY: {
+                        switch(internal.leaderPosition) {
+                        case Callout.LeaderPosition.UpperLeft:
+                        case Callout.LeaderPosition.Top:
+                        case Callout.LeaderPosition.UpperRight:
+                            return root.leaderHeight;
+                        case Callout.LeaderPosition.LowerRight:
+                        case Callout.LeaderPosition.Bottom:
+                        case Callout.LeaderPosition.LowerLeft:
+                            return -root.leaderHeight;
+                        case Callout.LeaderPosition.Left:
+                        case Callout.LeaderPosition.Right:
+                            return root.leaderWidth / 2;
+                        }
                     }
                 }
             }
@@ -609,6 +628,11 @@ Pane {
         id: internal
         property real anchorPointX: (calloutData ? calloutData.screenPoint.x : 0) + screenOffsetX
         property real anchorPointY: (calloutData ? calloutData.screenPoint.y : 0) + screenOffsetY
+        // QML bug workaround here: `background.border.color` always comes out as black by default,
+        // even if it is transparent. We keep the leader color as transparent until explicilty set via
+        // `borderColor`. This supports old behaviour, and also supports all current known styles where
+        // Pane does not have an initial background border color.
+        property color leaderColor: "transparent"
         // Is either the contents of root.leaderPosition, or a calculated LeaderPosition if root.leaderPosition
         // is set to \c Automatic.
         property int leaderPosition: {
@@ -637,6 +661,7 @@ Pane {
             }
             return Callout.LeaderPosition.Bottom;
         }
+        // Keeps track of when to show/hide callout based on CalloutData.
         property Connections calloutDataConnections: Connections {
             target: root.calloutData
             function onVisibleChanged() {
@@ -646,6 +671,13 @@ Pane {
                     root.dismiss();
                 }
             }
+        }
+        // Calculate the portion of property `width` allocated to the label `this`.
+        // Called via `labelWidthFrom.bind(label)(width)`.
+        function labelWidthFrom(width) {
+            if (!this.text)
+                return 0;
+            return width - (image.visible ? image.width : 0 ) - (accessoryButton.visible ? accessoryButton.width : 0);
         }
     }
 }
