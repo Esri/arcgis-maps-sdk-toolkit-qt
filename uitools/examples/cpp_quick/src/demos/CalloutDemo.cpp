@@ -35,7 +35,7 @@ void CalloutDemo::setUp()
   callData->setTitle("This is the location callout");
   callData->setDetail(QString("x: %1 y: %2").arg(m_xClickLoc, m_yClickLoc));
   QImage img(QStringLiteral(":/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/map_pin.png"));
-  callData->setImage(img);
+  //callData->setImage(img);
 
   connect(mv, &MapQuickView::mouseClicked, this, [mv](QMouseEvent& mouse)
           {

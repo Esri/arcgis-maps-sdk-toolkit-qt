@@ -52,21 +52,21 @@ Pane {
         LeaderPosition includes:
 
         \list
-            \li LeaderPosition.UpperLeft (0)
-            \li LeaderPosition.Top (1)
-            \li LeaderPosition.UpperRight (2)
-            \li LeaderPosition.Right (3)
-            \li LeaderPositio.LowerRight (4)
-            \li LeaderPosition.Bottom (5)
-            \li LeaderPosition.LowerLeft (6)
-            \li LeaderPosition.Left (7)
-            \li LeaderPosition.Automatic (8)
+            \li LeaderPosition.UpperLeft \c{(0)}
+            \li LeaderPosition.Top \c{(1)}
+            \li LeaderPosition.UpperRight \c{(2)}
+            \li LeaderPosition.Right \c{(3)}
+            \li LeaderPositio.LowerRight \c{(4)}
+            \li LeaderPosition.Bottom \c{(5)}
+            \li LeaderPosition.LowerLeft \c{(6)}
+            \li LeaderPosition.Left \c{(7)}
+            \li LeaderPosition.Automatic \c{(8)}
         \endlist
 
         Automatic will decide the best placement, based on the
         location of the callout within the visible area of the MapView.
 
-        The default is \c leaderPositionEnum.Bottom.
+        The default is \c LeaderPosition.Automatic.
     */
     enum LeaderPosition {
         UpperLeft = 0,
@@ -80,16 +80,12 @@ Pane {
         Automatic = 8
     }
 
-    /*========================================
-         Configurable properties
-    ========================================*/
-
     /*!
         \brief The property to set the leader position of the callout.
 
         For example, to set the leader line to the top of the callout use:
 
-        \c Callout.leaderPosition: Callout.LeaderPosition.Top
+        \c{Callout.leaderPosition: Callout.LeaderPosition.Top}
 
         The default is \c Callout.LeaderPosition.Automatic.
     */
@@ -98,14 +94,14 @@ Pane {
     /*!
         \brief The height of the leader line in the Callout.
 
-        The default leader height is \c 10.
+        The default leader height is \c 15.
     */
     property int leaderHeight: 15
 
     /*!
         \brief The width of the leader line in the Callout.
 
-        The default leader width is \c 20.
+        The default leader width is \c 30.
     */
     property int leaderWidth: 30
 
@@ -176,7 +172,7 @@ Pane {
     /*!
       When \c true, the width of the callout content automatically resizes up
       to the value of \l maxWidth. To explicitly set the width
-      set autoAdjustWidth to \c false, and explicitly set \l implicitWidth.
+      set autoAdjustWidth to \c false, and explicitly set \l calloutWidth.
 
       This property defaults to \c true.
     */
@@ -192,7 +188,7 @@ Pane {
     //                                 `autoAdjustWidth` dictating the behaviour. Possible Qt 6 breaking change?
 
     /*!
-      Maximum width of the Callout's content when `autoAdjustWidth` is true.
+      Maximum width of the Callout's content when \l autoAdjustWidth is \c true.
 
       This property defaults to \c 300.
     */
