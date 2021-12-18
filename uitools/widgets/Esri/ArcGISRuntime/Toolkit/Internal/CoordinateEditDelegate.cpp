@@ -37,7 +37,7 @@ namespace Toolkit
    \inmodule EsriArcGISRuntimeToolkit
    \brief This is an implementation detail of table-view editing for the
    \c CoordinateConversion tool.
-   
+
    When a coordinate is edited by the user, this tool triggers an update of the
    current point on the controller, as opposed to just editing the value in
    the cell as would normally happen.
@@ -50,7 +50,7 @@ namespace Toolkit
     \endlist
   */
 CoordinateEditDelegate::CoordinateEditDelegate(QObject* parent):
-  QItemDelegate(parent) 
+  QItemDelegate(parent)
 {
 }
 
@@ -102,10 +102,10 @@ void CoordinateEditDelegate::setModelData(
     return QItemDelegate::setModelData(editor, model, index);
 
   auto tableModel = qobject_cast<GenericTableProxyModel*>(model);
-  
+
   if (!tableModel)
     return QItemDelegate::setModelData(editor, model, index);
-  
+
   auto listModel = tableModel->sourceModel();
   auto result = listModel->element<CoordinateConversionResult>(index);
   if (result)

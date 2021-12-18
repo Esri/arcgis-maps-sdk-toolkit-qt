@@ -14,7 +14,7 @@
  *  limitations under the License.
  ******************************************************************************/
 import QtQml 2.12
-import Esri.ArcGISRuntime 100.13
+import Esri.ArcGISRuntime 100.14
 
 /*!
    \qmltype OverviewMapController
@@ -75,7 +75,7 @@ QtObject {
       \qmlproperty MapView insetView
       \brief MapView which represents an overview/inset of the current viewpoint of the geoView.
      */
-    readonly property MapView insetView: MapView {
+    readonly property var insetView: MapView {
         // Default map to show in the inset.
         Map {
             initBasemapStyle: Enums.BasemapStyleArcGISTopographic

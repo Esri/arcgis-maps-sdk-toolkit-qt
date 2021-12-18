@@ -16,7 +16,7 @@
 
 import QtQuick 2.6
 import QtQuick.Controls 2.2
-import Esri.ArcGISRuntime 100.13
+import Esri.ArcGISRuntime 100.14
 import Esri.ArcGISArToolkit 1.0
 
 ApplicationWindow {
@@ -205,7 +205,7 @@ ApplicationWindow {
         onStreetsSceneClicked: changeScene("qrc:/qml/scenes/StreetsScene.qml", streetsSceneFactor, false);
         onImagerySceneClicked: changeScene("qrc:/qml/scenes/ImageryScene.qml", imagerySceneFactor, false);
 
-        readonly property double pointCloundSceneFactor: 0.0001        
+        readonly property double pointCloundSceneFactor: 0.0001
         readonly property double brestSceneFactor: 0.00001
         readonly property double berlinSceneFactor: 0.0001
         readonly property double tabletopTestSceneFactor: 0.0000001

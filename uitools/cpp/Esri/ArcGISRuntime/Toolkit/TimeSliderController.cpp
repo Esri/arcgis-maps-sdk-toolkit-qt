@@ -43,9 +43,9 @@ namespace
           The type \c T must be default-constructible.
    \list
    \li \a listModel ListModel to accummalate.
-   \li \a f Accumulation function that takes the current \c T and a \c TimeAware 
+   \li \a f Accumulation function that takes the current \c T and a \c TimeAware
        object.
-   \endlist 
+   \endlist
    Returns the accumulation of \c T.
    */
   template <class T, class BinaryOperation>
@@ -145,13 +145,13 @@ namespace
   \ingroup ArcGISQtToolkitUiCppControllers
   \brief In MVC architecture, this is the controller for the corresponding
   \c TimeSlider.
-  
+
   This controller calculates interval steps and the range of the full extent for
-  the \c TimeSlider. This is based on the combined extents of time-aware layers 
+  the \c TimeSlider. This is based on the combined extents of time-aware layers
   in the given \c GeoView.
 
   The time-extent of the GeoView itself can be manipulated using steps with
-  calls to \l TimeSliderController::setSteps. 
+  calls to \l TimeSliderController::setSteps.
  */
 
 /*!
@@ -182,10 +182,10 @@ QObject* TimeSliderController::geoView() const
 
 /*!
   \brief Set the \c GeoView object this Controller uses.
-  
+
   Internally this is cast to a \c MapView or \c SceneView using \c qobject_cast,
   which is why the paremeter is of form \c QObject and not \c GeoView.
-  
+
   \list
   \li \a geoView Object which must inherit from \c GeoView* and \c QObject*.
   \endlist
@@ -200,7 +200,7 @@ void TimeSliderController::setGeoView(QObject* geoView)
 
   m_geoView = geoView;
 
-  if (!m_geoView) 
+  if (!m_geoView)
   {
     emit geoViewChanged();
     return;
@@ -208,12 +208,12 @@ void TimeSliderController::setGeoView(QObject* geoView)
 
   if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView.data()))
   {
-    connect(mapView, &MapViewToolkit::mapChanged, 
+    connect(mapView, &MapViewToolkit::mapChanged,
             this, qOverload<>(&TimeSliderController::initializeTimeProperties));
   }
   else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView.data()))
   {
-    connect(sceneView, &SceneViewToolkit::sceneChanged, 
+    connect(sceneView, &SceneViewToolkit::sceneChanged,
             this, qOverload<>(&TimeSliderController::initializeTimeProperties));
   }
 
@@ -239,8 +239,8 @@ void TimeSliderController::disconnectAllLayers()
 
 /*!
  \internal
- \brief Overload that extracts the operational layers from the current 
- \c GeoView and calls our initialization calls on the resultant 
+ \brief Overload that extracts the operational layers from the current
+ \c GeoView and calls our initialization calls on the resultant
  \c LayerListModel.
  */
 void TimeSliderController::initializeTimeProperties()
@@ -287,7 +287,7 @@ void TimeSliderController::initializeTimeProperties(LayerListModel* opLayers)
   {
     if (auto tLayer = dynamic_cast<TimeAware*>(layer))
     {
-      connect(layer, &Layer::loadStatusChanged, 
+      connect(layer, &Layer::loadStatusChanged,
               this, qOverload<>(&TimeSliderController::initializeTimeProperties));
     }
   }
@@ -323,7 +323,7 @@ TimeExtent TimeSliderController::fullTimeExtent() const
 /*!
  \brief Calculates the time-interval as a \c TimeValue, which is the smallest
   possible interval of all \c TimeAware layers in the current \c GeoView.
- 
+
  Returns a \c TimeValue which is the minimum time-interval of all intervals.
  */
 TimeValue TimeSliderController::timeInterval() const
@@ -344,7 +344,7 @@ TimeValue TimeSliderController::timeInterval() const
 }
 
 /*!
- \brief Calculates the number of steps the TimeSlider should display based on 
+ \brief Calculates the number of steps the TimeSlider should display based on
  \l fullTimeExtent dividied by \l timeInterval.
  Returns number of steps for TimeSlider.
  */
@@ -385,9 +385,9 @@ int TimeSliderController::endStep() const
 
  Setting steps changes the current time-extent of the \c GeoView to a
  \c TimeExtent range calculated by the current steps using \l timeForStep.
- 
+
  \list
- \li \a s start-step to set. 
+ \li \a s start-step to set.
  \li \a e end-step to set.
  \endlist
  */
@@ -402,7 +402,7 @@ void TimeSliderController::setSteps(int s, int e)
 
  Setting steps changes the current time-extent of the \c GeoView to a
  \c TimeExtent range calculated by the current steps using \l timeForStep.
- 
+
  \list
  \li \a steps Pair of start end steps.
  \endlist
@@ -427,9 +427,9 @@ void TimeSliderController::setSteps(std::pair<int, int> steps)
  \brief Calculates a \c QDateTIme from a step.
 
  Given \a step and \l numberOfSteps we can calculate the date-time for
- an arbitrary step \a step interpolated between the start and end times of 
+ an arbitrary step \a step interpolated between the start and end times of
  \l fullTimeExtent.
- 
+
  \list
  \li \a step Step to calculate a time for.
  \endlist

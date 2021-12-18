@@ -21,7 +21,7 @@ import Esri.ArcGISRuntime 100.8
    \inqmlmodule Esri.ArcGISRuntime.Toolkit
    \since Esri.ArcGISRutime 100.10
    \ingroup ArcGISQtToolkitUiQmlControllers
-   \brief In MVC architecture, this is the controller for the 
+   \brief In MVC architecture, this is the controller for the
    CoordinateConversion view.
  */
 
@@ -37,15 +37,15 @@ QtObject {
     /*!
        \brief Distance between camera and current point when zoomToCurrentPoint
        is invoked.
-       
+
        If geoView is a SceneView, then this value represents the distance
-       between the camera and the point returned by currentPoint when 
+       between the camera and the point returned by currentPoint when
        zoomToCurrentPoint is called.
-       
+
        If geoView is a MapView, this value has no effect on zoom calculations.
-       
+
        The distance is in the units of the GeoView's SpatialReference.
-       
+
        Defaults to 1500.
      */
     property double zoomToDistance: 1500.0
@@ -53,11 +53,11 @@ QtObject {
     /*!
        \brief Whether this controller is actively listening for mouse
        events.
-       
+
        When listening for mouse events, the Controller will update the
        current point to whatever point is returned by a click event on the
        GeoView.
-       
+
        When true this controller is listening to mouse events on the GeoView
        and will actively update the CurrentPoint.
        When false this controller is not listening to mouse events on the
@@ -66,7 +66,7 @@ QtObject {
     property bool inPickingMode: false
 
     /*!
-       \brief List of textual representations of the current point in different 
+       \brief List of textual representations of the current point in different
        formats.
      */
     property list<CoordinateConversionResult> results
@@ -120,7 +120,7 @@ QtObject {
 
     /*!
       \brief Returns the current point.
-      
+
       The current point represents the one point that all elements within
       the conversionResults list-model are tied to.
     */
@@ -129,10 +129,10 @@ QtObject {
     }
 
     /*!
-      \brief Converts the current point held by this controller as a 2D point 
+      \brief Converts the current point held by this controller as a 2D point
       relative to the current window.
-      
-      Returns the point returned by currentPoint as a screen coordinate. 
+
+      Returns the point returned by currentPoint as a screen coordinate.
     */
     function screenCoordinate() {
         if (!geoView)
@@ -176,11 +176,11 @@ QtObject {
     /*!
       \qmlmethod CoordinateConversionController::addNewCoordinateResultForOption(CoordinateConversionOption option)
       \brief Given option, generates a new result.
-      
+
       A new CoordianteConversionResult is added to the list-model returned by
       coordinateResults. This Result is tied to the conversion parameters as
       given by option.
-      
+
       \list
       \li \a option option to generate result for.
       \endlist
@@ -197,10 +197,10 @@ QtObject {
     /*!
       \qmlmethod CoordinateConversionController::removeCoordinateResultAtIndex(int index)
       \brief Removes a given CoordinateConversionResult at index.
-      
+
       This function is for deleting results in the list-model returned by
       coordinateREsults.
-      
+
       \list
       \li \a index index of a given CoordinateConversionResult in the list-model
       returned by coordinateResults.

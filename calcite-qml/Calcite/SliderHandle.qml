@@ -1,5 +1,3 @@
-import QtQuick 2.12
-
 /*******************************************************************************
  *  Copyright 2012-2021 Esri
  *
@@ -15,6 +13,9 @@ import QtQuick 2.12
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
+
+import QtQuick 2.12
+
 Rectangle {
     id: handle
 

@@ -19,8 +19,8 @@ import QtQml 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Shapes 1.15
 
-import Esri.ArcGISRuntime.Toolkit 100.13
-import Esri.ArcGISRuntime.Toolkit.Controller 100.13
+import Esri.ArcGISRuntime.Toolkit 100.14
+import Esri.ArcGISRuntime.Toolkit.Controller 100.14
 
 /*!
    \qmltype Scalebar

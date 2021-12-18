@@ -24,7 +24,7 @@ import Esri.ArcGISRuntime 100.8
    \ingroup ArcGISQtToolkitUiQmlControllers
    \brief a CoordinateConversionOption is a collection of properties that
    dictates how a Point should be converted to and from a string.
-   
+
    a CoordinateConversionOption is able to convert between Point <--> string
    using the formatting options it is currently set with.
  */
@@ -90,7 +90,7 @@ QtObject {
       \qmlmethod CoordinateConversionOption::prettyPrint(Point point)
       \brief Converts a Point to a string based on the properties set in this
       CoordinateConversionOption
-      
+
       \list
       \li \a point Point to convert to string.
       \endlist
@@ -121,15 +121,15 @@ QtObject {
       \qmlmethod void CoordinateConversionOption::pointFromString(Point point, SpatialReference spatialReference)
       \brief Given a string called point, converts it to a Point using the
       current formatting options applied.
-      
+
       This conversion has the chance of failing, in which case null is returned.
-      
+
       \list
       \li \a point string to conver to a Point.
       \li \a spatialReference SpatialReference to use in conversion.
       \endlist
 
-      Returns string as a Point. 
+      Returns string as a Point.
     */
     function pointFromString(point, spatialReference) {
         if (!spatialReference)

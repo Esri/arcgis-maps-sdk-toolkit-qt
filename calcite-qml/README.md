@@ -13,7 +13,7 @@ This is a WIP module which contains a port of Esri's Calcite Web Style that is Q
 ![dark mode screenshot](docs/dark_mode.png)
 
 ## Integration
- 
+
 To integrate Calcite into your app, add the following lines to your `*.pro` file:
 
 ```pro

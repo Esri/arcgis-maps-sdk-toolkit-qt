@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import Esri.ArcGISRuntime.Toolkit.Controller 100.13
+import Esri.ArcGISRuntime.Toolkit.Controller 100.14
 
 import QtQuick 2.12
 
@@ -52,7 +52,7 @@ Pane {
     /*!
        \qmlproperty bool inInputMode
        \brief Whether whether the tool is in input mode.
-      
+
        If \c true, the tool will convert a point set via a mouse click or text entry.
      */
     readonly property bool inInputMode: editCoordinateButton.checked || captureModeButton.checked

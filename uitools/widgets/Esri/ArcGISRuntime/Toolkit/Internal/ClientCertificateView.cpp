@@ -68,7 +68,7 @@ namespace Toolkit {
             });
 
     // Add a client certificate on request.
-    // Note: uses queued connection to not block the pressed signal with a 
+    // Note: uses queued connection to not block the pressed signal with a
     // modal dialog.
     connect(
         m_ui->addCertificateButton, &QPushButton::pressed, this,
@@ -91,7 +91,7 @@ namespace Toolkit {
         Qt::QueuedConnection);
 
     // Prompt for a password when required.
-    // Note: uses queued connection to not block the pressed signal with a 
+    // Note: uses queued connection to not block the pressed signal with a
     // modal dialog.
     connect(
         m_controller, &AuthenticationController::clientCertificatePasswordRequired, this,

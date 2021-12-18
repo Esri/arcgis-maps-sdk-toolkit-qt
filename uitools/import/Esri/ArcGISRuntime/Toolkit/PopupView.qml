@@ -14,7 +14,7 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import Esri.ArcGISRuntime.Toolkit.Controller 100.13
+import Esri.ArcGISRuntime.Toolkit.Controller 100.14
 
 import QtQuick 2.11
 import QtQuick.Controls 2.11
@@ -152,7 +152,7 @@ Page {
             Repeater {
                 model: controller.displayFields
                 Label {
-                    text: fieldName ?? ""
+                    text: label ?? fieldName ?? ""
                     Layout.maximumWidth: flickable.width / 2
                     wrapMode: Text.Wrap
                     font: popupView.font

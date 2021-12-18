@@ -102,7 +102,7 @@ int Flash::alpha_() const
   \brief Set the point on the screen the flash will appear relative to the
   parent.
   \list
-    \li \a point Point to appear. 
+    \li \a point Point to appear.
   \endlist
  */
 void Flash::setPoint(QPointF point)
@@ -149,9 +149,9 @@ int Flash::radius() const
 
 /*!
   \brief When called will begin animating this flash.
-  
+
   After the animation is finished this object will delete itself.
-  
+
   \list
     \li \a duration Lifetime of animation in ms.
   \endlist
@@ -165,17 +165,17 @@ void Flash::play(int duration)
   animation->start();
 }
 
-/*! 
+/*!
   \fn void Esri::ArcGISRuntime::Toolkit::Flash::alphaChanged()
-  \brief emitted when the \c alpha changes. 
+  \brief emitted when the \c alpha changes.
 */
 
-/*! 
+/*!
   \fn void Esri::ArcGISRuntime::Toolkit::Flash::pointChanged()
-  \brief emitted when the \c point changes. 
+  \brief emitted when the \c point changes.
  */
 
-/*! 
+/*!
   \fn void Esri::ArcGISRuntime::Toolkit::Flash::radiusChanged()
   \brief emitted when the \c radius changes.
  */

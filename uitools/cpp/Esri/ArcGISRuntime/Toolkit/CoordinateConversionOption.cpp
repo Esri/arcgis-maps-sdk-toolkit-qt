@@ -32,7 +32,7 @@ namespace Toolkit
   \ingroup ArcGISQtToolkitUiCppControllers
   \brief a \c CoordinateConversionOption is a collection of properties that
   dictates how a \c Point should be converted to and from a string.
-  
+
   A \c CoordinateConversionOption is able to convert between Point and QString
   using the formatting options it is currently set with.
  */
@@ -238,7 +238,7 @@ void CoordinateConversionOption::setGarsConversionMode(GarsConversionMode conver
 /*!
   \brief Converts a \c Point to a \c QString based on the properties set in this
   \c CoordinateConversionOption.
-  
+
   \list
   \li \a point \c Point to convert to \c QString.
   \endlist
@@ -277,7 +277,7 @@ QString CoordinateConversionOption::prettyPrint(const Point& point) const
       const auto conversionMode = utmConversionMode();
       return CoordinateFormatter::toUtm(point, conversionMode, hasSpaces());
     }
-    default: 
+    default:
       return QString();
   }
 }
@@ -285,16 +285,16 @@ QString CoordinateConversionOption::prettyPrint(const Point& point) const
 /*!
   \brief Given a string called \a point, converts it to a \c Point using the
   current formatting options applied.
-  
+
   This conversion has the chance of failing, in which case an invalid
   default-constructed Point will be returned.
-  
+
   \list
   \li \a point \c QString to convert to a \c Point.
   \li \a spatialReference \c SpatialReference to use in conversion.
   \endlist
 
-  Returns the string as a \c Point. 
+  Returns the string as a \c Point.
  */
 Point CoordinateConversionOption::pointFromString(const QString& point, const SpatialReference& spatialReference)
 {
@@ -353,47 +353,47 @@ Point CoordinateConversionOption::pointFromString(const QString& point, const Sp
 
 /*!
   \fn void Esri::ArcGISRuntime::Toolkit::CoordinateConversionOption::nameChanged()
-  \brief Emits when \c name property changes. 
+  \brief Emits when \c name property changes.
  */
 
 /*!
   \fn void Esri::ArcGISRuntime::Toolkit::CoordinateConversionOption::outputModeChanged()
-  \brief Emits when \c outputMode property changes. 
+  \brief Emits when \c outputMode property changes.
  */
 
 /*!
   \fn void Esri::ArcGISRuntime::Toolkit::CoordinateConversionOption::hasSpacesChanged()
-  \brief Emits when \c hasSpaces property changes. 
+  \brief Emits when \c hasSpaces property changes.
  */
 
 /*!
   \fn void Esri::ArcGISRuntime::Toolkit::CoordinateConversionOption::precisionChanged()
-  \brief Emits when \c precision property changes. 
+  \brief Emits when \c precision property changes.
  */
 
 /*!
   \fn void Esri::ArcGISRuntime::Toolkit::CoordinateConversionOption::decimalPlacesChanged()
-  \brief Emits when \c decimal property changes. 
+  \brief Emits when \c decimal property changes.
  */
 
 /*!
   \fn void Esri::ArcGISRuntime::Toolkit::CoordinateConversionOption::mgrsConversionModeChanged()
-  \brief Emits when \c mgrsConversion property changes. 
+  \brief Emits when \c mgrsConversion property changes.
  */
 
 /*!
   \fn void Esri::ArcGISRuntime::Toolkit::CoordinateConversionOption::latLonFormatChanged()
-  \brief Emits when \c latLonFormat property changes. 
+  \brief Emits when \c latLonFormat property changes.
  */
 
 /*!
   \fn void Esri::ArcGISRuntime::Toolkit::CoordinateConversionOption::utmConversionModeChanged()
-  \brief Emits when \c utmConversionMode property changes. 
+  \brief Emits when \c utmConversionMode property changes.
  */
 
   /*!
   \fn void Esri::ArcGISRuntime::Toolkit::CoordinateConversionOption::garsConversionModeChanged()
-  \brief Emits when \c garsConversionMode property changes. 
+  \brief Emits when \c garsConversionMode property changes.
  */
 
 /*!
