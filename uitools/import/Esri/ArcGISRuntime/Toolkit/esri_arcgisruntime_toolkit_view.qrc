@@ -8,7 +8,6 @@
     <file>CoordinateConversion.qml</file>
     <file>CurrentVersion.qml</file>
     <file>FlashImage.qml</file>
-    <file>LeaderPosition.js</file>
     <file>NorthArrow.qml</file>
     <file>OAuth2View.qml</file>
     <file>OverviewMap.qml</file>
