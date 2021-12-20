@@ -170,16 +170,18 @@ Pane {
     }
 
     /*!
-      When \c true, the width of the callout content automatically resizes up
-      to the value of \l maxWidth. To explicitly set the width
-      set autoAdjustWidth to \c false, and explicitly set \l calloutWidth.
+      \brief When \c true, the width of the callout content automatically resizes up
+      to the value of \l maxWidth. 
+      
+      To explicitly set the width set autoAdjustWidth to \c false, 
+      and explicitly set \l calloutWidth.
 
       This property defaults to \c true.
     */
     property bool autoAdjustWidth: true
 
     /*!
-        When \l{autoAdjustWidth} is \c{false}, the callout has a fixed width
+        \brief When \l{autoAdjustWidth} is \c{false}, the callout has a fixed width
         equal to this value.
 
         This property defaults to \c 300.
@@ -188,7 +190,7 @@ Pane {
     //                                 `autoAdjustWidth` dictating the behaviour. Possible Qt 6 breaking change?
 
     /*!
-      Maximum width of the Callout's content when \l autoAdjustWidth is \c true.
+      \brief Maximum width of the Callout's content when \l autoAdjustWidth is \c true.
 
       This property defaults to \c 300.
     */
