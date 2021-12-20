@@ -68,28 +68,6 @@ import QtQuick.Shapes 1.15
 Pane {
     id: root
 
-    /*!
-        \brief The enumerator for the set of possible positions of the leader line in the callout.
-
-        LeaderPosition includes:
-
-        \list
-            \li LeaderPosition.UpperLeft \c{(0)}
-            \li LeaderPosition.Top \c{(1)}
-            \li LeaderPosition.UpperRight \c{(2)}
-            \li LeaderPosition.Right \c{(3)}
-            \li LeaderPositio.LowerRight \c{(4)}
-            \li LeaderPosition.Bottom \c{(5)}
-            \li LeaderPosition.LowerLeft \c{(6)}
-            \li LeaderPosition.Left \c{(7)}
-            \li LeaderPosition.Automatic \c{(8)}
-        \endlist
-
-        Automatic will decide the best placement, based on the
-        location of the callout within the visible area of the MapView.
-
-        The default is \c LeaderPosition.Automatic.
-    */
     enum LeaderPosition {
         UpperLeft = 0,
         Top = 1,
@@ -103,11 +81,22 @@ Pane {
     }
 
     /*!
+        \qmlproperty enumeration leaderPosition
         \brief The property to set the leader position of the callout.
 
-        For example, to set the leader line to the top of the callout use:
+        leaderPosition can be one of:
+        \value Callout.LeaderPosition.UpperLeft \c{(0)}
+        \value Callout.LeaderPosition.Top \c{(1)}
+        \value Callout.LeaderPosition.UpperRight \c{(2)}
+        \value Callout.LeaderPosition.Right \c{(3)}
+        \value Callout.LeaderPosition.LowerRight \c{(4)}
+        \value Callout.LeaderPosition.Bottom \c{(5)}
+        \value Callout.LeaderPosition.LowerLeft \c{(6)}
+        \value Callout.LeaderPosition.Left \c{(7)}
+        \value Callout.LeaderPosition.Automatic \c{(8)} The default.
 
-        \c{Callout.leaderPosition: Callout.LeaderPosition.Top}
+        \c Callout.LeaderPosition.Automatic will decide the best placement,
+        based on the location of the callout within the visible area of the MapView.
 
         The default is \c Callout.LeaderPosition.Automatic.
     */
