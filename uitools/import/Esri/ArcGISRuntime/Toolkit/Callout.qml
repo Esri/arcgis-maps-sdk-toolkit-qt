@@ -292,6 +292,10 @@ Pane {
 
     x: {
         switch(internal.leaderPosition) {
+        case Callout.LeaderPosition.Left:
+            return internal.anchorPointX + root.leaderHeight;
+        case Callout.LeaderPosition.Right:
+            return internal.anchorPointX - root.leaderHeight - root.width;
         case Callout.LeaderPosition.UpperLeft:
         case Callout.LeaderPosition.LowerLeft:
             return internal.anchorPointX - leaderWidth / 2 - padding;
@@ -300,16 +304,16 @@ Pane {
             return internal.anchorPointX - root.width + leaderWidth / 2 + padding;
         case Callout.LeaderPosition.Top:
         case Callout.LeaderPosition.Bottom:
+        default:
             return internal.anchorPointX - root.width / 2;
-        case Callout.LeaderPosition.Left:
-            return internal.anchorPointX + root.leaderHeight;
-        case Callout.LeaderPosition.Right:
-            return internal.anchorPointX - root.leaderHeight - root.width;
         }
     }
 
     y: {
         switch(internal.leaderPosition) {
+        case Callout.LeaderPosition.Left:
+        case Callout.LeaderPosition.Right:
+            return internal.anchorPointY - height / 2;
         case Callout.LeaderPosition.UpperLeft:
         case Callout.LeaderPosition.Top:
         case Callout.LeaderPosition.UpperRight:
@@ -317,10 +321,8 @@ Pane {
         case Callout.LeaderPosition.LowerRight:
         case Callout.LeaderPosition.Bottom:
         case Callout.LeaderPosition.LowerLeft:
+        default:
             return internal.anchorPointY - height - leaderHeight;
-        case Callout.LeaderPosition.Left:
-        case Callout.LeaderPosition.Right:
-            return internal.anchorPointY - height / 2;
         }
     }
 
