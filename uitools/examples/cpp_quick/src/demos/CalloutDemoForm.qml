@@ -26,14 +26,6 @@ DemoPage {
                 id: callout
                 calloutData : view.calloutData //binding to parent. Any change is reflected on this
                 accessoryButtonVisible: false
-                titleTextColor: "#000000"
-                backgroundColor: "#ffffff"
-                borderColor: "#000000"
-                borderWidth: 2
-                cornerRadius: 5
-                leaderHeight: 10
-                leaderWidth: 20
-                leaderPosition: Callout.LeaderPosition.Bottom
             }
             CalloutDemo {
                 geoView: view
