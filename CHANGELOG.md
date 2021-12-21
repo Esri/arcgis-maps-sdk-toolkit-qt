@@ -2,6 +2,7 @@
 
 ## 100.13
 
+* (AR) Fixed bug when targeting API 30 on Android related to device permissions.
 * (SearchView) Introduction of new SearchView tool (C++/Quick and QML/Quick only).
 * (Scalebar) Introduction of new Scalebar tool (C++/Quick only).
 * (OverviewMap) Fixed initialization bug wherein the inset would not be valid until first user interaction.
