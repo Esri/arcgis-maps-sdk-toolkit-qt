@@ -1,9 +1,8 @@
 <RCC>
     <qresource prefix="/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images">
-        <file>add_encircled.png</file>
         <file>compass.png</file>
         <file>flash.png</file>
-        <file>info_encircled.png</file>
+        <file>information.svg</file>
         <file>map_pin.png</file>
         <file>menu.png</file>
         <file>menu_collapse.png</file>
@@ -19,5 +18,6 @@
         <file>text_editing_mode.png</file>
         <file>x.svg</file>
         <file>zoom.png</file>
+        <file>plus-circle.svg</file>
     </qresource>
 </RCC>

@@ -29,5 +29,6 @@ T.Pane {
 
     background: Rectangle {
         color: Calcite.background
+        border.color: "transparent"
     }
 }
