@@ -2,6 +2,8 @@
 
 ## 100.14
 
+* [Callout] Major rewrite of Callout. Moved from Canvas to Shape rendering. Callout is now style compliant.
+
 ## 100.13
 
 * (SearchView) Introduction of new SearchView tool (C++/Quick and QML/Quick only).
