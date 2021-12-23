@@ -19,18 +19,24 @@ namespace Esri {
 namespace ArcGISRuntime {
 namespace Toolkit {
 
-template <typename Sender, typename Signal, typename Receiver, typename Slot>
-QMetaObject::Connection singleShotConnection(Sender* sender, Signal&& signal, Receiver* reciever, Slot&& slot)
-{
-  auto connection = std::make_shared<QMetaObject::Connection>();
-  *connection = QObject::connect(sender, std::forward<Signal>(signal),
-                                 reciever, [connection, slot = std::forward<Slot>(slot)](auto&&...args)
-                                 {
-                                   QObject::disconnect(*connection);
-                                   slot(std::forward<decltype(args)>(args)...);
-                                 });
-  return *connection;
-}
+  /*!
+  \internal
+  \inmodule EsriArcGISRuntimeToolkit
+  \fn template<typename Sender, typename Signal, typename Receiver, typename Slot> QMetaObject::Connection singleShotConnection(Sender* sender, Signal&& signal, Receiver* reciever, Slot&& slot)
+  \brief Function that crates a connection and automatically disconnects it before its first run.
+ */
+  template <typename Sender, typename Signal, typename Receiver, typename Slot>
+  QMetaObject::Connection singleShotConnection(Sender* sender, Signal&& signal, Receiver* reciever, Slot&& slot)
+  {
+    auto connection = std::make_shared<QMetaObject::Connection>();
+    *connection = QObject::connect(sender, std::forward<Signal>(signal),
+                                   reciever, [connection, slot = std::forward<Slot>(slot)](auto&&... args)
+                                   {
+                                     QObject::disconnect(*connection);
+                                     slot(std::forward<decltype(args)>(args)...);
+                                   });
+    return *connection;
+  }
 }
 }
 }
