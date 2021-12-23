@@ -136,10 +136,7 @@ namespace Toolkit {
     if (!area.isEmpty() && repeatSearchResultThreshold() > 0)
     {
       QMetaObject::Connection connection(singleShotConnection(
-          locator(),
-          &LocatorTask::geocodeCompleted,
-          this,
-          [this, suggestion, area](QUuid taskId, const QList<Esri::ArcGISRuntime::GeocodeResult>& geocodeResults)
+          locator(), &LocatorTask::geocodeCompleted, this, [this, suggestion, area](QUuid taskId, const QList<Esri::ArcGISRuntime::GeocodeResult>& geocodeResults)
           {
             // Warning: hack here. We can not detect in an async-friendly manner when a task is cancelled.
             // Which means we have to disconnect on "any" callback (handled by the singleShotConnection), otherwise we will build up space leaks with repeated
@@ -172,10 +169,7 @@ namespace Toolkit {
     if (!area.isEmpty() && repeatSearchResultThreshold() > 0)
     {
       QMetaObject::Connection connection(singleShotConnection(
-          locator(),
-          &LocatorTask::geocodeCompleted,
-          this,
-          [this, searchString, area](QUuid taskId, const QList<Esri::ArcGISRuntime::GeocodeResult>& geocodeResults)
+          locator(), &LocatorTask::geocodeCompleted, this, [this, searchString, area](QUuid taskId, const QList<Esri::ArcGISRuntime::GeocodeResult>& geocodeResults)
           {
             // Warning: hack here. We can not detect in an async-friendly manner when a task is cancelled.
             // Which means we have to disconnect on "any" callback, otherwise we will build up space leaks with repeated
