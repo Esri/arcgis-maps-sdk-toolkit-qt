@@ -15,7 +15,7 @@
  ******************************************************************************/
 #include "OverviewMapController.h"
 
-#include "Internal/SingleshotConnection.h"
+#include "Internal/SingleShotConnection.h"
 
 // ArcGISRuntime headers
 #include <Graphic.h>

@@ -31,6 +31,7 @@ HEADERS += $$CPPPATH/AuthenticationController.h \
            $$CPPPATH/Internal/GenericTableProxyModel.h \
            $$CPPPATH/Internal/GeoViews.h \
            $$CPPPATH/Internal/MetaElement.h \
+           $$CPPPATH/Internal/SingleShotConnection.h \
            $$CPPPATH/NorthArrowController.h \
            $$CPPPATH/OverviewMapController.h \
            $$CPPPATH/PopupViewController.h \
@@ -40,8 +41,7 @@ HEADERS += $$CPPPATH/AuthenticationController.h \
            $$CPPPATH/SearchSuggestion.h \
            $$CPPPATH/SearchViewController.h \
            $$CPPPATH/SmartLocatorSearchSource.h \
-           $$CPPPATH/TimeSliderController.h \
-           $$PWD/cpp/Esri/ArcGISRuntime/Toolkit/Internal/SingleshotConnection.h
+           $$CPPPATH/TimeSliderController.h
 
 SOURCES += $$CPPPATH/AuthenticationController.cpp \
            $$CPPPATH/BasemapGalleryController.cpp \

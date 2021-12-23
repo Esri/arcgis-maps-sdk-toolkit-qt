@@ -16,7 +16,7 @@
  ******************************************************************************/
 #include "SmartLocatorSearchSource.h"
 
-#include "Internal/SingleshotConnection.h"
+#include "Internal/SingleShotConnection.h"
 
 namespace Esri {
 namespace ArcGISRuntime {
