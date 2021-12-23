@@ -15,6 +15,8 @@
  ******************************************************************************/
 #include "OverviewMapController.h"
 
+#include "Internal/SingleshotConnection.h"
+
 // ArcGISRuntime headers
 #include <Graphic.h>
 #include <GraphicsOverlay.h>
@@ -138,16 +140,13 @@ namespace Toolkit {
                          }
                        });
       // Create single-shot connection to geoView's drawStatusChanged to ensure OverviewMap updates when the scene initially loads.
-      QMetaObject::Connection* const sceneViewDrawStatusConnection = new QMetaObject::Connection;
-      *sceneViewDrawStatusConnection = connect(sceneView, &SceneViewToolkit::drawStatusChanged, this,
-                       [this, sceneView, sceneViewDrawStatusConnection] (DrawStatus status)
-                       {
-                          if (status == DrawStatus::Completed)
-                            applySceneNavigationToInset(sceneView);
-
-                          QObject::disconnect(*sceneViewDrawStatusConnection);
-                          delete sceneViewDrawStatusConnection;
-                        });
+      QMetaObject::Connection(singleShotConnection(
+        sceneView, &SceneViewToolkit::drawStatusChanged, this,
+                                                   [this, sceneView](DrawStatus status)
+                                                   {
+                                                     if (status == DrawStatus::Completed)
+                                                       applySceneNavigationToInset(sceneView);
+                                                   }));
     }
     else if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
@@ -170,16 +169,13 @@ namespace Toolkit {
                          }
                        });
       // Create single-shot connection to geoView's drawStatusChanged to ensure OverviewMap updates when the map initially loads.
-      QMetaObject::Connection* const mapViewDrawStatusConnection = new QMetaObject::Connection;
-      *mapViewDrawStatusConnection = connect(mapView, &MapViewToolkit::drawStatusChanged, this,
-                                  [this, mapView, mapViewDrawStatusConnection](DrawStatus status)
-                                  {
-                                    if (status == DrawStatus::Completed)
-                                      applyMapNavigationToInset(mapView);
-
-                                    QObject::disconnect(*mapViewDrawStatusConnection);
-                                    delete mapViewDrawStatusConnection;
-                                  });
+      QMetaObject::Connection mapViewDrawStatusConnection(singleShotConnection(
+          mapView, &MapViewToolkit::drawStatusChanged, this,
+          [this, mapView](DrawStatus status)
+          {
+            if (status == DrawStatus::Completed)
+              applyMapNavigationToInset(mapView);
+          }));
     }
     emit geoViewChanged();
   }

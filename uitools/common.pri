@@ -40,7 +40,8 @@ HEADERS += $$CPPPATH/AuthenticationController.h \
            $$CPPPATH/SearchSuggestion.h \
            $$CPPPATH/SearchViewController.h \
            $$CPPPATH/SmartLocatorSearchSource.h \
-           $$CPPPATH/TimeSliderController.h
+           $$CPPPATH/TimeSliderController.h \
+           $$PWD/cpp/Esri/ArcGISRuntime/Toolkit/Internal/SingleshotConnection.h
 
 SOURCES += $$CPPPATH/AuthenticationController.cpp \
            $$CPPPATH/BasemapGalleryController.cpp \

@@ -17,6 +17,7 @@
 
 // Toolkit headers
 #include "Internal/GeoViews.h"
+#include "Internal/SingleshotConnection.h"
 
 // ArcGISRuntime headers
 #include <Map.h>
@@ -509,12 +510,8 @@ namespace Toolkit {
   void
   BasemapGalleryController::setCurrentBasemap(Basemap* basemap)
   {
-    auto connection =
-        std::make_shared<QMetaObject::Connection>();
-
-    auto apply = [basemap, this, connection](Error e)
+    auto apply = [basemap, this](Error e)
     {
-      disconnect(*connection);
       if (e.isEmpty())
       {
         if (basemap == m_currentBasemap)
@@ -538,13 +535,12 @@ namespace Toolkit {
       {
         qDebug() << "problem in loading the layer";
       }
-      // delete connection;
     };
     if (basemap->baseLayers()->size() > 0)
     {
       if (basemap->baseLayers()->first()->loadStatus() != LoadStatus::Loaded)
       {
-        *connection = connect(
+        auto connection = singleShotConnection(
             basemap->baseLayers()->first(), &Layer::doneLoading, this, apply);
         basemap->baseLayers()->first()->load();
       }
