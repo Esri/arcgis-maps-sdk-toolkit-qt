@@ -789,7 +789,7 @@ namespace Toolkit {
    * \brief Compares the last search viewpoint with the \a geom and checks they are not more different than a specified panning difference.
    * The percentage used for the check is the variable returned from \l thresholdRatioRepeatSearch
    */
-  bool SearchViewController::checkPanningDifferenceLastSearch(Geometry& geom)
+  bool SearchViewController::checkPanningDifferenceLastSearch(const Geometry& geom) const
   {
     // Check center difference.
     double centerDiff = ArcGISRuntime::GeometryEngine::distance(m_lastSearchArea.extent().center(), geom.extent().center());
@@ -803,7 +803,7 @@ namespace Toolkit {
    * \brief Compares the last search viewpoint with the \a geom and checks they are not more different than a specified zooming difference.
    * The percentage used for the check the variable returned from \l thresholdRatioRepeatSearch
    */
-  bool SearchViewController::checkZoomingDifferenceLastSearch(Geometry& geom)
+  bool SearchViewController::checkZoomingDifferenceLastSearch(const Geometry& geom) const
   {
     // Check extent difference.
     double widthDiff = abs(geom.extent().width() - m_lastSearchArea.extent().width());
