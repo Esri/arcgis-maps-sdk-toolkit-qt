@@ -14,7 +14,7 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import Esri.ArcGISRuntime.Toolkit.Controller 100.13
+import Esri.ArcGISRuntime.Toolkit.Controller 100.14
 
 import QtQuick 2.12
 import QtQuick.Controls 2.12
@@ -27,7 +27,7 @@ import QtQuick.Layouts 1.12
     \since Esri.ArcGISRuntime 100.10
     \brief The slider provides a user interface for manually setting or animating
     changes to the current time extent of the \c GeoView.
-    
+
     A time slider can be bound to a geoView
     (\c MapView or \c SceneView) to allow filtering on temporal data.
     The time extents of all layers in the map or scene will be used to set up the
@@ -69,7 +69,7 @@ Pane {
     /*!
       \qmlproperty int labelSliderTickInterval
       \brief The interval at which slider ticks should be labeled.
-      
+
       The default is \c 20.
      */
     property int labelSliderTickInterval: 20
@@ -117,7 +117,7 @@ Pane {
       \qmlproperty bool startTimePinned
       \brief Whether the start time of the time window can
       be manipulated.
-      
+
       The default is \c false.
     */
     property bool startTimePinned: false
@@ -126,7 +126,7 @@ Pane {
       \qmlproperty bool endTimePinned
       \brief Whether the end time of the time window can
       be manipulated.
-      
+
       The default is \c false.
     */
     property bool endTimePinned: false
@@ -135,7 +135,7 @@ Pane {
       \qmlproperty bool playbackLoop
       \brief Whether to loop when the animation reaches the
       end of the slider.
-      
+
       The default is \c "true".
     */
     property bool playbackLoop: true
@@ -144,7 +144,7 @@ Pane {
       \qmlproperty bool playbackReverse
       \brief Whether to reverse the animation direction when
       the animation reaches the end of the slider.
-      
+
       \note This property has no effect if \l playbackLoop
       is \c false.
       The default is \c false.
@@ -155,7 +155,7 @@ Pane {
     \qmlproperty int playbackInterval
     \brief The amount of time (in milliseconds) during playback
     that will elapse before the slider advances to the next time step.
-    
+
     The default is \c 500.
     */
     property alias playbackInterval : playAnimation.interval
@@ -287,7 +287,7 @@ Pane {
                 }
                 Connections {
                     target: controller
-                    function onStepsChanged() { 
+                    function onStepsChanged() {
                         slider.setValues(controller.startStep,
                                         controller.endStep);
                     }
@@ -371,7 +371,7 @@ Pane {
                                         controller.timeForStep(repeater.secondHandleLabel.tickIndex),
                                         timeStepIntervalLabelFormat)}` : "";
 
-                                property real defaultLabelWidth: 
+                                property real defaultLabelWidth:
                                     fontMetric.boundingRect(defaultLabelText).width;
 
                                 property real defaultLabelX: {
@@ -396,28 +396,28 @@ Pane {
                                 visible: index > 0 &&
                                         index < repeater.marks &&
                                         index % labelSliderTickInterval === 0 &&
-                                        labelMode === TimeSlider.LabelMode.Ticks 
+                                        labelMode === TimeSlider.LabelMode.Ticks
 
                                 states: [
-                                    // Change the state of this single label to 
+                                    // Change the state of this single label to
                                     // visible if not an endpoint.
                                     State {
                                         name: "singleVisible"
                                         PropertyChanges {
                                             target: tickLabel
-                                            visible: index > 0 && 
+                                            visible: index > 0 &&
                                                     index < repeater.marks
                                         }
                                     },
                                     // Change the state of this label to visible and
-                                    // have it represented a "combined" label of 
+                                    // have it represented a "combined" label of
                                     // this and the second handle position(s).
                                     State {
                                         name: "combinedVisible"
                                         PropertyChanges {
                                             target: tickLabel
                                             text: tickLabel.combinedLabelText
-                                            visible: index > 0 && 
+                                            visible: index > 0 &&
                                                     index < repeater.marks
                                         }
                                     }
@@ -486,7 +486,7 @@ Pane {
                         function handlesChanged() {
                             if (firstHandleLabel && firstHandleLabel == secondHandleLabel) {
                                 firstHandleLabel.state = "singleVisible";
-                            } else if (firstHandleLabel && secondHandleLabel 
+                            } else if (firstHandleLabel && secondHandleLabel
                                     && horizontalOverlaps(firstHandleLabel, secondHandleLabel)) {
                                 firstHandleLabel.state = "combinedVisible";
                                 secondHandleLabel.state = "";
@@ -534,7 +534,7 @@ Pane {
 
     /*!
      \brief Increments both handles by \a count.
-     
+
      Count may be negative to decrement the handles.
      */
     function incrementFrame(count) {
@@ -553,11 +553,11 @@ Pane {
     }
 
     /*!
-     \internal 
+     \internal
      \brief Increments/decrements both handles by 1 or -1 depending on the
             value of \l playbackReverse.
 
-            If \l playbackLoop is true (and there are no pinned handles), the 
+            If \l playbackLoop is true (and there are no pinned handles), the
             playback loops around to the start of the animation once again.
      */
     function play() {

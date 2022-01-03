@@ -32,6 +32,6 @@ T.Popup {
     background: Rectangle {
         color: Calcite.background
         border.color: Calcite.foreground1
-        border.width: Calcite.theme === Calcite.Light ? 1 : 0 
+        border.width: Calcite.theme === Calcite.Light ? 1 : 0
     }
 }

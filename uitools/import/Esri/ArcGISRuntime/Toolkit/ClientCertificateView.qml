@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import Esri.ArcGISRuntime.Toolkit.Controller 100.13
+import Esri.ArcGISRuntime.Toolkit.Controller 100.14
 
 import QtQuick 2.12
 import QtQuick.Controls 2.12
@@ -23,7 +23,7 @@ import Qt.labs.platform 1.1 as P
 Dialog {
     id: clientCertificateView
     property AuthenticationController controller: AuthenticationController {}
-    
+
     title: qsTr("Client certificate requested")
 
     closePolicy: Popup.NoAutoClose

@@ -17,10 +17,10 @@
 
 /*!
   \headerfile Esri/ArcGISRuntime/Toolkit/register
-  
+
   This file contains the registration function required to register the toolkit
   with the `QQmlEngine`.
-  
+
   Please refer to
   \c README.md for more information on workflows.
 */

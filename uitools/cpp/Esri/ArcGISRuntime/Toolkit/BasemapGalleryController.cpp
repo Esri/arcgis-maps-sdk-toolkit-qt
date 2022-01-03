@@ -31,9 +31,9 @@ namespace ArcGISRuntime {
 namespace Toolkit {
 
   namespace {
-    /*! 
+    /*!
       \internal
-      \brief Convenience function which creates a QPointer for a given type \c{T} 
+      \brief Convenience function which creates a QPointer for a given type \c{T}
       which avoids explicitly stating what \c{T} is.
      */
     template <typename T>
@@ -492,7 +492,7 @@ namespace Toolkit {
 
     If a GeoModel is set, this is also the basemap applied to that
     GeoModel.
-   
+
     It is possible for the current basemap to not be in the gallery.
    */
   Basemap* BasemapGalleryController::currentBasemap() const
@@ -503,7 +503,7 @@ namespace Toolkit {
   /*!
     \brief Sets the current basemap associated with the map/scene
     of the given GeoModel to \a basemap.
-   
+
     It is possible for the current basemap to not be in the gallery.
    */
   void

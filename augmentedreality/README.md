@@ -53,7 +53,7 @@ heading of the scene to ensure accuracy between the device live video and the sc
   real-world coordinate
 - Eases access to ARKit, ARCore, and `LocationDataSource` delegate
   methods
-  
+
 ### System Requirements
 
 iOS 11 is the minimum requirement. Devices must support ARKit. For details about using ARKit, please refer to [Apple's
@@ -179,9 +179,9 @@ An example of parameters for tabletop AR app is given in the following code:
 
 In the constructor of the app's root class, adapt the creation of the scene.
 When creating the [Scene](https://developers.arcgis.com/qt/latest/cpp/api-reference/esri-arcgisruntime-scene.html),
-add some data that will visualize well in AR, like an 
+add some data that will visualize well in AR, like an
 [IntegratedMeshLayer](https://developers.arcgis.com/qt/latest/cpp/api-reference/esri-arcgisruntime-integratedmeshlayer.html), for example.
-The default Scene is suitable for full scale mode. 
+The default Scene is suitable for full scale mode.
 
 8. In the `<ProjectName>Form.qml` file,  make the following changes:
 
@@ -351,6 +351,14 @@ permission to access the camera to ARCore.
 <uses-feature android:name="android.hardware.camera.ar" android:required="true"/>
 ```
 
+  - Indicate that your app will be checking for the existence of arcore.
+```
+<!-- required at targetSdkVersion=30 to check for arcore support -->
+<queries>
+  <package android:name="com.google.ar.core"/>
+</queries>
+```
+
   - Set the minimum SDK version `android:minSdkVersion` to 24 for AR required app and 14 for
 AR optional app.
 ```
@@ -365,7 +373,7 @@ dependencies {
 }
 ```
 
-4. The project is now ready to be build and run in a compatible Android device. 
+4. The project is now ready to be build and run in a compatible Android device.
 
 ARCore requires Android 7.0 or later. The list of compatible devices can be found in
 [ARCore supported devices](https://developers.google.com/ar/discover/supported-devices)

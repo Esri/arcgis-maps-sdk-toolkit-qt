@@ -25,13 +25,13 @@ import Esri.ArcGISRuntime 100.9
    \ingroup ArcGISQtToolkitUiQmlControllers
    \brief In MVC architecture, this is the controller for the corresponding
    TimeSlider.
-   
+
   This controller calculates interval steps and the range of the full extent for
   the TimeSlider. This is based on the combined extents of time-aware layers
   in the given \c GeoView.
 
   The time-extent of the GeoView itself can be manipulated using steps with
-  calls to \l setSteps. 
+  calls to \l setSteps.
 
   Here is an example of how to use the TimeSlider from QML.
     \code
@@ -65,7 +65,7 @@ QtObject {
     property alias geoView: internal.geoView;
 
     /*!
-    \brief The number of steps the TimeSlider should display based on 
+    \brief The number of steps the TimeSlider should display based on
     on the fullTimeExtent dividied by smallest timeInterval.
     */
     readonly property alias numberOfSteps: internal.nSteps;
@@ -96,7 +96,7 @@ QtObject {
     Given "step" and \l numberOfSteps, we can calculate the date-time for
     an arbitrary step interpolated between the start and end times of
     the full time extent.
-    
+
     \list
     \li \a step Step to calculate a time for.
     \endlist
@@ -120,10 +120,10 @@ QtObject {
 
     /*!
       \brief Sets the current steps.
-  
-      Setting steps changes the the current time-extent of the \c GeoView to a 
+
+      Setting steps changes the the current time-extent of the \c GeoView to a
       \c TimeExtent range calculated by the current steps using \l timeForStep.
-      
+
       \list
       \li \a startStep start-step to set.
       \li \a endStep end-step to set.
@@ -206,8 +206,8 @@ QtObject {
 
         /*
         \internal
-        \brief Starts tracking the 
-        layers in the current geoView, which are now used for calculating 
+        \brief Starts tracking the
+        layers in the current geoView, which are now used for calculating
         full-time-extent and smallest time-interval.
         */
         function initializeTimeProperties() {
@@ -258,11 +258,11 @@ QtObject {
 
         /*!
         \internal
-        \brief Calculates the time-interval as a \c TimeValue, which is the 
-        smallest possible interval of all \c TimeAware layers in the current 
+        \brief Calculates the time-interval as a \c TimeValue, which is the
+        smallest possible interval of all \c TimeAware layers in the current
         \c GeoView.
-        
-        Returns a \c TimeValue which is the minimum time-interval of all 
+
+        Returns a \c TimeValue which is the minimum time-interval of all
         intervals.
         */
         function timeInterval() {
@@ -284,7 +284,7 @@ QtObject {
 
         /*!
         \internal
-        \brief Calculates the number of steps the TimeSlider should display 
+        \brief Calculates the number of steps the TimeSlider should display
         based on \l fullTimeExtent dividied by \l timeInterval.
 
         Returns number of steps for TimeSlider.
@@ -312,7 +312,7 @@ QtObject {
         \list
         \li \a layerList ListModel to accummalate.
         \li \a op Accumulation function used for reduce.
-        \endlist 
+        \endlist
         Returns the accumulation.
         */
         function accumalateTimeAware(layerList, op) {
@@ -387,11 +387,11 @@ QtObject {
 
         /*!
         \internal
-        \brief Calculates the start and end steps derived from the \c GeoView 
+        \brief Calculates the start and end steps derived from the \c GeoView
         object's current \c TimeExtent.
 
-        When \c GeoView has an empty extent, this is equivalent to 
-        "show everything" and the steps returned are 
+        When \c GeoView has an empty extent, this is equivalent to
+        "show everything" and the steps returned are
         \c{[0, numberOfSteps]} (inclusive).
 
         Returns a pair of steps derived from the current \c GeoView time-extent.

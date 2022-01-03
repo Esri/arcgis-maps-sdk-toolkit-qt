@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import Esri.ArcGISRuntime.Toolkit.Controller 100.13
+import Esri.ArcGISRuntime.Toolkit.Controller 100.14
 
 import QtQuick 2.12
 
@@ -24,7 +24,7 @@ import QtQuick 2.12
    \since Esri.ArcGISRuntime 100.10
    \brief The NorthArrow displays a compass overlaid on the GeoView, with the
    compass heading matching the current rotation of the MapView, or Camera
-   heading of the SceneView. 
+   heading of the SceneView.
    Double clicking on the NorthArrow triggers the heading of the connected
    GeoView to be orientainted to 0.
    \note default width and height is 48.

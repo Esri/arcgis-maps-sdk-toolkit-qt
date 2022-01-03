@@ -28,9 +28,9 @@ namespace Toolkit
   \ingroup ArcGISQtToolkitUiCppControllers
   \brief In MVC architecture, this is the controller for the corresponding
   \c PopupView.
-  
+
   This controller is a thin wrapper around a \c PopupManager. It re-exposes some
-  \c PopupManager properties, including the number of total rows to render as a 
+  \c PopupManager properties, including the number of total rows to render as a
   property.
  */
 
@@ -119,7 +119,7 @@ QAbstractListModel* PopupViewController::displayFields() const
 
 /*!
   \brief Returns a list model containing the attachment images of the
-  Popup associated with this PopupManager. 
+  Popup associated with this PopupManager.
   \note This can be null.
  */
 PopupAttachmentListModel* PopupViewController::attachments() const
@@ -136,8 +136,8 @@ PopupAttachmentListModel* PopupViewController::attachments() const
 
 /*!
   \internal
-  \brief Exposes the number of rows in the list model returned by 
-  \c displayFields. This is a property for QML. In C++ code call 
+  \brief Exposes the number of rows in the list model returned by
+  \c displayFields. This is a property for QML. In C++ code call
   \c{displayFields()->rowCount()}.
  */
 int PopupViewController::fieldCount() const
@@ -150,8 +150,8 @@ int PopupViewController::fieldCount() const
 
 /*!
   \internal
-  \brief Exposes the number of rows in the list model returned by 
-  \c attachments. This is a property for QML. In C++ code call 
+  \brief Exposes the number of rows in the list model returned by
+  \c attachments. This is a property for QML. In C++ code call
   \c{attachments()->rowCount()}.
  */
 int PopupViewController::attachmentCount() const
@@ -240,13 +240,13 @@ void PopupViewController::setAttachmentThumbnailHeight(int height)
 
 /*!
   \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::fieldCountChanged()
-  \brief Signal emitted when the number of rows in the \c displayFields 
+  \brief Signal emitted when the number of rows in the \c displayFields
   list-model changes.
 */
 
 /*!
   \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::attachmentCountChanged()
-  \brief Signal emitted when the number of rows in the attachments list-model 
+  \brief Signal emitted when the number of rows in the attachments list-model
   changes.
  */
 

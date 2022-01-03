@@ -37,9 +37,9 @@ namespace Toolkit
   \class Esri::ArcGISRuntime::Toolkit::NorthArrow
   \inmodule EsriArcGISRuntimeToolkit
   \ingroup ArcGISQtToolkitUiCppWidgetsViews
-  \brief The \c NorthArrow displays a compass overlaid on the \c GeoView, with 
-  the compass heading matching the current rotation of the \c MapView, or 
-  \c Camera heading of the \c SceneView. 
+  \brief The \c NorthArrow displays a compass overlaid on the \c GeoView, with
+  the compass heading matching the current rotation of the \c MapView, or
+  \c Camera heading of the \c SceneView.
   Double-clicking on the \c NorthArrow triggers the heading of the connected
   \c GeoView to be orientated to 0 (North).
   \note default width and height is 48.
@@ -57,7 +57,7 @@ NorthArrow::NorthArrow(QWidget* parent) :
 {
   m_image = QPixmap(":/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/compass.png");
   setAttribute(Qt::WA_TranslucentBackground);
-    
+
   if (!m_image.isNull())
   {
     const QSize defaultSize(48,48);

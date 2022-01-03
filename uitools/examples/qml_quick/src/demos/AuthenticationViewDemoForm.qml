@@ -12,8 +12,8 @@
 
 import QtQuick 2.12
 import QtQuick.Controls 2.12
-import Esri.ArcGISRuntime 100.13
-import Esri.ArcGISRuntime.Toolkit 100.13
+import Esri.ArcGISRuntime 100.14
+import Esri.ArcGISRuntime.Toolkit 100.14
 
 DemoPage {
     readonly property string exampleUrl: "https://www.arcgis.com/sharing/rest/content/items/e5039444ef3c48b8a8fdc9227f9be7c1/data"

@@ -14,6 +14,10 @@ const TOOLS = [
                   "url": "SearchViewDemoForm.qml"
                 },
   {
+   "name": "North arrow",
+   "url": "NorthArrowDemoForm.qml"
+  },
+  {
     "name": "Popup View",
     "url": "PopupViewDemoForm.qml"
   },
@@ -33,12 +37,6 @@ const TOOLS = [
     "name": "Coordinate conversion",
     "url": "CoordinateConversionDemoForm.qml"
   },
-  {
-    "name": "North arrow",
-    "url": "NorthArrowDemoForm.qml"
-  },
-
-
   {
     "name": "Time slider",
     "url": "TimeSliderDemoForm.qml"

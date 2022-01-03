@@ -55,7 +55,7 @@ public:
   void setPopupManager(PopupManager* popupManager);
 
   QAbstractListModel* displayFields() const;
-  
+
   PopupAttachmentListModel* attachments() const;
 
   QString title() const;

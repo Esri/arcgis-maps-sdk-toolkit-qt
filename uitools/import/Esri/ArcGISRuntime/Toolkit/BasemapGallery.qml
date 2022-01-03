@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import Esri.ArcGISRuntime.Toolkit.Controller 100.13
+import Esri.ArcGISRuntime.Toolkit.Controller 100.14
 
 import QtQuick 2.15
 import QtQml 2.15
@@ -111,7 +111,7 @@ Pane {
     /*!
        \qmlproperty bool allowTooltips
        \brief When this property is true, mouse-hover tooltips are enabled for gallery items.
-       
+
        Defaults to \c{true}.
      */
     property bool allowTooltips: true

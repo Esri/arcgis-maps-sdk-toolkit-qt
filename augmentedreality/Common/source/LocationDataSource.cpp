@@ -295,7 +295,7 @@ void LocationDataSource::updateObjectsAndConnections()
       emit isStartedChanged();
       emit sensorStatusChanged();
     }
-    
+
     // Disconnect the signal if the location tracking mode is Initial.
     if (m_locationTrackingMode == ArEnums::LocationTrackingMode::Initial)
       disconnect(m_geoPositionSourceConnection);
@@ -317,7 +317,7 @@ void LocationDataSource::updateObjectsAndConnections()
       emit isStartedChanged();
       emit sensorStatusChanged();
     }
-    
+
     // Disconnect the signal if the location tracking mode is Initial.
     if (m_locationTrackingMode == ArEnums::LocationTrackingMode::Initial)
       disconnect(m_compassConnection);

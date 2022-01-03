@@ -12,8 +12,8 @@
 
 import QtQuick 2.12
 import QtQuick.Controls 2.12
-import Esri.ArcGISRuntime 100.13
-import Esri.ArcGISRuntime.Toolkit 100.13
+import Esri.ArcGISRuntime 100.14
+import Esri.ArcGISRuntime.Toolkit 100.14
 import DemoApp 1.0
 
 DemoPage {
