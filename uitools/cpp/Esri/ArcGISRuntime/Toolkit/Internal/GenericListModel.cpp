@@ -43,10 +43,9 @@ namespace Toolkit {
  \code
  class Foo : public QObject
  {
-   Q_OBJECT
    Q_PROPERTY(int propertyA READ propertyA WRITE setPropertyA NOTIFY propertyAChanged)
    Q_PROPERTY(QString propertyB READ propertyB NOTIFY propertyBChanged)
-   Q_PROPERTY(bool propertyC READ propertyC CONTANT)
+   Q_PROPERTY(bool propertyC READ propertyC CONSTANT)
  };
  \endcode
 
