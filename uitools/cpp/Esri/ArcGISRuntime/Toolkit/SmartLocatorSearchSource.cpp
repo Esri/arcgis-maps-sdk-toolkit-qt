@@ -135,25 +135,24 @@ namespace Toolkit {
     // the search with the area constraint removed.
     if (!area.isEmpty() && repeatSearchResultThreshold() > 0)
     {
-      QMetaObject::Connection connection(singleShotConnection(
-          locator(), &LocatorTask::geocodeCompleted, this, [this, suggestion, area](QUuid taskId, const QList<Esri::ArcGISRuntime::GeocodeResult>& geocodeResults)
-          {
-            // Warning: hack here. We can not detect in an async-friendly manner when a task is cancelled.
-            // Which means we have to disconnect on "any" callback (handled by the singleShotConnection), otherwise we will build up space leaks with repeated
-            // search-and-cancel behaviour.
-            // This is obviously not ideal if the locator is used for multiple concurrent searches, but this is
-            // an unlikely scenario.
+      singleShotConnection(locator(), &LocatorTask::geocodeCompleted, this, [this, suggestion, area](QUuid taskId, const QList<Esri::ArcGISRuntime::GeocodeResult>& geocodeResults)
+                           {
+                             // Warning: hack here. We can not detect in an async-friendly manner when a task is cancelled.
+                             // Which means we have to disconnect on "any" callback (handled by the singleShotConnection), otherwise we will build up space leaks with repeated
+                             // search-and-cancel behaviour.
+                             // This is obviously not ideal if the locator is used for multiple concurrent searches, but this is
+                             // an unlikely scenario.
 
-            if (m_searchTask.taskId() != taskId)
-              return;
+                             if (m_searchTask.taskId() != taskId)
+                               return;
 
-            if (geocodeResults.length() < repeatSearchResultThreshold())
-            {
-              auto params = geocodeParameters();
-              params.setMaxResults(params.maxResults() - geocodeResults.length());
-              m_searchTask = locator()->geocodeWithSuggestResultAndParameters(suggestion, params);
-            }
-          }));
+                             if (geocodeResults.length() < repeatSearchResultThreshold())
+                             {
+                               auto params = geocodeParameters();
+                               params.setMaxResults(params.maxResults() - geocodeResults.length());
+                               m_searchTask = locator()->geocodeWithSuggestResultAndParameters(suggestion, params);
+                             }
+                           });
     }
     LocatorSearchSource::search(suggestion, area);
   }
@@ -168,25 +167,24 @@ namespace Toolkit {
     // the search with the area constraint removed.
     if (!area.isEmpty() && repeatSearchResultThreshold() > 0)
     {
-      QMetaObject::Connection connection(singleShotConnection(
-          locator(), &LocatorTask::geocodeCompleted, this, [this, searchString, area](QUuid taskId, const QList<Esri::ArcGISRuntime::GeocodeResult>& geocodeResults)
-          {
-            // Warning: hack here. We can not detect in an async-friendly manner when a task is cancelled.
-            // Which means we have to disconnect on "any" callback, otherwise we will build up space leaks with repeated
-            // search-and-cancel behaviour.
-            // This is obviously not ideal if the locator is used for multiple concurrent searches, but this is
-            // an unlikely scenario.
+      singleShotConnection(locator(), &LocatorTask::geocodeCompleted, this, [this, searchString, area](QUuid taskId, const QList<Esri::ArcGISRuntime::GeocodeResult>& geocodeResults)
+                           {
+                             // Warning: hack here. We can not detect in an async-friendly manner when a task is cancelled.
+                             // Which means we have to disconnect on "any" callback, otherwise we will build up space leaks with repeated
+                             // search-and-cancel behaviour.
+                             // This is obviously not ideal if the locator is used for multiple concurrent searches, but this is
+                             // an unlikely scenario.
 
-            if (m_searchTask.taskId() != taskId)
-              return;
+                             if (m_searchTask.taskId() != taskId)
+                               return;
 
-            if (geocodeResults.length() < repeatSearchResultThreshold())
-            {
-              auto params = geocodeParameters();
-              params.setMaxResults(params.maxResults() - geocodeResults.length());
-              m_searchTask = locator()->geocodeWithParameters(searchString, params);
-            }
-          }));
+                             if (geocodeResults.length() < repeatSearchResultThreshold())
+                             {
+                               auto params = geocodeParameters();
+                               params.setMaxResults(params.maxResults() - geocodeResults.length());
+                               m_searchTask = locator()->geocodeWithParameters(searchString, params);
+                             }
+                           });
     }
     LocatorSearchSource::search(searchString, area);
   }

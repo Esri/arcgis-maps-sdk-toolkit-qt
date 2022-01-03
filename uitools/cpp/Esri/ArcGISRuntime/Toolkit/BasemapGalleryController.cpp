@@ -540,7 +540,7 @@ namespace Toolkit {
     {
       if (basemap->baseLayers()->first()->loadStatus() != LoadStatus::Loaded)
       {
-        auto connection = singleShotConnection(
+        singleShotConnection(
             basemap->baseLayers()->first(), &Layer::doneLoading, this, apply);
         basemap->baseLayers()->first()->load();
       }

@@ -140,12 +140,11 @@ namespace Toolkit {
                          }
                        });
       // Create single-shot connection to geoView's drawStatusChanged to ensure OverviewMap updates when the scene initially loads.
-      QMetaObject::Connection(singleShotConnection(
-          sceneView, &SceneViewToolkit::drawStatusChanged, this, [this, sceneView](DrawStatus status)
-          {
-            if (status == DrawStatus::Completed)
-              applySceneNavigationToInset(sceneView);
-          }));
+      singleShotConnection(sceneView, &SceneViewToolkit::drawStatusChanged, this, [this, sceneView](DrawStatus status)
+                           {
+                             if (status == DrawStatus::Completed)
+                               applySceneNavigationToInset(sceneView);
+                           });
     }
     else if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
@@ -168,12 +167,11 @@ namespace Toolkit {
                          }
                        });
       // Create single-shot connection to geoView's drawStatusChanged to ensure OverviewMap updates when the map initially loads.
-      QMetaObject::Connection mapViewDrawStatusConnection(singleShotConnection(
-          mapView, &MapViewToolkit::drawStatusChanged, this, [this, mapView](DrawStatus status)
-          {
-            if (status == DrawStatus::Completed)
-              applyMapNavigationToInset(mapView);
-          }));
+      singleShotConnection(mapView, &MapViewToolkit::drawStatusChanged, this, [this, mapView](DrawStatus status)
+                           {
+                             if (status == DrawStatus::Completed)
+                               applyMapNavigationToInset(mapView);
+                           });
     }
     emit geoViewChanged();
   }
