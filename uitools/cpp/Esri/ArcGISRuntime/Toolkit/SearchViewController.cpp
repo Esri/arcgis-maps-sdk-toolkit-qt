@@ -421,24 +421,22 @@ namespace Toolkit {
       if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
       {
         // When the geoview changes, update the lastsearcharea
-        QMetaObject::Connection connection(singleShotConnection(
-            sceneView, &SceneViewToolkit::viewpointChanged, this, [sceneView, this]()
-            {
-              auto extent = sceneView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
-              m_lastSearchArea = extent;
-            }));
+        singleShotConnection(sceneView, &SceneViewToolkit::viewpointChanged, this, [sceneView, this]()
+                             {
+                               auto extent = sceneView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
+                               m_lastSearchArea = extent;
+                             });
         // Set sceneView viewpoint to where graphic is.
         sceneView->setViewpoint(m_selectedResult->selectionViewpoint(), 0);
       }
       else if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
       {
         // When the geoview changes, update the lastsearcharea
-        QMetaObject::Connection connection(singleShotConnection(
-            mapView, &MapViewToolkit::viewpointChanged, this, [mapView, this]()
-            {
-              auto extent = mapView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
-              m_lastSearchArea = extent;
-            }));
+        singleShotConnection(mapView, &MapViewToolkit::viewpointChanged, this, [mapView, this]()
+                             {
+                               auto extent = mapView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
+                               m_lastSearchArea = extent;
+                             });
         // Set mapView callout and zoom to where graphic + callout are (if applicable.)
         mapView->calloutData()->setTitle(m_selectedResult->displayTitle());
         mapView->calloutData()->setDetail(m_selectedResult->displaySubtitle());
