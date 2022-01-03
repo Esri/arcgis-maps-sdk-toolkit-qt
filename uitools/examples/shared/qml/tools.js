@@ -9,10 +9,10 @@
 //
 // See the Sample code usage restrictions document for further information.
 const TOOLS = [
-                {
-                  "name": "Search View",
-                  "url": "SearchViewDemoForm.qml"
-                },
+  {
+   "name": "Search View",
+   "url": "SearchViewDemoForm.qml"
+  },
   {
    "name": "North arrow",
    "url": "NorthArrowDemoForm.qml"

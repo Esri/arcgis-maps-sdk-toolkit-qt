@@ -517,7 +517,6 @@ namespace Toolkit {
       auto source = m_sources->element<SearchSourceInterface>(m_sources->index((i)));
       if (source)
       {
-        auto connection = std::make_shared<QMetaObject::Connection>();
         //set the lastSearchArea after the geoView viewpoint has changed and only once.
         source->search(currentQuery(), queryRestrictionArea);
       }
@@ -641,25 +640,22 @@ namespace Toolkit {
                 {
                   if (results.empty())
                     return;
-                  auto connection = std::make_shared<QMetaObject::Connection>();
                   //connect either to a scene or a map event changedviewpoint
                   if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
                   {
-                    *connection = connect(mapView, &MapViewToolkit::viewpointChanged, this, [mapView, connection, this]()
-                                          {
-                                            disconnect(*connection);
-                                            auto extent = mapView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
-                                            m_lastSearchArea = extent;
-                                          });
+                    singleShotConnection(mapView, &MapViewToolkit::viewpointChanged, this, [mapView, this]()
+                                         {
+                                           auto extent = mapView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
+                                           m_lastSearchArea = extent;
+                                         });
                   }
                   else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
                   {
-                    *connection = connect(sceneView, &SceneViewToolkit::viewpointChanged, this, [sceneView, connection, this]()
-                                          {
-                                            disconnect(*connection);
-                                            auto extent = sceneView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
-                                            m_lastSearchArea = extent;
-                                          });
+                    singleShotConnection(sceneView, &SceneViewToolkit::viewpointChanged, this, [sceneView, this]()
+                                         {
+                                           auto extent = sceneView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
+                                           m_lastSearchArea = extent;
+                                         });
                   }
 
                   // If only one result needs be applicable, automatically accept it, otherwise,
