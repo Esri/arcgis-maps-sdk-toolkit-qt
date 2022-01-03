@@ -31,6 +31,7 @@ HEADERS += $$CPPPATH/AuthenticationController.h \
            $$CPPPATH/Internal/GenericTableProxyModel.h \
            $$CPPPATH/Internal/GeoViews.h \
            $$CPPPATH/Internal/MetaElement.h \
+           $$CPPPATH/Internal/SingleShotConnection.h \
            $$CPPPATH/NorthArrowController.h \
            $$CPPPATH/OverviewMapController.h \
            $$CPPPATH/PopupViewController.h \
