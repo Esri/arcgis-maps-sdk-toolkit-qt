@@ -48,7 +48,8 @@ T.SpinBox {
         text: control.displayText
 
         font: control.font
-        color: enabled ? Calcite.text2 : Calcite.text2
+        //color: enabled ? Calcite.text3 : Calcite.text2
+        color : Calcite.text3
         selectionColor: Calcite.brandHover
         selectedTextColor: Calcite.foreground1
         horizontalAlignment: Qt.AlignHCenter
@@ -68,13 +69,15 @@ T.SpinBox {
         height: parent.height
         width: height
         Rectangle {
-            y: parent.y + parent.height - height - control.bottomPadding / 2
+            //y: parent.y + parent.height - height - control.bottomPadding / 2
             width: parent.width
-            height: parent.width
+            height: parent.width - bottomPadding * 2
+            y : bottomPadding
+            color: enabled ? Calcite.foreground1 : Calcite.background
             border {
-                color: "black"
+                color: Calcite.border1
             }
-        }
+
 //        Ripple {
 //            clipRadius: 2
 //            x: control.spacing
@@ -86,24 +89,25 @@ T.SpinBox {
 //            color: control.Material.rippleColor
 //        }
 
-        Rectangle {
-            x: (parent.width + width) / 2
-            y: (parent.height - height) / 2
-            width: Math.min(parent.width / 3, parent.height / 3)
-            height: 2
-            color: enabled ? Calcite.text1: Calcite.foreground2
-            transform: Rotation {origin.x: 0; origin.y: 1; angle: 135;}
+            Rectangle {
+                x: (parent.width + width) / 2
+                y: (parent.height - height) / 2
+                width: Math.min(parent.width / 3, parent.height / 3)
+                height: 2
+                //color: enabled ? Calcite.text3: Calcite.foreground2
+                color: Calcite.text3
+                transform: Rotation {origin.x: 0; origin.y: 1; angle: 135;}
+            }
+            Rectangle {
+                x: (parent.width + width) / 2
+                y: (parent.height - height) / 2
+                width: Math.min(parent.width / 3, parent.height / 3)
+                height: 2
+                color: Calcite.text3
+                transform: Rotation {origin.x: 0; origin.y: 1; angle: 225;}
+            }
         }
-        Rectangle {
-            x: (parent.width + width) / 2
-            y: (parent.height - height) / 2
-            width: Math.min(parent.width / 3, parent.height / 3)
-            height: 2
-            color: enabled ? Calcite.text1: Calcite.foreground2
-            transform: Rotation {origin.x: 0; origin.y: 1; angle: 225;}
-        }
-
-        }
+    }
 
 
     down.indicator: Item {
@@ -115,28 +119,30 @@ T.SpinBox {
 
         Rectangle {
             width: parent.width
-            height: parent.height
+            height: parent.height - bottomPadding * 2
+            y : bottomPadding
+            color: enabled ? Calcite.foreground1 : Calcite.background
             border {
-                color: "black"
+                color: Calcite.border1
             }
 
 
-        Rectangle {
-            x: (parent.width - width) / 2
-            y: (parent.height - height) / 2
-            width: Math.min(parent.width / 3, parent.height / 3)
-            height: 2
-            color: enabled ? Calcite.text1: Calcite.foreground2
-            transform: Rotation {origin.x: 0; origin.y: 1; angle: 45;}
-        }
-        Rectangle {
-            x: (parent.width - width) / 2
-            y: (parent.height - height) / 2
-            width: Math.min(parent.width / 3, parent.height / 3)
-            height: 2
-            color: enabled ? Calcite.text1: Calcite.foreground2
-            transform: Rotation {origin.x: 0; origin.y: 1; angle: -45;}
-        }
+            Rectangle {
+                x: (parent.width - width) / 2
+                y: (parent.height - height) / 2
+                width: Math.min(parent.width / 3, parent.height / 3)
+                height: 2
+                color: Calcite.text3
+                transform: Rotation {origin.x: 0; origin.y: 1; angle: 45;}
+            }
+            Rectangle {
+                x: (parent.width - width) / 2
+                y: (parent.height - height) / 2
+                width: Math.min(parent.width / 3, parent.height / 3)
+                height: 2
+                color: Calcite.text3
+                transform: Rotation {origin.x: 0; origin.y: 1; angle: -45;}
+            }
         }
 //        Ripple {
 //            clipRadius: 2
@@ -153,23 +159,28 @@ T.SpinBox {
     background: Item {
         implicitWidth: 192
         implicitHeight: 40
-        Rectangle {
-            width: parent.width
-            height: parent.height
-            border {
-                color : "black"
-            }
-        }
+        //uncomment to see the component real size (no padding on it)
+//        Rectangle {
+//            width: parent.width
+//            height: parent.height
+
+//            border {
+//                color : "black"
+//            }
+//        }
 
         Rectangle {
             id: backgroundRect
             x: parent.width / 2 - width / 2
-            y: parent.y + parent.height - height - control.bottomPadding / 2
+            //y: parent.y + parent.height - height - control.bottomPadding / 2
+            y : bottomPadding
             width: control.availableWidth
-            height: parent.height - control.bottomPadding
-
+            height: parent.height - control.bottomPadding * 2
+            color: enabled ? Calcite.foreground1 : Calcite.background
             border {
-                color: !control.acceptableInput ? control.activeFocus ? Calcite.dangerHover : Calcite.danger : control.activeFocus ? Calcite.brand : Calcite.borderInput
+                //not sure when an error occurs in a spinbox, acceptable input cannot be used
+                //color: !control.acceptableInput ? (control.activeFocus ? Calcite.dangerHover : Calcite.danger) : (control.activeFocus ? Calcite.brand : Calcite.borderInput)
+                color: control.activeFocus ? Calcite.brand : Calcite.borderInput
             }
         }
     }
