@@ -15,7 +15,7 @@
  ******************************************************************************/
 import QtQuick 2.12
 import QtQuick.Controls 2.12
-import Esri.ArcGISRuntime 100.13
+import Esri.ArcGISRuntime 100.14
 import Calcite 1.0 as C
 import QtQuick.Layouts 1.12
 
@@ -214,12 +214,16 @@ ApplicationWindow {
                     Layout.alignment: Qt.AlignHCenter
                 }
 
-                BusyIndicator {
-                    Layout.alignment: Qt.AlignHCenter
-                }
+//                BusyIndicator {
+//                    Layout.alignment: Qt.AlignHCenter
+//                }
                 Label {
                     text: "Loading..."
                     Layout.alignment: Qt.AlignHCenter
+                }
+                SpinBox {
+                    Layout.alignment: Qt.AlignHCenter
+                    value: 5
                 }
             }
         }
