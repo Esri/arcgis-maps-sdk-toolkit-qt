@@ -19,6 +19,7 @@ import QtQuick.Templates 2.15 as T
 T.SpinBox {
     id: control
 
+    editable : true
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
                             contentItem.implicitWidth +
                             up.implicitIndicatorWidth +
@@ -44,7 +45,6 @@ T.SpinBox {
 
     contentItem: TextInput {
         id: textInput
-
         text: control.displayText
 
         font: control.font
@@ -57,7 +57,8 @@ T.SpinBox {
 
         //cursorDelegate: CursorDelegate { }
 
-        readOnly: !control.editable
+        readOnly: false
+        //readOnly: !control.editable
         validator: control.validator
         inputMethodHints: control.inputMethodHints
     }
@@ -73,7 +74,7 @@ T.SpinBox {
             width: parent.width
             height: parent.width - bottomPadding * 2
             y : bottomPadding
-            color: enabled ? Calcite.foreground1 : Calcite.background
+            color: enabled ? (up.hovered ? Calcite.foreground2 : Calcite.foreground1) : Calcite.background
             border {
                 color: Calcite.border1
             }
@@ -95,7 +96,7 @@ T.SpinBox {
                 width: Math.min(parent.width / 3, parent.height / 3)
                 height: 2
                 //color: enabled ? Calcite.text3: Calcite.foreground2
-                color: Calcite.text3
+                color: up.hovered ? Calcite.text1 : Calcite.text3
                 transform: Rotation {origin.x: 0; origin.y: 1; angle: 135;}
             }
             Rectangle {
@@ -103,7 +104,7 @@ T.SpinBox {
                 y: (parent.height - height) / 2
                 width: Math.min(parent.width / 3, parent.height / 3)
                 height: 2
-                color: Calcite.text3
+                color: up.hovered ? Calcite.text1 : Calcite.text3
                 transform: Rotation {origin.x: 0; origin.y: 1; angle: 225;}
             }
         }
@@ -121,7 +122,7 @@ T.SpinBox {
             width: parent.width
             height: parent.height - bottomPadding * 2
             y : bottomPadding
-            color: enabled ? Calcite.foreground1 : Calcite.background
+            color: enabled ? (down.hovered ? Calcite.foreground2 : Calcite.foreground1) : Calcite.background
             border {
                 color: Calcite.border1
             }
@@ -132,7 +133,7 @@ T.SpinBox {
                 y: (parent.height - height) / 2
                 width: Math.min(parent.width / 3, parent.height / 3)
                 height: 2
-                color: Calcite.text3
+                color: down.hovered ? Calcite.text1 : Calcite.text3
                 transform: Rotation {origin.x: 0; origin.y: 1; angle: 45;}
             }
             Rectangle {
@@ -140,7 +141,7 @@ T.SpinBox {
                 y: (parent.height - height) / 2
                 width: Math.min(parent.width / 3, parent.height / 3)
                 height: 2
-                color: Calcite.text3
+                color: down.hovered ? Calcite.text1 : Calcite.text3
                 transform: Rotation {origin.x: 0; origin.y: 1; angle: -45;}
             }
         }
