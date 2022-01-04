@@ -49,7 +49,7 @@ T.SpinBox {
 
         font: control.font
         //color: enabled ? Calcite.text3 : Calcite.text2
-        color : Calcite.text3
+        color : Calcite.text1
         selectionColor: Calcite.brandHover
         selectedTextColor: Calcite.foreground1
         horizontalAlignment: Qt.AlignHCenter
