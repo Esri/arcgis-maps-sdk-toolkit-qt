@@ -19,7 +19,6 @@ import QtGraphicalEffects 1.12
 
 T.SpinBox {
     id: control
-
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
                             contentItem.implicitWidth +
                             up.implicitIndicatorWidth +
@@ -32,8 +31,7 @@ T.SpinBox {
     bottomPadding: 5
 
     spacing: 6
-//    topPadding: 16
-//    bottomPadding: 16
+
     leftPadding: (control.mirrored ? (up.indicator ? up.indicator.width : 0) : (down.indicator ? down.indicator.width : 0))
     rightPadding: (control.mirrored ? (down.indicator ? down.indicator.width : 0) : (up.indicator ? up.indicator.width : 0))
 
@@ -48,14 +46,11 @@ T.SpinBox {
         text: control.displayText
 
         font: control.font
-        //color: enabled ? Calcite.text3 : Calcite.text2
         color : Calcite.text1
         selectionColor: Calcite.brandHover
         selectedTextColor: Calcite.foreground1
         horizontalAlignment: Qt.AlignHCenter
         verticalAlignment: Qt.AlignVCenter
-
-        //cursorDelegate: CursorDelegate { }
 
         readOnly: !control.editable
         validator: control.validator
@@ -64,15 +59,14 @@ T.SpinBox {
 
     up.indicator: Item {
         x: control.mirrored ? 0 : parent.width - width
-        implicitWidth: 40
-        implicitHeight: 40
+        implicitWidth: 32
+        implicitHeight: 32
         height: parent.height
         width: height
         Rectangle {
             //y: parent.y + parent.height - height - control.bottomPadding / 2
             width: parent.width
-            height: parent.width - bottomPadding * 2
-            y : bottomPadding
+            height: parent.width
             color: enabled ? (up.hovered ? Calcite.foreground2 : Calcite.foreground1) : Calcite.background
             border {
                 color: Calcite.border1
@@ -95,7 +89,8 @@ T.SpinBox {
                     fill: parent
                 }
                 source: "images/chevron-right.svg"
-                Component.onCompleted: {console.log(parent.width, parent.height);}
+                sourceSize.width: parent.width
+                sourceSize.height: parent.width
             }
 
             ColorOverlay {
@@ -109,15 +104,14 @@ T.SpinBox {
 
     down.indicator: Item {
         x: control.mirrored ? parent.width - width : 0
-        implicitWidth: 40
-        implicitHeight: 40
+        implicitWidth: 32
+        implicitHeight: 32
         height: parent.height
         width: height
 
         Rectangle {
             width: parent.width
-            height: parent.height - bottomPadding * 2
-            y : bottomPadding
+            height: parent.height
             color: enabled ? (down.hovered ? Calcite.foreground2 : Calcite.foreground1) : Calcite.background
             border {
                 color: Calcite.border1
@@ -129,9 +123,9 @@ T.SpinBox {
                 anchors {
                     fill: parent
                 }
-
                 source: "images/chevron-left.svg"
-                Component.onCompleted: {console.log(parent.width, parent.height);}
+                sourceSize.width: parent.width
+                sourceSize.height: parent.width
             }
 
             ColorOverlay {
@@ -155,24 +149,13 @@ T.SpinBox {
 
     background: Item {
         implicitWidth: 192
-        implicitHeight: 40
-        //uncomment to see the component real size (no padding on it)
-//        Rectangle {
-//            width: parent.width
-//            height: parent.height
-
-//            border {
-//                color : "black"
-//            }
-//        }
+        implicitHeight: 32
 
         Rectangle {
             id: backgroundRect
             x: parent.width / 2 - width / 2
-            //y: parent.y + parent.height - height - control.bottomPadding / 2
-            y : bottomPadding
             width: control.availableWidth
-            height: parent.height - control.bottomPadding * 2
+            height: parent.height
             color: enabled ? Calcite.foreground1 : Calcite.background
             border {
                 //not sure when an error occurs in a spinbox, acceptable input cannot be used
