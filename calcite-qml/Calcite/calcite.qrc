@@ -38,5 +38,7 @@
         <file>images/caret-double-vertical.svg</file>
         <file>images/line-solid.svg</file>
         <file>SpinBox.qml</file>
+        <file>images/chevron-left.svg</file>
+        <file>images/chevron-right.svg</file>
     </qresource>
 </RCC>

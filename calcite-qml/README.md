@@ -87,7 +87,7 @@ For further details see [Calcite Web TypeFaces](https://esri.github.io/calcite-w
   - [ ] Scrollbar
   - [ ] ScrollIndicator
   - [x] Slider
-  - [ ] Spinbox
+  - [x] Spinbox
   - [ ] SplitHandle
   - [x] Switch
   - [ ] SwitchDelegate

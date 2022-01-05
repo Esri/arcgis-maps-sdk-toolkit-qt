@@ -15,11 +15,11 @@
  ******************************************************************************/
 import QtQuick 2.15
 import QtQuick.Templates 2.15 as T
+import QtGraphicalEffects 1.12
 
 T.SpinBox {
     id: control
 
-    editable : true
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
                             contentItem.implicitWidth +
                             up.implicitIndicatorWidth +
@@ -57,8 +57,7 @@ T.SpinBox {
 
         //cursorDelegate: CursorDelegate { }
 
-        readOnly: false
-        //readOnly: !control.editable
+        readOnly: !control.editable
         validator: control.validator
         inputMethodHints: control.inputMethodHints
     }
@@ -89,23 +88,20 @@ T.SpinBox {
 //            active: control.up.pressed || control.up.hovered || control.visualFocus
 //            color: control.Material.rippleColor
 //        }
-
-            Rectangle {
-                x: (parent.width + width) / 2
-                y: (parent.height - height) / 2
-                width: Math.min(parent.width / 3, parent.height / 3)
-                height: 2
-                //color: enabled ? Calcite.text3: Calcite.foreground2
-                color: up.hovered ? Calcite.text1 : Calcite.text3
-                transform: Rotation {origin.x: 0; origin.y: 1; angle: 135;}
+            Image {
+                id: upIndicatorImage
+                fillMode: Image.PreserveAspectFit
+                anchors {
+                    fill: parent
+                }
+                source: "images/chevron-right.svg"
+                Component.onCompleted: {console.log(parent.width, parent.height);}
             }
-            Rectangle {
-                x: (parent.width + width) / 2
-                y: (parent.height - height) / 2
-                width: Math.min(parent.width / 3, parent.height / 3)
-                height: 2
+
+            ColorOverlay {
+                anchors.fill : upIndicatorImage
+                source: upIndicatorImage
                 color: up.hovered ? Calcite.text1 : Calcite.text3
-                transform: Rotation {origin.x: 0; origin.y: 1; angle: 225;}
             }
         }
     }
@@ -127,24 +123,23 @@ T.SpinBox {
                 color: Calcite.border1
             }
 
+            Image {
+                id: downIndicatorImage
+                fillMode: Image.PreserveAspectFit
+                anchors {
+                    fill: parent
+                }
 
-            Rectangle {
-                x: (parent.width - width) / 2
-                y: (parent.height - height) / 2
-                width: Math.min(parent.width / 3, parent.height / 3)
-                height: 2
-                color: down.hovered ? Calcite.text1 : Calcite.text3
-                transform: Rotation {origin.x: 0; origin.y: 1; angle: 45;}
+                source: "images/chevron-left.svg"
+                Component.onCompleted: {console.log(parent.width, parent.height);}
             }
-            Rectangle {
-                x: (parent.width - width) / 2
-                y: (parent.height - height) / 2
-                width: Math.min(parent.width / 3, parent.height / 3)
-                height: 2
+
+            ColorOverlay {
+                anchors.fill : downIndicatorImage
+                source: downIndicatorImage
                 color: down.hovered ? Calcite.text1 : Calcite.text3
-                transform: Rotation {origin.x: 0; origin.y: 1; angle: -45;}
             }
-        }
+
 //        Ripple {
 //            clipRadius: 2
 //            x: control.spacing
@@ -155,6 +150,7 @@ T.SpinBox {
 //            active: control.down.pressed || control.down.hovered || control.visualFocus
 //            color: control.Material.rippleColor
 //        }
+        }
     }
 
     background: Item {

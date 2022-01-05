@@ -214,9 +214,10 @@ ApplicationWindow {
                     Layout.alignment: Qt.AlignHCenter
                 }
 
-//                BusyIndicator {
-//                    Layout.alignment: Qt.AlignHCenter
-//                }
+                BusyIndicator {
+                    Layout.alignment: Qt.AlignHCenter
+                }
+
                 Label {
                     text: "Loading..."
                     Layout.alignment: Qt.AlignHCenter
