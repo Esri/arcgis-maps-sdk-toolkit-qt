@@ -72,16 +72,6 @@ T.SpinBox {
                 color: Calcite.border1
             }
 
-//        Ripple {
-//            clipRadius: 2
-//            x: control.spacing
-//            y: control.spacing
-//            width: parent.width - 2 * control.spacing
-//            height: parent.height - 2 * control.spacing
-//            pressed: control.up.pressed
-//            active: control.up.pressed || control.up.hovered || control.visualFocus
-//            color: control.Material.rippleColor
-//        }
             Image {
                 id: upIndicatorImage
                 fillMode: Image.PreserveAspectFit
@@ -133,17 +123,6 @@ T.SpinBox {
                 source: downIndicatorImage
                 color: down.hovered ? Calcite.text1 : Calcite.text3
             }
-
-//        Ripple {
-//            clipRadius: 2
-//            x: control.spacing
-//            y: control.spacing
-//            width: parent.width - 2 * control.spacing
-//            height: parent.height - 2 * control.spacing
-//            pressed: control.down.pressed
-//            active: control.down.pressed || control.down.hovered || control.visualFocus
-//            color: control.Material.rippleColor
-//        }
         }
     }
 
