@@ -115,7 +115,7 @@ T.SpinBox {
                 }
                 source: "images/chevron-left.svg"
                 sourceSize.width: parent.width
-                sourceSize.height: parent.width
+                sourceSize.height: parent.height
             }
 
             ColorOverlay {

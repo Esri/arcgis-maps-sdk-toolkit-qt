@@ -32,12 +32,12 @@
         <file>Slider.qml</file>
         <file>SliderHandle.qml</file>
         <file>SliderGroove.qml</file>
+        <file>SpinBox.qml</file>
         <file>Switch.qml</file>
         <file>TextField.qml</file>
         <file>images/check.svg</file>
         <file>images/caret-double-vertical.svg</file>
         <file>images/line-solid.svg</file>
-        <file>SpinBox.qml</file>
         <file>images/chevron-left.svg</file>
         <file>images/chevron-right.svg</file>
     </qresource>
