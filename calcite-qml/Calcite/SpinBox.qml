@@ -64,7 +64,6 @@ T.SpinBox {
         height: parent.height
         width: height
         Rectangle {
-            //y: parent.y + parent.height - height - control.bottomPadding / 2
             width: parent.width
             height: parent.width
             color: enabled ? (up.hovered ? Calcite.foreground2 : Calcite.foreground1) : Calcite.background
@@ -137,8 +136,7 @@ T.SpinBox {
             height: parent.height
             color: enabled ? Calcite.foreground1 : Calcite.background
             border {
-                //not sure when an error occurs in a spinbox, acceptable input cannot be used
-                //color: !control.acceptableInput ? (control.activeFocus ? Calcite.dangerHover : Calcite.danger) : (control.activeFocus ? Calcite.brand : Calcite.borderInput)
+                // error box not shown. No error shown in the calcite interactive design.
                 color: control.activeFocus ? Calcite.brand : Calcite.borderInput
             }
         }
