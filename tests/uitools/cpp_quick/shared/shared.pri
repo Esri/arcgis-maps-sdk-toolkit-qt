@@ -1,7 +1,6 @@
-HEADERS += AutoDisconnector.h \
-	   SignalSynchronizer.h
-           
-SOURCES += AutoDisconnector.cpp \
-	   SignalSynchronizer.cpp
+HEADERS += $$PWD/AutoDisconnector.h \
+           $$PWD/SignalSynchronizer.h
+
+SOURCES += $$PWD/SignalSynchronizer.cpp
 
 INCLUDEPATH += $$PWD
