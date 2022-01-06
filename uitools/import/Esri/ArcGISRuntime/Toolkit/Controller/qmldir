@@ -32,3 +32,4 @@ ScalebarController 100.13 ScalebarController.qml
 SearchViewController 100.13 SearchViewController.qml
 SmartLocatorSearchSource 100.13 SmartLocatorSearchSource.qml
 TimeSliderController 100.10 TimeSliderController.qml
+FloorFilterController 100.14 FloorFilterController.qml

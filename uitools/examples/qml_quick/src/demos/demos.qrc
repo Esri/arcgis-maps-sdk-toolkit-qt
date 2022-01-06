@@ -9,5 +9,6 @@
         <file>PopupViewDemoForm.qml</file>
         <file>SearchViewDemoForm.qml</file>
         <file>OverviewMapDemoForm.qml</file>
+        <file>FloorFilterDemoForm.qml</file>
     </qresource>
 </RCC>
