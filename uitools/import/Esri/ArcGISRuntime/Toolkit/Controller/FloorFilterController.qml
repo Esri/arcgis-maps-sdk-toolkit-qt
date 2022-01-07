@@ -22,9 +22,9 @@ QtObject {
 
     //refresh()?
 
-    property string selectedFacilityId;
-
     property string selectedLevelId;
+
+    property string selectedFacilityId;
 
     property string selectedSiteId;
 
@@ -39,6 +39,15 @@ QtObject {
             name: "FF"
         }
     };
+
+    property ListModel facilities : ListModel {
+        ListElement {
+            name: "Facility1"
+        }
+        ListElement {
+            name: "Facility2"
+        }
+    }
 
     onSelectedFacilityIdChanged: onSelectedChanged()
     onSelectedLevelIdChanged: onSelectedChanged()

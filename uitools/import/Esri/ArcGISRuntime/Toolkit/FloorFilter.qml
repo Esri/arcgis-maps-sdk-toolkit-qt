@@ -26,10 +26,12 @@ import QtQuick.Layouts 1.15
 
 Item {
     id: floorFilter
-
     property var geoView;
 
     property FloorFilterController controller : FloorFilterController { }
+
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
 
     Binding {
         target : controller
@@ -37,67 +39,123 @@ Item {
         value : floorFilter.geoView
     }
 
-    //debug icon missing
-    Menu {
-        visible: true
-        MenuItem {
-            id: iconimg
-            icon.height: 50
-            icon.width: 50
-            leftPadding: 0
-            rightPadding: 0
-            topPadding: 0
-            bottomPadding: 0
-            icon.source : "qrc:/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/organization-24.svg"
-        }
-        MenuItem {
-            text: "testimage"
-        }
-        Component.onCompleted: console.log(iconimg.icon.height)
-    }
+//    // debug icon missing
+//    Menu {
+//        visible: true
+//        MenuItem {
+//            id: iconimg
+//            icon.height: 50
+//            icon.width: 50
+//            leftPadding: 0
+//            rightPadding: 0
+//            topPadding: 0
+//            bottomPadding: 0
+//            icon.source : "qrc:/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/organization-24.svg"
+//        }
+//        MenuItem {
+//            text: "testimage"
+//        }
+//    }
+//    // enddebug
 
+    RowLayout {
+        //anchors.fill: parent
 
-    GridLayout {
-        columns: 2
-        columnSpacing: 10
-        anchors.left: parent.left
-        anchors.bottom: parent.bottom
-
-        Menu {
-            id: floorFilterMenu1
+        ToolBar {
+            id: levelFilterMenu
             visible: true
             Action {
                 id: close
-                text: "close"
+                icon.source: "qrc:/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/x.svg"
                 onTriggered: floorFilterMenu1.close()
             }
 
             Action {
-                id: home
-                text: "home"
+                id: facility
                 icon.source: "qrc:/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/organization-24.svg"
+                onTriggered: facilityFilterMenu.visible ? facilityFilterMenu.close() : facilityFilterMenu.open()
             }
 
+            ColumnLayout {
 
-            MenuItem {
+
+            ToolButton {
+                Layout.fillWidth: true
                 action: close
             }
 
-            MenuSeparator {}
+            ToolSeparator {
+                Layout.fillWidth: true
+                orientation: Qt.Horizontal
+            }
 
             Repeater {
                 model: controller.floors
-                delegate: MenuItem {
+                delegate: ToolButton {
+                    Layout.fillWidth: true
                     text: model.name
                 }
             }
 
-            MenuSeparator {}
+            ToolSeparator {
+                Layout.fillWidth: true
+                orientation: Qt.Horizontal
+            }
 
-            MenuItem {
-                action: home
+            ToolButton {
+                Layout.fillWidth: true
+                action: facility
                 icon.color: "transparent"
             }
+            }
+
+            Component.onCompleted: console.log("1: ", x, y, width, height);
         }
+
+        Menu {
+            id: facilityFilterMenu
+            visible: true
+            // debug: need to fix the layout. hardcoding different position (otherwise they sit on each other)
+            x: 350
+
+            MenuItem {
+                contentItem: Item {
+                    RowLayout {
+                        anchors.fill: parent
+                        Image {
+                            source: "qrc:/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/plus-circle.svg"
+                        }
+
+                        ColumnLayout {
+                            Text {
+                                Layout.fillWidth: parent
+                                text: "1"
+                            }
+                            Text {
+                                Layout.fillWidth: parent
+                                text: "2"
+                            }
+                        }
+
+                        Image {
+                            source: "qrc:/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/plus-circle.svg"
+                        }
+                    }
+                }
+            }
+            TextField {
+                placeholderText: "Search"
+            }
+
+            Repeater {
+                model: controller.facilities
+                delegate : MenuItem {
+                    text: '\u2022 ' + model.name
+                }
+            }
+            Component.onCompleted: console.log("1: ", x, y, width, height);
+        }
+    Component.onCompleted: console.log("grid: ", x, y, width, height);
     }
+    Component.onCompleted: console.log("item: ", x, y, width, height);
 }
