@@ -12,12 +12,13 @@
         <file>pause.png</file>
         <file>pin.svg</file>
         <file>play.png</file>
+        <file>plus-circle.svg</file>
+        <file>organization-24.svg</file>
         <file>search.svg</file>
         <file>step.png</file>
         <file>step_back.png</file>
         <file>text_editing_mode.png</file>
         <file>x.svg</file>
         <file>zoom.png</file>
-        <file>plus-circle.svg</file>
     </qresource>
 </RCC>

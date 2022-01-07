@@ -120,6 +120,7 @@ ApplicationWindow {
 
         Menu {
             id: contextMenu
+            visible: true
             MenuItem { text: "Cut" }
             MenuItem { text: "Copy" }
             MenuSeparator { }
