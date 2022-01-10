@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images">
+        <file>chevron-left.svg</file>
         <file>compass.png</file>
         <file>flash.png</file>
         <file>information.svg</file>

@@ -39,25 +39,6 @@ Item {
         value : floorFilter.geoView
     }
 
-//    // debug icon missing
-//    Menu {
-//        visible: true
-//        MenuItem {
-//            id: iconimg
-//            icon.height: 50
-//            icon.width: 50
-//            leftPadding: 0
-//            rightPadding: 0
-//            topPadding: 0
-//            bottomPadding: 0
-//            icon.source : "qrc:/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/organization-24.svg"
-//        }
-//        MenuItem {
-//            text: "testimage"
-//        }
-//    }
-//    // enddebug
-
     RowLayout {
         //anchors.fill: parent
         ColumnLayout {
@@ -69,7 +50,7 @@ Item {
 
                 Action {
                     id: close
-                    icon.source: "qrc:/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/x.svg"
+                    icon.source: "images/x.svg"
                     onTriggered: levelFilterMenu.visible = false
                 }
 
@@ -119,70 +100,107 @@ Item {
                     icon.color: "transparent"
                 }
             }
+            Component.onCompleted: console.log(width, height)
         }
 
         ColumnLayout {
+            id: facilityFilterMenu
+            Layout.alignment: Qt.AlignBottom
+
             Item {
+                height: childrenRect.height
+                width: childrenRect.width
                 Component.onCompleted: console.log("item: ", width, height);
                 ColumnLayout {
+
                     RowLayout {
-                        Image {
-                            source: "qrc:/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/plus-circle.svg"
+
+                        Rectangle {
+                            Layout.fillHeight: true
+                            Layout.fillWidth: true
+                            width: leftChevronImg.width + 10
+                            border.color: "black"
+                            Image {
+                                Component.onCompleted: console.log("image: ", width, height);
+                                anchors.centerIn: parent
+                                id: leftChevronImg
+                                source: "images/chevron-left.svg"
+                            }
                         }
 
                         ColumnLayout {
+                            Component.onCompleted: console.log("columns: ", width, height);
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Item {
+                            width: 150
+                            height: childrenRect.height + 10
                             Text {
-
-                                text: "1"
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                text: controller.selectedFacilityId
+                                horizontalAlignment: Text.AlignHCenter
                             }
+                        }
+                        Item {
+                            width: 150
+                            height: childrenRect.height + 10
                             Text {
-                                text: "2"
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                horizontalAlignment: Text.AlignHCenter
+                                text: controller.selectedSiteId
                             }
+                        }
                         }
 
                         Image {
-                            source: "qrc:/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/plus-circle.svg"
+                            id: closeImg
+                            source: "images/x.svg"
                         }
+
                     }
+
                     Item {
-                        Component.onCompleted: console.log(width, height);
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
+                        width: childrenRect.width
+                        height: childrenRect.height
+
                         Image {
                             id: searchImg
                             sourceSize.width: 32
-                            sourceSize.height:  32
-                            source: "images/plus-circle.svg"
+                            sourceSize.height: 32
+                            source: "images/search.svg"
                         }
 
                         TextField {
+                            Layout.fillWidth: true
                             x: searchImg.width
                             placeholderText: "Search"
+                            onTextChanged: controller.filterFacilities(text)
                         }
                     }
                 }
             }
 
-
+            ListView {
+                visible: true
+                implicitHeight: contentHeight
+                implicitWidth: contentWidth
+                x: 350
+                model: controller.filteredFacilities
+                delegate: ItemDelegate {
+                    text: '\u2022 ' + model.name
+                    onClicked: {
+                        facilityFilterMenu.visible = false;
+                        levelFilterMenu.visible = true;
+                    }
+                }
+            }
 
         }
 
     //Component.onCompleted: console.log("grid: ", x, y, width, height);
     }
 
-    ListView {
-        id: facilityFilterMenu
-        visible: true
-        implicitHeight: contentHeight
-        implicitWidth: contentWidth
-        x: 350
-        model: controller.facilities
-        delegate: ItemDelegate {
-            text: '\u2022 ' + model.name
-            onClicked: {
-                facilityFilterMenu.visible = false;
-                levelFilterMenu.visible = true;
-            }
-        }
-    }
+
 }

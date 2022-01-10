@@ -35,7 +35,6 @@ DemoPage {
 //            }
 //        }
         FloorFilter {
-            controller.selectedFacilityId : "hello"
         }
 //! [Set up Floor Filter QML]
     }

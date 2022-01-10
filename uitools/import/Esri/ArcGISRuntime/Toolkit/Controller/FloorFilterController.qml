@@ -24,9 +24,9 @@ QtObject {
 
     property string selectedLevelId;
 
-    property string selectedFacilityId;
+    property string selectedFacilityId : "Facility";
 
-    property string selectedSiteId;
+    property string selectedSiteId : "Site"
 
     property ListModel floors: ListModel {
         ListElement {
@@ -49,21 +49,41 @@ QtObject {
         }
     }
 
-    onSelectedFacilityIdChanged: onSelectedChanged()
+    // not directly binding. update it when facilities is changed, otherwise the binding is broken everytime the filter method is called.
+    property ListModel filteredFacilities : ListModel {}
+
+    onFacilitiesChanged: { copyFacilities(); }
+
+    onSelectedFacilityIdChanged:
+    {
+        onSelectedChanged()
+    }
     onSelectedLevelIdChanged: onSelectedChanged()
     onSelectedSiteIdChanged: onSelectedChanged()
 
     function onSelectedChanged() {
-        console.log(controller.selectedFacilityId);
-    }
-
-    function createFloorElement() {
-
     }
 
     function filterFacilities(query){
-        //too: implement
+        filteredFacilities.clear();
+        console.log(facilities.count)
+        for(let i = 0; i < facilities.count; ++i){
+            const facility = facilities.get(i);
+            if(facility.name.includes(query))
+                filteredFacilities.append(facility);
+        }
     }
 
+    function copyFacilities() {
+        for(let i = 0; i < facilities.count; ++i){
+            let facility = facilities.get(i);
+            filteredFacilities.append(facility);
+        }
+    }
+
+    Component.onCompleted: {
+        //copy all the intial facilities into the filteredfacilites
+        copyFacilities();
+    }
 
 }
