@@ -70,7 +70,7 @@ Item {
                 Action {
                     id: close
                     icon.source: "qrc:/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/x.svg"
-                    onTriggered: floorFilterMenu.close()
+                    onTriggered: levelFilterMenu.visible = false
                 }
 
 
@@ -110,7 +110,7 @@ Item {
                 Action {
                     id: facility
                     icon.source: "qrc:/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/organization-24.svg"
-                    onTriggered: facilityFilterMenu.visible ? facilityFilterMenu.close() : facilityFilterMenu.open()
+                    onTriggered: facilityFilterMenu.visible ? facilityFilterMenu.visible = false : facilityFilterMenu.visible = true
                 }
 
                 ToolButton {
@@ -163,21 +163,26 @@ Item {
                 }
             }
 
-            Menu {
-                id: facilityFilterMenu
-                visible: true
-                // debug: need to fix the layout. hardcoding different position (otherwise they sit on each other)
-                x: 350
 
-                Repeater {
-                    model: controller.facilities
-                    delegate : MenuItem {
-                        text: '\u2022 ' + model.name
-                    }
-                }
 
+        }
+
+    //Component.onCompleted: console.log("grid: ", x, y, width, height);
+    }
+
+    ListView {
+        id: facilityFilterMenu
+        visible: true
+        implicitHeight: contentHeight
+        implicitWidth: contentWidth
+        x: 350
+        model: controller.facilities
+        delegate: ItemDelegate {
+            text: '\u2022 ' + model.name
+            onClicked: {
+                facilityFilterMenu.visible = false;
+                levelFilterMenu.visible = true;
             }
         }
-    //Component.onCompleted: console.log("grid: ", x, y, width, height);
     }
 }

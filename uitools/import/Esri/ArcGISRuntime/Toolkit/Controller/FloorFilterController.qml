@@ -61,5 +61,9 @@ QtObject {
 
     }
 
+    function filterFacilities(query){
+        //too: implement
+    }
+
 
 }
