@@ -60,79 +60,82 @@ Item {
 
     RowLayout {
         //anchors.fill: parent
+        ColumnLayout {
 
-        ToolBar {
-            id: levelFilterMenu
-            visible: true
-            Action {
-                id: close
-                icon.source: "qrc:/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/x.svg"
-                onTriggered: floorFilterMenu1.close()
-            }
-
-            Action {
-                id: facility
-                icon.source: "qrc:/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/organization-24.svg"
-                onTriggered: facilityFilterMenu.visible ? facilityFilterMenu.close() : facilityFilterMenu.open()
-            }
-
-            ColumnLayout {
+            ToolBar {
+                id: levelFilterMenu
+                visible: true
 
 
-            ToolButton {
-                Layout.fillWidth: true
-                action: close
-            }
+                Action {
+                    id: close
+                    icon.source: "qrc:/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/x.svg"
+                    onTriggered: floorFilterMenu.close()
+                }
 
-            ToolSeparator {
-                Layout.fillWidth: true
-                orientation: Qt.Horizontal
-            }
 
-            Repeater {
-                model: controller.floors
-                delegate: ToolButton {
+
+                ColumnLayout {
+
+
+                ToolButton {
                     Layout.fillWidth: true
-                    text: model.name
+                    action: close
+                }
+
+                ToolSeparator {
+                    Layout.fillWidth: true
+                    orientation: Qt.Horizontal
+                }
+
+                Repeater {
+                    model: controller.floors
+                    delegate: ToolButton {
+                        Layout.fillWidth: true
+                        text: model.name
+                    }
+                }
+
+                ToolSeparator {
+                    Layout.fillWidth: true
+                    orientation: Qt.Horizontal
+                }
+
+
                 }
             }
 
-            ToolSeparator {
-                Layout.fillWidth: true
-                orientation: Qt.Horizontal
-            }
+            ToolBar {
 
-            ToolButton {
-                Layout.fillWidth: true
-                action: facility
-                icon.color: "transparent"
-            }
-            }
+                Action {
+                    id: facility
+                    icon.source: "qrc:/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/organization-24.svg"
+                    onTriggered: facilityFilterMenu.visible ? facilityFilterMenu.close() : facilityFilterMenu.open()
+                }
 
-            Component.onCompleted: console.log("1: ", x, y, width, height);
+                ToolButton {
+                    Layout.fillWidth: true
+                    action: facility
+                    icon.color: "transparent"
+                }
+            }
         }
 
-        Menu {
-            id: facilityFilterMenu
-            visible: true
-            // debug: need to fix the layout. hardcoding different position (otherwise they sit on each other)
-            x: 350
-
-            MenuItem {
-                contentItem: Item {
+        ColumnLayout {
+            Item {
+                Component.onCompleted: console.log("item: ", width, height);
+                ColumnLayout {
                     RowLayout {
-                        anchors.fill: parent
                         Image {
                             source: "qrc:/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/plus-circle.svg"
                         }
 
                         ColumnLayout {
                             Text {
-                                Layout.fillWidth: parent
+
                                 text: "1"
                             }
                             Text {
-                                Layout.fillWidth: parent
                                 text: "2"
                             }
                         }
@@ -141,21 +144,40 @@ Item {
                             source: "qrc:/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/plus-circle.svg"
                         }
                     }
+                    Item {
+                        Component.onCompleted: console.log(width, height);
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Image {
+                            id: searchImg
+                            sourceSize.width: 32
+                            sourceSize.height:  32
+                            source: "images/plus-circle.svg"
+                        }
+
+                        TextField {
+                            x: searchImg.width
+                            placeholderText: "Search"
+                        }
+                    }
                 }
-            }
-            TextField {
-                placeholderText: "Search"
             }
 
-            Repeater {
-                model: controller.facilities
-                delegate : MenuItem {
-                    text: '\u2022 ' + model.name
+            Menu {
+                id: facilityFilterMenu
+                visible: true
+                // debug: need to fix the layout. hardcoding different position (otherwise they sit on each other)
+                x: 350
+
+                Repeater {
+                    model: controller.facilities
+                    delegate : MenuItem {
+                        text: '\u2022 ' + model.name
+                    }
                 }
+
             }
-            Component.onCompleted: console.log("1: ", x, y, width, height);
         }
-    Component.onCompleted: console.log("grid: ", x, y, width, height);
+    //Component.onCompleted: console.log("grid: ", x, y, width, height);
     }
-    Component.onCompleted: console.log("item: ", x, y, width, height);
 }
