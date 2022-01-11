@@ -45,11 +45,15 @@ Item {
             ToolBar {
                 id: levelFilterMenu
                 visible: true
+                property Item itemSelected: ({})
 
                 Action {
                     id: close
                     icon.source: "images/x.svg"
-                    onTriggered: levelFilterMenu.visible = false
+                    onTriggered: {
+                        levelFilterMenu.visible = false
+                        itemSelectedButton.visible = true
+                    }
                 }
 
                 ColumnLayout {
@@ -65,6 +69,13 @@ Item {
                     }
 
                     Repeater {
+                        Component.onCompleted: {
+                            var item = itemAt(0)
+                            if (item !== null) {
+                                item.down = true
+                                levelFilterMenu.itemSelected = item
+                            }
+                        }
                         model: controller.floors
                         delegate: ToolButton {
                             Layout.fillWidth: true
@@ -76,6 +87,13 @@ Item {
                         Layout.fillWidth: true
                         orientation: Qt.Horizontal
                     }
+                }
+            }
+            ToolBar {
+                id: itemSelectedButton
+                visible: false
+                ToolButton {
+                    text: levelFilterMenu.itemSelected.text
                 }
             }
 
@@ -136,6 +154,7 @@ Item {
                     onClicked: {
                         facilityFilterMenu.visible = false
                         levelFilterMenu.visible = true
+                        itemSelectedButton.visible = false
                     }
                     background: Rectangle {
                         Component.onCompleted: console.log("rect: ",
