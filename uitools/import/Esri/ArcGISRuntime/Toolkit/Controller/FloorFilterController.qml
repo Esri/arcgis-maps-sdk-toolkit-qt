@@ -24,9 +24,9 @@ QtObject {
 
     property string selectedLevelId;
 
-    property string selectedFacilityId : "Facility";
+    property string selectedFacilityId : "Select a Facility";
 
-    property string selectedSiteId : "Site"
+    property string selectedSiteId : "Select a Site"
 
     property ListModel floors: ListModel {
         ListElement {
@@ -42,15 +42,26 @@ QtObject {
 
     property ListModel facilities : ListModel {
         ListElement {
-            name: "Facility1"
+            name: "T1"
         }
         ListElement {
-            name: "Facility2"
+            name: "T2"
+        }
+    }
+
+    property ListModel sites : ListModel {
+        ListElement {
+            name: "A1"
+        }
+        ListElement {
+          name: "A2"
         }
     }
 
     // not directly binding. update it when facilities is changed, otherwise the binding is broken everytime the filter method is called.
     property ListModel filteredFacilities : ListModel {}
+
+    property ListModel filteredSites : ListModel {}
 
     onFacilitiesChanged: { copyFacilities(); }
 

@@ -30,9 +30,6 @@ Item {
 
     property FloorFilterController controller : FloorFilterController { }
 
-    anchors.bottom: parent.bottom
-    anchors.left: parent.left
-
     Binding {
         target : controller
         property : "geoView"
@@ -42,7 +39,7 @@ Item {
     RowLayout {
         //anchors.fill: parent
         ColumnLayout {
-
+            Layout.alignment: Qt.AlignBottom
             ToolBar {
                 id: levelFilterMenu
                 visible: true
@@ -87,10 +84,9 @@ Item {
             }
 
             ToolBar {
-
                 Action {
                     id: facility
-                    icon.source: "qrc:/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/organization-24.svg"
+                    icon.source: "images/organization-24.svg"
                     onTriggered: facilityFilterMenu.visible ? facilityFilterMenu.visible = false : facilityFilterMenu.visible = true
                 }
 
@@ -100,107 +96,94 @@ Item {
                     icon.color: "transparent"
                 }
             }
-            Component.onCompleted: console.log(width, height)
+            Component.onCompleted: console.log("toolbar", width, height)
         }
 
-        ColumnLayout {
+        GridLayout {
             id: facilityFilterMenu
-            Layout.alignment: Qt.AlignBottom
+            flow: GridLayout.TopToBottom
+            rows: 4
 
-            Item {
-                height: childrenRect.height
-                width: childrenRect.width
-                Component.onCompleted: console.log("item: ", width, height);
-                ColumnLayout {
-
-                    RowLayout {
-
-                        Rectangle {
-                            Layout.fillHeight: true
-                            Layout.fillWidth: true
-                            width: leftChevronImg.width + 10
-                            border.color: "black"
-                            Image {
-                                Component.onCompleted: console.log("image: ", width, height);
-                                anchors.centerIn: parent
-                                id: leftChevronImg
-                                source: "images/chevron-left.svg"
-                            }
-                        }
-
-                        ColumnLayout {
-                            Component.onCompleted: console.log("columns: ", width, height);
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                        Item {
-                            width: 150
-                            height: childrenRect.height + 10
-                            Text {
-                                anchors.left: parent.left
-                                anchors.right: parent.right
-                                text: controller.selectedFacilityId
-                                horizontalAlignment: Text.AlignHCenter
-                            }
-                        }
-                        Item {
-                            width: 150
-                            height: childrenRect.height + 10
-                            Text {
-                                anchors.left: parent.left
-                                anchors.right: parent.right
-                                horizontalAlignment: Text.AlignHCenter
-                                text: controller.selectedSiteId
-                            }
-                        }
-                        }
-
-                        Image {
-                            id: closeImg
-                            source: "images/x.svg"
-                        }
-
-                    }
-
-                    Item {
-                        width: childrenRect.width
-                        height: childrenRect.height
-
-                        Image {
-                            id: searchImg
-                            sourceSize.width: 32
-                            sourceSize.height: 32
-                            source: "images/search.svg"
-                        }
-
-                        TextField {
-                            Layout.fillWidth: true
-                            x: searchImg.width
-                            placeholderText: "Search"
-                            onTextChanged: controller.filterFacilities(text)
-                        }
-                    }
+            Rectangle {
+                Layout.fillHeight: true
+                Layout.rowSpan: 2
+                width: leftChevronImg.width + 10
+                border.color: "black"
+                Image {
+                    anchors.centerIn: parent
+                    id: leftChevronImg
+                    source: "images/chevron-left.svg"
+                    //visible: internal.currentVisibileListView === FloorFilter.VisibleListView.FACILITY
                 }
+                //visible: internal.currentVisibileListView === FloorFilter.VisibleListView.FACILITY
+            }
+
+            Image {
+                id: searchImg
+                sourceSize.width: 32
+                sourceSize.height: 32
+                source: "images/search.svg"
             }
 
             ListView {
+                Component.onCompleted: console.log("listview: ", width, height);
                 visible: true
+                Layout.columnSpan: 3
+                Layout.fillHeight: true
+                Layout.fillWidth: true
                 implicitHeight: contentHeight
                 implicitWidth: contentWidth
-                x: 350
                 model: controller.filteredFacilities
                 delegate: ItemDelegate {
+                    width: parent.width
                     text: '\u2022 ' + model.name
                     onClicked: {
                         facilityFilterMenu.visible = false;
                         levelFilterMenu.visible = true;
                     }
+                    background: Rectangle {
+                        Component.onCompleted: console.log("rect: ", width, height);
+                        border.color: "black"
+                    }
                 }
+            }
+            Text {
+                Layout.fillWidth: true
+                text: controller.selectedFacilityId
+                horizontalAlignment: Text.AlignHCenter
+            }
+            Text {
+                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignHCenter
+                text: controller.selectedSiteId
+            }
+
+            TextField {
+                Layout.fillWidth: true
+                Layout.columnSpan: 2
+                x: searchImg.width
+                placeholderText: "Search"
+                onTextChanged: controller.filterFacilities(text)
+            }
+
+            Image {
+                id: closeImg
+                Layout.rowSpan: 2
+                Layout.fillHeight: true
+                source: "images/x.svg"
             }
 
         }
-
-    //Component.onCompleted: console.log("grid: ", x, y, width, height);
     }
 
+    enum VisibleListView {
+        SITE, FACILITY, NONE
+    }
 
+    QtObject {
+        id: internal
+        property int currentVisibileListView : FloorFilter.VisibleListView.NONE
+    }
 }
+
+

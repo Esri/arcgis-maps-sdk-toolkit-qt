@@ -35,6 +35,7 @@ DemoPage {
 //            }
 //        }
         FloorFilter {
+            anchors.bottom: parent.bottom
         }
 //! [Set up Floor Filter QML]
     }
