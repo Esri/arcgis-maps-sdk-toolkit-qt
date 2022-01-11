@@ -217,9 +217,14 @@ ApplicationWindow {
                 BusyIndicator {
                     Layout.alignment: Qt.AlignHCenter
                 }
+
                 Label {
                     text: "Loading..."
                     Layout.alignment: Qt.AlignHCenter
+                }
+                SpinBox {
+                    Layout.alignment: Qt.AlignHCenter
+                    value: 5
                 }
             }
         }
