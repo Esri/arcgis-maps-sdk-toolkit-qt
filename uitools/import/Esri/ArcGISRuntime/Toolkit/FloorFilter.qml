@@ -36,8 +36,8 @@ Item {
         value : floorFilter.geoView
     }
 
-    RowLayout {
-        //anchors.fill: parent
+    GridLayout {
+        columns: 2
         ColumnLayout {
             Layout.alignment: Qt.AlignBottom
             ToolBar {
@@ -102,8 +102,9 @@ Item {
         GridLayout {
             id: facilityFilterMenu
             flow: GridLayout.TopToBottom
+            Layout.alignment: Qt.AlignBottom
             rows: 4
-
+Component.onCompleted: console.log("grid", width, height)
             Rectangle {
                 Layout.fillHeight: true
                 Layout.rowSpan: 2
@@ -129,7 +130,6 @@ Item {
                 Component.onCompleted: console.log("listview: ", width, height);
                 visible: true
                 Layout.columnSpan: 3
-                Layout.fillHeight: true
                 Layout.fillWidth: true
                 implicitHeight: contentHeight
                 implicitWidth: contentWidth
