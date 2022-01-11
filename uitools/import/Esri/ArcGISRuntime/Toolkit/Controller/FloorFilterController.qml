@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -18,29 +19,28 @@ import QtQuick 2.12
 QtObject {
     id: controller
 
-    property var geoView;
+    property var geoView
 
     //refresh()?
+    property string selectedLevelId
 
-    property string selectedLevelId;
+    property string selectedFacilityId: "Select a Facility"
 
-    property string selectedFacilityId : "Select a Facility";
-
-    property string selectedSiteId : "Select a Site"
+    property string selectedSiteId: "Select a Site"
 
     property ListModel floors: ListModel {
         ListElement {
-            name: "F1"
+            shortName: "F1"
         }
         ListElement {
-            name: "F2"
+            shortName: "F2"
         }
         ListElement {
-            name: "FF"
+            shortName: "FF"
         }
-    };
+    }
 
-    property ListModel facilities : ListModel {
+    property ListModel facilities: ListModel {
         ListElement {
             name: "T1"
         }
@@ -49,52 +49,51 @@ QtObject {
         }
     }
 
-    property ListModel sites : ListModel {
+    property ListModel sites: ListModel {
         ListElement {
             name: "A1"
         }
         ListElement {
-          name: "A2"
+            name: "A2"
         }
     }
 
     // not directly binding. update it when facilities is changed, otherwise the binding is broken everytime the filter method is called.
-    property ListModel filteredFacilities : ListModel {}
+    property ListModel filteredFacilities: ListModel {}
 
-    property ListModel filteredSites : ListModel {}
+    property ListModel filteredSites: ListModel {}
 
-    onFacilitiesChanged: { copyFacilities(); }
+    onFacilitiesChanged: {
+        copyFacilities()
+    }
 
-    onSelectedFacilityIdChanged:
-    {
+    onSelectedFacilityIdChanged: {
         onSelectedChanged()
     }
     onSelectedLevelIdChanged: onSelectedChanged()
     onSelectedSiteIdChanged: onSelectedChanged()
 
-    function onSelectedChanged() {
-    }
+    function onSelectedChanged() {}
 
-    function filterFacilities(query){
-        filteredFacilities.clear();
+    function filterFacilities(query) {
+        filteredFacilities.clear()
         console.log(facilities.count)
-        for(let i = 0; i < facilities.count; ++i){
-            const facility = facilities.get(i);
-            if(facility.name.includes(query))
-                filteredFacilities.append(facility);
+        for (var i = 0; i < facilities.count; ++i) {
+            const facility = facilities.get(i)
+            if (facility.name.includes(query))
+                filteredFacilities.append(facility)
         }
     }
 
     function copyFacilities() {
-        for(let i = 0; i < facilities.count; ++i){
-            let facility = facilities.get(i);
-            filteredFacilities.append(facility);
+        for (var i = 0; i < facilities.count; ++i) {
+            let facility = facilities.get(i)
+            filteredFacilities.append(facility)
         }
     }
 
     Component.onCompleted: {
         //copy all the intial facilities into the filteredfacilites
-        copyFacilities();
+        copyFacilities()
     }
-
 }
