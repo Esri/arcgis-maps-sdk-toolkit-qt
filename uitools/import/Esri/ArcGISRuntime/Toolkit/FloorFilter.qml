@@ -70,7 +70,7 @@ Item {
                     model: controller.floors
                     delegate: ToolButton {
                         Layout.fillWidth: true
-                        text: model.name
+                        text: model.shortName
                     }
                 }
 
