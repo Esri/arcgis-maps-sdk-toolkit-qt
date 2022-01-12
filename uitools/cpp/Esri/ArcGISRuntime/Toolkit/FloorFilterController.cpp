@@ -68,6 +68,9 @@ namespace Toolkit {
     template <typename Sender, typename Signal>
     QMetaObject::Connection disconnectOnSignal(Sender* sender, Signal&& signal, QObject* self, QMetaObject::Connection connection)
     {
+      if (!connection)
+        return QMetaObject::Connection{};
+
       return singleShotConnection(sender, signal, self, [c = std::move(connection)]
                                   {
                                     QObject::disconnect(c);
@@ -76,10 +79,10 @@ namespace Toolkit {
 
     /*!
      * \internal
-     * \brief Manages the conenction between Controller \a self and GeoView \a geoView.
+     * \brief Manages the connection between Controller \a self and GeoView \a geoView.
      * Attempts to call functor `f` if/when the FloorFilter within the geoModel is loaded.
      * This may also cause the geoModel itself to load.
-     * Will continue to call `f`on any new FloorFilters if a  map/sceneChanged signal is triggered on
+     * Will continue to call `f` every time a map/sceneChanged signal is triggered on
      * the GeoView.
      */
     template <typename GeoView, typename Func>

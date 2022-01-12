@@ -31,12 +31,20 @@ namespace Toolkit {
 
   /*
     \internal
-    \brief Exectues method \a f immediately if \a target is loaded, otherwise
-    attempts to load \a target and then executes \a f after the load occurs.
-    Returns the connection object where applicable, which may be default-constructed.
+    \brief Exectues method \a f immediately if \a sender is loaded, otherwise
+    attempts to load \a sender and then executes \a f after the load occurs.
+    Returns a connection object which may be default-constructed.
+
+    Example:
+    \begincode
+    doOnLoad(floorManager, this, []
+             {
+                qDebug() << "FloorManager is guaranteed loaded."
+             });
+    \endcode
    */
   template <typename Target, typename Func>
-  QMetaObject::Connection doOnLoad(Target* target, QObject* self, Func&& f)
+  QMetaObject::Connection doOnLoad(Target* sender, QObject* reveiver, Func&& f)
   {
     static_assert(
         std::is_convertible<Target*, ::Esri::ArcGISRuntime::Loadable*>::value,
@@ -45,7 +53,7 @@ namespace Toolkit {
         std::is_convertible<Target*, QObject*>::value,
         "Target type must be a QObject");
 
-    if (target->loadStatus() == LoadStatus::Loaded)
+    if (sender->loadStatus() == LoadStatus::Loaded)
     {
       f();
       return QMetaObject::Connection{};
@@ -53,17 +61,17 @@ namespace Toolkit {
     else
     {
       auto connection = QObject::connect(
-          target, &Target::loadStatusChanged, self,
+          sender, &Target::loadStatusChanged, reveiver,
           [f = std::forward<Func>(f)](LoadStatus loadStatus)
           {
             if (loadStatus == LoadStatus::Loaded)
               f();
           });
 
-      if (target->loadStatus() == LoadStatus::NotLoaded)
-        target->load();
-      else if (target->loadStatus() != LoadStatus::Loading)
-        target->retryLoad();
+      if (sender->loadStatus() == LoadStatus::NotLoaded)
+        sender->load();
+      else if (sender->loadStatus() != LoadStatus::Loading)
+        sender->retryLoad();
 
       return connection;
     }

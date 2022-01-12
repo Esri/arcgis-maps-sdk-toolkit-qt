@@ -51,6 +51,16 @@ namespace Toolkit {
     return m_floorSite;
   }
 
+  QString FloorFilterSiteItem::siteId() const
+  {
+    return m_floorSite ? m_floorSite->siteId() : QString{};
+  }
+
+  QString FloorFilterSiteItem::name() const
+  {
+    return m_floorSite ? m_floorSite->name() : QString{};
+  }
+
 } // Toolkit
 } // ArcGISRuntime
 } // Esri

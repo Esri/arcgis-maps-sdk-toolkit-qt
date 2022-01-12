@@ -27,6 +27,8 @@ namespace ArcGISRuntime {
     class FloorFilterSiteItem : public QObject
     {
       Q_OBJECT
+      Q_PROPERTY(QString modelId READ siteId NOTIFY floorSiteChanged)
+      Q_PROPERTY(QString name READ name NOTIFY floorSiteChanged)
     public:
       Q_INVOKABLE explicit FloorFilterSiteItem(QObject* parent = nullptr);
       Q_INVOKABLE explicit FloorFilterSiteItem(FloorSite* floorSite, QObject* parent = nullptr);
@@ -34,6 +36,9 @@ namespace ArcGISRuntime {
 
       void setFloorSite(FloorSite* floorSite);
       FloorSite* floorSite() const;
+
+      QString siteId() const;
+      QString name() const;
 
     signals:
       void floorSiteChanged();
