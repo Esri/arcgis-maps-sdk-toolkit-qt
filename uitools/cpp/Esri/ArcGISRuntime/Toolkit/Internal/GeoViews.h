@@ -44,6 +44,8 @@ namespace Toolkit {
 } // ArcGISRuntime
 } // Esri
 
+#endif
+
 namespace Esri {
 namespace ArcGISRuntime {
 namespace Toolkit {
@@ -69,7 +71,5 @@ namespace Toolkit {
 } // Toolkit
 } // ArcGISRuntime
 } // Esri
-
-#endif
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_GEOVIEWS_H
