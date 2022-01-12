@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -13,73 +14,86 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import  Esri.ArcGISRuntime.Toolkit.Controller 100.14
+import Esri.ArcGISRuntime.Toolkit.Controller 100.14
 import QtQuick 2.12
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+
+
 /*!
   \qmltype FloorFilter
   \inqmlmodule Esri.ArcGISRuntime.Toolkit
   \since 100.14
   \brief Allows to display and filter the available floor aware layers in the current \c GeoModel.
 */
-
 Item {
     id: floorFilter
-    property var geoView;
+    property var geoView
 
-    property FloorFilterController controller : FloorFilterController { }
+    property FloorFilterController controller: FloorFilterController {}
 
     Binding {
-        target : controller
-        property : "geoView"
-        value : floorFilter.geoView
+        target: controller
+        property: "geoView"
+        value: floorFilter.geoView
     }
 
-    RowLayout {
-        //anchors.fill: parent
+    GridLayout {
+        columns: 2
         ColumnLayout {
             Layout.alignment: Qt.AlignBottom
             ToolBar {
                 id: levelFilterMenu
                 visible: true
-
+                property Item itemSelected: ({})
 
                 Action {
                     id: close
                     icon.source: "images/x.svg"
-                    onTriggered: levelFilterMenu.visible = false
-                }
-
-
-
-                ColumnLayout {
-
-
-                ToolButton {
-                    Layout.fillWidth: true
-                    action: close
-                }
-
-                ToolSeparator {
-                    Layout.fillWidth: true
-                    orientation: Qt.Horizontal
-                }
-
-                Repeater {
-                    model: controller.floors
-                    delegate: ToolButton {
-                        Layout.fillWidth: true
-                        text: model.shortName
+                    onTriggered: {
+                        levelFilterMenu.visible = false
+                        itemSelectedButton.visible = true
                     }
                 }
 
-                ToolSeparator {
-                    Layout.fillWidth: true
-                    orientation: Qt.Horizontal
+                ColumnLayout {
+
+                    ToolButton {
+                        Layout.fillWidth: true
+                        action: close
+                    }
+
+                    ToolSeparator {
+                        Layout.fillWidth: true
+                        orientation: Qt.Horizontal
+                    }
+
+                    Repeater {
+                        Component.onCompleted: {
+                            var item = itemAt(0)
+                            if (item !== null) {
+                                item.down = true
+                                levelFilterMenu.itemSelected = item
+                            }
+                        }
+                        model: controller.floors
+                        delegate: ToolButton {
+                            Layout.fillWidth: true
+                            text: model.shortName
+                        }
+                    }
+
+                    ToolSeparator {
+                        Layout.fillWidth: true
+                        orientation: Qt.Horizontal
+                    }
                 }
-
-
+            }
+            ToolBar {
+                id: itemSelectedButton
+                visible: false
+                ToolButton {
+                    text: levelFilterMenu.itemSelected.text
                 }
             }
 
@@ -102,8 +116,9 @@ Item {
         GridLayout {
             id: facilityFilterMenu
             flow: GridLayout.TopToBottom
+            Layout.alignment: Qt.AlignBottom
             rows: 4
-
+            Component.onCompleted: console.log("grid", width, height)
             Rectangle {
                 Layout.fillHeight: true
                 Layout.rowSpan: 2
@@ -126,23 +141,24 @@ Item {
             }
 
             ListView {
-                Component.onCompleted: console.log("listview: ", width, height);
+                Component.onCompleted: console.log("listview: ", width, height)
                 visible: true
                 Layout.columnSpan: 3
-                Layout.fillHeight: true
                 Layout.fillWidth: true
                 implicitHeight: contentHeight
                 implicitWidth: contentWidth
                 model: controller.filteredFacilities
                 delegate: ItemDelegate {
-                    width: parent.width
+                    //width: parent.width
                     text: '\u2022 ' + model.name
                     onClicked: {
-                        facilityFilterMenu.visible = false;
-                        levelFilterMenu.visible = true;
+                        facilityFilterMenu.visible = false
+                        levelFilterMenu.visible = true
+                        itemSelectedButton.visible = false
                     }
                     background: Rectangle {
-                        Component.onCompleted: console.log("rect: ", width, height);
+                        Component.onCompleted: console.log("rect: ",
+                                                           width, height)
                         border.color: "black"
                     }
                 }
@@ -172,18 +188,17 @@ Item {
                 Layout.fillHeight: true
                 source: "images/x.svg"
             }
-
         }
     }
 
     enum VisibleListView {
-        SITE, FACILITY, NONE
+        SITE,
+        FACILITY,
+        NONE
     }
 
     QtObject {
         id: internal
-        property int currentVisibileListView : FloorFilter.VisibleListView.NONE
+        property int currentVisibileListView: FloorFilter.VisibleListView.NONE
     }
 }
-
-
