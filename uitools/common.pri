@@ -30,6 +30,7 @@ HEADERS += $$CPPPATH/AuthenticationController.h \
            $$CPPPATH/FloorFilterSiteItem.h \
            $$CPPPATH/LocatorSearchSource.h \
            $$CPPPATH/Internal/BasemapGalleryImageProvider.h \
+           $$CPPPATH/Internal/DoOnLoad.h \
            $$CPPPATH/Internal/GenericListModel.h \
            $$CPPPATH/Internal/GenericTableProxyModel.h \
            $$CPPPATH/Internal/GeoViews.h \

@@ -41,7 +41,7 @@ namespace ArcGISRuntime {
       Q_PROPERTY(QAbstractListModel* facilities READ facilities CONSTANT)
       Q_PROPERTY(QAbstractListModel* sites READ sites CONSTANT)
     public:
-      Q_INVOKABLE FloorFilterController(QObject* parent = nullptr);
+      Q_INVOKABLE explicit FloorFilterController(QObject* parent = nullptr);
       ~FloorFilterController() override;
 
       QObject* geoView() const;

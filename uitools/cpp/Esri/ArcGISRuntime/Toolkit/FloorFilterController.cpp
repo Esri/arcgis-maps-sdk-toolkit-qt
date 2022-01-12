@@ -20,7 +20,8 @@
 #include "FloorFilterLevelItem.h"
 #include "FloorFilterSiteItem.h"
 #include "Internal/GeoViews.h"
-#include "Internal/SingleShotConnection.h"
+#include "Internal/DoOnLoad.h"
+
 
 // ArcGISRuntime headers
 #include <FloorFacility.h>
@@ -29,9 +30,6 @@
 #include <FloorSite.h>
 #include <Map.h>
 #include <Scene.h>
-
-// C++ headers
-#include <type_traits>
 
 namespace Esri {
 namespace ArcGISRuntime {
@@ -55,44 +53,6 @@ namespace Toolkit {
         }
       }
       return nullptr;
-    }
-
-    /*!
-      \internal
-      \brief Exectues method \a f immediately if \a target is loaded, otherwise
-      attempts a load of \a target and then executes \a f once the load occurs.
-      Returns the connection object where applicable, which may be default-constructed
-      on immediate execution.
-     */
-    template <typename Target, typename Func>
-    QMetaObject::Connection doOnLoad(Target* target, QObject* self, Func&& f)
-    {
-      static_assert(
-          std::is_convertible<Target*, ::Esri::ArcGISRuntime::Loadable*>::value,
-          "Target type must use Loadable interface");
-
-      if (target->loadStatus() == LoadStatus::Loaded)
-      {
-        f();
-        return QMetaObject::Connection{};
-      }
-      else
-      {
-        auto connection = QObject::connect(
-            target, &Target::loadStatusChanged, self,
-            [f = std::forward<Func>(f)](LoadStatus loadStatus)
-            {
-              if (loadStatus == LoadStatus::Loaded)
-                f();
-            });
-
-        if (target->loadStatus() == LoadStatus::NotLoaded)
-          target->load();
-        else
-          target->retryLoad();
-
-        return connection;
-      }
     }
   }
 
