@@ -19,9 +19,9 @@
 #include "FloorFilterFacilityItem.h"
 #include "FloorFilterLevelItem.h"
 #include "FloorFilterSiteItem.h"
-#include "Internal/GeoViews.h"
 #include "Internal/DoOnLoad.h"
-
+#include "Internal/GeoViews.h"
+#include "Internal/SingleShotConnection.h"
 
 // ArcGISRuntime headers
 #include <FloorFacility.h>
@@ -36,6 +36,11 @@ namespace ArcGISRuntime {
 namespace Toolkit {
 
   namespace {
+    /*!
+      \internal
+      \brief Returns the FloorManager from the GeoView's model.
+      Can return null if map is not loaded.
+     */
     FloorManager* getFloorManager(QObject* geoView)
     {
       if (auto mapView = qobject_cast<MapViewToolkit*>(geoView))
@@ -53,6 +58,73 @@ namespace Toolkit {
         }
       }
       return nullptr;
+    }
+
+    /*!
+     \internal
+     \brief When \a signal fires on \a sender, the given \a connection is disconnected.
+     This makes the connection's invvocation depdendent on \a signal not firing.
+     */
+    template <typename Sender, typename Signal>
+    QMetaObject::Connection disconnectOnSignal(Sender* sender, Signal&& signal, QObject* self, QMetaObject::Connection connection)
+    {
+      return singleShotConnection(sender, signal, self, [c = std::move(connection)]
+                                  {
+                                    QObject::disconnect(c);
+                                  });
+    }
+
+    /*!
+     * \internal
+     * \brief Manages the conenction between Controller \a self and GeoView \a geoView.
+     * Attempts to call functor `f` if/when the FloorFilter within the geoModel is loaded.
+     * This may also cause the geoModel itself to load.
+     * Will continue to call `f`on any new FloorFilters if a  map/sceneChanged signal is triggered on
+     * the GeoView.
+     */
+    template <typename GeoView, typename Func>
+    void connectToGeoView(GeoView* geoView, FloorFilterController* self, Func&& f)
+    {
+      static_assert(
+          std::is_same<GeoView, MapViewToolkit>::value ||
+              std::is_same<GeoView, SceneViewToolkit>::value,
+          "Must be connected to a SceneView or MapView");
+
+      auto connectToGeoModel = [self, geoView, f = std::forward<Func>(f)]
+      {
+        auto model = getGeoModel(geoView);
+        if (!model)
+          return;
+
+        // Here we attempt to calls `f` if/when both the GeoModel and FloorManager are loaded.
+        // This may happen immediately or asyncnronously.This can be interrupted if GeoView or
+        // GeoModel changes in the interim.
+        auto c = doOnLoad(model, self, [self, model, geoView, f = std::move(f)]()
+                          {
+                            auto floorManager = model->floorManager();
+                            if (!floorManager)
+                              return;
+
+                            auto c = doOnLoad(floorManager, self, [f = std::move(f)]
+                                              {
+                                                f();
+                                              });
+                            // Destroy the connection `c` if the map/scene changes, or the geoView changes.
+                            // This means the connection is only relevant for as long as the model/view is relavant to
+                            // the FloorFilterController.
+                            disconnectOnSignal(geoView, getGeoModelChangedSignal(geoView), self, c);
+                            disconnectOnSignal(self, &FloorFilterController::geoViewChanged, self, c);
+                          });
+        // Destroy the connection `c` if the map/scene changes, or the geoView changes. This means
+        // the connection is only relevant for as long as the model/view is relavant to the FloorFilterController.
+        disconnectOnSignal(geoView, getGeoModelChangedSignal(geoView), self, c);
+        disconnectOnSignal(self, &FloorFilterController::geoViewChanged, self, c);
+      };
+
+      // Hooks up to any geoModels that appear when the map/sceneView changed signal is called.
+      QObject::connect(geoView, getGeoModelChangedSignal(geoView), self, connectToGeoModel);
+      // Attempt to hook up to existing geoModel if applicable.
+      connectToGeoModel();
     }
   }
 
@@ -109,41 +181,21 @@ namespace Toolkit {
 
     m_geoView = geoView;
 
-    if (m_geoView)
+    if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
-      if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
-      {
-        connect(mapView, &MapViewToolkit::mapChanged, this,
-                [this, mapView]
-                {
-                  auto map = mapView->map();
-                  doOnLoad(map, this, [this, map]
-                           {
-                             auto floorManager = map->floorManager();
-                             doOnLoad(floorManager, this, [this]
-                                      {
-                                        populateSites();
-                                      });
-                           });
-                });
-      }
-      else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
-      {
-        connect(sceneView, &SceneViewToolkit::sceneChanged, this,
-                [this, sceneView]
-                {
-                  auto scene = sceneView->arcGISScene();
-                  doOnLoad(scene, this, [this, scene]()
-                           {
-                             auto floorManager = scene->floorManager();
-                             doOnLoad(floorManager, this, [this]
-                                      {
-                                        populateSites();
-                                      });
-                           });
-                });
-      }
+      connectToGeoView(mapView, this, [this]
+                       {
+                         populateSites();
+                       });
     }
+    else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+    {
+      connectToGeoView(sceneView, this, [this]
+                       {
+                         populateSites();
+                       });
+    }
+
     emit geoViewChanged();
   }
 

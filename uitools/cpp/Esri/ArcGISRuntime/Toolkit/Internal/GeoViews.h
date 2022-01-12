@@ -18,34 +18,54 @@
 
 #ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
 
-#  include <MapGraphicsView.h>
-#  include <SceneGraphicsView.h>
+#include <MapGraphicsView.h>
+#include <SceneGraphicsView.h>
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
-    using SceneViewToolkit = SceneGraphicsView;
-    using MapViewToolkit = MapGraphicsView;
+namespace Esri {
+namespace ArcGISRuntime {
+namespace Toolkit {
+  using SceneViewToolkit = SceneGraphicsView;
+  using MapViewToolkit = MapGraphicsView;
 } // Toolkit
 } // ArcGISRuntime
 } // Esri
 
 #else
 
-#  include <MapQuickView.h>
-#  include <SceneQuickView.h>
+#include <MapQuickView.h>
+#include <SceneQuickView.h>
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri {
+namespace ArcGISRuntime {
+namespace Toolkit {
   using SceneViewToolkit = SceneQuickView;
   using MapViewToolkit = MapQuickView;
+} // Toolkit
+} // ArcGISRuntime
+} // Esri
+
+namespace Esri {
+namespace ArcGISRuntime {
+namespace Toolkit {
+  inline Map* getGeoModel(MapViewToolkit* mapView)
+  {
+    return mapView ? mapView->map() : nullptr;
+  }
+
+  inline Scene* getGeoModel(SceneViewToolkit* sceneView)
+  {
+    return sceneView ? sceneView->arcGISScene() : nullptr;
+  }
+
+  inline auto getGeoModelChangedSignal(MapViewToolkit* /*mapView*/)
+  {
+    return &MapViewToolkit::mapChanged;
+  }
+
+  inline auto getGeoModelChangedSignal(SceneViewToolkit* /*sceneView*/)
+  {
+    return &SceneViewToolkit::sceneChanged;
+  }
 } // Toolkit
 } // ArcGISRuntime
 } // Esri
