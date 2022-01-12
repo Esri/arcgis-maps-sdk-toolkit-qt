@@ -45,7 +45,7 @@ Item {
             ToolBar {
                 id: levelFilterMenu
                 visible: true
-                property Item itemSelected: ({})
+                property var itemSelected: ({})
 
                 Action {
                     id: close
@@ -69,14 +69,7 @@ Item {
                     }
 
                     Repeater {
-                        Component.onCompleted: {
-                            var item = itemAt(0)
-                            if (item !== null) {
-                                item.down = true
-                                levelFilterMenu.itemSelected = item
-                            }
-                        }
-                        model: controller.floors
+                        model: controller.levels
                         delegate: ToolButton {
                             Layout.fillWidth: true
                             text: model.shortName
@@ -93,7 +86,7 @@ Item {
                 id: itemSelectedButton
                 visible: false
                 ToolButton {
-                    text: levelFilterMenu.itemSelected.text
+                    text: levelFilterMenu ? levelFilterMenu.itemSelected.text : ""
                 }
             }
 
@@ -141,20 +134,31 @@ Item {
             }
 
             ListView {
-                Component.onCompleted: console.log("listview: ", width, height)
+                Component.onCompleted: console.log("listview: ", count)
                 visible: true
                 Layout.columnSpan: 3
                 Layout.fillWidth: true
                 implicitHeight: contentHeight
                 implicitWidth: contentWidth
-                model: controller.filteredFacilities
+                model: internal.currentVisibileListView
+                       === FloorFilter.VisibleListView.SITE ? controller.sites : controller.facilities
                 delegate: ItemDelegate {
                     //width: parent.width
                     text: '\u2022 ' + model.name
                     onClicked: {
-                        facilityFilterMenu.visible = false
-                        levelFilterMenu.visible = true
-                        itemSelectedButton.visible = false
+                        // switch to facility view
+                        if (internal.currentVisibileListView === FloorFilter.VisibleListView.SITE) {
+                            controller.selectedSiteId = model.modelId
+                            internal.currentVisibileListView = FloorFilter.VisibleListView.FACILITY
+                        } // switch to level view
+                        else if (internal.currentVisibileListView
+                                 === FloorFilter.VisibleListView.FACILITY) {
+                            controller.selectedFacilityId = model.modelId
+                            internal.currentVisibileListView = FloorFilter.VisibleListView.NONE
+                            facilityFilterMenu.visible = false
+                            levelFilterMenu.visible = true
+                            itemSelectedButton.visible = false
+                        }
                     }
                     background: Rectangle {
                         Component.onCompleted: console.log("rect: ",
@@ -199,6 +203,6 @@ Item {
 
     QtObject {
         id: internal
-        property int currentVisibileListView: FloorFilter.VisibleListView.NONE
+        property int currentVisibileListView: FloorFilter.VisibleListView.SITE
     }
 }

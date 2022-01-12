@@ -24,11 +24,11 @@ QtObject {
     //refresh()?
     property string selectedLevelId
 
-    property string selectedFacilityId: "Select a Facility"
+    property string selectedFacilityId
 
-    property string selectedSiteId: "Select a Site"
+    property string selectedSiteId
 
-    property ListModel floors: ListModel {
+    property ListModel levels: ListModel {
         ListElement {
             shortName: "F1"
         }
@@ -43,25 +43,24 @@ QtObject {
     property ListModel facilities: ListModel {
         ListElement {
             name: "T1"
+            modelId: "1"
         }
         ListElement {
             name: "T2"
+            modelId: "2"
         }
     }
 
     property ListModel sites: ListModel {
         ListElement {
             name: "A1"
+            modelId: "1"
         }
         ListElement {
             name: "A2"
+            modelId: "2"
         }
     }
-
-    // not directly binding. update it when facilities is changed, otherwise the binding is broken everytime the filter method is called.
-    property ListModel filteredFacilities: ListModel {}
-
-    property ListModel filteredSites: ListModel {}
 
     onFacilitiesChanged: {
         copyFacilities()
@@ -71,7 +70,10 @@ QtObject {
         onSelectedChanged()
     }
     onSelectedLevelIdChanged: onSelectedChanged()
-    onSelectedSiteIdChanged: onSelectedChanged()
+    onSelectedSiteIdChanged: {
+        console.log(selectedSiteId)
+        onSelectedChanged()
+    }
 
     function onSelectedChanged() {}
 
