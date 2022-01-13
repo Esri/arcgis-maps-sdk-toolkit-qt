@@ -31,49 +31,55 @@ QtObject {
 
     property string selectedSiteId
 
-    property ListModel levels: ListModel {
-        ListElement {
-            shortName: "F1"
-        }
-        ListElement {
-            shortName: "F2"
-        }
-        ListElement {
-            shortName: "FF"
-        }
-    }
+    property ListModel levels: ListModel {}
 
-    property ListModel facilities: ListModel {
-        ListElement {
-            name: "T1"
-            modelId: "1"
-        }
-        ListElement {
-            name: "T2"
-            modelId: "2"
-        }
-    }
+    property ListModel facilities: ListModel {}
 
-    property ListModel sites: ListModel {//        ListElement {
-        //            name: "A1"
-        //            modelId: "1"
-        //        }
-        //        ListElement {
-        //            name: "A2"
-        //            modelId: "2"
-        //        }
-    }
+    property ListModel sites: ListModel {}
 
     onFacilitiesChanged: {
 
     }
 
-    onSelectedFacilityIdChanged: {
+    // iterates over \a listElements to find an element with \a id.
+    //\a variableIdName is used to access the correct method name in each list (siteId, facilityId, levelId)
+    function findElementIdxById(id, listElements, variableIdName) {
+        let idx
+        for (var i = 0; i < listElements.length; ++i) {
+            let elementId = listElements[i][variableIdName]
+            if (elementId === id) {
+                idx = i
+                break
+            }
+        }
+        return idx
+    }
+
+    onSelectedLevelIdChanged: {
         onSelectedChanged()
     }
-    onSelectedLevelIdChanged: onSelectedChanged()
+
+    onSelectedFacilityIdChanged: {
+        // find the list element idx of the changed facilityId
+        let idx = findElementIdxById(selectedFacilityId,
+                                     floorManager.facilities, "facilityId")
+        if (typeof idx === undefined) {
+            console.error("site id not found")
+            return
+        }
+        populateLevels(floorManager.facilities[idx].levels)
+        onSelectedChanged()
+    }
+
     onSelectedSiteIdChanged: {
-        console.log(selectedSiteId)
+        // find the list element idx of the changed siteId
+        let idx = findElementIdxById(selectedSiteId,
+                                     floorManager.sites, "siteId")
+        if (typeof idx === undefined) {
+            console.error("site id not found")
+            return
+        }
+        populateFacilities(floorManager.sites[idx].facilities)
         onSelectedChanged()
     }
 
@@ -138,10 +144,24 @@ QtObject {
         console.log(sites.get(0).name)
     }
 
-    onFloorManagerChanged: console.log("manager changed")
-
-    Component.onCompleted: {
-
-        //copy all the intial facilities into the filteredfacilites
+    function populateFacilities(listFacilities) {
+        for (var i = 0; i < listFacilities.length; ++i) {
+            let facility = listFacilities[i]
+            facilities.append({
+                                  "name": facility.name,
+                                  "modelId": facility.facilityId
+                              })
+        }
     }
+
+    function populateLevels(listLevels) {
+        for (var i = 0; i < listLevels.length; ++i) {
+            let level = listLevels[i]
+            levels.append({
+                              "shortName": level.shortName
+                          })
+        }
+    }
+
+    onFloorManagerChanged: console.log("manager changed")
 }
