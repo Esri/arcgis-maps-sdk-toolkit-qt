@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -28,15 +29,21 @@ DemoPage {
     }
 
     mapViewContents: Component {
-//! [Set up Floor Filter QML]
-//        MapView {
-//            Map {
-//                initBasemapStyle: Enums.BasemapStyleArcGISDarkGray
-//            }
-//        }
-        FloorFilter {
-            anchors.bottom: parent.bottom
+        //! [Set up Floor Filter QML]
+        MapView {
+            Map {
+                initUrl: "https://www.arcgis.com/home/item.html?id=f133a698536f44c8884ad81f80b6cfc7"
+            }
+            FloorFilter {
+                geoView: parent
+                anchors {
+                    left: parent.left
+                    margins: 10
+                    top: parent.top
+                }
+            }
         }
-//! [Set up Floor Filter QML]
+
+        //! [Set up Floor Filter QML]
     }
 }
