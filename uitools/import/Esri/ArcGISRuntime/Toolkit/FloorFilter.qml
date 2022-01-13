@@ -94,6 +94,11 @@ Item {
                 ToolButton {
                     id: itemSelectedButton
                     text: levelFilterMenu.itemSelected
+                    onClicked: {
+                        console.log(parent)
+                        levelFilterMenu.visible = true
+                        itemSelectedToolBar.visible = false
+                    }
                 }
             }
 
@@ -101,7 +106,9 @@ Item {
                 Action {
                     id: facility
                     icon.source: "images/organization-24.svg"
-                    onTriggered: facilityFilterMenu.visible = !facilityFilterMenu.visible
+                    onTriggered: {
+                        facilityFilterMenu.visible = !facilityFilterMenu.visible
+                    }
                 }
 
                 ToolButton {
