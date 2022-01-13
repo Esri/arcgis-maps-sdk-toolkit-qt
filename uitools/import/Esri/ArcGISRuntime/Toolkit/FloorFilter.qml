@@ -94,7 +94,7 @@ Item {
                 Action {
                     id: facility
                     icon.source: "images/organization-24.svg"
-                    onTriggered: facilityFilterMenu.visible ? facilityFilterMenu.visible = false : facilityFilterMenu.visible = true
+                    onTriggered: facilityFilterMenu.visible = !facilityFilterMenu.visible
                 }
 
                 ToolButton {
@@ -103,7 +103,6 @@ Item {
                     icon.color: "transparent"
                 }
             }
-            Component.onCompleted: console.log("toolbar", width, height)
         }
 
         GridLayout {
@@ -111,19 +110,31 @@ Item {
             flow: GridLayout.TopToBottom
             Layout.alignment: Qt.AlignBottom
             rows: 4
-            Component.onCompleted: console.log("grid", width, height)
+            //visible: internal.currentVisibileListView !== FloorFilter.VisibleListView.NONE
             Rectangle {
                 Layout.fillHeight: true
                 Layout.rowSpan: 2
-                width: leftChevronImg.width + 10
+                Layout.alignment: Qt.AlignHCenter
+                // if == facility-> gets set twice: once to 24 and after to 0.
+                width: internal.currentVisibileListView
+                       === FloorFilter.VisibleListView.FACILITY ? 24 : 0
                 border.color: "black"
                 Image {
                     anchors.centerIn: parent
                     id: leftChevronImg
                     source: "images/chevron-left.svg"
-                    //visible: internal.currentVisibileListView === FloorFilter.VisibleListView.FACILITY
+                    sourceSize.width: 24
+                    sourceSize.height: 24
+                    width: internal.currentVisibileListView
+                           === FloorFilter.VisibleListView.FACILITY ? sourceSize.width : 0
+                    height: internal.currentVisibileListView
+                            === FloorFilter.VisibleListView.FACILITY ? sourceSize.width : 0
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: internal.currentVisibileListView
+                                   = FloorFilter.VisibleListView.SITE
+                    }
                 }
-                //visible: internal.currentVisibileListView === FloorFilter.VisibleListView.FACILITY
             }
 
             Image {
@@ -154,28 +165,27 @@ Item {
                         else if (internal.currentVisibileListView
                                  === FloorFilter.VisibleListView.FACILITY) {
                             controller.selectedFacilityId = model.modelId
-                            internal.currentVisibileListView = FloorFilter.VisibleListView.NONE
                             facilityFilterMenu.visible = false
                             levelFilterMenu.visible = true
                             itemSelectedButton.visible = false
                         }
                     }
                     background: Rectangle {
-                        Component.onCompleted: console.log("rect: ",
-                                                           width, height)
                         border.color: "black"
                     }
                 }
             }
             Text {
                 Layout.fillWidth: true
-                text: controller.selectedFacilityId
                 horizontalAlignment: Text.AlignHCenter
+                text: controller.selectedSiteId
+                      === "" ? "Select the Site" : controller.selectedSiteId
             }
             Text {
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignHCenter
-                text: controller.selectedSiteId
+                text: controller.selectedFacilityId
+                      === "" ? "Select the Facility" : controller.selectedFacilityId
             }
 
             TextField {
@@ -190,19 +200,26 @@ Item {
                 id: closeImg
                 Layout.rowSpan: 2
                 Layout.fillHeight: true
+                sourceSize: Qt.size(24, 24)
                 source: "images/x.svg"
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: facilityFilterMenu.visible = false
+                }
             }
         }
     }
 
+    // used to switch between site and facilities listviews and models.
     enum VisibleListView {
         SITE,
-        FACILITY,
-        NONE
+        FACILITY
     }
 
     QtObject {
         id: internal
         property int currentVisibileListView: FloorFilter.VisibleListView.SITE
+        onCurrentVisibileListViewChanged: console.log("curr changed",
+                                                      currentVisibileListView)
     }
 }
