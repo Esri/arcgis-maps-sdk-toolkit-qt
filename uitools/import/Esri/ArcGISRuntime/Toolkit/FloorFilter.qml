@@ -45,14 +45,15 @@ Item {
             ToolBar {
                 id: levelFilterMenu
                 visible: true
-                property var itemSelected: ({})
+                // property var itemSelected: {text: ""}
+                property string itemSelected: ""
 
                 Action {
                     id: close
                     icon.source: "images/x.svg"
                     onTriggered: {
                         levelFilterMenu.visible = false
-                        itemSelectedButton.visible = true
+                        itemSelectedToolBar.visible = (itemSelectedButton.text !== "")
                     }
                 }
 
@@ -73,6 +74,11 @@ Item {
                         delegate: ToolButton {
                             Layout.fillWidth: true
                             text: model.shortName
+                            onClicked: {
+                                levelFilterMenu.itemSelected = model.shortName
+
+                                console.log(levelFilterMenu.itemSelected)
+                            }
                         }
                     }
 
@@ -83,10 +89,11 @@ Item {
                 }
             }
             ToolBar {
-                id: itemSelectedButton
+                id: itemSelectedToolBar
                 visible: false
                 ToolButton {
-                    text: levelFilterMenu ? levelFilterMenu.itemSelected.text : ""
+                    id: itemSelectedButton
+                    text: levelFilterMenu.itemSelected
                 }
             }
 
@@ -167,7 +174,6 @@ Item {
                             controller.selectedFacilityId = model.modelId
                             facilityFilterMenu.visible = false
                             levelFilterMenu.visible = true
-                            itemSelectedButton.visible = false
                         }
                     }
                     background: Rectangle {
