@@ -24,7 +24,7 @@ import QtQuick.Layouts 1.15
   \qmltype FloorFilter
   \inqmlmodule Esri.ArcGISRuntime.Toolkit
   \since 100.14
-  \brief Allows to display and filter the available floor aware layers in the current \c GeoModel.
+  \brief Allows to display and filter the available floor aware layers in the current \c GeoView.
 */
 Item {
     id: floorFilter
@@ -69,15 +69,26 @@ Item {
                     }
 
                     Repeater {
+                        id: repeater
+                        property int downItem
                         model: controller.levels
                         delegate: ToolButton {
                             Layout.fillWidth: true
                             text: model.shortName
                             onClicked: {
+                                repeater.setItemHighlighted(
+                                            index) // _q can access Repeater without using the id?
                                 levelFilterMenu.itemSelected = model.shortName
 
                                 console.log(levelFilterMenu.itemSelected)
                             }
+                        }
+                        function setItemHighlighted(index) {
+                            if (downItem !== undefined) {
+                                itemAt(downItem).highlighted = false
+                            }
+                            itemAt(index).highlighted = true
+                            downItem = index
                         }
                     }
 
