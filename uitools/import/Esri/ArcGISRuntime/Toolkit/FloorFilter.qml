@@ -44,7 +44,7 @@ Item {
             Layout.alignment: Qt.AlignBottom
             ToolBar {
                 id: levelFilterMenu
-                visible: true
+                visible: !internal.isFloorFilterCollapsed
                 // property var itemSelected: {text: ""}
                 property string itemSelected: ""
 
@@ -52,8 +52,7 @@ Item {
                     id: close
                     icon.source: "images/x.svg"
                     onTriggered: {
-                        levelFilterMenu.visible = false
-                        itemSelectedToolBar.visible = (itemSelectedButton.text !== "")
+                        internal.isFloorFilterCollapsed = true
                     }
                 }
 
@@ -90,14 +89,15 @@ Item {
             }
             ToolBar {
                 id: itemSelectedToolBar
-                visible: false
+                // not visible when floorFilter is shown and not visible if the children has no text to be shown.
+                visible: internal.isFloorFilterCollapsed
+                         && itemSelectedButton.text !== ""
                 ToolButton {
                     id: itemSelectedButton
                     text: levelFilterMenu.itemSelected
                     onClicked: {
                         console.log(parent)
-                        levelFilterMenu.visible = true
-                        itemSelectedToolBar.visible = false
+                        internal.isFloorFilterCollapsed = false
                     }
                 }
             }
@@ -180,7 +180,7 @@ Item {
                                  === FloorFilter.VisibleListView.FACILITY) {
                             controller.selectedFacilityId = model.modelId
                             facilityFilterMenu.visible = false
-                            levelFilterMenu.visible = true
+                            internal.isFloorFilterCollapsed = false
                         }
                     }
                     background: Rectangle {
@@ -232,7 +232,11 @@ Item {
     QtObject {
         id: internal
         property int currentVisibileListView: FloorFilter.VisibleListView.SITE
+        property bool isFloorFilterCollapsed: true
         onCurrentVisibileListViewChanged: console.log("curr changed",
                                                       currentVisibileListView)
+        onIsFloorFilterCollapsedChanged: console.log(
+                                             "floorFilterMenu ",
+                                             isFloorFilterCollapsed ? "collapsed" : "shown")
     }
 }
