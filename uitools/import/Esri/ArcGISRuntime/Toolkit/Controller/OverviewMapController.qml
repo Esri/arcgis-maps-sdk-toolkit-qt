@@ -75,103 +75,107 @@ QtObject {
       \qmlproperty MapView insetView
       \brief MapView which represents an overview/inset of the current viewpoint of the geoView.
      */
-    readonly property var insetView: MapView {
-        // Default map to show in the inset.
-        Map {
-            initBasemapStyle: Enums.BasemapStyleArcGISTopographic
-        }
-
-        // The Graphic shown on the insetView showing the GeoView viewpoint.
-        GraphicsOverlay {
-            Graphic {
-                id: reticle
-                symbol: overviewMapController.symbol
-            }
-        }
-
-        // By default the inset does not have attribution visible.
-        attributionTextVisible: false
-
-        // If an inset viewpoint change is driven by user navigation, then
-        // update the geoView viewpoint if and when applicable.
-        onViewpointChanged: {
-            if (navigating && !internal.updateInsetViewpointTaskInProgress) {
-                if (geoView instanceof MapView) {
-                    let v = currentViewpointCenter;
-                    let newV = internal.viewpoint.createObject(null, {
-                                                                   center: v.center,
-                                                                   targetScale:  v.targetScale / overviewMapController.scaleFactor,
-                                                                   rotation: v.rotation
-                                                               });
-                    internal.updateGeoViewpointTaskInProgress = true;
-                    geoView.setViewpointAndSeconds(newV, 0);
-                } else if (geoView instanceof SceneView) {
-                    let v = currentViewpointCenter;
-                    let newV = internal.viewpoint.createObject(null, {
-                                                                   center: v.center,
-                                                                   targetScale:  v.targetScale / overviewMapController.scaleFactor
-                                                               });
-                    internal.updateGeoViewpointTaskInProgress = true;
-                    geoView.setViewpointAndSeconds(newV, 0);
-                }
-            }
-        }
-
-        onSetViewpointCompleted: {
-            internal.updateInsetViewpointTaskInProgress = false;
-        }
-
-        onKeyPressed: {
-            // Disable all key preesses
-            key.accepted = true;
-        }
-        onKeyReleased: {
-            // Disable all key releases
-            key.accepted = true;
-        }
-        onMouseWheelChanged: {
-            // Disable all wheel events if navigation is not enabled.
-            if (!navigationEnabled)
-                wheel.accepted = true;
-        }
-        onMouseClicked: {
-            // Disable mouse clicks if navigation is not enabled.
-            if (!navigationEnabled)
-                mouse.accepted = true;
-        }
-        onMouseDoubleClicked: {
-            // Disable mouse double clicks if navigation is not enabled.
-            if (!navigationEnabled)
-                mouse.accepted = true;
-        }
-        onMousePositionChanged: {
-            // Disable mouse position changes if navigation is not enabled.
-            if (!navigationEnabled)
-                mouse.accepted = true;
-        }
-        onMousePressedAndHeld: {
-            // Disable mouse press and hold if navigation is not enabled.
-            if (!navigationEnabled)
-                mouse.accepted = true;
-        }
-        onMousePressed: {
-            // Disable mouse press, if navigation is not enabled.
-            if (!navigationEnabled)
-                mouse.accepted = true;
-        }
-        onMouseReleased: {
-            // Disable mouse release if navigation is not enabled.
-            if (!navigationEnabled)
-                mouse.accepted = true;
-        }
-    }
+    readonly property alias insetView: internal.insetView
 
     property QtObject internal: QtObject {
+        id: internal
+
         // Keeps track of the progress of custom (non-navigaton) updates to the insetView viewpoint.
         property bool updateInsetViewpointTaskInProgress: false;
 
         // Keeps track of the progress of custom (non-navigaton) updates to the geoView viewpoint.
         property bool updateGeoViewpointTaskInProgress: false;
+
+        property MapView insetView: MapView {
+            // Default map to show in the inset.
+            Map {
+                initBasemapStyle: Enums.BasemapStyleArcGISTopographic
+            }
+
+            // The Graphic shown on the insetView showing the GeoView viewpoint.
+            GraphicsOverlay {
+                Graphic {
+                    id: reticle
+                    symbol: overviewMapController.symbol
+                }
+            }
+
+            // By default the inset does not have attribution visible.
+            attributionTextVisible: false
+
+            // If an inset viewpoint change is driven by user navigation, then
+            // update the geoView viewpoint if and when applicable.
+            onViewpointChanged: {
+                if (navigating && !internal.updateInsetViewpointTaskInProgress) {
+                    if (geoView instanceof MapView) {
+                        let v = currentViewpointCenter;
+                        let newV = internal.viewpoint.createObject(null, {
+                                                                       center: v.center,
+                                                                       targetScale:  v.targetScale / overviewMapController.scaleFactor,
+                                                                       rotation: v.rotation
+                                                                   });
+                        internal.updateGeoViewpointTaskInProgress = true;
+                        geoView.setViewpointAndSeconds(newV, 0);
+                    } else if (geoView instanceof SceneView) {
+                        let v = currentViewpointCenter;
+                        let newV = internal.viewpoint.createObject(null, {
+                                                                       center: v.center,
+                                                                       targetScale:  v.targetScale / overviewMapController.scaleFactor
+                                                                   });
+                        internal.updateGeoViewpointTaskInProgress = true;
+                        geoView.setViewpointAndSeconds(newV, 0);
+                    }
+                }
+            }
+
+            onSetViewpointCompleted: {
+                internal.updateInsetViewpointTaskInProgress = false;
+            }
+
+            onKeyPressed: {
+                // Disable all key preesses
+                key.accepted = true;
+            }
+            onKeyReleased: {
+                // Disable all key releases
+                key.accepted = true;
+            }
+            onMouseWheelChanged: {
+                // Disable all wheel events if navigation is not enabled.
+                if (!navigationEnabled)
+                    wheel.accepted = true;
+            }
+            onMouseClicked: {
+                // Disable mouse clicks if navigation is not enabled.
+                if (!navigationEnabled)
+                    mouse.accepted = true;
+            }
+            onMouseDoubleClicked: {
+                // Disable mouse double clicks if navigation is not enabled.
+                if (!navigationEnabled)
+                    mouse.accepted = true;
+            }
+            onMousePositionChanged: {
+                // Disable mouse position changes if navigation is not enabled.
+                if (!navigationEnabled)
+                    mouse.accepted = true;
+            }
+            onMousePressedAndHeld: {
+                // Disable mouse press and hold if navigation is not enabled.
+                if (!navigationEnabled)
+                    mouse.accepted = true;
+            }
+            onMousePressed: {
+                // Disable mouse press, if navigation is not enabled.
+                if (!navigationEnabled)
+                    mouse.accepted = true;
+            }
+            onMouseReleased: {
+                // Disable mouse release if navigation is not enabled.
+                if (!navigationEnabled)
+                    mouse.accepted = true;
+            }
+        }
 
         // Track geoView changes, and update the insetView as applicable.
         // Note that we apply slightly different calculations between MapView and SceneView.
@@ -185,7 +189,7 @@ QtObject {
                     reticle.geometry = geoView.visibleArea;
                     if (geoView.navigating && !internal.updateGeoViewpointTaskInProgress) {
                         let v = geoView.currentViewpointCenter;
-                        let newV = internal.viewpoint.createObject(null, {rotation: v.rotation});
+                        let newV = internal.viewpoint.createObject(null, {rotation: v ? v.rotation : 0});
                         internal.updateInsetViewpointTaskInProgress = true;
                         insetView.setViewpointAndSeconds(newV, 0);
                     }
@@ -219,7 +223,7 @@ QtObject {
                 if (geoView.drawStatus === Enums.DrawStatusCompleted) {
                     if (geoView instanceof MapView) {
                         let v = geoView.currentViewpointCenter;
-                        let newV = internal.viewpoint.createObject(null, {rotation: v.rotation});
+                        let newV = internal.viewpoint.createObject(null, {rotation: v ? v.rotation : 0});
                         internal.updateInsetViewpointTaskInProgress = true;
                         insetView.setViewpointAndSeconds(newV, 0);
 
