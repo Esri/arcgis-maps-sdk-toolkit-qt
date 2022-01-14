@@ -79,6 +79,7 @@ Item {
                                 repeater.setItemHighlighted(
                                             index) // _q can access Repeater without using the id?
                                 levelFilterMenu.itemSelected = model.shortName
+                                controller.selectedLevelId = model.modelId
 
                                 console.log(levelFilterMenu.itemSelected)
                             }

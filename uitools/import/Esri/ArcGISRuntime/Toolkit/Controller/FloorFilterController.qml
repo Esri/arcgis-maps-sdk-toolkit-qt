@@ -56,6 +56,20 @@ QtObject {
     }
 
     onSelectedLevelIdChanged: {
+        // find the list element idx of the changed levelId
+        let idx = findElementIdxById(selectedLevelId, floorManager.levels,
+                                     "levelId")
+        if (idx === undefined) {
+            console.error("site id not found")
+            return
+        }
+
+        // show level
+        let level = floorManager.levels[idx]
+        if (internal.selectedLevel !== null)
+            internal.selectedLevel.visible = false
+        internal.selectedLevel = level
+        internal.selectedLevel.visible = true
         onSelectedChanged()
     }
 
@@ -63,7 +77,7 @@ QtObject {
         // find the list element idx of the changed facilityId
         let idx = findElementIdxById(selectedFacilityId,
                                      floorManager.facilities, "facilityId")
-        if (typeof idx === undefined) {
+        if (idx === undefined) {
             console.error("site id not found")
             return
         }
@@ -75,7 +89,7 @@ QtObject {
         // find the list element idx of the changed siteId
         let idx = findElementIdxById(selectedSiteId,
                                      floorManager.sites, "siteId")
-        if (typeof idx === undefined) {
+        if (idx === undefined) {
             console.error("site id not found")
             return
         }
@@ -158,10 +172,18 @@ QtObject {
         for (var i = 0; i < listLevels.length; ++i) {
             let level = listLevels[i]
             levels.append({
-                              "shortName": level.shortName
+                              "shortName": level.shortName,
+                              "modelId": level.levelId
                           })
         }
     }
 
     onFloorManagerChanged: console.log("manager changed")
+
+    /*! internal */
+    property QtObject internal: QtObject {
+        property FloorLevel selectedLevel
+        property FloorFacility selectedFacility
+        property FloorSite selectedSite
+    }
 }
