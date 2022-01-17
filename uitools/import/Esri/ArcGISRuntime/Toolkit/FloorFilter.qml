@@ -203,14 +203,12 @@ Item {
             Text {
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignHCenter
-                text: controller.selectedSiteId
-                      === "" ? "Select the Site" : controller.selectedSiteId
+                text: controller.internal.selectedSite ? controller.internal.selectedSite.name : "Select the Site"
             }
             Text {
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignHCenter
-                text: controller.selectedFacilityId
-                      === "" ? "Select the Facility" : controller.selectedFacilityId
+                text: controller.internal.selectedFacility ? controller.internal.selectedFacility.name : "Select the Facility"
             }
 
             TextField {

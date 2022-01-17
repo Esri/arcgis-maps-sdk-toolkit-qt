@@ -81,6 +81,7 @@ QtObject {
             console.error("site id not found")
             return
         }
+        internal.selectedFacility = floorManager.facilities[idx]
         populateLevels(floorManager.facilities[idx].levels)
         onSelectedChanged()
     }
@@ -93,6 +94,7 @@ QtObject {
             console.error("site id not found")
             return
         }
+        internal.selectedSite = floorManager.sites[idx]
         populateFacilities(floorManager.sites[idx].facilities)
         onSelectedChanged()
     }
@@ -109,18 +111,12 @@ QtObject {
         }
     }
 
-    //    function copyFacilities() {
-    //        for (var i = 0; i < facilities.count; ++i) {
-    //            let facility = facilities.get(i)
-    //            filteredFacilities.append(facility)
-    //        }
-    //    }
     property Connections geoModelConn: Connections {
         target: geoView ? (geoView.scene ? geoView.scene : (geoView.map ? geoView.map : null)) : null
         ignoreUnknownSignals: true
         function onLoadStatusChanged() {
             console.log("map status: ", geoView.map.loadStatus)
-            //load floormanager after map has been laoded
+            // load floormanager after map has been loaded
             if (geoView.map.loadStatus === Enums.LoadStatusLoaded) {
                 floorManager = geoView.map.floorManager
                 floorManager.load()
@@ -182,7 +178,9 @@ QtObject {
 
     /*! internal */
     property QtObject internal: QtObject {
+        // used keep track of last level selected and toggle its visibility
         property FloorLevel selectedLevel
+        // used to update the view with their names
         property FloorFacility selectedFacility
         property FloorSite selectedSite
     }
