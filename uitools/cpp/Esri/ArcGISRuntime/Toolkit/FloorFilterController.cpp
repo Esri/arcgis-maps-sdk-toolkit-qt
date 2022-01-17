@@ -126,7 +126,6 @@ namespace Toolkit {
 
       // Hooks up to any geoModels that appear when the map/sceneView changed signal is called.
       QObject::connect(geoView, getGeoModelChangedSignal(geoView), self, connectToGeoModel);
-      // Attempt to hook up to existing geoModel if applicable.
       connectToGeoModel();
     }
   }
@@ -184,6 +183,8 @@ namespace Toolkit {
 
     m_geoView = geoView;
 
+    emit geoViewChanged();
+
     if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
       connectToGeoView(mapView, this, [this]
@@ -198,8 +199,6 @@ namespace Toolkit {
                          populateSites();
                        });
     }
-
-    emit geoViewChanged();
   }
 
   QString FloorFilterController::selectedFacilityId() const

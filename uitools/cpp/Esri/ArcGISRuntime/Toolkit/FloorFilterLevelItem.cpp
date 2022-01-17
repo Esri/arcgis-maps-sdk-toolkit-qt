@@ -56,6 +56,12 @@ namespace Toolkit {
     return m_floorLevel ? m_floorLevel->shortName() : QString{};
   }
 
+  QString FloorFilterLevelItem::levelId() const
+  {
+    return m_floorLevel ? m_floorLevel->levelId() : QString{};
+  }
+
+
 } // Toolkit
 } // ArcGISRuntime
 } // Esri

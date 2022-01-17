@@ -28,6 +28,7 @@ namespace ArcGISRuntime {
     class FloorFilterLevelItem : public QObject
     {
       Q_OBJECT
+      Q_PROPERTY(QString modelId READ levelId NOTIFY floorLevelChanged)
       Q_PROPERTY(QString shortName READ shortName NOTIFY floorLevelChanged)
     public:
       Q_INVOKABLE explicit FloorFilterLevelItem(QObject* parent = nullptr);
@@ -37,6 +38,7 @@ namespace ArcGISRuntime {
       void setFloorLevel(FloorLevel* floorLevel);
       FloorLevel* floorLevel() const;
 
+      QString levelId() const;
       QString shortName() const;
 
     signals:

@@ -40,7 +40,6 @@ namespace ArcGISRuntime {
       QString facilityId() const;
       QString name() const;
 
-
     signals:
       void floorFacilityChanged();
 

@@ -20,7 +20,7 @@ DemoPage {
             id: view
             FloorFilter {
                 id: gallery
-                geoView: parent
+                geoView: view
                 anchors {
                     left: parent.left
                     margins: 10
