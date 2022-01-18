@@ -47,14 +47,14 @@ namespace ArcGISRuntime {
       QObject* geoView() const;
       void setGeoView(QObject* geoView);
 
+      QString selectedSiteId() const;
+      void setSelectedSiteId(QString selectedSiteId);
+
       QString selectedFacilityId() const;
       void setSelectedFacilityId(QString selectedFacilityId);
 
       QString selectedLevelId() const;
       void setSelectedLevelId(QString selectedLevelId);
-
-      QString selectedSiteId() const;
-      void setSelectedSiteId(QString selectedSiteId);
 
       GenericListModel* levels() const;
       GenericListModel* sites() const;
@@ -62,9 +62,9 @@ namespace ArcGISRuntime {
 
     signals:
       void geoViewChanged();
-      void selectedFacilityIdChanged();
-      void selectedLevelIdChanged();
-      void selectedSiteIdChanged();
+      void selectedSiteIdChanged(QString oldId, QString newId);
+      void selectedFacilityIdChanged(QString oldId, QString newId);
+      void selectedLevelIdChanged(QString oldId, QString newId);
       void selectedChanged();
 
     private slots:
@@ -73,9 +73,9 @@ namespace ArcGISRuntime {
       void populateSites();
 
     private:
-      FloorFacility* selectedFacility() const;
-      FloorSite* selectedSite() const;
-      FloorLevel* selectedLevel() const;
+      FloorFacility* facility(const QString& id) const;
+      FloorSite* site(const QString& id) const;
+      FloorLevel* level(const QString& id) const;
 
     private:
       QObject* m_geoView{nullptr};
