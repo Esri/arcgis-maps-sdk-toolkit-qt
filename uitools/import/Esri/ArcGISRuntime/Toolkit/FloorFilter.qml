@@ -26,7 +26,7 @@ import QtQuick.Layouts 1.15
   \since 100.14
   \brief Allows to display and filter the available floor aware layers in the current \c GeoView.
 */
-Item {
+Control {
     id: floorFilter
     property var geoView
 
@@ -145,7 +145,7 @@ Item {
                 Layout.alignment: Qt.AlignHCenter
                 // if == facility-> gets set twice: once to 24 and after to 0.
                 width: internal.currentVisibileListView
-                       === FloorFilter.VisibleListView.FACILITY ? 24 : 0
+                       === FloorFilter.VisibleListView.Facility ? 24 : 0
                 border.color: "black"
                 Image {
                     anchors.centerIn: parent
@@ -154,13 +154,13 @@ Item {
                     sourceSize.width: 24
                     sourceSize.height: 24
                     width: internal.currentVisibileListView
-                           === FloorFilter.VisibleListView.FACILITY ? sourceSize.width : 0
+                           === FloorFilter.VisibleListView.Facility ? sourceSize.width : 0
                     height: internal.currentVisibileListView
-                            === FloorFilter.VisibleListView.FACILITY ? sourceSize.width : 0
+                            === FloorFilter.VisibleListView.Facility ? sourceSize.width : 0
                     MouseArea {
                         anchors.fill: parent
                         onClicked: internal.currentVisibileListView
-                                   = FloorFilter.VisibleListView.SITE
+                                   = FloorFilter.VisibleListView.Site
                     }
                 }
             }
@@ -175,7 +175,7 @@ Item {
             ListView {
                 id: listView
                 currentIndex: internal.currentVisibileListView
-                              === FloorFilter.VisibleListView.SITE ? internal.selectedSiteIdx : internal.selectedFacilityIdx // set by the onclick (represents either the facility or the site view)
+                              === FloorFilter.VisibleListView.Site ? internal.selectedSiteIdx : internal.selectedFacilityIdx // set by the onclick (represents either the facility or the site view)
 
                 highlight: Rectangle {
                     color: "lightsteelblue"
@@ -187,20 +187,20 @@ Item {
                 implicitHeight: contentHeight
                 implicitWidth: contentWidth
                 model: internal.currentVisibileListView
-                       === FloorFilter.VisibleListView.SITE ? controller.sites : controller.facilities
+                       === FloorFilter.VisibleListView.Site ? controller.sites : controller.facilities
                 delegate: ItemDelegate {
                     width: parent.width
                     highlighted: ListView.isCurrentItem
                     text: '\u2022 ' + model.name
                     onClicked: {
                         // switch to facility view
-                        if (internal.currentVisibileListView === FloorFilter.VisibleListView.SITE) {
+                        if (internal.currentVisibileListView === FloorFilter.VisibleListView.Site) {
                             internal.selectedSiteIdx = index
                             controller.selectedSiteId = model.modelId
-                            internal.currentVisibileListView = FloorFilter.VisibleListView.FACILITY
+                            internal.currentVisibileListView = FloorFilter.VisibleListView.Facility
                         } // switch to level view
                         else if (internal.currentVisibileListView
-                                 === FloorFilter.VisibleListView.FACILITY) {
+                                 === FloorFilter.VisibleListView.Facility) {
                             controller.selectedFacilityId = model.modelId
                             facilityFilterMenu.visible = false
                             internal.isFloorFilterCollapsed = false
@@ -246,13 +246,13 @@ Item {
 
     // used to switch between site and facilities listviews and models.
     enum VisibleListView {
-        SITE,
-        FACILITY
+        Site,
+        Facility
     }
 
     QtObject {
         id: internal
-        property int currentVisibileListView: FloorFilter.VisibleListView.SITE
+        property int currentVisibileListView: FloorFilter.VisibleListView.Site
         property bool isFloorFilterCollapsed: true
         //idx refers to repeter or listview idx, not the model idx.
         property int selectedFacilityIdx: -1
