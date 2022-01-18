@@ -137,6 +137,7 @@ Item {
             flow: GridLayout.TopToBottom
             Layout.alignment: Qt.AlignBottom
             rows: 4
+            rowSpacing: 0
             //visible: internal.currentVisibileListView !== FloorFilter.VisibleListView.NONE
             Rectangle {
                 Layout.fillHeight: true
@@ -172,7 +173,14 @@ Item {
             }
 
             ListView {
+                id: listView
                 Component.onCompleted: console.log("listview: ", count)
+                property int selectedItem: {
+                    var out = internal.currentVisibileListView
+                            === FloorFilter.VisibleListView.SITE ? internal.selectedSiteIdx : (internal.currentVisibileListView === FloorFilter.VisibleListView.FACILITY ? internal.selectedFacilityIdx : -1) // set by the onclick (represents either the facility or the site view)
+                    console.log("selectedItem: ", out)
+                    return out
+                }
                 visible: true
                 Layout.columnSpan: 3
                 Layout.fillWidth: true
@@ -182,10 +190,13 @@ Item {
                        === FloorFilter.VisibleListView.SITE ? controller.sites : controller.facilities
                 delegate: ItemDelegate {
                     width: parent.width
+
                     text: '\u2022 ' + model.name
                     onClicked: {
                         // switch to facility view
                         if (internal.currentVisibileListView === FloorFilter.VisibleListView.SITE) {
+                            internal.selectedSiteIdx = index
+                            listView.setItemHighlighted(index)
                             controller.selectedSiteId = model.modelId
                             internal.currentVisibileListView = FloorFilter.VisibleListView.FACILITY
                         } // switch to level view
@@ -194,14 +205,25 @@ Item {
                             controller.selectedFacilityId = model.modelId
                             facilityFilterMenu.visible = false
                             internal.isFloorFilterCollapsed = false
+                            internal.selectedFacilityIdx = index
+                            listView.setItemHighlighted(index)
                         }
                     }
                     background: Rectangle {
                         border.color: "black"
                     }
                 }
+                function setItemHighlighted(index) {
+                    if (selectedItem !== -1) {
+                        // toggle highlight for previous item
+                        listView.itemAtIndex(selectedItem).highlighted = false
+                    }
+                    listView.itemAtIndex(index).highlighted = true
+                    selectedItem = index
+                }
             }
             Text {
+                font.bold: true
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignHCenter
                 text: controller.internal.selectedSite ? controller.internal.selectedSite.name : "Select the Site"
@@ -214,6 +236,7 @@ Item {
 
             TextField {
                 Layout.fillWidth: true
+                Layout.fillHeight: true
                 Layout.columnSpan: 2
                 x: searchImg.width
                 placeholderText: "Search"
@@ -244,6 +267,9 @@ Item {
         id: internal
         property int currentVisibileListView: FloorFilter.VisibleListView.SITE
         property bool isFloorFilterCollapsed: true
+        //idx refers to repeter or listview idx, not the model idx.
+        property int selectedFacilityIdx: -1
+        property int selectedSiteIdx: -1
         onCurrentVisibileListViewChanged: console.log("curr changed",
                                                       currentVisibileListView)
         onIsFloorFilterCollapsedChanged: console.log(
