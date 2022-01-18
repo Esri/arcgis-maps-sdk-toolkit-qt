@@ -20,10 +20,18 @@ import Esri.ArcGISRuntime 100.14
 QtObject {
     id: controller
 
-    property var geoView
+    property GeoView geoView
 
-    property GeoModel geoModel
+    property GeoModel geoModel: {
+        if (typeof (geoView.map) !== "undefined")
+            return geoView.map
+        else if (typeof (geoView.scene) !== "undefined")
+            return geoView.scene
+        return null
+    }
+
     property FloorManager floorManager
+
     //refresh()?
     property string selectedLevelId
 
@@ -36,10 +44,6 @@ QtObject {
     property ListModel facilities: ListModel {}
 
     property ListModel sites: ListModel {}
-
-    onFacilitiesChanged: {
-
-    }
 
     // iterates over \a listElements to find an element with \a id.
     //\a variableIdName is used to access the correct method name in each list (siteId, facilityId, levelId)
@@ -111,14 +115,14 @@ QtObject {
         }
     }
 
+    // geomodel loaded connection
     property Connections geoModelConn: Connections {
-        target: geoView ? (geoView.scene ? geoView.scene : (geoView.map ? geoView.map : null)) : null
-        ignoreUnknownSignals: true
+        target: geoModel
         function onLoadStatusChanged() {
-            console.log("map status: ", geoView.map.loadStatus)
+            console.log("geomodel loaded: ", geoModel)
             // load floormanager after map has been loaded
-            if (geoView.map.loadStatus === Enums.LoadStatusLoaded) {
-                floorManager = geoView.map.floorManager
+            if (geoModel.loadStatus === Enums.LoadStatusLoaded) {
+                floorManager = geoModel.floorManager
                 floorManager.load()
             }
         }
@@ -126,7 +130,6 @@ QtObject {
 
     property Connections floorManagerConn: Connections {
         target: floorManager
-        ignoreUnknownSignals: true
         function onLoadStatusChanged() {
             console.log("floormanager status (0 loaded)",
                         floorManager.loadStatus)
@@ -135,11 +138,6 @@ QtObject {
                 populateSites(floorManager.sites)
             }
         }
-    }
-
-    onGeoViewChanged: {
-        //new geoView added, load the FloorManager
-        geoModel = geoView.map
     }
 
     function populateSites(listSites) {
