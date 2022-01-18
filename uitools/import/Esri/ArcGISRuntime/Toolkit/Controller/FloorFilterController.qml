@@ -162,8 +162,9 @@ QtObject {
         }
     }
 
+    // populate levels in reverse order. Levels numbers in ascending order from component's bottom section.
     function populateLevels(listLevels) {
-        for (var i = 0; i < listLevels.length; ++i) {
+        for (var i = listLevels.length - 1; i >= 0; --i) {
             let level = listLevels[i]
             levels.append({
                               "shortName": level.shortName,

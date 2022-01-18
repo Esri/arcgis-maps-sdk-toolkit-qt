@@ -180,7 +180,7 @@ Item {
                 model: internal.currentVisibileListView
                        === FloorFilter.VisibleListView.SITE ? controller.sites : controller.facilities
                 delegate: ItemDelegate {
-                    //width: parent.width
+                    width: parent.width
                     text: '\u2022 ' + model.name
                     onClicked: {
                         // switch to facility view
