@@ -142,6 +142,18 @@ namespace Toolkit {
 
     connect(this, &FloorFilterController::selectedFacilityIdChanged, this, &FloorFilterController::populateLevelsForSelectedFacility);
     connect(this, &FloorFilterController::selectedSiteIdChanged, this, &FloorFilterController::populateFacilitiesForSelectedSite);
+
+    connect(this, &FloorFilterController::selectedLevelIdChanged, this,
+            [this](QString oldId, QString newId)
+            {
+              auto oldLevel = level(oldId);
+              if (oldLevel)
+                oldLevel->setVisible(false);
+
+              auto newLevel = level(newId);
+              if (newLevel)
+                newLevel->setVisible(true);
+            });
   }
 
   FloorFilterController::~FloorFilterController()
@@ -183,6 +195,8 @@ namespace Toolkit {
 
     m_geoView = geoView;
 
+    // Important that this emit happens before the below connections,
+    // as this emit will destroy the connections set up below.
     emit geoViewChanged();
 
     if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
@@ -211,8 +225,9 @@ namespace Toolkit {
     if (m_selectedLevelId == selectedFacilityId)
       return;
 
+    QString oldId = m_selectedFacilityId;
     m_selectedFacilityId = std::move(selectedFacilityId);
-    emit selectedFacilityIdChanged();
+    emit selectedFacilityIdChanged(std::move(oldId), m_selectedFacilityId);
   }
 
   QString FloorFilterController::selectedLevelId() const
@@ -225,8 +240,9 @@ namespace Toolkit {
     if (m_selectedLevelId == selectedLevelId)
       return;
 
+    QString oldId = m_selectedLevelId;
     m_selectedLevelId = std::move(selectedLevelId);
-    emit selectedLevelIdChanged();
+    emit selectedLevelIdChanged(std::move(oldId), m_selectedLevelId);
   }
 
   QString FloorFilterController::selectedSiteId() const
@@ -239,20 +255,24 @@ namespace Toolkit {
     if (m_selectedSiteId == selectedSiteId)
       return;
 
+    QString oldId = m_selectedSiteId;
     m_selectedSiteId = std::move(selectedSiteId);
-    emit selectedSiteIdChanged();
+    emit selectedSiteIdChanged(std::move(oldId), m_selectedSiteId);
   }
 
-  FloorFacility* FloorFilterController::selectedFacility() const
+  FloorFacility* FloorFilterController::facility(const QString& id) const
   {
+    if (id.isEmpty())
+      return nullptr;
+
     if (auto floorManager = getFloorManager(m_geoView))
     {
       auto facilities = floorManager->facilities();
       auto it = std::find_if(std::cbegin(facilities),
                              std::cend(facilities),
-                             [this](FloorFacility* facility) -> bool
+                             [&id](FloorFacility* facility) -> bool
                              {
-                               return facility && facility->facilityId() == selectedFacilityId();
+                               return facility && facility->facilityId() == id;
                              });
       if (it != std::cend(facilities))
       {
@@ -262,16 +282,19 @@ namespace Toolkit {
     return nullptr;
   }
 
-  FloorSite* FloorFilterController::selectedSite() const
+  FloorSite* FloorFilterController::site(const QString& id) const
   {
+    if (id.isEmpty())
+      return nullptr;
+
     if (auto floorManager = getFloorManager(m_geoView))
     {
       auto sites = floorManager->sites();
       auto it = std::find_if(std::cbegin(sites),
                              std::cend(sites),
-                             [this](FloorSite* site) -> bool
+                             [&id](FloorSite* site) -> bool
                              {
-                               return site && site->siteId() == selectedSiteId();
+                               return site && site->siteId() == id;
                              });
       if (it != std::cend(sites))
       {
@@ -281,16 +304,19 @@ namespace Toolkit {
     return nullptr;
   }
 
-  FloorLevel* FloorFilterController::selectedLevel() const
+  FloorLevel* FloorFilterController::level(const QString& id) const
   {
+    if (id.isEmpty())
+      return nullptr;
+
     if (auto floorManager = getFloorManager(m_geoView))
     {
       auto levels = floorManager->levels();
       auto it = std::find_if(std::cbegin(levels),
                              std::cend(levels),
-                             [this](FloorLevel* level) -> bool
+                             [&id](FloorLevel* level) -> bool
                              {
-                               return level && level->levelId() == selectedLevelId();
+                               return level && level->levelId() == id;
                              });
       if (it != std::cend(levels))
       {
