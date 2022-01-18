@@ -174,12 +174,12 @@ Item {
 
             ListView {
                 id: listView
-                Component.onCompleted: console.log("listview: ", count)
-                property int selectedItem: {
-                    var out = internal.currentVisibileListView
-                            === FloorFilter.VisibleListView.SITE ? internal.selectedSiteIdx : (internal.currentVisibileListView === FloorFilter.VisibleListView.FACILITY ? internal.selectedFacilityIdx : -1) // set by the onclick (represents either the facility or the site view)
-                    console.log("selectedItem: ", out)
-                    return out
+                currentIndex: internal.currentVisibileListView
+                              === FloorFilter.VisibleListView.SITE ? internal.selectedSiteIdx : internal.selectedFacilityIdx // set by the onclick (represents either the facility or the site view)
+
+                highlight: Rectangle {
+                    color: "lightsteelblue"
+                    radius: 5
                 }
                 visible: true
                 Layout.columnSpan: 3
@@ -190,13 +190,12 @@ Item {
                        === FloorFilter.VisibleListView.SITE ? controller.sites : controller.facilities
                 delegate: ItemDelegate {
                     width: parent.width
-
+                    highlighted: ListView.isCurrentItem
                     text: '\u2022 ' + model.name
                     onClicked: {
                         // switch to facility view
                         if (internal.currentVisibileListView === FloorFilter.VisibleListView.SITE) {
                             internal.selectedSiteIdx = index
-                            listView.setItemHighlighted(index)
                             controller.selectedSiteId = model.modelId
                             internal.currentVisibileListView = FloorFilter.VisibleListView.FACILITY
                         } // switch to level view
@@ -206,20 +205,8 @@ Item {
                             facilityFilterMenu.visible = false
                             internal.isFloorFilterCollapsed = false
                             internal.selectedFacilityIdx = index
-                            listView.setItemHighlighted(index)
                         }
                     }
-                    background: Rectangle {
-                        border.color: "black"
-                    }
-                }
-                function setItemHighlighted(index) {
-                    if (selectedItem !== -1) {
-                        // toggle highlight for previous item
-                        listView.itemAtIndex(selectedItem).highlighted = false
-                    }
-                    listView.itemAtIndex(index).highlighted = true
-                    selectedItem = index
                 }
             }
             Text {
