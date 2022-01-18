@@ -42,6 +42,7 @@ Item {
         columns: 2
         ColumnLayout {
             Layout.alignment: Qt.AlignBottom
+            spacing: 0
             ToolBar {
                 id: levelFilterMenu
                 visible: !internal.isFloorFilterCollapsed
@@ -117,7 +118,7 @@ Item {
             ToolBar {
                 Action {
                     id: facility
-                    icon.source: "images/organization-24.svg"
+                    icon.source: "images/organization.svg"
                     onTriggered: {
                         facilityFilterMenu.visible = !facilityFilterMenu.visible
                     }
