@@ -42,6 +42,7 @@ Item {
         columns: 2
         ColumnLayout {
             Layout.alignment: Qt.AlignBottom
+            spacing: 0
             ToolBar {
                 id: levelFilterMenu
                 visible: !internal.isFloorFilterCollapsed
@@ -117,7 +118,7 @@ Item {
             ToolBar {
                 Action {
                     id: facility
-                    icon.source: "images/organization-24.svg"
+                    icon.source: "images/organization.svg"
                     onTriggered: {
                         facilityFilterMenu.visible = !facilityFilterMenu.visible
                     }
@@ -136,6 +137,7 @@ Item {
             flow: GridLayout.TopToBottom
             Layout.alignment: Qt.AlignBottom
             rows: 4
+            rowSpacing: 0
             //visible: internal.currentVisibileListView !== FloorFilter.VisibleListView.NONE
             Rectangle {
                 Layout.fillHeight: true
@@ -171,7 +173,14 @@ Item {
             }
 
             ListView {
-                Component.onCompleted: console.log("listview: ", count)
+                id: listView
+                currentIndex: internal.currentVisibileListView
+                              === FloorFilter.VisibleListView.SITE ? internal.selectedSiteIdx : internal.selectedFacilityIdx // set by the onclick (represents either the facility or the site view)
+
+                highlight: Rectangle {
+                    color: "lightsteelblue"
+                    radius: 5
+                }
                 visible: true
                 Layout.columnSpan: 3
                 Layout.fillWidth: true
@@ -180,11 +189,13 @@ Item {
                 model: internal.currentVisibileListView
                        === FloorFilter.VisibleListView.SITE ? controller.sites : controller.facilities
                 delegate: ItemDelegate {
-                    //width: parent.width
+                    width: parent.width
+                    highlighted: ListView.isCurrentItem
                     text: '\u2022 ' + model.name
                     onClicked: {
                         // switch to facility view
                         if (internal.currentVisibileListView === FloorFilter.VisibleListView.SITE) {
+                            internal.selectedSiteIdx = index
                             controller.selectedSiteId = model.modelId
                             internal.currentVisibileListView = FloorFilter.VisibleListView.FACILITY
                         } // switch to level view
@@ -193,28 +204,26 @@ Item {
                             controller.selectedFacilityId = model.modelId
                             facilityFilterMenu.visible = false
                             internal.isFloorFilterCollapsed = false
+                            internal.selectedFacilityIdx = index
                         }
-                    }
-                    background: Rectangle {
-                        border.color: "black"
                     }
                 }
             }
             Text {
+                font.bold: true
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignHCenter
-                text: controller.selectedSiteId
-                      === "" ? "Select the Site" : controller.selectedSiteId
+                text: controller.internal.selectedSite ? controller.internal.selectedSite.name : "Select the Site"
             }
             Text {
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignHCenter
-                text: controller.selectedFacilityId
-                      === "" ? "Select the Facility" : controller.selectedFacilityId
+                text: controller.internal.selectedFacility ? controller.internal.selectedFacility.name : "Select the Facility"
             }
 
             TextField {
                 Layout.fillWidth: true
+                Layout.fillHeight: true
                 Layout.columnSpan: 2
                 x: searchImg.width
                 placeholderText: "Search"
@@ -245,6 +254,9 @@ Item {
         id: internal
         property int currentVisibileListView: FloorFilter.VisibleListView.SITE
         property bool isFloorFilterCollapsed: true
+        //idx refers to repeter or listview idx, not the model idx.
+        property int selectedFacilityIdx: -1
+        property int selectedSiteIdx: -1
         onCurrentVisibileListViewChanged: console.log("curr changed",
                                                       currentVisibileListView)
         onIsFloorFilterCollapsedChanged: console.log(

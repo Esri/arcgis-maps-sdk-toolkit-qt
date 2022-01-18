@@ -20,10 +20,18 @@ import Esri.ArcGISRuntime 100.14
 QtObject {
     id: controller
 
-    property var geoView
+    property GeoView geoView
 
-    property GeoModel geoModel
+    property GeoModel geoModel: {
+        if (typeof (geoView.map) !== "undefined")
+            return geoView.map
+        else if (typeof (geoView.scene) !== "undefined")
+            return geoView.scene
+        return null
+    }
+
     property FloorManager floorManager
+
     //refresh()?
     property string selectedLevelId
 
@@ -36,10 +44,6 @@ QtObject {
     property ListModel facilities: ListModel {}
 
     property ListModel sites: ListModel {}
-
-    onFacilitiesChanged: {
-
-    }
 
     // iterates over \a listElements to find an element with \a id.
     //\a variableIdName is used to access the correct method name in each list (siteId, facilityId, levelId)
@@ -81,6 +85,7 @@ QtObject {
             console.error("site id not found")
             return
         }
+        internal.selectedFacility = floorManager.facilities[idx]
         populateLevels(floorManager.facilities[idx].levels)
         onSelectedChanged()
     }
@@ -93,6 +98,7 @@ QtObject {
             console.error("site id not found")
             return
         }
+        internal.selectedSite = floorManager.sites[idx]
         populateFacilities(floorManager.sites[idx].facilities)
         onSelectedChanged()
     }
@@ -109,20 +115,14 @@ QtObject {
         }
     }
 
-    //    function copyFacilities() {
-    //        for (var i = 0; i < facilities.count; ++i) {
-    //            let facility = facilities.get(i)
-    //            filteredFacilities.append(facility)
-    //        }
-    //    }
+    // geomodel loaded connection
     property Connections geoModelConn: Connections {
-        target: geoView ? (geoView.scene ? geoView.scene : (geoView.map ? geoView.map : null)) : null
-        ignoreUnknownSignals: true
+        target: geoModel
         function onLoadStatusChanged() {
-            console.log("map status: ", geoView.map.loadStatus)
-            //load floormanager after map has been laoded
-            if (geoView.map.loadStatus === Enums.LoadStatusLoaded) {
-                floorManager = geoView.map.floorManager
+            console.log("geomodel loaded: ", geoModel)
+            // load floormanager after map has been loaded
+            if (geoModel.loadStatus === Enums.LoadStatusLoaded) {
+                floorManager = geoModel.floorManager
                 floorManager.load()
             }
         }
@@ -130,7 +130,6 @@ QtObject {
 
     property Connections floorManagerConn: Connections {
         target: floorManager
-        ignoreUnknownSignals: true
         function onLoadStatusChanged() {
             console.log("floormanager status (0 loaded)",
                         floorManager.loadStatus)
@@ -139,11 +138,6 @@ QtObject {
                 populateSites(floorManager.sites)
             }
         }
-    }
-
-    onGeoViewChanged: {
-        //new geoView added, load the FloorManager
-        geoModel = geoView.map
     }
 
     function populateSites(listSites) {
@@ -168,8 +162,9 @@ QtObject {
         }
     }
 
+    // populate levels in reverse order. Levels numbers in ascending order from component's bottom section.
     function populateLevels(listLevels) {
-        for (var i = 0; i < listLevels.length; ++i) {
+        for (var i = listLevels.length - 1; i >= 0; --i) {
             let level = listLevels[i]
             levels.append({
                               "shortName": level.shortName,
@@ -182,7 +177,9 @@ QtObject {
 
     /*! internal */
     property QtObject internal: QtObject {
+        // used keep track of last level selected and toggle its visibility
         property FloorLevel selectedLevel
+        // used to update the view with their names
         property FloorFacility selectedFacility
         property FloorSite selectedSite
     }
