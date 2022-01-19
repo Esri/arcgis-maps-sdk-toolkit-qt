@@ -223,12 +223,12 @@ Control {
                 font.bold: true
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignHCenter
-                text: controller.internal.selectedSite ? controller.internal.selectedSite.name : "Select the Site"
+                text: controller.selectedSite ? controller.internal.selectedSite.name : "Select the Site"
             }
             Text {
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignHCenter
-                text: controller.internal.selectedFacility ? controller.internal.selectedFacility.name : "Select the Facility"
+                text: controller.selectedFacility ? controller.internal.selectedFacility.name : "Select the Facility"
             }
 
             TextField {
