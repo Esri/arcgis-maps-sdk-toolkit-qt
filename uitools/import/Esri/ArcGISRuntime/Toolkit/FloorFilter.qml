@@ -177,10 +177,10 @@ Control {
                 currentIndex: internal.currentVisibileListView
                               === FloorFilter.VisibleListView.Site ? internal.selectedSiteIdx : internal.selectedFacilityIdx // set by the onclick (represents either the facility or the site view)
 
-                highlight: Rectangle {
-                    color: "lightsteelblue"
-                    radius: 5
-                }
+                //                highlight: Rectangle {
+                //                    color: "lightsteelblue"
+                //                    radius: 5
+                //                }
                 visible: true
                 Layout.columnSpan: 3
                 Layout.fillWidth: true
@@ -191,7 +191,7 @@ Control {
                 delegate: ItemDelegate {
                     width: parent.width
                     highlighted: ListView.isCurrentItem
-                    text: '\u2022 ' + model.name
+                    text: model.name
                     onClicked: {
                         // switch to facility view
                         if (internal.currentVisibileListView === FloorFilter.VisibleListView.Site) {
