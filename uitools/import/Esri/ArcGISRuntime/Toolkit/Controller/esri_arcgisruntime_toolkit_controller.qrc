@@ -1,5 +1,4 @@
 <RCC>
-    <!-- This section contains all view components (shared by C++ and QML APIs) -->
     <qresource prefix="/esri.com/imports/Esri/ArcGISRuntime/Toolkit/Controller">
         <file>AuthenticationController.qml</file>
         <file>BasemapGalleryController.qml</file>
