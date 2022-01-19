@@ -138,31 +138,41 @@ Control {
             Layout.alignment: Qt.AlignBottom
             rows: 4
             rowSpacing: 0
+
             //visible: internal.currentVisibileListView !== FloorFilter.VisibleListView.NONE
-            Rectangle {
+            Button {
                 Layout.fillHeight: true
+                //Layout.fillWidth: true
                 Layout.rowSpan: 2
                 Layout.alignment: Qt.AlignHCenter
-                // if == facility-> gets set twice: once to 24 and after to 0.
-                width: internal.currentVisibileListView
-                       === FloorFilter.VisibleListView.Facility ? 24 : 0
-                border.color: "black"
-                Image {
-                    anchors.centerIn: parent
-                    id: leftChevronImg
+                Layout.preferredWidth: internal.currentVisibileListView
+                                       === FloorFilter.VisibleListView.Facility ? 32 : 0
+                display: AbstractButton.IconOnly
+                flat: true
+                //removing all paddings and spacing from component so icon will fill compeltely the button
+                topPadding: 0
+                bottomPadding: 0
+                leftPadding: 0
+                rightPadding: 0
+                spacing: 0
+
+                icon {
+                    width: 32
+                    height: 32
                     source: "images/chevron-left.svg"
-                    sourceSize.width: 24
-                    sourceSize.height: 24
-                    width: internal.currentVisibileListView
-                           === FloorFilter.VisibleListView.Facility ? sourceSize.width : 0
-                    height: internal.currentVisibileListView
-                            === FloorFilter.VisibleListView.Facility ? sourceSize.width : 0
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: internal.currentVisibileListView
-                                   = FloorFilter.VisibleListView.Site
-                    }
                 }
+                //                    Image {
+                //                        anchors.centerIn: parent
+                //                        id: leftChevronImg
+                //                        source: "images/chevron-left.svg"
+                //                        sourceSize.width: 24
+                //                        sourceSize.height: 24
+                //                        width: internal.currentVisibileListView
+                //                               === FloorFilter.VisibleListView.Facility ? sourceSize.width : 0
+                //                        height: internal.currentVisibileListView
+                //                                === FloorFilter.VisibleListView.Facility ? sourceSize.width : 0
+                //                    }
+                onClicked: internal.currentVisibileListView = FloorFilter.VisibleListView.Site
             }
 
             Image {
@@ -252,7 +262,7 @@ Control {
 
     QtObject {
         id: internal
-        property int currentVisibileListView: FloorFilter.VisibleListView.Site
+        property int currentVisibileListView: FloorFilter.VisibleListView.Facility
         property bool isFloorFilterCollapsed: true
         //idx refers to repeter or listview idx, not the model idx.
         property int selectedFacilityIdx: -1
