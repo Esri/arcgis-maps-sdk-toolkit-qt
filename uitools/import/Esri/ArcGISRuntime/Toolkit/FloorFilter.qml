@@ -80,12 +80,9 @@ Control {
                             Layout.fillWidth: true
                             text: model.shortName
                             onClicked: {
-                                //                                repeater.downItem = index
                                 checked = true
                                 levelFilterMenu.itemSelected = model.shortName
                                 controller.selectedLevelId = model.modelId
-
-                                console.log(levelFilterMenu.itemSelected)
                             }
                         }
                     }
@@ -158,17 +155,6 @@ Control {
                     source: "images/chevron-left.svg"
                     color: "black"
                 }
-                //                    Image {
-                //                        anchors.centerIn: parent
-                //                        id: leftChevronImg
-                //                        source: "images/chevron-left.svg"
-                //                        sourceSize.width: 24
-                //                        sourceSize.height: 24
-                //                        width: internal.currentVisibileListView
-                //                               === FloorFilter.VisibleListView.Facility ? sourceSize.width : 0
-                //                        height: internal.currentVisibileListView
-                //                                === FloorFilter.VisibleListView.Facility ? sourceSize.width : 0
-                //                    }
                 onClicked: internal.currentVisibileListView = FloorFilter.VisibleListView.Site
             }
 
@@ -237,16 +223,26 @@ Control {
                 onTextChanged: controller.filterFacilities(text)
             }
 
-            Image {
-                id: closeImg
+            Button {
                 Layout.rowSpan: 2
                 Layout.fillHeight: true
-                sourceSize: Qt.size(24, 24)
-                source: "images/x.svg"
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: facilityFilterMenu.visible = false
+                display: AbstractButton.IconOnly
+                flat: true
+                //removing all paddings and spacing from component so icon will fill compeltely the button
+                topPadding: 0
+                bottomPadding: 0
+                leftPadding: 0
+                rightPadding: 0
+                spacing: 0
+                Layout.alignment: Qt.AlignHCenter
+                Layout.preferredWidth: 32
+                icon {
+                    width: 32
+                    height: 32
+                    source: "images/x.svg"
+                    color: "black"
                 }
+                onClicked: facilityFilterMenu.visible = false
             }
         }
     }
