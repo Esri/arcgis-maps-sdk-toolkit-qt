@@ -69,30 +69,23 @@ Control {
                     ToolSeparator {
                         Layout.fillWidth: true
                         orientation: Qt.Horizontal
-                    }
 
                     Repeater {
                         id: repeater
                         property int downItem
                         model: controller.levels
                         delegate: ToolButton {
+                            autoExclusive: true
                             Layout.fillWidth: true
                             text: model.shortName
                             onClicked: {
-                                repeater.setItemHighlighted(
-                                            index) // _q can access Repeater without using the id?
+                                //                                repeater.downItem = index
+                                checked = true
                                 levelFilterMenu.itemSelected = model.shortName
                                 controller.selectedLevelId = model.modelId
 
                                 console.log(levelFilterMenu.itemSelected)
                             }
-                        }
-                        function setItemHighlighted(index) {
-                            if (downItem !== undefined) {
-                                itemAt(downItem).highlighted = false
-                            }
-                            itemAt(index).highlighted = true
-                            downItem = index
                         }
                     }
 
