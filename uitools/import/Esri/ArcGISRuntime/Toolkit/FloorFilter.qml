@@ -69,6 +69,7 @@ Control {
                     ToolSeparator {
                         Layout.fillWidth: true
                         orientation: Qt.Horizontal
+                    }
 
                     Repeater {
                         id: repeater
