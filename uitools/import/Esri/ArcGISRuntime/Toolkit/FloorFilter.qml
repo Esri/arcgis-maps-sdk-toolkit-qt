@@ -40,24 +40,26 @@ Control {
 
     GridLayout {
         columns: 2
+
         ColumnLayout {
             Layout.alignment: Qt.AlignBottom
             spacing: 0
+
             ToolBar {
                 id: levelFilterMenu
                 visible: !internal.isFloorFilterCollapsed
                 // property var itemSelected: {text: ""}
                 property string itemSelected: ""
 
-                Action {
-                    id: close
-                    icon.source: "images/x.svg"
-                    onTriggered: {
-                        internal.isFloorFilterCollapsed = true
-                    }
-                }
-
                 ColumnLayout {
+
+                    Action {
+                        id: close
+                        icon.source: "images/x.svg"
+                        onTriggered: {
+                            internal.isFloorFilterCollapsed = true
+                        }
+                    }
 
                     ToolButton {
                         Layout.fillWidth: true
@@ -160,6 +162,7 @@ Control {
                     width: 32
                     height: 32
                     source: "images/chevron-left.svg"
+                    color: "black"
                 }
                 //                    Image {
                 //                        anchors.centerIn: parent
@@ -262,7 +265,7 @@ Control {
 
     QtObject {
         id: internal
-        property int currentVisibileListView: FloorFilter.VisibleListView.Facility
+        property int currentVisibileListView: FloorFilter.VisibleListView.Site
         property bool isFloorFilterCollapsed: true
         //idx refers to repeter or listview idx, not the model idx.
         property int selectedFacilityIdx: -1
