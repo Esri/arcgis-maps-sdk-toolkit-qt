@@ -108,16 +108,6 @@ QtObject {
 
     function onSelectedChanged() {}
 
-    function filterFacilities(query) {
-        filteredFacilities.clear()
-        console.log(facilities.count)
-        for (var i = 0; i < facilities.count; ++i) {
-            const facility = facilities.get(i)
-            if (facility.name.includes(query))
-                filteredFacilities.append(facility)
-        }
-    }
-
     // geomodel loaded connection
     property Connections geoModelConn: Connections {
         target: geoModel

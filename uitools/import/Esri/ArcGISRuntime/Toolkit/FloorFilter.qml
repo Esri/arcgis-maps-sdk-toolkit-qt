@@ -18,6 +18,7 @@ import Esri.ArcGISRuntime.Toolkit.Controller 100.14
 import QtQuick 2.12
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import QtQml.Models 2.15
 
 
 /*!
@@ -175,26 +176,62 @@ Control {
                 implicitHeight: contentHeight
                 implicitWidth: contentWidth
 
-                model: internal.currentVisibileListView
-                       === FloorFilter.VisibleListView.Site ? controller.sites : controller.facilities
-                delegate: ItemDelegate {
-                    width: parent.width
-                    highlighted: internal.currentVisibileListView
-                                 === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx
-                    text: model.name
-                    onClicked: {
-                        // switch to facility view
-                        if (internal.currentVisibileListView === FloorFilter.VisibleListView.Site) {
-                            internal.selectedSiteIdx = index
-                            controller.selectedSiteId = model.modelId
-                            internal.currentVisibileListView = FloorFilter.VisibleListView.Facility
-                        } // switch to level view
-                        else if (internal.currentVisibileListView
-                                 === FloorFilter.VisibleListView.Facility) {
-                            controller.selectedFacilityId = model.modelId
-                            internal.selectedFacilityIdx = index
-                            facilityFilterMenu.visible = false
-                            internal.isFloorFilterCollapsed = false
+                model: DelegateModel {
+                    id: dm
+                    property Connections conn: Connections {
+                        target: searchTextField
+                        function onTextChanged() {
+
+                            //usign items group to fetch all the elements (they are all setin this group automatically)
+                            for (var i = 0; i < dm.items.count; ++i) {
+                                var item = dm.items.get(i)
+
+                                if (searchTextField.text === "") {
+                                    item.inFiltered = true
+                                } else {
+                                    if (item.model.name.includes(
+                                                searchTextField.text))
+                                        item.inFiltered = true
+                                    else
+                                        item.inFiltered = false
+                                }
+                            }
+                        }
+                    }
+
+                    model: internal.currentVisibileListView
+                           === FloorFilter.VisibleListView.Site ? controller.sites : controller.facilities
+                    Component.onCompleted: console.log("count:", count)
+                    onCountChanged: console.log("count:", count)
+                    filterOnGroup: "filtered"
+                    groups: [
+                        DelegateModelGroup {
+                            id: filteredGroup
+                            name: "filtered"
+                            includeByDefault: true
+                        }
+                    ]
+                    delegate: ItemDelegate {
+                        width: parent.width
+                        highlighted: internal.currentVisibileListView
+                                     === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx
+                        text: model.name
+                        onClicked: {
+                            // switch to facility view
+                            if (internal.currentVisibileListView
+                                    === FloorFilter.VisibleListView.Site) {
+                                internal.selectedSiteIdx = index
+                                controller.selectedSiteId = model.modelId
+                                internal.currentVisibileListView
+                                        = FloorFilter.VisibleListView.Facility
+                            } // switch to level view
+                            else if (internal.currentVisibileListView
+                                     === FloorFilter.VisibleListView.Facility) {
+                                controller.selectedFacilityId = model.modelId
+                                internal.selectedFacilityIdx = index
+                                facilityFilterMenu.visible = false
+                                internal.isFloorFilterCollapsed = false
+                            }
                         }
                     }
                 }
@@ -212,12 +249,12 @@ Control {
             }
 
             TextField {
+                id: searchTextField
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.columnSpan: 2
                 x: searchImg.width
                 placeholderText: "Search"
-                onTextChanged: controller.filterFacilities(text)
             }
 
             Button {
