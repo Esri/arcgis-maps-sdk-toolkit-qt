@@ -167,23 +167,20 @@ Control {
 
             ListView {
                 id: listView
-                currentIndex: internal.currentVisibileListView
-                              === FloorFilter.VisibleListView.Site ? internal.selectedSiteIdx : internal.selectedFacilityIdx // set by the onclick (represents either the facility or the site view)
 
-                //                highlight: Rectangle {
-                //                    color: "lightsteelblue"
-                //                    radius: 5
-                //                }
                 visible: true
+
                 Layout.columnSpan: 3
                 Layout.fillWidth: true
                 implicitHeight: contentHeight
                 implicitWidth: contentWidth
+
                 model: internal.currentVisibileListView
                        === FloorFilter.VisibleListView.Site ? controller.sites : controller.facilities
                 delegate: ItemDelegate {
                     width: parent.width
-                    highlighted: ListView.isCurrentItem
+                    highlighted: internal.currentVisibileListView
+                                 === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx
                     text: model.name
                     onClicked: {
                         // switch to facility view
@@ -195,9 +192,9 @@ Control {
                         else if (internal.currentVisibileListView
                                  === FloorFilter.VisibleListView.Facility) {
                             controller.selectedFacilityId = model.modelId
+                            internal.selectedFacilityIdx = index
                             facilityFilterMenu.visible = false
                             internal.isFloorFilterCollapsed = false
-                            internal.selectedFacilityIdx = index
                         }
                     }
                 }

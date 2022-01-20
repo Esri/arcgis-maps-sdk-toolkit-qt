@@ -23,6 +23,9 @@ QtObject {
     property GeoView geoView
 
     property GeoModel geoModel: {
+        // check geoView has been set
+        if (!geoView)
+            return null
         if (typeof (geoView.map) !== "undefined")
             return geoView.map
         else if (typeof (geoView.scene) !== "undefined")
