@@ -51,7 +51,7 @@ namespace Toolkit {
     return m_floorFacility;
   }
 
-  QString FloorFilterFacilityItem::facilityId() const
+  QString FloorFilterFacilityItem::modelId() const
   {
     return m_floorFacility ?  m_floorFacility->facilityId() : QString{};
   }

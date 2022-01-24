@@ -136,6 +136,10 @@ namespace Toolkit {
     m_facilities(new GenericListModel(&FloorFilterFacilityItem::staticMetaObject, this)),
     m_sites(new GenericListModel(&FloorFilterSiteItem::staticMetaObject, this))
   {
+    m_sites->setDisplayPropertyName("name");
+    m_facilities->setDisplayPropertyName("name");
+    m_levels->setDisplayPropertyName("shortName");
+
     connect(this, &FloorFilterController::selectedFacilityIdChanged, this, &FloorFilterController::selectedChanged);
     connect(this, &FloorFilterController::selectedLevelIdChanged, this, &FloorFilterController::selectedChanged);
     connect(this, &FloorFilterController::selectedSiteIdChanged, this, &FloorFilterController::selectedChanged);
@@ -335,16 +339,33 @@ namespace Toolkit {
 
     const auto allLevels = manager->levels();
 
+    QString defaultLevel{};
     QList<QObject*> levelItems;
     for (const auto level : allLevels)
     {
       if (level->facility()->facilityId() == selectedFacilityId())
       {
         levelItems << new FloorFilterLevelItem(level, m_levels);
+        if (level->verticalOrder() == 0)
+        {
+          // Default level is level with vertical order 0.
+          defaultLevel = level->levelId();
+        }
       }
     }
-    //' Reverse order for ascending order.
+
+    // Otherwise, if there is no appropriate vertical order, we use the bottom
+    // level as the default level.
+    if (defaultLevel.isEmpty() && levelItems.size() > 0)
+    {
+      defaultLevel = static_cast<FloorFilterLevelItem*>(levelItems.last())->modelId();
+    }
+
+    //' Reverse order in controller for ascending order. Such that floor level is at bottom of
+    // list.
     m_levels->append(QList<QObject*>(std::crbegin(levelItems), std::crend(levelItems)));
+
+    setSelectedLevelId(defaultLevel);
   }
 
   void FloorFilterController::populateFacilitiesForSelectedSite()
@@ -365,6 +386,16 @@ namespace Toolkit {
       }
     }
     m_facilities->append(facilityItems);
+
+    // Select only facility if there is only 1 facility.
+    if (facilityItems.size() == 1)
+    {
+      setSelectedFacilityId(static_cast<FloorFilterFacilityItem*>(facilityItems.at(0))->modelId());
+    }
+    else
+    {
+      setSelectedFacilityId("");
+    }
   }
 
   void FloorFilterController::populateSites()
@@ -382,6 +413,16 @@ namespace Toolkit {
       siteItems << new FloorFilterSiteItem(site, m_sites);
     }
     m_sites->append(siteItems);
+
+    // Select only site if there is only 1 site.
+    if (siteItems.size() == 1)
+    {
+      setSelectedSiteId(static_cast<FloorFilterSiteItem*>(siteItems.at(0))->modelId());
+    }
+    else
+    {
+      setSelectedSiteId("");
+    }
   }
 
 } // Toolkit
