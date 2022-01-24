@@ -42,7 +42,7 @@ public:
 
   void setMapView(MapGraphicsView* mapView);
 
-  void setSceneView(SceneGraphicsView* mapView);
+  void setSceneView(SceneGraphicsView* sceneView);
 
   NorthArrowController* controller() const;
 
