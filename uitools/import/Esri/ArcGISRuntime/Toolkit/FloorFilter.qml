@@ -130,8 +130,14 @@ Control {
             id: facilityFilterMenu
             flow: GridLayout.TopToBottom
             Layout.alignment: Qt.AlignBottom
-            rows: 4
+            rows: 5
             rowSpacing: 0
+
+            Button {
+                text: "show all facilities"
+                Layout.columnSpan: 3
+                onClicked: controller.populateAllFacilities()
+            }
 
             //visible: internal.currentVisibileListView !== FloorFilter.VisibleListView.NONE
             Button {

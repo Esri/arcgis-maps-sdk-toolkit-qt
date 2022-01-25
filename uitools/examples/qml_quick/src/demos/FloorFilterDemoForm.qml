@@ -31,6 +31,7 @@ DemoPage {
     mapViewContents: Component {
         //! [Set up Floor Filter QML]
         MapView {
+            id: viewMap
             Map {
                 initUrl: "https://www.arcgis.com/home/item.html?id=f133a698536f44c8884ad81f80b6cfc7"
             }
@@ -43,7 +44,6 @@ DemoPage {
                 }
             }
         }
-
         //! [Set up Floor Filter QML]
     }
 }

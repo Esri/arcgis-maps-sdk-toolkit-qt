@@ -134,6 +134,7 @@ QtObject {
     }
 
     function populateSites(listSites) {
+        sites.clear()
         for (var i = 0; i < listSites.length; ++i) {
             let site = listSites[i]
             sites.append({
@@ -147,12 +148,10 @@ QtObject {
             let site = listSites[0]
             selectedSiteId = site.siteId
         }
-
-        console.log(sites.count)
-        console.log(sites.get(0).name)
     }
 
     function populateFacilities(listFacilities) {
+        facilities.clear()
         for (var i = 0; i < listFacilities.length; ++i) {
             let facility = listFacilities[i]
             facilities.append({
@@ -160,6 +159,11 @@ QtObject {
                                   "modelId": facility.facilityId
                               })
         }
+    }
+
+    function populateAllFacilities() {
+        var listFacilities = floorManager.facilities
+        populateFacilities(listFacilities)
     }
 
     // populate levels in reverse order. Levels numbers in ascending order from component's bottom section.
