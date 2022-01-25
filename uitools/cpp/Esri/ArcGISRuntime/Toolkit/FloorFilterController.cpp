@@ -182,15 +182,21 @@ namespace Toolkit {
     connect(this, &FloorFilterController::selectedSiteIdChanged, this, &FloorFilterController::populateFacilitiesForSelectedSite);
 
     connect(this, &FloorFilterController::selectedLevelIdChanged, this,
-            [this](QString oldId, QString newId)
+            [this](QString /*oldId*/, QString newId)
             {
-              auto oldLevel = level(oldId);
-              if (oldLevel)
-                oldLevel->setVisible(false);
-
               auto newLevel = level(newId);
-              if (newLevel)
-                newLevel->setVisible(true);
+              auto floorManager = getFloorManager(m_geoView);
+              if (floorManager)
+              {
+                const auto levels = floorManager->levels();
+                for (const auto level : levels)
+                {
+                  if (level)
+                  {
+                    level->setVisible(newLevel ? level->verticalOrder() == newLevel->verticalOrder() : false);
+                  }
+                }
+              }
             });
   }
 
