@@ -24,6 +24,8 @@
 #include "Internal/SingleShotConnection.h"
 
 // ArcGISRuntime headers
+#include <Envelope.h>
+#include <EnvelopeBuilder.h>
 #include <FloorFacility.h>
 #include <FloorLevel.h>
 #include <FloorManager.h>
@@ -36,6 +38,38 @@ namespace ArcGISRuntime {
 namespace Toolkit {
 
   namespace {
+    /*!
+     \internal
+     \brief Constant padding value for the extent when zooming
+            to the geometry of a FloorFacility.
+     */
+    const float ZOOM_PADDING = 1.5;
+
+    /*!
+      \internal
+      \brief Zooms the given \a geoView to \a envelope, applying `ZOOM_PADDING`.
+     */
+    void zoomToEnvelope(const Envelope& envelope, QObject* geoView)
+    {
+      if (envelope.isEmpty())
+        return;
+
+      if (!geoView)
+        return;
+
+      EnvelopeBuilder b{envelope};
+      b.expandByFactor(ZOOM_PADDING);
+
+      if (auto mapView = qobject_cast<MapViewToolkit*>(geoView))
+      {
+        mapView->setViewpoint(b.toEnvelope());
+      }
+      else if (auto sceneView = qobject_cast<SceneViewToolkit*>(geoView))
+      {
+        sceneView->setViewpoint(b.toEnvelope());
+      }
+    }
+
     /*!
       \internal
       \brief Returns the FloorManager from the GeoView's model.
@@ -226,7 +260,7 @@ namespace Toolkit {
 
   void FloorFilterController::setSelectedFacilityId(QString selectedFacilityId)
   {
-    if (m_selectedLevelId == selectedFacilityId)
+    if (m_selectedFacilityId == selectedFacilityId)
       return;
 
     QString oldId = m_selectedFacilityId;
@@ -361,8 +395,8 @@ namespace Toolkit {
       defaultLevel = static_cast<FloorFilterLevelItem*>(levelItems.last())->modelId();
     }
 
-    //' Reverse order in controller for ascending order. Such that floor level is at bottom of
-    // list.
+    // Reverse order in controller for ascending order. Such that bottom floor level is 
+    // at bottom of the list.
     m_levels->append(QList<QObject*>(std::crbegin(levelItems), std::crend(levelItems)));
 
     setSelectedLevelId(defaultLevel);
@@ -423,6 +457,41 @@ namespace Toolkit {
     {
       setSelectedSiteId("");
     }
+  }
+
+  void FloorFilterController::zoomToFacility(FloorFilterFacilityItem* facilityItem)
+  {
+    if (!facilityItem)
+      return;
+
+    const auto f = facilityItem->floorFacility();
+    if (f)
+      zoomToEnvelope(f->geometry().extent(), m_geoView);
+  }
+
+
+  void FloorFilterController::zoomToFacility(QString facilityId)
+  {
+    const auto f = facility(facilityId);
+    if (f)
+      zoomToEnvelope(f->geometry().extent(), m_geoView);
+  }
+
+  void FloorFilterController::zoomToSite(FloorFilterSiteItem* siteItem)
+  {
+    if (!siteItem)
+      return;
+
+    const auto s = siteItem->floorSite();
+    if (s)
+      zoomToEnvelope(s->geometry().extent(), m_geoView);
+  }
+
+  void FloorFilterController::zoomToSite(QString siteId)
+  {
+    const auto s = site(siteId);
+    if (s)
+      zoomToEnvelope(s->geometry().extent(), m_geoView);
   }
 
 } // Toolkit

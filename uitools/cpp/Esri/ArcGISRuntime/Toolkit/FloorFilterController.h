@@ -29,6 +29,8 @@ namespace ArcGISRuntime {
   class FloorLevel;
 
   namespace Toolkit {
+    class FloorFilterFacilityItem;
+    class FloorFilterSiteItem;
 
     class FloorFilterController : public QObject
     {
@@ -59,6 +61,12 @@ namespace ArcGISRuntime {
       GenericListModel* levels() const;
       GenericListModel* sites() const;
       GenericListModel* facilities() const;
+
+      Q_INVOKABLE void zoomToFacility(QString facilityId);
+      void zoomToFacility(FloorFilterFacilityItem* facilityItem);
+
+      Q_INVOKABLE void zoomToSite(QString siteId);
+      void zoomToSite(FloorFilterSiteItem* siteItem);
 
     signals:
       void geoViewChanged();
