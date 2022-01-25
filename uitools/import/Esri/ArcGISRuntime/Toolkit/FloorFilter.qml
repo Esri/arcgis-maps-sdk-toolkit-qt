@@ -136,7 +136,10 @@ Control {
             Button {
                 text: "show all facilities"
                 Layout.columnSpan: 3
-                onClicked: controller.populateAllFacilities()
+                onClicked: {
+                    controller.populateAllFacilities()
+                    internal.currentVisibileListView = FloorFilter.VisibleListView.Facility
+                }
             }
 
             //visible: internal.currentVisibileListView !== FloorFilter.VisibleListView.NONE

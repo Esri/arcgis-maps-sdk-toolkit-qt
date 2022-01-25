@@ -85,10 +85,18 @@ QtObject {
         let idx = findElementIdxById(selectedFacilityId,
                                      floorManager.facilities, "facilityId")
         if (idx === undefined) {
-            console.error("site id not found")
+            console.error("facility id not found")
             return
         }
         internal.selectedFacility = floorManager.facilities[idx]
+        // check that the current site is the selected facility selected. Otherwise the click came from a populateAllFacilities
+        var facility = floorManager.facilities[idx]
+        if (facility.site.siteId !== internal.selectedSite.siteId) {
+            // selection of facility came after click of populateAllFacilities.
+            // this also sets the internal.selectedSite
+            selectedSiteId = facility.site.siteId
+        }
+
         populateLevels(floorManager.facilities[idx].levels)
         onSelectedChanged()
     }
@@ -164,10 +172,13 @@ QtObject {
     function populateAllFacilities() {
         var listFacilities = floorManager.facilities
         populateFacilities(listFacilities)
+        // setting view site name as ""
+        // internal.selectedSite = null
     }
 
     // populate levels in reverse order. Levels numbers in ascending order from component's bottom section.
     function populateLevels(listLevels) {
+        levels.clear()
         for (var i = listLevels.length - 1; i >= 0; --i) {
             let level = listLevels[i]
             levels.append({
