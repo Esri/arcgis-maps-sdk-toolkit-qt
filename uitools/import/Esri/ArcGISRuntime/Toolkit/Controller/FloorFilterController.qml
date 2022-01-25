@@ -172,7 +172,7 @@ QtObject {
     property QtObject internal: QtObject {
         // used keep track of last level selected and toggle its visibility
         property FloorLevel selectedLevel
-        // used to update the view with their names
+        // used to update the view with their names. _q could only store the name string
         property FloorFacility selectedFacility
         property FloorSite selectedSite
     }

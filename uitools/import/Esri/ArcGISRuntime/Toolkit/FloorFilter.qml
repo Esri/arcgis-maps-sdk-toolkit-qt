@@ -212,7 +212,7 @@ Control {
                         }
                     ]
                     delegate: ItemDelegate {
-                        width: parent.width
+                        width: listView.width
                         highlighted: internal.currentVisibileListView
                                      === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx
                         text: model.name
@@ -240,18 +240,17 @@ Control {
                 font.bold: true
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignHCenter
-                text: controller.selectedSite ? controller.internal.selectedSite.name : "Select the Site"
+                text: controller.internal.selectedSite ? controller.internal.selectedSite.name : "Select the Site"
             }
             Text {
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignHCenter
-                text: controller.selectedFacility ? controller.internal.selectedFacility.name : "Select the Facility"
+                text: controller.internal.selectedFacility ? controller.internal.selectedFacility.name : "Select the Facility"
             }
 
             TextField {
                 id: searchTextField
                 Layout.fillWidth: true
-                Layout.fillHeight: true
                 Layout.columnSpan: 2
                 x: searchImg.width
                 placeholderText: "Search"
