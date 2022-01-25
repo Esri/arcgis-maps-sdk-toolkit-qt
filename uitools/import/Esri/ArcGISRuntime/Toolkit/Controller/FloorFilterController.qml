@@ -141,6 +141,13 @@ QtObject {
                              "modelId": site.siteId
                          })
         }
+        // case single site: autoselect it and set the boolean used by the view
+        if (listSites.length === 1) {
+            internal.singleSite = true
+            let site = listSites[0]
+            selectedSiteId = site.siteId
+        }
+
         console.log(sites.count)
         console.log(sites.get(0).name)
     }
@@ -175,5 +182,7 @@ QtObject {
         // used to update the view with their names. _q could only store the name string
         property FloorFacility selectedFacility
         property FloorSite selectedSite
+        // used to set the default initial view. if singleSite : true->facility view and site already selected
+        property bool singleSite: false //_q should be better that the view checks the sites.length at changes the default view based on it?
     }
 }

@@ -139,8 +139,7 @@ Control {
                 //Layout.fillWidth: true
                 Layout.rowSpan: 2
                 Layout.alignment: Qt.AlignHCenter
-                Layout.preferredWidth: internal.currentVisibileListView
-                                       === FloorFilter.VisibleListView.Facility ? 32 : 0
+                Layout.preferredWidth: controller.internal.singleSite ? 0 : (internal.currentVisibileListView === FloorFilter.VisibleListView.Facility ? 32 : 0)
                 display: AbstractButton.IconOnly
                 flat: true
                 //removing all paddings and spacing from component so icon will fill compeltely the button
@@ -288,7 +287,7 @@ Control {
 
     QtObject {
         id: internal
-        property int currentVisibileListView: FloorFilter.VisibleListView.Site
+        property int currentVisibileListView: controller.internal.singleSite ? FloorFilter.VisibleListView.Facility : FloorFilter.VisibleListView.Site
         property bool isFloorFilterCollapsed: true
         //idx refers to repeter or listview idx, not the model idx.
         property int selectedFacilityIdx: -1
