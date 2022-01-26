@@ -17,6 +17,9 @@
 #define ESRI_ARCGISRUNTIME_TOOLKIT_FLOORFILTERCONTROLLER_H
 
 // Toolkit headers
+#include "FloorFilterFacilityItem.h"
+#include "FloorFilterLevelItem.h"
+#include "FloorFilterSiteItem.h"
 #include "Internal/GenericListModel.h"
 
 // Qt headers
@@ -24,78 +27,81 @@
 
 namespace Esri {
 namespace ArcGISRuntime {
-  class FloorFacility;
-  class FloorSite;
-  class FloorLevel;
+namespace Toolkit {
+  class FloorFilterFacilityItem;
+  class FloorFilterSiteItem;
 
-  namespace Toolkit {
-    class FloorFilterFacilityItem;
-    class FloorFilterSiteItem;
+  class FloorFilterController : public QObject
+  {
+    Q_OBJECT
+    Q_PROPERTY(QObject* geoView READ geoView WRITE setGeoView NOTIFY geoViewChanged)
+    Q_PROPERTY(FloorFacility* selectedFacility READ selectedFacility NOTIFY selectedFacilityIdChanged)
+    Q_PROPERTY(QString selectedFacilityId READ selectedFacilityId WRITE setSelectedFacilityId NOTIFY selectedFacilityIdChanged)
+    Q_PROPERTY(FloorLevel* selectedLevel READ selectedLevel NOTIFY selectedLevelIdChanged)
+    Q_PROPERTY(QString selectedLevelId READ selectedLevelId WRITE setSelectedLevelId NOTIFY selectedLevelIdChanged)
+    Q_PROPERTY(FloorSite* selectedSite READ selectdSite NOTIFY selectedSiteIdChanged)
+    Q_PROPERTY(QString selectedSiteId READ selectedSiteId WRITE setSelectedSiteId NOTIFY selectedSiteIdChanged)
+    Q_PROPERTY(QAbstractListModel* levels READ levels CONSTANT)
+    Q_PROPERTY(QAbstractListModel* facilities READ facilities CONSTANT)
+    Q_PROPERTY(QAbstractListModel* sites READ sites CONSTANT)
+  public:
+    Q_INVOKABLE explicit FloorFilterController(QObject* parent = nullptr);
+    ~FloorFilterController() override;
 
-    class FloorFilterController : public QObject
-    {
-      Q_OBJECT
-      Q_PROPERTY(QObject* geoView READ geoView WRITE setGeoView NOTIFY geoViewChanged)
-      Q_PROPERTY(QString selectedFacilityId READ selectedFacilityId WRITE setSelectedFacilityId NOTIFY selectedFacilityIdChanged)
-      Q_PROPERTY(QString selectedLevelId READ selectedLevelId WRITE setSelectedLevelId NOTIFY selectedLevelIdChanged)
-      Q_PROPERTY(QString selectedSiteId READ selectedSiteId WRITE setSelectedSiteId NOTIFY selectedSiteIdChanged)
-      Q_PROPERTY(QAbstractListModel* levels READ levels CONSTANT)
-      Q_PROPERTY(QAbstractListModel* facilities READ facilities CONSTANT)
-      Q_PROPERTY(QAbstractListModel* sites READ sites CONSTANT)
-    public:
-      Q_INVOKABLE explicit FloorFilterController(QObject* parent = nullptr);
-      ~FloorFilterController() override;
+    QObject* geoView() const;
+    void setGeoView(QObject* geoView);
 
-      QObject* geoView() const;
-      void setGeoView(QObject* geoView);
+    QString selectedSiteId() const;
+    void setSelectedSiteId(QString selectedSiteId);
 
-      QString selectedSiteId() const;
-      void setSelectedSiteId(QString selectedSiteId);
+    QString selectedFacilityId() const;
+    void setSelectedFacilityId(QString selectedFacilityId);
 
-      QString selectedFacilityId() const;
-      void setSelectedFacilityId(QString selectedFacilityId);
+    QString selectedLevelId() const;
+    void setSelectedLevelId(QString selectedLevelId);
 
-      QString selectedLevelId() const;
-      void setSelectedLevelId(QString selectedLevelId);
+    GenericListModel* levels() const;
+    GenericListModel* sites() const;
+    GenericListModel* facilities() const;
 
-      GenericListModel* levels() const;
-      GenericListModel* sites() const;
-      GenericListModel* facilities() const;
+    Q_INVOKABLE void zoomToFacility(QString facilityId);
+    void zoomToFacility(FloorFilterFacilityItem* facilityItem);
 
-      Q_INVOKABLE void zoomToFacility(QString facilityId);
-      void zoomToFacility(FloorFilterFacilityItem* facilityItem);
+    Q_INVOKABLE void zoomToSite(QString siteId);
+    void zoomToSite(FloorFilterSiteItem* siteItem);
 
-      Q_INVOKABLE void zoomToSite(QString siteId);
-      void zoomToSite(FloorFilterSiteItem* siteItem);
+  signals:
+    void geoViewChanged();
+    void selectedSiteIdChanged(QString oldId, QString newId);
+    void selectedFacilityIdChanged(QString oldId, QString newId);
+    void selectedLevelIdChanged(QString oldId, QString newId);
+    void selectedChanged();
 
-    signals:
-      void geoViewChanged();
-      void selectedSiteIdChanged(QString oldId, QString newId);
-      void selectedFacilityIdChanged(QString oldId, QString newId);
-      void selectedLevelIdChanged(QString oldId, QString newId);
-      void selectedChanged();
+  private slots:
+    void populateLevelsForSelectedFacility();
+    void populateFacilitiesForSelectedSite();
+    void populateSites();
 
-    private slots:
-      void populateLevelsForSelectedFacility();
-      void populateFacilitiesForSelectedSite();
-      void populateSites();
+  private:
+    FloorFacility* facility(const QString& id) const;
+    FloorSite* site(const QString& id) const;
+    FloorLevel* level(const QString& id) const;
 
-    private:
-      FloorFacility* facility(const QString& id) const;
-      FloorSite* site(const QString& id) const;
-      FloorLevel* level(const QString& id) const;
+    FloorFacility* selectedFacility() const;
+    FloorSite* selectedSite() const;
+    FloorLevel* selectedLevel() const;
 
-    private:
-      QObject* m_geoView{nullptr};
-      GenericListModel* m_levels{nullptr};
-      GenericListModel* m_facilities{nullptr};
-      GenericListModel* m_sites{nullptr};
-      QString m_selectedFacilityId;
-      QString m_selectedLevelId;
-      QString m_selectedSiteId;
-    };
+  private:
+    QObject* m_geoView{nullptr};
+    GenericListModel* m_levels{nullptr};
+    GenericListModel* m_facilities{nullptr};
+    GenericListModel* m_sites{nullptr};
+    QString m_selectedFacilityId;
+    QString m_selectedLevelId;
+    QString m_selectedSiteId;
+  };
 
-  } // Toolkit
+} // Toolkit
 } // ArcGISRuntime
 } // Esri
 
