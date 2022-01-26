@@ -188,6 +188,25 @@ QtObject {
         }
     }
 
+    function zoomToFacility(facilityId) {
+        let idx = findElementIdxById(selectedFacilityId,
+                                     floorManager.facilities, "facilityId")
+        let facility = floorManager.facilities[idx]
+        const extent = facility.geometry.extent
+        var builder = ArcGISRuntimeEnvironment.createObject('EnvelopeBuilder', {
+                                                                "geometry": extent
+                                                            })
+        builder.expandByFactor(internal.zoom_padding)
+        var newViewpoint = ArcGISRuntimeEnvironment.createObject(
+                    'ViewpointExtent', {
+                        "extent": builder.geometry
+                    })
+        geoView.setViewpoint(newViewpoint)
+        console.log("set viewqpoint")
+    }
+
+    function zoomToEnvelope(envelope) {}
+
     onFloorManagerChanged: console.log("manager changed")
 
     /*! internal */
@@ -199,5 +218,6 @@ QtObject {
         property FloorSite selectedSite
         // used to set the default initial view. if singleSite : true->facility view and site already selected
         property bool singleSite: false //_q should be better that the view checks the sites.length at changes the default view based on it?
+        readonly property double zoom_padding: 1.5
     }
 }

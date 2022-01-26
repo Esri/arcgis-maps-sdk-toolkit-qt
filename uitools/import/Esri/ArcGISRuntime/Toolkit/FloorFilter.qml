@@ -181,9 +181,9 @@ Control {
 
                 Layout.columnSpan: 3
                 Layout.fillWidth: true
-                implicitHeight: contentHeight
-                implicitWidth: contentWidth
 
+                //                implicitHeight: contentHeight
+                //                implicitWidth: contentWidth
                 model: DelegateModel {
                     id: dm
                     property Connections conn: Connections {
@@ -239,6 +239,7 @@ Control {
                                 internal.selectedFacilityIdx = index
                                 facilityFilterMenu.visible = false
                                 internal.isFloorFilterCollapsed = false
+                                controller.zoomToFacility(model.modelId)
                             }
                         }
                     }
