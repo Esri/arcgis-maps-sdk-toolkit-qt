@@ -30,16 +30,17 @@ namespace ArcGISRuntime {
 namespace Toolkit {
   class FloorFilterFacilityItem;
   class FloorFilterSiteItem;
+  class FloorFilterLevelItem;
 
   class FloorFilterController : public QObject
   {
     Q_OBJECT
     Q_PROPERTY(QObject* geoView READ geoView WRITE setGeoView NOTIFY geoViewChanged)
-    Q_PROPERTY(FloorFacility* selectedFacility READ selectedFacility NOTIFY selectedFacilityIdChanged)
+    Q_PROPERTY(FloorFilterFacilityItem* selectedFacility READ selectedFacility NOTIFY selectedFacilityIdChanged)
     Q_PROPERTY(QString selectedFacilityId READ selectedFacilityId WRITE setSelectedFacilityId NOTIFY selectedFacilityIdChanged)
-    Q_PROPERTY(FloorLevel* selectedLevel READ selectedLevel NOTIFY selectedLevelIdChanged)
+    Q_PROPERTY(FloorFilterLevelItem* selectedLevel READ selectedLevel NOTIFY selectedLevelIdChanged)
     Q_PROPERTY(QString selectedLevelId READ selectedLevelId WRITE setSelectedLevelId NOTIFY selectedLevelIdChanged)
-    Q_PROPERTY(FloorSite* selectedSite READ selectedSite NOTIFY selectedSiteIdChanged)
+    Q_PROPERTY(FloorFilterSiteItem* selectedSite READ selectedSite NOTIFY selectedSiteIdChanged)
     Q_PROPERTY(QString selectedSiteId READ selectedSiteId WRITE setSelectedSiteId NOTIFY selectedSiteIdChanged)
     Q_PROPERTY(QAbstractListModel* levels READ levels CONSTANT)
     Q_PROPERTY(QAbstractListModel* facilities READ facilities CONSTANT)
@@ -87,9 +88,9 @@ namespace Toolkit {
     FloorSite* site(const QString& id) const;
     FloorLevel* level(const QString& id) const;
 
-    FloorFacility* selectedFacility() const;
-    FloorSite* selectedSite() const;
-    FloorLevel* selectedLevel() const;
+    FloorFilterFacilityItem* selectedFacility() const;
+    FloorFilterSiteItem* selectedSite() const;
+    FloorFilterLevelItem* selectedLevel() const;
 
   private:
     QObject* m_geoView{nullptr};
