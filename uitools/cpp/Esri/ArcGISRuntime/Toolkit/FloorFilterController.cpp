@@ -51,10 +51,7 @@ namespace Toolkit {
      */
     void zoomToEnvelope(const Envelope& envelope, QObject* geoView)
     {
-      if (envelope.isEmpty())
-        return;
-
-      if (!geoView)
+      if (envelope.isEmpty() || !geoView)
         return;
 
       EnvelopeBuilder b{envelope};
@@ -498,6 +495,21 @@ namespace Toolkit {
     const auto s = site(siteId);
     if (s)
       zoomToEnvelope(s->geometry().extent(), m_geoView);
+  }
+
+  FloorFacility* FloorFilterController::selectedFacility() const
+  {
+    return facility(selectedFacilityId());
+  }
+
+  FloorSite* FloorFilterController::selectedSite() const
+  {
+    return site(selectedSiteId());
+  }
+
+  FloorLevel* FloorFilterController::selectedLevel() const
+  {
+    return level(selectedLevelId());
   }
 
 } // Toolkit
