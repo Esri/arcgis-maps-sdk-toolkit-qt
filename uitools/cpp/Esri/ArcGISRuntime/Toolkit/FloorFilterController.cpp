@@ -497,19 +497,46 @@ namespace Toolkit {
       zoomToEnvelope(s->geometry().extent(), m_geoView);
   }
 
-  FloorFacility* FloorFilterController::selectedFacility() const
+  FloorFilterFacilityItem* FloorFilterController::selectedFacility() const
   {
-    return facility(selectedFacilityId());
+    auto model = m_facilities;
+    const auto rows = model->rowCount();
+    for (int i = 0; i < rows; ++i)
+    {
+      auto index = model->index(i);
+      auto item = model->element<FloorFilterFacilityItem>(index);
+      if (item->modelId() == m_selectedFacilityId)
+        return item;
+    }
+    return nullptr;
   }
 
-  FloorSite* FloorFilterController::selectedSite() const
+  FloorFilterSiteItem* FloorFilterController::selectedSite() const
   {
-    return site(selectedSiteId());
+    auto model = m_sites;
+    const auto rows = model->rowCount();
+    for (int i = 0; i < rows; ++i)
+    {
+      auto index = model->index(i);
+      auto item = model->element<FloorFilterSiteItem>(index);
+      if (item->modelId() == m_selectedSiteId)
+        return item;
+    }
+    return nullptr;
   }
 
-  FloorLevel* FloorFilterController::selectedLevel() const
+  FloorFilterLevelItem* FloorFilterController::selectedLevel() const
   {
-    return level(selectedLevelId());
+    auto model = m_levels;
+    const auto rows = model->rowCount();
+    for (int i = 0; i < rows; ++i)
+    {
+      auto index = model->index(i);
+      auto item = model->element<FloorFilterLevelItem>(index);
+      if (item->modelId() == m_selectedLevelId)
+        return item;
+    }
+    return nullptr;
   }
 
 } // Toolkit
