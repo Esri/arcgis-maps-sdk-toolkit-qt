@@ -75,6 +75,7 @@ namespace Toolkit {
                 const auto index = model->index(i);
                 const auto data = model->element<FloorFilterSiteItem>(index);
                 m_controller->setSelectedSiteId(data->modelId());
+                m_controller->zoomToSite(data);
               }
             });
 
@@ -96,6 +97,7 @@ namespace Toolkit {
                 const auto index = model->index(i);
                 const auto data = model->element<FloorFilterFacilityItem>(index);
                 m_controller->setSelectedFacilityId(data->modelId());
+                m_controller->zoomToFacility(data);
               }
             });
 
