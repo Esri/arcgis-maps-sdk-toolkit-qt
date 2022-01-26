@@ -39,95 +39,73 @@ Control {
         value: floorFilter.geoView
     }
 
-    GridLayout {
-        columns: 2
+    contentItem: ToolBar {
+        id: levelFilterMenu
+        Layout.alignment: Qt.AlignBottom
 
         ColumnLayout {
-            Layout.alignment: Qt.AlignBottom
-            spacing: 0
 
-            ToolBar {
-                id: levelFilterMenu
-                visible: !internal.isFloorFilterCollapsed
-                // property var itemSelected: {text: ""}
-                property string itemSelected: ""
-
-                ColumnLayout {
-
-                    Action {
-                        id: close
-                        icon.source: "images/x.svg"
-                        onTriggered: {
-                            internal.isFloorFilterCollapsed = true
-                        }
-                    }
-
-                    ToolButton {
-                        Layout.fillWidth: true
-                        action: close
-                    }
-
-                    ToolSeparator {
-                        Layout.fillWidth: true
-                        orientation: Qt.Horizontal
-                    }
-
-                    Repeater {
-                        id: repeater
-                        property int downItem
-                        model: controller.levels
-                        delegate: ToolButton {
-                            autoExclusive: true
-                            Layout.fillWidth: true
-                            text: model.shortName
-                            onClicked: {
-                                checked = true
-                                levelFilterMenu.itemSelected = model.shortName
-                                controller.selectedLevelId = model.modelId
-                            }
-                        }
-                    }
-
-                    ToolSeparator {
-                        Layout.fillWidth: true
-                        orientation: Qt.Horizontal
-                    }
-                }
-            }
-            ToolBar {
-                id: itemSelectedToolBar
-                // not visible when floorFilter is shown and not visible if the children has no text to be shown.
-                visible: internal.isFloorFilterCollapsed
-                         && itemSelectedButton.text !== ""
-                ToolButton {
-                    id: itemSelectedButton
-                    text: levelFilterMenu.itemSelected
-                    onClicked: {
-                        console.log(parent)
-                        internal.isFloorFilterCollapsed = false
-                    }
-                }
+            ToolButton {
+                id: collapser
+                checkable: true
+                checked: true
+                visible: !collapser.checked
+                Layout.fillWidth: true
+                icon.source: "images/x.svg"
             }
 
-            ToolBar {
-                Action {
-                    id: facility
-                    icon.source: "images/organization.svg"
-                    onTriggered: {
-                        facilityFilterMenu.visible = !facilityFilterMenu.visible
-                    }
-                }
+            ToolSeparator {
+                visible: !collapser.checked
+                Layout.fillWidth: true
+                orientation: Qt.Horizontal
+            }
 
-                ToolButton {
+            Repeater {
+                id: repeater
+                property int downItem
+
+                model: controller.levels
+                delegate: ToolButton {
+                    visible: !collapser.checked
+                    checked: controller.selectedLevelId === model.modelId
+                    autoExclusive: true
                     Layout.fillWidth: true
-                    action: facility
-                    icon.color: "transparent"
+                    text: model.shortName
+                    onClicked: {
+                        controller.selectedLevelId = model.modelId
+                    }
                 }
+            }
+
+            ToolSeparator {
+                Layout.fillWidth: true
+                visible: !collapser.checked
+                orientation: Qt.Horizontal
+            }
+            // not visible when floorFilter is shown and not visible if the children has no text to be shown.
+            ToolButton {
+                visible: collapser.checked && text !== ""
+                id: itemSelectedButton
+                text: controller.selectedLevel ? controller.selectedLevel.shortName : ""
+                onClicked: {
+                    collapser.checked = false
+                }
+            }
+
+            ToolButton {
+                id: buildingMenuButton
+                checkable: true
+                Layout.fillWidth: true
+                icon.source: "images/organization.svg"
             }
         }
+    }
 
+    Pane {
+        anchors.left: levelFilterMenu.right
+        anchors.margins: 10
+        visible: buildingMenuButton.checked
         GridLayout {
-            id: facilityFilterMenu
             flow: GridLayout.TopToBottom
             Layout.alignment: Qt.AlignBottom
             rows: 5
@@ -148,7 +126,7 @@ Control {
                 //Layout.fillWidth: true
                 Layout.rowSpan: 2
                 Layout.alignment: Qt.AlignHCenter
-                Layout.preferredWidth: controller.internal.singleSite ? 0 : (internal.currentVisibileListView === FloorFilter.VisibleListView.Facility ? 32 : 0)
+                Layout.preferredWidth: controller.sites.count === 1 ? 0 : (internal.currentVisibileListView === FloorFilter.VisibleListView.Facility ? 32 : 0)
                 display: AbstractButton.IconOnly
                 flat: true
                 //removing all paddings and spacing from component so icon will fill compeltely the button
@@ -175,12 +153,19 @@ Control {
             }
 
             ListView {
+                Component.onCompleted: console.log("cont", contentHeight)
                 id: listView
 
                 visible: true
 
                 Layout.columnSpan: 3
                 Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.minimumHeight: contentHeight / count
+                Layout.maximumHeight: contentHeight / count * 3
+
+                ScrollBar.vertical: ScrollBar {}
+                clip: true
 
                 //                implicitHeight: contentHeight
                 //                implicitWidth: contentWidth
@@ -190,7 +175,7 @@ Control {
                         target: searchTextField
                         function onTextChanged() {
 
-                            //usign items group to fetch all the elements (they are all setin this group automatically)
+                            //usign items group to fetch all the elements (they are all setting this group automatically)
                             for (var i = 0; i < dm.items.count; ++i) {
                                 var item = dm.items.get(i)
 
@@ -220,6 +205,7 @@ Control {
                         }
                     ]
                     delegate: ItemDelegate {
+                        Component.onCompleted: console.log("delegate", height)
                         width: listView.width
                         highlighted: internal.currentVisibileListView
                                      === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx
@@ -237,8 +223,8 @@ Control {
                                      === FloorFilter.VisibleListView.Facility) {
                                 controller.selectedFacilityId = model.modelId
                                 internal.selectedFacilityIdx = index
-                                facilityFilterMenu.visible = false
-                                internal.isFloorFilterCollapsed = false
+                                buildingMenuButton.checked = false
+                                collapser.checked = false
                                 controller.zoomToFacility(model.modelId)
                             }
                         }
@@ -249,12 +235,12 @@ Control {
                 font.bold: true
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignHCenter
-                text: controller.internal.selectedSite ? controller.internal.selectedSite.name : "Select the Site"
+                text: controller.selectedSite ? controller.selectedSite.name : "Select the Site"
             }
             Text {
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignHCenter
-                text: controller.internal.selectedFacility ? controller.internal.selectedFacility.name : "Select the Facility"
+                text: controller.selectedFacility ? controller.selectedFacility.name : "Select the Facility"
             }
 
             TextField {
@@ -284,11 +270,10 @@ Control {
                     source: "images/x.svg"
                     color: "black"
                 }
-                onClicked: facilityFilterMenu.visible = false
+                onClicked: buildingMenuButton.checked = false
             }
         }
     }
-
     // used to switch between site and facilities listviews and models.
     enum VisibleListView {
         Site,
@@ -297,15 +282,11 @@ Control {
 
     QtObject {
         id: internal
-        property int currentVisibileListView: controller.internal.singleSite ? FloorFilter.VisibleListView.Facility : FloorFilter.VisibleListView.Site
-        property bool isFloorFilterCollapsed: true
+        property int currentVisibileListView: controller.sites.count === 1 ? FloorFilter.VisibleListView.Facility : FloorFilter.VisibleListView.Site
         //idx refers to repeter or listview idx, not the model idx.
         property int selectedFacilityIdx: -1
         property int selectedSiteIdx: -1
         onCurrentVisibileListViewChanged: console.log("curr changed",
                                                       currentVisibileListView)
-        onIsFloorFilterCollapsedChanged: console.log(
-                                             "floorFilterMenu ",
-                                             isFloorFilterCollapsed ? "collapsed" : "shown")
     }
 }

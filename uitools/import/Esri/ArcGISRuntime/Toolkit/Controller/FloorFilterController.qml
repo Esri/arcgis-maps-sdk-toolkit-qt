@@ -48,6 +48,9 @@ QtObject {
 
     property ListModel sites: ListModel {}
 
+    property alias selectedSite: internal.selectedSite
+    property alias selectedFacility: internal.selectedFacility
+
     // iterates over \a listElements to find an element with \a id.
     //\a variableIdName is used to access the correct method name in each list (siteId, facilityId, levelId)
     function findElementIdxById(id, listElements, variableIdName) {
