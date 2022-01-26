@@ -39,7 +39,7 @@ namespace Toolkit {
     Q_PROPERTY(QString selectedFacilityId READ selectedFacilityId WRITE setSelectedFacilityId NOTIFY selectedFacilityIdChanged)
     Q_PROPERTY(FloorLevel* selectedLevel READ selectedLevel NOTIFY selectedLevelIdChanged)
     Q_PROPERTY(QString selectedLevelId READ selectedLevelId WRITE setSelectedLevelId NOTIFY selectedLevelIdChanged)
-    Q_PROPERTY(FloorSite* selectedSite READ selectdSite NOTIFY selectedSiteIdChanged)
+    Q_PROPERTY(FloorSite* selectedSite READ selectedSite NOTIFY selectedSiteIdChanged)
     Q_PROPERTY(QString selectedSiteId READ selectedSiteId WRITE setSelectedSiteId NOTIFY selectedSiteIdChanged)
     Q_PROPERTY(QAbstractListModel* levels READ levels CONSTANT)
     Q_PROPERTY(QAbstractListModel* facilities READ facilities CONSTANT)
