@@ -182,13 +182,21 @@ QtObject {
     // populate levels in reverse order. Levels numbers in ascending order from component's bottom section.
     function populateLevels(listLevels) {
         levels.clear()
+        let selectedLevel = ""
         for (var i = listLevels.length - 1; i >= 0; --i) {
             let level = listLevels[i]
             levels.append({
                               "shortName": level.shortName,
                               "modelId": level.levelId
                           })
+            if (level.verticalOrder === 0) {
+                selectedLevel = level.levelId
+                selectedLevelId = level.levelId
+            }
         }
+        // no suitable vertical order found
+        if (!selectedLevel)
+            selectedLevelId = listLevels[0].levelId
     }
 
     function zoomToFacility(facilityId) {
@@ -214,6 +222,7 @@ QtObject {
 
     /*! internal */
     property QtObject internal: QtObject {
+        id: internal
         // used keep track of last level selected and toggle its visibility
         property FloorLevel selectedLevel
         // used to update the view with their names. _q could only store the name string
