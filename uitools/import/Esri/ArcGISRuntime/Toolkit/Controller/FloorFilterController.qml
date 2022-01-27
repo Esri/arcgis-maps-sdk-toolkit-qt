@@ -33,6 +33,8 @@ QtObject {
         return null
     }
 
+    property int updateLevelsMode: FloorFilterController.UpdateLevelsMode.AllLevelsMatchingVerticalOrder
+
     property FloorManager floorManager
 
     //refresh()?
@@ -81,6 +83,12 @@ QtObject {
             internal.selectedLevel.visible = false
         internal.selectedLevel = level
         internal.selectedLevel.visible = true
+
+        if (updateLevelsMode
+                === FloorFilterController.UpdateLevelsMode.AllLevelsMatchingVerticalOrder) {
+            setVisibleLevelsMatchingVerticalOrder()
+        }
+
         onSelectedChanged()
     }
 
@@ -223,7 +231,22 @@ QtObject {
 
     function zoomToEnvelope(envelope) {}
 
+
+    /*!
+      Setting the levels visible if they match the current selected level vertical order.
+    */
+    function setVisibleLevelsMatchingVerticalOrder() {
+        for (var level in levels) {
+            level.verticalOrder = level.verticalOrder === selectedLevel.verticalOrder
+        }
+    }
+
     onFloorManagerChanged: console.log("manager changed")
+
+    enum UpdateLevelsMode {
+        SingleLevel,
+        AllLevelsMatchingVerticalOrder
+    }
 
     /*! internal */
     property QtObject internal: QtObject {

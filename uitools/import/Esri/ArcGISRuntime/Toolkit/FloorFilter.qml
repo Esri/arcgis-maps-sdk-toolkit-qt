@@ -29,9 +29,22 @@ import QtQml.Models 2.15
 */
 Control {
     id: floorFilter
+
     property var geoView
 
-    property FloorFilterController controller: FloorFilterController {}
+    property var controller: FloorFilterController {}
+
+    property int updateLevelsMode: {
+        // dont create a binding to the controller. just set intial value
+        updateLevelsMode = controller.updateLevelsMode
+    }
+
+    // create singlepointing binding towards controller
+    Binding {
+        target: controller
+        property: "updateLevelsMode"
+        value: floorFilter.updateLevelsMode
+    }
 
     Binding {
         target: controller
