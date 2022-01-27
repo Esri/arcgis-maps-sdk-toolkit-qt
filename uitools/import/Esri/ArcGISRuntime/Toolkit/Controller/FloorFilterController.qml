@@ -50,6 +50,7 @@ QtObject {
 
     property alias selectedSite: internal.selectedSite
     property alias selectedFacility: internal.selectedFacility
+    property alias selectedLevel: internal.selectedLevel
 
     // iterates over \a listElements to find an element with \a id.
     //\a variableIdName is used to access the correct method name in each list (siteId, facilityId, levelId)
@@ -169,6 +170,10 @@ QtObject {
                                   "name": facility.name,
                                   "modelId": facility.facilityId
                               })
+        }
+        // case single facility: autoselect it
+        if (listFacilities.length === 1) {
+            selectedFacilityId = listFacilities[0].facilityId
         }
     }
 
