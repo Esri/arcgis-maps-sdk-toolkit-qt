@@ -39,6 +39,8 @@ Control {
         updateLevelsMode = controller.updateLevelsMode
     }
 
+    property bool hideSiteFacilityButton: false
+
     // create singlepointing binding towards controller
     Binding {
         target: controller
@@ -92,7 +94,7 @@ Control {
 
             ToolSeparator {
                 Layout.fillWidth: true
-                visible: !collapser.checked
+                visible: !collapser.checked && !hideSiteFacilityButton
                 orientation: Qt.Horizontal
             }
             // not visible when floorFilter is shown and not visible if the children has no text to be shown.
@@ -109,6 +111,7 @@ Control {
                 id: buildingMenuButton
                 checkable: true
                 Layout.fillWidth: true
+                visible: !hideSiteFacilityButton
                 icon.source: "images/organization.svg"
             }
         }
@@ -133,7 +136,6 @@ Control {
                 }
             }
 
-            //visible: internal.currentVisibileListView !== FloorFilter.VisibleListView.NONE
             Button {
                 Layout.fillHeight: true
                 //Layout.fillWidth: true
