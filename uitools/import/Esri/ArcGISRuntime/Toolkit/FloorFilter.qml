@@ -41,6 +41,14 @@ Control {
 
     property bool hideSiteFacilityButton: false
 
+    property bool autoselectSingleFacilitySite: false
+
+    Binding {
+        target: controller
+        property: "autoselectSingleFacilitySite"
+        value: floorFilter.autoselectSingleFacilitySite
+    }
+
     // create singlepointing binding towards controller
     Binding {
         target: controller
@@ -59,7 +67,7 @@ Control {
         Layout.alignment: Qt.AlignBottom
 
         ColumnLayout {
-
+            spacing: 0
             ToolButton {
                 id: collapser
                 checkable: true
@@ -141,7 +149,7 @@ Control {
                 //Layout.fillWidth: true
                 Layout.rowSpan: 2
                 Layout.alignment: Qt.AlignHCenter
-                Layout.preferredWidth: controller.sites.count === 1 ? 0 : (internal.currentVisibileListView === FloorFilter.VisibleListView.Facility ? 32 : 0)
+                Layout.preferredWidth: autoselectSingleFacilitySite ? 0 : (internal.currentVisibileListView === FloorFilter.VisibleListView.Facility ? 32 : 0)
                 display: AbstractButton.IconOnly
                 flat: true
                 //removing all paddings and spacing from component so icon will fill compeltely the button
@@ -297,7 +305,7 @@ Control {
 
     QtObject {
         id: internal
-        property int currentVisibileListView: controller.sites.count === 1 ? FloorFilter.VisibleListView.Facility : FloorFilter.VisibleListView.Site
+        property int currentVisibileListView: FloorFilter.VisibleListView.Site
         //idx refers to repeter or listview idx, not the model idx.
         property int selectedFacilityIdx: -1
         property int selectedSiteIdx: -1
