@@ -33,6 +33,7 @@ T.ToolButton {
     icon.height: 24
     icon.color: control.down || control.checked
                 || control.highlighted ? Calcite.foreground4 : Calcite.text4
+    font.bold: control.down || control.checked || control.highlighted
     //icon.color: visualFocus ? control.palette.highlight : control.palette.buttonText
     contentItem: IconLabel {
         spacing: control.spacing
