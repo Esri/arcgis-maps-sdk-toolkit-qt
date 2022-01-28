@@ -23,7 +23,7 @@ import QtQuick.Layouts 1.12
 ApplicationWindow {
     id: appWindow
     width: 800
-    height: 600
+    height: 800
     title: "Calite_test"
     visible: true
 
@@ -223,6 +223,26 @@ ApplicationWindow {
                 Label {
                     text: "Loading..."
                     Layout.alignment: Qt.AlignHCenter
+                }
+                ToolBar {
+                    ColumnLayout {
+                        spacing: 0
+                        Layout.margins: 0
+                        ToolButton {
+                            icon.source: "qrc:/esri.com/imports/Calcite/images/caret-double-vertical.svg"
+                            checkable: true
+                            text: "icon toolbutton"
+                        }
+
+                        ToolSeparator {
+                            orientation: Qt.Horizontal
+                        }
+
+                        ToolButton {
+                            //Layout.fillWidth: true
+                            text: "toolbutton2"
+                        }
+                    }
                 }
             }
         }
