@@ -136,15 +136,6 @@ Control {
             rowSpacing: 0
 
             Button {
-                text: "show all facilities"
-                Layout.columnSpan: 3
-                onClicked: {
-                    controller.populateAllFacilities()
-                    internal.currentVisibileListView = FloorFilter.VisibleListView.Facility
-                }
-            }
-
-            Button {
                 Layout.fillHeight: true
                 //Layout.fillWidth: true
                 Layout.rowSpan: 2
@@ -173,6 +164,16 @@ Control {
                 sourceSize.width: 32
                 sourceSize.height: 32
                 source: "images/search.svg"
+            }
+
+            Button {
+                text: "show all facilities"
+                Layout.alignment: Qt.AlignCenter
+                Layout.columnSpan: 3
+                onClicked: {
+                    controller.populateAllFacilities()
+                    internal.currentVisibileListView = FloorFilter.VisibleListView.Facility
+                }
             }
 
             ListView {
