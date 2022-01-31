@@ -69,16 +69,16 @@ Control {
         ColumnLayout {
             spacing: 0
             ToolButton {
-                id: collapser
+                id: closer
                 checkable: true
                 checked: true
-                visible: !collapser.checked
+                visible: !closer.checked
                 Layout.fillWidth: true
                 icon.source: "images/x.svg"
             }
 
             ToolSeparator {
-                visible: !collapser.checked
+                visible: !closer.checked
                 Layout.fillWidth: true
                 orientation: Qt.Horizontal
             }
@@ -89,7 +89,7 @@ Control {
 
                 model: controller.levels
                 delegate: ToolButton {
-                    visible: !collapser.checked
+                    visible: !closer.checked
                     checked: controller.selectedLevelId === model.modelId
                     autoExclusive: true
                     Layout.fillWidth: true
@@ -102,16 +102,16 @@ Control {
 
             ToolSeparator {
                 Layout.fillWidth: true
-                visible: !collapser.checked && !hideSiteFacilityButton
+                visible: !closer.checked && !hideSiteFacilityButton
                 orientation: Qt.Horizontal
             }
             // not visible when floorFilter is shown and not visible if the children has no text to be shown.
             ToolButton {
-                visible: collapser.checked && text !== ""
+                visible: closer.checked && text !== ""
                 id: itemSelectedButton
                 text: controller.selectedLevel ? controller.selectedLevel.shortName : ""
                 onClicked: {
-                    collapser.checked = false
+                    closer.checked = false
                 }
             }
 
@@ -121,6 +121,21 @@ Control {
                 Layout.fillWidth: true
                 visible: !hideSiteFacilityButton
                 icon.source: "images/organization.svg"
+                text: collapser.checked ? "" : "Browse"
+            }
+
+            ToolButton {
+                text: collapser.checked ? "" : "Zoom to"
+                icon.source: "images/zoom-to-object.svg"
+            }
+
+            ToolButton {
+                id: collapser
+                Component.onCompleted: console.log(checked)
+                icon.source: "images/chevrons-left.svg"
+                checkable: true
+                checked: true
+                text: collapser.checked ? "" : "Collapse"
             }
         }
     }
@@ -248,7 +263,7 @@ Control {
                                 controller.selectedFacilityId = model.modelId
                                 internal.selectedFacilityIdx = index
                                 buildingMenuButton.checked = false
-                                collapser.checked = false
+                                closer.checked = false
                                 controller.zoomToFacility(model.modelId)
                             }
                         }

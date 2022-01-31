@@ -21,5 +21,8 @@
         <file>text_editing_mode.png</file>
         <file>x.svg</file>
         <file>zoom.png</file>
+        <file>chevrons-right.svg</file>
+        <file>zoom-to-object.svg</file>
+        <file>chevrons-left.svg</file>
     </qresource>
 </RCC>
