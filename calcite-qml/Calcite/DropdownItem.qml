@@ -14,14 +14,15 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import QtQuick 2.15
+import QtQuick 2.12
+import QtQuick.Controls 2.12
+import QtQuick.Controls.impl 2.12
 import QtQuick.Templates 2.15 as T
-import QtGraphicalEffects 1.15
+import QtGraphicalEffects 1.12
 
-T.RadioDelegate {
+T.ItemDelegate {
     id: control
 
-    Component.onCompleted: console.log(width)
     implicitWidth: Math.max(
                        background ? background.implicitWidth : 0,
                        contentItem.implicitWidth + leftPadding + rightPadding)
@@ -33,43 +34,62 @@ T.RadioDelegate {
     padding: 5
     spacing: 5
 
-    icon.width: 24
-    icon.height: 24
-    icon.source: "images/bullet-point.svg"
-    font.bold: control.checked || control.highlighted
+    icon.width: 16
+    icon.height: 16
 
-    contentItem: Text {
-        leftPadding: !control.mirrored ? control.indicator.width + control.spacing : 0
-        rightPadding: control.mirrored ? control.indicator.width + control.spacing : 0
-        text: control.text
-        font: control.font
-        color: control.enabled ? Calcite.text1 : Calcite.text3
-        elide: Text.ElideRight
-        visible: control.text
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-    }
+    property color color: control.enabled ? control.hovered
+                                            || control.down ? Calcite.offWhite : Calcite.text1 : Calcite.text3
+    icon.color: color
 
     indicator: Image {
         id: indicator
-        visible: control.checked || control.highlighted
         x: control.mirrored ? control.width - width - control.rightPadding : control.leftPadding
         y: control.topPadding + (control.availableHeight - height) / 2
-        source: icon.source
-        width: icon.width
-        height: icon.height
+
+        visible: control.highlighted
+        source: "images/check.svg"
         ColorOverlay {
             anchors.fill: indicator
             source: indicator
-            color: control.visualFocus ? Calcite.foreground4 : "transparent"
+            color: control.color
             visible: indicator.visible
         }
+    }
+    contentItem: IconLabel {
+        spacing: control.spacing
+        mirrored: control.mirrored
+        display: control.display
+        leftPadding: {
+            if (!control.mirrored && control.indicator) {
+                const width = control.indicator.width
+                if (width > 0) {
+                    return control.spacing + width
+                }
+            }
+            return 0
+        }
+        rightPadding: {
+            if (control.mirrored && control.indicator) {
+                const width = control.indicator.width
+                if (width > 0) {
+                    return control.spacing + width
+                }
+            }
+            return 0
+        }
+        alignment: control.display === IconLabel.IconOnly
+                   || control.display === IconLabel.TextUnderIcon ? Qt.AlignCenter : Qt.AlignLeft
+
+        icon: control.icon
+        text: control.text
+        font: control.font
+        color: control.color
     }
 
     background: Rectangle {
         implicitWidth: 200
         implicitHeight: 40
         color: control.visualFocus
-               || control.down ? Calcite.background2 : control.hovered ? Calcite.foreground2 : Calcite.foreground1
+               || control.down ? Calcite.brandPress : control.hovered ? Calcite.brand : "transparent"
     }
 }

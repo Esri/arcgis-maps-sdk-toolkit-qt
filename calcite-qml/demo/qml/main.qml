@@ -225,7 +225,8 @@ ApplicationWindow {
                     Layout.alignment: Qt.AlignHCenter
                 }
                 RadioDelegate {
-                    highlighted: true
+                    highlighted: false
+                    checkable: true
                     text: "radio delegate"
                 }
             }
