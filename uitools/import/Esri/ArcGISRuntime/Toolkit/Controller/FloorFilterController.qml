@@ -33,6 +33,10 @@ QtObject {
         return null
     }
 
+    property int updateLevelsMode: FloorFilterController.UpdateLevelsMode.AllLevelsMatchingVerticalOrder
+
+    property bool autoselectSingleFacilitySite
+
     property FloorManager floorManager
 
     //refresh()?
@@ -47,6 +51,10 @@ QtObject {
     property ListModel facilities: ListModel {}
 
     property ListModel sites: ListModel {}
+
+    property alias selectedSite: internal.selectedSite
+    property alias selectedFacility: internal.selectedFacility
+    property alias selectedLevel: internal.selectedLevel
 
     // iterates over \a listElements to find an element with \a id.
     //\a variableIdName is used to access the correct method name in each list (siteId, facilityId, levelId)
@@ -77,6 +85,12 @@ QtObject {
             internal.selectedLevel.visible = false
         internal.selectedLevel = level
         internal.selectedLevel.visible = true
+
+        if (updateLevelsMode
+                === FloorFilterController.UpdateLevelsMode.AllLevelsMatchingVerticalOrder) {
+            setVisibleLevelsMatchingVerticalOrder()
+        }
+
         onSelectedChanged()
     }
 
@@ -151,7 +165,7 @@ QtObject {
                          })
         }
         // case single site: autoselect it and set the boolean used by the view
-        if (listSites.length === 1) {
+        if (autoselectSingleFacilitySite && listSites.length === 1) {
             internal.singleSite = true
             let site = listSites[0]
             selectedSiteId = site.siteId
@@ -167,6 +181,10 @@ QtObject {
                                   "modelId": facility.facilityId
                               })
         }
+        // case single facility: autoselect it
+        if (autoselectSingleFacilitySite && listFacilities.length === 1) {
+            selectedFacilityId = listFacilities[0].facilityId
+        }
     }
 
     function populateAllFacilities() {
@@ -179,19 +197,70 @@ QtObject {
     // populate levels in reverse order. Levels numbers in ascending order from component's bottom section.
     function populateLevels(listLevels) {
         levels.clear()
+        let selectedLevel = ""
         for (var i = listLevels.length - 1; i >= 0; --i) {
             let level = listLevels[i]
             levels.append({
                               "shortName": level.shortName,
                               "modelId": level.levelId
                           })
+            if (level.verticalOrder === 0) {
+                selectedLevel = level.levelId
+                selectedLevelId = level.levelId
+            }
+        }
+        // no suitable vertical order found
+        if (!selectedLevel)
+            selectedLevelId = listLevels[0].levelId
+    }
+
+    function zoomToCurrentFacility() {
+        if (!selectedFacilityId) {
+            console.error("no facility yet selected")
+            return
+        }
+        zoomToFacility(selectedFacilityId)
+    }
+
+    function zoomToFacility(facilityId) {
+        let idx = findElementIdxById(selectedFacilityId,
+                                     floorManager.facilities, "facilityId")
+        let facility = floorManager.facilities[idx]
+        const extent = facility.geometry.extent
+        var builder = ArcGISRuntimeEnvironment.createObject('EnvelopeBuilder', {
+                                                                "geometry": extent
+                                                            })
+        builder.expandByFactor(internal.zoom_padding)
+        var newViewpoint = ArcGISRuntimeEnvironment.createObject(
+                    'ViewpointExtent', {
+                        "extent": builder.geometry
+                    })
+        geoView.setViewpoint(newViewpoint)
+        console.log("set viewqpoint")
+    }
+
+    function zoomToEnvelope(envelope) {}
+
+
+    /*!
+      Setting the levels visible if they match the current selected level vertical order.
+    */
+    function setVisibleLevelsMatchingVerticalOrder() {
+        for (var level in levels) {
+            level.verticalOrder = level.verticalOrder === selectedLevel.verticalOrder
         }
     }
 
     onFloorManagerChanged: console.log("manager changed")
 
+    enum UpdateLevelsMode {
+        SingleLevel,
+        AllLevelsMatchingVerticalOrder
+    }
+
     /*! internal */
     property QtObject internal: QtObject {
+        id: internal
         // used keep track of last level selected and toggle its visibility
         property FloorLevel selectedLevel
         // used to update the view with their names. _q could only store the name string
@@ -199,5 +268,6 @@ QtObject {
         property FloorSite selectedSite
         // used to set the default initial view. if singleSite : true->facility view and site already selected
         property bool singleSite: false //_q should be better that the view checks the sites.length at changes the default view based on it?
+        readonly property double zoom_padding: 1.5
     }
 }
