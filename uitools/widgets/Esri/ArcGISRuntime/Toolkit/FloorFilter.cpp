@@ -27,11 +27,20 @@
 #include <MapGraphicsView.h>
 #include <SceneGraphicsView.h>
 
+// Qt headers
+#include <QCompleter>
+
 namespace Esri {
 namespace ArcGISRuntime {
 namespace Toolkit {
 
   namespace {
+
+    /*!
+     \internal
+     \brief Given some modelId in a given model, returns that items index in the model.
+            O(n) search time.
+     */
     template <typename T>
     int indexForId(GenericListModel* model, QString id)
     {
@@ -45,6 +54,19 @@ namespace Toolkit {
       }
       return -1;
     }
+
+    /*!
+      \internal
+      \brief Changes the ComboBox behaviour to be filter-friendly.
+     */
+    void makeComboSearchable(QComboBox* box)
+    {
+      box->setInsertPolicy(QComboBox::NoInsert);
+      auto completer = box->completer();
+      completer->setCompletionMode(QCompleter::PopupCompletion);
+      completer->setCaseSensitivity(Qt::CaseInsensitive);
+      completer->setFilterMode(Qt::MatchContains);
+    }
   }
 
   FloorFilter::FloorFilter(QWidget* parent) :
@@ -53,9 +75,23 @@ namespace Toolkit {
     m_ui(new Ui::FloorFilter)
   {
     m_ui->setupUi(this);
+    m_ui->sitesBox->setVisible(false);
+
     m_ui->sitesCombo->setModel(m_controller->sites());
+    makeComboSearchable(m_ui->sitesCombo);
+
     m_ui->facilitiesCombo->setModel(m_controller->facilities());
+    makeComboSearchable(m_ui->facilitiesCombo);
+
     m_ui->levelsCombo->setModel(m_controller->levels());
+    makeComboSearchable(m_ui->levelsCombo);
+
+    // Changes the visibility of the sites list based on the number on whether there
+    // are any sites in the FloorManager or not.
+    connect(m_controller->sites(), &GenericListModel::countChanged, this, [this]()
+            {
+              m_ui->sitesBox->setVisible(m_controller->sites()->rowCount() > 0);
+            });
 
     // Sites setup
     connect(m_controller, &FloorFilterController::selectedSiteIdChanged, this, [this](QString /*oldId*/, QString newId)

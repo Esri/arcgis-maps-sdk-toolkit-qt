@@ -169,7 +169,7 @@ namespace Toolkit {
   {
     m_sites->setDisplayPropertyName("name");
     m_facilities->setDisplayPropertyName("name");
-    m_levels->setDisplayPropertyName("shortName");
+    m_levels->setDisplayPropertyName("longName");
 
     connect(this, &FloorFilterController::selectedFacilityIdChanged, this, &FloorFilterController::selectedChanged);
     connect(this, &FloorFilterController::selectedLevelIdChanged, this, &FloorFilterController::selectedChanged);
@@ -181,7 +181,9 @@ namespace Toolkit {
     connect(this, &FloorFilterController::selectedLevelIdChanged, this,
             [this](QString /*oldId*/, QString newId)
             {
-              auto newLevel = level(newId);
+              auto newLevelItem = level(newId);
+              auto newLevel = newLevelItem ? newLevelItem-> floorLevel() : nullptr;
+
               auto floorManager = getFloorManager(m_geoView);
               if (floorManager)
               {
@@ -301,72 +303,6 @@ namespace Toolkit {
     emit selectedSiteIdChanged(std::move(oldId), m_selectedSiteId);
   }
 
-  FloorFacility* FloorFilterController::facility(const QString& id) const
-  {
-    if (id.isEmpty())
-      return nullptr;
-
-    if (auto floorManager = getFloorManager(m_geoView))
-    {
-      auto facilities = floorManager->facilities();
-      auto it = std::find_if(std::cbegin(facilities),
-                             std::cend(facilities),
-                             [&id](FloorFacility* facility) -> bool
-                             {
-                               return facility && facility->facilityId() == id;
-                             });
-      if (it != std::cend(facilities))
-      {
-        return *it;
-      }
-    }
-    return nullptr;
-  }
-
-  FloorSite* FloorFilterController::site(const QString& id) const
-  {
-    if (id.isEmpty())
-      return nullptr;
-
-    if (auto floorManager = getFloorManager(m_geoView))
-    {
-      auto sites = floorManager->sites();
-      auto it = std::find_if(std::cbegin(sites),
-                             std::cend(sites),
-                             [&id](FloorSite* site) -> bool
-                             {
-                               return site && site->siteId() == id;
-                             });
-      if (it != std::cend(sites))
-      {
-        return *it;
-      }
-    }
-    return nullptr;
-  }
-
-  FloorLevel* FloorFilterController::level(const QString& id) const
-  {
-    if (id.isEmpty())
-      return nullptr;
-
-    if (auto floorManager = getFloorManager(m_geoView))
-    {
-      auto levels = floorManager->levels();
-      auto it = std::find_if(std::cbegin(levels),
-                             std::cend(levels),
-                             [&id](FloorLevel* level) -> bool
-                             {
-                               return level && level->levelId() == id;
-                             });
-      if (it != std::cend(levels))
-      {
-        return *it;
-      }
-    }
-    return nullptr;
-  }
-
   void FloorFilterController::populateLevelsForSelectedFacility()
   {
     m_levels->clear();
@@ -417,7 +353,7 @@ namespace Toolkit {
     QList<QObject*> facilityItems;
     for (const auto facility : allFacilites)
     {
-      if (facility->site()->siteId() == selectedSiteId())
+      if (selectedSiteId().isEmpty() || facility->site()->siteId() == selectedSiteId())
       {
         facilityItems << new FloorFilterFacilityItem(facility, m_facilities);
       }
@@ -473,11 +409,9 @@ namespace Toolkit {
   }
 
 
-  void FloorFilterController::zoomToFacility(QString facilityId)
+  void FloorFilterController::zoomToFacility(const QString& facilityId)
   {
-    const auto f = facility(facilityId);
-    if (f)
-      zoomToEnvelope(f->geometry().extent(), m_geoView);
+    zoomToFacility(facility(facilityId));
   }
 
   void FloorFilterController::zoomToSite(FloorFilterSiteItem* siteItem)
@@ -490,14 +424,12 @@ namespace Toolkit {
       zoomToEnvelope(s->geometry().extent(), m_geoView);
   }
 
-  void FloorFilterController::zoomToSite(QString siteId)
+  void FloorFilterController::zoomToSite(const QString& siteId)
   {
-    const auto s = site(siteId);
-    if (s)
-      zoomToEnvelope(s->geometry().extent(), m_geoView);
+    zoomToSite(site(siteId));
   }
 
-  FloorFilterFacilityItem* FloorFilterController::selectedFacility() const
+  FloorFilterFacilityItem* FloorFilterController::facility(const QString& facilityId) const
   {
     auto model = m_facilities;
     const auto rows = model->rowCount();
@@ -505,13 +437,13 @@ namespace Toolkit {
     {
       auto index = model->index(i);
       auto item = model->element<FloorFilterFacilityItem>(index);
-      if (item->modelId() == m_selectedFacilityId)
+      if (item->modelId() == facilityId)
         return item;
     }
     return nullptr;
   }
 
-  FloorFilterSiteItem* FloorFilterController::selectedSite() const
+  FloorFilterSiteItem* FloorFilterController::site(const QString& siteId) const
   {
     auto model = m_sites;
     const auto rows = model->rowCount();
@@ -519,13 +451,13 @@ namespace Toolkit {
     {
       auto index = model->index(i);
       auto item = model->element<FloorFilterSiteItem>(index);
-      if (item->modelId() == m_selectedSiteId)
+      if (item->modelId() == siteId)
         return item;
     }
     return nullptr;
   }
 
-  FloorFilterLevelItem* FloorFilterController::selectedLevel() const
+  FloorFilterLevelItem* FloorFilterController::level(const QString& levelId) const
   {
     auto model = m_levels;
     const auto rows = model->rowCount();
@@ -533,10 +465,25 @@ namespace Toolkit {
     {
       auto index = model->index(i);
       auto item = model->element<FloorFilterLevelItem>(index);
-      if (item->modelId() == m_selectedLevelId)
+      if (item->modelId() == levelId)
         return item;
     }
     return nullptr;
+  }
+
+  FloorFilterFacilityItem* FloorFilterController::selectedFacility() const
+  {
+    return facility(selectedFacilityId());
+  }
+
+  FloorFilterSiteItem* FloorFilterController::selectedSite() const
+  {
+    return site(selectedSiteId());
+  }
+
+  FloorFilterLevelItem* FloorFilterController::selectedLevel() const
+  {
+    return level(selectedLevelId());
   }
 
 } // Toolkit
