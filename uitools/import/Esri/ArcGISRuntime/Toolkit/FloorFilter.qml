@@ -93,7 +93,7 @@ Control {
                     checked: controller.selectedLevelId === model.modelId
                     autoExclusive: true
                     Layout.fillWidth: true
-                    text: model.shortName
+                    text: collapser.checked ? model.shortName : model.longName
                     onClicked: {
                         controller.selectedLevelId = model.modelId
                     }
@@ -124,12 +124,20 @@ Control {
                 text: collapser.checked ? "" : "Browse"
             }
 
+            ToolSeparator {
+                orientation: Qt.Horizontal
+            }
+
             ToolButton {
                 text: collapser.checked ? "" : "Zoom to"
                 icon.source: "images/zoom-to-object.svg"
                 onClicked: {
                     controller.zoomToCurrentFacility()
                 }
+            }
+
+            ToolSeparator {
+                orientation: Qt.Horizontal
             }
 
             ToolButton {
@@ -184,7 +192,7 @@ Control {
                 source: "images/search.svg"
             }
 
-            Button {
+            CheckBox {
                 text: "show all facilities"
                 Layout.alignment: Qt.AlignCenter
                 Layout.columnSpan: 3
@@ -224,8 +232,9 @@ Control {
                                 if (searchTextField.text === "") {
                                     item.inFiltered = true
                                 } else {
-                                    if (item.model.name.includes(
-                                                searchTextField.text))
+                                    if (item.model.name.toLowerCase().includes(
+                                                searchTextField.text.toLowerCase(
+                                                    )))
                                         item.inFiltered = true
                                     else
                                         item.inFiltered = false

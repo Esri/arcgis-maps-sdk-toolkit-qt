@@ -202,6 +202,7 @@ QtObject {
             let level = listLevels[i]
             levels.append({
                               "shortName": level.shortName,
+                              "longName": level.longName,
                               "modelId": level.levelId
                           })
             if (level.verticalOrder === 0) {
