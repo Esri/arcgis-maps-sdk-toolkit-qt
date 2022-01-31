@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2021 Esri
  *
@@ -27,6 +28,7 @@ ApplicationWindow {
     visible: true
 
     Component.onCompleted: {
+
         //Calcite.theme = Calcite.Dark;
     }
 
@@ -41,7 +43,7 @@ ApplicationWindow {
         Map {
             // add the OpenStreetMapLayer basemap to the map
             Basemap {
-                OpenStreetMapLayer { }
+                OpenStreetMapLayer {}
             }
         }
 
@@ -106,13 +108,10 @@ ApplicationWindow {
                         interactive: true
                     }
 
-                    Page {
+                    Page {}
+                    Page {// ...
                     }
-                    Page {
-                        // ...
-                    }
-                    Page {
-                        // ...
+                    Page {// ...
                     }
                 }
             }
@@ -120,10 +119,16 @@ ApplicationWindow {
 
         Menu {
             id: contextMenu
-            MenuItem { text: "Cut" }
-            MenuItem { text: "Copy" }
-            MenuSeparator { }
-            MenuItem { text: "Paste" }
+            MenuItem {
+                text: "Cut"
+            }
+            MenuItem {
+                text: "Copy"
+            }
+            MenuSeparator {}
+            MenuItem {
+                text: "Paste"
+            }
         }
 
         Frame {
@@ -162,13 +167,11 @@ ApplicationWindow {
                 RoundButton {
                     Layout.alignment: Qt.AlignHCenter
                     text: "Round button "
-
                 }
                 RoundButton {
                     Layout.alignment: Qt.AlignHCenter
                     text: "Round button flat"
                     flat: true
-
                 }
                 GroupBox {
                     title: "Group box"
@@ -198,7 +201,7 @@ ApplicationWindow {
                 }
                 ComboBox {
                     Layout.alignment: Qt.AlignHCenter
-                    model: [ "Banana", "Apple", "Coconut" ]
+                    model: ["Banana", "Apple", "Coconut"]
                 }
 
                 Switch {
@@ -221,8 +224,11 @@ ApplicationWindow {
                     text: "Loading..."
                     Layout.alignment: Qt.AlignHCenter
                 }
+                RadioDelegate {
+                    highlighted: true
+                    text: "radio delegate"
+                }
             }
         }
     }
 }
-
