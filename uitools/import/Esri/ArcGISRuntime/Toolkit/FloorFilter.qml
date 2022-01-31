@@ -127,6 +127,9 @@ Control {
             ToolButton {
                 text: collapser.checked ? "" : "Zoom to"
                 icon.source: "images/zoom-to-object.svg"
+                onClicked: {
+                    controller.zoomToCurrentFacility()
+                }
             }
 
             ToolButton {

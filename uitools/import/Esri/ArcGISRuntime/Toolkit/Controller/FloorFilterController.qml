@@ -214,6 +214,14 @@ QtObject {
             selectedLevelId = listLevels[0].levelId
     }
 
+    function zoomToCurrentFacility() {
+        if (!selectedFacilityId) {
+            console.error("no facility yet selected")
+            return
+        }
+        zoomToFacility(selectedFacilityId)
+    }
+
     function zoomToFacility(facilityId) {
         let idx = findElementIdxById(selectedFacilityId,
                                      floorManager.facilities, "facilityId")
