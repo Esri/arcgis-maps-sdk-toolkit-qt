@@ -56,6 +56,11 @@ namespace Toolkit {
     return m_floorLevel ? m_floorLevel->shortName() : QString{};
   }
 
+  QString FloorFilterLevelItem::longName() const
+  {
+    return m_floorLevel ? m_floorLevel->longName() : QString{};
+  }
+
   QString FloorFilterLevelItem::modelId() const
   {
     return m_floorLevel ? m_floorLevel->levelId() : QString{};

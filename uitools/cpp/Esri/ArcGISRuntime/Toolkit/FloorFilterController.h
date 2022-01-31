@@ -65,11 +65,17 @@ namespace Toolkit {
     GenericListModel* sites() const;
     GenericListModel* facilities() const;
 
-    Q_INVOKABLE void zoomToFacility(QString facilityId);
+    Q_INVOKABLE void zoomToFacility(const QString& facilityId);
     void zoomToFacility(FloorFilterFacilityItem* facilityItem);
 
-    Q_INVOKABLE void zoomToSite(QString siteId);
+    Q_INVOKABLE void zoomToSite(const QString& siteId);
     void zoomToSite(FloorFilterSiteItem* siteItem);
+
+    Q_INVOKABLE FloorFilterFacilityItem* facility(const QString& facilityId) const;
+
+    Q_INVOKABLE FloorFilterSiteItem* site(const QString& siteId) const;
+
+    Q_INVOKABLE FloorFilterLevelItem* level(const QString& levelId) const;
 
   signals:
     void geoViewChanged();
@@ -84,10 +90,6 @@ namespace Toolkit {
     void populateSites();
 
   private:
-    FloorFacility* facility(const QString& id) const;
-    FloorSite* site(const QString& id) const;
-    FloorLevel* level(const QString& id) const;
-
     FloorFilterFacilityItem* selectedFacility() const;
     FloorFilterSiteItem* selectedSite() const;
     FloorFilterLevelItem* selectedLevel() const;
