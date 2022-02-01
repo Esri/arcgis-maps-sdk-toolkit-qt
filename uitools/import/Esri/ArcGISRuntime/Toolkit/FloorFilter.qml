@@ -77,7 +77,10 @@ Control {
                 checked: true
                 visible: !closer.checked
                 Layout.fillWidth: true
+                Layout.alignment: Qt.AlignLeft
                 icon.source: "images/x.svg"
+                text: "Close"
+                display: collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
             }
 
             ToolSeparator {
@@ -122,9 +125,11 @@ Control {
                 id: buildingMenuButton
                 checkable: true
                 Layout.fillWidth: true
+                Layout.alignment: Qt.AlignLeft
                 visible: !hideSiteFacilityButton
                 icon.source: "images/organization.svg"
-                text: collapsedIcons ? "" : "Browse"
+                text: "Browse"
+                display: collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
             }
 
             ToolSeparator {
@@ -132,8 +137,11 @@ Control {
             }
 
             ToolButton {
-                text: collapsedIcons ? "" : "Zoom to"
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignLeft
                 icon.source: "images/zoom-to-object.svg"
+                text: "Zoom to"
+                display: collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
                 onClicked: {
                     controller.zoomToCurrentFacility()
                 }
@@ -145,24 +153,32 @@ Control {
 
             ToolButton {
                 id: collapser
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignLeft
                 icon.source: collapsedIcons ? "images/chevrons-right.svg" : "images/chevrons-left.svg"
-                text: collapsedIcons ? "" : "Collapse"
+                text: "Collapse"
+                display: collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
                 onClicked: collapsedIcons = !collapsedIcons
             }
         }
     }
 
     Pane {
+        padding: 0
         anchors.left: levelFilterMenu.right
         anchors.margins: 10
         visible: buildingMenuButton.checked
         GridLayout {
+            Component.onCompleted: {
+                console.log("completed")
+            }
             flow: GridLayout.TopToBottom
             Layout.alignment: Qt.AlignBottom
             rows: 5
+            columnSpacing: 0
             rowSpacing: 0
-
             Button {
+                Layout.margins: 0
                 Layout.fillHeight: true
                 //Layout.fillWidth: true
                 Layout.rowSpan: 2
@@ -181,22 +197,38 @@ Control {
                     width: 32
                     height: 32
                     source: "images/chevron-left.svg"
-                    color: "black"
                 }
                 onClicked: internal.currentVisibileListView = FloorFilter.VisibleListView.Site
             }
 
-            Image {
-                id: searchImg
-                sourceSize.width: 32
-                sourceSize.height: 32
-                source: "images/search.svg"
+            TextField {
+                id: searchTextField
+                Layout.fillWidth: true
+                Layout.columnSpan: 3
+                Layout.margins: 5
+                placeholderText: "Search"
+                leftPadding: searchImg.width + 5
+                Image {
+                    id: searchImg
+                    sourceSize.width: 32
+                    sourceSize.height: 32
+                    width: height
+                    anchors {
+                        left: parent.left
+                        top: parent.top
+                        bottom: parent.bottom
+                        margins: 4
+                    }
+
+                    source: "images/search.svg"
+                }
             }
 
             CheckBox {
                 text: "show all facilities"
                 Layout.alignment: Qt.AlignCenter
                 Layout.columnSpan: 3
+                Layout.margins: 5
                 onClicked: {
                     controller.populateAllFacilities()
                     internal.currentVisibileListView = FloorFilter.VisibleListView.Facility
@@ -204,16 +236,15 @@ Control {
             }
 
             ListView {
-                Component.onCompleted: console.log("cont", contentHeight)
                 id: listView
-
                 visible: true
-
+                Layout.preferredHeight: 200
                 Layout.columnSpan: 3
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.minimumHeight: contentHeight / count
                 Layout.maximumHeight: contentHeight / count * 3
+                Layout.topMargin: 5
 
                 ScrollBar.vertical: ScrollBar {}
                 clip: true
@@ -283,24 +314,19 @@ Control {
                     }
                 }
             }
-            Text {
+            Label {
+                id: siteLabel
                 font.bold: true
                 Layout.fillWidth: true
+                Layout.topMargin: 5
                 horizontalAlignment: Text.AlignHCenter
                 text: controller.selectedSite ? controller.selectedSite.name : "Select the Site"
             }
-            Text {
+            Label {
                 Layout.fillWidth: true
+                Layout.bottomMargin: 5
                 horizontalAlignment: Text.AlignHCenter
                 text: controller.selectedFacility ? controller.selectedFacility.name : "Select the Facility"
-            }
-
-            TextField {
-                id: searchTextField
-                Layout.fillWidth: true
-                Layout.columnSpan: 2
-                x: searchImg.width
-                placeholderText: "Search"
             }
 
             Button {
@@ -313,14 +339,14 @@ Control {
                 bottomPadding: 0
                 leftPadding: 0
                 rightPadding: 0
-                spacing: 0
+                //spacing: 0
                 Layout.alignment: Qt.AlignHCenter
                 Layout.preferredWidth: 32
                 icon {
                     width: 32
                     height: 32
                     source: "images/x.svg"
-                    color: "black"
+                    color: siteLabel.color
                 }
                 onClicked: buildingMenuButton.checked = false
             }
