@@ -46,7 +46,7 @@ T.RadioDelegate {
         color: control.enabled ? Calcite.text1 : Calcite.text3
         elide: Text.ElideRight
         visible: control.text
-        horizontalAlignment: Text.AlignHCenter
+        horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
     }
 
@@ -56,12 +56,14 @@ T.RadioDelegate {
         x: control.mirrored ? control.width - width - control.rightPadding : control.leftPadding
         y: control.topPadding + (control.availableHeight - height) / 2
         source: icon.source
+        sourceSize: Qt.size(icon.width, icon.height)
         width: icon.width
         height: icon.height
         ColorOverlay {
             anchors.fill: indicator
             source: indicator
-            color: control.visualFocus ? Calcite.foreground4 : "transparent"
+            color: control.checked
+                   || control.highlighted ? Calcite.brand : "transparent"
             visible: indicator.visible
         }
     }
