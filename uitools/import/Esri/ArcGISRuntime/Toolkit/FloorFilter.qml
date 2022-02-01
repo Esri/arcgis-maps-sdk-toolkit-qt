@@ -41,7 +41,10 @@ Control {
 
     property bool hideSiteFacilityButton: false
 
+    //debug property: should always be true, autoselecting singlefacilitiesistes in case they are single
     property bool autoselectSingleFacilitySite: false
+
+    property bool collapsedIcons: true
 
     Binding {
         target: controller
@@ -121,7 +124,7 @@ Control {
                 Layout.fillWidth: true
                 visible: !hideSiteFacilityButton
                 icon.source: "images/organization.svg"
-                text: collapser.checked ? "" : "Browse"
+                text: collapsedIcons ? "" : "Browse"
             }
 
             ToolSeparator {
@@ -129,7 +132,7 @@ Control {
             }
 
             ToolButton {
-                text: collapser.checked ? "" : "Zoom to"
+                text: collapsedIcons ? "" : "Zoom to"
                 icon.source: "images/zoom-to-object.svg"
                 onClicked: {
                     controller.zoomToCurrentFacility()
@@ -142,11 +145,9 @@ Control {
 
             ToolButton {
                 id: collapser
-                Component.onCompleted: console.log(checked)
-                icon.source: "images/chevrons-left.svg"
-                checkable: true
-                checked: true
-                text: collapser.checked ? "" : "Collapse"
+                icon.source: collapsedIcons ? "images/chevrons-right.svg" : "images/chevrons-left.svg"
+                text: collapsedIcons ? "" : "Collapse"
+                onClicked: collapsedIcons = !collapsedIcons
             }
         }
     }
@@ -255,7 +256,7 @@ Control {
                             includeByDefault: true
                         }
                     ]
-                    delegate: ItemDelegate {
+                    delegate: RadioDelegate {
                         Component.onCompleted: console.log("delegate", height)
                         width: listView.width
                         highlighted: internal.currentVisibileListView
