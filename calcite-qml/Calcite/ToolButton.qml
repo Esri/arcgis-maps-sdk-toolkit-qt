@@ -26,7 +26,6 @@ T.ToolButton {
                             implicitContentWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
                              implicitContentHeight + topPadding + bottomPadding)
-
     padding: 6
     spacing: 6
     icon.width: 24
@@ -34,7 +33,7 @@ T.ToolButton {
     icon.color: control.down || control.checked
                 || control.highlighted ? Calcite.foreground4 : Calcite.text4
     font.bold: control.down || control.checked || control.highlighted
-    //icon.color: visualFocus ? control.palette.highlight : control.palette.buttonText
+
     contentItem: IconLabel {
         spacing: control.spacing
         mirrored: control.mirrored
@@ -46,14 +45,13 @@ T.ToolButton {
 
         color: control.down || control.checked
                || control.highlighted ? Calcite.foreground4 : Calcite.text4
-        //color: control.visualFocus ? Calcite.text1 : Calcite.text3
+        alignment: control.display === AbstractButton.TextBesideIcon ? Qt.AlignLeft : Qt.AlignCenter
     }
 
     background: Rectangle {
         implicitHeight: 48
         implicitWidth: 48
 
-        //opacity: control.down ? 1.0 : 0.5
         color: control.down || control.checked
                || control.highlighted ? Calcite.background2 : (control.hovered ? Calcite.foreground5 : Calcite.background)
         border.color: control.down || control.checked
