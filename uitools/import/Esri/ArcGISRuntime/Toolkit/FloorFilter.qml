@@ -222,6 +222,30 @@ Control {
 
                     source: "images/search.svg"
                 }
+
+                Button {
+                    flat: true
+                    display: AbstractButton.IconOnly
+                    width: 32
+                    height: 32
+                    topPadding: 0
+                    bottomPadding: 0
+                    leftPadding: 0
+                    rightPadding: 0
+                    anchors {
+                        right: parent.right
+                        top: parent.top
+                        bottom: parent.bottom
+                        margins: 1
+                    }
+                    icon {
+                        // half size the parent (small 'x')
+                        width: parent.width / 2
+                        height: parent.height / 2
+                        source: "images/x.svg"
+                    }
+                    onClicked: searchTextField.text = ""
+                }
             }
 
             CheckBox {
