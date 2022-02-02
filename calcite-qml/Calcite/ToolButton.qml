@@ -32,7 +32,6 @@ T.ToolButton {
     icon.height: 24
     icon.color: control.down || control.checked
                 || control.highlighted ? Calcite.foreground4 : Calcite.text4
-    font.bold: control.down || control.checked || control.highlighted
 
     contentItem: IconLabel {
         spacing: control.spacing
@@ -54,7 +53,5 @@ T.ToolButton {
 
         color: control.down || control.checked
                || control.highlighted ? Calcite.background2 : (control.hovered ? Calcite.foreground5 : Calcite.background)
-        border.color: control.down || control.checked
-                      || control.highlighted ? control.icon.color : "transparent"
     }
 }
