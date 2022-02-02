@@ -75,9 +75,9 @@ namespace Toolkit {
     m_ui(new Ui::FloorFilter)
   {
     m_ui->setupUi(this);
-    m_ui->sitesBox->setVisible(false);
 
     m_ui->sitesCombo->setModel(m_controller->sites());
+    m_ui->sitesBox->setChecked(m_controller->isSelectedSiteRespected());
     makeComboSearchable(m_ui->sitesCombo);
 
     m_ui->facilitiesCombo->setModel(m_controller->facilities());
@@ -86,11 +86,17 @@ namespace Toolkit {
     m_ui->levelsCombo->setModel(m_controller->levels());
     makeComboSearchable(m_ui->levelsCombo);
 
+    // Changes the contents of the facilities list.
+    connect(m_ui->sitesBox, &QGroupBox::clicked, this, [this](bool checked)
+            {
+              m_controller->setIsSelectedSiteRespected(checked);
+            });
+
     // Changes the visibility of the sites list based on the number on whether there
     // are any sites in the FloorManager or not.
     connect(m_controller->sites(), &GenericListModel::countChanged, this, [this]()
             {
-              m_ui->sitesBox->setVisible(m_controller->sites()->rowCount() > 0);
+              m_ui->sitesBox->setEnabled(m_controller->sites()->rowCount() > 0);
             });
 
     // Sites setup
@@ -99,7 +105,7 @@ namespace Toolkit {
               const auto i = indexForId<FloorFilterSiteItem>(m_controller->sites(), newId);
               m_ui->sitesCombo->setCurrentIndex(i);
             });
-    connect(m_ui->sitesCombo, qOverload<int>(&QComboBox::activated), this, [this](int i)
+    connect(m_ui->sitesCombo, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int i)
             {
               if (i == -1)
               {
@@ -121,7 +127,7 @@ namespace Toolkit {
               const auto i = indexForId<FloorFilterFacilityItem>(m_controller->facilities(), newId);
               m_ui->facilitiesCombo->setCurrentIndex(i);
             });
-    connect(m_ui->facilitiesCombo, qOverload<int>(&QComboBox::activated), this, [this](int i)
+    connect(m_ui->facilitiesCombo, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int i)
             {
               if (i == -1)
               {
@@ -143,7 +149,7 @@ namespace Toolkit {
               const auto i = indexForId<FloorFilterLevelItem>(m_controller->levels(), newId);
               m_ui->levelsCombo->setCurrentIndex(i);
             });
-    connect(m_ui->levelsCombo, qOverload<int>(&QComboBox::activated), this, [this](int i)
+    connect(m_ui->levelsCombo, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int i)
             {
               if (i == -1)
               {

@@ -176,13 +176,16 @@ namespace Toolkit {
     connect(this, &FloorFilterController::selectedSiteIdChanged, this, &FloorFilterController::selectedChanged);
 
     connect(this, &FloorFilterController::selectedFacilityIdChanged, this, &FloorFilterController::populateLevelsForSelectedFacility);
+
     connect(this, &FloorFilterController::selectedSiteIdChanged, this, &FloorFilterController::populateFacilitiesForSelectedSite);
+    connect(this, &FloorFilterController::isSelectedSiteRespectedChanged, this, &FloorFilterController::populateFacilitiesForSelectedSite);
 
     connect(this, &FloorFilterController::selectedLevelIdChanged, this,
             [this](QString /*oldId*/, QString newId)
             {
               auto newLevelItem = level(newId);
               auto newLevel = newLevelItem ? newLevelItem-> floorLevel() : nullptr;
+              qDebug() << "NEW_LEVEL:" << (newLevel ? newLevel->longName() : "NONE");
 
               auto floorManager = getFloorManager(m_geoView);
               if (floorManager)
@@ -353,7 +356,8 @@ namespace Toolkit {
     QList<QObject*> facilityItems;
     for (const auto facility : allFacilites)
     {
-      if (selectedSiteId().isEmpty() || facility->site()->siteId() == selectedSiteId())
+      // If we have no sites take everything, otherwise filter by the selected site.
+      if (!m_selectedSiteResepected || manager->sites().isEmpty() || facility->site()->siteId() == selectedSiteId())
       {
         facilityItems << new FloorFilterFacilityItem(facility, m_facilities);
       }
@@ -484,6 +488,20 @@ namespace Toolkit {
   FloorFilterLevelItem* FloorFilterController::selectedLevel() const
   {
     return level(selectedLevelId());
+  }
+
+  bool FloorFilterController::isSelectedSiteRespected() const
+  {
+    return m_selectedSiteResepected;
+  }
+
+  void FloorFilterController::setIsSelectedSiteRespected(bool isSelectedSiteRespected)
+  {
+    if (isSelectedSiteRespected == m_selectedSiteResepected)
+      return;
+
+    m_selectedSiteResepected = isSelectedSiteRespected;
+    emit isSelectedSiteRespectedChanged();
   }
 
 } // Toolkit
