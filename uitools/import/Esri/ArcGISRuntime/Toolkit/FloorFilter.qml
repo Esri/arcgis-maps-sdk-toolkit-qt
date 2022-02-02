@@ -235,6 +235,17 @@ Control {
                 }
             }
 
+            Label {
+                id: noResultsFoundLabel
+                text: "No results found"
+                visible: false
+                Layout.columnSpan: 3
+                Layout.fillWidth: true
+                Layout.topMargin: 5
+                horizontalAlignment: Qt.AlignHCenter
+                verticalAlignment: Qt.AlignVCenter
+            }
+
             ListView {
                 id: listView
                 visible: true
@@ -249,8 +260,6 @@ Control {
                 ScrollBar.vertical: ScrollBar {}
                 clip: true
 
-                //                implicitHeight: contentHeight
-                //                implicitWidth: contentWidth
                 model: DelegateModel {
                     id: dm
                     property Connections conn: Connections {
@@ -272,6 +281,8 @@ Control {
                                         item.inFiltered = false
                                 }
                             }
+                            listView.visible = filteredGroup.count > 0
+                            noResultsFoundLabel.visible = !listView.visible
                         }
                     }
 
