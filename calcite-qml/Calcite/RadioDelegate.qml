@@ -52,7 +52,7 @@ T.RadioDelegate {
 
     indicator: Image {
         id: indicator
-        visible: control.checked || control.highlighted
+        visible: control.checked || control.highlighted || control.hovered
         x: control.mirrored ? control.width - width - control.rightPadding : control.leftPadding
         y: control.topPadding + (control.availableHeight - height) / 2
         source: icon.source
@@ -63,7 +63,7 @@ T.RadioDelegate {
             anchors.fill: indicator
             source: indicator
             color: control.checked
-                   || control.highlighted ? Calcite.brand : "transparent"
+                   || control.highlighted ? Calcite.brand : control.hovered ? Calcite.border1 : "transparent"
             visible: indicator.visible
         }
     }
