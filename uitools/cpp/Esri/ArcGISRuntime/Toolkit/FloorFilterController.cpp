@@ -185,8 +185,6 @@ namespace Toolkit {
             {
               auto newLevelItem = level(newId);
               auto newLevel = newLevelItem ? newLevelItem->floorLevel() : nullptr;
-              qDebug() << "NEW_LEVEL:" << (newLevel ? newLevel->longName() : "NONE");
-
               auto floorManager = getFloorManager(m_geoView);
               if (floorManager)
               {
