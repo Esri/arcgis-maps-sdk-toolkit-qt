@@ -272,12 +272,26 @@ Control {
                                         item.inFiltered = false
                                 }
                             }
+
+                            // toggling the inFilter group on the default item noResultFound, to toggle its visibility
+                            if (filteredGroup.count === 0) {
+                                console.log("setting noresult")
+                                noResultsFound.get(0).inFiltered = true
+                            } else
+                                noResultsFound.get(0).inFiltered = false
                         }
                     }
 
                     model: internal.currentVisibileListView
                            === FloorFilter.VisibleListView.Site ? controller.sites : controller.facilities
-                    Component.onCompleted: console.log("count:", count)
+                    Component.onCompleted: {
+                        // creating the default text item. only shown when no filtered items are found
+                        noResultsFound.insert(0, {
+                                                  "name": "No results found"
+                                              })
+                        var item = noResultsFound.get(0)
+                    }
+
                     onCountChanged: console.log("count:", count)
                     filterOnGroup: "filtered"
                     groups: [
@@ -285,10 +299,18 @@ Control {
                             id: filteredGroup
                             name: "filtered"
                             includeByDefault: true
+                        },
+                        DelegateModelGroup {
+                            id: noResultsFound
+                            name: "noResultsFound"
+                            includeByDefault: false
                         }
                     ]
                     delegate: RadioDelegate {
-                        Component.onCompleted: console.log("delegate", height)
+                        Component.onCompleted: {
+                            if (DelegateModel.inNoResultsFound)
+                                this.enabled = false
+                        }
                         width: listView.width
                         highlighted: internal.currentVisibileListView
                                      === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx

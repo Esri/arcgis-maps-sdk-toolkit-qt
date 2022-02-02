@@ -48,9 +48,19 @@ QtObject {
 
     property ListModel levels: ListModel {}
 
-    property ListModel facilities: ListModel {}
+    property ListModel facilities: ListModel {
+        ListElement {
+            name: ""
+            modelId: ""
+        }
+    }
 
-    property ListModel sites: ListModel {}
+    property ListModel sites: ListModel {
+        ListElement {
+            name: ""
+            modelId: ""
+        }
+    }
 
     property alias selectedSite: internal.selectedSite
     property alias selectedFacility: internal.selectedFacility
