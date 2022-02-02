@@ -176,14 +176,15 @@ namespace Toolkit {
     connect(this, &FloorFilterController::selectedSiteIdChanged, this, &FloorFilterController::selectedChanged);
 
     connect(this, &FloorFilterController::selectedFacilityIdChanged, this, &FloorFilterController::populateLevelsForSelectedFacility);
+
     connect(this, &FloorFilterController::selectedSiteIdChanged, this, &FloorFilterController::populateFacilitiesForSelectedSite);
+    connect(this, &FloorFilterController::isSelectedSiteRespectedChanged, this, &FloorFilterController::populateFacilitiesForSelectedSite);
 
     connect(this, &FloorFilterController::selectedLevelIdChanged, this,
             [this](QString /*oldId*/, QString newId)
             {
               auto newLevelItem = level(newId);
-              auto newLevel = newLevelItem ? newLevelItem-> floorLevel() : nullptr;
-
+              auto newLevel = newLevelItem ? newLevelItem->floorLevel() : nullptr;
               auto floorManager = getFloorManager(m_geoView);
               if (floorManager)
               {
@@ -310,13 +311,25 @@ namespace Toolkit {
     if (!manager)
       return;
 
-    const auto allLevels = manager->levels();
+    auto allLevels = manager->levels();
 
-    QString defaultLevel{};
-    QList<QObject*> levelItems;
-    for (const auto level : allLevels)
+    if (allLevels.isEmpty())
     {
-      if (level->facility()->facilityId() == selectedFacilityId())
+      setSelectedLevelId({});
+      return;
+    }
+
+    // Sort levels by vertical order.
+    std::sort(std::begin(allLevels), std::end(allLevels), [](FloorLevel* a, FloorLevel* b)
+              {
+                return a && b ? a->verticalOrder() < b->verticalOrder() : static_cast<bool>(a);
+              });
+
+    QString defaultLevel= allLevels.first()->levelId();
+    QList<QObject*> levelItems;
+    for (const auto level : qAsConst(allLevels))
+    {
+      if (level && level->facility()->facilityId() == selectedFacilityId())
       {
         levelItems << new FloorFilterLevelItem(level, m_levels);
         if (level->verticalOrder() == 0)
@@ -327,17 +340,9 @@ namespace Toolkit {
       }
     }
 
-    // Otherwise, if there is no appropriate vertical order, we use the bottom
-    // level as the default level.
-    if (defaultLevel.isEmpty() && levelItems.size() > 0)
-    {
-      defaultLevel = static_cast<FloorFilterLevelItem*>(levelItems.last())->modelId();
-    }
-
-    // Reverse order in controller for ascending order. Such that bottom floor level is 
+    // Reverse order in controller for ascending order. Such that bottom floor level is
     // at bottom of the list.
     m_levels->append(QList<QObject*>(std::crbegin(levelItems), std::crend(levelItems)));
-
     setSelectedLevelId(defaultLevel);
   }
 
@@ -353,7 +358,8 @@ namespace Toolkit {
     QList<QObject*> facilityItems;
     for (const auto facility : allFacilites)
     {
-      if (selectedSiteId().isEmpty() || facility->site()->siteId() == selectedSiteId())
+      // If we have no sites take everything, otherwise filter by the selected site.
+      if (!m_selectedSiteResepected || manager->sites().isEmpty() || facility->site()->siteId() == selectedSiteId())
       {
         facilityItems << new FloorFilterFacilityItem(facility, m_facilities);
       }
@@ -407,7 +413,6 @@ namespace Toolkit {
     if (f)
       zoomToEnvelope(f->geometry().extent(), m_geoView);
   }
-
 
   void FloorFilterController::zoomToFacility(const QString& facilityId)
   {
@@ -484,6 +489,20 @@ namespace Toolkit {
   FloorFilterLevelItem* FloorFilterController::selectedLevel() const
   {
     return level(selectedLevelId());
+  }
+
+  bool FloorFilterController::isSelectedSiteRespected() const
+  {
+    return m_selectedSiteResepected;
+  }
+
+  void FloorFilterController::setIsSelectedSiteRespected(bool isSelectedSiteRespected)
+  {
+    if (isSelectedSiteRespected == m_selectedSiteResepected)
+      return;
+
+    m_selectedSiteResepected = isSelectedSiteRespected;
+    emit isSelectedSiteRespectedChanged();
   }
 
 } // Toolkit

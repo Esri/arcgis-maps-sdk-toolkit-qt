@@ -36,6 +36,7 @@ namespace Toolkit {
   {
     Q_OBJECT
     Q_PROPERTY(QObject* geoView READ geoView WRITE setGeoView NOTIFY geoViewChanged)
+    Q_PROPERTY(bool selectedSiteResepected READ isSelectedSiteRespected WRITE setIsSelectedSiteRespected NOTIFY isSelectedSiteRespectedChanged)
     Q_PROPERTY(FloorFilterFacilityItem* selectedFacility READ selectedFacility NOTIFY selectedFacilityIdChanged)
     Q_PROPERTY(QString selectedFacilityId READ selectedFacilityId WRITE setSelectedFacilityId NOTIFY selectedFacilityIdChanged)
     Q_PROPERTY(FloorFilterLevelItem* selectedLevel READ selectedLevel NOTIFY selectedLevelIdChanged)
@@ -48,6 +49,9 @@ namespace Toolkit {
   public:
     Q_INVOKABLE explicit FloorFilterController(QObject* parent = nullptr);
     ~FloorFilterController() override;
+
+    bool isSelectedSiteRespected() const;
+    void setIsSelectedSiteRespected(bool isSelectedSiteRespected);
 
     QObject* geoView() const;
     void setGeoView(QObject* geoView);
@@ -83,6 +87,7 @@ namespace Toolkit {
     void selectedFacilityIdChanged(QString oldId, QString newId);
     void selectedLevelIdChanged(QString oldId, QString newId);
     void selectedChanged();
+    void isSelectedSiteRespectedChanged();
 
   private slots:
     void populateLevelsForSelectedFacility();
@@ -102,6 +107,7 @@ namespace Toolkit {
     QString m_selectedFacilityId;
     QString m_selectedLevelId;
     QString m_selectedSiteId;
+    bool m_selectedSiteResepected{true};
   };
 
 } // Toolkit
