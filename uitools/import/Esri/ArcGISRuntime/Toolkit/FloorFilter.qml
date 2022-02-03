@@ -120,7 +120,8 @@ Control {
                             autoExclusive: true
                             anchors.left: parent.left
                             anchors.right: parent.right
-                            text: collapser.checked ? model.shortName : model.longName
+                            text: closer.checked
+                                  || collapsedIcons ? model.shortName : model.longName
                             onClicked: {
                                 controller.selectedLevelId = model.modelId
                             }
