@@ -46,6 +46,7 @@ Control {
 
     property bool collapsedIcons: true
 
+    property int maxNumberLevels: 2
     Binding {
         target: controller
         property: "autoselectSingleFacilitySite"
@@ -89,19 +90,41 @@ Control {
                 orientation: Qt.Horizontal
             }
 
-            Repeater {
-                id: repeater
-                property int downItem
+            Flickable {
+                visible: !closer.checked
 
-                model: controller.levels
-                delegate: ToolButton {
-                    visible: !closer.checked
-                    checked: controller.selectedLevelId === model.modelId
-                    autoExclusive: true
-                    Layout.fillWidth: true
-                    text: collapser.checked ? model.shortName : model.longName
-                    onClicked: {
-                        controller.selectedLevelId = model.modelId
+                // dont need to use the id of the column
+                contentHeight: contentItem.childrenRect.height
+                Layout.fillWidth: true
+                height: repeater.buttonHeight * maxNumberLevels
+                clip: true
+                ScrollBar.vertical: ScrollBar {}
+
+                Column {
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    Component.onCompleted: console.log("width col", width)
+                    Repeater {
+                        id: repeater
+
+                        property int downItem
+                        // defaulting to 0, so in case of model.count === 0, the buttonHeight value is not undefined
+                        property int buttonHeight: 0
+
+                        model: controller.levels
+                        delegate: ToolButton {
+                            Component.onCompleted: repeater.buttonHeight = this.height
+                            id: levelButton
+                            visible: !closer.checked
+                            checked: controller.selectedLevelId === model.modelId
+                            autoExclusive: true
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            text: collapser.checked ? model.shortName : model.longName
+                            onClicked: {
+                                controller.selectedLevelId = model.modelId
+                            }
+                        }
                     }
                 }
             }
