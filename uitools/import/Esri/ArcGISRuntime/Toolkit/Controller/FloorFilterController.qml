@@ -198,18 +198,28 @@ QtObject {
     function populateLevels(listLevels) {
         levels.clear()
         let selectedLevel = ""
+        let levelsExtracted = []
         for (var i = listLevels.length - 1; i >= 0; --i) {
             let level = listLevels[i]
-            levels.append({
-                              "shortName": level.shortName,
-                              "longName": level.longName,
-                              "modelId": level.levelId
-                          })
+            levelsExtracted.push(level)
+
             if (level.verticalOrder === 0) {
                 selectedLevel = level.levelId
                 selectedLevelId = level.levelId
             }
         }
+        // sorting higher levels first
+        levelsExtracted.sort(function (first, second) {
+            return second.verticalOrder - first.verticalOrder
+        })
+
+        levelsExtracted.forEach(levelExtracted => {
+                                    levels.append({
+                                                      "shortName": levelExtracted.shortName,
+                                                      "longName": levelExtracted.longName,
+                                                      "modelId": levelExtracted.levelId
+                                                  })
+                                })
         // no suitable vertical order found
         if (!selectedLevel)
             selectedLevelId = listLevels[0].levelId
