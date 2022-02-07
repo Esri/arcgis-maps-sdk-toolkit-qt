@@ -157,6 +157,7 @@ Control {
             }
 
             ToolSeparator {
+                Layout.fillWidth: true
                 orientation: Qt.Horizontal
             }
 
@@ -172,6 +173,7 @@ Control {
             }
 
             ToolSeparator {
+                Layout.fillWidth: true
                 orientation: Qt.Horizontal
             }
 
@@ -229,6 +231,7 @@ Control {
                 id: searchTextField
                 Layout.fillWidth: true
                 Layout.columnSpan: 3
+                //                Layout.rowSpan: noResultsFoundLabel.visible ? 1 : 2
                 Layout.margins: 5
                 placeholderText: "Search"
                 leftPadding: searchImg.width + 5
@@ -272,22 +275,12 @@ Control {
                 }
             }
 
-            CheckBox {
-                text: "show all facilities"
-                Layout.alignment: Qt.AlignCenter
-                Layout.columnSpan: 3
-                Layout.margins: 5
-                onClicked: {
-                    controller.populateAllFacilities()
-                    internal.currentVisibileListView = FloorFilter.VisibleListView.Facility
-                }
-            }
-
             Label {
                 id: noResultsFoundLabel
                 text: "No results found"
                 visible: false
                 Layout.columnSpan: 3
+                Layout.rowSpan: showAllFacilities.visible ? 1 : 2
                 Layout.fillWidth: true
                 Layout.topMargin: 5
                 horizontalAlignment: Qt.AlignHCenter
@@ -304,7 +297,7 @@ Control {
                 Layout.minimumHeight: contentHeight / count
                 Layout.maximumHeight: contentHeight / count * 3
                 Layout.topMargin: 5
-
+                Layout.rowSpan: showAllFacilities.visible ? 1 : 2
                 ScrollBar.vertical: ScrollBar {}
                 clip: true
 
@@ -373,15 +366,31 @@ Control {
                     }
                 }
             }
+
+            Button {
+                id: showAllFacilities
+                flat: true
+                text: "show all facilities"
+                Layout.alignment: Qt.AlignCenter
+                Layout.columnSpan: 3
+                Layout.margins: 5
+                visible: internal.currentVisibileListView === FloorFilter.VisibleListView.Site
+                onClicked: {
+                    controller.populateAllFacilities()
+                    internal.currentVisibileListView = FloorFilter.VisibleListView.Facility
+                }
+            }
+
             Label {
                 id: siteLabel
-                font.bold: true
+                font.bold: internal.currentVisibileListView === FloorFilter.VisibleListView.Site
                 Layout.fillWidth: true
                 Layout.topMargin: 5
                 horizontalAlignment: Text.AlignHCenter
                 text: controller.selectedSite ? controller.selectedSite.name : "Select the Site"
             }
             Label {
+                font.bold: internal.currentVisibileListView === FloorFilter.VisibleListView.Facility
                 Layout.fillWidth: true
                 Layout.bottomMargin: 5
                 horizontalAlignment: Text.AlignHCenter
