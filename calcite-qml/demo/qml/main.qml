@@ -224,25 +224,30 @@ ApplicationWindow {
                     text: "Loading..."
                     Layout.alignment: Qt.AlignHCenter
                 }
-                ToolBar {
-                    ColumnLayout {
-                        spacing: 0
-                        Layout.margins: 0
-                        ToolButton {
-                            icon.source: "qrc:/esri.com/imports/Calcite/images/caret-double-vertical.svg"
-                            checkable: true
-                            text: "icon toolbutton"
-                        }
+            }
+        }
+        ToolBar {
+            anchors {
+                right: parent.right
+                bottom: parent.attributionTop
+                margins: 5
+            }
+            ColumnLayout {
 
-                        ToolSeparator {
-                            orientation: Qt.Horizontal
-                        }
+                ToolButton {
+                    icon.source: "qrc:/esri.com/imports/Calcite/images/check.svg"
+                    checkable: true
+                    text: "Checkable ToolButton"
+                }
 
-                        ToolButton {
-                            //Layout.fillWidth: true
-                            text: "toolbutton2"
-                        }
-                    }
+                ToolSeparator {
+                    Layout.fillWidth: true
+                    orientation: Qt.Horizontal
+                }
+
+                ToolButton {
+                    Layout.fillWidth: true
+                    text: "Regular ToolButton"
                 }
             }
         }

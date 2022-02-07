@@ -26,9 +26,11 @@ T.ToolBar {
                             contentWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
                              contentHeight + topPadding + bottomPadding)
+
     spacing: 16
+
     background: Rectangle {
         implicitHeight: 48
-        color: "transparent"
+        color: Calcite.background
     }
 }

@@ -22,8 +22,6 @@ import QtQuick.Controls.impl 2.15
 T.ToolSeparator {
     id: control
 
-    padding: 0
-
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
                             implicitContentWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
