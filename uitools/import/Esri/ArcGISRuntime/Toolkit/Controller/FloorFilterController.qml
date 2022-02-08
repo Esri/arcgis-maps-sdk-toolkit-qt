@@ -45,7 +45,25 @@ QtObject {
 
     property string selectedFacilityId
 
+    function setSelectedFacilityId(facilityId) {
+        let idx = findElementIdxById(facilityId, floorManager.facilities,
+                                     "facilityId")
+        // check that the current site is the selected facility selected. Otherwise the click came from a populateAllFacilities
+        var facility = floorManager.facilities[idx]
+        if (!internal.selectedSite
+                || facility.site.siteId !== internal.selectedSite.siteId) {
+            // selection of facility came after click of populateAllFacilities.
+            // this also sets the internal.selectedSite
+            selectedSiteId = facility.site.siteId
+        }
+        selectedFacilityId = facilityId
+    }
+
     property string selectedSiteId
+
+    function setSelectedSiteId(siteId) {
+        selectedSiteId = siteId
+    }
 
     property ListModel levels: ListModel {}
 
@@ -100,18 +118,11 @@ QtObject {
         let idx = findElementIdxById(selectedFacilityId,
                                      floorManager.facilities, "facilityId")
         if (idx === undefined) {
-            console.error("facility id not found")
+            console.error("facility id not found, resetting current facility")
+            internal.selectedFacility = null
             return
         }
         internal.selectedFacility = floorManager.facilities[idx]
-        // check that the current site is the selected facility selected. Otherwise the click came from a populateAllFacilities
-        var facility = floorManager.facilities[idx]
-        if (!internal.selectedSite
-                || facility.site.siteId !== internal.selectedSite.siteId) {
-            // selection of facility came after click of populateAllFacilities.
-            // this also sets the internal.selectedSite
-            selectedSiteId = facility.site.siteId
-        }
 
         populateLevels(floorManager.facilities[idx].levels)
         onSelectedChanged()
@@ -128,6 +139,7 @@ QtObject {
         internal.selectedSite = floorManager.sites[idx]
         populateFacilities(floorManager.sites[idx].facilities)
         onSelectedChanged()
+        selectedFacilityId = ""
     }
 
     function onSelectedChanged() {}
