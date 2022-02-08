@@ -200,7 +200,7 @@ Control {
             }
             flow: GridLayout.TopToBottom
             Layout.alignment: Qt.AlignBottom
-            rows: 5
+            rows: 6
             columnSpacing: 0
             rowSpacing: 0
             Button {
@@ -366,18 +366,28 @@ Control {
                     }
                 }
             }
+            ToolSeparator {
+                Layout.fillWidth: true
+                Layout.columnSpan: 3
+                orientation: Qt.Horizontal
+            }
 
-            Button {
+            Label {
                 id: showAllFacilities
-                flat: true
-                text: "show all facilities"
+                text: '<a href=" "style="text-decoration: none">All sites</a>'
+                textFormat: Text.RichText
                 Layout.alignment: Qt.AlignCenter
                 Layout.columnSpan: 3
                 Layout.margins: 5
                 visible: internal.currentVisibileListView === FloorFilter.VisibleListView.Site
-                onClicked: {
-                    controller.populateAllFacilities()
-                    internal.currentVisibileListView = FloorFilter.VisibleListView.Facility
+
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: {
+                        controller.populateAllFacilities()
+                        internal.currentVisibileListView = FloorFilter.VisibleListView.Facility
+                    }
                 }
             }
 
@@ -385,13 +395,18 @@ Control {
                 id: siteLabel
                 font.bold: internal.currentVisibileListView === FloorFilter.VisibleListView.Site
                 Layout.fillWidth: true
+                // the two titles are close to each others
                 Layout.topMargin: 5
+                Layout.leftMargin: 5
+                Layout.rightMargin: 5
                 horizontalAlignment: Text.AlignHCenter
                 text: controller.selectedSite ? controller.selectedSite.name : "Select the Site"
             }
             Label {
                 font.bold: internal.currentVisibileListView === FloorFilter.VisibleListView.Facility
                 Layout.fillWidth: true
+                Layout.leftMargin: 5
+                Layout.rightMargin: 5
                 Layout.bottomMargin: 5
                 horizontalAlignment: Text.AlignHCenter
                 text: controller.selectedFacility ? controller.selectedFacility.name : "Select the Facility"
