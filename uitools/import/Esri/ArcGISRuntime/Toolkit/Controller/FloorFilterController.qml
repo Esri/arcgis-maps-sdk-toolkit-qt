@@ -17,6 +17,7 @@
 import QtQuick 2.12
 import Esri.ArcGISRuntime 100.14
 
+// sites are optional, facilities are optional. a Facility might have no levels (restricted access facility)
 QtObject {
     id: controller
 
@@ -105,7 +106,8 @@ QtObject {
         internal.selectedFacility = floorManager.facilities[idx]
         // check that the current site is the selected facility selected. Otherwise the click came from a populateAllFacilities
         var facility = floorManager.facilities[idx]
-        if (facility.site.siteId !== internal.selectedSite.siteId) {
+        if (!internal.selectedSite
+                || facility.site.siteId !== internal.selectedSite.siteId) {
             // selection of facility came after click of populateAllFacilities.
             // this also sets the internal.selectedSite
             selectedSiteId = facility.site.siteId
@@ -220,8 +222,8 @@ QtObject {
                                                       "modelId": levelExtracted.levelId
                                                   })
                                 })
-        // no suitable vertical order found
-        if (!selectedLevel)
+        // no suitable vertical order found. second check to from facilities with no levels
+        if (!selectedLevel && listLevels[0])
             selectedLevelId = listLevels[0].levelId
     }
 
@@ -238,8 +240,20 @@ QtObject {
                                      floorManager.facilities, "facilityId")
         let facility = floorManager.facilities[idx]
         const extent = facility.geometry.extent
+        zoomToEnvelope(extent)
+    }
+
+    function zoomToSite(siteId) {
+        let idx = findElementIdxById(selectedSiteId,
+                                     floorManager.sites, "siteId")
+        let site = floorManager.sites[idx]
+        const extent = site.geometry.extent
+        zoomToEnvelope(extent)
+    }
+
+    function zoomToEnvelope(envelope) {
         var builder = ArcGISRuntimeEnvironment.createObject('EnvelopeBuilder', {
-                                                                "geometry": extent
+                                                                "geometry": envelope
                                                             })
         builder.expandByFactor(internal.zoom_padding)
         var newViewpoint = ArcGISRuntimeEnvironment.createObject(
@@ -247,10 +261,7 @@ QtObject {
                         "extent": builder.geometry
                     })
         geoView.setViewpoint(newViewpoint)
-        console.log("set viewqpoint")
     }
-
-    function zoomToEnvelope(envelope) {}
 
 
     /*!

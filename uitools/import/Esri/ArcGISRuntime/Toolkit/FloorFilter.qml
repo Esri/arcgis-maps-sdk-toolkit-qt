@@ -353,6 +353,7 @@ Control {
                                 controller.selectedSiteId = model.modelId
                                 internal.currentVisibileListView
                                         = FloorFilter.VisibleListView.Facility
+                                controller.zoomToSite(model.modelId)
                             } // switch to level view
                             else if (internal.currentVisibileListView
                                      === FloorFilter.VisibleListView.Facility) {
