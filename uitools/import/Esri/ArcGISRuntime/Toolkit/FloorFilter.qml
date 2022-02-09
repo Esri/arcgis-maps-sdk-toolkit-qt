@@ -96,14 +96,14 @@ Control {
                 // dont need to use the id of the column
                 contentHeight: contentItem.childrenRect.height
                 Layout.fillWidth: true
-                height: repeater.buttonHeight * maxNumberLevels
+                Layout.maximumHeight: repeater.buttonHeight * maxNumberLevels
+                implicitHeight: repeater.buttonHeight * repeater.count
                 clip: true
                 ScrollBar.vertical: ScrollBar {}
 
                 Column {
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    Component.onCompleted: console.log("width col", width)
                     Repeater {
                         id: repeater
 
