@@ -28,6 +28,9 @@ import QtQml.Models 2.15
   \brief Allows to display and filter the available floor aware layers in the current \c GeoView.
 */
 Control {
+    Component.onCompleted: print("floorfilter sizes", width, height)
+    onHeightChanged: print("floorfilter ehigh", height)
+    onWidthChanged: print("floorfilter width", width)
     id: floorFilter
 
     property var geoView
@@ -69,14 +72,18 @@ Control {
         value: floorFilter.geoView
     }
 
-    contentItem: RowLayout {
-        //        Component.onCompleted: print("item: ", height, width)
-        //        width: childrenRect.width
-        //        height: childrenRect.height
+    contentItem: Grid {
+        rows: 1
+        layoutDirection: (internal.leaderPosition === FloorFilter.LeaderPosition.UpperLeft)
+                         || (internal.leaderPosition === FloorFilter.LeaderPosition.LowerLeft) ? Qt.LeftToRight : Qt.RightToLeft
+        verticalItemAlignment: (internal.leaderPosition === FloorFilter.LeaderPosition.UpperLeft)
+                               || (internal.leaderPosition === FloorFilter.LeaderPosition.UpperRight) ? Grid.AlignTop : Grid.AlignBottom
+        columnSpacing: 5
         ToolBar {
-            id: levelFilterMenu
-            Layout.alignment: Qt.AlignBottom
 
+            id: levelFilterMenu
+
+            Layout.alignment: Qt.AlignBottom
             ColumnLayout {
                 spacing: 0
                 ToolButton {
@@ -448,19 +455,68 @@ Control {
             }
         }
     }
+    Item {
+        Component.onCompleted: {
+            print("x, y", x, y)
+        }
+        x: internal.centerFloorFilterX
+        y: internal.centerFloorFilterY
+    }
+    Rectangle {
+        Component.onCompleted: print("dot", x, y)
+        width: 5
+        height: 5
+        x: internal.centerParentX
+        y: internal.centerParentY
+        color: "red"
+    }
+
     // used to switch between site and facilities listviews and models.
     enum VisibleListView {
         Site,
         Facility
     }
 
+    enum LeaderPosition {
+        UpperLeft,
+        UpperRight,
+        LowerRight,
+        LowerLeft
+    }
+
     QtObject {
         id: internal
+
         property int currentVisibileListView: FloorFilter.VisibleListView.Site
         //idx refers to repeter or listview idx, not the model idx.
         property int selectedFacilityIdx: -1
         property int selectedSiteIdx: -1
         onCurrentVisibileListViewChanged: console.log("curr changed",
                                                       currentVisibileListView)
+        // absolute position parent floorfilter
+        property var parentOrigin: mapToItem(floorFilter.parent,
+                                             floorFilter.parent.x,
+                                             floorFilter.parent.y)
+        // absolute position center point floorfilter
+        property var floorFilterOrigin: (mapToItem(floorFilter.parent,
+                                                   floorFilter.x,
+                                                   floorFilter.y))
+        property double centerFloorFilterX: (floorFilterOrigin.x + floorFilter.width) / 2
+        property double centerFloorFilterY: (floorFilterOrigin.y + floorFilter.height) / 2
+        property double centerParentX: (parentOrigin.x + floorFilter.parent.width) / 2
+        property double centerParentY: (parentOrigin.y + floorFilter.parent.height) / 2
+        property int leaderPosition: {
+            if (centerFloorFilterX < centerParentX) {
+                if (centerFloorFilterY < centerParentY)
+                    FloorFilter.LeaderPosition.UpperLeft
+                else
+                    FloorFilter.LeaderPosition.LowerLeft
+            } else {
+                if (centerFloorFilterY < centerParentY)
+                    FloorFilter.LeaderPosition.UpperRight
+                else
+                    FloorFilter.LeaderPosition.LowerRight
+            }
+        }
     }
 }
