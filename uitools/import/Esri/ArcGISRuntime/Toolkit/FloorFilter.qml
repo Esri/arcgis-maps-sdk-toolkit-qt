@@ -41,14 +41,6 @@ Control {
 
     property bool hideSiteFacilityButton: false
 
-    property bool autoselectSingleFacilitySite: false
-
-    Binding {
-        target: controller
-        property: "autoselectSingleFacilitySite"
-        value: floorFilter.autoselectSingleFacilitySite
-    }
-
     // create singlepointing binding towards controller
     Binding {
         target: controller
@@ -67,18 +59,18 @@ Control {
         Layout.alignment: Qt.AlignBottom
 
         ColumnLayout {
-            spacing: 0
+
             ToolButton {
-                id: closer
+                id: collapser
                 checkable: true
                 checked: true
-                visible: !closer.checked
+                visible: !collapser.checked
                 Layout.fillWidth: true
                 icon.source: "images/x.svg"
             }
 
             ToolSeparator {
-                visible: !closer.checked
+                visible: !collapser.checked
                 Layout.fillWidth: true
                 orientation: Qt.Horizontal
             }
@@ -89,7 +81,7 @@ Control {
 
                 model: controller.levels
                 delegate: ToolButton {
-                    visible: !closer.checked
+                    visible: !collapser.checked
                     checked: controller.selectedLevelId === model.modelId
                     autoExclusive: true
                     Layout.fillWidth: true
@@ -102,16 +94,16 @@ Control {
 
             ToolSeparator {
                 Layout.fillWidth: true
-                visible: !closer.checked && !hideSiteFacilityButton
+                visible: !collapser.checked && !hideSiteFacilityButton
                 orientation: Qt.Horizontal
             }
             // not visible when floorFilter is shown and not visible if the children has no text to be shown.
             ToolButton {
-                visible: closer.checked && text !== ""
+                visible: collapser.checked && text !== ""
                 id: itemSelectedButton
                 text: controller.selectedLevel ? controller.selectedLevel.shortName : ""
                 onClicked: {
-                    closer.checked = false
+                    collapser.checked = false
                 }
             }
 
@@ -121,24 +113,6 @@ Control {
                 Layout.fillWidth: true
                 visible: !hideSiteFacilityButton
                 icon.source: "images/organization.svg"
-                text: collapser.checked ? "" : "Browse"
-            }
-
-            ToolButton {
-                text: collapser.checked ? "" : "Zoom to"
-                icon.source: "images/zoom-to-object.svg"
-                onClicked: {
-                    controller.zoomToCurrentFacility()
-                }
-            }
-
-            ToolButton {
-                id: collapser
-                Component.onCompleted: console.log(checked)
-                icon.source: "images/chevrons-left.svg"
-                checkable: true
-                checked: true
-                text: collapser.checked ? "" : "Collapse"
             }
         }
     }
@@ -154,11 +128,20 @@ Control {
             rowSpacing: 0
 
             Button {
+                text: "show all facilities"
+                Layout.columnSpan: 3
+                onClicked: {
+                    controller.populateAllFacilities()
+                    internal.currentVisibileListView = FloorFilter.VisibleListView.Facility
+                }
+            }
+
+            Button {
                 Layout.fillHeight: true
                 //Layout.fillWidth: true
                 Layout.rowSpan: 2
                 Layout.alignment: Qt.AlignHCenter
-                Layout.preferredWidth: autoselectSingleFacilitySite ? 0 : (internal.currentVisibileListView === FloorFilter.VisibleListView.Facility ? 32 : 0)
+                Layout.preferredWidth: controller.sites.count === 1 ? 0 : (internal.currentVisibileListView === FloorFilter.VisibleListView.Facility ? 32 : 0)
                 display: AbstractButton.IconOnly
                 flat: true
                 //removing all paddings and spacing from component so icon will fill compeltely the button
@@ -182,16 +165,6 @@ Control {
                 sourceSize.width: 32
                 sourceSize.height: 32
                 source: "images/search.svg"
-            }
-
-            Button {
-                text: "show all facilities"
-                Layout.alignment: Qt.AlignCenter
-                Layout.columnSpan: 3
-                onClicked: {
-                    controller.populateAllFacilities()
-                    internal.currentVisibileListView = FloorFilter.VisibleListView.Facility
-                }
             }
 
             ListView {
@@ -266,7 +239,7 @@ Control {
                                 controller.selectedFacilityId = model.modelId
                                 internal.selectedFacilityIdx = index
                                 buildingMenuButton.checked = false
-                                closer.checked = false
+                                collapser.checked = false
                                 controller.zoomToFacility(model.modelId)
                             }
                         }
@@ -324,7 +297,7 @@ Control {
 
     QtObject {
         id: internal
-        property int currentVisibileListView: FloorFilter.VisibleListView.Site
+        property int currentVisibileListView: controller.sites.count === 1 ? FloorFilter.VisibleListView.Facility : FloorFilter.VisibleListView.Site
         //idx refers to repeter or listview idx, not the model idx.
         property int selectedFacilityIdx: -1
         property int selectedSiteIdx: -1
