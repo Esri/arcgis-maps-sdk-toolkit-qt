@@ -17,11 +17,15 @@
 import QtQuick 2.15
 import QtQuick.Templates 2.15 as T
 import QtGraphicalEffects 1.15
+import QtQuick.Controls 2.15
+import QtQuick.Controls.impl 2.15
 
 T.RadioDelegate {
     id: control
 
-    Component.onCompleted: console.log(width)
+    // extra colors not part of calcite specification
+    readonly property int theme: Calcite.theme
+    readonly property color backgroundDown: theme === Calcite.Theme.Light ? "#C7EAFF" : "#151515"
     implicitWidth: Math.max(
                        background ? background.implicitWidth : 0,
                        contentItem.implicitWidth + leftPadding + rightPadding)
@@ -33,32 +37,34 @@ T.RadioDelegate {
     padding: 5
     spacing: 5
 
-    icon.width: 24
-    icon.height: 24
-    icon.source: "images/bullet-point.svg"
     font.bold: control.checked || control.highlighted
 
-    contentItem: Text {
+    contentItem: IconLabel {
         leftPadding: !control.mirrored ? control.indicator.width + control.spacing : 0
         rightPadding: control.mirrored ? control.indicator.width + control.spacing : 0
+
+        spacing: control.spacing
+        mirrored: control.mirrored
+        display: control.display
+        alignment: control.display === IconLabel.IconOnly
+                   || control.display === IconLabel.TextUnderIcon ? Qt.AlignCenter : Qt.AlignLeft
+
+        icon: control.icon
         text: control.text
         font: control.font
         color: control.enabled ? Calcite.text1 : Calcite.text3
-        elide: Text.ElideRight
-        visible: control.text
-        horizontalAlignment: Text.AlignLeft
-        verticalAlignment: Text.AlignVCenter
     }
 
     indicator: Image {
         id: indicator
         visible: control.checked || control.highlighted || control.hovered
+        // indicator is at the beginning of control.
         x: control.mirrored ? control.width - width - control.rightPadding : control.leftPadding
         y: control.topPadding + (control.availableHeight - height) / 2
-        source: icon.source
-        sourceSize: Qt.size(icon.width, icon.height)
-        width: icon.width
-        height: icon.height
+        source: "images/bullet-point.svg"
+        sourceSize: Qt.size(24, 24)
+        width: sourceSize.width
+        height: sourceSize.height
         ColorOverlay {
             anchors.fill: indicator
             source: indicator
@@ -72,6 +78,7 @@ T.RadioDelegate {
         implicitWidth: 200
         implicitHeight: 40
         color: control.visualFocus
-               || control.down ? Calcite.background2 : control.hovered ? Calcite.foreground2 : Calcite.foreground1
+               || control.down ? backgroundDown : control.hovered ? Calcite.foreground2 : Calcite.foreground1
     }
+    opacity: control.enabled ? 1.0 : 0.3
 }

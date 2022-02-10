@@ -43,27 +43,17 @@ QtObject {
 
     readonly property color background: theme === Calcite.Theme.Light ? offWhite : "#353535"
 
-    readonly property color background2: theme === Calcite.Theme.Light ? "#C7EAff" : "#151515"
-
-    readonly property color background3: theme === Calcite.Theme.Light ? "FFFFFF" : "#404040"
-
     readonly property color foreground1: theme === Calcite.Theme.Light ? "#FFFFFF" : "#2B2B2B"
 
     readonly property color foreground2: theme === Calcite.Theme.Light ? "#F3F3F3" : "#202020"
 
     readonly property color foreground3: theme === Calcite.Theme.Light ? "#EAEAEA" : "#151515"
 
-    readonly property color foreground4: theme === Calcite.Theme.Light ? "#004874" : "#59d6ff"
-
-    readonly property color foreground5: theme === Calcite.Theme.Light ? "#EAEAEA" : "#2B2B2B"
-
     readonly property color text1: theme === Calcite.Theme.Light ? "#151515" : "#FFFFFF"
 
     readonly property color text2: theme === Calcite.Theme.Light ? "#4A4A4A" : "#BFBFBF"
 
     readonly property color text3: theme === Calcite.Theme.Light ? "#6A6A6A" : "#9F9F9F"
-
-    readonly property color text4: theme === Calcite.Theme.Light ? "#2B2B2B" : "#FFFFFF"
 
     readonly property color textInverse: theme === Calcite.Theme.Light ? "#FFFFFF" : "#151515"
 
