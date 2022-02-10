@@ -247,7 +247,8 @@ ApplicationWindow {
 
                 ToolButton {
                     Layout.fillWidth: true
-                    text: "Regular ToolButton"
+                    flat: true
+                    text: "Regular Flat ToolButton "
                 }
             }
         }

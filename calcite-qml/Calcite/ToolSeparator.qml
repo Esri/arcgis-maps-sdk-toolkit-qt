@@ -29,6 +29,6 @@ T.ToolSeparator {
     contentItem: Rectangle {
         implicitWidth: vertical ? 1 : 48
         implicitHeight: vertical ? 48 : 1
-        color: Calcite.foreground5
+        color: Calcite.border1
     }
 }
