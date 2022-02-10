@@ -22,6 +22,13 @@ import QtQuick.Controls.impl 2.15
 T.ToolButton {
     id: control
 
+    // extra colors not part of calcite specification
+    readonly property int theme: Calcite.theme
+    readonly property color textDown: theme === Calcite.Theme.Light ? "#004874" : "#59d6ff"
+    readonly property color textIdle: theme === Calcite.Theme.Light ? "#2B2B2B" : "#FFFFFF"
+    readonly property color backgroundDown: theme === Calcite.Theme.Light ? "#C7EAFF" : "#151515"
+    readonly property color backgroundHovered: theme === Calcite.Theme.Light ? "#EAEAEA" : "#2B2B2B"
+
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
                             implicitContentWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
@@ -30,9 +37,10 @@ T.ToolButton {
     spacing: 6
     icon.width: 24
     icon.height: 24
-    icon.color: control.down || control.checked
-                || control.highlighted ? Calcite.foreground4 : Calcite.text4
-
+    icon.color: control.flat ? (control.down || control.checked
+                                || control.highlighted ? textDown : textIdle) : control.down
+                               || control.checked
+                               || control.highlighted ? Calcite.text1 : Calcite.text3
     contentItem: IconLabel {
         spacing: control.spacing
         mirrored: control.mirrored
@@ -42,8 +50,7 @@ T.ToolButton {
         text: control.text
         font: control.font
 
-        color: control.down || control.checked
-               || control.highlighted ? Calcite.foreground4 : Calcite.text4
+        color: control.icon.color
         alignment: control.display === AbstractButton.TextBesideIcon ? Qt.AlignLeft : Qt.AlignCenter
     }
 
@@ -51,7 +58,9 @@ T.ToolButton {
         implicitHeight: 48
         implicitWidth: 48
 
-        color: control.down || control.checked
-               || control.highlighted ? Calcite.background2 : (control.hovered ? Calcite.foreground5 : Calcite.background)
+        color: control.flat ? (control.down || control.checked
+                               || control.highlighted ? backgroundDown : (control.hovered ? backgroundHovered : Calcite.background)) : control.down
+                              || control.checked
+                              || control.highlighted ? Calcite.foreground3 : (control.hovered ? Calcite.foreground2 : Calcite.foreground1)
     }
 }
