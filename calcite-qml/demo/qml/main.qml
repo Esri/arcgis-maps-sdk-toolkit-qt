@@ -226,7 +226,9 @@ ApplicationWindow {
                 }
             }
         }
+
         ToolBar {
+            enabled: enabler.checked
             anchors {
                 right: parent.right
                 bottom: parent.attributionTop

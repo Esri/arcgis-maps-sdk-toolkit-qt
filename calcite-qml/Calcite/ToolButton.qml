@@ -57,10 +57,10 @@ T.ToolButton {
     background: Rectangle {
         implicitHeight: 48
         implicitWidth: 48
-
         color: control.flat ? (control.down || control.checked
                                || control.highlighted ? backgroundDown : (control.hovered ? backgroundHovered : Calcite.background)) : control.down
                               || control.checked
                               || control.highlighted ? Calcite.foreground3 : (control.hovered ? Calcite.foreground2 : Calcite.foreground1)
     }
+    opacity: control.enabled ? 1.0 : 0.3
 }
