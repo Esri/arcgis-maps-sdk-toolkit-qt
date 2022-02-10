@@ -100,6 +100,42 @@ Control {
                     Layout.fillWidth: true
                     orientation: Qt.Horizontal
                 }
+                ToolButton {
+                    id: collapser
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignLeft
+                    icon.source: collapsedIcons ? "images/chevrons-right.svg" : "images/chevrons-left.svg"
+                    text: "Collapse"
+                    display: collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
+                    onClicked: collapsedIcons = !collapsedIcons
+                }
+                ToolSeparator {
+                    Layout.fillWidth: true
+                    orientation: Qt.Horizontal
+                }
+                ToolButton {
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignLeft
+                    icon.source: "images/zoom-to-object.svg"
+                    text: "Zoom to"
+                    enabled: !listView.visible ? controller.selectedFacilityId : internal.currentVisibileListView === FloorFilter.VisibleListView.Site ? controller.selectedSiteId : controller.selectedFacilityId
+                    display: collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
+                    onClicked: {
+                        if (internal.currentVisibileListView === FloorFilter.VisibleListView.Site
+                                && listView.visible)
+                            controller.zoomToCurrentSite()
+                        else if (internal.currentVisibileListView
+                                 === FloorFilter.VisibleListView.Facility
+                                 || !listView.visible)
+                            controller.zoomToCurrentFacility()
+                        else
+                            console.error("extra enum not accounted for.")
+                    }
+                }
+                ToolSeparator {
+                    Layout.fillWidth: true
+                    orientation: Qt.Horizontal
+                }
 
                 Flickable {
                     visible: !closer.checked
@@ -146,11 +182,14 @@ Control {
                     visible: !closer.checked && !hideSiteFacilityButton
                     orientation: Qt.Horizontal
                 }
+
                 // not visible when floorFilter is shown and not visible if the children has no text to be shown.
                 ToolButton {
                     visible: closer.checked && text !== ""
                     id: itemSelectedButton
+                    Layout.fillWidth: true
                     text: controller.selectedLevel ? controller.selectedLevel.shortName : ""
+
                     onClicked: {
                         closer.checked = false
                     }
@@ -165,46 +204,6 @@ Control {
                     icon.source: "images/organization.svg"
                     text: "Browse"
                     display: collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
-                }
-
-                ToolSeparator {
-                    Layout.fillWidth: true
-                    orientation: Qt.Horizontal
-                }
-
-                ToolButton {
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignLeft
-                    icon.source: "images/zoom-to-object.svg"
-                    text: "Zoom to"
-                    enabled: !listView.visible ? controller.selectedFacilityId : internal.currentVisibileListView === FloorFilter.VisibleListView.Site ? controller.selectedSiteId : controller.selectedFacilityId
-                    display: collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
-                    onClicked: {
-                        if (internal.currentVisibileListView === FloorFilter.VisibleListView.Site
-                                && listView.visible)
-                            controller.zoomToCurrentSite()
-                        else if (internal.currentVisibileListView
-                                 === FloorFilter.VisibleListView.Facility
-                                 || !listView.visible)
-                            controller.zoomToCurrentFacility()
-                        else
-                            console.error("extra enum not accounted for.")
-                    }
-                }
-
-                ToolSeparator {
-                    Layout.fillWidth: true
-                    orientation: Qt.Horizontal
-                }
-
-                ToolButton {
-                    id: collapser
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignLeft
-                    icon.source: collapsedIcons ? "images/chevrons-right.svg" : "images/chevrons-left.svg"
-                    text: "Collapse"
-                    display: collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
-                    onClicked: collapsedIcons = !collapsedIcons
                 }
             }
         }
