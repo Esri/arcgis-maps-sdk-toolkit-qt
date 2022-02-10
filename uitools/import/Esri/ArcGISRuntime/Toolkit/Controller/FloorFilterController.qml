@@ -247,6 +247,14 @@ QtObject {
         zoomToFacility(selectedFacilityId)
     }
 
+    function zoomToCurrentSite() {
+        if (!selectedSiteId) {
+            console.error("no site yet selected")
+            return
+        }
+        zoomToSite(selectedSiteId)
+    }
+
     function zoomToFacility(facilityId) {
         let idx = findElementIdxById(selectedFacilityId,
                                      floorManager.facilities, "facilityId")

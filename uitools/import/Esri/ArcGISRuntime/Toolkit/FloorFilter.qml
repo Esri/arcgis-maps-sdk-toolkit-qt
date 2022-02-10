@@ -28,9 +28,6 @@ import QtQml.Models 2.15
   \brief Allows to display and filter the available floor aware layers in the current \c GeoView.
 */
 Control {
-    Component.onCompleted: print("floorfilter sizes", width, height)
-    onHeightChanged: print("floorfilter ehigh", height)
-    onWidthChanged: print("floorfilter width", width)
     id: floorFilter
 
     property var geoView
@@ -180,9 +177,18 @@ Control {
                     Layout.alignment: Qt.AlignLeft
                     icon.source: "images/zoom-to-object.svg"
                     text: "Zoom to"
+                    enabled: !listView.visible ? controller.selectedFacilityId : internal.currentVisibileListView === FloorFilter.VisibleListView.Site ? controller.selectedSiteId : controller.selectedFacilityId
                     display: collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
                     onClicked: {
-                        controller.zoomToCurrentFacility()
+                        if (internal.currentVisibileListView === FloorFilter.VisibleListView.Site
+                                && listView.visible)
+                            controller.zoomToCurrentSite()
+                        else if (internal.currentVisibileListView
+                                 === FloorFilter.VisibleListView.Facility
+                                 || !listView.visible)
+                            controller.zoomToCurrentFacility()
+                        else
+                            console.error("extra enum not accounted for.")
                     }
                 }
 
@@ -454,21 +460,6 @@ Control {
                 }
             }
         }
-    }
-    Item {
-        Component.onCompleted: {
-            print("x, y", x, y)
-        }
-        x: internal.centerFloorFilterX
-        y: internal.centerFloorFilterY
-    }
-    Rectangle {
-        Component.onCompleted: print("dot", x, y)
-        width: 5
-        height: 5
-        x: internal.centerParentX
-        y: internal.centerParentY
-        color: "red"
     }
 
     // used to switch between site and facilities listviews and models.
