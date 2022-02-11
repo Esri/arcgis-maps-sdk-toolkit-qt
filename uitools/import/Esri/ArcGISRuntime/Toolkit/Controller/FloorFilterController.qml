@@ -46,8 +46,13 @@ QtObject {
     property string selectedFacilityId
 
     function setSelectedFacilityId(facilityId) {
-        let idx = findElementIdxById(facilityId, floorManager.facilities,
-                                     "facilityId")
+        let idx = findElementIdxById(facilityId,
+                                     FloorFilterController.TypeElement.Facility)
+        if (!idx) {
+            console.error("not found facility")
+            return
+        }
+
         // check that the current site is the selected facility selected. Otherwise the click came from a populateAllFacilities
         var facility = floorManager.facilities[idx]
         if (!internal.selectedSite
@@ -77,23 +82,42 @@ QtObject {
 
     // iterates over \a listElements to find an element with \a id.
     //\a variableIdName is used to access the correct method name in each list (siteId, facilityId, levelId)
-    function findElementIdxById(id, listElements, variableIdName) {
-        let idx
-        for (var i = 0; i < listElements.length; ++i) {
-            let elementId = listElements[i][variableIdName]
+    function findElementIdxById(id, typeElement) {
+        var model
+        var variableIdName
+        print("type", typeElement)
+        switch (typeElement) {
+        case FloorFilterController.TypeElement.Level:
+            model = floorManager.levels
+            variableIdName = "levelId"
+            break
+        case FloorFilterController.TypeElement.Facility:
+            model = floorManager.facilities
+            variableIdName = "facilityId"
+            break
+        case FloorFilterController.TypeElement.Site:
+            model = floorManager.sites
+            variableIdName = "siteId"
+            break
+        default:
+            console.error("no element type matched")
+            return null
+        }
+
+        for (var i = 0; i < model.length; ++i) {
+            let elementId = model[i][variableIdName]
             if (elementId === id) {
-                idx = i
-                break
+                return i
             }
         }
-        return idx
+        return null
     }
 
     onSelectedLevelIdChanged: {
         // find the list element idx of the changed levelId
-        let idx = findElementIdxById(selectedLevelId, floorManager.levels,
-                                     "levelId")
-        if (idx === undefined) {
+        let idx = findElementIdxById(selectedLevelId,
+                                     FloorFilterController.TypeElement.Level)
+        if (idx == null) {
             console.error("site id not found")
             return
         }
@@ -116,8 +140,9 @@ QtObject {
     onSelectedFacilityIdChanged: {
         // find the list element idx of the changed facilityId
         let idx = findElementIdxById(selectedFacilityId,
-                                     floorManager.facilities, "facilityId")
-        if (idx === undefined) {
+                                     FloorFilterController.TypeElement.Facility)
+        // checking both null and undefined
+        if (idx == null) {
             console.error("facility id not found, resetting current facility")
             internal.selectedFacility = null
             return
@@ -131,8 +156,8 @@ QtObject {
     onSelectedSiteIdChanged: {
         // find the list element idx of the changed siteId
         let idx = findElementIdxById(selectedSiteId,
-                                     floorManager.sites, "siteId")
-        if (idx === undefined) {
+                                     FloorFilterController.TypeElement.Site)
+        if (idx == null) {
             console.error("site id not found")
             return
         }
@@ -256,16 +281,16 @@ QtObject {
     }
 
     function zoomToFacility(facilityId) {
-        let idx = findElementIdxById(selectedFacilityId,
-                                     floorManager.facilities, "facilityId")
+        let idx = findElementIdxById(facilityId,
+                                     FloorFilterController.TypeElement.Facility)
         let facility = floorManager.facilities[idx]
         const extent = facility.geometry.extent
         zoomToEnvelope(extent)
     }
 
     function zoomToSite(siteId) {
-        let idx = findElementIdxById(selectedSiteId,
-                                     floorManager.sites, "siteId")
+        let idx = findElementIdxById(siteId,
+                                     FloorFilterController.TypeElement.Site)
         let site = floorManager.sites[idx]
         const extent = site.geometry.extent
         zoomToEnvelope(extent)
@@ -298,6 +323,12 @@ QtObject {
     enum UpdateLevelsMode {
         SingleLevel,
         AllLevelsMatchingVerticalOrder
+    }
+
+    enum TypeElement {
+        Level,
+        Facility,
+        Site
     }
 
     /*! internal */

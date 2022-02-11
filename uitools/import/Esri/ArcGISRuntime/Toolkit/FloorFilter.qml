@@ -370,20 +370,16 @@ Control {
                                 // switch to facility view
                                 if (internal.currentVisibileListView
                                         === FloorFilter.VisibleListView.Site) {
-                                    internal.selectedSiteIdx = index
                                     controller.setSelectedSiteId(model.modelId)
                                     internal.currentVisibileListView
                                             = FloorFilter.VisibleListView.Facility
-                                    controller.zoomToSite(model.modelId)
                                 } // switch to level view
                                 else if (internal.currentVisibileListView
                                          === FloorFilter.VisibleListView.Facility) {
                                     controller.setSelectedFacilityId(
                                                 model.modelId)
-                                    internal.selectedFacilityIdx = index
                                     buildingMenuButton.checked = false
                                     closer.checked = false
-                                    controller.zoomToFacility(model.modelId)
                                 }
                             }
                         }
