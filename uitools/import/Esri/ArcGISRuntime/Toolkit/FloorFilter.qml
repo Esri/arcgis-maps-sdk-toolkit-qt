@@ -106,6 +106,7 @@ Control {
                     Layout.alignment: Qt.AlignLeft
                     icon.source: collapsedIcons ? "images/chevrons-right.svg" : "images/chevrons-left.svg"
                     text: "Collapse"
+                    flat: true
                     display: collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
                     onClicked: collapsedIcons = !collapsedIcons
                 }
@@ -118,6 +119,7 @@ Control {
                     Layout.alignment: Qt.AlignLeft
                     icon.source: "images/zoom-to-object.svg"
                     text: "Zoom to"
+                    flat: true
                     enabled: !listView.visible ? controller.selectedFacilityId : internal.currentVisibileListView === FloorFilter.VisibleListView.Site ? controller.selectedSiteId : controller.selectedFacilityId
                     display: collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
                     onClicked: {
@@ -169,6 +171,8 @@ Control {
                                 anchors.right: parent.right
                                 text: closer.checked
                                       || collapsedIcons ? model.shortName : model.longName
+                                flat: true
+                                display: AbstractButton.TextOnly
                                 onClicked: {
                                     controller.selectedLevelId = model.modelId
                                 }
@@ -188,8 +192,12 @@ Control {
                     visible: closer.checked && text !== ""
                     id: itemSelectedButton
                     Layout.fillWidth: true
+                    // always checked
+                    checkable: false
+                    checked: true
                     text: controller.selectedLevel ? controller.selectedLevel.shortName : ""
-
+                    flat: true
+                    display: AbstractButton.TextOnly
                     onClicked: {
                         closer.checked = false
                     }
@@ -203,6 +211,7 @@ Control {
                     visible: !hideSiteFacilityButton
                     icon.source: "images/organization.svg"
                     text: "Browse"
+                    flat: true
                     display: collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
                 }
             }
