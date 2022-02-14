@@ -44,6 +44,14 @@ Control {
     //debug property: should always be true, autoselecting singlefacilitiesistes in case they are single
     property bool autoselectSingleFacilitySite: false
 
+    property var automaticSelectionMode: FloorFilterController.AutomaticSelectionMode.Always
+
+    Binding {
+        target: controller
+        property: "automaticSelectionMode"
+        value: floorFilter.automaticSelectionMode
+    }
+
     property bool collapsedIcons: true
 
     property int maxNumberLevels: 2
@@ -369,8 +377,6 @@ Control {
                             }
                         ]
                         delegate: RadioDelegate {
-                            Component.onCompleted: console.log("delegate",
-                                                               height)
                             width: listView.width
                             highlighted: internal.currentVisibileListView
                                          === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx
