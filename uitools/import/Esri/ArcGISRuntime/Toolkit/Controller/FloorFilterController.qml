@@ -125,7 +125,7 @@ QtObject {
 
 
     /*!
-      if levelId == "", disable visibility previous level
+      if levelId == "", disable visibility previous level.
       */
     function setSelectedLevelId(levelId) {
         let idx = findElementIdxById(levelId,

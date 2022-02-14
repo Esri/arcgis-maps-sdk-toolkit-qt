@@ -388,6 +388,7 @@ Control {
                                     controller.setSelectedSiteId(model.modelId)
                                     internal.currentVisibileListView
                                             = FloorFilter.VisibleListView.Facility
+                                    controller.zoomToCurrentSite()
                                 } // switch to level view
                                 else if (internal.currentVisibileListView
                                          === FloorFilter.VisibleListView.Facility) {
@@ -395,6 +396,7 @@ Control {
                                                 model.modelId)
                                     buildingMenuButton.checked = false
                                     closer.checked = false
+                                    controller.zoomToCurrentFacility()
                                 }
                             }
                         }
