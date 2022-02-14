@@ -63,8 +63,9 @@ QtObject {
 
         let selectSite
         for (var i = 0; i < floorManager.sites.length; ++i) {
-            if (GeometryEngine.intersects(floorManager.sites[i].geometry,
-                                          viewpointCenter.center)) {
+            if (GeometryEngine.intersects(
+                        floorManager.sites[i].geometry.extent,
+                        viewpointCenter.center)) {
                 selectSite = floorManager.sites[i]
                 break
             }
@@ -83,8 +84,9 @@ QtObject {
         let selectFacility
         for (i = 0; i < floorManager.facilities.length; ++i) {
             let facility
-            if (GeometryEngine.intersects(floorManager.facilities[i].geometry,
-                                          viewpointCenter.center)) {
+            if (GeometryEngine.intersects(
+                        floorManager.facilities[i].geometry.extent,
+                        viewpointCenter.center)) {
                 selectFacility = floorManager.facilities[i]
                 break
             }
