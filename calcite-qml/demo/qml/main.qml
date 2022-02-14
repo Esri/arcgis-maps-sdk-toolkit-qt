@@ -250,6 +250,7 @@ ApplicationWindow {
                 ToolButton {
                     Layout.fillWidth: true
                     flat: true
+                    checkable: true
                     text: "Regular Flat ToolButton "
                 }
             }
