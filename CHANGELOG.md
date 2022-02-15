@@ -1,6 +1,9 @@
 # Changelog
 
 ## 100.14
+* (ToolBar) Calcite styling of the ToolBar, similar as a Calcite ActionBar but not matching specifically its style.
+* (ToolSeparator) Calcite styling of the ToolSeparator, not maching specific component.
+* (ToolButton) Calcite styling of the ToolButton, now matching the Calcite Action component. A second styling is available for flat ToolButton.
 * (SpinBox) Calcite styling of the SpinBox component.
 * (Callout) Major rewrite of Callout. Moved from Canvas to Shape rendering. Callout is now style compliant.
 * Adding unit and functional test suites for uitools.
