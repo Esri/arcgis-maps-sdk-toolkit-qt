@@ -348,13 +348,21 @@ namespace Toolkit {
 
   void FloorFilterController::populateFacilitiesForSelectedSite()
   {
-    m_facilities->clear();
     auto manager = getFloorManager(m_geoView);
     if (!manager)
+    {
+      m_facilities->clear();
+      return;
+    }
+
+    // Do not blow out the facilities list with a new list if we are showing all facilities in the
+    // FloorManager and we are in ignore selected-site mode. This is not just a micro-optimziation,
+    // there are cases where selecting a facility in this mode will select a parent site, and we don't
+    // want to regenerate the facilities list when the selected site changes.
+    if (manager->facilities().length() == m_facilities->rowCount() && !m_selectedSiteResepected)
       return;
 
     const auto allFacilites = manager->facilities();
-
     QList<QObject*> facilityItems;
     for (const auto facility : allFacilites)
     {
@@ -364,6 +372,8 @@ namespace Toolkit {
         facilityItems << new FloorFilterFacilityItem(facility, m_facilities);
       }
     }
+
+    m_facilities->clear();
     m_facilities->append(facilityItems);
 
     // Select only facility if there is only 1 facility.
@@ -401,6 +411,10 @@ namespace Toolkit {
     else
     {
       setSelectedSiteId("");
+      // Even if a site isn't selected, we may still need to populate facilities
+      // if the isSelectedSiteRespected flag is false or there are 0 sites
+      // in the manager.
+      populateFacilitiesForSelectedSite();
     }
   }
 
