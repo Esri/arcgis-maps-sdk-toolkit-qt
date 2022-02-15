@@ -1,6 +1,7 @@
 # Changelog
 
 ## 100.14
+* (RadioDelegate) Calcite styling of Radiodelegate component, now matches the Calcite Dropdown component.
 * (SpinBox) Calcite styling of the SpinBox component.
 * (Callout) Major rewrite of Callout. Moved from Canvas to Shape rendering. Callout is now style compliant.
 * Adding unit and functional test suites for uitools.
