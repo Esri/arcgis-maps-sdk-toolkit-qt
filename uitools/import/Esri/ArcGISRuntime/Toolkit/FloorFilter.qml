@@ -317,18 +317,28 @@ Control {
 
                 ListView {
                     id: listView
+                    onWidthChanged: print("width", width)
+                    property var w: contentItem.childrenRect.width
+                    onWChanged: print("width rect ", w)
+                    property var h: contentItem.childrenRect.height
+                    onHChanged: print("height rect", h)
                     visible: true
                     Layout.preferredHeight: 200
                     Layout.columnSpan: 3
+                    //width: contentItem.childrenRect.width
+                    contentWidth: contentItem.childrenRect.width
+                    implicitWidth: contentWidth
+                    Layout.minimumWidth: implicitWidth
                     Layout.fillWidth: true
                     Layout.fillHeight: true
+                    //Layout.fillWidth: true
                     Layout.minimumHeight: contentHeight / count
                     Layout.maximumHeight: contentHeight / count * 3
                     Layout.topMargin: 5
                     Layout.rowSpan: showAllFacilities.visible ? 1 : 2
                     ScrollBar.vertical: ScrollBar {}
-                    clip: true
 
+                    clip: true
                     model: DelegateModel {
                         id: dm
                         property Connections conn: Connections {
@@ -358,8 +368,6 @@ Control {
 
                         model: internal.currentVisibileListView
                                === FloorFilter.VisibleListView.Site ? controller.sites : controller.facilities
-                        Component.onCompleted: console.log("count:", count)
-                        onCountChanged: console.log("count:", count)
                         filterOnGroup: "filtered"
                         groups: [
                             DelegateModelGroup {
@@ -369,8 +377,6 @@ Control {
                             }
                         ]
                         delegate: RadioDelegate {
-                            Component.onCompleted: console.log("delegate",
-                                                               height)
                             width: listView.width
                             highlighted: internal.currentVisibileListView
                                          === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx
