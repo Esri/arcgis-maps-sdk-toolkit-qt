@@ -28,21 +28,15 @@ QtObject {
         function onViewpointChanged() {
             updateSelection()
         }
-        // manually set when floorManager is loaded
+        // manually set true when floorManager is loaded
         enabled: false
     }
 
     function updateSelection() {
-        // todo: checks on floormanager not loaded/ not defined
-        // todo: swap ints with always, etc..
         // todo: facilities and sites are optional, add checks
         var viewpointCenter = geoView.currentViewpointCenter
-        var targetGeometry = geoView.currentViewpointExtent.extent
-        console.log("uodateselection")
-        if (floorManager.loadStatus === Enums.LoadStatusLoaded)
-            console.log(viewpointCenter.center.geometryType,
-                        floorManager.sites[0].geometry.geometryType)
-        //viewPointCenter.targetScale === double.NaN
+        console.log("updateselection")
+
         if (automaticSelectionMode === FloorFilterController.AutomaticSelectionMode.Never) {
             return
         }
@@ -53,23 +47,17 @@ QtObject {
         if (viewpointCenter.targetScale > targetScale) {
             if (automaticSelectionMode === FloorFilterController.AutomaticSelectionMode.Always) {
 
-                // todo: set site, facility and level to null
                 setSelectedSiteId("")
                 setSelectedFacilityId("")
                 setSelectedLevelId("")
             }
             return
         }
+        let sitesArray = Array.from(floorManager.sites)
+        let selectSite = sitesArray.find(element => GeometryEngine.intersects(
+                                             element.geometry.extent,
+                                             viewpointCenter.center))
 
-        let selectSite
-        for (var i = 0; i < floorManager.sites.length; ++i) {
-            if (GeometryEngine.intersects(
-                        floorManager.sites[i].geometry.extent,
-                        viewpointCenter.center)) {
-                selectSite = floorManager.sites[i]
-                break
-            }
-        }
         if (selectSite !== undefined) {
             console.log("selecting site", selectSite.siteId)
             setSelectedSiteId(selectSite.siteId)
@@ -81,16 +69,10 @@ QtObject {
         if (targetScale === 0)
             targetScale = 4300
 
-        let selectFacility
-        for (i = 0; i < floorManager.facilities.length; ++i) {
-            let facility
-            if (GeometryEngine.intersects(
-                        floorManager.facilities[i].geometry.extent,
-                        viewpointCenter.center)) {
-                selectFacility = floorManager.facilities[i]
-                break
-            }
-        }
+        let facilitiesArray = Array.from(floorManager.facilities)
+        let selectFacility = facilitiesArray.find(
+                element => GeometryEngine.intersects(element.geometry.extent,
+                                                     viewpointCenter.center))
         if (selectFacility !== undefined) {
             console.log("selecting facility", selectFacility.facilityId)
             setSelectedFacilityId(selectFacility.facilityId)
@@ -112,7 +94,7 @@ QtObject {
         return null
     }
 
-    property int updateLevelsMode: FloorFilterController.UpdateLevelsMode.SingleLevel
+    property int updateLevelsMode: FloorFilterController.UpdateLevelsMode.AllLevelsMatchingVerticalOrder
 
     property bool autoselectSingleFacilitySite
 
