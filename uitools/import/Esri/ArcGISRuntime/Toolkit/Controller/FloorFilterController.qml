@@ -53,11 +53,16 @@ QtObject {
             }
             return
         }
-        let sitesArray = Array.from(floorManager.sites)
-        let selectSite = sitesArray.find(element => GeometryEngine.intersects(
-                                             element.geometry.extent,
-                                             viewpointCenter.center))
 
+        let selectSite
+        for (var i = 0; i < floorManager.sites.length; ++i) {
+            if (GeometryEngine.intersects(
+                        floorManager.sites[i].geometry.extent,
+                        viewpointCenter.center)) {
+                selectSite = floorManager.sites[i]
+                break
+            }
+        }
         if (selectSite !== undefined) {
             console.log("selecting site", selectSite.siteId)
             setSelectedSiteId(selectSite.siteId)
@@ -69,10 +74,16 @@ QtObject {
         if (targetScale === 0)
             targetScale = 4300
 
-        let facilitiesArray = Array.from(floorManager.facilities)
-        let selectFacility = facilitiesArray.find(
-                element => GeometryEngine.intersects(element.geometry.extent,
-                                                     viewpointCenter.center))
+        let selectFacility
+        for (i = 0; i < floorManager.facilities.length; ++i) {
+            let facility
+            if (GeometryEngine.intersects(
+                        floorManager.facilities[i].geometry.extent,
+                        viewpointCenter.center)) {
+                selectFacility = floorManager.facilities[i]
+                break
+            }
+        }
         if (selectFacility !== undefined) {
             console.log("selecting facility", selectFacility.facilityId)
             setSelectedFacilityId(selectFacility.facilityId)
