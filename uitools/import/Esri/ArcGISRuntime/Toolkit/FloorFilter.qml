@@ -343,6 +343,7 @@ Control {
                     ScrollBar.vertical: ScrollBar {}
 
                     clip: true
+
                     model: DelegateModel {
                         id: dm
                         property Connections conn: Connections {
@@ -380,26 +381,36 @@ Control {
                                 includeByDefault: true
                             }
                         ]
-                        delegate: RadioDelegate {
-                            width: listView.width
-                            highlighted: internal.currentVisibileListView
-                                         === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx
-                            text: model.name
-                            onClicked: {
-                                // switch to facility view
-                                if (internal.currentVisibileListView
-                                        === FloorFilter.VisibleListView.Site) {
-                                    controller.setSelectedSiteId(model.modelId)
-                                    internal.currentVisibileListView
-                                            = FloorFilter.VisibleListView.Facility
-                                } // switch to level view
-                                else if (internal.currentVisibileListView
-                                         === FloorFilter.VisibleListView.Facility) {
-                                    controller.setSelectedFacilityId(
-                                                model.modelId)
-                                    buildingMenuButton.checked = false
-                                    closer.checked = false
+                        delegate: ColumnLayout {
+                            Layout.alignment: Qt.AlignLeft
+                            RadioDelegate {
+                                id: radioDelegate
+                                checkable: false
+                                width: listView.width
+                                highlighted: internal.currentVisibileListView
+                                             === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx
+                                text: model.name
+                                onClicked: {
+                                    // switch to facility view
+                                    if (internal.currentVisibileListView
+                                            === FloorFilter.VisibleListView.Site) {
+                                        controller.setSelectedSiteId(
+                                                    model.modelId)
+                                        internal.currentVisibileListView
+                                                = FloorFilter.VisibleListView.Facility
+                                    } // switch to level view
+                                    else if (internal.currentVisibileListView
+                                             === FloorFilter.VisibleListView.Facility) {
+                                        controller.setSelectedFacilityId(
+                                                    model.modelId)
+                                        buildingMenuButton.checked = false
+                                        closer.checked = false
+                                    }
                                 }
+                            }
+                            Label {
+                                leftPadding: radioDelegate.leftPadding + 5
+                                text: "paretj"
                             }
                         }
                     }
