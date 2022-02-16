@@ -41,20 +41,11 @@ Control {
 
     property bool hideSiteFacilityButton: false
 
-    //debug property: should always be true, autoselecting singlefacilitiesistes in case they are single
-    property bool autoselectSingleFacilitySite: false
-
     property bool collapsedIcons: true
 
     property int maxNumberLevels: 2
 
     padding: 5
-
-    Binding {
-        target: controller
-        property: "autoselectSingleFacilitySite"
-        value: floorFilter.autoselectSingleFacilitySite
-    }
 
     // create singlepointing binding towards controller
     Binding {

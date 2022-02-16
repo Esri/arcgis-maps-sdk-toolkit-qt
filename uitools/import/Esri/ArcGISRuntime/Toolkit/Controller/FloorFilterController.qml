@@ -36,8 +36,6 @@ QtObject {
 
     property int updateLevelsMode: FloorFilterController.UpdateLevelsMode.AllLevelsMatchingVerticalOrder
 
-    property bool autoselectSingleFacilitySite
-
     property FloorManager floorManager
 
     property bool selectedSiteResepected: true
@@ -212,7 +210,7 @@ QtObject {
                          })
         }
         // case single site: autoselect it and set the boolean used by the view
-        if (autoselectSingleFacilitySite && listSites.length === 1) {
+        if (listSites.length === 1) {
             internal.singleSite = true
             let site = listSites[0]
             selectedSiteId = site.siteId
@@ -229,7 +227,7 @@ QtObject {
                               })
         }
         // case single facility: autoselect it
-        if (autoselectSingleFacilitySite && listFacilities.length === 1) {
+        if (listFacilities.length === 1) {
             selectedFacilityId = listFacilities[0].facilityId
         }
     }
