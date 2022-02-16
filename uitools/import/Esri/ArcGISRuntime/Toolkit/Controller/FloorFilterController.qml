@@ -40,6 +40,8 @@ QtObject {
 
     property FloorManager floorManager
 
+    property bool selectedSiteResepected: true
+
     //refresh()?
     property string selectedLevelId
 
@@ -48,7 +50,7 @@ QtObject {
     function setSelectedFacilityId(facilityId) {
         let idx = findElementIdxById(facilityId,
                                      FloorFilterController.TypeElement.Facility)
-        if (!idx) {
+        if (idx == null) {
             console.error("not found facility")
             return
         }
@@ -161,7 +163,13 @@ QtObject {
             console.error("site id not found")
             return
         }
+
         internal.selectedSite = floorManager.sites[idx]
+
+        // dont populate facilities if they are total number and we are ignoring the current selected site
+        if (!selectedSiteResepected
+                && facilities.count === floorManager.facilities.length)
+            return
         populateFacilities(floorManager.sites[idx].facilities)
         onSelectedChanged()
         selectedFacilityId = ""

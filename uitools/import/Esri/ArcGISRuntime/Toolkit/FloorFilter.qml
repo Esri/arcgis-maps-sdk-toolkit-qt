@@ -252,7 +252,11 @@ Control {
                         height: 32
                         source: "images/chevron-left.svg"
                     }
-                    onClicked: internal.currentVisibileListView = FloorFilter.VisibleListView.Site
+                    onClicked: {
+                        internal.currentVisibileListView = FloorFilter.VisibleListView.Site
+                        // When showing site view, resetting the not ignore current site. (this button is only way to get to site view)
+                        controller.selectedSiteResepected = true
+                    }
                 }
 
                 TextField {
@@ -419,6 +423,7 @@ Control {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
                         onClicked: {
+                            controller.selectedSiteResepected = false
                             controller.populateAllFacilities()
                             internal.currentVisibileListView = FloorFilter.VisibleListView.Facility
                         }
