@@ -23,9 +23,6 @@ import QtQuick.Controls.impl 2.15
 T.RadioDelegate {
     id: control
 
-    // extra colors not part of calcite specification
-    readonly property int theme: Calcite.theme
-    readonly property color backgroundDown: theme === Calcite.Theme.Light ? "#C7EAFF" : "#151515"
     implicitWidth: Math.max(
                        background ? background.implicitWidth : 0,
                        contentItem.implicitWidth + leftPadding + rightPadding)
@@ -78,7 +75,7 @@ T.RadioDelegate {
         implicitWidth: 200
         implicitHeight: 40
         color: control.visualFocus
-               || control.down ? backgroundDown : control.hovered ? Calcite.foreground2 : Calcite.foreground1
+               || control.down ? Calcite.foreground3: control.hovered ? Calcite.foreground2 : "transparent"
     }
     opacity: control.enabled ? 1.0 : 0.3
 }
