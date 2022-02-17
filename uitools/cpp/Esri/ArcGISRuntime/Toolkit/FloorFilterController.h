@@ -36,6 +36,7 @@ namespace Toolkit {
   {
     Q_OBJECT
     Q_PROPERTY(QObject* geoView READ geoView WRITE setGeoView NOTIFY geoViewChanged)
+    Q_PROPERTY(bool selectedSiteResepected READ isSelectedSiteRespected WRITE setIsSelectedSiteRespected NOTIFY isSelectedSiteRespectedChanged)
     Q_PROPERTY(FloorFilterFacilityItem* selectedFacility READ selectedFacility NOTIFY selectedFacilityIdChanged)
     Q_PROPERTY(QString selectedFacilityId READ selectedFacilityId WRITE setSelectedFacilityId NOTIFY selectedFacilityIdChanged)
     Q_PROPERTY(FloorFilterLevelItem* selectedLevel READ selectedLevel NOTIFY selectedLevelIdChanged)
@@ -48,6 +49,9 @@ namespace Toolkit {
   public:
     Q_INVOKABLE explicit FloorFilterController(QObject* parent = nullptr);
     ~FloorFilterController() override;
+
+    bool isSelectedSiteRespected() const;
+    void setIsSelectedSiteRespected(bool isSelectedSiteRespected);
 
     QObject* geoView() const;
     void setGeoView(QObject* geoView);
@@ -65,11 +69,17 @@ namespace Toolkit {
     GenericListModel* sites() const;
     GenericListModel* facilities() const;
 
-    Q_INVOKABLE void zoomToFacility(QString facilityId);
+    Q_INVOKABLE void zoomToFacility(const QString& facilityId);
     void zoomToFacility(FloorFilterFacilityItem* facilityItem);
 
-    Q_INVOKABLE void zoomToSite(QString siteId);
+    Q_INVOKABLE void zoomToSite(const QString& siteId);
     void zoomToSite(FloorFilterSiteItem* siteItem);
+
+    Q_INVOKABLE FloorFilterFacilityItem* facility(const QString& facilityId) const;
+
+    Q_INVOKABLE FloorFilterSiteItem* site(const QString& siteId) const;
+
+    Q_INVOKABLE FloorFilterLevelItem* level(const QString& levelId) const;
 
   signals:
     void geoViewChanged();
@@ -77,6 +87,7 @@ namespace Toolkit {
     void selectedFacilityIdChanged(QString oldId, QString newId);
     void selectedLevelIdChanged(QString oldId, QString newId);
     void selectedChanged();
+    void isSelectedSiteRespectedChanged();
 
   private slots:
     void populateLevelsForSelectedFacility();
@@ -84,10 +95,6 @@ namespace Toolkit {
     void populateSites();
 
   private:
-    FloorFacility* facility(const QString& id) const;
-    FloorSite* site(const QString& id) const;
-    FloorLevel* level(const QString& id) const;
-
     FloorFilterFacilityItem* selectedFacility() const;
     FloorFilterSiteItem* selectedSite() const;
     FloorFilterLevelItem* selectedLevel() const;
@@ -100,6 +107,7 @@ namespace Toolkit {
     QString m_selectedFacilityId;
     QString m_selectedLevelId;
     QString m_selectedSiteId;
+    bool m_selectedSiteResepected{true};
   };
 
 } // Toolkit

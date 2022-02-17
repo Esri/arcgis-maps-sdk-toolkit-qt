@@ -169,19 +169,22 @@ namespace Toolkit {
   {
     m_sites->setDisplayPropertyName("name");
     m_facilities->setDisplayPropertyName("name");
-    m_levels->setDisplayPropertyName("shortName");
+    m_levels->setDisplayPropertyName("longName");
 
     connect(this, &FloorFilterController::selectedFacilityIdChanged, this, &FloorFilterController::selectedChanged);
     connect(this, &FloorFilterController::selectedLevelIdChanged, this, &FloorFilterController::selectedChanged);
     connect(this, &FloorFilterController::selectedSiteIdChanged, this, &FloorFilterController::selectedChanged);
 
     connect(this, &FloorFilterController::selectedFacilityIdChanged, this, &FloorFilterController::populateLevelsForSelectedFacility);
+
     connect(this, &FloorFilterController::selectedSiteIdChanged, this, &FloorFilterController::populateFacilitiesForSelectedSite);
+    connect(this, &FloorFilterController::isSelectedSiteRespectedChanged, this, &FloorFilterController::populateFacilitiesForSelectedSite);
 
     connect(this, &FloorFilterController::selectedLevelIdChanged, this,
             [this](QString /*oldId*/, QString newId)
             {
-              auto newLevel = level(newId);
+              auto newLevelItem = level(newId);
+              auto newLevel = newLevelItem ? newLevelItem->floorLevel() : nullptr;
               auto floorManager = getFloorManager(m_geoView);
               if (floorManager)
               {
@@ -301,72 +304,6 @@ namespace Toolkit {
     emit selectedSiteIdChanged(std::move(oldId), m_selectedSiteId);
   }
 
-  FloorFacility* FloorFilterController::facility(const QString& id) const
-  {
-    if (id.isEmpty())
-      return nullptr;
-
-    if (auto floorManager = getFloorManager(m_geoView))
-    {
-      auto facilities = floorManager->facilities();
-      auto it = std::find_if(std::cbegin(facilities),
-                             std::cend(facilities),
-                             [&id](FloorFacility* facility) -> bool
-                             {
-                               return facility && facility->facilityId() == id;
-                             });
-      if (it != std::cend(facilities))
-      {
-        return *it;
-      }
-    }
-    return nullptr;
-  }
-
-  FloorSite* FloorFilterController::site(const QString& id) const
-  {
-    if (id.isEmpty())
-      return nullptr;
-
-    if (auto floorManager = getFloorManager(m_geoView))
-    {
-      auto sites = floorManager->sites();
-      auto it = std::find_if(std::cbegin(sites),
-                             std::cend(sites),
-                             [&id](FloorSite* site) -> bool
-                             {
-                               return site && site->siteId() == id;
-                             });
-      if (it != std::cend(sites))
-      {
-        return *it;
-      }
-    }
-    return nullptr;
-  }
-
-  FloorLevel* FloorFilterController::level(const QString& id) const
-  {
-    if (id.isEmpty())
-      return nullptr;
-
-    if (auto floorManager = getFloorManager(m_geoView))
-    {
-      auto levels = floorManager->levels();
-      auto it = std::find_if(std::cbegin(levels),
-                             std::cend(levels),
-                             [&id](FloorLevel* level) -> bool
-                             {
-                               return level && level->levelId() == id;
-                             });
-      if (it != std::cend(levels))
-      {
-        return *it;
-      }
-    }
-    return nullptr;
-  }
-
   void FloorFilterController::populateLevelsForSelectedFacility()
   {
     m_levels->clear();
@@ -374,13 +311,25 @@ namespace Toolkit {
     if (!manager)
       return;
 
-    const auto allLevels = manager->levels();
+    auto allLevels = manager->levels();
 
-    QString defaultLevel{};
-    QList<QObject*> levelItems;
-    for (const auto level : allLevels)
+    if (allLevels.isEmpty())
     {
-      if (level->facility()->facilityId() == selectedFacilityId())
+      setSelectedLevelId({});
+      return;
+    }
+
+    // Sort levels by vertical order.
+    std::sort(std::begin(allLevels), std::end(allLevels), [](FloorLevel* a, FloorLevel* b)
+              {
+                return a && b ? a->verticalOrder() < b->verticalOrder() : static_cast<bool>(a);
+              });
+
+    QString defaultLevel= allLevels.first()->levelId();
+    QList<QObject*> levelItems;
+    for (const auto level : qAsConst(allLevels))
+    {
+      if (level && level->facility()->facilityId() == selectedFacilityId())
       {
         levelItems << new FloorFilterLevelItem(level, m_levels);
         if (level->verticalOrder() == 0)
@@ -391,37 +340,40 @@ namespace Toolkit {
       }
     }
 
-    // Otherwise, if there is no appropriate vertical order, we use the bottom
-    // level as the default level.
-    if (defaultLevel.isEmpty() && levelItems.size() > 0)
-    {
-      defaultLevel = static_cast<FloorFilterLevelItem*>(levelItems.last())->modelId();
-    }
-
-    // Reverse order in controller for ascending order. Such that bottom floor level is 
+    // Reverse order in controller for ascending order. Such that bottom floor level is
     // at bottom of the list.
     m_levels->append(QList<QObject*>(std::crbegin(levelItems), std::crend(levelItems)));
-
     setSelectedLevelId(defaultLevel);
   }
 
   void FloorFilterController::populateFacilitiesForSelectedSite()
   {
-    m_facilities->clear();
     auto manager = getFloorManager(m_geoView);
     if (!manager)
+    {
+      m_facilities->clear();
+      return;
+    }
+
+    // Do not blow out the facilities list with a new list if we are showing all facilities in the
+    // FloorManager and we are in ignore selected-site mode. This is not just a micro-optimziation,
+    // there are cases where selecting a facility in this mode will select a parent site, and we don't
+    // want to regenerate the facilities list when the selected site changes.
+    if (manager->facilities().length() == m_facilities->rowCount() && !m_selectedSiteResepected)
       return;
 
     const auto allFacilites = manager->facilities();
-
     QList<QObject*> facilityItems;
     for (const auto facility : allFacilites)
     {
-      if (facility->site()->siteId() == selectedSiteId())
+      // If we have no sites take everything, otherwise filter by the selected site.
+      if (!m_selectedSiteResepected || manager->sites().isEmpty() || facility->site()->siteId() == selectedSiteId())
       {
         facilityItems << new FloorFilterFacilityItem(facility, m_facilities);
       }
     }
+
+    m_facilities->clear();
     m_facilities->append(facilityItems);
 
     // Select only facility if there is only 1 facility.
@@ -459,6 +411,10 @@ namespace Toolkit {
     else
     {
       setSelectedSiteId("");
+      // Even if a site isn't selected, we may still need to populate facilities
+      // if the isSelectedSiteRespected flag is false or there are 0 sites
+      // in the manager.
+      populateFacilitiesForSelectedSite();
     }
   }
 
@@ -472,12 +428,9 @@ namespace Toolkit {
       zoomToEnvelope(f->geometry().extent(), m_geoView);
   }
 
-
-  void FloorFilterController::zoomToFacility(QString facilityId)
+  void FloorFilterController::zoomToFacility(const QString& facilityId)
   {
-    const auto f = facility(facilityId);
-    if (f)
-      zoomToEnvelope(f->geometry().extent(), m_geoView);
+    zoomToFacility(facility(facilityId));
   }
 
   void FloorFilterController::zoomToSite(FloorFilterSiteItem* siteItem)
@@ -490,14 +443,12 @@ namespace Toolkit {
       zoomToEnvelope(s->geometry().extent(), m_geoView);
   }
 
-  void FloorFilterController::zoomToSite(QString siteId)
+  void FloorFilterController::zoomToSite(const QString& siteId)
   {
-    const auto s = site(siteId);
-    if (s)
-      zoomToEnvelope(s->geometry().extent(), m_geoView);
+    zoomToSite(site(siteId));
   }
 
-  FloorFilterFacilityItem* FloorFilterController::selectedFacility() const
+  FloorFilterFacilityItem* FloorFilterController::facility(const QString& facilityId) const
   {
     auto model = m_facilities;
     const auto rows = model->rowCount();
@@ -505,13 +456,13 @@ namespace Toolkit {
     {
       auto index = model->index(i);
       auto item = model->element<FloorFilterFacilityItem>(index);
-      if (item->modelId() == m_selectedFacilityId)
+      if (item->modelId() == facilityId)
         return item;
     }
     return nullptr;
   }
 
-  FloorFilterSiteItem* FloorFilterController::selectedSite() const
+  FloorFilterSiteItem* FloorFilterController::site(const QString& siteId) const
   {
     auto model = m_sites;
     const auto rows = model->rowCount();
@@ -519,13 +470,13 @@ namespace Toolkit {
     {
       auto index = model->index(i);
       auto item = model->element<FloorFilterSiteItem>(index);
-      if (item->modelId() == m_selectedSiteId)
+      if (item->modelId() == siteId)
         return item;
     }
     return nullptr;
   }
 
-  FloorFilterLevelItem* FloorFilterController::selectedLevel() const
+  FloorFilterLevelItem* FloorFilterController::level(const QString& levelId) const
   {
     auto model = m_levels;
     const auto rows = model->rowCount();
@@ -533,10 +484,39 @@ namespace Toolkit {
     {
       auto index = model->index(i);
       auto item = model->element<FloorFilterLevelItem>(index);
-      if (item->modelId() == m_selectedLevelId)
+      if (item->modelId() == levelId)
         return item;
     }
     return nullptr;
+  }
+
+  FloorFilterFacilityItem* FloorFilterController::selectedFacility() const
+  {
+    return facility(selectedFacilityId());
+  }
+
+  FloorFilterSiteItem* FloorFilterController::selectedSite() const
+  {
+    return site(selectedSiteId());
+  }
+
+  FloorFilterLevelItem* FloorFilterController::selectedLevel() const
+  {
+    return level(selectedLevelId());
+  }
+
+  bool FloorFilterController::isSelectedSiteRespected() const
+  {
+    return m_selectedSiteResepected;
+  }
+
+  void FloorFilterController::setIsSelectedSiteRespected(bool isSelectedSiteRespected)
+  {
+    if (isSelectedSiteRespected == m_selectedSiteResepected)
+      return;
+
+    m_selectedSiteResepected = isSelectedSiteRespected;
+    emit isSelectedSiteRespectedChanged();
   }
 
 } // Toolkit
