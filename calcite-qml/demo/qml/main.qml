@@ -23,7 +23,7 @@ import QtQuick.Layouts 1.12
 ApplicationWindow {
     id: appWindow
     width: 800
-    height: 600
+    height: 800
     title: "Calite_test"
     visible: true
 
@@ -228,6 +228,35 @@ ApplicationWindow {
                     highlighted: false
                     checkable: true
                     text: "radio delegate"
+                }
+            }
+        }
+
+        ToolBar {
+            enabled: enabler.checked
+            anchors {
+                right: parent.right
+                bottom: parent.attributionTop
+                margins: 5
+            }
+            ColumnLayout {
+
+                ToolButton {
+                    icon.source: "qrc:/esri.com/imports/Calcite/images/check.svg"
+                    checkable: true
+                    text: "Checkable ToolButton"
+                }
+
+                ToolSeparator {
+                    Layout.fillWidth: true
+                    orientation: Qt.Horizontal
+                }
+
+                ToolButton {
+                    Layout.fillWidth: true
+                    flat: true
+                    checkable: true
+                    text: "Regular Flat ToolButton "
                 }
             }
         }
