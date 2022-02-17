@@ -224,6 +224,11 @@ ApplicationWindow {
                     text: "Loading..."
                     Layout.alignment: Qt.AlignHCenter
                 }
+                RadioDelegate {
+                    highlighted: false
+                    checkable: true
+                    text: "radio delegate"
+                }
             }
         }
     }
