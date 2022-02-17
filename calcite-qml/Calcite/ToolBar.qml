@@ -31,6 +31,6 @@ T.ToolBar {
 
     background: Rectangle {
         implicitHeight: 48
-        color: Calcite.foreground1
+        color: Calcite.background
     }
 }
