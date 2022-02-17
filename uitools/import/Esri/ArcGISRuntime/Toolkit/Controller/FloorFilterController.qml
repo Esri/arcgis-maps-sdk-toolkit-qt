@@ -17,6 +17,7 @@
 import QtQuick 2.12
 import Esri.ArcGISRuntime 100.14
 
+// sites are optional, facilities are optional. a Facility might have no levels (restricted access facility)
 QtObject {
     id: controller
 
@@ -35,14 +36,41 @@ QtObject {
 
     property int updateLevelsMode: FloorFilterController.UpdateLevelsMode.AllLevelsMatchingVerticalOrder
 
+    property bool autoselectSingleFacilitySite
+
     property FloorManager floorManager
+
+    property bool selectedSiteResepected: true
 
     //refresh()?
     property string selectedLevelId
 
     property string selectedFacilityId
 
+    function setSelectedFacilityId(facilityId) {
+        let idx = findElementIdxById(facilityId,
+                                     FloorFilterController.TypeElement.Facility)
+        if (idx == null) {
+            console.error("not found facility")
+            return
+        }
+
+        // check that the current site is the selected facility selected. Otherwise the click came from a populateAllFacilities
+        var facility = floorManager.facilities[idx]
+        if (!internal.selectedSite
+                || facility.site.siteId !== internal.selectedSite.siteId) {
+            // selection of facility came after click of populateAllFacilities.
+            // this also sets the internal.selectedSite
+            selectedSiteId = facility.site.siteId
+        }
+        selectedFacilityId = facilityId
+    }
+
     property string selectedSiteId
+
+    function setSelectedSiteId(siteId) {
+        selectedSiteId = siteId
+    }
 
     property ListModel levels: ListModel {}
 
@@ -56,23 +84,42 @@ QtObject {
 
     // iterates over \a listElements to find an element with \a id.
     //\a variableIdName is used to access the correct method name in each list (siteId, facilityId, levelId)
-    function findElementIdxById(id, listElements, variableIdName) {
-        let idx
-        for (var i = 0; i < listElements.length; ++i) {
-            let elementId = listElements[i][variableIdName]
+    function findElementIdxById(id, typeElement) {
+        var model
+        var variableIdName
+        print("type", typeElement)
+        switch (typeElement) {
+        case FloorFilterController.TypeElement.Level:
+            model = floorManager.levels
+            variableIdName = "levelId"
+            break
+        case FloorFilterController.TypeElement.Facility:
+            model = floorManager.facilities
+            variableIdName = "facilityId"
+            break
+        case FloorFilterController.TypeElement.Site:
+            model = floorManager.sites
+            variableIdName = "siteId"
+            break
+        default:
+            console.error("no element type matched")
+            return null
+        }
+
+        for (var i = 0; i < model.length; ++i) {
+            let elementId = model[i][variableIdName]
             if (elementId === id) {
-                idx = i
-                break
+                return i
             }
         }
-        return idx
+        return null
     }
 
     onSelectedLevelIdChanged: {
         // find the list element idx of the changed levelId
-        let idx = findElementIdxById(selectedLevelId, floorManager.levels,
-                                     "levelId")
-        if (idx === undefined) {
+        let idx = findElementIdxById(selectedLevelId,
+                                     FloorFilterController.TypeElement.Level)
+        if (idx == null) {
             console.error("site id not found")
             return
         }
@@ -95,19 +142,14 @@ QtObject {
     onSelectedFacilityIdChanged: {
         // find the list element idx of the changed facilityId
         let idx = findElementIdxById(selectedFacilityId,
-                                     floorManager.facilities, "facilityId")
-        if (idx === undefined) {
-            console.error("facility id not found")
+                                     FloorFilterController.TypeElement.Facility)
+        // checking both null and undefined
+        if (idx == null) {
+            console.error("facility id not found, resetting current facility")
+            internal.selectedFacility = null
             return
         }
         internal.selectedFacility = floorManager.facilities[idx]
-        // check that the current site is the selected facility selected. Otherwise the click came from a populateAllFacilities
-        var facility = floorManager.facilities[idx]
-        if (facility.site.siteId !== internal.selectedSite.siteId) {
-            // selection of facility came after click of populateAllFacilities.
-            // this also sets the internal.selectedSite
-            selectedSiteId = facility.site.siteId
-        }
 
         populateLevels(floorManager.facilities[idx].levels)
         onSelectedChanged()
@@ -116,14 +158,21 @@ QtObject {
     onSelectedSiteIdChanged: {
         // find the list element idx of the changed siteId
         let idx = findElementIdxById(selectedSiteId,
-                                     floorManager.sites, "siteId")
-        if (idx === undefined) {
+                                     FloorFilterController.TypeElement.Site)
+        if (idx == null) {
             console.error("site id not found")
             return
         }
+
         internal.selectedSite = floorManager.sites[idx]
+
+        // dont populate facilities if they are total number and we are ignoring the current selected site
+        if (!selectedSiteResepected
+                && facilities.count === floorManager.facilities.length)
+            return
         populateFacilities(floorManager.sites[idx].facilities)
         onSelectedChanged()
+        selectedFacilityId = ""
     }
 
     function onSelectedChanged() {}
@@ -163,7 +212,7 @@ QtObject {
                          })
         }
         // case single site: autoselect it and set the boolean used by the view
-        if (listSites.length === 1) {
+        if (autoselectSingleFacilitySite && listSites.length === 1) {
             internal.singleSite = true
             let site = listSites[0]
             selectedSiteId = site.siteId
@@ -180,7 +229,7 @@ QtObject {
                               })
         }
         // case single facility: autoselect it
-        if (listFacilities.length === 1) {
+        if (autoselectSingleFacilitySite && listFacilities.length === 1) {
             selectedFacilityId = listFacilities[0].facilityId
         }
     }
@@ -196,29 +245,68 @@ QtObject {
     function populateLevels(listLevels) {
         levels.clear()
         let selectedLevel = ""
+        let levelsExtracted = []
         for (var i = listLevels.length - 1; i >= 0; --i) {
             let level = listLevels[i]
-            levels.append({
-                              "shortName": level.shortName,
-                              "modelId": level.levelId
-                          })
+            levelsExtracted.push(level)
+
             if (level.verticalOrder === 0) {
                 selectedLevel = level.levelId
                 selectedLevelId = level.levelId
             }
         }
-        // no suitable vertical order found
-        if (!selectedLevel)
+        // sorting higher levels first
+        levelsExtracted.sort(function (first, second) {
+            return second.verticalOrder - first.verticalOrder
+        })
+
+        levelsExtracted.forEach(levelExtracted => {
+                                    levels.append({
+                                                      "shortName": levelExtracted.shortName,
+                                                      "longName": levelExtracted.longName,
+                                                      "modelId": levelExtracted.levelId
+                                                  })
+                                })
+        // no suitable vertical order found. second check to from facilities with no levels
+        if (!selectedLevel && listLevels[0])
             selectedLevelId = listLevels[0].levelId
     }
 
+    function zoomToCurrentFacility() {
+        if (!selectedFacilityId) {
+            console.error("no facility yet selected")
+            return
+        }
+        zoomToFacility(selectedFacilityId)
+    }
+
+    function zoomToCurrentSite() {
+        if (!selectedSiteId) {
+            console.error("no site yet selected")
+            return
+        }
+        zoomToSite(selectedSiteId)
+    }
+
     function zoomToFacility(facilityId) {
-        let idx = findElementIdxById(selectedFacilityId,
-                                     floorManager.facilities, "facilityId")
+        let idx = findElementIdxById(facilityId,
+                                     FloorFilterController.TypeElement.Facility)
         let facility = floorManager.facilities[idx]
         const extent = facility.geometry.extent
+        zoomToEnvelope(extent)
+    }
+
+    function zoomToSite(siteId) {
+        let idx = findElementIdxById(siteId,
+                                     FloorFilterController.TypeElement.Site)
+        let site = floorManager.sites[idx]
+        const extent = site.geometry.extent
+        zoomToEnvelope(extent)
+    }
+
+    function zoomToEnvelope(envelope) {
         var builder = ArcGISRuntimeEnvironment.createObject('EnvelopeBuilder', {
-                                                                "geometry": extent
+                                                                "geometry": envelope
                                                             })
         builder.expandByFactor(internal.zoom_padding)
         var newViewpoint = ArcGISRuntimeEnvironment.createObject(
@@ -226,10 +314,7 @@ QtObject {
                         "extent": builder.geometry
                     })
         geoView.setViewpoint(newViewpoint)
-        console.log("set viewqpoint")
     }
-
-    function zoomToEnvelope(envelope) {}
 
 
     /*!
@@ -246,6 +331,12 @@ QtObject {
     enum UpdateLevelsMode {
         SingleLevel,
         AllLevelsMatchingVerticalOrder
+    }
+
+    enum TypeElement {
+        Level,
+        Facility,
+        Site
     }
 
     /*! internal */

@@ -41,6 +41,21 @@ Control {
 
     property bool hideSiteFacilityButton: false
 
+    //debug property: should always be true, autoselecting singlefacilitiesistes in case they are single
+    property bool autoselectSingleFacilitySite: false
+
+    property bool collapsedIcons: true
+
+    property int maxNumberLevels: 2
+
+    padding: 5
+
+    Binding {
+        target: controller
+        property: "autoselectSingleFacilitySite"
+        value: floorFilter.autoselectSingleFacilitySite
+    }
+
     // create singlepointing binding towards controller
     Binding {
         target: controller
@@ -54,254 +69,460 @@ Control {
         value: floorFilter.geoView
     }
 
-    contentItem: ToolBar {
-        id: levelFilterMenu
-        Layout.alignment: Qt.AlignBottom
+    contentItem: Grid {
+        rows: 1
+        layoutDirection: (internal.leaderPosition === FloorFilter.LeaderPosition.UpperLeft)
+                         || (internal.leaderPosition === FloorFilter.LeaderPosition.LowerLeft) ? Qt.LeftToRight : Qt.RightToLeft
+        verticalItemAlignment: (internal.leaderPosition === FloorFilter.LeaderPosition.UpperLeft)
+                               || (internal.leaderPosition === FloorFilter.LeaderPosition.UpperRight) ? Grid.AlignTop : Grid.AlignBottom
+        columnSpacing: 5
+        ToolBar {
 
-        ColumnLayout {
+            id: levelFilterMenu
 
-            ToolButton {
-                id: collapser
-                checkable: true
-                checked: true
-                visible: !collapser.checked
-                Layout.fillWidth: true
-                icon.source: "images/x.svg"
-            }
-
-            ToolSeparator {
-                visible: !collapser.checked
-                Layout.fillWidth: true
-                orientation: Qt.Horizontal
-            }
-
-            Repeater {
-                id: repeater
-                property int downItem
-
-                model: controller.levels
-                delegate: ToolButton {
-                    visible: !collapser.checked
-                    checked: controller.selectedLevelId === model.modelId
-                    autoExclusive: true
+            Layout.alignment: Qt.AlignBottom
+            ColumnLayout {
+                spacing: 0
+                ToolButton {
+                    id: closer
+                    checkable: true
+                    checked: true
+                    visible: !closer.checked
                     Layout.fillWidth: true
-                    text: model.shortName
+                    Layout.alignment: Qt.AlignLeft
+                    icon.source: "images/x.svg"
+                    text: "Close"
+                    display: collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
+                }
+
+                ToolSeparator {
+                    visible: !closer.checked
+                    Layout.fillWidth: true
+                    orientation: Qt.Horizontal
+                }
+                ToolButton {
+                    id: collapser
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignLeft
+                    icon.source: collapsedIcons ? "images/chevrons-right.svg" : "images/chevrons-left.svg"
+                    text: "Collapse"
+                    flat: true
+                    display: collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
+                    onClicked: collapsedIcons = !collapsedIcons
+                }
+                ToolSeparator {
+                    Layout.fillWidth: true
+                    orientation: Qt.Horizontal
+                }
+                ToolButton {
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignLeft
+                    icon.source: "images/zoom-to-object.svg"
+                    text: "Zoom to"
+                    flat: true
+                    enabled: !listView.visible ? controller.selectedFacilityId : internal.currentVisibileListView === FloorFilter.VisibleListView.Site ? controller.selectedSiteId : controller.selectedFacilityId
+                    display: collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
                     onClicked: {
-                        controller.selectedLevelId = model.modelId
+                        if (internal.currentVisibileListView === FloorFilter.VisibleListView.Site
+                                && listView.visible)
+                            controller.zoomToCurrentSite()
+                        else if (internal.currentVisibileListView
+                                 === FloorFilter.VisibleListView.Facility
+                                 || !listView.visible)
+                            controller.zoomToCurrentFacility()
+                        else
+                            console.error("extra enum not accounted for.")
                     }
                 }
-            }
-
-            ToolSeparator {
-                Layout.fillWidth: true
-                visible: !collapser.checked && !hideSiteFacilityButton
-                orientation: Qt.Horizontal
-            }
-            // not visible when floorFilter is shown and not visible if the children has no text to be shown.
-            ToolButton {
-                visible: collapser.checked && text !== ""
-                id: itemSelectedButton
-                text: controller.selectedLevel ? controller.selectedLevel.shortName : ""
-                onClicked: {
-                    collapser.checked = false
+                ToolSeparator {
+                    Layout.fillWidth: true
+                    orientation: Qt.Horizontal
                 }
-            }
 
-            ToolButton {
-                id: buildingMenuButton
-                checkable: true
-                Layout.fillWidth: true
-                visible: !hideSiteFacilityButton
-                icon.source: "images/organization.svg"
-            }
-        }
-    }
+                Flickable {
+                    visible: !closer.checked
 
-    Pane {
-        anchors.left: levelFilterMenu.right
-        anchors.margins: 10
-        visible: buildingMenuButton.checked
-        GridLayout {
-            flow: GridLayout.TopToBottom
-            Layout.alignment: Qt.AlignBottom
-            rows: 5
-            rowSpacing: 0
+                    // dont need to use the id of the column
+                    contentHeight: contentItem.childrenRect.height
+                    Layout.fillWidth: true
+                    Layout.maximumHeight: repeater.buttonHeight * maxNumberLevels
+                    implicitHeight: repeater.buttonHeight * repeater.count
+                    clip: true
+                    ScrollBar.vertical: ScrollBar {}
 
-            Button {
-                text: "show all facilities"
-                Layout.columnSpan: 3
-                onClicked: {
-                    controller.populateAllFacilities()
-                    internal.currentVisibileListView = FloorFilter.VisibleListView.Facility
-                }
-            }
+                    Column {
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        Repeater {
+                            id: repeater
 
-            Button {
-                Layout.fillHeight: true
-                //Layout.fillWidth: true
-                Layout.rowSpan: 2
-                Layout.alignment: Qt.AlignHCenter
-                Layout.preferredWidth: controller.sites.count === 1 ? 0 : (internal.currentVisibileListView === FloorFilter.VisibleListView.Facility ? 32 : 0)
-                display: AbstractButton.IconOnly
-                flat: true
-                //removing all paddings and spacing from component so icon will fill compeltely the button
-                topPadding: 0
-                bottomPadding: 0
-                leftPadding: 0
-                rightPadding: 0
-                spacing: 0
+                            property int downItem
+                            // defaulting to 0, so in case of model.count === 0, the buttonHeight value is not undefined
+                            property int buttonHeight: 0
 
-                icon {
-                    width: 32
-                    height: 32
-                    source: "images/chevron-left.svg"
-                    color: "black"
-                }
-                onClicked: internal.currentVisibileListView = FloorFilter.VisibleListView.Site
-            }
-
-            Image {
-                id: searchImg
-                sourceSize.width: 32
-                sourceSize.height: 32
-                source: "images/search.svg"
-            }
-
-            ListView {
-                Component.onCompleted: console.log("cont", contentHeight)
-                id: listView
-
-                visible: true
-
-                Layout.columnSpan: 3
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.minimumHeight: contentHeight / count
-                Layout.maximumHeight: contentHeight / count * 3
-
-                ScrollBar.vertical: ScrollBar {}
-                clip: true
-
-                //                implicitHeight: contentHeight
-                //                implicitWidth: contentWidth
-                model: DelegateModel {
-                    id: dm
-                    property Connections conn: Connections {
-                        target: searchTextField
-                        function onTextChanged() {
-
-                            //usign items group to fetch all the elements (they are all setting this group automatically)
-                            for (var i = 0; i < dm.items.count; ++i) {
-                                var item = dm.items.get(i)
-
-                                if (searchTextField.text === "") {
-                                    item.inFiltered = true
-                                } else {
-                                    if (item.model.name.includes(
-                                                searchTextField.text))
-                                        item.inFiltered = true
-                                    else
-                                        item.inFiltered = false
+                            model: controller.levels
+                            delegate: ToolButton {
+                                Component.onCompleted: repeater.buttonHeight = this.height
+                                id: levelButton
+                                visible: !closer.checked
+                                checked: controller.selectedLevelId === model.modelId
+                                autoExclusive: true
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                text: closer.checked
+                                      || collapsedIcons ? model.shortName : model.longName
+                                flat: true
+                                display: AbstractButton.TextOnly
+                                onClicked: {
+                                    controller.selectedLevelId = model.modelId
                                 }
                             }
                         }
                     }
+                }
 
-                    model: internal.currentVisibileListView
-                           === FloorFilter.VisibleListView.Site ? controller.sites : controller.facilities
-                    Component.onCompleted: console.log("count:", count)
-                    onCountChanged: console.log("count:", count)
-                    filterOnGroup: "filtered"
-                    groups: [
-                        DelegateModelGroup {
-                            id: filteredGroup
-                            name: "filtered"
-                            includeByDefault: true
+                ToolSeparator {
+                    Layout.fillWidth: true
+                    visible: !closer.checked && !hideSiteFacilityButton
+                    orientation: Qt.Horizontal
+                }
+
+                // not visible when floorFilter is shown and not visible if the children has no text to be shown.
+                ToolButton {
+                    visible: closer.checked && text !== ""
+                    id: itemSelectedButton
+                    Layout.fillWidth: true
+                    // always checked
+                    checkable: false
+                    checked: true
+                    text: controller.selectedLevel ? controller.selectedLevel.shortName : ""
+                    flat: true
+                    display: AbstractButton.TextOnly
+                    onClicked: {
+                        closer.checked = false
+                    }
+                }
+
+                ToolButton {
+                    id: buildingMenuButton
+                    checkable: true
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignLeft
+                    visible: !hideSiteFacilityButton
+                    icon.source: "images/organization.svg"
+                    text: "Browse"
+                    flat: true
+                    display: collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
+                }
+            }
+        }
+
+        Pane {
+            padding: 0
+            //            anchors.left: levelFilterMenu.right
+            //            anchors.margins: 10
+            visible: buildingMenuButton.checked
+            GridLayout {
+                Component.onCompleted: {
+                    console.log("completed")
+                }
+                flow: GridLayout.TopToBottom
+                Layout.alignment: Qt.AlignBottom
+                rows: 6
+                columnSpacing: 0
+                rowSpacing: 0
+                Button {
+                    Layout.margins: 0
+                    Layout.fillHeight: true
+                    //Layout.fillWidth: true
+                    Layout.rowSpan: 2
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.preferredWidth: autoselectSingleFacilitySite ? 0 : (internal.currentVisibileListView === FloorFilter.VisibleListView.Facility ? 32 : 0)
+                    display: AbstractButton.IconOnly
+                    flat: true
+                    //removing all paddings and spacing from component so icon will fill compeltely the button
+                    topPadding: 0
+                    bottomPadding: 0
+                    leftPadding: 0
+                    rightPadding: 0
+                    spacing: 0
+
+                    icon {
+                        width: 32
+                        height: 32
+                        source: "images/chevron-left.svg"
+                    }
+                    onClicked: {
+                        internal.currentVisibileListView = FloorFilter.VisibleListView.Site
+                        // When showing site view, resetting the not ignore current site. (this button is only way to get to site view)
+                        controller.selectedSiteResepected = true
+                    }
+                }
+
+                TextField {
+                    id: searchTextField
+                    Layout.fillWidth: true
+                    Layout.columnSpan: 3
+                    //                Layout.rowSpan: noResultsFoundLabel.visible ? 1 : 2
+                    Layout.margins: 5
+                    placeholderText: "Search"
+                    leftPadding: searchImg.width + 5
+                    Image {
+                        id: searchImg
+                        sourceSize.width: 32
+                        sourceSize.height: 32
+                        width: height
+                        anchors {
+                            left: parent.left
+                            top: parent.top
+                            bottom: parent.bottom
+                            margins: 4
                         }
-                    ]
-                    delegate: ItemDelegate {
-                        Component.onCompleted: console.log("delegate", height)
-                        width: listView.width
-                        highlighted: internal.currentVisibileListView
-                                     === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx
-                        text: model.name
-                        onClicked: {
-                            // switch to facility view
-                            if (internal.currentVisibileListView
-                                    === FloorFilter.VisibleListView.Site) {
-                                internal.selectedSiteIdx = index
-                                controller.selectedSiteId = model.modelId
-                                internal.currentVisibileListView
-                                        = FloorFilter.VisibleListView.Facility
-                            } // switch to level view
-                            else if (internal.currentVisibileListView
-                                     === FloorFilter.VisibleListView.Facility) {
-                                controller.selectedFacilityId = model.modelId
-                                internal.selectedFacilityIdx = index
-                                buildingMenuButton.checked = false
-                                collapser.checked = false
-                                controller.zoomToFacility(model.modelId)
+
+                        source: "images/search.svg"
+                    }
+
+                    Button {
+                        flat: true
+                        display: AbstractButton.IconOnly
+                        width: 32
+                        height: 32
+                        topPadding: 0
+                        bottomPadding: 0
+                        leftPadding: 0
+                        rightPadding: 0
+                        anchors {
+                            right: parent.right
+                            top: parent.top
+                            bottom: parent.bottom
+                            margins: 1
+                        }
+                        icon {
+                            // half size the parent (small 'x')
+                            width: parent.width / 2
+                            height: parent.height / 2
+                            source: "images/x.svg"
+                        }
+                        onClicked: searchTextField.text = ""
+                    }
+                }
+
+                Label {
+                    id: noResultsFoundLabel
+                    text: "No results found"
+                    visible: false
+                    Layout.columnSpan: 3
+                    Layout.rowSpan: showAllFacilities.visible ? 1 : 2
+                    Layout.fillWidth: true
+                    Layout.topMargin: 5
+                    horizontalAlignment: Qt.AlignHCenter
+                    verticalAlignment: Qt.AlignVCenter
+                }
+
+                ListView {
+                    id: listView
+                    onWidthChanged: print("width", width)
+                    property var w: contentItem.childrenRect.width
+                    onWChanged: print("width rect ", w)
+                    property var h: contentItem.childrenRect.height
+                    onHChanged: print("height rect", h)
+                    visible: true
+                    Layout.preferredHeight: 200
+                    Layout.columnSpan: 3
+                    //width: contentItem.childrenRect.width
+                    contentWidth: contentItem.childrenRect.width
+                    implicitWidth: contentWidth
+                    Layout.minimumWidth: implicitWidth
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    //Layout.fillWidth: true
+                    Layout.minimumHeight: contentHeight / count
+                    Layout.maximumHeight: contentHeight / count * 3
+                    Layout.topMargin: 5
+                    Layout.rowSpan: showAllFacilities.visible ? 1 : 2
+                    ScrollBar.vertical: ScrollBar {}
+
+                    clip: true
+                    model: DelegateModel {
+                        id: dm
+                        property Connections conn: Connections {
+                            target: searchTextField
+                            function onTextChanged() {
+
+                                //usign items group to fetch all the elements (they are all setting this group automatically)
+                                for (var i = 0; i < dm.items.count; ++i) {
+                                    var item = dm.items.get(i)
+
+                                    if (searchTextField.text === "") {
+                                        item.inFiltered = true
+                                    } else {
+                                        if (item.model.name.toLowerCase(
+                                                    ).includes(
+                                                    searchTextField.text.toLowerCase(
+                                                        )))
+                                            item.inFiltered = true
+                                        else
+                                            item.inFiltered = false
+                                    }
+                                }
+                                listView.visible = filteredGroup.count > 0
+                                noResultsFoundLabel.visible = !listView.visible
+                            }
+                        }
+
+                        model: internal.currentVisibileListView
+                               === FloorFilter.VisibleListView.Site ? controller.sites : controller.facilities
+                        filterOnGroup: "filtered"
+                        groups: [
+                            DelegateModelGroup {
+                                id: filteredGroup
+                                name: "filtered"
+                                includeByDefault: true
+                            }
+                        ]
+                        delegate: RadioDelegate {
+                            width: listView.width
+                            highlighted: internal.currentVisibileListView
+                                         === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx
+                            text: model.name
+                            onClicked: {
+                                // switch to facility view
+                                if (internal.currentVisibileListView
+                                        === FloorFilter.VisibleListView.Site) {
+                                    controller.setSelectedSiteId(model.modelId)
+                                    internal.currentVisibileListView
+                                            = FloorFilter.VisibleListView.Facility
+                                } // switch to level view
+                                else if (internal.currentVisibileListView
+                                         === FloorFilter.VisibleListView.Facility) {
+                                    controller.setSelectedFacilityId(
+                                                model.modelId)
+                                    buildingMenuButton.checked = false
+                                    closer.checked = false
+                                }
                             }
                         }
                     }
                 }
-            }
-            Text {
-                font.bold: true
-                Layout.fillWidth: true
-                horizontalAlignment: Text.AlignHCenter
-                text: controller.selectedSite ? controller.selectedSite.name : "Select the Site"
-            }
-            Text {
-                Layout.fillWidth: true
-                horizontalAlignment: Text.AlignHCenter
-                text: controller.selectedFacility ? controller.selectedFacility.name : "Select the Facility"
-            }
-
-            TextField {
-                id: searchTextField
-                Layout.fillWidth: true
-                Layout.columnSpan: 2
-                x: searchImg.width
-                placeholderText: "Search"
-            }
-
-            Button {
-                Layout.rowSpan: 2
-                Layout.fillHeight: true
-                display: AbstractButton.IconOnly
-                flat: true
-                //removing all paddings and spacing from component so icon will fill compeltely the button
-                topPadding: 0
-                bottomPadding: 0
-                leftPadding: 0
-                rightPadding: 0
-                spacing: 0
-                Layout.alignment: Qt.AlignHCenter
-                Layout.preferredWidth: 32
-                icon {
-                    width: 32
-                    height: 32
-                    source: "images/x.svg"
-                    color: "black"
+                ToolSeparator {
+                    Layout.fillWidth: true
+                    Layout.columnSpan: 3
+                    orientation: Qt.Horizontal
                 }
-                onClicked: buildingMenuButton.checked = false
+
+                Label {
+                    id: showAllFacilities
+                    text: '<a href=" "style="text-decoration: none">All sites</a>'
+                    textFormat: Text.RichText
+                    Layout.alignment: Qt.AlignCenter
+                    Layout.columnSpan: 3
+                    Layout.margins: 5
+                    visible: internal.currentVisibileListView === FloorFilter.VisibleListView.Site
+
+                    MouseArea {
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            controller.selectedSiteResepected = false
+                            controller.populateAllFacilities()
+                            internal.currentVisibileListView = FloorFilter.VisibleListView.Facility
+                        }
+                    }
+                }
+
+                Label {
+                    id: siteLabel
+                    font.bold: internal.currentVisibileListView === FloorFilter.VisibleListView.Site
+                    Layout.fillWidth: true
+                    // the two titles are close to each others
+                    Layout.topMargin: 5
+                    Layout.leftMargin: 5
+                    Layout.rightMargin: 5
+                    horizontalAlignment: Text.AlignHCenter
+                    text: controller.selectedSite ? controller.selectedSite.name : "Select the Site"
+                }
+                Label {
+                    font.bold: internal.currentVisibileListView
+                               === FloorFilter.VisibleListView.Facility
+                    Layout.fillWidth: true
+                    Layout.leftMargin: 5
+                    Layout.rightMargin: 5
+                    Layout.bottomMargin: 5
+                    horizontalAlignment: Text.AlignHCenter
+                    text: controller.selectedFacility ? controller.selectedFacility.name : "Select the Facility"
+                }
+
+                Button {
+                    Layout.rowSpan: 2
+                    Layout.fillHeight: true
+                    display: AbstractButton.IconOnly
+                    flat: true
+                    //removing all paddings and spacing from component so icon will fill compeltely the button
+                    topPadding: 0
+                    bottomPadding: 0
+                    leftPadding: 0
+                    rightPadding: 0
+                    //spacing: 0
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.preferredWidth: 32
+                    icon {
+                        width: 32
+                        height: 32
+                        source: "images/x.svg"
+                        color: siteLabel.color
+                    }
+                    onClicked: buildingMenuButton.checked = false
+                }
             }
         }
     }
+
     // used to switch between site and facilities listviews and models.
     enum VisibleListView {
         Site,
         Facility
     }
 
+    enum LeaderPosition {
+        UpperLeft,
+        UpperRight,
+        LowerRight,
+        LowerLeft
+    }
+
     QtObject {
         id: internal
-        property int currentVisibileListView: controller.sites.count === 1 ? FloorFilter.VisibleListView.Facility : FloorFilter.VisibleListView.Site
+
+        property int currentVisibileListView: FloorFilter.VisibleListView.Site
         //idx refers to repeter or listview idx, not the model idx.
         property int selectedFacilityIdx: -1
         property int selectedSiteIdx: -1
         onCurrentVisibileListViewChanged: console.log("curr changed",
                                                       currentVisibileListView)
+        // absolute position parent floorfilter
+        property var parentOrigin: mapToItem(floorFilter.parent,
+                                             floorFilter.parent.x,
+                                             floorFilter.parent.y)
+        // absolute position center point floorfilter
+        property var floorFilterOrigin: (mapToItem(floorFilter.parent,
+                                                   floorFilter.x,
+                                                   floorFilter.y))
+        property double centerFloorFilterX: (floorFilterOrigin.x + floorFilter.width) / 2
+        property double centerFloorFilterY: (floorFilterOrigin.y + floorFilter.height) / 2
+        property double centerParentX: (parentOrigin.x + floorFilter.parent.width) / 2
+        property double centerParentY: (parentOrigin.y + floorFilter.parent.height) / 2
+        property int leaderPosition: {
+            if (centerFloorFilterX < centerParentX) {
+                if (centerFloorFilterY < centerParentY)
+                    FloorFilter.LeaderPosition.UpperLeft
+                else
+                    FloorFilter.LeaderPosition.LowerLeft
+            } else {
+                if (centerFloorFilterY < centerParentY)
+                    FloorFilter.LeaderPosition.UpperRight
+                else
+                    FloorFilter.LeaderPosition.LowerRight
+            }
+        }
     }
 }

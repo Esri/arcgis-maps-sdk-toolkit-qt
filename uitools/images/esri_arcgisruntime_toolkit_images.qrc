@@ -1,6 +1,8 @@
 <RCC>
     <qresource prefix="/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images">
         <file>chevron-left.svg</file>
+        <file>chevrons-left.svg</file>
+        <file>chevrons-right.svg</file>
         <file>compass.png</file>
         <file>flash.png</file>
         <file>information.svg</file>
@@ -21,5 +23,6 @@
         <file>text_editing_mode.png</file>
         <file>x.svg</file>
         <file>zoom.png</file>
+        <file>zoom-to-object.svg</file>
     </qresource>
 </RCC>
