@@ -57,10 +57,10 @@ namespace Toolkit {
     void setGeoView(QObject* geoView);
 
     QString selectedSiteId() const;
-    void setSelectedSiteId(QString selectedSiteId);
+    Q_INVOKABLE void setSelectedSiteId(QString selectedSiteId);
 
     QString selectedFacilityId() const;
-    void setSelectedFacilityId(QString selectedFacilityId);
+    Q_INVOKABLE void setSelectedFacilityId(QString selectedFacilityId);
 
     QString selectedLevelId() const;
     void setSelectedLevelId(QString selectedLevelId);

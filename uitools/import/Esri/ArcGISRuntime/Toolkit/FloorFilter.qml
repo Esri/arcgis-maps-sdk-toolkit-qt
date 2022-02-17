@@ -165,7 +165,7 @@ Control {
                                 flat: true
                                 display: AbstractButton.TextOnly
                                 onClicked: {
-                                    controller.selectedLevelId = model.modelId
+                                    controller.setSelectedLevelId(model.modelId)
                                 }
                             }
                         }
@@ -228,7 +228,7 @@ Control {
                     //Layout.fillWidth: true
                     Layout.rowSpan: 2
                     Layout.alignment: Qt.AlignHCenter
-                    Layout.preferredWidth: autoselectSingleFacilitySite ? 0 : (internal.currentVisibileListView === FloorFilter.VisibleListView.Facility ? 32 : 0)
+                    Layout.preferredWidth: internal.currentVisibileListView === FloorFilter.VisibleListView.Facility ? 32 : 0
                     display: AbstractButton.IconOnly
                     flat: true
                     //removing all paddings and spacing from component so icon will fill compeltely the button

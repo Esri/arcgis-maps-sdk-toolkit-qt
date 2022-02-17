@@ -41,9 +41,13 @@ QtObject {
     property bool selectedSiteResepected: true
 
     //refresh()?
-    property string selectedLevelId
+    readonly property alias selectedLevelId: internal.selectedLevelId
 
-    property string selectedFacilityId
+    function setSelectedLevelId(levelId) {
+        internal.selectedLevelId = levelId
+    }
+
+    readonly property alias selectedFacilityId: internal.selectedFacilityId
 
     function setSelectedFacilityId(facilityId) {
         let idx = findElementIdxById(facilityId,
@@ -59,15 +63,16 @@ QtObject {
                 || facility.site.siteId !== internal.selectedSite.siteId) {
             // selection of facility came after click of populateAllFacilities.
             // this also sets the internal.selectedSite
-            selectedSiteId = facility.site.siteId
+            internal.selectedSiteId = facility.site.siteId
         }
-        selectedFacilityId = facilityId
+        internal.selectedFacilityId = facilityId
     }
 
-    property string selectedSiteId
+    readonly property alias selectedSiteId: internal.selectedSiteId
 
     function setSelectedSiteId(siteId) {
-        selectedSiteId = siteId
+        console.log("set selected site id")
+        internal.selectedSiteId = siteId
     }
 
     property ListModel levels: ListModel {}
@@ -170,7 +175,7 @@ QtObject {
             return
         populateFacilities(floorManager.sites[idx].facilities)
         onSelectedChanged()
-        selectedFacilityId = ""
+        internal.selectedFacilityId = ""
     }
 
     function onSelectedChanged() {}
@@ -213,7 +218,7 @@ QtObject {
         if (listSites.length === 1) {
             internal.singleSite = true
             let site = listSites[0]
-            selectedSiteId = site.siteId
+            internal.selectedSiteId = site.siteId
         }
     }
 
@@ -228,7 +233,7 @@ QtObject {
         }
         // case single facility: autoselect it
         if (listFacilities.length === 1) {
-            selectedFacilityId = listFacilities[0].facilityId
+            internal.selectedFacilityId = listFacilities[0].facilityId
         }
     }
 
@@ -250,7 +255,7 @@ QtObject {
 
             if (level.verticalOrder === 0) {
                 selectedLevel = level.levelId
-                selectedLevelId = level.levelId
+                internal.selectedLevelId = level.levelId
             }
         }
         // sorting higher levels first
@@ -267,7 +272,7 @@ QtObject {
                                 })
         // no suitable vertical order found. second check to from facilities with no levels
         if (!selectedLevel && listLevels[0])
-            selectedLevelId = listLevels[0].levelId
+            internal.selectedLevelId = listLevels[0].levelId
     }
 
     function zoomToCurrentFacility() {
@@ -340,6 +345,9 @@ QtObject {
     /*! internal */
     property QtObject internal: QtObject {
         id: internal
+        property string selectedLevelId
+        property string selectedFacilityId
+        property string selectedSiteId
         // used keep track of last level selected and toggle its visibility
         property FloorLevel selectedLevel
         // used to update the view with their names. _q could only store the name string
