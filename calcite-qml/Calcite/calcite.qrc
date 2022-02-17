@@ -42,5 +42,4 @@
         <file>images/check.svg</file>
         <file>images/line-solid.svg</file>
     </qresource>
-    <qresource prefix="/"/>
 </RCC>
