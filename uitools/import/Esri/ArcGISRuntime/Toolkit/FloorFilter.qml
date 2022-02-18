@@ -129,7 +129,8 @@ Control {
                         else if (internal.currentVisibileListView
                                  === FloorFilter.VisibleListView.Facility
                                  || !listView.visible)
-                            controller.zoomToFacility(controller.selectedFacilityId)
+                            controller.zoomToFacility(
+                                        controller.selectedFacilityId)
                         else
                             console.error("extra enum not accounted for.")
                     }
@@ -338,7 +339,7 @@ Control {
                     Layout.topMargin: 5
                     Layout.rowSpan: showAllFacilities.visible ? 1 : 2
                     ScrollBar.vertical: ScrollBar {}
-
+                    spacing: 5
                     clip: true
 
                     model: DelegateModel {
@@ -378,12 +379,12 @@ Control {
                                 includeByDefault: true
                             }
                         ]
-                        delegate: ColumnLayout {
-                            Layout.alignment: Qt.AlignLeft
+                        delegate: Column {
+                            //Layout.alignment: Qt.AlignLeft
+                            spacing: 0
                             RadioDelegate {
                                 id: radioDelegate
-                                checkable: false
-                                width: listView.width
+                                //width: listView.width
                                 highlighted: internal.currentVisibileListView
                                              === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx
                                 text: model.name
@@ -406,10 +407,12 @@ Control {
                                 }
                             }
                             Label {
-                                leftPadding: radioDelegate.leftPadding + 5
-                                visible: internal.currentVisibileListView === FloorFilter.VisibleListView.Facility
-                                font.pointSize: radioDelegate.font.pointSize - 5
-                                text: model.parentSiteName
+                                leftPadding: radioDelegate.leftPadding
+                                visible: internal.currentVisibileListView
+                                         === FloorFilter.VisibleListView.Facility
+                                font.pointSize: radioDelegate.font.pointSize - 3
+                                text: internal.currentVisibileListView
+                                      === FloorFilter.VisibleListView.Facility ? model.parentSiteName ?? "" : ""
                             }
                         }
                     }
