@@ -314,9 +314,7 @@ Control {
                     id: listView
                     onWidthChanged: print("width", width)
                     property var w: contentItem.childrenRect.width
-                    onWChanged: print("width rect ", w)
                     property var h: contentItem.childrenRect.height
-                    onHChanged: print("height rect", h)
                     visible: true
                     Layout.preferredHeight: 200
                     Layout.columnSpan: 3
@@ -373,14 +371,16 @@ Control {
                         ]
                         delegate: RadioDelegate {
                             width: listView.width
-                            highlighted: internal.currentVisibileListView
-                                         === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx
+                            highlighted: internal.currentVisibileListView === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx
                             text: model.name
                             onClicked: {
                                 // switch to facility view
                                 if (internal.currentVisibileListView
                                         === FloorFilter.VisibleListView.Site) {
                                     controller.setSelectedSiteId(model.modelId)
+                                    internal.selectedSiteIdx = index
+                                    // resetting the previous selected facility
+                                    internal.selectedFacilityIdx = -1
                                     internal.currentVisibileListView
                                             = FloorFilter.VisibleListView.Facility
                                 } // switch to level view
@@ -388,6 +388,7 @@ Control {
                                          === FloorFilter.VisibleListView.Facility) {
                                     controller.setSelectedFacilityId(
                                                 model.modelId)
+                                    internal.selectedFacilityIdx = index
                                     buildingMenuButton.checked = false
                                     closer.checked = false
                                 }
