@@ -39,10 +39,10 @@ QtObject {
     property FloorManager floorManager
 
     // toggling false will autofire the ilities
-    property bool selectedSiteResepected: true
+    property bool selectedSiteRespected: true
 
-    onSelectedSiteResepectedChanged: {
-        if (!selectedSiteResepected) {
+    onSelectedSiteRespectedChanged: {
+        if (!selectedSiteRespected) {
             populateAllFacilities()
         }
     }
@@ -176,7 +176,7 @@ QtObject {
         internal.selectedSite = floorManager.sites[idx]
 
         // dont populate facilities if they are total number and we are ignoring the current selected site
-        if (!selectedSiteResepected
+        if (!selectedSiteRespected
                 && facilities.count === floorManager.facilities.length)
             return
         populateFacilities(floorManager.sites[idx].facilities)

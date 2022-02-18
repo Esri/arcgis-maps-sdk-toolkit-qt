@@ -414,7 +414,7 @@ Control {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
                         onClicked: {
-                            controller.selectedSiteResepected = false
+                            controller.selectedSiteRespected = false
                             //controller.populateAllFacilities()
                             internal.currentVisibileListView = FloorFilter.VisibleListView.Facility
                         }

@@ -36,7 +36,7 @@ namespace Toolkit {
   {
     Q_OBJECT
     Q_PROPERTY(QObject* geoView READ geoView WRITE setGeoView NOTIFY geoViewChanged)
-    Q_PROPERTY(bool selectedSiteResepected READ isSelectedSiteRespected WRITE setIsSelectedSiteRespected NOTIFY isSelectedSiteRespectedChanged)
+    Q_PROPERTY(bool selectedSiteRespected READ isSelectedSiteRespected WRITE setIsSelectedSiteRespected NOTIFY isSelectedSiteRespectedChanged)
     Q_PROPERTY(FloorFilterFacilityItem* selectedFacility READ selectedFacility NOTIFY selectedFacilityIdChanged)
     Q_PROPERTY(QString selectedFacilityId READ selectedFacilityId WRITE setSelectedFacilityId NOTIFY selectedFacilityIdChanged)
     Q_PROPERTY(FloorFilterLevelItem* selectedLevel READ selectedLevel NOTIFY selectedLevelIdChanged)
@@ -107,7 +107,7 @@ namespace Toolkit {
     QString m_selectedFacilityId;
     QString m_selectedLevelId;
     QString m_selectedSiteId;
-    bool m_selectedSiteResepected{true};
+    bool m_selectedSiteRespected{true};
   };
 
 } // Toolkit
