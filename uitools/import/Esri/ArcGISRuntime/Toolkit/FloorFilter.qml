@@ -120,7 +120,8 @@ Control {
                         else if (internal.currentVisibileListView
                                  === FloorFilter.VisibleListView.Facility
                                  || !listView.visible)
-                            controller.zoomToFacility(controller.selectedFacilityId)
+                            controller.zoomToFacility(
+                                        controller.selectedFacilityId)
                         else
                             console.error("extra enum not accounted for.")
                     }
@@ -329,7 +330,7 @@ Control {
                     Layout.topMargin: 5
                     Layout.rowSpan: showAllFacilities.visible ? 1 : 2
                     ScrollBar.vertical: ScrollBar {}
-
+                    spacing: 5
                     clip: true
                     model: DelegateModel {
                         id: dm
