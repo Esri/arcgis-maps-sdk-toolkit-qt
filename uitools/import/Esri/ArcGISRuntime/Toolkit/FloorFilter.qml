@@ -116,11 +116,11 @@ Control {
                     onClicked: {
                         if (internal.currentVisibileListView === FloorFilter.VisibleListView.Site
                                 && listView.visible)
-                            controller.zoomToCurrentSite()
+                            controller.zoomToSite(controller.selectedSiteId)
                         else if (internal.currentVisibileListView
                                  === FloorFilter.VisibleListView.Facility
                                  || !listView.visible)
-                            controller.zoomToCurrentFacility()
+                            controller.zoomToFacility(controller.selectedFacilityId)
                         else
                             console.error("extra enum not accounted for.")
                     }
@@ -312,7 +312,6 @@ Control {
 
                 ListView {
                     id: listView
-                    onWidthChanged: print("width", width)
                     property var w: contentItem.childrenRect.width
                     property var h: contentItem.childrenRect.height
                     visible: true
