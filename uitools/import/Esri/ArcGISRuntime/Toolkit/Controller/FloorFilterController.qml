@@ -225,21 +225,29 @@ QtObject {
         facilities.clear()
         let facilitiesExtracted = Array.from(listFacilities)
         facilitiesExtracted.sort(function (first, second) {
-            const diff = first.site.siteId - second.site.siteId
-            // first and second have same parent site, order them alphabetically
-            if(diff === 0){
-                return first.name - second.name
+            if (first.site.name < second.site.name)
+                return -1
+            else if (first.site.name > second.site.name)
+                return 1
+            else {
+
+                //first and second have same parent site, order them alphabetically
+                if (first.name < second.name)
+                    return -1
+                else if (first.name > second.name)
+                    return 1
+
             }
-            return diff
+               return 0
         })
-        for (var i = 0; i < listFacilities.length; ++i) {
-            let facility = listFacilities[i]
-            facilities.append({
-                                  "name": facility.name,
-                                  "modelId": facility.facilityId,
-                                  "parentSiteName": facility.site.name
-                              })
-        }
+        facilitiesExtracted.forEach(facility => {
+                                        facilities.append({
+                                                              "name": facility.name,
+                                                              "modelId": facility.facilityId,
+                                                              "parentSiteName": facility.site.name
+                                                          })
+                                    })
+
         // case single facility: autoselect it
         if (listFacilities.length === 1) {
             internal.selectedFacilityId = listFacilities[0].facilityId
