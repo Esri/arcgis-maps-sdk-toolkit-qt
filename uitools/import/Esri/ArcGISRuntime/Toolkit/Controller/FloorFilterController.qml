@@ -38,7 +38,14 @@ QtObject {
 
     property FloorManager floorManager
 
+    // toggling false will autofire the ilities
     property bool selectedSiteResepected: true
+
+    onSelectedSiteResepectedChanged: {
+        if (!selectedSiteResepected) {
+            populateAllFacilities()
+        }
+    }
 
     //refresh()?
     readonly property alias selectedLevelId: internal.selectedLevelId
@@ -236,9 +243,8 @@ QtObject {
                     return -1
                 else if (first.name > second.name)
                     return 1
-
             }
-               return 0
+            return 0
         })
         facilitiesExtracted.forEach(facility => {
                                         facilities.append({
@@ -254,11 +260,13 @@ QtObject {
         }
     }
 
+
+    /*!
+     \internal
+    */
     function populateAllFacilities() {
         var listFacilities = floorManager.facilities
         populateFacilities(listFacilities)
-        // setting view site name as ""
-        // internal.selectedSite = null
     }
 
     // populate levels in reverse order. Levels numbers in ascending order from component's bottom section.
@@ -325,10 +333,8 @@ QtObject {
       Setting the levels visible if they match the current selected level vertical order.
     */
     function setVisibleLevelsMatchingVerticalOrder() {
-        console.log("--")
-        for (let i = 0; i < floorManager.levels.length; ++i) {
+        for (var i = 0; i < floorManager.levels.length; ++i) {
             let level = floorManager.levels[i]
-            console.log(level.verticalOrder)
             level.visible = level.verticalOrder === selectedLevel.verticalOrder
         }
     }

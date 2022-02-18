@@ -34,10 +34,7 @@ Control {
 
     property var controller: FloorFilterController {}
 
-    property int updateLevelsMode: {
-        // dont create a binding to the controller. just set intial value
-        updateLevelsMode = controller.updateLevelsMode
-    }
+    property int updateLevelsMode: controller.updateLevelsMode
 
     property bool hideSiteFacilityButton: false
 
@@ -229,7 +226,8 @@ Control {
                     //Layout.fillWidth: true
                     Layout.rowSpan: 2
                     Layout.alignment: Qt.AlignHCenter
-                    Layout.preferredWidth: internal.currentVisibileListView === FloorFilter.VisibleListView.Facility ? 32 : 0
+                    Layout.preferredWidth: internal.currentVisibileListView
+                                           === FloorFilter.VisibleListView.Facility ? 32 : 0
                     display: AbstractButton.IconOnly
                     flat: true
                     //removing all paddings and spacing from component so icon will fill compeltely the button
@@ -371,7 +369,8 @@ Control {
                         ]
                         delegate: RadioDelegate {
                             width: listView.width
-                            highlighted: internal.currentVisibileListView === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx
+                            highlighted: internal.currentVisibileListView
+                                         === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx
                             text: model.name
                             onClicked: {
                                 // switch to facility view
@@ -416,7 +415,7 @@ Control {
                         cursorShape: Qt.PointingHandCursor
                         onClicked: {
                             controller.selectedSiteResepected = false
-                            controller.populateAllFacilities()
+                            //controller.populateAllFacilities()
                             internal.currentVisibileListView = FloorFilter.VisibleListView.Facility
                         }
                     }
