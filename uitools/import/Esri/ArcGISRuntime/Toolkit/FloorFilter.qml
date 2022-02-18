@@ -125,11 +125,11 @@ Control {
                     onClicked: {
                         if (internal.currentVisibileListView === FloorFilter.VisibleListView.Site
                                 && listView.visible)
-                            controller.zoomToCurrentSite()
+                            controller.zoomToSite(controller.selectedSiteId)
                         else if (internal.currentVisibileListView
                                  === FloorFilter.VisibleListView.Facility
                                  || !listView.visible)
-                            controller.zoomToCurrentFacility()
+                            controller.zoomToFacility(controller.selectedFacilityId)
                         else
                             console.error("extra enum not accounted for.")
                     }
@@ -321,11 +321,8 @@ Control {
 
                 ListView {
                     id: listView
-                    onWidthChanged: print("width", width)
                     property var w: contentItem.childrenRect.width
-                    onWChanged: print("width rect ", w)
                     property var h: contentItem.childrenRect.height
-                    onHChanged: print("height rect", h)
                     visible: true
                     Layout.preferredHeight: 200
                     Layout.columnSpan: 3
@@ -410,7 +407,9 @@ Control {
                             }
                             Label {
                                 leftPadding: radioDelegate.leftPadding + 5
-                                text: "paretj"
+                                visible: internal.currentVisibileListView === FloorFilter.VisibleListView.Facility
+                                font.pointSize: radioDelegate.font.pointSize - 5
+                                text: model.parentSiteName
                             }
                         }
                     }

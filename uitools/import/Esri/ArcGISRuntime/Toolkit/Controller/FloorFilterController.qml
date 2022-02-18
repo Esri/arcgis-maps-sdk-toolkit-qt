@@ -221,11 +221,21 @@ QtObject {
 
     function populateFacilities(listFacilities) {
         facilities.clear()
+        let facilitiesExtracted = Array.from(listFacilities)
+        facilitiesExtracted.sort(function (first, second) {
+            const diff = first.site.siteId - second.site.siteId
+            // first and second have same parent site, order them alphabetically
+            if(diff === 0){
+                return first.name - second.name
+            }
+            return diff
+        })
         for (var i = 0; i < listFacilities.length; ++i) {
             let facility = listFacilities[i]
             facilities.append({
                                   "name": facility.name,
-                                  "modelId": facility.facilityId
+                                  "modelId": facility.facilityId,
+                                  "parentSiteName": facility.site.name
                               })
         }
         // case single facility: autoselect it
@@ -270,22 +280,6 @@ QtObject {
         // no suitable vertical order found. second check to from facilities with no levels
         if (!selectedLevel && listLevels[0])
             selectedLevelId = listLevels[0].levelId
-    }
-
-    function zoomToCurrentFacility() {
-        if (!selectedFacilityId) {
-            console.error("no facility yet selected")
-            return
-        }
-        zoomToFacility(selectedFacilityId)
-    }
-
-    function zoomToCurrentSite() {
-        if (!selectedSiteId) {
-            console.error("no site yet selected")
-            return
-        }
-        zoomToSite(selectedSiteId)
     }
 
     function zoomToFacility(facilityId) {
