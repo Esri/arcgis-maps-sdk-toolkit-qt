@@ -90,7 +90,6 @@ QtObject {
     function findElementIdxById(id, typeElement) {
         var model
         var variableIdName
-        print("type", typeElement)
         switch (typeElement) {
         case FloorFilterController.TypeElement.Level:
             model = floorManager.levels
@@ -318,8 +317,11 @@ QtObject {
       Setting the levels visible if they match the current selected level vertical order.
     */
     function setVisibleLevelsMatchingVerticalOrder() {
-        for (var level in levels) {
-            level.verticalOrder = level.verticalOrder === selectedLevel.verticalOrder
+        console.log("--")
+        for (let i = 0; i < floorManager.levels.length; ++i) {
+            let level = floorManager.levels[i]
+            console.log(level.verticalOrder)
+            level.visible = level.verticalOrder === selectedLevel.verticalOrder
         }
     }
 
