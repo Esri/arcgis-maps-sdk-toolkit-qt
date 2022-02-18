@@ -63,7 +63,7 @@ namespace Toolkit {
     Q_INVOKABLE void setSelectedFacilityId(QString selectedFacilityId);
 
     QString selectedLevelId() const;
-    void setSelectedLevelId(QString selectedLevelId);
+    Q_INVOKABLE void setSelectedLevelId(QString selectedLevelId);
 
     GenericListModel* levels() const;
     GenericListModel* sites() const;
