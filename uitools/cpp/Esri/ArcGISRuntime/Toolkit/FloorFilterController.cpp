@@ -359,7 +359,7 @@ namespace Toolkit {
     // FloorManager and we are in ignore selected-site mode. This is not just a micro-optimziation,
     // there are cases where selecting a facility in this mode will select a parent site, and we don't
     // want to regenerate the facilities list when the selected site changes.
-    if (manager->facilities().length() == m_facilities->rowCount() && !m_selectedSiteResepected)
+    if (manager->facilities().length() == m_facilities->rowCount() && !m_selectedSiteRespected)
       return;
 
     const auto allFacilites = manager->facilities();
@@ -367,7 +367,7 @@ namespace Toolkit {
     for (const auto facility : allFacilites)
     {
       // If we have no sites take everything, otherwise filter by the selected site.
-      if (!m_selectedSiteResepected || manager->sites().isEmpty() || facility->site()->siteId() == selectedSiteId())
+      if (!m_selectedSiteRespected || manager->sites().isEmpty() || facility->site()->siteId() == selectedSiteId())
       {
         facilityItems << new FloorFilterFacilityItem(facility, m_facilities);
       }
@@ -507,15 +507,15 @@ namespace Toolkit {
 
   bool FloorFilterController::isSelectedSiteRespected() const
   {
-    return m_selectedSiteResepected;
+    return m_selectedSiteRespected;
   }
 
   void FloorFilterController::setIsSelectedSiteRespected(bool isSelectedSiteRespected)
   {
-    if (isSelectedSiteRespected == m_selectedSiteResepected)
+    if (isSelectedSiteRespected == m_selectedSiteRespected)
       return;
 
-    m_selectedSiteResepected = isSelectedSiteRespected;
+    m_selectedSiteRespected = isSelectedSiteRespected;
     emit isSelectedSiteRespectedChanged();
   }
 
