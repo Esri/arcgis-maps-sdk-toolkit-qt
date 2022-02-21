@@ -1,4 +1,3 @@
-
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -19,7 +18,7 @@ import QtQuick 2.12
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtQml.Models 2.15
-
+import QtGraphicalEffects 1.12
 
 /*!
   \qmltype FloorFilter
@@ -245,7 +244,7 @@ Control {
                     onClicked: {
                         internal.currentVisibileListView = FloorFilter.VisibleListView.Site
                         // When showing site view, resetting the not ignore current site. (this button is only way to get to site view)
-                        controller.selectedSiteResepected = true
+                        controller.selectedSiteRespected = true
                     }
                 }
 
@@ -261,6 +260,8 @@ Control {
                         id: searchImg
                         sourceSize.width: 32
                         sourceSize.height: 32
+                        visible: false
+                        source: "images/search.svg"
                         width: height
                         anchors {
                             left: parent.left
@@ -268,32 +269,11 @@ Control {
                             bottom: parent.bottom
                             margins: 4
                         }
-
-                        source: "images/search.svg"
                     }
-
-                    Button {
-                        flat: true
-                        display: AbstractButton.IconOnly
-                        width: 32
-                        height: 32
-                        topPadding: 0
-                        bottomPadding: 0
-                        leftPadding: 0
-                        rightPadding: 0
-                        anchors {
-                            right: parent.right
-                            top: parent.top
-                            bottom: parent.bottom
-                            margins: 1
-                        }
-                        icon {
-                            // half size the parent (small 'x')
-                            width: parent.width / 2
-                            height: parent.height / 2
-                            source: "images/x.svg"
-                        }
-                        onClicked: searchTextField.text = ""
+                    ColorOverlay {
+                        anchors.fill: searchImg
+                        source: searchImg
+                        color: noResultsFoundLabel.color
                     }
                 }
 
@@ -401,23 +381,19 @@ Control {
                     orientation: Qt.Horizontal
                 }
 
-                Label {
+                Button {
                     id: showAllFacilities
-                    text: '<a href=" "style="text-decoration: none">All sites</a>'
-                    textFormat: Text.RichText
+                    text: 'All sites'
                     Layout.alignment: Qt.AlignCenter
                     Layout.columnSpan: 3
                     Layout.margins: 5
+                    Layout.fillWidth: true
+                    flat: true
                     visible: internal.currentVisibileListView === FloorFilter.VisibleListView.Site
-
-                    MouseArea {
-                        anchors.fill: parent
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: {
-                            controller.selectedSiteRespected = false
-                            //controller.populateAllFacilities()
-                            internal.currentVisibileListView = FloorFilter.VisibleListView.Facility
-                        }
+                    onClicked: {
+                        controller.selectedSiteRespected = false
+                        //controller.populateAllFacilities()
+                        internal.currentVisibileListView = FloorFilter.VisibleListView.Facility
                     }
                 }
 
