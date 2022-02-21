@@ -32,8 +32,4 @@ DISTFILES += \
 SOURCES += \
     tst_main.cpp
 
-RESOURCES += \
-    qtquick.qrc \
-    $$absolute_path($$PWD/../../../../../calcite-qml/Calcite/calcite.qrc) \
-
 QML2_IMPORT_PATH += $$absolute_path($$PWD/../../../uitools/import)
