@@ -34,9 +34,20 @@ QtObject {
         return null
     }
 
+//    onGeoModelChanged: {
+//        if (geoModel.loadStatus === Enums.LoadStatusLoaded)
+//            if (geoModel.floorManager)
+//                floorManager = geoModel.floorManager;
+//    }
+
     property int updateLevelsMode: FloorFilterController.UpdateLevelsMode.AllLevelsMatchingVerticalOrder
 
-    property FloorManager floorManager
+    property FloorManager floorManager : geoModel? geoModel.floorManager : null
+
+    onFloorManagerChanged: {
+        if (floorManager.loadStatus !== Enums.LoadStatusLoaded)
+            floorManager.load();
+    }
 
     // toggling false will autofire the ilities
     property bool selectedSiteRespected: true
@@ -195,22 +206,28 @@ QtObject {
     property Connections geoModelConn: Connections {
         target: geoModel
         function onLoadStatusChanged() {
-            console.log("geomodel loaded: ", geoModel)
             // load floormanager after map has been loaded
             if (geoModel.loadStatus === Enums.LoadStatusLoaded) {
+                console.log("geomodel loaded: ", geoModel)
                 floorManager = geoModel.floorManager
+                console.log("loading floormanager");
                 floorManager.load()
             }
         }
     }
+
+    signal loaded()
 
     property Connections floorManagerConn: Connections {
         target: floorManager
         function onLoadStatusChanged() {
             console.log("floormanager status (0 loaded)",
                         floorManager.loadStatus)
+            if(floorManager.loadError)
+                console.log("floormanager load error: ", floorManager.loadError.message, floorManager.loadError.additionalMessage);
             if (floorManager.loadStatus === Enums.LoadStatusLoaded) {
                 // load the listmodels
+                controller.loaded();
                 populateSites(floorManager.sites)
             }
         }
@@ -343,8 +360,6 @@ QtObject {
             level.visible = level.verticalOrder === selectedLevel.verticalOrder
         }
     }
-
-    onFloorManagerChanged: console.log("manager changed")
 
     enum UpdateLevelsMode {
         SingleLevel,
