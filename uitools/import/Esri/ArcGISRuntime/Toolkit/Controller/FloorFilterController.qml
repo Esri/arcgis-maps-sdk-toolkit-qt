@@ -134,7 +134,8 @@ QtObject {
         let idx = findElementIdxById(selectedLevelId,
                                      FloorFilterController.TypeElement.Level)
         if (idx == null) {
-            console.error("site id not found")
+            console.error("level id not found, resetting current level")
+            internal.selectedLevel = null;
             return
         }
 

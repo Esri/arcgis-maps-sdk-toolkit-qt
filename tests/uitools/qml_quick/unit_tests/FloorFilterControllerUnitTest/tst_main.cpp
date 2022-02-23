@@ -24,7 +24,8 @@ public slots:
 #ifdef ARCGIS_RUNTIME_IMPORT_PATH_2
     engine->addImportPath(ARCGIS_RUNTIME_IMPORT_PATH_2);
 #endif
-
+    engine->rootContext()->setContextProperty("credential_username", qgetenv("CREDENTIAL_USERNAME"));
+    engine->rootContext()->setContextProperty("credential_password", qgetenv("CREDENTIAL_PASSWORD"));
     //engine->load(QUrl("qrc:/qml/main.qml"));
   }
 };
