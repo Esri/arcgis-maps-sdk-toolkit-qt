@@ -1,3 +1,19 @@
+/*******************************************************************************
+ *  Copyright 2012-2022 Esri
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ ******************************************************************************/
+
 import QtQuick 2.0
 import QtTest 1.0
 
@@ -53,12 +69,10 @@ TestCase {
     function initTestCase() {
         ffSpy.wait();
         // first signal is loading, wait for loaded signal
-        if (control.floorManager.loadStatus !== Enums.LoadStatusLoaded);
-        ffSpy.wait(10000);
+        if (control.floorManager.loadStatus !== Enums.LoadStatusLoaded)
+            ffSpy.wait(10000);
         compare(control.floorManager.loadStatus, Enums.LoadStatusLoaded);
     }
-
-    function cleanupTestCase() {}
 
     function test_findElementIdxById() {
         // find site
@@ -89,13 +103,13 @@ TestCase {
     function test_setSelectedFacilityId() {
         var facility = floorManager.facilities[0];
         control.setSelectedFacilityId(facility.facilityId);
-        print(facility.facilityId);
         verify(facility.facilityId !== "");
         compare(control.selectedFacilityId, facility.facilityId);
         // not performing object equality, just the facilityId
         compare(control.selectedFacility.facilityId, facility.facilityId);
     }
 
+    // check level id is set, selected level object is set
     function test_setSelectedLevelId() {
         ffLevelIdSpy.clear()
         var level = floorManager.levels[1];
@@ -113,14 +127,49 @@ TestCase {
         compare(floorManager.levels[0].visible, false);
     }
 
+    // check levels selection modes are respected
+    function test_updateLevelsModeSelection() {
+        // all levels matching vertical ordering mode.
+        // default AllLevelsMatchingVerticalOrder
+        compare(control.updateLevelsMode, FloorFilterController.UpdateLevelsMode.AllLevelsMatchingVerticalOrder);
+        var level = floorManager.levels[0];
+        verify(level && level.levelId);
+        control.setSelectedLevelId(level.levelId);
+
+        var verticalOrder = level.verticalOrder
+        verify(floorManager.levels.length > 1);
+        // all the levels with matching vertical order are visible
+        for(var i = 0; i < floorManager.levels.length; ++i){
+            let levelI = floorManager.levels[i];
+            if(levelI.verticalOrder === verticalOrder)
+                verify(levelI.visible);
+        }
+
+        // updatelevelsmode SingleLevel
+        control.updateLevelsMode = FloorFilterController.SingleLevel;
+        // set all level's visiblities as false to build test.
+        for(var i = 0; i < floorManager.levels.length; ++i){
+            floorManager.levels[i].visibility = false;
+        }
+        // setting a new level as selected (last one)
+        level = floorManager.levels[floorManager.levels.length - 1];
+        control.setSelectedLevelId(level.levelId);
+
+        for(var i = 0; i < floorManager.levels.length - 1; ++i){
+            verify(!floorManager.levels.visible);
+        }
+    }
+
     function test_setVisibilityCurrentLevel() {
+        // set true visibile
         var floorLevel = floorManager.levels[0];
         control.internal.selectedLevel = floorLevel;
         control.setVisibilityCurrentLevel(true);
         compare(true, control.selectedLevel.visible);
+        // set false visibile
         control.setVisibilityCurrentLevel(false);
         compare(false, control.selectedLevel.visible);
-
+        // set visibile to null level
         control.internal.selectedLevel = null;
         control.setVisibilityCurrentLevel(true);
         compare(null, control.selectedLevel);
