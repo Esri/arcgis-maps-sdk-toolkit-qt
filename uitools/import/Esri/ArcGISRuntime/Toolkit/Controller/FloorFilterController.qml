@@ -401,6 +401,8 @@ QtObject {
     onDoneViewpointChanged: {
         console.log("sigbnal called")
         controller.geoViewConnections.enabled = true
+        geoView.onSetViewpointCompleted.disconnect(
+                    controller.doneViewpointChanged)
     }
 
     function zoomToEnvelope(envelope) {
