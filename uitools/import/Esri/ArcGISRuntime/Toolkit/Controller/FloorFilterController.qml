@@ -1,4 +1,3 @@
-
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -14,6 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
+
 import QtQuick 2.12
 import Esri.ArcGISRuntime 100.14
 
@@ -33,12 +33,6 @@ QtObject {
             return geoView.scene
         return null
     }
-
-//    onGeoModelChanged: {
-//        if (geoModel.loadStatus === Enums.LoadStatusLoaded)
-//            if (geoModel.floorManager)
-//                floorManager = geoModel.floorManager;
-//    }
 
     property int updateLevelsMode: FloorFilterController.UpdateLevelsMode.AllLevelsMatchingVerticalOrder
 
