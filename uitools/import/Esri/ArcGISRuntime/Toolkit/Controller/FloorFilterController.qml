@@ -35,7 +35,7 @@ QtObject {
     function updateSelection() {
         // todo: facilities and sites are optional, add checks
         var viewpointCenter = geoView.currentViewpointCenter
-        console.log("updateselection")
+        console.log("update selection")
 
         if (automaticSelectionMode === FloorFilterController.AutomaticSelectionMode.Never) {
             return
@@ -398,8 +398,10 @@ QtObject {
     }
 
     signal doneViewpointChanged
+
+    // signal used to set active again the \c Connections geoViewConnections pointing to onSetViewpoint.
     onDoneViewpointChanged: {
-        console.log("sigbnal called")
+        console.log("signal on doneviewpoint called")
         controller.geoViewConnections.enabled = true
         geoView.onSetViewpointCompleted.disconnect(
                     controller.doneViewpointChanged)
@@ -414,8 +416,10 @@ QtObject {
                     'ViewpointExtent', {
                         "extent": builder.geometry
                     })
-        // disconnect the connections
+        // disconnect temporarily the \c Connections geoViewConnections. This is done to ignore all the \c GeoView onSetViewpoint
+        // events triggered from the floorfilter that would be triggered once the floorFilter zoom button is clicked (or zoomToEnvelope function called).
         controller.geoViewConnections.enabled = false
+        // doneViewpoint signal sets active again the \c Connection onSetViewpoint.
         geoView.onSetViewpointCompleted.connect(controller.doneViewpointChanged)
         geoView.setViewpoint(newViewpoint)
     }
