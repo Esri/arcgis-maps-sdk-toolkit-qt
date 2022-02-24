@@ -1,4 +1,3 @@
-
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -14,6 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
+
 import QtQuick 2.12
 import Esri.ArcGISRuntime 100.14
 
@@ -36,7 +36,12 @@ QtObject {
 
     property int updateLevelsMode: FloorFilterController.UpdateLevelsMode.AllLevelsMatchingVerticalOrder
 
-    property FloorManager floorManager
+    property FloorManager floorManager : geoModel? geoModel.floorManager : null
+
+    onFloorManagerChanged: {
+        if (floorManager.loadStatus !== Enums.LoadStatusLoaded)
+            floorManager.load();
+    }
 
     // toggling false will autofire the ilities
     property bool selectedSiteRespected: true
@@ -129,7 +134,8 @@ QtObject {
         let idx = findElementIdxById(selectedLevelId,
                                      FloorFilterController.TypeElement.Level)
         if (idx == null) {
-            console.error("site id not found")
+            console.error("level id not found, resetting current level")
+            internal.selectedLevel = null;
             return
         }
 
@@ -184,28 +190,39 @@ QtObject {
         internal.selectedFacilityId = ""
     }
 
+    function setVisibilityCurrentLevel(visibility) {
+        if(internal.selectedLevel)
+            internal.selectedLevel.visible = visibility
+    }
+
     function onSelectedChanged() {}
 
     // geomodel loaded connection
     property Connections geoModelConn: Connections {
         target: geoModel
         function onLoadStatusChanged() {
-            console.log("geomodel loaded: ", geoModel)
             // load floormanager after map has been loaded
             if (geoModel.loadStatus === Enums.LoadStatusLoaded) {
+                console.log("geomodel loaded: ", geoModel)
                 floorManager = geoModel.floorManager
+                console.log("loading floormanager");
                 floorManager.load()
             }
         }
     }
+
+    signal loaded()
 
     property Connections floorManagerConn: Connections {
         target: floorManager
         function onLoadStatusChanged() {
             console.log("floormanager status (0 loaded)",
                         floorManager.loadStatus)
+            if(floorManager.loadError)
+                console.log("floormanager load error: ", floorManager.loadError.message, floorManager.loadError.additionalMessage);
             if (floorManager.loadStatus === Enums.LoadStatusLoaded) {
                 // load the listmodels
+                controller.loaded();
                 populateSites(floorManager.sites)
             }
         }
@@ -338,8 +355,6 @@ QtObject {
             level.visible = level.verticalOrder === selectedLevel.verticalOrder
         }
     }
-
-    onFloorManagerChanged: console.log("manager changed")
 
     enum UpdateLevelsMode {
         SingleLevel,

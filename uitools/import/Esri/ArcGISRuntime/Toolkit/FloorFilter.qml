@@ -390,6 +390,7 @@ Control {
                     Layout.fillWidth: true
                     flat: true
                     visible: internal.currentVisibileListView === FloorFilter.VisibleListView.Site
+
                     onClicked: {
                         controller.selectedSiteRespected = false
                         //controller.populateAllFacilities()
