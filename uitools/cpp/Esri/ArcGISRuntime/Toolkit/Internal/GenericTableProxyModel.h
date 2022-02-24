@@ -34,7 +34,6 @@ class GenericTableProxyModel : public QAbstractTableModel
 public:
   Q_INVOKABLE explicit GenericTableProxyModel(QObject* parent = nullptr);
 
-
   ~GenericTableProxyModel() override;
 
   int rowCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -55,7 +54,6 @@ public:
   bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
 
   Q_INVOKABLE bool append(QList<QObject*> object);
-
 
   Q_INVOKABLE bool append(QObject* object);
 

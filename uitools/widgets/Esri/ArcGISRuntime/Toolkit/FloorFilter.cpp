@@ -96,23 +96,28 @@ namespace Toolkit {
     connect(m_controller, &FloorFilterController::selectedSiteIdChanged, this, [this](QString /*oldId*/, QString newId)
             {
               const auto i = indexForId<FloorFilterSiteItem>(m_controller->sites(), newId);
-              m_ui->sitesView->selectionModel()->setCurrentIndex(i, QItemSelectionModel::ClearAndSelect);
+              m_ui->sitesView->selectionModel()->setCurrentIndex(i, QItemSelectionModel::Current);
             });
     connect(m_ui->sitesView, &QListView::doubleClicked, this, [this](QModelIndex index)
             {
               if (index.isValid())
                 m_ui->toolBox->setCurrentIndex(1);
             });
-    connect(m_ui->sitesView->selectionModel(), &QItemSelectionModel::currentChanged, this, [this](QModelIndex index)
+    connect(m_ui->sitesView->selectionModel(), &QItemSelectionModel::currentChanged, this, [this](QModelIndex index, QModelIndex previous)
             {
+              if (index == previous)
+                return;
+
               if (index == QModelIndex{})
               {
+                qDebug() << "Unselecting  site";
                 m_controller->setSelectedSiteId("");
               }
               else
               {
                 const auto model = m_controller->sites();
                 const auto data = model->element<FloorFilterSiteItem>(index);
+                qDebug() << "Selecting site" << data->modelId();
                 m_controller->setSelectedSiteId(data->modelId());
                 m_controller->zoomToSite(data);
               }
@@ -122,23 +127,28 @@ namespace Toolkit {
     connect(m_controller, &FloorFilterController::selectedFacilityIdChanged, this, [this](QString /*oldId*/, QString newId)
             {
               const auto i = indexForId<FloorFilterFacilityItem>(m_controller->facilities(), newId);
-              m_ui->facilitiesView->selectionModel()->setCurrentIndex(i, QItemSelectionModel::ClearAndSelect);
+              m_ui->facilitiesView->selectionModel()->setCurrentIndex(i, QItemSelectionModel::Current);
             });
     connect(m_ui->facilitiesView, &QListView::doubleClicked, this, [this](QModelIndex index)
             {
               if (index.isValid())
                 m_ui->toolBox->setCurrentIndex(2);
             });
-    connect(m_ui->facilitiesView->selectionModel(), &QItemSelectionModel::currentChanged, this, [this](QModelIndex index)
+    connect(m_ui->facilitiesView->selectionModel(), &QItemSelectionModel::currentChanged, this, [this](QModelIndex index, QModelIndex previous)
             {
+              if (index == previous)
+                return;
+
               if (index == QModelIndex{})
               {
+                qDebug() << "Unselecting facility";
                 m_controller->setSelectedFacilityId("");
               }
               else
               {
                 const auto model = m_controller->facilities();
                 const auto data = model->element<FloorFilterFacilityItem>(index);
+                qDebug() << "Selecting facility" << data->modelId();
                 m_controller->setSelectedFacilityId(data->modelId());
                 if (auto site = data->floorFacility()->site())
                 {
@@ -152,18 +162,23 @@ namespace Toolkit {
     connect(m_controller, &FloorFilterController::selectedLevelIdChanged, this, [this](QString /*oldId*/, QString newId)
             {
               const auto i = indexForId<FloorFilterLevelItem>(m_controller->levels(), newId);
-              m_ui->levelsView->selectionModel()->setCurrentIndex(i, QItemSelectionModel::ClearAndSelect);
+              m_ui->levelsView->selectionModel()->setCurrentIndex(i, QItemSelectionModel::Current);
             });
-    connect(m_ui->levelsView->selectionModel(), &QItemSelectionModel::currentChanged, this, [this](QModelIndex index)
+    connect(m_ui->levelsView->selectionModel(), &QItemSelectionModel::currentChanged, this, [this](QModelIndex index, QModelIndex previous)
             {
+              if (index == previous)
+                return;
+
               if (index == QModelIndex{})
               {
+                qDebug() << "Unselecting level";
                 m_controller->setSelectedLevelId("");
               }
               else
               {
                 const auto model = m_controller->levels();
                 const auto data = model->element<FloorFilterLevelItem>(index);
+                qDebug() << "Selecting level" << data->modelId();
                 m_controller->setSelectedLevelId(data->modelId());
               }
             });
