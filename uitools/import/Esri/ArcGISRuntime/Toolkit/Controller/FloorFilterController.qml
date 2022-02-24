@@ -357,8 +357,8 @@ QtObject {
     }
 
     enum UpdateLevelsMode {
-        SingleLevel,
-        AllLevelsMatchingVerticalOrder
+        AllLevelsMatchingVerticalOrder,
+        SingleLevel
     }
 
     enum TypeElement {
