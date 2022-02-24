@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2021 Esri
  *
@@ -15,34 +16,66 @@
  ******************************************************************************/
 import QtQuick 2.15
 import QtQuick.Templates 2.15 as T
+import QtGraphicalEffects 1.15
+import QtQuick.Controls 2.15
+import QtQuick.Controls.impl 2.15
 
 T.RadioDelegate {
     id: control
 
-    implicitWidth: Math.max(background ? background.implicitWidth : 0,
-                            contentItem.implicitWidth + leftPadding + rightPadding)
-    implicitHeight: Math.max(background ? background.implicitHeight : 0,
-                             Math.max(contentItem.implicitHeight,
-                                      indicator ? indicator.implicitHeight : 0) + topPadding + bottomPadding)
+    implicitWidth: Math.max(
+                       background ? background.implicitWidth : 0,
+                       contentItem.implicitWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(
+                        background ? background.implicitHeight : 0, Math.max(
+                            contentItem.implicitHeight,
+                            indicator ? indicator.implicitHeight : 0) + topPadding + bottomPadding)
 
     padding: 5
     spacing: 5
 
-    contentItem: Text {
-        leftPadding: control.mirrored ? control.indicator.width + control.spacing : 0
-        rightPadding: !control.mirrored ? control.indicator.width + control.spacing : 0
+    font.bold: control.checked || control.highlighted
+
+    contentItem: IconLabel {
+        leftPadding: !control.mirrored ? control.indicator.width + control.spacing : 0
+        rightPadding: control.mirrored ? control.indicator.width + control.spacing : 0
+
+        spacing: control.spacing
+        mirrored: control.mirrored
+        display: control.display
+        alignment: control.display === IconLabel.IconOnly
+                   || control.display === IconLabel.TextUnderIcon ? Qt.AlignCenter : Qt.AlignLeft
+
+        icon: control.icon
         text: control.text
         font: control.font
         color: control.enabled ? Calcite.text1 : Calcite.text3
-        elide: Text.ElideRight
-        visible: control.text
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
     }
 
-    indicator: RadioIndicator {
-        x: control.mirrored ? control.leftPadding : control.width - width - control.rightPadding
+    indicator: Image {
+        id: indicator
+        visible: control.checked || control.highlighted || control.hovered
+        // indicator is at the beginning of control.
+        x: control.mirrored ? control.width - width - control.rightPadding : control.leftPadding
         y: control.topPadding + (control.availableHeight - height) / 2
-        control: control
+        source: "images/bullet-point.svg"
+        sourceSize: Qt.size(24, 24)
+        width: sourceSize.width
+        height: sourceSize.height
+        ColorOverlay {
+            anchors.fill: indicator
+            source: indicator
+            color: control.checked
+                   || control.highlighted ? Calcite.brand : control.hovered ? Calcite.border1 : "transparent"
+            visible: indicator.visible
+        }
     }
+
+    background: Rectangle {
+        implicitWidth: 200
+        implicitHeight: 40
+        color: control.visualFocus
+               || control.down ? Calcite.foreground3: control.hovered ? Calcite.foreground2 : "transparent"
+    }
+    opacity: control.enabled ? 1.0 : 0.3
 }
