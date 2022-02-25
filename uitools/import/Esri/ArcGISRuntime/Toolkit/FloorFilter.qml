@@ -68,10 +68,47 @@ Control {
             id: levelFilterMenu
 
             Layout.alignment: Qt.AlignBottom
-            ColumnLayout {
-                spacing: 0
+            GridLayout {
+                id: gridLayoutToolBar
+                columns: 1
+                rowSpacing : 0
+                /*! switch the buildingMenuButton from bottom to 3rd position of the gridlayout (below the close button and the separator).
+                    note: the buildingMenuButton has to be the last or the first item in the gridLayout.
+                */
+                function setBuildingMenuButtonPos() {
+                    console.log("leader position changed", internal.leaderPosition);
+                    // using enum to decide which  position to adapt
+                    const lastPos = children.length - 1
+                    // upper case
+                    if(internal.leaderPosition === FloorFilter.LeaderPosition.UpperRight || internal.leaderPosition === FloorFilter.LeaderPosition.UpperLeft) {
+                        if(children[lastPos].Layout.row === 2)
+                            return;
+                        // +1 to all the rows to make space for the building menu hideSiteFacilityButton
+                        children[lastPos].Layout.row = 2;
+                        for(var i = 3; i < lastPos - 1; ++i) {
+                            children[i].Layout.row += 1;
+                        }
+                    } else {
+                        // lower case
+                        if(children[lastPos].Layout.row === lastPos)
+                            return;
+                        children[lastPos].Layout.row = lastPos;
+                        for(var i = 3; i < lastPos - 1; ++i) {
+                            children[i].Layout.row -= 1;
+                        }
+                    }
+                }
+
+                property Connections setBuildingMenuButtonConnections : Connections {
+                    target: internal
+                    function onLeaderPositionChanged() {
+                        gridLayoutToolBar.setBuildingMenuButtonPos();
+                    }
+                }
+
                 ToolButton {
                     id: closer
+                    Layout.row: 0
                     checkable: true
                     checked: true
                     visible: !closer.checked
@@ -83,12 +120,14 @@ Control {
                 }
 
                 ToolSeparator {
+                    Layout.row: 1
                     visible: !closer.checked
                     Layout.fillWidth: true
                     orientation: Qt.Horizontal
                 }
                 ToolButton {
                     id: collapser
+                    Layout.row: 2
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft
                     icon.source: collapsedIcons ? "images/chevrons-right.svg" : "images/chevrons-left.svg"
@@ -98,10 +137,12 @@ Control {
                     onClicked: collapsedIcons = !collapsedIcons
                 }
                 ToolSeparator {
+                    Layout.row: 3
                     Layout.fillWidth: true
                     orientation: Qt.Horizontal
                 }
                 ToolButton {
+                    Layout.row: 4
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft
                     icon.source: "images/zoom-to-object.svg"
@@ -123,11 +164,13 @@ Control {
                     }
                 }
                 ToolSeparator {
+                    Layout.row: 5
                     Layout.fillWidth: true
                     orientation: Qt.Horizontal
                 }
 
                 Flickable {
+                    Layout.row: 6
                     visible: !closer.checked
 
                     // dont need to use the id of the column
@@ -170,6 +213,7 @@ Control {
                 }
 
                 ToolSeparator {
+                    Layout.row: 7
                     Layout.fillWidth: true
                     visible: !closer.checked && !hideSiteFacilityButton
                     orientation: Qt.Horizontal
@@ -177,6 +221,7 @@ Control {
 
                 // not visible when floorFilter is shown and not visible if the children has no text to be shown.
                 ToolButton {
+                    Layout.row: 8
                     visible: closer.checked && text !== ""
                     id: itemSelectedButton
                     Layout.fillWidth: true
@@ -192,6 +237,7 @@ Control {
                 }
 
                 ToolButton {
+                    Layout.row: 9
                     id: buildingMenuButton
                     checkable: true
                     Layout.fillWidth: true
