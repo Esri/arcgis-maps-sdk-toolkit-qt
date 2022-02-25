@@ -253,14 +253,6 @@ QtObject {
                 return -1
             else if (first.site.name > second.site.name)
                 return 1
-            else {
-
-                //first and second have same parent site, order them alphabetically
-                if (first.name < second.name)
-                    return -1
-                else if (first.name > second.name)
-                    return 1
-            }
             return 0
         })
         facilitiesExtracted.forEach(facility => {

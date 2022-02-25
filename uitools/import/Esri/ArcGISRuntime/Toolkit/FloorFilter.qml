@@ -425,7 +425,6 @@ Control {
                                 }
                             }
                         }
-
                     }
                 }
                 ToolSeparator {
@@ -433,7 +432,6 @@ Control {
                     Layout.columnSpan: 3
                     orientation: Qt.Horizontal
                 }
-
                 Button {
                     id: showAllFacilities
                     text: 'All sites'
@@ -446,7 +444,6 @@ Control {
 
                     onClicked: {
                         controller.selectedSiteRespected = false
-                        //controller.populateAllFacilities()
                         internal.currentVisibileListView = FloorFilter.VisibleListView.Facility
                     }
                 }
