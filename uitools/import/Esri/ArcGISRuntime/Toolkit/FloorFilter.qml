@@ -353,7 +353,7 @@ Control {
                             property var parentSiteName: model.parentSiteName ?? ""
                                                                                  highlighted: internal.currentVisibileListView
                                                                                  === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx
-                            text: model.name + (model.parentSiteName ? '<br/>' + parentSiteName : "")
+                            text: model.name + (model.parentSiteName && !controller.selectedSiteRespected ? '<br/>' + parentSiteName : "")
 
                             onClicked: {
                                 // switch to facility view
@@ -363,8 +363,10 @@ Control {
                                     internal.selectedSiteIdx = index
                                     // resetting the previous selected facility
                                     internal.selectedFacilityIdx = -1
+                                    controller.zoomToSite(model.modelId)
                                     internal.currentVisibileListView
                                             = FloorFilter.VisibleListView.Facility
+
                                 } // switch to level view
                                 else if (internal.currentVisibileListView
                                          === FloorFilter.VisibleListView.Facility) {
@@ -373,6 +375,7 @@ Control {
                                     internal.selectedFacilityIdx = index
                                     buildingMenuButton.checked = false
                                     closer.checked = false
+                                    controller.zoomToFacility(model.modelId)
                                 }
                             }
                         }
