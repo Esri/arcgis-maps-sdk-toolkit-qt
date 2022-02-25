@@ -296,13 +296,11 @@ Control {
                     visible: true
                     Layout.preferredHeight: 200
                     Layout.columnSpan: 3
-                    //width: contentItem.childrenRect.width
                     contentWidth: contentItem.childrenRect.width
-                    implicitWidth: contentWidth
-                    Layout.minimumWidth: implicitWidth
+                    //implicitWidth: contentWidth
+                    Layout.minimumWidth: contentItem.childrenRect.width
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    //Layout.fillWidth: true
                     Layout.minimumHeight: contentHeight / count
                     Layout.maximumHeight: contentHeight / count * 3
                     Layout.topMargin: 5
@@ -310,6 +308,7 @@ Control {
                     ScrollBar.vertical: ScrollBar {}
                     spacing: 5
                     clip: true
+
                     model: DelegateModel {
                         id: dm
                         property Connections conn: Connections {
@@ -348,10 +347,14 @@ Control {
                             }
                         ]
                         delegate: RadioDelegate {
-                            width: listView.width
-                            highlighted: internal.currentVisibileListView
-                                         === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx
-                            text: model.name
+                            id: radioDelegate
+                            // wait that the radiodelegates are all set, then resize them into the largest of them (stored in the listview contentItem)
+                            Component.onCompleted: width = listView.contentItem.childrenRect.width
+                            property var parentSiteName: model.parentSiteName ?? ""
+                                                                                 highlighted: internal.currentVisibileListView
+                                                                                 === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx
+                            text: model.name + (model.parentSiteName ? '<br/>' + parentSiteName : "")
+
                             onClicked: {
                                 // switch to facility view
                                 if (internal.currentVisibileListView
@@ -373,6 +376,7 @@ Control {
                                 }
                             }
                         }
+
                     }
                 }
                 ToolSeparator {

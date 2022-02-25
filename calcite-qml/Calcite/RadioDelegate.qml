@@ -72,7 +72,6 @@ T.RadioDelegate {
     }
 
     background: Rectangle {
-        implicitWidth: 200
         implicitHeight: 40
         color: control.visualFocus
                || control.down ? Calcite.foreground3: control.hovered ? Calcite.foreground2 : "transparent"
