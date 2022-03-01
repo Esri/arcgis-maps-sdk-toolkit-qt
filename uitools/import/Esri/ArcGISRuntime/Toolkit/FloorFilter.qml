@@ -85,7 +85,7 @@ Control {
                             return;
                         // +1 to all the rows to make space for the building menu hideSiteFacilityButton
                         children[lastPos].Layout.row = 2;
-                        for(var i = 3; i < lastPos - 1; ++i) {
+                        for(var i = 2; i < lastPos - 1; ++i) {
                             children[i].Layout.row += 1;
                         }
                     } else {
@@ -93,7 +93,7 @@ Control {
                         if(children[lastPos].Layout.row === lastPos)
                             return;
                         children[lastPos].Layout.row = lastPos;
-                        for(var i = 3; i < lastPos - 1; ++i) {
+                        for(var i = 2; i < lastPos - 1; ++i) {
                             children[i].Layout.row -= 1;
                         }
                     }
@@ -130,7 +130,9 @@ Control {
                     Layout.row: 2
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft
-                    icon.source: collapsedIcons ? "images/chevrons-right.svg" : "images/chevrons-left.svg"
+                    icon.source:  !((internal.leaderPosition === FloorFilter.LeaderPosition.UpperRight ||
+                                   internal.leaderPosition === FloorFilter.LeaderPosition.LowerRight) ^ collapsedIcons) ? "images/chevrons-left.svg" : "images/chevrons-right.svg"
+
                     text: "Collapse"
                     flat: true
                     display: collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
@@ -337,8 +339,6 @@ Control {
 
                 ListView {
                     id: listView
-                    property var w: contentItem.childrenRect.width
-                    property var h: contentItem.childrenRect.height
                     visible: true
                     Layout.preferredHeight: 200
                     Layout.columnSpan: 3
@@ -502,10 +502,10 @@ Control {
     }
 
     enum LeaderPosition {
-        UpperLeft,
-        UpperRight,
-        LowerRight,
-        LowerLeft
+        UpperRight = 0,
+        UpperLeft = 1,
+        LowerRight = 2,
+        LowerLeft = 3
     }
 
     QtObject {
