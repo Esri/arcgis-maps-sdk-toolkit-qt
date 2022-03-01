@@ -148,7 +148,7 @@ QtObject {
 
         if (updateLevelsMode
                 === FloorFilterController.UpdateLevelsMode.AllLevelsMatchingVerticalOrder) {
-            setVisibleLevelsMatchingVerticalOrder()
+            resetLevelsVisibility(internal.selectedLevel.verticalOrder)
         }
 
         onSelectedChanged()
@@ -165,8 +165,9 @@ QtObject {
             return
         }
         internal.selectedFacility = floorManager.facilities[idx]
-
         populateLevels(floorManager.facilities[idx].levels)
+        // reset the levels visibilty to vertical order 0 once a facility is selected.
+        resetLevelsVisibility(0);
         onSelectedChanged()
     }
 
@@ -193,6 +194,16 @@ QtObject {
     function setVisibilityCurrentLevel(visibility) {
         if(internal.selectedLevel)
             internal.selectedLevel.visible = visibility
+    }
+
+    /*!
+      Setting the levels visible if they match the current selected level vertical order.
+    */
+    function resetLevelsVisibility(verticalOrder){
+        for(var i = 0; i < floorManager.levels.length; ++i) {
+            var level = floorManager.levels[i];
+            level.visible = level.verticalOrder === verticalOrder
+        }
     }
 
     function onSelectedChanged() {}
@@ -281,6 +292,7 @@ QtObject {
     // populate levels in reverse order. Levels numbers in ascending order from component's bottom section.
     function populateLevels(listLevels) {
         levels.clear()
+        console.log("populate levels")
         let selectedLevel = ""
         let levelsExtracted = []
         for (var i = listLevels.length - 1; i >= 0; --i) {
@@ -306,7 +318,7 @@ QtObject {
                                 })
         // no suitable vertical order found. second check to from facilities with no levels
         if (!selectedLevel && listLevels[0])
-            internal.selectedLevelId = listLevels[0].levelId
+            internal.selectedLevelId = listLevels.length ? listLevels[0].levelId : ""
     }
 
     function zoomToFacility(facilityId) {
@@ -335,17 +347,6 @@ QtObject {
                         "extent": builder.geometry
                     })
         geoView.setViewpoint(newViewpoint)
-    }
-
-
-    /*!
-      Setting the levels visible if they match the current selected level vertical order.
-    */
-    function setVisibleLevelsMatchingVerticalOrder() {
-        for (var i = 0; i < floorManager.levels.length; ++i) {
-            let level = floorManager.levels[i]
-            level.visible = level.verticalOrder === selectedLevel.verticalOrder
-        }
     }
 
     enum UpdateLevelsMode {
