@@ -239,6 +239,14 @@ QtObject {
         }
     }
 
+    /*!
+     Function used to expose the current site idx from the sites model.
+    */
+    function getCurrentSiteIdx() {
+        return findElementIdxById(internal.selectedSiteId, FloorFilterController.TypeElement.Site);
+
+    }
+
     function populateSites(listSites) {
         sites.clear()
         for (var i = 0; i < listSites.length; ++i) {

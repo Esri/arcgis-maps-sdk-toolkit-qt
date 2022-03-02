@@ -91,7 +91,8 @@ Control {
                     id: collapser
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft
-                    icon.source: collapsedIcons ? "images/chevrons-right.svg" : "images/chevrons-left.svg"
+                    icon.source: !((internal.leaderPosition === FloorFilter.LeaderPosition.UpperRight ||
+                                    internal.leaderPosition === FloorFilter.LeaderPosition.LowerRight) ^ collapsedIcons) ? "images/chevrons-left.svg" : "images/chevrons-right.svg"
                     text: "Collapse"
                     flat: true
                     display: collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
@@ -291,8 +292,6 @@ Control {
 
                 ListView {
                     id: listView
-                    property var w: contentItem.childrenRect.width
-                    property var h: contentItem.childrenRect.height
                     visible: true
                     Layout.preferredHeight: 200
                     Layout.columnSpan: 3
@@ -301,8 +300,8 @@ Control {
                     Layout.minimumWidth: contentItem.childrenRect.width
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    Layout.minimumHeight: contentHeight / count
-                    Layout.maximumHeight: contentHeight / count * 3
+                    Layout.minimumHeight: count ? contentHeight / count : 0
+                    Layout.maximumHeight: count ? contentHeight / count * 3 : 0
                     Layout.topMargin: 5
                     Layout.rowSpan: showAllFacilities.visible ? 1 : 2
                     ScrollBar.vertical: ScrollBar {}
@@ -351,8 +350,7 @@ Control {
                             // wait that the radiodelegates are all set, then resize them into the largest of them (stored in the listview contentItem)
                             Component.onCompleted: width = listView.contentItem.childrenRect.width
                             property var parentSiteName: model.parentSiteName ?? ""
-                                                                                 highlighted: internal.currentVisibileListView
-                                                                                 === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx
+                            highlighted: internal.currentVisibileListView === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx
                             text: model.name + (model.parentSiteName && !controller.selectedSiteRespected ? '<br/>' + parentSiteName : "")
 
                             onClicked: {
@@ -370,12 +368,18 @@ Control {
                                 } // switch to level view
                                 else if (internal.currentVisibileListView
                                          === FloorFilter.VisibleListView.Facility) {
-                                    controller.setSelectedFacilityId(
-                                                model.modelId)
+                                    controller.setSelectedFacilityId(model.modelId)
                                     internal.selectedFacilityIdx = index
                                     buildingMenuButton.checked = false
                                     closer.checked = false
                                     controller.zoomToFacility(model.modelId)
+                                    if (!controller.selectedSiteRespected) {
+                                        const idx = controller.getCurrentSiteIdx();
+                                        // idx could be null if not found, guard from it
+                                        if (idx != null)
+                                            internal.selectedSiteIdx = idx;
+
+                                    }
                                 }
                             }
                         }
