@@ -135,7 +135,7 @@ Control {
                     contentHeight: contentItem.childrenRect.height
                     Layout.fillWidth: true
                     Layout.maximumHeight: repeater.buttonHeight * maxNumberLevels
-                    implicitHeight: repeater.buttonHeight * repeater.count
+                    Layout.preferredHeight: repeater.buttonHeight * repeater.count
                     clip: true
                     ScrollBar.vertical: ScrollBar {}
 
@@ -148,7 +148,6 @@ Control {
                             property int downItem
                             // defaulting to 0, so in case of model.count === 0, the buttonHeight value is not undefined
                             property int buttonHeight: 0
-
                             model: controller.levels
                             delegate: ToolButton {
                                 Component.onCompleted: repeater.buttonHeight = this.height
@@ -295,6 +294,7 @@ Control {
                     visible: true
                     Layout.preferredHeight: 200
                     Layout.columnSpan: 3
+                    cacheBuffer: Math.max(contentHeight,0)
                     contentWidth: contentItem.childrenRect.width
                     //implicitWidth: contentWidth
                     Layout.minimumWidth: contentItem.childrenRect.width
