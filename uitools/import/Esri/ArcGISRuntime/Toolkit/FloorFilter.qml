@@ -91,7 +91,8 @@ Control {
                     id: collapser
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft
-                    icon.source: collapsedIcons ? "images/chevrons-right.svg" : "images/chevrons-left.svg"
+                    icon.source: !((internal.leaderPosition === FloorFilter.LeaderPosition.UpperRight ||
+                                    internal.leaderPosition === FloorFilter.LeaderPosition.LowerRight) ^ collapsedIcons) ? "images/chevrons-left.svg" : "images/chevrons-right.svg"
                     text: "Collapse"
                     flat: true
                     display: collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
@@ -134,7 +135,7 @@ Control {
                     contentHeight: contentItem.childrenRect.height
                     Layout.fillWidth: true
                     Layout.maximumHeight: repeater.buttonHeight * maxNumberLevels
-                    implicitHeight: repeater.buttonHeight * repeater.count
+                    Layout.preferredHeight: repeater.buttonHeight * repeater.count
                     clip: true
                     ScrollBar.vertical: ScrollBar {}
 
@@ -147,7 +148,6 @@ Control {
                             property int downItem
                             // defaulting to 0, so in case of model.count === 0, the buttonHeight value is not undefined
                             property int buttonHeight: 0
-
                             model: controller.levels
                             delegate: ToolButton {
                                 Component.onCompleted: repeater.buttonHeight = this.height
@@ -291,25 +291,23 @@ Control {
 
                 ListView {
                     id: listView
-                    property var w: contentItem.childrenRect.width
-                    property var h: contentItem.childrenRect.height
                     visible: true
                     Layout.preferredHeight: 200
                     Layout.columnSpan: 3
-                    //width: contentItem.childrenRect.width
+                    cacheBuffer: Math.max(contentHeight,0)
                     contentWidth: contentItem.childrenRect.width
-                    implicitWidth: contentWidth
-                    Layout.minimumWidth: implicitWidth
+                    //implicitWidth: contentWidth
+                    Layout.minimumWidth: contentItem.childrenRect.width
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    //Layout.fillWidth: true
-                    Layout.minimumHeight: contentHeight / count
-                    Layout.maximumHeight: contentHeight / count * 3
+                    Layout.minimumHeight: count ? contentHeight / count : 0
+                    Layout.maximumHeight: count ? contentHeight / count * 3 : 0
                     Layout.topMargin: 5
                     Layout.rowSpan: showAllFacilities.visible ? 1 : 2
                     ScrollBar.vertical: ScrollBar {}
                     spacing: 5
                     clip: true
+
                     model: DelegateModel {
                         id: dm
                         property Connections conn: Connections {
@@ -348,10 +346,13 @@ Control {
                             }
                         ]
                         delegate: RadioDelegate {
-                            width: listView.width
-                            highlighted: internal.currentVisibileListView
-                                         === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx
-                            text: model.name
+                            id: radioDelegate
+                            // wait that the radiodelegates are all set, then resize them into the largest of them (stored in the listview contentItem)
+                            Component.onCompleted: width = listView.contentItem.childrenRect.width
+                            property var parentSiteName: model.parentSiteName ?? ""
+                            highlighted: internal.currentVisibileListView === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx
+                            text: model.name + (model.parentSiteName && !controller.selectedSiteRespected ? '<br/>' + parentSiteName : "")
+
                             onClicked: {
                                 // switch to facility view
                                 if (internal.currentVisibileListView
@@ -360,16 +361,25 @@ Control {
                                     internal.selectedSiteIdx = index
                                     // resetting the previous selected facility
                                     internal.selectedFacilityIdx = -1
+                                    controller.zoomToSite(model.modelId)
                                     internal.currentVisibileListView
                                             = FloorFilter.VisibleListView.Facility
+
                                 } // switch to level view
                                 else if (internal.currentVisibileListView
                                          === FloorFilter.VisibleListView.Facility) {
-                                    controller.setSelectedFacilityId(
-                                                model.modelId)
+                                    controller.setSelectedFacilityId(model.modelId)
                                     internal.selectedFacilityIdx = index
                                     buildingMenuButton.checked = false
                                     closer.checked = false
+                                    controller.zoomToFacility(model.modelId)
+                                    if (!controller.selectedSiteRespected) {
+                                        const idx = controller.getCurrentSiteIdx();
+                                        // idx could be null if not found, guard from it
+                                        if (idx != null)
+                                            internal.selectedSiteIdx = idx;
+
+                                    }
                                 }
                             }
                         }
@@ -380,7 +390,6 @@ Control {
                     Layout.columnSpan: 3
                     orientation: Qt.Horizontal
                 }
-
                 Button {
                     id: showAllFacilities
                     text: 'All sites'
@@ -393,7 +402,6 @@ Control {
 
                     onClicked: {
                         controller.selectedSiteRespected = false
-                        //controller.populateAllFacilities()
                         internal.currentVisibileListView = FloorFilter.VisibleListView.Facility
                     }
                 }
