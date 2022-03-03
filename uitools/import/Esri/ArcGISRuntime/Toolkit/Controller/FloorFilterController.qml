@@ -26,24 +26,30 @@ QtObject {
     property Connections geoViewConnections: Connections {
         target: geoView
         function onViewpointChanged() {
-            updateSelection()
+            tryUpdateSelection()
         }
         // manually set true when floorManager is loaded
         enabled: false
     }
 
-    function updateSelection() {
+    function tryUpdateSelection() {
         // todo: facilities and sites are optional, add checks
         var viewpointCenter = geoView.currentViewpointCenter
-        console.log("update selection")
+        //console.log("update selection")
 
-        if (automaticSelectionMode === FloorFilterController.AutomaticSelectionMode.Never) {
+        if (automaticSelectionMode === FloorFilterController.AutomaticSelectionMode.Never || !viewpointCenter || isNaN(viewpointCenter.targetScale)) {
             return
         }
-        var targetScale = controller.floorManager.siteLayer ? controller.floorManager.siteLayer.minScale : 0
+
+        var floorManager = controller.floorManager
+        var targetScale = 0
+
+        if (floorManager)
+            targetScale = controller.floorManager.siteLayer ? controller.floorManager.siteLayer.minScale : 0
 
         if (targetScale === 0)
             targetScale = 4300
+
         if (viewpointCenter.targetScale > targetScale) {
             if (automaticSelectionMode === FloorFilterController.AutomaticSelectionMode.Always) {
 
@@ -51,8 +57,12 @@ QtObject {
                 setSelectedFacilityId("")
                 setSelectedLevelId("")
             }
+            // Assumption: if too zoomed out to see sites, also too zoomed out to see facilities
             return
         }
+
+        if(!floorManager)
+            return
 
         let selectSite
         for (var i = 0; i < floorManager.sites.length; ++i) {
@@ -63,6 +73,7 @@ QtObject {
                 break
             }
         }
+
         if (selectSite !== undefined) {
             console.log("selecting site", selectSite.siteId)
             setSelectedSiteId(selectSite.siteId)
@@ -72,7 +83,10 @@ QtObject {
 
         targetScale = floorManager.facilityLayer ? floorManager.facilityLayer.minScale : 0
         if (targetScale === 0)
-            targetScale = 4300
+            targetScale = 1500
+
+        if(viewpointCenter.targetScale > targetScale)
+            return
 
         let selectFacility
         for (i = 0; i < floorManager.facilities.length; ++i) {
@@ -88,7 +102,6 @@ QtObject {
             console.log("selecting facility", selectFacility.facilityId)
             setSelectedFacilityId(selectFacility.facilityId)
         } else if (automaticSelectionMode === FloorFilterController.AutomaticSelectionMode.Always) {
-            //always
             setSelectedFacilityId("")
             setSelectedLevelId("")
         }
