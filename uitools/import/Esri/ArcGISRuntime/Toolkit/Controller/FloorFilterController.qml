@@ -268,9 +268,9 @@ QtObject {
         facilities.clear()
         let facilitiesExtracted = Array.from(listFacilities)
         facilitiesExtracted.sort(function (first, second) {
-            if (first.site.name < second.site.name)
+            if (first.name < second.name)
                 return -1
-            else if (first.site.name > second.site.name)
+            else if (first.name > second.name)
                 return 1
             return 0
         })

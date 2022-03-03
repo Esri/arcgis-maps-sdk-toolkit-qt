@@ -171,7 +171,7 @@ TestCase {
         control.setSelectedLevelId("");
         compare(control.selectedLevelId, "");
         compare(control.selectedLevel, null);
-        compare(control.floorManager.levels[0].visible, false);
+        compare(level.visible, false);
     }
 
     // check levels selection modes are respected
@@ -236,12 +236,11 @@ TestCase {
     }
 
     function test_populateFacilities() {
-        var control = loadFloorManagerMultiple();
+        var control = loadFloorManagerSingle();
         control.populateFacilities(control.floorManager.facilities);
         compare(control.facilities.count, control.floorManager.facilities.length);
         // check facility model loaded correctly
         var facilityElem = control.facilities.get(0);
-        // not passing because ordering the facilities by parent site and alphabetical order atm.
         compare(facilityElem.name, control.floorManager.facilities[0].name);
         compare(facilityElem.modelId, control.floorManager.facilities[0].facilityId);
         // todo: autoselect switch? is it unit or functional?
@@ -255,7 +254,6 @@ TestCase {
         const facilityNamesOrdered = ["RED A","RED B","RED C","RED CAFE","RED D","RED E","RED F","RED G","RED Gym","RED H","RED J","RED K","RED L","RED M","RED M Plant","RED N","RED O","RED O Plant","RED OA","RED P","RED Q","RED Q Plant","RED R","RED S","RED T","RED U","RED V","RED VE","RED W","RED Z","RED ZN","RED ZW"];
         verify(facilityNamesOrdered.length === control.facilities.count);
         for(var i = 0; i < control.facilities.count; ++i){
-            // failing because of ordering based on parent site atm
             compare(control.facilities.get(i).name, facilityNamesOrdered[i]);
         }
     }
