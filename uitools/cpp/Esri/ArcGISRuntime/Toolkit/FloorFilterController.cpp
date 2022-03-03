@@ -413,7 +413,6 @@ namespace Toolkit {
     const auto f = facilityItem->floorFacility();
     if (f)
     {
-      qDebug() << "Zooming to facility: " << f->facilityId();
       zoomToEnvelope(f->geometry().extent());
     }
   }
@@ -431,7 +430,6 @@ namespace Toolkit {
     const auto s = siteItem->floorSite();
     if (s)
     {
-      qDebug() << "Zooming to site: " << s->siteId();
       zoomToEnvelope(s->geometry().extent());
     }
   }
@@ -587,9 +585,6 @@ namespace Toolkit {
       // Assumption: if too zoomed out to see sites, also too zoomed out to see facilities
       return;
     }
-
-    if (!floorManager)
-      return;
 
     // If the centerpoint is within a site's geometry, select that site.
     // This code gracefully skips selection if there are no sites or no matching sites
