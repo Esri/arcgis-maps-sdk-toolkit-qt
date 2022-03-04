@@ -1,4 +1,3 @@
-
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -19,7 +18,7 @@ import QtQuick 2.12
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtQml.Models 2.15
-
+import QtGraphicalEffects 1.12
 
 /*!
   \qmltype FloorFilter
@@ -34,35 +33,15 @@ Control {
 
     property var controller: FloorFilterController {}
 
-    property int updateLevelsMode: {
-        // dont create a binding to the controller. just set intial value
-        updateLevelsMode = controller.updateLevelsMode
-    }
+    property int updateLevelsMode: controller.updateLevelsMode
 
     property bool hideSiteFacilityButton: false
-
-    //debug property: should always be true, autoselecting singlefacilitiesistes in case they are single
-    property bool autoselectSingleFacilitySite: false
-
-    property int automaticSelectionMode: FloorFilterController.AutomaticSelectionMode.Always
-
-    Binding {
-        target: controller
-        property: "automaticSelectionMode"
-        value: floorFilter.automaticSelectionMode
-    }
 
     property bool collapsedIcons: true
 
     property int maxNumberLevels: 2
 
     padding: 5
-
-    Binding {
-        target: controller
-        property: "autoselectSingleFacilitySite"
-        value: floorFilter.autoselectSingleFacilitySite
-    }
 
     // create singlepointing binding towards controller
     Binding {
@@ -112,7 +91,8 @@ Control {
                     id: collapser
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft
-                    icon.source: collapsedIcons ? "images/chevrons-right.svg" : "images/chevrons-left.svg"
+                    icon.source: !((internal.leaderPosition === FloorFilter.LeaderPosition.UpperRight ||
+                                    internal.leaderPosition === FloorFilter.LeaderPosition.LowerRight) ^ collapsedIcons) ? "images/chevrons-left.svg" : "images/chevrons-right.svg"
                     text: "Collapse"
                     flat: true
                     display: collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
@@ -133,11 +113,12 @@ Control {
                     onClicked: {
                         if (internal.currentVisibileListView === FloorFilter.VisibleListView.Site
                                 && listView.visible)
-                            controller.zoomToCurrentSite()
+                            controller.zoomToSite(controller.selectedSiteId)
                         else if (internal.currentVisibileListView
                                  === FloorFilter.VisibleListView.Facility
                                  || !listView.visible)
-                            controller.zoomToCurrentFacility()
+                            controller.zoomToFacility(
+                                        controller.selectedFacilityId)
                         else
                             console.error("extra enum not accounted for.")
                     }
@@ -154,7 +135,7 @@ Control {
                     contentHeight: contentItem.childrenRect.height
                     Layout.fillWidth: true
                     Layout.maximumHeight: repeater.buttonHeight * maxNumberLevels
-                    implicitHeight: repeater.buttonHeight * repeater.count
+                    Layout.preferredHeight: repeater.buttonHeight * repeater.count
                     clip: true
                     ScrollBar.vertical: ScrollBar {}
 
@@ -167,7 +148,6 @@ Control {
                             property int downItem
                             // defaulting to 0, so in case of model.count === 0, the buttonHeight value is not undefined
                             property int buttonHeight: 0
-
                             model: controller.levels
                             delegate: ToolButton {
                                 Component.onCompleted: repeater.buttonHeight = this.height
@@ -182,7 +162,7 @@ Control {
                                 flat: true
                                 display: AbstractButton.TextOnly
                                 onClicked: {
-                                    controller.selectedLevelId = model.modelId
+                                    controller.setSelectedLevelId(model.modelId)
                                 }
                             }
                         }
@@ -245,7 +225,8 @@ Control {
                     //Layout.fillWidth: true
                     Layout.rowSpan: 2
                     Layout.alignment: Qt.AlignHCenter
-                    Layout.preferredWidth: autoselectSingleFacilitySite ? 0 : (internal.currentVisibileListView === FloorFilter.VisibleListView.Facility ? 32 : 0)
+                    Layout.preferredWidth: internal.currentVisibileListView
+                                           === FloorFilter.VisibleListView.Facility ? 32 : 0
                     display: AbstractButton.IconOnly
                     flat: true
                     //removing all paddings and spacing from component so icon will fill compeltely the button
@@ -260,7 +241,11 @@ Control {
                         height: 32
                         source: "images/chevron-left.svg"
                     }
-                    onClicked: internal.currentVisibileListView = FloorFilter.VisibleListView.Site
+                    onClicked: {
+                        internal.currentVisibileListView = FloorFilter.VisibleListView.Site
+                        // When showing site view, resetting the not ignore current site. (this button is only way to get to site view)
+                        controller.selectedSiteRespected = true
+                    }
                 }
 
                 TextField {
@@ -275,6 +260,8 @@ Control {
                         id: searchImg
                         sourceSize.width: 32
                         sourceSize.height: 32
+                        visible: false
+                        source: "images/search.svg"
                         width: height
                         anchors {
                             left: parent.left
@@ -282,32 +269,11 @@ Control {
                             bottom: parent.bottom
                             margins: 4
                         }
-
-                        source: "images/search.svg"
                     }
-
-                    Button {
-                        flat: true
-                        display: AbstractButton.IconOnly
-                        width: 32
-                        height: 32
-                        topPadding: 0
-                        bottomPadding: 0
-                        leftPadding: 0
-                        rightPadding: 0
-                        anchors {
-                            right: parent.right
-                            top: parent.top
-                            bottom: parent.bottom
-                            margins: 1
-                        }
-                        icon {
-                            // half size the parent (small 'x')
-                            width: parent.width / 2
-                            height: parent.height / 2
-                            source: "images/x.svg"
-                        }
-                        onClicked: searchTextField.text = ""
+                    ColorOverlay {
+                        anchors.fill: searchImg
+                        source: searchImg
+                        color: noResultsFoundLabel.color
                     }
                 }
 
@@ -328,13 +294,18 @@ Control {
                     visible: true
                     Layout.preferredHeight: 200
                     Layout.columnSpan: 3
+                    cacheBuffer: Math.max(contentHeight,0)
+                    contentWidth: contentItem.childrenRect.width
+                    //implicitWidth: contentWidth
+                    Layout.minimumWidth: contentItem.childrenRect.width
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    Layout.minimumHeight: contentHeight / count
-                    Layout.maximumHeight: contentHeight / count * 3
+                    Layout.minimumHeight: count ? contentHeight / count : 0
+                    Layout.maximumHeight: count ? contentHeight / count * 3 : 0
                     Layout.topMargin: 5
                     Layout.rowSpan: showAllFacilities.visible ? 1 : 2
                     ScrollBar.vertical: ScrollBar {}
+                    spacing: 5
                     clip: true
 
                     model: DelegateModel {
@@ -366,8 +337,6 @@ Control {
 
                         model: internal.currentVisibileListView
                                === FloorFilter.VisibleListView.Site ? controller.sites : controller.facilities
-                        Component.onCompleted: console.log("count:", count)
-                        onCountChanged: console.log("count:", count)
                         filterOnGroup: "filtered"
                         groups: [
                             DelegateModelGroup {
@@ -377,26 +346,39 @@ Control {
                             }
                         ]
                         delegate: RadioDelegate {
-                            width: listView.width
-                            highlighted: internal.currentVisibileListView
-                                         === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx
-                            text: model.name
+                            id: radioDelegate
+                            // wait that the radiodelegates are all set, then resize them into the largest of them (stored in the listview contentItem)
+                            Component.onCompleted: width = listView.contentItem.childrenRect.width
+                            property var parentSiteName: model.parentSiteName ?? ""
+                            highlighted: internal.currentVisibileListView === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx
+                            text: model.name + (model.parentSiteName && !controller.selectedSiteRespected ? '<br/>' + parentSiteName : "")
+
                             onClicked: {
                                 // switch to facility view
                                 if (internal.currentVisibileListView
                                         === FloorFilter.VisibleListView.Site) {
                                     controller.setSelectedSiteId(model.modelId)
+                                    internal.selectedSiteIdx = index
+                                    // resetting the previous selected facility
+                                    internal.selectedFacilityIdx = -1
+                                    controller.zoomToSite(model.modelId)
                                     internal.currentVisibileListView
                                             = FloorFilter.VisibleListView.Facility
-                                    controller.zoomToCurrentSite()
                                 } // switch to level view
                                 else if (internal.currentVisibileListView
                                          === FloorFilter.VisibleListView.Facility) {
-                                    controller.setSelectedFacilityId(
-                                                model.modelId)
+                                    controller.setSelectedFacilityId(model.modelId)
+                                    internal.selectedFacilityIdx = index
                                     buildingMenuButton.checked = false
                                     closer.checked = false
-                                    controller.zoomToCurrentFacility()
+                                    controller.zoomToFacility(model.modelId)
+                                    if (!controller.selectedSiteRespected) {
+                                        const idx = controller.getCurrentSiteIdx();
+                                        // idx could be null if not found, guard from it
+                                        if (idx != null)
+                                            internal.selectedSiteIdx = idx;
+
+                                    }
                                 }
                             }
                         }
@@ -407,23 +389,19 @@ Control {
                     Layout.columnSpan: 3
                     orientation: Qt.Horizontal
                 }
-
-                Label {
+                Button {
                     id: showAllFacilities
-                    text: '<a href=" "style="text-decoration: none">All sites</a>'
-                    textFormat: Text.RichText
+                    text: 'All sites'
                     Layout.alignment: Qt.AlignCenter
                     Layout.columnSpan: 3
                     Layout.margins: 5
+                    Layout.fillWidth: true
+                    flat: true
                     visible: internal.currentVisibileListView === FloorFilter.VisibleListView.Site
 
-                    MouseArea {
-                        anchors.fill: parent
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: {
-                            controller.populateAllFacilities()
-                            internal.currentVisibileListView = FloorFilter.VisibleListView.Facility
-                        }
+                    onClicked: {
+                        controller.selectedSiteRespected = false
+                        internal.currentVisibileListView = FloorFilter.VisibleListView.Facility
                     }
                 }
 

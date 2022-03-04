@@ -16,6 +16,9 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_FLOORFILTERCONTROLLER_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_FLOORFILTERCONTROLLER_H
 
+// ArcGISRuntime headers
+#include <Viewpoint.h>
+
 // Toolkit headers
 #include "FloorFilterFacilityItem.h"
 #include "FloorFilterLevelItem.h"
@@ -24,6 +27,12 @@
 
 // Qt headers
 #include <QObject>
+
+namespace Esri {
+namespace ArcGISRuntime {
+  class Envelope;
+}
+}
 
 namespace Esri {
 namespace ArcGISRuntime {
@@ -36,7 +45,7 @@ namespace Toolkit {
   {
     Q_OBJECT
     Q_PROPERTY(QObject* geoView READ geoView WRITE setGeoView NOTIFY geoViewChanged)
-    Q_PROPERTY(bool selectedSiteResepected READ isSelectedSiteRespected WRITE setIsSelectedSiteRespected NOTIFY isSelectedSiteRespectedChanged)
+    Q_PROPERTY(bool selectedSiteRespected READ isSelectedSiteRespected WRITE setIsSelectedSiteRespected NOTIFY isSelectedSiteRespectedChanged)
     Q_PROPERTY(FloorFilterFacilityItem* selectedFacility READ selectedFacility NOTIFY selectedFacilityIdChanged)
     Q_PROPERTY(QString selectedFacilityId READ selectedFacilityId WRITE setSelectedFacilityId NOTIFY selectedFacilityIdChanged)
     Q_PROPERTY(FloorFilterLevelItem* selectedLevel READ selectedLevel NOTIFY selectedLevelIdChanged)
@@ -46,7 +55,24 @@ namespace Toolkit {
     Q_PROPERTY(QAbstractListModel* levels READ levels CONSTANT)
     Q_PROPERTY(QAbstractListModel* facilities READ facilities CONSTANT)
     Q_PROPERTY(QAbstractListModel* sites READ sites CONSTANT)
+    Q_PROPERTY(UpdateLevelsMode updateLevelsMode READ updateLevelsMode WRITE setUpdateLevelsMode NOTIFY updateLevelsModeChanged)
+    Q_PROPERTY(AutomaticSelectionMode automaticSelectionMode READ automaticSelectionMode WRITE setAutomaticSelectionMode NOTIFY automaticSelectionModeChanged)
   public:
+    enum class UpdateLevelsMode
+    {
+      AllLevelsMatchingVerticalOrder,
+      SingleLevel
+    };
+    Q_ENUM(UpdateLevelsMode)
+
+    enum class AutomaticSelectionMode
+    {
+      Never,
+      Always,
+      AlwaysNonClearing
+    };
+    Q_ENUM(AutomaticSelectionMode)
+
     Q_INVOKABLE explicit FloorFilterController(QObject* parent = nullptr);
     ~FloorFilterController() override;
 
@@ -57,13 +83,19 @@ namespace Toolkit {
     void setGeoView(QObject* geoView);
 
     QString selectedSiteId() const;
-    void setSelectedSiteId(QString selectedSiteId);
+    Q_INVOKABLE void setSelectedSiteId(QString selectedSiteId);
 
     QString selectedFacilityId() const;
-    void setSelectedFacilityId(QString selectedFacilityId);
+    Q_INVOKABLE void setSelectedFacilityId(QString selectedFacilityId);
 
     QString selectedLevelId() const;
-    void setSelectedLevelId(QString selectedLevelId);
+    Q_INVOKABLE void setSelectedLevelId(QString selectedLevelId);
+
+    UpdateLevelsMode updateLevelsMode() const;
+    void setUpdateLevelsMode(UpdateLevelsMode updateLevelsMode);
+
+    AutomaticSelectionMode automaticSelectionMode() const;
+    void setAutomaticSelectionMode(AutomaticSelectionMode automaticSelectionMode);
 
     GenericListModel* levels() const;
     GenericListModel* sites() const;
@@ -75,11 +107,14 @@ namespace Toolkit {
     Q_INVOKABLE void zoomToSite(const QString& siteId);
     void zoomToSite(FloorFilterSiteItem* siteItem);
 
-    Q_INVOKABLE FloorFilterFacilityItem* facility(const QString& facilityId) const;
+    Q_INVOKABLE Esri::ArcGISRuntime::Toolkit::FloorFilterFacilityItem* facility(const QString& facilityId) const;
 
-    Q_INVOKABLE FloorFilterSiteItem* site(const QString& siteId) const;
+    Q_INVOKABLE Esri::ArcGISRuntime::Toolkit::FloorFilterSiteItem* site(const QString& siteId) const;
 
-    Q_INVOKABLE FloorFilterLevelItem* level(const QString& levelId) const;
+    Q_INVOKABLE Esri::ArcGISRuntime::Toolkit::FloorFilterLevelItem* level(const QString& levelId) const;
+
+  public slots:
+    void tryUpdateSelection();
 
   signals:
     void geoViewChanged();
@@ -88,6 +123,8 @@ namespace Toolkit {
     void selectedLevelIdChanged(QString oldId, QString newId);
     void selectedChanged();
     void isSelectedSiteRespectedChanged();
+    void updateLevelsModeChanged();
+    void automaticSelectionModeChanged();
 
   private slots:
     void populateLevelsForSelectedFacility();
@@ -98,6 +135,7 @@ namespace Toolkit {
     FloorFilterFacilityItem* selectedFacility() const;
     FloorFilterSiteItem* selectedSite() const;
     FloorFilterLevelItem* selectedLevel() const;
+    void zoomToEnvelope(const Envelope& envelope);
 
   private:
     QObject* m_geoView{nullptr};
@@ -107,7 +145,10 @@ namespace Toolkit {
     QString m_selectedFacilityId;
     QString m_selectedLevelId;
     QString m_selectedSiteId;
-    bool m_selectedSiteResepected{true};
+    bool m_selectedSiteRespected{true};
+    UpdateLevelsMode m_updatelevelMode{UpdateLevelsMode::AllLevelsMatchingVerticalOrder};
+    AutomaticSelectionMode m_automaticSelectionMode{AutomaticSelectionMode::Always};
+    bool m_settingViewpoint{false};
   };
 
 } // Toolkit

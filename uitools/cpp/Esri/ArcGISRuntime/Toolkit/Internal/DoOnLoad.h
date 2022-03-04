@@ -77,10 +77,8 @@ namespace Toolkit {
     }
   }
 
-
 } // Toolkit
 } // ArcGISRuntime
 } // Esri
-
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_DOONLOAD_H

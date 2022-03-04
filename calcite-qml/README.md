@@ -95,8 +95,8 @@ For further details see [Calcite Web TypeFaces](https://esri.github.io/calcite-w
   - [ ] TabButton
   - [ ] TextArea
   - [x] TextField
-  - [ ] ToolBar
-  - [ ] ToolButton
-  - [ ] ToolSeparator
+  - [x] ToolBar
+  - [x] ToolButton
+  - [x] ToolSeparator
   - [ ] Tooltip
   - [ ] Tumbler

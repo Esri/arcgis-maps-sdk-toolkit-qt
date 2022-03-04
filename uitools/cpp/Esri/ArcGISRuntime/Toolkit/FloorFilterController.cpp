@@ -1,4 +1,4 @@
-/*******************************************************************************
+#/*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +15,17 @@
  ******************************************************************************/
 #include "FloorFilterController.h"
 
+// ArcGISRuntime headers
+#include <Envelope.h>
+#include <EnvelopeBuilder.h>
+#include <FloorFacility.h>
+#include <FloorLevel.h>
+#include <FloorManager.h>
+#include <FloorSite.h>
+#include <GeometryEngine.h>
+#include <Map.h>
+#include <Scene.h>
+
 // Toolkit headers
 #include "FloorFilterFacilityItem.h"
 #include "FloorFilterLevelItem.h"
@@ -23,15 +34,8 @@
 #include "Internal/GeoViews.h"
 #include "Internal/SingleShotConnection.h"
 
-// ArcGISRuntime headers
-#include <Envelope.h>
-#include <EnvelopeBuilder.h>
-#include <FloorFacility.h>
-#include <FloorLevel.h>
-#include <FloorManager.h>
-#include <FloorSite.h>
-#include <Map.h>
-#include <Scene.h>
+// stl headers
+#include <cmath>
 
 namespace Esri {
 namespace ArcGISRuntime {
@@ -44,28 +48,6 @@ namespace Toolkit {
             to the geometry of a FloorFacility.
      */
     const float ZOOM_PADDING = 1.5;
-
-    /*!
-      \internal
-      \brief Zooms the given \a geoView to \a envelope, applying `ZOOM_PADDING`.
-     */
-    void zoomToEnvelope(const Envelope& envelope, QObject* geoView)
-    {
-      if (envelope.isEmpty() || !geoView)
-        return;
-
-      EnvelopeBuilder b{envelope};
-      b.expandByFactor(ZOOM_PADDING);
-
-      if (auto mapView = qobject_cast<MapViewToolkit*>(geoView))
-      {
-        mapView->setViewpoint(b.toEnvelope());
-      }
-      else if (auto sceneView = qobject_cast<SceneViewToolkit*>(geoView))
-      {
-        sceneView->setViewpoint(b.toEnvelope());
-      }
-    }
 
     /*!
       \internal
@@ -158,6 +140,11 @@ namespace Toolkit {
       // Hooks up to any geoModels that appear when the map/sceneView changed signal is called.
       QObject::connect(geoView, getGeoModelChangedSignal(geoView), self, connectToGeoModel);
       connectToGeoModel();
+
+      // Hook up to any viewpoint changes on the GeoView.
+      auto c = QObject::connect(geoView, &std::remove_pointer<decltype(geoView)>::type::viewpointChanged,
+                                self, &FloorFilterController::tryUpdateSelection);
+      disconnectOnSignal(self, &FloorFilterController::geoViewChanged, self, c);
     }
   }
 
@@ -325,7 +312,7 @@ namespace Toolkit {
                 return a && b ? a->verticalOrder() < b->verticalOrder() : static_cast<bool>(a);
               });
 
-    QString defaultLevel= allLevels.first()->levelId();
+    QString defaultLevel = allLevels.first()->levelId();
     QList<QObject*> levelItems;
     for (const auto level : qAsConst(allLevels))
     {
@@ -348,22 +335,32 @@ namespace Toolkit {
 
   void FloorFilterController::populateFacilitiesForSelectedSite()
   {
-    m_facilities->clear();
     auto manager = getFloorManager(m_geoView);
     if (!manager)
+    {
+      m_facilities->clear();
+      return;
+    }
+
+    // Do not blow out the facilities list with a new list if we are showing all facilities in the
+    // FloorManager and we are in ignore selected-site mode. This is not just a micro-optimziation,
+    // there are cases where selecting a facility in this mode will select a parent site, and we don't
+    // want to regenerate the facilities list when the selected site changes.
+    if (manager->facilities().length() == m_facilities->rowCount() && !m_selectedSiteRespected)
       return;
 
     const auto allFacilites = manager->facilities();
-
     QList<QObject*> facilityItems;
     for (const auto facility : allFacilites)
     {
       // If we have no sites take everything, otherwise filter by the selected site.
-      if (!m_selectedSiteResepected || manager->sites().isEmpty() || facility->site()->siteId() == selectedSiteId())
+      if (!m_selectedSiteRespected || manager->sites().isEmpty() || facility->site()->siteId() == selectedSiteId())
       {
         facilityItems << new FloorFilterFacilityItem(facility, m_facilities);
       }
     }
+
+    m_facilities->clear();
     m_facilities->append(facilityItems);
 
     // Select only facility if there is only 1 facility.
@@ -401,6 +398,10 @@ namespace Toolkit {
     else
     {
       setSelectedSiteId("");
+      // Even if a site isn't selected, we may still need to populate facilities
+      // if the isSelectedSiteRespected flag is false or there are 0 sites
+      // in the manager.
+      populateFacilitiesForSelectedSite();
     }
   }
 
@@ -411,7 +412,9 @@ namespace Toolkit {
 
     const auto f = facilityItem->floorFacility();
     if (f)
-      zoomToEnvelope(f->geometry().extent(), m_geoView);
+    {
+      zoomToEnvelope(f->geometry().extent());
+    }
   }
 
   void FloorFilterController::zoomToFacility(const QString& facilityId)
@@ -426,7 +429,9 @@ namespace Toolkit {
 
     const auto s = siteItem->floorSite();
     if (s)
-      zoomToEnvelope(s->geometry().extent(), m_geoView);
+    {
+      zoomToEnvelope(s->geometry().extent());
+    }
   }
 
   void FloorFilterController::zoomToSite(const QString& siteId)
@@ -493,16 +498,194 @@ namespace Toolkit {
 
   bool FloorFilterController::isSelectedSiteRespected() const
   {
-    return m_selectedSiteResepected;
+    return m_selectedSiteRespected;
   }
 
   void FloorFilterController::setIsSelectedSiteRespected(bool isSelectedSiteRespected)
   {
-    if (isSelectedSiteRespected == m_selectedSiteResepected)
+    if (isSelectedSiteRespected == m_selectedSiteRespected)
       return;
 
-    m_selectedSiteResepected = isSelectedSiteRespected;
+    m_selectedSiteRespected = isSelectedSiteRespected;
     emit isSelectedSiteRespectedChanged();
+  }
+
+  FloorFilterController::UpdateLevelsMode FloorFilterController::updateLevelsMode() const
+  {
+    return m_updatelevelMode;
+  }
+
+  void FloorFilterController::setUpdateLevelsMode(UpdateLevelsMode updateLevelsMode)
+  {
+    if (updateLevelsMode == m_updatelevelMode)
+      return;
+
+    m_updatelevelMode = updateLevelsMode;
+    emit updateLevelsModeChanged();
+  }
+
+  FloorFilterController::AutomaticSelectionMode FloorFilterController::automaticSelectionMode() const
+  {
+    return m_automaticSelectionMode;
+  }
+
+  void FloorFilterController::setAutomaticSelectionMode(AutomaticSelectionMode automaticSelectionMode)
+  {
+    if (m_automaticSelectionMode == automaticSelectionMode)
+      return;
+
+    m_automaticSelectionMode = automaticSelectionMode;
+    emit automaticSelectionModeChanged();
+  }
+
+  void FloorFilterController::tryUpdateSelection()
+  {
+    if (m_settingViewpoint)
+      return;
+
+    Viewpoint observedViewpoint;
+    if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+    {
+      observedViewpoint = sceneView->currentViewpoint(ViewpointType::CenterAndScale);
+    }
+    else if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
+    {
+      observedViewpoint = mapView->currentViewpoint(ViewpointType::CenterAndScale);
+    }
+
+    // Expectation: viewpoint is center and scale
+    if (m_automaticSelectionMode == AutomaticSelectionMode::Never ||
+        observedViewpoint.isEmpty() ||
+        isnan(observedViewpoint.targetScale()))
+      return;
+
+    auto floorManager = getFloorManager(m_geoView);
+
+    // Only take action if viewpoint is within minimum scale. Default minscale is 4300 or less (~zoom level 17 or greater)
+    double targetScale = 0.0;
+    if (floorManager)
+    {
+      if (auto siteLayer = floorManager->siteLayer())
+      {
+        targetScale = siteLayer->minScale();
+      }
+    }
+
+    if (targetScale == 0.0)
+      targetScale = 4300.0;
+
+    if (observedViewpoint.targetScale() > targetScale)
+    {
+      if (m_automaticSelectionMode == AutomaticSelectionMode::Always)
+      {
+        setSelectedLevelId({});
+        setSelectedFacilityId({});
+        setSelectedSiteId({});
+      }
+      // Assumption: if too zoomed out to see sites, also too zoomed out to see facilities
+      return;
+    }
+
+    // If the centerpoint is within a site's geometry, select that site.
+    // This code gracefully skips selection if there are no sites or no matching sites
+    auto sites = floorManager ? floorManager->sites() : QList<FloorSite*>{};
+    auto siteResult = std::find_if(std::cbegin(sites), std::cend(sites),
+                                   [&observedViewpoint](FloorSite* site)
+                                   {
+                                     if (site == nullptr)
+                                       return false;
+
+                                     auto extent = site->geometry().extent();
+                                     if (extent.isEmpty())
+                                       return false;
+
+                                     return GeometryEngine::intersects(extent, observedViewpoint.targetGeometry());
+                                   });
+
+    if (siteResult != std::cend(sites))
+    {
+      setSelectedSiteId((*siteResult)->siteId());
+    }
+    else if (m_automaticSelectionMode == AutomaticSelectionMode::Always)
+    {
+      setSelectedSiteId({});
+    }
+
+    // Move on to facility selection. Default to map-authored Facility MinScale. If MinScale not specified or is 0, default to 1500.
+    targetScale = 0.0;
+    if (floorManager)
+    {
+      if (auto siteLayer = floorManager->facilityLayer())
+      {
+        targetScale = siteLayer->minScale();
+      }
+    }
+
+    if (targetScale == 0)
+    {
+      targetScale = 1500;
+    }
+
+    // If out of scale, stop here
+    if (observedViewpoint.targetScale() > targetScale)
+    {
+      return;
+    }
+
+    auto facilities = floorManager ? floorManager->facilities() : QList<FloorFacility*>{};
+    auto facilityResult = std::find_if(std::cbegin(facilities), std::cend(facilities),
+                                       [&observedViewpoint](FloorFacility* facility)
+                                       {
+                                         if (facility == nullptr)
+                                           return false;
+
+                                         auto extent = facility->geometry().extent();
+                                         if (extent.isEmpty())
+                                           return false;
+
+                                         return GeometryEngine::intersects(extent, observedViewpoint.targetGeometry());
+                                       });
+
+    if (facilityResult != std::cend(facilities))
+    {
+      setSelectedFacilityId((*facilityResult)->facilityId());
+    }
+    else if (m_automaticSelectionMode == AutomaticSelectionMode::Always)
+    {
+      setSelectedFacilityId({});
+    }
+  }
+
+  /*!
+      \internal
+      \brief Zooms the given \a geoView to \a envelope, applying `ZOOM_PADDING`.
+     */
+  void FloorFilterController::zoomToEnvelope(const Envelope& envelope)
+  {
+    if (envelope.isEmpty() || !m_geoView)
+      return;
+
+    EnvelopeBuilder b{envelope};
+    b.expandByFactor(ZOOM_PADDING);
+
+    if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
+    {
+      m_settingViewpoint = true;
+      singleShotConnection(mapView, &MapViewToolkit::setViewpointCompleted, this, [this](bool /*success*/)
+                           {
+                             m_settingViewpoint = false;
+                           });
+      mapView->setViewpoint(b.toEnvelope());
+    }
+    else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+    {
+      m_settingViewpoint = true;
+      singleShotConnection(mapView, &MapViewToolkit::setViewpointCompleted, this, [this](bool /*success*/)
+                           {
+                             m_settingViewpoint = false;
+                           });
+      sceneView->setViewpoint(b.toEnvelope());
+    }
   }
 
 } // Toolkit

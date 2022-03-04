@@ -1,4 +1,3 @@
-
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -14,6 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
+
 import QtQuick 2.12
 import Esri.ArcGISRuntime 100.14
 
@@ -111,36 +111,33 @@ QtObject {
 
     property int updateLevelsMode: FloorFilterController.UpdateLevelsMode.AllLevelsMatchingVerticalOrder
 
-    property bool autoselectSingleFacilitySite
+    property FloorManager floorManager : geoModel? geoModel.floorManager : null
 
-    property int automaticSelectionMode
-
-    property FloorManager floorManager
-
-    readonly property alias selectedLevelId : internal.selectedLevelId
-
-    readonly property alias selectedFacilityId : internal.selectedFacilityId
-
-
-    /*!
-      if levelId == "", disable visibility previous level.
-      */
-    function setSelectedLevelId(levelId) {
-        let idx = findElementIdxById(levelId,
-                                     FloorFilterController.TypeElement.Level)
-        if (levelId === "" && idx != null) {
-            // reset the previous level visibility
-            if (internal.selectedLevel) {
-                internal.selectedLevel.visible = false
-            }
-        } else
-            selectedLevelId = levelId
+    onFloorManagerChanged: {
+        if (floorManager.loadStatus !== Enums.LoadStatusLoaded)
+            floorManager.load();
     }
+
+    // toggling false will autofire the ilities
+    property bool selectedSiteRespected: true
+
+    onSelectedSiteRespectedChanged: {
+        if (!selectedSiteRespected) {
+            populateAllFacilities()
+        }
+    }
+    
+    readonly property alias selectedLevelId: internal.selectedLevelId
+
+    function setSelectedLevelId(levelId) {
+        internal.selectedLevelId = levelId
+    }
+
+    readonly property alias selectedFacilityId: internal.selectedFacilityId
 
     function setSelectedFacilityId(facilityId) {
         let idx = findElementIdxById(facilityId,
                                      FloorFilterController.TypeElement.Facility)
-        console.log(idx)
         if (idx == null) {
             console.error("not found facility")
             selectedFacilityId = ""
@@ -153,15 +150,16 @@ QtObject {
                 || facility.site.siteId !== internal.selectedSite.siteId) {
             // selection of facility came after click of populateAllFacilities.
             // this also sets the internal.selectedSite
-            selectedSiteId = facility.site.siteId
+            internal.selectedSiteId = facility.site.siteId
         }
-        selectedFacilityId = facilityId
+        internal.selectedFacilityId = facilityId
     }
 
-    readonly property alias selectedSiteId : internal.selectedSiteId
+    readonly property alias selectedSiteId: internal.selectedSiteId
 
     function setSelectedSiteId(siteId) {
-        selectedSiteId = siteId
+        console.log("set selected site id")
+        internal.selectedSiteId = siteId
     }
 
     property ListModel levels: ListModel {}
@@ -179,7 +177,6 @@ QtObject {
     function findElementIdxById(id, typeElement) {
         var model
         var variableIdName
-        print("type", typeElement)
         switch (typeElement) {
         case FloorFilterController.TypeElement.Level:
             model = floorManager.levels
@@ -214,8 +211,10 @@ QtObject {
         let idx = findElementIdxById(selectedLevelId,
                                      FloorFilterController.TypeElement.Level)
         if (idx == null) {
-            console.error("level id not found")
-            internal.selectedLevel = null
+            console.error("level id not found, resetting current level")
+            if(internal.selectedLevelId === "")
+              internal.selectedLevel.visible = false;
+            internal.selectedLevel = null;
             return
         }
 
@@ -228,7 +227,7 @@ QtObject {
 
         if (updateLevelsMode
                 === FloorFilterController.UpdateLevelsMode.AllLevelsMatchingVerticalOrder) {
-            setVisibleLevelsMatchingVerticalOrder()
+            resetLevelsVisibility(internal.selectedLevel.verticalOrder)
         }
 
         onSelectedChanged()
@@ -245,8 +244,9 @@ QtObject {
             return
         }
         internal.selectedFacility = floorManager.facilities[idx]
-
         populateLevels(floorManager.facilities[idx].levels)
+        // reset the levels visibilty to vertical order 0 once a facility is selected.
+        resetLevelsVisibility(0);
         onSelectedChanged()
     }
 
@@ -259,10 +259,31 @@ QtObject {
             internal.selectedSite = null
             return
         }
+
         internal.selectedSite = floorManager.sites[idx]
+
+        // dont populate facilities if they are total number and we are ignoring the current selected site
+        if (!selectedSiteRespected
+                && facilities.count === floorManager.facilities.length)
+            return
         populateFacilities(floorManager.sites[idx].facilities)
         onSelectedChanged()
-        selectedFacilityId = ""
+        internal.selectedFacilityId = ""
+    }
+
+    function setVisibilityCurrentLevel(visibility) {
+        if(internal.selectedLevel)
+            internal.selectedLevel.visible = visibility
+    }
+
+    /*!
+      Setting the levels visible if they match the current selected level vertical order.
+    */
+    function resetLevelsVisibility(verticalOrder){
+        for(var i = 0; i < floorManager.levels.length; ++i) {
+            var level = floorManager.levels[i];
+            level.visible = level.verticalOrder === verticalOrder
+        }
     }
 
     function setVisibilityCurrentLevel(visibility) {
@@ -275,26 +296,40 @@ QtObject {
     property Connections geoModelConn: Connections {
         target: geoModel
         function onLoadStatusChanged() {
-            console.log("geomodel loaded: ", geoModel)
             // load floormanager after map has been loaded
             if (geoModel.loadStatus === Enums.LoadStatusLoaded) {
+                console.log("geomodel loaded: ", geoModel)
                 floorManager = geoModel.floorManager
+                console.log("loading floormanager");
                 floorManager.load()
             }
         }
     }
+
+    signal loaded()
 
     property Connections floorManagerConn: Connections {
         target: floorManager
         function onLoadStatusChanged() {
             console.log("floormanager status (0 loaded)",
                         floorManager.loadStatus)
+            if(floorManager.loadError)
+                console.log("floormanager load error: ", floorManager.loadError.message, floorManager.loadError.additionalMessage);
             if (floorManager.loadStatus === Enums.LoadStatusLoaded) {
                 // load the listmodels
+                controller.loaded();
                 populateSites(floorManager.sites)
                 controller.internal.geoViewConnections.enabled = true
             }
         }
+    }
+
+    /*!
+     Function used to expose the current site idx from the sites model.
+    */
+    function getCurrentSiteIdx() {
+        return findElementIdxById(internal.selectedSiteId, FloorFilterController.TypeElement.Site);
+
     }
 
     function populateSites(listSites) {
@@ -307,38 +342,50 @@ QtObject {
                          })
         }
         // case single site: autoselect it and set the boolean used by the view
-        if (autoselectSingleFacilitySite && listSites.length === 1) {
+        if (listSites.length === 1) {
             internal.singleSite = true
             let site = listSites[0]
-            selectedSiteId = site.siteId
+            internal.selectedSiteId = site.siteId
         }
     }
 
     function populateFacilities(listFacilities) {
         facilities.clear()
-        for (var i = 0; i < listFacilities.length; ++i) {
-            let facility = listFacilities[i]
-            facilities.append({
-                                  "name": facility.name,
-                                  "modelId": facility.facilityId
-                              })
-        }
+        let facilitiesExtracted = Array.from(listFacilities)
+        facilitiesExtracted.sort(function (first, second) {
+            if (first.site.name < second.site.name)
+                return -1
+            else if (first.site.name > second.site.name)
+                return 1
+            return 0
+        })
+        facilitiesExtracted.forEach(facility => {
+                                        facilities.append({
+                                                              "name": facility.name,
+                                                              "modelId": facility.facilityId,
+                                                              "parentSiteName": facility.site.name
+                                                          })
+                                    })
+
         // case single facility: autoselect it
-        if (autoselectSingleFacilitySite && listFacilities.length === 1) {
-            selectedFacilityId = listFacilities[0].facilityId
+        if (listFacilities.length === 1) {
+            internal.selectedFacilityId = listFacilities[0].facilityId
         }
     }
 
+
+    /*!
+     \internal
+    */
     function populateAllFacilities() {
         var listFacilities = floorManager.facilities
         populateFacilities(listFacilities)
-        // setting view site name as ""
-        // internal.selectedSite = null
     }
 
     // populate levels in reverse order. Levels numbers in ascending order from component's bottom section.
     function populateLevels(listLevels) {
         levels.clear()
+        console.log("populate levels")
         let selectedLevel = ""
         let levelsExtracted = []
         for (var i = listLevels.length - 1; i >= 0; --i) {
@@ -347,7 +394,7 @@ QtObject {
 
             if (level.verticalOrder === 0) {
                 selectedLevel = level.levelId
-                selectedLevelId = level.levelId
+                internal.selectedLevelId = level.levelId
             }
         }
         // sorting higher levels first
@@ -364,23 +411,7 @@ QtObject {
                                 })
         // no suitable vertical order found. second check to from facilities with no levels
         if (!selectedLevel && listLevels[0])
-            selectedLevelId = listLevels[0].levelId
-    }
-
-    function zoomToCurrentFacility() {
-        if (!selectedFacilityId) {
-            console.error("no facility yet selected")
-            return
-        }
-        zoomToFacility(selectedFacilityId)
-    }
-
-    function zoomToCurrentSite() {
-        if (!selectedSiteId) {
-            console.error("no site yet selected")
-            return
-        }
-        zoomToSite(selectedSiteId)
+            internal.selectedLevelId = listLevels.length ? listLevels[0].levelId : ""
     }
 
     function zoomToFacility(facilityId) {
@@ -426,21 +457,9 @@ QtObject {
         geoView.setViewpoint(newViewpoint)
     }
 
-
-    /*!
-      Setting the levels visible if they match the current selected level vertical order.
-    */
-    function setVisibleLevelsMatchingVerticalOrder() {
-        for (var level in levels) {
-            level.verticalOrder = level.verticalOrder === selectedLevel.verticalOrder
-        }
-    }
-
-    onFloorManagerChanged: console.log("manager changed")
-
     enum UpdateLevelsMode {
-        SingleLevel,
-        AllLevelsMatchingVerticalOrder
+        AllLevelsMatchingVerticalOrder,
+        SingleLevel
     }
 
     enum TypeElement {
@@ -461,6 +480,9 @@ QtObject {
     /*! internal */
     property QtObject internal: QtObject {
         id: internal
+        property string selectedLevelId
+        property string selectedFacilityId
+        property string selectedSiteId
         // used keep track of last level selected and toggle its visibility
         property FloorLevel selectedLevel
         // used to update the view with their names. _q could only store the name string

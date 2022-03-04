@@ -11,8 +11,29 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-TEMPLATE = subdirs
 
-SUBDIRS += \
-    FloorFilterControllerUnitTest
+CONFIG += c++14 warn_on qmltestcase
 
+TEMPLATE = app
+
+ARCGIS_RUNTIME_VERSION = 100.14
+include($$PWD/../../shared/arcgisruntime.pri)
+include($$PWD/../../../../../uitools/toolkitqml.pri)
+
+macx {
+    cache()
+}
+
+TARGET = qml_quick
+
+DISTFILES += \
+    tst_floorfiltercontroller.qml
+
+SOURCES += \
+    tst_main.cpp
+
+RESOURCES += \
+    qtquick.qrc \
+    $$absolute_path($$PWD/../../../../../calcite-qml/Calcite/calcite.qrc) \
+
+QML2_IMPORT_PATH += $$absolute_path($$PWD/../../../uitools/import)

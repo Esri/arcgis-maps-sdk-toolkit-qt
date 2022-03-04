@@ -17,7 +17,7 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_FLOORFILTER_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_FLOORFILTER_H
 
-#include <QWidget>
+#include <QFrame>
 
 namespace Ui {
   class FloorFilter;
@@ -32,7 +32,7 @@ namespace ArcGISRuntime {
   namespace Toolkit {
     class FloorFilterController;
 
-    class FloorFilter : public QWidget
+    class FloorFilter : public QFrame
     {
       Q_OBJECT
     public:
@@ -49,6 +49,8 @@ namespace ArcGISRuntime {
     private:
       FloorFilterController* m_controller = nullptr;
       Ui::FloorFilter* m_ui;
+      bool m_sitesUpdatedFromController{false};
+      bool m_facilitiesUpdatedFromController{false};
     };
   } // Toolkit
 } // ArcGISRuntime

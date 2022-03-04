@@ -24,11 +24,14 @@
 #include "FloorFilterSiteItem.h"
 
 // ArcGISRuntime headers
+#include <FloorFacility.h>
+#include <FloorSite.h>
 #include <MapGraphicsView.h>
 #include <SceneGraphicsView.h>
 
 // Qt headers
-#include <QCompleter>
+#include <QEvent>
+#include <QSortFilterProxyModel>
 
 namespace Esri {
 namespace ArcGISRuntime {
@@ -38,131 +41,215 @@ namespace Toolkit {
 
     /*!
      \internal
+     \brief Given a \a modelIndex, for \a model,
+     extracts the `T*` pointer from its \c userRole.
+     */
+    template <typename T>
+    T* itemForIndex(QAbstractItemModel* model, QModelIndex modelIndex)
+    {
+      if (!model)
+        return nullptr;
+
+      if (modelIndex.isValid())
+      {
+        return qvariant_cast<T*>(model->data(modelIndex, Qt::UserRole));
+      }
+      return nullptr;
+    }
+
+    /*!
+     \internal
      \brief Given some modelId in a given model, returns that items index in the model.
             O(n) search time.
      */
     template <typename T>
-    int indexForId(GenericListModel* model, QString id)
+    QModelIndex indexForId(QAbstractItemModel* model, QString id)
     {
       const int rowCount = model->rowCount();
       for (int i = 0; i < rowCount; ++i)
       {
-        const auto index = model->index(i);
-        const auto item = model->element<T>(index);
-        if (item->modelId() == id)
-          return i;
+        const auto index = model->index(i, 0);
+        const auto item = itemForIndex<T>(model, index);
+        if (item && item->modelId() == id)
+          return index;
       }
-      return -1;
+      return QModelIndex{};
+    }
+
+    QSortFilterProxyModel* wrapFilterModel(QAbstractItemModel* sourceModel, QLineEdit* filterField, FloorFilter* parent)
+    {
+      auto model = new QSortFilterProxyModel(parent);
+      model->setSourceModel(sourceModel);
+      model->setSortCaseSensitivity(Qt::CaseInsensitive);
+      model->setFilterCaseSensitivity(Qt::CaseInsensitive);
+
+      QObject::connect(filterField, &QLineEdit::textEdited, parent, [model](const QString& text)
+                       {
+                         model->setFilterFixedString(text);
+                       });
+      return model;
     }
 
     /*!
-      \internal
-      \brief Changes the ComboBox behaviour to be filter-friendly.
+     \internal
+     \brief Helper struct that holds a reference to sme `b`, sets `b` to `v` on construction,
+     and then sets `b` back to its initial value on destruction.
      */
-    void makeComboSearchable(QComboBox* box)
+    template<typename T>
+    struct PushValue
     {
-      box->setInsertPolicy(QComboBox::NoInsert);
-      auto completer = box->completer();
-      completer->setCompletionMode(QCompleter::PopupCompletion);
-      completer->setCaseSensitivity(Qt::CaseInsensitive);
-      completer->setFilterMode(Qt::MatchContains);
-    }
+      PushValue(T& b, T v) :
+        m_tracked(b),
+        m_state{std::move(m_tracked)}
+      {
+        m_tracked = std::move(v);
+      }
+
+      ~PushValue()
+      {
+        m_tracked = std::move(m_state);
+      }
+
+      T& m_tracked;
+      T m_state;
+    };
+  }
+
+  /*!
+   \internal
+   \brief Creates a `PushValue`.
+   */
+  template <typename T>
+  PushValue<T> push_value(T& t, T v)
+  {
+    return PushValue<T>(t, v);
   }
 
   FloorFilter::FloorFilter(QWidget* parent) :
-    QWidget(parent),
+    QFrame(parent),
     m_controller(new FloorFilterController(this)),
     m_ui(new Ui::FloorFilter)
   {
     m_ui->setupUi(this);
 
-    m_ui->sitesCombo->setModel(m_controller->sites());
-    m_ui->sitesBox->setChecked(m_controller->isSelectedSiteRespected());
-    makeComboSearchable(m_ui->sitesCombo);
-
-    m_ui->facilitiesCombo->setModel(m_controller->facilities());
-    makeComboSearchable(m_ui->facilitiesCombo);
-
-    m_ui->levelsCombo->setModel(m_controller->levels());
-    makeComboSearchable(m_ui->levelsCombo);
+    m_ui->allSites->setChecked(!m_controller->isSelectedSiteRespected());
+    m_ui->sitesView->setModel(wrapFilterModel(m_controller->sites(), m_ui->sitesFiltler, this));
+    m_ui->facilitiesView->setModel(wrapFilterModel(m_controller->facilities(), m_ui->facilitiesFilter, this));
+    m_ui->levelsView->setModel(m_controller->levels());
 
     // Changes the contents of the facilities list.
-    connect(m_ui->sitesBox, &QGroupBox::clicked, this, [this](bool checked)
-            {
-              m_controller->setIsSelectedSiteRespected(checked);
-            });
-
-    // Changes the visibility of the sites list based on the number on whether there
-    // are any sites in the FloorManager or not.
-    connect(m_controller->sites(), &GenericListModel::countChanged, this, [this]()
-            {
-              m_ui->sitesBox->setEnabled(m_controller->sites()->rowCount() > 0);
-            });
+    connect(
+        m_ui->allSites, &QCheckBox::clicked, this, [this](bool checked)
+        {
+          m_controller->setIsSelectedSiteRespected(!checked);
+          if (checked)
+            m_ui->toolBox->setCurrentIndex(1);
+        });
 
     // Sites setup
-    connect(m_controller, &FloorFilterController::selectedSiteIdChanged, this, [this](QString /*oldId*/, QString newId)
+    connect(
+        m_controller, &FloorFilterController::selectedSiteIdChanged, this, [this](QString /*oldId*/, QString newId)
+        {
+          auto b = push_value(m_sitesUpdatedFromController, true);
+          const auto i = indexForId<FloorFilterSiteItem>(m_ui->sitesView->model(), newId);
+          m_ui->sitesView->selectionModel()->setCurrentIndex(i, QItemSelectionModel::SelectCurrent);
+        });
+
+    connect(
+        m_ui->sitesView, &QListView::doubleClicked, this, [this](QModelIndex index)
+        {
+          if (index.isValid())
+            m_ui->toolBox->setCurrentIndex(1);
+        });
+
+    connect(
+        m_ui->sitesView->selectionModel(), &QItemSelectionModel::currentChanged, this, [this](QModelIndex index, QModelIndex previous)
+        {
+          if (index == previous)
+            return;
+
+          if (index == QModelIndex{})
+          {
+            m_controller->setSelectedSiteId("");
+          }
+          else
+          {
+            const auto data = itemForIndex<FloorFilterSiteItem>(m_ui->sitesView->model(), index);
+            m_controller->setSelectedSiteId(data->modelId());
+
+            if (!m_sitesUpdatedFromController)
             {
-              const auto i = indexForId<FloorFilterSiteItem>(m_controller->sites(), newId);
-              m_ui->sitesCombo->setCurrentIndex(i);
-            });
-    connect(m_ui->sitesCombo, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int i)
-            {
-              if (i == -1)
-              {
-                m_controller->setSelectedSiteId("");
-              }
-              else
-              {
-                const auto model = m_controller->sites();
-                const auto index = model->index(i);
-                const auto data = model->element<FloorFilterSiteItem>(index);
-                m_controller->setSelectedSiteId(data->modelId());
-                m_controller->zoomToSite(data);
-              }
-            });
+               m_controller->zoomToSite(data);
+            }
+          }
+        });
 
     // Facilities setup.
-    connect(m_controller, &FloorFilterController::selectedFacilityIdChanged, this, [this](QString /*oldId*/, QString newId)
+    connect(
+        m_controller, &FloorFilterController::selectedFacilityIdChanged, this, [this](QString /*oldId*/, QString newId)
+        {
+          auto b = push_value(m_facilitiesUpdatedFromController, true);
+          const auto i = indexForId<FloorFilterFacilityItem>(m_ui->facilitiesView->model(), newId);
+          m_ui->facilitiesView->selectionModel()->setCurrentIndex(i, QItemSelectionModel::SelectCurrent);
+        });
+
+    connect(
+        m_ui->facilitiesView, &QListView::doubleClicked, this, [this](QModelIndex index)
+        {
+          if (index.isValid())
+            m_ui->toolBox->setCurrentIndex(2);
+        });
+
+    connect(
+        m_ui->facilitiesView->selectionModel(), &QItemSelectionModel::currentChanged, this, [this](QModelIndex index, QModelIndex previous)
+        {
+          if (index == previous)
+            return;
+
+          if (index == QModelIndex{})
+          {
+            m_controller->setSelectedFacilityId("");
+          }
+          else
+          {
+            const auto data = itemForIndex<FloorFilterFacilityItem>(m_ui->facilitiesView->model(), index);
+            m_controller->setSelectedFacilityId(data->modelId());
+            if (auto site = data->floorFacility()->site())
             {
-              const auto i = indexForId<FloorFilterFacilityItem>(m_controller->facilities(), newId);
-              m_ui->facilitiesCombo->setCurrentIndex(i);
-            });
-    connect(m_ui->facilitiesCombo, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int i)
+              m_controller->setSelectedSiteId(site->siteId());
+            }
+
+            if (!m_facilitiesUpdatedFromController)
             {
-              if (i == -1)
-              {
-                m_controller->setSelectedFacilityId("");
-              }
-              else
-              {
-                const auto model = m_controller->facilities();
-                const auto index = model->index(i);
-                const auto data = model->element<FloorFilterFacilityItem>(index);
-                m_controller->setSelectedFacilityId(data->modelId());
-                m_controller->zoomToFacility(data);
-              }
-            });
+              m_controller->zoomToFacility(data);
+            }
+          }
+        });
 
     // Levels setup.
-    connect(m_controller, &FloorFilterController::selectedLevelIdChanged, this, [this](QString /*oldId*/, QString newId)
-            {
-              const auto i = indexForId<FloorFilterLevelItem>(m_controller->levels(), newId);
-              m_ui->levelsCombo->setCurrentIndex(i);
-            });
-    connect(m_ui->levelsCombo, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int i)
-            {
-              if (i == -1)
-              {
-                m_controller->setSelectedLevelId("");
-              }
-              else
-              {
-                const auto model = m_controller->levels();
-                const auto index = model->index(i);
-                const auto data = model->element<FloorFilterLevelItem>(index);
-                m_controller->setSelectedLevelId(data->modelId());
-              }
-            });
+    connect(
+        m_controller, &FloorFilterController::selectedLevelIdChanged, this, [this](QString /*oldId*/, QString newId)
+        {
+          const auto i = indexForId<FloorFilterLevelItem>(m_ui->levelsView->model(), newId);
+          m_ui->levelsView->selectionModel()->setCurrentIndex(i, QItemSelectionModel::SelectCurrent);
+        });
+
+    connect(
+        m_ui->levelsView->selectionModel(), &QItemSelectionModel::currentChanged, this, [this](QModelIndex index, QModelIndex previous)
+        {
+          if (index == previous)
+            return;
+
+          if (!index.isValid())
+          {
+            m_controller->setSelectedLevelId("");
+          }
+          else
+          {
+            const auto data = itemForIndex<FloorFilterLevelItem>(m_ui->levelsView->model(), index);
+            m_controller->setSelectedLevelId(data->modelId());
+          }
+        });
   }
 
   FloorFilter::~FloorFilter()
