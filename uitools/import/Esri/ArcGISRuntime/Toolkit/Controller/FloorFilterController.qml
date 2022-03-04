@@ -23,6 +23,8 @@ QtObject {
 
     property GeoView geoView
 
+    property int automaticSelectionMode
+
     function tryUpdateSelection() {
         // todo: facilities and sites are optional, add checks
         var viewpointCenter = geoView.currentViewpointCenter
@@ -140,7 +142,7 @@ QtObject {
                                      FloorFilterController.TypeElement.Facility)
         if (idx == null) {
             console.error("not found facility")
-            selectedFacilityId = ""
+            internal.selectedFacilityId = ""
             return
         }
 
@@ -284,10 +286,6 @@ QtObject {
             var level = floorManager.levels[i];
             level.visible = level.verticalOrder === verticalOrder
         }
-    }
-
-    function setVisibilityCurrentLevel(visibility) {
-        internal.selectedLevel.visible = visibility
     }
 
     function onSelectedChanged() {}
