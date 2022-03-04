@@ -27,88 +27,88 @@ QtObject {
 
     function tryUpdateSelection() {
         // todo: facilities and sites are optional, add checks
-        var viewpointCenter = geoView.currentViewpointCenter
+        var viewpointCenter = geoView.currentViewpointCenter;
         //console.log("update selection")
 
         if (automaticSelectionMode === FloorFilterController.AutomaticSelectionMode.Never || !viewpointCenter || isNaN(viewpointCenter.targetScale)) {
-            return
+            return;
         }
 
-        var floorManager = controller.floorManager
-        var targetScale = 0
+        var floorManager = controller.floorManager;
+        var targetScale = 0;
 
         if (floorManager)
-            targetScale = controller.floorManager.siteLayer ? controller.floorManager.siteLayer.minScale : 0
+            targetScale = controller.floorManager.siteLayer ? controller.floorManager.siteLayer.minScale : 0;
 
         if (targetScale === 0)
-            targetScale = 4300
+            targetScale = 4300;
 
         if (viewpointCenter.targetScale > targetScale) {
             if (automaticSelectionMode === FloorFilterController.AutomaticSelectionMode.Always) {
 
-                setSelectedSiteId("")
-                setSelectedFacilityId("")
-                setSelectedLevelId("")
+                setSelectedSiteId("");
+                setSelectedFacilityId("");
+                setSelectedLevelId("");
             }
             // Assumption: if too zoomed out to see sites, also too zoomed out to see facilities
-            return
+            return;
         }
 
         if(!floorManager)
-            return
+            return;
 
         let selectSite
         for (var i = 0; i < floorManager.sites.length; ++i) {
             if (GeometryEngine.intersects(
                         floorManager.sites[i].geometry.extent,
                         viewpointCenter.center)) {
-                selectSite = floorManager.sites[i]
-                break
+                selectSite = floorManager.sites[i];
+                break;
             }
         }
 
         if (selectSite !== undefined) {
-            console.log("selecting site", selectSite.siteId)
-            setSelectedSiteId(selectSite.siteId)
+            console.log("selecting site", selectSite.siteId);
+            setSelectedSiteId(selectSite.siteId);
         } else if (automaticSelectionMode === FloorFilterController.AutomaticSelectionMode.Always) {
-            setSelectedSiteId("")
+            setSelectedSiteId("");
         }
 
         targetScale = floorManager.facilityLayer ? floorManager.facilityLayer.minScale : 0
         if (targetScale === 0)
-            targetScale = 1500
+            targetScale = 1500;
 
         if(viewpointCenter.targetScale > targetScale)
-            return
+            return;
 
         let selectFacility
         for (i = 0; i < floorManager.facilities.length; ++i) {
-            let facility
+            let facility;
             if (GeometryEngine.intersects(
                         floorManager.facilities[i].geometry.extent,
                         viewpointCenter.center)) {
-                selectFacility = floorManager.facilities[i]
-                break
+                selectFacility = floorManager.facilities[i];
+                break;
             }
         }
         if (selectFacility !== undefined) {
-            console.log("selecting facility", selectFacility.facilityId)
-            setSelectedFacilityId(selectFacility.facilityId)
+            console.log("selecting facility", selectFacility.facilityId);
+            setSelectedFacilityId(selectFacility.facilityId);
         } else if (automaticSelectionMode === FloorFilterController.AutomaticSelectionMode.Always) {
-            setSelectedFacilityId("")
-            setSelectedLevelId("")
+            setSelectedFacilityId("");
+            setSelectedLevelId("");
         }
     }
 
     property GeoModel geoModel: {
         // check geoView has been set
         if (!geoView)
-            return null
+            return null;
         if (typeof (geoView.map) !== "undefined")
-            return geoView.map
+            return geoView.map;
         else if (typeof (geoView.scene) !== "undefined")
-            return geoView.scene
-        return null
+            return geoView.scene;
+        return null;
     }
 
     property int updateLevelsMode: FloorFilterController.UpdateLevelsMode.AllLevelsMatchingVerticalOrder
@@ -125,43 +125,43 @@ QtObject {
 
     onSelectedSiteRespectedChanged: {
         if (!selectedSiteRespected) {
-            populateAllFacilities()
+            populateAllFacilities();
         }
     }
     
     readonly property alias selectedLevelId: internal.selectedLevelId
 
     function setSelectedLevelId(levelId) {
-        internal.selectedLevelId = levelId
+        internal.selectedLevelId = levelId;
     }
 
     readonly property alias selectedFacilityId: internal.selectedFacilityId
 
     function setSelectedFacilityId(facilityId) {
         let idx = findElementIdxById(facilityId,
-                                     FloorFilterController.TypeElement.Facility)
+                                     FloorFilterController.TypeElement.Facility);
         if (idx == null) {
-            console.error("not found facility")
-            internal.selectedFacilityId = ""
-            return
+            console.error("not found facility");
+            internal.selectedFacilityId = "";
+            return;
         }
 
         // check that the current site is the selected facility selected. Otherwise the click came from a populateAllFacilities
-        var facility = floorManager.facilities[idx]
+        var facility = floorManager.facilities[idx];
         if (!internal.selectedSite
                 || facility.site.siteId !== internal.selectedSite.siteId) {
             // selection of facility came after click of populateAllFacilities.
             // this also sets the internal.selectedSite
-            internal.selectedSiteId = facility.site.siteId
+            internal.selectedSiteId = facility.site.siteId;
         }
-        internal.selectedFacilityId = facilityId
+        internal.selectedFacilityId = facilityId;
     }
 
     readonly property alias selectedSiteId: internal.selectedSiteId
 
     function setSelectedSiteId(siteId) {
-        console.log("set selected site id")
-        internal.selectedSiteId = siteId
+        console.log("set selected site id");
+        internal.selectedSiteId = siteId;
     }
 
     property ListModel levels: ListModel {}
@@ -177,105 +177,105 @@ QtObject {
     // iterates over \a listElements to find an element with \a id.
     //\a variableIdName is used to access the correct method name in each list (siteId, facilityId, levelId)
     function findElementIdxById(id, typeElement) {
-        var model
-        var variableIdName
+        var model;
+        var variableIdName;
         switch (typeElement) {
         case FloorFilterController.TypeElement.Level:
-            model = floorManager.levels
-            variableIdName = "levelId"
-            break
+            model = floorManager.levels;
+            variableIdName = "levelId";
+            break;
         case FloorFilterController.TypeElement.Facility:
-            model = floorManager.facilities
-            variableIdName = "facilityId"
-            break
+            model = floorManager.facilities;
+            variableIdName = "facilityId";
+            break;
         case FloorFilterController.TypeElement.Site:
-            model = floorManager.sites
-            variableIdName = "siteId"
-            break
+            model = floorManager.sites;
+            variableIdName = "siteId";
+            break;
         default:
-            console.error("no element type matched")
-            return null
+            console.error("no element type matched");
+            return null;
         }
 
         for (var i = 0; i < model.length; ++i) {
-            let elementId = model[i][variableIdName]
+            let elementId = model[i][variableIdName];
             if (elementId === id) {
-                return i
+                return i;
             }
         }
-        return null
+        return null;
     }
 
     onSelectedLevelIdChanged: {
         if (selectedLevelId === "")
-            setVisibilityCurrentLevel(false)
+            setVisibilityCurrentLevel(false);
         // find the list element idx of the changed levelId
         let idx = findElementIdxById(selectedLevelId,
-                                     FloorFilterController.TypeElement.Level)
+                                     FloorFilterController.TypeElement.Level);
         if (idx == null) {
-            console.error("level id not found, resetting current level")
+            console.error("level id not found, resetting current level");
             if(internal.selectedLevelId === "")
               internal.selectedLevel.visible = false;
             internal.selectedLevel = null;
-            return
+            return;
         }
 
         // show level
-        let level = floorManager.levels[idx]
+        let level = floorManager.levels[idx];
         if (internal.selectedLevel !== null)
-            internal.selectedLevel.visible = false
-        internal.selectedLevel = level
-        internal.selectedLevel.visible = true
+            internal.selectedLevel.visible = false;
+        internal.selectedLevel = level;
+        internal.selectedLevel.visible = true;
 
         if (updateLevelsMode
                 === FloorFilterController.UpdateLevelsMode.AllLevelsMatchingVerticalOrder) {
-            resetLevelsVisibility(internal.selectedLevel.verticalOrder)
+            resetLevelsVisibility(internal.selectedLevel.verticalOrder);
         }
 
-        onSelectedChanged()
+        onSelectedChanged();
     }
 
     onSelectedFacilityIdChanged: {
         // find the list element idx of the changed facilityId
         let idx = findElementIdxById(selectedFacilityId,
-                                     FloorFilterController.TypeElement.Facility)
+                                     FloorFilterController.TypeElement.Facility);
         // checking both null and undefined
         if (idx == null) {
-            console.error("facility id not found, resetting current facility")
-            internal.selectedFacility = null
-            return
+            console.error("facility id not found, resetting current facility");
+            internal.selectedFacility = null;
+            return;
         }
-        internal.selectedFacility = floorManager.facilities[idx]
-        populateLevels(floorManager.facilities[idx].levels)
+        internal.selectedFacility = floorManager.facilities[idx];
+        populateLevels(floorManager.facilities[idx].levels);
         // reset the levels visibilty to vertical order 0 once a facility is selected.
         resetLevelsVisibility(0);
-        onSelectedChanged()
+        onSelectedChanged();
     }
 
     onSelectedSiteIdChanged: {
         // find the list element idx of the changed siteId
         let idx = findElementIdxById(selectedSiteId,
-                                     FloorFilterController.TypeElement.Site)
+                                     FloorFilterController.TypeElement.Site);
         if (idx == null) {
-            console.error("site id not found")
-            internal.selectedSite = null
-            return
+            console.error("site id not found");
+            internal.selectedSite = null;
+            return;
         }
 
-        internal.selectedSite = floorManager.sites[idx]
+        internal.selectedSite = floorManager.sites[idx];
 
         // dont populate facilities if they are total number and we are ignoring the current selected site
         if (!selectedSiteRespected
                 && facilities.count === floorManager.facilities.length)
-            return
-        populateFacilities(floorManager.sites[idx].facilities)
-        onSelectedChanged()
-        internal.selectedFacilityId = ""
+            return;
+        populateFacilities(floorManager.sites[idx].facilities);
+        onSelectedChanged();
+        internal.selectedFacilityId = "";
     }
 
     function setVisibilityCurrentLevel(visibility) {
         if(internal.selectedLevel)
-            internal.selectedLevel.visible = visibility
+            internal.selectedLevel.visible = visibility;
     }
 
     /*!
@@ -284,7 +284,7 @@ QtObject {
     function resetLevelsVisibility(verticalOrder){
         for(var i = 0; i < floorManager.levels.length; ++i) {
             var level = floorManager.levels[i];
-            level.visible = level.verticalOrder === verticalOrder
+            level.visible = level.verticalOrder === verticalOrder;
         }
     }
 
@@ -296,10 +296,10 @@ QtObject {
         function onLoadStatusChanged() {
             // load floormanager after map has been loaded
             if (geoModel.loadStatus === Enums.LoadStatusLoaded) {
-                console.log("geomodel loaded: ", geoModel)
-                floorManager = geoModel.floorManager
+                console.log("geomodel loaded: ", geoModel);
+                floorManager = geoModel.floorManager;
                 console.log("loading floormanager");
-                floorManager.load()
+                floorManager.load();
             }
         }
     }
@@ -310,14 +310,14 @@ QtObject {
         target: floorManager
         function onLoadStatusChanged() {
             console.log("floormanager status (0 loaded)",
-                        floorManager.loadStatus)
+                        floorManager.loadStatus);
             if(floorManager.loadError)
                 console.log("floormanager load error: ", floorManager.loadError.message, floorManager.loadError.additionalMessage);
             if (floorManager.loadStatus === Enums.LoadStatusLoaded) {
                 // load the listmodels
                 controller.loaded();
-                populateSites(floorManager.sites)
-                controller.internal.geoViewConnections.enabled = true
+                populateSites(floorManager.sites);
+                controller.internal.geoViewConnections.enabled = true;
             }
         }
     }
@@ -331,43 +331,43 @@ QtObject {
     }
 
     function populateSites(listSites) {
-        sites.clear()
+        sites.clear();
         for (var i = 0; i < listSites.length; ++i) {
-            let site = listSites[i]
+            let site = listSites[i];
             sites.append({
                              "name": site.name,
                              "modelId": site.siteId
-                         })
+                         });
         }
         // case single site: autoselect it and set the boolean used by the view
         if (listSites.length === 1) {
-            internal.singleSite = true
-            let site = listSites[0]
-            internal.selectedSiteId = site.siteId
+            internal.singleSite = true;
+            let site = listSites[0];
+            internal.selectedSiteId = site.siteId;
         }
     }
 
     function populateFacilities(listFacilities) {
-        facilities.clear()
-        let facilitiesExtracted = Array.from(listFacilities)
+        facilities.clear();
+        let facilitiesExtracted = Array.from(listFacilities);
         facilitiesExtracted.sort(function (first, second) {
             if (first.name < second.name)
-                return -1
+                return -1;
             else if (first.name > second.name)
-                return 1
-            return 0
-        })
+                return 1;
+            return 0;
+        });
         facilitiesExtracted.forEach(facility => {
                                         facilities.append({
                                                               "name": facility.name,
                                                               "modelId": facility.facilityId,
                                                               "parentSiteName": facility.site.name
-                                                          })
-                                    })
+                                                          });
+                                    });
 
         // case single facility: autoselect it
         if (listFacilities.length === 1) {
-            internal.selectedFacilityId = listFacilities[0].facilityId
+            internal.selectedFacilityId = listFacilities[0].facilityId;
         }
     }
 
@@ -376,83 +376,83 @@ QtObject {
      \internal
     */
     function populateAllFacilities() {
-        var listFacilities = floorManager.facilities
-        populateFacilities(listFacilities)
+        var listFacilities = floorManager.facilities;
+        populateFacilities(listFacilities);
     }
 
     // populate levels in reverse order. Levels numbers in ascending order from component's bottom section.
     function populateLevels(listLevels) {
-        levels.clear()
-        console.log("populate levels")
-        let selectedLevel = ""
-        let levelsExtracted = []
+        levels.clear();
+        console.log("populate levels");
+        let selectedLevel = "";
+        let levelsExtracted = [];
         for (var i = listLevels.length - 1; i >= 0; --i) {
-            let level = listLevels[i]
-            levelsExtracted.push(level)
+            let level = listLevels[i];
+            levelsExtracted.push(level);
 
             if (level.verticalOrder === 0) {
-                selectedLevel = level.levelId
-                internal.selectedLevelId = level.levelId
+                selectedLevel = level.levelId;
+                internal.selectedLevelId = level.levelId;
             }
         }
         // sorting higher levels first
         levelsExtracted.sort(function (first, second) {
-            return second.verticalOrder - first.verticalOrder
-        })
+            return second.verticalOrder - first.verticalOrder;
+        });
 
         levelsExtracted.forEach(levelExtracted => {
                                     levels.append({
                                                       "shortName": levelExtracted.shortName,
                                                       "longName": levelExtracted.longName,
                                                       "modelId": levelExtracted.levelId
-                                                  })
-                                })
+                                                  });
+                                });
         // no suitable vertical order found. second check to from facilities with no levels
         if (!selectedLevel && listLevels[0])
-            internal.selectedLevelId = listLevels.length ? listLevels[0].levelId : ""
+            internal.selectedLevelId = listLevels.length ? listLevels[0].levelId : "";
     }
 
     function zoomToFacility(facilityId) {
         let idx = findElementIdxById(facilityId,
-                                     FloorFilterController.TypeElement.Facility)
-        let facility = floorManager.facilities[idx]
-        const extent = facility.geometry.extent
-        zoomToEnvelope(extent)
+                                     FloorFilterController.TypeElement.Facility);
+        let facility = floorManager.facilities[idx];
+        const extent = facility.geometry.extent;
+        zoomToEnvelope(extent);
     }
 
     function zoomToSite(siteId) {
         let idx = findElementIdxById(siteId,
-                                     FloorFilterController.TypeElement.Site)
-        let site = floorManager.sites[idx]
-        const extent = site.geometry.extent
-        zoomToEnvelope(extent)
+                                     FloorFilterController.TypeElement.Site);
+        let site = floorManager.sites[idx];
+        const extent = site.geometry.extent;
+        zoomToEnvelope(extent);
     }
 
     signal doneViewpointChanged
 
     // signal used to set active again the \c Connections geoViewConnections pointing to onSetViewpoint.
     onDoneViewpointChanged: {
-        console.log("signal on doneviewpoint called")
-        controller.internal.geoViewConnections.enabled = true
+        console.log("signal on doneviewpoint called");
+        controller.internal.geoViewConnections.enabled = true;
         geoView.onSetViewpointCompleted.disconnect(
-                    controller.doneViewpointChanged)
+                    controller.doneViewpointChanged);
     }
 
     function zoomToEnvelope(envelope) {
         var builder = ArcGISRuntimeEnvironment.createObject('EnvelopeBuilder', {
                                                                 "geometry": envelope
-                                                            })
-        builder.expandByFactor(internal.zoom_padding)
+                                                            });
+        builder.expandByFactor(internal.zoom_padding);
         var newViewpoint = ArcGISRuntimeEnvironment.createObject(
                     'ViewpointExtent', {
                         "extent": builder.geometry
-                    })
+                    });
         // disconnect temporarily the \c Connections geoViewConnections. This is done to ignore all the \c GeoView onSetViewpoint
         // events triggered from the floorfilter that would be triggered once the floorFilter zoom button is clicked (or zoomToEnvelope function called).
-        controller.internal.geoViewConnections.enabled = false
+        controller.internal.geoViewConnections.enabled = false;
         // doneViewpoint signal sets active again the \c Connection onSetViewpoint.
-        geoView.onSetViewpointCompleted.connect(controller.doneViewpointChanged)
-        geoView.setViewpoint(newViewpoint)
+        geoView.onSetViewpointCompleted.connect(controller.doneViewpointChanged);
+        geoView.setViewpoint(newViewpoint);
     }
 
     enum UpdateLevelsMode {
@@ -494,7 +494,7 @@ QtObject {
         property Connections geoViewConnections: Connections {
             target: geoView
             function onViewpointChanged() {
-                tryUpdateSelection()
+                tryUpdateSelection();
             }
             // manually set true when floorManager is loaded
             enabled: false
