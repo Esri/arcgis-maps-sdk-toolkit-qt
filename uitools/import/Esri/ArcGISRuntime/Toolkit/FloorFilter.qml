@@ -37,6 +37,14 @@ Control {
 
     property bool hideSiteFacilityButton: false
 
+    property int automaticSelectionMode: FloorFilterController.AutomaticSelectionMode.Always
+
+    Binding {
+        target: controller
+        property: "automaticSelectionMode"
+        value: floorFilter.automaticSelectionMode
+    }
+
     property bool collapsedIcons: true
 
     property int maxNumberLevels: 2
@@ -350,7 +358,7 @@ Control {
                             // wait that the radiodelegates are all set, then resize them into the largest of them (stored in the listview contentItem)
                             Component.onCompleted: width = listView.contentItem.childrenRect.width
                             property var parentSiteName: model.parentSiteName ?? ""
-                            highlighted: internal.currentVisibileListView === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx
+                                                                                 highlighted: internal.currentVisibileListView === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx
                             text: model.name + (model.parentSiteName && !controller.selectedSiteRespected ? '<br/>' + parentSiteName : "")
 
                             onClicked: {
@@ -364,7 +372,6 @@ Control {
                                     controller.zoomToSite(model.modelId)
                                     internal.currentVisibileListView
                                             = FloorFilter.VisibleListView.Facility
-
                                 } // switch to level view
                                 else if (internal.currentVisibileListView
                                          === FloorFilter.VisibleListView.Facility) {

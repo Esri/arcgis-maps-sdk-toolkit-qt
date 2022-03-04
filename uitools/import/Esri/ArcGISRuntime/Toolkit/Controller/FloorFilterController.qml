@@ -23,6 +23,83 @@ QtObject {
 
     property GeoView geoView
 
+    property int automaticSelectionMode
+
+    function tryUpdateSelection() {
+        // todo: facilities and sites are optional, add checks
+        var viewpointCenter = geoView.currentViewpointCenter
+        //console.log("update selection")
+
+        if (automaticSelectionMode === FloorFilterController.AutomaticSelectionMode.Never || !viewpointCenter || isNaN(viewpointCenter.targetScale)) {
+            return
+        }
+
+        var floorManager = controller.floorManager
+        var targetScale = 0
+
+        if (floorManager)
+            targetScale = controller.floorManager.siteLayer ? controller.floorManager.siteLayer.minScale : 0
+
+        if (targetScale === 0)
+            targetScale = 4300
+
+        if (viewpointCenter.targetScale > targetScale) {
+            if (automaticSelectionMode === FloorFilterController.AutomaticSelectionMode.Always) {
+
+                setSelectedSiteId("")
+                setSelectedFacilityId("")
+                setSelectedLevelId("")
+            }
+            // Assumption: if too zoomed out to see sites, also too zoomed out to see facilities
+            return
+        }
+
+        if(!floorManager)
+            return
+
+        let selectSite
+        for (var i = 0; i < floorManager.sites.length; ++i) {
+            if (GeometryEngine.intersects(
+                        floorManager.sites[i].geometry.extent,
+                        viewpointCenter.center)) {
+                selectSite = floorManager.sites[i]
+                break
+            }
+        }
+
+        if (selectSite !== undefined) {
+            console.log("selecting site", selectSite.siteId)
+            setSelectedSiteId(selectSite.siteId)
+        } else if (automaticSelectionMode === FloorFilterController.AutomaticSelectionMode.Always) {
+            setSelectedSiteId("")
+        }
+
+        targetScale = floorManager.facilityLayer ? floorManager.facilityLayer.minScale : 0
+        if (targetScale === 0)
+            targetScale = 1500
+
+        if(viewpointCenter.targetScale > targetScale)
+            return
+
+        let selectFacility
+        for (i = 0; i < floorManager.facilities.length; ++i) {
+            let facility
+            if (GeometryEngine.intersects(
+                        floorManager.facilities[i].geometry.extent,
+                        viewpointCenter.center)) {
+                selectFacility = floorManager.facilities[i]
+                break
+            }
+        }
+        if (selectFacility !== undefined) {
+            console.log("selecting facility", selectFacility.facilityId)
+            setSelectedFacilityId(selectFacility.facilityId)
+        } else if (automaticSelectionMode === FloorFilterController.AutomaticSelectionMode.Always) {
+            setSelectedFacilityId("")
+            setSelectedLevelId("")
+        }
+    }
+
     property GeoModel geoModel: {
         // check geoView has been set
         if (!geoView)
@@ -51,8 +128,7 @@ QtObject {
             populateAllFacilities()
         }
     }
-
-    //refresh()?
+    
     readonly property alias selectedLevelId: internal.selectedLevelId
 
     function setSelectedLevelId(levelId) {
@@ -66,6 +142,7 @@ QtObject {
                                      FloorFilterController.TypeElement.Facility)
         if (idx == null) {
             console.error("not found facility")
+            internal.selectedFacilityId = ""
             return
         }
 
@@ -130,11 +207,15 @@ QtObject {
     }
 
     onSelectedLevelIdChanged: {
+        if (selectedLevelId === "")
+            setVisibilityCurrentLevel(false)
         // find the list element idx of the changed levelId
         let idx = findElementIdxById(selectedLevelId,
                                      FloorFilterController.TypeElement.Level)
         if (idx == null) {
             console.error("level id not found, resetting current level")
+            if(internal.selectedLevelId === "")
+              internal.selectedLevel.visible = false;
             internal.selectedLevel = null;
             return
         }
@@ -177,6 +258,7 @@ QtObject {
                                      FloorFilterController.TypeElement.Site)
         if (idx == null) {
             console.error("site id not found")
+            internal.selectedSite = null
             return
         }
 
@@ -235,6 +317,7 @@ QtObject {
                 // load the listmodels
                 controller.loaded();
                 populateSites(floorManager.sites)
+                controller.internal.geoViewConnections.enabled = true
             }
         }
     }
@@ -345,6 +428,16 @@ QtObject {
         zoomToEnvelope(extent)
     }
 
+    signal doneViewpointChanged
+
+    // signal used to set active again the \c Connections geoViewConnections pointing to onSetViewpoint.
+    onDoneViewpointChanged: {
+        console.log("signal on doneviewpoint called")
+        controller.internal.geoViewConnections.enabled = true
+        geoView.onSetViewpointCompleted.disconnect(
+                    controller.doneViewpointChanged)
+    }
+
     function zoomToEnvelope(envelope) {
         var builder = ArcGISRuntimeEnvironment.createObject('EnvelopeBuilder', {
                                                                 "geometry": envelope
@@ -354,6 +447,11 @@ QtObject {
                     'ViewpointExtent', {
                         "extent": builder.geometry
                     })
+        // disconnect temporarily the \c Connections geoViewConnections. This is done to ignore all the \c GeoView onSetViewpoint
+        // events triggered from the floorfilter that would be triggered once the floorFilter zoom button is clicked (or zoomToEnvelope function called).
+        controller.internal.geoViewConnections.enabled = false
+        // doneViewpoint signal sets active again the \c Connection onSetViewpoint.
+        geoView.onSetViewpointCompleted.connect(controller.doneViewpointChanged)
         geoView.setViewpoint(newViewpoint)
     }
 
@@ -366,6 +464,15 @@ QtObject {
         Level,
         Facility,
         Site
+    }
+
+    enum AutomaticSelectionMode {
+        // Never update selection based on the GeoView's current viewpoint
+        Never,
+        // Always update selection based on the current viewpoint; clear the selection when the user navigates away
+        Always,
+        // Only update the selection when there is a new site or facility in the current viewpoint; don't clear selection when the user navigates away
+        AlwaysNonClearing
     }
 
     /*! internal */
@@ -382,5 +489,15 @@ QtObject {
         // used to set the default initial view. if singleSite : true->facility view and site already selected
         property bool singleSite: false //_q should be better that the view checks the sites.length at changes the default view based on it?
         readonly property double zoom_padding: 1.5
+
+
+        property Connections geoViewConnections: Connections {
+            target: geoView
+            function onViewpointChanged() {
+                tryUpdateSelection()
+            }
+            // manually set true when floorManager is loaded
+            enabled: false
+        }
     }
 }
