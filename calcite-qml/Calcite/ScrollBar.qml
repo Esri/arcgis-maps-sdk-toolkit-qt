@@ -19,6 +19,7 @@ import QtQuick.Controls 2.12
 import QtQuick.Controls.impl 2.12
 import QtQuick.Templates 2.12 as T
 
+
 T.ScrollBar {
     id: control
 
@@ -31,11 +32,11 @@ T.ScrollBar {
     minimumSize: orientation == Qt.Horizontal ? height / width : width / height
 
     contentItem: Rectangle {
-        implicitWidth: control.interactive ? 6 : 2
-        implicitHeight: control.interactive ? 6 : 2
+        implicitWidth: control.interactive ? 8 : 2
+        implicitHeight: control.interactive ? 8 : 2
 
         radius: width / 2
-        color: control.pressed ? control.palette.dark : control.palette.mid
+        color: control.pressed ? Calcite.text2: Calcite.text3
         opacity: 0.0
 
         states: State {
@@ -48,7 +49,7 @@ T.ScrollBar {
             from: "active"
             SequentialAnimation {
                 PauseAnimation { duration: 450 }
-                NumberAnimation { target: control.contentItem; duration: 200; property: "opacity"; to: 0.0 }
+                NumberAnimation { target: control.contentItem; duration: 350; property: "opacity"; to: 0.0 }
             }
         }
     }
