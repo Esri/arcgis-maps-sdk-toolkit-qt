@@ -44,7 +44,7 @@ Control {
     //debug property: should always be true, autoselecting singlefacilitiesistes in case they are single
     property bool autoselectSingleFacilitySite: false
 
-    property var automaticSelectionMode: FloorFilterController.AutomaticSelectionMode.Always
+    property int automaticSelectionMode: FloorFilterController.AutomaticSelectionMode.Always
 
     Binding {
         target: controller

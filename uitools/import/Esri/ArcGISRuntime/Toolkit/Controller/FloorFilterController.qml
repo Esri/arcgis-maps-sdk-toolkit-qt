@@ -23,15 +23,6 @@ QtObject {
 
     property GeoView geoView
 
-    property Connections geoViewConnections: Connections {
-        target: geoView
-        function onViewpointChanged() {
-            tryUpdateSelection()
-        }
-        // manually set true when floorManager is loaded
-        enabled: false
-    }
-
     function tryUpdateSelection() {
         // todo: facilities and sites are optional, add checks
         var viewpointCenter = geoView.currentViewpointCenter
@@ -122,14 +113,13 @@ QtObject {
 
     property bool autoselectSingleFacilitySite
 
-    property var automaticSelectionMode
+    property int automaticSelectionMode
 
     property FloorManager floorManager
 
-    //refresh()?
-    property string selectedLevelId
+    readonly property alias selectedLevelId : internal.selectedLevelId
 
-    property string selectedFacilityId
+    readonly property alias selectedFacilityId : internal.selectedFacilityId
 
 
     /*!
@@ -168,7 +158,7 @@ QtObject {
         selectedFacilityId = facilityId
     }
 
-    property string selectedSiteId
+    readonly property alias selectedSiteId : internal.selectedSiteId
 
     function setSelectedSiteId(siteId) {
         selectedSiteId = siteId
@@ -266,7 +256,6 @@ QtObject {
                                      FloorFilterController.TypeElement.Site)
         if (idx == null) {
             console.error("site id not found")
-            // todo: set site as null?
             internal.selectedSite = null
             return
         }
@@ -303,7 +292,7 @@ QtObject {
             if (floorManager.loadStatus === Enums.LoadStatusLoaded) {
                 // load the listmodels
                 populateSites(floorManager.sites)
-                controller.geoViewConnections.enabled = true
+                controller.internal.geoViewConnections.enabled = true
             }
         }
     }
@@ -415,7 +404,7 @@ QtObject {
     // signal used to set active again the \c Connections geoViewConnections pointing to onSetViewpoint.
     onDoneViewpointChanged: {
         console.log("signal on doneviewpoint called")
-        controller.geoViewConnections.enabled = true
+        controller.internal.geoViewConnections.enabled = true
         geoView.onSetViewpointCompleted.disconnect(
                     controller.doneViewpointChanged)
     }
@@ -431,7 +420,7 @@ QtObject {
                     })
         // disconnect temporarily the \c Connections geoViewConnections. This is done to ignore all the \c GeoView onSetViewpoint
         // events triggered from the floorfilter that would be triggered once the floorFilter zoom button is clicked (or zoomToEnvelope function called).
-        controller.geoViewConnections.enabled = false
+        controller.internal.geoViewConnections.enabled = false
         // doneViewpoint signal sets active again the \c Connection onSetViewpoint.
         geoView.onSetViewpointCompleted.connect(controller.doneViewpointChanged)
         geoView.setViewpoint(newViewpoint)
@@ -480,5 +469,15 @@ QtObject {
         // used to set the default initial view. if singleSite : true->facility view and site already selected
         property bool singleSite: false //_q should be better that the view checks the sites.length at changes the default view based on it?
         readonly property double zoom_padding: 1.5
+
+
+        property Connections geoViewConnections: Connections {
+            target: geoView
+            function onViewpointChanged() {
+                tryUpdateSelection()
+            }
+            // manually set true when floorManager is loaded
+            enabled: false
+        }
     }
 }
