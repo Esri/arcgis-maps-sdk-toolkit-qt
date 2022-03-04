@@ -57,6 +57,7 @@ Control {
     }
 
     contentItem: Grid {
+        objectName: "gridOuterWrapper"
         rows: 1
         layoutDirection: (internal.leaderPosition === FloorFilter.LeaderPosition.UpperLeft)
                          || (internal.leaderPosition === FloorFilter.LeaderPosition.LowerLeft) ? Qt.LeftToRight : Qt.RightToLeft
@@ -72,6 +73,7 @@ Control {
                 spacing: 0
                 ToolButton {
                     id: closer
+                    objectName: "closer"
                     checkable: true
                     checked: true
                     visible: !closer.checked
@@ -89,6 +91,7 @@ Control {
                 }
                 ToolButton {
                     id: collapser
+                    objectName: "collapser"
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft
                     icon.source: !((internal.leaderPosition === FloorFilter.LeaderPosition.UpperRight ||
@@ -103,6 +106,7 @@ Control {
                     orientation: Qt.Horizontal
                 }
                 ToolButton {
+                    objectName: "zoom"
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft
                     icon.source: "images/zoom-to-object.svg"
@@ -129,6 +133,7 @@ Control {
                 }
 
                 Flickable {
+                    objectName: "flickable"
                     visible: !closer.checked
 
                     // dont need to use the id of the column
@@ -193,6 +198,7 @@ Control {
 
                 ToolButton {
                     id: buildingMenuButton
+                    objectName: "buildingMenuButton"
                     checkable: true
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft
@@ -211,15 +217,13 @@ Control {
             //            anchors.margins: 10
             visible: buildingMenuButton.checked
             GridLayout {
-                Component.onCompleted: {
-                    console.log("completed")
-                }
                 flow: GridLayout.TopToBottom
                 Layout.alignment: Qt.AlignBottom
                 rows: 6
                 columnSpacing: 0
                 rowSpacing: 0
                 Button {
+                    objectName: "backToSite"
                     Layout.margins: 0
                     Layout.fillHeight: true
                     //Layout.fillWidth: true
@@ -291,6 +295,7 @@ Control {
 
                 ListView {
                     id: listView
+                    objectName: "listView"
                     visible: true
                     Layout.preferredHeight: 200
                     Layout.columnSpan: 3
@@ -468,6 +473,7 @@ Control {
 
     QtObject {
         id: internal
+        objectName: "internal"
 
         property int currentVisibileListView: FloorFilter.VisibleListView.Site
         //idx refers to repeter or listview idx, not the model idx.
