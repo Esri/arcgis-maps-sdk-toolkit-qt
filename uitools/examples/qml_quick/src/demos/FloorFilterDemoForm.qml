@@ -23,7 +23,7 @@ DemoPage {
     sceneViewContents: Component {
         SceneView {
             Scene {
-                initBasemapStyle: Enums.BasemapStyleArcGISDarkGray
+                initUrl: "https://www.arcgis.com/home/item.html?id=ed300862738440de94d777061fa04742"
             }
         }
     }
