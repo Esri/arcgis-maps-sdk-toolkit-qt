@@ -150,6 +150,7 @@ namespace Toolkit {
     connect(
         m_controller, &FloorFilterController::selectedSiteIdChanged, this, [this](QString /*oldId*/, QString newId)
         {
+          // Set `m_sitesUpdatedFromController` for the duration of scope, then set back to false.
           auto b = push_value(m_sitesUpdatedFromController, true);
           const auto i = indexForId<FloorFilterSiteItem>(m_ui->sitesView->model(), newId);
           m_ui->sitesView->selectionModel()->setCurrentIndex(i, QItemSelectionModel::SelectCurrent);
