@@ -37,6 +37,14 @@ Control {
 
     property bool hideSiteFacilityButton: false
 
+    property int automaticSelectionMode: FloorFilterController.AutomaticSelectionMode.Always
+
+    Binding {
+        target: controller
+        property: "automaticSelectionMode"
+        value: floorFilter.automaticSelectionMode
+    }
+
     property bool collapsedIcons: true
 
     property int maxNumberLevels: 2
@@ -113,14 +121,14 @@ Control {
                     onClicked: {
                         if (internal.currentVisibileListView === FloorFilter.VisibleListView.Site
                                 && listView.visible)
-                            controller.zoomToSite(controller.selectedSiteId)
+                            controller.zoomToSite(controller.selectedSiteId);
                         else if (internal.currentVisibileListView
                                  === FloorFilter.VisibleListView.Facility
                                  || !listView.visible)
                             controller.zoomToFacility(
-                                        controller.selectedFacilityId)
+                                        controller.selectedFacilityId);
                         else
-                            console.error("extra enum not accounted for.")
+                            console.error("extra enum not accounted for.");
                     }
                 }
                 ToolSeparator {
@@ -162,7 +170,7 @@ Control {
                                 flat: true
                                 display: AbstractButton.TextOnly
                                 onClicked: {
-                                    controller.setSelectedLevelId(model.modelId)
+                                    controller.setSelectedLevelId(model.modelId);
                                 }
                             }
                         }
@@ -187,7 +195,7 @@ Control {
                     flat: true
                     display: AbstractButton.TextOnly
                     onClicked: {
-                        closer.checked = false
+                        closer.checked = false;
                     }
                 }
 
@@ -212,7 +220,7 @@ Control {
             visible: buildingMenuButton.checked
             GridLayout {
                 Component.onCompleted: {
-                    console.log("completed")
+                    console.log("completed");
                 }
                 flow: GridLayout.TopToBottom
                 Layout.alignment: Qt.AlignBottom
@@ -242,9 +250,9 @@ Control {
                         source: "images/chevron-left.svg"
                     }
                     onClicked: {
-                        internal.currentVisibileListView = FloorFilter.VisibleListView.Site
+                        internal.currentVisibileListView = FloorFilter.VisibleListView.Site;
                         // When showing site view, resetting the not ignore current site. (this button is only way to get to site view)
-                        controller.selectedSiteRespected = true
+                        controller.selectedSiteRespected = true;
                     }
                 }
 
@@ -316,22 +324,22 @@ Control {
 
                                 //usign items group to fetch all the elements (they are all setting this group automatically)
                                 for (var i = 0; i < dm.items.count; ++i) {
-                                    var item = dm.items.get(i)
+                                    var item = dm.items.get(i);
 
                                     if (searchTextField.text === "") {
-                                        item.inFiltered = true
+                                        item.inFiltered = true;
                                     } else {
                                         if (item.model.name.toLowerCase(
                                                     ).includes(
                                                     searchTextField.text.toLowerCase(
                                                         )))
-                                            item.inFiltered = true
+                                            item.inFiltered = true;
                                         else
-                                            item.inFiltered = false
+                                            item.inFiltered = false;
                                     }
                                 }
-                                listView.visible = filteredGroup.count > 0
-                                noResultsFoundLabel.visible = !listView.visible
+                                listView.visible = filteredGroup.count > 0;
+                                noResultsFoundLabel.visible = !listView.visible;
                             }
                         }
 
@@ -357,22 +365,21 @@ Control {
                                 // switch to facility view
                                 if (internal.currentVisibileListView
                                         === FloorFilter.VisibleListView.Site) {
-                                    controller.setSelectedSiteId(model.modelId)
-                                    internal.selectedSiteIdx = index
+                                    controller.setSelectedSiteId(model.modelId);
+                                    internal.selectedSiteIdx = index;
                                     // resetting the previous selected facility
-                                    internal.selectedFacilityIdx = -1
-                                    controller.zoomToSite(model.modelId)
+                                    internal.selectedFacilityIdx = -1;
+                                    controller.zoomToSite(model.modelId);
                                     internal.currentVisibileListView
-                                            = FloorFilter.VisibleListView.Facility
-
+                                            = FloorFilter.VisibleListView.Facility;
                                 } // switch to level view
                                 else if (internal.currentVisibileListView
                                          === FloorFilter.VisibleListView.Facility) {
-                                    controller.setSelectedFacilityId(model.modelId)
-                                    internal.selectedFacilityIdx = index
-                                    buildingMenuButton.checked = false
-                                    closer.checked = false
-                                    controller.zoomToFacility(model.modelId)
+                                    controller.setSelectedFacilityId(model.modelId);
+                                    internal.selectedFacilityIdx = index;
+                                    buildingMenuButton.checked = false;
+                                    closer.checked = false;
+                                    controller.zoomToFacility(model.modelId);
                                     if (!controller.selectedSiteRespected) {
                                         const idx = controller.getCurrentSiteIdx();
                                         // idx could be null if not found, guard from it
@@ -401,8 +408,8 @@ Control {
                     visible: internal.currentVisibileListView === FloorFilter.VisibleListView.Site
 
                     onClicked: {
-                        controller.selectedSiteRespected = false
-                        internal.currentVisibileListView = FloorFilter.VisibleListView.Facility
+                        controller.selectedSiteRespected = false;
+                        internal.currentVisibileListView = FloorFilter.VisibleListView.Facility;
                     }
                 }
 
@@ -490,14 +497,14 @@ Control {
         property int leaderPosition: {
             if (centerFloorFilterX < centerParentX) {
                 if (centerFloorFilterY < centerParentY)
-                    FloorFilter.LeaderPosition.UpperLeft
+                    FloorFilter.LeaderPosition.UpperLeft;
                 else
-                    FloorFilter.LeaderPosition.LowerLeft
+                    FloorFilter.LeaderPosition.LowerLeft;
             } else {
                 if (centerFloorFilterY < centerParentY)
-                    FloorFilter.LeaderPosition.UpperRight
+                    FloorFilter.LeaderPosition.UpperRight;
                 else
-                    FloorFilter.LeaderPosition.LowerRight
+                    FloorFilter.LeaderPosition.LowerRight;
             }
         }
     }
