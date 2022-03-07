@@ -104,15 +104,15 @@ namespace Toolkit {
    */
 
   /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterFacilityItem::modelId
+    \property Esri::ArcGISRuntime::Toolkit::FloorFilterLevelItem::modelId
    */
 
   /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterFacilityItem::shortName
+    \property Esri::ArcGISRuntime::Toolkit::FloorFilterLevelItem::shortName
    */
 
   /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterFacilityItem::longName
+    \property Esri::ArcGISRuntime::Toolkit::FloorFilterLevelItem::longName
    */
 
 } // Toolkit

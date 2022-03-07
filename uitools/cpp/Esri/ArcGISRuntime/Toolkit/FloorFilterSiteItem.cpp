@@ -39,7 +39,7 @@ namespace Toolkit {
 
   /*!
     \brief Constructs a new empty FloorFilterSiteItem object with a given \a parent and
-    \a flootSite to wrap.
+    \a floorSite to wrap.
    */
   FloorFilterSiteItem::FloorFilterSiteItem(FloorSite* floorSite, QObject* parent) :
     QObject(parent),

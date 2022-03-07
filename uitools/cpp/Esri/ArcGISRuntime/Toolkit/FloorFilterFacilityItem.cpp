@@ -103,7 +103,6 @@ namespace Toolkit {
     \property Esri::ArcGISRuntime::Toolkit::FloorFilterFacilityItem::name
    */
 
-
 } // Toolkit
 } // ArcGISRuntime
 } // Esri
