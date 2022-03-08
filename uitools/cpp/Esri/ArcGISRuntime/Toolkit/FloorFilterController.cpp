@@ -386,7 +386,7 @@ namespace Toolkit {
   /*!
    \internal
    \brief Clears the levels list, and repopulates with only those levels
-   thaat match the ecurrently selected site id. Levels are sorted in terms
+   that match the currently selected site id. Levels are sorted in terms
    of their vertical order, and a default level is selected, favouring the
    level with verticalOrder == 0.
    */
@@ -437,7 +437,7 @@ namespace Toolkit {
    \brief Clears the facilities list and repopulates with the facilites that have a matching
    siteID to \l selectedSiteId.
 
-   If only on faciity exists we select that facility, otherwise we do not automatically select
+   If only on facility exists we select that facility, otherwise we do not automatically select
    a facility.
 
    Note that `sites` are optional in the data, and it may be the case that ther are no sites,
@@ -563,7 +563,7 @@ namespace Toolkit {
   }
 
   /*!
-   \brief On the GeoView, zooms to the facility with ID matching \a siteId.
+   \brief On the GeoView, zooms to the site with ID matching \a siteId.
    */
   void FloorFilterController::zoomToSite(const QString& siteId)
   {
@@ -721,7 +721,7 @@ namespace Toolkit {
 
   /*!
    * \internal
-   * \brief Attempts to select a facility based on the current viewpoint geoemtry.
+   * \brief Attempts to select a facility based on the current viewpoint geometry.
    */
   void FloorFilterController::tryUpdateSelection()
   {

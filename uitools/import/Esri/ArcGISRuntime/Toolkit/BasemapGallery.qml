@@ -58,7 +58,7 @@ Pane {
     }
 
     /*!
-      \qmlproperty BasemapGalleryController controller.
+      \qmlproperty BasemapGalleryController controller
       \brief The controller handles binding logic between the BasemapGallery and
       the \c GeoModel and the \c Portal where applicable.
     */
