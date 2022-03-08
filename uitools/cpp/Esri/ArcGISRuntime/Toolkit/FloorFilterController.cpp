@@ -189,6 +189,7 @@ namespace Toolkit {
   {
     m_sites->setDisplayPropertyName("name");
     m_facilities->setDisplayPropertyName("name");
+    m_facilities->setTooltipPropertyName("parentSiteName");
     m_levels->setDisplayPropertyName("longName");
 
     connect(this, &FloorFilterController::selectedFacilityIdChanged, this, &FloorFilterController::selectedChanged);
@@ -330,7 +331,6 @@ namespace Toolkit {
   {
     if (m_selectedFacilityId == selectedFacilityId)
       return;
-
     QString oldId = m_selectedFacilityId;
     m_selectedFacilityId = std::move(selectedFacilityId);
     emit selectedFacilityIdChanged(std::move(oldId), m_selectedFacilityId);
@@ -475,7 +475,6 @@ namespace Toolkit {
 
     m_facilities->clear();
     m_facilities->append(facilityItems);
-
     // Select only facility if there is only 1 facility.
     if (facilityItems.size() == 1)
     {
