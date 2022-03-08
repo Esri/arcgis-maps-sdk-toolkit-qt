@@ -44,8 +44,8 @@ Control {
 
     /*!
       \qmlproperty FloorFilterController controller
-      \brief The controller handles biding logic between the FloorFilter and the \c GeoModel, \c FloorManager and
-      its flooraware layers.
+      \brief The controller handles binding logic between the FloorFilter, \c GeoModel, \c FloorManager and
+      the flooraware layers.
       Default is \l{FloorFilterController}
     */
     property var controller: FloorFilterController {}

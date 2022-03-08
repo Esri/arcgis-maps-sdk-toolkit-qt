@@ -95,7 +95,7 @@ namespace Toolkit {
      \brief Helper struct that holds a reference to sme `b`, sets `b` to `v` on construction,
      and then sets `b` back to its initial value on destruction.
      */
-    template<typename T>
+    template <typename T>
     struct PushValue
     {
       PushValue(T& b, T v) :
@@ -113,18 +113,30 @@ namespace Toolkit {
       T& m_tracked;
       T m_state;
     };
+
+    /*!
+     \internal
+     \brief Creates a `PushValue`.
+     */
+    template <typename T>
+    PushValue<T> push_value(T& t, T v)
+    {
+      return PushValue<T>(t, v);
+    }
   }
 
   /*!
-   \internal
-   \brief Creates a `PushValue`.
+    \inmodule EsriArcGISRuntimeToolkit
+    \class Esri::ArcGISRuntime::Toolkit::FloorFilter
+    \brief Allows to display and filter the available floor aware layers in the current \c GeoModel.
+    The FloorFilter allows the interaction with the available floor aware layers. A user can select from a list of sites which presents
+    their facilities. Once a facility is chosen, it is possible to toggle between its levels which will show them on the \c GeoView.
+    2D maps and 3D scenes are supported.
    */
-  template <typename T>
-  PushValue<T> push_value(T& t, T v)
-  {
-    return PushValue<T>(t, v);
-  }
 
+  /*!
+    \brief Constructs a new FloorFilter object with a given \a parent.
+   */
   FloorFilter::FloorFilter(QWidget* parent) :
     QFrame(parent),
     m_controller(new FloorFilterController(this)),
@@ -180,7 +192,7 @@ namespace Toolkit {
 
             if (!m_sitesUpdatedFromController)
             {
-               m_controller->zoomToSite(data);
+              m_controller->zoomToSite(data);
             }
           }
         });
@@ -253,21 +265,42 @@ namespace Toolkit {
         });
   }
 
+  /*!
+   \brief Destructor.
+   */
   FloorFilter::~FloorFilter()
   {
     delete m_ui;
   }
 
+  /*!
+    \brief Set the \c GeoView.
+    \list
+    \li \a mapView Sets the \c GeoView to a \c MapView.
+    \endlist
+   */
   void FloorFilter::setMapView(MapGraphicsView* mapView)
   {
     m_controller->setGeoView(mapView);
   }
 
+  /*!
+    \brief Set the \c GeoView.
+    \list
+      \li \a sceneView Sets the \c GeoView to a \c SceneView.
+    \endlist
+   */
   void FloorFilter::setSceneView(SceneGraphicsView* sceneView)
   {
     m_controller->setGeoView(sceneView);
   }
 
+  /*!
+    \brief Returns the controller.
+
+    The controller handles binding logic between the FloorFilter, \c GeoModel,
+    \c FloorManager and the flooraware layers.
+    */
   FloorFilterController* FloorFilter::controller() const
   {
     return m_controller;
