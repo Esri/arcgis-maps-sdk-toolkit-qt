@@ -17,18 +17,46 @@
 import QtQuick 2.12
 import Esri.ArcGISRuntime 100.14
 
-// sites are optional, facilities are optional. a Facility might have no levels (restricted access facility)
+/*!
+  \qmltype FloorFilterController
+  \inqmlmodule Esri.ArcGISRuntime.Toolkit
+  \since Esri.ArcGISRuntime 100.14
+  \ingroup ArcGISQtToolkitUiQmlControllers
+  \brief The controller part of a FloorFilter. This class handles the toggling of selected levels' visibility
+  associated to the \c FloorFilter inputted \c GeoModel flooraware layers.
+*/
 QtObject {
+    // sites are optional, facilities are optional. a Facility might have no levels (restricted access facility)
     id: controller
 
+    /*!
+      \qmlproperty GeoView geoView
+      \brief The \c GeoView the controller is listening to for viewpoint changes.
+      Controller sets the \c GeoView viewpoint when selecting site/facility.
+    */
     property GeoView geoView
 
+    /*!
+      \qmlproperty enumeration automaticSelectionMode
+      \brief The mode selected defines how the \c FloorFilter updates its selection as the user navigates the connected \c GeoView.
+      \value AutomaticSelectionMode.Never Viewpoint navigation does not affect the currently selected facility.
+      \value AutomaticSelectionMode.Always When the geoview's current viewpoint updates, the controller tests to see if the facility interect the viewpoint,
+      and selects it if so. If no facility intersects the viewpoint, then the current facility is deselected.
+      \value AutomaticSelectionMode.AlwaysNonClearing Variant of \c Always, but if there is no facility to select within the viewpoint then we do not
+      deselect the current viewpoint.
+
+      Default is \c{AutomaticSelectionMode.Always}
+    */
     property int automaticSelectionMode
 
+    /*!
+      \brief Tries to update the current selected site,facility and level based on the current viewcenter point geometry.
+      In case a site/facility is in the current viewcenter point, it is selected and its default level shown.
+      The \l automaticSelectionMode is used to decide the specific behavior of level selection.
+    */
     function tryUpdateSelection() {
         // todo: facilities and sites are optional, add checks
         var viewpointCenter = geoView.currentViewpointCenter;
-        //console.log("update selection")
 
         if (automaticSelectionMode === FloorFilterController.AutomaticSelectionMode.Never || !viewpointCenter || isNaN(viewpointCenter.targetScale)) {
             return;
@@ -100,6 +128,10 @@ QtObject {
         }
     }
 
+    /*!
+      \qmlproperty GeoModel geoModel
+      \brief The geomodel the controller is listening for \c FloorManager changes.
+    */
     property GeoModel geoModel: {
         // check geoView has been set
         if (!geoView)
@@ -111,8 +143,22 @@ QtObject {
         return null;
     }
 
+    /*!
+      \qmlproperty int updateLevelsMode
+      \brief The mode that defines how levels are made visible/invisible in the geoView.
+      \value UpdateLevelsMode.AllLevelsMatchingVerticalOrder When a level is selected, all levels with matching vertical order are made visible, all other levels are invisible.
+      \value UpdateLevelsMode.SingleLevel All levels with \c{verticalOrder == 0} are set to visible, the currently selected level is also visible, all other levels are set to invisible. This
+      matches the JavaScript Widget FloorFilter functionality.
+
+      Default is \c{UpdateLevelsMode.AllLevelsMatchingVerticalOrder}
+    */
     property int updateLevelsMode: FloorFilterController.UpdateLevelsMode.AllLevelsMatchingVerticalOrder
 
+    /*!
+      \qmlproperty FloorManager floorManager
+      \brief The FloorManager associated to the \l geoModel.
+      It can be null if no associated geoModel is available or is not loaded.
+    */
     property FloorManager floorManager : geoModel? geoModel.floorManager : null
 
     onFloorManagerChanged: {
@@ -120,7 +166,13 @@ QtObject {
             floorManager.load();
     }
 
-    // toggling false will autofire the ilities
+    /*!
+      \qmlproperty bool selectedSiteRespected
+      \brief Repopulates the \l facilities model when toggled false.
+      When the selected site is respected, the facilities list is limited to the facilities which match the selected site.
+      If the selected site is not respected, then facilities will contain all facilities from all sites, regardless of the selected site.
+      Default is {true}.
+    */
     property bool selectedSiteRespected: true
 
     onSelectedSiteRespectedChanged: {
@@ -129,14 +181,37 @@ QtObject {
         }
     }
     
+    /*!
+      \qmlproperty string selectedLevelId
+      \brief Stores the current selected level Id.
+      Default is {""}.
+    */
     readonly property alias selectedLevelId: internal.selectedLevelId
 
+    /*!
+      \brief Sets the \a levelId as \l selectedLevelId.
+      This will change the current visibile level on the \c GeoView.
+      If \a levelId is empty string, current selected level visibility is set to false.
+      Resets the previous level visibility. \l updateLevelsMode modifies the behavior of selecting level.
+
+    */
     function setSelectedLevelId(levelId) {
         internal.selectedLevelId = levelId;
     }
 
+    /*!
+      \qmlproperty string selectedFacilityId
+      \brief Stores the current selected facility Id.
+      Default is {""}.
+    */
     readonly property alias selectedFacilityId: internal.selectedFacilityId
 
+    /*!
+      \brief Sets the \a facilityId as \l selectedFacilityId.
+      This will load the \l levels with the levels withing the facility and
+      reset by selecting \l selectedLevelId with level matching vertical ordering == 0.
+      \sa setSelectedLevelId
+    */
     function setSelectedFacilityId(facilityId) {
         let idx = findElementIdxById(facilityId,
                                      FloorFilterController.TypeElement.Facility);
@@ -157,25 +232,62 @@ QtObject {
         internal.selectedFacilityId = facilityId;
     }
 
+    /*!
+      \qmlproperty string selectedSiteId
+      \brief Stores the current selected site Id.
+      Default is {""}.
+    */
     readonly property alias selectedSiteId: internal.selectedSiteId
 
+    /*!
+      \brief Sets the \a siteId as \l selectedSiteId.
+      This will load the \l facilities with the facilities within the site and reset \l selectedFacilityId.
+      Does not repopulate facilities in case of not \l selectedSiteRespected.
+    */
     function setSelectedSiteId(siteId) {
         console.log("set selected site id");
         internal.selectedSiteId = siteId;
     }
 
+    /*!
+      \qmlproperty ListModel levels
+      \brief Stores the levels in the currently selected facility in alphabetical order.
+      If not \l selectedSiteRespected, all levels are stored.
+      \sa selectedLevelId
+    */
     property ListModel levels: ListModel {}
 
+    /*!
+      \qmlproperty ListModel facilities
+      \brief Stores the facilities in the currently selected site.
+      \sa selectedSiteId
+    */
     property ListModel facilities: ListModel {}
 
+    /*!
+      \qmlproperty ListModel sites
+      \brief Stores all the sites in the current \l floorManager.
+      \sa selectedSiteId
+    */
     property ListModel sites: ListModel {}
 
     property alias selectedSite: internal.selectedSite
     property alias selectedFacility: internal.selectedFacility
     property alias selectedLevel: internal.selectedLevel
 
+
     // iterates over \a listElements to find an element with \a id.
     //\a variableIdName is used to access the correct method name in each list (siteId, facilityId, levelId)
+    /*!
+      \internal
+      \brief Finds an element index in the internal models using its \a id.
+      \a typeElement is one of the \c FloorFilterController.TypeElement values.
+      It automatically iterates on the correct internal model based on the \a typeElement passed.
+      \value TypeElement.Level level
+      \value TypeElement.Facility facility
+      \value TypeElement.Site site
+      Returns the id or \c null if no matching element id was found in the model.
+    */
     function findElementIdxById(id, typeElement) {
         var model;
         var variableIdName;
@@ -273,13 +385,16 @@ QtObject {
         internal.selectedFacilityId = "";
     }
 
+    /*!
+      \brief Set the \a visibility to the \c selectedLevel.
+    */
     function setVisibilityCurrentLevel(visibility) {
         if(internal.selectedLevel)
             internal.selectedLevel.visible = visibility;
     }
 
     /*!
-      Setting the levels visible if they match the current selected level vertical order.
+      \brief Setting the levels visible that match the \a verticalOrder
     */
     function resetLevelsVisibility(verticalOrder){
         for(var i = 0; i < floorManager.levels.length; ++i) {
@@ -291,6 +406,10 @@ QtObject {
     function onSelectedChanged() {}
 
     // geomodel loaded connection
+    /*!
+      \qmlproperty Connections geoModelConn
+      \brief load the \c FloorManager associated with the \l geoModel.
+    */
     property Connections geoModelConn: Connections {
         target: geoModel
         function onLoadStatusChanged() {
@@ -304,8 +423,15 @@ QtObject {
         }
     }
 
+    /*!
+      \brief Signal emitted once the \l floorManager has been successfully loaded.
+    */
     signal loaded()
 
+    /*!
+      \brief Load the \l floorManager associated with the \l geoModel and populate the sites.
+      \sa populateSites
+    */
     property Connections floorManagerConn: Connections {
         target: floorManager
         function onLoadStatusChanged() {
@@ -323,13 +449,18 @@ QtObject {
     }
 
     /*!
-     Function used to expose the current site idx from the sites model.
+     Function used to expose the current site index from \l sites model.
     */
     function getCurrentSiteIdx() {
         return findElementIdxById(internal.selectedSiteId, FloorFilterController.TypeElement.Site);
 
     }
 
+    /*!
+      \brief Clears and repopulates \l sites with \a listSites.
+      Expects the site elements to have properties `name` and `siteId`.
+      If only one site exists in the model, then we select it automatically. \sa setSelectedSiteId.
+    */
     function populateSites(listSites) {
         sites.clear();
         for (var i = 0; i < listSites.length; ++i) {
@@ -347,6 +478,13 @@ QtObject {
         }
     }
 
+    /*!
+      \brief Clears and repopulates \l facilities with \a listFacilities.
+      Expects the facility elements to have `name`, `facilityId` and `site.name` properties.
+      Model \l facilities elements are alphabetically ordered.
+      If only on facility exists we select that facility, otherwise we do not automatically select
+      a facility.
+    */
     function populateFacilities(listFacilities) {
         facilities.clear();
         let facilitiesExtracted = Array.from(listFacilities);
@@ -374,6 +512,8 @@ QtObject {
 
     /*!
      \internal
+     \brief Populate the \l facilities model with all the facilities fetched from the \c floorManager.
+     \sa populateFacilities
     */
     function populateAllFacilities() {
         var listFacilities = floorManager.facilities;
@@ -381,6 +521,12 @@ QtObject {
     }
 
     // populate levels in reverse order. Levels numbers in ascending order from component's bottom section.
+    /*!
+      \brief Clears and repopulates the \l levels with \a listLevels.
+      Expects the levels elements to have `shortName`, `longName`, `levelId` properties.
+      Levels are sorted in terms of their vertical order, and a default level is selected, favouring the
+      level with verticalOrder == 0.
+    */
     function populateLevels(listLevels) {
         levels.clear();
         console.log("populate levels");
@@ -412,6 +558,9 @@ QtObject {
             internal.selectedLevelId = listLevels.length ? listLevels[0].levelId : "";
     }
 
+    /*!
+      \brief On the GeoView, zooms to the facility with ID matching \a facilityId.
+    */
     function zoomToFacility(facilityId) {
         let idx = findElementIdxById(facilityId,
                                      FloorFilterController.TypeElement.Facility);
@@ -420,6 +569,9 @@ QtObject {
         zoomToEnvelope(extent);
     }
 
+    /*!
+      \brief On the \c GeoView, zooms to the facility with ID matching \a siteId.
+    */
     function zoomToSite(siteId) {
         let idx = findElementIdxById(siteId,
                                      FloorFilterController.TypeElement.Site);
@@ -428,9 +580,19 @@ QtObject {
         zoomToEnvelope(extent);
     }
 
+    /*!
+      \internal
+      \brief Signal emitted once \c geoModel has completed a setViewpoint.
+      This signal is hooked up to setViewpoint changes requested by the \c FloorFilter. Doing so, it is possible
+      to understand which signal comes from \c FloorFilter and which from user panning the \c GeoModel.
+    */
     signal doneViewpointChanged
 
     // signal used to set active again the \c Connections geoViewConnections pointing to onSetViewpoint.
+    /*!
+      \internal
+      Re-enables \l geoViewConnections.
+    */
     onDoneViewpointChanged: {
         console.log("signal on doneviewpoint called");
         controller.internal.geoViewConnections.enabled = true;
@@ -455,17 +617,39 @@ QtObject {
         geoView.setViewpoint(newViewpoint);
     }
 
+    /*!
+      \brief The mode that defines how levels are made visible/invisible in the geoView.
+      \value AllLevelsMatchingVerticalOrder When a level is selected, all levels with matching vertical order are made visible, all other levels are invisible.
+      \value SingleLevel All levels with \c{verticalOrder == 0} are set to visible, the currently selected level is also visible, all other levels are set to invisible. This
+      matches the JavaScript Widget FloorFilter functionality.
+      \sa updateLevelsMode
+    */
     enum UpdateLevelsMode {
         AllLevelsMatchingVerticalOrder,
         SingleLevel
     }
 
+    /*!
+      \brief The type of elements used in the internal models.
+      \value TypeElement.Level
+      \value TypeElement.Facility
+      \value TypeElement.Site
+    */
     enum TypeElement {
         Level,
         Facility,
         Site
     }
 
+    /*!
+      \brief The mode that defines how facilities are selected by viewpoint navigation.
+      \value Never Viewpoint navigation does not affect the currently selected facility.
+      \value Always When the geoview's current viewpoint updates, the controller tests to see if the facility interect the viewpoint,
+      and selects it if so. If no facility intersects the viewpoint, then the current facility is deselected.
+      \value AlwaysNonClearing Variant of \c Always, but if there is no facility to select within the viewpoint then we do not
+      deselect the current viewpoint.
+      \sa automaticSelectionMode
+    */
     enum AutomaticSelectionMode {
         // Never update selection based on the GeoView's current viewpoint
         Never,
