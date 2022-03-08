@@ -17,6 +17,7 @@
 
 // ArcGISRuntime headers
 #include <FloorFacility.h>
+#include <FloorSite.h>
 
 namespace Esri {
 namespace ArcGISRuntime {
@@ -88,6 +89,11 @@ namespace Toolkit {
   QString FloorFilterFacilityItem::name() const
   {
     return m_floorFacility ? m_floorFacility->name() : QString{};
+  }
+
+  QString FloorFilterFacilityItem::parentSiteName() const
+  {
+    return m_floorFacility ? m_floorFacility->site()->name() : QString{};
   }
 
   /*!
