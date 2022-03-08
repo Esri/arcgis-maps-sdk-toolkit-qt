@@ -26,7 +26,6 @@ import QtGraphicalEffects 1.12
   \ingroup ArcGISQtToolkitUiQmlViews
   \since 100.14
   \brief Allows to display and filter the available floor aware layers in the current \c GeoMap.
-
   The FloorFilter allows the interaction with the available floor aware layers. A user can select from a list of sites which presents
   their facilities. Once a facility is chosen, it is possible to toggle between its levels which will show them on the \c GeoView.
   2D maps and 3D scenes are supported.
@@ -46,13 +45,14 @@ Control {
       \qmlproperty FloorFilterController controller
       \brief The controller handles biding logic between the FloorFilter and the \c GeoModel, \c FloorManager and
       its flooraware layers.
-      Defaults to \l{FloorFilterController}
+      Default is \l{FloorFilterController}
     */
     property var controller: FloorFilterController {}
 
     /*!
       \qmlproperty int updateLevelsMode
       \brief The mode to use for updating levels visibility.
+      \sa FloorFilterController.updateLevelsMode
     */
     property int updateLevelsMode: controller.updateLevelsMode
 
@@ -61,6 +61,8 @@ Control {
     /*!
       \qmlproperty int automaticSelectionMode
       \brief The mode to use for the automatic selection of levels based on current center viewpoint.
+      Defaults is \c{FloorFilterController.AutomaticSelectionMode.Always}.
+      \sa FloorFilterController.automaticSelection
 
 
     */
