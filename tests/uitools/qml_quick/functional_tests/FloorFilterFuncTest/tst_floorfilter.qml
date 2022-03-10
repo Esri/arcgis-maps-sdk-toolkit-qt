@@ -73,38 +73,6 @@ Rectangle {
             password: credential_password
         }
 
-        //    MapView {
-        //        id: viewSingle
-        //        Map {
-        //            id: mapSingle
-        //            item: PortalItem {
-        //                itemId: "f133a698536f44c8884ad81f80b6cfc7"
-        //                portal: Portal {
-        //                    Component.onCompleted: load()
-        //                    onErrorChanged: {
-        //                        if (loadStatus === Enums.LoadStatusFailedToLoad) {
-        //                            console.log(error.message);
-        //                        }
-        //                    }
-        //                    url: "https://www.arcgis.com"
-        //                }
-        //            }
-        //        }
-        //    }
-
-        // 1 site, 1 facility, 3 levels
-
-        //        Component {
-        //            id: ffSingleComponent
-
-        //        }
-
-        // more sites, more facilities
-
-
-
-
-
         function test_collapserDefault() {
             var ff = createTemporaryObject(ffComponent, foo);
             var collapser = Utils.findChild(ff, "collapser");

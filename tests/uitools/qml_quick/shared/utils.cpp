@@ -20,9 +20,4 @@ QObject* Utils::createSingletonInstance(QQmlEngine* engine, QJSEngine* scriptEng
   Q_UNUSED(engine);
   Q_UNUSED(scriptEngine);
   return new Utils;
-  //  if (m_instance == nullptr)
-  //  {
-  //    m_instance = new Utils;
-  //  }
-  //  return m_instance;
 }
