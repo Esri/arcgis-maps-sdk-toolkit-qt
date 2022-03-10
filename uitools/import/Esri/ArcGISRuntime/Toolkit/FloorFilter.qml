@@ -532,8 +532,6 @@ Control {
         // idx refers to repeter or listview idx, not the model idx. Used to set the highlight of the current selected facility/site.
         property int selectedFacilityIdx: -1
         property int selectedSiteIdx: -1
-        onCurrentVisibileListViewChanged: console.log("curr changed",
-                                                      currentVisibileListView)
         // absolute position parent floorfilter
         property var parentOrigin: mapToItem(floorFilter.parent,
                                              floorFilter.parent.x,

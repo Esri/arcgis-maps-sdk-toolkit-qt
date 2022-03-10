@@ -96,7 +96,6 @@ QtObject {
         }
 
         if (selectSite !== undefined) {
-            console.log("selecting site", selectSite.siteId);
             setSelectedSiteId(selectSite.siteId);
         } else if (automaticSelectionMode === FloorFilterController.AutomaticSelectionMode.Always) {
             setSelectedSiteId("");
@@ -120,7 +119,6 @@ QtObject {
             }
         }
         if (selectFacility !== undefined) {
-            console.log("selecting facility", selectFacility.facilityId);
             setSelectedFacilityId(selectFacility.facilityId);
         } else if (automaticSelectionMode === FloorFilterController.AutomaticSelectionMode.Always) {
             setSelectedFacilityId("");
@@ -245,7 +243,6 @@ QtObject {
       Does not repopulate facilities in case of not \l selectedSiteRespected.
     */
     function setSelectedSiteId(siteId) {
-        console.log("set selected site id");
         internal.selectedSiteId = siteId;
     }
 
@@ -415,9 +412,7 @@ QtObject {
         function onLoadStatusChanged() {
             // load floormanager after map has been loaded
             if (geoModel.loadStatus === Enums.LoadStatusLoaded) {
-                console.log("geomodel loaded: ", geoModel);
                 floorManager = geoModel.floorManager;
-                console.log("loading floormanager");
                 floorManager.load();
             }
         }
@@ -435,10 +430,6 @@ QtObject {
     property Connections floorManagerConn: Connections {
         target: floorManager
         function onLoadStatusChanged() {
-            console.log("floormanager status (0 loaded)",
-                        floorManager.loadStatus);
-            if(floorManager.loadError)
-                console.log("floormanager load error: ", floorManager.loadError.message, floorManager.loadError.additionalMessage);
             if (floorManager.loadStatus === Enums.LoadStatusLoaded) {
                 // load the listmodels
                 controller.loaded();
@@ -529,7 +520,6 @@ QtObject {
     */
     function populateLevels(listLevels) {
         levels.clear();
-        console.log("populate levels");
         let selectedLevel = "";
         let levelsExtracted = [];
         for (var i = listLevels.length - 1; i >= 0; --i) {
@@ -594,7 +584,6 @@ QtObject {
       Re-enables \l geoViewConnections.
     */
     onDoneViewpointChanged: {
-        console.log("signal on doneviewpoint called");
         controller.internal.geoViewConnections.enabled = true;
         geoView.onSetViewpointCompleted.disconnect(
                     controller.doneViewpointChanged);
