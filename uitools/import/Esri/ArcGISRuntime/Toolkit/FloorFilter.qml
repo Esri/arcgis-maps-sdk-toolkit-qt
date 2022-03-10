@@ -175,19 +175,19 @@ Control {
                     orientation: Qt.Horizontal
                 }
 
+                //Layout width: fill the parent Layout if is larger than the `contentItem.width`. If `contentItem.width` is larger, stretch to keep all its items without resizing them (don't elide text children).
                 Flickable {
                     visible: !closer.checked
                     // dont need to use the id of the column
                     contentHeight: contentItem.childrenRect.height
-                    Layout.fillWidth: true
+                    Layout.preferredWidth: contentItem.childrenRect.width
                     Layout.maximumHeight: repeater.buttonHeight * maxNumberLevels
                     Layout.preferredHeight: repeater.buttonHeight * repeater.count
                     clip: true
                     ScrollBar.vertical: ScrollBar {}
 
-                    Column {
-                        anchors.left: parent.left
-                        anchors.right: parent.right
+                    ColumnLayout {
+                        spacing: 0
                         Repeater {
                             id: repeater
 
@@ -201,8 +201,7 @@ Control {
                                 visible: !closer.checked
                                 checked: controller.selectedLevelId === model.modelId
                                 autoExclusive: true
-                                anchors.left: parent.left
-                                anchors.right: parent.right
+                                Layout.fillWidth: true
                                 text: closer.checked
                                       || internal.collapsedIcons ? model.shortName : model.longName
                                 flat: true
@@ -223,13 +222,13 @@ Control {
 
                 // not visible when floorFilter is shown and not visible if the children has no text to be shown.
                 ToolButton {
-                    visible: closer.checked && text !== ""
                     id: itemSelectedButton
+                    visible: closer.checked && text !== ""
                     Layout.fillWidth: true
                     // always checked
                     checkable: false
                     checked: true
-                    text: controller.selectedLevel ? controller.selectedLevel.shortName : ""
+                    text: controller.selectedLevel ? (internal.collapsedIcons ? controller.selectedLevel.shortName : controller.selectedLevel.longName) : ""
                     flat: true
                     display: AbstractButton.TextOnly
                     onClicked: {
