@@ -348,7 +348,6 @@ Control {
                     Layout.columnSpan: 3
                     cacheBuffer: Math.max(contentHeight,0)
                     contentWidth: contentItem.childrenRect.width
-                    //implicitWidth: contentWidth
                     Layout.minimumWidth: contentItem.childrenRect.width
                     Layout.fillWidth: true
                     Layout.fillHeight: true
@@ -410,7 +409,6 @@ Control {
                             text: model.name + (model.parentSiteName && !controller.selectedSiteRespected ? '<br/>' + parentSiteName : "")
 
                             onClicked: {
-                                print("Clicked")
                                 // switch to facility view
                                 if (internal.currentVisibileListView
                                         === FloorFilter.VisibleListView.Site) {
@@ -546,7 +544,8 @@ Control {
         objectName: "internal"
         // expands/collapse icons, showing long/short name.
         property bool collapsedIcons : true
-        property int currentVisibileListView: FloorFilter.VisibleListView.Site
+        // set the intial view as the facility view in case of single site.
+        property int currentVisibileListView: floorFilter.controller.sites.count === 1 ? FloorFilter.VisibleListView.Facility : FloorFilter.VisibleListView.Site
         // idx refers to repeter or listview idx, not the model idx. Used to set the highlight of the current selected facility/site.
         property int selectedFacilityIdx: -1
         property int selectedSiteIdx: -1

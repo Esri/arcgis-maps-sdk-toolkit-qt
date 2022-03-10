@@ -469,7 +469,7 @@ QtObject {
         if (listSites.length === 1) {
             internal.singleSite = true;
             let site = listSites[0];
-            internal.selectedSiteId = site.siteId;
+            setSelectedSiteId(site.siteId);
         }
     }
 
