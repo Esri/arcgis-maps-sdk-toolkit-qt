@@ -41,6 +41,10 @@ QtObject {
     onFloorManagerChanged: {
         if (floorManager.loadStatus !== Enums.LoadStatusLoaded)
             floorManager.load();
+        else{
+            populateSites(floorManager.sites);
+            controller.loaded(); //emit the loaded signal
+        }
     }
 
     // toggling false will autofire the ilities
@@ -233,8 +237,8 @@ QtObject {
                 console.log("floormanager load error: ", floorManager.loadError.message, floorManager.loadError.additionalMessage);
             if (floorManager.loadStatus === Enums.LoadStatusLoaded) {
                 // load the listmodels
-                controller.loaded();
                 populateSites(floorManager.sites)
+                controller.loaded();
             }
         }
     }

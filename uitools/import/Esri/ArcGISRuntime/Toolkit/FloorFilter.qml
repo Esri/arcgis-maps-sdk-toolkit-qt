@@ -145,11 +145,12 @@ Control {
                     ScrollBar.vertical: ScrollBar {}
 
                     Column {
+                        objectName: "wrapper"
                         anchors.left: parent.left
                         anchors.right: parent.right
                         Repeater {
                             id: repeater
-
+                            objectName: "repeater"
                             property int downItem
                             // defaulting to 0, so in case of model.count === 0, the buttonHeight value is not undefined
                             property int buttonHeight: 0
@@ -184,6 +185,7 @@ Control {
                 ToolButton {
                     visible: closer.checked && text !== ""
                     id: itemSelectedButton
+                    objectName: "itemSelectedButton"
                     Layout.fillWidth: true
                     // always checked
                     checkable: false
@@ -254,6 +256,7 @@ Control {
 
                 TextField {
                     id: searchTextField
+                    objectName: "searchTextField"
                     Layout.fillWidth: true
                     Layout.columnSpan: 3
                     //                Layout.rowSpan: noResultsFoundLabel.visible ? 1 : 2
@@ -283,6 +286,7 @@ Control {
 
                 Label {
                     id: noResultsFoundLabel
+                    objectName: "noResultsFoundLabel"
                     text: "No results found"
                     visible: false
                     Layout.columnSpan: 3
@@ -359,11 +363,13 @@ Control {
                             text: model.name + (model.parentSiteName && !controller.selectedSiteRespected ? '<br/>' + parentSiteName : "")
 
                             onClicked: {
+                                print("Clicked")
                                 // switch to facility view
                                 if (internal.currentVisibileListView
                                         === FloorFilter.VisibleListView.Site) {
                                     controller.setSelectedSiteId(model.modelId)
                                     internal.selectedSiteIdx = index
+                                    print("settignt eh sitre value idx");
                                     // resetting the previous selected facility
                                     internal.selectedFacilityIdx = -1
                                     controller.zoomToSite(model.modelId)
@@ -397,6 +403,7 @@ Control {
                 }
                 Button {
                     id: showAllFacilities
+                    objectName: "showAllFacilities"
                     text: 'All sites'
                     Layout.alignment: Qt.AlignCenter
                     Layout.columnSpan: 3
@@ -413,6 +420,7 @@ Control {
 
                 Label {
                     id: siteLabel
+                    objectName: "siteLabel"
                     font.bold: internal.currentVisibileListView === FloorFilter.VisibleListView.Site
                     Layout.fillWidth: true
                     // the two titles are close to each others
@@ -423,6 +431,7 @@ Control {
                     text: controller.selectedSite ? controller.selectedSite.name : "Select the Site"
                 }
                 Label {
+                    objectName: "facilityLabel"
                     font.bold: internal.currentVisibileListView
                                === FloorFilter.VisibleListView.Facility
                     Layout.fillWidth: true
@@ -434,6 +443,7 @@ Control {
                 }
 
                 Button {
+                    objectName: "closerListView"
                     Layout.rowSpan: 2
                     Layout.fillHeight: true
                     display: AbstractButton.IconOnly
