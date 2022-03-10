@@ -162,6 +162,10 @@ QtObject {
     onFloorManagerChanged: {
         if (floorManager.loadStatus !== Enums.LoadStatusLoaded)
             floorManager.load();
+        else{
+            populateSites(floorManager.sites);
+            controller.loaded(); //emit the loaded signal
+        }
     }
 
     /*!
@@ -432,8 +436,8 @@ QtObject {
         function onLoadStatusChanged() {
             if (floorManager.loadStatus === Enums.LoadStatusLoaded) {
                 // load the listmodels
+                populateSites(floorManager.sites)
                 controller.loaded();
-                populateSites(floorManager.sites);
                 controller.internal.geoViewConnections.enabled = true;
             }
         }

@@ -97,6 +97,7 @@ Control {
     }
 
     contentItem: Grid {
+        objectName: "gridOuterWrapper"
         rows: 1
         // changing the layout direction based on the current position of the floorfilter relative to its parent.
         // switching the layout will result in switching the levels toolbar with the site/facility view.
@@ -115,6 +116,7 @@ Control {
                 spacing: 0
                 ToolButton {
                     id: closer
+                    objectName: "closer"
                     checkable: true
                     checked: true
                     visible: !closer.checked
@@ -132,6 +134,7 @@ Control {
                 }
                 ToolButton {
                     id: collapser
+                    objectName: "collapser"
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft
                     // use different pointing icon based on the leader position. if icons are collapsed and left position: use right pointing icon; if right position: use left pointing icon; if collapsedIcons === true, switch the icon.
@@ -148,6 +151,7 @@ Control {
                     orientation: Qt.Horizontal
                 }
                 ToolButton {
+                    objectName: "zoom"
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft
                     icon.source: "images/zoom-to-object.svg"
@@ -177,6 +181,7 @@ Control {
 
                 //Layout width: fill the parent Layout if is larger than the `contentItem.width`. If `contentItem.width` is larger, stretch to keep all its items without resizing them (don't elide text children).
                 Flickable {
+                    objectName: "flickable"
                     visible: !closer.checked
                     // dont need to use the id of the column
                     contentHeight: contentItem.childrenRect.height
@@ -187,10 +192,11 @@ Control {
                     ScrollBar.vertical: ScrollBar {}
 
                     ColumnLayout {
+                        objectName: "wrapper"
                         spacing: 0
                         Repeater {
                             id: repeater
-
+                            objectName: "repeater"
                             // defaulting to 0, so in case of model.count === 0, the buttonHeight value is not undefined.
                             // buttonHeight used to set the buttons height, so the flickable visible will be exactly buttonHeight * numberLevels. They are not clipped half a level but assumes that all levels have same height.
                             property int buttonHeight: 0
@@ -223,6 +229,7 @@ Control {
                 // not visible when floorFilter is shown and not visible if the children has no text to be shown.
                 ToolButton {
                     id: itemSelectedButton
+                    objectName: "itemSelectedButton"
                     visible: closer.checked && text !== ""
                     Layout.fillWidth: true
                     // always checked
@@ -238,6 +245,7 @@ Control {
 
                 ToolButton {
                     id: buildingMenuButton
+                    objectName: "buildingMenuButton"
                     checkable: true
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft
@@ -260,6 +268,7 @@ Control {
                 columnSpacing: 0
                 rowSpacing: 0
                 Button {
+                    objectName: "backToSite"
                     Layout.margins: 0
                     Layout.fillHeight: true
                     Layout.rowSpan: 2
@@ -290,6 +299,7 @@ Control {
 
                 TextField {
                     id: searchTextField
+                    objectName: "searchTextField"
                     Layout.fillWidth: true
                     Layout.columnSpan: 3
                     Layout.margins: 5
@@ -318,6 +328,7 @@ Control {
 
                 Label {
                     id: noResultsFoundLabel
+                    objectName: "noResultsFoundLabel"
                     text: "No results found"
                     visible: false
                     Layout.columnSpan: 3
@@ -331,6 +342,7 @@ Control {
 
                 ListView {
                     id: listView
+                    objectName: "listView"
                     visible: true
                     Layout.preferredHeight: 200
                     Layout.columnSpan: 3
@@ -398,6 +410,7 @@ Control {
                             text: model.name + (model.parentSiteName && !controller.selectedSiteRespected ? '<br/>' + parentSiteName : "")
 
                             onClicked: {
+                                print("Clicked")
                                 // switch to facility view
                                 if (internal.currentVisibileListView
                                         === FloorFilter.VisibleListView.Site) {
@@ -436,6 +449,7 @@ Control {
                 }
                 Button {
                     id: showAllFacilities
+                    objectName: "showAllFacilities"
                     text: 'All sites'
                     Layout.alignment: Qt.AlignCenter
                     Layout.columnSpan: 3
@@ -453,6 +467,7 @@ Control {
 
                 Label {
                     id: siteLabel
+                    objectName: "siteLabel"
                     font.bold: internal.currentVisibileListView === FloorFilter.VisibleListView.Site
                     Layout.fillWidth: true
                     // the two titles are close to each others
@@ -463,6 +478,7 @@ Control {
                     text: controller.selectedSite ? controller.selectedSite.name : "Select the Site"
                 }
                 Label {
+                    objectName: "facilityLabel"
                     font.bold: internal.currentVisibileListView
                                === FloorFilter.VisibleListView.Facility
                     Layout.fillWidth: true
@@ -474,6 +490,7 @@ Control {
                 }
 
                 Button {
+                    objectName: "closerListView"
                     Layout.rowSpan: 2
                     Layout.fillHeight: true
                     display: AbstractButton.IconOnly
@@ -526,6 +543,7 @@ Control {
 
     QtObject {
         id: internal
+        objectName: "internal"
         // expands/collapse icons, showing long/short name.
         property bool collapsedIcons : true
         property int currentVisibileListView: FloorFilter.VisibleListView.Site
