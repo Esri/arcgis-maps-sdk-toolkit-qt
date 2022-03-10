@@ -413,6 +413,10 @@ Rectangle {
             compare(false, flickable.visible);
             compare(true, itemSelectedButton.visible);
             compare("A1", itemSelectedButton.text);
+            // check the not collapsed itemSelectedButton
+            var collapser = Utils.findChild(ff, "collapser");
+            mouseClick(collapser);
+            compare("Level 1", itemSelectedButton.text);
             // reopen the floorfilter, showing all the levels available
             mouseClick(itemSelectedButton);
             compare(true, flickable.visible);
