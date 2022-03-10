@@ -23,27 +23,67 @@ import QtGraphicalEffects 1.12
 /*!
   \qmltype FloorFilter
   \inqmlmodule Esri.ArcGISRuntime.Toolkit
+  \ingroup ArcGISQtToolkitUiQmlViews
   \since 100.14
-  \brief Allows to display and filter the available floor aware layers in the current \c GeoView.
+  \brief Allows to display and filter the available floor aware layers in the current \c GeoMap.
+
+  The FloorFilter allows the interaction with the available floor aware layers. A user can select from a list of sites which presents
+  their facilities. Once a facility is chosen, it is possible to toggle between its levels which will show them on the \c GeoView.
+  2D maps and 3D scenes are supported.
+  Example code in the QML API (C++ API might differ):
+  \snippet qml_quick/src/demos/FloorFilterDemoForm.qml Set up Floor Filter QML
 */
 Control {
     id: floorFilter
 
+    /*!
+      \qmlproperty GeoView geoView
+      \brief The \c GeoView for this tool. Should be a \c SceneView or \c MapView.
+    */
     property var geoView
 
+    /*!
+      \qmlproperty FloorFilterController controller
+      \brief The controller handles binding logic between the FloorFilter, \c GeoModel, \c FloorManager and
+      the flooraware layers.
+      Default is \l{FloorFilterController}
+    */
     property var controller: FloorFilterController {}
 
+    /*!
+      \qmlproperty enumeration updateLevelsMode
+      \brief The mode to use for updating levels visibility.
+      Default is \c {FloorFilterController.UpdateLevelsMode.AllLevelsMatchingVerticalOrder}.
+      \sa {FloorFilterController} {FloorFilterController.updateLevelsMode}
+    */
     property int updateLevelsMode: controller.updateLevelsMode
 
     property bool hideSiteFacilityButton: false
 
-    property bool collapsedIcons: true
+    /*!
+      \qmlproperty enumeration automaticSelectionMode
+      \brief The mode to use for the automatic selection of levels based on current center viewpoint.
+      Default is \c{FloorFilterController.AutomaticSelectionMode.Always}.
+      \sa {FloorFilterController} {FloorFilterController.automaticSelectionMode}
+    */
+    property int automaticSelectionMode: FloorFilterController.AutomaticSelectionMode.Always
 
+    /*!
+      \qmlproperty int maxNumberLevels
+      \brief trims the maximum number of viewalbe levels.
+      A scrollable component is automatically used in case of higher number of levels.
+    */
     property int maxNumberLevels: 2
 
     padding: 5
 
     // create singlepointing binding towards controller
+    Binding {
+        target: controller
+        property: "automaticSelectionMode"
+        value: floorFilter.automaticSelectionMode
+    }
+
     Binding {
         target: controller
         property: "updateLevelsMode"
@@ -59,13 +99,16 @@ Control {
     contentItem: Grid {
         objectName: "gridOuterWrapper"
         rows: 1
+        // changing the layout direction based on the current position of the floorfilter relative to its parent.
+        // switching the layout will result in switching the levels toolbar with the site/facility view.
         layoutDirection: (internal.leaderPosition === FloorFilter.LeaderPosition.UpperLeft)
                          || (internal.leaderPosition === FloorFilter.LeaderPosition.LowerLeft) ? Qt.LeftToRight : Qt.RightToLeft
+        // verticalalignment based on current position of the floorfilter relative to its parent.
+        // upper: top align; lower: bottom align
         verticalItemAlignment: (internal.leaderPosition === FloorFilter.LeaderPosition.UpperLeft)
                                || (internal.leaderPosition === FloorFilter.LeaderPosition.UpperRight) ? Grid.AlignTop : Grid.AlignBottom
         columnSpacing: 5
         ToolBar {
-
             id: levelFilterMenu
 
             Layout.alignment: Qt.AlignBottom
@@ -81,7 +124,7 @@ Control {
                     Layout.alignment: Qt.AlignLeft
                     icon.source: "images/x.svg"
                     text: "Close"
-                    display: collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
+                    display: internal.collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
                 }
 
                 ToolSeparator {
@@ -94,12 +137,14 @@ Control {
                     objectName: "collapser"
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft
+                    // use different pointing icon based on the leader position. if icons are collapsed and left position: use right pointing icon; if right position: use left pointing icon; if collapsedIcons === true, switch the icon.
+                    // leaderPosition === right XNOR collapsedIcons; if collapsedIcons === false, expression evaluates opposite as its operands. if collapsedIcons === true, expression evaluates as its operands.
                     icon.source: !((internal.leaderPosition === FloorFilter.LeaderPosition.UpperRight ||
-                                    internal.leaderPosition === FloorFilter.LeaderPosition.LowerRight) ^ collapsedIcons) ? "images/chevrons-left.svg" : "images/chevrons-right.svg"
+                                    internal.leaderPosition === FloorFilter.LeaderPosition.LowerRight) ^ internal.collapsedIcons) ? "images/chevrons-left.svg" : "images/chevrons-right.svg"
                     text: "Collapse"
                     flat: true
-                    display: collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
-                    onClicked: collapsedIcons = !collapsedIcons
+                    display: internal.collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
+                    onClicked: internal.collapsedIcons = !internal.collapsedIcons
                 }
                 ToolSeparator {
                     Layout.fillWidth: true
@@ -112,19 +157,21 @@ Control {
                     icon.source: "images/zoom-to-object.svg"
                     text: "Zoom to"
                     flat: true
-                    enabled: !listView.visible ? controller.selectedFacilityId : internal.currentVisibileListView === FloorFilter.VisibleListView.Site ? controller.selectedSiteId : controller.selectedFacilityId
-                    display: collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
+                    // enabled based on the currentVisibleListView and if site/facility element is not undefined.
+                    enabled: !listView.visible ? controller.selectedFacilityId : internal.currentVisibileListView === FloorFilter.VisibleListView.Site
+                                                 ? controller.selectedSiteId : controller.selectedFacilityId
+                    display: internal.collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
                     onClicked: {
                         if (internal.currentVisibileListView === FloorFilter.VisibleListView.Site
                                 && listView.visible)
-                            controller.zoomToSite(controller.selectedSiteId)
+                            controller.zoomToSite(controller.selectedSiteId);
                         else if (internal.currentVisibileListView
                                  === FloorFilter.VisibleListView.Facility
                                  || !listView.visible)
                             controller.zoomToFacility(
-                                        controller.selectedFacilityId)
+                                        controller.selectedFacilityId);
                         else
-                            console.error("extra enum not accounted for.")
+                            console.error("extra enum not accounted for.");
                     }
                 }
                 ToolSeparator {
@@ -132,27 +179,26 @@ Control {
                     orientation: Qt.Horizontal
                 }
 
+                //Layout width: fill the parent Layout if is larger than the `contentItem.width`. If `contentItem.width` is larger, stretch to keep all its items without resizing them (don't elide text children).
                 Flickable {
                     objectName: "flickable"
                     visible: !closer.checked
-
                     // dont need to use the id of the column
                     contentHeight: contentItem.childrenRect.height
-                    Layout.fillWidth: true
+                    Layout.preferredWidth: contentItem.childrenRect.width
                     Layout.maximumHeight: repeater.buttonHeight * maxNumberLevels
                     Layout.preferredHeight: repeater.buttonHeight * repeater.count
                     clip: true
                     ScrollBar.vertical: ScrollBar {}
 
-                    Column {
+                    ColumnLayout {
                         objectName: "wrapper"
-                        anchors.left: parent.left
-                        anchors.right: parent.right
+                        spacing: 0
                         Repeater {
                             id: repeater
                             objectName: "repeater"
-                            property int downItem
-                            // defaulting to 0, so in case of model.count === 0, the buttonHeight value is not undefined
+                            // defaulting to 0, so in case of model.count === 0, the buttonHeight value is not undefined.
+                            // buttonHeight used to set the buttons height, so the flickable visible will be exactly buttonHeight * numberLevels. They are not clipped half a level but assumes that all levels have same height.
                             property int buttonHeight: 0
                             model: controller.levels
                             delegate: ToolButton {
@@ -161,14 +207,13 @@ Control {
                                 visible: !closer.checked
                                 checked: controller.selectedLevelId === model.modelId
                                 autoExclusive: true
-                                anchors.left: parent.left
-                                anchors.right: parent.right
+                                Layout.fillWidth: true
                                 text: closer.checked
-                                      || collapsedIcons ? model.shortName : model.longName
+                                      || internal.collapsedIcons ? model.shortName : model.longName
                                 flat: true
                                 display: AbstractButton.TextOnly
                                 onClicked: {
-                                    controller.setSelectedLevelId(model.modelId)
+                                    controller.setSelectedLevelId(model.modelId);
                                 }
                             }
                         }
@@ -183,18 +228,18 @@ Control {
 
                 // not visible when floorFilter is shown and not visible if the children has no text to be shown.
                 ToolButton {
-                    visible: closer.checked && text !== ""
                     id: itemSelectedButton
                     objectName: "itemSelectedButton"
+                    visible: closer.checked && text !== ""
                     Layout.fillWidth: true
                     // always checked
                     checkable: false
                     checked: true
-                    text: controller.selectedLevel ? controller.selectedLevel.shortName : ""
+                    text: controller.selectedLevel ? (internal.collapsedIcons ? controller.selectedLevel.shortName : controller.selectedLevel.longName) : ""
                     flat: true
                     display: AbstractButton.TextOnly
                     onClicked: {
-                        closer.checked = false
+                        closer.checked = false;
                     }
                 }
 
@@ -208,15 +253,13 @@ Control {
                     icon.source: "images/organization.svg"
                     text: "Browse"
                     flat: true
-                    display: collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
+                    display: internal.collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
                 }
             }
         }
 
         Pane {
             padding: 0
-            //            anchors.left: levelFilterMenu.right
-            //            anchors.margins: 10
             visible: buildingMenuButton.checked
             GridLayout {
                 flow: GridLayout.TopToBottom
@@ -228,14 +271,14 @@ Control {
                     objectName: "backToSite"
                     Layout.margins: 0
                     Layout.fillHeight: true
-                    //Layout.fillWidth: true
                     Layout.rowSpan: 2
                     Layout.alignment: Qt.AlignHCenter
+                    // setting width to 0 and not setting visibility to false, otherwise it would break the rows layout by having a missing row.
                     Layout.preferredWidth: internal.currentVisibileListView
                                            === FloorFilter.VisibleListView.Facility ? 32 : 0
                     display: AbstractButton.IconOnly
                     flat: true
-                    //removing all paddings and spacing from component so icon will fill compeltely the button
+                    // removing all paddings and spacing from component so icon will fill compeltely the button
                     topPadding: 0
                     bottomPadding: 0
                     leftPadding: 0
@@ -248,9 +291,9 @@ Control {
                         source: "images/chevron-left.svg"
                     }
                     onClicked: {
-                        internal.currentVisibileListView = FloorFilter.VisibleListView.Site
-                        // When showing site view, resetting the not ignore current site. (this button is only way to get to site view)
-                        controller.selectedSiteRespected = true
+                        internal.currentVisibileListView = FloorFilter.VisibleListView.Site;
+                        // When showing site view, resetting the not ignore current site. (this button is only way to get to site view).
+                        controller.selectedSiteRespected = true;
                     }
                 }
 
@@ -259,7 +302,6 @@ Control {
                     objectName: "searchTextField"
                     Layout.fillWidth: true
                     Layout.columnSpan: 3
-                    //                Layout.rowSpan: noResultsFoundLabel.visible ? 1 : 2
                     Layout.margins: 5
                     placeholderText: "Search"
                     leftPadding: searchImg.width + 5
@@ -290,6 +332,7 @@ Control {
                     text: "No results found"
                     visible: false
                     Layout.columnSpan: 3
+                    // expanding to the showAllFacilities cell in case is not visible. This will not break the grid layout, otherwise there is a missing row.
                     Layout.rowSpan: showAllFacilities.visible ? 1 : 2
                     Layout.fillWidth: true
                     Layout.topMargin: 5
@@ -317,35 +360,38 @@ Control {
                     spacing: 5
                     clip: true
 
+                    // delegate model used to implement the filtering functionality, by setting visible elements in the `filtered` group.
                     model: DelegateModel {
                         id: dm
                         property Connections conn: Connections {
                             target: searchTextField
                             function onTextChanged() {
 
-                                //usign items group to fetch all the elements (they are all setting this group automatically)
+                                //using `items` group to fetch all the elements (all elements are set into this group by default).
                                 for (var i = 0; i < dm.items.count; ++i) {
-                                    var item = dm.items.get(i)
-
+                                    var item = dm.items.get(i);
+                                    // empty string clears the filtering. All elements are visible (set into the `filtered` group).
                                     if (searchTextField.text === "") {
-                                        item.inFiltered = true
+                                        item.inFiltered = true;
                                     } else {
                                         if (item.model.name.toLowerCase(
                                                     ).includes(
                                                     searchTextField.text.toLowerCase(
                                                         )))
-                                            item.inFiltered = true
+                                            item.inFiltered = true;
                                         else
-                                            item.inFiltered = false
+                                            item.inFiltered = false;
                                     }
                                 }
-                                listView.visible = filteredGroup.count > 0
-                                noResultsFoundLabel.visible = !listView.visible
+                                listView.visible = filteredGroup.count > 0;
+                                noResultsFoundLabel.visible = !listView.visible;
                             }
                         }
 
+                        // switch between controller model based on the currentVisibleListView
                         model: internal.currentVisibileListView
                                === FloorFilter.VisibleListView.Site ? controller.sites : controller.facilities
+                        // elements belonging to this group are visible.
                         filterOnGroup: "filtered"
                         groups: [
                             DelegateModelGroup {
@@ -356,10 +402,11 @@ Control {
                         ]
                         delegate: RadioDelegate {
                             id: radioDelegate
-                            // wait that the radiodelegates are all set, then resize them into the largest of them (stored in the listview contentItem)
+                            // wait that the radiodelegates are all set, then resize them into the largest of them (stored in the listview contentItem).
                             Component.onCompleted: width = listView.contentItem.childrenRect.width
                             property var parentSiteName: model.parentSiteName ?? ""
                             highlighted: internal.currentVisibileListView === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx
+                            // show parentSiteName once `all Sites` button is clicked (selectedSiteRespected-> false).
                             text: model.name + (model.parentSiteName && !controller.selectedSiteRespected ? '<br/>' + parentSiteName : "")
 
                             onClicked: {
@@ -367,23 +414,22 @@ Control {
                                 // switch to facility view
                                 if (internal.currentVisibileListView
                                         === FloorFilter.VisibleListView.Site) {
-                                    controller.setSelectedSiteId(model.modelId)
-                                    internal.selectedSiteIdx = index
-                                    print("settignt eh sitre value idx");
+                                    controller.setSelectedSiteId(model.modelId);
+                                    internal.selectedSiteIdx = index;
                                     // resetting the previous selected facility
-                                    internal.selectedFacilityIdx = -1
-                                    controller.zoomToSite(model.modelId)
+                                    internal.selectedFacilityIdx = -1;
+                                    controller.zoomToSite(model.modelId);
                                     internal.currentVisibileListView
-                                            = FloorFilter.VisibleListView.Facility
-
+                                            = FloorFilter.VisibleListView.Facility;
                                 } // switch to level view
                                 else if (internal.currentVisibileListView
                                          === FloorFilter.VisibleListView.Facility) {
-                                    controller.setSelectedFacilityId(model.modelId)
-                                    internal.selectedFacilityIdx = index
-                                    buildingMenuButton.checked = false
-                                    closer.checked = false
-                                    controller.zoomToFacility(model.modelId)
+                                    controller.setSelectedFacilityId(model.modelId);
+                                    internal.selectedFacilityIdx = index;
+                                    buildingMenuButton.checked = false;
+                                    closer.checked = false;
+                                    controller.zoomToFacility(model.modelId);
+                                    // get manually the selectedSiteIdx for case `selectedSiteRespected` === false
                                     if (!controller.selectedSiteRespected) {
                                         const idx = controller.getCurrentSiteIdx();
                                         // idx could be null if not found, guard from it
@@ -413,8 +459,9 @@ Control {
                     visible: internal.currentVisibileListView === FloorFilter.VisibleListView.Site
 
                     onClicked: {
-                        controller.selectedSiteRespected = false
-                        internal.currentVisibileListView = FloorFilter.VisibleListView.Facility
+                        // show all facilities from all sites.
+                        controller.selectedSiteRespected = false;
+                        internal.currentVisibileListView = FloorFilter.VisibleListView.Facility;
                     }
                 }
 
@@ -453,7 +500,6 @@ Control {
                     bottomPadding: 0
                     leftPadding: 0
                     rightPadding: 0
-                    //spacing: 0
                     Layout.alignment: Qt.AlignHCenter
                     Layout.preferredWidth: 32
                     icon {
@@ -468,12 +514,26 @@ Control {
         }
     }
 
+    /*!
+      \brief Types of elements shown into the \c ListView.
+      \value VisibleListView.Site Site containes Facilities
+      \value VisibleListView.Facility Facility containes levels.
+      Default is \c VisibleListView.Site
+    */
     // used to switch between site and facilities listviews and models.
     enum VisibleListView {
         Site,
         Facility
     }
 
+    /*!
+      \brief Enums to generalize the current \c FloorFilter position relative to its parent.
+      4 different options, created by tracing 2 lines passing by the parent center point and its width / 2 or its height / 2 points.
+      \value LeaderPosition.UpperLeft Top left square.
+      \value LeaderPosition.UpperRight Top right square.
+      \value LeaderPosition.LowerRight Bottom right square.
+      \value LeaderPosition.LowerLeft Botttom left square.
+    */
     enum LeaderPosition {
         UpperLeft,
         UpperRight,
@@ -484,13 +544,12 @@ Control {
     QtObject {
         id: internal
         objectName: "internal"
-
+        // expands/collapse icons, showing long/short name.
+        property bool collapsedIcons : true
         property int currentVisibileListView: FloorFilter.VisibleListView.Site
-        //idx refers to repeter or listview idx, not the model idx.
+        // idx refers to repeter or listview idx, not the model idx. Used to set the highlight of the current selected facility/site.
         property int selectedFacilityIdx: -1
         property int selectedSiteIdx: -1
-        onCurrentVisibileListViewChanged: console.log("curr changed",
-                                                      currentVisibileListView)
         // absolute position parent floorfilter
         property var parentOrigin: mapToItem(floorFilter.parent,
                                              floorFilter.parent.x,
@@ -503,17 +562,18 @@ Control {
         property double centerFloorFilterY: (floorFilterOrigin.y + floorFilter.height) / 2
         property double centerParentX: (parentOrigin.x + floorFilter.parent.width) / 2
         property double centerParentY: (parentOrigin.y + floorFilter.parent.height) / 2
+        // position of floorfilter related to its parent.
         property int leaderPosition: {
             if (centerFloorFilterX < centerParentX) {
                 if (centerFloorFilterY < centerParentY)
-                    FloorFilter.LeaderPosition.UpperLeft
+                    FloorFilter.LeaderPosition.UpperLeft;
                 else
-                    FloorFilter.LeaderPosition.LowerLeft
+                    FloorFilter.LeaderPosition.LowerLeft;
             } else {
                 if (centerFloorFilterY < centerParentY)
-                    FloorFilter.LeaderPosition.UpperRight
+                    FloorFilter.LeaderPosition.UpperRight;
                 else
-                    FloorFilter.LeaderPosition.LowerRight
+                    FloorFilter.LeaderPosition.LowerRight;
             }
         }
     }

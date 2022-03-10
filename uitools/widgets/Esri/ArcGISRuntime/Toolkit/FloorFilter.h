@@ -49,6 +49,8 @@ namespace ArcGISRuntime {
     private:
       FloorFilterController* m_controller = nullptr;
       Ui::FloorFilter* m_ui;
+      bool m_sitesUpdatedFromController{false};
+      bool m_facilitiesUpdatedFromController{false};
     };
   } // Toolkit
 } // ArcGISRuntime
