@@ -163,7 +163,12 @@ QtObject {
         if (floorManager.loadStatus !== Enums.LoadStatusLoaded)
             floorManager.load();
         else{
-            populateSites(floorManager.sites);
+            if(floorManager.sites.length > 0)
+                populateSites(floorManager.sites);
+            else {
+                populateAllFacilities();
+            }
+
             controller.loaded(); //emit the loaded signal
         }
     }
@@ -223,10 +228,11 @@ QtObject {
             return;
         }
 
-        // check that the current site is the selected facility selected. Otherwise the click came from a populateAllFacilities
+        // check that the current site is the selected facility selected's parent site. Otherwise the click came from a populateAllFacilities
         var facility = floorManager.facilities[idx];
-        if (!internal.selectedSite
-                || facility.site.siteId !== internal.selectedSite.siteId) {
+
+        if (facility.site != null && (!internal.selectedSite || facility.site.siteId !== internal.selectedSite.siteId) ) {
+            console.log(facility.site === undefined, facility.site === null);
             // selection of facility came after click of populateAllFacilities.
             // this also sets the internal.selectedSite
             internal.selectedSiteId = facility.site.siteId;
@@ -436,7 +442,13 @@ QtObject {
         function onLoadStatusChanged() {
             if (floorManager.loadStatus === Enums.LoadStatusLoaded) {
                 // load the listmodels
-                populateSites(floorManager.sites)
+                if(floorManager.sites.length > 0)
+                    populateSites(floorManager.sites);
+                else {
+                    // sites could be empty, just load the facilites
+                    console.log("populate all facilities")
+                    populateAllFacilities();
+                }
                 controller.loaded();
                 controller.internal.geoViewConnections.enabled = true;
             }
@@ -490,12 +502,13 @@ QtObject {
                 return 1;
             return 0;
         });
+
         facilitiesExtracted.forEach(facility => {
-                                        facilities.append({
-                                                              "name": facility.name,
-                                                              "modelId": facility.facilityId,
-                                                              "parentSiteName": facility.site.name
-                                                          });
+                                        let obj = { "name": facility.name,
+                                            "modelId": facility.facilityId};
+                                        if(facility.site != null)
+                                            obj["parentSiteName"] = facility.site.name;
+                                        facilities.append(obj);
                                     });
 
         // case single facility: autoselect it

@@ -275,7 +275,7 @@ Control {
                     Layout.alignment: Qt.AlignHCenter
                     // setting width to 0 and not setting visibility to false, otherwise it would break the rows layout by having a missing row.
                     Layout.preferredWidth: internal.currentVisibileListView
-                                           === FloorFilter.VisibleListView.Facility ? 32 : 0
+                                           === FloorFilter.VisibleListView.Facility && controller.sites.count > 0 ? 32 : 0
                     display: AbstractButton.IconOnly
                     flat: true
                     // removing all paddings and spacing from component so icon will fill compeltely the button
@@ -403,6 +403,7 @@ Control {
                             id: radioDelegate
                             // wait that the radiodelegates are all set, then resize them into the largest of them (stored in the listview contentItem).
                             Component.onCompleted: width = listView.contentItem.childrenRect.width
+                            // facility might not have a parentSite, guarding from it.
                             property var parentSiteName: model.parentSiteName ?? ""
                             highlighted: internal.currentVisibileListView === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx
                             // show parentSiteName once `all Sites` button is clicked (selectedSiteRespected-> false).
@@ -466,6 +467,7 @@ Control {
                 Label {
                     id: siteLabel
                     objectName: "siteLabel"
+                    visible : controller.sites.count > 0
                     font.bold: internal.currentVisibileListView === FloorFilter.VisibleListView.Site
                     Layout.fillWidth: true
                     // the two titles are close to each others
@@ -544,8 +546,8 @@ Control {
         objectName: "internal"
         // expands/collapse icons, showing long/short name.
         property bool collapsedIcons : true
-        // set the intial view as the facility view in case of single site.
-        property int currentVisibileListView: floorFilter.controller.sites.count === 1 ? FloorFilter.VisibleListView.Facility : FloorFilter.VisibleListView.Site
+        // set the intial view as the facility view in case of single site or no sites.
+        property int currentVisibileListView: floorFilter.controller.sites.count <= 1 ? FloorFilter.VisibleListView.Facility : FloorFilter.VisibleListView.Site
         // idx refers to repeter or listview idx, not the model idx. Used to set the highlight of the current selected facility/site.
         property int selectedFacilityIdx: -1
         property int selectedSiteIdx: -1
