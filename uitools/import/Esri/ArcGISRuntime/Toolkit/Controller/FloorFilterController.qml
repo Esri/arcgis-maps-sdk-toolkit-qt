@@ -24,6 +24,7 @@ import Esri.ArcGISRuntime 100.14
   \ingroup ArcGISQtToolkitUiQmlControllers
   \brief The controller part of a FloorFilter. This class handles the toggling of selected levels' visibility
   associated to the \c FloorFilter inputted \c GeoModel flooraware layers.
+  Automatically loads the \c GeoModel and its associated \c FloorManager.
 */
 QtObject {
     // sites are optional, facilities are optional. a Facility might have no levels (restricted access facility)
@@ -139,6 +140,11 @@ QtObject {
         else if (typeof (geoView.scene) !== "undefined")
             return geoView.scene;
         return null;
+    }
+
+    onGeoModelChanged: {
+        // make sure that the geomodel is loaded.
+        geoModel.load();
     }
 
     /*!
@@ -459,6 +465,8 @@ QtObject {
                 controller.loaded();
                 controller.internal.geoViewConnections.enabled = true;
             }
+            else if(floorManager.loadStatus === Enums.LoadStatusFailedToLoad)
+                console.error("floorManager failed to load.");
         }
     }
 
