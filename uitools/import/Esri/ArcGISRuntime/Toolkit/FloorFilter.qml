@@ -363,6 +363,10 @@ Control {
                     // delegate model used to implement the filtering functionality, by setting visible elements in the `filtered` group.
                     model: DelegateModel {
                         id: dm
+//                        Component.onCompleted: {
+//                            anchors.left = ListView.left;
+//                            anchors.right = ListView.right;
+//                        }
                         property Connections conn: Connections {
                             target: searchTextField
                             function onTextChanged() {
@@ -402,8 +406,8 @@ Control {
                         ]
                         delegate: RadioDelegate {
                             id: radioDelegate
-                            // wait that the radiodelegates are all set, then resize them into the largest of them (stored in the listview contentItem).
-                            Component.onCompleted: width = listView.contentItem.childrenRect.width
+                            // if listView is larger than the delegates, resize them to match the listview.
+                            width : Math.max(implicitWidth, listView.width)
                             // facility might not have a parentSite, guarding from it.
                             property var parentSiteName: model.parentSiteName ?? ""
                             highlighted: internal.currentVisibileListView === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx
@@ -584,7 +588,6 @@ Control {
         property Connections controllerConnFacility : Connections {
             target: controller
             function onSelectedFacilityIdChanged() {
-                console.log("setting faiclity ", internal.getCurrentFacilityIdx());
                 internal.selectedFacilityIdx = internal.getCurrentFacilityIdx() ?? -1;
             }
         }
@@ -620,7 +623,6 @@ Control {
             let model = controller.facilities;
             for (var i = 0; i < model.count; ++i) {
                 let elementId = model.get(i).modelId;
-                console.log(elementId, controller.selectedFacilityId);
                 if (elementId === controller.selectedFacilityId) {
                     return i;
                 }
