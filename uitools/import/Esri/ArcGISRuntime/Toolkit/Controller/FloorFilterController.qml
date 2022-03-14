@@ -456,14 +456,6 @@ QtObject {
     }
 
     /*!
-     Function used to expose the current site index from \l sites model.
-    */
-    function getCurrentSiteIdx() {
-        return findElementIdxById(internal.selectedSiteId, FloorFilterController.TypeElement.Site);
-
-    }
-
-    /*!
       \brief Clears and repopulates \l sites with \a listSites.
       Expects the site elements to have properties `name` and `siteId`.
       If only one site exists in the model, then we select it automatically. \sa setSelectedSiteId.

@@ -336,6 +336,7 @@ Control {
                     Layout.rowSpan: showAllFacilities.visible ? 1 : 2
                     Layout.fillWidth: true
                     Layout.topMargin: 5
+                    Layout.bottomMargin: 5
                     horizontalAlignment: Qt.AlignHCenter
                     verticalAlignment: Qt.AlignVCenter
                 }
@@ -430,7 +431,7 @@ Control {
                                     controller.zoomToFacility(model.modelId);
                                     // get manually the selectedSiteIdx for case `selectedSiteRespected` === false
                                     if (!controller.selectedSiteRespected) {
-                                        const idx = controller.getCurrentSiteIdx();
+                                        const idx = internal.getCurrentSiteIdx();
                                         // idx could be null if not found, guard from it
                                         if (idx != null)
                                             internal.selectedSiteIdx = idx;
@@ -485,6 +486,8 @@ Control {
                     Layout.leftMargin: 5
                     Layout.rightMargin: 5
                     Layout.bottomMargin: 5
+                    // if no site label, set top margin. Otherwise is squished
+                    Layout.topMargin: !siteLabel.visible ? 5 : 0
                     horizontalAlignment: Text.AlignHCenter
                     text: controller.selectedFacility ? controller.selectedFacility.name : "Select the Facility"
                 }
@@ -576,6 +579,53 @@ Control {
                 else
                     FloorFilter.LeaderPosition.LowerRight;
             }
+        }
+
+        property Connections controllerConnFacility : Connections {
+            target: controller
+            function onSelectedFacilityIdChanged() {
+                console.log("setting faiclity ", internal.getCurrentFacilityIdx());
+                internal.selectedFacilityIdx = internal.getCurrentFacilityIdx() ?? -1;
+            }
+        }
+
+        property Connections controllerConnSite : Connections {
+            target: controller
+            function onSelectedSiteIdChanged() {
+                //update the current site idx.
+                internal.selectedSiteIdx = internal.getCurrentSiteIdx() ?? -1;
+            }
+        }
+
+        /*!
+         \internal
+         Function used to find the current site idx related to the model.
+        */
+        function getCurrentSiteIdx() {
+            let model = controller.sites;
+            for (var i = 0; i < model.count; ++i) {
+                let elementId = model.get(i).modelId;
+                if (elementId === controller.selectedSiteId) {
+                    return i;
+                }
+            }
+            return null;
+        }
+
+        /*!
+         \internal
+         Function used to find the current facility idx related to the model.
+        */
+        function getCurrentFacilityIdx(id) {
+            let model = controller.facilities;
+            for (var i = 0; i < model.count; ++i) {
+                let elementId = model.get(i).modelId;
+                console.log(elementId, controller.selectedFacilityId);
+                if (elementId === controller.selectedFacilityId) {
+                    return i;
+                }
+            }
+            return null;
         }
     }
 }
