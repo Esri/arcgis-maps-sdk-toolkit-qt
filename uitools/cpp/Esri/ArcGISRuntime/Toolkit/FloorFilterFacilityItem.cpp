@@ -93,7 +93,7 @@ namespace Toolkit {
 
   QString FloorFilterFacilityItem::parentSiteName() const
   {
-    return m_floorFacility ? m_floorFacility->site()->name() : QString{};
+    return m_floorFacility && m_floorFacility->site() ? m_floorFacility->site()->name() : QString{};
   }
 
   /*!
