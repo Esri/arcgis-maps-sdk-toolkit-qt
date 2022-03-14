@@ -217,9 +217,16 @@ QtObject {
       \brief Sets the \a facilityId as \l selectedFacilityId.
       This will load the \l levels with the levels withing the facility and
       reset by selecting \l selectedLevelId with level matching vertical ordering == 0.
+      Set empty string to reset the facility.
       \sa setSelectedLevelId
     */
     function setSelectedFacilityId(facilityId) {
+        // avoid findind null idx, immediately return if empty string
+        if(facilityId === ""){
+            internal.selectedFacilityId = facilityId;
+            return;
+        }
+
         let idx = findElementIdxById(facilityId,
                                      FloorFilterController.TypeElement.Facility);
         if (idx == null) {
