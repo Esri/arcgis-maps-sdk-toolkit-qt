@@ -368,6 +368,8 @@ Control {
                     ScrollBar.vertical: ScrollBar {}
                     spacing: 5
                     clip: true
+                    // scroll list view to selected item
+                    onCurrentIndexChanged: positionViewAtIndex(currentIndex, ListView.Visible)
 
                     // delegate model used to implement the filtering functionality, by setting visible elements in the `filtered` group.
                     model: DelegateModel {
@@ -423,6 +425,7 @@ Control {
                             checkable: false
                             highlighted: internal.currentVisibileListView === FloorFilter.VisibleListView.Site ?
                                                                                      model.modelId === internal.selectedSiteId : model.modelId === internal.selectedFacilityId
+                            onHighlightedChanged: listView.currentIndex = index;
                             // show parentSiteName once `all Sites` button is clicked (selectedSiteRespected-> false).
                             text: model.name + (model.parentSiteName && !controller.selectedSiteRespected ? '<br/>' + parentSiteName : "")
 
