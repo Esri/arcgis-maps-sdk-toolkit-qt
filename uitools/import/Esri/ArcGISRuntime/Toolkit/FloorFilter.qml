@@ -185,15 +185,20 @@ Control {
                     visible: !closer.checked
                     // dont need to use the id of the column
                     contentHeight: contentItem.childrenRect.height
-                    Layout.preferredWidth: contentItem.childrenRect.width
                     Layout.maximumHeight: repeater.buttonHeight * maxNumberLevels
                     Layout.preferredHeight: repeater.buttonHeight * repeater.count
+                    Layout.fillWidth: true
                     clip: true
                     ScrollBar.vertical: ScrollBar {}
 
                     ColumnLayout {
                         objectName: "wrapper"
                         spacing: 0
+                        anchors {
+                            left: parent.left
+                            right: parent.right
+                        }
+
                         Repeater {
                             id: repeater
                             objectName: "repeater"
@@ -410,7 +415,10 @@ Control {
                             width : Math.max(implicitWidth, listView.width)
                             // facility might not have a parentSite, guarding from it.
                             property var parentSiteName: model.parentSiteName ?? ""
-                            highlighted: internal.currentVisibileListView === FloorFilter.VisibleListView.Site ? index === internal.selectedSiteIdx : index === internal.selectedFacilityIdx
+                            // highlight only set by the modelId comparison, not by the user click. Otherwise double selected facility could happen.
+                            checkable: false
+                            highlighted: internal.currentVisibileListView === FloorFilter.VisibleListView.Site ?
+                                                                                     model.modelId === internal.selectedSiteId : model.modelId === internal.selectedFacilityId
                             // show parentSiteName once `all Sites` button is clicked (selectedSiteRespected-> false).
                             text: model.name + (model.parentSiteName && !controller.selectedSiteRespected ? '<br/>' + parentSiteName : "")
 
@@ -419,9 +427,6 @@ Control {
                                 if (internal.currentVisibileListView
                                         === FloorFilter.VisibleListView.Site) {
                                     controller.setSelectedSiteId(model.modelId);
-                                    internal.selectedSiteIdx = index;
-                                    // resetting the previous selected facility
-                                    internal.selectedFacilityIdx = -1;
                                     controller.zoomToSite(model.modelId);
                                     internal.currentVisibileListView
                                             = FloorFilter.VisibleListView.Facility;
@@ -429,18 +434,9 @@ Control {
                                 else if (internal.currentVisibileListView
                                          === FloorFilter.VisibleListView.Facility) {
                                     controller.setSelectedFacilityId(model.modelId);
-                                    internal.selectedFacilityIdx = index;
                                     buildingMenuButton.checked = false;
                                     closer.checked = false;
                                     controller.zoomToFacility(model.modelId);
-                                    // get manually the selectedSiteIdx for case `selectedSiteRespected` === false
-                                    if (!controller.selectedSiteRespected) {
-                                        const idx = internal.getCurrentSiteIdx();
-                                        // idx could be null if not found, guard from it
-                                        if (idx != null)
-                                            internal.selectedSiteIdx = idx;
-
-                                    }
                                 }
                             }
                         }
@@ -556,8 +552,8 @@ Control {
         // set the intial view as the facility view in case of single site or no sites.
         property int currentVisibileListView: floorFilter.controller.sites.count <= 1 ? FloorFilter.VisibleListView.Facility : FloorFilter.VisibleListView.Site
         // idx refers to repeter or listview idx, not the model idx. Used to set the highlight of the current selected facility/site.
-        property int selectedFacilityIdx: -1
-        property int selectedSiteIdx: -1
+        property string selectedFacilityId: controller.selectedFacilityId
+        property string selectedSiteId: controller.selectedSiteId
         // absolute position parent floorfilter
         property var parentOrigin: mapToItem(floorFilter.parent,
                                              floorFilter.parent.x,
@@ -583,51 +579,6 @@ Control {
                 else
                     FloorFilter.LeaderPosition.LowerRight;
             }
-        }
-
-        property Connections controllerConnFacility : Connections {
-            target: controller
-            function onSelectedFacilityIdChanged() {
-                internal.selectedFacilityIdx = internal.getCurrentFacilityIdx() ?? -1;
-            }
-        }
-
-        property Connections controllerConnSite : Connections {
-            target: controller
-            function onSelectedSiteIdChanged() {
-                //update the current site idx.
-                internal.selectedSiteIdx = internal.getCurrentSiteIdx() ?? -1;
-            }
-        }
-
-        /*!
-         \internal
-         Function used to find the current site idx related to the model.
-        */
-        function getCurrentSiteIdx() {
-            let model = controller.sites;
-            for (var i = 0; i < model.count; ++i) {
-                let elementId = model.get(i).modelId;
-                if (elementId === controller.selectedSiteId) {
-                    return i;
-                }
-            }
-            return null;
-        }
-
-        /*!
-         \internal
-         Function used to find the current facility idx related to the model.
-        */
-        function getCurrentFacilityIdx(id) {
-            let model = controller.facilities;
-            for (var i = 0; i < model.count; ++i) {
-                let elementId = model.get(i).modelId;
-                if (elementId === controller.selectedFacilityId) {
-                    return i;
-                }
-            }
-            return null;
         }
     }
 }

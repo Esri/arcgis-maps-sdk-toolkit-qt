@@ -339,8 +339,9 @@ QtObject {
     }
 
     onSelectedLevelIdChanged: {
-        if (selectedLevelId === "")
+        if (selectedLevelId === "") {
             setVisibilityCurrentLevel(false);
+        }
         // find the list element idx of the changed levelId
         let idx = findElementIdxById(selectedLevelId,
                                      FloorFilterController.TypeElement.Level);
