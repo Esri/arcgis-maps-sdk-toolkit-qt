@@ -189,7 +189,11 @@ Control {
                     Layout.preferredHeight: repeater.buttonHeight * repeater.count
                     Layout.fillWidth: true
                     clip: true
-                    ScrollBar.vertical: ScrollBar {}
+                    // scroll to the bottom of the flickable (so verticalorder 0 default selected level is visible)
+                    contentY : contentHeight-height
+                    ScrollBar.vertical: ScrollBar {
+                        policy: parent.contentHeight > parent.height ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+                    }
 
                     ColumnLayout {
                         objectName: "wrapper"
@@ -434,6 +438,7 @@ Control {
                                 else if (internal.currentVisibileListView
                                          === FloorFilter.VisibleListView.Facility) {
                                     controller.setSelectedFacilityId(model.modelId);
+                                    // hide the whole facilityview
                                     buildingMenuButton.checked = false;
                                     closer.checked = false;
                                     controller.zoomToFacility(model.modelId);
