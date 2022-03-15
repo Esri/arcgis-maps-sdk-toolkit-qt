@@ -204,7 +204,7 @@ QtObject {
     /*!
       \brief Sets the \a levelId as \l selectedLevelId.
       This will change the current visibile level on the \c GeoView.
-      If \a levelId is empty string, current selected level visibility is set to false.
+      If \a levelId is empty string, current selected level is deseleted and its visibility is set to false.
       Resets the previous level visibility. \l updateLevelsMode modifies the behavior of selecting level.
 
     */
@@ -376,6 +376,7 @@ QtObject {
         if (idx == null) {
             console.error("facility id not found, resetting current facility");
             internal.selectedFacility = null;
+            levels.clear();
             return;
         }
         internal.selectedFacility = floorManager.facilities[idx];
@@ -392,6 +393,7 @@ QtObject {
         if (idx == null) {
             console.error("site id not found");
             internal.selectedSite = null;
+            facilities.clear();
             return;
         }
 

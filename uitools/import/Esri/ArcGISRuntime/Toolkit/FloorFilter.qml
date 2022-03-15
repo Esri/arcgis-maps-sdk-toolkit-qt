@@ -588,5 +588,9 @@ Control {
                     FloorFilter.LeaderPosition.LowerRight;
             }
         }
+        onCurrentVisibileListViewChanged: {
+            // reset the search text when the currentListView is changed
+            searchTextField.text = ""
+        }
     }
 }
