@@ -230,8 +230,8 @@ Control {
                 }
 
                 ToolSeparator {
+                    visible: repeater.count !== 0
                     Layout.fillWidth: true
-                    visible: !closer.checked && !hideSiteFacilityButton
                     orientation: Qt.Horizontal
                 }
 
@@ -250,6 +250,12 @@ Control {
                     onClicked: {
                         closer.checked = false;
                     }
+                }
+
+                ToolSeparator {
+                    visible: itemSelectedButton.visible
+                    Layout.fillWidth: true
+                    orientation: Qt.Horizontal
                 }
 
                 ToolButton {
@@ -341,8 +347,9 @@ Control {
                     text: "No results found"
                     visible: false
                     Layout.columnSpan: 3
-                    // expanding to the showAllFacilities cell in case is not visible. This will not break the grid layout, otherwise there is a missing row.
-                    Layout.rowSpan: showAllFacilities.visible ? 1 : 2
+                    // expanding to the showAllFacilities cell (and its ToolSeparator) in case is not visible. This will not break the grid layout, otherwise there is a missing row.
+                    // no checks on listView visibility because they are opposite visibility, so one takes the other cell when it is visible.
+                    Layout.rowSpan: !showAllFacilities.visible ? 3 : 1
                     Layout.fillWidth: true
                     Layout.topMargin: 5
                     Layout.bottomMargin: 5
@@ -364,7 +371,8 @@ Control {
                     Layout.minimumHeight: count ? contentHeight / count : 0
                     Layout.maximumHeight: count ? contentHeight / count * 3 : 0
                     Layout.topMargin: 5
-                    Layout.rowSpan: showAllFacilities.visible ? 1 : 2
+                    // span taking space of showAllFacilities and the related ToolSeparator
+                    Layout.rowSpan: showAllFacilities.visible ? 1 : 3
                     ScrollBar.vertical: ScrollBar {}
                     spacing: 5
                     clip: true
@@ -374,14 +382,9 @@ Control {
                     // delegate model used to implement the filtering functionality, by setting visible elements in the `filtered` group.
                     model: DelegateModel {
                         id: dm
-//                        Component.onCompleted: {
-//                            anchors.left = ListView.left;
-//                            anchors.right = ListView.right;
-//                        }
                         property Connections conn: Connections {
                             target: searchTextField
                             function onTextChanged() {
-
                                 //using `items` group to fetch all the elements (all elements are set into this group by default).
                                 for (var i = 0; i < dm.items.count; ++i) {
                                     var item = dm.items.get(i);
@@ -451,6 +454,7 @@ Control {
                     }
                 }
                 ToolSeparator {
+                    visible: showAllFacilities.visible
                     Layout.fillWidth: true
                     Layout.columnSpan: 3
                     orientation: Qt.Horizontal
@@ -559,7 +563,6 @@ Control {
         property bool collapsedIcons : true
         // set the intial view as the facility view in case of single site or no sites.
         property int currentVisibileListView: floorFilter.controller.sites.count <= 1 ? FloorFilter.VisibleListView.Facility : FloorFilter.VisibleListView.Site
-        // idx refers to repeter or listview idx, not the model idx. Used to set the highlight of the current selected facility/site.
         property string selectedFacilityId: controller.selectedFacilityId
         property string selectedSiteId: controller.selectedSiteId
         // absolute position parent floorfilter
