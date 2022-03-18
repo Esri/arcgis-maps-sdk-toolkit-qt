@@ -76,6 +76,10 @@ namespace Toolkit {
       return QModelIndex{};
     }
 
+  /*!
+    \internal
+    \brief Wrap the \a sourceModel with a \l QSortFilterProxyModel that sorts and filters based on the \a filterField textEdited event.
+   */
     QSortFilterProxyModel* wrapFilterModel(QAbstractItemModel* sourceModel, QLineEdit* filterField, FloorFilter* parent)
     {
       auto model = new QSortFilterProxyModel(parent);

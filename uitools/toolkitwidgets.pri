@@ -24,8 +24,8 @@ INCLUDEPATH += $$PWD/widgets $$WIDGETPATH
 HEADERS += $$WIDGETPATH/AuthenticationView.h \
            $$WIDGETPATH/BasemapGallery.h \
            $$WIDGETPATH/CoordinateConversion.h \
-           $$WIDGETPATH/NorthArrow.h \
            $$WIDGETPATH/FloorFilter.h \
+           $$WIDGETPATH/NorthArrow.h \
            $$WIDGETPATH/OverviewMap.h \
            $$WIDGETPATH/Internal/ClientCertificatePasswordDialog.h \
            $$WIDGETPATH/Internal/ClientCertificateView.h \
@@ -38,8 +38,8 @@ HEADERS += $$WIDGETPATH/AuthenticationView.h \
 SOURCES += $$WIDGETPATH/AuthenticationView.cpp \
            $$WIDGETPATH/BasemapGallery.cpp \
            $$WIDGETPATH/CoordinateConversion.cpp \
-           $$WIDGETPATH/NorthArrow.cpp \
            $$WIDGETPATH/FloorFilter.cpp \
+           $$WIDGETPATH/NorthArrow.cpp \
            $$WIDGETPATH/OverviewMap.cpp \
            $$WIDGETPATH/Internal/ClientCertificatePasswordDialog.cpp \
            $$WIDGETPATH/Internal/ClientCertificateView.cpp \

@@ -109,6 +109,9 @@ namespace Toolkit {
     \property Esri::ArcGISRuntime::Toolkit::FloorFilterFacilityItem::name
    */
 
+   /*!
+    \property Esri::ArcGISRuntime::Toolkit::FloorFilterFacilityItem::parentSiteName
+   */
 } // Toolkit
 } // ArcGISRuntime
 } // Esri

@@ -16,7 +16,7 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_SINGLESHOTCONNECTION_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_SINGLESHOTCONNECTION_H
 
-// Qt heeaders
+// Qt headers
 #include <QObject>
 
 // C++ headers
@@ -29,7 +29,7 @@ namespace Toolkit {
   /*
     \internal
     \brief Creates a connection and automatically disconnects it on trigger. Follows same syntax as `QObject::connect`.
-    \note This method differs from \c QObject::conenct in that the signal and slot parameters must match.
+    \note This method differs from \c QObject::connect in that the signal and slot parameters must match.
    */
   template <typename Sender, typename Signal, typename Receiver, typename Slot>
   QMetaObject::Connection singleShotConnection(Sender* sender, Signal&& signal, Receiver* reciever, Slot&& slot)

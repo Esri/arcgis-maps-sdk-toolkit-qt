@@ -1,4 +1,4 @@
-#/*******************************************************************************
+/*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,6 +30,7 @@
 #include "FloorFilterFacilityItem.h"
 #include "FloorFilterLevelItem.h"
 #include "FloorFilterSiteItem.h"
+#include "Internal/DisconnectOnSignal.h"
 #include "Internal/DoOnLoad.h"
 #include "Internal/GeoViews.h"
 #include "Internal/SingleShotConnection.h"
@@ -71,23 +72,6 @@ namespace Toolkit {
         }
       }
       return nullptr;
-    }
-
-    /*!
-     \internal
-     \brief When \a signal fires on \a sender, the given \a connection is disconnected.
-     This makes the connection's invvocation depdendent on \a signal not firing.
-     */
-    template <typename Sender, typename Signal>
-    QMetaObject::Connection disconnectOnSignal(Sender* sender, Signal&& signal, QObject* self, QMetaObject::Connection connection)
-    {
-      if (!connection)
-        return QMetaObject::Connection{};
-
-      return singleShotConnection(sender, signal, self, [c = std::move(connection)]
-                                  {
-                                    QObject::disconnect(c);
-                                  });
     }
 
     /*!
@@ -386,7 +370,7 @@ namespace Toolkit {
   /*!
    \internal
    \brief Clears the levels list, and repopulates with only those levels
-   that match the currently selected site id. Levels are sorted in terms
+   that match the currently selected facility id. Levels are sorted in terms
    of their vertical order, and a default level is selected, favouring the
    level with verticalOrder == 0.
    */
@@ -864,7 +848,7 @@ namespace Toolkit {
     else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
       m_settingViewpoint = true;
-      singleShotConnection(mapView, &MapViewToolkit::setViewpointCompleted, this, [this](bool /*success*/)
+      singleShotConnection(sceneView, &SceneViewToolkit::setViewpointCompleted, this, [this](bool /*success*/)
                            {
                              m_settingViewpoint = false;
                            });

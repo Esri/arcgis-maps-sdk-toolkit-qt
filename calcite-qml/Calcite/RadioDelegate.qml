@@ -14,11 +14,11 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import QtQuick 2.15
-import QtQuick.Templates 2.15 as T
 import QtGraphicalEffects 1.15
+import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Controls.impl 2.15
+import QtQuick.Templates 2.15 as T
 
 T.RadioDelegate {
     id: control

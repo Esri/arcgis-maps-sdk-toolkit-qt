@@ -186,7 +186,7 @@ Control {
                     Layout.fillWidth: true
                     clip: true
                     // scroll to the bottom of the flickable (so verticalorder 0 default selected level is visible)
-                    contentY : contentHeight-height
+                    contentY : contentHeight - height
                     ScrollBar.vertical: ScrollBar {
                         policy: parent.contentHeight > parent.height ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
                     }
@@ -207,7 +207,7 @@ Control {
                             property int buttonHeight: 0
                             model: controller.levels
                             delegate: ToolButton {
-                                Component.onCompleted: repeater.buttonHeight = this.height
+Component.onCompleted: repeater.buttonHeight = Math.max(repeater.buttonHeight, this.height)
                                 id: levelButton
                                 visible: !closer.checked
                                 checked: controller.selectedLevelId === model.modelId
@@ -339,7 +339,7 @@ Control {
                 Label {
                     id: noResultsFoundLabel
                     objectName: "noResultsFoundLabel"
-                    text: "No results found"
+                    text: qsTr("No results found")
                     visible: false
                     Layout.columnSpan: 3
                     // expanding to the showAllFacilities cell (and its ToolSeparator) in case is not visible. This will not break the grid layout, otherwise there is a missing row.
@@ -480,7 +480,7 @@ Control {
                     Layout.leftMargin: 5
                     Layout.rightMargin: 5
                     horizontalAlignment: Text.AlignHCenter
-                    text: controller.selectedSite ? controller.selectedSite.name : "Select the Site"
+                    text: controller.selectedSite ? controller.selectedSite.name : qsTr("Select the Site")
                 }
                 Label {
                     objectName: "facilityLabel"
@@ -493,7 +493,7 @@ Control {
                     // if no site label, set top margin. Otherwise is squished
                     Layout.topMargin: !siteLabel.visible ? 5 : 0
                     horizontalAlignment: Text.AlignHCenter
-                    text: controller.selectedFacility ? controller.selectedFacility.name : "Select the Facility"
+                    text: controller.selectedFacility ? controller.selectedFacility.name : qsTr("Select the Facility")
                 }
 
                 Button {
