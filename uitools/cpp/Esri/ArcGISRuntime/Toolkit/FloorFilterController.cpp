@@ -386,7 +386,7 @@ namespace Toolkit {
   /*!
    \internal
    \brief Clears the levels list, and repopulates with only those levels
-   that match the currently selected site id. Levels are sorted in terms
+   that match the currently selected facility id. Levels are sorted in terms
    of their vertical order, and a default level is selected, favouring the
    level with verticalOrder == 0.
    */
