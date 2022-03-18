@@ -31,7 +31,7 @@ namespace Toolkit {
 
   /*
     \internal
-    \brief Exectues method \a f immediately if \a sender is loaded, otherwise
+    \brief Executes method \a f immediately if \a sender is loaded, otherwise
     attempts to load \a sender and then executes \a f after the load occurs.
     Returns a connection object which may be default-constructed.
 

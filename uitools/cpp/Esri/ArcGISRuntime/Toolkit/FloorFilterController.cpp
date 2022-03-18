@@ -1,4 +1,4 @@
-#/*******************************************************************************
+/*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -370,7 +370,7 @@ namespace Toolkit {
   /*!
    \internal
    \brief Clears the levels list, and repopulates with only those levels
-   that match the currently selected site id. Levels are sorted in terms
+   that match the currently selected facility id. Levels are sorted in terms
    of their vertical order, and a default level is selected, favouring the
    level with verticalOrder == 0.
    */
@@ -848,7 +848,7 @@ namespace Toolkit {
     else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
       m_settingViewpoint = true;
-      singleShotConnection(mapView, &MapViewToolkit::setViewpointCompleted, this, [this](bool /*success*/)
+      singleShotConnection(sceneView, &SceneViewToolkit::setViewpointCompleted, this, [this](bool /*success*/)
                            {
                              m_settingViewpoint = false;
                            });

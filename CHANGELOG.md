@@ -1,7 +1,9 @@
 # Changelog
 
 ## 100.14
-
+* (ScrollBar) Calcite styling of the ScrollBar, not matching specific component.
+* (FloorFilter) Viewpoint selection mode implemented.
+* (FloorFilter) Introduction of new FloorFilter tool (C++/Quick, QML/Quick, Widget) 
 * (ToolBar) Calcite styling of the ToolBar, similar as a Calcite ActionBar.
 * (ToolSeparator) Calcite styling of the ToolSeparator, not maching specific component.
 * (ToolButton) Calcite styling of the ToolButton, now matching the Calcite Action component. A second styling is available for flat ToolButton.
