@@ -43,7 +43,6 @@ public slots:
     engine->rootContext()->setContextProperty("credential_username", qgetenv("CREDENTIAL_USERNAME"));
     engine->rootContext()->setContextProperty("credential_password", qgetenv("CREDENTIAL_PASSWORD"));
     qmlRegisterSingletonType<Utils>("utils", 1, 0, "Utils", Utils::createSingletonInstance);
-    //engine->load(QUrl("qrc:/qml/main.qml"));
   }
 };
 

@@ -25,7 +25,7 @@ import QtGraphicalEffects 1.12
   \inqmlmodule Esri.ArcGISRuntime.Toolkit
   \ingroup ArcGISQtToolkitUiQmlViews
   \since 100.14
-  \brief Allows to display and filter the available floor aware layers in the current \c GeoMap.
+  \brief Allows to display and filter the available floor aware layers in the current \c GeoModel.
 
   The FloorFilter allows the interaction with the available floor aware layers. A user can select from a list of sites which presents
   their facilities. Once a facility is chosen, it is possible to toggle between its levels which will show them on the \c GeoView.

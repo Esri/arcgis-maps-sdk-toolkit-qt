@@ -26,7 +26,6 @@ public slots:
 #endif
     engine->rootContext()->setContextProperty("credential_username", qgetenv("CREDENTIAL_USERNAME"));
     engine->rootContext()->setContextProperty("credential_password", qgetenv("CREDENTIAL_PASSWORD"));
-    //engine->load(QUrl("qrc:/qml/main.qml"));
   }
 };
 

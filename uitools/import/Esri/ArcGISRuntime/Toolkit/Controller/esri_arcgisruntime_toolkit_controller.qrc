@@ -7,6 +7,7 @@
         <file>CoordinateConversionOption.qml</file>
         <file>CoordinateConversionResult.qml</file>
         <file>CurrentVersion.qml</file>
+        <file>FloorFilterController.qml</file>
         <file>LocatorSearchSource.qml</file>
         <file>NorthArrowController.qml</file>
         <file>OverviewMapController.qml</file>
@@ -16,6 +17,5 @@
         <file>SmartLocatorSearchSource.qml</file>
         <file>TimeSliderController.qml</file>
         <file>qmldir</file>
-        <file>FloorFilterController.qml</file>
     </qresource>
 </RCC>
