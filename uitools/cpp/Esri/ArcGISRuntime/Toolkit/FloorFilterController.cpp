@@ -864,7 +864,7 @@ namespace Toolkit {
     else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
       m_settingViewpoint = true;
-      singleShotConnection(mapView, &MapViewToolkit::setViewpointCompleted, this, [this](bool /*success*/)
+      singleShotConnection(sceneView, &SceneViewToolkit::setViewpointCompleted, this, [this](bool /*success*/)
                            {
                              m_settingViewpoint = false;
                            });
