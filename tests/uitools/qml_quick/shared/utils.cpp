@@ -5,11 +5,6 @@ Utils::Utils(QObject* parent) :
 {
 }
 
-QObject* Utils::findChild(QObject* parent, QString name)
-{
-  return parent->findChild<QObject*>(name);
-}
-
 QString Utils::urlFileName(const QString& urlName)
 {
   QUrl url(urlName);
