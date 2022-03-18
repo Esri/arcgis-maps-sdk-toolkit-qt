@@ -38,8 +38,8 @@ HEADERS += $$WIDGETPATH/AuthenticationView.h \
 SOURCES += $$WIDGETPATH/AuthenticationView.cpp \
            $$WIDGETPATH/BasemapGallery.cpp \
            $$WIDGETPATH/CoordinateConversion.cpp \
-           $$WIDGETPATH/NorthArrow.cpp \
            $$WIDGETPATH/FloorFilter.cpp \
+           $$WIDGETPATH/NorthArrow.cpp \
            $$WIDGETPATH/OverviewMap.cpp \
            $$WIDGETPATH/Internal/ClientCertificatePasswordDialog.cpp \
            $$WIDGETPATH/Internal/ClientCertificateView.cpp \
