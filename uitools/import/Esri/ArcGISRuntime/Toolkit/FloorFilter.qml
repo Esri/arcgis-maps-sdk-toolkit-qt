@@ -101,12 +101,12 @@ Control {
         rows: 1
         // changing the layout direction based on the current position of the floorfilter relative to its parent.
         // switching the layout will result in switching the levels toolbar with the site/facility view.
-        layoutDirection: (internal.leaderPosition === FloorFilter.LeaderPosition.UpperLeft)
-                         || (internal.leaderPosition === FloorFilter.LeaderPosition.LowerLeft) ? Qt.LeftToRight : Qt.RightToLeft
+        layoutDirection: (internal.parentPosition === FloorFilter.ParentPosition.UpperLeft)
+                         || (internal.parentPosition === FloorFilter.ParentPosition.LowerLeft) ? Qt.LeftToRight : Qt.RightToLeft
         // verticalalignment based on current position of the floorfilter relative to its parent.
         // upper: top align; lower: bottom align
-        verticalItemAlignment: (internal.leaderPosition === FloorFilter.LeaderPosition.UpperLeft)
-                               || (internal.leaderPosition === FloorFilter.LeaderPosition.UpperRight) ? Grid.AlignTop : Grid.AlignBottom
+        verticalItemAlignment: (internal.parentPosition === FloorFilter.ParentPosition.UpperLeft)
+                               || (internal.parentPosition === FloorFilter.ParentPosition.UpperRight) ? Grid.AlignTop : Grid.AlignBottom
         columnSpacing: 5
         ToolBar {
             id: levelFilterMenu
@@ -138,9 +138,9 @@ Control {
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft
                     // use different pointing icon based on the leader position. if icons are collapsed and left position: use right pointing icon; if right position: use left pointing icon; if collapsedIcons === true, switch the icon.
-                    // leaderPosition === right XNOR collapsedIcons; if collapsedIcons === false, expression evaluates opposite as its operands. if collapsedIcons === true, expression evaluates as its operands.
-                    icon.source: !((internal.leaderPosition === FloorFilter.LeaderPosition.UpperRight ||
-                                    internal.leaderPosition === FloorFilter.LeaderPosition.LowerRight) ^ internal.collapsedIcons) ? "images/chevrons-left.svg" : "images/chevrons-right.svg"
+                    // parentPosition === right XNOR collapsedIcons; if collapsedIcons === false, expression evaluates opposite as its operands. if collapsedIcons === true, expression evaluates as its operands.
+                    icon.source: !((internal.parentPosition === FloorFilter.ParentPosition.UpperRight ||
+                                    internal.parentPosition === FloorFilter.ParentPosition.LowerRight) ^ internal.collapsedIcons) ? "images/chevrons-left.svg" : "images/chevrons-right.svg"
                     text: "Collapse"
                     flat: true
                     display: internal.collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
@@ -544,12 +544,12 @@ Control {
     /*!
       \brief Enums to generalize the current \c FloorFilter position relative to its parent.
       4 different options, created by tracing 2 lines passing by the parent center point and its width / 2 or its height / 2 points.
-      \value LeaderPosition.UpperLeft Top left square.
-      \value LeaderPosition.UpperRight Top right square.
-      \value LeaderPosition.LowerRight Bottom right square.
-      \value LeaderPosition.LowerLeft Botttom left square.
+      \value ParentPosition.UpperLeft Top left square.
+      \value ParentPosition.UpperRight Top right square.
+      \value ParentPosition.LowerRight Bottom right square.
+      \value ParentPosition.LowerLeft Botttom left square.
     */
-    enum LeaderPosition {
+    enum ParentPosition {
         UpperLeft,
         UpperRight,
         LowerRight,
@@ -578,17 +578,17 @@ Control {
         property double centerParentX: (parentOrigin.x + floorFilter.parent.width) / 2
         property double centerParentY: (parentOrigin.y + floorFilter.parent.height) / 2
         // position of floorfilter related to its parent.
-        property int leaderPosition: {
+        property int parentPosition: {
             if (centerFloorFilterX < centerParentX) {
                 if (centerFloorFilterY < centerParentY)
-                    FloorFilter.LeaderPosition.UpperLeft;
+                    FloorFilter.ParentPosition.UpperLeft;
                 else
-                    FloorFilter.LeaderPosition.LowerLeft;
+                    FloorFilter.ParentPosition.LowerLeft;
             } else {
                 if (centerFloorFilterY < centerParentY)
-                    FloorFilter.LeaderPosition.UpperRight;
+                    FloorFilter.ParentPosition.UpperRight;
                 else
-                    FloorFilter.LeaderPosition.LowerRight;
+                    FloorFilter.ParentPosition.LowerRight;
             }
         }
         onCurrentVisibileListViewChanged: {
