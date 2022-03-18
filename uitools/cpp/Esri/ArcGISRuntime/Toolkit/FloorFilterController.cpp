@@ -76,7 +76,7 @@ namespace Toolkit {
     /*!
      \internal
      \brief When \a signal fires on \a sender, the given \a connection is disconnected.
-     This makes the connection's invvocation depdendent on \a signal not firing.
+     This makes the connection's invocation dependent on \a signal not firing.
      */
     template <typename Sender, typename Signal>
     QMetaObject::Connection disconnectOnSignal(Sender* sender, Signal&& signal, QObject* self, QMetaObject::Connection connection)
