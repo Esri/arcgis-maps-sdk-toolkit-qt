@@ -30,6 +30,7 @@
 #include "FloorFilterFacilityItem.h"
 #include "FloorFilterLevelItem.h"
 #include "FloorFilterSiteItem.h"
+#include "Internal/DisconnectOnSignal.h"
 #include "Internal/DoOnLoad.h"
 #include "Internal/GeoViews.h"
 #include "Internal/SingleShotConnection.h"
@@ -71,23 +72,6 @@ namespace Toolkit {
         }
       }
       return nullptr;
-    }
-
-    /*!
-     \internal
-     \brief When \a signal fires on \a sender, the given \a connection is disconnected.
-     This makes the connection's invvocation depdendent on \a signal not firing.
-     */
-    template <typename Sender, typename Signal>
-    QMetaObject::Connection disconnectOnSignal(Sender* sender, Signal&& signal, QObject* self, QMetaObject::Connection connection)
-    {
-      if (!connection)
-        return QMetaObject::Connection{};
-
-      return singleShotConnection(sender, signal, self, [c = std::move(connection)]
-                                  {
-                                    QObject::disconnect(c);
-                                  });
     }
 
     /*!
