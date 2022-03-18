@@ -68,7 +68,7 @@ Control {
 
     /*!
       \qmlproperty int maxNumberLevels
-      \brief trims the maximum number of viewalbe levels.
+      \brief trims the maximum number of viewable levels.
       A scrollable component is automatically used in case of higher number of levels.
     */
     property int maxNumberLevels: 2
@@ -136,9 +136,8 @@ Control {
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft
                     // use different pointing icon based on the leader position. if icons are collapsed and left position: use right pointing icon; if right position: use left pointing icon; if collapsedIcons === true, switch the icon.
-                    // parentPosition === right XNOR collapsedIcons; if collapsedIcons === false, expression evaluates opposite as its operands. if collapsedIcons === true, expression evaluates as its operands.
-                    icon.source: !((internal.parentPosition === FloorFilter.ParentPosition.UpperRight ||
-                                    internal.parentPosition === FloorFilter.ParentPosition.LowerRight) ^ internal.collapsedIcons) ? "images/chevrons-left.svg" : "images/chevrons-right.svg"
+                    icon.source: (internal.parentPosition === FloorFilter.ParentPosition.UpperRight ||
+                                    internal.parentPosition === FloorFilter.ParentPosition.LowerRight) === internal.collapsedIcons ? "images/chevrons-left.svg" : "images/chevrons-right.svg"
                     text: "Collapse"
                     flat: true
                     display: internal.collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
@@ -155,17 +154,16 @@ Control {
                     icon.source: "images/zoom-to-object.svg"
                     text: "Zoom to"
                     flat: true
-                    // enabled based on the currentVisibleListView and if site/facility element is not undefined.
-                    enabled: !listView.visible ? controller.selectedFacilityId : internal.currentVisibileListView === FloorFilter.VisibleListView.Site
-                                                 ? controller.selectedSiteId : controller.selectedFacilityId
+                    // Zooming to currentVisibleListView, facility or site. If listView is not visible, zoom to facility (regardeless of currentVisibleListView).
+                    // Also check if facility/site are defined, otherwise zoom button not enabled.
+                    enabled: listView.visible ? (internal.currentVisibileListView === FloorFilter.VisibleListView.Site ? controller.selectedSiteId
+                                              : controller.selectedFacilityId) : controller.selectedFacilityId
                     display: internal.collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
                     onClicked: {
-                        if (internal.currentVisibileListView === FloorFilter.VisibleListView.Site
-                                && listView.visible)
+                        if (internal.currentVisibileListView === FloorFilter.VisibleListView.Site)
                             controller.zoomToSite(controller.selectedSiteId);
                         else if (internal.currentVisibileListView
-                                 === FloorFilter.VisibleListView.Facility
-                                 || !listView.visible)
+                                 === FloorFilter.VisibleListView.Facility)
                             controller.zoomToFacility(
                                         controller.selectedFacilityId);
                         else
@@ -376,32 +374,29 @@ Control {
                     // scroll list view to selected item
                     onCurrentIndexChanged: positionViewAtIndex(currentIndex, ListView.Visible)
 
+                    Connections {
+                        target: searchTextField
+                        function onTextChanged() {
+                            //using `items` group to fetch all the elements (all elements are set into this group by default).
+                            for (var i = 0; i < dm.items.count; ++i) {
+                                var item = dm.items.get(i);
+                                // empty string clears the filtering. All elements are visible (set into the `filtered` group).
+                                if (searchTextField.text === "") {
+                                    item.inFiltered = true;
+                                } else {
+                                    if (item.model.name.toLowerCase().includes(searchTextField.text.toLowerCase()))
+                                        item.inFiltered = true;
+                                    else
+                                        item.inFiltered = false;
+                                }
+                            }
+                            listView.visible = filteredGroup.count > 0;
+                            noResultsFoundLabel.visible = !listView.visible;
+                        }
+                    }
                     // delegate model used to implement the filtering functionality, by setting visible elements in the `filtered` group.
                     model: DelegateModel {
                         id: dm
-                        property Connections conn: Connections {
-                            target: searchTextField
-                            function onTextChanged() {
-                                //using `items` group to fetch all the elements (all elements are set into this group by default).
-                                for (var i = 0; i < dm.items.count; ++i) {
-                                    var item = dm.items.get(i);
-                                    // empty string clears the filtering. All elements are visible (set into the `filtered` group).
-                                    if (searchTextField.text === "") {
-                                        item.inFiltered = true;
-                                    } else {
-                                        if (item.model.name.toLowerCase(
-                                                    ).includes(
-                                                    searchTextField.text.toLowerCase(
-                                                        )))
-                                            item.inFiltered = true;
-                                        else
-                                            item.inFiltered = false;
-                                    }
-                                }
-                                listView.visible = filteredGroup.count > 0;
-                                noResultsFoundLabel.visible = !listView.visible;
-                            }
-                        }
 
                         // switch between controller model based on the currentVisibleListView
                         model: internal.currentVisibileListView
