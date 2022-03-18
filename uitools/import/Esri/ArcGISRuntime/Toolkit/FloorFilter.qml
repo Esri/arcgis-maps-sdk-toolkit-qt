@@ -58,8 +58,6 @@ Control {
     */
     property int updateLevelsMode: controller.updateLevelsMode
 
-    property bool hideSiteFacilityButton: false
-
     /*!
       \qmlproperty enumeration automaticSelectionMode
       \brief The mode to use for the automatic selection of levels based on current center viewpoint.
@@ -264,7 +262,6 @@ Control {
                     checkable: true
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft
-                    visible: !hideSiteFacilityButton
                     icon.source: "images/organization.svg"
                     text: "Browse"
                     flat: true
