@@ -176,10 +176,6 @@ namespace Toolkit {
     m_facilities->setTooltipPropertyName("parentSiteName");
     m_levels->setDisplayPropertyName("longName");
 
-    connect(this, &FloorFilterController::selectedFacilityIdChanged, this, &FloorFilterController::selectedChanged);
-    connect(this, &FloorFilterController::selectedLevelIdChanged, this, &FloorFilterController::selectedChanged);
-    connect(this, &FloorFilterController::selectedSiteIdChanged, this, &FloorFilterController::selectedChanged);
-
     connect(this, &FloorFilterController::selectedFacilityIdChanged, this, &FloorFilterController::populateLevelsForSelectedFacility);
 
     connect(this, &FloorFilterController::selectedSiteIdChanged, this, &FloorFilterController::populateFacilitiesForSelectedSite);
@@ -874,11 +870,6 @@ namespace Toolkit {
   /*!
   \fn void Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedLevelIdChanged(QString oldId, QString newId)
   \brief Emitted when the selectedLevelId has changed from \a oldId to \a newId.
- */
-
-  /*!
-  \fn void Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedChanged()
-  \brief Emitted on any selection event.
  */
 
   /*!
