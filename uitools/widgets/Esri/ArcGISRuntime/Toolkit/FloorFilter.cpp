@@ -136,6 +136,8 @@ namespace Toolkit {
     The FloorFilter allows the interaction with the available floor aware layers. A user can select from a list of sites which presents
     their facilities. Once a facility is chosen, it is possible to toggle between its levels which will show them on the \c GeoView.
     2D maps and 3D scenes are supported.
+
+    \note Double-clicking a site or facility will automatically open the next pane.
    */
 
   /*!
