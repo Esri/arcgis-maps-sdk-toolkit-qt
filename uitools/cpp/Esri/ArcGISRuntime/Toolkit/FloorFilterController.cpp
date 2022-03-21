@@ -699,6 +699,9 @@ namespace Toolkit {
    */
   void FloorFilterController::tryUpdateSelection()
   {
+    if (m_automaticSelectionMode == AutomaticSelectionMode::Never)
+      return;
+
     if (m_settingViewpoint)
       return;
 
@@ -713,8 +716,7 @@ namespace Toolkit {
     }
 
     // Expectation: viewpoint is center and scale
-    if (m_automaticSelectionMode == AutomaticSelectionMode::Never ||
-        observedViewpoint.isEmpty() ||
+    if (observedViewpoint.isEmpty() ||
         isnan(observedViewpoint.targetScale()))
       return;
 
