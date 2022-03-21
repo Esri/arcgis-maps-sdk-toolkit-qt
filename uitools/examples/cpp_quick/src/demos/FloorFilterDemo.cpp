@@ -35,9 +35,3 @@ Map* FloorFilterDemo::initMap_(QObject* parent) const
 {
   return new Map(new PortalItem("f133a698536f44c8884ad81f80b6cfc7", parent), parent);
 }
-
-Scene* FloorFilterDemo::initScene_(QObject* parent) const
-{
-  return BaseDemo::initScene_(parent);
-  // return new Scene("f133a698536f44c8884ad81f80b6cfc7", parent);
-}

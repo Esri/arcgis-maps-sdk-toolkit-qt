@@ -136,6 +136,8 @@ namespace Toolkit {
     The FloorFilter allows the interaction with the available floor aware layers. A user can select from a list of sites which presents
     their facilities. Once a facility is chosen, it is possible to toggle between its levels which will show them on the \c GeoView.
     2D maps and 3D scenes are supported.
+
+    \note Double-clicking a site or facility will automatically open the next pane.
    */
 
   /*!
@@ -182,7 +184,7 @@ namespace Toolkit {
     connect(
         m_ui->sitesView->selectionModel(), &QItemSelectionModel::currentChanged, this, [this](QModelIndex index, QModelIndex previous)
         {
-          if (index == previous)
+          if (index == previous || m_facilitiesUpdatedFromController)
             return;
 
           if (index == QModelIndex{})
@@ -193,11 +195,7 @@ namespace Toolkit {
           {
             const auto data = itemForIndex<FloorFilterSiteItem>(m_ui->sitesView->model(), index);
             m_controller->setSelectedSiteId(data->modelId());
-
-            if (!m_sitesUpdatedFromController)
-            {
-              m_controller->zoomToSite(data);
-            }
+            m_controller->zoomToSite(data);
           }
         });
 

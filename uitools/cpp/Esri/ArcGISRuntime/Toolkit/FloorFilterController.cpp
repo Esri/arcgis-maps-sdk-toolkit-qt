@@ -146,8 +146,6 @@ namespace Toolkit {
     \brief The mode that defines how levels are made visible/invisible in the geoView.
     \sa Esri::ArcGISRuntime::Toolkit::FloorFilterController::updateLevelsMode
     \value AllLevelsMatchingVerticalOrder When a level is selected, all levels with matching vertical order are made visible, all other levels are invisible.
-    \value SingleLevel All levels with \c{verticalOrder == 0} are set to visible, the currently selected level is also visible, all other levels are set to invisible. This
-           matches the JavaScript Widget FloorFilter functionality.
   */
 
   /*!
@@ -176,10 +174,6 @@ namespace Toolkit {
     m_facilities->setTooltipPropertyName("parentSiteName");
     m_levels->setDisplayPropertyName("longName");
 
-    connect(this, &FloorFilterController::selectedFacilityIdChanged, this, &FloorFilterController::selectedChanged);
-    connect(this, &FloorFilterController::selectedLevelIdChanged, this, &FloorFilterController::selectedChanged);
-    connect(this, &FloorFilterController::selectedSiteIdChanged, this, &FloorFilterController::selectedChanged);
-
     connect(this, &FloorFilterController::selectedFacilityIdChanged, this, &FloorFilterController::populateLevelsForSelectedFacility);
 
     connect(this, &FloorFilterController::selectedSiteIdChanged, this, &FloorFilterController::populateFacilitiesForSelectedSite);
@@ -198,13 +192,10 @@ namespace Toolkit {
                 {
                   if (level)
                   {
-                    if (m_updatelevelMode == UpdateLevelsMode::AllLevelsMatchingVerticalOrder)
+                    switch (m_updatelevelMode)
+                    case UpdateLevelsMode::AllLevelsMatchingVerticalOrder:
                     {
                       level->setVisible(newLevel ? level->verticalOrder() == newLevel->verticalOrder() : false);
-                    }
-                    else if (m_updatelevelMode == UpdateLevelsMode::SingleLevel)
-                    {
-                      level->setVisible(level->verticalOrder() == 0 || level == newLevel);
                     }
                   }
                 }
@@ -708,6 +699,9 @@ namespace Toolkit {
    */
   void FloorFilterController::tryUpdateSelection()
   {
+    if (m_automaticSelectionMode == AutomaticSelectionMode::Never)
+      return;
+
     if (m_settingViewpoint)
       return;
 
@@ -722,8 +716,7 @@ namespace Toolkit {
     }
 
     // Expectation: viewpoint is center and scale
-    if (m_automaticSelectionMode == AutomaticSelectionMode::Never ||
-        observedViewpoint.isEmpty() ||
+    if (observedViewpoint.isEmpty() ||
         isnan(observedViewpoint.targetScale()))
       return;
 
@@ -874,11 +867,6 @@ namespace Toolkit {
   /*!
   \fn void Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedLevelIdChanged(QString oldId, QString newId)
   \brief Emitted when the selectedLevelId has changed from \a oldId to \a newId.
- */
-
-  /*!
-  \fn void Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedChanged()
-  \brief Emitted on any selection event.
  */
 
   /*!

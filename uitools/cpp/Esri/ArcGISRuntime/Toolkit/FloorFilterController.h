@@ -54,8 +54,7 @@ namespace ArcGISRuntime {
     public:
       enum class UpdateLevelsMode
       {
-        AllLevelsMatchingVerticalOrder,
-        SingleLevel
+        AllLevelsMatchingVerticalOrder
       };
       Q_ENUM(UpdateLevelsMode)
 
@@ -115,7 +114,6 @@ namespace ArcGISRuntime {
       void selectedSiteIdChanged(QString oldId, QString newId);
       void selectedFacilityIdChanged(QString oldId, QString newId);
       void selectedLevelIdChanged(QString oldId, QString newId);
-      void selectedChanged();
       void isSelectedSiteRespectedChanged();
       void updateLevelsModeChanged();
       void automaticSelectionModeChanged();
