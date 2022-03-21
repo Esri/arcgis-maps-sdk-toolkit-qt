@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/esri.com/imports/Esri/ArcGISRuntime/Toolkit/Controller">
+    <!-- This section contains all QML API controller components. -->
         <file>AuthenticationController.qml</file>
         <file>BasemapGalleryController.qml</file>
         <file>BasemapGalleryItem.qml</file>

@@ -57,7 +57,6 @@ TestCase {
             item: PortalItem {
                 itemId: "f133a698536f44c8884ad81f80b6cfc7"
                 portal: Portal {
-                    Component.onCompleted: load()
                     onErrorChanged: {
                         if (loadStatus === Enums.LoadStatusFailedToLoad) {
                             console.log(error.message);
@@ -250,7 +249,10 @@ TestCase {
         control.populateAllFacilities();
         compare(control.facilities.count, control.floorManager.facilities.length);
         // check facility model loaded correctly. sorted alphabetically
-        const facilityNamesOrdered = ["RED A","RED B","RED C","RED CAFE","RED D","RED E","RED F","RED G","RED Gym","RED H","RED J","RED K","RED L","RED M","RED M Plant","RED N","RED O","RED O Plant","RED OA","RED P","RED Q","RED Q Plant","RED R","RED S","RED T","RED U","RED V","RED VE","RED W","RED Z","RED ZN","RED ZW"];
+        const facilityNamesOrdered = ["RED A","RED B","RED C","RED CAFE","RED D","RED E","RED F","RED G","RED Gym","RED H",
+                                      "RED J","RED K","RED L","RED M","RED M Plant","RED N","RED O","RED O Plant","RED OA",
+                                      "RED P","RED Q","RED Q Plant","RED R","RED S","RED T","RED U","RED V","RED VE","RED W",
+                                      "RED Z","RED ZN","RED ZW"];
         verify(facilityNamesOrdered.length === control.facilities.count);
         for(var i = 0; i < control.facilities.count; ++i){
             compare(control.facilities.get(i).name, facilityNamesOrdered[i]);
@@ -284,23 +286,4 @@ TestCase {
     }
 
     // skipping functions that are based on viewpoints (upateselection and the zoom ones)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-}// sort functionality
+}

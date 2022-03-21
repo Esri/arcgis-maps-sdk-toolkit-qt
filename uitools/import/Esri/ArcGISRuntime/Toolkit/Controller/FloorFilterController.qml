@@ -132,11 +132,11 @@ QtObject {
     */
     property GeoModel geoModel: {
         // check geoView has been set
-        if (!geoView)
+        if(!geoView)
             return null;
-        if (typeof (geoView.map) !== "undefined")
+        if (geoView instanceof MapView)
             return geoView.map;
-        else if (typeof (geoView.scene) !== "undefined")
+        else if (geoView instanceof SceneView)
             return geoView.scene;
         return null;
     }
@@ -184,7 +184,7 @@ QtObject {
       \brief Repopulates the \l facilities model when toggled false.
       When the selected site is respected, the facilities list is limited to the facilities which match the selected site.
       If the selected site is not respected, then facilities will contain all facilities from all sites, regardless of the selected site.
-      Default is {true}.
+      Default is \c {true}.
     */
     property bool selectedSiteRespected: true
 
@@ -197,7 +197,7 @@ QtObject {
     /*!
       \qmlproperty string selectedLevelId
       \brief Stores the current selected level Id.
-      Default is {""}.
+      Default is \c {""}.
     */
     readonly property alias selectedLevelId: internal.selectedLevelId
 
@@ -215,7 +215,7 @@ QtObject {
     /*!
       \qmlproperty string selectedFacilityId
       \brief Stores the current selected facility Id.
-      Default is {""}.
+      Default is \c {""}.
     */
     readonly property alias selectedFacilityId: internal.selectedFacilityId
 
@@ -255,7 +255,7 @@ QtObject {
     /*!
       \qmlproperty string selectedSiteId
       \brief Stores the current selected site Id.
-      Default is {""}.
+      Default is \c {""}.
     */
     readonly property alias selectedSiteId: internal.selectedSiteId
 
@@ -363,8 +363,6 @@ QtObject {
                 === FloorFilterController.UpdateLevelsMode.AllLevelsMatchingVerticalOrder) {
             resetLevelsVisibility(internal.selectedLevel.verticalOrder);
         }
-
-        onSelectedChanged();
     }
 
     onSelectedFacilityIdChanged: {
@@ -382,7 +380,6 @@ QtObject {
         populateLevels(floorManager.facilities[idx].levels);
         // reset the levels visibilty to vertical order 0 once a facility is selected.
         resetLevelsVisibility(0);
-        onSelectedChanged();
     }
 
     onSelectedSiteIdChanged: {
@@ -402,9 +399,8 @@ QtObject {
         if (!selectedSiteRespected
                 && facilities.count === floorManager.facilities.length)
             return;
-        populateFacilities(floorManager.sites[idx].facilities);
-        onSelectedChanged();
         internal.selectedFacilityId = "";
+        populateFacilities(floorManager.sites[idx].facilities);
     }
 
     /*!
@@ -424,8 +420,6 @@ QtObject {
             level.visible = level.verticalOrder === verticalOrder;
         }
     }
-
-    function onSelectedChanged() {}
 
     // geomodel loaded connection
     /*!

@@ -28,7 +28,8 @@ class Setup : public QObject
   Q_OBJECT
 
 public:
-  Setup()
+  Q_INVOKABLE explicit Setup(QObject* parent = nullptr) :
+    QObject(parent)
   {
   }
 

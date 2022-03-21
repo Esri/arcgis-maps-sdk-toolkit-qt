@@ -74,7 +74,12 @@ TestCase {
     Component {
         id: controlSingleComponent
         FloorFilterController {
+            id: single
             geoView: viewSingle
+            property SignalSpy spy : SignalSpy {
+                target: single
+                signalName: "onLoaded" // signal outputted from FloorFilter once the floorManager has been loaded
+            }
         }
     }
 
@@ -82,34 +87,32 @@ TestCase {
     Component {
         id: controlMultiComponent
         FloorFilterController {
+            id: multi
             geoView: viewMulti
+            property SignalSpy spy : SignalSpy {
+                target: multi
+                signalName: "onLoaded" // signal outputted from FloorFilter once the floorManager has been loaded
+            }
         }
     }
 
-    SignalSpy {
-        id: ffLoadedSpy
-        signalName: "onLoaded" // signal outputted from FloorFilter once the floorManager has been loaded
-    }
+
 
     function loadFloorManagerSingle() {
-        ffLoadedSpy.clear();
         var control = createTemporaryObject(controlSingleComponent, floorFilterControllerFuncTest);
 
         if(!control.floorManager || control.floorManager.loadStatus !== Enums.LoadStatusLoaded) {
-            ffLoadedSpy.target = control;
-            ffLoadedSpy.wait(10000);
+            control.spy.wait(10000);
         }
         compare(control.floorManager.loadStatus, Enums.LoadStatusLoaded);
         return control;
     }
 
     function loadFloorManagerMultiple() {
-        ffLoadedSpy.clear();
         var control = createTemporaryObject(controlMultiComponent, floorFilterControllerFuncTest);
 
         if(!control.floorManager || control.floorManager.loadStatus !== Enums.LoadStatusLoaded) {
-            ffLoadedSpy.target = control;
-            ffLoadedSpy.wait(10000);
+            control.spy.wait(10000);
         }
         compare(control.floorManager.loadStatus, Enums.LoadStatusLoaded);
         return control;
@@ -120,7 +123,7 @@ TestCase {
         // autofires populateAllFacilities()
         control.selectedSiteRespected = false;
         var facility = control.floorManager.facilities[0];
-        verify(facility.facilityId);
+        compare(facility.facilityId, "1000.US01.WAREHOUSE.T");
         control.setSelectedFacilityId(facility.facilityId);
         compare(control.selectedSiteId, facility.site.siteId);
         compare(control.selectedSite.siteId, facility.site.siteId);
@@ -129,19 +132,20 @@ TestCase {
     // singlesite mode on. only 1 site and 1 facility, automatically select them on load.
     function test_singleSiteAutoSelect() {
         var control = loadFloorManagerSingle();
-        verify(1, control.floorManager.sites.count);
-        compare(1, control.sites.count);
-        compare(1, control.facilities.count);
-        verify(control.selectedSiteId) // not empty string
-        verify(control.selectedSite);
-        verify(control.selectedFacilityId);
-        verify(control.selectedFacility);
+        compare(control.floorManager.sites.length, 1);
+        compare(control.sites.count, 1);
+        compare(control.facilities.count, 1);
+        verify(control.selectedSiteId !== "") // not empty string
+        verify(control.selectedSite != null);
+        verify(control.selectedFacilityId !== "");
+        verify(control.selectedFacility != null);
     }
 
 
     Component {
         id: mapComponentMulti
         Map {
+            id: map
             item: PortalItem {
                 itemId: "49520a67773842f1858602735ef538b5"
                 portal: Portal {
@@ -155,7 +159,16 @@ TestCase {
                     url: "https://indoors.maps.arcgis.com/"
                 }
             }
-            onLoadStatusChanged: console.log("loading map", loadStatus)
+            onLoadStatusChanged: {
+                if (loadStatus === Enums.LoadStatusLoaded) {
+                    console.log("map loaded")
+                    map.floorManager.load()
+                }
+            }
+            property SignalSpy spy: SignalSpy {
+                target: map.floorManager
+                signalName: "onLoadStatusChanged"
+            }
         }
 
     }
@@ -165,20 +178,14 @@ TestCase {
     function test_noModifyOriginalVisibilityLevels() {
         var control = loadFloorManagerMultiple();
         var map = createTemporaryObject(mapComponentMulti, floorFilterControllerFuncTest);
-        var control = createTemporaryObject(controlMultiComponent, floorFilterControllerFuncTest);
         map.load();
-        var spy = createTemporaryQmlObject('import QtQuick 2.0; SignalSpy {signalName : "onLoadStatusChanged"}',
-                                           floorFilterControllerFuncTest);
-        spy.target = map;
         // wait for map to be loaded, then able to set a spy on the floormanager.
-        spy.wait();
-        spy.clear();
-        spy.target = Qt.binding(function() { return map.floorManager});
-        map.floorManager.load();
-        spy.wait();
-        console.log(map.floorManager.loadStatus);
+        map.spy.wait();
         if(map.floorManager.loadStatus !== Enums.LoadStatusLoaded)
-            spy.wait();
+            map.spy.wait(); // the first wait outputter a Loading status.
+        // floormanager automatically loaded from the map component
+        control.spy.wait();
+        verify(map.floorManager.loadStatus === Enums.LoadStatusLoaded);
         verify(map.floorManager.levels.length > 0);
         verify(map.floorManager.levels.length === control.floorManager.levels.length);
         for (var i = 0; i < map.floorManager.levels; ++i) {

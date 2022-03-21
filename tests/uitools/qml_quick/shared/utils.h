@@ -12,7 +12,6 @@ public:
   Q_INVOKABLE explicit Utils(QObject* parent = nullptr);
   static QObject* createSingletonInstance(QQmlEngine* engine, QJSEngine* scriptEngine);
 
-  Q_INVOKABLE QObject* findChild(QObject* parent, QString name);
   Q_INVOKABLE QString urlFileName(const QString& url);
 };
 

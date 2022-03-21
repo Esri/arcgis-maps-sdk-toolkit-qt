@@ -59,14 +59,6 @@ Control {
     property int updateLevelsMode: controller.updateLevelsMode
 
     /*!
-      \qmlproperty enumeration automaticSelectionMode
-      \brief The mode to use for the automatic selection of levels based on current center viewpoint.
-      Default is \c{FloorFilterController.AutomaticSelectionMode.Always}.
-      \sa {FloorFilterController} {FloorFilterController.automaticSelectionMode}
-    */
-    property int automaticSelectionMode: FloorFilterController.AutomaticSelectionMode.Always
-
-    /*!
       \qmlproperty int maxNumberLevels
       \brief trims the maximum number of viewable levels.
       A scrollable component is automatically used in case of higher number of levels.
@@ -74,13 +66,6 @@ Control {
     property int maxNumberLevels: 2
 
     padding: 5
-
-    // create singlepointing binding towards controller
-    Binding {
-        target: controller
-        property: "automaticSelectionMode"
-        value: floorFilter.automaticSelectionMode
-    }
 
     Binding {
         target: controller
@@ -121,7 +106,7 @@ Control {
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft
                     icon.source: "images/x.svg"
-                    text: "Close"
+                    text: qsTr("Close")
                     display: internal.collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
                 }
 
@@ -138,7 +123,7 @@ Control {
                     // use different pointing icon based on the leader position. if icons are collapsed and left position: use right pointing icon; if right position: use left pointing icon; if collapsedIcons === true, switch the icon.
                     icon.source: (internal.parentPosition === FloorFilter.ParentPosition.UpperRight ||
                                     internal.parentPosition === FloorFilter.ParentPosition.LowerRight) === internal.collapsedIcons ? "images/chevrons-left.svg" : "images/chevrons-right.svg"
-                    text: "Collapse"
+                    text: qsTr("Collapse")
                     flat: true
                     display: internal.collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
                     onClicked: internal.collapsedIcons = !internal.collapsedIcons
@@ -152,7 +137,7 @@ Control {
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft
                     icon.source: "images/zoom-to-object.svg"
-                    text: "Zoom to"
+                    text: qsTr("Zoom to")
                     flat: true
                     // Zooming to currentVisibleListView, facility or site. If listView is not visible, zoom to facility (regardeless of currentVisibleListView).
                     // Also check if facility/site are defined, otherwise zoom button not enabled.
@@ -177,6 +162,7 @@ Control {
 
                 //Layout width: fill the parent Layout if is larger than the `contentItem.width`. If `contentItem.width` is larger, stretch to keep all its items without resizing them (don't elide text children).
                 Flickable {
+                    id: flickable
                     objectName: "flickable"
                     visible: !closer.checked
                     // dont need to use the id of the column
@@ -207,7 +193,7 @@ Control {
                             property int buttonHeight: 0
                             model: controller.levels
                             delegate: ToolButton {
-Component.onCompleted: repeater.buttonHeight = Math.max(repeater.buttonHeight, this.height)
+                                Component.onCompleted: repeater.buttonHeight = Math.max(repeater.buttonHeight, this.height)
                                 id: levelButton
                                 visible: !closer.checked
                                 checked: controller.selectedLevelId === model.modelId
@@ -226,7 +212,7 @@ Component.onCompleted: repeater.buttonHeight = Math.max(repeater.buttonHeight, t
                 }
 
                 ToolSeparator {
-                    visible: repeater.count !== 0
+                    visible: flickable.visible && repeater.count !== 0
                     Layout.fillWidth: true
                     orientation: Qt.Horizontal
                 }
@@ -261,7 +247,7 @@ Component.onCompleted: repeater.buttonHeight = Math.max(repeater.buttonHeight, t
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft
                     icon.source: "images/organization.svg"
-                    text: "Browse"
+                    text: qsTr("Browse")
                     flat: true
                     display: internal.collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
                 }
@@ -313,7 +299,7 @@ Component.onCompleted: repeater.buttonHeight = Math.max(repeater.buttonHeight, t
                     Layout.fillWidth: true
                     Layout.columnSpan: 3
                     Layout.margins: 5
-                    placeholderText: "Search"
+                    placeholderText: qsTr("Search")
                     leftPadding: searchImg.width + 5
                     Image {
                         id: searchImg
@@ -422,7 +408,7 @@ Component.onCompleted: repeater.buttonHeight = Math.max(repeater.buttonHeight, t
                                                                                      model.modelId === internal.selectedSiteId : model.modelId === internal.selectedFacilityId
                             onHighlightedChanged: listView.currentIndex = index;
                             // show parentSiteName once `all Sites` button is clicked (selectedSiteRespected-> false).
-                            text: model.name + (model.parentSiteName && !controller.selectedSiteRespected ? '<br/>' + parentSiteName : "")
+                            text: model.name + (model.parentSiteName && !controller.selectedSiteRespected ? "<br/>" + parentSiteName : "")
 
                             onClicked: {
                                 // switch to facility view
@@ -454,7 +440,7 @@ Component.onCompleted: repeater.buttonHeight = Math.max(repeater.buttonHeight, t
                 Button {
                     id: showAllFacilities
                     objectName: "showAllFacilities"
-                    text: 'All sites'
+                    text: qsTr("All sites")
                     Layout.alignment: Qt.AlignCenter
                     Layout.columnSpan: 3
                     Layout.margins: 5
