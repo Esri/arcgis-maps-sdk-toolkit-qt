@@ -54,8 +54,7 @@ namespace ArcGISRuntime {
     public:
       enum class UpdateLevelsMode
       {
-        AllLevelsMatchingVerticalOrder,
-        SingleLevel
+        AllLevelsMatchingVerticalOrder
       };
       Q_ENUM(UpdateLevelsMode)
 
