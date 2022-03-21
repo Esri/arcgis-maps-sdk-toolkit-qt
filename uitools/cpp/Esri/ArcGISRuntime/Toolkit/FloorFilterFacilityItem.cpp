@@ -84,16 +84,20 @@ namespace Toolkit {
   }
 
   /*!
-   * \brief Returns the \c name from the wrapped item.
+   * \brief Returns the name from the wrapped item.
    */
   QString FloorFilterFacilityItem::name() const
   {
     return m_floorFacility ? m_floorFacility->name() : QString{};
   }
 
+  /*!
+   * \brief Returns the name of the parent site.
+   */
   QString FloorFilterFacilityItem::parentSiteName() const
   {
-    return m_floorFacility && m_floorFacility->site() ? m_floorFacility->site()->name() : QString{};
+    auto site = m_floorFacility ? m_floorFacility->site() : nullptr;
+    return site ? site->name() : QString{};
   }
 
   /*!
