@@ -182,7 +182,7 @@ namespace Toolkit {
     connect(
         m_ui->sitesView->selectionModel(), &QItemSelectionModel::currentChanged, this, [this](QModelIndex index, QModelIndex previous)
         {
-          if (index == previous)
+          if (index == previous || m_facilitiesUpdatedFromController)
             return;
 
           if (index == QModelIndex{})
@@ -193,11 +193,7 @@ namespace Toolkit {
           {
             const auto data = itemForIndex<FloorFilterSiteItem>(m_ui->sitesView->model(), index);
             m_controller->setSelectedSiteId(data->modelId());
-
-            if (!m_sitesUpdatedFromController)
-            {
-              m_controller->zoomToSite(data);
-            }
+            m_controller->zoomToSite(data);
           }
         });
 
