@@ -1,4 +1,3 @@
-
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -20,14 +19,6 @@ import Esri.ArcGISRuntime 100.14
 import Esri.ArcGISRuntime.Toolkit 100.14
 
 DemoPage {
-    sceneViewContents: Component {
-        SceneView {
-            Scene {
-                initUrl: "https://www.arcgis.com/home/item.html?id=ed300862738440de94d777061fa04742"
-            }
-        }
-    }
-
     mapViewContents: Component {
         //! [Set up Floor Filter QML]
         MapView {
@@ -44,6 +35,7 @@ DemoPage {
                 }
             }
         }
+
         //! [Set up Floor Filter QML]
     }
 }

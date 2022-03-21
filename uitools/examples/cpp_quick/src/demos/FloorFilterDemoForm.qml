@@ -15,24 +15,6 @@ import Esri.ArcGISRuntime.Toolkit 100.14
 import DemoApp 1.0
 
 DemoPage {
-    sceneViewContents: Component {
-        SceneView {
-            id: view
-            FloorFilter {
-                id: gallery
-                geoView: view
-                anchors {
-                    left: parent.left
-                    margins: 10
-                    top: parent.top
-                }
-            }
-            FloorFilterDemo {
-                geoView: view
-            }
-        }
-    }
-
     mapViewContents: Component {
         MapView {
             id: view
