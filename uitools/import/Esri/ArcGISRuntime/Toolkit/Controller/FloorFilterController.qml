@@ -56,7 +56,6 @@ QtObject {
       The \l automaticSelectionMode is used to decide the specific behavior of level selection.
     */
     function tryUpdateSelection() {
-        // todo: facilities and sites are optional, add checks
         var viewpointCenter = geoView.currentViewpointCenter;
 
         if (automaticSelectionMode === FloorFilterController.AutomaticSelectionMode.Never || !viewpointCenter || isNaN(viewpointCenter.targetScale)) {
@@ -166,16 +165,17 @@ QtObject {
     property FloorManager floorManager : geoModel? geoModel.floorManager : null
 
     onFloorManagerChanged: {
-        if (floorManager.loadStatus !== Enums.LoadStatusLoaded)
-            floorManager.load();
-        else{
-            if(floorManager.sites.length > 0)
-                populateSites(floorManager.sites);
-            else {
-                populateAllFacilities();
-            }
+        internal.onFloorManagerLoaded();
+    }
 
-            controller.loaded(); //emit the loaded signal
+    /*!
+      \brief Load the \l floorManager associated with the \l geoModel and populate the sites.
+      \sa populateSites
+    */
+    property Connections floorManagerConn: Connections {
+        target: floorManager
+        function onLoadStatusChanged() {
+            internal.onFloorManagerLoaded();
         }
     }
 
@@ -245,7 +245,6 @@ QtObject {
         var facility = floorManager.facilities[idx];
 
         if (facility.site != null && (!internal.selectedSite || facility.site.siteId !== internal.selectedSite.siteId) ) {
-            console.log(facility.site === undefined, facility.site === null);
             // selection of facility came after click of populateAllFacilities.
             // this also sets the internal.selectedSite
             internal.selectedSiteId = facility.site.siteId;
@@ -275,25 +274,25 @@ QtObject {
       If not \l selectedSiteRespected, all levels are stored.
       \sa selectedLevelId
     */
-    property ListModel levels: ListModel {}
+    readonly property ListModel levels: ListModel {}
 
     /*!
       \qmlproperty ListModel facilities
       \brief Stores the facilities in the currently selected site.
       \sa selectedSiteId
     */
-    property ListModel facilities: ListModel {}
+    readonly property ListModel facilities: ListModel {}
 
     /*!
       \qmlproperty ListModel sites
       \brief Stores all the sites in the current \l floorManager.
       \sa selectedSiteId
     */
-    property ListModel sites: ListModel {}
+    readonly property ListModel sites: ListModel {}
 
-    property alias selectedSite: internal.selectedSite
-    property alias selectedFacility: internal.selectedFacility
-    property alias selectedLevel: internal.selectedLevel
+    readonly property alias selectedSite: internal.selectedSite
+    readonly property alias selectedFacility: internal.selectedFacility
+    readonly property alias selectedLevel: internal.selectedLevel
 
 
     // iterates over \a listElements to find an element with \a id.
@@ -448,30 +447,6 @@ QtObject {
       \brief Signal emitted once the \l floorManager has been successfully loaded.
     */
     signal loaded()
-
-    /*!
-      \brief Load the \l floorManager associated with the \l geoModel and populate the sites.
-      \sa populateSites
-    */
-    property Connections floorManagerConn: Connections {
-        target: floorManager
-        function onLoadStatusChanged() {
-            if (floorManager.loadStatus === Enums.LoadStatusLoaded) {
-                // load the listmodels
-                if(floorManager.sites.length > 0)
-                    populateSites(floorManager.sites);
-                else {
-                    // sites could be empty, just load the facilites
-                    console.log("populate all facilities")
-                    populateAllFacilities();
-                }
-                controller.loaded();
-                controller.internal.geoViewConnections.enabled = true;
-            }
-            else if(floorManager.loadStatus === Enums.LoadStatusFailedToLoad)
-                console.error("floorManager failed to load.");
-        }
-    }
 
     /*!
       \brief Clears and repopulates \l sites with \a listSites.
@@ -698,6 +673,25 @@ QtObject {
             }
             // manually set true when floorManager is loaded
             enabled: false
+        }
+
+        function onFloorManagerLoaded() {
+            if (floorManager.loadStatus === Enums.LoadStatusLoaded) {
+                // load the listmodels
+                if(floorManager.sites.length > 0)
+                    populateSites(floorManager.sites);
+                else {
+                    // sites could be empty, just load the facilites
+                    populateAllFacilities();
+                }
+                controller.loaded();
+                controller.internal.geoViewConnections.enabled = true;
+            }
+            else if(floorManager.loadStatus === Enums.LoadStatusFailedToLoad)
+                console.error("floorManager failed to load.");
+            else {
+                floorManager.load();
+            }
         }
     }
 }

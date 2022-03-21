@@ -25,7 +25,7 @@ import QtGraphicalEffects 1.12
   \inqmlmodule Esri.ArcGISRuntime.Toolkit
   \ingroup ArcGISQtToolkitUiQmlViews
   \since 100.14
-  \brief Allows to display and filter the available floor aware layers in the current \c GeoMap.
+  \brief Allows to display and filter the available floor aware layers in the current \c GeoModel.
 
   The FloorFilter allows the interaction with the available floor aware layers. A user can select from a list of sites which presents
   their facilities. Once a facility is chosen, it is possible to toggle between its levels which will show them on the \c GeoView.
@@ -58,8 +58,6 @@ Control {
     */
     property int updateLevelsMode: controller.updateLevelsMode
 
-    property bool hideSiteFacilityButton: false
-
     /*!
       \qmlproperty enumeration automaticSelectionMode
       \brief The mode to use for the automatic selection of levels based on current center viewpoint.
@@ -70,7 +68,7 @@ Control {
 
     /*!
       \qmlproperty int maxNumberLevels
-      \brief trims the maximum number of viewalbe levels.
+      \brief trims the maximum number of viewable levels.
       A scrollable component is automatically used in case of higher number of levels.
     */
     property int maxNumberLevels: 2
@@ -101,12 +99,12 @@ Control {
         rows: 1
         // changing the layout direction based on the current position of the floorfilter relative to its parent.
         // switching the layout will result in switching the levels toolbar with the site/facility view.
-        layoutDirection: (internal.leaderPosition === FloorFilter.LeaderPosition.UpperLeft)
-                         || (internal.leaderPosition === FloorFilter.LeaderPosition.LowerLeft) ? Qt.LeftToRight : Qt.RightToLeft
+        layoutDirection: (internal.parentPosition === FloorFilter.ParentPosition.UpperLeft)
+                         || (internal.parentPosition === FloorFilter.ParentPosition.LowerLeft) ? Qt.LeftToRight : Qt.RightToLeft
         // verticalalignment based on current position of the floorfilter relative to its parent.
         // upper: top align; lower: bottom align
-        verticalItemAlignment: (internal.leaderPosition === FloorFilter.LeaderPosition.UpperLeft)
-                               || (internal.leaderPosition === FloorFilter.LeaderPosition.UpperRight) ? Grid.AlignTop : Grid.AlignBottom
+        verticalItemAlignment: (internal.parentPosition === FloorFilter.ParentPosition.UpperLeft)
+                               || (internal.parentPosition === FloorFilter.ParentPosition.UpperRight) ? Grid.AlignTop : Grid.AlignBottom
         columnSpacing: 5
         ToolBar {
             id: levelFilterMenu
@@ -138,9 +136,8 @@ Control {
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft
                     // use different pointing icon based on the leader position. if icons are collapsed and left position: use right pointing icon; if right position: use left pointing icon; if collapsedIcons === true, switch the icon.
-                    // leaderPosition === right XNOR collapsedIcons; if collapsedIcons === false, expression evaluates opposite as its operands. if collapsedIcons === true, expression evaluates as its operands.
-                    icon.source: !((internal.leaderPosition === FloorFilter.LeaderPosition.UpperRight ||
-                                    internal.leaderPosition === FloorFilter.LeaderPosition.LowerRight) ^ internal.collapsedIcons) ? "images/chevrons-left.svg" : "images/chevrons-right.svg"
+                    icon.source: (internal.parentPosition === FloorFilter.ParentPosition.UpperRight ||
+                                    internal.parentPosition === FloorFilter.ParentPosition.LowerRight) === internal.collapsedIcons ? "images/chevrons-left.svg" : "images/chevrons-right.svg"
                     text: "Collapse"
                     flat: true
                     display: internal.collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
@@ -157,17 +154,16 @@ Control {
                     icon.source: "images/zoom-to-object.svg"
                     text: "Zoom to"
                     flat: true
-                    // enabled based on the currentVisibleListView and if site/facility element is not undefined.
-                    enabled: !listView.visible ? controller.selectedFacilityId : internal.currentVisibileListView === FloorFilter.VisibleListView.Site
-                                                 ? controller.selectedSiteId : controller.selectedFacilityId
+                    // Zooming to currentVisibleListView, facility or site. If listView is not visible, zoom to facility (regardeless of currentVisibleListView).
+                    // Also check if facility/site are defined, otherwise zoom button not enabled.
+                    enabled: listView.visible ? (internal.currentVisibileListView === FloorFilter.VisibleListView.Site ? controller.selectedSiteId
+                                              : controller.selectedFacilityId) : controller.selectedFacilityId
                     display: internal.collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
                     onClicked: {
-                        if (internal.currentVisibileListView === FloorFilter.VisibleListView.Site
-                                && listView.visible)
+                        if (internal.currentVisibileListView === FloorFilter.VisibleListView.Site)
                             controller.zoomToSite(controller.selectedSiteId);
                         else if (internal.currentVisibileListView
-                                 === FloorFilter.VisibleListView.Facility
-                                 || !listView.visible)
+                                 === FloorFilter.VisibleListView.Facility)
                             controller.zoomToFacility(
                                         controller.selectedFacilityId);
                         else
@@ -264,7 +260,6 @@ Component.onCompleted: repeater.buttonHeight = Math.max(repeater.buttonHeight, t
                     checkable: true
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft
-                    visible: !hideSiteFacilityButton
                     icon.source: "images/organization.svg"
                     text: "Browse"
                     flat: true
@@ -379,32 +374,29 @@ Component.onCompleted: repeater.buttonHeight = Math.max(repeater.buttonHeight, t
                     // scroll list view to selected item
                     onCurrentIndexChanged: positionViewAtIndex(currentIndex, ListView.Visible)
 
+                    Connections {
+                        target: searchTextField
+                        function onTextChanged() {
+                            //using `items` group to fetch all the elements (all elements are set into this group by default).
+                            for (var i = 0; i < dm.items.count; ++i) {
+                                var item = dm.items.get(i);
+                                // empty string clears the filtering. All elements are visible (set into the `filtered` group).
+                                if (searchTextField.text === "") {
+                                    item.inFiltered = true;
+                                } else {
+                                    if (item.model.name.toLowerCase().includes(searchTextField.text.toLowerCase()))
+                                        item.inFiltered = true;
+                                    else
+                                        item.inFiltered = false;
+                                }
+                            }
+                            listView.visible = filteredGroup.count > 0;
+                            noResultsFoundLabel.visible = !listView.visible;
+                        }
+                    }
                     // delegate model used to implement the filtering functionality, by setting visible elements in the `filtered` group.
                     model: DelegateModel {
                         id: dm
-                        property Connections conn: Connections {
-                            target: searchTextField
-                            function onTextChanged() {
-                                //using `items` group to fetch all the elements (all elements are set into this group by default).
-                                for (var i = 0; i < dm.items.count; ++i) {
-                                    var item = dm.items.get(i);
-                                    // empty string clears the filtering. All elements are visible (set into the `filtered` group).
-                                    if (searchTextField.text === "") {
-                                        item.inFiltered = true;
-                                    } else {
-                                        if (item.model.name.toLowerCase(
-                                                    ).includes(
-                                                    searchTextField.text.toLowerCase(
-                                                        )))
-                                            item.inFiltered = true;
-                                        else
-                                            item.inFiltered = false;
-                                    }
-                                }
-                                listView.visible = filteredGroup.count > 0;
-                                noResultsFoundLabel.visible = !listView.visible;
-                            }
-                        }
 
                         // switch between controller model based on the currentVisibleListView
                         model: internal.currentVisibileListView
@@ -544,12 +536,12 @@ Component.onCompleted: repeater.buttonHeight = Math.max(repeater.buttonHeight, t
     /*!
       \brief Enums to generalize the current \c FloorFilter position relative to its parent.
       4 different options, created by tracing 2 lines passing by the parent center point and its width / 2 or its height / 2 points.
-      \value LeaderPosition.UpperLeft Top left square.
-      \value LeaderPosition.UpperRight Top right square.
-      \value LeaderPosition.LowerRight Bottom right square.
-      \value LeaderPosition.LowerLeft Botttom left square.
+      \value ParentPosition.UpperLeft Top left square.
+      \value ParentPosition.UpperRight Top right square.
+      \value ParentPosition.LowerRight Bottom right square.
+      \value ParentPosition.LowerLeft Botttom left square.
     */
-    enum LeaderPosition {
+    enum ParentPosition {
         UpperLeft,
         UpperRight,
         LowerRight,
@@ -578,17 +570,17 @@ Component.onCompleted: repeater.buttonHeight = Math.max(repeater.buttonHeight, t
         property double centerParentX: (parentOrigin.x + floorFilter.parent.width) / 2
         property double centerParentY: (parentOrigin.y + floorFilter.parent.height) / 2
         // position of floorfilter related to its parent.
-        property int leaderPosition: {
+        property int parentPosition: {
             if (centerFloorFilterX < centerParentX) {
                 if (centerFloorFilterY < centerParentY)
-                    FloorFilter.LeaderPosition.UpperLeft;
+                    FloorFilter.ParentPosition.UpperLeft;
                 else
-                    FloorFilter.LeaderPosition.LowerLeft;
+                    FloorFilter.ParentPosition.LowerLeft;
             } else {
                 if (centerFloorFilterY < centerParentY)
-                    FloorFilter.LeaderPosition.UpperRight;
+                    FloorFilter.ParentPosition.UpperRight;
                 else
-                    FloorFilter.LeaderPosition.LowerRight;
+                    FloorFilter.ParentPosition.LowerRight;
             }
         }
         onCurrentVisibileListViewChanged: {

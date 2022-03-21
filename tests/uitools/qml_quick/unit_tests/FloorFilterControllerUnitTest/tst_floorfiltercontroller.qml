@@ -38,7 +38,6 @@ TestCase {
             item: PortalItem {
                 itemId: "49520a67773842f1858602735ef538b5"
                 portal: Portal {
-                    Component.onCompleted: load()
                     onErrorChanged: {
                         if (loadStatus === Enums.LoadStatusFailedToLoad) {
                             console.log(error.message);
