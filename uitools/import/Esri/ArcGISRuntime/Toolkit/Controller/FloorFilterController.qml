@@ -539,8 +539,8 @@ QtObject {
                                                       "modelId": levelExtracted.levelId
                                                   });
                                 });
-        // no suitable vertical order found. second check to from facilities with no levels
-        if (!selectedLevel && listLevels[0])
+        // no suitable vertical order found or no levels in facility. second check to from facilities with no levels
+        if (selectedLevel === "")
             internal.selectedLevelId = listLevels.length ? listLevels[0].levelId : "";
     }
 

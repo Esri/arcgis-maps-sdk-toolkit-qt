@@ -173,6 +173,26 @@ TestCase {
 
     }
 
+    // selecting facilities. check that the facilities are set and its default levels are automatically selected.
+    function test_selectFacilities() {
+        var control = loadFloorManagerMultiple();
+        // select site and facility
+        control.setSelectedFacilityId("1000.US01.MAIN.M");
+        compare(control.selectedFacilityId, "1000.US01.MAIN.M");
+        compare(control.selectedFacility.name, "RED M");
+        compare(control.selectedSite.name, "Esri Redlands Main Campus");
+        verify(control.selectedLevel != null);
+        compare(control.selectedLevelId, "1000.US01.MAIN.M1")
+
+        // select facility with no level. check that the selectedLevel is also reset
+        control.setSelectedFacilityId("1000.US01.MAIN.N");
+        compare(control.selectedFacilityId, "1000.US01.MAIN.N");
+        compare(control.selectedFacility.name, "RED N");
+        compare(control.selectedSite.name, "Esri Redlands Main Campus");
+        verify(control.selectedLevel == null);
+        compare(control.selectedLevelId, "");
+    }
+
     // don't change the visibility of levels when ff is loaded.
     // load a new map with floormanager. check its levels visibility with the same map loaded in the floorfilter
     function test_noModifyOriginalVisibilityLevels() {
