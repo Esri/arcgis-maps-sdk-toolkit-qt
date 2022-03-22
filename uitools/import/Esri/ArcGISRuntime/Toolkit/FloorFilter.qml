@@ -357,7 +357,8 @@ Control {
                     ScrollBar.vertical: ScrollBar {}
                     spacing: 5
                     clip: true
-                    // scroll list view to selected item
+                    // known bug: currentIndex is not on sync with the highlighted delegate when a new model is set/updated (listview automatically set currentIndex to 0).
+                    // scroll list view to selected item.
                     onCurrentIndexChanged: positionViewAtIndex(currentIndex, ListView.Visible)
 
                     Connections {
@@ -403,7 +404,8 @@ Control {
                             // facility might not have a parentSite, guarding from it.
                             property var parentSiteName: model.parentSiteName ?? ""
                             // highlight only set by the modelId comparison, not by the user click. Otherwise double selected facility could happen.
-                            checkable: false
+                            checkable: true
+                            checked: highlighted
                             highlighted: internal.currentVisibileListView === FloorFilter.VisibleListView.Site ?
                                                                                      model.modelId === internal.selectedSiteId : model.modelId === internal.selectedFacilityId
                             onHighlightedChanged: listView.currentIndex = index;

@@ -48,7 +48,7 @@ QtObject {
 
       Default is \c{AutomaticSelectionMode.Always}
     */
-    property int automaticSelectionMode
+    property int automaticSelectionMode : FloorFilterController.AutomaticSelectionMode.Always
 
     /*!
       \brief Tries to update the current selected site,facility and level based on the current viewcenter point geometry.
