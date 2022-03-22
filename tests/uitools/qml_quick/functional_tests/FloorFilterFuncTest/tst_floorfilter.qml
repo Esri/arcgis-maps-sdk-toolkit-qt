@@ -409,5 +409,55 @@ Rectangle {
             compare(true, closer.visible);
             compare(false, itemSelectedButton.visible);
         }
+
+        // testing the viewpoint mode. This functionality is more related to the \c FloorFilterController, but
+        // it is needed a rendering test in order to complete the `setViewpoint` and the GUI testing suite provides it.
+        function test_viewpointMode() {
+            var ff = createTemporaryObject(ffMultiComponent, foo);
+            var buildingMenuButton = findChild(ff, "buildingMenuButton");
+            // show the listview
+            mouseClick(buildingMenuButton);
+            var listView = findChild(ff, "listView");
+            var showAllFacilities = findChild(ff, "showAllFacilities");
+            // if floorManager already loaded, skip the wait. Otherwise wait for the signal
+            if(ff.controller.floorManager != null ? ff.controller.floorManager.loadStatus !== Enums.LoadStatusLoaded : true)
+                ff.controller.spy.wait(10000);
+            compare(ff.controller.automaticSelectionMode, FloorFilterController.AutomaticSelectionMode.Always);
+            //ff.controller.setSelectedSiteId(ff.controller.floorManager.sites[1].siteId);
+            var initialViewpoint = ff.controller.geoView.currentViewpointCenter;
+            var selectFacility = ff.controller.floorManager.facilities[0];
+            verify(selectFacility != null);
+            var newViewpoint = ArcGISRuntimeEnvironment.createObject(
+                        'ViewpointExtent', {
+                            "extent": selectFacility.geometry
+                        });
+            var spyViewpoint = createTemporaryQmlObject('import QtQuick 2.0; SignalSpy { signalName : "setViewpointCompleted" }', foo);
+            spyViewpoint.target = ff.geoView;
+            // need to spy on the `selectedSite` because when the spyViewpoint is done, the `selectedSite` is not yet set.
+            ff.geoView.setViewpoint(newViewpoint);
+            wait(spyViewpoint);
+            var internal = findChild(ff, "internal");
+            // have to tryVerify until the `selectedSiteId` is not null/"" becuase it is set multiple times from the `tryUpdate`, so can't rely on a signalSpy on its onChanged event.
+            tryVerify(function() {return internal.selectedSiteId != null && internal.selectedSiteId.length > 0});
+            compare(internal.selectedSiteId, ff.controller.selectedSiteId);
+            compare(ff.controller.selectedSiteId, selectFacility.site.siteId);
+            // directly access controller properties
+            verify(ff.controller.selectedSite != null);
+            compare(internal.selectedFacilityId, selectFacility.facilityId);
+            compare(internal.selectedFacilityId, ff.controller.selectedFacilityId);
+
+            // reset the geoview viewpoint
+            spyViewpoint.clear();
+            ff.geoView.setViewpoint(initialViewpoint);
+            wait(spyViewpoint);
+            // have to tryVerify until the `selectedSiteId` is null/"" becuase it is set multiple times from the `tryUpdate`, so can't rely on a signalSpy on its onChanged event.
+            tryVerify(function() {return internal.selectedSiteId == null || internal.selectedSiteId.length === 0});
+            compare(internal.selectedSiteId, ff.controller.selectedSiteId);
+            compare(ff.controller.selectedSiteId, "");
+            // directly access controller properties
+            verify(ff.controller.selectedSite == null);
+            compare(internal.selectedFacilityId, "");
+            compare(internal.selectedFacilityId, ff.controller.selectedFacilityId);
+        }
     }
 }

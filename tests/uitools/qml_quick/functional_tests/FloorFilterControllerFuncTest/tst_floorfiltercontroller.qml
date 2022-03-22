@@ -23,7 +23,7 @@ import Esri.ArcGISRuntime.Toolkit.Controller 100.14
 
 TestCase {
     id: floorFilterControllerFuncTest
-    name: "FloorFilterControllerUnitTest"
+    name: "FloorFilterControllerFuncTest"
 
     Credential {
         id: viewerCredentialIndoors
@@ -192,5 +192,4 @@ TestCase {
             verify(map.floorManager.levels[i].visible === control.floorManager.levels[i].visible);
         }
     }
-
 }
