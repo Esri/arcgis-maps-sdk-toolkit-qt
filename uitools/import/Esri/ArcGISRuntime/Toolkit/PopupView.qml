@@ -221,6 +221,7 @@ Page {
     }
 
     footer: ColumnLayout {
+        visible: popupView.closeCallback
         Button {
             text: "Close"
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
