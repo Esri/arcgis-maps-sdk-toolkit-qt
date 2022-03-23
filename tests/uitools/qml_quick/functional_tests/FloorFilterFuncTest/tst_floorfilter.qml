@@ -30,6 +30,8 @@ Rectangle {
     MapView {
         id: viewMulti
         anchors.fill: parent
+        property var initialViewpoint
+        onCurrentViewpointCenterChanged: initialViewpoint = viewMulti.currentViewpointCenter
         Map {
             id: mapMulti
             item: PortalItem {
@@ -336,6 +338,7 @@ Rectangle {
         // zoom button enabled or not. Check if it changes viewpoint by spying on setViewpointCompleted
         function test_zoom() {
             var ff = createTemporaryObject(ffMultiComponent, foo);
+            ff.controller.automaticSelectionMode = FloorFilterController.Never;
             var buildingMenuButton = findChild(ff, "buildingMenuButton");
             // show the listview
             mouseClick(buildingMenuButton);
@@ -353,21 +356,17 @@ Rectangle {
             var backToSite = findChild(ff, "backToSite");
             mouseClick(backToSite);
             compare(true, zoom.enabled);
-            wait(1000);
             // pan mapview
             mouseDrag(viewMulti, viewMulti.width / 2, viewMulti.height / 2, 30, 0);
-            wait(1000);
             // spy on the setViewpoint
             var spyViewpoint = createTemporaryQmlObject('import QtQuick 2.0; SignalSpy { target: viewMulti; signalName : "setViewpointCompleted" }', foo);
             mouseClick(zoom);
-            wait(spyViewpoint);
-            wait(1000);
+            spyViewpoint.wait();
             // select site again, go to facility view
             listView.positionViewAtIndex(1, ListView.Beginning);
             mouseClick(listView, 25, 25, Qt.LeftButton, Qt.NoModifier, 100);
             compare(false, zoom.enabled);
             mouseDrag(viewMulti, viewMulti.width / 2, viewMulti.height / 2, 30, 0);
-            wait(1000);
             // select a facility
             mouseClick(listView, 25, 25, Qt.LeftButton, Qt.NoModifier, 100);
             spyViewpoint.clear();
@@ -422,36 +421,48 @@ Rectangle {
             // if floorManager already loaded, skip the wait. Otherwise wait for the signal
             if(ff.controller.floorManager != null ? ff.controller.floorManager.loadStatus !== Enums.LoadStatusLoaded : true)
                 ff.controller.spy.wait(10000);
+            var spyViewpoint = createTemporaryQmlObject('import QtQuick 2.0; SignalSpy { signalName : "setViewpointCompleted" }', foo);
+            spyViewpoint.target = ff.geoView;
+            // reset by zooming out
+            var builder = ArcGISRuntimeEnvironment.createObject('EnvelopeBuilder', {
+                                                                    "geometry": ff.geoView.currentViewpointExtent.extent
+                                                                });
+            builder.expandByFactor(10.0);
+            var outViewpoint = ArcGISRuntimeEnvironment.createObject(
+                        'ViewpointExtent', {
+                            "extent": builder.geometry
+                        });
+            ff.geoView.setViewpoint(outViewpoint);
+            spyViewpoint.wait();
             compare(ff.controller.automaticSelectionMode, FloorFilterController.AutomaticSelectionMode.Always);
             //ff.controller.setSelectedSiteId(ff.controller.floorManager.sites[1].siteId);
-            var initialViewpoint = ff.controller.geoView.currentViewpointCenter;
+
             var selectFacility = ff.controller.floorManager.facilities[0];
             verify(selectFacility != null);
-            var newViewpoint = ArcGISRuntimeEnvironment.createObject(
+            var newViewpointFacility = ArcGISRuntimeEnvironment.createObject(
                         'ViewpointExtent', {
                             "extent": selectFacility.geometry
                         });
-            var spyViewpoint = createTemporaryQmlObject('import QtQuick 2.0; SignalSpy { signalName : "setViewpointCompleted" }', foo);
-            spyViewpoint.target = ff.geoView;
+            viewMulti.setViewpoint(newViewpointFacility);
             // need to spy on the `selectedSite` because when the spyViewpoint is done, the `selectedSite` is not yet set.
-            ff.geoView.setViewpoint(newViewpoint);
-            wait(spyViewpoint);
+            spyViewpoint.clear();
+            spyViewpoint.wait();
             var internal = findChild(ff, "internal");
             // have to tryVerify until the `selectedSiteId` is not null/"" becuase it is set multiple times from the `tryUpdate`, so can't rely on a signalSpy on its onChanged event.
             tryVerify(function() {return internal.selectedSiteId != null && internal.selectedSiteId.length > 0});
+            tryVerify(function() {return internal.selectedFacilityId === selectFacility.facilityId}, 5000, `internal.selectedFacilityId ${internal.selectedFacilityId}, selectFacility.facilityId ${selectFacility.facilityId}`);
             compare(internal.selectedSiteId, ff.controller.selectedSiteId);
             compare(ff.controller.selectedSiteId, selectFacility.site.siteId);
             // directly access controller properties
             verify(ff.controller.selectedSite != null);
-            compare(internal.selectedFacilityId, selectFacility.facilityId);
             compare(internal.selectedFacilityId, ff.controller.selectedFacilityId);
 
             // reset the geoview viewpoint
             spyViewpoint.clear();
-            ff.geoView.setViewpoint(initialViewpoint);
-            wait(spyViewpoint);
+            ff.geoView.setViewpoint(outViewpoint);
+            spyViewpoint.wait();
             // have to tryVerify until the `selectedSiteId` is null/"" becuase it is set multiple times from the `tryUpdate`, so can't rely on a signalSpy on its onChanged event.
-            tryVerify(function() {return internal.selectedSiteId == null || internal.selectedSiteId.length === 0});
+            tryVerify(function() {return internal.selectedSiteId == null || internal.selectedSiteId.length === 0}, 5000, `internal.selectedSiteId: ${internal.selectedSiteId}`);
             compare(internal.selectedSiteId, ff.controller.selectedSiteId);
             compare(ff.controller.selectedSiteId, "");
             // directly access controller properties

@@ -176,7 +176,7 @@ TestCase {
     // selecting facilities. check that the facilities are set and its default levels are automatically selected.
     function test_selectFacilities() {
         var control = loadFloorManagerMultiple();
-        // select site and facility
+        // select facility
         control.setSelectedFacilityId("1000.US01.MAIN.M");
         compare(control.selectedFacilityId, "1000.US01.MAIN.M");
         compare(control.selectedFacility.name, "RED M");
@@ -184,7 +184,7 @@ TestCase {
         verify(control.selectedLevel != null);
         compare(control.selectedLevelId, "1000.US01.MAIN.M1")
 
-        // select facility with no level. check that the selectedLevel is also reset
+        // select facility with no level. check that the selectedLevel is reset
         control.setSelectedFacilityId("1000.US01.MAIN.N");
         compare(control.selectedFacilityId, "1000.US01.MAIN.N");
         compare(control.selectedFacility.name, "RED N");
