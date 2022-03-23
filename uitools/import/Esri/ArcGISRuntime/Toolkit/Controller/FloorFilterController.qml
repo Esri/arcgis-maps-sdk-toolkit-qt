@@ -150,8 +150,6 @@ QtObject {
       \qmlproperty int updateLevelsMode
       \brief The mode that defines how levels are made visible/invisible in the geoView.
       \value UpdateLevelsMode.AllLevelsMatchingVerticalOrder When a level is selected, all levels with matching vertical order are made visible, all other levels are invisible.
-      \value UpdateLevelsMode.SingleLevel All levels with \c{verticalOrder == 0} are set to visible, the currently selected level is also visible, all other levels are set to invisible. This
-      matches the JavaScript Widget FloorFilter functionality.
 
       Default is \c{UpdateLevelsMode.AllLevelsMatchingVerticalOrder}
     */
@@ -605,13 +603,10 @@ QtObject {
     /*!
       \brief The mode that defines how levels are made visible/invisible in the geoView.
       \value AllLevelsMatchingVerticalOrder When a level is selected, all levels with matching vertical order are made visible, all other levels are invisible.
-      \value SingleLevel All levels with \c{verticalOrder == 0} are set to visible, the currently selected level is also visible, all other levels are set to invisible. This
-      matches the JavaScript Widget FloorFilter functionality.
       \sa updateLevelsMode
     */
     enum UpdateLevelsMode {
         AllLevelsMatchingVerticalOrder,
-        SingleLevel
     }
 
     /*!

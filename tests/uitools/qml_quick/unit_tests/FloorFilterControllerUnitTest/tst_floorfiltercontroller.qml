@@ -190,20 +190,6 @@ TestCase {
             if(levelI.verticalOrder === verticalOrder)
                 verify(levelI.visible);
         }
-
-        // updatelevelsmode SingleLevel
-        control.updateLevelsMode = FloorFilterController.SingleLevel;
-        // set all level's visiblities as false to build test.
-        for(var i = 0; i < control.floorManager.levels.length; ++i){
-            control.floorManager.levels[i].visibility = false;
-        }
-        // setting a new level as selected (last one)
-        level = control.floorManager.levels[control.floorManager.levels.length - 1];
-        control.setSelectedLevelId(level.levelId);
-
-        for(var i = 0; i < control.floorManager.levels.length - 1; ++i) {
-            verify(!control.floorManager.levels.visible);
-        }
     }
 
     function test_setVisibilityCurrentLevel() {
