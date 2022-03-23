@@ -4,6 +4,7 @@
 * (SpinBox) Calcite styling of the SpinBox component.
 * (Callout) Major rewrite of Callout. Moved from Canvas to Shape rendering. Callout is now style compliant.
 * Adding unit and functional test suites for uitools.
+* (PopupView) Setting `closeCallback` to `null` now correctly hides the close button as docs advertise.
 
 ## 100.13
 
