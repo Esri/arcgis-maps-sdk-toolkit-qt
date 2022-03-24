@@ -25,9 +25,9 @@ import QtGraphicalEffects 1.12
   \inqmlmodule Esri.ArcGISRuntime.Toolkit
   \ingroup ArcGISQtToolkitUiQmlViews
   \since 100.14
-  \brief Allows to display and filter the available floor aware layers in the current \c GeoModel.
+  \brief Allows display and filtering of the available floor aware layers in the current \c GeoModel.
 
-  The FloorFilter allows the interaction with the available floor aware layers. A user can select from a list of sites which presents
+  The FloorFilter allows interaction with the available floor aware layers. A user can select from a list of sites which presents
   their facilities. Once a facility is chosen, it is possible to toggle between its levels which will show them on the \c GeoView.
   2D maps and 3D scenes are supported.
   Example code in the QML API (C++ API might differ):
@@ -98,11 +98,11 @@ Control {
             ColumnLayout {
                 spacing: 0
                 ToolButton {
-                    id: closer
+                    id: closeButton
                     objectName: "closer"
                     checkable: true
                     checked: true
-                    visible: !closer.checked
+                    visible: !closeButton.checked
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft
                     icon.source: "images/x.svg"
@@ -111,10 +111,11 @@ Control {
                 }
 
                 ToolSeparator {
-                    visible: !closer.checked
+                    visible: !closeButton.checked
                     Layout.fillWidth: true
                     orientation: Qt.Horizontal
                 }
+
                 ToolButton {
                     id: collapser
                     objectName: "collapser"
@@ -128,10 +129,12 @@ Control {
                     display: internal.collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
                     onClicked: internal.collapsedIcons = !internal.collapsedIcons
                 }
+
                 ToolSeparator {
                     Layout.fillWidth: true
                     orientation: Qt.Horizontal
                 }
+
                 ToolButton {
                     objectName: "zoom"
                     Layout.fillWidth: true
@@ -145,26 +148,30 @@ Control {
                                               : controller.selectedFacilityId) : controller.selectedFacilityId
                     display: internal.collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
                     onClicked: {
-                        if (internal.currentVisibileListView === FloorFilter.VisibleListView.Site)
-                            controller.zoomToSite(controller.selectedSiteId);
-                        else if (internal.currentVisibileListView
-                                 === FloorFilter.VisibleListView.Facility)
-                            controller.zoomToFacility(
-                                        controller.selectedFacilityId);
-                        else
-                            console.error("extra enum not accounted for.");
+                        switch(internal.currentVisibileListView){
+                            case FloorFilter.VisibleListView.Site:
+                                controller.zoomToSite(controller.selectedSiteId);    
+                                break;
+                            case FloorFilter.VisibleListView.Facility:
+                                controller.zoomToFacility(controller.selectedFacilityId);
+                                break;
+                            default:
+                                console.error("extra enum not accounted for.");
+                        } 
                     }
                 }
+
                 ToolSeparator {
                     Layout.fillWidth: true
                     orientation: Qt.Horizontal
                 }
 
-                //Layout width: fill the parent Layout if is larger than the `contentItem.width`. If `contentItem.width` is larger, stretch to keep all its items without resizing them (don't elide text children).
+                //Layout width: fill the parent Layout if is larger than the `contentItem.width`. 
+                // If `contentItem.width` is larger, stretch to keep all its items without resizing them (don't elide text children).
                 Flickable {
                     id: flickable
                     objectName: "flickable"
-                    visible: !closer.checked
+                    visible: !closeButton.checked
                     // dont need to use the id of the column
                     contentHeight: contentItem.childrenRect.height
                     Layout.maximumHeight: repeater.buttonHeight * maxNumberLevels
@@ -195,11 +202,11 @@ Control {
                             delegate: ToolButton {
                                 Component.onCompleted: repeater.buttonHeight = Math.max(repeater.buttonHeight, this.height)
                                 id: levelButton
-                                visible: !closer.checked
+                                visible: !closeButton.checked
                                 checked: controller.selectedLevelId === model.modelId
                                 autoExclusive: true
                                 Layout.fillWidth: true
-                                text: closer.checked
+                                text: closeButton.checked
                                       || internal.collapsedIcons ? model.shortName : model.longName
                                 flat: true
                                 display: AbstractButton.TextOnly
@@ -221,7 +228,7 @@ Control {
                 ToolButton {
                     id: itemSelectedButton
                     objectName: "itemSelectedButton"
-                    visible: closer.checked && text !== ""
+                    visible: closeButton.checked && text !== ""
                     Layout.fillWidth: true
                     // always checked
                     checkable: false
@@ -230,7 +237,7 @@ Control {
                     flat: true
                     display: AbstractButton.TextOnly
                     onClicked: {
-                        closer.checked = false;
+                        closeButton.checked = false;
                     }
                 }
 
@@ -288,7 +295,7 @@ Control {
                     }
                     onClicked: {
                         internal.currentVisibileListView = FloorFilter.VisibleListView.Site;
-                        // When showing site view, resetting the not ignore current site. (this button is only way to get to site view).
+                        // When switching to site view, reset the `selectedSiteRespected` to true. (this button is the only way to get to the site view).
                         controller.selectedSiteRespected = true;
                     }
                 }
@@ -363,15 +370,21 @@ Control {
 
                     Connections {
                         target: searchTextField
+                        function setItemsinFiltered() {
+                            for(let i = 0; i < delegateModel.items.count; ++i)
+                                delegateModel.items.get(i).inFiltered = true;
+                        }
+
                         function onTextChanged() {
-                            //using `items` group to fetch all the elements (all elements are set into this group by default).
-                            for (var i = 0; i < dm.items.count; ++i) {
-                                var item = dm.items.get(i);
-                                // empty string clears the filtering. All elements are visible (set into the `filtered` group).
-                                if (searchTextField.text === "") {
-                                    item.inFiltered = true;
-                                } else {
-                                    if (item.model.name.toLowerCase().includes(searchTextField.text.toLowerCase()))
+                            const searchTextLower = searchTextField.text.toLowerCase();
+                            // empty string clears the filtering. All elements are visible (set into the `filtered` group).
+                            if (searchTextLower === "")
+                                setItemsinFiltered();
+                            else {
+                                //using `items` group to fetch all the elements (all elements are set into this group by default).
+                                for (let i = 0; i < delegateModel.items.count; ++i) {
+                                    var item = delegateModel.items.get(i);
+                                    if (item.model.name.toLowerCase().includes(searchTextLower))
                                         item.inFiltered = true;
                                     else
                                         item.inFiltered = false;
@@ -383,7 +396,7 @@ Control {
                     }
                     // delegate model used to implement the filtering functionality, by setting visible elements in the `filtered` group.
                     model: DelegateModel {
-                        id: dm
+                        id: delegateModel
 
                         // switch between controller model based on the currentVisibleListView
                         model: internal.currentVisibileListView
@@ -426,19 +439,21 @@ Control {
                                     controller.setSelectedFacilityId(model.modelId);
                                     // hide the whole facilityview
                                     buildingMenuButton.checked = false;
-                                    closer.checked = false;
+                                    closeButton.checked = false;
                                     controller.zoomToFacility(model.modelId);
                                 }
                             }
                         }
                     }
                 }
+
                 ToolSeparator {
                     visible: showAllFacilities.visible
                     Layout.fillWidth: true
                     Layout.columnSpan: 3
                     orientation: Qt.Horizontal
                 }
+
                 Button {
                     id: showAllFacilities
                     objectName: "showAllFacilities"
@@ -468,8 +483,9 @@ Control {
                     Layout.leftMargin: 5
                     Layout.rightMargin: 5
                     horizontalAlignment: Text.AlignHCenter
-                    text: controller.selectedSite ? controller.selectedSite.name : qsTr("Select the Site")
+                    text: controller.selectedSite ? controller.selectedSite.name : qsTr("Select a Site")
                 }
+
                 Label {
                     objectName: "facilityLabel"
                     font.bold: internal.currentVisibileListView
@@ -481,7 +497,7 @@ Control {
                     // if no site label, set top margin. Otherwise is squished
                     Layout.topMargin: !siteLabel.visible ? 5 : 0
                     horizontalAlignment: Text.AlignHCenter
-                    text: controller.selectedFacility ? controller.selectedFacility.name : qsTr("Select the Facility")
+                    text: controller.selectedFacility ? controller.selectedFacility.name : qsTr("Select a Facility")
                 }
 
                 Button {
