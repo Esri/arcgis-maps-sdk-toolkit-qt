@@ -31,6 +31,7 @@ TestCase {
         username: credential_username
         password: credential_password
     }
+
     MapView {
         id: viewMulti
         Map {
@@ -96,8 +97,6 @@ TestCase {
         }
     }
 
-
-
     function loadFloorManagerSingle() {
         var control = createTemporaryObject(controlSingleComponent, floorFilterControllerFuncTest);
 
@@ -140,7 +139,6 @@ TestCase {
         verify(control.selectedFacilityId !== "");
         verify(control.selectedFacility != null);
     }
-
 
     Component {
         id: mapComponentMulti

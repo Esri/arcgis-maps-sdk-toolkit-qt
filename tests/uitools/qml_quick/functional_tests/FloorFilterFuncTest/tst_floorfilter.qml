@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -24,7 +25,7 @@ import Esri.ArcGISRuntime.Toolkit.Controller 100.14
 import utils 1.0
 
 Rectangle {
-    id: foo
+    id: root
     width: 640; height: 480
 
     MapView {
@@ -53,7 +54,6 @@ Rectangle {
     Component {
         id: ffComponent
         FloorFilter {
-
         }
     }
 
@@ -83,9 +83,9 @@ Rectangle {
         }
 
         function test_collapserDefault() {
-            var ff = createTemporaryObject(ffComponent, foo);
-            var collapser = findChild(ff, "collapser");
-            var zoom = findChild(ff, "zoom");
+            let ff = createTemporaryObject(ffComponent, root);
+            let collapser = findChild(ff, "collapser");
+            let zoom = findChild(ff, "zoom");
             compare(collapser.text, qsTr("Collapse"));
             compare(collapser.display, AbstractButton.IconOnly);
             compare(zoom.text, qsTr("Zoom to"));
@@ -101,53 +101,67 @@ Rectangle {
         // test ff components that change state based on ff realative position to its parent.
         // x axis changes the gridOuterWrapper layoutDirection switching toolbuttons position with the site/facility component. Collapser icon used (point left or right).
         function test_visual_changePosition() {
-            var ff = createTemporaryObject(ffComponent, foo);
-            var buildingMenuButton = findChild(ff, "buildingMenuButton");
-            var gridOuterWrapper = findChild(ff, "gridOuterWrapper");
-            var collapser = findChild(ff, "collapser");
+            let ff = createTemporaryObject(ffComponent, root);
+            let buildingMenuButton = findChild(ff, "buildingMenuButton");
+            let gridOuterWrapper = findChild(ff, "gridOuterWrapper");
+            let collapser = findChild(ff, "collapser");
             mouseClick(buildingMenuButton);
             // set to top left
             ff.x = 0;
             ff.y = 0;
 
             // move ff until its center point is < parent center
-            while(ff.x + ff.width / 2 < ff.parent.width / 2){
+            tryVerify(function() {
+                if(ff.x + ff.width / 2 >= ff.parent.width / 2)
+                    return true;
                 compare(Qt.LeftToRight,  gridOuterWrapper.layoutDirection)
                 compare("chevrons-right.svg", Utils.urlFileName(collapser.icon.source.toString()))
                 ff.x += 20;
                 wait(50);
-            }
+                return false;
+            });
+
             // move ff until x-axis-end of parent
-            while(ff.x < ff.parent.width){
+            tryVerify(function() {
+                if(ff.x >= ff.parent.width)
+                    return true;
                 compare(Qt.RightToLeft,  gridOuterWrapper.layoutDirection)
                 compare("chevrons-left.svg", Utils.urlFileName(collapser.icon.source.toString()))
                 ff.x += 20;
                 wait(50);
-            }
+                return false;
+            });
 
             // reset the ff to top left
             ff.x = 0;
             ff.y = 0;
             // same as what done above, but for y-axis
-            while(ff.y + ff.height / 2 < ff.parent.height / 2){
+            tryVerify(function() {
+                if(ff.y + ff.height / 2 >= ff.parent.height / 2)
+                    return true;
                 compare(Grid.AlignTop, gridOuterWrapper.verticalItemAlignment);
                 ff.y += 20;
                 wait(50);
-            }
-            while(ff.y < ff.parent.height) {
+                return false;
+            });
+
+            tryVerify(function() {
+                if(ff.y >= ff.parent.height)
+                    return true;
                 compare(Grid.AlignBottom, gridOuterWrapper.verticalItemAlignment);
                 ff.y += 20;
                 wait(50);
-            }
+                return false;
+            });
         }
 
         // click floorfilter button and open the site/facility listview. single and multi sites/facilities
         function test_floorfilterOpen() {
             //no sites, no facilities
-            var ff = createTemporaryObject(ffComponent, foo);
-            var buildingMenuButton = findChild(ff, "buildingMenuButton");
-            var internal = findChild(ff, "internal");
-            var listView = findChild(ff, "listView");
+            let ff = createTemporaryObject(ffComponent, root);
+            let buildingMenuButton = findChild(ff, "buildingMenuButton");
+            let internal = findChild(ff, "internal");
+            let listView = findChild(ff, "listView");
             verify(internal)
             compare(internal.currentVisibileListView, FloorFilter.VisibleListView.Facility);
             compare(false, listView.visible);
@@ -156,13 +170,13 @@ Rectangle {
             compare(internal.currentVisibileListView, FloorFilter.VisibleListView.Facility);
             verify(listView);
             compare(true, listView.visible);
-            var backToSite = findChild(ff, "backToSite");
+            let backToSite = findChild(ff, "backToSite");
             // visible but with width size of 0
             compare(true, backToSite.visible);
             compare(0, backToSite.width);
 
             //multi sites
-            var ffMulti = createTemporaryObject(ffMultiComponent, foo);
+            let ffMulti = createTemporaryObject(ffMultiComponent, root);
             if(ffMulti.controller.floorManager != null ? ffMulti.controller.floorManager.loadStatus !== Enums.LoadStatusLoaded : true)
                 ffMulti.controller.spy.wait(10000);
             buildingMenuButton = findChild(ffMulti, "buildingMenuButton");
@@ -183,13 +197,13 @@ Rectangle {
         }
 
         function test_listViewCloser() {
-            var ff = createTemporaryObject(ffComponent, foo);
-            var buildingMenuButton = findChild(ff, "buildingMenuButton");
+            let ff = createTemporaryObject(ffComponent, root);
+            let buildingMenuButton = findChild(ff, "buildingMenuButton");
             mouseClick(buildingMenuButton);
-            var listView = findChild(ff, "listView");
+            let listView = findChild(ff, "listView");
             compare(true, listView.visible);
             compare(true, buildingMenuButton.checked);
-            var closerListView = findChild(ff, "closerListView");
+            let closerListView = findChild(ff, "closerListView");
             verify(closerListView);
             mouseClick(closerListView);
             compare(false, listView.visible);
@@ -197,10 +211,10 @@ Rectangle {
         }
 
         function test_filter() {
-            var ff = createTemporaryObject(ffMultiComponent, foo);
-            var buildingMenuButton = findChild(ff, "buildingMenuButton");
+            let ff = createTemporaryObject(ffMultiComponent, root);
+            let buildingMenuButton = findChild(ff, "buildingMenuButton");
             mouseClick(buildingMenuButton);
-            var listView = findChild(ff, "listView");
+            let listView = findChild(ff, "listView");
             // if floorManager already loaded, skip the wait. Otherwise wait for the signal
             if(ff.controller.floorManager != null ? ff.controller.floorManager.loadStatus !== Enums.LoadStatusLoaded : true)
                 ff.controller.spy.wait(10000);
@@ -208,11 +222,11 @@ Rectangle {
             verify(ff.controller.floorManager.levels.length > 0)
             wait(3000)
             verify(listView.model.count > 0);
-            var searchTextField = findChild(ff, "searchTextField");
+            let searchTextField = findChild(ff, "searchTextField");
             verify(searchTextField)
             searchTextField.text = "esri redlands learning center";
             compare(1, listView.model.count);
-            var noResultsFoundLabel = findChild(ff, "noResultsFoundLabel");
+            let noResultsFoundLabel = findChild(ff, "noResultsFoundLabel");
             compare(false, noResultsFoundLabel.visible);
             searchTextField.text = "asd";
             compare(0, listView.model.count);
@@ -229,26 +243,26 @@ Rectangle {
         }
 
         function test_highlightElements() {
-            var ff = createTemporaryObject(ffMultiComponent, foo);
-            var buildingMenuButton = findChild(ff, "buildingMenuButton");
+            let ff = createTemporaryObject(ffMultiComponent, root);
+            let buildingMenuButton = findChild(ff, "buildingMenuButton");
             // show the listview
             mouseClick(buildingMenuButton);
-            var listView = findChild(ff, "listView");
+            let listView = findChild(ff, "listView");
             // if floorManager already loaded, skip the wait. Otherwise wait for the signal
             if(ff.controller.floorManager != null ? ff.controller.floorManager.loadStatus !== Enums.LoadStatusLoaded : true)
                 ff.controller.spy.wait(10000);
             verify(listView.model.count > 0);
-            var siteLabel = findChild(ff, "siteLabel");
+            let siteLabel = findChild(ff, "siteLabel");
             compare("Select the Site", siteLabel.text);
             // click the first element in the list view at central x position and 5 y axis
-            var internal = findChild(ff, "internal");
+            let internal = findChild(ff, "internal");
             // select site
             mouseClick(listView, 25, 25);
             // no currentItem is selected
             verify(listView.currentItem == null);
             compare(-1, listView.currentIndex);
             compare("Esri Redlands Learning Center", siteLabel.text);
-            var backToSite = findChild(ff, "backToSite");
+            let backToSite = findChild(ff, "backToSite");
             // go back to site view
             mouseClick(backToSite);
             compare(FloorFilter.VisibleListView.Site, internal.currentVisibileListView);
@@ -270,34 +284,34 @@ Rectangle {
         // check all sites functionality, flickable/repeater and select levels.
         function test_allSites_levels() {
             // todo: checks on delegate text (composed by facility + new line + parent site)
-            var ff = createTemporaryObject(ffMultiComponent, foo);
-            var buildingMenuButton = findChild(ff, "buildingMenuButton");
+            let ff = createTemporaryObject(ffMultiComponent, root);
+            let buildingMenuButton = findChild(ff, "buildingMenuButton");
             // show the listview
             mouseClick(buildingMenuButton);
-            var listView = findChild(ff, "listView");
+            let listView = findChild(ff, "listView");
             // if floorManager already loaded, skip the wait. Otherwise wait for the signal
             if(ff.controller.floorManager != null ? ff.controller.floorManager.loadStatus !== Enums.LoadStatusLoaded : true)
                 ff.controller.spy.wait(10000);
-            var showAllFacilities = findChild(ff, "showAllFacilities");
+            let showAllFacilities = findChild(ff, "showAllFacilities");
             // show all facilities
             mouseClick(showAllFacilities, showAllFacilities.width / 2, showAllFacilities.height / 2, Qt.LeftButton, Qt.NoModifier, 100);
             verify(listView.model.count > 0);
-            var internal = findChild(ff, "internal");
+            let internal = findChild(ff, "internal");
             compare(FloorFilter.VisibleListView.Facility, internal.currentVisibileListView);
             // search for 3 level facility
-            var searchTextField = findChild(ff, "searchTextField");
+            let searchTextField = findChild(ff, "searchTextField");
             searchTextField.text = "red o";
             // select first facility
             mouseClick(listView, 25, 25, Qt.LeftButton, Qt.NoModifier, 100);
             compare("1000.US01.MAIN.O", internal.selectedFacilityId);
-            var siteLabel = findChild(ff, "siteLabel");
-            var facilityLabel = findChild(ff, "facilityLabel");
+            let siteLabel = findChild(ff, "siteLabel");
+            let facilityLabel = findChild(ff, "facilityLabel");
             compare("Esri Redlands Main Campus", siteLabel.text);
             compare("RED O", facilityLabel.text);
             // check repeater
-            var repeater = findChild(ff, "repeater");
+            let repeater = findChild(ff, "repeater");
             compare(3, repeater.count);
-            var flickable = findChild(ff, "flickable");
+            let flickable = findChild(ff, "flickable");
             // check the height of the flickable is number of items * buttonheight
             // wait that the delegate sets the buttonHeight once it is completed.
             tryCompare(flickable, "height", 2 * repeater.buttonHeight, 50);
@@ -305,7 +319,7 @@ Rectangle {
             compare(120, flickable.contentHeight);
 
             // select first level and check visiblity, text on gui, text on controller and checked status
-            var wrapper = findChild(ff, "wrapper");
+            let wrapper = findChild(ff, "wrapper");
             // scroll up to have the highest level on top.
             mouseWheel(flickable, 10, 10, 0, 120, Qt.NoButton);
             wait(1000); // wait that the scroll is done.
@@ -337,29 +351,29 @@ Rectangle {
 
         // zoom button enabled or not. Check if it changes viewpoint by spying on setViewpointCompleted
         function test_zoom() {
-            var ff = createTemporaryObject(ffMultiComponent, foo);
+            let ff = createTemporaryObject(ffMultiComponent, root);
             ff.controller.automaticSelectionMode = FloorFilterController.Never;
-            var buildingMenuButton = findChild(ff, "buildingMenuButton");
+            let buildingMenuButton = findChild(ff, "buildingMenuButton");
             // show the listview
             mouseClick(buildingMenuButton);
-            var listView = findChild(ff, "listView");
+            let listView = findChild(ff, "listView");
             // if floorManager already loaded, skip the wait. Otherwise wait for the signal
             if(ff.controller.floorManager != null ? ff.controller.floorManager.loadStatus !== Enums.LoadStatusLoaded : true)
                 ff.controller.spy.wait(10000);
-            var zoom = findChild(ff, "zoom");
+            let zoom = findChild(ff, "zoom");
             compare(false, zoom.enabled);
             // select a site (which has > 1 facility, otherwise the facility is automatically selected)
             listView.positionViewAtIndex(1, ListView.Beginning); // scroll to index 1 site, then click on it
             mouseClick(listView, 25, 25, Qt.LeftButton, Qt.NoModifier, 100);
             compare(false, zoom.enabled);
             // back to siteview
-            var backToSite = findChild(ff, "backToSite");
+            let backToSite = findChild(ff, "backToSite");
             mouseClick(backToSite);
             compare(true, zoom.enabled);
             // pan mapview
             mouseDrag(viewMulti, viewMulti.width / 2, viewMulti.height / 2, 30, 0);
             // spy on the setViewpoint
-            var spyViewpoint = createTemporaryQmlObject('import QtQuick 2.0; SignalSpy { target: viewMulti; signalName : "setViewpointCompleted" }', foo);
+            let spyViewpoint = createTemporaryQmlObject('import QtQuick 2.0; SignalSpy { target: viewMulti; signalName : "setViewpointCompleted" }', root);
             mouseClick(zoom);
             spyViewpoint.wait();
             // select site again, go to facility view
@@ -375,33 +389,33 @@ Rectangle {
         }
 
         function test_close() {
-            var ff = createTemporaryObject(ffMultiComponent, foo);
-            var buildingMenuButton = findChild(ff, "buildingMenuButton");
+            let ff = createTemporaryObject(ffMultiComponent, root);
+            let buildingMenuButton = findChild(ff, "buildingMenuButton");
             // show the listview
             mouseClick(buildingMenuButton);
-            var listView = findChild(ff, "listView");
-            var showAllFacilities = findChild(ff, "showAllFacilities");
+            let listView = findChild(ff, "listView");
+            let showAllFacilities = findChild(ff, "showAllFacilities");
             // if floorManager already loaded, skip the wait. Otherwise wait for the signal
             if(ff.controller.floorManager != null ? ff.controller.floorManager.loadStatus !== Enums.LoadStatusLoaded : true)
                 ff.controller.spy.wait(10000);
             mouseClick(showAllFacilities);
             // select first all facility (red a)
             mouseClick(listView, 25, 25, Qt.LeftButton, Qt.NoModifier, 100);
-            var closer = findChild(ff, "closer");
+            let closer = findChild(ff, "closer");
             verify(closer);
-            var itemSelectedButton = findChild(ff, "itemSelectedButton");
+            let itemSelectedButton = findChild(ff, "itemSelectedButton");
             compare(false, itemSelectedButton.visible);
             compare(true, closer.visible);
             // close the floorfilter: collapses the levels and only show the current selected
             // have to use 10ms delay, otherwise the click is done befor that the closer is available
             mouseClick(closer, closer.width / 2, closer.height / 2, Qt.LeftButton, Qt.NoModifier, 10);
-            var flickable = findChild(ff, "flickable");
+            let flickable = findChild(ff, "flickable");
             compare(false, closer.visible);
             compare(false, flickable.visible);
             compare(true, itemSelectedButton.visible);
             compare("A1", itemSelectedButton.text);
             // check the not collapsed itemSelectedButton
-            var collapser = findChild(ff, "collapser");
+            let collapser = findChild(ff, "collapser");
             // reopen the floorfilter, showing all the levels available
             mouseClick(itemSelectedButton);
             compare(true, flickable.visible);
@@ -412,23 +426,23 @@ Rectangle {
         // testing the viewpoint mode. This functionality is more related to the \c FloorFilterController, but
         // it is needed a rendering test in order to complete the `setViewpoint` and the GUI testing suite provides it.
         function test_viewpointMode() {
-            var ff = createTemporaryObject(ffMultiComponent, foo);
-            var buildingMenuButton = findChild(ff, "buildingMenuButton");
+            let ff = createTemporaryObject(ffMultiComponent, root);
+            let buildingMenuButton = findChild(ff, "buildingMenuButton");
             // show the listview
             mouseClick(buildingMenuButton);
-            var listView = findChild(ff, "listView");
-            var showAllFacilities = findChild(ff, "showAllFacilities");
+            let listView = findChild(ff, "listView");
+            let showAllFacilities = findChild(ff, "showAllFacilities");
             // if floorManager already loaded, skip the wait. Otherwise wait for the signal
             if(ff.controller.floorManager != null ? ff.controller.floorManager.loadStatus !== Enums.LoadStatusLoaded : true)
                 ff.controller.spy.wait(10000);
-            var spyViewpoint = createTemporaryQmlObject('import QtQuick 2.0; SignalSpy { signalName : "setViewpointCompleted" }', foo);
+            let spyViewpoint = createTemporaryQmlObject('import QtQuick 2.0; SignalSpy { signalName : "setViewpointCompleted" }', root);
             spyViewpoint.target = ff.geoView;
             // reset by zooming out
-            var builder = ArcGISRuntimeEnvironment.createObject('EnvelopeBuilder', {
+            let builder = ArcGISRuntimeEnvironment.createObject('EnvelopeBuilder', {
                                                                     "geometry": ff.geoView.currentViewpointExtent.extent
                                                                 });
             builder.expandByFactor(10.0);
-            var outViewpoint = ArcGISRuntimeEnvironment.createObject(
+            let outViewpoint = ArcGISRuntimeEnvironment.createObject(
                         'ViewpointExtent', {
                             "extent": builder.geometry
                         });
@@ -437,9 +451,9 @@ Rectangle {
             compare(ff.controller.automaticSelectionMode, FloorFilterController.AutomaticSelectionMode.Always);
             //ff.controller.setSelectedSiteId(ff.controller.floorManager.sites[1].siteId);
 
-            var selectFacility = ff.controller.floorManager.facilities[0];
+            let selectFacility = ff.controller.floorManager.facilities[0];
             verify(selectFacility != null);
-            var newViewpointFacility = ArcGISRuntimeEnvironment.createObject(
+            let newViewpointFacility = ArcGISRuntimeEnvironment.createObject(
                         'ViewpointExtent', {
                             "extent": selectFacility.geometry
                         });
@@ -447,7 +461,7 @@ Rectangle {
             // need to spy on the `selectedSite` because when the spyViewpoint is done, the `selectedSite` is not yet set.
             spyViewpoint.clear();
             spyViewpoint.wait();
-            var internal = findChild(ff, "internal");
+            let internal = findChild(ff, "internal");
             // have to tryVerify until the `selectedSiteId` is not null/"" becuase it is set multiple times from the `tryUpdate`, so can't rely on a signalSpy on its onChanged event.
             tryVerify(function() {return internal.selectedSiteId != null && internal.selectedSiteId.length > 0});
             tryVerify(function() {return internal.selectedFacilityId === selectFacility.facilityId}, 5000, `internal.selectedFacilityId ${internal.selectedFacilityId}, selectFacility.facilityId ${selectFacility.facilityId}`);
