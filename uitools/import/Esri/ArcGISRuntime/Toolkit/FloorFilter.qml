@@ -513,7 +513,7 @@ Control {
                     Layout.fillHeight: true
                     display: AbstractButton.IconOnly
                     flat: true
-                    //removing all paddings and spacing from component so icon will fill compeltely the button
+                    //removing all paddings and spacing from component so icon will fill completely the button
                     topPadding: 0
                     bottomPadding: 0
                     leftPadding: 0
@@ -533,9 +533,9 @@ Control {
     }
 
     /*!
-      \brief Types of elements shown into the \c ListView.
-      \value VisibleListView.Site Site containes Facilities
-      \value VisibleListView.Facility Facility containes levels.
+      \brief Types of elements shown in the \c ListView.
+      \value VisibleListView.Site Site contains Facilities
+      \value VisibleListView.Facility Facility contains levels.
       Default is \c VisibleListView.Site
     */
     // used to switch between site and facilities listviews and models.
@@ -546,11 +546,11 @@ Control {
 
     /*!
       \brief Enums to generalize the current \c FloorFilter position relative to its parent.
-      4 different options, created by tracing 2 lines passing by the parent center point and its width / 2 or its height / 2 points.
+      4 different options, created by tracing 2 lines passing by the parent center point and its \c {width / 2} or its \c {height / 2 points}.
       \value ParentPosition.UpperLeft Top left square.
       \value ParentPosition.UpperRight Top right square.
       \value ParentPosition.LowerRight Bottom right square.
-      \value ParentPosition.LowerLeft Botttom left square.
+      \value ParentPosition.LowerLeft Bottom left square.
     */
     enum ParentPosition {
         UpperLeft,
@@ -564,7 +564,7 @@ Control {
         objectName: "internal"
         // expands/collapse icons, showing long/short name.
         property bool collapsedIcons : true
-        // set the intial view as the facility view in case of single site or no sites.
+        // set the initial view as the facility view in case of single site or no sites.
         property int currentVisibileListView: floorFilter.controller.sites.count <= 1 ? FloorFilter.VisibleListView.Facility : FloorFilter.VisibleListView.Site
         property string selectedFacilityId: controller.selectedFacilityId
         property string selectedSiteId: controller.selectedSiteId
