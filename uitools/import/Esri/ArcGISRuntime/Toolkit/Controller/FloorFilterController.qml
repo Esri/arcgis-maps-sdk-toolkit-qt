@@ -52,7 +52,7 @@ QtObject {
 
     /*!
       \brief Tries to update the current selected site,facility and level based on the current viewcenter point geometry.
-      In case a site/facility is in the current viewcenter point, it is selected and its default level shown.
+      In case a site/facility is in the current viewpoint center, it is selected and its default level shown.
       The \l automaticSelectionMode is used to decide the specific behavior of level selection.
     */
     function tryUpdateSelection() {
@@ -85,19 +85,18 @@ QtObject {
         if(!floorManager)
             return;
 
-        let selectSite
+        let selectSite = null;
         for (var i = 0; i < floorManager.sites.length; ++i) {
             if (GeometryEngine.intersects(
                         floorManager.sites[i].geometry.extent,
                         viewpointCenter.center)) {
                 selectSite = floorManager.sites[i];
+                setSelectedSiteId(selectSite.siteId);
                 break;
             }
         }
 
-        if (selectSite !== undefined) {
-            setSelectedSiteId(selectSite.siteId);
-        } else if (automaticSelectionMode === FloorFilterController.AutomaticSelectionMode.Always) {
+        if (selectSite === null && automaticSelectionMode === FloorFilterController.AutomaticSelectionMode.Always) {
             setSelectedSiteId("");
         }
 
@@ -108,19 +107,18 @@ QtObject {
         if(viewpointCenter.targetScale > targetScale)
             return;
 
-        let selectFacility
+        let selectFacility = null;
         for (i = 0; i < floorManager.facilities.length; ++i) {
-            let facility;
             if (GeometryEngine.intersects(
                         floorManager.facilities[i].geometry.extent,
                         viewpointCenter.center)) {
                 selectFacility = floorManager.facilities[i];
+                setSelectedFacilityId(selectFacility.facilityId);
                 break;
             }
         }
-        if (selectFacility !== undefined) {
-            setSelectedFacilityId(selectFacility.facilityId);
-        } else if (automaticSelectionMode === FloorFilterController.AutomaticSelectionMode.Always) {
+
+        if (selectFacility === null && automaticSelectionMode === FloorFilterController.AutomaticSelectionMode.Always) {
             setSelectedFacilityId("");
             setSelectedLevelId("");
         }
@@ -147,7 +145,7 @@ QtObject {
     }
 
     /*!
-      \qmlproperty int updateLevelsMode
+      \qmlproperty enumeration updateLevelsMode
       \brief The mode that defines how levels are made visible/invisible in the geoView.
       \value UpdateLevelsMode.AllLevelsMatchingVerticalOrder When a level is selected, all levels with matching vertical order are made visible, all other levels are invisible.
 
@@ -158,7 +156,7 @@ QtObject {
     /*!
       \qmlproperty FloorManager floorManager
       \brief The FloorManager associated to the \l geoModel.
-      It can be null if no associated geoModel is available or is not loaded.
+      It can be null if no associated geoModel is available, is not loaded or it does not contain any floor aware data.
     */
     property FloorManager floorManager : geoModel? geoModel.floorManager : null
 
@@ -306,8 +304,8 @@ QtObject {
       Returns the id or \c null if no matching element id was found in the model.
     */
     function findElementIdxById(id, typeElement) {
-        var model;
-        var variableIdName;
+        let model;
+        let variableIdName;
         switch (typeElement) {
         case FloorFilterController.TypeElement.Level:
             model = floorManager.levels;
