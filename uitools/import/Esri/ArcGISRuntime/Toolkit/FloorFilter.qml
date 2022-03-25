@@ -37,6 +37,7 @@ import QtGraphicalEffects 1.12
   The user interface is driven from the FloorAware data that is available in the GeoModel's FloorManager.
 
   2D maps and 3D scenes are supported.
+  \image docs/floorfilter.gif
   Example code in the QML API (C++ API might differ):
   \snippet qml_quick/src/demos/FloorFilterDemoForm.qml Set up Floor Filter QML
 */
