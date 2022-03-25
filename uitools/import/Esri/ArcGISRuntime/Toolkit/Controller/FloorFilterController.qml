@@ -23,7 +23,7 @@ import Esri.ArcGISRuntime 100.14
   \since Esri.ArcGISRuntime 100.14
   \ingroup ArcGISQtToolkitUiQmlControllers
   \brief The controller part of a FloorFilter. This class handles the toggling of selected levels' visibility
-  associated to the \c FloorFilter inputted \c GeoModel flooraware layers.
+  associated to the \c FloorFilter inputted \c GeoModel FloorAware layers.
   Automatically loads the \c GeoModel and its associated \c FloorManager.
 */
 QtObject {
@@ -41,7 +41,7 @@ QtObject {
       \qmlproperty enumeration automaticSelectionMode
       \brief The mode selected defines how the \c FloorFilter updates its selection as the user navigates the connected \c GeoView.
       \value AutomaticSelectionMode.Never Viewpoint navigation does not affect the currently selected facility.
-      \value AutomaticSelectionMode.Always When the geoview's current viewpoint updates, the controller tests to see if the facility interect the viewpoint,
+      \value AutomaticSelectionMode.Always When the geoview's current viewpoint updates, the controller tests to see if the facility intersect the viewpoint,
       and selects it if so. If no facility intersects the viewpoint, then the current facility is deselected.
       \value AutomaticSelectionMode.AlwaysNonClearing Variant of \c Always, but if there is no facility to select within the viewpoint then we do not
       deselect the current viewpoint.
@@ -126,7 +126,7 @@ QtObject {
 
     /*!
       \qmlproperty GeoModel geoModel
-      \brief The geomodel the controller is listening for \c FloorManager changes.
+      \brief The GeoModel used by the controller to obtain the FloorManager.     
     */
     property GeoModel geoModel: {
         // check geoView has been set
@@ -199,7 +199,7 @@ QtObject {
 
     /*!
       \brief Sets the \a levelId as \l selectedLevelId.
-      This will change the current visibile level on the \c GeoView.
+      This will change the current visible level on the \c GeoView.
       If \a levelId is empty string, current selected level is deseleted and its visibility is set to false.
       Resets the previous level visibility. \l updateLevelsMode modifies the behavior of selecting level.
 
@@ -223,7 +223,7 @@ QtObject {
       \sa setSelectedLevelId
     */
     function setSelectedFacilityId(facilityId) {
-        // avoid findind null idx, immediately return if empty string
+        // avoid finding null idx, immediately return if empty string
         if(facilityId === ""){
             internal.selectedFacilityId = facilityId;
             return;
@@ -237,7 +237,7 @@ QtObject {
             return;
         }
 
-        // check that the current site is the selected facility selected's parent site. Otherwise the click came from a populateAllFacilities
+        // check that the current site is the selected facility's parent site. Otherwise the click came from a populateAllFacilities
         var facility = floorManager.facilities[idx];
 
         if (facility.site != null && (!internal.selectedSite || facility.site.siteId !== internal.selectedSite.siteId) ) {
@@ -507,7 +507,7 @@ QtObject {
     /*!
       \brief Clears and repopulates the \l levels with \a listLevels.
       Expects the levels elements to have `shortName`, `longName`, `levelId` properties.
-      Levels are sorted in terms of their vertical order, and a default level is selected, favouring the
+      Levels are sorted in terms of their vertical order, and a default level is selected, favoring the
       level with verticalOrder == 0.
     */
     function populateLevels(listLevels) {
@@ -604,7 +604,7 @@ QtObject {
       \sa updateLevelsMode
     */
     enum UpdateLevelsMode {
-        AllLevelsMatchingVerticalOrder,
+        AllLevelsMatchingVerticalOrder
     }
 
     /*!
