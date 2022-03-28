@@ -499,7 +499,7 @@ namespace Toolkit {
   }
 
   /*!
-   \brief On the GeoView, zooms to the facility contained within \a facilityItem.
+   \brief Sets the GeoView's viewpoint to the facility contained within \a facilityItem.
    */
   void FloorFilterController::zoomToFacility(FloorFilterFacilityItem* facilityItem)
   {
