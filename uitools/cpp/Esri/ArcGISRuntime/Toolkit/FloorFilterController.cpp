@@ -322,7 +322,7 @@ namespace Toolkit {
   /*!
    \brief Sets the ID of the currently selected level to \a selectedLevelId.
 
-   This will change the current visibile level on the GeoView.
+   This will change the current visible level on the GeoView.
    */
   void FloorFilterController::setSelectedLevelId(QString selectedLevelId)
   {
