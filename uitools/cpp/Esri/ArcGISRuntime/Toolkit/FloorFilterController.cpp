@@ -514,7 +514,7 @@ namespace Toolkit {
   }
 
   /*!
-   \brief On the GeoView, zooms to the facility with ID matching \a facilityId.
+   \brief Sets the GeoView's viewpoint to the facility with ID matching \a facilityId.
    */
   void FloorFilterController::zoomToFacility(const QString& facilityId)
   {
