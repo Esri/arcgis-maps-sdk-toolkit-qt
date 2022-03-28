@@ -18,6 +18,7 @@
 #define ESRI_ARCGISRUNTIME_TOOLKIT_FLOORFILTER_H
 
 #include <QFrame>
+#include <memory>
 
 namespace Ui {
   class FloorFilter;
@@ -48,7 +49,7 @@ namespace ArcGISRuntime {
 
     private:
       FloorFilterController* m_controller = nullptr;
-      Ui::FloorFilter* m_ui;
+      std::unique_ptr<Ui::FloorFilter> m_ui;
       bool m_sitesUpdatedFromController{false};
       bool m_facilitiesUpdatedFromController{false};
     };

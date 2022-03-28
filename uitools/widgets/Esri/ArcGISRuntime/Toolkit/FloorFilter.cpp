@@ -45,7 +45,7 @@ namespace Toolkit {
      extracts the `T*` pointer from its \c userRole.
      */
     template <typename T>
-    T* itemForIndex(QAbstractItemModel* model, QModelIndex modelIndex)
+    T* itemForIndex(QAbstractItemModel* model, const QModelIndex& modelIndex)
     {
       if (!model)
         return nullptr;
@@ -63,7 +63,7 @@ namespace Toolkit {
             O(n) search time.
      */
     template <typename T>
-    QModelIndex indexForId(QAbstractItemModel* model, QString id)
+    QModelIndex indexForId(QAbstractItemModel* model, const QString& id)
     {
       const int rowCount = model->rowCount();
       for (int i = 0; i < rowCount; ++i)
@@ -96,22 +96,22 @@ namespace Toolkit {
 
     /*!
      \internal
-     \brief Helper struct that holds a reference to sme `b`, sets `b` to `v` on construction,
-     and then sets `b` back to its initial value on destruction.
+     \brief Helper struct that holds a reference to some value `tracked`, sets `tracked` to `val` on construction,
+     and then sets `tracked` back to its initial value on destruction.
      */
     template <typename T>
     struct PushValue
     {
-      PushValue(T& b, T v) :
-        m_tracked(b),
+      PushValue(T& tracked, T val) :
+        m_tracked(tracked),
         m_state{std::move(m_tracked)}
       {
-        m_tracked = std::move(v);
+        m_tracked = std::move(val);
       }
 
       ~PushValue()
       {
-        m_tracked = std::move(m_state);
+        std::swap(m_tracked, m_state);
       }
 
       T& m_tracked;
@@ -127,7 +127,7 @@ namespace Toolkit {
     {
       return PushValue<T>(t, v);
     }
-  }
+  } // namespace
 
   /*!
     \inmodule EsriArcGISRuntimeToolkit
@@ -174,7 +174,7 @@ namespace Toolkit {
 
     // Sites setup
     connect(
-        m_controller, &FloorFilterController::selectedSiteIdChanged, this, [this](QString /*oldId*/, QString newId)
+        m_controller, &FloorFilterController::selectedSiteIdChanged, this, [this](const QString& /*oldId*/, const QString& newId)
         {
           // Set `m_sitesUpdatedFromController` for the duration of scope, then set back to false.
           auto b = push_value(m_sitesUpdatedFromController, true);
@@ -190,7 +190,7 @@ namespace Toolkit {
         });
 
     connect(
-        m_ui->sitesView->selectionModel(), &QItemSelectionModel::currentChanged, this, [this](QModelIndex index, QModelIndex previous)
+        m_ui->sitesView->selectionModel(), &QItemSelectionModel::currentChanged, this, [this](const QModelIndex& index, const QModelIndex& previous)
         {
           if (index == previous || m_facilitiesUpdatedFromController)
             return;
@@ -209,7 +209,7 @@ namespace Toolkit {
 
     // Facilities setup.
     connect(
-        m_controller, &FloorFilterController::selectedFacilityIdChanged, this, [this](QString /*oldId*/, QString newId)
+        m_controller, &FloorFilterController::selectedFacilityIdChanged, this, [this](const QString& /*oldId*/, const QString& newId)
         {
           auto b = push_value(m_facilitiesUpdatedFromController, true);
           const auto i = indexForId<FloorFilterFacilityItem>(m_ui->facilitiesView->model(), newId);
@@ -217,14 +217,14 @@ namespace Toolkit {
         });
 
     connect(
-        m_ui->facilitiesView, &QListView::doubleClicked, this, [this](QModelIndex index)
+        m_ui->facilitiesView, &QListView::doubleClicked, this, [this](const QModelIndex& index)
         {
           if (index.isValid())
             m_ui->toolBox->setCurrentIndex(2);
         });
 
     connect(
-        m_ui->facilitiesView->selectionModel(), &QItemSelectionModel::currentChanged, this, [this](QModelIndex index, QModelIndex previous)
+        m_ui->facilitiesView->selectionModel(), &QItemSelectionModel::currentChanged, this, [this](const QModelIndex& index, const QModelIndex& previous)
         {
           if (index == previous)
             return;
@@ -251,14 +251,14 @@ namespace Toolkit {
 
     // Levels setup.
     connect(
-        m_controller, &FloorFilterController::selectedLevelIdChanged, this, [this](QString /*oldId*/, QString newId)
+        m_controller, &FloorFilterController::selectedLevelIdChanged, this, [this](const QString& /*oldId*/, const QString& newId)
         {
           const auto i = indexForId<FloorFilterLevelItem>(m_ui->levelsView->model(), newId);
           m_ui->levelsView->selectionModel()->setCurrentIndex(i, QItemSelectionModel::SelectCurrent);
         });
 
     connect(
-        m_ui->levelsView->selectionModel(), &QItemSelectionModel::currentChanged, this, [this](QModelIndex index, QModelIndex previous)
+        m_ui->levelsView->selectionModel(), &QItemSelectionModel::currentChanged, this, [this](const QModelIndex& index, const QModelIndex& previous)
         {
           if (index == previous)
             return;
@@ -280,7 +280,6 @@ namespace Toolkit {
    */
   FloorFilter::~FloorFilter()
   {
-    delete m_ui;
   }
 
   /*!
