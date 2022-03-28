@@ -278,6 +278,12 @@ namespace Toolkit {
                        {
                          populateSites();
                        });
+      //debug
+      assert(mapView != nullptr);
+      connect(mapView, &MapViewToolkit::setViewpointCompleted, this, [this](bool /*success*/)
+              {
+                qDebug() << "viewpoint compl;eted";
+              });
     }
     else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
@@ -506,6 +512,7 @@ namespace Toolkit {
     if (!facilityItem)
       return;
 
+    qDebug() << "zoom to facility";
     const auto f = facilityItem->floorFacility();
     if (f)
     {
@@ -518,6 +525,7 @@ namespace Toolkit {
    */
   void FloorFilterController::zoomToFacility(const QString& facilityId)
   {
+    qDebug() << "zoom to facility";
     zoomToFacility(facility(facilityId));
   }
 
@@ -528,7 +536,7 @@ namespace Toolkit {
   {
     if (!siteItem)
       return;
-
+    qDebug() << "zoom to site";
     const auto s = siteItem->floorSite();
     if (s)
     {
@@ -541,6 +549,7 @@ namespace Toolkit {
    */
   void FloorFilterController::zoomToSite(const QString& siteId)
   {
+    qDebug() << "zoom to site";
     zoomToSite(site(siteId));
   }
 
@@ -699,6 +708,7 @@ namespace Toolkit {
    */
   void FloorFilterController::tryUpdateSelection()
   {
+    qDebug() << "tryupadte, " << m_settingViewpoint;
     if (m_automaticSelectionMode == AutomaticSelectionMode::Never)
       return;
 
@@ -831,11 +841,31 @@ namespace Toolkit {
 
     if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
+      qDebug() << "setting viewpoint flag true";
       m_settingViewpoint = true;
-      singleShotConnection(mapView, &MapViewToolkit::setViewpointCompleted, this, [this](bool /*success*/)
-                           {
-                             m_settingViewpoint = false;
-                           });
+      auto c = std::make_shared<QMetaObject::Connection>();
+      *c = connect(mapView, &MapViewToolkit::setViewpointCompleted, this, [this, c](bool success)
+                   {
+                     if (success)
+                     {
+                       qDebug() << "setting false";
+                       m_settingViewpoint = false;
+                       disconnect(*c);
+                     }
+                   });
+      //      singleShotConnection(mapView, &MapViewToolkit::setViewpointCompleted, this, [this, mapView](bool success)
+      //                           {
+      //                             qDebug() << success;
+      //                             if (!mapView->isNavigating())
+      //                             {
+      //                               qDebug() << "setting false";
+      //                               m_settingViewpoint = false;
+      //                             }
+      //                           });
+      //      if (mapView->isNavigating())
+      //      {
+      //        singleShotConnection(mapView, &)
+      //      }
       mapView->setViewpoint(b.toEnvelope());
     }
     else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
