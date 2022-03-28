@@ -42,17 +42,41 @@ namespace Esri {
 namespace ArcGISRuntime {
 namespace Toolkit {
 
-  // default scale for our "observing" viewpoint to find
-  // facility intersections if no viewpoint scale is available.
-  constexpr double DEFAULT_TARGET_SCALE = 4300.0;
-
   namespace {
+
+    /*!
+     \internal
+     \brief default scale for our "observing" viewpoint to find
+     facility intersections if no viewpoint scale is available.
+     */
+    constexpr double DEFAULT_TARGET_SCALE = 4300.0;
+
     /*!
      \internal
      \brief Constant padding value for the extent when zooming
             to the geometry of a FloorFacility.
      */
     const float ZOOM_PADDING = 1.5;
+
+    /*!
+     \internal
+     \brief Given a ListModel and id, finds the element in the ListModel that matches the given id.
+     */
+    template <typename T>
+    T* findElement(const GenericListModel* model, const QString& id)
+    {
+      const auto rows = model->rowCount();
+      for (int i = 0; i < rows; ++i)
+      {
+        auto index = model->index(i);
+        auto item = model->element<T>(index);
+        if (item->modelId() == id)
+        {
+          return item;
+        }
+      }
+      return nullptr;
+    }
 
     /*!
       \internal
@@ -112,9 +136,9 @@ namespace Toolkit {
                               return;
 
                             auto c2 = doOnLoad(floorManager, self, [f = std::move(f)]
-                                              {
-                                                f();
-                                              });
+                                               {
+                                                 f();
+                                               });
                             // Destroy the connection `c` if the map/scene changes, or the geoView changes.
                             // This means the connection is only relevant for as long as the model/view is relavant to
                             // the FloorFilterController.
@@ -133,7 +157,7 @@ namespace Toolkit {
 
       // Hook up to any viewpoint changes on the GeoView.
       auto c2 = QObject::connect(geoView, &std::remove_pointer<decltype(geoView)>::type::viewpointChanged,
-                                self, &FloorFilterController::tryUpdateSelection);
+                                 self, &FloorFilterController::tryUpdateSelection);
       disconnectOnSignal(self, &FloorFilterController::geoViewChanged, self, c2);
     }
   }
@@ -581,18 +605,7 @@ namespace Toolkit {
    */
   FloorFilterFacilityItem* FloorFilterController::facility(const QString& facilityId) const
   {
-    auto model = m_facilities;
-    const auto rows = model->rowCount();
-    for (int i = 0; i < rows; ++i)
-    {
-      auto index = model->index(i);
-      auto item = model->element<FloorFilterFacilityItem>(index);
-      if (item->modelId() == facilityId)
-      {
-        return item;
-      }
-    }
-    return nullptr;
+    return findElement<FloorFilterFacilityItem>(m_facilities, facilityId);
   }
 
   /*!
@@ -600,18 +613,7 @@ namespace Toolkit {
    */
   FloorFilterSiteItem* FloorFilterController::site(const QString& siteId) const
   {
-    auto model = m_sites;
-    const auto rows = model->rowCount();
-    for (int i = 0; i < rows; ++i)
-    {
-      auto index = model->index(i);
-      auto item = model->element<FloorFilterSiteItem>(index);
-      if (item->modelId() == siteId)
-      {
-        return item;
-      }
-    }
-    return nullptr;
+    return findElement<FloorFilterSiteItem>(m_sites, siteId);
   }
 
   /*!
@@ -619,18 +621,7 @@ namespace Toolkit {
    */
   FloorFilterLevelItem* FloorFilterController::level(const QString& levelId) const
   {
-    auto model = m_levels;
-    const auto rows = model->rowCount();
-    for (int i = 0; i < rows; ++i)
-    {
-      auto index = model->index(i);
-      auto item = model->element<FloorFilterLevelItem>(index);
-      if (item->modelId() == levelId)
-      {
-        return item;
-      }
-    }
-    return nullptr;
+    return findElement<FloorFilterLevelItem>(m_levels, levelId);
   }
 
   /*!
