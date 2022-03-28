@@ -132,10 +132,18 @@ namespace Toolkit {
   /*!
     \inmodule EsriArcGISRuntimeToolkit
     \class Esri::ArcGISRuntime::Toolkit::FloorFilter
-    \brief Allows to display and filter the available floor aware layers in the current \c GeoModel.
-    The FloorFilter allows the interaction with the available floor aware layers. A user can select from a list of sites which presents
-    their facilities. Once a facility is chosen, it is possible to toggle between its levels which will show them on the \c GeoView.
-    2D maps and 3D scenes are supported.
+  \brief Displays and filters the available floor aware layers in the current \c GeoModel.
+
+  This component supports manual selection and text-based filtering for sites and facilities.
+  Once a site and facility is selected, levels can be selected and the GeoView will be updated.
+  
+  In addition to the browsing workflow where sites and facilities are manually selected, automatic facility 
+  selection based on the GeoView's current viewpoint. This mode is useful when you are exploring the
+  GeoView but do not know the name of the site or facility.
+  
+  The user interface is driven from the FloorAware data that is available in the GeoModel's FloorManager. 
+  
+  2D maps and 3D scenes are supported.
 
     \note Double-clicking a site or facility will automatically open the next pane.
    */
