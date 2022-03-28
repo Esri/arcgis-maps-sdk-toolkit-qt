@@ -211,6 +211,7 @@ namespace Toolkit {
   }
 
   /*!
+    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::geoView
     \brief Returns the \c GeoView as a \c QObject.
    */
   QObject* FloorFilterController::geoView() const
@@ -219,6 +220,7 @@ namespace Toolkit {
   }
 
   /*!
+   \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::levels
    \brief Returns the levels in the currently selected facility.
    \sa selectedFacilityId
    */
@@ -228,6 +230,7 @@ namespace Toolkit {
   }
 
   /*!
+   \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::sites
    \brief Returns the site in the current \c GeoView's FloorManager.
    \sa geoView
    */
@@ -237,6 +240,7 @@ namespace Toolkit {
   }
 
   /*!
+   \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::facilities
    \brief Returns the facilities in the currently selected site.
    \sa selectedSiteId
    */
@@ -289,6 +293,7 @@ namespace Toolkit {
   }
 
   /*!
+   \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedFacilityId
    \brief Returns the ID of the currently selected facility.
    */
   QString FloorFilterController::selectedFacilityId() const
@@ -312,6 +317,7 @@ namespace Toolkit {
   }
 
   /*!
+   \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedLevelId
    \brief Returns the ID of the currently selected level.
    */
   QString FloorFilterController::selectedLevelId() const
@@ -335,6 +341,7 @@ namespace Toolkit {
   }
 
   /*!
+   \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedSiteId
    \brief Returns the ID of the currently selected site.
    */
   QString FloorFilterController::selectedSiteId() const
@@ -597,6 +604,7 @@ namespace Toolkit {
 
   /*!
    \internal
+   \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedFacility
    */
   FloorFilterFacilityItem* FloorFilterController::selectedFacility() const
   {
@@ -605,6 +613,7 @@ namespace Toolkit {
 
   /*!
    \internal
+   \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedSite
    */
   FloorFilterSiteItem* FloorFilterController::selectedSite() const
   {
@@ -613,6 +622,7 @@ namespace Toolkit {
 
   /*!
    \internal
+   \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedLevel
    */
   FloorFilterLevelItem* FloorFilterController::selectedLevel() const
   {
@@ -620,6 +630,7 @@ namespace Toolkit {
   }
 
   /*!
+   \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedSiteRespected
    \brief Returns whether the selected site is respected.
 
    When the selected site is respected, the \l facilities list is limited to the facilities
@@ -646,6 +657,7 @@ namespace Toolkit {
   }
 
   /*!
+   \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::updateLevelsMode
    \brief Returns the current level update mode in use.
 
    Defaults to \c{FloorFilterController::UpdateLevelsMode::AllLevelsMatchingVerticalOrder}.
@@ -670,6 +682,7 @@ namespace Toolkit {
   }
 
   /*!
+    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::automaticSelectionMode
     \brief Returns the current level update mode in use.
 
     Defaults to \c{FloorFilterController::AutomaticSelectionMode::Always}.
@@ -884,57 +897,6 @@ namespace Toolkit {
   \brief Emitted when the automaticSelectionModeChanged flag has changed.
  */
 
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::geoView
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedSiteRespected
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedFacility
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedFacilityId
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedLevel
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedLevelId
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedSite
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedSiteId
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::levels
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::facilities
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::sites
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::updateLevelsMode
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::automaticSelectionMode
-   */
 } // Toolkit
 } // ArcGISRuntime
 } // Esri

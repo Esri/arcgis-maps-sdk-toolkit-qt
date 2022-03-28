@@ -76,7 +76,8 @@ namespace Toolkit {
   }
 
   /*!
-   * \brief Returns the \c facilityId from the wrapped item.
+   \property Esri::ArcGISRuntime::Toolkit::FloorFilterFacilityItem::modelId
+   \brief Returns the \c facilityId from the wrapped item.
    */
   QString FloorFilterFacilityItem::modelId() const
   {
@@ -84,7 +85,8 @@ namespace Toolkit {
   }
 
   /*!
-   * \brief Returns the name from the wrapped item.
+   \property Esri::ArcGISRuntime::Toolkit::FloorFilterFacilityItem::name
+   \brief Returns the name from the wrapped item.
    */
   QString FloorFilterFacilityItem::name() const
   {
@@ -92,7 +94,8 @@ namespace Toolkit {
   }
 
   /*!
-   * \brief Returns the name of the parent site.
+   \property Esri::ArcGISRuntime::Toolkit::FloorFilterFacilityItem::parentSiteName
+   \brief Returns the name of the parent site.
    */
   QString FloorFilterFacilityItem::parentSiteName() const
   {
@@ -105,17 +108,6 @@ namespace Toolkit {
     \brief Signal emitted when the wrapped \l floorFacility changes.
    */
 
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterFacilityItem::modelId
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterFacilityItem::name
-   */
-
-   /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterFacilityItem::parentSiteName
-   */
 } // Toolkit
 } // ArcGISRuntime
 } // Esri
