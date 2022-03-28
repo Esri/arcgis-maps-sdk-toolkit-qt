@@ -415,8 +415,8 @@ namespace Toolkit {
    If only on facility exists we select that facility, otherwise we do not automatically select
    a facility.
 
-   Note that `sites` are optional in the data, and it may be the case that ther are no sites,
-   in which case we popualte with all available facilities.
+   Note that `sites` are optional in the data, and it may be the case that there are no sites,
+   in which case we populate with all available facilities.
 
    It may also be the case that `m_selectedSiteRespected` is false, in which case we extract all
    facilities and ignore the currently selected site in terms of filtering.
