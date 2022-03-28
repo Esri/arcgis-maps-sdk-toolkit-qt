@@ -431,7 +431,7 @@ namespace Toolkit {
     }
 
     // Do not blow out the facilities list with a new list if we are showing all facilities in the
-    // FloorManager and we are in ignore selected-site mode. This is not just a micro-optimziation,
+    // FloorManager and we are in ignore selected-site mode. This is not just a micro-optimization,
     // there are cases where selecting a facility in this mode will select a parent site, and we don't
     // want to regenerate the facilities list when the selected site changes.
     if (manager->facilities().length() == m_facilities->rowCount() && !m_selectedSiteRespected)
