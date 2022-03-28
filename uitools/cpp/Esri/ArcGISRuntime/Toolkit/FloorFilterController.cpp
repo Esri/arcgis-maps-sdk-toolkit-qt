@@ -42,6 +42,10 @@ namespace Esri {
 namespace ArcGISRuntime {
 namespace Toolkit {
 
+  // default scale for our "observing" viewpoint to find
+  // facility intersections if no viewpoint scale is available.
+  constexpr double DEFAULT_TARGET_SCALE = 4300.0;
+
   namespace {
     /*!
      \internal
@@ -94,7 +98,9 @@ namespace Toolkit {
       {
         auto model = getGeoModel(geoView);
         if (!model)
+        {
           return;
+        }
 
         // Here we attempt to calls `f` if/when both the GeoModel and FloorManager are loaded.
         // This may happen immediately or asyncnronously.This can be interrupted if GeoView or
@@ -105,15 +111,15 @@ namespace Toolkit {
                             if (!floorManager)
                               return;
 
-                            auto c = doOnLoad(floorManager, self, [f = std::move(f)]
+                            auto c2 = doOnLoad(floorManager, self, [f = std::move(f)]
                                               {
                                                 f();
                                               });
                             // Destroy the connection `c` if the map/scene changes, or the geoView changes.
                             // This means the connection is only relevant for as long as the model/view is relavant to
                             // the FloorFilterController.
-                            disconnectOnSignal(geoView, getGeoModelChangedSignal(geoView), self, c);
-                            disconnectOnSignal(self, &FloorFilterController::geoViewChanged, self, c);
+                            disconnectOnSignal(geoView, getGeoModelChangedSignal(geoView), self, c2);
+                            disconnectOnSignal(self, &FloorFilterController::geoViewChanged, self, c2);
                           });
         // Destroy the connection `c` if the map/scene changes, or the geoView changes. This means
         // the connection is only relevant for as long as the model/view is relavant to the FloorFilterController.
@@ -126,9 +132,9 @@ namespace Toolkit {
       connectToGeoModel();
 
       // Hook up to any viewpoint changes on the GeoView.
-      auto c = QObject::connect(geoView, &std::remove_pointer<decltype(geoView)>::type::viewpointChanged,
+      auto c2 = QObject::connect(geoView, &std::remove_pointer<decltype(geoView)>::type::viewpointChanged,
                                 self, &FloorFilterController::tryUpdateSelection);
-      disconnectOnSignal(self, &FloorFilterController::geoViewChanged, self, c);
+      disconnectOnSignal(self, &FloorFilterController::geoViewChanged, self, c2);
     }
   }
 
@@ -263,7 +269,9 @@ namespace Toolkit {
   void FloorFilterController::setGeoView(QObject* geoView)
   {
     if (geoView == m_geoView)
+    {
       return;
+    }
 
     if (m_geoView)
     {
@@ -310,7 +318,10 @@ namespace Toolkit {
   void FloorFilterController::setSelectedFacilityId(QString selectedFacilityId)
   {
     if (m_selectedFacilityId == selectedFacilityId)
+    {
       return;
+    }
+
     QString oldId = m_selectedFacilityId;
     m_selectedFacilityId = std::move(selectedFacilityId);
     emit selectedFacilityIdChanged(std::move(oldId), m_selectedFacilityId);
@@ -333,7 +344,9 @@ namespace Toolkit {
   void FloorFilterController::setSelectedLevelId(QString selectedLevelId)
   {
     if (m_selectedLevelId == selectedLevelId)
+    {
       return;
+    }
 
     QString oldId = m_selectedLevelId;
     m_selectedLevelId = std::move(selectedLevelId);
@@ -358,7 +371,9 @@ namespace Toolkit {
   void FloorFilterController::setSelectedSiteId(QString selectedSiteId)
   {
     if (m_selectedSiteId == selectedSiteId)
+    {
       return;
+    }
 
     QString oldId = m_selectedSiteId;
     m_selectedSiteId = std::move(selectedSiteId);
@@ -377,7 +392,9 @@ namespace Toolkit {
     m_levels->clear();
     auto manager = getFloorManager(m_geoView);
     if (!manager)
+    {
       return;
+    }
 
     auto allLevels = manager->levels();
 
@@ -442,7 +459,9 @@ namespace Toolkit {
     // there are cases where selecting a facility in this mode will select a parent site, and we don't
     // want to regenerate the facilities list when the selected site changes.
     if (manager->facilities().length() == m_facilities->rowCount() && !m_selectedSiteRespected)
+    {
       return;
+    }
 
     const auto allFacilites = manager->facilities();
     QList<QObject*> facilityItems;
@@ -479,7 +498,9 @@ namespace Toolkit {
     m_sites->clear();
     auto manager = getFloorManager(m_geoView);
     if (!manager)
+    {
       return;
+    }
 
     const auto allSites = manager->sites();
 
@@ -511,7 +532,9 @@ namespace Toolkit {
   void FloorFilterController::zoomToFacility(FloorFilterFacilityItem* facilityItem)
   {
     if (!facilityItem)
+    {
       return;
+    }
 
     const auto f = facilityItem->floorFacility();
     if (f)
@@ -534,7 +557,9 @@ namespace Toolkit {
   void FloorFilterController::zoomToSite(FloorFilterSiteItem* siteItem)
   {
     if (!siteItem)
+    {
       return;
+    }
 
     const auto s = siteItem->floorSite();
     if (s)
@@ -563,7 +588,9 @@ namespace Toolkit {
       auto index = model->index(i);
       auto item = model->element<FloorFilterFacilityItem>(index);
       if (item->modelId() == facilityId)
+      {
         return item;
+      }
     }
     return nullptr;
   }
@@ -580,7 +607,9 @@ namespace Toolkit {
       auto index = model->index(i);
       auto item = model->element<FloorFilterSiteItem>(index);
       if (item->modelId() == siteId)
+      {
         return item;
+      }
     }
     return nullptr;
   }
@@ -597,7 +626,9 @@ namespace Toolkit {
       auto index = model->index(i);
       auto item = model->element<FloorFilterLevelItem>(index);
       if (item->modelId() == levelId)
+      {
         return item;
+      }
     }
     return nullptr;
   }
@@ -650,7 +681,9 @@ namespace Toolkit {
   void FloorFilterController::setIsSelectedSiteRespected(bool isSelectedSiteRespected)
   {
     if (isSelectedSiteRespected == m_selectedSiteRespected)
+    {
       return;
+    }
 
     m_selectedSiteRespected = isSelectedSiteRespected;
     emit isSelectedSiteRespectedChanged();
@@ -675,7 +708,9 @@ namespace Toolkit {
   void FloorFilterController::setUpdateLevelsMode(UpdateLevelsMode updateLevelsMode)
   {
     if (updateLevelsMode == m_updatelevelMode)
+    {
       return;
+    }
 
     m_updatelevelMode = updateLevelsMode;
     emit updateLevelsModeChanged();
@@ -700,7 +735,9 @@ namespace Toolkit {
   void FloorFilterController::setAutomaticSelectionMode(AutomaticSelectionMode automaticSelectionMode)
   {
     if (m_automaticSelectionMode == automaticSelectionMode)
+    {
       return;
+    }
 
     m_automaticSelectionMode = automaticSelectionMode;
     emit automaticSelectionModeChanged();
@@ -713,10 +750,14 @@ namespace Toolkit {
   void FloorFilterController::tryUpdateSelection()
   {
     if (m_automaticSelectionMode == AutomaticSelectionMode::Never)
+    {
       return;
+    }
 
     if (m_settingViewpoint)
+    {
       return;
+    }
 
     Viewpoint observedViewpoint;
     if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
@@ -731,7 +772,9 @@ namespace Toolkit {
     // Expectation: viewpoint is center and scale
     if (observedViewpoint.isEmpty() ||
         isnan(observedViewpoint.targetScale()))
+    {
       return;
+    }
 
     auto floorManager = getFloorManager(m_geoView);
 
@@ -746,7 +789,9 @@ namespace Toolkit {
     }
 
     if (targetScale == 0.0)
-      targetScale = 4300.0;
+    {
+      targetScale = DEFAULT_TARGET_SCALE;
+    }
 
     if (observedViewpoint.targetScale() > targetScale)
     {
@@ -837,7 +882,9 @@ namespace Toolkit {
   void FloorFilterController::zoomToEnvelope(const Envelope& envelope)
   {
     if (envelope.isEmpty() || !m_geoView)
+    {
       return;
+    }
 
     EnvelopeBuilder b{envelope};
     b.expandByFactor(ZOOM_PADDING);

@@ -61,7 +61,9 @@ namespace Toolkit {
   void FloorFilterFacilityItem::setFloorFacility(FloorFacility* floorFacility)
   {
     if (m_floorFacility == floorFacility)
+    {
       return;
+    }
 
     m_floorFacility = floorFacility;
     emit floorFacilityChanged();
