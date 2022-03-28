@@ -154,7 +154,7 @@ namespace Toolkit {
     \brief The mode that defines how facilities are selected by viewpoint navigation.
     \sa Esri::ArcGISRuntime::Toolkit::FloorFilterController::automaticSelectionMode
     \value Never Viewpoint navigation does not affect the currently selected facility.
-    \value Always When the geoview's current viewpoint updates, the controller tests to see if the facility interect the viewpoint,
+    \value Always When the geoview's current viewpoint updates, the controller tests to see if the facility intersect the viewpoint,
            and selects it if so. If no facility intersects the viewpoint, then the current facility is deselected.
     \value AlwaysNonClearing Variant of \c Always, but if there is no facility to select within the viewpoint then we do not
            deselect the current viewpoint.
