@@ -581,9 +581,7 @@ namespace Toolkit {
   void FloorFilterController::zoomToSite(FloorFilterSiteItem* siteItem)
   {
     if (!siteItem)
-    {
       return;
-    }
 
     const auto s = siteItem->floorSite();
     if (s)
@@ -882,20 +880,30 @@ namespace Toolkit {
 
     if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
+      auto c = std::make_shared<QMetaObject::Connection>();
       m_settingViewpoint = true;
-      singleShotConnection(mapView, &MapViewToolkit::setViewpointCompleted, this, [this](bool /*success*/)
-                           {
-                             m_settingViewpoint = false;
-                           });
+      *c = connect(mapView, &MapViewToolkit::setViewpointCompleted, this, [this, c](bool success)
+                   {
+                     if (success)
+                     {
+                       m_settingViewpoint = false;
+                       disconnect(*c);
+                     }
+                   });
       mapView->setViewpoint(b.toEnvelope());
     }
     else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
+      auto c = std::make_shared<QMetaObject::Connection>();
       m_settingViewpoint = true;
-      singleShotConnection(sceneView, &SceneViewToolkit::setViewpointCompleted, this, [this](bool /*success*/)
-                           {
-                             m_settingViewpoint = false;
-                           });
+      *c = connect(sceneView, &SceneViewToolkit::setViewpointCompleted, this, [this, c](bool success)
+                   {
+                     if (success)
+                     {
+                       m_settingViewpoint = false;
+                       disconnect(*c);
+                     }
+                   });
       sceneView->setViewpoint(b.toEnvelope());
     }
   }
