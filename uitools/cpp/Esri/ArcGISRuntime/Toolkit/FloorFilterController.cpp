@@ -299,7 +299,7 @@ namespace Toolkit {
   /*!
    \brief Sets the ID of the currently selected facility to \a selectedFacilityId.
 
-   This will change the contents of \l levels to all levels within the facility, and
+   This will change the contents of \l levels to all levels within the facility and
    reset \l selectedLevelId.
    */
   void FloorFilterController::setSelectedFacilityId(QString selectedFacilityId)
