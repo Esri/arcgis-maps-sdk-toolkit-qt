@@ -69,6 +69,7 @@ QtObject {
             targetScale = controller.floorManager.siteLayer ? controller.floorManager.siteLayer.minScale : 0;
 
         if (targetScale === 0)
+            // default scale for our "observing" viewpoint to find facility intersections if no viewpoint scale is available.
             targetScale = 4300;
 
         if (viewpointCenter.targetScale > targetScale) {
