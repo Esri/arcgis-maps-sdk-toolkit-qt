@@ -828,10 +828,10 @@ namespace Toolkit {
     EnvelopeBuilder b{envelope};
     b.expandByFactor(ZOOM_PADDING);
 
+    auto c = std::make_shared<QMetaObject::Connection>();
     if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
       m_settingViewpoint = true;
-      auto c = std::make_shared<QMetaObject::Connection>();
       *c = connect(mapView, &MapViewToolkit::setViewpointCompleted, this, [this, c](bool success)
                    {
                      if (success)
@@ -845,10 +845,14 @@ namespace Toolkit {
     else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
       m_settingViewpoint = true;
-      singleShotConnection(sceneView, &SceneViewToolkit::setViewpointCompleted, this, [this](bool /*success*/)
-                           {
-                             m_settingViewpoint = false;
-                           });
+      *c = connect(sceneView, &SceneViewToolkit::setViewpointCompleted, this, [this, c](bool success)
+                   {
+                     if (success)
+                     {
+                       m_settingViewpoint = false;
+                       disconnect(*c);
+                     }
+                   });
       sceneView->setViewpoint(b.toEnvelope());
     }
   }
