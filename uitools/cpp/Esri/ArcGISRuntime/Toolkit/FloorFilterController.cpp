@@ -362,7 +362,7 @@ namespace Toolkit {
    \internal
    \brief Clears the levels list, and repopulates with only those levels
    that match the currently selected facility id. Levels are sorted in terms
-   of their vertical order, and a default level is selected, favouring the
+   of their vertical order, and a default level is selected, favoring the
    level with verticalOrder == 0.
    */
   void FloorFilterController::populateLevelsForSelectedFacility()
