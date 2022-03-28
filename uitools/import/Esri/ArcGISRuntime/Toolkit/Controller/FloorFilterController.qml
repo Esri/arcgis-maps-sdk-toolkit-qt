@@ -220,6 +220,7 @@ QtObject {
       \brief Sets the \a facilityId as \l selectedFacilityId.
       This will load the \l levels with the levels withing the facility and
       reset by selecting \l selectedLevelId with level matching vertical ordering == 0.
+      Also, sets the \l selectedSiteId to the facility's parent site.
       Set empty string to reset the facility.
       \sa setSelectedLevelId
     */
@@ -482,8 +483,10 @@ QtObject {
         facilitiesExtracted.forEach(facility => {
                                         let obj = { "name": facility.name,
                                             "modelId": facility.facilityId};
-                                        if(facility.site != null)
+                                        if(facility.site != null){
                                             obj["parentSiteName"] = facility.site.name;
+                                            obj["parentSiteId"] = facility.site.siteId;
+                                        }
                                         facilities.append(obj);
                                     });
 

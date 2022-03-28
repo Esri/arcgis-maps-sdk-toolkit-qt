@@ -445,6 +445,9 @@ Control {
                                 else if (internal.currentVisibileListView
                                          === FloorFilter.VisibleListView.Facility) {
                                     controller.setSelectedFacilityId(model.modelId);
+                                    // manually call the setSelectedSiteId, so it is sure that `allSites` mode is handled both on the cpp and qml versions.
+                                    if(model.parentSiteName != null && internal.selectedFacilityId != null)
+                                        controller.setSelectedSiteId(model.parentSiteId);
                                     // hide the whole facilityview
                                     buildingMenuButton.checked = false;
                                     closeButton.checked = false;
