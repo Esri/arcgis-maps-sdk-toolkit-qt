@@ -537,7 +537,7 @@ namespace Toolkit {
   }
 
   /*!
-   \brief On the GeoView, zooms to the site with ID matching \a siteId.
+   \brief Sets the GeoView's viewpoint to the site with ID matching \a siteId.
    */
   void FloorFilterController::zoomToSite(const QString& siteId)
   {
