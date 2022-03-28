@@ -111,9 +111,9 @@ namespace ArcGISRuntime {
 
     signals:
       void geoViewChanged();
-      void selectedSiteIdChanged(QString oldId, QString newId);
-      void selectedFacilityIdChanged(QString oldId, QString newId);
-      void selectedLevelIdChanged(QString oldId, QString newId);
+      void selectedSiteIdChanged(const QString& oldId, const QString& newId);
+      void selectedFacilityIdChanged(const QString& oldId, const QString& newId);
+      void selectedLevelIdChanged(const QString& oldId, const QString& newId);
       void isSelectedSiteRespectedChanged();
       void updateLevelsModeChanged();
       void automaticSelectionModeChanged();

@@ -43,12 +43,40 @@ namespace ArcGISRuntime {
 namespace Toolkit {
 
   namespace {
+
+    /*!
+     \internal
+     \brief default scale for our "observing" viewpoint to find
+     facility intersections if no viewpoint scale is available.
+     */
+    constexpr double DEFAULT_TARGET_SCALE = 4300.0;
+
     /*!
      \internal
      \brief Constant padding value for the extent when zooming
             to the geometry of a FloorFacility.
      */
     const float ZOOM_PADDING = 1.5;
+
+    /*!
+     \internal
+     \brief Given a ListModel and id, finds the element in the ListModel that matches the given id.
+     */
+    template <typename T>
+    T* findElement(const GenericListModel* model, const QString& id)
+    {
+      const auto rows = model->rowCount();
+      for (int i = 0; i < rows; ++i)
+      {
+        auto index = model->index(i);
+        auto item = model->element<T>(index);
+        if (item->modelId() == id)
+        {
+          return item;
+        }
+      }
+      return nullptr;
+    }
 
     /*!
       \internal
@@ -94,7 +122,9 @@ namespace Toolkit {
       {
         auto model = getGeoModel(geoView);
         if (!model)
+        {
           return;
+        }
 
         // Here we attempt to calls `f` if/when both the GeoModel and FloorManager are loaded.
         // This may happen immediately or asyncnronously.This can be interrupted if GeoView or
@@ -105,15 +135,15 @@ namespace Toolkit {
                             if (!floorManager)
                               return;
 
-                            auto c = doOnLoad(floorManager, self, [f = std::move(f)]
-                                              {
-                                                f();
-                                              });
+                            auto c2 = doOnLoad(floorManager, self, [f = std::move(f)]
+                                               {
+                                                 f();
+                                               });
                             // Destroy the connection `c` if the map/scene changes, or the geoView changes.
                             // This means the connection is only relevant for as long as the model/view is relavant to
                             // the FloorFilterController.
-                            disconnectOnSignal(geoView, getGeoModelChangedSignal(geoView), self, c);
-                            disconnectOnSignal(self, &FloorFilterController::geoViewChanged, self, c);
+                            disconnectOnSignal(geoView, getGeoModelChangedSignal(geoView), self, c2);
+                            disconnectOnSignal(self, &FloorFilterController::geoViewChanged, self, c2);
                           });
         // Destroy the connection `c` if the map/scene changes, or the geoView changes. This means
         // the connection is only relevant for as long as the model/view is relavant to the FloorFilterController.
@@ -126,9 +156,9 @@ namespace Toolkit {
       connectToGeoModel();
 
       // Hook up to any viewpoint changes on the GeoView.
-      auto c = QObject::connect(geoView, &std::remove_pointer<decltype(geoView)>::type::viewpointChanged,
-                                self, &FloorFilterController::tryUpdateSelection);
-      disconnectOnSignal(self, &FloorFilterController::geoViewChanged, self, c);
+      auto c2 = QObject::connect(geoView, &std::remove_pointer<decltype(geoView)>::type::viewpointChanged,
+                                 self, &FloorFilterController::tryUpdateSelection);
+      disconnectOnSignal(self, &FloorFilterController::geoViewChanged, self, c2);
     }
   }
 
@@ -154,7 +184,7 @@ namespace Toolkit {
     \brief The mode that defines how facilities are selected by viewpoint navigation.
     \sa Esri::ArcGISRuntime::Toolkit::FloorFilterController::automaticSelectionMode
     \value Never Viewpoint navigation does not affect the currently selected facility.
-    \value Always When the geoview's current viewpoint updates, the controller tests to see if the facility interect the viewpoint,
+    \value Always When the geoview's current viewpoint updates, the controller tests to see if the facility intersect the viewpoint,
            and selects it if so. If no facility intersects the viewpoint, then the current facility is deselected.
     \value AlwaysNonClearing Variant of \c Always, but if there is no facility to select within the viewpoint then we do not
            deselect the current viewpoint.
@@ -211,6 +241,7 @@ namespace Toolkit {
   }
 
   /*!
+    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::geoView
     \brief Returns the \c GeoView as a \c QObject.
    */
   QObject* FloorFilterController::geoView() const
@@ -219,6 +250,7 @@ namespace Toolkit {
   }
 
   /*!
+   \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::levels
    \brief Returns the levels in the currently selected facility.
    \sa selectedFacilityId
    */
@@ -228,6 +260,7 @@ namespace Toolkit {
   }
 
   /*!
+   \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::sites
    \brief Returns the site in the current \c GeoView's FloorManager.
    \sa geoView
    */
@@ -237,6 +270,7 @@ namespace Toolkit {
   }
 
   /*!
+   \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::facilities
    \brief Returns the facilities in the currently selected site.
    \sa selectedSiteId
    */
@@ -259,7 +293,9 @@ namespace Toolkit {
   void FloorFilterController::setGeoView(QObject* geoView)
   {
     if (geoView == m_geoView)
+    {
       return;
+    }
 
     if (m_geoView)
     {
@@ -289,6 +325,7 @@ namespace Toolkit {
   }
 
   /*!
+   \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedFacilityId
    \brief Returns the ID of the currently selected facility.
    */
   QString FloorFilterController::selectedFacilityId() const
@@ -299,19 +336,23 @@ namespace Toolkit {
   /*!
    \brief Sets the ID of the currently selected facility to \a selectedFacilityId.
 
-   This will change the contents of \l levels to all levels within the facility, and
+   This will change the contents of \l levels to all levels within the facility and
    reset \l selectedLevelId.
    */
   void FloorFilterController::setSelectedFacilityId(QString selectedFacilityId)
   {
     if (m_selectedFacilityId == selectedFacilityId)
+    {
       return;
+    }
+
     QString oldId = m_selectedFacilityId;
     m_selectedFacilityId = std::move(selectedFacilityId);
     emit selectedFacilityIdChanged(std::move(oldId), m_selectedFacilityId);
   }
 
   /*!
+   \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedLevelId
    \brief Returns the ID of the currently selected level.
    */
   QString FloorFilterController::selectedLevelId() const
@@ -322,12 +363,14 @@ namespace Toolkit {
   /*!
    \brief Sets the ID of the currently selected level to \a selectedLevelId.
 
-   This will change the current visibile level on the GeoView.
+   This will change the current visible level on the GeoView.
    */
   void FloorFilterController::setSelectedLevelId(QString selectedLevelId)
   {
     if (m_selectedLevelId == selectedLevelId)
+    {
       return;
+    }
 
     QString oldId = m_selectedLevelId;
     m_selectedLevelId = std::move(selectedLevelId);
@@ -335,6 +378,7 @@ namespace Toolkit {
   }
 
   /*!
+   \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedSiteId
    \brief Returns the ID of the currently selected site.
    */
   QString FloorFilterController::selectedSiteId() const
@@ -351,7 +395,9 @@ namespace Toolkit {
   void FloorFilterController::setSelectedSiteId(QString selectedSiteId)
   {
     if (m_selectedSiteId == selectedSiteId)
+    {
       return;
+    }
 
     QString oldId = m_selectedSiteId;
     m_selectedSiteId = std::move(selectedSiteId);
@@ -362,7 +408,7 @@ namespace Toolkit {
    \internal
    \brief Clears the levels list, and repopulates with only those levels
    that match the currently selected facility id. Levels are sorted in terms
-   of their vertical order, and a default level is selected, favouring the
+   of their vertical order, and a default level is selected, favoring the
    level with verticalOrder == 0.
    */
   void FloorFilterController::populateLevelsForSelectedFacility()
@@ -370,7 +416,9 @@ namespace Toolkit {
     m_levels->clear();
     auto manager = getFloorManager(m_geoView);
     if (!manager)
+    {
       return;
+    }
 
     auto allLevels = manager->levels();
 
@@ -415,8 +463,8 @@ namespace Toolkit {
    If only on facility exists we select that facility, otherwise we do not automatically select
    a facility.
 
-   Note that `sites` are optional in the data, and it may be the case that ther are no sites,
-   in which case we popualte with all available facilities.
+   Note that `sites` are optional in the data, and it may be the case that there are no sites,
+   in which case we populate with all available facilities.
 
    It may also be the case that `m_selectedSiteRespected` is false, in which case we extract all
    facilities and ignore the currently selected site in terms of filtering.
@@ -431,11 +479,13 @@ namespace Toolkit {
     }
 
     // Do not blow out the facilities list with a new list if we are showing all facilities in the
-    // FloorManager and we are in ignore selected-site mode. This is not just a micro-optimziation,
+    // FloorManager and we are in ignore selected-site mode. This is not just a micro-optimization,
     // there are cases where selecting a facility in this mode will select a parent site, and we don't
     // want to regenerate the facilities list when the selected site changes.
     if (manager->facilities().length() == m_facilities->rowCount() && !m_selectedSiteRespected)
+    {
       return;
+    }
 
     const auto allFacilites = manager->facilities();
     QList<QObject*> facilityItems;
@@ -472,7 +522,9 @@ namespace Toolkit {
     m_sites->clear();
     auto manager = getFloorManager(m_geoView);
     if (!manager)
+    {
       return;
+    }
 
     const auto allSites = manager->sites();
 
@@ -499,12 +551,14 @@ namespace Toolkit {
   }
 
   /*!
-   \brief On the GeoView, zooms to the facility contained within \a facilityItem.
+   \brief Sets the GeoView's viewpoint to the facility contained within \a facilityItem.
    */
   void FloorFilterController::zoomToFacility(FloorFilterFacilityItem* facilityItem)
   {
     if (!facilityItem)
+    {
       return;
+    }
 
     const auto f = facilityItem->floorFacility();
     if (f)
@@ -514,7 +568,7 @@ namespace Toolkit {
   }
 
   /*!
-   \brief On the GeoView, zooms to the facility with ID matching \a facilityId.
+   \brief Sets the GeoView's viewpoint to the facility with ID matching \a facilityId.
    */
   void FloorFilterController::zoomToFacility(const QString& facilityId)
   {
@@ -522,12 +576,13 @@ namespace Toolkit {
   }
 
   /*!
-   \brief On the GeoView, zooms to the site contained within \a siteItem.
+   Sets the GeoView's viewpoint to the site contained within \a siteItem.
    */
   void FloorFilterController::zoomToSite(FloorFilterSiteItem* siteItem)
   {
     if (!siteItem)
       return;
+
     const auto s = siteItem->floorSite();
     if (s)
     {
@@ -536,7 +591,7 @@ namespace Toolkit {
   }
 
   /*!
-   \brief On the GeoView, zooms to the site with ID matching \a siteId.
+   \brief Sets the GeoView's viewpoint to the site with ID matching \a siteId.
    */
   void FloorFilterController::zoomToSite(const QString& siteId)
   {
@@ -548,16 +603,7 @@ namespace Toolkit {
    */
   FloorFilterFacilityItem* FloorFilterController::facility(const QString& facilityId) const
   {
-    auto model = m_facilities;
-    const auto rows = model->rowCount();
-    for (int i = 0; i < rows; ++i)
-    {
-      auto index = model->index(i);
-      auto item = model->element<FloorFilterFacilityItem>(index);
-      if (item->modelId() == facilityId)
-        return item;
-    }
-    return nullptr;
+    return findElement<FloorFilterFacilityItem>(m_facilities, facilityId);
   }
 
   /*!
@@ -565,16 +611,7 @@ namespace Toolkit {
    */
   FloorFilterSiteItem* FloorFilterController::site(const QString& siteId) const
   {
-    auto model = m_sites;
-    const auto rows = model->rowCount();
-    for (int i = 0; i < rows; ++i)
-    {
-      auto index = model->index(i);
-      auto item = model->element<FloorFilterSiteItem>(index);
-      if (item->modelId() == siteId)
-        return item;
-    }
-    return nullptr;
+    return findElement<FloorFilterSiteItem>(m_sites, siteId);
   }
 
   /*!
@@ -582,20 +619,12 @@ namespace Toolkit {
    */
   FloorFilterLevelItem* FloorFilterController::level(const QString& levelId) const
   {
-    auto model = m_levels;
-    const auto rows = model->rowCount();
-    for (int i = 0; i < rows; ++i)
-    {
-      auto index = model->index(i);
-      auto item = model->element<FloorFilterLevelItem>(index);
-      if (item->modelId() == levelId)
-        return item;
-    }
-    return nullptr;
+    return findElement<FloorFilterLevelItem>(m_levels, levelId);
   }
 
   /*!
    \internal
+   \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedFacility
    */
   FloorFilterFacilityItem* FloorFilterController::selectedFacility() const
   {
@@ -604,6 +633,7 @@ namespace Toolkit {
 
   /*!
    \internal
+   \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedSite
    */
   FloorFilterSiteItem* FloorFilterController::selectedSite() const
   {
@@ -612,6 +642,7 @@ namespace Toolkit {
 
   /*!
    \internal
+   \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedLevel
    */
   FloorFilterLevelItem* FloorFilterController::selectedLevel() const
   {
@@ -619,6 +650,7 @@ namespace Toolkit {
   }
 
   /*!
+   \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedSiteRespected
    \brief Returns whether the selected site is respected.
 
    When the selected site is respected, the \l facilities list is limited to the facilities
@@ -638,13 +670,16 @@ namespace Toolkit {
   void FloorFilterController::setIsSelectedSiteRespected(bool isSelectedSiteRespected)
   {
     if (isSelectedSiteRespected == m_selectedSiteRespected)
+    {
       return;
+    }
 
     m_selectedSiteRespected = isSelectedSiteRespected;
     emit isSelectedSiteRespectedChanged();
   }
 
   /*!
+   \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::updateLevelsMode
    \brief Returns the current level update mode in use.
 
    Defaults to \c{FloorFilterController::UpdateLevelsMode::AllLevelsMatchingVerticalOrder}.
@@ -662,13 +697,16 @@ namespace Toolkit {
   void FloorFilterController::setUpdateLevelsMode(UpdateLevelsMode updateLevelsMode)
   {
     if (updateLevelsMode == m_updatelevelMode)
+    {
       return;
+    }
 
     m_updatelevelMode = updateLevelsMode;
     emit updateLevelsModeChanged();
   }
 
   /*!
+    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::automaticSelectionMode
     \brief Returns the current level update mode in use.
 
     Defaults to \c{FloorFilterController::AutomaticSelectionMode::Always}.
@@ -686,7 +724,9 @@ namespace Toolkit {
   void FloorFilterController::setAutomaticSelectionMode(AutomaticSelectionMode automaticSelectionMode)
   {
     if (m_automaticSelectionMode == automaticSelectionMode)
+    {
       return;
+    }
 
     m_automaticSelectionMode = automaticSelectionMode;
     emit automaticSelectionModeChanged();
@@ -699,10 +739,14 @@ namespace Toolkit {
   void FloorFilterController::tryUpdateSelection()
   {
     if (m_automaticSelectionMode == AutomaticSelectionMode::Never)
+    {
       return;
+    }
 
     if (m_settingViewpoint)
+    {
       return;
+    }
 
     Viewpoint observedViewpoint;
     if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
@@ -717,7 +761,9 @@ namespace Toolkit {
     // Expectation: viewpoint is center and scale
     if (observedViewpoint.isEmpty() ||
         isnan(observedViewpoint.targetScale()))
+    {
       return;
+    }
 
     auto floorManager = getFloorManager(m_geoView);
 
@@ -732,7 +778,9 @@ namespace Toolkit {
     }
 
     if (targetScale == 0.0)
-      targetScale = 4300.0;
+    {
+      targetScale = DEFAULT_TARGET_SCALE;
+    }
 
     if (observedViewpoint.targetScale() > targetScale)
     {
@@ -823,7 +871,9 @@ namespace Toolkit {
   void FloorFilterController::zoomToEnvelope(const Envelope& envelope)
   {
     if (envelope.isEmpty() || !m_geoView)
+    {
       return;
+    }
 
     EnvelopeBuilder b{envelope};
     b.expandByFactor(ZOOM_PADDING);
@@ -893,57 +943,6 @@ namespace Toolkit {
   \brief Emitted when the automaticSelectionModeChanged flag has changed.
  */
 
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::geoView
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedSiteRespected
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedFacility
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedFacilityId
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedLevel
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedLevelId
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedSite
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedSiteId
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::levels
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::facilities
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::sites
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::updateLevelsMode
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::automaticSelectionMode
-   */
 } // Toolkit
 } // ArcGISRuntime
 } // Esri

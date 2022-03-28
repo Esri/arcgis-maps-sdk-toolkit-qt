@@ -75,7 +75,8 @@ namespace Toolkit {
   }
 
   /*!
-   * \brief Returns the \c siteId from the wrapped item.
+   \property Esri::ArcGISRuntime::Toolkit::FloorFilterSiteItem::modelId
+   \brief Returns the \c siteId from the wrapped item.
    */
   QString FloorFilterSiteItem::modelId() const
   {
@@ -83,7 +84,8 @@ namespace Toolkit {
   }
 
   /*!
-   * \brief Returns the \c name from the wrapped item.
+   \property Esri::ArcGISRuntime::Toolkit::FloorFilterSiteItem::name
+   \brief Returns the \c name from the wrapped item.
    */
   QString FloorFilterSiteItem::name() const
   {
@@ -94,15 +96,6 @@ namespace Toolkit {
     \fn void Esri::ArcGISRuntime::Toolkit::FloorFilterSiteItem::floorSiteChanged()
     \brief Signal emitted when the wrapped \l floorSite changes.
    */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterSiteItem::modelId
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::FloorFilterSiteItem::name
-   */
-
 
 } // Toolkit
 } // ArcGISRuntime

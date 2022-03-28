@@ -45,7 +45,7 @@ namespace Toolkit {
      extracts the `T*` pointer from its \c userRole.
      */
     template <typename T>
-    T* itemForIndex(QAbstractItemModel* model, QModelIndex modelIndex)
+    T* itemForIndex(QAbstractItemModel* model, const QModelIndex& modelIndex)
     {
       if (!model)
         return nullptr;
@@ -63,7 +63,7 @@ namespace Toolkit {
             O(n) search time.
      */
     template <typename T>
-    QModelIndex indexForId(QAbstractItemModel* model, QString id)
+    QModelIndex indexForId(QAbstractItemModel* model, const QString& id)
     {
       const int rowCount = model->rowCount();
       for (int i = 0; i < rowCount; ++i)
@@ -96,22 +96,22 @@ namespace Toolkit {
 
     /*!
      \internal
-     \brief Helper struct that holds a reference to sme `b`, sets `b` to `v` on construction,
-     and then sets `b` back to its initial value on destruction.
+     \brief Helper struct that holds a reference to some value `tracked`, sets `tracked` to `val` on construction,
+     and then sets `tracked` back to its initial value on destruction.
      */
     template <typename T>
     struct PushValue
     {
-      PushValue(T& b, T v) :
-        m_tracked(b),
+      PushValue(T& tracked, T val) :
+        m_tracked(tracked),
         m_state{std::move(m_tracked)}
       {
-        m_tracked = std::move(v);
+        m_tracked = std::move(val);
       }
 
       ~PushValue()
       {
-        m_tracked = std::move(m_state);
+        std::swap(m_tracked, m_state);
       }
 
       T& m_tracked;
@@ -127,15 +127,23 @@ namespace Toolkit {
     {
       return PushValue<T>(t, v);
     }
-  }
+  } // namespace
 
   /*!
     \inmodule EsriArcGISRuntimeToolkit
     \class Esri::ArcGISRuntime::Toolkit::FloorFilter
-    \brief Allows to display and filter the available floor aware layers in the current \c GeoModel.
-    The FloorFilter allows the interaction with the available floor aware layers. A user can select from a list of sites which presents
-    their facilities. Once a facility is chosen, it is possible to toggle between its levels which will show them on the \c GeoView.
-    2D maps and 3D scenes are supported.
+  \brief Displays and filters the available floor aware layers in the current \c GeoModel.
+
+  This component supports manual selection and text-based filtering for sites and facilities.
+  Once a site and facility is selected, levels can be selected and the GeoView will be updated.
+  
+  In addition to the browsing workflow where sites and facilities are manually selected, automatic facility 
+  selection based on the GeoView's current viewpoint. This mode is useful when you are exploring the
+  GeoView but do not know the name of the site or facility.
+  
+  The user interface is driven from the FloorAware data that is available in the GeoModel's FloorManager. 
+  
+  2D maps and 3D scenes are supported.
 
     \note Double-clicking a site or facility will automatically open the next pane.
    */
@@ -166,7 +174,7 @@ namespace Toolkit {
 
     // Sites setup
     connect(
-        m_controller, &FloorFilterController::selectedSiteIdChanged, this, [this](QString /*oldId*/, QString newId)
+        m_controller, &FloorFilterController::selectedSiteIdChanged, this, [this](const QString& /*oldId*/, const QString& newId)
         {
           // Set `m_sitesUpdatedFromController` for the duration of scope, then set back to false.
           auto b = push_value(m_sitesUpdatedFromController, true);
@@ -182,7 +190,7 @@ namespace Toolkit {
         });
 
     connect(
-        m_ui->sitesView->selectionModel(), &QItemSelectionModel::currentChanged, this, [this](QModelIndex index, QModelIndex previous)
+        m_ui->sitesView->selectionModel(), &QItemSelectionModel::currentChanged, this, [this](const QModelIndex& index, const QModelIndex& previous)
         {
           if (index == previous || m_facilitiesUpdatedFromController)
             return;
@@ -201,7 +209,7 @@ namespace Toolkit {
 
     // Facilities setup.
     connect(
-        m_controller, &FloorFilterController::selectedFacilityIdChanged, this, [this](QString /*oldId*/, QString newId)
+        m_controller, &FloorFilterController::selectedFacilityIdChanged, this, [this](const QString& /*oldId*/, const QString& newId)
         {
           auto b = push_value(m_facilitiesUpdatedFromController, true);
           const auto i = indexForId<FloorFilterFacilityItem>(m_ui->facilitiesView->model(), newId);
@@ -209,14 +217,14 @@ namespace Toolkit {
         });
 
     connect(
-        m_ui->facilitiesView, &QListView::doubleClicked, this, [this](QModelIndex index)
+        m_ui->facilitiesView, &QListView::doubleClicked, this, [this](const QModelIndex& index)
         {
           if (index.isValid())
             m_ui->toolBox->setCurrentIndex(2);
         });
 
     connect(
-        m_ui->facilitiesView->selectionModel(), &QItemSelectionModel::currentChanged, this, [this](QModelIndex index, QModelIndex previous)
+        m_ui->facilitiesView->selectionModel(), &QItemSelectionModel::currentChanged, this, [this](const QModelIndex& index, const QModelIndex& previous)
         {
           if (index == previous)
             return;
@@ -243,14 +251,14 @@ namespace Toolkit {
 
     // Levels setup.
     connect(
-        m_controller, &FloorFilterController::selectedLevelIdChanged, this, [this](QString /*oldId*/, QString newId)
+        m_controller, &FloorFilterController::selectedLevelIdChanged, this, [this](const QString& /*oldId*/, const QString& newId)
         {
           const auto i = indexForId<FloorFilterLevelItem>(m_ui->levelsView->model(), newId);
           m_ui->levelsView->selectionModel()->setCurrentIndex(i, QItemSelectionModel::SelectCurrent);
         });
 
     connect(
-        m_ui->levelsView->selectionModel(), &QItemSelectionModel::currentChanged, this, [this](QModelIndex index, QModelIndex previous)
+        m_ui->levelsView->selectionModel(), &QItemSelectionModel::currentChanged, this, [this](const QModelIndex& index, const QModelIndex& previous)
         {
           if (index == previous)
             return;
@@ -272,7 +280,6 @@ namespace Toolkit {
    */
   FloorFilter::~FloorFilter()
   {
-    delete m_ui;
   }
 
   /*!
