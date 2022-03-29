@@ -13,18 +13,24 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
+#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_SINGLESHOTCONNECTION_H
+#define ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_SINGLESHOTCONNECTION_H
+
+// Qt headers
 #include <QObject>
+
+// C++ headers
+#include <memory>
 
 namespace Esri {
 namespace ArcGISRuntime {
 namespace Toolkit {
 
-  /*!
-  \internal
-  \inmodule EsriArcGISRuntimeToolkit
-  \fn template<typename Sender, typename Signal, typename Receiver, typename Slot> QMetaObject::Connection singleShotConnection(Sender* sender, Signal&& signal, Receiver* reciever, Slot&& slot)
-  \brief Function that crates a connection and automatically disconnects it before its first run.
- */
+  /*
+    \internal
+    \brief Creates a connection and automatically disconnects it on trigger. Follows same syntax as `QObject::connect`.
+    \note This method differs from \c QObject::connect in that the signal and slot parameters must match.
+   */
   template <typename Sender, typename Signal, typename Receiver, typename Slot>
   QMetaObject::Connection singleShotConnection(Sender* sender, Signal&& signal, Receiver* reciever, Slot&& slot)
   {
@@ -37,6 +43,9 @@ namespace Toolkit {
                                    });
     return *connection;
   }
-}
-}
-}
+
+} // Toolkit
+} // ArcGISRuntime
+} // Esri
+
+#endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_SINGLESHOTCONNECTION_H

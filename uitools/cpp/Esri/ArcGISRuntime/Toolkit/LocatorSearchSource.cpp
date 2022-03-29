@@ -21,6 +21,7 @@
 #include <SuggestResult.h>
 
 // Toolkit headers
+#include "Internal/DoOnLoad.h"
 #include "SearchResult.h"
 
 namespace Esri {
@@ -121,58 +122,42 @@ namespace Toolkit {
               emit searchCompleted(std::move(results));
             });
 
-    auto setAttributes = [this]
-    {
-      const auto& info = m_locatorTask->locatorInfo();
-      if (!info.name().isEmpty())
-      {
-        setDisplayName(info.name());
-      }
-      else if (!info.description().isEmpty())
-      {
-        setDisplayName(info.description());
-      }
+    doOnLoaded(locatorTask, this, [this]
+             {
+               const auto& info = m_locatorTask->locatorInfo();
+               if (!info.name().isEmpty())
+               {
+                 setDisplayName(info.name());
+               }
+               else if (!info.description().isEmpty())
+               {
+                 setDisplayName(info.description());
+               }
 
-      QStringList attrs{"Type", "LongLabel"};
-      auto resultAttrs = info.resultAttributes();
-      auto geocodeAttrs = m_geocodeParameters.resultAttributeNames();
-      bool foundOne{false};
-      for (const auto& attr : attrs)
-      {
-        auto it = std::find_if(std::cbegin(resultAttrs), std::cend(resultAttrs), [attr](const LocatorAttribute& la)
-                               {
-                                 return la.name() == attr;
-                               });
-        if (it != std::cend(resultAttrs))
-        {
-          foundOne = true;
-          geocodeAttrs << it->name();
-        }
-      }
+               QStringList attrs{"Type", "LongLabel"};
+               auto resultAttrs = info.resultAttributes();
+               auto geocodeAttrs = m_geocodeParameters.resultAttributeNames();
+               bool foundOne{false};
+               for (const auto& attr : attrs)
+               {
+                 auto it = std::find_if(std::cbegin(resultAttrs), std::cend(resultAttrs), [attr](const LocatorAttribute& la)
+                                        {
+                                          return la.name() == attr;
+                                        });
+                 if (it != std::cend(resultAttrs))
+                 {
+                   foundOne = true;
+                   geocodeAttrs << it->name();
+                 }
+               }
 
-      if (!foundOne)
-      {
-        geocodeAttrs << "*";
-      }
+               if (!foundOne)
+               {
+                 geocodeAttrs << "*";
+               }
 
-      m_geocodeParameters.setResultAttributeNames(geocodeAttrs);
-    };
-
-    if (m_locatorTask->loadStatus() == LoadStatus::Loaded)
-    {
-      setAttributes();
-    }
-    else
-    {
-      connect(m_locatorTask, &LocatorTask::loadStatusChanged, this, [setAttributes](Esri::ArcGISRuntime::LoadStatus loadStatus)
-              {
-                if (loadStatus == LoadStatus::Loaded)
-                {
-                  setAttributes();
-                }
-              });
-      m_locatorTask->load();
-    }
+               m_geocodeParameters.setResultAttributeNames(geocodeAttrs);
+             });
   }
 
   /*!

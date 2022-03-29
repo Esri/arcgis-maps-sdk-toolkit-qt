@@ -17,6 +17,9 @@
 
 #include "ui_BasemapGallery.h"
 
+// Toolkit headers
+#include "BasemapGalleryController.h"
+
 namespace Esri {
 namespace ArcGISRuntime {
 namespace Toolkit {
@@ -43,8 +46,8 @@ namespace Toolkit {
   */
  BasemapGallery::BasemapGallery(QWidget* parent) :
    QFrame(parent),
-   m_ui(new Ui::BasemapGallery),
-   m_controller(new BasemapGalleryController(this))
+   m_controller(new BasemapGalleryController(this)),
+   m_ui(new Ui::BasemapGallery)
  {
    m_ui->setupUi(this);
    GenericListModel* model = m_controller->gallery();
