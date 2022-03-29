@@ -24,6 +24,7 @@ BasemapGalleryItem 100.12 BasemapGalleryItem.qml
 CoordinateConversionController 100.10 CoordinateConversionController.qml
 CoordinateConversionOption 100.10 CoordinateConversionOption.qml
 CoordinateConversionResult 100.10 CoordinateConversionResult.qml
+FloorFilterController 100.14 FloorFilterController.qml
 LocatorSearchSource 100.13 LocatorSearchSource.qml
 NorthArrowController 100.10 NorthArrowController.qml
 OverviewMapController 100.12 OverviewMapController.qml
