@@ -576,7 +576,7 @@ namespace Toolkit {
   }
 
   /*!
-   Sets the GeoView's viewpoint to the site contained within \a siteItem.
+   \brief Sets the GeoView's viewpoint to the site contained within \a siteItem.
    */
   void FloorFilterController::zoomToSite(FloorFilterSiteItem* siteItem)
   {
