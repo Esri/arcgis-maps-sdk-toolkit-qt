@@ -106,6 +106,15 @@ namespace Toolkit {
   }
 
   /*!
+   * \brief Returns the id of the parent site. 
+   */
+  QString FloorFilterFacilityItem::parentSiteId() const
+  {
+    auto site = m_floorFacility ? m_floorFacility->site() : nullptr;
+    return site ? site->siteId() : QString{};
+  }
+
+  /*!
     \fn void Esri::ArcGISRuntime::Toolkit::FloorFilterFacilityItem::floorFacilityChanged()
     \brief Signal emitted when the wrapped \l floorFacility changes.
    */
