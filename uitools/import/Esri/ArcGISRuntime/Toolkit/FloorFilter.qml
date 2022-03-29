@@ -409,6 +409,7 @@ Control {
                         // switch between controller model based on the currentVisibleListView
                         model: internal.currentVisibileListView
                                === FloorFilter.VisibleListView.Site ? controller.sites : controller.facilities
+
                         // elements belonging to this group are visible.
                         filterOnGroup: "filtered"
                         groups: [
@@ -416,6 +417,21 @@ Control {
                                 id: filteredGroup
                                 name: "filtered"
                                 includeByDefault: true
+                                onCountChanged: {
+                                    // bubble sort impl
+
+                                    // when loaded, elements are appended 1 at the time->sorting n times.
+                                    // afterwards, countchanged only triggered when all the elements have been appended.
+                                    if(internal.currentVisibileListView === FloorFilter.VisibleListView.Facility)
+                                        for(var j = 0; j < filteredGroup.count - 1; ++j){
+                                            for(var i = 0; i < filteredGroup.count -1 - j; ++i) {
+                                                let item = filteredGroup.get(i);
+                                                if(item.model.name > filteredGroup.get(i + 1).model.name){
+                                                    filteredGroup.move(i, i + 1, 1);
+                                                }
+                                            }
+                                        }
+                                }
                             }
                         ]
                         delegate: RadioDelegate {
