@@ -10,6 +10,10 @@
 // See the Sample code usage restrictions document for further information.
 const TOOLS = [
   {
+   "name" : "FloorFilter",
+   "url" : "FloorFilterDemoForm.qml"
+  },
+  {
    "name": "Search View",
    "url": "SearchViewDemoForm.qml"
   },
