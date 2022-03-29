@@ -471,13 +471,6 @@ QtObject {
     function populateFacilities(listFacilities) {
         facilities.clear();
         let facilitiesExtracted = Array.from(listFacilities);
-        facilitiesExtracted.sort(function (first, second) {
-            if (first.name < second.name)
-                return -1;
-            else if (first.name > second.name)
-                return 1;
-            return 0;
-        });
 
         facilitiesExtracted.forEach(facility => {
                                         let obj = { "name": facility.name,

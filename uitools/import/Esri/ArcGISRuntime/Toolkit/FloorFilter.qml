@@ -406,9 +406,11 @@ Control {
                     model: DelegateModel {
                         id: delegateModel
 
+
                         // switch between controller model based on the currentVisibleListView
                         model: internal.currentVisibileListView
                                === FloorFilter.VisibleListView.Site ? controller.sites : controller.facilities
+
                         // elements belonging to this group are visible.
                         filterOnGroup: "filtered"
                         groups: [
@@ -418,6 +420,29 @@ Control {
                                 includeByDefault: true
                             }
                         ]
+                        // sort the items in filteredGroup when in facility view.
+                        items.onChanged: {                            
+                            if(internal.currentVisibileListView === FloorFilter.VisibleListView.Facility){
+                                var elements = [];
+                                // populate js array
+                                for(var i = 0; i < filteredGroup.count; ++i){
+                                    elements.push(filteredGroup.get(i));
+                                }
+                                // utilize the sort function on the Array.
+                                elements.sort(function(first, second){
+                                    if(first.model.name < second.model.name)
+                                        return -1;
+                                    else if(first.model.name > second.model.name)
+                                        return 1;
+                                    return 0;
+                                });
+
+                                // move the elements in the filteredGroup using the index from the js Array.
+                                for(i = 0; i < elements.length; ++i) {
+                                    filteredGroup.move(elements[i].filteredIndex, i, 1);
+                                }
+                            }
+                        }
                         delegate: RadioDelegate {
                             id: radioDelegate
                             // if listView is larger than the delegates, resize them to match the listview.
