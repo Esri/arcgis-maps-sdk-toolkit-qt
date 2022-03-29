@@ -85,7 +85,7 @@ Pane {
       \brief The controller handles calculating steps and setting extents on the
        GeoView.
 
-       A default TimeSliderController is provided.
+       A default \l TimeSliderController is provided.
     */
     property var controller: TimeSliderController { }
 

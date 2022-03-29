@@ -54,7 +54,8 @@ Control {
       \qmlproperty FloorFilterController controller
       \brief The controller handles binding logic between the FloorFilter, \c GeoModel, \c FloorManager and
       the flooraware layers.
-      Default is \l{FloorFilterController}
+      
+      A default \l FloorFilterController is provided.
     */
     property var controller: FloorFilterController {}
 

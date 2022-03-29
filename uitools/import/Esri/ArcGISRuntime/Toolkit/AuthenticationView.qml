@@ -57,9 +57,11 @@ Item {
     id: authenticationView
 
     /*!
-      \qmlproperty AuthenticationController controller.
+      \qmlproperty AuthenticationController controller
       \brief the Controller handles references to challenges emitted by the
       \c AuthenticationManager.
+
+      A default \l AuthenticationController is provided.
     */
     property var controller: AuthenticationController { }
 

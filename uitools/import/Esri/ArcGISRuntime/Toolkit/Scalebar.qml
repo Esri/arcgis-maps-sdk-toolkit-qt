@@ -47,6 +47,8 @@ Control {
       \brief The controller portion of the Scalebar which handles
       distance calculations based on the visual properties of the given
       \l{mapView}.
+
+      A default is \l ScalebarController is provided.
      */
     property var controller: ScalebarController { }
 

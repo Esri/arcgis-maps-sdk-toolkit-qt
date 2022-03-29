@@ -77,8 +77,10 @@ Page {
 
     /*!
       \qmlproperty PopupViewController controller
-      \brief the Controller handles reading from the PopupManager and monitoring
+      \brief The Controller handles reading from the PopupManager and monitoring
       the list-models.
+
+      A default is \l PopupViewController is provided.
     */
     property var controller: PopupViewController {}
 

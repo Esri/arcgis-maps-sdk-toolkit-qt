@@ -52,6 +52,8 @@ Item {
     /*!
       \qmlproperty NorthArrowController controller
       \brief the Controller handles connections writing/reading to the GeoView.
+
+      A default \l NorthArrowController is provided.
     */
     property var controller: NorthArrowController { }
 

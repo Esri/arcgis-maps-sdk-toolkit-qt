@@ -34,9 +34,11 @@ Item {
     id: overviewMap
 
     /*!
-      \qmlproperty OverviewMapController controller.
+      \qmlproperty OverviewMapController controller
       \brief The controller handles binding logic between the OverviewMap and
       the \c GeoView where applicable.
+
+      A default \l OverviewMapController is provided.
      */
     property var controller: OverviewMapController { }
 

@@ -47,7 +47,7 @@ Pane {
       \brief The Controller which performs the search and manages
       the results/suggestions.
 
-       A default SearchViewController is provided.
+       A default \l SearchViewController is provided.
     */
     property var controller: SearchViewController { }
 
