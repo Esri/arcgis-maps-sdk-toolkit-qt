@@ -129,13 +129,13 @@ namespace Toolkit {
         // Here we attempt to calls `f` if/when both the GeoModel and FloorManager are loaded.
         // This may happen immediately or asyncnronously.This can be interrupted if GeoView or
         // GeoModel changes in the interim.
-        auto c = doOnLoad(model, self, [self, model, geoView, f = std::move(f)]()
+        auto c = doOnLoaded(model, self, [self, model, geoView, f = std::move(f)]()
                           {
                             auto floorManager = model->floorManager();
                             if (!floorManager)
                               return;
 
-                            auto c2 = doOnLoad(floorManager, self, [f = std::move(f)]
+                            auto c2 = doOnLoaded(floorManager, self, [f = std::move(f)]
                                                {
                                                  f();
                                                });

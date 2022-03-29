@@ -122,7 +122,7 @@ namespace Toolkit {
               emit searchCompleted(std::move(results));
             });
 
-    doOnLoad(locatorTask, this, [this]
+    doOnLoaded(locatorTask, this, [this]
              {
                const auto& info = m_locatorTask->locatorInfo();
                if (!info.name().isEmpty())

@@ -95,7 +95,7 @@ namespace Toolkit {
      */
     void connectToGeoModel(BasemapGalleryController* self, GeoModel* geoModel)
     {
-      doOnLoad(geoModel, self, [self, geoModel]
+      doOnLoaded(geoModel, self, [self, geoModel]
                {
                  self->setCurrentBasemap(geoModel->basemap());
                });
@@ -439,7 +439,7 @@ namespace Toolkit {
     {
       // If portal basemaps are populated, add the contents to the gallery.
       // Otherwise attempt a fetch of the contents then add to the gallery.
-      doOnLoad(m_portal, this, [this]
+      doOnLoaded(m_portal, this, [this]
                {
                  if (m_portal->basemaps()->rowCount() > 0)
                  {

@@ -37,14 +37,14 @@ namespace Toolkit {
 
     Example:
     \begincode
-    doOnLoad(floorManager, this, []
+    doOnLoaded(floorManager, this, []
              {
                 qDebug() << "FloorManager is guaranteed loaded."
              });
     \endcode
    */
   template <typename Target, typename Func>
-  QMetaObject::Connection doOnLoad(Target* sender, QObject* reveiver, Func&& f)
+  QMetaObject::Connection doOnLoaded(Target* sender, QObject* reveiver, Func&& f)
   {
     static_assert(
         std::is_convertible<Target*, ::Esri::ArcGISRuntime::Loadable*>::value,

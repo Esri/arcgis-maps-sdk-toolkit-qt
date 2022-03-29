@@ -85,7 +85,7 @@ namespace Toolkit {
         return;
       }
 
-      doOnLoad(basemap, this, [this, basemap]
+      doOnLoaded(basemap, this, [this, basemap]
                {
                  auto item = basemap->item();
                  if (!item)

@@ -165,7 +165,7 @@ namespace Toolkit {
 
     if (m_basemap)
     {
-      doOnLoad(m_basemap.data(), this, [this, basemap]
+      doOnLoaded(m_basemap.data(), this, [this, basemap]
                {
                  emit basemapChanged();
                  auto item = basemap->item();
