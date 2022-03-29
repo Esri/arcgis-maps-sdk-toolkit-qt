@@ -623,8 +623,8 @@ namespace Toolkit {
   }
 
   /*!
-   \internal
    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedFacility
+   \brief Returns the FloorFilterFacilityItem that matches the current \l selectedFacilityId.
    */
   FloorFilterFacilityItem* FloorFilterController::selectedFacility() const
   {
@@ -632,8 +632,8 @@ namespace Toolkit {
   }
 
   /*!
-   \internal
    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedSite
+   \brief Returns the FloorFilterSiteItem that matches the current \l selectedSiteId.
    */
   FloorFilterSiteItem* FloorFilterController::selectedSite() const
   {
@@ -641,8 +641,8 @@ namespace Toolkit {
   }
 
   /*!
-   \internal
    \property Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedLevel
+   \brief Returns the FloorFilterLevelItem that matches the current \l selectedLevelId.
    */
   FloorFilterLevelItem* FloorFilterController::selectedLevel() const
   {
