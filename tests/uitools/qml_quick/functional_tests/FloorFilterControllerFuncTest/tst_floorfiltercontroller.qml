@@ -25,19 +25,12 @@ TestCase {
     id: floorFilterControllerFuncTest
     name: "FloorFilterControllerFuncTest"
 
-    Credential {
-        id: viewerCredentialIndoors
-        // need to add CREDENTIAL_USERNAME and CREDENTIAL_PASSWORD to the Environment variables.
-        username: credential_username
-        password: credential_password
-    }
-
     MapView {
         id: viewMulti
         Map {
             id: mapMulti
             item: PortalItem {
-                itemId: "49520a67773842f1858602735ef538b5"
+                itemId: "b4b599a43a474d33946cf0df526426f5"
                 portal: Portal {
                     Component.onCompleted: load()
                     onErrorChanged: {
@@ -45,7 +38,6 @@ TestCase {
                             console.log(error.message);
                         }
                     }
-                    credential: viewerCredentialIndoors
                     url: "https://indoors.maps.arcgis.com/"
                 }
             }
@@ -122,7 +114,7 @@ TestCase {
         // autofires populateAllFacilities()
         control.selectedSiteRespected = false;
         var facility = control.floorManager.facilities[0];
-        compare(facility.facilityId, "1000.US01.WAREHOUSE.T");
+        compare(facility.facilityId, "GFC.EAST.D");
         control.setSelectedFacilityId(facility.facilityId);
         compare(control.selectedSiteId, facility.site.siteId);
         compare(control.selectedSite.siteId, facility.site.siteId);
@@ -145,7 +137,7 @@ TestCase {
         Map {
             id: map
             item: PortalItem {
-                itemId: "49520a67773842f1858602735ef538b5"
+                itemId: "b4b599a43a474d33946cf0df526426f5"
                 portal: Portal {
                     Component.onCompleted: load()
                     onErrorChanged: {
@@ -153,7 +145,6 @@ TestCase {
                             console.log(error.message);
                         }
                     }
-                    credential: viewerCredentialIndoors
                     url: "https://indoors.maps.arcgis.com/"
                 }
             }
@@ -175,18 +166,18 @@ TestCase {
     function test_selectFacilities() {
         var control = loadFloorManagerMultiple();
         // select facility
-        control.setSelectedFacilityId("1000.US01.MAIN.M");
-        compare(control.selectedFacilityId, "1000.US01.MAIN.M");
-        compare(control.selectedFacility.name, "RED M");
-        compare(control.selectedSite.name, "Esri Redlands Main Campus");
+        control.setSelectedFacilityId("GFC.RA.L");
+        compare(control.selectedFacilityId, "GFC.RA.L");
+        compare(control.selectedFacility.name, "Lattice");
+        compare(control.selectedSite.name, "Research Annex");
         verify(control.selectedLevel != null);
-        compare(control.selectedLevelId, "1000.US01.MAIN.M1")
+        compare(control.selectedLevelId, "GFC.RA.L1");
 
         // select facility with no level. check that the selectedLevel is reset
-        control.setSelectedFacilityId("1000.US01.MAIN.N");
-        compare(control.selectedFacilityId, "1000.US01.MAIN.N");
-        compare(control.selectedFacility.name, "RED N");
-        compare(control.selectedSite.name, "Esri Redlands Main Campus");
+        control.setSelectedFacilityId("GFC.EAST.D");
+        compare(control.selectedFacilityId, "GFC.EAST.D");
+        compare(control.selectedFacility.name, "Datum");
+        compare(control.selectedSite.name, "East");
         verify(control.selectedLevel == null);
         compare(control.selectedLevelId, "");
     }
@@ -205,7 +196,7 @@ TestCase {
         control.spy.wait();
         verify(map.floorManager.loadStatus === Enums.LoadStatusLoaded);
         verify(map.floorManager.levels.length > 0);
-        verify(map.floorManager.levels.length === control.floorManager.levels.length);
+        compare(map.floorManager.levels.length, control.floorManager.levels.length);
         for (var i = 0; i < map.floorManager.levels; ++i) {
             verify(map.floorManager.levels[i].visible === control.floorManager.levels[i].visible);
         }
