@@ -219,7 +219,6 @@ Rectangle {
                 ff.controller.spy.wait(10000);
             verify(ff.controller.floorManager.loadStatus === Enums.LoadStatusLoaded);
             verify(ff.controller.floorManager.levels.length > 0)
-            wait(3000)
             verify(listView.model.count > 0);
             let searchTextField = findChild(ff, "searchTextField");
             verify(searchTextField)
@@ -227,7 +226,7 @@ Rectangle {
             compare(1, listView.model.count);
             let noResultsFoundLabel = findChild(ff, "noResultsFoundLabel");
             compare(false, noResultsFoundLabel.visible);
-            searchTextField.text = "asd";
+            searchTextField.text = "azz";
             compare(0, listView.model.count);
             compare(true, noResultsFoundLabel.visible);
             compare("No results found", noResultsFoundLabel.text);
@@ -237,11 +236,7 @@ Rectangle {
             keyClick(Qt.Key_Backspace);
             verify(listView.model.count < 1);
             keyClick(Qt.Key_Backspace);
-            verify(listView.model.count < 1);
-            keyClick(Qt.Key_Backspace);
-            verify(listView.model.count < 1);
-            keyClick(Qt.Key_Backspace);
-            compare("", searchTextField.text);
+            compare("a", searchTextField.text);
             verify(listView.model.count > 1);
         }
 

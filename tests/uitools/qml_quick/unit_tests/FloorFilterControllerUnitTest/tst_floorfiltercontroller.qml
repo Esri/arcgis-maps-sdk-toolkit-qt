@@ -25,25 +25,18 @@ TestCase {
     id: floorFilterControllerUnitTest
     name: "FloorFilterControllerUnitTest"
 
-    Credential {
-        id: viewerCredentialIndoors
-        // need to add CREDENTIAL_USERNAME and CREDENTIAL_PASSWORD to the Environment variables.
-        username: credential_username
-        password: credential_password
-    }
     MapView {
         id: viewMulti
         Map {
             id: mapMulti
             item: PortalItem {
-                itemId: "49520a67773842f1858602735ef538b5"
+                itemId: "b4b599a43a474d33946cf0df526426f5"
                 portal: Portal {
                     onErrorChanged: {
                         if (loadStatus === Enums.LoadStatusFailedToLoad) {
                             console.log(error.message);
                         }
                     }
-                    credential: viewerCredentialIndoors
                     url: "https://indoors.maps.arcgis.com/"
                 }
             }
@@ -137,8 +130,11 @@ TestCase {
 
     function test_setSelectedSiteId() {
         var control = loadFloorManagerMultiple();
-        control.setSelectedSiteId("Esri Redlands Main");
-        compare(control.selectedSiteId, "Esri Redlands Main");
+        // set site that is not in the list
+        control.setSelectedSiteId("azzzzz");
+        compare(control.selectedSiteId, "");
+        control.setSelectedSiteId("GFC.RA");
+        compare(control.selectedSiteId, "GFC.RA");
     }
 
     function test_setSelectedFacilityId() {
@@ -234,40 +230,42 @@ TestCase {
         var control = loadFloorManagerMultiple();
         control.populateAllFacilities();
         compare(control.facilities.count, control.floorManager.facilities.length);
-        // check facility model loaded correctly. sorted alphabetically
-        const facilityNamesOrdered = ["RED A","RED B","RED C","RED CAFE","RED D","RED E","RED F","RED G","RED Gym","RED H",
-                                      "RED J","RED K","RED L","RED M","RED M Plant","RED N","RED O","RED O Plant","RED OA",
-                                      "RED P","RED Q","RED Q Plant","RED R","RED S","RED T","RED U","RED V","RED VE","RED W",
-                                      "RED Z","RED ZN","RED ZW"];
-        verify(facilityNamesOrdered.length === control.facilities.count);
+        // check facility model loaded correctly. default ordering from the floormanager
+        const facilityNames = ["Datum","Bearing","Azimuth","Contour","Lattice","Ellipsoid","Meridian","Geoid"];
+
+        verify(facilityNames.length === control.facilities.count);
         for(var i = 0; i < control.facilities.count; ++i){
-            compare(control.facilities.get(i).name, facilityNamesOrdered[i]);
+            compare(control.facilities.get(i).name, facilityNames[i]);
         }
     }
 
     // check levels populated are ordered ascending by their vertical order
     function test_populateLevels() {
         var control = loadFloorManagerMultiple();
-        control.populateLevels(control.floorManager.facilities[31].levels);
-        compare(control.levels.count, control.floorManager.facilities[31].levels.length);
+        control.populateLevels(control.floorManager.facilities[5].levels);
+        compare(control.levels.count, control.floorManager.facilities[5].levels.length);
         // check level model loaded correctly (bottom to top levels)
-        var facility = control.floorManager.facilities[31]; // only 1 facility
-        compare(control.levels.get(0).shortName, "E3");
-        compare(facility.levels[3].shortName, control.levels.get(0).shortName);
-        var prevVerticalOrder = facility.levels[3].verticalOrder;
+        var facility = control.floorManager.facilities[5]; // only 1 facility
+        compare(control.levels.get(0).shortName, "4");
+        compare(facility.levels[4].shortName, control.levels.get(0).shortName);
+        var prevVerticalOrder = facility.levels[4].verticalOrder;
 
-        compare(control.levels.get(1).shortName, "E2");
-        compare(facility.levels[2].shortName, control.levels.get(1).shortName);
+        compare(control.levels.get(1).shortName, "3");
+        compare(facility.levels[3].shortName, control.levels.get(1).shortName);
+        verify(prevVerticalOrder > facility.levels[3].verticalOrder);
+        prevVerticalOrder = facility.levels[3].verticalOrder;
+
+        compare(control.levels.get(2).shortName, "2");
+        compare(facility.levels[2].shortName, control.levels.get(2).shortName);
         verify(prevVerticalOrder > facility.levels[2].verticalOrder);
         prevVerticalOrder = facility.levels[2].verticalOrder;
 
-        compare(control.levels.get(2).shortName, "E1");
-        compare(facility.levels[1].shortName, control.levels.get(2).shortName);
+        compare(control.levels.get(3).shortName, "1");
+        compare(facility.levels[1].shortName, control.levels.get(3).shortName);
         verify(prevVerticalOrder > facility.levels[1].verticalOrder);
-        prevVerticalOrder = facility.levels[1].verticalOrder;
 
-        compare(control.levels.get(3).shortName, "E0");
-        compare(facility.levels[0].shortName, control.levels.get(3).shortName);
+        compare(control.levels.get(4).shortName, "B");
+        compare(facility.levels[0].shortName, control.levels.get(4).shortName);
         verify(prevVerticalOrder > facility.levels[0].verticalOrder);
     }
 

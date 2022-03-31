@@ -347,6 +347,7 @@ QtObject {
             if(internal.selectedLevelId === "")
               internal.selectedLevel.visible = false;
             internal.selectedLevel = null;
+            internal.selectedLevelId = "";
             return;
         }
 
@@ -372,6 +373,7 @@ QtObject {
             console.error("facility id not found, resetting current facility");
             internal.selectedFacility = null;
             levels.clear();
+            internal.selectedLevelId = "";
             return;
         }
         internal.selectedFacility = floorManager.facilities[idx];
@@ -388,6 +390,7 @@ QtObject {
             console.error("site id not found");
             internal.selectedSite = null;
             facilities.clear();
+            internal.selectedSiteId = "";
             return;
         }
 
