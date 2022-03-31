@@ -196,6 +196,9 @@ Pane {
             Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
             Layout.fillWidth: true
             Layout.margins: 5
+            wrapMode: Text.WordWrap
+            clip: true
+            maximumLineCount: 3
         }
 
         Button {
@@ -259,6 +262,9 @@ Pane {
             Layout.alignment: Qt.AlignRight  | Qt.AlignBottom
             Layout.fillWidth: true
             Layout.margins: 5
+            wrapMode: Text.WordWrap
+            clip: true
+            maximumLineCount: 3
         }
 
         Control {
