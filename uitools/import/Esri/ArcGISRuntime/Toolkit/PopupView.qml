@@ -80,7 +80,7 @@ Page {
       \brief The Controller handles reading from the PopupManager and monitoring
       the list-models.
 
-      A default is \l PopupViewController is provided.
+      A QML default is provided \l PopupViewController and a CPP is provided \l{Esri::ArcGISRuntime::Toolkit::PopupViewController}{PopupViewController}.
     */
     property var controller: PopupViewController {}
 

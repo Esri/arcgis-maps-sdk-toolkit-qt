@@ -38,7 +38,7 @@ Item {
       \brief The controller handles binding logic between the OverviewMap and
       the \c GeoView where applicable.
 
-      A default \l OverviewMapController is provided.
+      A QML default is provided \l OverviewMapController and a CPP is provided \l{Esri::ArcGISRuntime::Toolkit::OverviewMapController}{OverviewMapController}.
      */
     property var controller: OverviewMapController { }
 

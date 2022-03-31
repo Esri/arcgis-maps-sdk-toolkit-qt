@@ -66,11 +66,11 @@ Pane {
 
     /*!
       \qmlproperty CoordinateConversionController controller
-      \brief the Controller handles connections writing/reading to the GeoView,
+      \brief The Controller handles connections writing/reading to the GeoView,
       and maintaining our list of textual representations of a single point
       in multiple formats.
 
-      A default \l CoordinateConversionController is provided.
+      A QML default is provided \l CoordinateConversionController and a CPP is provided \l{Esri::ArcGISRuntime::Toolkit::CoordinateConversionController}{CoordinateConversionController}.
     */
     property var controller: CoordinateConversionController { }
 

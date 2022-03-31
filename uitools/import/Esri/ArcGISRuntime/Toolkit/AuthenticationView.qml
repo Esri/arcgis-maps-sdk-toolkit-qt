@@ -58,10 +58,10 @@ Item {
 
     /*!
       \qmlproperty AuthenticationController controller
-      \brief the Controller handles references to challenges emitted by the
+      \brief The Controller handles references to challenges emitted by the
       \c AuthenticationManager.
 
-      A default \l AuthenticationController is provided.
+      A QML default is provided \l AuthenticationController and a CPP is provided \l{Esri::ArcGISRuntime::Toolkit::AuthenticationController}{AuthenticationController}.
     */
     property var controller: AuthenticationController { }
 

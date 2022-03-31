@@ -55,7 +55,7 @@ Control {
       \brief The controller handles binding logic between the FloorFilter, \c GeoModel, \c FloorManager and
       the flooraware layers.
       
-      A default \l FloorFilterController is provided.
+      A QML default is provided \l FloorFilterController and a CPP is provided \l{Esri::ArcGISRuntime::Toolkit::FloorFilterController}{FloorFilterController}.
     */
     property var controller: FloorFilterController {}
 
