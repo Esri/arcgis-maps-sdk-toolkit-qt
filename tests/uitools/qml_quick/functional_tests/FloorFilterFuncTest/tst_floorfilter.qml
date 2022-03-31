@@ -74,12 +74,6 @@ Rectangle {
         id: floorFilterFuncTest
         name: "FloorFilterFuncTest"
         when: windowShown
-        Credential {
-            id: viewerCredentialIndoors
-            // need to add CREDENTIAL_USERNAME and CREDENTIAL_PASSWORD to the Environment variables.
-            username: credential_username
-            password: credential_password
-        }
 
         function test_collapserDefault() {
             let ff = createTemporaryObject(ffComponent, root);
