@@ -36,7 +36,7 @@ Rectangle {
         Map {
             id: mapMulti
             item: PortalItem {
-                itemId: "49520a67773842f1858602735ef538b5"
+                itemId: "b4b599a43a474d33946cf0df526426f5"
                 portal: Portal {
                     Component.onCompleted: load()
                     onErrorChanged: {
@@ -44,7 +44,6 @@ Rectangle {
                             console.log(error.message);
                         }
                     }
-                    credential: viewerCredentialIndoors
                     url: "https://indoors.maps.arcgis.com/"
                 }
             }
@@ -224,7 +223,7 @@ Rectangle {
             verify(listView.model.count > 0);
             let searchTextField = findChild(ff, "searchTextField");
             verify(searchTextField)
-            searchTextField.text = "esri redlands learning center";
+            searchTextField.text = "west";
             compare(1, listView.model.count);
             let noResultsFoundLabel = findChild(ff, "noResultsFoundLabel");
             compare(false, noResultsFoundLabel.visible);
@@ -238,7 +237,11 @@ Rectangle {
             keyClick(Qt.Key_Backspace);
             verify(listView.model.count < 1);
             keyClick(Qt.Key_Backspace);
-            compare("a", searchTextField.text);
+            verify(listView.model.count < 1);
+            keyClick(Qt.Key_Backspace);
+            verify(listView.model.count < 1);
+            keyClick(Qt.Key_Backspace);
+            compare("", searchTextField.text);
             verify(listView.model.count > 1);
         }
 
@@ -253,7 +256,7 @@ Rectangle {
                 ff.controller.spy.wait(10000);
             verify(listView.model.count > 0);
             let siteLabel = findChild(ff, "siteLabel");
-            compare("Select the Site", siteLabel.text);
+            compare("Select a Site", siteLabel.text);
             // click the first element in the list view at central x position and 5 y axis
             let internal = findChild(ff, "internal");
             // select site
@@ -261,7 +264,7 @@ Rectangle {
             // no currentItem is selected
             verify(listView.currentItem == null);
             compare(-1, listView.currentIndex);
-            compare("Esri Redlands Learning Center", siteLabel.text);
+            compare("East", siteLabel.text);
             let backToSite = findChild(ff, "backToSite");
             // go back to site view
             mouseClick(backToSite);
@@ -300,23 +303,23 @@ Rectangle {
             compare(FloorFilter.VisibleListView.Facility, internal.currentVisibileListView);
             // search for 3 level facility
             let searchTextField = findChild(ff, "searchTextField");
-            searchTextField.text = "red o";
+            searchTextField.text = "ellipsoid";
             // select first facility
             mouseClick(listView, 25, 25, Qt.LeftButton, Qt.NoModifier, 100);
-            compare("1000.US01.MAIN.O", internal.selectedFacilityId);
+            compare("GFC.WEST.E", internal.selectedFacilityId);
             let siteLabel = findChild(ff, "siteLabel");
             let facilityLabel = findChild(ff, "facilityLabel");
-            compare("Esri Redlands Main Campus", siteLabel.text);
-            compare("RED O", facilityLabel.text);
+            compare("West", siteLabel.text);
+            compare("Ellipsoid", facilityLabel.text);
             // check repeater
             let repeater = findChild(ff, "repeater");
-            compare(3, repeater.count);
+            compare(5, repeater.count);
             let flickable = findChild(ff, "flickable");
             // check the height of the flickable is number of items * buttonheight
             // wait that the delegate sets the buttonHeight once it is completed.
             tryCompare(flickable, "height", 2 * repeater.buttonHeight, 50);
             // check the flickable scrollable height is 3 * buttonHeight
-            compare(120, flickable.contentHeight);
+            compare(200, flickable.contentHeight);
 
             // select first level and check visiblity, text on gui, text on controller and checked status
             let wrapper = findChild(ff, "wrapper");
@@ -324,14 +327,14 @@ Rectangle {
             mouseWheel(flickable, 10, 10, 0, 120, Qt.NoButton);
             wait(1000); // wait that the scroll is done.
             mouseClick(flickable, 10, 10);
-            compare("1000.US01.MAIN.O3", ff.controller.selectedLevelId);
-            compare("O3", wrapper.children[0].text);
+            compare("GFC.WEST.E4", ff.controller.selectedLevelId);
+            compare("4", wrapper.children[0].text);
             verify(wrapper.children[0].checked);
             verify(ff.controller.selectedLevel.visible === true);
             // select second level
             mouseClick(flickable, 10, 50);
-            compare("1000.US01.MAIN.O2", ff.controller.selectedLevelId);
-            compare("O2", wrapper.children[1].text);
+            compare("GFC.WEST.E3", ff.controller.selectedLevelId);
+            compare("3", wrapper.children[1].text);
             verify(wrapper.children[1].checked);
             verify(ff.controller.selectedLevel.visible === true);
             // select third level. have to scroll down (negative means scroll down, positive means scroll up). 120 is 15 degrees of scoll (enough for our needs).
@@ -339,13 +342,15 @@ Rectangle {
             wait(1000);
             // select the third level, which now is at second position
             mouseClick(flickable, 10, 50);
-            wait(100)
-            compare("1000.US01.MAIN.O1", ff.controller.selectedLevelId);
-            compare("O1", wrapper.children[2].text);
-            verify(wrapper.children[2].checked);
+            wait(1000)
+            compare("GFC.WEST.EB", ff.controller.selectedLevelId);
+            compare("B", wrapper.children[4].text);
+            verify(wrapper.children[4].checked);
             // check the other levels are not checked anymore
             verify(!wrapper.children[0].checked);
             verify(!wrapper.children[1].checked);
+            verify(!wrapper.children[2].checked);
+            verify(!wrapper.children[3].checked);
             verify(ff.controller.selectedLevel.visible === true);
         }
 
@@ -399,7 +404,7 @@ Rectangle {
             if(ff.controller.floorManager != null ? ff.controller.floorManager.loadStatus !== Enums.LoadStatusLoaded : true)
                 ff.controller.spy.wait(10000);
             mouseClick(showAllFacilities);
-            // select first all facility (red a)
+            // select first all facility (Azimuth)
             mouseClick(listView, 25, 25, Qt.LeftButton, Qt.NoModifier, 100);
             let closer = findChild(ff, "closer");
             verify(closer);
@@ -413,7 +418,7 @@ Rectangle {
             compare(false, closer.visible);
             compare(false, flickable.visible);
             compare(true, itemSelectedButton.visible);
-            compare("A1", itemSelectedButton.text);
+            compare("1", itemSelectedButton.text);
             // check the not collapsed itemSelectedButton
             let collapser = findChild(ff, "collapser");
             // reopen the floorfilter, showing all the levels available
