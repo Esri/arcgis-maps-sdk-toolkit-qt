@@ -201,7 +201,7 @@ Pane {
         Button {
             id: stepBackButton
             icon.source: "images/step_back.png"
-            enabled: !startTimePinned || !endTimePinned
+            enabled: (!startTimePinned || !endTimePinned) && playAnimation.running
             palette: timeSlider.palette
             onClicked: timeSlider.incrementFrame(-1);
             Layout.alignment: Qt.AlignLeft
@@ -229,7 +229,7 @@ Pane {
         Button {
             id: stepForwardButton
             icon.source: "images/step.png"
-            enabled: !startTimePinned || !endTimePinned
+            enabled: (!startTimePinned || !endTimePinned) && !playAnimation.running
             palette: timeSlider.palette
             onClicked: timeSlider.incrementFrame(1);
             Layout.alignment: Qt.AlignRight
