@@ -201,9 +201,16 @@ Pane {
         Button {
             id: stepBackButton
             icon.source: "images/step_back.png"
-            enabled: (!startTimePinned || !endTimePinned) && playAnimation.running
+            enabled: (!startTimePinned || !endTimePinned) && !playAnimation.running
             palette: timeSlider.palette
-            onClicked: timeSlider.incrementFrame(-1);
+            Timer {
+                id: pressedHoldBack
+                repeat: true
+                running: parent.pressed
+                interval: 200
+                onTriggered: timeSlider.incrementFrame(-1);
+                triggeredOnStart: true
+            }
             Layout.alignment: Qt.AlignLeft
             Layout.margins: 5
         }
@@ -231,7 +238,14 @@ Pane {
             icon.source: "images/step.png"
             enabled: (!startTimePinned || !endTimePinned) && !playAnimation.running
             palette: timeSlider.palette
-            onClicked: timeSlider.incrementFrame(1);
+            Timer {
+                id: pressedHoldForward
+                repeat: true
+                running: parent.pressed
+                interval: 200
+                onTriggered: timeSlider.incrementFrame(1);
+                triggeredOnStart: true
+            }
             Layout.alignment: Qt.AlignRight
             Layout.margins: 5
         }
