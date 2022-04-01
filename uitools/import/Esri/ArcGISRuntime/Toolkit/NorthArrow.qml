@@ -53,7 +53,7 @@ Item {
       \qmlproperty NorthArrowController controller
       \brief The Controller handles connections writing/reading to the GeoView.
 
-      A QML default is provided \l NorthArrowController and a CPP is provided \l{Esri::ArcGISRuntime::Toolkit::NorthArrowController}{NorthArrowController}.
+      The QML controller is documented \l{NorthArrowController}{here} and the CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::NorthArrowController}{here}.
     */
     property var controller: NorthArrowController { }
 

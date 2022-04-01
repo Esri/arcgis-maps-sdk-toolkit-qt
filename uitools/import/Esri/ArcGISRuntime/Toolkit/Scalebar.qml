@@ -48,7 +48,7 @@ Control {
       distance calculations based on the visual properties of the given
       \l{mapView}.
 
-      A CPP default is provided \l{Esri::ArcGISRuntime::Toolkit::ScalebarController}{ScalebarController}.
+      The CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::ScalebarController}{here}.
      */
     property var controller: ScalebarController { }
 

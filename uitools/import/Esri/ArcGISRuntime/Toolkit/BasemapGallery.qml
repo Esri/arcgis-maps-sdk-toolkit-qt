@@ -62,7 +62,7 @@ Pane {
       \brief The controller handles binding logic between the BasemapGallery and
       the \c GeoModel and the \c Portal where applicable.
       
-      A QML default is provided \l BasemapGalleryController and a CPP is provided \l{Esri::ArcGISRuntime::Toolkit::BasemapGalleryController}{BasemapGalleryController}.
+      The QML controller is documented \l{BasemapGalleryController}{here} and the CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::BasemapGalleryController}{here}.
     */
     property var controller: BasemapGalleryController { }
 
