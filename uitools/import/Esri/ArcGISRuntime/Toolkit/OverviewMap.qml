@@ -34,9 +34,11 @@ Item {
     id: overviewMap
 
     /*!
-      \qmlproperty OverviewMapController controller.
+      \qmlproperty OverviewMapController controller
       \brief The controller handles binding logic between the OverviewMap and
       the \c GeoView where applicable.
+
+      The QML controller is documented \l{OverviewMapController}{here} and the CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::OverviewMapController}{here}.
      */
     property var controller: OverviewMapController { }
 

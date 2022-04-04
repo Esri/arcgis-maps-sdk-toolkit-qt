@@ -85,7 +85,7 @@ Pane {
       \brief The controller handles calculating steps and setting extents on the
        GeoView.
 
-       A default TimeSliderController is provided.
+       The QML controller is documented \l{TimeSliderController}{here} and the CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::TimeSliderController}{here}.
     */
     property var controller: TimeSliderController { }
 

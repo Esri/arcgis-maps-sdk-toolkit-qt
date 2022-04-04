@@ -47,7 +47,7 @@ Pane {
       \brief The Controller which performs the search and manages
       the results/suggestions.
 
-       A default SearchViewController is provided.
+       The QML controller is documented \l{SearchViewController}{here} and the CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::SearchViewController}{here}.
     */
     property var controller: SearchViewController { }
 

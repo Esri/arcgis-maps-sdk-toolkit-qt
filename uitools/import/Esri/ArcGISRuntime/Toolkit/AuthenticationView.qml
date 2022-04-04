@@ -57,9 +57,11 @@ Item {
     id: authenticationView
 
     /*!
-      \qmlproperty AuthenticationController controller.
-      \brief the Controller handles references to challenges emitted by the
+      \qmlproperty AuthenticationController controller
+      \brief The Controller handles references to challenges emitted by the
       \c AuthenticationManager.
+
+      The QML controller is documented \l{AuthenticationController}{here} and the CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::AuthenticationController}{here}.
     */
     property var controller: AuthenticationController { }
 

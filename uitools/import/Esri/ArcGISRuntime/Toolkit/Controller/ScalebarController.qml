@@ -26,7 +26,9 @@ import QtQml 2.12
 
     This controller object handles the Scalebar calculations for a Scalebar's width
     and display units, based on a given mapview and owning scalebar's bounds.
+    \note This controller has not been implemented yet for QML.
  */
+//todo: once implemented, add this file as a \l to the docs on scalebar.qml controller property. remove the \note above
 QtObject {
 
   property var mapView;
