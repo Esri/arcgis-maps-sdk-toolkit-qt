@@ -196,14 +196,24 @@ Pane {
             Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
             Layout.fillWidth: true
             Layout.margins: 5
+            wrapMode: Text.WordWrap
+            clip: true
+            maximumLineCount: 3
         }
 
         Button {
             id: stepBackButton
             icon.source: "images/step_back.png"
-            enabled: !startTimePinned || !endTimePinned
+            enabled: (!startTimePinned || !endTimePinned) && !playAnimation.running
             palette: timeSlider.palette
-            onClicked: timeSlider.incrementFrame(-1);
+            Timer {
+                id: pressedHoldBack
+                repeat: true
+                running: parent.pressed
+                interval: 200
+                onTriggered: timeSlider.incrementFrame(-1);
+                triggeredOnStart: true
+            }
             Layout.alignment: Qt.AlignLeft
             Layout.margins: 5
         }
@@ -229,9 +239,16 @@ Pane {
         Button {
             id: stepForwardButton
             icon.source: "images/step.png"
-            enabled: !startTimePinned || !endTimePinned
+            enabled: (!startTimePinned || !endTimePinned) && !playAnimation.running
             palette: timeSlider.palette
-            onClicked: timeSlider.incrementFrame(1);
+            Timer {
+                id: pressedHoldForward
+                repeat: true
+                running: parent.pressed
+                interval: 200
+                onTriggered: timeSlider.incrementFrame(1);
+                triggeredOnStart: true
+            }
             Layout.alignment: Qt.AlignRight
             Layout.margins: 5
         }
@@ -245,6 +262,9 @@ Pane {
             Layout.alignment: Qt.AlignRight  | Qt.AlignBottom
             Layout.fillWidth: true
             Layout.margins: 5
+            wrapMode: Text.WordWrap
+            clip: true
+            maximumLineCount: 3
         }
 
         Control {

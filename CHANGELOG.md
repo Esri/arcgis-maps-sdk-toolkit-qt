@@ -1,6 +1,7 @@
 # Changelog
 
 ## 100.14
+* (TimeSlider) Forward and backward buttons are not enabled while playing. Holding buttons, continuously skips forward or backwards. Time labels wrap into new line for small screens and don't overlap behind the buttons.
 * (ScrollBar) Calcite styling of the ScrollBar, not matching specific component.
 * (FloorFilter) Viewpoint selection mode implemented.
 * (FloorFilter) Introduction of new FloorFilter tool (C++/Quick, QML/Quick, Widget) 
