@@ -760,7 +760,7 @@ namespace Toolkit {
 
     // Expectation: viewpoint is center and scale
     if (observedViewpoint.isEmpty() ||
-        isnan(observedViewpoint.targetScale()))
+        std::isnan(observedViewpoint.targetScale()))
     {
       return;
     }
