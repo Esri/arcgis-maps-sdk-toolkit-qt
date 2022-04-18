@@ -13,6 +13,8 @@
 # limitations under the License.
 include($$PWD/common.pri)
 
+QT += widgets webenginewidgets svg
+
 RESOURCES += $$PWD/images/esri_arcgisruntime_toolkit_images.qrc
 
 DEFINES += WIDGETS_ARCGISRUNTIME_TOOLKIT

@@ -20,11 +20,7 @@ mac {
 CONFIG += c++14
 
 # additional modules are pulled in via arcgisruntime.pri
-QT += opengl qml quick quickcontrols2 webview
-
-ios {
-    QT += svg
-}
+QT += opengl qml quick
 
 ARCGIS_RUNTIME_VERSION = 100.14
 include($$PWD/arcgisruntime.pri)

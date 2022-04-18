@@ -1,6 +1,7 @@
 # Changelog
 
 ## 100.14
+* `toolkitwidgets.pri`, `toolkitqml.pri`, and `toolkitcpp.pri` now include `QT += ...` lines to account for needed dependencies.
 * (TimeSlider) Forward and backward buttons are not enabled while playing. Holding buttons, continuously skips forward or backwards. Time labels wrap into new line for small screens and don't overlap behind the buttons.
 * (ScrollBar) Calcite styling of the ScrollBar, not matching specific component.
 * (FloorFilter) Viewpoint selection mode implemented.

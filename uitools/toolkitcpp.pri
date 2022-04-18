@@ -13,6 +13,8 @@
 # limitations under the License.
 include($$PWD/common.pri)
 
+QT += quickcontrols2 webview svg
+
 REGISTERPATH = $$PWD/register/Esri/ArcGISRuntime/Toolkit
 
 INCLUDEPATH += $$PWD/register $$REGISTERPATH

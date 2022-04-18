@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+QT += quickcontrols2 webview svg
+
 REGISTERPATH = $$PWD/register/Esri/ArcGISRuntime/Toolkit
 
 INCLUDEPATH += $$PWD/register $$REGISTERPATH
