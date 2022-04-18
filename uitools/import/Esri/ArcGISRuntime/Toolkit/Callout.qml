@@ -365,8 +365,8 @@ Pane {
             Layout.columnSpan: 3
             Layout.rowSpan: 2
             Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.preferredWidth: root.maxWidth
+            Layout.preferredWidth: autoAdjustWidth ? -1 : root.maxWidth
+            Layout.maximumWidth: autoAdjustWidth ? root.maxWidth : -1
             visible: calloutContent
         }
         Image {
