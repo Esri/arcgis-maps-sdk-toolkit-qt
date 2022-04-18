@@ -315,7 +315,7 @@ Control {
                     Layout.fillWidth: true
                     Layout.columnSpan: 3
                     Layout.margins: 5
-                    placeholderText: qsTr("Search")
+                    placeholderText: internal.currentVisibileListView === FloorFilter.VisibleListView.Site ? qsTr("Filter Sites") : qsTr("Filter Facilities")
                     leftPadding: searchImg.width + 5
                     Image {
                         id: searchImg
@@ -341,7 +341,7 @@ Control {
                 Label {
                     id: noResultsFoundLabel
                     objectName: "noResultsFoundLabel"
-                    text: qsTr("No results found")
+                    text: qsTr("No matches found")
                     visible: false
                     Layout.columnSpan: 3
                     // expanding to the showAllFacilities cell (and its ToolSeparator) in case is not visible. This will not break the grid layout, otherwise there is a missing row.
