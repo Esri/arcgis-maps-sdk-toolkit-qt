@@ -41,6 +41,8 @@ namespace Toolkit
   \brief Defines a small "overview" (or "inset") map displaying a representation of the current viewpoint of the given GeoView.
    For MapViews, the current viewpoint will be represented by a polygon displaying the visible area of the MapView. For SceneViews,
    the current viewpoint will be represented by a reticle (crosshairs) displaying the viewpoint center.
+
+  \note By default, the OverviewMap will attempt to use an ArcGIS Topographic basemap, which requires an \l{https://developers.arcgis.com/qt/get-started/#3-access-services-and-content-with-an-api-key}{API key} to access.
  */
 
 /*!

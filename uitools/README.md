@@ -196,3 +196,8 @@ in your own widgets files.
   // Add your NorthArrow to your UI here!
   northArrow->show();
 ```
+
+## API Key requirements
+
+Some of the toolkit components and examples utilize ArcGIS Platform services which require an API Key.
+Please see the [setup guide](https://developers.arcgis.com/qt/get-started/#3-access-services-and-content-with-an-api-key) for more information.

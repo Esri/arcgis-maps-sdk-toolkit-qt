@@ -28,6 +28,8 @@ import Esri.ArcGISRuntime.Toolkit.Controller 100.14
    \image docs/overviewmap.png overviewmap
    Example code in the QML API (C++ API might differ):
    \snippet qml_quick/src/demos/OverviewMapDemoForm.qml Set up Overview Map QML
+
+    \note By default, the OverviewMap will attempt to use an ArcGIS Topographic basemap, which requires an \l{https://developers.arcgis.com/qt/get-started/#3-access-services-and-content-with-an-api-key}{API key} to access.
  */
 
 Item {
