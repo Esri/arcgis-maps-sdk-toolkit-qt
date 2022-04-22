@@ -40,7 +40,7 @@ void BasemapGalleryItemUnitTest::initTestCase()
   const QString apiKey = qgetenv("ARCGIS_RUNTIME_API_KEY");
   Esri::ArcGISRuntime::ArcGISRuntimeEnvironment::setApiKey(apiKey);
 
-  m_basemapLightGray = Basemap::lightGrayCanvas(this);
+  m_basemapLightGray = Basemap(BasemapStyle::ArcGISLightGray, this);
   m_map = new Map(m_basemapLightGray);
 
   QSignalSpy mapLoaded(m_map, &Esri::ArcGISRuntime::GeoModel::doneLoading);
