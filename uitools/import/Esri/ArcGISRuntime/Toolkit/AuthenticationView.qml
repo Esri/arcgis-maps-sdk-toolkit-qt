@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import Esri.ArcGISRuntime.Toolkit.Controller 100.13
+import Esri.ArcGISRuntime.Toolkit.Controller 100.14
 
 import QtQml 2.12
 import QtQuick 2.12
@@ -24,10 +24,10 @@ import QtQuick.Controls 2.12
   \inqmlmodule Esri.ArcGISRuntime.Toolkit
   \ingroup ArcGISQtToolkitUiQmlViews
   \since Esri.ArcGISRuntime 100.10
-  \brief A view for handling authentication challenges and automatically 
+  \brief A view for handling authentication challenges and automatically
   launching the appropriate UI for each type of authentication.
-    
-  Declare an AuthenticationView in your QML file. The AuthenticationView 
+
+  Declare an AuthenticationView in your QML file. The AuthenticationView
   will then be connected to all authentication challenges, and will
   automatically launch the appropriate view for the type of
   challenge. Supported security formats include:
@@ -42,9 +42,9 @@ import QtQuick.Controls 2.12
     \li PKI (ClientCertificateView)
     \li SSL Handshake Warnings (SslHandshakeView)
   \endlist
-  
+
   \note OAuth 2.0 uses a WebView. To use an OAuthView you must call
-        \c{QtWebView::initialize()} immediately after the \c{QGuiApplication} 
+        \c{QtWebView::initialize()} immediately after the \c{QGuiApplication}
         instance is created. See \l{https://doc.qt.io/qt-5/qtwebview-index.html}
         {Qt WebView}.
 
@@ -57,9 +57,11 @@ Item {
     id: authenticationView
 
     /*!
-      \qmlproperty AuthenticationController controller.
-      \brief the Controller handles references to challenges emitted by the 
+      \qmlproperty AuthenticationController controller
+      \brief The Controller handles references to challenges emitted by the
       \c AuthenticationManager.
+
+      The QML controller is documented \l{AuthenticationController}{here} and the CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::AuthenticationController}{here}.
     */
     property var controller: AuthenticationController { }
 

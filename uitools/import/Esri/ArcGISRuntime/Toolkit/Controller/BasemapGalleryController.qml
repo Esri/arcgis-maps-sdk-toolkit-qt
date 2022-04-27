@@ -14,13 +14,13 @@
  *  limitations under the License.
  ******************************************************************************/
 import QtQml 2.15
-import Esri.ArcGISRuntime 100.13
+import Esri.ArcGISRuntime 100.14
 import QtQml.Models 2.15
 
 /*!
    \qmltype BasemapGalleryController
    \inqmlmodule Esri.ArcGISRuntime.Toolkit
-   \since Esri.ArcGISRutime 100.12
+   \since Esri.ArcGISRuntime 100.12
    \ingroup ArcGISQtToolkitUiQmlControllers
    \brief The controller part of a BasemapGallery. This class handles the
    management of the BasemapGalleryItem objects, and listening to changes to the current

@@ -192,7 +192,7 @@ namespace Toolkit {
       return;
 
     const auto point = m_controller->screenCoordinate();
-    if (point.isNull() || isnan(point.x()) || isnan(point.y()))
+    if (point.isNull() || std::isnan(point.x()) || std::isnan(point.y()))
       return;
 
     m_flash = new Flash();

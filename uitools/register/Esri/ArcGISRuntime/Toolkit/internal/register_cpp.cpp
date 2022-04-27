@@ -22,6 +22,10 @@
 #include "CoordinateConversionController.h"
 #include "CoordinateConversionOption.h"
 #include "CoordinateConversionResult.h"
+#include "FloorFilterController.h"
+#include "FloorFilterFacilityItem.h"
+#include "FloorFilterLevelItem.h"
+#include "FloorFilterSiteItem.h"
 #include "LocatorSearchSource.h"
 #include "NorthArrowController.h"
 #include "OverviewMapController.h"
@@ -59,7 +63,7 @@ namespace Toolkit {
     constexpr char const* NAMESPACE = "Esri.ArcGISRuntime.Toolkit.Controller";
 
     constexpr int VERSION_MAJOR = 100;
-    constexpr int VERSION_MINOR = 13;
+    constexpr int VERSION_MINOR = 14;
 
     /*
       \internal
@@ -167,6 +171,10 @@ namespace Toolkit {
     registerComponent<CoordinateConversionController>(10);
     registerComponent<CoordinateConversionOption>(10);
     registerComponent<CoordinateConversionResult>(10);
+    registerComponent<FloorFilterController>(14);
+    registerComponent<FloorFilterFacilityItem>(14, CreationType::Uncreatable);
+    registerComponent<FloorFilterLevelItem>(14, CreationType::Uncreatable);
+    registerComponent<FloorFilterSiteItem>(14, CreationType::Uncreatable);
     registerComponent<LocatorSearchSource>(13, CreationType::Uncreatable);
     registerComponent<NorthArrowController>(10);
     registerComponent<OverviewMapController>(12);

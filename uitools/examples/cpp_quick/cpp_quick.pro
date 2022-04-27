@@ -16,7 +16,7 @@ TEMPLATE = app
 CONFIG += c++14 qmltypes
 
 # additional modules are pulled in via arcgisruntime.pri
-QT += opengl qml quick quickcontrols2 webview
+QT += opengl qml quick
 
 QML_IMPORT_NAME = "DemoApp"
 QML_IMPORT_MAJOR_VERSION = 1
@@ -36,7 +36,7 @@ equals(QT_MAJOR_VERSION, 6) {
   error("This version of the ArcGIS Runtime SDK for Qt is incompatible with Qt 6")
 }
 
-ARCGIS_RUNTIME_VERSION = 100.13
+ARCGIS_RUNTIME_VERSION = 100.14
 include($$PWD/arcgisruntime.pri)
 include($$PWD/../../toolkitcpp.pri)
 

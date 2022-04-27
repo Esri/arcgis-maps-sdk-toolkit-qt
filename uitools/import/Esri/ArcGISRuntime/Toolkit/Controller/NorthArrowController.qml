@@ -22,7 +22,7 @@ import QtQml 2.12
    \ingroup ArcGISQtToolkitUiQmlControllers
    \brief In MVC architecture, this is the controller for the corresponding
    NorthArrow view.
-   
+
    This controller calculates the current heading from a GeoView, and allows
    the NorthArrow to apply a given heading to the GeoView.
  */

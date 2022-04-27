@@ -33,7 +33,7 @@ Item {
       \brief Read-only flag stating if the flashing animation is running or not.
      */
     property alias running: animation.running
-    
+
     /*!
       \brief Color of the flashing image.
      */

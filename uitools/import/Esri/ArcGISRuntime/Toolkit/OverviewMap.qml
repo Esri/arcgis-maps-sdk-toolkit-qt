@@ -15,7 +15,7 @@
  *  limitations under the License.
  ******************************************************************************/
 import QtQuick 2.12
-import Esri.ArcGISRuntime.Toolkit.Controller 100.13
+import Esri.ArcGISRuntime.Toolkit.Controller 100.14
 
 /*!
    \qmltype OverviewMap
@@ -28,15 +28,19 @@ import Esri.ArcGISRuntime.Toolkit.Controller 100.13
    \image docs/overviewmap.png overviewmap
    Example code in the QML API (C++ API might differ):
    \snippet qml_quick/src/demos/OverviewMapDemoForm.qml Set up Overview Map QML
+
+    \note By default, the OverviewMap will attempt to use an ArcGIS Topographic basemap, which requires an \l{https://developers.arcgis.com/qt/get-started/#3-access-services-and-content-with-an-api-key}{API key} to access.
  */
 
 Item {
     id: overviewMap
 
     /*!
-      \qmlproperty OverviewMapController controller.
+      \qmlproperty OverviewMapController controller
       \brief The controller handles binding logic between the OverviewMap and
       the \c GeoView where applicable.
+
+      The QML controller is documented \l{OverviewMapController}{here} and the CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::OverviewMapController}{here}.
      */
     property var controller: OverviewMapController { }
 

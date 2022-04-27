@@ -26,32 +26,31 @@ namespace Toolkit {
   /*!
  \inmodule EsriArcGISRuntimeToolkit
  \class Esri::ArcGISRuntime::Toolkit::GenericListModel
- 
+
  \brief This ListModel automatically exposes a list of QObjects with
  properties as a list of elements where each property is mapped to a user
  role.
- 
+
  A GenericListModel addresses the need to take a collection of properties,
  on a QObject and expose them in a view (Widgets or QML).
- 
+
  A GenericListModel takes a QMetaObject as an `elementType`. Each property in
  the QMetaObject is scanned and assigned a role in the order in which the
  property was declared in the class.
- 
+
  For example, given a class Foo:
- 
+
  \code
  class Foo : public QObject
  {
-   Q_OBJECT
    Q_PROPERTY(int propertyA READ propertyA WRITE setPropertyA NOTIFY propertyAChanged)
    Q_PROPERTY(QString propertyB READ propertyB NOTIFY propertyBChanged)
-   Q_PROPERTY(bool propertyC READ propertyC CONTANT)
+   Q_PROPERTY(bool propertyC READ propertyC CONSTANT)
  };
  \endcode
- 
+
  Then a GenericListModel will expose the following roles:
- 
+
  \table
   \header
     \li Name
@@ -74,14 +73,14 @@ namespace Toolkit {
     \li \c{ Qt::UserRole + 3}
     \li \c {bool}
  \endtable
- 
- A hard-coded \e{modelData} role is always exposed as \c Qt::UserRole, 
- followed by each property on \c Foo in order of declaration. 
+
+ A hard-coded \e{modelData} role is always exposed as \c Qt::UserRole,
+ followed by each property on \c Foo in order of declaration.
 
  Both \c data and \c setData can be called respectively on these roles.
  Likewise, every time a property updates, the notify signal will be consumed
  and this model will emit a dataChanged signal.
- 
+
  The class definition for a given \c QObject must have
  a constructor of form \c{Q_INVOKABLE Foo(QObject* parent = nullptr)}.
  An ElementType that does not have this form of constructor will trigger
@@ -166,25 +165,25 @@ namespace Toolkit {
   /*!
   \brief For a given index in the model, returns the data read from that
   object's property and returns the data as a \c QVariant.
-  
+
   If role is \c Qt::DisplayRole or \c Qt::EditRole, then the property read
   from is the property with the name defined by the \e displayPropertyName
   field.
-  
+
   If the role is \c Qt::UserRole, then the \c QVariant return is the pointer
   to the underlying QObject in the list.
-  
+
   If the role is is any value greater than \c Qt::UserRole, then the role is
   mapped to the property in the object associated with that role. See
   \l roleNames to get a list of those properties.
-  
+
   \list
     \li \a index The index of the object in the model to query
     \li \a role The role to query data for which maps to properties
   \endlist
-  
+
   Returns the data as read from the property cast as a QVariant.
-  
+
   \sa roleNames
  */
   QVariant GenericListModel::data(const QModelIndex& index, int role) const
@@ -230,25 +229,25 @@ namespace Toolkit {
   \brief For a given index in the model, attempts to set the data in the
   corresponding property to value and returns whether the write succeeded or
   not.
-  
+
   If role is \c Qt::DisplayRole or \c Qt::EditRole, then the property written
   to is the property with the name defined by the displayPropertyName
   field.
-  
+
   If the role is \c Qt::UserRole, then we attempt to cast the QVariant to
   the type defined by elementType, and replace the object in the model with
   this new object.
-  
+
   If the role is is any value greater than \c Qt::UserRole, then the role is
   mapped to the property in the object associated with that role. See
   roleNames to get a list of those properties.
-  
+
   \list
   \li \a index QObject in list to write to.
   \li \a role The role to map to a property in the QObject.
   \li \a value Value written to the property in the QObject.
   \endlist
-  
+
   Returns \c true if the QMetaProperty::write call succeeded.
  */
   bool GenericListModel::setData(const QModelIndex& index, const QVariant& value, int role)
@@ -290,18 +289,18 @@ namespace Toolkit {
   }
 
   /*!
-  \brief A collection of role names and the corresponding user role enum. 
-  
-  This will always return the hard-coded \e{(name, role)} combination 
+  \brief A collection of role names and the corresponding user role enum.
+
+  This will always return the hard-coded \e{(name, role)} combination
   \c{(modelData, Qt::UserRole)}.
-  
+
   For each subsequent property it will also expose:
-  \c{(property_N, Qt::UserRole + N + 1)} where \tt{property_N} is the N\sup{th} 
+  \c{(property_N, Qt::UserRole + N + 1)} where \tt{property_N} is the N\sup{th}
   property in the QMetaObject.
-  
-  I.E. for the \c Foo example given in the class documentation we would 
+
+  I.E. for the \c Foo example given in the class documentation we would
   return:
- 
+
   \table
    \header
      \li Name
@@ -345,22 +344,22 @@ namespace Toolkit {
 
   /*!
   \brief Default constructs count new objects and appends them to this list.
-  
+
   For this function work, the type as defined by elementType must have the
   following constructor:
-  
+
   \code
   Q_INVOKABLE MyClass(QObject* parent = nullptr);
   \endcode
-  
+
   Otherwise behaviour is undefined.
-  
+
   \list
   \li \a row Row to start insertion at.
   \li \a count Number of new objects to create and insert.
   \li \a parent Not used for lists.
   \endlist
-  
+
   Returns true If creation was successful.
  */
   bool GenericListModel::insertRows(int row, int count, const QModelIndex& parent)
@@ -394,13 +393,13 @@ namespace Toolkit {
 
   /*!
   \brief Removes and deletes the range of objects defined by row and count.
- 
-  \list 
+
+  \list
   \li \a row Start index for deletion.
   \li \a count Number of objects to delete.
   \li \a parent Not used for lists.
   \endlist
-  
+
   Returns \c true if deletion was successful.
  */
   bool GenericListModel::removeRows(int row, int count, const QModelIndex& parent)
@@ -439,10 +438,10 @@ namespace Toolkit {
   /*!
   \brief Set the QMetaObject that defines all the roles this model will
   expose.
-  
+
   This function will reset the model and delete the current model
   contents if changed.
-  
+
   \list
   \li \a metaObject A QMetaObject with properties to expose.
   \endlist
@@ -468,7 +467,7 @@ namespace Toolkit {
   /*!
    \brief Return the QMetaObject which dictates all the roles this model
    exposes.
-   
+
    Returns a QMetaObject with the desired properties.
  */
   const QMetaObject* GenericListModel::elementType() const
@@ -479,16 +478,16 @@ namespace Toolkit {
   /*!
   \brief The name of the property which is to be exposed as both the
   display role and the edit role.
-  
+
   When data or setData is called with \c Qt::DisplayRole or \c Qt::EditRole
   as the given role, then the underlying property as defined by this setter
   will be read from or set to.
-  
+
   This property is reset if \l setElementType is called.
-  
+
   \list
    \li \a propertyName name of property to expose as DisplayRole and EditRole.
-  \endlist 
+  \endlist
  */
   void GenericListModel::setDisplayPropertyName(const QString& propertyName)
   {
@@ -507,7 +506,7 @@ namespace Toolkit {
   /*!
   \brief Returns the name of the property which has been elevated to be used
   as the \c Qt::DisplayRole and Qt::EditRole in this model.
-  
+
   Returns name of property.
  */
   QString GenericListModel::displayPropertyName()
@@ -521,7 +520,7 @@ namespace Toolkit {
   /*!
   \brief Returns the name of the property which has been elevated to be used
   as the \c Qt::DecorationRole in this model.
-  
+
   Returns name of property.
  */
   QString GenericListModel::decorationPropertyName()
@@ -535,7 +534,7 @@ namespace Toolkit {
   /*!
   \brief Returns the name of the property which has been elevated to be used
   as the \c Qt::ToolTipRole in this model.
-  
+
   Returns name of property.
  */
   QString GenericListModel::tooltipPropertyName()
@@ -548,14 +547,14 @@ namespace Toolkit {
 
   /*!
   \brief Helper function append an additional object to this list.
-  
+
   The append will fail if \a object is null.
   The append will fail if the MetaType of \a object does not match elementType.
-  
+
   \list
   \li \a object Object to append to this model.
   \endlist
-  
+
   Returns \c true if object was appended.
  */
   bool GenericListModel::append(QObject* object)
@@ -579,14 +578,14 @@ namespace Toolkit {
 
   /*!
   \brief Helper function append additional objects to this list.
-  
+
   \list
   \li \a objects List of object to append to this model.
   \endlist
-  
+
   The append will fail if any object is null.
   The append will fail if any objects' MetaType does not match elementType.
-  
+
   Return \c true If objects were appended.
  */
   bool GenericListModel::append(QList<QObject*> objects)
@@ -619,16 +618,16 @@ namespace Toolkit {
   }
 
   /*!
-  \internal 
-  
+  \internal
+
   \brief Given a \c QModelIndex, connect up to the underlying \c QObject.
-  
+
   We connect up to the destroyed signal on the \c QObject so that we can
   automatically remove the object from this list.
-  
+
   We also connect up to each notify signal on each property, so we can
   emit a \l dataChanged signal each time a property informs us of an update.
-  
+
   \list
   \li \a index Index of item in the model.
   \endlist
@@ -692,17 +691,17 @@ namespace Toolkit {
 
   /*!
   \brief Returns header data for the list.
-  
-  The horizontal header is the class-name of the elementType. 
-  
+
+  The horizontal header is the class-name of the elementType.
+
   Vertical header is the section numbering.
-  
+
   \list
   \li \a section Section to query
   \li \a orientation Horizontal or vertical header.
   \li \a role Role to query.
   \endlist
-  
+
   Returns the header data as a \c QVariant.
  */
   QVariant GenericListModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -756,10 +755,10 @@ namespace Toolkit {
   \code
     QFlags<Qt::ItemFlag> myFlagsCallback(const QModelIndex& index);
   \endcode
-  
+
   */
 
-  /*! 
+  /*!
   \fn template<typename Func> void Esri::ArcGISRuntime::Toolkit::GenericListModel::setFlagsCallback(Func&& f)
   \brief Template member function used to set the callback function which calculates each item \c Qt::ItemFlags.
 
@@ -771,21 +770,21 @@ namespace Toolkit {
 
   /*!
   \fn T* Esri::ArcGISRuntime::Toolkit::GenericListModel::element(const QModelIndex& index) const
-  
+
   \brief Helper function to grab the object at index and cast to type T.
-  
+
   \list
   \li \c T The type to cast to.
   \li \a index Index of element to grab.
   \endlist
-  
-  Returns the cast of object in list to \c T. Nullptr is returned if the cast 
+
+  Returns the cast of object in list to \c T. Nullptr is returned if the cast
   fails.
  */
 
   /*!
-  \fn void Esri::ArcGISRuntime::Toolkit::GenericListModel::countChanged() 
-  \brief Emitted when the size of the list changes. 
+  \fn void Esri::ArcGISRuntime::Toolkit::GenericListModel::countChanged()
+  \brief Emitted when the size of the list changes.
  */
 
   /*!

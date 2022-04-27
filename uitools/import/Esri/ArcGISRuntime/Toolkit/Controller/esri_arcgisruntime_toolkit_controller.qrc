@@ -1,21 +1,21 @@
 <RCC>
-    <!-- This section contains all QML API controller components. -->
     <qresource prefix="/esri.com/imports/Esri/ArcGISRuntime/Toolkit/Controller">
-      <file>AuthenticationController.qml</file>
-      <file>BasemapGalleryController.qml</file>
-      <file>BasemapGalleryItem.qml</file>
-      <file>CoordinateConversionController.qml</file>
-      <file>CoordinateConversionOption.qml</file>
-      <file>CoordinateConversionResult.qml</file>
-      <file>CurrentVersion.qml</file>
-      <file>LocatorSearchSource.qml</file>
-      <file>NorthArrowController.qml</file>
-      <file>OverviewMapController.qml</file>
-      <file>PopupViewController.qml</file>
-      <file>ScalebarController.qml</file>
-      <file>SearchViewController.qml</file>
-      <file>SmartLocatorSearchSource.qml</file>
-      <file>TimeSliderController.qml</file>
-      <file>qmldir</file>
+        <file>AuthenticationController.qml</file>
+        <file>BasemapGalleryController.qml</file>
+        <file>BasemapGalleryItem.qml</file>
+        <file>CoordinateConversionController.qml</file>
+        <file>CoordinateConversionOption.qml</file>
+        <file>CoordinateConversionResult.qml</file>
+        <file>CurrentVersion.qml</file>
+        <file>FloorFilterController.qml</file>
+        <file>LocatorSearchSource.qml</file>
+        <file>NorthArrowController.qml</file>
+        <file>OverviewMapController.qml</file>
+        <file>PopupViewController.qml</file>
+        <file>ScalebarController.qml</file>
+        <file>SearchViewController.qml</file>
+        <file>SmartLocatorSearchSource.qml</file>
+        <file>TimeSliderController.qml</file>
+        <file>qmldir</file>
     </qresource>
 </RCC>

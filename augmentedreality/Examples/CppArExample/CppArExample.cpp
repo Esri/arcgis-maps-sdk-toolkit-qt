@@ -180,7 +180,7 @@ void CppArExample::createEmptyScene()
 void CppArExample::createStreetsScene()
 {
   // Create a scene with streets
-  m_scene = new Scene(BasemapType::Streets, this);
+  m_scene = new Scene(BasemapStyle::ArcGISStreets, this);
   createSurfaceWithElevation();
 
   // Set the location data source so we use our GPS location as the originCamera.
@@ -196,7 +196,7 @@ void CppArExample::createStreetsScene()
 void CppArExample::createImageryScene()
 {
   // Create a scene with imagery
-  m_scene = new Scene(BasemapType::ImageryWithLabels, this);
+  m_scene = new Scene(BasemapStyle::ArcGISImageryLabels, this);
   createSurfaceWithElevation();
 
   // Set the location data source so we use our GPS location as the originCamera.

@@ -59,10 +59,10 @@ namespace Toolkit {
   \inmodule EsriArcGISRuntimeToolkit
   \ingroup ArcGISQtToolkitUiCppWidgetsViews
   \since Esri.ArcGISRuntime 100.12
-  \brief A view for handling authentication challenges and automatically 
+  \brief A view for handling authentication challenges and automatically
   launching the appropriate UI for each type of authentication.
-    
-  Declare an AuthenticationView. The AuthenticationView 
+
+  Declare an AuthenticationView. The AuthenticationView
   will then be connected to all authentication challenges, and will
   automatically launch the appropriate view for the type of
   challenge. Supported security formats include:
@@ -77,7 +77,7 @@ namespace Toolkit {
     \li PKI (client certificate)
     \li SSL Handshake Warnings (ssl)
   \endlist
-  
+
   \note OAuth 2.0 uses QWebEngineView. To use OAuth you must add \c{QT += webenginewidgets}
         to \c{qmake}.
         See \l{https://doc.qt.io/qt-5/qwebengineview.html}{QWebEngineView}.

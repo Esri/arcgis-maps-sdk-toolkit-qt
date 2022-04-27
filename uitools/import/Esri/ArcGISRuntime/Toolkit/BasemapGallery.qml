@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import Esri.ArcGISRuntime.Toolkit.Controller 100.13
+import Esri.ArcGISRuntime.Toolkit.Controller 100.14
 
 import QtQuick 2.15
 import QtQml 2.15
@@ -33,6 +33,8 @@ import QtQuick.Layouts 1.15
  \image docs/basemap.gif
  Example code in the QML API (C++ API might differ):
  \snippet qml_quick/src/demos/BasemapGalleryDemoForm.qml Set up BasemapGallery QML
+
+ \note By default, the BasemapGallery will attempt to fetch the set of developer basemaps, which require an \l{https://developers.arcgis.com/qt/get-started/#3-access-services-and-content-with-an-api-key}{API key} to access.
  */
 
 Pane {
@@ -58,9 +60,11 @@ Pane {
     }
 
     /*!
-      \qmlproperty BasemapGalleryController controller.
+      \qmlproperty BasemapGalleryController controller
       \brief The controller handles binding logic between the BasemapGallery and
       the \c GeoModel and the \c Portal where applicable.
+      
+      The QML controller is documented \l{BasemapGalleryController}{here} and the CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::BasemapGalleryController}{here}.
     */
     property var controller: BasemapGalleryController { }
 
@@ -111,7 +115,7 @@ Pane {
     /*!
        \qmlproperty bool allowTooltips
        \brief When this property is true, mouse-hover tooltips are enabled for gallery items.
-       
+
        Defaults to \c{true}.
      */
     property bool allowTooltips: true

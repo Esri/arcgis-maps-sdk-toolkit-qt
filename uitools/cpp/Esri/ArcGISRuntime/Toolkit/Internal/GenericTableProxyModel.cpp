@@ -32,9 +32,9 @@ namespace
 /*
   \internal
   \brief Takes a string and transforms it into title-case.
-  
+
   This is for property headers.
-  
+
   \list
   \li \a string String to turn into title case.
   \endlist
@@ -54,7 +54,7 @@ QString toTitleCase(const QString& string)
 }
 
 /*!
- \internal 
+ \internal
  \inmodule EsriArcGISRuntimeToolkit
  \class Esri::ArcGISRuntime::Toolkit::GenericTableProxyModel
 
@@ -65,17 +65,17 @@ QString toTitleCase(const QString& string)
 
   This is a convenience type primarily for widgets where custom delegates
   aren't always the most natural fit for column-aligning data.
-  
+
   This table takes a list of \c QObjects. In the table each row represents the
   \c QObject, and each property in the \c QObject maps to a column in the row.
-  
+
   This table takes a GenericListModel and consumes it in the following way:
-  
+
   \list
     \li Each property is mapped to a column.
     \li There are only 3 valid roles for each cell in the table,
-        \c Qt::DisplayRole and \c Qt::EditRole which map to the displayed 
-        property itself, and \c Qt::UserRole which maps to the underlying 
+        \c Qt::DisplayRole and \c Qt::EditRole which map to the displayed
+        property itself, and \c Qt::UserRole which maps to the underlying
         object.
   \endlist
  */
@@ -109,7 +109,7 @@ GenericListModel* GenericTableProxyModel::sourceModel() const
 }
 
 /*!
-  \brief Sets the underlying \c GenericListModel \a listModel used to populate 
+  \brief Sets the underlying \c GenericListModel \a listModel used to populate
   this table.
   \note Setting this will reset the entire table.
  */
@@ -146,12 +146,12 @@ void GenericTableProxyModel::setSourceModel(GenericListModel* listModel)
 }
 
 /*!
-  \brief Returns the number of rows in the table, and number of objects in the 
+  \brief Returns the number of rows in the table, and number of objects in the
   list.
-  
+
   \note \a parent is not used for tables.
-  
-  Returns number of rows. 
+
+  Returns number of rows.
  */
 int GenericTableProxyModel::rowCount(const QModelIndex& parent) const
 {
@@ -162,14 +162,14 @@ int GenericTableProxyModel::rowCount(const QModelIndex& parent) const
 
 /*!
   \brief Returns the number of columns in the table.
-  
+
   The number of columns is dictated by the number of QMetaProperty objects
   held in the QMetaObject.
-  
+
   \note \a parent is not used for tables.
- 
+
   Returns number of columns in the table.
-   
+
   \sa Esri::ArcGISRuntime::Toolkit::GenericListModel::elementType
  */
 int GenericTableProxyModel::columnCount(const QModelIndex& parent) const
@@ -182,18 +182,18 @@ int GenericTableProxyModel::columnCount(const QModelIndex& parent) const
 /*!
   \brief For a given index in the model, returns the data read from that
   object's property and returns the data as a QVariant.
-  
-  If role is \c Qt::DisplayRole or \c Qt::EditRole, then the property 
+
+  If role is \c Qt::DisplayRole or \c Qt::EditRole, then the property
   associated with the cell is read from.
-  
+
   If the role is \c Qt::UserRole, then the QVariant return is the pointer
   to the underlying QObject of the row.
-  
+
   \list
   \li \a index The index of the object in the model to query
   \li \a role The role to query.
   \endlist
- 
+
   Returns the data as read from the property cast as a QVariant.
  */
 QVariant GenericTableProxyModel::data(const QModelIndex& index, int role) const
@@ -217,19 +217,19 @@ QVariant GenericTableProxyModel::data(const QModelIndex& index, int role) const
 /*!
   \brief For a given index in the model, sets the data on the property of the
   object associated wit the current cell in the table.
-   
-  If role is \c Qt::DisplayRole or \c Qt::EditRole, then the property 
+
+  If role is \c Qt::DisplayRole or \c Qt::EditRole, then the property
   associated with the cell is written to.
-  
+
   If the role is \c Qt::UserRole, then we attempt to overwrite the object at
   the current cell.
- 
-  \list 
+
+  \list
     \li \a index The index of the object in the model to write to.
     \li \a role The role to write to
     \li \a value Value written to the property in the QObject.
   \endlist
-  
+
   Returns \c true if the QMetaProperty::write call succeeded.
  */
 bool GenericTableProxyModel::setData(const QModelIndex& index, const QVariant& value, int role)
@@ -249,10 +249,10 @@ bool GenericTableProxyModel::setData(const QModelIndex& index, const QVariant& v
 
 /*!
   \brief Returns the flags for the cell.
- 
+
   The table will dictate whether a cell is editable or not based on whether
   the underlying \c QMetaProperty has an \c isWritable flag.
-  
+
   \list
   \li \a index Index of cell to query.
   \endlist
@@ -276,11 +276,11 @@ Qt::ItemFlags GenericTableProxyModel::flags(const QModelIndex &index) const
 
 /*!
   \brief Returns header data for the table.
-  
+
   The horizontal header is the collection of property names in title-case.
-  
+
   Vertical header is the section numbering.
-  
+
   \list
   \li \a section Section to query.
   \li \a orientation Horizontal or vertical header.
@@ -307,14 +307,14 @@ if (Qt::Orientation::Vertical == orientation)
 
 /*!
   \brief Calls \c insertRows on underlying \c GenericListModel.
-  \sa Esri::ArcGISRuntime::Toolkit::GenericListModel::insertRows 
- 
+  \sa Esri::ArcGISRuntime::Toolkit::GenericListModel::insertRows
+
   \list
   \li \a row Index of row to insert at
   \li \a count Number of rows to insert
   \li \a parent Not applicable in tables.
   \endlist
-  
+
   Returns \c true if insert was a success.
  */
 bool GenericTableProxyModel::insertRows(int row, int count, const QModelIndex& parent)
@@ -332,7 +332,7 @@ bool GenericTableProxyModel::insertRows(int row, int count, const QModelIndex& p
  \brief Calls \c removeRows on underlying \c GenericListModel.
  \sa Esri::ArcGISRuntime::Toolkit::GenericListModel::removeRows
 
- \list 
+ \list
  \li \a row Index of row to remove at.
  \li \a count Number of rows to remove.
  \li \a parent Not applicable in tables.
@@ -353,7 +353,7 @@ bool GenericTableProxyModel::removeRows(int row, int count, const QModelIndex& p
 
 /*!
   \brief Calls \c append on underlying \c GenericListModel
-  \sa Esri::ArcGISRuntime::Toolkit::GenericListModel::append 
+  \sa Esri::ArcGISRuntime::Toolkit::GenericListModel::append
 
   \list
   \li \a object Object to append.
@@ -368,8 +368,8 @@ bool GenericTableProxyModel::append(QList<QObject*> object)
 
 /*!
  \brief Calls \c append on underlying \c GenericListModel
- \sa Esri::ArcGISRuntime::Toolkit::GenericListModel::append 
- 
+ \sa Esri::ArcGISRuntime::Toolkit::GenericListModel::append
+
  \list
  \li \a object Objects to append.
  \endlist

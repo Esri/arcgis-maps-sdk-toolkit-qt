@@ -14,14 +14,17 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
+
 #include "SearchViewController.h"
 
 // Toolkit headers
 #include "Internal/GeoViews.h"
+#include "Internal/SingleShotConnection.h"
 #include "SmartLocatorSearchSource.h"
 
 // ArcGISRuntime headers
 #include <EnvelopeBuilder.h>
+#include <GeometryEngine.h>
 #include <Graphic.h>
 #include <PictureMarkerSymbol.h>
 #include <SuggestListModel.h>
@@ -139,7 +142,6 @@ namespace Toolkit {
       setCurrentQuery({});
       setActiveSource(nullptr);
       setDefaultPlaceholder(DEFAULT_DEFAULT_PLACEHOLDER);
-
       // Reset sources to default.
       {
         sources()->clear();
@@ -154,47 +156,40 @@ namespace Toolkit {
     {
       m_graphicsOverlay = new GraphicsOverlay(this);
       geoView->graphicsOverlays()->append(m_graphicsOverlay);
-    }
 
-    if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
-    {
-      auto setViewpoint = [mapView, this]
+      auto setViewpoint = [geoView, this]
       {
+        //setting the lastsearcharea with the inital geoViewCast extent
+        if (m_lastSearchArea.isEmpty())
+          m_lastSearchArea = geoView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry();
+
         if (isAutomaticConfigurationEnabled())
         {
-          auto vp = mapView->currentViewpoint(ViewpointType::BoundingGeometry);
+          auto vp = geoView->currentViewpoint(ViewpointType::BoundingGeometry);
           setQueryCenter(vp.targetGeometry().extent().center());
           setQueryArea(vp.targetGeometry());
 
-          if (mapView->isNavigating())
+          if (geoView->isNavigating())
           {
-            setIsEligableForRequery(true);
+            // m_queryArea at this point is effectively the currentviewpoint geometry.
+            if (checkZoomingDifferenceLastSearch(m_queryArea))
+              setIsEligableForRequery(true);
+            if (checkPanningDifferenceLastSearch(m_queryArea))
+              setIsEligableForRequery(true);
           }
         }
       };
 
-      connect(mapView, &MapViewToolkit::viewpointChanged, this, setViewpoint);
-      setViewpoint();
-    }
-    else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
-    {
-      auto setViewpoint = [sceneView, this]
+      if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
       {
-        if (isAutomaticConfigurationEnabled())
-        {
-          auto vp = sceneView->currentViewpoint(ViewpointType::BoundingGeometry);
-          setQueryCenter(vp.targetGeometry().extent().center());
-          setQueryArea(vp.targetGeometry());
-
-          if (sceneView->isNavigating())
-          {
-            setIsEligableForRequery(true);
-          }
-        }
-      };
-
-      connect(sceneView, &SceneViewToolkit::viewpointChanged, this, setViewpoint);
-      setViewpoint();
+        connect(mapView, &MapViewToolkit::viewpointChanged, this, setViewpoint);
+        setViewpoint();
+      }
+      else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+      {
+        connect(sceneView, &SceneViewToolkit::viewpointChanged, this, setViewpoint);
+        setViewpoint();
+      }
     }
 
     emit geoViewChanged();
@@ -425,11 +420,23 @@ namespace Toolkit {
 
       if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
       {
+        // When the geoview changes, update the lastsearcharea
+        singleShotConnection(sceneView, &SceneViewToolkit::viewpointChanged, this, [sceneView, this]()
+                             {
+                               auto extent = sceneView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
+                               m_lastSearchArea = extent;
+                             });
         // Set sceneView viewpoint to where graphic is.
         sceneView->setViewpoint(m_selectedResult->selectionViewpoint(), 0);
       }
       else if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
       {
+        // When the geoview changes, update the lastsearcharea
+        singleShotConnection(mapView, &MapViewToolkit::viewpointChanged, this, [mapView, this]()
+                             {
+                               auto extent = mapView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
+                               m_lastSearchArea = extent;
+                             });
         // Set mapView callout and zoom to where graphic + callout are (if applicable.)
         mapView->calloutData()->setTitle(m_selectedResult->displayTitle());
         mapView->calloutData()->setDetail(m_selectedResult->displaySubtitle());
@@ -510,6 +517,7 @@ namespace Toolkit {
       auto source = m_sources->element<SearchSourceInterface>(m_sources->index((i)));
       if (source)
       {
+        //set the lastSearchArea after the geoView viewpoint has changed and only once.
         source->search(currentQuery(), queryRestrictionArea);
       }
     }
@@ -581,6 +589,20 @@ namespace Toolkit {
     emit isAutomaticConfigurationEnabledChanged();
   }
 
+  double SearchViewController::thresholdRatioRepeatSearch()
+  {
+    return m_thresholdRatioRepeatSearch;
+  }
+
+  void SearchViewController::setThresholdRatioRepeatSearch(double rate)
+  {
+    if (m_thresholdRatioRepeatSearch == rate)
+      return;
+
+    m_thresholdRatioRepeatSearch = rate;
+    emit thresholdRatioRepeatSearchChanged();
+  }
+
   /*!
     \internal
     \brief User has updated the query, update the sources.
@@ -618,6 +640,23 @@ namespace Toolkit {
                 {
                   if (results.empty())
                     return;
+                  //connect either to a scene or a map event changedviewpoint
+                  if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
+                  {
+                    singleShotConnection(mapView, &MapViewToolkit::viewpointChanged, this, [mapView, this]()
+                                         {
+                                           auto extent = mapView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
+                                           m_lastSearchArea = extent;
+                                         });
+                  }
+                  else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+                  {
+                    singleShotConnection(sceneView, &SceneViewToolkit::viewpointChanged, this, [sceneView, this]()
+                                         {
+                                           auto extent = sceneView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
+                                           m_lastSearchArea = extent;
+                                         });
+                  }
 
                   // If only one result needs be applicable, automatically accept it, otherwise,
                   // add all results to the list model.
@@ -738,6 +777,36 @@ namespace Toolkit {
         }
       }
     }
+  }
+
+  /*!
+   * \internal
+   * \brief Compares the last search viewpoint with the \a geom and checks they are not more different than a specified panning difference.
+   * The percentage used for the check is the variable returned from \l thresholdRatioRepeatSearch
+   */
+  bool SearchViewController::checkPanningDifferenceLastSearch(const Geometry& geom) const
+  {
+    // Check center difference.
+    double centerDiff = ArcGISRuntime::GeometryEngine::distance(m_lastSearchArea.extent().center(), geom.extent().center());
+    double currentExtentAvg = (m_lastSearchArea.extent().width() + m_lastSearchArea.extent().height()) / 2;
+    double threshold = currentExtentAvg * m_thresholdRatioRepeatSearch;
+    return centerDiff > threshold;
+  }
+
+  /*!
+   * \internal
+   * \brief Compares the last search viewpoint with the \a geom and checks they are not more different than a specified zooming difference.
+   * The percentage used for the check the variable returned from \l thresholdRatioRepeatSearch
+   */
+  bool SearchViewController::checkZoomingDifferenceLastSearch(const Geometry& geom) const
+  {
+    // Check extent difference.
+    double widthDiff = abs(geom.extent().width() - m_lastSearchArea.extent().width());
+    double heightDiff = abs(geom.extent().height() - m_lastSearchArea.extent().height());
+
+    double widthThreshold = m_lastSearchArea.extent().width() * m_thresholdRatioRepeatSearch;
+    double heightThreshold = m_lastSearchArea.extent().height() * m_thresholdRatioRepeatSearch;
+    return widthDiff > widthThreshold || heightDiff > heightThreshold;
   }
 
   /*!

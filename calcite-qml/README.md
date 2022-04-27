@@ -13,7 +13,7 @@ This is a WIP module which contains a port of Esri's Calcite Web Style that is Q
 ![dark mode screenshot](docs/dark_mode.png)
 
 ## Integration
- 
+
 To integrate Calcite into your app, add the following lines to your `*.pro` file:
 
 ```pro
@@ -84,10 +84,10 @@ For further details see [Calcite Web TypeFaces](https://esri.github.io/calcite-w
   - [x] RadioDelegate
   - [x] RangeSlider
   - [x] RoundButton
-  - [ ] Scrollbar
+  - [x] Scrollbar
   - [ ] ScrollIndicator
   - [x] Slider
-  - [ ] Spinbox
+  - [x] Spinbox
   - [ ] SplitHandle
   - [x] Switch
   - [ ] SwitchDelegate
@@ -95,8 +95,8 @@ For further details see [Calcite Web TypeFaces](https://esri.github.io/calcite-w
   - [ ] TabButton
   - [ ] TextArea
   - [x] TextField
-  - [ ] ToolBar
-  - [ ] ToolButton
-  - [ ] ToolSeparator
+  - [x] ToolBar
+  - [x] ToolButton
+  - [x] ToolSeparator
   - [ ] Tooltip
   - [ ] Tumbler

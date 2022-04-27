@@ -19,8 +19,8 @@ import QtQml 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Shapes 1.15
 
-import Esri.ArcGISRuntime.Toolkit 100.13
-import Esri.ArcGISRuntime.Toolkit.Controller 100.13
+import Esri.ArcGISRuntime.Toolkit 100.14
+import Esri.ArcGISRuntime.Toolkit.Controller 100.14
 
 /*!
    \qmltype Scalebar
@@ -47,6 +47,8 @@ Control {
       \brief The controller portion of the Scalebar which handles
       distance calculations based on the visual properties of the given
       \l{mapView}.
+
+      The CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::ScalebarController}{here}.
      */
     property var controller: ScalebarController { }
 

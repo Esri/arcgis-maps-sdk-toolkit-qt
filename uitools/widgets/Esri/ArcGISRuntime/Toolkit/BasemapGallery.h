@@ -16,46 +16,43 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_BASEMAPGALLERY_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_BASEMAPGALLERY_H
 
-#include "BasemapGalleryController.h"
-
 #include <QFrame>
 
 namespace Ui {
-
   class BasemapGallery;
 }
 
 namespace Esri {
 namespace ArcGISRuntime {
-namespace Toolkit {
-  class BasemapGalleryController;
+  class GeoModel;
 
-  class BasemapGallery : public QFrame
-  {
-    Q_OBJECT
+  namespace Toolkit {
+    class BasemapGalleryController;
 
-  public:
-    Q_INVOKABLE explicit BasemapGallery(QWidget* parent = nullptr);
-    Q_INVOKABLE explicit BasemapGallery(GeoModel* geoModel, QWidget* parent = nullptr);
+    class BasemapGallery : public QFrame
+    {
+      Q_OBJECT
+    public:
+      Q_INVOKABLE explicit BasemapGallery(QWidget* parent = nullptr);
+      Q_INVOKABLE explicit BasemapGallery(GeoModel* geoModel, QWidget* parent = nullptr);
 
-    ~BasemapGallery() override;
+      ~BasemapGallery() override;
 
-    BasemapGalleryController* controller() const;
-    void setGeoModel(GeoModel* geomodel);
-    GeoModel* geoModel();
+      BasemapGalleryController* controller() const;
+      void setGeoModel(GeoModel* geomodel);
+      GeoModel* geoModel();
 
-  private slots:
-    void onItemSelected(const QModelIndex& index);
-    void onCurrentBasemapChanged();
+    private slots:
+      void onItemSelected(const QModelIndex& index);
+      void onCurrentBasemapChanged();
 
-  private:
-    BasemapGalleryController* m_controller = nullptr;
-    Ui::BasemapGallery* m_ui;
-  };
+    private:
+      BasemapGalleryController* m_controller = nullptr;
+      Ui::BasemapGallery* m_ui;
+    };
 
-}
-}
+  } // Toolkit
+} // ArcGISRuntime
+} // Esri
 
-}
-
-#endif // ESRI_ARCGISRUNTIME_BASEMAPGALLERY_H
+#endif // ESRI_ARCGISRUNTIME_TOOLKIT_BASEMAPGALLERY_H

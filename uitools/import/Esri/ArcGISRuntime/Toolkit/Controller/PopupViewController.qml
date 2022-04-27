@@ -23,9 +23,9 @@ import QtQml 2.12
    \ingroup ArcGISQtToolkitUiQmlControllers
    \brief In MVC architecture, this is the controller for the corresponding
    PopupView.
-   
+
    This controller is a thin wrapper around a PopupManager. It re-exposes some
-   PopupManager properties, including the number of total rows to render as a 
+   PopupManager properties, including the number of total rows to render as a
    property.
  */
 QtObject {
@@ -50,13 +50,13 @@ QtObject {
 
     /*!
       \brief A list model containing the attachment images of the
-      Popup associated with this PopupManager. 
+      Popup associated with this PopupManager.
       \note This can be null.
      */
     readonly property alias attachments: internal.attachments
 
     /*!
-      \brief Exposes the number of rows in the list model returned by 
+      \brief Exposes the number of rows in the list model returned by
       `attachments`.
      */
     readonly property alias attachmentCount: internal.attachmentCount
@@ -130,7 +130,7 @@ QtObject {
 
     onPopupManagerChanged: {
         // PopupManager properties have no NOTIFY or CONST properties.
-        // To avoid property warnings we will instead cache 
+        // To avoid property warnings we will instead cache
         // what comes out of PopupManager.
         if (popupManager) {
             if (popupManager.attachmentManager) {

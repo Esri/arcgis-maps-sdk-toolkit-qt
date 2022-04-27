@@ -1,6 +1,6 @@
 # ArcGIS Runtime Toolkit - Qt
 
-[![API reference](https://img.shields.io/badge/API_Reference-purple)](https://developers.arcgis.com/qt/latest/toolkit/api-reference/) ![Current release](https://img.shields.io/github/v/release/esri/arcgis-runtime-toolkit-qt?label=current%20release)
+[![API reference](https://img.shields.io/badge/API_Reference-purple)](https://developers.arcgis.com/qt/latest/toolkit/api-reference/) [![Current release](https://img.shields.io/github/v/release/esri/arcgis-runtime-toolkit-qt?label=current%20release)](https://github.com/Esri/arcgis-runtime-toolkit-qt/releases)
 
 ## Introduction
 
@@ -40,7 +40,7 @@ Anyone and everyone is welcome to contribute.
 
 ## Licensing
 
-Copyright 2019-2020 Esri
+Copyright 2019-2022 Esri
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
