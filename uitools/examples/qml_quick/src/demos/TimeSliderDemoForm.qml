@@ -12,8 +12,8 @@
 
 import QtQuick 2.12
 import QtQuick.Controls 2.12
-import Esri.ArcGISRuntime 100.14
-import Esri.ArcGISRuntime.Toolkit 100.14
+import Esri.ArcGISRuntime 100.15
+import Esri.ArcGISRuntime.Toolkit.CppApi 100.15
 
 DemoPage {
     readonly property string dataUrl: "https://sampleserver6.arcgisonline.com/arcgis/rest/services/Hurricanes/MapServer"

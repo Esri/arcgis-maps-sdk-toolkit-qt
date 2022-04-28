@@ -72,14 +72,14 @@ Once you have successfully imported the toolkit, you can access individual tools
 in your own QML files.
 
 - add an import statement for the toolkit:
-  `import Esri.ArcGISRuntime.Toolkit 100.14`
+  `import Esri.ArcGISRuntime.Toolkit.CppApi 100.15`
 - declare the tool you wish to use. Generally you will also have to supply the
   `GeoView` etc. you wish the tool to work with. For example, to add a
   `NorthArrow`:
 
 ```qml
-import Esri.ArcGISRuntime 100.14
-import Esri.ArcGISRuntime.Toolkit 100.14
+import Esri.ArcGISRuntime 100.15
+import Esri.ArcGISRuntime.Toolkit.CppApi 100.15
 
 MapView {
     id: mapView
@@ -108,7 +108,7 @@ MapView {
 A good way to start using the toolkit is to use one of the template apps which
 get added to QtCreator when you install the ArcGIS Runime SDK for Qt.
 
-- In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Runtime 100.14 Qt Quick C++ App`
+- In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Runtime 100.15 Qt Quick C++ App`
 - choose settings to match the platform etc. you are building for
 - in the `.pro` file of your new app, add a line to add the library for your QML
   plugin - for example:
@@ -139,12 +139,12 @@ Once you have successfully imported the toolkit, you can access individual tools
 in your own QML files.
 
 - add an import statement for the toolkit:
-`import Esri.ArcGISRuntime.Toolkit 100.14`
+`import Esri.ArcGISRuntime.Toolkit.CppApi 100.15`
 - declare the tool you wish to use. Generally you will also have to supply the
   `GeoView` etc. you wish the tool to work with. For example, to add a `NorthArrow`:
 
 ```qml
-import Esri.ArcGISRuntime.Toolkit 100.14
+import Esri.ArcGISRuntime.Toolkit.CppApi 100.15
 
 MapView {
     id: mapView
@@ -169,7 +169,7 @@ MapView {
 A good way to start using the toolkit is to use one of the template apps which
 get added to QtCreator when you install the ArcGIS Runtime SDK for Qt.
 
-- In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Runtime 100.14 Qt Widgets App`
+- In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Runtime 100.15 Qt Widgets App`
 - choose settings to match the platform etc. you are building for
 - in the `.pro` file of your new app, add a line to add the library for your QML
   plugin - for example:
