@@ -16,7 +16,7 @@
 
 import QtQml 2.12
 import Esri.ArcGISRuntime 100.15
-import Esri.ArcGISRuntime.Toolkit.CppApi 100.15
+import Esri.ArcGISRuntime.Toolkit 100.15
 import QtQml.Models 2.15
 import QtQuick 2.15
 

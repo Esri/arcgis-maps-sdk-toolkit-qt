@@ -13,7 +13,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import Esri.ArcGISRuntime 100.15
-import Esri.ArcGISRuntime.Toolkit.CppApi 100.15
+import Esri.ArcGISRuntime.Toolkit 100.15
 import Calcite 1.0 as C
 
 Control {
