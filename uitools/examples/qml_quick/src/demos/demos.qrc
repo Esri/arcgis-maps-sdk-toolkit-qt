@@ -1,13 +1,14 @@
 <RCC>
     <qresource prefix="/demo_app/qml">
-        <file>CoordinateConversionDemoForm.qml</file>
-        <file>NorthArrowDemoForm.qml</file>
-        <file>BasemapGalleryDemoForm.qml</file>
         <file>AuthenticationViewDemoForm.qml</file>
-        <file>TimeSliderDemoForm.qml</file>
+        <file>BasemapGalleryDemoForm.qml</file>
         <file>CalloutDemoForm.qml</file>
+        <file>CoordinateConversionDemoForm.qml</file>
+        <file>FloorFilterDemoForm.qml</file>
+        <file>NorthArrowDemoForm.qml</file>
+        <file>OverviewMapDemoForm.qml</file>
         <file>PopupViewDemoForm.qml</file>
         <file>SearchViewDemoForm.qml</file>
-        <file>OverviewMapDemoForm.qml</file>
+        <file>TimeSliderDemoForm.qml</file>
     </qresource>
 </RCC>

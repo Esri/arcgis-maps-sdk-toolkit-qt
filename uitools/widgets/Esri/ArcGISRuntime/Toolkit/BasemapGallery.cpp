@@ -17,6 +17,9 @@
 
 #include "ui_BasemapGallery.h"
 
+// Toolkit headers
+#include "BasemapGalleryController.h"
+
 namespace Esri {
 namespace ArcGISRuntime {
 namespace Toolkit {
@@ -30,6 +33,8 @@ namespace Toolkit {
   The BasemapGallery displays a collection of items representing basemaps from either ArcGIS Online, a user-defined portal,
   or an array of Basemaps. When the user selects a basemap from the BasemapGallery, the basemap rendered in the current
   geoModel is removed from the given map/scene and replaced with the basemap selected in the gallery.
+
+  \note By default, the BasemapGallery will attempt to fetch the set of developer basemaps, which require an \l{https://developers.arcgis.com/qt/get-started/#3-access-services-and-content-with-an-api-key}{API key} to access.
   */
 
  /*!
@@ -43,8 +48,8 @@ namespace Toolkit {
   */
  BasemapGallery::BasemapGallery(QWidget* parent) :
    QFrame(parent),
-   m_ui(new Ui::BasemapGallery),
-   m_controller(new BasemapGalleryController(this))
+   m_controller(new BasemapGalleryController(this)),
+   m_ui(new Ui::BasemapGallery)
  {
    m_ui->setupUi(this);
    GenericListModel* model = m_controller->gallery();

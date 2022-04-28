@@ -13,6 +13,8 @@
 # limitations under the License.
 include($$PWD/common.pri)
 
+QT += widgets webenginewidgets svg
+
 RESOURCES += $$PWD/images/esri_arcgisruntime_toolkit_images.qrc
 
 DEFINES += WIDGETS_ARCGISRUNTIME_TOOLKIT
@@ -24,6 +26,7 @@ INCLUDEPATH += $$PWD/widgets $$WIDGETPATH
 HEADERS += $$WIDGETPATH/AuthenticationView.h \
            $$WIDGETPATH/BasemapGallery.h \
            $$WIDGETPATH/CoordinateConversion.h \
+           $$WIDGETPATH/FloorFilter.h \
            $$WIDGETPATH/NorthArrow.h \
            $$WIDGETPATH/OverviewMap.h \
            $$WIDGETPATH/Internal/ClientCertificatePasswordDialog.h \
@@ -37,6 +40,7 @@ HEADERS += $$WIDGETPATH/AuthenticationView.h \
 SOURCES += $$WIDGETPATH/AuthenticationView.cpp \
            $$WIDGETPATH/BasemapGallery.cpp \
            $$WIDGETPATH/CoordinateConversion.cpp \
+           $$WIDGETPATH/FloorFilter.cpp \
            $$WIDGETPATH/NorthArrow.cpp \
            $$WIDGETPATH/OverviewMap.cpp \
            $$WIDGETPATH/Internal/ClientCertificatePasswordDialog.cpp \
@@ -50,6 +54,7 @@ SOURCES += $$WIDGETPATH/AuthenticationView.cpp \
 FORMS += $$WIDGETPATH/AuthenticationView.ui \
          $$WIDGETPATH/BasemapGallery.ui \
          $$WIDGETPATH/CoordinateConversion.ui \
+         $$WIDGETPATH/FloorFilter.ui \
          $$WIDGETPATH/OverviewMap.ui \
          $$WIDGETPATH/Internal/ClientCertificatePasswordDialog.ui \
          $$WIDGETPATH/Internal/ClientCertificateView.ui \

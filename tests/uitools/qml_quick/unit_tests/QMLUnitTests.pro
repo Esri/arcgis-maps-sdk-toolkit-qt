@@ -14,4 +14,5 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
+    FloorFilterControllerUnitTest
 

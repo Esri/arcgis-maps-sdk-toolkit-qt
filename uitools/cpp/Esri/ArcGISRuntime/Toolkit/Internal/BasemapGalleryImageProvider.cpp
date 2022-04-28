@@ -15,7 +15,9 @@
  ******************************************************************************/
 #include "BasemapGalleryImageProvider.h"
 
+// Toolkit headers
 #include "BasemapGalleryItem.h"
+#include "Internal/DoOnLoad.h"
 
 // ArcGISRuntime headers
 #include <Item.h>
@@ -83,35 +85,25 @@ namespace Toolkit {
         return;
       }
 
-      auto doFetch = [this, basemap]
-      {
-        auto item = basemap->item();
-        if (!item)
-        {
-          emit finished();
-          return;
-        }
+      doOnLoaded(basemap, this, [this, basemap]
+               {
+                 auto item = basemap->item();
+                 if (!item)
+                 {
+                   emit finished();
+                   return;
+                 }
 
-        auto itemThumbnail = item->thumbnail();
-        if (!itemThumbnail.isNull())
-        {
-          // We have a good thumbnail.
-          emit finished();
-          return;
-        }
-        connect(item, &Item::fetchThumbnailCompleted, this, &BasemapGalleryImageResponse::finished);
-        item->fetchThumbnail();
-      };
-
-      if (basemap->loadStatus() != LoadStatus::Loaded)
-      {
-        connect(basemap, &Basemap::doneLoading, this, doFetch);
-        basemap->load();
-      }
-      else
-      {
-        doFetch();
-      }
+                 auto itemThumbnail = item->thumbnail();
+                 if (!itemThumbnail.isNull())
+                 {
+                   // We have a good thumbnail.
+                   emit finished();
+                   return;
+                 }
+                 connect(item, &Item::fetchThumbnailCompleted, this, &BasemapGalleryImageResponse::finished);
+                 item->fetchThumbnail();
+               });
     }
 
     /*!

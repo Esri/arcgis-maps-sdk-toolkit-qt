@@ -16,6 +16,7 @@
 #include "BasemapGalleryController.h"
 
 // Toolkit headers
+#include "Internal/DoOnLoad.h"
 #include "Internal/GeoViews.h"
 #include "Internal/SingleShotConnection.h"
 
@@ -94,20 +95,10 @@ namespace Toolkit {
      */
     void connectToGeoModel(BasemapGalleryController* self, GeoModel* geoModel)
     {
-      if (geoModel->loadStatus() == LoadStatus::Loaded)
-      {
-        self->setCurrentBasemap(geoModel->basemap());
-      }
-      else
-      {
-        QObject::connect(geoModel, &GeoModel::doneLoading, self, [self, geoModel](Error e)
-                         {
-                           if (e.isEmpty())
-                           {
-                             self->setCurrentBasemap(geoModel->basemap());
-                           }
-                         });
-      }
+      doOnLoaded(geoModel, self, [self, geoModel]
+               {
+                 self->setCurrentBasemap(geoModel->basemap());
+               });
 
       // TODO: Cleanup this when GeoModel itself exposes the
       // basemapChanged signal.
@@ -448,43 +439,28 @@ namespace Toolkit {
     {
       // If portal basemaps are populated, add the contents to the gallery.
       // Otherwise attempt a fetch of the contents then add to the gallery.
-      auto grabPortalBasemaps = [this]()
-      {
-        if (m_portal->basemaps()->rowCount() > 0)
-        {
-          for (auto basemap : *m_portal->basemaps())
-          {
-            append(basemap);
-          }
-        }
-        else
-        {
-          connect(m_portal, &Portal::basemapsChanged, this, [this]
-                  {
-                    BasemapListModel* basemaps = m_portal->basemaps();
+      doOnLoaded(m_portal, this, [this]
+               {
+                 if (m_portal->basemaps()->rowCount() > 0)
+                 {
+                   for (auto basemap : *m_portal->basemaps())
+                   {
+                     append(basemap);
+                   }
+                 }
+                 else
+                 {
+                   connect(m_portal, &Portal::basemapsChanged, this, [this]
+                           {
+                             BasemapListModel* basemaps = m_portal->basemaps();
 
-                    sortBasemapsAndAddToGallery(this, basemaps);
-                  });
-          m_portal->fetchBasemaps();
-        }
-      };
-
-      // If the portal is already loaded we grab the basemaps.
-      // Otherwise, we load the portal then grab the contents.
-      if (m_portal->loadStatus() == LoadStatus::Loaded)
-      {
-        grabPortalBasemaps();
-      }
-      else
-      {
-        connect(m_portal, &Portal::doneLoading, this, [grabPortalBasemaps](Error e)
-                {
-                  if (e.isEmpty())
-                    grabPortalBasemaps();
-                });
-        m_portal->load();
-      }
+                             sortBasemapsAndAddToGallery(this, basemaps);
+                           });
+                   m_portal->fetchBasemaps();
+                 }
+               });
     }
+
     emit portalChanged();
   }
 

@@ -13,6 +13,7 @@ In the [API Documentation](https://developers.arcgis.com/qt/toolkit/api-referenc
 |Basemap gallery|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-basemapgallery.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-basemapgallery.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-basemapgallery.html)|
 |Callout|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-callout.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-callout.html)||
 |Coordinate conversion|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-coordinateconversion.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-coordinateconversion.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-coordinateconversion.html)|
+|Floor Filter|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-floorfilter.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-floorfilter.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-floorfilter.html)|
 |North arrow|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-northarrow.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-northarrow.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-northarrow.html)|
 |Overview map|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-overviewmap.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-overviewmap.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-overviewmap.html)|
 |Popup stack view|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupstackview.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupstackview.html)||
@@ -195,3 +196,8 @@ in your own widgets files.
   // Add your NorthArrow to your UI here!
   northArrow->show();
 ```
+
+## API Key requirements
+
+Some of the toolkit components and examples utilize ArcGIS Platform services which require an API Key.
+Please see the [setup guide](https://developers.arcgis.com/qt/get-started/#3-access-services-and-content-with-an-api-key) for more information.

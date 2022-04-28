@@ -56,3 +56,26 @@
   \c MapGraphicsView, otherwise it is \c MapQuickView.
  */
 
+/*!
+  \internal
+  \fn Map* getGeoModel(MapViewToolkit* mapView)
+  \brief Returns the geoModel from the Geoview. Helper overload.
+*/
+
+/*!
+  \internal
+  \fn Scene* getGeoModel(SceneViewToolkit* sceneView)
+  \brief Returns the geoModel from the Geoview. Helper overload.
+*/
+
+/*!
+  \internal
+  \fn auto getGeoModelChangedSignal(MapViewToolkit*)
+  \brief Returns the geoModelChanged signal from the Geoview. Helper overload.
+*/
+
+/*!
+  \internal
+  \fn auto getGeoModelChangedSignal(SceneViewToolkit*)
+  \brief Returns the geoModelChanged signal from the Geoview. Helper overload.
+*/

@@ -77,8 +77,10 @@ Page {
 
     /*!
       \qmlproperty PopupViewController controller
-      \brief the Controller handles reading from the PopupManager and monitoring
+      \brief The Controller handles reading from the PopupManager and monitoring
       the list-models.
+
+      The QML controller is documented \l{PopupViewController}{here} and the CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::PopupViewController}{here}.
     */
     property var controller: PopupViewController {}
 
@@ -221,6 +223,7 @@ Page {
     }
 
     footer: ColumnLayout {
+        visible: popupView.closeCallback
         Button {
             text: "Close"
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter

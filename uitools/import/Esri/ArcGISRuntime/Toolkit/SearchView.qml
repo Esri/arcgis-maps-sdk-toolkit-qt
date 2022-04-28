@@ -31,6 +31,8 @@ import QtGraphicalEffects 1.15
     \image docs/search.png search
     Example code in the QML API (C++ API might differ):
     \snippet qml_quick/src/demos/SearchViewDemoForm.qml Set up Search View QML
+
+    \note By default, the SearchView will attempt to access the World Geocoding Service, which requires an \l{https://developers.arcgis.com/qt/get-started/#3-access-services-and-content-with-an-api-key}{API key}.
 */
 Pane {
     id: searchView
@@ -47,7 +49,7 @@ Pane {
       \brief The Controller which performs the search and manages
       the results/suggestions.
 
-       A default SearchViewController is provided.
+       The QML controller is documented \l{SearchViewController}{here} and the CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::SearchViewController}{here}.
     */
     property var controller: SearchViewController { }
 

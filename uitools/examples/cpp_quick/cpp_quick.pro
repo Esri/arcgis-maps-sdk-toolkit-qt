@@ -16,7 +16,7 @@ TEMPLATE = app
 CONFIG += c++14 qmltypes
 
 # additional modules are pulled in via arcgisruntime.pri
-QT += opengl qml quick quickcontrols2 webview
+QT += opengl qml quick
 
 QML_IMPORT_NAME = "DemoApp"
 QML_IMPORT_MAJOR_VERSION = 1

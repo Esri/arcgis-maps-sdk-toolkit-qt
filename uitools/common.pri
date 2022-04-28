@@ -16,7 +16,6 @@ CPPPATH = $$PWD/cpp/Esri/ArcGISRuntime/Toolkit
 
 INCLUDEPATH += $$PWD/cpp $$CPPPATH
 
-
 HEADERS += $$CPPPATH/AuthenticationController.h \
            $$CPPPATH/BasemapGalleryController.h \
            $$CPPPATH/BasemapGalleryItem.h \
@@ -25,8 +24,14 @@ HEADERS += $$CPPPATH/AuthenticationController.h \
            $$CPPPATH/CoordinateConversionOption.h \
            $$CPPPATH/CoordinateConversionResult.h \
            $$CPPPATH/CoordinateOptionDefaults.h \
+           $$CPPPATH/FloorFilterController.h \
+           $$CPPPATH/FloorFilterFacilityItem.h \
+           $$CPPPATH/FloorFilterLevelItem.h \
+           $$CPPPATH/FloorFilterSiteItem.h \
            $$CPPPATH/LocatorSearchSource.h \
            $$CPPPATH/Internal/BasemapGalleryImageProvider.h \
+           $$CPPPATH/Internal/DisconnectOnSignal.h \
+           $$CPPPATH/Internal/DoOnLoad.h \
            $$CPPPATH/Internal/GenericListModel.h \
            $$CPPPATH/Internal/GenericTableProxyModel.h \
            $$CPPPATH/Internal/GeoViews.h \
@@ -51,6 +56,10 @@ SOURCES += $$CPPPATH/AuthenticationController.cpp \
            $$CPPPATH/CoordinateConversionOption.cpp \
            $$CPPPATH/CoordinateConversionResult.cpp \
            $$CPPPATH/CoordinateOptionDefaults.cpp \
+           $$CPPPATH/FloorFilterController.cpp \
+           $$CPPPATH/FloorFilterFacilityItem.cpp \
+           $$CPPPATH/FloorFilterLevelItem.cpp \
+           $$CPPPATH/FloorFilterSiteItem.cpp \
            $$CPPPATH/LocatorSearchSource.cpp \
            $$CPPPATH/Internal/BasemapGalleryImageProvider.cpp \
            $$CPPPATH/Internal/GenericListModel.cpp \

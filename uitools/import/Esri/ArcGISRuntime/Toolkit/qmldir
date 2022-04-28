@@ -37,3 +37,4 @@ SearchView 100.13 SearchView.qml
 SslHandshakeView 100.10 SslHandshakeView.qml
 TimeSlider 100.10 TimeSlider.qml
 UserCredentialsView 100.10 UserCredentialsView.qml
+FloorFilter 100.14 FloorFilter.qml
