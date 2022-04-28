@@ -13,8 +13,8 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
-import Esri.ArcGISRuntime 100.14
-import Esri.ArcGISRuntime.Toolkit 100.14
+import Esri.ArcGISRuntime 100.15
+import Esri.ArcGISRuntime.Toolkit 100.15
 import DemoApp 1.0
 
 DemoPage {

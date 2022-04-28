@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 import QtQuick 2.6
-import Esri.ArcGISRuntime 100.14
+import Esri.ArcGISRuntime 100.15
 
 Scene {
     Surface {

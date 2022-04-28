@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 import QtQuick 2.6
-import Esri.ArcGISRuntime 100.14
+import Esri.ArcGISRuntime 100.15
 import Esri.ArcGISArToolkit 1.0
 
 // Creates a scene based on the Streets base map.
