@@ -23,6 +23,9 @@
 // ArcGISRuntime headers
 #include <Basemap.h>
 
+// Qt headers
+#include <QIcon>
+
 #ifdef CPP_ARCGISRUNTIME_TOOLKIT
 // Qt headers
 #include <QQmlContext>
@@ -212,7 +215,8 @@ namespace Toolkit {
       }
       else
       {
-        return QImage(QStringLiteral(":/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/basemap.svg"));
+        QIcon icon{QStringLiteral(":/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/basemap.svg")};
+        return icon.pixmap(200, 133).toImage();
       }
     }
     return m_thumbnail;

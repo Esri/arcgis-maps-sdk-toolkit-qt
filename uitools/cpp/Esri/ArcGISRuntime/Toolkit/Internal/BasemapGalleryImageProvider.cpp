@@ -22,6 +22,8 @@
 // ArcGISRuntime headers
 #include <Item.h>
 
+#include <QIcon>
+
 namespace Esri {
 namespace ArcGISRuntime {
 namespace Toolkit {
@@ -127,7 +129,10 @@ namespace Toolkit {
         thumbnail = m_galleryItem->thumbnail();
 
       if (thumbnail.isNull())
-        thumbnail = QImage{QStringLiteral(":/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/basemap.svg")};
+      {
+        QIcon icon{QStringLiteral(":/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/basemap.svg")};
+        thumbnail = icon.pixmap(200, 133).toImage();
+      }
 
       return QQuickTextureFactory::textureFactoryForImage(m_requestedSize.isValid() ? thumbnail.scaled(m_requestedSize) : thumbnail);
     }
