@@ -127,7 +127,7 @@ namespace Toolkit {
         thumbnail = m_galleryItem->thumbnail();
 
       if (thumbnail.isNull())
-        thumbnail = QImage{QStringLiteral(":/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/generic_basemap_thumbnail.png")};
+        thumbnail = QImage{QStringLiteral(":/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/basemap.svg")};
 
       return QQuickTextureFactory::textureFactoryForImage(m_requestedSize.isValid() ? thumbnail.scaled(m_requestedSize) : thumbnail);
     }

@@ -252,7 +252,7 @@ QtObject {
         property Component resultGeoElement: Component {
             Graphic {
                 PictureMarkerSymbol {
-                    url: 'qrc:///esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/map_pin.png'
+                    url: 'qrc:///esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/pin-tear.svg'
                 }
             }
         }
@@ -294,7 +294,7 @@ QtObject {
                         results.push({
                                          displayTitle: g.label,
                                          displaySubtitle: g.attributes['LongLabel'] ?? `Match percent: ${g.score}`,
-                                         markerImageUrl: 'qrc:///esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/map_pin.png',
+                                         markerImageUrl: 'qrc:///esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/pin-tear.svg',
                                          owningSource: locatorSearchSource,
                                          geoElement: geoElement,
                                          selectionViewpoint: extent

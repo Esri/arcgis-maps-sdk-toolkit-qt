@@ -21,7 +21,7 @@
      </property>
      <property name="icon">
       <iconset resource="../images/esri_arcgisruntime_toolkit_images.qrc">
-       <normaloff>:/Esri/ArcGISRuntime/Toolkit/images/zoom.png</normaloff>:/Esri/ArcGISRuntime/Toolkit/images/zoom.png</iconset>
+       <normaloff>:/Esri/ArcGISRuntime/Toolkit/images/layer-zoom-to.svg</normaloff>:/Esri/ArcGISRuntime/Toolkit/images/layer-zoom-to.svg</iconset>
      </property>
     </widget>
    </item>
@@ -32,7 +32,7 @@
      </property>
      <property name="icon">
       <iconset resource="../images/esri_arcgisruntime_toolkit_images.qrc">
-       <normaloff>:/Esri/ArcGISRuntime/Toolkit/images/flash.png</normaloff>:/Esri/ArcGISRuntime/Toolkit/images/flash.png</iconset>
+       <normaloff>:/Esri/ArcGISRuntime/Toolkit/images/flash.svg</normaloff>:/Esri/ArcGISRuntime/Toolkit/images/flash.svg</iconset>
      </property>
     </widget>
    </item>
@@ -43,7 +43,7 @@
      </property>
      <property name="icon">
       <iconset resource="../images/esri_arcgisruntime_toolkit_images.qrc">
-       <normaloff>:/Esri/ArcGISRuntime/Toolkit/images/mouse_click_mode.png</normaloff>:/Esri/ArcGISRuntime/Toolkit/images/mouse_click_mode.png</iconset>
+       <normaloff>:/Esri/ArcGISRuntime/Toolkit/images/cursor-click.svg</normaloff>:/Esri/ArcGISRuntime/Toolkit/images/cursor-click.svg</iconset>
      </property>
     </widget>
    </item>

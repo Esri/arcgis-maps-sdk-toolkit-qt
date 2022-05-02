@@ -212,7 +212,7 @@ namespace Toolkit {
       }
       else
       {
-        return QImage(QStringLiteral(":/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/generic_basemap_thumbnail.png"));
+        return QImage(QStringLiteral(":/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/basemap.svg"));
       }
     }
     return m_thumbnail;

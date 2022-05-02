@@ -55,7 +55,7 @@ NorthArrow::NorthArrow(QWidget* parent) :
   QLabel(parent),
   m_controller(new NorthArrowController(this))
 {
-  m_image = QPixmap(":/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/compass.png");
+  m_image = QPixmap(":/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/compass.svg");
   setAttribute(Qt::WA_TranslucentBackground);
 
   if (!m_image.isNull())
