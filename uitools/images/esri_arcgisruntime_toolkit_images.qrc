@@ -1,28 +1,28 @@
 <RCC>
     <qresource prefix="/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images">
+        <file>basemap.svg</file>
         <file>chevron-left.svg</file>
         <file>chevrons-left.svg</file>
         <file>chevrons-right.svg</file>
-        <file>compass.png</file>
-        <file>flash.png</file>
+        <file>chevron-down.svg</file>
+        <file>chevron-up.svg</file>
+        <file>compass.svg</file>
+        <file>cursor-click.svg</file>
+        <file>edit-attributes.svg</file>
+        <file>ellipsis.svg</file>
+        <file>flash.svg</file>
+        <file>forward.svg</file>
         <file>information.svg</file>
-        <file>map_pin.png</file>
-        <file>menu.png</file>
-        <file>menu_collapse.png</file>
-        <file>menu_expand.png</file>
-        <file>mouse_click_mode.png</file>
-        <file>generic_basemap_thumbnail.png</file>
-        <file>pause.png</file>
-        <file>pin.svg</file>
-        <file>play.png</file>
-        <file>plus-circle.svg</file>
+        <file>layer-zoom-to.svg</file>
         <file>organization.svg</file>
+        <file>pin-tear.svg</file>
+        <file>pause.svg</file>
+        <file>pin.svg</file>
+        <file>play.svg</file>
+        <file>plus-circle.svg</file>
+        <file>reverse.svg</file>
         <file>search.svg</file>
-        <file>step.png</file>
-        <file>step_back.png</file>
-        <file>text_editing_mode.png</file>
         <file>x.svg</file>
-        <file>zoom.png</file>
         <file>zoom-to-object.svg</file>
     </qresource>
 </RCC>
