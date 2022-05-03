@@ -69,7 +69,7 @@ NorthArrow::NorthArrow(QWidget* parent) :
     if (m_image.isNull())
       return;
 
-    QMatrix rm;
+    QTransform rm;
     rm.rotate(-m_controller->heading());
     const int imageWidth = m_image.width();
     const int imageHeight = m_image.height();
