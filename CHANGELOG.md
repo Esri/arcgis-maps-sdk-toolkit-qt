@@ -2,9 +2,12 @@
 
 ## 100.15
 
-* Updated `.png` files to be `.svg` instead. Tools no longer look pixelated on high-dpi devices.
+* Updated `.png` files to be `.svg` instead. Tools no longer look pixilated on high-dpi devices.
 * (NorthArrow) Fixed deprecation warning in widgets.
 * (CoordinateConversion) Fixed button images not rendering.
+* Added a `CONTRIBUTING.md`.
+* Added a `.clang-format` file.
+* Added vscode/spellchecking for documentation purposes.
 
 ## 100.14
 * `toolkitwidgets.pri`, `toolkitqml.pri`, and `toolkitcpp.pri` now include `QT += ...` lines to account for needed dependencies.
@@ -13,9 +16,9 @@
 * (FloorFilter) Viewpoint selection mode implemented.
 * (FloorFilter) Introduction of new FloorFilter tool (C++/Quick, QML/Quick, Widget) 
 * (ToolBar) Calcite styling of the ToolBar, similar as a Calcite ActionBar.
-* (ToolSeparator) Calcite styling of the ToolSeparator, not maching specific component.
+* (ToolSeparator) Calcite styling of the ToolSeparator, not matching specific component.
 * (ToolButton) Calcite styling of the ToolButton, now matching the Calcite Action component. A second styling is available for flat ToolButton.
-* (RadioDelegate) Calcite styling of Radiodelegate component, now matches the Calcite Dropdown component.
+* (RadioDelegate) Calcite styling of RadioDelegate component, now matches the Calcite Dropdown component.
 * (SpinBox) Calcite styling of the SpinBox component.
 * (Callout) Major rewrite of Callout. Moved from Canvas to Shape rendering. Callout is now style compliant.
 * Adding unit and functional test suites for uitools.
@@ -43,7 +46,6 @@
 * Documentation improvements.
 * Added a CHANGELOG.md
 * Updated README.md with a contributors section.
-
 
 ## 100.12
 
