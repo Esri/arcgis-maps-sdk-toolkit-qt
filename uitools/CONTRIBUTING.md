@@ -61,7 +61,7 @@ Whenever you add a new tool, remember to update the table in [README.md](README.
 
 1. Add  `<MyToolName>Controller.h` and `<MyToolName>Controller.cpp` to your build system by adding them to [common.pri](common.pri).
 
-1. Register  `<MyToolName>Controller.h` and `<MyToolName>Controller.cpp` with the Qml ecosystem by registering them in
+1. Register  `<MyToolName>` with the Qml ecosystem in
 [register/Esri/ArcGISRuntime/Toolkit/internal/register_cpp.cpp](register/Esri/ArcGISRuntime/Toolkit/internal/register_cpp.cpp).
 
 ### Adding a C++ Widget View
