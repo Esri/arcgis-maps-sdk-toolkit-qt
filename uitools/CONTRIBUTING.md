@@ -53,15 +53,15 @@ Whenever you add a new tool, remember to update the table in [README.md](README.
 
 1. Add a new `<MyToolName>Controller.qml` file in the [import/Esri/ArcGISRuntime/Toolkit/Controller](import/Esri/ArcGISRuntime/Toolkit/Controller) folder.
 1. Register `<MyToolName>Controller` with the associated [esri_arcgisruntime_toolkit_controller.qrc](import/Esri/ArcGISRuntime/Toolkit/Controller/esri_arcgisruntime_toolkit_controller.qrc) file.
-1. Register `<MyToolName>` with the associated [qmldir](import/Esri/ArcGISRuntime/Toolkit/Controller/qmldir) file along with the current branch version.
+1. Register `<MyToolName>Controller` with the associated [qmldir](import/Esri/ArcGISRuntime/Toolkit/Controller/qmldir) file along with the current branch version.
 
-### Adding a C++ QtQuick View
+### Adding a C++ Controller
 
 1. Add your `<MyToolName>Controller.h` and `<MyToolName>Controller.cpp` files to the [cpp/Esri/ArcGISRuntime/Toolkit](cpp/Esri/ArcGISRuntime/Toolkit/) folder.
 
 1. Add  `<MyToolName>Controller.h` and `<MyToolName>Controller.cpp` to your build system by adding them to [common.pri](common.pri).
 
-1. Register  `<MyToolName>Controller.h` and `<MyToolName>Controller.cpp` with the Qml ecosystem by registering them in
+1. Register  `<MyToolName>` with the Qml ecosystem in
 [register/Esri/ArcGISRuntime/Toolkit/internal/register_cpp.cpp](register/Esri/ArcGISRuntime/Toolkit/internal/register_cpp.cpp).
 
 ### Adding a C++ Widget View
