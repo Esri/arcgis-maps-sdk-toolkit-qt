@@ -72,6 +72,8 @@ Whenever you add a new tool, remember to update the table in [README.md](README.
 
 ## Golden rules
 
+What follows is general advice to be effective in writing tools.
+
 ### C++ Controller
 
 1. Don't refer to `MapQuickView`/`MapGraphicsView` directly. Use [MapViewToolkit](cpp/Esri/ArcGISRuntime/Toolkit/Internal/GeoViews.h).
@@ -93,8 +95,8 @@ Whenever you add a new tool, remember to update the table in [README.md](README.
 
 3. Re-expose collections in a [GenericListModel](cpp/Esri/ArcGISRuntime/Toolkit/Internal/GenericListModel.h).
 
-   This goes hand-in-hand with the "use an adaptor" step. How do you expose a collection of `ArcGISRuntime` types in a QML-friendly way? `GenericListModel` reduces the boilerplate in this area by scanning the QObject metadata of a given 
-   class, exposing each public property as a data role. 
+   This goes hand-in-hand with the "use an adaptor" step. How do you expose a collection of `ArcGISRuntime` types in a QML-friendly way? `GenericListModel` reduces the boilerplate in this area by scanning the QObject metadata of 
+   a given class, exposing each public property as a data role. 
   
    (For example, if the `GenericListModel` is instantiated with a particular class `Foo`, which has 2 properties, `GenericListModel` will expose 2 roles with the same name as those properties in `Foo`.)
 
@@ -115,3 +117,44 @@ Whenever you add a new tool, remember to update the table in [README.md](README.
 ### QML Controller
 
 1. Make use of an `internal` `QtObject` to hide implementation details. This doesn't prevent the developer from accessing these properties, but it helps hide them from the autocomplete.
+
+### QML View
+
+1. Inherit from `Control` or derivatives.
+
+   (Unless you have a good reason not to do so.)
+
+   When writing a new tool, favour subclassing `Control` or one of `Control`'s subclasses. This will mean 
+   your tool participates in font/palette inheritance, and the content/background will be easily configurable 
+   by the consuming developer.
+  
+   Do not inherit from `Item` unless you have a specific use-case in mind.
+
+2. Compose using `Control` derivatives.
+
+   When composing your tool, choose `Control`-friendly types over other QML primitives.
+
+   Examples: 
+   
+   - If you want a background, do not use [Rectangle](https://doc.qt.io/qt-5/qml-qtquick-rectangle.html), 
+   use [Pane](https://doc.qt.io/qt-5/qml-qtquick-controls2-pane.html). 
+
+   - If you want to render some text, do not use [Label](https://doc.qt.io/qt-5/qml-qtquick-controls2-label.html) use
+   [Text](https://doc.qt.io/qt-5/qml-qtquick-text.html). 
+   
+   There are a [rich variety](https://doc.qt.io/qt-5/qtquick-controls2-qmlmodule.html) of `Control`s that can serve 
+   as composable primitives in your new tool.
+
+   Any QML component you use which is not a `Control` will not participate in the styling, palette, or font system, and  may exhibit less advanced margin/padding behavior. Types like `Rectangle` are best saved for when you 
+   need to render an actual rectangle, like the striping in the Scalebar tool.
+
+### Widget View
+
+1. Prefer usage of UI files for composition and declaration where possible.
+
+2. Always have a constructor of the form `MyTool(QWidget* parent = nullptr)`.
+   This is the only constructor that the Qt forms editor can handle. 
+
+   If you are wondering "How do I set a value at construction which can't be changed?"
+   Note that this doesn't fit into the Qt's API design philosophy. It's best to expose getters and setters
+   which can be mutated at any point during a Widget's lifetime.
