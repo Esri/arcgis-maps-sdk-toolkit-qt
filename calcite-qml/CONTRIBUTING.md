@@ -20,7 +20,7 @@ For general contributing guidelines see [here](/CONTRIBUTING.md).
 ## Design philosophy 
 
 1. We are writing a custom QML style. Wherever there is a direct conflict between the QML 
-and Calcite styling systems, QML should be favoured.
+and Calcite styling systems, QML should be favored.
 
 2. Coherence is key. Favour designs which look cohesive 
    to the rest of QML Calcite over components which mirror Calcite Web exactly.
