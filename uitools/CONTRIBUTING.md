@@ -141,12 +141,35 @@ What follows is general advice to be effective in writing tools.
 
    - If you want to render some text, do not use [Label](https://doc.qt.io/qt-5/qml-qtquick-controls2-label.html) use
    [Text](https://doc.qt.io/qt-5/qml-qtquick-text.html). 
+
+   - Use `ItemDelegate`/`SwitchDelegate`/`RadioDelegate` etc in `ListView`s. Avoid creating custom delegate implementations
+     that are built around `Item`. Avoid using inappropriate delegates like `Button` or `CheckBox` when an `ItemDelegate` 
+     or `CheckDelegate` would be more appropriate.
    
    There are a [rich variety](https://doc.qt.io/qt-5/qtquick-controls2-qmlmodule.html) of `Control`s that can serve 
-   as composable primitives in your new tool.
+   as composable primitives in your new tool. It is worth your time to familiarize yourself with them.
 
    Any QML component you use which is not a `Control` will not participate in the styling, palette, or font system, and  may exhibit less advanced margin/padding behavior. Types like `Rectangle` are best saved for when you 
-   need to render an actual rectangle, like the striping in the Scalebar tool.
+   need to render an actual rectangle, such as the striping in the Scalebar tool.
+
+3. Understand when to use `anchors`, `Grid`, `GridLayout` and absolute positioning.
+
+   There is a myriad of ways to layout items in QML. Some are more appropriate than 
+   others in certain situations.
+
+   - Use [GridLayout](https://doc.qt.io/qt-5/qml-qtquick-layouts-gridlayout.html) (along with `ColumnLayout` and `RowLayout`) when
+     you care about the **placement** and **sizing** of multiple items.
+
+   - Use [Grid](https://doc.qt.io/qt-5/qml-qtquick-grid.html) (along with `Column` and `Row`) when you care about
+     the **placement** of multiple items, but do not wish to influence the sizing of the items (rarely needed if ever.)
+
+   - Use [anchors](https://doc.qt.io/qt-5/qtquick-positioning-anchors.html) when the other options seem inappropriate, 
+     either because you are sizing one item, or you need to size/position items relative to the parent, independent 
+     of siblings.
+
+   - Set the `x`, `y`, `width` and `height` options as sparingly as possible, as this ignores padding, margins, 
+     and content bounds. Usually only required when defining new primitives, like the speech-bubble in 
+     the `Callout` tool.
 
 ### Widget View
 
