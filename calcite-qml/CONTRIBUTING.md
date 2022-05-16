@@ -22,7 +22,7 @@ For general contributing guidelines see [here](/CONTRIBUTING.md).
 1. We are writing a custom QML style. Wherever there is a direct conflict between the QML 
 and Calcite styling systems, QML should be favored.
 
-2. Coherence is key. Favour designs which look cohesive 
+2. Coherence is key. Favor designs which look cohesive 
    to the rest of QML Calcite over components which mirror Calcite Web exactly.
 
 3. Avoid many unique properties and/or behaviors on your control. A user should be free to swap out
