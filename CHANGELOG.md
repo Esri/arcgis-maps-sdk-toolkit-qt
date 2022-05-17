@@ -2,6 +2,7 @@
 
 ## 100.15
 
+* (Callout) Deprecated `calloutContent` property in favour of `contentItem` usage.
 * Updated `.png` files to be `.svg` instead. Tools no longer look pixilated on high-dpi devices.
 * (NorthArrow) Fixed deprecation warning in widgets.
 * (CoordinateConversion) Fixed button images not rendering.
