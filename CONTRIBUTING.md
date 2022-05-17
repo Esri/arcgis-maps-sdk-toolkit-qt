@@ -29,20 +29,20 @@ You will need:
 
 - [Official Qt documentation](https://doc.qt.io/).
 
-- [DSA App](https://github.com/Esri/dynamic-situational-awareness-qt), an open source project built with the ArcGISRuntime Toolkit for Qt.
+- [DSA App](https://github.com/Esri/dynamic-situational-awareness-qt), an open source project built with the ArcGIS Runtime Toolkit for Qt.
 
 ## Submitting a change
 
 There are two active branches within toolkit: `main` and `v.next`.
 
 - **main** is the active branch, and must always be compatible with 
-  the [release version of ArcGISRuntime for Qt](https://developers.arcgis.com/qt/). This is 
+  the [release version of ArcGIS Runtime for Qt](https://developers.arcgis.com/qt/). This is 
   the main branch all our users consume to access toolkit features.
 
 - **v.next** is the "next version" branch which contains upcoming features and is
   compatible with the upcoming version of ArcGIS Runtime. While anyone may contribute to this 
   branch, public contributors outside of Esri will not be able to build this branch as the upcoming
-  version of ArcGISRuntime will be unavailable.
+  version of ArcGIS Runtime will be unavailable.
 
 ### Bugfixes
 

@@ -24,7 +24,7 @@ ArcGIS Runtime for Qt provides 3 different GUI workflows.
 
 1. **Widgets/C++** The Widgets/C++ workflow is for applications written in pure C++ with a Qt widget front-end. Often used by users who care about performance/control. This workflow targets desktop **only**.
 
-Of these, `QtQuick/QML` exposed an ArcGISRuntime QML API, incompatible with C++ ArcGISRuntime API used in `Widgets/C++` & `QtQuick/C++`.
+Of these, `QtQuick/QML` exposed an ArcGIS Runtime QML API, incompatible with C++ ArcGIS Runtime API used in `Widgets/C++` & `QtQuick/C++`.
 
 The challenge of writing UI tools then, is to target all these workflows with as minimum repetition as possible. The worst case scenario would be writing three separate implementations for each workflow, leading to subtle differences
 and code duplication.
@@ -85,8 +85,8 @@ What follows is general advice to be effective in writing tools.
 
 2. Make use of the [Adaptor](https://refactoring.guru/design-patterns/adapter) pattern.
 
-   Exposing an ArcGISRuntime class to to QML can be tricky because the C++ types don't expose properties for
-   free. The best way around this is to wrap an ArcGISRuntime type in an adaptor, which exposes the required
+   Exposing an ArcGIS Runtime class to to QML can be tricky because the C++ types don't expose properties for
+   free. The best way around this is to wrap an ArcGIS Runtime type in an adaptor, which exposes the required
    properties in a QML friendly-way. For example, [FloorFilterSiteItem](cpp/Esri//ArcGISRuntime/Toolkit/FloorFilterSiteItem.h),
    wraps and exposes the properties of [FloorSite](https://developers.arcgis.com/qt/cpp/api-reference/esri-arcgisruntime-floorsite.html).
 
