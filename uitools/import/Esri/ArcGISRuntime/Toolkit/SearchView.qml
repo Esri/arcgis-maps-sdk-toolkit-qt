@@ -350,7 +350,7 @@ Pane {
 
         function acceptDropdownItem(index) {
             if (index === -1) {
-                // With no suggestion, we perform a search wiith the given text.
+                // With no suggestion, we perform a search with the given text.
                 controller.commitSearch(false);
                 searchView.state = "searchCommitted";
             } else if (searchView.state === "searchCommitted") {
