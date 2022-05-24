@@ -19,6 +19,8 @@ INCLUDEPATH += $$PWD/cpp $$CPPPATH
 HEADERS += $$CPPPATH/AuthenticationController.h \
            $$CPPPATH/BasemapGalleryController.h \
            $$CPPPATH/BasemapGalleryItem.h \
+           $$CPPPATH/BookmarksViewController.h \
+           $$CPPPATH/BookmarkListItem.h \
            $$CPPPATH/CoordinateConversionConstants.h \
            $$CPPPATH/CoordinateConversionController.h \
            $$CPPPATH/CoordinateConversionOption.h \
@@ -51,6 +53,8 @@ HEADERS += $$CPPPATH/AuthenticationController.h \
 SOURCES += $$CPPPATH/AuthenticationController.cpp \
            $$CPPPATH/BasemapGalleryController.cpp \
            $$CPPPATH/BasemapGalleryItem.cpp \
+           $$CPPPATH/BookmarksViewController.cpp \
+           $$CPPPATH/BookmarkListItem.cpp \
            $$CPPPATH/CoordinateConversionConstants.cpp \
            $$CPPPATH/CoordinateConversionController.cpp \
            $$CPPPATH/CoordinateConversionOption.cpp \
