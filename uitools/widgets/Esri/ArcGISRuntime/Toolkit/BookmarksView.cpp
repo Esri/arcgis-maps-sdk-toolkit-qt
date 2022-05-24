@@ -33,13 +33,13 @@ namespace Toolkit {
   \class Esri::ArcGISRuntime::Toolkit::BookmarksView
   \inmodule EsriArcGISRuntimeToolkit
   \ingroup ArcGISQtToolkitUiCppWidgetsViews
-  \since Esri.ArcGISRuntime 100.13
+  \since Esri.ArcGISRuntime 100.15
   \brief The user interface for the BookmarksView.
-  The BookmarksView displays a collection of items representing basemaps from either ArcGIS Online, a user-defined portal,
-  or an array of Basemaps. When the user selects a basemap from the BookmarksView, the basemap rendered in the current
-  geoModel is removed from the given map/scene and replaced with the basemap selected in the gallery.
+  The BookmarksView displays a collection of bookmarks in the form of viewpoints from either ArcGIS Online, a user-defined portal,
+  or an array of Bookmarks. When the user selects a bookmark from the BookmarksView, the viewpoint rendered in the current
+  geoView is repalced in the given map/scene by the viewpoint selected from the bookmarks.
 
-  \note By default, the BookmarksView will attempt to fetch the set of developer basemaps, which require an \l{https://developers.arcgis.com/qt/get-started/#3-access-services-and-content-with-an-api-key}{API key} to access.
+  \note By default, the BookmarksView will attempt to fetch the set of developer bookmarks, which require an \l{https://developers.arcgis.com/qt/get-started/#3-access-services-and-content-with-an-api-key}{API key} to access.
   */
 
   /*!
@@ -49,7 +49,7 @@ namespace Toolkit {
   \endlist
 
   View mantains its associated controller, sets up the view itself and its model.
-  \note If this constructor is used, a \c GeoModel must be set separately using \l setGeoModel.
+  \note If this constructor is used, a \c GeoView must be set separately using \l setGeoModel.
   */
   BookmarksView::BookmarksView(QWidget* parent) :
     QFrame(parent),
