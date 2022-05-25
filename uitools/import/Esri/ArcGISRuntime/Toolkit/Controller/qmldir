@@ -21,6 +21,7 @@ CurrentVersion 100.15 CurrentVersion.qml
 AuthenticationController 100.10 AuthenticationController.qml
 BasemapGalleryController 100.12 BasemapGalleryController.qml
 BasemapGalleryItem 100.12 BasemapGalleryItem.qml
+BookmarksViewController 100.15 BookmarksViewController.qml
 CoordinateConversionController 100.10 CoordinateConversionController.qml
 CoordinateConversionOption 100.10 CoordinateConversionOption.qml
 CoordinateConversionResult 100.10 CoordinateConversionResult.qml
