@@ -18,6 +18,7 @@
 
 // Qt headers
 #include <QObject>
+#include <QPointer>
 
 namespace Esri {
   namespace ArcGISRuntime {
@@ -45,7 +46,7 @@ namespace Esri {
         void nameChanged();
 
       private:
-        Bookmark* m_bookmark = nullptr;
+        QPointer<Bookmark> m_bookmark;
       };
 
     } // Toolkit
