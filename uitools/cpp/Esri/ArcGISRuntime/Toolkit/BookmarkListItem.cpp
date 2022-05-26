@@ -38,8 +38,8 @@ namespace Esri {
     }
 
     /*!
-    \brief Constructs a new BookmarkListItem object with a given \a parent and
-    \a bookmark to wrap.
+    \brief Constructs a new BookmarkListItem object with a given \a bookmark and
+    \a parent to wrap.
    */
       BookmarkListItem::BookmarkListItem(Bookmark* bookmark, QObject* parent) :
         QObject(parent),

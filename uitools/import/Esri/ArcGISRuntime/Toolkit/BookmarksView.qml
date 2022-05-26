@@ -27,9 +27,9 @@ import QtQuick.Layouts 1.15
  \since Esri.ArcGISRuntime 100.15
  \brief The user interface for the BookmarksView.
 
- The BookmarksView displays a collection of viewpoints represented by bookmarks from either ArcGIS Online, a user-defined portal,
- or an array of Bookmarks. When the user selects a bookmark from the provied list, the currently rendered bookmark in the
- geoView is replaced with the new bookmark view extent.
+ The BookmarksView displays a collection of viewpoints represented by bookmarks from either Webmap/Webscene
+ or are programmatically defined. When the user selects a bookmark from the provied list,
+ the viewpoint in the geoView is set to the new bookmark's view extent.
  \image docs/bookmarksView.gif
  Example code in the QML API (C++ API might differ):
  \snippet qml_quick/src/demos/BookmarksViewDemoForm.qml Set up Bookmark QML
@@ -62,26 +62,24 @@ Pane {
     wheelEnabled: true
     hoverEnabled: true
 
-    contentItem: Frame{
+    contentItem: ListView{
+        id: listView
+        model: controller.bookmarks
         clip: true
-        contentItem: ListView{
-            id: listView
-            model: controller.bookmarks
 
-            ScrollBar.vertical: ScrollBar {
-                active: true
-                snapMode: ScrollBar.SnapOnRelease
-            }
+        ScrollBar.vertical: ScrollBar {
+            active: true
+            snapMode: ScrollBar.SnapOnRelease
+        }
 
-            delegate: ItemDelegate {
-                // `name` is a role within GenericListModel's BookmarkListItem specification.
-                // `text` can take `name` because the `model` builds the roles from the
-                // properties of BookmarkListItem that is set in BookmarksViewController.
-                text: name
-                width: parent.width
-                indicator: null
-                onPressed: controller.zoomToBookmarkExtent(modelData)
-            }
+        delegate: ItemDelegate {
+            // `name` is a role within GenericListModel's BookmarkListItem specification.
+            // `text` can take `name` because the `model` builds the roles from the
+            // properties of BookmarkListItem that is set in BookmarksViewController.
+            text: name
+            width: parent.width
+            indicator: null
+            onPressed: controller.zoomToBookmarkExtent(modelData)
         }
     }
 

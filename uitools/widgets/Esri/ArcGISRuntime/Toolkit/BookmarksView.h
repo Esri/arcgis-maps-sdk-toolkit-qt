@@ -44,12 +44,9 @@ namespace Toolkit {
 
     void setSceneView(SceneGraphicsView* mapView);
 
-  private slots:
-    void onItemSelected(const QModelIndex& index);
-
   private:
     BookmarksViewController* m_controller = nullptr;
-    Ui::BookmarksView* m_ui;
+    Ui::BookmarksView* m_ui = nullptr;
   };
 
 } // Toolkit

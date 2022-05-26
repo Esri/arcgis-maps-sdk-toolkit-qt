@@ -23,13 +23,8 @@
 // ArcGISRuntime headers
 #include <Bookmark.h>
 #include <GeoView.h>
-#include <Portal.h>
-
 // Qt headers
 #include <QObject>
-
-// Qt forward declarations
-class QAbstractListModel;
 
 namespace Esri {
   namespace ArcGISRuntime {

@@ -20,12 +20,12 @@ DemoPage {
             id: view
             BookmarksView {
                 id: bookmarksView
+                geoView: view
                 anchors {
                     left: parent.left
                     top: parent.top
                     margins: 10
                 }
-                geoView: view
             }
             BookmarksViewDemo {
                 id: demo

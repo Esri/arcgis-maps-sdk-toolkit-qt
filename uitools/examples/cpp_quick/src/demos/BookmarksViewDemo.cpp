@@ -10,7 +10,6 @@
 // See the Sample code usage restrictions document for further information.
 #include "BookmarksViewDemo.h"
 
-#include "ArcGISMapImageLayer.h"
 #include "Map.h"
 #include "Scene.h"
 

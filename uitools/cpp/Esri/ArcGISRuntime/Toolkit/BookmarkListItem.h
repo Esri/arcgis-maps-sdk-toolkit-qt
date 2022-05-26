@@ -18,7 +18,6 @@
 
 // Qt headers
 #include <QObject>
-#include "Viewpoint.h"
 
 namespace Esri {
   namespace ArcGISRuntime {

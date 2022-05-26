@@ -23,7 +23,7 @@ import QtQml.Models 2.15
    \since Esri.ArcGISRuntime 100.15
    \ingroup ArcGISQtToolkitUiQmlControllers
    \brief The controller part of a BookmarksView. This class handles the
-   management of the Bookmark objects.
+   management of the Bookmark objects and zooming onto the bookmarks' view extents.
  */
 
 QtObject {
@@ -39,14 +39,12 @@ QtObject {
       \brief The bookmarks of Bookmark list objects.
 
       Internally, the list is a QML ListModel containing elements of type ListElement.
-      Each ListElement has a single property `modelData`, which maps to a Bookmark.
+      Each ListElement has a `modelData` and property `name`, which maps to a Bookmark.
      */
     readonly property alias bookmarks: internal.bookmarks
 
     /*!
-       \brief Method that takes a Bookmark \a modelData and sets this controller's
-       bookmark to the map contained within. This method is for QML/C++ layer
-       compatibility.
+       \brief Method that takes a Bookmark \a modelData and  zoom to that bookmark in the `geoView`.
      */
     function zoomToBookmarkExtent(modelData) {
         geoView.setBookmark(modelData);
@@ -56,6 +54,9 @@ QtObject {
     property QtObject internal : QtObject {
         id: internal
 
+        // qmlproperty Bookmark rawBookmarks
+        // The bookmarks, stored in the geoView.
+        // This property can experience changes, which are copied into the internal `bookmarks` ListModel.
         property var rawBookmarks: {
             if (geoView === null)
                 return null;
@@ -68,16 +69,15 @@ QtObject {
             }
         }
 
-        /*!
-          \qmlproperty ListModel bookmarks
-          \brief The bookmarks of Bookmark ListModel.
-
-          This is the internal representation, containing the elements.
-         */
+        // qmlproperty ListModel bookmarks
+        // The bookmarks of Bookmark ListModel.
+        // This is the internal representation, containing the elements.
         property ListModel bookmarks: ListModel {
             //
         }
 
+        // When the `geoView`'s bookmarks change, we want to reflect that change into this
+        // internal `bookmarks` ListModel, which is utilised by the view.
         onRawBookmarksChanged: {
             for (let i = 0; i <= internal.rawBookmarks.count; i++) {
                 let bookmark = internal.rawBookmarks.get(i);
@@ -85,6 +85,8 @@ QtObject {
             }
         }
 
+        // We set up connections so that when the `geoView`'s bookmarks change, we want to reflect those changes
+        // within the internal `bookmarks` ListModel, which is utilised by the view.
         property Connections rawBookmarkConections : Connections {
             target: internal.rawBookmarks
 

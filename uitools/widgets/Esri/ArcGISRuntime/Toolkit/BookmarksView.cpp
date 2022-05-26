@@ -35,9 +35,9 @@ namespace Toolkit {
   \ingroup ArcGISQtToolkitUiCppWidgetsViews
   \since Esri.ArcGISRuntime 100.15
   \brief The user interface for the BookmarksView.
-  The BookmarksView displays a collection of bookmarks in the form of viewpoints from either ArcGIS Online, a user-defined portal,
-  or an array of Bookmarks. When the user selects a bookmark from the BookmarksView, the viewpoint rendered in the current
-  geoView is repalced in the given map/scene by the viewpoint selected from the bookmarks.
+  The BookmarksView displays a collection of bookmarks in the form of viewpoints from either Webmap/Webscene
+  or are programmatically defined. When the user selects a bookmark from the provied list,
+  the viewpoint in the geoView is set to the new bookmark's view extent.
 
   \note By default, the BookmarksView will attempt to fetch the set of developer bookmarks, which require an \l{https://developers.arcgis.com/qt/get-started/#3-access-services-and-content-with-an-api-key}{API key} to access.
   */
@@ -49,7 +49,6 @@ namespace Toolkit {
   \endlist
 
   View mantains its associated controller, sets up the view itself and its model.
-  \note If this constructor is used, a \c GeoView must be set separately using \l setGeoModel.
   */
   BookmarksView::BookmarksView(QWidget* parent) :
     QFrame(parent),
@@ -59,7 +58,14 @@ namespace Toolkit {
     m_ui->setupUi(this);
     m_ui->listView->setModel(m_controller->bookmarks());
 
-    connect(m_ui->listView->selectionModel(), &QItemSelectionModel::currentChanged, this, &BookmarksView::onItemSelected);
+    connect(m_ui->listView->selectionModel(), &QItemSelectionModel::currentChanged, this, [this](const QModelIndex& index)
+            {
+              // Slot that sets the current viewpoint at \a index.
+              // When a click event is received (and thus item is selected),
+              // the `bookmark` at the given \a index is zoomed to via the controller.
+              auto item = m_controller->bookmarks()->element<BookmarkListItem>(index);
+              m_controller->zoomToBookmarkExtent(item);
+            });
   }
 
   /*!
@@ -98,18 +104,6 @@ namespace Toolkit {
   void BookmarksView::setSceneView(SceneGraphicsView* sceneView)
   {
     m_controller->setGeoView(sceneView);
-  }
-
-  /*!
-  \internal
-  \brief Slot that sets the current viewpoint with \a index.
-  Once linked to the clicked ListView event, this slot receives \c QModelIndex \a index and uses it
-  to set its viewpoint into the controller.
-  */
-  void BookmarksView::onItemSelected(const QModelIndex& index)
-  {
-    auto item = m_controller->bookmarks()->element<BookmarkListItem>(index);
-    m_controller->zoomToBookmarkExtent(item);
   }
 } //Toolkit
 } //ArcGISRuntime
