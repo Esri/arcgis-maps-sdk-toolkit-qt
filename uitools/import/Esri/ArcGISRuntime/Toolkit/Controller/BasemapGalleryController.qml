@@ -69,7 +69,7 @@ QtObject {
       \brief The gallery of BasemapGalleryItem objects.
 
       Internally, the gallery is a QML ListModel containing elements of type ListElement.
-      Each ListElement has a single property `modelData`, which maps ot a BasemapGalleryItem.
+      Each ListElement has a single property `modelData`, which maps to a BasemapGalleryItem.
      */
     readonly property alias gallery: internal.gallery
 
