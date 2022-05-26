@@ -207,16 +207,17 @@ namespace Toolkit {
 
     if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
+      // `connectToGeoView` guarantees the map and/or scene exists as it is only invoked once the geomodel is loaded.
       connectToGeoView(mapView, this, [this, mapView]
                        {
-                         setupBookmarks(mapView->map() ? mapView->map()->bookmarks() : nullptr, m_bookmarks);
+                         setupBookmarks(mapView->map()->bookmarks(), m_bookmarks);
                        });
     }
     else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
       connectToGeoView(sceneView, this, [this, sceneView]
                        {
-                         setupBookmarks(sceneView->arcGISScene() ? sceneView->arcGISScene()->bookmarks() : nullptr, m_bookmarks);
+                         setupBookmarks(sceneView->arcGISScene()->bookmarks(), m_bookmarks);
                        });
     }
   }
