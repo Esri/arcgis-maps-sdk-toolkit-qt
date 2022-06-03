@@ -36,7 +36,7 @@ namespace Toolkit {
   \since Esri.ArcGISRuntime 100.15
   \brief The user interface for the BookmarksView.
   The BookmarksView displays a collection of bookmarks in the form of viewpoints from either Webmap/Webscene
-  or are programmatically defined. When the user selects a bookmark from the provied list,
+  or are programmatically defined. When the user selects a bookmark from the provided list,
   the viewpoint in the geoView is set to the new bookmark's view extent.
 
   \note By default, the BookmarksView will attempt to fetch the set of developer bookmarks, which require an \l{https://developers.arcgis.com/qt/get-started/#3-access-services-and-content-with-an-api-key}{API key} to access.
@@ -48,7 +48,7 @@ namespace Toolkit {
     \li \a parent Parent widget.
   \endlist
 
-  View mantains its associated controller, sets up the view itself and its model.
+  The view mantains its associated controller, sets up the view itself and its model.
   */
   BookmarksView::BookmarksView(QWidget* parent) :
     QFrame(parent),

@@ -30,7 +30,7 @@ QtObject {
     id: controller
     /*!
       \qmlproperty GeoView geoView
-      \brief The geoview of the controller.
+      \brief The geoView of the controller.
      */
     property GeoView geoView: null;
 

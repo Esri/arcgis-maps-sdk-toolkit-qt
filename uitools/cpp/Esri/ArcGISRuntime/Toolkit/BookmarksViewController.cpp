@@ -257,8 +257,8 @@ namespace Toolkit {
 
   /*!
   \property Esri::ArcGISRuntime::Toolkit::BookmarksViewController::geoView
-  \brief The geoview the controller is utilizing for interactions.
-  \sa Esri::ArcGISRuntime::Toolkit::BookmarksViewController::geoView()
+  \brief The geoView the controller is utilizing for interactions.
+  \sa Esri::ArcGISRuntime::Toolkit::BookmarksViewController::geoView() const
  */
 
 } // Toolkit

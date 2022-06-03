@@ -39,7 +39,7 @@ namespace Esri {
 
     /*!
     \brief Constructs a new BookmarkListItem object with a given \a bookmark and
-    \a parent to wrap.
+    \a parent.
    */
       BookmarkListItem::BookmarkListItem(Bookmark* bookmark, QObject* parent) :
         QObject(parent),
@@ -54,7 +54,7 @@ namespace Esri {
     BookmarkListItem::~BookmarkListItem() = default;
 
     /*!
-    \brief Change the underlying wrapped item to \a bookmark.
+    \brief Change the underlying item to \a bookmark.
    */
     void BookmarkListItem::setBookmark(Bookmark* bookmark)
     {
@@ -68,7 +68,7 @@ namespace Esri {
     }
 
     /*!
-    \brief Returns the currently wrapped \c bookmark.
+    \brief Returns the current \c bookmark.
    */
     Bookmark* BookmarkListItem::bookmark() const
     {
@@ -77,7 +77,7 @@ namespace Esri {
 
     /*!
     \property Esri::ArcGISRuntime::Toolkit::BookmarkListItem::name
-    \brief Returns the name of the wrapped item.
+    \brief Returns the name of the item.
    */
     QString BookmarkListItem::name() const
     {
@@ -85,7 +85,7 @@ namespace Esri {
     }
 
     /*!
-    \brief Sets the underlying wrapped item to \a name.
+    \brief Sets the underlying item to \a name.
    */
     void BookmarkListItem::setName(const QString& name)
     {
@@ -98,7 +98,7 @@ namespace Esri {
 
     /*!
     \fn void Esri::ArcGISRuntime::Toolkit::BookmarkListItem::bookmarkChanged()
-    \brief Signal emitted when the wrapped \l bookmark changes.
+    \brief Signal emitted when the \l bookmark changes.
    */
 
     /*!
