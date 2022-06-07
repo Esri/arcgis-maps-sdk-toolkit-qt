@@ -3,8 +3,9 @@ INCLUDEPATH += $$PWD
 
 RESOURCES += $$PWD/demos.qrc
 
-HEADERS += $$PWD/BasemapGalleryDemo.h \
-           $$PWD/AuthenticationViewDemo.h \
+HEADERS += $$PWD/AuthenticationViewDemo.h \
+           $$PWD/BasemapGalleryDemo.h \
+           $$PWD/BookmarksViewDemo.h \
            $$PWD/CalloutDemo.h \
            $$PWD/CoordinateConversionDemo.h \
            $$PWD/FloorFilterDemo.h \
@@ -14,8 +15,9 @@ HEADERS += $$PWD/BasemapGalleryDemo.h \
            $$PWD/SearchViewDemo.h \
            $$PWD/TimeSliderDemo.h
 
-SOURCES += $$PWD/BasemapGalleryDemo.cpp \
-           $$PWD/AuthenticationViewDemo.cpp \
+SOURCES += $$PWD/AuthenticationViewDemo.cpp \
+           $$PWD/BasemapGalleryDemo.cpp \
+           $$PWD/BookmarksViewDemo.cpp \
            $$PWD/CalloutDemo.cpp \
            $$PWD/CoordinateConversionDemo.cpp \
            $$PWD/FloorFilterDemo.cpp \

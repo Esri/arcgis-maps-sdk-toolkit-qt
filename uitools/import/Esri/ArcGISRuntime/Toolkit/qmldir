@@ -22,6 +22,7 @@ CurrentVersion 100.15 CurrentVersion.qml
 # View components
 AuthenticationView 100.10 AuthenticationView.qml
 BasemapGallery 100.12 BasemapGallery.qml
+BookmarksView 100.15 BookmarksView.qml
 Callout 100.10 Callout.qml
 ClientCertificateView 100.10 ClientCertificateView.qml
 CoordinateConversion 100.10 CoordinateConversion.qml

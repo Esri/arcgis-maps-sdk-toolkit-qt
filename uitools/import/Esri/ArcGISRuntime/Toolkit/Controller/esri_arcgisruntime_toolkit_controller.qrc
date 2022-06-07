@@ -3,6 +3,7 @@
         <file>AuthenticationController.qml</file>
         <file>BasemapGalleryController.qml</file>
         <file>BasemapGalleryItem.qml</file>
+        <file>BookmarksViewController.qml</file>
         <file>CoordinateConversionController.qml</file>
         <file>CoordinateConversionOption.qml</file>
         <file>CoordinateConversionResult.qml</file>

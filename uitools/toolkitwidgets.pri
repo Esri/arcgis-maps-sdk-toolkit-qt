@@ -25,6 +25,7 @@ INCLUDEPATH += $$PWD/widgets $$WIDGETPATH
 
 HEADERS += $$WIDGETPATH/AuthenticationView.h \
            $$WIDGETPATH/BasemapGallery.h \
+           $$WIDGETPATH/BookmarksView.h \
            $$WIDGETPATH/CoordinateConversion.h \
            $$WIDGETPATH/FloorFilter.h \
            $$WIDGETPATH/NorthArrow.h \
@@ -39,6 +40,7 @@ HEADERS += $$WIDGETPATH/AuthenticationView.h \
 
 SOURCES += $$WIDGETPATH/AuthenticationView.cpp \
            $$WIDGETPATH/BasemapGallery.cpp \
+           $$WIDGETPATH/BookmarksView.cpp \
            $$WIDGETPATH/CoordinateConversion.cpp \
            $$WIDGETPATH/FloorFilter.cpp \
            $$WIDGETPATH/NorthArrow.cpp \
@@ -53,6 +55,7 @@ SOURCES += $$WIDGETPATH/AuthenticationView.cpp \
 
 FORMS += $$WIDGETPATH/AuthenticationView.ui \
          $$WIDGETPATH/BasemapGallery.ui \
+         $$WIDGETPATH/BookmarksView.ui \
          $$WIDGETPATH/CoordinateConversion.ui \
          $$WIDGETPATH/FloorFilter.ui \
          $$WIDGETPATH/OverviewMap.ui \

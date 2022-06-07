@@ -11,6 +11,7 @@ In the [API Documentation](https://developers.arcgis.com/qt/toolkit/api-referenc
 |:--:|:--:|:--:|:--:|
 |Authentication view|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-authenticationview.html) | [✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-authenticationview.html) | [✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-authenticationview.html) |
 |Basemap gallery|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-basemapgallery.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-basemapgallery.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-basemapgallery.html)|
+| Bookmarks view |✔|✔ |✔ |
 |Callout|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-callout.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-callout.html)||
 |Coordinate conversion|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-coordinateconversion.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-coordinateconversion.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-coordinateconversion.html)|
 |Floor Filter|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-floorfilter.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-floorfilter.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-floorfilter.html)|

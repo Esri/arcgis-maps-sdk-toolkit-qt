@@ -10,11 +10,15 @@
 // See the Sample code usage restrictions document for further information.
 const TOOLS = [
   {
-   "name" : "FloorFilter",
+    "name": "Bookmarks view",
+    "url": "BookmarksViewDemoForm.qml"
+  },
+  {
+   "name" : "Floor filter",
    "url" : "FloorFilterDemoForm.qml"
   },
   {
-   "name": "Search View",
+   "name": "Search view",
    "url": "SearchViewDemoForm.qml"
   },
   {
@@ -22,11 +26,11 @@ const TOOLS = [
    "url": "NorthArrowDemoForm.qml"
   },
   {
-    "name": "Popup View",
+    "name": "Popup view",
     "url": "PopupViewDemoForm.qml"
   },
   {
-    "name": "Overview Map",
+    "name": "Overview map",
     "url": "OverviewMapDemoForm.qml"
   },
   {
