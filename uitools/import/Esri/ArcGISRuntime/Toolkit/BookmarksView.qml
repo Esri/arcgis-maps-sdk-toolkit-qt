@@ -77,7 +77,7 @@ Pane {
             // `text` can take `name` because the `model` builds the roles from the
             // properties of BookmarkListItem that is set in BookmarksViewController.
             text: name
-            width: parent.width
+            width: listView.width
             indicator: null
             onPressed: controller.zoomToBookmarkExtent(modelData)
         }

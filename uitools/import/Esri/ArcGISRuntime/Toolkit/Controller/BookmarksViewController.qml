@@ -80,9 +80,12 @@ QtObject {
         // internal `bookmarks` ListModel, which is utilised by the view.
         onRawBookmarksChanged: {
             bookmarks.clear();
-            for (let i = 0; i <= internal.rawBookmarks.count; i++) {
-                let bookmark = internal.rawBookmarks.get(i);
-                bookmarks.insert(i, {modelData: bookmark, name: bookmark.name});
+            if (internal.rawBookmarks) {
+                for (let i = 0; i <= internal.rawBookmarks.count; i++) {
+                    let bookmark = internal.rawBookmarks.get(i);
+                    if (bookmark)
+                        bookmarks.insert(i, {modelData: bookmark, name: bookmark.name});
+                }
             }
         }
 

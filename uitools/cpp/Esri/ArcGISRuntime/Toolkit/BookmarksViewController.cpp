@@ -207,6 +207,11 @@ namespace Toolkit {
 
     if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
+      connect(mapView, &MapViewToolkit::mapChanged, this, [this]()
+              {
+                m_bookmarks->clear();
+              });
+
       // `connectToGeoView` guarantees the map and/or scene exists as it is only invoked once the geomodel is loaded.
       connectToGeoView(mapView, this, [this, mapView]
                        {
@@ -215,6 +220,11 @@ namespace Toolkit {
     }
     else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
+      connect(sceneView, &SceneViewToolkit::sceneChanged, this, [this]()
+              {
+                m_bookmarks->clear();
+              });
+
       connectToGeoView(sceneView, this, [this, sceneView]
                        {
                          setupBookmarks(sceneView->arcGISScene()->bookmarks(), m_bookmarks);
@@ -240,6 +250,9 @@ namespace Toolkit {
  */
   void BookmarksViewController::zoomToBookmarkExtent(BookmarkListItem* bookmark)
   {
+    if (!bookmark)
+      return;
+
     if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
       sceneView->setBookmark(bookmark->bookmark());
