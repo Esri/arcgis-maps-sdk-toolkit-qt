@@ -50,6 +50,10 @@ const TOOLS = [
     "url": "TimeSliderDemoForm.qml"
   },
   {
+    "name": "Scalebar",
+    "url": "ScalebarDemoForm.qml"
+  },
+  {
     "name": "Authentication view",
     "url": "AuthenticationViewDemoForm.qml",
     "handlesOwnAuthentication" : true
