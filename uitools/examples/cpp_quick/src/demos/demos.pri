@@ -12,7 +12,7 @@ HEADERS += $$PWD/AuthenticationViewDemo.h \
            $$PWD/NorthArrowDemo.h \
            $$PWD/OverviewMapDemo.h \
            $$PWD/PopupViewDemo.h \
-           $$PWD/ScalebarDemo.h
+           $$PWD/ScalebarDemo.h \
            $$PWD/SearchViewDemo.h \
            $$PWD/TimeSliderDemo.h
 
@@ -25,6 +25,6 @@ SOURCES += $$PWD/AuthenticationViewDemo.cpp \
            $$PWD/NorthArrowDemo.cpp \
            $$PWD/OverviewMapDemo.cpp \
            $$PWD/PopupViewDemo.cpp \
-           $$PWD/ScalebarDemo.cpp
+           $$PWD/ScalebarDemo.cpp \
            $$PWD/SearchViewDemo.cpp \
            $$PWD/TimeSliderDemo.cpp \
