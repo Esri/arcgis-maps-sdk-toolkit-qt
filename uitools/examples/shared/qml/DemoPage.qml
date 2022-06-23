@@ -72,6 +72,8 @@ Control {
         contentItem: TextField {
             id: apiKeyInput
             placeholderText: "Enter your API Key here."
+            Keys.onReturnPressed: apiKeyPopup.accept()
+            Component.onCompleted: forceActiveFocus()
         }
         anchors.centerIn: demoPage
         standardButtons: Dialog.Ok | Dialog.Cancel

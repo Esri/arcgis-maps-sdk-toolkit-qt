@@ -24,7 +24,7 @@ ApplicationWindow {
     id: appWindow
     width: 800
     height: 800
-    title: "Calite_test"
+    title: "Calcite_test"
     visible: true
 
     Component.onCompleted: {
