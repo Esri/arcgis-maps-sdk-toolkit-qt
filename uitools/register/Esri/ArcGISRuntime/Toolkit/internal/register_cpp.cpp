@@ -39,6 +39,11 @@
 #include "SearchViewController.h"
 #include "SmartLocatorSearchSource.h"
 #include "TimeSliderController.h"
+#include "UtilityNetworkListItem.h"
+#include "UtilityNetworkTrace.h"
+#include "UtilityNetworkTraceController.h"
+#include "UtilityNetworkTraceOperationResult.h"
+#include "UtilityNetworkTraceStartingPoint.h"
 
 // Internal includes
 #include "Internal/BasemapGalleryImageProvider.h"
@@ -190,6 +195,11 @@ namespace Toolkit {
     registerComponent<SearchViewController>(13, CreationType::Creatable);
     registerComponent<SmartLocatorSearchSource>(13, CreationType::Uncreatable);
     registerComponent<TimeSliderController>(10);
+    registerComponent<UtilityNetworkListItem>(15);
+    registerComponent<UtilityNetworkTrace>(15);
+    registerComponent<UtilityNetworkTraceController>(15);
+    registerComponent<UtilityNetworkTraceOperationResult>(15);
+    registerComponent<UtilityNetworkTraceStartingPoint>(15);
 
     // Register ArcGISRuntime types with toolkit.
     qRegisterMetaType<Point>("Esri::ArcGISRuntime::Point");

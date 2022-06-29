@@ -13,7 +13,8 @@ HEADERS += $$PWD/AuthenticationViewDemo.h \
            $$PWD/OverviewMapDemo.h \
            $$PWD/PopupViewDemo.h \
            $$PWD/SearchViewDemo.h \
-           $$PWD/TimeSliderDemo.h
+           $$PWD/TimeSliderDemo.h \
+           $$PWD/UtilityNetworkTraceDemo.h
 
 SOURCES += $$PWD/AuthenticationViewDemo.cpp \
            $$PWD/BasemapGalleryDemo.cpp \
@@ -25,4 +26,5 @@ SOURCES += $$PWD/AuthenticationViewDemo.cpp \
            $$PWD/OverviewMapDemo.cpp \
            $$PWD/PopupViewDemo.cpp \
            $$PWD/SearchViewDemo.cpp \
-           $$PWD/TimeSliderDemo.cpp
+           $$PWD/TimeSliderDemo.cpp \
+           $$PWD/UtilityNetworkTraceDemo.cpp

@@ -9,7 +9,8 @@
 * Added a `CONTRIBUTING.md`.
 * Added a `.clang-format` file.
 * Added vscode/spellchecking for documentation purposes.
-* (BookmarksView) Introduction of new Bookmark tool (C++/Quick, QML/Quick, Widget) 
+* (BookmarksView) Introduction of new Bookmark tool (C++/Quick, QML/Quick, Widget).
+* (UtilityNetworkTrace) Introduction of new Utility Network Trace tool.
 
 ## 100.14
 * `toolkitwidgets.pri`, `toolkitqml.pri`, and `toolkitcpp.pri` now include `QT += ...` lines to account for needed dependencies.

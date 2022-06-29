@@ -1,0 +1,97 @@
+/*******************************************************************************
+ *  Copyright 2012-2022 Esri
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ ******************************************************************************/
+#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_UTILITYNETWORKTRACE_H
+#define ESRI_ARCGISRUNTIME_TOOLKIT_UTILITYNETWORKTRACE_H
+
+// Toolkit headers
+#include "Internal/GenericListModel.h"
+#include "Internal/GeoViews.h"
+
+// Qt headers
+#include <QObject>
+
+namespace Esri {
+namespace ArcGISRuntime {
+
+  class GraphicsOverlay;
+  class UtilityNamedTraceConfiguration;
+  class UtilityNetwork;
+  class UtilityNetworkListModel;
+  class UtilityNetworkTraceOperationResult;
+  class UtilityNetworkTraceStartingPoint;
+
+namespace Toolkit {
+
+  class UtilityNetworkTrace : public QObject
+  {
+    Q_OBJECT
+    Q_PROPERTY(MapViewToolkit* mapView READ mapView WRITE setMapView NOTIFY mapViewChanged)
+    Q_PROPERTY(UtilityNetwork* selectedUtilityNetwork READ selectedUtilityNetwork WRITE setSelectedUtilityNetwork NOTIFY selectedUtilityNetworkChanged)
+    Q_PROPERTY(QList<UtilityNetworkTraceStartingPoint*> startingPoints READ startingPoints WRITE setStartingPoints NOTIFY startingPointsChanged)
+    Q_PROPERTY(UtilityNamedTraceConfiguration* selectedTraceConfiguration READ selectedTraceConfiguration WRITE setSelectedTraceConfiguration NOTIFY selectedTraceConfigurationChanged)
+    Q_PROPERTY(bool isTraceInProgress READ isTraceInProgress WRITE setIsTraceInProgress NOTIFY isTraceInProgressChanged)
+
+  public:
+    Q_INVOKABLE explicit UtilityNetworkTrace(QObject* parent = nullptr);
+    Q_INVOKABLE UtilityNetworkTrace(Esri::ArcGISRuntime::Toolkit::MapViewToolkit* mapView, QObject* parent = nullptr);
+
+    ~UtilityNetworkTrace() override;
+
+    MapViewToolkit* mapView() const;
+    void setMapView(MapViewToolkit* mapView);
+
+    UtilityNetwork* selectedUtilityNetwork() const;
+    void setSelectedUtilityNetwork(UtilityNetwork* selectedUtilityNetwork);
+
+    QList<UtilityNetworkTraceStartingPoint*> startingPoints() const;
+    void setStartingPoints(QList<UtilityNetworkTraceStartingPoint*> startingPoints);
+
+    UtilityNamedTraceConfiguration* selectedTraceConfiguration() const;
+    void setSelectedTraceConfiguration(UtilityNamedTraceConfiguration* selectedTraceConfiguration);
+
+    bool isTraceInProgress() const;
+    void setIsTraceInProgress(bool isTraceInProgress);
+
+    Q_INVOKABLE QList<Esri::ArcGISRuntime::UtilityNamedTraceConfiguration*> traceConfigurations() const;
+
+    Q_INVOKABLE QList<Esri::ArcGISRuntime::UtilityNetworkTraceOperationResult*> traceResults() const;
+
+  signals:
+    void mapViewChanged();
+    void selectedUtilityNetworkChanged(Esri::ArcGISRuntime::UtilityNetwork* newValue);
+    void startingPointsChanged();
+    void selectedTraceConfigurationChanged();
+    void isTraceInProgressChanged();
+
+  private:
+    void populateUtilityNetworksFromMap();
+
+    MapViewToolkit* m_mapView = nullptr;
+    GraphicsOverlay* m_graphicsOverlay = nullptr;
+    UtilityNetwork* m_selectedUtilityNetwork = nullptr;
+    GenericListModel* m_utilityNetworks = nullptr;
+    QList<UtilityNamedTraceConfiguration*> m_traceConfigurations;
+    UtilityNamedTraceConfiguration* m_selectedTraceConfiguration = nullptr;
+    QList<UtilityNetworkTraceStartingPoint*> m_startingPoints;
+    QList<UtilityNetworkTraceOperationResult*> m_traceResults;
+    bool m_isTraceInProgress = false;
+  };
+
+} // Toolkit
+} // ArcGISRuntime
+} // Esri
+
+#endif // ESRI_ARCGISRUNTIME_TOOLKIT_UTILITYNETWORKTRACE_H
