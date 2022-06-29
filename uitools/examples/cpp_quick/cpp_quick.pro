@@ -39,7 +39,7 @@ equals(QT_MAJOR_VERSION, 6) {
   error("This version of the ArcGIS Runtime SDK for Qt is incompatible with Qt 6")
 }
 
-ARCGIS_RUNTIME_VERSION = 100.15
+ARCGIS_RUNTIME_VERSION = 100.15.0
 include($$PWD/arcgisruntime.pri)
 include($$PWD/../../toolkitcpp.pri)
 
