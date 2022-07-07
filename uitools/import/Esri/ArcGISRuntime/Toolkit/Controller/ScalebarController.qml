@@ -17,6 +17,7 @@
 import QtQml 2.12
 
 /*!
+   \internal
    \qmltype ScalineLineController
    \inqmlmodule Esri.ArcGISRuntime.Toolkit
    \since Esri.ArcGISRuntime 100.13
