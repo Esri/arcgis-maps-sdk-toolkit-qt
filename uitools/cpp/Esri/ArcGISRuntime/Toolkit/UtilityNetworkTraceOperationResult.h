@@ -52,7 +52,7 @@ namespace Toolkit {
     Q_INVOKABLE explicit UtilityNetworkTraceOperationResult(QObject* parent = nullptr);
     Q_INVOKABLE UtilityNetworkTraceOperationResult(Esri::ArcGISRuntime::UtilityTraceParameters* traceParameters,
                                                    Esri::ArcGISRuntime::UtilityNamedTraceConfiguration* traceConfiguration,
-                                                   QObject* parent);
+                                                   QObject* parent = nullptr);
     ~UtilityNetworkTraceOperationResult() override;
 
     UtilityTraceParameters* traceParameters() const;

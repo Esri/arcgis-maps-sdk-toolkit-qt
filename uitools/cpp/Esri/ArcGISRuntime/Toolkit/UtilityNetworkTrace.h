@@ -26,14 +26,16 @@
 namespace Esri {
 namespace ArcGISRuntime {
 
+  class ArcGISFeature;
   class GraphicsOverlay;
   class UtilityNamedTraceConfiguration;
   class UtilityNetwork;
   class UtilityNetworkListModel;
-  class UtilityNetworkTraceOperationResult;
-  class UtilityNetworkTraceStartingPoint;
 
 namespace Toolkit {
+
+  class UtilityNetworkTraceStartingPoint;
+  class UtilityNetworkTraceOperationResult;
 
   class UtilityNetworkTrace : public QObject
   {
@@ -43,6 +45,7 @@ namespace Toolkit {
     Q_PROPERTY(QList<UtilityNetworkTraceStartingPoint*> startingPoints READ startingPoints WRITE setStartingPoints NOTIFY startingPointsChanged)
     Q_PROPERTY(UtilityNamedTraceConfiguration* selectedTraceConfiguration READ selectedTraceConfiguration WRITE setSelectedTraceConfiguration NOTIFY selectedTraceConfigurationChanged)
     Q_PROPERTY(bool isTraceInProgress READ isTraceInProgress WRITE setIsTraceInProgress NOTIFY isTraceInProgressChanged)
+    Q_PROPERTY(Symbol* startingPointSymbol READ startingPointSymbol WRITE setStartingPointSymbol NOTIFY startingPointSymbolChanged)
 
   public:
     Q_INVOKABLE explicit UtilityNetworkTrace(QObject* parent = nullptr);
@@ -65,9 +68,16 @@ namespace Toolkit {
     bool isTraceInProgress() const;
     void setIsTraceInProgress(bool isTraceInProgress);
 
+    Symbol* startingPointSymbol() const;
+    void setStartingPointSymbol(Symbol* startingPointSymbol);
+
+    Q_INVOKABLE void runTrace(const QString& name);
+
     Q_INVOKABLE QList<Esri::ArcGISRuntime::UtilityNamedTraceConfiguration*> traceConfigurations() const;
 
-    Q_INVOKABLE QList<Esri::ArcGISRuntime::UtilityNetworkTraceOperationResult*> traceResults() const;
+    Q_INVOKABLE QList<Esri::ArcGISRuntime::Toolkit::UtilityNetworkTraceOperationResult*> traceResults();
+
+    Q_INVOKABLE void refresh();
 
   signals:
     void mapViewChanged();
@@ -75,12 +85,16 @@ namespace Toolkit {
     void startingPointsChanged();
     void selectedTraceConfigurationChanged();
     void isTraceInProgressChanged();
+    void startingPointSymbolChanged();
 
   private:
     void populateUtilityNetworksFromMap();
+    void addStartingPoint(ArcGISFeature* identifiedFeature, Point mapPoint);
+    void removeStartingPoint(UtilityNetworkTraceStartingPoint* startingPoint);
+    void setupUtilityNetworks();
 
     MapViewToolkit* m_mapView = nullptr;
-    GraphicsOverlay* m_graphicsOverlay = nullptr;
+    GraphicsOverlay* m_startingPointsGraphicsOverlay = nullptr;
     UtilityNetwork* m_selectedUtilityNetwork = nullptr;
     GenericListModel* m_utilityNetworks = nullptr;
     QList<UtilityNamedTraceConfiguration*> m_traceConfigurations;
@@ -88,6 +102,7 @@ namespace Toolkit {
     QList<UtilityNetworkTraceStartingPoint*> m_startingPoints;
     QList<UtilityNetworkTraceOperationResult*> m_traceResults;
     bool m_isTraceInProgress = false;
+    Symbol* m_startingPointSymbol;
   };
 
 } // Toolkit

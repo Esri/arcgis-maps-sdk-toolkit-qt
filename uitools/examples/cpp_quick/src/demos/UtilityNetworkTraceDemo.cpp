@@ -15,21 +15,32 @@
  ******************************************************************************/
 #include "UtilityNetworkTraceDemo.h"
 
-#include "Map.h"
+#include <Map.h>
+#include <Credential.h>
+#include <Portal.h>
+#include <PortalItem.h>
+#include <Error.h>
+#include <AuthenticationManager.h>
 
 using namespace Esri::ArcGISRuntime;
 
 UtilityNetworkTraceDemo::UtilityNetworkTraceDemo(QObject* parent) :
   BaseDemo(parent)
 {
+  connect(AuthenticationManager::instance(),
+          &AuthenticationManager::authenticationChallenge,
+          this,
+          [parent](AuthenticationChallenge* challenge)
+          {
+            challenge->continueWithCredential(new Credential("viewer01", "I68VGU^nMurF", parent));
+          });
 }
 
 UtilityNetworkTraceDemo::~UtilityNetworkTraceDemo() = default;
 
-Map* UtilityNetworkTraceDemo::initMap_(QObject* /*parent*/) const
+Map* UtilityNetworkTraceDemo::initMap_(QObject* parent) const
 {
-  // Don't set a default map; it will be created in the controller
-  return nullptr;
+    return new Map(QUrl{"https://www.arcgis.com/home/item.html?id=471eb0bf37074b1fbb972b1da70fb310"}, parent);
 }
 
 Scene* UtilityNetworkTraceDemo::initScene_(QObject* /*parent*/) const

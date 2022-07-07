@@ -16,10 +16,10 @@
 #include "UtilityNetworkTraceController.h"
 
 // Toolkit headers
-#include "UtilityNetworkListItem.h"
 #include "Internal/DisconnectOnSignal.h"
 #include "Internal/DoOnLoad.h"
 #include "Internal/GeoViews.h"
+#include "UtilityNetworkListItem.h"
 
 // Qt headers
 #include <QtGlobal>
@@ -150,48 +150,7 @@ namespace Toolkit {
     qDebug() << "constructing UtilityNetworkTraceController";
     m_utilityNetworks->setDisplayPropertyName("name");
 
-    QUrl featureServiceURL{"https://sampleserver7.arcgisonline.com/portal/sharing/rest"};
-    m_portal = new Portal(featureServiceURL);
-    m_portal->setCredential(new Credential("viewer01", "I68VGU^nMurF"));
-
-    QObject::connect(m_portal,
-                     &Portal::doneLoading,
-                     this,
-                     [this](Error)
-                     {
-                       if (!m_geoView)
-                         qDebug() << "the geoview is null";
-                       if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
-                       {
-                         QUrl webMapURL{"https://www.arcgis.com/home/item.html?id=471eb0bf37074b1fbb972b1da70fb310"};
-                         Map* map = new Map(webMapURL);
-                         mapView->setMap(map);
-
-                         QObject::connect(map,
-                                          &Map::doneLoading,
-                                          this,
-                                          [this, map, mapView](Error)
-                                          {
-                                            qDebug() << "map loaded";
-                                            qDebug() << "un load status: " << static_cast<int>(map->utilityNetworks()->at(0)->loadStatus());
-                                            qDebug() << "uns: " << map->utilityNetworks()->size();
-                                            m_utilityNetwork = map->utilityNetworks()->at(0);
-                                            QObject::connect(m_utilityNetwork,
-                                                             &UtilityNetwork::doneLoading,
-                                                             this,
-                                                             [this, mapView](Error)
-                                                             {
-                                                               qDebug() << "Utility Network loaded";
-                                                               // We can disable the progress indicator now
-                                                               m_utilityNetworkTrace = new UtilityNetworkTrace(mapView);
-
-                                                             });
-                                            m_utilityNetwork->load();
-                                          });
-                         map->load();
-                       }
-                     });
-    m_portal->load();
+    connect(this, &UtilityNetworkTraceController::geoViewChanged, this, &UtilityNetworkTraceController::setupLoadingMap);
   }
 
   /*!
@@ -285,6 +244,60 @@ namespace Toolkit {
   {
     if (portal != m_portal)
       m_portal = portal;
+  }
+
+  void UtilityNetworkTraceController::setupLoadingMap()
+  {
+    if (!m_geoView)
+      return;
+
+    auto mapView = qobject_cast<MapViewToolkit*>(m_geoView);
+    if (!mapView)
+      return;
+
+    const auto map = mapView->map();
+    if (!map)
+      return;
+
+    if (map->loadStatus() == LoadStatus::Loaded)
+    {
+      setupLoadingUtilityNetwork();
+    }
+    else
+    {
+      connect(map, &Map::doneLoading, this, [this]()
+              {
+                this->setupLoadingUtilityNetwork();
+              });
+      map->load();
+    }
+  }
+
+  void UtilityNetworkTraceController::setupLoadingUtilityNetwork()
+  {
+    auto mapView = qobject_cast<MapViewToolkit*>(m_geoView);
+
+    qDebug() << "uns: " << mapView->map()->utilityNetworks()->size();
+    m_utilityNetwork = mapView->map()->utilityNetworks()->at(0);
+    qDebug() << "## UN load status==>" << static_cast<int>(m_utilityNetwork->loadStatus());
+
+    if (m_utilityNetwork->loadStatus() == LoadStatus::Loaded)
+    {
+      m_utilityNetworkTrace = new UtilityNetworkTrace(mapView);
+    }
+    else
+    {
+      QObject::connect(m_utilityNetwork,
+                       &UtilityNetwork::doneLoading,
+                       this,
+                       [this, mapView](Error)
+                       {
+                         qDebug() << "Utility Network loaded";
+                         // We can disable the progress indicator now
+                         m_utilityNetworkTrace = new UtilityNetworkTrace(mapView);
+                       });
+      m_utilityNetwork->load();
+    }
   }
 
   /*!

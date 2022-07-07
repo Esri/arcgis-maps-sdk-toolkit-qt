@@ -41,7 +41,7 @@ namespace Toolkit {
                                                  Esri::ArcGISRuntime::Graphic* selectionGraphic,
                                                  Esri::ArcGISRuntime::Symbol* featureSymbol,
                                                  Esri::ArcGISRuntime::Envelope extent,
-                                                 QObject* parent);
+                                                 QObject* parent = nullptr);
     ~UtilityNetworkTraceStartingPoint() override;
 
     Graphic* selectionGraphic() const;

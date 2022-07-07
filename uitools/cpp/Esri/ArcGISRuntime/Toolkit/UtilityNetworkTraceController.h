@@ -61,6 +61,9 @@ namespace Toolkit {
     void portalChanged();
 
   private:
+    void setupLoadingMap();
+    void setupLoadingUtilityNetwork();
+
     QObject* m_geoView = nullptr;
     GenericListModel* m_utilityNetworks = nullptr;
     Portal* m_portal = nullptr;
