@@ -50,7 +50,6 @@ HEADERS += $$CPPPATH/AuthenticationController.h \
            $$CPPPATH/SmartLocatorSearchSource.h \
            $$CPPPATH/TimeSliderController.h \
            $$CPPPATH/UtilityNetworkListItem.h \
-           $$CPPPATH/UtilityNetworkTrace.h \
            $$CPPPATH/UtilityNetworkTraceController.h \
            $$CPPPATH/UtilityNetworkTraceOperationResult.h \
            $$CPPPATH/UtilityNetworkTraceStartingPoint.h
@@ -85,7 +84,6 @@ SOURCES += $$CPPPATH/AuthenticationController.cpp \
            $$CPPPATH/SmartLocatorSearchSource.cpp \
            $$CPPPATH/TimeSliderController.cpp \
            $$CPPPATH/UtilityNetworkListItem.cpp \
-           $$CPPPATH/UtilityNetworkTrace.cpp \
            $$CPPPATH/UtilityNetworkTraceController.cpp \
            $$CPPPATH/UtilityNetworkTraceOperationResult.cpp \
            $$CPPPATH/UtilityNetworkTraceStartingPoint.cpp

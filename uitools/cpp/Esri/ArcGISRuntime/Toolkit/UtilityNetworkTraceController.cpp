@@ -15,28 +15,49 @@
  ******************************************************************************/
 #include "UtilityNetworkTraceController.h"
 
+// ArcGISRuntime headers
+#include <ArcGISFeature.h>
+#include <FeatureLayer.h>
+#include <FeatureTable.h>
+#include <GeoView.h>
+#include <GeometryEngine.h>
+#include <GraphicsOverlay.h>
+#include <GraphicsOverlayListModel.h>
+#include <Map.h>
+#include <SimpleMarkerSymbol.h>
+#include <Symbol.h>
+#include <UtilityAssetType.h>
+#include <UtilityElement.h>
+#include <UtilityElementTraceResult.h>
+#include <UtilityNamedTraceConfiguration.h>
+#include <UtilityNetwork.h>
+#include <UtilityNetworkListModel.h>
+#include <UtilityNetworkSource.h>
+#include <UtilityNetworkTraceOperationResult.h>
+#include <UtilityTerminalConfiguration.h>
+#include <UtilityTraceParameters.h>
+#include <UtilityTraceResult.h>
+#include <UtilityTraceResultListModel.h>
+
 // Toolkit headers
 #include "Internal/DisconnectOnSignal.h"
 #include "Internal/DoOnLoad.h"
 #include "Internal/GeoViews.h"
 #include "UtilityNetworkListItem.h"
+#include "UtilityNetworkTraceStartingPoint.h"
 
 // Qt headers
-#include <QtGlobal>
+#include <QList>
 
-// ArcGISRuntime headers
-#include <Map.h>
-#include <UtilityNetworkListModel.h>
-
-// Toolkit headers
-#include "UtilityNetworkTrace.h"
+// std headers
+#include <cmath>
 
 namespace Esri {
 namespace ArcGISRuntime {
 namespace Toolkit {
 
   namespace {
-    void setupUtilityNetworks(UtilityNetworkListModel* sourceModel, GenericListModel* targetModel)
+    void setupUtilityNetworksInt(UtilityNetworkListModel* sourceModel, GenericListModel* targetModel)
     {
       QObject::connect(sourceModel, &UtilityNetworkListModel::rowsInserted, targetModel,
                        [sourceModel, targetModel](const QModelIndex& parent, int first, int last)
@@ -125,37 +146,16 @@ namespace Toolkit {
     }
   }
 
-  /*!
-  \class Esri::ArcGISRuntime::Toolkit::UtilityNetworkTraceController
-  \ingroup ArcGISQtToolkitUiCppControllers
-  \inmodule EsriArcGISRuntimeToolkit
-
-  \brief In MVC architecture, this is the controller for the corresponding
-  \c UtilityNetwork trace.
-  This class handles the management of the UtilityNetworkListItem objects, and
-  displays the current UtilityNetwork.
- */
-
-  /*!
-  \brief Constructor.
-  \list
-    \li \a parent owning parent object.
-  \endlist
- */
   UtilityNetworkTraceController::UtilityNetworkTraceController(QObject* parent) :
     QObject(parent),
-    m_utilityNetworks(new GenericListModel(&UtilityNetworkListItem::staticMetaObject, this))
+    m_utilityNetworks(new GenericListModel(&UtilityNetworkListItem::staticMetaObject, this)),
+    m_startingPointSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle::Cross, QColor(Qt::green), 20.0f))
   {
-    // Let's add a progress indicator here
-    qDebug() << "constructing UtilityNetworkTraceController";
-    m_utilityNetworks->setDisplayPropertyName("name");
+    qDebug() << "UtilityNetworkTrace begins construction";
 
-    connect(this, &UtilityNetworkTraceController::geoViewChanged, this, &UtilityNetworkTraceController::setupLoadingMap);
+
   }
 
-  /*!
-  \brief Destructor
- */
   UtilityNetworkTraceController::~UtilityNetworkTraceController() = default;
 
   /*!
@@ -170,13 +170,13 @@ namespace Toolkit {
   \brief Set the GeoView object this Controller uses.
 
   Internally this is cast to a \c MapView using \c qobject_cast,
-  which is why the paremeter is of form \c QObject and not \c GeoView.
+      which is why the paremeter is of form \c QObject and not \c GeoView.
 
   \list
     \li \a geoView \c Object which must inherit from \c{GeoView*} and
         \c{QObject*}.
   \endlist
-*/
+                                                               */
   void UtilityNetworkTraceController::setGeoView(QObject* geoView)
   {
     if (geoView == m_geoView)
@@ -218,8 +218,68 @@ namespace Toolkit {
       // `connectToGeoView` guarantees the map exists as it is only invoked once the geomodel is loaded.
       connectToGeoView(mapView, this, [this, mapView]
                        {
-                         setupUtilityNetworks(mapView->map()->utilityNetworks(), m_utilityNetworks);
+                         setupUtilityNetworksInt(mapView->map()->utilityNetworks(), m_utilityNetworks);
                        });
+
+      connect(this, &UtilityNetworkTraceController::startingPointsChanged, this, []()
+              {
+                //
+              });
+
+      connect(this,
+              &UtilityNetworkTraceController::selectedUtilityNetworkChanged,
+              this,
+              [this](UtilityNetwork* newValue)
+              {
+                if (newValue)
+                {
+                  connect(m_selectedUtilityNetwork,
+                          &UtilityNetwork::queryNamedTraceConfigurationsCompleted,
+                          this,
+                          [this](QUuid /*taskId*/, const QList<Esri::ArcGISRuntime::UtilityNamedTraceConfiguration*>& utilityNamedTraceConfigurationResults)
+                          {
+                            m_traceConfigurations.clear();
+                            m_traceConfigurations = utilityNamedTraceConfigurationResults;
+                          });
+                  auto traceConfigs = m_selectedUtilityNetwork->queryNamedTraceConfigurations(nullptr);
+                }
+                else
+                {
+                  m_traceConfigurations.clear();
+                  m_selectedTraceConfiguration = nullptr;
+                }
+              });
+
+      mapView->graphicsOverlays()->append(m_startingPointsGraphicsOverlay);
+
+      populateUtilityNetworksFromMap();
+
+      // identify symbols on mouse click
+      connect(mapView, &MapQuickView::mouseClicked, this, [this, mapView](QMouseEvent& mouseEvent)
+              {
+                qDebug() << "### results searched";
+                const double tolerance = 10.0;
+                const bool returnPopups = false;
+                Point mapPoint = mapView->screenToLocation(mouseEvent.x(), mouseEvent.y());
+
+                // handle the identify results
+                connect(mapView, &MapQuickView::identifyLayersCompleted, this, [this, mapPoint](QUuid, const QList<IdentifyLayerResult*>& results)
+                        {
+                          qDebug() << "### results found";
+                          for (const auto& layer : results)
+                          {
+                            for (const auto& geoElement : layer->geoElements())
+                            {
+                              const auto ft = dynamic_cast<ArcGISFeature*>(geoElement);
+                              addStartingPoint(ft, mapPoint);
+                            }
+                          }
+                        });
+
+                mapView->identifyLayers(mouseEvent.x(), mouseEvent.y(), tolerance, returnPopups);
+              });
+
+      setupUtilityNetworks();
     }
   }
 
@@ -229,103 +289,437 @@ namespace Toolkit {
 
   Internally, this is a \c GenericListModel with an \c elementType of
   \c UtilityNetwork.
- */
+                      */
   GenericListModel* UtilityNetworkTraceController::utilityNetworks() const
   {
     return m_utilityNetworks;
   }
 
-  Portal* UtilityNetworkTraceController::portal() const
+  UtilityNetwork* UtilityNetworkTraceController::selectedUtilityNetwork() const
   {
-    return m_portal;
+    return m_selectedUtilityNetwork;
   }
 
-  void UtilityNetworkTraceController::setPortal(Portal* portal)
+  void UtilityNetworkTraceController::setSelectedUtilityNetwork(UtilityNetwork* selectedUtilityNetwork)
   {
-    if (portal != m_portal)
-      m_portal = portal;
+    if (m_selectedUtilityNetwork == selectedUtilityNetwork)
+      return;
+
+    m_selectedUtilityNetwork = selectedUtilityNetwork;
+    emit selectedUtilityNetworkChanged(m_selectedUtilityNetwork);
   }
 
-  void UtilityNetworkTraceController::setupLoadingMap()
+  QList<UtilityNetworkTraceStartingPoint*> UtilityNetworkTraceController::startingPoints() const
   {
-    if (!m_geoView)
+    return m_startingPoints;
+  }
+
+  void UtilityNetworkTraceController::setStartingPoints(QList<UtilityNetworkTraceStartingPoint*> startingPoints)
+  {
+    if (m_startingPoints == startingPoints)
       return;
 
-    auto mapView = qobject_cast<MapViewToolkit*>(m_geoView);
-    if (!mapView)
+    m_startingPoints = startingPoints;
+    emit startingPointsChanged();
+  }
+
+  UtilityNamedTraceConfiguration* UtilityNetworkTraceController::selectedTraceConfiguration() const
+  {
+    return m_selectedTraceConfiguration;
+  }
+
+  void UtilityNetworkTraceController::setSelectedTraceConfiguration(UtilityNamedTraceConfiguration* selectedTraceConfiguration)
+  {
+    if (m_selectedTraceConfiguration == selectedTraceConfiguration)
       return;
 
-    const auto map = mapView->map();
-    if (!map)
+    m_selectedTraceConfiguration = selectedTraceConfiguration;
+    emit selectedTraceConfigurationChanged();
+  }
+
+  bool UtilityNetworkTraceController::isTraceInProgress() const
+  {
+    return m_isTraceInProgress;
+  }
+
+  void UtilityNetworkTraceController::setIsTraceInProgress(bool isTraceInProgress)
+  {
+    if (m_isTraceInProgress == isTraceInProgress)
       return;
 
-    if (map->loadStatus() == LoadStatus::Loaded)
+    m_isTraceInProgress = isTraceInProgress;
+    emit isTraceInProgressChanged();
+  }
+
+  Symbol* UtilityNetworkTraceController::startingPointSymbol() const
+  {
+    return m_startingPointSymbol;
+  }
+
+  void UtilityNetworkTraceController::setStartingPointSymbol(Symbol* startingPointSymbol)
+  {
+    if (m_startingPointSymbol == startingPointSymbol)
+      return;
+
+    m_startingPointSymbol = startingPointSymbol;
+    emit startingPointSymbolChanged();
+  }
+
+  void UtilityNetworkTraceController::runTrace(const QString& name)
+  {
+    qDebug() << "Trace underway";
+    setIsTraceInProgress(true);
+    auto selectedTraceConfiguration = this->selectedTraceConfiguration();
+
+    // create utility trace parameters for a connected trace
+    QList<UtilityElement*> utilityElementsForStartingPoints;
+    for (const auto& sp : startingPoints())
     {
-      setupLoadingUtilityNetwork();
+      utilityElementsForStartingPoints.append(sp->utilityElement());
     }
-    else
+
+    try
     {
-      connect(map, &Map::doneLoading, this, [this]()
+      UtilityTraceParameters* utilityTraceParameters = new UtilityTraceParameters(selectedTraceConfiguration, utilityElementsForStartingPoints);
+
+      UtilityNetworkTraceOperationResult* resultsInProgress = new UtilityNetworkTraceOperationResult(utilityTraceParameters, selectedTraceConfiguration);
+      qDebug() << "result in progress: " << resultsInProgress->resultsGraphicsOverlay()->graphics()->size();
+      qDebug() << "result in progress: " << resultsInProgress->name();
+
+      // TODO: handle if selectedTraceConfig is null
+
+      qDebug() << "trace params: " << utilityTraceParameters->traceConfiguration();
+
+      // run the utility trace and get the results
+      // async connection auto utilityTraceResultsFuture = m_selectedUtilityNetwork->trace(utilityTraceParameters);
+
+      connect(m_selectedUtilityNetwork, &UtilityNetwork::traceCompleted, this, [this, resultsInProgress]()
               {
-                this->setupLoadingUtilityNetwork();
+                /*try
+                {
+                  UtilityTraceResultListModel* utilityTraceResults = m_selectedUtilityNetwork->traceResult();
+                  // set the raw results to the current result
+                  resultsInProgress->setRawResults(utilityTraceResults);
+
+                  // loop through the results
+                  for (int i = 0; i < utilityTraceResults->size(); ++i)
+                  {
+                    auto utilityTraceResult = utilityTraceResults->at(i);
+                    // if there are any warnings, add to the current result
+                    if (!utilityTraceResult->warnings().isEmpty())
+                    {
+                      resultsInProgress->setWarnings(utilityTraceResult->warnings());
+                    }
+
+                    // TODO: handle errors / warnings
+                    // TODO: zoom to extent
+                    if (utilityTraceResult->traceResultObjectType() == UtilityTraceResultObjectType::UtilityElementTraceResult)
+                    {
+                      qDebug() << "Utility Element trace result";
+
+                      auto utilityElementTraceResult = dynamic_cast<UtilityElementTraceResult*>(utilityTraceResult);
+
+                      // add the element trace results to the current result
+                      resultsInProgress->setElementResults(utilityElementTraceResult->elements());
+                      QHash<UtilityAssetGroup*, QList<UtilityElement*>> elementResultsByAssetGroup{};
+                      //resultsInProgress->setElementResultsByAssetGroup(resultsInProgress->elementResults()->stream().collect(groupingBy(UtilityElement::getAssetGroup)));
+
+                      auto featuresFuture = m_selectedUtilityNetwork->featuresForElements(utilityElementTraceResult->elements());
+                      /*this->setIsFetchingFeaturesInProgress(true);
+                      featuresFuture.addDoneListener(()->
+                                                     {
+                                                       try
+                                                       {
+                                                         System.out.println("features future");
+                                                         var features = featuresFuture.get();
+
+                                                         // add the features to the current result
+                                                         resultsInProgress.setFeatures(FXCollections.observableArrayList(features));
+
+                                                         System.out.println("features: " + features.size());
+
+                                                         selectResultFeatures(resultsInProgress);
+
+                                                       } catch (Exception e)
+                                                       {
+                                                         e.printStackTrace();
+                                                         isTraceInProgressProperty.set(false);
+                                                       } finally
+                                                       {
+                                                         isFetchingFeaturesInProgressProperty.set(false);
+                                                       }
+                                                     });
+                    }
+                    else if (utilityTraceResult instanceof UtilityGeometryTraceResult)
+                    {
+                      System.out.println("Utility Geometry trace result");
+
+                      var geometryTraceResult = (UtilityGeometryTraceResult)utilityTraceResult;
+
+                      var multipoint = geometryTraceResult.getMultipoint();
+                      if (multipoint != null)
+                      {
+                        var graphic = new Graphic(multipoint, new SimpleMarkerSymbol(defaultResultPointSymbol.getStyle(), defaultResultPointSymbol.getColor(), defaultResultPointSymbol.getSize()));
+                        resultsInProgress.getGraphics().add(graphic);
+                        resultsInProgress.getResultsGraphicsOverlay().getGraphics().add(graphic);
+                      }
+
+                      var polyline = geometryTraceResult.getPolyline();
+                      if (polyline != null)
+                      {
+                        // TODO: linesymbol customisation
+                        var graphic = new Graphic(polyline, new SimpleLineSymbol(defaultResultLineSymbol.getStyle(), defaultResultLineSymbol.getColor(), defaultResultLineSymbol.getWidth()));
+                        resultsInProgress.getGraphics().add(graphic);
+                        resultsInProgress.getResultsGraphicsOverlay().getGraphics().add(graphic);
+                      }
+                      System.out.println("result in progress graphics overlay: " + resultsInProgress.getResultsGraphicsOverlay());
+
+                      var polygon = geometryTraceResult.getPolygon();
+                      if (polygon != null)
+                      {
+                        // TODO: polygon customisation
+                        var graphic = new Graphic(polygon, new SimpleFillSymbol(defaultResultFillSymbol.getStyle(), defaultResultFillSymbol.getColor(), defaultResultFillSymbol.getOutline()));
+                        resultsInProgress.getGraphics().add(graphic);
+                        resultsInProgress.getResultsGraphicsOverlay().getGraphics().add(graphic);
+                      }
+                      System.out.println("geometry results multipoint: " + geometryTraceResult.getMultipoint());
+                      System.out.println("geometry results polyline: " + geometryTraceResult.getPolyline());
+                      System.out.println("geometry results polygon: " + geometryTraceResult.getPolygon());
+
+                      getMapView().getGraphicsOverlays().add(resultsInProgress.getResultsGraphicsOverlay());
+                      System.out.println("number of gos: " + getMapView().getGraphicsOverlays().size());
+                    }
+                    else if (utilityTraceResult instanceof UtilityFunctionTraceResult)
+                    {
+                      System.out.println("Utility Function trace result");
+
+                      var functionTraceResult = (UtilityFunctionTraceResult)utilityTraceResult;
+                      functionTraceResult.getFunctionOutputs().forEach(functionOutput->resultsInProgress.getFunctionResults().add(functionOutput));
+                      System.out.println("function results: " + functionTraceResult.getFunctionOutputs().size());
+                    }
+                    else
+                    {
+                      System.out.println("nothing found in results");
+                    }
+                  });
+                  resultsInProgress.setName(name);
+                  traceResults.addAll(resultsInProgress);
+                  System.out.println("added results now");
+                  isTraceInProgressProperty.set(false);
+                } catch (Exception e)
+                {
+                  e.printStackTrace();
+                  isTraceInProgressProperty.set(false);
+                }*/
               });
-      map->load();
+      m_selectedUtilityNetwork->trace(utilityTraceParameters);
+
+    } catch (Error e)
+    {
+      if (e.message().contains("namedTraceConfiguration must not be null"))
+      {
+        qDebug() << "Warning: namedtrace cannot be null";
+      }
+      setIsTraceInProgress(false);
     }
   }
 
-  void UtilityNetworkTraceController::setupLoadingUtilityNetwork()
+  QList<UtilityNamedTraceConfiguration*> UtilityNetworkTraceController::traceConfigurations() const
   {
-    auto mapView = qobject_cast<MapViewToolkit*>(m_geoView);
+    return m_traceConfigurations;
+  }
 
-    qDebug() << "uns: " << mapView->map()->utilityNetworks()->size();
-    m_utilityNetwork = mapView->map()->utilityNetworks()->at(0);
-    qDebug() << "## UN load status==>" << static_cast<int>(m_utilityNetwork->loadStatus());
+  QList<UtilityNetworkTraceOperationResult*> UtilityNetworkTraceController::traceResults()
+  {
+    return m_traceResults;
+  }
 
-    if (m_utilityNetwork->loadStatus() == LoadStatus::Loaded)
+  void UtilityNetworkTraceController::refresh()
+  {
+    m_selectedUtilityNetwork = nullptr;
+    m_selectedTraceConfiguration = nullptr;
+    m_utilityNetworks = new GenericListModel(&UtilityNetworkListItem::staticMetaObject, this);
+    m_traceConfigurations.clear();
+    m_startingPoints.clear();
+    m_startingPointsGraphicsOverlay->graphics()->clear();
+    m_traceResults.clear();
+    setupUtilityNetworks();
+  }
+
+  void UtilityNetworkTraceController::populateUtilityNetworksFromMap()
+  {
+    const auto mapView = qobject_cast<MapViewToolkit*>(m_geoView);
+
+    if (mapView)
     {
-      m_utilityNetworkTrace = new UtilityNetworkTrace(mapView);
+      auto map = mapView->map();
+      if (map->loadStatus() == LoadStatus::Loaded)
+      {
+        const auto un = map->utilityNetworks();
+        for (int i = 0; i < un->size(); ++i)
+        {
+          if (un->at(i)->loadStatus() == LoadStatus::Loaded)
+          {
+            m_utilityNetworks->append(un->at(i));
+          }
+          else
+          {
+            qDebug() << "Utility network" << i << "not loaded";
+          }
+        }
+
+        if (map->utilityNetworks()->size() == 1)
+        {
+          setSelectedUtilityNetwork(map->utilityNetworks()->at(0));
+        }
+      }
+      else
+      {
+        qDebug() << "map not loaded";
+      }
+    }
+  }
+
+  void UtilityNetworkTraceController::addStartingPoint(ArcGISFeature* identifiedFeature, Point mapPoint)
+  {
+    auto geometry = identifiedFeature->geometry();
+    auto utilityElement = m_selectedUtilityNetwork->createElementWithArcGISFeature(identifiedFeature);
+
+    if (!utilityElement)
+    {
+      qDebug() << "Input feature does not belong to this utility network.... skipping.";
+      return;
+    }
+
+    if (utilityElement)
+    {
+      auto startingPointAlreadyExists = false;
+      auto utilityElementId = utilityElement->objectId();
+      for (const auto& startingPoint : m_startingPoints)
+      {
+        if (startingPoint->utilityElement()->objectId() == utilityElementId)
+        {
+          startingPointAlreadyExists = true;
+          qDebug() << "starting point for the selected utility element already exists.... skipping.";
+        }
+      }
+
+      // skip if starting point already exists for the selected utility element
+      if (!startingPointAlreadyExists)
+      {
+        if (utilityElement->networkSource()->sourceType() == UtilityNetworkSourceType::Edge &&
+            geometry.geometryType() == GeometryType::Polyline)
+        {
+          auto polyline = geometry_cast<Polyline>(geometry);
+          if (polyline.hasZ())
+          {
+            // get the geometry of the identified feature as a polyline, and remove the z component
+            polyline = GeometryEngine::removeZ(polyline);
+          }
+
+          if (mapPoint.spatialReference() != polyline.spatialReference())
+          {
+            polyline = GeometryEngine::project(polyline, mapPoint.spatialReference());
+          }
+
+          geometry = polyline;
+          // compute how far the clicked location is along the edge feature
+          double fractionAlongEdge = GeometryEngine::fractionAlong(polyline, mapPoint, -1);
+          if (!std::isnan(fractionAlongEdge))
+          {
+            // set the fraction along edge
+            utilityElement->setFractionAlongEdge(fractionAlongEdge);
+            qDebug() << "### EDGE";
+          }
+        }
+        else if (utilityElement->networkSource()->sourceType() == UtilityNetworkSourceType::Junction &&
+                 utilityElement->assetType()->terminalConfiguration() != nullptr)
+        {
+          auto utilityTerminalConfiguration = utilityElement->assetType()->terminalConfiguration();
+          QList<UtilityTerminal*> terminals = utilityTerminalConfiguration->terminals();
+          if (terminals.size() > 1)
+          {
+            utilityElement->setTerminal(utilityElement->assetType()->terminalConfiguration()->terminals().at(0));
+            qDebug() << "### JUNCTION";
+          }
+        }
+
+        auto graphic = new Graphic(geometry, this);
+        //graphic->attributes().put("GlobalId", utilityElement.getGlobalId());
+        graphic->setSymbol(m_startingPointSymbol);
+        auto featureLayer = dynamic_cast<FeatureLayer*>(identifiedFeature->featureTable()->layer());
+        auto symbol = featureLayer->renderer()->symbol(identifiedFeature);
+        if (symbol == nullptr)
+        {
+          m_startingPoints.append(new UtilityNetworkTraceStartingPoint(utilityElement, graphic, symbol, featureLayer->fullExtent(), this));
+          qDebug() << "### Added with null";
+        }
+        else
+        {
+          m_startingPoints.append(new UtilityNetworkTraceStartingPoint(utilityElement, graphic, symbol, graphic->geometry().extent(), this));
+          qDebug() << "### Added with extent";
+        }
+      }
+    }
+  }
+
+  void UtilityNetworkTraceController::removeStartingPoint(UtilityNetworkTraceStartingPoint* startingPoint)
+  {
+    m_startingPoints.removeOne(startingPoint);
+  }
+
+  void UtilityNetworkTraceController::setupUtilityNetworks()
+  {
+    const auto mapView = qobject_cast<MapViewToolkit*>(m_geoView);
+    // first check if there's a map
+    if (mapView->map() != nullptr)
+    {
+      connect(mapView->map(), &Map::doneLoading, this, [this, mapView]()
+              {
+                const auto& map = mapView->map();
+
+                if (!map->utilityNetworks()->isEmpty())
+                {
+                  if (map->utilityNetworks()->size() == 1)
+                    setSelectedUtilityNetwork(map->utilityNetworks()->at(0));
+
+                  for (int i = 0; i < map->utilityNetworks()->size(); ++i)
+                  {
+                    const auto& un = map->utilityNetworks()->at(i);
+
+                    if (un->loadStatus() == LoadStatus::Loaded)
+                      m_utilityNetworks->append(un);
+                    else
+                    {
+                      connect(un, &UtilityNetwork::doneLoading, this, [this, un]()
+                              {
+                                this->m_utilityNetworks->append(un);
+                              });
+                      un->load();
+                    }
+                  }
+                }
+                else
+                {
+                  qDebug() << "There are no Utility Networks associated with the ArcGIS Map attached "
+                           << "to the MapView. Utility Network Trace will not be displayed. Call "
+                           << "UtilityNetworkTrace.refresh() after updating the ArcGIS Map to try again.";
+                }
+              });
+
+      if (mapView->map()->loadStatus() != LoadStatus::Loaded)
+      {
+        // load the map if it is not already loaded
+        mapView->map()->load();
+      }
     }
     else
     {
-      QObject::connect(m_utilityNetwork,
-                       &UtilityNetwork::doneLoading,
-                       this,
-                       [this, mapView](Error)
-                       {
-                         qDebug() << "Utility Network loaded";
-                         // We can disable the progress indicator now
-                         m_utilityNetworkTrace = new UtilityNetworkTrace(mapView);
-                       });
-      m_utilityNetwork->load();
+      qDebug() << "There is no ArcGIS Map attached to the MapView. Utility Network Trace will not be"
+               << " displayed. Call UtilityNetworkTrace.refresh() after updating the ArcGIS Map to try again.";
     }
   }
 
-  /*!
-  \brief Updates the \c GeoView camera to point to the current utilityNetwork's
-  location on the map.
- */
-  /*void UtilityNetworkTraceController::zoomToBookmarkExtent(BookmarkListItem* bookmark)
-  {
-    if (!bookmark)
-      return;
-
-    if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
-    {
-      mapView->setBookmark(bookmark->bookmark());
-    }
-  }*/
-
-  /*!
-  \fn void Esri::ArcGISRuntime::Toolkit::UtilityNetworkTraceController::geoViewChanged()
-  \brief Emitted when the geoView has changed.
- */
-
-  /*!
-  \property Esri::ArcGISRuntime::Toolkit::UtilityNetworkTraceController::geoView
-  \brief The geoView the controller is utilizing for interactions.
-  \sa Esri::ArcGISRuntime::Toolkit::UtilityNetworkTraceController::geoView() const
- */
-
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+}
+}
+}

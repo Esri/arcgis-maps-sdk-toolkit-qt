@@ -17,32 +17,38 @@
 #define ESRI_ARCGISRUNTIME_TOOLKIT_UTILITYNETWORKTRACECONTROLLER_H
 
 // Toolkit headers
-#include "UtilityNetworkListItem.h"
 #include "Internal/GenericListModel.h"
-
-// ArcGISRuntime headers
-#include <GeoView.h>
-#include <Portal.h>
-#include <UtilityNetwork.h>
+#include "Internal/GeoViews.h"
 
 // Qt headers
 #include <QObject>
 
 namespace Esri {
 namespace ArcGISRuntime {
+
+  class ArcGISFeature;
+  class GraphicsOverlay;
+  class UtilityNamedTraceConfiguration;
+  class UtilityNetwork;
+  class UtilityNetworkListModel;
+
 namespace Toolkit {
 
-  class UtilityNetworkTrace;
+  class UtilityNetworkTraceStartingPoint;
+  class UtilityNetworkTraceOperationResult;
 
   class UtilityNetworkTraceController : public QObject
   {
     Q_OBJECT
     Q_PROPERTY(QObject* geoView READ geoView WRITE setGeoView NOTIFY geoViewChanged)
-    Q_PROPERTY(QAbstractListModel* utilityNetworks READ utilityNetworks CONSTANT)
-    Q_PROPERTY(Portal* portal READ portal WRITE setPortal NOTIFY portalChanged)
+    Q_PROPERTY(UtilityNetwork* selectedUtilityNetwork READ selectedUtilityNetwork WRITE setSelectedUtilityNetwork NOTIFY selectedUtilityNetworkChanged)
+    Q_PROPERTY(QList<UtilityNetworkTraceStartingPoint*> startingPoints READ startingPoints WRITE setStartingPoints NOTIFY startingPointsChanged)
+    Q_PROPERTY(UtilityNamedTraceConfiguration* selectedTraceConfiguration READ selectedTraceConfiguration WRITE setSelectedTraceConfiguration NOTIFY selectedTraceConfigurationChanged)
+    Q_PROPERTY(bool isTraceInProgress READ isTraceInProgress WRITE setIsTraceInProgress NOTIFY isTraceInProgressChanged)
+    Q_PROPERTY(Symbol* startingPointSymbol READ startingPointSymbol WRITE setStartingPointSymbol NOTIFY startingPointSymbolChanged)
 
   public:
-    Q_INVOKABLE UtilityNetworkTraceController(QObject* parent = nullptr);
+    Q_INVOKABLE explicit UtilityNetworkTraceController(QObject* parent = nullptr);
 
     ~UtilityNetworkTraceController() override;
 
@@ -51,25 +57,53 @@ namespace Toolkit {
 
     GenericListModel* utilityNetworks() const;
 
-    Portal* portal() const;
-    void setPortal(Portal* portal);
+    UtilityNetwork* selectedUtilityNetwork() const;
+    void setSelectedUtilityNetwork(UtilityNetwork* selectedUtilityNetwork);
 
-    //Q_INVOKABLE void zoomToBookmarkExtent(Esri::ArcGISRuntime::Toolkit::BookmarkListItem* bookmark);
+    QList<UtilityNetworkTraceStartingPoint*> startingPoints() const;
+    void setStartingPoints(QList<UtilityNetworkTraceStartingPoint*> startingPoints);
+
+    UtilityNamedTraceConfiguration* selectedTraceConfiguration() const;
+    void setSelectedTraceConfiguration(UtilityNamedTraceConfiguration* selectedTraceConfiguration);
+
+    bool isTraceInProgress() const;
+    void setIsTraceInProgress(bool isTraceInProgress);
+
+    Symbol* startingPointSymbol() const;
+    void setStartingPointSymbol(Symbol* startingPointSymbol);
+
+    Q_INVOKABLE void runTrace(const QString& name);
+
+    Q_INVOKABLE QList<Esri::ArcGISRuntime::UtilityNamedTraceConfiguration*> traceConfigurations() const;
+
+    Q_INVOKABLE QList<Esri::ArcGISRuntime::Toolkit::UtilityNetworkTraceOperationResult*> traceResults();
+
+    Q_INVOKABLE void refresh();
 
   signals:
     void geoViewChanged();
-    void portalChanged();
+    void selectedUtilityNetworkChanged(Esri::ArcGISRuntime::UtilityNetwork* newValue);
+    void startingPointsChanged();
+    void selectedTraceConfigurationChanged();
+    void isTraceInProgressChanged();
+    void startingPointSymbolChanged();
 
   private:
-    void setupLoadingMap();
-    void setupLoadingUtilityNetwork();
+    void populateUtilityNetworksFromMap();
+    void addStartingPoint(ArcGISFeature* identifiedFeature, Point mapPoint);
+    void removeStartingPoint(UtilityNetworkTraceStartingPoint* startingPoint);
+    void setupUtilityNetworks();
 
     QObject* m_geoView = nullptr;
+    GraphicsOverlay* m_startingPointsGraphicsOverlay = nullptr;
+    UtilityNetwork* m_selectedUtilityNetwork = nullptr;
     GenericListModel* m_utilityNetworks = nullptr;
-    Portal* m_portal = nullptr;
-    UtilityNetwork* m_utilityNetwork = nullptr;
-    UtilityNetworkTrace* m_utilityNetworkTrace = nullptr;
-
+    QList<UtilityNamedTraceConfiguration*> m_traceConfigurations;
+    UtilityNamedTraceConfiguration* m_selectedTraceConfiguration = nullptr;
+    QList<UtilityNetworkTraceStartingPoint*> m_startingPoints;
+    QList<UtilityNetworkTraceOperationResult*> m_traceResults;
+    bool m_isTraceInProgress = false;
+    Symbol* m_startingPointSymbol;
   };
 
 } // Toolkit
