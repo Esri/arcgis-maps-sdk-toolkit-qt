@@ -26,6 +26,7 @@
 #include <Map.h>
 #include <SimpleMarkerSymbol.h>
 #include <Symbol.h>
+#include <UtilityAssetGroup.h>
 #include <UtilityAssetType.h>
 #include <UtilityElement.h>
 #include <UtilityElementTraceResult.h>
@@ -126,12 +127,28 @@ namespace Toolkit {
           return;
         }
 
-        // Here we attempt to calls `f` if/when the GeoModel is loaded.
+        // Here we attempt to call `f` if/when both the GeoModel and UtilityNetwork are loaded.
         // This may happen immediately or asyncnronously. This can be interrupted if GeoView or
         // GeoModel changes in the interim.
-        auto c = doOnLoaded(model, self, [f = std::move(f)]()
+        auto c = doOnLoaded(model, self, [self, model, geoView, f = std::move(f)]()
                             {
-                              f();
+                              auto utilityNetworks = model->utilityNetworks();
+
+                              for (const auto& utilityNetwork : *utilityNetworks)
+                              {
+                                if (!utilityNetwork)
+                                  return;
+
+                                auto c2 = doOnLoaded(utilityNetwork, self, [f = std::move(f)]
+                                                     {
+                                                       f();
+                                                     });
+                                // Destroy the connection `c` if the map changes, or the geoView changes.
+                                // This means the connection is only relevant for as long as the model/view is relavant to
+                                // the UtilityNetworkTraceController.
+                                disconnectOnSignal(geoView, getGeoModelChangedSignal(geoView), self, c2);
+                                disconnectOnSignal(self, &UtilityNetworkTraceController::geoViewChanged, self, c2);
+                              }
                             });
 
         // Destroy the connection `c` if the map changes, or the geoView changes. This means
@@ -143,17 +160,20 @@ namespace Toolkit {
       // Hooks up to any geoModels that appear when the mapView changed signal is called.
       QObject::connect(geoView, getGeoModelChangedSignal(geoView), self, connectToGeoModel);
       connectToGeoModel();
+
+      // Hook up to any viewpoint changes on the GeoView.
+      /*auto c2 = QObject::connect(geoView, &std::remove_pointer<decltype(geoView)>::type::viewpointChanged,
+                                 self, &UtilityNetworkTraceController::tryUpdateSelection);
+      disconnectOnSignal(self, &UtilityNetworkTraceController::geoViewChanged, self, c2);*/
     }
   }
 
   UtilityNetworkTraceController::UtilityNetworkTraceController(QObject* parent) :
     QObject(parent),
     m_utilityNetworks(new GenericListModel(&UtilityNetworkListItem::staticMetaObject, this)),
-    m_startingPointSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle::Cross, QColor(Qt::green), 20.0f))
+    m_startingPointSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle::Cross, QColor(Qt::green), 20.0f, this))
   {
     qDebug() << "UtilityNetworkTrace begins construction";
-
-
   }
 
   UtilityNetworkTraceController::~UtilityNetworkTraceController() = default;
@@ -216,37 +236,52 @@ namespace Toolkit {
               });
 
       // `connectToGeoView` guarantees the map exists as it is only invoked once the geomodel is loaded.
+      // maybe the UN is not loaded just yet.
       connectToGeoView(mapView, this, [this, mapView]
                        {
                          setupUtilityNetworksInt(mapView->map()->utilityNetworks(), m_utilityNetworks);
                        });
 
-      connect(this, &UtilityNetworkTraceController::startingPointsChanged, this, []()
+      connect(this, &UtilityNetworkTraceController::startingPointsChanged, this, [this]()
               {
-                //
+                qDebug() << "Starting point changed, size:" << m_startingPoints.size();
+                for (const auto& startingPoint : m_startingPoints)
+                {
+                  qDebug() << "network source name:" << startingPoint->utilityElement()->networkSource()->name();
+                  qDebug() << "asset group name:" << startingPoint->utilityElement()->assetGroup()->name();
+                  qDebug() << "fractionAlongEdge:" << startingPoint->utilityElement()->fractionAlongEdge();
+                }
               });
 
       connect(this,
-              &UtilityNetworkTraceController::selectedUtilityNetworkChanged,
+              &UtilityNetworkTraceController::selectedUtilityNetworkChanged, // this shoul already been handled and newValue used
               this,
-              [this](UtilityNetwork* newValue)
+              [this](UtilityNetwork* newValue) // when it's used, we also need to use it
               {
+                qDebug() << "selectedUtilityNetworkChanged";
                 if (newValue)
                 {
-                  connect(m_selectedUtilityNetwork,
-                          &UtilityNetwork::queryNamedTraceConfigurationsCompleted,
-                          this,
-                          [this](QUuid /*taskId*/, const QList<Esri::ArcGISRuntime::UtilityNamedTraceConfiguration*>& utilityNamedTraceConfigurationResults)
-                          {
-                            m_traceConfigurations.clear();
-                            m_traceConfigurations = utilityNamedTraceConfigurationResults;
-                          });
+                  // have the connection, but the internal logic should be done when (or where) the newValue is handled.
+                  auto c = connect(m_selectedUtilityNetwork,
+                                   &UtilityNetwork::queryNamedTraceConfigurationsCompleted,
+                                   this,
+                                   [this](QUuid taskId, const QList<Esri::ArcGISRuntime::UtilityNamedTraceConfiguration*>& utilityNamedTraceConfigurationResults)
+                                   {
+                                     const auto findIter = m_traceConfigConnection.find(taskId);
+                                     if (findIter != m_traceConfigConnection.end())
+                                     {
+                                       disconnect(*findIter);
+                                       m_traceConfigConnection.remove(taskId);
+                                     }
+                                     m_traceConfigurations.clear();
+                                     m_traceConfigurations = utilityNamedTraceConfigurationResults;
+                                   });
                   auto traceConfigs = m_selectedUtilityNetwork->queryNamedTraceConfigurations(nullptr);
+                  m_traceConfigConnection.insert(traceConfigs.taskId(), c);
                 }
                 else
                 {
-                  m_traceConfigurations.clear();
-                  m_selectedTraceConfiguration = nullptr;
+                  refresh();
                 }
               });
 
@@ -254,29 +289,32 @@ namespace Toolkit {
 
       populateUtilityNetworksFromMap();
 
+      // handle the identify results
+      connect(mapView, &MapQuickView::identifyLayersCompleted, this, [this](QUuid, const QList<IdentifyLayerResult*>& results)
+              {
+                // set busy false
+                qDebug() << "### results found";
+                for (const auto& layer : results)
+                {
+                  for (const auto& geoElement : layer->geoElements())
+                  {
+                    const auto ft = dynamic_cast<ArcGISFeature*>(geoElement);
+                    addStartingPoint(ft, this->m_mapPoint);
+                  }
+                }
+              });
+
       // identify symbols on mouse click
       connect(mapView, &MapQuickView::mouseClicked, this, [this, mapView](QMouseEvent& mouseEvent)
               {
+                // check if busy is running
+                // if so -> set busy true; return;
                 qDebug() << "### results searched";
                 const double tolerance = 10.0;
                 const bool returnPopups = false;
-                Point mapPoint = mapView->screenToLocation(mouseEvent.x(), mouseEvent.y());
+                m_mapPoint = mapView->screenToLocation(mouseEvent.x(), mouseEvent.y());
 
-                // handle the identify results
-                connect(mapView, &MapQuickView::identifyLayersCompleted, this, [this, mapPoint](QUuid, const QList<IdentifyLayerResult*>& results)
-                        {
-                          qDebug() << "### results found";
-                          for (const auto& layer : results)
-                          {
-                            for (const auto& geoElement : layer->geoElements())
-                            {
-                              const auto ft = dynamic_cast<ArcGISFeature*>(geoElement);
-                              addStartingPoint(ft, mapPoint);
-                            }
-                          }
-                        });
-
-                mapView->identifyLayers(mouseEvent.x(), mouseEvent.y(), tolerance, returnPopups);
+                /* qhash(taskid, mouseevent))))*/ mapView->identifyLayers(mouseEvent.x(), mouseEvent.y(), tolerance, returnPopups);
               });
 
       setupUtilityNetworks();
@@ -292,6 +330,7 @@ namespace Toolkit {
                       */
   GenericListModel* UtilityNetworkTraceController::utilityNetworks() const
   {
+    qDebug() << "Returning m_utilityNetworks";
     return m_utilityNetworks;
   }
 
@@ -380,9 +419,9 @@ namespace Toolkit {
 
     try
     {
-      UtilityTraceParameters* utilityTraceParameters = new UtilityTraceParameters(selectedTraceConfiguration, utilityElementsForStartingPoints);
+      UtilityTraceParameters* utilityTraceParameters = new UtilityTraceParameters(selectedTraceConfiguration, utilityElementsForStartingPoints, this);
 
-      UtilityNetworkTraceOperationResult* resultsInProgress = new UtilityNetworkTraceOperationResult(utilityTraceParameters, selectedTraceConfiguration);
+      UtilityNetworkTraceOperationResult* resultsInProgress = new UtilityNetworkTraceOperationResult(utilityTraceParameters, selectedTraceConfiguration, this);
       qDebug() << "result in progress: " << resultsInProgress->resultsGraphicsOverlay()->graphics()->size();
       qDebug() << "result in progress: " << resultsInProgress->name();
 
@@ -543,6 +582,7 @@ namespace Toolkit {
     m_startingPoints.clear();
     m_startingPointsGraphicsOverlay->graphics()->clear();
     m_traceResults.clear();
+    qDebug() << "Resetting";
     setupUtilityNetworks();
   }
 
@@ -583,6 +623,10 @@ namespace Toolkit {
   void UtilityNetworkTraceController::addStartingPoint(ArcGISFeature* identifiedFeature, Point mapPoint)
   {
     auto geometry = identifiedFeature->geometry();
+
+    if (!m_selectedUtilityNetwork)
+      return;
+
     auto utilityElement = m_selectedUtilityNetwork->createElementWithArcGISFeature(identifiedFeature);
 
     if (!utilityElement)
@@ -645,7 +689,7 @@ namespace Toolkit {
         }
 
         auto graphic = new Graphic(geometry, this);
-        //graphic->attributes().put("GlobalId", utilityElement.getGlobalId());
+        graphic->attributes()->insertAttribute("GlobalId", utilityElement->globalId());
         graphic->setSymbol(m_startingPointSymbol);
         auto featureLayer = dynamic_cast<FeatureLayer*>(identifiedFeature->featureTable()->layer());
         auto symbol = featureLayer->renderer()->symbol(identifiedFeature);
@@ -653,11 +697,13 @@ namespace Toolkit {
         {
           m_startingPoints.append(new UtilityNetworkTraceStartingPoint(utilityElement, graphic, symbol, featureLayer->fullExtent(), this));
           qDebug() << "### Added with null";
+          emit startingPointsChanged();
         }
         else
         {
           m_startingPoints.append(new UtilityNetworkTraceStartingPoint(utilityElement, graphic, symbol, graphic->geometry().extent(), this));
           qDebug() << "### Added with extent";
+          emit startingPointsChanged();
         }
       }
     }
@@ -681,20 +727,38 @@ namespace Toolkit {
                 if (!map->utilityNetworks()->isEmpty())
                 {
                   if (map->utilityNetworks()->size() == 1)
-                    setSelectedUtilityNetwork(map->utilityNetworks()->at(0));
-
-                  for (int i = 0; i < map->utilityNetworks()->size(); ++i)
                   {
-                    const auto& un = map->utilityNetworks()->at(i);
+                    qDebug() << "There is exactly one UN";
+                    setSelectedUtilityNetwork(map->utilityNetworks()->at(0));
+                  }
+                  else
+                  {
+                    qDebug() << "There are multiple UNs";
+                  }
 
+                  for (const auto un : qAsConst(*map->utilityNetworks()))
+                  {
                     if (un->loadStatus() == LoadStatus::Loaded)
+                    {
+                      qDebug() << "@@@ m_utilityNetworks->append(un) without explicit loading";
                       m_utilityNetworks->append(un);
+                    }
                     else
                     {
-                      connect(un, &UtilityNetwork::doneLoading, this, [this, un]()
-                              {
-                                this->m_utilityNetworks->append(un);
-                              });
+                      //single shot connection
+                      QMetaObject::Connection* const connection = new QMetaObject::Connection;
+                      *connection = connect(un, &UtilityNetwork::doneLoading, this, [this, un, connection](const Error& e)
+                                            {
+                                              if (!e.isEmpty())
+                                              {
+                                                qDebug() << e.message() << e.additionalMessage();
+                                                return;
+                                              }
+                                              qDebug() << "@@@ m_utilityNetworks->append(un) with explicit loading";
+                                              this->m_utilityNetworks->append(un);
+                                              QObject::disconnect(*connection);
+                                              delete connection;
+                                            });
                       un->load();
                     }
                   }

@@ -60,24 +60,121 @@ Pane {
     wheelEnabled: true
     hoverEnabled: true
 
-    contentItem: ListView{
-        id: listView
-        model: controller.bookmarks
-        clip: true
-
-        ScrollBar.vertical: ScrollBar {
-            active: true
-            snapMode: ScrollBar.SnapOnRelease
+    contentItem: ColumnLayout {
+        id: gridLayout
+        spacing: 0
+        anchors {
+            left: parent.left
+            right: parent.right
         }
 
-        delegate: ItemDelegate {
-            // `name` is a role within GenericListModel's BookmarkListItem specification.
-            // `text` can take `name` because the `model` builds the roles from the
-            // properties of BookmarkListItem that is set in UtilityNetworkTraceController.
-            text: name
-            width: listView.width
-            indicator: null
-            onPressed: controller.zoomToBookmarkExtent(modelData)
+        RowLayout {
+            Layout.margins: 0
+            ComboBox {
+                Layout.margins: 5
+                id: startingPints
+                visible: true
+                model: utilityNetworkTrace.controller.startingPoints
+                textRole: "name"
+                /*onStartingPointsChanged: {
+                    const index = currentIndex;
+                    const formats = utilityNetworkTrace.controller.formats;
+                    let modelData = formats[index];
+                    if (modelData === undefined) {
+                        modelData = formats.element(formats.index(index, 0));
+                    }
+                    inputFormat.type = modelData;
+                    inputFormat.updateCoordinatePoint(utilityNetworkTrace.controller.currentPoint());
+                }*/
+            }
+
+            /*TextField {
+                id: editPointEntry
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.alignment: Qt.AlignBottom
+                Layout.margins: 5
+                placeholderText: "No position"
+                readOnly: !editCoordinateButton.checked
+                selectByMouse: !readOnly
+                text: inputFormat.type? inputFormat.notation : "No position"
+                onEditingFinished: {
+                    controller.setCurrentPoint(text, inputFormat.type);
+                    editCoordinateButton.checked = false;
+                }
+            }
+
+            Button {
+                id: menuButton
+                checkable: true
+                checked: false
+                flat: true
+                Layout.margins: 5
+                Layout.alignment: Qt.AlignRight
+                icon.source: menuButton.checked ? "images/chevron-up.svg" : "images/chevron-down.svg"
+            }*/
+        }
+
+        RowLayout {
+            Layout.margins: 0
+            visible: true
+            /*Button {
+                id: addConversionButton
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignLeft
+                Layout.margins: 5
+                text: "Add conversion"
+                flat: true
+                onClicked: {
+                    addConversionMenu.visible = true;
+                }
+            }
+
+            Button {
+                id: zoomToButton
+                icon.source: "images/layer-zoom-to.svg"
+                flat: true
+                Layout.alignment: Qt.AlignRight
+
+                Layout.maximumWidth: Layout.maximumHeight
+                padding: 0
+                display: AbstractButton.IconOnly
+                onClicked: utilityNetworkTrace.controller.zoomToCurrentPoint()
+            }
+
+            Button {
+                id: flashCoordinateButton
+                icon.source: "images/flash.svg"
+                flat: true
+                Layout.alignment: Qt.AlignRight
+                Layout.maximumWidth: Layout.maximumHeight
+                padding: 0
+                display: AbstractButton.IconOnly
+                onClicked: {
+                    if (!geoView)
+                        return;
+
+                    var screenPos = utilityNetworkTrace.controller.screenCoordinate();
+                    if (screenPos === null || (screenPos.x === -1.0 && screenPos.y === -1.0))
+                        return;
+
+                    var itemPos = geoView.mapToItem(geoView, screenPos.x, screenPos.y);
+                    checked = true;
+                    var flashImage = internal.flashImageFactory.createObject(geoView, { "x": itemPos.x, "y": itemPos.y, "color": palette.highlight });
+                    flashImage.finished.connect(function() { flashCoordinateButton.checked = false; });
+                }
+            }*/
+
+            Button {
+                id: selectStartingPointButton
+                checkable: true
+                flat: true
+                text: "select starting point"
+                //icon.source: "images/edit-attributes.svg"
+                Layout.alignment: Qt.AlignRight
+                Layout.maximumWidth: Layout.maximumHeight
+                padding: 0
+            }
         }
     }
 

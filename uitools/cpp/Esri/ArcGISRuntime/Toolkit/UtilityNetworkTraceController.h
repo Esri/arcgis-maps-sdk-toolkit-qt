@@ -104,6 +104,8 @@ namespace Toolkit {
     QList<UtilityNetworkTraceOperationResult*> m_traceResults;
     bool m_isTraceInProgress = false;
     Symbol* m_startingPointSymbol;
+    Point m_mapPoint;
+    QMap<QUuid, QMetaObject::Connection> m_traceConfigConnection;
   };
 
 } // Toolkit
