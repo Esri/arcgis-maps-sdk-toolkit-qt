@@ -67,13 +67,13 @@ void BasemapGalleryItemUnitTest::ctor_Basemap()
   QCOMPARE(item.tooltip(), "");
   //default thumbnail image
   QVERIFY(!item.thumbnail().isNull());
-  QImage defaultThumbnail(QStringLiteral(":/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/generic_basemap_thumbnail.png"));
+  QImage defaultThumbnail(QStringLiteral(":/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/basemap.svg"));
   QCOMPARE(item.thumbnail(), defaultThumbnail);
 }
 
 void BasemapGalleryItemUnitTest::ctor_Overrides()
 {
-  QImage thumbnail(":/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/generic_basemap_thumbnail.png");
+  QImage thumbnail(":/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/basemap.svg");
   QString tooltip("Basemap description");
   QVERIFY(!thumbnail.isNull());
   BasemapGalleryItem item(m_basemapLightGray, thumbnail, tooltip, this);

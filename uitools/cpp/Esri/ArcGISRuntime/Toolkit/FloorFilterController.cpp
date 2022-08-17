@@ -151,7 +151,7 @@ namespace Toolkit {
         disconnectOnSignal(self, &FloorFilterController::geoViewChanged, self, c);
       };
 
-      // Hooks up to any geoModels that appear when the map/sceneView changed signal is called.
+      // Hooks up to any geoModels that appear when the mapView/sceneView changed signal is called.
       QObject::connect(geoView, getGeoModelChangedSignal(geoView), self, connectToGeoModel);
       connectToGeoModel();
 

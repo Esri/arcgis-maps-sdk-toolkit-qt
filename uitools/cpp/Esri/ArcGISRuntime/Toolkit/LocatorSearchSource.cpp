@@ -28,7 +28,7 @@ namespace Esri {
 namespace ArcGISRuntime {
 namespace Toolkit {
   namespace {
-    const char* MAP_PIN = "qrc:///esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/map_pin.png";
+    const char* MAP_PIN = "qrc:///esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/pin-tear.svg";
 
     constexpr const int DEFAULT_MAXIMUM_RESULTS = 6;
     constexpr const int DEFAULT_MAXIMUM_SUGGESTIONS = 6;

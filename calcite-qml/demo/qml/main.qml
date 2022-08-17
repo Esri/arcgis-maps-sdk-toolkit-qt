@@ -16,7 +16,7 @@
  ******************************************************************************/
 import QtQuick 2.12
 import QtQuick.Controls 2.12
-import Esri.ArcGISRuntime 100.14
+import Esri.ArcGISRuntime 100.15
 import Calcite 1.0 as C
 import QtQuick.Layouts 1.12
 
@@ -24,7 +24,7 @@ ApplicationWindow {
     id: appWindow
     width: 800
     height: 800
-    title: "Calite_test"
+    title: "Calcite_test"
     visible: true
 
     Component.onCompleted: {

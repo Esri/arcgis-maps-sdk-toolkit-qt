@@ -26,12 +26,9 @@ T.DialogButtonBox {
 
     spacing: 5
     padding: 16
-    buttonLayout: DialogButtonBox.MacLayout
     delegate: Button { }
 
     contentItem: ListView {
-          implicitWidth: parent.width
-          implicitHeight: 40
           model: control.contentModel
           spacing: control.spacing
           orientation: ListView.Horizontal
@@ -40,6 +37,11 @@ T.DialogButtonBox {
       }
 
         background: Rectangle {
+            implicitHeight: 60
+            x: 2.5
+            y: 2.5
+            width: parent.width - 5
+            height: parent.height - 5
             border {
                 width: 1
                 color: Calcite.border1

@@ -14,7 +14,7 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import Esri.ArcGISRuntime.Toolkit.Controller 100.14
+import Esri.ArcGISRuntime.Toolkit.Controller 100.15
 
 import QtQuick 2.12
 import QtQuick.Controls 2.12
@@ -350,7 +350,7 @@ Pane {
 
         function acceptDropdownItem(index) {
             if (index === -1) {
-                // With no suggestion, we perform a search wiith the given text.
+                // With no suggestion, we perform a search with the given text.
                 controller.commitSearch(false);
                 searchView.state = "searchCommitted";
             } else if (searchView.state === "searchCommitted") {

@@ -1,0 +1,109 @@
+# Copyright 2012-2020 Esri
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# This format definition requires a minimum of Clang 11 
+# and Qt Creator 4.14.1.
+
+Language: Cpp
+Standard: c++14
+
+# Pointers
+DerivePointerAlignment: false
+PointerAlignment: Left
+
+# Indentation
+IndentWidth: 2
+ColumnLimit: 0
+IndentGotoLabels: false
+NamespaceIndentation: All
+BinPackArguments: true
+BinPackParameters: true
+AllowAllArgumentsOnNextLine: true
+
+# spacing
+SpaceBeforeParens: ControlStatements
+SpaceBeforeRangeBasedForLoopColon: true
+AccessModifierOffset: -2
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
+AlignConsecutiveMacros: true
+AlignOperands: true
+AlignEscapedNewlines: Left
+AlignTrailingComments: false
+Cpp11BracedListStyle: true
+
+# Comments
+FixNamespaceComments: false
+ReflowComments: false
+
+# Note order is important here, as 
+# this is the order in which each header
+# is tested.
+IncludeCategories:
+  - Regex: '^"pch.hpp"$'
+    Priority: -1
+
+  # Any remaining headers with 
+  # "" quotes are interpreted as C++ API headers.
+  - Regex: '^".+\.h"$'
+    Priority: 2
+
+  # Qt headers
+  - Regex: '^<Q'
+    Priority: 5
+
+  # STL headers
+  - Regex: '^<'
+    Priority: 6
+IncludeBlocks: Regroup
+SortUsingDeclarations: true
+
+# Constructor rules
+BreakConstructorInitializers: AfterColon
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+AllowAllConstructorInitializersOnNextLine: false
+ConstructorInitializerIndentWidth: 2
+SpaceBeforeCtorInitializerColon: true
+
+# Line wrapping
+AllowShortBlocksOnASingleLine: Never
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLambdasOnASingleLine: Empty
+AlwaysBreakAfterDefinitionReturnType: None
+AlwaysBreakAfterReturnType: None
+AlwaysBreakBeforeMultilineStrings: true
+AlwaysBreakTemplateDeclarations: true
+AllowShortLoopsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
+CompactNamespaces: true
+KeepEmptyLinesAtTheStartOfBlocks: false
+
+# Brace/newline rules
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterNamespace: false
+  SplitEmptyFunction: true
+  AfterControlStatement: true
+  AfterCaseLabel: true
+  AfterClass: true
+  AfterEnum: true
+  AfterFunction: true
+  AfterStruct: true
+  AfterUnion: true
+  BeforeElse: true
+  BeforeLambdaBody: true
+  SplitEmptyNamespace: true
+  IndentBraces: false
+  SplitEmptyRecord: true

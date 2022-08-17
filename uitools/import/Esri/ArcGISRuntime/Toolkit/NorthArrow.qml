@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import Esri.ArcGISRuntime.Toolkit.Controller 100.14
+import Esri.ArcGISRuntime.Toolkit.Controller 100.15
 
 import QtQuick 2.12
 
@@ -76,7 +76,7 @@ Item {
     Image {
         id: compassImage
         anchors.fill: parent
-        source: "images/compass.png"
+        source: "images/compass.svg"
         fillMode: Image.PreserveAspectFit
         visible: autoHide && (controller.heading  % 360 < 1e-05) ? false : true
     }

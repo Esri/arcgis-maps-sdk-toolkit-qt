@@ -55,7 +55,7 @@ NorthArrow::NorthArrow(QWidget* parent) :
   QLabel(parent),
   m_controller(new NorthArrowController(this))
 {
-  m_image = QPixmap(":/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/compass.png");
+  m_image = QPixmap(":/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/compass.svg");
   setAttribute(Qt::WA_TranslucentBackground);
 
   if (!m_image.isNull())
@@ -69,7 +69,7 @@ NorthArrow::NorthArrow(QWidget* parent) :
     if (m_image.isNull())
       return;
 
-    QMatrix rm;
+    QTransform rm;
     rm.rotate(-m_controller->heading());
     const int imageWidth = m_image.width();
     const int imageHeight = m_image.height();

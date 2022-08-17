@@ -14,7 +14,7 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import Esri.ArcGISRuntime.Toolkit.Controller 100.14
+import Esri.ArcGISRuntime.Toolkit.Controller 100.15
 
 import QtQuick 2.12
 import QtQuick.Controls 2.12
@@ -203,7 +203,7 @@ Pane {
 
         Button {
             id: stepBackButton
-            icon.source: "images/step_back.png"
+            icon.source: "images/reverse.svg"
             enabled: (!startTimePinned || !endTimePinned) && !playAnimation.running
             palette: timeSlider.palette
             Timer {
@@ -220,8 +220,8 @@ Pane {
 
         Button {
             id: playButton
-            icon.source: checked ? "images/pause.png"
-                                 : "images/play.png"
+            icon.source: checked ? "images/pause.svg"
+                                 : "images/play.svg"
             enabled: !startTimePinned || !endTimePinned
             checkable: true
             palette: timeSlider.palette
@@ -238,7 +238,7 @@ Pane {
 
         Button {
             id: stepForwardButton
-            icon.source: "images/step.png"
+            icon.source: "images/forward.svg"
             enabled: (!startTimePinned || !endTimePinned) && !playAnimation.running
             palette: timeSlider.palette
             Timer {

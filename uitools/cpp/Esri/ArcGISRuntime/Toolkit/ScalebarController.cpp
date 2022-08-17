@@ -292,7 +292,7 @@ namespace Toolkit {
   {
     double displayDistance = distance;
     LinearUnit displayUnit = selectLinearUnit(distance, unitSystem);
-    if (displayUnit.unitId() != m_baseUnit.unitId())
+    if (displayUnit.wkid() != m_baseUnit.wkid())
     {
       displayDistance = m_baseUnit.convertTo(displayUnit, displayDistance);
     }

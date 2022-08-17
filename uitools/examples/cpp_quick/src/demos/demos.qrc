@@ -2,12 +2,14 @@
     <qresource prefix="/demo_app/qml">
         <file>AuthenticationViewDemoForm.qml</file>
         <file>BasemapGalleryDemoForm.qml</file>
+        <file>BookmarksViewDemoForm.qml</file>
         <file>CalloutDemoForm.qml</file>
         <file>CoordinateConversionDemoForm.qml</file>
         <file>FloorFilterDemoForm.qml</file>
         <file>NorthArrowDemoForm.qml</file>
         <file>OverviewMapDemoForm.qml</file>
         <file>PopupViewDemoForm.qml</file>
+        <file>ScalebarDemoForm.qml</file>
         <file>SearchViewDemoForm.qml</file>
         <file>TimeSliderDemoForm.qml</file>
     </qresource>

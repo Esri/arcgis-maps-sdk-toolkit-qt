@@ -19,6 +19,8 @@
 #include "AuthenticationController.h"
 #include "BasemapGalleryController.h"
 #include "BasemapGalleryItem.h"
+#include "BookmarksViewController.h"
+#include "BookmarkListItem.h"
 #include "CoordinateConversionController.h"
 #include "CoordinateConversionOption.h"
 #include "CoordinateConversionResult.h"
@@ -63,7 +65,7 @@ namespace Toolkit {
     constexpr char const* NAMESPACE = "Esri.ArcGISRuntime.Toolkit.Controller";
 
     constexpr int VERSION_MAJOR = 100;
-    constexpr int VERSION_MINOR = 14;
+    constexpr int VERSION_MINOR = 15;
 
     /*
       \internal
@@ -168,6 +170,8 @@ namespace Toolkit {
     registerComponent<AuthenticationController>(10);
     registerComponent<BasemapGalleryController>(12);
     registerComponent<BasemapGalleryItem>(12);
+    registerComponent<BookmarksViewController>(15);
+    registerComponent<BookmarkListItem>(15);
     registerComponent<CoordinateConversionController>(10);
     registerComponent<CoordinateConversionOption>(10);
     registerComponent<CoordinateConversionResult>(10);

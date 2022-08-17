@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import Esri.ArcGISRuntime.Toolkit.Controller 100.14
+import Esri.ArcGISRuntime.Toolkit.Controller 100.15
 
 import QtQuick 2.12
 
@@ -150,7 +150,7 @@ Pane {
                 flat: true
                 Layout.margins: 5
                 Layout.alignment: Qt.AlignRight
-                icon.source: menuButton.checked ? "images/menu_expand.png" : "images/menu_collapse.png"
+                icon.source: menuButton.checked ? "images/chevron-up.svg" : "images/chevron-down.svg"
             }
         }
 
@@ -185,7 +185,7 @@ Pane {
 
             Button {
                 id: zoomToButton
-                icon.source: "images/zoom.png"
+                icon.source: "images/layer-zoom-to.svg"
                 flat: true
                 Layout.alignment: Qt.AlignRight
 
@@ -197,7 +197,7 @@ Pane {
 
             Button {
                 id: flashCoordinateButton
-                icon.source: "images/flash.png"
+                icon.source: "images/flash.svg"
                 flat: true
                 Layout.alignment: Qt.AlignRight
                 Layout.maximumWidth: Layout.maximumHeight
@@ -222,7 +222,7 @@ Pane {
                 id: editCoordinateButton
                 checkable: true
                 flat: true
-                icon.source: "images/text_editing_mode.png"
+                icon.source: "images/edit-attributes.svg"
                 Layout.alignment: Qt.AlignRight
                 Layout.maximumWidth: Layout.maximumHeight
                 padding: 0
@@ -232,7 +232,7 @@ Pane {
                 id: captureModeButton
                 checkable: true
                 flat: true
-                icon.source: "images/mouse_click_mode.png"
+                icon.source: "images/cursor-click.svg"
                 Layout.alignment: Qt.AlignRight
                 Layout.maximumWidth: Layout.maximumHeight
                 Layout.margins: 5
@@ -270,7 +270,7 @@ Pane {
                     Layout.maximumWidth: menuButton.width
                     Layout.alignment: Qt.AlignRight
                     Layout.margins: 5
-                    icon.source: "images/menu.png"
+                    icon.source: "images/ellipsis.svg"
                     flat: true
                     onClicked: editMenu.open()
 

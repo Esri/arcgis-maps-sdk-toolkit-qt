@@ -157,9 +157,14 @@ Pane {
     property bool accessoryButtonVisible: true
 
     /*!
+        \obsolete
+
         \brief A QML Item to display in the Callout.
 
         The default is \c null.
+
+        This property is obsolete, to replace the Callout's content
+        set \c{contentItem} instead.
     */
     property Component calloutContent: null
 

@@ -15,7 +15,7 @@
  ******************************************************************************/
 import QtQml 2.12
 import QtQuick 2.12
-import Esri.ArcGISRuntime 100.14
+import Esri.ArcGISRuntime 100.15
 
 /*!
    \qmltype BasemapGalleryItem
@@ -85,7 +85,7 @@ QtObject {
             return internal.item.thumbnailUrl;
         }
 
-        return "qrc:///esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/generic_basemap_thumbnail.png";
+        return "qrc:///esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/basemap.svg";
     }
 
     /*!
