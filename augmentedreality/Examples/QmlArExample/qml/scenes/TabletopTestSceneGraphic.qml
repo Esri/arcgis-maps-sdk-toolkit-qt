@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 import QtQuick 2.6
-import Esri.ArcGISRuntime 100.15
+import Esri.ArcGISRuntime
 
 // Creates a graphic with sympbol for the tabletop test scene.
 
