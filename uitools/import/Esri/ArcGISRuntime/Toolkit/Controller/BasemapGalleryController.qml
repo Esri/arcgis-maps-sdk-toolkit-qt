@@ -14,7 +14,7 @@
  *  limitations under the License.
  ******************************************************************************/
 import QtQml 2.15
-import Esri.ArcGISRuntime 100.15
+import Esri.ArcGISRuntime
 import QtQml.Models 2.15
 
 /*!

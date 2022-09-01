@@ -17,9 +17,9 @@
 import QtQuick 2.0
 import QtTest 1.0
 
-import Esri.ArcGISRuntime 100.15
-import Esri.ArcGISRuntime.Toolkit 100.15
-import Esri.ArcGISRuntime.Toolkit.Controller 100.15
+import Esri.ArcGISRuntime
+import Esri.ArcGISRuntime.Toolkit
+import Esri.ArcGISRuntime.Toolkit.Controller
 
 TestCase {
     id: floorFilterControllerUnitTest

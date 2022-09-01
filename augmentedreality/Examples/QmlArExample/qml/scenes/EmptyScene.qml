@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 import QtQuick 2.6
-import Esri.ArcGISRuntime 100.15
+import Esri.ArcGISRuntime
 import Esri.ArcGISArToolkit 1.0
 
 // Creates an empty scene with an elevation source.
