@@ -51,10 +51,10 @@ void CalloutDemo::setUp()
               callData->setVisible(false);
             else
             {
-              Point mapPoint(mv->screenToLocation(mouse.x(), mouse.y()));
+              Point mapPoint(mv->screenToLocation(mouse.pos().x(), mouse.pos().y()));
               //atm the position is not working correctly with the setLocation
               callData->setLocation(mapPoint);
-              callData->setDetail("x: " + QString::number(mouse.x()) + " y: " + QString::number(mouse.y()));
+              callData->setDetail("x: " + QString::number(mouse.pos().x()) + " y: " + QString::number(mouse.pos().y()));
               callData->setVisible(true);
             }
           });

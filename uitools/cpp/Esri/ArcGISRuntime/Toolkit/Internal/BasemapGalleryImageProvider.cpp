@@ -233,7 +233,7 @@ namespace Toolkit {
    */
   QQuickImageResponse* BasemapGalleryImageProvider::requestImageResponse(const QString& id, const QSize& requestedSize)
   {
-    auto itemIt = m_itemMap.find(id);
+    auto itemIt = m_itemMap.find(QUuid::fromString(id));
     return new BasemapGalleryImageResponse(itemIt == std::end(m_itemMap) ? nullptr : itemIt.value(), requestedSize);
   }
 

@@ -21,10 +21,11 @@ import Esri.ArcGISRuntime.Toolkit
 import DemoApp 1.0
 
 DemoPage {
-    sceneViewContents: Component {
-        SceneView {
+    mapViewContents: Component {
+        MapView {
             id: view
             SearchView {
+                id: searchView
                 geoView: parent
                 anchors {
                     top: parent.top
@@ -38,8 +39,8 @@ DemoPage {
         }
     }
 
-    mapViewContents: Component {
-        MapView {
+    sceneViewContents: Component {
+        SceneView {
             id: view
             SearchView {
                 geoView: parent

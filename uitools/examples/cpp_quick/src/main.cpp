@@ -36,7 +36,7 @@
 int main(int argc, char* argv[])
 {
   QtWebView::initialize();
-  QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+  //QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling); --- this flag is not needed for Qt6
   QGuiApplication app(argc, argv);
 
   // Use of Esri location services, including basemaps and geocoding, requires
@@ -61,21 +61,21 @@ int main(int argc, char* argv[])
     Esri::ArcGISRuntime::ArcGISRuntimeEnvironment::setApiKey(apiKey);
   }
 
-  QQuickStyle::addStylePath("qrc:///esri.com/imports/");
+  //QQuickStyle::addStylePath("qrc:///esri.com/imports/"); see https://doc.qt.io/qt-6/qtquickcontrols-changes-qt6.html#custom-styles-are-now-proper-qml-modules
 
   // Register ArcGIS types with QML.
   qmlRegisterExtendedType<Esri::ArcGISRuntime::MapQuickView,
-                          MapQuickViewProxy>("Esri.ArcGISRuntime", 100, 15, "MapView");
+                          MapQuickViewProxy>("Esri.ArcGISRuntime", 200, 0, "MapView");
   qmlRegisterExtendedType<Esri::ArcGISRuntime::SceneQuickView,
-                          SceneQuickViewProxy>("Esri.ArcGISRuntime", 100, 15, "SceneView");
+                          SceneQuickViewProxy>("Esri.ArcGISRuntime", 200, 0, "SceneView");
   qmlRegisterUncreatableType<GeoModelProxy>("Esri.ArcGISRuntime",
-                                            100,
-                                            15,
+                                            200,
+                                            0,
                                             "Map",
                                             "Map not creatable in QML.");
   qmlRegisterUncreatableType<GeoModelProxy>("Esri.ArcGISRuntime",
-                                            100,
-                                            15,
+                                            200,
+                                            0,
                                             "Scene",
                                             "Scene not creatable in QML.");
 
@@ -90,8 +90,8 @@ int main(int argc, char* argv[])
       });
 
   qmlRegisterSingletonType<EnumsProxy>("Esri.ArcGISRuntime",
-                                       100,
-                                       15,
+                                       200,
+                                       0,
                                        "Enums",
                                        [](QQmlEngine* engine, QJSEngine*) -> QObject*
                                        {

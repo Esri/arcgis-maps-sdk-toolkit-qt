@@ -40,9 +40,9 @@ equals(QT_MAJOR_VERSION, 5) {
         }
 }
 
-equals(QT_MAJOR_VERSION, 6) {
-  error("This version of the ArcGIS Runtime SDK for Qt is incompatible with Qt 6")
-}
+#equals(QT_MAJOR_VERSION, 6) {
+#  error("This version of the ArcGIS Runtime SDK for Qt is incompatible with Qt 6")
+#}
 
 #-------------------------------------------------------------------------------
 

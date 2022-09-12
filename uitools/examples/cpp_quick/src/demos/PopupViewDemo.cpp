@@ -86,7 +86,7 @@ void PopupViewDemo::setUp()
                     if (layer->layerType() == LayerType::FeatureLayer)
                     {
                       m_featureLayer = static_cast<FeatureLayer*>(layer);
-                      geoView->identifyLayer(m_featureLayer, mouse.x(), mouse.y(), 12, false);
+                      geoView->identifyLayer(m_featureLayer, mouse.pos().x(), mouse.pos().y(), 12, false);
                     }
                     else
                     {
