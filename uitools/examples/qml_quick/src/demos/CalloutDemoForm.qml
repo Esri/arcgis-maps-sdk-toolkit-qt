@@ -41,7 +41,7 @@ DemoPage {
                 calloutData: view.calloutData
                 accessoryButtonVisible: false
             }
-            onMouseClicked : {
+            onMouseClicked : (mouse) => {
                 if (calloutData.visible) {
                     callout.dismiss();
                 } else {

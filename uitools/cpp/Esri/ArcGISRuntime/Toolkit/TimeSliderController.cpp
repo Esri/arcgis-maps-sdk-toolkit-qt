@@ -277,10 +277,10 @@ void TimeSliderController::initializeTimeProperties(LayerListModel* opLayers)
   if (!m_operationalLayers)
     return;
 
-  connect(m_operationalLayers.data(), &LayerListModel::layerAdded,
+  connect(m_operationalLayers.data(), &LayerListModel::itemAdded,
           this, qOverload<>(&TimeSliderController::initializeTimeProperties));
 
-  connect(m_operationalLayers.data(), &LayerListModel::layerRemoved,
+  connect(m_operationalLayers.data(), &LayerListModel::itemRemoved,
           this, qOverload<>(&TimeSliderController::initializeTimeProperties));
 
   for (auto layer : *m_operationalLayers)
