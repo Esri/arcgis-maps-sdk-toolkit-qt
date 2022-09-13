@@ -40,9 +40,18 @@ equals(QT_MAJOR_VERSION, 5) {
         }
 }
 
-#equals(QT_MAJOR_VERSION, 6) {
-#  error("This version of the ArcGIS Runtime SDK for Qt is incompatible with Qt 6")
-#}
+lessThan(QT_MAJOR_VERSION, 6) {
+    error("This version of the ArcGIS Runtime SDK for Qt requires Qt 6.2.4")
+}
+
+equals(QT_MAJOR_VERSION, 6) {
+    lessThan(QT_MINOR_VERSION, 2) {
+        error("This version of the ArcGIS Runtime SDK for Qt requires Qt 6.2.4")
+    }
+  equals(QT_MINOR_VERSION, 2) : lessThan(QT_PATCH_VERSION, 4) {
+    error("This version of the ArcGIS Runtime SDK for Qt requires Qt 6.2.4")
+  }
+}
 
 #-------------------------------------------------------------------------------
 
