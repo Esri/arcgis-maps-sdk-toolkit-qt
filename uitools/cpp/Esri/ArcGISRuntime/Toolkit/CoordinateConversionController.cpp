@@ -157,7 +157,7 @@ void CoordinateConversionController::setGeoView(QObject* geoView)
       if (m_inPickingMode && (!m_screenToLocationTask.isValid() ||
                                m_screenToLocationTask.isDone()))
       {
-        m_screenToLocationTask = sceneView->screenToLocation(event.x(), event.y());
+        m_screenToLocationTask = sceneView->screenToLocation(event.pos().x(), event.pos().y());
         event.accept();
       }
     });
@@ -178,7 +178,7 @@ void CoordinateConversionController::setGeoView(QObject* geoView)
     {
       if (m_inPickingMode)
       {
-        setCurrentPoint(mapView->screenToLocation(event.x(), event.y()));
+        setCurrentPoint(mapView->screenToLocation(event.pos().x(), event.pos().y()));
         event.accept();
       }
     });

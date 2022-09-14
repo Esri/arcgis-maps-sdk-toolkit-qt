@@ -22,6 +22,8 @@
 #include <QObject>
 #include <QQmlEngine>
 
+Q_MOC_INCLUDE("BasemapGalleryController.h")
+
 namespace Esri {
 namespace ArcGISRuntime {
 namespace Toolkit {

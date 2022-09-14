@@ -26,6 +26,8 @@
 #include <QObject>
 #include <QString>
 
+Q_MOC_INCLUDE("SearchResult.h")
+
 // Forward declarations
 namespace Esri {
 namespace ArcGISRuntime {

@@ -28,7 +28,6 @@
 int main(int argc, char* argv[])
 {
     QtWebView::initialize();
-    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
 
   // Use of Esri location services, including basemaps and geocoding, requires
@@ -52,9 +51,6 @@ int main(int argc, char* argv[])
   {
     QCoreApplication::instance()->setProperty("Esri.ArcGISRuntime.apiKey", apiKey);
   }
-
-
-  QQuickStyle::addStylePath("qrc:///esri.com/imports/");
 
   // Intialize application window
   QQmlApplicationEngine engine;

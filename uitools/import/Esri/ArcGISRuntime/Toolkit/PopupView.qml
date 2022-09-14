@@ -16,11 +16,11 @@
 
 import Esri.ArcGISRuntime.Toolkit.Controller
 
-import QtQuick 2.11
-import QtQuick.Controls 2.11
-import QtQuick.Dialogs 1.2
-import QtQuick.Window 2.11
-import QtQuick.Layouts 1.3
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Dialogs
+import QtQuick.Window
+import QtQuick.Layouts
 
 
 /*!
