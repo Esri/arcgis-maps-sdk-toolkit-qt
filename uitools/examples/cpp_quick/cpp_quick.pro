@@ -16,7 +16,7 @@
 
 TEMPLATE = app
 
-CONFIG += c++14 qmltypes
+CONFIG += c++17 qmltypes
 
 # additional modules are pulled in via arcgisruntime.pri
 QT += opengl qml quick
