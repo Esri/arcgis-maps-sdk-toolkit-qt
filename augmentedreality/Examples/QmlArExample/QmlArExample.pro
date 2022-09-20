@@ -20,7 +20,7 @@ mac {
 
 #-------------------------------------------------------------------------------
 
-CONFIG += c++14
+CONFIG += c++17
 
 QT += core gui opengl network positioning sensors qml quick
 
