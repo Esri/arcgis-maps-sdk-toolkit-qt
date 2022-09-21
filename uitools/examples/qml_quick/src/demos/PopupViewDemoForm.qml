@@ -50,7 +50,7 @@ DemoPage {
                     renderingMode: Enums.FeatureRenderingModeDynamic
                 }
             }
-            onMouseClicked: {
+            onMouseClicked: mouse => {
                 //get the feature layer from the map
                 featureLayer = sceneView.scene.operationalLayers.get(0);
                 sceneView.identifyLayer(featureLayer, mouse.x, mouse.y , 12, false);
@@ -81,7 +81,7 @@ DemoPage {
                 initUrl: "https://runtime.maps.arcgis.com/home/webmap/viewer.html?webmap=e4c6eb667e6c43b896691f10cc2f1580"
             }
 
-            onMouseClicked: {
+            onMouseClicked: mouse => {
                 //get the feature layer from the map
                 featureLayer = mapView.map.operationalLayers.get(0);
                 mapView.identifyLayer(featureLayer, mouse.x, mouse.y , 12, false);

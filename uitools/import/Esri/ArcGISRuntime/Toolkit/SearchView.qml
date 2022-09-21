@@ -301,7 +301,6 @@ Pane {
                         Layout.fillWidth: true
                         text: displayTitle
                         elide: Text.ElideRight
-                        palette: searchView.palette
                         font: searchView.font
                         Layout.rowSpan: displaySubtitle === "" ? 2 : 1
                         verticalAlignment: Label.AlignVCenter
@@ -309,7 +308,6 @@ Pane {
                     Label {
                         Layout.fillWidth: true
                         text: displaySubtitle
-                        palette: searchView.palette
                         font: searchView.font
                         elide: Text.ElideRight
                     }
@@ -337,7 +335,6 @@ Pane {
 //                    }
 //                    contentItem: Label {
 //                        text: section
-//                        palette: searchView.palette
 //                        horizontalAlignment: Text.AlignHCenter
 //                        elide: Text.ElideRight
 //                        font.italic: true

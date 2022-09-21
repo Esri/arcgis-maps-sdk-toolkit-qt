@@ -28,7 +28,6 @@ T.Slider {
         x: control.leftPadding + Math.round(control.horizontal ? control.visualPosition * (control.availableWidth - width) : (control.availableWidth - width) / 2)
         y: control.topPadding + Math.round(control.horizontal ? (control.availableHeight - height) / 2 : control.visualPosition * (control.availableHeight - height))
 
-        palette: control.palette
         pressed: control.pressed
         hovered: control.hovered
         vertical: control.vertical

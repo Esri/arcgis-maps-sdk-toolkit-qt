@@ -128,7 +128,6 @@ Page {
         verticalAlignment: Text.AlignVCenter
         wrapMode: Text.Wrap
         font: popupView.font
-        palette: popupView.palette
         leftPadding: popupView.spacing
         rightPadding: popupView.spacing
     }
@@ -158,7 +157,6 @@ Page {
                     Layout.maximumWidth: flickable.width / 2
                     wrapMode: Text.Wrap
                     font: popupView.font
-                    palette: popupView.palette
                 }
             }
 
@@ -172,7 +170,6 @@ Page {
                 horizontalAlignment: Text.AlignHCenter
                 text: controller.attachmentCount > 0 ? "<h2>Attachments</h2>" : ""
                 font: popupView.font
-                palette: popupView.palette
             }
 
             // Attachment names
@@ -184,7 +181,6 @@ Page {
                     enabled: visible
                     text: name
                     wrapMode: Text.Wrap
-                    palette: popupView.palette
                     font: popupView.font
                 }
             }
@@ -196,7 +192,6 @@ Page {
                     Layout.fillWidth: true
                     text: formattedValue
                     wrapMode: Text.Wrap
-                    palette: popupView.palette
                     font: popupView.font
                 }
             }

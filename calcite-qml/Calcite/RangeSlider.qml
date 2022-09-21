@@ -30,7 +30,6 @@ T.RangeSlider {
         x: control.leftPadding + Math.round(control.horizontal ? control.first.visualPosition * (control.availableWidth - width) : (control.availableWidth - width) / 2)
         y: control.topPadding + Math.round(control.horizontal ? (control.availableHeight - height) / 2 : control.first.visualPosition * (control.availableHeight - height))
 
-        palette: control.palette
         pressed: control.first.pressed
         hovered: control.hovered
         vertical: control.vertical
@@ -42,7 +41,6 @@ T.RangeSlider {
         x: control.leftPadding + Math.round(control.horizontal ? control.second.visualPosition * (control.availableWidth - width) : (control.availableWidth - width) / 2)
         y: control.topPadding + Math.round(control.horizontal ? (control.availableHeight - height) / 2 : control.second.visualPosition * (control.availableHeight - height))
 
-        palette: control.palette
         pressed: control.second.pressed
         hovered: control.hovered
         vertical: control.vertical

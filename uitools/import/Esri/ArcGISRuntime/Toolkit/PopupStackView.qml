@@ -250,7 +250,6 @@ Pane {
             Layout.alignment: Qt.AlignLeft
             visible: popupManagers && popupManagers.length > 1
             enabled: popupManagers ? stack.depth > 1 : false
-            palette: popupStackView.palette
             font: popupStackView.font
         }
 
@@ -259,7 +258,6 @@ Pane {
             Layout.columnSpan: popupManagers && popupManagers.length > 1 ? 1 : 3
             horizontalAlignment: Text.AlignHCenter
             text: popupManagers && popupManagers.length > 0 ? `${stack.depth} of ${popupManagers.length}` : ""
-            palette: popupStackView.palette
             font: popupStackView.font
         }
 
@@ -269,7 +267,6 @@ Pane {
             Layout.alignment: Qt.AlignRight
             visible: popupManagers && popupManagers.length > 1
             enabled: popupManagers ? stack.depth < popupManagers.length : false
-            palette: popupStackView.palette
             font: popupStackView.font
         }
 
@@ -284,7 +281,6 @@ Pane {
             id: popupViewPage
             PopupView {
                 popupManager: popupManagers && popupManagers.length >= StackView.index ? popupManagers[StackView.index] : null
-                palette: popupStackView.palette
                 font: popupStackView.font
                 background: null
                 closeCallback: popupStackView.closeCallback

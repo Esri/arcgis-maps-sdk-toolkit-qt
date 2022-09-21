@@ -106,7 +106,6 @@ Control {
             implicitWidth: scalebar.implicitWidth
             implicitHeight: scalebar.implicitHeight
             font: scalebar.font
-            palette: scalebar.palette
             controller: scalebar.controller
             unitSystem: unitSystem === unitSystem.Dual ? Scalebar.UnitSystem.Metric : unitSystem
         }
