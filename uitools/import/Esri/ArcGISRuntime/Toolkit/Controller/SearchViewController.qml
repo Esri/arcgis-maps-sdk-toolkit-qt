@@ -296,7 +296,7 @@ QtObject {
         property Point queryCenter: null
 
         property ListModel sources: ListModel {
-            onRowsInserted: {
+            onRowsInserted: (first, last) =>{
                 for (let i = first; i <= last; ++i) {
                     const source = sources.get(i).modelData;
                     if (source) {

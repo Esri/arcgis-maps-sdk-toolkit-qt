@@ -165,7 +165,7 @@ Pane {
                 }
             }
 
-            Keys.onPressed: {
+            Keys.onPressed: event => {
                 if (event.key === Qt.Key_Up) {
                     if (list.currentIndex === 0) {
                         list.currentIndex = -1;
