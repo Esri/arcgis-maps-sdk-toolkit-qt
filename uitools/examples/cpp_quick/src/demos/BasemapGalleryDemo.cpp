@@ -18,11 +18,12 @@
 
 #include "Esri/ArcGISRuntime/Toolkit/BasemapGalleryController.h"
 
-#include <GeoView.h>
-#include <Map.h>
-#include <MapView.h>
-#include <Portal.h>
-#include <Scene.h>
+#include "BasemapListModel.h"
+#include "GeoView.h"
+#include "Map.h"
+#include "MapViewTypes.h"
+#include "Portal.h"
+#include "Scene.h"
 
 BasemapGalleryDemo::BasemapGalleryDemo(QObject* parent) :
   BaseDemo(parent),

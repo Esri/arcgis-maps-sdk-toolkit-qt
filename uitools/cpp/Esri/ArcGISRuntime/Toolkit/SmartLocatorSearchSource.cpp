@@ -16,7 +16,13 @@
  ******************************************************************************/
 #include "SmartLocatorSearchSource.h"
 
+#include <QUuid>
+
 #include "Internal/SingleShotConnection.h"
+
+#include "GeocodeResult.h"
+#include "SuggestListModel.h"
+#include "SuggestResult.h"
 
 namespace Esri {
 namespace ArcGISRuntime {

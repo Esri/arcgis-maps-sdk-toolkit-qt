@@ -16,6 +16,7 @@
 #include "BookmarksViewDemo.h"
 
 #include "Map.h"
+#include "PortalItem.h"
 #include "Scene.h"
 
 using namespace Esri::ArcGISRuntime;

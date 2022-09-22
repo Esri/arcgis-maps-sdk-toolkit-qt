@@ -19,12 +19,19 @@
 #include "Internal/GeoViews.h"
 
 // ArcGISRuntime headers
-#include <Map.h>
-#include <Scene.h>
-#include <TimeAware.h>
+#include "GeoView.h"
+#include "Layer.h"
+#include "LayerListModel.h"
+#include "Map.h"
+#include "MapTypes.h"
+#include "Scene.h"
+#include "ServiceTypes.h"
+#include "TimeAware.h"
+#include "TimeValue.h"
 
 #include <cmath>
 
+#include <QDateTime>
 #include <QDebug>
 
 namespace Esri

@@ -15,6 +15,13 @@
  ******************************************************************************/
 #include "PopupViewController.h"
 
+#include <QAbstractListModel>
+
+#include "PopupAttachmentListModel.h"
+#include "PopupAttachmentManager.h"
+#include "PopupAttributeListModel.h"
+#include "PopupManager.h"
+
 namespace Esri
 {
 namespace ArcGISRuntime

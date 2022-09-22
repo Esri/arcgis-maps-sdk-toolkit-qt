@@ -25,6 +25,7 @@
 #include <QPointer>
 #include <QString>
 #include <QUrl>
+#include <QUuid>
 
 namespace Esri {
 namespace ArcGISRuntime {

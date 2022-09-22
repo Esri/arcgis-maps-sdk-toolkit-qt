@@ -23,8 +23,11 @@
 #include <FloorManager.h>
 #include <FloorSite.h>
 #include <GeometryEngine.h>
+#include <Layer.h>
 #include <Map.h>
 #include <Scene.h>
+#include <TaskWatcher.h>
+#include <Viewpoint.h>
 
 // Toolkit headers
 #include "FloorFilterFacilityItem.h"

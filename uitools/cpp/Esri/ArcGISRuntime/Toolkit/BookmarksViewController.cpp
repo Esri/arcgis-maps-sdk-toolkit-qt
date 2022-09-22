@@ -25,9 +25,11 @@
 #include <QtGlobal>
 
 // ArcGISRuntime headers
-#include <Bookmark.h>
-#include <Map.h>
-#include <Scene.h>
+#include "Bookmark.h"
+#include "BookmarkListModel.h"
+#include "Map.h"
+#include "Scene.h"
+#include "TaskWatcher.h"
 
 namespace Esri {
 namespace ArcGISRuntime {

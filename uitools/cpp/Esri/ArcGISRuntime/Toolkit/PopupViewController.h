@@ -24,10 +24,15 @@
 #include <QObject>
 #include <QPointer>
 
+Q_MOC_INCLUDE("PopupAttachmentListModel.h")
+
 namespace Esri
 {
 namespace ArcGISRuntime
 {
+
+class PopupAttachmentListModel;
+class PopupManager;
 
 namespace Toolkit
 {

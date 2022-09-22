@@ -16,15 +16,29 @@
 
 #include "PopupViewDemo.h"
 
-#include "GeoView.h"
+#include "Envelope.h"
+#include "Error.h"
+#include "Feature.h"
+#include "GeoElement.h"
+#include "IdentifyLayerResult.h"
+#include "LayerListModel.h"
 #include "Map.h"
+#include "MapTypes.h"
 #include "MapQuickView.h"
+#include "MapViewTypes.h"
+#include "Popup.h"
+#include "PopupDefinition.h"
 #include "PopupManager.h"
 #include "Scene.h"
 #include "SceneQuickView.h"
+#include "TaskWatcher.h"
 #include "ServiceFeatureTable.h"
+#include "SpatialReference.h"
+#include "Viewpoint.h"
 
 #include <QList>
+#include <QMouseEvent>
+#include <QUuid>
 
 using namespace Esri::ArcGISRuntime;
 

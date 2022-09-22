@@ -22,9 +22,15 @@
 
 // Qt headers
 #include <QtGlobal>
+#include <QUuid>
 
 // ArcGISRuntime headers
-#include <CoordinateFormatter.h>
+#include "Camera.h"
+#include "CoordinateFormatter.h"
+#include "LocationToScreenResult.h"
+#include "MapTypes.h"
+#include "SceneViewTypes.h"
+#include "Viewpoint.h"
 
 namespace Esri
 {

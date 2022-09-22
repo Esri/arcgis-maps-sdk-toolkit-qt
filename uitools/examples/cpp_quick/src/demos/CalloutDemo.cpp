@@ -16,10 +16,13 @@
 
 #include "CalloutDemo.h"
 
+#include <QImage>
+
+#include "CalloutData.h"
 #include "GeoView.h"
 #include "MapQuickView.h"
 #include "MapView.h"
-#include "SceneQuickView.h"
+#include "Point.h"
 
 using namespace Esri::ArcGISRuntime;
 

@@ -21,6 +21,7 @@
 #include <TimeValue.h>
 
 // Qt headers
+#include <QDateTime>
 #include <QObject>
 #include <QPointer>
 
