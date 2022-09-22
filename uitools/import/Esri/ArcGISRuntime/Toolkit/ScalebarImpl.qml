@@ -45,7 +45,6 @@ Control {
                 leftMargin: scalebar.spacing
             }
             font: scalebar.font
-            palette: scalebar.palette
             text: internal.displayDistance
         }
     }

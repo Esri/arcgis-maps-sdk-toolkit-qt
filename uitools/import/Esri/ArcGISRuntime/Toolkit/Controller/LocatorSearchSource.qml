@@ -124,10 +124,10 @@ QtObject {
         }
 
         signal suggestionsAdded(var source, int first, int last)
-        onRowsInserted: suggestionsAdded(this, first, last)
+        onRowsInserted: (first, last) => suggestionsAdded(this, first, last)
 
         signal suggestionsRemoved(var source, int first, int last)
-        onRowsAboutToBeRemoved: suggestionsRemoved(this, first, last)
+        onRowsAboutToBeRemoved: (first, last) => suggestionsRemoved(this, first, last)
     }
 
     /*!
