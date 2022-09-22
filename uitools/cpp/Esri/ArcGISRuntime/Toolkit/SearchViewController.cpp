@@ -23,9 +23,15 @@
 #include "SmartLocatorSearchSource.h"
 
 // ArcGISRuntime headers
+#include <CalloutData.h>
+#include <Envelope.h>
 #include <EnvelopeBuilder.h>
 #include <GeometryEngine.h>
 #include <Graphic.h>
+#include <GraphicListModel.h>
+#include <GraphicsOverlay.h>
+#include <GraphicsOverlayListModel.h>
+#include <MapTypes.h>
 #include <PictureMarkerSymbol.h>
 #include <SuggestListModel.h>
 #include <SymbolStyle.h>

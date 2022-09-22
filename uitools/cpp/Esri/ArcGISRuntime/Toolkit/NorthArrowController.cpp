@@ -17,6 +17,9 @@
 
 #include "Internal/GeoViews.h"
 
+#include "Camera.h"
+#include "TaskWatcher.h"
+
 // std headers
 #include <cmath>
 

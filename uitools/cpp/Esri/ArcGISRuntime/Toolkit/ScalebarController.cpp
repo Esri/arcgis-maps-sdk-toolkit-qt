@@ -19,8 +19,12 @@
 #include <cmath>
 
 // ArcGISRuntime headers
-#include <GeometryEngine.h>
-#include <PolylineBuilder.h>
+#include "Envelope.h"
+#include "GeometryEngine.h"
+#include "Point.h"
+#include "Polygon.h"
+#include "PolylineBuilder.h"
+#include "SpatialReference.h"
 
 namespace Esri {
 namespace ArcGISRuntime {

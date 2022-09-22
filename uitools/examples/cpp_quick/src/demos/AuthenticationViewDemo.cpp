@@ -17,6 +17,7 @@
 #include "AuthenticationViewDemo.h"
 
 #include "Map.h"
+#include "PortalItem.h"
 #include "Scene.h"
 
 AuthenticationViewDemo::AuthenticationViewDemo(QObject* parent) :

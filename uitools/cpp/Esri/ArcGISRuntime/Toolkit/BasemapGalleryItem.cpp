@@ -22,6 +22,9 @@
 
 // ArcGISRuntime headers
 #include <Basemap.h>
+#include <Geometry.h>
+#include <Item.h>
+#include <Polygon.h>
 
 // Qt headers
 #include <QIcon>
