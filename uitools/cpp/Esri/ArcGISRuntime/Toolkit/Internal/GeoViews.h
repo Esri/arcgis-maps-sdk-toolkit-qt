@@ -24,9 +24,7 @@
 namespace Esri::ArcGISRuntime::Toolkit {
   using SceneViewToolkit = SceneGraphicsView;
   using MapViewToolkit = MapGraphicsView;
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit
 
 #else
 
