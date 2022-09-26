@@ -16,7 +16,7 @@
 
 #include "GeoModelProxy.h"
 
-#include <GeoModel.h>
+#include "GeoModel.h"
 
 /*!
     \internal

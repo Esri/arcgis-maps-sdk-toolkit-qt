@@ -16,8 +16,8 @@
 #include "FloorFilterFacilityItem.h"
 
 // ArcGISRuntime headers
-#include <FloorFacility.h>
-#include <FloorSite.h>
+#include "FloorFacility.h"
+#include "FloorSite.h"
 
 namespace Esri {
 namespace ArcGISRuntime {

@@ -44,8 +44,8 @@
 #include "Internal/BasemapGalleryImageProvider.h"
 
 // ArcGIS includes
-#include <MapQuickView.h>
-#include <Point.h>
+#include "MapQuickView.h"
+#include "Point.h"
 
 // Qt Includes
 #include <QQmlEngine>

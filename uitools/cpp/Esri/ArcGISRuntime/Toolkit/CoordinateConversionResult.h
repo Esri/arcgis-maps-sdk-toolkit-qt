@@ -24,7 +24,7 @@
 #include <QPointer>
 
 // ArcGISRuntime headers
-#include <Point.h>
+#include "Point.h"
 
 namespace Esri
 {

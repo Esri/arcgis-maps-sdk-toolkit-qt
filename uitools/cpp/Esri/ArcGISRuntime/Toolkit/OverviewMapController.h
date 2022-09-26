@@ -20,7 +20,7 @@
 #include "Internal/GeoViews.h"
 
 // ArcGISRuntime headers
-#include <TaskWatcher.h>
+#include "TaskWatcher.h"
 
 // Qt headers
 #include <QObject>

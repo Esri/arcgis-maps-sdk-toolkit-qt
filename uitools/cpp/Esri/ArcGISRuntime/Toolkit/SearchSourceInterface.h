@@ -17,9 +17,9 @@
 #define ESRI_ARCGISRUNTIME_TOOLKIT_SEARCHSOURCEINTERFACE_H
 
 // ArcGISRuntime headers
-#include <Geometry.h>
-#include <Point.h>
-#include <TaskWatcher.h>
+#include "Geometry.h"
+#include "Point.h"
+#include "TaskWatcher.h"
 
 // Qt headers
 #include <QList>

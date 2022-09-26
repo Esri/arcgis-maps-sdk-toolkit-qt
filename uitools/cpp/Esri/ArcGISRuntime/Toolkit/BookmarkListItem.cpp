@@ -16,7 +16,7 @@
 #include "BookmarkListItem.h"
 
 // ArcGISRuntime headers
-#include <Bookmark.h>
+#include "Bookmark.h"
 
 namespace Esri {
   namespace ArcGISRuntime {

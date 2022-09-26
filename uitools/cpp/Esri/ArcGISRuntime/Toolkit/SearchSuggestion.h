@@ -20,7 +20,7 @@
 #include "SearchSourceInterface.h"
 
 // ArcGISRuntime headers
-#include <SuggestResult.h>
+#include "SuggestResult.h"
 
 // Qt headers
 #include <QObject>

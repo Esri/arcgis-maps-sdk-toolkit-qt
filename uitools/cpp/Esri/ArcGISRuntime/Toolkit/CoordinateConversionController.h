@@ -29,8 +29,8 @@
 class QAbstractListModel;
 
 // ArcGISRuntime headers
-#include <Point.h>
-#include <TaskWatcher.h>
+#include "Point.h"
+#include "TaskWatcher.h"
 
 namespace Esri
 {

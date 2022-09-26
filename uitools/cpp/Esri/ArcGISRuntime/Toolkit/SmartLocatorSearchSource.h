@@ -20,8 +20,8 @@
 #include "LocatorSearchSource.h"
 
 // ArcGISRuntime headers
-#include <LocatorTask.h>
-#include <SymbolStyle.h>
+#include "LocatorTask.h"
+#include "SymbolStyle.h"
 
 // Qt headers
 #include <QObject>

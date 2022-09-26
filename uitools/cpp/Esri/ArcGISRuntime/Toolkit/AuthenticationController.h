@@ -17,8 +17,8 @@
 #define ESRI_ARCGISRUNTIME_TOOLKIT_AUTHENTICATIONCONTROLLER_H
 
 // ArcGISRuntime headers
-#include <AuthenticationChallenge.h>
-#include <CoreTypes.h>
+#include "AuthenticationChallenge.h"
+#include "CoreTypes.h"
 
 // Qt headers
 #include <QObject>

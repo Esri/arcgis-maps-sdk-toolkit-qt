@@ -16,9 +16,9 @@
 #include "FloorFilterDemo.h"
 
 // ArcGISRuntime imports
-#include <Map.h>
-#include <PortalItem.h>
-#include <Scene.h>
+#include "Map.h"
+#include "PortalItem.h"
+#include "Scene.h"
 
 using namespace Esri::ArcGISRuntime;
 
