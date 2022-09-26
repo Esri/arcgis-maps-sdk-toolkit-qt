@@ -35,6 +35,9 @@
 //------------------------------------------------------------------------------
 int main(int argc, char* argv[])
 {
+  // Enable OpenGL
+  qputenv("QSG_RHI_BACKEND", "opengl");
+
   QtWebView::initialize();
   QGuiApplication app(argc, argv);
 
