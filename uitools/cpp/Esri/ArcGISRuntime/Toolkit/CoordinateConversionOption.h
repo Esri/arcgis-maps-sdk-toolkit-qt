@@ -20,9 +20,9 @@
 #include <QObject>
 
 // ArcGISRuntime headers
-#include <GeometryTypes.h>
-#include <Point.h>
-#include <SpatialReference.h>
+#include "GeometryTypes.h"
+#include "Point.h"
+#include "SpatialReference.h"
 
 namespace Esri
 {

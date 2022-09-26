@@ -16,8 +16,8 @@
 #include "CoordinateConversionOption.h"
 
 // ArcGISRuntime headers
-#include <CoordinateFormatter.h>
-#include <Point.h>
+#include "CoordinateFormatter.h"
+#include "Point.h"
 
 namespace Esri
 {

@@ -22,8 +22,8 @@
 #include "BookmarkListItem.h"
 
 // ArcGISRuntime headers
-#include <MapGraphicsView.h>
-#include <SceneGraphicsView.h>
+#include "MapGraphicsView.h"
+#include "SceneGraphicsView.h"
 
 namespace Esri {
 namespace ArcGISRuntime {

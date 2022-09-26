@@ -20,8 +20,8 @@
 #include <QObject>
 
 // ArcGISRuntime headers
-#include <CoreTypes.h>
-#include <LinearUnit.h>
+#include "CoreTypes.h"
+#include "LinearUnit.h"
 
 // Toolkit headers
 #include "Internal/GeoViews.h"

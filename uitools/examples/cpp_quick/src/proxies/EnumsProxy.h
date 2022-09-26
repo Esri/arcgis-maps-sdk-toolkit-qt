@@ -19,7 +19,7 @@
 
 #include <QObject>
 
-#include <MapTypes.h>
+#include "MapTypes.h"
 
 class EnumsProxy : public QObject
 {

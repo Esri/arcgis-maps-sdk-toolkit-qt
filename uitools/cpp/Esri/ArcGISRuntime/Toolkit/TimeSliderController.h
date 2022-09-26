@@ -17,8 +17,8 @@
 #define ESRI_ARCGISRUNTIME_TOOLKIT_TIMESLIDERCONTROLLER_H
 
 // ArcGISRuntime headers
-#include <TimeExtent.h>
-#include <TimeValue.h>
+#include "TimeExtent.h"
+#include "TimeValue.h"
 
 // Qt headers
 #include <QDateTime>

@@ -16,8 +16,8 @@
 
 #include "MapQuickViewProxy.h"
 
-#include <Map.h>
-#include <MapQuickView.h>
+#include "Map.h"
+#include "MapQuickView.h"
 
 /*!
     \internal

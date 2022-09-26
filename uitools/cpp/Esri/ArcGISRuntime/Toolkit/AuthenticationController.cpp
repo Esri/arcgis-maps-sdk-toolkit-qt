@@ -16,7 +16,7 @@
 #include "AuthenticationController.h"
 
 // ArcGISRuntime headers
-#include <AuthenticationManager.h>
+#include "AuthenticationManager.h"
 
 namespace Esri
 {

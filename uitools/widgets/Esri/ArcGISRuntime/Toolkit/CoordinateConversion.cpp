@@ -28,8 +28,8 @@
 #include "Internal/GenericTableProxyModel.h"
 
 // ArcGISRuntime headers
-#include <MapGraphicsView.h>
-#include <SceneGraphicsView.h>
+#include "MapGraphicsView.h"
+#include "SceneGraphicsView.h"
 
 // Qt headers
 #include <QGraphicsEllipseItem>

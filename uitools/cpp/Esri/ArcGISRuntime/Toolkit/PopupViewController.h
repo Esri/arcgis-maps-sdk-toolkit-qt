@@ -17,7 +17,7 @@
 #define ESRI_ARCGISRUNTIME_TOOLKIT_POPUPVIEWCONTROLLER_H
 
 // ArcGISRuntime headers
-#include <PopupManager.h>
+#include "PopupManager.h"
 
 // Qt headers
 #include <QAbstractListModel>

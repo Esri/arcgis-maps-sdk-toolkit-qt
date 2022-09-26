@@ -20,8 +20,8 @@
 #include "SearchSourceInterface.h"
 
 // ArcGISRuntime headers
-#include <GeoElement.h>
-#include <Viewpoint.h>
+#include "GeoElement.h"
+#include "Viewpoint.h"
 
 // Qt headers
 #include <QObject>
