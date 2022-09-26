@@ -54,7 +54,7 @@
 
 int main(int argc, char *argv[])
 {
-  // Enable OpenGL
+  // Enforce OpenGL
   qputenv("QSG_RHI_BACKEND", "opengl");
 
   // There are some conflicts between the AR frameworks and the Qt's rendering thread.
