@@ -127,8 +127,8 @@ QtObject {
                                         this,
                                         {
                                             basemap: basemap,
-                                            thumbnailUrlOverride: thumbnailUrl,
-                                            tooltipOverride: tooltip
+                                            thumbnailUrlOverride: thumbnailUrl ?? "",
+                                            tooltipOverride: tooltip ?? ""
                                         })
                     });
         return true;
