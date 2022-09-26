@@ -37,39 +37,25 @@
 #if defined(CPP_ARCGISRUNTIME_TOOLKIT)
 #  include "internal/register_cpp.h"
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri::ArcGISRuntime::Toolkit {
 
 void registerComponents(QQmlEngine& engine)
 {
   registerComponents_cpp_(engine);
 }
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit
 
 #elif defined(QML_ARCGISRUNTIME_TOOLKIT)
 #  include "internal/register_qml.h"
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri::ArcGISRuntime::Toolkit {
 
 void registerComponents(QQmlEngine& engine)
 {
   registerComponents_qml_(engine);
 }
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif

@@ -37,9 +37,7 @@
 #include <QPersistentModelIndex>
 #include <QPointer>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   namespace {
     /*!
@@ -734,6 +732,4 @@ namespace Toolkit {
   \sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::gallery()
  */
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

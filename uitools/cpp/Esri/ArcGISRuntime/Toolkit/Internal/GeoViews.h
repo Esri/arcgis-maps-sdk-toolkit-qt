@@ -21,9 +21,7 @@
 #include <MapGraphicsView.h>
 #include <SceneGraphicsView.h>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
   using SceneViewToolkit = SceneGraphicsView;
   using MapViewToolkit = MapGraphicsView;
 } // Toolkit
@@ -35,20 +33,14 @@ namespace Toolkit {
 #include <MapQuickView.h>
 #include <SceneQuickView.h>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
   using SceneViewToolkit = SceneQuickView;
   using MapViewToolkit = MapQuickView;
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
   inline Map* getGeoModel(MapViewToolkit* mapView)
   {
     return mapView ? mapView->map() : nullptr;
@@ -68,8 +60,6 @@ namespace Toolkit {
   {
     return &SceneViewToolkit::sceneChanged;
   }
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_GEOVIEWS_H

@@ -32,9 +32,7 @@ using ArTrackableList = struct ArTrackableList_;
 using ArTrackable = struct ArTrackable_;
 using ArPointCloud = struct ArPointCloud_;
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
 class ArcGISArViewInterface;
 
@@ -164,8 +162,6 @@ private:
 };
 
 } // Internal namespace
-} // Toolkit namespace
-} // ArcGISRuntime namespace
-} // Esri namespace
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // ArCoreWrapper_H

@@ -22,8 +22,8 @@ namespace Ui {
   class BookmarksView;
 }
 
-namespace Esri {
-namespace ArcGISRuntime {
+namespace Esri::ArcGISRuntime {
+    
   class MapGraphicsView;
   class SceneGraphicsView;
 
@@ -50,7 +50,6 @@ namespace Toolkit {
   };
 
 } // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_BOOKMARKSVIEW_H

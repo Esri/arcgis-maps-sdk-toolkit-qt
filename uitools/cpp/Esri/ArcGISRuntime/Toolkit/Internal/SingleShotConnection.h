@@ -22,9 +22,7 @@
 // C++ headers
 #include <memory>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   /*
     \internal
@@ -44,8 +42,6 @@ namespace Toolkit {
     return *connection;
   }
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_SINGLESHOTCONNECTION_H

@@ -18,9 +18,7 @@
 // ArcGISRuntime headers
 #include <Bookmark.h>
 
-namespace Esri {
-  namespace ArcGISRuntime {
-    namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
     /*!
     \inmodule EsriArcGISRuntimeToolkit
@@ -106,6 +104,4 @@ namespace Esri {
     \brief Signal emitted when the \l bookmark name changes.
    */
 
-    } // Toolkit
-  } // ArcGISRuntime
-} // Esri
+    } // Esri::ArcGISRuntime::Toolkit

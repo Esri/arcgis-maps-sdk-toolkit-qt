@@ -21,8 +21,7 @@
 #include "Camera.h"
 #include "SceneQuickView.h"
 
-namespace Esri {
-namespace ArcGISRuntime {
+namespace Esri::ArcGISRuntime {
 
 class TransformationMatrixCameraController;
 
@@ -104,7 +103,6 @@ private:
 };
 
 } // Toolkit namespace
-} // ArcGISRuntime namespace
-} // Esri namespace
+} // Esri::ArcGISRuntime
 
 #endif // ArcGISArView_H

@@ -17,9 +17,7 @@
 
 #include "ui_OAuth2View.h"
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   namespace {
     bool isSuccess(const QString& title)
@@ -115,6 +113,4 @@ namespace Toolkit {
     delete m_ui;
   }
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

@@ -20,13 +20,11 @@
 #include <QObject>
 #include "ArcGISArView.h"
 
-namespace Esri {
-namespace ArcGISRuntime {
+namespace Esri::ArcGISRuntime {
 class Scene;
 class SceneQuickView;
 class GraphicsOverlay;
-} // ArcGISRuntime namespace
-} // Esri namespace
+} // Esri::ArcGISRuntime 
 
 class CppArExample : public QObject
 {

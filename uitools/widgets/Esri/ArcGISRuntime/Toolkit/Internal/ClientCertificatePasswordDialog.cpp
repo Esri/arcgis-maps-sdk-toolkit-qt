@@ -17,9 +17,7 @@
 
 #include "ui_ClientCertificatePasswordDialog.h"
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   /*!
   \brief Constructor.
@@ -60,6 +58,4 @@ namespace Toolkit {
     delete m_ui;
   }
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

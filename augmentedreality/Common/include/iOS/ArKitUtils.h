@@ -17,10 +17,7 @@
 #import <ARKit/ARKit.h>
 #include <QString>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
-namespace ArKitUtils {
+namespace Esri::ArcGISRuntime::Toolkit::ArKitUtils {
 
 QString worldMappingStatusToString(ARWorldMappingStatus status)
 {
@@ -196,7 +193,4 @@ QString arErrorCodeToDescription(ARErrorCode errorCode)
   }
 }
 
-} // ArKitUtils namespace
-} // Toolkit namespace
-} // ArcGISRuntime namespace
-} // Esri namespace
+} // Esri::ArcGISRuntime::Toolkit::ArKitUtils

@@ -31,20 +31,16 @@
 #include <QPointer>
 
 // Forward declarations
-namespace Esri {
-namespace ArcGISRuntime {
+namespace Esri::ArcGISRuntime {
   class Map;
   class Scene;
   class SymbolStyle;
   class GeocodeResult;
   class Graphic;
   class GraphicsOverlay;
-}
-}
+} // Esri::ArcGISRuntime
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   class SearchViewController : public QObject
   {
@@ -159,8 +155,6 @@ namespace Toolkit {
     double m_thresholdRatioRepeatSearch{0.25};
   };
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_SEARCHVIEWCONTROLLER_H

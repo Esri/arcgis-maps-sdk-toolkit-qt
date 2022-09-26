@@ -26,10 +26,7 @@
 
 Q_MOC_INCLUDE("PopupAttachmentListModel.h")
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
+namespace Esri::ArcGISRuntime {
 
 class PopupAttachmentListModel;
 class PopupManager;
@@ -95,7 +92,6 @@ private:
 };
 
 } // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_POPUPVIEWCONTROLLER_H

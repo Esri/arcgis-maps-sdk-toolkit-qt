@@ -19,12 +19,7 @@
 #include <CoordinateFormatter.h>
 #include <Point.h>
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
   \class Esri::ArcGISRuntime::Toolkit::CoordinateConversionOption
@@ -441,6 +436,4 @@ Point CoordinateConversionOption::pointFromString(const QString& point, const Sp
   \sa Esri::ArcGISRuntime::Toolkit::CoordinateConversionOption::garsConversionMode()
  */
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

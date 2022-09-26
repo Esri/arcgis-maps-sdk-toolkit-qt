@@ -18,15 +18,13 @@
 
 #include <QtTest>
 
-namespace Esri {
-namespace ArcGISRuntime {
+namespace Esri::ArcGISRuntime {
   class Basemap;
   class Map;
   namespace Toolkit {
 
   }
-}
-}
+} // Esri::ArcGISRuntime
 
 class BasemapGalleryItemUnitTest : public QObject
 {

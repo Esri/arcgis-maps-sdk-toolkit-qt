@@ -23,9 +23,7 @@
 #include "Internal/SslHandshakeView.h"
 #include "Internal/UserCredentialView.h"
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   namespace {
     QWidget* createWidgetView(AuthenticationController* controller, AuthenticationView* view)
@@ -196,6 +194,4 @@ namespace Toolkit {
     \brief Emitted when the controller used to drive the view changes.
    */
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

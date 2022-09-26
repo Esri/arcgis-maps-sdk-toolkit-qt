@@ -20,16 +20,14 @@
 #include <QObject>
 #include <QQmlEngine>
 
-namespace Esri {
-namespace ArcGISRuntime {
+namespace Esri::ArcGISRuntime {
   class GeoView;
   class GeoModel;
   class Map;
   class MapQuickView;
   class Scene;
   class SceneQuickView;
-}
-}
+} // Esri::ArcGISRuntime
 
 class BaseDemo : public QObject
 {

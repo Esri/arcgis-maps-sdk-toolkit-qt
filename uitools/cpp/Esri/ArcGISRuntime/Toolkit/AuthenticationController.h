@@ -24,13 +24,7 @@
 #include <QObject>
 #include <QPointer>
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-
-namespace Toolkit
-{
+namespace Esri::ArcGISRuntime::Toolkit {
 
 class AuthenticationController : public QObject
 {
@@ -93,8 +87,6 @@ private:
     bool m_deleteChallengeOnProcessed = true;
 };
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_AUTHENTICATIONCONTROLLER_H

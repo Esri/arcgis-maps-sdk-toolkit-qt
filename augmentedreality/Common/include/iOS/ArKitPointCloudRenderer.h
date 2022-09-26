@@ -23,10 +23,7 @@
 
 class QOpenGLShaderProgram;
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
-namespace Internal {
+namespace Esri::ArcGISRuntime::Toolkit::Internal {
 
 class ArKitWrapper;
 
@@ -57,9 +54,6 @@ private:
   int m_pointCloudSize = 10;
 };
 
-} // Internal namespace
-} // Toolkit namespace
-} // ArcGISRuntime namespace
-} // Esri namespace
+} // Esri::ArcGISRuntime::Toolkit::Internal
 
 #endif // ArKitPointCloudRenderer_H

@@ -21,10 +21,7 @@
 
 class QQuickWindow;
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
-namespace Internal {
+namespace Esri::ArcGISRuntime::Toolkit::Internal {
 
 class ArWrapper;
 
@@ -45,9 +42,6 @@ private:
   Internal::ArWrapper* m_arWrapper = nullptr;
 };
 
-} // Internal namespace
-} // Toolkit namespace
-} // ArcGISRuntime namespace
-} // Esri namespace
+} // Esri::ArcGISRuntime::Toolkit::Internal
 
 #endif // ArcGISArViewRenderer_H

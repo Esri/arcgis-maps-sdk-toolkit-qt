@@ -21,12 +21,7 @@
 
 #include <type_traits>
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri::ArcGISRuntime::Toolkit {
 
 class GenericListModel : public QAbstractListModel
 {
@@ -111,8 +106,6 @@ private:
   std::function<FlagsCallback> m_flagsCallback;
 };
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_GENERICLISTMODEL_H

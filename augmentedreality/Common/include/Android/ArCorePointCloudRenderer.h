@@ -21,10 +21,7 @@
 #include <QOpenGLShaderProgram>
 #include <QColor>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
-namespace Internal {
+namespace Esri::ArcGISRuntime::Toolkit::Internal {
 
 class ArCoreWrapper;
 
@@ -61,9 +58,6 @@ private:
   int m_pointCloudSize = 10;
 };
 
-} // Internal namespace
-} // Toolkit namespace
-} // ArcGISRuntime namespace
-} // Esri namespace
+} // Esri::ArcGISRuntime::Toolkit::Internal
 
 #endif // ArCorePointCloudRenderer_H

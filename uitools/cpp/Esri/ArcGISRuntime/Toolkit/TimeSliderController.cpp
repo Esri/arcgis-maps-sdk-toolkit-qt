@@ -34,12 +34,7 @@
 #include <QDateTime>
 #include <QDebug>
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri::ArcGISRuntime::Toolkit {
 
 namespace
 {
@@ -531,6 +526,4 @@ std::pair<int, int> TimeSliderController::stepsForGeoViewExtent() const
   \property Esri::ArcGISRuntime::Toolkit::TimeSliderController::endStep
  */
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

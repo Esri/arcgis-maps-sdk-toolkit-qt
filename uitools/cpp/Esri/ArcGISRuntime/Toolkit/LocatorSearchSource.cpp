@@ -34,9 +34,8 @@
 #include "Internal/DoOnLoad.h"
 #include "SearchResult.h"
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
+    
   namespace {
     const char* MAP_PIN = "qrc:///esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/pin-tear.svg";
 
@@ -281,6 +280,4 @@ namespace Toolkit {
     m_searchTask = m_locatorTask->geocodeWithParameters(searchString, params);
   }
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

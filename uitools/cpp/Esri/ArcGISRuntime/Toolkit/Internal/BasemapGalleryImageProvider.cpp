@@ -24,9 +24,7 @@
 
 #include <QIcon>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
 #ifdef CPP_ARCGISRUNTIME_TOOLKIT
   namespace {
@@ -239,6 +237,4 @@ namespace Toolkit {
 
 #endif // CPP_ARCGISRUNTIME_TOOLKIT
 
-} // namespace Toolkit
-} // namespace ArcGISRuntime
-} // namespace Esri
+} // Esri::ArcGISRuntime::Toolkit

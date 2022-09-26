@@ -36,9 +36,7 @@
 #include <SuggestListModel.h>
 #include <SymbolStyle.h>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   namespace {
     const char* DEFAULT_DEFAULT_PLACEHOLDER = "Find a place or address";
@@ -908,6 +906,4 @@ namespace Toolkit {
   /*!
     \property Esri::ArcGISRuntime::Toolkit::SearchViewController::automaticConfigurationEnabled
    */
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

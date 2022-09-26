@@ -23,9 +23,7 @@
 #include <array>
 #include <memory>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
 namespace Internal {
 class ArWrapper;
@@ -154,8 +152,6 @@ private:
   QMetaObject::Connection m_headingChangedConnection;
 };
 
-} // Toolkit namespace
-} // ArcGISRuntime namespace
-} // Esri namespace
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // ArcGISArViewInterface_H
