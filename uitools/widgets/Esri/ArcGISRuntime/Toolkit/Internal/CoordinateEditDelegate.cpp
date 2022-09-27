@@ -24,12 +24,7 @@
 //Qt headers
 #include <QLineEdit>
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
    \internal
@@ -121,6 +116,4 @@ void CoordinateEditDelegate::setModelData(
   }
 }
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

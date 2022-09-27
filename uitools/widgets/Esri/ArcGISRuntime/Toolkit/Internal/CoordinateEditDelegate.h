@@ -20,12 +20,7 @@
 #include <QItemDelegate>
 #include <QPointer>
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri::ArcGISRuntime::Toolkit {
 
 class CoordinateConversionController;
 
@@ -48,8 +43,6 @@ private:
   QPointer<CoordinateConversionController> m_controller;
 };
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_COORDIANTEEDITDELEGATE_H

@@ -32,12 +32,7 @@
 #include "SceneViewTypes.h"
 #include "Viewpoint.h"
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri::ArcGISRuntime::Toolkit {
 
 namespace
 {
@@ -515,6 +510,4 @@ void CoordinateConversionController::setInPickingMode(bool mode)
   \sa Esri::ArcGISRuntime::Toolkit::CoordinateConversionController::inPickingMode()
  */
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

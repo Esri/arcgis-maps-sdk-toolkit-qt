@@ -26,9 +26,7 @@ namespace Ui {
   class AuthenticationView;
 }
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   class AuthenticationController;
 
@@ -51,8 +49,6 @@ namespace Toolkit {
     Ui::AuthenticationView* m_ui = nullptr;
   };
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_AUTHENTICATIONVIEW_H

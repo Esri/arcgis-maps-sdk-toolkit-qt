@@ -31,9 +31,7 @@
 // Qt forward declarations
 class QAbstractListModel;
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   class BasemapGalleryController : public QObject
   {
@@ -83,8 +81,6 @@ namespace Toolkit {
     GenericListModel* m_gallery = nullptr;
   };
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_BASEMAPGALLERYCONTROLLER_H

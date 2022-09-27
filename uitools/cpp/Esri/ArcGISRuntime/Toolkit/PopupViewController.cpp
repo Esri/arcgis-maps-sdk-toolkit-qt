@@ -22,12 +22,7 @@
 #include "PopupAttributeListModel.h"
 #include "PopupManager.h"
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
   \class Esri::ArcGISRuntime::Toolkit::PopupViewController
@@ -304,6 +299,4 @@ void PopupViewController::setAttachmentThumbnailHeight(int height)
   \property Esri::ArcGISRuntime::Toolkit::PopupViewController::title
  */
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

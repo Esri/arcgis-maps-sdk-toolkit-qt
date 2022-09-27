@@ -19,10 +19,7 @@
 #include <QLabel>
 #include <QPixmap>
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
+namespace Esri::ArcGISRuntime {
 
 class MapGraphicsView;
 class SceneGraphicsView;
@@ -55,7 +52,6 @@ private:
 };
 
 } // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_NORTHARROW_H

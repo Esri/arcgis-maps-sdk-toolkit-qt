@@ -23,9 +23,7 @@
 class QGeoPositionInfoSource;
 class QCompass;
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
 class LocationDataSource : public QObject
 {
@@ -90,8 +88,6 @@ private:
   ArEnums::LocationTrackingMode m_locationTrackingMode = ArEnums::LocationTrackingMode::Initial;
 };
 
-} // Toolkit namespace
-} // ArcGISRuntime namespace
-} // Esri namespace
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // LocationDataSource_H

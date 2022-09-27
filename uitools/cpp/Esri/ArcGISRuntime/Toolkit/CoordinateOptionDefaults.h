@@ -18,12 +18,7 @@
 
 #include "CoordinateConversionOption.h"
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri::ArcGISRuntime::Toolkit {
 
 CoordinateConversionOption* createDecimalDegrees(QObject* parent = nullptr);
 
@@ -39,8 +34,6 @@ CoordinateConversionOption* createUtm(UtmConversionMode mode = UtmConversionMode
 
 CoordinateConversionOption* createGars(GarsConversionMode mode = GarsConversionMode::Center, QObject* parent = nullptr);
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_COORDIANTEOPTIONDEFAULTS_H

@@ -41,9 +41,7 @@
 // stl headers
 #include <cmath>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   namespace {
 
@@ -946,6 +944,4 @@ namespace Toolkit {
   \brief Emitted when the automaticSelectionModeChanged flag has changed.
  */
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

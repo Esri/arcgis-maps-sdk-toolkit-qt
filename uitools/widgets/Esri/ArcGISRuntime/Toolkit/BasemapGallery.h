@@ -22,8 +22,8 @@ namespace Ui {
   class BasemapGallery;
 }
 
-namespace Esri {
-namespace ArcGISRuntime {
+namespace Esri::ArcGISRuntime {
+
   class GeoModel;
 
   namespace Toolkit {
@@ -52,7 +52,6 @@ namespace ArcGISRuntime {
     };
 
   } // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_BASEMAPGALLERY_H

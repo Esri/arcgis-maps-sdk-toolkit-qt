@@ -26,12 +26,7 @@
 #include <QMouseEvent>
 
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
   \class Esri::ArcGISRuntime::Toolkit::NorthArrow
@@ -134,6 +129,4 @@ NorthArrowController* NorthArrow::controller() const
   return m_controller;
 }
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

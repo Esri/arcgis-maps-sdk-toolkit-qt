@@ -39,9 +39,7 @@
 // std headers
 #include <cmath>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   /*!
   \class Esri::ArcGISRuntime::Toolkit::CoordinateConversion
@@ -203,6 +201,4 @@ namespace Toolkit {
     graphicsView->scene()->addWidget(m_flash.data());
   }
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

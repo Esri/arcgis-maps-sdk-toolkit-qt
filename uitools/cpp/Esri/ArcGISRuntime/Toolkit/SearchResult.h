@@ -28,9 +28,7 @@
 #include <QString>
 #include <QUrl>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   class SearchResult : public QObject
   {
@@ -79,8 +77,6 @@ namespace Toolkit {
     Viewpoint m_selectionViewpoint;
   };
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_SEARCHRESULT_H

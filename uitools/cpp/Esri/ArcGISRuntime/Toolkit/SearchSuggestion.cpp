@@ -15,9 +15,7 @@
  ******************************************************************************/
 #include "SearchSuggestion.h"
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   /*!
     \inmodule EsriArcGISRuntimeToolkit
@@ -183,6 +181,4 @@ namespace Toolkit {
   /*!
     \property Esri::ArcGISRuntime::Toolkit::SearchSuggestion::collection
    */
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

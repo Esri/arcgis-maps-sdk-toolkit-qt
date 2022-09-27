@@ -27,9 +27,7 @@ namespace Ui {
   class ClientCertificatePasswordDialog;
 }
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   class ClientCertificatePasswordDialog : public QDialog
   {
@@ -44,8 +42,6 @@ namespace Toolkit {
     Ui::ClientCertificatePasswordDialog* m_ui = nullptr;
   };
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_CLIENTCERTIFICATEPASSWORDDIALOG_H

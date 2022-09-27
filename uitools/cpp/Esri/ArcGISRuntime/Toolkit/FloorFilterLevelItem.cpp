@@ -18,9 +18,7 @@
 // ArcGISRuntime headers
 #include "FloorLevel.h"
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
    /*!
     \inmodule EsriArcGISRuntimeToolkit
@@ -106,6 +104,4 @@ namespace Toolkit {
     \brief Signal emitted when the wrapped \l floorLevel changes.
    */
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

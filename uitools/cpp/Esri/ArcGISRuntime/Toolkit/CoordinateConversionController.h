@@ -32,10 +32,7 @@ class QAbstractListModel;
 #include "Point.h"
 #include "TaskWatcher.h"
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
+namespace Esri::ArcGISRuntime {
 
 class GeoView;
 
@@ -113,7 +110,6 @@ private:
 };
 
 } // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_COORDINATECONVERSIONCONTROLLER_H

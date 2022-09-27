@@ -33,9 +33,7 @@
 #include <QEvent>
 #include <QSortFilterProxyModel>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   namespace {
 
@@ -315,6 +313,4 @@ namespace Toolkit {
     return m_controller;
   }
 
-} //Toolkit
-} //ArcGISRuntime
-} //Esri
+} // Esri::ArcGISRuntime::Toolkit

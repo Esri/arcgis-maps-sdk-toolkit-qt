@@ -26,9 +26,7 @@
 // Toolkit headers
 #include "Internal/GeoViews.h"
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   class ScalebarController : public QObject
   {
@@ -67,8 +65,6 @@ namespace Toolkit {
     LinearUnit m_baseUnit{LinearUnitId::Meters};
   };
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_NORTHARROWCONTROLLER_H

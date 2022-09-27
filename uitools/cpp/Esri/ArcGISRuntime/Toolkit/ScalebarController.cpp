@@ -26,9 +26,7 @@
 #include "PolylineBuilder.h"
 #include "SpatialReference.h"
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   namespace {
     /*
@@ -329,6 +327,4 @@ namespace Toolkit {
     \brief The current units system of this controller. Can be imperial or metric.
   */
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

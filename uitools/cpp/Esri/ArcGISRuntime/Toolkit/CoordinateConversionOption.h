@@ -24,13 +24,7 @@
 #include "Point.h"
 #include "SpatialReference.h"
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-
-namespace Toolkit
-{
+namespace Esri::ArcGISRuntime::Toolkit {
 
 class CoordinateConversionOption : public QObject
 {
@@ -135,8 +129,6 @@ private:
   GarsConversionMode m_garsConvesrionMode = GarsConversionMode::Center;
 };
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_COORDINATECONVERSIONOPTION_H

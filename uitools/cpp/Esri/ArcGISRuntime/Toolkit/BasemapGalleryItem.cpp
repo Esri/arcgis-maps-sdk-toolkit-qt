@@ -34,9 +34,7 @@
 #include <QQmlContext>
 #endif // CPP_ARCGISRUNTIME_TOOLKIT
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   namespace {
 #ifdef CPP_ARCGISRUNTIME_TOOLKIT
@@ -377,6 +375,4 @@ namespace Toolkit {
   \sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem::thumbnailUrl()
 */
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

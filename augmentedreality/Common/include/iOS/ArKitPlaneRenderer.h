@@ -19,10 +19,7 @@
 
 #include <QOpenGLFunctions>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
-namespace Internal {
+namespace Esri::ArcGISRuntime::Toolkit::Internal {
 
 class ArKitWrapper;
 
@@ -39,9 +36,6 @@ private:
   ArKitWrapper* m_arKitWrapper = nullptr;
 };
 
-} // Internal namespace
-} // Toolkit namespace
-} // ArcGISRuntime namespace
-} // Esri namespace
+} // Esri::ArcGISRuntime::Toolkit::Internal
 
 #endif // ArKitPlaneRenderer_H

@@ -18,14 +18,7 @@
 
 #include <QString>
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
-namespace CoordinateConversionConstants
-{
+namespace Esri::ArcGISRuntime::Toolkit::CoordinateConversionConstants {
 
 extern const QString DECIMAL_DEGREES_FORMAT;
 extern const QString DEGREES_DECIMAL_MINUTES_FORMAT;
@@ -36,9 +29,6 @@ extern const QString MGRS_FORMAT;
 extern const QString USNG_FORMAT;
 extern const QString UTM_FORMAT;
 
-} // CoordinateConversionConstants
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit::CoordinateConversionConstants
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_COORDINATECONVERSIONCONSTANTS_H

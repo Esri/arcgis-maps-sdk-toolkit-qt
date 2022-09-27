@@ -22,12 +22,7 @@
 // ArcGISRuntime headers
 #include "Point.h"
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
   \class Esri::ArcGISRuntime::Toolkit::CoordinateConversionResult
@@ -187,6 +182,4 @@ void CoordinateConversionResult::copyNotationToClipboard() const
  \property Esri::ArcGISRuntime::Toolkit::CoordinateConversionResult::type
  */
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

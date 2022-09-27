@@ -19,9 +19,7 @@
 #include "FloorFacility.h"
 #include "FloorSite.h"
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
     /*!
     \inmodule EsriArcGISRuntimeToolkit
@@ -119,6 +117,4 @@ namespace Toolkit {
     \brief Signal emitted when the wrapped \l floorFacility changes.
    */
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

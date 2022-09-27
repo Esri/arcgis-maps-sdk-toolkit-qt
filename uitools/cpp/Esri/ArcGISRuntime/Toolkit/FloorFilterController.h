@@ -25,8 +25,7 @@
 // Qt headers
 #include <QObject>
 
-namespace Esri {
-namespace ArcGISRuntime {
+namespace Esri::ArcGISRuntime {
 
   class Envelope;
 
@@ -144,7 +143,6 @@ namespace ArcGISRuntime {
     };
 
   } // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_FLOORFILTERCONTROLLER_H

@@ -20,10 +20,7 @@
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
-namespace Internal {
+namespace Esri::ArcGISRuntime::Toolkit::Internal {
 
 class ArCoreWrapper;
 
@@ -48,9 +45,6 @@ private:
   GLuint m_attributeUvs = 0;
 };
 
-} // Internal namespace
-} // Toolkit namespace
-} // ArcGISRuntime namespace
-} // Esri namespace
+} // Esri::ArcGISRuntime::Toolkit::Internal
 
 #endif // ArCoreFrameRenderer_H

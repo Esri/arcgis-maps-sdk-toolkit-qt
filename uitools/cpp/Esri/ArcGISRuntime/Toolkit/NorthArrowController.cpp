@@ -23,9 +23,7 @@
 // std headers
 #include <cmath>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   /*!
     \class Esri::ArcGISRuntime::Toolkit::NorthArrowController
@@ -148,6 +146,4 @@ namespace Toolkit {
     \property Esri::ArcGISRuntime::Toolkit::NorthArrowController::heading
    */
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

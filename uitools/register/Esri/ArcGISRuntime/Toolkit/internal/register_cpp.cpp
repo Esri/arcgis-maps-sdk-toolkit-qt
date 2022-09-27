@@ -54,9 +54,7 @@
 // std includes
 #include <type_traits>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   namespace {
 
@@ -196,6 +194,4 @@ namespace Toolkit {
     qmlRegisterAnonymousType<MapQuickView>(NAMESPACE, 12);
   }
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

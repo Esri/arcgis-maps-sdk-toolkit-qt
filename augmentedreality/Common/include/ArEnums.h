@@ -19,9 +19,7 @@
 
 #include <QObject>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
 class ArEnums
 {
@@ -48,8 +46,6 @@ public:
   ~ArEnums();
 };
 
-} // Toolkit namespace
-} // ArcGISRuntime namespace
-} // Esri namespace
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // ArEnums_H

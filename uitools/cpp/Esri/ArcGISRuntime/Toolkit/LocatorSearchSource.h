@@ -29,9 +29,7 @@
 #include <QList>
 #include <QObject>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   class LocatorSearchSource : public SearchSourceInterface
   {
@@ -72,8 +70,6 @@ namespace Toolkit {
 
   };
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_LOCATORSEARCHSOURCE_H
