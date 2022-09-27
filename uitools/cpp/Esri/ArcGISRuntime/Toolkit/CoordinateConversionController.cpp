@@ -21,6 +21,7 @@
 #include "Internal/GeoViews.h"
 
 // Qt headers
+#include <QMouseEvent>
 #include <QtGlobal>
 #include <QUuid>
 
