@@ -36,6 +36,7 @@
 
 // Qt headers
 #include <QtGlobal>
+#include <QKeyEvent>
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
