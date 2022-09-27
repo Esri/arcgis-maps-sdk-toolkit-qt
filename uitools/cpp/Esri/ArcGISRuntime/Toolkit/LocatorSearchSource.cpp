@@ -35,7 +35,7 @@
 #include "SearchResult.h"
 
 namespace Esri::ArcGISRuntime::Toolkit {
-    
+
   namespace {
     const char* MAP_PIN = "qrc:///esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/pin-tear.svg";
 

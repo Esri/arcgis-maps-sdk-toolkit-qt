@@ -20,7 +20,7 @@
 #include <QObject>
 
 namespace Esri::ArcGISRuntime {
-    
+
   class FloorLevel;
 
   namespace Toolkit {

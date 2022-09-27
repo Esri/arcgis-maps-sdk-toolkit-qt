@@ -23,7 +23,7 @@ namespace Ui {
 }
 
 namespace Esri::ArcGISRuntime {
-    
+
   class MapGraphicsView;
   class SceneGraphicsView;
 

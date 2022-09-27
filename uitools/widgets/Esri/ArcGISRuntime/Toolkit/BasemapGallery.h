@@ -23,7 +23,7 @@ namespace Ui {
 }
 
 namespace Esri::ArcGISRuntime {
-    
+
   class GeoModel;
 
   namespace Toolkit {
