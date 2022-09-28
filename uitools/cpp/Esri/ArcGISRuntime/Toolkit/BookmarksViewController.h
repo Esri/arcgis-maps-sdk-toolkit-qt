@@ -23,6 +23,7 @@
 // ArcGISRuntime headers
 #include <Bookmark.h>
 #include <GeoView.h>
+
 // Qt headers
 #include <QObject>
 

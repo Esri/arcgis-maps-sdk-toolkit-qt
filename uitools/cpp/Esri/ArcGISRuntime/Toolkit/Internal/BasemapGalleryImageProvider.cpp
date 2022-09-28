@@ -22,6 +22,7 @@
 // ArcGISRuntime headers
 #include <Item.h>
 
+// Qt headers
 #include <QIcon>
 
 namespace Esri::ArcGISRuntime::Toolkit {

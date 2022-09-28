@@ -17,8 +17,8 @@
 #define ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_DOONLOAD_H
 
 // ArcGISRuntime headers
-#include "Loadable.h"
-#include "MapTypes.h"
+#include <Loadable.h>
+#include <MapTypes.h>
 
 // Qt headers
 #include <QObject>
