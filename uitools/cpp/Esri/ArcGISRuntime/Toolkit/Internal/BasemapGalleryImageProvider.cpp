@@ -20,7 +20,7 @@
 #include "Internal/DoOnLoad.h"
 
 // ArcGISRuntime headers
-#include "Item.h"
+#include <Item.h>
 
 #include <QIcon>
 

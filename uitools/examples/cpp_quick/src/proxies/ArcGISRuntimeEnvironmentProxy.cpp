@@ -16,7 +16,7 @@
 
 #include "ArcGISRuntimeEnvironmentProxy.h"
 
-#include "ArcGISRuntimeEnvironment.h"
+#include <ArcGISRuntimeEnvironment.h>
 
 /*!
     \internal

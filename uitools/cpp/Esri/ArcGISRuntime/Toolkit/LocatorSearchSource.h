@@ -20,9 +20,9 @@
 #include "SearchSourceInterface.h"
 
 // ArcGISRuntime headers
-#include "GeocodeParameters.h"
-#include "LocatorTask.h"
-#include "SuggestParameters.h"
+#include <GeocodeParameters.h>
+#include <LocatorTask.h>
+#include <SuggestParameters.h>
 
 // Qt headers
 #include <QFuture>

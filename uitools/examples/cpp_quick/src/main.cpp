@@ -26,11 +26,11 @@
 #include <QQuickStyle>
 #include <QtWebView>
 
-#include "ArcGISRuntimeEnvironment.h"
-#include "Map.h"
-#include "MapQuickView.h"
-#include "Scene.h"
-#include "SceneQuickView.h"
+#include <ArcGISRuntimeEnvironment.h>
+#include <Map.h>
+#include <MapQuickView.h>
+#include <Scene.h>
+#include <SceneQuickView.h>
 
 //------------------------------------------------------------------------------
 int main(int argc, char* argv[])

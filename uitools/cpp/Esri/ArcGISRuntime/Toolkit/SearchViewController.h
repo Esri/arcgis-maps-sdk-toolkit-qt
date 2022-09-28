@@ -23,7 +23,7 @@
 #include "SearchSuggestion.h"
 
 // ArcGISRuntime headers
-#include "Geometry.h"
+#include <Geometry.h>
 
 // Qt headers
 #include <QAbstractListModel>

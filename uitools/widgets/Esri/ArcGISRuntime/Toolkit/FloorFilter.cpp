@@ -24,10 +24,10 @@
 #include "FloorFilterSiteItem.h"
 
 // ArcGISRuntime headers
-#include "FloorFacility.h"
-#include "FloorSite.h"
-#include "MapGraphicsView.h"
-#include "SceneGraphicsView.h"
+#include <FloorFacility.h>
+#include <FloorSite.h>
+#include <MapGraphicsView.h>
+#include <SceneGraphicsView.h>
 
 // Qt headers
 #include <QEvent>

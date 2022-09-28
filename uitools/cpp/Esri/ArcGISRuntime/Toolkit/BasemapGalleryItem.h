@@ -17,7 +17,7 @@
 #define ESRI_ARCGISRUNTIME_TOOLKIT_BASEMAPGALLERYITEM_H
 
 // ArcGISRuntime headers
-#include "Basemap.h"
+#include <Basemap.h>
 
 // Qt headers
 #include <QImage>

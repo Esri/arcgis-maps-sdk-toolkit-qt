@@ -18,8 +18,8 @@
 
 #ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
 
-#include "MapGraphicsView.h"
-#include "SceneGraphicsView.h"
+#include <MapGraphicsView.h>
+#include <SceneGraphicsView.h>
 
 namespace Esri::ArcGISRuntime::Toolkit {
   using SceneViewToolkit = SceneGraphicsView;
@@ -28,8 +28,8 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
 #else
 
-#include "MapQuickView.h"
-#include "SceneQuickView.h"
+#include <MapQuickView.h>
+#include <SceneQuickView.h>
 
 namespace Esri::ArcGISRuntime::Toolkit {
   using SceneViewToolkit = SceneQuickView;

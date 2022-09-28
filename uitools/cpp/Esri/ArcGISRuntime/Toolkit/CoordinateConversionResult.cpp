@@ -20,7 +20,7 @@
 #include <QGuiApplication>
 
 // ArcGISRuntime headers
-#include "Point.h"
+#include <Point.h>
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
