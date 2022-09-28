@@ -288,12 +288,6 @@ Pane {
                         source: markerImageUrl
                         sourceSize.height: 32
                         visible: true
-                        ColorOverlay {
-                            anchors.fill: sourceImage
-                            source: sourceImage
-                            color: textLabel.color
-                            visible: searchView.state !== "searchCommitted"
-                        }
                     }
                     Label {
                         id: textLabel

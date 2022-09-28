@@ -81,12 +81,6 @@ T.SpinBox {
                 sourceSize.width: parent.width
                 sourceSize.height: parent.width
             }
-
-            ColorOverlay {
-                anchors.fill : upIndicatorImage
-                source: upIndicatorImage
-                color: up.hovered ? Calcite.text1 : Calcite.text3
-            }
         }
     }
 
@@ -115,12 +109,6 @@ T.SpinBox {
                 source: "images/chevron-left.svg"
                 sourceSize.width: parent.width
                 sourceSize.height: parent.height
-            }
-
-            ColorOverlay {
-                anchors.fill : downIndicatorImage
-                source: downIndicatorImage
-                color: down.hovered ? Calcite.text1 : Calcite.text3
             }
         }
     }

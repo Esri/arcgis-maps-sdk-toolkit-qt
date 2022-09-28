@@ -331,11 +331,6 @@ Control {
                             margins: 4
                         }
                     }
-                    ColorOverlay {
-                        anchors.fill: searchImg
-                        source: searchImg
-                        color: noResultsFoundLabel.color
-                    }
                 }
 
                 Label {
