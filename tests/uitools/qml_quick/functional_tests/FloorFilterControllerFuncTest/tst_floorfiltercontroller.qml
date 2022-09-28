@@ -14,8 +14,8 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.0
-import QtTest 1.0
+import QtQuick
+import QtTest
 
 import Esri.ArcGISRuntime
 import Esri.ArcGISRuntime.Toolkit

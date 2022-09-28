@@ -14,12 +14,12 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtQuick.Layouts 1.12
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 import Esri.ArcGISRuntime
 import Esri.ArcGISRuntime.Toolkit
-import DemoApp 1.0
+import DemoApp
 
 DemoPage {
     mapViewContents: Component {

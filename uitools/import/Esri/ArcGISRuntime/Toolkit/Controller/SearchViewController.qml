@@ -14,11 +14,11 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQml 2.12
+import QtQml
 import Esri.ArcGISRuntime
 import Esri.ArcGISRuntime.Toolkit
-import QtQml.Models 2.15
-import QtQuick 2.15
+import QtQml.Models
+import QtQuick
 
 /*!
    \qmltype SearchViewController

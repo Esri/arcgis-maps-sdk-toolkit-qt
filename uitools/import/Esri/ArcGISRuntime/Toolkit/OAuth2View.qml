@@ -16,10 +16,10 @@
 
 import Esri.ArcGISRuntime.Toolkit.Controller
 
-import QtQuick 2.11
-import QtQuick.Controls 2.11
-import QtWebView 1.1
-import QtQuick.Window 2.12
+import QtQuick
+import QtQuick.Controls
+import QtWebView
+import QtQuick.Window
 
 Dialog {
     id: oAuthView

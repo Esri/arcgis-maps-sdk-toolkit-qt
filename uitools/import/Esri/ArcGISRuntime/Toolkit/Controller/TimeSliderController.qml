@@ -14,9 +14,9 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQml 2.12
+import QtQml
 
-import Esri.ArcGISRuntime 100.9
+import Esri.ArcGISRuntime
 
 /*!
    \qmltype TimeSliderController
