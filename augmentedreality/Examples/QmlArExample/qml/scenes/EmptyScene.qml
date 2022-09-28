@@ -14,9 +14,9 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.6
+import QtQuick
 import Esri.ArcGISRuntime
-import Esri.ArcGISArToolkit 1.0
+import Esri.ArcGISArToolkit
 
 // Creates an empty scene with an elevation source.
 // Mode: Full-Scale AR

@@ -14,9 +14,9 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQml 2.12
+import QtQml
 import Esri.ArcGISRuntime
-import QtQml.Models 2.15
+import QtQml.Models
 
 /*!
     \qmltype SmartLocatorSearchSource

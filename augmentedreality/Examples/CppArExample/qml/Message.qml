@@ -1,6 +1,6 @@
-import QtQuick 2.6
-import QtQuick.Controls 2.2
-import Esri.ArcGISArToolkit 1.0
+import QtQuick
+import QtQuick.Controls
+import Esri.ArcGISArToolkit
 
 Rectangle {
     property alias text: label.text

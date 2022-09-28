@@ -14,10 +14,10 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.12
-import QtQuick.Window 2.12
+import QtQuick
+import QtQuick.Window
 import Esri.ArcGISRuntime
-import Esri.ArcGISArToolkit 1.0
+import Esri.ArcGISArToolkit
 
 ArcGISArViewInternal {
     id: root

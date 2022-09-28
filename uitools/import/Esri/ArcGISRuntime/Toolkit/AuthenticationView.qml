@@ -15,9 +15,9 @@
  ******************************************************************************/
 import Esri.ArcGISRuntime.Toolkit.Controller
 
-import QtQml 2.12
-import QtQuick 2.12
-import QtQuick.Controls 2.12
+import QtQml
+import QtQuick
+import QtQuick.Controls
 
 /*!
   \qmltype AuthenticationView

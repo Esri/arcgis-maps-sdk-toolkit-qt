@@ -14,8 +14,8 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.12
-import QtQuick.Controls 2.12
+import QtQuick
+import QtQuick.Controls
 import Esri.ArcGISRuntime
 import Esri.ArcGISRuntime.Toolkit
 import "tools.js" as T

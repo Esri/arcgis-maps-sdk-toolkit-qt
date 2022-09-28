@@ -14,10 +14,10 @@
  *  limitations under the License.
  ******************************************************************************/
 import Esri.ArcGISRuntime.Toolkit.Controller
-import QtQuick 2.12
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
-import QtQml.Models 2.15
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQml.Models
 import Qt5Compat.GraphicalEffects
 
 /*!

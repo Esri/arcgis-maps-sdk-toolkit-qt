@@ -14,8 +14,8 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.0
-import QtTest 1.0
+import QtQuick
+import QtTest
 
 import Esri.ArcGISRuntime
 import Esri.ArcGISRuntime.Toolkit
@@ -151,7 +151,7 @@ TestCase {
     function test_setSelectedLevelId() {
         var control = loadFloorManagerMultiple();
         var ffLevelIdSpy = createTemporaryQmlObject(
-                    'import QtQuick 2.0; SignalSpy {signalName: "onSelectedLevelIdChanged"}', floorFilterControllerUnitTest);
+                    'import QtQuick; SignalSpy {signalName: "onSelectedLevelIdChanged"}', floorFilterControllerUnitTest);
         ffLevelIdSpy.target = control
         var level = control.floorManager.levels[1];
         control.setSelectedLevelId(level.levelId);

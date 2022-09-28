@@ -14,10 +14,10 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.6
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
 import Esri.ArcGISRuntime
-import Esri.ArcGISArToolkit 1.0
+import Esri.ArcGISArToolkit
 
 ApplicationWindow {
     id: appWindow

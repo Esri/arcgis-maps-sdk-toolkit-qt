@@ -13,9 +13,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import QtQuick 2.15
-import QtQuick.Templates 2.15 as T
-import QtQuick.Layouts 1.15
+import QtQuick
+import QtQuick.Templates as T
+import QtQuick.Layouts
 
 T.BusyIndicator {
     id: control

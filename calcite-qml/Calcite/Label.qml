@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import QtQuick.Templates 2.15 as T
+import QtQuick.Templates as T
 
 T.Label {
     id: control

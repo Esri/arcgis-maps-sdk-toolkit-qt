@@ -14,7 +14,7 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.6
+import QtQuick
 import Esri.ArcGISRuntime
 
 // Creates a graphic with sympbol for the tabletop test scene.
