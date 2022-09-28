@@ -52,7 +52,7 @@ Dialog {
 
         url: controller.currentChallengeUrl
 
-        onLoadingChanged: {
+        onLoadingChanged: (loadRequest) => {
             if (loadRequest.status === WebView.LoadSucceededStatus) {
                 forceActiveFocus();
             } else if (loadRequest.status === WebView.LoadFailedStatus) {
