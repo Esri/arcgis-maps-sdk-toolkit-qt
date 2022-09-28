@@ -20,15 +20,15 @@
 #include <QUuid>
 
 // ArcGISRuntime headers
-#include "Envelope.h"
-#include "Error.h"
-#include "GeocodeResult.h"
-#include "Graphic.h"
-#include "LocatorAttribute.h"
-#include "LocatorInfo.h"
-#include "PictureMarkerSymbol.h"
-#include "SuggestListModel.h"
-#include "SuggestResult.h"
+#include <Envelope.h>
+#include <Error.h>
+#include <GeocodeResult.h>
+#include <Graphic.h>
+#include <LocatorAttribute.h>
+#include <LocatorInfo.h>
+#include <PictureMarkerSymbol.h>
+#include <SuggestListModel.h>
+#include <SuggestResult.h>
 
 // Toolkit headers
 #include "Internal/DoOnLoad.h"

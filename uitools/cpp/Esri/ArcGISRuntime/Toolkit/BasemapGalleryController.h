@@ -21,9 +21,9 @@
 #include "Internal/GenericListModel.h"
 
 // ArcGISRuntime headers
-#include "Basemap.h"
-#include "GeoModel.h"
-#include "Portal.h"
+#include <Basemap.h>
+#include <GeoModel.h>
+#include <Portal.h>
 
 // Qt headers
 #include <QObject>

@@ -16,8 +16,8 @@
 
 #include "SceneQuickViewProxy.h"
 
-#include "Scene.h"
-#include "SceneQuickView.h"
+#include <Scene.h>
+#include <SceneQuickView.h>
 
 /*!
     \internal

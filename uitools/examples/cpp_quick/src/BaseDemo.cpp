@@ -16,12 +16,12 @@
 
 #include "BaseDemo.h"
 
-#include "Map.h"
-#include "MapQuickView.h"
-#include "MapTypes.h"
-#include "MapViewTypes.h"
-#include "Scene.h"
-#include "SceneQuickView.h"
+#include <Map.h>
+#include <MapQuickView.h>
+#include <MapTypes.h>
+#include <MapViewTypes.h>
+#include <Scene.h>
+#include <SceneQuickView.h>
 #include <stdexcept>
 
 using namespace Esri::ArcGISRuntime;

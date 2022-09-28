@@ -21,17 +21,17 @@
 #include "Internal/SingleShotConnection.h"
 
 // ArcGISRuntime headers
-#include "Basemap.h"
-#include "BasemapListModel.h"
-#include "Error.h"
-#include "Item.h"
-#include "Layer.h"
-#include "LayerListModel.h"
-#include "Loadable.h"
-#include "Map.h"
-#include "Scene.h"
-#include "SceneViewTypes.h"
-#include "SpatialReference.h"
+#include <Basemap.h>
+#include <BasemapListModel.h>
+#include <Error.h>
+#include <Item.h>
+#include <Layer.h>
+#include <LayerListModel.h>
+#include <Loadable.h>
+#include <Map.h>
+#include <Scene.h>
+#include <SceneViewTypes.h>
+#include <SpatialReference.h>
 
 // Qt headers
 #include <QPersistentModelIndex>

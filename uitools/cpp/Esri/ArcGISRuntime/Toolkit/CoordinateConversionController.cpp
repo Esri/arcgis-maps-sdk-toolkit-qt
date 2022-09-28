@@ -26,12 +26,12 @@
 #include <QUuid>
 
 // ArcGISRuntime headers
-#include "Camera.h"
-#include "CoordinateFormatter.h"
-#include "LocationToScreenResult.h"
-#include "MapTypes.h"
-#include "SceneViewTypes.h"
-#include "Viewpoint.h"
+#include <Camera.h>
+#include <CoordinateFormatter.h>
+#include <LocationToScreenResult.h>
+#include <MapTypes.h>
+#include <SceneViewTypes.h>
+#include <Viewpoint.h>
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
