@@ -59,11 +59,6 @@ main(int argc, char* argv[])
   // QCoreApplication::instance()->setProperty("Esri.ArcGISRuntime.license",
   // "licenseString");
 
-  // This is how we make the style visible to our application!
-  // We can now apply the style via the `qtquickcontrol2.conf` file.
-  // See `README.md` for details.
-  QQuickStyle::addStylePath("qrc:///esri.com/imports/");
-
   // Intialize application window
   QQmlApplicationEngine appEngine;
   appEngine.addImportPath("qrc:///esri.com/imports/");

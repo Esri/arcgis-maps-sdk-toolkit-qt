@@ -31,15 +31,6 @@ include($$PWD/../../toolkitqml.pri)
 TEMPLATE = app
 TARGET = qml_quick
 
-equals(QT_MAJOR_VERSION, 5) {
-    lessThan(QT_MINOR_VERSION, 15) {
-        error("$$TARGET requires Qt 5.15.2")
-    }
-        equals(QT_MINOR_VERSION, 15) : lessThan(QT_PATCH_VERSION, 2) {
-                error("$$TARGET requires Qt 5.15.2")
-        }
-}
-
 lessThan(QT_MAJOR_VERSION, 6) {
     error("This version of the ArcGIS Runtime SDK for Qt requires Qt 6.2.4")
 }
