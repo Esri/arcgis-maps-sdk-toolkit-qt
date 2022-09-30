@@ -17,7 +17,7 @@
 import QtQuick
 import QtQuick.Controls
 import Esri.ArcGISRuntime
-import Esri.ArcGISRuntime.Toolkit
+import Esri.ArcGISRuntime.Toolkit 100.14
 import "tools.js" as T
 
 Item {
