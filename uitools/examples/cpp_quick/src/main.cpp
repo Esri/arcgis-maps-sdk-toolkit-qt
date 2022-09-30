@@ -101,7 +101,6 @@ int main(int argc, char* argv[])
   // Register Own types with QML.
   // Initialize application view
   QQmlApplicationEngine engine;
-  qDebug() << "start registering components";
   Esri::ArcGISRuntime::Toolkit::registerComponents(engine);
   engine.load(QUrl("qrc:/demo_app/qml/main.qml"));
   return app.exec();
