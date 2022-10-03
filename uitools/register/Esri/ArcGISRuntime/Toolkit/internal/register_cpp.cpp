@@ -89,12 +89,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
       };
 
       template <class T>
-      void registerComponentImpl(CreationType::Creatable_, const char* name)
+      void registerComponentImpl(CreationType::Creatable_, int majorVersion, int minorVersion, const char* name)
       {
-        // register version 100
-        qmlRegisterType<T>(NAMESPACE, 100, 10, name);
-        // register version 200
-        qmlRegisterType<T>(NAMESPACE, VERSION_MAJOR, 0, name);
+        qmlRegisterType<T>(NAMESPACE, majorVersion, minorVersion, name);
       }
 
       constexpr Creatable_ Creatable = Creatable_{};
@@ -104,12 +101,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
       };
 
       template <class T>
-      void registerComponentImpl(CreationType::Uncreatable_, const char* name)
+      void registerComponentImpl(CreationType::Uncreatable_, int majorVersion, int minorVersion, const char* name)
       {
-        // register version 100
-        qmlRegisterUncreatableType<T>(NAMESPACE, 100, 10, name, "Cannot instantiate type in QML.");
-        // register version 200
-        qmlRegisterUncreatableType<T>(NAMESPACE, VERSION_MAJOR, 0, name, "Cannot instantiate type in QML.");
+        qmlRegisterUncreatableType<T>(NAMESPACE, majorVersion, minorVersion, name, "Cannot instantiate type in QML.");
       }
 
       constexpr Uncreatable_ Uncreatable = Uncreatable_{};
@@ -119,12 +113,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
       };
 
       template <class T>
-      void registerComponentImpl(CreationType::Interface_, const char* /*name*/)
+      void registerComponentImpl(CreationType::Interface_, int majorVersion, int /*minorVersion*/, const char* /*name*/)
       {
-        // register version 100
-        qmlRegisterInterface<T>(NAMESPACE, 100);
-        // register version 200
-        qmlRegisterInterface<T>(NAMESPACE, VERSION_MAJOR);
+        qmlRegisterInterface<T>(NAMESPACE, majorVersion);
       }
 
       constexpr Interface_ Interface = Interface_{};
@@ -151,9 +142,10 @@ namespace Esri::ArcGISRuntime::Toolkit {
       static_assert(std::is_base_of<QObject, T>::value, "Must inherit QObject");
       auto name = QString{T::staticMetaObject.className()};
       name.remove("Esri::ArcGISRuntime::Toolkit::");
-      // register version 100
-      CreationType::registerComponentImpl<T>(creationType, name.toLatin1());
-      // register version 200
+      // register component on version 100
+      CreationType::registerComponentImpl<T>(creationType, 100, 10, name.toLatin1());
+      // register component on version 200
+      CreationType::registerComponentImpl<T>(creationType, 200, 0, name.toLatin1());
     }
 
     /*
@@ -163,15 +155,17 @@ namespace Esri::ArcGISRuntime::Toolkit {
      */
     void registerModuleRevisions()
     {
-      constexpr int START_MINOR_VERSION = 10;
-      constexpr int END_MINOR_VERSION = 15;
-      constexpr int START_MAJOR_VERSION = 100;
-      // resiter version 100
-      for (int i = START_MINOR_VERSION; i <= END_MINOR_VERSION; ++i) {
-        qmlRegisterModule(NAMESPACE, START_MAJOR_VERSION, i);
+      constexpr int MAJOR_VERSION_100 = 100;
+      constexpr int START_MINOR_VERSION_100 = 10;
+      constexpr int END_MINOR_VERSION_100 = 15;
+      // register version 100
+      for (int i = START_MINOR_VERSION_100; i <= END_MINOR_VERSION_100; ++i)
+      {
+        qmlRegisterModule(NAMESPACE, MAJOR_VERSION_100, i);
       }
       // register version 200 onwards
-      for(int i = 0; i <= VERSION_MINOR; ++i) {
+      for (int i = 0; i <= VERSION_MINOR; ++i)
+      {
         qmlRegisterModule(NAMESPACE, VERSION_MAJOR, i);
       }
     }
