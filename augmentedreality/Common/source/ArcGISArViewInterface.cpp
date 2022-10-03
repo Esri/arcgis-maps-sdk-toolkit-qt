@@ -355,16 +355,18 @@ void ArcGISArViewInterface::setPlaneColor(const QColor& planeColor)
 /*!
   \internal
  */
-void ArcGISArViewInterface::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
+void ArcGISArViewInterface::geometryChange(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
   // enable detection of orientation changes.
-  if (window() && window()->screen())
+  /*if (window() && window()->screen())
   {
-    window()->screen()->setOrientationUpdateMask(Qt::LandscapeOrientation	| Qt::PortraitOrientation |
-                                                 Qt::InvertedLandscapeOrientation | Qt::InvertedPortraitOrientation);
-  }
+    windows()->screen()->orientation();
 
-  QQuickFramebufferObject::geometryChanged(newGeometry, oldGeometry);
+    window()->screen()->setOrientationUpdateMask(Qt::LandscapeOrientation | Qt::PortraitOrientation |
+                                                 Qt::InvertedLandscapeOrientation | Qt::InvertedPortraitOrientation);
+  }*/
+
+  QQuickFramebufferObject::geometryChange(newGeometry, oldGeometry);
 
   if (newGeometry.size() == oldGeometry.size())
     return;

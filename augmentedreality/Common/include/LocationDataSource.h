@@ -20,8 +20,11 @@
 #include <QObject>
 #include "ArEnums.h"
 
-class QGeoPositionInfoSource;
 class QCompass;
+class QGeoPositionInfoSource;
+
+Q_MOC_INCLUDE(QCompass)
+Q_MOC_INCLUDE("QGeoPositionInfoSource")
 
 namespace Esri::ArcGISRuntime::Toolkit {
 

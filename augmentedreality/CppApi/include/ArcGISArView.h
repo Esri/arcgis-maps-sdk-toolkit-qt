@@ -21,6 +21,8 @@
 #include "Camera.h"
 #include "SceneQuickView.h"
 
+Q_MOC_INCLUDE("Point.h")
+
 namespace Esri::ArcGISRuntime {
 
 class TransformationMatrixCameraController;

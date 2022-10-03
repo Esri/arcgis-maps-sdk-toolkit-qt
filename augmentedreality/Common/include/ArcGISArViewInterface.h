@@ -123,7 +123,7 @@ public: // internals, used by AR wrappers
   virtual void renderFrameInternal() = 0;
 
 protected:
-  void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry) override;
+  void geometryChange(const QRectF& newGeometry, const QRectF& oldGeometry) override;
 
   // internals, used by AR view derived classes
   std::array<double, 7> hitTestInternal(int x, int y) const;

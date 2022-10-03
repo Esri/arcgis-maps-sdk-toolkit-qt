@@ -16,27 +16,36 @@
 
 #include "CppArExample.h"
 
-#include "ArcGISTiledElevationSource.h"
-#include "Basemap.h"
-#include "Scene.h"
-#include "SceneQuickView.h"
-#include "IntegratedMeshLayer.h"
-#include "ArcGISSceneLayer.h"
-#include "ArcGISArView.h"
-#include "GeometryEngine.h"
-#include "PointCloudLayer.h"
-#include "PortalItem.h"
-#include "IntegratedMeshLayer.h"
-#include "LocationDataSource.h"
-
-#include <QUrl>
 #include <QFileInfo>
-#include <QStandardPaths>
-
 #include <QGeoPositionInfoSource>
+#include <QStandardPaths>
+#include <QUrl>
 
-#include "SimpleMarkerSceneSymbol.h"
-#include "SimpleLineSymbol.h"
+#include <ArcGISArView.h>
+#include <ArcGISSceneLayer.h>
+#include <ArcGISTiledElevationSource.h>
+#include <BackgroundGrid.h>
+#include <Basemap.h>
+#include <GeometryEngine.h>
+#include <Graphic.h>
+#include <GraphicListModel.h>
+#include <GraphicsOverlay.h>
+#include <GraphicsOverlayListModel.h>
+#include <IntegratedMeshLayer.h>
+#include <LayerListModel.h>
+#include <LayerSceneProperties.h>
+#include <LocationDataSource.h>
+#include <MapTypes.h>
+#include <Point.h>
+#include <PointCloudLayer.h>
+#include <PortalItem.h>
+#include <Scene.h>
+#include <SceneQuickView.h>
+#include <SceneViewTypes.h>
+#include <SimpleLineSymbol.h>
+#include <SimpleMarkerSceneSymbol.h>
+#include <Surface.h>
+#include <SymbolTypes.h>
 
 using namespace Esri::ArcGISRuntime;
 using namespace Esri::ArcGISRuntime::Toolkit;

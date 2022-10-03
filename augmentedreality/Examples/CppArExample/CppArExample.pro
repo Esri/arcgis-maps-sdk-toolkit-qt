@@ -21,6 +21,19 @@ CONFIG += c++17
 
 TARGET = CppArExample
 
+lessThan(QT_MAJOR_VERSION, 6) {
+    error("This version of the ArcGIS Runtime SDK for Qt requires Qt 6.2.4")
+}
+
+equals(QT_MAJOR_VERSION, 6) {
+    lessThan(QT_MINOR_VERSION, 2) {
+        error("This version of the ArcGIS Runtime SDK for Qt requires Qt 6.2.4")
+    }
+  equals(QT_MINOR_VERSION, 2) : lessThan(QT_PATCH_VERSION, 4) {
+    error("This version of the ArcGIS Runtime SDK for Qt requires Qt 6.2.4")
+  }
+}
+
 ARCGIS_RUNTIME_VERSION = 200.0.0
 include($$PWD/arcgisruntime.pri)
 
@@ -46,7 +59,7 @@ OTHER_FILES += \
 # The path to the ArcGIS runtime toolkit for Qt sources, corresponding to the files downloaded
 # from the GitHub repo: https://github.com/Esri/arcgis-runtime-toolkit-qt
 
-ARCGIS_TOOLKIT_PATH = # must be set to the root path of the toolkit folder
+ARCGIS_TOOLKIT_PATH = $$PWD/../../../ # must be set to the root path of the toolkit folder
 
 isEmpty(ARCGIS_TOOLKIT_PATH) {
     error(ARCGIS_TOOLKIT_PATH is not set)

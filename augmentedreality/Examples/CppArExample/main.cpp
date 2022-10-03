@@ -22,15 +22,14 @@
 #include "AppInfo.h"
 #include "CppArExample.h"
 
-#include "ArcGISRuntimeEnvironment.h"
-#include "SceneQuickView.h"
-
 #include <QDir>
 #include <QGuiApplication>
-#include <QMessageBox>
+#include <QQmlApplicationEngine>
 #include <QSettings>
 #include <QSurfaceFormat>
-#include <QQmlApplicationEngine>
+
+#include <ArcGISRuntimeEnvironment.h>
+#include <SceneQuickView.h>
 
 // Include the AR view from toolkit
 #include "ArcGISArView.h"
@@ -90,9 +89,7 @@ int main(int argc, char *argv[])
 
   //  use this code to check for initialization errors
   //  QObject::connect(ArcGISRuntimeEnvironment::instance(), &ArcGISRuntimeEnvironment::errorOccurred, [](const Error& error){
-  //    QMessageBox msgBox;
-  //    msgBox.setText(error.message);
-  //    msgBox.exec();
+  //    qDebug() << error.message() << error.additionalMessage();
   //  });
 
   //  if (ArcGISRuntimeEnvironment::initialize() == false)
