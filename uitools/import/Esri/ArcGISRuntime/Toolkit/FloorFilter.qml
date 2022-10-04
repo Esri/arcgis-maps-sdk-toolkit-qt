@@ -18,7 +18,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQml.Models
-import Qt5Compat.GraphicalEffects
 
 /*!
   \qmltype FloorFilter
@@ -321,7 +320,7 @@ Control {
                         id: searchImg
                         sourceSize.width: 32
                         sourceSize.height: 32
-                        visible: false
+                        visible: true
                         source: "images/search.svg"
                         width: height
                         anchors {
@@ -330,11 +329,6 @@ Control {
                             bottom: parent.bottom
                             margins: 4
                         }
-                    }
-                    ColorOverlay {
-                        anchors.fill: searchImg
-                        source: searchImg
-                        color: noResultsFoundLabel.color
                     }
                 }
 

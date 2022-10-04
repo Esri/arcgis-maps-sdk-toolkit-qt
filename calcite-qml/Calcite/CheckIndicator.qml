@@ -14,7 +14,6 @@
  *  limitations under the License.
  ******************************************************************************/
 import QtQuick
-import Qt5Compat.GraphicalEffects
 
 Rectangle {
     property var control;
@@ -36,13 +35,6 @@ Rectangle {
             margins: control.checkState === Qt.Checked ? -2 : 2
         }
         source: control.checkState === Qt.Checked ? "images/check.svg": "images/line-solid.svg"
-        visible: false
-    }
-
-    ColorOverlay {
-        anchors.fill: checkmark
-        source: checkmark
-        color: Calcite.textInverse
-        visible: control.checkState !== Qt.Unchecked
+        visible: true
     }
 }

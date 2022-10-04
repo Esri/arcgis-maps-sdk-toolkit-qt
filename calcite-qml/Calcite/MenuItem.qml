@@ -15,7 +15,6 @@
  ******************************************************************************/
 import QtQuick
 import QtQuick.Templates as T
-import Qt5Compat.GraphicalEffects
 
 T.MenuItem {
     id: control
@@ -47,11 +46,6 @@ T.MenuItem {
 
         visible: control.checked
         source: control.checkable ? "images/check.svg" : ""
-        ColorOverlay {
-            anchors.fill: parent
-            source: parent
-            color: control.contentItem.color
-        }
     }
 
     background: Item {
