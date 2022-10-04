@@ -16,6 +16,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Templates as T
+import Qt5Compat.GraphicalEffects
 
 T.ComboBox {
     id: control
@@ -39,6 +40,12 @@ T.ComboBox {
         y: control.topPadding + (control.availableHeight - height) / 2
         source: "images/caret-double-vertical.svg"
         visible: false
+    }
+
+    ColorOverlay {
+        anchors.fill: indicator
+        source: indicator
+        color: Calcite.text3
     }
 
     contentItem: Text {
