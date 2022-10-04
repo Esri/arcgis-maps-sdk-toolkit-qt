@@ -62,13 +62,6 @@ T.RadioDelegate {
         sourceSize: Qt.size(24, 24)
         width: sourceSize.width
         height: sourceSize.height
-        ColorOverlay {
-            anchors.fill: indicator
-            source: indicator
-            color: control.checked
-                   || control.highlighted ? Calcite.brand : control.hovered ? Calcite.border1 : "transparent"
-            visible: indicator.visible
-        }
     }
 
     background: Rectangle {

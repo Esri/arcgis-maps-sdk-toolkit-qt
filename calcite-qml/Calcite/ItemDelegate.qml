@@ -17,7 +17,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.impl
 import QtQuick.Templates as T
-import Qt5Compat.GraphicalEffects
 
 T.ItemDelegate {
     id: control
@@ -44,12 +43,6 @@ T.ItemDelegate {
 
         visible: control.highlighted
         source: "images/check.svg"
-        ColorOverlay {
-            anchors.fill: indicator
-            source: indicator
-            color: control.color
-            visible: indicator.visible
-        }
     }
     contentItem: IconLabel {
         spacing: control.spacing

@@ -19,7 +19,6 @@ import Esri.ArcGISRuntime.Toolkit.Controller
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
 
 /*!
     \qmltype SearchView
@@ -287,13 +286,7 @@ Pane {
                         Layout.rowSpan: 2
                         source: markerImageUrl
                         sourceSize.height: 32
-                        visible: true
-                        ColorOverlay {
-                            anchors.fill: sourceImage
-                            source: sourceImage
-                            color: textLabel.color
-                            visible: searchView.state !== "searchCommitted"
-                        }
+                        visible: searchView.state !== "searchCommitted"
                     }
                     Label {
                         id: textLabel
