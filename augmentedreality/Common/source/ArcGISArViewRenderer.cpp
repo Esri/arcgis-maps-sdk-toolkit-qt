@@ -77,7 +77,6 @@ void ArcGISArViewRenderer::render()
 
   if (m_window)
   {
-    //m_window->resetOpenGLState();
     QQuickOpenGLUtils::resetOpenGLState();
   }
 }
