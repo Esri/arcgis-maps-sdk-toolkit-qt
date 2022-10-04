@@ -74,7 +74,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
       Provided is the overloaded method:
 
       \code
-      void registerComponentImpl(<CreationType> creationType, int minorVersion, const char* name)
+      void registerComponentImpl(<CreationType> creationType, int majorVersion, int minorVersion, const char* name)
       \endcode
 
       And the three currently accepted values for the \a creationType parameter.
@@ -124,7 +124,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     /*
      \internal
      \brief Function for registration. Registers the C++ type Foo as
-     Foo in QML with the 100.10 and 200.0 version.
+     Foo in QML with the 100.10, 200.0 version and namespace information.
 
      \list
       \li \a Determines how the type is instantiated in QML. Choose between CreationType::Creatable, CreationType::Uncreatable and CreationType::Interface.
@@ -150,7 +150,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     /*
      \internal
-     \brief Ensures a Module revision is available from 100.10 onwards
+     \brief Ensures a Module revision is available from 100.10 and 200.0 onwards
      to the current version of the Toolkit.
      */
     void registerModuleRevisions()
