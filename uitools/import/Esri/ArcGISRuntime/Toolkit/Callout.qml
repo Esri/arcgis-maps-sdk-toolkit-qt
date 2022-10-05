@@ -219,12 +219,6 @@ Pane {
 
     /*!
         \obsolete
-        Use \l maxWidth instead.
-    */
-    property alias calloutWidth: root.maxWidth
-
-    /*!
-        \obsolete
         Use \c{background.border.width} instead.
     */
     property int borderWidth
