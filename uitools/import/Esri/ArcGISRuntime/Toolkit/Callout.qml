@@ -225,22 +225,6 @@ Pane {
 
     /*!
         \obsolete
-        Use \c{Callout.LeaderPosition} instead.
-    */
-    property var leaderPositionEnum: { return {
-            UpperLeft: 0,
-            Top: 1,
-            UpperRight: 2,
-            Right: 3,
-            LowerRight: 4,
-            Bottom: 5,
-            LowerLeft: 6,
-            Left: 7,
-            Automatic: 8
-        } }
-
-    /*!
-        \obsolete
         Use \l maxWidth instead.
     */
     property alias calloutWidth: root.maxWidth
