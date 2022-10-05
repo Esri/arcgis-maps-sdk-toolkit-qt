@@ -57,7 +57,7 @@ import QtQuick.Shapes
               titleTextColor: "#000000"
               backgroundColor: "#ffffff"
               borderColor: "#000000"
-              borderWidth: 2
+              background.border.width: 2
               cornerRadius: 5
               leaderHeight: 10
               leaderWidth: 20
@@ -216,13 +216,6 @@ Pane {
         background.border.color = borderColor;
         internal.leaderColor = borderColor;
     }
-
-    /*!
-        \obsolete
-        Use \c{background.border.width} instead.
-    */
-    property int borderWidth
-    onBorderWidthChanged: background.border.width = borderWidth;
 
     /*!
         \obsolete
