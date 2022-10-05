@@ -209,12 +209,6 @@ Pane {
 
     /*!
         \obsolete
-        Use \c{implicitHeight} instead.
-    */
-    property alias calloutHeight: root.implicitHeight
-
-    /*!
-        \obsolete
         Use \c{background.border.color} instead.
     */
     property color borderColor
