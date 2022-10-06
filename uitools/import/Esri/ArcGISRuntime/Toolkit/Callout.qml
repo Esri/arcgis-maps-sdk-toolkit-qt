@@ -55,7 +55,7 @@ import QtQuick.Shapes
             Callout {
               calloutData: myCalloutData
               titleTextColor: "#000000"
-              backgroundColor: "#ffffff"
+              background.color: "#ffffff"
               borderColor: "#000000"
               background.border.width: 2
               cornerRadius: 5
@@ -216,13 +216,6 @@ Pane {
         background.border.color = borderColor;
         internal.leaderColor = borderColor;
     }
-
-    /*!
-        \obsolete
-        Use \c{background.color} instead.
-    */
-    property color backgroundColor
-    onBackgroundColorChanged: background.color = backgroundColor
 
     /*!
         \obsolete
