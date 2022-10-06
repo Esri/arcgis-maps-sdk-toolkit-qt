@@ -219,13 +219,6 @@ Pane {
 
     /*!
         \obsolete
-        Use \c{palette.windowText} instead.
-    */
-    property color detailTextColor
-    onDetailTextColorChanged: palette.windowText = detailTextColor
-
-    /*!
-        \obsolete
         Use \c{accessoryButtonVisible} instead.
     */
     property bool accessoryButtonHidden: false
