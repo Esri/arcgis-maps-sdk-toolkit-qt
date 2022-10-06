@@ -219,13 +219,6 @@ Pane {
 
     /*!
         \obsolete
-        Use \c{accessoryButtonVisible} instead.
-    */
-    property bool accessoryButtonHidden: false
-    onAccessoryButtonHiddenChanged: accessoryButtonVisible = !accessoryButtonHidden
-
-    /*!
-        \obsolete
         Use \c{background.radius} instead.
     */
     property int cornerRadius
