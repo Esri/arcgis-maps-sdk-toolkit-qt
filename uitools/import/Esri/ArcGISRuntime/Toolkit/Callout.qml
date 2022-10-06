@@ -58,7 +58,7 @@ import QtQuick.Shapes
               background.color: "#ffffff"
               borderColor: "#000000"
               background.border.width: 2
-              cornerRadius: 5
+              background.radius: 5
               leaderHeight: 10
               leaderWidth: 20
               leaderPosition: Callout.LeaderPosition.Bottom
@@ -216,13 +216,6 @@ Pane {
         background.border.color = borderColor;
         internal.leaderColor = borderColor;
     }
-
-    /*!
-        \obsolete
-        Use \c{background.radius} instead.
-    */
-    property int cornerRadius
-    onCornerRadiusChanged: background.radius = cornerRadius
 
     /*!
         \brief The signal emitted when the accessory button is clicked.
