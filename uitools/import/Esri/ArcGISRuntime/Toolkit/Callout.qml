@@ -54,7 +54,7 @@ import QtQuick.Shapes
      \newcode
             Callout {
               calloutData: myCalloutData
-              titleTextColor: "#000000"
+              palette.windowText: "#000000"
               background.color: "#ffffff"
               borderColor: "#000000"
               background.border.width: 2
@@ -216,13 +216,6 @@ Pane {
         background.border.color = borderColor;
         internal.leaderColor = borderColor;
     }
-
-    /*!
-        \obsolete
-        Use \c{palette.windowText} instead.
-    */
-    property color titleTextColor
-    onTitleTextColorChanged: palette.windowText = titleTextColor
 
     /*!
         \obsolete
