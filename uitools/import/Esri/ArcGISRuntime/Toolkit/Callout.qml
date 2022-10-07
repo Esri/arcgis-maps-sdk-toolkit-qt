@@ -55,10 +55,12 @@ import QtQuick.Shapes
             Callout {
               calloutData: myCalloutData
               palette.windowText: "#000000"
-              background.color: "#ffffff"
-              background.border.color: "#000000"
-              background.border.width: 2
-              background.radius: 5
+              background: Rectangle {
+                  color: "#ffffff"
+                  border.color: "#000000"
+                  border.width: 2
+                  radius: 5
+              }
               leaderHeight: 10
               leaderWidth: 20
               leaderPosition: Callout.LeaderPosition.Bottom
@@ -266,8 +268,6 @@ Pane {
     Component.onCompleted: {
         background.children.push(shapeTail.createObject())
     }
-
-
 
     contentItem: GridLayout {
         id: calloutLayout
@@ -560,7 +560,6 @@ Pane {
         id: internal
         property real anchorPointX: (calloutData ? calloutData.screenPoint.x : 0) + screenOffsetX
         property real anchorPointY: (calloutData ? calloutData.screenPoint.y : 0) + screenOffsetY
-
         // Is either the contents of root.leaderPosition, or a calculated LeaderPosition if root.leaderPosition
         // is set to \c Automatic.
         property int leaderPosition: {
