@@ -56,7 +56,7 @@ import QtQuick.Shapes
               calloutData: myCalloutData
               palette.windowText: "#000000"
               background.color: "#ffffff"
-              borderColor: "#000000"
+              background.border.color: "#000000"
               background.border.width: 2
               background.radius: 5
               leaderHeight: 10
@@ -206,16 +206,6 @@ Pane {
       This property defaults to \c 300.
     */
     property real maxWidth: 300
-
-    /*!
-        \obsolete
-        Use \c{background.border.color} instead.
-    */
-    property color borderColor
-    onBorderColorChanged: {
-        background.border.color = borderColor;
-        internal.leaderColor = borderColor;
-    }
 
     /*!
         \brief The signal emitted when the accessory button is clicked.
@@ -478,7 +468,7 @@ Pane {
                 // Draws the tail portion emitting from the pane.
                 id: tail
                 fillColor: root.background.color
-                strokeColor: internal.leaderColor
+                strokeColor: root.background.border.color
                 strokeWidth: parent.border.width
                 capStyle: ShapePath.RoundCap
                 startX: {
@@ -591,11 +581,7 @@ Pane {
         id: internal
         property real anchorPointX: (calloutData ? calloutData.screenPoint.x : 0) + screenOffsetX
         property real anchorPointY: (calloutData ? calloutData.screenPoint.y : 0) + screenOffsetY
-        // QML bug workaround here: `background.border.color` always comes out as black by default,
-        // even if it is transparent. We keep the leader color as transparent until explicilty set via
-        // `borderColor`. This supports old behaviour, and also supports all current known styles where
-        // Pane does not have an initial background border color.
-        property color leaderColor: "transparent"
+
         // Is either the contents of root.leaderPosition, or a calculated LeaderPosition if root.leaderPosition
         // is set to \c Automatic.
         property int leaderPosition: {

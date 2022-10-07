@@ -40,6 +40,15 @@ DemoPage {
                 id:callout
                 calloutData: view.calloutData
                 accessoryButtonVisible: false
+                implicitHeight: 300
+                leaderPosition: Callout.LeaderPosition.Automatic
+                maxWidth: 250
+                background: Rectangle {
+                    radius: 5
+                    border.width: 5
+                    border.color: "red"
+                }
+                palette.windowText: "black"
             }
             onMouseClicked : (mouse) => {
                 if (calloutData.visible) {
