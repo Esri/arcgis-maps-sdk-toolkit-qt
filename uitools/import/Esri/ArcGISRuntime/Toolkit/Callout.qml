@@ -157,18 +157,6 @@ Pane {
     property bool accessoryButtonVisible: true
 
     /*!
-        \obsolete
-
-        \brief A QML Item to display in the Callout.
-
-        The default is \c null.
-
-        This property is obsolete, to replace the Callout's content
-        set \c{contentItem} instead.
-    */
-    property Component calloutContent: null
-
-    /*!
         \brief The CalloutData to display in the Callout.
 
         The CalloutData controls the data that is being displayed
@@ -286,16 +274,7 @@ Pane {
         columns: 3
         rows: 2
         columnSpacing: 7
-        Loader {
-            sourceComponent: calloutContent
-            clip: true
-            Layout.columnSpan: 3
-            Layout.rowSpan: 2
-            Layout.fillWidth: true
-            Layout.preferredWidth: autoAdjustWidth ? -1 : root.maxWidth
-            Layout.maximumWidth: autoAdjustWidth ? root.maxWidth : -1
-            visible: calloutContent
-        }
+
         Image {
             id: image
             source: calloutData ? calloutData.imageUrl : ""
@@ -304,7 +283,7 @@ Pane {
             Layout.fillHeight: true
             Layout.preferredWidth: 40
             fillMode : Image.PreserveAspectFit
-            visible: !calloutContent && source && source.toString() !== ""
+            visible: source && source.toString() !== ""
         }
         Label {
             id: title
@@ -315,7 +294,7 @@ Pane {
             elide: Text.ElideRight
             // Is visible (even when empty) if detail is visible, otherise
             // row & columnspan offsets go askew.
-            visible: !calloutContent && (text || detail.visible)
+            visible: text || detail.visible
             Layout.alignment: Qt.AlignVCenter
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -357,7 +336,7 @@ Pane {
             rightPadding: 0
             flat: true
             radius: 32
-            visible: accessoryButtonVisible && !calloutContent && icon.source.toString() !== ""
+            visible: accessoryButtonVisible && icon.source.toString() !== ""
             onClicked: accessoryButtonClicked()
             icon.source: {
                 if (accessoryButtonType === "Info")
@@ -377,7 +356,7 @@ Pane {
             wrapMode: Text.Wrap
             elide: Text.ElideRight
             clip: true
-            visible: !calloutContent && text
+            visible: text
             Layout.alignment: Qt.AlignVCenter
             Layout.fillWidth: true
             Layout.fillHeight: true
