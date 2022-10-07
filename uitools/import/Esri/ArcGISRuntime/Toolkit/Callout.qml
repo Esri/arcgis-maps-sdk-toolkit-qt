@@ -289,6 +289,8 @@ Pane {
         background.children.push(shapeTail.createObject())
     }
 
+
+
     contentItem: GridLayout {
         id: calloutLayout
         columns: 3
@@ -317,6 +319,7 @@ Pane {
         Label {
             id: title
             text: calloutData ? calloutData.title : ""
+            color: palette.windowText
             wrapMode: Text.Wrap
             clip: true
             elide: Text.ElideRight
@@ -380,6 +383,7 @@ Pane {
         Label {
             id: detail
             text: calloutData ? calloutData.detail : ""
+            color: palette.windowText
             wrapMode: Text.Wrap
             elide: Text.ElideRight
             clip: true
