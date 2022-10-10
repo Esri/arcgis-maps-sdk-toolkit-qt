@@ -24,7 +24,7 @@
 #include "arcore_c_api.h"
 
 // Qt headers
-#include <QtAndroid>
+#include <QCoreApplication>
 #include <QGuiApplication>
 #include <QScreen>
 

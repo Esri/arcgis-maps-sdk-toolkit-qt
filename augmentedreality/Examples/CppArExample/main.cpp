@@ -69,7 +69,6 @@ int main(int argc, char *argv[])
   QSurfaceFormat::setDefaultFormat(fmt);
 #endif
 
-  QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
   QGuiApplication app(argc, argv);
 
   QCoreApplication::setApplicationName(kApplicationName);

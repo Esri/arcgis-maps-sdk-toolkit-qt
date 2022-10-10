@@ -79,7 +79,7 @@ ios {
 # Android configuration
 
 android {
-    QT += androidextras
+    QT += core
 
     HEADERS += \
         $$AR_COMMON_INCLUDE_PATH/Android/ArCoreWrapper.h \

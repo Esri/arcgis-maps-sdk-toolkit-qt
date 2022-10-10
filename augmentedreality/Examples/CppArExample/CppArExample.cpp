@@ -114,7 +114,7 @@ void CppArExample::setSceneView(SceneQuickView* sceneView)
   // Ignore multi-touch events.
   connect(m_sceneView, &SceneQuickView::touched, this, [](QTouchEvent& touchEvent)
   {
-    if (touchEvent.touchPoints().size() != 1)
+    if (touchEvent.points().size() != 1)
       touchEvent.accept();
   });
 
@@ -341,7 +341,7 @@ void CppArExample::onMouseClicked(QMouseEvent& event)
 {
   Q_CHECK_PTR(m_arcGISArView);
 
-  const QPoint screenPoint = event.localPos().toPoint();
+  const QPoint screenPoint = event.position().toPoint();
 
   // If "screenToLocation" mode is enabled.
   if (m_screenToLocationMode)
