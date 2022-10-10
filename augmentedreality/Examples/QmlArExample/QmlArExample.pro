@@ -1,4 +1,4 @@
-  ###############################################################################
+###############################################################################
 # Copyright 2012-2019 Esri
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -66,7 +66,7 @@ OTHER_FILES += \
 # The path to the ArcGIS runtime toolkit for Qt sources, corresponding to the files downloaded
 # from the GitHub repo: https://github.com/Esri/arcgis-runtime-toolkit-qt
 
-ARCGIS_TOOLKIT_PATH = $$PWD/../../../ # must be set to the root path of the toolkit folder
+ARCGIS_TOOLKIT_PATH = # must be set to the root path of the toolkit folder
 
 isEmpty(ARCGIS_TOOLKIT_PATH) {
     error(ARCGIS_TOOLKIT_PATH is not set)
