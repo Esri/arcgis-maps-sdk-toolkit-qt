@@ -36,17 +36,17 @@ DemoPage {
                 detail: "x: " + xClickLoc + " y: " + yClickLoc
             }
 
-            Callout{
+            Callout {
                 id:callout
                 calloutData: view.calloutData
                 accessoryButtonVisible: false
-                implicitHeight: 300
+                implicitHeight: 100
                 leaderPosition: Callout.LeaderPosition.Automatic
                 maxWidth: 250
                 background: Rectangle {
                     radius: 5
-                    border.width: 5
-                    border.color: "red"
+                    border.width: 2
+                    border.color: "black"
                 }
                 palette.windowText: "black"
             }
