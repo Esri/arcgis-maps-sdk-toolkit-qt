@@ -341,7 +341,7 @@ void CppArExample::onMouseClicked(QMouseEvent& event)
 {
   Q_CHECK_PTR(m_arcGISArView);
 
-  const QPoint screenPoint = event.position().toPoint();
+  const QPoint screenPoint = event.globalPosition().toPoint();
 
   // If "screenToLocation" mode is enabled.
   if (m_screenToLocationMode)
