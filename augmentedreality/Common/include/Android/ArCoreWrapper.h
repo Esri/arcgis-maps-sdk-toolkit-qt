@@ -17,7 +17,7 @@
 #ifndef ArCoreWrapper_H
 #define ArCoreWrapper_H
 
-#include <QAndroidJniEnvironment>
+#include <QJniEnvironment>
 #include <QSize>
 #include <QTimer>
 #include <QMatrix4x4>
@@ -113,7 +113,7 @@ private:
 
   ArcGISArViewInterface* m_arcGISArView = nullptr;
 
-  QAndroidJniEnvironment m_jniEnvironment;
+  QJniEnvironment m_jniEnvironment;
 
   jobject m_applicationActivity = nullptr;
 

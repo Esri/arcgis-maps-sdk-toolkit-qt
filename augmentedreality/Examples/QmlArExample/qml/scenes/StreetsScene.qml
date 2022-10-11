@@ -23,14 +23,14 @@ import Esri.ArcGISArToolkit
 
 Item {
     property alias scene: scene
+    property alias initBasemapStyle : initBasemapStyle
     property Camera originCamera: null
     property alias locationDataSource: locationDataSource
     property double translationFactor: 1.0
 
     SceneWithElevation {
         id:scene
-        BasemapStreets {
-        }
+        initBasemapStyle: Enums.BasemapStyleArcGISStreets
     }
 
     LocationDataSource {

@@ -29,8 +29,7 @@ Item {
 
     SceneWithElevation {
         id:scene
-        BasemapImageryWithLabels {
-        }
+        initBasemapStyle: Enums.BasemapStyleArcGISImageryLabels
     }
 
     LocationDataSource {

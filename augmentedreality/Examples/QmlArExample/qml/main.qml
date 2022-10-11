@@ -66,7 +66,7 @@ ApplicationWindow {
 
         // If screenToLocationMode is true, create and place a 3D sphere in the scene. Otherwise set the
         // initial transformation based on the screen position.
-        onMouseClicked: {
+        onMouseClicked: (mouse) => {
             // If "screenToLocation" mode is enabled.
             if (screenToLocationMode) {
                 // Get the real world location for screen point from AR view.
@@ -96,7 +96,7 @@ ApplicationWindow {
             }
         }
 
-        onMousePositionChanged: mouse.accepted = true;
+        onMousePositionChanged: (mouse) => { mouse.accepted = true; }
 
         // Get or create graphic overlay
         function getOrCreateGraphicsOverlay() {
@@ -154,7 +154,7 @@ ApplicationWindow {
             id: calibrationView
             width: parent.width
             visible: false
-            onTriggered: updateOriginCamera(latitude, longitude, altitude, heading);
+            onTriggered: (latitude, longitude, altitude, heading) => updateOriginCamera(latitude, longitude, altitude, heading);
         }
 
         ClippingView {
@@ -183,7 +183,7 @@ ApplicationWindow {
         onResetCalibrationClicked: calibrationView.reset();
         onScreenToLocationClicked: screenToLocationMode = !screenToLocationMode;
 
-        onShowPointCloud: {
+        onShowPointCloud: (visible) => {
             if (visible)
                 arcGISArView.pointCloudColor = Qt.rgba(0.39, 0.39, 1.0, 1.0);
             else
