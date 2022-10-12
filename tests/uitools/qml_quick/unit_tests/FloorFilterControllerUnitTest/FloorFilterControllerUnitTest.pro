@@ -16,7 +16,7 @@ CONFIG += c++14 warn_on qmltestcase
 
 TEMPLATE = app
 
-ARCGIS_RUNTIME_VERSION = 100.15
+ARCGIS_RUNTIME_VERSION = 100.15.0
 include($$PWD/../../shared/arcgisruntime.pri)
 include($$PWD/../../../../../uitools/toolkitqml.pri)
 

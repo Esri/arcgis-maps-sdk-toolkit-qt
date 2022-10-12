@@ -163,4 +163,11 @@ QtObject {
             }
         }
     }
+
+    // cancel the current challenge on destruction to ensure new challenges can be issued
+    // for future requests (e.g. if AuthenticationView is declared within a StackView)
+    Component.onDestruction: {
+        if (internal.currentChallenge)
+            internal.currentChallenge.cancel();
+    }
 }

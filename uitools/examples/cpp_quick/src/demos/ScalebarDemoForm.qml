@@ -18,40 +18,23 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import Esri.ArcGISRuntime 100.15
 import Esri.ArcGISRuntime.Toolkit 100.15
+import DemoApp 1.0
 
 DemoPage {
-    property real xClickLoc
-    property real yClickLoc
-
     mapViewContents: Component {
-//! [Set up Callout QML]
         MapView {
             id: view
-            Map {
-                initBasemapStyle: Enums.BasemapStyleArcGISDarkGray
-            }
-            calloutData {
-                imageUrl: "qrc:///esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/pin-tear.svg"
-                title: "This is the location callout"
-                detail: "x: " + xClickLoc + " y: " + yClickLoc
-            }
-
-            Callout{
-                id:callout
-                calloutData: view.calloutData
-                accessoryButtonVisible: false
-            }
-            onMouseClicked : {
-                if (calloutData.visible) {
-                    callout.dismiss();
-                } else {
-                    xClickLoc = mouse.mapPoint.x.toFixed(2);
-                    yClickLoc = mouse.mapPoint.y.toFixed(2);
-                    calloutData.location = mouse.mapPoint
-                    callout.showCallout()
+            Scalebar {
+                anchors {
+                    bottom: parent.attributionTop
+                    left: parent.left
+                    margins: 10
                 }
+                mapView: parent
+            }
+            OverviewMapDemo {
+                geoView: view
             }
         }
-//! [Set up Callout QML]
     }
 }

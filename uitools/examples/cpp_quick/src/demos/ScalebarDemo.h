@@ -14,26 +14,21 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtQuick.Layouts 1.12
-import Esri.ArcGISRuntime 100.15
-import Esri.ArcGISRuntime.Toolkit 100.15
-import DemoApp 1.0
+#ifndef ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_SCALEBARDEMO_H
+#define ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_SCALEBARDEMO_H
 
-DemoPage {
-    mapViewContents: Component {
-        MapView {
-            id:view
+#include "BaseDemo.h"
 
-            Callout {
-                id: callout
-                calloutData : view.calloutData //binding to parent. Any change is reflected on this
-                accessoryButtonVisible: false
-            }
-            CalloutDemo {
-                geoView: view
-            }
-        }
-    }
-}
+#include <QObject>
+#include <QQmlEngine>
+
+class ScalebarDemo : public BaseDemo
+{
+  Q_OBJECT
+  QML_ELEMENT
+public:
+  Q_INVOKABLE ScalebarDemo(QObject* parent = nullptr);
+  ~ScalebarDemo() override;
+};
+
+#endif // ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_SCALEBARDEMO_H
