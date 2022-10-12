@@ -21,9 +21,7 @@
 #include <QSizeF>
 #include <QMatrix4x4>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
 class ArcGISArViewInterface;
 
@@ -92,8 +90,6 @@ private:
 };
 
 } // Internal namespace
-} // Toolkit namespace
-} // ArcGISRuntime namespace
-} // Esri namespace
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // ArKitWrapper_H

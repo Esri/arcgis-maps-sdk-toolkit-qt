@@ -20,37 +20,36 @@
 #include <QObject>
 #include <QPointer>
 
-namespace Esri {
-  namespace ArcGISRuntime {
-    class Bookmark;
+namespace Esri::ArcGISRuntime {
 
-    namespace Toolkit {
-      class BookmarkListItem : public QObject
-      {
-        Q_OBJECT
-        Q_PROPERTY(QString name READ name NOTIFY nameChanged)
+  class Bookmark;
 
-      public:
-        Q_INVOKABLE explicit BookmarkListItem(QObject* parent = nullptr);
-        Q_INVOKABLE explicit BookmarkListItem(Bookmark* bookmark, QObject* parent = nullptr);
-        ~BookmarkListItem() override;
+  namespace Toolkit {
+    class BookmarkListItem : public QObject
+    {
+      Q_OBJECT
+      Q_PROPERTY(QString name READ name NOTIFY nameChanged)
 
-        void setBookmark(Bookmark* bookmark);
-        Bookmark* bookmark() const;
+    public:
+      Q_INVOKABLE explicit BookmarkListItem(QObject* parent = nullptr);
+      Q_INVOKABLE explicit BookmarkListItem(Bookmark* bookmark, QObject* parent = nullptr);
+      ~BookmarkListItem() override;
 
-        QString name() const;
-        void setName(const QString& name);
+      void setBookmark(Bookmark* bookmark);
+      Bookmark* bookmark() const;
 
-      signals:
-        void bookmarkChanged();
-        void nameChanged();
+      QString name() const;
+      void setName(const QString& name);
 
-      private:
-        QPointer<Bookmark> m_bookmark;
-      };
+    signals:
+      void bookmarkChanged();
+      void nameChanged();
 
-    } // Toolkit
-  } // ArcGISRuntime
-} // Esri
+    private:
+      QPointer<Bookmark> m_bookmark;
+    };
+
+  } // Toolkit
+} // Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_BOOKMARKLISTITEM_H

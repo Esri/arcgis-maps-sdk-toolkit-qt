@@ -20,9 +20,7 @@
 // Toolkit headers
 #include "BasemapGalleryController.h"
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
  /*!
   \class Esri::ArcGISRuntime::Toolkit::BasemapGallery
@@ -140,6 +138,4 @@ namespace Toolkit {
       return;
     m_ui->listView->selectionModel()->select(index, QItemSelectionModel::Select);
   }
-} //Toolkit
-} //ArcGISRuntime
-} //Esri
+} // Esri::ArcGISRuntime::Toolkit

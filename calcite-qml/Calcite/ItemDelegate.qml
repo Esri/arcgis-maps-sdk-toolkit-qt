@@ -13,11 +13,10 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtQuick.Controls.impl 2.12
-import QtQuick.Templates 2.15 as T
-import QtGraphicalEffects 1.12
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Controls.impl
+import QtQuick.Templates as T
 
 T.ItemDelegate {
     id: control
@@ -44,12 +43,6 @@ T.ItemDelegate {
 
         visible: control.highlighted
         source: "images/check.svg"
-        ColorOverlay {
-            anchors.fill: indicator
-            source: indicator
-            color: control.color
-            visible: indicator.visible
-        }
     }
     contentItem: IconLabel {
         spacing: control.spacing

@@ -20,12 +20,13 @@
 #include <QObject>
 #include "ArEnums.h"
 
-class QGeoPositionInfoSource;
 class QCompass;
+class QGeoPositionInfoSource;
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+Q_MOC_INCLUDE(QCompass)
+Q_MOC_INCLUDE("QGeoPositionInfoSource")
+
+namespace Esri::ArcGISRuntime::Toolkit {
 
 class LocationDataSource : public QObject
 {
@@ -90,8 +91,6 @@ private:
   ArEnums::LocationTrackingMode m_locationTrackingMode = ArEnums::LocationTrackingMode::Initial;
 };
 
-} // Toolkit namespace
-} // ArcGISRuntime namespace
-} // Esri namespace
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // LocationDataSource_H

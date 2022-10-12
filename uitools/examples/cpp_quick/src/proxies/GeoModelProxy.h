@@ -21,11 +21,9 @@
 
 #include <QObject>
 
-namespace Esri {
-namespace ArcGISRuntime {
+namespace Esri::ArcGISRuntime {
   class GeoModel;
-}
-}
+} // Esri::ArcGISRuntime
 
 class GeoModelProxy : public QObject
 {

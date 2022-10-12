@@ -24,8 +24,7 @@ namespace Ui {
   class FloorFilter;
 }
 
-namespace Esri {
-namespace ArcGISRuntime {
+namespace Esri::ArcGISRuntime {
 
   class MapGraphicsView;
   class SceneGraphicsView;
@@ -54,7 +53,6 @@ namespace ArcGISRuntime {
       bool m_facilitiesUpdatedFromController{false};
     };
   } // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_FLOORFILTER_H

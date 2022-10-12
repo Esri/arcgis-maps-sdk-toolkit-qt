@@ -14,29 +14,45 @@
 
 module Esri.ArcGISRuntime.Toolkit
 
-depends Esri.ArcGISRuntime.Toolkit.Controller 100.15
+depends Esri.ArcGISRuntime.Toolkit.Controller 200.0
 
 # Current version increment
-CurrentVersion 100.15 CurrentVersion.qml
+CurrentVersion 200.0 CurrentVersion.qml
 
 # View components
 AuthenticationView 100.10 AuthenticationView.qml
+AuthenticationView 200.0 AuthenticationView.qml
 BasemapGallery 100.12 BasemapGallery.qml
+BasemapGallery 200.0 BasemapGallery.qml
 BookmarksView 100.15 BookmarksView.qml
+BookmarksView 200.0 BookmarksView.qml
 Callout 100.10 Callout.qml
+Callout 200.0 Callout.qml
 ClientCertificateView 100.10 ClientCertificateView.qml
+ClientCertificateView 200.0 ClientCertificateView.qml
 CoordinateConversion 100.10 CoordinateConversion.qml
+CoordinateConversion 200.0 CoordinateConversion.qml
 internal FlashImage FlashImage.qml
 NorthArrow 100.10 NorthArrow.qml
+NorthArrow 200.0 NorthArrow.qml
 OAuth2View 100.10 OAuth2View.qml
+OAuth2View 200.0 OAuth2View.qml
 OverviewMap 100.12 OverviewMap.qml
+OverviewMap 200.0 OverviewMap.qml
 PopupStackView 100.10 PopupStackView.qml
+PopupStackView 200.0 PopupStackView.qml
 PopupView 100.10 PopupView.qml
+PopupView 200.0 PopupView.qml
 Scalebar 100.13 Scalebar.qml
+Scalebar 200.0 Scalebar.qml
 internal ScalebarImpl ScalebarImpl.qml
 SearchView 100.13 SearchView.qml
+SearchView 200.0 SearchView.qml
 SslHandshakeView 100.10 SslHandshakeView.qml
+SslHandshakeView 200.0 SslHandshakeView.qml
 TimeSlider 100.10 TimeSlider.qml
+TimeSlider 200.0 TimeSlider.qml
 UserCredentialsView 100.10 UserCredentialsView.qml
-FloorFilter 100.14 FloorFilter.qml
+UserCredentialsView 200.0 UserCredentialsView.qml
 UtilityNetworkTrace 100.15 UtilityNetworkTrace.qml
+FloorFilter 200.0 FloorFilter.qml

@@ -20,12 +20,7 @@
 #include <QString>
 #include <QQmlEngine>
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri::ArcGISRuntime::Toolkit {
 
 namespace
 {
@@ -37,6 +32,4 @@ void registerComponents_qml_(QQmlEngine& appEngine)
   appEngine.addImportPath(ESRI_COM_PATH);
 }
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

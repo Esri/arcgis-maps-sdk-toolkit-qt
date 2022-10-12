@@ -20,6 +20,8 @@
 #include <QOpenGLContext>
 #include <QQuickWindow>
 
+#include <QQuickOpenGLUtils>
+
 using namespace Esri::ArcGISRuntime::Toolkit::Internal;
 
 /*!
@@ -74,5 +76,7 @@ void ArcGISArViewRenderer::render()
   m_arWrapper->render();
 
   if (m_window)
-    m_window->resetOpenGLState();
+  {
+    QQuickOpenGLUtils::resetOpenGLState();
+  }
 }

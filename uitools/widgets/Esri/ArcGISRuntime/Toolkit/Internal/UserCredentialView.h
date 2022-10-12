@@ -26,9 +26,7 @@ namespace Ui {
   class UserCredentialView;
 }
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   class UserCredentialView : public QWidget
   {
@@ -46,8 +44,6 @@ namespace Toolkit {
     Ui::UserCredentialView* m_ui = nullptr;
   };
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_USERCREDENTIALVIEW_H

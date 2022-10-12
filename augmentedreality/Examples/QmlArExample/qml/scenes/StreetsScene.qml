@@ -14,23 +14,23 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.6
-import Esri.ArcGISRuntime 100.15
-import Esri.ArcGISArToolkit 1.0
+import QtQuick
+import Esri.ArcGISRuntime
+import Esri.ArcGISArToolkit
 
 // Creates a scene based on the Streets base map.
 // Mode: Full-Scale AR
 
 Item {
     property alias scene: scene
+    property alias initBasemapStyle : initBasemapStyle
     property Camera originCamera: null
     property alias locationDataSource: locationDataSource
     property double translationFactor: 1.0
 
     SceneWithElevation {
         id:scene
-        BasemapStreets {
-        }
+        initBasemapStyle: Enums.BasemapStyleArcGISStreets
     }
 
     LocationDataSource {

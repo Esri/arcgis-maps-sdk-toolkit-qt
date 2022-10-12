@@ -23,8 +23,11 @@
 #include <FloorManager.h>
 #include <FloorSite.h>
 #include <GeometryEngine.h>
+#include <Layer.h>
 #include <Map.h>
 #include <Scene.h>
+#include <TaskWatcher.h>
+#include <Viewpoint.h>
 
 // Toolkit headers
 #include "FloorFilterFacilityItem.h"
@@ -38,9 +41,7 @@
 // stl headers
 #include <cmath>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   namespace {
 
@@ -943,6 +944,4 @@ namespace Toolkit {
   \brief Emitted when the automaticSelectionModeChanged flag has changed.
  */
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

@@ -14,10 +14,10 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.12
-import QtQuick.Controls 2.2
-import Esri.CppArExample 1.0
-import Esri.ArcGISArToolkit 1.0
+import QtQuick
+import QtQuick.Controls
+import Esri.CppArExample
+import Esri.ArcGISArToolkit
 
 ApplicationWindow {
     visible: true

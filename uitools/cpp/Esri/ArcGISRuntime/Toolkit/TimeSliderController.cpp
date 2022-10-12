@@ -19,20 +19,24 @@
 #include "Internal/GeoViews.h"
 
 // ArcGISRuntime headers
+#include <GeoView.h>
+#include <Layer.h>
+#include <LayerListModel.h>
 #include <Map.h>
+#include <MapTypes.h>
 #include <Scene.h>
+#include <ServiceTypes.h>
 #include <TimeAware.h>
+#include <TimeValue.h>
 
+// std headers
 #include <cmath>
 
+// Qt headers
+#include <QDateTime>
 #include <QDebug>
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri::ArcGISRuntime::Toolkit {
 
 namespace
 {
@@ -277,10 +281,10 @@ void TimeSliderController::initializeTimeProperties(LayerListModel* opLayers)
   if (!m_operationalLayers)
     return;
 
-  connect(m_operationalLayers.data(), &LayerListModel::layerAdded,
+  connect(m_operationalLayers.data(), &LayerListModel::itemAdded,
           this, qOverload<>(&TimeSliderController::initializeTimeProperties));
 
-  connect(m_operationalLayers.data(), &LayerListModel::layerRemoved,
+  connect(m_operationalLayers.data(), &LayerListModel::itemRemoved,
           this, qOverload<>(&TimeSliderController::initializeTimeProperties));
 
   for (auto layer : *m_operationalLayers)
@@ -524,6 +528,4 @@ std::pair<int, int> TimeSliderController::stepsForGeoViewExtent() const
   \property Esri::ArcGISRuntime::Toolkit::TimeSliderController::endStep
  */
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

@@ -18,17 +18,10 @@
 
 class QQmlEngine;
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri::ArcGISRuntime::Toolkit {
 
 void registerComponents(QQmlEngine& engine);
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_REGISTER_H

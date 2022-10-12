@@ -14,11 +14,11 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQml 2.12
-import Esri.ArcGISRuntime 100.15
-import Esri.ArcGISRuntime.Toolkit 100.15
-import QtQml.Models 2.15
-import QtQuick 2.15
+import QtQml
+import Esri.ArcGISRuntime
+import Esri.ArcGISRuntime.Toolkit
+import QtQml.Models
+import QtQuick
 
 /*!
    \qmltype SearchViewController
@@ -296,7 +296,7 @@ QtObject {
         property Point queryCenter: null
 
         property ListModel sources: ListModel {
-            onRowsInserted: {
+            onRowsInserted: (first, last) =>{
                 for (let i = first; i <= last; ++i) {
                     const source = sources.get(i).modelData;
                     if (source) {

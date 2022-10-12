@@ -14,10 +14,10 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.12
-import QtQuick.Window 2.12
-import Esri.ArcGISRuntime 100.15
-import Esri.ArcGISArToolkit 1.0
+import QtQuick
+import QtQuick.Window
+import Esri.ArcGISRuntime
+import Esri.ArcGISArToolkit
 
 ArcGISArViewInternal {
     id: root
@@ -45,7 +45,13 @@ ArcGISArViewInternal {
     // Update the initial transformation, using the hit matrix.
     property TransformationMatrix initialTransformationMatrix: null
 
-    onInitialTransformationChanged: {
+    onInitialTransformationChanged: (quaternionX,
+                                     quaternionY,
+                                     quaternionZ,
+                                     quaternionW,
+                                     translationX,
+                                     translationY,
+                                     translationZ) => {
         // Set the `initialTransformationMatrix` as the TransformationMatrix.identity - hit test matrix.
         const hitMatrix = Factory.TransformationMatrix.createWithQuaternionAndTranslation(
                     quaternionX, quaternionY, quaternionZ, quaternionW,
@@ -57,7 +63,13 @@ ArcGISArViewInternal {
 
     // It's not possible to create the TransformationMatrix object directly in C++. This function
     // is used to create the TM object and assign it to the TMCC.
-    onTransformationMatrixChanged: {
+    onTransformationMatrixChanged: (quaternionX,
+                                    quaternionY,
+                                    quaternionZ,
+                                    quaternionW,
+                                    translationX,
+                                    translationY,
+                                    translationZ) => {
         const matrix = Factory.TransformationMatrix.createWithQuaternionAndTranslation(
                     quaternionX, quaternionY, quaternionZ, quaternionW,
                     translationX, translationY, translationZ);
@@ -72,7 +84,12 @@ ArcGISArViewInternal {
     // It's not possible to call setFieldOfViewFromLensIntrinsics directly from the C++ code, due to
     // the orientation device enumeration. This function is used to converts the orientation (int) to
     // deviceOrientation (enum).
-    onFieldOfViewChanged: {
+    onFieldOfViewChanged: (xFocalLength,
+                           yFocalLength,
+                           xPrincipal,
+                           yPrincipal,
+                           xImageSize,
+                           yImageSize) => {
         if (!sceneView)
             return;
 
@@ -92,7 +109,9 @@ ArcGISArViewInternal {
     }
 
     // Update the location.
-    onLocationChanged: {
+    onLocationChanged: (latitude,
+                        longitude,
+                        altitude) => {
         const location = ArcGISRuntimeEnvironment.createObject("Point", { y: latitude, x: longitude, z: altitude });
 
         // Save location camera parameters.
@@ -114,7 +133,7 @@ ArcGISArViewInternal {
     }
 
     // Update the heading.
-    onHeadingChanged: {
+    onHeadingChanged: (heading) => {
         // Save location camera parameters.
         if (!locationCameraInternal) {
             const location = ArcGISRuntimeEnvironment.createObject("Point", { y: 0.0, x: 0.0, z: 0.0 });

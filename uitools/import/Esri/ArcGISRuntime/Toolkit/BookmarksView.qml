@@ -13,12 +13,12 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import Esri.ArcGISRuntime.Toolkit.Controller 100.15
+import Esri.ArcGISRuntime.Toolkit.Controller
 
-import QtQuick 2.15
-import QtQml 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
+import QtQuick
+import QtQml
+import QtQuick.Controls
+import QtQuick.Layouts
 
 /*!
  \qmltype BookmarksView

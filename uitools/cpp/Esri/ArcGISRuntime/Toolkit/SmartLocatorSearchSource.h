@@ -26,9 +26,7 @@
 // Qt headers
 #include <QObject>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   class SmartLocatorSearchSource : public LocatorSearchSource
   {
@@ -57,8 +55,6 @@ namespace Toolkit {
     int m_repeatSearchSuggestThreshold;
   };
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_SMARTLOCATORSEARCHSOURCE_H

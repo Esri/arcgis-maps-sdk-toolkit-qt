@@ -22,11 +22,9 @@
 #include <QObject>
 #include <QPointer>
 
-namespace Esri {
-namespace ArcGISRuntime {
+namespace Esri::ArcGISRuntime {
   class MapQuickView;
-}
-}
+} // Esri::ArcGISRuntime
 
 class MapQuickViewProxy : public QObject
 {

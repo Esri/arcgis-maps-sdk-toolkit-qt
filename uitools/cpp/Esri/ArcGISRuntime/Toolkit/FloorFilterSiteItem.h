@@ -19,8 +19,8 @@
 // Qt headers
 #include <QObject>
 
-namespace Esri {
-namespace ArcGISRuntime {
+namespace Esri::ArcGISRuntime {
+
   class FloorSite;
 
   namespace Toolkit {
@@ -48,7 +48,6 @@ namespace ArcGISRuntime {
     };
 
   } // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_FLOORFITLERFSITEITEM_H

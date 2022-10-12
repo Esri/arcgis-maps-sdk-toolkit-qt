@@ -14,7 +14,7 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQml 2.12
+import QtQml
 
 /*!
    \internal

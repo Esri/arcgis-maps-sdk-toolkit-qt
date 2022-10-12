@@ -21,17 +21,19 @@
 #include "Internal/GeoViews.h"
 
 // Qt headers
+#include <QMouseEvent>
 #include <QtGlobal>
+#include <QUuid>
 
 // ArcGISRuntime headers
+#include <Camera.h>
 #include <CoordinateFormatter.h>
+#include <LocationToScreenResult.h>
+#include <MapTypes.h>
+#include <SceneViewTypes.h>
+#include <Viewpoint.h>
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri::ArcGISRuntime::Toolkit {
 
 namespace
 {
@@ -157,7 +159,7 @@ void CoordinateConversionController::setGeoView(QObject* geoView)
       if (m_inPickingMode && (!m_screenToLocationTask.isValid() ||
                                m_screenToLocationTask.isDone()))
       {
-        m_screenToLocationTask = sceneView->screenToLocation(event.x(), event.y());
+        m_screenToLocationTask = sceneView->screenToLocation(event.pos().x(), event.pos().y());
         event.accept();
       }
     });
@@ -178,7 +180,7 @@ void CoordinateConversionController::setGeoView(QObject* geoView)
     {
       if (m_inPickingMode)
       {
-        setCurrentPoint(mapView->screenToLocation(event.x(), event.y()));
+        setCurrentPoint(mapView->screenToLocation(event.pos().x(), event.pos().y()));
         event.accept();
       }
     });
@@ -509,6 +511,4 @@ void CoordinateConversionController::setInPickingMode(bool mode)
   \sa Esri::ArcGISRuntime::Toolkit::CoordinateConversionController::inPickingMode()
  */
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

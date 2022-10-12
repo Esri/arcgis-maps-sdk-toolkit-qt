@@ -14,11 +14,11 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.12
-import QtQuick.Window 2.11
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.12
-import QtQuick.Shapes 1.15
+import QtQuick
+import QtQuick.Window
+import QtQuick.Layouts
+import QtQuick.Controls
+import QtQuick.Shapes
 
 /*!
     \qmltype Callout
@@ -54,11 +54,13 @@ import QtQuick.Shapes 1.15
      \newcode
             Callout {
               calloutData: myCalloutData
-              titleTextColor: "#000000"
-              backgroundColor: "#ffffff"
-              borderColor: "#000000"
-              borderWidth: 2
-              cornerRadius: 5
+              palette.windowText: "#000000"
+              background: Rectangle {
+                  color: "#ffffff"
+                  border.color: "#000000"
+                  border.width: 2
+                  radius: 5
+              }
               leaderHeight: 10
               leaderWidth: 20
               leaderPosition: Callout.LeaderPosition.Bottom
@@ -157,18 +159,6 @@ Pane {
     property bool accessoryButtonVisible: true
 
     /*!
-        \obsolete
-
-        \brief A QML Item to display in the Callout.
-
-        The default is \c null.
-
-        This property is obsolete, to replace the Callout's content
-        set \c{contentItem} instead.
-    */
-    property Component calloutContent: null
-
-    /*!
         \brief The CalloutData to display in the Callout.
 
         The CalloutData controls the data that is being displayed
@@ -206,86 +196,6 @@ Pane {
       This property defaults to \c 300.
     */
     property real maxWidth: 300
-
-    /*!
-        \obsolete
-        Use \c{implicitHeight} instead.
-    */
-    property alias calloutHeight: root.implicitHeight
-
-    /*!
-        \obsolete
-        Use \c{background.border.color} instead.
-    */
-    property color borderColor
-    onBorderColorChanged: {
-        background.border.color = borderColor;
-        internal.leaderColor = borderColor;
-    }
-
-    /*!
-        \obsolete
-        Use \c{Callout.LeaderPosition} instead.
-    */
-    property var leaderPositionEnum: { return {
-            UpperLeft: 0,
-            Top: 1,
-            UpperRight: 2,
-            Right: 3,
-            LowerRight: 4,
-            Bottom: 5,
-            LowerLeft: 6,
-            Left: 7,
-            Automatic: 8
-        } }
-
-    /*!
-        \obsolete
-        Use \l maxWidth instead.
-    */
-    property alias calloutWidth: root.maxWidth
-
-    /*!
-        \obsolete
-        Use \c{background.border.width} instead.
-    */
-    property int borderWidth
-    onBorderWidthChanged: background.border.width = borderWidth;
-
-    /*!
-        \obsolete
-        Use \c{background.color} instead.
-    */
-    property color backgroundColor
-    onBackgroundColorChanged: background.color = backgroundColor
-
-    /*!
-        \obsolete
-        Use \c{palette.windowText} instead.
-    */
-    property color titleTextColor
-    onTitleTextColorChanged: palette.windowText = titleTextColor
-
-    /*!
-        \obsolete
-        Use \c{palette.windowText} instead.
-    */
-    property color detailTextColor
-    onDetailTextColorChanged: palette.windowText = detailTextColor
-
-    /*!
-        \obsolete
-        Use \c{accessoryButtonVisible} instead.
-    */
-    property bool accessoryButtonHidden: false
-    onAccessoryButtonHiddenChanged: accessoryButtonVisible = !accessoryButtonHidden
-
-    /*!
-        \obsolete
-        Use \c{background.radius} instead.
-    */
-    property int cornerRadius
-    onCornerRadiusChanged: background.radius = cornerRadius
 
     /*!
         \brief The signal emitted when the accessory button is clicked.
@@ -364,16 +274,7 @@ Pane {
         columns: 3
         rows: 2
         columnSpacing: 7
-        Loader {
-            sourceComponent: calloutContent
-            clip: true
-            Layout.columnSpan: 3
-            Layout.rowSpan: 2
-            Layout.fillWidth: true
-            Layout.preferredWidth: autoAdjustWidth ? -1 : root.maxWidth
-            Layout.maximumWidth: autoAdjustWidth ? root.maxWidth : -1
-            visible: calloutContent
-        }
+
         Image {
             id: image
             source: calloutData ? calloutData.imageUrl : ""
@@ -382,17 +283,18 @@ Pane {
             Layout.fillHeight: true
             Layout.preferredWidth: 40
             fillMode : Image.PreserveAspectFit
-            visible: !calloutContent && source && source.toString() !== ""
+            visible: source && source.toString() !== ""
         }
         Label {
             id: title
             text: calloutData ? calloutData.title : ""
+            color: palette.windowText
             wrapMode: Text.Wrap
             clip: true
             elide: Text.ElideRight
             // Is visible (even when empty) if detail is visible, otherise
             // row & columnspan offsets go askew.
-            visible: !calloutContent && (text || detail.visible)
+            visible: text || detail.visible
             Layout.alignment: Qt.AlignVCenter
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -434,7 +336,7 @@ Pane {
             rightPadding: 0
             flat: true
             radius: 32
-            visible: accessoryButtonVisible && !calloutContent && icon.source.toString() !== ""
+            visible: accessoryButtonVisible && icon.source.toString() !== ""
             onClicked: accessoryButtonClicked()
             icon.source: {
                 if (accessoryButtonType === "Info")
@@ -450,10 +352,11 @@ Pane {
         Label {
             id: detail
             text: calloutData ? calloutData.detail : ""
+            color: palette.windowText
             wrapMode: Text.Wrap
             elide: Text.ElideRight
             clip: true
-            visible: !calloutContent && text
+            visible: text
             Layout.alignment: Qt.AlignVCenter
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -544,7 +447,7 @@ Pane {
                 // Draws the tail portion emitting from the pane.
                 id: tail
                 fillColor: root.background.color
-                strokeColor: internal.leaderColor
+                strokeColor: root.background.border.color
                 strokeWidth: parent.border.width
                 capStyle: ShapePath.RoundCap
                 startX: {
@@ -657,11 +560,6 @@ Pane {
         id: internal
         property real anchorPointX: (calloutData ? calloutData.screenPoint.x : 0) + screenOffsetX
         property real anchorPointY: (calloutData ? calloutData.screenPoint.y : 0) + screenOffsetY
-        // QML bug workaround here: `background.border.color` always comes out as black by default,
-        // even if it is transparent. We keep the leader color as transparent until explicilty set via
-        // `borderColor`. This supports old behaviour, and also supports all current known styles where
-        // Pane does not have an initial background border color.
-        property color leaderColor: "transparent"
         // Is either the contents of root.leaderPosition, or a calculated LeaderPosition if root.leaderPosition
         // is set to \c Automatic.
         property int leaderPosition: {

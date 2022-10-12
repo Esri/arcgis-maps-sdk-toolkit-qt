@@ -22,10 +22,7 @@
 
 class QOpenGLShaderProgram;
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
-namespace Internal {
+namespace Esri::ArcGISRuntime::Toolkit::Internal {
 
 class ArKitFrameRenderer : public QOpenGLFunctions
 {
@@ -58,9 +55,6 @@ private:
   QOpenGLTexture m_textureCbCr;
 };
 
-} // Internal namespace
-} // Toolkit namespace
-} // ArcGISRuntime namespace
-} // Esri namespace
+} // Esri::ArcGISRuntime::Toolkit::Internal
 
 #endif // ArKitFrameRenderer_H

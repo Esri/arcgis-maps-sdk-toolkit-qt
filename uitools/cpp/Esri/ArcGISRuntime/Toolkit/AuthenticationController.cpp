@@ -18,12 +18,7 @@
 // ArcGISRuntime headers
 #include <AuthenticationManager.h>
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
  \class Esri::ArcGISRuntime::Toolkit::AuthenticationController
@@ -359,6 +354,4 @@ void AuthenticationController::cleanup()
   \brief List of strings representing the certificates held by the AuthenticationManager.
  */
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

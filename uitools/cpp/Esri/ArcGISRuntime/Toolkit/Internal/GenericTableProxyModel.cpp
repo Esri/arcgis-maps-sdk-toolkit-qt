@@ -19,12 +19,7 @@
 
 #include <QMetaProperty>
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri::ArcGISRuntime::Toolkit {
 
 namespace
 {
@@ -381,6 +376,4 @@ bool GenericTableProxyModel::append(QObject* object)
   return m_sourceModel ? m_sourceModel->append(object) : false;
 }
 
-}
-}
-}
+} // Esri::ArcGISRuntime::Toolkit

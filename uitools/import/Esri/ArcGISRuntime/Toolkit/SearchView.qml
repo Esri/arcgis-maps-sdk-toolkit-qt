@@ -14,12 +14,11 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import Esri.ArcGISRuntime.Toolkit.Controller 100.15
+import Esri.ArcGISRuntime.Toolkit.Controller
 
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtQuick.Layouts 1.12
-import QtGraphicalEffects 1.15
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
 /*!
     \qmltype SearchView
@@ -165,7 +164,7 @@ Pane {
                 }
             }
 
-            Keys.onPressed: {
+            Keys.onPressed: event => {
                 if (event.key === Qt.Key_Up) {
                     if (list.currentIndex === 0) {
                         list.currentIndex = -1;
@@ -287,13 +286,7 @@ Pane {
                         Layout.rowSpan: 2
                         source: markerImageUrl
                         sourceSize.height: 32
-                        visible: true
-                        ColorOverlay {
-                            anchors.fill: sourceImage
-                            source: sourceImage
-                            color: textLabel.color
-                            visible: searchView.state !== "searchCommitted"
-                        }
+                        visible: searchView.state !== "searchCommitted"
                     }
                     Label {
                         id: textLabel
@@ -301,7 +294,6 @@ Pane {
                         Layout.fillWidth: true
                         text: displayTitle
                         elide: Text.ElideRight
-                        palette: searchView.palette
                         font: searchView.font
                         Layout.rowSpan: displaySubtitle === "" ? 2 : 1
                         verticalAlignment: Label.AlignVCenter
@@ -309,7 +301,6 @@ Pane {
                     Label {
                         Layout.fillWidth: true
                         text: displaySubtitle
-                        palette: searchView.palette
                         font: searchView.font
                         elide: Text.ElideRight
                     }
@@ -337,7 +328,6 @@ Pane {
 //                    }
 //                    contentItem: Label {
 //                        text: section
-//                        palette: searchView.palette
 //                        horizontalAlignment: Text.AlignHCenter
 //                        elide: Text.ElideRight
 //                        font.italic: true

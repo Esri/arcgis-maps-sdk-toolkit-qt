@@ -13,9 +13,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import QtQuick 2.15
-import QtQuick.Templates 2.15 as T
-import QtGraphicalEffects 1.12
+import QtQuick
+import QtQuick.Templates as T
 
 T.MenuItem {
     id: control
@@ -47,11 +46,6 @@ T.MenuItem {
 
         visible: control.checked
         source: control.checkable ? "images/check.svg" : ""
-        ColorOverlay {
-            anchors.fill: parent
-            source: parent
-            color: control.contentItem.color
-        }
     }
 
     background: Item {

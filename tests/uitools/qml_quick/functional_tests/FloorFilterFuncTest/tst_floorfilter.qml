@@ -15,14 +15,14 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.0
-import QtQuick.Controls 2.15
-import QtTest 1.0
+import QtQuick
+import QtQuick.Controls
+import QtTest
 
-import Esri.ArcGISRuntime 100.15
-import Esri.ArcGISRuntime.Toolkit 100.15
-import Esri.ArcGISRuntime.Toolkit.Controller 100.15
-import utils 1.0
+import Esri.ArcGISRuntime
+import Esri.ArcGISRuntime.Toolkit
+import Esri.ArcGISRuntime.Toolkit.Controller
+import utils
 
 Rectangle {
     id: root
@@ -367,7 +367,7 @@ Rectangle {
             // pan mapview
             mouseDrag(viewMulti, viewMulti.width / 2, viewMulti.height / 2, 30, 0);
             // spy on the setViewpoint
-            let spyViewpoint = createTemporaryQmlObject('import QtQuick 2.0; SignalSpy { target: viewMulti; signalName : "setViewpointCompleted" }', root);
+            let spyViewpoint = createTemporaryQmlObject('import QtQuick; SignalSpy { target: viewMulti; signalName : "setViewpointCompleted" }', root);
             mouseClick(zoom);
             spyViewpoint.wait();
             // select site again, go to facility view
@@ -429,7 +429,7 @@ Rectangle {
             // if floorManager already loaded, skip the wait. Otherwise wait for the signal
             if(ff.controller.floorManager != null ? ff.controller.floorManager.loadStatus !== Enums.LoadStatusLoaded : true)
                 ff.controller.spy.wait(10000);
-            let spyViewpoint = createTemporaryQmlObject('import QtQuick 2.0; SignalSpy { signalName : "setViewpointCompleted" }', root);
+            let spyViewpoint = createTemporaryQmlObject('import QtQuick; SignalSpy { signalName : "setViewpointCompleted" }', root);
             spyViewpoint.target = ff.geoView;
             // reset by zooming out
             let builder = ArcGISRuntimeEnvironment.createObject('EnvelopeBuilder', {

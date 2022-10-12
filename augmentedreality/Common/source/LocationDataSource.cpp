@@ -15,8 +15,9 @@
  ******************************************************************************/
 
 #include "LocationDataSource.h"
-#include <QGeoPositionInfoSource>
+
 #include <QCompass>
+#include <QGeoPositionInfoSource>
 
 using namespace Esri::ArcGISRuntime::Toolkit;
 

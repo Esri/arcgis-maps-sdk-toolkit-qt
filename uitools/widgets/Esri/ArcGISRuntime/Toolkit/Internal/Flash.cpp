@@ -20,12 +20,7 @@
 #include <QPropertyAnimation>
 #include <QTimer>
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
   \internal
@@ -192,6 +187,4 @@ void Flash::play(int duration)
  \property Esri::ArcGISRuntime::Toolkit::Flash::radius
  */
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

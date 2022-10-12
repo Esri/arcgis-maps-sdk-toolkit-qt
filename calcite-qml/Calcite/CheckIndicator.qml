@@ -13,8 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import QtQuick 2.15
-import QtGraphicalEffects 1.12
+import QtQuick
 
 Rectangle {
     property var control;
@@ -36,13 +35,6 @@ Rectangle {
             margins: control.checkState === Qt.Checked ? -2 : 2
         }
         source: control.checkState === Qt.Checked ? "images/check.svg": "images/line-solid.svg"
-        visible: false
-    }
-
-    ColorOverlay {
-        anchors.fill: checkmark
-        source: checkmark
-        color: Calcite.textInverse
-        visible: control.checkState !== Qt.Unchecked
+        visible: true
     }
 }

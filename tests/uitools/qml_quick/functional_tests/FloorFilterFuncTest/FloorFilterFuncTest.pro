@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-CONFIG += c++14 warn_on qmltestcase
+CONFIG += c++17 warn_on qmltestcase
 
 TEMPLATE = app
 
-ARCGIS_RUNTIME_VERSION = 100.15.0
+ARCGIS_RUNTIME_VERSION = 200.0.0
 include($$PWD/../../shared/arcgisruntime.pri)
 include($$PWD/../../../../../uitools/toolkitqml.pri)
 

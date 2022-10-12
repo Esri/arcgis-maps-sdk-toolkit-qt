@@ -28,10 +28,7 @@
 #include "ArCoreWrapper.h"
 #endif
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
-namespace Internal {
+namespace Esri::ArcGISRuntime::Toolkit::Internal {
 
 class ArcGISArView;
 
@@ -83,9 +80,6 @@ public:
 
 #endif
 
-} // Internal namespace
-} // Toolkit namespace
-} // ArcGISRuntime namespace
-} // Esri namespace
+} // Esri::ArcGISRuntime::Toolkit::Internal
 
 #endif // ARWRAPPER_H

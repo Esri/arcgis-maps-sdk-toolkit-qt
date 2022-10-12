@@ -27,10 +27,8 @@ namespace Ui
 class CoordinateConversion;
 }
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
+namespace Esri::ArcGISRuntime {
+    
 class MapGraphicsView;
 class SceneGraphicsView;
 
@@ -67,7 +65,6 @@ private:
 };
 
 } // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_COORDIANTECONVERSION_H

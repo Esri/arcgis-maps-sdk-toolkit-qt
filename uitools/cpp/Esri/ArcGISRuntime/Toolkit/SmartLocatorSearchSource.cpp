@@ -16,11 +16,15 @@
  ******************************************************************************/
 #include "SmartLocatorSearchSource.h"
 
+#include <QUuid>
+
 #include "Internal/SingleShotConnection.h"
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+#include "GeocodeResult.h"
+#include "SuggestListModel.h"
+#include "SuggestResult.h"
+
+namespace Esri::ArcGISRuntime::Toolkit {
 
   namespace {
     constexpr int DEFAULT_REPEAT_SEARCH_RESULT_THRESHOLD = 1;
@@ -189,6 +193,4 @@ namespace Toolkit {
     LocatorSearchSource::search(searchString, area);
   }
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

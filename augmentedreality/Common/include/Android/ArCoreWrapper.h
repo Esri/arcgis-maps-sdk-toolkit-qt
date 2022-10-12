@@ -17,7 +17,7 @@
 #ifndef ArCoreWrapper_H
 #define ArCoreWrapper_H
 
-#include <QAndroidJniEnvironment>
+#include <QJniEnvironment>
 #include <QSize>
 #include <QTimer>
 #include <QMatrix4x4>
@@ -32,9 +32,7 @@ using ArTrackableList = struct ArTrackableList_;
 using ArTrackable = struct ArTrackable_;
 using ArPointCloud = struct ArPointCloud_;
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
 class ArcGISArViewInterface;
 
@@ -115,7 +113,7 @@ private:
 
   ArcGISArViewInterface* m_arcGISArView = nullptr;
 
-  QAndroidJniEnvironment m_jniEnvironment;
+  QJniEnvironment m_jniEnvironment;
 
   jobject m_applicationActivity = nullptr;
 
@@ -164,8 +162,6 @@ private:
 };
 
 } // Internal namespace
-} // Toolkit namespace
-} // ArcGISRuntime namespace
-} // Esri namespace
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // ArCoreWrapper_H

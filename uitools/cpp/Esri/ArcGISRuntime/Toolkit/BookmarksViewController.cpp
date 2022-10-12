@@ -26,12 +26,12 @@
 
 // ArcGISRuntime headers
 #include <Bookmark.h>
+#include <BookmarkListModel.h>
 #include <Map.h>
 #include <Scene.h>
+#include <TaskWatcher.h>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   namespace {
     void setupBookmarks(BookmarkListModel* sourceModel, GenericListModel* targetModel)
@@ -274,6 +274,4 @@ namespace Toolkit {
   \sa Esri::ArcGISRuntime::Toolkit::BookmarksViewController::geoView() const
  */
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

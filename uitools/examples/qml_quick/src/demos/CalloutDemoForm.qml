@@ -14,10 +14,10 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import Esri.ArcGISRuntime 100.15
-import Esri.ArcGISRuntime.Toolkit 100.15
+import QtQuick
+import QtQuick.Controls
+import Esri.ArcGISRuntime
+import Esri.ArcGISRuntime.Toolkit
 
 DemoPage {
     property real xClickLoc
@@ -36,12 +36,21 @@ DemoPage {
                 detail: "x: " + xClickLoc + " y: " + yClickLoc
             }
 
-            Callout{
+            Callout {
                 id:callout
                 calloutData: view.calloutData
                 accessoryButtonVisible: false
+                implicitHeight: 100
+                leaderPosition: Callout.LeaderPosition.Automatic
+                maxWidth: 250
+                background: Rectangle {
+                    radius: 5
+                    border.width: 2
+                    border.color: "black"
+                }
+                palette.windowText: "black"
             }
-            onMouseClicked : {
+            onMouseClicked : (mouse) => {
                 if (calloutData.visible) {
                     callout.dismiss();
                 } else {

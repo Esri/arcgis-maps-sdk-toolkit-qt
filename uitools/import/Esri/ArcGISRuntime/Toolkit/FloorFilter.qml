@@ -13,12 +13,11 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import Esri.ArcGISRuntime.Toolkit.Controller 100.15
-import QtQuick 2.12
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
-import QtQml.Models 2.15
-import QtGraphicalEffects 1.12
+import Esri.ArcGISRuntime.Toolkit.Controller
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQml.Models
 
 /*!
   \qmltype FloorFilter
@@ -54,7 +53,7 @@ Control {
       \qmlproperty FloorFilterController controller
       \brief The controller handles binding logic between the FloorFilter, \c GeoModel, \c FloorManager and
       the flooraware layers.
-      
+
       The QML controller is documented \l{FloorFilterController}{here} and the CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::FloorFilterController}{here}.
     */
     property var controller: FloorFilterController {}
@@ -159,14 +158,14 @@ Control {
                     onClicked: {
                         switch(internal.currentVisibileListView){
                             case FloorFilter.VisibleListView.Site:
-                                controller.zoomToSite(controller.selectedSiteId);    
+                                controller.zoomToSite(controller.selectedSiteId);
                                 break;
                             case FloorFilter.VisibleListView.Facility:
                                 controller.zoomToFacility(controller.selectedFacilityId);
                                 break;
                             default:
                                 console.error("extra enum not accounted for.");
-                        } 
+                        }
                     }
                 }
 
@@ -175,7 +174,7 @@ Control {
                     orientation: Qt.Horizontal
                 }
 
-                //Layout width: fill the parent Layout if is larger than the `contentItem.width`. 
+                //Layout width: fill the parent Layout if is larger than the `contentItem.width`.
                 // If `contentItem.width` is larger, stretch to keep all its items without resizing them (don't elide text children).
                 Flickable {
                     id: flickable
@@ -321,7 +320,7 @@ Control {
                         id: searchImg
                         sourceSize.width: 32
                         sourceSize.height: 32
-                        visible: false
+                        visible: true
                         source: "images/search.svg"
                         width: height
                         anchors {
@@ -330,11 +329,6 @@ Control {
                             bottom: parent.bottom
                             margins: 4
                         }
-                    }
-                    ColorOverlay {
-                        anchors.fill: searchImg
-                        source: searchImg
-                        color: noResultsFoundLabel.color
                     }
                 }
 
@@ -422,7 +416,7 @@ Control {
                             }
                         ]
                         // sort the items in filteredGroup when in facility view.
-                        items.onChanged: {                            
+                        items.onChanged: {
                             if(internal.currentVisibileListView === FloorFilter.VisibleListView.Facility){
                                 var elements = [];
                                 // populate js array

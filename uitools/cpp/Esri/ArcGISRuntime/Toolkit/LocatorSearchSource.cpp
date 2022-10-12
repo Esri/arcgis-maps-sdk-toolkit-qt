@@ -15,18 +15,27 @@
  ******************************************************************************/
 #include "LocatorSearchSource.h"
 
+// Qt headers
+#include <QVariant>
+#include <QUuid>
+
 // ArcGISRuntime headers
+#include <Envelope.h>
+#include <Error.h>
+#include <GeocodeResult.h>
 #include <Graphic.h>
+#include <LocatorAttribute.h>
+#include <LocatorInfo.h>
 #include <PictureMarkerSymbol.h>
+#include <SuggestListModel.h>
 #include <SuggestResult.h>
 
 // Toolkit headers
 #include "Internal/DoOnLoad.h"
 #include "SearchResult.h"
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
+
   namespace {
     const char* MAP_PIN = "qrc:///esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/pin-tear.svg";
 
@@ -271,6 +280,4 @@ namespace Toolkit {
     m_searchTask = m_locatorTask->geocodeWithParameters(searchString, params);
   }
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

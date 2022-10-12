@@ -18,6 +18,7 @@
 
 // ArcGISRuntime headers
 #include <Loadable.h>
+#include <MapTypes.h>
 
 // Qt headers
 #include <QObject>
@@ -25,9 +26,7 @@
 // C++ headers
 #include <type_traits>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   /*
     \internal
@@ -77,8 +76,6 @@ namespace Toolkit {
     }
   }
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_DOONLOAD_H

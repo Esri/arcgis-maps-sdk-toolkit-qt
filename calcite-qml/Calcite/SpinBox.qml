@@ -13,9 +13,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import QtQuick 2.15
-import QtQuick.Templates 2.15 as T
-import QtGraphicalEffects 1.12
+import QtQuick
+import QtQuick.Templates as T
 
 T.SpinBox {
     id: control
@@ -81,12 +80,6 @@ T.SpinBox {
                 sourceSize.width: parent.width
                 sourceSize.height: parent.width
             }
-
-            ColorOverlay {
-                anchors.fill : upIndicatorImage
-                source: upIndicatorImage
-                color: up.hovered ? Calcite.text1 : Calcite.text3
-            }
         }
     }
 
@@ -115,12 +108,6 @@ T.SpinBox {
                 source: "images/chevron-left.svg"
                 sourceSize.width: parent.width
                 sourceSize.height: parent.height
-            }
-
-            ColorOverlay {
-                anchors.fill : downIndicatorImage
-                source: downIndicatorImage
-                color: down.hovered ? Calcite.text1 : Calcite.text3
             }
         }
     }
