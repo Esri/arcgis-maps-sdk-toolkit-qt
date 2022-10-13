@@ -16,7 +16,10 @@
 #include "UtilityNetworkTraceStartingPoint.h"
 
 // ArcGISRuntime headers
+#include <Envelope.h>
 #include <GeometryEngine.h>
+#include <Graphic.h>
+#include <Point.h>
 #include <Polyline.h>
 #include <UtilityAssetType.h>
 #include <UtilityElement.h>
@@ -24,9 +27,7 @@
 #include <UtilityNetworkTypes.h>
 #include <UtilityTerminalConfiguration.h>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   UtilityNetworkTraceStartingPoint::UtilityNetworkTraceStartingPoint(QObject* parent) :
     QObject(parent)
@@ -125,6 +126,4 @@ namespace Toolkit {
     return m_extent;
   }
 
-}
-}
-}
+} // Esri::ArcGISRuntime::Toolkit

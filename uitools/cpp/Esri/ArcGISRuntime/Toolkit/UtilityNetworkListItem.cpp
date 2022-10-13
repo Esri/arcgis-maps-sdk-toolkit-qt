@@ -18,9 +18,7 @@
 // ArcGISRuntime headers
 #include <UtilityNetwork.h>
 
-namespace Esri {
-  namespace ArcGISRuntime {
-    namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
     /*!
     \inmodule EsriArcGISRuntimeToolkit
@@ -94,6 +92,4 @@ namespace Esri {
     \brief Signal emitted when the \l utilityNetwork name changes.
    */
 
-    } // Toolkit
-  } // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

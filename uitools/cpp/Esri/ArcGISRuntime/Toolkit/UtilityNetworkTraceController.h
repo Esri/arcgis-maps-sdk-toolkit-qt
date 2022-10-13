@@ -16,6 +16,9 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_UTILITYNETWORKTRACECONTROLLER_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_UTILITYNETWORKTRACECONTROLLER_H
 
+// ArcGISRuntime headers
+#include <Point.h>
+
 // Toolkit headers
 #include "Internal/GenericListModel.h"
 #include "Internal/GeoViews.h"
@@ -23,11 +26,17 @@
 // Qt headers
 #include <QObject>
 
-namespace Esri {
-namespace ArcGISRuntime {
+Q_MOC_INCLUDE("UtilityNetwork.h")
+Q_MOC_INCLUDE("UtilityNetworkTraceStartingPoint.h")
+Q_MOC_INCLUDE("UtilityNamedTraceConfiguration.h")
+Q_MOC_INCLUDE("UtilityNetworkTraceOperationResult.h")
+Q_MOC_INCLUDE("Symbol.h")
+
+namespace Esri::ArcGISRuntime {
 
   class ArcGISFeature;
   class GraphicsOverlay;
+  class Symbol;
   class UtilityNamedTraceConfiguration;
   class UtilityNetwork;
   class UtilityNetworkListModel;
@@ -109,7 +118,6 @@ namespace Toolkit {
   };
 
 } // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // // Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_UTILITYNETWORKTRACECONTROLLER_H

@@ -20,15 +20,19 @@
 #include "Internal/GenericListModel.h"
 
 // ArcGISRuntime headers
+#include <Envelope.h>
 #include <GeoView.h>
 #include <UtilityNetwork.h>
 
 // Qt headers
 #include <QObject>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime {
+  class Graphic;
+  class Symbol;
+} // Esri::ArcGISRuntime
+
+namespace Esri::ArcGISRuntime::Toolkit {
 
   class UtilityNetworkTraceStartingPoint : public QObject
   {
@@ -72,8 +76,6 @@ namespace Toolkit {
     double m_fractionAlongEdge = 0.0;
   };
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_UTILITYNETWORKTRACESTARTINGPOINT_H

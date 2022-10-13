@@ -20,8 +20,7 @@
 #include <QObject>
 #include <QPointer>
 
-namespace Esri {
-  namespace ArcGISRuntime {
+namespace Esri::ArcGISRuntime {
     class UtilityNetwork;
 
     namespace Toolkit {
@@ -49,7 +48,6 @@ namespace Esri {
       };
 
     } // Toolkit
-  } // ArcGISRuntime
-} // Esri
+  } // Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_UTILITYNETWORKLISTITEM_H

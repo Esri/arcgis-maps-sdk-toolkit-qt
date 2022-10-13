@@ -26,12 +26,23 @@
 // Qt headers
 #include <QObject>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+Q_MOC_INCLUDE("UtilityTraceParameters.h")
+Q_MOC_INCLUDE("UtilityTraceResultListModel.h")
+Q_MOC_INCLUDE("UtilityTraceFunctionOutput.h")
+Q_MOC_INCLUDE("UtilityElement.h")
+Q_MOC_INCLUDE("ArcGISFeature.h")
+Q_MOC_INCLUDE("Graphic.h")
+Q_MOC_INCLUDE("GraphicsOverlay.h")
+Q_MOC_INCLUDE("UtilityNamedTraceConfiguration.h")
+
+namespace Esri::ArcGISRuntime {
+  class Graphic;
+  class UtilityTraceFunctionOutput;
+}
+
+namespace Esri::ArcGISRuntime::Toolkit {
 
   class UtilityAssetGroup;
-  class UtilityTraceFunctionOutput;
 
   class UtilityNetworkTraceOperationResult : public QObject
   {
@@ -124,8 +135,6 @@ namespace Toolkit {
     bool m_areFeaturesSelected = true;
   };
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_UTILITYNETWORKTRACEOPERATIONRESULT_H
