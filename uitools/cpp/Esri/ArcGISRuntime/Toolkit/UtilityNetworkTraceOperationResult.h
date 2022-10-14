@@ -36,104 +36,104 @@ Q_MOC_INCLUDE("GraphicsOverlay.h")
 Q_MOC_INCLUDE("UtilityNamedTraceConfiguration.h")
 
 namespace Esri::ArcGISRuntime {
-  class Graphic;
-  class UtilityTraceFunctionOutput;
+class Graphic;
+class UtilityTraceFunctionOutput;
 }
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-  class UtilityAssetGroup;
+class UtilityAssetGroup;
 
-  class UtilityNetworkTraceOperationResult : public QObject
-  {
-    Q_OBJECT
-    Q_PROPERTY(UtilityTraceParameters* traceParameters READ traceParameters WRITE setTraceParameters NOTIFY traceParametersChanged)
-    Q_PROPERTY(UtilityTraceResultListModel* rawResults READ rawResults WRITE setRawResults NOTIFY rawResultsChanged)
-    Q_PROPERTY(QList<UtilityTraceFunctionOutput*> functionResults READ functionResults WRITE setFunctionResults NOTIFY functionResultsChanged)
-    Q_PROPERTY(QList<UtilityElement*> elementResults READ elementResults WRITE setElementResults NOTIFY elementResultsChanged)
-    Q_PROPERTY(QList<ArcGISFeature*> features READ features WRITE setFeatures NOTIFY featuresChanged)
-    Q_PROPERTY(QList<QString> warnings READ warnings WRITE setWarnings NOTIFY warningsChanged)
-    Q_PROPERTY(QList<Graphic*> graphics READ graphics WRITE setGraphics NOTIFY graphicsChanged)
-    Q_PROPERTY(GraphicsOverlay* resultsGraphicsOverlay READ resultsGraphicsOverlay WRITE setResultsGraphicsOverlay NOTIFY resultsGraphicsOverlayChanged)
-    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
-    Q_PROPERTY(UtilityNamedTraceConfiguration* traceConfiguration READ traceConfiguration WRITE setTraceConfiguration NOTIFY traceConfigurationChanged)
-    Q_PROPERTY(bool areFeaturesSelected READ areFeaturesSelected WRITE setAreFeaturesSelected NOTIFY areFeaturesSelectedChanged)
+class UtilityNetworkTraceOperationResult : public QObject
+{
+  Q_OBJECT
+  Q_PROPERTY(UtilityTraceParameters* traceParameters READ traceParameters WRITE setTraceParameters NOTIFY traceParametersChanged)
+  Q_PROPERTY(UtilityTraceResultListModel* rawResults READ rawResults WRITE setRawResults NOTIFY rawResultsChanged)
+  Q_PROPERTY(QList<UtilityTraceFunctionOutput*> functionResults READ functionResults WRITE setFunctionResults NOTIFY functionResultsChanged)
+  Q_PROPERTY(QList<UtilityElement*> elementResults READ elementResults WRITE setElementResults NOTIFY elementResultsChanged)
+  Q_PROPERTY(QList<ArcGISFeature*> features READ features WRITE setFeatures NOTIFY featuresChanged)
+  Q_PROPERTY(QList<QString> warnings READ warnings WRITE setWarnings NOTIFY warningsChanged)
+  Q_PROPERTY(QList<Graphic*> graphics READ graphics WRITE setGraphics NOTIFY graphicsChanged)
+  Q_PROPERTY(GraphicsOverlay* resultsGraphicsOverlay READ resultsGraphicsOverlay WRITE setResultsGraphicsOverlay NOTIFY resultsGraphicsOverlayChanged)
+  Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+  Q_PROPERTY(UtilityNamedTraceConfiguration* traceConfiguration READ traceConfiguration WRITE setTraceConfiguration NOTIFY traceConfigurationChanged)
+  Q_PROPERTY(bool areFeaturesSelected READ areFeaturesSelected WRITE setAreFeaturesSelected NOTIFY areFeaturesSelectedChanged)
 
-  public:
-    Q_INVOKABLE explicit UtilityNetworkTraceOperationResult(QObject* parent = nullptr);
-    Q_INVOKABLE UtilityNetworkTraceOperationResult(Esri::ArcGISRuntime::UtilityTraceParameters* traceParameters,
-                                                   Esri::ArcGISRuntime::UtilityNamedTraceConfiguration* traceConfiguration,
-                                                   QObject* parent = nullptr);
-    ~UtilityNetworkTraceOperationResult() override;
+public:
+  Q_INVOKABLE explicit UtilityNetworkTraceOperationResult(QObject* parent = nullptr);
+  Q_INVOKABLE UtilityNetworkTraceOperationResult(Esri::ArcGISRuntime::UtilityTraceParameters* traceParameters,
+                                                 Esri::ArcGISRuntime::UtilityNamedTraceConfiguration* traceConfiguration,
+                                                 QObject* parent = nullptr);
+  ~UtilityNetworkTraceOperationResult() override;
 
-    UtilityTraceParameters* traceParameters() const;
-    void setTraceParameters(UtilityTraceParameters* traceParameters);
+  UtilityTraceParameters* traceParameters() const;
+  void setTraceParameters(UtilityTraceParameters* traceParameters);
 
-    UtilityTraceResultListModel* rawResults() const;
-    void setRawResults(UtilityTraceResultListModel* rawResults);
+  UtilityTraceResultListModel* rawResults() const;
+  void setRawResults(UtilityTraceResultListModel* rawResults);
 
-    QList<UtilityTraceFunctionOutput*> functionResults() const;
-    void setFunctionResults(QList<UtilityTraceFunctionOutput*> functionResults);
+  QList<UtilityTraceFunctionOutput*> functionResults() const;
+  void setFunctionResults(QList<UtilityTraceFunctionOutput*> functionResults);
 
-    QList<UtilityElement*> elementResults() const;
-    void setElementResults(QList<UtilityElement*> elementResults);
+  QList<UtilityElement*> elementResults() const;
+  void setElementResults(QList<UtilityElement*> elementResults);
 
-    QHash<UtilityAssetGroup*, QList<UtilityElement*>> elementResultsByAssetGroup() const;
-    void setElementResultsByAssetGroup(QHash<UtilityAssetGroup*, QList<UtilityElement*>> elementResultsByAssetGroup);
+  QHash<UtilityAssetGroup*, QList<UtilityElement*>> elementResultsByAssetGroup() const;
+  void setElementResultsByAssetGroup(QHash<UtilityAssetGroup*, QList<UtilityElement*>> elementResultsByAssetGroup);
 
-    QList<ArcGISFeature*> features() const;
-    void setFeatures(QList<ArcGISFeature*> features);
+  QList<ArcGISFeature*> features() const;
+  void setFeatures(QList<ArcGISFeature*> features);
 
-    QList<QString> warnings() const;
-    void setWarnings(QList<QString> warnings);
+  QList<QString> warnings() const;
+  void setWarnings(QList<QString> warnings);
 
-    QList<Graphic*> graphics() const;
-    void setGraphics(QList<Graphic*> graphics);
+  QList<Graphic*> graphics() const;
+  void setGraphics(QList<Graphic*> graphics);
 
-    GraphicsOverlay* resultsGraphicsOverlay() const;
-    void setResultsGraphicsOverlay(GraphicsOverlay* resultsGraphicsOverlay);
+  GraphicsOverlay* resultsGraphicsOverlay() const;
+  void setResultsGraphicsOverlay(GraphicsOverlay* resultsGraphicsOverlay);
 
-    QString name() const;
-    void setName(QString name);
+  QString name() const;
+  void setName(QString name);
 
-    UtilityNamedTraceConfiguration* traceConfiguration() const;
-    void setTraceConfiguration(UtilityNamedTraceConfiguration* traceConfiguration);
+  UtilityNamedTraceConfiguration* traceConfiguration() const;
+  void setTraceConfiguration(UtilityNamedTraceConfiguration* traceConfiguration);
 
-    bool areFeaturesSelected() const;
-    void setAreFeaturesSelected(bool areFeaturesSelected);
+  bool areFeaturesSelected() const;
+  void setAreFeaturesSelected(bool areFeaturesSelected);
 
-    //SimpleBooleanProperty* areFeaturesSelectedProperty();
+  //SimpleBooleanProperty* areFeaturesSelectedProperty();
 
-    void setVisualizationColorProperty(QColor visualizationColorProperty);
+  void setVisualizationColorProperty(QColor visualizationColorProperty);
 
-  signals:
-    void traceParametersChanged();
-    void rawResultsChanged();
-    void functionResultsChanged();
-    void elementResultsChanged();
-    void elementResultsByAssetGroupChanged();
-    void featuresChanged();
-    void warningsChanged();
-    void graphicsChanged();
-    void resultsGraphicsOverlayChanged();
-    void nameChanged();
-    void traceConfigurationChanged();
-    void areFeaturesSelectedChanged();
+signals:
+  void traceParametersChanged();
+  void rawResultsChanged();
+  void functionResultsChanged();
+  void elementResultsChanged();
+  void elementResultsByAssetGroupChanged();
+  void featuresChanged();
+  void warningsChanged();
+  void graphicsChanged();
+  void resultsGraphicsOverlayChanged();
+  void nameChanged();
+  void traceConfigurationChanged();
+  void areFeaturesSelectedChanged();
 
-  private:
-    UtilityTraceParameters* m_traceParameters = nullptr;
-    UtilityTraceResultListModel* m_rawResults = nullptr;
-    QList<UtilityTraceFunctionOutput*> m_functionResults;
-    QList<UtilityElement*> m_elementResults{};
-    QHash<UtilityAssetGroup*, QList<UtilityElement*>> m_elementResultsByAssetGroup;
-    QList<ArcGISFeature*> m_features;
-    QList<QString> m_warnings;
-    QList<Graphic*> m_graphics;
-    GraphicsOverlay* m_resultsGraphicsOverlay = nullptr;
-    QString m_name;
-    UtilityNamedTraceConfiguration* m_traceConfiguration = nullptr;
-    bool m_areFeaturesSelected = true;
-  };
+private:
+  UtilityTraceParameters* m_traceParameters = nullptr;
+  UtilityTraceResultListModel* m_rawResults = nullptr;
+  QList<UtilityTraceFunctionOutput*> m_functionResults;
+  QList<UtilityElement*> m_elementResults{};
+  QHash<UtilityAssetGroup*, QList<UtilityElement*>> m_elementResultsByAssetGroup;
+  QList<ArcGISFeature*> m_features;
+  QList<QString> m_warnings;
+  QList<Graphic*> m_graphics;
+  GraphicsOverlay* m_resultsGraphicsOverlay = nullptr;
+  QString m_name;
+  UtilityNamedTraceConfiguration* m_traceConfiguration = nullptr;
+  bool m_areFeaturesSelected = true;
+};
 
 } // Esri::ArcGISRuntime::Toolkit
 

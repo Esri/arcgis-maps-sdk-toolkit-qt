@@ -32,16 +32,16 @@ UtilityNetworkTraceDemo::UtilityNetworkTraceDemo(QObject* parent) :
           &AuthenticationManager::authenticationChallenge,
           this,
           [parent](AuthenticationChallenge* challenge)
-          {
-            challenge->continueWithCredential(new Credential("viewer01", "I68VGU^nMurF", parent));
-          });
+  {
+    challenge->continueWithCredential(new Credential("viewer01", "I68VGU^nMurF", parent));
+  });
 }
 
 UtilityNetworkTraceDemo::~UtilityNetworkTraceDemo() = default;
 
 Map* UtilityNetworkTraceDemo::initMap_(QObject* parent) const
 {
-    return new Map(QUrl{"https://www.arcgis.com/home/item.html?id=471eb0bf37074b1fbb972b1da70fb310"}, parent);
+  return new Map(QUrl{"https://www.arcgis.com/home/item.html?id=471eb0bf37074b1fbb972b1da70fb310"}, parent);
 }
 
 Scene* UtilityNetworkTraceDemo::initScene_(QObject* /*parent*/) const

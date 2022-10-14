@@ -21,33 +21,33 @@
 #include <QPointer>
 
 namespace Esri::ArcGISRuntime {
-    class UtilityNetwork;
+class UtilityNetwork;
 
-    namespace Toolkit {
-      class UtilityNetworkListItem : public QObject
-      {
-        Q_OBJECT
-        Q_PROPERTY(QString name READ name NOTIFY nameChanged)
+namespace Toolkit {
+class UtilityNetworkListItem : public QObject
+{
+  Q_OBJECT
+  Q_PROPERTY(QString name READ name NOTIFY nameChanged)
 
-      public:
-        Q_INVOKABLE explicit UtilityNetworkListItem(QObject* parent = nullptr);
-        Q_INVOKABLE explicit UtilityNetworkListItem(UtilityNetwork* utilityNetwork, QObject* parent = nullptr);
-        ~UtilityNetworkListItem() override;
+public:
+  Q_INVOKABLE explicit UtilityNetworkListItem(QObject* parent = nullptr);
+  Q_INVOKABLE explicit UtilityNetworkListItem(UtilityNetwork* utilityNetwork, QObject* parent = nullptr);
+  ~UtilityNetworkListItem() override;
 
-        void setUtilityNetwork(UtilityNetwork* utilityNetwork);
-        UtilityNetwork* utilityNetwork() const;
+  void setUtilityNetwork(UtilityNetwork* utilityNetwork);
+  UtilityNetwork* utilityNetwork() const;
 
-        QString name() const;
+  QString name() const;
 
-      signals:
-        void utilityNetworkChanged();
-        void nameChanged();
+signals:
+  void utilityNetworkChanged();
+  void nameChanged();
 
-      private:
-        QPointer<UtilityNetwork> m_utilityNetwork;
-      };
+private:
+  QPointer<UtilityNetwork> m_utilityNetwork;
+};
 
-    } // Toolkit
-  } // Esri::ArcGISRuntime
+} // Toolkit
+} // Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_UTILITYNETWORKLISTITEM_H
