@@ -104,6 +104,7 @@ private:
   void setupUtilityNetworks();
 
   QObject* m_geoView = nullptr;
+  QObject* m_startingPointParent = nullptr;
   GraphicsOverlay* m_startingPointsGraphicsOverlay = nullptr;
   UtilityNetwork* m_selectedUtilityNetwork = nullptr;
   GenericListModel* m_utilityNetworks = nullptr;

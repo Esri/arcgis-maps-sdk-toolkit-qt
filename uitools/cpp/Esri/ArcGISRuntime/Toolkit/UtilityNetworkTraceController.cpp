@@ -144,7 +144,7 @@ void connectToGeoView(GeoViewToolkit* geoView, UtilityNetworkTraceController* se
     {
       auto utilityNetworks = model->utilityNetworks();
 
-      for (const auto& utilityNetwork : *utilityNetworks)
+      for (const auto utilityNetwork : *utilityNetworks)
       {
         if (!utilityNetwork)
           return;
@@ -180,8 +180,10 @@ void connectToGeoView(GeoViewToolkit* geoView, UtilityNetworkTraceController* se
 
 UtilityNetworkTraceController::UtilityNetworkTraceController(QObject* parent) :
   QObject(parent),
+  m_startingPointParent(new QObject(this)),
   m_utilityNetworks(new GenericListModel(&UtilityNetworkListItem::staticMetaObject, this)),
-  m_startingPointSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle::Cross, QColor(Qt::green), 20.0f, this))
+  m_startingPointSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle::Cross, QColor(Qt::green), 20.0f, this)),
+  m_startingPointsGraphicsOverlay(new GraphicsOverlay(m_startingPointParent))
 {
   qDebug() << "UtilityNetworkTrace begins construction";
 }
@@ -260,11 +262,14 @@ void UtilityNetworkTraceController::setGeoView(QObject* geoView)
         qDebug() << "network source name:" << startingPoint->utilityElement()->networkSource()->name();
         qDebug() << "asset group name:" << startingPoint->utilityElement()->assetGroup()->name();
         qDebug() << "fractionAlongEdge:" << startingPoint->utilityElement()->fractionAlongEdge();
+
+        int symT = static_cast<int>(startingPoint->featureSymbol()->symbolType());
+        qDebug() << "symbol type:" << symT;
       }
     });
 
     connect(this,
-            &UtilityNetworkTraceController::selectedUtilityNetworkChanged, // this shoul already been handled and newValue used
+            &UtilityNetworkTraceController::selectedUtilityNetworkChanged, // this should already been handled and newValue used
             this,
             [this](UtilityNetwork* newValue) // when it's used, we also need to use it
     {
@@ -277,14 +282,14 @@ void UtilityNetworkTraceController::setGeoView(QObject* geoView)
                          this,
                          [this](QUuid taskId, const QList<Esri::ArcGISRuntime::UtilityNamedTraceConfiguration*>& utilityNamedTraceConfigurationResults)
         {
-            const auto findIter = m_traceConfigConnection.find(taskId);
-            if (findIter != m_traceConfigConnection.end())
-        {
+          const auto findIter = m_traceConfigConnection.find(taskId);
+          if (findIter != m_traceConfigConnection.end())
+          {
             disconnect(*findIter);
             m_traceConfigConnection.remove(taskId);
-      }
-            m_traceConfigurations.clear();
-            m_traceConfigurations = utilityNamedTraceConfigurationResults;
+          }
+          m_traceConfigurations.clear();
+          m_traceConfigurations = utilityNamedTraceConfigurationResults;
       });
         auto traceConfigs = m_selectedUtilityNetwork->queryNamedTraceConfigurations(nullptr);
         m_traceConfigConnection.insert(traceConfigs.taskId(), c);
@@ -303,7 +308,7 @@ void UtilityNetworkTraceController::setGeoView(QObject* geoView)
     connect(mapView, &MapQuickView::identifyLayersCompleted, this, [this](QUuid, const QList<IdentifyLayerResult*>& results)
     {
       // set busy false
-      qDebug() << "### results found";
+      qDebug() << "### identifyLayersCompleted results found";
       for (const auto& layer : results)
       {
         for (const auto& geoElement : layer->geoElements())
@@ -319,7 +324,7 @@ void UtilityNetworkTraceController::setGeoView(QObject* geoView)
     {
       // check if busy is running
       // if so -> set busy true; return;
-      qDebug() << "### results searched";
+      qDebug() << "### mouseClicked search begins";
       const double tolerance = 10.0;
       const bool returnPopups = false;
       m_mapPoint = mapView->screenToLocation(mouseEvent.pos().x(), mouseEvent.pos().y());
@@ -591,6 +596,11 @@ void UtilityNetworkTraceController::refresh()
   m_traceConfigurations.clear();
   m_startingPoints.clear();
   m_startingPointsGraphicsOverlay->graphics()->clear();
+
+  if (m_startingPointParent)
+    delete m_startingPointParent;
+
+  m_startingPointParent = new QObject(this);
   m_traceResults.clear();
   qDebug() << "Resetting";
   setupUtilityNetworks();
@@ -698,20 +708,22 @@ void UtilityNetworkTraceController::addStartingPoint(ArcGISFeature* identifiedFe
         }
       }
 
-      auto graphic = new Graphic(geometry, this);
+      auto graphic = new Graphic(geometry, m_startingPointParent);
       graphic->attributes()->insertAttribute("GlobalId", utilityElement->globalId());
       graphic->setSymbol(m_startingPointSymbol);
       auto featureLayer = dynamic_cast<FeatureLayer*>(identifiedFeature->featureTable()->layer());
       auto symbol = featureLayer->renderer()->symbol(identifiedFeature);
+      //
+      m_startingPointsGraphicsOverlay->graphics()->append(graphic);
       if (symbol == nullptr)
       {
-        m_startingPoints.append(new UtilityNetworkTraceStartingPoint(utilityElement, graphic, symbol, featureLayer->fullExtent(), this));
+        m_startingPoints.append(new UtilityNetworkTraceStartingPoint(utilityElement, graphic, symbol, featureLayer->fullExtent(), m_startingPointParent));
         qDebug() << "### Added with null";
         emit startingPointsChanged();
       }
       else
       {
-        m_startingPoints.append(new UtilityNetworkTraceStartingPoint(utilityElement, graphic, symbol, graphic->geometry().extent(), this));
+        m_startingPoints.append(new UtilityNetworkTraceStartingPoint(utilityElement, graphic, symbol, graphic->geometry().extent(), m_startingPointParent));
         qDebug() << "### Added with extent";
         emit startingPointsChanged();
       }

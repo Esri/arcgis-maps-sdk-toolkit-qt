@@ -52,6 +52,10 @@ UtilityNetworkTraceStartingPoint::UtilityNetworkTraceStartingPoint(UtilityElemen
     m_terminalPickerVisible = true;
   }
 
+  qDebug() << "@@@ UtilityNetworkTraceStartingPoint c'tor";
+  qDebug() << "@@@ m_utilityElement->networkSource()->sourceType()" << static_cast<int>(m_utilityElement->networkSource()->sourceType());
+  qDebug() << "@@@ m_selectionGraphic->geometry().geometryType()" << static_cast<int>(m_selectionGraphic->geometry().geometryType());
+
   if (m_selectionGraphic != nullptr &&
       m_utilityElement->networkSource()->sourceType() == UtilityNetworkSourceType::Edge &&
       m_selectionGraphic->geometry().geometryType() == GeometryType::Polyline)
