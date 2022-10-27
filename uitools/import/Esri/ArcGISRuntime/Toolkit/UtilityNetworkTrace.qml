@@ -155,13 +155,19 @@ Pane {
                     }
                 }
 
+                Text {
+                    visible: controller.isAddingStartingPoint
+                    text: "Click on the map to identify starting points."
+                    horizontalAlignment: Text.AlignLeft
+                }
+
                 RowLayout {
                     Layout.margins: 0
                     visible: true
 
                     Button {
                         id: selectStartingPointButton
-                        text: "Add Starting Point"
+                        text: controller.isAddingStartingPoint ? "Cancel" : "Add Starting Point"
                         //icon.source: "images/edit-attributes.svg"
                         Layout.alignment: Qt.AlignRight
                         Layout.maximumWidth: Layout.maximumHeight
