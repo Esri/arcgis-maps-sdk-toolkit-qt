@@ -66,21 +66,21 @@ Pane {
         id: root
 
         TabBar {
-                id: bar
+            id: bar
 
-                height: implicitHeight
-                width: parent.width
+            height: implicitHeight
+            width: parent.width
 
-                TabButton {
-                    text: qsTr("New Trace")
-                    font.pixelSize: 14
+            TabButton {
+                text: qsTr("New Trace")
+                font.pixelSize: 14
 
-                }
-                TabButton {
-                    text: qsTr("Trace Result")
-                    font.pixelSize: 14
-                }
             }
+            TabButton {
+                text: qsTr("Trace Result")
+                font.pixelSize: 14
+            }
+        }
 
 
         StackLayout {
@@ -91,6 +91,7 @@ Pane {
             ColumnLayout {
                 id: gridLayoutTrace
                 spacing: 0
+                width: root.width
 
                 RowLayout {
 
@@ -104,84 +105,51 @@ Pane {
                         visible: true
                         model: utilityNetworkTrace.controller.startingPoints
                         textRole: "name"
-                        /*onStartingPointsChanged: {
-                    const index = currentIndex;
-                    const formats = utilityNetworkTrace.controller.formats;
-                    let modelData = formats[index];
-                    if (modelData === undefined) {
-                        modelData = formats.element(formats.index(index, 0));
                     }
-                    inputFormat.type = modelData;
-                    inputFormat.updateCoordinatePoint(utilityNetworkTrace.controller.currentPoint());
-                }*/
-                    }
-
-                    /*TextField {
-                id: editPointEntry
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.alignment: Qt.AlignBottom
-                Layout.margins: 5
-                placeholderText: "No position"
-                readOnly: !editCoordinateButton.checked
-                selectByMouse: !readOnly
-                text: inputFormat.type? inputFormat.notation : "No position"
-                onEditingFinished: {
-                    controller.setCurrentPoint(text, inputFormat.type);
-                    editCoordinateButton.checked = false;
-                }
-            }
-
-            Button {
-                id: menuButton
-                checkable: true
-                checked: false
-                flat: true
-                Layout.margins: 5
-                Layout.alignment: Qt.AlignRight
-                icon.source: menuButton.checked ? "images/chevron-up.svg" : "images/chevron-down.svg"
-            }*/
                 }
 
                 Label {
                     text: "Starting Points"
                 }
 
-                ListModel {
-                    id: dummyModel
-                     ListElement {
-                         groupName: "Street Light"
-                         sourceName: "Electric Distribution Device"
-                     }
-                     ListElement {
-                         groupName: "Electric Distribution Junction"
-                         sourceName: "Connection Point"
-                     }
-                     ListElement {
-                         groupName: "Electric Distribution Line"
-                         sourceName: "Low Voltage"
-                     }
-                 }
-
                 ListView {
+                    id: startPointList
+                    anchors.margins: 4
+                    width: parent.width
                     Layout.fillHeight: true
-                    model: dummyModel
+                    model: controller.startingPoints
                     delegate: Pane {
                         RowLayout {
+                            width: startPointList.width - (startPointList.anchors.margins * 2)
                             spacing: 4
                             ColumnLayout {
+                                Layout.fillWidth: true
+
                                 Text {
+                                    Layout.fillWidth: true
+                                    elide: Text.ElideRight
                                     text: groupName
+                                    horizontalAlignment: Text.AlignLeft
                                 }
                                 Text {
+                                    Layout.fillWidth: true
+                                    elide: Text.ElideRight
                                     text: sourceName
+                                    horizontalAlignment: Text.AlignLeft
                                 }
                             }
                             Button {
-                                text: "zoom"
+                                Layout.preferredWidth: 48
+                                icon.source: "images/zoom-to-object.svg"
+                                icon.width: 16
+                                icon.height: 16
                             }
                             Button {
-                                text: "delete"
+                                Layout.preferredWidth: 48
+                                icon.source: "images/trash.svg"
+                                icon.width: 16
+                                icon.height: 16
+                                onClicked: controller.removeStartingPoint(index)
                             }
                         }
                     }
@@ -190,68 +158,22 @@ Pane {
                 RowLayout {
                     Layout.margins: 0
                     visible: true
-                    /*Button {
-                id: addConversionButton
-                Layout.fillWidth: true
-                Layout.alignment: Qt.AlignLeft
-                Layout.margins: 5
-                text: "Add conversion"
-                flat: true
-                onClicked: {
-                    addConversionMenu.visible = true;
-                }
-            }
-
-            Button {
-                id: zoomToButton
-                icon.source: "images/layer-zoom-to.svg"
-                flat: true
-                Layout.alignment: Qt.AlignRight
-
-                Layout.maximumWidth: Layout.maximumHeight
-                padding: 0
-                display: AbstractButton.IconOnly
-                onClicked: utilityNetworkTrace.controller.zoomToCurrentPoint()
-            }
-
-            Button {
-                id: flashCoordinateButton
-                icon.source: "images/flash.svg"
-                flat: true
-                Layout.alignment: Qt.AlignRight
-                Layout.maximumWidth: Layout.maximumHeight
-                padding: 0
-                display: AbstractButton.IconOnly
-                onClicked: {
-                    if (!geoView)
-                        return;
-
-                    var screenPos = utilityNetworkTrace.controller.screenCoordinate();
-                    if (screenPos === null || (screenPos.x === -1.0 && screenPos.y === -1.0))
-                        return;
-
-                    var itemPos = geoView.mapToItem(geoView, screenPos.x, screenPos.y);
-                    checked = true;
-                    var flashImage = internal.flashImageFactory.createObject(geoView, { "x": itemPos.x, "y": itemPos.y, "color": palette.highlight });
-                    flashImage.finished.connect(function() { flashCoordinateButton.checked = false; });
-                }
-            }*/
 
                     Button {
                         id: selectStartingPointButton
-                        checkable: true
-                        flat: true
                         text: "Add Starting Point"
                         //icon.source: "images/edit-attributes.svg"
                         Layout.alignment: Qt.AlignRight
                         Layout.maximumWidth: Layout.maximumHeight
                         padding: 0
+                        onClicked: controller.isAddingStartingPoint = !controller.isAddingStartingPoint
                     }
                 }
             }
 
             ColumnLayout {
                 id: gridLayoutResults
+                width: root.width
                 spacing: 0
             }
         }

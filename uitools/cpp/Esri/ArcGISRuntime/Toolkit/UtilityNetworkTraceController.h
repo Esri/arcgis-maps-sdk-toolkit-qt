@@ -44,6 +44,7 @@ class UtilityNetworkListModel;
 namespace Toolkit {
 
 class UtilityNetworkTraceStartingPoint;
+class UtilityNetworkTraceStartingPointsModel;
 class UtilityNetworkTraceOperationResult;
 
 class UtilityNetworkTraceController : public QObject
@@ -51,10 +52,11 @@ class UtilityNetworkTraceController : public QObject
   Q_OBJECT
   Q_PROPERTY(QObject* geoView READ geoView WRITE setGeoView NOTIFY geoViewChanged)
   Q_PROPERTY(UtilityNetwork* selectedUtilityNetwork READ selectedUtilityNetwork WRITE setSelectedUtilityNetwork NOTIFY selectedUtilityNetworkChanged)
-  Q_PROPERTY(QList<UtilityNetworkTraceStartingPoint*> startingPoints READ startingPoints WRITE setStartingPoints NOTIFY startingPointsChanged)
   Q_PROPERTY(UtilityNamedTraceConfiguration* selectedTraceConfiguration READ selectedTraceConfiguration WRITE setSelectedTraceConfiguration NOTIFY selectedTraceConfigurationChanged)
   Q_PROPERTY(bool isTraceInProgress READ isTraceInProgress WRITE setIsTraceInProgress NOTIFY isTraceInProgressChanged)
+  Q_PROPERTY(bool isAddingStartingPoint READ isAddingStartingPoint WRITE setIsAddingStartingPoint NOTIFY isAddingStartingPointChanged)
   Q_PROPERTY(Symbol* startingPointSymbol READ startingPointSymbol WRITE setStartingPointSymbol NOTIFY startingPointSymbolChanged)
+  Q_PROPERTY(QAbstractItemModel* startingPoints READ startingPoints CONSTANT);
 
 public:
   Q_INVOKABLE explicit UtilityNetworkTraceController(QObject* parent = nullptr);
@@ -69,14 +71,16 @@ public:
   UtilityNetwork* selectedUtilityNetwork() const;
   void setSelectedUtilityNetwork(UtilityNetwork* selectedUtilityNetwork);
 
-  QList<UtilityNetworkTraceStartingPoint*> startingPoints() const;
-  void setStartingPoints(QList<UtilityNetworkTraceStartingPoint*> startingPoints);
+  QAbstractItemModel* startingPoints() const;
 
   UtilityNamedTraceConfiguration* selectedTraceConfiguration() const;
   void setSelectedTraceConfiguration(UtilityNamedTraceConfiguration* selectedTraceConfiguration);
 
   bool isTraceInProgress() const;
-  void setIsTraceInProgress(bool isTraceInProgress);
+  void setIsTraceInProgress(const bool isTraceInProgress);
+
+  bool isAddingStartingPoint() const;
+  void setIsAddingStartingPoint(const bool isAddingStartingPoint);
 
   Symbol* startingPointSymbol() const;
   void setStartingPointSymbol(Symbol* startingPointSymbol);
@@ -89,18 +93,20 @@ public:
 
   Q_INVOKABLE void refresh();
 
+  Q_INVOKABLE void removeStartingPoint(int index);
+
 signals:
   void geoViewChanged();
   void selectedUtilityNetworkChanged(Esri::ArcGISRuntime::UtilityNetwork* newValue);
   void startingPointsChanged();
   void selectedTraceConfigurationChanged();
   void isTraceInProgressChanged();
+  void isAddingStartingPointChanged();
   void startingPointSymbolChanged();
 
 private:
   void populateUtilityNetworksFromMap();
   void addStartingPoint(ArcGISFeature* identifiedFeature, Point mapPoint);
-  void removeStartingPoint(UtilityNetworkTraceStartingPoint* startingPoint);
   void setupUtilityNetworks();
 
   QObject* m_geoView = nullptr;
@@ -110,9 +116,10 @@ private:
   GenericListModel* m_utilityNetworks = nullptr;
   QList<UtilityNamedTraceConfiguration*> m_traceConfigurations;
   UtilityNamedTraceConfiguration* m_selectedTraceConfiguration = nullptr;
-  QList<UtilityNetworkTraceStartingPoint*> m_startingPoints;
+  UtilityNetworkTraceStartingPointsModel* m_startingPoints;
   QList<UtilityNetworkTraceOperationResult*> m_traceResults;
   bool m_isTraceInProgress = false;
+  bool m_isAddingStartingPoint = false;
   Symbol* m_startingPointSymbol;
   Point m_mapPoint;
   QMap<QUuid, QMetaObject::Connection> m_traceConfigConnection;

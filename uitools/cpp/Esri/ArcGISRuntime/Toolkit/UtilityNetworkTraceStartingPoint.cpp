@@ -21,6 +21,7 @@
 #include <Graphic.h>
 #include <Point.h>
 #include <Polyline.h>
+#include <UtilityAssetGroup.h>
 #include <UtilityAssetType.h>
 #include <UtilityElement.h>
 #include <UtilityNetworkSource.h>
@@ -128,6 +129,16 @@ void UtilityNetworkTraceStartingPoint::setFractionAlongEdge(double fractionAlong
 Envelope UtilityNetworkTraceStartingPoint::extent() const
 {
   return m_extent;
+}
+
+QString UtilityNetworkTraceStartingPoint::groupName() const
+{
+  return utilityElement()->assetGroup()->name();
+}
+
+QString UtilityNetworkTraceStartingPoint::sourceName() const
+{
+  return utilityElement()->networkSource()->name();
 }
 
 } // Esri::ArcGISRuntime::Toolkit

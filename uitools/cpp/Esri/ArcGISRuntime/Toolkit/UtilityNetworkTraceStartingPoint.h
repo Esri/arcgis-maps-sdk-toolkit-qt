@@ -63,6 +63,9 @@ public:
 
   Envelope extent() const;
 
+  QString groupName() const;
+  QString sourceName() const;
+
 signals:
   void fractionAlongEdgeChanged(double newValue, double oldValue);
 
