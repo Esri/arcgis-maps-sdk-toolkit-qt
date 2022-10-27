@@ -40,11 +40,11 @@ UtilityNetworkTraceStartingPoint::UtilityNetworkTraceStartingPoint(UtilityElemen
                                                                    Symbol* featureSymbol,
                                                                    Envelope extent,
                                                                    QObject* parent) :
+  QObject(parent),
   m_utilityElement(utilityElement),
   m_selectionGraphic(selectionGraphic),
   m_featureSymbol(featureSymbol),
-  m_extent(extent),
-  QObject(parent)
+  m_extent(extent)
 {
   if (m_utilityElement->assetType()->terminalConfiguration() != nullptr &&
       m_utilityElement->assetType()->terminalConfiguration()->terminals().size() > 1)

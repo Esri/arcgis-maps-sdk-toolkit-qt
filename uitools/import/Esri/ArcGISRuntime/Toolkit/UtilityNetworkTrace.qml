@@ -35,6 +35,7 @@ import QtQuick.Layouts
 
 Pane {
     id: utilityNetworkTrace
+    height: 500
 
     /*!
       \qmlproperty UtilityNetworkTraceController controller
@@ -61,22 +62,49 @@ Pane {
     hoverEnabled: true
 
     contentItem: ColumnLayout {
-        id: gridLayout
-        spacing: 0
-        anchors {
-            left: parent.left
-            right: parent.right
-        }
 
-        RowLayout {
-            Layout.margins: 0
-            ComboBox {
-                Layout.margins: 5
-                id: startingPints
-                visible: true
-                model: utilityNetworkTrace.controller.startingPoints
-                textRole: "name"
-                /*onStartingPointsChanged: {
+        id: root
+
+        TabBar {
+                id: bar
+
+                height: implicitHeight
+                width: parent.width
+
+                TabButton {
+                    text: qsTr("New Trace")
+                    font.pixelSize: 14
+
+                }
+                TabButton {
+                    text: qsTr("Trace Result")
+                    font.pixelSize: 14
+                }
+            }
+
+
+        StackLayout {
+
+            currentIndex: bar.currentIndex
+            clip: true
+
+            ColumnLayout {
+                id: gridLayoutTrace
+                spacing: 0
+
+                RowLayout {
+
+                    Label {
+                        text: "Trace Configuration"
+                    }
+                    Layout.margins: 0
+                    ComboBox {
+                        Layout.margins: 5
+                        id: startingPints
+                        visible: true
+                        model: utilityNetworkTrace.controller.startingPoints
+                        textRole: "name"
+                        /*onStartingPointsChanged: {
                     const index = currentIndex;
                     const formats = utilityNetworkTrace.controller.formats;
                     let modelData = formats[index];
@@ -86,9 +114,9 @@ Pane {
                     inputFormat.type = modelData;
                     inputFormat.updateCoordinatePoint(utilityNetworkTrace.controller.currentPoint());
                 }*/
-            }
+                    }
 
-            /*TextField {
+                    /*TextField {
                 id: editPointEntry
                 Layout.fillWidth: true
                 Layout.fillHeight: true
@@ -113,12 +141,56 @@ Pane {
                 Layout.alignment: Qt.AlignRight
                 icon.source: menuButton.checked ? "images/chevron-up.svg" : "images/chevron-down.svg"
             }*/
-        }
+                }
 
-        RowLayout {
-            Layout.margins: 0
-            visible: true
-            /*Button {
+                Label {
+                    text: "Starting Points"
+                }
+
+                ListModel {
+                    id: dummyModel
+                     ListElement {
+                         groupName: "Street Light"
+                         sourceName: "Electric Distribution Device"
+                     }
+                     ListElement {
+                         groupName: "Electric Distribution Junction"
+                         sourceName: "Connection Point"
+                     }
+                     ListElement {
+                         groupName: "Electric Distribution Line"
+                         sourceName: "Low Voltage"
+                     }
+                 }
+
+                ListView {
+                    Layout.fillHeight: true
+                    model: dummyModel
+                    delegate: Pane {
+                        RowLayout {
+                            spacing: 4
+                            ColumnLayout {
+                                Text {
+                                    text: groupName
+                                }
+                                Text {
+                                    text: sourceName
+                                }
+                            }
+                            Button {
+                                text: "zoom"
+                            }
+                            Button {
+                                text: "delete"
+                            }
+                        }
+                    }
+                }
+
+                RowLayout {
+                    Layout.margins: 0
+                    visible: true
+                    /*Button {
                 id: addConversionButton
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignLeft
@@ -165,15 +237,22 @@ Pane {
                 }
             }*/
 
-            Button {
-                id: selectStartingPointButton
-                checkable: true
-                flat: true
-                text: "select starting point"
-                //icon.source: "images/edit-attributes.svg"
-                Layout.alignment: Qt.AlignRight
-                Layout.maximumWidth: Layout.maximumHeight
-                padding: 0
+                    Button {
+                        id: selectStartingPointButton
+                        checkable: true
+                        flat: true
+                        text: "Add Starting Point"
+                        //icon.source: "images/edit-attributes.svg"
+                        Layout.alignment: Qt.AlignRight
+                        Layout.maximumWidth: Layout.maximumHeight
+                        padding: 0
+                    }
+                }
+            }
+
+            ColumnLayout {
+                id: gridLayoutResults
+                spacing: 0
             }
         }
     }
