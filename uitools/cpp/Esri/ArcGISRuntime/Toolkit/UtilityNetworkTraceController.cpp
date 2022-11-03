@@ -50,6 +50,7 @@
 #include <UtilityTraceParameters.h>
 #include <UtilityTraceResult.h>
 #include <UtilityTraceResultListModel.h>
+#include <Viewpoint.h>
 
 // Toolkit headers
 #include "Internal/DisconnectOnSignal.h"
@@ -766,6 +767,16 @@ void UtilityNetworkTraceController::removeStartingPoint(int index)
 {
   m_startingPoints->removeAt(index);
   m_startingPointsGraphicsOverlay->graphics()->removeAt(index);
+}
+
+void UtilityNetworkTraceController::zoomToStartingPoint(int index)
+{
+  if (auto mapView = qobject_cast<MapView*>(m_geoView))
+  {
+    const Viewpoint currVP = mapView->currentViewpoint(ViewpointType::CenterAndScale);
+    const Viewpoint newViewPoint(m_startingPoints->pointAt(index), currVP.targetScale());
+    mapView->setViewpoint(newViewPoint, 1.0);
+  }
 }
 
 void UtilityNetworkTraceController::removeAllStartingPoints()

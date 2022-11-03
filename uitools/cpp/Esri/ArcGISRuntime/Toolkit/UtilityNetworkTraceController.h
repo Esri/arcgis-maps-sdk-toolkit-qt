@@ -103,6 +103,8 @@ public:
 
   Q_INVOKABLE void removeStartingPoint(int index);
 
+  Q_INVOKABLE void zoomToStartingPoint(int index);
+
   Q_INVOKABLE void removeAllStartingPoints();
 
   Q_INVOKABLE void setSelectedTraceConfigurationNameByIndex(int index);

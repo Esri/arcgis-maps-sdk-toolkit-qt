@@ -3,6 +3,9 @@
 
 #include <QAbstractListModel>
 
+// ArcGISRuntime headers
+#include <Point.h>
+
 namespace Esri::ArcGISRuntime {
 
 class UtilityElement;
@@ -41,6 +44,8 @@ public:
   bool doesItemAlreadyExist(UtilityElement* utilityElement) const;
 
   void removeAt(int index);
+
+  Point pointAt(int index);
 
   private:
     QHash<int, QByteArray> roleNames() const override;

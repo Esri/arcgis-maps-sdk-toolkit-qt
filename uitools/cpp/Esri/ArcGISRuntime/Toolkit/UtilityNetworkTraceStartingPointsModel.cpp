@@ -122,6 +122,11 @@ void UtilityNetworkTraceStartingPointsModel::removeAt(int index)
   endRemoveRows();
 }
 
+Esri::ArcGISRuntime::Point UtilityNetworkTraceStartingPointsModel::pointAt(int index)
+{
+  return m_data.at(index)->extent().center();
+}
+
 QHash<int, QByteArray> UtilityNetworkTraceStartingPointsModel::roleNames() const
 {
   return m_roles;

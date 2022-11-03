@@ -154,6 +154,7 @@ Pane {
                                     icon.source: "images/zoom-to-object.svg"
                                     icon.width: 16
                                     icon.height: 16
+                                    onClicked: controller.zoomToStartingPoint(index)
                                 }
                                 Button {
                                     Layout.preferredWidth: 48
