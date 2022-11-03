@@ -36,6 +36,7 @@ import QtQuick.Layouts
 Pane {
     id: utilityNetworkTrace
     height: 500
+    width: implicitWidth * 1.20
 
     /*!
       \qmlproperty UtilityNetworkTraceController controller
@@ -82,7 +83,6 @@ Pane {
             }
         }
 
-
         StackLayout {
 
             currentIndex: bar.currentIndex
@@ -90,7 +90,7 @@ Pane {
 
             ColumnLayout {
                 id: gridLayoutTrace
-                spacing: 0
+                spacing: 5
                 width: root.width
 
                 RowLayout {
@@ -99,12 +99,22 @@ Pane {
                         text: "Trace Configuration"
                     }
                     Layout.margins: 0
+
                     ComboBox {
                         Layout.margins: 5
-                        id: startingPints
-                        visible: true
-                        model: utilityNetworkTrace.controller.startingPoints
+                        id: traceConfigurationBox
+                        model: controller.traceConfigurations
                         textRole: "name"
+                        onCurrentIndexChanged: {
+                            const index = currentIndex;
+                            const traceConfiguration = controller.traceConfigurations;
+                            let modelData = traceConfiguration[index];
+                            if (modelData === undefined) {
+                                modelData = traceConfiguration.element(traceConfiguration.index(index, 0));
+                            }
+                            inputFormat.type = modelData;
+                            inputFormat.updateTraceConfiguration(controller.currentPoint());
+                        }
                     }
                 }
 
@@ -112,51 +122,95 @@ Pane {
                     text: "Starting Points"
                 }
 
+                BusyIndicator {
+                    Layout.alignment: Qt.AlignHCenter
+                    running: controller.isAddingStartingPointInProgress
+                    visible: running
+                }
+
                 ListView {
                     id: startPointList
                     anchors.margins: 4
                     width: parent.width
-                    Layout.fillHeight: true
+                    Layout.preferredHeight: 250
+                    clip: true
+                    ScrollBar.vertical: ScrollBar {}
                     model: controller.startingPoints
                     delegate: Pane {
-                        RowLayout {
-                            width: startPointList.width - (startPointList.anchors.margins * 2)
-                            spacing: 4
-                            ColumnLayout {
-                                Layout.fillWidth: true
 
-                                Text {
+                        ColumnLayout {
+                            width: startPointList.width - (startPointList.anchors.margins * 4)
+                            RowLayout {
+                                Layout.fillWidth: true
+                                spacing: 1
+                                ColumnLayout {
                                     Layout.fillWidth: true
-                                    elide: Text.ElideRight
-                                    text: groupName
-                                    horizontalAlignment: Text.AlignLeft
+
+                                    Text {
+                                        Layout.fillWidth: true
+                                        elide: Text.ElideRight
+                                        text: groupName
+                                        horizontalAlignment: Text.AlignLeft
+                                    }
+                                    Text {
+                                        Layout.fillWidth: true
+                                        elide: Text.ElideRight
+                                        text: sourceName
+                                        horizontalAlignment: Text.AlignLeft
+                                    }
                                 }
-                                Text {
-                                    Layout.fillWidth: true
-                                    elide: Text.ElideRight
-                                    text: sourceName
-                                    horizontalAlignment: Text.AlignLeft
+                                Button {
+                                    Layout.preferredWidth: 48
+                                    icon.source: "images/zoom-to-object.svg"
+                                    icon.width: 16
+                                    icon.height: 16
+                                }
+                                Button {
+                                    Layout.preferredWidth: 48
+                                    icon.source: "images/trash.svg"
+                                    icon.width: 16
+                                    icon.height: 16
+                                    onClicked: controller.removeStartingPoint(index)
                                 }
                             }
-                            Button {
-                                Layout.preferredWidth: 48
-                                icon.source: "images/zoom-to-object.svg"
-                                icon.width: 16
-                                icon.height: 16
-                            }
-                            Button {
-                                Layout.preferredWidth: 48
-                                icon.source: "images/trash.svg"
-                                icon.width: 16
-                                icon.height: 16
-                                onClicked: controller.removeStartingPoint(index)
+                            RowLayout {
+                                spacing: 4
+                                Layout.fillWidth: true
+                                Slider {
+                                    id: slider
+                                    Layout.fillWidth: true
+                                    padding: 0
+                                    stepSize: 0.01
+                                    snapMode: RangeSlider.SnapAlways
+                                    from: 0.0
+                                    to: 1.0
+                                    visible: true
+                                    onValueChanged: {
+                                        if (slider.first.pressed) {
+                                            if (slider.first.handle.enabled) {
+                                                controller.setSteps(first.value, controller.fractionAlongEdge);
+                                            } else { // Reset
+                                                slider.first.value = controller.fractionAlongEdge;
+                                            }
+                                        }
+                                    }
+                                    Connections {
+                                        target: controller
+                                        function fractionAlongEdgeChanged() {
+                                            slider.setValue(controller.fractionAlongEdge);
+                                        }
+                                    }
+                                }
+                                Label {
+                                    text: slider.value.toFixed(2)
+                                }
                             }
                         }
                     }
                 }
 
                 Text {
-                    visible: controller.isAddingStartingPoint
+                    visible: controller.isAddingStartingPointEnabled
                     text: "Click on the map to identify starting points."
                     horizontalAlignment: Text.AlignLeft
                 }
@@ -166,13 +220,22 @@ Pane {
                     visible: true
 
                     Button {
+                        id: removeAllButton
+                        text: "Remove All"
+                        Layout.alignment: Qt.AlignLeft
+                        Layout.maximumWidth: Layout.maximumHeight
+                        padding: 0
+                        onClicked: controller.removeAllStartingPoints()
+                        visible: startPointList.count > 0
+                    }
+
+                    Button {
                         id: selectStartingPointButton
-                        text: controller.isAddingStartingPoint ? "Cancel" : "Add Starting Point"
-                        //icon.source: "images/edit-attributes.svg"
+                        text: controller.isAddingStartingPointEnabled ? "Cancel" : "Add Starting Point"
                         Layout.alignment: Qt.AlignRight
                         Layout.maximumWidth: Layout.maximumHeight
                         padding: 0
-                        onClicked: controller.isAddingStartingPoint = !controller.isAddingStartingPoint
+                        onClicked: controller.isAddingStartingPointEnabled = !controller.isAddingStartingPointEnabled
                     }
                 }
             }

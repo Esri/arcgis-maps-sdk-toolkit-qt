@@ -19,7 +19,7 @@ Qt::ItemFlags UtilityNetworkTraceStartingPointsModel::flags(const QModelIndex& i
   return QAbstractListModel::flags(index);
 }
 
-int UtilityNetworkTraceStartingPointsModel::rowCount(const QModelIndex& parent) const
+int UtilityNetworkTraceStartingPointsModel::rowCount(const QModelIndex& /*parent*/) const
 {
   return static_cast<int>(m_data.size());
 }

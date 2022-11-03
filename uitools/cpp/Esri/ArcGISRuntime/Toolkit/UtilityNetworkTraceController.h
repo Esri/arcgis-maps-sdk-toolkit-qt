@@ -54,9 +54,11 @@ class UtilityNetworkTraceController : public QObject
   Q_PROPERTY(UtilityNetwork* selectedUtilityNetwork READ selectedUtilityNetwork WRITE setSelectedUtilityNetwork NOTIFY selectedUtilityNetworkChanged)
   Q_PROPERTY(UtilityNamedTraceConfiguration* selectedTraceConfiguration READ selectedTraceConfiguration WRITE setSelectedTraceConfiguration NOTIFY selectedTraceConfigurationChanged)
   Q_PROPERTY(bool isTraceInProgress READ isTraceInProgress WRITE setIsTraceInProgress NOTIFY isTraceInProgressChanged)
-  Q_PROPERTY(bool isAddingStartingPoint READ isAddingStartingPoint WRITE setIsAddingStartingPoint NOTIFY isAddingStartingPointChanged)
+  Q_PROPERTY(bool isAddingStartingPointEnabled READ isAddingStartingPointEnabled WRITE setIsAddingStartingPointEnabled NOTIFY isAddingStartingPointEnabledChanged)
+  Q_PROPERTY(bool isAddingStartingPointInProgress READ isAddingStartingPointInProgress WRITE setIsAddingStartingPointInProgress NOTIFY isAddingStartingPointInProgressChanged)
   Q_PROPERTY(Symbol* startingPointSymbol READ startingPointSymbol WRITE setStartingPointSymbol NOTIFY startingPointSymbolChanged)
-  Q_PROPERTY(QAbstractItemModel* startingPoints READ startingPoints CONSTANT);
+  Q_PROPERTY(QAbstractItemModel* startingPoints READ startingPoints CONSTANT)
+  Q_PROPERTY(QList<UtilityNamedTraceConfiguration*> traceConfigurations READ traceConfigurations CONSTANT)
 
 public:
   Q_INVOKABLE explicit UtilityNetworkTraceController(QObject* parent = nullptr);
@@ -79,15 +81,18 @@ public:
   bool isTraceInProgress() const;
   void setIsTraceInProgress(const bool isTraceInProgress);
 
-  bool isAddingStartingPoint() const;
-  void setIsAddingStartingPoint(const bool isAddingStartingPoint);
+  bool isAddingStartingPointEnabled() const;
+  void setIsAddingStartingPointEnabled(const bool isAddingStartingPointEnabled);
+
+  bool isAddingStartingPointInProgress() const;
+  void setIsAddingStartingPointInProgress(const bool isAddingStartingPointInProgress);
 
   Symbol* startingPointSymbol() const;
   void setStartingPointSymbol(Symbol* startingPointSymbol);
 
   Q_INVOKABLE void runTrace(const QString& name);
 
-  Q_INVOKABLE QList<Esri::ArcGISRuntime::UtilityNamedTraceConfiguration*> traceConfigurations() const;
+  QList<Esri::ArcGISRuntime::UtilityNamedTraceConfiguration*> traceConfigurations() const;
 
   Q_INVOKABLE QList<Esri::ArcGISRuntime::Toolkit::UtilityNetworkTraceOperationResult*> traceResults();
 
@@ -95,13 +100,16 @@ public:
 
   Q_INVOKABLE void removeStartingPoint(int index);
 
+  Q_INVOKABLE void removeAllStartingPoints();
+
 signals:
   void geoViewChanged();
   void selectedUtilityNetworkChanged(Esri::ArcGISRuntime::UtilityNetwork* newValue);
   void startingPointsChanged();
   void selectedTraceConfigurationChanged();
   void isTraceInProgressChanged();
-  void isAddingStartingPointChanged();
+  void isAddingStartingPointEnabledChanged();
+  void isAddingStartingPointInProgressChanged();
   void startingPointSymbolChanged();
 
 private:
@@ -119,7 +127,8 @@ private:
   UtilityNetworkTraceStartingPointsModel* m_startingPoints;
   QList<UtilityNetworkTraceOperationResult*> m_traceResults;
   bool m_isTraceInProgress = false;
-  bool m_isAddingStartingPoint = false;
+  bool m_isAddingStartingPointEnabled = false; // if so, user can select points on the map to become starting points
+  bool m_isAddingStartingPointInProgress = false; // if so, it's processing selected points on the map to be starting points
   Symbol* m_startingPointSymbol;
   Point m_mapPoint;
   QMap<QUuid, QMetaObject::Connection> m_traceConfigConnection;

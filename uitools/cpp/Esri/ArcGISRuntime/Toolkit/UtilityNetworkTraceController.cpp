@@ -185,6 +185,8 @@ UtilityNetworkTraceController::UtilityNetworkTraceController(QObject* parent) :
   m_startingPointsGraphicsOverlay(new GraphicsOverlay(m_startingPointParent)),
   m_utilityNetworks(new GenericListModel(&UtilityNetworkListItem::staticMetaObject, this)),
   m_startingPoints(new UtilityNetworkTraceStartingPointsModel(this)),
+  m_isAddingStartingPointEnabled(false),
+  m_isAddingStartingPointInProgress(false),
   m_startingPointSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle::Cross, QColor(Qt::green), 20.0f, this))
 {
   qDebug() << "UtilityNetworkTrace begins construction";
@@ -269,16 +271,21 @@ void UtilityNetworkTraceController::setGeoView(QObject* geoView)
                          &UtilityNetwork::queryNamedTraceConfigurationsCompleted,
                          this,
                          [this](QUuid taskId, const QList<Esri::ArcGISRuntime::UtilityNamedTraceConfiguration*>& utilityNamedTraceConfigurationResults)
-        {
+          {
             const auto findIter = m_traceConfigConnection.find(taskId);
             if (findIter != m_traceConfigConnection.end())
-        {
-            disconnect(*findIter);
-            m_traceConfigConnection.remove(taskId);
-      }
+            {
+              disconnect(*findIter);
+              m_traceConfigConnection.remove(taskId);
+            }
             m_traceConfigurations.clear();
             m_traceConfigurations = utilityNamedTraceConfigurationResults;
-      });
+            if (!m_traceConfigurations.isEmpty())
+            {
+              // select the first trace configuration by default
+              m_selectedTraceConfiguration = m_traceConfigurations.at(0);
+            }
+          });
         auto traceConfigs = m_selectedUtilityNetwork->queryNamedTraceConfigurations(nullptr);
         m_traceConfigConnection.insert(traceConfigs.taskId(), c);
       }
@@ -295,10 +302,6 @@ void UtilityNetworkTraceController::setGeoView(QObject* geoView)
     // handle the identify results
     connect(mapView, &MapQuickView::identifyLayersCompleted, this, [this](QUuid, const QList<IdentifyLayerResult*>& results)
     {
-      // set busy false
-      if (!isAddingStartingPoint())
-        return;
-
       qDebug() << "### identifyLayersCompleted results found";
       for (const auto& layer : results)
       {
@@ -309,20 +312,23 @@ void UtilityNetworkTraceController::setGeoView(QObject* geoView)
         }
       }
 
-      setIsAddingStartingPoint(!isAddingStartingPoint());
+      setIsAddingStartingPointInProgress(false);
     });
 
     // identify symbols on mouse click
     connect(mapView, &MapQuickView::mouseClicked, this, [this, mapView](QMouseEvent& mouseEvent)
     {
-      // check if busy is running
-      // if so -> set busy true; return;
+      if (isAddingStartingPointInProgress() || !isAddingStartingPointEnabled())
+        return;
+
+      setIsAddingStartingPointEnabled(false);
+      setIsAddingStartingPointInProgress(true);
       qDebug() << "### mouseClicked search begins";
       const double tolerance = 10.0;
       const bool returnPopups = false;
       m_mapPoint = mapView->screenToLocation(mouseEvent.pos().x(), mouseEvent.pos().y());
 
-      /* qhash(taskid, mouseevent))))*/ mapView->identifyLayers(mouseEvent.pos().x(), mouseEvent.pos().y(), tolerance, returnPopups);
+      mapView->identifyLayers(mouseEvent.pos().x(), mouseEvent.pos().y(), tolerance, returnPopups);
     });
 
     setupUtilityNetworks();
@@ -389,18 +395,32 @@ void UtilityNetworkTraceController::setIsTraceInProgress(const bool isTraceInPro
   emit isTraceInProgressChanged();
 }
 
-bool UtilityNetworkTraceController::isAddingStartingPoint() const
+bool UtilityNetworkTraceController::isAddingStartingPointEnabled() const
 {
-  return m_isAddingStartingPoint;
+  return m_isAddingStartingPointEnabled;
 }
 
-void UtilityNetworkTraceController::setIsAddingStartingPoint(const bool isAddingStartingPoint)
+void UtilityNetworkTraceController::setIsAddingStartingPointEnabled(const bool isAddingStartingPointEnabled)
 {
-  if (m_isAddingStartingPoint == isAddingStartingPoint)
+  if (m_isAddingStartingPointEnabled == isAddingStartingPointEnabled)
     return;
 
-  m_isAddingStartingPoint = isAddingStartingPoint;
-  emit isAddingStartingPointChanged();
+  m_isAddingStartingPointEnabled = isAddingStartingPointEnabled;
+  emit isAddingStartingPointEnabledChanged();
+}
+
+bool UtilityNetworkTraceController::isAddingStartingPointInProgress() const
+{
+  return m_isAddingStartingPointInProgress;
+}
+
+void UtilityNetworkTraceController::setIsAddingStartingPointInProgress(const bool isAddingStartingPointInProgress)
+{
+  if (m_isAddingStartingPointInProgress == isAddingStartingPointInProgress)
+    return;
+
+  m_isAddingStartingPointInProgress = isAddingStartingPointInProgress;
+  emit isAddingStartingPointInProgressChanged();
 }
 
 Symbol* UtilityNetworkTraceController::startingPointSymbol() const
@@ -721,6 +741,18 @@ void UtilityNetworkTraceController::addStartingPoint(ArcGISFeature* identifiedFe
 void UtilityNetworkTraceController::removeStartingPoint(int index)
 {
   m_startingPoints->removeAt(index);
+  m_startingPointsGraphicsOverlay->graphics()->removeAt(index);
+}
+
+void UtilityNetworkTraceController::removeAllStartingPoints()
+{
+  m_startingPointsGraphicsOverlay->graphics()->clear();
+
+  if (m_startingPointParent)
+    delete m_startingPointParent;
+
+  m_startingPointParent = new QObject(this);
+  m_startingPoints->clear();
 }
 
 void UtilityNetworkTraceController::setupUtilityNetworks()
