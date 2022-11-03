@@ -21,6 +21,7 @@ public:
   {
     SourceNameRole = Qt::UserRole + 1,
     GroupNameRole = Qt::UserRole + 2,
+    HasFractionAlongEdgeRole = Qt::UserRole +3,
   };
 
   Qt::ItemFlags flags(const QModelIndex& index) const override;

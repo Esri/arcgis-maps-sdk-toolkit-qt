@@ -37,7 +37,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
 class UtilityNetworkTraceStartingPoint : public QObject
 {
   Q_OBJECT
-  Q_PROPERTY(double fractionAlongEdge READ fractionAlongEdge WRITE setFractionAlongEdge NOTIFY fractionAlongEdgeChanged)
 
 public:
   Q_INVOKABLE explicit UtilityNetworkTraceStartingPoint(QObject* parent = nullptr);
@@ -56,7 +55,7 @@ public:
 
   bool terminalPickerVisible() const;
 
-  bool fractionSliderVisible() const;
+  bool hasFractionAlongEdge() const;
 
   double fractionAlongEdge() const;
   void setFractionAlongEdge(double fractionAlongEdge);
@@ -75,7 +74,7 @@ private:
   Symbol* m_featureSymbol = nullptr;
   Envelope m_extent;
   bool m_terminalPickerVisible = false;
-  bool m_fractionSliderVisible = false;
+  bool m_hasFractionAlongEdge = false;
   double m_fractionAlongEdge = 0.0;
 };
 

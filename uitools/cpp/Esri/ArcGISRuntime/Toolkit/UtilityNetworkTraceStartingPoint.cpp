@@ -61,7 +61,7 @@ UtilityNetworkTraceStartingPoint::UtilityNetworkTraceStartingPoint(UtilityElemen
       m_utilityElement->networkSource()->sourceType() == UtilityNetworkSourceType::Edge &&
       m_selectionGraphic->geometry().geometryType() == GeometryType::Polyline)
   {
-    m_fractionSliderVisible = true;
+    m_hasFractionAlongEdge = true;
     setFractionAlongEdge(m_utilityElement->fractionAlongEdge());
 
     qDebug() << "fraction along edge initial: " << m_utilityElement->fractionAlongEdge();
@@ -106,9 +106,9 @@ bool UtilityNetworkTraceStartingPoint::terminalPickerVisible() const
   return m_terminalPickerVisible;
 }
 
-bool UtilityNetworkTraceStartingPoint::fractionSliderVisible() const
+bool UtilityNetworkTraceStartingPoint::hasFractionAlongEdge() const
 {
-  return m_fractionSliderVisible;
+  return m_hasFractionAlongEdge;
 }
 
 double UtilityNetworkTraceStartingPoint::fractionAlongEdge() const

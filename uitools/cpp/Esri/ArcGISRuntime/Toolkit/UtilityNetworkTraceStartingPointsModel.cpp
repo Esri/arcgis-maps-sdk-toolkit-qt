@@ -37,6 +37,8 @@ QVariant UtilityNetworkTraceStartingPointsModel::data(const QModelIndex& index, 
       return startingPoint->sourceName();
     case GroupNameRole:
       return startingPoint->groupName();
+    case HasFractionAlongEdgeRole:
+      return startingPoint->hasFractionAlongEdge();
   }
 
   return {};
@@ -99,4 +101,5 @@ void UtilityNetworkTraceStartingPointsModel::setupRoles()
 {
   m_roles[SourceNameRole] = "sourceName";
   m_roles[GroupNameRole] = "groupName";
+  m_roles[HasFractionAlongEdgeRole] = "hasFractionAlongEdge";
 }

@@ -184,7 +184,7 @@ Pane {
                                     snapMode: RangeSlider.SnapAlways
                                     from: 0.0
                                     to: 1.0
-                                    visible: true
+                                    visible: hasFractionAlongEdge
                                     onValueChanged: {
                                         if (slider.first.pressed) {
                                             if (slider.first.handle.enabled) {
@@ -203,6 +203,7 @@ Pane {
                                 }
                                 Label {
                                     text: slider.value.toFixed(2)
+                                    visible: hasFractionAlongEdge
                                 }
                             }
                         }
