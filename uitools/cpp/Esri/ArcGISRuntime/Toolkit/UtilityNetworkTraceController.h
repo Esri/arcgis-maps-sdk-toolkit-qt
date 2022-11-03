@@ -58,7 +58,7 @@ class UtilityNetworkTraceController : public QObject
   Q_PROPERTY(bool isAddingStartingPointInProgress READ isAddingStartingPointInProgress WRITE setIsAddingStartingPointInProgress NOTIFY isAddingStartingPointInProgressChanged)
   Q_PROPERTY(Symbol* startingPointSymbol READ startingPointSymbol WRITE setStartingPointSymbol NOTIFY startingPointSymbolChanged)
   Q_PROPERTY(QAbstractItemModel* startingPoints READ startingPoints CONSTANT)
-  Q_PROPERTY(QList<UtilityNamedTraceConfiguration*> traceConfigurations READ traceConfigurations CONSTANT)
+  Q_PROPERTY(QStringList traceConfigurationNames READ traceConfigurationNames NOTIFY traceConfigurationNamesChanged)
 
 public:
   Q_INVOKABLE explicit UtilityNetworkTraceController(QObject* parent = nullptr);
@@ -74,6 +74,9 @@ public:
   void setSelectedUtilityNetwork(UtilityNetwork* selectedUtilityNetwork);
 
   QAbstractItemModel* startingPoints() const;
+
+  QStringList traceConfigurationNames() const;
+  void setTraceConfigurationNames(const QStringList& traceConfigurationNames);
 
   UtilityNamedTraceConfiguration* selectedTraceConfiguration() const;
   void setSelectedTraceConfiguration(UtilityNamedTraceConfiguration* selectedTraceConfiguration);
@@ -102,10 +105,13 @@ public:
 
   Q_INVOKABLE void removeAllStartingPoints();
 
+  Q_INVOKABLE void setSelectedTraceConfigurationNameByIndex(int index);
+
 signals:
   void geoViewChanged();
   void selectedUtilityNetworkChanged(Esri::ArcGISRuntime::UtilityNetwork* newValue);
   void startingPointsChanged();
+  void traceConfigurationNamesChanged();
   void selectedTraceConfigurationChanged();
   void isTraceInProgressChanged();
   void isAddingStartingPointEnabledChanged();
@@ -122,6 +128,7 @@ private:
   GraphicsOverlay* m_startingPointsGraphicsOverlay = nullptr;
   UtilityNetwork* m_selectedUtilityNetwork = nullptr;
   GenericListModel* m_utilityNetworks = nullptr;
+  QStringList m_traceConfigurationNames;
   QList<UtilityNamedTraceConfiguration*> m_traceConfigurations;
   UtilityNamedTraceConfiguration* m_selectedTraceConfiguration = nullptr;
   UtilityNetworkTraceStartingPointsModel* m_startingPoints;

@@ -280,6 +280,16 @@ void UtilityNetworkTraceController::setGeoView(QObject* geoView)
             }
             m_traceConfigurations.clear();
             m_traceConfigurations = utilityNamedTraceConfigurationResults;
+
+            QStringList traceConfigNamesTemp{};
+
+            for (const auto& traceConfig : m_traceConfigurations)
+            {
+              traceConfigNamesTemp.append(traceConfig->name());
+            }
+
+            setTraceConfigurationNames(traceConfigNamesTemp);
+
             if (!m_traceConfigurations.isEmpty())
             {
               // select the first trace configuration by default
@@ -365,6 +375,20 @@ void UtilityNetworkTraceController::setSelectedUtilityNetwork(UtilityNetwork* se
 QAbstractItemModel* UtilityNetworkTraceController::startingPoints() const
 {
   return m_startingPoints;
+}
+
+QStringList UtilityNetworkTraceController::traceConfigurationNames() const
+{
+  return m_traceConfigurationNames;
+}
+
+void UtilityNetworkTraceController::setTraceConfigurationNames(const QStringList& traceConfigurationNames)
+{
+  if (m_traceConfigurationNames == traceConfigurationNames)
+    return;
+
+  m_traceConfigurationNames = traceConfigurationNames;
+  emit traceConfigurationNamesChanged();
 }
 
 UtilityNamedTraceConfiguration* UtilityNetworkTraceController::selectedTraceConfiguration() const
@@ -753,6 +777,12 @@ void UtilityNetworkTraceController::removeAllStartingPoints()
 
   m_startingPointParent = new QObject(this);
   m_startingPoints->clear();
+}
+
+void UtilityNetworkTraceController::setSelectedTraceConfigurationNameByIndex(int index)
+{
+  if (m_traceConfigurations.size() > index)
+    setSelectedTraceConfiguration(m_traceConfigurations.at(index));
 }
 
 void UtilityNetworkTraceController::setupUtilityNetworks()

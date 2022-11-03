@@ -93,28 +93,18 @@ Pane {
                 spacing: 5
                 width: root.width
 
-                RowLayout {
+                Label {
+                    text: "Trace Configuration"
+                }
+                //Layout.margins: 0
 
-                    Label {
-                        text: "Trace Configuration"
-                    }
-                    Layout.margins: 0
-
-                    ComboBox {
-                        Layout.margins: 5
-                        id: traceConfigurationBox
-                        model: controller.traceConfigurations
-                        textRole: "name"
-                        onCurrentIndexChanged: {
-                            const index = currentIndex;
-                            const traceConfiguration = controller.traceConfigurations;
-                            let modelData = traceConfiguration[index];
-                            if (modelData === undefined) {
-                                modelData = traceConfiguration.element(traceConfiguration.index(index, 0));
-                            }
-                            inputFormat.type = modelData;
-                            inputFormat.updateTraceConfiguration(controller.currentPoint());
-                        }
+                ComboBox {
+                    Layout.margins: 5
+                    id: traceConfigurationBox
+                    model: controller.traceConfigurationNames
+                    Layout.fillWidth: true
+                    onCurrentIndexChanged: {
+                        controller.setSelectedTraceConfigurationNameByIndex(currentIndex);
                     }
                 }
 
