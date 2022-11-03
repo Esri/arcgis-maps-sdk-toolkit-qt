@@ -22,6 +22,7 @@ public:
     SourceNameRole = Qt::UserRole + 1,
     GroupNameRole = Qt::UserRole + 2,
     HasFractionAlongEdgeRole = Qt::UserRole +3,
+    FractionAlongEdgeRole = Qt::UserRole +4,
   };
 
   Qt::ItemFlags flags(const QModelIndex& index) const override;
@@ -29,6 +30,7 @@ public:
   int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 
   QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+  bool setData(const QModelIndex& index, const QVariant& value, int role) override;
 
   void addStartingPoint(UtilityNetworkTraceStartingPoint* startingPoint);
 

@@ -185,19 +185,10 @@ Pane {
                                     from: 0.0
                                     to: 1.0
                                     visible: hasFractionAlongEdge
+                                    value: fractionAlongEdge
                                     onValueChanged: {
-                                        if (slider.first.pressed) {
-                                            if (slider.first.handle.enabled) {
-                                                controller.setSteps(first.value, controller.fractionAlongEdge);
-                                            } else { // Reset
-                                                slider.first.value = controller.fractionAlongEdge;
-                                            }
-                                        }
-                                    }
-                                    Connections {
-                                        target: controller
-                                        function fractionAlongEdgeChanged() {
-                                            slider.setValue(controller.fractionAlongEdge);
+                                        if (fractionAlongEdge !== value) {
+                                            fractionAlongEdge = value
                                         }
                                     }
                                 }

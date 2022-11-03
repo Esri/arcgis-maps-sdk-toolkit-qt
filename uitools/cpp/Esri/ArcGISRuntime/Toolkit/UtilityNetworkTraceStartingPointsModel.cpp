@@ -39,9 +39,39 @@ QVariant UtilityNetworkTraceStartingPointsModel::data(const QModelIndex& index, 
       return startingPoint->groupName();
     case HasFractionAlongEdgeRole:
       return startingPoint->hasFractionAlongEdge();
+    case FractionAlongEdgeRole:
+      return startingPoint->fractionAlongEdge();
   }
 
   return {};
+}
+
+bool UtilityNetworkTraceStartingPointsModel::setData(const QModelIndex& index, const QVariant& value, int role)
+{
+  if (index.row() < 0 || index.row() >= rowCount())
+    return false;
+
+  auto& startingPoint = m_data[static_cast<size_t>(index.row())];
+
+  switch (role)
+  {
+    case SourceNameRole:
+      break;
+    case GroupNameRole:
+      break;
+    case HasFractionAlongEdgeRole:
+      break;
+    case FractionAlongEdgeRole:
+    {
+      bool success = false;
+      double fraction = value.toDouble(&success);
+      if (success)
+        startingPoint->setFractionAlongEdge(fraction);
+      return success;
+    }
+  }
+
+  return false;
 }
 
 void UtilityNetworkTraceStartingPointsModel::addStartingPoint(UtilityNetworkTraceStartingPoint* startingPoint)
@@ -102,4 +132,5 @@ void UtilityNetworkTraceStartingPointsModel::setupRoles()
   m_roles[SourceNameRole] = "sourceName";
   m_roles[GroupNameRole] = "groupName";
   m_roles[HasFractionAlongEdgeRole] = "hasFractionAlongEdge";
+  m_roles[FractionAlongEdgeRole] = "fractionAlongEdge";
 }
