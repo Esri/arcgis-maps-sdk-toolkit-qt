@@ -41,6 +41,12 @@ QVariant UtilityNetworkTraceStartingPointsModel::data(const QModelIndex& index, 
       return startingPoint->hasFractionAlongEdge();
     case FractionAlongEdgeRole:
       return startingPoint->fractionAlongEdge();
+    case HasMultipleTerminalsRole:
+      return startingPoint->hasMultipleTerminals();
+    case MultipleTerminalNamesRole:
+      return startingPoint->multipleTerminalNames();
+    case SelectedTerminalIndexRole:
+      return startingPoint->selectedTerminalIndex();
   }
 
   return {};
@@ -67,6 +73,18 @@ bool UtilityNetworkTraceStartingPointsModel::setData(const QModelIndex& index, c
       double fraction = value.toDouble(&success);
       if (success)
         startingPoint->setFractionAlongEdge(fraction);
+      return success;
+    }
+    case HasMultipleTerminalsRole:
+      break;
+    case MultipleTerminalNamesRole:
+      break;
+    case SelectedTerminalIndexRole:
+    {
+      bool success = false;
+      int i = value.toInt(&success);
+      if (success)
+        startingPoint->setSelectedTerminalNameByIndex(i);
       return success;
     }
   }
@@ -138,4 +156,7 @@ void UtilityNetworkTraceStartingPointsModel::setupRoles()
   m_roles[GroupNameRole] = "groupName";
   m_roles[HasFractionAlongEdgeRole] = "hasFractionAlongEdge";
   m_roles[FractionAlongEdgeRole] = "fractionAlongEdge";
+  m_roles[HasMultipleTerminalsRole] = "hasMultipleTerminals";
+  m_roles[MultipleTerminalNamesRole] = "multipleTerminalNames";
+  m_roles[SelectedTerminalIndexRole] = "selectedTerminalIndex";
 }

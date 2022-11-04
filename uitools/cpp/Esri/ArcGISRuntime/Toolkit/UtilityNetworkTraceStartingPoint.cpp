@@ -26,6 +26,7 @@
 #include <UtilityElement.h>
 #include <UtilityNetworkSource.h>
 #include <UtilityNetworkTypes.h>
+#include <UtilityTerminal.h>
 #include <UtilityTerminalConfiguration.h>
 
 namespace Esri::ArcGISRuntime::Toolkit {
@@ -50,7 +51,18 @@ UtilityNetworkTraceStartingPoint::UtilityNetworkTraceStartingPoint(UtilityElemen
   if (m_utilityElement->assetType()->terminalConfiguration() != nullptr &&
       m_utilityElement->assetType()->terminalConfiguration()->terminals().size() > 1)
   {
-    m_terminalPickerVisible = true;
+    m_hasMultipleTerminals = true;
+
+    m_multipleTerminals = m_utilityElement->assetType()->terminalConfiguration()->terminals();
+
+    QStringList multipleTerminalsTemp{};
+
+    for (const auto& terminal : m_multipleTerminals)
+    {
+      multipleTerminalsTemp.append(terminal->name());
+    }
+
+    m_multipleTerminalNames = multipleTerminalsTemp;
   }
 
   qDebug() << "@@@ UtilityNetworkTraceStartingPoint c'tor";
@@ -69,9 +81,6 @@ UtilityNetworkTraceStartingPoint::UtilityNetworkTraceStartingPoint(UtilityElemen
     m_selectionGraphic->setGeometry(
           GeometryEngine::createPointAlong(polyline, GeometryEngine::length(polyline) * fractionAlongEdge()));
 
-    // from Java fractionAlongEdgeProperty.addListener((obvs, nv, ov)->
-    // Also, why does Java have two connections instead of one?
-    // Do the connections last, so prior initialization will not cause issues
     connect(this,
             &UtilityNetworkTraceStartingPoint::fractionAlongEdgeChanged,
             this,
@@ -101,9 +110,38 @@ Symbol* UtilityNetworkTraceStartingPoint::featureSymbol() const
   return m_featureSymbol;
 }
 
-bool UtilityNetworkTraceStartingPoint::terminalPickerVisible() const
+bool UtilityNetworkTraceStartingPoint::hasMultipleTerminals() const
 {
-  return m_terminalPickerVisible;
+  return m_hasMultipleTerminals;
+}
+
+QStringList UtilityNetworkTraceStartingPoint::multipleTerminalNames() const
+{
+  return m_multipleTerminalNames;
+}
+
+void UtilityNetworkTraceStartingPoint::setMultipleTerminalNames(const QStringList& multipleTerminalNames)
+{
+  if (m_multipleTerminalNames == multipleTerminalNames)
+    return;
+
+  m_multipleTerminalNames = multipleTerminalNames;
+  emit multipleTerminalNamesChanged();
+}
+
+int UtilityNetworkTraceStartingPoint::selectedTerminalIndex() const
+{
+  return m_selectedTerminalIndex;
+}
+
+void UtilityNetworkTraceStartingPoint::setSelectedTerminalNameByIndex(int index)
+{
+  if (m_multipleTerminalNames.size() > index)
+  {
+    m_selectedMultipleTerminal = m_multipleTerminals.at(index);
+    m_selectedTerminalIndex = index;
+    qDebug() << "&&&&&" << m_selectedMultipleTerminal->name();
+  }
 }
 
 bool UtilityNetworkTraceStartingPoint::hasFractionAlongEdge() const

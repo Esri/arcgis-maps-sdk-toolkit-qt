@@ -782,11 +782,6 @@ void UtilityNetworkTraceController::zoomToStartingPoint(int index)
 void UtilityNetworkTraceController::removeAllStartingPoints()
 {
   m_startingPointsGraphicsOverlay->graphics()->clear();
-
-  if (m_startingPointParent)
-    delete m_startingPointParent;
-
-  m_startingPointParent = new QObject(this);
   m_startingPoints->clear();
 }
 

@@ -53,7 +53,12 @@ public:
 
   Symbol* featureSymbol() const;
 
-  bool terminalPickerVisible() const;
+  bool hasMultipleTerminals() const;
+
+  QStringList multipleTerminalNames() const;
+  void setMultipleTerminalNames(const QStringList& multipleTerminals);
+  int selectedTerminalIndex() const;
+  void setSelectedTerminalNameByIndex(int index);
 
   bool hasFractionAlongEdge() const;
 
@@ -66,6 +71,7 @@ public:
   QString sourceName() const;
 
 signals:
+  void multipleTerminalNamesChanged();
   void fractionAlongEdgeChanged(double newValue, double oldValue);
 
 private:
@@ -73,7 +79,11 @@ private:
   Graphic* m_selectionGraphic = nullptr;
   Symbol* m_featureSymbol = nullptr;
   Envelope m_extent;
-  bool m_terminalPickerVisible = false;
+  bool m_hasMultipleTerminals = false;
+  QStringList m_multipleTerminalNames;
+  QList<UtilityTerminal*> m_multipleTerminals;
+  UtilityTerminal* m_selectedMultipleTerminal = nullptr;
+  int m_selectedTerminalIndex = 0;
   bool m_hasFractionAlongEdge = false;
   double m_fractionAlongEdge = 0.0;
 };

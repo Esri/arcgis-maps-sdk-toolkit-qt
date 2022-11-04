@@ -96,7 +96,6 @@ Pane {
                 Label {
                     text: "Trace Configuration"
                 }
-                //Layout.margins: 0
 
                 ComboBox {
                     Layout.margins: 5
@@ -139,13 +138,13 @@ Pane {
                                     Text {
                                         Layout.fillWidth: true
                                         elide: Text.ElideRight
-                                        text: groupName
+                                        text: sourceName
                                         horizontalAlignment: Text.AlignLeft
                                     }
                                     Text {
                                         Layout.fillWidth: true
                                         elide: Text.ElideRight
-                                        text: sourceName
+                                        text: groupName
                                         horizontalAlignment: Text.AlignLeft
                                     }
                                 }
@@ -167,6 +166,19 @@ Pane {
                             RowLayout {
                                 spacing: 4
                                 Layout.fillWidth: true
+
+                                ComboBox {
+                                    id: multipleTerminalsCombo
+                                    Layout.fillWidth: true
+                                    padding: 0
+                                    visible: hasMultipleTerminals
+                                    model: multipleTerminalNames
+                                    onCurrentIndexChanged: {
+                                        if (selectedTerminalIndex !== currentIndex)
+                                            selectedTerminalIndex = currentIndex;
+                                    }
+                                }
+
                                 Slider {
                                     id: slider
                                     Layout.fillWidth: true
