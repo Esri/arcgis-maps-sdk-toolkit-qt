@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import Esri.ArcGISRuntime.Toolkit.Controller 100.15
+import Esri.ArcGISRuntime.Toolkit.Controller
 
 import QtQuick
 import QtQml
@@ -24,7 +24,7 @@ import QtQuick.Layouts
  \qmltype UtilityNetworkTrace
  \inqmlmodule Esri.ArcGISRuntime.Toolkit
  \ingroup ArcGISQtToolkitUiQmlViews
- \since Esri.ArcGISRuntime 100.15
+ \since Esri.ArcGISRuntime 200.0
  \brief The user interface for the UtilityNetworkTrace.
 
  xxxx
