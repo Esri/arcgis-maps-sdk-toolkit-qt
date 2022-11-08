@@ -342,6 +342,18 @@ void UtilityNetworkTraceController::setGeoView(QObject* geoView)
       mapView->identifyLayers(mouseEvent.pos().x(), mouseEvent.pos().y(), tolerance, returnPopups);
     });
 
+    connect(this, &UtilityNetworkTraceController::selectedTraceConfigurationChanged, this, [this]()
+    {
+      qDebug() << "@@@ selectedTraceConfigurationChanged";
+      this->applyStartingPointWarnings();
+    });
+
+    connect(this, &UtilityNetworkTraceController::startingPointsChanged, this, [this]()
+    {
+      qDebug() << "@@@ startingPointsChanged";
+      this->applyStartingPointWarnings();
+    });
+
     setupUtilityNetworks();
   }
 }
@@ -460,6 +472,34 @@ void UtilityNetworkTraceController::setStartingPointSymbol(Symbol* startingPoint
 
   m_startingPointSymbol = startingPointSymbol;
   emit startingPointSymbolChanged();
+}
+
+bool UtilityNetworkTraceController::isInsufficientStartingPoint() const
+{
+  return m_isInsufficientStartingPoint;
+}
+
+void UtilityNetworkTraceController::setIsInsufficientStartingPoint(bool isInsufficientStartingPoint)
+{
+  if (m_isInsufficientStartingPoint == isInsufficientStartingPoint)
+    return;
+
+  m_isInsufficientStartingPoint = isInsufficientStartingPoint;
+  emit isInsufficientStartingPointChanged();
+}
+
+bool UtilityNetworkTraceController::isAboveMinimumStartingPoint() const
+{
+  return m_isAboveMinimumStartingPoint;
+}
+
+void UtilityNetworkTraceController::setIsAboveMinimumStartingPoint(bool isAboveMinimumStartingPoint)
+{
+  if (m_isAboveMinimumStartingPoint == isAboveMinimumStartingPoint)
+    return;
+
+  m_isAboveMinimumStartingPoint = isAboveMinimumStartingPoint;
+  emit isAboveMinimumStartingPointChanged();
 }
 
 void UtilityNetworkTraceController::runTrace(const QString& /*name*/)
@@ -635,6 +675,7 @@ void UtilityNetworkTraceController::refresh()
   m_traceConfigurations.clear();
   m_startingPoints->clear();
   m_startingPointsGraphicsOverlay->graphics()->clear();
+  emit startingPointsChanged();
 
   if (m_startingPointParent)
     delete m_startingPointParent;
@@ -767,6 +808,7 @@ void UtilityNetworkTraceController::removeStartingPoint(int index)
 {
   m_startingPoints->removeAt(index);
   m_startingPointsGraphicsOverlay->graphics()->removeAt(index);
+  emit startingPointsChanged();
 }
 
 void UtilityNetworkTraceController::zoomToStartingPoint(int index)
@@ -783,6 +825,7 @@ void UtilityNetworkTraceController::removeAllStartingPoints()
 {
   m_startingPointsGraphicsOverlay->graphics()->clear();
   m_startingPoints->clear();
+  emit startingPointsChanged();
 }
 
 void UtilityNetworkTraceController::setSelectedTraceConfigurationNameByIndex(int index)
@@ -859,6 +902,21 @@ void UtilityNetworkTraceController::setupUtilityNetworks()
     qDebug() << "There is no ArcGIS Map attached to the MapView. Utility Network Trace will not be"
              << " displayed. Call UtilityNetworkTrace.refresh() after updating the ArcGIS Map to try again.";
   }
+}
+
+void UtilityNetworkTraceController::applyStartingPointWarnings()
+{
+  if (selectedTraceConfiguration() != nullptr) {
+        auto minimumStartingLocations = selectedTraceConfiguration()->minimumStartingLocations();
+        auto minimum = 1;
+        if (minimumStartingLocations == UtilityMinimumStartingLocations::Many)
+        {
+          minimum = 2;
+        }
+
+        setIsInsufficientStartingPoint(m_startingPoints->size() < minimum);
+        setIsAboveMinimumStartingPoint(m_startingPoints->size() > minimum);
+      }
 }
 
 } // Esri::ArcGISRuntime::Toolkit

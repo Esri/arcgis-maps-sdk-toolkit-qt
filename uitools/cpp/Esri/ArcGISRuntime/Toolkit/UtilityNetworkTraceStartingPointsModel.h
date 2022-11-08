@@ -65,6 +65,8 @@ public:
 
   Point pointAt(int index);
 
+  int size() const;
+
   private:
     QHash<int, QByteArray> roleNames() const override;
 

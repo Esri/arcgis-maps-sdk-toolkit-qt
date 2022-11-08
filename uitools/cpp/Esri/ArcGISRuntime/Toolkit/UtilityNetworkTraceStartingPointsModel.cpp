@@ -157,6 +157,11 @@ Esri::ArcGISRuntime::Point UtilityNetworkTraceStartingPointsModel::pointAt(int i
   return m_data.at(index)->extent().center();
 }
 
+int UtilityNetworkTraceStartingPointsModel::size() const
+{
+  return m_data.size();
+}
+
 QHash<int, QByteArray> UtilityNetworkTraceStartingPointsModel::roleNames() const
 {
   return m_roles;

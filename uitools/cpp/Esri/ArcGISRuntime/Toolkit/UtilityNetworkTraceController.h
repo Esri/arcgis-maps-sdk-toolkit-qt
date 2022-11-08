@@ -59,6 +59,8 @@ class UtilityNetworkTraceController : public QObject
   Q_PROPERTY(Symbol* startingPointSymbol READ startingPointSymbol WRITE setStartingPointSymbol NOTIFY startingPointSymbolChanged)
   Q_PROPERTY(QAbstractItemModel* startingPoints READ startingPoints CONSTANT)
   Q_PROPERTY(QStringList traceConfigurationNames READ traceConfigurationNames NOTIFY traceConfigurationNamesChanged)
+  Q_PROPERTY(bool isInsufficientStartingPoint READ isInsufficientStartingPoint WRITE setIsInsufficientStartingPoint NOTIFY isInsufficientStartingPointChanged)
+  Q_PROPERTY(bool isAboveMinimumStartingPoint READ isAboveMinimumStartingPoint WRITE setIsAboveMinimumStartingPoint NOTIFY isAboveMinimumStartingPointChanged)
 
 public:
   Q_INVOKABLE explicit UtilityNetworkTraceController(QObject* parent = nullptr);
@@ -93,6 +95,12 @@ public:
   Symbol* startingPointSymbol() const;
   void setStartingPointSymbol(Symbol* startingPointSymbol);
 
+  bool isInsufficientStartingPoint() const;
+  void setIsInsufficientStartingPoint(bool isInsufficientStartingPoint);
+
+  bool isAboveMinimumStartingPoint() const;
+  void setIsAboveMinimumStartingPoint(bool isAboveMinimumStartingPoint);
+
   Q_INVOKABLE void runTrace(const QString& name);
 
   QList<Esri::ArcGISRuntime::UtilityNamedTraceConfiguration*> traceConfigurations() const;
@@ -119,11 +127,14 @@ signals:
   void isAddingStartingPointEnabledChanged();
   void isAddingStartingPointInProgressChanged();
   void startingPointSymbolChanged();
+  void isInsufficientStartingPointChanged();
+  void isAboveMinimumStartingPointChanged();
 
 private:
   void populateUtilityNetworksFromMap();
   void addStartingPoint(ArcGISFeature* identifiedFeature, Point mapPoint);
   void setupUtilityNetworks();
+  void applyStartingPointWarnings();
 
   QObject* m_geoView = nullptr;
   QObject* m_startingPointParent = nullptr;
@@ -141,6 +152,8 @@ private:
   Symbol* m_startingPointSymbol;
   Point m_mapPoint;
   QMap<QUuid, QMetaObject::Connection> m_traceConfigConnection;
+  bool m_isInsufficientStartingPoint = true; // during initialization, it cannot be sufficient
+  bool m_isAboveMinimumStartingPoint = false; // during initialization, it cannot be more than minimum
 };
 
 } // Toolkit

@@ -35,7 +35,7 @@ import QtQuick.Layouts
 
 Pane {
     id: utilityNetworkTrace
-    height: 500
+    height: 600
     width: implicitWidth * 1.20
 
     /*!
@@ -69,13 +69,14 @@ Pane {
         TabBar {
             id: bar
 
+            Layout.fillWidth: true
+
             height: implicitHeight
             width: parent.width
 
             TabButton {
                 text: qsTr("New Trace")
                 font.pixelSize: 14
-
             }
             TabButton {
                 text: qsTr("Trace Result")
@@ -135,13 +136,13 @@ Pane {
                                 ColumnLayout {
                                     Layout.fillWidth: true
 
-                                    Text {
+                                    Label {
                                         Layout.fillWidth: true
                                         elide: Text.ElideRight
                                         text: sourceName
                                         horizontalAlignment: Text.AlignLeft
                                     }
-                                    Text {
+                                    Label {
                                         Layout.fillWidth: true
                                         elide: Text.ElideRight
                                         text: groupName
@@ -204,7 +205,7 @@ Pane {
                     }
                 }
 
-                Text {
+                Label {
                     visible: controller.isAddingStartingPointEnabled
                     text: "Click on the map to identify starting points."
                     horizontalAlignment: Text.AlignLeft
@@ -233,16 +234,45 @@ Pane {
                         onClicked: controller.isAddingStartingPointEnabled = !controller.isAddingStartingPointEnabled
                     }
                 }
-            }
 
-            ColumnLayout {
-                id: gridLayoutResults
-                width: root.width
-                spacing: 0
+                ColumnLayout {
+                    id: gridLayoutResults
+                    width: root.width
+                    spacing: 0
+
+                    Label {
+                        visible: controller.isInsufficientStartingPoint
+                        text: "The selected trace configuration requires additional starting points."
+                        horizontalAlignment: Text.AlignLeft
+                        width: gridLayoutTrace.width
+                        wrapMode: "WordWrap"
+                        Layout.fillWidth: true
+                    }
+
+                    Label {
+                        visible: controller.isAboveMinimumStartingPoint
+                        text: "There are more starting points than required for the selected trace configuration."
+                        horizontalAlignment: Text.AlignLeft
+                        width: gridLayoutTrace.width
+                        wrapMode: "WordWrap"
+                        Layout.fillWidth: true
+                    }
+
+                    Button {
+                        id: runTrace
+                        text: "Run trace"
+                        Layout.alignment: Qt.AlignCenter
+                        Layout.maximumWidth: Layout.maximumHeight
+                        padding: 0
+                        onClicked: controller.runTrace
+                        enabled: !controller.isInsufficientStartingPoint
+                        visible: true
+                    }
+                }
             }
         }
     }
 
-    implicitHeight: 200
+    implicitHeight: 250
     implicitWidth: 300
 }
