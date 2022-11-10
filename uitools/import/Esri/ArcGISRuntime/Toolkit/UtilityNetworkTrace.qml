@@ -264,10 +264,25 @@ Pane {
                         Layout.alignment: Qt.AlignCenter
                         Layout.maximumWidth: Layout.maximumHeight
                         padding: 0
-                        onClicked: controller.runTrace
+                        onClicked: {
+                            bar.currentIndex = 1
+                            controller.runTrace("n/a")
+                        }
                         enabled: !controller.isInsufficientStartingPoint
                         visible: true
                     }
+                }
+            }
+
+            ColumnLayout {
+                id: gridLayoutTraceResults
+                spacing: 5
+                width: root.width
+
+                BusyIndicator {
+                    Layout.alignment: Qt.AlignHCenter
+                    running: controller.isTraceInProgress
+                    visible: running
                 }
             }
         }

@@ -17,6 +17,7 @@
 
 // ArcGISRuntime headers
 #include <ArcGISFeature.h>
+#include <ArcGISFeatureListModel.h>
 #include <AttributeListModel.h>
 #include <Error.h>
 #include <FeatureLayer.h>
@@ -272,31 +273,39 @@ void UtilityNetworkTraceController::setGeoView(QObject* geoView)
                          &UtilityNetwork::queryNamedTraceConfigurationsCompleted,
                          this,
                          [this](QUuid taskId, const QList<Esri::ArcGISRuntime::UtilityNamedTraceConfiguration*>& utilityNamedTraceConfigurationResults)
-          {
+        {
             const auto findIter = m_traceConfigConnection.find(taskId);
             if (findIter != m_traceConfigConnection.end())
-            {
-              disconnect(*findIter);
-              m_traceConfigConnection.remove(taskId);
-            }
+        {
+            disconnect(*findIter);
+            m_traceConfigConnection.remove(taskId);
+      }
+
+
             m_traceConfigurations.clear();
             m_traceConfigurations = utilityNamedTraceConfigurationResults;
+            std::sort(std::begin(m_traceConfigurations),
+                      std::end(m_traceConfigurations),
+                      [](const auto& a, const auto& b)
+        {
+          return a->name() < b->name();
+        });
 
             QStringList traceConfigNamesTemp{};
 
             for (const auto& traceConfig : m_traceConfigurations)
-            {
-              traceConfigNamesTemp.append(traceConfig->name());
-            }
+        {
+            traceConfigNamesTemp.append(traceConfig->name());
+      }
 
             setTraceConfigurationNames(traceConfigNamesTemp);
 
             if (!m_traceConfigurations.isEmpty())
-            {
-              // select the first trace configuration by default
-              m_selectedTraceConfiguration = m_traceConfigurations.at(0);
-            }
-          });
+        {
+            // select the first trace configuration by default
+            m_selectedTraceConfiguration = m_traceConfigurations.at(0);
+      }
+      });
         auto traceConfigs = m_selectedUtilityNetwork->queryNamedTraceConfigurations(nullptr);
         m_traceConfigConnection.insert(traceConfigs.taskId(), c);
       }
@@ -381,7 +390,14 @@ void UtilityNetworkTraceController::setSelectedUtilityNetwork(UtilityNetwork* se
   if (m_selectedUtilityNetwork == selectedUtilityNetwork)
     return;
 
+  disconnect(m_selectedUtilityNetwork, nullptr, nullptr, nullptr);
+
   m_selectedUtilityNetwork = selectedUtilityNetwork;
+
+  connect(m_selectedUtilityNetwork, &UtilityNetwork::traceCompleted, this, &UtilityNetworkTraceController::onTraceCompleted);
+  connect(m_selectedUtilityNetwork, &UtilityNetwork::errorOccurred, this, &UtilityNetworkTraceController::onSelectedUtilityNetworkError);
+  connect(m_selectedUtilityNetwork, &UtilityNetwork::featuresForElementsCompleted, this, &UtilityNetworkTraceController::onFeaturesForElementsCompleted);
+
   emit selectedUtilityNetworkChanged(m_selectedUtilityNetwork);
 }
 
@@ -504,157 +520,25 @@ void UtilityNetworkTraceController::setIsAboveMinimumStartingPoint(bool isAboveM
 
 void UtilityNetworkTraceController::runTrace(const QString& /*name*/)
 {
-  qDebug() << "Trace underway";
+  if (isTraceInProgress())
+    return;
+  qDebug() << "run trace";
+
+  if (m_selectedUtilityNetwork)
+    qDebug() << "selected utility network";
+
+  if (m_selectedTraceConfiguration)
+    qDebug() << "m_selectedTraceConfiguration" << m_selectedTraceConfiguration->name();
+
+  if (m_startingPoints)
+    qDebug() << "m_startingPoints" << m_startingPoints->size();
+
   setIsTraceInProgress(true);
-  auto selectedTraceConfiguration = this->selectedTraceConfiguration();
 
-  // create utility trace parameters for a connected trace
-  QList<UtilityElement*> utilityElementsForStartingPoints = m_startingPoints->utilityElements();
-
-  try
-  {
-    UtilityTraceParameters* utilityTraceParameters = new UtilityTraceParameters(selectedTraceConfiguration, utilityElementsForStartingPoints, this);
-
-    UtilityNetworkTraceOperationResult* resultsInProgress = new UtilityNetworkTraceOperationResult(utilityTraceParameters, selectedTraceConfiguration, this);
-    qDebug() << "result in progress: " << resultsInProgress->resultsGraphicsOverlay()->graphics()->size();
-    qDebug() << "result in progress: " << resultsInProgress->name();
-
-    // TODO: handle if selectedTraceConfig is null
-
-    qDebug() << "trace params: " << utilityTraceParameters->traceConfiguration();
-
-    // run the utility trace and get the results
-    // async connection auto utilityTraceResultsFuture = m_selectedUtilityNetwork->trace(utilityTraceParameters);
-
-    connect(m_selectedUtilityNetwork, &UtilityNetwork::traceCompleted, this, [/*this, resultsInProgress*/]()
-    {
-      /*try
-                {
-                  UtilityTraceResultListModel* utilityTraceResults = m_selectedUtilityNetwork->traceResult();
-                  // set the raw results to the current result
-                  resultsInProgress->setRawResults(utilityTraceResults);
-
-                  // loop through the results
-                  for (int i = 0; i < utilityTraceResults->size(); ++i)
-                  {
-                    auto utilityTraceResult = utilityTraceResults->at(i);
-                    // if there are any warnings, add to the current result
-                    if (!utilityTraceResult->warnings().isEmpty())
-                    {
-                      resultsInProgress->setWarnings(utilityTraceResult->warnings());
-                    }
-
-                    // TODO: handle errors / warnings
-                    // TODO: zoom to extent
-                    if (utilityTraceResult->traceResultObjectType() == UtilityTraceResultObjectType::UtilityElementTraceResult)
-                    {
-                      qDebug() << "Utility Element trace result";
-
-                      auto utilityElementTraceResult = dynamic_cast<UtilityElementTraceResult*>(utilityTraceResult);
-
-                      // add the element trace results to the current result
-                      resultsInProgress->setElementResults(utilityElementTraceResult->elements());
-                      QHash<UtilityAssetGroup*, QList<UtilityElement*>> elementResultsByAssetGroup{};
-                      //resultsInProgress->setElementResultsByAssetGroup(resultsInProgress->elementResults()->stream().collect(groupingBy(UtilityElement::getAssetGroup)));
-
-                      auto featuresFuture = m_selectedUtilityNetwork->featuresForElements(utilityElementTraceResult->elements());
-                      this->setIsFetchingFeaturesInProgress(true);
-                      featuresFuture.addDoneListener(()->
-                                                     {
-                                                       try
-                                                       {
-                                                         System.out.println("features future");
-                                                         var features = featuresFuture.get();
-
-                                                         // add the features to the current result
-                                                         resultsInProgress.setFeatures(FXCollections.observableArrayList(features));
-
-                                                         System.out.println("features: " + features.size());
-
-                                                         selectResultFeatures(resultsInProgress);
-
-                                                       } catch (Exception e)
-                                                       {
-                                                         e.printStackTrace();
-                                                         isTraceInProgressProperty.set(false);
-                                                       } finally
-                                                       {
-                                                         isFetchingFeaturesInProgressProperty.set(false);
-                                                       }
-                                                     });
-                    }
-                    else if (utilityTraceResult instanceof UtilityGeometryTraceResult)
-                    {
-                      System.out.println("Utility Geometry trace result");
-
-                      var geometryTraceResult = (UtilityGeometryTraceResult)utilityTraceResult;
-
-                      var multipoint = geometryTraceResult.getMultipoint();
-                      if (multipoint != null)
-                      {
-                        var graphic = new Graphic(multipoint, new SimpleMarkerSymbol(defaultResultPointSymbol.getStyle(), defaultResultPointSymbol.getColor(), defaultResultPointSymbol.getSize()));
-                        resultsInProgress.getGraphics().add(graphic);
-                        resultsInProgress.getResultsGraphicsOverlay().getGraphics().add(graphic);
-                      }
-
-                      var polyline = geometryTraceResult.getPolyline();
-                      if (polyline != null)
-                      {
-                        // TODO: linesymbol customisation
-                        var graphic = new Graphic(polyline, new SimpleLineSymbol(defaultResultLineSymbol.getStyle(), defaultResultLineSymbol.getColor(), defaultResultLineSymbol.getWidth()));
-                        resultsInProgress.getGraphics().add(graphic);
-                        resultsInProgress.getResultsGraphicsOverlay().getGraphics().add(graphic);
-                      }
-                      System.out.println("result in progress graphics overlay: " + resultsInProgress.getResultsGraphicsOverlay());
-
-                      var polygon = geometryTraceResult.getPolygon();
-                      if (polygon != null)
-                      {
-                        // TODO: polygon customisation
-                        var graphic = new Graphic(polygon, new SimpleFillSymbol(defaultResultFillSymbol.getStyle(), defaultResultFillSymbol.getColor(), defaultResultFillSymbol.getOutline()));
-                        resultsInProgress.getGraphics().add(graphic);
-                        resultsInProgress.getResultsGraphicsOverlay().getGraphics().add(graphic);
-                      }
-                      System.out.println("geometry results multipoint: " + geometryTraceResult.getMultipoint());
-                      System.out.println("geometry results polyline: " + geometryTraceResult.getPolyline());
-                      System.out.println("geometry results polygon: " + geometryTraceResult.getPolygon());
-
-                      getMapView().getGraphicsOverlays().add(resultsInProgress.getResultsGraphicsOverlay());
-                      System.out.println("number of gos: " + getMapView().getGraphicsOverlays().size());
-                    }
-                    else if (utilityTraceResult instanceof UtilityFunctionTraceResult)
-                    {
-                      System.out.println("Utility Function trace result");
-
-                      var functionTraceResult = (UtilityFunctionTraceResult)utilityTraceResult;
-                      functionTraceResult.getFunctionOutputs().forEach(functionOutput->resultsInProgress.getFunctionResults().add(functionOutput));
-                      System.out.println("function results: " + functionTraceResult.getFunctionOutputs().size());
-                    }
-                    else
-                    {
-                      System.out.println("nothing found in results");
-                    }
-                  });
-                  resultsInProgress.setName(name);
-                  traceResults.addAll(resultsInProgress);
-                  System.out.println("added results now");
-                  isTraceInProgressProperty.set(false);
-                } catch (Exception e)
-                {
-                  e.printStackTrace();
-                  isTraceInProgressProperty.set(false);
-                }*/
-    });
-    m_selectedUtilityNetwork->trace(utilityTraceParameters);
-
-  } catch (Error e)
-  {
-    if (e.message().contains("namedTraceConfiguration must not be null"))
-    {
-      qDebug() << "Warning: namedtrace cannot be null";
-    }
-    setIsTraceInProgress(false);
-  }
+  // make member and delete if !nullptr
+  UtilityTraceParameters* utilityTraceParameters =
+      new UtilityTraceParameters(m_selectedTraceConfiguration, m_startingPoints->utilityElements(), this);
+  m_selectedUtilityNetwork->trace(utilityTraceParameters);
 }
 
 QList<UtilityNamedTraceConfiguration*> UtilityNetworkTraceController::traceConfigurations() const
@@ -834,6 +718,93 @@ void UtilityNetworkTraceController::setSelectedTraceConfigurationNameByIndex(int
     setSelectedTraceConfiguration(m_traceConfigurations.at(index));
 }
 
+void UtilityNetworkTraceController::onTraceCompleted()
+{
+  qDebug() << "Trace analysis completed";
+  setIsTraceInProgress(false);
+  auto results = m_selectedUtilityNetwork->traceResult();
+
+  QList<UtilityElement*> allElements;
+
+  for (const auto result : *results)
+  {
+    const auto type = result->traceResultObjectType();
+
+    switch (type)
+    {
+      case UtilityTraceResultObjectType::UtilityElementTraceResult:
+      {
+        qDebug() << "Trace completed with UtilityElementTraceResult";
+        auto elementResult = static_cast<UtilityElementTraceResult*>(result);
+        allElements.append(elementResult->elements());
+        break;
+      }
+      case UtilityTraceResultObjectType::UtilityFunctionTraceResult:
+      {
+        qDebug() << "Trace completed with UtilityFunctionTraceResult";
+        break;
+      }
+      case UtilityTraceResultObjectType::UtilityGeometryTraceResult:
+      {
+        qDebug() << "Trace completed with UtilityGeometryTraceResult";
+        break;
+      }
+      default:
+      {
+        qDebug() << "Trace completed without object type";
+        break;
+      }
+    }
+
+  }
+
+  if (!allElements.isEmpty())
+  {
+    qDebug() << "calling async featuresForElements with elements:" << allElements.size();
+    m_selectedUtilityNetwork->featuresForElements(allElements);
+  }
+  else
+  {
+    qDebug() << "cannot async featuresForElements no elements";
+  }
+}
+
+void UtilityNetworkTraceController::onSelectedUtilityNetworkError(const Error& e)
+{
+  qDebug() << "m_selectedUtilityNetwork Error Occurred" << e.message() << "||" << e.additionalMessage();
+  setIsTraceInProgress(false);
+}
+
+void UtilityNetworkTraceController::onFeaturesForElementsCompleted()
+{
+  qDebug() << "arrived at onFeaturesForElementsCompleted";
+  auto featuresList = m_selectedUtilityNetwork->featuresForElementsResult();
+  QHash<FeatureLayer*, QList<Feature*>> layerToFeatures;
+  for (const auto f : *featuresList)
+  {
+    auto featureLayer = static_cast<FeatureLayer*>(f->featureTable()->layer());
+
+    auto findLayer = layerToFeatures.find(featureLayer);
+    if (findLayer == std::end(layerToFeatures))
+    {
+      layerToFeatures[featureLayer] = {f};
+    }
+    else
+    {
+      findLayer.value().append(f);
+    }
+  }
+
+  const auto layerKeys = layerToFeatures.keys();
+  for (const auto lyr : layerKeys)
+  {
+    // this is where the magic happens
+    lyr->selectFeatures(layerToFeatures[lyr]);
+  }
+
+  qDebug() << "Trace completed with features for elements";
+}
+
 void UtilityNetworkTraceController::setupUtilityNetworks()
 {
   const auto mapView = qobject_cast<MapViewToolkit*>(m_geoView);
@@ -907,16 +878,16 @@ void UtilityNetworkTraceController::setupUtilityNetworks()
 void UtilityNetworkTraceController::applyStartingPointWarnings()
 {
   if (selectedTraceConfiguration() != nullptr) {
-        auto minimumStartingLocations = selectedTraceConfiguration()->minimumStartingLocations();
-        auto minimum = 1;
-        if (minimumStartingLocations == UtilityMinimumStartingLocations::Many)
-        {
-          minimum = 2;
-        }
+    auto minimumStartingLocations = selectedTraceConfiguration()->minimumStartingLocations();
+    auto minimum = 1;
+    if (minimumStartingLocations == UtilityMinimumStartingLocations::Many)
+    {
+      minimum = 2;
+    }
 
-        setIsInsufficientStartingPoint(m_startingPoints->size() < minimum);
-        setIsAboveMinimumStartingPoint(m_startingPoints->size() > minimum);
-      }
+    setIsInsufficientStartingPoint(m_startingPoints->size() < minimum);
+    setIsAboveMinimumStartingPoint(m_startingPoints->size() > minimum);
+  }
 }
 
 } // Esri::ArcGISRuntime::Toolkit

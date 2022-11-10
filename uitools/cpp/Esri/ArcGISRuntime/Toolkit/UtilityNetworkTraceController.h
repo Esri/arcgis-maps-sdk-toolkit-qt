@@ -37,6 +37,7 @@ namespace Esri::ArcGISRuntime {
 class ArcGISFeature;
 class GraphicsOverlay;
 class Symbol;
+class UtilityElementTraceResult;
 class UtilityNamedTraceConfiguration;
 class UtilityNetwork;
 class UtilityNetworkListModel;
@@ -129,6 +130,11 @@ signals:
   void startingPointSymbolChanged();
   void isInsufficientStartingPointChanged();
   void isAboveMinimumStartingPointChanged();
+
+private slots:
+  void onTraceCompleted();
+  void onSelectedUtilityNetworkError(const Esri::ArcGISRuntime::Error& e);
+  void onFeaturesForElementsCompleted();
 
 private:
   void populateUtilityNetworksFromMap();
