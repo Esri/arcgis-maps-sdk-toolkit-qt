@@ -284,6 +284,29 @@ Pane {
                     running: controller.isTraceInProgress
                     visible: running
                 }
+
+                ListView {
+                    id: resultsList
+                    anchors.margins: 4
+                    width: parent.width
+                    Layout.preferredHeight: 250
+                    clip: true
+                    ScrollBar.vertical: ScrollBar {}
+                }
+
+                Button {
+                    id: clearTraceResults
+                    text: "Clear results"
+                    Layout.alignment: Qt.AlignCenter
+                    Layout.maximumWidth: Layout.maximumHeight
+                    padding: 0
+                    onClicked: {
+                        bar.currentIndex = 0
+                        controller.resetTraceResults()
+                    }
+                    enabled: true // !controller.isInsufficientStartingPoint
+                    visible: true
+                }
             }
         }
     }

@@ -522,23 +522,18 @@ void UtilityNetworkTraceController::runTrace(const QString& /*name*/)
 {
   if (isTraceInProgress())
     return;
-  qDebug() << "run trace";
-
-  if (m_selectedUtilityNetwork)
-    qDebug() << "selected utility network";
-
-  if (m_selectedTraceConfiguration)
-    qDebug() << "m_selectedTraceConfiguration" << m_selectedTraceConfiguration->name();
-
-  if (m_startingPoints)
-    qDebug() << "m_startingPoints" << m_startingPoints->size();
 
   setIsTraceInProgress(true);
 
-  // make member and delete if !nullptr
-  UtilityTraceParameters* utilityTraceParameters =
-      new UtilityTraceParameters(m_selectedTraceConfiguration, m_startingPoints->utilityElements(), this);
-  m_selectedUtilityNetwork->trace(utilityTraceParameters);
+  if (m_utilityTraceParameters)
+  {
+    delete m_utilityTraceParameters;
+    m_utilityTraceParameters = nullptr;
+  }
+
+  m_utilityTraceParameters = new UtilityTraceParameters(m_selectedTraceConfiguration, m_startingPoints->utilityElements(), this);
+
+  m_selectedUtilityNetwork->trace(m_utilityTraceParameters);
 }
 
 QList<UtilityNamedTraceConfiguration*> UtilityNetworkTraceController::traceConfigurations() const
@@ -546,7 +541,7 @@ QList<UtilityNamedTraceConfiguration*> UtilityNetworkTraceController::traceConfi
   return m_traceConfigurations;
 }
 
-QList<UtilityNetworkTraceOperationResult*> UtilityNetworkTraceController::traceResults()
+UtilityTraceResultListModel* UtilityNetworkTraceController::traceResults()
 {
   return m_traceResults;
 }
@@ -562,10 +557,17 @@ void UtilityNetworkTraceController::refresh()
   emit startingPointsChanged();
 
   if (m_startingPointParent)
+  {
     delete m_startingPointParent;
+    m_startingPointParent = nullptr;
+  }
 
   m_startingPointParent = new QObject(this);
-  m_traceResults.clear();
+  if (m_traceResults)
+  {
+    delete m_traceResults;
+    m_traceResults = nullptr;
+  }
   qDebug() << "Resetting";
   setupUtilityNetworks();
 }
@@ -718,15 +720,50 @@ void UtilityNetworkTraceController::setSelectedTraceConfigurationNameByIndex(int
     setSelectedTraceConfiguration(m_traceConfigurations.at(index));
 }
 
+void UtilityNetworkTraceController::resetTraceResults()
+{
+  //auto mapViewGraphicsOverlay = qobject_cast<MapViewToolkit*>(geoView())->graphicsOverlays();
+
+  auto featuresList = m_selectedUtilityNetwork->featuresForElementsResult();
+  QHash<FeatureLayer*, QList<Feature*>> layerToFeatures;
+  for (const auto f : *featuresList)
+  {
+    auto featureLayer = static_cast<FeatureLayer*>(f->featureTable()->layer());
+
+    auto findLayer = layerToFeatures.find(featureLayer);
+    if (findLayer == std::end(layerToFeatures))
+    {
+      layerToFeatures[featureLayer] = {f};
+    }
+    else
+    {
+      findLayer.value().append(f);
+    }
+  }
+
+  const auto layerKeys = layerToFeatures.keys();
+  for (const auto lyr : layerKeys)
+  {
+    // this is where the magic happens
+    lyr->unselectFeatures(layerToFeatures[lyr]);
+  }
+
+  if (m_traceResults)
+  {
+    delete m_traceResults;
+    m_traceResults = nullptr;
+  }
+}
+
 void UtilityNetworkTraceController::onTraceCompleted()
 {
   qDebug() << "Trace analysis completed";
   setIsTraceInProgress(false);
-  auto results = m_selectedUtilityNetwork->traceResult();
+  m_traceResults = m_selectedUtilityNetwork->traceResult();
 
   QList<UtilityElement*> allElements;
 
-  for (const auto result : *results)
+  for (const auto result : *m_traceResults)
   {
     const auto type = result->traceResultObjectType();
 

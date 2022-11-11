@@ -41,6 +41,8 @@ class UtilityElementTraceResult;
 class UtilityNamedTraceConfiguration;
 class UtilityNetwork;
 class UtilityNetworkListModel;
+class UtilityTraceParameters;
+class UtilityTraceResultListModel;
 
 namespace Toolkit {
 
@@ -106,7 +108,7 @@ public:
 
   QList<Esri::ArcGISRuntime::UtilityNamedTraceConfiguration*> traceConfigurations() const;
 
-  Q_INVOKABLE QList<Esri::ArcGISRuntime::Toolkit::UtilityNetworkTraceOperationResult*> traceResults();
+  Q_INVOKABLE UtilityTraceResultListModel* traceResults();
 
   Q_INVOKABLE void refresh();
 
@@ -117,6 +119,8 @@ public:
   Q_INVOKABLE void removeAllStartingPoints();
 
   Q_INVOKABLE void setSelectedTraceConfigurationNameByIndex(int index);
+
+  Q_INVOKABLE void resetTraceResults();
 
 signals:
   void geoViewChanged();
@@ -151,7 +155,7 @@ private:
   QList<UtilityNamedTraceConfiguration*> m_traceConfigurations;
   UtilityNamedTraceConfiguration* m_selectedTraceConfiguration = nullptr;
   UtilityNetworkTraceStartingPointsModel* m_startingPoints;
-  QList<UtilityNetworkTraceOperationResult*> m_traceResults;
+  UtilityTraceResultListModel* m_traceResults = nullptr;
   bool m_isTraceInProgress = false;
   bool m_isAddingStartingPointEnabled = false; // if so, user can select points on the map to become starting points
   bool m_isAddingStartingPointInProgress = false; // if so, it's processing selected points on the map to be starting points
@@ -160,6 +164,7 @@ private:
   QMap<QUuid, QMetaObject::Connection> m_traceConfigConnection;
   bool m_isInsufficientStartingPoint = true; // during initialization, it cannot be sufficient
   bool m_isAboveMinimumStartingPoint = false; // during initialization, it cannot be more than minimum
+  UtilityTraceParameters* m_utilityTraceParameters = nullptr;
 };
 
 } // Toolkit
