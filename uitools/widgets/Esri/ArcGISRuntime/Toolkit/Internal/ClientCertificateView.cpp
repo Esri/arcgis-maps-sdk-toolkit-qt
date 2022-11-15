@@ -24,12 +24,13 @@
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-  /*!
-  \brief Constructor.
-  \list
-    \li \a parent Parent widget.
-  \endlist
+/*!
+   \internal
+   \class Esri::ArcGISRuntime::Toolkit::ClientCertificateView
+   \inmodule EsriArcGISRuntimeToolkit
+   \brief This is an implementation of dialog to select a client certificate.
  */
+
   ClientCertificateView::ClientCertificateView(AuthenticationController* controller, QWidget* parent) :
     QWidget(parent),
     m_controller(controller),

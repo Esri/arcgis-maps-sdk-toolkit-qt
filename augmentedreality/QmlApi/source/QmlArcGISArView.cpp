@@ -16,17 +16,17 @@
 
 #include "QmlArcGISArView.h"
 
-using namespace Esri::ArcGISRuntime::Toolkit;
+namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
   \qmltype ArcGISArView
-  \instantiates QmlArcGISArView
+  \instantiates Esri::ArcGISRuntime::Toolkit::QmlArcGISArView
   \inherits ArcGISArViewInterface
   \ingroup ArcGISQtToolkitAR
   \ingroup ArcGISQtToolkitARQmlApi
   \ingroup ArcGISQtToolkit
   \ingroup ArcGISQtToolkitQmlApi
-  \inmodule ArcGISQtToolkit
+  \inqmlmodule ArcGISQtToolkit
   \since Esri::ArcGISArToolkit  100.6
   \brief A scene view for displaying ARKit/ARCore features on mobile devices
    using the QML API.
@@ -280,3 +280,5 @@ bool QmlArcGISArView::assertClassName(QObject* object, const QString& className)
   \fn void QmlArcGISArView::sceneViewChanged();
   \brief Signal emitted when the \l sceneView property changes.
  */
+
+} // Esri::ArcGISRuntime::Toolkit namespace

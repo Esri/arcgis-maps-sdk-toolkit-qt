@@ -26,10 +26,11 @@ DemoPage {
 
             Map {
                 PortalItem {
-                   itemId: "16f1b8ba37b44dc3884afc8d5f454dd2"
+                    itemId: "16f1b8ba37b44dc3884afc8d5f454dd2"
                 }
             }
 
+            //! [Set up Bookmark QML]
             BookmarksView {
                 id: bookmarksView
                 geoView: view
@@ -39,6 +40,7 @@ DemoPage {
                     margins: 10
                 }
             }
+            //! [Set up Bookmark QML]
         }
     }
 }
