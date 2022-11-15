@@ -51,8 +51,8 @@ main(int argc, char* argv[])
                                               apiKey);
   }
 
-  // Production deployment of applications built with ArcGIS Runtime requires
-  // you to license ArcGIS Runtime functionality. For more information see
+  // Production deployment of applications built with ArcGIS Maps SDK for Native Apps
+  // requires you to license its functionality. For more information see
   // https://links.esri.com/arcgis-runtime-license-and-deploy.
 
   // QCoreApplication::instance()->setProperty("Esri.ArcGISRuntime.license",

@@ -16,7 +16,7 @@
 
 # This file is a part of the AR features provides in the toolkit.
 # This file must be imported in the project to use the QML API of the
-# ArcGIS Runtime SDK for Qt. See AR.md for details.
+# ArcGIS Maps SDK for Qt. See AR.md for details.
 
 isEmpty(ARCGIS_TOOLKIT_PATH) {
     error(ARCGIS_TOOLKIT_PATH is not set)

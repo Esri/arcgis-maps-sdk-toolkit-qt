@@ -67,7 +67,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NOTE</key>
-	<string>Built with ArcGIS Runtime SDK for Qt.</string>
+	<string>Built with ArcGIS Maps SDK for Qt.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Camera access is needed for AR testing</string>
 	<key>NSLocationAlwaysUsageDescription</key>

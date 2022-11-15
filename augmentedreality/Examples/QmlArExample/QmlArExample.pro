@@ -25,15 +25,15 @@ CONFIG += c++17
 QT += core gui opengl network positioning sensors qml quick
 
 lessThan(QT_MAJOR_VERSION, 6) {
-    error("This version of the ArcGIS Runtime SDK for Qt requires Qt 6.2.4")
+    error("This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.2.4")
 }
 
 equals(QT_MAJOR_VERSION, 6) {
     lessThan(QT_MINOR_VERSION, 2) {
-        error("This version of the ArcGIS Runtime SDK for Qt requires Qt 6.2.4")
+        error("This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.2.4")
     }
   equals(QT_MINOR_VERSION, 2) : lessThan(QT_PATCH_VERSION, 4) {
-    error("This version of the ArcGIS Runtime SDK for Qt requires Qt 6.2.4")
+    error("This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.2.4")
   }
 }
 
@@ -63,7 +63,7 @@ OTHER_FILES += \
 #-------------------------------------------------------------------------------
 # AR configuration
 
-# The path to the ArcGIS runtime toolkit for Qt sources, corresponding to the files downloaded
+# The path to the ArcGIS Maps SDK toolkit for Qt sources, corresponding to the files downloaded
 # from the GitHub repo: https://github.com/Esri/arcgis-runtime-toolkit-qt
 
 ARCGIS_TOOLKIT_PATH = # must be set to the root path of the toolkit folder
