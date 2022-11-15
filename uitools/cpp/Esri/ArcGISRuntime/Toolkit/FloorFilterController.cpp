@@ -915,17 +915,17 @@ namespace Esri::ArcGISRuntime::Toolkit {
  */
 
   /*!
-  \fn void Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedSiteIdChanged(QString oldId, QString newId)
+  \fn void Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedSiteIdChanged(const QString& oldId, const QString& newId)
   \brief Emitted when the selectedSiteId has changed from \a oldId to \a newId.
  */
 
   /*!
-  \fn void Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedFacilityIdChanged(QString oldId, QString newId)
+  \fn void Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedFacilityIdChanged(const QString& oldId, const QString& newId)
   \brief Emitted when the selectedFacilityId has changed from \a oldId to \a newId.
  */
 
   /*!
-  \fn void Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedLevelIdChanged(QString oldId, QString newId)
+  \fn void Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedLevelIdChanged(const QString& oldId, const QString& newId)
   \brief Emitted when the selectedLevelId has changed from \a oldId to \a newId.
  */
 

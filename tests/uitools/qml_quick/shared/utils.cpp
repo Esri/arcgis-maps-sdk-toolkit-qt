@@ -23,8 +23,6 @@ QString Utils::urlFileName(const QString& urlName)
 /*!
  \internal
  \brief Creates a Singleton Instance that can be accesses without instantiating the class.
- \param engine
- \param scriptEngine 
  */
 QObject* Utils::createSingletonInstance(QQmlEngine* engine, QJSEngine* scriptEngine)
 {

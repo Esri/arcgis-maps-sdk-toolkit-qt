@@ -71,7 +71,7 @@ QtObject {
      */
     property list<CoordinateConversionResult> results
 
-    /*! \brief Emitted when the currentPoint has changed. */
+    /*! \brief Emitted when the current \a point has changed. */
     signal currentPointChanged(Point point)
 
     /*!

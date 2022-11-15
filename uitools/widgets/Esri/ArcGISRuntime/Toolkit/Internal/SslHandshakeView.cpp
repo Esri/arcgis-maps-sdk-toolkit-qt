@@ -19,12 +19,13 @@
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-  /*!
-  \brief Constructor.
-  \list
-    \li \a parent Parent widget.
-  \endlist
+/*!
+   \internal
+   \class Esri::ArcGISRuntime::Toolkit::SslHandshakeView
+   \inmodule EsriArcGISRuntimeToolkit
+   \brief This is an implementation of dialog for SSL handshake.
  */
+
   SslHandshakeView::SslHandshakeView(AuthenticationController* controller, QWidget* parent) :
     QWidget(parent),
     m_controller(controller),
