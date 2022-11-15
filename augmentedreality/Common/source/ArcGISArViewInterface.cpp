@@ -418,7 +418,7 @@ std::array<double, 7> ArcGISArViewInterface::hitTestInternal(int x, int y) const
   \endlist
 
   \code
-  ArSession* arSession = arcGISArView->getAR<ArSession>();
+  ArSession* arSession = arcGISArView->arRawPtr<ArSession>(); // ARSession on iOS and ArSession on Android
   if (arSession)
   {
     // use AR session
