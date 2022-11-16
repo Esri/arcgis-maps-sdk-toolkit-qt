@@ -165,6 +165,7 @@ private:
   bool m_isInsufficientStartingPoint = true; // during initialization, it cannot be sufficient
   bool m_isAboveMinimumStartingPoint = false; // during initialization, it cannot be more than minimum
   UtilityTraceParameters* m_utilityTraceParameters = nullptr;
+  GraphicsOverlay* m_resultsGraphicsOverlay = nullptr;
 };
 
 } // Toolkit

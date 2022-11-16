@@ -30,8 +30,12 @@
 #include <GraphicsOverlayListModel.h>
 #include <IdentifyLayerResult.h>
 #include <Map.h>
+#include <Multipoint.h>
+#include <Polygon.h>
 #include <Polyline.h>
 #include <Renderer.h>
+#include <SimpleFillSymbol.h>
+#include <SimpleLineSymbol.h>
 #include <SimpleMarkerSymbol.h>
 #include <SpatialReference.h>
 #include <Symbol.h>
@@ -41,13 +45,18 @@
 #include <UtilityAssetType.h>
 #include <UtilityElement.h>
 #include <UtilityElementTraceResult.h>
+#include <UtilityFunctionTraceResult.h>
+#include <UtilityGeometryTraceResult.h>
 #include <UtilityNamedTraceConfiguration.h>
 #include <UtilityNetwork.h>
+#include <UtilityNetworkAttribute.h>
 #include <UtilityNetworkListModel.h>
 #include <UtilityNetworkSource.h>
 #include <UtilityNetworkTraceOperationResult.h>
 #include <UtilityNetworkTypes.h>
 #include <UtilityTerminalConfiguration.h>
+#include <UtilityTraceFunction.h>
+#include <UtilityTraceFunctionOutput.h>
 #include <UtilityTraceParameters.h>
 #include <UtilityTraceResult.h>
 #include <UtilityTraceResultListModel.h>
@@ -189,7 +198,8 @@ UtilityNetworkTraceController::UtilityNetworkTraceController(QObject* parent) :
   m_startingPoints(new UtilityNetworkTraceStartingPointsModel(this)),
   m_isAddingStartingPointEnabled(false),
   m_isAddingStartingPointInProgress(false),
-  m_startingPointSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle::Cross, QColor(Qt::green), 20.0f, this))
+  m_startingPointSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle::Cross, QColor(Qt::green), 20.0f, this)),
+  m_resultsGraphicsOverlay(new GraphicsOverlay(this))
 {
   qDebug() << "UtilityNetworkTrace begins construction";
 }
@@ -554,6 +564,7 @@ void UtilityNetworkTraceController::refresh()
   m_traceConfigurations.clear();
   m_startingPoints->clear();
   m_startingPointsGraphicsOverlay->graphics()->clear();
+  m_resultsGraphicsOverlay->graphics()->clear();
   emit startingPointsChanged();
 
   if (m_startingPointParent)
@@ -762,6 +773,7 @@ void UtilityNetworkTraceController::onTraceCompleted()
   m_traceResults = m_selectedUtilityNetwork->traceResult();
 
   QList<UtilityElement*> allElements;
+  bool hasGeometryTraceResult{false};
 
   for (const auto result : *m_traceResults)
   {
@@ -771,19 +783,75 @@ void UtilityNetworkTraceController::onTraceCompleted()
     {
       case UtilityTraceResultObjectType::UtilityElementTraceResult:
       {
-        qDebug() << "Trace completed with UtilityElementTraceResult";
+        qDebug() << "Trace completed with Element Result";
         auto elementResult = static_cast<UtilityElementTraceResult*>(result);
         allElements.append(elementResult->elements());
         break;
       }
       case UtilityTraceResultObjectType::UtilityFunctionTraceResult:
       {
-        qDebug() << "Trace completed with UtilityFunctionTraceResult";
+        qDebug() << "Trace completed with Function Result";
+        const auto functionResult = static_cast<UtilityFunctionTraceResult*>(result);
+        const auto outputList = functionResult->functionOutputs();
+
+        for (const auto o : outputList)
+        {
+          o->function()->functionType();
+          qDebug() << "xx" << o->function()->networkAttribute()->name() << static_cast<int>(o->function()->functionType()) << o->result().toString();
+        }
+
         break;
       }
       case UtilityTraceResultObjectType::UtilityGeometryTraceResult:
       {
-        qDebug() << "Trace completed with UtilityGeometryTraceResult";
+        qDebug() << "Trace completed with Geometry Result";
+        auto geometryTraceResult = static_cast<UtilityGeometryTraceResult*>(result);
+
+        auto multipoint = geometryTraceResult->multipoint();
+        if (!multipoint.isEmpty())
+        {
+          SimpleMarkerSymbol* resultPointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle::Circle,
+                                                                         QColor(0, 0, 255, 126),
+                                                                         20,
+                                                                         this);
+          auto graphic = new Graphic(multipoint,
+                                     resultPointSymbol,
+                                     this);
+          hasGeometryTraceResult = true;
+          m_resultsGraphicsOverlay->graphics()->append(graphic);
+        }
+
+        auto polyline = geometryTraceResult->polyline();
+        if (!polyline.isEmpty())
+        {
+          SimpleLineSymbol* resultPointSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle::Dot,
+                                                                     QColor(0, 0, 255, 126),
+                                                                     5,
+                                                                     this);
+          auto graphic = new Graphic(polyline,
+                                     resultPointSymbol,
+                                     this);
+          hasGeometryTraceResult = true;
+          m_resultsGraphicsOverlay->graphics()->append(graphic);
+        }
+
+        auto polygon = geometryTraceResult->polygon();
+        if (!polygon.isEmpty())
+        {
+          SimpleFillSymbol* resultPointSymbol = new SimpleFillSymbol(SimpleFillSymbolStyle::ForwardDiagonal,
+                                                                     QColor(0, 0, 255, 126),
+                                                                     new SimpleLineSymbol(SimpleLineSymbolStyle::Solid,
+                                                                                      QColor(0, 0, 255, 126),
+                                                                                      2,
+                                                                                      this),
+                                                                     this);
+          auto graphic = new Graphic(polygon,
+                                     resultPointSymbol,
+                                     this);
+          hasGeometryTraceResult = true;
+          m_resultsGraphicsOverlay->graphics()->append(graphic);
+        }
+
         break;
       }
       default:
@@ -803,6 +871,12 @@ void UtilityNetworkTraceController::onTraceCompleted()
   else
   {
     qDebug() << "cannot async featuresForElements no elements";
+  }
+
+  if (hasGeometryTraceResult)
+  {
+    auto mapView = qobject_cast<MapViewToolkit*>(m_geoView);
+    mapView->graphicsOverlays()->append(m_resultsGraphicsOverlay);
   }
 }
 
