@@ -7,16 +7,16 @@ guidelines see [here](/CONTRIBUTING.md).
 
 - The [Building a better toolkit](https://community.esri.com/t5/arcgis-runtime-sdks-blog/building-a-better-toolkit/ba-p/888826) Esri community blog.
 
-- The [ArcGIS Maps SDK for Qt Reference](https://developers.arcgis.com/qt/api-reference/). Which includes:
+- The [Qt ArcGIS Runtime API Reference](https://developers.arcgis.com/qt/api-reference/). Which includes:
   - [Qt Toolkit API](https://developers.arcgis.com/qt/toolkit/api-reference/).
   - [QML API](https://developers.arcgis.com/qt/qml/api-reference/).
   - [C++ API](https://developers.arcgis.com/qt/cpp/api-reference/).
 
-- The [ArcGIS Maps SDK for Qt Guide](https://developers.arcgis.com/qt/).
+- The [Qt ArcGIS Runtime Guide](https://developers.arcgis.com/qt/).
 
 ## UI Tools Architecture
 
-ArcGIS Maps SDK for Qt provides 3 different GUI workflows.
+ArcGIS Runtime for Qt provides 3 different GUI workflows.
 
 1. **QtQuick/QML** The QML workflow is for applications written in pure QML. Used successfully in [AppStudio](https://www.esri.com/en-us/arcgis/products/arcgis-appstudio/overview). The overall philosophy of this API is that the developer should touch as little C++ code as possible. This workflow targets desktop and mobile devices.
 
@@ -24,7 +24,7 @@ ArcGIS Maps SDK for Qt provides 3 different GUI workflows.
 
 1. **Widgets/C++** The Widgets/C++ workflow is for applications written in pure C++ with a Qt widget front-end. Often used by users who care about performance/control. This workflow targets desktop **only**.
 
-Of these, `QtQuick/QML` exposes the API for QML, whic is incompatible with the API for C++ used in `Widgets/C++` & `QtQuick/C++`.
+Of these, `QtQuick/QML` exposed an ArcGIS Runtime QML API, incompatible with C++ ArcGIS Runtime API used in `Widgets/C++` & `QtQuick/C++`.
 
 The challenge of writing UI tools then, is to target all these workflows with as minimum repetition as possible. The worst case scenario would be writing three separate implementations for each workflow, leading to subtle differences
 and code duplication.
@@ -33,7 +33,7 @@ As such this module is split up into `Controller` and `View` components like so:
 
 ![UI Tools Architecture diagram](images/docs/architecture_uitools.svg)
 
-The Controller layer handles consuming the Maps SDK and communicating with an API-agnostic View layer.
+The Controller layer handles consuming an ArcGIS Runtime API and communicating with an API-agnostic View layer.
 
 A QML View will use either a QML Controller or C++ Controller dependent on what workflow it is compiled for. A Widget View will always use the C++ Controller, thus sharing the same business logic with the Qt Quick/C++ workflow.
 
@@ -85,8 +85,8 @@ What follows is general advice to be effective in writing tools.
 
 2. Make use of the [Adaptor](https://refactoring.guru/design-patterns/adapter) pattern.
 
-   Exposing a Maps SDK class to to QML can be tricky because the C++ types don't expose properties for
-   free. The best way around this is to wrap a Maps SDK type in an adaptor, which exposes the required
+   Exposing an ArcGIS Runtime class to to QML can be tricky because the C++ types don't expose properties for
+   free. The best way around this is to wrap an ArcGIS Runtime type in an adaptor, which exposes the required
    properties in a QML friendly-way. For example, [FloorFilterSiteItem](cpp/Esri//ArcGISRuntime/Toolkit/FloorFilterSiteItem.h),
    wraps and exposes the properties of [FloorSite](https://developers.arcgis.com/qt/cpp/api-reference/esri-arcgisruntime-floorsite.html).
 

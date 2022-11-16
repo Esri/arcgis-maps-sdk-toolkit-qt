@@ -1,6 +1,6 @@
 ## Introduction
 
-This toolkit is an open source resource intended for use with the ArcGIS Maps
+This toolkit is an open source resource intended for use with the ArcGIS Runtime
 SDK for Qt. It provides ready made UI components to complement mapping and GIS
 applications. Because it is open source you are encouraged to modify these tools
 and add your own.
@@ -30,7 +30,7 @@ In the [examples](examples) folder, there can be found three demo applications p
 ## Structure
 
 This repo contains 3 toolkit projects, each intended for use with a different
-flavor of the ArcGIS Maps SDK for Qt:
+flavor of the ArcGIS Runtime SDK for Qt:
 
 - toolkitqml (for use with QML only apps)
 - toolkitcpp (for use with C++ apps which use a QtQuick UI)
@@ -46,7 +46,7 @@ project.
 A good way to start using the toolkit is to use one of the template apps which
 get added to QtCreator when you install the ArcGIS Runime SDK for Qt.
 
-- In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Maps SDK 200.0.0 Quick QML App`
+- In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Runtime 200.0.0 Quick QML App`
 - choose settings to match the platform etc. you are building for
 - in the `.pro` file of your new app, add a line to add the toolkit for your
   QML application. For example:
@@ -110,7 +110,7 @@ MapView {
 A good way to start using the toolkit is to use one of the template apps which
 get added to QtCreator when you install the ArcGIS Runime SDK for Qt.
 
-- In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Maps SDK 200.0.0 Qt Quick C++ App`
+- In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Runtime 200.0.0 Qt Quick C++ App`
 - choose settings to match the platform etc. you are building for
 - in the `.pro` file of your new app, add a line to add the library for your QML
   plugin - for example:
@@ -169,9 +169,9 @@ MapView {
 #### Importing the toolkit (toolkitwidgets.pri)
 
 A good way to start using the toolkit is to use one of the template apps which
-get added to QtCreator when you install the ArcGIS Maps SDK for Qt.
+get added to QtCreator when you install the ArcGIS Runtime SDK for Qt.
 
-- In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Maps SDK 200.0.0 Qt Widgets App`
+- In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Runtime 200.0.0 Qt Widgets App`
 - choose settings to match the platform etc. you are building for
 - in the `.pro` file of your new app, add a line to add the library for your QML
   plugin - for example:
