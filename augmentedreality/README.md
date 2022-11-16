@@ -77,10 +77,10 @@ used to create the Qt project.
 for details.
 
 2. Download from GitHub the source files of the
-[ArcGIS Maps SDK API Toolkit](https://github.com/Esri/arcgis-runtime-toolkit-qt).
+[ArcGIS Maps SDK for Qt Toolkit](https://github.com/Esri/arcgis-runtime-toolkit-qt).
 
 3. In Qt Creator, create a new project and select the app template named
-"ArcGIS Maps SDK 200.0.0 Qt Quick C++ app". Select the option "3D project" in the
+"ArcGIS Maps 200.0.0 Qt Quick C++ app". Select the option "3D project" in the
 "Details" dialog.
 
 4. In the newly created project, add the following lines anywhere in the app's project (`.pro`)
@@ -221,13 +221,13 @@ ArcGISArView {
 An example of QML app with AR support can be found in the folder
 `Examples\QmlArExample` in the toolkit repo.
 
-1. Install the ArcGIS Maps SDK SDK for Qt. See
-[ArcGIS Maps SDK SDK for Qt Guide](https://developers.arcgis.com/qt/latest/qml/guide/arcgis-runtime-sdk-for-qt.htm)
+1. Install the ArcGIS Maps SDK for Qt. See
+[ArcGIS Maps SDK for Qt Guide](https://developers.arcgis.com/qt/latest/qml/guide/arcgis-runtime-sdk-for-qt.htm)
 for details.
 
-2. Download the sources of the [ArcGIS Maps SDK API Toolkit](https://github.com/Esri/arcgis-runtime-toolkit-qt) from GitHub.
+2. Download the sources of the [ArcGIS Maps SDK for Qt Toolkit](https://github.com/Esri/arcgis-runtime-toolkit-qt) from GitHub.
 
-3. In Qt Creator, create a new project and select "ArcGIS Maps SDK 200.0.0 Qt Quick QML app".
+3. In Qt Creator, create a new project and select "ArcGIS Maps 200.0.0 Qt Quick QML app".
 Select the option "3D project" in the "Details" step.
 
 4. In the created project, add the following lines anywhere in the app's project
