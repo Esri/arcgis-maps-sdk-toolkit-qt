@@ -65,7 +65,7 @@
     <key>CFBundleVersion</key>
     <string>1.0</string>
     <key>NOTE</key>
-    <string>Built with ArcGIS Maps SDK for Qt.</string>
+    <string>Built with ArcGIS Runtime SDK for Qt.</string>
     <key>UIFileSharingEnabled</key>
         <string>FALSE</string>
     <key>UIRequiresPersistentWiFi</key>

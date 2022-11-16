@@ -1,17 +1,17 @@
-# ArcGIS Maps SDK for Qt Toolkit
+# ArcGIS Runtime Toolkit - Qt
 
 [![API reference](https://img.shields.io/badge/API_Reference-purple)](https://developers.arcgis.com/qt/latest/toolkit/api-reference/) [![Current release](https://img.shields.io/github/v/release/esri/arcgis-runtime-toolkit-qt?label=current%20release)](https://github.com/Esri/arcgis-runtime-toolkit-qt/releases)
 
 ## Introduction
 
-This toolkit is an open source resource intended for use with the ArcGIS Maps
+This toolkit is an open source resource intended for use with the ArcGIS Runtime
 SDK for Qt. It provides ready made components to complement mapping and GIS
 applications. Because it is open source you are encouraged to modify these tools
 and add your own.
 
 ## Resources
 
-* [ArcGIS Maps SDK for Qt](https://developers.arcgis.com/qt/)
+* [ArcGIS Runtime SDK for Qt](https://developers.arcgis.com/qt/)
 * [System requirements](https://developers.arcgis.com/qt/latest/qml/guide/system-requirements.htm)
 * [Qt and QML](http://www.qt.io/)
 

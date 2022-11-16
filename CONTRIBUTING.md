@@ -1,6 +1,6 @@
 # Contributing 
 
-Welcome to the contributors' guide on the ArcGIS Maps SDK for Qt Toolkit! We hope this document
+Welcome to the contributors' guide on the ArcGIS Runtime toolkit! We hope this document
 encourages you to help improve and expand upon our toolkit offering.
 
 For specific resources on:
@@ -14,45 +14,45 @@ You will need:
 
 - System requirements as laid out [here](https://developers.arcgis.com/qt/reference/system-requirements/)
   for your development platform.
-- Latest version of the [ArcGIS Maps SDK for Qt](https://developers.arcgis.com/qt/).
+- Latest version of the [ArcGIS Runtime SDK](https://developers.arcgis.com/qt/).
 
 ## Important resources
 
-- The [ArcGIS Maps SDK for Qt Reference](https://developers.arcgis.com/qt/api-reference/). Which includes:
+- The [Qt ArcGIS Runtime API Reference](https://developers.arcgis.com/qt/api-reference/). Which includes:
   - [Qt Toolkit API](https://developers.arcgis.com/qt/toolkit/api-reference/).
   - [QML API](https://developers.arcgis.com/qt/qml/api-reference/).
   - [C++ API](https://developers.arcgis.com/qt/cpp/api-reference/).
 
-- The [ArcGIS Maps SDK for Qt Guide](https://developers.arcgis.com/qt/).
+- The [Qt ArcGIS Runtime Guide](https://developers.arcgis.com/qt/).
 
 - [Qt's board on Esri Community](https://community.esri.com/t5/arcgis-runtime-sdk-for-qt-questions/bd-p/arcgis-runtime-sdk-for-qt-questions).
 
 - [Official Qt documentation](https://doc.qt.io/).
 
-- [DSA App](https://github.com/Esri/dynamic-situational-awareness-qt), an open source project built with the ArcGIS Maps SDK for Qt Toolkit.
+- [DSA App](https://github.com/Esri/dynamic-situational-awareness-qt), an open source project built with the ArcGIS Runtime Toolkit for Qt.
 
 ## Submitting a change
 
 There are two active branches within toolkit: `main` and `v.next`.
 
-- **main** is the active branch, and must always be compatible with
-  the [release version of ArcGIS Maps SDK for Qt](https://developers.arcgis.com/qt/). This is
+- **main** is the active branch, and must always be compatible with 
+  the [release version of ArcGIS Runtime for Qt](https://developers.arcgis.com/qt/). This is 
   the main branch all our users consume to access toolkit features.
 
 - **v.next** is the "next version" branch which contains upcoming features and is
-  compatible with the upcoming version of the ArcGIS Maps SDK. While anyone may contribute to this
+  compatible with the upcoming version of ArcGIS Runtime. While anyone may contribute to this 
   branch, public contributors outside of Esri will not be able to build this branch as the upcoming
-  version of ArcGIS Maps SDK will be unavailable.
+  version of ArcGIS Runtime will be unavailable.
 
 ### Bugfixes
 
 If you are contributing a bugfix, and you believe the bug is high priority
-in impact, then target the **main** branch in your PR. Otherwise consider targeting **v.next**!
+in impact, then target the **main** branch in your PR. Otherwise consider targeting **v.next**! 
 If unsure, the PR reviewer can help make the right call.
 
 ### Feature enhancements
 
-Once you have implemented a new feature, and are ready for a pull-request,  please target the **v.next** branch.
+Once you have implemented a new feature, and are ready for a pull-request,  please target the **v.next** branch. 
 This helps the toolkit team verify the feature is production ready before we ship!
 
 ### CHANGELOG.md

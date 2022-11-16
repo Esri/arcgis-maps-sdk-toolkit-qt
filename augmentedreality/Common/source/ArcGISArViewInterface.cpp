@@ -36,7 +36,7 @@ using namespace Esri::ArcGISRuntime::Toolkit::Internal;
   \since Esri::ArcGISRuntime 100.6
   \brief Base class to impement AR scene view.
 
-  This class provides the AR features without using the C++ or QML APIs of the ArcGIS Maps SDK for Qt.
+  This class provides the AR features without using the C++ or QML APIs of the ArcGIS Runtime SDK for Qt.
   It is used as a base class to create two API-dependent classes: \l ArcGISArSceneView which uses the C++ API and
   \l QmlArcGISArSceneView which uses the QML API.
  */

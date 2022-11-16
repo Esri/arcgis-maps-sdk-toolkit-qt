@@ -346,7 +346,7 @@ void ArcGISArView::resetTrackingInternal()
 /*!
   \internal
 
-  Cast from Qt's screen orientation to ArcGIS Maps SDK's screen orientation.
+  Cast from Qt's screen orientation to ArcGIS Runtime's screen orientation.
  */
 DeviceOrientation ArcGISArView::toDeviceOrientation(Qt::ScreenOrientations orientation)
 {
