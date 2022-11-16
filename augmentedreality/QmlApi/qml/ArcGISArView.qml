@@ -184,7 +184,7 @@ ArcGISArViewInternal {
 
     /*!
         \internal
-        Cast from Qt's screen orientation to ArcGIS Runtime's screen orientation.
+        Cast from Qt's screen orientation to ArcGIS Maps SDK's screen orientation.
      */
     function toDeviceOrientation(orientation) {
         switch(Screen.orientation) {
