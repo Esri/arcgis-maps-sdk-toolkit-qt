@@ -66,6 +66,8 @@
 #include "Internal/DisconnectOnSignal.h"
 #include "Internal/DoOnLoad.h"
 #include "Internal/GeoViews.h"
+#include "UtilityNetworkFunctionTraceResult.h"
+#include "UtilityNetworkFunctionTraceResultsModel.h"
 #include "UtilityNetworkListItem.h"
 #include "UtilityNetworkTraceStartingPoint.h"
 #include "UtilityNetworkTraceStartingPointsModel.h"
@@ -196,6 +198,7 @@ UtilityNetworkTraceController::UtilityNetworkTraceController(QObject* parent) :
   m_startingPointsGraphicsOverlay(new GraphicsOverlay(m_startingPointParent)),
   m_utilityNetworks(new GenericListModel(&UtilityNetworkListItem::staticMetaObject, this)),
   m_startingPoints(new UtilityNetworkTraceStartingPointsModel(this)),
+  m_functionResults(new UtilityNetworkFunctionTraceResultsModel(this)),
   m_isAddingStartingPointEnabled(false),
   m_isAddingStartingPointInProgress(false),
   m_startingPointSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle::Cross, QColor(Qt::green), 20.0f, this)),
@@ -416,6 +419,11 @@ QAbstractItemModel* UtilityNetworkTraceController::startingPoints() const
   return m_startingPoints;
 }
 
+QAbstractItemModel* UtilityNetworkTraceController::functionResults() const
+{
+  return m_functionResults;
+}
+
 QStringList UtilityNetworkTraceController::traceConfigurationNames() const
 {
   return m_traceConfigurationNames;
@@ -563,6 +571,7 @@ void UtilityNetworkTraceController::refresh()
   m_utilityNetworks = new GenericListModel(&UtilityNetworkListItem::staticMetaObject, this);
   m_traceConfigurations.clear();
   m_startingPoints->clear();
+  m_functionResults->clear();
   m_startingPointsGraphicsOverlay->graphics()->clear();
   m_resultsGraphicsOverlay->graphics()->clear();
   emit startingPointsChanged();
@@ -796,8 +805,9 @@ void UtilityNetworkTraceController::onTraceCompleted()
 
         for (const auto o : outputList)
         {
-          o->function()->functionType();
-          qDebug() << "xx" << o->function()->networkAttribute()->name() << static_cast<int>(o->function()->functionType()) << o->result().toString();
+          m_functionResults->addFunctionResult(new UtilityNetworkFunctionTraceResult(o->function()->networkAttribute()->name(),
+                                               static_cast<int>(o->function()->functionType()),
+                                               o->result().toDouble(), this));
         }
 
         break;

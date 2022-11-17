@@ -15,7 +15,8 @@
  ******************************************************************************/
 #include "UtilityNetworkTraceStartingPointsModel.h"
 
-#include "UtilityElement.h"
+#include <UtilityElement.h>
+
 #include "UtilityNetworkTraceStartingPoint.h"
 
 using namespace Esri::ArcGISRuntime::Toolkit;
@@ -59,6 +60,8 @@ QVariant UtilityNetworkTraceStartingPointsModel::data(const QModelIndex& index, 
       return startingPoint->multipleTerminalNames();
     case SelectedTerminalIndexRole:
       return startingPoint->selectedTerminalIndex();
+    default:
+      qDebug() << "Incorrect UtilityNetworkTraceStartingPointsModel data.";
   }
 
   return {};

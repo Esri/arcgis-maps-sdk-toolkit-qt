@@ -14,37 +14,30 @@
  *  limitations under the License.
  ******************************************************************************/
 
-#ifndef UTILITYNETWORKTRACESTARTINGPOINTSMODEL_H
-#define UTILITYNETWORKTRACESTARTINGPOINTSMODEL_H
+#ifndef UTILITYNETWORKFUNCTIONTRACERESULTSMODEL_H
+#define UTILITYNETWORKFUNCTIONTRACERESULTSMODEL_H
 
 #include <QAbstractListModel>
-
-// ArcGISRuntime headers
-#include <Point.h>
 
 namespace Esri::ArcGISRuntime {
 
 class UtilityElement;
 
 namespace Toolkit {
-class UtilityNetworkTraceStartingPoint;
+class UtilityNetworkFunctionTraceResult;
 
-class UtilityNetworkTraceStartingPointsModel : public QAbstractListModel
+class UtilityNetworkFunctionTraceResultsModel : public QAbstractListModel
 {
   Q_OBJECT
 
 public:
-  explicit UtilityNetworkTraceStartingPointsModel(QObject* parent = nullptr);
+  explicit UtilityNetworkFunctionTraceResultsModel(QObject* parent = nullptr);
 
   enum StartingPointRoles
   {
-    SourceNameRole = Qt::UserRole + 1,
-    GroupNameRole = Qt::UserRole + 2,
-    HasFractionAlongEdgeRole = Qt::UserRole + 3,
-    FractionAlongEdgeRole = Qt::UserRole + 4,
-    HasMultipleTerminalsRole = Qt::UserRole + 5,
-    MultipleTerminalNamesRole = Qt::UserRole + 6,
-    SelectedTerminalIndexRole = Qt::UserRole + 7,
+    NameRole = Qt::UserRole + 1,
+    TypeRole = Qt::UserRole + 2,
+    ValueRole = Qt::UserRole + 3,
   };
 
   Qt::ItemFlags flags(const QModelIndex& index) const override;
@@ -52,19 +45,10 @@ public:
   int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 
   QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
-  bool setData(const QModelIndex& index, const QVariant& value, int role) override;
 
-  void addStartingPoint(UtilityNetworkTraceStartingPoint* startingPoint);
-
-  QList<UtilityElement*> utilityElements() const;
+  void addFunctionResult(UtilityNetworkFunctionTraceResult* functionResult);
 
   void clear();
-
-  bool doesItemAlreadyExist(UtilityElement* utilityElement) const;
-
-  void removeAt(int index);
-
-  Point pointAt(int index);
 
   int size() const;
 
@@ -74,9 +58,9 @@ public:
   void setupRoles();
 
   QHash<int, QByteArray> m_roles;
-  QList<UtilityNetworkTraceStartingPoint*> m_data;
+  QList<UtilityNetworkFunctionTraceResult*> m_data;
 };
 } // namespace Toolkit
 }// namespace Esri::ArcGISRuntime
 
-#endif // UTILITYNETWORKTRACESTARTINGPOINTSMODEL_H
+#endif // UTILITYNETWORKFUNCTIONTRACERESULTSMODEL_H

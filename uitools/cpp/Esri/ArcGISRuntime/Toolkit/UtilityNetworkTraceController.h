@@ -46,6 +46,7 @@ class UtilityTraceResultListModel;
 
 namespace Toolkit {
 
+class UtilityNetworkFunctionTraceResultsModel;
 class UtilityNetworkTraceStartingPoint;
 class UtilityNetworkTraceStartingPointsModel;
 class UtilityNetworkTraceOperationResult;
@@ -61,6 +62,7 @@ class UtilityNetworkTraceController : public QObject
   Q_PROPERTY(bool isAddingStartingPointInProgress READ isAddingStartingPointInProgress WRITE setIsAddingStartingPointInProgress NOTIFY isAddingStartingPointInProgressChanged)
   Q_PROPERTY(Symbol* startingPointSymbol READ startingPointSymbol WRITE setStartingPointSymbol NOTIFY startingPointSymbolChanged)
   Q_PROPERTY(QAbstractItemModel* startingPoints READ startingPoints CONSTANT)
+  Q_PROPERTY(QAbstractItemModel* functionResults READ functionResults CONSTANT)
   Q_PROPERTY(QStringList traceConfigurationNames READ traceConfigurationNames NOTIFY traceConfigurationNamesChanged)
   Q_PROPERTY(bool isInsufficientStartingPoint READ isInsufficientStartingPoint WRITE setIsInsufficientStartingPoint NOTIFY isInsufficientStartingPointChanged)
   Q_PROPERTY(bool isAboveMinimumStartingPoint READ isAboveMinimumStartingPoint WRITE setIsAboveMinimumStartingPoint NOTIFY isAboveMinimumStartingPointChanged)
@@ -79,6 +81,8 @@ public:
   void setSelectedUtilityNetwork(UtilityNetwork* selectedUtilityNetwork);
 
   QAbstractItemModel* startingPoints() const;
+
+  QAbstractItemModel* functionResults() const;
 
   QStringList traceConfigurationNames() const;
   void setTraceConfigurationNames(const QStringList& traceConfigurationNames);
@@ -155,6 +159,7 @@ private:
   QList<UtilityNamedTraceConfiguration*> m_traceConfigurations;
   UtilityNamedTraceConfiguration* m_selectedTraceConfiguration = nullptr;
   UtilityNetworkTraceStartingPointsModel* m_startingPoints;
+  UtilityNetworkFunctionTraceResultsModel* m_functionResults;
   UtilityTraceResultListModel* m_traceResults = nullptr;
   bool m_isTraceInProgress = false;
   bool m_isAddingStartingPointEnabled = false; // if so, user can select points on the map to become starting points

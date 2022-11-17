@@ -286,12 +286,39 @@ Pane {
                 }
 
                 ListView {
-                    id: resultsList
+                    id: functionResultsList
                     anchors.margins: 4
                     width: parent.width
                     Layout.preferredHeight: 250
                     clip: true
                     ScrollBar.vertical: ScrollBar {}
+                    model: controller.functionResults
+                    delegate: Pane {
+
+                        ColumnLayout {
+                            width: functionResultsList.width - (functionResultsList.anchors.margins * 4)
+                            RowLayout {
+                                Layout.fillWidth: true
+                                spacing: 1
+                                ColumnLayout {
+                                    Layout.fillWidth: true
+
+                                    Label {
+                                        Layout.fillWidth: true
+                                        elide: Text.ElideRight
+                                        text: name + ": " + value
+                                        horizontalAlignment: Text.AlignLeft
+                                    }
+                                    Label {
+                                        Layout.fillWidth: true
+                                        elide: Text.ElideRight
+                                        text: "Function type: " + type
+                                        horizontalAlignment: Text.AlignLeft
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
 
                 Button {
