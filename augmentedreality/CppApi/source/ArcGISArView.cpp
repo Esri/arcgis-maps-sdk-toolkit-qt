@@ -25,11 +25,12 @@
 #include <QScreen>
 
 using namespace Esri::ArcGISRuntime;
-using namespace Esri::ArcGISRuntime::Toolkit;
 using namespace Esri::ArcGISRuntime::Toolkit::Internal;
 
+namespace Esri::ArcGISRuntime::Toolkit {
+
 /*!
-  \class ArcGISArView
+  \class Esri::ArcGISRuntime::Toolkit::ArcGISArView
   \ingroup ArcGISQtToolkit
   \ingroup ArcGISQtToolkitAR
   \ingroup ArcGISQtToolkitARCppApi
@@ -412,3 +413,4 @@ void ArcGISArView::updateTmccOriginCamera() const
   \brief Signal emitted when the \l sceneView property changes.
  */
 
+} // Esri::ArcGISRuntime::Toolkit namespace

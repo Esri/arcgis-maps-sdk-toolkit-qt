@@ -245,7 +245,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   }
 
   /*!
-  \brief Updates the \c GeoView camera to point to the current bookmark's
+  \brief Updates the \c GeoView camera to point to the current \a bookmark's
   location on the map.
  */
   void BookmarksViewController::zoomToBookmarkExtent(BookmarkListItem* bookmark)
@@ -271,7 +271,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   /*!
   \property Esri::ArcGISRuntime::Toolkit::BookmarksViewController::geoView
   \brief The geoView the controller is utilizing for interactions.
-  \sa Esri::ArcGISRuntime::Toolkit::BookmarksViewController::geoView() const
+  \sa Esri::ArcGISRuntime::Toolkit::BookmarksViewController::geoView
  */
 
 } // Esri::ArcGISRuntime::Toolkit

@@ -187,9 +187,13 @@ Pane {
             Connections {
                 target: controller
                 function onExtentsChanged() {
+                    if (controller.timeForStep(0)) {
                     startLabel.text = Qt.formatDateTime(
                                 controller.timeForStep(0),
                                 fullExtentLabelFormat);
+                    } else {
+                        startLabel.text = "";
+                    }
                 }
             }
             Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
@@ -250,9 +254,15 @@ Pane {
         }
 
         Label {
-            text: Qt.formatDateTime(
-                      controller.timeForStep(controller.numberOfSteps),
-                      fullExtentLabelFormat);
+            text: {
+                if (controller.timeForStep(controller.numberOfSteps)) {
+                    Qt.formatDateTime(
+                          controller.timeForStep(controller.numberOfSteps),
+                          fullExtentLabelFormat);
+                } else {
+                    "";
+                }
+            }
             horizontalAlignment: Qt.AlignRight
             Layout.alignment: Qt.AlignRight  | Qt.AlignBottom
             Layout.fillWidth: true

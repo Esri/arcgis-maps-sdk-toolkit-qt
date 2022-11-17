@@ -22,12 +22,12 @@
 #include <QScreen>
 #include "ArWrapper.h"
 
-
-using namespace Esri::ArcGISRuntime::Toolkit;
 using namespace Esri::ArcGISRuntime::Toolkit::Internal;
 
+namespace Esri::ArcGISRuntime::Toolkit {
+
 /*!
-  \class ArcGISArViewInterface
+  \class Esri::ArcGISRuntime::Toolkit::ArcGISArViewInterface
   \ingroup ArcGISQtToolkit
   \ingroup ArcGISQtToolkitAR
   \ingroup ArcGISQtToolkitARCppApi
@@ -110,7 +110,7 @@ bool ArcGISArViewInterface::tracking() const
 }
 
 /*!
-  \brief Starts or stops the AR scene view tracking.
+  \brief Sets \a tracking to starts or stops the AR scene view tracking.
  */
 void ArcGISArViewInterface::setTracking(bool tracking)
 {
@@ -129,7 +129,7 @@ bool ArcGISArViewInterface::renderVideoFeed() const
 }
 
 /*!
-  \brief Sets to \c true when the scene view renders the camera frames in the background.
+  \brief Sets \a renderVideoFeed to \c true when the scene view renders the camera frames in the background.
  */
 void ArcGISArViewInterface::setRenderVideoFeed(bool renderVideoFeed)
 {
@@ -153,7 +153,7 @@ double ArcGISArViewInterface::translationFactor() const
 }
 
 /*!
-  \brief The translation factor used to support a table top AR experience.
+  \brief The \a translationFactor used to support a table top AR experience.
 
   All the translation of the device are multiplied by this factor, to have translations in
   the scene view adapted to the scene zooming.
@@ -397,24 +397,28 @@ std::array<double, 7> ArcGISArViewInterface::hitTestInternal(int x, int y) const
 
   \section1 On iOS
 
+  On iOS, the template argument must be one of the types from the following list:
+
   \list
-  \li \a ARSession - The current AR session object. https://developer.apple.com/documentation/arkit/arsession?language=objc
-  \li \a ARConfiguration - The AR configuration object used to run the AR session.
+  \li ARSession - The current AR session object. https://developer.apple.com/documentation/arkit/arsession?language=objc
+  \li ARConfiguration - The AR configuration object used to run the AR session.
   https://developer.apple.com/documentation/arkit/arconfiguration?language=objc
-  \li \a NSObject<ARSessionDelegate> - The session delegate which received the updates.
+  \li NSObject<ARSessionDelegate> - The session delegate which received the updates.
   https://developer.apple.com/documentation/arkit/arsessiondelegate?language=objc
   \endlist
 
   \section1 On Android
 
+  On Android, the template argument must be one of the types from the following list:
+
   \list
-  \li \a ArSession - The current AR session object. https://developers.google.com/ar/reference/c/group/session
-  \li \a ArFrame - The last received AR frame object. https://developers.google.com/ar/reference/c/group/frame
-  \li \a ArCamera - The last received AR camera object. https://developers.google.com/ar/reference/c/group/camera
+  \li ArSession - The current AR session object. https://developers.google.com/ar/reference/c/group/session
+  \li ArFrame - The last received AR frame object. https://developers.google.com/ar/reference/c/group/frame
+  \li ArCamera - The last received AR camera object. https://developers.google.com/ar/reference/c/group/camera
   \endlist
 
   \code
-  ARSession* arSession = arcGISArView->getAR<ARSession>();
+  ArSession* arSession = arcGISArView->arRawPtr<ArSession>(); // ARSession on iOS and ArSession on Android
   if (arSession)
   {
     // use AR session
@@ -443,3 +447,5 @@ ArRawPtr* ArcGISArViewInterface::arRawPtr() const
   \fn void ArcGISArViewInterface::trackingChanged()
   \brief Signal emitted when the \l tracking property changes.
  */
+
+} // Esri::ArcGISRuntime::Toolkit namespace

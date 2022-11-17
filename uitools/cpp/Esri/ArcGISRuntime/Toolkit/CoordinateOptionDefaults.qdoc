@@ -1,5 +1,6 @@
 /*!
 * \headerfile Esri/ArcGISRuntime/Toolkit/CoordinateOptionDefaults
+* \inmodule ArcGISRuntimeToolkit
 * This file contains several function to instantiate several kinds of common
 * CoordinateConversionOption objects used by a CoordinateConversionController.
 * \sa Esri::ArcGISRuntime::Toolkit::CoordinateConversionOption
