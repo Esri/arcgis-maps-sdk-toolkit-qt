@@ -81,8 +81,8 @@ int main(int argc, char *argv[])
 #endif
   QSettings::setDefaultFormat(kSettingsFormat);
 
-  // Before initializing ArcGIS Runtime, first set the
-  // ArcGIS Runtime license setting required for your application.
+  // Before initializing this application, first set the
+  // the required license setting.
 
   // ArcGISRuntimeEnvironment::setLicense("Place license string in here");
 
