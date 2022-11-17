@@ -294,7 +294,6 @@ Pane {
                     ScrollBar.vertical: ScrollBar {}
                     model: controller.functionResults
                     delegate: Pane {
-
                         ColumnLayout {
                             width: functionResultsList.width - (functionResultsList.anchors.margins * 4)
                             RowLayout {
@@ -331,7 +330,7 @@ Pane {
                         bar.currentIndex = 0
                         controller.resetTraceResults()
                     }
-                    enabled: true // !controller.isInsufficientStartingPoint
+                    enabled: controller.isResetResultsEnabled
                     visible: true
                 }
             }

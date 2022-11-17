@@ -66,6 +66,7 @@ class UtilityNetworkTraceController : public QObject
   Q_PROPERTY(QStringList traceConfigurationNames READ traceConfigurationNames NOTIFY traceConfigurationNamesChanged)
   Q_PROPERTY(bool isInsufficientStartingPoint READ isInsufficientStartingPoint WRITE setIsInsufficientStartingPoint NOTIFY isInsufficientStartingPointChanged)
   Q_PROPERTY(bool isAboveMinimumStartingPoint READ isAboveMinimumStartingPoint WRITE setIsAboveMinimumStartingPoint NOTIFY isAboveMinimumStartingPointChanged)
+  Q_PROPERTY(bool isResetResultsEnabled READ isResetResultsEnabled WRITE setIsResetResultsEnabled NOTIFY isResetResultsEnabledChanged)
 
 public:
   Q_INVOKABLE explicit UtilityNetworkTraceController(QObject* parent = nullptr);
@@ -108,6 +109,9 @@ public:
   bool isAboveMinimumStartingPoint() const;
   void setIsAboveMinimumStartingPoint(bool isAboveMinimumStartingPoint);
 
+  bool isResetResultsEnabled() const;
+  void setIsResetResultsEnabled(bool isResetResultsEnabled);
+
   Q_INVOKABLE void runTrace(const QString& name);
 
   QList<Esri::ArcGISRuntime::UtilityNamedTraceConfiguration*> traceConfigurations() const;
@@ -138,6 +142,7 @@ signals:
   void startingPointSymbolChanged();
   void isInsufficientStartingPointChanged();
   void isAboveMinimumStartingPointChanged();
+  void isResetResultsEnabledChanged();
 
 private slots:
   void onTraceCompleted();
@@ -169,6 +174,7 @@ private:
   QMap<QUuid, QMetaObject::Connection> m_traceConfigConnection;
   bool m_isInsufficientStartingPoint = true; // during initialization, it cannot be sufficient
   bool m_isAboveMinimumStartingPoint = false; // during initialization, it cannot be more than minimum
+  bool m_isResetResultsEnabled = false;
   UtilityTraceParameters* m_utilityTraceParameters = nullptr;
   GraphicsOverlay* m_resultsGraphicsOverlay = nullptr;
 };

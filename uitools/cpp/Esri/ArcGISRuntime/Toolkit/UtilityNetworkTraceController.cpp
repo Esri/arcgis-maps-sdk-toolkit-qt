@@ -536,10 +536,26 @@ void UtilityNetworkTraceController::setIsAboveMinimumStartingPoint(bool isAboveM
   emit isAboveMinimumStartingPointChanged();
 }
 
+bool UtilityNetworkTraceController::isResetResultsEnabled() const
+{
+  return m_isResetResultsEnabled;
+}
+
+void UtilityNetworkTraceController::setIsResetResultsEnabled(bool isResetResultsEnabled)
+{
+  if (m_isResetResultsEnabled == isResetResultsEnabled)
+    return;
+
+  m_isResetResultsEnabled = isResetResultsEnabled;
+  emit isResetResultsEnabledChanged();
+}
+
 void UtilityNetworkTraceController::runTrace(const QString& /*name*/)
 {
   if (isTraceInProgress())
     return;
+
+  resetTraceResults();
 
   setIsTraceInProgress(true);
 
@@ -583,11 +599,7 @@ void UtilityNetworkTraceController::refresh()
   }
 
   m_startingPointParent = new QObject(this);
-  if (m_traceResults)
-  {
-    delete m_traceResults;
-    m_traceResults = nullptr;
-  }
+
   qDebug() << "Resetting";
   setupUtilityNetworks();
 }
@@ -742,8 +754,15 @@ void UtilityNetworkTraceController::setSelectedTraceConfigurationNameByIndex(int
 
 void UtilityNetworkTraceController::resetTraceResults()
 {
-  //auto mapViewGraphicsOverlay = qobject_cast<MapViewToolkit*>(geoView())->graphicsOverlays();
+  setIsResetResultsEnabled(false);
 
+  /*** CLEARING GEOMETRY TRACE RESULTS ***/
+  m_resultsGraphicsOverlay->graphics()->clear();
+
+  /*** CLEARING FUNCTION TRACE RESULTS ***/
+  m_functionResults->clear();
+
+  /*** CLEARING ELEMENT TRACE RESULTS ***/
   auto featuresList = m_selectedUtilityNetwork->featuresForElementsResult();
   QHash<FeatureLayer*, QList<Feature*>> layerToFeatures;
   for (const auto f : *featuresList)
@@ -767,18 +786,12 @@ void UtilityNetworkTraceController::resetTraceResults()
     // this is where the magic happens
     lyr->unselectFeatures(layerToFeatures[lyr]);
   }
-
-  if (m_traceResults)
-  {
-    delete m_traceResults;
-    m_traceResults = nullptr;
-  }
 }
 
 void UtilityNetworkTraceController::onTraceCompleted()
 {
   qDebug() << "Trace analysis completed";
-  setIsTraceInProgress(false);
+
   m_traceResults = m_selectedUtilityNetwork->traceResult();
 
   QList<UtilityElement*> allElements;
@@ -793,6 +806,7 @@ void UtilityNetworkTraceController::onTraceCompleted()
       case UtilityTraceResultObjectType::UtilityElementTraceResult:
       {
         qDebug() << "Trace completed with Element Result";
+        setIsResetResultsEnabled(true);
         auto elementResult = static_cast<UtilityElementTraceResult*>(result);
         allElements.append(elementResult->elements());
         break;
@@ -800,6 +814,7 @@ void UtilityNetworkTraceController::onTraceCompleted()
       case UtilityTraceResultObjectType::UtilityFunctionTraceResult:
       {
         qDebug() << "Trace completed with Function Result";
+        setIsResetResultsEnabled(true);
         const auto functionResult = static_cast<UtilityFunctionTraceResult*>(result);
         const auto outputList = functionResult->functionOutputs();
 
@@ -815,6 +830,7 @@ void UtilityNetworkTraceController::onTraceCompleted()
       case UtilityTraceResultObjectType::UtilityGeometryTraceResult:
       {
         qDebug() << "Trace completed with Geometry Result";
+        setIsResetResultsEnabled(true);
         auto geometryTraceResult = static_cast<UtilityGeometryTraceResult*>(result);
 
         auto multipoint = geometryTraceResult->multipoint();
@@ -880,6 +896,7 @@ void UtilityNetworkTraceController::onTraceCompleted()
   }
   else
   {
+    setIsTraceInProgress(false);
     qDebug() << "cannot async featuresForElements no elements";
   }
 
@@ -923,6 +940,7 @@ void UtilityNetworkTraceController::onFeaturesForElementsCompleted()
     lyr->selectFeatures(layerToFeatures[lyr]);
   }
 
+  setIsTraceInProgress(false);
   qDebug() << "Trace completed with features for elements";
 }
 
