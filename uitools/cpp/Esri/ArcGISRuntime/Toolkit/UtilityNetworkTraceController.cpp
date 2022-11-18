@@ -52,7 +52,6 @@
 #include <UtilityNetworkAttribute.h>
 #include <UtilityNetworkListModel.h>
 #include <UtilityNetworkSource.h>
-#include <UtilityNetworkTraceOperationResult.h>
 #include <UtilityNetworkTypes.h>
 #include <UtilityTerminalConfiguration.h>
 #include <UtilityTraceFunction.h>

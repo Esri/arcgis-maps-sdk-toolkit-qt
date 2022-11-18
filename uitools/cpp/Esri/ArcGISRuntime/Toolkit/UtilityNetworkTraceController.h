@@ -29,7 +29,6 @@
 Q_MOC_INCLUDE("UtilityNetwork.h")
 Q_MOC_INCLUDE("UtilityNetworkTraceStartingPoint.h")
 Q_MOC_INCLUDE("UtilityNamedTraceConfiguration.h")
-Q_MOC_INCLUDE("UtilityNetworkTraceOperationResult.h")
 Q_MOC_INCLUDE("Symbol.h")
 
 namespace Esri::ArcGISRuntime {
@@ -49,7 +48,6 @@ namespace Toolkit {
 class UtilityNetworkFunctionTraceResultsModel;
 class UtilityNetworkTraceStartingPoint;
 class UtilityNetworkTraceStartingPointsModel;
-class UtilityNetworkTraceOperationResult;
 
 class UtilityNetworkTraceController : public QObject
 {

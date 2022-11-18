@@ -53,7 +53,6 @@ HEADERS += $$CPPPATH/AuthenticationController.h \
            $$CPPPATH/UtilityNetworkFunctionTraceResultsModel.h \
            $$CPPPATH/UtilityNetworkListItem.h \
            $$CPPPATH/UtilityNetworkTraceController.h \
-           $$CPPPATH/UtilityNetworkTraceOperationResult.h \
            $$CPPPATH/UtilityNetworkTraceStartingPoint.h \
            $$CPPPATH/UtilityNetworkTraceStartingPointsModel.h
 
@@ -90,6 +89,5 @@ SOURCES += $$CPPPATH/AuthenticationController.cpp \
            $$CPPPATH/UtilityNetworkFunctionTraceResultsModel.cpp \
            $$CPPPATH/UtilityNetworkListItem.cpp \
            $$CPPPATH/UtilityNetworkTraceController.cpp \
-           $$CPPPATH/UtilityNetworkTraceOperationResult.cpp \
            $$CPPPATH/UtilityNetworkTraceStartingPoint.cpp \
            $$CPPPATH/UtilityNetworkTraceStartingPointsModel.cpp

@@ -1,5 +1,8 @@
 # Changelog
 
+## 200.0
+* (UtilityNetworkTrace) Introduction of new Utility Network Trace tool (C++/Quick).
+
 ## 100.15
 
 * (Callout) Deprecated `calloutContent` property in favour of `contentItem` usage.
@@ -10,7 +13,6 @@
 * Added a `.clang-format` file.
 * Added vscode/spellchecking for documentation purposes.
 * (BookmarksView) Introduction of new Bookmark tool (C++/Quick, QML/Quick, Widget).
-* (UtilityNetworkTrace) Introduction of new Utility Network Trace tool.
 
 ## 100.14
 * `toolkitwidgets.pri`, `toolkitqml.pri`, and `toolkitcpp.pri` now include `QT += ...` lines to account for needed dependencies.
