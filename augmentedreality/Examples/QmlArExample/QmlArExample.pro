@@ -24,6 +24,8 @@ CONFIG += c++17
 
 QT += core gui opengl network positioning sensors qml quick
 
+QT += core-private
+
 lessThan(QT_MAJOR_VERSION, 6) {
     error("This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.2.4")
 }

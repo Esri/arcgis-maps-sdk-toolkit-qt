@@ -101,7 +101,6 @@ private:
   Q_DISABLE_COPY(ArCoreWrapper)
 
   JNIEnv* jniEnvironment();
-  jobject applicationActivity();
 
   bool installArCore();
   void createArSession();
@@ -115,7 +114,6 @@ private:
 
   QJniEnvironment m_jniEnvironment;
 
-  jobject m_applicationActivity = nullptr;
 
   std::unique_ptr<ArCoreFrameRenderer> m_arCoreFrameRenderer;
   std::unique_ptr<ArCorePlaneRenderer> m_arCorePlaneRenderer;

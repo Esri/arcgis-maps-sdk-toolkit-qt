@@ -17,6 +17,8 @@
 TEMPLATE = app
 
 QT += core gui opengl network positioning sensors qml quick multimedia
+QT += core-private
+
 CONFIG += c++17
 
 TARGET = CppArExample
