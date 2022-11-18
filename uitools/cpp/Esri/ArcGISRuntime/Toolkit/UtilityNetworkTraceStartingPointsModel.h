@@ -77,6 +77,6 @@ public:
   QList<UtilityNetworkTraceStartingPoint*> m_data;
 };
 } // namespace Toolkit
-}// namespace Esri::ArcGISRuntime
+} // namespace Esri::ArcGISRuntime
 
 #endif // UTILITYNETWORKTRACESTARTINGPOINTSMODEL_H

@@ -19,7 +19,7 @@
 
 #include "UtilityNetworkTraceStartingPoint.h"
 
-using namespace Esri::ArcGISRuntime::Toolkit;
+namespace Esri::ArcGISRuntime::Toolkit {
 
 UtilityNetworkTraceStartingPointsModel::UtilityNetworkTraceStartingPointsModel(QObject* parent)
   : QAbstractListModel(parent)
@@ -180,3 +180,4 @@ void UtilityNetworkTraceStartingPointsModel::setupRoles()
   m_roles[MultipleTerminalNamesRole] = "multipleTerminalNames";
   m_roles[SelectedTerminalIndexRole] = "selectedTerminalIndex";
 }
+} namespace Esri::ArcGISRuntime::Toolkit

@@ -65,10 +65,6 @@ UtilityNetworkTraceStartingPoint::UtilityNetworkTraceStartingPoint(UtilityElemen
     m_multipleTerminalNames = multipleTerminalsTemp;
   }
 
-  qDebug() << "@@@ UtilityNetworkTraceStartingPoint c'tor";
-  qDebug() << "@@@ m_utilityElement->networkSource()->sourceType()" << static_cast<int>(m_utilityElement->networkSource()->sourceType());
-  qDebug() << "@@@ m_selectionGraphic->geometry().geometryType()" << static_cast<int>(m_selectionGraphic->geometry().geometryType());
-
   if (m_selectionGraphic != nullptr &&
       m_utilityElement->networkSource()->sourceType() == UtilityNetworkSourceType::Edge &&
       m_selectionGraphic->geometry().geometryType() == GeometryType::Polyline)
@@ -76,7 +72,6 @@ UtilityNetworkTraceStartingPoint::UtilityNetworkTraceStartingPoint(UtilityElemen
     m_hasFractionAlongEdge = true;
     setFractionAlongEdge(m_utilityElement->fractionAlongEdge());
 
-    qDebug() << "fraction along edge initial: " << m_utilityElement->fractionAlongEdge();
     const auto polyline = static_cast<Polyline>(m_selectionGraphic->geometry());
     m_selectionGraphic->setGeometry(
           GeometryEngine::createPointAlong(polyline, GeometryEngine::length(polyline) * fractionAlongEdge()));
@@ -140,7 +135,6 @@ void UtilityNetworkTraceStartingPoint::setSelectedTerminalNameByIndex(int index)
   {
     m_selectedMultipleTerminal = m_multipleTerminals.at(index);
     m_selectedTerminalIndex = index;
-    qDebug() << "&&&&&" << m_selectedMultipleTerminal->name();
   }
 }
 

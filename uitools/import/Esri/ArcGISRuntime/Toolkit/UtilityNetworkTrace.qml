@@ -26,11 +26,6 @@ import QtQuick.Layouts
  \ingroup ArcGISQtToolkitUiQmlViews
  \since Esri.ArcGISRuntime 200.0
  \brief The user interface for the UtilityNetworkTrace.
-
- xxxx
- \image docs/utilityNetworkTrace.gif
- Example code in the QML API (C++ API might differ):
- \snippet qml_quick/src/demos/UtilityNetworkTraceDemoForm.qml Set up Bookmark QML
 */
 
 Pane {
@@ -40,10 +35,9 @@ Pane {
 
     /*!
       \qmlproperty UtilityNetworkTraceController controller
-      \brief The controller handles binding logic between the UtilityNetworkTrace and
-      the \c BookmarkListItem.
+      \brief Loads a map with uitlity networks, on which different trace operations can be performed and the
+      operation's results are shown both on the map and textually in the UI.
 
-      The QML controller is documented \l{UtilityNetworkTraceController}{here} and the CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::UtilityNetworkTraceController}{here}.
     */
     property var controller: UtilityNetworkTraceController { }
 

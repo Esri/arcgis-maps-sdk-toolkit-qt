@@ -18,7 +18,7 @@
 
 #include "UtilityNetworkFunctionTraceResult.h"
 
-using namespace Esri::ArcGISRuntime::Toolkit;
+namespace Esri::ArcGISRuntime::Toolkit {
 
 UtilityNetworkFunctionTraceResultsModel::UtilityNetworkFunctionTraceResultsModel(QObject* parent)
   : QAbstractListModel(parent)
@@ -91,3 +91,4 @@ void Esri::ArcGISRuntime::Toolkit::UtilityNetworkFunctionTraceResultsModel::setu
   m_roles[TypeRole] = "type";
   m_roles[ValueRole] = "value";
 }
+} // Esri::ArcGISRuntime::Toolkit
