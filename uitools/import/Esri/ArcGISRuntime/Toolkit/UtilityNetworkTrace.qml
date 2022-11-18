@@ -258,6 +258,7 @@ Pane {
                         Layout.alignment: Qt.AlignCenter
                         Layout.maximumWidth: Layout.maximumHeight
                         padding: 0
+                        implicitWidth: root.width
                         onClicked: {
                             bar.currentIndex = 1
                             controller.runTrace("n/a")
@@ -317,7 +318,7 @@ Pane {
                 Button {
                     id: clearTraceResults
                     text: "Clear results"
-                    Layout.alignment: Qt.AlignCenter
+                    Layout.alignment: Qt.AlignCenter | Qt.AlignBottom
                     Layout.maximumWidth: Layout.maximumHeight
                     padding: 0
                     onClicked: {
