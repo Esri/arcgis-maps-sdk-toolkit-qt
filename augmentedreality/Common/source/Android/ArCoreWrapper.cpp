@@ -250,12 +250,6 @@ JNIEnv* ArCoreWrapper::jniEnvironment()
 
 /*!
   \internal
-  the jobject referencing the application's current Android Activity.
- */
-
-
-/*!
-  \internal
   initiates installation of ARCore if needed. May be called prior to ArSession_create().
  */
 bool ArCoreWrapper::installArCore()
@@ -291,15 +285,6 @@ void ArCoreWrapper::createArSession()
   if (m_arSession)
     return;
 
-  // try to create the ARCore session. This function can fail if the user reject the authorization
-  // to install ARCore.
-  auto status = ArSession_create(jniEnvironment(), QNativeInterface::QAndroidApplication::context(), &m_arSession);
-  if (status != AR_SUCCESS || !m_arSession)
-  {
-    emit m_arcGISArView->errorOccurred("ARCore failure", "Failed to create the AR session.");
-    return;
-  }
-
   // request camera permission
   auto checkPermissionResultFuture = QtAndroidPrivate::checkPermission(QtAndroidPrivate::PermissionType::Camera);
   checkPermissionResultFuture.waitForFinished();
@@ -314,6 +299,15 @@ void ArCoreWrapper::createArSession()
       emit m_arcGISArView->errorOccurred("ARCore failure", "Failed to access to the camera.");
       return;
     }
+  }
+
+  // try to create the ARCore session. This function can fail if the user reject the authorization
+  // to install ARCore.
+  auto status = ArSession_create(jniEnvironment(), QNativeInterface::QAndroidApplication::context(), &m_arSession);
+  if (status != AR_SUCCESS || !m_arSession)
+  {
+    emit m_arcGISArView->errorOccurred("ARCore failure", "Failed to create the AR session.");
+    return;
   }
 
   // create the ARCore config.

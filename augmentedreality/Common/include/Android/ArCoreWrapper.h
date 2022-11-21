@@ -114,7 +114,6 @@ private:
 
   QJniEnvironment m_jniEnvironment;
 
-
   std::unique_ptr<ArCoreFrameRenderer> m_arCoreFrameRenderer;
   std::unique_ptr<ArCorePlaneRenderer> m_arCorePlaneRenderer;
   std::unique_ptr<ArCorePointCloudRenderer> m_arCorePointCloudRenderer;
