@@ -306,7 +306,7 @@ Pane {
                                     Label {
                                         Layout.fillWidth: true
                                         elide: Text.ElideRight
-                                        text: "Function type: " + type
+                                        text: "Function type: <i>" + type + "</i>"
                                         horizontalAlignment: Text.AlignLeft
                                     }
                                 }

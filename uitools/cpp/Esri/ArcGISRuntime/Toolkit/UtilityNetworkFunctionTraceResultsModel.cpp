@@ -48,7 +48,7 @@ QVariant UtilityNetworkFunctionTraceResultsModel::data(const QModelIndex& index,
     case NameRole:
       return functionResult->name();
     case TypeRole:
-      return functionResult->type();
+      return functionResult->typeAsLabel();
     case ValueRole:
       return functionResult->value();
     default:

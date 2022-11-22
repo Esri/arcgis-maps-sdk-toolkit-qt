@@ -25,7 +25,7 @@ UtilityNetworkFunctionTraceResult::UtilityNetworkFunctionTraceResult(QObject* pa
 }
 
 UtilityNetworkFunctionTraceResult::UtilityNetworkFunctionTraceResult(const QString& name,
-                                                                     int type,
+                                                                     UtilityTraceFunctionType type,
                                                                      double value,
                                                                      QObject* parent) :
   QObject(parent),
@@ -43,9 +43,30 @@ QString UtilityNetworkFunctionTraceResult::name() const
   return m_name;
 }
 
-int UtilityNetworkFunctionTraceResult::type() const
+UtilityTraceFunctionType UtilityNetworkFunctionTraceResult::type() const
 {
   return m_type;
+}
+
+QString UtilityNetworkFunctionTraceResult::typeAsLabel() const
+{
+  switch(m_type)
+  {
+    case UtilityTraceFunctionType::Add:
+      return "Add";
+    case UtilityTraceFunctionType::Average:
+      return "Average";
+    case UtilityTraceFunctionType::Count:
+      return "Count";
+    case UtilityTraceFunctionType::Max:
+      return "Max";
+    case UtilityTraceFunctionType::Min:
+      return "Min";
+    case UtilityTraceFunctionType::Subtract:
+      return "Subtract";
+    default:
+      return "N/a";
+  }
 }
 
 double UtilityNetworkFunctionTraceResult::value() const

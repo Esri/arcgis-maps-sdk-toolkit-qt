@@ -821,7 +821,7 @@ void UtilityNetworkTraceController::onTraceCompleted()
         for (const auto o : outputList)
         {
           m_functionResults->addFunctionResult(new UtilityNetworkFunctionTraceResult(o->function()->networkAttribute()->name(),
-                                                                                     static_cast<int>(o->function()->functionType()),
+                                                                                     o->function()->functionType(),
                                                                                      o->result().toDouble(), this));
         }
 

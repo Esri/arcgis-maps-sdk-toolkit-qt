@@ -20,6 +20,8 @@
 // Toolkit headers
 #include "Internal/GenericListModel.h"
 
+#include <UtilityNetworkTypes.h>
+
 // Qt headers
 #include <QObject>
 
@@ -32,18 +34,19 @@ class UtilityNetworkFunctionTraceResult : public QObject
 public:
   Q_INVOKABLE explicit UtilityNetworkFunctionTraceResult(QObject* parent = nullptr);
   Q_INVOKABLE UtilityNetworkFunctionTraceResult(const QString& name,
-                                                int type,
+                                                const UtilityTraceFunctionType type,
                                                 double value,
                                                 QObject* parent = nullptr);
   ~UtilityNetworkFunctionTraceResult() override;
 
   QString name() const;
-  int type() const;
+  UtilityTraceFunctionType type() const;
+  QString typeAsLabel() const;
   double value() const;
 
 private:
   QString m_name;
-  int m_type;
+  UtilityTraceFunctionType m_type;
   double m_value;
 };
 
