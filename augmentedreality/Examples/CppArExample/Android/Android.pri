@@ -1,5 +1,5 @@
 ###############################################################################
-# Copyright 2012-2019 Esri
+# Copyright 2012-2022 Esri
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,8 +28,5 @@ OTHER_FILES += \
 
 DISTFILES += \
     $$ANDROID_PACKAGE_SOURCE_DIR/AndroidManifest.xml \
-    $$ANDROID_PACKAGE_SOURCE_DIR/gradle/wrapper/gradle-wrapper.jar \
-    $$ANDROID_PACKAGE_SOURCE_DIR/gradlew \
     $$ANDROID_PACKAGE_SOURCE_DIR/build.gradle \
-    $$ANDROID_PACKAGE_SOURCE_DIR/gradle/wrapper/gradle-wrapper.properties \
-    $$ANDROID_PACKAGE_SOURCE_DIR/gradlew.bat
+    $$ANDROID_PACKAGE_SOURCE_DIR/gradle.properties

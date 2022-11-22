@@ -37,7 +37,6 @@ HEADERS += \
 SOURCES += \
     $$AR_COMMON_SOURCE_PATH/ArcGISArViewInterface.cpp \
     $$AR_COMMON_SOURCE_PATH/ArcGISArViewRenderer.cpp \
-    $$AR_COMMON_SOURCE_PATH/ArEnums.cpp \
     $$AR_COMMON_SOURCE_PATH/ArWrapper.cpp \
     $$AR_COMMON_SOURCE_PATH/LocationDataSource.cpp
 
@@ -108,13 +107,12 @@ android {
     INCLUDEPATH += $$AR_CORE_INCLUDE_PATH
     DEPENDPATH += $$AR_CORE_INCLUDE_PATH
 
-    LIBS += -larcore_sdk_c -larcore_sdk_jni
+    LIBS += -larcore_sdk_c
 
     # libs foreach platforms
     contains(ANDROID_TARGET_ARCH, arm64-v8a) {
         LIBS += -L"$$AR_CORE_LIBS_PATH/jni/arm64-v8a"
         ANDROID_EXTRA_LIBS += \
-            "$$AR_CORE_LIBS_PATH/jni/arm64-v8a/libarcore_sdk_c.so" \
-            "$$AR_CORE_LIBS_PATH/jni/arm64-v8a/libarcore_sdk_jni.so"
+            "$$AR_CORE_LIBS_PATH/jni/arm64-v8a/libarcore_sdk_c.so"
     }
 }

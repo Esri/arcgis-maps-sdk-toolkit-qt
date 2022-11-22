@@ -22,6 +22,8 @@ isEmpty(ARCGIS_TOOLKIT_PATH) {
     error(ARCGIS_TOOLKIT_PATH is not set)
 }
 
+QT += core-private
+
 AUGMENTED_REALITY_PATH = $$ARCGIS_TOOLKIT_PATH/augmentedreality
 
 include($$AUGMENTED_REALITY_PATH/Common/AR.pri)
