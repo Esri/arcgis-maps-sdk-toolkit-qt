@@ -43,16 +43,22 @@
                 android:name="android.app.extract_android_style"
                 android:value="minimal" />
         </activity>
-        <meta-data android:name="com.google.ar.core" android:value="required" />
+        <meta-data
+            android:name="com.google.ar.core"
+            android:value="required" />
     </application>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-feature android:name="android.hardware.camera.ar" android:required="true"/>
-
-
-    <uses-feature android:name="android.hardware.camera"
+    <uses-permission
+        android:name="android.permission.CAMERA"/>
+    <uses-feature
+        android:name="android.hardware.camera.ar"
         android:required="true"/>
-    <uses-feature android:name="android.hardware.camera.autofocus"
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true"/>
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
         android:required="false"/>
-    <uses-feature android:name="android.hardware.camera2.full"
+    <uses-feature
+        android:name="android.hardware.camera2.full"
         android:required="true" />
 </manifest>

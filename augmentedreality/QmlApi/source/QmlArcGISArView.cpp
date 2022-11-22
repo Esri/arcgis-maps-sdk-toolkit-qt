@@ -167,7 +167,7 @@ void QmlArcGISArView::qmlRegisterTypes()
 {
   qmlRegisterType<QmlArcGISArView>("Esri.ArcGISArToolkit", 1, 0, "ArcGISArViewInternal");
   qmlRegisterType<LocationDataSource>("Esri.ArcGISArToolkit", 1, 0, "LocationDataSource");
-  qmlRegisterUncreatableType<ArEnums>("Esri.ArcGISArToolkit", 1, 0, "ArEnums", "ArEnums is not creatable.");
+  qmlRegisterUncreatableMetaObject(ArEnums::staticMetaObject, "Esri.ArcGISArToolkit", 1, 0, "ArEnums", "ArEnums is not creatable.");
 
   // Register enum types.
   qRegisterMetaType<ArEnums::LocationTrackingMode>("ArEnums::LocationTrackingMode");
