@@ -68,9 +68,6 @@ Pane {
 
             Layout.fillWidth: true
 
-            height: implicitHeight
-            width: parent.width
-
             TabButton {
                 text: qsTr("New Trace")
                 font.pixelSize: 14
@@ -267,7 +264,6 @@ Pane {
                             controller.runTrace("n/a")
                         }
                         enabled: !controller.isInsufficientStartingPoint
-                        visible: true
                     }
                 }
             }
