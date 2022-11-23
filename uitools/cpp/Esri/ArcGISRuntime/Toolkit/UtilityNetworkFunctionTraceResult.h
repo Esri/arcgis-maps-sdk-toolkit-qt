@@ -27,17 +27,15 @@
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-class UtilityNetworkFunctionTraceResult : public QObject
+class UtilityNetworkFunctionTraceResult
 {
-  Q_OBJECT
 
 public:
-  Q_INVOKABLE explicit UtilityNetworkFunctionTraceResult(QObject* parent = nullptr);
-  Q_INVOKABLE UtilityNetworkFunctionTraceResult(const QString& name,
+  explicit UtilityNetworkFunctionTraceResult();
+  UtilityNetworkFunctionTraceResult(const QString& name,
                                                 const UtilityTraceFunctionType type,
-                                                double value,
-                                                QObject* parent = nullptr);
-  ~UtilityNetworkFunctionTraceResult() override;
+                                                double value);
+  ~UtilityNetworkFunctionTraceResult();
 
   QString name() const;
   UtilityTraceFunctionType type() const;

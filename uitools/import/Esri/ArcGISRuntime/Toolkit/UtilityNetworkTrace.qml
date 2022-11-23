@@ -33,9 +33,12 @@ Pane {
     height: 600
     width: implicitWidth * 1.20
 
+    implicitHeight: 250
+    implicitWidth: 300
+
     /*!
       \qmlproperty UtilityNetworkTraceController controller
-      \brief Loads a map with uitlity networks, on which different trace operations can be performed and the
+      \brief Loads a map with utility networks, on which different trace operations can be performed and the
       operation's results are shown both on the map and textually in the UI.
 
     */
@@ -43,7 +46,7 @@ Pane {
 
     /*!
        \qmlproperty GeoView geoView
-       \brief The \c GeoView for this tool. Currenlty, it can be a \c Map; but could be extended to use a \c Scene as well.
+       \brief The \c GeoView for this tool. Currently, it can be a \c Map; but could be extended to use a \c Scene as well.
      */
     property var geoView;
 
@@ -179,7 +182,7 @@ Pane {
                                     Layout.fillWidth: true
                                     padding: 0
                                     stepSize: 0.01
-                                    snapMode: RangeSlider.SnapAlways
+                                    snapMode: Slider.SnapAlways
                                     from: 0.0
                                     to: 1.0
                                     visible: hasFractionAlongEdge
@@ -235,11 +238,11 @@ Pane {
                     spacing: 0
 
                     Label {
-                        visible: controller.isInsufficientStartingPoint
+                        visible: controller.isInsufficientStartingPoints
                         text: "The selected trace configuration requires additional starting points."
                         horizontalAlignment: Text.AlignLeft
                         width: gridLayoutTrace.width
-                        wrapMode: "WordWrap"
+                        wrapMode: Text.WordWrap
                         Layout.fillWidth: true
                     }
 
@@ -248,7 +251,7 @@ Pane {
                         text: "There are more starting points than required for the selected trace configuration."
                         horizontalAlignment: Text.AlignLeft
                         width: gridLayoutTrace.width
-                        wrapMode: "WordWrap"
+                        wrapMode: Text.WordWrap
                         Layout.fillWidth: true
                     }
 
@@ -331,7 +334,4 @@ Pane {
             }
         }
     }
-
-    implicitHeight: 250
-    implicitWidth: 300
 }

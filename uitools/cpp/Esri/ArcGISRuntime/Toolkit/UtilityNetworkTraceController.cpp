@@ -81,7 +81,7 @@
 namespace Esri::ArcGISRuntime::Toolkit {
 
 namespace {
-void setupUtilityNetworksInt(UtilityNetworkListModel* sourceModel, GenericListModel* targetModel)
+void setupUtilityNetworksInternal(UtilityNetworkListModel* sourceModel, GenericListModel* targetModel)
 {
   QObject::connect(sourceModel, &UtilityNetworkListModel::rowsInserted, targetModel,
                    [sourceModel, targetModel](const QModelIndex& parent, int first, int last)
@@ -160,7 +160,7 @@ void connectToGeoView(GeoViewToolkit* geoView, UtilityNetworkTraceController* se
       for (const auto utilityNetwork : *utilityNetworks)
       {
         if (!utilityNetwork)
-          return;
+          continue;
 
         auto c2 = doOnLoaded(utilityNetwork, self, [f = std::move(f)]
         {
@@ -264,7 +264,7 @@ void UtilityNetworkTraceController::setGeoView(QObject* geoView)
     // Maybe the UN is not loaded just yet.
     connectToGeoView(mapView, this, [this, mapView]
     {
-      setupUtilityNetworksInt(mapView->map()->utilityNetworks(), m_utilityNetworks);
+      setupUtilityNetworksInternal(mapView->map()->utilityNetworks(), m_utilityNetworks);
     });
 
     connect(this,
@@ -333,7 +333,9 @@ void UtilityNetworkTraceController::setGeoView(QObject* geoView)
         for (const auto& geoElement : layer->geoElements())
         {
           const auto ft = dynamic_cast<ArcGISFeature*>(geoElement);
-          addStartingPoint(ft, this->m_mapPoint);
+
+          if (geoElement)
+            addStartingPoint(ft, this->m_mapPoint);
         }
       }
 
@@ -497,18 +499,18 @@ void UtilityNetworkTraceController::setStartingPointSymbol(Symbol* startingPoint
   emit startingPointSymbolChanged();
 }
 
-bool UtilityNetworkTraceController::isInsufficientStartingPoint() const
+bool UtilityNetworkTraceController::isInsufficientStartingPoints() const
 {
-  return m_isInsufficientStartingPoint;
+  return m_isInsufficientStartingPoints;
 }
 
-void UtilityNetworkTraceController::setIsInsufficientStartingPoint(bool isInsufficientStartingPoint)
+void UtilityNetworkTraceController::setIsInsufficientStartingPoints(bool isInsufficientStartingPoints)
 {
-  if (m_isInsufficientStartingPoint == isInsufficientStartingPoint)
+  if (m_isInsufficientStartingPoints == isInsufficientStartingPoints)
     return;
 
-  m_isInsufficientStartingPoint = isInsufficientStartingPoint;
-  emit isInsufficientStartingPointChanged();
+  m_isInsufficientStartingPoints = isInsufficientStartingPoints;
+  emit isInsufficientStartingPointsChanged();
 }
 
 bool UtilityNetworkTraceController::isAboveMinimumStartingPoint() const
@@ -583,7 +585,7 @@ void UtilityNetworkTraceController::refresh()
   m_isTraceInProgress = false;
   m_isAddingStartingPointEnabled = false;
   m_isAddingStartingPointInProgress = false;
-  m_isInsufficientStartingPoint = true;
+  m_isInsufficientStartingPoints = true;
   m_isAboveMinimumStartingPoint = false;
   m_isResetResultsEnabled = false;
   emit startingPointsChanged();
@@ -638,12 +640,12 @@ void UtilityNetworkTraceController::populateUtilityNetworksFromMap()
     }
     else
     {
-      qDebug() << "Warning: Maps hasn't been loaded yet.";
+      qDebug() << "Warning: Map hasn't been loaded yet.";
     }
   }
 }
 
-void UtilityNetworkTraceController::addStartingPoint(ArcGISFeature* identifiedFeature, Point mapPoint)
+void UtilityNetworkTraceController::addStartingPoint(ArcGISFeature* identifiedFeature, const Point& mapPoint)
 {
   auto geometry = identifiedFeature->geometry();
 
@@ -658,68 +660,65 @@ void UtilityNetworkTraceController::addStartingPoint(ArcGISFeature* identifiedFe
     return;
   }
 
-  if (utilityElement)
+  const auto startingPointAlreadyExists = m_startingPoints->doesItemAlreadyExist(utilityElement);
+
+  // skip if starting point already exists for the selected utility element
+  if (!startingPointAlreadyExists)
   {
-    const auto startingPointAlreadyExists = m_startingPoints->doesItemAlreadyExist(utilityElement);
-
-    // skip if starting point already exists for the selected utility element
-    if (!startingPointAlreadyExists)
+    if (utilityElement->networkSource()->sourceType() == UtilityNetworkSourceType::Edge &&
+        geometry.geometryType() == GeometryType::Polyline)
     {
-      if (utilityElement->networkSource()->sourceType() == UtilityNetworkSourceType::Edge &&
-          geometry.geometryType() == GeometryType::Polyline)
+      auto polyline = geometry_cast<Polyline>(geometry);
+      if (polyline.hasZ())
       {
-        auto polyline = geometry_cast<Polyline>(geometry);
-        if (polyline.hasZ())
-        {
-          // get the geometry of the identified feature as a polyline, and remove the z component
-          polyline = geometry_cast<Polyline>(GeometryEngine::removeZ(polyline));
-        }
-
-        if (mapPoint.spatialReference() != polyline.spatialReference())
-        {
-          polyline = geometry_cast<Polyline>(GeometryEngine::project(polyline, mapPoint.spatialReference()));
-        }
-
-        geometry = polyline;
-        // compute how far the clicked location is along the edge feature
-        double fractionAlongEdge = GeometryEngine::fractionAlong(polyline, mapPoint, -1);
-        if (!std::isnan(fractionAlongEdge))
-        {
-          // set the fraction along edge
-          utilityElement->setFractionAlongEdge(fractionAlongEdge);
-        }
-      }
-      else if (utilityElement->networkSource()->sourceType() == UtilityNetworkSourceType::Junction &&
-               utilityElement->assetType()->terminalConfiguration() != nullptr)
-      {
-        auto utilityTerminalConfiguration = utilityElement->assetType()->terminalConfiguration();
-        QList<UtilityTerminal*> terminals = utilityTerminalConfiguration->terminals();
-        if (terminals.size() > 1)
-        {
-          // The user can select between multiple terminals, but by default the first one is selected
-          utilityElement->setTerminal(utilityElement->assetType()->terminalConfiguration()->terminals().at(0));
-        }
+        // get the geometry of the identified feature as a polyline, and remove the z component
+        polyline = geometry_cast<Polyline>(GeometryEngine::removeZ(polyline));
       }
 
-      auto graphic = new Graphic(geometry, m_startingPointParent);
-      graphic->attributes()->insertAttribute("GlobalId", utilityElement->globalId());
-      graphic->setSymbol(m_startingPointSymbol);
-      auto featureLayer = dynamic_cast<FeatureLayer*>(identifiedFeature->featureTable()->layer());
-      auto symbol = featureLayer->renderer()->symbol(identifiedFeature);
+      if (mapPoint.spatialReference() != polyline.spatialReference())
+      {
+        polyline = geometry_cast<Polyline>(GeometryEngine::project(polyline, mapPoint.spatialReference()));
+      }
 
-      m_startingPointsGraphicsOverlay->graphics()->append(graphic);
-      if (symbol == nullptr)
+      geometry = polyline;
+      // compute how far the clicked location is along the edge feature
+      double fractionAlongEdge = GeometryEngine::fractionAlong(polyline, mapPoint, -1);
+      if (!std::isnan(fractionAlongEdge))
       {
-        // Adding with null symbol
-        m_startingPoints->addStartingPoint(new UtilityNetworkTraceStartingPoint(utilityElement, graphic, symbol, featureLayer->fullExtent(), m_startingPointParent));
-        emit startingPointsChanged();
+        // set the fraction along edge
+        utilityElement->setFractionAlongEdge(fractionAlongEdge);
       }
-      else
+    }
+    else if (utilityElement->networkSource()->sourceType() == UtilityNetworkSourceType::Junction &&
+             utilityElement->assetType()->terminalConfiguration() != nullptr)
+    {
+      auto utilityTerminalConfiguration = utilityElement->assetType()->terminalConfiguration();
+      QList<UtilityTerminal*> terminals = utilityTerminalConfiguration->terminals();
+      if (terminals.size() > 1)
       {
-        // Adding with extent
-        m_startingPoints->addStartingPoint(new UtilityNetworkTraceStartingPoint(utilityElement, graphic, symbol, graphic->geometry().extent(), m_startingPointParent));
-        emit startingPointsChanged();
+        // The user can select between multiple terminals, but by default the first one is selected
+        utilityElement->setTerminal(utilityElement->assetType()->terminalConfiguration()->terminals().at(0));
       }
+    }
+
+    auto graphic = new Graphic(geometry, m_startingPointParent);
+    graphic->attributes()->insertAttribute("GlobalId", utilityElement->globalId());
+    graphic->setSymbol(m_startingPointSymbol);
+    auto featureLayer = dynamic_cast<FeatureLayer*>(identifiedFeature->featureTable()->layer());
+    auto symbol = featureLayer->renderer()->symbol(identifiedFeature);
+
+    m_startingPointsGraphicsOverlay->graphics()->append(graphic);
+    if (symbol == nullptr)
+    {
+      // Adding with null symbol
+      m_startingPoints->addStartingPoint(new UtilityNetworkTraceStartingPoint(utilityElement, graphic, symbol, featureLayer->fullExtent(), m_startingPointParent));
+      emit startingPointsChanged();
+    }
+    else
+    {
+      // Adding with extent
+      m_startingPoints->addStartingPoint(new UtilityNetworkTraceStartingPoint(utilityElement, graphic, symbol, graphic->geometry().extent(), m_startingPointParent));
+      emit startingPointsChanged();
     }
   }
 }
@@ -785,7 +784,6 @@ void UtilityNetworkTraceController::resetTraceResults()
   const auto layerKeys = layerToFeatures.keys();
   for (const auto lyr : layerKeys)
   {
-    // this is where the functionality takes place
     lyr->unselectFeatures(layerToFeatures[lyr]);
   }
 }
@@ -820,9 +818,9 @@ void UtilityNetworkTraceController::onTraceCompleted()
 
         for (const auto o : outputList)
         {
-          m_functionResults->addFunctionResult(new UtilityNetworkFunctionTraceResult(o->function()->networkAttribute()->name(),
+          m_functionResults->addFunctionResult(UtilityNetworkFunctionTraceResult(o->function()->networkAttribute()->name(),
                                                                                      o->function()->functionType(),
-                                                                                     o->result().toDouble(), this));
+                                                                                     o->result().toDouble()));
         }
 
         break;
@@ -935,7 +933,6 @@ void UtilityNetworkTraceController::onFeaturesForElementsCompleted()
   const auto layerKeys = layerToFeatures.keys();
   for (const auto lyr : layerKeys)
   {
-    // this is where the functionality takes place
     lyr->selectFeatures(layerToFeatures[lyr]);
   }
 
@@ -1018,7 +1015,7 @@ void UtilityNetworkTraceController::applyStartingPointWarnings()
       minimum = 2;
     }
 
-    setIsInsufficientStartingPoint(m_startingPoints->size() < minimum);
+    setIsInsufficientStartingPoints(m_startingPoints->size() < minimum);
     setIsAboveMinimumStartingPoint(m_startingPoints->size() > minimum);
   }
 }

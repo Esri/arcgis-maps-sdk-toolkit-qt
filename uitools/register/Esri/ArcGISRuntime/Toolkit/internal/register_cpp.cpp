@@ -39,7 +39,6 @@
 #include "SearchViewController.h"
 #include "SmartLocatorSearchSource.h"
 #include "TimeSliderController.h"
-#include "UtilityNetworkFunctionTraceResult.h"
 #include "UtilityNetworkFunctionTraceResultsModel.h"
 #include "UtilityNetworkListItem.h"
 #include "UtilityNetworkTraceController.h"
@@ -203,10 +202,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
     registerComponent<SearchResult>();
     registerComponent<SearchSourceInterface>(CreationType::Interface);
     registerComponent<SearchSuggestion>();
-    registerComponent<SearchViewController>(CreationType::Creatable);
+    registerComponent<SearchViewController>();
     registerComponent<SmartLocatorSearchSource>(CreationType::Uncreatable);
     registerComponent<TimeSliderController>();
-    registerComponent<UtilityNetworkFunctionTraceResult>();
     registerComponent<UtilityNetworkFunctionTraceResultsModel>();
     registerComponent<UtilityNetworkListItem>();
     registerComponent<UtilityNetworkTraceController>();

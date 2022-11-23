@@ -18,17 +18,9 @@
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-UtilityNetworkFunctionTraceResult::UtilityNetworkFunctionTraceResult(QObject* parent) :
-  QObject(parent)
-{
-  //
-}
-
 UtilityNetworkFunctionTraceResult::UtilityNetworkFunctionTraceResult(const QString& name,
                                                                      UtilityTraceFunctionType type,
-                                                                     double value,
-                                                                     QObject* parent) :
-  QObject(parent),
+                                                                     double value) :
   m_name(name),
   m_type(type),
   m_value(value)

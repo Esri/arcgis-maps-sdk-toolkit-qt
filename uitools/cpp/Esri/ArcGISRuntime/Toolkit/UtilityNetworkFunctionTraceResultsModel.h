@@ -19,12 +19,13 @@
 
 #include <QAbstractListModel>
 
+#include "UtilityNetworkFunctionTraceResult.h"
+
 namespace Esri::ArcGISRuntime {
 
 class UtilityElement;
 
 namespace Toolkit {
-class UtilityNetworkFunctionTraceResult;
 
 class UtilityNetworkFunctionTraceResultsModel : public QAbstractListModel
 {
@@ -46,7 +47,7 @@ public:
 
   QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 
-  void addFunctionResult(UtilityNetworkFunctionTraceResult* functionResult);
+  void addFunctionResult(const UtilityNetworkFunctionTraceResult& functionResult);
 
   void clear();
 
@@ -58,7 +59,7 @@ public:
   void setupRoles();
 
   QHash<int, QByteArray> m_roles;
-  QList<UtilityNetworkFunctionTraceResult*> m_data;
+  QList<UtilityNetworkFunctionTraceResult> m_data;
 };
 } // namespace Toolkit
 }// namespace Esri::ArcGISRuntime

@@ -1,7 +1,7 @@
 # Changelog
 
 ## 200.0
-* (UtilityNetworkTrace) Introduction of new Utility Network Trace tool (C++/Quick).
+* (UtilityNetworkTrace) Introduction of the new Utility Network Trace tool (C++/Quick).
 
 ## 100.15
 

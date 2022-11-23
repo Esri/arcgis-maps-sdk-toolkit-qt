@@ -62,7 +62,7 @@ class UtilityNetworkTraceController : public QObject
   Q_PROPERTY(QAbstractItemModel* startingPoints READ startingPoints CONSTANT)
   Q_PROPERTY(QAbstractItemModel* functionResults READ functionResults CONSTANT)
   Q_PROPERTY(QStringList traceConfigurationNames READ traceConfigurationNames NOTIFY traceConfigurationNamesChanged)
-  Q_PROPERTY(bool isInsufficientStartingPoint READ isInsufficientStartingPoint WRITE setIsInsufficientStartingPoint NOTIFY isInsufficientStartingPointChanged)
+  Q_PROPERTY(bool isInsufficientStartingPoints READ isInsufficientStartingPoints WRITE setIsInsufficientStartingPoints NOTIFY isInsufficientStartingPointsChanged)
   Q_PROPERTY(bool isAboveMinimumStartingPoint READ isAboveMinimumStartingPoint WRITE setIsAboveMinimumStartingPoint NOTIFY isAboveMinimumStartingPointChanged)
   Q_PROPERTY(bool isResetResultsEnabled READ isResetResultsEnabled WRITE setIsResetResultsEnabled NOTIFY isResetResultsEnabledChanged)
 
@@ -101,8 +101,8 @@ public:
   Symbol* startingPointSymbol() const;
   void setStartingPointSymbol(Symbol* startingPointSymbol);
 
-  bool isInsufficientStartingPoint() const;
-  void setIsInsufficientStartingPoint(bool isInsufficientStartingPoint);
+  bool isInsufficientStartingPoints() const;
+  void setIsInsufficientStartingPoints(bool isInsufficientStartingPoints);
 
   bool isAboveMinimumStartingPoint() const;
   void setIsAboveMinimumStartingPoint(bool isAboveMinimumStartingPoint);
@@ -138,7 +138,7 @@ signals:
   void isAddingStartingPointEnabledChanged();
   void isAddingStartingPointInProgressChanged();
   void startingPointSymbolChanged();
-  void isInsufficientStartingPointChanged();
+  void isInsufficientStartingPointsChanged();
   void isAboveMinimumStartingPointChanged();
   void isResetResultsEnabledChanged();
 
@@ -149,7 +149,7 @@ private slots:
 
 private:
   void populateUtilityNetworksFromMap();
-  void addStartingPoint(ArcGISFeature* identifiedFeature, Point mapPoint);
+  void addStartingPoint(ArcGISFeature* identifiedFeature, const Point& mapPoint);
   void setupUtilityNetworks();
   void applyStartingPointWarnings();
 
@@ -170,7 +170,7 @@ private:
   Symbol* m_startingPointSymbol;
   Point m_mapPoint;
   QMap<QUuid, QMetaObject::Connection> m_traceConfigConnection;
-  bool m_isInsufficientStartingPoint = true; // during initialization, it cannot be sufficient
+  bool m_isInsufficientStartingPoints = true; // during initialization, it cannot be sufficient
   bool m_isAboveMinimumStartingPoint = false; // during initialization, it cannot be more than minimum
   bool m_isResetResultsEnabled = false;
   UtilityTraceParameters* m_utilityTraceParameters = nullptr;
