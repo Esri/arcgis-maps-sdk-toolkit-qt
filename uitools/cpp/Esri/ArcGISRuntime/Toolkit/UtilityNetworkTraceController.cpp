@@ -81,52 +81,6 @@
 namespace Esri::ArcGISRuntime::Toolkit {
 
 namespace {
-void setupUtilityNetworksInternal(UtilityNetworkListModel* sourceModel, GenericListModel* targetModel)
-{
-  QObject::connect(sourceModel, &UtilityNetworkListModel::rowsInserted, targetModel,
-                   [sourceModel, targetModel](const QModelIndex& parent, int first, int last)
-  {
-    if (parent.isValid())
-      return;
-
-    if (!targetModel->insertRows(first, last - first + 1))
-      return;
-
-    for (auto i = first; i <= last; ++i)
-    {
-      QModelIndex j = targetModel->index(i);
-      auto targetItem = targetModel->element<UtilityNetworkListItem>(j);
-      if (targetItem)
-        targetItem->setUtilityNetwork(sourceModel->at(i));
-    }
-  });
-
-  QObject::connect(sourceModel, &UtilityNetworkListModel::rowsRemoved, targetModel,
-                   [targetModel](const QModelIndex& parent, int first, int last)
-  {
-    if (parent.isValid())
-      return;
-
-    targetModel->removeRows(first, last - first + 1);
-  });
-
-  QObject::connect(sourceModel, &UtilityNetworkListModel::rowsMoved, targetModel,
-                   [targetModel](const QModelIndex& parent, int start, int end, const QModelIndex& destination, int row)
-  {
-    if (parent.isValid() || destination.isValid())
-      return;
-
-    targetModel->moveRows(QModelIndex{}, start, end - start + 1, QModelIndex{}, row);
-  });
-
-  QList<QObject*> targetItems;
-  for (int i = 0; i < sourceModel->size(); ++i)
-  {
-    targetItems << new UtilityNetworkListItem(sourceModel->at(i), targetModel);
-  }
-  targetModel->append(targetItems);
-}
-
 /*!
      \internal
      \brief Manages the connection between Controller \a self and GeoView \a geoView.
@@ -190,7 +144,6 @@ UtilityNetworkTraceController::UtilityNetworkTraceController(QObject* parent) :
   QObject(parent),
   m_startingPointParent(new QObject(this)),
   m_startingPointsGraphicsOverlay(new GraphicsOverlay(m_startingPointParent)),
-  m_utilityNetworks(new GenericListModel(&UtilityNetworkListItem::staticMetaObject, this)),
   m_startingPoints(new UtilityNetworkTraceStartingPointsModel(this)),
   m_functionResults(new UtilityNetworkFunctionTraceResultsModel(this)),
   m_isAddingStartingPointEnabled(false),
@@ -246,20 +199,11 @@ void UtilityNetworkTraceController::setGeoView(QObject* geoView)
   {
     disconnect(m_geoView, nullptr, this, nullptr);
 
-    if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
-    {
-      auto map = mapView->map();
-
-      if (map && map->utilityNetworks())
-        disconnect(map->utilityNetworks(), nullptr, m_utilityNetworks, nullptr);
-    }
-    else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+    if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
       // scene does not have utility networks
       return;
     }
-
-    m_utilityNetworks->clear();
   }
 
   m_geoView = geoView;
@@ -270,18 +214,6 @@ void UtilityNetworkTraceController::setGeoView(QObject* geoView)
 
   if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
   {
-    connect(mapView, &MapViewToolkit::mapChanged, this, [this]()
-    {
-      m_utilityNetworks->clear();
-    });
-
-    // `connectToGeoView` guarantees the map exists as it is only invoked once the geomodel is loaded.
-    // Maybe the UN is not loaded just yet.
-    connectToGeoView(mapView, this, [this, mapView]
-    {
-      setupUtilityNetworksInternal(mapView->map()->utilityNetworks(), m_utilityNetworks);
-    });
-
     connect(this,
             &UtilityNetworkTraceController::selectedUtilityNetworkChanged, // this should've already been handled and newValue used
             this,
@@ -386,18 +318,6 @@ void UtilityNetworkTraceController::setGeoView(QObject* geoView)
 
     setupUtilityNetworks();
   }
-}
-
-/*!
-  \brief Returns the known list of available utilityNetworks which
-  can be textually displayed.
-
-  Internally, this is a \c GenericListModel with an \c elementType of
-  \c UtilityNetwork.
- */
-GenericListModel* UtilityNetworkTraceController::utilityNetworks() const
-{
-  return m_utilityNetworks;
 }
 
 UtilityNetwork* UtilityNetworkTraceController::selectedUtilityNetwork() const
@@ -594,7 +514,6 @@ void UtilityNetworkTraceController::refresh()
   m_selectedUtilityNetwork = nullptr;
   delete m_selectedTraceConfiguration;
   m_selectedTraceConfiguration = nullptr;
-  m_utilityNetworks = new GenericListModel(&UtilityNetworkListItem::staticMetaObject, this);
   m_traceConfigurations.clear();
   m_startingPoints->clear();
   m_functionResults->clear();
@@ -915,16 +834,11 @@ void UtilityNetworkTraceController::setupUtilityNetworks()
 
         for (const auto un : qAsConst(*map->utilityNetworks()))
         {
-          if (un->loadStatus() == LoadStatus::Loaded)
-          {
-            // append UN without explicit loading
-            m_utilityNetworks->append(un);
-          }
-          else
+          if (un->loadStatus() == LoadStatus::NotLoaded)
           {
             //single shot connection
             QMetaObject::Connection* const connection = new QMetaObject::Connection;
-            *connection = connect(un, &UtilityNetwork::doneLoading, this, [this, un, connection](const Error& e)
+            *connection = connect(un, &UtilityNetwork::doneLoading, this, [connection](const Error& e)
             {
               if (!e.isEmpty())
               {
@@ -932,7 +846,6 @@ void UtilityNetworkTraceController::setupUtilityNetworks()
                 return;
               }
               // append UN with explicit loading
-              this->m_utilityNetworks->append(un);
               QObject::disconnect(*connection);
               delete connection;
             });

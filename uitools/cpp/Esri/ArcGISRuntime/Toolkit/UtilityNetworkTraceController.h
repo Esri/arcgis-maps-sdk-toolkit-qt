@@ -77,8 +77,6 @@ public:
   QObject* geoView() const;
   void setGeoView(QObject* mapView);
 
-  GenericListModel* utilityNetworks() const;
-
   UtilityNetwork* selectedUtilityNetwork() const;
   void setSelectedUtilityNetwork(UtilityNetwork* selectedUtilityNetwork);
 
@@ -159,7 +157,6 @@ private:
   QObject* m_startingPointParent = nullptr;
   GraphicsOverlay* m_startingPointsGraphicsOverlay = nullptr;
   UtilityNetwork* m_selectedUtilityNetwork = nullptr;
-  GenericListModel* m_utilityNetworks = nullptr;
   QStringList m_traceConfigurationNames;
   QList<UtilityNamedTraceConfiguration*> m_traceConfigurations;
   UtilityNamedTraceConfiguration* m_selectedTraceConfiguration = nullptr;
