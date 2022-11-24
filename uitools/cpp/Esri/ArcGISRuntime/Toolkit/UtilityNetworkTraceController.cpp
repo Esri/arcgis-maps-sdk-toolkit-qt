@@ -353,6 +353,8 @@ void UtilityNetworkTraceController::setGeoView(QObject* geoView)
         }
       }
 
+      qDeleteAll(results);
+
       setIsAddingStartingPointInProgress(false);
     });
 
