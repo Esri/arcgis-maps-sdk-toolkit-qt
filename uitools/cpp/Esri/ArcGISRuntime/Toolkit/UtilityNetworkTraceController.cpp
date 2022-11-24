@@ -295,11 +295,11 @@ void UtilityNetworkTraceController::setGeoView(QObject* geoView)
                          this,
                          [this](QUuid taskId, const QList<Esri::ArcGISRuntime::UtilityNamedTraceConfiguration*>& utilityNamedTraceConfigurationResults)
         {
-          const auto findIter = m_traceConfigConnection.find(taskId);
-          if (findIter != m_traceConfigConnection.end())
+          const auto findIter = m_traceConfigConnection.constFind(taskId);
+          if (findIter != m_traceConfigConnection.cend())
           {
             disconnect(*findIter);
-            m_traceConfigConnection.remove(taskId);
+            m_traceConfigConnection.erase(findIter);
           }
 
           m_traceConfigurations.clear();
