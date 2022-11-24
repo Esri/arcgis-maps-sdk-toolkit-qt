@@ -140,6 +140,22 @@ void connectToGeoView(GeoViewToolkit* geoView, UtilityNetworkTraceController* se
 }
 }
 
+/*!
+\class Esri::ArcGISRuntime::Toolkit::UtilityNetworkTraceController
+\ingroup ArcGISQtToolkitUiCppControllers
+\inmodule EsriArcGISRuntimeToolkit
+
+\brief In MVC architecture, this is the controller for the corresponding
+ Utility Network Trace that enables trace analysis to be performed on a Utility Network with the
+ selected named trace configuration and starting points.
+*/
+
+/*!
+\brief Constructor.
+\list
+  \li \a parent owning parent object.
+\endlist
+*/
 UtilityNetworkTraceController::UtilityNetworkTraceController(QObject* parent) :
   QObject(parent),
   m_startingPointParent(new QObject(this)),

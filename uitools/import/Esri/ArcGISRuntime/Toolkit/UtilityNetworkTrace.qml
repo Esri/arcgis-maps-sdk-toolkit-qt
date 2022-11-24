@@ -25,7 +25,20 @@ import QtQuick.Layouts
  \inqmlmodule Esri.ArcGISRuntime.Toolkit
  \ingroup ArcGISQtToolkitUiQmlViews
  \since Esri.ArcGISRuntime 200.0
- \brief The user interface for the UtilityNetworkTrace.
+ \brief The user interface for the UtilityNetworkTrace tool.
+
+ The UI is only displayed if there is at least one Utility Network loaded in the data model.
+ When there are multiple Utility Networks present in the map, the first one in the list is displayed.
+
+ The UI includes a TabBar with one tab for configuring a new trace and another Tab for displaying results.
+
+ The new trace Tab includes a custom UtilityNetworkTraceStartingPointsModel for displaying the different
+ properties of starting points in the UI.
+
+ The result Tab itself contains a TabBar of the results made up of custom Tabs defined in
+ UtilityNetworkFunctionTraceResultsModel.
+
+ Generic styles, displayed in this Qml UI, can be overwritten using the Calcite style.
 */
 
 Pane {
