@@ -263,7 +263,7 @@ Pane {
                             bar.currentIndex = 1
                             controller.runTrace("n/a")
                         }
-                        enabled: !controller.isInsufficientStartingPoint
+                        enabled: !controller.isInsufficientStartingPoints
                     }
                 }
             }

@@ -196,7 +196,22 @@ UtilityNetworkTraceController::UtilityNetworkTraceController(QObject* parent) :
   m_isAddingStartingPointEnabled(false),
   m_isAddingStartingPointInProgress(false),
   m_startingPointSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle::Cross, QColor(Qt::green), 20.0f, this)),
-  m_resultsGraphicsOverlay(new GraphicsOverlay(this))
+  m_resultsGraphicsOverlay(new GraphicsOverlay(this)),
+  m_resultPointSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle::Circle,
+                                             QColor(0, 0, 255, 126),
+                                             20,
+                                             this)),
+  m_resultLineSymbol(new SimpleLineSymbol(SimpleLineSymbolStyle::Dot,
+                                          QColor(0, 0, 255, 126),
+                                          5,
+                                          this)),
+  m_resultFillSymbol(new SimpleFillSymbol(SimpleFillSymbolStyle::ForwardDiagonal,
+                                          QColor(0, 0, 255, 126),
+                                          new SimpleLineSymbol(SimpleLineSymbolStyle::Solid,
+                                                               QColor(0, 0, 255, 126),
+                                                               2,
+                                                               this),
+                                          this))
 {
   //
 }
@@ -322,8 +337,7 @@ void UtilityNetworkTraceController::setGeoView(QObject* geoView)
     });
 
     mapView->graphicsOverlays()->append(m_startingPointsGraphicsOverlay);
-
-    populateUtilityNetworksFromMap();
+    mapView->graphicsOverlays()->append(m_resultsGraphicsOverlay);
 
     // handle the identify results
     connect(mapView, &MapQuickView::identifyLayersCompleted, this, [this](QUuid, const QList<IdentifyLayerResult*>& results)
@@ -603,50 +617,6 @@ void UtilityNetworkTraceController::refresh()
   setupUtilityNetworks();
 }
 
-void UtilityNetworkTraceController::populateUtilityNetworksFromMap()
-{
-  const auto mapView = qobject_cast<MapViewToolkit*>(m_geoView);
-
-  if (mapView)
-  {
-    auto map = mapView->map();
-    if (map->loadStatus() == LoadStatus::Loaded)
-    {
-      const auto un = map->utilityNetworks();
-      for (int i = 0; i < un->size(); ++i)
-      {
-        if (un->at(i)->loadStatus() == LoadStatus::Loaded)
-        {
-          m_utilityNetworks->append(un->at(i));
-        }
-        else
-        {
-          qDebug() << "Utility network" << i << "not loaded";
-        }
-      }
-
-      if (map->utilityNetworks()->size() > 0)
-      {
-        // TODO append all UNs into a list and allow the user to select which one to load
-        // User can load any of them during the app's lifetime.
-        // Load the first one by default.
-        setSelectedUtilityNetwork(map->utilityNetworks()->at(0));
-      }
-      else
-      {
-        qDebug() << "There are no Utility Networks associated with the ArcGIS Map attached "
-                 << "to the MapView. Utility Network Trace will not be displayed. Call "
-                 << "UtilityNetworkTrace.refresh() after updating the ArcGIS Map to try again.";
-        return;
-      }
-    }
-    else
-    {
-      qDebug() << "Warning: Map hasn't been loaded yet.";
-    }
-  }
-}
-
 void UtilityNetworkTraceController::addStartingPoint(ArcGISFeature* identifiedFeature, const Point& mapPoint)
 {
   auto geometry = identifiedFeature->geometry();
@@ -760,6 +730,11 @@ void UtilityNetworkTraceController::resetTraceResults()
   setIsResetResultsEnabled(false);
 
   // Clearing GEOMETRY TRACE RESULTS
+  auto graphics = m_resultsGraphicsOverlay->graphics();
+  for (int i = 0; i < graphics->size(); ++i)
+  {
+    delete graphics->at(i);
+  }
   m_resultsGraphicsOverlay->graphics()->clear();
 
   // Clearing FUNCTION TRACE RESULTS
@@ -795,7 +770,6 @@ void UtilityNetworkTraceController::onTraceCompleted()
   m_traceResults = m_selectedUtilityNetwork->traceResult();
 
   QList<UtilityElement*> allElements;
-  bool hasGeometryTraceResult{false};
 
   for (const auto result : *m_traceResults)
   {
@@ -836,45 +810,30 @@ void UtilityNetworkTraceController::onTraceCompleted()
         auto multipoint = geometryTraceResult->multipoint();
         if (!multipoint.isEmpty())
         {
-          SimpleMarkerSymbol* resultPointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle::Circle,
-                                                                         QColor(0, 0, 255, 126),
-                                                                         20,
-                                                                         this);
+          // will be deleted in resetTraceResults()
           auto graphic = new Graphic(multipoint,
-                                     resultPointSymbol,
+                                     m_resultPointSymbol,
                                      this);
-          hasGeometryTraceResult = true;
           m_resultsGraphicsOverlay->graphics()->append(graphic);
         }
 
         auto polyline = geometryTraceResult->polyline();
         if (!polyline.isEmpty())
         {
-          SimpleLineSymbol* resultPointSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle::Dot,
-                                                                     QColor(0, 0, 255, 126),
-                                                                     5,
-                                                                     this);
+          // will be deleted in resetTraceResults()
           auto graphic = new Graphic(polyline,
-                                     resultPointSymbol,
+                                     m_resultLineSymbol,
                                      this);
-          hasGeometryTraceResult = true;
           m_resultsGraphicsOverlay->graphics()->append(graphic);
         }
 
         auto polygon = geometryTraceResult->polygon();
         if (!polygon.isEmpty())
         {
-          SimpleFillSymbol* resultPointSymbol = new SimpleFillSymbol(SimpleFillSymbolStyle::ForwardDiagonal,
-                                                                     QColor(0, 0, 255, 126),
-                                                                     new SimpleLineSymbol(SimpleLineSymbolStyle::Solid,
-                                                                                          QColor(0, 0, 255, 126),
-                                                                                          2,
-                                                                                          this),
-                                                                     this);
+          // will be deleted in resetTraceResults()
           auto graphic = new Graphic(polygon,
-                                     resultPointSymbol,
+                                     m_resultFillSymbol,
                                      this);
-          hasGeometryTraceResult = true;
           m_resultsGraphicsOverlay->graphics()->append(graphic);
         }
 
@@ -898,12 +857,6 @@ void UtilityNetworkTraceController::onTraceCompleted()
   {
     // when the above async completes, the run trace in-progress will be set to false
     setIsTraceInProgress(false);
-  }
-
-  if (hasGeometryTraceResult)
-  {
-    auto mapView = qobject_cast<MapViewToolkit*>(m_geoView);
-    mapView->graphicsOverlays()->append(m_resultsGraphicsOverlay);
   }
 }
 

@@ -35,6 +35,9 @@ namespace Esri::ArcGISRuntime {
 
 class ArcGISFeature;
 class GraphicsOverlay;
+class SimpleFillSymbol;
+class SimpleLineSymbol;
+class SimpleMarkerSymbol;
 class Symbol;
 class UtilityElementTraceResult;
 class UtilityNamedTraceConfiguration;
@@ -148,7 +151,6 @@ private slots:
   void onFeaturesForElementsCompleted();
 
 private:
-  void populateUtilityNetworksFromMap();
   void addStartingPoint(ArcGISFeature* identifiedFeature, const Point& mapPoint);
   void setupUtilityNetworks();
   void applyStartingPointWarnings();
@@ -175,6 +177,11 @@ private:
   bool m_isResetResultsEnabled = false;
   UtilityTraceParameters* m_utilityTraceParameters = nullptr;
   GraphicsOverlay* m_resultsGraphicsOverlay = nullptr;
+
+  // these won't get refreshed in refresh() because they shouldn't change
+  SimpleMarkerSymbol* m_resultPointSymbol = nullptr;
+  SimpleLineSymbol* m_resultLineSymbol = nullptr;
+  SimpleFillSymbol* m_resultFillSymbol = nullptr;
 };
 
 } // Toolkit
