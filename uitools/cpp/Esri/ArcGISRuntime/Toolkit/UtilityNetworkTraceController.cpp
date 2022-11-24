@@ -574,7 +574,9 @@ UtilityTraceResultListModel* UtilityNetworkTraceController::traceResults()
 
 void UtilityNetworkTraceController::refresh()
 {
+  delete m_selectedUtilityNetwork;
   m_selectedUtilityNetwork = nullptr;
+  delete m_selectedTraceConfiguration;
   m_selectedTraceConfiguration = nullptr;
   m_utilityNetworks = new GenericListModel(&UtilityNetworkListItem::staticMetaObject, this);
   m_traceConfigurations.clear();
@@ -757,13 +759,13 @@ void UtilityNetworkTraceController::resetTraceResults()
 {
   setIsResetResultsEnabled(false);
 
-  /*** CLEARING GEOMETRY TRACE RESULTS ***/
+  // Clearing GEOMETRY TRACE RESULTS
   m_resultsGraphicsOverlay->graphics()->clear();
 
-  /*** CLEARING FUNCTION TRACE RESULTS ***/
+  // Clearing FUNCTION TRACE RESULTS
   m_functionResults->clear();
 
-  /*** CLEARING ELEMENT TRACE RESULTS ***/
+  // Clearing ELEMENT TRACE RESULTS
   auto featuresList = m_selectedUtilityNetwork->featuresForElementsResult();
   QHash<FeatureLayer*, QList<Feature*>> layerToFeatures;
   for (const auto f : *featuresList)
