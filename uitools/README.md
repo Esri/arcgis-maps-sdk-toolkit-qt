@@ -22,6 +22,7 @@ In the [API Documentation](https://developers.arcgis.com/qt/toolkit/api-referenc
 |Scalebar|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-scalebar.html)|||
 |Search view|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-searchview.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-searchview.html)||
 |Time slider|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-timeslider.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-timeslider.html)||
+|Utility Network Trace |✔ | | |
 
 ## Showcase - Demo app
 

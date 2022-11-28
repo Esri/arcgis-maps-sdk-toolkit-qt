@@ -56,3 +56,5 @@ UserCredentialsView 100.10 UserCredentialsView.qml
 UserCredentialsView 200.0 UserCredentialsView.qml
 FloorFilter 100.14 FloorFilter.qml
 FloorFilter 200.0 FloorFilter.qml
+UtilityNetworkTrace 100.15 UtilityNetworkTrace.qml
+UtilityNetworkTrace 200.0 UtilityNetworkTrace.qml
