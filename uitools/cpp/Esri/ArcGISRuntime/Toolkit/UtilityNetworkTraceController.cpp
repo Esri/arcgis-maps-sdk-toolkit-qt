@@ -30,6 +30,7 @@
 #include <GraphicsOverlayListModel.h>
 #include <IdentifyLayerResult.h>
 #include <Map.h>
+#include <MapQuickView.h>
 #include <Multipoint.h>
 #include <Polygon.h>
 #include <Polyline.h>
@@ -288,7 +289,7 @@ void UtilityNetworkTraceController::setGeoView(QObject* geoView)
     mapView->graphicsOverlays()->append(m_resultsGraphicsOverlay);
 
     // handle the identify results
-    connect(mapView, &MapQuickView::identifyLayersCompleted, this, [this](QUuid, const QList<IdentifyLayerResult*>& results)
+    connect(mapView, &MapViewToolkit::identifyLayersCompleted, this, [this](QUuid, const QList<IdentifyLayerResult*>& results)
     {
       for (const auto& layer : results)
       {
@@ -307,7 +308,7 @@ void UtilityNetworkTraceController::setGeoView(QObject* geoView)
     });
 
     // identify symbols on mouse click
-    connect(mapView, &MapQuickView::mouseClicked, this, [this, mapView](QMouseEvent& mouseEvent)
+    connect(mapView, &MapViewToolkit::mouseClicked, this, [this, mapView](QMouseEvent& mouseEvent)
     {
       if (isAddingStartingPointInProgress() || !isAddingStartingPointEnabled())
         return;
