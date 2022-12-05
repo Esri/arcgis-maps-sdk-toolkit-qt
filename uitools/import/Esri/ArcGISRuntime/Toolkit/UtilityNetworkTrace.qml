@@ -223,15 +223,6 @@ Pane {
                     visible: true
 
                     Button {
-                        id: selectStartingPointButton
-                        text: controller.isAddingStartingPointEnabled ? "Cancel" : "Add Starting Point"
-                        Layout.alignment: Qt.AlignRight
-                        Layout.maximumWidth: Layout.maximumHeight
-                        padding: 0
-                        onClicked: controller.isAddingStartingPointEnabled = !controller.isAddingStartingPointEnabled
-                    }
-
-                    Button {
                         id: removeAllButton
                         text: "Remove All"
                         Layout.alignment: Qt.AlignLeft
@@ -239,6 +230,15 @@ Pane {
                         padding: 0
                         onClicked: controller.removeAllStartingPoints()
                         visible: startPointList.count > 0
+                    }
+
+                    Button {
+                        id: selectStartingPointButton
+                        text: controller.isAddingStartingPointEnabled ? "Cancel" : "Add Starting Point"
+                        Layout.alignment: Qt.AlignRight
+                        Layout.maximumWidth: Layout.maximumHeight
+                        padding: 0
+                        onClicked: controller.isAddingStartingPointEnabled = !controller.isAddingStartingPointEnabled
                     }
                 }
 
