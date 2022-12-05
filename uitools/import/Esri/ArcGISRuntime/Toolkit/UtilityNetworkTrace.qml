@@ -221,6 +221,7 @@ Pane {
                 RowLayout {
                     Layout.margins: 0
                     visible: true
+
                     Button {
                         id: selectStartingPointButton
                         text: controller.isAddingStartingPointEnabled ? "Cancel" : "Add Starting Point"
@@ -239,7 +240,6 @@ Pane {
                         onClicked: controller.removeAllStartingPoints()
                         visible: startPointList.count > 0
                     }
-
                 }
 
                 ColumnLayout {
