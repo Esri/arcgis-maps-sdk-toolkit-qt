@@ -221,6 +221,14 @@ Pane {
                 RowLayout {
                     Layout.margins: 0
                     visible: true
+                    Button {
+                        id: selectStartingPointButton
+                        text: controller.isAddingStartingPointEnabled ? "Cancel" : "Add Starting Point"
+                        Layout.alignment: Qt.AlignRight
+                        Layout.maximumWidth: Layout.maximumHeight
+                        padding: 0
+                        onClicked: controller.isAddingStartingPointEnabled = !controller.isAddingStartingPointEnabled
+                    }
 
                     Button {
                         id: removeAllButton
@@ -232,14 +240,6 @@ Pane {
                         visible: startPointList.count > 0
                     }
 
-                    Button {
-                        id: selectStartingPointButton
-                        text: controller.isAddingStartingPointEnabled ? "Cancel" : "Add Starting Point"
-                        Layout.alignment: Qt.AlignRight
-                        Layout.maximumWidth: Layout.maximumHeight
-                        padding: 0
-                        onClicked: controller.isAddingStartingPointEnabled = !controller.isAddingStartingPointEnabled
-                    }
                 }
 
                 ColumnLayout {
