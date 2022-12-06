@@ -34,7 +34,6 @@
 #include "PopupViewController.h"
 #include "ScalebarController.h"
 #include "SearchResult.h"
-#include "SearchSourceInterface.h"
 #include "SearchSuggestion.h"
 #include "SearchViewController.h"
 #include "SmartLocatorSearchSource.h"
@@ -113,17 +112,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
       constexpr Uncreatable_ Uncreatable = Uncreatable_{};
 
-      struct Interface_
-      {
-      };
-
-      template <class T>
-      void registerComponentImpl(CreationType::Interface_, int majorVersion, int /*minorVersion*/, const char* /*name*/)
-      {
-        qmlRegisterInterface<T>(NAMESPACE, majorVersion);
-      }
-
-      constexpr Interface_ Interface = Interface_{};
     }
 
     /*
@@ -200,7 +188,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     registerComponent<PopupViewController>();
     registerComponent<ScalebarController>();
     registerComponent<SearchResult>();
-    registerComponent<SearchSourceInterface>(CreationType::Interface);
     registerComponent<SearchSuggestion>();
     registerComponent<SearchViewController>();
     registerComponent<SmartLocatorSearchSource>(CreationType::Uncreatable);

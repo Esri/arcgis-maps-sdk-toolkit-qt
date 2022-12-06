@@ -25,6 +25,7 @@
 #include <QList>
 #include <QObject>
 #include <QString>
+#include <QQmlEngine>
 
 Q_MOC_INCLUDE("SearchResult.h")
 
@@ -43,7 +44,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   class SearchSourceInterface : public QObject
   {
     Q_OBJECT
+    QML_INTERFACE
     Q_PROPERTY(QString displayName READ displayName WRITE setDisplayName NOTIFY displayNameChanged)
+
   public:
     SearchSourceInterface(QObject* parent = nullptr);
     ~SearchSourceInterface() override;
@@ -76,5 +79,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   };
 
 } // Esri::ArcGISRuntime::Toolkit
+
+Q_DECLARE_INTERFACE(Esri::ArcGISRuntime::Toolkit::SearchSourceInterface, "Esri::ArcGISRuntime::Toolkit::SearchSourceInterface")
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_SEARCHSOURCEINTERFACE_H
