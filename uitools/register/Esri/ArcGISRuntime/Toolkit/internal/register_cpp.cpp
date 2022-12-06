@@ -34,6 +34,7 @@
 #include "PopupViewController.h"
 #include "ScalebarController.h"
 #include "SearchResult.h"
+#include "SearchSourceInterface.h"
 #include "SearchSuggestion.h"
 #include "SearchViewController.h"
 #include "SmartLocatorSearchSource.h"
@@ -199,6 +200,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     registerComponent<PopupViewController>();
     registerComponent<ScalebarController>();
     registerComponent<SearchResult>();
+    registerComponent<SearchSourceInterface>(CreationType::Interface);
     registerComponent<SearchSuggestion>();
     registerComponent<SearchViewController>();
     registerComponent<SmartLocatorSearchSource>(CreationType::Uncreatable);
