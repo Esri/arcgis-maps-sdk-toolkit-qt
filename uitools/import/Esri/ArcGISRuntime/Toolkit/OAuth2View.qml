@@ -24,7 +24,7 @@ import QtQuick.Window
 Dialog {
     id: oAuthView
 
-    property AuthenticationController controller: AuthenticationController {}
+    property AuthenticationController controller: null
 
     title: webView.title
 
