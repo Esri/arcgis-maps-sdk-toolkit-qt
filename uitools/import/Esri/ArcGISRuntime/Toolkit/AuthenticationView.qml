@@ -65,6 +65,10 @@ Item {
     */
     property var controller: AuthenticationController { }
 
+    property var activeLoginView
+
+    signal activeLoginViewReady
+
     Connections {
         target: controller
         function onCurrentChallengeTypeChanged() {
@@ -74,6 +78,12 @@ Item {
                 incubator.onStatusChanged = function(status) {
                     if (status === Component.Ready) {
                         this.object.open();
+
+                        if (component === userCredentialsView)
+                        {
+                            activeLoginView = this.object;
+                            activeLoginViewReady();
+                        }
                     }
                 }
             }
