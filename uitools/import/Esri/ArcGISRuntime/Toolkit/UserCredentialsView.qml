@@ -25,10 +25,6 @@ Dialog {
 
     property AuthenticationController controller: AuthenticationController {}
 
-    property alias username: usernameTextField.text
-
-    property alias password: passwordTextField.text
-
     title: qsTr("Authentication required")
 
     closePolicy: Popup.NoAutoClose
@@ -123,4 +119,9 @@ Dialog {
             controller.continueWithUsernamePassword(usernameTextField.text,
                                                     passwordTextField.text);
     }
+
+    property alias username_: usernameTextField.text // internal
+
+    property alias password_: passwordTextField.text // internal
+
 }

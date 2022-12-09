@@ -65,10 +65,6 @@ Item {
     */
     property var controller: AuthenticationController { }
 
-    property var activeLoginView
-
-    signal activeLoginViewReady
-
     Connections {
         target: controller
         function onCurrentChallengeTypeChanged() {
@@ -80,10 +76,7 @@ Item {
                         this.object.open();
 
                         if (component === userCredentialsView)
-                        {
-                            activeLoginView = this.object;
-                            activeLoginViewReady();
-                        }
+                            activeLoginViewReady_(this.object);
                     }
                 }
             }
@@ -157,6 +150,8 @@ Item {
             }
         }
     }
+
+    signal activeLoginViewReady_(var activeLoginView) // internal
 
     QtObject {
         id: internal
