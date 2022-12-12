@@ -110,6 +110,15 @@ Dialog {
     }
 
     /*!
+      \internal
+      \brief pre-fill the username and password fields
+     */
+    function prefillUsernameAndPassword(username, password) {
+        usernameTextField.text = username;
+        passwordTextField.text = password;
+    }
+
+    /*!
      \internal
      \brief Attempts to apply the current username and password to
      the token.

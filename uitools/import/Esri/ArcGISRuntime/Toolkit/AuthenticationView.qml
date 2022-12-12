@@ -94,6 +94,7 @@ Item {
             onClosed: {
                 this.destroy();
             }
+            Component.onCompleted: activeLoginViewReady_(this)
         }
     }
 
@@ -111,6 +112,7 @@ Item {
             onClosed: {
                 this.destroy();
             }
+            onWebViewLoaded_: activeLoginViewReady_(this)
         }
     }
 
@@ -147,6 +149,12 @@ Item {
             }
         }
     }
+
+    /*!
+        \internal
+        \brief signal emitted when the login view is in the Ready state
+    */
+    signal activeLoginViewReady_(var activeLoginView)
 
     QtObject {
         id: internal

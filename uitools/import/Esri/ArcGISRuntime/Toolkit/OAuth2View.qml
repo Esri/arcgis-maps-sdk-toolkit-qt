@@ -55,6 +55,7 @@ Dialog {
         onLoadingChanged: (loadRequest) => {
             if (loadRequest.status === WebView.LoadSucceededStatus) {
                 forceActiveFocus();
+                webViewLoaded_();
             } else if (loadRequest.status === WebView.LoadFailedStatus) {
                 controller.cancelWithError("Failed to load");
             }
@@ -101,5 +102,20 @@ Dialog {
             const js = "document.documentElement.outerHTML";
             webview.runJavaScript(js, function(result) { html = result; });
         }
+    }
+
+    /*!
+        \internal
+        \brief signal emitted when the login web view is loaded
+    */
+    signal webViewLoaded_
+
+    /*!
+      \internal
+      \brief pre-fill the username and password fields
+     */
+    function prefillUsernameAndPassword(username, password) {
+        const js = `setTimeout(function() { document.getElementById('user_username').value = '${username}'; document.getElementById('user_password').value = '${password}'; }, 1000);`;
+        webView.runJavaScript(js);
     }
 }
