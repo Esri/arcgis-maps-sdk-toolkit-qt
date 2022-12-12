@@ -16,7 +16,7 @@ project = EsriArcGISRuntimeToolkit
 
 description = Esri ArcGISRuntime Toolkit Documentation
 
-version = 200.0
+version = 200.1
 
 headers.fileextensions  = "*.h"
 

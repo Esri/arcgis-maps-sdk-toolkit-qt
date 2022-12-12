@@ -47,7 +47,7 @@ project.
 A good way to start using the toolkit is to use one of the template apps which
 get added to QtCreator when you install the ArcGIS Runime SDK for Qt.
 
-- In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Maps 200.0.0 Quick QML App`
+- In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Maps 200.1.0 Quick QML App`
 - choose settings to match the platform etc. you are building for
 - in the `.pro` file of your new app, add a line to add the toolkit for your
   QML application. For example:
@@ -111,7 +111,7 @@ MapView {
 A good way to start using the toolkit is to use one of the template apps which
 get added to QtCreator when you install the ArcGIS Runime SDK for Qt.
 
-- In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Maps 200.0.0 Qt Quick C++ App`
+- In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Maps 200.1.0 Qt Quick C++ App`
 - choose settings to match the platform etc. you are building for
 - in the `.pro` file of your new app, add a line to add the library for your QML
   plugin - for example:
@@ -172,7 +172,7 @@ MapView {
 A good way to start using the toolkit is to use one of the template apps which
 get added to QtCreator when you install the ArcGIS Maps SDK for Qt.
 
-- In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Maps 200.0.0 Qt Widgets App`
+- In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Maps 200.1.0 Qt Widgets App`
 - choose settings to match the platform etc. you are building for
 - in the `.pro` file of your new app, add a line to add the library for your QML
   plugin - for example:
