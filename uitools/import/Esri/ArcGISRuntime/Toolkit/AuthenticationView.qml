@@ -74,9 +74,6 @@ Item {
                 incubator.onStatusChanged = function(status) {
                     if (status === Component.Ready) {
                         this.object.open();
-
-                        if (component === userCredentialsView)
-                            activeLoginViewReady_(this.object);
                     }
                 }
             }
@@ -97,6 +94,7 @@ Item {
             onClosed: {
                 this.destroy();
             }
+            Component.onCompleted: activeLoginViewReady_(this)
         }
     }
 
@@ -114,6 +112,7 @@ Item {
             onClosed: {
                 this.destroy();
             }
+            onWebViewLoaded_: activeLoginViewReady_(this)
         }
     }
 
