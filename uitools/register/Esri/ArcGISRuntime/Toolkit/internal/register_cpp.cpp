@@ -67,7 +67,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     constexpr char const* NAMESPACE = "Esri.ArcGISRuntime.Toolkit.Controller";
 
     constexpr int VERSION_MAJOR = 200;
-    constexpr int VERSION_MINOR = 0;
+    constexpr int VERSION_MINOR = 1;
 
     /*
       \internal
