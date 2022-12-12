@@ -151,7 +151,11 @@ Item {
         }
     }
 
-    signal activeLoginViewReady_(var activeLoginView) // internal
+    /*!
+        \internal
+        \brief signal emitted when the login view is in the Ready state
+    */
+    signal activeLoginViewReady_(var activeLoginView)
 
     QtObject {
         id: internal
