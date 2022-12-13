@@ -118,4 +118,13 @@ Dialog {
         const js = `setTimeout(function() { document.getElementById('user_username').value = '${username}'; document.getElementById('user_password').value = '${password}'; }, 1000);`;
         webView.runJavaScript(js);
     }
+
+    /*!
+      \internal
+      \brief Fill and accept the username and password
+     */
+    function applyUsernameAndPassword(username, password) {
+        const js = `setTimeout(function() { document.getElementById('user_username').value = '${username}'; document.getElementById('user_password').value = '${password}'; document.getElementById('oauth').submit(); }, 1000);`;
+        webView.runJavaScript(js);
+    }
 }
