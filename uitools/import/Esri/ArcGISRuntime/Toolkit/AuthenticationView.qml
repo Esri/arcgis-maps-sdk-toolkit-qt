@@ -71,8 +71,7 @@ Item {
             const component = internal.viewNameForChallengeType(controller.currentChallengeType);
             if (component) {
                 const incubator = component.incubateObject(authenticationView);
-                if (incubator.status === Component.Ready)
-                {
+                if (incubator.status === Component.Ready) {
                     incubator.object.open();
                 } else {
                     incubator.onStatusChanged = function(status) {
