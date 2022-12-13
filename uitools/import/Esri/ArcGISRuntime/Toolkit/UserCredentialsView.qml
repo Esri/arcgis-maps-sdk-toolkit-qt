@@ -119,6 +119,16 @@ Dialog {
     }
 
     /*!
+      \internal
+      \brief Fill and accept the username and password
+     */
+    function applyUsernameAndPassword(username, password) {
+        prefillUsernameAndPassword(username, password);
+        acceptWithCurrentUsernameAndPassword();
+        accept();
+    }
+
+    /*!
      \internal
      \brief Attempts to apply the current username and password to
      the token.
