@@ -13,9 +13,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import QtQml 2.15
-import Esri.ArcGISRuntime 100.15
-import QtQml.Models 2.15
+import QtQml
+import Esri.ArcGISRuntime
+import QtQml.Models
 
 /*!
    \qmltype BasemapGalleryController
@@ -127,8 +127,8 @@ QtObject {
                                         this,
                                         {
                                             basemap: basemap,
-                                            thumbnailUrlOverride: thumbnailUrl,
-                                            tooltipOverride: tooltip
+                                            thumbnailUrlOverride: thumbnailUrl ? thumbnailUrl : "",
+                                            tooltipOverride: tooltip ? tooltip : ""
                                         })
                     });
         return true;

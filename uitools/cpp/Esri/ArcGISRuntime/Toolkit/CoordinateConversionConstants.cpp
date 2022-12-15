@@ -15,14 +15,7 @@
  ******************************************************************************/
 #include "CoordinateConversionConstants.h"
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
-namespace CoordinateConversionConstants
-{
+namespace Esri::ArcGISRuntime::Toolkit::CoordinateConversionConstants {
 
 const QString DECIMAL_DEGREES_FORMAT = QStringLiteral("DD");
 const QString DEGREES_DECIMAL_MINUTES_FORMAT = QStringLiteral("DDM");
@@ -33,7 +26,4 @@ const QString MGRS_FORMAT = QStringLiteral("MGRS");
 const QString USNG_FORMAT = QStringLiteral("USNG");
 const QString UTM_FORMAT = QStringLiteral("UTM");
 
-} // CoordinateConversionConstants
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit::CoordinateConversionConstants

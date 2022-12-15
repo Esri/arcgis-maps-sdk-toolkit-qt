@@ -17,16 +17,15 @@
 
 #include "ui_ClientCertificatePasswordDialog.h"
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
-  /*!
-  \brief Constructor.
-  \list
-    \li \a parent Parent widget.
-  \endlist
+/*!
+   \internal
+   \class Esri::ArcGISRuntime::Toolkit::ClientCertificatePasswordDialog
+   \inmodule EsriArcGISRuntimeToolkit
+   \brief This is an implementation of dialog to request password for client certificate.
  */
+
   ClientCertificatePasswordDialog::ClientCertificatePasswordDialog(QUrl certificateFile, AuthenticationController* controller, QWidget* parent) :
     QDialog(parent),
     m_certificateFile(std::move(certificateFile)),
@@ -55,11 +54,12 @@ namespace Toolkit {
             });
   }
 
+  /*!
+    \brief Destructor
+   */
   ClientCertificatePasswordDialog::~ClientCertificatePasswordDialog()
   {
     delete m_ui;
   }
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

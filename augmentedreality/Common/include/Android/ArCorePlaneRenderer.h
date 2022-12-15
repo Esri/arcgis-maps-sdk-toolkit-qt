@@ -21,10 +21,7 @@
 #include <QOpenGLShaderProgram>
 #include <QColor>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
-namespace Internal {
+namespace Esri::ArcGISRuntime::Toolkit::Internal {
 
 class ArCoreWrapper;
 
@@ -56,9 +53,6 @@ private:
   QColor m_planeColor = QColor(255, 0, 0, 10);
 };
 
-} // Internal namespace
-} // Toolkit namespace
-} // ArcGISRuntime namespace
-} // Esri namespace
+} // Esri::ArcGISRuntime::Toolkit::Internal
 
 #endif // ArCorePlaneRenderer_H

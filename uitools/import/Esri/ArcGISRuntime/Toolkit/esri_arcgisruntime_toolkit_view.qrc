@@ -21,6 +21,7 @@
         <file>SslHandshakeView.qml</file>
         <file>TimeSlider.qml</file>
         <file>UserCredentialsView.qml</file>
+        <file>UtilityNetworkTrace.qml</file>
         <file>qmldir</file>
     </qresource>
 </RCC>

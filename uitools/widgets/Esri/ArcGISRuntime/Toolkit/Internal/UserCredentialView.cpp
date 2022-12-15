@@ -19,9 +19,7 @@
 
 #include <QPushButton>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
   \class Esri::ArcGISRuntime::Toolkit::UserCredentialView
@@ -91,6 +89,4 @@ namespace Toolkit {
     m_ui->buttonBox->button(QDialogButtonBox::Ok)->setDisabled(m_ui->usernameEdit->text().isEmpty() || m_ui->passwordEdit->text().isEmpty());
   }
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

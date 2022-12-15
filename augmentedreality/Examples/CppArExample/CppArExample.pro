@@ -17,11 +17,25 @@
 TEMPLATE = app
 
 QT += core gui opengl network positioning sensors qml quick multimedia
-CONFIG += c++14
+
+CONFIG += c++17
 
 TARGET = CppArExample
 
-ARCGIS_RUNTIME_VERSION = 100.15.0
+lessThan(QT_MAJOR_VERSION, 6) {
+    error("This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.2.4")
+}
+
+equals(QT_MAJOR_VERSION, 6) {
+    lessThan(QT_MINOR_VERSION, 2) {
+        error("This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.2.4")
+    }
+  equals(QT_MINOR_VERSION, 2) : lessThan(QT_PATCH_VERSION, 4) {
+    error("This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.2.4")
+  }
+}
+
+ARCGIS_RUNTIME_VERSION = 200.0.0
 include($$PWD/arcgisruntime.pri)
 
 HEADERS += \

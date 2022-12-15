@@ -15,9 +15,7 @@
  ******************************************************************************/
 #include "SearchResult.h"
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   /*!
     \inmodule EsriArcGISRuntimeToolkit
@@ -220,6 +218,4 @@ namespace Toolkit {
     \property Esri::ArcGISRuntime::Toolkit::SearchResult::owningSource
    */
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

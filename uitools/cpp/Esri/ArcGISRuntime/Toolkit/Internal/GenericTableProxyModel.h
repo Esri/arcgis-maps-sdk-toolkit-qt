@@ -19,12 +19,7 @@
 // Qt headers
 #include <QAbstractProxyModel>
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri::ArcGISRuntime::Toolkit {
 
 class GenericListModel;
 
@@ -65,8 +60,6 @@ private:
   GenericListModel* m_sourceModel = nullptr;
 };
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_GENERICTABLEPROXYMODEL_H

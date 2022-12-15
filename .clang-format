@@ -16,7 +16,7 @@
 # and Qt Creator 4.14.1.
 
 Language: Cpp
-Standard: c++14
+Standard: c++17
 
 # Pointers
 DerivePointerAlignment: false

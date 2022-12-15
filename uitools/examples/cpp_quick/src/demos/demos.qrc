@@ -12,6 +12,7 @@
         <file>ScalebarDemoForm.qml</file>
         <file>SearchViewDemoForm.qml</file>
         <file>TimeSliderDemoForm.qml</file>
+        <file>UtilityNetworkTraceDemoForm.qml</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

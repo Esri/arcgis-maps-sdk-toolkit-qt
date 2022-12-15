@@ -22,11 +22,10 @@
 // ArcGISRuntime headers
 #include <Item.h>
 
+// Qt headers
 #include <QIcon>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
 #ifdef CPP_ARCGISRUNTIME_TOOLKIT
   namespace {
@@ -233,12 +232,10 @@ namespace Toolkit {
    */
   QQuickImageResponse* BasemapGalleryImageProvider::requestImageResponse(const QString& id, const QSize& requestedSize)
   {
-    auto itemIt = m_itemMap.find(id);
+    auto itemIt = m_itemMap.find(QUuid::fromString(id));
     return new BasemapGalleryImageResponse(itemIt == std::end(m_itemMap) ? nullptr : itemIt.value(), requestedSize);
   }
 
 #endif // CPP_ARCGISRUNTIME_TOOLKIT
 
-} // namespace Toolkit
-} // namespace ArcGISRuntime
-} // namespace Esri
+} // Esri::ArcGISRuntime::Toolkit

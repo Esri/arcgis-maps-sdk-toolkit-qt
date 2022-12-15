@@ -22,10 +22,7 @@ namespace Ui {
   class OverviewMap;
 }
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
+namespace Esri::ArcGISRuntime {
 
 class MapGraphicsView;
 class SceneGraphicsView;
@@ -55,7 +52,6 @@ private:
 };
 
 } // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_OVERVIEWMAP_H

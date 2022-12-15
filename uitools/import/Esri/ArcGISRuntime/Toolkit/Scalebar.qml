@@ -14,13 +14,13 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.15
-import QtQml 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Shapes 1.15
+import QtQuick
+import QtQml
+import QtQuick.Controls
+import QtQuick.Shapes
 
-import Esri.ArcGISRuntime.Toolkit 100.15
-import Esri.ArcGISRuntime.Toolkit.Controller 100.15
+import Esri.ArcGISRuntime.Toolkit
+import Esri.ArcGISRuntime.Toolkit.Controller
 
 /*!
    \qmltype Scalebar
@@ -106,7 +106,6 @@ Control {
             implicitWidth: scalebar.implicitWidth
             implicitHeight: scalebar.implicitHeight
             font: scalebar.font
-            palette: scalebar.palette
             controller: scalebar.controller
             unitSystem: unitSystem === unitSystem.Dual ? Scalebar.UnitSystem.Metric : unitSystem
         }

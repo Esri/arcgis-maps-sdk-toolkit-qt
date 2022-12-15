@@ -14,12 +14,12 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtQuick.Layouts 1.12
-import Esri.ArcGISRuntime 100.15
-import Esri.ArcGISRuntime.Toolkit 100.15
-import DemoApp 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import Esri.ArcGISRuntime
+import Esri.ArcGISRuntime.Toolkit
+import DemoApp
 
 DemoPage {
     mapViewContents: Component {
@@ -30,6 +30,15 @@ DemoPage {
                 id: callout
                 calloutData : view.calloutData //binding to parent. Any change is reflected on this
                 accessoryButtonVisible: false
+                implicitHeight: 100
+                leaderPosition: Callout.LeaderPosition.Automatic
+                maxWidth: 250
+                background: Rectangle {
+                    radius: 5
+                    border.width: 2
+                    border.color: "black"
+                }
+                palette.windowText: "black"
             }
             CalloutDemo {
                 geoView: view

@@ -24,12 +24,14 @@
 #include "arcore_c_api.h"
 
 // Qt headers
-#include <QtAndroid>
+#include <QCoreApplication>
 #include <QGuiApplication>
 #include <QScreen>
 
 // C++ headers
 #include <array>
+
+#include <QtCore/private/qandroidextras_p.h>
 
 using namespace Esri::ArcGISRuntime;
 using namespace Esri::ArcGISRuntime::Toolkit::Internal;
@@ -243,20 +245,7 @@ void ArCoreWrapper::render()
  */
 JNIEnv* ArCoreWrapper::jniEnvironment()
 {
-  return m_jniEnvironment;
-}
-
-/*!
-  \internal
-  the jobject referencing the application's current Android Activity.
- */
-jobject ArCoreWrapper::applicationActivity()
-{
-  // note: AR run in different thread, must to create local reference to avoid deleted object.
-  if (!m_applicationActivity)
-    m_applicationActivity = jniEnvironment()->NewLocalRef(QtAndroid::androidActivity().object<jobject>());
-
-  return m_applicationActivity;
+  return m_jniEnvironment.jniEnv();
 }
 
 /*!
@@ -269,7 +258,7 @@ bool ArCoreWrapper::installArCore()
     return true;
 
   ArInstallStatus installStatus;
-  ArStatus error = ArCoreApk_requestInstall(jniEnvironment(), applicationActivity(), m_installRequested, &installStatus);
+  ArStatus error = ArCoreApk_requestInstall(jniEnvironment(), QNativeInterface::QAndroidApplication::context(), m_installRequested, &installStatus);
   if (error != AR_SUCCESS)
     return false;
 
@@ -296,21 +285,28 @@ void ArCoreWrapper::createArSession()
   if (m_arSession)
     return;
 
+  // request camera permission
+  auto checkPermissionResultFuture = QtAndroidPrivate::checkPermission(QtAndroidPrivate::PermissionType::Camera);
+  checkPermissionResultFuture.waitForFinished();
+  const auto checkPermissionResult = checkPermissionResultFuture.result();
+  if (checkPermissionResult != QtAndroidPrivate::PermissionResult::Authorized)
+  {
+    auto requestPermissionResultFuture = QtAndroidPrivate::requestPermission(QtAndroidPrivate::PermissionType::Camera);
+    requestPermissionResultFuture.waitForFinished();
+    const auto requestPermissionResult = requestPermissionResultFuture.result();
+    if (requestPermissionResult != QtAndroidPrivate::PermissionResult::Authorized)
+    {
+      emit m_arcGISArView->errorOccurred("ARCore failure", "Failed to access to the camera.");
+      return;
+    }
+  }
+
   // try to create the ARCore session. This function can fail if the user reject the authorization
   // to install ARCore.
-  auto status = ArSession_create(jniEnvironment(), applicationActivity(), &m_arSession);
+  auto status = ArSession_create(jniEnvironment(), QNativeInterface::QAndroidApplication::context(), &m_arSession);
   if (status != AR_SUCCESS || !m_arSession)
   {
     emit m_arcGISArView->errorOccurred("ARCore failure", "Failed to create the AR session.");
-    return;
-  }
-
-  // request camera permission
-  const QString permissionKey = QStringLiteral("android.permission.CAMERA");
-  const auto permissions = QtAndroid::requestPermissionsSync({ permissionKey }, 5000);
-  if (permissions[permissionKey] != QtAndroid::PermissionResult::Granted)
-  {
-    emit m_arcGISArView->errorOccurred("ARCore failure", "Failed to access to the camera.");
     return;
   }
 

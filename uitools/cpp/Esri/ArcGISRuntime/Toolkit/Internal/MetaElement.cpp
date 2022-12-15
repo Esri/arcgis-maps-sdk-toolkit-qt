@@ -15,12 +15,7 @@
  ******************************************************************************/
 #include "MetaElement.h"
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
   \internal
@@ -100,6 +95,4 @@ void MetaElement::emitDataChanged()
   \c QMetaMethod connection purposes.
  */
 
-} // Esri
-} // ArcGISRuntime
-} // Toolkit
+} // Esri::ArcGISRuntime::Toolkit

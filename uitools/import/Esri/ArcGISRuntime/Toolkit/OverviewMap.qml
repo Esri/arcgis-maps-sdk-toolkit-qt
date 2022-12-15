@@ -14,8 +14,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import QtQuick 2.12
-import Esri.ArcGISRuntime.Toolkit.Controller 100.15
+import QtQuick
+import Esri.ArcGISRuntime.Toolkit.Controller
 
 /*!
    \qmltype OverviewMap

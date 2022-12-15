@@ -48,7 +48,13 @@ HEADERS += $$CPPPATH/AuthenticationController.h \
            $$CPPPATH/SearchSuggestion.h \
            $$CPPPATH/SearchViewController.h \
            $$CPPPATH/SmartLocatorSearchSource.h \
-           $$CPPPATH/TimeSliderController.h
+           $$CPPPATH/TimeSliderController.h \
+           $$CPPPATH/UtilityNetworkFunctionTraceResult.h \
+           $$CPPPATH/UtilityNetworkFunctionTraceResultsModel.h \
+           $$CPPPATH/UtilityNetworkListItem.h \
+           $$CPPPATH/UtilityNetworkTraceController.h \
+           $$CPPPATH/UtilityNetworkTraceStartingPoint.h \
+           $$CPPPATH/UtilityNetworkTraceStartingPointsModel.h
 
 SOURCES += $$CPPPATH/AuthenticationController.cpp \
            $$CPPPATH/BasemapGalleryController.cpp \
@@ -78,4 +84,10 @@ SOURCES += $$CPPPATH/AuthenticationController.cpp \
            $$CPPPATH/SearchSuggestion.cpp \
            $$CPPPATH/SearchViewController.cpp \
            $$CPPPATH/SmartLocatorSearchSource.cpp \
-           $$CPPPATH/TimeSliderController.cpp
+           $$CPPPATH/TimeSliderController.cpp \
+           $$CPPPATH/UtilityNetworkFunctionTraceResult.cpp \
+           $$CPPPATH/UtilityNetworkFunctionTraceResultsModel.cpp \
+           $$CPPPATH/UtilityNetworkListItem.cpp \
+           $$CPPPATH/UtilityNetworkTraceController.cpp \
+           $$CPPPATH/UtilityNetworkTraceStartingPoint.cpp \
+           $$CPPPATH/UtilityNetworkTraceStartingPointsModel.cpp

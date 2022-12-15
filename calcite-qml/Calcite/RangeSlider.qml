@@ -13,9 +13,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import QtQuick 2.12
-import QtQuick.Templates 2.15 as T
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Templates as T
+import QtQuick.Controls
 
 T.RangeSlider {
     id: control
@@ -30,7 +30,6 @@ T.RangeSlider {
         x: control.leftPadding + Math.round(control.horizontal ? control.first.visualPosition * (control.availableWidth - width) : (control.availableWidth - width) / 2)
         y: control.topPadding + Math.round(control.horizontal ? (control.availableHeight - height) / 2 : control.first.visualPosition * (control.availableHeight - height))
 
-        palette: control.palette
         pressed: control.first.pressed
         hovered: control.hovered
         vertical: control.vertical
@@ -42,7 +41,6 @@ T.RangeSlider {
         x: control.leftPadding + Math.round(control.horizontal ? control.second.visualPosition * (control.availableWidth - width) : (control.availableWidth - width) / 2)
         y: control.topPadding + Math.round(control.horizontal ? (control.availableHeight - height) / 2 : control.second.visualPosition * (control.availableHeight - height))
 
-        palette: control.palette
         pressed: control.second.pressed
         hovered: control.hovered
         vertical: control.vertical

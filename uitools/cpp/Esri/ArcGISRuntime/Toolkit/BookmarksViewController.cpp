@@ -26,12 +26,12 @@
 
 // ArcGISRuntime headers
 #include <Bookmark.h>
+#include <BookmarkListModel.h>
 #include <Map.h>
 #include <Scene.h>
+#include <TaskWatcher.h>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   namespace {
     void setupBookmarks(BookmarkListModel* sourceModel, GenericListModel* targetModel)
@@ -245,7 +245,7 @@ namespace Toolkit {
   }
 
   /*!
-  \brief Updates the \c GeoView camera to point to the current bookmark's
+  \brief Updates the \c GeoView camera to point to the current \a bookmark's
   location on the map.
  */
   void BookmarksViewController::zoomToBookmarkExtent(BookmarkListItem* bookmark)
@@ -271,9 +271,7 @@ namespace Toolkit {
   /*!
   \property Esri::ArcGISRuntime::Toolkit::BookmarksViewController::geoView
   \brief The geoView the controller is utilizing for interactions.
-  \sa Esri::ArcGISRuntime::Toolkit::BookmarksViewController::geoView() const
+  \sa Esri::ArcGISRuntime::Toolkit::BookmarksViewController::geoView
  */
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

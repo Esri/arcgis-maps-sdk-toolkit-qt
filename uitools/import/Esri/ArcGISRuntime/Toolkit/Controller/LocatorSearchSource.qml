@@ -14,9 +14,9 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQml 2.12
-import Esri.ArcGISRuntime 100.15
-import QtQml.Models 2.15
+import QtQml
+import Esri.ArcGISRuntime
+import QtQml.Models
 
 /*!
    \qmltype LocatorSearchSource
@@ -124,10 +124,10 @@ QtObject {
         }
 
         signal suggestionsAdded(var source, int first, int last)
-        onRowsInserted: suggestionsAdded(this, first, last)
+        onRowsInserted: (first, last) => suggestionsAdded(this, first, last)
 
         signal suggestionsRemoved(var source, int first, int last)
-        onRowsAboutToBeRemoved: suggestionsRemoved(this, first, last)
+        onRowsAboutToBeRemoved: (first, last) => suggestionsRemoved(this, first, last)
     }
 
     /*!

@@ -25,10 +25,9 @@
 #include <QPointer>
 #include <QString>
 #include <QUrl>
+#include <QUuid>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   class BasemapGalleryItem : public QObject
   {
@@ -82,8 +81,6 @@ namespace Toolkit {
     QUuid m_id;
   };
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_BASEMAPGALLERYCONTROLLER_H

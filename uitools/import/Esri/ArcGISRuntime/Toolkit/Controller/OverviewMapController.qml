@@ -13,8 +13,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import QtQml 2.12
-import Esri.ArcGISRuntime 100.15
+import QtQml
+import Esri.ArcGISRuntime
 
 /*!
    \qmltype OverviewMapController
@@ -132,45 +132,45 @@ QtObject {
                 internal.updateInsetViewpointTaskInProgress = false;
             }
 
-            onKeyPressed: {
+            onKeyPressed: key => {
                 // Disable all key preesses
                 key.accepted = true;
             }
-            onKeyReleased: {
+            onKeyReleased: key => {
                 // Disable all key releases
                 key.accepted = true;
             }
-            onMouseWheelChanged: {
+            onMouseWheelChanged: wheel => {
                 // Disable all wheel events if navigation is not enabled.
                 if (!navigationEnabled)
                     wheel.accepted = true;
             }
-            onMouseClicked: {
+            onMouseClicked: mouse => {
                 // Disable mouse clicks if navigation is not enabled.
                 if (!navigationEnabled)
                     mouse.accepted = true;
             }
-            onMouseDoubleClicked: {
+            onMouseDoubleClicked: mouse => {
                 // Disable mouse double clicks if navigation is not enabled.
                 if (!navigationEnabled)
                     mouse.accepted = true;
             }
-            onMousePositionChanged: {
+            onMousePositionChanged: mouse => {
                 // Disable mouse position changes if navigation is not enabled.
                 if (!navigationEnabled)
                     mouse.accepted = true;
             }
-            onMousePressedAndHeld: {
+            onMousePressedAndHeld: mouse => {
                 // Disable mouse press and hold if navigation is not enabled.
                 if (!navigationEnabled)
                     mouse.accepted = true;
             }
-            onMousePressed: {
+            onMousePressed: mouse => {
                 // Disable mouse press, if navigation is not enabled.
                 if (!navigationEnabled)
                     mouse.accepted = true;
             }
-            onMouseReleased: {
+            onMouseReleased: mouse => {
                 // Disable mouse release if navigation is not enabled.
                 if (!navigationEnabled)
                     mouse.accepted = true;

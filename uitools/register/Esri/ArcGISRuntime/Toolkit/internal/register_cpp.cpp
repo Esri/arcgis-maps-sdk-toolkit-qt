@@ -34,11 +34,15 @@
 #include "PopupViewController.h"
 #include "ScalebarController.h"
 #include "SearchResult.h"
-#include "SearchSourceInterface.h"
 #include "SearchSuggestion.h"
 #include "SearchViewController.h"
 #include "SmartLocatorSearchSource.h"
 #include "TimeSliderController.h"
+#include "UtilityNetworkFunctionTraceResultsModel.h"
+#include "UtilityNetworkListItem.h"
+#include "UtilityNetworkTraceController.h"
+#include "UtilityNetworkTraceStartingPoint.h"
+#include "UtilityNetworkTraceStartingPointsModel.h"
 
 // Internal includes
 #include "Internal/BasemapGalleryImageProvider.h"
@@ -54,9 +58,7 @@
 // std includes
 #include <type_traits>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   namespace {
 
@@ -64,8 +66,8 @@ namespace Toolkit {
 
     constexpr char const* NAMESPACE = "Esri.ArcGISRuntime.Toolkit.Controller";
 
-    constexpr int VERSION_MAJOR = 100;
-    constexpr int VERSION_MINOR = 15;
+    constexpr int VERSION_MAJOR = 200;
+    constexpr int VERSION_MINOR = 0;
 
     /*
       \internal
@@ -76,7 +78,7 @@ namespace Toolkit {
       Provided is the overloaded method:
 
       \code
-      void registerComponentImpl(<CreationType> creationType, int minorVersion, const char* name)
+      void registerComponentImpl(<CreationType> creationType, int majorVersion, int minorVersion, const char* name)
       \endcode
 
       And the three currently accepted values for the \a creationType parameter.
@@ -91,9 +93,9 @@ namespace Toolkit {
       };
 
       template <class T>
-      void registerComponentImpl(CreationType::Creatable_, int minorVersion, const char* name)
+      void registerComponentImpl(CreationType::Creatable_, int majorVersion, int minorVersion, const char* name)
       {
-        qmlRegisterType<T>(NAMESPACE, VERSION_MAJOR, minorVersion, name);
+        qmlRegisterType<T>(NAMESPACE, majorVersion, minorVersion, name);
       }
 
       constexpr Creatable_ Creatable = Creatable_{};
@@ -103,61 +105,62 @@ namespace Toolkit {
       };
 
       template <class T>
-      void registerComponentImpl(CreationType::Uncreatable_, int minorVersion, const char* name)
+      void registerComponentImpl(CreationType::Uncreatable_, int majorVersion, int minorVersion, const char* name)
       {
-        qmlRegisterUncreatableType<T>(NAMESPACE, VERSION_MAJOR, minorVersion, name, "Cannot instantiate type in QML.");
+        qmlRegisterUncreatableType<T>(NAMESPACE, majorVersion, minorVersion, name, "Cannot instantiate type in QML.");
       }
 
       constexpr Uncreatable_ Uncreatable = Uncreatable_{};
 
-      struct Interface_
-      {
-      };
-
-      template <class T>
-      void registerComponentImpl(CreationType::Interface_, int /*minorVersion*/, const char* /*name*/)
-      {
-        qmlRegisterInterface<T>(NAMESPACE, VERSION_MAJOR);
-      }
-
-      constexpr Interface_ Interface = Interface_{};
     }
 
     /*
      \internal
      \brief Function for registration. Registers the C++ type Foo as
-     Foo in QML with the appropriate version and namespace information.
+     Foo in QML with the 100.10, 200.0 version and namespace information.
 
      \list
-      \li \a minorVersion The version at which the component was created.
       \li \a Determines how the type is instantiated in QML. Choose between CreationType::Creatable, CreationType::Uncreatable and CreationType::Interface.
           CreationType::Creatable is assumed by default if not provided.
      \endlist
 
       Example call:
       \code
-      registerComponent<LocatorSearchSource>(13, CreationType::Uncreatable);
+      registerComponent<LocatorSearchSource>(CreationType::Uncreatable);
       \endcode
      */
     template <typename T, typename CType = CreationType::Creatable_>
-    void registerComponent(int minorVersion, CType creationType = CType{})
+    void registerComponent(CType creationType = CType{})
     {
       static_assert(std::is_base_of<QObject, T>::value, "Must inherit QObject");
       auto name = QString{T::staticMetaObject.className()};
       name.remove("Esri::ArcGISRuntime::Toolkit::");
-      CreationType::registerComponentImpl<T>(creationType, minorVersion, name.toLatin1());
+      // register component on version 100
+      CreationType::registerComponentImpl<T>(creationType, 100, 10, name.toLatin1());
+      // register component on version 200
+      CreationType::registerComponentImpl<T>(creationType, 200, 0, name.toLatin1());
     }
 
     /*
      \internal
-     \brief Ensures a Module revision is available from 100.10 onwards
+     \brief Ensures a Module revision is available from 100.10 and 200.0 onwards
      to the current version of the Toolkit.
      */
     void registerModuleRevisions()
     {
-      constexpr int START_VERSION = 10;
-      for (int i = START_VERSION; i <= VERSION_MINOR; ++i)
+      constexpr int MAJOR_VERSION_100 = 100;
+      constexpr int START_MINOR_VERSION_100 = 10;
+      constexpr int END_MINOR_VERSION_100 = 15;
+      // register version 100
+      for (int i = START_MINOR_VERSION_100; i <= END_MINOR_VERSION_100; ++i)
+      {
+        qmlRegisterModule(NAMESPACE, MAJOR_VERSION_100, i);
+      }
+      // register version 200 onwards
+      for (int i = 0; i <= VERSION_MINOR; ++i)
+      {
         qmlRegisterModule(NAMESPACE, VERSION_MAJOR, i);
+      }
     }
 
   } // namespace
@@ -167,35 +170,38 @@ namespace Toolkit {
     appEngine.addImageProvider(BasemapGalleryImageProvider::PROVIDER_ID, BasemapGalleryImageProvider::instance());
     appEngine.addImportPath(ESRI_COM_PATH);
     registerModuleRevisions();
-    registerComponent<AuthenticationController>(10);
-    registerComponent<BasemapGalleryController>(12);
-    registerComponent<BasemapGalleryItem>(12);
-    registerComponent<BookmarksViewController>(15);
-    registerComponent<BookmarkListItem>(15);
-    registerComponent<CoordinateConversionController>(10);
-    registerComponent<CoordinateConversionOption>(10);
-    registerComponent<CoordinateConversionResult>(10);
-    registerComponent<FloorFilterController>(14);
-    registerComponent<FloorFilterFacilityItem>(14, CreationType::Uncreatable);
-    registerComponent<FloorFilterLevelItem>(14, CreationType::Uncreatable);
-    registerComponent<FloorFilterSiteItem>(14, CreationType::Uncreatable);
-    registerComponent<LocatorSearchSource>(13, CreationType::Uncreatable);
-    registerComponent<NorthArrowController>(10);
-    registerComponent<OverviewMapController>(12);
-    registerComponent<PopupViewController>(10);
-    registerComponent<ScalebarController>(13);
-    registerComponent<SearchResult>(13);
-    registerComponent<SearchSourceInterface>(13, CreationType::Interface);
-    registerComponent<SearchSuggestion>(13);
-    registerComponent<SearchViewController>(13, CreationType::Creatable);
-    registerComponent<SmartLocatorSearchSource>(13, CreationType::Uncreatable);
-    registerComponent<TimeSliderController>(10);
+    registerComponent<AuthenticationController>();
+    registerComponent<BasemapGalleryController>();
+    registerComponent<BasemapGalleryItem>();
+    registerComponent<BookmarksViewController>();
+    registerComponent<BookmarkListItem>();
+    registerComponent<CoordinateConversionController>();
+    registerComponent<CoordinateConversionOption>();
+    registerComponent<CoordinateConversionResult>();
+    registerComponent<FloorFilterController>();
+    registerComponent<FloorFilterFacilityItem>(CreationType::Uncreatable);
+    registerComponent<FloorFilterLevelItem>(CreationType::Uncreatable);
+    registerComponent<FloorFilterSiteItem>(CreationType::Uncreatable);
+    registerComponent<LocatorSearchSource>(CreationType::Uncreatable);
+    registerComponent<NorthArrowController>();
+    registerComponent<OverviewMapController>();
+    registerComponent<PopupViewController>();
+    registerComponent<ScalebarController>();
+    registerComponent<SearchResult>();
+    registerComponent<SearchSuggestion>();
+    registerComponent<SearchViewController>();
+    registerComponent<SmartLocatorSearchSource>(CreationType::Uncreatable);
+    registerComponent<TimeSliderController>();
+    registerComponent<UtilityNetworkFunctionTraceResultsModel>();
+    registerComponent<UtilityNetworkListItem>();
+    registerComponent<UtilityNetworkTraceController>();
+    registerComponent<UtilityNetworkTraceStartingPoint>();
+    registerComponent<UtilityNetworkTraceStartingPointsModel>();
 
     // Register ArcGISRuntime types with toolkit.
     qRegisterMetaType<Point>("Esri::ArcGISRuntime::Point");
-    qmlRegisterAnonymousType<MapQuickView>(NAMESPACE, 12);
+    qmlRegisterAnonymousType<MapQuickView>(NAMESPACE, 100);
+    qmlRegisterAnonymousType<MapQuickView>(NAMESPACE, 200);
   }
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

@@ -17,7 +17,7 @@
 #ifndef ArCoreWrapper_H
 #define ArCoreWrapper_H
 
-#include <QAndroidJniEnvironment>
+#include <QJniEnvironment>
 #include <QSize>
 #include <QTimer>
 #include <QMatrix4x4>
@@ -32,9 +32,7 @@ using ArTrackableList = struct ArTrackableList_;
 using ArTrackable = struct ArTrackable_;
 using ArPointCloud = struct ArPointCloud_;
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
 class ArcGISArViewInterface;
 
@@ -103,7 +101,6 @@ private:
   Q_DISABLE_COPY(ArCoreWrapper)
 
   JNIEnv* jniEnvironment();
-  jobject applicationActivity();
 
   bool installArCore();
   void createArSession();
@@ -115,9 +112,7 @@ private:
 
   ArcGISArViewInterface* m_arcGISArView = nullptr;
 
-  QAndroidJniEnvironment m_jniEnvironment;
-
-  jobject m_applicationActivity = nullptr;
+  QJniEnvironment m_jniEnvironment;
 
   std::unique_ptr<ArCoreFrameRenderer> m_arCoreFrameRenderer;
   std::unique_ptr<ArCorePlaneRenderer> m_arCorePlaneRenderer;
@@ -164,8 +159,6 @@ private:
 };
 
 } // Internal namespace
-} // Toolkit namespace
-} // ArcGISRuntime namespace
-} // Esri namespace
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // ArCoreWrapper_H

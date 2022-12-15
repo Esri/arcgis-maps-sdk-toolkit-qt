@@ -13,9 +13,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import QtQml 2.12
-import QtQuick 2.12
-import Esri.ArcGISRuntime 100.15
+import QtQml
+import QtQuick
+import Esri.ArcGISRuntime
 
 /*!
    \qmltype BasemapGalleryItem

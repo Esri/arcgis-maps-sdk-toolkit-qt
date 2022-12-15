@@ -18,21 +18,27 @@
 #include "Internal/SingleShotConnection.h"
 
 // ArcGISRuntime headers
+#include <Geometry.h>
 #include <Graphic.h>
+#include <GraphicListModel.h>
 #include <GraphicsOverlay.h>
+#include <GraphicsOverlayListModel.h>
 #include <Map.h>
 #include <MapTypes.h>
+#include <MapViewTypes.h>
+#include <Point.h>
+#include <Polygon.h>
 #include <SimpleFillSymbol.h>
 #include <SimpleLineSymbol.h>
 #include <SimpleMarkerSymbol.h>
+#include <SymbolTypes.h>
 #include <Viewpoint.h>
 
 // Qt headers
 #include <QtGlobal>
+#include <QKeyEvent>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   /*!
     \inmodule EsriArcGISRuntimeToolkit
@@ -412,6 +418,4 @@ namespace Toolkit {
   \sa Esri::ArcGISRuntime::Toolkit::OverviewMapController::scaleFactor()
  */
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

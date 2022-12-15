@@ -23,41 +23,38 @@
 // ArcGISRuntime headers
 #include <Bookmark.h>
 #include <GeoView.h>
+
 // Qt headers
 #include <QObject>
 
-namespace Esri {
-  namespace ArcGISRuntime {
-    namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
-      class BookmarksViewController : public QObject
-      {
-        Q_OBJECT
-        Q_PROPERTY(QObject* geoView READ geoView WRITE setGeoView NOTIFY geoViewChanged)
-        Q_PROPERTY(QAbstractListModel* bookmarks READ bookmarks CONSTANT)
-      public:
-        Q_INVOKABLE BookmarksViewController(QObject* parent = nullptr);
+  class BookmarksViewController : public QObject
+  {
+    Q_OBJECT
+    Q_PROPERTY(QObject* geoView READ geoView WRITE setGeoView NOTIFY geoViewChanged)
+    Q_PROPERTY(QAbstractListModel* bookmarks READ bookmarks CONSTANT)
+  public:
+    Q_INVOKABLE BookmarksViewController(QObject* parent = nullptr);
 
-        ~BookmarksViewController() override;
+    ~BookmarksViewController() override;
 
-        QObject* geoView() const;
+    QObject* geoView() const;
 
-        void setGeoView(QObject* mapView);
+    void setGeoView(QObject* mapView);
 
-        GenericListModel* bookmarks() const;
+    GenericListModel* bookmarks() const;
 
-        Q_INVOKABLE void zoomToBookmarkExtent(Esri::ArcGISRuntime::Toolkit::BookmarkListItem* bookmark);
+    Q_INVOKABLE void zoomToBookmarkExtent(Esri::ArcGISRuntime::Toolkit::BookmarkListItem* bookmark);
 
-      signals:
-        void geoViewChanged();
+  signals:
+    void geoViewChanged();
 
-      private:
-        QObject* m_geoView = nullptr;
-        GenericListModel* m_bookmarks = nullptr;
-      };
+  private:
+    QObject* m_geoView = nullptr;
+    GenericListModel* m_bookmarks = nullptr;
+  };
 
-    } // Toolkit
-  } // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_BOOKMARKSVIEWCONTROLLER_H

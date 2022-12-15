@@ -22,6 +22,7 @@
         <file>plus-circle.svg</file>
         <file>reverse.svg</file>
         <file>search.svg</file>
+        <file>trash.svg</file>
         <file>x.svg</file>
         <file>zoom-to-object.svg</file>
     </qresource>

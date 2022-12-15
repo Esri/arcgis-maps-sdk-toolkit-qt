@@ -25,27 +25,28 @@
 #include <QList>
 #include <QObject>
 #include <QString>
+#include <QQmlEngine>
+
+Q_MOC_INCLUDE("SearchResult.h")
 
 // Forward declarations
-namespace Esri {
-namespace ArcGISRuntime {
+namespace Esri::ArcGISRuntime {
   class SuggestListModel;
   class SuggestResult;
 
   namespace Toolkit {
     class SearchResult;
   }
-}
-}
+} // Esri::ArcGISRuntime
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   class SearchSourceInterface : public QObject
   {
     Q_OBJECT
+    QML_INTERFACE
     Q_PROPERTY(QString displayName READ displayName WRITE setDisplayName NOTIFY displayNameChanged)
+
   public:
     SearchSourceInterface(QObject* parent = nullptr);
     ~SearchSourceInterface() override;
@@ -77,8 +78,8 @@ namespace Toolkit {
     QString m_displayName;
   };
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit
+
+Q_DECLARE_INTERFACE(Esri::ArcGISRuntime::Toolkit::SearchSourceInterface, "Esri::ArcGISRuntime::Toolkit::SearchSourceInterface")
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_SEARCHSOURCEINTERFACE_H

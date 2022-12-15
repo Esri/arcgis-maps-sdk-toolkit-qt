@@ -19,9 +19,7 @@
 
 #include <QMetaProperty>
 #include <QPointer>
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   /*!
  \inmodule EsriArcGISRuntimeToolkit
@@ -792,6 +790,4 @@ namespace Toolkit {
   \brief The current number of elements in this list model.
  */
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

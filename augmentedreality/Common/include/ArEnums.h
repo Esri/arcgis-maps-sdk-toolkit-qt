@@ -19,22 +19,17 @@
 
 #include <QObject>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
-
-class ArEnums
+namespace Esri::ArcGISRuntime::Toolkit::ArEnums
 {
-  Q_GADGET
+  Q_NAMESPACE
 
-public:
   enum class LocationTrackingMode
   {
     Ignore = 0,
     Initial = 1,
     Continuous = 2
   };
-  Q_ENUM(LocationTrackingMode)
+  Q_ENUM_NS(LocationTrackingMode)
 
   enum class SensorStatus
   {
@@ -42,14 +37,8 @@ public:
     Starting = 1,
     Started = 2
   };
-  Q_ENUM(SensorStatus)
+  Q_ENUM_NS(SensorStatus)
 
-  ArEnums();
-  ~ArEnums();
-};
-
-} // Toolkit namespace
-} // ArcGISRuntime namespace
-} // Esri namespace
+} // Esri::ArcGISRuntime::Toolkit::ArEnums
 
 #endif // ArEnums_H

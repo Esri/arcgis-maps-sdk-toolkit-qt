@@ -14,7 +14,7 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.12
+import QtQuick
 
 Rectangle {
     id: handle
@@ -41,8 +41,8 @@ Rectangle {
         anchors.fill: parent
         hoverEnabled: true
         propagateComposedEvents: true
-        onPressed: mouse.accepted = false
-        onReleased: mouse.accepted = false
-        onPositionChanged: mouse.accepted = false
+        onPressed: mouse => mouse.accepted = false
+        onReleased: mouse => mouse.accepted = false
+        onPositionChanged: mouse => mouse.accepted = false
     }
 }

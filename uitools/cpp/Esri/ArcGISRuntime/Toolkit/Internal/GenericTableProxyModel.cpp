@@ -19,12 +19,7 @@
 
 #include <QMetaProperty>
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri::ArcGISRuntime::Toolkit {
 
 namespace
 {
@@ -294,8 +289,8 @@ QVariant GenericTableProxyModel::headerData(int section, Qt::Orientation orienta
   if (role != Qt::DisplayRole)
     return QVariant();
 
-if (Qt::Orientation::Vertical == orientation)
-  return section + 1;
+  if (Qt::Orientation::Vertical == orientation)
+    return section + 1;
 
   const auto roles = m_sourceModel ? m_sourceModel->roleNames() : QHash<int, QByteArray>();
   auto it = roles.find(section + Qt::UserRole + 1);
@@ -381,6 +376,4 @@ bool GenericTableProxyModel::append(QObject* object)
   return m_sourceModel ? m_sourceModel->append(object) : false;
 }
 
-}
-}
-}
+} // Esri::ArcGISRuntime::Toolkit

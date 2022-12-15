@@ -13,9 +13,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-import QtQml 2.12
+import QtQml
 
-import Esri.ArcGISRuntime 100.8
+import Esri.ArcGISRuntime
 
 /*!
   \qmltype AuthenticationController

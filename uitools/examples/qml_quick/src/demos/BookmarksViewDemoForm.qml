@@ -14,10 +14,10 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import Esri.ArcGISRuntime 100.15
-import Esri.ArcGISRuntime.Toolkit 100.15
+import QtQuick
+import QtQuick.Controls
+import Esri.ArcGISRuntime
+import Esri.ArcGISRuntime.Toolkit
 
 DemoPage {
     mapViewContents: Component {
@@ -26,10 +26,11 @@ DemoPage {
 
             Map {
                 PortalItem {
-                   itemId: "16f1b8ba37b44dc3884afc8d5f454dd2"
+                    itemId: "16f1b8ba37b44dc3884afc8d5f454dd2"
                 }
             }
 
+            //! [Set up Bookmark QML]
             BookmarksView {
                 id: bookmarksView
                 geoView: view
@@ -39,6 +40,7 @@ DemoPage {
                     margins: 10
                 }
             }
+            //! [Set up Bookmark QML]
         }
     }
 }

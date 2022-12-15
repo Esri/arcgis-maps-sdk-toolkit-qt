@@ -21,13 +21,11 @@
 #include <TimeValue.h>
 
 // Qt headers
+#include <QDateTime>
 #include <QObject>
 #include <QPointer>
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
+namespace Esri::ArcGISRuntime {
 
 class GeoView;
 class LayerListModel;
@@ -89,7 +87,6 @@ private:
 };
 
 } // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_TIMESLIDERCONTROLLER_H

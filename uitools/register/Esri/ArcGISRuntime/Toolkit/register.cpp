@@ -17,6 +17,7 @@
 
 /*!
   \headerfile Esri/ArcGISRuntime/Toolkit/register
+  \inmodule ArcGISRuntimeToolkit
 
   This file contains the registration function required to register the toolkit
   with the `QQmlEngine`.
@@ -26,9 +27,9 @@
 */
 
 /*!
-  \fn void Esri::ArcGISRuntime::Toolkit::registerComponents(QmlEngine& engine)
+  \fn void Esri::ArcGISRuntime::Toolkit::registerComponents(QQmlEngine& engine)
   \relates Esri/ArcGISRuntime/Toolkit/register
-  \brief This registration function must be called after the QmlEngine has been
+  \brief This registration function must be called after the QML \a engine has been
   declared, but before it is run. This sets up resources and component registration
   with the `QQmlEngine` and the toolkit.
  */
@@ -37,39 +38,25 @@
 #if defined(CPP_ARCGISRUNTIME_TOOLKIT)
 #  include "internal/register_cpp.h"
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri::ArcGISRuntime::Toolkit {
 
 void registerComponents(QQmlEngine& engine)
 {
   registerComponents_cpp_(engine);
 }
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit
 
 #elif defined(QML_ARCGISRUNTIME_TOOLKIT)
 #  include "internal/register_qml.h"
 
-namespace Esri
-{
-namespace ArcGISRuntime
-{
-namespace Toolkit
-{
+namespace Esri::ArcGISRuntime::Toolkit {
 
 void registerComponents(QQmlEngine& engine)
 {
   registerComponents_qml_(engine);
 }
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif

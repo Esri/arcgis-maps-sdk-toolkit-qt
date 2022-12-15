@@ -22,15 +22,14 @@
 #include "AppInfo.h"
 #include "CppArExample.h"
 
-#include "ArcGISRuntimeEnvironment.h"
-#include "SceneQuickView.h"
-
 #include <QDir>
 #include <QGuiApplication>
-#include <QMessageBox>
+#include <QQmlApplicationEngine>
 #include <QSettings>
 #include <QSurfaceFormat>
-#include <QQmlApplicationEngine>
+
+#include <ArcGISRuntimeEnvironment.h>
+#include <SceneQuickView.h>
 
 // Include the AR view from toolkit
 #include "ArcGISArView.h"
@@ -50,6 +49,9 @@ using namespace Esri::ArcGISRuntime;
 
 int main(int argc, char *argv[])
 {
+  // Enforce OpenGL
+  qputenv("QSG_RHI_BACKEND", "opengl");
+
   // There are some conflicts between the AR frameworks and the Qt's rendering thread.
   // This code enables the non-threaded render loop mode in Qt.
   // See SceneView::renderFrame documentation and Qt's documentation
@@ -67,7 +69,6 @@ int main(int argc, char *argv[])
   QSurfaceFormat::setDefaultFormat(fmt);
 #endif
 
-  QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
   QGuiApplication app(argc, argv);
 
   QCoreApplication::setApplicationName(kApplicationName);
@@ -80,16 +81,14 @@ int main(int argc, char *argv[])
 #endif
   QSettings::setDefaultFormat(kSettingsFormat);
 
-  // Before initializing ArcGIS Runtime, first set the
-  // ArcGIS Runtime license setting required for your application.
+  // Before initializing this application, first set the
+  // the required license setting.
 
   // ArcGISRuntimeEnvironment::setLicense("Place license string in here");
 
   //  use this code to check for initialization errors
   //  QObject::connect(ArcGISRuntimeEnvironment::instance(), &ArcGISRuntimeEnvironment::errorOccurred, [](const Error& error){
-  //    QMessageBox msgBox;
-  //    msgBox.setText(error.message);
-  //    msgBox.exec();
+  //    qDebug() << error.message() << error.additionalMessage();
   //  });
 
   //  if (ArcGISRuntimeEnvironment::initialize() == false)

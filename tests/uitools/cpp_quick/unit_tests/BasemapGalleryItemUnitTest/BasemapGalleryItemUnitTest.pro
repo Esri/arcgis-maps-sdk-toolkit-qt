@@ -14,7 +14,7 @@
 QT += testlib
 QT -= gui
 
-CONFIG += qt console warn_on depend_includepath testcase c++14
+CONFIG += qt console warn_on depend_includepath testcase c++17
 
 TEMPLATE = app
 
@@ -27,7 +27,7 @@ QT += testlib
 QT -= gui
 QT += core gui opengl xml testlib network positioning sensors multimedia quick
 
-ARCGIS_RUNTIME_VERSION = 100.15.0
+ARCGIS_RUNTIME_VERSION = 200.0.0
 
 include($$PWD/../arcgisruntime.pri)
 include($$PWD/../../../../../uitools/toolkitcpp.pri)

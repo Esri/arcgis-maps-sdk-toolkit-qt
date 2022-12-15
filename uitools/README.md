@@ -1,6 +1,6 @@
 ## Introduction
 
-This toolkit is an open source resource intended for use with the ArcGIS Runtime
+This toolkit is an open source resource intended for use with the ArcGIS Maps
 SDK for Qt. It provides ready made UI components to complement mapping and GIS
 applications. Because it is open source you are encouraged to modify these tools
 and add your own.
@@ -22,6 +22,7 @@ In the [API Documentation](https://developers.arcgis.com/qt/toolkit/api-referenc
 |Scalebar|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-scalebar.html)|||
 |Search view|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-searchview.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-searchview.html)||
 |Time slider|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-timeslider.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-timeslider.html)||
+|Utility Network Trace |✔ | | |
 
 ## Showcase - Demo app
 
@@ -30,7 +31,7 @@ In the [examples](examples) folder, there can be found three demo applications p
 ## Structure
 
 This repo contains 3 toolkit projects, each intended for use with a different
-flavor of the ArcGIS Runtime SDK for Qt:
+flavor of the ArcGIS Maps SDK for Qt:
 
 - toolkitqml (for use with QML only apps)
 - toolkitcpp (for use with C++ apps which use a QtQuick UI)
@@ -46,7 +47,7 @@ project.
 A good way to start using the toolkit is to use one of the template apps which
 get added to QtCreator when you install the ArcGIS Runime SDK for Qt.
 
-- In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Runtime 100.15 Quick QML App`
+- In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Maps 200.0.0 Quick QML App`
 - choose settings to match the platform etc. you are building for
 - in the `.pro` file of your new app, add a line to add the toolkit for your
   QML application. For example:
@@ -74,14 +75,14 @@ Once you have successfully imported the toolkit, you can access individual tools
 in your own QML files.
 
 - add an import statement for the toolkit:
-  `import Esri.ArcGISRuntime.Toolkit 100.15`
+  `import Esri.ArcGISRuntime.Toolkit`
 - declare the tool you wish to use. Generally you will also have to supply the
   `GeoView` etc. you wish the tool to work with. For example, to add a
   `NorthArrow`:
 
 ```qml
-import Esri.ArcGISRuntime 100.15
-import Esri.ArcGISRuntime.Toolkit 100.15
+import Esri.ArcGISRuntime
+import Esri.ArcGISRuntime.Toolkit
 
 MapView {
     id: mapView
@@ -110,7 +111,7 @@ MapView {
 A good way to start using the toolkit is to use one of the template apps which
 get added to QtCreator when you install the ArcGIS Runime SDK for Qt.
 
-- In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Runtime 100.15 Qt Quick C++ App`
+- In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Maps 200.0.0 Qt Quick C++ App`
 - choose settings to match the platform etc. you are building for
 - in the `.pro` file of your new app, add a line to add the library for your QML
   plugin - for example:
@@ -141,12 +142,12 @@ Once you have successfully imported the toolkit, you can access individual tools
 in your own QML files.
 
 - add an import statement for the toolkit:
-`import Esri.ArcGISRuntime.Toolkit 100.15`
+`import Esri.ArcGISRuntime.Toolkit`
 - declare the tool you wish to use. Generally you will also have to supply the
   `GeoView` etc. you wish the tool to work with. For example, to add a `NorthArrow`:
 
 ```qml
-import Esri.ArcGISRuntime.Toolkit 100.15
+import Esri.ArcGISRuntime.Toolkit
 
 MapView {
     id: mapView
@@ -169,9 +170,9 @@ MapView {
 #### Importing the toolkit (toolkitwidgets.pri)
 
 A good way to start using the toolkit is to use one of the template apps which
-get added to QtCreator when you install the ArcGIS Runtime SDK for Qt.
+get added to QtCreator when you install the ArcGIS Maps SDK for Qt.
 
-- In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Runtime 100.15 Qt Widgets App`
+- In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Maps 200.0.0 Qt Widgets App`
 - choose settings to match the platform etc. you are building for
 - in the `.pro` file of your new app, add a line to add the library for your QML
   plugin - for example:

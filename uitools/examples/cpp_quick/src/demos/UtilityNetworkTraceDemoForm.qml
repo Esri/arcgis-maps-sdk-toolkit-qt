@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2019 Esri
+ *  Copyright 2012-2022 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -13,15 +13,29 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
+import QtQuick
+import QtQuick.Controls
+import Esri.ArcGISRuntime
+import Esri.ArcGISRuntime.Toolkit
+import DemoApp
 
-#include "ArEnums.h"
-
-using namespace Esri::ArcGISRuntime::Toolkit;
-
-ArEnums::ArEnums()
-{
-}
-
-ArEnums::~ArEnums()
-{
+DemoPage {
+    mapViewContents: Component {
+        MapView {
+            id: view
+            UtilityNetworkTrace {
+                id: utilityNetworkTrace
+                geoView: view
+                anchors {
+                    left: parent.left
+                    top: parent.top
+                    margins: 10
+                }
+            }
+            UtilityNetworkTraceDemo {
+                id: demo
+                geoView: view
+            }
+        }
+    }
 }

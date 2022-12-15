@@ -17,7 +17,9 @@
 #include "TimeSliderDemo.h"
 
 #include "ArcGISMapImageLayer.h"
+#include "LayerListModel.h"
 #include "Map.h"
+#include "MapTypes.h"
 #include "Scene.h"
 
 using namespace Esri::ArcGISRuntime;

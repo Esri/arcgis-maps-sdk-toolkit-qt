@@ -15,17 +15,22 @@
  ******************************************************************************/
 
 #include "ArcGISArView.h"
-#include "TransformationMatrix.h"
-#include "TransformationMatrixCameraController.h"
+
+#include <Point.h>
+#include <SceneViewTypes.h>
+#include <TransformationMatrix.h>
+#include <TransformationMatrixCameraController.h>
+
 #include <QQuickWindow>
 #include <QScreen>
 
 using namespace Esri::ArcGISRuntime;
-using namespace Esri::ArcGISRuntime::Toolkit;
 using namespace Esri::ArcGISRuntime::Toolkit::Internal;
 
+namespace Esri::ArcGISRuntime::Toolkit {
+
 /*!
-  \class ArcGISArView
+  \class Esri::ArcGISRuntime::Toolkit::ArcGISArView
   \ingroup ArcGISQtToolkit
   \ingroup ArcGISQtToolkitAR
   \ingroup ArcGISQtToolkitARCppApi
@@ -229,7 +234,7 @@ void ArcGISArView::qmlRegisterTypes()
 {
   qmlRegisterType<ArcGISArView>("Esri.ArcGISArToolkit", 1, 0, "ArcGISArView");
   qmlRegisterType<LocationDataSource>("Esri.ArcGISArToolkit", 1, 0, "LocationDataSource");
-  qmlRegisterUncreatableType<ArEnums>("Esri.ArcGISArToolkit", 1, 0, "ArEnums", "ArEnums is not creatable.");
+  qmlRegisterUncreatableMetaObject(ArEnums::staticMetaObject, "Esri.ArcGISArToolkit", 1, 0, "ArEnums", "ArEnums is not creatable.");
 
   // Register enum types.
   qRegisterMetaType<ArEnums::LocationTrackingMode>("ArEnums::LocationTrackingMode");
@@ -342,7 +347,7 @@ void ArcGISArView::resetTrackingInternal()
 /*!
   \internal
 
-  Cast from Qt's screen orientation to ArcGIS Runtime's screen orientation.
+  Cast from Qt's screen orientation to ArcGIS Maps SDK's screen orientation.
  */
 DeviceOrientation ArcGISArView::toDeviceOrientation(Qt::ScreenOrientations orientation)
 {
@@ -408,3 +413,4 @@ void ArcGISArView::updateTmccOriginCamera() const
   \brief Signal emitted when the \l sceneView property changes.
  */
 
+} // Esri::ArcGISRuntime::Toolkit namespace

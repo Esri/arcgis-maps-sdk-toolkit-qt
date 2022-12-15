@@ -14,17 +14,18 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import Esri.ArcGISRuntime 100.15
-import Esri.ArcGISRuntime.Toolkit 100.15
-import DemoApp 1.0
+import QtQuick
+import QtQuick.Controls
+import Esri.ArcGISRuntime
+import Esri.ArcGISRuntime.Toolkit
+import DemoApp
 
 DemoPage {
-    sceneViewContents: Component {
-        SceneView {
+    mapViewContents: Component {
+        MapView {
             id: view
             SearchView {
+                id: searchView
                 geoView: parent
                 anchors {
                     top: parent.top
@@ -38,8 +39,8 @@ DemoPage {
         }
     }
 
-    mapViewContents: Component {
-        MapView {
+    sceneViewContents: Component {
+        SceneView {
             id: view
             SearchView {
                 geoView: parent

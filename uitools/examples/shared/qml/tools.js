@@ -24,6 +24,10 @@ const TOOLS = [
    "url" : "FloorFilterDemoForm.qml"
   },
   {
+   "name" : "Utility network trace",
+   "url" : "UtilityNetworkTraceDemoForm.qml"
+  },
+  {
    "name": "Search view",
    "url": "SearchViewDemoForm.qml"
   },

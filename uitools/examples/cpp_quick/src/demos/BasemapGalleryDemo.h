@@ -22,13 +22,11 @@
 #include <QObject>
 #include <QQmlEngine>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+Q_MOC_INCLUDE("BasemapGalleryController.h")
+
+namespace Esri::ArcGISRuntime::Toolkit {
   class BasemapGalleryController;
-}
-}
-}
+} // Esri::ArcGISRuntime::Toolkit
 
 class BasemapGalleryDemo : public BaseDemo
 {

@@ -25,9 +25,7 @@
 #include <MapGraphicsView.h>
 #include <SceneGraphicsView.h>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   /*!
   \class Esri::ArcGISRuntime::Toolkit::BookmarksView
@@ -105,6 +103,4 @@ namespace Toolkit {
   {
     m_controller->setGeoView(sceneView);
   }
-} //Toolkit
-} //ArcGISRuntime
-} //Esri
+} // Esri::ArcGISRuntime::Toolkit

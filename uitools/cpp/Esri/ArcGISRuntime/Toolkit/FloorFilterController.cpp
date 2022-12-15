@@ -23,8 +23,11 @@
 #include <FloorManager.h>
 #include <FloorSite.h>
 #include <GeometryEngine.h>
+#include <Layer.h>
 #include <Map.h>
 #include <Scene.h>
+#include <TaskWatcher.h>
+#include <Viewpoint.h>
 
 // Toolkit headers
 #include "FloorFilterFacilityItem.h"
@@ -38,9 +41,7 @@
 // stl headers
 #include <cmath>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   namespace {
 
@@ -914,17 +915,17 @@ namespace Toolkit {
  */
 
   /*!
-  \fn void Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedSiteIdChanged(QString oldId, QString newId)
+  \fn void Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedSiteIdChanged(const QString& oldId, const QString& newId)
   \brief Emitted when the selectedSiteId has changed from \a oldId to \a newId.
  */
 
   /*!
-  \fn void Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedFacilityIdChanged(QString oldId, QString newId)
+  \fn void Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedFacilityIdChanged(const QString& oldId, const QString& newId)
   \brief Emitted when the selectedFacilityId has changed from \a oldId to \a newId.
  */
 
   /*!
-  \fn void Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedLevelIdChanged(QString oldId, QString newId)
+  \fn void Esri::ArcGISRuntime::Toolkit::FloorFilterController::selectedLevelIdChanged(const QString& oldId, const QString& newId)
   \brief Emitted when the selectedLevelId has changed from \a oldId to \a newId.
  */
 
@@ -943,6 +944,4 @@ namespace Toolkit {
   \brief Emitted when the automaticSelectionModeChanged flag has changed.
  */
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

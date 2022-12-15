@@ -26,9 +26,7 @@ namespace Ui {
   class OAuth2View;
 }
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   class OAuth2View : public QWidget
   {
@@ -42,8 +40,6 @@ namespace Toolkit {
     Ui::OAuth2View* m_ui = nullptr;
   };
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_OAUTH2VIEW_H

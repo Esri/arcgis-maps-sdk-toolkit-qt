@@ -19,29 +19,29 @@ mac {
 
 #-------------------------------------------------------------------------------
 
-CONFIG += c++14
+CONFIG += c++17
 
 # additional modules are pulled in via arcgisruntime.pri
 QT += opengl qml quick
 
-ARCGIS_RUNTIME_VERSION = 100.15.0
+ARCGIS_RUNTIME_VERSION = 200.0.0
 include($$PWD/arcgisruntime.pri)
 include($$PWD/../../toolkitqml.pri)
 
 TEMPLATE = app
 TARGET = qml_quick
 
-equals(QT_MAJOR_VERSION, 5) {
-    lessThan(QT_MINOR_VERSION, 15) {
-        error("$$TARGET requires Qt 5.15.2")
-    }
-        equals(QT_MINOR_VERSION, 15) : lessThan(QT_PATCH_VERSION, 2) {
-                error("$$TARGET requires Qt 5.15.2")
-        }
+lessThan(QT_MAJOR_VERSION, 6) {
+    error("This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.2.4")
 }
 
 equals(QT_MAJOR_VERSION, 6) {
-  error("This version of the ArcGIS Runtime SDK for Qt is incompatible with Qt 6")
+    lessThan(QT_MINOR_VERSION, 2) {
+        error("This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.2.4")
+    }
+  equals(QT_MINOR_VERSION, 2) : lessThan(QT_PATCH_VERSION, 4) {
+    error("This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.2.4")
+  }
 }
 
 #-------------------------------------------------------------------------------

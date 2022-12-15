@@ -21,16 +21,23 @@
 #include "Internal/SingleShotConnection.h"
 
 // ArcGISRuntime headers
+#include <Basemap.h>
+#include <BasemapListModel.h>
+#include <Error.h>
+#include <Item.h>
+#include <Layer.h>
+#include <LayerListModel.h>
+#include <Loadable.h>
 #include <Map.h>
 #include <Scene.h>
+#include <SceneViewTypes.h>
+#include <SpatialReference.h>
 
 // Qt headers
 #include <QPersistentModelIndex>
 #include <QPointer>
 
-namespace Esri {
-namespace ArcGISRuntime {
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
   namespace {
     /*!
@@ -725,6 +732,4 @@ namespace Toolkit {
   \sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::gallery()
  */
 
-} // Toolkit
-} // ArcGISRuntime
-} // Esri
+} // Esri::ArcGISRuntime::Toolkit

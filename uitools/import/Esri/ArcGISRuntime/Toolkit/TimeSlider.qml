@@ -14,11 +14,11 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import Esri.ArcGISRuntime.Toolkit.Controller 100.15
+import Esri.ArcGISRuntime.Toolkit.Controller
 
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtQuick.Layouts 1.12
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
 /*!
     \qmltype TimeSlider
@@ -184,13 +184,16 @@ Pane {
         Label {
             id: startLabel
             horizontalAlignment: Qt.AlignLeft
-            palette: timeSlider.palette
             Connections {
                 target: controller
                 function onExtentsChanged() {
+                    if (controller.timeForStep(0)) {
                     startLabel.text = Qt.formatDateTime(
                                 controller.timeForStep(0),
                                 fullExtentLabelFormat);
+                    } else {
+                        startLabel.text = "";
+                    }
                 }
             }
             Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
@@ -205,7 +208,6 @@ Pane {
             id: stepBackButton
             icon.source: "images/reverse.svg"
             enabled: (!startTimePinned || !endTimePinned) && !playAnimation.running
-            palette: timeSlider.palette
             Timer {
                 id: pressedHoldBack
                 repeat: true
@@ -224,7 +226,6 @@ Pane {
                                  : "images/play.svg"
             enabled: !startTimePinned || !endTimePinned
             checkable: true
-            palette: timeSlider.palette
             Layout.alignment: Qt.AlignHCenter
             Layout.margins: 5
             Timer {
@@ -240,7 +241,6 @@ Pane {
             id: stepForwardButton
             icon.source: "images/forward.svg"
             enabled: (!startTimePinned || !endTimePinned) && !playAnimation.running
-            palette: timeSlider.palette
             Timer {
                 id: pressedHoldForward
                 repeat: true
@@ -254,11 +254,16 @@ Pane {
         }
 
         Label {
-            text: Qt.formatDateTime(
-                      controller.timeForStep(controller.numberOfSteps),
-                      fullExtentLabelFormat);
+            text: {
+                if (controller.timeForStep(controller.numberOfSteps)) {
+                    Qt.formatDateTime(
+                          controller.timeForStep(controller.numberOfSteps),
+                          fullExtentLabelFormat);
+                } else {
+                    "";
+                }
+            }
             horizontalAlignment: Qt.AlignRight
-            palette: timeSlider.palette
             Layout.alignment: Qt.AlignRight  | Qt.AlignBottom
             Layout.fillWidth: true
             Layout.margins: 5
@@ -279,7 +284,6 @@ Pane {
                 id: slider
                 padding: 0
                 stepSize: 1.0
-                palette: timeSlider.palette
                 snapMode: RangeSlider.SnapAlways
                 from: 0
                 to: controller.numberOfSteps
@@ -408,7 +412,6 @@ Pane {
 
                                 text: defaultLabelText;
 
-                                palette: slider.palette
                                 font: slider.font
 
                                 // By default the label mark is only visible on

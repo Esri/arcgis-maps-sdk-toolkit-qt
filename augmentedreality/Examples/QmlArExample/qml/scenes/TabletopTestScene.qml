@@ -14,9 +14,9 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick 2.6
-import Esri.ArcGISRuntime 100.15
-import Esri.ArcGISArToolkit 1.0
+import QtQuick
+import Esri.ArcGISRuntime
+import Esri.ArcGISArToolkit
 
 // Creates a tabletop test scene.
 // Mode: Tabletop AR
