@@ -22,7 +22,7 @@ import QtQuick.Layouts
 
 Dialog {
 
-    property AuthenticationController controller: AuthenticationController {}
+    property AuthenticationController controller: null
 
     title: qsTr("Untrusted Host")
 

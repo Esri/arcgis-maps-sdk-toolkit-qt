@@ -23,7 +23,7 @@ import QtQuick.Layouts
 Dialog {
     id: userCredentialsView
 
-    property AuthenticationController controller: AuthenticationController {}
+    property AuthenticationController controller: null
 
     title: qsTr("Authentication required")
 
