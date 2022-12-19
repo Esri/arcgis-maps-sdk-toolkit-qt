@@ -22,7 +22,7 @@ import Qt.labs.platform as P
 
 Dialog {
     id: clientCertificateView
-    property AuthenticationController controller: AuthenticationController {}
+    property AuthenticationController controller: null
 
     title: qsTr("Client certificate requested")
 
