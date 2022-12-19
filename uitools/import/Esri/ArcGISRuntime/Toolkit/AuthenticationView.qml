@@ -71,9 +71,13 @@ Item {
             const component = internal.viewNameForChallengeType(controller.currentChallengeType);
             if (component) {
                 const incubator = component.incubateObject(authenticationView);
-                incubator.onStatusChanged = function(status) {
-                    if (status === Component.Ready) {
-                        this.object.open();
+                if (incubator.status === Component.Ready) {
+                    incubator.object.open();
+                } else {
+                    incubator.onStatusChanged = function(status) {
+                        if (status === Component.Ready) {
+                            this.object.open();
+                        }
                     }
                 }
             }
@@ -94,6 +98,7 @@ Item {
             onClosed: {
                 this.destroy();
             }
+            Component.onCompleted: activeLoginViewReady_(this)
         }
     }
 
@@ -111,6 +116,7 @@ Item {
             onClosed: {
                 this.destroy();
             }
+            onWebViewLoaded_: activeLoginViewReady_(this)
         }
     }
 
@@ -147,6 +153,12 @@ Item {
             }
         }
     }
+
+    /*!
+        \internal
+        \brief signal emitted when the login view is in the Ready state
+    */
+    signal activeLoginViewReady_(var activeLoginView)
 
     QtObject {
         id: internal
