@@ -58,7 +58,7 @@ OTHER_FILES += \
 # AR configuration
 
 # The path to the ArcGIS runtime toolkit for Qt sources, corresponding to the files downloaded
-# from the GitHub repo: https://github.com/Esri/arcgis-runtime-toolkit-qt
+# from the GitHub repo: https://github.com/Esri/arcgis-maps-sdk-toolkit-qt
 
 ARCGIS_TOOLKIT_PATH = # must be set to the root path of the toolkit folder
 
