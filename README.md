@@ -1,6 +1,6 @@
 # ArcGIS Maps SDK for Qt Toolkit
 
-[![API reference](https://img.shields.io/badge/API_Reference-purple)](https://developers.arcgis.com/qt/latest/toolkit/api-reference/) [![Current release](https://img.shields.io/github/v/release/esri/arcgis-runtime-toolkit-qt?label=current%20release)](https://github.com/Esri/arcgis-runtime-toolkit-qt/releases)
+[![API reference](https://img.shields.io/badge/API_Reference-purple)](https://developers.arcgis.com/qt/latest/toolkit/api-reference/) [![Current release](https://img.shields.io/github/v/release/esri/arcgis-maps-sdk-toolkit-qt?label=current%20release)](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/releases)
 
 ## Introduction
 
@@ -17,7 +17,7 @@ and add your own.
 
 ## Issues
 
-Find a bug or want to request a new feature?  Please let us know by [submitting an issue](https://github.com/Esri/arcgis-runtime-toolkit-qt/issues/new).
+Find a bug or want to request a new feature?  Please let us know by [submitting an issue](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/issues/new).
 
 ## Contributing
 
