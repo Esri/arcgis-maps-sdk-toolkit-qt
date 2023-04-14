@@ -27,7 +27,7 @@ QT += testlib
 QT -= gui
 QT += core gui opengl xml testlib network positioning sensors multimedia quick
 
-ARCGIS_RUNTIME_VERSION = 200.1.0
+ARCGIS_RUNTIME_VERSION = 200.2.0
 
 include($$PWD/../arcgisruntime.pri)
 include($$PWD/../../../../../uitools/toolkitcpp.pri)
