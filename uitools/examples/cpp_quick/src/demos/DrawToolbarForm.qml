@@ -21,7 +21,6 @@ import Esri.ArcGISRuntime.Toolkit
 import DemoApp
 
 DemoPage {
-
     mapViewContents: Component {
         MapView {
             id: view
@@ -32,8 +31,18 @@ DemoPage {
             }
             Shortcut {
                 context: Qt.ApplicationShortcut
-                sequences: ["Ctrl+Y"]
+                sequences: ["Ctrl+Y", "Ctrl+Shift+Z"]
                 onActivated: drawToolbar.controller.redo()
+            }
+            Shortcut {
+                context: Qt.ApplicationShortcut
+                sequences: ["Ctrl+D", "D", StandardKey.Backspace, StandardKey.Delete]
+                onActivated: drawToolbar.controller.deleteSelected()
+            }
+            Shortcut {
+                context: Qt.ApplicationShortcut
+                sequences: ["Esc"]
+                onActivated: drawToolbar.controller.clearAll()
             }
 
             DrawToolbar {
@@ -69,7 +78,6 @@ DemoPage {
                         visible: drawToolbar.controller.isEditing
                         action: Action {
                             onTriggered: {
-                                console.log("delete selected")
                                 drawToolbar.controller.deleteSelected();
                             }
                         }
@@ -79,7 +87,6 @@ DemoPage {
                         visible: drawToolbar.controller.isEditing
                         action: Action {
                             onTriggered: {
-                                console.log("add part")
                                 drawToolbar.controller.addPart();
                             }
                         }
@@ -89,7 +96,6 @@ DemoPage {
                         visible: drawToolbar.controller.isEditing
                         action: Action {
                             onTriggered: {
-                                console.log("undo")
                                 drawToolbar.controller.undo();
                             }
                         }
@@ -99,7 +105,6 @@ DemoPage {
                         visible: drawToolbar.controller.isEditing
                         action: Action {
                             onTriggered: {
-                                console.log("redo")
                                 drawToolbar.controller.redo();
                             }
                         }
@@ -109,7 +114,6 @@ DemoPage {
                         visible: drawToolbar.controller.isEditing
                         action: Action {
                             onTriggered: {
-                                console.log("finish")
                                 drawToolbar.controller.save();
                             }
                         }
