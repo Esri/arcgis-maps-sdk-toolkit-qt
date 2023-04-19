@@ -16,6 +16,10 @@
 
 const TOOLS = [
   {
+    "name": "Draw Toolbar",
+    "url": "DrawToolbarForm.qml"
+  },
+  {
     "name": "Bookmarks view",
     "url": "BookmarksViewDemoForm.qml"
   },

@@ -22,8 +22,17 @@
         <file>plus-circle.svg</file>
         <file>reverse.svg</file>
         <file>search.svg</file>
-        <file>trash.svg</file>
         <file>x.svg</file>
         <file>zoom-to-object.svg</file>
+        <file>point.svg</file>
+        <file>polygon.svg</file>
+        <file>polyline.svg</file>
+        <file>redo.svg</file>
+        <file>undo.svg</file>
+        <file>check.svg</file>
+        <file>trash.svg</file>
+        <file>cursor.svg</file>
+        <file>freehand-area.svg</file>
+        <file>freehand-line.svg</file>
     </qresource>
 </RCC>

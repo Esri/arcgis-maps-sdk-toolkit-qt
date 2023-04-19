@@ -32,6 +32,7 @@ ClientCertificateView 100.10 ClientCertificateView.qml
 ClientCertificateView 200.0 ClientCertificateView.qml
 CoordinateConversion 100.10 CoordinateConversion.qml
 CoordinateConversion 200.0 CoordinateConversion.qml
+DrawToolbar 200.1 DrawToolbar.qml
 internal FlashImage FlashImage.qml
 NorthArrow 100.10 NorthArrow.qml
 NorthArrow 200.0 NorthArrow.qml

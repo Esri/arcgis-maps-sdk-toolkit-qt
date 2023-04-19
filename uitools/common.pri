@@ -26,6 +26,7 @@ HEADERS += $$CPPPATH/AuthenticationController.h \
            $$CPPPATH/CoordinateConversionOption.h \
            $$CPPPATH/CoordinateConversionResult.h \
            $$CPPPATH/CoordinateOptionDefaults.h \
+           $$CPPPATH/DrawToolbarController.h \
            $$CPPPATH/FloorFilterController.h \
            $$CPPPATH/FloorFilterFacilityItem.h \
            $$CPPPATH/FloorFilterLevelItem.h \
@@ -66,6 +67,7 @@ SOURCES += $$CPPPATH/AuthenticationController.cpp \
            $$CPPPATH/CoordinateConversionOption.cpp \
            $$CPPPATH/CoordinateConversionResult.cpp \
            $$CPPPATH/CoordinateOptionDefaults.cpp \
+           $$CPPPATH/DrawToolbarController.cpp \
            $$CPPPATH/FloorFilterController.cpp \
            $$CPPPATH/FloorFilterFacilityItem.cpp \
            $$CPPPATH/FloorFilterLevelItem.cpp \

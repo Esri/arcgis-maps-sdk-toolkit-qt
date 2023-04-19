@@ -8,6 +8,7 @@
         <file>ClientCertificateView.qml</file>
         <file>CoordinateConversion.qml</file>
         <file>CurrentVersion.qml</file>
+        <file>DrawToolbar.qml</file>
         <file>FlashImage.qml</file>
         <file>FloorFilter.qml</file>
         <file>NorthArrow.qml</file>

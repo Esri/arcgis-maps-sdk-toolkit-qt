@@ -49,6 +49,8 @@ internal SliderGroove SliderGroove.qml
 internal SliderHandle SliderHandle.qml
 Switch 1.0 Switch.qml
 TextField 1.0 TextField.qml
+ToolBar 1.0 ToolBar.qml
+ToolButton 1.0 ToolButton.qml
 SpinBox 1.0 SpinBox.qml
 
 # Calcite global

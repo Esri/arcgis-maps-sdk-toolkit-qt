@@ -23,6 +23,7 @@ HEADERS += $$PWD/AuthenticationViewDemo.h \
            $$PWD/BookmarksViewDemo.h \
            $$PWD/CalloutDemo.h \
            $$PWD/CoordinateConversionDemo.h \
+           $$PWD/DrawToolbarDemo.h \
            $$PWD/FloorFilterDemo.h \
            $$PWD/NorthArrowDemo.h \
            $$PWD/OverviewMapDemo.h \
@@ -37,6 +38,7 @@ SOURCES += $$PWD/AuthenticationViewDemo.cpp \
            $$PWD/BookmarksViewDemo.cpp \
            $$PWD/CalloutDemo.cpp \
            $$PWD/CoordinateConversionDemo.cpp \
+           $$PWD/DrawToolbarDemo.cpp \
            $$PWD/FloorFilterDemo.cpp \
            $$PWD/NorthArrowDemo.cpp \
            $$PWD/OverviewMapDemo.cpp \

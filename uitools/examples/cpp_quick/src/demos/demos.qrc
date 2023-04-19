@@ -5,6 +5,7 @@
         <file>BookmarksViewDemoForm.qml</file>
         <file>CalloutDemoForm.qml</file>
         <file>CoordinateConversionDemoForm.qml</file>
+        <file>DrawToolbarForm.qml</file>
         <file>FloorFilterDemoForm.qml</file>
         <file>NorthArrowDemoForm.qml</file>
         <file>OverviewMapDemoForm.qml</file>
