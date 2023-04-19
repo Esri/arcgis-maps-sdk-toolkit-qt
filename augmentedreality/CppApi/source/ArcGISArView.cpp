@@ -45,7 +45,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   This toolkit component allows quick and easy integration
   of AR into your application for a variety of scenarios.
 
-  See \l {https://github.com/Esri/arcgis-runtime-toolkit-qt/blob/master/Common/AR/README.md} {additional details about using the ArcGISArView toolkit component}.
+  See \l {https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/blob/master/Common/AR/README.md} {additional details about using the ArcGISArView toolkit component}.
  */
 
 /*!

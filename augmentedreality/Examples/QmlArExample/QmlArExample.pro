@@ -37,7 +37,7 @@ equals(QT_MAJOR_VERSION, 6) {
   }
 }
 
-ARCGIS_RUNTIME_VERSION = 200.0.0
+ARCGIS_RUNTIME_VERSION = 200.1.0
 include($$PWD/arcgisruntime.pri)
 
 TEMPLATE = app
@@ -64,7 +64,7 @@ OTHER_FILES += \
 # AR configuration
 
 # The path to the ArcGIS Maps SDK toolkit for Qt sources, corresponding to the files downloaded
-# from the GitHub repo: https://github.com/Esri/arcgis-runtime-toolkit-qt
+# from the GitHub repo: https://github.com/Esri/arcgis-maps-sdk-toolkit-qt
 
 ARCGIS_TOOLKIT_PATH = # must be set to the root path of the toolkit folder
 
