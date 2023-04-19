@@ -18,7 +18,7 @@ To integrate Calcite into your app, add the following lines to your `*.pro` file
 
 ```pro
 QT += quickcontrols2
-RESOURCES += path/to/arcgis-runtime-toolkit-qt/calcite-qml/Calcite/calcite.qrc
+RESOURCES += path/to/arcgis-maps-sdk-toolkit-qt/calcite-qml/Calcite/calcite.qrc
 ```
 
 And then in `main.cpp` add the following lines:
