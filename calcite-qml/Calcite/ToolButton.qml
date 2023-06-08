@@ -54,8 +54,8 @@ T.ToolButton {
     }
 
     background: Rectangle {
-        implicitHeight: 48
-        implicitWidth: 48
+        implicitHeight: 32
+        implicitWidth: 32
         color: control.down || control.checked
                                || control.highlighted ? backgroundDown : control.hovered ? backgroundHovered : backgroundIdle
     }

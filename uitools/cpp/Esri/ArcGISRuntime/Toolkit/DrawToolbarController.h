@@ -80,7 +80,9 @@ public:
   Q_INVOKABLE void redo();
   Q_INVOKABLE void save();
   Q_INVOKABLE void deleteSelected();
-  Q_INVOKABLE void addPart();
+  Q_INVOKABLE void addPart(double mouseX, double mouseY);
+
+  Esri::ArcGISRuntime::GeometryEditor* geometryEditor() const { return m_geometryEditor; }
 
 signals:
   void mapViewChanged();

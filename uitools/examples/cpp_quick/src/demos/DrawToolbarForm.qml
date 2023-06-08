@@ -24,26 +24,6 @@ DemoPage {
     mapViewContents: Component {
         MapView {
             id: view
-            Shortcut {
-                context: Qt.ApplicationShortcut
-                sequences: ["Ctrl+Z"]
-                onActivated: drawToolbar.controller.undo()
-            }
-            Shortcut {
-                context: Qt.ApplicationShortcut
-                sequences: ["Ctrl+Y", "Ctrl+Shift+Z"]
-                onActivated: drawToolbar.controller.redo()
-            }
-            Shortcut {
-                context: Qt.ApplicationShortcut
-                sequences: ["Ctrl+D", "D", StandardKey.Backspace, StandardKey.Delete]
-                onActivated: drawToolbar.controller.deleteSelected()
-            }
-            Shortcut {
-                context: Qt.ApplicationShortcut
-                sequences: ["Esc"]
-                onActivated: drawToolbar.controller.clearAll()
-            }
 
             DrawToolbar {
                 id: drawToolbar
@@ -61,6 +41,7 @@ DemoPage {
             }
 
             MouseArea {
+                id: mouseArea
                 anchors.fill: parent
                 acceptedButtons: Qt.RightButton
                 cursorShape: drawToolbar.mouseCursorShape
@@ -87,7 +68,7 @@ DemoPage {
                         visible: drawToolbar.controller.isEditing
                         action: Action {
                             onTriggered: {
-                                drawToolbar.controller.addPart();
+                                drawToolbar.controller.addPart(mouseArea.mouseX, mouseArea.mouseY);
                             }
                         }
                     }

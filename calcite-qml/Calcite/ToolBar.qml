@@ -30,7 +30,7 @@ T.ToolBar {
     spacing: 16
 
     background: Rectangle {
-        implicitHeight: 48
+        implicitHeight: 32
         color: Calcite.background
     }
 }

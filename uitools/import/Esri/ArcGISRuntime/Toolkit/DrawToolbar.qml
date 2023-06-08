@@ -60,6 +60,28 @@ Control {
         }
     }
 
+    Shortcut {
+        context: Qt.ApplicationShortcut
+        sequences: ["Ctrl+Z"]
+        onActivated: drawToolbar.controller.undo()
+    }
+
+    Shortcut {
+        context: Qt.ApplicationShortcut
+        sequences: ["Ctrl+Y", "Ctrl+Shift+Z"]
+        onActivated: drawToolbar.controller.redo()
+    }
+    Shortcut {
+        context: Qt.ApplicationShortcut
+        sequences: ["Ctrl+D", "D", StandardKey.Backspace, StandardKey.Delete]
+        onActivated: drawToolbar.controller.deleteSelected()
+    }
+    Shortcut {
+        context: Qt.ApplicationShortcut
+        sequences: ["Esc"]
+        onActivated: drawToolbar.controller.clearAll()
+    }
+
     property var mouseCursorShape: Qt.ArrowCursor
 
     /*

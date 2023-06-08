@@ -19,6 +19,7 @@
 #include <QUuid>
 
 // ArcGISRuntime headers
+#include <Error.h>
 #include <FreehandTool.h>
 #include <Geometry.h>
 #include <GeometryEditor.h>
@@ -34,6 +35,8 @@
 #include <GraphicsOverlay.h>
 #include <GraphicsOverlayListModel.h>
 #include <IdentifyGraphicsOverlayResult.h>
+#include <ImmutablePartCollection.h>
+#include <InteractionConfiguration.h>
 #include <MapQuickView.h>
 #include <Part.h>
 #include <PartCollection.h>
@@ -159,6 +162,12 @@ void DrawToolbarController::setMapView(QObject* mapView)
 
   m_mapView->graphicsOverlays()->append(m_graphicsOverlay);
 
+
+  connect(m_mapView, &MapQuickView::mouseMoved, this, [this](const QMouseEvent& event)
+  {
+    //qDebug() << "MOUSE MOVED!!" << event.position().x() << event.position().y();
+  });
+
   connect(m_mapView, &MapQuickView::mouseClicked, this, [this](const QMouseEvent& event)
   {
     if (m_drawMode == DrawMode::SelectDrawMode)
@@ -179,7 +188,6 @@ void DrawToolbarController::setMapView(QObject* mapView)
 
   connect(m_mapView, &MapQuickView::identifyGraphicsOverlayCompleted, this, [this](QUuid, IdentifyGraphicsOverlayResult* result)
   {
-    qDebug() << "got a result!" << result->graphics().count() << result->graphics().size();
     if (result->graphics().count() < 1)
       return;
 
@@ -344,7 +352,7 @@ void DrawToolbarController::deleteSelected()
   m_geometryEditor->deleteSelectedElement();
 }
 
-void DrawToolbarController::addPart()
+void DrawToolbarController::addPart(double mouseX, double mouseY)
 {
   QObject localParent;
   if (m_drawMode == DrawMode::PolygonDrawMode)
@@ -353,6 +361,8 @@ void DrawToolbarController::addPart()
     Part part(builder.spatialReference(), &localParent);
     builder.parts()->addPart(&part);
     m_geometryEditor->replaceGeometry(builder.toGeometry());
+    Point newPoint = m_mapView->screenToLocation(mouseX, mouseY);
+    m_geometryEditor->insertVertex(newPoint);
   }
   else if (m_drawMode == DrawMode::PolylineDrawMode)
   {
@@ -360,6 +370,8 @@ void DrawToolbarController::addPart()
     Part part(builder2.spatialReference(), &localParent);
     builder2.parts()->addPart(&part);
     m_geometryEditor->replaceGeometry(builder2.toGeometry());
+    Point newPoint = m_mapView->screenToLocation(mouseX, mouseY);
+    m_geometryEditor->insertVertex(newPoint);
   }
 }
 
