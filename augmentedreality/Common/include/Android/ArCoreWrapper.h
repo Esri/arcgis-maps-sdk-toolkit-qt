@@ -24,6 +24,8 @@
 #include <QOpenGLFunctions>
 #include <array>
 
+#include "Object.h"
+
 // forward declaration of AR core types to avoid include "arcore_c_api.h" here.
 using ArSession = struct ArSession_;
 using ArFrame = struct ArFrame_;
@@ -42,8 +44,10 @@ class ArCoreFrameRenderer;
 class ArCorePointCloudRenderer;
 class ArCorePlaneRenderer;
 
-class ArCoreWrapper
+class ArCoreWrapper : public Object
 {
+  Q_OBJECT
+
 public:
   ArCoreWrapper(ArcGISArViewInterface* arcGISArView);
   ~ArCoreWrapper();
