@@ -44,7 +44,7 @@ class ArCoreFrameRenderer;
 class ArCorePointCloudRenderer;
 class ArCorePlaneRenderer;
 
-class ArCoreWrapper : public Object
+class ArCoreWrapper : public QObject
 {
   Q_OBJECT
 
