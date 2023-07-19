@@ -26,6 +26,7 @@
 // Qt headers
 #include <QCoreApplication>
 #include <QGuiApplication>
+#include <QPermission>
 #include <QScreen>
 
 // C++ headers
@@ -285,20 +286,42 @@ void ArCoreWrapper::createArSession()
   if (m_arSession)
     return;
 
-  // request camera permission
-  auto checkPermissionResultFuture = QtAndroidPrivate::checkPermission(QtAndroidPrivate::PermissionType::Camera);
-  checkPermissionResultFuture.waitForFinished();
-  const auto checkPermissionResult = checkPermissionResultFuture.result();
-  if (checkPermissionResult != QtAndroidPrivate::PermissionResult::Authorized)
+  QCameraPermission cameraPermission;
+  QEventLoop loop;
+  QTimer timeout;
+
+  //connect timeout signal to quitting the blocking loop
+  QObject::connect(&timeout, &QTimer::timeout, &loop, &QEventLoop::quit);
+
+  //start the permissions request timeout
+  timeout.start(15000);
+
+  if (qApp->checkPermission(cameraPermission) == Qt::PermissionStatus::Undetermined)
   {
-    auto requestPermissionResultFuture = QtAndroidPrivate::requestPermission(QtAndroidPrivate::PermissionType::Camera);
-    requestPermissionResultFuture.waitForFinished();
-    const auto requestPermissionResult = requestPermissionResultFuture.result();
-    if (requestPermissionResult != QtAndroidPrivate::PermissionResult::Authorized)
-    {
+    
+    qApp->requestPermission(cameraPermission, this, [this, &loop, &timeout]() {
+      //Stop the timer and exit the blocking loop
+      timeout.stop();
+      loop.quit();
+    });
+    loop.exec();
+  }
+
+  //If remaining time is 0 the timer ran out
+  if(timeout.remainingTime() == 0)
+  {
+    emit m_arcGISArView->errorOccurred("ARCore failure", "Failed to access to the camera.");
+    return;
+  }
+
+  switch (qApp->checkPermission(cameraPermission)) {
+    case Qt::PermissionStatus::Granted:
+      break;
+    case Qt::PermissionStatus::Denied:
+    case Qt::PermissionStatus::Undetermined:
+    default:
       emit m_arcGISArView->errorOccurred("ARCore failure", "Failed to access to the camera.");
       return;
-    }
   }
 
   // try to create the ARCore session. This function can fail if the user reject the authorization
