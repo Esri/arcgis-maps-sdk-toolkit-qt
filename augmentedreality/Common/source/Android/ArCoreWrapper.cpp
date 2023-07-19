@@ -304,7 +304,7 @@ void ArCoreWrapper::createArSession()
     loop.exec();
   }
 
-  //If the time is active we timed out
+  //If remaining time is 0 the timer ran out
   if(timeout.remainingTime() == 0)
   {
     emit m_arcGISArView->errorOccurred("ARCore failure", "Failed to access to the camera.");
