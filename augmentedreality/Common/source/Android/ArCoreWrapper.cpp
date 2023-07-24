@@ -26,12 +26,11 @@
 // Qt headers
 #include <QCoreApplication>
 #include <QGuiApplication>
+#include <QPermission>
 #include <QScreen>
 
 // C++ headers
 #include <array>
-
-#include <QtCore/private/qandroidextras_p.h>
 
 using namespace Esri::ArcGISRuntime;
 using namespace Esri::ArcGISRuntime::Toolkit::Internal;
@@ -285,20 +284,28 @@ void ArCoreWrapper::createArSession()
   if (m_arSession)
     return;
 
-  // request camera permission
-  auto checkPermissionResultFuture = QtAndroidPrivate::checkPermission(QtAndroidPrivate::PermissionType::Camera);
-  checkPermissionResultFuture.waitForFinished();
-  const auto checkPermissionResult = checkPermissionResultFuture.result();
-  if (checkPermissionResult != QtAndroidPrivate::PermissionResult::Authorized)
+  QCameraPermission cameraPermission;
+  QEventLoop loop;
+
+  if (qApp->checkPermission(cameraPermission) == Qt::PermissionStatus::Undetermined)
   {
-    auto requestPermissionResultFuture = QtAndroidPrivate::requestPermission(QtAndroidPrivate::PermissionType::Camera);
-    requestPermissionResultFuture.waitForFinished();
-    const auto requestPermissionResult = requestPermissionResultFuture.result();
-    if (requestPermissionResult != QtAndroidPrivate::PermissionResult::Authorized)
-    {
+    qApp->requestPermission(cameraPermission, &loop, [&loop]() {
+      //Connect finishing requestPermission to quitting the blocking loop
+      loop.quit();
+    });
+    //Start the blocking loop to wait for permissions
+    loop.exec();
+  }
+
+  //checkPermission will never return Undetermined after call to requestPermission
+  switch (qApp->checkPermission(cameraPermission)) 
+  {
+    case Qt::PermissionStatus::Granted:
+      break;
+    case Qt::PermissionStatus::Denied:
+    default:
       emit m_arcGISArView->errorOccurred("ARCore failure", "Failed to access to the camera.");
       return;
-    }
   }
 
   // try to create the ARCore session. This function can fail if the user reject the authorization

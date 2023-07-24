@@ -44,6 +44,7 @@ class ArCorePlaneRenderer;
 
 class ArCoreWrapper
 {
+
 public:
   ArCoreWrapper(ArcGISArViewInterface* arcGISArView);
   ~ArCoreWrapper();
