@@ -44,7 +44,7 @@ class ArCorePlaneRenderer;
 
 class ArCoreWrapper : public QObject
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
   ArCoreWrapper(ArcGISArViewInterface* arcGISArView);
