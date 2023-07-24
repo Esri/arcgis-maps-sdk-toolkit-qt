@@ -299,7 +299,8 @@ void ArCoreWrapper::createArSession()
   }
 
   //checkPermission will never return Undetermined after call to requestPermission
-  switch (qApp->checkPermission(cameraPermission)) {
+  switch (qApp->checkPermission(cameraPermission)) 
+  {
     case Qt::PermissionStatus::Granted:
       break;
     case Qt::PermissionStatus::Denied:
