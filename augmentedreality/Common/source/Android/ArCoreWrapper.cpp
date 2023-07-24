@@ -289,7 +289,7 @@ void ArCoreWrapper::createArSession()
 
   if (qApp->checkPermission(cameraPermission) == Qt::PermissionStatus::Undetermined)
   {
-    qApp->requestPermission(cameraPermission, this, [this, &loop]() {
+    qApp->requestPermission(cameraPermission, [&loop]() {
       //Connect finishing requestPermission to quitting the blocking loop
       loop.quit();
     });
