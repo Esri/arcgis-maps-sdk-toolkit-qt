@@ -42,8 +42,10 @@ class ArCoreFrameRenderer;
 class ArCorePointCloudRenderer;
 class ArCorePlaneRenderer;
 
-class ArCoreWrapper
+class ArCoreWrapper : public QObject
 {
+    Q_OBJECT
+
 public:
   ArCoreWrapper(ArcGISArViewInterface* arcGISArView);
   ~ArCoreWrapper();
