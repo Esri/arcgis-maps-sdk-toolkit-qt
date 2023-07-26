@@ -62,7 +62,7 @@ Android 7.0 64-bit (armv8) is the minimum requirement. 32-bit (armv7) is not sup
 
 The latest ArcGIS Maps SDK for Qt is required to use this toolkit component.
 
-The system requirements for the ArcGIS Maps SDK for Qt takes precendent over the minimum versions mentioned here.
+The system requirements for the ArcGIS Maps SDK for Qt take precedence over the minimum versions mentioned here.
 
 OpenGL graphics API is required. Metal is not supported. See the [limitations](#Limitations) section below for more details.
 
