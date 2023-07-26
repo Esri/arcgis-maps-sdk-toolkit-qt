@@ -27,8 +27,6 @@
 
 int main(int argc, char* argv[])
 {
-    // Enforce OpenGL
-    qputenv("QSG_RHI_BACKEND", "opengl");
 
     QtWebView::initialize();
     QGuiApplication app(argc, argv);

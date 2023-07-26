@@ -22,6 +22,7 @@
 #include <QCommandLineParser>
 #include <QDir>
 #include <QSurfaceFormat>
+#include <QQuickWindow>
 
 #ifdef Q_OS_WIN
 #include <Windows.h>
@@ -54,13 +55,13 @@
 
 int main(int argc, char *argv[])
 {
-  // Enforce OpenGL
-  qputenv("QSG_RHI_BACKEND", "opengl");
+  // At this time AR with the ArcGIS Maps SDK for Qt only supports OpenGL
+  QQuickWindow::setGraphicsApi(QSGRendererInterface::GraphicsApi::OpenGL);
 
   // There are some conflicts between the AR frameworks and the Qt's rendering thread.
   // This code enables the non-threaded render loop mode in Qt.
   // See SceneView::renderFrame documentation and Qt's documentation
-  // https://doc.qt.io/qt-5/qtquick-visualcanvas-scenegraph.html#non-threaded-render-loops-basic-and-windows
+  // https://doc.qt.io/qt-6/qtquick-visualcanvas-scenegraph.html#non-threaded-render-loops-basic-and-windows
   // for more information.
 #if defined(Q_OS_IOS) || defined(Q_OS_ANDROID)
   qputenv("QSG_RENDER_LOOP", "basic");
