@@ -62,6 +62,8 @@ Android 7.0 64-bit (armv8) is the minimum requirement. 32-bit (armv7) is not sup
 
 The latest ArcGIS Maps SDK for Qt is required to use this toolkit component.
 
+OpenGL graphics API is required. Metal is not supported. See the [limitations](#Limitations) section below for more details.
+
 ## Creating a new AR app using ArcGIS Maps AR toolkit
 
 ### Creating a new C++ app
@@ -410,4 +412,13 @@ The following lines of code enable the non-threaded render loop mode in Qt:
 #if defined(Q_OS_IOS) && defined(Q_OS_ANDROID)
   qputenv("QSG_RENDER_LOOP", "basic");
 #endif
+```
+
+## Limitations 
+
+AR currently only supports OpenGL. On iOS devices, you must enforce this because the default graphics API on 
+iOS devices is Metal. Add the following code to your apps:
+
+```cpp
+QQuickWindow::setGraphicsApi(QSGRendererInterface::GraphicsApi::OpenGL);
 ```
