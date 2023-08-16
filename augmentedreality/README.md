@@ -62,6 +62,10 @@ Android 7.0 64-bit (armv8) is the minimum requirement. 32-bit (armv7) is not sup
 
 The latest ArcGIS Maps SDK for Qt is required to use this toolkit component.
 
+The system requirements for the ArcGIS Maps SDK for Qt take precedence over the minimum versions mentioned here.
+
+OpenGL graphics API is required. Metal is not supported. See the [limitations](#Limitations) section below for more details.
+
 ## Creating a new AR app using ArcGIS Maps AR toolkit
 
 ### Creating a new C++ app
@@ -80,7 +84,7 @@ for details.
 [ArcGIS Maps SDK for Qt Toolkit](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt).
 
 3. In Qt Creator, create a new project and select the app template named
-"ArcGIS Maps 200.1.0 Qt Quick C++ app". Select the option "3D project" in the
+"ArcGIS Maps 200.2.0 Qt Quick C++ app". Select the option "3D project" in the
 "Details" dialog.
 
 4. In the newly created project, add the following lines anywhere in the app's project (`.pro`)
@@ -227,7 +231,7 @@ for details.
 
 2. Download the sources of the [ArcGIS Maps SDK for Qt Toolkit](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt) from GitHub.
 
-3. In Qt Creator, create a new project and select "ArcGIS Maps 200.1.0 Qt Quick QML app".
+3. In Qt Creator, create a new project and select "ArcGIS Maps 200.2.0 Qt Quick QML app".
 Select the option "3D project" in the "Details" step.
 
 4. In the created project, add the following lines anywhere in the app's project
@@ -410,4 +414,13 @@ The following lines of code enable the non-threaded render loop mode in Qt:
 #if defined(Q_OS_IOS) && defined(Q_OS_ANDROID)
   qputenv("QSG_RENDER_LOOP", "basic");
 #endif
+```
+
+## Limitations 
+
+AR currently only supports OpenGL. On iOS devices, you must enforce this because the default graphics API on 
+iOS devices is Metal. Add the following code to your apps:
+
+```cpp
+QQuickWindow::setGraphicsApi(QSGRendererInterface::GraphicsApi::OpenGL);
 ```

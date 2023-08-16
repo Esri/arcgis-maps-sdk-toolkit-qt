@@ -396,7 +396,7 @@ Pane {
                                         timeStepIntervalLabelFormat)}` : "";
 
                                 property real defaultLabelWidth:
-                                    fontMetric.boundingRect(defaultLabelText).width;
+                                    fontMetric.advanceWidth(defaultLabelText);
 
                                 property real defaultLabelX: {
                                     const minX = -tickHold.x;
@@ -523,22 +523,10 @@ Pane {
                                 }
                             }
                         }
-                        function horizontalOverlaps(item1, item2) {
-                            const r1 = Qt.rect(
-                                item1.parent.x + item1.defaultLabelX, item1.y,
-                                item1.defaultLabelWidth, item1.height
-                            );
-                            const r2 = Qt.rect(
-                                item2.parent.x + item2.defaultLabelX, item2.y,
-                                item2.defaultLabelWidth, item2.height
-                            );
-                            if (r1.right < r2.left) {
-                                return false;
-                            }
-                            else if (r2.right < r1.left) {
-                                return false;
-                            }
-                            return true;
+                        function horizontalOverlaps(leftItem, rightItem) {
+                            const leftEnd = leftItem.parent.x + leftItem.defaultLabelX + leftItem.defaultLabelWidth;
+                            const rightBegin = rightItem.parent.x + rightItem.defaultLabelX;
+                            return rightBegin <= leftEnd;
                         }
                     }
                     FontMetrics {

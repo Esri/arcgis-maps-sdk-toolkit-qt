@@ -35,7 +35,7 @@ Graphic {
 
     symbol: SimpleMarkerSceneSymbol {
         id: symbol
-        style: "SimpleMarkerSceneSymbolStyleSphere"
+        style: Enums.SimpleMarkerSceneSymbolStyleSphere
         anchorPosition: Enums.SceneSymbolAnchorPositionCenter
         color: "green"
         width: size
