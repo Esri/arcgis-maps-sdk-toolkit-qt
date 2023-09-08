@@ -635,7 +635,7 @@ void UtilityNetworkTraceController::zoomToStartingPoint(int index)
   {
     const Viewpoint currVP = mapView->currentViewpoint(ViewpointType::CenterAndScale);
     const Viewpoint newViewPoint(m_startingPoints->pointAt(index), currVP.targetScale());
-    auto future = mapView->GeoView::setViewpointAsync(newViewPoint, 1.0);
+    auto future = mapView->setViewpointAsync(newViewPoint, 1.0);
     Q_UNUSED(future)
   }
 }

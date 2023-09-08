@@ -883,7 +883,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
       m_settingViewpoint = true;
-      mapView->GeoView::setViewpointAsync(b.toEnvelope()).then(this, [this](bool success)
+      mapView->setViewpointAsync(b.toEnvelope()).then(this, [this](bool success)
       {
         if (success)
         {
@@ -894,7 +894,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
       m_settingViewpoint = true;
-      sceneView->GeoView::setViewpointAsync(b.toEnvelope()).then(this, [this](bool success)
+      sceneView->setViewpointAsync(b.toEnvelope()).then(this, [this](bool success)
       {
         if (success)
         {

@@ -450,7 +450,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
         mapView->calloutData()->setGeoElement(m_selectedResult->geoElement());
         mapView->calloutData()->setVisible(true);
 
-        auto future = mapView->GeoView::setViewpointAsync(m_selectedResult->selectionViewpoint(), 0);
+        auto future = mapView->setViewpointAsync(m_selectedResult->selectionViewpoint(), 0);
         Q_UNUSED(future)
       }
     }
