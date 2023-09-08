@@ -61,6 +61,7 @@
 #include <UtilityTraceResult.h>
 #include <UtilityTraceResultListModel.h>
 #include <Viewpoint.h>
+#include <ErrorException.h>
 
 // Toolkit headers
 #include "Internal/DisconnectOnSignal.h"
@@ -68,13 +69,13 @@
 #include "Internal/GeoViews.h"
 #include "UtilityNetworkFunctionTraceResult.h"
 #include "UtilityNetworkFunctionTraceResultsModel.h"
-#include "UtilityNetworkListItem.h"
 #include "UtilityNetworkTraceStartingPoint.h"
 #include "UtilityNetworkTraceStartingPointsModel.h"
 
 // Qt headers
-#include <QList>
+#include <QFuture>
 #include <QUuid>
+#include <QList>
 
 // std headers
 #include <cmath>
@@ -238,19 +239,9 @@ void UtilityNetworkTraceController::setGeoView(QObject* geoView)
     {
       if (newValue)
       {
-        // have the connection, but the internal logic should be done when (or where) the newValue is handled.
-        auto c = connect(m_selectedUtilityNetwork,
-                         &UtilityNetwork::queryNamedTraceConfigurationsCompleted,
-                         this,
-                         [this](QUuid taskId, const QList<Esri::ArcGISRuntime::UtilityNamedTraceConfiguration*>& utilityNamedTraceConfigurationResults)
+        auto traceConfigs = m_selectedUtilityNetwork->queryNamedTraceConfigurationsAsync(nullptr).then(this,
+        [this](const QList<UtilityNamedTraceConfiguration*>& utilityNamedTraceConfigurationResults)
         {
-          const auto findIter = m_traceConfigConnection.constFind(taskId);
-          if (findIter != m_traceConfigConnection.cend())
-          {
-            disconnect(*findIter);
-            m_traceConfigConnection.erase(findIter);
-          }
-
           m_traceConfigurations.clear();
           m_traceConfigurations = utilityNamedTraceConfigurationResults;
           std::sort(std::begin(m_traceConfigurations),
@@ -275,9 +266,6 @@ void UtilityNetworkTraceController::setGeoView(QObject* geoView)
             m_selectedTraceConfiguration = m_traceConfigurations.at(0);
           }
         });
-
-        auto traceConfigs = m_selectedUtilityNetwork->queryNamedTraceConfigurations(nullptr);
-        m_traceConfigConnection.insert(traceConfigs.taskId(), c);
       }
       else
       {
@@ -287,25 +275,6 @@ void UtilityNetworkTraceController::setGeoView(QObject* geoView)
 
     mapView->graphicsOverlays()->append(m_startingPointsGraphicsOverlay);
     mapView->graphicsOverlays()->append(m_resultsGraphicsOverlay);
-
-    // handle the identify results
-    connect(mapView, &MapViewToolkit::identifyLayersCompleted, this, [this](QUuid, const QList<IdentifyLayerResult*>& results)
-    {
-      for (const auto& layer : results)
-      {
-        for (const auto& geoElement : layer->geoElements())
-        {
-          const auto ft = dynamic_cast<ArcGISFeature*>(geoElement);
-
-          if (geoElement)
-            addStartingPoint(ft, this->m_mapPoint);
-        }
-      }
-
-      qDeleteAll(results);
-
-      setIsAddingStartingPointInProgress(false);
-    });
 
     // identify symbols on mouse click
     connect(mapView, &MapViewToolkit::mouseClicked, this, [this, mapView](QMouseEvent& mouseEvent)
@@ -320,7 +289,25 @@ void UtilityNetworkTraceController::setGeoView(QObject* geoView)
       const bool returnPopups = false;
       m_mapPoint = mapView->screenToLocation(mouseEvent.pos().x(), mouseEvent.pos().y());
 
-      mapView->identifyLayers(mouseEvent.pos().x(), mouseEvent.pos().y(), tolerance, returnPopups);
+      mapView->identifyLayersAsync(mouseEvent.position(), tolerance, returnPopups).then(this,
+      [this](const QList<IdentifyLayerResult*>& results)
+      {
+        // handle the identify results
+        for (const auto& layer : results)
+        {
+          for (const auto& geoElement : layer->geoElements())
+          {
+            const auto ft = dynamic_cast<ArcGISFeature*>(geoElement);
+
+            if (geoElement)
+              addStartingPoint(ft, this->m_mapPoint);
+          }
+        }
+
+        qDeleteAll(results);
+
+        setIsAddingStartingPointInProgress(false);
+      });
     });
 
     connect(this, &UtilityNetworkTraceController::selectedTraceConfigurationChanged, this, [this]()
@@ -350,10 +337,6 @@ void UtilityNetworkTraceController::setSelectedUtilityNetwork(UtilityNetwork* se
   disconnect(m_selectedUtilityNetwork, nullptr, this, nullptr);
 
   m_selectedUtilityNetwork = selectedUtilityNetwork;
-
-  connect(m_selectedUtilityNetwork, &UtilityNetwork::traceCompleted, this, &UtilityNetworkTraceController::onTraceCompleted);
-  connect(m_selectedUtilityNetwork, &UtilityNetwork::errorOccurred, this, &UtilityNetworkTraceController::onSelectedUtilityNetworkError);
-  connect(m_selectedUtilityNetwork, &UtilityNetwork::featuresForElementsCompleted, this, &UtilityNetworkTraceController::onFeaturesForElementsCompleted);
 
   emit selectedUtilityNetworkChanged(m_selectedUtilityNetwork);
 }
@@ -512,7 +495,13 @@ void UtilityNetworkTraceController::runTrace(const QString& /*name*/)
   m_utilityTraceParameters = new UtilityTraceParameters(m_selectedTraceConfiguration, m_startingPoints->utilityElements(), this);
 
   // Async UtilityNetwork::trace
-  m_selectedUtilityNetwork->trace(m_utilityTraceParameters);
+  m_selectedUtilityNetwork->traceAsync(m_utilityTraceParameters).then(this, [this](const QList<UtilityTraceResult*>&)
+  {
+    onTraceCompleted();
+  }).onFailed([this](const ErrorException& e)
+  {
+    onSelectedUtilityNetworkError(e);
+  });
 }
 
 QList<UtilityNamedTraceConfiguration*> UtilityNetworkTraceController::traceConfigurations() const
@@ -646,7 +635,8 @@ void UtilityNetworkTraceController::zoomToStartingPoint(int index)
   {
     const Viewpoint currVP = mapView->currentViewpoint(ViewpointType::CenterAndScale);
     const Viewpoint newViewPoint(m_startingPoints->pointAt(index), currVP.targetScale());
-    mapView->setViewpoint(newViewPoint, 1.0);
+    auto future = mapView->GeoView::setViewpointAsync(newViewPoint, 1.0);
+    Q_UNUSED(future)
   }
 }
 
@@ -709,7 +699,7 @@ void UtilityNetworkTraceController::onTraceCompleted()
 
   QList<UtilityElement*> allElements;
 
-  for (const auto result : *m_traceResults)
+  for (auto* result : *m_traceResults)
   {
     const auto type = result->traceResultObjectType();
 
@@ -733,8 +723,8 @@ void UtilityNetworkTraceController::onTraceCompleted()
         for (const auto o : outputList)
         {
           m_functionResults->addFunctionResult(UtilityNetworkFunctionTraceResult(o->function()->networkAttribute()->name(),
-                                                                                     o->function()->functionType(),
-                                                                                     o->result().toDouble()));
+                                                                                 o->function()->functionType(),
+                                                                                 o->result().toDouble()));
         }
 
         break;
@@ -789,7 +779,13 @@ void UtilityNetworkTraceController::onTraceCompleted()
   if (!allElements.isEmpty())
   {
     // calling async featuresForElements with elements
-    m_selectedUtilityNetwork->featuresForElements(allElements);
+    m_selectedUtilityNetwork->featuresForElementsAsync(allElements).then(this, [this](const QList<ArcGISFeature*>&)
+    {
+      onFeaturesForElementsCompleted();
+    }).onFailed([this](const ErrorException& e)
+    {
+      onSelectedUtilityNetworkError(e);
+    });
   }
   else
   {
@@ -798,9 +794,9 @@ void UtilityNetworkTraceController::onTraceCompleted()
   }
 }
 
-void UtilityNetworkTraceController::onSelectedUtilityNetworkError(const Error& e)
+void UtilityNetworkTraceController::onSelectedUtilityNetworkError(const ErrorException& e)
 {
-  qDebug() << "selectedUtilityNetwork Error Occurred" << e.message() << "||" << e.additionalMessage();
+  qDebug() << "selectedUtilityNetwork Error Occurred" << e.error().message() << "||" << e.error().additionalMessage();
   setIsTraceInProgress(false);
 }
 

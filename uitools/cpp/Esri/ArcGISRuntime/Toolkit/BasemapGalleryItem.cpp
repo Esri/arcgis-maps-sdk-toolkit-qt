@@ -13,12 +13,11 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#include "BasemapGalleryController.h"
+#include "BasemapGalleryItem.h"
 
 // Toolkit headers
 #include "Internal/BasemapGalleryImageProvider.h"
 #include "Internal/DoOnLoad.h"
-#include "Internal/GeoViews.h"
 
 // ArcGISRuntime headers
 #include <Basemap.h>
@@ -28,6 +27,7 @@
 
 // Qt headers
 #include <QIcon>
+#include <QFuture>
 
 #ifdef CPP_ARCGISRUNTIME_TOOLKIT
 // Qt headers
@@ -185,8 +185,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
                    return;
                  }
-                 connect(item, &Item::fetchThumbnailCompleted, this, &BasemapGalleryItem::basemapChanged);
-                 item->fetchThumbnail();
+
+                 item->fetchThumbnailAsync().then(this, [this](const QImage&)
+                 {
+                   emit basemapChanged();
+                 });
                });
     }
     emit basemapChanged();

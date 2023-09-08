@@ -74,7 +74,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     connect(m_insetView, &MapViewToolkit::viewpointChanged, this,
             [this]
             {
-              if (m_insetView->isNavigating() && (m_updateGeoViewpointTask.isDone() || !m_updateGeoViewpointTask.isValid()))
+              if (m_insetView->isNavigating() && !m_setViewpointFuture.isRunning())
               {
                 if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
                 {
@@ -140,7 +140,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
                        {
                          const Viewpoint viewpoint = sceneView->currentViewpoint(ViewpointType::CenterAndScale);
                          m_reticle->setGeometry(viewpoint.targetGeometry());
-                         if (sceneView->isNavigating() && (m_updateInsetViewpointTask.isDone() || !m_updateInsetViewpointTask.isValid()))
+                         if (sceneView->isNavigating() && !m_setViewpointInsetFuture.isRunning())
                          {
                            applySceneNavigationToInset(sceneView);
                          }
@@ -167,7 +167,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
                        [this, mapView]
                        {
                          m_reticle->setGeometry(mapView->visibleArea());
-                         if (mapView->isNavigating() && (m_updateInsetViewpointTask.isDone() || !m_updateInsetViewpointTask.isValid()))
+                         if (mapView->isNavigating() && !m_setViewpointInsetFuture.isRunning())
                          {
                            applyMapNavigationToInset(mapView);
                          }
@@ -282,7 +282,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
         viewpoint.rotation()};
 
     constexpr float animationDuration{0};
-    m_updateGeoViewpointTask = view->setViewpoint(newViewpoint, animationDuration);
+    m_setViewpointFuture = view->GeoView::setViewpointAsync(newViewpoint, animationDuration);
   }
 
   /*!
@@ -299,7 +299,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
         viewpoint.targetScale() / scaleFactor()};
 
     constexpr float animationDuration{0};
-    m_updateGeoViewpointTask = view->setViewpoint(newViewpoint, animationDuration);
+    m_setViewpointFuture = view->GeoView::setViewpointAsync(newViewpoint, animationDuration);
   }
 
   /*!
@@ -317,7 +317,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
         viewpoint.rotation()};
 
     constexpr float animationDuration{0};
-    m_updateInsetViewpointTask = m_insetView->setViewpoint(newViewpoint, animationDuration);
+    m_setViewpointInsetFuture = m_insetView->GeoView::setViewpointAsync(newViewpoint, animationDuration);
   }
 
   /*!
@@ -334,7 +334,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
         viewpoint.targetScale() * scaleFactor()};
 
     constexpr float animationDuration{0};
-    m_updateInsetViewpointTask = m_insetView->setViewpoint(newViewpoint, animationDuration);
+    m_setViewpointInsetFuture = m_insetView->GeoView::setViewpointAsync(newViewpoint, animationDuration);
   }
 
   /*!

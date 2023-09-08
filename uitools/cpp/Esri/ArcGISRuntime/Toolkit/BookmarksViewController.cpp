@@ -23,6 +23,7 @@
 
 // Qt headers
 #include <QtGlobal>
+#include <QFuture>
 
 // ArcGISRuntime headers
 #include <Bookmark.h>
@@ -255,11 +256,13 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
-      sceneView->setBookmark(bookmark->bookmark());
+      auto future = sceneView->setBookmarkAsync(bookmark->bookmark());
+      Q_UNUSED(future)
     }
     else if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
-      mapView->setBookmark(bookmark->bookmark());
+      auto future = mapView->setBookmarkAsync(bookmark->bookmark());
+      Q_UNUSED(future)
     }
   }
 

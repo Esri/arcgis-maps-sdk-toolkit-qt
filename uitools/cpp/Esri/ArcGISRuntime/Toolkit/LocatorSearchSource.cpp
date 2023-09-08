@@ -116,21 +116,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     LocatorSearchSource::setMaximumResults(DEFAULT_MAXIMUM_RESULTS);
     LocatorSearchSource::setMaximumSuggestions(DEFAULT_MAXIMUM_SUGGESTIONS);
 
-    connect(m_locatorTask, &LocatorTask::geocodeCompleted, this, [this](QUuid taskId, const QList<Esri::ArcGISRuntime::GeocodeResult>& geocodeResults)
-            {
-              if (m_searchTask.taskId() != taskId)
-                return;
-
-              QList<SearchResult*> results;
-
-              for (const auto& g : geocodeResults)
-              {
-                results << resultFromGeocodeResult(g, this);
-              }
-
-              emit searchCompleted(std::move(results));
-            });
-
     doOnLoaded(locatorTask, this, [this]
              {
                const auto& info = m_locatorTask->locatorInfo();
@@ -261,23 +246,43 @@ namespace Esri::ArcGISRuntime::Toolkit {
     return m_locatorTask->suggestions();
   }
 
+  void LocatorSearchSource::onGeocodeCompleted_(const QList<GeocodeResult>& geocodeResults)
+  {
+    QList<SearchResult*> results;
+
+    for (const auto& g : geocodeResults)
+    {
+      results << resultFromGeocodeResult(g, this);
+    }
+
+    emit searchCompleted(std::move(results));
+  }
+
   /*!
       \reimp
    */
   void LocatorSearchSource::search(const SuggestResult& suggestion, Geometry area)
   {
-    m_searchTask.cancel();
+    m_geocodeFuture.cancel();
 
     auto params = normalizeGeometryParams(m_geocodeParameters, area);
-    m_searchTask = m_locatorTask->geocodeWithSuggestResultAndParameters(suggestion, params);
+    m_geocodeFuture = m_locatorTask->geocodeWithSuggestResultAndParametersAsync(suggestion, params);
+    m_geocodeFuture.then(this, [this](const QList<GeocodeResult>& geocodeResults)
+    {
+      onGeocodeCompleted_(geocodeResults);
+    });
   }
 
   void LocatorSearchSource::search(const QString& searchString, Geometry area)
   {
-    m_searchTask.cancel();
+    m_geocodeFuture.cancel();
 
     auto params = normalizeGeometryParams(m_geocodeParameters, area);
-    m_searchTask = m_locatorTask->geocodeWithParameters(searchString, params);
+    m_geocodeFuture = m_locatorTask->geocodeWithParametersAsync(searchString, params);
+    m_geocodeFuture.then(this, [this](const QList<GeocodeResult>& geocodeResults)
+    {
+      onGeocodeCompleted_(geocodeResults);
+    });
   }
 
 } // Esri::ArcGISRuntime::Toolkit

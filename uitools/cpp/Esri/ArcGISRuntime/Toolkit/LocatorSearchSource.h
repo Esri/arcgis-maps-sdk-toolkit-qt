@@ -29,6 +29,10 @@
 #include <QList>
 #include <QObject>
 
+namespace Esri::ArcGISRuntime {
+  class GeocodeResult;
+}
+
 namespace Esri::ArcGISRuntime::Toolkit {
 
   class LocatorSearchSource : public SearchSourceInterface
@@ -62,10 +66,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
     void search(const QString& searchString, Geometry area = Geometry{}) override;
 
   protected:
-    TaskWatcher m_searchTask;
+    virtual void onGeocodeCompleted_(const QList<GeocodeResult>& geocodeResults);
+    QFuture<QList<GeocodeResult>> m_geocodeFuture;
 
   private:
-    LocatorTask* m_locatorTask;
+    LocatorTask* m_locatorTask = nullptr;
     GeocodeParameters m_geocodeParameters;
 
   };

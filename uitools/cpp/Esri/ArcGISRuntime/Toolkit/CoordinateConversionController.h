@@ -30,7 +30,6 @@ class QAbstractListModel;
 
 // ArcGISRuntime headers
 #include <Point.h>
-#include <TaskWatcher.h>
 
 namespace Esri::ArcGISRuntime {
 
@@ -100,8 +99,8 @@ public slots:
   void removeCoordinateResultAtIndex(int index);
 
 private:
+  bool m_screenToLocationInProgress = false;
   Point m_currentPoint;
-  TaskWatcher m_screenToLocationTask;
   double m_zoomToDistance = 0.0;
   GenericListModel* m_coordinateFormats = nullptr;
   GenericListModel* m_conversionResults = nullptr;

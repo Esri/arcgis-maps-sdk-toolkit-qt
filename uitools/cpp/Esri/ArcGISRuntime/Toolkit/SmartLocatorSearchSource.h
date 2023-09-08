@@ -25,6 +25,7 @@
 
 // Qt headers
 #include <QObject>
+#include <QVariant>
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
@@ -51,6 +52,10 @@ namespace Esri::ArcGISRuntime::Toolkit {
     void repeatSearchResultThresholdChanged();
 
   private:
+    void onGeocodeCompleted_(const QList<GeocodeResult>& geocodeResults) override;
+
+    Geometry m_lastSearchArea;
+    QVariant m_searchStringOrSuggestResult;
     int m_repeatSearchResultThreshold;
     int m_repeatSearchSuggestThreshold;
   };

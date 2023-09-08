@@ -22,6 +22,8 @@
 #include "Internal/SingleShotConnection.h"
 #include "SmartLocatorSearchSource.h"
 
+#include <QFuture>
+
 // ArcGISRuntime headers
 #include <CalloutData.h>
 #include <Envelope.h>
@@ -431,7 +433,8 @@ namespace Esri::ArcGISRuntime::Toolkit {
                                m_lastSearchArea = extent;
                              });
         // Set sceneView viewpoint to where graphic is.
-        sceneView->setViewpoint(m_selectedResult->selectionViewpoint(), 0);
+        auto future = sceneView->setViewpointAsync(m_selectedResult->selectionViewpoint(), 0);
+        Q_UNUSED(future)
       }
       else if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
       {
@@ -447,7 +450,8 @@ namespace Esri::ArcGISRuntime::Toolkit {
         mapView->calloutData()->setGeoElement(m_selectedResult->geoElement());
         mapView->calloutData()->setVisible(true);
 
-        mapView->setViewpoint(m_selectedResult->selectionViewpoint(), 0);
+        auto future = mapView->GeoView::setViewpointAsync(m_selectedResult->selectionViewpoint(), 0);
+        Q_UNUSED(future)
       }
     }
     else
@@ -702,7 +706,8 @@ namespace Esri::ArcGISRuntime::Toolkit {
                         const auto extent = m_graphicsOverlay->extent();
                         EnvelopeBuilder b{extent};
                         b.expandByFactor(1.2); // Give some margins to the view.
-                        geoView->setViewpoint(b.toEnvelope(), 0);
+                        auto future = geoView->setViewpointAsync(b.toEnvelope(), 0);
+                        Q_UNUSED(future)
                       }
                     }
                   }
