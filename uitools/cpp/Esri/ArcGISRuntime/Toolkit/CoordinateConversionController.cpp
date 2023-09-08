@@ -21,10 +21,10 @@
 #include "Internal/GeoViews.h"
 
 // Qt headers
-#include <QFuture>
 #include <QMouseEvent>
 #include <QtGlobal>
 #include <QUuid>
+#include <QPointF>
 
 // ArcGISRuntime headers
 #include <Camera.h>
@@ -157,14 +157,14 @@ void CoordinateConversionController::setGeoView(QObject* geoView)
     connect(sceneView, &SceneViewToolkit::mouseClicked, this,
             [sceneView, this](QMouseEvent& event)
     {
-      if (m_inPickingMode && !m_screenToLocationInProgress)
+      if (m_inPickingMode && !m_screenToLocationFuture.isRunning())
       {
-        sceneView->screenToLocationAsync(event.pos().x(), event.pos().y()).then(this, [this](const Point& point)
+        m_screenToLocationFuture = sceneView->screenToLocationAsync(event.pos().x(), event.pos().y());
+        m_screenToLocationFuture.then(this, [this](const Point& point)
         {
-          m_screenToLocationInProgress = false;
           setCurrentPoint(point);
         });
-        m_screenToLocationInProgress = true;
+
         event.accept();
       }
     });
