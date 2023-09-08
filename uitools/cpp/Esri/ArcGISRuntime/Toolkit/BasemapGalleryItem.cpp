@@ -186,10 +186,16 @@ namespace Esri::ArcGISRuntime::Toolkit {
                    return;
                  }
 
-                 item->fetchThumbnailAsync().then(this, [this](const QImage&)
+                 // fetchThumbnailAsync returns a single future, so don't keep attaching continuations
+                 // if it's already running
+                 auto future = item->fetchThumbnailAsync();
+                 if (!future.isRunning())
                  {
-                   emit basemapChanged();
-                 });
+                   future.then(this, [this](const QImage&)
+                   {
+                     emit basemapChanged();
+                   });
+                 }
                });
     }
     emit basemapChanged();
