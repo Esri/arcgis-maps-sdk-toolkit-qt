@@ -24,6 +24,7 @@
 #include <QMouseEvent>
 #include <QtGlobal>
 #include <QUuid>
+#include <QPointF>
 
 // ArcGISRuntime headers
 #include <Camera.h>
@@ -156,21 +157,16 @@ void CoordinateConversionController::setGeoView(QObject* geoView)
     connect(sceneView, &SceneViewToolkit::mouseClicked, this,
             [sceneView, this](QMouseEvent& event)
     {
-      if (m_inPickingMode && (!m_screenToLocationTask.isValid() ||
-                               m_screenToLocationTask.isDone()))
+      if (m_inPickingMode && !m_screenToLocationFuture.isRunning())
       {
-        m_screenToLocationTask = sceneView->screenToLocation(event.pos().x(), event.pos().y());
+        m_screenToLocationFuture = sceneView->screenToLocationAsync(event.pos().x(), event.pos().y());
+        m_screenToLocationFuture.then(this, [this](const Point& point)
+        {
+          setCurrentPoint(point);
+        });
+
         event.accept();
       }
-    });
-
-    connect(sceneView, &SceneViewToolkit::screenToLocationCompleted, this,
-            [this](QUuid taskId, Point point)
-    {
-      if (taskId != m_screenToLocationTask.taskId())
-        return;
-
-      setCurrentPoint(point);
     });
   }
   else if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
@@ -341,13 +337,15 @@ void CoordinateConversionController::zoomToCurrentPoint()
   {
     const Camera currentCam = sceneView->currentViewpointCamera();
     const Camera newCam(m_currentPoint, m_zoomToDistance, currentCam.heading(), currentCam.pitch(), currentCam.roll());
-    sceneView->setViewpointCamera(newCam, 1.0);
+    auto future = sceneView->setViewpointCameraAsync(newCam, 1.0);
+    Q_UNUSED(future)
   }
   else if (auto mapView = qobject_cast<MapView*>(m_geoView))
   {
     const Viewpoint currVP = mapView->currentViewpoint(ViewpointType::CenterAndScale);
     const Viewpoint newViewPoint(m_currentPoint, currVP.targetScale());
-    mapView->setViewpoint(newViewPoint, 1.0);
+    auto future = mapView->setViewpointAsync(newViewPoint, 1.0);
+    Q_UNUSED(future)
   }
 }
 

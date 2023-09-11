@@ -21,16 +21,18 @@
 #include "Internal/GenericListModel.h"
 
 // Qt headers
+#include <QFuture>
 #include <QObject>
 #include <QString>
-#include <QPointF>
 
 // Qt forward declarations
 class QAbstractListModel;
 
 // ArcGISRuntime headers
 #include <Point.h>
-#include <TaskWatcher.h>
+
+Q_MOC_INCLUDE(<QPointF>)
+class QPointF;
 
 namespace Esri::ArcGISRuntime {
 
@@ -100,8 +102,8 @@ public slots:
   void removeCoordinateResultAtIndex(int index);
 
 private:
+  QFuture<Point> m_screenToLocationFuture;
   Point m_currentPoint;
-  TaskWatcher m_screenToLocationTask;
   double m_zoomToDistance = 0.0;
   GenericListModel* m_coordinateFormats = nullptr;
   GenericListModel* m_conversionResults = nullptr;

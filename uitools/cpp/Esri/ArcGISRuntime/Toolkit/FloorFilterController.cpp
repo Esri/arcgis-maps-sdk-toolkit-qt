@@ -15,6 +15,8 @@
  ******************************************************************************/
 #include "FloorFilterController.h"
 
+#include <QFuture>
+
 // ArcGISRuntime headers
 #include <Envelope.h>
 #include <EnvelopeBuilder.h>
@@ -36,7 +38,6 @@
 #include "Internal/DisconnectOnSignal.h"
 #include "Internal/DoOnLoad.h"
 #include "Internal/GeoViews.h"
-#include "Internal/SingleShotConnection.h"
 
 // stl headers
 #include <cmath>
@@ -881,31 +882,25 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
-      auto c = std::make_shared<QMetaObject::Connection>();
       m_settingViewpoint = true;
-      *c = connect(mapView, &MapViewToolkit::setViewpointCompleted, this, [this, c](bool success)
-                   {
-                     if (success)
-                     {
-                       m_settingViewpoint = false;
-                       disconnect(*c);
-                     }
-                   });
-      mapView->setViewpoint(b.toEnvelope());
+      mapView->setViewpointAsync(b.toEnvelope()).then(this, [this](bool success)
+      {
+        if (success)
+        {
+          m_settingViewpoint = false;
+        }
+      });
     }
     else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
-      auto c = std::make_shared<QMetaObject::Connection>();
       m_settingViewpoint = true;
-      *c = connect(sceneView, &SceneViewToolkit::setViewpointCompleted, this, [this, c](bool success)
-                   {
-                     if (success)
-                     {
-                       m_settingViewpoint = false;
-                       disconnect(*c);
-                     }
-                   });
-      sceneView->setViewpoint(b.toEnvelope());
+      sceneView->setViewpointAsync(b.toEnvelope()).then(this, [this](bool success)
+      {
+        if (success)
+        {
+          m_settingViewpoint = false;
+        }
+      });
     }
   }
 

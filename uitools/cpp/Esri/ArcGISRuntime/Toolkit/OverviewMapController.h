@@ -19,11 +19,9 @@
 // ArcGISRUntime Toolkit headers
 #include "Internal/GeoViews.h"
 
-// ArcGISRuntime headers
-#include <TaskWatcher.h>
-
 // Qt headers
 #include <QObject>
+#include <QFuture>
 
 namespace Esri::ArcGISRuntime {
   class Graphic;
@@ -69,12 +67,12 @@ namespace Esri::ArcGISRuntime::Toolkit {
     void disableInteractions();
 
   private:
+    QFuture<bool> m_setViewpointFuture;
+    QFuture<bool> m_setViewpointInsetFuture;
     MapViewToolkit* m_insetView = nullptr;
     QObject* m_geoView = nullptr;
     Graphic* m_reticle = nullptr;
     double m_scaleFactor = 25.0;
-    TaskWatcher m_updateInsetViewpointTask;
-    TaskWatcher m_updateGeoViewpointTask;
   };
 
 } // Esri::ArcGISRuntime::Toolkit

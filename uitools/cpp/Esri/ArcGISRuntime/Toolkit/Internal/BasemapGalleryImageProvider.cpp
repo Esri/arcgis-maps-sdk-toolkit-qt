@@ -23,6 +23,7 @@
 #include <Item.h>
 
 // Qt headers
+#include <QFuture>
 #include <QIcon>
 
 namespace Esri::ArcGISRuntime::Toolkit {
@@ -102,8 +103,10 @@ namespace Esri::ArcGISRuntime::Toolkit {
                    emit finished();
                    return;
                  }
-                 connect(item, &Item::fetchThumbnailCompleted, this, &BasemapGalleryImageResponse::finished);
-                 item->fetchThumbnail();
+                 item->fetchThumbnailAsync().then(this, [this](QImage)
+                 {
+                   emit finished();
+                 });
                });
     }
 

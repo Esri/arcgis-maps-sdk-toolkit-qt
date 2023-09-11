@@ -24,6 +24,8 @@
 #include "SuggestListModel.h"
 #include "SuggestResult.h"
 
+Q_DECLARE_METATYPE(Esri::ArcGISRuntime::SuggestResult)
+
 namespace Esri::ArcGISRuntime::Toolkit {
 
   namespace {
@@ -51,6 +53,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     m_repeatSearchResultThreshold{DEFAULT_REPEAT_SEARCH_RESULT_THRESHOLD},
     m_repeatSearchSuggestThreshold{DEFAULT_REPEAT_SEARCH_SUGGEST_THRESHOLD}
   {
+    qRegisterMetaType<SuggestResult>("SuggestResult");
     // If suggestion count is below are below our criteria, redo the suggestion search
     // with area removed.
     connect(suggestions(),
@@ -134,30 +137,8 @@ namespace Esri::ArcGISRuntime::Toolkit {
    */
   void SmartLocatorSearchSource::search(const SuggestResult& suggestion, const Geometry area)
   {
-    // If area is specified, we listen in to the returned results and check to see if the number of
-    // results meets our threshold. If the number of results do not meet our threshold we re-do
-    // the search with the area constraint removed.
-    if (!area.isEmpty() && repeatSearchResultThreshold() > 0)
-    {
-      singleShotConnection(locator(), &LocatorTask::geocodeCompleted, this, [this, suggestion, area](QUuid taskId, const QList<Esri::ArcGISRuntime::GeocodeResult>& geocodeResults)
-                           {
-                             // Warning: hack here. We can not detect in an async-friendly manner when a task is cancelled.
-                             // Which means we have to disconnect on "any" callback (handled by the singleShotConnection), otherwise we will build up space leaks with repeated
-                             // search-and-cancel behaviour.
-                             // This is obviously not ideal if the locator is used for multiple concurrent searches, but this is
-                             // an unlikely scenario.
-
-                             if (m_searchTask.taskId() != taskId)
-                               return;
-
-                             if (geocodeResults.length() < repeatSearchResultThreshold())
-                             {
-                               auto params = geocodeParameters();
-                               params.setMaxResults(params.maxResults() - geocodeResults.length());
-                               m_searchTask = locator()->geocodeWithSuggestResultAndParameters(suggestion, params);
-                             }
-                           });
-    }
+    m_lastSearchArea = area;
+    m_searchStringOrSuggestResult = QVariant::fromValue<SuggestResult>(suggestion);
     LocatorSearchSource::search(suggestion, area);
   }
 
@@ -166,31 +147,37 @@ namespace Esri::ArcGISRuntime::Toolkit {
    */
   void SmartLocatorSearchSource::search(const QString& searchString, const Geometry area)
   {
-    // If area is specified, we listen in to the returned results and check to see if the number of
+    m_lastSearchArea = area;
+    m_searchStringOrSuggestResult = QVariant {searchString};
+    LocatorSearchSource::search(searchString, area);
+  }
+
+  void SmartLocatorSearchSource::onGeocodeCompleted_(const QList<GeocodeResult>& geocodeResults)
+  {
+    // If area is specified, we check the returned results and check to see if the number of
     // results meets our threshold. If the number of results do not meet our threshold we re-do
     // the search with the area constraint removed.
-    if (!area.isEmpty() && repeatSearchResultThreshold() > 0)
+
+    if (!m_lastSearchArea.isEmpty() && repeatSearchResultThreshold() > 0)
     {
-      singleShotConnection(locator(), &LocatorTask::geocodeCompleted, this, [this, searchString, area](QUuid taskId, const QList<Esri::ArcGISRuntime::GeocodeResult>& geocodeResults)
-                           {
-                             // Warning: hack here. We can not detect in an async-friendly manner when a task is cancelled.
-                             // Which means we have to disconnect on "any" callback, otherwise we will build up space leaks with repeated
-                             // search-and-cancel behaviour.
-                             // This is obviously not ideal if the locator is used for multiple concurrent searches, but this is
-                             // an unlikely scenario.
-
-                             if (m_searchTask.taskId() != taskId)
-                               return;
-
-                             if (geocodeResults.length() < repeatSearchResultThreshold())
-                             {
-                               auto params = geocodeParameters();
-                               params.setMaxResults(params.maxResults() - geocodeResults.length());
-                               m_searchTask = locator()->geocodeWithParameters(searchString, params);
-                             }
-                           });
+      if (geocodeResults.length() < repeatSearchResultThreshold())
+      {
+        auto params = geocodeParameters();
+        params.setMaxResults(params.maxResults() - geocodeResults.length());
+        if (static_cast<QMetaType::Type>(m_searchStringOrSuggestResult.typeId()) == QMetaType::QString)
+        {
+          const auto searchString = m_searchStringOrSuggestResult.toString();
+          m_geocodeFuture = locator()->geocodeWithParametersAsync(searchString, params);
+        }
+        else
+        {
+          const auto suggestResult = m_searchStringOrSuggestResult.value<SuggestResult>();
+          m_geocodeFuture = locator()->geocodeWithSuggestResultAndParametersAsync(suggestResult, params);
+        }
+      }
     }
-    LocatorSearchSource::search(searchString, area);
+
+    LocatorSearchSource::onGeocodeCompleted_(geocodeResults);
   }
 
 } // Esri::ArcGISRuntime::Toolkit
