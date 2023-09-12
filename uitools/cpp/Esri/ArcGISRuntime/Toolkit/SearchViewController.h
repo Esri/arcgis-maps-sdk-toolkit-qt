@@ -35,7 +35,6 @@ namespace Esri::ArcGISRuntime {
   class Map;
   class Scene;
   class SymbolStyle;
-  class GeocodeResult;
   class Graphic;
   class GraphicsOverlay;
 } // Esri::ArcGISRuntime

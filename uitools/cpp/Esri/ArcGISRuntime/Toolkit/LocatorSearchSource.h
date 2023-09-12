@@ -21,6 +21,7 @@
 
 // ArcGISRuntime headers
 #include <GeocodeParameters.h>
+#include <GeocodeResult.h>
 #include <LocatorTask.h>
 #include <SuggestParameters.h>
 
@@ -28,10 +29,6 @@
 #include <QFuture>
 #include <QList>
 #include <QObject>
-
-namespace Esri::ArcGISRuntime {
-  class GeocodeResult;
-}
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
