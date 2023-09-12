@@ -22,7 +22,6 @@
 // ArcGISRuntime headers
 #include <Envelope.h>
 #include <Error.h>
-#include <GeocodeResult.h>
 #include <Graphic.h>
 #include <LocatorAttribute.h>
 #include <LocatorInfo.h>
