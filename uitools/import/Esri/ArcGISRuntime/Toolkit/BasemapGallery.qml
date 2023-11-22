@@ -63,7 +63,7 @@ Pane {
       \qmlproperty BasemapGalleryController controller
       \brief The controller handles binding logic between the BasemapGallery and
       the \c GeoModel and the \c Portal where applicable.
-      
+
       The QML controller is documented \l{BasemapGalleryController}{here} and the CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::BasemapGalleryController}{here}.
     */
     property var controller: BasemapGalleryController { }
@@ -208,8 +208,8 @@ Pane {
             id: basemapDelegate
             width: view.cellWidth
             height: view.cellHeight
-            enabled: controller.basemapMatchesCurrentSpatialReference(modelData.basemap)
-            onClicked: controller.setCurrentBasemap(modelData.basemap)
+            enabled: controller.basemapMatchesCurrentSpatialReference(basemap)
+            onClicked: controller.setCurrentBasemap(basemap)
             indicator: Item { }
             down: GridView.isCurrentItem
 
@@ -229,13 +229,13 @@ Pane {
             }
             icon {
                 cache: false
-                source: modelData.thumbnailUrl
+                source: thumbnailUrl
                 width: basemapGallery.internal.defaultCellSize
                 height: basemapGallery.internal.defaultCellSize
                 color: "transparent"
             }
 
-            text: modelData.name === "" ? "Unnamed basemap" : modelData.name
+            text: name === "" ? "Unnamed basemap" : name
             display: {
                 if (basemapGallery.internal.calculatedStyle === BasemapGallery.ViewStyle.List) {
                     return AbstractButton.TextBesideIcon;
@@ -250,23 +250,23 @@ Pane {
                     Qt.openUrlExternally(link)
                 }
             }
-            ToolTip.text: modelData.tooltip
+            ToolTip.text: tooltip
             MouseArea {
                 id: mouseArea
                 z : 2
                 anchors.fill: parent
                 hoverEnabled: true
                 onClicked: {
-                    if (controller.currentBasemap !== modelData.basemap)
+                    if (controller.currentBasemap !== basemap)
                         busyIndicator.running = true;
-                    controller.setCurrentBasemap(modelData.basemap);
+                    controller.setCurrentBasemap(basemap);
                 }
 
                 // When mouse enters thumbnail area, use timer to delay showing of tooltip.
                 onEntered: {
                     // Create a definition for the showTooltipFn property of timerOnEntered
                     timerOnEntered.showTooltipFn = () => {
-                        if (allowTooltips && mouseArea.containsMouse && modelData.tooltip !== "")
+                        if (allowTooltips && mouseArea.containsMouse && tooltip !== "")
                         basemapDelegate.ToolTip.visible = true;
                     }
                     timerOnEntered.start();
