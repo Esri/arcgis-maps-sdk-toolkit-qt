@@ -131,7 +131,7 @@ QtObject {
       \qmlproperty ListModel sources
       \brief The collection of search sources to be used.
 
-      Each element is a ListElement with a single \c modelData
+      Each element is a ListElement with a single \c listData
       field, which contains the search source object.
      */
     readonly property alias sources: internal.sources
@@ -246,7 +246,7 @@ QtObject {
         // Go through all sources and start a search.
         const area = restrictToArea ? internal.queryArea : null;
         for (let i = 0; i < internal.sources.count; i++) {
-            const source = internal.sources.get(i).modelData;
+            const source = internal.sources.get(i).listData;
             if (source) {
                 source.search(controller.currentQuery, area);
             }
@@ -298,7 +298,7 @@ QtObject {
         property ListModel sources: ListModel {
             onRowsInserted: (parent, first, last) =>{
                 for (let i = first; i <= last; ++i) {
-                    const source = sources.get(i).modelData;
+                    const source = sources.get(i).listData;
                     if (source) {
                         // Listen to the source changes in results/suggestions.
                         source.suggestions.suggestionsAdded.connect(internal.onSuggestionsAdded);
@@ -309,7 +309,7 @@ QtObject {
             }
             onRowsAboutToBeRemoved: {
                 for (let i = first; i <= last; i++) {
-                    const source = source.get(i).modelData;
+                    const source = source.get(i).listData;
                     if (source) {
                         // Disconnect from source.
                         source.suggestions.suggestionsAdded.disconnect(internal.onSuggestionsAdded);
@@ -450,7 +450,7 @@ QtObject {
 
         onQueryCenterChanged: {
             for (let i = 0; i < internal.sources.count; i++) {
-                const source = internal.sources.get(i).modelData;
+                const source = internal.sources.get(i).listData;
                 if (source) {
                     // Update all sources with changes to queryCenter.
                     source.preferredSearchLocation = internal.queryCenter;
@@ -468,7 +468,7 @@ QtObject {
             internal.graphicsOverlay = null;
             internal.sources.clear();
             internal.sources.append({
-                                        "modelData" : internal.defaultWorldGeocoderSource.createObject(this)
+                                        "listData" : internal.defaultWorldGeocoderSource.createObject(this)
                                     });
 
             if (controller.geoView) {
@@ -482,7 +482,7 @@ QtObject {
     onCurrentQueryChanged: {
         controller.eligableForRequery = false;
         for (let i = 0; i < internal.sources.count; i++) {
-            const source = internal.sources.get(i).modelData;
+            const source = internal.sources.get(i).listData;
             if (source) {
                 source.suggestions.searchText = controller.currentQuery;
             }

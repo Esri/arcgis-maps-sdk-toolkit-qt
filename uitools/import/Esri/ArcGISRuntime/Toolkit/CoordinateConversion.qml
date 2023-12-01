@@ -118,11 +118,11 @@ Pane {
                 onCurrentIndexChanged: {
                     const index = currentIndex;
                     const formats = coordinateConversionWindow.controller.formats;
-                    let modelData = formats[index];
-                    if (modelData === undefined) {
-                        modelData = formats.element(formats.index(index, 0));
+                    let listData = formats[index];
+                    if (listData === undefined) {
+                        listData = formats.element(formats.index(index, 0));
                     }
-                    inputFormat.type = modelData;
+                    inputFormat.type = listData;
                     inputFormat.updateCoordinatePoint(coordinateConversionWindow.controller.currentPoint());
                 }
             }
@@ -176,7 +176,7 @@ Pane {
                             text: name
                             enabled: text !== inputModeButton.text
                             onTriggered: {
-                                coordinateConversionWindow.controller.addNewCoordinateResultForOption(modelData);
+                                coordinateConversionWindow.controller.addNewCoordinateResultForOption(listData);
                             }
                         }
                     }
@@ -285,11 +285,11 @@ Pane {
                         MenuItem {
                             text: "Copy to clipboard"
                             // Copy not available in pure QML API
-                            enabled: modelData.copyNotationToClipboard !== undefined
+                            enabled: listData.copyNotationToClipboard !== undefined
                             visible: enabled
                             height: enabled ? implicitHeight : 0
                             onClicked: {
-                                modelData.copyNotationToClipboard();
+                                listData.copyNotationToClipboard();
                             }
                         }
                     }
