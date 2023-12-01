@@ -55,7 +55,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     \li Value
     \li Type
   \row
-    \li
+    \li listData
     \li \c{Qt::UserRole}
     \li \c{Foo*}
   \row
