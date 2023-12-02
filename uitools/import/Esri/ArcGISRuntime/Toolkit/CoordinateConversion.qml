@@ -118,11 +118,11 @@ Pane {
                 onCurrentIndexChanged: {
                     const index = currentIndex;
                     const formats = coordinateConversionWindow.controller.formats;
-                    let listData = formats[index];
-                    if (listData === undefined) {
-                        listData = formats.element(formats.index(index, 0));
+                    let modelData = formats[index];
+                    if (modelData === undefined) {
+                        modelData = formats.element(formats.index(index, 0));
                     }
-                    inputFormat.type = listData;
+                    inputFormat.type = modelData;
                     inputFormat.updateCoordinatePoint(coordinateConversionWindow.controller.currentPoint());
                 }
             }
@@ -176,7 +176,10 @@ Pane {
                             text: name
                             enabled: text !== inputModeButton.text
                             onTriggered: {
-                                coordinateConversionWindow.controller.addNewCoordinateResultForOption(listData);
+                                if(modelData === undefined)
+                                    coordinateConversionWindow.controller.addNewCoordinateResultForOption(variantObject);
+                                else
+                                    coordinateConversionWindow.controller.addNewCoordinateResultForOption(modelData);
                             }
                         }
                     }
@@ -285,11 +288,11 @@ Pane {
                         MenuItem {
                             text: "Copy to clipboard"
                             // Copy not available in pure QML API
-                            enabled: listData.copyNotationToClipboard !== undefined
+                            enabled: modelData===undefined
                             visible: enabled
                             height: enabled ? implicitHeight : 0
                             onClicked: {
-                                listData.copyNotationToClipboard();
+                                variantObject.copyNotationToClipboard();
                             }
                         }
                     }
