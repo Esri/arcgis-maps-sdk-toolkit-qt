@@ -27,7 +27,6 @@ import Esri.ArcGISRuntime
 
 QtObject {
     id: controller
-
     /*!
       \qmlproperty GeoView geoView
       \brief The GeoView for this tool. Should be a SceneView or a MapView.
@@ -242,6 +241,12 @@ QtObject {
             });
             geoView.setViewpointAndSeconds(newViewpoint, 1.0);
         }
+    }
+
+    function getData(index)
+    {
+        console.log("CoordinateConversionControllerQML::getData");
+        return formats[index];
     }
 
     /*! \internal */

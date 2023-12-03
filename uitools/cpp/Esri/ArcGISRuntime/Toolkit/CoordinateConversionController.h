@@ -62,6 +62,8 @@ public:
 
   GenericListModel* coordinateFormats() const;
 
+  Q_INVOKABLE CoordinateConversionOption* getData(int index) const;
+
   GenericListModel* conversionResults() const;
 
   Q_INVOKABLE Esri::ArcGISRuntime::Point currentPoint() const;

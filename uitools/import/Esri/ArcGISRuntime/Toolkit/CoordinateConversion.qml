@@ -176,10 +176,7 @@ Pane {
                             text: name
                             enabled: text !== inputModeButton.text
                             onTriggered: {
-                                if(modelData === undefined)
-                                    coordinateConversionWindow.controller.addNewCoordinateResultForOption(variantObject);
-                                else
-                                    coordinateConversionWindow.controller.addNewCoordinateResultForOption(modelData);
+                                coordinateConversionWindow.controller.addNewCoordinateResultForOption(coordinateConversionWindow.controller.getData(index));
                             }
                         }
                     }
