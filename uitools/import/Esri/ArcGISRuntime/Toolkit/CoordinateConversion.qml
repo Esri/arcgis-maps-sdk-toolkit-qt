@@ -176,7 +176,8 @@ Pane {
                             text: name
                             enabled: text !== inputModeButton.text
                             onTriggered: {
-                                coordinateConversionWindow.controller.addNewCoordinateResultForOption(modelData);
+                                var formatOption = coordinateConversionWindow.controller.getOption(index);
+                                coordinateConversionWindow.controller.addNewCoordinateResultForOption(formatOption);
                             }
                         }
                     }
@@ -285,11 +286,11 @@ Pane {
                         MenuItem {
                             text: "Copy to clipboard"
                             // Copy not available in pure QML API
-                            enabled: modelData.copyNotationToClipboard !== undefined
+                            enabled: typeof listModelData !== "undefined"
                             visible: enabled
                             height: enabled ? implicitHeight : 0
                             onClicked: {
-                                modelData.copyNotationToClipboard();
+                                listModelData.copyNotationToClipboard();
                             }
                         }
                     }

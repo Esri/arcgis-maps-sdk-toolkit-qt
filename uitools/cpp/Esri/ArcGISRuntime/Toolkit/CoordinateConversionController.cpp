@@ -314,6 +314,14 @@ GenericListModel* CoordinateConversionController::coordinateFormats() const
 }
 
 /*!
+  \brief Returns the \c CoordinateConversionOption at \a index from the \c GenericListModel
+ */
+CoordinateConversionOption* CoordinateConversionController::getOption(int index) const
+{
+  return m_coordinateFormats->element<CoordinateConversionOption>(m_coordinateFormats->index(index));
+}
+
+/*!
   \brief Returns the list of textual representations of the current point in
   different formats.
 
