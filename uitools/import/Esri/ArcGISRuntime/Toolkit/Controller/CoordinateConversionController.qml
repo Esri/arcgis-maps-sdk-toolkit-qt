@@ -247,8 +247,7 @@ QtObject {
       \qmlmethod CoordinateConversionController::getOption(int index)
       \brief Returns the CoordinateConversionOption at index.
     */
-    function getOption(index)
-    {
+    function getOption(index) {
         return formats[index];
     }
 
