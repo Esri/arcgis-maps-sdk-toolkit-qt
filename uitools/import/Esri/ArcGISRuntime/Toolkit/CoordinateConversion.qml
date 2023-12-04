@@ -286,7 +286,7 @@ Pane {
                         MenuItem {
                             text: "Copy to clipboard"
                             // Copy not available in pure QML API
-                            enabled: modelData===undefined
+                            enabled: typeof variantObject !== "undefined"
                             visible: enabled
                             height: enabled ? implicitHeight : 0
                             onClicked: {
