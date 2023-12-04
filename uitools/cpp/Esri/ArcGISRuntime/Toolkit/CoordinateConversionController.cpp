@@ -321,7 +321,7 @@ CoordinateConversionOption* CoordinateConversionController::getOption(int index)
   return m_coordinateFormats->element<CoordinateConversionOption>(m_coordinateFormats->index(index));
 }
 
-/*!4
+/*!
   \brief Returns the list of textual representations of the current point in
   different formats.
 
