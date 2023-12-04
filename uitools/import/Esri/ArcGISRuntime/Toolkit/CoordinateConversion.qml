@@ -176,7 +176,8 @@ Pane {
                             text: name
                             enabled: text !== inputModeButton.text
                             onTriggered: {
-                                coordinateConversionWindow.controller.addNewCoordinateResultForOption(coordinateConversionWindow.controller.getData(index));
+                                var formatOption = coordinateConversionWindow.controller.getOption(index);
+                                coordinateConversionWindow.controller.addNewCoordinateResultForOption(formatOption);
                             }
                         }
                     }

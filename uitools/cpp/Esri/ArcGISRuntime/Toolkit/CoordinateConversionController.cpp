@@ -313,9 +313,11 @@ GenericListModel* CoordinateConversionController::coordinateFormats() const
   return m_coordinateFormats;
 }
 
-CoordinateConversionOption* CoordinateConversionController::getData(int index) const
+/*!
+  \brief Returns the \c CoordinateConversionOption at \a index from the \c GenericListModel
+ */
+CoordinateConversionOption* CoordinateConversionController::getOption(int index) const
 {
-  qDebug() << "CoordinateConversionController::getData" << index;
   return m_coordinateFormats->element<CoordinateConversionOption>(m_coordinateFormats->index(index));
 }
 

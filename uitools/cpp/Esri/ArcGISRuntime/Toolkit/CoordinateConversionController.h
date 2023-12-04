@@ -62,7 +62,7 @@ public:
 
   GenericListModel* coordinateFormats() const;
 
-  Q_INVOKABLE CoordinateConversionOption* getData(int index) const;
+  Q_INVOKABLE CoordinateConversionOption* getOption(int index) const;
 
   GenericListModel* conversionResults() const;
 
