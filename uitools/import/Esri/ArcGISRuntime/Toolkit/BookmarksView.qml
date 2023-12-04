@@ -79,7 +79,7 @@ Pane {
             text: name
             width: listView.width
             indicator: null
-            onPressed: controller.zoomToBookmarkExtent(modelData)
+            onPressed: controller.zoomToBookmarkExtent(listModelData)
         }
     }
 
