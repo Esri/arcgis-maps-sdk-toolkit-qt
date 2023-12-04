@@ -97,7 +97,7 @@ Dialog {
             }
 
             delegate: ItemDelegate {
-                text: dataRole
+                text: listModelData
                 anchors {
                     left: parent.left
                     right: parent.right

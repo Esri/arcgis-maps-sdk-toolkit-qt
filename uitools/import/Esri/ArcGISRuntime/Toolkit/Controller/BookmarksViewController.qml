@@ -39,15 +39,15 @@ QtObject {
       \brief The bookmarks of Bookmark list objects.
 
       Internally, the list is a QML ListModel containing elements of type ListElement.
-      Each ListElement has a `variantObject` and property `name`, which maps to a Bookmark.
+      Each ListElement has a `listModelData` and property `name`, which maps to a Bookmark.
      */
     readonly property alias bookmarks: internal.bookmarks
 
     /*!
-       \brief Method that takes a Bookmark \a variantObject and  zoom to that bookmark in the `geoView`.
+       \brief Method that takes a Bookmark \a listModelData and  zoom to that bookmark in the `geoView`.
      */
-    function zoomToBookmarkExtent(variantObject) {
-        geoView.setBookmark(variantObject);
+    function zoomToBookmarkExtent(listModelData) {
+        geoView.setBookmark(listModelData);
     }
 
     /*! \internal */
@@ -84,7 +84,7 @@ QtObject {
                 for (let i = 0; i <= internal.rawBookmarks.count; i++) {
                     let bookmark = internal.rawBookmarks.get(i);
                     if (bookmark)
-                        bookmarks.insert(i, {variantObject: bookmark, name: bookmark.name});
+                        bookmarks.insert(i, {listModelData: bookmark, name: bookmark.name});
                 }
             }
         }
@@ -97,7 +97,7 @@ QtObject {
             function onRowsInserted(parent, first, last) {
                 for (let i = first; i <= last; i++) {
                     let bookmark = internal.rawBookmarks.get(i);
-                    bookmarks.insert(i, {variantObject: bookmark, name: bookmark.name});
+                    bookmarks.insert(i, {listModelData: bookmark, name: bookmark.name});
                 }
             }
 
