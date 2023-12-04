@@ -208,8 +208,8 @@ Pane {
             id: basemapDelegate
             width: view.cellWidth
             height: view.cellHeight
-            enabled: controller.basemapMatchesCurrentSpatialReference(variantObject.basemap)
-            onClicked: controller.setCurrentBasemap(variantObject.basemap)
+            enabled: controller.basemapMatchesCurrentSpatialReference(dataRole.basemap)
+            onClicked: controller.setCurrentBasemap(dataRole.basemap)
             indicator: Item { }
             down: GridView.isCurrentItem
 
@@ -229,13 +229,13 @@ Pane {
             }
             icon {
                 cache: false
-                source: variantObject.thumbnailUrl
+                source: dataRole.thumbnailUrl
                 width: basemapGallery.internal.defaultCellSize
                 height: basemapGallery.internal.defaultCellSize
                 color: "transparent"
             }
 
-            text: variantObject.name === "" ? "Unnamed basemap" : variantObject.name
+            text: dataRole.name === "" ? "Unnamed basemap" : dataRole.name
             display: {
                 if (basemapGallery.internal.calculatedStyle === BasemapGallery.ViewStyle.List) {
                     return AbstractButton.TextBesideIcon;
@@ -250,23 +250,23 @@ Pane {
                     Qt.openUrlExternally(link)
                 }
             }
-            ToolTip.text: variantObject.tooltip
+            ToolTip.text: dataRole.tooltip
             MouseArea {
                 id: mouseArea
                 z : 2
                 anchors.fill: parent
                 hoverEnabled: true
                 onClicked: {
-                    if (controller.currentBasemap !== variantObject.basemap)
+                    if (controller.currentBasemap !== dataRole.basemap)
                         busyIndicator.running = true;
-                    controller.setCurrentBasemap(variantObject.basemap);
+                    controller.setCurrentBasemap(dataRole.basemap);
                 }
 
                 // When mouse enters thumbnail area, use timer to delay showing of tooltip.
                 onEntered: {
                     // Create a definition for the showTooltipFn property of timerOnEntered
                     timerOnEntered.showTooltipFn = () => {
-                        if (allowTooltips && mouseArea.containsMouse && variantObject.tooltip !== "")
+                        if (allowTooltips && mouseArea.containsMouse && dataRole.tooltip !== "")
                         basemapDelegate.ToolTip.visible = true;
                     }
                     timerOnEntered.start();

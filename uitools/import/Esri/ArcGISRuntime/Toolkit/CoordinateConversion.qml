@@ -286,11 +286,11 @@ Pane {
                         MenuItem {
                             text: "Copy to clipboard"
                             // Copy not available in pure QML API
-                            enabled: typeof variantObject !== "undefined"
+                            enabled: typeof dataRole !== "undefined"
                             visible: enabled
                             height: enabled ? implicitHeight : 0
                             onClicked: {
-                                variantObject.copyNotationToClipboard();
+                                dataRole.copyNotationToClipboard();
                             }
                         }
                     }

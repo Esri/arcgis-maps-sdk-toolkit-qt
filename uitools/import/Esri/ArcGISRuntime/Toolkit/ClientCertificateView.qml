@@ -97,7 +97,7 @@ Dialog {
             }
 
             delegate: ItemDelegate {
-                text: variantObject
+                text: dataRole
                 anchors {
                     left: parent.left
                     right: parent.right

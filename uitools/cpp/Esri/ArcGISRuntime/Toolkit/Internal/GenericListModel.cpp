@@ -55,7 +55,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     \li Value
     \li Type
   \row
-    \li variantObject
+    \li dataRole
     \li \c{Qt::UserRole}
     \li \c{Foo*}
   \row
@@ -72,7 +72,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     \li \c {bool}
  \endtable
 
- A hard-coded \e{variantObject} role is always exposed as \c Qt::UserRole,
+ A hard-coded \e{dataRole} role is always exposed as \c Qt::UserRole,
  followed by each property on \c Foo in order of declaration.
 
  Both \c data and \c setData can be called respectively on these roles.
@@ -290,7 +290,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   \brief A collection of role names and the corresponding user role enum.
 
   This will always return the hard-coded \e{(name, role)} combination
-  \c{(variantObject, Qt::UserRole)}.
+  \c{(dataRole, Qt::UserRole)}.
 
   For each subsequent property it will also expose:
   \c{(property_N, Qt::UserRole + N + 1)} where \tt{property_N} is the N\sup{th}
@@ -304,7 +304,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
      \li Name
      \li Value
    \row
-     \li variantObject
+     \li dataRole
      \li \c{Qt::UserRole}
    \row
      \li propertyA
@@ -326,7 +326,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
       return {};
 
     QHash<int, QByteArray> output;
-    output.insert(Qt::UserRole, "variantObject");
+    output.insert(Qt::UserRole, "dataRole");
 
     const int offset = m_elementType->propertyOffset();
     for (int i = offset; i < m_elementType->propertyCount(); ++i)
