@@ -34,6 +34,7 @@ Q_MOC_INCLUDE("Symbol.h")
 namespace Esri::ArcGISRuntime {
 
 class ArcGISFeature;
+class ErrorException;
 class GraphicsOverlay;
 class SimpleFillSymbol;
 class SimpleLineSymbol;
@@ -145,7 +146,7 @@ signals:
 
 private slots:
   void onTraceCompleted();
-  void onSelectedUtilityNetworkError(const Esri::ArcGISRuntime::Error& e);
+  void onSelectedUtilityNetworkError(const Esri::ArcGISRuntime::ErrorException& e);
   void onFeaturesForElementsCompleted();
 
 private:
@@ -168,7 +169,6 @@ private:
   bool m_isAddingStartingPointInProgress = false; // if so, it's processing selected points on the map to be starting points
   Symbol* m_startingPointSymbol;
   Point m_mapPoint;
-  QMap<QUuid, QMetaObject::Connection> m_traceConfigConnection;
   bool m_isInsufficientStartingPoints = true; // during initialization, it cannot be sufficient
   bool m_isAboveMinimumStartingPoint = false; // during initialization, it cannot be more than minimum
   bool m_isResetResultsEnabled = false;

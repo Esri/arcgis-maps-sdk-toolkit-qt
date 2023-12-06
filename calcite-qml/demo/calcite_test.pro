@@ -23,7 +23,7 @@ CONFIG += c++17
 # additional modules are pulled in via arcgisruntime.pri
 QT += opengl qml quick quickcontrols2
 
-ARCGIS_RUNTIME_VERSION = 200.2.0
+ARCGIS_RUNTIME_VERSION = 200.3.0
 include($$PWD/arcgisruntime.pri)
 
 TEMPLATE = app

@@ -21,6 +21,7 @@
 
 // ArcGISRuntime headers
 #include <GeocodeParameters.h>
+#include <GeocodeResult.h>
 #include <LocatorTask.h>
 #include <SuggestParameters.h>
 
@@ -62,10 +63,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
     void search(const QString& searchString, Geometry area = Geometry{}) override;
 
   protected:
-    TaskWatcher m_searchTask;
+    virtual void onGeocodeCompleted_(const QList<GeocodeResult>& geocodeResults);
+    QFuture<QList<GeocodeResult>> m_geocodeFuture;
 
   private:
-    LocatorTask* m_locatorTask;
+    LocatorTask* m_locatorTask = nullptr;
     GeocodeParameters m_geocodeParameters;
 
   };

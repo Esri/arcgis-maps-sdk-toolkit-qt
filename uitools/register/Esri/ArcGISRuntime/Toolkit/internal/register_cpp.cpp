@@ -98,7 +98,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
         qmlRegisterType<T>(NAMESPACE, majorVersion, minorVersion, name);
       }
 
-      constexpr Creatable_ Creatable = Creatable_{};
+      [[maybe_unused]] constexpr Creatable_ Creatable = Creatable_{};
 
       struct Uncreatable_
       {

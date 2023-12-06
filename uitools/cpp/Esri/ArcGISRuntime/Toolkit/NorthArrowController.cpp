@@ -18,7 +18,8 @@
 #include "Internal/GeoViews.h"
 
 #include "Camera.h"
-#include "TaskWatcher.h"
+
+#include <QFuture>
 
 // std headers
 #include <cmath>
@@ -62,13 +63,15 @@ namespace Esri::ArcGISRuntime::Toolkit {
   {
     if (auto mapView = qobject_cast<MapView*>(m_geoView))
     {
-      mapView->setViewpointRotation(heading);
+      auto future = mapView->setViewpointRotationAsync(heading);
+      Q_UNUSED(future)
     }
     else if (auto sceneView = qobject_cast<SceneView*>(m_geoView))
     {
       Camera currentCamera = sceneView->currentViewpointCamera();
       Camera updatedCamera = currentCamera.rotateTo(heading, currentCamera.pitch(), currentCamera.roll());
-      sceneView->setViewpointCamera(updatedCamera, 0.50);
+      auto future = sceneView->setViewpointCameraAsync(updatedCamera, 0.50);
+      Q_UNUSED(future)
     }
   }
   /*!

@@ -69,7 +69,7 @@ QtObject {
       \brief The gallery of BasemapGalleryItem objects.
 
       Internally, the gallery is a QML ListModel containing elements of type ListElement.
-      Each ListElement has a single property `modelData`, which maps to a BasemapGalleryItem.
+      Each ListElement has a single property `listModelData`, which maps to a BasemapGalleryItem.
      */
     readonly property alias gallery: internal.gallery
 
@@ -123,7 +123,7 @@ QtObject {
             return false;
         }
         internal.gallery.append(
-                    { "modelData" : internal.galleryItem.createObject(
+                    { "listModelData" : internal.galleryItem.createObject(
                                         this,
                                         {
                                             basemap: basemap,
@@ -149,7 +149,7 @@ QtObject {
         // We do a name and ItemID comparisons, since the ArcGIS QML API disallows
         // pointer comparisons.
         for (let i = 0; i < gallery.count; i++) {
-            let b = gallery.get(i).modelData;
+            let b = gallery.get(i).listModelData;
             if (b && b.basemap && b.basemap.name === basemap.name) {
                 // If there is an item involved, we can check the itemId to confirm the sameness.
                 if ((b.basemap.item && basemap.item && b.basemap.item.itemId === basemap.item.itemId)
