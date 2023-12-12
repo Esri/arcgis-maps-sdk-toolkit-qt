@@ -14,10 +14,10 @@
 
 module Esri.ArcGISRuntime.Toolkit
 
-depends Esri.ArcGISRuntime.Toolkit.Controller 200.2
+depends Esri.ArcGISRuntime.Toolkit.Controller 200.4
 
 # Current version increment
-CurrentVersion 200.2 CurrentVersion.qml
+CurrentVersion 200.4 CurrentVersion.qml
 
 # View components
 AuthenticationView 100.10 AuthenticationView.qml
