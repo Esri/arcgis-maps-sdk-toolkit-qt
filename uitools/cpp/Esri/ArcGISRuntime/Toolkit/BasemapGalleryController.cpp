@@ -241,8 +241,8 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     /*!
       \internal
-      Calls Portal::fetchDeveloperBasemaps on the portal. Note that we do
-      not call Portal::fetchBasemaps. The former call is for retrieving the modern API-key
+      Calls Portal::fetchDeveloperBasemapsAsync on the portal. Note that we do
+      not call Portal::fetchBasemapsAsync. The former call is for retrieving the modern API-key
       metered basemaps, while the latter returns older-style basemaps. The latter is required
       only when the user applies a custom portal, as it is also the call for retrieving an
       enterprises's custom basemaps if set.
@@ -412,7 +412,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     \brief Sets the current portal. This resets the gallery.
 
     When \a portal is set, the basemaps of the Portal
-    are fetched via \c{Portal::fetchBasemaps}.
+    are fetched via \c{Portal::fetchBasemapsAsync}.
 
     This is useful for displaying an organization's basemaps or to display a gallery of the old-style basemaps
     (which do not require an API key or named user.)
