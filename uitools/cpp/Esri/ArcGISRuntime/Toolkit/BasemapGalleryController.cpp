@@ -34,6 +34,7 @@
 #include <SpatialReference.h>
 
 // Qt headers
+#include <QFuture>
 #include <QPersistentModelIndex>
 #include <QPointer>
 
@@ -248,21 +249,21 @@ namespace Esri::ArcGISRuntime::Toolkit {
      */
     void setToDefaultBasemaps(BasemapGalleryController* self, Portal* portal)
     {
-      // For every "discovered" basemap we add it to our gallery.
-      QObject::connect(
-          portal, &Portal::developerBasemapsChanged, self, [portal, self]()
-          {
-            BasemapListModel* basemaps = portal->developerBasemaps();
-
-            sortBasemapsAndAddToGallery(self, basemaps);
-          });
-
       // Load the portal and kick-off the group discovery.
-      QObject::connect(portal, &Portal::doneLoading, self, [portal](Error e)
+      QObject::connect(portal, &Portal::doneLoading, self, [portal, self](Error e)
                        {
                          if (!e.isEmpty())
                            return;
-                         portal->fetchDeveloperBasemaps();
+
+                         portal->fetchDeveloperBasemapsAsync().then(
+                         [portal, self]()
+                         {
+                           // Sort and append the basemaps to the gallery.
+                           BasemapListModel* basemaps = portal->developerBasemaps();
+                           sortBasemapsAndAddToGallery(self, basemaps);
+                           // Notify the demo that the basemaps have changed.
+                           emit self->basemapsChanged();
+                         });
                        });
       portal->load();
     }
@@ -457,13 +458,13 @@ namespace Esri::ArcGISRuntime::Toolkit {
                  }
                  else
                  {
-                   connect(m_portal, &Portal::basemapsChanged, this, [this]
-                           {
-                             BasemapListModel* basemaps = m_portal->basemaps();
-
-                             sortBasemapsAndAddToGallery(this, basemaps);
-                           });
-                   m_portal->fetchBasemaps();
+                   m_portal->fetchBasemapsAsync().then(
+                   [this]()
+                   {
+                     BasemapListModel* basemaps = m_portal->basemaps();
+                     sortBasemapsAndAddToGallery(this, basemaps);
+                     emit basemapsChanged();
+                   });
                  }
                });
     }
