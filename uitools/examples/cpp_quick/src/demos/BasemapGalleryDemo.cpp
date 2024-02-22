@@ -41,13 +41,9 @@ BasemapGalleryDemo::BasemapGalleryDemo(QObject* parent) :
 
             auto basemap = portal->developerBasemaps()->at(0);
             if (geoView()->geoViewType() == GeoViewType::MapView)
-            {
               setGeoModel(new Map(basemap, this));
-            }
             else if (geoView()->geoViewType() == GeoViewType::SceneView)
-            {
               setGeoModel(new Scene(basemap, this));
-            }
           });
 }
 
