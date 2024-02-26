@@ -72,6 +72,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   signals:
     void geoModelChanged();
     void portalChanged();
+    void basemapsChanged();
     void currentBasemapChanged();
 
   private:
