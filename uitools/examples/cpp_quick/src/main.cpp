@@ -38,6 +38,7 @@ int main(int argc, char* argv[])
 
   QtWebView::initialize();
   QGuiApplication app(argc, argv);
+  QQuickStyle::setStyle("Basic");
 
   // Use of Esri location services, including basemaps and geocoding, requires
   // either an ArcGIS identity or an API key. For more information see
