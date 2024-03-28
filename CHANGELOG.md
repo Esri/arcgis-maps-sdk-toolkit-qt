@@ -1,5 +1,8 @@
 # Changelog
 
+## 200.4
+* Added CMake files for installing ArcGIS Toolkit in projects that use CMake
+
 ## 200.0
 * (UtilityNetworkTrace) Introduction of the new Utility Network Trace tool (C++/Quick).
 * Increased minimum version to use Qt 6
