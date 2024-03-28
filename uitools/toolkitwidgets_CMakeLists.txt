@@ -82,4 +82,4 @@ target_link_libraries(ArcGISToolkit_Widgets PRIVATE
     Qt6::Widgets
     Qt6::WebEngineWidgets
     Qt6::Svg
-    ArcGISRuntime::Cpp) #(This should be installed in the CMakeLists.txt that calls this one)
+    ArcGISRuntime::Cpp) #(This package should be found in the CMakeLists.txt that calls this one)
