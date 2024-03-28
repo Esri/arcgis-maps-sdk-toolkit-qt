@@ -1,0 +1,85 @@
+#[[ Copyright 2012-2024 Esri
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#]]
+
+#[[ QMAKE: include($$PWD/common.pri)]]
+include(common_CMakeLists.txt)
+
+#[[ QMAKE: QT += widgets webenginewidgets svg]]
+find_package(Qt6 COMPONENTS Widgets WebEngineWidgets Svg)
+
+#[[ QMAKE: RESOURCES += $$PWD/images/esri_arcgisruntime_toolkit_images.qrc]]
+list(APPEND RESOURCES ${CMAKE_CURRENT_LIST_DIR}/images/esri_arcgisruntime_toolkit_images.qrc)
+
+#[[ QMAKE: DEFINES += WIDGETS_ARCGISRUNTIME_TOOLKIT]]
+add_definitions(-DWIDGETS_ARCGISRUNTIME_TOOLKIT)
+
+#[[ QMAKE: WIDGETPATH = $$PWD/widgets/Esri/ArcGISRuntime/Toolkit]]
+set(WIDGETPATH ${CMAKE_CURRENT_LIST_DIR}/widgets/Esri/ArcGISRuntime/Toolkit)
+
+#[[ QMAKE: INCLUDEPATH += $$PWD/widgets $$WIDGETPATH]]
+include_directories(${CMAKE_CURRENT_LIST_DIR}/widgets ${WIDGETPATH})
+
+#[[ QMAKE: HEADERS += <all the header files>]]
+list(APPEND HEADERS ${WIDGETPATH}/AuthenticationView.h
+    ${WIDGETPATH}/BasemapGallery.h
+    ${WIDGETPATH}/BookmarksView.h
+    ${WIDGETPATH}/CoordinateConversion.h
+    ${WIDGETPATH}/FloorFilter.h
+    ${WIDGETPATH}/NorthArrow.h
+    ${WIDGETPATH}/OverviewMap.h
+    ${WIDGETPATH}/Internal/ClientCertificatePasswordDialog.h
+    ${WIDGETPATH}/Internal/ClientCertificateView.h
+    ${WIDGETPATH}/Internal/CoordinateEditDelegate.h
+    ${WIDGETPATH}/Internal/Flash.h
+    ${WIDGETPATH}/Internal/OAuth2View.h
+    ${WIDGETPATH}/Internal/SslHandshakeView.h
+    ${WIDGETPATH}/Internal/UserCredentialView.h)
+
+#[[ QMAKE: SOURCES += <all the cpp files>]]
+list(APPEND SOURCES ${WIDGETPATH}/AuthenticationView.cpp
+    ${WIDGETPATH}/BasemapGallery.cpp
+    ${WIDGETPATH}/BookmarksView.cpp
+    ${WIDGETPATH}/CoordinateConversion.cpp
+    ${WIDGETPATH}/FloorFilter.cpp
+    ${WIDGETPATH}/NorthArrow.cpp
+    ${WIDGETPATH}/OverviewMap.cpp
+    ${WIDGETPATH}/Internal/ClientCertificatePasswordDialog.cpp
+    ${WIDGETPATH}/Internal/ClientCertificateView.cpp
+    ${WIDGETPATH}/Internal/CoordinateEditDelegate.cpp
+    ${WIDGETPATH}/Internal/Flash.cpp
+    ${WIDGETPATH}/Internal/OAuth2View.cpp
+    ${WIDGETPATH}/Internal/SslHandshakeView.cpp
+    ${WIDGETPATH}/Internal/UserCredentialView.cpp)
+
+#[[ QMAKE: FORMS += <all the ui files>]]
+list(APPEND FORMS ${WIDGETPATH}/AuthenticationView.ui
+    ${WIDGETPATH}/BasemapGallery.ui
+    ${WIDGETPATH}/BookmarksView.ui
+    ${WIDGETPATH}/CoordinateConversion.ui
+    ${WIDGETPATH}/FloorFilter.ui
+    ${WIDGETPATH}/OverviewMap.ui
+    ${WIDGETPATH}/Internal/ClientCertificatePasswordDialog.ui
+    ${WIDGETPATH}/Internal/ClientCertificateView.ui
+    ${WIDGETPATH}/Internal/OAuth2View.ui
+    ${WIDGETPATH}/Internal/SslHandshakeView.ui
+    ${WIDGETPATH}/Internal/UserCredentialView.ui)
+
+# These commands are run implicitly as part of the qmake commands above
+qt_add_library(ArcGISToolkit_Widgets STATIC ${HEADERS} ${SOURCES} ${RESOURCE_FILES})
+target_link_libraries(ArcGISToolkit_Widgets PRIVATE
+    Qt6::Widgets
+    Qt6::WebEngineWidgets
+    Qt6::Svg
+    ArcGISRuntime::Cpp) #(This should be installed in the CMakeLists.txt that calls this one)
