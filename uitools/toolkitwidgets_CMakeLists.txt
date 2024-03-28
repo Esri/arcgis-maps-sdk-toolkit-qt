@@ -14,7 +14,7 @@
 #]]
 
 #[[ QMAKE: include($$PWD/common.pri)]]
-include(common_CMakeLists.txt)
+include(${CMAKE_CURRENT_LIST_DIR}/common_CMakeLists.txt)
 
 #[[ QMAKE: QT += widgets webenginewidgets svg]]
 find_package(Qt6 COMPONENTS Widgets WebEngineWidgets Svg)
