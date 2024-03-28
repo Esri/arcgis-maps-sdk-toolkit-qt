@@ -113,15 +113,20 @@ get added to QtCreator when you install the ArcGIS Runime SDK for Qt.
 
 - In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Maps 200.4.0 Qt Quick C++ App`
 - choose settings to match the platform etc. you are building for
-- in the `.pro` file of your new app, add a line to add the library for your QML
-  plugin - for example:
+- Depending on which build tool you are using, add one of the following lines to your build file to install the Toolkit library:
+    - **QMAKE**: In the `.pro` file of your new app, add the following:
+      ```qmake
+      include(path/to/toolkitcpp.pri)
+      ```
 
-```qmake
-include(path/to/toolkitcpp.pri)
-```
-
-- in the Run environment settings for the app, add a new environment variable to
-  import the QML module - e.g:
+    - **CMAKE**: In the `CMakeLists.txt` file of your new app, add the following:
+      ```CMake
+      include(path/to/toolkitcpp_CMakeLists.txt)
+      ```
+      Don't forget to add the library in a `target_link_libraries()` statement, too:
+      ```
+      target_link_libraries(myProject PRIVATE ArcGISToolkit_Cpp)
+      ```
 
 - in `main.cpp` add a line to import the toolkit registration function.
 
@@ -174,12 +179,20 @@ get added to QtCreator when you install the ArcGIS Maps SDK for Qt.
 
 - In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Maps 200.4.0 Qt Widgets App`
 - choose settings to match the platform etc. you are building for
-- in the `.pro` file of your new app, add a line to add the library for your QML
-  plugin - for example:
+- Depending on which build tool you are using, add one of the following lines to your build file to install the Toolkit library:
+    - **QMAKE**: In the `.pro` file of your new app, add the following:
+      ```qmake
+      include(path/to/toolkitwidgets.pri)
+      ```
 
-```qmake
-include(path/to/toolkitwidgets.pri)
-```
+    - **CMAKE**: In the `CMakeLists.txt` file of your new app, add the following:
+      ```CMake
+      include(path/to/toolkitwidgets_CMakeLists.txt)
+      ```
+      Don't forget to add the library in a `target_link_libraries()` statement, too:
+      ```
+      target_link_libraries(myProject PRIVATE ArcGISToolkit_Widgets)
+      ```
 
 #### Using a tool from the toolkit (toolkitwidgets.pri)
 
