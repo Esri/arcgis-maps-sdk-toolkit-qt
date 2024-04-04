@@ -84,7 +84,7 @@ for details.
 [ArcGIS Maps SDK for Qt Toolkit](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt).
 
 3. In Qt Creator, create a new project and select the app template named
-"ArcGIS Maps 200.4.0 Qt Quick C++ app". Select the option "3D project" in the
+"ArcGIS Maps 200.5.0 Qt Quick C++ app". Select the option "3D project" in the
 "Details" dialog.
 
 4. In the newly created project, add the following lines anywhere in the app's project (`.pro`)
@@ -231,7 +231,7 @@ for details.
 
 2. Download the sources of the [ArcGIS Maps SDK for Qt Toolkit](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt) from GitHub.
 
-3. In Qt Creator, create a new project and select "ArcGIS Maps 200.4.0 Qt Quick QML app".
+3. In Qt Creator, create a new project and select "ArcGIS Maps 200.5.0 Qt Quick QML app".
 Select the option "3D project" in the "Details" step.
 
 4. In the created project, add the following lines anywhere in the app's project
