@@ -77,7 +77,7 @@ Pane {
     /*!
        \qmlproperty Portal portal
        \brief The \c Portal contains basemaps which will be fetched and displayed in the gallery if applicable.
-       When a valid Portal is set then `Portal.fetchBasemaps` is immediately called.
+       When a valid Portal is set then `Portal.fetchBasemapsAsync` is immediately called.
 
        Note: Changing the current active portal will reset the contents of the gallery.
      */
