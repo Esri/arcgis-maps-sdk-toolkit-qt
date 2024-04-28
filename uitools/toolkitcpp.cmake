@@ -59,60 +59,20 @@ set(TOOLKITCPP_SOURCES
     ${REGISTERPATH}/register.cpp
     ${REGISTERPATH}/internal/register_cpp.cpp)
 
-set(TOOLKITCPP_HEADERS
-    ${CPPPATH}/AuthenticationController.h
-    ${CPPPATH}/BasemapGalleryController.h
-    ${CPPPATH}/BasemapGalleryItem.h
-    ${CPPPATH}/BookmarksViewController.h
-    ${CPPPATH}/BookmarkListItem.h
-    ${CPPPATH}/CoordinateConversionConstants.h
-    ${CPPPATH}/CoordinateConversionController.h
-    ${CPPPATH}/CoordinateConversionOption.h
-    ${CPPPATH}/CoordinateConversionResult.h
-    ${CPPPATH}/CoordinateOptionDefaults.h
-    ${CPPPATH}/FloorFilterController.h
-    ${CPPPATH}/FloorFilterFacilityItem.h
-    ${CPPPATH}/FloorFilterLevelItem.h
-    ${CPPPATH}/FloorFilterSiteItem.h
-    ${CPPPATH}/LocatorSearchSource.h
-    ${CPPPATH}/Internal/BasemapGalleryImageProvider.h
-    ${CPPPATH}/Internal/DisconnectOnSignal.h
-    ${CPPPATH}/Internal/DoOnLoad.h
-    ${CPPPATH}/Internal/GenericListModel.h
-    ${CPPPATH}/Internal/GenericTableProxyModel.h
-    ${CPPPATH}/Internal/GeoViews.h
-    ${CPPPATH}/Internal/MetaElement.h
-    ${CPPPATH}/Internal/SingleShotConnection.h
-    ${CPPPATH}/NorthArrowController.h
-    ${CPPPATH}/OverviewMapController.h
-    ${CPPPATH}/PopupViewController.h
-    ${CPPPATH}/ScalebarController.h
-    ${CPPPATH}/SearchResult.h
-    ${CPPPATH}/SearchSourceInterface.h
-    ${CPPPATH}/SearchSuggestion.h
-    ${CPPPATH}/SearchViewController.h
-    ${CPPPATH}/SmartLocatorSearchSource.h
-    ${CPPPATH}/TimeSliderController.h
-    ${CPPPATH}/UtilityNetworkFunctionTraceResult.h
-    ${CPPPATH}/UtilityNetworkFunctionTraceResultsModel.h
-    ${CPPPATH}/UtilityNetworkListItem.h
-    ${CPPPATH}/UtilityNetworkTraceController.h
-    ${CPPPATH}/UtilityNetworkTraceStartingPoint.h
-    ${CPPPATH}/UtilityNetworkTraceStartingPointsModel.h
-    ${REGISTERPATH}/register.h
-    ${REGISTERPATH}/internal/register_cpp.h)
-
 set(TOOLKITCPP_RESOURCES
     ${CMAKE_CURRENT_LIST_DIR}/images/esri_arcgisruntime_toolkit_images.qrc
     ${CMAKE_CURRENT_LIST_DIR}/import/Esri/ArcGISRuntime/Toolkit/esri_arcgisruntime_toolkit_view.qrc)
 
-target_sources(${PROJECT_NAME} PRIVATE
-    ${TOOLKITCPP_SOURCES}
-    ${TOOLKITCPP_HEADERS}
-    ${TOOLKITCPP_RESOURCES})
-
 find_package(Qt6 COMPONENTS REQUIRED quickcontrols2 webview svg quicklayouts)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::QuickControls2 Qt6::WebView Qt6::Svg Qt6::QuickLayouts)
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    Qt::QuickControls2
+    Qt::WebView
+    Qt::Svg
+    Qt::QuickLayouts)
+
+target_sources(${PROJECT_NAME} PRIVATE
+    ${TOOLKITCPP_SOURCES}
+    ${TOOLKITCPP_RESOURCES})
 
 add_definitions(-DCPP_ARCGISRUNTIME_TOOLKIT)
