@@ -11,11 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-include_directories(${CMAKE_CURRENT_LIST_DIR}/cpp
-                    ${CMAKE_CURRENT_LIST_DIR}/cpp/Esri/ArcGISRuntime/Toolkit
-                    ${CMAKE_CURRENT_LIST_DIR}/register
-                    ${CMAKE_CURRENT_LIST_DIR}/register/Esri/ArcGISRuntime/Toolkit)
-
 set(CPPPATH ${CMAKE_CURRENT_LIST_DIR}/cpp/Esri/ArcGISRuntime/Toolkit)
 
 set(REGISTERPATH ${CMAKE_CURRENT_LIST_DIR}/register/Esri/ArcGISRuntime/Toolkit)
@@ -63,16 +58,27 @@ set(TOOLKITCPP_RESOURCES
     ${CMAKE_CURRENT_LIST_DIR}/images/esri_arcgisruntime_toolkit_images.qrc
     ${CMAKE_CURRENT_LIST_DIR}/import/Esri/ArcGISRuntime/Toolkit/esri_arcgisruntime_toolkit_view.qrc)
 
-find_package(Qt6 COMPONENTS REQUIRED quickcontrols2 webview svg quicklayouts)
-
-target_link_libraries(${PROJECT_NAME} PRIVATE
-    Qt::QuickControls2
-    Qt::WebView
-    Qt::Svg
-    Qt::QuickLayouts)
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/cpp
+    ${CPPPATH}
+    ${CMAKE_CURRENT_LIST_DIR}/register
+    ${REGISTERPATH})
 
 target_sources(${PROJECT_NAME} PRIVATE
     ${TOOLKITCPP_SOURCES}
     ${TOOLKITCPP_RESOURCES})
+
+find_package(Qt6 COMPONENTS REQUIRED QuickControls2 WebView Svg QuickLayouts)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    Qt6::QuickControls2
+    Qt6::WebView
+    Qt6::Svg)
+
+if(IOS)
+    target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::qquicklayoutsplugin)
+else()
+    target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::QuickLayouts)
+endif()
 
 add_definitions(-DCPP_ARCGISRUNTIME_TOOLKIT)
