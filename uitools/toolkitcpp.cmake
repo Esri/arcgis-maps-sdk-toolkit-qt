@@ -81,4 +81,8 @@ else()
     target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::QuickLayouts)
 endif()
 
+list(APPEND QML_IMPORT_PATH ${CMAKE_CURRENT_LIST_DIR}/import)
+
+set(QML_IMPORT_PATH ${QML_IMPORT_PATH} CACHE STRING "" FORCE)
+
 add_definitions(-DCPP_ARCGISRUNTIME_TOOLKIT)
