@@ -104,6 +104,62 @@ MapView {
     }
 }
 ```
+## toolkitcpp.cmake (C++ QtQuick)
+
+#### Importing the toolkit (toolkitcpp.cmake)
+A good way to start using the toolkit is to use one of the template apps which
+get added to QtCreator when you install the ArcGIS Runime SDK for Qt.
+
+- In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Maps 200.4.0 Qt Quick C++ App`
+- choose settings to match the platform etc. you are building for
+- in the `CMakeLists.txt` file of your new app, uncomment this line to add the toolkit to your app:
+
+```CMake
+# include(path/to/toolkitcpp.cmake)
+```
+
+- in `main.cpp` add a line to import the toolkit registration function.
+
+```cpp
+#include "Esri/ArcGISRuntime/Toolkit/register.h"
+```
+
+- in `main.cpp` (inside the main function) call the registration function.
+
+```cpp
+QQmlApplicationEngine engine; // The engine driving your QML application.
+Esri::ArcGISRuntime::Toolkit::registerComponents(engine);
+```
+#### Using a tool from the toolkit (toolkitcpp.cmake)
+
+Once you have successfully imported the toolkit, you can access individual tools
+in your own QML files.
+
+- add an import statement for the toolkit:
+`import Esri.ArcGISRuntime.Toolkit`
+- declare the tool you wish to use. Generally you will also have to supply the
+  `GeoView` etc. you wish the tool to work with. For example, to add a `NorthArrow`:
+
+```qml
+import Esri.ArcGISRuntime.Toolkit
+
+MapView {
+    id: mapView
+
+    // A visible compass is now embedded in the mapView and hooked up!
+    NorthArrow {
+        id: arrow
+        width: 32
+        height: 32
+        anchors {
+            right: parent.right
+            bottom: parent.bottom
+        }
+        geoView: mapView
+    }
+}
+```
+
 ## toolkitcpp.pri (C++ QtQuick)
 
 #### Importing the toolkit (toolkitcpp.pri)
@@ -182,6 +238,39 @@ include(path/to/toolkitwidgets.pri)
 ```
 
 #### Using a tool from the toolkit (toolkitwidgets.pri)
+
+Once you have successfully imported the toolkit, you can create individual tools
+in your own widgets files.
+
+- in your widgets code, create a new instance of the tool you wish to use and
+  add it to your widgets layout. You will also normally need to pass the `GeoView`
+  which the tool is designed to work with:
+
+```cpp
+  #include "Esri/ArcGISRuntime/Toolkit/NorthArrow.h"
+  ...
+  auto northArrow = new Esri::ArcGISRuntime::Toolkit::NorthArrow(this);
+  northArrow->setMapView(m_mapView);
+  // Add your NorthArrow to your UI here!
+  northArrow->show();
+```
+
+## toolkitwidgets.cmake (QtWidgets)
+
+#### Importing the toolkit (toolkitwidgets.cmake)
+
+A good way to start using the toolkit is to use one of the template apps which
+get added to QtCreator when you install the ArcGIS Maps SDK for Qt.
+
+- In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Maps 200.4.0 Qt Widgets App`
+- choose settings to match the platform etc. you are building for
+- in the `CMakeLists.txt` file of your new app, uncomment this line to add the toolkit to your app:
+
+```CMake
+# include(path/to/toolkitcpp.cmake)
+```
+
+#### Using a tool from the toolkit (toolkitwidgets.cmake)
 
 Once you have successfully imported the toolkit, you can create individual tools
 in your own widgets files.
