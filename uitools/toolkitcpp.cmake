@@ -15,7 +15,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/common.cmake)
 
 set(REGISTERPATH ${CMAKE_CURRENT_LIST_DIR}/register/Esri/ArcGISRuntime/Toolkit)
 
-set(REGISTER_SOURCES
+set(TOOLKITREGISTER_SOURCES
     ${REGISTERPATH}/register.cpp
     ${REGISTERPATH}/internal/register_cpp.cpp)
 
@@ -29,7 +29,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 
 target_sources(${PROJECT_NAME} PRIVATE
     ${TOOLKITCOMMON_SOURCES}
-    ${REGISTER_SOURCES}
+    ${TOOLKITREGISTER_SOURCES}
     ${TOOLKIT_RESOURCES})
 
 find_package(Qt6 COMPONENTS REQUIRED QuickControls2 WebView Svg QuickLayouts)
