@@ -16,10 +16,15 @@ function(setup_toolkit TARGET_NAME TOOLKIT_DIR)
     set(CPPPATH ${TOOLKITUI_DIR}/cpp/Esri/ArcGISRuntime/Toolkit)
     set(REGISTERPATH ${TOOLKITUI_DIR}/register/Esri/ArcGISRuntime/Toolkit)
 
-    file(GLOB_RECURSE TOOLKITCOMMON_HEADERS "${CPPPATH}/*.h")
-    file(GLOB_RECURSE TOOLKITCOMMON_SOURCES "${CPPPATH}/*.cpp")
-    file(GLOB_RECURSE TOOLKITREGISTER_HEADERS "${REGISTERPATH}/*.h")
-    file(GLOB_RECURSE TOOLKITREGISTER_SOURCES "${REGISTERPATH}/*.cpp")
+    include(${TOOLKITUI_DIR}/common.cmake)
+
+    set(TOOLKITREGISTER_HEADERS
+        ${REGISTERPATH}/register.h
+        ${REGISTERPATH}/internal/register_cpp.h)
+
+    set(TOOLKITREGISTER_SOURCES
+        ${REGISTERPATH}/register.cpp
+        ${REGISTERPATH}/internal/register_cpp.cpp)
 
     set(TOOLKIT_RESOURCES
         ${TOOLKITUI_DIR}/images/esri_arcgisruntime_toolkit_images.qrc
