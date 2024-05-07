@@ -15,6 +15,22 @@ include(${CMAKE_CURRENT_LIST_DIR}/common.cmake)
 
 set(WIDGETPATH ${CMAKE_CURRENT_LIST_DIR}/widgets/Esri/ArcGISRuntime/Toolkit)
 
+set(TOOLKITWIDGET_HEADERS
+    ${WIDGETPATH}/AuthenticationView.h
+    ${WIDGETPATH}/BasemapGallery.h
+    ${WIDGETPATH}/BookmarksView.h
+    ${WIDGETPATH}/CoordinateConversion.h
+    ${WIDGETPATH}/FloorFilter.h
+    ${WIDGETPATH}/NorthArrow.h
+    ${WIDGETPATH}/OverviewMap.h
+    ${WIDGETPATH}/Internal/ClientCertificatePasswordDialog.h
+    ${WIDGETPATH}/Internal/ClientCertificateView.h
+    ${WIDGETPATH}/Internal/CoordinateEditDelegate.h
+    ${WIDGETPATH}/Internal/Flash.h
+    ${WIDGETPATH}/Internal/OAuth2View.h
+    ${WIDGETPATH}/Internal/SslHandshakeView.h
+    ${WIDGETPATH}/Internal/UserCredentialView.h)
+
 set(TOOLKITWIDGET_SOURCES
     ${WIDGETPATH}/AuthenticationView.cpp
     ${WIDGETPATH}/BasemapGallery.cpp
@@ -51,7 +67,9 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     ${WIDGETPATH})
 
 target_sources(${PROJECT_NAME} PRIVATE
+    ${TOOLKITCOMMON_HEADERS}
     ${TOOLKITCOMMON_SOURCES}
+    ${TOOLKITWIDGET_HEADERS}
     ${TOOLKITWIDGET_SOURCES}
     ${TOOLKITWIDGET_RESOURCES}
     ${TOOLKITWIDGET_FORMS})
