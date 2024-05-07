@@ -13,43 +13,6 @@
 # limitations under the License.
 set(CPPPATH ${TOOLKITUI_DIR}/cpp/Esri/ArcGISRuntime/Toolkit)
 
-set(TOOLKITCOMMON_SOURCES
-    ${CPPPATH}/AuthenticationController.cpp
-    ${CPPPATH}/BasemapGalleryController.cpp
-    ${CPPPATH}/BasemapGalleryItem.cpp
-    ${CPPPATH}/BookmarksViewController.cpp
-    ${CPPPATH}/BookmarkListItem.cpp
-    ${CPPPATH}/CoordinateConversionConstants.cpp
-    ${CPPPATH}/CoordinateConversionController.cpp
-    ${CPPPATH}/CoordinateConversionOption.cpp
-    ${CPPPATH}/CoordinateConversionResult.cpp
-    ${CPPPATH}/CoordinateOptionDefaults.cpp
-    ${CPPPATH}/FloorFilterController.cpp
-    ${CPPPATH}/FloorFilterFacilityItem.cpp
-    ${CPPPATH}/FloorFilterLevelItem.cpp
-    ${CPPPATH}/FloorFilterSiteItem.cpp
-    ${CPPPATH}/LocatorSearchSource.cpp
-    ${CPPPATH}/Internal/BasemapGalleryImageProvider.cpp
-    ${CPPPATH}/Internal/GenericListModel.cpp
-    ${CPPPATH}/Internal/GenericTableProxyModel.cpp
-    ${CPPPATH}/Internal/MetaElement.cpp
-    ${CPPPATH}/NorthArrowController.cpp
-    ${CPPPATH}/OverviewMapController.cpp
-    ${CPPPATH}/PopupViewController.cpp
-    ${CPPPATH}/ScalebarController.cpp
-    ${CPPPATH}/SearchResult.cpp
-    ${CPPPATH}/SearchSourceInterface.cpp
-    ${CPPPATH}/SearchSuggestion.cpp
-    ${CPPPATH}/SearchViewController.cpp
-    ${CPPPATH}/SmartLocatorSearchSource.cpp
-    ${CPPPATH}/TimeSliderController.cpp
-    ${CPPPATH}/UtilityNetworkFunctionTraceResult.cpp
-    ${CPPPATH}/UtilityNetworkFunctionTraceResultsModel.cpp
-    ${CPPPATH}/UtilityNetworkListItem.cpp
-    ${CPPPATH}/UtilityNetworkTraceController.cpp
-    ${CPPPATH}/UtilityNetworkTraceStartingPoint.cpp
-    ${CPPPATH}/UtilityNetworkTraceStartingPointsModel.cpp)
-
 set(TOOLKITCOMMON_HEADERS
     ${CPPPATH}/AuthenticationController.h
     ${CPPPATH}/BasemapGalleryController.h
@@ -86,3 +49,40 @@ set(TOOLKITCOMMON_HEADERS
     ${CPPPATH}/UtilityNetworkTraceController.h
     ${CPPPATH}/UtilityNetworkTraceStartingPoint.h
     ${CPPPATH}/UtilityNetworkTraceStartingPointsModel.h)
+
+set(TOOLKITCOMMON_SOURCES
+    ${CPPPATH}/AuthenticationController.cpp
+    ${CPPPATH}/BasemapGalleryController.cpp
+    ${CPPPATH}/BasemapGalleryItem.cpp
+    ${CPPPATH}/BookmarksViewController.cpp
+    ${CPPPATH}/BookmarkListItem.cpp
+    ${CPPPATH}/CoordinateConversionConstants.cpp
+    ${CPPPATH}/CoordinateConversionController.cpp
+    ${CPPPATH}/CoordinateConversionOption.cpp
+    ${CPPPATH}/CoordinateConversionResult.cpp
+    ${CPPPATH}/CoordinateOptionDefaults.cpp
+    ${CPPPATH}/FloorFilterController.cpp
+    ${CPPPATH}/FloorFilterFacilityItem.cpp
+    ${CPPPATH}/FloorFilterLevelItem.cpp
+    ${CPPPATH}/FloorFilterSiteItem.cpp
+    ${CPPPATH}/LocatorSearchSource.cpp
+    ${CPPPATH}/Internal/BasemapGalleryImageProvider.cpp
+    ${CPPPATH}/Internal/GenericListModel.cpp
+    ${CPPPATH}/Internal/GenericTableProxyModel.cpp
+    ${CPPPATH}/Internal/MetaElement.cpp
+    ${CPPPATH}/NorthArrowController.cpp
+    ${CPPPATH}/OverviewMapController.cpp
+    ${CPPPATH}/PopupViewController.cpp
+    ${CPPPATH}/ScalebarController.cpp
+    ${CPPPATH}/SearchResult.cpp
+    ${CPPPATH}/SearchSourceInterface.cpp
+    ${CPPPATH}/SearchSuggestion.cpp
+    ${CPPPATH}/SearchViewController.cpp
+    ${CPPPATH}/SmartLocatorSearchSource.cpp
+    ${CPPPATH}/TimeSliderController.cpp
+    ${CPPPATH}/UtilityNetworkFunctionTraceResult.cpp
+    ${CPPPATH}/UtilityNetworkFunctionTraceResultsModel.cpp
+    ${CPPPATH}/UtilityNetworkListItem.cpp
+    ${CPPPATH}/UtilityNetworkTraceController.cpp
+    ${CPPPATH}/UtilityNetworkTraceStartingPoint.cpp
+    ${CPPPATH}/UtilityNetworkTraceStartingPointsModel.cpp)
