@@ -88,6 +88,3 @@ function(setup_tookitwidgets TARGET_NAME TOOLKIT_DIR)
 
     add_definitions(-DWIDGETS_ARCGISRUNTIME_TOOLKIT)
 endfunction()
-
-
-
