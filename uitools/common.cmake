@@ -13,6 +13,43 @@
 # limitations under the License.
 set(CPPPATH ${CMAKE_CURRENT_LIST_DIR}/cpp/Esri/ArcGISRuntime/Toolkit)
 
+set(TOOLKITCOMMON_HEADERS
+    ${CPPPATH}/AuthenticationController.h
+    ${CPPPATH}/BasemapGalleryController.h
+    ${CPPPATH}/BasemapGalleryItem.h
+    ${CPPPATH}/BookmarksViewController.h
+    ${CPPPATH}/BookmarkListItem.h
+    ${CPPPATH}/CoordinateConversionConstants.h
+    ${CPPPATH}/CoordinateConversionController.h
+    ${CPPPATH}/CoordinateConversionOption.h
+    ${CPPPATH}/CoordinateConversionResult.h
+    ${CPPPATH}/CoordinateOptionDefaults.h
+    ${CPPPATH}/FloorFilterController.h
+    ${CPPPATH}/FloorFilterFacilityItem.h
+    ${CPPPATH}/FloorFilterLevelItem.h
+    ${CPPPATH}/FloorFilterSiteItem.h
+    ${CPPPATH}/LocatorSearchSource.h
+    ${CPPPATH}/Internal/BasemapGalleryImageProvider.h
+    ${CPPPATH}/Internal/GenericListModel.h
+    ${CPPPATH}/Internal/GenericTableProxyModel.h
+    ${CPPPATH}/Internal/MetaElement.h
+    ${CPPPATH}/NorthArrowController.h
+    ${CPPPATH}/OverviewMapController.h
+    ${CPPPATH}/PopupViewController.h
+    ${CPPPATH}/ScalebarController.h
+    ${CPPPATH}/SearchResult.h
+    ${CPPPATH}/SearchSourceInterface.h
+    ${CPPPATH}/SearchSuggestion.h
+    ${CPPPATH}/SearchViewController.h
+    ${CPPPATH}/SmartLocatorSearchSource.h
+    ${CPPPATH}/TimeSliderController.h
+    ${CPPPATH}/UtilityNetworkFunctionTraceResult.h
+    ${CPPPATH}/UtilityNetworkFunctionTraceResultsModel.h
+    ${CPPPATH}/UtilityNetworkListItem.h
+    ${CPPPATH}/UtilityNetworkTraceController.h
+    ${CPPPATH}/UtilityNetworkTraceStartingPoint.h
+    ${CPPPATH}/UtilityNetworkTraceStartingPointsModel.h)
+
 set(TOOLKITCOMMON_SOURCES
     ${CPPPATH}/AuthenticationController.cpp
     ${CPPPATH}/BasemapGalleryController.cpp

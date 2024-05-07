@@ -15,6 +15,10 @@ include(${CMAKE_CURRENT_LIST_DIR}/common.cmake)
 
 set(REGISTERPATH ${CMAKE_CURRENT_LIST_DIR}/register/Esri/ArcGISRuntime/Toolkit)
 
+set(TOOLKITREGISTER_HEADERS
+    ${REGISTERPATH}/register.h
+    ${REGISTERPATH}/internal/register_cpp.h)
+
 set(TOOLKITREGISTER_SOURCES
     ${REGISTERPATH}/register.cpp
     ${REGISTERPATH}/internal/register_cpp.cpp)
@@ -28,7 +32,9 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     ${REGISTERPATH})
 
 target_sources(${PROJECT_NAME} PRIVATE
+    ${TOOLKITCOMMON_HEADERS}
     ${TOOLKITCOMMON_SOURCES}
+    ${TOOLKITREGISTER_HEADERS}
     ${TOOLKITREGISTER_SOURCES}
     ${TOOLKIT_RESOURCES})
 
