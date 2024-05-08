@@ -13,39 +13,12 @@
 # limitations under the License.
 function(setup_tookitwidgets TARGET_NAME TOOLKIT_DIR)
     set(TOOLKITUI_PATH ${TOOLKIT_DIR}/uitools)
+
     set(CPP_PATH ${TOOLKITUI_PATH}/cpp/Esri/ArcGISRuntime/Toolkit)
+
     set(WIDGET_PATH ${TOOLKITUI_PATH}/widgets/Esri/ArcGISRuntime/Toolkit)
 
-    setup_common_vars(TOOLKITCOMMON_HEADERS TOOLKITCOMMON_SOURCES)
-    setup_widget_vars(TOOLKITWIDGET_HEADERS TOOLKITWIDGET_SOURCES)
-    setup_forms_vars(TOOLKITWIDGET_FORMS)
-
-    target_include_directories(${TARGET_NAME} PRIVATE
-        ${TOOLKITUI_PATH}/cpp
-        ${TOOLKITUI_PATH}/widgets
-        ${CPP_PATH}
-        ${WIDGET_PATH})
-
-    target_sources(${TARGET_NAME} PRIVATE
-        ${TOOLKITCOMMON_HEADERS}
-        ${TOOLKITCOMMON_SOURCES}
-        ${TOOLKITWIDGET_HEADERS}
-        ${TOOLKITWIDGET_SOURCES}
-        ${TOOLKITWIDGET_FORMS}
-        ${TOOLKITUI_PATH}/images/esri_arcgisruntime_toolkit_images.qrc)
-
-    find_package(Qt6 COMPONENTS REQUIRED Widgets WebEngineWidgets Svg)
-
-    target_link_libraries(${TARGET_NAME} PRIVATE
-        Qt::Widgets
-        Qt::WebEngineWidgets
-        Qt::Svg)
-
-    target_compile_definitions(${TARGET_NAME} PRIVATE WIDGETS_ARCGISRUNTIME_TOOLKIT)
-endfunction()
-
-function(setup_common_vars HEADERS SOURCES)
-    set(${HEADERS}
+    set(TOOLKITCOMMON_HEADERS
         ${CPP_PATH}/AuthenticationController.h
         ${CPP_PATH}/BasemapGalleryController.h
         ${CPP_PATH}/BasemapGalleryItem.h
@@ -80,10 +53,9 @@ function(setup_common_vars HEADERS SOURCES)
         ${CPP_PATH}/UtilityNetworkListItem.h
         ${CPP_PATH}/UtilityNetworkTraceController.h
         ${CPP_PATH}/UtilityNetworkTraceStartingPoint.h
-        ${CPP_PATH}/UtilityNetworkTraceStartingPointsModel.h
-        PARENT_SCOPE)
+        ${CPP_PATH}/UtilityNetworkTraceStartingPointsModel.h)
 
-    set(${SOURCES}
+    set(TOOLKITCOMMON_SOURCES
         ${CPP_PATH}/AuthenticationController.cpp
         ${CPP_PATH}/BasemapGalleryController.cpp
         ${CPP_PATH}/BasemapGalleryItem.cpp
@@ -118,12 +90,9 @@ function(setup_common_vars HEADERS SOURCES)
         ${CPP_PATH}/UtilityNetworkListItem.cpp
         ${CPP_PATH}/UtilityNetworkTraceController.cpp
         ${CPP_PATH}/UtilityNetworkTraceStartingPoint.cpp
-        ${CPP_PATH}/UtilityNetworkTraceStartingPointsModel.cpp
-        PARENT_SCOPE)
-endfunction()
+        ${CPP_PATH}/UtilityNetworkTraceStartingPointsModel.cpp)
 
-function(setup_widget_vars HEADERS SOURCES)
-    set(${HEADERS}
+    set(TOOLKITWIDGET_HEADERS
         ${WIDGET_PATH}/AuthenticationView.h
         ${WIDGET_PATH}/BasemapGallery.h
         ${WIDGET_PATH}/BookmarksView.h
@@ -137,10 +106,9 @@ function(setup_widget_vars HEADERS SOURCES)
         ${WIDGET_PATH}/Internal/Flash.h
         ${WIDGET_PATH}/Internal/OAuth2View.h
         ${WIDGET_PATH}/Internal/SslHandshakeView.h
-        ${WIDGET_PATH}/Internal/UserCredentialView.h
-        PARENT_SCOPE)
+        ${WIDGET_PATH}/Internal/UserCredentialView.h)
 
-    set(${SOURCES}
+    set(TOOLKITWIDGET_SOURCES
         ${WIDGET_PATH}/AuthenticationView.cpp
         ${WIDGET_PATH}/BasemapGallery.cpp
         ${WIDGET_PATH}/BookmarksView.cpp
@@ -154,12 +122,9 @@ function(setup_widget_vars HEADERS SOURCES)
         ${WIDGET_PATH}/Internal/Flash.cpp
         ${WIDGET_PATH}/Internal/OAuth2View.cpp
         ${WIDGET_PATH}/Internal/SslHandshakeView.cpp
-        ${WIDGET_PATH}/Internal/UserCredentialView.cpp
-        PARENT_SCOPE)
-endfunction()
+        ${WIDGET_PATH}/Internal/UserCredentialView.cpp)
 
-function(setup_forms_vars FORMS)
-    set(${FORMS}
+    set(TOOLKITWIDGET_FORMS
         ${WIDGET_PATH}/AuthenticationView.ui
         ${WIDGET_PATH}/BasemapGallery.ui
         ${WIDGET_PATH}/BookmarksView.ui
@@ -170,6 +135,28 @@ function(setup_forms_vars FORMS)
         ${WIDGET_PATH}/Internal/ClientCertificateView.ui
         ${WIDGET_PATH}/Internal/OAuth2View.ui
         ${WIDGET_PATH}/Internal/SslHandshakeView.ui
-        ${WIDGET_PATH}/Internal/UserCredentialView.ui
-        PARENT_SCOPE)
+        ${WIDGET_PATH}/Internal/UserCredentialView.ui)
+
+    target_include_directories(${TARGET_NAME} PRIVATE
+        ${TOOLKITUI_PATH}/cpp
+        ${TOOLKITUI_PATH}/widgets
+        ${CPP_PATH}
+        ${WIDGET_PATH})
+
+    target_sources(${TARGET_NAME} PRIVATE
+        ${TOOLKITCOMMON_HEADERS}
+        ${TOOLKITCOMMON_SOURCES}
+        ${TOOLKITWIDGET_HEADERS}
+        ${TOOLKITWIDGET_SOURCES}
+        ${TOOLKITWIDGET_FORMS}
+        ${TOOLKITUI_PATH}/images/esri_arcgisruntime_toolkit_images.qrc)
+
+    find_package(Qt6 COMPONENTS REQUIRED Widgets WebEngineWidgets Svg)
+
+    target_link_libraries(${TARGET_NAME} PRIVATE
+        Qt::Widgets
+        Qt::WebEngineWidgets
+        Qt::Svg)
+
+    target_compile_definitions(${TARGET_NAME} PRIVATE WIDGETS_ARCGISRUNTIME_TOOLKIT)
 endfunction()

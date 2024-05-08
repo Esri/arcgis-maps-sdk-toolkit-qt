@@ -13,48 +13,12 @@
 # limitations under the License.
 function(setup_toolkit TARGET_NAME TOOLKIT_DIR)
     set(TOOLKITUI_PATH ${TOOLKIT_DIR}/uitools)
+
     set(CPP_PATH ${TOOLKITUI_PATH}/cpp/Esri/ArcGISRuntime/Toolkit)
+
     set(REGISTER_PATH ${TOOLKITUI_PATH}/register/Esri/ArcGISRuntime/Toolkit)
 
-    setup_common_vars(TOOLKITCOMMON_HEADERS TOOLKITCOMMON_SOURCES)
-    setup_register_vars(TOOLKITREGISTER_HEADERS TOOLKITREGISTER_SOURCES)
-
-    target_include_directories(${TARGET_NAME} PRIVATE
-        ${TOOLKITUI_PATH}/cpp
-        ${TOOLKITUI_PATH}/register
-        ${CPP_PATH}
-        ${REGISTER_PATH})
-
-    target_sources(${TARGET_NAME} PRIVATE
-        ${TOOLKITCOMMON_HEADERS}
-        ${TOOLKITCOMMON_SOURCES}
-        ${TOOLKITREGISTER_HEADERS}
-        ${TOOLKITREGISTER_SOURCES}
-        ${TOOLKITUI_PATH}/images/esri_arcgisruntime_toolkit_images.qrc
-        ${TOOLKITUI_PATH}/import/Esri/ArcGISRuntime/Toolkit/esri_arcgisruntime_toolkit_view.qrc)
-
-    find_package(Qt6 COMPONENTS REQUIRED QuickControls2 WebView Svg QuickLayouts)
-
-    target_link_libraries(${TARGET_NAME} PRIVATE
-        Qt6::QuickControls2
-        Qt6::WebView
-        Qt6::Svg)
-
-    if(IOS)
-        target_link_libraries(${TARGET_NAME} PRIVATE Qt6::qquicklayoutsplugin)
-    else()
-        target_link_libraries(${TARGET_NAME} PRIVATE Qt6::QuickLayouts)
-    endif()
-
-    list(APPEND QML_IMPORT_PATH ${TOOLKITUI_DIR}/import)
-
-    set(QML_IMPORT_PATH ${QML_IMPORT_PATH} CACHE STRING "" FORCE)
-
-    target_compile_definitions(${TARGET_NAME} PRIVATE CPP_ARCGISRUNTIME_TOOLKIT)
-endfunction()
-
-function(setup_common_vars HEADERS SOURCES)
-    set(${HEADERS}
+    set(TOOLKITCOMMON_HEADERS
         ${CPP_PATH}/AuthenticationController.h
         ${CPP_PATH}/BasemapGalleryController.h
         ${CPP_PATH}/BasemapGalleryItem.h
@@ -89,10 +53,9 @@ function(setup_common_vars HEADERS SOURCES)
         ${CPP_PATH}/UtilityNetworkListItem.h
         ${CPP_PATH}/UtilityNetworkTraceController.h
         ${CPP_PATH}/UtilityNetworkTraceStartingPoint.h
-        ${CPP_PATH}/UtilityNetworkTraceStartingPointsModel.h
-        PARENT_SCOPE)
+        ${CPP_PATH}/UtilityNetworkTraceStartingPointsModel.h)
 
-    set(${SOURCES}
+    set(TOOLKITCOMMON_SOURCES
         ${CPP_PATH}/AuthenticationController.cpp
         ${CPP_PATH}/BasemapGalleryController.cpp
         ${CPP_PATH}/BasemapGalleryItem.cpp
@@ -127,18 +90,42 @@ function(setup_common_vars HEADERS SOURCES)
         ${CPP_PATH}/UtilityNetworkListItem.cpp
         ${CPP_PATH}/UtilityNetworkTraceController.cpp
         ${CPP_PATH}/UtilityNetworkTraceStartingPoint.cpp
-        ${CPP_PATH}/UtilityNetworkTraceStartingPointsModel.cpp
-        PARENT_SCOPE)
-endfunction()
+        ${CPP_PATH}/UtilityNetworkTraceStartingPointsModel.cpp)
 
-function(setup_register_vars HEADERS SOURCES)
-    set(${HEADERS}
+    set(TOOLKITREGISTER_HEADERS
         ${REGISTER_PATH}/register.h
-        ${REGISTER_PATH}/internal/register_cpp.h
-        PARENT_SCOPE)
+        ${REGISTER_PATH}/internal/register_cpp.h)
 
-    set(${SOURCES}
+    set(TOOLKITREGISTER_SOURCES
         ${REGISTER_PATH}/register.cpp
-        ${REGISTER_PATH}/internal/register_cpp.cpp
-        PARENT_SCOPE)
+        ${REGISTER_PATH}/internal/register_cpp.cpp)
+
+    target_include_directories(${TARGET_NAME} PRIVATE
+        ${TOOLKITUI_PATH}/cpp
+        ${TOOLKITUI_PATH}/register
+        ${CPP_PATH}
+        ${REGISTER_PATH})
+
+    target_sources(${TARGET_NAME} PRIVATE
+        ${TOOLKITCOMMON_HEADERS}
+        ${TOOLKITCOMMON_SOURCES}
+        ${TOOLKITREGISTER_HEADERS}
+        ${TOOLKITREGISTER_SOURCES}
+        ${TOOLKITUI_PATH}/images/esri_arcgisruntime_toolkit_images.qrc
+        ${TOOLKITUI_PATH}/import/Esri/ArcGISRuntime/Toolkit/esri_arcgisruntime_toolkit_view.qrc)
+
+    find_package(Qt6 COMPONENTS REQUIRED QuickControls2 WebView Svg QuickLayouts)
+
+    target_link_libraries(${TARGET_NAME} PRIVATE
+        Qt6::QuickControls2
+        Qt6::WebView
+        Qt6::Svg)
+
+    if(IOS)
+        target_link_libraries(${TARGET_NAME} PRIVATE Qt6::qquicklayoutsplugin)
+    else()
+        target_link_libraries(${TARGET_NAME} PRIVATE Qt6::QuickLayouts)
+    endif()
+
+    target_compile_definitions(${TARGET_NAME} PRIVATE CPP_ARCGISRUNTIME_TOOLKIT)
 endfunction()
