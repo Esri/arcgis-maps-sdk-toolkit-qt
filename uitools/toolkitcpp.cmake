@@ -12,36 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 function(setup_toolkit TARGET_NAME TOOLKIT_DIR)
-    set(TOOLKITUI_DIR ${TOOLKIT_DIR}/uitools)
-    set(CPPPATH ${TOOLKITUI_DIR}/cpp/Esri/ArcGISRuntime/Toolkit)
-    set(REGISTERPATH ${TOOLKITUI_DIR}/register/Esri/ArcGISRuntime/Toolkit)
+    set(TOOLKITUI_PATH ${TOOLKIT_DIR}/uitools)
+    set(CPP_PATH ${TOOLKITUI_PATH}/cpp/Esri/ArcGISRuntime/Toolkit)
+    set(REGISTER_PATH ${TOOLKITUI_PATH}/register/Esri/ArcGISRuntime/Toolkit)
 
-    include(${TOOLKITUI_DIR}/common.cmake)
-
-    set(TOOLKITREGISTER_HEADERS
-        ${REGISTERPATH}/register.h
-        ${REGISTERPATH}/internal/register_cpp.h)
-
-    set(TOOLKITREGISTER_SOURCES
-        ${REGISTERPATH}/register.cpp
-        ${REGISTERPATH}/internal/register_cpp.cpp)
-
-    set(TOOLKIT_RESOURCES
-        ${TOOLKITUI_DIR}/images/esri_arcgisruntime_toolkit_images.qrc
-        ${TOOLKITUI_DIR}/import/Esri/ArcGISRuntime/Toolkit/esri_arcgisruntime_toolkit_view.qrc)
+    setup_common_vars(TOOLKITCOMMON_HEADERS TOOLKITCOMMON_SOURCES)
+    setup_register_vars(TOOLKITREGISTER_HEADERS TOOLKITREGISTER_SOURCES)
 
     target_include_directories(${TARGET_NAME} PRIVATE
-        ${TOOLKITUI_DIR}/cpp
-        ${TOOLKITUI_DIR}/register
-        ${CPPPATH}
-        ${REGISTERPATH})
+        ${TOOLKITUI_PATH}/cpp
+        ${TOOLKITUI_PATH}/register
+        ${CPP_PATH}
+        ${REGISTER_PATH})
 
     target_sources(${TARGET_NAME} PRIVATE
         ${TOOLKITCOMMON_HEADERS}
         ${TOOLKITCOMMON_SOURCES}
         ${TOOLKITREGISTER_HEADERS}
         ${TOOLKITREGISTER_SOURCES}
-        ${TOOLKIT_RESOURCES})
+        ${TOOLKITUI_PATH}/images/esri_arcgisruntime_toolkit_images.qrc
+        ${TOOLKITUI_PATH}/import/Esri/ArcGISRuntime/Toolkit/esri_arcgisruntime_toolkit_view.qrc)
 
     find_package(Qt6 COMPONENTS REQUIRED QuickControls2 WebView Svg QuickLayouts)
 
@@ -60,5 +50,95 @@ function(setup_toolkit TARGET_NAME TOOLKIT_DIR)
 
     set(QML_IMPORT_PATH ${QML_IMPORT_PATH} CACHE STRING "" FORCE)
 
-    add_definitions(-DCPP_ARCGISRUNTIME_TOOLKIT)
+    target_compile_definitions(${TARGET_NAME} PRIVATE CPP_ARCGISRUNTIME_TOOLKIT)
+endfunction()
+
+function(setup_common_vars HEADERS SOURCES)
+    set(${HEADERS}
+        ${CPP_PATH}/AuthenticationController.h
+        ${CPP_PATH}/BasemapGalleryController.h
+        ${CPP_PATH}/BasemapGalleryItem.h
+        ${CPP_PATH}/BookmarksViewController.h
+        ${CPP_PATH}/BookmarkListItem.h
+        ${CPP_PATH}/CoordinateConversionConstants.h
+        ${CPP_PATH}/CoordinateConversionController.h
+        ${CPP_PATH}/CoordinateConversionOption.h
+        ${CPP_PATH}/CoordinateConversionResult.h
+        ${CPP_PATH}/CoordinateOptionDefaults.h
+        ${CPP_PATH}/FloorFilterController.h
+        ${CPP_PATH}/FloorFilterFacilityItem.h
+        ${CPP_PATH}/FloorFilterLevelItem.h
+        ${CPP_PATH}/FloorFilterSiteItem.h
+        ${CPP_PATH}/LocatorSearchSource.h
+        ${CPP_PATH}/Internal/BasemapGalleryImageProvider.h
+        ${CPP_PATH}/Internal/GenericListModel.h
+        ${CPP_PATH}/Internal/GenericTableProxyModel.h
+        ${CPP_PATH}/Internal/MetaElement.h
+        ${CPP_PATH}/NorthArrowController.h
+        ${CPP_PATH}/OverviewMapController.h
+        ${CPP_PATH}/PopupViewController.h
+        ${CPP_PATH}/ScalebarController.h
+        ${CPP_PATH}/SearchResult.h
+        ${CPP_PATH}/SearchSourceInterface.h
+        ${CPP_PATH}/SearchSuggestion.h
+        ${CPP_PATH}/SearchViewController.h
+        ${CPP_PATH}/SmartLocatorSearchSource.h
+        ${CPP_PATH}/TimeSliderController.h
+        ${CPP_PATH}/UtilityNetworkFunctionTraceResult.h
+        ${CPP_PATH}/UtilityNetworkFunctionTraceResultsModel.h
+        ${CPP_PATH}/UtilityNetworkListItem.h
+        ${CPP_PATH}/UtilityNetworkTraceController.h
+        ${CPP_PATH}/UtilityNetworkTraceStartingPoint.h
+        ${CPP_PATH}/UtilityNetworkTraceStartingPointsModel.h
+        PARENT_SCOPE)
+
+    set(${SOURCES}
+        ${CPP_PATH}/AuthenticationController.cpp
+        ${CPP_PATH}/BasemapGalleryController.cpp
+        ${CPP_PATH}/BasemapGalleryItem.cpp
+        ${CPP_PATH}/BookmarksViewController.cpp
+        ${CPP_PATH}/BookmarkListItem.cpp
+        ${CPP_PATH}/CoordinateConversionConstants.cpp
+        ${CPP_PATH}/CoordinateConversionController.cpp
+        ${CPP_PATH}/CoordinateConversionOption.cpp
+        ${CPP_PATH}/CoordinateConversionResult.cpp
+        ${CPP_PATH}/CoordinateOptionDefaults.cpp
+        ${CPP_PATH}/FloorFilterController.cpp
+        ${CPP_PATH}/FloorFilterFacilityItem.cpp
+        ${CPP_PATH}/FloorFilterLevelItem.cpp
+        ${CPP_PATH}/FloorFilterSiteItem.cpp
+        ${CPP_PATH}/LocatorSearchSource.cpp
+        ${CPP_PATH}/Internal/BasemapGalleryImageProvider.cpp
+        ${CPP_PATH}/Internal/GenericListModel.cpp
+        ${CPP_PATH}/Internal/GenericTableProxyModel.cpp
+        ${CPP_PATH}/Internal/MetaElement.cpp
+        ${CPP_PATH}/NorthArrowController.cpp
+        ${CPP_PATH}/OverviewMapController.cpp
+        ${CPP_PATH}/PopupViewController.cpp
+        ${CPP_PATH}/ScalebarController.cpp
+        ${CPP_PATH}/SearchResult.cpp
+        ${CPP_PATH}/SearchSourceInterface.cpp
+        ${CPP_PATH}/SearchSuggestion.cpp
+        ${CPP_PATH}/SearchViewController.cpp
+        ${CPP_PATH}/SmartLocatorSearchSource.cpp
+        ${CPP_PATH}/TimeSliderController.cpp
+        ${CPP_PATH}/UtilityNetworkFunctionTraceResult.cpp
+        ${CPP_PATH}/UtilityNetworkFunctionTraceResultsModel.cpp
+        ${CPP_PATH}/UtilityNetworkListItem.cpp
+        ${CPP_PATH}/UtilityNetworkTraceController.cpp
+        ${CPP_PATH}/UtilityNetworkTraceStartingPoint.cpp
+        ${CPP_PATH}/UtilityNetworkTraceStartingPointsModel.cpp
+        PARENT_SCOPE)
+endfunction()
+
+function(setup_register_vars HEADERS SOURCES)
+    set(${HEADERS}
+        ${REGISTER_PATH}/register.h
+        ${REGISTER_PATH}/internal/register_cpp.h
+        PARENT_SCOPE)
+
+    set(${SOURCES}
+        ${REGISTER_PATH}/register.cpp
+        ${REGISTER_PATH}/internal/register_cpp.cpp
+        PARENT_SCOPE)
 endfunction()
