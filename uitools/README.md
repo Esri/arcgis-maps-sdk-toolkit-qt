@@ -279,7 +279,7 @@ include(path/to/toolkitcppwidgets.cmake)
 ```CMake
 qt_add_executable(MyTarget ${SOURCE_FILES})
 ...
-setup_toolkit(MyTarget path_to_toolkit)
+setup_toolkitwidgets(MyTarget path_to_toolkit)
 ```
 
 #### Using a tool from the toolkit (toolkitwidgets.cmake)
