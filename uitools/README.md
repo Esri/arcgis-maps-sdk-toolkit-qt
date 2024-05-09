@@ -117,8 +117,10 @@ get added to QtCreator when you install the ArcGIS Runime SDK for Qt.
 ```CMake
 include(path/to/toolkitcpp.cmake)
 ```
-- in the `CmakeLists.txt` file of your new app, call `setup_toolkit` after you've defined your target, and pass your target name and the path to the toolkit
+- in the `CmakeLists.txt` file of your new app, call `setup_toolkit` after you've defined your target and pass in your target name and the path to the toolkit
 ```CMake
+qt_add_executable(target_name ${SOURCE_FILES})
+...
 setup_toolkit(target_name path_to_toolkit)
 ```
 
@@ -273,9 +275,11 @@ get added to QtCreator when you install the ArcGIS Maps SDK for Qt.
 ```CMake
 include(path/to/toolkitcppwidgets.cmake)
 ```
-- in the `CmakeLists.txt` file of your new app, call `setup_toolkit` after you've defined your target, and pass your target name and the path to the toolkit
+- in the `CmakeLists.txt` file of your new app, call `setup_toolkit` after you've defined your target and pass in your target name and the path to the toolkit
 ```CMake
-setup_toolkit(target_name path_to_toolkit)
+qt_add_executable(MyTarget ${SOURCE_FILES})
+...
+setup_toolkit(MyTarget path_to_toolkit)
 ```
 
 #### Using a tool from the toolkit (toolkitwidgets.cmake)
