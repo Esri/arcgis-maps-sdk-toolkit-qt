@@ -270,7 +270,7 @@ get added to QtCreator when you install the ArcGIS Maps SDK for Qt.
 
 - In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Maps 200.4.0 Qt Widgets App`
 - choose settings to match the platform etc. you are building for
-- in the `CMakeLists.txt` file of your new app, add this line to get access to the `setup_toolkit` function:
+- in the `CMakeLists.txt` file of your new app, add this line to get access to the `setup_toolkitwidgets` function:
 
 ```CMake
 include(path/to/toolkitcppwidgets.cmake)
