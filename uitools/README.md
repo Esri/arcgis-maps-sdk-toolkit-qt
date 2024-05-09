@@ -277,9 +277,9 @@ include(path/to/toolkitcppwidgets.cmake)
 ```
 - in the `CmakeLists.txt` file of your new app, call `setup_toolkitwidgets` after you've defined your target and pass in your target name and the path to the toolkit
 ```CMake
-qt_add_executable(MyTarget ${SOURCE_FILES})
+qt_add_executable(target_name ${SOURCE_FILES})
 ...
-setup_toolkitwidgets(MyTarget path_to_toolkit)
+setup_toolkitwidgets(target_name path_to_toolkit)
 ```
 
 #### Using a tool from the toolkit (toolkitwidgets.cmake)
