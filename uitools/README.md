@@ -275,7 +275,7 @@ get added to QtCreator when you install the ArcGIS Maps SDK for Qt.
 ```CMake
 include(path/to/toolkitcppwidgets.cmake)
 ```
-- in the `CmakeLists.txt` file of your new app, call `setup_toolkit` after you've defined your target and pass in your target name and the path to the toolkit
+- in the `CmakeLists.txt` file of your new app, call `setup_toolkitwidgets` after you've defined your target and pass in your target name and the path to the toolkit
 ```CMake
 qt_add_executable(MyTarget ${SOURCE_FILES})
 ...
