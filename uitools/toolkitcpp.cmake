@@ -121,6 +121,14 @@ function(setup_toolkit TARGET_NAME TOOLKIT_DIR)
         Qt6::WebView
         Qt6::Svg)
 
+    list(APPEND QML_IMPORT_PATH ${TOOLKITUI_PATH}/import)
+
+    list(REMOVE_DUPLICATES QML_IMPORT_PATH)
+
+    set(QML_IMPORT_PATH ${QML_IMPORT_PATH}
+        CACHE STRING "QML import path for ArcGIS Runtime Toolkit"
+        FORCE)
+
     if(IOS)
         target_link_libraries(${TARGET_NAME} PRIVATE Qt6::qquicklayoutsplugin)
     else()
