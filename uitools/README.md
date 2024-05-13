@@ -116,7 +116,7 @@ get added to QtCreator when you install the ArcGIS Runime SDK for Qt.
   - Uncomment the `include` line below, and replace `path_to_toolkitcpp.cmake` with the actual path to your `toolkitcpp.cmake` file.
   - Uncomment the `setup_toolkit` line below, and replace `target_name` with the name of your target, and `path_to_toolkit` with the path to your toolkit directory.
   ```CMake
-  # include(path_to_toolkitcpp.cmake)
+  # include(path/to/toolkitcpp.cmake)
   # setup_toolkit(target_name path_to_toolkit)
   ```
 - in `main.cpp` add a line to import the toolkit registration function.
@@ -269,7 +269,7 @@ get added to QtCreator when you install the ArcGIS Maps SDK for Qt.
   - Uncomment the `include` line below, and replace `path_to_toolkitwidgets.cmake` with the actual path to your `toolkitwidgets.cmake` file.
   - Uncomment the `setup_toolkitwidgets` line below, and replace `target_name` with the name of your target, and `path_to_toolkit` with the path to your toolkit directory.
   ```CMake
-  # include(path_to_toolkitwidgets.cmake)
+  # include(path/to/toolkitwidgets.cmake)
   # setup_toolkitwidgets(target_name path_to_toolkit)
   ```
 
