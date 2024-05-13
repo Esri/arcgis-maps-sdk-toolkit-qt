@@ -113,10 +113,10 @@ get added to QtCreator when you install the ArcGIS Runime SDK for Qt.
 - In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Maps 200.4.0 Qt Quick C++ App`
 - choose settings to match the platform etc. you are building for
 - In the `CMakeLists.txt` file of your new application, you need to make two changes:
-  - Uncomment the `include` line below, and replace `path/to/toolkitcpp.cmake` with the path to your `toolkitcpp.cmake` file.
+  - Uncomment the `include` line below, and replace `path/to/toolkit/uitools/toolkitcpp.cmake` with the path to your `toolkitcpp.cmake` file.
   - Uncomment the `setup_toolkit` line below, and replace `target_name` with the name of your target, and `path/to/toolkit` with the path to your toolkit directory.
   ```CMake
-  # include(path/to/toolkitcpp.cmake)
+  # include(path/to/toolkit/uitools/toolkitcpp.cmake)
   # setup_toolkit(target_name path/to/toolkit)
   ```
 - in `main.cpp` add a line to import the toolkit registration function.
@@ -266,10 +266,10 @@ get added to QtCreator when you install the ArcGIS Maps SDK for Qt.
 - In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Maps 200.4.0 Qt Widgets App`
 - choose settings to match the platform etc. you are building for
 - In the `CMakeLists.txt` file of your new application, you need to make two changes:
-  - Uncomment the `include` line below, and replace `path/to/toolkitwidgets.cmake` with the path to your `toolkitwidgets.cmake` file.
+  - Uncomment the `include` line below, and replace `path/to/toolkit/uitools/toolkitwidgets.cmake` with the path to your `toolkitwidgets.cmake` file.
   - Uncomment the `setup_toolkitwidgets` line below, and replace `target_name` with the name of your target, and `path/to/toolkit` with the path to your toolkit directory.
   ```CMake
-  # include(path/to/toolkitwidgets.cmake)
+  # include(path/to/toolkit/uitools/toolkitwidgets.cmake)
   # setup_toolkitwidgets(target_name path/to/toolkit)
   ```
 
