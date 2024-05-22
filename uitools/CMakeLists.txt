@@ -84,7 +84,6 @@ target_link_libraries(libtoolkit PRIVATE
     ArcGISRuntime::Cpp
 )
 
-# Resources:
 set(esri_arcgisruntime_toolkit_images_resource_files
     "images/basemap.svg"
     "images/chevron-down.svg"
