@@ -154,3 +154,12 @@ qt_add_resources(libtoolkit "esri_arcgisruntime_toolkit_view"
     FILES
         ${esri_arcgisruntime_toolkit_view_resource_files}
 )
+
+list(APPEND QML_IMPORT_PATH ${CMAKE_CURRENT_LIST_DIR}/import)
+
+list(REMOVE_DUPLICATES QML_IMPORT_PATH)
+
+set(QML_IMPORT_PATH ${QML_IMPORT_PATH}
+    CACHE STRING "ArcGISRuntime toolkit qml import paths"
+    FORCE
+)
