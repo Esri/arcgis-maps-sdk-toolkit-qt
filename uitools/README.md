@@ -111,35 +111,39 @@ A good way to start using the toolkit is to use one of the template apps which
 get added to QtCreator when you install the ArcGIS Runime SDK for Qt.
 
 - In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Maps 200.4.0 Qt Quick C++ App`
-- choose settings to match the platform etc. you are building for
-- In the `CMakeLists.txt` file of your new application, you need to make two changes:
-  - Uncomment the `include` line below, and replace `path/to/toolkit/uitools/toolkitcpp.cmake` with the path to your `toolkitcpp.cmake` file.
-  - Uncomment the `setup_toolkit` line below, and replace `target_name` with the name of your target, and `path/to/toolkit` with the path to your toolkit directory.
+- Choose settings to match the platform etc. you are building for
+- Copy the `toolkitcpp` subdirectory into your project's directory
+```bash
+cp -r /path/to/toolkit/uitools/toolkitcpp /path/to/project
+```
+- In the `CMakeLists.txt` file of your new application, do the following:
+  - Call `add_subdirectory` with the copied `toolkitcpp` subdirectory
   ```CMake
-  # include(path/to/toolkit/uitools/toolkitcpp.cmake)
-  # setup_toolkit(target_name path/to/toolkit)
+  add_subdirectory(toolkitcpp)
   ```
-- in `main.cpp` add a line to import the toolkit registration function.
-
-```cpp
-#include "Esri/ArcGISRuntime/Toolkit/register.h"
-```
-
-- in `main.cpp` (inside the main function) call the registration function.
-
-```cpp
-QQmlApplicationEngine engine; // The engine driving your QML application.
-Esri::ArcGISRuntime::Toolkit::registerComponents(engine);
-```
+  - Link your target to the `libtoolkitcpp` library
+  ```CMake
+  target_link_libraries(${PROJECT_NAME} PRIVATE libtoolkitcpp)
+  ```
+- In the `main.cpp` file of your new application, do the following:
+  - Include the `register.h` file from the toolkit
+  ```cpp
+  #include "Esri/ArcGISRuntime/Toolkit/register.h"
+  ```
+  - Call the `registerComponents` function with your `QQmlApplicationEngine`
+  ```cpp
+  QQmlApplicationEngine engine; // The engine driving your QML application.
+  Esri::ArcGISRuntime::Toolkit::registerComponents(engine);
+  ```
 #### Using a tool from the toolkit (toolkitcpp.cmake)
 
 Once you have successfully imported the toolkit, you can access individual tools
 in your own QML files.
 
-- add an import statement for the toolkit:
+- Add an import statement for the toolkit:
 `import Esri.ArcGISRuntime.Toolkit`
-- declare the tool you wish to use. Generally you will also have to supply the
-  `GeoView` etc. you wish the tool to work with. For example, to add a `NorthArrow`:
+- Declare the tool you wish to use. Generally you will also have to supply the
+  `GeoView` to the tool you want to work with. For example, to add a `NorthArrow`:
 
 ```qml
 import Esri.ArcGISRuntime.Toolkit
@@ -264,15 +268,21 @@ A good way to start using the toolkit is to use one of the template apps which
 get added to QtCreator when you install the ArcGIS Maps SDK for Qt.
 
 - In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Maps 200.4.0 Qt Widgets App`
-- choose settings to match the platform etc. you are building for
-- In the `CMakeLists.txt` file of your new application, you need to make two changes:
-  - Uncomment the `include` line below, and replace `path/to/toolkit/uitools/toolkitwidgets.cmake` with the path to your `toolkitwidgets.cmake` file.
-  - Uncomment the `setup_toolkitwidgets` line below, and replace `target_name` with the name of your target, and `path/to/toolkit` with the path to your toolkit directory.
+- Choose settings to match the platform etc. you are building for
+- Copy the `toolkitwidgets` subdirectory into your project's directory
+```bash
+cp -r /path/to/toolkit/uitools/toolkitwidgets /path/to/project
+```
+- In the `CMakeLists.txt` file of your new application, do the following:
+  - Call `add_subdirectory` with the copied `toolkitwidgets` subdirectory
   ```CMake
-  # include(path/to/toolkit/uitools/toolkitwidgets.cmake)
-  # setup_toolkitwidgets(target_name path/to/toolkit)
+  add_subdirectory(toolkitwidgets)
   ```
-
+  - Link your target to the `libtoolkitwidgets` library
+  ```CMake
+  target_link_libraries(${PROJECT_NAME} PRIVATE libtoolkitwidgets)
+  ```
+  
 #### Using a tool from the toolkit (toolkitwidgets.cmake)
 
 Once you have successfully imported the toolkit, you can create individual tools
