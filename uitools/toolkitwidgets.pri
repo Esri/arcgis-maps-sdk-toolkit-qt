@@ -15,13 +15,11 @@ include($$PWD/common.pri)
 
 QT += widgets webenginewidgets svg
 
-RESOURCES += $$PWD/images/esri_arcgisruntime_toolkit_images.qrc
+RESOURCES += $$PWD/toolkitwidgets/images/esri_arcgisruntime_toolkit_images.qrc
 
-DEFINES += WIDGETS_ARCGISRUNTIME_TOOLKIT
+WIDGETPATH = $$PWD/toolkitwidgets/widgets/Esri/ArcGISRuntime/Toolkit
 
-WIDGETPATH = $$PWD/widgets/Esri/ArcGISRuntime/Toolkit
-
-INCLUDEPATH += $$PWD/widgets $$WIDGETPATH
+INCLUDEPATH += $$PWD/toolkitwidgets/widgets $$WIDGETPATH
 
 HEADERS += $$WIDGETPATH/AuthenticationView.h \
            $$WIDGETPATH/BasemapGallery.h \
@@ -64,3 +62,5 @@ FORMS += $$WIDGETPATH/AuthenticationView.ui \
          $$WIDGETPATH/Internal/OAuth2View.ui \
          $$WIDGETPATH/Internal/SslHandshakeView.ui \
          $$WIDGETPATH/Internal/UserCredentialView.ui
+
+DEFINES += WIDGETS_ARCGISRUNTIME_TOOLKIT

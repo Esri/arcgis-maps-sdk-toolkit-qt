@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-CPPPATH = $$PWD/cpp/Esri/ArcGISRuntime/Toolkit
+CPPPATH = $$PWD/toolkitcpp/cpp/Esri/ArcGISRuntime/Toolkit
 
-INCLUDEPATH += $$PWD/cpp $$CPPPATH
+INCLUDEPATH += $$PWD/toolkitcpp/cpp $$CPPPATH
 
 HEADERS += $$CPPPATH/AuthenticationController.h \
            $$CPPPATH/BasemapGalleryController.h \
