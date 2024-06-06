@@ -116,14 +116,13 @@ get added to QtCreator when you install the ArcGIS Runime SDK for Qt.
 ```bash
 cp -r /path/to/toolkit/uitools/toolkitcpp /path/to/project
 ```
-- In the `CMakeLists.txt` file of your new application, do the following:
-  - Call `add_subdirectory` with the copied `toolkitcpp` subdirectory
+- The following code block is pregenerated in the `CMakeLists.txt` of your template app, uncomment the `add_subdirectory` and `target_link_libraries` commands:
   ```CMake
-  add_subdirectory(toolkitcpp)
-  ```
-  - Link your target to the `libtoolkitcpp` library
-  ```CMake
-  target_link_libraries(${PROJECT_NAME} PRIVATE libtoolkitcpp)
+    # To integrate the toolkit, copy the `toolkitcpp` subdirectory from the toolkit
+    # into your project's directory. Then uncomment the following lines to add it to your project.
+    # See https://github.com/Esri/arcgis-maps-sdk-toolkit-qt for details
+    # add_subdirectory(toolkitcpp)
+    # target_link_libraries(${PROJECT_NAME} PRIVATE libtoolkitcpp)
   ```
 - In the `main.cpp` file of your new application, do the following:
   - Include the `register.h` file from the toolkit
@@ -273,14 +272,13 @@ get added to QtCreator when you install the ArcGIS Maps SDK for Qt.
 ```bash
 cp -r /path/to/toolkit/uitools/toolkitwidgets /path/to/project
 ```
-- In the `CMakeLists.txt` file of your new application, do the following:
-  - Call `add_subdirectory` with the copied `toolkitwidgets` subdirectory
+- The following code block is pregenerated in the `CMakeLists.txt` of your template app, uncomment the `add_subdirectory` and `target_link_libraries` commands:
   ```CMake
-  add_subdirectory(toolkitwidgets)
-  ```
-  - Link your target to the `libtoolkitwidgets` library
-  ```CMake
-  target_link_libraries(${PROJECT_NAME} PRIVATE libtoolkitwidgets)
+    # To integrate the toolkit, copy the `toolkitwidgets` subdirectory from the toolkit
+    # into your project's directory. Then uncomment the following lines to add it to your project.
+    # See https://github.com/Esri/arcgis-maps-sdk-toolkit-qt for details
+    # add_subdirectory(toolkitwidgets)
+    # target_link_libraries(${PROJECT_NAME} PRIVATE libtoolkitwidgets)
   ```
   
 #### Using a tool from the toolkit (toolkitwidgets.cmake)
