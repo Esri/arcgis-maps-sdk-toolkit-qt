@@ -27,15 +27,15 @@ QML_IMPORT_MAJOR_VERSION = 1
 TARGET = cpp_quick
 
 lessThan(QT_MAJOR_VERSION, 6) {
-    error("This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.5.6")
+    error("This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.5.1")
 }
 
 equals(QT_MAJOR_VERSION, 6) {
     lessThan(QT_MINOR_VERSION, 5) {
-        error("This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.5.6")
+        error("This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.5.1")
     }
-  equals(QT_MINOR_VERSION, 5) : lessThan(QT_PATCH_VERSION, 6) {
-    error("This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.5.6")
+  equals(QT_MINOR_VERSION, 5) : lessThan(QT_PATCH_VERSION, 1) {
+    error("This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.5.1")
   }
 }
 
