@@ -40,15 +40,15 @@ int main(int argc, char* argv[])
   QGuiApplication app(argc, argv);
 
   // Use of Esri location services, including basemaps and geocoding, requires
-  // either an ArcGIS identity or an API key. For more information see
+  // either an ArcGIS identity or an access token. For more information see
   // https://links.esri.com/arcgis-runtime-security-auth.
 
   // 1. ArcGIS identity: An ArcGIS named user account that is a member of an
   // organization in ArcGIS Online or ArcGIS Enterprise.
 
-  // 2. API key: A permanent key that gives your application access to Esri
-  // location services. Create a new API key or access existing API keys from
-  // your ArcGIS for Developers dashboard (https://links.esri.com/arcgis-api-keys).
+  // 2. Access token: A long-lived token that gives your application access to Esri
+  // location services. See the [developer site](http://links.esri.com/create-an-api-key) 
+  // for more details.
 
   QString apiKey = QString("");
   if (apiKey.isEmpty())

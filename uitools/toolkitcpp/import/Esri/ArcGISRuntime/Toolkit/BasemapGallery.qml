@@ -34,7 +34,7 @@ import QtQuick.Layouts
  Example code in the QML API (C++ API might differ):
  \snippet qml_quick/src/demos/BasemapGalleryDemoForm.qml Set up BasemapGallery QML
 
- \note By default, the BasemapGallery will attempt to fetch the set of developer basemaps, which require an \l{https://developers.arcgis.com/qt/get-started/#3-access-services-and-content-with-an-api-key}{API key} to access.
+ \note By default, the BasemapGallery will attempt to fetch the set of developer basemaps, which require an \l{http://links.esri.com/create-an-api-key}{access token} to access.
  */
 
 Pane {
@@ -63,7 +63,7 @@ Pane {
       \qmlproperty BasemapGalleryController controller
       \brief The controller handles binding logic between the BasemapGallery and
       the \c GeoModel and the \c Portal where applicable.
-      
+
       The QML controller is documented \l{BasemapGalleryController}{here} and the CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::BasemapGalleryController}{here}.
     */
     property var controller: BasemapGalleryController { }
