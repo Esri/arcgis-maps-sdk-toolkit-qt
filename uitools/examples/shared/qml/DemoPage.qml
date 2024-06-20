@@ -73,11 +73,11 @@ Control {
 
     Dialog {
         id: apiKeyPopup
-        title: "Set API Key"
+        title: "Set access token"
         implicitWidth: 300
         contentItem: TextField {
             id: apiKeyInput
-            placeholderText: "Enter your API Key here."
+            placeholderText: "Enter your access token here."
             Keys.onReturnPressed: apiKeyPopup.accept()
             Component.onCompleted: forceActiveFocus()
         }
@@ -152,7 +152,7 @@ Control {
         Button {
             Layout.topMargin: 5
             Layout.rightMargin: 5
-            text: "Set API Key"
+            text: "Set access token"
             Layout.alignment: Qt.AlignRight
             onClicked: apiKeyPopup.open()
             enabled: !apiKeyPopup.visible
@@ -166,7 +166,7 @@ Control {
             focus: true
             sourceComponent: Component {
                 Label {
-                    text: "No API key set. Please set an API Key."
+                    text: "No access token set. Please set an access token."
                     horizontalAlignment: Qt.AlignHCenter
                     verticalAlignment: Qt.AlignVCenter
                 }

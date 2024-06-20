@@ -282,7 +282,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     The controller will automatically populate itself with the developer basemaps from AGOL.
 
-     The given default basemaps require either an API key or named-user to be signed into the app.
+    The given default basemaps require either an access token or named-user to be signed into the app.
    */
   BasemapGalleryController::BasemapGalleryController(QObject* parent) :
     QObject(parent),
