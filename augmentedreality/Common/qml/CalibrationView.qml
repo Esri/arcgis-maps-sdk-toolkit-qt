@@ -21,10 +21,8 @@ import QtQuick.Controls
     \qmltype CalibrationView
     \ingroup ArcGISQtToolkitAR
     \ingroup ArcGISQtToolkitARCppApi
-    \ingroup ArcGISQtToolkitARQmlApi
     \ingroup ArcGISQtToolkit
     \ingroup ArcGISQtToolkitCppApi
-    \ingroup ArcGISQtToolkitQmlApi
     \inqmlmodule Esri.ArcGISRuntime.Toolkit.AR
     \since Esri.ArcGISRutime 100.6
     \brief A item displaying controls for adjusting a scene view's location, heading, and elevation.

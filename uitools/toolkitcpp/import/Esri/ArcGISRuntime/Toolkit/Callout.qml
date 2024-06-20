@@ -23,7 +23,6 @@ import QtQuick.Shapes
 /*!
     \qmltype Callout
     \ingroup ArcGISQtToolkit
-    \ingroup ArcGISQtToolkitQmlApi
     \ingroup ArcGISQtToolkitUiQmlViews
     \inqmlmodule Esri.ArcGISRuntime.Toolkit
     \since Esri.ArcGISRuntime 100.10
