@@ -30,7 +30,7 @@ import QtQuick
    \note default width and height is 48.
    \image  docs/northarrow.gif northarrow
    Example code in the QML API (C++ API might differ):
-   \snippet qml_quick/src/demos/NorthArrowDemoForm.qml Set up North Arrow QML
+   \snippet cpp_quick/src/demos/NorthArrowDemoForm.qml Set up North Arrow QML
  */
 
 Item {

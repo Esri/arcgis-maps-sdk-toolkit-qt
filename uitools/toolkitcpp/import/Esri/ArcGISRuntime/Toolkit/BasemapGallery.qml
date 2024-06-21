@@ -32,7 +32,7 @@ import QtQuick.Layouts
  geoModel is removed from the given map/scene and replaced with the basemap selected in the gallery.
  \image docs/basemap.gif
  Example code in the QML API (C++ API might differ):
- \snippet qml_quick/src/demos/BasemapGalleryDemoForm.qml Set up BasemapGallery QML
+ \snippet cpp_quick/src/demos/BasemapGalleryDemoForm.qml Set up BasemapGallery QML
 
  \note By default, the BasemapGallery will attempt to fetch the set of developer basemaps, which require an \l{https://developers.arcgis.com/qt/get-started/#3-access-services-and-content-with-an-api-key}{API key} to access.
  */

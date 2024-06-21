@@ -50,7 +50,7 @@ import QtQuick.Controls
 
   \image docs/authenticationview_qml.png authentication_view
   Example code in the QML API (C++ API might differ):
-  \snippet qml_quick/src/demos/AuthenticationViewDemoForm.qml Set up Authentication View QML
+  \snippet cpp_quick/src/demos/AuthenticationViewDemoForm.qml Set up Authentication View QML
  */
 
 Item {

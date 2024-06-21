@@ -29,7 +29,7 @@ import QtQuick.Layouts
     from a variety of sources, with suggestions.
     \image docs/search.png search
     Example code in the QML API (C++ API might differ):
-    \snippet qml_quick/src/demos/SearchViewDemoForm.qml Set up Search View QML
+    \snippet cpp_quick/src/demos/SearchViewDemoForm.qml Set up Search View QML
 
     \note By default, the SearchView will attempt to access the World Geocoding Service, which requires an \l{https://developers.arcgis.com/qt/get-started/#3-access-services-and-content-with-an-api-key}{API key}.
 */
