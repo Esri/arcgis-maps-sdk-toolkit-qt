@@ -43,7 +43,7 @@ Pane {
       \brief The controller handles binding logic between the BookmarksView and
       the \c BookmarkListItem.
 
-      The QML controller is documented \l{BookmarksViewController}{here} and the CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::BookmarksViewController}{here}.
+      The CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::BookmarksViewController}{here}.
     */
     property var controller: BookmarksViewController { }
 

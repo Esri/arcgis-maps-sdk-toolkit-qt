@@ -70,7 +70,7 @@ Pane {
       and maintaining our list of textual representations of a single point
       in multiple formats.
 
-      The QML controller is documented \l{CoordinateConversionController}{here} and the CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::CoordinateConversionController}{here}.
+      The CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::CoordinateConversionController}{here}.
     */
     property var controller: CoordinateConversionController { }
 
