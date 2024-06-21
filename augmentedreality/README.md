@@ -77,7 +77,7 @@ Note: In the following explanation, `<ProjectName>` refers to the project name
 used to create the Qt project.
 
 1. Install the ArcGIS Maps SDK for Qt. See
-[ArcGIS Maps SDK for Qt](https://developers.arcgis.com/qt/latest/qml/guide/arcgis-runtime-sdk-for-qt.htm)
+[ArcGIS Maps SDK for Qt](https://developers.arcgis.com/qt/install-and-set-up)
 for details.
 
 2. Download from GitHub the source files of the

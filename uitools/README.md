@@ -7,22 +7,22 @@ and add your own.
 
 In the [API Documentation](https://developers.arcgis.com/qt/toolkit/api-reference/), it can be found a visual representation for each of the components in the below table. A set up example code is also available in the docs to help in quickly utilize the tools.
 
-|Tool|[C++ (QtQuick)](https://developers.arcgis.com/qt/toolkit/api-reference/cppquickuitools.html)|[QML](https://developers.arcgis.com/qt/toolkit/api-reference/qmluitools.html)|[QtWidgets](https://developers.arcgis.com/qt/toolkit/api-reference/cppwidgetsuitools.html)|
-|:--:|:--:|:--:|:--:|
-|Authentication view|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-authenticationview.html) | [✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-authenticationview.html) | [✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-authenticationview.html) |
-|Basemap gallery|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-basemapgallery.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-basemapgallery.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-basemapgallery.html)|
-| Bookmarks view |✔|✔ |✔ |
-|Callout|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-callout.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-callout.html)||
-|Coordinate conversion|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-coordinateconversion.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-coordinateconversion.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-coordinateconversion.html)|
-|Floor Filter|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-floorfilter.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-floorfilter.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-floorfilter.html)|
-|North arrow|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-northarrow.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-northarrow.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-northarrow.html)|
-|Overview map|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-overviewmap.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-overviewmap.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-overviewmap.html)|
-|Popup stack view|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupstackview.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupstackview.html)||
-|Popup view|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupview.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupview.html)||
-|Scalebar|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-scalebar.html)|||
-|Search view|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-searchview.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-searchview.html)||
-|Time slider|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-timeslider.html)|[✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-timeslider.html)||
-|Utility Network Trace |✔ | | |
+|          Tool         | [C++ (QtQuick)](https://developers.arcgis.com/qt/toolkit/api-reference/cppquickuitools.html) |            [QtWidgets](https://developers.arcgis.com/qt/toolkit/api-reference/cppwidgetsuitools.html)            |
+|:---------------------:|:--------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------:|
+|  Authentication view  |    [✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-authenticationview.html)   |  [✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-authenticationview.html)  |
+|    Basemap gallery    |      [✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-basemapgallery.html)     |    [✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-basemapgallery.html)    |
+|     Bookmarks view    |                                               ✔                                              |                                                         ✔                                                        |
+|        Callout        |         [✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-callout.html)         |                                                                                                                  |
+| Coordinate conversion |   [✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-coordinateconversion.html)  | [✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-coordinateconversion.html) |
+|      Floor Filter     |       [✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-floorfilter.html)       |      [✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-floorfilter.html)     |
+|      North arrow      |        [✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-northarrow.html)       |      [✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-northarrow.html)      |
+|      Overview map     |       [✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-overviewmap.html)       |      [✔](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-overviewmap.html)     |
+|    Popup stack view   |      [✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupstackview.html)     |                                                                                                                  |
+|       Popup view      |        [✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupview.html)        |                                                                                                                  |
+|        Scalebar       |         [✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-scalebar.html)        |                                                                                                                  |
+|      Search view      |        [✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-searchview.html)       |                                                                                                                  |
+|      Time slider      |        [✔](https://developers.arcgis.com/qt/toolkit/api-reference/qml-timeslider.html)       |                                                                                                                  |
+| Utility Network Trace |                                               ✔                                              |                                                                                                                  |
 
 ## Showcase - Demo app
 
