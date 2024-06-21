@@ -37,7 +37,6 @@ import QtQml.Models
 
   2D maps and 3D scenes are supported.
   \image docs/floorfilter.gif
-  Example code in the QML API (C++ API might differ):
   \snippet cpp_quick/src/demos/FloorFilterDemoForm.qml Set up Floor Filter QML
 */
 Control {
@@ -62,7 +61,7 @@ Control {
       \qmlproperty enumeration updateLevelsMode
       \brief The mode to use for updating levels visibility.
       Default is \c {FloorFilterController.UpdateLevelsMode.AllLevelsMatchingVerticalOrder}.
-      \sa {FloorFilterController} {FloorFilterController.updateLevelsMode}
+      \sa {Esri::ArcGISRuntime::Toolkit::FloorFilterController} {FloorFilterController.updateLevelsMode}
     */
     property int updateLevelsMode: controller.updateLevelsMode
 

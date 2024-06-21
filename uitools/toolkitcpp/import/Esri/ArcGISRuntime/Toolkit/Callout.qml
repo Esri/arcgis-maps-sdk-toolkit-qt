@@ -39,7 +39,6 @@ import QtQuick.Shapes
 
      For more information, please see the CalloutData documentation.
      \image docs/callout.png
-     Example code in the QML API (C++ API might differ):
      \snippet cpp_quick/src/demos/CalloutDemoForm.qml Set up Callout QML
 
      \note That the Callout has gone through a major revision as of ArcGISRuntime 100.14.

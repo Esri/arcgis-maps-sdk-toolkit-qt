@@ -49,7 +49,6 @@ import QtQuick.Controls
         {Qt WebView}.
 
   \image docs/authenticationview_qml.png authentication_view
-  Example code in the QML API (C++ API might differ):
   \snippet cpp_quick/src/demos/AuthenticationViewDemoForm.qml Set up Authentication View QML
  */
 
