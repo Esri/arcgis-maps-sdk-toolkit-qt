@@ -33,8 +33,7 @@ import QtQuick.Layouts
     The time extents of all layers in the map or scene will be used to set up the
     slider with the full temporal range and the current time extent.
     \image docs/timeslider.gif timeslider
-    Example code in the QML API (C++ API might differ):
-    \snippet qml_quick/src/demos/TimeSliderDemoForm.qml Set up Time Slider
+    \snippet cpp_quick/src/demos/TimeSliderDemoForm.qml Set up Time Slider
 */
 Pane {
     id: timeSlider
@@ -85,7 +84,7 @@ Pane {
       \brief The controller handles calculating steps and setting extents on the
        GeoView.
 
-       The QML controller is documented \l{TimeSliderController}{here} and the CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::TimeSliderController}{here}.
+       The CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::TimeSliderController}{here}.
     */
     property var controller: TimeSliderController { }
 

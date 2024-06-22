@@ -28,8 +28,7 @@ import QtQuick.Layouts
     \brief SearchView enables users to search for one or more locations or features,
     from a variety of sources, with suggestions.
     \image docs/search.png search
-    Example code in the QML API (C++ API might differ):
-    \snippet qml_quick/src/demos/SearchViewDemoForm.qml Set up Search View QML
+    \snippet cpp_quick/src/demos/SearchViewDemoForm.qml Set up Search View QML
 
     \note By default, the SearchView will attempt to access the World Geocoding Service, which requires an \l{https://developers.arcgis.com/qt/get-started/#3-access-services-and-content-with-an-api-key}{API key}.
 */
@@ -48,7 +47,7 @@ Pane {
       \brief The Controller which performs the search and manages
       the results/suggestions.
 
-       The QML controller is documented \l{SearchViewController}{here} and the CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::SearchViewController}{here}.
+       The CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::SearchViewController}{here}.
     */
     property var controller: SearchViewController { }
 
@@ -64,7 +63,7 @@ Pane {
       \qmlproperty bool repeatSearchHereButtonEnabled
       \brief Determines whether a button that allows the user to repeat a search with a spatial constraint is displayed automatically.
       Set to false if you want to use a custom button, for example so that you can place it elsewhere on the map.
-      \l SearchViewController has properties and methods you can use to determine when the custom button should be visible and to
+      \l{Esri::ArcGISRuntime::Toolkit::SearchViewController} has properties and methods you can use to determine when the custom button should be visible and to
       trigger the search repeat behavior.
 
       Defaults to true.

@@ -49,8 +49,7 @@ import QtQuick.Controls
         {Qt WebView}.
 
   \image docs/authenticationview_qml.png authentication_view
-  Example code in the QML API (C++ API might differ):
-  \snippet qml_quick/src/demos/AuthenticationViewDemoForm.qml Set up Authentication View QML
+  \snippet cpp_quick/src/demos/AuthenticationViewDemoForm.qml Set up Authentication View QML
  */
 
 Item {
@@ -61,7 +60,7 @@ Item {
       \brief The Controller handles references to challenges emitted by the
       \c AuthenticationManager.
 
-      The QML controller is documented \l{AuthenticationController}{here} and the CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::AuthenticationController}{here}.
+      The CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::AuthenticationController}{here}.
     */
     property var controller: AuthenticationController { }
 

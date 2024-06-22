@@ -34,8 +34,7 @@ import QtQuick.Layouts
  A list of different coordinate formats representing the same point are
  available to the user.
  \image docs/coordinateConversion.png coordinate_conversion
- Example code in the QML API (C++ API might differ):
- \snippet qml_quick/src/demos/CoordinateConversionDemoForm.qml Set up Coordinate Conversion QML
+ \snippet cpp_quick/src/demos/CoordinateConversionDemoForm.qml Set up Coordinate Conversion QML
  */
 
 Pane {
@@ -70,7 +69,7 @@ Pane {
       and maintaining our list of textual representations of a single point
       in multiple formats.
 
-      The QML controller is documented \l{CoordinateConversionController}{here} and the CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::CoordinateConversionController}{here}.
+      The CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::CoordinateConversionController}{here}.
     */
     property var controller: CoordinateConversionController { }
 

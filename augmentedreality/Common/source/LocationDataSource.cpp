@@ -25,10 +25,8 @@ using namespace Esri::ArcGISRuntime::Toolkit;
   \class Esri::ArcGISRuntime::Toolkit::LocationDataSource
   \ingroup ArcGISQtToolkitAR
   \ingroup ArcGISQtToolkitARCppApi
-  \ingroup ArcGISQtToolkitARQmlApi
   \ingroup ArcGISQtToolkit
   \ingroup ArcGISQtToolkitCppApi
-  \ingroup ArcGISQtToolkitQmlApi
   \inmodule ArcGISQtToolkit
   \since Esri::ArcGISRuntime 100.6
   \brief Updates the location using the positioning device.

@@ -20,7 +20,6 @@ You will need:
 
 - The [ArcGIS Maps SDK for Qt Reference](https://developers.arcgis.com/qt/api-reference/). Which includes:
   - [Qt Toolkit API](https://developers.arcgis.com/qt/toolkit/api-reference/).
-  - [QML API](https://developers.arcgis.com/qt/qml/api-reference/).
   - [C++ API](https://developers.arcgis.com/qt/cpp/api-reference/).
 
 - The [ArcGIS Maps SDK for Qt Guide](https://developers.arcgis.com/qt/).
