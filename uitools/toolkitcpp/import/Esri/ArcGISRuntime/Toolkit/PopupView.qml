@@ -59,8 +59,7 @@ import QtQuick.Layouts
    PopupManager, or any of their properties, the PopupManager must
    be re-set to the PopupView.
    \image docs/popupview.png popupview
-   Example code in the QML API (C++ API might differ):
-   \snippet qml_quick/src/demos/PopupViewDemoForm.qml Set up Popup View
+   \snippet cpp_quick/src/demos/PopupViewDemoForm.qml Set up Popup View
  */
 Page {
     id: popupView
@@ -80,7 +79,7 @@ Page {
       \brief The Controller handles reading from the PopupManager and monitoring
       the list-models.
 
-      The QML controller is documented \l{PopupViewController}{here} and the CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::PopupViewController}{here}.
+      The CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::PopupViewController}{here}.
     */
     property var controller: PopupViewController {}
 

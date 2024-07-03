@@ -31,8 +31,7 @@ import QtQuick.Layouts
  or are programmatically defined. When the user selects a bookmark from the provided list,
  the viewpoint in the geoView is set to the new bookmark's view extent.
  \image docs/bookmarksView.gif
- Example code in the QML API (C++ API might differ):
- \snippet qml_quick/src/demos/BookmarksViewDemoForm.qml Set up Bookmark QML
+ \snippet cpp_quick/src/demos/BookmarksViewDemoForm.qml Set up Bookmark QML
 */
 
 Pane {
@@ -43,7 +42,7 @@ Pane {
       \brief The controller handles binding logic between the BookmarksView and
       the \c BookmarkListItem.
 
-      The QML controller is documented \l{BookmarksViewController}{here} and the CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::BookmarksViewController}{here}.
+      The CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::BookmarksViewController}{here}.
     */
     property var controller: BookmarksViewController { }
 
