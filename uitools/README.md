@@ -236,5 +236,5 @@ in your own widgets files.
 
 ## Access token requirements
 
-Some of the toolkit components and examples utilize ArcGIS Platform services which require an access token.
+Some of the toolkit components and examples utilize ArcGIS location services which require an access token.
 Please see the [setup guide](http://links.esri.com/create-an-api-key) for more information.

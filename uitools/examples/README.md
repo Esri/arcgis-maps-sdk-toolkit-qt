@@ -8,7 +8,7 @@ tools into a C++/Quick and QML/Quick app respectively.
 
 ## Access token setup
 
-To run the application and use the tools, please have an [access token](http://links.esri.com/create-an-api-key) ready to to access the features. 
+To run the application and use the tools, please have an [access token](http://links.esri.com/create-an-api-key) ready to access the features. 
 
 You can set the access token in a number of ways:
 
