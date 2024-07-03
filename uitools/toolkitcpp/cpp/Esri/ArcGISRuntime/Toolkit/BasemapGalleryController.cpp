@@ -282,7 +282,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     The controller will automatically populate itself with the developer basemaps from ArcGIS Online.
 
-    The given default basemaps require either an access token or a user to be signed into the app.
+    The given default basemaps require either an access token or user authentication to be signed into the app.
    */
   BasemapGalleryController::BasemapGalleryController(QObject* parent) :
     QObject(parent),
