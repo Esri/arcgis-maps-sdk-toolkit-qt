@@ -438,7 +438,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     QString defaultLevel = allLevels.first()->levelId();
     QList<QObject*> levelItems;
-    for (const auto level : qAsConst(allLevels))
+    for (const auto level : std::as_const(allLevels))
     {
       if (level && level->facility()->facilityId() == selectedFacilityId())
       {
