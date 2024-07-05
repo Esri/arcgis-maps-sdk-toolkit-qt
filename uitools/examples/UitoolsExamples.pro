@@ -25,8 +25,6 @@ QT += opengl qml quick
 QML_IMPORT_NAME = "DemoApp"
 QML_IMPORT_MAJOR_VERSION = 1
 
-TARGET = uitools_examples
-
 lessThan(QT_MAJOR_VERSION, 6) {
     error("This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.5.6")
 }

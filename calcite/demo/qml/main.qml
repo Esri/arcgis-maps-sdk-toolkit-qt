@@ -16,8 +16,7 @@
  ******************************************************************************/
 import QtQuick
 import QtQuick.Controls
-// import Esri.ArcGISRuntime.Toolkit
-import Esri.Calcite
+import Esri.ArcGISRuntime
 import Calcite as C
 import QtQuick.Layouts
 
@@ -29,6 +28,7 @@ ApplicationWindow {
     visible: true
 
     Component.onCompleted: {
+
         //Calcite.theme = Calcite.Dark;
     }
 
@@ -42,9 +42,9 @@ ApplicationWindow {
         // add a map to the mapview
         Map {
             // add the OpenStreetMapLayer basemap to the map
-            // Basemap {
-                // OpenStreetMapLayer {}
-            // }
+            Basemap {
+                OpenStreetMapLayer {}
+            }
         }
 
         Pane {

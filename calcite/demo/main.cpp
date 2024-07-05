@@ -19,15 +19,10 @@
 #include <QQuickWindow>
 #include <QQuickStyle>
 
-#include "MapQuickView.h"
-#include "Basemap.h"
-#include "Map.h"
-
 //------------------------------------------------------------------------------
 
-using namespace Esri::ArcGISRuntime;
-
-int main(int argc, char* argv[])
+int
+main(int argc, char* argv[])
 {
   qDebug() << "Initializing application";
 
@@ -46,13 +41,14 @@ int main(int argc, char* argv[])
   // (https://links.esri.com/arcgis-api-keys).
 
   const QString apiKey =
-    QString("");
+      QString("");
   if (apiKey.isEmpty()) {
     qWarning() << "Use of Esri location services, including basemaps, requires "
                   "you to authenticate with an ArcGIS identity or set the API "
                   "Key property.";
   } else {
-    QCoreApplication::instance()->setProperty("Esri.ArcGISRuntime.apiKey", apiKey);
+    QCoreApplication::instance()->setProperty("Esri.ArcGISRuntime.apiKey",
+                                              apiKey);
   }
 
   // Production deployment of applications built with ArcGIS Maps SDK for Native Apps
@@ -61,10 +57,6 @@ int main(int argc, char* argv[])
 
   // QCoreApplication::instance()->setProperty("Esri.ArcGISRuntime.license",
   // "licenseString");
-
-  qmlRegisterType<MapQuickView>("Esri.Calcite", 1, 0, "MapView");
-  qmlRegisterType<Basemap>("Esri.Calcite", 1, 0, "Basemap");
-  qmlRegisterType<Map>("Esri.Calcite", 1, 0, "Map");
 
   // Intialize application window
   QQmlApplicationEngine appEngine;
