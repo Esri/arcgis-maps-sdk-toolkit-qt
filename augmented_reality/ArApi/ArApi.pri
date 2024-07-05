@@ -16,8 +16,7 @@
 
 # This configuration file is an internal file.
 # To use the AR features of the ArcGIS Runtime Toolkit for Qt,
-# uses the files ArApi.pri to use C++ API and ArQmlApi.pri
-# to use the QML API. See AR.md for details.
+# uses the files ArApi.pri to use C++ API. See AR.md for details.
 
 isEmpty(ARCGIS_TOOLKIT_PATH) {
     error(ARCGIS_TOOLKIT_PATH is not set)
