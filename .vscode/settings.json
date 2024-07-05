@@ -21,8 +21,7 @@
     "Scalebar",
     "Struct",
     "subclassing",
-    "toolkitcpp",
-    "toolkitqml",
+    "toolkit",
     "toolkitwidgets",
     "uitools"
   ],
