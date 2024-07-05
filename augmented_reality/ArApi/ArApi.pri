@@ -14,9 +14,6 @@
 # limitations under the License.
 ###############################################################################
 
-
-# QT += core-private ?
-
 # This configuration file is an internal file.
 # To use the AR features of the ArcGIS Runtime Toolkit for Qt,
 # uses the files ArApi.pri to use C++ API and ArQmlApi.pri
