@@ -31,26 +31,30 @@ main(int argc, char* argv[])
 
   QGuiApplication app(argc, argv);
 
-  // Use of Esri location services, including basemaps and geocoding, requires
-  // either an ArcGIS identity or an API key. For more information see
+  // Use of ArcGIS location services, such as basemap styles, geocoding, and routing services,
+  // requires an access token. For more information see
   // https://links.esri.com/arcgis-runtime-security-auth.
 
-  // 1. ArcGIS identity: An ArcGIS named user account that is a member of an
+  // The following methods grant an access token:
+
+  // 1. User authentication: Grants a temporary access token associated with a user's ArcGIS account.
+  // To generate a token, a user logs in to the app with an ArcGIS account that is part of an
   // organization in ArcGIS Online or ArcGIS Enterprise.
 
-  // 2. API key: A permanent key that gives your application access to Esri
-  // location services. Create a new API key or access existing API keys from
-  // your ArcGIS for Developers dashboard
-  // (https://links.esri.com/arcgis-api-keys).
+  // 2. API key authentication: Get a long-lived access token that gives your application access to
+  // ArcGIS location services. Go to the tutorial at https://links.esri.com/create-an-api-key.
+  // Copy the API Key access token.
 
-  const QString apiKey =
-    QString("");
-  if (apiKey.isEmpty()) {
-    qWarning() << "Use of Esri location services, including basemaps, requires "
-                  "you to authenticate with an ArcGIS identity or set the API "
-                  "Key property.";
-  } else {
-    Esri::ArcGISRuntime::ArcGISRuntimeEnvironment::setApiKey(apiKey);
+  const QString accessToken = QString("");
+
+  if (accessToken.isEmpty())
+  {
+    qWarning() << "Use of ArcGIS location services, such as the basemap styles service, requires" <<
+                  "you to authenticate with an ArcGIS account or set the API Key property.";
+  }
+  else
+  {
+    Esri::ArcGISRuntime::ArcGISRuntimeEnvironment::setApiKey(accessToken);
   }
 
   // Production deployment of applications built with ArcGIS Maps SDK for Native Apps
