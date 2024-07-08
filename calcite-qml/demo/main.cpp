@@ -57,8 +57,6 @@ main(int argc, char* argv[])
   // requires you to license its functionality. For more information see
   // https://links.esri.com/arcgis-runtime-license-and-deploy.
 
-  // QCoreApplication::instance()->setProperty("Esri.ArcGISRuntime.license",
-  // "licenseString");
 
   CalciteTest::init();
 
