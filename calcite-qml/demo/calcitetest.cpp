@@ -16,10 +16,10 @@
 
 #include "CalciteTest.h"
 
+#include "Basemap.h"
 #include "Map.h"
 #include "MapQuickView.h"
 #include "MapTypes.h"
-#include "Basemap.h"
 #include "OpenStreetMapLayer.h"
 
 using namespace Esri::ArcGISRuntime;
