@@ -58,8 +58,6 @@ RESOURCES += \
     Resources/Resources.qrc \
     $$absolute_path($$PWD/../Calcite/calcite.qrc)
 
-# QML_IMPORT_PATH += $$PWD/../Calcite
-
 OTHER_FILES += \
     wizard.xml \
     wizard.png
