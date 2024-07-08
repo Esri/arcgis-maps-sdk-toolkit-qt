@@ -19,6 +19,9 @@
 #include <QQuickWindow>
 #include <QQuickStyle>
 
+#include "ArcGISRuntimeEnvironment.h"
+#include "CalciteTest.h"
+
 //------------------------------------------------------------------------------
 
 int
@@ -47,8 +50,7 @@ main(int argc, char* argv[])
                   "you to authenticate with an ArcGIS identity or set the API "
                   "Key property.";
   } else {
-    QCoreApplication::instance()->setProperty("Esri.ArcGISRuntime.apiKey",
-                                              apiKey);
+    Esri::ArcGISRuntime::ArcGISRuntimeEnvironment::setApiKey(apiKey);
   }
 
   // Production deployment of applications built with ArcGIS Maps SDK for Native Apps
@@ -57,6 +59,8 @@ main(int argc, char* argv[])
 
   // QCoreApplication::instance()->setProperty("Esri.ArcGISRuntime.license",
   // "licenseString");
+
+  CalciteTest::init();
 
   // Intialize application window
   QQmlApplicationEngine appEngine;
