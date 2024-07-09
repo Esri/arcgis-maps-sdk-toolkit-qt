@@ -71,7 +71,7 @@ OpenGL graphics API is required. Metal is not supported. See the [limitations](#
 ### Creating a new C++ app
 
 An example C++ app with AR support can be found in the folder
-`Examples\CppArExample` in the toolkit repo.
+`Examples\ArExample` in the toolkit repo.
 
 Note: In the following explanation, `<ProjectName>` refers to the project name
 used to create the Qt project.
@@ -93,7 +93,7 @@ on your development machine.
 
 ```qmake
 ARCGIS_TOOLKIT_PATH = # must be set to the root path of the toolkit folder
-include($$ARCGIS_TOOLKIT_PATH/augmentedreality/CppApi/ArCppApi.pri)
+include($$ARCGIS_TOOLKIT_PATH/augmented_reality/ArApi/ArApi.pri)
 ```
 
 5. In the `main.cpp` file, make the following changes:
