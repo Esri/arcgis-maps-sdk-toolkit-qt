@@ -685,7 +685,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
                   else
                   {
                     // Take ownership of all elements.
-                    for (auto r : qAsConst(results))
+                    for (auto r : std::as_const(results))
                     {
                       r->setParent(m_results);
                       m_results->append(r);
@@ -696,7 +696,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
                     {
                       m_graphicsOverlay->graphics()->clear();
 
-                      for (auto r : qAsConst(results))
+                      for (auto r : std::as_const(results))
                       {
                         addGeoElementToOverlay(m_graphicsOverlay, r->geoElement());
                       }

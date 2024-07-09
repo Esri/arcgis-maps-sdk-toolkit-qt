@@ -1,6 +1,11 @@
 # Changelog
 
+## 200.5
+
+* remove of `toolkitqml.pri`
+
 ## 200.0
+
 * (UtilityNetworkTrace) Introduction of the new Utility Network Trace tool (C++/Quick).
 * Increased minimum version to use Qt 6
 * Updated language to allow for C++ 17
