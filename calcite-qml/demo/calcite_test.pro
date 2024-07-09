@@ -45,7 +45,11 @@ equals(QT_MAJOR_VERSION, 6) {
 #-------------------------------------------------------------------------------
 
 SOURCES += \
+    CalciteTest.cpp \
     main.cpp
+
+HEADERS += \
+    CalciteTest.h
 
 # Note: this is how we integrate the Calcite theme into the app binary!
 # See `README.md` for setup details.

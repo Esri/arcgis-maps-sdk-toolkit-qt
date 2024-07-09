@@ -16,7 +16,7 @@
  ******************************************************************************/
 import QtQuick
 import QtQuick.Controls
-import Esri.ArcGISRuntime
+import Esri.Calcite
 import Calcite as C
 import QtQuick.Layouts
 
@@ -26,6 +26,11 @@ ApplicationWindow {
     height: 800
     title: "Calcite_test"
     visible: true
+
+    CalciteTest {
+        id: model
+        mapView: mapView
+    }
 
     Component.onCompleted: {
 
@@ -39,13 +44,6 @@ ApplicationWindow {
         // set focus to enable keyboard navigation
         focus: true
 
-        // add a map to the mapview
-        Map {
-            // add the OpenStreetMapLayer basemap to the map
-            Basemap {
-                OpenStreetMapLayer {}
-            }
-        }
 
         Pane {
             anchors {
