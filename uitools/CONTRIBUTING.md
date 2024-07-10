@@ -9,22 +9,17 @@ guidelines see [here](/CONTRIBUTING.md).
 
 - The [ArcGIS Maps SDK for Qt Reference](https://developers.arcgis.com/qt/api-reference/). Which includes:
   - [Qt Toolkit API](https://developers.arcgis.com/qt/toolkit/api-reference/).
-  - [QML API](https://developers.arcgis.com/qt/qml/api-reference/).
   - [C++ API](https://developers.arcgis.com/qt/cpp/api-reference/).
 
 - The [ArcGIS Maps SDK for Qt Guide](https://developers.arcgis.com/qt/).
 
 ## UI Tools Architecture
 
-ArcGIS Maps SDK for Qt provides 3 different GUI workflows.
-
-1. **QtQuick/QML** The QML workflow is for applications written in pure QML. Used successfully in [AppStudio](https://www.esri.com/en-us/arcgis/products/arcgis-appstudio/overview). The overall philosophy of this API is that the developer should touch as little C++ code as possible. This workflow targets desktop and mobile devices.
+ArcGIS Maps SDK for Qt provides 2 different GUI workflows.
 
 1. **QtQuick/C++** The QtQuick/C++ workflow is for applications written in C++ with a QML QtQuick frontend. Often used by developers who care about performance/control. This workflow targets desktop and mobile devices.
 
 1. **Widgets/C++** The Widgets/C++ workflow is for applications written in pure C++ with a Qt widget front-end. Often used by users who care about performance/control. This workflow targets desktop **only**.
-
-Of these, `QtQuick/QML` exposes the API for QML, whic is incompatible with the API for C++ used in `Widgets/C++` & `QtQuick/C++`.
 
 The challenge of writing UI tools then, is to target all these workflows with as minimum repetition as possible. The worst case scenario would be writing three separate implementations for each workflow, leading to subtle differences
 and code duplication.
@@ -48,12 +43,6 @@ Whenever you add a new tool, remember to update the table in [README.md](README.
 1. Add a new `<MyToolName>.qml` file in the [import/Esri/ArcGISRuntime/Toolkit](import/Esri/ArcGISRuntime/Toolkit) folder.
 1. Register `<MyToolName>` with the associated [esri_arcgisruntime_toolkit_view.qrc](import/Esri/ArcGISRuntime/Toolkit/esri_arcgisruntime_toolkit_view.qrc) file.
 1. Register `<MyToolName>` with the associated [qmldir](import/Esri/ArcGISRuntime/Toolkit/qmldir) file along with the current branch version.
-
-### Adding a QML Controller
-
-1. Add a new `<MyToolName>Controller.qml` file in the [import/Esri/ArcGISRuntime/Toolkit/Controller](import/Esri/ArcGISRuntime/Toolkit/Controller) folder.
-1. Register `<MyToolName>Controller` with the associated [esri_arcgisruntime_toolkit_controller.qrc](import/Esri/ArcGISRuntime/Toolkit/Controller/esri_arcgisruntime_toolkit_controller.qrc) file.
-1. Register `<MyToolName>Controller` with the associated [qmldir](import/Esri/ArcGISRuntime/Toolkit/Controller/qmldir) file along with the current branch version.
 
 ### Adding a C++ Controller
 

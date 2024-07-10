@@ -77,7 +77,7 @@ Resources can be found as follows:
 
 - Functional/unit tests can be found in [tests](tests).
 
-- Augmented reality examples can be found in [augmentedreality/Examples](augmentedreality/Examples).
+- Augmented reality examples can be found in [augmented_reality/Examples](augmented_reality/Examples).
 
 - UI tool examples can be found in [uitools/examples](uitools/examples).
 
