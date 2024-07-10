@@ -845,7 +845,7 @@ void UtilityNetworkTraceController::setupUtilityNetworks()
         // Load the first one by default.
         setSelectedUtilityNetwork(map->utilityNetworks()->at(0));
 
-        for (const auto un : qAsConst(*map->utilityNetworks()))
+        for (const auto un : std::as_const(*map->utilityNetworks()))
         {
           if (un->loadStatus() == LoadStatus::NotLoaded)
           {
