@@ -49,7 +49,7 @@ SOURCES += \
   $$PWD/src/*.cpp
 
 RESOURCES += \
-    qml/examples.qrc \
+    qml/qml.qrc \
     qml/demos/demos.qrc \
     $$absolute_path($$PWD/../../calcite/Calcite/calcite.qrc)
 
