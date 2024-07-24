@@ -38,14 +38,14 @@ equals(QT_MAJOR_VERSION, 6) {
 ARCGIS_RUNTIME_VERSION = 200.5.0
 include($$PWD/arcgisruntime.pri)
 
-HEADERS += *.h
-SOURCES += *.cpp
+HEADERS += $$files($$PWD/*.h)
+SOURCES += $$files($$PWD/*.cpp)
 RESOURCES += \
     qml/qml.qrc \
     Resources/Resources.qrc
 OTHER_FILES += \
-    qml/*.qml \
-    qml/*.js
+    $$files($$PWD/qml/*.qml) \
+    $$files($$PWD/qml/*.js)
 
 #-------------------------------------------------------------------------------
 # AR configuration

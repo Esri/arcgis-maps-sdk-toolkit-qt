@@ -43,10 +43,10 @@ include($$PWD/arcgisruntime.pri)
 include($$PWD/../toolkitcpp.pri)
 
 HEADERS += \
-  $$PWD/src/*.h
+  $$files($$PWD/src/*.h)
 
 SOURCES += \
-  $$PWD/src/*.cpp
+  $$files($$PWD/src/*.cpp)
 
 RESOURCES += \
     qml/qml.qrc \
