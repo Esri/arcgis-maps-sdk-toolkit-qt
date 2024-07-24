@@ -18,8 +18,8 @@ CONFIG += qt console warn_on depend_includepath testcase c++17
 
 TEMPLATE = app
 
-HEADERS += *.h
-SOURCES +=  *.cpp
+HEADERS += $$files($$PWD/*.h)
+SOURCES +=  $$files($$PWD/*.cpp)
 
 QT += testlib
 QT -= gui

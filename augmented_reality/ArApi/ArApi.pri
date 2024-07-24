@@ -32,9 +32,9 @@ AR_API_QML_PATH = $$AR_API_PATH/qml
 #-------------------------------------------------
 # platform independent configuration
 
-HEADERS += $$AR_API_INCLUDE_PATH/*.h
-SOURCES += $$AR_API_SOURCE_PATH/*.cpp
-RESOURCES += $$AR_API_QML_PATH/*.qrc
+HEADERS += $$files($$AR_API_INCLUDE_PATH/*.h)
+SOURCES += $$files($$AR_API_SOURCE_PATH/*.cpp)
+RESOURCES += $$files($$AR_API_QML_PATH/*.qrc)
 
 INCLUDEPATH += $$AR_API_INCLUDE_PATH
 DEPENDPATH += $$AR_API_INCLUDE_PATH
