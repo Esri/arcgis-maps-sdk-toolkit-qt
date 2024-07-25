@@ -102,6 +102,7 @@ set(esri_arcgisruntime_toolkit_images_resource_files
     "images/organization.svg"
     "images/pause.svg"
     "images/pin-tear.svg"
+    "images/pin-tear.png"
     "images/pin.svg"
     "images/play.svg"
     "images/plus-circle.svg"
