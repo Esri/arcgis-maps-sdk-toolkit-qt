@@ -2,7 +2,8 @@
 
 ## 200.5
 
-* remove of `toolkitqml.pri`
+* Remove `toolkitqml.pri` alongside the removal of the corresponding QML API.
+* Add CMake support.
 
 ## 200.0
 
