@@ -2,7 +2,7 @@
   "cSpell.words": [
     "ARCGIS",
     "ARCGISRUNTIME",
-    "augmentedreality",
+    "augmented_reality",
     "Basemap",
     "Basemaps",
     "Callout",
@@ -22,7 +22,6 @@
     "Struct",
     "subclassing",
     "toolkitcpp",
-    "toolkitqml",
     "toolkitwidgets",
     "uitools"
   ],

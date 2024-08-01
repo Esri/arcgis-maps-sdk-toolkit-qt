@@ -15,9 +15,9 @@ include($$PWD/common.pri)
 
 QT += quickcontrols2 webview svg
 
-REGISTERPATH = $$PWD/register/Esri/ArcGISRuntime/Toolkit
+REGISTERPATH = $$PWD/toolkitcpp/register/Esri/ArcGISRuntime/Toolkit
 
-INCLUDEPATH += $$PWD/register $$REGISTERPATH
+INCLUDEPATH += $$PWD/toolkitcpp/register $$REGISTERPATH
 
 HEADERS += $$REGISTERPATH/register.h \
            $$REGISTERPATH/internal/register_cpp.h
@@ -26,9 +26,9 @@ SOURCES += $$REGISTERPATH/register.cpp \
            $$REGISTERPATH/internal/register_cpp.cpp
 
 RESOURCES += \
-  $$PWD/images/esri_arcgisruntime_toolkit_images.qrc \
-  $$PWD/import/Esri/ArcGISRuntime/Toolkit/esri_arcgisruntime_toolkit_view.qrc
+  $$PWD/toolkitcpp/images/esri_arcgisruntime_toolkit_images.qrc \
+  $$PWD/toolkitcpp/import/Esri/ArcGISRuntime/Toolkit/esri_arcgisruntime_toolkit_view.qrc
 
-QML_IMPORT_PATH += $$PWD/import
+QML_IMPORT_PATH += $$PWD/toolkitcpp/import
 
 DEFINES += CPP_ARCGISRUNTIME_TOOLKIT
