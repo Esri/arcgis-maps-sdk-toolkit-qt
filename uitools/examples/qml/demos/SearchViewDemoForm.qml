@@ -24,6 +24,8 @@ DemoPage {
     mapViewContents: Component {
         MapView {
             id: view
+
+            //! [Set up Search View QML]
             SearchView {
                 id: searchView
                 geoView: parent
@@ -33,6 +35,8 @@ DemoPage {
                     margins: 10
                 }
             }
+            //! [Set up Search View QML]
+
             SearchViewDemo {
                 geoView: view
             }

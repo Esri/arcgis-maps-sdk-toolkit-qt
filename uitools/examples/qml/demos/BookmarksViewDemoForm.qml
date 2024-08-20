@@ -23,6 +23,8 @@ DemoPage {
     mapViewContents: Component {
         MapView {
             id: view
+
+            //! [Set up Bookmark QML]
             BookmarksView {
                 id: bookmarksView
                 geoView: view
@@ -32,6 +34,8 @@ DemoPage {
                     margins: 10
                 }
             }
+            //! [Set up Bookmark QML]
+
             BookmarksViewDemo {
                 id: demo
                 geoView: view

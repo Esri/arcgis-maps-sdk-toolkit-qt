@@ -37,7 +37,7 @@ import QtQml.Models
 
   2D maps and 3D scenes are supported.
   \image docs/floorfilter.gif
-  \snippet cpp_quick/src/demos/FloorFilterDemoForm.qml Set up Floor Filter QML
+  \snippet qml/demos/FloorFilterDemoForm.qml Set up Floor Filter QML
 */
 Control {
     id: floorFilter
