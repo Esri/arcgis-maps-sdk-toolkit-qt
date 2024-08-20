@@ -217,7 +217,7 @@ void UtilityNetworkTraceController::setGeoView(QObject* geoView)
   {
     disconnect(m_geoView, nullptr, this, nullptr);
 
-    if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+    if (qobject_cast<SceneViewToolkit*>(m_geoView))
     {
       // scene does not have utility networks
       return;
