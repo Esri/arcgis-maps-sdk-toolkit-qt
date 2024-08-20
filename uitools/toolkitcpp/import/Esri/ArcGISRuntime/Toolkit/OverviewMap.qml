@@ -26,7 +26,7 @@ import Esri.ArcGISRuntime.Toolkit.Controller
    For MapViews, the current viewpoint will be represented by a polygon displaying the visible area of the MapView. For SceneViews,
    the current viewpoint will be represented by a reticle (crosshairs) displaying the viewpoint center.
    \image docs/overviewmap.png overviewmap
-   \snippet cpp_quick/src/demos/OverviewMapDemoForm.qml Set up Overview Map QML
+   \snippet qml/demos/OverviewMapDemoForm.qml Set up Overview Map QML
 
     \note By default, the OverviewMap will attempt to use an ArcGIS Topographic basemap, which requires an \l{http://links.esri.com/create-an-api-key}{access token} to access.
  */

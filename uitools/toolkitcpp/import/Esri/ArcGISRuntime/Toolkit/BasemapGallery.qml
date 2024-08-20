@@ -31,7 +31,7 @@ import QtQuick.Layouts
  or an array of Basemaps. When the user selects a basemap from the BasemapGallery, the  basemap rendered in the current
  geoModel is removed from the given map/scene and replaced with the basemap selected in the gallery.
  \image docs/basemap.gif
- \snippet cpp_quick/src/demos/BasemapGalleryDemoForm.qml Set up BasemapGallery QML
+ \snippet qml/demos/BasemapGalleryDemoForm.qml Set up BasemapGallery QML
 
  \note By default, the BasemapGallery will attempt to fetch the set of developer basemaps, which require an \l{http://links.esri.com/create-an-api-key}{access token} to access.
  */
@@ -62,7 +62,7 @@ Pane {
       \qmlproperty BasemapGalleryController controller
       \brief The controller handles binding logic between the BasemapGallery and
       the \c GeoModel and the \c Portal where applicable.
-      
+
       The CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::BasemapGalleryController}{here}.
     */
     property var controller: BasemapGalleryController { }
