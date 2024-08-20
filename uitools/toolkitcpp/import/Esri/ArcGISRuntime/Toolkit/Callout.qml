@@ -52,7 +52,7 @@ import QtQuick.Shapes
             }
      \endcode
 
-     can be rewrite as:
+     can be rewritten as:
 
      \code
             Callout {
