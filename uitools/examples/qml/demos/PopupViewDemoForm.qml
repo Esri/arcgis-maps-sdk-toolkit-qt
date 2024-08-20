@@ -25,6 +25,7 @@ DemoPage {
         SceneView {
             id: view
 
+            //! [Set up Popup View QML]
             PopupView {
                 id:popupView
                 anchors {
@@ -35,6 +36,7 @@ DemoPage {
                 visible: false
                 popupManager: model.popupManager
             }
+            //! [Set up Popup View QML]
 
             PopupViewDemo {
                 id: model
