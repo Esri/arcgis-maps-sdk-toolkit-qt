@@ -25,9 +25,11 @@ DemoPage {
         MapView {
             id: view
 
+            //! [Set up Authentication View QML]
             AuthenticationView {
                 anchors.centerIn: parent
             }
+            //! [Set up Authentication View QML]
 
             AuthenticationViewDemo {
                 geoView: view;
