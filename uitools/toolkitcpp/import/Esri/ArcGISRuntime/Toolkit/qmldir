@@ -20,6 +20,10 @@ depends Esri.ArcGISRuntime.Toolkit.Controller 200.6
 CurrentVersion 200.6 CurrentVersion.qml
 
 # View components
+ArcGISAuthenticationView 200.6 ArcGISAuthenticationView.qml
+ArcGISAuthenticationView_internal 200.6 ArcGISAuthenticationView_internal.qml
+ArcGISOAuth2View 200.6 ArcGISOAuth2View.qml
+ArcGISUserCredentialsView 200.6 ArcGISUserCredentialsView.qml
 AuthenticationView 100.10 AuthenticationView.qml
 AuthenticationView 200.0 AuthenticationView.qml
 BasemapGallery 100.12 BasemapGallery.qml
@@ -32,7 +36,10 @@ ClientCertificateView 100.10 ClientCertificateView.qml
 ClientCertificateView 200.0 ClientCertificateView.qml
 CoordinateConversion 100.10 CoordinateConversion.qml
 CoordinateConversion 200.0 CoordinateConversion.qml
+FloorFilter 100.14 FloorFilter.qml
+FloorFilter 200.0 FloorFilter.qml
 internal FlashImage FlashImage.qml
+internal ScalebarImpl ScalebarImpl.qml
 NorthArrow 100.10 NorthArrow.qml
 NorthArrow 200.0 NorthArrow.qml
 OAuth2View 100.10 OAuth2View.qml
@@ -45,7 +52,6 @@ PopupView 100.10 PopupView.qml
 PopupView 200.0 PopupView.qml
 Scalebar 100.13 Scalebar.qml
 Scalebar 200.0 Scalebar.qml
-internal ScalebarImpl ScalebarImpl.qml
 SearchView 100.13 SearchView.qml
 SearchView 200.0 SearchView.qml
 SslHandshakeView 100.10 SslHandshakeView.qml
@@ -54,7 +60,5 @@ TimeSlider 100.10 TimeSlider.qml
 TimeSlider 200.0 TimeSlider.qml
 UserCredentialsView 100.10 UserCredentialsView.qml
 UserCredentialsView 200.0 UserCredentialsView.qml
-FloorFilter 100.14 FloorFilter.qml
-FloorFilter 200.0 FloorFilter.qml
 UtilityNetworkTrace 100.15 UtilityNetworkTrace.qml
 UtilityNetworkTrace 200.0 UtilityNetworkTrace.qml
