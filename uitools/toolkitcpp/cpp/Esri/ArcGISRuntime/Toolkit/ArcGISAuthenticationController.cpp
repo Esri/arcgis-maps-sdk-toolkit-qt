@@ -43,6 +43,7 @@
 
 #include <QUrl>
 #include <QFuture>
+#include <QPointer>
 
 using namespace Esri::ArcGISRuntime;
 
@@ -76,6 +77,21 @@ ArcGISAuthenticationController::ArcGISAuthenticationController(QObject* parent) 
   \brief Destructor.
  */
 ArcGISAuthenticationController::~ArcGISAuthenticationController() = default;
+
+ArcGISAuthenticationController* ArcGISAuthenticationController::create(QQmlEngine*, QJSEngine*)
+{
+  static QPointer<ArcGISAuthenticationController> instance = new ArcGISAuthenticationController();
+
+  if (!instance)
+    instance = new ArcGISAuthenticationController();
+
+  return instance;
+}
+
+ArcGISAuthenticationController* ArcGISAuthenticationController::instance()
+{
+  return create(nullptr, nullptr);
+}
 
 void ArcGISAuthenticationController::handleArcGISAuthenticationChallenge(ArcGISAuthenticationChallenge* challenge)
 {

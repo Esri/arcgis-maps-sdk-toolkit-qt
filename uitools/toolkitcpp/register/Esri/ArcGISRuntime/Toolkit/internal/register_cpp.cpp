@@ -71,6 +71,7 @@
 // Qt Includes
 #include <QQmlEngine>
 #include <QQmlFileSelector>
+#include <QPointer>
 
 // std includes
 #include <type_traits>
@@ -85,6 +86,8 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     constexpr int VERSION_MAJOR = 200;
     constexpr int VERSION_MINOR = 2;
+
+    QPointer<ArcGISAuthenticationController> s_arcGISAuthenticationController;
 
     /*
       \internal
@@ -129,6 +132,23 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
       constexpr Uncreatable_ Uncreatable = Uncreatable_{};
 
+      struct Singleton_
+      {
+      };
+
+      template <class T>
+      void registerComponentImpl(CreationType::Singleton_, int majorVersion, int minorVersion, const char* name)
+      {
+        qmlRegisterSingletonType<T>(NAMESPACE, majorVersion, minorVersion, name, [](QQmlEngine*, QJSEngine*) -> QObject* {
+          if (!s_arcGISAuthenticationController)
+          {
+            s_arcGISAuthenticationController = T::instance();
+          }
+          return s_arcGISAuthenticationController;
+        });
+      }
+
+      [[maybe_unused]] constexpr Singleton_ Singleton = Singleton_{};
     }
 
     /*
@@ -187,7 +207,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     appEngine.addImageProvider(BasemapGalleryImageProvider::PROVIDER_ID, BasemapGalleryImageProvider::instance());
     appEngine.addImportPath(ESRI_COM_PATH);
     registerModuleRevisions();
-    registerComponent<ArcGISAuthenticationController>();
+    registerComponent<ArcGISAuthenticationController>(CreationType::Singleton);
     registerComponent<AuthenticationController>();
     registerComponent<BasemapGalleryController>();
     registerComponent<BasemapGalleryItem>();

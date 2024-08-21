@@ -36,7 +36,7 @@ import QtQuick.Controls
 Item {
     id: authenticationView
 
-    property var controller: ArcGISAuthenticationController { }
+    property ArcGISAuthenticationController controller: ArcGISAuthenticationController
 
     Connections {
         target: controller
@@ -55,12 +55,6 @@ Item {
         ArcGISUserCredentialsView {
             anchors.centerIn: authenticationView
             controller: authenticationView.controller
-            Connections {
-                target: controller
-                function onCurrentChallengeTypeChanged() {
-                    reject();
-                }
-            }
             onClosed: {
                 this.destroy();
             }
@@ -73,12 +67,6 @@ Item {
         ArcGISOAuth2View {
             anchors.centerIn: authenticationView
             controller: authenticationView.controller
-            Connections {
-                target: controller
-                function onCurrentChallengeTypeChanged() {
-                    reject();
-                }
-            }
             onClosed: {
                 this.destroy();
             }

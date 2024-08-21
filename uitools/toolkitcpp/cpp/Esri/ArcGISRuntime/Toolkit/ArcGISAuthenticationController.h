@@ -34,6 +34,7 @@
 
 // Qt headers
 #include <QObject>
+#include <QQmlEngine>
 
 // STL headers
 #include <ArcGISAuthenticationChallengeHandler.h>
@@ -55,7 +56,9 @@ class ArcGISAuthenticationController : public ArcGISAuthenticationChallengeHandl
   Q_PROPERTY(bool canBeUsed READ canBeUsed_ CONSTANT)
 
 public:
-  explicit Q_INVOKABLE ArcGISAuthenticationController(QObject* parent = nullptr);
+  // assumed to be owned by the QML engine
+  static ArcGISAuthenticationController* create(QQmlEngine* qmlEngine, QJSEngine* jsEngine);
+  static ArcGISAuthenticationController* instance();
 
   ~ArcGISAuthenticationController() override;
 
@@ -74,6 +77,7 @@ signals:
   void currentAuthenticatingHostChanged();
 
 private:
+  explicit ArcGISAuthenticationController(QObject* parent = nullptr);
   bool canBeUsed_() const;
   QUrl currentAuthenticatingHost_() const;
 

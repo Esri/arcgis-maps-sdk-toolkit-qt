@@ -21,14 +21,7 @@ import QtQuick.Controls
 Item {
     id: root
     Component.onCompleted: {
-            const tempController = Qt.createQmlObject(`
-                import Esri.ArcGISRuntime.Toolkit.Controller
-                ArcGISAuthenticationController {}
-            `, root);
-        const canBeUsed = tempController.canBeUsed;
-        tempController.destroy();
-
-        viewLoader.source = canBeUsed ? "ArcGISAuthenticationView_internal.qml" : "AuthenticationView.qml";
+        viewLoader.source = ArcGISAuthenticationController.canBeUsed ? "ArcGISAuthenticationView_internal.qml" : "AuthenticationView.qml";
     }
 
     Loader {
