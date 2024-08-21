@@ -1,21 +1,5 @@
-// COPYRIGHT 2024 ESRI
-// TRADE SECRETS: ESRI PROPRIETARY AND CONFIDENTIAL
-// Unpublished material - all rights reserved under the
-// Copyright Laws of the United States and applicable international
-// laws, treaties, and conventions.
-//
-// For additional information, contact:
-// Environmental Systems Research Institute, Inc.
-// Attn: Contracts and Legal Services Department
-// 380 New York Street
-// Redlands, California, 92373
-// USA
-//
-// email: contracts@esri.com
-/// \file register_cpp.cpp
-
 /*******************************************************************************
- *  Copyright 2012-2020 Esri
+ *  Copyright 2012-2024 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
