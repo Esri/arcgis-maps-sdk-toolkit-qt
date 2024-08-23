@@ -1,3 +1,19 @@
+// COPYRIGHT 2024 ESRI
+// TRADE SECRETS: ESRI PROPRIETARY AND CONFIDENTIAL
+// Unpublished material - all rights reserved under the
+// Copyright Laws of the United States and applicable international
+// laws, treaties, and conventions.
+//
+// For additional information, contact:
+// Environmental Systems Research Institute, Inc.
+// Attn: Contracts and Legal Services Department
+// 380 New York Street
+// Redlands, California, 92373
+// USA
+//
+// email: contracts@esri.com
+/// \file ArcGISAuthenticationController.h
+
 /*******************************************************************************
  *  Copyright 2012-2024 Esri
  *
@@ -26,6 +42,7 @@
 
 namespace Esri::ArcGISRuntime {
   class OAuthUserConfiguration;
+  class OAuthUserLoginPrompt;
 }
 
 Q_MOC_INCLUDE(<QUrl>)
@@ -36,8 +53,16 @@ class ArcGISAuthenticationController : public ArcGISAuthenticationChallengeHandl
 {
   Q_OBJECT
 
-  Q_PROPERTY(QUrl currentAuthenticatingHost READ currentAuthenticatingHost_ NOTIFY currentAuthenticatingHostChanged)
+  // general
   Q_PROPERTY(bool canBeUsed READ canBeUsed_ CONSTANT)
+
+  // token authentication
+  Q_PROPERTY(QUrl currentAuthenticatingHost READ currentAuthenticatingHost_ NOTIFY currentAuthenticatingHostChanged)
+
+  // OAuth
+  Q_PROPERTY(QUrl authorizeUrl READ authorizeUrl_ NOTIFY authorizeUrlChanged)
+  Q_PROPERTY(bool preferPrivateWebBrowserSession READ preferPrivateWebBrowserSession_ NOTIFY preferPrivateWebBrowserSessionChanged)
+  Q_PROPERTY(QUrl redirectUrl READ redirectUrl_ NOTIFY redirectUrlChanged)
 
 public:
   // assumed to be owned by the QML engine
@@ -46,10 +71,20 @@ public:
 
   ~ArcGISAuthenticationController() override;
 
+  // callbacks invoked by QML
+  // token authentication
   Q_INVOKABLE void continueWithUsernamePassword(const QString& username, const QString& password);
 
+  // OAuth
+  Q_INVOKABLE void respond(const QUrl& url);
+  Q_INVOKABLE void respondWithError(const QString& platformError);
+
+  Q_INVOKABLE void cancel();
+
+  // ArcGISAuthenticationChallengeHandler interface
   void handleArcGISAuthenticationChallenge(ArcGISAuthenticationChallenge* challenge) override;
 
+  // OAuth user challenge support
   void addOAuthUserConfiguration(Esri::ArcGISRuntime::OAuthUserConfiguration* userConfiguration);
   void setOAuthUserConfigurations(QList<Esri::ArcGISRuntime::OAuthUserConfiguration*> userConfigurations);
   void clearOAuthUserConfigurations();
@@ -59,14 +94,21 @@ signals:
   void displayOAuthSignInView();
   void displayUsernamePasswordSignInView();
   void currentAuthenticatingHostChanged();
+  void authorizeUrlChanged();
+  void preferPrivateWebBrowserSessionChanged();
+  void redirectUrlChanged();
 
 private:
   explicit ArcGISAuthenticationController(QObject* parent = nullptr);
   bool canBeUsed_() const;
   QUrl currentAuthenticatingHost_() const;
+  QUrl authorizeUrl_() const;
+  bool preferPrivateWebBrowserSession_() const;
+  QUrl redirectUrl_() const;
 
   ArcGISAuthenticationChallenge* m_currentChallenge = nullptr;
   QList<Esri::ArcGISRuntime::OAuthUserConfiguration*> m_userConfigurations;
+  OAuthUserLoginPrompt* m_currentOAuthUserLoginPrompt = nullptr;
   std::mutex m_mutex;
 };
 

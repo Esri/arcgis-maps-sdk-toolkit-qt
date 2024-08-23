@@ -28,4 +28,13 @@ Item {
         id: viewLoader
         anchors.fill: parent
     }
+
+    Connections {
+        target: viewLoader.source
+        function onActiveLoginViewReady(activeLoginView) {
+            activeLoginViewReady_(activeLoginView);
+        }
+    }
+
+    signal activeLoginViewReady_(var activeLoginView)
 }

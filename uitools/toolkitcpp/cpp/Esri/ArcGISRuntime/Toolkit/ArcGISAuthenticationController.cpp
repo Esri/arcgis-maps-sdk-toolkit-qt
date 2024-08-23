@@ -1,3 +1,19 @@
+// COPYRIGHT 2024 ESRI
+// TRADE SECRETS: ESRI PROPRIETARY AND CONFIDENTIAL
+// Unpublished material - all rights reserved under the
+// Copyright Laws of the United States and applicable international
+// laws, treaties, and conventions.
+//
+// For additional information, contact:
+// Environmental Systems Research Institute, Inc.
+// Attn: Contracts and Legal Services Department
+// 380 New York Street
+// Redlands, California, 92373
+// USA
+//
+// email: contracts@esri.com
+/// \file ArcGISAuthenticationController.cpp
+
 /*******************************************************************************
  *  Copyright 2012-2024 Esri
  *
@@ -20,6 +36,7 @@
 #include <ArcGISRuntimeEnvironment.h>
 #include <OAuthUserConfiguration.h>
 #include <OAuthUserCredential.h>
+#include <OAuthUserLoginPrompt.h>
 #include <TokenCredential.h>
 #include <ArcGISAuthenticationChallenge.h>
 #include <ErrorException.h>
@@ -55,6 +72,17 @@ ArcGISAuthenticationController::ArcGISAuthenticationController(QObject* parent) 
 
   // Set the authentication manager to use this controller
   ArcGISRuntimeEnvironment::instance()->arcGISAuthenticationManager()->setArcGISAuthenticationChallengeHandler(this);
+
+  // listen for OAuth prompts
+  connect(ArcGISRuntimeEnvironment::instance()->arcGISAuthenticationManager(), &ArcGISAuthenticationManager::oAuthUserLoginPromptIssued, this,
+          [this](OAuthUserLoginPrompt* currentOAuthUserLoginPrompt)
+  {
+    m_currentOAuthUserLoginPrompt = currentOAuthUserLoginPrompt;
+    emit authorizeUrlChanged();
+    emit preferPrivateWebBrowserSessionChanged();
+    emit redirectUrlChanged();
+    emit displayOAuthSignInView();
+  });
 }
 
 /*!
@@ -89,12 +117,22 @@ void ArcGISAuthenticationController::handleArcGISAuthenticationChallenge(ArcGISA
   {
     if (userConfiguration->canBeUsedForUrl(requestUrl))
     {
-      OAuthUserCredential::createAsync(userConfiguration, this).then([this](OAuthUserCredential* credential)
+      OAuthUserCredential::createAsync(userConfiguration, this).then(this, [this](OAuthUserCredential* credential)
       {
+        if (!m_currentChallenge)
+          return;
+
         m_currentChallenge->continueWithCredential(credential);
-      }).onFailed([this](const ErrorException& e)
+        m_currentChallenge->deleteLater();
+        m_currentChallenge = nullptr;
+      }).onFailed(this, [this](const ErrorException& e)
       {
+        if (!m_currentChallenge)
+          return;
+
         m_currentChallenge->continueAndFailWithError(e.error());
+        m_currentChallenge->deleteLater();
+        m_currentChallenge = nullptr;
       });
 
       return;
@@ -124,6 +162,43 @@ void ArcGISAuthenticationController::continueWithUsernamePassword(const QString&
     m_currentChallenge->deleteLater();
     m_currentChallenge = nullptr;
   });
+}
+
+void ArcGISAuthenticationController::respond(const QUrl& url)
+{
+  if (!m_currentOAuthUserLoginPrompt)
+    return;
+
+  m_currentOAuthUserLoginPrompt->respond(url);
+  m_currentOAuthUserLoginPrompt->deleteLater();
+  m_currentOAuthUserLoginPrompt = nullptr;
+}
+
+void ArcGISAuthenticationController::respondWithError(const QString& platformError)
+{
+  if (!m_currentOAuthUserLoginPrompt)
+    return;
+
+  m_currentOAuthUserLoginPrompt->respondWithError(platformError);
+  m_currentOAuthUserLoginPrompt->deleteLater();
+  m_currentOAuthUserLoginPrompt = nullptr;
+}
+
+void ArcGISAuthenticationController::cancel()
+{
+  if (m_currentChallenge)
+  {
+    m_currentChallenge->cancel();
+    m_currentChallenge->deleteLater();
+    m_currentChallenge = nullptr;
+  }
+
+  if (m_currentOAuthUserLoginPrompt)
+  {
+    m_currentOAuthUserLoginPrompt->respondWithError("User canceled");
+    m_currentOAuthUserLoginPrompt->deleteLater();
+    m_currentOAuthUserLoginPrompt = nullptr;
+  }
 }
 
 // this class cannot be used with the legacy authentication system
@@ -170,6 +245,21 @@ QUrl ArcGISAuthenticationController::currentAuthenticatingHost_() const
   const auto scheme = requestUrl.scheme();
   const auto host = requestUrl.host();
   return scheme + "://" + host;
+}
+
+QUrl ArcGISAuthenticationController::authorizeUrl_() const
+{
+  return m_currentOAuthUserLoginPrompt ? m_currentOAuthUserLoginPrompt->authorizeUrl() : QUrl{};
+}
+
+bool ArcGISAuthenticationController::preferPrivateWebBrowserSession_() const
+{
+  return m_currentOAuthUserLoginPrompt ? m_currentOAuthUserLoginPrompt->preferPrivateWebBrowserSession() : false;
+}
+
+QUrl ArcGISAuthenticationController::redirectUrl_() const
+{
+  return m_currentOAuthUserLoginPrompt ? m_currentOAuthUserLoginPrompt->redirectUrl() : QUrl{};
 }
 
 } //  Esri::ArcGISRuntime::Toolkit

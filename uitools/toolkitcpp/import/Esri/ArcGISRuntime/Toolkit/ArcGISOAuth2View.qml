@@ -50,14 +50,14 @@ Dialog {
             fill: parent
         }
 
-        url: controller.currentChallengeUrl
+        url: controller.authorizeUrl
 
         onLoadingChanged: (loadRequest) => {
             if (loadRequest.status === WebView.LoadSucceededStatus) {
                 forceActiveFocus();
                 webViewLoaded_();
             } else if (loadRequest.status === WebView.LoadFailedStatus) {
-                controller.cancelWithError("Failed to load");
+                controller.respondWithError("Failed to load");
             }
         }
 
@@ -65,7 +65,9 @@ Dialog {
             // If the title contains "SUCCESS", get the authorization code from the title and continue authenticationChallenge.
             if (isSuccess()) {
                 const authCode = title.replace("SUCCESS code=", "");
-                controller.continueWithOAuthAuthorizationCode(authCode);
+                const responseAsUrlWithCode = controller.redirectUrl + "?code=" + authCode;
+                controller.respond(responseAsUrlWithCode);
+                close();
                 return;
             } else if (isInvalidRequest()) {
                 // If the title contains "Denied error=invalid_request", get the HTML content.
@@ -75,14 +77,14 @@ Dialog {
 
             // If there is an error, cancel with error.
             if (isError()) {
-                controller.cancelWithError(title, html);
+                controller.respondWithError(html);
             }
         }
 
         // Property to get HTML content when necessary.
         property string html: ""
         onHtmlChanged: {
-            controller.cancelWithError(title, html);
+            controller.respondWithError(html);
         }
 
         // Helper functions
