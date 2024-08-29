@@ -30,7 +30,8 @@ Item {
     }
 
     Connections {
-        target: viewLoader.source
+        target: viewLoader.item
+        ignoreUnknownSignals: true
         function onActiveLoginViewReady(activeLoginView) {
             activeLoginViewReady_(activeLoginView);
         }
