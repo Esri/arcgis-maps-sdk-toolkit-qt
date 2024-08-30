@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2024 Esri
  *
@@ -15,20 +16,21 @@
  ******************************************************************************/
 #include "ArcGISAuthenticationController.h"
 
-// ArcGISRuntime headers
+// Qt headers
+#include <QFuture>
+#include <QPointer>
+#include <QUrl>
+
+// Maps SDK headers
+#include <ArcGISAuthenticationChallenge.h>
 #include <ArcGISAuthenticationManager.h>
 #include <ArcGISRuntimeEnvironment.h>
+#include <Error.h>
+#include <ErrorException.h>
 #include <OAuthUserConfiguration.h>
 #include <OAuthUserCredential.h>
 #include <OAuthUserLoginPrompt.h>
 #include <TokenCredential.h>
-#include <ArcGISAuthenticationChallenge.h>
-#include <ErrorException.h>
-#include <Error.h>
-
-#include <QUrl>
-#include <QFuture>
-#include <QPointer>
 
 using namespace Esri::ArcGISRuntime;
 
@@ -74,12 +76,12 @@ ArcGISAuthenticationController::ArcGISAuthenticationController(QObject* parent) 
  */
 ArcGISAuthenticationController::~ArcGISAuthenticationController() = default;
 
-ArcGISAuthenticationController* ArcGISAuthenticationController::create(QQmlEngine*, QJSEngine*)
+ArcGISAuthenticationController* ArcGISAuthenticationController::create(QQmlEngine* qmlEngine, QJSEngine* /*jsEngine*/)
 {
-  static QPointer<ArcGISAuthenticationController> instance = new ArcGISAuthenticationController();
+  static QPointer<ArcGISAuthenticationController> instance = new ArcGISAuthenticationController(qmlEngine);
 
   if (!instance)
-    instance = new ArcGISAuthenticationController();
+    instance = new ArcGISAuthenticationController(qmlEngine);
 
   return instance;
 }

@@ -30,6 +30,7 @@ Item {
     Loader {
         id: viewLoader
         anchors.fill: parent
+        focus: true
     }
 
     Connections {
