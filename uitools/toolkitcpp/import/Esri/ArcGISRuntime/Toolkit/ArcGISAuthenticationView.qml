@@ -32,7 +32,7 @@ Item {
     Connections {
         target: viewLoader.item
         ignoreUnknownSignals: true
-        function onActiveLoginViewReady(activeLoginView) {
+        function onActiveLoginViewReady_(activeLoginView) {
             activeLoginViewReady_(activeLoginView);
         }
     }
