@@ -20,6 +20,9 @@ import QtQuick.Controls
 
 Item {
     id: root
+
+    property var controller: viewLoader.controller
+
     Component.onCompleted: {
         viewLoader.source = ArcGISAuthenticationController.canBeUsed ? "ArcGISAuthenticationView_internal.qml" : "AuthenticationView.qml";
     }
