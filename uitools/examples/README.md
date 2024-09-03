@@ -1,10 +1,9 @@
 # UI Tools Examples
 
-This module contains two example apps, [cpp_quick](cpp_quick/cpp_quick.pro) and 
-[qml_quick](qml_quick/qml_quick.pro).
+This module contains the example app, [UitoolsExample](UitoolsExamples.pro).
 
-Both modules cover the the same functionality, demonstrating how to integrate toolkit 
-tools into a C++/Quick and QML/Quick app respectively.
+This module demonstrates how to integrate toolkit 
+tools into a C++/Quick app.
 
 ## Access token setup
 
