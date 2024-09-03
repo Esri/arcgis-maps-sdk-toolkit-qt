@@ -1,6 +1,6 @@
 # UI Tools Examples
 
-This module contains the example app, [cpp_quick](cpp_quick/cpp_quick.pro).
+This module contains the example app, [UitoolsExample](UitoolsExamples.pro).
 
 This module demonstrates how to integrate toolkit 
 tools into a C++/Quick app.
