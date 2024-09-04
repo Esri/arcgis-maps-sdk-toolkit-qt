@@ -143,9 +143,17 @@ void ArcGISAuthenticationController::continueWithUsernamePassword(const QString&
     m_currentChallenge = nullptr;
   }).onFailed(this, [this](ErrorException e)
   {
-    m_currentChallenge->continueAndFailWithError(e.error());
-    m_currentChallenge->deleteLater();
-    m_currentChallenge = nullptr;
+    if ((++m_currentChallengeFailureCount) >= s_maxChallengeFailureCount)
+    {
+      m_currentChallengeFailureCount = 0;
+      m_currentChallenge->continueAndFailWithError(e.error());
+      m_currentChallenge->deleteLater();
+      m_currentChallenge = nullptr;
+      return;
+    }
+
+    emit currentChallengeFailureCountChanged();
+    emit displayUsernamePasswordSignInView();
   });
 }
 
@@ -242,9 +250,14 @@ bool ArcGISAuthenticationController::preferPrivateWebBrowserSession_() const
   return m_currentOAuthUserLoginPrompt ? m_currentOAuthUserLoginPrompt->preferPrivateWebBrowserSession() : false;
 }
 
-QUrl ArcGISAuthenticationController::redirectUrl_() const
+QString ArcGISAuthenticationController::redirectUrl_() const
 {
-  return m_currentOAuthUserLoginPrompt ? m_currentOAuthUserLoginPrompt->redirectUrl() : QUrl{};
+  return m_currentOAuthUserLoginPrompt ? m_currentOAuthUserLoginPrompt->redirectUrl() : QString{};
+}
+
+int ArcGISAuthenticationController::currentChallengeFailureCount_() const
+{
+  return m_currentChallengeFailureCount;
 }
 
 } //  Esri::ArcGISRuntime::Toolkit

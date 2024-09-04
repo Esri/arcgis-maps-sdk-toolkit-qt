@@ -61,7 +61,7 @@ Dialog {
         Label {
             text: qsTr("Invalid username or password.")
             horizontalAlignment: Qt.AlignHCenter
-            visible: controller.currentChallengeFailureCount > 1
+            visible: controller.currentChallengeFailureCount > 0
             color: "red"
             background:  Rectangle {
                 color: "#FFCCCC"
@@ -131,11 +131,13 @@ Dialog {
     /*!
      \internal
      \brief Attempts to apply the current username and password to
-     the token.
+     the challenge.
      */
     function acceptWithCurrentUsernameAndPassword() {
-        if (hasValidInput())
+        if (hasValidInput()) {
             controller.continueWithUsernamePassword(usernameTextField.text,
                                                     passwordTextField.text);
+            accept();
+        }
     }
 }

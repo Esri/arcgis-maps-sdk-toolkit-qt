@@ -46,7 +46,9 @@ class ArcGISAuthenticationController : public ArcGISAuthenticationChallengeHandl
   // OAuth
   Q_PROPERTY(QUrl authorizeUrl READ authorizeUrl_ NOTIFY authorizeUrlChanged)
   Q_PROPERTY(bool preferPrivateWebBrowserSession READ preferPrivateWebBrowserSession_ NOTIFY preferPrivateWebBrowserSessionChanged)
-  Q_PROPERTY(QUrl redirectUrl READ redirectUrl_ NOTIFY redirectUrlChanged)
+  Q_PROPERTY(QString redirectUrl READ redirectUrl_ NOTIFY redirectUrlChanged)
+
+  Q_PROPERTY(int currentChallengeFailureCount READ currentChallengeFailureCount_ NOTIFY currentChallengeFailureCountChanged)
 
 public:
   // assumed to be owned by the QML engine
@@ -81,6 +83,7 @@ signals:
   void authorizeUrlChanged();
   void preferPrivateWebBrowserSessionChanged();
   void redirectUrlChanged();
+  void currentChallengeFailureCountChanged();
 
 private:
   explicit ArcGISAuthenticationController(QObject* parent = nullptr);
@@ -88,11 +91,14 @@ private:
   QUrl currentAuthenticatingHost_() const;
   QUrl authorizeUrl_() const;
   bool preferPrivateWebBrowserSession_() const;
-  QUrl redirectUrl_() const;
+  QString redirectUrl_() const;
+  int currentChallengeFailureCount_() const;
 
   ArcGISAuthenticationChallenge* m_currentChallenge = nullptr;
   QList<Esri::ArcGISRuntime::OAuthUserConfiguration*> m_userConfigurations;
   OAuthUserLoginPrompt* m_currentOAuthUserLoginPrompt = nullptr;
+  int m_currentChallengeFailureCount = 0;
+  static inline constexpr int s_maxChallengeFailureCount = 5;
   std::mutex m_mutex;
 };
 
