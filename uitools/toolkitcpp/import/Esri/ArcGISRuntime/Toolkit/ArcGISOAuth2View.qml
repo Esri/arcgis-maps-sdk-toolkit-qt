@@ -78,6 +78,7 @@ Dialog {
             // If there is an error, cancel with error.
             if (isError()) {
                 controller.respondWithError(html);
+                close();
             }
         }
 
