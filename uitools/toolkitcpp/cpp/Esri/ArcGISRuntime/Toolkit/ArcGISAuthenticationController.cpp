@@ -67,7 +67,7 @@ ArcGISAuthenticationController::ArcGISAuthenticationController(QObject* parent) 
     m_currentOAuthUserLoginPrompt = std::unique_ptr<OAuthUserLoginPrompt>{currentOAuthUserLoginPrompt};
     emit authorizeUrlChanged();
     emit preferPrivateWebBrowserSessionChanged();
-    emit redirectUrlChanged();
+    emit redirectUriChanged();
     emit displayOAuthSignInView();
   });
 }
@@ -244,9 +244,9 @@ bool ArcGISAuthenticationController::preferPrivateWebBrowserSession_() const
   return m_currentOAuthUserLoginPrompt ? m_currentOAuthUserLoginPrompt->preferPrivateWebBrowserSession() : false;
 }
 
-QString ArcGISAuthenticationController::redirectUrl_() const
+QString ArcGISAuthenticationController::redirectUri_() const
 {
-  return m_currentOAuthUserLoginPrompt ? m_currentOAuthUserLoginPrompt->redirectUrl() : QString{};
+  return m_currentOAuthUserLoginPrompt ? m_currentOAuthUserLoginPrompt->redirectUri() : QString{};
 }
 
 int ArcGISAuthenticationController::currentChallengeFailureCount_() const

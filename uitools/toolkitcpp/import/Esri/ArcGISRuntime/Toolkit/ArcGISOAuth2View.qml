@@ -65,7 +65,7 @@ Dialog {
             // If the title contains "SUCCESS", get the authorization code from the title and continue authenticationChallenge.
             if (isSuccess()) {
                 const authCode = title.replace("SUCCESS code=", "");
-                const responseAsUrlWithCode = controller.redirectUrl + "?code=" + authCode;
+                const responseAsUrlWithCode = controller.redirectUri + "?code=" + authCode;
                 controller.respond(responseAsUrlWithCode);
                 close();
                 return;

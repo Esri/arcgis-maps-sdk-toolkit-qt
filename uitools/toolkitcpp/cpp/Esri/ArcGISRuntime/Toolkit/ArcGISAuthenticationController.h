@@ -47,7 +47,7 @@ class ArcGISAuthenticationController : public ArcGISAuthenticationChallengeHandl
   // OAuth
   Q_PROPERTY(QUrl authorizeUrl READ authorizeUrl_ NOTIFY authorizeUrlChanged)
   Q_PROPERTY(bool preferPrivateWebBrowserSession READ preferPrivateWebBrowserSession_ NOTIFY preferPrivateWebBrowserSessionChanged)
-  Q_PROPERTY(QString redirectUrl READ redirectUrl_ NOTIFY redirectUrlChanged)
+  Q_PROPERTY(QString redirectUri READ redirectUri_ NOTIFY redirectUriChanged)
 
   Q_PROPERTY(int currentChallengeFailureCount READ currentChallengeFailureCount_ NOTIFY currentChallengeFailureCountChanged)
 
@@ -83,7 +83,7 @@ signals:
   void currentAuthenticatingHostChanged();
   void authorizeUrlChanged();
   void preferPrivateWebBrowserSessionChanged();
-  void redirectUrlChanged();
+  void redirectUriChanged();
   void currentChallengeFailureCountChanged();
 
 private:
@@ -92,7 +92,7 @@ private:
   QUrl currentAuthenticatingHost_() const;
   QUrl authorizeUrl_() const;
   bool preferPrivateWebBrowserSession_() const;
-  QString redirectUrl_() const;
+  QString redirectUri_() const;
   int currentChallengeFailureCount_() const;
 
   std::unique_ptr<ArcGISAuthenticationChallenge> m_currentChallenge;
