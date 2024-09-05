@@ -63,7 +63,8 @@ ArcGISAuthenticationController::ArcGISAuthenticationController(QObject* parent) 
   connect(ArcGISRuntimeEnvironment::instance()->arcGISAuthenticationManager(), &ArcGISAuthenticationManager::oAuthUserLoginPromptIssued, this,
           [this](OAuthUserLoginPrompt* currentOAuthUserLoginPrompt)
   {
-    m_currentOAuthUserLoginPrompt = currentOAuthUserLoginPrompt;
+    currentOAuthUserLoginPrompt->setParent(nullptr);
+    m_currentOAuthUserLoginPrompt = std::unique_ptr<OAuthUserLoginPrompt>{currentOAuthUserLoginPrompt};
     emit authorizeUrlChanged();
     emit preferPrivateWebBrowserSessionChanged();
     emit redirectUrlChanged();
@@ -94,7 +95,8 @@ ArcGISAuthenticationController* ArcGISAuthenticationController::instance()
 void ArcGISAuthenticationController::handleArcGISAuthenticationChallenge(ArcGISAuthenticationChallenge* challenge)
 {
   std::lock_guard<std::mutex> lock(m_mutex);
-  m_currentChallenge = challenge;
+  challenge->setParent(nullptr);
+  m_currentChallenge = std::unique_ptr<ArcGISAuthenticationChallenge>{challenge};
   emit currentAuthenticatingHostChanged();
 
   // first see if we can handle this with OAuth
@@ -109,16 +111,14 @@ void ArcGISAuthenticationController::handleArcGISAuthenticationChallenge(ArcGISA
           return;
 
         m_currentChallenge->continueWithCredential(credential);
-        m_currentChallenge->deleteLater();
-        m_currentChallenge = nullptr;
+        m_currentChallenge.reset();
       }).onFailed(this, [this](const ErrorException& e)
       {
         if (!m_currentChallenge)
           return;
 
         m_currentChallenge->continueAndFailWithError(e.error());
-        m_currentChallenge->deleteLater();
-        m_currentChallenge = nullptr;
+        m_currentChallenge.reset();
       });
 
       return;
@@ -139,16 +139,14 @@ void ArcGISAuthenticationController::continueWithUsernamePassword(const QString&
                                0).then(this, [this](TokenCredential* credential)
   {
     m_currentChallenge->continueWithCredential(credential);
-    m_currentChallenge->deleteLater();
-    m_currentChallenge = nullptr;
+    m_currentChallenge.reset();
   }).onFailed(this, [this](ErrorException e)
   {
     if ((++m_currentChallengeFailureCount) >= s_maxChallengeFailureCount)
     {
       m_currentChallengeFailureCount = 0;
       m_currentChallenge->continueAndFailWithError(e.error());
-      m_currentChallenge->deleteLater();
-      m_currentChallenge = nullptr;
+      m_currentChallenge.reset();
       return;
     }
 
@@ -163,8 +161,7 @@ void ArcGISAuthenticationController::respond(const QUrl& url)
     return;
 
   m_currentOAuthUserLoginPrompt->respond(url);
-  m_currentOAuthUserLoginPrompt->deleteLater();
-  m_currentOAuthUserLoginPrompt = nullptr;
+  m_currentOAuthUserLoginPrompt.reset();
 }
 
 void ArcGISAuthenticationController::respondWithError(const QString& platformError)
@@ -173,8 +170,7 @@ void ArcGISAuthenticationController::respondWithError(const QString& platformErr
     return;
 
   m_currentOAuthUserLoginPrompt->respondWithError(platformError);
-  m_currentOAuthUserLoginPrompt->deleteLater();
-  m_currentOAuthUserLoginPrompt = nullptr;
+  m_currentOAuthUserLoginPrompt.reset();
 }
 
 void ArcGISAuthenticationController::cancel()
@@ -182,15 +178,13 @@ void ArcGISAuthenticationController::cancel()
   if (m_currentChallenge)
   {
     m_currentChallenge->cancel();
-    m_currentChallenge->deleteLater();
-    m_currentChallenge = nullptr;
+    m_currentChallenge.reset();
   }
 
   if (m_currentOAuthUserLoginPrompt)
   {
     m_currentOAuthUserLoginPrompt->respondWithError("User canceled");
-    m_currentOAuthUserLoginPrompt->deleteLater();
-    m_currentOAuthUserLoginPrompt = nullptr;
+    m_currentOAuthUserLoginPrompt.reset();
   }
 }
 

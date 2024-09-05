@@ -22,6 +22,7 @@
 
 // STL headers
 #include <ArcGISAuthenticationChallengeHandler.h>
+#include <memory>
 #include <mutex>
 
 namespace Esri::ArcGISRuntime {
@@ -94,9 +95,9 @@ private:
   QString redirectUrl_() const;
   int currentChallengeFailureCount_() const;
 
-  ArcGISAuthenticationChallenge* m_currentChallenge = nullptr;
+  std::unique_ptr<ArcGISAuthenticationChallenge> m_currentChallenge;
   QList<Esri::ArcGISRuntime::OAuthUserConfiguration*> m_userConfigurations;
-  OAuthUserLoginPrompt* m_currentOAuthUserLoginPrompt = nullptr;
+  std::unique_ptr<OAuthUserLoginPrompt> m_currentOAuthUserLoginPrompt;
   int m_currentChallengeFailureCount = 0;
   static inline constexpr int s_maxChallengeFailureCount = 5;
   std::mutex m_mutex;

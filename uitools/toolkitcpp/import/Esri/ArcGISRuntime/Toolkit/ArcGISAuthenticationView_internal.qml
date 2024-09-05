@@ -42,16 +42,16 @@ Item {
         target: controller
 
         function onDisplayUsernamePasswordSignInView() {
-            displayView(userCredentialsView)
+            displayView(userCredentialsViewComponent)
         }
 
         function onDisplayOAuthSignInView() {
-            displayView(oAuth2View)
+            displayView(oAuth2ViewComponent)
         }
     }
 
     Component {
-        id: userCredentialsView
+        id: userCredentialsViewComponent
         ArcGISUserCredentialsView {
             anchors.centerIn: authenticationView
             controller: authenticationView.controller
@@ -63,7 +63,7 @@ Item {
     }
 
     Component {
-        id: oAuth2View
+        id: oAuth2ViewComponent
         ArcGISOAuth2View {
             anchors.centerIn: authenticationView
             controller: authenticationView.controller
@@ -76,7 +76,7 @@ Item {
 
     // TODO - implement SSL handshake view
     // Component {
-    //     id: sslHandshakeView
+    //     id: sslHandshakeViewComponent
     //     SslHandshakeView {
     //         anchors.centerIn: authenticationView
     //         controller: authenticationView.controller
