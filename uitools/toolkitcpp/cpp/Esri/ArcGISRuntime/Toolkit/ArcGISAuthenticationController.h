@@ -20,8 +20,10 @@
 #include <QObject>
 #include <QQmlEngine>
 
-// STL headers
+// Maps SDK headers
 #include <ArcGISAuthenticationChallengeHandler.h>
+
+// STL headers
 #include <memory>
 #include <mutex>
 

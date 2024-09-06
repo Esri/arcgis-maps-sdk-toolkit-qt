@@ -18,13 +18,33 @@ import Esri.ArcGISRuntime.Toolkit.Controller
 import QtQuick
 import QtQuick.Controls
 
+/*
+    \qmltype ArcGISAuthenticationView
+    \inqmlmodule Esri.ArcGISRuntime.Toolkit
+    \ingroup ArcGISQtToolkitUiQmlViews
+    \since Esri.ArcGISRuntime 200.6
+    \brief A view for handling authentication challenges and automatically
+           launching the appropriate UI for each type of authentication.
+
+    The ArcGISAuthenticationView will handle determining which type of authentication
+    is in use by the ArcGIS Maps SDK for Qt, and will initiate the proper backend
+    controller and UI components.
+
+    \note OAuth 2.0 uses a WebView. To use a OAuth you must call
+          \c{QtWebView::initialize()} before the \c{QGuiApplication}
+          instance is created. See \l{https://doc.qt.io/qt-6/qtwebview-index.html}
+          {Qt WebView}.
+*/
+
 Item {
     id: root
 
     property var controller: viewLoader.controller
 
     Component.onCompleted: {
-        viewLoader.source = ArcGISAuthenticationController.canBeUsed ? "ArcGISAuthenticationView_internal.qml" : "AuthenticationView.qml";
+        viewLoader.source = ArcGISAuthenticationController.canBeUsed ?
+                                "ArcGISAuthenticationView_internal.qml" :
+                                "AuthenticationView.qml";
     }
 
     Loader {

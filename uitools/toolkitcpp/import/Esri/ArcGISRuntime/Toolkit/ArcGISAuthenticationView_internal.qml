@@ -20,17 +20,8 @@ import QtQuick
 import QtQuick.Controls
 
 /*!
-  \qmltype ArcGISAuthenticationView
-  \inqmlmodule Esri.ArcGISRuntime.Toolkit
-  \ingroup ArcGISQtToolkitUiQmlViews
-  \since Esri.ArcGISRuntime 200.6
-  \brief A view for handling authentication challenges and automatically
-  launching the appropriate UI for each type of authentication.
-
-  \note OAuth 2.0 uses a WebView. To use an OAuthView you must call
-        \c{QtWebView::initialize()} immediately after the \c{QGuiApplication}
-        instance is created. See \l{https://doc.qt.io/qt-6/qtwebview-index.html}
-        {Qt WebView}.
+  \qmltype ArcGISAuthenticationView_internal
+  \internal
  */
 
 Item {
@@ -92,10 +83,6 @@ Item {
     //     }
     // }
 
-    /*!
-        \internal
-        \brief signal emitted when the login view is in the Ready state
-    */
     signal activeLoginViewReady_(var activeLoginView)
 
     function displayView(componentToDisplay) {
