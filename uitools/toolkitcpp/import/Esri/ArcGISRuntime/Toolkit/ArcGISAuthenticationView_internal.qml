@@ -25,27 +25,28 @@ import QtQuick.Controls
  */
 
 Item {
-    id: authenticationView
+    id: arcgisAuthenticationView_internal
 
     property ArcGISAuthenticationController controller: ArcGISAuthenticationController
+    signal activeLoginViewReady_(var activeLoginView)
 
     Connections {
         target: controller
 
         function onDisplayUsernamePasswordSignInView() {
-            displayView(userCredentialsViewComponent)
+            displayView(userCredentialsViewComponent);
         }
 
         function onDisplayOAuthSignInView() {
-            displayView(oAuth2ViewComponent)
+            displayView(oAuth2ViewComponent);
         }
     }
 
     Component {
         id: userCredentialsViewComponent
         ArcGISUserCredentialsView {
-            anchors.centerIn: authenticationView
-            controller: authenticationView.controller
+            anchors.centerIn: arcgisAuthenticationView_internal
+            controller: arcgisAuthenticationView_internal.controller
             onClosed: {
                 this.destroy();
             }
@@ -56,8 +57,8 @@ Item {
     Component {
         id: oAuth2ViewComponent
         ArcGISOAuth2View {
-            anchors.centerIn: authenticationView
-            controller: authenticationView.controller
+            anchors.centerIn: arcgisAuthenticationView_internal
+            controller: arcgisAuthenticationView_internal.controller
             onClosed: {
                 this.destroy();
             }
@@ -69,8 +70,8 @@ Item {
     // Component {
     //     id: sslHandshakeViewComponent
     //     SslHandshakeView {
-    //         anchors.centerIn: authenticationView
-    //         controller: authenticationView.controller
+    //         anchors.centerIn: arcgisAuthenticationView_internal
+    //         controller: arcgisAuthenticationView_internal.controller
     //         Connections {
     //             target: controller
     //             function onCurrentChallengeTypeChanged() {
@@ -83,11 +84,9 @@ Item {
     //     }
     // }
 
-    signal activeLoginViewReady_(var activeLoginView)
-
     function displayView(componentToDisplay) {
         if (componentToDisplay) {
-            const incubator = componentToDisplay.incubateObject(authenticationView);
+            const incubator = componentToDisplay.incubateObject(arcgisAuthenticationView_internal);
             if (incubator.status === Component.Ready) {
                 incubator.object.open();
             } else {

@@ -125,7 +125,6 @@ Dialog {
     function applyUsernameAndPassword(username, password) {
         prefillUsernameAndPassword(username, password);
         acceptWithCurrentUsernameAndPassword();
-        accept();
     }
 
     /*!
