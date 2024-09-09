@@ -40,6 +40,7 @@ Item {
     id: root
 
     property var controller: viewLoader.controller
+    signal activeLoginViewReady_(var activeLoginView)
 
     Component.onCompleted: {
         viewLoader.source = ArcGISAuthenticationController.canBeUsed ?
@@ -60,6 +61,4 @@ Item {
             activeLoginViewReady_(activeLoginView);
         }
     }
-
-    signal activeLoginViewReady_(var activeLoginView)
 }
