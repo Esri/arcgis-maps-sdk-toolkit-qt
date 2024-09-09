@@ -1,5 +1,6 @@
+
 /*******************************************************************************
- *  Copyright 2012-2020 Esri
+ *  Copyright 2012-2024 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,6 +17,7 @@
 #include "register_cpp.h"
 
 // Toolkit includes
+#include "ArcGISAuthenticationController.h"
 #include "AuthenticationController.h"
 #include "BasemapGalleryController.h"
 #include "BasemapGalleryItem.h"
@@ -54,6 +56,7 @@
 // Qt Includes
 #include <QQmlEngine>
 #include <QQmlFileSelector>
+#include <QPointer>
 
 // std includes
 #include <type_traits>
@@ -68,6 +71,8 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     constexpr int VERSION_MAJOR = 200;
     constexpr int VERSION_MINOR = 2;
+
+    QPointer<ArcGISAuthenticationController> s_arcGISAuthenticationController;
 
     /*
       \internal
@@ -112,6 +117,23 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
       constexpr Uncreatable_ Uncreatable = Uncreatable_{};
 
+      struct Singleton_
+      {
+      };
+
+      template <class T>
+      void registerComponentImpl(CreationType::Singleton_, int majorVersion, int minorVersion, const char* name)
+      {
+        qmlRegisterSingletonType<T>(NAMESPACE, majorVersion, minorVersion, name, [](QQmlEngine* qmlEngine, QJSEngine* jsEngine) -> QObject* {
+          if (!s_arcGISAuthenticationController)
+          {
+            s_arcGISAuthenticationController = T::create(qmlEngine, jsEngine);
+          }
+          return s_arcGISAuthenticationController;
+        });
+      }
+
+      [[maybe_unused]] constexpr Singleton_ Singleton = Singleton_{};
     }
 
     /*
@@ -170,6 +192,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     appEngine.addImageProvider(BasemapGalleryImageProvider::PROVIDER_ID, BasemapGalleryImageProvider::instance());
     appEngine.addImportPath(ESRI_COM_PATH);
     registerModuleRevisions();
+    registerComponent<ArcGISAuthenticationController>(CreationType::Singleton);
     registerComponent<AuthenticationController>();
     registerComponent<BasemapGalleryController>();
     registerComponent<BasemapGalleryItem>();
