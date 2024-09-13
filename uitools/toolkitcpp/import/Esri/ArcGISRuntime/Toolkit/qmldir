@@ -43,6 +43,7 @@ PopupStackView 100.10 PopupStackView.qml
 PopupStackView 200.0 PopupStackView.qml
 PopupView 100.10 PopupView.qml
 PopupView 200.0 PopupView.qml
+PopupView2 200.6 PopupView2.qml
 Scalebar 100.13 Scalebar.qml
 Scalebar 200.0 Scalebar.qml
 internal ScalebarImpl ScalebarImpl.qml
@@ -50,6 +51,7 @@ SearchView 100.13 SearchView.qml
 SearchView 200.0 SearchView.qml
 SslHandshakeView 100.10 SslHandshakeView.qml
 SslHandshakeView 200.0 SslHandshakeView.qml
+TextPopupElementView 200.6 TextPopupElementView.qml
 TimeSlider 100.10 TimeSlider.qml
 TimeSlider 200.0 TimeSlider.qml
 UserCredentialsView 100.10 UserCredentialsView.qml

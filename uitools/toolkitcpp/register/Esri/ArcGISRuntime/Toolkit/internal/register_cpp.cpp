@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2020 Esri
  *
@@ -43,6 +44,10 @@
 #include "UtilityNetworkTraceController.h"
 #include "UtilityNetworkTraceStartingPoint.h"
 #include "UtilityNetworkTraceStartingPointsModel.h"
+
+// PopupViewController for PopupElements
+#include "PopupViewController2.h"
+#include "TextPopupElementViewController.h"
 
 // Internal includes
 #include "Internal/BasemapGalleryImageProvider.h"
@@ -197,6 +202,10 @@ namespace Esri::ArcGISRuntime::Toolkit {
     registerComponent<UtilityNetworkTraceController>();
     registerComponent<UtilityNetworkTraceStartingPoint>();
     registerComponent<UtilityNetworkTraceStartingPointsModel>();
+
+    // PopupViewController for PopupElements
+    registerComponent<PopupViewController2>();
+    registerComponent<TextPopupElementViewController>();
 
     // Register ArcGISRuntime types with toolkit.
     qRegisterMetaType<Point>("Esri::ArcGISRuntime::Point");

@@ -54,7 +54,9 @@ HEADERS += $$CPPPATH/AuthenticationController.h \
            $$CPPPATH/UtilityNetworkListItem.h \
            $$CPPPATH/UtilityNetworkTraceController.h \
            $$CPPPATH/UtilityNetworkTraceStartingPoint.h \
-           $$CPPPATH/UtilityNetworkTraceStartingPointsModel.h
+           $$CPPPATH/UtilityNetworkTraceStartingPointsModel.h \
+           $$CPPPATH/PopupViewController2.h \
+           $$CPPPATH/TextPopupElementViewController.h
 
 SOURCES += $$CPPPATH/AuthenticationController.cpp \
            $$CPPPATH/BasemapGalleryController.cpp \
@@ -90,4 +92,6 @@ SOURCES += $$CPPPATH/AuthenticationController.cpp \
            $$CPPPATH/UtilityNetworkListItem.cpp \
            $$CPPPATH/UtilityNetworkTraceController.cpp \
            $$CPPPATH/UtilityNetworkTraceStartingPoint.cpp \
-           $$CPPPATH/UtilityNetworkTraceStartingPointsModel.cpp
+           $$CPPPATH/UtilityNetworkTraceStartingPointsModel.cpp \
+           $$CPPPATH/PopupViewController2.cpp \
+           $$CPPPATH/TextPopupElementViewController.cpp
