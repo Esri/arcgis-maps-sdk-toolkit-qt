@@ -23,48 +23,85 @@ import QtQuick.Window
 import QtQuick.Layouts
 import QtWebView
 
-Page {
+Item {
     id: textPopupElementView
-    property string htmlString: ""
+    property var popupElement: null
 
-    anchors.fill: parent
-//    implicitWidth: 300 + padding
+    property var controller: TextPopupElementViewController {}
 
-//    implicitHeight: 300 + padding
+    implicitWidth: webView.width
+    implicitHeight: webView.height
 
-//    spacing: 5
-//    leftPadding: textPopupElementView.spacing
-//    rightPadding: textPopupElementView.spacing
 
-//    title: controller.title
-    WebView {
-        id: webView
-        anchors.fill: parent
-
-        Component.onCompleted: {
-//            var htmlString = "<p><span style='color:#287fb8;font-family:Verdana;font-size:14px;'><strong>White Mountain Peak</strong></span><span style='font-family:Verdana;font-size:14px;'> is a peak in California's White Mountains range. It ranks </span><span style='color:#aa3427;font-family:Verdana;font-size:14px;'><strong>#3</strong></span><span style='font-family:Verdana;font-size:14px;'> among the California Fourteeners.</span></p><p><span style='font-family:Verdana;font-size:14px;'>The summit is </span><span style='color:#287fb8;font-family:Verdana;font-size:14px;'><strong>14,252</strong></span><span style='font-family:Verdana;font-size:14px;'> feet high (4,344 meters) and has a prominence of </span><span style='color:#287fb8;font-family:Verdana;font-size:14px;'><strong>7,196</strong></span><span style='font-family:Verdana;font-size:14px;'> feet (2,193 meters).</span></p><p><a href='https://en.wikipedia.org/wiki/List_of_California_fourteeners' rel='nofollow ugc'><span style='font-family:Verdana;font-size:14px;'>More info</span></a></p>"
-             webView.loadHtml(htmlString);
+    Connections {
+        target: controller
+        function onPopupElementChanged() {
+            webView.loadHtml(controller.text);
         }
 
-        onUrlChanged: {
-            print("");
-            print(webView.url);
-            print("");
-            if (webView.url.toString() !== "") {
-//                Qt.openUrlExternally(webView.url.toString());
-                //load external url via C++
-                var htmlString2 = "<p><span style='color:#287fb8;font-family:Verdana;font-size:14px;'><strong>White Mountain Peak</strong></span><span style='font-family:Verdana;font-size:14px;'> is a peak in California's White Mountains range. It ranks </span><span style='color:#aa3427;font-family:Verdana;font-size:14px;'><strong>#3</strong></span><span style='font-family:Verdana;font-size:14px;'> among the California Fourteeners.</span></p><p><span style='font-family:Verdana;font-size:14px;'>The summit is </span><span style='color:#287fb8;font-family:Verdana;font-size:14px;'><strong>14,252</strong></span><span style='font-family:Verdana;font-size:14px;'> feet high (4,344 meters) and has a prominence of </span><span style='color:#287fb8;font-family:Verdana;font-size:14px;'><strong>7,196</strong></span><span style='font-family:Verdana;font-size:14px;'> feet (2,193 meters).</span></p><p><a href='https://en.wikipedia.org/wiki/List_of_California_fourteeners' rel='nofollow ugc'><span style='font-family:Verdana;font-size:14px;'>More info</span></a></p>"
-                webView.loadHtml(htmlString2); // Reload the original HTML
+    }
+
+    Binding {
+        target: controller
+        property: "popupElement"
+        value: textPopupElementView.popupElement
+    }
+
+    WebView {
+        id: webView
+        width: parent.width
+        implicitHeight: 100 + padding
+
+        // Property to get HTML content when necessary.(Remove?)
+        property string html: ""
+
+        onLoadingChanged: (loadRequest) => {
+        if (loadRequest.status === WebView.LoadSucceededStatus) {
+            webView.runJavaScript("document.body.scrollHeight", function(result) {
+                // Set the height of the WebView based on the content height
+                // this works for Switch but seems problematic in WebView
+                webView.height = result;
+            });
+                readHtmlContent();
+            } else if (loadRequest.status === WebView.LoadFailedStatus) {
+                print("Failed to load");
             }
         }
 
-//        url: "data:text/html,<p><span style='color:#287fb8;font-family:Verdana;font-size:14px;'><strong>White Mountain Peak</strong></span><span style='font-family:Verdana;font-size:14px;'> is a peak in California's White Mountains range. It ranks </span><span style='color:#aa3427;font-family:Verdana;font-size:14px;'><strong>#3</strong></span><span style='font-family:Verdana;font-size:14px;'> among the California Fourteeners.</span></p><p><span style='font-family:Verdana;font-size:14px;'>The summit is </span><span style='color:#287fb8;font-family:Verdana;font-size:14px;'><strong>14,252</strong></span><span style='font-family:Verdana;font-size:14px;'> feet high (4,344 meters) and has a prominence of </span><span style='color:#287fb8;font-family:Verdana;font-size:14px;'><strong>7,196</strong></span><span style='font-family:Verdana;font-size:14px;'> feet (2,193 meters).</span></p><p><a href='https://en.wikipedia.org/wiki/List_of_California_fourteeners' rel='nofollow ugc'><span style='font-family:Verdana;font-size:14px;'>More info</span></a></p>"
-    }
-//    Text {
-//        id: textView
-//        textFormat: Text.RichText
-//        anchors.centerIn: parent
-//        text: "<p><span style='color:#287fb8;font-family:Verdana;font-size:14px;'><strong>White Mountain Peak</strong></span><span style='font-family:Verdana;font-size:14px;'> is a peak in California's White Mountains range. It ranks </span><span style='color:#aa3427;font-family:Verdana;font-size:14px;'><strong>#3</strong></span><span style='font-family:Verdana;font-size:14px;'> among the California Fourteeners.</span></p><p><span style='font-family:Verdana;font-size:14px;'>The summit is </span><span style='color:#287fb8;font-family:Verdana;font-size:14px;'><strong>14,252</strong></span><span style='font-family:Verdana;font-size:14px;'> feet high (4,344 meters) and has a prominence of </span><span style='color:#287fb8;font-family:Verdana;font-size:14px;'><strong>7,196</strong></span><span style='font-family:Verdana;font-size:14px;'> feet (2,193 meters).</span></p><p><a href='https://en.wikipedia.org/wiki/List_of_California_fourteeners' rel='nofollow ugc'><span style='font-family:Verdana;font-size:14px;'>More info</span></a></p>"
-//    }
+        onUrlChanged: {
+            // If a link is clicked in the html content, open the link in the default browser
+            // then reload the original html content
+            if (webView.url.toString() !== "" && webView.url.toString().startsWith("http")) {
+                Qt.openUrlExternally(webView.url.toString());
+                webView.loadHtml(controller.text);
+            }
+        }
 
+        function readHtmlContent() {
+            const js = "document.documentElement.outerHTML";
+            webView.runJavaScript(js, function(result) { html = result; });
+        }
+    }
+
+    // WebView backup
+    //    Text {
+    //        id: richText
+    //        text: controller.text
+    //        textFormat: Text.RichText
+    //        wrapMode: Text.WordWrap
+
+    //        MouseArea {
+    //            anchors.fill: parent
+    //            onClicked: {
+    //                // Regular expression to find links
+    //                var regex = /href='(https?:\/\/[^\s']+)'/g;
+    //                var match = regex.exec(richText.text);
+
+    //                // Check if a link was clicked
+    //                if (match) {
+    //                    Qt.openUrlExternally(match[1]); // Open the first matched link
+    //                }
+    //            }
+    //        }
+    //    }
 }

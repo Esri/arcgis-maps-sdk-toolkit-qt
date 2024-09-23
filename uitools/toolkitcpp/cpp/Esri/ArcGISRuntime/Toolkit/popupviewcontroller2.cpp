@@ -35,7 +35,8 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
 PopupViewController2::PopupViewController2(QObject* parent)
     : QObject{parent}
-{}
+{
+}
 
 Popup* PopupViewController2::popup() const
 {
@@ -55,51 +56,42 @@ void PopupViewController2::setPopup(Popup* popup)
     if (m_popup)
         connect(m_popup.data(), &QObject::destroyed, this, &PopupViewController2::popupChanged);
 
-    qDebug() << "(B)m_popup->evaluatedElements().length()" << m_popup->evaluatedElements().length();
-    // what if this gets reset before it completes?
     m_popup->evaluateExpressionsAsync(this)
-        .then([this](const QList<PopupExpressionEvaluation*>& res) {
-            qDebug() << "res.length()" << res.length();
-            qDebug() << "(A)m_popup->evaluatedElements().length()" << m_popup->evaluatedElements().length();
+        .then([this](const QList<PopupExpressionEvaluation*>&)
+              {
             for ( auto element : m_popup->evaluatedElements())
             {
-//                qDebug() << element->popupElementType();
                 auto elementType = element->popupElementType();
                 switch (elementType)
                 {
-                    case PopupElementType::TextPopupElement:
-                        qDebug() << "TextPopupElement";
-                        qDebug() << dynamic_cast<TextPopupElement*>(element)->text();
+                    case PopupElementType::TextPopupElement:       
+                        m_popupElement = element;
+                        emit popupElementChanged();
                         break;
                     case PopupElementType::FieldsPopupElement:
-                        qDebug() << "FieldsPopupElement";
-                        qDebug() << dynamic_cast<FieldsPopupElement*>(element)->title();
                         break;
                     case PopupElementType::AttachmentsPopupElement:
-                        qDebug() << "AttachmentsPopupElement";
-                        qDebug() << dynamic_cast<AttachmentsPopupElement*>(element)->title();
                         break;
                     case PopupElementType::MediaPopupElement:
-                        qDebug() << "MediaPopupElement";
-                        qDebug() << dynamic_cast<MediaPopupElement*>(element)->title();
                         break;
                     default:
-                        qDebug() << "Nothing";
                         break;
                 }
             }
         })
-        .onFailed(this, [](const ErrorException& error) { qDebug() << error.error().message(); });
+        .onFailed(this, [](const ErrorException& error) { qDebug() << "ErrorException: " << error.error().message(); });
 
     emit popupChanged();
 }
 
 QString PopupViewController2::title() const
 {
-    // This is re-exposed from PopupManager as PopupManager does not have
-    // NOTIFY/CONSTANT modifiers on its title property, so the Controller
-    // re-exposes title to suppress warnings about this.
     return m_popup ? m_popup->title() : nullptr;
+}
+
+QPointer<PopupElement> PopupViewController2::popupElement() const
+{
+    return m_popupElement;
 }
 
 } // namespace Esri::ArcGISRuntime::Toolkit

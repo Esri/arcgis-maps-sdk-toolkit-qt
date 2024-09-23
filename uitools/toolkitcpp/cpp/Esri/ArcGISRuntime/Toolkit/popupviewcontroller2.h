@@ -22,10 +22,15 @@
 
 // STL headers
 #include <Popup.h>
+#include <PopupElement.h>
+
+// Other headers
+#include "Internal/GenericListModel.h"
 
 namespace Esri::ArcGISRuntime {
 
 class Popup;
+class PopupElement;
 
 namespace Toolkit
 {
@@ -34,21 +39,28 @@ class PopupViewController2 : public QObject
 {
   Q_OBJECT
   Q_PROPERTY(Popup* popup READ popup WRITE setPopup NOTIFY popupChanged)
+  Q_PROPERTY(QPointer<PopupElement> popupElement READ popupElement NOTIFY popupElementChanged)
+//  Q_PROPERTY(int popupElementType READ popupElementType NOTIFY popupElementTypeChanged)
   Q_PROPERTY(QString title READ title NOTIFY popupChanged)
 
 public:
   Q_INVOKABLE explicit PopupViewController2(QObject* parent = nullptr);
+  ~PopupViewController2() = default;
 
   Popup* popup() const;
+  QPointer<PopupElement> popupElement() const;
   void setPopup(Popup* popup);
 
   QString title() const;
 
 signals:
   void popupChanged();
+  void popupElementChanged();
 
 private:
   QPointer<Popup> m_popup;
+  QPointer<PopupElement> m_popupElement;
+  GenericListModel* m_popupElementsModel = nullptr;
 };
 
 } // Toolkit

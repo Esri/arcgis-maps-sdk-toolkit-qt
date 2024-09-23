@@ -21,29 +21,36 @@
 #include <QPointer>
 
 // STL headers
+#include <PopupElement.h>
 #include <TextPopupElement.h>
 
 namespace Esri::ArcGISRuntime {
 
 class TextPopupElement;
+class PopupElement;
 
 namespace Toolkit
 {
 
 class TextPopupElementViewController : public QObject
 {
-    Q_PROPERTY(TextPopupElement* textPopupElement READ textPopupElement WRITE setTextPopupElement NOTIFY textPopupElementChanged)
-    Q_PROPERTY(QString text READ text NOTIFY popupChanged)
+    Q_PROPERTY(QPointer<PopupElement> popupElement READ popupElement WRITE setPopupElement NOTIFY popupElementChanged)
+    Q_PROPERTY(QString text READ text NOTIFY popupElementChanged)
 
     Q_OBJECT
 public:
     Q_INVOKABLE explicit TextPopupElementViewController(QObject *parent = nullptr);
+    ~TextPopupElementViewController() = default;
 
     QString text() const;
-    QPointer<TextPopupElement> m_textPopupElement;
+    QPointer<PopupElement> popupElement() const;
+    void setPopupElement(QPointer<PopupElement> popupElement);
 
 signals:
+    void popupElementChanged();
 
+private:
+    QPointer<PopupElement> m_textPopupElement;
 };
 
 } // Toolkit

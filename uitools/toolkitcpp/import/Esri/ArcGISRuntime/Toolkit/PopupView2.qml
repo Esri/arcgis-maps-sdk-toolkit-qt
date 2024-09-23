@@ -21,6 +21,7 @@ import QtQuick.Controls
 import QtQuick.Dialogs
 import QtQuick.Window
 import QtQuick.Layouts
+import QtWebView
 
 
 Page {
@@ -34,6 +35,7 @@ Page {
        \qmlproperty PopupManager popupManager
      */
     property var popup: null
+    property var popupElement: null
 
 
     property var controller: PopupViewController2 {}
@@ -48,11 +50,55 @@ Page {
         popupView.visible = false;
     }
 
+    Connections {
+        target: controller
+        function onPopupElementChanged() {
+            print("popupElementChanged");
+//            const component = textPopupElementView;
+//            if (component) {
+//                const incubator = component.incubateObject(popupView2);
+//                if (incubator.status === Component.Ready) {
+//                    incubator.object.open();
+//                } else {
+//                    incubator.onStatusChanged = function(status) {
+//                        if (status === Component.Ready) {
+//                            this.object.open();
+//                        }
+//                    }
+//                }
+//            }
+
+            var component = textPopupElementView;
+            if (component.status === Component.Ready) {
+                var view = component.createObject(dynamicViewContainer);
+                if (view) {
+                    view.popupElement = controller.popupElement;  // Set the color based on the button clicked
+                }
+            } else {
+                console.error("Error loading component:", component.errorString());
+            }
+        }
+
+        function onPopupChanged() {
+            // don't think this is ideal but it's the right idea
+            print("popupChanged");
+            for ( let i = dynamicViewContainer.children.length - 1; i >=0; i--) {
+                dynamicViewContainer.children[i].destroy();
+            }
+        }
+    }
+
     Binding {
         target: controller
         property: "popup"
         value: popupView2.popup
     }
+
+//    Binding {
+//        target: controller
+//        property: "popupElement"
+//        value: popupView2.popupElement
+//    }
 
     implicitWidth: 300 + padding
 
@@ -76,6 +122,16 @@ Page {
         rightPadding: popupView.spacing
     }
 
+    ScrollView {
+        id: sv
+        anchors.fill: parent
+        clip: true
+        Column {
+            id: dynamicViewContainer
+            anchors.fill: parent
+            spacing: 5
+        }
+    }
 
 
     footer: ColumnLayout {
@@ -88,6 +144,26 @@ Page {
                     popupView.closeCallback()
             }
             Layout.bottomMargin: popupView.spacing
+        }
+    }
+
+    Component {
+        id: textPopupElementView
+        TextPopupElementView {
+            width: parent.width
+//            anchors.fill: parent
+//            popupElement: controller.popupElement
+//            controller: TextPopupElementViewController {popupElement: controller.popupElement}
+//            Connections {
+//                target: controller
+//                function onCurrentChallengeTypeChanged() {
+//                    reject();
+//                }
+//            }
+//            onClosed: {
+//                this.destroy();
+//            }
+//            Component.onCompleted: activeLoginViewReady_(this)
         }
     }
 }

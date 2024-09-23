@@ -16,11 +16,40 @@
  ******************************************************************************/
 #include "TextPopupElementViewController.h"
 
+//#include <QDebug>
+
 namespace Esri::ArcGISRuntime::Toolkit {
 
 TextPopupElementViewController::TextPopupElementViewController(QObject *parent)
     : QObject{parent}
 {
+}
+
+QString TextPopupElementViewController::text() const
+{
+    return m_textPopupElement ? static_cast<TextPopupElement*>(m_textPopupElement.get())->text() : nullptr;
+}
+
+QPointer<PopupElement> TextPopupElementViewController::popupElement() const
+{
+    return m_textPopupElement;
+}
+
+void TextPopupElementViewController::setPopupElement(QPointer<PopupElement> popupElement)
+{
+
+    if (m_textPopupElement == popupElement)
+        return;
+
+    if (m_textPopupElement)
+        disconnect(m_textPopupElement.data(), nullptr, this, nullptr);
+
+    m_textPopupElement = popupElement;
+
+    if (m_textPopupElement)
+        connect(m_textPopupElement.data(), &QObject::destroyed, this, &TextPopupElementViewController::popupElementChanged);
+
+    emit popupElementChanged();
 }
 
 } // namespace Esri::ArcGISRuntime::Toolkit
