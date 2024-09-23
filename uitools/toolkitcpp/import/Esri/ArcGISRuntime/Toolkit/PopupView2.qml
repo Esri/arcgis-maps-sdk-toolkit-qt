@@ -88,25 +88,32 @@ Page {
 
     ListView {
         id: elementsView
+
         width: parent.width
         height: parent.height
         model: controller.popupElements
         spacing: 10
 
 //        delegate: ItemDelegate {
-        delegate: Item {
-            width: ListView.view.width
-            height: 210
-                TextPopupElementView
-                {
-                    anchors.fill: parent
+//        delegate: Item {
+////            width: ListView.view.width
+////            anchors.fill: parent
+//            width: parent.width
+//            implicitHeight: children.implicitHeight
+//            implicitWidth: children.implicitWidth
+//            height: 210
+                delegate: TextPopupElementView {
+                    width: parent.width
+//                    anchors.fill: parent
+//                    implicitHeight: children.implicitHeight
+//                    implicitWidth: children.implicitWidth
                     popupElement: listModelData.popupElement
 //                    popupElement: listModelData.popupElementType === 0 ? listModelData.popupElement : null
 //                    width: parent.width
                 }
-                Component.onCompleted: {
-                    print("height: " + height);
-                }
+//                Component.onCompleted: {
+//                    print("height: " + height);
+//                }
 
 //                MouseArea {
 //                    anchors.fill: parent
@@ -135,7 +142,7 @@ Page {
 //                        mouse.accepted = false;
 //                    }
 //                }
-            }
+//            }
     }
 
 

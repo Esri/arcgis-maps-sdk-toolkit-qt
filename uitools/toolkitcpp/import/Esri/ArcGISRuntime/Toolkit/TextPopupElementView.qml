@@ -29,14 +29,15 @@ Item {
 
     property var controller: TextPopupElementViewController {}
 
-//    implicitWidth: richText.width
-//    implicitHeight: richText.height
 
     Binding {
         target: controller
         property: "popupElement"
         value: textPopupElementView.popupElement
     }
+
+//    implicitWidth: richText.width
+//    implicitHeight: richText.height
 
 //    WebView {
 //        id: webView
@@ -78,24 +79,52 @@ Item {
 //        }
 //    }
 
-    // WebView backup
-        Text {
-            id: richText
-            text: controller.text
-            textFormat: Text.RichText
-            wrapMode: Text.WordWrap
-            width: parent.width
+//    // WebView backup
+//        Text {
+//            id: richText
+//            text: controller.text
+//            textFormat: Text.RichText
+//            wrapMode: Text.WordWrap
+//            width: parent.width
 
-            MouseArea {
+//            MouseArea {
+//                anchors.fill: parent
+//                onClicked: {
+//                    // Regular expression to find links
+//                    var regex = /href='(https?:\/\/[^\s']+)'/g;
+//                    var match = regex.exec(richText.text);
+
+//                    // Check if a link was clicked
+//                    if (match) {
+//                        Qt.openUrlExternally(match[1]); // Open the first matched link
+//                    }
+//                }
+//            }
+//        }
+
+        implicitHeight: richText.implicitHeight
+        Rectangle {
+            color: "white" // Set the background color to white
+            anchors.fill: parent
+            //    WebView backup
+            Text {
+                id: richText
+                text: controller.text
+                textFormat: Text.RichText
+                wrapMode: Text.WordWrap
+                //            width: parent.width
                 anchors.fill: parent
-                onClicked: {
-                    // Regular expression to find links
-                    var regex = /href='(https?:\/\/[^\s']+)'/g;
-                    var match = regex.exec(richText.text);
 
-                    // Check if a link was clicked
-                    if (match) {
-                        Qt.openUrlExternally(match[1]); // Open the first matched link
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        // Regular expression to find links
+                        let link = richText.hoveredLink;
+
+                        // Check if a link was clicked
+                        if (link !== "" && link !== undefined) {
+                            Qt.openUrlExternally(link); // Open the first matched link
+                        }
                     }
                 }
             }
