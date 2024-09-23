@@ -29,6 +29,12 @@ Item {
 
     property var controller: TextPopupElementViewController {}
 
+    Binding {
+        target: controller
+        property: "popupElement"
+        value: textPopupElementView.popupElement
+    }
+
     implicitWidth: webView.width
     implicitHeight: webView.height
 
@@ -39,12 +45,6 @@ Item {
             webView.loadHtml(controller.text);
         }
 
-    }
-
-    Binding {
-        target: controller
-        property: "popupElement"
-        value: textPopupElementView.popupElement
     }
 
     WebView {
@@ -83,25 +83,32 @@ Item {
         }
     }
 
-    // WebView backup
-    //    Text {
-    //        id: richText
-    //        text: controller.text
-    //        textFormat: Text.RichText
-    //        wrapMode: Text.WordWrap
 
-    //        MouseArea {
-    //            anchors.fill: parent
-    //            onClicked: {
-    //                // Regular expression to find links
-    //                var regex = /href='(https?:\/\/[^\s']+)'/g;
-    //                var match = regex.exec(richText.text);
+//    implicitHeight: richText.implicitHeight
+//    Rectangle {
+//        color: "white" // Set the background color to white
+//        anchors.fill: parent
+//        //    WebView backup
+//        Text {
+//            id: richText
+//            text: controller.text
+//            textFormat: Text.RichText
+//            wrapMode: Text.WordWrap
+//            //            width: parent.width
+//            anchors.fill: parent
 
-    //                // Check if a link was clicked
-    //                if (match) {
-    //                    Qt.openUrlExternally(match[1]); // Open the first matched link
-    //                }
-    //            }
-    //        }
-    //    }
+//            MouseArea {
+//                anchors.fill: parent
+//                onClicked: {
+//                    // Regular expression to find links
+//                    let link = richText.hoveredLink;
+
+//                    // Check if a link was clicked
+//                    if (link !== "" && link !== undefined) {
+//                        Qt.openUrlExternally(link); // Open the first matched link
+//                    }
+//                }
+//            }
+//        }
+//    }
 }

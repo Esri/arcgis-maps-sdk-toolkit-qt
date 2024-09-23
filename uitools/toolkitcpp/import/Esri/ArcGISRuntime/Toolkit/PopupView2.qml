@@ -106,7 +106,7 @@ Page {
         Column {
             id: dynamicViewContainer
             anchors.fill: parent
-            spacing: 5
+            spacing: 10
         }
     }
 
