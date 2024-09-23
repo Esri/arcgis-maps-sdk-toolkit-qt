@@ -29,8 +29,8 @@ Item {
 
     property var controller: TextPopupElementViewController {}
 
-    implicitWidth: webView.width
-    implicitHeight: webView.height
+//    implicitWidth: richText.width
+//    implicitHeight: richText.height
 
     Binding {
         target: controller
@@ -38,65 +38,66 @@ Item {
         value: textPopupElementView.popupElement
     }
 
-    WebView {
-        id: webView
-        width: parent.width
-        implicitHeight: 100 + padding
+//    WebView {
+//        id: webView
+//        width: parent.width
+//        implicitHeight: 100 + padding
 
-        // Property to get HTML content when necessary.(Remove?)
-        property string html: ""
+//        // Property to get HTML content when necessary.(Remove?)
+//        property string html: ""
 
-        onLoadingChanged: (loadRequest) => {
-        if (loadRequest.status === WebView.LoadSucceededStatus) {
-            webView.runJavaScript("document.body.scrollHeight", function(result) {
-                // Set the height of the WebView based on the content height
-                // this works for Switch but seems problematic in WebView
-                webView.height = result;
-            });
-                readHtmlContent();
-            } else if (loadRequest.status === WebView.LoadFailedStatus) {
-                print("Failed to load");
-            }
-        }
+//        onLoadingChanged: (loadRequest) => {
+//        if (loadRequest.status === WebView.LoadSucceededStatus) {
+//            webView.runJavaScript("document.body.scrollHeight", function(result) {
+//                // Set the height of the WebView based on the content height
+//                // this works for Switch but seems problematic in WebView
+//                webView.height = result;
+//            });
+//                readHtmlContent();
+//            } else if (loadRequest.status === WebView.LoadFailedStatus) {
+//                print("Failed to load");
+//            }
+//        }
 
-        onUrlChanged: {
-            // If a link is clicked in the html content, open the link in the default browser
-            // then reload the original html content
-            if (webView.url.toString() !== "" && webView.url.toString().startsWith("http")) {
-                Qt.openUrlExternally(webView.url.toString());
-                webView.loadHtml(controller.text);
-            }
-        }
+//        onUrlChanged: {
+//            // If a link is clicked in the html content, open the link in the default browser
+//            // then reload the original html content
+//            if (webView.url.toString() !== "" && webView.url.toString().startsWith("http")) {
+//                Qt.openUrlExternally(webView.url.toString());
+//                webView.loadHtml(controller.text);
+//            }
+//        }
 
-        function readHtmlContent() {
-            const js = "document.documentElement.outerHTML";
-            webView.runJavaScript(js, function(result) { html = result; });
-        }
+//        function readHtmlContent() {
+//            const js = "document.documentElement.outerHTML";
+//            webView.runJavaScript(js, function(result) { html = result; });
+//        }
 
-        Component.onCompleted: {
-            loadHtml(controller.text);
-        }
-    }
+//        Component.onCompleted: {
+//            loadHtml(controller.text);
+//        }
+//    }
 
     // WebView backup
-    //    Text {
-    //        id: richText
-    //        text: controller.text
-    //        textFormat: Text.RichText
-    //        wrapMode: Text.WordWrap
+        Text {
+            id: richText
+            text: controller.text
+            textFormat: Text.RichText
+            wrapMode: Text.WordWrap
+            width: parent.width
 
-    //        MouseArea {
-    //            anchors.fill: parent
-    //            onClicked: {
-    //                // Regular expression to find links
-    //                var regex = /href='(https?:\/\/[^\s']+)'/g;
-    //                var match = regex.exec(richText.text);
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    // Regular expression to find links
+                    var regex = /href='(https?:\/\/[^\s']+)'/g;
+                    var match = regex.exec(richText.text);
 
-    //                // Check if a link was clicked
-    //                if (match) {
-    //                    Qt.openUrlExternally(match[1]); // Open the first matched link
-    //                }
-    //            }
-    //        }
-    //    }
+                    // Check if a link was clicked
+                    if (match) {
+                        Qt.openUrlExternally(match[1]); // Open the first matched link
+                    }
+                }
+            }
+        }
 }

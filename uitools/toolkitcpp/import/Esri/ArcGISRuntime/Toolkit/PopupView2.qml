@@ -102,7 +102,7 @@ Page {
                     anchors.fill: parent
                     popupElement: listModelData.popupElement
 //                    popupElement: listModelData.popupElementType === 0 ? listModelData.popupElement : null
-                    width: parent.width
+//                    width: parent.width
                 }
                 Component.onCompleted: {
                     print("height: " + height);
