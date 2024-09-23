@@ -50,32 +50,12 @@ Page {
         popupView.visible = false;
     }
 
-//    Connections {
-//        target: controller
-//        function onPopupElementChanged() {
-//            let component = textPopupElementView;
-//            if (component.status === Component.Ready) {
-//                let view = component.createObject(dynamicViewContainer);
-//                if (view) {
-//                    view.popupElement = controller.popupElement;
-//                }
-//            } else {
-//                console.error("Error loading component:", component.errorString());
-//            }
-//        }
-
-//        function onPopupChanged() {
-//            for ( let i = dynamicViewContainer.children.length; i > 0; i--) {
-//                dynamicViewContainer.children[i-1].destroy();
-//            }
-//        }
-//    }
-        Connections {
-            target: controller
-            function onPopupChanged() {
-                print("controller.popupElements.count: " + controller.popupElements.count);
-            }
+    Connections {
+        target: controller
+        function onPopupChanged() {
+            print("controller.popupElements.count: " + controller.popupElements.count);
         }
+    }
 
     Binding {
         target: controller
