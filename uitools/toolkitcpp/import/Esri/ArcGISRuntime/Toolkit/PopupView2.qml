@@ -151,19 +151,6 @@ Page {
         id: textPopupElementView
         TextPopupElementView {
             width: parent.width
-//            anchors.fill: parent
-//            popupElement: controller.popupElement
-//            controller: TextPopupElementViewController {popupElement: controller.popupElement}
-//            Connections {
-//                target: controller
-//                function onCurrentChallengeTypeChanged() {
-//                    reject();
-//                }
-//            }
-//            onClosed: {
-//                this.destroy();
-//            }
-//            Component.onCompleted: activeLoginViewReady_(this)
         }
     }
 }
