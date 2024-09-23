@@ -55,7 +55,7 @@ Page {
         function onPopupElementChanged() {
             let component = textPopupElementView;
             if (component.status === Component.Ready) {
-                var view = component.createObject(dynamicViewContainer);
+                let view = component.createObject(dynamicViewContainer);
                 if (view) {
                     view.popupElement = controller.popupElement;
                 }
