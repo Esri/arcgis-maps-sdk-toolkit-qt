@@ -53,26 +53,11 @@ Page {
     Connections {
         target: controller
         function onPopupElementChanged() {
-            print("popupElementChanged");
-//            const component = textPopupElementView;
-//            if (component) {
-//                const incubator = component.incubateObject(popupView2);
-//                if (incubator.status === Component.Ready) {
-//                    incubator.object.open();
-//                } else {
-//                    incubator.onStatusChanged = function(status) {
-//                        if (status === Component.Ready) {
-//                            this.object.open();
-//                        }
-//                    }
-//                }
-//            }
-
-            var component = textPopupElementView;
+            let component = textPopupElementView;
             if (component.status === Component.Ready) {
                 var view = component.createObject(dynamicViewContainer);
                 if (view) {
-                    view.popupElement = controller.popupElement;  // Set the color based on the button clicked
+                    view.popupElement = controller.popupElement;
                 }
             } else {
                 console.error("Error loading component:", component.errorString());
@@ -80,10 +65,8 @@ Page {
         }
 
         function onPopupChanged() {
-            // don't think this is ideal but it's the right idea
-            print("popupChanged");
-            for ( let i = dynamicViewContainer.children.length - 1; i >=0; i--) {
-                dynamicViewContainer.children[i].destroy();
+            for ( let i = dynamicViewContainer.children.length; i > 0; i--) {
+                dynamicViewContainer.children[i-1].destroy();
             }
         }
     }
@@ -93,12 +76,6 @@ Page {
         property: "popup"
         value: popupView2.popup
     }
-
-//    Binding {
-//        target: controller
-//        property: "popupElement"
-//        value: popupView2.popupElement
-//    }
 
     implicitWidth: 300 + padding
 
