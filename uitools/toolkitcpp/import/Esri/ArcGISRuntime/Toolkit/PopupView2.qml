@@ -35,7 +35,7 @@ Page {
        \qmlproperty PopupManager popupManager
      */
     property var popup: null
-    property var popupElement: null
+//    property var popupElement: null
 
 
     property var controller: PopupViewController2 {}
@@ -70,6 +70,12 @@ Page {
 //            }
 //        }
 //    }
+        Connections {
+            target: controller
+            function onPopupChanged() {
+                print("controller.popupElements.count: " + controller.popupElements.count);
+            }
+        }
 
     Binding {
         target: controller
@@ -99,33 +105,57 @@ Page {
         rightPadding: popupView.spacing
     }
 
-//    ScrollView {
-//        id: sv
-//        anchors.fill: parent
-//        clip: true
-//        Column {
-//            id: dynamicViewContainer
-//            anchors.fill: parent
-//            spacing: 5
-//        }
-//    }
+
     ListView {
         id: elementsView
         width: parent.width
         height: parent.height
         model: controller.popupElements
+        spacing: 10
 
-        delegate: ItemDelegate {
+//        delegate: ItemDelegate {
+        delegate: Item {
             width: ListView.view.width
-            height: 300
+            height: 210
+                TextPopupElementView
+                {
+                    anchors.fill: parent
+                    popupElement: listModelData.popupElement
+//                    popupElement: listModelData.popupElementType === 0 ? listModelData.popupElement : null
+                    width: parent.width
+                }
+                Component.onCompleted: {
+                    print("height: " + height);
+                }
 
-            TextPopupElementView
-            {
-                anchors.fill: parent
-                popupElement: listModelData.popupElement
-                width: parent.width
+//                MouseArea {
+//                    anchors.fill: parent
+//                    drag.target: parent
+
+//                    onWheel: (wheel) => {
+//                        // Calculate new contentY
+//                        var newContentY = elementsView.contentY - wheel.angleDelta.y;
+
+//                        // Prevent overscrolling
+//                        if (newContentY < 0) {
+//                            newContentY = 0; // Prevent scrolling above the top
+//                        } else if (newContentY > elementsView.contentHeight - elementsView.height) {
+//                            newContentY = elementsView.contentHeight - elementsView.height; // Prevent scrolling below the bottom
+//                        }
+
+//                        // Set the new contentY
+//                        elementsView.contentY = newContentY;
+
+//                        // Prevent default handling to allow ListView to scroll
+//                        wheel.accepted = true;
+//                    }
+
+//                    onClicked: (mouse) => {
+//                        // Allow click events to propagate
+//                        mouse.accepted = false;
+//                    }
+//                }
             }
-        }
     }
 
 

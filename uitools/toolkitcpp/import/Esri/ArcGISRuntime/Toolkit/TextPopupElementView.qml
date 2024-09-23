@@ -27,19 +27,10 @@ Item {
     id: textPopupElementView
     property var popupElement: null
 
-//    property var controller: TextPopupElementViewController {}
-    property var controller: null
+    property var controller: TextPopupElementViewController {}
 
     implicitWidth: webView.width
     implicitHeight: webView.height
-
-
-    Connections {
-        target: controller
-        function onPopupElementChanged() {
-            webView.loadHtml(controller.text);
-        }
-    }
 
     Binding {
         target: controller
@@ -80,6 +71,10 @@ Item {
         function readHtmlContent() {
             const js = "document.documentElement.outerHTML";
             webView.runJavaScript(js, function(result) { html = result; });
+        }
+
+        Component.onCompleted: {
+            loadHtml(controller.text);
         }
     }
 

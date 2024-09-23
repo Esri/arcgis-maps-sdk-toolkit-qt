@@ -39,10 +39,11 @@ class PopupViewController2 : public QObject
 {
   Q_OBJECT
   Q_PROPERTY(Popup* popup READ popup WRITE setPopup NOTIFY popupChanged)
-  Q_PROPERTY(QPointer<PopupElement> popupElement READ popupElement NOTIFY popupElementChanged)
+//  Q_PROPERTY(QPointer<PopupElement> popupElement READ popupElement NOTIFY popupElementChanged)
 //  Q_PROPERTY(int popupElementType READ popupElementType NOTIFY popupElementTypeChanged)
   Q_PROPERTY(QString title READ title NOTIFY popupChanged)
-  Q_PROPERTY(QAbstractListModel* popupElements READ popupElements NOTIFY popupElementChanged)
+//  Q_PROPERTY(QAbstractListModel* popupElements READ popupElements CONSTANT)
+    Q_PROPERTY(QAbstractListModel* popupElements READ popupElements NOTIFY popupChanged)
 
 public:
   Q_INVOKABLE explicit PopupViewController2(QObject* parent = nullptr);

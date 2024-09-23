@@ -73,12 +73,14 @@ void PopupViewController2::setPopup(Popup* popup)
             for ( auto element : m_popup->evaluatedElements())
             {
                 auto elementType = element->popupElementType();
+                qDebug() << elementType;
+                m_popupElementsModel->append(new TextPopupElementViewController(element, this));
                 switch (elementType)
                 {
-                    case PopupElementType::TextPopupElement:       
-                        m_popupElement = element;
-                        m_popupElementsModel->append(new TextPopupElementViewController(element, this));
-                        emit popupElementChanged();
+                    case PopupElementType::TextPopupElement:
+//                        m_popupElement = element;
+//                        m_popupElementsModel->append(new TextPopupElementViewController(element, this));
+//                        emit popupElementChanged();
                         break;
                     case PopupElementType::FieldsPopupElement:
                         break;
