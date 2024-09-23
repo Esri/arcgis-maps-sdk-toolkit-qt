@@ -25,9 +25,20 @@ TextPopupElementViewController::TextPopupElementViewController(QObject *parent)
 {
 }
 
+TextPopupElementViewController::TextPopupElementViewController(QPointer<PopupElement> textPopupElement, QObject *parent) :
+    QObject{parent},
+    m_textPopupElement{textPopupElement}
+{
+}
+
 QString TextPopupElementViewController::text() const
 {
     return m_textPopupElement ? static_cast<TextPopupElement*>(m_textPopupElement.get())->text() : nullptr;
+}
+
+int TextPopupElementViewController::popupElementType() const
+{
+    return m_textPopupElement ? static_cast<int>(m_textPopupElement->popupElementType()) : -1;
 }
 
 QPointer<PopupElement> TextPopupElementViewController::popupElement() const

@@ -50,26 +50,26 @@ Page {
         popupView.visible = false;
     }
 
-    Connections {
-        target: controller
-        function onPopupElementChanged() {
-            let component = textPopupElementView;
-            if (component.status === Component.Ready) {
-                let view = component.createObject(dynamicViewContainer);
-                if (view) {
-                    view.popupElement = controller.popupElement;
-                }
-            } else {
-                console.error("Error loading component:", component.errorString());
-            }
-        }
+//    Connections {
+//        target: controller
+//        function onPopupElementChanged() {
+//            let component = textPopupElementView;
+//            if (component.status === Component.Ready) {
+//                let view = component.createObject(dynamicViewContainer);
+//                if (view) {
+//                    view.popupElement = controller.popupElement;
+//                }
+//            } else {
+//                console.error("Error loading component:", component.errorString());
+//            }
+//        }
 
-        function onPopupChanged() {
-            for ( let i = dynamicViewContainer.children.length; i > 0; i--) {
-                dynamicViewContainer.children[i-1].destroy();
-            }
-        }
-    }
+//        function onPopupChanged() {
+//            for ( let i = dynamicViewContainer.children.length; i > 0; i--) {
+//                dynamicViewContainer.children[i-1].destroy();
+//            }
+//        }
+//    }
 
     Binding {
         target: controller
@@ -99,14 +99,32 @@ Page {
         rightPadding: popupView.spacing
     }
 
-    ScrollView {
-        id: sv
-        anchors.fill: parent
-        clip: true
-        Column {
-            id: dynamicViewContainer
-            anchors.fill: parent
-            spacing: 5
+//    ScrollView {
+//        id: sv
+//        anchors.fill: parent
+//        clip: true
+//        Column {
+//            id: dynamicViewContainer
+//            anchors.fill: parent
+//            spacing: 5
+//        }
+//    }
+    ListView {
+        id: elementsView
+        width: parent.width
+        height: parent.height
+        model: controller.popupElements
+
+        delegate: ItemDelegate {
+            width: ListView.view.width
+            height: 300
+
+            TextPopupElementView
+            {
+                anchors.fill: parent
+                popupElement: listModelData.popupElement
+                width: parent.width
+            }
         }
     }
 

@@ -27,7 +27,8 @@ Item {
     id: textPopupElementView
     property var popupElement: null
 
-    property var controller: TextPopupElementViewController {}
+//    property var controller: TextPopupElementViewController {}
+    property var controller: null
 
     implicitWidth: webView.width
     implicitHeight: webView.height
@@ -38,7 +39,6 @@ Item {
         function onPopupElementChanged() {
             webView.loadHtml(controller.text);
         }
-
     }
 
     Binding {

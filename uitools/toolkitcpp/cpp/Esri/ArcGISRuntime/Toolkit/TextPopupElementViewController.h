@@ -34,15 +34,18 @@ namespace Toolkit
 
 class TextPopupElementViewController : public QObject
 {
+    Q_OBJECT
     Q_PROPERTY(QPointer<PopupElement> popupElement READ popupElement WRITE setPopupElement NOTIFY popupElementChanged)
+    Q_PROPERTY(int popupElementType READ popupElementType NOTIFY popupElementChanged)
     Q_PROPERTY(QString text READ text NOTIFY popupElementChanged)
 
-    Q_OBJECT
 public:
     Q_INVOKABLE explicit TextPopupElementViewController(QObject *parent = nullptr);
     ~TextPopupElementViewController() = default;
+    Q_INVOKABLE TextPopupElementViewController(QPointer<PopupElement> textPopupElement, QObject *parent = nullptr);
 
     QString text() const;
+    int popupElementType() const;
     QPointer<PopupElement> popupElement() const;
     void setPopupElement(QPointer<PopupElement> popupElement);
 

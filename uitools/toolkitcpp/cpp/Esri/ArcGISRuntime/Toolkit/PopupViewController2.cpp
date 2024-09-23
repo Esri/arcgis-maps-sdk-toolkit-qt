@@ -31,10 +31,13 @@
 #include "AttachmentsPopupElement.h"
 #include "MediaPopupElement.h"
 
+#include "TextPopupElementViewController.h"
+
 namespace Esri::ArcGISRuntime::Toolkit {
 
 PopupViewController2::PopupViewController2(QObject* parent)
-    : QObject{parent}
+    : QObject{parent},
+    m_popupElementsModel(new GenericListModel(&TextPopupElementViewController::staticMetaObject, this))
 {
 }
 
@@ -43,13 +46,21 @@ Popup* PopupViewController2::popup() const
     return m_popup;
 }
 
+GenericListModel* PopupViewController2::popupElements() const
+{
+    return m_popupElementsModel;
+}
+
 void PopupViewController2::setPopup(Popup* popup)
 {
     if (m_popup == popup)
         return;
 
     if (m_popup)
+    {
         disconnect(m_popup.data(), nullptr, this, nullptr);
+        m_popupElementsModel->removeRows(0, m_popupElementsModel->rowCount());
+    }
 
     m_popup = popup;
 
@@ -66,6 +77,7 @@ void PopupViewController2::setPopup(Popup* popup)
                 {
                     case PopupElementType::TextPopupElement:       
                         m_popupElement = element;
+                        m_popupElementsModel->append(new TextPopupElementViewController(element, this));
                         emit popupElementChanged();
                         break;
                     case PopupElementType::FieldsPopupElement:
