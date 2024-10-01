@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2019 Esri
  *
@@ -20,7 +21,7 @@
 #endif
 
 #include "AppInfo.h"
-#include "CppArExample.h"
+#include "ArExample.h"
 
 #include <QDir>
 #include <QGuiApplication>
