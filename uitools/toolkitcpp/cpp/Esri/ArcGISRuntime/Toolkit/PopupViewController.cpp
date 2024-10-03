@@ -93,7 +93,7 @@ GenericListModel* PopupViewController::popupElements() const
 
 /*!
   \brief Sets the \c Popup. Setting this will trigger evaluate expressions on the popup and notify the
-  popup and title have chagned.
+  popup and title have changed.
   \list
   \li \a popup To deliver data from.
   \endlist
