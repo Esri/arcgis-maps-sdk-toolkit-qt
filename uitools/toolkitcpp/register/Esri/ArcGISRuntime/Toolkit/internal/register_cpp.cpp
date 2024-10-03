@@ -38,16 +38,13 @@
 #include "SearchSuggestion.h"
 #include "SearchViewController.h"
 #include "SmartLocatorSearchSource.h"
+#include "TextPopupElementViewController.h"
 #include "TimeSliderController.h"
 #include "UtilityNetworkFunctionTraceResultsModel.h"
 #include "UtilityNetworkListItem.h"
 #include "UtilityNetworkTraceController.h"
 #include "UtilityNetworkTraceStartingPoint.h"
 #include "UtilityNetworkTraceStartingPointsModel.h"
-
-// PopupViewController for PopupElements
-#include "PopupViewController2.h"
-#include "TextPopupElementViewController.h"
 
 // Internal includes
 #include "Internal/BasemapGalleryImageProvider.h"
@@ -196,16 +193,13 @@ namespace Esri::ArcGISRuntime::Toolkit {
     registerComponent<SearchSuggestion>();
     registerComponent<SearchViewController>();
     registerComponent<SmartLocatorSearchSource>(CreationType::Uncreatable);
+    registerComponent<TextPopupElementViewController>();
     registerComponent<TimeSliderController>();
     registerComponent<UtilityNetworkFunctionTraceResultsModel>();
     registerComponent<UtilityNetworkListItem>();
     registerComponent<UtilityNetworkTraceController>();
     registerComponent<UtilityNetworkTraceStartingPoint>();
     registerComponent<UtilityNetworkTraceStartingPointsModel>();
-
-    // PopupViewController for PopupElements
-    registerComponent<PopupViewController2>();
-    registerComponent<TextPopupElementViewController>();
 
     // Register ArcGISRuntime types with toolkit.
     qRegisterMetaType<Point>("Esri::ArcGISRuntime::Point");
