@@ -87,7 +87,7 @@ int TextPopupElementViewController::popupElementType() const
 /*!
   \brief Returns the \c TextPopupElement.
 */
-QPointer<TextPopupElement> TextPopupElementViewController::popupElement() const
+QPointer<TextPopupElement> TextPopupElementViewController::textPopupElement() const
 {
     return m_textPopupElement ? m_textPopupElement : nullptr;
 }
@@ -98,7 +98,7 @@ QPointer<TextPopupElement> TextPopupElementViewController::popupElement() const
   \li \a popup To deliver data from.
   \endlist
  */
-void TextPopupElementViewController::setPopupElement(QPointer<TextPopupElement> popupElement)
+void TextPopupElementViewController::setTextPopupElement(QPointer<TextPopupElement> popupElement)
 {
 
     if (m_textPopupElement == popupElement)
@@ -110,14 +110,14 @@ void TextPopupElementViewController::setPopupElement(QPointer<TextPopupElement> 
     m_textPopupElement = popupElement;
 
     if (m_textPopupElement)
-        connect(m_textPopupElement.data(), &QObject::destroyed, this, &TextPopupElementViewController::popupElementChanged);
+        connect(m_textPopupElement.data(), &QObject::destroyed, this, &TextPopupElementViewController::textPopupElementChanged);
 
-    emit popupElementChanged();
+    emit textPopupElementChanged();
 }
 
 } // namespace Esri::ArcGISRuntime::Toolkit
 
 /*!
-  \fn void Esri::ArcGISRuntime::Toolkit::TextPopupElementViewController::popupElementChanged()
+  \fn void Esri::ArcGISRuntime::Toolkit::TextPopupElementViewController::textPopupElementChanged()
   \brief Signal emitted when the \c PopupElement changes.
  */

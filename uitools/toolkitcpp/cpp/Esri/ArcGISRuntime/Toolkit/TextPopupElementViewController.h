@@ -35,9 +35,9 @@ namespace Toolkit
 class TextPopupElementViewController : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QPointer<TextPopupElement> popupElement READ popupElement WRITE setPopupElement NOTIFY popupElementChanged)
-    Q_PROPERTY(int popupElementType READ popupElementType NOTIFY popupElementChanged)
-    Q_PROPERTY(QString text READ text NOTIFY popupElementChanged)
+    Q_PROPERTY(QPointer<TextPopupElement> textPopupElement READ textPopupElement WRITE setTextPopupElement NOTIFY textPopupElementChanged)
+    Q_PROPERTY(int popupElementType READ popupElementType NOTIFY textPopupElementChanged)
+    Q_PROPERTY(QString text READ text NOTIFY textPopupElementChanged)
 
 public:
     explicit TextPopupElementViewController(QObject *parent = nullptr);
@@ -46,11 +46,11 @@ public:
 
     QString text() const;
     int popupElementType() const;
-    QPointer<TextPopupElement> popupElement() const;
-    void setPopupElement(QPointer<TextPopupElement> popupElement);
+    QPointer<TextPopupElement> textPopupElement() const;
+    void setTextPopupElement(QPointer<TextPopupElement> popupElement);
 
 signals:
-    void popupElementChanged();
+    void textPopupElementChanged();
 
 private:
     QPointer<TextPopupElement> m_textPopupElement;
