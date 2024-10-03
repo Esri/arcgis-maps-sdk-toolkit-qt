@@ -35,7 +35,6 @@ Page {
        \qmlproperty PopupManager popupManager
      */
     property var popup: null
-//    property var popupElement: null
 
 
     property var controller: PopupViewController2 {}
@@ -47,14 +46,7 @@ Page {
        Defaults to setting visible to false.
      */
     property var closeCallback: function() {
-        popupView.visible = false;
-    }
-
-    Connections {
-        target: controller
-        function onPopupChanged() {
-            print("controller.popupElements.count: " + controller.popupElements.count);
-        }
+        popupView2.visible = false;
     }
 
     Binding {
@@ -72,97 +64,69 @@ Page {
     rightPadding: popupView2.spacing
 
     title: controller.title
+    clip: true
 
     // Title Header
     header: Label {
         textFormat: Text.StyledText
-        text: `<h2>${popupView.title}</h2>`
+        text: `<h2>${popupView2.title}</h2>`
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         wrapMode: Text.Wrap
-        font: popupView.font
-        leftPadding: popupView.spacing
-        rightPadding: popupView.spacing
+        font: popupView2.font
+        leftPadding: popupView2.spacing
+        rightPadding: popupView2.spacing
     }
 
 
     ListView {
         id: elementsView
 
-        width: parent.width
-        height: parent.height
+        anchors.fill: parent
         model: controller.popupElements
         spacing: 10
+        clip: true
 
-//        delegate: ItemDelegate {
-//        delegate: Item {
-////            width: ListView.view.width
-////            anchors.fill: parent
-//            width: parent.width
-//            implicitHeight: children.implicitHeight
-//            implicitWidth: children.implicitWidth
-//            height: 210
-                delegate: TextPopupElementView {
-                    width: parent.width
-//                    anchors.fill: parent
-//                    implicitHeight: children.implicitHeight
-//                    implicitWidth: children.implicitWidth
-                    popupElement: listModelData.popupElement
-//                    popupElement: listModelData.popupElementType === 0 ? listModelData.popupElement : null
-//                    width: parent.width
+        delegate: Item {
+
+            height: loader.item ? loader.item.height : 200
+
+            Component.onCompleted: {
+                if (model.popupElementType === 0) {
+                    loader.sourceComponent = textPopupElementView;
+                } else if (model.popupElementType === 1) {
+                } else if (model.popupElementType === 2) {
+                } else if (model.popupElementType === 3) {
+                } else {
                 }
-//                Component.onCompleted: {
-//                    print("height: " + height);
-//                }
+            }
 
-//                MouseArea {
-//                    anchors.fill: parent
-//                    drag.target: parent
+            Loader {
+                id: loader
+            }
 
-//                    onWheel: (wheel) => {
-//                        // Calculate new contentY
-//                        var newContentY = elementsView.contentY - wheel.angleDelta.y;
-
-//                        // Prevent overscrolling
-//                        if (newContentY < 0) {
-//                            newContentY = 0; // Prevent scrolling above the top
-//                        } else if (newContentY > elementsView.contentHeight - elementsView.height) {
-//                            newContentY = elementsView.contentHeight - elementsView.height; // Prevent scrolling below the bottom
-//                        }
-
-//                        // Set the new contentY
-//                        elementsView.contentY = newContentY;
-
-//                        // Prevent default handling to allow ListView to scroll
-//                        wheel.accepted = true;
-//                    }
-
-//                    onClicked: (mouse) => {
-//                        // Allow click events to propagate
-//                        mouse.accepted = false;
-//                    }
-//                }
-//            }
+            Component {
+                id: textPopupElementView
+                TextPopupElementView {
+                    controller: model
+                    width: elementsView.width
+                    height: children.height
+                }
+            }
+        }
     }
 
 
     footer: ColumnLayout {
-        visible: popupView.closeCallback
+        visible: popupView2.closeCallback
         Button {
             text: "Close"
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             onClicked: {
-                if (popupView.closeCallback)
-                    popupView.closeCallback()
+                if (popupView2.closeCallback)
+                    popupView2.closeCallback()
             }
-            Layout.bottomMargin: popupView.spacing
-        }
-    }
-
-    Component {
-        id: textPopupElementView
-        TextPopupElementView {
-            width: parent.width
+            Layout.bottomMargin: popupView2.spacing
         }
     }
 }

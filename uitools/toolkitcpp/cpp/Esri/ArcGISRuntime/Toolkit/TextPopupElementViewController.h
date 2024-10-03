@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2020 Esri
+ *  Copyright 2012-2024 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -40,9 +40,9 @@ class TextPopupElementViewController : public QObject
     Q_PROPERTY(QString text READ text NOTIFY popupElementChanged)
 
 public:
-    Q_INVOKABLE explicit TextPopupElementViewController(QObject *parent = nullptr);
+    explicit TextPopupElementViewController(QObject *parent = nullptr);
+    explicit TextPopupElementViewController(QPointer<PopupElement> textPopupElement, QObject *parent = nullptr);
     ~TextPopupElementViewController() = default;
-    Q_INVOKABLE TextPopupElementViewController(QPointer<PopupElement> textPopupElement, QObject *parent = nullptr);
 
     QString text() const;
     int popupElementType() const;

@@ -1,6 +1,6 @@
 
 /*******************************************************************************
- *  Copyright 2012-2020 Esri
+ *  Copyright 2012-2024 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,36 +16,88 @@
  ******************************************************************************/
 #include "TextPopupElementViewController.h"
 
-//#include <QDebug>
-
 namespace Esri::ArcGISRuntime::Toolkit {
 
+/*!
+  \class Esri::ArcGISRuntime::Toolkit::TextPopupElementViewController
+  \inmodule ArcGISRuntimeToolkit
+  \ingroup ArcGISQtToolkitUiCppControllers
+  \brief In MVC architecture, this is the controller for the corresponding
+  \c TextPopupElementView.
+ */
+
+/*!
+ \brief Constructor
+ \list
+   \li \a parent Parent owning \c QObject.
+ \endlist
+ */
 TextPopupElementViewController::TextPopupElementViewController(QObject *parent)
     : QObject{parent}
 {
 }
 
+  /*!
+  \brief Constructor. Takes a \a PopupElement and \a parent object.
+ */
 TextPopupElementViewController::TextPopupElementViewController(QPointer<PopupElement> textPopupElement, QObject *parent) :
     QObject{parent},
     m_textPopupElement{textPopupElement}
 {
 }
 
+/*!
+  \brief Returns the text of the \c TextPopupElement.
+*/
 QString TextPopupElementViewController::text() const
 {
     return m_textPopupElement ? static_cast<TextPopupElement*>(m_textPopupElement.get())->text() : nullptr;
 }
 
+/*!
+ \brief Returns the PopupElementType of the PopupElement as an int.
+
+  \table
+  \header
+      \li PopupElementType
+      \li Constant
+  \row
+      \li \c Unknown
+      \li \c -1
+  \row
+      \li \c TextPopupElement
+      \li \c 0
+  \row
+      \li \c FieldsPopupElement
+      \li \c 1
+  \row
+      \li \c MediaPopupElement
+      \li \c 2
+  \row
+      \li \c AttachmentsPopupElement
+      \li \c 3
+  \endtable
+
+ */
 int TextPopupElementViewController::popupElementType() const
 {
     return m_textPopupElement ? static_cast<int>(m_textPopupElement->popupElementType()) : -1;
 }
 
+/*!
+  \brief Returns the \c TextPopupElement.
+*/
 QPointer<PopupElement> TextPopupElementViewController::popupElement() const
 {
-    return m_textPopupElement;
+    return m_textPopupElement ? m_textPopupElement : nullptr;
 }
 
+/*!
+  \brief Sets the \c PopupElement.
+  \list
+  \li \a popup To deliver data from.
+  \endlist
+ */
 void TextPopupElementViewController::setPopupElement(QPointer<PopupElement> popupElement)
 {
 
@@ -64,3 +116,8 @@ void TextPopupElementViewController::setPopupElement(QPointer<PopupElement> popu
 }
 
 } // namespace Esri::ArcGISRuntime::Toolkit
+
+/*!
+  \fn void Esri::ArcGISRuntime::Toolkit::TextPopupElementViewController::popupElementChanged()
+  \brief Signal emitted when the \c PopupElement changes.
+ */

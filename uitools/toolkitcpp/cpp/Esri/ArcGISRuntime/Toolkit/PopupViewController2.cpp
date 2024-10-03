@@ -16,7 +16,6 @@
  ******************************************************************************/
 #include "PopupViewController2.h"
 
-#include <QDebug>
 #include <QFuture>
 
 #include "ErrorException.h"
@@ -26,10 +25,7 @@
 #include "PopupElement.h"
 #include "PopupTypes.h"
 
-#include "TextPopupElement.h"
-#include "FieldsPopupElement.h"
 #include "AttachmentsPopupElement.h"
-#include "MediaPopupElement.h"
 
 #include "TextPopupElementViewController.h"
 
@@ -70,30 +66,25 @@ void PopupViewController2::setPopup(Popup* popup)
     m_popup->evaluateExpressionsAsync(this)
         .then([this](const QList<PopupExpressionEvaluation*>&)
               {
-            for ( auto element : m_popup->evaluatedElements())
-            {
-                auto elementType = element->popupElementType();
-                qDebug() << elementType;
-//                m_popupElementsModel->append(new TextPopupElementViewController(element, this));
-                switch (elementType)
+                for (auto element : m_popup->evaluatedElements())
                 {
-                    case PopupElementType::TextPopupElement:
-//                        m_popupElement = element;
-                        m_popupElementsModel->append(new TextPopupElementViewController(element, this));
-//                        emit popupElementChanged();
-                        break;
-                    case PopupElementType::FieldsPopupElement:
-                        break;
-                    case PopupElementType::AttachmentsPopupElement:
-                        break;
-                    case PopupElementType::MediaPopupElement:
-                        break;
-                    default:
-                        break;
+                    auto elementType = element->popupElementType();
+                    switch (elementType)
+                    {
+                        case PopupElementType::TextPopupElement:
+                            m_popupElementsModel->append(new TextPopupElementViewController(element, m_popup));
+                            break;
+                        case PopupElementType::FieldsPopupElement:
+                            break;
+                        case PopupElementType::AttachmentsPopupElement:
+                            break;
+                        case PopupElementType::MediaPopupElement:
+                            break;
+                        default:
+                            break;
+                    }
                 }
-            }
-        })
-        .onFailed(this, [](const ErrorException& error) { qDebug() << "ErrorException: " << error.error().message(); });
+            });
 
     emit popupChanged();
 }
@@ -101,11 +92,6 @@ void PopupViewController2::setPopup(Popup* popup)
 QString PopupViewController2::title() const
 {
     return m_popup ? m_popup->title() : nullptr;
-}
-
-QPointer<PopupElement> PopupViewController2::popupElement() const
-{
-    return m_popupElement;
 }
 
 } // namespace Esri::ArcGISRuntime::Toolkit

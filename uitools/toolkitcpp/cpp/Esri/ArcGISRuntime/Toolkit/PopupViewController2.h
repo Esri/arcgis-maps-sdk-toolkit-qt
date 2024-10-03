@@ -16,13 +16,13 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_POPUPVIEWCONTROLLER2_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_POPUPVIEWCONTROLLER2_H
 
+// C++ API headers
+#include "Popup.h"
+#include "PopupElement.h"
+
 // Qt headers
 #include <QObject>
 #include <QPointer>
-
-// STL headers
-#include <Popup.h>
-#include <PopupElement.h>
 
 // Other headers
 #include "Internal/GenericListModel.h"
@@ -39,18 +39,14 @@ class PopupViewController2 : public QObject
 {
   Q_OBJECT
   Q_PROPERTY(Popup* popup READ popup WRITE setPopup NOTIFY popupChanged)
-//  Q_PROPERTY(QPointer<PopupElement> popupElement READ popupElement NOTIFY popupElementChanged)
-//  Q_PROPERTY(int popupElementType READ popupElementType NOTIFY popupElementTypeChanged)
+  Q_PROPERTY(QAbstractListModel* popupElements READ popupElements NOTIFY popupChanged)
   Q_PROPERTY(QString title READ title NOTIFY popupChanged)
-//  Q_PROPERTY(QAbstractListModel* popupElements READ popupElements CONSTANT)
-    Q_PROPERTY(QAbstractListModel* popupElements READ popupElements NOTIFY popupChanged)
 
 public:
   Q_INVOKABLE explicit PopupViewController2(QObject* parent = nullptr);
   ~PopupViewController2() = default;
 
   Popup* popup() const;
-  QPointer<PopupElement> popupElement() const;
   void setPopup(Popup* popup);
   GenericListModel* popupElements() const;
 
@@ -62,7 +58,6 @@ signals:
 
 private:
   QPointer<Popup> m_popup;
-  QPointer<PopupElement> m_popupElement;
   GenericListModel* m_popupElementsModel = nullptr;
 };
 

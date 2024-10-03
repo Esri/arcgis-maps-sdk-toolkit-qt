@@ -16,13 +16,18 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_POPUPVIEWCONTROLLER_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_POPUPVIEWCONTROLLER_H
 
-// ArcGISRuntime headers
-#include <PopupManager.h>
-
 // Qt headers
 #include <QAbstractListModel>
 #include <QObject>
 #include <QPointer>
+
+// STL headers
+#include <Popup.h>
+#include <PopupElement.h>
+#include <PopupManager.h>
+
+// Other headers
+#include "Internal/GenericListModel.h"
 
 Q_MOC_INCLUDE("PopupAttachmentListModel.h")
 
@@ -37,8 +42,10 @@ namespace Toolkit
 class PopupViewController : public QObject
 {
   Q_OBJECT
+  Q_PROPERTY(Popup* popup READ popup WRITE setPopup NOTIFY popupChanged)
+  Q_PROPERTY(QAbstractListModel* popupElements READ popupElements NOTIFY popupChanged)
   Q_PROPERTY(PopupManager* popupManager READ popupManager WRITE setPopupManager NOTIFY popupManagerChanged)
-  Q_PROPERTY(QString title READ title NOTIFY popupManagerChanged)
+  Q_PROPERTY(QString title READ title NOTIFY titleChanged)
   Q_PROPERTY(QAbstractListModel* displayFields READ displayFields NOTIFY popupManagerChanged)
   Q_PROPERTY(int fieldCount READ fieldCount NOTIFY fieldCountChanged)
   Q_PROPERTY(QAbstractListModel* attachments READ attachments NOTIFY popupManagerChanged)
@@ -51,6 +58,12 @@ public:
   Q_INVOKABLE explicit PopupViewController(QObject* parent = nullptr);
 
   ~PopupViewController();
+
+  Popup* popup() const;
+
+  void setPopup(Popup* popup);
+
+  GenericListModel* popupElements() const;
 
   PopupManager* popupManager() const;
 
@@ -72,7 +85,11 @@ public:
 
 signals:
 
+  void popupChanged();
+
   void popupManagerChanged();
+
+  void titleChanged();
 
   void fieldCountChanged();
 
@@ -89,6 +106,8 @@ private:
 
 private:
   QPointer<PopupManager> m_popupManager;
+  QPointer<Popup> m_popup;
+  GenericListModel* m_popupElementsModel = nullptr;
 };
 
 } // Toolkit
