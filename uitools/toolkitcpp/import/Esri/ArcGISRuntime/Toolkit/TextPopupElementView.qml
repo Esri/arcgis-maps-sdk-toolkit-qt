@@ -21,7 +21,6 @@ import QtQuick.Controls
 import QtQuick.Dialogs
 import QtQuick.Window
 import QtQuick.Layouts
-import QtWebView
 
 Item {
     id: textPopupElementView
