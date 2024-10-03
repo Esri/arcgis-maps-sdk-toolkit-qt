@@ -40,7 +40,7 @@ TextPopupElementViewController::TextPopupElementViewController(QObject *parent)
   /*!
   \brief Constructor. Takes a \a PopupElement and \a parent object.
  */
-TextPopupElementViewController::TextPopupElementViewController(QPointer<PopupElement> textPopupElement, QObject *parent) :
+TextPopupElementViewController::TextPopupElementViewController(QPointer<TextPopupElement> textPopupElement, QObject *parent) :
     QObject{parent},
     m_textPopupElement{textPopupElement}
 {
@@ -51,7 +51,7 @@ TextPopupElementViewController::TextPopupElementViewController(QPointer<PopupEle
 */
 QString TextPopupElementViewController::text() const
 {
-    return m_textPopupElement ? static_cast<TextPopupElement*>(m_textPopupElement.get())->text() : nullptr;
+    return m_textPopupElement ? m_textPopupElement.get()->text() : nullptr;
 }
 
 /*!
@@ -87,7 +87,7 @@ int TextPopupElementViewController::popupElementType() const
 /*!
   \brief Returns the \c TextPopupElement.
 */
-QPointer<PopupElement> TextPopupElementViewController::popupElement() const
+QPointer<TextPopupElement> TextPopupElementViewController::popupElement() const
 {
     return m_textPopupElement ? m_textPopupElement : nullptr;
 }
@@ -98,7 +98,7 @@ QPointer<PopupElement> TextPopupElementViewController::popupElement() const
   \li \a popup To deliver data from.
   \endlist
  */
-void TextPopupElementViewController::setPopupElement(QPointer<PopupElement> popupElement)
+void TextPopupElementViewController::setPopupElement(QPointer<TextPopupElement> popupElement)
 {
 
     if (m_textPopupElement == popupElement)

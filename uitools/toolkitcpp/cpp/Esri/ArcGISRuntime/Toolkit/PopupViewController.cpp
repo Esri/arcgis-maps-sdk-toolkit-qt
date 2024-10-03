@@ -126,7 +126,7 @@ void PopupViewController::setPopup(Popup* popup)
                     switch (elementType)
                     {
                     case PopupElementType::TextPopupElement:
-                        m_popupElementsModel->append(new TextPopupElementViewController(element, m_popup));
+                        m_popupElementsModel->append(new TextPopupElementViewController(static_cast<TextPopupElement*>(element), m_popup));
                         break;
                     case PopupElementType::FieldsPopupElement:
                         break;
