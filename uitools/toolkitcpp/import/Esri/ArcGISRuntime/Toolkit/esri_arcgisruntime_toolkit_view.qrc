@@ -18,10 +18,14 @@
         <file>ScalebarImpl.qml</file>
         <file>SearchView.qml</file>
         <file>SslHandshakeView.qml</file>
+        <file>TextPopupElementView.qml</file>
         <file>TimeSlider.qml</file>
         <file>UserCredentialsView.qml</file>
         <file>UtilityNetworkTrace.qml</file>
         <file>qmldir</file>
-        <file>TextPopupElementView.qml</file>
+        <file>ArcGISAuthenticationView.qml</file>
+        <file>ArcGISOAuth2View.qml</file>
+        <file>ArcGISAuthenticationView_internal.qml</file>
+        <file>ArcGISUserCredentialsView.qml</file>
     </qresource>
 </RCC>

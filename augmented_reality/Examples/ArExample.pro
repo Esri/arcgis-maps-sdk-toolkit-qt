@@ -52,8 +52,8 @@ OTHER_FILES += \
 
 ARCGIS_TOOLKIT_PATH = $$absolute_path($$PWD/../../)
 
-include($$ARCGIS_TOOLKIT_PATH/augmented_reality/ArApi/ArApi.pri) {
-    error(Fails to open $$ARCGIS_TOOLKIT_PATH/augmented_reality/ArApi/ArApi.pri)
+!include($$ARCGIS_TOOLKIT_PATH/augmented_reality/ArApi/ArApi.pri) {
+    error(Failed to open $$ARCGIS_TOOLKIT_PATH/augmented_reality/ArApi/ArApi.pri)
 }
 
 #-------------------------------------------------------------------------------
