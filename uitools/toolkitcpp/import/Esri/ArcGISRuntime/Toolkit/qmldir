@@ -43,7 +43,6 @@ PopupStackView 100.10 PopupStackView.qml
 PopupStackView 200.0 PopupStackView.qml
 PopupView 100.10 PopupView.qml
 PopupView 200.0 PopupView.qml
-PopupView2 200.6 PopupView2.qml
 Scalebar 100.13 Scalebar.qml
 Scalebar 200.0 Scalebar.qml
 internal ScalebarImpl ScalebarImpl.qml
