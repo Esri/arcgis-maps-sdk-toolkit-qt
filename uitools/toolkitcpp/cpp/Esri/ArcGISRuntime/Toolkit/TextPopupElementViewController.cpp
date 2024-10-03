@@ -32,7 +32,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
    \li \a parent Parent owning \c QObject.
  \endlist
  */
-TextPopupElementViewController::TextPopupElementViewController(QObject *parent)
+TextPopupElementViewController::TextPopupElementViewController(QObject* parent)
     : QObject{parent}
 {
 }
@@ -89,7 +89,7 @@ int TextPopupElementViewController::popupElementType() const
 */
 QPointer<TextPopupElement> TextPopupElementViewController::textPopupElement() const
 {
-    return m_textPopupElement ? m_textPopupElement : nullptr;
+    return m_textPopupElement;
 }
 
 /*!
@@ -100,7 +100,6 @@ QPointer<TextPopupElement> TextPopupElementViewController::textPopupElement() co
  */
 void TextPopupElementViewController::setTextPopupElement(QPointer<TextPopupElement> popupElement)
 {
-
     if (m_textPopupElement == popupElement)
         return;
 

@@ -120,10 +120,9 @@ void PopupViewController::setPopup(Popup* popup)
   m_popup->evaluateExpressionsAsync(this)
       .then([this](const QList<PopupExpressionEvaluation*>&)
             {
-                for (auto element : m_popup->evaluatedElements())
+                for (auto* element : m_popup->evaluatedElements())
                 {
-                    auto elementType = element->popupElementType();
-                    switch (elementType)
+                    switch (element->popupElementType())
                     {
                     case PopupElementType::TextPopupElement:
                         m_popupElementsModel->append(new TextPopupElementViewController(static_cast<TextPopupElement*>(element), m_popup));
