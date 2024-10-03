@@ -18,6 +18,7 @@
 
 #include <QAbstractListModel>
 #include <QFuture>
+#include <QDebug>
 
 #include "Popup.h"
 #include "PopupAttachmentListModel.h"
@@ -110,6 +111,9 @@ void PopupViewController::setPopup(Popup* popup)
 
   m_popup = popup;
 
+  if (m_popupManager)
+      qWarning() << "Both Popup and PopupManager have been set. The PopupView will default to PopupView which supports PopupElements.";
+
   if (m_popup)
       connect(m_popup.data(), &QObject::destroyed, this, &PopupViewController::popupChanged);
 
@@ -162,6 +166,9 @@ void PopupViewController::setPopupManager(PopupManager* popupManager)
     disconnect(displayFields, nullptr, this, nullptr);
 
   m_popupManager = popupManager;
+
+  if (m_popup)
+    qWarning() << "Both Popup and PopupManager have been set. The PopupView will default to PopupView which supports PopupElements.";
 
   if (m_popupManager)
     connect(m_popupManager.data(), &QObject::destroyed, this, &PopupViewController::popupManagerChanged);
