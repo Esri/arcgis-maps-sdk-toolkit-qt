@@ -1,4 +1,3 @@
-
 /*******************************************************************************
  *  Copyright 2012-2020 Esri
  *
@@ -30,6 +29,7 @@
 #include "PopupTypes.h"
 
 #include "TextPopupElementViewController.h"
+#include "PopupElementViewItem.h"
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
@@ -54,7 +54,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
  */
 PopupViewController::PopupViewController(QObject* parent):
   QObject(parent),
-  m_popupElementsModel(new GenericListModel(&TextPopupElementViewController::staticMetaObject, this))
+m_popupElementControllerModel(new GenericListModel(&PopupElementViewItem::staticMetaObject, this))
 {
 }
 
@@ -86,14 +86,15 @@ Popup* PopupViewController::popup() const
     Internally, this is a \c GenericListModel with an \c elementType of
     \c TextPopupElementViewController.
  */
-GenericListModel* PopupViewController::popupElements() const
+GenericListModel* PopupViewController::popupElementControllers() const
 {
-  return m_popupElementsModel;
+  return m_popupElementControllerModel;
 }
 
 /*!
-  \brief Sets the \c Popup. Setting this will trigger evaluate expressions on the popup and notify the
-  popup and title have changed.
+  \brief Sets the \c Popup. Setting this will call \l {Esri::ArcGISRuntime::Popup::evaluateExpressionsAsync} {evaluateExpressionsAsync}.
+  Then it will loop through \l {Esri::ArcGISRuntime::Popup::evaluatedElements} {evaluatedElements} and create the corresponding
+  PopupElementController and add it to the \c popupElementControllers. It will notify the popup and title have changed.
   \list
   \li \a popup To deliver data from.
   \endlist
@@ -101,44 +102,48 @@ GenericListModel* PopupViewController::popupElements() const
 void PopupViewController::setPopup(Popup* popup)
 {
   if (m_popup == popup)
-      return;
+    return;
 
   if (m_popup)
   {
-      disconnect(m_popup.data(), nullptr, this, nullptr);
-      m_popupElementsModel->removeRows(0, m_popupElementsModel->rowCount());
+    disconnect(m_popup.data(), nullptr, this, nullptr);
+    m_popupElementControllerModel->removeRows(0, m_popupElementControllerModel->rowCount());
   }
 
   m_popup = popup;
 
   if (m_popupManager)
-      qWarning() << "Both Popup and PopupManager have been set. The PopupView will default to PopupView which supports PopupElements.";
+    qWarning() << "Both Popup and PopupManager have been set. The PopupView will default to "
+                  "PopupView which supports PopupElements.";
 
   if (m_popup)
-      connect(m_popup.data(), &QObject::destroyed, this, &PopupViewController::popupChanged);
+    connect(m_popup.data(), &QObject::destroyed, this, &PopupViewController::popupChanged);
 
-  m_popup->evaluateExpressionsAsync(this)
-      .then([this](const QList<PopupExpressionEvaluation*>&)
-            {
-                for (auto element : m_popup->evaluatedElements())
-                {
-                    auto elementType = element->popupElementType();
-                    switch (elementType)
-                    {
-                    case PopupElementType::TextPopupElement:
-                        m_popupElementsModel->append(new TextPopupElementViewController(static_cast<TextPopupElement*>(element), m_popup));
-                        break;
-                    case PopupElementType::FieldsPopupElement:
-                        break;
-                    case PopupElementType::AttachmentsPopupElement:
-                        break;
-                    case PopupElementType::MediaPopupElement:
-                        break;
-                    default:
-                        break;
-                    }
-                }
-            });
+  m_popup->evaluateExpressionsAsync(this).then([this](const QList<PopupExpressionEvaluation*>&)
+    {
+      for (auto element : m_popup->evaluatedElements())
+      {
+        switch (element->popupElementType())
+        {
+        case Esri::ArcGISRuntime::PopupElementType::TextPopupElement:
+          m_popupElementControllerModel->append(
+            new TextPopupElementViewController(static_cast<TextPopupElement*>(element), m_popup));
+          break;
+        case Esri::ArcGISRuntime::PopupElementType::FieldsPopupElement:
+          Q_UNIMPLEMENTED();
+          break;
+        case Esri::ArcGISRuntime::PopupElementType::AttachmentsPopupElement:
+          Q_UNIMPLEMENTED();
+          break;
+        case Esri::ArcGISRuntime::PopupElementType::MediaPopupElement:
+          Q_UNIMPLEMENTED();
+          break;
+        default:
+          Q_UNIMPLEMENTED();
+          break;
+        }
+      }
+    });
 
   emit popupChanged();
   emit titleChanged();

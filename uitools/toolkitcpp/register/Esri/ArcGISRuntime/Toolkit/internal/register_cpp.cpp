@@ -33,6 +33,7 @@
 #include "LocatorSearchSource.h"
 #include "NorthArrowController.h"
 #include "OverviewMapController.h"
+#include "PopupElementViewItem.h"
 #include "PopupViewController.h"
 #include "ScalebarController.h"
 #include "SearchResult.h"
@@ -49,6 +50,7 @@
 
 // Internal includes
 #include "Internal/BasemapGalleryImageProvider.h"
+#include "Internal/QmlEnums.h"
 
 // ArcGIS includes
 #include <MapQuickView.h>
@@ -209,7 +211,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
     registerComponent<LocatorSearchSource>(CreationType::Uncreatable);
     registerComponent<NorthArrowController>();
     registerComponent<OverviewMapController>();
+    registerComponent<PopupElementViewItem>();
     registerComponent<PopupViewController>();
+    registerComponent<QmlEnums>();
     registerComponent<ScalebarController>();
     registerComponent<SearchResult>();
     registerComponent<SearchSuggestion>();

@@ -19,8 +19,9 @@
 // Qt headers
 #include <QObject>
 #include <QPointer>
+#include "PopupElementViewItem.h"
 
-// STL headers
+// Maps SDK headers
 #include <PopupElement.h>
 #include <TextPopupElement.h>
 
@@ -29,33 +30,25 @@ namespace Esri::ArcGISRuntime {
 class TextPopupElement;
 class PopupElement;
 
-namespace Toolkit
+namespace Toolkit {
+
+class TextPopupElementViewController : public PopupElementViewItem
 {
+  Q_OBJECT
+  Q_PROPERTY(QString text READ text NOTIFY textPopupElementChanged)
 
-class TextPopupElementViewController : public QObject
-{
-    Q_OBJECT
-    Q_PROPERTY(QPointer<TextPopupElement> textPopupElement READ textPopupElement WRITE setTextPopupElement NOTIFY textPopupElementChanged)
-    Q_PROPERTY(int popupElementType READ popupElementType NOTIFY textPopupElementChanged)
-    Q_PROPERTY(QString text READ text NOTIFY textPopupElementChanged)
+  public:
+  explicit TextPopupElementViewController(QObject *parent = nullptr);
+  explicit TextPopupElementViewController(QPointer<TextPopupElement> textPopupElement,
+                                          QObject *parent = nullptr);
+  ~TextPopupElementViewController() = default;
 
-public:
-    explicit TextPopupElementViewController(QObject *parent = nullptr);
-    explicit TextPopupElementViewController(QPointer<TextPopupElement> textPopupElement, QObject *parent = nullptr);
-    ~TextPopupElementViewController() = default;
+  QString text() const;
 
-    QString text() const;
-    int popupElementType() const;
-    QPointer<TextPopupElement> textPopupElement() const;
-    void setTextPopupElement(QPointer<TextPopupElement> popupElement);
-
-signals:
-    void textPopupElementChanged();
-
-private:
-    QPointer<TextPopupElement> m_textPopupElement;
+  signals:
+  void textPopupElementChanged();
 };
 
-} // Toolkit
-} // Esri::ArcGISRuntime
+} // namespace Toolkit
+} // namespace Esri::ArcGISRuntime
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_TEXTPOPUPELEMENTVIEWCONTROLLER_H

@@ -73,6 +73,14 @@ Page {
      */
     property var popupManager: null
 
+    /*!
+       \brief The Popup that controls the information being displayed in
+       the view.
+
+       If both a Popup and PopupManager are provided, the Popup will take priority
+       which utilizes the new PopupElements.
+       \qmlproperty Popup popup
+     */
     property var popup: null
 
 
@@ -239,16 +247,17 @@ Page {
             id: elementsView
 
             anchors.fill: parent
-            model: controller.popupElements
+            model: controller.popupElementControllers
             spacing: 10
             clip: true
 
             delegate: Item {
 
-                height: loader.item ? loader.item.height : 200
+                height: loader.item ? loader.item.height : null
 
+                // Load the correct PopupElement based on the PopupElementType
                 Component.onCompleted: {
-                    if (model.popupElementType === 0) {
+                    if (model.popupElementType === QmlEnums.PopupElementTypeTextPopupElement) {
                         loader.sourceComponent = textPopupElementView;
                     } else if (model.popupElementType === 1) {
                     } else if (model.popupElementType === 2) {
@@ -264,7 +273,7 @@ Page {
                 Component {
                     id: textPopupElementView
                     TextPopupElementView {
-                        controller: model
+                        controller: model.listModelData
                         width: elementsView.width
                         height: children.height
                     }

@@ -40,8 +40,10 @@ HEADERS += $$CPPPATH/ArcGISAuthenticationController.h \
            $$CPPPATH/Internal/GeoViews.h \
            $$CPPPATH/Internal/MetaElement.h \
            $$CPPPATH/Internal/SingleShotConnection.h \
+           $$CPPPATH/Internal//QmlEnums.h \
            $$CPPPATH/NorthArrowController.h \
            $$CPPPATH/OverviewMapController.h \
+           $$CPPPATH/PopupElementViewItem.h \
            $$CPPPATH/PopupViewController.h \
            $$CPPPATH/ScalebarController.h \
            $$CPPPATH/SearchResult.h \
@@ -78,8 +80,10 @@ SOURCES += $$CPPPATH/ArcGISAuthenticationController.cpp \
            $$CPPPATH/Internal/GenericListModel.cpp \
            $$CPPPATH/Internal/GenericTableProxyModel.cpp \
            $$CPPPATH/Internal/MetaElement.cpp \
+           $$CPPPATH/Internal/QmlEnums.cpp \
            $$CPPPATH/NorthArrowController.cpp \
            $$CPPPATH/OverviewMapController.cpp \
+           $$CPPPATH/PopupElementViewItem.cpp \
            $$CPPPATH/PopupViewController.cpp \
            $$CPPPATH/ScalebarController.cpp \
            $$CPPPATH/SearchResult.cpp \
