@@ -32,22 +32,27 @@ namespace Esri::ArcGISRuntime::Toolkit {
  \endlist
  */
 TextPopupElementViewController::TextPopupElementViewController(QObject *parent)
-    : PopupElementViewItem{parent}
+  : PopupElementViewItem{parent}
 {
 }
+
+/*!
+  \brief Destructor.
+  */
+TextPopupElementViewController::~TextPopupElementViewController() = default;
 
 /*!
 \brief Constructor. Takes a \a PopupElement and \a parent object.
   */
 TextPopupElementViewController::TextPopupElementViewController(
     QPointer<TextPopupElement> textPopupElement, QObject *parent)
-    : PopupElementViewItem{QPointer<PopupElement>(textPopupElement), parent}
+  : PopupElementViewItem{QPointer<PopupElement>(textPopupElement), parent}
 {
 }
 
 /*!
   \brief Returns the text of the \c TextPopupElement.
-*/
+  */
 QString TextPopupElementViewController::text() const
 {
   return popupElement() ? static_cast<TextPopupElement *>(popupElement().get())->text() : nullptr;

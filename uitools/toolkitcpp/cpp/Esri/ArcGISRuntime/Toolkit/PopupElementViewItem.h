@@ -20,7 +20,7 @@
 #include <QObject>
 #include <QPointer>
 
-// STL headers
+// Maps SDK headers
 #include <PopupElement.h>
 #include <PopupTypes.h>
 
@@ -42,7 +42,7 @@ class PopupElementViewItem : public QObject
 public:
   explicit PopupElementViewItem(QObject *parent = nullptr);
   explicit PopupElementViewItem(QPointer<PopupElement> popupElement, QObject *parent = nullptr);
-  ~PopupElementViewItem() = default;
+  ~PopupElementViewItem();
 
   QmlEnums::PopupElementType popupElementType() const;
   QPointer<PopupElement> popupElement() const;

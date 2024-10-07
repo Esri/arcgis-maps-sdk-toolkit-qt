@@ -20,9 +20,13 @@
     \internal
     \class QmlEnums
     \brief This class exposes `QmlEnums.PopupElementType` such that it is accessible to QML.
-*/
-
+ */
 QmlEnums::QmlEnums(QObject* parent) :
-    QObject(parent)
+  QObject(parent)
 {
 }
+
+/*!
+  \brief Destructor.
+  */
+QmlEnums::~QmlEnums() = default;

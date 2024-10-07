@@ -20,15 +20,15 @@
 // Qt headers
 #include <QObject>
 
-// STL headers
+// Maps SDK headers
 #include <PopupTypes.h>
 
 class QmlEnums : public QObject
 {
   Q_OBJECT
-  public:
+public:
   Q_INVOKABLE explicit QmlEnums(QObject* parent = nullptr);
-  ~QmlEnums() = default;
+  ~QmlEnums();
 
   enum class PopupElementType
   {

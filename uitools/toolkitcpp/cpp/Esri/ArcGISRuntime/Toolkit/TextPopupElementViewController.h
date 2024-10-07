@@ -37,15 +37,15 @@ class TextPopupElementViewController : public PopupElementViewItem
   Q_OBJECT
   Q_PROPERTY(QString text READ text NOTIFY textPopupElementChanged)
 
-  public:
+public:
   explicit TextPopupElementViewController(QObject *parent = nullptr);
   explicit TextPopupElementViewController(QPointer<TextPopupElement> textPopupElement,
                                           QObject *parent = nullptr);
-  ~TextPopupElementViewController() = default;
+  ~TextPopupElementViewController();
 
   QString text() const;
 
-  signals:
+signals:
   void textPopupElementChanged();
 };
 

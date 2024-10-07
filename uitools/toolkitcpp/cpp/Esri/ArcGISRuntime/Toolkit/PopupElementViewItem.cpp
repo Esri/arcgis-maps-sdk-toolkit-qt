@@ -52,6 +52,11 @@ PopupElementViewItem::PopupElementViewItem(QPointer<PopupElement> popupElement, 
 }
 
 /*!
+  \brief Destructor.
+*/
+PopupElementViewItem::~PopupElementViewItem() = default;
+
+/*!
  \brief Returns the c/ PopupElementType of the c/ PopupElement.
  */
 QmlEnums::PopupElementType PopupElementViewItem::popupElementType() const

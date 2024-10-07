@@ -54,7 +54,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
  */
 PopupViewController::PopupViewController(QObject* parent):
   QObject(parent),
-m_popupElementControllerModel(new GenericListModel(&PopupElementViewItem::staticMetaObject, this))
+  m_popupElementControllerModel(new GenericListModel(&PopupElementViewItem::staticMetaObject, this))
 {
 }
 
@@ -120,14 +120,14 @@ void PopupViewController::setPopup(Popup* popup)
     connect(m_popup.data(), &QObject::destroyed, this, &PopupViewController::popupChanged);
 
   m_popup->evaluateExpressionsAsync(this).then([this](const QList<PopupExpressionEvaluation*>&)
+  {
+    for (auto element : m_popup->evaluatedElements())
     {
-      for (auto element : m_popup->evaluatedElements())
+      switch (element->popupElementType())
       {
-        switch (element->popupElementType())
-        {
         case Esri::ArcGISRuntime::PopupElementType::TextPopupElement:
           m_popupElementControllerModel->append(
-            new TextPopupElementViewController(static_cast<TextPopupElement*>(element), m_popup));
+                new TextPopupElementViewController(static_cast<TextPopupElement*>(element), m_popup));
           break;
         case Esri::ArcGISRuntime::PopupElementType::FieldsPopupElement:
           Q_UNIMPLEMENTED();
@@ -141,9 +141,9 @@ void PopupViewController::setPopup(Popup* popup)
         default:
           Q_UNIMPLEMENTED();
           break;
-        }
       }
-    });
+    }
+  });
 
   emit popupChanged();
   emit titleChanged();
