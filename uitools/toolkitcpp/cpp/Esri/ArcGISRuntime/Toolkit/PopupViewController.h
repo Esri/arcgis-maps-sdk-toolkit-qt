@@ -43,7 +43,7 @@ class PopupViewController : public QObject
 {
   Q_OBJECT
   Q_PROPERTY(Popup* popup READ popup WRITE setPopup NOTIFY popupChanged)
-  Q_PROPERTY(QAbstractListModel* popupElements READ popupElements NOTIFY popupChanged)
+  Q_PROPERTY(QAbstractListModel* popupElementControllers READ popupElementControllers NOTIFY popupChanged)
   Q_PROPERTY(PopupManager* popupManager READ popupManager WRITE setPopupManager NOTIFY popupManagerChanged)
   Q_PROPERTY(QString title READ title NOTIFY titleChanged)
   Q_PROPERTY(QAbstractListModel* displayFields READ displayFields NOTIFY popupManagerChanged)
@@ -63,7 +63,7 @@ public:
 
   void setPopup(Popup* popup);
 
-  GenericListModel* popupElements() const;
+  GenericListModel* popupElementControllers() const;
 
   PopupManager* popupManager() const;
 
@@ -107,7 +107,7 @@ private:
 private:
   QPointer<PopupManager> m_popupManager;
   QPointer<Popup> m_popup;
-  GenericListModel* m_popupElementsModel = nullptr;
+  GenericListModel* m_popupElementControllerModel = nullptr;
 };
 
 } // Toolkit

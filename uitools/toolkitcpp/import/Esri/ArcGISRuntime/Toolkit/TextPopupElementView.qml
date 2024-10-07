@@ -24,15 +24,14 @@ import QtQuick.Layouts
 
 Item {
     id: textPopupElementView
-    property var popupElement: null
 
+    /*!
+      \qmlproperty TextPopupElementView controller
+      \brief The Controller handles reading from the TextPopupElement.
+
+      The CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::TextPopupElementViewController}{here}.
+    */
     property var controller: null
-
-    Binding {
-        target: controller
-        property: "popupElement"
-        value: textPopupElementView.popupElement
-    }
 
     implicitHeight: richText.implicitHeight
     Rectangle {
@@ -40,7 +39,7 @@ Item {
 
         Text {
             id: richText
-            text: controller.text
+            text: controller ? controller.text : ""
             textFormat: Text.RichText
             wrapMode: Text.WordWrap
             anchors.fill: parent
