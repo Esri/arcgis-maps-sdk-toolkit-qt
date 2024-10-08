@@ -16,10 +16,12 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_TEXTPOPUPELEMENTVIEWCONTROLLER_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_TEXTPOPUPELEMENTVIEWCONTROLLER_H
 
+// Toolkit headers
+#include "PopupElementViewItem.h"
+
 // Qt headers
 #include <QObject>
 #include <QPointer>
-#include "PopupElementViewItem.h"
 
 // Maps SDK headers
 #include <PopupElement.h>
