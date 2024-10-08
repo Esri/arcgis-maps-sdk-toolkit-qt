@@ -18,9 +18,6 @@ import Esri.ArcGISRuntime.Toolkit.Controller
 
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Dialogs
-import QtQuick.Window
-import QtQuick.Layouts
 
 Item {
     id: textPopupElementView
@@ -42,10 +39,6 @@ Item {
         wrapMode: Text.WordWrap
         anchors.fill: parent
         padding: 10
-
-        onColorChanged: {
-            print(richText.color)
-        }
 
         onLinkActivated: (link) => {
             if (link !== "" && link !== undefined) {
