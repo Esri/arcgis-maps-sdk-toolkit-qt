@@ -34,26 +34,22 @@ Item {
     property var controller: null
 
     implicitHeight: richText.implicitHeight
-    Rectangle {
+
+    Label {
+        id: richText
+        text: controller ? controller.text : ""
+        textFormat: Text.RichText
+        wrapMode: Text.WordWrap
         anchors.fill: parent
+        padding: 10
 
-        Text {
-            id: richText
-            text: controller ? controller.text : ""
-            textFormat: Text.RichText
-            wrapMode: Text.WordWrap
-            anchors.fill: parent
-            padding: 10
+        onColorChanged: {
+            print(richText.color)
+        }
 
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    let link = richText.hoveredLink;
-
-                    if (link !== "" && link !== undefined) {
-                        Qt.openUrlExternally(link);
-                    }
-                }
+        onLinkActivated: (link) => {
+            if (link !== "" && link !== undefined) {
+                Qt.openUrlExternally(link);
             }
         }
     }
