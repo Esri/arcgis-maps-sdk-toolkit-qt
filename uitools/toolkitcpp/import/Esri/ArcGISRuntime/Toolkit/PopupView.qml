@@ -83,7 +83,6 @@ Page {
      */
     property var popup: null
 
-
     /*!
       \qmlproperty PopupViewController controller
       \brief The Controller handles reading from the PopupManager and monitoring
@@ -92,7 +91,6 @@ Page {
       The CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::PopupViewController}{here}.
     */
     property var controller: PopupViewController {}
-
 
     /*!
        \brief Callback function called when the close button is clicked. When
@@ -103,7 +101,6 @@ Page {
     property var closeCallback: function() {
         popupView.visible = false;
     }
-
 
     /*!
        \qmlsignal PopupView::attachmentThumbnailClicked(var index)
@@ -250,6 +247,7 @@ Page {
             model: controller.popupElementControllers
             spacing: 10
             clip: true
+            focus: true
 
             delegate: Item {
 
@@ -259,7 +257,8 @@ Page {
                 Component.onCompleted: {
                     if (model.popupElementType === QmlEnums.PopupElementTypeTextPopupElement) {
                         loader.sourceComponent = textPopupElementView;
-                    } else if (model.popupElementType === 1) {
+                    } else if (model.popupElementType === QmlEnums.PopupElementTypeFieldsPopupElement) {
+                        loader.sourceComponent = fieldsPopupElementView;
                     } else if (model.popupElementType === 2) {
                     } else if (model.popupElementType === 3) {
                     } else {
@@ -273,9 +272,21 @@ Page {
                 Component {
                     id: textPopupElementView
                     TextPopupElementView {
-                        controller: model.listModelData
+                        // controller: elementsView.model.listModelData
+                        controller: listModelData
                         width: elementsView.width
                         height: children.height
+                    }
+                }
+
+                Component {
+                    id: fieldsPopupElementView
+                    FieldsPopupElementView {
+                        // controller: elementsView.model.listModelData
+                        controller: listModelData
+                        width: elementsView.width
+                        // height: children.height
+                        // anchors.fill: parent
                     }
                 }
             }

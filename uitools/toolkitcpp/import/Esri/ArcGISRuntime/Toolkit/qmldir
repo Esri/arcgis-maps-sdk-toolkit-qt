@@ -36,6 +36,7 @@ ClientCertificateView 100.10 ClientCertificateView.qml
 ClientCertificateView 200.0 ClientCertificateView.qml
 CoordinateConversion 100.10 CoordinateConversion.qml
 CoordinateConversion 200.0 CoordinateConversion.qml
+FieldsPopupElementView 200.6 FieldsPopupElementView.qml
 FloorFilter 100.14 FloorFilter.qml
 FloorFilter 200.0 FloorFilter.qml
 internal FlashImage FlashImage.qml

@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2020 Esri
  *
@@ -28,6 +29,8 @@
 #include "PopupManager.h"
 #include "PopupTypes.h"
 
+// Toolkit headers
+#include "FieldsPopupElementViewController.h"
 #include "TextPopupElementViewController.h"
 #include "PopupElementViewItem.h"
 
@@ -130,7 +133,8 @@ void PopupViewController::setPopup(Popup* popup)
                 new TextPopupElementViewController(static_cast<TextPopupElement*>(element), m_popup));
           break;
         case Esri::ArcGISRuntime::PopupElementType::FieldsPopupElement:
-          Q_UNIMPLEMENTED();
+          m_popupElementControllerModel->append(
+                new FieldsPopupElementViewController(static_cast<FieldsPopupElement*>(element), m_popup));
           break;
         case Esri::ArcGISRuntime::PopupElementType::AttachmentsPopupElement:
           Q_UNIMPLEMENTED();
