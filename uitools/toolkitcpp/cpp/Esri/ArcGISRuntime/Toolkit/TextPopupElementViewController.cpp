@@ -42,7 +42,7 @@ TextPopupElementViewController::TextPopupElementViewController(QObject *parent)
 TextPopupElementViewController::~TextPopupElementViewController() = default;
 
 /*!
-\brief Constructor. Takes a \a PopupElement and \a parent object.
+\brief Constructor. Takes a \a textPopupElement and \a parent object.
   */
 TextPopupElementViewController::TextPopupElementViewController(
     QPointer<TextPopupElement> textPopupElement, QObject *parent)

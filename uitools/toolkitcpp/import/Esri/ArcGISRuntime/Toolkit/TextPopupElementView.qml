@@ -26,7 +26,7 @@ Item {
       \qmlproperty TextPopupElementView controller
       \brief The Controller handles reading from the TextPopupElement.
 
-      The CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::TextPopupElementViewController}{here}.
+      \sa Esri::ArcGISRuntime::Toolkit::TextPopupElementViewController
     */
     property var controller: null
 
