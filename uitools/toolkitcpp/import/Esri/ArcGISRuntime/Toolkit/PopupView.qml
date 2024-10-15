@@ -249,6 +249,11 @@ Page {
             clip: true
             focus: true
 
+            // Method to scroll the ListView
+            // function scroll(delta) {
+            //     contentY += delta;
+            // }
+
             delegate: Item {
 
                 height: loader.item ? loader.item.height : null
@@ -269,6 +274,10 @@ Page {
                     id: loader
                 }
 
+                // MenuSeparator {
+                //     width: elementsView.width
+                // }
+
                 Component {
                     id: textPopupElementView
                     TextPopupElementView {
@@ -279,14 +288,37 @@ Page {
                     }
                 }
 
+                // Component {
+                //     id: fieldsPopupElementView
+                //     FieldsPopupElementView {
+                //         // controller: elementsView.model.listModelData
+                //         controller: listModelData
+                //         width: elementsView.width
+                //         // height: children.height
+                //         // anchors.fill: parent
+                //     }
+                // }
+
                 Component {
                     id: fieldsPopupElementView
-                    FieldsPopupElementView {
-                        // controller: elementsView.model.listModelData
-                        controller: listModelData
-                        width: elementsView.width
-                        // height: children.height
-                        // anchors.fill: parent
+                    Column {
+                        // padding: 10
+                        MenuSeparator {
+                            width: elementsView.width
+                        }
+
+                        FieldsPopupElementView {
+                            // controller: elementsView.model.listModelData
+                            controller: listModelData
+                            width: elementsView.width
+                            // height: children.height
+                            // anchors.fill: parent
+                        }
+
+                        MenuSeparator {
+                            width: elementsView.width
+                        }
+
                     }
                 }
             }

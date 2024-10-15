@@ -20,64 +20,9 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-// Item {
-//     property var controller: null
-//     Flickable {
-//         id: flickable
-//         clip: true
-//         // contentHeight: fieldsLayout.height
-//         anchors.top: parent.top
-//         anchors.right: parent.right
-//         anchors.bottom: parent.bottom
-//         width: 300
-
-
-//         ColumnLayout {
-//             id: fieldsLayout
-//             anchors {
-//                 left: parent.left
-//                 right: parent.right
-//             }
-
-//             // We must account for what is visible, including title headers as rows.
-//             // Field names
-//             Repeater {
-//                 model: ListModel {
-//                     ListElement { label: "Test1" }
-//                     ListElement { label: "Test2" }
-//                     ListElement { label: "Test3" }
-//                     ListElement { label: "Test4" }
-//                     ListElement { label: "Test5" }
-//                 }
-//                 Label {
-//                     // text: label ?? fieldName ?? ""
-//                     // Layout.maximumWidth: flickable.width / 2
-//                     // wrapMode: Text.Wrap
-//                     // font: popupView.font
-//                     Label {
-//                         id: testText
-//                         text: model.label ? model.label : ""
-//                         Layout.maximumWidth: parent.width
-//                         padding: 10
-//                     }
-//                 }
-//             }
-//         }
-//     }
-// }
-
-// Item {
-//     property var controller: null
-//     // height: fieldsPopupElementView.height
-//     // width: parent.width
-//     anchors.fill: parent
-
-// works with generic LM
 ListView {
-    // id: lview
     id: fieldsPopupElementView
 
-    // height: 600
     height: contentHeight
 
     property var controller: null
@@ -99,39 +44,53 @@ ListView {
         wrapMode: Text.WordWrap
         textFormat: Text.AutoText
         width: parent.width
+        font.pixelSize: 20
+        rightPadding: 10
+        leftPadding: 10
     }
 
     delegate: Column {
         width: parent.width
-        // anchors.margins: 50
-        // Layout.maximumWidth: parent.width
-            Label {
-                // id: testText
-                text: modelData["labels"]/* ? model.label : ""*/
-                wrapMode: Text.WordWrap
-                textFormat: Text.AutoText
+
+            MenuSeparator {
                 width: parent.width
-                // anchors.fill: parent
-                // padding: 5
+                leftPadding: 20
             }
             Label {
                 // id: testText
-                text: modelData["formattedValues"]/* ? model.label : ""*/
+                text: modelData["labels"]
                 wrapMode: Text.WordWrap
                 textFormat: Text.AutoText
                 width: parent.width
+                color: "grey"
+                font.pixelSize: 15
+                rightPadding: 10
+                leftPadding: 20
+            }
+            Label {
+                // id: testText
+                text: modelData["formattedValues"]
+                wrapMode: Text.WordWrap
+                textFormat: Text.AutoText
+                width: parent.width
+                rightPadding: 10
+                leftPadding: 20
                 Component.onCompleted: {
-                    print(parent);
-                    print("LabelPwidth: " + parent.width);
-                    // print("LabelPheight: " + parent.height);
+                    if (text.startsWith("http")) {
+                        let link = text;
+                        text = `<a href="${link}" target="_blank">View</a>`;
+                        textFormat = Text.RichText;
+                    }
                 }
-                // anchors.fill: parent
-                // padding: 5
+                onLinkActivated: (link) => {
+                    if (link !== "" && link !== undefined) {
+                        Qt.openUrlExternally(link);
+                    }
+                }
+                    // print(parent);
+                    // print("LabelPwidth: " + parent.width);
             }
-            Component.onCompleted: {
-                // print("delegate - Pwidth: " + parent.width);
-                print(parent);
-            }
+
     }
 
     Component.onCompleted: {
@@ -142,6 +101,22 @@ ListView {
     onContentHeightChanged: {
         print("onContentHeightChanged: " + fieldsPopupElementView.contentHeight)
     }
+
+    // MouseArea {
+    //     anchors.fill: parent
+    //     onWheel: (wheel) => {
+    //         // console.log("Mouse wheel:", wheel.angleDelta.y)
+    //         // Emit a signal or call a method on the outer ListView
+    //         // if (wheel.angleDelta.y < 0) {
+    //         //     // Scroll outer down
+    //         //     elementsView.scroll(wheel.angleDelta.y);
+    //         // } else {
+    //         //     // Scroll outer up
+    //         //     elementsView.scroll(wheel.angleDelta.y);
+    //         // }
+    //         elementsView.scroll((-1) * wheel.angleDelta.y);
+    //     }
+    // }
 }
 // }
 
