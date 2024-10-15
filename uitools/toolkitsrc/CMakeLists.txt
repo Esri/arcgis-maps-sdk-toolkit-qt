@@ -12,15 +12,42 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 cmake_minimum_required(VERSION 3.5)
-project(libtoolkitcpp VERSION 1.0 LANGUAGES CXX)
+
+# Extract the name of the parent directory
+get_filename_component(PARENT_DIR ${CMAKE_CURRENT_SOURCE_DIR} NAME)
+
+# Check if PARENT_DIR contains "Widget"
+set(FOUND_INDEX -1)
+string(FIND "${PARENT_DIR}" "Widget" FOUND_INDEX)
+
+# Set IS_WIDGET to false by default
+set(IS_WIDGET false)
+
+# Set IS_WIDGET to true if "Widget" is found in PARENT_DIR
+if(${FOUND_INDEX} GREATER -1)
+# Set the project name to "lib" + parent directory name
+set(PROJECT_LIB "lib${PARENT_DIR}")
+
+# Use the variable in the project command
+project(${PROJECT_LIB} VERSION 1.0 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui QuickControls2 Svg WebView)
+# Use the variable in the project command
+project(${PROJECT_LIB} VERSION 1.0 LANGUAGES CXX)
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+if(IS_WIDGET)
+    set(CMAKE_AUTOUIC ON)
+    find_package(Qt6 REQUIRED COMPONENTS Core Gui Svg WebEngineWidgets Widgets)
+else()
+    find_package(Qt6 REQUIRED COMPONENTS Core Gui QuickControls2 Svg WebView)
+endif()
 
 qt_standard_project_setup()
 
-qt_add_library(libtoolkitcpp STATIC
+qt_add_library(${PROJECT_LIB} STATIC
     cpp/Esri/ArcGISRuntime/Toolkit/AuthenticationController.cpp cpp/Esri/ArcGISRuntime/Toolkit/AuthenticationController.h
     cpp/Esri/ArcGISRuntime/Toolkit/BasemapGalleryController.cpp cpp/Esri/ArcGISRuntime/Toolkit/BasemapGalleryController.h
     cpp/Esri/ArcGISRuntime/Toolkit/BasemapGalleryItem.cpp cpp/Esri/ArcGISRuntime/Toolkit/BasemapGalleryItem.h
@@ -63,27 +90,74 @@ qt_add_library(libtoolkitcpp STATIC
     register/Esri/ArcGISRuntime/Toolkit/internal/register_cpp.cpp register/Esri/ArcGISRuntime/Toolkit/internal/register_cpp.h
     register/Esri/ArcGISRuntime/Toolkit/register.cpp register/Esri/ArcGISRuntime/Toolkit/register.h
 )
+# Add widget-related source files if IS_WIDGET is true
+if(IS_WIDGET)
+    target_sources(${PROJECT_LIB} PRIVATE
+        widgets/Esri/ArcGISRuntime/Toolkit/AuthenticationView.cpp widgets/Esri/ArcGISRuntime/Toolkit/AuthenticationView.h widgets/Esri/ArcGISRuntime/Toolkit/AuthenticationView.ui
+        widgets/Esri/ArcGISRuntime/Toolkit/BasemapGallery.cpp widgets/Esri/ArcGISRuntime/Toolkit/BasemapGallery.h widgets/Esri/ArcGISRuntime/Toolkit/BasemapGallery.ui
+        widgets/Esri/ArcGISRuntime/Toolkit/BookmarksView.cpp widgets/Esri/ArcGISRuntime/Toolkit/BookmarksView.h widgets/Esri/ArcGISRuntime/Toolkit/BookmarksView.ui
+        widgets/Esri/ArcGISRuntime/Toolkit/CoordinateConversion.cpp widgets/Esri/ArcGISRuntime/Toolkit/CoordinateConversion.h widgets/Esri/ArcGISRuntime/Toolkit/CoordinateConversion.ui
+        widgets/Esri/ArcGISRuntime/Toolkit/FloorFilter.cpp widgets/Esri/ArcGISRuntime/Toolkit/FloorFilter.h widgets/Esri/ArcGISRuntime/Toolkit/FloorFilter.ui
+        widgets/Esri/ArcGISRuntime/Toolkit/Internal/ClientCertificatePasswordDialog.cpp widgets/Esri/ArcGISRuntime/Toolkit/Internal/ClientCertificatePasswordDialog.h widgets/Esri/ArcGISRuntime/Toolkit/Internal/ClientCertificatePasswordDialog.ui
+        widgets/Esri/ArcGISRuntime/Toolkit/Internal/ClientCertificateView.cpp widgets/Esri/ArcGISRuntime/Toolkit/Internal/ClientCertificateView.h widgets/Esri/ArcGISRuntime/Toolkit/Internal/ClientCertificateView.ui
+        widgets/Esri/ArcGISRuntime/Toolkit/Internal/CoordinateEditDelegate.cpp widgets/Esri/ArcGISRuntime/Toolkit/Internal/CoordinateEditDelegate.h
+        widgets/Esri/ArcGISRuntime/Toolkit/Internal/Flash.cpp widgets/Esri/ArcGISRuntime/Toolkit/Internal/Flash.h
+        widgets/Esri/ArcGISRuntime/Toolkit/Internal/OAuth2View.cpp widgets/Esri/ArcGISRuntime/Toolkit/Internal/OAuth2View.h widgets/Esri/ArcGISRuntime/Toolkit/Internal/OAuth2View.ui
+        widgets/Esri/ArcGISRuntime/Toolkit/Internal/SslHandshakeView.cpp widgets/Esri/ArcGISRuntime/Toolkit/Internal/SslHandshakeView.h widgets/Esri/ArcGISRuntime/Toolkit/Internal/SslHandshakeView.ui
+        widgets/Esri/ArcGISRuntime/Toolkit/Internal/UserCredentialView.cpp widgets/Esri/ArcGISRuntime/Toolkit/Internal/UserCredentialView.h widgets/Esri/ArcGISRuntime/Toolkit/Internal/UserCredentialView.ui
+        widgets/Esri/ArcGISRuntime/Toolkit/NorthArrow.cpp widgets/Esri/ArcGISRuntime/Toolkit/NorthArrow.h
+        widgets/Esri/ArcGISRuntime/Toolkit/OverviewMap.cpp widgets/Esri/ArcGISRuntime/Toolkit/OverviewMap.h widgets/Esri/ArcGISRuntime/Toolkit/OverviewMap.ui
+    )
+endif()
 
-target_include_directories(libtoolkitcpp PUBLIC
+target_include_directories(${PROJECT_LIB} PUBLIC
     cpp
     cpp/Esri/ArcGISRuntime/Toolkit
-    register
-    register/Esri/ArcGISRuntime/Toolkit
 )
 
-target_compile_definitions(libtoolkitcpp PRIVATE
-    CPP_ARCGISRUNTIME_TOOLKIT
-    MAPS_SDK_QT_TOOLKIT
-)
+if(IS_WIDGET)
+    target_include_directories(${PROJECT_LIB} PUBLIC
+        widgets
+        widgets/Esri/ArcGISRuntime/Toolkit
+    )
+else()
+    target_include_directories(${PROJECT_LIB} PUBLIC
+        register
+        register/Esri/ArcGISRuntime/Toolkit
+    )
+endif()
 
-target_link_libraries(libtoolkitcpp PRIVATE
+target_compile_definitions(${PROJECT_LIB} PRIVATE)
+
+if(IS_WIDGET)
+    target_compile_definitions(${PROJECT_LIB} PRIVATE
+        WIDGETS_ARCGISRUNTIME_TOOLKIT
+    )
+else()
+    target_compile_definitions(${PROJECT_LIB} PRIVATE
+        CPP_ARCGISRUNTIME_TOOLKIT
+        MAPS_SDK_QT_TOOLKIT
+    )
+endif()
+
+target_link_libraries(${PROJECT_LIB} PRIVATE
     Qt6::Core
     Qt6::Gui
-    Qt6::QuickControls2
     Qt6::Svg
-    Qt6::WebView
     ArcGISRuntime::Cpp
 )
+
+if(IS_WIDGET)
+    target_link_libraries(${PROJECT_LIB} PRIVATE
+        Qt6::WebEngineWidgets
+        Qt6::Widgets
+    )
+else()
+    target_link_libraries(${PROJECT_LIB} PRIVATE
+        Qt6::QuickControls2
+        Qt6::WebView
+    )
+endif()
 
 set(esri_arcgisruntime_toolkit_images_resource_files
     "images/basemap.svg"
@@ -114,7 +188,7 @@ set(esri_arcgisruntime_toolkit_images_resource_files
     "images/zoom-to-object.svg"
 )
 
-qt_add_resources(libtoolkitcpp "esri_arcgisruntime_toolkit_images"
+qt_add_resources(${PROJECT_LIB}  "esri_arcgisruntime_toolkit_images"
     PREFIX
         "/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images"
     BASE
@@ -123,45 +197,47 @@ qt_add_resources(libtoolkitcpp "esri_arcgisruntime_toolkit_images"
         ${esri_arcgisruntime_toolkit_images_resource_files}
 )
 
-set(esri_arcgisruntime_toolkit_view_resource_files
-    "import/Esri/ArcGISRuntime/Toolkit/AuthenticationView.qml"
-    "import/Esri/ArcGISRuntime/Toolkit/BasemapGallery.qml"
-    "import/Esri/ArcGISRuntime/Toolkit/BookmarksView.qml"
-    "import/Esri/ArcGISRuntime/Toolkit/Callout.qml"
-    "import/Esri/ArcGISRuntime/Toolkit/ClientCertificateView.qml"
-    "import/Esri/ArcGISRuntime/Toolkit/CoordinateConversion.qml"
-    "import/Esri/ArcGISRuntime/Toolkit/CurrentVersion.qml"
-    "import/Esri/ArcGISRuntime/Toolkit/FlashImage.qml"
-    "import/Esri/ArcGISRuntime/Toolkit/FloorFilter.qml"
-    "import/Esri/ArcGISRuntime/Toolkit/NorthArrow.qml"
-    "import/Esri/ArcGISRuntime/Toolkit/OAuth2View.qml"
-    "import/Esri/ArcGISRuntime/Toolkit/OverviewMap.qml"
-    "import/Esri/ArcGISRuntime/Toolkit/PopupStackView.qml"
-    "import/Esri/ArcGISRuntime/Toolkit/PopupView.qml"
-    "import/Esri/ArcGISRuntime/Toolkit/Scalebar.qml"
-    "import/Esri/ArcGISRuntime/Toolkit/ScalebarImpl.qml"
-    "import/Esri/ArcGISRuntime/Toolkit/SearchView.qml"
-    "import/Esri/ArcGISRuntime/Toolkit/SslHandshakeView.qml"
-    "import/Esri/ArcGISRuntime/Toolkit/TimeSlider.qml"
-    "import/Esri/ArcGISRuntime/Toolkit/UserCredentialsView.qml"
-    "import/Esri/ArcGISRuntime/Toolkit/UtilityNetworkTrace.qml"
-    "import/Esri/ArcGISRuntime/Toolkit/qmldir"
-)
+if(NOT IS_WIDGET)
+    set(esri_arcgisruntime_toolkit_view_resource_files
+        "import/Esri/ArcGISRuntime/Toolkit/AuthenticationView.qml"
+        "import/Esri/ArcGISRuntime/Toolkit/BasemapGallery.qml"
+        "import/Esri/ArcGISRuntime/Toolkit/BookmarksView.qml"
+        "import/Esri/ArcGISRuntime/Toolkit/Callout.qml"
+        "import/Esri/ArcGISRuntime/Toolkit/ClientCertificateView.qml"
+        "import/Esri/ArcGISRuntime/Toolkit/CoordinateConversion.qml"
+        "import/Esri/ArcGISRuntime/Toolkit/CurrentVersion.qml"
+        "import/Esri/ArcGISRuntime/Toolkit/FlashImage.qml"
+        "import/Esri/ArcGISRuntime/Toolkit/FloorFilter.qml"
+        "import/Esri/ArcGISRuntime/Toolkit/NorthArrow.qml"
+        "import/Esri/ArcGISRuntime/Toolkit/OAuth2View.qml"
+        "import/Esri/ArcGISRuntime/Toolkit/OverviewMap.qml"
+        "import/Esri/ArcGISRuntime/Toolkit/PopupStackView.qml"
+        "import/Esri/ArcGISRuntime/Toolkit/PopupView.qml"
+        "import/Esri/ArcGISRuntime/Toolkit/Scalebar.qml"
+        "import/Esri/ArcGISRuntime/Toolkit/ScalebarImpl.qml"
+        "import/Esri/ArcGISRuntime/Toolkit/SearchView.qml"
+        "import/Esri/ArcGISRuntime/Toolkit/SslHandshakeView.qml"
+        "import/Esri/ArcGISRuntime/Toolkit/TimeSlider.qml"
+        "import/Esri/ArcGISRuntime/Toolkit/UserCredentialsView.qml"
+        "import/Esri/ArcGISRuntime/Toolkit/UtilityNetworkTrace.qml"
+        "import/Esri/ArcGISRuntime/Toolkit/qmldir"
+    )
 
-qt_add_resources(libtoolkitcpp "esri_arcgisruntime_toolkit_view"
-    PREFIX
-        "/esri.com/imports/Esri/ArcGISRuntime/Toolkit"
-    BASE
-        "import/Esri/ArcGISRuntime/Toolkit"
-    FILES
-        ${esri_arcgisruntime_toolkit_view_resource_files}
-)
+    qt_add_resources(${PROJECT_LIB}  "esri_arcgisruntime_toolkit_view"
+        PREFIX
+            "/esri.com/imports/Esri/ArcGISRuntime/Toolkit"
+        BASE
+            "import/Esri/ArcGISRuntime/Toolkit"
+        FILES
+            ${esri_arcgisruntime_toolkit_view_resource_files}
+    )
 
-list(APPEND QML_IMPORT_PATH ${CMAKE_CURRENT_LIST_DIR}/import)
+    list(APPEND QML_IMPORT_PATH ${CMAKE_CURRENT_LIST_DIR}/import)
 
-list(REMOVE_DUPLICATES QML_IMPORT_PATH)
+    list(REMOVE_DUPLICATES QML_IMPORT_PATH)
 
-set(QML_IMPORT_PATH ${QML_IMPORT_PATH}
-    CACHE STRING "ArcGISRuntime toolkit qml import paths"
-    FORCE
-)
+    set(QML_IMPORT_PATH ${QML_IMPORT_PATH}
+        CACHE STRING "ArcGISRuntime toolkit qml import paths"
+        FORCE
+    )
+endif()
