@@ -99,7 +99,7 @@ GenericListModel* PopupViewController::popupElementControllers() const
   Then it will loop through \l {Esri::ArcGISRuntime::Popup::evaluatedElements} {evaluatedElements} and create the corresponding
   PopupElementController and add it to the \c popupElementControllers. It will notify the popup and title have changed.
   \list
-  \li \a popup To deliver data from.
+  \li \a The \c Popup which will be used to populate the PopupView.
   \endlist
  */
 void PopupViewController::setPopup(Popup* popup)
@@ -377,6 +377,10 @@ void PopupViewController::setAttachmentThumbnailHeight(int height)
 
 /*!
   \property Esri::ArcGISRuntime::Toolkit::PopupViewController::attachmentThumbnailHeight
+ */
+
+/*!
+  \property Esri::ArcGISRuntime::Toolkit::PopupViewController::popup
  */
 
 /*!

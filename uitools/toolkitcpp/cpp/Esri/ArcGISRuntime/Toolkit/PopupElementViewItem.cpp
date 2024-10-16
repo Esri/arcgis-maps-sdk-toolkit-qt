@@ -43,11 +43,11 @@ PopupElementViewItem::PopupElementViewItem(QObject *parent)
 }
 
 /*!
-\brief Constructor. Takes a \a PopupElement and \a parent object.
+\brief Constructor. Takes a \a popupElement and \a parent object.
   */
-PopupElementViewItem::PopupElementViewItem(QPointer<PopupElement> popupElement, QObject *parent)
+PopupElementViewItem::PopupElementViewItem(QPointer<PopupElement> popupElement, QObject* parent)
   : QObject{parent}
-  , m_popupElement{popupElement}
+  , m_popupElement{std::move(popupElement)}
 {
 }
 
@@ -67,18 +67,15 @@ QmlEnums::PopupElementType PopupElementViewItem::popupElementType() const
 /*!
   \brief Returns the \c PopupElement.
 */
-QPointer<PopupElement> PopupElementViewItem::popupElement() const
+PopupElement* PopupElementViewItem::popupElement() const
 {
   return m_popupElement ? m_popupElement : nullptr;
 }
 
 /*!
-  \brief Sets the \c PopupElement.
-  \list
-  \li \a popup To deliver data from.
-  \endlist
+  \brief Sets the c/ popupElement.
  */
-void PopupElementViewItem::setPopupElement(QPointer<PopupElement> popupElement)
+void PopupElementViewItem::setPopupElement(PopupElement* popupElement)
 {
   if (m_popupElement == popupElement)
     return;
@@ -102,4 +99,8 @@ void PopupElementViewItem::setPopupElement(QPointer<PopupElement> popupElement)
 /*!
   \fn void Esri::ArcGISRuntime::Toolkit::PopupElementViewItem::popupElementChanged()
   \brief Signal emitted when the \c PopupElement changes.
+ */
+
+/*!
+  \property Esri::ArcGISRuntime::Toolkit::PopupElementViewItem::popupElementType
  */

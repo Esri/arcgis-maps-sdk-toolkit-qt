@@ -19,7 +19,7 @@
 /*!
     \internal
     \class QmlEnums
-    \brief This class exposes `QmlEnums.PopupElementType` such that it is accessible to QML.
+    \brief This class exposes `QmlEnums` which wraps ArcGIS Maps SDK enumerations and makes them accessible in QML.
  */
 QmlEnums::QmlEnums(QObject* parent) :
   QObject(parent)

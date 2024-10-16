@@ -45,8 +45,8 @@ public:
   ~PopupElementViewItem();
 
   QmlEnums::PopupElementType popupElementType() const;
-  QPointer<PopupElement> popupElement() const;
-  void setPopupElement(QPointer<PopupElement> popupElement);
+  PopupElement* popupElement() const;
+  void setPopupElement(PopupElement* popupElement);
 
 signals:
   void popupElementChanged();

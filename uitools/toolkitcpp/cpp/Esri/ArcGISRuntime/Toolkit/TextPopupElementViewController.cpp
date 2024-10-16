@@ -42,7 +42,7 @@ TextPopupElementViewController::TextPopupElementViewController(QObject *parent)
 TextPopupElementViewController::~TextPopupElementViewController() = default;
 
 /*!
-\brief Constructor. Takes a \a PopupElement and \a parent object.
+\brief Constructor. Takes a \a textPopupElement and \a parent object.
   */
 TextPopupElementViewController::TextPopupElementViewController(
     QPointer<TextPopupElement> textPopupElement, QObject *parent)
@@ -55,7 +55,7 @@ TextPopupElementViewController::TextPopupElementViewController(
   */
 QString TextPopupElementViewController::text() const
 {
-  return popupElement() ? static_cast<TextPopupElement *>(popupElement().get())->text() : nullptr;
+  return popupElement() ? static_cast<TextPopupElement*>(popupElement())->text() : nullptr;
 }
 
 } // namespace Esri::ArcGISRuntime::Toolkit
