@@ -16,11 +16,20 @@
 #include "PopupViewController.h"
 
 #include <QAbstractListModel>
+#include <QFuture>
+#include <QDebug>
 
+#include "Popup.h"
 #include "PopupAttachmentListModel.h"
 #include "PopupAttachmentManager.h"
 #include "PopupAttributeListModel.h"
+#include "PopupElement.h"
+#include "PopupExpressionEvaluation.h"
 #include "PopupManager.h"
+#include "PopupTypes.h"
+
+#include "TextPopupElementViewController.h"
+#include "PopupElementViewItem.h"
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
@@ -29,7 +38,8 @@ namespace Esri::ArcGISRuntime::Toolkit {
   \inmodule ArcGISRuntimeToolkit
   \ingroup ArcGISQtToolkitUiCppControllers
   \brief In MVC architecture, this is the controller for the corresponding
-  \c PopupView.
+  \c PopupView. This class handles the
+    management of the Different PopupElementViewController objects.
 
   This controller is a thin wrapper around a \c PopupManager. It re-exposes some
   \c PopupManager properties, including the number of total rows to render as a
@@ -43,7 +53,8 @@ namespace Esri::ArcGISRuntime::Toolkit {
  \endlist
  */
 PopupViewController::PopupViewController(QObject* parent):
-  QObject(parent)
+  QObject(parent),
+  m_popupElementControllerModel(new GenericListModel(&PopupElementViewItem::staticMetaObject, this))
 {
 }
 
@@ -60,6 +71,82 @@ PopupViewController::~PopupViewController()
 PopupManager* PopupViewController::popupManager() const
 {
   return m_popupManager;
+}
+
+/*!
+  \brief Returns the \c Popup that populates this controller with data, this takes precedence over PopupManager.
+ */
+Popup* PopupViewController::popup() const
+{
+  return m_popup;
+}
+
+/*!
+    \brief Returns the known list of available PopupElementViewControllers.
+    Internally, this is a \c GenericListModel with an \c elementType of
+    \c TextPopupElementViewController.
+ */
+GenericListModel* PopupViewController::popupElementControllers() const
+{
+  return m_popupElementControllerModel;
+}
+
+/*!
+  \brief Sets the \c Popup. Setting this will call \l {Esri::ArcGISRuntime::Popup::evaluateExpressionsAsync} {evaluateExpressionsAsync}.
+  Then it will loop through \l {Esri::ArcGISRuntime::Popup::evaluatedElements} {evaluatedElements} and create the corresponding
+  PopupElementController and add it to the \c popupElementControllers. It will notify the popup and title have changed.
+  \list
+  \li \a The \c Popup which will be used to populate the PopupView.
+  \endlist
+ */
+void PopupViewController::setPopup(Popup* popup)
+{
+  if (m_popup == popup)
+    return;
+
+  if (m_popup)
+  {
+    disconnect(m_popup.data(), nullptr, this, nullptr);
+    m_popupElementControllerModel->removeRows(0, m_popupElementControllerModel->rowCount());
+  }
+
+  m_popup = popup;
+
+  if (m_popupManager)
+    qWarning() << "Both Popup and PopupManager have been set. The PopupView will default to "
+                  "PopupView which supports PopupElements.";
+
+  if (m_popup)
+    connect(m_popup.data(), &QObject::destroyed, this, &PopupViewController::popupChanged);
+
+  m_popup->evaluateExpressionsAsync(this).then([this](const QList<PopupExpressionEvaluation*>&)
+  {
+    for (auto element : m_popup->evaluatedElements())
+    {
+      switch (element->popupElementType())
+      {
+        case Esri::ArcGISRuntime::PopupElementType::TextPopupElement:
+          m_popupElementControllerModel->append(
+                new TextPopupElementViewController(static_cast<TextPopupElement*>(element), m_popup));
+          break;
+        case Esri::ArcGISRuntime::PopupElementType::FieldsPopupElement:
+          Q_UNIMPLEMENTED();
+          break;
+        case Esri::ArcGISRuntime::PopupElementType::AttachmentsPopupElement:
+          Q_UNIMPLEMENTED();
+          break;
+        case Esri::ArcGISRuntime::PopupElementType::MediaPopupElement:
+          Q_UNIMPLEMENTED();
+          break;
+        default:
+          Q_UNIMPLEMENTED();
+          break;
+      }
+    }
+  });
+
+  emit popupChanged();
+  emit titleChanged();
 }
 
 /*!
@@ -85,6 +172,9 @@ void PopupViewController::setPopupManager(PopupManager* popupManager)
 
   m_popupManager = popupManager;
 
+  if (m_popup)
+    qWarning() << "Both Popup and PopupManager have been set. The PopupView will default to PopupView which supports PopupElements.";
+
   if (m_popupManager)
     connect(m_popupManager.data(), &QObject::destroyed, this, &PopupViewController::popupManagerChanged);
 
@@ -103,6 +193,7 @@ void PopupViewController::setPopupManager(PopupManager* popupManager)
   }
 
   emit popupManagerChanged();
+  emit titleChanged();
   emit fieldCountChanged();
   emit attachmentCountChanged();
   emit attachmentThumbnailHeightChanged();
@@ -184,7 +275,7 @@ QString PopupViewController::title() const
   // This is re-exposed from PopupManager as PopupManager does not have
   // NOTIFY/CONSTANT modifiers on its title property, so the Controller
   // re-exposes title to suppress warnings about this.
-  return m_popupManager ? m_popupManager->title() : nullptr;
+  return m_popup ? m_popup->title() : m_popupManager ? m_popupManager->title() : nullptr;
 }
 
 /*!
@@ -236,8 +327,18 @@ void PopupViewController::setAttachmentThumbnailHeight(int height)
 }
 
 /*!
+  \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::popupChanged()
+  \brief Signal emitted when the \c Popup changes.
+ */
+
+/*!
   \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::popupManagerChanged()
   \brief Signal emitted when the \c PopupManager changes.
+ */
+
+/*!
+  \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::titleChanged()
+  \brief Signal emitted when the title changes.
  */
 
 /*!
@@ -262,7 +363,6 @@ void PopupViewController::setAttachmentThumbnailHeight(int height)
   \brief Signal emitted when the attachment minimum height changes.
  */
 
-
 /*!
   \property Esri::ArcGISRuntime::Toolkit::PopupViewController::showAttachments
  */
@@ -273,6 +373,10 @@ void PopupViewController::setAttachmentThumbnailHeight(int height)
 
 /*!
   \property Esri::ArcGISRuntime::Toolkit::PopupViewController::attachmentThumbnailHeight
+ */
+
+/*!
+  \property Esri::ArcGISRuntime::Toolkit::PopupViewController::popup
  */
 
 /*!

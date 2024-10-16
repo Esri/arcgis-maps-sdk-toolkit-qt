@@ -75,6 +75,17 @@ Page {
 
 
     /*!
+       \brief The Popup that controls the information being displayed in
+       the view.
+
+       If both a Popup and PopupManager are provided, the Popup will take priority
+       which utilizes the new PopupElements.
+       \qmlproperty Popup popup
+     */
+    property var popup: null
+
+
+    /*!
       \qmlproperty PopupViewController controller
       \brief The Controller handles reading from the PopupManager and monitoring
       the list-models.
@@ -109,6 +120,12 @@ Page {
         value: popupView.popupManager
     }
 
+    Binding {
+        target: controller
+        property: "popup"
+        value: popupView.popup
+    }
+
     implicitWidth: 300 + padding
 
     implicitHeight: 300 + padding
@@ -131,85 +148,135 @@ Page {
         rightPadding: popupView.spacing
     }
 
-    contentItem: Flickable {
-        id: flickable
-        clip: true
-        contentHeight: fieldsLayout.height
-        GridLayout {
-            id: fieldsLayout
-            flow: GridLayout.TopToBottom
-            anchors {
-                left: parent.left
-                right: parent.right
-            }
+    // prioritizes PopupElements over PopupManager styled Popups if both are present
+    contentItem: Loader {
+        id: popupDisplayLoader
+        sourceComponent: popup ? popupUsingPopupElements : popupUsingPopupManager
+    }
 
-            // We must account for what is visible, including title headers as rows.
-            rows: controller.showAttachments ? controller.fieldCount + controller.attachmentCount + 1
-                                             : controller.fieldCount
-            rowSpacing: popupView.spacing
-            columnSpacing: 30
-            // Field names
-            Repeater {
-                model: controller.displayFields
-                Label {
-                    text: label ?? fieldName ?? ""
-                    Layout.maximumWidth: flickable.width / 2
-                    wrapMode: Text.Wrap
-                    font: popupView.font
+    Component {
+        id: popupUsingPopupManager
+        Flickable {
+            id: flickable
+            clip: true
+            contentHeight: fieldsLayout.height
+            GridLayout {
+                id: fieldsLayout
+                flow: GridLayout.TopToBottom
+                anchors {
+                    left: parent.left
+                    right: parent.right
                 }
-            }
 
-            // Attachments header
-            Label {
-                Layout.columnSpan: 2
-                Layout.fillWidth: true
-                visible: controller.showAttachments
-                enabled: visible
-                textFormat: Text.StyledText
-                horizontalAlignment: Text.AlignHCenter
-                text: controller.attachmentCount > 0 ? "<h2>Attachments</h2>" : ""
-                font: popupView.font
-            }
+                // We must account for what is visible, including title headers as rows.
+                rows: controller.showAttachments ? controller.fieldCount + controller.attachmentCount + 1
+                                                 : controller.fieldCount
+                rowSpacing: popupView.spacing
+                columnSpacing: 30
+                // Field names
+                Repeater {
+                    model: controller.displayFields
+                    Label {
+                        text: label ?? fieldName ?? ""
+                        Layout.maximumWidth: flickable.width / 2
+                        wrapMode: Text.Wrap
+                        font: popupView.font
+                    }
+                }
 
-            // Attachment names
-            Repeater {
-                model: controller.attachments
+                // Attachments header
                 Label {
+                    Layout.columnSpan: 2
                     Layout.fillWidth: true
                     visible: controller.showAttachments
                     enabled: visible
-                    text: name
-                    wrapMode: Text.Wrap
+                    textFormat: Text.StyledText
+                    horizontalAlignment: Text.AlignHCenter
+                    text: controller.attachmentCount > 0 ? "<h2>Attachments</h2>" : ""
                     font: popupView.font
                 }
-            }
 
-            // Field contents
-            Repeater {
-                model: controller.displayFields
-                Label {
-                    Layout.fillWidth: true
-                    text: formattedValue
-                    wrapMode: Text.Wrap
-                    font: popupView.font
+                // Attachment names
+                Repeater {
+                    model: controller.attachments
+                    Label {
+                        Layout.fillWidth: true
+                        visible: controller.showAttachments
+                        enabled: visible
+                        text: name
+                        wrapMode: Text.Wrap
+                        font: popupView.font
+                    }
                 }
-            }
 
-            // Attachment images
-            Repeater {
-                model: controller.attachments
-                Image {
-                    Layout.fillHeight: true
-                    Layout.minimumWidth: controller.attachmentThumbnailWidth
-                    Layout.minimumHeight: controller.attachmentThumbnailHeight
-                    visible: controller.showAttachments
-                    enabled: visible
-                    source: thumbnailUrl
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: {
-                            attachmentThumbnailClicked(index)
+                // Field contents
+                Repeater {
+                    model: controller.displayFields
+                    Label {
+                        Layout.fillWidth: true
+                        text: formattedValue
+                        wrapMode: Text.Wrap
+                        font: popupView.font
+                    }
+                }
+
+                // Attachment images
+                Repeater {
+                    model: controller.attachments
+                    Image {
+                        Layout.fillHeight: true
+                        Layout.minimumWidth: controller.attachmentThumbnailWidth
+                        Layout.minimumHeight: controller.attachmentThumbnailHeight
+                        visible: controller.showAttachments
+                        enabled: visible
+                        source: thumbnailUrl
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                attachmentThumbnailClicked(index)
+                            }
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    Component {
+        id: popupUsingPopupElements
+        ListView {
+            id: elementsView
+
+            anchors.fill: parent
+            model: controller.popupElementControllers
+            spacing: 10
+            clip: true
+
+            delegate: Item {
+
+                height: loader.item ? loader.item.height : null
+
+                // Load the correct PopupElement based on the PopupElementType
+                Component.onCompleted: {
+                    if (model.popupElementType === QmlEnums.PopupElementTypeTextPopupElement) {
+                        loader.sourceComponent = textPopupElementView;
+                    } else if (model.popupElementType === 1) {
+                    } else if (model.popupElementType === 2) {
+                    } else if (model.popupElementType === 3) {
+                    } else {
+                    }
+                }
+
+                Loader {
+                    id: loader
+                }
+
+                Component {
+                    id: textPopupElementView
+                    TextPopupElementView {
+                        controller: model.listModelData
+                        width: elementsView.width
+                        height: children.height
                     }
                 }
             }
