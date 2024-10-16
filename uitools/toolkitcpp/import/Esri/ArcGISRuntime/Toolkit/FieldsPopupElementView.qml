@@ -27,13 +27,6 @@ ListView {
 
     property var controller: null
     model: controller.values
-    // model: ListModel {
-    //     ListElement { label: "Test1" }
-    //     ListElement { label: "Test2" }
-    //     ListElement { label: "Test3" }
-    //     ListElement { label: "Test4" }
-    //     ListElement { label: "Test5" }
-    // }
     clip: true
     focus: true
 
@@ -123,89 +116,3 @@ ListView {
     //     }
     // }
 }
-// }
-
-// Item {
-//     id: fieldsPopupElementView
-
-//     /*!
-//       \qmlproperty FieldsPopupElementView controller
-//       \brief The Controller handles reading from the FieldsPopupElement.
-
-//       The CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::FieldsPopupElementViewController}{here}.
-//     */
-
-
-
-//     property var controller: null
-
-//     // implicitHeight: lview.implicitHeight
-//     // implicitHeight: childrenRect.height
-//     // implicitHeight: 300
-//     height: lview.height
-
-//     ListView {
-//         id: lview
-//         // model: controller.fieldsLM ? controller.fieldsLM : {}
-//         model: ListModel {
-//                     ListElement { label: "Test1" }
-//                     ListElement { label: "Test2" }
-//                     ListElement { label: "Test3" }
-//                     ListElement { label: "Test4" }
-//                     ListElement { label: "Test5" }
-//                 }
-//         spacing: 10
-//         height: contentHeight
-//         clip: true
-//         anchors.fill: parent
-//         // contentHeight: fieldsLayout.height
-//         // anchors.top: parent.top
-//         // anchors.right: parent.right
-//         // anchors.bottom: parent.bottom
-//         // width: 300
-
-//         onModelChanged: {
-//             print("ModelChanged")
-//             // print(controller.fieldsLM.size());
-//         }
-
-//         // clip: true
-//         delegate: Item {
-//             height: testText.implicitHeight
-//             Label {
-//                 id: testText
-//                 text: model.label ? model.label : ""
-//                 anchors.fill: parent
-//                 padding: 10
-//             }
-//         }
-
-//         Component.onCompleted: print(lview.height);
-//     }
-
-//     // Rectangle {
-//     //     anchors.top: parent.top
-//     //     anchors.right: parent.right
-//     //     anchors.bottom: parent.bottom
-//     //     width: 300
-//     //     color: "black"
-//     //     ListView {
-//     //         id: lview
-//     //         // model: controller.fieldsLM ? controller.fieldsLM : {}
-//     //         anchors.fill: parent
-//     //         model: testModel
-//     //         spacing: 10
-//     //         height: contentHeight
-//     //         // clip: true
-//     //         delegate: Item {
-//     //             height: testText.implicitHeight
-//     //             Label {
-//     //                 id: testText
-//     //                 text: model.label ? model.label : ""
-//     //                 anchors.fill: parent
-//     //                 padding: 10
-//     //             }
-//     //         }
-//     //     }
-//     // }
-// }
