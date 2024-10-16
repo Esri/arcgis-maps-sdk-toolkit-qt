@@ -42,18 +42,18 @@ FieldsPopupElementViewController::FieldsPopupElementViewController(
 
 QString FieldsPopupElementViewController::title() const
 {
-  return static_cast<FieldsPopupElement*>(popupElement().get())->title();
+  return static_cast<FieldsPopupElement*>(popupElement())->title();
 }
 
 QStringList FieldsPopupElementViewController::fields() const
 {
-  return static_cast<FieldsPopupElement*>(popupElement().get())->labels();
+  return static_cast<FieldsPopupElement*>(popupElement())->labels();
 }
 
 QVariantList FieldsPopupElementViewController::values()
 {
-  auto list1 = static_cast<FieldsPopupElement*>(popupElement().get())->labels();
-  auto list2 = static_cast<FieldsPopupElement*>(popupElement().get())->formattedValues();
+  auto list1 = static_cast<FieldsPopupElement*>(popupElement())->labels();
+  auto list2 = static_cast<FieldsPopupElement*>(popupElement())->formattedValues();
   QVariantList combinedData;
   int size = qMin(list1.size(), list2.size());
 

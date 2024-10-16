@@ -45,50 +45,43 @@ ListView {
     delegate: Column {
         width: parent.width
 
-            MenuSeparator {
-                width: parent.width
-                leftPadding: 20
-            }
-            Label {
-                // id: testText
-                text: modelData["labels"]
-                wrapMode: Text.WordWrap
-                textFormat: Text.AutoText
-                width: parent.width
-                color: Application.styleHints.colorScheme === Qt.Light ? "#6A6A6A" : "#9F9F9F"
-                // color: Calcite.text3
-                // color: "#4A4A4A"
-                // color: "#BFBFBF"
-                // color: "grey"
-                font.pixelSize: 15
-                rightPadding: 10
-                leftPadding: 20
-                onColorChanged: print(color);
-            }
-            Label {
-                // id: testText
-                text: modelData["formattedValues"]
-                wrapMode: Text.WordWrap
-                textFormat: Text.AutoText
-                width: parent.width
-                rightPadding: 10
-                leftPadding: 20
-                Component.onCompleted: {
-                    if (text.startsWith("http")) {
-                        let link = text;
-                        text = `<a href="${link}" target="_blank">View</a>`;
-                        textFormat = Text.RichText;
-                    }
+        MenuSeparator {
+            width: parent.width
+            leftPadding: 20
+        }
+        Label {
+            // id: testText
+            text: modelData["labels"]
+            wrapMode: Text.WordWrap
+            textFormat: Text.AutoText
+            width: parent.width
+            font.weight: Font.Bold
+            font.pixelSize: 15
+            rightPadding: 10
+            leftPadding: 20
+            onColorChanged: print(color);
+        }
+        Label {
+            // id: testText
+            text: modelData["formattedValues"]
+            wrapMode: Text.WordWrap
+            textFormat: Text.AutoText
+            width: parent.width
+            rightPadding: 10
+            leftPadding: 20
+            Component.onCompleted: {
+                if (text.startsWith("http")) {
+                    let link = text;
+                    text = `<a href="${link}" target="_blank">View</a>`;
+                    textFormat = Text.RichText;
                 }
-                onLinkActivated: (link) => {
-                    if (link !== "" && link !== undefined) {
-                        Qt.openUrlExternally(link);
-                    }
-                }
-                    // print(parent);
-                    // print("LabelPwidth: " + parent.width);
             }
-
+            onLinkActivated: (link) => {
+                if (link !== "" && link !== undefined) {
+                    Qt.openUrlExternally(link);
+                }
+            }
+        }
     }
 
     Component.onCompleted: {
