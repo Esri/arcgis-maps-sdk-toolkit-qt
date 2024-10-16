@@ -55,7 +55,7 @@ TextPopupElementViewController::TextPopupElementViewController(
   */
 QString TextPopupElementViewController::text() const
 {
-  return popupElement() ? static_cast<TextPopupElement *>(popupElement().get())->text() : nullptr;
+  return popupElement() ? static_cast<TextPopupElement*>(popupElement())->text() : nullptr;
 }
 
 } // namespace Esri::ArcGISRuntime::Toolkit
