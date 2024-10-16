@@ -62,10 +62,15 @@ ListView {
                 wrapMode: Text.WordWrap
                 textFormat: Text.AutoText
                 width: parent.width
-                color: "grey"
+                color: Application.styleHints.colorScheme === Qt.Light ? "#6A6A6A" : "#9F9F9F"
+                // color: Calcite.text3
+                // color: "#4A4A4A"
+                // color: "#BFBFBF"
+                // color: "grey"
                 font.pixelSize: 15
                 rightPadding: 10
                 leftPadding: 20
+                onColorChanged: print(color);
             }
             Label {
                 // id: testText
