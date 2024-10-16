@@ -122,10 +122,18 @@ Control {
         }
         Switch {
             text: "Dark Mode"
-            checked: C.Calcite.theme === C.Calcite.Theme.Dark
-            onCheckedChanged: C.Calcite.theme = checked ? C.Calcite.Theme.Dark : C.Calcite.Theme.Light
+            checked: Application.styleHints.colorScheme === Qt.Dark
+            // enabled: false
+            Binding {
+                target: C.Calcite
+                property: "theme"
+                value: themeSwitch.checked ? Qt.Dark : Qt.Light
+            }
         }
-
+        // DarkMode Switch removed to fill out the grid
+        // Item {
+        //     Layout.fillWidth: true
+        // }
         Item {
             Layout.fillWidth: true
         }

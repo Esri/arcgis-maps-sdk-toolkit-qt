@@ -55,11 +55,13 @@ ApplicationWindow {
                     id: themeSwitch
                     text: checked ? "Dark Mode" : "Light Mode"
                     Layout.alignment: Qt.AlignRight
-                    Binding {
-                        target: C.Calcite
-                        property: "theme"
-                        value: themeSwitch.checked ? C.Calcite.Dark : C.Calcite.Light
-                    }
+                    enabled: false
+                    checked: Application.styleHints.colorScheme === Qt.Dark
+                    // Binding {
+                    //     target: C.Calcite
+                    //     property: "theme"
+                    //     value: themeSwitch.checked ? Qt.Dark : C.Calcite.Light
+                    // }
                 }
                 CheckBox {
                     id: enabler
