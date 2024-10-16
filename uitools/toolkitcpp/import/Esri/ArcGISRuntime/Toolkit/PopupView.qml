@@ -73,6 +73,7 @@ Page {
      */
     property var popupManager: null
 
+
     /*!
        \brief The Popup that controls the information being displayed in
        the view.

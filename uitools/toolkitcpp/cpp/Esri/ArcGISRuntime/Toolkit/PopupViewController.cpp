@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2020 Esri
  *
@@ -373,6 +374,10 @@ void PopupViewController::setAttachmentThumbnailHeight(int height)
 
 /*!
   \property Esri::ArcGISRuntime::Toolkit::PopupViewController::attachmentThumbnailHeight
+ */
+
+/*!
+  \property Esri::ArcGISRuntime::Toolkit::PopupViewController::popup
  */
 
 /*!
