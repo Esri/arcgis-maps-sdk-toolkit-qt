@@ -40,7 +40,6 @@ class FieldsPopupElementViewController : public PopupElementViewItem
 {
   Q_OBJECT
   Q_PROPERTY(QString title READ title NOTIFY fieldsPopupElementChanged)
-  Q_PROPERTY(QStringList fields READ fields NOTIFY fieldsPopupElementChanged)
   Q_PROPERTY(QVariantList values READ values NOTIFY fieldsPopupElementChanged)
 
 public:
@@ -50,7 +49,6 @@ public:
   ~FieldsPopupElementViewController();
 
   QString title() const;
-  QStringList fields() const;
   QVariantList values();
 
 signals:

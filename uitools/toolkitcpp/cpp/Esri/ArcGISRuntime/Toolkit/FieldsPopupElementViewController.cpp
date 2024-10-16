@@ -33,21 +33,11 @@ FieldsPopupElementViewController::FieldsPopupElementViewController(
     QPointer<FieldsPopupElement> fieldsPopupElement, QObject *parent)
   : PopupElementViewItem{QPointer<FieldsPopupElement>(fieldsPopupElement), parent}
 {
-  // qDebug() << fieldsPopupElement->fields()->size();
-  // for ( auto field : *fieldsPopupElement->fields())
-  // {
-    // qDebug() << field->label();
-  // }
 }
 
 QString FieldsPopupElementViewController::title() const
 {
   return static_cast<FieldsPopupElement*>(popupElement())->title();
-}
-
-QStringList FieldsPopupElementViewController::fields() const
-{
-  return static_cast<FieldsPopupElement*>(popupElement())->labels();
 }
 
 QVariantList FieldsPopupElementViewController::values()
@@ -67,22 +57,6 @@ QVariantList FieldsPopupElementViewController::values()
                  });
   emit fieldsPopupElementChanged();
   return combinedData;
-
-  // QVariantList combinedList;
-  // combinedList.append(QVariant::fromValue(list1));
-  // combinedList.append(QVariant::fromValue(list2));
-
-  // need to comebine these some way to be used as the model for the ListView of labels.
-  // QVariantList combinedData = QVariantList::fromList(
-  //     list1.toVector().zip(list2.toVector()).toList().transform([](const auto &pair) {
-  //         QVariantMap item;
-  //         item["column1"] = pair.first;
-  //         item["column2"] = pair.second;
-  //         return item;
-  //     })
-  // );
-  // emit fieldsPopupElementChanged();
-  // return static_cast<FieldsPopupElement*>(popupElement().get())->formattedValues();
 }
 
 } // namespace Esri::ArcGISRuntime::Toolkit

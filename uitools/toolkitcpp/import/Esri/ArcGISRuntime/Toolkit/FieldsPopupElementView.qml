@@ -23,13 +23,19 @@ import QtQuick.Layouts
 ListView {
     id: fieldsPopupElementView
 
-    height: contentHeight
+    /*!
+      \qmlproperty FieldsPopupElementView controller
+      \brief The Controller handles reading from the FieldsPopupElement.
 
+      \sa Esri::ArcGISRuntime::Toolkit::FieldsPopupElementViewController
+    */
     property var controller: null
+
+    height: contentHeight
+    interactive: false
     model: controller.values
     clip: true
     focus: true
-
     spacing: 10
 
     header: Label {
@@ -50,7 +56,6 @@ ListView {
             leftPadding: 20
         }
         Label {
-            // id: testText
             text: modelData["labels"]
             wrapMode: Text.WordWrap
             textFormat: Text.AutoText
@@ -59,10 +64,8 @@ ListView {
             font.pixelSize: 15
             rightPadding: 10
             leftPadding: 20
-            onColorChanged: print(color);
         }
         Label {
-            // id: testText
             text: modelData["formattedValues"]
             wrapMode: Text.WordWrap
             textFormat: Text.AutoText
@@ -83,29 +86,4 @@ ListView {
             }
         }
     }
-
-    Component.onCompleted: {
-        // print(fieldsPopupElementView.height);
-        // fieldsPopupElementView.height = 600;
-    }
-
-    onContentHeightChanged: {
-        print("onContentHeightChanged: " + fieldsPopupElementView.contentHeight)
-    }
-
-    // MouseArea {
-    //     anchors.fill: parent
-    //     onWheel: (wheel) => {
-    //         // console.log("Mouse wheel:", wheel.angleDelta.y)
-    //         // Emit a signal or call a method on the outer ListView
-    //         // if (wheel.angleDelta.y < 0) {
-    //         //     // Scroll outer down
-    //         //     elementsView.scroll(wheel.angleDelta.y);
-    //         // } else {
-    //         //     // Scroll outer up
-    //         //     elementsView.scroll(wheel.angleDelta.y);
-    //         // }
-    //         elementsView.scroll((-1) * wheel.angleDelta.y);
-    //     }
-    // }
 }
