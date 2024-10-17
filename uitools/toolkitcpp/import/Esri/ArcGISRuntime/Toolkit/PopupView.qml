@@ -260,6 +260,8 @@ Page {
                         loader.sourceComponent = textPopupElementView;
                     } else if (model.popupElementType === QmlEnums.PopupElementTypeFieldsPopupElement) {
                         loader.sourceComponent = fieldsPopupElementView;
+                    } else if (model.popupElementType === QmlEnums.PopupElementTypeMediaPopupElement) {
+                        loader.sourceComponent = mediaPopupElementView;
                     }
                 }
 
@@ -270,6 +272,15 @@ Page {
                 Component {
                     id: textPopupElementView
                     TextPopupElementView {
+                        controller: listModelData
+                        width: elementsView.width
+                        height: children.height
+                    }
+                }
+
+                Component {
+                    id: mediaPopupElementView
+                    MediaPopupElementView {
                         controller: listModelData
                         width: elementsView.width
                         height: children.height
