@@ -28,5 +28,6 @@
         <file>ArcGISOAuth2View.qml</file>
         <file>ArcGISAuthenticationView_internal.qml</file>
         <file>ArcGISUserCredentialsView.qml</file>
+        <file>MediaPopupElementView.qml</file>
     </qresource>
 </RCC>

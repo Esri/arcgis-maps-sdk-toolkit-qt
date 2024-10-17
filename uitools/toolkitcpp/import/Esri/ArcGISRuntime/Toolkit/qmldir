@@ -41,6 +41,7 @@ FloorFilter 100.14 FloorFilter.qml
 FloorFilter 200.0 FloorFilter.qml
 internal FlashImage FlashImage.qml
 internal ScalebarImpl ScalebarImpl.qml
+MediaPopupElementView 200.6 MediaPopupElementView.qml
 NorthArrow 100.10 NorthArrow.qml
 NorthArrow 200.0 NorthArrow.qml
 OAuth2View 100.10 OAuth2View.qml

@@ -32,6 +32,7 @@
 #include "FloorFilterLevelItem.h"
 #include "FloorFilterSiteItem.h"
 #include "LocatorSearchSource.h"
+#include "MediaPopupElementViewController.h"
 #include "NorthArrowController.h"
 #include "OverviewMapController.h"
 #include "PopupElementViewItem.h"
@@ -211,6 +212,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     registerComponent<FloorFilterLevelItem>(CreationType::Uncreatable);
     registerComponent<FloorFilterSiteItem>(CreationType::Uncreatable);
     registerComponent<LocatorSearchSource>(CreationType::Uncreatable);
+    registerComponent<MediaPopupElementViewController>();
     registerComponent<NorthArrowController>();
     registerComponent<OverviewMapController>();
     registerComponent<PopupElementViewItem>();
