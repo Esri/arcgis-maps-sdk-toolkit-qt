@@ -26,12 +26,6 @@ import QtQuick
     {Calcite colors and themes}.
  */
 QtObject {
-    // enum Theme {
-    //     Light,
-    //     Dark
-    // }
-
-    //property int theme: Calcite.Theme.Light
 
     property int theme: Application.styleHints.colorScheme
 

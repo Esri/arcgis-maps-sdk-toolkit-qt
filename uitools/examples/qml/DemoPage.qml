@@ -120,20 +120,9 @@ Control {
             onClicked: showToolsButtonPressed()
             enabled: !apiKeyPopup.visible
         }
-        Switch {
-            text: "Dark Mode"
-            checked: Application.styleHints.colorScheme === Qt.Dark
-            // enabled: false
-            Binding {
-                target: C.Calcite
-                property: "theme"
-                value: themeSwitch.checked ? Qt.Dark : Qt.Light
-            }
+        Item {
+            Layout.fillWidth: true
         }
-        // DarkMode Switch removed to fill out the grid
-        // Item {
-        //     Layout.fillWidth: true
-        // }
         Item {
             Layout.fillWidth: true
         }
