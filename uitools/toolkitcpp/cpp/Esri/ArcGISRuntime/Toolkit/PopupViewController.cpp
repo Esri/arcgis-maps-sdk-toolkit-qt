@@ -19,6 +19,9 @@
 #include <QFuture>
 #include <QDebug>
 
+// Maps SDK headers
+#include "FieldsPopupElement.h"
+#include "TextPopupElement.h"
 #include "Popup.h"
 #include "PopupAttachmentListModel.h"
 #include "PopupAttachmentManager.h"

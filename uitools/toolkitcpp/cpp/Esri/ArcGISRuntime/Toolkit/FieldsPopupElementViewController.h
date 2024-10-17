@@ -20,14 +20,8 @@
 #include "PopupElementViewItem.h"
 
 // Qt headers
-#include <QAbstractListModel>
 #include <QObject>
 #include <QPointer>
-
-// Maps SDK headers
-#include <FieldsPopupElement.h>
-#include <PopupElement.h>
-#include <PopupFieldListModel.h>
 
 namespace Esri::ArcGISRuntime {
 

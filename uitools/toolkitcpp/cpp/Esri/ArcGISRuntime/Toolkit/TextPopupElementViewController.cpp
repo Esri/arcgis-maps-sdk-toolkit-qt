@@ -15,6 +15,10 @@
  ******************************************************************************/
 #include "TextPopupElementViewController.h"
 
+// Maps SDK headers
+#include <PopupElement.h>
+#include <TextPopupElement.h>
+
 namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
