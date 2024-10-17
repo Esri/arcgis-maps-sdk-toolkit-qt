@@ -14,7 +14,11 @@
  *  limitations under the License.
  ******************************************************************************/
 #include "FieldsPopupElementViewController.h"
-#include "PopupField.h"
+
+// Maps SDK headers
+#include <FieldsPopupElement.h>
+#include <PopupElement.h>
+#include <PopupField.h>
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
