@@ -41,7 +41,6 @@ ListView {
     header: Label {
         text: controller.title !== "" ? controller.title : "Fields"
         wrapMode: Text.WordWrap
-        textFormat: Text.AutoText
         width: parent.width
         font.pixelSize: 20
         rightPadding: 10
@@ -56,9 +55,8 @@ ListView {
             leftPadding: 20
         }
         Label {
-            text: modelData["labels"]
+            text: model.modelData["label"]
             wrapMode: Text.WordWrap
-            textFormat: Text.AutoText
             width: parent.width
             font.weight: Font.Bold
             font.pixelSize: 15
@@ -66,13 +64,15 @@ ListView {
             leftPadding: 20
         }
         Label {
-            text: modelData["formattedValues"]
+            text: model.modelData["formattedValue"]
             wrapMode: Text.WordWrap
-            textFormat: Text.AutoText
             width: parent.width
             rightPadding: 10
             leftPadding: 20
             Component.onCompleted: {
+                // Checks to see if the formatted value is a hyperlink.
+                // If it is, it will modify the text to be a clickable link
+                // displayed as `View`.
                 if (text.startsWith("http")) {
                     let link = text;
                     text = `<a href="${link}" target="_blank">View</a>`;

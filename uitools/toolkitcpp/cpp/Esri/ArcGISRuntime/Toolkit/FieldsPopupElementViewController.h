@@ -43,17 +43,16 @@ class FieldsPopupElementViewController : public PopupElementViewItem
   Q_PROPERTY(QVariantList values READ values NOTIFY fieldsPopupElementChanged)
 
 public:
-  explicit FieldsPopupElementViewController(QObject *parent = nullptr);
+  explicit FieldsPopupElementViewController(QObject* parent = nullptr);
   explicit FieldsPopupElementViewController(QPointer<FieldsPopupElement> fieldsPopupElement,
-                                          QObject *parent = nullptr);
+                                            QObject* parent = nullptr);
   ~FieldsPopupElementViewController();
 
   QString title() const;
   QVariantList values();
 
 signals:
-void fieldsPopupElementChanged();
-
+  void fieldsPopupElementChanged();
 };
 
 } // namespace Toolkit
