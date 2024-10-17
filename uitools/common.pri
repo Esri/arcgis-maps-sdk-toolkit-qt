@@ -33,6 +33,7 @@ HEADERS += $$CPPPATH/ArcGISAuthenticationController.h \
            $$CPPPATH/FloorFilterLevelItem.h \
            $$CPPPATH/FloorFilterSiteItem.h \
            $$CPPPATH/LocatorSearchSource.h \
+           $$CPPPATH/MediaPopupElementViewController.h \
            $$CPPPATH/Internal/BasemapGalleryImageProvider.h \
            $$CPPPATH/Internal/DisconnectOnSignal.h \
            $$CPPPATH/Internal/DoOnLoad.h \
@@ -78,6 +79,7 @@ SOURCES += $$CPPPATH/ArcGISAuthenticationController.cpp \
            $$CPPPATH/FloorFilterLevelItem.cpp \
            $$CPPPATH/FloorFilterSiteItem.cpp \
            $$CPPPATH/LocatorSearchSource.cpp \
+           $$CPPPATH/MediaPopupElementViewController.cpp \
            $$CPPPATH/Internal/BasemapGalleryImageProvider.cpp \
            $$CPPPATH/Internal/GenericListModel.cpp \
            $$CPPPATH/Internal/GenericTableProxyModel.cpp \
