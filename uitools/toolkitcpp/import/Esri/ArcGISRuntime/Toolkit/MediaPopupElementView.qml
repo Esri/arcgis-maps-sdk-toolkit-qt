@@ -13,8 +13,28 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
+
+import Esri.ArcGISRuntime.Toolkit.Controller
+
 import QtQuick
+import QtQuick.Controls
 
 Item {
 
+    /*!
+      \qmlproperty MediaPopupElementView controller
+      \brief The Controller handles reading from the MediaPopupElement.
+
+      \sa Esri::ArcGISRuntime::Toolkit::MediaPopupElementViewController
+    */
+    property var controller: null
+
+    implicitHeight: childrenRect.height
+    width: elementsView.width
+
+    Label {
+        text: controller.title !== "" ? controller.title : "Media"
+        wrapMode: Text.WordWrap
+        width: parent.width
+    }
 }
