@@ -41,7 +41,7 @@ class PopupElementViewItem : public QObject
   Q_PROPERTY(QmlEnums::PopupElementType popupElementType READ popupElementType NOTIFY popupElementChanged)
 public:
   explicit PopupElementViewItem(QObject *parent = nullptr);
-  explicit PopupElementViewItem(QPointer<PopupElement> popupElement, QObject *parent = nullptr);
+  explicit PopupElementViewItem(QPointer<PopupElement> popupElement, QObject* parent = nullptr);
   ~PopupElementViewItem();
 
   QmlEnums::PopupElementType popupElementType() const;

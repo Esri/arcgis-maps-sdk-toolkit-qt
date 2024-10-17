@@ -73,7 +73,7 @@ PopupElement* PopupElementViewItem::popupElement() const
 }
 
 /*!
-  \brief Sets the c/ popupElement.
+  \brief Sets the \a popupElement.
  */
 void PopupElementViewItem::setPopupElement(PopupElement* popupElement)
 {

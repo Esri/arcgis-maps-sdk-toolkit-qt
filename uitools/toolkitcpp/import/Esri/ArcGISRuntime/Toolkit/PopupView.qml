@@ -260,9 +260,6 @@ Page {
                         loader.sourceComponent = textPopupElementView;
                     } else if (model.popupElementType === QmlEnums.PopupElementTypeFieldsPopupElement) {
                         loader.sourceComponent = fieldsPopupElementView;
-                    } else if (model.popupElementType === 2) {
-                    } else if (model.popupElementType === 3) {
-                    } else {
                     }
                 }
 
