@@ -13,19 +13,44 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#ifndef MEDIAPOPUPELEMENTVIEWCONTROLLER_H
-#define MEDIAPOPUPELEMENTVIEWCONTROLLER_H
+#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_MEDIAPOPUPELEMENTVIEWCONTROLLER_H
+#define ESRI_ARCGISRUNTIME_TOOLKIT_MEDIAPOPUPELEMENTVIEWCONTROLLER_H
 
+// Toolkit headers
+#include "PopupElementViewItem.h"
+
+// Qt headers
 #include <QObject>
+#include <QPointer>
 
-class MediaPopupElementViewController : public QObject
+// Maps SDK headers
+#include <PopupElement.h>
+#include <MediaPopupElement.h>
+
+namespace Esri::ArcGISRuntime {
+
+class TextPopupElement;
+class PopupElement;
+
+namespace Toolkit {
+
+class MediaPopupElementViewController : public PopupElementViewItem
 {
   Q_OBJECT
+  Q_PROPERTY(QString title READ title NOTIFY mediaPopupElementChanged)
+
 public:
-  explicit MediaPopupElementViewController(QObject *parent = nullptr);
+  explicit MediaPopupElementViewController(QObject* parent = nullptr);
+  explicit MediaPopupElementViewController(QPointer<MediaPopupElement> mediaPopupElement,
+                                           QObject* parent = nullptr);
+  ~MediaPopupElementViewController();
+
+  QString title() const;
 
 signals:
-
+  void mediaPopupElementChanged();
 };
 
-#endif // MEDIAPOPUPELEMENTVIEWCONTROLLER_H
+} // namespace Toolkit
+} // namespace Esri::ArcGISRuntime
+#endif // ESRI_ARCGISRUNTIME_TOOLKIT_MEDIAPOPUPELEMENTVIEWCONTROLLER_H

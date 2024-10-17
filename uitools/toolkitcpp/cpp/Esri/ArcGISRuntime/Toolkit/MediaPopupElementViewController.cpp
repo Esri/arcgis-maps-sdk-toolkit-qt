@@ -15,8 +15,56 @@
  ******************************************************************************/
 #include "MediaPopupElementViewController.h"
 
-MediaPopupElementViewController::MediaPopupElementViewController(QObject *parent)
-  : QObject{parent}
-{
+namespace Esri::ArcGISRuntime::Toolkit {
 
+/*!
+  \class Esri::ArcGISRuntime::Toolkit::MediaPopupElementViewController
+  \inmodule ArcGISRuntimeToolkit
+  \ingroup ArcGISQtToolkitUiCppControllers
+  \brief In MVC architecture, this is the controller for the corresponding
+  \c MediaPopupElementView.
+ */
+
+/*!
+ \brief Constructor
+ \list
+   \li \a parent Parent owning \c QObject.
+ \endlist
+ */
+MediaPopupElementViewController::MediaPopupElementViewController(QObject* parent)
+  : PopupElementViewItem{parent}
+{
 }
+
+/*!
+  \brief Destructor.
+  */
+MediaPopupElementViewController::~MediaPopupElementViewController() = default;
+
+/*!
+\brief Constructor. Takes a \a mediaPopupElement and \a parent object.
+  */
+MediaPopupElementViewController::MediaPopupElementViewController(
+    QPointer<MediaPopupElement> mediaPopupElement, QObject* parent)
+  : PopupElementViewItem{QPointer<MediaPopupElement>(std::move(mediaPopupElement)), parent}
+{
+}
+
+/*!
+  \brief Returns the title of the \c MediaPopupElement.
+ */
+QString MediaPopupElementViewController::title() const
+{
+  return static_cast<MediaPopupElement*>(popupElement())->title();
+}
+
+} // namespace Esri::ArcGISRuntime::Toolkit
+
+/*!
+  \fn void Esri::ArcGISRuntime::Toolkit::MediaPopupElementViewController::mediaPopupElementChanged()
+  \brief Signal emitted when the underlying \c MediaPopupElement changes.
+ */
+
+/*!
+  \property Esri::ArcGISRuntime::Toolkit::MediaPopupElementViewController::title
+ */

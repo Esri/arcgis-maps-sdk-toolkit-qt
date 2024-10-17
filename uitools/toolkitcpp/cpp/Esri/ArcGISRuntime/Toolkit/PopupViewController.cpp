@@ -30,6 +30,7 @@
 
 // Toolkit headers
 #include "FieldsPopupElementViewController.h"
+#include "MediaPopupElementViewController.h"
 #include "TextPopupElementViewController.h"
 #include "PopupElementViewItem.h"
 
@@ -139,7 +140,8 @@ void PopupViewController::setPopup(Popup* popup)
           Q_UNIMPLEMENTED();
           break;
         case Esri::ArcGISRuntime::PopupElementType::MediaPopupElement:
-          Q_UNIMPLEMENTED();
+          m_popupElementControllerModel->append(
+                new MediaPopupElementViewController(static_cast<MediaPopupElement*>(element), m_popup));
           break;
         default:
           Q_UNIMPLEMENTED();
