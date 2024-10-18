@@ -20,6 +20,8 @@
 #include <PopupElement.h>
 #include <PopupField.h>
 
+#include <QPointer>
+
 namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
@@ -68,14 +70,15 @@ QString FieldsPopupElementViewController::title() const
   \l {Esri::ArcGISRuntime::FieldsPopupElement::formattedValues} {formattedValues} of the
   \c FieldsPopupElement in a QList of QMap elements
   */
-QVariantList FieldsPopupElementViewController::values()
+QVariantList FieldsPopupElementViewController::labelsAndValues()
 {
   const auto list1 = static_cast<FieldsPopupElement*>(popupElement())->labels();
   const auto list2 = static_cast<FieldsPopupElement*>(popupElement())->formattedValues();
   QVariantList combinedData;
-  int size = qMin(list1.size(), list2.size());
 
-  std::transform(list1.begin(), list1.begin() + size, list2.begin(),
+  Q_ASSERT(list1.size() != list2.size());
+
+  std::transform(list1.begin(), list1.begin(), list2.begin(),
                  std::back_inserter(combinedData),
                  [](const QString &item1, const QString &item2) {
     QVariantMap item;

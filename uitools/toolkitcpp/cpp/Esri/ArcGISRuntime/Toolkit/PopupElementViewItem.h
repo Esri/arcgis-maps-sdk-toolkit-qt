@@ -42,7 +42,7 @@ class PopupElementViewItem : public QObject
 public:
   explicit PopupElementViewItem(QObject *parent = nullptr);
   explicit PopupElementViewItem(QPointer<PopupElement> popupElement, QObject* parent = nullptr);
-  ~PopupElementViewItem();
+  ~PopupElementViewItem() override;
 
   QmlEnums::PopupElementType popupElementType() const;
   PopupElement* popupElement() const;

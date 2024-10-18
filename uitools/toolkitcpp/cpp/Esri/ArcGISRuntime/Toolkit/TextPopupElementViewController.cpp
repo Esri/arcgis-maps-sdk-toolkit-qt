@@ -19,6 +19,8 @@
 #include <PopupElement.h>
 #include <TextPopupElement.h>
 
+#include <QPointer>
+
 namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
