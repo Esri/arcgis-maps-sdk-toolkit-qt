@@ -45,8 +45,8 @@ MediaPopupElementViewController::~MediaPopupElementViewController() = default;
 \brief Constructor. Takes a \a mediaPopupElement and \a parent object.
   */
 MediaPopupElementViewController::MediaPopupElementViewController(
-    QPointer<MediaPopupElement> mediaPopupElement, QObject* parent)
-  : PopupElementViewItem{QPointer<MediaPopupElement>(std::move(mediaPopupElement)), parent}
+    MediaPopupElement* mediaPopupElement, QObject* parent)
+  : PopupElementViewItem{std::move(mediaPopupElement), parent}
 {
 }
 

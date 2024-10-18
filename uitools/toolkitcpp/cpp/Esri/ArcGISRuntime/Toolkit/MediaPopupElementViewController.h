@@ -21,7 +21,6 @@
 
 // Qt headers
 #include <QObject>
-#include <QPointer>
 
 // Maps SDK headers
 #include <PopupElement.h>
@@ -41,7 +40,7 @@ class MediaPopupElementViewController : public PopupElementViewItem
 
 public:
   explicit MediaPopupElementViewController(QObject* parent = nullptr);
-  explicit MediaPopupElementViewController(QPointer<MediaPopupElement> mediaPopupElement,
+  explicit MediaPopupElementViewController(MediaPopupElement* mediaPopupElement,
                                            QObject* parent = nullptr);
   ~MediaPopupElementViewController();
 
