@@ -13,39 +13,42 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_TEXTPOPUPELEMENTVIEWCONTROLLER_H
-#define ESRI_ARCGISRUNTIME_TOOLKIT_TEXTPOPUPELEMENTVIEWCONTROLLER_H
+#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_FIELDSPOPUPELEMENTVIEWCONTROLLER_H
+#define ESRI_ARCGISRUNTIME_TOOLKIT_FIELDSPOPUPELEMENTVIEWCONTROLLER_H
 
 // Toolkit headers
 #include "PopupElementViewItem.h"
 
 // Qt headers
+#include <QVariantList>
 #include <QObject>
 
 namespace Esri::ArcGISRuntime {
 
-class TextPopupElement;
+class FieldsPopupElement;
 class PopupElement;
 
 namespace Toolkit {
 
-class TextPopupElementViewController : public PopupElementViewItem
+class FieldsPopupElementViewController : public PopupElementViewItem
 {
   Q_OBJECT
-  Q_PROPERTY(QString text READ text NOTIFY textPopupElementChanged)
+  Q_PROPERTY(QString title READ title NOTIFY fieldsPopupElementChanged)
+  Q_PROPERTY(QVariantList labelsAndValues READ labelsAndValues NOTIFY fieldsPopupElementChanged)
 
 public:
-  explicit TextPopupElementViewController(QObject* parent = nullptr);
-  explicit TextPopupElementViewController(TextPopupElement* textPopupElement,
-                                          QObject* parent = nullptr);
-  ~TextPopupElementViewController() override;
+  explicit FieldsPopupElementViewController(QObject* parent = nullptr);
+  explicit FieldsPopupElementViewController(FieldsPopupElement* fieldsPopupElement,
+                                            QObject* parent = nullptr);
+  ~FieldsPopupElementViewController() override;
 
-  QString text() const;
+  QString title() const;
+  QVariantList labelsAndValues() const;
 
 signals:
-  void textPopupElementChanged();
+  void fieldsPopupElementChanged();
 };
 
 } // namespace Toolkit
 } // namespace Esri::ArcGISRuntime
-#endif // ESRI_ARCGISRUNTIME_TOOLKIT_TEXTPOPUPELEMENTVIEWCONTROLLER_H
+#endif // ESRI_ARCGISRUNTIME_TOOLKIT_FIELDSPOPUPELEMENTVIEWCONTROLLER_H

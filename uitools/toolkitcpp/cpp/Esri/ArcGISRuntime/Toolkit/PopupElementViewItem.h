@@ -18,7 +18,6 @@
 
 // Qt headers
 #include <QObject>
-#include <QPointer>
 
 // Maps SDK headers
 #include <PopupElement.h>
@@ -41,8 +40,8 @@ class PopupElementViewItem : public QObject
   Q_PROPERTY(QmlEnums::PopupElementType popupElementType READ popupElementType NOTIFY popupElementChanged)
 public:
   explicit PopupElementViewItem(QObject *parent = nullptr);
-  explicit PopupElementViewItem(QPointer<PopupElement> popupElement, QObject *parent = nullptr);
-  ~PopupElementViewItem();
+  explicit PopupElementViewItem(PopupElement* popupElement, QObject* parent = nullptr);
+  ~PopupElementViewItem() override;
 
   QmlEnums::PopupElementType popupElementType() const;
   PopupElement* popupElement() const;
@@ -52,7 +51,7 @@ signals:
   void popupElementChanged();
 
 private:
-  QPointer<PopupElement> m_popupElement;
+  PopupElement* m_popupElement = nullptr;
 
 };
 

@@ -26,6 +26,7 @@
 #include "CoordinateConversionController.h"
 #include "CoordinateConversionOption.h"
 #include "CoordinateConversionResult.h"
+#include "FieldsPopupElementViewController.h"
 #include "FloorFilterController.h"
 #include "FloorFilterFacilityItem.h"
 #include "FloorFilterLevelItem.h"
@@ -204,6 +205,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     registerComponent<CoordinateConversionController>();
     registerComponent<CoordinateConversionOption>();
     registerComponent<CoordinateConversionResult>();
+    registerComponent<FieldsPopupElementViewController>();
     registerComponent<FloorFilterController>();
     registerComponent<FloorFilterFacilityItem>(CreationType::Uncreatable);
     registerComponent<FloorFilterLevelItem>(CreationType::Uncreatable);

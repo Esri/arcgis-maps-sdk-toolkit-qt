@@ -15,6 +15,10 @@
  ******************************************************************************/
 #include "TextPopupElementViewController.h"
 
+// Maps SDK headers
+#include <PopupElement.h>
+#include <TextPopupElement.h>
+
 namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
@@ -31,7 +35,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
    \li \a parent Parent owning \c QObject.
  \endlist
  */
-TextPopupElementViewController::TextPopupElementViewController(QObject *parent)
+TextPopupElementViewController::TextPopupElementViewController(QObject* parent)
   : PopupElementViewItem{parent}
 {
 }
@@ -45,8 +49,8 @@ TextPopupElementViewController::~TextPopupElementViewController() = default;
 \brief Constructor. Takes a \a textPopupElement and \a parent object.
   */
 TextPopupElementViewController::TextPopupElementViewController(
-    QPointer<TextPopupElement> textPopupElement, QObject *parent)
-  : PopupElementViewItem{QPointer<PopupElement>(textPopupElement), parent}
+    TextPopupElement* textPopupElement, QObject* parent)
+  : PopupElementViewItem{std::move(textPopupElement), parent}
 {
 }
 
@@ -63,4 +67,8 @@ QString TextPopupElementViewController::text() const
 /*!
   \fn void Esri::ArcGISRuntime::Toolkit::TextPopupElementViewController::textPopupElementChanged()
   \brief Signal emitted when the \c text changes.
+ */
+
+/*!
+  \property Esri::ArcGISRuntime::Toolkit::TextPopupElementViewController::text
  */

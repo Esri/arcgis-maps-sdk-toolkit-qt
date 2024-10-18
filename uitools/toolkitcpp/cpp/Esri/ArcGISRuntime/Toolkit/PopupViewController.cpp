@@ -19,6 +19,9 @@
 #include <QFuture>
 #include <QDebug>
 
+// Maps SDK headers
+#include "FieldsPopupElement.h"
+#include "TextPopupElement.h"
 #include "Popup.h"
 #include "PopupAttachmentListModel.h"
 #include "PopupAttachmentManager.h"
@@ -28,6 +31,8 @@
 #include "PopupManager.h"
 #include "PopupTypes.h"
 
+// Toolkit headers
+#include "FieldsPopupElementViewController.h"
 #include "TextPopupElementViewController.h"
 #include "PopupElementViewItem.h"
 
@@ -130,7 +135,8 @@ void PopupViewController::setPopup(Popup* popup)
                 new TextPopupElementViewController(static_cast<TextPopupElement*>(element), m_popup));
           break;
         case Esri::ArcGISRuntime::PopupElementType::FieldsPopupElement:
-          Q_UNIMPLEMENTED();
+          m_popupElementControllerModel->append(
+                new FieldsPopupElementViewController(static_cast<FieldsPopupElement*>(element), m_popup));
           break;
         case Esri::ArcGISRuntime::PopupElementType::AttachmentsPopupElement:
           Q_UNIMPLEMENTED();

@@ -27,6 +27,7 @@ HEADERS += $$CPPPATH/ArcGISAuthenticationController.h \
            $$CPPPATH/CoordinateConversionOption.h \
            $$CPPPATH/CoordinateConversionResult.h \
            $$CPPPATH/CoordinateOptionDefaults.h \
+           $$CPPPATH/FieldsPopupElementViewController.h \
            $$CPPPATH/FloorFilterController.h \
            $$CPPPATH/FloorFilterFacilityItem.h \
            $$CPPPATH/FloorFilterLevelItem.h \
@@ -71,6 +72,7 @@ SOURCES += $$CPPPATH/ArcGISAuthenticationController.cpp \
            $$CPPPATH/CoordinateConversionOption.cpp \
            $$CPPPATH/CoordinateConversionResult.cpp \
            $$CPPPATH/CoordinateOptionDefaults.cpp \
+           $$CPPPATH/FieldsPopupElementViewController.cpp \
            $$CPPPATH/FloorFilterController.cpp \
            $$CPPPATH/FloorFilterFacilityItem.cpp \
            $$CPPPATH/FloorFilterLevelItem.cpp \
