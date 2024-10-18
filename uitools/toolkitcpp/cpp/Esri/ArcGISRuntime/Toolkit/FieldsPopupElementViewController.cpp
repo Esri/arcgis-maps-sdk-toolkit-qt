@@ -20,8 +20,6 @@
 #include <PopupElement.h>
 #include <PopupField.h>
 
-#include <QPointer>
-
 namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
@@ -52,8 +50,8 @@ FieldsPopupElementViewController::~FieldsPopupElementViewController() = default;
 \brief Constructor. Takes a \a fieldsPopupElement and \a parent object.
   */
 FieldsPopupElementViewController::FieldsPopupElementViewController(
-    QPointer<FieldsPopupElement> fieldsPopupElement, QObject* parent)
-  : PopupElementViewItem{QPointer<FieldsPopupElement>(std::move(fieldsPopupElement)), parent}
+    FieldsPopupElement* fieldsPopupElement, QObject* parent)
+  : PopupElementViewItem{std::move(fieldsPopupElement), parent}
 {
 }
 

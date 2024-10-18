@@ -45,7 +45,7 @@ PopupElementViewItem::PopupElementViewItem(QObject *parent)
 /*!
 \brief Constructor. Takes a \a popupElement and \a parent object.
   */
-PopupElementViewItem::PopupElementViewItem(QPointer<PopupElement> popupElement, QObject* parent)
+PopupElementViewItem::PopupElementViewItem(PopupElement* popupElement, QObject* parent)
   : QObject{parent}
   , m_popupElement{std::move(popupElement)}
 {
@@ -81,12 +81,12 @@ void PopupElementViewItem::setPopupElement(PopupElement* popupElement)
     return;
 
   if (m_popupElement)
-    disconnect(m_popupElement.data(), nullptr, this, nullptr);
+    disconnect(m_popupElement, nullptr, this, nullptr);
 
   m_popupElement = popupElement;
 
   if (m_popupElement)
-    connect(m_popupElement.data(),
+    connect(m_popupElement,
             &QObject::destroyed,
             this,
             &PopupElementViewItem::popupElementChanged);

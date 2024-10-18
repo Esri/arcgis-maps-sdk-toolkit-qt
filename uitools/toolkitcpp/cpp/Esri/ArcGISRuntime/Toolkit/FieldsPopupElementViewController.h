@@ -38,7 +38,7 @@ class FieldsPopupElementViewController : public PopupElementViewItem
 
 public:
   explicit FieldsPopupElementViewController(QObject* parent = nullptr);
-  explicit FieldsPopupElementViewController(QPointer<FieldsPopupElement> fieldsPopupElement,
+  explicit FieldsPopupElementViewController(FieldsPopupElement* fieldsPopupElement,
                                             QObject* parent = nullptr);
   ~FieldsPopupElementViewController() override;
 

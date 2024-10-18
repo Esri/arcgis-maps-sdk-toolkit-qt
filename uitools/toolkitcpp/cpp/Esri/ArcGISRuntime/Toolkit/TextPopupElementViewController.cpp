@@ -19,8 +19,6 @@
 #include <PopupElement.h>
 #include <TextPopupElement.h>
 
-#include <QPointer>
-
 namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
@@ -51,8 +49,8 @@ TextPopupElementViewController::~TextPopupElementViewController() = default;
 \brief Constructor. Takes a \a textPopupElement and \a parent object.
   */
 TextPopupElementViewController::TextPopupElementViewController(
-    QPointer<TextPopupElement> textPopupElement, QObject* parent)
-  : PopupElementViewItem{QPointer<PopupElement>(std::move(textPopupElement)), parent}
+    TextPopupElement* textPopupElement, QObject* parent)
+  : PopupElementViewItem{std::move(textPopupElement), parent}
 {
 }
 
