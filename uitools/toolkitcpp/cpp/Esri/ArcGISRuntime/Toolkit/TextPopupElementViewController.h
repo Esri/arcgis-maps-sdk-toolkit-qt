@@ -21,7 +21,6 @@
 
 // Qt headers
 #include <QObject>
-#include <QPointer>
 
 namespace Esri::ArcGISRuntime {
 
@@ -37,9 +36,9 @@ class TextPopupElementViewController : public PopupElementViewItem
 
 public:
   explicit TextPopupElementViewController(QObject* parent = nullptr);
-  explicit TextPopupElementViewController(QPointer<TextPopupElement> textPopupElement,
+  explicit TextPopupElementViewController(TextPopupElement* textPopupElement,
                                           QObject* parent = nullptr);
-  ~TextPopupElementViewController();
+  ~TextPopupElementViewController() override;
 
   QString text() const;
 

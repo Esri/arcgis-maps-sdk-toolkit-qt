@@ -20,8 +20,8 @@
 #include "PopupElementViewItem.h"
 
 // Qt headers
+#include <QVariantList>
 #include <QObject>
-#include <QPointer>
 
 namespace Esri::ArcGISRuntime {
 
@@ -34,16 +34,16 @@ class FieldsPopupElementViewController : public PopupElementViewItem
 {
   Q_OBJECT
   Q_PROPERTY(QString title READ title NOTIFY fieldsPopupElementChanged)
-  Q_PROPERTY(QVariantList values READ values NOTIFY fieldsPopupElementChanged)
+  Q_PROPERTY(QVariantList labelsAndValues READ labelsAndValues NOTIFY fieldsPopupElementChanged)
 
 public:
   explicit FieldsPopupElementViewController(QObject* parent = nullptr);
-  explicit FieldsPopupElementViewController(QPointer<FieldsPopupElement> fieldsPopupElement,
+  explicit FieldsPopupElementViewController(FieldsPopupElement* fieldsPopupElement,
                                             QObject* parent = nullptr);
-  ~FieldsPopupElementViewController();
+  ~FieldsPopupElementViewController() override;
 
   QString title() const;
-  QVariantList values();
+  QVariantList labelsAndValues() const;
 
 signals:
   void fieldsPopupElementChanged();

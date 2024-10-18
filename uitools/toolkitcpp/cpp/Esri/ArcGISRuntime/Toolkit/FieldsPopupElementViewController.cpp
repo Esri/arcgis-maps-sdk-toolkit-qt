@@ -50,8 +50,8 @@ FieldsPopupElementViewController::~FieldsPopupElementViewController() = default;
 \brief Constructor. Takes a \a fieldsPopupElement and \a parent object.
   */
 FieldsPopupElementViewController::FieldsPopupElementViewController(
-    QPointer<FieldsPopupElement> fieldsPopupElement, QObject* parent)
-  : PopupElementViewItem{QPointer<FieldsPopupElement>(std::move(fieldsPopupElement)), parent}
+    FieldsPopupElement* fieldsPopupElement, QObject* parent)
+  : PopupElementViewItem{std::move(fieldsPopupElement), parent}
 {
 }
 
@@ -68,14 +68,15 @@ QString FieldsPopupElementViewController::title() const
   \l {Esri::ArcGISRuntime::FieldsPopupElement::formattedValues} {formattedValues} of the
   \c FieldsPopupElement in a QList of QMap elements
   */
-QVariantList FieldsPopupElementViewController::values()
+QVariantList FieldsPopupElementViewController::labelsAndValues() const
 {
   const auto list1 = static_cast<FieldsPopupElement*>(popupElement())->labels();
   const auto list2 = static_cast<FieldsPopupElement*>(popupElement())->formattedValues();
   QVariantList combinedData;
-  int size = qMin(list1.size(), list2.size());
 
-  std::transform(list1.begin(), list1.begin() + size, list2.begin(),
+  Q_ASSERT(list1.size() == list2.size());
+
+  std::transform(list1.begin(), list1.end(), list2.begin(),
                  std::back_inserter(combinedData),
                  [](const QString &item1, const QString &item2) {
     QVariantMap item;
@@ -83,7 +84,7 @@ QVariantList FieldsPopupElementViewController::values()
     item["formattedValue"] = item2;
     return item;
   });
-  emit fieldsPopupElementChanged();
+
   return combinedData;
 }
 

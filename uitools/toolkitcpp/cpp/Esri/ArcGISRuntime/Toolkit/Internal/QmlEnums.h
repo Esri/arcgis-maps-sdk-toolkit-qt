@@ -28,7 +28,7 @@ class QmlEnums : public QObject
   Q_OBJECT
 public:
   Q_INVOKABLE explicit QmlEnums(QObject* parent = nullptr);
-  ~QmlEnums();
+  ~QmlEnums() override;
 
   enum class PopupElementType
   {
