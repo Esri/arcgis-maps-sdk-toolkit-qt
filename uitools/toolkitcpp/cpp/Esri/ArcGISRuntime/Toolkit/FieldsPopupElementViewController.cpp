@@ -70,15 +70,15 @@ QString FieldsPopupElementViewController::title() const
   \l {Esri::ArcGISRuntime::FieldsPopupElement::formattedValues} {formattedValues} of the
   \c FieldsPopupElement in a QList of QMap elements
   */
-QVariantList FieldsPopupElementViewController::labelsAndValues()
+QVariantList FieldsPopupElementViewController::labelsAndValues() const
 {
   const auto list1 = static_cast<FieldsPopupElement*>(popupElement())->labels();
   const auto list2 = static_cast<FieldsPopupElement*>(popupElement())->formattedValues();
   QVariantList combinedData;
 
-  Q_ASSERT(list1.size() != list2.size());
+  Q_ASSERT(list1.size() == list2.size());
 
-  std::transform(list1.begin(), list1.begin(), list2.begin(),
+  std::transform(list1.begin(), list1.end(), list2.begin(),
                  std::back_inserter(combinedData),
                  [](const QString &item1, const QString &item2) {
     QVariantMap item;
@@ -86,7 +86,7 @@ QVariantList FieldsPopupElementViewController::labelsAndValues()
     item["formattedValue"] = item2;
     return item;
   });
-  emit fieldsPopupElementChanged();
+
   return combinedData;
 }
 

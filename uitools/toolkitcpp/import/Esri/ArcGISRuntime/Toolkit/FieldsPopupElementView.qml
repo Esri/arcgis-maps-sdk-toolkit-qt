@@ -33,7 +33,7 @@ ListView {
 
     height: contentHeight
     interactive: false
-    model: controller.values
+    model: controller.labelsAndValues
     clip: true
     focus: true
     spacing: 10

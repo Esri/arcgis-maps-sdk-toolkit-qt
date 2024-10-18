@@ -43,7 +43,7 @@ public:
   ~FieldsPopupElementViewController() override;
 
   QString title() const;
-  QVariantList labelsAndValues();
+  QVariantList labelsAndValues() const;
 
 signals:
   void fieldsPopupElementChanged();
