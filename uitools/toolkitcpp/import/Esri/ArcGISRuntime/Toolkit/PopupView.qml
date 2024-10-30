@@ -145,11 +145,6 @@ Page {
         rightPadding: popupView.spacing
     }
 
-    // MediaPopupElementView {
-    //     // controller: listModelData
-    //     width: parent.width
-    // }
-
     // prioritizes PopupElements over PopupManager styled Popups if both are present
     contentItem: Loader {
         id: popupDisplayLoader

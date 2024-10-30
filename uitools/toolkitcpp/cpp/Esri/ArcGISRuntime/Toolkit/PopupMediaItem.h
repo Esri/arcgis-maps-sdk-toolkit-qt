@@ -30,6 +30,9 @@
 //fwd declare?
 #include <QUrl>
 
+// Other headers
+#include "Internal/QmlEnums.h"
+
 // class QUrl;
 
 namespace Esri::ArcGISRuntime {
@@ -48,6 +51,7 @@ class PopupMediaItem : public QObject
   Q_PROPERTY(QUrl sourceUrl READ sourceUrl NOTIFY popopMediaItemChanged)
   Q_PROPERTY(QUrl linkUrl READ linkUrl NOTIFY popopMediaItemChanged)
   Q_PROPERTY(QString caption READ caption NOTIFY popopMediaItemChanged)
+  Q_PROPERTY(PopupMediaType popupMediaType READ popupMediaType NOTIFY popopMediaItemChanged)
 public:
   explicit PopupMediaItem(QObject* parent = nullptr);
   explicit PopupMediaItem(PopupMedia* popupMedia, QObject* parent = nullptr);
@@ -56,6 +60,7 @@ public:
   QUrl linkUrl() const;
   QUrl sourceUrl() const;
   QString caption() const;
+  PopupMediaType popupMediaType() const;
 
 signals:
   void popopMediaItemChanged();

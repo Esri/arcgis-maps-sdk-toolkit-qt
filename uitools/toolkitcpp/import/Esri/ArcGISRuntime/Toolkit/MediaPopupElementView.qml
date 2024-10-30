@@ -18,17 +18,20 @@ import Esri.ArcGISRuntime.Toolkit.Controller
 
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
 
 
-Column {
-    height: childrenRect.height + 10
-    width: elementsView.width
-    leftPadding: 10
-    rightPadding: 10
-    topPadding: 10
-    bottomPadding: 10
+ColumnLayout {
+    id: mediaPopupElementView
+    height: childrenRect.height
     clip: true
     focus: true
+    Layout.fillWidth: true
+    spacing: layoutSpacing
+
+    property real mediaMargin: 10
+    property real imageTextMargin: 5
+    property real layoutSpacing: 0
 
     /*!
       \qmlproperty MediaPopupElementView controller
@@ -39,60 +42,68 @@ Column {
     property var controller: null
 
     MenuSeparator {
-        width: parent.width
-        rightPadding: 20
+        Layout.fillWidth: true
+        Layout.leftMargin: mediaMargin
+        Layout.rightMargin: mediaMargin
     }
 
-    Column {
-        height: childrenRect.height
-        width: elementsView.width - 40
+    ColumnLayout {
         clip: true
         focus: true
+        spacing: layoutSpacing
 
         Label {
             text: controller.title !== "" ? controller.title : "Media"
             wrapMode: Text.WordWrap
-            width: elementsView.width
             font.pixelSize: 20
             font.weight: Font.Black
+
+            Layout.fillWidth: true
+            Layout.leftMargin: mediaMargin
+            Layout.rightMargin: mediaMargin
         }
         Label {
             text: controller.description
             visible: controller.description !== ""
             wrapMode: Text.WordWrap
-            width: elementsView.width
+
+            Layout.fillWidth: true
+            Layout.leftMargin: mediaMargin
+            Layout.rightMargin: mediaMargin
         }
     }
 
     MenuSeparator {
-        width: parent.width
-        rightPadding: 20
+        Layout.fillWidth: true
+        Layout.leftMargin: mediaMargin
+        Layout.rightMargin: mediaMargin
     }
 
     ListView {
-        id: lv
         orientation: ListView.Horizontal
         clip: true
         focus: true
-        height: 300
-        width: parent.width - 20
-
-        spacing: 10
-
+        height: 170
+        spacing: mediaMargin
         model: controller.popupMediaItems
 
+        Layout.fillWidth: true
+        Layout.leftMargin: mediaMargin
+        Layout.rightMargin: mediaMargin
+
         delegate: Item {
-            height: 300
-            width: elementsView.width - 40
+            height: 170
+            width: 220
 
             Image {
+                id: imageMediaPreview
                 source: model.sourceUrl
                 fillMode: Image.PreserveAspectCrop
-                height: 300
-                width: elementsView.width - 40
-                // width: popupView.width - 40
                 asynchronous: true
                 cache: true
+
+                anchors.fill: parent
+                Layout.leftMargin: mediaMargin
 
                 MouseArea {
                     anchors.fill: parent
@@ -100,64 +111,51 @@ Column {
                         Qt.openUrlExternally(model.linkUrl);
                     }
                 }
-
-                Component.onCompleted: print("this.height:", this, this.height)
             }
 
             // Overlay text
             Rectangle {
                 visible: model.title !== ""
-                anchors.bottom: parent.bottom
-                anchors.left: parent.left
-                anchors.right: parent.right
-                height: childrenRect.height
+                height: overlayTextLayout.height
                 color: "white"
                 opacity: 0.7
 
-                Column {
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+
+                ColumnLayout {
+                    id: overlayTextLayout
                     height: childrenRect.height
-                    width: elementsView.width - 40
                     clip: true
                     focus: true
+                    spacing: layoutSpacing
+
                     anchors.bottom: parent.bottom
-                    leftPadding: 10
-                    // rightPadding: 10
 
                     Label {
                         visible: model.title !== ""
                         text: model.title
                         font.weight: Font.Bold
-                        // font.pointSize: 20
-                        // width: elementsView.width - 40 - 20
-                        width: parent.width - 20
-                        // wrapMode: Text.WordWrap
                         color: "black"
                         elide: Text.ElideRight
-                        // anchors.horizontalCenter: parent.horizontalCenter
-                        // anchors.bottom: parent.bottom
-                        // anchors.bottomMargin: 20 // Adjust margin as needed
-                        // Component.onCompleted: {
-                        //     print("model.title: ", model.title);
-                        //     print("label.parent:" , parent.width);
-                        // }
+
+                        Layout.alignment: Qt.AlignHCenter
+                        Layout.maximumWidth: imageMediaPreview.width - imageTextMargin
+                        Layout.leftMargin: imageTextMargin
+                        Layout.rightMargin: imageTextMargin
                     }
 
                     Label {
                         visible: model.caption !== ""
-                        // visible: false
                         text: model.caption
-                        font.pointSize: 15
-                        // width: elementsView.width - 40 - 2
-                        width: parent.width - 20
-                        // wrapMode: Text.WordWrap
                         color: "black"
                         elide: Text.ElideRight
-                        // anchors.horizontalCenter: parent.horizontalCenter
-                        // anchors.bottom: parent.bottom
-                        // anchors.bottomMargin: 20 // Adjust margin as needed
-                        Component.onCompleted: {
-                            print("model.caption: ", model.caption);
-                        }
+
+                        Layout.alignment: Qt.AlignHCenter
+                        Layout.maximumWidth: imageMediaPreview.width - imageTextMargin
+                        Layout.leftMargin: imageTextMargin
+                        Layout.rightMargin: imageTextMargin
                     }
                 }
             }

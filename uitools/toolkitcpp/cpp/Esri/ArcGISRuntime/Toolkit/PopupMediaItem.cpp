@@ -23,11 +23,9 @@
 namespace Esri::ArcGISRuntime::Toolkit {
 
 
-
 PopupMediaItem::PopupMediaItem(QObject *parent)
   : QObject{parent}
 {
-
 }
 
 PopupMediaItem::PopupMediaItem(PopupMedia* popupMedia, QObject* parent)
@@ -53,6 +51,11 @@ QUrl PopupMediaItem::linkUrl() const
 QString PopupMediaItem::caption() const
 {
   return m_popupMedia->caption();
+}
+
+PopupMediaType PopupMediaItem::popupMediaType() const
+{
+  return m_popupMedia->popupMediaType();
 }
 
 } // namespace Esri::ArcGISRuntime::Toolkit

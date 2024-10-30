@@ -42,8 +42,6 @@ class MediaPopupElementViewController : public PopupElementViewItem
   Q_OBJECT
   Q_PROPERTY(QString title READ title NOTIFY mediaPopupElementChanged)
   Q_PROPERTY(QString description READ description NOTIFY mediaPopupElementChanged)
-  Q_PROPERTY(PopupMediaListModel* media READ media NOTIFY mediaPopupElementChanged)
-  Q_PROPERTY(QStringListModel* sourceUrls READ sourceUrls NOTIFY mediaPopupElementChanged)
   Q_PROPERTY(QAbstractListModel* popupMediaItems READ popupMediaItems NOTIFY mediaPopupElementChanged)
 
 public:
@@ -54,15 +52,12 @@ public:
 
   QString description() const;
   QString title() const;
-  PopupMediaListModel* media() const;
-  QStringListModel* sourceUrls();
   GenericListModel* popupMediaItems() const;
 
 signals:
   void mediaPopupElementChanged();
 
 private:
-  QStringListModel* m_sourceUrls = nullptr;
   GenericListModel* m_popupMediaItems = nullptr;
 };
 
