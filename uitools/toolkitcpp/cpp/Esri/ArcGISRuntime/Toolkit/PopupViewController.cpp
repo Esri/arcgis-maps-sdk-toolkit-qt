@@ -21,6 +21,7 @@
 
 // Maps SDK headers
 #include "FieldsPopupElement.h"
+#include "MediaPopupElement.h"
 #include "TextPopupElement.h"
 #include "Popup.h"
 #include "PopupAttachmentListModel.h"

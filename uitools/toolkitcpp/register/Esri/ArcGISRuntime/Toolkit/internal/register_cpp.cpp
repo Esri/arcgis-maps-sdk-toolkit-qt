@@ -36,6 +36,7 @@
 #include "NorthArrowController.h"
 #include "OverviewMapController.h"
 #include "PopupElementViewItem.h"
+#include "PopupMediaItem.h"
 #include "PopupViewController.h"
 #include "ScalebarController.h"
 #include "SearchResult.h"
@@ -216,6 +217,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     registerComponent<NorthArrowController>();
     registerComponent<OverviewMapController>();
     registerComponent<PopupElementViewItem>();
+    registerComponent<PopupMediaItem>();
     registerComponent<PopupViewController>();
     registerComponent<QmlEnums>();
     registerComponent<ScalebarController>();

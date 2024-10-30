@@ -25,7 +25,6 @@ Item {
     /*!
       \qmlproperty TextPopupElementView controller
       \brief The Controller handles reading from the TextPopupElement.
-
       \sa Esri::ArcGISRuntime::Toolkit::TextPopupElementViewController
     */
     property var controller: null
@@ -38,7 +37,8 @@ Item {
         textFormat: Text.RichText
         wrapMode: Text.WordWrap
         anchors.fill: parent
-        padding: 10
+        leftPadding: 10
+        rightPadding: 10
 
         onLinkActivated: (link) => {
             if (link !== "" && link !== undefined) {

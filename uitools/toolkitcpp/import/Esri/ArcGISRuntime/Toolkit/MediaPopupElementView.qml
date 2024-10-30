@@ -19,7 +19,16 @@ import Esri.ArcGISRuntime.Toolkit.Controller
 import QtQuick
 import QtQuick.Controls
 
-Item {
+
+Column {
+    height: childrenRect.height + 10
+    width: elementsView.width
+    leftPadding: 10
+    rightPadding: 10
+    topPadding: 10
+    bottomPadding: 10
+    clip: true
+    focus: true
 
     /*!
       \qmlproperty MediaPopupElementView controller
@@ -29,12 +38,130 @@ Item {
     */
     property var controller: null
 
-    implicitHeight: childrenRect.height
-    width: elementsView.width
-
-    Label {
-        text: controller.title !== "" ? controller.title : "Media"
-        wrapMode: Text.WordWrap
+    MenuSeparator {
         width: parent.width
+        rightPadding: 20
+    }
+
+    Column {
+        height: childrenRect.height
+        width: elementsView.width - 40
+        clip: true
+        focus: true
+
+        Label {
+            text: controller.title !== "" ? controller.title : "Media"
+            wrapMode: Text.WordWrap
+            width: elementsView.width
+            font.pixelSize: 20
+            font.weight: Font.Black
+        }
+        Label {
+            text: controller.description
+            visible: controller.description !== ""
+            wrapMode: Text.WordWrap
+            width: elementsView.width
+        }
+    }
+
+    MenuSeparator {
+        width: parent.width
+        rightPadding: 20
+    }
+
+    ListView {
+        id: lv
+        orientation: ListView.Horizontal
+        clip: true
+        focus: true
+        height: 300
+        width: parent.width - 20
+
+        spacing: 10
+
+        model: controller.popupMediaItems
+
+        delegate: Item {
+            height: 300
+            width: elementsView.width - 40
+
+            Image {
+                source: model.sourceUrl
+                fillMode: Image.PreserveAspectCrop
+                height: 300
+                width: elementsView.width - 40
+                // width: popupView.width - 40
+                asynchronous: true
+                cache: true
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        Qt.openUrlExternally(model.linkUrl);
+                    }
+                }
+
+                Component.onCompleted: print("this.height:", this, this.height)
+            }
+
+            // Overlay text
+            Rectangle {
+                visible: model.title !== ""
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: childrenRect.height
+                color: "white"
+                opacity: 0.7
+
+                Column {
+                    height: childrenRect.height
+                    width: elementsView.width - 40
+                    clip: true
+                    focus: true
+                    anchors.bottom: parent.bottom
+                    leftPadding: 10
+                    // rightPadding: 10
+
+                    Label {
+                        visible: model.title !== ""
+                        text: model.title
+                        font.weight: Font.Bold
+                        // font.pointSize: 20
+                        // width: elementsView.width - 40 - 20
+                        width: parent.width - 20
+                        // wrapMode: Text.WordWrap
+                        color: "black"
+                        elide: Text.ElideRight
+                        // anchors.horizontalCenter: parent.horizontalCenter
+                        // anchors.bottom: parent.bottom
+                        // anchors.bottomMargin: 20 // Adjust margin as needed
+                        // Component.onCompleted: {
+                        //     print("model.title: ", model.title);
+                        //     print("label.parent:" , parent.width);
+                        // }
+                    }
+
+                    Label {
+                        visible: model.caption !== ""
+                        // visible: false
+                        text: model.caption
+                        font.pointSize: 15
+                        // width: elementsView.width - 40 - 2
+                        width: parent.width - 20
+                        // wrapMode: Text.WordWrap
+                        color: "black"
+                        elide: Text.ElideRight
+                        // anchors.horizontalCenter: parent.horizontalCenter
+                        // anchors.bottom: parent.bottom
+                        // anchors.bottomMargin: 20 // Adjust margin as needed
+                        Component.onCompleted: {
+                            print("model.caption: ", model.caption);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
+

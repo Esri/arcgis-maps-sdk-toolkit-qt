@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2024 Esri
  *
@@ -14,6 +15,18 @@
  *  limitations under the License.
  ******************************************************************************/
 #include "MediaPopupElementViewController.h"
+
+#include <QDebug>
+#include <QUrl>
+#include <QList>
+
+// Maps SDK headers
+#include <MediaPopupElement.h>
+#include <PopupElement.h>
+#include <PopupMedia.h>
+#include <PopupMediaItem.h>
+#include <PopupMediaValue.h>
+#include <PopupMediaListModel.h>
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
@@ -46,8 +59,30 @@ MediaPopupElementViewController::~MediaPopupElementViewController() = default;
   */
 MediaPopupElementViewController::MediaPopupElementViewController(
     MediaPopupElement* mediaPopupElement, QObject* parent)
-  : PopupElementViewItem{std::move(mediaPopupElement), parent}
+  : PopupElementViewItem{std::move(mediaPopupElement), parent},
+    m_popupMediaItems{new GenericListModel(&PopupMediaItem::staticMetaObject, this)}
 {
+  // qDebug() << static_cast<MediaPopupElement*>(popupElement())->media()->size();
+  // for ( auto media : *static_cast<MediaPopupElement*>(popupElement())->media() )
+  // {
+  //   qDebug() << this;
+  //   if ( media->popupMediaType() == PopupMediaType::Image ) {
+  //     qDebug() << "C++: " << media->value()->sourceUrl();
+  //   }
+  // }
+
+  int i = 0;
+  for (auto media: *static_cast<MediaPopupElement*>(popupElement())->media())
+  {
+    qDebug() << ++i;
+    m_popupMediaItems->append(new PopupMediaItem(media, this));
+  }
+  qDebug() << "RowCount: " << m_popupMediaItems->rowCount();
+}
+
+QString MediaPopupElementViewController::description() const
+{
+  return static_cast<MediaPopupElement*>(popupElement())->description();
 }
 
 /*!
@@ -56,6 +91,36 @@ MediaPopupElementViewController::MediaPopupElementViewController(
 QString MediaPopupElementViewController::title() const
 {
   return static_cast<MediaPopupElement*>(popupElement())->title();
+}
+
+PopupMediaListModel* MediaPopupElementViewController::media() const
+{
+  // qDebug() << "size: " << static_cast<MediaPopupElement*>(popupElement())->media()->size();
+  return static_cast<MediaPopupElement*>(popupElement())->media();
+}
+
+QStringListModel* MediaPopupElementViewController::sourceUrls()
+{
+  if (m_sourceUrls)
+  {
+    return m_sourceUrls;
+  }
+
+  QStringList sourceUrls;
+  for ( auto media: *static_cast<MediaPopupElement*>(popupElement())->media() )
+  {
+    // qDebug() << media->value()->sourceUrl().toString();
+    sourceUrls.append(media->value()->sourceUrl().toString());
+  }
+
+  m_sourceUrls = new QStringListModel(sourceUrls, popupElement());
+  // qDebug() << m_sourceUrls->roleNames();
+  return m_sourceUrls;
+}
+
+GenericListModel* MediaPopupElementViewController::popupMediaItems() const
+{
+  return m_popupMediaItems;
 }
 
 } // namespace Esri::ArcGISRuntime::Toolkit

@@ -20,16 +20,20 @@
 #include "PopupElementViewItem.h"
 
 // Qt headers
+#include <QStringListModel>
 #include <QObject>
 
-// Maps SDK headers
-#include <PopupElement.h>
-#include <MediaPopupElement.h>
+// Other headers
+#include "Internal/GenericListModel.h"
+
+Q_MOC_INCLUDE("PopupMediaValue.h")
+Q_MOC_INCLUDE("PopupMediaListModel.h")
 
 namespace Esri::ArcGISRuntime {
 
-class TextPopupElement;
 class PopupElement;
+class MediaPopupElement;
+class PopupMediaListModel;
 
 namespace Toolkit {
 
@@ -37,17 +41,29 @@ class MediaPopupElementViewController : public PopupElementViewItem
 {
   Q_OBJECT
   Q_PROPERTY(QString title READ title NOTIFY mediaPopupElementChanged)
+  Q_PROPERTY(QString description READ description NOTIFY mediaPopupElementChanged)
+  Q_PROPERTY(PopupMediaListModel* media READ media NOTIFY mediaPopupElementChanged)
+  Q_PROPERTY(QStringListModel* sourceUrls READ sourceUrls NOTIFY mediaPopupElementChanged)
+  Q_PROPERTY(QAbstractListModel* popupMediaItems READ popupMediaItems NOTIFY mediaPopupElementChanged)
 
 public:
   explicit MediaPopupElementViewController(QObject* parent = nullptr);
   explicit MediaPopupElementViewController(MediaPopupElement* mediaPopupElement,
                                            QObject* parent = nullptr);
-  ~MediaPopupElementViewController();
+  ~MediaPopupElementViewController() override;
 
+  QString description() const;
   QString title() const;
+  PopupMediaListModel* media() const;
+  QStringListModel* sourceUrls();
+  GenericListModel* popupMediaItems() const;
 
 signals:
   void mediaPopupElementChanged();
+
+private:
+  QStringListModel* m_sourceUrls = nullptr;
+  GenericListModel* m_popupMediaItems = nullptr;
 };
 
 } // namespace Toolkit
