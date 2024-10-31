@@ -45,12 +45,12 @@ public:
 
   enum class PopupMediaType
   {
-    PopupMediaTypeImage       = static_cast<int>(Esri::ArcGISRuntime::PopupMediaType::Image),
-    PopupMediaTypeBarChart    = static_cast<int>(Esri::ArcGISRuntime::PopupMediaType::BarChart),
+    PopupMediaTypeImage = static_cast<int>(Esri::ArcGISRuntime::PopupMediaType::Image),
+    PopupMediaTypeBarChart = static_cast<int>(Esri::ArcGISRuntime::PopupMediaType::BarChart),
     PopupMediaTypeColumnChart = static_cast<int>(Esri::ArcGISRuntime::PopupMediaType::ColumnChart),
-    PopupMediaTypeLineChart   = static_cast<int>(Esri::ArcGISRuntime::PopupMediaType::LineChart),
-    PopupMediaTypePieChart    = static_cast<int>(Esri::ArcGISRuntime::PopupMediaType::PieChart),
-    PopupMediaTypeUnknown     = static_cast<int>(Esri::ArcGISRuntime::PopupMediaType::Unknown)
+    PopupMediaTypeLineChart = static_cast<int>(Esri::ArcGISRuntime::PopupMediaType::LineChart),
+    PopupMediaTypePieChart = static_cast<int>(Esri::ArcGISRuntime::PopupMediaType::PieChart),
+    PopupMediaTypeUnknown = static_cast<int>(Esri::ArcGISRuntime::PopupMediaType::Unknown)
   };
   Q_ENUM(PopupMediaType)
 };
