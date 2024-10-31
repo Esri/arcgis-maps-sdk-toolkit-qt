@@ -45,7 +45,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
  */
 MediaPopupElementViewController::MediaPopupElementViewController(
     MediaPopupElement* mediaPopupElement, QObject* parent)
-  : PopupElementViewItem{std::move(mediaPopupElement), parent},
+  : PopupElementViewItem{mediaPopupElement, parent},
     m_popupMediaItems{new GenericListModel(&PopupMediaItem::staticMetaObject, this)}
 {
   for (auto media: *static_cast<MediaPopupElement*>(popupElement())->media())

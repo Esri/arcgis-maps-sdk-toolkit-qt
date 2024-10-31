@@ -38,7 +38,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
  */
 TextPopupElementViewController::TextPopupElementViewController(
     TextPopupElement* textPopupElement, QObject* parent)
-  : PopupElementViewItem{std::move(textPopupElement), parent}
+  : PopupElementViewItem{textPopupElement, parent}
 {
 }
 

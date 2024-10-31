@@ -39,7 +39,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   */
 FieldsPopupElementViewController::FieldsPopupElementViewController(
     FieldsPopupElement* fieldsPopupElement, QObject* parent)
-  : PopupElementViewItem{std::move(fieldsPopupElement), parent}
+  : PopupElementViewItem{fieldsPopupElement, parent}
 {
 }
 
