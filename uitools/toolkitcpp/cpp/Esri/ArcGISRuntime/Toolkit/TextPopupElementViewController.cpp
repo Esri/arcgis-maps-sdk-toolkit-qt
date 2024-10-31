@@ -30,13 +30,15 @@ namespace Esri::ArcGISRuntime::Toolkit {
  */
 
 /*!
- \brief Constructor
- \list
-   \li \a parent Parent owning \c QObject.
- \endlist
+  \brief Constructor
+  \list
+    \li \a textPopupElement - The \l {Esri::ArcGISRuntime::TextPopupElement} {TextPopupElement} used to populate the view.
+    \li \a parent - The optional parent QObject.
+  \endlist
  */
-TextPopupElementViewController::TextPopupElementViewController(QObject* parent)
-  : PopupElementViewItem{parent}
+TextPopupElementViewController::TextPopupElementViewController(
+    TextPopupElement* textPopupElement, QObject* parent)
+  : PopupElementViewItem{std::move(textPopupElement), parent}
 {
 }
 
@@ -44,15 +46,6 @@ TextPopupElementViewController::TextPopupElementViewController(QObject* parent)
   \brief Destructor.
   */
 TextPopupElementViewController::~TextPopupElementViewController() = default;
-
-/*!
-\brief Constructor. Takes a \a textPopupElement and \a parent object.
-  */
-TextPopupElementViewController::TextPopupElementViewController(
-    TextPopupElement* textPopupElement, QObject* parent)
-  : PopupElementViewItem{std::move(textPopupElement), parent}
-{
-}
 
 /*!
   \brief Returns the text of the \c TextPopupElement.

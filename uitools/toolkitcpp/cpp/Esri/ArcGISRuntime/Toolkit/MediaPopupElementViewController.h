@@ -41,7 +41,7 @@ class MediaPopupElementViewController : public PopupElementViewItem
   Q_PROPERTY(QAbstractListModel* popupMediaItems READ popupMediaItems NOTIFY mediaPopupElementChanged)
 
 public:
-  explicit MediaPopupElementViewController(QObject* parent = nullptr);
+  MediaPopupElementViewController(QObject* parent = nullptr) = delete;
   explicit MediaPopupElementViewController(MediaPopupElement* mediaPopupElement,
                                            QObject* parent = nullptr);
   ~MediaPopupElementViewController() override;

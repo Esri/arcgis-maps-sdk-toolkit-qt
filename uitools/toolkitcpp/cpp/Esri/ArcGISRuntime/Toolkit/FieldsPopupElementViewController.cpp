@@ -31,13 +31,15 @@ namespace Esri::ArcGISRuntime::Toolkit {
  */
 
 /*!
- \brief Constructor
- \list
-   \li \a parent Parent owning \c QObject.
- \endlist
- */
-FieldsPopupElementViewController::FieldsPopupElementViewController(QObject* parent)
-  : PopupElementViewItem{parent}
+  \brief Constructor
+  \list
+    \li \a fieldsPopupElement - The \l {Esri::ArcGISRuntime::FieldsPopupElement} {FieldsPopupElement} used to populate the view.
+    \li \a parent - The optional parent QObject.
+  \endlist
+  */
+FieldsPopupElementViewController::FieldsPopupElementViewController(
+    FieldsPopupElement* fieldsPopupElement, QObject* parent)
+  : PopupElementViewItem{std::move(fieldsPopupElement), parent}
 {
 }
 
@@ -45,15 +47,6 @@ FieldsPopupElementViewController::FieldsPopupElementViewController(QObject* pare
   \brief Destructor.
   */
 FieldsPopupElementViewController::~FieldsPopupElementViewController() = default;
-
-/*!
-\brief Constructor. Takes a \a fieldsPopupElement and \a parent object.
-  */
-FieldsPopupElementViewController::FieldsPopupElementViewController(
-    FieldsPopupElement* fieldsPopupElement, QObject* parent)
-  : PopupElementViewItem{std::move(fieldsPopupElement), parent}
-{
-}
 
 /*!
   \brief Returns the title of the \c FieldsPopupElement.

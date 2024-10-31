@@ -37,7 +37,7 @@ class FieldsPopupElementViewController : public PopupElementViewItem
   Q_PROPERTY(QVariantList labelsAndValues READ labelsAndValues NOTIFY fieldsPopupElementChanged)
 
 public:
-  explicit FieldsPopupElementViewController(QObject* parent = nullptr);
+  FieldsPopupElementViewController(QObject* parent = nullptr) = delete;
   explicit FieldsPopupElementViewController(FieldsPopupElement* fieldsPopupElement,
                                             QObject* parent = nullptr);
   ~FieldsPopupElementViewController() override;

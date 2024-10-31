@@ -40,8 +40,9 @@ class PopupMediaItem : public QObject
   Q_PROPERTY(QUrl linkUrl READ linkUrl NOTIFY popopMediaItemChanged)
   Q_PROPERTY(QString caption READ caption NOTIFY popopMediaItemChanged)
   Q_PROPERTY(PopupMediaType popupMediaType READ popupMediaType NOTIFY popopMediaItemChanged)
+
 public:
-  explicit PopupMediaItem(QObject* parent = nullptr);
+  PopupMediaItem(QObject* parent = nullptr) = delete;
   explicit PopupMediaItem(PopupMedia* popupMedia, QObject* parent = nullptr);
 
   QString title() const;
@@ -52,9 +53,9 @@ public:
 
 signals:
   void popopMediaItemChanged();
+
 private:
   PopupMedia* m_popupMedia = nullptr;
-
 };
 
 } // Toolkit
