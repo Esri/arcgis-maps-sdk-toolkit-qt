@@ -35,7 +35,8 @@ namespace Esri::ArcGISRuntime::Toolkit {
  \brief Constructor
  \list
     \li \a popupMedia - The \l {Esri::ArcGISRuntime::PopupMedia} {PopupMedia} used to populate the view.
-    \li \a parent - The optional parent QObject. \endlist
+    \li \a parent - The optional parent QObject. 
+\endlist
  */
 PopupMediaItem::PopupMediaItem(PopupMedia* popupMedia, QObject* parent)
   : QObject{parent}, m_popupMedia{popupMedia}
