@@ -1,4 +1,3 @@
-
 /*******************************************************************************
  *  Copyright 2012-2024 Esri
  *
@@ -16,17 +15,16 @@
  ******************************************************************************/
 #include "MediaPopupElementViewController.h"
 
+// Qt headers
 #include <QDebug>
-#include <QUrl>
-#include <QList>
 
 // Maps SDK headers
 #include <MediaPopupElement.h>
-#include <PopupElement.h>
 #include <PopupMedia.h>
-#include <PopupMediaItem.h>
-#include <PopupMediaValue.h>
 #include <PopupMediaListModel.h>
+
+// Toolkit headers
+#include <PopupMediaItem.h>
 
 namespace Esri::ArcGISRuntime::Toolkit {
 

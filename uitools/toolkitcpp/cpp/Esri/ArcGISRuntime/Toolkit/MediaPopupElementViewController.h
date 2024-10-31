@@ -20,14 +20,10 @@
 #include "PopupElementViewItem.h"
 
 // Qt headers
-#include <QStringListModel>
 #include <QObject>
 
 // Other headers
 #include "Internal/GenericListModel.h"
-
-Q_MOC_INCLUDE("PopupMediaValue.h")
-Q_MOC_INCLUDE("PopupMediaListModel.h")
 
 namespace Esri::ArcGISRuntime {
 

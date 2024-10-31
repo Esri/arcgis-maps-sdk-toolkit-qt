@@ -15,6 +15,7 @@
  ******************************************************************************/
 #include "PopupViewController.h"
 
+// Qt headers
 #include <QAbstractListModel>
 #include <QFuture>
 #include <QDebug>

@@ -18,22 +18,10 @@
 
 // Qt headers
 #include <QObject>
-
-// Maps SDK headers
-#include <PopupElement.h>
-// #include <PopupMedia.h>
-#include <PopupTypes.h>
-
-// Other headers
-#include "Internal/QmlEnums.h"
-
-//fwd declare?
 #include <QUrl>
 
 // Other headers
 #include "Internal/QmlEnums.h"
-
-// class QUrl;
 
 namespace Esri::ArcGISRuntime {
 
