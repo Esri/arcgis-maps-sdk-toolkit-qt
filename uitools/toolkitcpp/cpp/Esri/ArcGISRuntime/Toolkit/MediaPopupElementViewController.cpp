@@ -37,24 +37,12 @@ namespace Esri::ArcGISRuntime::Toolkit {
  */
 
 /*!
- \brief Constructor
- \list
-   \li \a parent Parent owning \c QObject.
- \endlist
+  \brief Constructor
+  \list
+    \li \a mediaPopupElement - The \l {Esri::ArcGISRuntime::MediaPopupElement} {MediaPopupElement} used to populate the view.
+    \li \a parent - The optional parent QObject.
+  \endlist
  */
-MediaPopupElementViewController::MediaPopupElementViewController(QObject* parent)
-  : PopupElementViewItem{parent}
-{
-}
-
-/*!
-  \brief Destructor.
-  */
-MediaPopupElementViewController::~MediaPopupElementViewController() = default;
-
-/*!
-\brief Constructor. Takes a \a mediaPopupElement and \a parent object.
-  */
 MediaPopupElementViewController::MediaPopupElementViewController(
     MediaPopupElement* mediaPopupElement, QObject* parent)
   : PopupElementViewItem{std::move(mediaPopupElement), parent},
@@ -66,6 +54,14 @@ MediaPopupElementViewController::MediaPopupElementViewController(
   }
 }
 
+/*!
+  \brief Destructor.
+  */
+MediaPopupElementViewController::~MediaPopupElementViewController() = default;
+
+/*!
+  \brief Returns the description of the \c MediaPopupElement.
+ */
 QString MediaPopupElementViewController::description() const
 {
   return static_cast<MediaPopupElement*>(popupElement())->description();
@@ -80,9 +76,9 @@ QString MediaPopupElementViewController::title() const
 }
 
 /*!
-    \brief Returns the known list of available PopupMedia.
-    Internally, this is a \c GenericListModel with an \c elementType of
-    \c TextPopupElementViewController.
+  \brief Returns the known list of available PopupMedia.
+  Internally, this is a \c GenericListModel with an \c elementType of
+  \c PopupMediaItem.
  */
 GenericListModel* MediaPopupElementViewController::popupMediaItems() const
 {
@@ -98,4 +94,8 @@ GenericListModel* MediaPopupElementViewController::popupMediaItems() const
 
 /*!
   \property Esri::ArcGISRuntime::Toolkit::MediaPopupElementViewController::title
+ */
+
+/*!
+  \property Esri::ArcGISRuntime::Toolkit::MediaPopupElementViewController::description
  */
