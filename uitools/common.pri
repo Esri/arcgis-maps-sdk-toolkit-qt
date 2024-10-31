@@ -46,6 +46,7 @@ HEADERS += $$CPPPATH/ArcGISAuthenticationController.h \
            $$CPPPATH/NorthArrowController.h \
            $$CPPPATH/OverviewMapController.h \
            $$CPPPATH/PopupElementViewItem.h \
+           $$CPPPATH/PopupMediaItem.h \
            $$CPPPATH/PopupViewController.h \
            $$CPPPATH/ScalebarController.h \
            $$CPPPATH/SearchResult.h \
@@ -88,6 +89,7 @@ SOURCES += $$CPPPATH/ArcGISAuthenticationController.cpp \
            $$CPPPATH/NorthArrowController.cpp \
            $$CPPPATH/OverviewMapController.cpp \
            $$CPPPATH/PopupElementViewItem.cpp \
+           $$CPPPATH/PopupMediaItem.cpp \
            $$CPPPATH/PopupViewController.cpp \
            $$CPPPATH/ScalebarController.cpp \
            $$CPPPATH/SearchResult.cpp \
