@@ -120,9 +120,11 @@ ColumnLayout {
                 color: "white"
                 opacity: 0.7
 
-                anchors.bottom: parent.bottom
-                anchors.left: parent.left
-                anchors.right: parent.right
+                anchors {
+                    bottom: parent.bottom
+                    left: parent.left
+                    right: parent.right
+                }
 
                 ColumnLayout {
                     id: overlayTextLayout
