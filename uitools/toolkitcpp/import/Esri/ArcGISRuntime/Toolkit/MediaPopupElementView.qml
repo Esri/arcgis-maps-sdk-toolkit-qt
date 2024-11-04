@@ -108,7 +108,9 @@ ColumnLayout {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        Qt.openUrlExternally(model.linkUrl);
+                        // saving this as a placeholder. Should fire an event the user could take otherwise
+                        // we define our own default behavior to open the image in full screen mode.
+                        // Qt.openUrlExternally(model.linkUrl);
                     }
                 }
             }
