@@ -35,7 +35,6 @@ class TextPopupElementViewController : public PopupElementViewItem
   Q_PROPERTY(QString text READ text NOTIFY textPopupElementChanged)
 
 public:
-  TextPopupElementViewController(QObject* parent = nullptr) = delete;
   explicit TextPopupElementViewController(TextPopupElement* textPopupElement,
                                           QObject* parent = nullptr);
   ~TextPopupElementViewController() override;

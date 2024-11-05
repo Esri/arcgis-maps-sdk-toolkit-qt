@@ -48,7 +48,7 @@ MediaPopupElementViewController::MediaPopupElementViewController(
   : PopupElementViewItem{mediaPopupElement, parent},
     m_popupMediaItems{new GenericListModel(&PopupMediaItem::staticMetaObject, this)}
 {
-  for (auto media: *static_cast<MediaPopupElement*>(popupElement())->media())
+  for (auto* media: *static_cast<MediaPopupElement*>(popupElement())->media())
   {
     m_popupMediaItems->append(new PopupMediaItem(media, this));
   }
