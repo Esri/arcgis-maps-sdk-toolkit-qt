@@ -1,5 +1,9 @@
 <RCC>
     <qresource prefix="/esri.com/imports/Esri/ArcGISRuntime/Toolkit">
+        <file>ArcGISAuthenticationView_internal.qml</file>
+        <file>ArcGISAuthenticationView.qml</file>
+        <file>ArcGISOAuth2View.qml</file>
+        <file>ArcGISUserCredentialsView.qml</file>
         <file>AuthenticationView.qml</file>
         <file>BasemapGallery.qml</file>
         <file>BookmarksView.qml</file>
@@ -10,11 +14,13 @@
         <file>FieldsPopupElementView.qml</file>
         <file>FlashImage.qml</file>
         <file>FloorFilter.qml</file>
+        <file>MediaPopupElementView.qml</file>
         <file>NorthArrow.qml</file>
         <file>OAuth2View.qml</file>
         <file>OverviewMap.qml</file>
         <file>PopupStackView.qml</file>
         <file>PopupView.qml</file>
+        <file>qmldir</file>
         <file>Scalebar.qml</file>
         <file>ScalebarImpl.qml</file>
         <file>SearchView.qml</file>
@@ -23,10 +29,5 @@
         <file>TimeSlider.qml</file>
         <file>UserCredentialsView.qml</file>
         <file>UtilityNetworkTrace.qml</file>
-        <file>qmldir</file>
-        <file>ArcGISAuthenticationView.qml</file>
-        <file>ArcGISOAuth2View.qml</file>
-        <file>ArcGISAuthenticationView_internal.qml</file>
-        <file>ArcGISUserCredentialsView.qml</file>
     </qresource>
 </RCC>

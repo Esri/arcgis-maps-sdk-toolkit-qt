@@ -53,13 +53,13 @@ ListView {
         MenuSeparator {
             width: parent.width
             leftPadding: 20
+            rightPadding: 10
         }
         Label {
             text: model.modelData["label"]
             wrapMode: Text.WordWrap
             width: parent.width
             font.weight: Font.Bold
-            font.pixelSize: 15
             rightPadding: 10
             leftPadding: 20
         }
@@ -73,9 +73,9 @@ ListView {
                 // Checks to see if the formatted value is a hyperlink.
                 // If it is, it will modify the text to be a clickable link
                 // displayed as `View`.
-                if (text.startsWith("http")) {
+                if (text.toLowerCase().startsWith("http")) {
                     let link = text;
-                    text = `<a href="${link}" target="_blank">View</a>`;
+                    text = `<a href="${link}">View</a>`;
                     textFormat = Text.RichText;
                 }
             }

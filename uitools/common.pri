@@ -33,6 +33,7 @@ HEADERS += $$CPPPATH/ArcGISAuthenticationController.h \
            $$CPPPATH/FloorFilterLevelItem.h \
            $$CPPPATH/FloorFilterSiteItem.h \
            $$CPPPATH/LocatorSearchSource.h \
+           $$CPPPATH/MediaPopupElementViewController.h \
            $$CPPPATH/Internal/BasemapGalleryImageProvider.h \
            $$CPPPATH/Internal/DisconnectOnSignal.h \
            $$CPPPATH/Internal/DoOnLoad.h \
@@ -45,6 +46,7 @@ HEADERS += $$CPPPATH/ArcGISAuthenticationController.h \
            $$CPPPATH/NorthArrowController.h \
            $$CPPPATH/OverviewMapController.h \
            $$CPPPATH/PopupElementViewItem.h \
+           $$CPPPATH/PopupMediaItem.h \
            $$CPPPATH/PopupViewController.h \
            $$CPPPATH/ScalebarController.h \
            $$CPPPATH/SearchResult.h \
@@ -78,6 +80,7 @@ SOURCES += $$CPPPATH/ArcGISAuthenticationController.cpp \
            $$CPPPATH/FloorFilterLevelItem.cpp \
            $$CPPPATH/FloorFilterSiteItem.cpp \
            $$CPPPATH/LocatorSearchSource.cpp \
+           $$CPPPATH/MediaPopupElementViewController.cpp \
            $$CPPPATH/Internal/BasemapGalleryImageProvider.cpp \
            $$CPPPATH/Internal/GenericListModel.cpp \
            $$CPPPATH/Internal/GenericTableProxyModel.cpp \
@@ -86,6 +89,7 @@ SOURCES += $$CPPPATH/ArcGISAuthenticationController.cpp \
            $$CPPPATH/NorthArrowController.cpp \
            $$CPPPATH/OverviewMapController.cpp \
            $$CPPPATH/PopupElementViewItem.cpp \
+           $$CPPPATH/PopupMediaItem.cpp \
            $$CPPPATH/PopupViewController.cpp \
            $$CPPPATH/ScalebarController.cpp \
            $$CPPPATH/SearchResult.cpp \

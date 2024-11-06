@@ -15,12 +15,14 @@
  ******************************************************************************/
 #include "PopupViewController.h"
 
+// Qt headers
 #include <QAbstractListModel>
 #include <QFuture>
 #include <QDebug>
 
 // Maps SDK headers
 #include "FieldsPopupElement.h"
+#include "MediaPopupElement.h"
 #include "TextPopupElement.h"
 #include "Popup.h"
 #include "PopupAttachmentListModel.h"
@@ -33,6 +35,7 @@
 
 // Toolkit headers
 #include "FieldsPopupElementViewController.h"
+#include "MediaPopupElementViewController.h"
 #include "TextPopupElementViewController.h"
 #include "PopupElementViewItem.h"
 
@@ -142,7 +145,8 @@ void PopupViewController::setPopup(Popup* popup)
           Q_UNIMPLEMENTED();
           break;
         case Esri::ArcGISRuntime::PopupElementType::MediaPopupElement:
-          Q_UNIMPLEMENTED();
+          m_popupElementControllerModel->append(
+                new MediaPopupElementViewController(static_cast<MediaPopupElement*>(element), m_popup));
           break;
         default:
           Q_UNIMPLEMENTED();

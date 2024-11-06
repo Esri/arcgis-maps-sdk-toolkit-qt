@@ -13,41 +13,49 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_FIELDSPOPUPELEMENTVIEWCONTROLLER_H
-#define ESRI_ARCGISRUNTIME_TOOLKIT_FIELDSPOPUPELEMENTVIEWCONTROLLER_H
+#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_MEDIAPOPUPELEMENTVIEWCONTROLLER_H
+#define ESRI_ARCGISRUNTIME_TOOLKIT_MEDIAPOPUPELEMENTVIEWCONTROLLER_H
 
 // Toolkit headers
 #include "PopupElementViewItem.h"
 
 // Qt headers
-#include <QVariantList>
 #include <QObject>
+
+// Other headers
+#include "Internal/GenericListModel.h"
 
 namespace Esri::ArcGISRuntime {
 
-class FieldsPopupElement;
 class PopupElement;
+class MediaPopupElement;
+class PopupMediaListModel;
 
 namespace Toolkit {
 
-class FieldsPopupElementViewController : public PopupElementViewItem
+class MediaPopupElementViewController : public PopupElementViewItem
 {
   Q_OBJECT
-  Q_PROPERTY(QString title READ title NOTIFY fieldsPopupElementChanged)
-  Q_PROPERTY(QVariantList labelsAndValues READ labelsAndValues NOTIFY fieldsPopupElementChanged)
+  Q_PROPERTY(QString title READ title NOTIFY mediaPopupElementChanged)
+  Q_PROPERTY(QString description READ description NOTIFY mediaPopupElementChanged)
+  Q_PROPERTY(QAbstractListModel* popupMediaItems READ popupMediaItems NOTIFY mediaPopupElementChanged)
 
 public:
-  explicit FieldsPopupElementViewController(FieldsPopupElement* fieldsPopupElement,
-                                            QObject* parent = nullptr);
-  ~FieldsPopupElementViewController() override;
+  explicit MediaPopupElementViewController(MediaPopupElement* mediaPopupElement,
+                                           QObject* parent = nullptr);
+  ~MediaPopupElementViewController() override;
 
+  QString description() const;
   QString title() const;
-  QVariantList labelsAndValues() const;
+  GenericListModel* popupMediaItems() const;
 
 signals:
-  void fieldsPopupElementChanged();
+  void mediaPopupElementChanged();
+
+private:
+  GenericListModel* m_popupMediaItems = nullptr;
 };
 
 } // namespace Toolkit
 } // namespace Esri::ArcGISRuntime
-#endif // ESRI_ARCGISRUNTIME_TOOLKIT_FIELDSPOPUPELEMENTVIEWCONTROLLER_H
+#endif // ESRI_ARCGISRUNTIME_TOOLKIT_MEDIAPOPUPELEMENTVIEWCONTROLLER_H

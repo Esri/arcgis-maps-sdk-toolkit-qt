@@ -42,6 +42,17 @@ public:
     PopupElementTypeUnsupportedPopupElement = static_cast<int>(Esri::ArcGISRuntime::PopupElementType::UnsupportedPopupElement)
   };
   Q_ENUM(PopupElementType)
+
+  enum class PopupMediaType
+  {
+    PopupMediaTypeImage = static_cast<int>(Esri::ArcGISRuntime::PopupMediaType::Image),
+    PopupMediaTypeBarChart = static_cast<int>(Esri::ArcGISRuntime::PopupMediaType::BarChart),
+    PopupMediaTypeColumnChart = static_cast<int>(Esri::ArcGISRuntime::PopupMediaType::ColumnChart),
+    PopupMediaTypeLineChart = static_cast<int>(Esri::ArcGISRuntime::PopupMediaType::LineChart),
+    PopupMediaTypePieChart = static_cast<int>(Esri::ArcGISRuntime::PopupMediaType::PieChart),
+    PopupMediaTypeUnknown = static_cast<int>(Esri::ArcGISRuntime::PopupMediaType::Unknown)
+  };
+  Q_ENUM(PopupMediaType)
 };
 
 #endif // ARCGIS_RUNTIME_TOOLKIT_CPP_QMLENUMS_H
