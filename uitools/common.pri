@@ -16,8 +16,7 @@ CPPPATH = $$PWD/toolkitcpp/cpp/Esri/ArcGISRuntime/Toolkit
 
 INCLUDEPATH += $$PWD/toolkitcpp/cpp $$CPPPATH
 
-HEADERS += $$CPPPATH/ArcGISAuthenticationController.h \
-           $$CPPPATH/AuthenticationController.h \
+HEADERS += $$CPPPATH/AuthenticationController.h \
            $$CPPPATH/BasemapGalleryController.h \
            $$CPPPATH/BasemapGalleryItem.h \
            $$CPPPATH/BookmarksViewController.h \
@@ -57,8 +56,7 @@ HEADERS += $$CPPPATH/ArcGISAuthenticationController.h \
            $$CPPPATH/UtilityNetworkTraceStartingPoint.h \
            $$CPPPATH/UtilityNetworkTraceStartingPointsModel.h
 
-SOURCES += $$CPPPATH/ArcGISAuthenticationController.cpp \
-           $$CPPPATH/AuthenticationController.cpp \
+SOURCES += $$CPPPATH/AuthenticationController.cpp \
            $$CPPPATH/BasemapGalleryController.cpp \
            $$CPPPATH/BasemapGalleryItem.cpp \
            $$CPPPATH/BookmarksViewController.cpp \
