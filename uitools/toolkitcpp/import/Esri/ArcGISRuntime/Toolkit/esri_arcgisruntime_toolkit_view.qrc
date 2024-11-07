@@ -22,9 +22,5 @@
         <file>UserCredentialsView.qml</file>
         <file>UtilityNetworkTrace.qml</file>
         <file>qmldir</file>
-        <file>ArcGISAuthenticationView.qml</file>
-        <file>ArcGISOAuth2View.qml</file>
-        <file>ArcGISAuthenticationView_internal.qml</file>
-        <file>ArcGISUserCredentialsView.qml</file>
     </qresource>
 </RCC>

@@ -20,10 +20,6 @@ depends Esri.ArcGISRuntime.Toolkit.Controller 200.6
 CurrentVersion 200.6 CurrentVersion.qml
 
 # View components
-ArcGISAuthenticationView 200.6 ArcGISAuthenticationView.qml
-ArcGISAuthenticationView_internal 200.6 ArcGISAuthenticationView_internal.qml
-ArcGISOAuth2View 200.6 ArcGISOAuth2View.qml
-ArcGISUserCredentialsView 200.6 ArcGISUserCredentialsView.qml
 AuthenticationView 100.10 AuthenticationView.qml
 AuthenticationView 200.0 AuthenticationView.qml
 BasemapGallery 100.12 BasemapGallery.qml
