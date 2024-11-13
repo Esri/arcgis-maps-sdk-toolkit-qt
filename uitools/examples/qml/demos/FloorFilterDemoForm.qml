@@ -24,8 +24,6 @@ DemoPage {
     mapViewContents: Component {
         MapView {
             id: view
-
-            //! [Set up Floor Filter QML]
             FloorFilter {
                 geoView: parent
                 anchors {
@@ -34,8 +32,6 @@ DemoPage {
                     top: parent.top
                 }
             }
-            //! [Set up Floor Filter QML]
-
             FloorFilterDemo {
                 geoView: view
             }

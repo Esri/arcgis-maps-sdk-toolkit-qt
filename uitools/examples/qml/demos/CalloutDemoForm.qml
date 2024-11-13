@@ -26,7 +26,6 @@ DemoPage {
         MapView {
             id:view
 
-            //! [Set up Callout QML]
             Callout {
                 id: callout
                 calloutData : view.calloutData //binding to parent. Any change is reflected on this
@@ -41,8 +40,6 @@ DemoPage {
                 }
                 palette.windowText: "black"
             }
-            //! [Set up Callout QML]
-
             CalloutDemo {
                 geoView: view
             }

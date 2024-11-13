@@ -14,7 +14,7 @@
  *  limitations under the License.
  ******************************************************************************/
 
-#include "ArExample.h"
+#include "CppArExample.h"
 
 #include <QFileInfo>
 #include <QGeoPositionInfoSource>

@@ -59,7 +59,7 @@ import QtQuick.Layouts
    PopupManager, or any of their properties, the PopupManager must
    be re-set to the PopupView.
    \image docs/popupview.png popupview
-   \snippet qml/demos/PopupViewDemoForm.qml Set up Popup View QML
+   \snippet cpp_quick/src/demos/PopupViewDemoForm.qml Set up Popup View
  */
 Page {
     id: popupView

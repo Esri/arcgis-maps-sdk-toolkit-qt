@@ -24,8 +24,6 @@ DemoPage {
     sceneViewContents: Component {
         SceneView {
             id: view
-
-            //! [Set up Time Slider QML]
             TimeSlider {
                 geoView: parent
                 anchors {
@@ -34,8 +32,6 @@ DemoPage {
                     bottom: parent.bottom
                 }
             }
-            //! [Set up Time Slider QML]
-
             TimeSliderDemo {
                 geoView: view
             }

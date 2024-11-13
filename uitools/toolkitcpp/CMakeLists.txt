@@ -73,7 +73,6 @@ target_include_directories(libtoolkitcpp PUBLIC
 
 target_compile_definitions(libtoolkitcpp PRIVATE
     CPP_ARCGISRUNTIME_TOOLKIT
-    MAPS_SDK_QT_TOOLKIT
 )
 
 target_link_libraries(libtoolkitcpp PRIVATE
