@@ -44,12 +44,12 @@ import QtQuick.Controls
   \endlist
 
   \note OAuth 2.0 uses a WebView. To use an OAuthView you must call
-        \c{QtWebView::initialize()} before the \c{QGuiApplication}
-        instance is created. See \l{https://doc.qt.io/qt-6/qtwebview-index.html}
+        \c{QtWebView::initialize()} immediately after the \c{QGuiApplication}
+        instance is created. See \l{https://doc.qt.io/qt-5/qtwebview-index.html}
         {Qt WebView}.
 
   \image docs/authenticationview_qml.png authentication_view
-  \snippet qml/demos/AuthenticationViewDemoForm.qml Set up Authentication View QML
+  \snippet cpp_quick/src/demos/AuthenticationViewDemoForm.qml Set up Authentication View QML
  */
 
 Item {

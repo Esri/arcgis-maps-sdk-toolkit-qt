@@ -35,7 +35,7 @@ equals(QT_MAJOR_VERSION, 6) {
   }
 }
 
-ARCGIS_RUNTIME_VERSION = 200.6.0
+ARCGIS_RUNTIME_VERSION = 200.5.0
 include($$PWD/arcgisruntime.pri)
 
 HEADERS += $$files($$PWD/*.h)
@@ -52,8 +52,8 @@ OTHER_FILES += \
 
 ARCGIS_TOOLKIT_PATH = $$absolute_path($$PWD/../../)
 
-!include($$ARCGIS_TOOLKIT_PATH/augmented_reality/ArApi/ArApi.pri) {
-    error(Failed to open $$ARCGIS_TOOLKIT_PATH/augmented_reality/ArApi/ArApi.pri)
+include($$ARCGIS_TOOLKIT_PATH/augmented_reality/ArApi/ArApi.pri) {
+    error(Fails to open $$ARCGIS_TOOLKIT_PATH/augmented_reality/ArApi/ArApi.pri)
 }
 
 #-------------------------------------------------------------------------------

@@ -14,10 +14,10 @@
 
 module Esri.ArcGISRuntime.Toolkit
 
-depends Esri.ArcGISRuntime.Toolkit.Controller 200.6
+depends Esri.ArcGISRuntime.Toolkit.Controller 200.5
 
 # Current version increment
-CurrentVersion 200.6 CurrentVersion.qml
+CurrentVersion 200.5 CurrentVersion.qml
 
 # View components
 AuthenticationView 100.10 AuthenticationView.qml
@@ -32,10 +32,7 @@ ClientCertificateView 100.10 ClientCertificateView.qml
 ClientCertificateView 200.0 ClientCertificateView.qml
 CoordinateConversion 100.10 CoordinateConversion.qml
 CoordinateConversion 200.0 CoordinateConversion.qml
-FloorFilter 100.14 FloorFilter.qml
-FloorFilter 200.0 FloorFilter.qml
 internal FlashImage FlashImage.qml
-internal ScalebarImpl ScalebarImpl.qml
 NorthArrow 100.10 NorthArrow.qml
 NorthArrow 200.0 NorthArrow.qml
 OAuth2View 100.10 OAuth2View.qml
@@ -48,6 +45,7 @@ PopupView 100.10 PopupView.qml
 PopupView 200.0 PopupView.qml
 Scalebar 100.13 Scalebar.qml
 Scalebar 200.0 Scalebar.qml
+internal ScalebarImpl ScalebarImpl.qml
 SearchView 100.13 SearchView.qml
 SearchView 200.0 SearchView.qml
 SslHandshakeView 100.10 SslHandshakeView.qml
@@ -56,5 +54,7 @@ TimeSlider 100.10 TimeSlider.qml
 TimeSlider 200.0 TimeSlider.qml
 UserCredentialsView 100.10 UserCredentialsView.qml
 UserCredentialsView 200.0 UserCredentialsView.qml
+FloorFilter 100.14 FloorFilter.qml
+FloorFilter 200.0 FloorFilter.qml
 UtilityNetworkTrace 100.15 UtilityNetworkTrace.qml
 UtilityNetworkTrace 200.0 UtilityNetworkTrace.qml

@@ -39,22 +39,17 @@ import QtQuick.Shapes
 
      For more information, please see the CalloutData documentation.
      \image docs/callout.png
-     \snippet qml/demos/CalloutDemoForm.qml Set up Callout QML
+     \snippet cpp_quick/src/demos/CalloutDemoForm.qml Set up Callout QML
 
      \note That the Callout has gone through a major revision as of ArcGISRuntime 100.14.
      Part of this revision has been a change to the styling behaviour of the Callout, making the Callout
      compliant with your currently applied theme. To revert to the classic Callout look, you can supply the
      old style properties to the Callout as provided below.
-
-     \code
+     \oldcode
             Callout {
               calloutData: myCalloutData
             }
-     \endcode
-
-     can be rewritten as:
-
-     \code
+     \newcode
             Callout {
               calloutData: myCalloutData
               palette.windowText: "#000000"

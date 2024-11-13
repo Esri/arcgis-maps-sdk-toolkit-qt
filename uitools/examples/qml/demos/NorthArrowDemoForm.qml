@@ -24,8 +24,6 @@ DemoPage {
     sceneViewContents: Component {
         SceneView {
             id: view
-
-            //! [Set up North Arrow QML]
             NorthArrow {
                 geoView: parent
                 anchors {
@@ -34,8 +32,6 @@ DemoPage {
                     margins: 10
                 }
             }
-            //! [Set up North Arrow QML]
-
             NorthArrowDemo {
                 geoView: view
             }
