@@ -20,7 +20,7 @@
 #endif
 
 #include "AppInfo.h"
-#include "CppArExample.h"
+#include "ArExample.h"
 
 #include <QDir>
 #include <QGuiApplication>
