@@ -16,7 +16,8 @@ CPPPATH = $$PWD/toolkitcpp/cpp/Esri/ArcGISRuntime/Toolkit
 
 INCLUDEPATH += $$PWD/toolkitcpp/cpp $$CPPPATH
 
-HEADERS += $$CPPPATH/ArcGISAuthenticationController.h \
+HEADERS += $$CPPPATH/CustomOAuth2AuthorizationCodeFlow.h \
+           $$CPPPATH/ArcGISAuthenticationController.h \
            $$CPPPATH/AuthenticationController.h \
            $$CPPPATH/BasemapGalleryController.h \
            $$CPPPATH/BasemapGalleryItem.h \
@@ -57,7 +58,8 @@ HEADERS += $$CPPPATH/ArcGISAuthenticationController.h \
            $$CPPPATH/UtilityNetworkTraceStartingPoint.h \
            $$CPPPATH/UtilityNetworkTraceStartingPointsModel.h
 
-SOURCES += $$CPPPATH/ArcGISAuthenticationController.cpp \
+SOURCES += $$CPPPATH/CustomOAuth2AuthorizationCodeFlow.cpp \
+           $$CPPPATH/ArcGISAuthenticationController.cpp \
            $$CPPPATH/AuthenticationController.cpp \
            $$CPPPATH/BasemapGalleryController.cpp \
            $$CPPPATH/BasemapGalleryItem.cpp \

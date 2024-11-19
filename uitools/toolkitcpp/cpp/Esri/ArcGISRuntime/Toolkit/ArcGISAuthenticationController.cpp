@@ -32,6 +32,12 @@
 #include <OAuthUserLoginPrompt.h>
 #include <TokenCredential.h>
 
+#include <QOAuth2AuthorizationCodeFlow>
+#include <QOAuthUriSchemeReplyHandler>
+#include <QDesktopServices>
+
+#include "CustomOAuth2AuthorizationCodeFlow.h"
+
 using namespace Esri::ArcGISRuntime;
 
 namespace Esri::ArcGISRuntime::Toolkit {
@@ -62,12 +68,22 @@ ArcGISAuthenticationController::ArcGISAuthenticationController(QObject* parent) 
   connect(ArcGISRuntimeEnvironment::instance()->arcGISAuthenticationManager(), &ArcGISAuthenticationManager::oAuthUserLoginPromptIssued, this,
           [this](OAuthUserLoginPrompt* currentOAuthUserLoginPrompt)
   {
-    currentOAuthUserLoginPrompt->setParent(nullptr);
-    m_currentOAuthUserLoginPrompt = std::unique_ptr<OAuthUserLoginPrompt>{currentOAuthUserLoginPrompt};
-    emit authorizeUrlChanged();
-    emit preferPrivateWebBrowserSessionChanged();
-    emit redirectUriChanged();
-    emit displayOAuthSignInView();
+    m_currentOAuthUserLoginPrompt = currentOAuthUserLoginPrompt;
+    m_currentOAuthUserLoginPrompt->setParent(this);
+
+    if (const auto redirectUrl = m_currentOAuthUserLoginPrompt->redirectUri();
+          redirectUrl == QUrl{"urn:ietf:wg:oauth:2.0:oob"} || // this is the default value for "oob"
+          redirectUrl.toString().contains("oob")) // this is what the Qt docs indicate to check for
+    { // use embedded web view session for "oob" redirect URI
+      emit authorizeUrlChanged();
+      emit preferPrivateWebBrowserSessionChanged();
+      emit redirectUriChanged();
+      emit displayOAuthSignInView();
+    }
+    else
+    {
+      processOAuthExternalBrowserLogin_();
+    }
   });
 }
 
@@ -84,7 +100,13 @@ ArcGISAuthenticationController* ArcGISAuthenticationController::create(QQmlEngin
   static QPointer<ArcGISAuthenticationController> instance = new ArcGISAuthenticationController(qmlEngine);
 
   if (!instance)
+  {
     instance = new ArcGISAuthenticationController(qmlEngine);
+  }
+  else if (qmlEngine && !instance->parent())
+  { // it's possible c++ can call 'instance' first and we don't want this to have no parent
+    instance->setParent(qmlEngine);
+  }
 
   return instance;
 }
@@ -113,20 +135,21 @@ void ArcGISAuthenticationController::handleArcGISAuthenticationChallenge(ArcGISA
   {
     if (userConfiguration->canBeUsedForUrl(requestUrl))
     {
+      m_currentOAuthUserConfiguration = userConfiguration;
       OAuthUserCredential::createAsync(userConfiguration, this).then(this, [this](OAuthUserCredential* credential)
       {
         if (!m_currentChallenge)
           return;
 
         m_currentChallenge->continueWithCredential(credential);
-        m_currentChallenge.reset();
+        finishChallengeFlow_();
       }).onFailed(this, [this](const ErrorException& e)
       {
         if (!m_currentChallenge)
           return;
 
         m_currentChallenge->continueAndFailWithError(e.error());
-        m_currentChallenge.reset();
+        finishChallengeFlow_();
       });
 
       return;
@@ -134,6 +157,59 @@ void ArcGISAuthenticationController::handleArcGISAuthenticationChallenge(ArcGISA
   }
 
   emit displayUsernamePasswordSignInView();
+}
+
+void ArcGISAuthenticationController::processOAuthExternalBrowserLogin_()
+{
+  CustomOAuth2AuthorizationCodeFlow* oauthFlow = new CustomOAuth2AuthorizationCodeFlow(m_currentOAuthUserLoginPrompt->authorizeUrl(),
+                                                                                       m_currentOAuthUserLoginPrompt);
+
+  QOAuthUriSchemeReplyHandler* callbackReplyHandler = new QOAuthUriSchemeReplyHandler(m_currentOAuthUserLoginPrompt);
+  connect(callbackReplyHandler, &QOAuthUriSchemeReplyHandler::callbackReceived, this, [this, oauthFlow](const QVariantMap& values)
+  {
+    if (!values.contains("code"))
+    {
+      m_currentOAuthUserLoginPrompt->respondWithError("There was an error obtaining the authorization code");
+      finishChallengeFlow_();
+      return;
+    }
+
+    const auto code = values.value("code").toString();
+    oauthFlow->setAuthorizationCode(code);
+    emit oauthFlow->granted();
+  });
+
+  oauthFlow->setAuthorizationUrl(m_currentOAuthUserLoginPrompt->authorizeUrl());
+  oauthFlow->setClientIdentifier(m_currentOAuthUserConfiguration->clientId());
+
+  connect(oauthFlow, &QAbstractOAuth::authorizeWithBrowser, this, &QDesktopServices::openUrl);
+  connect(oauthFlow, &QAbstractOAuth::granted, this, [callbackReplyHandler, oauthFlow, this]()
+  {
+    callbackReplyHandler->close();
+    m_currentOAuthUserLoginPrompt->respondWithAuthorizationCode(oauthFlow->authorizationCode());
+  });
+
+  callbackReplyHandler->setRedirectUrl(m_currentOAuthUserLoginPrompt->redirectUri());
+  oauthFlow->setReplyHandler(callbackReplyHandler);
+
+  if (callbackReplyHandler->listen())
+  {
+    oauthFlow->grant();
+  }
+}
+
+void ArcGISAuthenticationController::finishChallengeFlow_()
+{
+  m_currentChallenge = {};
+  m_currentOAuthUserConfiguration = nullptr;
+
+  if (m_currentOAuthUserLoginPrompt)
+  {
+    m_currentOAuthUserLoginPrompt->deleteLater();
+    m_currentOAuthUserLoginPrompt = nullptr;
+  }
+
+  m_currentChallengeFailureCount = 0;
 }
 
 /*!
@@ -150,14 +226,14 @@ void ArcGISAuthenticationController::continueWithUsernamePassword(const QString&
                                0).then(this, [this](TokenCredential* credential)
   {
     m_currentChallenge->continueWithCredential(credential);
-    m_currentChallenge.reset();
+    finishChallengeFlow_();
   }).onFailed(this, [this](ErrorException e)
   {
     if ((++m_currentChallengeFailureCount) >= s_maxChallengeFailureCount)
     {
       m_currentChallengeFailureCount = 0;
       m_currentChallenge->continueAndFailWithError(e.error());
-      m_currentChallenge.reset();
+      finishChallengeFlow_();
       return;
     }
 
@@ -175,7 +251,14 @@ void ArcGISAuthenticationController::respond(const QUrl& url)
     return;
 
   m_currentOAuthUserLoginPrompt->respond(url);
-  m_currentOAuthUserLoginPrompt.reset();
+}
+
+void ArcGISAuthenticationController::respondWithAuthorizationCode(const QString& authorizationCode)
+{
+  if (!m_currentOAuthUserLoginPrompt)
+    return;
+
+  m_currentOAuthUserLoginPrompt->respondWithAuthorizationCode(authorizationCode);
 }
 
 /*!
@@ -187,7 +270,6 @@ void ArcGISAuthenticationController::respondWithError(const QString& platformErr
     return;
 
   m_currentOAuthUserLoginPrompt->respondWithError(platformError);
-  m_currentOAuthUserLoginPrompt.reset();
 }
 
 /*!
@@ -204,7 +286,7 @@ void ArcGISAuthenticationController::cancel()
   if (m_currentOAuthUserLoginPrompt)
   {
     m_currentOAuthUserLoginPrompt->respondWithError("User canceled");
-    m_currentOAuthUserLoginPrompt.reset();
+    finishChallengeFlow_();
   }
 }
 
@@ -291,7 +373,7 @@ bool ArcGISAuthenticationController::preferPrivateWebBrowserSession_() const
 /*!
   \internal
  */
-QString ArcGISAuthenticationController::redirectUri_() const
+QUrl ArcGISAuthenticationController::redirectUri_() const
 {
   return m_currentOAuthUserLoginPrompt ? m_currentOAuthUserLoginPrompt->redirectUri() : QString{};
 }

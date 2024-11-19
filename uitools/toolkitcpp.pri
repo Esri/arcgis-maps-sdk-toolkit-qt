@@ -13,7 +13,7 @@
 # limitations under the License.
 include($$PWD/common.pri)
 
-QT += quickcontrols2 webview svg
+QT += quickcontrols2 webview svg networkauth
 
 REGISTERPATH = $$PWD/toolkitcpp/register/Esri/ArcGISRuntime/Toolkit
 

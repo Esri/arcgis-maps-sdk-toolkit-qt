@@ -20,10 +20,8 @@
 #include <QObject>
 #include <QQmlEngine>
 
-// Maps SDK headers
-#include <ArcGISAuthenticationChallengeHandler.h>
-
 // STL headers
+#include <ArcGISAuthenticationChallengeHandler.h>
 #include <memory>
 #include <mutex>
 
@@ -49,7 +47,7 @@ class ArcGISAuthenticationController : public ArcGISAuthenticationChallengeHandl
   // OAuth
   Q_PROPERTY(QUrl authorizeUrl READ authorizeUrl_ NOTIFY authorizeUrlChanged)
   Q_PROPERTY(bool preferPrivateWebBrowserSession READ preferPrivateWebBrowserSession_ NOTIFY preferPrivateWebBrowserSessionChanged)
-  Q_PROPERTY(QString redirectUri READ redirectUri_ NOTIFY redirectUriChanged)
+  Q_PROPERTY(QUrl redirectUri READ redirectUri_ NOTIFY redirectUriChanged)
 
   Q_PROPERTY(int currentChallengeFailureCount READ currentChallengeFailureCount_ NOTIFY currentChallengeFailureCountChanged)
 
@@ -66,6 +64,7 @@ public:
 
   // OAuth
   Q_INVOKABLE void respond(const QUrl& url);
+  Q_INVOKABLE void respondWithAuthorizationCode(const QString& authorizationCode);
   Q_INVOKABLE void respondWithError(const QString& platformError);
 
   Q_INVOKABLE void cancel();
@@ -94,12 +93,16 @@ private:
   QUrl currentAuthenticatingHost_() const;
   QUrl authorizeUrl_() const;
   bool preferPrivateWebBrowserSession_() const;
-  QString redirectUri_() const;
+  QUrl redirectUri_() const;
   int currentChallengeFailureCount_() const;
+  void processOAuthExternalBrowserLogin_();
+
+  void finishChallengeFlow_();
 
   std::unique_ptr<ArcGISAuthenticationChallenge> m_currentChallenge;
   QList<Esri::ArcGISRuntime::OAuthUserConfiguration*> m_userConfigurations;
-  std::unique_ptr<OAuthUserLoginPrompt> m_currentOAuthUserLoginPrompt;
+  Esri::ArcGISRuntime::OAuthUserConfiguration* m_currentOAuthUserConfiguration = nullptr;
+  OAuthUserLoginPrompt* m_currentOAuthUserLoginPrompt;
   int m_currentChallengeFailureCount = 0;
   static inline constexpr int s_maxChallengeFailureCount = 5;
   std::mutex m_mutex;
