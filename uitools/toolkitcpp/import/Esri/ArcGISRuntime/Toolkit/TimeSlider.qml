@@ -33,7 +33,7 @@ import QtQuick.Layouts
     The time extents of all layers in the map or scene will be used to set up the
     slider with the full temporal range and the current time extent.
     \image docs/timeslider.gif timeslider
-    \snippet cpp_quick/src/demos/TimeSliderDemoForm.qml Set up Time Slider
+    \snippet qml/demos/TimeSliderDemoForm.qml Set up Time Slider QML
 */
 Pane {
     id: timeSlider

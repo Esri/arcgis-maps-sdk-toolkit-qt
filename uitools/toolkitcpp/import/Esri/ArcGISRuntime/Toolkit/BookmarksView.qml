@@ -31,7 +31,7 @@ import QtQuick.Layouts
  or are programmatically defined. When the user selects a bookmark from the provided list,
  the viewpoint in the geoView is set to the new bookmark's view extent.
  \image docs/bookmarksView.gif
- \snippet cpp_quick/src/demos/BookmarksViewDemoForm.qml Set up Bookmark QML
+ \snippet qml/demos/BookmarksViewDemoForm.qml Set up Bookmark QML
 */
 
 Pane {

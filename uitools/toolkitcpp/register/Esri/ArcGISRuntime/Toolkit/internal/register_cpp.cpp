@@ -1,5 +1,6 @@
+
 /*******************************************************************************
- *  Copyright 2012-2020 Esri
+ *  Copyright 2012-2024 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -54,6 +55,7 @@
 // Qt Includes
 #include <QQmlEngine>
 #include <QQmlFileSelector>
+#include <QPointer>
 
 // std includes
 #include <type_traits>
@@ -112,6 +114,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
       constexpr Uncreatable_ Uncreatable = Uncreatable_{};
 
+      struct Singleton_
+      {
+      };
     }
 
     /*
