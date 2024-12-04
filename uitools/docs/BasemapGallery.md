@@ -5,5 +5,5 @@ The BasemapGallery displays a collection of items representing basemaps from eit
 ![Basemap Gallery image](https://developers.arcgis.com/qt/toolkit/api-reference/images/basemap.gif)
 
 Details on how to use the Basemap Galley can be found here:
-- [QML Type/UI Control](https://developers.arcgis.com/qt/toolkit/api-reference/qml-basemapgallery.html)
-- [C++ Classes](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-basemapgallery.html)
+- [QML Type/UI Controls/QtQuick](https://developers.arcgis.com/qt/toolkit/api-reference/qml-basemapgallery.html)
+- [C++ Classes/Qt Widgets](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-basemapgallery.html)
