@@ -5,6 +5,7 @@ The NorthArrow displays a compass overlaid on the GeoView, with the compass head
 NOTE: default width and height is 48 pixels.
 
 ![NorthArrow image](https://developers.arcgis.com/qt/toolkit/api-reference/images/northarrow.gif)
+![Callout image](https://developers.arcgis.com/qt/toolkit/api-reference/images/callout.png)
 
 Details on how to use the control can be found here:
 - [QML Type/UI Controls/QtQuick](https://developers.arcgis.com/qt/toolkit/api-reference/qml-northarrow.html)
