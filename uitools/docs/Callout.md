@@ -8,8 +8,8 @@ A view for displaying information at a geographic location on a Map. A Callout c
 
 For more information, please see the CalloutData documentation.
 
-![Callout](https://developers.arcgis.com/qt/toolkit/api-reference/images/callout.png)
+![Callout image](https://developers.arcgis.com/qt/toolkit/api-reference/images/callout.png)
 
-Details on how to use the Basemap Galley can be found here:
+Details on how to use the control can be found here:
 - [QML Type/UI Controls/QtQuick](https://developers.arcgis.com/qt/toolkit/api-reference/qml-callout.html)
 - C++ Classes/Qt Widgets - NONE
