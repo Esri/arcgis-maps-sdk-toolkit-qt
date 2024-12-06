@@ -10,5 +10,6 @@ For more information, please see the CalloutData documentation.
 
 ![Callout image](https://developers.arcgis.com/qt/toolkit/api-reference/images/callout.png)
 
-API Reference documentation that provides full details on this Qt Quick UI component can be found here:
-- [Callout](https://developers.arcgis.com/qt/toolkit/api-reference/qml-callout.html)
+Details on how to use the control can be found here:
+- [QML Type/UI Controls/QtQuick](https://developers.arcgis.com/qt/toolkit/api-reference/qml-callout.html)
+- C++ Classes/Qt Widgets - NONE

@@ -4,5 +4,6 @@ The user interface for the coordinate conversion tool. This tool allows a user t
 
 ![CoordinateConversion image](https://developers.arcgis.com/qt/toolkit/api-reference/images/coordinateConversion.png)
 
-API Reference documentation that provides full details on this Qt Quick UI component can be found here:
-- [CoordinateConversion](https://developers.arcgis.com/qt/toolkit/api-reference/qml-coordinateconversion.html)
+Details on how to use the control can be found here:
+- [QML Type/UI Controls/QtQuick](https://developers.arcgis.com/qt/toolkit/api-reference/qml-coordinateconversion.html)
+- [C++ Classes/Qt Widgets](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-coordinateconversion.html)

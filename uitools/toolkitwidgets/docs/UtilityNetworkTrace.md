@@ -12,5 +12,6 @@ Generic styles, displayed in this Qml UI, can be overwritten using the Calcite s
 
 NEED IMAGE FOR UtilityNetworkTrace
 
-API Reference documentation that provides full details on this Qt Quick UI component can be found here:
-- [UtilityNetworkTrace](https://developers.arcgis.com/qt/toolkit/api-reference/qml-utilitynetworktrace.html)
+Details on how to use the control can be found here:
+- [QML Type/UI Controls/QtQuick](https://developers.arcgis.com/qt/toolkit/api-reference/qml-utilitynetworktrace.html)
+- C++ Classes/Qt Widgets - NONE

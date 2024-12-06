@@ -15,5 +15,6 @@ NOTE: Each time a change is made to the Popup, PopupDefinition, PopupManager, or
 
 ![PopupView image](https://developers.arcgis.com/qt/toolkit/api-reference/images/popupview.png)
 
-API Reference documentation that provides full details on this Qt Quick UI component can be found here:
-- [PopupView](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupview.html)
+Details on how to use the control can be found here:
+- [QML Type/UI Controls/QtQuick](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupview.html)
+- C++ Classes/Qt Widgets - NONE

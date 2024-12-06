@@ -4,5 +4,6 @@ Defines a small "overview" (or "inset") map displaying a representation of the c
 
 ![OverviewMap image](https://developers.arcgis.com/qt/toolkit/api-reference/images/overviewmap.png)
 
-API Reference documentation that provides full details on this Qt Quick UI component can be found here:
-- [OverviewMap](https://developers.arcgis.com/qt/toolkit/api-reference/qml-overviewmap.html)
+Details on how to use the control can be found here:
+- [QML Type/UI Controls/QtQuick](https://developers.arcgis.com/qt/toolkit/api-reference/qml-overviewmap.html)
+- [C++ Classes/Qt Widgets](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-overviewmap.html)

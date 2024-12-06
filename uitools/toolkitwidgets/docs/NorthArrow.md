@@ -6,5 +6,6 @@ NOTE: default width and height is 48 pixels.
 
 ![NorthArrow image](https://developers.arcgis.com/qt/toolkit/api-reference/images/northarrow.gif)
 
-API Reference documentation that provides full details on this Qt Quick UI component can be found here:
-- [NorthArrow](https://developers.arcgis.com/qt/toolkit/api-reference/qml-northarrow.html)
+Details on how to use the control can be found here:
+- [QML Type/UI Controls/QtQuick](https://developers.arcgis.com/qt/toolkit/api-reference/qml-northarrow.html)
+- [C++ Classes/Qt Widgets](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-northarrow.html)

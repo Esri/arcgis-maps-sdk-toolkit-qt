@@ -17,3 +17,4 @@ NOTE: OAuth 2.0 uses a WebView. To use an OAuthView you must call `QtWebView::in
 
 API Reference documentation that provides full details on this Qt Quick UI component can be found here:
 - [AuthenticationView](https://developers.arcgis.com/qt/toolkit/api-reference/qml-authenticationview.html)
+- [C++ Classes/Qt Widgets](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-authenticationview.html)

@@ -4,5 +4,6 @@ A Scalebar control that shows an accurate distance that can be used to visually 
 
 NEED IMAGE FOR Scalebar
 
-API Reference documentation that provides full details on this Qt Quick UI component can be found here:
-- [Scalebar](https://developers.arcgis.com/qt/toolkit/api-reference/qml-scalebar.html)
+Details on how to use the control can be found here:
+- [QML Type/UI Controls/QtQuick](https://developers.arcgis.com/qt/toolkit/api-reference/qml-scalebar.html)
+- C++ Classes/Qt Widgets - NONE

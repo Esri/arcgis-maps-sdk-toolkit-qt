@@ -19,5 +19,6 @@ NOTE: Each time a change is made to the Popup, PopupDefinition, PopupManager, or
 
 NEED IMAGE FOR PopupStackView
 
-API Reference documentation that provides full details on this Qt Quick UI component can be found here:
-- [PopupStackView](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupstackview.html)
+Details on how to use the control can be found here:
+- [QML Type/UI Controls/QtQuick](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupstackview.html)
+- C++ Classes/Qt Widgets - NONE

@@ -4,5 +4,6 @@ The slider provides a user interface for manually setting or animating changes t
 
 ![TimeSlider image](https://developers.arcgis.com/qt/toolkit/api-reference/images/timeslider.gif)
 
-API Reference documentation that provides full details on this Qt Quick UI component can be found here:
-- [TimeSlider](https://developers.arcgis.com/qt/toolkit/api-reference/qml-timeslider.html)
+Details on how to use the control can be found here:
+- [QML Type/UI Controls/QtQuick](https://developers.arcgis.com/qt/toolkit/api-reference/qml-timeslider.html)
+- C++ Classes/Qt Widgets - NONE

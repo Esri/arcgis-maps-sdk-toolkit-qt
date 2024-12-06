@@ -4,5 +4,6 @@ The BasemapGallery displays a collection of items representing basemaps from eit
 
 ![BasemapGallery image](https://developers.arcgis.com/qt/toolkit/api-reference/images/basemap.gif)
 
-API Reference documentation that provides full details on this Qt Quick UI component can be found here:
-- [BasemapGallery](https://developers.arcgis.com/qt/toolkit/api-reference/qml-basemapgallery.html)
+Details on how to use the control can be found here:
+- [QML Type/UI Controls/QtQuick](https://developers.arcgis.com/qt/toolkit/api-reference/qml-basemapgallery.html)
+- [C++ Classes/Qt Widgets](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-basemapgallery.html)
