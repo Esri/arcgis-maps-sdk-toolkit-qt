@@ -2,7 +2,7 @@
 
 These are the QML UI components available:
 
-- **[AuthenticationView](docs/toolkit/AuthenticationView.md)** - A wrapper view that will automatically display the proper authentication view for any of the supported authentication types (OAuth, Token, HTTP Basic, HTTP Digest, SAML, PKI).
+- **[AuthenticationView](docs/AuthenticationView.md)** - A wrapper view that will automatically display the proper authentication view for any of the supported authentication types (OAuth, Token, HTTP Basic, HTTP Digest, SAML, PKI).
 - **[BasemapGallery](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/blob/don1760/6911-toolkit-doc/uitools/docs/toolkit/BasemapGallery.md)** - Shows a list of available basemaps by using a Portal or using a user defined collection. User is able to select a basemap, setting it on the current Geomodel.
 - **[BookmarksView](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/blob/don1760/6911-toolkit-doc/uitools/docs/toolkit/BookmarksView.md)**- A control that displays and navigates to bookmarks that have been authored in a map.
 - **[Callout](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/blob/don1760/6911-toolkit-doc/uitools/docs/toolkit/Callout.md)** - A view for displaying information at a geographic location.
