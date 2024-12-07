@@ -164,13 +164,13 @@ MapView {
 
 #### Importing the toolkit (toolkitwidgets.pri)
 
-A good way to start using the toolkit is to use one of the template apps which
-get added to QtCreator when you install the ArcGIS Maps SDK for Qt.
+A good way to start using the toolkit is to use one of the template apps which get added to QtCreator when you install the ArcGIS Maps SDK for Qt.
 
 - In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Maps 200.6.0 Qt Widgets App`
-- choose settings to match the platform etc. you are building for
-- in the `.pro` file of your new app, add a line to add the library for your QML
-  plugin - for example:
+
+- Choose settings to match the platform etc. you are building for
+
+- In the `.pro` file of your new app, add a line to add the library for your QML plugin - for example:
 
 ```qmake
 include(path/to/toolkitwidgets.pri)
@@ -178,12 +178,9 @@ include(path/to/toolkitwidgets.pri)
 
 #### Using a tool from the toolkit (toolkitwidgets.pri)
 
-Once you have successfully imported the toolkit, you can create individual tools
-in your own widgets files.
+Once you have successfully imported the toolkit, you can create individual tools in your own widgets files.
 
-- in your widgets code, create a new instance of the tool you wish to use and
-  add it to your widgets layout. You will also normally need to pass the `GeoView`
-  which the tool is designed to work with:
+- In your widgets code, create a new instance of the tool you wish to use and add it to your widgets layout. You will also normally need to pass the `GeoView` which the tool is designed to work with:
 
 ```cpp
   #include "Esri/ArcGISRuntime/Toolkit/NorthArrow.h"
@@ -198,16 +195,20 @@ in your own widgets files.
 
 #### Importing the toolkit (toolkitwidgets.cmake)
 
-A good way to start using the toolkit is to use one of the template apps which
-get added to QtCreator when you install the ArcGIS Maps SDK for Qt.
+A good way to start using the toolkit is to use one of the template apps which get added to QtCreator when you install the ArcGIS Maps SDK for Qt.
 
 - In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Maps 200.4.0 Qt Widgets App`
+
 - Choose settings to match the platform etc. you are building for
+
 - Copy the `toolkitwidgets` subdirectory into your project's directory
+
 ```bash
 cp -r /path/to/toolkit/uitools/toolkitwidgets /path/to/project
 ```
+
 - The following code block is pregenerated in the `CMakeLists.txt` of your template app, uncomment the `add_subdirectory` and `target_link_libraries` commands:
+
   ```CMake
     # To integrate the toolkit, copy the `toolkitwidgets` subdirectory from the toolkit
     # into your project's directory. Then uncomment the following lines to add it to your project.
@@ -218,12 +219,9 @@ cp -r /path/to/toolkit/uitools/toolkitwidgets /path/to/project
   
 #### Using a tool from the toolkit (toolkitwidgets.cmake)
 
-Once you have successfully imported the toolkit, you can create individual tools
-in your own widgets files.
+Once you have successfully imported the toolkit, you can create individual tools in your own widgets files.
 
-- in your widgets code, create a new instance of the tool you wish to use and
-  add it to your widgets layout. You will also normally need to pass the `GeoView`
-  which the tool is designed to work with:
+- In your widgets code, create a new instance of the tool you wish to use and add it to your widgets layout. You will also normally need to pass the `GeoView` which the tool is designed to work with:
 
 ```cpp
   #include "Esri/ArcGISRuntime/Toolkit/NorthArrow.h"
@@ -236,5 +234,4 @@ in your own widgets files.
 
 ## Access token requirements
 
-Some of the toolkit components and examples utilize ArcGIS location services which require an access token.
-Please see the [setup guide](http://links.esri.com/create-an-api-key) for more information.
+Some of the toolkit components and examples utilize ArcGIS location services which require an access token. Please see the [setup guide](http://links.esri.com/create-an-api-key) for more information.

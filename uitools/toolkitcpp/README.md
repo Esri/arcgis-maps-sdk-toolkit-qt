@@ -14,9 +14,9 @@ These are the components available to use:
 - **[BasemapGallery](docs/BasemapGallery.md)** - Shows a list of available basemaps by using a Portal or using a user defined collection. User is able to select a basemap, setting it on the current Geomodel.
 - **[BookmarksView](/docs/BookmarksView.md)**- A control that displays and navigates to bookmarks that have been authored in a map.
 - **[Callout](docs/Callout.md)** - A view for displaying information at a geographic location.
-- **[NorthArrow](docs/NorthArrow.md)** - A control that indicates north, reacting to rotation changes of the map.
 - **[CoordinateConversion](docs/CoordinateConversion.md)** - A tool that helps convert coordinates from one coordinate system to another.
 - **Floor filter** - A tool that shows sites and facilities, and enables toggling the visibility of levels on floor-aware maps and scenes.
+- **[NorthArrow](docs/NorthArrow.md)** - A control that indicates north, reacting to rotation changes of the map.
 - **[OverviewMap](docs/OverviewMap.md)** - An inset map that shows the current extent of an associated GeoView in the context of a larger area.
 - **[PopupStackView](docs/PopupStackView.md)** - A view based on the Popup view that can show multiple Popups as flickable pages.
 - **[PopupView](docs/PopupView.md)** - A view that displays feature attributes and attachments.
@@ -121,8 +121,7 @@ cp -r /path/to/toolkit/uitools/toolkitcpp /path/to/project
   ```
 #### Using a tool from the toolkit (toolkitcpp.cmake)
 
-Once you have successfully imported the toolkit, you can access individual tools
-in your own QML files.
+Once you have successfully imported the toolkit, you can access individual tools in your own QML files.
 
 - Add an import statement for the toolkit:
 `import Esri.ArcGISRuntime.Toolkit`
@@ -149,7 +148,11 @@ MapView {
     }
 }
 ```
+
+## Access token requirements
+
+Some of the toolkit components and examples utilize ArcGIS location services which require an access token. Please see the [setup guide](http://links.esri.com/create-an-api-key) for more information.
+
 ## Sample app
 
 In the [examples](../examples) folder, there is a Qt example application project (UitoolExamples.pro) that showcases many of the Qt toolkit components being used.
-
