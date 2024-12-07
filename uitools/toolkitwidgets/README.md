@@ -10,13 +10,13 @@ You can learn more about the benefits of building apps with the [Qt Widgets UI c
 
 These are the components available to use:
 
-- **[AuthenticationView](docs/AuthenticationView.md)** - A wrapper view that will automatically display the proper authentication view for any of the supported authentication types (OAuth, Token, HTTP Basic, HTTP Digest, SAML, PKI).
-- **[BasemapGallery](docs/BasemapGallery.md)** - Shows a list of available basemaps by using a Portal or using a user defined collection. User is able to select a basemap, setting it on the current Geomodel.
-- **[BookmarksView](/docs/BookmarksView.md)**- A control that displays and navigates to bookmarks that have been authored in a map.
-- **[CoordinateConversion](docs/CoordinateConversion.md)** - A tool that helps convert coordinates from one coordinate system to another.
+- **[AuthenticationView - Qt Widgets UI control/Class](docs/AuthenticationView.md)** - A wrapper view that will automatically display the proper authentication view for any of the supported authentication types (OAuth, Token, HTTP Basic, HTTP Digest, SAML, PKI).
+- **[BasemapGallery - Qt Widgets UI control/Class](docs/BasemapGallery.md)** - Shows a list of available basemaps by using a Portal or using a user defined collection. User is able to select a basemap, setting it on the current Geomodel.
+- **[BookmarksView - Qt Widgets UI control](/docs/BookmarksView.md)**- A control that displays and navigates to bookmarks that have been authored in a map.
+- **[CoordinateConversion - Qt Widgets UI control/Class](docs/CoordinateConversion.md)** - A tool that helps convert coordinates from one coordinate system to another.
 - **Floor filter** - A tool that shows sites and facilities, and enables toggling the visibility of levels on floor-aware maps and scenes.
-- **[NorthArrow](docs/NorthArrow.md)** - A control that indicates north, reacting to rotation changes of the map.
-- **[OverviewMap](docs/OverviewMap.md)** - An inset map that shows the current extent of an associated GeoView in the context of a larger area.
+- **[NorthArrow - Qt Widgets UI control/Class](docs/NorthArrow.md)** - A control that indicates north, reacting to rotation changes of the map.
+- **[OverviewMap - Qt Widgets UI control/Class](docs/OverviewMap.md)** - An inset map that shows the current extent of an associated GeoView in the context of a larger area.
 
 PUT IN A NOTE THAT THERE ARE NOT AS MANY QT WIDGETS UI COMPONENTS AS THERE ARE QT QUICK UI COMPONENTS. HOWEVER, YOU CAN CREATE YOUR OWN VERSION OF THESE CONTROLS USING THE VARIOUS "CONTROLLER" AND ANCILLARY CLASSES AVAILABLE IN THE https://developers.arcgis.com/qt/toolkit/api-reference/cppwidgetsuitools.html
 

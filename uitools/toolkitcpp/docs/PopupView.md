@@ -1,8 +1,8 @@
 [![ArcGIS Maps SDK for Qt](https://img.shields.io/badge/ArcGIS%20Maps%20SDK%20for%20Qt-0b5394)](https://developers.arcgis.com/qt/) [![ArcGIS Maps SDK for Qt toolkit](https://img.shields.io/badge/ArcGIS%20Maps%20SDK%20for%20Qt%20toolkit-ea4d13)](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt) [![Qt Quick UI components](https://img.shields.io/badge/Qt%20Qt%20Quick%20UI%20components-ea4d13)](../../toolkitcpp/)
 
-# PopupView
+# PopupView - Qt Quick UI control/QML Type
 
-The [PopupView](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupview.html) control provides a view for displaying and editing information about a feature. A PopupView can be used to display information for any type that implements the PopupSource interface. For example, FeatureLayer implements PopupSource. This means that it has a PopupDefinition, which defines how the Popup should look for any features in that layer. An example workflow for displaying a PopupView for a feature in a FeatureLayer would be:
+The [PopupView - Qt Quick UI control/QML Type](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupview.html) control provides a view for displaying and editing information about a feature. A PopupView can be used to display information for any type that implements the PopupSource interface. For example, FeatureLayer implements PopupSource. This means that it has a PopupDefinition, which defines how the Popup should look for any features in that layer. An example workflow for displaying a PopupView for a feature in a FeatureLayer would be:
 
 - Declare a PopupView and anchor it to a desired location.
 - Perform an identify operation on a GeoView and select a Feature from the identify result.

@@ -10,20 +10,20 @@ You can learn more about the benefits of building apps with the [Qt Quick UI con
 
 These are the components available to use:
 
-- **[AuthenticationView](docs/AuthenticationView.md)** - A wrapper view that will automatically display the proper authentication view for any of the supported authentication types (OAuth, Token, HTTP Basic, HTTP Digest, SAML, PKI).
-- **[BasemapGallery](docs/BasemapGallery.md)** - Shows a list of available basemaps by using a Portal or using a user defined collection. User is able to select a basemap, setting it on the current Geomodel.
-- **[BookmarksView](/docs/BookmarksView.md)**- A control that displays and navigates to bookmarks that have been authored in a map.
-- **[Callout](docs/Callout.md)** - A view for displaying information at a geographic location.
-- **[CoordinateConversion](docs/CoordinateConversion.md)** - A tool that helps convert coordinates from one coordinate system to another.
+- **[AuthenticationView - Qt Quick UI control/QML Type](docs/AuthenticationView.md)** - A wrapper view that will automatically display the proper authentication view for any of the supported authentication types (OAuth, Token, HTTP Basic, HTTP Digest, SAML, PKI).
+- **[BasemapGallery - Qt Quick UI control/QML Type](docs/BasemapGallery.md)** - Shows a list of available basemaps by using a Portal or using a user defined collection. User is able to select a basemap, setting it on the current Geomodel.
+- **[BookmarksView - Qt Quick UI control/QML Type](/docs/BookmarksView.md)**- A control that displays and navigates to bookmarks that have been authored in a map.
+- **[Callout - Qt Quick UI control/QML Type](docs/Callout.md)** - A view for displaying information at a geographic location.
+- **[CoordinateConversion - Qt Quick control/QML Type](docs/CoordinateConversion.md)** - A tool that helps convert coordinates from one coordinate system to another.
 - **Floor filter** - A tool that shows sites and facilities, and enables toggling the visibility of levels on floor-aware maps and scenes.
-- **[NorthArrow](docs/NorthArrow.md)** - A control that indicates north, reacting to rotation changes of the map.
-- **[OverviewMap](docs/OverviewMap.md)** - An inset map that shows the current extent of an associated GeoView in the context of a larger area.
-- **[PopupStackView](docs/PopupStackView.md)** - A view based on the Popup view that can show multiple Popups as flickable pages.
-- **[PopupView](docs/PopupView.md)** - A view that displays feature attributes and attachments.
-- **[Scalebar](docs/Scalebar.md)** - A tool that indicates the proportions of a map to the actual geographic area so users can visually gauge distances on a map view.
-- **[SearchView](docs/SearchView.md)** - A tool that submits search queries and shows single or multiple results. Queries can be restricted to the current view extent.
-- **[TimeSlider](docs/TimeSlider.md)** - A control for changing the current time extent on a view using a slider that moves between the defined minimum and maximum time values.
-- **[UtilityNetworkTrace](docs/UtilityNetworkTrace.md)**- A control that streamlines utility network trace workflows by allowing the user to select a starting point and trace configuration.
+- **[NorthArrow - Qt Quick UI control/QML Type](docs/NorthArrow.md)** - A control that indicates north, reacting to rotation changes of the map.
+- **[OverviewMap - Qt Quick UI control/QML Type](docs/OverviewMap.md)** - An inset map that shows the current extent of an associated GeoView in the context of a larger area.
+- **[PopupStackView - Qt Quick UI control/QML Type](docs/PopupStackView.md)** - A view based on the Popup view that can show multiple Popups as flickable pages.
+- **[PopupView - Qt Quick UI control/QML Type](docs/PopupView.md)** - A view that displays feature attributes and attachments.
+- **[Scalebar - Qt Quick UI control/QML Type](docs/Scalebar.md)** - A tool that indicates the proportions of a map to the actual geographic area so users can visually gauge distances on a map view.
+- **[SearchView - Qt Quick UI control/QML Type](docs/SearchView.md)** - A tool that submits search queries and shows single or multiple results. Queries can be restricted to the current view extent.
+- **[TimeSlider - Qt Quick UI control/QML Type](docs/TimeSlider.md)** - A control for changing the current time extent on a view using a slider that moves between the defined minimum and maximum time values.
+- **[UtilityNetworkTrace - Qt Quick UI control/QML Type](docs/UtilityNetworkTrace.md)**- A control that streamlines utility network trace workflows by allowing the user to select a starting point and trace configuration.
 
 ## Options to use the components in your project
 
