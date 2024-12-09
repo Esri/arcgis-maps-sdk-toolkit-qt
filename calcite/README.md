@@ -1,8 +1,14 @@
+[![ArcGIS Maps SDK for Qt Toolkit API reference](https://img.shields.io/badge/API_Reference-purple)](https://developers.arcgis.com/qt/latest/toolkit/api-reference/) [![Current release](https://img.shields.io/github/v/release/esri/arcgis-maps-sdk-toolkit-qt?label=current%20release)](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/releases) [![ArcGIS Maps SDK for Qt](https://img.shields.io/badge/ArcGIS%20Maps%20SDK%20for%20Qt-0b5394)](https://developers.arcgis.com/qt/)
+
 # Esri Calcite Style
 
 Esri’s design system ([Calcite](https://esri.github.io/calcite-web/)) enables you to create beautiful, easy to use, and consistent experiences across apps with minimal effort.
 
-This is a WIP module which contains a port of Esri's Calcite Web Style that is QML compatible.
+These components are QML compatible and are configured by adding them to your .qml files. These components include options for creating Light and Dark themed UI's in you app. There are over 30 controls available like: Button, CheckBox, Menu, RadioButton, ToolBar, and so forth.
+
+You can learn more about [Calcite web project](https://esri.github.io/calcite-web/) from the Esri sponsored GitHub repo.
+
+This is a work-in-progress module which contains a port of Esri's Calcite Web Style that is QML compatible.
 
 ## Light Mode
 
