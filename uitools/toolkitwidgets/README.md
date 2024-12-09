@@ -99,3 +99,7 @@ Once you have successfully imported the toolkit, you can create individual tools
 ## Access token requirements
 
 Some of the toolkit components and examples utilize ArcGIS location services which require an access token. Please see the [setup guide](http://links.esri.com/create-an-api-key) for more information.
+
+## Sample app
+
+In the [examples](../examples) folder, there is a Qt example application project (UitoolExamples.pro) that showcases many of the Qt toolkit components being used.

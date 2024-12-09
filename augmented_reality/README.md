@@ -336,3 +336,6 @@ iOS devices is Metal. Add the following code to your apps:
 ```cpp
 QQuickWindow::setGraphicsApi(QSGRendererInterface::GraphicsApi::OpenGL);
 ```
+## Sample app
+
+In the [Examples](../Examples) folder, there is a Qt example application project (ArExample.pro) that showcases many of the Qt toolkit AR components being used.
