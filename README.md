@@ -14,17 +14,16 @@ You can do this by doing either of the following:
 
 ## Toolkit components available
 
-Currently, the toolkit contains:
 - [Qt Quick UI components](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/main/uitools/toolkitcpp) - these are components that compliment your `MapView` or `SceneView` by adding them to your Qt project's .qml files (QML based UI development). They are components like: AuthenticationView, NorthArrow, OverviewMap, TimeSlider, and so forth. Using these components are very beneficial for device based apps like phones and tablets. 
 - [Qt Widgets UI components](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/main/uitools/toolkitwidgets) - these are components that compliment your `MapView` or `SceneView` by adding them to your projects .cpp files. They are components like: AuthenticationView, NorthArrow, OverviewMap, TimeSlider, and so forth. Using these components are very beneficial for traditional desktop based apps.
 
-The following table lists the various UI components available depending on if Qt project is created with Qt Quick UI or Qt Widgets UI components. 
+The following table lists the various UI components available depending on how your Qt project was created with either Qt Quick UI or Qt Widgets UI components. 
 
 |          Tool         | [Qt Quick UI components](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/main/uitools/toolkitcpp) |            [Qt Widgets UI components](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/main/uitools/toolkitwidgets)            |
 |:---------------------:|:--------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------:|
 |  AuthenticationView  |    [✔](uitools/toolkitcpp/docs/AuthenticationView.md)   |  [✔](uitools/toolkitwidgets/docs/AuthenticationView.md)  |
-|    BasemapGallery    |      [✔](uitools/toolkitcpp/docs/BasemapgGallery.md)    |    [✔](uitools/toolkitwidgets/docs/BasemapgGallery.md)   |
-|     BookmarksView    |                                               ✔         |               ✔                                          |
+|    BasemapGallery    |      [✔](uitools/toolkitcpp/docs/BasemapGallery.md)     |    [✔](uitools/toolkitwidgets/docs/BasemapGallery.md)   |
+|     BookmarksView    |       [✔](uitools/toolkitcpp/docs/BookmarksView.md)     |    [✔](uitools/toolkitwidgets/docs/BookmarksView.md)    |
 |        Callout       |         [✔](uitools/toolkitcpp/docs/Callout.md)         |                                                          |
 | CoordinateConversion |   [✔](uitools/toolkitcpp/docs/CoordinateConversion.md)  | [✔](uitools/toolkitwidgets/docs/CoordinateConversion.md) |
 |      FloorFilter     |       [✔](uitools/toolkitcpp/docs/FloorFilter.md)       |      [✔](uitools/toolkitwidgets/docs/FloorFilter.md)     |
