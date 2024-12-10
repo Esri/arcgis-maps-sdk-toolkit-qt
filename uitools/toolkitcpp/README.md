@@ -47,11 +47,6 @@ A good way to start using the toolkit is to use one of the template apps which g
  -- Project Management ==> Add asa subproject to project: none, Add to version control: none
 
 - In your apps `.pro` file, add an `include` statement that points to the path of the `toolkit.pri` file that you have on disk. For example:
-
-```qmake
-include(C:/arcgis-maps-sdk-toolkit-qt/uitools/toolkitcpp.pri)
-```
-
 ![Adding the toolkit.pri to the .pro file](./images/AddingToolkitPriToPath.png)
 
 - In `main.cpp` add a line to import the toolkit registration function:
