@@ -35,49 +35,26 @@ A good way to start using the toolkit is to use one of the template apps which g
 
 - In Qt Creator choose "File > New project" from the menus. 
 
-- In the "New Project - Qt Creator" dialog. Select "ArcGIS" in the Project template on the left and then choose the "ArcGIS Maps 200.6.0 Qt Quick C++ App" template. Then click teh "Choose..." button.
+- In the "New Project - Qt Creator" dialog. Select "ArcGIS" in the Project template on the left and then choose the "ArcGIS Maps 200.6.0 Qt Quick C++ App" template. Then click the "Choose..." button.
 
 - Complete the rest of the dialog wizard options to create a project. For example:
-  * Project Location ==> Name TestNorthArrow, Create in: "C:\temp"
-  * Define Build System ==> Build System: qMake
-  * Define Project Details ==> App Description: Test using a NorthArrow, 3D project: unchecked, ArcGIS OnlineBasemap: Imagery, AccessToken: [Create an API Key](see:https://developers.arcgis.com/documentation/security-and-authentication/api-key-authentication/tutorials/create-an-api-key/)
+  * Project Location ==> **Name:** TestNorthArrow, **Create in:** C:\temp
+  * Define Build System ==> **Build System:** qMake
+  * Define Project Details ==> **App Description:** Test using a NorthArrow, **3D project:** leave unchecked, **ArcGIS OnlineBasemap:** Imagery, **AccessToken:** see: [Create an API Key](https://developers.arcgis.com/documentation/security-and-authentication/api-key-authentication/tutorials/create-an-api-key/)
   * Kit Selection ==> Desktop Qt 6.5.6 MSVC2019 64bit
-  * Project Management ==> Add asa subproject to project: none, Add to version control: none
+  * Project Management ==> **Add as a subproject to project:** none, **Add to version control:** none
 
 - In your apps `.pro` file, add an `include` statement that points to the path of the `toolkit.pri` file that you have on disk. For example:
 ![Adding the toolkit.pri to the .pro file](./images/AddingToolkitPriToPath.png)
 
-- In `main.cpp` file, near the top add an include statement to import the toolkit registration.h file (ex: `#include "Esri/ArcGISRuntime/Toolkit/register.h"`) and then later in the `main` function call the `ToolkitregisterComponents()` function. For example: 
+- In the `main.cpp` file, near the top add an `include` statement to import the toolkit `registration.h` file (ex: `#include "Esri/ArcGISRuntime/Toolkit/register.h"`) and then later in the `main` function call the `ToolkitregisterComponents()` function. For example: 
 ![Adding code to the main.cpp file](./images/AddingCodeToMainCpp.png)
 
-Once you have successfully imported the toolkit, you can access individual tools in your own QML files.
+- In your apps QML file (ex: `TestNorthArrow.qml`), add an `import` statement for the `Toolkit` (ex: `import Esri.ArcGISRuntime.Toolkit`). Then later in the file declare and configure the Qt toolkit component you wish to use. This is typically done by embedding the Qt toolkit component within the `MapView` or `SceneView` control. In general, you will have to set the `GeoView` property of the Qt toolkit component (and possibly other properties). If you were to add a NorthArrow, you code would look something like this: 
+![Adding code to the main.cpp file](./images/AddingCodeToQML.png)
 
-- Add an import statement for the toolkit:
-`import Esri.ArcGISRuntime.Toolkit`
-
-- Declare the tool you wish to use. Generally you will also have to supply the `GeoView` etc. you wish the tool to work with. 
-
-For example, to add a `NorthArrow`:
-
-```qml
-import Esri.ArcGISRuntime.Toolkit
-
-MapView {
-    id: mapView
-
-    // A visible compass is now embedded in the mapView and hooked up!
-    NorthArrow {
-        id: arrow
-        width: 32
-        height: 32
-        anchors {
-            right: parent.right
-            bottom: parent.bottom
-        }
-        geoView: mapView
-    }
-}
-```
+When you run your app, you should now see the UI for the Qt toolkit component in your app. For example:
+![Adding code to the main.cpp file](./images/testNorthArrow.png)
 
 ### OPTION2: CMake based projects 
 
