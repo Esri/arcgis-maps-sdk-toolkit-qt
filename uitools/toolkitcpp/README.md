@@ -2,7 +2,7 @@
 
 ## ArcGIS Maps SDK - Qt Quick UI components
 
-These are controls that compliment your MapView or SceneView by adding them to your Qt project's .qml files (QML based UI development). They are components like: AuthenticationView, NorthArrow, OverviewMap, TimeSlider, and so forth. Using these components are very beneficial for device based apps like phones and tablets.
+These are controls that compliment your `MapView` or `SceneView` by adding them to your Qt project's .qml files (QML based UI development). They are components like: AuthenticationView, NorthArrow, OverviewMap, TimeSlider, and so forth. Using these components are very beneficial for device based apps like phones and tablets.
 
 You can learn more about the benefits of building apps with the [Qt Quick UI controls](https://doc.qt.io/qt-6/qtquickcontrols-index.html) from the Qt Group. 
 
@@ -35,15 +35,24 @@ There are two options to make use of the Qt Quick UI components depending on how
 
 A good way to start using the toolkit is to use one of the template apps which get added to QtCreator when you install the ArcGIS Runtime SDK for Qt.
 
-- In QtCreator choose `File/New file or project/ArcGIS/ArcGIS Maps 200.6.0 Qt Quick C++ App`
+- In Qt Creator choose "File > New project" from the menus. 
 
-- Choose settings to match the platform etc. you are building for
+- In the "New Project - Qt Creator" dialog. Select "ArcGIS" in the Project template on the left and then choose the "ArcGIS Maps 200.6.0 Qt Quick C++ App" template. Then click teh "Choose..." button.
 
-- In the `.pro` file of your new app, add a line to add the library for your QML plugin - for example:
+- Complete the rest of the dialog wizard options to create a project. For example:
+ -- Project Location ==> Name TestNorthArrow, Create in: "C:\temp"
+ -- Define Build System ==> Build System: qMake
+ -- Define Project Details ==> App Description: Test using a NorthArrow, 3D project: unchecked, ArcGIS OnlineBasemap: Imagery, AccessToken: [see:https://developers.arcgis.com/documentation/security-and-authentication/api-key-authentication/tutorials/create-an-api-key/]
+ -- Kit Selection ==> Desktop Qt 6.5.6 MSVC2019 64bit
+ -- Project Management ==> Add asa subproject to project: none, Add to version control: none
+
+- In your apps `.pro` file, add an `include` statement that points to the path of the `toolkit.pri` file that you have on disk. For example:
 
 ```qmake
-include(path/to/toolkitcpp.pri)
+include(C:/arcgis-maps-sdk-toolkit-qt/uitools/toolkitcpp.pri)
 ```
+
+![Adding the toolkit.pri to the .pro file](./images/AddingToolkitPriToPath.png)
 
 - In `main.cpp` add a line to import the toolkit registration function:
 
@@ -155,4 +164,4 @@ Some of the toolkit components and examples utilize ArcGIS location services whi
 
 ## Sample app
 
-In the [examples](../examples) folder, there is a Qt example application project (UitoolExamples.pro) that showcases many of the Qt toolkit components being used.
+In the [examples](../examples) folder, there is a Qt example application project (UitoolExamples.pro) that showcases many of the Qt toolkit components used in a C++ app based on the Qt Quick UI controls.

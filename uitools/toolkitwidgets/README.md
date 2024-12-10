@@ -2,7 +2,7 @@
 
 ## ArcGIS Maps SDK - Qt Widgets UI components
 
-These are controls that compliment your MapView or SceneView by adding them to your projects .cpp files. They are components like: AuthenticationView, NorthArrow, OverviewMap, TimeSlider, and so forth. Using these components are very beneficial for traditional desktop based apps.
+These are controls that compliment your `MapView` or `SceneView` by adding them to your projects .cpp files. They are components like: AuthenticationView, NorthArrow, OverviewMap, TimeSlider, and so forth. Using these components are very beneficial for traditional desktop based apps.
 
 You can learn more about the benefits of building apps with the [Qt Widgets UI controls](https://doc.qt.io/qt-6/qtwidgets-index.html). 
 
@@ -18,7 +18,7 @@ These are the components available to use:
 - **[NorthArrow - Qt Widgets UI control/Class](docs/NorthArrow.md)** - A control that indicates north, reacting to rotation changes of the map.
 - **[OverviewMap - Qt Widgets UI control/Class](docs/OverviewMap.md)** - An inset map that shows the current extent of an associated GeoView in the context of a larger area.
 
-PUT IN A NOTE THAT THERE ARE NOT AS MANY QT WIDGETS UI COMPONENTS AS THERE ARE QT QUICK UI COMPONENTS. HOWEVER, YOU CAN CREATE YOUR OWN VERSION OF THESE CONTROLS USING THE VARIOUS "CONTROLLER" AND ANCILLARY CLASSES AVAILABLE IN THE https://developers.arcgis.com/qt/toolkit/api-reference/cppwidgetsuitools.html
+NOTE: Due to the open source nature of the Qt toolkit repo, you may notice that currently there are not as many Qt Widget components as there are Qt Quick versions. You are welcome to create you own components to suit your needs. The [Qt Toolkit API Reference](https://developers.arcgis.com/qt/toolkit/api-reference/) should be your starting point (in particular expand the "C++ Classes" section in the TOC). The API classes have been architected to utilize MVC design principals, so for each view, there is an associated controller (the word "Controller" is appended to the class name).
 
 ## Options to use the components in your project
 
@@ -102,4 +102,4 @@ Some of the toolkit components and examples utilize ArcGIS location services whi
 
 ## Sample app
 
-In the [examples](../examples) folder, there is a Qt example application project (UitoolExamples.pro) that showcases many of the Qt toolkit components being used.
+In the [examples](../examples) folder, there is a Qt example application project (UitoolExamples.pro) that showcases many of the Qt toolkit components used in a C++ app based Qt Quick UI controls. Currently, there is not an example application that demonstrates Qt toolkit components used in a C++ app based on the Qt Widget UI controls.
