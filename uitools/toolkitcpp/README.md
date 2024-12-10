@@ -31,8 +31,6 @@ There are two options to make use of the Qt Quick UI components depending on how
 
 ### OPTION1: Making use of the toolkitcpp.pri file
 
-#### Importing the toolkit (toolkitcpp.pri)
-
 A good way to start using the toolkit is to use one of the template apps which get added to QtCreator when you install the ArcGIS Runtime SDK for Qt.
 
 - In Qt Creator choose "File > New project" from the menus. 
@@ -42,27 +40,15 @@ A good way to start using the toolkit is to use one of the template apps which g
 - Complete the rest of the dialog wizard options to create a project. For example:
   * Project Location ==> Name TestNorthArrow, Create in: "C:\temp"
   * Define Build System ==> Build System: qMake
-  * Define Project Details ==> App Description: Test using a NorthArrow, 3D project: unchecked, ArcGIS OnlineBasemap: Imagery, AccessToken: [see:https://developers.arcgis.com/documentation/security-and-authentication/api-key-authentication/tutorials/create-an-api-key/]
+  * Define Project Details ==> App Description: Test using a NorthArrow, 3D project: unchecked, ArcGIS OnlineBasemap: Imagery, AccessToken: [Create an API Key](see:https://developers.arcgis.com/documentation/security-and-authentication/api-key-authentication/tutorials/create-an-api-key/)
   * Kit Selection ==> Desktop Qt 6.5.6 MSVC2019 64bit
   * Project Management ==> Add asa subproject to project: none, Add to version control: none
 
 - In your apps `.pro` file, add an `include` statement that points to the path of the `toolkit.pri` file that you have on disk. For example:
 ![Adding the toolkit.pri to the .pro file](./images/AddingToolkitPriToPath.png)
 
-- In `main.cpp` add a line to import the toolkit registration function:
-
-```cpp
-#include "Esri/ArcGISRuntime/Toolkit/register.h"
-```
-
-- In `main.cpp` (inside the main function) call the registration function:
-
-```cpp
-QQmlApplicationEngine engine; // The engine driving your QML application.
-Esri::ArcGISRuntime::Toolkit::registerComponents(engine);
-```
-
-#### Using a tool from the toolkit (toolkitcpp.pri)
+- In `main.cpp` file, near the top add an include statement to import the toolkit registration.h file (ex: `#include "Esri/ArcGISRuntime/Toolkit/register.h"`) and then later in the `main` function call the `ToolkitregisterComponents()` function. For example: 
+![Adding code to the main.cpp file](./images/AddingCodeToMainCpp.png)
 
 Once you have successfully imported the toolkit, you can access individual tools in your own QML files.
 
