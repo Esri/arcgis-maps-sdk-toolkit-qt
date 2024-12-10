@@ -54,7 +54,7 @@ A good way to start using the toolkit is to use one of the template apps which g
 ![Adding code to the main.cpp file](./images/AddingCodeToQML.png)
 
 When you run your app, you should now see the UI for the Qt toolkit component in your app. For example:
-![Adding code to the main.cpp file](./images/testNorthArrow.png)
+![Adding code to the main.cpp file](./images/TestNorthArrow.png)
 
 ### OPTION2: CMake based projects 
 

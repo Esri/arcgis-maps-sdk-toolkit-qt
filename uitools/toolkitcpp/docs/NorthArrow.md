@@ -6,4 +6,4 @@ The [NorthArrow - Qt Quick UI control/QML Type](https://developers.arcgis.com/qt
 
 NOTE: default width and height is 48 pixels.
 
-![NorthArrow image](https://developers.arcgis.com/qt/toolkit/api-reference/images/northarrow.gif)
+![NorthArrow image](../images/TestNorthArrow.png)
