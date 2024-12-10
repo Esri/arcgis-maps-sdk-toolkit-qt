@@ -17,8 +17,30 @@ You can do this by doing either of the following:
 Currently, the toolkit contains:
 - [Qt Quick UI components](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/main/uitools/toolkitcpp) - these are components that compliment your `MapView` or `SceneView` by adding them to your Qt project's .qml files (QML based UI development). They are components like: AuthenticationView, NorthArrow, OverviewMap, TimeSlider, and so forth. Using these components are very beneficial for device based apps like phones and tablets. 
 - [Qt Widgets UI components](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/main/uitools/toolkitwidgets) - these are components that compliment your `MapView` or `SceneView` by adding them to your projects .cpp files. They are components like: AuthenticationView, NorthArrow, OverviewMap, TimeSlider, and so forth. Using these components are very beneficial for traditional desktop based apps.
-- [Calcite style components](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/main/calcite) - these are components that enable you to create beautiful and consistent experiences using the Calcite web style for Esri. These components are QML compatible and are configured by adding them to your .qml files. These components include options for creating Light and Dark themed UI's in you app. There are over 30 controls available like: Button, CheckBox, Menu, RadioButton, ToolBar, and so forth.  
-- [Augmented Reality toolkit components](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/main/augmented_reality) - these are components that provide Augmented Reality (AR) support for ARKit for iOS apps and ARCore for Android apps. AR experiences enhance the physical world with virtual content that respects real world scale, position, and orientation of a device. A `SceneView` object displays 3D geographic AR data as virtual content on top of a camera feed of the real, physical world.
+
+The following table lists the various UI components available depending on if Qt project is created with Qt Quick UI or Qt Widgets UI components. 
+
+|          Tool         | [Qt Quick UI components](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/main/uitools/toolkitcpp) |            [Qt Widgets UI components](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/main/uitools/toolkitwidgets)            |
+|:---------------------:|:--------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------:|
+|  AuthenticationView  |    [✔](uitools/toolkitcpp/docs/AuthenticationView.md)   |  [✔](uitools/toolkitwidgets/docs/AuthenticationView.md)  |
+|    BasemapGallery    |      [✔](uitools/toolkitcpp/docs/BasemapgGallery.md)    |    [✔](uitools/toolkitwidgets/docs/BasemapgGallery.md)   |
+|     BookmarksView    |                                               ✔         |               ✔                                          |
+|        Callout       |         [✔](uitools/toolkitcpp/docs/Callout.md)         |                                                          |
+| CoordinateConversion |   [✔](uitools/toolkitcpp/docs/CoordinateConversion.md)  | [✔](uitools/toolkitwidgets/docs/CoordinateConversion.md) |
+|      FloorFilter     |       [✔](uitools/toolkitcpp/docs/FloorFilter.md)       |      [✔](uitools/toolkitwidgets/docs/FloorFilter.md)     |
+|      NorthArrow      |        [✔](uitools/toolkitcpp/docs/NorthArrow.md)       |      [✔](uitools/toolkitwidgets/docs/NorthArrow.md)      |
+|      OverviewMap     |       [✔](uitools/toolkitcpp/docs/OverviewMap.md)       |      [✔](uitools/toolkitwidgets/docs/OverviewMap.md)     |
+|    PopupStackView    |      [✔](uitools/toolkitcpp/docs/PopupStackView.md)     |                                                          |
+|       PopupView      |        [✔](uitools/toolkitcpp/docs/PopupView.md)        |                                                          |
+|        Scalebar      |         [✔](uitools/toolkitcpp/docs/Scalebar.md)        |                                                          |
+|      SearchView      |        [✔](uitools/toolkitcpp/docs/SearchView.md)       |                                                          |
+|      TimeSlider      |        [✔](uitools/toolkitcpp/docs/TimeSlider.md)       |                                                          |
+| UtilityNetworkTrace  |  [✔](uitools/toolkitcpp/docs/UtilityNetworkTrace.md)    |                                                          |
+
+## Other Toolkit features available
+
+- [Calcite style](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/main/calcite) - this feature provides visual styles that enable you to create beautiful and consistent experiences using the Calcite web style for Esri on UI controls you have in your app. These styles are QML compatible and are configured by adding them to your .qml files. The styles include options for creating Light and Dark themed UI's in you app. There are over 30 styles available that can be used on Qt controls like: Button, CheckBox, Menu, RadioButton, ToolBar, and so forth. 
+- [Augmented Reality](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/main/augmented_reality) - these are UI components and C++ classes that provide Augmented Reality (AR) support for ARKit for iOS apps and ARCore for Android apps. AR experiences enhance the physical world with virtual content that respects real world scale, position, and orientation of a device. A `SceneView` object displays 3D geographic AR data as virtual content on top of a camera feed of the real, physical world.
 
 ## Resources
 
