@@ -12,4 +12,4 @@ The result Tab itself contains a TabBar of the results made up of custom Tabs de
 
 Generic styles, displayed in this Qml UI, can be overwritten using the Calcite style.
 
-NEED IMAGE FOR UtilityNetworkTrace
+![UtilityNetworkTrace image](../images/UtilityNetworkTrace.png)
