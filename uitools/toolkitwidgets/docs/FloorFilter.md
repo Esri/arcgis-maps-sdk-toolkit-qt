@@ -1,6 +1,6 @@
 [![ArcGIS Maps SDK for Qt](https://img.shields.io/badge/ArcGIS%20Maps%20SDK%20for%20Qt-0b5394)](https://developers.arcgis.com/qt/) [![ArcGIS Maps SDK for Qt toolkit](https://img.shields.io/badge/ArcGIS%20Maps%20SDK%20for%20Qt%20toolkit-ea4d13)](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt) [![Qt Widgets UI components](https://img.shields.io/badge/Qt%20Qt%20Widgets%20UI%20components-ea4d13)](../../toolkitwidgets/)
 
-# FloorFilter - Qt Widgets control/QML Type
+# FloorFilter - Qt Widgets control/Class
 
 The [FloorFilter - Qt Widgets control/Class](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-floorfilter.html) tool allows for the browsing workflow where sites and facilities are manually selected, automatic facility selection based on the GeoView's current viewpoint. This mode is useful when you are exploring the GeoView but do not know the name of the site or facility. For the same reason, it is possible to list all the facilities available in the `FloorManager` using the button on the siteView.
 
