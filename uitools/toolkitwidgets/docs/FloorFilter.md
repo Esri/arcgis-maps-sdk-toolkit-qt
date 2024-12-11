@@ -2,7 +2,7 @@
 
 # FloorFilter - Qt Widgets control/QML Type
 
-The [FloorFilter - Qt Quick control/QML Type](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-floorfilter.html) tool allows for the browsing workflow where sites and facilities are manually selected, automatic facility selection based on the GeoView's current viewpoint. This mode is useful when you are exploring the GeoView but do not know the name of the site or facility. For the same reason, it is possible to list all the facilities available in the `FloorManager` using the button on the siteView.
+The [FloorFilter - Qt Widgets control/Class](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-floorfilter.html) tool allows for the browsing workflow where sites and facilities are manually selected, automatic facility selection based on the GeoView's current viewpoint. This mode is useful when you are exploring the GeoView but do not know the name of the site or facility. For the same reason, it is possible to list all the facilities available in the `FloorManager` using the button on the siteView.
 
 The user interface is driven from the `FloorAware` data that is available in the GeoModel's `FloorManager`.
 
