@@ -8,15 +8,15 @@ You can learn more about the benefits of building apps with the [Qt Widgets UI c
 
 ## Available components
 
-These are the components available to use:
+These are the **Qt Widgets UI control/Class** available to use:
 
-- **[AuthenticationView - Qt Widgets UI control/Class](docs/AuthenticationView.md)** - A wrapper view that will automatically display the proper authentication view for any of the supported authentication types (OAuth, Token, HTTP Basic, HTTP Digest, SAML, PKI).
-- **[BasemapGallery - Qt Widgets UI control/Class](docs/BasemapGallery.md)** - Shows a list of available basemaps by using a Portal or using a user defined collection. User is able to select a basemap, setting it on the current Geomodel.
-- **[BookmarksView - Qt Widgets UI control](/docs/BookmarksView.md)**- A control that displays and navigates to bookmarks that have been authored in a map.
-- **[CoordinateConversion - Qt Widgets UI control/Class](docs/CoordinateConversion.md)** - A tool that helps convert coordinates from one coordinate system to another.
-- **[FloorFilter - Qt Widgets UI control.Class](docs/FloorFilter.md)** - A tool that shows sites and facilities, and enables toggling the visibility of levels on floor-aware maps and scenes.
-- **[NorthArrow - Qt Widgets UI control/Class](docs/NorthArrow.md)** - A control that indicates north, reacting to rotation changes of the map.
-- **[OverviewMap - Qt Widgets UI control/Class](docs/OverviewMap.md)** - An inset map that shows the current extent of an associated GeoView in the context of a larger area.
+- **[AuthenticationView](docs/AuthenticationView.md)** - A wrapper view that will automatically display the proper authentication view for any of the supported authentication types (OAuth, Token, HTTP Basic, HTTP Digest, SAML, PKI).
+- **[BasemapGallery](docs/BasemapGallery.md)** - Shows a list of available basemaps by using a Portal or using a user defined collection. User is able to select a basemap, setting it on the current Geomodel.
+- **[BookmarksView](/docs/BookmarksView.md)**- A control that displays and navigates to bookmarks that have been authored in a map.
+- **[CoordinateConversion](docs/CoordinateConversion.md)** - A tool that helps convert coordinates from one coordinate system to another.
+- **[FloorFilter](docs/FloorFilter.md)** - A tool that shows sites and facilities, and enables toggling the visibility of levels on floor-aware maps and scenes.
+- **[NorthArrow](docs/NorthArrow.md)** - A control that indicates north, reacting to rotation changes of the map.
+- **[OverviewMap](docs/OverviewMap.md)** - An inset map that shows the current extent of an associated GeoView in the context of a larger area.
 
 NOTE: Due to the open source nature of the Qt toolkit repo, you may notice that currently there are not as many Qt Widget UI components as there are Qt Quick UI versions. You are welcome to create you own components to suit your needs. The [Qt Toolkit API Reference](https://developers.arcgis.com/qt/toolkit/api-reference/) should be your starting point (in particular expand the "C++ Classes" section in the TOC) to learn about developing custom UI components. The API classes have been architected to utilize MVC design principals, so for each view, there is an associated controller (the word "Controller" is appended to the class name).
 
