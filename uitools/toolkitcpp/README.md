@@ -31,7 +31,7 @@ There are two options to make use of the Qt Quick UI components depending on how
 
 ### OPTION1: Making use of the toolkitcpp.pri file
 
-A good way to start using the toolkit is to use one of the template apps which get added to QtCreator when you install the ArcGIS Runtime SDK for Qt.
+A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Qt templates to build an app. The following steps show an example of adding the NorthArrow control.
 
 - In Qt Creator choose **File** > **New project** from the menus. 
 
@@ -67,7 +67,7 @@ A good way to start using the toolkit is to use one of the template apps which g
 ![Adding the toolkit.pri to the .pro file](./images/AddingToolkitPriToPath.png)
 -->
 
-- In the `main.cpp` file (near the top), add an `include` statement to import the toolkit `registration.h` file and then later in the `main` function call the `ToolkitregisterComponents()` function.
+- In the `main.cpp` file (near the top), add an `include` statement to import the toolkit `registration.h` file and then later in file call the `ToolkitregisterComponents()` function.
 
 > For example:
 > ```cpp
@@ -91,8 +91,46 @@ A good way to start using the toolkit is to use one of the template apps which g
 ![Adding code to the main.cpp file](./images/AddingCodeToMainCpp.png)
 -->
 
-- In your apps QML file (ex: `TestNorthArrow.qml`), add an `import` statement for the `Toolkit` (ex: `import Esri.ArcGISRuntime.Toolkit`). Then later in the file declare and configure the Qt toolkit component you wish to use. This is typically done by embedding the Qt toolkit component within the `MapView` or `SceneView` control. In general, you will have to set the `GeoView` property of the Qt toolkit component (and possibly other properties). If you were to add a NorthArrow, you code would look something like this: 
+- In your apps QML file add an `import` statement for the `Toolkit`. Then later in the file, declare and configure the Qt toolkit component you wish to use. 
+
+NOTE: In general, you will have to set the `GeoView` property of the Qt toolkit component (and possibly other properties). If you were to add a NorthArrow, you code would look something like this:
+
+> For example:
+> ```qml
+> ...
+> import Esri.TestNorthArrow
+>
+> // Needed for the Qt toolkit
+> import Esri.ArcGISRuntime.Toolkit
+> 
+> Item {
+>
+>    // Create MapQuickView here, and create its Map etc. in C++ code
+>    MapView {
+>        id: view
+>        anchors.fill: parent
+>        // set focus to enable keyboard navigation
+>        focus: true
+>    }
+>
+>    // Adding the Qt toolkit NorthArrow component via QML.
+>    NorthArrow {
+>        id: arrow
+>        width: 200 // The default is 48 pixles.
+>        height: 200 // The default is 48 pixels.
+>        anchors {
+>            right: parent.right
+>            bottom: parent.bottom
+>            margins: 10
+>        }
+>        geoView: view // Set the geoView to the id of the MapView control (ie. view)
+>    }
+> ...
+>```
+
+<!--
 ![Adding code to the main.cpp file](./images/AddingCodeToQML.png)
+-->
 
 When you run your app, you should now see the UI for the Qt toolkit component in your app. For example:
 ![Adding code to the main.cpp file](./images/TestNorthArrow.png)
