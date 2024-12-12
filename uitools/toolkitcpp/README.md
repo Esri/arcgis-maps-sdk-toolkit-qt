@@ -40,23 +40,26 @@ A good way to start using the toolkit is to use one of the template apps which g
 - Now complete the rest of the dialog wizard options to create a project.
 
 > For example:
->  Project Location ==> **Name:** TestNorthArrow, **Create in:** C:\temp
->  Define Build System ==> **Build System:** qMake
->  Define Project Details ==> **App Description:** Test using a NorthArrow, **3D project:** leave unchecked, **ArcGIS OnlineBasemap:** Imagery, **AccessToken:** see: [Create an API Key](https://developers.arcgis.com/documentation/security-and-authentication/api-key-authentication/tutorials/create-an-api-key/)
->  Kit Selection ==> Desktop Qt 6.5.6 MSVC2019 64bit
->  Project Management ==> **Add as a subproject to project:** none, **Add to version control:** none
+>
+>  **Project Location** ==> **Name:** TestNorthArrow, **Create in:** C:\temp
+>
+>  **Define Build System** ==> **Build System:** qMake
+>
+>  **Define Project Details** ==> **App Description:** Test using a NorthArrow, **3D project:** leave unchecked, **ArcGIS OnlineBasemap:** Imagery, **AccessToken:** see: [Create an API Key](https://developers.arcgis.com/documentation/security-and-authentication/api-key-authentication/tutorials/create-an-api-key/)
+>
+>  **Kit Selection** ==> Desktop Qt 6.5.6 MSVC2019 64bit (or hihger)
+>
+>  **Project Management** ==> **Add as a subproject to project:** none, **Add to version control:** none
 
 - In your apps `.pro` file, add an `include` statement that points to the path of the `toolkit.pri` file that you have on disk. 
 
 > For example:
-> ```
+> ```cpp
 > ...
 > include($$PWD/arcgisruntime.pri)
 >
 > # Include the path to the toolkit.pri file
 > include(C:/arcgis-maps-sdk-toolkit-qt/uitools/toolkitcpp.pri)
->
-> HEADERS +=\
 > ...
 > ```  
 
@@ -67,11 +70,11 @@ A good way to start using the toolkit is to use one of the template apps which g
 - In the `main.cpp` file (near the top), add an `include` statement to import the toolkit `registration.h` file and then later in the `main` function call the `ToolkitregisterComponents()` function.
 
 > For example:
-> ```
+> ```cpp
 > ...
 > #include <QQmlApplicationEngine>
 >
-> // Needed for teh Qt toolkit
+> // Needed for the Qt toolkit
 > #include "Esri/ArcGISRuntime.Toolkit/register.h"
 > ...
 >
