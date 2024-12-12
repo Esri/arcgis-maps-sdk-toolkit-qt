@@ -14,7 +14,7 @@ These are the components available to use:
 - **[BasemapGallery - Qt Widgets UI control/Class](docs/BasemapGallery.md)** - Shows a list of available basemaps by using a Portal or using a user defined collection. User is able to select a basemap, setting it on the current Geomodel.
 - **[BookmarksView - Qt Widgets UI control](/docs/BookmarksView.md)**- A control that displays and navigates to bookmarks that have been authored in a map.
 - **[CoordinateConversion - Qt Widgets UI control/Class](docs/CoordinateConversion.md)** - A tool that helps convert coordinates from one coordinate system to another.
-- **Floor filter** - A tool that shows sites and facilities, and enables toggling the visibility of levels on floor-aware maps and scenes.
+- **[FloorFilter - Qt Widgets UI control.Class](docs/FloorFilter.md)** - A tool that shows sites and facilities, and enables toggling the visibility of levels on floor-aware maps and scenes.
 - **[NorthArrow - Qt Widgets UI control/Class](docs/NorthArrow.md)** - A control that indicates north, reacting to rotation changes of the map.
 - **[OverviewMap - Qt Widgets UI control/Class](docs/OverviewMap.md)** - An inset map that shows the current extent of an associated GeoView in the context of a larger area.
 

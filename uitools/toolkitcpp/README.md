@@ -15,7 +15,7 @@ These are the components available to use:
 - **[BookmarksView - Qt Quick UI control/QML Type](/docs/BookmarksView.md)**- A control that displays and navigates to bookmarks that have been authored in a map.
 - **[Callout - Qt Quick UI control/QML Type](docs/Callout.md)** - A view for displaying information at a geographic location.
 - **[CoordinateConversion - Qt Quick control/QML Type](docs/CoordinateConversion.md)** - A tool that helps convert coordinates from one coordinate system to another.
-- **Floor filter** - A tool that shows sites and facilities, and enables toggling the visibility of levels on floor-aware maps and scenes.
+- **[FloorFilter - Qt Quick UI control/QML Type](docs/FloorFilter.md)** - A tool that shows sites and facilities, and enables toggling the visibility of levels on floor-aware maps and scenes.
 - **[NorthArrow - Qt Quick UI control/QML Type](docs/NorthArrow.md)** - A control that indicates north, reacting to rotation changes of the map.
 - **[OverviewMap - Qt Quick UI control/QML Type](docs/OverviewMap.md)** - An inset map that shows the current extent of an associated GeoView in the context of a larger area.
 - **[PopupStackView - Qt Quick UI control/QML Type](docs/PopupStackView.md)** - A view based on the Popup view that can show multiple Popups as flickable pages.
