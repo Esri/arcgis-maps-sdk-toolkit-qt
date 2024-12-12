@@ -51,7 +51,7 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 >
 >  **Project Management** ==> **Add as a subproject to project:** none, **Add to version control:** none
 
-- In your apps `.pro` file, add an `include` statement that points to the path of the `toolkit.pri` file that you have on disk. 
+- In your apps `.pro` file (for example: TestNorthArrow.pro), add an `include` statement that points to the path of the `toolkit.pri` file that you have on disk. 
 
 > For example:
 > ```cpp
@@ -62,10 +62,6 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 > include(C:/arcgis-maps-sdk-toolkit-qt/uitools/toolkitcpp.pri)
 > ...
 > ```  
-
-<!--
-![Adding the toolkit.pri to the .pro file](./images/AddingToolkitPriToPath.png)
--->
 
 - In the `main.cpp` file (near the top), add an `include` statement to import the toolkit `registration.h` file and then later in file call the `ToolkitregisterComponents()` function.
 
@@ -87,11 +83,7 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 > ...
 > ``` 
 
-<!--
-![Adding code to the main.cpp file](./images/AddingCodeToMainCpp.png)
--->
-
-- In your apps QML file add an `import` statement for the `Toolkit`. Then later in the file, declare and configure the Qt toolkit component you wish to use. 
+- In your apps QML file (for example: TestNorthArrowForm.qml) add an `import` statement for the `Toolkit`. Then later in the file, declare and configure the Qt toolkit component you wish to use. 
 
   NOTE: In general, you will have to set the `GeoView` property of the Qt toolkit component (and possibly other properties). If you were to add a NorthArrow, you code would look something like this:
 
@@ -127,10 +119,6 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 >    }
 > ...
 >```
-
-<!--
-![Adding code to the main.cpp file](./images/AddingCodeToQML.png)
--->
 
 When you run your app, you should now see the UI for the Qt toolkit component in your app. For example:
 ![Adding code to the main.cpp file](./images/TestNorthArrow.png)
