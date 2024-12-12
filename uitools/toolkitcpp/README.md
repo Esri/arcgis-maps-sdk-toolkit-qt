@@ -33,22 +33,65 @@ There are two options to make use of the Qt Quick UI components depending on how
 
 A good way to start using the toolkit is to use one of the template apps which get added to QtCreator when you install the ArcGIS Runtime SDK for Qt.
 
-- In Qt Creator choose "File > New project" from the menus. 
+- In Qt Creator choose **File** > **New project** from the menus. 
 
-- In the "New Project - Qt Creator" dialog. Select "ArcGIS" in the Project template on the left and then choose the "ArcGIS Maps 200.6.0 Qt Quick C++ App" template. Then click the "Choose..." button.
+- In the **New Project - Qt Creator** dialog. Select **ArcGIS** in the Project template on the left and then choose the **ArcGIS Maps 200.x.0 Qt Quick C++ App** template. Then click the **Choose...** button.
 
-- Complete the rest of the dialog wizard options to create a project. For example:
-  * Project Location ==> **Name:** TestNorthArrow, **Create in:** C:\temp
-  * Define Build System ==> **Build System:** qMake
-  * Define Project Details ==> **App Description:** Test using a NorthArrow, **3D project:** leave unchecked, **ArcGIS OnlineBasemap:** Imagery, **AccessToken:** see: [Create an API Key](https://developers.arcgis.com/documentation/security-and-authentication/api-key-authentication/tutorials/create-an-api-key/)
-  * Kit Selection ==> Desktop Qt 6.5.6 MSVC2019 64bit
-  * Project Management ==> **Add as a subproject to project:** none, **Add to version control:** none
+- Now complete the rest of the dialog wizard options to create a project.
 
-- In your apps `.pro` file, add an `include` statement that points to the path of the `toolkit.pri` file that you have on disk. For example:
+> For example:
+> ```
+>  Project Location ==> **Name:** TestNorthArrow, **Create in:** C:\temp
+>  Define Build System ==> **Build System:** qMake
+>  Define Project Details ==> **App Description:** Test using a NorthArrow, **3D project:** leave unchecked, **ArcGIS OnlineBasemap:** Imagery, **AccessToken:** see: [Create an API Key](https://developers.arcgis.com/documentation/security-and-authentication/api-key-authentication/tutorials/create-an-api-key/)
+>  Kit Selection ==> Desktop Qt 6.5.6 MSVC2019 64bit
+>  Project Management ==> **Add as a subproject to project:** none, **Add to version control:** none
+> ```
+
+- In your apps `.pro` file, add an `include` statement that points to the path of the `toolkit.pri` file that you have on disk. 
+
+> For example:
+> ```
+> ...
+> include($$PWD/arcgisruntime.pri)
+>
+> # Include the path to the toolkit.pri file
+> include(C:/arcgis-maps-sdk-toolkit-qt/uitools/toolkitcpp.pri)
+>
+> HEADERS +=\
+> ...
+> ```  
+
+<!--
 ![Adding the toolkit.pri to the .pro file](./images/AddingToolkitPriToPath.png)
+-->
 
-- In the `main.cpp` file, near the top add an `include` statement to import the toolkit `registration.h` file (ex: `#include "Esri/ArcGISRuntime/Toolkit/register.h"`) and then later in the `main` function call the `ToolkitregisterComponents()` function. For example: 
+- In the `main.cpp` file, near the top add an `include` statement to import the toolkit `registration.h` file and then later in the `main` function call the `ToolkitregisterComponents()` function.
+
+> For example:
+> ```
+> ...
+> #include <QQmlApplicationEngine>
+>
+> // Needed for teh Qt toolkit
+> #include "Esri/ArcGISRuntime.Toolkit/register.h"
+> // ---------------------------------------------
+> ...
+> ...
+> // Intitialize application view
+> QQmlApplicationEngine engine;
+>
+> // Register the toolkit
+> Esri.ArcGISRuntime::Toolkit::registerComponent(engine);
+>
+> // Add the import path
+> engine.addImportPath(QDri(QCoreApplicationDirPath()).filePath("qml:));
+> ...
+> ``` 
+
+<!--
 ![Adding code to the main.cpp file](./images/AddingCodeToMainCpp.png)
+-->
 
 - In your apps QML file (ex: `TestNorthArrow.qml`), add an `import` statement for the `Toolkit` (ex: `import Esri.ArcGISRuntime.Toolkit`). Then later in the file declare and configure the Qt toolkit component you wish to use. This is typically done by embedding the Qt toolkit component within the `MapView` or `SceneView` control. In general, you will have to set the `GeoView` property of the Qt toolkit component (and possibly other properties). If you were to add a NorthArrow, you code would look something like this: 
 ![Adding code to the main.cpp file](./images/AddingCodeToQML.png)
