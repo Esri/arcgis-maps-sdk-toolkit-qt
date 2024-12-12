@@ -93,7 +93,7 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 
 - In your apps QML file add an `import` statement for the `Toolkit`. Then later in the file, declare and configure the Qt toolkit component you wish to use. 
 
-NOTE: In general, you will have to set the `GeoView` property of the Qt toolkit component (and possibly other properties). If you were to add a NorthArrow, you code would look something like this:
+  NOTE: In general, you will have to set the `GeoView` property of the Qt toolkit component (and possibly other properties). If you were to add a NorthArrow, you code would look something like this:
 
 > For example:
 > ```qml
