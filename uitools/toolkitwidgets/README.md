@@ -18,7 +18,7 @@ These are the components available to use:
 - **[NorthArrow - Qt Widgets UI control/Class](docs/NorthArrow.md)** - A control that indicates north, reacting to rotation changes of the map.
 - **[OverviewMap - Qt Widgets UI control/Class](docs/OverviewMap.md)** - An inset map that shows the current extent of an associated GeoView in the context of a larger area.
 
-NOTE: Due to the open source nature of the Qt toolkit repo, you may notice that currently there are not as many Qt Widget components as there are Qt Quick versions. You are welcome to create you own components to suit your needs. The [Qt Toolkit API Reference](https://developers.arcgis.com/qt/toolkit/api-reference/) should be your starting point (in particular expand the "C++ Classes" section in the TOC). The API classes have been architected to utilize MVC design principals, so for each view, there is an associated controller (the word "Controller" is appended to the class name).
+NOTE: Due to the open source nature of the Qt toolkit repo, you may notice that currently there are not as many Qt Widget UI components as there are Qt Quick UI versions. You are welcome to create you own components to suit your needs. The [Qt Toolkit API Reference](https://developers.arcgis.com/qt/toolkit/api-reference/) should be your starting point (in particular expand the "C++ Classes" section in the TOC) to learn about developing custom UI components. The API classes have been architected to utilize MVC design principals, so for each view, there is an associated controller (the word "Controller" is appended to the class name).
 
 ## Options to use the components in your project
 
