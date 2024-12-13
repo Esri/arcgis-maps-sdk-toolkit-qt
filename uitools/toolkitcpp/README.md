@@ -27,7 +27,7 @@ These are the **Qt Quick UI components/QML Type** available to use:
 
 ## Options to use the components in your project
 
-There are two options to make use of the Qt Quick UI components depending on how your app development build configuration (qMake or CMake):
+There are two options to make use of the Qt Quick UI components depending on your Qt Creator app development build configuration (qMake or CMake):
 
 ### OPTION 1: Qt Creator projects built using qMake (making use of the toolkitcpp.pri file)
 
@@ -85,9 +85,8 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 
 - In your apps QML file (for example: TestNorthArrowForm.qml) add an `import` statement for the `Toolkit`. Then later in the file, declare and configure the Qt toolkit component you wish to use. 
 
-  NOTE: In general, you will have to set the `GeoView` property of the Qt toolkit component (and possibly other properties). If you were to add a NorthArrow, you code would look something like this:
+  NOTE: In general, you will have to set the `GeoView` property of the Qt toolkit component (and possibly other properties). For example when adding a NorthArrow, your code would look something like this:
 
-> For example:
 > ```qml
 > ...
 > import Esri.TestNorthArrow
@@ -123,9 +122,9 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 When you run your app, you should now see the UI for the Qt toolkit component in your app. For example:
 ![Adding code to the main.cpp file](./images/TestNorthArrow.png)
 
-### OPTION 2: Qt Creator projects built using CMake based projects (making use of the toolkitcpp.cmake file)
+### OPTION 2: Qt Creator projects built using CMake based projects (making use of the CMmakeLists.txt file)
 
-A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Qt templates to build an app. The following steps show an example of adding the NorthArrow control.
+A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Qt templates to build an app. The following steps show an example of adding the OverviewMap control.
 
 - In Qt Creator choose **File** > **New project** from the menus. 
 
@@ -135,7 +134,7 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 
 > For example:
 >
->  **Project Location** ==> **Name:** TestOverviewMapw, **Create in:** C:\temp
+>  **Project Location** ==> **Name:** TestOverviewMap, **Create in:** C:\temp
 >
 >  **Define Build System** ==> **Build System:** CMake
 >
@@ -145,9 +144,7 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 >
 >  **Project Management** ==> **Add as a subproject to project:** none, **Add to version control:** none
 
-- Copy the `toolkitcpp` subdirectory into your project's directory.
-
-> For example you could modify this `bash` script to do the copy of the toolkit directories/files for you:
+- Copy the `toolkitcpp` subdirectory into your project's directory. For example you could modify this `bash` script to do the copy of the toolkit directories/files for you:
 > ```bash
 > cp -r /path/to/toolkit/uitools/toolkitcpp /path/to/project
 > ```
@@ -182,14 +179,14 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 > ...
 > ``` 
 
-- In your apps QML file (for example: TestNorthArrowForm.qml) add an `import` statement for the `Toolkit`. Then later in the file, declare and configure the Qt toolkit component you wish to use. 
+- In your apps QML file (for example: TestOverviewMap.qml) add an `import` statement for the `Toolkit`. Then later in the file, declare and configure the Qt toolkit component you wish to use. 
 
-  NOTE: In general, you will have to set the `GeoView` property of the Qt toolkit component (and possibly other properties). If you were to add a NorthArrow, you code would look something like this:
+  NOTE: In general, you will have to set the `GeoView` property of the Qt toolkit component (and possibly other properties). For example when adding a OverviewMap, your code would look something like this:
 
 > For example:
 > ```qml
 > ...
-> import Esri.TestNorthArrow
+> import Esri.TestOverviewMap
 >
 > // Needed for the Qt toolkit
 > import Esri.ArcGISRuntime.Toolkit
@@ -217,7 +214,7 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 >```
 
 When you run your app, you should now see the UI for the Qt toolkit component in your app. For example:
-![Adding code to the main.cpp file](./images/TestOverviewMap)
+![Adding code to the main.cpp file](./images/TestOverviewMap.png)
 
 ## Access token requirements
 
