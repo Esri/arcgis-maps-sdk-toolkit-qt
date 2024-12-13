@@ -59,7 +59,7 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 > include($$PWD/arcgisruntime.pri)
 >
 > # Include the path to the toolkit.pri file
-> include(C:/arcgis-maps-sdk-toolkit-qt/uitools/toolkitcpp.pri)
+> include(C:/arcgis-maps-sdk-toolkit-qt/toolkit/uitools/toolkitcpp.pri)
 > ...
 > ```  
 
@@ -71,7 +71,7 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 > #include <QQmlApplicationEngine>
 >
 > // Needed for the Qt toolkit
-> #include "Esri/ArcGISRuntime.Toolkit/register.h"
+> #include "Esri/ArcGISRuntime/Toolkit/register.h"
 > ...
 >
 > ...
@@ -151,13 +151,15 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 
 - Edit the `CMakeLists.txt` in your Qt project (it was created when you went through the ArcGIS Maps SDK for Qt template wizards). Uncomment the `add_subdirectory` and `target_link_libraries` commands:
 
->  ```CMake
->    # To integrate the toolkit, copy the `toolkitcpp` subdirectory from the toolkit
->    # into your project's directory. Then uncomment the following lines to add it to your project.
->    # See https://github.com/Esri/arcgis-maps-sdk-toolkit-qt for details
->    add_subdirectory(toolkitcpp)
->    target_link_libraries(${PROJECT_NAME} PRIVATE libtoolkitcpp)
->  ```
+> ```CMake
+> ...
+> # To integrate the toolkit, copy the `toolkitcpp` subdirectory from the toolkit
+> # into your project's directory. Then uncomment the following lines to add it to your project.
+> # See https://github.com/Esri/arcgis-maps-sdk-toolkit-qt for details
+> add_subdirectory(toolkitcpp)
+> target_link_libraries(${PROJECT_NAME} PRIVATE libtoolkitcpp)
+> ...
+> ```
 
 - In the `main.cpp` file, add an `include` statement near the top of the file to import the toolkit `registration.h` file and then later in file call the `ToolkitregisterComponents()` function.
 
@@ -167,7 +169,7 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 > #include <QQmlApplicationEngine>
 >
 > // Needed for the Qt toolkit
-> #include "Esri/ArcGISRuntime.Toolkit/register.h"
+> #include "Esri/ArcGISRuntime/Toolkit/register.h"
 > ...
 >
 > ...
