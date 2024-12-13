@@ -35,7 +35,7 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 
 - In Qt Creator choose **File** > **New project** from the menus. 
 
-- In the **New Project - Qt Creator** dialog. Select **ArcGIS** in the Project template on the left and then choose the **ArcGIS Maps 200.x.0 Qt Quick C++ App** template. Then click the **Choose...** button.
+- In the **New Project - Qt Creator** dialog. Select **ArcGIS** in the Project template on the left and then choose the **ArcGIS Maps 200.x.0 Qt Quick C++ app** template. Then click the **Choose...** button.
 
 - Now complete the rest of the dialog wizard options to create a project.
 
@@ -128,7 +128,7 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 
 - In Qt Creator choose **File** > **New project** from the menus. 
 
-- In the **New Project - Qt Creator** dialog. Select **ArcGIS** in the Project template on the left and then choose the **ArcGIS Maps 200.x.0 Qt Quick C++ App** template. Then click the **Choose...** button.
+- In the **New Project - Qt Creator** dialog. Select **ArcGIS** in the Project template on the left and then choose the **ArcGIS Maps 200.x.0 Qt Quick C++ app** template. Then click the **Choose...** button.
 
 - Now complete the rest of the dialog wizard options to create a project.
 
