@@ -82,14 +82,18 @@ Once you have successfully imported the toolkit, you can create individual tools
 
 - In your widgets code, create a new instance of the tool you wish to use and add it to your widgets layout. You will also normally need to pass the `GeoView` which the tool is designed to work with:
 
-```cpp
-  #include "Esri/ArcGISRuntime/Toolkit/NorthArrow.h"
-  ...
-  auto northArrow = new Esri::ArcGISRuntime::Toolkit::NorthArrow(this);
-  northArrow->setMapView(m_mapView);
-  // Add your NorthArrow to your UI here!
-  northArrow->show();
-```
+> ```cpp
+>  #include "Esri/ArcGISRuntime/Toolkit/NorthArrow.h"
+>  ...
+>
+>  auto northArrow = new Esri::ArcGISRuntime::Toolkit::NorthArrow(this);
+>  northArrow->setMapView(m_mapView);
+>  // Add your NorthArrow to your UI here!
+>  northArrow->show();
+> ```
+
+When you run your app, you should now see the UI for the Qt toolkit component in your app. For example:
+![Adding code to the main.cpp file](./images/TestNorthArrow.png)
 
 ### OPTION 2: Qt Creator projects built using CMake based projects (making use of the CMmakeLists.txt file)
 
@@ -134,15 +138,18 @@ Once you have successfully imported the toolkit, you can create individual tools
 
 - In your widgets code, create a new instance of the tool you wish to use and add it to your widgets layout. You will also normally need to pass the `GeoView` which the tool is designed to work with:
 
-```cpp
-  #include "Esri/ArcGISRuntime/Toolkit/OverviewMap.h"
-  ...
-  auto overviewMap = new Esri::ArcGISRuntime::Toolkit::OverviewMap(this);
-  overviewMap->setMapView(m_mapView);
+> ```cpp
+> #include "Esri/ArcGISRuntime/Toolkit/OverviewMap.h"
+> ...
+> auto overviewMap = new Esri::ArcGISRuntime::Toolkit::OverviewMap(this);
+> overviewMap->setMapView(m_mapView);
+>
+> // Add your OverviewMap to your UI here!
+> northArrow->show();
+> ```
 
-  // Add your OverviewMaNorthArrow to your UI here!
-  northArrow->show();
-```
+When you run your app, you should now see the UI for the Qt toolkit component in your app. For example:
+![Adding code to the main.cpp file](./images/TestOverviewMap.png)
 
 ## Access token requirements
 
