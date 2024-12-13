@@ -135,11 +135,12 @@ Once you have successfully imported the toolkit, you can create individual tools
 - In your widgets code, create a new instance of the tool you wish to use and add it to your widgets layout. You will also normally need to pass the `GeoView` which the tool is designed to work with:
 
 ```cpp
-  #include "Esri/ArcGISRuntime/Toolkit/NorthArrow.h"
+  #include "Esri/ArcGISRuntime/Toolkit/OverviewMap.h"
   ...
-  auto northArrow = new Esri::ArcGISRuntime::Toolkit::NorthArrow(this);
-  northArrow->setMapView(m_mapView);
-  // Add your NorthArrow to your UI here!
+  auto overviewMap = new Esri::ArcGISRuntime::Toolkit::OverviewMap(this);
+  overviewMap->setMapView(m_mapView);
+
+  // Add your OverviewMaNorthArrow to your UI here!
   northArrow->show();
 ```
 
