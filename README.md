@@ -14,8 +14,9 @@ You can do this by doing either of the following:
 
 ## Toolkit components available
 
-- [Qt Quick UI components](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/main/uitools/toolkitcpp) - these are components that compliment your `MapView` or `SceneView` by adding them to your Qt project's .qml files (QML based UI development). They are components like: AuthenticationView, NorthArrow, OverviewMap, TimeSlider, and so forth. Using these components are very beneficial for device based apps like phones and tablets. 
-- [Qt Widgets UI components](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/main/uitools/toolkitwidgets) - these are components that compliment your `MapView` or `SceneView` by adding them to your projects .cpp files. They are components like: AuthenticationView, NorthArrow, OverviewMap, TimeSlider, and so forth. Using these components are very beneficial for traditional desktop based apps.
+[Qt Quick UI components](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/main/uitools/toolkitcpp) - these are components that compliment your `MapView` or `SceneView` by adding them to your Qt project's .qml files (QML based UI development). They are components like: AuthenticationView, NorthArrow, OverviewMap, TimeSlider, and so forth. Using these components are very beneficial for device based apps like phones and tablets. 
+
+[Qt Widgets UI components](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/main/uitools/toolkitwidgets) - these are components that compliment your `MapView` or `SceneView` by adding them to your projects .cpp files. They are components like: AuthenticationView, NorthArrow, OverviewMap, TimeSlider, and so forth. Using these components are very beneficial for traditional desktop based apps.
 
 The following table lists the various UI components available depending on how your Qt project was created with either Qt Quick UI or Qt Widgets UI components. 
 
@@ -38,8 +39,9 @@ The following table lists the various UI components available depending on how y
 
 ## Other Toolkit features available
 
-- [Calcite style](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/main/calcite) - this feature provides visual styles that enable you to create beautiful and consistent experiences using the Calcite web style for Esri on UI controls you have in your app. These styles are QML compatible and are configured by adding them to your .qml files. The styles include options for creating Light and Dark themed UI's in you app. There are over 30 styles available that can be used on Qt controls like: Button, CheckBox, Menu, RadioButton, ToolBar, and so forth. 
-- [Augmented Reality](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/main/augmented_reality) - these are UI components and C++ classes that provide Augmented Reality (AR) support for ARKit for iOS apps and ARCore for Android apps. AR experiences enhance the physical world with virtual content that respects real world scale, position, and orientation of a device. A `SceneView` object displays 3D geographic AR data as virtual content on top of a camera feed of the real, physical world.
+[Calcite style](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/main/calcite) - this feature provides visual styles that enable you to create beautiful and consistent experiences using the Calcite web style for Esri on UI controls you have in your app. These styles are QML compatible and are configured by adding them to your .qml files. The styles include options for creating Light and Dark themed UI's in you app. There are over 30 styles available that can be used on Qt controls like: Button, CheckBox, Menu, RadioButton, ToolBar, and so forth. 
+
+[Augmented Reality](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/main/augmented_reality) - these are UI components and C++ classes that provide Augmented Reality (AR) support for ARKit for iOS apps and ARCore for Android apps. AR experiences enhance the physical world with virtual content that respects real world scale, position, and orientation of a device. A `SceneView` object displays 3D geographic AR data as virtual content on top of a camera feed of the real, physical world.
 
 ## Resources
 
