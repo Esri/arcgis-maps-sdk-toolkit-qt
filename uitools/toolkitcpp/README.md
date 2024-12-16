@@ -161,7 +161,7 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 > ...
 > ```
 
-- In the `main.cpp` file, add an `include` statement near the top of the file to import the toolkit `registration.h` file and then later in file call the `ToolkitregisterComponents()` function.
+- In the `main.cpp` file, add an `include` statement near the top of the file to import the toolkit `register.h` file and then later in file call the `Toolkit::registerComponents()` function.
 
 > For example:
 > ```cpp
