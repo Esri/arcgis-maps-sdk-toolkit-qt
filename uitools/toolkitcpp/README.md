@@ -27,7 +27,7 @@ These are the **Qt Quick UI components/QML Type** available to use:
 
 ## Options to use the components in your project
 
-There are two options to make use of the Qt Quick UI components depending on your Qt Creator app development build configuration (qMake or CMake):
+There are two options to make use of the Qt Quick UI components depending on your Qt Creator app development build configuration (qmake or CMake):
 
 ### OPTION 1: Qt Creator projects built using qMake (making use of the toolkitcpp.pri file)
 
