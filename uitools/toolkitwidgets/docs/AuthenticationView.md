@@ -2,7 +2,7 @@
 
 # AuthenticationView - Qt Widgets UI control/Class
 
-The [AuthenticationView - Qt Widgets UI control/Class](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-authenticationview.html) handles authentication challenges and automatically launching the appropriate UI for each type of authentication. Declare an AuthenticationView in your QML file. The AuthenticationView will then be connected to all authentication challenges, and will automatically launch the appropriate view for the type of challenge. Supported security formats include:
+The [AuthenticationView - Qt Widgets UI control/Class](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-authenticationview.html) handles authentication challenges and automatically launching the appropriate UI for each type of authentication. Declare an AuthenticationView widget. The AuthenticationView will then be connected to all authentication challenges, and will automatically launch the appropriate view for the type of challenge. Supported security formats include:
 
 - ArcGIS Token (UserCredentialsView)
 - HTTP Basic (UserCredentialsView)
