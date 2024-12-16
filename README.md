@@ -9,7 +9,7 @@ This toolkit is an open source resource intended for use with the ArcGIS Maps SD
 To use the toolkit, you need to copy this repository onto your development machine.
 
 You can do this by doing either of the following:
-- Cloning this repo using Git (using the the URL: https://github.com/Esri/arcgis-maps-sdk-toolkit-qt.git) to your preferred location on your development machine.  Do this by clicking the green "Code" button above and clicking the "Open with GitHub Desktop" option.
+- Cloning this repo using Git (using the the URL: https://github.com/Esri/arcgis-maps-sdk-toolkit-qt.git) to your preferred location on your development machine. 
 - Downloading the .zip version of the repo and unzipping it to your preferred location on your development machine. Do this by clicking the green "Code" button above and clicking the "Download ZIP" option.
 
 ## Toolkit components available
