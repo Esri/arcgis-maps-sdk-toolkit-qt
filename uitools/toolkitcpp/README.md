@@ -122,7 +122,7 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 When you run your app, you should now see the UI for the Qt toolkit component in your app. For example:
 ![Adding code to the main.cpp file](./images/TestNorthArrow.png)
 
-### OPTION 2: Qt Creator projects built using CMake based projects (making use of the CMmakeLists.txt file)
+### OPTION 2: Qt Creator projects built using CMake based projects (making use of the CMakeLists.txt file)
 
 A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Qt templates to build an app. The following steps show an example of adding the OverviewMap control.
 
