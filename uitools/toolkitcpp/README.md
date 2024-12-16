@@ -18,7 +18,7 @@ These are the **Qt Quick UI components/QML Type** available to use:
 - **[FloorFilter](docs/FloorFilter.md)** - A tool that shows sites and facilities, and enables toggling the visibility of levels on floor-aware maps and scenes.
 - **[NorthArrow](docs/NorthArrow.md)** - A control that indicates north, reacting to rotation changes of the map.
 - **[OverviewMap](docs/OverviewMap.md)** - An inset map that shows the current extent of an associated GeoView in the context of a larger area.
-- **[PopupStackView](docs/PopupStackView.md)** - A view based on the Popup view that can show multiple Popups as flickable pages.
+- **[PopupStackView](docs/PopupStackView.md)** - A view that displays multiple PopupViews, typically used when multiple map element were tapped on.
 - **[PopupView](docs/PopupView.md)** - A view that displays feature attributes and attachments.
 - **[Scalebar](docs/Scalebar.md)** - A tool that indicates the proportions of a map to the actual geographic area so users can visually gauge distances on a map view.
 - **[SearchView](docs/SearchView.md)** - A tool that submits search queries and shows single or multiple results. Queries can be restricted to the current view extent.
