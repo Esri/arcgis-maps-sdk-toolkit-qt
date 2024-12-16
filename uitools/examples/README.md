@@ -2,7 +2,7 @@
 
 This module contains the example app, [UitoolsExample](UitoolsExamples.pro).
 
-This module demonstrates how to integrate the Qt toolkit tools into a C++ app based on the Qt Quick UI controls.
+This module demonstrates how to integrate the Qt toolkit tools into a C++ app using Qt Quick UI controls.
 
 ## Access token setup
 
