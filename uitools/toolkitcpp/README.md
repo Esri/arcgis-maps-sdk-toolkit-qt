@@ -49,7 +49,7 @@ These are the **Qt Quick UI components/QML Type** available to use:
 
 **qmake**
 
-- If you chose the qmake build system, edit your apps `TestNorthArrow.pro` file (it was created when you went through the ArcGIS Maps SDK for Qt template wizards), add an `include` statement that points to the path of the `toolkit.pri` file that you have on disk. 
+- If you chose the **qmake** build system, edit your apps `TestNorthArrow.pro` file (it was created when you went through the ArcGIS Maps SDK for Qt template wizards), add an `include` statement that points to the path of the `toolkit.pri` file that you have on disk. 
 
 > ```cpp
 > ...
@@ -62,7 +62,8 @@ These are the **Qt Quick UI components/QML Type** available to use:
 
 **CMake**
 
-- If you chose the qmake build system,, copy the `toolkitcpp` subdirectory into your project's directory. For example you could modify this `bash` script to do the copy of the toolkit directories/files for you:
+- If you chose the **CMake** build system, copy the `toolkitcpp` subdirectory into your project's directory. For example you could modify this `bash` script to do the copy of the toolkit directories/files for you:
+
 > ```bash
 > cp -r /path/to/toolkit/uitools/toolkitcpp /path/to/project
 > ```
@@ -122,7 +123,7 @@ These are the **Qt Quick UI components/QML Type** available to use:
 >    // Adding the Qt toolkit NorthArrow component via QML.
 >    NorthArrow {
 >        id: arrow
->        width: 100 // The default is 48 pixles.
+>        width: 100 // The default is 48 pixels.
 >        height: 100 // The default is 48 pixels.
 >        anchors {
 >            right: parent.right
