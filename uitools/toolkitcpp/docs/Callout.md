@@ -8,6 +8,6 @@ The [Callout - Qt Quick UI control/QML Type](https://developers.arcgis.com/qt/to
 - To display information about a GeoElement that has been identified on the MapView.
 - To display a callout at your current location.
 
-For more information, please see the CalloutData documentation.
+For more information, please see the [CalloutData](https://developers.arcgis.com/qt/toolkit/api-reference/qml-callout.html#calloutData-prop) documentation.
 
 ![Callout image](https://developers.arcgis.com/qt/toolkit/api-reference/images/callout.png)

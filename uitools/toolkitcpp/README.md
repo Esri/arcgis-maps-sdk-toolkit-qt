@@ -29,7 +29,7 @@ These are the **Qt Quick UI components/QML Type** available to use:
 
 There are two options to make use of the Qt Quick UI components depending on your Qt Creator app development build configuration (qmake or CMake):
 
-### OPTION 1: Qt Creator projects built using qMake (making use of the toolkitcpp.pri file)
+### OPTION 1: Qt Creator projects built using qmake (making use of the toolkitcpp.pri file)
 
 A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Qt templates to build an app. The following steps show an example of adding the NorthArrow control.
 
@@ -43,7 +43,7 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 >
 >  **Project Location** ==> **Name:** TestNorthArrow, **Create in:** C:\temp
 >
->  **Define Build System** ==> **Build System:** qMake
+>  **Define Build System** ==> **Build System:** qmake
 >
 >  **Define Project Details** ==> **App Description:** Test using a NorthArrow, **3D project:** leave unchecked, **ArcGIS OnlineBasemap:** Imagery, **AccessToken:** see: [Create an API Key](https://developers.arcgis.com/documentation/security-and-authentication/api-key-authentication/tutorials/create-an-api-key/)
 >
