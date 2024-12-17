@@ -6,4 +6,4 @@ The [NorthArrow - Qt Widgets UI control/Class](https://developers.arcgis.com/qt/
 
 NOTE: default width and height is 48 pixels.
 
-![NorthArrow image](../images/TestNorthArrow.png)
+![NorthArrow image](../images/NorthArrow.gif)
