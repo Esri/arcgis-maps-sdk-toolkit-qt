@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2020 Esri
  *
@@ -16,6 +17,7 @@
 #include "AuthenticationController.h"
 
 // ArcGISRuntime headers
+#include <AuthenticationChallenge.h>
 #include <AuthenticationManager.h>
 
 namespace Esri::ArcGISRuntime::Toolkit {

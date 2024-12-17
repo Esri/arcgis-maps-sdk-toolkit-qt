@@ -16,13 +16,16 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_AUTHENTICATIONCONTROLLER_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_AUTHENTICATIONCONTROLLER_H
 
-// ArcGISRuntime headers
-#include <AuthenticationChallenge.h>
-#include <CoreTypes.h>
-
 // Qt headers
 #include <QObject>
 #include <QPointer>
+
+// STL headers
+#include <CoreTypes.h>
+
+namespace Esri::ArcGISRuntime {
+  class AuthenticationChallenge;
+}
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
