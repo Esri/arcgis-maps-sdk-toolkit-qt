@@ -22,7 +22,7 @@ NOTE: Due to the open source nature of the Qt toolkit repo, you may notice that 
 
 ## Example steps showing how to use a Qt Widget UI component in your project
 
-A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Qt templates to build an app. There are two options to make use of the Qt Widget UI components depending on your Qt Creator app development build configuration (qmake or CMake). The following steps show an example of adding the NorthArrow control to an app:
+A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Qt templates to build an app. There are two options to make use of the Qt Widget UI components depending on your Qt Creator app development build configuration (**qmake** or **CMake**). The following steps show an example of adding the NorthArrow control to an app:
 
 **STEP 1:** In Qt Creator choose **File** > **New project** from the menus. 
 
