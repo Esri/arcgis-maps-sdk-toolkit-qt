@@ -29,11 +29,11 @@ These are the **Qt Quick UI components/QML Type** available to use:
 
  A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Qt templates to build an app. There are two options to make use of the Qt Quick UI components depending on your Qt Creator app development build configuration (**qmake** or **CMake**). The following steps show an example of adding the NorthArrow control to an app:
 
-- In Qt Creator choose **File** > **New project** from the menus. 
+- Step 1: In Qt Creator choose **File** > **New project** from the menus. 
 
-- In the **New Project - Qt Creator** dialog. Select **ArcGIS** in the Project template on the left and then choose the **ArcGIS Maps 200.x.0 Qt Quick C++ app** template. Then click the **Choose...** button.
+- Step 2: In the **New Project - Qt Creator** dialog. Select **ArcGIS** in the Project template on the left and then choose the **ArcGIS Maps 200.x.0 Qt Quick C++ app** template. Then click the **Choose...** button.
 
-- Now complete the rest of the dialog wizard options to create a project.
+- Step 3: Now complete the rest of the dialog wizard options to create a project.
 
 >  **Project Location** ==> **Name:** TestNorthArrow, **Create in:** C:\temp
 >
@@ -44,6 +44,8 @@ These are the **Qt Quick UI components/QML Type** available to use:
 >  **Kit Selection** ==> Desktop Qt 6.5.6 MSVC2019 64bit (or higher)
 >
 >  **Project Management** ==> **Add as a subproject to project:** none, **Add to version control:** none
+
+- Step 4: Have the project reference the location of the toolkit:
 
 **qmake**
 
@@ -77,8 +79,7 @@ These are the **Qt Quick UI components/QML Type** available to use:
 > ...
 > ```
 
-
-- In the `main.cpp` file, add an `include` statement near the top of the file to import the toolkit `register.h` file and then later in file call the `Toolkit::registerComponents()` function.
+- Step 5: In the `main.cpp` file, add an `include` statement near the top of the file to import the toolkit `register.h` file and then later in file call the `Toolkit::registerComponents()` function.
 
 > ```cpp
 > ...
@@ -97,7 +98,7 @@ These are the **Qt Quick UI components/QML Type** available to use:
 > ...
 > ``` 
 
-- In your apps QML file (for example: TestNorthArrowForm.qml) add an `import` statement for the `Toolkit`. Then later in the file, declare and configure the Qt toolkit component you wish to use. 
+- Step 6: In your apps QML file (for example: TestNorthArrowForm.qml) add an `import` statement for the `Toolkit`. Then later in the file, declare and configure the Qt toolkit component you wish to use. 
 
   NOTE: In general, you will have to set the `GeoView` property of the Qt toolkit component (and possibly other properties). For example when adding a NorthArrow, your code would look something like this:
 
@@ -133,7 +134,7 @@ These are the **Qt Quick UI components/QML Type** available to use:
 > ...
 >```
 
-When you run your app, you should now see the UI for the Qt toolkit component in your app. For example:
+- Step 7: When you run your app, you should now see the UI for the Qt toolkit component in your app. For example:
 ![Adding code to the main.cpp file](./images/TestNorthArrow.png)
 
 ## Access token requirements
