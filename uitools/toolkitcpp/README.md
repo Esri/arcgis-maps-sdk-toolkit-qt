@@ -49,7 +49,7 @@ These are the **Qt Quick UI components/QML Type** available to use:
 
 **qmake**
 
-- If you chose the qmake build system, in your apps `.pro` file (for example: TestNorthArrow.pro), add an `include` statement that points to the path of the `toolkit.pri` file that you have on disk. 
+- If you chose the qmake build system, edit your apps `TestNorthArrow.pro` file (it was created when you went through the ArcGIS Maps SDK for Qt template wizards), add an `include` statement that points to the path of the `toolkit.pri` file that you have on disk. 
 
 > ```cpp
 > ...
@@ -134,7 +134,7 @@ These are the **Qt Quick UI components/QML Type** available to use:
 > ...
 >```
 
-** STEP 7:** When you run your app, you should now see the UI for the Qt toolkit component in your app. For example:
+**STEP 7:** When you run your app, you should now see the UI for the Qt toolkit component in your app. For example:
 ![Adding code to the main.cpp file](./images/TestNorthArrow.png)
 
 ## Access token requirements
