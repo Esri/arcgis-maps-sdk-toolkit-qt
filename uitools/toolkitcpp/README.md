@@ -25,13 +25,9 @@ These are the **Qt Quick UI components/QML Type** available to use:
 - **[TimeSlider](docs/TimeSlider.md)** - A control for changing the current time extent on a view using a slider that moves between the defined minimum and maximum time values.
 - **[UtilityNetworkTrace](docs/UtilityNetworkTrace.md)**- A control that streamlines utility network trace workflows by allowing the user to select a starting point and trace configuration.
 
-## Options to use the components in your project
+## Example steps showing how to use a Qt Quick UI component in your project
 
-There are two options to make use of the Qt Quick UI components depending on your Qt Creator app development build configuration (qmake or CMake):
-
-### OPTION 1: Qt Creator projects built using qmake (making use of the toolkitcpp.pri file)
-
-A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Qt templates to build an app. The following steps show an example of adding the NorthArrow control.
+ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Qt templates to build an app. There are two options to make use of the Qt Quick UI components depending on your Qt Creator app development build configuration (**qmake** or **CMake**). The following steps show an example of adding the NorthArrow control to an app:
 
 - In Qt Creator choose **File** > **New project** from the menus. 
 
@@ -39,11 +35,9 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 
 - Now complete the rest of the dialog wizard options to create a project.
 
-> For example:
->
 >  **Project Location** ==> **Name:** TestNorthArrow, **Create in:** C:\temp
 >
->  **Define Build System** ==> **Build System:** qmake
+>  **Define Build System** ==> **Build System:** qmake or CMake
 >
 >  **Define Project Details** ==> **App Description:** Test using a NorthArrow, **3D project:** leave unchecked, **ArcGIS OnlineBasemap:** Imagery, **AccessToken:** see: [Create an API Key](https://developers.arcgis.com/documentation/security-and-authentication/api-key-authentication/tutorials/create-an-api-key/)
 >
@@ -51,9 +45,10 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 >
 >  **Project Management** ==> **Add as a subproject to project:** none, **Add to version control:** none
 
-- In your apps `.pro` file (for example: TestNorthArrow.pro), add an `include` statement that points to the path of the `toolkit.pri` file that you have on disk. 
+**qmake**
 
-> For example:
+- If you chose the qmake build system, in your apps `.pro` file (for example: TestNorthArrow.pro), add an `include` statement that points to the path of the `toolkit.pri` file that you have on disk. 
+
 > ```cpp
 > ...
 > include($$PWD/arcgisruntime.pri)
@@ -63,9 +58,28 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 > ...
 > ```  
 
+**CMake**
+
+- If you chose the qmake build system,, copy the `toolkitcpp` subdirectory into your project's directory. For example you could modify this `bash` script to do the copy of the toolkit directories/files for you:
+> ```bash
+> cp -r /path/to/toolkit/uitools/toolkitcpp /path/to/project
+> ```
+
+- Edit the `CMakeLists.txt` in your Qt project (it was created when you went through the ArcGIS Maps SDK for Qt template wizards). Uncomment the `add_subdirectory` and `target_link_libraries` commands:
+
+> ```CMake
+> ...
+> # To integrate the toolkit, copy the `toolkitcpp` subdirectory from the toolkit
+> # into your project's directory. Then uncomment the following lines to add it to your project.
+> # See https://github.com/Esri/arcgis-maps-sdk-toolkit-qt for details
+> add_subdirectory(toolkitcpp)
+> target_link_libraries(${PROJECT_NAME} PRIVATE libtoolkitcpp)
+> ...
+> ```
+
+
 - In the `main.cpp` file, add an `include` statement near the top of the file to import the toolkit `register.h` file and then later in file call the `Toolkit::registerComponents()` function.
 
-> For example:
 > ```cpp
 > ...
 > #include <QQmlApplicationEngine>
@@ -121,102 +135,6 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 
 When you run your app, you should now see the UI for the Qt toolkit component in your app. For example:
 ![Adding code to the main.cpp file](./images/TestNorthArrow.png)
-
-### OPTION 2: Qt Creator projects built using CMake based projects (making use of the CMakeLists.txt file)
-
-A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Qt templates to build an app. The following steps show an example of adding the OverviewMap control.
-
-- In Qt Creator choose **File** > **New project** from the menus. 
-
-- In the **New Project - Qt Creator** dialog. Select **ArcGIS** in the Project template on the left and then choose the **ArcGIS Maps 200.x.0 Qt Quick C++ app** template. Then click the **Choose...** button.
-
-- Now complete the rest of the dialog wizard options to create a project.
-
-> For example:
->
->  **Project Location** ==> **Name:** TestOverviewMap, **Create in:** C:\temp
->
->  **Define Build System** ==> **Build System:** CMake
->
->  **Define Project Details** ==> **App Description:** Test using an OverviewMap, **3D project:** leave unchecked, **ArcGIS OnlineBasemap:** Streets Night, **AccessToken:** see: [Create an API Key](https://developers.arcgis.com/documentation/security-and-authentication/api-key-authentication/tutorials/create-an-api-key/)
->
->  **Kit Selection** ==> Desktop Qt 6.5.6 MSVC2019 64bit (or higher)
->
->  **Project Management** ==> **Add as a subproject to project:** none, **Add to version control:** none
-
-- Copy the `toolkitcpp` subdirectory into your project's directory. For example you could modify this `bash` script to do the copy of the toolkit directories/files for you:
-> ```bash
-> cp -r /path/to/toolkit/uitools/toolkitcpp /path/to/project
-> ```
-
-- Edit the `CMakeLists.txt` in your Qt project (it was created when you went through the ArcGIS Maps SDK for Qt template wizards). Uncomment the `add_subdirectory` and `target_link_libraries` commands:
-
-> ```CMake
-> ...
-> # To integrate the toolkit, copy the `toolkitcpp` subdirectory from the toolkit
-> # into your project's directory. Then uncomment the following lines to add it to your project.
-> # See https://github.com/Esri/arcgis-maps-sdk-toolkit-qt for details
-> add_subdirectory(toolkitcpp)
-> target_link_libraries(${PROJECT_NAME} PRIVATE libtoolkitcpp)
-> ...
-> ```
-
-- In the `main.cpp` file, add an `include` statement near the top of the file to import the toolkit `register.h` file and then later in file call the `Toolkit::registerComponents()` function.
-
-> For example:
-> ```cpp
-> ...
-> #include <QQmlApplicationEngine>
->
-> // Needed for the Qt toolkit
-> #include "Esri/ArcGISRuntime/Toolkit/register.h"
-> ...
->
-> ...
-> // Intitialize application view
-> QQmlApplicationEngine engine;
->
-> // Register the toolkit
-> Esri::ArcGISRuntime::Toolkit::registerComponents(engine);
-> ...
-> ``` 
-
-- In your apps QML file (for example: TestOverviewMap.qml) add an `import` statement for the `Toolkit`. Then later in the file, declare and configure the Qt toolkit component you wish to use. 
-
-  NOTE: In general, you will have to set the `GeoView` property of the Qt toolkit component (and possibly other properties). For example when adding a OverviewMap, your code would look something like this:
-
-> For example:
-> ```qml
-> ...
-> import Esri.TestOverviewMap
->
-> // Needed for the Qt toolkit
-> import Esri.ArcGISRuntime.Toolkit
-> 
-> Item {
->
->    // Create MapQuickView here, and create its Map etc. in C++ code
->    MapView {
->        id: view
->        anchors.fill: parent
->        // set focus to enable keyboard navigation
->        focus: true
->    }
->
->    // Adding the Qt toolkit OverviewMap component via QML.
->    OverviewMap {
->        anchors {
->            top: parent.top
->            left: parent.left
->            margins: 10
->        }
->        geoView: view // Set the geoView to the id of the MapView control (ie. view)
->    }
-> ...
->```
-
-When you run your app, you should now see the UI for the Qt toolkit component in your app. For example:
-![Adding code to the main.cpp file](./images/TestOverviewMap.png)
 
 ## Access token requirements
 
