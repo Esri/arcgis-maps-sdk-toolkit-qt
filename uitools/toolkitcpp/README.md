@@ -107,12 +107,12 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 >    // Adding the Qt toolkit NorthArrow component via QML.
 >    NorthArrow {
 >        id: arrow
->        width: 200 // The default is 48 pixles.
->        height: 200 // The default is 48 pixels.
+>        width: 100 // The default is 48 pixles.
+>        height: 100 // The default is 48 pixels.
 >        anchors {
 >            right: parent.right
 >            bottom: parent.bottom
->            margins: 10
+>            margins: 30
 >        }
 >        geoView: view // Set the geoView to the id of the MapView control (ie. view)
 >    }

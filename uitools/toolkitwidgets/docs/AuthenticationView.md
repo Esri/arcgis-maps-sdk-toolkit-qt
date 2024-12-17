@@ -1,8 +1,8 @@
 [![ArcGIS Maps SDK for Qt](https://img.shields.io/badge/ArcGIS%20Maps%20SDK%20for%20Qt-0b5394)](https://developers.arcgis.com/qt/) [![ArcGIS Maps SDK for Qt toolkit](https://img.shields.io/badge/ArcGIS%20Maps%20SDK%20for%20Qt%20toolkit-ea4d13)](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt) [![Qt Widgets UI components](https://img.shields.io/badge/Qt%20Qt%20Widgets%20UI%20components-ea4d13)](../../toolkitwidgets/)
 
-# AuthenticationView - Qt Widgets UI control/Class
+# AuthenticationView - Qt Widgets UI/Class
 
-The [AuthenticationView - Qt Widgets UI control/Class](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-authenticationview.html) handles authentication challenges and automatically launching the appropriate UI for each type of authentication. Declare an AuthenticationView widget. The AuthenticationView will then be connected to all authentication challenges, and will automatically launch the appropriate view for the type of challenge. Supported security formats include:
+The [AuthenticationView - Qt Widgets UI/Class](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-authenticationview.html) handles authentication challenges and automatically launching the appropriate UI for each type of authentication. Declare an AuthenticationView widget. The AuthenticationView will then be connected to all authentication challenges, and will automatically launch the appropriate view for the type of challenge. Supported security formats include:
 
 - ArcGIS Token (UserCredentialsView)
 - HTTP Basic (UserCredentialsView)
