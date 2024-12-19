@@ -1,3 +1,5 @@
+[![ArcGIS Maps SDK for Qt Toolkit API reference](https://img.shields.io/badge/API_Reference-purple)](https://developers.arcgis.com/qt/latest/toolkit/api-reference/) [![ArcGIS Maps SDK for Qt](https://img.shields.io/badge/ArcGIS%20Maps%20SDK%20for%20Qt-0b5394)](https://developers.arcgis.com/qt/) [![ArcGIS Maps SDK for Qt toolkit](https://img.shields.io/badge/ArcGIS%20Maps%20SDK%20for%20Qt%20toolkit-ea4d13)](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt)
+
 # Augmented Reality toolkit components
 
 The Augmented Reality (AR) toolkit components provide support for ARKit for iOS
@@ -334,3 +336,6 @@ iOS devices is Metal. Add the following code to your apps:
 ```cpp
 QQuickWindow::setGraphicsApi(QSGRendererInterface::GraphicsApi::OpenGL);
 ```
+## Sample app
+
+In the [Examples](./Examples/) folder, there is a Qt example application project (ArExample.pro) that showcases many of the Qt toolkit AR components being used.
