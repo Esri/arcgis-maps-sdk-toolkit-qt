@@ -37,7 +37,7 @@ import QtQuick.Layouts
 
  The result Tab itself contains a TabBar of the results made up of custom Tabs defined in
  UtilityNetworkFunctionTraceResultsModel.
- /
+ */
 
 Pane {
     id: utilityNetworkTrace
