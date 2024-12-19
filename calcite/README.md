@@ -105,6 +105,6 @@ For further details see [Calcite Web TypeFaces](https://esri.github.io/calcite-w
   - [ ] Tooltip
   - [ ] Tumbler
 
-## Sample app
+## Demo app
 
 In the [demo](./demo/) folder, there is a Qt demo application project (calcite_test.pro) that showcases many of the Qt toolkit Calcite components being used.

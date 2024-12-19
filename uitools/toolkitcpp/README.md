@@ -142,6 +142,6 @@ These are the **Qt Quick UI components/QML Type** available to use:
 
 Some of the toolkit components and examples utilize ArcGIS location services which require an access token. Please see the [setup guide](http://links.esri.com/create-an-api-key) for more information.
 
-## Sample app
+## Example app
 
 In the [examples](../examples) folder, there is a Qt example application project (UitoolExamples.pro) that showcases many of the Qt toolkit components used in a C++ app based on the Qt Quick UI controls.

@@ -113,6 +113,6 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 
 Some of the toolkit components and examples utilize ArcGIS location services which require an access token. Please see the [setup guide](http://links.esri.com/create-an-api-key) for more information.
 
-## Sample app
+## Example app
 
 In the [examples](../examples) folder, there is a Qt example application project (UitoolExamples.pro) that showcases many of the Qt toolkit components used in a C++ app based Qt Quick UI controls. Currently, there is not an example application that demonstrates Qt toolkit components used in a C++ app based on the Qt Widget UI controls.
