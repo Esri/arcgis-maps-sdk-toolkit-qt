@@ -1,8 +1,12 @@
+[![ArcGIS Maps SDK for Qt Toolkit API reference](https://img.shields.io/badge/API_Reference-purple)](https://developers.arcgis.com/qt/latest/toolkit/api-reference/) [![ArcGIS Maps SDK for Qt](https://img.shields.io/badge/ArcGIS%20Maps%20SDK%20for%20Qt-0b5394)](https://developers.arcgis.com/qt/) [![ArcGIS Maps SDK for Qt toolkit](https://img.shields.io/badge/ArcGIS%20Maps%20SDK%20for%20Qt%20toolkit-ea4d13)](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt)
+
 # Esri Calcite Style
 
 Esri’s design system ([Calcite](https://esri.github.io/calcite-web/)) enables you to create beautiful, easy to use, and consistent experiences across apps with minimal effort.
 
-This is a WIP module which contains a port of Esri's Calcite Web Style that is QML compatible.
+Calcite provides visual styles that are applied to your UI controls in your app. These styles are QML compatible and are configured by adding them to your .qml files. The styles include options for creating Light and Dark themed UI's. There are over 30 styles available that can be used on Qt controls like: Button, CheckBox, Menu, RadioButton, ToolBar, and so forth. 
+
+Other styling options (like: Basic, Fusion, macOS, Material, Windows, and for forth) are available for your QML based UI controls and are provided by the Qt Group. You can learn more about these styles in the [Styling Qt Quick Controls](https://doc.qt.io/qt-6/qtquickcontrols-styles.html) documentation. 
 
 ## Light Mode
 
@@ -100,3 +104,7 @@ For further details see [Calcite Web TypeFaces](https://esri.github.io/calcite-w
   - [x] ToolSeparator
   - [ ] Tooltip
   - [ ] Tumbler
+
+## Demo app
+
+In the [demo](./demo/) folder, there is a Qt demo application project (calcite_test.pro) that showcases many of the Qt toolkit Calcite components being used.
