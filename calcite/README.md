@@ -49,7 +49,7 @@ Calcite Web primarily uses Avenir Next. For best results your app should use Ave
 
 #### Licensing
 
-If you are a developer outside Esri, it is your responsibility to ensure you are complaint with
+If you are a developer outside Esri, it is your responsibility to ensure you are compliant with
 the font license agreement of any font you use.
 
 For further details see [Calcite Web TypeFaces](https://esri.github.io/calcite-web/documentation/type/).
