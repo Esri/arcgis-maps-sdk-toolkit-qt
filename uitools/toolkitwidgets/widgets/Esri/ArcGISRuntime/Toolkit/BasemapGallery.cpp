@@ -24,7 +24,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
  /*!
   \class Esri::ArcGISRuntime::Toolkit::BasemapGallery
-  \inmodule EsriArcGISRuntimeToolkit
+  \inmodule Esri.ArcGISRuntime.Toolkit
   \ingroup ArcGISQtToolkitUiCppWidgetsViews
   \since Esri.ArcGISRuntime 100.13
   \brief The user interface for the BasemapGallery.

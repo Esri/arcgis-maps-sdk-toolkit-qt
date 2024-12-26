@@ -31,7 +31,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
   \class Esri::ArcGISRuntime::Toolkit::OverviewMap
-  \inmodule EsriArcGISRuntimeToolkit
+  \inmodule Esri.ArcGISRuntime.Toolkit
   \ingroup ArcGISQtToolkitUiCppWidgetsViews
   \brief Defines a small "overview" (or "inset") map displaying a representation of the current viewpoint of the given GeoView.
    For MapViews, the current viewpoint will be represented by a polygon displaying the visible area of the MapView. For SceneViews,

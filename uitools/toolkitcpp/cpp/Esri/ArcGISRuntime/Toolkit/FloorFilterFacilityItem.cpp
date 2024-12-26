@@ -22,7 +22,7 @@
 namespace Esri::ArcGISRuntime::Toolkit {
 
     /*!
-    \inmodule EsriArcGISRuntimeToolkit
+    \inmodule Esri.ArcGISRuntime.Toolkit
     \class Esri::ArcGISRuntime::Toolkit::FloorFilterFacilityItem
     \brief An item contained within \l FloorFilterController::facilities. This class wraps
     a \c FloorFacility for easy manipulation/inspection within an AbstractItemModel.

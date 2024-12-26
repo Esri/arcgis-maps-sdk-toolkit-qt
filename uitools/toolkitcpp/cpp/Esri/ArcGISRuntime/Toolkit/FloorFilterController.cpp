@@ -165,7 +165,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   }
 
   /*!
-    \inmodule EsriArcGISRuntimeToolkit
+    \inmodule Esri.ArcGISRuntime.Toolkit
     \class Esri::ArcGISRuntime::Toolkit::FloorFilterController
     \brief The controller part of a FloorFilter. This class handles the
     visibility of levels, and listening to changes to the current
@@ -173,7 +173,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
    */
 
   /*!
-    \inmodule EsriArcGISRuntimeToolkit
+    \inmodule Esri.ArcGISRuntime.Toolkit
     \enum Esri::ArcGISRuntime::Toolkit::FloorFilterController::UpdateLevelsMode
     \brief The mode that defines how levels are made visible/invisible in the geoView.
     \sa Esri::ArcGISRuntime::Toolkit::FloorFilterController::updateLevelsMode
@@ -181,7 +181,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   */
 
   /*!
-    \inmodule EsriArcGISRuntimeToolkit
+    \inmodule Esri.ArcGISRuntime.Toolkit
     \enum Esri::ArcGISRuntime::Toolkit::FloorFilterController::AutomaticSelectionMode
     \brief The mode that defines how facilities are selected by viewpoint navigation.
     \sa Esri::ArcGISRuntime::Toolkit::FloorFilterController::automaticSelectionMode

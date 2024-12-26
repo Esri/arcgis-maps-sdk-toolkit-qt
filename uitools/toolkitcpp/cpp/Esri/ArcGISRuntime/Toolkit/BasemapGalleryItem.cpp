@@ -77,7 +77,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   }
 
   /*!
-  \inmodule EsriArcGISRuntimeToolkit
+  \inmodule Esri.ArcGISRuntime.Toolkit
   \class Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem
   \brief Represents the contents of a BasemapGallery. Can be accessed via
   \c{BasemapGalleryController::gallery}.

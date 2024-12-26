@@ -21,7 +21,7 @@
 namespace Esri::ArcGISRuntime::Toolkit {
 
   /*!
-    \inmodule EsriArcGISRuntimeToolkit
+    \inmodule Esri.ArcGISRuntime.Toolkit
     \class Esri::ArcGISRuntime::Toolkit::BookmarkListItem
     \brief An item contained within \l BookmarksViewController::bookmarks. This class wraps
     a \c Bookmark for easy manipulation/inspection within an AbstractItemModel.

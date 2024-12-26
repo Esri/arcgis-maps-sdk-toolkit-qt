@@ -145,7 +145,7 @@ void connectToGeoView(GeoViewToolkit* geoView, UtilityNetworkTraceController* se
 /*!
 \class Esri::ArcGISRuntime::Toolkit::UtilityNetworkTraceController
 \ingroup ArcGISQtToolkitUiCppControllers
-\inmodule EsriArcGISRuntimeToolkit
+\inmodule Esri.ArcGISRuntime.Toolkit
 
 \brief In MVC architecture, this is the controller for the corresponding
  Utility Network Trace that enables trace analysis to be performed on a Utility Network with the

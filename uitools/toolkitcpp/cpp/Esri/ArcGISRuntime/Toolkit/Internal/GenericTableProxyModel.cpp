@@ -50,7 +50,7 @@ QString toTitleCase(const QString& string)
 
 /*!
  \internal
- \inmodule EsriArcGISRuntimeToolkit
+ \inmodule Esri.ArcGISRuntime.Toolkit
  \class Esri::ArcGISRuntime::Toolkit::GenericTableProxyModel
 
   \brief Consumes a GenericListModel and transposes each element property into

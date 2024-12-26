@@ -23,7 +23,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
   \class Esri::ArcGISRuntime::Toolkit::UserCredentialView
-  \inmodule EsriArcGISRuntimeToolkit
+  \inmodule Esri.ArcGISRuntime.Toolkit
   \ingroup ArcGISQtToolkitUiCppWidgetsViews
   \brief The user interface for displaying a username/password sign-in dialog.
 

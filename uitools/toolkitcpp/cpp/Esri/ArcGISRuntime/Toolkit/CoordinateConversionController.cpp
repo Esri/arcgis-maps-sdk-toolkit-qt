@@ -44,7 +44,7 @@ constexpr double DEFAULT_ZOOM_TO_DISTANCE = 1500.0;
 /*!
   \class Esri::ArcGISRuntime::Toolkit::CoordinateConversionController
   \ingroup ArcGISQtToolkitUiCppControllers
-  \inmodule EsriArcGISRuntimeToolkit
+  \inmodule Esri.ArcGISRuntime.Toolkit
 
   \brief In MVC architecture, this is the controller for the corresponding
   \c CoordinateConversion view.

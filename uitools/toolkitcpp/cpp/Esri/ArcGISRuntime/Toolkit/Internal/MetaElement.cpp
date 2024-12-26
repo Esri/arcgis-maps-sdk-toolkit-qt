@@ -20,7 +20,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 /*!
   \internal
 
-  \inmodule EsriArcGISRuntimeToolkit
+  \inmodule Esri.ArcGISRuntime.Toolkit
   \class Esri::ArcGISRuntime::Toolkit::MetaElement
 
   \brief The \c MetaElement is an implementation detail of \c GenericListModel

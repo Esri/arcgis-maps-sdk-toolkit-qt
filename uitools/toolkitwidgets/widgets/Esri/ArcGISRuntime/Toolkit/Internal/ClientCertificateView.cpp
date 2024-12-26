@@ -27,7 +27,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 /*!
    \internal
    \class Esri::ArcGISRuntime::Toolkit::ClientCertificateView
-   \inmodule EsriArcGISRuntimeToolkit
+   \inmodule Esri.ArcGISRuntime.Toolkit
    \brief This is an implementation of dialog to select a client certificate.
  */
 

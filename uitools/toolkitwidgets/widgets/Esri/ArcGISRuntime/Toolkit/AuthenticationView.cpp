@@ -54,7 +54,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
   \class Esri::ArcGISRuntime::Toolkit::AuthenticationView
-  \inmodule EsriArcGISRuntimeToolkit
+  \inmodule Esri.ArcGISRuntime.Toolkit
   \ingroup ArcGISQtToolkitUiCppWidgetsViews
   \since Esri.ArcGISRuntime 100.12
   \brief A view for handling authentication challenges and automatically

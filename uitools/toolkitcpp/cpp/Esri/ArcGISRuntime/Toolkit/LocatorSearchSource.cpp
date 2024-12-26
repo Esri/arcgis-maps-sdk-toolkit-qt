@@ -97,7 +97,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   }
 
   /*!
-    \inmodule EsriArcGISRuntimeToolkit
+    \inmodule Esri.ArcGISRuntime.Toolkit
     \class Esri::ArcGISRuntime::Toolkit::LocatorSearchSource
     \brief Uses a Locator to provide search and suggest results.
 

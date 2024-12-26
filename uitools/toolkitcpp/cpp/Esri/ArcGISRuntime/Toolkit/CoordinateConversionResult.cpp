@@ -26,7 +26,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
   \class Esri::ArcGISRuntime::Toolkit::CoordinateConversionResult
-  \inmodule EsriArcGISRuntimeToolkit
+  \inmodule Esri.ArcGISRuntime.Toolkit
   \brief A \c CoordinateConversionResult stores the textual representation of a
   a point converted to a string using the formatting given in a
   \c CoordinateConversionOption.

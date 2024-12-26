@@ -25,7 +25,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 /*!
   \internal
   \class Esri::ArcGISRuntime::Toolkit::Flash
-  \inmodule EsriArcGISRuntimeToolkit
+  \inmodule Esri.ArcGISRuntime.Toolkit
   \brief a \c Flash just exists to display a flashing blue dot on a map
   for the \c CoordinateConversion tool, then delete itself after its animation
   is complete.

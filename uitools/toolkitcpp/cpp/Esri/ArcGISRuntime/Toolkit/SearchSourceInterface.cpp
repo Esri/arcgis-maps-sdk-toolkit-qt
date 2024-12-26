@@ -18,7 +18,7 @@
 namespace Esri::ArcGISRuntime::Toolkit {
 
   /*!
-    \inmodule EsriArcGISRuntimeToolkit
+    \inmodule Esri.ArcGISRuntime.Toolkit
     \class Esri::ArcGISRuntime::Toolkit::SearchSourceInterface
     \brief Defines the contract for a search result provider.
    */

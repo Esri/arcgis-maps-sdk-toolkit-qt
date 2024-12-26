@@ -41,7 +41,7 @@
 namespace Esri::ArcGISRuntime::Toolkit {
 
   /*!
-    \inmodule EsriArcGISRuntimeToolkit
+    \inmodule Esri.ArcGISRuntime.Toolkit
     \class Esri::ArcGISRuntime::Toolkit::OverviewMapController
     \brief The controller part of a OverviewMap. This class handles the
     management of the inset MapView, including symbol styling and navigation.

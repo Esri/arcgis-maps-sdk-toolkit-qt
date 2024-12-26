@@ -128,7 +128,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   /*!
   \class Esri::ArcGISRuntime::Toolkit::BookmarksViewController
   \ingroup ArcGISQtToolkitUiCppControllers
-  \inmodule EsriArcGISRuntimeToolkit
+  \inmodule Esri.ArcGISRuntime.Toolkit
 
   \brief In MVC architecture, this is the controller for the corresponding
   \c Bookmark view.

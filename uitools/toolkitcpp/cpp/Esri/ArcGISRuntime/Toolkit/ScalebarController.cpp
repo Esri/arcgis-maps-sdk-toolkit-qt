@@ -112,7 +112,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
   /*!
   \class Esri::ArcGISRuntime::Toolkit::ScalebarController
-  \inmodule EsriArcGISRuntimeToolkit
+  \inmodule Esri.ArcGISRuntime.Toolkit
   \ingroup ArcGISQtToolkitUiCppControllers
   \brief In MVC architecture, this is the controller for the corresponding
   \c Scalebar view.

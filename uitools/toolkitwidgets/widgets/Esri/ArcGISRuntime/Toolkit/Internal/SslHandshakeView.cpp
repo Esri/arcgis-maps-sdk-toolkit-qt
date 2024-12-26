@@ -22,7 +22,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 /*!
    \internal
    \class Esri::ArcGISRuntime::Toolkit::SslHandshakeView
-   \inmodule EsriArcGISRuntimeToolkit
+   \inmodule Esri.ArcGISRuntime.Toolkit
    \brief This is an implementation of dialog for SSL handshake.
  */
 

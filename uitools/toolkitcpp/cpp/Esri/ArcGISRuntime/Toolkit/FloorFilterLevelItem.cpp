@@ -21,7 +21,7 @@
 namespace Esri::ArcGISRuntime::Toolkit {
 
    /*!
-    \inmodule EsriArcGISRuntimeToolkit
+    \inmodule Esri.ArcGISRuntime.Toolkit
     \class Esri::ArcGISRuntime::Toolkit::FloorFilterLevelItem
     \brief An item contained within \l FloorFilterController::levels. This class wraps
     a \c FloorLevel for easy manipulation/inspection within an AbstractItemModel.

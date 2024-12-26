@@ -33,7 +33,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     /*!
       \internal
-      \inmodule EsriArcGISRuntimeToolkit
+      \inmodule Esri.ArcGISRuntime.Toolkit
       \class Esri::ArcGISRuntime::Toolkit::BasemapGalleryImageResponse
       \brief A response object which grabs the thumbnail image from a GalleryItem when it becomes
       available. Think of this like a poor man's future/promise.
@@ -142,7 +142,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
   /*!
     \internal
-    \inmodule EsriArcGISRuntimeToolkit
+    \inmodule Esri.ArcGISRuntime.Toolkit
     \class Esri::ArcGISRuntime::Toolkit::BasemapGalleryImageProvider
     \brief An asynchronous image provider, that when supplied an ID will fetch the appropriate
     basemap thumbnail. See \l QQuickImageProvider for a comprehensive overview.

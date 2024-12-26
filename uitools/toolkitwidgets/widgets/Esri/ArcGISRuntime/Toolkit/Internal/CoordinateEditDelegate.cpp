@@ -29,7 +29,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 /*!
    \internal
    \class Esri::ArcGISRuntime::Toolkit::CoordinateEditDelegate
-   \inmodule EsriArcGISRuntimeToolkit
+   \inmodule Esri.ArcGISRuntime.Toolkit
    \brief This is an implementation detail of table-view editing for the
    \c CoordinateConversion tool.
 

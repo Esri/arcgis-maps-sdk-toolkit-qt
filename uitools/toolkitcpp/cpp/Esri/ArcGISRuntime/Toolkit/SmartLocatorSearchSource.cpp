@@ -34,7 +34,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   }
 
   /*!
-    \inmodule EsriArcGISRuntimeToolkit
+    \inmodule Esri.ArcGISRuntime.Toolkit
     \class Esri::ArcGISRuntime::Toolkit::SmartLocatorSearchSource
     \brief Extends LocatorSearchSource with intelligent search behaviors; adds support for repeated search.
     \note Advanced functionality requires knowledge of the underlying locator to be used well; this class implements behaviors that

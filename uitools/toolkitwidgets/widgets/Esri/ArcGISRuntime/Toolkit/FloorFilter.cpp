@@ -128,7 +128,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   } // namespace
 
   /*!
-    \inmodule EsriArcGISRuntimeToolkit
+    \inmodule Esri.ArcGISRuntime.Toolkit
     \class Esri::ArcGISRuntime::Toolkit::FloorFilter
     \brief Displays and filters the available floor aware layers in the current \c GeoModel.
 

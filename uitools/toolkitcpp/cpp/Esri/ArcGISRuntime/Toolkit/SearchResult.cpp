@@ -18,7 +18,7 @@
 namespace Esri::ArcGISRuntime::Toolkit {
 
   /*!
-    \inmodule EsriArcGISRuntimeToolkit
+    \inmodule Esri.ArcGISRuntime.Toolkit
     \class Esri::ArcGISRuntime::Toolkit::SearchResult
     \brief Wraps a Esri::ArcGISRuntime::GeocodeResult result for display.
    */

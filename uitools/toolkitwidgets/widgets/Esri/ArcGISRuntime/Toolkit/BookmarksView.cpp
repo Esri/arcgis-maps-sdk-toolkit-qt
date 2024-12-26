@@ -29,7 +29,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
   /*!
   \class Esri::ArcGISRuntime::Toolkit::BookmarksView
-  \inmodule EsriArcGISRuntimeToolkit
+  \inmodule Esri.ArcGISRuntime.Toolkit
   \ingroup ArcGISQtToolkitUiCppWidgetsViews
   \since Esri.ArcGISRuntime 100.15
   \brief The user interface for the BookmarksView.

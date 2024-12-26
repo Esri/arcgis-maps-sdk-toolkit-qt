@@ -18,7 +18,7 @@
 namespace Esri::ArcGISRuntime::Toolkit {
 
   /*!
-    \inmodule EsriArcGISRuntimeToolkit
+    \inmodule Esri.ArcGISRuntime.Toolkit
     \class Esri::ArcGISRuntime::Toolkit::SearchSuggestion
     \brief Wraps a Esri::ArcGISRuntime::SuggestResult result for display.
    */

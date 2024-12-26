@@ -270,7 +270,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   }
 
   /*!
-    \inmodule EsriArcGISRuntimeToolkit
+    \inmodule Esri.ArcGISRuntime.Toolkit
     \class Esri::ArcGISRuntime::Toolkit::BasemapGalleryController
     \brief The controller part of a BasemapGallery. This class handles the
     management of the BasemapGalleryItem objects, and listening to changes to the current

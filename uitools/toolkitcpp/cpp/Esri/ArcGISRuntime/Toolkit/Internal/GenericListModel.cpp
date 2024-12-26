@@ -22,7 +22,7 @@
 namespace Esri::ArcGISRuntime::Toolkit {
 
   /*!
- \inmodule EsriArcGISRuntimeToolkit
+ \inmodule Esri.ArcGISRuntime.Toolkit
  \class Esri::ArcGISRuntime::Toolkit::GenericListModel
 
  \brief This ListModel automatically exposes a list of QObjects with

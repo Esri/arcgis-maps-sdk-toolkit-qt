@@ -66,13 +66,13 @@ namespace Esri::ArcGISRuntime::Toolkit {
   }
 
   /*!
-    \inmodule EsriArcGISRuntimeToolkit
+    \inmodule Esri.ArcGISRuntime.Toolkit
     \class Esri::ArcGISRuntime::Toolkit::SearchViewController
     \brief Performs searches and manages search state for a SearchView.
    */
 
   /*!
-    \inmodule EsriArcGISRuntimeToolkit
+    \inmodule Esri.ArcGISRuntime.Toolkit
     \enum Esri::ArcGISRuntime::Toolkit::SearchViewController::SearchResultMode
     \brief The result mode used by the controller to display results.
     \sa Esri::ArcGISRuntime::Toolkit::SearchViewController::resultMode

@@ -40,7 +40,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
  \class Toolkit::ArcGISAuthenticationController
- \inmodule EsriArcGISRuntimeToolkit
+ \inmodule Esri.ArcGISRuntime.Toolkit
  \ingroup ArcGISQtToolkitUiCppControllers
  \brief In MVC architecture, this is the controller for the corresponding
         AuthenticationView.
