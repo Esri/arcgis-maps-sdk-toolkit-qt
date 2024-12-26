@@ -23,7 +23,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 /*!
   \inmodule EsriArcGISRuntimeToolkit
   \class Esri::ArcGISRuntime::Toolkit::UtilityNetworkListItem
-  \brief An item contained within \l UtilityNetworkTraceController::utilityNetworks. This class wraps
+  \brief An item contained within \l Esri::ArcGISRuntime::Toolkit::UtilityNetworkTraceController::utilityNetworks. This class wraps
   a \c UtilityNetwork for easy manipulation/inspection within an AbstractItemModel.
  */
 

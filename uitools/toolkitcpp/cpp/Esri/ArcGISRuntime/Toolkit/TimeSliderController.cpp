@@ -400,7 +400,6 @@ void TimeSliderController::setSteps(int s, int e)
   setSteps(std::make_pair(s, e));
 }
 
-
 /*!
  \brief Sets the current steps.
 
