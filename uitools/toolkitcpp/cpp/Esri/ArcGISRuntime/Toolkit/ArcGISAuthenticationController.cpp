@@ -316,17 +316,21 @@ QList<OAuthUserConfiguration*> ArcGISAuthenticationController::oAuthUserConfigur
 QUrl ArcGISAuthenticationController::currentAuthenticatingHost_() const
 {
   // network challenges are checked first
-  if (m_currentNetworkChallenge)
+  const auto requestUrl = [this]() -> QUrl
   {
-    const auto requestUrl = m_currentNetworkChallenge->requestUrl();
-    const auto scheme = requestUrl.scheme();
-    const auto host = requestUrl.host();
-    return scheme + "://" + host;
-  }
+    if (m_currentNetworkChallenge)
+    {
+      return m_currentNetworkChallenge->requestUrl();
+    }
+    if (m_currentArcGISChallenge)
+    {
+      return m_currentArcGISChallenge->requestUrl();
+    }
+    return {};
+  }();
 
-  if (m_currentArcGISChallenge)
+  if (!requestUrl.isEmpty())
   {
-    const auto requestUrl = m_currentArcGISChallenge->requestUrl();
     const auto scheme = requestUrl.scheme();
     const auto host = requestUrl.host();
     return scheme + "://" + host;

@@ -39,8 +39,6 @@ Q_MOC_INCLUDE(<QUrl>)
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-// TODO - need to solve multiple inheritance problem here. These can't both inherit QObject.
-
 class ArcGISAuthenticationController : public QObject
 {
   Q_OBJECT
