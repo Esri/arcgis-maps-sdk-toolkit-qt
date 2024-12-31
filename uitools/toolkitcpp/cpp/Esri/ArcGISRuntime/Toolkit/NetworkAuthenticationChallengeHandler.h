@@ -16,7 +16,7 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_NETWORKAUTHENTICATIONCHALLENGEHANDLER_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_NETWORKAUTHENTICATIONCHALLENGEHANDLER_H
 
-// STL headers
+// Maps SDK headers
 #include <Authentication/NetworkAuthenticationChallengeHandler.h>
 
 namespace Esri::ArcGISRuntime::Toolkit {
