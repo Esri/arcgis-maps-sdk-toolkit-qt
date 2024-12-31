@@ -20,6 +20,7 @@
 #include <QFuture>
 #include <QPointer>
 #include <QUrl>
+#include <QSslError>
 
 // Maps SDK headers
 #include <Authentication/ArcGISAuthenticationChallenge.h>
@@ -31,6 +32,8 @@
 #include <Authentication/OAuthUserCredential.h>
 #include <Authentication/OAuthUserLoginPrompt.h>
 #include <Authentication/TokenCredential.h>
+#include <Authentication/ServerTrustCredential.h>
+#include <Authentication/NetworkAuthenticationChallenge.h>
 
 using namespace Esri::ArcGISRuntime;
 using namespace Esri::ArcGISRuntime::Authentication;
@@ -52,13 +55,12 @@ namespace Esri::ArcGISRuntime::Toolkit {
   \internal
  */
 ArcGISAuthenticationController::ArcGISAuthenticationController(QObject* parent) :
-  ArcGISAuthenticationChallengeHandler(parent)
+  QObject(parent),
+  m_arcGISAuthenticationChallengeHandler(ArcGISAuthenticationChallengeHandler{this}),
+  m_networkAuthenticationChallengeHandler(NetworkAuthenticationChallengeHandler{this})
 {
   if (!canBeUsed_())
     return;
-
-  // Set the authentication manager to use this controller
-  ArcGISRuntimeEnvironment::instance()->authenticationManager()->setArcGISAuthenticationChallengeHandler(this);
 
   // listen for OAuth prompts
   connect(ArcGISRuntimeEnvironment::instance()->authenticationManager(), &AuthenticationManager::oAuthUserLoginPromptIssued, this,
@@ -106,7 +108,7 @@ void ArcGISAuthenticationController::handleArcGISAuthenticationChallenge(ArcGISA
 {
   std::lock_guard<std::mutex> lock(m_mutex);
   challenge->setParent(nullptr);
-  m_currentChallenge = std::unique_ptr<ArcGISAuthenticationChallenge>{challenge};
+  m_currentArcGISChallenge = std::unique_ptr<ArcGISAuthenticationChallenge>{challenge};
   emit currentAuthenticatingHostChanged();
 
   // first see if we can handle this with OAuth
@@ -117,18 +119,18 @@ void ArcGISAuthenticationController::handleArcGISAuthenticationChallenge(ArcGISA
     {
       OAuthUserCredential::createAsync(userConfiguration, this).then(this, [this](OAuthUserCredential* credential)
       {
-        if (!m_currentChallenge)
+        if (!m_currentArcGISChallenge)
           return;
 
-        m_currentChallenge->continueWithCredential(credential);
-        m_currentChallenge.reset();
+        m_currentArcGISChallenge->continueWithCredential(credential);
+        m_currentArcGISChallenge.reset();
       }).onFailed(this, [this](const ErrorException& e)
       {
-        if (!m_currentChallenge)
+        if (!m_currentArcGISChallenge)
           return;
 
-        m_currentChallenge->continueAndFailWithError(e.error());
-        m_currentChallenge.reset();
+        m_currentArcGISChallenge->continueAndFailWithError(e.error());
+        m_currentArcGISChallenge.reset();
       });
 
       return;
@@ -141,25 +143,64 @@ void ArcGISAuthenticationController::handleArcGISAuthenticationChallenge(ArcGISA
 /*!
   \internal
  */
+void ArcGISAuthenticationController::handleNetworkAuthenticationChallenge(NetworkAuthenticationChallenge* challenge)
+{
+  std::lock_guard<std::mutex> lock(m_mutex);
+  challenge->setParent(nullptr);
+  m_currentNetworkChallenge = std::unique_ptr<NetworkAuthenticationChallenge>{challenge};
+
+  if (!m_currentNetworkChallenge)
+  {
+    return;
+  }
+
+  if (!m_currentNetworkChallenge->sslErrors().isEmpty())
+  {
+    // SSL errors implies an SSL handshake challenge, aka server trust
+    emit displayServerTrustView();
+  }
+  else
+  {
+    Q_UNIMPLEMENTED();
+    qWarning() << "unimplemented network authentication challenge";
+  }
+}
+
+/*!
+  \internal
+ */
+void ArcGISAuthenticationController::continueWithServerTrust(bool trust, bool remember)
+{
+  auto* credential = ServerTrustCredential::createWithChallenge(m_currentNetworkChallenge.get(), trust, remember);
+  if (credential)
+  {
+    m_currentNetworkChallenge->continueWithCredential(credential);
+    m_currentNetworkChallenge.reset();
+  }
+}
+
+/*!
+  \internal
+ */
 void ArcGISAuthenticationController::continueWithUsernamePassword(const QString& username, const QString& password)
 {
-  if (!m_currentChallenge)
+  if (!m_currentArcGISChallenge)
     return;
 
-  TokenCredential::createAsync(m_currentChallenge->requestUrl(),
+  TokenCredential::createAsync(m_currentArcGISChallenge->requestUrl(),
                                username,
                                password,
                                0).then(this, [this](TokenCredential* credential)
   {
-    m_currentChallenge->continueWithCredential(credential);
-    m_currentChallenge.reset();
+    m_currentArcGISChallenge->continueWithCredential(credential);
+    m_currentArcGISChallenge.reset();
   }).onFailed(this, [this](ErrorException e)
   {
     if ((++m_currentChallengeFailureCount) >= s_maxChallengeFailureCount)
     {
       m_currentChallengeFailureCount = 0;
-      m_currentChallenge->continueAndFailWithError(e.error());
-      m_currentChallenge.reset();
+      m_currentArcGISChallenge->continueAndFailWithError(e.error());
+      m_currentArcGISChallenge.reset();
       return;
     }
 
@@ -197,10 +238,10 @@ void ArcGISAuthenticationController::respondWithError(const QString& platformErr
  */
 void ArcGISAuthenticationController::cancel()
 {
-  if (m_currentChallenge)
+  if (m_currentArcGISChallenge)
   {
-    m_currentChallenge->cancel();
-    m_currentChallenge.reset();
+    m_currentArcGISChallenge->cancel();
+    m_currentArcGISChallenge.reset();
   }
 
   if (m_currentOAuthUserLoginPrompt)
@@ -265,13 +306,24 @@ QList<OAuthUserConfiguration*> ArcGISAuthenticationController::oAuthUserConfigur
  */
 QUrl ArcGISAuthenticationController::currentAuthenticatingHost_() const
 {
-  if (!m_currentChallenge)
-    return {};
+  // network challenges are checked first
+  if (m_currentNetworkChallenge)
+  {
+    const auto requestUrl = m_currentNetworkChallenge->requestUrl();
+    const auto scheme = requestUrl.scheme();
+    const auto host = requestUrl.host();
+    return scheme + "://" + host;
+  }
 
-  const auto requestUrl = m_currentChallenge->requestUrl();
-  const auto scheme = requestUrl.scheme();
-  const auto host = requestUrl.host();
-  return scheme + "://" + host;
+  if (m_currentArcGISChallenge)
+  {
+    const auto requestUrl = m_currentArcGISChallenge->requestUrl();
+    const auto scheme = requestUrl.scheme();
+    const auto host = requestUrl.host();
+    return scheme + "://" + host;
+  }
+
+  return {};
 }
 
 /*!

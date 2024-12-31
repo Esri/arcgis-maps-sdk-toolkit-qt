@@ -17,6 +17,7 @@ CPPPATH = $$PWD/toolkitcpp/cpp/Esri/ArcGISRuntime/Toolkit
 INCLUDEPATH += $$PWD/toolkitcpp/cpp $$CPPPATH
 
 HEADERS += $$CPPPATH/ArcGISAuthenticationController.h \
+           $$CPPPATH/ArcGISAuthenticationChallengeHandler.h \
            $$CPPPATH/AuthenticationController.h \
            $$CPPPATH/BasemapGalleryController.h \
            $$CPPPATH/BasemapGalleryItem.h \
@@ -40,6 +41,7 @@ HEADERS += $$CPPPATH/ArcGISAuthenticationController.h \
            $$CPPPATH/Internal/GeoViews.h \
            $$CPPPATH/Internal/MetaElement.h \
            $$CPPPATH/Internal/SingleShotConnection.h \
+           $$CPPPATH/NetworkAuthenticationChallengeHandler.h \
            $$CPPPATH/NorthArrowController.h \
            $$CPPPATH/OverviewMapController.h \
            $$CPPPATH/PopupViewController.h \
@@ -58,6 +60,7 @@ HEADERS += $$CPPPATH/ArcGISAuthenticationController.h \
            $$CPPPATH/UtilityNetworkTraceStartingPointsModel.h
 
 SOURCES += $$CPPPATH/ArcGISAuthenticationController.cpp \
+           $$CPPPATH/ArcGISAuthenticationChallengeHandler.cpp \
            $$CPPPATH/AuthenticationController.cpp \
            $$CPPPATH/BasemapGalleryController.cpp \
            $$CPPPATH/BasemapGalleryItem.cpp \
@@ -77,6 +80,7 @@ SOURCES += $$CPPPATH/ArcGISAuthenticationController.cpp \
            $$CPPPATH/Internal/GenericListModel.cpp \
            $$CPPPATH/Internal/GenericTableProxyModel.cpp \
            $$CPPPATH/Internal/MetaElement.cpp \
+           $$CPPPATH/NetworkAuthenticationChallengeHandler.cpp \
            $$CPPPATH/NorthArrowController.cpp \
            $$CPPPATH/OverviewMapController.cpp \
            $$CPPPATH/PopupViewController.cpp \
