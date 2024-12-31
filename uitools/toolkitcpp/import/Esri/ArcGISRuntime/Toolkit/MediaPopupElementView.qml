@@ -16,6 +16,7 @@
 
 import Esri.ArcGISRuntime.Toolkit.Controller
 
+import QtGraphs
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -43,74 +44,221 @@ ColumnLayout {
 
     MenuSeparator {
         Layout.fillWidth: true
-        Layout.leftMargin: mediaMargin
-        Layout.rightMargin: mediaMargin
+        Layout.leftMargin: mediaPopupElementView.mediaMargin
+        Layout.rightMargin: mediaPopupElementView.mediaMargin
     }
 
     ColumnLayout {
         clip: true
         focus: true
-        spacing: layoutSpacing
+        spacing: mediaPopupElementView.layoutSpacing
 
         Label {
-            text: controller.title !== "" ? controller.title : "Media"
+            text: mediaPopupElementView.controller.title !== "" ? controller.title : "Media"
             wrapMode: Text.WordWrap
             font.pixelSize: 20
             font.weight: Font.Black
 
             Layout.fillWidth: true
-            Layout.leftMargin: mediaMargin
-            Layout.rightMargin: mediaMargin
+            Layout.leftMargin: mediaPopupElementView.mediaMargin
+            Layout.rightMargin: mediaPopupElementView.mediaMargin
         }
         Label {
-            text: controller.description
-            visible: controller.description !== ""
+            text: mediaPopupElementView.controller.description
+            visible: mediaPopupElementView.controller.description !== ""
             wrapMode: Text.WordWrap
 
             Layout.fillWidth: true
-            Layout.leftMargin: mediaMargin
-            Layout.rightMargin: mediaMargin
+            Layout.leftMargin: mediaPopupElementView.mediaMargin
+            Layout.rightMargin: mediaPopupElementView.mediaMargin
         }
     }
 
     MenuSeparator {
         Layout.fillWidth: true
-        Layout.leftMargin: mediaMargin
-        Layout.rightMargin: mediaMargin
+        Layout.leftMargin: mediaPopupElementView.mediaMargin
+        Layout.rightMargin: mediaPopupElementView.mediaMargin
     }
 
     ListView {
+        id: lv
         orientation: ListView.Horizontal
         clip: true
         focus: true
-        height: 170
-        spacing: mediaMargin
-        model: controller.popupMediaItems
+        implicitHeight: 170
+        spacing: mediaPopupElementView.mediaMargin
+        model: mediaPopupElementView.controller.popupMediaItems
 
         Layout.fillWidth: true
-        Layout.leftMargin: mediaMargin
-        Layout.rightMargin: mediaMargin
+        Layout.leftMargin: mediaPopupElementView.mediaMargin
+        Layout.rightMargin: mediaPopupElementView.mediaMargin
 
         delegate: Item {
+            id: thisItem
             height: 170
             width: 220
 
-            Image {
-                id: imageMediaPreview
-                source: model.sourceUrl
-                fillMode: Image.PreserveAspectCrop
-                asynchronous: true
-                cache: true
+            Loader {
+                id: loader
+            }
 
-                anchors.fill: parent
-                Layout.leftMargin: mediaMargin
+            Component.onCompleted: {
+                if (popupMediaType === QmlEnums.PopupMediaTypeImage) {
+                    loader.sourceComponent = imageComp;
+                } else if (popupMediaType === QmlEnums.PopupMediaTypeColumnChart) {
+                    loader.sourceComponent = columnChartComp;
+                } else if (popupMediaType === QmlEnums.PopupMediaTypeBarChart) {
+                    loader.sourceComponent = barChartComp;
+                } else if (popupMediaType === QmlEnums.PopupMediaTypePieChart) {
+                    loader.sourceComponent = pieChartComp;
+                } else if (popupMediaType === QmlEnums.PopupMediaTypeLineChart) {
+                    loader.sourceComponent = lineChartComp;
+                }
+            }
 
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        // saving this as a placeholder. Should fire an event the user could take otherwise
-                        // we define our own default behavior to open the image in full screen mode.
-                        // Qt.openUrlExternally(model.linkUrl);
+            Component {
+                id: imageComp
+                Image {
+                    source: listModelData.sourceUrl
+                    fillMode: Image.PreserveAspectCrop
+                    asynchronous: true
+                    cache: true
+                    height: thisItem.height
+                    width: thisItem.width
+
+                    Layout.leftMargin: mediaPopupElementView.mediaMargin
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            // saving this as a placeholder. Should fire an event the user could take otherwise
+                            // we define our own default behavior to open the image in full screen mode.
+                            // Qt.openUrlExternally(model.linkUrl);
+                        }
+                    }
+                }
+            }
+
+            Component {
+                id: columnChartComp
+                GraphsView {
+                    height: thisItem.height
+                    width: thisItem.width
+                    marginTop: 10
+                    marginBottom: 10
+                    marginLeft: 10
+                    marginRight: 10
+
+                    // Setting a default theme if no color information is provided on the BarSeries
+                    theme: GraphsTheme {
+                        backgroundColor: "white"
+                        plotAreaBackgroundColor: "white"
+                        theme: GraphsTheme.Theme.MixSeries
+                    }
+
+                    axisY: ValueAxis {
+                        max: listModelData.maxValue
+                        min: listModelData.minValue
+                        tickInterval: Math.abs(max) > Math.abs(min)? max / 3 : Math.abs(min) / 3
+                    }
+
+                    BarSeries {
+                        // BarSeries will take owership of the QList<QBarSet*> when we call append. This also applies to PieSeries and QPieSlice for PieChartPopupMediaItem.
+                        // s.a https://github.com/qt/qtgraphs/blob/ef90c963d10a1af30ed523483e9a589235eccef9/src/graphs2d/barchart/qbarseries.cpp#L670-L692
+                        Component.onCompleted: append(listModelData.barSets);
+                    }
+                }
+            }
+
+            Component {
+                id: barChartComp
+                GraphsView {
+                    height: thisItem.height
+                    width: thisItem.width
+                    marginTop: 10
+                    marginBottom: 10
+                    marginLeft: -50
+
+                    orientation: Qt.Horizontal
+
+                    // Setting a default theme if no color information is provided on the BarSeries
+                    theme: GraphsTheme {
+                        backgroundColor: "white"
+                        plotAreaBackgroundColor: "white"
+                        theme: GraphsTheme.Theme.MixSeries
+                    }
+
+                    axisY: ValueAxis {
+                        max: listModelData.maxValue
+                        min: listModelData.minValue
+                        tickInterval: Math.abs(listModelData.maxValue) > Math.abs(listModelData.minValue)? max / 3 : Math.abs(min) / 3
+                    }
+
+                    BarSeries {
+                        // BarSeries will take owership of the QList<QBarSet*> when we call append. This also applies to PieSeries and QPieSlice for PieChartPopupMediaItem.
+                        // s.a https://github.com/qt/qtgraphs/blob/ef90c963d10a1af30ed523483e9a589235eccef9/src/graphs2d/barchart/qbarseries.cpp#L670-L692
+                        Component.onCompleted: append(listModelData.barSets);
+                    }
+                }
+            }
+
+            Component {
+                id: pieChartComp
+                GraphsView {
+                    height: thisItem.height
+                    width: thisItem.width
+                    marginTop: -25
+                    marginBottom: -25
+                    marginLeft: -25
+                    marginRight: -25
+
+                    // Setting a default theme if no color information is provided on the PieSeries
+                    theme: GraphsTheme {
+                        backgroundColor: "white"
+                        plotAreaBackgroundColor: "white"
+                        theme: GraphsTheme.Theme.MixSeries
+                    }
+
+                    PieSeries {
+                        // PieSeries will take owership of the QList<QPieSlice*> when we call append. This also applies to BarSeries and QBarSet for BarChartPopupMediaItem.
+                        // s.a https://github.com/qt/qtgraphs/blob/08393457537bb45acf3620986039e516f1ac6f2b/src/graphs2d/piechart/qpieseries.cpp#L635-L672
+                        Component.onCompleted: append(listModelData.pieSlices);
+                    }
+                }
+            }
+
+            Component {
+                id: lineChartComp
+                GraphsView {
+                    height: thisItem.height
+                    width: thisItem.width
+                    marginTop: 10
+                    marginBottom: 10
+                    marginLeft: 10
+                    marginRight: 10
+
+                    // Setting a default theme if no color information is provided on the LineSeries
+                    theme: GraphsTheme {
+                        backgroundColor: "white"
+                        plotAreaBackgroundColor: "white"
+                        theme: GraphsTheme.Theme.MixSeries
+                    }
+
+                    axisX: ValueAxis {
+                        id: xAxis
+                        max: listModelData.linePoints.length - 1
+                        tickInterval: 1
+                        labelsVisible: false
+                    }
+                    axisY: ValueAxis {
+                        id: yAxis
+                        max: listModelData.maxValue
+                        tickInterval: Math.abs(max) > Math.abs(min)? max / 3 : min / 3
+                    }
+
+                    LineSeries {
+                        color: listModelData.color
+                        Component.onCompleted: append(listModelData.linePoints);
                     }
                 }
             }
@@ -145,7 +293,7 @@ ColumnLayout {
                         elide: Text.ElideRight
 
                         Layout.alignment: Qt.AlignHCenter
-                        Layout.maximumWidth: imageMediaPreview.width - imageTextMargin
+                        Layout.maximumWidth: thisItem.width - imageTextMargin
                         Layout.leftMargin: imageTextMargin
                         Layout.rightMargin: imageTextMargin
                     }
@@ -157,7 +305,7 @@ ColumnLayout {
                         elide: Text.ElideRight
 
                         Layout.alignment: Qt.AlignHCenter
-                        Layout.maximumWidth: imageMediaPreview.width - imageTextMargin
+                        Layout.maximumWidth: thisItem.width - imageTextMargin
                         Layout.leftMargin: imageTextMargin
                         Layout.rightMargin: imageTextMargin
                     }
