@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2024 Esri
+ *  Copyright 2012-2025 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,14 +16,12 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_MEDIAPOPUPELEMENTVIEWCONTROLLER_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_MEDIAPOPUPELEMENTVIEWCONTROLLER_H
 
-// Toolkit headers
-#include "PopupElementViewItem.h"
-
 // Qt headers
 #include <QObject>
 
 // Other headers
 #include "Internal/GenericListModel.h"
+#include "PopupElementViewItem.h"
 
 namespace Esri::ArcGISRuntime {
 

@@ -1,5 +1,6 @@
+
 /*******************************************************************************
- *  Copyright 2012-2024 Esri
+ *  Copyright 2012-2025 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,20 +17,33 @@
 #include "PopupMediaItem.h"
 
 // Maps SDK headers
+#include <ChartImage.h>
+#include <ChartImageParameters.h>
 #include <PopupMedia.h>
 #include <PopupMediaValue.h>
+
+// Qt headers
+#include <QQmlContext>
+#include <QFuture>
+#include <QDebug>
+#include <QUuid>
+#include <QRandomGenerator>
+#include <QList>
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
   \class Esri::ArcGISRuntime::Toolkit::PopupMediaItem
   \inmodule ArcGISRuntimeToolkit
-  \brief Represents the contents of a \c{MediaPopupElement::media}. Can be accessed via
-  \c{MediaPopupElementViewController::popupMediaItems}.
+  \brief This is the base class for the following PopupMediaItems, \l
+  {Esri::ArcGISRuntime::Toolkit::BarChartPopupMediaItem} {BarChartPopupMediaItem}, and \l
+  {Esri::ArcGISRuntime::Toolkit::PieChartPopupMediaItem} {PieChartPopupMediaItem}, and \l
+  {Esri::ArcGISRuntime::Toolkit::LineChartPopupMediaItem} {LineChartPopupMediaItem}.
 
-  The PopupMediaItem is a wrapper around a PopupMedia, along with any additional
-  meta-information.
-  */
+  It contains a \c PopupMedia and exposes the properties \c PopupElementType, \c title, \c caption. This is used to build a
+  GenericListModel to be provided to MediaPopupElementView which can access the individual PopupMediaItems and
+  construct the appropriate QML components.
+*/
 
 /*!
  \brief Constructor
@@ -52,22 +66,6 @@ QString PopupMediaItem::title() const
 }
 
 /*!
-  \brief Returns the sourceUrl of the \c MediaPopupElement.
- */
-QUrl PopupMediaItem::sourceUrl() const
-{
-  return m_popupMedia->value()->sourceUrl();
-}
-
-/*!
-  \brief Returns the linkUrl of the \c MediaPopupElement.
- */
-QUrl PopupMediaItem::linkUrl() const
-{
-  return m_popupMedia->value()->linkUrl();
-}
-
-/*!
   \brief Returns the caption of the \c MediaPopupElement.
  */
 QString PopupMediaItem::caption() const
@@ -83,19 +81,18 @@ PopupMediaType PopupMediaItem::popupMediaType() const
   return m_popupMedia->popupMediaType();
 }
 
-} // namespace Esri::ArcGISRuntime::Toolkit
+/*!
+  \brief Returns the PopupMedia of the \c MediaPopupElement.
+ */
+PopupMedia* PopupMediaItem::popupMediaItem() const
+{
+  return m_popupMedia;
+}
 
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 /*!
   \property Esri::ArcGISRuntime::Toolkit::PopupMediaItem::title
- */
-
-/*!
-  \property Esri::ArcGISRuntime::Toolkit::PopupMediaItem::sourceUrl
- */
-
-/*!
-  \property Esri::ArcGISRuntime::Toolkit::PopupMediaItem::linkUrl
  */
 
 /*!

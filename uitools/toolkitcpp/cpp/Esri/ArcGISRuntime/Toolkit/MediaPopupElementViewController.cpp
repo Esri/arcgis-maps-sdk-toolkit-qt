@@ -1,5 +1,6 @@
+
 /*******************************************************************************
- *  Copyright 2012-2024 Esri
+ *  Copyright 2012-2025 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,15 +17,22 @@
 #include "MediaPopupElementViewController.h"
 
 // Qt headers
-#include <QDebug>
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QJsonArray>
 
 // Maps SDK headers
 #include <MediaPopupElement.h>
 #include <PopupMedia.h>
 #include <PopupMediaListModel.h>
+#include <PopupTypes.h>
 
 // Toolkit headers
 #include <PopupMediaItem.h>
+#include <ImagePopupMediaItem.h>
+#include <BarChartPopupMediaItem.h>
+#include <PieChartPopupMediaItem.h>
+#include <LineChartPopupMediaItem.h>
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
@@ -48,9 +56,40 @@ MediaPopupElementViewController::MediaPopupElementViewController(
   : PopupElementViewItem{mediaPopupElement, parent},
     m_popupMediaItems{new GenericListModel(&PopupMediaItem::staticMetaObject, this)}
 {
-  for (auto* media: *static_cast<MediaPopupElement*>(popupElement())->media())
+  auto* media = mediaPopupElement->media();
+  for (int i = 0; i < media->size(); i++)
   {
-    m_popupMediaItems->append(new PopupMediaItem(media, this));
+    const QJsonDocument mediaPopupElementJson = QJsonDocument::fromJson(mediaPopupElement->toJson().toUtf8());
+    auto* popupMedia = media->at(i);
+
+    // Get color information for each popup media. If no color is selected when defining a popup, the default
+    // color will be used from the appropriate QtGraphs Series component.
+    // s.a. Web Map Spec: https://developers.arcgis.com/web-map-specification/objects/popupElement_media
+    const auto colors = mediaPopupElementJson.object()["mediaInfos"][i]["value"]["colors"].toArray();
+
+    switch (popupMedia->popupMediaType())
+    {
+      case Esri::ArcGISRuntime::PopupMediaType::Image:
+        m_popupMediaItems->append(new ImagePopupMediaItem(popupMedia, media));
+        break;
+      case Esri::ArcGISRuntime::PopupMediaType::BarChart:
+        m_popupMediaItems->append(new BarChartPopupMediaItem(popupMedia, colors, media));
+        break;
+      case Esri::ArcGISRuntime::PopupMediaType::ColumnChart:
+        m_popupMediaItems->append(new BarChartPopupMediaItem(popupMedia, colors, media));
+        break;
+      case Esri::ArcGISRuntime::PopupMediaType::PieChart:
+        m_popupMediaItems->append(new PieChartPopupMediaItem(popupMedia, colors, media));
+        break;
+      case Esri::ArcGISRuntime::PopupMediaType::LineChart:
+        m_popupMediaItems->append(new LineChartPopupMediaItem(popupMedia, colors, media));
+        break;
+      case Esri::ArcGISRuntime::PopupMediaType::Unknown:
+        break;
+      default:
+        Q_UNIMPLEMENTED();
+        break;
+    }
   }
 }
 
