@@ -35,6 +35,10 @@
 #include <Authentication/ServerTrustCredential.h>
 #include <Authentication/NetworkAuthenticationChallenge.h>
 
+// Toolkit headers
+#include "ArcGISAuthenticationChallengeHandler.h"
+#include "NetworkAuthenticationChallengeHandler.h"
+
 using namespace Esri::ArcGISRuntime;
 using namespace Esri::ArcGISRuntime::Authentication;
 using Esri::ArcGISRuntime::Authentication::AuthenticationManager;
@@ -55,12 +59,15 @@ namespace Esri::ArcGISRuntime::Toolkit {
   \internal
  */
 ArcGISAuthenticationController::ArcGISAuthenticationController(QObject* parent) :
-  QObject(parent),
-  m_arcGISAuthenticationChallengeHandler(ArcGISAuthenticationChallengeHandler{this}),
-  m_networkAuthenticationChallengeHandler(NetworkAuthenticationChallengeHandler{this})
+  QObject(parent)
 {
   if (!canBeUsed_())
+  {
     return;
+  }
+
+  m_arcGISAuthenticationChallengeHandler = std::make_unique<ArcGISAuthenticationChallengeHandler>(this);
+  m_networkAuthenticationChallengeHandler = std::make_unique<NetworkAuthenticationChallengeHandler>(this);
 
   // listen for OAuth prompts
   connect(ArcGISRuntimeEnvironment::instance()->authenticationManager(), &AuthenticationManager::oAuthUserLoginPromptIssued, this,

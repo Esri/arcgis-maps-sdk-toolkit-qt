@@ -24,10 +24,6 @@
 #include <memory>
 #include <mutex>
 
-// Other headers
-#include "ArcGISAuthenticationChallengeHandler.h"
-#include "NetworkAuthenticationChallengeHandler.h"
-
 namespace Esri::ArcGISRuntime::Authentication {
   class OAuthUserConfiguration;
   class OAuthUserLoginPrompt;
@@ -38,6 +34,9 @@ namespace Esri::ArcGISRuntime::Authentication {
 Q_MOC_INCLUDE(<QUrl>)
 
 namespace Esri::ArcGISRuntime::Toolkit {
+
+class ArcGISAuthenticationChallengeHandler;
+class NetworkAuthenticationChallengeHandler;
 
 class ArcGISAuthenticationController : public QObject
 {
@@ -107,8 +106,8 @@ private:
   QString redirectUri_() const;
   int currentChallengeFailureCount_() const;
 
-  ArcGISAuthenticationChallengeHandler m_arcGISAuthenticationChallengeHandler;
-  NetworkAuthenticationChallengeHandler m_networkAuthenticationChallengeHandler;
+  std::unique_ptr<ArcGISAuthenticationChallengeHandler> m_arcGISAuthenticationChallengeHandler;
+  std::unique_ptr<NetworkAuthenticationChallengeHandler> m_networkAuthenticationChallengeHandler;
 
   std::unique_ptr<Authentication::ArcGISAuthenticationChallenge> m_currentArcGISChallenge;
   std::unique_ptr<Authentication::NetworkAuthenticationChallenge> m_currentNetworkChallenge;
