@@ -11,24 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-include($$PWD/common.pri)
+include($$PWD/../common/common.pri)
 
 QT += quickcontrols2 webview svg
 
-REGISTERPATH = $$PWD/toolkitcpp/register/Esri/ArcGISRuntime/Toolkit
+TOOLKITCPP_SRC = $$PWD/src
 
-INCLUDEPATH += $$PWD/toolkitcpp/register $$REGISTERPATH
+INCLUDEPATH += $$TOOLKITCPP_SRC
 
-HEADERS += $$REGISTERPATH/register.h \
-           $$REGISTERPATH/internal/register_cpp.h
+DEPENDPATH += $$TOOLKITCPP_SRC
 
-SOURCES += $$REGISTERPATH/register.cpp \
-           $$REGISTERPATH/internal/register_cpp.cpp
+HEADERS += $$files($$TOOLKITCPP_SRC/*.h)
 
-RESOURCES += \
-  $$PWD/toolkitcpp/images/esri_arcgisruntime_toolkit_images.qrc \
-  $$PWD/toolkitcpp/import/Esri/ArcGISRuntime/Toolkit/esri_arcgisruntime_toolkit_view.qrc
+SOURCES += $$files($$TOOLKITCPP_SRC/*.cpp)
 
-QML_IMPORT_PATH += $$PWD/toolkitcpp/import
+RESOURCES += $$PWD/qml/toolkit_qml.qrc
+
+QML_IMPORT_PATH += $$PWD/qml
 
 DEFINES += CPP_ARCGISRUNTIME_TOOLKIT MAPS_SDK_QT_TOOLKIT

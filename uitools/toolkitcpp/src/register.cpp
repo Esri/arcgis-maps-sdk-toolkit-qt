@@ -1,6 +1,5 @@
-
 /*******************************************************************************
- *  Copyright 2012-2024 Esri
+ *  Copyright 2012-2025 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,7 +13,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#include "register_cpp.h"
+
+#include "register.h"
 
 // Toolkit includes
 #include "ArcGISAuthenticationController.h"
@@ -41,7 +41,6 @@
 #include "SmartLocatorSearchSource.h"
 #include "TimeSliderController.h"
 #include "UtilityNetworkFunctionTraceResultsModel.h"
-#include "UtilityNetworkListItem.h"
 #include "UtilityNetworkTraceController.h"
 #include "UtilityNetworkTraceStartingPoint.h"
 #include "UtilityNetworkTraceStartingPointsModel.h"
@@ -60,6 +59,25 @@
 
 // std includes
 #include <type_traits>
+
+/*!
+  \headerfile Esri/ArcGISRuntime/Toolkit/register
+  \inmodule ArcGISRuntimeToolkit
+
+  This file contains the registration function required to register the toolkit
+  with the `QQmlEngine`.
+
+  Please refer to
+  \c README.md for more information on workflows.
+*/
+
+/*!
+  \fn void Esri::ArcGISRuntime::Toolkit::registerComponents(QQmlEngine& engine)
+  \relates Esri/ArcGISRuntime/Toolkit/register
+  \brief This registration function must be called after the QML \a engine has been
+  declared, but before it is run. This sets up resources and component registration
+  with the `QQmlEngine` and the toolkit.
+ */
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
@@ -125,12 +143,12 @@ namespace Esri::ArcGISRuntime::Toolkit {
       void registerComponentImpl(CreationType::Singleton_, int majorVersion, int minorVersion, const char* name)
       {
         qmlRegisterSingletonType<T>(NAMESPACE, majorVersion, minorVersion, name, [](QQmlEngine* qmlEngine, QJSEngine* jsEngine) -> QObject* {
-          if (!s_arcGISAuthenticationController)
-          {
-            s_arcGISAuthenticationController = T::create(qmlEngine, jsEngine);
-          }
-          return s_arcGISAuthenticationController;
-        });
+                                      if (!s_arcGISAuthenticationController)
+                                      {
+                                        s_arcGISAuthenticationController = T::create(qmlEngine, jsEngine);
+                                      }
+                                      return s_arcGISAuthenticationController;
+                                    });
       }
 
       [[maybe_unused]] constexpr Singleton_ Singleton = Singleton_{};
@@ -187,7 +205,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
   } // namespace
 
-  void registerComponents_cpp_(QQmlEngine& appEngine)
+  void registerComponents(QQmlEngine& appEngine)
   {
     appEngine.addImageProvider(BasemapGalleryImageProvider::PROVIDER_ID, BasemapGalleryImageProvider::instance());
     appEngine.addImportPath(ESRI_COM_PATH);
@@ -216,7 +234,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     registerComponent<SmartLocatorSearchSource>(CreationType::Uncreatable);
     registerComponent<TimeSliderController>();
     registerComponent<UtilityNetworkFunctionTraceResultsModel>();
-    registerComponent<UtilityNetworkListItem>();
     registerComponent<UtilityNetworkTraceController>();
     registerComponent<UtilityNetworkTraceStartingPoint>();
     registerComponent<UtilityNetworkTraceStartingPointsModel>();

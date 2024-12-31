@@ -400,16 +400,16 @@ void TimeSliderController::setSteps(int s, int e)
   setSteps(std::make_pair(s, e));
 }
 
-/*!
- \brief Sets the current steps.
+  // /*!
+  //  \brief Sets the current steps.
 
- Setting steps changes the current time-extent of the \c GeoView to a
- \c TimeExtent range calculated by the current steps using \l timeForStep.
+  //  Setting steps changes the current time-extent of the \c GeoView to a
+  //  \c TimeExtent range calculated by the current steps using \l timeForStep.
 
- \list
- \li \a steps Pair of start end steps.
- \endlist
- */
+  //  \list
+  //  \li \a steps Pair of start end steps.
+  //  \endlist
+  //  */
 void TimeSliderController::setSteps(std::pair<int, int> steps)
 {
   if (steps == m_steps)
