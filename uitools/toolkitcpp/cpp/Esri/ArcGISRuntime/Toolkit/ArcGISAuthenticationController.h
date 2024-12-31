@@ -73,10 +73,10 @@ public:
   Q_INVOKABLE void respond(const QUrl& url);
   Q_INVOKABLE void respondWithError(const QString& platformError);
 
-  Q_INVOKABLE void cancel();
-
   // ServerTrust
-  Q_INVOKABLE void continueWithServerTrust(bool trust, bool remember);
+  Q_INVOKABLE void continueWithServerTrust(bool trust);
+
+  Q_INVOKABLE void cancel();
 
   // ArcGISAuthenticationChallengeHandler relay
   void handleArcGISAuthenticationChallenge(Authentication::ArcGISAuthenticationChallenge* challenge);

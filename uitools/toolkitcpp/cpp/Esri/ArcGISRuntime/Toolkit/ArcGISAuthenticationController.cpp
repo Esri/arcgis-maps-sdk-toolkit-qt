@@ -169,8 +169,11 @@ void ArcGISAuthenticationController::handleNetworkAuthenticationChallenge(Networ
 /*!
   \internal
  */
-void ArcGISAuthenticationController::continueWithServerTrust(bool trust, bool remember)
+void ArcGISAuthenticationController::continueWithServerTrust(bool trust)
 {
+  // to simplify the toolkit experience, 'remember' is always true.
+  // it's uncommon to reject, and want another opportunity to accept later for the same host.
+  constexpr auto remember = true;
   auto* credential = ServerTrustCredential::createWithChallenge(m_currentNetworkChallenge.get(), trust, remember);
   if (credential)
   {
@@ -238,6 +241,12 @@ void ArcGISAuthenticationController::respondWithError(const QString& platformErr
  */
 void ArcGISAuthenticationController::cancel()
 {
+  if (m_currentNetworkChallenge)
+  {
+    m_currentNetworkChallenge->cancel();
+    m_currentNetworkChallenge.reset();
+  }
+
   if (m_currentArcGISChallenge)
   {
     m_currentArcGISChallenge->cancel();

@@ -35,19 +35,18 @@ Dialog {
 
     footer: DialogButtonBox {
         Button {
+            id: blockButton
             text: qsTr("Block")
             DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
         }
         Button {
+            id: trustButton
             text: qsTr("Trust")
             DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
         }
 
-        onAccepted: controller.continueWithServerTrust(
-            true, rememberCheckbox.checked);
-
-        onRejected: controller.continueWithServerTrust(
-            false, rememberCheckbox.checked);
+        onRejected: controller.continueWithServerTrust(false);
+        onAccepted: controller.continueWithServerTrust(true);
     }
 
     ColumnLayout {
@@ -69,12 +68,21 @@ Dialog {
             Layout.fillWidth: true
             Layout.margins: 5
         }
-        CheckBox {
-            id: rememberCheckbox
-            text: qsTr("Remember")
-            checked: false
-            Layout.alignment: Qt.AlignHCenter
-            Layout.margins: 5
-        }
+    }
+
+    /*!
+      \internal
+      \brief automated testing helper
+     */
+    function block() {
+        blockButton.clicked();
+    }
+
+    /*!
+      \internal
+      \brief automated testing helper
+     */
+    function trust() {
+        trustButton.clicked();
     }
 }
