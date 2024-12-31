@@ -60,21 +60,21 @@ Dialog {
             font.weight: Font.Bold
         }
         Label {
-                text: qsTr("The server could not prove itself; its security "
-                         + "certificate is not trusted by your OS. Would you "
-                         + "like to continue anyway?")
-                horizontalAlignment: Qt.AlignHCenter
-                wrapMode: Text.Wrap
-                Layout.preferredWidth: 400
-                Layout.fillWidth: true
-                Layout.margins: 5
-            }
+            text: qsTr("The server could not prove itself; its security "
+                     + "certificate is not trusted by your OS. Would you "
+                     + "like to continue anyway?")
+            horizontalAlignment: Qt.AlignHCenter
+            wrapMode: Text.Wrap
+            Layout.preferredWidth: 400
+            Layout.fillWidth: true
+            Layout.margins: 5
+        }
         CheckBox {
-                id: rememberCheckbox
-                text: qsTr("Remember")
-                checked: false
-                Layout.alignment: Qt.AlignHCenter
-                Layout.margins: 5
-            }
+            id: rememberCheckbox
+            text: qsTr("Remember")
+            checked: false
+            Layout.alignment: Qt.AlignHCenter
+            Layout.margins: 5
+        }
     }
 }
