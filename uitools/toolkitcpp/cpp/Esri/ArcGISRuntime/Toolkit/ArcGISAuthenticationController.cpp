@@ -22,19 +22,17 @@
 #include <QUrl>
 
 // Maps SDK headers
-#include <Authentication/ArcGISAuthenticationChallenge.h>
-#include <Authentication/AuthenticationManager.h>
+#include <ArcGISAuthenticationChallenge.h>
+#include <ArcGISAuthenticationManager.h>
 #include <ArcGISRuntimeEnvironment.h>
 #include <Error.h>
 #include <ErrorException.h>
-#include <Authentication/OAuthUserConfiguration.h>
-#include <Authentication/OAuthUserCredential.h>
-#include <Authentication/OAuthUserLoginPrompt.h>
-#include <Authentication/TokenCredential.h>
+#include <OAuthUserConfiguration.h>
+#include <OAuthUserCredential.h>
+#include <OAuthUserLoginPrompt.h>
+#include <TokenCredential.h>
 
 using namespace Esri::ArcGISRuntime;
-using namespace Esri::ArcGISRuntime::Authentication;
-using Esri::ArcGISRuntime::Authentication::AuthenticationManager;
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
@@ -58,10 +56,10 @@ ArcGISAuthenticationController::ArcGISAuthenticationController(QObject* parent) 
     return;
 
   // Set the authentication manager to use this controller
-  ArcGISRuntimeEnvironment::instance()->authenticationManager()->setArcGISAuthenticationChallengeHandler(this);
+  ArcGISRuntimeEnvironment::instance()->arcGISAuthenticationManager()->setArcGISAuthenticationChallengeHandler(this);
 
   // listen for OAuth prompts
-  connect(ArcGISRuntimeEnvironment::instance()->authenticationManager(), &AuthenticationManager::oAuthUserLoginPromptIssued, this,
+  connect(ArcGISRuntimeEnvironment::instance()->arcGISAuthenticationManager(), &ArcGISAuthenticationManager::oAuthUserLoginPromptIssued, this,
           [this](OAuthUserLoginPrompt* currentOAuthUserLoginPrompt)
   {
     currentOAuthUserLoginPrompt->setParent(nullptr);
