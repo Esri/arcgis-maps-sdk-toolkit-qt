@@ -18,6 +18,7 @@ INCLUDEPATH += $$PWD/toolkitcpp/cpp $$CPPPATH
 
 HEADERS += $$CPPPATH/ArcGISAuthenticationController.h \
            $$CPPPATH/AuthenticationController.h \
+           $$CPPPATH/BarChartPopupMediaItem.h \
            $$CPPPATH/BasemapGalleryController.h \
            $$CPPPATH/BasemapGalleryItem.h \
            $$CPPPATH/BookmarksViewController.h \
@@ -32,8 +33,10 @@ HEADERS += $$CPPPATH/ArcGISAuthenticationController.h \
            $$CPPPATH/FloorFilterFacilityItem.h \
            $$CPPPATH/FloorFilterLevelItem.h \
            $$CPPPATH/FloorFilterSiteItem.h \
+           $$CPPPATH/LineChartPopupMediaItem.h \
            $$CPPPATH/LocatorSearchSource.h \
            $$CPPPATH/MediaPopupElementViewController.h \
+           $$CPPPATH/ImagePopupMediaItem.h \
            $$CPPPATH/Internal/BasemapGalleryImageProvider.h \
            $$CPPPATH/Internal/DisconnectOnSignal.h \
            $$CPPPATH/Internal/DoOnLoad.h \
@@ -45,6 +48,7 @@ HEADERS += $$CPPPATH/ArcGISAuthenticationController.h \
            $$CPPPATH/Internal//QmlEnums.h \
            $$CPPPATH/NorthArrowController.h \
            $$CPPPATH/OverviewMapController.h \
+           $$CPPPATH/PieChartPopupMediaItem.h \
            $$CPPPATH/PopupElementViewItem.h \
            $$CPPPATH/PopupMediaItem.h \
            $$CPPPATH/PopupViewController.h \
@@ -65,6 +69,7 @@ HEADERS += $$CPPPATH/ArcGISAuthenticationController.h \
 
 SOURCES += $$CPPPATH/ArcGISAuthenticationController.cpp \
            $$CPPPATH/AuthenticationController.cpp \
+           $$CPPPATH/BarChartPopupMediaItem.cpp \
            $$CPPPATH/BasemapGalleryController.cpp \
            $$CPPPATH/BasemapGalleryItem.cpp \
            $$CPPPATH/BookmarksViewController.cpp \
@@ -79,8 +84,10 @@ SOURCES += $$CPPPATH/ArcGISAuthenticationController.cpp \
            $$CPPPATH/FloorFilterFacilityItem.cpp \
            $$CPPPATH/FloorFilterLevelItem.cpp \
            $$CPPPATH/FloorFilterSiteItem.cpp \
+           $$CPPPATH/LineChartPopupMediaItem.cpp \
            $$CPPPATH/LocatorSearchSource.cpp \
            $$CPPPATH/MediaPopupElementViewController.cpp \
+           $$CPPPATH/ImagePopupMediaItem.cpp \
            $$CPPPATH/Internal/BasemapGalleryImageProvider.cpp \
            $$CPPPATH/Internal/GenericListModel.cpp \
            $$CPPPATH/Internal/GenericTableProxyModel.cpp \
@@ -88,6 +95,7 @@ SOURCES += $$CPPPATH/ArcGISAuthenticationController.cpp \
            $$CPPPATH/Internal/QmlEnums.cpp \
            $$CPPPATH/NorthArrowController.cpp \
            $$CPPPATH/OverviewMapController.cpp \
+           $$CPPPATH/PieChartPopupMediaItem.cpp \
            $$CPPPATH/PopupElementViewItem.cpp \
            $$CPPPATH/PopupMediaItem.cpp \
            $$CPPPATH/PopupViewController.cpp \
