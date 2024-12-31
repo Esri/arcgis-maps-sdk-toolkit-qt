@@ -25,6 +25,7 @@
 // Maps SDK headers
 #include <Authentication/ArcGISAuthenticationChallenge.h>
 #include <Authentication/AuthenticationManager.h>
+#include <Authentication/AuthenticationTypes.h>
 #include <ArcGISRuntimeEnvironment.h>
 #include <Error.h>
 #include <ErrorException.h>
@@ -161,16 +162,18 @@ void ArcGISAuthenticationController::handleNetworkAuthenticationChallenge(Networ
     return;
   }
 
-  if (!m_currentNetworkChallenge->sslErrors().isEmpty())
+  switch(m_currentNetworkChallenge->networkChallengeType())
   {
-    // SSL errors implies an SSL handshake challenge, aka server trust
-    emit displayServerTrustView();
+    case NetworkChallengeType::ServerTrust:
+    {
+      emit displayServerTrustView();
+      return;
+    }
   }
-  else
-  {
-    Q_UNIMPLEMENTED();
-    qWarning() << "unimplemented network authentication challenge";
-  }
+
+  m_currentNetworkChallenge.reset();
+  Q_UNIMPLEMENTED();
+  qWarning() << "unimplemented network authentication challenge";
 }
 
 /*!
