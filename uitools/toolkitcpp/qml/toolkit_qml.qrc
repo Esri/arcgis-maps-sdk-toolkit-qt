@@ -1,30 +1,30 @@
 <RCC>
-    <qresource prefix="esri.com/imports/Esri/ArcGISRuntime/Toolkit">
-        <file>ArcGISAuthenticationView_internal.qml</file>
-        <file>ArcGISAuthenticationView.qml</file>
-        <file>ArcGISOAuth2View.qml</file>
-        <file>ArcGISUserCredentialsView.qml</file>
-        <file>AuthenticationView.qml</file>
-        <file>BasemapGallery.qml</file>
-        <file>BookmarksView.qml</file>
-        <file>Callout.qml</file>
-        <file>ClientCertificateView.qml</file>
-        <file>CoordinateConversion.qml</file>
-        <file>CurrentVersion.qml</file>
-        <file>FlashImage.qml</file>
-        <file>FloorFilter.qml</file>
-        <file>NorthArrow.qml</file>
-        <file>OAuth2View.qml</file>
-        <file>OverviewMap.qml</file>
-        <file>PopupStackView.qml</file>
-        <file>PopupView.qml</file>
-        <file>Scalebar.qml</file>
-        <file>ScalebarImpl.qml</file>
-        <file>SearchView.qml</file>
-        <file>SslHandshakeView.qml</file>
-        <file>TimeSlider.qml</file>
-        <file>UserCredentialsView.qml</file>
-        <file>UtilityNetworkTrace.qml</file>
-        <file>qmldir</file>
+    <qresource prefix="/Esri/ArcGISRuntime/Toolkit">
+        <file>Esri/ArcGISRuntime/Toolkit/ArcGISAuthenticationView_internal.qml</file>
+        <file>Esri/ArcGISRuntime/Toolkit/ArcGISAuthenticationView.qml</file>
+        <file>Esri/ArcGISRuntime/Toolkit/ArcGISOAuth2View.qml</file>
+        <file>Esri/ArcGISRuntime/Toolkit/ArcGISUserCredentialsView.qml</file>
+        <file>Esri/ArcGISRuntime/Toolkit/AuthenticationView.qml</file>
+        <file>Esri/ArcGISRuntime/Toolkit/BasemapGallery.qml</file>
+        <file>Esri/ArcGISRuntime/Toolkit/BookmarksView.qml</file>
+        <file>Esri/ArcGISRuntime/Toolkit/Callout.qml</file>
+        <file>Esri/ArcGISRuntime/Toolkit/ClientCertificateView.qml</file>
+        <file>Esri/ArcGISRuntime/Toolkit/CoordinateConversion.qml</file>
+        <file>Esri/ArcGISRuntime/Toolkit/CurrentVersion.qml</file>
+        <file>Esri/ArcGISRuntime/Toolkit/FlashImage.qml</file>
+        <file>Esri/ArcGISRuntime/Toolkit/FloorFilter.qml</file>
+        <file>Esri/ArcGISRuntime/Toolkit/NorthArrow.qml</file>
+        <file>Esri/ArcGISRuntime/Toolkit/OAuth2View.qml</file>
+        <file>Esri/ArcGISRuntime/Toolkit/OverviewMap.qml</file>
+        <file>Esri/ArcGISRuntime/Toolkit/PopupStackView.qml</file>
+        <file>Esri/ArcGISRuntime/Toolkit/PopupView.qml</file>
+        <file>Esri/ArcGISRuntime/Toolkit/qmldir</file>
+        <file>Esri/ArcGISRuntime/Toolkit/Scalebar.qml</file>
+        <file>Esri/ArcGISRuntime/Toolkit/ScalebarImpl.qml</file>
+        <file>Esri/ArcGISRuntime/Toolkit/SearchView.qml</file>
+        <file>Esri/ArcGISRuntime/Toolkit/SslHandshakeView.qml</file>
+        <file>Esri/ArcGISRuntime/Toolkit/TimeSlider.qml</file>
+        <file>Esri/ArcGISRuntime/Toolkit/UserCredentialsView.qml</file>
+        <file>Esri/ArcGISRuntime/Toolkit/UtilityNetworkTrace.qml</file>
     </qresource>
 </RCC>
