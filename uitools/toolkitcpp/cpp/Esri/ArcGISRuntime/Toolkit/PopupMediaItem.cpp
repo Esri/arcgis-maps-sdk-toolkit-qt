@@ -21,14 +21,6 @@
 #include <PopupMedia.h>
 #include <PopupMediaValue.h>
 
-// Qt headers
-#include <QQmlContext>
-#include <QFuture>
-#include <QDebug>
-#include <QUuid>
-#include <QRandomGenerator>
-#include <QList>
-
 namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
