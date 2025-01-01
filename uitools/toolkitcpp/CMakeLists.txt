@@ -22,7 +22,7 @@ qt_standard_project_setup()
 
 qt_add_library(libtoolkitcpp STATIC
     cpp/Esri/ArcGISRuntime/Toolkit/ArcGISAuthenticationController.cpp cpp/Esri/ArcGISRuntime/Toolkit/ArcGISAuthenticationController.h
-    cpp/Esri/ArcGISRuntime/Toolkit/ArcGISAuthenticationChallengeHandler.cpp cpp/Esri/ArcGISRuntime/Toolkit/ArcGISAuthenticationChallengeHandler.h
+    cpp/Esri/ArcGISRuntime/Toolkit/ArcGISAuthenticationChallengeRelay.cpp cpp/Esri/ArcGISRuntime/Toolkit/ArcGISAuthenticationChallengeRelay.h
     cpp/Esri/ArcGISRuntime/Toolkit/AuthenticationController.cpp cpp/Esri/ArcGISRuntime/Toolkit/AuthenticationController.h
     cpp/Esri/ArcGISRuntime/Toolkit/BasemapGalleryController.cpp cpp/Esri/ArcGISRuntime/Toolkit/BasemapGalleryController.h
     cpp/Esri/ArcGISRuntime/Toolkit/BasemapGalleryItem.cpp cpp/Esri/ArcGISRuntime/Toolkit/BasemapGalleryItem.h
@@ -46,7 +46,7 @@ qt_add_library(libtoolkitcpp STATIC
     cpp/Esri/ArcGISRuntime/Toolkit/Internal/MetaElement.cpp cpp/Esri/ArcGISRuntime/Toolkit/Internal/MetaElement.h
     cpp/Esri/ArcGISRuntime/Toolkit/Internal/SingleShotConnection.h
     cpp/Esri/ArcGISRuntime/Toolkit/LocatorSearchSource.cpp cpp/Esri/ArcGISRuntime/Toolkit/LocatorSearchSource.h
-    cpp/Esri/ArcGISRuntime/Toolkit/NetworkAuthenticationChallengeHandler.cpp cpp/Esri/ArcGISRuntime/Toolkit/NetworkAuthenticationChallengeHandler.h
+    cpp/Esri/ArcGISRuntime/Toolkit/NetworkAuthenticationChallengeRelay.cpp cpp/Esri/ArcGISRuntime/Toolkit/NetworkAuthenticationChallengeRelay.h
     cpp/Esri/ArcGISRuntime/Toolkit/NorthArrowController.cpp cpp/Esri/ArcGISRuntime/Toolkit/NorthArrowController.h
     cpp/Esri/ArcGISRuntime/Toolkit/OverviewMapController.cpp cpp/Esri/ArcGISRuntime/Toolkit/OverviewMapController.h
     cpp/Esri/ArcGISRuntime/Toolkit/PopupViewController.cpp cpp/Esri/ArcGISRuntime/Toolkit/PopupViewController.h

@@ -14,11 +14,11 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#include "NetworkAuthenticationChallengeHandler.h"
+#include "ArcGISAuthenticationChallengeRelay.h"
 #include "ArcGISAuthenticationController.h"
 
 // Maps SDK headers
-#include <Authentication/NetworkAuthenticationChallenge.h>
+#include <Authentication/ArcGISAuthenticationChallenge.h>
 #include <Authentication/AuthenticationManager.h>
 #include <ArcGISRuntimeEnvironment.h>
 
@@ -28,10 +28,10 @@ using namespace Esri::ArcGISRuntime::Authentication;
 namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
- \class Toolkit::NetworkAuthenticationChallengeHandler
+ \class Toolkit::ArcGISAuthenticationChallengeRelay
  \inmodule EsriArcGISRuntimeToolkit
  \ingroup ArcGISQtToolkitUiCppControllers
- \brief Simple implementation of NetworkAuthenticationChallengeHandler.
+ \brief Simple implementation of ArcGISAuthenticationChallengeHandler.
 
  \internal
  */
@@ -39,24 +39,24 @@ namespace Esri::ArcGISRuntime::Toolkit {
 /*!
   \internal
  */
-NetworkAuthenticationChallengeHandler::NetworkAuthenticationChallengeHandler(ArcGISAuthenticationController* controller) :
-  Authentication::NetworkAuthenticationChallengeHandler(controller),
+ArcGISAuthenticationChallengeRelay::ArcGISAuthenticationChallengeRelay(ArcGISAuthenticationController* controller) :
+  ArcGISAuthenticationChallengeHandler(controller),
   m_controller(controller)
 {
-  ArcGISRuntimeEnvironment::instance()->authenticationManager()->setNetworkAuthenticationChallengeHandler(this);
+  ArcGISRuntimeEnvironment::instance()->authenticationManager()->setArcGISAuthenticationChallengeHandler(this);
 }
 
 /*!
   \internal
  */
-NetworkAuthenticationChallengeHandler::~NetworkAuthenticationChallengeHandler() = default;
+ArcGISAuthenticationChallengeRelay::~ArcGISAuthenticationChallengeRelay() = default;
 
 /*!
   \internal
  */
-void NetworkAuthenticationChallengeHandler::handleNetworkAuthenticationChallenge(Authentication::NetworkAuthenticationChallenge* challenge)
+void ArcGISAuthenticationChallengeRelay::handleArcGISAuthenticationChallenge(ArcGISAuthenticationChallenge* challenge)
 {
-  m_controller->handleNetworkAuthenticationChallenge(challenge);
+  m_controller->handleArcGISAuthenticationChallenge(challenge);
 }
 
 } //  Esri::ArcGISRuntime::Toolkit

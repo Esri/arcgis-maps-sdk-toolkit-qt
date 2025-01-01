@@ -35,8 +35,8 @@ Q_MOC_INCLUDE(<QUrl>)
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-class ArcGISAuthenticationChallengeHandler;
-class NetworkAuthenticationChallengeHandler;
+class ArcGISAuthenticationChallengeRelay;
+class NetworkAuthenticationChallengeRelay;
 
 class ArcGISAuthenticationController : public QObject
 {
@@ -106,8 +106,8 @@ private:
   QString redirectUri_() const;
   int currentChallengeFailureCount_() const;
 
-  std::unique_ptr<ArcGISAuthenticationChallengeHandler> m_arcGISAuthenticationChallengeHandler;
-  std::unique_ptr<NetworkAuthenticationChallengeHandler> m_networkAuthenticationChallengeHandler;
+  std::unique_ptr<ArcGISAuthenticationChallengeRelay> m_arcGISAuthenticationChallengeRelay;
+  std::unique_ptr<NetworkAuthenticationChallengeRelay> m_networkAuthenticationChallengeRelay;
 
   std::unique_ptr<Authentication::ArcGISAuthenticationChallenge> m_currentArcGISChallenge;
   std::unique_ptr<Authentication::NetworkAuthenticationChallenge> m_currentNetworkChallenge;

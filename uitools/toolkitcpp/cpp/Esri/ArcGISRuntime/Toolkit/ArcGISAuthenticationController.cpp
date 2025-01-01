@@ -37,8 +37,8 @@
 #include <Authentication/NetworkAuthenticationChallenge.h>
 
 // Toolkit headers
-#include "ArcGISAuthenticationChallengeHandler.h"
-#include "NetworkAuthenticationChallengeHandler.h"
+#include "ArcGISAuthenticationChallengeRelay.h"
+#include "NetworkAuthenticationChallengeRelay.h"
 
 using namespace Esri::ArcGISRuntime;
 using namespace Esri::ArcGISRuntime::Authentication;
@@ -67,11 +67,11 @@ ArcGISAuthenticationController::ArcGISAuthenticationController(QObject* parent) 
     return;
   }
 
-  m_arcGISAuthenticationChallengeHandler = std::make_unique<ArcGISAuthenticationChallengeHandler>(this);
-  m_networkAuthenticationChallengeHandler = std::make_unique<NetworkAuthenticationChallengeHandler>(this);
+  m_arcGISAuthenticationChallengeRelay = std::make_unique<ArcGISAuthenticationChallengeRelay>(this);
+  m_networkAuthenticationChallengeRelay = std::make_unique<NetworkAuthenticationChallengeRelay>(this);
 
   // listen for OAuth prompts
-  connect(ArcGISRuntimeEnvironment::instance()->authenticationManager(), &AuthenticationManager::oAuthUserLoginPromptIssued, this,
+  connect(ArcGISRuntimeEnvironment::authenticationManager(), &AuthenticationManager::oAuthUserLoginPromptIssued, this,
           [this](OAuthUserLoginPrompt* currentOAuthUserLoginPrompt)
   {
     currentOAuthUserLoginPrompt->setParent(nullptr);
@@ -96,7 +96,9 @@ ArcGISAuthenticationController* ArcGISAuthenticationController::create(QQmlEngin
   static QPointer<ArcGISAuthenticationController> instance = new ArcGISAuthenticationController(qmlEngine);
 
   if (!instance)
+  {
     instance = new ArcGISAuthenticationController(qmlEngine);
+  }
 
   return instance;
 }
@@ -128,14 +130,18 @@ void ArcGISAuthenticationController::handleArcGISAuthenticationChallenge(ArcGISA
       OAuthUserCredential::createAsync(userConfiguration, this).then(this, [this](OAuthUserCredential* credential)
       {
         if (!m_currentArcGISChallenge)
+        {
           return;
+        }
 
         m_currentArcGISChallenge->continueWithCredential(credential);
         m_currentArcGISChallenge.reset();
       }).onFailed(this, [this](const ErrorException& e)
       {
         if (!m_currentArcGISChallenge)
+        {
           return;
+        }
 
         m_currentArcGISChallenge->continueAndFailWithError(e.error());
         m_currentArcGISChallenge.reset();
@@ -198,7 +204,9 @@ void ArcGISAuthenticationController::continueWithServerTrust(bool trust)
 void ArcGISAuthenticationController::continueWithUsernamePassword(const QString& username, const QString& password)
 {
   if (!m_currentArcGISChallenge)
+  {
     return;
+  }
 
   TokenCredential::createAsync(m_currentArcGISChallenge->requestUrl(),
                                username,
@@ -207,7 +215,7 @@ void ArcGISAuthenticationController::continueWithUsernamePassword(const QString&
   {
     m_currentArcGISChallenge->continueWithCredential(credential);
     m_currentArcGISChallenge.reset();
-  }).onFailed(this, [this](ErrorException e)
+  }).onFailed(this, [this](const ErrorException& e)
   {
     if ((++m_currentChallengeFailureCount) >= s_maxChallengeFailureCount)
     {
@@ -228,7 +236,9 @@ void ArcGISAuthenticationController::continueWithUsernamePassword(const QString&
 void ArcGISAuthenticationController::respond(const QUrl& url)
 {
   if (!m_currentOAuthUserLoginPrompt)
+  {
     return;
+  }
 
   m_currentOAuthUserLoginPrompt->respond(url);
   m_currentOAuthUserLoginPrompt.reset();
@@ -240,7 +250,9 @@ void ArcGISAuthenticationController::respond(const QUrl& url)
 void ArcGISAuthenticationController::respondWithError(const QString& platformError)
 {
   if (!m_currentOAuthUserLoginPrompt)
+  {
     return;
+  }
 
   m_currentOAuthUserLoginPrompt->respondWithError(platformError);
   m_currentOAuthUserLoginPrompt.reset();

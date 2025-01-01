@@ -13,8 +13,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_NETWORKAUTHENTICATIONCHALLENGEHANDLER_H
-#define ESRI_ARCGISRUNTIME_TOOLKIT_NETWORKAUTHENTICATIONCHALLENGEHANDLER_H
+#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_NETWORKAUTHENTICATIONCHALLENGERELAY_H
+#define ESRI_ARCGISRUNTIME_TOOLKIT_NETWORKAUTHENTICATIONCHALLENGERELAY_H
 
 // Maps SDK headers
 #include <Authentication/NetworkAuthenticationChallengeHandler.h>
@@ -22,13 +22,13 @@
 namespace Esri::ArcGISRuntime::Toolkit {
 
 class ArcGISAuthenticationController;
-class NetworkAuthenticationChallengeHandler : public Authentication::NetworkAuthenticationChallengeHandler
+class NetworkAuthenticationChallengeRelay : public Authentication::NetworkAuthenticationChallengeHandler
 {
   Q_OBJECT
 
 public:
-  explicit NetworkAuthenticationChallengeHandler(ArcGISAuthenticationController* controller);
-  ~NetworkAuthenticationChallengeHandler();
+  explicit NetworkAuthenticationChallengeRelay(ArcGISAuthenticationController* controller);
+  ~NetworkAuthenticationChallengeRelay();
 
 protected:
   void handleNetworkAuthenticationChallenge(Authentication::NetworkAuthenticationChallenge* challenge) override;
@@ -39,4 +39,4 @@ private:
 
 } // Esri::ArcGISRuntime::Toolkit
 
-#endif // ESRI_ARCGISRUNTIME_TOOLKIT_NETWORKAUTHENTICATIONCHALLENGEHANDLER_H
+#endif // ESRI_ARCGISRUNTIME_TOOLKIT_NETWORKAUTHENTICATIONCHALLENGERELAY_H
