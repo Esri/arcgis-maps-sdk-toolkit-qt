@@ -41,7 +41,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
  */
 LineChartPopupMediaItem::LineChartPopupMediaItem(PopupMedia* popupMedia, const QJsonArray& jsonColorArray, QObject* parent)
   : PopupMediaItem{popupMedia, parent},
-    m_jsonDoc{jsonColorArray}
+    m_jsonArr{jsonColorArray}
 {
   auto mediaValue = popupMediaItem()->value();
   for (int i = 0; i < mediaValue->data().length(); i++ )
@@ -59,10 +59,10 @@ LineChartPopupMediaItem::LineChartPopupMediaItem(PopupMedia* popupMedia, const Q
     m_linePoints.append(point);
   }
 
-  if (!m_jsonDoc.isEmpty())
+  if (!m_jsonArr.isEmpty())
   {
     // color scheme is [Red, Green, Blue, Alpha]
-    m_color = QColor(m_jsonDoc[0][0].toInt(), m_jsonDoc[0][1].toInt(), m_jsonDoc[0][2].toInt(), m_jsonDoc[0][3].toInt());
+    m_color = QColor(m_jsonArr[0][0].toInt(), m_jsonArr[0][1].toInt(), m_jsonArr[0][2].toInt(), m_jsonArr[0][3].toInt());
   }
 }
 

@@ -16,12 +16,12 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_BARCHARTPOPUPMEDIAITEM_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_BARCHARTPOPUPMEDIAITEM_H
 
-// Toolkit headers
-#include "PopupMediaItem.h"
-
 // Qt headers
 #include <QJsonArray>
 #include <QObject>
+
+// Other headers
+#include "PopupMediaItem.h"
 
 class QBarSet;
 
@@ -51,7 +51,7 @@ signals:
 
 private:
   QList<QBarSet*> m_barSets;
-  QJsonArray m_jsonDoc;
+  QJsonArray m_jsonArr;
   qreal m_maxValue = 0.0;
   qreal m_minValue = 0.0;
 };

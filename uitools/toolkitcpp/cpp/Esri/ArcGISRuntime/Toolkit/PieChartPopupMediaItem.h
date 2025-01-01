@@ -45,8 +45,7 @@ signals:
   void pieChartPopupMediaItemChanged();
 
 private:
-  QJsonArray m_jsonDoc;
-
+  QJsonArray m_jsonArr;
 };
 
 } // Toolkit

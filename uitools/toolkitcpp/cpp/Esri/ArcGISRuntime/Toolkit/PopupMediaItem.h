@@ -17,10 +17,7 @@
 #define ESRI_ARCGISRUNTIME_TOOLKIT_POPUPMEDIAITEM_H
 
 // Qt headers
-#include <QImage>
 #include <QObject>
-#include <QUrl>
-#include <QVariant>
 
 // Other headers
 #include "Internal/QmlEnums.h"
@@ -55,7 +52,6 @@ signals:
 
 private:
   PopupMedia* m_popupMedia = nullptr;
-  QImage m_mediaImage;
 };
 
 } // Toolkit

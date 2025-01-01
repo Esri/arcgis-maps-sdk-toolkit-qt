@@ -16,6 +16,7 @@
 #include "PieChartPopupMediaItem.h"
 
 // Qt headers
+#include <QColor>
 #include <QPieSlice>
 
 // Maps SDK headers
@@ -41,7 +42,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
  */
 PieChartPopupMediaItem::PieChartPopupMediaItem(PopupMedia* popupMedia, const QJsonArray& jsonColorArray, QObject* parent)
   : PopupMediaItem{popupMedia, parent},
-    m_jsonDoc{jsonColorArray}
+    m_jsonArr{jsonColorArray}
 {
 }
 
@@ -64,10 +65,10 @@ QList<QPieSlice*> PieChartPopupMediaItem::pieSlices()
     const auto value = mediaValue->data().at(i).toReal();
 
     auto* pieSlice = new QPieSlice(label, value);
-    if (!m_jsonDoc.isEmpty())
+    if (!m_jsonArr.isEmpty())
     {
       // color scheme is [Red, Green, Blue, Alpha]
-      auto color = QColor(m_jsonDoc[i][0].toInt(), m_jsonDoc[i][1].toInt(), m_jsonDoc[i][2].toInt(), m_jsonDoc[i][3].toInt());
+      auto color = QColor(m_jsonArr[i][0].toInt(), m_jsonArr[i][1].toInt(), m_jsonArr[i][2].toInt(), m_jsonArr[i][3].toInt());
       pieSlice->setColor(color);
       pieSlice->setBorderColor(color);
     }

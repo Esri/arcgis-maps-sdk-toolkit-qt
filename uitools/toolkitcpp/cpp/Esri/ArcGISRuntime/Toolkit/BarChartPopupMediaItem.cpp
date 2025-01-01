@@ -17,6 +17,7 @@
 
 // Qt headers
 #include <QBarSet>
+#include <QColor>
 
 // Maps SDK headers
 #include <PopupMedia.h>
@@ -41,7 +42,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
  */
 BarChartPopupMediaItem::BarChartPopupMediaItem(PopupMedia* popupMedia, const QJsonArray& jsonColorArray, QObject* parent)
   : PopupMediaItem{popupMedia, parent},
-    m_jsonDoc{jsonColorArray}
+    m_jsonArr{jsonColorArray}
 {
 }
 
@@ -66,10 +67,10 @@ QList<QBarSet*> BarChartPopupMediaItem::barSets()
 
     const auto barset = new QBarSet(label, this);
     barset->append(value);
-    if (!m_jsonDoc.isEmpty())
+    if (!m_jsonArr.isEmpty())
     {
       // color scheme is [Red, Green, Blue, Alpha]
-      auto color = QColor(m_jsonDoc[i][0].toInt(), m_jsonDoc[i][1].toInt(), m_jsonDoc[i][2].toInt(), m_jsonDoc[i][3].toInt());
+      auto color = QColor(m_jsonArr[i][0].toInt(), m_jsonArr[i][1].toInt(), m_jsonArr[i][2].toInt(), m_jsonArr[i][3].toInt());
       barset->setColor(color);
       barset->setBorderColor(color);
     }

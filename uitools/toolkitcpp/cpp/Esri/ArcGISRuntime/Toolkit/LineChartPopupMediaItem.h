@@ -53,7 +53,7 @@ signals:
 
 private:
   QList<QPointF> m_linePoints;
-  QJsonArray m_jsonDoc;
+  QJsonArray m_jsonArr;
   QColor m_color;
   qreal m_maxValue = 0.0;
   qreal m_minValue = 0.0;
