@@ -25,7 +25,7 @@ HEADERS += $$files($$TOOLKITCPP_SRC/*.h)
 
 SOURCES += $$files($$TOOLKITCPP_SRC/*.cpp)
 
-RESOURCES += $$PWD/qml/Esri/ArcGISRuntime/Toolkit/toolkit_qml.qrc
+RESOURCES += $$PWD/qml/Esri/ArcGISRuntime/Toolkit/esri_arcgisruntime_toolkit_qml.qrc
 
 QML_IMPORT_PATH += $$PWD/qml
 

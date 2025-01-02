@@ -25,7 +25,7 @@ HEADERS += $$REGISTERPATH/register.h \
 SOURCES += $$REGISTERPATH/register.cpp \
            $$REGISTERPATH/internal/register_cpp.cpp
 
-RESOURCES += $$PWD/../common/images/esri_arcgisruntime_toolkit_images.qrc
+RESOURCES += $$PWD/../common/images/esri_arcgisruntime_toolkit_common_images.qrc
 
 QML_IMPORT_PATH += $$PWD/toolkitcpp/import
 

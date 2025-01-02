@@ -31,7 +31,7 @@
     SOURCES += $$files($$TOOLKIT_COMMON_SRC/*.cpp) \
                $$files($$TOOLKIT_COMMON_SRC/Internal/*.cpp)
 
-    RESOURCES += $$PWD/images/toolkit_common_images.qrc
+    RESOURCES += $$PWD/images/esri_arcgisruntime_toolkit_common_images.qrc
 
-    TOOLKIT_COMMON_INCLUDED = xxxx
+    TOOLKIT_COMMON_INCLUDED = true
 }

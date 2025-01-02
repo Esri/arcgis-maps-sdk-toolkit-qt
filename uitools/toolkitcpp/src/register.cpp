@@ -142,7 +142,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
       template <class T>
       void registerComponentImpl(CreationType::Singleton_, int majorVersion, int minorVersion, const char* name)
       {
-        qmlRegisterSingletonType<T>(NAMESPACE, majorVersion, minorVersion, name, [](QQmlEngine* qmlEngine, QJSEngine* jsEngine) -> QObject* {
+        qmlRegisterSingletonType<T>(NAMESPACE, majorVersion, minorVersion, name,
+                                    [](QQmlEngine* qmlEngine, QJSEngine* jsEngine) -> QObject*
+                                    {
                                       if (!s_arcGISAuthenticationController)
                                       {
                                         s_arcGISAuthenticationController = T::create(qmlEngine, jsEngine);
