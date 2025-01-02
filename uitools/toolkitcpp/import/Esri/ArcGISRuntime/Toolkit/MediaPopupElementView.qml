@@ -94,7 +94,7 @@ ColumnLayout {
         Layout.rightMargin: mediaPopupElementView.mediaMargin
 
         delegate: Item {
-            id: thisItem
+            id: delegatePopupMedia
             height: 170
             width: 220
 
@@ -123,8 +123,8 @@ ColumnLayout {
                     fillMode: Image.PreserveAspectCrop
                     asynchronous: true
                     cache: true
-                    height: thisItem.height
-                    width: thisItem.width
+                    height: delegatePopupMedia.height
+                    width: delegatePopupMedia.width
 
                     Layout.leftMargin: mediaPopupElementView.mediaMargin
 
@@ -142,8 +142,8 @@ ColumnLayout {
             Component {
                 id: columnChartComp
                 GraphsView {
-                    height: thisItem.height
-                    width: thisItem.width
+                    height: delegatePopupMedia.height
+                    width: delegatePopupMedia.width
                     marginTop: 10
                     marginBottom: 10
                     marginLeft: 10
@@ -173,8 +173,8 @@ ColumnLayout {
             Component {
                 id: barChartComp
                 GraphsView {
-                    height: thisItem.height
-                    width: thisItem.width
+                    height: delegatePopupMedia.height
+                    width: delegatePopupMedia.width
                     marginTop: 10
                     marginBottom: 10
                     marginLeft: -50
@@ -205,8 +205,8 @@ ColumnLayout {
             Component {
                 id: pieChartComp
                 GraphsView {
-                    height: thisItem.height
-                    width: thisItem.width
+                    height: delegatePopupMedia.height
+                    width: delegatePopupMedia.width
                     marginTop: -25
                     marginBottom: -25
                     marginLeft: -25
@@ -230,8 +230,8 @@ ColumnLayout {
             Component {
                 id: lineChartComp
                 GraphsView {
-                    height: thisItem.height
-                    width: thisItem.width
+                    height: delegatePopupMedia.height
+                    width: delegatePopupMedia.width
                     marginTop: 10
                     marginBottom: 10
                     marginLeft: 10
@@ -293,7 +293,7 @@ ColumnLayout {
                         elide: Text.ElideRight
 
                         Layout.alignment: Qt.AlignHCenter
-                        Layout.maximumWidth: thisItem.width - imageTextMargin
+                        Layout.maximumWidth: delegatePopupMedia.width - imageTextMargin
                         Layout.leftMargin: imageTextMargin
                         Layout.rightMargin: imageTextMargin
                     }
@@ -305,7 +305,7 @@ ColumnLayout {
                         elide: Text.ElideRight
 
                         Layout.alignment: Qt.AlignHCenter
-                        Layout.maximumWidth: thisItem.width - imageTextMargin
+                        Layout.maximumWidth: delegatePopupMedia.width - imageTextMargin
                         Layout.leftMargin: imageTextMargin
                         Layout.rightMargin: imageTextMargin
                     }
