@@ -28,12 +28,16 @@ using namespace Esri::ArcGISRuntime::Authentication;
 namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
- \class Toolkit::ArcGISAuthenticationChallengeRelay
- \inmodule EsriArcGISRuntimeToolkit
- \ingroup ArcGISQtToolkitUiCppControllers
- \brief Simple implementation of ArcGISAuthenticationChallengeHandler.
+  \class Esri::ArcGISRuntime::Toolkit::ArcGISAuthenticationChallengeRelay
+  \inmodule EsriArcGISRuntimeToolkit
+  \ingroup ArcGISQtToolkitUiCppControllers
+  \brief Simple implementation of the ArcGISAuthenticationChallengeHandler interface.
 
- \internal
+  This class is used to relay authentication challenges to the ArcGISAuthenticationController. Since multiple
+  inheritance of QObject is not allowed, and both ChallengeHandler classes inherit QObject, we use a
+  composition pattern instead.
+
+  \internal
  */
 
 /*!
