@@ -25,7 +25,6 @@
 // Qt headers
 #include <QMouseEvent>
 
-
 namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!

@@ -1,4 +1,4 @@
-# Copyright 2012-2020 Esri
+# Copyright 2012-2025 Esri
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,22 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-include($$PWD/../common/common.pri)
 
-QT += quickcontrols2 webview svg
-
-TOOLKITCPP_SRC = $$PWD/src
-
-INCLUDEPATH += $$TOOLKITCPP_SRC
-
-DEPENDPATH += $$TOOLKITCPP_SRC
-
-HEADERS += $$files($$TOOLKITCPP_SRC/Esri/ArcGISRuntime/Toolkit/*.h)
-
-SOURCES += $$files($$TOOLKITCPP_SRC/Esri/ArcGISRuntime/Toolkit/*.cpp)
-
-RESOURCES += $$PWD/qml/Esri/ArcGISRuntime/Toolkit/esri_arcgisruntime_toolkit_qml.qrc
-
-QML_IMPORT_PATH += $$PWD/qml
-
-DEFINES += CPP_ARCGISRUNTIME_TOOLKIT MAPS_SDK_QT_TOOLKIT
+message("This file is deprecated. Prefer to use toolkitcpp/toolkitcpp.pri")
+include($$PWD/toolkitcpp/toolkitcpp.pri)
