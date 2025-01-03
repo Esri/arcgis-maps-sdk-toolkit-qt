@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2024 Esri
+ *  Copyright 2012-2025 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_NETWORKAUTHENTICATIONCHALLENGERELAY_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_NETWORKAUTHENTICATIONCHALLENGERELAY_H
 
-// Maps SDK headers
+// STL headers
 #include <Authentication/NetworkAuthenticationChallengeHandler.h>
 
 namespace Esri::ArcGISRuntime::Toolkit {
