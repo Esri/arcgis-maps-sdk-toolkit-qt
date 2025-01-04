@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2025 Esri
  *
@@ -20,8 +21,10 @@
 
 // Maps SDK headers
 #include <PopupMedia.h>
-#include <PopupMediaItem.h>
 #include <PopupMediaValue.h>
+
+// Toolkit headers
+#include <PopupMediaItem.h>
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
@@ -44,7 +47,9 @@ LineChartPopupMediaItem::LineChartPopupMediaItem(PopupMedia* popupMedia, const Q
     m_jsonArr{jsonColorArray}
 {
   auto mediaValue = popupMediaItem()->value();
-  for (int i = 0; i < mediaValue->data().length(); i++ )
+  const auto popupMediaValueDataLength = mediaValue->data().length();
+
+  for (int i = 0; i < popupMediaValueDataLength; i++ )
   {
     const auto label = mediaValue->labels().at(i);
     const auto value = mediaValue->data().at(i).toReal();

@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2025 Esri
  *
@@ -21,8 +22,10 @@
 
 // Maps SDK headers
 #include <PopupMedia.h>
-#include <PopupMediaItem.h>
 #include <PopupMediaValue.h>
+
+// Toolkit headers
+#include <PopupMediaItem.h>
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
@@ -53,8 +56,9 @@ QList<QBarSet*> BarChartPopupMediaItem::barSets()
 {
   QList<QBarSet*> barSets;
   auto mediaValue = popupMediaItem()->value();
+  const auto popupMediaValueDataLength = mediaValue->data().length();
 
-  for (int i = 0; i < mediaValue->data().length(); i++)
+  for (int i = 0; i < popupMediaValueDataLength; i++)
   {
     const auto label = mediaValue->labels().at(i);
     const auto value = mediaValue->data().at(i).toReal();
@@ -70,7 +74,7 @@ QList<QBarSet*> BarChartPopupMediaItem::barSets()
     if (!m_jsonArr.isEmpty())
     {
       // color scheme is [Red, Green, Blue, Alpha]
-      auto color = QColor(m_jsonArr[i][0].toInt(), m_jsonArr[i][1].toInt(), m_jsonArr[i][2].toInt(), m_jsonArr[i][3].toInt());
+      const auto color = QColor(m_jsonArr[i][0].toInt(), m_jsonArr[i][1].toInt(), m_jsonArr[i][2].toInt(), m_jsonArr[i][3].toInt());
       barset->setColor(color);
       barset->setBorderColor(color);
     }

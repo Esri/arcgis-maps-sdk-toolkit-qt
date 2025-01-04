@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2025 Esri
  *
@@ -18,6 +19,8 @@
 // Maps SDK headers
 #include <PopupMedia.h>
 #include <PopupMediaValue.h>
+
+// Toolkit headers
 #include <PopupMediaItem.h>
 
 namespace Esri::ArcGISRuntime::Toolkit {
