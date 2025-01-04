@@ -25,9 +25,7 @@
 
 class QPieSlice;
 
-namespace Esri::ArcGISRuntime {
-
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
 class PieChartPopupMediaItem : public PopupMediaItem
 {
@@ -38,16 +36,15 @@ public:
   explicit PieChartPopupMediaItem(PopupMedia* popupMedia, const QJsonArray& jsonColorArray, QObject* parent = nullptr);
   ~PieChartPopupMediaItem() override = default;
 
+private:
   QList<QPieSlice*> pieSlices();
 
 signals:
-
   void pieChartPopupMediaItemChanged();
 
 private:
   QJsonArray m_jsonArr;
 };
 
-} // Toolkit
-} // Esri::ArcGISRuntime
+} // Esri::ArcGISRuntime::Toolkit
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_PIECHARTPOPUPMEDIAITEM_H

@@ -17,17 +17,13 @@
 #define ESRI_ARCGISRUNTIME_TOOLKIT_IMAGEPOPUPMEDIAITEM_H
 
 // Qt headers
-#include <QJsonObject> // fwd declare?
+#include <QJsonObject>
 #include <QObject>
 
 // Other headers
 #include "PopupMediaItem.h"
 
-namespace Esri::ArcGISRuntime {
-
-class PopupMedia;
-
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
 class ImagePopupMediaItem : public PopupMediaItem
 {
@@ -39,16 +35,14 @@ public:
   explicit ImagePopupMediaItem(PopupMedia* popupMedia, QObject* parent = nullptr);
   ~ImagePopupMediaItem() override = default;
 
+private:
   QUrl linkUrl() const;
   QUrl sourceUrl() const;
 
 signals:
   void imagePopupMediaItemChanged();
-
-private:
-  PopupMedia* m_popupMedia = nullptr;
 };
-} // Toolkit
-} // Esri::ArcGISRuntime
+
+} // Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_IMAGEPOPUPMEDIAITEM_H

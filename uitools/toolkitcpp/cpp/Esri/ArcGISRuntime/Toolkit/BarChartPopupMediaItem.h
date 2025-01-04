@@ -25,11 +25,7 @@
 
 class QBarSet;
 
-namespace Esri::ArcGISRuntime {
-
-class PopupMedia;
-
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
 class BarChartPopupMediaItem : public PopupMediaItem
 {
@@ -42,6 +38,7 @@ public:
   explicit BarChartPopupMediaItem(PopupMedia* popupMedia, const QJsonArray& jsonColorArray, QObject* parent = nullptr);
   ~BarChartPopupMediaItem() override = default;
 
+private:
   QList<QBarSet*> barSets();
   qreal maxValue() const;
   qreal minValue() const;
@@ -56,6 +53,5 @@ private:
   qreal m_minValue = 0.0;
 };
 
-} // Toolkit
-} // Esri::ArcGISRuntime
+} // Esri::ArcGISRuntime::Toolkit
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_BARCHARTPOPUPMEDIAITEM_H

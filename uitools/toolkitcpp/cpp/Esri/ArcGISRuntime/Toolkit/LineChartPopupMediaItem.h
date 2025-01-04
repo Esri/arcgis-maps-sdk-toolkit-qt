@@ -25,11 +25,7 @@
 // Other headers
 #include "PopupMediaItem.h"
 
-namespace Esri::ArcGISRuntime {
-
-class PopupMedia;
-
-namespace Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit {
 
 class LineChartPopupMediaItem : public PopupMediaItem
 {
@@ -43,6 +39,7 @@ public:
   explicit LineChartPopupMediaItem(PopupMedia* popupMedia, const QJsonArray& jsonColorArray, QObject* parent = nullptr);
   ~LineChartPopupMediaItem() override = default;
 
+private:
   QList<QPointF> linePoints() const;
   QColor color() const;
   qreal maxValue() const;
@@ -59,6 +56,5 @@ private:
   qreal m_minValue = 0.0;
 };
 
-} // Toolkit
-} // Esri::ArcGISRuntime
+} // Esri::ArcGISRuntime::Toolkit
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_LINECHARTPOPUPMEDIAITEM_H
