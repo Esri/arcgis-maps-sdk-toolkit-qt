@@ -30,7 +30,7 @@ import QtQuick.Layouts
  The BookmarksView displays a collection of viewpoints represented by bookmarks from either Webmap/Webscene
  or are programmatically defined. When the user selects a bookmark from the provided list,
  the viewpoint in the geoView is set to the new bookmark's view extent.
- \image docs/bookmarksView.gif
+ \image bookmarksView.gif
  \snippet qml/demos/BookmarksViewDemoForm.qml Set up Bookmark QML
 */
 

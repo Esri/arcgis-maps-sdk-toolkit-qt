@@ -32,7 +32,7 @@ import QtQuick.Layouts
     (\c MapView or \c SceneView) to allow filtering on temporal data.
     The time extents of all layers in the map or scene will be used to set up the
     slider with the full temporal range and the current time extent.
-    \image docs/timeslider.gif timeslider
+    \image timeslider.gif timeslider
     \snippet qml/demos/TimeSliderDemoForm.qml Set up Time Slider QML
 */
 Pane {

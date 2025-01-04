@@ -58,7 +58,7 @@ import QtQuick.Layouts
    \note Each time a change is made to the Popup, PopupDefinition,
    PopupManager, or any of their properties, the PopupManager must
    be re-set to the PopupView.
-   \image docs/popupview.png popupview
+   \image popupview.png popupview
    \snippet qml/demos/PopupViewDemoForm.qml Set up Popup View QML
  */
 Page {
