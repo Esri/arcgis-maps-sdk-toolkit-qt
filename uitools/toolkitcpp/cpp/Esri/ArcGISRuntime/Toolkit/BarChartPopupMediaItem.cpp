@@ -49,7 +49,7 @@ BarChartPopupMediaItem::BarChartPopupMediaItem(PopupMedia* popupMedia, const QJs
 }
 
 /*!
-  \brief Returns the list of \c QBarSet objects. You must take ownership of the returned QBarSets.
+  \brief Returns the list of \c QBarSet objects.
  */
 QList<QBarSet*> BarChartPopupMediaItem::barSets()
 {

@@ -54,7 +54,7 @@ PieChartPopupMediaItem::PieChartPopupMediaItem(PopupMedia* popupMedia, const QJs
 // s.a https://github.com/qt/qtgraphs/blob/08393457537bb45acf3620986039e516f1ac6f2b/src/graphs2d/piechart/qpieseries.cpp#L635-L672
 
 /*!
-  \brief Returns the list of \c QPieSlice objects. You must take ownership of the returned QPieSlices.
+  \brief Returns the list of \c QPieSlice objects.
  */
 QList<QPieSlice*> PieChartPopupMediaItem::pieSlices()
 {
