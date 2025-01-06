@@ -68,7 +68,7 @@ QList<QBarSet*> BarChartPopupMediaItem::barSets()
     if (value <= m_minValue)
       m_minValue = value;
 
-    const auto barset = new QBarSet(label, this);
+    const auto barset = new QBarSet(label);
     barset->append(value);
     if (!m_jsonArr.isEmpty())
     {
