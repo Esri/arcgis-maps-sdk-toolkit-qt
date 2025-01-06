@@ -67,7 +67,7 @@ QList<QPieSlice*> PieChartPopupMediaItem::pieSlices()
     const auto label = mediaValue->labels().at(i);
     const auto value = mediaValue->data().at(i).toReal();
 
-    auto* pieSlice = new QPieSlice(label, value);
+    auto* pieSlice = new QPieSlice(label, value, this);
     if (!m_jsonArr.isEmpty())
     {
       // color scheme is [Red, Green, Blue, Alpha]
