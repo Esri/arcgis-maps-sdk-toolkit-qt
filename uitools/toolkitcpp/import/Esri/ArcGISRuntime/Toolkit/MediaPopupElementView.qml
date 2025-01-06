@@ -103,16 +103,22 @@ ColumnLayout {
             }
 
             Component.onCompleted: {
-                if (popupMediaType === QmlEnums.PopupMediaTypeImage) {
-                    loader.sourceComponent = imageComp;
-                } else if (popupMediaType === QmlEnums.PopupMediaTypeColumnChart) {
-                    loader.sourceComponent = columnChartComp;
-                } else if (popupMediaType === QmlEnums.PopupMediaTypeBarChart) {
-                    loader.sourceComponent = barChartComp;
-                } else if (popupMediaType === QmlEnums.PopupMediaTypePieChart) {
-                    loader.sourceComponent = pieChartComp;
-                } else if (popupMediaType === QmlEnums.PopupMediaTypeLineChart) {
-                    loader.sourceComponent = lineChartComp;
+                switch (popupMediaType) {
+                    case QmlEnums.PopupMediaTypeImage:
+                        loader.sourceComponent = imageComp;
+                        break;
+                    case QmlEnums.PopupMediaTypeColumnChart:
+                        loader.sourceComponent = columnChartComp;
+                        break;
+                    case QmlEnums.PopupMediaTypeBarChart:
+                        loader.sourceComponent = barChartComp;
+                        break;
+                    case QmlEnums.PopupMediaTypePieChart:
+                        loader.sourceComponent = pieChartComp;
+                        break;
+                    case QmlEnums.PopupMediaTypeLineChart:
+                        loader.sourceComponent = lineChartComp;
+                        break;
                 }
             }
 

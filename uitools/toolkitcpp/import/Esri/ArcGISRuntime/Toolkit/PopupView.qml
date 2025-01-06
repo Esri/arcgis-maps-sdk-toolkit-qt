@@ -256,12 +256,16 @@ Page {
 
                 // Load the correct PopupElement based on the PopupElementType
                 Component.onCompleted: {
-                    if (model.popupElementType === QmlEnums.PopupElementTypeTextPopupElement) {
-                        loader.sourceComponent = textPopupElementView;
-                    } else if (model.popupElementType === QmlEnums.PopupElementTypeFieldsPopupElement) {
-                        loader.sourceComponent = fieldsPopupElementView;
-                    } else if (model.popupElementType === QmlEnums.PopupElementTypeMediaPopupElement) {
-                        loader.sourceComponent = mediaPopupElementView;
+                    switch (model.popupElementType) {
+                        case QmlEnums.PopupElementTypeTextPopupElement:
+                            loader.sourceComponent = textPopupElementView;
+                            break;
+                        case QmlEnums.PopupElementTypeFieldsPopupElement:
+                            loader.sourceComponent = fieldsPopupElementView;
+                            break;
+                        case QmlEnums.PopupElementTypeMediaPopupElement:
+                            loader.sourceComponent = mediaPopupElementView;
+                            break;
                     }
                 }
 
