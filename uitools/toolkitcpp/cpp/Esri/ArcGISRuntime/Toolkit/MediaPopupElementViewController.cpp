@@ -84,8 +84,6 @@ MediaPopupElementViewController::MediaPopupElementViewController(
         m_popupMediaItems->append(new LineChartPopupMediaItem(popupMedia, colors, media));
         break;
       case Esri::ArcGISRuntime::PopupMediaType::Unknown:
-        break;
-      default:
         Q_UNIMPLEMENTED();
         break;
     }
