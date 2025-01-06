@@ -170,7 +170,7 @@ ColumnLayout {
 
                     BarSeries {
                         // BarSeries will take owership of the QList<QBarSet*> when we call append. This also applies to PieSeries and QPieSlice for PieChartPopupMediaItem.
-                        // s.a https://github.com/qt/qtgraphs/blob/ef90c963d10a1af30ed523483e9a589235eccef9/src/graphs2d/barchart/qbarseries.cpp#L670-L692
+                        // s.a https://doc.qt.io/qt-6/qbarseries.html#append-1
                         Component.onCompleted: append(listModelData.barSets);
                     }
                 }
@@ -202,7 +202,7 @@ ColumnLayout {
 
                     BarSeries {
                         // BarSeries will take owership of the QList<QBarSet*> when we call append. This also applies to PieSeries and QPieSlice for PieChartPopupMediaItem.
-                        // s.a https://github.com/qt/qtgraphs/blob/ef90c963d10a1af30ed523483e9a589235eccef9/src/graphs2d/barchart/qbarseries.cpp#L670-L692
+                        // s.a https://doc.qt.io/qt-6/qbarseries.html#append-1
                         Component.onCompleted: append(listModelData.barSets);
                     }
                 }
@@ -227,7 +227,7 @@ ColumnLayout {
 
                     PieSeries {
                         // PieSeries will take owership of the QList<QPieSlice*> when we call append. This also applies to BarSeries and QBarSet for BarChartPopupMediaItem.
-                        // s.a https://github.com/qt/qtgraphs/blob/08393457537bb45acf3620986039e516f1ac6f2b/src/graphs2d/piechart/qpieseries.cpp#L635-L672
+                        // s.a https://doc.qt.io/qt-6/qpieseries.html#append-1
                         Component.onCompleted: append(listModelData.pieSlices);
                     }
                 }
