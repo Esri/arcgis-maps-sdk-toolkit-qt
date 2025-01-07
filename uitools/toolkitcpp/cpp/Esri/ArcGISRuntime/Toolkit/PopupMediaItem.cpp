@@ -84,7 +84,7 @@ PopupMedia* PopupMediaItem::popupMediaItem() const
   return m_popupMedia;
 }
 
-QColor PopupMediaItem::jsonColorExtractor(const QJsonArray& colorArray, const int index)
+QColor PopupMediaItem::extractColorFromJson(const QJsonArray& colorArray, const int index)
 {
   if (!colorArray.isEmpty() && index < colorArray.size())
   {

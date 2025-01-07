@@ -47,7 +47,7 @@ public:
   PopupMediaType popupMediaType() const;
   PopupMedia* popupMediaItem() const;
 
-  static QColor jsonColorExtractor(const QJsonArray& colorArray, const int index);
+  static QColor extractColorFromJson(const QJsonArray& colorArray, const int index);
 
 signals:
   void popupMediaItemChanged();

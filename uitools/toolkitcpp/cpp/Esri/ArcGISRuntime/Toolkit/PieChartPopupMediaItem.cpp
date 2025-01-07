@@ -70,7 +70,7 @@ QList<QPieSlice*> PieChartPopupMediaItem::pieSlices()
 
     if (!m_jsonColorArr.isEmpty())
     {
-      const auto color = jsonColorExtractor(m_jsonColorArr, i);
+      const auto color = extractColorFromJson(m_jsonColorArr, i);
       pieSlice->setColor(color);
       pieSlice->setBorderColor(color);
     }
