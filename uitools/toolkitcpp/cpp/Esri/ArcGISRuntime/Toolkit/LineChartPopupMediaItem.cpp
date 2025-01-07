@@ -63,7 +63,7 @@ LineChartPopupMediaItem::LineChartPopupMediaItem(PopupMedia* popupMedia, const Q
     m_linePoints.append(point);
   }
 
-  m_color = jsonColorHelper(m_jsonColorArr, 0);
+  m_color = jsonColorExtractor(m_jsonColorArr, 0);
 }
 
 /*!

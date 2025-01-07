@@ -84,16 +84,19 @@ PopupMedia* PopupMediaItem::popupMediaItem() const
   return m_popupMedia;
 }
 
-QColor PopupMediaItem::jsonColorHelper(const QJsonArray& colorArray, const int index) const
+QColor PopupMediaItem::jsonColorExtractor(const QJsonArray& colorArray, const int index)
 {
   if (!colorArray.isEmpty() && index < colorArray.size())
   {
     // color scheme is [Red, Green, Blue, Alpha]
     // https://developers.arcgis.com/web-map-specification/objects/color
-    return QColor(colorArray[index][0].toInt(),
-                  colorArray[index][1].toInt(),
-                  colorArray[index][2].toInt(),
-                  colorArray[index][3].toInt());
+    const auto colorArrayAtIndex = colorArray[index];
+    const auto r = colorArrayAtIndex[0].toInt();
+    const auto g = colorArrayAtIndex[1].toInt();
+    const auto b = colorArrayAtIndex[2].toInt();
+    const auto a = colorArrayAtIndex[3].toInt();
+
+    return QColor(r, g, b, a);
   }
   return QColor();
 }
