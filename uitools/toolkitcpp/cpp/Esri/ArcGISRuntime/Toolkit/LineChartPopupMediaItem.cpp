@@ -98,6 +98,14 @@ qreal LineChartPopupMediaItem::minValue() const
   return m_minValue;
 }
 
+/*!
+  \brief Returns true if the color was found in the JSON array.
+ */
+bool LineChartPopupMediaItem::colorFromJsonFound() const
+{
+  return !m_jsonColorArr.isEmpty();
+}
+
 } // namespace Esri::ArcGISRuntime::Toolkit
 
 /*!
@@ -119,4 +127,8 @@ qreal LineChartPopupMediaItem::minValue() const
 
 /*!
   \property Esri::ArcGISRuntime::Toolkit::LineChartPopupMediaItem::minValue
+ */
+
+/*!
+  \property Esri::ArcGISRuntime::Toolkit::LineChartPopupMediaItem::colorFromJsonFound
  */

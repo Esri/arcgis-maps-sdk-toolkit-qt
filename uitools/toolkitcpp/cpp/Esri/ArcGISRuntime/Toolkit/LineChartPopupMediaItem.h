@@ -34,6 +34,7 @@ class LineChartPopupMediaItem : public PopupMediaItem
   Q_PROPERTY(QColor color READ color NOTIFY lineChartPopupMediaItemChanged)
   Q_PROPERTY(qreal maxValue READ maxValue NOTIFY lineChartPopupMediaItemChanged)
   Q_PROPERTY(qreal minValue READ minValue NOTIFY lineChartPopupMediaItemChanged)
+  Q_PROPERTY(bool colorFromJsonFound READ colorFromJsonFound NOTIFY lineChartPopupMediaItemChanged)
 
 public:
   explicit LineChartPopupMediaItem(PopupMedia* popupMedia, const QJsonArray& jsonColorArray, QObject* parent = nullptr);
@@ -44,6 +45,7 @@ private:
   QColor color() const;
   qreal maxValue() const;
   qreal minValue() const;
+  bool colorFromJsonFound() const;
 
 signals:
   void lineChartPopupMediaItemChanged();
