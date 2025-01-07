@@ -19,4 +19,4 @@ For more information, please see the Popup and PopupManager documentation.
 
 NOTE: Each time a change is made to the Popup, PopupDefinition, PopupManager, or any of their properties, the popupManagers must be re-set to the PopupStackView.
 
-![NorthArrow image](../images/PopupStackView.png)
+![NorthArrow image](images/PopupStackView.png)
