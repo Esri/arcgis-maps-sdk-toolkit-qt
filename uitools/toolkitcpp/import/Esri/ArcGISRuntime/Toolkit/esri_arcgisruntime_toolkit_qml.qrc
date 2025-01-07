@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/esri.com/qml/Esri/ArcGISRuntime/Toolkit">
+    <qresource prefix="/esri.com/imports/Esri/ArcGISRuntime/Toolkit">
         <file>ArcGISAuthenticationView_internal.qml</file>
         <file>ArcGISAuthenticationView.qml</file>
         <file>ArcGISOAuth2View.qml</file>

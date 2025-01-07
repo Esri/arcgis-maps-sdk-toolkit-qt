@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images">
+    <qresource prefix="Esri/ArcGISRuntime/Toolkit">
         <file>basemap.svg</file>
         <file>chevron-left.svg</file>
         <file>chevrons-left.svg</file>

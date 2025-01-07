@@ -225,7 +225,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
       }
       else
       {
-        QIcon icon{QStringLiteral(":/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/basemap.svg")};
+        QIcon icon{QStringLiteral(":/Esri/ArcGISRuntime/Toolkit/basemap.svg")};
         return icon.pixmap(200, 133).toImage();
       }
     }

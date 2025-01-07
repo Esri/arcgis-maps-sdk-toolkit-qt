@@ -78,11 +78,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
     }
     else if (m_suggestResult.isCollection())
     {
-      return QUrl{QStringLiteral("qrc:///esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/search.svg")};
+      return QUrl{QStringLiteral("qrc:/Esri/ArcGISRuntime/Toolkit/search.svg")};
     }
     else
     {
-      return QUrl{QStringLiteral("qrc:///esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/pin.svg")};
+      return QUrl{QStringLiteral("qrc:/Esri/ArcGISRuntime/Toolkit/pin.svg")};
     }
   }
 

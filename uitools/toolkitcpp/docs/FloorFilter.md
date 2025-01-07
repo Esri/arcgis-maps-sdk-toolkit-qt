@@ -8,4 +8,4 @@ The user interface is driven from the `FloorAware` data that is available in the
 
 2D maps and 3D scenes are supported.
 
-![FloorFilter image](../images/FloorFilter.gif)
+![FloorFilter image](images/FloorFilter.gif)

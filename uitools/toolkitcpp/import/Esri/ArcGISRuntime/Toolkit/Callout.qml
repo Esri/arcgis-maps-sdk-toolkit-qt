@@ -343,9 +343,9 @@ Pane {
             onClicked: accessoryButtonClicked()
             icon.source: {
                 if (accessoryButtonType === "Info")
-                    return "images/information.svg";
+                    return "qrc:/Esri/ArcGISRuntime/Toolkit/information.svg";
                 else if (accessoryButtonType === "Add")
-                    return "images/plus-circle.svg";
+                    return "qrc:/Esri/ArcGISRuntime/Toolkit/plus-circle.svg";
                 else if (accessoryButtonType === "Custom")
                     return customImageUrl;
 

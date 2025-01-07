@@ -10,4 +10,4 @@ The new trace Tab includes a custom UtilityNetworkTraceStartingPointsModel for d
 
 The result Tab itself contains a TabBar of the results made up of custom Tabs defined in UtilityNetworkFunctionTraceResultsModel.
 
-![UtilityNetworkTrace image](../images/UtilityNetworkTrace.png)
+![UtilityNetworkTrace image](images/UtilityNetworkTrace.png)
