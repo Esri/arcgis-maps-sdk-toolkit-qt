@@ -70,10 +70,10 @@ QList<QBarSet*> BarChartPopupMediaItem::barSets()
 
     const auto barset = new QBarSet(label);
     barset->append(value);
-    if (!m_jsonArr.isEmpty())
+
+    if (!m_jsonColorArr.isEmpty())
     {
-      // color scheme is [Red, Green, Blue, Alpha]
-      const auto color = QColor(m_jsonArr[i][0].toInt(), m_jsonArr[i][1].toInt(), m_jsonArr[i][2].toInt(), m_jsonArr[i][3].toInt());
+      const auto color = jsonColorHelper(m_jsonColorArr, i);
       barset->setColor(color);
       barset->setBorderColor(color);
     }

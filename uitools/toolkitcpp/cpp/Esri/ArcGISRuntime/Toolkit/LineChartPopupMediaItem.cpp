@@ -63,11 +63,7 @@ LineChartPopupMediaItem::LineChartPopupMediaItem(PopupMedia* popupMedia, const Q
     m_linePoints.append(point);
   }
 
-  if (!m_jsonArr.isEmpty())
-  {
-    // color scheme is [Red, Green, Blue, Alpha]
-    m_color = QColor(m_jsonArr[0][0].toInt(), m_jsonArr[0][1].toInt(), m_jsonArr[0][2].toInt(), m_jsonArr[0][3].toInt());
-  }
+  m_color = jsonColorHelper(m_jsonColorArr, 0);
 }
 
 /*!

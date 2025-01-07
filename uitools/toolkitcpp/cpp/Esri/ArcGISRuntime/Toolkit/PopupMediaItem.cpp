@@ -15,6 +15,10 @@
  ******************************************************************************/
 #include "PopupMediaItem.h"
 
+// Qt headers
+#include <QColor>
+#include <QJsonArray>
+
 // Maps SDK headers
 #include <ChartImage.h>
 #include <ChartImageParameters.h>
@@ -40,7 +44,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
  \brief Constructor
  \list
     \li \a popupMedia - The \l {Esri::ArcGISRuntime::PopupMedia} {PopupMedia} used to populate the view.
-    \li \a parent - The optional parent QObject. 
+    \li \a parent - The optional parent QObject.
 \endlist
  */
 PopupMediaItem::PopupMediaItem(PopupMedia* popupMedia, QObject* parent)
@@ -78,6 +82,20 @@ PopupMediaType PopupMediaItem::popupMediaType() const
 PopupMedia* PopupMediaItem::popupMediaItem() const
 {
   return m_popupMedia;
+}
+
+QColor PopupMediaItem::jsonColorHelper(const QJsonArray& colorArray, const int index) const
+{
+  if (!colorArray.isEmpty() && index < colorArray.size())
+  {
+    // color scheme is [Red, Green, Blue, Alpha]
+    // https://developers.arcgis.com/web-map-specification/objects/color
+    return QColor(colorArray[index][0].toInt(),
+                  colorArray[index][1].toInt(),
+                  colorArray[index][2].toInt(),
+                  colorArray[index][3].toInt());
+  }
+  return QColor();
 }
 
 } // namespace Esri::ArcGISRuntime::Toolkit

@@ -66,12 +66,11 @@ QList<QPieSlice*> PieChartPopupMediaItem::pieSlices()
   {
     const auto label = mediaValue->labels().at(i);
     const auto value = mediaValue->data().at(i).toReal();
-
     auto* pieSlice = new QPieSlice(label, value);
-    if (!m_jsonArr.isEmpty())
+
+    if (!m_jsonColorArr.isEmpty())
     {
-      // color scheme is [Red, Green, Blue, Alpha]
-      const auto color = QColor(m_jsonArr[i][0].toInt(), m_jsonArr[i][1].toInt(), m_jsonArr[i][2].toInt(), m_jsonArr[i][3].toInt());
+      const auto color = jsonColorHelper(m_jsonColorArr, i);
       pieSlice->setColor(color);
       pieSlice->setBorderColor(color);
     }
