@@ -30,6 +30,8 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
   \internal
+  This class is an internal implementation detail and is subject to change.
+
   \class Esri::ArcGISRuntime::Toolkit::PieChartPopupMediaItem
   \inmodule ArcGISRuntimeToolkit
   \brief Represents the contents of a \c{MediaPopupElement::media} to be used for a PieSeries in QML.
