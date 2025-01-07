@@ -48,7 +48,7 @@ signals:
 
 private:
   QList<QBarSet*> m_barSets;
-  QJsonArray m_jsonArr;
+  QJsonArray m_jsonColorArr;
   qreal m_maxValue = 0.0;
   qreal m_minValue = 0.0;
 };

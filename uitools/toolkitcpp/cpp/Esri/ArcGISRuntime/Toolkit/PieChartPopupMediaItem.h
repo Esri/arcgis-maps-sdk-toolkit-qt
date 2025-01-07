@@ -43,7 +43,7 @@ signals:
   void pieChartPopupMediaItemChanged();
 
 private:
-  QJsonArray m_jsonArr;
+  QJsonArray m_jsonColorArr;
 };
 
 } // Esri::ArcGISRuntime::Toolkit

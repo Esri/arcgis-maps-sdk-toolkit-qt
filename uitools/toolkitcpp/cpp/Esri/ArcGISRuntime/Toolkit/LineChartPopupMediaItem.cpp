@@ -43,7 +43,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
  */
 LineChartPopupMediaItem::LineChartPopupMediaItem(PopupMedia* popupMedia, const QJsonArray& jsonColorArray, QObject* parent)
   : PopupMediaItem{popupMedia, parent},
-    m_jsonArr{jsonColorArray}
+    m_jsonColorArr{jsonColorArray}
 {
   auto mediaValue = popupMediaItem()->value();
   const auto popupMediaValueDataLength = mediaValue->data().length();
