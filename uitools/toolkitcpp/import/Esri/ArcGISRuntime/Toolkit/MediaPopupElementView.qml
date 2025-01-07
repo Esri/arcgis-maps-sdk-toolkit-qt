@@ -156,6 +156,7 @@ ColumnLayout {
                     marginRight: 10
 
                     // Setting a default theme if no color information is provided on the BarSeries
+                    // For more information on the MixSeries theme see https://doc.qt.io/qt-6/qtgraphs-overview-theme.html
                     theme: GraphsTheme {
                         backgroundColor: "white"
                         plotAreaBackgroundColor: "white"
@@ -194,6 +195,7 @@ ColumnLayout {
                     orientation: Qt.Horizontal
 
                     // Setting a default theme if no color information is provided on the BarSeries
+                    // For more information on the MixSeries theme see https://doc.qt.io/qt-6/qtgraphs-overview-theme.html
                     theme: GraphsTheme {
                         backgroundColor: "white"
                         plotAreaBackgroundColor: "white"
@@ -231,6 +233,7 @@ ColumnLayout {
                     marginRight: -25
 
                     // Setting a default theme if no color information is provided on the PieSeries
+                    // For more information on the MixSeries theme see https://doc.qt.io/qt-6/qtgraphs-overview-theme.html
                     theme: GraphsTheme {
                         backgroundColor: "white"
                         plotAreaBackgroundColor: "white"
@@ -262,6 +265,7 @@ ColumnLayout {
                     marginRight: 10
 
                     // Setting a default theme if no color information is provided on the LineSeries
+                    // For more information on the MixSeries theme see https://doc.qt.io/qt-6/qtgraphs-overview-theme.html
                     theme: GraphsTheme {
                         backgroundColor: "white"
                         plotAreaBackgroundColor: "white"
