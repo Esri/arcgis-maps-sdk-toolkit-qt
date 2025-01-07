@@ -21,6 +21,10 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+/*!
+  \internal
+  This is an internal implementation detail and is subject to change.
+*/
 
 ColumnLayout {
     id: mediaPopupElementView
@@ -34,10 +38,6 @@ ColumnLayout {
     property real imageTextMargin: 5
     property real layoutSpacing: 0
 
-    /*!
-      \internal
-      This is an internal implementation detail and is subject to change.
-    */
     property var controller: null
 
     MenuSeparator {

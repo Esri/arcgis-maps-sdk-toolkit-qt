@@ -36,41 +36,26 @@ PopupMediaItem::PopupMediaItem(PopupMedia* popupMedia, QObject* parent)
 {
 }
 
-/*!
-  \internal
- */
 QString PopupMediaItem::title() const
 {
   return m_popupMedia->title();
 }
 
-/*!
-  \internal
- */
 QString PopupMediaItem::caption() const
 {
   return m_popupMedia->caption();
 }
 
-/*!
-  \internal
- */
 PopupMediaType PopupMediaItem::popupMediaType() const
 {
   return m_popupMedia->popupMediaType();
 }
 
-/*!
-  \internal
- */
 PopupMedia* PopupMediaItem::popupMediaItem() const
 {
   return m_popupMedia;
 }
 
-/*!
-  \internal
- */
 QColor PopupMediaItem::extractColorFromJson(const QJsonArray& colorArray, const int index)
 {
   if (!colorArray.isEmpty() && index < colorArray.size())

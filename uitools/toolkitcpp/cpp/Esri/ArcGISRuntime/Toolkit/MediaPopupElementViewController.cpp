@@ -39,7 +39,8 @@ namespace {
 
   /*!
     \internal
-    */
+    This class is an internal implementation detail and is subject to change.
+   */
   bool isNullOrUndefined(const QJsonValue& value) {
       return value.isNull() || value.isUndefined();
   }
@@ -47,9 +48,6 @@ namespace {
   // Get color information for each popup media. If no color is selected when defining a popup, GraphsTheme.Theme.MixSeries will
   // be applied to the GraphsView.
   // s.a. Web Map Spec: https://developers.arcgis.com/web-map-specification/objects/popupElement_media
-  /*!
-    \internal
-    */
   QJsonArray colorsArrayFromJson(const QByteArray& mediaPopupElementJson, const int index)
   {
     if (mediaPopupElementJson.isEmpty())
@@ -96,10 +94,6 @@ namespace {
   }
 }
 
-/*!
-  \internal
-  This class is an internal implementation detail and is subject to change.
- */
 MediaPopupElementViewController::MediaPopupElementViewController(
     MediaPopupElement* mediaPopupElement, QObject* parent)
   : PopupElementViewItem{mediaPopupElement, parent},
@@ -157,30 +151,18 @@ MediaPopupElementViewController::MediaPopupElementViewController(
   }
 }
 
-/*!
-  \internal
-  */
 MediaPopupElementViewController::~MediaPopupElementViewController() = default;
 
-/*!
-  \internal
- */
 QString MediaPopupElementViewController::description() const
 {
   return static_cast<MediaPopupElement*>(popupElement())->description();
 }
 
-/*!
-  \internal
- */
 QString MediaPopupElementViewController::title() const
 {
   return static_cast<MediaPopupElement*>(popupElement())->title();
 }
 
-/*!
-  \internal
- */
 GenericListModel* MediaPopupElementViewController::popupMediaItems() const
 {
   return m_popupMediaItems;

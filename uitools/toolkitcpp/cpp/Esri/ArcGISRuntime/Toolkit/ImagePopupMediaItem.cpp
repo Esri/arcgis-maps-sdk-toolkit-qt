@@ -25,34 +25,19 @@
 namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
-  \class Esri::ArcGISRuntime::Toolkit::ImagePopupMediaItem
-  \inmodule ArcGISRuntimeToolkit
-  \brief Represents the contents of a \c{MediaPopupElement::media} to be used in MediaPopupElementView.
-  */
-
-/*!
-  \brief Constructor
-  \list
-    \li \a popupMedia - The \l {Esri::ArcGISRuntime::PopupMedia} {PopupMedia} used to expose the image related properties.
-    \li \a parent - The optional parent QObject.
-  \endlist
+  \internal
+  This class is an internal implementation detail and is subject to change.
  */
 ImagePopupMediaItem::ImagePopupMediaItem(PopupMedia* popupMedia, QObject* parent)
   : PopupMediaItem{popupMedia, parent}
 {
 }
 
-/*!
-  \brief Returns the sourceUrl of the \c PopupMediaValue.
- */
 QUrl ImagePopupMediaItem::sourceUrl() const
 {
   return popupMediaItem()->value()->sourceUrl();
 }
 
-/*!
-  \brief Returns the linkUrl of the \c PopupMediaValue.
- */
 QUrl ImagePopupMediaItem::linkUrl() const
 {
   return popupMediaItem()->value()->linkUrl();
@@ -60,15 +45,4 @@ QUrl ImagePopupMediaItem::linkUrl() const
 
 } // namespace Esri::ArcGISRuntime::Toolkit
 
-/*!
-  \fn void Esri::ArcGISRuntime::Toolkit::ImagePopupMediaItem::imagePopupMediaItemChanged()
-  \brief Signal emitted when the underlying \c PopupMedia changes.
- */
 
-/*!
-  \property Esri::ArcGISRuntime::Toolkit::ImagePopupMediaItem::sourceUrl
- */
-
-/*!
-  \property Esri::ArcGISRuntime::Toolkit::ImagePopupMediaItem::linkUrl
- */

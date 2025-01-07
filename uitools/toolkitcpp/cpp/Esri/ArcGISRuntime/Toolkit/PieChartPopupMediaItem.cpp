@@ -38,9 +38,6 @@ PieChartPopupMediaItem::PieChartPopupMediaItem(PopupMedia* popupMedia, const QJs
 {
 }
 
-/*!
-  \internal
- */
 QList<QPieSlice*> PieChartPopupMediaItem::pieSlices()
 {
   QList<QPieSlice*> pieSlices;

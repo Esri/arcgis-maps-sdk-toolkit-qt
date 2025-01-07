@@ -38,9 +38,6 @@ BarChartPopupMediaItem::BarChartPopupMediaItem(PopupMedia* popupMedia, const QJs
 {
 }
 
-/*!
-  \internal
- */
 QList<QBarSet*> BarChartPopupMediaItem::barSets()
 {
   QList<QBarSet*> barSets;
@@ -73,17 +70,11 @@ QList<QBarSet*> BarChartPopupMediaItem::barSets()
   return barSets;
 }
 
-/*!
-  \internal
- */
 qreal BarChartPopupMediaItem::maxValue() const
 {
   return m_maxValue;
 }
 
-/*!
-  \internal
- */
 qreal BarChartPopupMediaItem::minValue() const
 {
   return m_minValue;

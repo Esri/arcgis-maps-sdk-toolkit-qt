@@ -56,41 +56,26 @@ LineChartPopupMediaItem::LineChartPopupMediaItem(PopupMedia* popupMedia, const Q
   m_color = extractColorFromJson(m_jsonColorArr, 0);
 }
 
-/*!
-  \internal
- */
 QList<QPointF> LineChartPopupMediaItem::linePoints() const
 {
   return m_linePoints;
 }
 
-/*!
-  \internal
- */
 QColor LineChartPopupMediaItem::color() const
 {
   return m_color;
 }
 
-/*!
-  \internal
- */
 qreal LineChartPopupMediaItem::maxValue() const
 {
   return m_maxValue;
 }
 
-/*!
-  \internal
- */
 qreal LineChartPopupMediaItem::minValue() const
 {
   return m_minValue;
 }
 
-/*!
-  \internal
- */
 bool LineChartPopupMediaItem::colorFromJsonFound() const
 {
   return !m_jsonColorArr.isEmpty();
