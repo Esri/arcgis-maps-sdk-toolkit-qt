@@ -37,11 +37,6 @@ ColumnLayout {
     /*!
       \internal
       This is an internal implementation detail and is subject to change.
-
-      \qmlproperty MediaPopupElementView controller
-      \brief The Controller handles reading from the MediaPopupElement.
-
-      \sa Esri::ArcGISRuntime::Toolkit::MediaPopupElementViewController
     */
     property var controller: null
 

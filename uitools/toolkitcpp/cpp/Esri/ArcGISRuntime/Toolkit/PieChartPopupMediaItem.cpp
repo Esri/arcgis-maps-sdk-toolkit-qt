@@ -31,20 +31,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
 /*!
   \internal
   This class is an internal implementation detail and is subject to change.
-
-  \class Esri::ArcGISRuntime::Toolkit::PieChartPopupMediaItem
-  \inmodule ArcGISRuntimeToolkit
-  \brief Represents the contents of a \c{MediaPopupElement::media} to be used for a PieSeries in QML.
-  */
-
-/*!
-  \internal
-  \brief Constructor
-  \list
-    \li \a popupMedia - The \l {Esri::ArcGISRuntime::PopupMedia} {PopupMedia} used to populate the list of pie slices.
-    \li \a jsonColorArray - The JSON array containing the color information for each pie slice.
-    \li \a parent - The optional parent QObject.
-  \endlist
  */
 PieChartPopupMediaItem::PieChartPopupMediaItem(PopupMedia* popupMedia, const QJsonArray& jsonColorArray, QObject* parent)
   : PopupMediaItem{popupMedia, parent},
@@ -52,14 +38,8 @@ PieChartPopupMediaItem::PieChartPopupMediaItem(PopupMedia* popupMedia, const QJs
 {
 }
 
-// When appending QList<QPieSlice*> to the QPieSeries, the ownership is transferred to the QPieSeries. This requires us to recreate the QList<QPieSlice*>
-// every time the data is requested because the ListView will recycle the component as needed for performance which will delete the underlying QPieSlices
-// originally added to the QList. This also applies to QBarSeries and QBarSet for BarChartPopupMediaItem.
-// s.a https://github.com/qt/qtgraphs/blob/08393457537bb45acf3620986039e516f1ac6f2b/src/graphs2d/piechart/qpieseries.cpp#L635-L672
-
 /*!
   \internal
-  \brief Returns the list of \c QPieSlice objects.
  */
 QList<QPieSlice*> PieChartPopupMediaItem::pieSlices()
 {
@@ -86,14 +66,3 @@ QList<QPieSlice*> PieChartPopupMediaItem::pieSlices()
 }
 
 } // namespace Esri::ArcGISRuntime::Toolkit
-
-/*!
-  \internal
-  \fn void Esri::ArcGISRuntime::Toolkit::PieChartPopupMediaItem::pieChartPopupMediaItemChanged()
-  \brief Signal emitted when the underlying \c PopupMedia changes.
- */
-
-/*!
-  \internal
-  \property Esri::ArcGISRuntime::Toolkit::PieChartPopupMediaItem::pieSlices
- */

@@ -30,20 +30,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
 /*!
   \internal
   This class is an internal implementation detail and is subject to change.
-
-  \class Esri::ArcGISRuntime::Toolkit::LineChartPopupMediaItem
-  \inmodule ArcGISRuntimeToolkit
-  \brief Represents the contents of a \c{MediaPopupElement::media} to be used for a LineSeries in QML.
-  */
-
-/*!
-  \internal
-  \brief Constructor
-  \list
-    \li \a popupMedia - The \l {Esri::ArcGISRuntime::PopupMedia} {PopupMedia} used to populate the list of points.
-    \li \a jsonColorArray - The JSON array containing the color information for the line.
-    \li \a parent - The optional parent QObject.
-  \endlist
  */
 LineChartPopupMediaItem::LineChartPopupMediaItem(PopupMedia* popupMedia, const QJsonArray& jsonColorArray, QObject* parent)
   : PopupMediaItem{popupMedia, parent},
@@ -72,7 +58,6 @@ LineChartPopupMediaItem::LineChartPopupMediaItem(PopupMedia* popupMedia, const Q
 
 /*!
   \internal
-  \brief Returns the list of \c QPointF objects.
  */
 QList<QPointF> LineChartPopupMediaItem::linePoints() const
 {
@@ -81,7 +66,6 @@ QList<QPointF> LineChartPopupMediaItem::linePoints() const
 
 /*!
   \internal
-  \brief Returns the color of the line.
  */
 QColor LineChartPopupMediaItem::color() const
 {
@@ -90,7 +74,6 @@ QColor LineChartPopupMediaItem::color() const
 
 /*!
   \internal
-  \brief Returns the maxValue of the points.
  */
 qreal LineChartPopupMediaItem::maxValue() const
 {
@@ -99,7 +82,6 @@ qreal LineChartPopupMediaItem::maxValue() const
 
 /*!
   \internal
-  \brief Returns the minValue of the points.
  */
 qreal LineChartPopupMediaItem::minValue() const
 {
@@ -108,7 +90,6 @@ qreal LineChartPopupMediaItem::minValue() const
 
 /*!
   \internal
-  \brief Returns true if the color was found in the JSON array.
  */
 bool LineChartPopupMediaItem::colorFromJsonFound() const
 {
@@ -116,34 +97,3 @@ bool LineChartPopupMediaItem::colorFromJsonFound() const
 }
 
 } // namespace Esri::ArcGISRuntime::Toolkit
-
-/*!
-  \internal
-  \fn void Esri::ArcGISRuntime::Toolkit::LineChartPopupMediaItem::lineChartPopupMediaItemChanged()
-  \brief Signal emitted when the underlying \c PopupMedia changes.
- */
-
-/*!
-  \internal
-  \property Esri::ArcGISRuntime::Toolkit::LineChartPopupMediaItem::linePoints
- */
-
-/*!
-  \internal
-  \property Esri::ArcGISRuntime::Toolkit::LineChartPopupMediaItem::color
- */
-
-/*!
-  \internal
-  \property Esri::ArcGISRuntime::Toolkit::LineChartPopupMediaItem::maxValue
- */
-
-/*!
-  \internal
-  \property Esri::ArcGISRuntime::Toolkit::LineChartPopupMediaItem::minValue
- */
-
-/*!
-  \internal
-  \property Esri::ArcGISRuntime::Toolkit::LineChartPopupMediaItem::colorFromJsonFound
- */

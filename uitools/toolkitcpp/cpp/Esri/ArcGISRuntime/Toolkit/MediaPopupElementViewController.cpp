@@ -37,6 +37,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
 namespace {
 
+  /*!
+    \internal
+    */
   bool isNullOrUndefined(const QJsonValue& value) {
       return value.isNull() || value.isUndefined();
   }
@@ -44,6 +47,9 @@ namespace {
   // Get color information for each popup media. If no color is selected when defining a popup, GraphsTheme.Theme.MixSeries will
   // be applied to the GraphsView.
   // s.a. Web Map Spec: https://developers.arcgis.com/web-map-specification/objects/popupElement_media
+  /*!
+    \internal
+    */
   QJsonArray colorsArrayFromJson(const QByteArray& mediaPopupElementJson, const int index)
   {
     if (mediaPopupElementJson.isEmpty())
@@ -93,21 +99,6 @@ namespace {
 /*!
   \internal
   This class is an internal implementation detail and is subject to change.
-
-  \class Esri::ArcGISRuntime::Toolkit::MediaPopupElementViewController
-  \inmodule ArcGISRuntimeToolkit
-  \ingroup ArcGISQtToolkitUiCppControllers
-  \brief In MVC architecture, this is the controller for the corresponding
-  \c MediaPopupElementView.
- */
-
-/*!
-  \internal
-  \brief Constructor
-  \list
-    \li \a mediaPopupElement - The \l {Esri::ArcGISRuntime::MediaPopupElement} {MediaPopupElement} used to populate the view.
-    \li \a parent - The optional parent QObject.
-  \endlist
  */
 MediaPopupElementViewController::MediaPopupElementViewController(
     MediaPopupElement* mediaPopupElement, QObject* parent)
@@ -168,13 +159,11 @@ MediaPopupElementViewController::MediaPopupElementViewController(
 
 /*!
   \internal
-  \brief Destructor.
   */
 MediaPopupElementViewController::~MediaPopupElementViewController() = default;
 
 /*!
   \internal
-  \brief Returns the description of the \c MediaPopupElement.
  */
 QString MediaPopupElementViewController::description() const
 {
@@ -183,7 +172,6 @@ QString MediaPopupElementViewController::description() const
 
 /*!
   \internal
-  \brief Returns the title of the \c MediaPopupElement.
  */
 QString MediaPopupElementViewController::title() const
 {
@@ -192,9 +180,6 @@ QString MediaPopupElementViewController::title() const
 
 /*!
   \internal
-  \brief Returns the known list of available PopupMedia.
-  Internally, this is a \c GenericListModel with an \c elementType of
-  \c PopupMediaItem.
  */
 GenericListModel* MediaPopupElementViewController::popupMediaItems() const
 {
@@ -202,19 +187,3 @@ GenericListModel* MediaPopupElementViewController::popupMediaItems() const
 }
 
 } // namespace Esri::ArcGISRuntime::Toolkit
-
-/*!
-  \internal
-  \fn void Esri::ArcGISRuntime::Toolkit::MediaPopupElementViewController::mediaPopupElementChanged()
-  \brief Signal emitted when the underlying \c MediaPopupElement changes.
- */
-
-/*!
-  \internal
-  \property Esri::ArcGISRuntime::Toolkit::MediaPopupElementViewController::title
- */
-
-/*!
-  \internal
-  \property Esri::ArcGISRuntime::Toolkit::MediaPopupElementViewController::description
- */

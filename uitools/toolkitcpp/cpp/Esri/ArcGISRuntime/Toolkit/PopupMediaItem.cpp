@@ -30,26 +30,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
 /*!
   \internal
   This class is an internal implementation detail and is subject to change.
-
-  \class Esri::ArcGISRuntime::Toolkit::PopupMediaItem
-  \inmodule ArcGISRuntimeToolkit
-  \brief This is the base class for the following PopupMediaItems, \l
-  {Esri::ArcGISRuntime::Toolkit::BarChartPopupMediaItem} {BarChartPopupMediaItem}, and \l
-  {Esri::ArcGISRuntime::Toolkit::PieChartPopupMediaItem} {PieChartPopupMediaItem}, and \l
-  {Esri::ArcGISRuntime::Toolkit::LineChartPopupMediaItem} {LineChartPopupMediaItem}.
-
-  It contains a \c PopupMedia and exposes the properties \c PopupElementType, \c title, \c caption. This is used to build a
-  GenericListModel to be provided to MediaPopupElementView which can access the individual PopupMediaItems and
-  construct the appropriate QML components.
-*/
-
-/*!
-  \internal
-  \brief Constructor
-  \list
-    \li \a popupMedia - The \l {Esri::ArcGISRuntime::PopupMedia} {PopupMedia} used to populate the view.
-    \li \a parent - The optional parent QObject.
-  \endlist
  */
 PopupMediaItem::PopupMediaItem(PopupMedia* popupMedia, QObject* parent)
   : QObject{parent}, m_popupMedia{popupMedia}
@@ -58,7 +38,6 @@ PopupMediaItem::PopupMediaItem(PopupMedia* popupMedia, QObject* parent)
 
 /*!
   \internal
-  \brief Returns the title of the \c MediaPopupElement.
  */
 QString PopupMediaItem::title() const
 {
@@ -67,7 +46,6 @@ QString PopupMediaItem::title() const
 
 /*!
   \internal
-  \brief Returns the caption of the \c MediaPopupElement.
  */
 QString PopupMediaItem::caption() const
 {
@@ -76,7 +54,6 @@ QString PopupMediaItem::caption() const
 
 /*!
   \internal
-  \brief Returns the popupMediaType of the \c MediaPopupElement.
  */
 PopupMediaType PopupMediaItem::popupMediaType() const
 {
@@ -85,7 +62,6 @@ PopupMediaType PopupMediaItem::popupMediaType() const
 
 /*!
   \internal
-  \brief Returns the PopupMedia of the \c MediaPopupElement.
  */
 PopupMedia* PopupMediaItem::popupMediaItem() const
 {
@@ -113,18 +89,3 @@ QColor PopupMediaItem::extractColorFromJson(const QJsonArray& colorArray, const 
 }
 
 } // namespace Esri::ArcGISRuntime::Toolkit
-
-/*!
-  \internal
-  \property Esri::ArcGISRuntime::Toolkit::PopupMediaItem::title
- */
-
-/*!
-  \internal
-  \property Esri::ArcGISRuntime::Toolkit::PopupMediaItem::caption
- */
-
-/*!
-  \internal
-  \property Esri::ArcGISRuntime::Toolkit::PopupMediaItem::popupMediaType
- */
