@@ -56,7 +56,9 @@ MediaPopupElementViewController::MediaPopupElementViewController(
     m_popupMediaItems{new GenericListModel(&PopupMediaItem::staticMetaObject, this)}
 {
   auto* media = mediaPopupElement->media();
-  for (int i = 0; i < media->size(); i++)
+  const auto mediaListModelSize = media->size();
+
+  for (int i = 0; i < mediaListModelSize; i++)
   {
     const QJsonDocument mediaPopupElementJson = QJsonDocument::fromJson(mediaPopupElement->toJson().toUtf8());
     auto* popupMedia = media->at(i);
