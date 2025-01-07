@@ -35,6 +35,62 @@
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
+namespace {
+
+  template <typename T>
+  bool isNullOrUndefined(const T& value) {
+      return value.isNull() || value.isUndefined();
+  }
+
+  // Get color information for each popup media. If no color is selected when defining a popup, GraphsTheme.Theme.MixSeries will
+  // be applied to the GraphsView.
+  // s.a. Web Map Spec: https://developers.arcgis.com/web-map-specification/objects/popupElement_media
+  QJsonArray colorsArrayFromJson(const QByteArray& mediaPopupElementJson, const int index)
+  {
+    if (mediaPopupElementJson.isEmpty())
+    {
+      qCritical() << QString("MediaPopupElement JSON is empty.");
+      return QJsonArray{};
+    }
+
+    const QJsonDocument mediaPopupElementJsonDoc = QJsonDocument::fromJson(mediaPopupElementJson);
+    if (mediaPopupElementJsonDoc.isNull())
+    {
+      qCritical() << QString("Error parsing input json");
+      return QJsonArray{};
+    }
+
+    const auto mediaInfos = mediaPopupElementJsonDoc["mediaInfos"];
+    if (isNullOrUndefined(mediaInfos))
+    {
+      qCritical() << QString("`mediaInfos` array was not found.");
+      return QJsonArray{};
+    }
+
+    const auto mediaInfo = mediaInfos[index];
+    if (isNullOrUndefined(mediaInfo))
+    {
+      qCritical() << QString("`mediaInfo` at index:%1 was not found in mediaInfos.").arg(index);
+      return QJsonArray{};
+    }
+
+    const auto value = mediaInfo["value"];
+    if (isNullOrUndefined(value))
+    {
+      qCritical() << QString("`value` object in was not found in mediaInfo.");
+      return QJsonArray{};
+    }
+
+    const auto colorsArray = value["colors"].toArray();
+    if (colorsArray.isEmpty())
+    {
+      return QJsonArray{};
+    }
+
+    return colorsArray;
+  }
+}
+
 /*!
   \class Esri::ArcGISRuntime::Toolkit::MediaPopupElementViewController
   \inmodule ArcGISRuntimeToolkit
@@ -60,30 +116,45 @@ MediaPopupElementViewController::MediaPopupElementViewController(
 
   for (int i = 0; i < mediaListModelSize; i++)
   {
-    const QJsonDocument mediaPopupElementJson = QJsonDocument::fromJson(mediaPopupElement->toJson().toUtf8());
     auto* popupMedia = media->at(i);
+    const auto popupMediaType = popupMedia->popupMediaType();
+    const auto mediaPopupElementJson = mediaPopupElement->toJson().toUtf8();
 
-    // Get color information for each popup media. If no color is selected when defining a popup, the default
-    // color will be used from the appropriate QtGraphs Series component.
-    // s.a. Web Map Spec: https://developers.arcgis.com/web-map-specification/objects/popupElement_media
-    const auto colors = mediaPopupElementJson.object()["mediaInfos"][i]["value"]["colors"].toArray();
-
-    switch (popupMedia->popupMediaType())
+    switch (popupMediaType)
     {
       case Esri::ArcGISRuntime::PopupMediaType::Image:
-        m_popupMediaItems->append(new ImagePopupMediaItem(popupMedia, media));
+        m_popupMediaItems->append(new ImagePopupMediaItem(
+                                    popupMedia,
+                                    media)
+                                  );
         break;
       case Esri::ArcGISRuntime::PopupMediaType::BarChart:
-        m_popupMediaItems->append(new BarChartPopupMediaItem(popupMedia, colors, media));
+        m_popupMediaItems->append(new BarChartPopupMediaItem(
+                                    popupMedia,
+                                    colorsArrayFromJson(mediaPopupElementJson, i),
+                                    media)
+                                  );
         break;
       case Esri::ArcGISRuntime::PopupMediaType::ColumnChart:
-        m_popupMediaItems->append(new BarChartPopupMediaItem(popupMedia, colors, media));
+        m_popupMediaItems->append(new BarChartPopupMediaItem(
+                                    popupMedia,
+                                    colorsArrayFromJson(mediaPopupElementJson, i),
+                                    media)
+                                  );
         break;
       case Esri::ArcGISRuntime::PopupMediaType::PieChart:
-        m_popupMediaItems->append(new PieChartPopupMediaItem(popupMedia, colors, media));
+        m_popupMediaItems->append(new PieChartPopupMediaItem(
+                                    popupMedia,
+                                    colorsArrayFromJson(mediaPopupElementJson, i),
+                                    media)
+                                  );
         break;
       case Esri::ArcGISRuntime::PopupMediaType::LineChart:
-        m_popupMediaItems->append(new LineChartPopupMediaItem(popupMedia, colors, media));
+        m_popupMediaItems->append(new LineChartPopupMediaItem(
+                                    popupMedia,
+                                    colorsArrayFromJson(mediaPopupElementJson, i),
+                                    media)
+                                  );
         break;
       case Esri::ArcGISRuntime::PopupMediaType::Unknown:
         Q_UNIMPLEMENTED();
