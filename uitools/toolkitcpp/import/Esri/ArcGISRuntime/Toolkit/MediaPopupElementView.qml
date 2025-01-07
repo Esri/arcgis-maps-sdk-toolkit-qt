@@ -171,7 +171,13 @@ ColumnLayout {
                     BarSeries {
                         // BarSeries will take owership of the QList<QBarSet*> when we call append. This also applies to PieSeries and QPieSlice for PieChartPopupMediaItem.
                         // s.a https://doc.qt.io/qt-6/qbarseries.html#append-1
-                        Component.onCompleted: append(listModelData.barSets);
+                        Component.onCompleted: {
+                            let sets = listModelData.barSets;
+                            if (sets.length > 0)
+                                append(sets);
+                            else
+                                parent.visible = false;
+                        }
                     }
                 }
             }
@@ -197,13 +203,19 @@ ColumnLayout {
                     axisY: ValueAxis {
                         max: listModelData.maxValue
                         min: listModelData.minValue
-                        tickInterval: Math.abs(listModelData.maxValue) > Math.abs(listModelData.minValue)? max / 3 : Math.abs(min) / 3
+                        tickInterval: Math.abs(max) > Math.abs(min)? max / 3 : Math.abs(min) / 3
                     }
 
                     BarSeries {
                         // BarSeries will take owership of the QList<QBarSet*> when we call append. This also applies to PieSeries and QPieSlice for PieChartPopupMediaItem.
                         // s.a https://doc.qt.io/qt-6/qbarseries.html#append-1
-                        Component.onCompleted: append(listModelData.barSets);
+                        Component.onCompleted: {
+                            let sets = listModelData.barSets;
+                            if (sets.length > 0)
+                                append(sets);
+                            else
+                                parent.visible = false;
+                        }
                     }
                 }
             }
@@ -228,7 +240,13 @@ ColumnLayout {
                     PieSeries {
                         // PieSeries will take owership of the QList<QPieSlice*> when we call append. This also applies to BarSeries and QBarSet for BarChartPopupMediaItem.
                         // s.a https://doc.qt.io/qt-6/qpieseries.html#append-1
-                        Component.onCompleted: append(listModelData.pieSlices);
+                        Component.onCompleted: {
+                            let slices = listModelData.pieSlices;
+                            if (slices.length > 0)
+                                append(slices);
+                            else
+                                parent.visible = false;
+                        }
                     }
                 }
             }
@@ -263,8 +281,16 @@ ColumnLayout {
                     }
 
                     LineSeries {
-                        color: listModelData.color
-                        Component.onCompleted: append(listModelData.linePoints);
+
+                        Component.onCompleted: {
+                            let points = listModelData.linePoints;
+                            if (listModelData.colorFromJsonFound)
+                                color = listModelData.color;
+                            if (points.length > 0)
+                                append(points);
+                            else
+                                parent.visible = false;
+                        }
                     }
                 }
             }
