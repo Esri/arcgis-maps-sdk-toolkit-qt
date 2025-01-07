@@ -37,8 +37,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
 namespace {
 
-  template <typename T>
-  bool isNullOrUndefined(const T& value) {
+  bool isNullOrUndefined(const QJsonValue& value) {
       return value.isNull() || value.isUndefined();
   }
 
