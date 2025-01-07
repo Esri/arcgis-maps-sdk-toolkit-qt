@@ -366,6 +366,6 @@ void LocationDataSource::updateObjectsAndConnections()
  */
 
 /*!
-  \property Esri::ArcGISRuntime::Toolkit::LocationDataSource::started
+  \property LocationDataSource::started
   \brief Holds the property that indicates if the tracking has started.
 */

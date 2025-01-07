@@ -48,7 +48,7 @@ import QtQuick.Controls
         instance is created. See \l{https://doc.qt.io/qt-6/qtwebview-index.html}
         {Qt WebView}.
 
-  \image authenticationview_qml.png authentication_view
+  \image docs/authenticationview_qml.png authentication_view
   \snippet qml/demos/AuthenticationViewDemoForm.qml Set up Authentication View QML
  */
 

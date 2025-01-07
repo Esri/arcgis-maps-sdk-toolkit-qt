@@ -90,7 +90,7 @@ Camera ArcGISArView::originCamera() const
 }
 
 /*!
-  \property Esri::ArcGISRuntime::Toolkit::ArcGISArView::originCamera
+  \property ArcGISArView::originCamera
   \brief Sets the origin camera of this ArcGISArView.
  */
 void ArcGISArView::setOriginCamera(const Camera& originCamera)
@@ -106,7 +106,7 @@ void ArcGISArView::setOriginCamera(const Camera& originCamera)
 }
 
 /*!
-  \property Esri::ArcGISRuntime::Toolkit::ArcGISArView::sceneView
+  \property ArcGISArView::sceneView
   \brief Gets the SceneView associated with this ArcGISArView.
  */
 SceneQuickView* ArcGISArView::sceneView() const
