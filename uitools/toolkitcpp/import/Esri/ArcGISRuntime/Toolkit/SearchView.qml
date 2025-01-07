@@ -123,7 +123,7 @@ Pane {
 
             RoundButton {
                 id: searchButton
-                icon.source: "images/search.svg"
+                icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/search.svg"
                 width: height
                 flat: true
                 leftPadding: 2
@@ -144,7 +144,7 @@ Pane {
 
             RoundButton {
                 id: clearButton
-                icon.source: "images/x.svg"
+                icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/x.svg"
                 width: height
                 flat: true
                 leftPadding: 2

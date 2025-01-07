@@ -132,7 +132,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
       if (thumbnail.isNull())
       {
-        QIcon icon{QStringLiteral(":/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/basemap.svg")};
+        QIcon icon{QStringLiteral(":/Esri/ArcGISRuntime/Toolkit/basemap.svg")};
         thumbnail = icon.pixmap(200, 133).toImage();
       }
 

@@ -20,8 +20,8 @@
       <string>Zoom to</string>
      </property>
      <property name="icon">
-      <iconset resource="../../../../images/esri_arcgisruntime_toolkit_common_images.qrc">
-       <normaloff>:/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/layer-zoom-to.svg</normaloff>:/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/layer-zoom-to.svg</iconset>
+      <iconset resource="../../common/images/esri_arcgisruntime_toolkit_common_images.qrc">
+       <normaloff>:/Esri/ArcGISRuntime/Toolkit/layer-zoom-to.svg</normaloff>:/Esri/ArcGISRuntime/Toolkit/layer-zoom-to.svg</iconset>
      </property>
     </widget>
    </item>
@@ -31,8 +31,8 @@
       <string>Flash</string>
      </property>
      <property name="icon">
-      <iconset resource="../../../../images/esri_arcgisruntime_toolkit_common_images.qrc">
-       <normaloff>:/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/flash.svg</normaloff>:/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/flash.svg</iconset>
+      <iconset resource="../../common/images/esri_arcgisruntime_toolkit_common_images.qrc">
+       <normaloff>:/Esri/ArcGISRuntime/Toolkit/flash.svg</normaloff>:/Esri/ArcGISRuntime/Toolkit/flash.svg</iconset>
      </property>
     </widget>
    </item>
@@ -42,15 +42,15 @@
       <string>Capture</string>
      </property>
      <property name="icon">
-      <iconset resource="../../../../images/esri_arcgisruntime_toolkit_common_images.qrc">
-       <normaloff>:/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/cursor-click.svg</normaloff>:/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images/cursor-click.svg</iconset>
+      <iconset resource="../../common/images/esri_arcgisruntime_toolkit_common_images.qrc">
+       <normaloff>:/Esri/ArcGISRuntime/Toolkit/cursor-click.svg</normaloff>:/Esri/ArcGISRuntime/Toolkit/cursor-click.svg</iconset>
      </property>
     </widget>
    </item>
    <item row="0" column="3">
     <spacer name="horizontalSpacer">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -63,10 +63,10 @@
    <item row="1" column="0" colspan="4">
     <widget class="QTableView" name="resultsView">
      <property name="horizontalScrollBarPolicy">
-      <enum>Qt::ScrollBarAlwaysOff</enum>
+      <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
      </property>
      <property name="sizeAdjustPolicy">
-      <enum>QAbstractScrollArea::AdjustToContents</enum>
+      <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents</enum>
      </property>
      <property name="alternatingRowColors">
       <bool>true</bool>
@@ -79,7 +79,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../../../../images/esri_arcgisruntime_toolkit_common_images.qrc"/>
+  <include location="../../common/images/esri_arcgisruntime_toolkit_common_images.qrc"/>
  </resources>
  <connections/>
 </ui>

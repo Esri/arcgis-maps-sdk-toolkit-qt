@@ -75,7 +75,7 @@ Item {
     Image {
         id: compassImage
         anchors.fill: parent
-        source: "images/compass.svg"
+        source: "qrc:/Esri/ArcGISRuntime/Toolkit/compass.svg"
         fillMode: Image.PreserveAspectFit
         visible: autoHide && (controller.heading  % 360 < 1e-05) ? false : true
     }

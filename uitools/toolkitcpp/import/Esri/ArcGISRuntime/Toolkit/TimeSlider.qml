@@ -205,7 +205,7 @@ Pane {
 
         Button {
             id: stepBackButton
-            icon.source: "images/reverse.svg"
+            icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/reverse.svg"
             enabled: (!startTimePinned || !endTimePinned) && !playAnimation.running
             Timer {
                 id: pressedHoldBack
@@ -221,8 +221,8 @@ Pane {
 
         Button {
             id: playButton
-            icon.source: checked ? "images/pause.svg"
-                                 : "images/play.svg"
+            icon.source: checked ? "qrc:/Esri/ArcGISRuntime/Toolkit/pause.svg"
+                                 : "qrc:/Esri/ArcGISRuntime/Toolkit/play.svg"
             enabled: !startTimePinned || !endTimePinned
             checkable: true
             Layout.alignment: Qt.AlignHCenter
@@ -238,7 +238,7 @@ Pane {
 
         Button {
             id: stepForwardButton
-            icon.source: "images/forward.svg"
+            icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/forward.svg"
             enabled: (!startTimePinned || !endTimePinned) && !playAnimation.running
             Timer {
                 id: pressedHoldForward
