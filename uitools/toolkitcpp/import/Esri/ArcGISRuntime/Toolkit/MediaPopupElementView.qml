@@ -35,6 +35,7 @@ ColumnLayout {
     property real layoutSpacing: 0
 
     /*!
+      \internal
       \qmlproperty MediaPopupElementView controller
       \brief The Controller handles reading from the MediaPopupElement.
 

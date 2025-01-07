@@ -28,6 +28,7 @@
 namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
+  \internal
   \class Esri::ArcGISRuntime::Toolkit::PopupMediaItem
   \inmodule ArcGISRuntimeToolkit
   \brief This is the base class for the following PopupMediaItems, \l
@@ -41,11 +42,12 @@ namespace Esri::ArcGISRuntime::Toolkit {
 */
 
 /*!
- \brief Constructor
- \list
+  \internal
+  \brief Constructor
+  \list
     \li \a popupMedia - The \l {Esri::ArcGISRuntime::PopupMedia} {PopupMedia} used to populate the view.
     \li \a parent - The optional parent QObject.
-\endlist
+  \endlist
  */
 PopupMediaItem::PopupMediaItem(PopupMedia* popupMedia, QObject* parent)
   : QObject{parent}, m_popupMedia{popupMedia}
@@ -53,6 +55,7 @@ PopupMediaItem::PopupMediaItem(PopupMedia* popupMedia, QObject* parent)
 }
 
 /*!
+  \internal
   \brief Returns the title of the \c MediaPopupElement.
  */
 QString PopupMediaItem::title() const
@@ -61,6 +64,7 @@ QString PopupMediaItem::title() const
 }
 
 /*!
+  \internal
   \brief Returns the caption of the \c MediaPopupElement.
  */
 QString PopupMediaItem::caption() const
@@ -69,6 +73,7 @@ QString PopupMediaItem::caption() const
 }
 
 /*!
+  \internal
   \brief Returns the popupMediaType of the \c MediaPopupElement.
  */
 PopupMediaType PopupMediaItem::popupMediaType() const
@@ -77,6 +82,7 @@ PopupMediaType PopupMediaItem::popupMediaType() const
 }
 
 /*!
+  \internal
   \brief Returns the PopupMedia of the \c MediaPopupElement.
  */
 PopupMedia* PopupMediaItem::popupMediaItem() const
@@ -84,6 +90,9 @@ PopupMedia* PopupMediaItem::popupMediaItem() const
   return m_popupMedia;
 }
 
+/*!
+  \internal
+ */
 QColor PopupMediaItem::extractColorFromJson(const QJsonArray& colorArray, const int index)
 {
   if (!colorArray.isEmpty() && index < colorArray.size())
@@ -104,13 +113,16 @@ QColor PopupMediaItem::extractColorFromJson(const QJsonArray& colorArray, const 
 } // namespace Esri::ArcGISRuntime::Toolkit
 
 /*!
+  \internal
   \property Esri::ArcGISRuntime::Toolkit::PopupMediaItem::title
  */
 
 /*!
+  \internal
   \property Esri::ArcGISRuntime::Toolkit::PopupMediaItem::caption
  */
 
 /*!
+  \internal
   \property Esri::ArcGISRuntime::Toolkit::PopupMediaItem::popupMediaType
  */

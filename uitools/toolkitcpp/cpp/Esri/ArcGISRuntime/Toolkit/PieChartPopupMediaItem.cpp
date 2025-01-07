@@ -29,12 +29,14 @@
 namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
+  \internal
   \class Esri::ArcGISRuntime::Toolkit::PieChartPopupMediaItem
   \inmodule ArcGISRuntimeToolkit
   \brief Represents the contents of a \c{MediaPopupElement::media} to be used for a PieSeries in QML.
   */
 
 /*!
+  \internal
   \brief Constructor
   \list
     \li \a popupMedia - The \l {Esri::ArcGISRuntime::PopupMedia} {PopupMedia} used to populate the list of pie slices.
@@ -54,6 +56,7 @@ PieChartPopupMediaItem::PieChartPopupMediaItem(PopupMedia* popupMedia, const QJs
 // s.a https://github.com/qt/qtgraphs/blob/08393457537bb45acf3620986039e516f1ac6f2b/src/graphs2d/piechart/qpieseries.cpp#L635-L672
 
 /*!
+  \internal
   \brief Returns the list of \c QPieSlice objects.
  */
 QList<QPieSlice*> PieChartPopupMediaItem::pieSlices()
@@ -83,10 +86,12 @@ QList<QPieSlice*> PieChartPopupMediaItem::pieSlices()
 } // namespace Esri::ArcGISRuntime::Toolkit
 
 /*!
+  \internal
   \fn void Esri::ArcGISRuntime::Toolkit::PieChartPopupMediaItem::pieChartPopupMediaItemChanged()
   \brief Signal emitted when the underlying \c PopupMedia changes.
  */
 
 /*!
+  \internal
   \property Esri::ArcGISRuntime::Toolkit::PieChartPopupMediaItem::pieSlices
  */

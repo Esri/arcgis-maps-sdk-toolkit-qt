@@ -29,12 +29,14 @@
 namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
+  \internal
   \class Esri::ArcGISRuntime::Toolkit::BarChartPopupMediaItem
   \inmodule ArcGISRuntimeToolkit
   \brief Represents the contents of a \c{MediaPopupElement::media} to be used for a BarSeries in QML.
   */
 
 /*!
+  \internal
   \brief Constructor
   \list
     \li \a popupMedia - The \l {Esri::ArcGISRuntime::PopupMedia} {PopupMedia} used to populate the view.
@@ -49,6 +51,7 @@ BarChartPopupMediaItem::BarChartPopupMediaItem(PopupMedia* popupMedia, const QJs
 }
 
 /*!
+  \internal
   \brief Returns the list of \c QBarSet objects.
  */
 QList<QBarSet*> BarChartPopupMediaItem::barSets()
@@ -84,6 +87,7 @@ QList<QBarSet*> BarChartPopupMediaItem::barSets()
 }
 
 /*!
+  \internal
   \brief Returns the maximum value of all QBarSets.
  */
 qreal BarChartPopupMediaItem::maxValue() const
@@ -92,6 +96,7 @@ qreal BarChartPopupMediaItem::maxValue() const
 }
 
 /*!
+  \internal
   \brief Returns the minimum value of all QBarSets.
  */
 qreal BarChartPopupMediaItem::minValue() const
@@ -102,18 +107,22 @@ qreal BarChartPopupMediaItem::minValue() const
 } // namespace Esri::ArcGISRuntime::Toolkit
 
 /*!
+  \internal
   \fn void Esri::ArcGISRuntime::Toolkit::BarChartPopupMediaItem::barChartPopupMediaItemChanged()
   \brief Signal emitted when the underlying \c PopupMedia changes.
  */
 
 /*!
+  \internal
   \property Esri::ArcGISRuntime::Toolkit::BarChartPopupMediaItem::barSets
  */
 
 /*!
+  \internal
   \property Esri::ArcGISRuntime::Toolkit::BarChartPopupMediaItem::maxValue
  */
 
 /*!
+  \internal
   \property Esri::ArcGISRuntime::Toolkit::BarChartPopupMediaItem::minValue
  */

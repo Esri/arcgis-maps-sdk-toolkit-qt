@@ -91,6 +91,7 @@ namespace {
 }
 
 /*!
+  \internal
   \class Esri::ArcGISRuntime::Toolkit::MediaPopupElementViewController
   \inmodule ArcGISRuntimeToolkit
   \ingroup ArcGISQtToolkitUiCppControllers
@@ -99,6 +100,7 @@ namespace {
  */
 
 /*!
+  \internal
   \brief Constructor
   \list
     \li \a mediaPopupElement - The \l {Esri::ArcGISRuntime::MediaPopupElement} {MediaPopupElement} used to populate the view.
@@ -163,11 +165,13 @@ MediaPopupElementViewController::MediaPopupElementViewController(
 }
 
 /*!
+  \internal
   \brief Destructor.
   */
 MediaPopupElementViewController::~MediaPopupElementViewController() = default;
 
 /*!
+  \internal
   \brief Returns the description of the \c MediaPopupElement.
  */
 QString MediaPopupElementViewController::description() const
@@ -176,6 +180,7 @@ QString MediaPopupElementViewController::description() const
 }
 
 /*!
+  \internal
   \brief Returns the title of the \c MediaPopupElement.
  */
 QString MediaPopupElementViewController::title() const
@@ -184,6 +189,7 @@ QString MediaPopupElementViewController::title() const
 }
 
 /*!
+  \internal
   \brief Returns the known list of available PopupMedia.
   Internally, this is a \c GenericListModel with an \c elementType of
   \c PopupMediaItem.
@@ -196,14 +202,17 @@ GenericListModel* MediaPopupElementViewController::popupMediaItems() const
 } // namespace Esri::ArcGISRuntime::Toolkit
 
 /*!
+  \internal
   \fn void Esri::ArcGISRuntime::Toolkit::MediaPopupElementViewController::mediaPopupElementChanged()
   \brief Signal emitted when the underlying \c MediaPopupElement changes.
  */
 
 /*!
+  \internal
   \property Esri::ArcGISRuntime::Toolkit::MediaPopupElementViewController::title
  */
 
 /*!
+  \internal
   \property Esri::ArcGISRuntime::Toolkit::MediaPopupElementViewController::description
  */
