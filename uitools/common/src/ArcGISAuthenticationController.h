@@ -21,20 +21,24 @@
 #include <QQmlEngine>
 
 // STL headers
-#include <Authentication/ArcGISAuthenticationChallengeHandler.h>
 #include <memory>
 #include <mutex>
 
 namespace Esri::ArcGISRuntime::Authentication {
   class OAuthUserConfiguration;
   class OAuthUserLoginPrompt;
+  class ArcGISAuthenticationChallenge;
+  class NetworkAuthenticationChallenge;
 }
 
 Q_MOC_INCLUDE(<QUrl>)
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-class ArcGISAuthenticationController : public Authentication::ArcGISAuthenticationChallengeHandler
+class ArcGISAuthenticationChallengeRelay;
+class NetworkAuthenticationChallengeRelay;
+
+class ArcGISAuthenticationController : public QObject
 {
   Q_OBJECT
 
@@ -66,10 +70,16 @@ public:
   Q_INVOKABLE void respond(const QUrl& url);
   Q_INVOKABLE void respondWithError(const QString& platformError);
 
+  // ServerTrust
+  Q_INVOKABLE void continueWithServerTrust(bool trust);
+
   Q_INVOKABLE void cancel();
 
-  // ArcGISAuthenticationChallengeHandler interface
-  void handleArcGISAuthenticationChallenge(Authentication::ArcGISAuthenticationChallenge* challenge) override;
+  // ArcGISAuthenticationChallengeHandler relay
+  void handleArcGISAuthenticationChallenge(Authentication::ArcGISAuthenticationChallenge* challenge);
+
+  // NetworkAuthenticationChallengeHandler relay
+  void handleNetworkAuthenticationChallenge(Authentication::NetworkAuthenticationChallenge* challenge);
 
   // OAuth user challenge support
   void addOAuthUserConfiguration(Esri::ArcGISRuntime::Authentication::OAuthUserConfiguration* userConfiguration);
@@ -80,6 +90,7 @@ public:
 signals:
   void displayOAuthSignInView();
   void displayUsernamePasswordSignInView();
+  void displayServerTrustView();
   void currentAuthenticatingHostChanged();
   void authorizeUrlChanged();
   void preferPrivateWebBrowserSessionChanged();
@@ -95,7 +106,11 @@ private:
   QString redirectUri_() const;
   int currentChallengeFailureCount_() const;
 
-  std::unique_ptr<Authentication::ArcGISAuthenticationChallenge> m_currentChallenge;
+  std::unique_ptr<ArcGISAuthenticationChallengeRelay> m_arcGISAuthenticationChallengeRelay;
+  std::unique_ptr<NetworkAuthenticationChallengeRelay> m_networkAuthenticationChallengeRelay;
+
+  std::unique_ptr<Authentication::ArcGISAuthenticationChallenge> m_currentArcGISChallenge;
+  std::unique_ptr<Authentication::NetworkAuthenticationChallenge> m_currentNetworkChallenge;
   QList<Esri::ArcGISRuntime::Authentication::OAuthUserConfiguration*> m_userConfigurations;
   std::unique_ptr<Authentication::OAuthUserLoginPrompt> m_currentOAuthUserLoginPrompt;
   int m_currentChallengeFailureCount = 0;

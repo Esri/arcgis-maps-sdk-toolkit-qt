@@ -40,6 +40,10 @@ Item {
         function onDisplayOAuthSignInView() {
             displayView(oAuth2ViewComponent);
         }
+
+        function onDisplayServerTrustView() {
+            displayView(serverTrustViewComponent);
+        }
     }
 
     Component {
@@ -66,23 +70,17 @@ Item {
         }
     }
 
-    // TODO - implement SSL handshake view
-    // Component {
-    //     id: sslHandshakeViewComponent
-    //     SslHandshakeView {
-    //         anchors.centerIn: arcgisAuthenticationView_internal
-    //         controller: arcgisAuthenticationView_internal.controller
-    //         Connections {
-    //             target: controller
-    //             function onCurrentChallengeTypeChanged() {
-    //                 reject();
-    //             }
-    //         }
-    //         onClosed: {
-    //             this.destroy();
-    //         }
-    //     }
-    // }
+    Component {
+        id: serverTrustViewComponent
+        ServerTrustView {
+            anchors.centerIn: arcgisAuthenticationView_internal
+            controller: arcgisAuthenticationView_internal.controller
+            onClosed: {
+                this.destroy();
+            }
+            Component.onCompleted: activeLoginViewReady_(this)
+        }
+    }
 
     function displayView(componentToDisplay) {
         if (componentToDisplay) {
