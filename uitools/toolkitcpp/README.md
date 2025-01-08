@@ -27,7 +27,7 @@ These are the **Qt Quick UI components/QML Type** available to use:
 
 ## Example steps showing how to use a Qt Quick UI component in your project
 
- A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Qt templates to build an app. There are two options to make use of the Qt Quick UI components depending on your Qt Creator app development build configuration (**qmake** or **CMake**). The following steps show an example of adding the NorthArrow control to an app:
+ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Qt templates to build an app. There are two options to make use of the Qt Quick UI components depending on your Qt Creator app development build configuration (**qmake** or **CMake**). The following steps show an example of adding the NorthArrow control to an app: for windows?
 
 **STEP 1:** In Qt Creator choose **File** > **New project** from the menus. 
 
@@ -41,11 +41,13 @@ These are the **Qt Quick UI components/QML Type** available to use:
 >
 >  **Define Project Details** ==> **App Description:** Test using a NorthArrow, **3D project:** leave unchecked, **ArcGIS OnlineBasemap:** Imagery, **AccessToken:** see: [Create an API Key](https://developers.arcgis.com/documentation/security-and-authentication/api-key-authentication/tutorials/create-an-api-key/)
 >
->  **Kit Selection** ==> Desktop Qt 6.5.6 MSVC2019 64bit (or higher)
+>  **Kit Selection** ==> Desktop Qt 6.5.6 MSVC2019 64bit (or higher) or other corresponding compiler/kit?
 >
 >  **Project Management** ==> **Add as a subproject to project:** none, **Add to version control:** none
 
 **STEP 4:** Have the project reference the location of the toolkit:
+
+why different qmake and cmake? copy in both case?
 
 **qmake**
 
@@ -53,10 +55,10 @@ These are the **Qt Quick UI components/QML Type** available to use:
 
 > ```cpp
 > ...
-> include($$PWD/arcgisruntime.pri)
+> include($$PWD/arcgisruntime.pri) // this line already exists
 >
 > # Include the path to the toolkit.pri file
-> include(C:/arcgis-maps-sdk-toolkit-qt/toolkit/uitools/toolkitcpp.pri)
+> include(C:/arcgis-maps-sdk-toolkit-qt/toolkit/uitools/toolkitcpp/toolkitcpp.pri)
 > ...
 > ```  
 
@@ -84,15 +86,15 @@ These are the **Qt Quick UI components/QML Type** available to use:
 
 > ```cpp
 > ...
-> #include <QQmlApplicationEngine>
+> #include <QQmlApplicationEngine> // this line already exists
 >
 > // Needed for the Qt toolkit
-> #include "Esri/ArcGISRuntime/Toolkit/register.h"
+> #include "register.h"
 > ...
 >
 > ...
 > // Intitialize application view
-> QQmlApplicationEngine engine;
+> QQmlApplicationEngine engine; // this line already exists
 >
 > // Register the toolkit
 > Esri::ArcGISRuntime::Toolkit::registerComponents(engine);
@@ -105,7 +107,7 @@ These are the **Qt Quick UI components/QML Type** available to use:
 
 > ```qml
 > ...
-> import Esri.TestNorthArrow
+> import Esri.TestNorthArrow // this line already exists
 >
 > // Needed for the Qt toolkit
 > import Esri.ArcGISRuntime.Toolkit
@@ -113,7 +115,7 @@ These are the **Qt Quick UI components/QML Type** available to use:
 > Item {
 >
 >    // Create MapQuickView here, and create its Map etc. in C++ code
->    MapView {
+>    MapView { // this line already exists
 >        id: view
 >        anchors.fill: parent
 >        // set focus to enable keyboard navigation

@@ -49,64 +49,47 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 > ```cpp
 > ...
 > include($$PWD/arcgisruntime.pri)
->
+> .
 > # Include the path to the toolkit.pri file
-> include(C:/arcgis-maps-sdk-toolkit-qt/toolkit/uitools/toolkitcpp.pri)
+> include(C:/arcgis-maps-sdk-toolkit-qt/toolkit/uitools/toolkitwidgets/toolkitwidgets.pri)
+>  ...
+> or 
+> include($$PWD/toolkitwidgets/toolkitwidgets.pri)
 > ...
 > ```  
 
 **CMake**
 
-- If you chose the **CMake** build system, copy the `toolkitcpp` subdirectory into your project's directory. For example you could modify this `bash` script to do the copy of the toolkit directories/files for you:
+- If you chose the **CMake** build system, copy the `toolkitwidgets` subdirectory into your project's directory. For example you could modify this `bash` script to do the copy of the toolkit directories/files for you:
 
 > ```bash
-> cp -r /path/to/toolkit/uitools/toolkitcpp /path/to/project
+> cp -r /path/to/toolkit/uitools/toolkitwidgets /path/to/project
 > ```
 
 - Edit the `CMakeLists.txt` in your Qt project (it was created when you went through the ArcGIS Maps SDK for Qt template wizards). Uncomment the `add_subdirectory` and `target_link_libraries` commands:
 
 > ```CMake
 > ...
-> # To integrate the toolkit, copy the `toolkitcpp` subdirectory from the toolkit
+> # To integrate the toolkit, copy the `toolkitwidgets` subdirectory from the toolkit
 > # into your project's directory. Then uncomment the following lines to add it to your project.
 > # See https://github.com/Esri/arcgis-maps-sdk-toolkit-qt for details
-> add_subdirectory(toolkitcpp)
-> target_link_libraries(${PROJECT_NAME} PRIVATE libtoolkitcpp)
+> add_subdirectory(toolkitwidgets)
+> target_link_libraries(${PROJECT_NAME} PRIVATE libtoolkitwidgets)
 > ...
 > ```
 
-**STEP 5:** In the `main.cpp` file, add an `include` statement near the top of the file to import the toolkit `register.h` file and then later in file call the `Toolkit::registerComponents()` function.
+**STEP 5:** Once you have successfully included the toolkit, you can create individual tools in your own widgets files. In your widgets code file (for example: `TestNorthArrow.cpp`), create a new instance of the tool you wish to use and add it to your widgets layout. You will also normally need to pass the `GeoView` which the tool is designed to work with:
 
 > ```cpp
-> ...
-> #include <QQmlApplicationEngine>
->
-> // Needed for the Qt toolkit
-> #include "Esri/ArcGISRuntime/Toolkit/register.h"
-> ...
->
-> ...
-> // Intitialize application view
-> QQmlApplicationEngine engine;
->
-> // Register the toolkit
-> Esri::ArcGISRuntime::Toolkit::registerComponents(engine);
-> ...
-> ``` 
-
-**STEP 6:** Once you have successfully imported the toolkit, you can create individual tools in your own widgets files. In your widgets code file (for example: `TestNorthArrow.cpp`), create a new instance of the tool you wish to use and add it to your widgets layout. You will also normally need to pass the `GeoView` which the tool is designed to work with:
-
-> ```cpp
->  #include "Esri/ArcGISRuntime/Toolkit/NorthArrow.h"
+>  #include "NorthArrow.h"
 >  ...
 >
 >  auto northArrow = new Esri::ArcGISRuntime::Toolkit::NorthArrow(this);
 >  northArrow->setMapView(m_mapView);
 >  // Add your NorthArrow to your UI here!
->  northArrow->show();
 > ```
 
-**STEP 7:** When you run your app, you should now see the UI for the Qt toolkit component in your app. For example:
+**STEP 6:** When you run your app, you should now see the UI for the Qt toolkit component in your app. For example:
 ![Adding code to the main.cpp file](./images/TestNorthArrow.png)
 
 ## Access token requirements
