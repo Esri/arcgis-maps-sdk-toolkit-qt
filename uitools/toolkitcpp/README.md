@@ -53,7 +53,7 @@ why different qmake and cmake? copy in both case?
 
 - If you chose the **qmake** build system, edit your apps `TestNorthArrow.pro` file (it was created when you went through the ArcGIS Maps SDK for Qt template wizards), add an `include` statement that points to the path of the `toolkit.pri` file that you have on disk. 
 
-> ```cpp
+> ```qmake
 > ...
 > include($$PWD/arcgisruntime.pri) // this line already exists
 >
