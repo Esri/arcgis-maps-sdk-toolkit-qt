@@ -89,7 +89,7 @@ why different qmake and cmake? copy in both case?
 > #include <QQmlApplicationEngine> // this line already exists
 >
 > // Needed for the Qt toolkit
-> #include "register.h"
+> #include "Esri/ArcGISRuntime/Toolkit/register.h"
 > ...
 >
 > ...
