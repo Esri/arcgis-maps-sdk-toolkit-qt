@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2024 Esri
+ *  Copyright 2012-2025 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
 
 // Qt headers
 #include <QObject>
-#include <QUrl>
 
 // Other headers
 #include "Internal/QmlEnums.h"
@@ -35,24 +34,23 @@ namespace Toolkit
 class PopupMediaItem : public QObject
 {
   Q_OBJECT
-  Q_PROPERTY(QString title READ title NOTIFY popopMediaItemChanged)
-  Q_PROPERTY(QUrl sourceUrl READ sourceUrl NOTIFY popopMediaItemChanged)
-  Q_PROPERTY(QUrl linkUrl READ linkUrl NOTIFY popopMediaItemChanged)
-  Q_PROPERTY(QString caption READ caption NOTIFY popopMediaItemChanged)
-  Q_PROPERTY(PopupMediaType popupMediaType READ popupMediaType NOTIFY popopMediaItemChanged)
+  Q_PROPERTY(QString title READ title NOTIFY popupMediaItemChanged)
+  Q_PROPERTY(QString caption READ caption NOTIFY popupMediaItemChanged)
+  Q_PROPERTY(PopupMediaType popupMediaType READ popupMediaType NOTIFY popupMediaItemChanged)
 
 public:
   PopupMediaItem(QObject* parent = nullptr) = delete;
   explicit PopupMediaItem(PopupMedia* popupMedia, QObject* parent = nullptr);
 
   QString title() const;
-  QUrl linkUrl() const;
-  QUrl sourceUrl() const;
   QString caption() const;
   PopupMediaType popupMediaType() const;
+  PopupMedia* popupMediaItem() const;
+
+  static QColor extractColorFromJson(const QJsonArray& colorArray, const int index);
 
 signals:
-  void popopMediaItemChanged();
+  void popupMediaItemChanged();
 
 private:
   PopupMedia* m_popupMedia = nullptr;

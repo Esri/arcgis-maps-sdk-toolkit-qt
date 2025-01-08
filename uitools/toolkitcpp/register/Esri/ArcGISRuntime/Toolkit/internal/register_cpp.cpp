@@ -19,6 +19,7 @@
 // Toolkit includes
 #include "ArcGISAuthenticationController.h"
 #include "AuthenticationController.h"
+#include "BarChartPopupMediaItem.h"
 #include "BasemapGalleryController.h"
 #include "BasemapGalleryItem.h"
 #include "BookmarksViewController.h"
@@ -31,10 +32,13 @@
 #include "FloorFilterFacilityItem.h"
 #include "FloorFilterLevelItem.h"
 #include "FloorFilterSiteItem.h"
+#include "ImagePopupMediaItem.h"
+#include "LineChartPopupMediaItem.h"
 #include "LocatorSearchSource.h"
 #include "MediaPopupElementViewController.h"
 #include "NorthArrowController.h"
 #include "OverviewMapController.h"
+#include "PieChartPopupMediaItem.h"
 #include "PopupElementViewItem.h"
 #include "PopupMediaItem.h"
 #include "PopupViewController.h"
@@ -200,6 +204,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     registerModuleRevisions();
     registerComponent<ArcGISAuthenticationController>(CreationType::Singleton);
     registerComponent<AuthenticationController>();
+    registerComponent<BarChartPopupMediaItem>();
     registerComponent<BasemapGalleryController>();
     registerComponent<BasemapGalleryItem>();
     registerComponent<BookmarksViewController>();
@@ -212,10 +217,13 @@ namespace Esri::ArcGISRuntime::Toolkit {
     registerComponent<FloorFilterFacilityItem>(CreationType::Uncreatable);
     registerComponent<FloorFilterLevelItem>(CreationType::Uncreatable);
     registerComponent<FloorFilterSiteItem>(CreationType::Uncreatable);
+    registerComponent<ImagePopupMediaItem>();
+    registerComponent<LineChartPopupMediaItem>();
     registerComponent<LocatorSearchSource>(CreationType::Uncreatable);
     registerComponent<MediaPopupElementViewController>();
     registerComponent<NorthArrowController>();
     registerComponent<OverviewMapController>();
+    registerComponent<PieChartPopupMediaItem>();
     registerComponent<PopupElementViewItem>();
     registerComponent<PopupMediaItem>();
     registerComponent<PopupViewController>();

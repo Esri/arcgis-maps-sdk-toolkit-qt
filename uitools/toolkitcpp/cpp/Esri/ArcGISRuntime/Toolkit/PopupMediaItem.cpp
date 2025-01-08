@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2024 Esri
+ *  Copyright 2012-2025 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,93 +15,62 @@
  ******************************************************************************/
 #include "PopupMediaItem.h"
 
+// Qt headers
+#include <QColor>
+#include <QJsonArray>
+
 // Maps SDK headers
+#include <ChartImage.h>
+#include <ChartImageParameters.h>
 #include <PopupMedia.h>
 #include <PopupMediaValue.h>
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
-  \class Esri::ArcGISRuntime::Toolkit::PopupMediaItem
-  \inmodule ArcGISRuntimeToolkit
-  \brief Represents the contents of a \c{MediaPopupElement::media}. Can be accessed via
-  \c{MediaPopupElementViewController::popupMediaItems}.
-
-  The PopupMediaItem is a wrapper around a PopupMedia, along with any additional
-  meta-information.
-  */
-
-/*!
- \brief Constructor
- \list
-    \li \a popupMedia - The \l {Esri::ArcGISRuntime::PopupMedia} {PopupMedia} used to populate the view.
-    \li \a parent - The optional parent QObject. 
-\endlist
+  \internal
+  This class is an internal implementation detail and is subject to change.
  */
 PopupMediaItem::PopupMediaItem(PopupMedia* popupMedia, QObject* parent)
   : QObject{parent}, m_popupMedia{popupMedia}
 {
 }
 
-/*!
-  \brief Returns the title of the \c MediaPopupElement.
- */
 QString PopupMediaItem::title() const
 {
   return m_popupMedia->title();
 }
 
-/*!
-  \brief Returns the sourceUrl of the \c MediaPopupElement.
- */
-QUrl PopupMediaItem::sourceUrl() const
-{
-  return m_popupMedia->value()->sourceUrl();
-}
-
-/*!
-  \brief Returns the linkUrl of the \c MediaPopupElement.
- */
-QUrl PopupMediaItem::linkUrl() const
-{
-  return m_popupMedia->value()->linkUrl();
-}
-
-/*!
-  \brief Returns the caption of the \c MediaPopupElement.
- */
 QString PopupMediaItem::caption() const
 {
   return m_popupMedia->caption();
 }
 
-/*!
-  \brief Returns the popupMediaType of the \c MediaPopupElement.
- */
 PopupMediaType PopupMediaItem::popupMediaType() const
 {
   return m_popupMedia->popupMediaType();
 }
 
+PopupMedia* PopupMediaItem::popupMediaItem() const
+{
+  return m_popupMedia;
+}
+
+QColor PopupMediaItem::extractColorFromJson(const QJsonArray& colorArray, const int index)
+{
+  if (!colorArray.isEmpty() && index < colorArray.size())
+  {
+    // color scheme is [Red, Green, Blue, Alpha]
+    // https://developers.arcgis.com/web-map-specification/objects/color
+    const auto colorArrayAtIndex = colorArray[index];
+    const auto r = colorArrayAtIndex[0].toInt();
+    const auto g = colorArrayAtIndex[1].toInt();
+    const auto b = colorArrayAtIndex[2].toInt();
+    const auto a = colorArrayAtIndex[3].toInt();
+
+    return QColor(r, g, b, a);
+  }
+  return QColor();
+}
+
 } // namespace Esri::ArcGISRuntime::Toolkit
-
-
-/*!
-  \property Esri::ArcGISRuntime::Toolkit::PopupMediaItem::title
- */
-
-/*!
-  \property Esri::ArcGISRuntime::Toolkit::PopupMediaItem::sourceUrl
- */
-
-/*!
-  \property Esri::ArcGISRuntime::Toolkit::PopupMediaItem::linkUrl
- */
-
-/*!
-  \property Esri::ArcGISRuntime::Toolkit::PopupMediaItem::caption
- */
-
-/*!
-  \property Esri::ArcGISRuntime::Toolkit::PopupMediaItem::popupMediaType
- */
