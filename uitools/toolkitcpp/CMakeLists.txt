@@ -31,7 +31,7 @@ qt_add_library(libtoolkitcpp STATIC
 
 target_include_directories(libtoolkitcpp PUBLIC
     ${ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_INCLUDES}
-    src/Esri/ArcGISRuntime/Toolkit
+    src
 )
 
 target_compile_definitions(libtoolkitcpp PRIVATE

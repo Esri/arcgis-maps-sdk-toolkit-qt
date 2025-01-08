@@ -39,8 +39,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
   \note default width and height is 48.
  */
 
-// NorthArrow::NorthArrow(SceneGraphicsView* sceneView, QWidget* parent) :
-
 /*!
   \brief Constructor
   \list
