@@ -27,7 +27,7 @@ These are the **Qt Quick UI components/QML Type** available to use:
 
 ## Example steps showing how to use a Qt Quick UI component in your project
 
- A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Qt templates to build an app. There are two options to make use of the Qt Quick UI components depending on your Qt Creator app development build configuration (**qmake** or **CMake**). The following steps show an example of adding the NorthArrow control to an app: for windows?
+ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Qt templates to build an app. There are two options to make use of the Qt Quick UI components depending on your Qt Creator app development build configuration (**qmake** or **CMake**). The following steps show an example of adding the NorthArrow control to an app on Windows. Similar steps would be needed on different platforms.
 
 **STEP 1:** In Qt Creator choose **File** > **New project** from the menus. 
 
