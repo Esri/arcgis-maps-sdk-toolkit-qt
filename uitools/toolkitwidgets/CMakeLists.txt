@@ -80,7 +80,6 @@ qt_add_library(libtoolkitwidgets STATIC
 target_include_directories(libtoolkitwidgets PUBLIC
     ${ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_INCLUDES}
     src
-    src/Esri/ArcGISRuntime/Toolkit/Internal
 )
 
 target_compile_definitions(libtoolkitwidgets PRIVATE
