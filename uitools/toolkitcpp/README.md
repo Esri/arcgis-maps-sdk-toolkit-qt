@@ -118,7 +118,7 @@ These are the **Qt Quick UI components/QML Type** available to use:
 > // Locate this existing line in your project
 > Item {
 >    // Create MapQuickView here, and create its Map etc. in C++ code
->    MapView { // this line already exists
+>    MapView {
 >        id: view
 >        anchors.fill: parent
 >        // set focus to enable keyboard navigation
