@@ -23,44 +23,22 @@
 namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
-  \class Esri::ArcGISRuntime::Toolkit::FieldsPopupElementViewController
-  \inmodule ArcGISRuntimeToolkit
-  \ingroup ArcGISQtToolkitUiCppControllers
-  \brief In MVC architecture, this is the controller for the corresponding
-  \c FieldsPopupElementView.
+  \internal
+  This class is an internal implementation detail and is subject to change.
  */
-
-/*!
-  \brief Constructor
-  \list
-    \li \a fieldsPopupElement - The \l {Esri::ArcGISRuntime::FieldsPopupElement} {FieldsPopupElement} used to populate the view.
-    \li \a parent - The optional parent QObject.
-  \endlist
-  */
 FieldsPopupElementViewController::FieldsPopupElementViewController(
     FieldsPopupElement* fieldsPopupElement, QObject* parent)
   : PopupElementViewItem{fieldsPopupElement, parent}
 {
 }
 
-/*!
-  \brief Destructor.
-  */
 FieldsPopupElementViewController::~FieldsPopupElementViewController() = default;
 
-/*!
-  \brief Returns the title of the \c FieldsPopupElement.
- */
 QString FieldsPopupElementViewController::title() const
 {
   return static_cast<FieldsPopupElement*>(popupElement())->title();
 }
 
-/*!
-  \brief Returns the combination of each element from \l {Esri::ArcGISRuntime::FieldsPopupElement::labels} {labels} and
-  \l {Esri::ArcGISRuntime::FieldsPopupElement::formattedValues} {formattedValues} of the
-  \c FieldsPopupElement in a QList of QMap elements
-  */
 QVariantList FieldsPopupElementViewController::labelsAndValues() const
 {
   const auto list1 = static_cast<FieldsPopupElement*>(popupElement())->labels();
@@ -82,16 +60,3 @@ QVariantList FieldsPopupElementViewController::labelsAndValues() const
 }
 
 } // namespace Esri::ArcGISRuntime::Toolkit
-
-/*!
-  \fn void Esri::ArcGISRuntime::Toolkit::FieldsPopupElementViewController::fieldsPopupElementChanged()
-  \brief Signal emitted when the underlying \c FieldsPopupElement changes.
- */
-
-/*!
-  \property Esri::ArcGISRuntime::Toolkit::FieldsPopupElementViewController::title
- */
-
-/*!
-  \property Esri::ArcGISRuntime::Toolkit::FieldsPopupElementViewController::values
- */

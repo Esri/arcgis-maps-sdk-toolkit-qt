@@ -22,19 +22,8 @@
 namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
-  \class Esri::ArcGISRuntime::Toolkit::TextPopupElementViewController
-  \inmodule ArcGISRuntimeToolkit
-  \ingroup ArcGISQtToolkitUiCppControllers
-  \brief In MVC architecture, this is the controller for the corresponding
-  \c TextPopupElementView.
- */
-
-/*!
-  \brief Constructor
-  \list
-    \li \a textPopupElement - The \l {Esri::ArcGISRuntime::TextPopupElement} {TextPopupElement} used to populate the view.
-    \li \a parent - The optional parent QObject.
-  \endlist
+  \internal
+  This class is an internal implementation detail and is subject to change.
  */
 TextPopupElementViewController::TextPopupElementViewController(
     TextPopupElement* textPopupElement, QObject* parent)
@@ -42,26 +31,11 @@ TextPopupElementViewController::TextPopupElementViewController(
 {
 }
 
-/*!
-  \brief Destructor.
-  */
 TextPopupElementViewController::~TextPopupElementViewController() = default;
 
-/*!
-  \brief Returns the text of the \c TextPopupElement.
-  */
 QString TextPopupElementViewController::text() const
 {
   return popupElement() ? static_cast<TextPopupElement*>(popupElement())->text() : nullptr;
 }
 
 } // namespace Esri::ArcGISRuntime::Toolkit
-
-/*!
-  \fn void Esri::ArcGISRuntime::Toolkit::TextPopupElementViewController::textPopupElementChanged()
-  \brief Signal emitted when the \c text changes.
- */
-
-/*!
-  \property Esri::ArcGISRuntime::Toolkit::TextPopupElementViewController::text
- */
