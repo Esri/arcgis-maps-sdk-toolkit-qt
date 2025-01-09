@@ -28,7 +28,7 @@ import QtQuick
    Double clicking on the NorthArrow triggers the heading of the connected
    GeoView to be orientainted to 0.
    \note default width and height is 48.
-   \image  docs/northarrow.gif northarrow
+   \image northarrow.gif northarrow
    \snippet qml/demos/NorthArrowDemoForm.qml Set up North Arrow QML
  */
 
@@ -75,7 +75,7 @@ Item {
     Image {
         id: compassImage
         anchors.fill: parent
-        source: "images/compass.svg"
+        source: "qrc:/Esri/ArcGISRuntime/Toolkit/compass.svg"
         fillMode: Image.PreserveAspectFit
         visible: autoHide && (controller.heading  % 360 < 1e-05) ? false : true
     }

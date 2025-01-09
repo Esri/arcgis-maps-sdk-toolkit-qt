@@ -37,9 +37,7 @@ import QtQuick.Layouts
 
  The result Tab itself contains a TabBar of the results made up of custom Tabs defined in
  UtilityNetworkFunctionTraceResultsModel.
-
- Generic styles, displayed in this Qml UI, can be overwritten using the Calcite style.
-*/
+ */
 
 Pane {
     id: utilityNetworkTrace
@@ -158,14 +156,14 @@ Pane {
                                 }
                                 Button {
                                     Layout.preferredWidth: 48
-                                    icon.source: "images/zoom-to-object.svg"
+                                    icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/zoom-to-object.svg"
                                     icon.width: 16
                                     icon.height: 16
                                     onClicked: controller.zoomToStartingPoint(index)
                                 }
                                 Button {
                                     Layout.preferredWidth: 48
-                                    icon.source: "images/trash.svg"
+                                    icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/trash.svg"
                                     icon.width: 16
                                     icon.height: 16
                                     onClicked: controller.removeStartingPoint(index)

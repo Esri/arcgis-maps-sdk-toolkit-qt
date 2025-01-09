@@ -27,7 +27,7 @@ import QtQuick.Layouts
     \since Esri.ArcGISRuntime 100.13
     \brief SearchView enables users to search for one or more locations or features,
     from a variety of sources, with suggestions.
-    \image docs/search.png search
+    \image search.png search
     \snippet qml/demos/SearchViewDemoForm.qml Set up Search View QML
 
     \note By default, the SearchView will attempt to access the World Geocoding Service, which requires an \l{http://links.esri.com/create-an-api-key}{access token}.
@@ -123,7 +123,7 @@ Pane {
 
             RoundButton {
                 id: searchButton
-                icon.source: "images/search.svg"
+                icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/search.svg"
                 width: height
                 flat: true
                 leftPadding: 2
@@ -144,7 +144,7 @@ Pane {
 
             RoundButton {
                 id: clearButton
-                icon.source: "images/x.svg"
+                icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/x.svg"
                 width: height
                 flat: true
                 leftPadding: 2

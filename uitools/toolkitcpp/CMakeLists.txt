@@ -21,6 +21,8 @@ find_package(Qt6 REQUIRED COMPONENTS Core Gui QuickControls2 Svg WebView)
 qt_standard_project_setup()
 
 qt_add_library(libtoolkitcpp STATIC
+    cpp/Esri/ArcGISRuntime/Toolkit/ArcGISAuthenticationController.cpp cpp/Esri/ArcGISRuntime/Toolkit/ArcGISAuthenticationController.h
+    cpp/Esri/ArcGISRuntime/Toolkit/ArcGISAuthenticationChallengeRelay.cpp cpp/Esri/ArcGISRuntime/Toolkit/ArcGISAuthenticationChallengeRelay.h
     cpp/Esri/ArcGISRuntime/Toolkit/AuthenticationController.cpp cpp/Esri/ArcGISRuntime/Toolkit/AuthenticationController.h
     cpp/Esri/ArcGISRuntime/Toolkit/BasemapGalleryController.cpp cpp/Esri/ArcGISRuntime/Toolkit/BasemapGalleryController.h
     cpp/Esri/ArcGISRuntime/Toolkit/BasemapGalleryItem.cpp cpp/Esri/ArcGISRuntime/Toolkit/BasemapGalleryItem.h
@@ -31,7 +33,6 @@ qt_add_library(libtoolkitcpp STATIC
     cpp/Esri/ArcGISRuntime/Toolkit/CoordinateConversionOption.cpp cpp/Esri/ArcGISRuntime/Toolkit/CoordinateConversionOption.h
     cpp/Esri/ArcGISRuntime/Toolkit/CoordinateConversionResult.cpp cpp/Esri/ArcGISRuntime/Toolkit/CoordinateConversionResult.h
     cpp/Esri/ArcGISRuntime/Toolkit/CoordinateOptionDefaults.cpp cpp/Esri/ArcGISRuntime/Toolkit/CoordinateOptionDefaults.h
-    cpp/Esri/ArcGISRuntime/Toolkit/FieldsPopupElementViewController.cpp cpp/Esri/ArcGISRuntime/Toolkit/FieldsPopupElementViewController.h
     cpp/Esri/ArcGISRuntime/Toolkit/FloorFilterController.cpp cpp/Esri/ArcGISRuntime/Toolkit/FloorFilterController.h
     cpp/Esri/ArcGISRuntime/Toolkit/FloorFilterFacilityItem.cpp cpp/Esri/ArcGISRuntime/Toolkit/FloorFilterFacilityItem.h
     cpp/Esri/ArcGISRuntime/Toolkit/FloorFilterLevelItem.cpp cpp/Esri/ArcGISRuntime/Toolkit/FloorFilterLevelItem.h
@@ -45,11 +46,9 @@ qt_add_library(libtoolkitcpp STATIC
     cpp/Esri/ArcGISRuntime/Toolkit/Internal/MetaElement.cpp cpp/Esri/ArcGISRuntime/Toolkit/Internal/MetaElement.h
     cpp/Esri/ArcGISRuntime/Toolkit/Internal/SingleShotConnection.h
     cpp/Esri/ArcGISRuntime/Toolkit/LocatorSearchSource.cpp cpp/Esri/ArcGISRuntime/Toolkit/LocatorSearchSource.h
-    cpp/Esri/ArcGISRuntime/Toolkit/MediaPopupElementViewController.cpp cpp/Esri/ArcGISRuntime/Toolkit/MediaPopupElementViewController.h
+    cpp/Esri/ArcGISRuntime/Toolkit/NetworkAuthenticationChallengeRelay.cpp cpp/Esri/ArcGISRuntime/Toolkit/NetworkAuthenticationChallengeRelay.h
     cpp/Esri/ArcGISRuntime/Toolkit/NorthArrowController.cpp cpp/Esri/ArcGISRuntime/Toolkit/NorthArrowController.h
     cpp/Esri/ArcGISRuntime/Toolkit/OverviewMapController.cpp cpp/Esri/ArcGISRuntime/Toolkit/OverviewMapController.h
-    cpp/Esri/ArcGISRuntime/Toolkit/PopupElementViewItem.cpp cpp/Esri/ArcGISRuntime/Toolkit/PopupElementViewItem.h
-    cpp/Esri/ArcGISRuntime/Toolkit/PopupMediaItem.cpp cpp/Esri/ArcGISRuntime/Toolkit/PopupMediaItem.h
     cpp/Esri/ArcGISRuntime/Toolkit/PopupViewController.cpp cpp/Esri/ArcGISRuntime/Toolkit/PopupViewController.h
     cpp/Esri/ArcGISRuntime/Toolkit/ScalebarController.cpp cpp/Esri/ArcGISRuntime/Toolkit/ScalebarController.h
     cpp/Esri/ArcGISRuntime/Toolkit/SearchResult.cpp cpp/Esri/ArcGISRuntime/Toolkit/SearchResult.h
@@ -57,7 +56,6 @@ qt_add_library(libtoolkitcpp STATIC
     cpp/Esri/ArcGISRuntime/Toolkit/SearchSuggestion.cpp cpp/Esri/ArcGISRuntime/Toolkit/SearchSuggestion.h
     cpp/Esri/ArcGISRuntime/Toolkit/SearchViewController.cpp cpp/Esri/ArcGISRuntime/Toolkit/SearchViewController.h
     cpp/Esri/ArcGISRuntime/Toolkit/SmartLocatorSearchSource.cpp cpp/Esri/ArcGISRuntime/Toolkit/SmartLocatorSearchSource.h
-    cpp/Esri/ArcGISRuntime/Toolkit/TextPopupElementViewController.cpp cpp/Esri/ArcGISRuntime/Toolkit/TextPopupElementViewController.h
     cpp/Esri/ArcGISRuntime/Toolkit/TimeSliderController.cpp cpp/Esri/ArcGISRuntime/Toolkit/TimeSliderController.h
     cpp/Esri/ArcGISRuntime/Toolkit/UtilityNetworkFunctionTraceResult.cpp cpp/Esri/ArcGISRuntime/Toolkit/UtilityNetworkFunctionTraceResult.h
     cpp/Esri/ArcGISRuntime/Toolkit/UtilityNetworkFunctionTraceResultsModel.cpp cpp/Esri/ArcGISRuntime/Toolkit/UtilityNetworkFunctionTraceResultsModel.h
@@ -136,21 +134,17 @@ set(esri_arcgisruntime_toolkit_view_resource_files
     "import/Esri/ArcGISRuntime/Toolkit/ClientCertificateView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/CoordinateConversion.qml"
     "import/Esri/ArcGISRuntime/Toolkit/CurrentVersion.qml"
-    "import/Esri/ArcGISRuntime/Toolkit/FieldsPopupElementView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/FlashImage.qml"
     "import/Esri/ArcGISRuntime/Toolkit/FloorFilter.qml"
-    "import/Esri/ArcGISRuntime/Toolkit/MediaPopupElementView"
     "import/Esri/ArcGISRuntime/Toolkit/NorthArrow.qml"
     "import/Esri/ArcGISRuntime/Toolkit/OAuth2View.qml"
     "import/Esri/ArcGISRuntime/Toolkit/OverviewMap.qml"
     "import/Esri/ArcGISRuntime/Toolkit/PopupStackView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/PopupView.qml"
-    "import/Esri/ArcGISRuntime/Toolkit/qmldir"
     "import/Esri/ArcGISRuntime/Toolkit/Scalebar.qml"
     "import/Esri/ArcGISRuntime/Toolkit/ScalebarImpl.qml"
     "import/Esri/ArcGISRuntime/Toolkit/SearchView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/SslHandshakeView.qml"
-    "import/Esri/ArcGISRuntime/Toolkit/TextPopupElementView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/TimeSlider.qml"
     "import/Esri/ArcGISRuntime/Toolkit/UserCredentialsView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/UtilityNetworkTrace.qml"
