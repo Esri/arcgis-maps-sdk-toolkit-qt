@@ -24,10 +24,8 @@ ListView {
     id: fieldsPopupElementView
 
     /*!
-      \qmlproperty FieldsPopupElementView controller
-      \brief The Controller handles reading from the FieldsPopupElement.
-
-      \sa Esri::ArcGISRuntime::Toolkit::FieldsPopupElementViewController
+      \internal
+    This class is an internal implementation detail and is subject to change.
     */
     property var controller: null
 

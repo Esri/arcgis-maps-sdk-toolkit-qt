@@ -23,9 +23,8 @@ Item {
     id: textPopupElementView
 
     /*!
-      \qmlproperty TextPopupElementView controller
-      \brief The Controller handles reading from the TextPopupElement.
-      \sa Esri::ArcGISRuntime::Toolkit::TextPopupElementViewController
+      \internal
+    This class is an internal implementation detail and is subject to change.
     */
     property var controller: null
 

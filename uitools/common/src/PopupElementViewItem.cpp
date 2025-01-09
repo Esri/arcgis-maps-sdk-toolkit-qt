@@ -18,63 +18,32 @@
 namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
-  \class Esri::ArcGISRuntime::Toolkit::PopupElementViewItem
-  \inmodule ArcGISRuntimeToolkit
-  \brief This is the base class for a number of different PopupElementViewControllers, such as \l
-    {Esri::ArcGISRuntime::Toolkit::TextPopupElementViewController} {TextPopupElementViewController}, and \l
-    {Esri::ArcGISRuntime::Toolkit::FieldsPopupElementViewController} {FieldsPopupElementViewController}, and \l
-    {Esri::ArcGISRuntime::Toolkit::AttachmentsPopupElementViewController} {AttachmentsPopupElementViewController}, and \l
-    {Esri::ArcGISRuntime::Toolkit::MediaPopupElementViewController} {MediaPopupElementViewController}.
-
-    It contains a \c PopupElement and provides access to it's \c PopupElementType. This is used to build a
-    GenericListModel to be provided to PopupView which can access the individual PopupElementViewControllers and
-    pass them along to the correct QML view.
+  \internal
+  This class is an internal implementation detail and is subject to change.
  */
-
-/*!
- \brief Constructor
- \list
-   \li \a parent Parent owning \c QObject.
- \endlist
-  */
 PopupElementViewItem::PopupElementViewItem(QObject *parent)
   : QObject{parent}
 {
 }
 
-/*!
-\brief Constructor. Takes a \a popupElement and \a parent object.
-  */
 PopupElementViewItem::PopupElementViewItem(PopupElement* popupElement, QObject* parent)
   : QObject{parent}
   , m_popupElement{std::move(popupElement)}
 {
 }
 
-/*!
-  \brief Destructor.
-*/
 PopupElementViewItem::~PopupElementViewItem() = default;
 
-/*!
- \brief Returns the c/ PopupElementType of the c/ PopupElement.
- */
 QmlEnums::PopupElementType PopupElementViewItem::popupElementType() const
 {
   return static_cast<QmlEnums::PopupElementType>(m_popupElement->popupElementType());
 }
 
-/*!
-  \brief Returns the \c PopupElement.
-*/
 PopupElement* PopupElementViewItem::popupElement() const
 {
   return m_popupElement ? m_popupElement : nullptr;
 }
 
-/*!
-  \brief Sets the \a popupElement.
- */
 void PopupElementViewItem::setPopupElement(PopupElement* popupElement)
 {
   if (m_popupElement == popupElement)
@@ -95,12 +64,3 @@ void PopupElementViewItem::setPopupElement(PopupElement* popupElement)
 }
 
 } // namespace Esri::ArcGISRuntime::Toolkit
-
-/*!
-  \fn void Esri::ArcGISRuntime::Toolkit::PopupElementViewItem::popupElementChanged()
-  \brief Signal emitted when the \c PopupElement changes.
- */
-
-/*!
-  \property Esri::ArcGISRuntime::Toolkit::PopupElementViewItem::popupElementType
- */
