@@ -300,7 +300,7 @@ void UtilityNetworkTraceController::setGeoView(QObject* geoView)
             const auto ft = dynamic_cast<ArcGISFeature*>(geoElement);
 
             if (geoElement)
-              addStartingPoint(ft, this->m_mapPoint);
+              addStartingPoint(ft, m_mapPoint);
           }
         }
 
@@ -312,12 +312,12 @@ void UtilityNetworkTraceController::setGeoView(QObject* geoView)
 
     connect(this, &UtilityNetworkTraceController::selectedTraceConfigurationChanged, this, [this]()
     {
-      this->applyStartingPointWarnings();
+      applyStartingPointWarnings();
     });
 
     connect(this, &UtilityNetworkTraceController::startingPointsChanged, this, [this]()
     {
-      this->applyStartingPointWarnings();
+      applyStartingPointWarnings();
     });
 
     setupUtilityNetworks();
