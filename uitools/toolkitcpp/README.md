@@ -47,17 +47,16 @@ These are the **Qt Quick UI components/QML Type** available to use:
 
 **STEP 4:** Have the project reference the location of the toolkit:
 
-why different qmake and cmake? copy in both case?
-
 **qmake**
 
 - If you chose the **qmake** build system, edit your apps `TestNorthArrow.pro` file (it was created when you went through the ArcGIS Maps SDK for Qt template wizards), add an `include` statement that points to the path of the `toolkit.pri` file that you have on disk. 
 
 > ```qmake
 > ...
-> include($$PWD/arcgisruntime.pri) // this line already exists
+> # Locate this existing line in your project
+> include($$PWD/arcgisruntime.pri) 
 >
-> # Include the path to the toolkit.pri file
+> # Include this toolkit pri qmake file directly afterwards
 > include(C:/arcgis-maps-sdk-toolkit-qt/toolkit/uitools/toolkitcpp/toolkitcpp.pri)
 > ...
 > ```  
@@ -86,20 +85,21 @@ why different qmake and cmake? copy in both case?
 
 > ```cpp
 > ...
-> #include <QQmlApplicationEngine> // this line already exists
+> // Locate this existing line in your project
+> #include <QQmlApplicationEngine>
 >
-> // Needed for the Qt toolkit
+> // Include register.h file directly afterwards
 > #include "Esri/ArcGISRuntime/Toolkit/register.h"
 > ...
 >
 > ...
-> // Intitialize application view
-> QQmlApplicationEngine engine; // this line already exists
+> // Locate this existing line in your project
+> QQmlApplicationEngine engine;
 >
-> // Register the toolkit
+> // Register the toolkit directly afterwards
 > Esri::ArcGISRuntime::Toolkit::registerComponents(engine);
 > ...
-> ``` 
+> ```
 
 **STEP 6:** In your apps QML file (for example: TestNorthArrowForm.qml) add an `import` statement for the `Toolkit`. Then later in the file, declare and configure the Qt toolkit component you wish to use. 
 
@@ -107,13 +107,16 @@ why different qmake and cmake? copy in both case?
 
 > ```qml
 > ...
-> import Esri.TestNorthArrow // this line already exists
+> // Locate this existing line in your project
+> import Esri.TestNorthArrow
 >
 > // Needed for the Qt toolkit
 > import Esri.ArcGISRuntime.Toolkit
-> 
-> Item {
+> ...
 >
+> ...
+> // Locate this existing line in your project
+> Item {
 >    // Create MapQuickView here, and create its Map etc. in C++ code
 >    MapView { // this line already exists
 >        id: view
