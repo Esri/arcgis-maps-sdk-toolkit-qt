@@ -32,17 +32,19 @@ namespace Esri::ArcGISRuntime::Toolkit {
   \internal
   This class is an internal implementation detail and is subject to change.
  */
-PieChartPopupMediaItem::PieChartPopupMediaItem(PopupMedia* popupMedia, const QJsonArray& jsonColorArray, QObject* parent)
-  : PopupMediaItem{popupMedia, parent},
-    m_jsonColorArr{jsonColorArray}
+PieChartPopupMediaItem::PieChartPopupMediaItem(PopupMedia* popupMedia, QObject* parent)
+  : PopupMediaItem{popupMedia, parent}
 {
 }
+
+PieChartPopupMediaItem::~PieChartPopupMediaItem() = default;
 
 QList<QPieSlice*> PieChartPopupMediaItem::pieSlices()
 {
   QList<QPieSlice*> pieSlices;
   auto mediaValue = popupMediaItem()->value();
   const auto popupMediaValueDataLength = mediaValue->data().length();
+  const auto chartColors = mediaValue->chartColors();
 
   for (int i = 0; i < popupMediaValueDataLength; i++)
   {
@@ -50,9 +52,9 @@ QList<QPieSlice*> PieChartPopupMediaItem::pieSlices()
     const auto value = mediaValue->data().at(i).toReal();
     auto* pieSlice = new QPieSlice(label, value);
 
-    if (!m_jsonColorArr.isEmpty())
+    if (!chartColors.isEmpty())
     {
-      const auto color = extractColorFromJson(m_jsonColorArr, i);
+      const auto color = chartColors.at(i);
       pieSlice->setColor(color);
       pieSlice->setBorderColor(color);
     }

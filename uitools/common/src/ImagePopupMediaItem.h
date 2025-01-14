@@ -33,7 +33,7 @@ class ImagePopupMediaItem : public PopupMediaItem
 
 public:
   explicit ImagePopupMediaItem(PopupMedia* popupMedia, QObject* parent = nullptr);
-  ~ImagePopupMediaItem() override = default;
+  ~ImagePopupMediaItem() override;
 
 private:
   QUrl linkUrl() const;

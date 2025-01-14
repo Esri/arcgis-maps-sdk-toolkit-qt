@@ -35,65 +35,10 @@
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-namespace {
-
-  /*!
-    \internal
-    This class is an internal implementation detail and is subject to change.
-   */
-  bool isNullOrUndefined(const QJsonValue& value) {
-      return value.isNull() || value.isUndefined();
-  }
-
-  // Get color information for each popup media. If no color is selected when defining a popup, GraphsTheme.Theme.MixSeries will
-  // be applied to the GraphsView.
-  // s.a. Web Map Spec: https://developers.arcgis.com/web-map-specification/objects/popupElement_media
-  QJsonArray colorsArrayFromJson(const QByteArray& mediaPopupElementJson, const int index)
-  {
-    if (mediaPopupElementJson.isEmpty())
-    {
-      qCritical() << QString("MediaPopupElement JSON is empty.");
-      return QJsonArray{};
-    }
-
-    const QJsonDocument mediaPopupElementJsonDoc = QJsonDocument::fromJson(mediaPopupElementJson);
-    if (mediaPopupElementJsonDoc.isNull())
-    {
-      qCritical() << QString("Error parsing input json");
-      return QJsonArray{};
-    }
-
-    const auto mediaInfos = mediaPopupElementJsonDoc["mediaInfos"];
-    if (isNullOrUndefined(mediaInfos))
-    {
-      qCritical() << QString("`mediaInfos` array was not found.");
-      return QJsonArray{};
-    }
-
-    const auto mediaInfo = mediaInfos[index];
-    if (isNullOrUndefined(mediaInfo))
-    {
-      qCritical() << QString("`mediaInfo` at index:%1 was not found in mediaInfos.").arg(index);
-      return QJsonArray{};
-    }
-
-    const auto value = mediaInfo["value"];
-    if (isNullOrUndefined(value))
-    {
-      qCritical() << QString("`value` object in was not found in mediaInfo.");
-      return QJsonArray{};
-    }
-
-    const auto colorsArray = value["colors"].toArray();
-    if (colorsArray.isEmpty())
-    {
-      return QJsonArray{};
-    }
-
-    return colorsArray;
-  }
-}
-
+/*!
+  \internal
+  This class is an internal implementation detail and is subject to change.
+ */
 MediaPopupElementViewController::MediaPopupElementViewController(
     MediaPopupElement* mediaPopupElement, QObject* parent)
   : PopupElementViewItem{mediaPopupElement, parent},
@@ -119,28 +64,24 @@ MediaPopupElementViewController::MediaPopupElementViewController(
       case Esri::ArcGISRuntime::PopupMediaType::BarChart:
         m_popupMediaItems->append(new BarChartPopupMediaItem(
                                     popupMedia,
-                                    colorsArrayFromJson(mediaPopupElementJson, i),
                                     media)
                                   );
         break;
       case Esri::ArcGISRuntime::PopupMediaType::ColumnChart:
         m_popupMediaItems->append(new BarChartPopupMediaItem(
                                     popupMedia,
-                                    colorsArrayFromJson(mediaPopupElementJson, i),
                                     media)
                                   );
         break;
       case Esri::ArcGISRuntime::PopupMediaType::PieChart:
         m_popupMediaItems->append(new PieChartPopupMediaItem(
                                     popupMedia,
-                                    colorsArrayFromJson(mediaPopupElementJson, i),
                                     media)
                                   );
         break;
       case Esri::ArcGISRuntime::PopupMediaType::LineChart:
         m_popupMediaItems->append(new LineChartPopupMediaItem(
                                     popupMedia,
-                                    colorsArrayFromJson(mediaPopupElementJson, i),
                                     media)
                                   );
         break;

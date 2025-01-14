@@ -33,17 +33,14 @@ class PieChartPopupMediaItem : public PopupMediaItem
   Q_PROPERTY(QList<QPieSlice*> pieSlices READ pieSlices NOTIFY pieChartPopupMediaItemChanged)
 
 public:
-  explicit PieChartPopupMediaItem(PopupMedia* popupMedia, const QJsonArray& jsonColorArray, QObject* parent = nullptr);
-  ~PieChartPopupMediaItem() override = default;
+  explicit PieChartPopupMediaItem(PopupMedia* popupMedia, QObject* parent = nullptr);
+  ~PieChartPopupMediaItem() override;
 
 private:
   QList<QPieSlice*> pieSlices();
 
 signals:
   void pieChartPopupMediaItemChanged();
-
-private:
-  QJsonArray m_jsonColorArr;
 };
 
 } // Esri::ArcGISRuntime::Toolkit

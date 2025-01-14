@@ -34,25 +34,24 @@ class LineChartPopupMediaItem : public PopupMediaItem
   Q_PROPERTY(QColor color READ color NOTIFY lineChartPopupMediaItemChanged)
   Q_PROPERTY(qreal maxValue READ maxValue NOTIFY lineChartPopupMediaItemChanged)
   Q_PROPERTY(qreal minValue READ minValue NOTIFY lineChartPopupMediaItemChanged)
-  Q_PROPERTY(bool colorFromJsonFound READ colorFromJsonFound NOTIFY lineChartPopupMediaItemChanged)
+  Q_PROPERTY(bool chartColorsEmpty READ chartColorsEmpty NOTIFY lineChartPopupMediaItemChanged)
 
 public:
-  explicit LineChartPopupMediaItem(PopupMedia* popupMedia, const QJsonArray& jsonColorArray, QObject* parent = nullptr);
-  ~LineChartPopupMediaItem() override = default;
+  explicit LineChartPopupMediaItem(PopupMedia* popupMedia, QObject* parent = nullptr);
+  ~LineChartPopupMediaItem() override;
 
 private:
   QList<QPointF> linePoints() const;
   QColor color() const;
   qreal maxValue() const;
   qreal minValue() const;
-  bool colorFromJsonFound() const;
+  bool chartColorsEmpty() const;
 
 signals:
   void lineChartPopupMediaItemChanged();
 
 private:
   QList<QPointF> m_linePoints;
-  QJsonArray m_jsonColorArr;
   QColor m_color;
   qreal m_maxValue = 0.0;
   qreal m_minValue = 0.0;

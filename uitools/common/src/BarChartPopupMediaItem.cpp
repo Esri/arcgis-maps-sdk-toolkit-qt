@@ -32,17 +32,19 @@ namespace Esri::ArcGISRuntime::Toolkit {
   \internal
   This class is an internal implementation detail and is subject to change.
  */
-BarChartPopupMediaItem::BarChartPopupMediaItem(PopupMedia* popupMedia, const QJsonArray& jsonColorArray, QObject* parent)
-  : PopupMediaItem{popupMedia, parent},
-    m_jsonColorArr{jsonColorArray}
+BarChartPopupMediaItem::BarChartPopupMediaItem(PopupMedia* popupMedia, QObject* parent)
+  : PopupMediaItem{popupMedia, parent}
 {
 }
+
+BarChartPopupMediaItem::~BarChartPopupMediaItem() = default;
 
 QList<QBarSet*> BarChartPopupMediaItem::barSets()
 {
   QList<QBarSet*> barSets;
   auto mediaValue = popupMediaItem()->value();
   const auto popupMediaValueDataLength = mediaValue->data().length();
+  const auto chartColors = mediaValue->chartColors();
 
   for (int i = 0; i < popupMediaValueDataLength; i++)
   {
@@ -58,9 +60,9 @@ QList<QBarSet*> BarChartPopupMediaItem::barSets()
     const auto barset = new QBarSet(label);
     barset->append(value);
 
-    if (!m_jsonColorArr.isEmpty())
+    if (!chartColors.isEmpty())
     {
-      const auto color = extractColorFromJson(m_jsonColorArr, i);
+      const auto color = chartColors.at(i);
       barset->setColor(color);
       barset->setBorderColor(color);
     }
