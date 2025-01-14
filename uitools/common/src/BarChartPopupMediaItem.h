@@ -35,8 +35,8 @@ class BarChartPopupMediaItem : public PopupMediaItem
   Q_PROPERTY(qreal minValue READ minValue NOTIFY barChartPopupMediaItemChanged)
 
 public:
-  explicit BarChartPopupMediaItem(PopupMedia* popupMedia, const QJsonArray& jsonColorArray, QObject* parent = nullptr);
-  ~BarChartPopupMediaItem() override = default;
+  explicit BarChartPopupMediaItem(PopupMedia* popupMedia, QObject* parent = nullptr);
+  ~BarChartPopupMediaItem() override;
 
 private:
   QList<QBarSet*> barSets();
@@ -48,7 +48,6 @@ signals:
 
 private:
   QList<QBarSet*> m_barSets;
-  QJsonArray m_jsonColorArr;
   qreal m_maxValue = 0.0;
   qreal m_minValue = 0.0;
 };

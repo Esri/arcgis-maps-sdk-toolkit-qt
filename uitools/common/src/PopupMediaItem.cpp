@@ -15,10 +15,6 @@
  ******************************************************************************/
 #include "PopupMediaItem.h"
 
-// Qt headers
-#include <QColor>
-#include <QJsonArray>
-
 // Maps SDK headers
 #include <ChartImage.h>
 #include <ChartImageParameters.h>
@@ -54,23 +50,6 @@ PopupMediaType PopupMediaItem::popupMediaType() const
 PopupMedia* PopupMediaItem::popupMediaItem() const
 {
   return m_popupMedia;
-}
-
-QColor PopupMediaItem::extractColorFromJson(const QJsonArray& colorArray, const int index)
-{
-  if (!colorArray.isEmpty() && index < colorArray.size())
-  {
-    // color scheme is [Red, Green, Blue, Alpha]
-    // https://developers.arcgis.com/web-map-specification/objects/color
-    const auto colorArrayAtIndex = colorArray[index];
-    const auto r = colorArrayAtIndex[0].toInt();
-    const auto g = colorArrayAtIndex[1].toInt();
-    const auto b = colorArrayAtIndex[2].toInt();
-    const auto a = colorArrayAtIndex[3].toInt();
-
-    return QColor(r, g, b, a);
-  }
-  return QColor();
 }
 
 } // namespace Esri::ArcGISRuntime::Toolkit

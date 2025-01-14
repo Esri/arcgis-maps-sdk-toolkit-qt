@@ -286,7 +286,7 @@ ColumnLayout {
 
                         Component.onCompleted: {
                             let points = listModelData.linePoints;
-                            if (listModelData.colorFromJsonFound)
+                            if (!listModelData.chartColorsEmpty)
                                 color = listModelData.color;
                             if (points.length > 0)
                                 append(points);

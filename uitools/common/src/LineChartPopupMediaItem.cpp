@@ -31,12 +31,12 @@ namespace Esri::ArcGISRuntime::Toolkit {
   \internal
   This class is an internal implementation detail and is subject to change.
  */
-LineChartPopupMediaItem::LineChartPopupMediaItem(PopupMedia* popupMedia, const QJsonArray& jsonColorArray, QObject* parent)
-  : PopupMediaItem{popupMedia, parent},
-    m_jsonColorArr{jsonColorArray}
+LineChartPopupMediaItem::LineChartPopupMediaItem(PopupMedia* popupMedia, QObject* parent)
+  : PopupMediaItem{popupMedia, parent}
 {
   auto mediaValue = popupMediaItem()->value();
   const auto popupMediaValueDataLength = mediaValue->data().length();
+  const auto chartColors = mediaValue->chartColors();
 
   for (int i = 0; i < popupMediaValueDataLength; i++ )
   {
@@ -53,8 +53,13 @@ LineChartPopupMediaItem::LineChartPopupMediaItem(PopupMedia* popupMedia, const Q
     m_linePoints.append(point);
   }
 
-  m_color = extractColorFromJson(m_jsonColorArr, 0);
+  if (!chartColors.isEmpty())
+  {
+    m_color = chartColors.at(0);
+  }
 }
+
+LineChartPopupMediaItem::~LineChartPopupMediaItem() = default;
 
 QList<QPointF> LineChartPopupMediaItem::linePoints() const
 {
@@ -76,9 +81,9 @@ qreal LineChartPopupMediaItem::minValue() const
   return m_minValue;
 }
 
-bool LineChartPopupMediaItem::colorFromJsonFound() const
+bool LineChartPopupMediaItem::chartColorsEmpty() const
 {
-  return !m_jsonColorArr.isEmpty();
+  return popupMediaItem()->value()->chartColors().isEmpty();
 }
 
 } // namespace Esri::ArcGISRuntime::Toolkit

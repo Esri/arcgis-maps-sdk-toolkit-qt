@@ -33,6 +33,8 @@ ImagePopupMediaItem::ImagePopupMediaItem(PopupMedia* popupMedia, QObject* parent
 {
 }
 
+ImagePopupMediaItem::~ImagePopupMediaItem() = default;
+
 QUrl ImagePopupMediaItem::sourceUrl() const
 {
   return popupMediaItem()->value()->sourceUrl();
