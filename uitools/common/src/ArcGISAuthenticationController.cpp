@@ -193,15 +193,19 @@ void ArcGISAuthenticationController::continueWithServerTrust(bool trust)
     if (credential)
     {
       m_currentNetworkChallenge->continueWithCredential(credential);
-      m_currentNetworkChallenge.reset();
+    }
+    else
+    {
+      m_currentNetworkChallenge->continueAndFail();
     }
   }
   else
   {
     m_currentNetworkChallenge->continueAndFailWithError(
           Error{"A ServerTrust challenge was issued, but was blocked by the user", ""});
-    m_currentNetworkChallenge.reset();
   }
+
+  m_currentNetworkChallenge.reset();
 }
 
 /*!
