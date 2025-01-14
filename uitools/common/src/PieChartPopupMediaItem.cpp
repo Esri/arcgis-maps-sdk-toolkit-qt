@@ -45,6 +45,7 @@ QList<QPieSlice*> PieChartPopupMediaItem::pieSlices()
   auto mediaValue = popupMediaItem()->value();
   const auto popupMediaValueDataLength = mediaValue->data().length();
   const auto chartColors = mediaValue->chartColors();
+  const auto colorsHasLessThanLabels = chartColors.size() < popupMediaValueDataLength;
 
   for (int i = 0; i < popupMediaValueDataLength; i++)
   {
@@ -52,7 +53,7 @@ QList<QPieSlice*> PieChartPopupMediaItem::pieSlices()
     const auto value = mediaValue->data().at(i).toReal();
     auto* pieSlice = new QPieSlice(label, value);
 
-    if (!chartColors.isEmpty())
+    if (!chartColors.isEmpty() && !colorsHasLessThanLabels)
     {
       const auto color = chartColors.at(i);
       pieSlice->setColor(color);

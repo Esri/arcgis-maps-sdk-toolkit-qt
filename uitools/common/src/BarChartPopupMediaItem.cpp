@@ -45,6 +45,7 @@ QList<QBarSet*> BarChartPopupMediaItem::barSets()
   auto mediaValue = popupMediaItem()->value();
   const auto popupMediaValueDataLength = mediaValue->data().length();
   const auto chartColors = mediaValue->chartColors();
+  const auto colorsHasLessThanLabels = chartColors.size() < popupMediaValueDataLength;
 
   for (int i = 0; i < popupMediaValueDataLength; i++)
   {
@@ -60,7 +61,7 @@ QList<QBarSet*> BarChartPopupMediaItem::barSets()
     const auto barset = new QBarSet(label);
     barset->append(value);
 
-    if (!chartColors.isEmpty())
+    if (!chartColors.isEmpty() && !colorsHasLessThanLabels)
     {
       const auto color = chartColors.at(i);
       barset->setColor(color);
