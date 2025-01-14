@@ -15,11 +15,6 @@
  ******************************************************************************/
 #include "MediaPopupElementViewController.h"
 
-// Qt headers
-#include <QJsonObject>
-#include <QJsonDocument>
-#include <QJsonArray>
-
 // Maps SDK headers
 #include <MediaPopupElement.h>
 #include <PopupMedia.h>
@@ -51,7 +46,6 @@ MediaPopupElementViewController::MediaPopupElementViewController(
   {
     auto* popupMedia = media->at(i);
     const auto popupMediaType = popupMedia->popupMediaType();
-    const auto mediaPopupElementJson = mediaPopupElement->toJson().toUtf8();
 
     switch (popupMediaType)
     {

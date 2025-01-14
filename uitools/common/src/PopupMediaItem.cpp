@@ -15,10 +15,6 @@
  ******************************************************************************/
 #include "PopupMediaItem.h"
 
-// Qt headers
-#include <QColor>
-#include <QJsonArray>
-
 // Maps SDK headers
 #include <ChartImage.h>
 #include <ChartImageParameters.h>
