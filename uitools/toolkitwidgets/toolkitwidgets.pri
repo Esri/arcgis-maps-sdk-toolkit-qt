@@ -13,22 +13,24 @@
 # limitations under the License.
 include($$PWD/../common/common.pri)
 
-QT += widgets webenginewidgets svg
+unix:win32:macx {
+    QT += widgets webenginewidgets svg
 
-TOOLKITWIDGETS_BASE_SRC = $$PWD/src
-TOOLKITWIDGETS_TOOLKIT_SRC = $$TOOLKITWIDGETS_BASE_SRC/Esri/ArcGISRuntime/Toolkit
+    TOOLKITWIDGETS_BASE_SRC = $$PWD/src
+    TOOLKITWIDGETS_TOOLKIT_SRC = $$TOOLKITWIDGETS_BASE_SRC/Esri/ArcGISRuntime/Toolkit
 
-INCLUDEPATH += $$TOOLKITWIDGETS_BASE_SRC
+    INCLUDEPATH += $$TOOLKITWIDGETS_BASE_SRC
 
-DEPENDPATH += $$TOOLKITWIDGETS_BASE_SRC
+    DEPENDPATH += $$TOOLKITWIDGETS_BASE_SRC
 
-HEADERS += $$files($$TOOLKITWIDGETS_TOOLKIT_SRC/*.h) \
-           $$files($$TOOLKITWIDGETS_TOOLKIT_SRC/Internal/*.h)
+    HEADERS += $$files($$TOOLKITWIDGETS_TOOLKIT_SRC/*.h) \
+               $$files($$TOOLKITWIDGETS_TOOLKIT_SRC/Internal/*.h)
 
-SOURCES += $$files($$TOOLKITWIDGETS_TOOLKIT_SRC/*.cpp) \
-           $$files($$TOOLKITWIDGETS_TOOLKIT_SRC/Internal/*.cpp)
+    SOURCES += $$files($$TOOLKITWIDGETS_TOOLKIT_SRC/*.cpp) \
+               $$files($$TOOLKITWIDGETS_TOOLKIT_SRC/Internal/*.cpp)
 
-FORMS += $$files($$TOOLKITWIDGETS_TOOLKIT_SRC/*.ui) \
-         $$files($$TOOLKITWIDGETS_TOOLKIT_SRC/Internal/*.ui)
+    FORMS += $$files($$TOOLKITWIDGETS_TOOLKIT_SRC/*.ui) \
+             $$files($$TOOLKITWIDGETS_TOOLKIT_SRC/Internal/*.ui)
 
-DEFINES += WIDGETS_ARCGISRUNTIME_TOOLKIT
+    DEFINES += WIDGETS_ARCGISRUNTIME_TOOLKIT
+}
