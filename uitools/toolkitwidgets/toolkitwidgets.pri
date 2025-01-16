@@ -13,6 +13,11 @@
 # limitations under the License.
 include($$PWD/../common/common.pri)
 
+# toolkitwidgets is not supported on mobile platforms
+android|ios {
+    error("toolkitwidgets.pri is not usable on mobile platforms.")
+}
+
 QT += widgets webenginewidgets svg
 
 TOOLKITWIDGETS_BASE_SRC = $$PWD/src
