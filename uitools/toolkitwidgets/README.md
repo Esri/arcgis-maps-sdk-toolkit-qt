@@ -58,9 +58,10 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 
 **CMake**
 
-- If you chose the **CMake** build system, copy the `toolkitwidgets` subdirectory into your project's directory. For example you could modify this `bash` script to do the copy of the toolkit directories/files for you:
+- If you chose the **CMake** build system, copy the `toolkitwidgets` and the `common` subdirectories into your project's directory. For example you could modify this `bash` script to do the copy of the toolkit directories/files for you:
 
 > ```bash
+> cp -r /path/to/toolkit/uitools/common /path/to/project
 > cp -r /path/to/toolkit/uitools/toolkitwidgets /path/to/project
 > ```
 
