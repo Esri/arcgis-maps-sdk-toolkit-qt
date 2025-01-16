@@ -63,9 +63,10 @@ These are the **Qt Quick UI components/QML Type** available to use:
 
 **CMake**
 
-- If you chose the **CMake** build system, copy the `toolkitcpp` subdirectory into your project's directory. For example you could modify this `bash` script to do the copy of the toolkit directories/files for you:
+- If you chose the **CMake** build system, copy the `toolkitcpp` and the `common` subdirectories into your project's directory. For example you could modify this `bash` script to do the copy of the toolkit directories/files for you:
 
 > ```bash
+> cp -r /path/to/toolkit/uitools/common /path/to/project
 > cp -r /path/to/toolkit/uitools/toolkitcpp /path/to/project
 > ```
 
