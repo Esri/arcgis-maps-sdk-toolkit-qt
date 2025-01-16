@@ -13,26 +13,27 @@
 # limitations under the License.
 include($$PWD/../common/common.pri)
 
+# toolkitwidgets is not supported on mobile platforms
 android|ios {
-    message("toolkitwidgets.pri is not usable on mobile platforms.")
-} else {
-    QT += widgets webenginewidgets svg
-
-    TOOLKITWIDGETS_BASE_SRC = $$PWD/src
-    TOOLKITWIDGETS_TOOLKIT_SRC = $$TOOLKITWIDGETS_BASE_SRC/Esri/ArcGISRuntime/Toolkit
-
-    INCLUDEPATH += $$TOOLKITWIDGETS_BASE_SRC
-
-    DEPENDPATH += $$TOOLKITWIDGETS_BASE_SRC
-
-    HEADERS += $$files($$TOOLKITWIDGETS_TOOLKIT_SRC/*.h) \
-               $$files($$TOOLKITWIDGETS_TOOLKIT_SRC/Internal/*.h)
-
-    SOURCES += $$files($$TOOLKITWIDGETS_TOOLKIT_SRC/*.cpp) \
-               $$files($$TOOLKITWIDGETS_TOOLKIT_SRC/Internal/*.cpp)
-
-    FORMS += $$files($$TOOLKITWIDGETS_TOOLKIT_SRC/*.ui) \
-             $$files($$TOOLKITWIDGETS_TOOLKIT_SRC/Internal/*.ui)
-
-    DEFINES += WIDGETS_ARCGISRUNTIME_TOOLKIT
+    error("toolkitwidgets.pri is not usable on mobile platforms.")
 }
+
+QT += widgets webenginewidgets svg
+
+TOOLKITWIDGETS_BASE_SRC = $$PWD/src
+TOOLKITWIDGETS_TOOLKIT_SRC = $$TOOLKITWIDGETS_BASE_SRC/Esri/ArcGISRuntime/Toolkit
+
+INCLUDEPATH += $$TOOLKITWIDGETS_BASE_SRC
+
+DEPENDPATH += $$TOOLKITWIDGETS_BASE_SRC
+
+HEADERS += $$files($$TOOLKITWIDGETS_TOOLKIT_SRC/*.h) \
+           $$files($$TOOLKITWIDGETS_TOOLKIT_SRC/Internal/*.h)
+
+SOURCES += $$files($$TOOLKITWIDGETS_TOOLKIT_SRC/*.cpp) \
+           $$files($$TOOLKITWIDGETS_TOOLKIT_SRC/Internal/*.cpp)
+
+FORMS += $$files($$TOOLKITWIDGETS_TOOLKIT_SRC/*.ui) \
+         $$files($$TOOLKITWIDGETS_TOOLKIT_SRC/Internal/*.ui)
+
+DEFINES += WIDGETS_ARCGISRUNTIME_TOOLKIT
