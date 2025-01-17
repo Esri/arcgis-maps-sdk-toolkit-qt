@@ -53,10 +53,9 @@ These are the **Qt Quick UI components/QML Type** available to use:
 
 > ```qmake
 > ...
-> # Locate this existing line in your project
-> include($$PWD/arcgisruntime.pri) 
+> include($$PWD/arcgisruntime.pri) # <-- Locate this existing line in your project
 >
-> # Include this toolkit pri qmake file directly afterwards
+> # Include the path to the toolkitcpp.pri file on your device, for example:
 > include(C:/arcgis-maps-sdk-toolkit-qt/toolkit/uitools/toolkitcpp/toolkitcpp.pri)
 > ...
 > ```  
@@ -86,18 +85,16 @@ These are the **Qt Quick UI components/QML Type** available to use:
 
 > ```cpp
 > ...
-> // Locate this existing line in your project
-> #include <QQmlApplicationEngine>
+> #include <QQmlApplicationEngine> // <-- Locate this existing line in your project
 >
-> // Include register.h file directly afterwards
+> // Include the register.h file for the Qt toolkit
 > #include "Esri/ArcGISRuntime/Toolkit/register.h"
 > ...
 >
 > ...
-> // Locate this existing line in your project
-> QQmlApplicationEngine engine;
+> QQmlApplicationEngine engine; // <-- Locate this existing line in your project
 >
-> // Register the toolkit directly afterwards
+> // Register the Qt toolkit
 > Esri::ArcGISRuntime::Toolkit::registerComponents(engine);
 > ...
 > ```
@@ -108,15 +105,14 @@ These are the **Qt Quick UI components/QML Type** available to use:
 
 > ```qml
 > ...
-> // Locate this existing line in your project
-> import Esri.TestNorthArrow
+> import Esri.TestNorthArrow // <-- Locate this existing line in your project
 >
 > // Needed for the Qt toolkit
 > import Esri.ArcGISRuntime.Toolkit
 > ...
 >
 > ...
-> // Locate this existing line in your project
+> // Locate this secton in your project
 > Item {
 >    // Create MapQuickView here, and create its Map etc. in C++ code
 >    MapView {
