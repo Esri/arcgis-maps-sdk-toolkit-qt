@@ -93,6 +93,7 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 > auto northArrow = new Esri::ArcGISRuntime::Toolkit::NorthArrow(this);
 > northArrow->setMapView(m_mapView);
 > northArrow->setFixedSize(100,100); // The default is 48x48 pixels.
+> ...
 > ```
 
 **STEP 6:** When you run your app, you should now see the UI for the Qt toolkit component in your app. For example:
