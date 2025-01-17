@@ -112,7 +112,7 @@ These are the **Qt Quick UI components/QML Type** available to use:
 > ...
 >
 > ...
-> // Locate this secton in your project
+> // Locate this section in your project
 > Item {
 >    // Create MapQuickView here, and create its Map etc. in C++ code
 >    MapView {
