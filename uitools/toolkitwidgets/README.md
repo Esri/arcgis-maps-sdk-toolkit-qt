@@ -48,9 +48,10 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 > For example:
 > ```qmake
 > ...
-> include($$PWD/arcgisruntime.pri) # <-- Locate this existing line in your project
-> 
-> # Include the path to the toolkitcpp.pri file on your device, for example:
+> # Locate this existing line in your project
+> include($$PWD/arcgisruntime.pri)
+> .
+> # Include the path to the toolkit.pri file
 > include(C:/arcgis-maps-sdk-toolkit-qt/toolkit/uitools/toolkitwidgets/toolkitwidgets.pri)
 > ...
 > ```  
@@ -79,22 +80,13 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 **STEP 5:** Once you have successfully included the toolkit, you can create individual tools in your own widgets files. In your widgets code file (for example: `TestNorthArrow.cpp`), create a new instance of the tool you wish to use and add it to your widgets layout. You will also normally need to pass the `GeoView` which the tool is designed to work with:
 
 > ```cpp
-> ...
-> #include "MapTypes.h" // <-- Locate this existing line in your project
->
-> // Add the header for the Qt toolkit control.
+> // Locate this existing line in your project
 > #include "Esri/ArcGISRuntime/Toolkit/NorthArrow.h"
-> ...
+>  ...
 >
-> ...
-> setCentralWidget(m_mapView);  // <-- Locate this existing line in your project
->
-> // Add the NorthArrow to your UI.
 > auto northArrow = new Esri::ArcGISRuntime::Toolkit::NorthArrow(this);
 > northArrow->setMapView(m_mapView);
-> northArrow->setFixedSize(100,100); // The default is 48x48 pixels.
-> northArrow->move(this->width() + 40, this->height() - 10); // Additional code needed if the app window is resized.
-> ...
+> // Add your NorthArrow to your UI here!
 > ```
 
 **STEP 6:** When you run your app, you should now see the UI for the Qt toolkit component in your app. For example:
