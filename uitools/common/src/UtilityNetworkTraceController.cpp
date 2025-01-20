@@ -851,6 +851,8 @@ void UtilityNetworkTraceController::setupUtilityNetworks()
           {
             //single shot connection
             QMetaObject::Connection* const connection = new QMetaObject::Connection;
+            QT_WARNING_PUSH
+            QT_WARNING_DISABLE_MSVC(4573)
             *connection = connect(un, &UtilityNetwork::doneLoading, this, [connection](const Error& e)
             {
               if (!e.isEmpty())
@@ -862,6 +864,7 @@ void UtilityNetworkTraceController::setupUtilityNetworks()
               QObject::disconnect(*connection);
               delete connection;
             });
+            QT_WARNING_POP
             un->load();
           }
         }
