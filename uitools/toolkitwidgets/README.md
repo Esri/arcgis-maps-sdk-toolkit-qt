@@ -52,7 +52,7 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 > include($$PWD/arcgisruntime.pri)
 > .
 > # Include the path to the toolkit.pri file
-> include(C:/arcgis-maps-sdk-toolkit-qt/toolkit/uitools/toolkitwidgets/toolkitwidgets.pri)
+> include(C:/arcgis-maps-sdk-toolkit-qt/uitools/toolkitwidgets/toolkitwidgets.pri)
 > ...
 > ```  
 
