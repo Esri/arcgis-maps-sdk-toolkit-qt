@@ -57,7 +57,7 @@ These are the **Qt Quick UI components/QML Type** available to use:
 > include($$PWD/arcgisruntime.pri) 
 >
 > # Include this toolkit pri qmake file directly afterwards
-> include(C:/arcgis-maps-sdk-toolkit-qt/toolkit/uitools/toolkitcpp/toolkitcpp.pri)
+> include(C:/arcgis-maps-sdk-toolkit-qt/uitools/toolkitcpp/toolkitcpp.pri)
 > ...
 > ```  
 
