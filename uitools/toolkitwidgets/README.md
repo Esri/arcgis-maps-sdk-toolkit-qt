@@ -83,9 +83,11 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 > // Locate this existing line in your project
 > #include "Esri/ArcGISRuntime/Toolkit/NorthArrow.h"
 >  ...
-> // Add your NorthArrow to your UI here!
+> // Add your NorthArrow to your UI here
 > auto northArrow = new Esri::ArcGISRuntime::Toolkit::NorthArrow(this);
-> northArrow->setMapView(m_mapView);
+> northArrow->setMapView(m_mapView); // for a 2D map
+> // or northArrow->setSceneView(m_sceneView); // for a 3D scene
+> northArrow->show();
 > ```
 
 **STEP 6:** When you run your app, you should now see the UI for the Qt toolkit component in your app. For example:
