@@ -36,7 +36,7 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 >
 >  **Define Project Details** ==> **App Description:** Test using a NorthArrow, **3D project:** leave unchecked, **ArcGIS OnlineBasemap:** Imagery, **AccessToken:** see: [Create an API Key](https://developers.arcgis.com/documentation/security-and-authentication/api-key-authentication/tutorials/create-an-api-key/)
 >
->  **Kit Selection** ==> Desktop Qt 6.5.6 MSVC2019 64bit (or higher)
+>  **Kit Selection** ==> Desktop Qt 6.8.1 MSVC2019 64bit (or higher)
 >
 >  **Project Management** ==> **Add as a subproject to project:** none, **Add to version control:** none
 
@@ -58,12 +58,7 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 
 **CMake**
 
-- If you chose the **CMake** build system, copy the `toolkitwidgets` and the `common` subdirectories into your project's directory. For example you could modify this `bash` script to do the copy of the toolkit directories/files for you:
-
-> ```bash
-> cp -r /path/to/toolkit/uitools/common /path/to/project
-> cp -r /path/to/toolkit/uitools/toolkitwidgets /path/to/project
-> ```
+- If you chose the **CMake** build system, copy the `toolkitwidgets` and the `common` subdirectories into your project's directory.
 
 - Edit the `CMakeLists.txt` in your Qt project (it was created when you went through the ArcGIS Maps SDK for Qt template wizards). Uncomment the `add_subdirectory` and `target_link_libraries` commands:
 
@@ -80,7 +75,7 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 **STEP 5:** Once you have successfully included the toolkit, you can create individual tools in your own widgets files. In your widgets code file (for example: `TestNorthArrow.cpp`), create a new instance of the tool you wish to use and add it to your widgets layout. You will also normally need to pass the `GeoView` which the tool is designed to work with:
 
 > ```cpp
-> // Locate this existing line in your project
+> // Needed to use the NorthArrow tool
 > #include "Esri/ArcGISRuntime/Toolkit/NorthArrow.h"
 >  ...
 > // Add your NorthArrow to your UI here
