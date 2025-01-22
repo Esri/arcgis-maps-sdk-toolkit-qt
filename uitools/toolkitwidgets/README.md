@@ -75,7 +75,7 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 **STEP 5:** Once you have successfully included the toolkit, you can create individual tools in your own widgets files. In your widgets code file (for example: `TestNorthArrow.cpp`), create a new instance of the tool you wish to use and add it to your widgets layout. You will also normally need to pass the `GeoView` which the tool is designed to work with:
 
 > ```cpp
-> // Locate this existing line in your project
+> // Needed to use the NorthArrow tool
 > #include "Esri/ArcGISRuntime/Toolkit/NorthArrow.h"
 >  ...
 > // Add your NorthArrow to your UI here
