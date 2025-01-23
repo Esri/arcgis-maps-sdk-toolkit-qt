@@ -13,49 +13,48 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_POPUPMEDIAITEM_H
-#define ESRI_ARCGISRUNTIME_TOOLKIT_POPUPMEDIAITEM_H
+#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_POPUPATTACHMENTITEM_H
+#define ESRI_ARCGISRUNTIME_TOOLKIT_POPUPATTACHMENTITEM_H
 
 // Qt headers
 #include <QObject>
+
+// #include <PopupAttachment.h>
 
 // Other headers
 #include "Internal/QmlEnums.h"
 
 namespace Esri::ArcGISRuntime {
 
-class TextPopupElement;
-class PopupElement;
-class PopupMedia;
+class PopupAttachment;
 
 namespace Toolkit
 {
 
-class PopupMediaItem : public QObject
+class PopupAttachmentItem : public QObject
 {
   Q_OBJECT
-  Q_PROPERTY(QString title READ title NOTIFY popupMediaItemChanged)
-  Q_PROPERTY(QString caption READ caption NOTIFY popupMediaItemChanged)
-  Q_PROPERTY(PopupMediaType popupMediaType READ popupMediaType NOTIFY popupMediaItemChanged)
+  Q_PROPERTY(QString name READ name NOTIFY popupAttachmentItemChanged)
+  Q_PROPERTY(QString contentType READ contentType NOTIFY popupAttachmentItemChanged)
+  // Q_PROPERTY(PopupMediaType popupMediaType READ popupMediaType NOTIFY popupMediaItemChanged)
 
 public:
-  PopupMediaItem(QObject* parent = nullptr) = delete;
-  explicit PopupMediaItem(PopupMedia* popupMedia, QObject* parent = nullptr);
+  PopupAttachmentItem(QObject* parent = nullptr) = delete;
+  explicit PopupAttachmentItem(PopupAttachment* popupAttachment, QObject* parent = nullptr);
 
-private:
-  QString title() const;
-  QString caption() const;
-  PopupMediaType popupMediaType() const;
-public:
-  PopupMedia* popupMediaItem() const;
+  QString name() const;
+  QString contentType() const;
+  // PopupMediaType popupMediaType() const;
+  // PopupMedia* popupMediaItem() const;
 
 signals:
-  void popupMediaItemChanged();
+  void popupAttachmentItemChanged();
 
 private:
-  PopupMedia* m_popupMedia = nullptr;
+  PopupAttachment* m_popupAttachment = nullptr;
 };
 
 } // Toolkit
 } // Esri::ArcGISRuntime
-#endif // ESRI_ARCGISRUNTIME_TOOLKIT_POPUPMEDIAITEM_H
+
+#endif // ESRI_ARCGISRUNTIME_TOOLKIT_POPUPATTACHMENTITEM_H

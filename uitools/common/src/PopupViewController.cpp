@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2020 Esri
  *
@@ -21,6 +22,7 @@
 #include <QDebug>
 
 // Maps SDK headers
+#include "AttachmentsPopupElement.h"
 #include "FieldsPopupElement.h"
 #include "MediaPopupElement.h"
 #include "TextPopupElement.h"
@@ -34,6 +36,7 @@
 #include "PopupTypes.h"
 
 // Toolkit headers
+#include "AttachmentsPopupElementViewController.h"
 #include "FieldsPopupElementViewController.h"
 #include "MediaPopupElementViewController.h"
 #include "TextPopupElementViewController.h"
@@ -142,7 +145,8 @@ void PopupViewController::setPopup(Popup* popup)
                 new FieldsPopupElementViewController(static_cast<FieldsPopupElement*>(element), m_popup));
           break;
         case Esri::ArcGISRuntime::PopupElementType::AttachmentsPopupElement:
-          Q_UNIMPLEMENTED();
+          m_popupElementControllerModel->append(
+                new AttachmentsPopupElementViewController(static_cast<AttachmentsPopupElement*>(element), m_popup));
           break;
         case Esri::ArcGISRuntime::PopupElementType::MediaPopupElement:
           m_popupElementControllerModel->append(

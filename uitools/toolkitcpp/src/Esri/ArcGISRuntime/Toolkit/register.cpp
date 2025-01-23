@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2025 Esri
  *
@@ -18,6 +19,7 @@
 
 // Toolkit includes
 #include "ArcGISAuthenticationController.h"
+#include "AttachmentsPopupElementViewController.h"
 #include "AuthenticationController.h"
 #include "BarChartPopupMediaItem.h"
 #include "BasemapGalleryController.h"
@@ -39,6 +41,7 @@
 #include "NorthArrowController.h"
 #include "OverviewMapController.h"
 #include "PieChartPopupMediaItem.h"
+#include "PopupAttachmentItem.h"
 #include "PopupElementViewItem.h"
 #include "PopupMediaItem.h"
 #include "PopupViewController.h"
@@ -223,6 +226,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     appEngine.addImportPath(ESRI_COM_PATH);
     registerModuleRevisions();
     registerComponent<ArcGISAuthenticationController>(CreationType::Singleton);
+    registerComponent<AttachmentsPopupElementViewController>();
     registerComponent<AuthenticationController>();
     registerComponent<BarChartPopupMediaItem>();
     registerComponent<BasemapGalleryController>();
@@ -244,6 +248,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     registerComponent<NorthArrowController>();
     registerComponent<OverviewMapController>();
     registerComponent<PieChartPopupMediaItem>();
+    registerComponent<PopupAttachmentItem>();
     registerComponent<PopupElementViewItem>();
     registerComponent<PopupMediaItem>();
     registerComponent<PopupViewController>();
