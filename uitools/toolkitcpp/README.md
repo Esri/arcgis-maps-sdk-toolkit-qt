@@ -41,7 +41,7 @@ These are the **Qt Quick UI components/QML Type** available to use:
 >
 >  **Define Project Details** ==> **App Description:** Test using a NorthArrow, **3D project:** leave unchecked, **ArcGIS OnlineBasemap:** Imagery, **AccessToken:** see: [Create an API Key](https://developers.arcgis.com/documentation/security-and-authentication/api-key-authentication/tutorials/create-an-api-key/)
 >
->  **Kit Selection** ==> Desktop Qt 6.5.6 MSVC2019 64bit (or higher)
+>  **Kit Selection** ==> Desktop Qt 6.8.1 MSVC2019 64bit (or higher)
 >
 >  **Project Management** ==> **Add as a subproject to project:** none, **Add to version control:** none
 
@@ -55,19 +55,14 @@ These are the **Qt Quick UI components/QML Type** available to use:
 > ...
 > include($$PWD/arcgisruntime.pri) # <-- Locate this existing line in your project
 >
-> # Include the path to the toolkitcpp.pri file on your device, for example:
-> include(C:/arcgis-maps-sdk-toolkit-qt/toolkit/uitools/toolkitcpp/toolkitcpp.pri)
+> # Include this toolkit pri qmake file directly afterwards
+> include(C:/arcgis-maps-sdk-toolkit-qt/uitools/toolkitcpp/toolkitcpp.pri)
 > ...
 > ```  
 
 **CMake**
 
-- If you chose the **CMake** build system, copy the `toolkitcpp` and the `common` subdirectories into your project's directory. For example you could modify this `bash` script to do the copy of the toolkit directories/files for you:
-
-> ```bash
-> cp -r /path/to/toolkit/uitools/common /path/to/project
-> cp -r /path/to/toolkit/uitools/toolkitcpp /path/to/project
-> ```
+- If you chose the **CMake** build system, copy the `toolkitcpp` and the `common` subdirectories into your project's directory.
 
 - Edit the `CMakeLists.txt` in your Qt project (it was created when you went through the ArcGIS Maps SDK for Qt template wizards). Uncomment the `add_subdirectory` and `target_link_libraries` commands:
 
