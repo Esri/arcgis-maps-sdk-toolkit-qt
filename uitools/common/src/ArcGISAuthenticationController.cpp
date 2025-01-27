@@ -187,15 +187,25 @@ void ArcGISAuthenticationController::handleNetworkAuthenticationChallenge(Networ
  */
 void ArcGISAuthenticationController::continueWithServerTrust(bool trust)
 {
-  // to simplify the toolkit experience, 'remember' is always true.
-  // it's uncommon to reject, and want another opportunity to accept later for the same host.
-  constexpr auto remember = true;
-  auto* credential = ServerTrustCredential::createWithChallenge(m_currentNetworkChallenge.get(), trust, remember);
-  if (credential)
+  if (trust)
   {
-    m_currentNetworkChallenge->continueWithCredential(credential);
-    m_currentNetworkChallenge.reset();
+    auto* credential = ServerTrustCredential::createWithChallenge(m_currentNetworkChallenge.get(), this);
+    if (credential)
+    {
+      m_currentNetworkChallenge->continueWithCredential(credential);
+    }
+    else
+    {
+      m_currentNetworkChallenge->continueAndFail();
+    }
   }
+  else
+  {
+    m_currentNetworkChallenge->continueAndFailWithError(
+          Error{"A ServerTrust challenge was issued, but was blocked by the user", ""});
+  }
+
+  m_currentNetworkChallenge.reset();
 }
 
 /*!
@@ -337,27 +347,21 @@ QList<OAuthUserConfiguration*> ArcGISAuthenticationController::oAuthUserConfigur
  */
 QUrl ArcGISAuthenticationController::currentAuthenticatingHost_() const
 {
-  // network challenges are checked first
-  const auto requestUrl = [this]() -> QUrl
+  if (m_currentNetworkChallenge)
   {
-    if (m_currentNetworkChallenge)
-    {
-      return m_currentNetworkChallenge->requestUrl();
-    }
-    if (m_currentArcGISChallenge)
-    {
-      return m_currentArcGISChallenge->requestUrl();
-    }
-    return {};
-  }();
-
-  if (!requestUrl.isEmpty())
-  {
-    const auto scheme = requestUrl.scheme();
-    const auto host = requestUrl.host();
-    return scheme + "://" + host;
+    return QUrl{m_currentNetworkChallenge->host()};
   }
 
+  if (m_currentArcGISChallenge)
+  {
+    const auto requestUrl = m_currentArcGISChallenge->requestUrl();
+    if (!requestUrl.isEmpty())
+    {
+      const auto scheme = requestUrl.scheme();
+      const auto host = requestUrl.host();
+      return scheme + "://" + host;
+    }
+  }
   return {};
 }
 
