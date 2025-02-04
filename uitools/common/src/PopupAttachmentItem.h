@@ -36,6 +36,9 @@ class PopupAttachmentItem : public QObject
   Q_OBJECT
   Q_PROPERTY(QString name READ name NOTIFY popupAttachmentItemChanged)
   Q_PROPERTY(QString contentType READ contentType NOTIFY popupAttachmentItemChanged)
+  Q_PROPERTY(bool dataFetched READ dataFetched NOTIFY popupAttachmentItemChanged)
+  Q_PROPERTY(QString size READ size NOTIFY popupAttachmentItemChanged)
+  Q_PROPERTY(bool fetchingAttachment READ fetchingAttachment NOTIFY popupAttachmentItemChanged)
   // Q_PROPERTY(PopupMediaType popupMediaType READ popupMediaType NOTIFY popupMediaItemChanged)
 
 public:
@@ -44,6 +47,11 @@ public:
 
   QString name() const;
   QString contentType() const;
+  QString size() const;
+  bool dataFetched() const;
+  bool fetchingAttachment() const;
+
+  Q_INVOKABLE void downloadAttachment();
   // PopupMediaType popupMediaType() const;
   // PopupMedia* popupMediaItem() const;
 
@@ -52,6 +60,7 @@ signals:
 
 private:
   PopupAttachment* m_popupAttachment = nullptr;
+  bool m_fetchingAttachment;
 };
 
 } // Toolkit

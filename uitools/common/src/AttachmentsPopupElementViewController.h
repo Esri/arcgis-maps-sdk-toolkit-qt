@@ -51,6 +51,9 @@ private:
 signals:
   void attachmentPopupElementChanged();
 
+public slots:
+  void popuplateAttachments();
+
 private:
   GenericListModel* m_popupAttachmentItems = nullptr;
 };

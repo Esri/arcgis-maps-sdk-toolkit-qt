@@ -44,15 +44,7 @@ AttachmentsPopupElementViewController::AttachmentsPopupElementViewController(
   qDebug() << "attachments created";
   attachmentsPopupElement->fetchAttachmentsAsync().then([this] ()
   {
-    qDebug() << "attachments fetched";
-    qDebug() << static_cast<AttachmentsPopupElement*>(popupElement())->attachments().size();
-
-    for (auto popupAttachment : static_cast<AttachmentsPopupElement*>(popupElement())->attachments())
-    {
-      m_popupAttachmentItems->append(new PopupAttachmentItem(popupAttachment, popupElement()));
-    }
-    emit attachmentPopupElementChanged();
-
+    QMetaObject::invokeMethod(this, "popuplateAttachments", Qt::QueuedConnection);
   });
 
   // attachmentsPopupElement->fetchAttachmentsAsync().then(
@@ -77,6 +69,20 @@ QString AttachmentsPopupElementViewController::description() const
 GenericListModel* AttachmentsPopupElementViewController::popupAttachmentItems() const
 {
   return m_popupAttachmentItems;
+}
+
+void AttachmentsPopupElementViewController::popuplateAttachments() {
+  qDebug() << "attachments fetched";
+  qDebug() << static_cast<AttachmentsPopupElement*>(popupElement())->attachments().size();
+
+  qDebug() << "Current Thread: " << QThread::currentThread();
+  qDebug() << "Parent Thread: " << this->thread();
+  for (auto* popupAttachment : static_cast<AttachmentsPopupElement*>(popupElement())->attachments())
+  {
+    m_popupAttachmentItems->append(new PopupAttachmentItem(popupAttachment, this));
+
+  }
+  emit attachmentPopupElementChanged();
 }
 
 } // namespace Esri::ArcGISRuntime::Toolkit
