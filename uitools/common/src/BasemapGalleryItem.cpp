@@ -131,6 +131,22 @@ namespace Esri::ArcGISRuntime::Toolkit {
     setBasemap(basemap);
   }
 
+  BasemapGalleryItem::BasemapGalleryItem(Basemap* basemap, QImage thumbnail, QString tooltip, bool is3D, QObject* parent) :
+    QObject(parent),
+    m_thumbnail{std::move(thumbnail)},
+    m_tooltip{std::move(tooltip)},
+    m_id{QUuid::createUuid()},
+    m_is3D{is3D}
+  {
+    registerItem(this);
+    connect(this, &BasemapGalleryItem::basemapChanged, this, &BasemapGalleryItem::thumbnailChanged);
+    connect(this, &BasemapGalleryItem::thumbnailOverrideChanged, this, &BasemapGalleryItem::thumbnailChanged);
+    connect(this, &BasemapGalleryItem::basemapChanged, this, &BasemapGalleryItem::tooltipChanged);
+    connect(this, &BasemapGalleryItem::tooltipOverrideChanged, this, &BasemapGalleryItem::tooltipChanged);
+    connect(this, &BasemapGalleryItem::is3DChanged, this, &BasemapGalleryItem::is3DChanged);
+    setBasemap(basemap);
+  }
+
   /*!
   \brief Destructor.
  */
@@ -294,6 +310,16 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     m_tooltip = std::move(tooltip);
     emit tooltipOverrideChanged();
+  }
+  
+  bool BasemapGalleryItem::is3D() const
+  {
+      return m_is3D;
+  }
+  
+  void BasemapGalleryItem::setIs3D(bool is3D)
+  {
+      m_is3D = is3D;
   }
 
 #ifdef CPP_ARCGISRUNTIME_TOOLKIT

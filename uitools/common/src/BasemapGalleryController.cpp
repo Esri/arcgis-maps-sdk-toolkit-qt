@@ -239,6 +239,30 @@ namespace Esri::ArcGISRuntime::Toolkit {
       }
     }
 
+    void sort3DBasemapsAndAddToGallery(BasemapGalleryController* self, BasemapListModel* basemaps)
+    {
+      qDebug() << self->geoModel();
+      // Convert BasemapListModel into a Basemap* vector and sort basemaps alphabetically using the title
+      std::vector<Basemap*> basemapsVector;
+      basemapsVector.reserve(basemaps->rowCount());
+      std::copy(std::cbegin(*basemaps), std::cend(*basemaps), std::back_inserter(basemapsVector));
+      std::sort(std::begin(basemapsVector), std::end(basemapsVector), [](Basemap* b1, Basemap* b2)
+      {
+        // Check validity of basemap->item() and if title() is empty. If either is true, push to end of list.
+        if (!b1->item() || b1->item()->title() == "")
+          return false;
+        else if (!b2->item() || b2->item()->title() == "")
+          return true;
+        else
+          return b1->item()->title() < b2->item()->title();
+      });
+
+      // For each discovered map, add it to our gallery.
+      for (auto basemap : basemapsVector)
+      {
+        self->append(basemap, true);
+      }
+    }
     /*!
       \internal
       Calls Portal::fetchDeveloperBasemapsAsync on the portal. Note that we do
@@ -264,6 +288,19 @@ namespace Esri::ArcGISRuntime::Toolkit {
                            // Notify the demo that the basemaps have changed.
                            emit self->basemapsChanged();
                          });
+
+                         if (qobject_cast<Scene*>(self->geoModel()))
+                         {
+                           portal->fetch3DBasemapsAsync().then(
+                                 [portal, self]()
+                           {
+                             // Sort and append the basemaps to the gallery.
+                             BasemapListModel* basemaps = portal->basemaps3D();
+                             sort3DBasemapsAndAddToGallery(self, basemaps);
+                             // Notify the demo that the basemaps have changed.
+                             emit self->basemapsChanged();
+                           });
+                         }
                        });
       portal->load();
     }
@@ -466,6 +503,27 @@ namespace Esri::ArcGISRuntime::Toolkit {
                      emit basemapsChanged();
                    });
                  }
+
+                 if (qobject_cast<Scene*>(m_geoModel))
+                 {
+                   if (m_portal->basemaps3D()->rowCount() > 0)
+                   {
+                     for (auto basemap : *m_portal->basemaps3D())
+                     {
+                       append(basemap);
+                     }
+                   }
+                   else
+                   {
+                     m_portal->fetch3DBasemapsAsync().then(
+                           [this]()
+                     {
+                       BasemapListModel* basemaps = m_portal->basemaps3D();
+                       sort3DBasemapsAndAddToGallery(this, basemaps);
+                       emit basemapsChanged();
+                     });
+                   }
+                 }
                });
     }
 
@@ -553,6 +611,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
   bool BasemapGalleryController::append(Basemap* basemap)
   {
     return m_gallery->append(new BasemapGalleryItem(basemap, this));
+  }
+
+  bool BasemapGalleryController::append(Basemap* basemap, bool is3D)
+  {
+    return m_gallery->append(new BasemapGalleryItem(basemap, {}, {}, is3D, this));
   }
 
   /*!

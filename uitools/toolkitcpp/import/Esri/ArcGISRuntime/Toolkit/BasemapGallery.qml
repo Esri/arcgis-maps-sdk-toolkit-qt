@@ -233,6 +233,22 @@ Pane {
                 height: basemapGallery.internal.defaultCellSize
                 color: "transparent"
             }
+            Rectangle {
+                x: ((view.cellWidth - basemapGallery.internal.defaultCellSize) / 2 + basemapGallery.internal.defaultCellSize) - (width + (width*0.2))
+                y: ((view.cellHeight - basemapGallery.internal.defaultCellSize) / 2) - 8
+                z: 2
+                height: 14
+                width: height * 2
+                color: "purple"
+                radius: 15
+                visible: listModelData.is3D
+                Text {
+                    anchors.centerIn: parent
+                    text: qsTr("3D")
+                    font.pixelSize: 10
+                    color: "white"
+                }
+            }
 
             text: listModelData.name === "" ? "Unnamed basemap" : listModelData.name
             display: {
