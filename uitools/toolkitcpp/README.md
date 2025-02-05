@@ -41,7 +41,7 @@ These are the **Qt Quick UI components/QML Type** available to use:
 >
 >  **Define Project Details** ==> **App Description:** Test using a NorthArrow, **3D project:** leave unchecked, **ArcGIS OnlineBasemap:** Imagery, **AccessToken:** see: [Create an API Key](https://developers.arcgis.com/documentation/security-and-authentication/api-key-authentication/tutorials/create-an-api-key/)
 >
->  **Kit Selection** ==> Desktop Qt 6.8.1 MSVC2019 64bit (or higher)
+>  **Kit Selection** ==> Desktop Qt 6.8.2 MSVC2019 64bit (or higher)
 >
 >  **Project Management** ==> **Add as a subproject to project:** none, **Add to version control:** none
 
