@@ -53,6 +53,15 @@ public:
     PopupMediaTypeUnknown = static_cast<int>(Esri::ArcGISRuntime::PopupMediaType::Unknown)
   };
   Q_ENUM(PopupMediaType)
+
+  enum class PopupAttachmentType
+  {
+    PopupAttachmentTypeImage = static_cast<int>(Esri::ArcGISRuntime::PopupAttachmentType::Image),
+    PopupAttachmentTypeVideo = static_cast<int>(Esri::ArcGISRuntime::PopupAttachmentType::Video),
+    PopupAttachmentTypeDocument = static_cast<int>(Esri::ArcGISRuntime::PopupAttachmentType::Document),
+    PopupAttachmentTypeOther = static_cast<int>(Esri::ArcGISRuntime::PopupAttachmentType::Other)
+  };
+  Q_ENUM(PopupAttachmentType)
 };
 
 #endif // ARCGIS_RUNTIME_TOOLKIT_CPP_QMLENUMS_H
