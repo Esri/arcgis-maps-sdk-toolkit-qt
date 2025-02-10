@@ -28,7 +28,6 @@ import QtQuick.Layouts
 
 ColumnLayout {
     id: attachmentsPopupElementView
-    // height: childrenRect.height
 
     clip: true
     focus: true
@@ -47,7 +46,6 @@ ColumnLayout {
         Layout.rightMargin: attachmentsPopupElementView.mediaMargin
     }
 
-    // ColumnLayout originally....
     Column {
         clip: true
         focus: true
@@ -80,129 +78,6 @@ ColumnLayout {
         Layout.rightMargin: attachmentsPopupElementView.mediaMargin
     }
 
-    // ListView {
-    //     id: lv
-    //     clip: true
-    //     focus: true
-    //     Layout.preferredHeight: childrenRect.height
-    //     spacing: attachmentsPopupElementView.mediaMargin
-    //     model: attachmentsPopupElementView.controller.popupAttachmentItems
-
-    //     Layout.fillWidth: true
-    //     Layout.leftMargin: attachmentsPopupElementView.mediaMargin
-    //     Layout.rightMargin: attachmentsPopupElementView.mediaMargin
-
-    //     delegate: GridLayout {
-    //         // width: parent.width
-    //         columns: 2
-    //         rows: 2
-    //         width: parent.width
-    //         // Layout.alignment: Qt.AlignLeft
-
-    //         Image {
-    //             id: downIndicatorImage
-    //             // Layout.preferredHeight: 32
-    //             // Layout.preferredWidth:  32
-    //             fillMode: Image.PreserveAspectFit
-    //             // Layout.alignment: Qt.AlignVCenter
-    //             // source: "qrc:/esri.com/imports/Calcite/images/download-to.svg"
-    //             source: "qrc:/esri.com/imports/Calcite/images/download.svg"
-
-    //             // sourceSize.width: 32
-    //             // sourceSize.height: 32
-    //         }
-
-    //         Label {
-    //             id: attachmentLabel
-    //             text: model.name
-    //             Layout.fillWidth: true
-    //             wrapMode: Text.NoWrap
-    //             Layout.preferredHeight: downIndicatorImage.height
-    //             font.weight: Font.Bold
-    //             // Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-    //         }
-
-    //         MenuSeparator {
-    //             Layout.fillWidth: true
-    //             Layout.columnSpan: 2
-    //         }
-    //     }
-
-    //     // delegate: Column {
-    //     //     width: parent.width
-
-    //     //     Label {
-    //     //         text: model.name
-    //     //         wrapMode: Text.WordWrap
-    //     //         width: parent.width
-    //     //         font.weight: Font.Bold
-    //     //         rightPadding: 10
-    //     //         leftPadding: 20
-    //     //     }
-    //     // }
-
-    //     // delegate: GridLayout {
-    //     //     // width: parent.width
-    //     //     columns: 2
-    //     //     rows: 1
-    //     //     width: parent.width
-    //     //     Layout.alignment: Qt.AlignLeft
-
-    //     //     // Rectangle {
-
-    //     //     //     // opacity: 0
-    //     //     //     // color: enabled ? (down.hovered ? Calcite.foreground2 : Calcite.foreground1) : Calcite.background
-    //     //     //     // border {
-    //     //     //     //     color: Calcite.border1
-    //     //     //     // }
-    //     // // }
-    //     //     Item { // Use Item or Rectangle as a container
-    //     //         Layout.fillWidth: true
-    //     //         Layout.preferredHeight: 32 // Set preferred height for the container
-
-    //     //         MouseArea {
-    //     //             anchors.fill: parent // Fill the entire area of the parent
-    //     //             onClicked: {
-    //     //                 console.log("Mouse clicked on:", model.name); // Handle mouse click event
-    //     //             }
-    //     //             onEntered: {
-    //     //                 // Optional: Change appearance on hover
-    //     //                 parent.opacity = 0.8; // Example: Change opacity on hover
-    //     //             }
-    //     //             onExited: {
-    //     //                 parent.opacity = 1.0; // Reset opacity when mouse exits
-    //     //             }
-    //     //         }
-
-    //     //         Image {
-    //     //             id: downIndicatorImage
-    //     //             Layout.preferredHeight: 32
-    //     //             Layout.preferredWidth:  32
-    //     //             fillMode: Image.PreserveAspectFit
-    //     //             Layout.alignment: Qt.AlignLeft
-    //     //             // source: "qrc:/esri.com/imports/Calcite/images/download-to.svg"
-    //     //             source: "qrc:/esri.com/imports/Calcite/images/download.svg"
-    //     //         }
-
-    //     //         Label {
-    //     //             id: attachmentLabel
-    //     //             text: model.name
-    //     //             Layout.fillWidth: true
-    //     //             wrapMode: Text.NoWrap
-    //     //             Layout.preferredHeight: 32
-    //     //             font.weight: Font.Bold
-    //     //             Layout.alignment: Qt.AlignLeft
-    //     //         }
-    //     //     }
-
-    //     //     MenuSeparator {
-    //     //         Layout.fillWidth: true
-    //     //         Layout.columnSpan: 2
-    //     //     }
-    //     // }
-
-    // }
-
     ListView {
         id: lv
         clip: true
@@ -215,64 +90,70 @@ ColumnLayout {
         Layout.leftMargin: attachmentsPopupElementView.mediaMargin
         Layout.rightMargin: attachmentsPopupElementView.mediaMargin
 
-        delegate: Item { // Use Item as a container for the delegate
-            width: parent.width // Ensure the item takes the full width of the ListView
+        delegate: Item {
+            width: parent.width
             height: childrenRect.height
 
             MouseArea {
-                anchors.fill: parent // Fill the entire area of the parent
+                anchors.fill: parent
                 hoverEnabled: true
-                property string tempName: ""
+
                 onClicked: {
                     console.log("Mouse clicked on:", model.name); // Handle mouse click event
-                    if (!model.listModelData.dataFetched)
-                    {
+                    if (!model.listModelData.dataFetched) {
                         model.listModelData.downloadAttachment();
+                    } else {
+                        let res = Qt.openUrlExternally(model.listModelData.localData);
                     }
                 }
                 onEntered: {
-                    // parent.opacity = 0.8; // Optional: Change appearance on hover
-                    print(tempName);
-                    if( tempName === "")
-                    {
-                        tempName = name.text;
-                    }
-                    if(model.dataFetched)
-                    {
-                        name.text = "click to open";
-                    }
+                    if (model.listModelData.dataFetched && name.text !== "Click to open")
+                        name.text = "Click to open";
 
                 }
                 onExited: {
-                    // parent.opacity = 1.0; // Reset appearance when mouse exits
-                    print("exit");
-                    // if( tempName !== "")
-                    // {
-                    //     tempName = name.text;
-                    // }
-                    if(model.dataFetched)
-                    {
-                        name.text = tempName;
-                    }
+                    if (model.dataFetched && name.text === "Click to open")
+                        name.text = model.name;
                 }
             }
 
             GridLayout {
-                columns: 2
+                columns: 3
                 rows: 2
                 width: parent.width
                 clip: true
                 columnSpacing: 0
                 rowSpacing: 0
 
-                // Image {
-                //     id: downIndicatorImage
-                //     fillMode: Image.PreserveAspectFit
-                //     visible: !model.dataFetched
-                //     source: "qrc:/esri.com/imports/Calcite/images/download.svg"
-                // }
+                Image {
+                    fillMode: Image.PreserveAspectFit
+                    Layout.preferredHeight: fileInfoColumn.height
+                    Layout.preferredWidth: fileInfoColumn.height
+                    Component.onCompleted: {
+                        switch(model.listModelData.popupAttachmentType)
+                        {
+                            case QmlEnums.PopupAttachmentTypeImage:
+                                source = "qrc:/esri.com/imports/Calcite/images/image.svg";
+                                break;
+                            case QmlEnums.PopupAttachmentTypeVideo:
+                                source = "qrc:/esri.com/imports/Calcite/images/video.svg";
+                                break;
+                            case QmlEnums.PopupAttachmentTypeDocument:
+                                source = "qrc:/esri.com/imports/Calcite/images/file.svg";
+                                break;
+                            case QmlEnums.PopupAttachmentTypeOther:
+                                source = "qrc:/esri.com/imports/Calcite/images/other.svg";
+                                break;
+                            default:
+                                source = "qrc:/esri.com/imports/Calcite/images/other.svg";
+                                break;
+                        }
+                    }
+                }
 
                 Column {
+                    id: fileInfoColumn
+
                     Layout.fillWidth: true
                     clip: true
                     Label {
@@ -281,10 +162,6 @@ ColumnLayout {
                         width: parent.width
                         wrapMode: Text.NoWrap
                         elide: Text.ElideRight
-                        onWidthChanged: print(width);
-
-
-                        // visible: !fetchAttachment.running
                     }
                     Label {
                         id: fileSize
@@ -293,47 +170,27 @@ ColumnLayout {
                         wrapMode: Text.NoWrap
                         font.weight: Font.Bold
                         elide: Text.ElideRight
-
-                        // visible: !fetchAttachment.running
                     }
-
-                    // BusyIndicator {
-                    //     id: fetchAttachment
-                    //     Layout.fillWidth: true
-                    //     Layout.alignment: Qt.AlignHCenter
-                    //     running: model.listModelData.fetchingAttachment
-                    //     visible: model.listModelData.fetchingAttachment
-                    // }
                 }
 
                 Image {
-                    id: downIndicatorImage
+                    id: downloadImage
                     fillMode: Image.PreserveAspectFit
+                    Layout.preferredHeight: fileInfoColumn.height
+                    Layout.preferredWidth: fileInfoColumn.height
                     visible: !fetchAttachment.running ? !model.dataFetched : !fetchAttachment.running
                     source: "qrc:/esri.com/imports/Calcite/images/download.svg"
                 }
 
                 BusyIndicator {
                     id: fetchAttachment
-                    // Layout.fillWidth: true
-                    // Layout.alignment: Qt.AlignHCenter
-                    // Layout.preferredWidth: downIndicatorImage.width
                     running: model.listModelData.fetchingAttachment
                     visible: model.listModelData.fetchingAttachment
                 }
 
-                // Label {
-                //     id: attachmentLabel
-                //     text: model.name
-                //     Layout.fillWidth: true
-                //     wrapMode: Text.NoWrap
-                //     Layout.preferredHeight: downIndicatorImage.height
-                //     font.weight: Font.Bold
-                // }
-
                 MenuSeparator {
                     Layout.fillWidth: true
-                    Layout.columnSpan: 2
+                    Layout.columnSpan: 3
                 }
             }
         }
