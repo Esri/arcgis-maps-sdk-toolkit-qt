@@ -1,4 +1,3 @@
-
 /*******************************************************************************
  *  Copyright 2012-2025 Esri
  *
@@ -29,29 +28,21 @@
 // Toolkit headers
 #include <PopupAttachmentItem.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
-
 /*!
   \internal
   This class is an internal implementation detail and is subject to change.
  */
+namespace Esri::ArcGISRuntime::Toolkit {
+
 AttachmentsPopupElementViewController::AttachmentsPopupElementViewController(
     AttachmentsPopupElement* attachmentsPopupElement, QObject* parent)
   : PopupElementViewItem{attachmentsPopupElement, parent},
     m_popupAttachmentItems{new GenericListModel(&PopupAttachmentItem::staticMetaObject, this)}
 {
-  qDebug() << attachmentsPopupElement->displayType();
-  qDebug() << "attachments created";
   attachmentsPopupElement->fetchAttachmentsAsync().then([this] ()
   {
     QMetaObject::invokeMethod(this, "popuplateAttachments", Qt::QueuedConnection);
   });
-
-  // attachmentsPopupElement->fetchAttachmentsAsync().then(
-  //       [this](const QList<Attachment*>& attachments)
-  //       {
-  //       });
-
 }
 
 AttachmentsPopupElementViewController::~AttachmentsPopupElementViewController() = default;
@@ -71,16 +62,11 @@ GenericListModel* AttachmentsPopupElementViewController::popupAttachmentItems() 
   return m_popupAttachmentItems;
 }
 
-void AttachmentsPopupElementViewController::popuplateAttachments() {
-  qDebug() << "attachments fetched";
-  qDebug() << static_cast<AttachmentsPopupElement*>(popupElement())->attachments().size();
-
-  qDebug() << "Current Thread: " << QThread::currentThread();
-  qDebug() << "Parent Thread: " << this->thread();
+void AttachmentsPopupElementViewController::popuplateAttachments()
+{
   for (auto* popupAttachment : static_cast<AttachmentsPopupElement*>(popupElement())->attachments())
   {
     m_popupAttachmentItems->append(new PopupAttachmentItem(popupAttachment, this));
-
   }
   emit attachmentPopupElementChanged();
 }

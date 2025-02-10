@@ -18,8 +18,8 @@
 
 // Qt headers
 #include <QObject>
-
-// #include <PopupAttachment.h>
+#include <QTemporaryDir>
+#include <QUrl>
 
 // Other headers
 #include "Internal/QmlEnums.h"
@@ -30,37 +30,40 @@ class PopupAttachment;
 
 namespace Toolkit
 {
-
 class PopupAttachmentItem : public QObject
 {
   Q_OBJECT
-  Q_PROPERTY(QString name READ name NOTIFY popupAttachmentItemChanged)
-  Q_PROPERTY(QString contentType READ contentType NOTIFY popupAttachmentItemChanged)
   Q_PROPERTY(bool dataFetched READ dataFetched NOTIFY popupAttachmentItemChanged)
-  Q_PROPERTY(QString size READ size NOTIFY popupAttachmentItemChanged)
   Q_PROPERTY(bool fetchingAttachment READ fetchingAttachment NOTIFY popupAttachmentItemChanged)
-  // Q_PROPERTY(PopupMediaType popupMediaType READ popupMediaType NOTIFY popupMediaItemChanged)
+  Q_PROPERTY(PopupAttachmentType popupAttachmentType READ popupAttachmentType NOTIFY popupAttachmentItemChanged)
+  Q_PROPERTY(QString contentType READ contentType NOTIFY popupAttachmentItemChanged)
+  Q_PROPERTY(QString name READ name NOTIFY popupAttachmentItemChanged)
+  Q_PROPERTY(QString size READ size NOTIFY popupAttachmentItemChanged)
+  Q_PROPERTY(QUrl localData READ localData NOTIFY popupAttachmentItemChanged)
 
 public:
-  PopupAttachmentItem(QObject* parent = nullptr) = delete;
   explicit PopupAttachmentItem(PopupAttachment* popupAttachment, QObject* parent = nullptr);
-
-  QString name() const;
-  QString contentType() const;
-  QString size() const;
-  bool dataFetched() const;
-  bool fetchingAttachment() const;
+  ~PopupAttachmentItem() override;
 
   Q_INVOKABLE void downloadAttachment();
-  // PopupMediaType popupMediaType() const;
-  // PopupMedia* popupMediaItem() const;
+
+private:
+  bool dataFetched() const;
+  bool fetchingAttachment() const;
+  PopupAttachmentType popupAttachmentType() const;
+  QString contentType() const;
+  QString name() const;
+  QString size() const;
+  QUrl localData() const;
 
 signals:
   void popupAttachmentItemChanged();
 
 private:
-  PopupAttachment* m_popupAttachment = nullptr;
   bool m_fetchingAttachment;
+  PopupAttachment* m_popupAttachment = nullptr;
+  QTemporaryDir m_tempDir;
+  QUrl m_localData;
 };
 
 } // Toolkit

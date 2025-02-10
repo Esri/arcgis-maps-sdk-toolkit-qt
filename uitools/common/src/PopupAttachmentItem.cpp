@@ -1,4 +1,3 @@
-
 /*******************************************************************************
  *  Copyright 2012-2025 Esri
  *
@@ -16,36 +15,65 @@
  ******************************************************************************/
 #include "PopupAttachmentItem.h"
 
+// Qt headers
+#include <QFile>
 #include <QFuture>
+#include <QStandardPaths>
+#include <QtGlobal>
 
-#include <PopupAttachment.h>
+// Maps SDK headers
 #include <Attachment.h>
+#include <PopupAttachment.h>
 
+/*!
+  \internal
+  This class is an internal implementation detail and is subject to change.
+ */
 namespace Esri::ArcGISRuntime::Toolkit {
 
 namespace {
 
   QString formatFileSize(qint64 bytes) {
+    if (bytes < 0) {
+        return "Invalid size";
+    }
+    if (bytes == 0) {
+        return "0 B";
+    }
+
     const char* units[] = { "B", "KB", "MB", "GB", "TB" };
-    double size = static_cast<double>(bytes);
+    auto size = static_cast<double>(bytes);
     int unitIndex = 0;
 
-    // Loop to find the appropriate unit
-    while (size >= 1024 && unitIndex < 4) {
+    while (size >= 1024 && unitIndex < 4)
+    {
       size /= 1024;
       unitIndex++;
     }
 
-    // Format the output string
     return QString::number(size, 'f', 2) + " " + units[unitIndex];
+  }
+
+  static QString homePath()
+  {
+    QString homePath;
+
+  #ifdef Q_OS_IOS
+    homePath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+  #else
+    homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+  #endif
+    return homePath;
   }
 
 }
 
 PopupAttachmentItem::PopupAttachmentItem(PopupAttachment* popupAttachment, QObject *parent)
-  : QObject{parent}, m_popupAttachment{popupAttachment}, m_fetchingAttachment{false}
+  : QObject{parent}, m_fetchingAttachment{false}, m_popupAttachment{popupAttachment}
 {
 }
+
+PopupAttachmentItem::~PopupAttachmentItem() = default;
 
 QString PopupAttachmentItem::name() const
 {
@@ -72,24 +100,39 @@ bool PopupAttachmentItem::fetchingAttachment() const
   return m_fetchingAttachment;
 }
 
+PopupAttachmentType PopupAttachmentItem::popupAttachmentType() const
+{
+  return m_popupAttachment->popupAttachmentType();
+}
+
+QUrl PopupAttachmentItem::localData() const
+{
+  return m_localData;
+}
+
 void PopupAttachmentItem::downloadAttachment()
 {
-  QByteArray imageData;
   m_fetchingAttachment = true;
   emit popupAttachmentItemChanged();
-  m_popupAttachment->attachment()->fetchDataAsync().then([&imageData, this] (const QByteArray& data)
+  m_popupAttachment->attachment()->fetchDataAsync().then([this] (const QByteArray& data)
   {
-    qDebug() << "FetchDataCompleted";
-    qDebug() << m_popupAttachment->attachment()->name();
+    if (m_tempDir.isValid())
+    {
+#if defined Q_OS_ANDROID || defined Q_OS_IOS
+      m_localData = QUrl::fromLocalFile(homePath() + "/" + m_popupAttachment->attachment()->name());
+#else
+      m_localData = QUrl::fromLocalFile(m_tempDir.path() + "/" + m_popupAttachment->attachment()->name());
+#endif
+      QFile file(m_localData.toLocalFile());
+      if (file.open(QIODevice::WriteOnly))
+      {
+        file.write(data);
+        file.close();
+      }
+    }
     m_fetchingAttachment = false;
     emit popupAttachmentItemChanged();
   });
-
-  // auto future = attachment1->fetchDataAsync().then(
-  // [&imageData](const QByteArray& data)
-  // {
-  //   imageData = data;
-  // });
 }
 
-}
+} // Esri::ArcGISRuntime::Toolkit

@@ -25,9 +25,7 @@
 
 namespace Esri::ArcGISRuntime {
 
-class PopupElement;
 class AttachmentsPopupElement;
-class PopupMediaListModel;
 
 namespace Toolkit {
 
