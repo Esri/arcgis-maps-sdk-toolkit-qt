@@ -15,18 +15,19 @@ include($$PWD/../common/common.pri)
 
 QT += quickcontrols2 webview svg graphs
 
-TOOLKITCPP_SRC = $$PWD/src
+TOOLKITCPP_BASE_SRC = $$PWD/src
+TOOLKITCPP_TOOLKIT_SRC = $$TOOLKITCPP_BASE_SRC/Esri/ArcGISRuntime/Toolkit
 
-INCLUDEPATH += $$TOOLKITCPP_SRC
+INCLUDEPATH += $$TOOLKITCPP_BASE_SRC
 
-DEPENDPATH += $$TOOLKITCPP_SRC
+DEPENDPATH += $$TOOLKITCPP_BASE_SRC
 
-HEADERS += $$files($$TOOLKITCPP_SRC/Esri/ArcGISRuntime/Toolkit/*.h)
+HEADERS += $$files($$TOOLKITCPP_TOOLKIT_SRC/*.h)
 
-SOURCES += $$files($$TOOLKITCPP_SRC/Esri/ArcGISRuntime/Toolkit/*.cpp)
+SOURCES += $$files($$TOOLKITCPP_TOOLKIT_SRC/*.cpp)
 
 RESOURCES += $$PWD/import/Esri/ArcGISRuntime/Toolkit/esri_arcgisruntime_toolkit_qml.qrc
 
 QML_IMPORT_PATH += $$PWD/import
 
-DEFINES += CPP_ARCGISRUNTIME_TOOLKIT MAPS_SDK_QT_TOOLKIT
+DEFINES += CPP_ARCGISRUNTIME_TOOLKIT

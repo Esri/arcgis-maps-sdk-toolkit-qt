@@ -49,13 +49,15 @@ NorthArrow::NorthArrow(QWidget* parent) :
   QLabel(parent),
   m_controller(new NorthArrowController(this))
 {
+  setScaledContents(true);
   m_image = QPixmap(":/Esri/ArcGISRuntime/Toolkit/compass.svg");
   setAttribute(Qt::WA_TranslucentBackground);
 
   if (!m_image.isNull())
   {
-    const QSize defaultSize(48,48);
-    this->setPixmap(m_image.scaled(defaultSize, Qt::IgnoreAspectRatio));
+    const QSize defaultSize(48, 48);
+    setPixmap(m_image.scaled(defaultSize, Qt::IgnoreAspectRatio));
+    resize(defaultSize);
   }
 
   connect(m_controller, &NorthArrowController::headingChanged, this, [this]()
@@ -72,7 +74,7 @@ NorthArrow::NorthArrow(QWidget* parent) :
                    (pix.height() - imageHeight)/2,
                    imageWidth,
                    imageHeight);
-    this->setPixmap(pix);
+    setPixmap(pix);
   });
 }
 

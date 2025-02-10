@@ -11,8 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.16)
 project(libtoolkitcpp VERSION 1.0 LANGUAGES CXX)
+
+include(../common/CMakeLists.txt)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -21,62 +23,19 @@ find_package(Qt6 REQUIRED COMPONENTS Core Gui QuickControls2 Svg WebView)
 qt_standard_project_setup()
 
 qt_add_library(libtoolkitcpp STATIC
-    cpp/Esri/ArcGISRuntime/Toolkit/ArcGISAuthenticationController.cpp cpp/Esri/ArcGISRuntime/Toolkit/ArcGISAuthenticationController.h
-    cpp/Esri/ArcGISRuntime/Toolkit/ArcGISAuthenticationChallengeRelay.cpp cpp/Esri/ArcGISRuntime/Toolkit/ArcGISAuthenticationChallengeRelay.h
-    cpp/Esri/ArcGISRuntime/Toolkit/AuthenticationController.cpp cpp/Esri/ArcGISRuntime/Toolkit/AuthenticationController.h
-    cpp/Esri/ArcGISRuntime/Toolkit/BasemapGalleryController.cpp cpp/Esri/ArcGISRuntime/Toolkit/BasemapGalleryController.h
-    cpp/Esri/ArcGISRuntime/Toolkit/BasemapGalleryItem.cpp cpp/Esri/ArcGISRuntime/Toolkit/BasemapGalleryItem.h
-    cpp/Esri/ArcGISRuntime/Toolkit/BookmarkListItem.cpp cpp/Esri/ArcGISRuntime/Toolkit/BookmarkListItem.h
-    cpp/Esri/ArcGISRuntime/Toolkit/BookmarksViewController.cpp cpp/Esri/ArcGISRuntime/Toolkit/BookmarksViewController.h
-    cpp/Esri/ArcGISRuntime/Toolkit/CoordinateConversionConstants.cpp cpp/Esri/ArcGISRuntime/Toolkit/CoordinateConversionConstants.h
-    cpp/Esri/ArcGISRuntime/Toolkit/CoordinateConversionController.cpp cpp/Esri/ArcGISRuntime/Toolkit/CoordinateConversionController.h
-    cpp/Esri/ArcGISRuntime/Toolkit/CoordinateConversionOption.cpp cpp/Esri/ArcGISRuntime/Toolkit/CoordinateConversionOption.h
-    cpp/Esri/ArcGISRuntime/Toolkit/CoordinateConversionResult.cpp cpp/Esri/ArcGISRuntime/Toolkit/CoordinateConversionResult.h
-    cpp/Esri/ArcGISRuntime/Toolkit/CoordinateOptionDefaults.cpp cpp/Esri/ArcGISRuntime/Toolkit/CoordinateOptionDefaults.h
-    cpp/Esri/ArcGISRuntime/Toolkit/FloorFilterController.cpp cpp/Esri/ArcGISRuntime/Toolkit/FloorFilterController.h
-    cpp/Esri/ArcGISRuntime/Toolkit/FloorFilterFacilityItem.cpp cpp/Esri/ArcGISRuntime/Toolkit/FloorFilterFacilityItem.h
-    cpp/Esri/ArcGISRuntime/Toolkit/FloorFilterLevelItem.cpp cpp/Esri/ArcGISRuntime/Toolkit/FloorFilterLevelItem.h
-    cpp/Esri/ArcGISRuntime/Toolkit/FloorFilterSiteItem.cpp cpp/Esri/ArcGISRuntime/Toolkit/FloorFilterSiteItem.h
-    cpp/Esri/ArcGISRuntime/Toolkit/Internal/BasemapGalleryImageProvider.cpp cpp/Esri/ArcGISRuntime/Toolkit/Internal/BasemapGalleryImageProvider.h
-    cpp/Esri/ArcGISRuntime/Toolkit/Internal/DisconnectOnSignal.h
-    cpp/Esri/ArcGISRuntime/Toolkit/Internal/DoOnLoad.h
-    cpp/Esri/ArcGISRuntime/Toolkit/Internal/GenericListModel.cpp cpp/Esri/ArcGISRuntime/Toolkit/Internal/GenericListModel.h
-    cpp/Esri/ArcGISRuntime/Toolkit/Internal/GenericTableProxyModel.cpp cpp/Esri/ArcGISRuntime/Toolkit/Internal/GenericTableProxyModel.h
-    cpp/Esri/ArcGISRuntime/Toolkit/Internal/GeoViews.h
-    cpp/Esri/ArcGISRuntime/Toolkit/Internal/MetaElement.cpp cpp/Esri/ArcGISRuntime/Toolkit/Internal/MetaElement.h
-    cpp/Esri/ArcGISRuntime/Toolkit/Internal/SingleShotConnection.h
-    cpp/Esri/ArcGISRuntime/Toolkit/LocatorSearchSource.cpp cpp/Esri/ArcGISRuntime/Toolkit/LocatorSearchSource.h
-    cpp/Esri/ArcGISRuntime/Toolkit/NetworkAuthenticationChallengeRelay.cpp cpp/Esri/ArcGISRuntime/Toolkit/NetworkAuthenticationChallengeRelay.h
-    cpp/Esri/ArcGISRuntime/Toolkit/NorthArrowController.cpp cpp/Esri/ArcGISRuntime/Toolkit/NorthArrowController.h
-    cpp/Esri/ArcGISRuntime/Toolkit/OverviewMapController.cpp cpp/Esri/ArcGISRuntime/Toolkit/OverviewMapController.h
-    cpp/Esri/ArcGISRuntime/Toolkit/PopupViewController.cpp cpp/Esri/ArcGISRuntime/Toolkit/PopupViewController.h
-    cpp/Esri/ArcGISRuntime/Toolkit/ScalebarController.cpp cpp/Esri/ArcGISRuntime/Toolkit/ScalebarController.h
-    cpp/Esri/ArcGISRuntime/Toolkit/SearchResult.cpp cpp/Esri/ArcGISRuntime/Toolkit/SearchResult.h
-    cpp/Esri/ArcGISRuntime/Toolkit/SearchSourceInterface.cpp cpp/Esri/ArcGISRuntime/Toolkit/SearchSourceInterface.h
-    cpp/Esri/ArcGISRuntime/Toolkit/SearchSuggestion.cpp cpp/Esri/ArcGISRuntime/Toolkit/SearchSuggestion.h
-    cpp/Esri/ArcGISRuntime/Toolkit/SearchViewController.cpp cpp/Esri/ArcGISRuntime/Toolkit/SearchViewController.h
-    cpp/Esri/ArcGISRuntime/Toolkit/SmartLocatorSearchSource.cpp cpp/Esri/ArcGISRuntime/Toolkit/SmartLocatorSearchSource.h
-    cpp/Esri/ArcGISRuntime/Toolkit/TimeSliderController.cpp cpp/Esri/ArcGISRuntime/Toolkit/TimeSliderController.h
-    cpp/Esri/ArcGISRuntime/Toolkit/UtilityNetworkFunctionTraceResult.cpp cpp/Esri/ArcGISRuntime/Toolkit/UtilityNetworkFunctionTraceResult.h
-    cpp/Esri/ArcGISRuntime/Toolkit/UtilityNetworkFunctionTraceResultsModel.cpp cpp/Esri/ArcGISRuntime/Toolkit/UtilityNetworkFunctionTraceResultsModel.h
-    cpp/Esri/ArcGISRuntime/Toolkit/UtilityNetworkListItem.cpp cpp/Esri/ArcGISRuntime/Toolkit/UtilityNetworkListItem.h
-    cpp/Esri/ArcGISRuntime/Toolkit/UtilityNetworkTraceController.cpp cpp/Esri/ArcGISRuntime/Toolkit/UtilityNetworkTraceController.h
-    cpp/Esri/ArcGISRuntime/Toolkit/UtilityNetworkTraceStartingPoint.cpp cpp/Esri/ArcGISRuntime/Toolkit/UtilityNetworkTraceStartingPoint.h
-    cpp/Esri/ArcGISRuntime/Toolkit/UtilityNetworkTraceStartingPointsModel.cpp cpp/Esri/ArcGISRuntime/Toolkit/UtilityNetworkTraceStartingPointsModel.h
-    register/Esri/ArcGISRuntime/Toolkit/internal/register_cpp.cpp register/Esri/ArcGISRuntime/Toolkit/internal/register_cpp.h
-    register/Esri/ArcGISRuntime/Toolkit/register.cpp register/Esri/ArcGISRuntime/Toolkit/register.h
+    ${ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_HEADERS}
+    ${ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_SOURCES}
+    src/Esri/ArcGISRuntime/Toolkit/register.h
+    src/Esri/ArcGISRuntime/Toolkit/register.cpp
 )
 
 target_include_directories(libtoolkitcpp PUBLIC
-    cpp
-    cpp/Esri/ArcGISRuntime/Toolkit
-    register
-    register/Esri/ArcGISRuntime/Toolkit
+    ${ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_INCLUDES}
+    src
 )
 
 target_compile_definitions(libtoolkitcpp PRIVATE
     CPP_ARCGISRUNTIME_TOOLKIT
-    MAPS_SDK_QT_TOOLKIT
 )
 
 target_link_libraries(libtoolkitcpp PRIVATE
@@ -86,44 +45,6 @@ target_link_libraries(libtoolkitcpp PRIVATE
     Qt6::Svg
     Qt6::WebView
     ArcGISRuntime::Cpp
-)
-
-set(esri_arcgisruntime_toolkit_images_resource_files
-    "images/basemap.svg"
-    "images/chevron-down.svg"
-    "images/chevron-left.svg"
-    "images/chevron-up.svg"
-    "images/chevrons-left.svg"
-    "images/chevrons-right.svg"
-    "images/compass.svg"
-    "images/cursor-click.svg"
-    "images/edit-attributes.svg"
-    "images/ellipsis.svg"
-    "images/flash.svg"
-    "images/forward.svg"
-    "images/information.svg"
-    "images/layer-zoom-to.svg"
-    "images/organization.svg"
-    "images/pause.svg"
-    "images/pin-tear.svg"
-    "images/pin-tear.png"
-    "images/pin.svg"
-    "images/play.svg"
-    "images/plus-circle.svg"
-    "images/reverse.svg"
-    "images/search.svg"
-    "images/trash.svg"
-    "images/x.svg"
-    "images/zoom-to-object.svg"
-)
-
-qt_add_resources(libtoolkitcpp "esri_arcgisruntime_toolkit_images"
-    PREFIX
-        "/esri.com/imports/Esri/ArcGISRuntime/Toolkit/images"
-    BASE
-        "images"
-    FILES
-        ${esri_arcgisruntime_toolkit_images_resource_files}
 )
 
 set(esri_arcgisruntime_toolkit_view_resource_files
@@ -167,4 +88,13 @@ list(REMOVE_DUPLICATES QML_IMPORT_PATH)
 set(QML_IMPORT_PATH ${QML_IMPORT_PATH}
     CACHE STRING "ArcGISRuntime toolkit qml import paths"
     FORCE
+)
+
+qt_add_resources(libtoolkitcpp "ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_IMAGES"
+    PREFIX
+        ${ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_IMAGES_PREFIX}
+    BASE
+        ${ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_IMAGES_BASE}
+    FILES
+        ${ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_IMAGES}
 )
