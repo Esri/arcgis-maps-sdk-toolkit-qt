@@ -241,7 +241,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     void sort3DBasemapsAndAddToGallery(BasemapGalleryController* self, BasemapListModel* basemaps)
     {
-      qDebug() << self->geoModel();
       // Convert BasemapListModel into a Basemap* vector and sort basemaps alphabetically using the title
       std::vector<Basemap*> basemapsVector;
       basemapsVector.reserve(basemaps->rowCount());
