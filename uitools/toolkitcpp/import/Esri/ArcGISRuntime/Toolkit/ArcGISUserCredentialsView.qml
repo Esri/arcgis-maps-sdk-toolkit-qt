@@ -61,7 +61,7 @@ Dialog {
         Label {
             text: qsTr("Invalid username or password.")
             horizontalAlignment: Qt.AlignHCenter
-            visible: controller.currentChallengeFailureCount > 0
+            visible: controller.previousFailureCount > 0
             color: "red"
             background:  Rectangle {
                 color: "#FFCCCC"
