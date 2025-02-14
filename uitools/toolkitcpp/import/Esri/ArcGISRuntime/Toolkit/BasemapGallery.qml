@@ -234,19 +234,25 @@ Pane {
                 color: "transparent"
             }
             Rectangle {
-                x: ((view.cellWidth - basemapGallery.internal.defaultCellSize) / 2 + basemapGallery.internal.defaultCellSize) - (width + (width*0.2))
-                y: ((view.cellHeight - basemapGallery.internal.defaultCellSize) / 2) - 8
+                x: basemapGallery.internal.calculatedStyle === BasemapGallery.ViewStyle.Grid ?
+                   (view.cellWidth - basemapGallery.internal.defaultCellSize) / 2 + basemapGallery.internal.defaultCellSize - (width * 1.25) :
+                   view.cellWidth - (width + 116)
+
+                y: basemapGallery.internal.calculatedStyle === BasemapGallery.ViewStyle.Grid ?
+                   ((view.cellHeight - basemapGallery.internal.defaultCellSize) / 2) - 8 :
+                   view.cellHeight - basemapGallery.internal.defaultCellSize - 4
+
                 z: 2
                 height: 14
                 width: height * 2
-                color: "purple"
+                color: "lightgrey"
                 radius: 15
                 visible: listModelData.is3D
                 Text {
                     anchors.centerIn: parent
                     text: qsTr("3D")
                     font.pixelSize: 10
-                    color: "white"
+                    color: "black"
                 }
             }
 
