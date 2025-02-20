@@ -249,7 +249,7 @@ Pane {
                     height: basemapDelegate.isGrid ? view.cellHeight - (basemapIcon.height + (anchors.margins * 2)) : view.cellHeight - (anchors.margins * 2)
                     text: listModelData.name === "" ? "Unnamed basemap" : listModelData.name
                     elide: Text.ElideRight
-                    wrapMode: Text.Wrap
+                    wrapMode: Text.WordWrap
                     verticalAlignment: basemapDelegate.isGrid ? Qt.AlignTop : Qt.AlignVCenter
                     horizontalAlignment: basemapDelegate.isGrid ? Qt.AlignHCenter : Qt.AlignLeft
                 }
