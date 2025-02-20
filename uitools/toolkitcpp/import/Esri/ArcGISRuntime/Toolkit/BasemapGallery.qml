@@ -280,8 +280,8 @@ Pane {
                 // Store function inside a property
                 property var updateLayout: function() {
                     if (basemapDelegate.isGrid) {
-                        // Grid Mode
                         // Anchors must be unset before setting new ones
+                        // Grid Mode
                         basemapIcon.anchors.left = undefined
                         basemapIcon.anchors.verticalCenter = undefined
                         basemapIcon.anchors.top = basemapItem.top;

@@ -37,6 +37,7 @@
 #include <QFuture>
 #include <QPersistentModelIndex>
 #include <QPointer>
+#include <QMetaObject>
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
@@ -215,7 +216,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
       Because the basemaps are initially unloaded, Basemap->item() must be used to access the
       basemap metadata. The basemaps are sorted using Basemap->item()->title().
      */
-    void sortBasemapsAndAddToGallery(BasemapGalleryController* self, BasemapListModel* basemaps)
+    void sortBasemapsAndAddToGallery(BasemapGalleryController* self, BasemapListModel* basemaps, bool is3D = false)
     {
       // Convert BasemapListModel into a Basemap* vector and sort basemaps alphabetically using the title
       std::vector<Basemap*> basemapsVector;
@@ -224,44 +225,23 @@ namespace Esri::ArcGISRuntime::Toolkit {
       std::sort(std::begin(basemapsVector), std::end(basemapsVector), [](Basemap* b1, Basemap* b2)
                 {
                   // Check validity of basemap->item() and if title() is empty. If either is true, push to end of list.
-                  if (!b1->item() || b1->item()->title() == "")
+                  if (!b1->item() || b1->item()->title().isEmpty())
                     return false;
-                  else if (!b2->item() || b2->item()->title() == "")
+                  else if (!b2->item() || b2->item()->title().isEmpty())
                     return true;
                   else
                     return b1->item()->title() < b2->item()->title();
                 });
 
-      // For each discovered map, add it to our gallery.
+      // Ensure appending happens on the main thread
       for (auto basemap : basemapsVector)
       {
-        self->append(basemap);
+        QMetaObject::invokeMethod(self, [self, basemap, is3D]() {
+          self->append(basemap, is3D);
+        }, Qt::QueuedConnection); // Schedule for execution in the event loop (main thread)
       }
     }
 
-    void sort3DBasemapsAndAddToGallery(BasemapGalleryController* self, BasemapListModel* basemaps)
-    {
-      // Convert BasemapListModel into a Basemap* vector and sort basemaps alphabetically using the title
-      std::vector<Basemap*> basemapsVector;
-      basemapsVector.reserve(basemaps->rowCount());
-      std::copy(std::cbegin(*basemaps), std::cend(*basemaps), std::back_inserter(basemapsVector));
-      std::sort(std::begin(basemapsVector), std::end(basemapsVector), [](Basemap* b1, Basemap* b2)
-      {
-        // Check validity of basemap->item() and if title() is empty. If either is true, push to end of list.
-        if (!b1->item() || b1->item()->title() == "")
-          return false;
-        else if (!b2->item() || b2->item()->title() == "")
-          return true;
-        else
-          return b1->item()->title() < b2->item()->title();
-      });
-
-      // For each discovered map, add it to our gallery.
-      for (auto basemap : basemapsVector)
-      {
-        self->append(basemap, true);
-      }
-    }
     /*!
       \internal
       Calls Portal::fetchDeveloperBasemapsAsync on the portal. Note that we do
@@ -295,7 +275,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
                            {
                              // Sort and append the basemaps to the gallery.
                              BasemapListModel* basemaps = portal->basemaps3D();
-                             sort3DBasemapsAndAddToGallery(self, basemaps);
+                             sortBasemapsAndAddToGallery(self, basemaps, true);
                              // Notify the demo that the basemaps have changed.
                              emit self->basemapsChanged();
                            });
@@ -515,10 +495,10 @@ namespace Esri::ArcGISRuntime::Toolkit {
                    else
                    {
                      m_portal->fetch3DBasemapsAsync().then(
-                           [this]()
+                     [this]()
                      {
                        BasemapListModel* basemaps = m_portal->basemaps3D();
-                       sort3DBasemapsAndAddToGallery(this, basemaps);
+                       sortBasemapsAndAddToGallery(this, basemaps, true);
                        emit basemapsChanged();
                      });
                    }
