@@ -201,10 +201,11 @@ Pane {
         cacheBuffer: Math.max(0, Math.ceil(contentHeight))
         snapMode: GridView.SnapToRow
         currentIndex: controller.basemapIndex(controller.currentBasemap)
-        ScrollBar.vertical: ScrollBar { }
+        ScrollBar.vertical: ScrollBar { id: scrollBar }
 
         delegate: ItemDelegate {
             id: basemapDelegate
+            property bool isGrid: basemapGallery.internal.calculatedStyle === BasemapGallery.ViewStyle.Grid
             width: view.cellWidth
             height: view.cellHeight
             enabled: controller.basemapMatchesCurrentSpatialReference(listModelData.basemap)
@@ -226,44 +227,95 @@ Pane {
                     busyIndicator.running = false;
                 }
             }
-            icon {
-                cache: false
-                source: listModelData.thumbnailUrl
-                width: basemapGallery.internal.defaultCellSize
-                height: basemapGallery.internal.defaultCellSize
-                color: "transparent"
-            }
-            Rectangle {
-                x: basemapGallery.internal.calculatedStyle === BasemapGallery.ViewStyle.Grid ?
-                   (view.cellWidth - basemapGallery.internal.defaultCellSize) / 2 + basemapGallery.internal.defaultCellSize - (width * 1.25) :
-                   view.cellWidth - (width + 116)
 
-                y: basemapGallery.internal.calculatedStyle === BasemapGallery.ViewStyle.Grid ?
-                   ((view.cellHeight - basemapGallery.internal.defaultCellSize) / 2) - 8 :
-                   view.cellHeight - basemapGallery.internal.defaultCellSize - 4
+            Item {
+                id: basemapItem
+                anchors.fill: parent
 
-                z: 2
-                height: 14
-                width: height * 2
-                color: "lightgrey"
-                radius: 15
-                visible: listModelData.is3D
+                // Icon Item
+                Image {
+                    id: basemapIcon
+                    anchors.margins: 5
+                    source: listModelData.thumbnailUrl
+                    width: basemapGallery.internal.defaultCellSize
+                    height: basemapGallery.internal.defaultCellSize
+                }
+
+                // Text display
                 Text {
-                    anchors.centerIn: parent
-                    text: qsTr("3D")
-                    font.pixelSize: 10
-                    color: "black"
+                    id: basemapLabel
+                    anchors.margins: 5
+                    width: basemapDelegate.isGrid ? view.cellWidth - anchors.margins * 2 : view.cellWidth - (basemapIcon.width + (anchors.margins * 2) + scrollBar.width)
+                    height: basemapDelegate.isGrid ? view.cellHeight - (basemapIcon.height + (anchors.margins * 2)) : view.cellHeight - (anchors.margins * 2)
+                    text: listModelData.name === "" ? "Unnamed basemap" : listModelData.name
+                    elide: Text.ElideRight
+                    wrapMode: Text.Wrap
+                    verticalAlignment: basemapDelegate.isGrid ? Qt.AlignTop : Qt.AlignVCenter
+                    horizontalAlignment: basemapDelegate.isGrid ? Qt.AlignHCenter : Qt.AlignLeft
+                }
+
+                // 3D Tag
+                Rectangle {
+                    id: basemap3DTag
+                    anchors {
+                        top: basemapIcon.top;
+                        right: basemapIcon.right;
+                        margins: 5
+                    }
+
+                    height: 14
+                    width: height * 2
+                    color: "lightgrey"
+                    radius: 15
+                    visible: listModelData.is3D
+
+                    Text {
+                        anchors.centerIn: parent
+                        text: qsTr("3D")
+                        font.pixelSize: 10
+                        color: "black"
+                    }
+                }
+
+                // Store function inside a property
+                property var updateLayout: function() {
+                    if (basemapDelegate.isGrid) {
+                        // Grid Mode
+                        // Anchors must be unset before setting new ones
+                        basemapIcon.anchors.left = undefined
+                        basemapIcon.anchors.verticalCenter = undefined
+                        basemapIcon.anchors.top = basemapItem.top;
+                        basemapIcon.anchors.horizontalCenter = basemapItem.horizontalCenter;
+
+                        basemapLabel.anchors.left = undefined
+                        basemapLabel.anchors.verticalCenter = undefined
+                        basemapLabel.anchors.top = basemapIcon.bottom;
+                        basemapLabel.anchors.horizontalCenter = basemapItem.horizontalCenter;
+                    } else {
+                        // List Mode
+                        basemapIcon.anchors.top = undefined
+                        basemapIcon.anchors.horizontalCenter = undefined
+                        basemapIcon.anchors.left = basemapItem.left;
+                        basemapIcon.anchors.verticalCenter = basemapItem.verticalCenter;
+
+                        basemapLabel.anchors.top = undefined
+                        basemapLabel.anchors.horizontalCenter = undefined
+                        basemapLabel.anchors.left = basemapIcon.right;
+                        basemapLabel.anchors.verticalCenter = basemapItem.verticalCenter;
+                    }
+                }
+
+                // Call the function when state changes
+                Component.onCompleted: basemapItem.updateLayout()
+
+                Connections {
+                    target: basemapDelegate
+                    function onIsGridChanged() {
+                        basemapItem.updateLayout();
+                    }
                 }
             }
 
-            text: listModelData.name === "" ? "Unnamed basemap" : listModelData.name
-            display: {
-                if (basemapGallery.internal.calculatedStyle === BasemapGallery.ViewStyle.List) {
-                    return AbstractButton.TextBesideIcon;
-                } else if (basemapGallery.internal.calculatedStyle === BasemapGallery.ViewStyle.Grid) {
-                    return AbstractButton.TextUnderIcon;
-                }
-            }
             Connections {
                 target: basemapDelegate.ToolTip.toolTip.contentItem
                 enabled: basemapDelegate.ToolTip.visible
@@ -271,13 +323,16 @@ Pane {
                     Qt.openUrlExternally(link)
                 }
             }
+
             ToolTip.text: listModelData.tooltip
+
             MouseArea {
                 id: mouseArea
                 z : 2
                 anchors.fill: parent
                 hoverEnabled: true
                 onClicked: {
+                    console.log(icon.width)
                     if (controller.currentBasemap !== listModelData.basemap)
                         busyIndicator.running = true;
                     controller.setCurrentBasemap(listModelData.basemap);
