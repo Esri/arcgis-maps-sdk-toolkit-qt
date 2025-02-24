@@ -30,7 +30,6 @@
 #include <BookmarkListModel.h>
 #include <Map.h>
 #include <Scene.h>
-#include <TaskWatcher.h>
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
