@@ -41,7 +41,6 @@
 #include <SpatialReference.h>
 #include <Symbol.h>
 #include <SymbolTypes.h>
-#include <TaskWatcher.h>
 #include <UtilityAssetGroup.h>
 #include <UtilityAssetType.h>
 #include <UtilityElement.h>
