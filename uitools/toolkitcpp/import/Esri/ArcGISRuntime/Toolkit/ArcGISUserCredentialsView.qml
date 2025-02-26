@@ -37,6 +37,7 @@ Dialog {
 
     footer: DialogButtonBox {
         Button {
+            id: skipButton
             text: qsTr("Skip")
             DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
         }
@@ -138,5 +139,13 @@ Dialog {
                                                     passwordTextField.text);
             accept();
         }
+    }
+
+    /*!
+      \internal
+      \brief automated testing helper
+     */
+    function clickSkip() {
+        skipButton.clicked();
     }
 }
