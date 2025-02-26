@@ -314,12 +314,12 @@ namespace Esri::ArcGISRuntime::Toolkit {
   
   bool BasemapGalleryItem::is3D() const
   {
-      return m_is3D;
+    return m_is3D;
   }
   
   void BasemapGalleryItem::setIs3D(bool is3D)
   {
-      m_is3D = is3D;
+    m_is3D = is3D;
   }
 
 #ifdef CPP_ARCGISRUNTIME_TOOLKIT

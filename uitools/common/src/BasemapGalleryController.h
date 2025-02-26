@@ -25,6 +25,9 @@
 #include <GeoModel.h>
 #include <Portal.h>
 
+// C++ Headers
+#include <mutex>
+
 // Qt headers
 #include <QObject>
 
@@ -82,6 +85,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     GeoModel* m_geoModel = nullptr;
     Portal* m_portal = nullptr;
     GenericListModel* m_gallery = nullptr;
+    std::mutex m_galleryAccessMutex;
   };
 
 } // Esri::ArcGISRuntime::Toolkit

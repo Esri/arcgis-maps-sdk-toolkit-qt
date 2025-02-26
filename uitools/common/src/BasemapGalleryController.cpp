@@ -37,7 +37,6 @@
 #include <QFuture>
 #include <QPersistentModelIndex>
 #include <QPointer>
-#include <QMetaObject>
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
@@ -236,9 +235,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
       // Ensure appending happens on the main thread
       for (auto basemap : basemapsVector)
       {
-        QMetaObject::invokeMethod(self, [self, basemap, is3D]() {
-          self->append(basemap, is3D);
-        }, Qt::QueuedConnection); // Schedule for execution in the event loop (main thread)
+        self->append(basemap, is3D);
       }
     }
 
@@ -589,11 +586,13 @@ namespace Esri::ArcGISRuntime::Toolkit {
   */
   bool BasemapGalleryController::append(Basemap* basemap)
   {
+    std::lock_guard<std::mutex> lock(m_galleryAccessMutex);
     return m_gallery->append(new BasemapGalleryItem(basemap, this));
   }
 
   bool BasemapGalleryController::append(Basemap* basemap, bool is3D)
   {
+    std::lock_guard<std::mutex> lock(m_galleryAccessMutex);
     return m_gallery->append(new BasemapGalleryItem(basemap, {}, {}, is3D, this));
   }
 
@@ -615,6 +614,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
    */
   bool BasemapGalleryController::append(Basemap* basemap, QImage thumbnail, QString tooltip)
   {
+    std::lock_guard<std::mutex> lock(m_galleryAccessMutex);
     return m_gallery->append(new BasemapGalleryItem(basemap, std::move(thumbnail), std::move(tooltip), this));
   }
 
