@@ -250,13 +250,28 @@ void ArcGISAuthenticationController::continueWithUsernamePasswordArcGIS_(const Q
                                password,
                                0).then(this, [this](TokenCredential* credential)
   {
+    if (m_arcGISPreviousFailureCountsForUrl.contains(m_currentArcGISChallenge->requestUrl()))
+    {
+      m_arcGISPreviousFailureCountsForUrl.remove(m_currentArcGISChallenge->requestUrl());
+    }
+
     m_currentArcGISChallenge->continueWithCredential(credential);
     m_currentArcGISChallenge.reset();
   }).onFailed(this, [this](const ErrorException& e)
   {
-    if ((++m_arcGISPreviousFailureCount) >= s_maxArcGISPreviousFailureCount)
+    const auto requestUrl = m_currentArcGISChallenge->requestUrl();
+    if (m_arcGISPreviousFailureCountsForUrl.contains(requestUrl))
     {
-      m_arcGISPreviousFailureCount = 0;
+      m_arcGISPreviousFailureCountsForUrl[requestUrl] = m_arcGISPreviousFailureCountsForUrl[requestUrl] + 1;
+    }
+    else
+    {
+      m_arcGISPreviousFailureCountsForUrl[requestUrl] = 1;
+    }
+
+    if (m_arcGISPreviousFailureCountsForUrl[requestUrl] >= s_maxArcGISPreviousFailureCount)
+    {
+      m_arcGISPreviousFailureCountsForUrl.remove(requestUrl);
       m_currentArcGISChallenge->continueAndFailWithError(e.error());
       m_currentArcGISChallenge.reset();
       return;
@@ -431,7 +446,21 @@ QString ArcGISAuthenticationController::redirectUri_() const
  */
 int ArcGISAuthenticationController::previousFailureCount_() const
 {
-  return m_currentNetworkChallenge ? m_currentNetworkChallenge->previousFailureCount() : m_arcGISPreviousFailureCount;
+  if (m_currentNetworkChallenge)
+  {
+    return m_currentNetworkChallenge->previousFailureCount();
+  }
+
+  if (m_currentArcGISChallenge)
+  {
+    const auto requestUrl = m_currentArcGISChallenge->requestUrl();
+    if (m_arcGISPreviousFailureCountsForUrl.contains(requestUrl))
+    {
+      return m_arcGISPreviousFailureCountsForUrl[requestUrl];
+    }
+  }
+
+  return 0;
 }
 
 } //  Esri::ArcGISRuntime::Toolkit

@@ -17,6 +17,7 @@
 #define ESRI_ARCGISRUNTIME_TOOLKIT_ARCGISAUTHENTICATIONCONTROLLER_H
 
 // Qt headers
+#include <QHash>
 #include <QObject>
 #include <QQmlEngine>
 
@@ -24,14 +25,16 @@
 #include <memory>
 #include <mutex>
 
+class QUrl;
+
+Q_MOC_INCLUDE(<QUrl>)
+
 namespace Esri::ArcGISRuntime::Authentication {
   class OAuthUserConfiguration;
   class OAuthUserLoginPrompt;
   class ArcGISAuthenticationChallenge;
   class NetworkAuthenticationChallenge;
 }
-
-Q_MOC_INCLUDE(<QUrl>)
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
@@ -118,7 +121,7 @@ private:
   std::unique_ptr<Authentication::OAuthUserLoginPrompt> m_currentOAuthUserLoginPrompt;
 
   // ArcGISAuthenticationChallenges only. NetworkAuthenticationChallenges already contain this information
-  int m_arcGISPreviousFailureCount = 0;
+  QHash<QUrl, int> m_arcGISPreviousFailureCountsForUrl;
   static inline constexpr int s_maxArcGISPreviousFailureCount = 5;
 
   std::mutex m_mutex;
