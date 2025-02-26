@@ -258,8 +258,8 @@ Pane {
                 Rectangle {
                     id: basemap3DTag
                     anchors {
-                        top: basemapIcon.top;
-                        right: basemapIcon.right;
+                        top: basemapIcon.top
+                        right: basemapIcon.right
                         margins: 5
                     }
 
