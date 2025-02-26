@@ -332,7 +332,6 @@ Pane {
                 anchors.fill: parent
                 hoverEnabled: true
                 onClicked: {
-                    console.log(icon.width)
                     if (controller.currentBasemap !== listModelData.basemap)
                         busyIndicator.running = true;
                     controller.setCurrentBasemap(listModelData.basemap);
