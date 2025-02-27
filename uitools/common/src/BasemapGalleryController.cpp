@@ -232,7 +232,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
                     return b1->item()->title() < b2->item()->title();
                 });
 
-      // Ensure appending happens on the main thread
       for (auto basemap : basemapsVector)
       {
         self->append(basemap, is3D);
