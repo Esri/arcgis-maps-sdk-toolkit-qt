@@ -215,7 +215,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
       Because the basemaps are initially unloaded, Basemap->item() must be used to access the
       basemap metadata. The basemaps are sorted using Basemap->item()->title().
      */
-    void sortBasemapsAndAddToGallery(BasemapGalleryController* self, BasemapListModel* basemaps)
+    void sortBasemapsAndAddToGallery(BasemapGalleryController* self, BasemapListModel* basemaps, bool is3D = false)
     {
       // Convert BasemapListModel into a Basemap* vector and sort basemaps alphabetically using the title
       std::vector<Basemap*> basemapsVector;
@@ -224,18 +224,17 @@ namespace Esri::ArcGISRuntime::Toolkit {
       std::sort(std::begin(basemapsVector), std::end(basemapsVector), [](Basemap* b1, Basemap* b2)
                 {
                   // Check validity of basemap->item() and if title() is empty. If either is true, push to end of list.
-                  if (!b1->item() || b1->item()->title() == "")
+                  if (!b1->item() || b1->item()->title().isEmpty())
                     return false;
-                  else if (!b2->item() || b2->item()->title() == "")
+                  else if (!b2->item() || b2->item()->title().isEmpty())
                     return true;
                   else
                     return b1->item()->title() < b2->item()->title();
                 });
 
-      // For each discovered map, add it to our gallery.
       for (auto basemap : basemapsVector)
       {
-        self->append(basemap);
+        self->append(basemap, is3D);
       }
     }
 
@@ -264,6 +263,19 @@ namespace Esri::ArcGISRuntime::Toolkit {
                            // Notify the demo that the basemaps have changed.
                            emit self->basemapsChanged();
                          });
+
+                         if (qobject_cast<Scene*>(self->geoModel()))
+                         {
+                           portal->fetch3DBasemapsAsync().then(
+                                 [portal, self]()
+                           {
+                             // Sort and append the basemaps to the gallery.
+                             BasemapListModel* basemaps = portal->basemaps3D();
+                             sortBasemapsAndAddToGallery(self, basemaps, true);
+                             // Notify the demo that the basemaps have changed.
+                             emit self->basemapsChanged();
+                           });
+                         }
                        });
       portal->load();
     }
@@ -466,6 +478,27 @@ namespace Esri::ArcGISRuntime::Toolkit {
                      emit basemapsChanged();
                    });
                  }
+
+                 if (qobject_cast<Scene*>(m_geoModel))
+                 {
+                   if (m_portal->basemaps3D()->rowCount() > 0)
+                   {
+                     for (auto basemap : *m_portal->basemaps3D())
+                     {
+                       append(basemap);
+                     }
+                   }
+                   else
+                   {
+                     m_portal->fetch3DBasemapsAsync().then(
+                     [this]()
+                     {
+                       BasemapListModel* basemaps = m_portal->basemaps3D();
+                       sortBasemapsAndAddToGallery(this, basemaps, true);
+                       emit basemapsChanged();
+                     });
+                   }
+                 }
                });
     }
 
@@ -552,7 +585,14 @@ namespace Esri::ArcGISRuntime::Toolkit {
   */
   bool BasemapGalleryController::append(Basemap* basemap)
   {
+    std::lock_guard<std::mutex> lock(m_galleryAccessMutex);
     return m_gallery->append(new BasemapGalleryItem(basemap, this));
+  }
+
+  bool BasemapGalleryController::append(Basemap* basemap, bool is3D)
+  {
+    std::lock_guard<std::mutex> lock(m_galleryAccessMutex);
+    return m_gallery->append(new BasemapGalleryItem(basemap, {}, {}, is3D, this));
   }
 
   /*!
@@ -573,6 +613,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
    */
   bool BasemapGalleryController::append(Basemap* basemap, QImage thumbnail, QString tooltip)
   {
+    std::lock_guard<std::mutex> lock(m_galleryAccessMutex);
     return m_gallery->append(new BasemapGalleryItem(basemap, std::move(thumbnail), std::move(tooltip), this));
   }
 
