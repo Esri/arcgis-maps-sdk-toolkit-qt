@@ -74,7 +74,7 @@ private:
   PopupAttachment* m_popupAttachment = nullptr;
   QImage m_thumbnail;
   QUrl m_localData;
-  QUuid m_id;
+  const QUuid m_id;
 };
 
 } // Toolkit
