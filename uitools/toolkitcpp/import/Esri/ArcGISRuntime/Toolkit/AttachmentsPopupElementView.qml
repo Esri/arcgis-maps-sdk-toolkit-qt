@@ -133,7 +133,9 @@ ColumnLayout {
                             fullScreenImage.source = model.listModelData.localData;
                             fullScreenImageDialog.visible = true;
                         } else {
-                            Qt.openUrlExternally(model.listModelData.localData);
+                            if (Qt.platform.os !== "android" && Qt.platform.os !== "ios") {
+                                Qt.openUrlExternally(model.listModelData.localData);
+                            }
                         }
                     }
                 }
