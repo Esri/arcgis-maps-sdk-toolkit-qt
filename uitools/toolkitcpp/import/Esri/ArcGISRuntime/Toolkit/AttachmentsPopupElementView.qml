@@ -40,6 +40,34 @@ ColumnLayout {
 
     property var controller: null
 
+    Dialog {
+        id: fullScreenImageDialog
+        modal: true
+        visible: false
+        width: Overlay.overlay.width
+        height: Overlay.overlay.height
+        anchors.centerIn: Overlay.overlay
+
+        Image {
+            id: fullScreenImage
+            anchors{
+                top: parent.top
+                bottom: closeButton.top
+                left: parent.left
+                right: parent.right
+            }
+            fillMode: Image.PreserveAspectFit
+        }
+
+        Button {
+            id: closeButton
+            text: "Close"
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            onClicked: fullScreenImageDialog.visible = false;
+        }
+    }
+
     MenuSeparator {
         Layout.fillWidth: true
         Layout.leftMargin: attachmentsPopupElementView.mediaMargin
@@ -99,11 +127,15 @@ ColumnLayout {
                 hoverEnabled: true
 
                 onClicked: {
-                    console.log("Mouse clicked on:", model.name); // Handle mouse click event
                     if (!model.listModelData.dataFetched) {
                         model.listModelData.downloadAttachment();
                     } else {
-                        let res = Qt.openUrlExternally(model.listModelData.localData);
+                        if( model.listModelData.popupAttachmentType === QmlEnums.PopupAttachmentTypeImage) {
+                            fullScreenImage.source = model.listModelData.localData;
+                            fullScreenImageDialog.visible = true;
+                        } else {
+                            Qt.openUrlExternally(model.listModelData.localData);
+                        }
                     }
                 }
                 onEntered: {
@@ -122,33 +154,15 @@ ColumnLayout {
                 rows: 2
                 width: parent.width
                 clip: true
-                columnSpacing: 0
+                columnSpacing: 5
                 rowSpacing: 0
 
                 Image {
+                    id: thumbnail
                     fillMode: Image.PreserveAspectFit
                     Layout.preferredHeight: fileInfoColumn.height
                     Layout.preferredWidth: fileInfoColumn.height
-                    Component.onCompleted: {
-                        switch(model.listModelData.popupAttachmentType)
-                        {
-                            case QmlEnums.PopupAttachmentTypeImage:
-                                source = "qrc:/esri.com/imports/Calcite/images/image.svg";
-                                break;
-                            case QmlEnums.PopupAttachmentTypeVideo:
-                                source = "qrc:/esri.com/imports/Calcite/images/video.svg";
-                                break;
-                            case QmlEnums.PopupAttachmentTypeDocument:
-                                source = "qrc:/esri.com/imports/Calcite/images/file.svg";
-                                break;
-                            case QmlEnums.PopupAttachmentTypeOther:
-                                source = "qrc:/esri.com/imports/Calcite/images/other.svg";
-                                break;
-                            default:
-                                source = "qrc:/esri.com/imports/Calcite/images/other.svg";
-                                break;
-                        }
-                    }
+                    source: model.listModelData.thumbnailUrl
                 }
 
                 Column {
