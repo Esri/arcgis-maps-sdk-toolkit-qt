@@ -21,8 +21,7 @@
 #include <QtGlobal>
 #include <QIcon>
 #include <QMimeDatabase>
-
-#include <QStandardPaths>
+#include <QPointer>
 
 // Maps SDK headers
 #include <Item.h>
@@ -151,7 +150,12 @@ PopupAttachmentImageProvider* PopupAttachmentImageProvider::instance()
 {
   // It is assumed that the instance is passed to QQuickEngine image providers -- which will take
   // ownership and delete this object, otherwise a memory leak will occur.
-  static PopupAttachmentImageProvider* self = new PopupAttachmentImageProvider;
+  // we do not know when QQuickEngine will delete it so we check before creating a new instance
+  static QPointer<PopupAttachmentImageProvider> self;
+  if (!self)
+  {
+    self = new PopupAttachmentImageProvider;
+  }
   return self;
 }
 
