@@ -155,15 +155,9 @@ PopupAttachmentImageProvider* PopupAttachmentImageProvider::instance()
   return self;
 }
 
-PopupAttachmentImageProvider::PopupAttachmentImageProvider() :
-  m_internalObject(new QObject)
-{
-}
+PopupAttachmentImageProvider::PopupAttachmentImageProvider() = default;
 
-PopupAttachmentImageProvider::~PopupAttachmentImageProvider()
-{
-  delete m_internalObject;
-}
+PopupAttachmentImageProvider::~PopupAttachmentImageProvider() = default;
 
 bool PopupAttachmentImageProvider::registerItem(PopupAttachmentItem* item)
 {
@@ -176,7 +170,7 @@ bool PopupAttachmentImageProvider::registerItem(PopupAttachmentItem* item)
     return false;
 
   m_itemMap.insert(key, item);
-  QObject::connect(item, &QObject::destroyed, m_internalObject, [this, key]
+  QObject::connect(item, &QObject::destroyed, this, [this, key]
   {
     m_itemMap.remove(key);
   });
@@ -187,7 +181,7 @@ bool PopupAttachmentImageProvider::deregisterItem(PopupAttachmentItem* item)
 {
   if (!item)
     return false;
-  QObject::disconnect(item, nullptr, m_internalObject, nullptr);
+  QObject::disconnect(item, nullptr, this, nullptr);
   return m_itemMap.remove(item->id()) > 0;
 }
 

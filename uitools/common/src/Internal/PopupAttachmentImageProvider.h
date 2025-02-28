@@ -40,7 +40,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
   private:
     PopupAttachmentImageProvider();
-    QObject* m_internalObject;
     QMap<QUuid, PopupAttachmentItem*> m_itemMap;
   };
 } // Esri::ArcGISRuntime::Toolkit
