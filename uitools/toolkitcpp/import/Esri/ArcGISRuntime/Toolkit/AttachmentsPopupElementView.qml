@@ -107,7 +107,6 @@ ColumnLayout {
     }
 
     ListView {
-        id: lv
         clip: true
         focus: true
         Layout.preferredHeight: childrenRect.height
@@ -139,13 +138,13 @@ ColumnLayout {
                     }
                 }
                 onEntered: {
-                    if (model.listModelData.dataFetched && name.text !== "Click to open")
-                        name.text = "Click to open";
+                    if (model.listModelData.dataFetched && nameLabel.text !== "Click to open")
+                        nameLabel.text = "Click to open";
 
                 }
                 onExited: {
-                    if (model.dataFetched && name.text === "Click to open")
-                        name.text = model.name;
+                    if (model.dataFetched && nameLabel.text === "Click to open")
+                        nameLabel.text = model.name;
                 }
             }
 
@@ -158,7 +157,6 @@ ColumnLayout {
                 rowSpacing: 0
 
                 Image {
-                    id: thumbnail
                     fillMode: Image.PreserveAspectFit
                     Layout.preferredHeight: fileInfoColumn.height
                     Layout.preferredWidth: fileInfoColumn.height
@@ -171,7 +169,7 @@ ColumnLayout {
                     Layout.fillWidth: true
                     clip: true
                     Label {
-                        id: name
+                        id: nameLabel
                         text: model.name
                         width: parent.width
                         wrapMode: Text.NoWrap
