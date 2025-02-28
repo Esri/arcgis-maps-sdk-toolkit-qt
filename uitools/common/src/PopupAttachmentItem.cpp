@@ -125,18 +125,18 @@ QUrl PopupAttachmentItem::thumbnailUrl() const
   QUrl defaultThumbnail;
   switch (popupAttachmentType()) {
     case PopupAttachmentType::Image:
-      defaultThumbnail = "qrc:/esri.com/imports/Calcite/images/image.svg";
+      defaultThumbnail = QStringLiteral("qrc:/esri.com/imports/Calcite/images/image.svg");
       break;
     case PopupAttachmentType::Video:
-      defaultThumbnail = "qrc:/esri.com/imports/Calcite/images/video.svg";
+      defaultThumbnail = QStringLiteral("qrc:/esri.com/imports/Calcite/images/video.svg");
       break;
     case PopupAttachmentType::Document:
-      defaultThumbnail =  "qrc:/esri.com/imports/Calcite/images/file.svg";
+      defaultThumbnail = QStringLiteral("qrc:/esri.com/imports/Calcite/images/file.svg");
       break;
     case PopupAttachmentType::Other:
       [[fallthrough]];
     default:
-      defaultThumbnail =  "qrc:/esri.com/imports/Calcite/images/other.svg";
+      defaultThumbnail = QStringLiteral("qrc:/esri.com/imports/Calcite/images/other.svg");
       break;
   }
 
