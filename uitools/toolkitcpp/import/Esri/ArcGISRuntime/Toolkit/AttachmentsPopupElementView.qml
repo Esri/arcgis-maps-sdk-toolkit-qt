@@ -129,7 +129,7 @@ ColumnLayout {
                     if (!model.listModelData.dataFetched) {
                         model.listModelData.downloadAttachment();
                     } else {
-                        if( model.listModelData.popupAttachmentType === QmlEnums.PopupAttachmentTypeImage) {
+                        if (model.listModelData.popupAttachmentType === QmlEnums.PopupAttachmentTypeImage) {
                             fullScreenImage.source = model.listModelData.localData;
                             fullScreenImageDialog.visible = true;
                         } else {
@@ -192,7 +192,7 @@ ColumnLayout {
                     fillMode: Image.PreserveAspectFit
                     Layout.preferredHeight: fileInfoColumn.height
                     Layout.preferredWidth: fileInfoColumn.height
-                    visible: !fetchAttachment.running ? !model.dataFetched : !fetchAttachment.running
+                    visible: !fetchAttachment.running && !model.dataFetched
                     source: "qrc:/esri.com/imports/Calcite/images/download.svg"
                 }
 
