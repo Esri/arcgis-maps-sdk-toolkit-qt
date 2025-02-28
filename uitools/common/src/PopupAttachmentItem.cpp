@@ -16,7 +16,7 @@
 #include "PopupAttachmentItem.h"
 
 // Qt headers
-#include <QFile>
+#include <QAbstractFileIconProvider>
 #include <QFuture>
 #include <QStandardPaths>
 #include <QtGlobal>
@@ -25,6 +25,9 @@
 #include <Attachment.h>
 #include <PopupAttachment.h>
 
+// Toolkit headers
+#include "Internal/PopupAttachmentImageProvider.h"
+
 /*!
   \internal
   This class is an internal implementation detail and is subject to change.
@@ -32,6 +35,16 @@
 namespace Esri::ArcGISRuntime::Toolkit {
 
 namespace {
+
+  void registerItem(PopupAttachmentItem* self)
+  {
+    PopupAttachmentImageProvider::instance()->registerItem(self);
+  }
+
+  void deregisterItem(PopupAttachmentItem* self)
+  {
+    PopupAttachmentImageProvider::instance()->deregisterItem(self);
+  }
 
   QString formatFileSize(qint64 bytes) {
     if (bytes < 0) {
@@ -53,27 +66,21 @@ namespace {
 
     return QString::number(size, 'f', 2) + " " + units[unitIndex];
   }
-
-  static QString homePath()
-  {
-    QString homePath;
-
-  #ifdef Q_OS_IOS
-    homePath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-  #else
-    homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
-  #endif
-    return homePath;
-  }
-
 }
 
 PopupAttachmentItem::PopupAttachmentItem(PopupAttachment* popupAttachment, QObject *parent)
-  : QObject{parent}, m_fetchingAttachment{false}, m_popupAttachment{popupAttachment}
+  : QObject{parent},
+    m_fetchingAttachment{false},
+    m_popupAttachment{popupAttachment},
+    m_id{QUuid::createUuid()}
 {
+  registerItem(this);
 }
 
-PopupAttachmentItem::~PopupAttachmentItem() = default;
+PopupAttachmentItem::~PopupAttachmentItem()
+{
+  deregisterItem(this);
+}
 
 QString PopupAttachmentItem::name() const
 {
@@ -92,7 +99,7 @@ QString PopupAttachmentItem::size() const
 
 bool PopupAttachmentItem::dataFetched() const
 {
-  return m_popupAttachment->attachment()->isDataFetched();
+  return m_popupAttachment->attachment()->isDataFetched() && m_popupAttachment->attachment()->attachmentUrl().isValid();
 }
 
 bool PopupAttachmentItem::fetchingAttachment() const
@@ -110,29 +117,69 @@ QUrl PopupAttachmentItem::localData() const
   return m_localData;
 }
 
+QUrl PopupAttachmentItem::thumbnailUrl() const
+{
+  QUrl defaultThumbnail;
+  switch (popupAttachmentType()) {
+    case PopupAttachmentType::Image:
+      defaultThumbnail = "qrc:/esri.com/imports/Calcite/images/image.svg";
+      break;
+    case PopupAttachmentType::Video:
+      defaultThumbnail = "qrc:/esri.com/imports/Calcite/images/video.svg";
+      break;
+    case PopupAttachmentType::Document:
+      defaultThumbnail =  "qrc:/esri.com/imports/Calcite/images/file.svg";
+      break;
+    case PopupAttachmentType::Other:
+      [[fallthrough]];
+    default:
+      defaultThumbnail =  "qrc:/esri.com/imports/Calcite/images/other.svg";
+      break;
+  }
+
+  return dataFetched() ? QUrl::fromUserInput(QString("image://%1/%2").arg(PopupAttachmentImageProvider::PROVIDER_ID, m_id.toString(QUuid::StringFormat::WithoutBraces))) : defaultThumbnail;
+}
+
 void PopupAttachmentItem::downloadAttachment()
 {
   m_fetchingAttachment = true;
   emit popupAttachmentItemChanged();
-  m_popupAttachment->attachment()->fetchDataAsync().then([this] (const QByteArray& data)
+  m_popupAttachment->attachment()->fetchDataAsync().then([this] (const QByteArray&)
   {
-    if (m_tempDir.isValid())
-    {
-#if defined Q_OS_ANDROID || defined Q_OS_IOS
-      m_localData = QUrl::fromLocalFile(homePath() + "/" + m_popupAttachment->attachment()->name());
-#else
-      m_localData = QUrl::fromLocalFile(m_tempDir.path() + "/" + m_popupAttachment->attachment()->name());
-#endif
-      QFile file(m_localData.toLocalFile());
-      if (file.open(QIODevice::WriteOnly))
-      {
-        file.write(data);
-        file.close();
-      }
-    }
+    m_localData = m_popupAttachment->attachment()->attachmentUrl();
     m_fetchingAttachment = false;
+    // we delay the registration of this until the data has been fetched.
+    // Otherwise the creating of the thumbnail/image will do this for us.
+    if (m_popupAttachment->popupAttachmentType() == PopupAttachmentType::Image)
+    {
+      setThumbnail(QImage(m_localData.toLocalFile()));
+    }
+    else {
+      setThumbnail(QImage());
+    }
     emit popupAttachmentItemChanged();
   });
+}
+
+QUuid PopupAttachmentItem::id() const
+{
+  return m_id;
+}
+
+void PopupAttachmentItem::setThumbnail(const QImage& thumbnail)
+{
+  m_thumbnail = thumbnail;
+  emit popupAttachmentItemChanged();
+}
+
+PopupAttachment* PopupAttachmentItem::popupAttachment() const
+{
+  return m_popupAttachment;
+}
+
+QImage PopupAttachmentItem::thumbnail() const
+{
+  return m_thumbnail;
 }
 
 } // Esri::ArcGISRuntime::Toolkit

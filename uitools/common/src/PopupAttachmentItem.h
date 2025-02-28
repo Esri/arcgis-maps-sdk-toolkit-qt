@@ -17,7 +17,9 @@
 #define ESRI_ARCGISRUNTIME_TOOLKIT_POPUPATTACHMENTITEM_H
 
 // Qt headers
+#include <QImage>
 #include <QObject>
+#include <QtCore/quuid.h>
 #include <QTemporaryDir>
 #include <QUrl>
 
@@ -40,6 +42,7 @@ class PopupAttachmentItem : public QObject
   Q_PROPERTY(QString name READ name NOTIFY popupAttachmentItemChanged)
   Q_PROPERTY(QString size READ size NOTIFY popupAttachmentItemChanged)
   Q_PROPERTY(QUrl localData READ localData NOTIFY popupAttachmentItemChanged)
+  Q_PROPERTY(QUrl thumbnailUrl READ thumbnailUrl NOTIFY popupAttachmentItemChanged)
 
 public:
   explicit PopupAttachmentItem(PopupAttachment* popupAttachment, QObject* parent = nullptr);
@@ -48,13 +51,20 @@ public:
   Q_INVOKABLE void downloadAttachment();
 
 private:
-  bool dataFetched() const;
   bool fetchingAttachment() const;
-  PopupAttachmentType popupAttachmentType() const;
   QString contentType() const;
   QString name() const;
   QString size() const;
+  QUrl thumbnailUrl() const;
+
+public:
+  bool dataFetched() const;
+  PopupAttachment* popupAttachment() const;
+  PopupAttachmentType popupAttachmentType() const;
+  QImage thumbnail() const;
   QUrl localData() const;
+  QUuid id() const;
+  void setThumbnail(const QImage& thumbnail);
 
 signals:
   void popupAttachmentItemChanged();
@@ -62,8 +72,9 @@ signals:
 private:
   bool m_fetchingAttachment;
   PopupAttachment* m_popupAttachment = nullptr;
-  QTemporaryDir m_tempDir;
+  QImage m_thumbnail;
   QUrl m_localData;
+  QUuid m_id;
 };
 
 } // Toolkit
