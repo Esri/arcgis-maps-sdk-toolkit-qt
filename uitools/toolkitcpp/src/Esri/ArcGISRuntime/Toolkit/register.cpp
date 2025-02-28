@@ -59,6 +59,7 @@
 
 // Internal includes
 #include "Internal/BasemapGalleryImageProvider.h"
+#include "Internal/PopupAttachmentImageProvider.h"
 #include "Internal/QmlEnums.h"
 
 // ArcGIS includes
@@ -223,6 +224,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void registerComponents(QQmlEngine& appEngine)
   {
     appEngine.addImageProvider(BasemapGalleryImageProvider::PROVIDER_ID, BasemapGalleryImageProvider::instance());
+    appEngine.addImageProvider(PopupAttachmentImageProvider::PROVIDER_ID, PopupAttachmentImageProvider::instance());
     appEngine.addImportPath(ESRI_COM_PATH);
     registerModuleRevisions();
     registerComponent<ArcGISAuthenticationController>(CreationType::Singleton);
