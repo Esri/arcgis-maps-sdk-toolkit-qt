@@ -101,7 +101,9 @@ QQuickTextureFactory* PopupAttachmentImageResponse::textureFactory() const
     thumbnail = m_popupAttachmentItem->thumbnail();
   }
 
-  if (thumbnail.isNull() && !m_popupAttachmentItem->dataFetched())
+  // Handles edge case for Mobile since QAbstractFileIconProvider returns a Null QIcon.
+#if defined(Q_OS_IOS) || defined(Q_OS_ANDROID)
+  if (thumbnail.isNull() || m_popupAttachmentItem->popupAttachmentType() != PopupAttachmentType::Image)
   {
     switch (m_popupAttachmentItem->popupAttachmentType()) {
       case PopupAttachmentType::Image:
@@ -120,10 +122,14 @@ QQuickTextureFactory* PopupAttachmentImageResponse::textureFactory() const
         break;
     }
 
+
     auto pixmap = icon.pixmap(32, 32);
     thumbnail = pixmap.toImage();
+    return QQuickTextureFactory::textureFactoryForImage(thumbnail);
   }
-  else if (thumbnail.isNull() && m_popupAttachmentItem->dataFetched())
+#endif
+
+  if (thumbnail.isNull() && m_popupAttachmentItem->dataFetched())
   {
     QAbstractFileIconProvider iconProvider;
     QFileInfo fileInfo(m_popupAttachmentItem->localData().toLocalFile());
