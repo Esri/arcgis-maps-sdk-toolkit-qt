@@ -62,8 +62,10 @@ ColumnLayout {
         Button {
             id: closeButton
             text: "Close"
-            anchors.bottom: parent.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
+            anchors {
+                bottom: parent.bottom
+                horizontalCenter: parent.horizontalCenter
+            }
             onClicked: fullScreenImageDialog.visible = false;
         }
     }
@@ -142,7 +144,6 @@ ColumnLayout {
                 onEntered: {
                     if (model.listModelData.dataFetched && nameLabel.text !== "Click to open")
                         nameLabel.text = "Click to open";
-
                 }
                 onExited: {
                     if (model.dataFetched && nameLabel.text === "Click to open")

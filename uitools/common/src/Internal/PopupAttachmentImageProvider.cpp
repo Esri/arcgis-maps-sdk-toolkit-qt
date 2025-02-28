@@ -125,7 +125,6 @@ QQuickTextureFactory* PopupAttachmentImageResponse::textureFactory() const
         break;
     }
 
-
     auto pixmap = icon.pixmap(32, 32);
     thumbnail = pixmap.toImage();
     return QQuickTextureFactory::textureFactoryForImage(thumbnail);
