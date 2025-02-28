@@ -110,18 +110,18 @@ QQuickTextureFactory* PopupAttachmentImageResponse::textureFactory() const
   {
     switch (m_popupAttachmentItem->popupAttachmentType()) {
       case PopupAttachmentType::Image:
-        icon = QIcon(":/esri.com/imports/Calcite/images/image.svg");
+        icon = QIcon(QStringLiteral(":/esri.com/imports/Calcite/images/image.svg"));
         break;
       case PopupAttachmentType::Video:
-        icon = QIcon(":/esri.com/imports/Calcite/images/video.svg");
+        icon = QIcon(QStringLiteral(":/esri.com/imports/Calcite/images/video.svg"));
         break;
       case PopupAttachmentType::Document:
-        icon = QIcon(":/esri.com/imports/Calcite/images/file.svg");
+        icon = QIcon(QStringLiteral(":/esri.com/imports/Calcite/images/file.svg"));
         break;
       case PopupAttachmentType::Other:
         [[fallthrough]];
       default:
-        icon = QIcon(":/esri.com/imports/Calcite/images/other.svg");
+        icon = QIcon(QStringLiteral(":/esri.com/imports/Calcite/images/other.svg"));
         break;
     }
 
