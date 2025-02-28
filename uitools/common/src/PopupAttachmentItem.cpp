@@ -46,15 +46,18 @@ namespace {
     PopupAttachmentImageProvider::instance()->deregisterItem(self);
   }
 
-  QString formatFileSize(qint64 bytes) {
-    if (bytes < 0) {
+  QString formatFileSize(qint64 bytes)
+  {
+    if (bytes < 0)
+    {
         return "Invalid size";
     }
-    if (bytes == 0) {
+    if (bytes == 0)
+    {
         return "0 B";
     }
 
-    const char* units[] = { "B", "KB", "MB", "GB", "TB" };
+    const std::array<const char*, 5> units = { "B", "KB", "MB", "GB", "TB" };
     auto size = static_cast<double>(bytes);
     int unitIndex = 0;
 
@@ -154,7 +157,8 @@ void PopupAttachmentItem::downloadAttachment()
     {
       setThumbnail(QImage(m_localData.toLocalFile()));
     }
-    else {
+    else
+    {
       setThumbnail(QImage());
     }
     emit popupAttachmentItemChanged();
