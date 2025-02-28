@@ -35,17 +35,6 @@
 namespace Esri::ArcGISRuntime::Toolkit {
 
 namespace {
-
-  void registerItem(PopupAttachmentItem* self)
-  {
-    PopupAttachmentImageProvider::instance()->registerItem(self);
-  }
-
-  void deregisterItem(PopupAttachmentItem* self)
-  {
-    PopupAttachmentImageProvider::instance()->deregisterItem(self);
-  }
-
   QString formatFileSize(qint64 bytes)
   {
     if (bytes < 0)
@@ -77,12 +66,12 @@ PopupAttachmentItem::PopupAttachmentItem(PopupAttachment* popupAttachment, QObje
     m_popupAttachment{popupAttachment},
     m_id{QUuid::createUuid()}
 {
-  registerItem(this);
+  PopupAttachmentImageProvider::instance()->registerItem(this);
 }
 
 PopupAttachmentItem::~PopupAttachmentItem()
 {
-  deregisterItem(this);
+  PopupAttachmentImageProvider::instance()->deregisterItem(this);
 }
 
 QString PopupAttachmentItem::name() const
