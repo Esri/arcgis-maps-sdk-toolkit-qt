@@ -16,10 +16,13 @@
 #include "PopupAttachmentImageProvider.h"
 
 // Qt headers
-#include <QAbstractFileIconProvider>
+#include <QFileSystemModel>
 #include <QFuture>
+#include <QtGlobal>
 #include <QIcon>
 #include <QMimeDatabase>
+
+#include <QStandardPaths>
 
 // Maps SDK headers
 #include <Item.h>
@@ -131,10 +134,10 @@ QQuickTextureFactory* PopupAttachmentImageResponse::textureFactory() const
 
   if (thumbnail.isNull() && m_popupAttachmentItem->dataFetched())
   {
-    QAbstractFileIconProvider iconProvider;
-    QFileInfo fileInfo(m_popupAttachmentItem->localData().toLocalFile());
+    QFileSystemModel fileSystemModel;
+    auto index = fileSystemModel.index(m_popupAttachmentItem->localData().toLocalFile());
+    icon = fileSystemModel.fileIcon(index);
 
-    icon = iconProvider.icon(fileInfo);
     auto pixmap = icon.pixmap(32, 32);
     thumbnail = pixmap.toImage();
   }
