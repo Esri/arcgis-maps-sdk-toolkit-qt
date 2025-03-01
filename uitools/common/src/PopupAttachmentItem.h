@@ -70,7 +70,7 @@ signals:
   void popupAttachmentItemChanged();
 
 private:
-  bool m_fetchingAttachment;
+  bool m_fetchingAttachment{false};
   PopupAttachment* m_popupAttachment = nullptr;
   QImage m_thumbnail;
   QUrl m_localData;
