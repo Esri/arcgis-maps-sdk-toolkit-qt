@@ -135,6 +135,9 @@ ColumnLayout {
                             fullScreenImage.source = model.listModelData.localData;
                             fullScreenImageDialog.visible = true;
                         } else {
+                            // This is a known limitation iOS but there are a few mentioned workarounds, https://bugreports.qt.io/browse/QTBUG-42942
+                            // Android currnetly has a bug logged against this, https://bugreports.qt.io/browse/QTBUG-133702
+                            // We plan on supporting these platforms in the future when it's implemented on iOS and fixed on Android.
                             if (Qt.platform.os !== "android" && Qt.platform.os !== "ios") {
                                 Qt.openUrlExternally(model.listModelData.localData);
                             }
@@ -194,7 +197,7 @@ ColumnLayout {
                     Layout.preferredHeight: fileInfoColumn.height
                     Layout.preferredWidth: fileInfoColumn.height
                     visible: !fetchAttachment.running && !model.dataFetched
-                    source: "qrc:/esri.com/imports/Calcite/images/download.svg"
+                    source: "qrc:/esri.com/imports/Calcite/images/arrow-circle-down.svg"
                 }
 
                 BusyIndicator {
