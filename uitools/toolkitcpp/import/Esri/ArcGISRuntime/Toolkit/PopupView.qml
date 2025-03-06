@@ -266,6 +266,9 @@ Page {
                         case QmlEnums.PopupElementTypeMediaPopupElement:
                             loader.sourceComponent = mediaPopupElementView;
                             break;
+                        case QmlEnums.PopupElementTypeAttachmentsPopupElement:
+                            loader.sourceComponent = attachmentsPopupElementView;
+                            break;
                     }
                 }
 
@@ -285,6 +288,14 @@ Page {
                 Component {
                     id: mediaPopupElementView
                     MediaPopupElementView {
+                        controller: listModelData
+                        width: elementsView.width
+                    }
+                }
+
+                Component {
+                    id: attachmentsPopupElementView
+                    AttachmentsPopupElementView {
                         controller: listModelData
                         width: elementsView.width
                     }

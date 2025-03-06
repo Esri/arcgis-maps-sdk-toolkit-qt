@@ -42,9 +42,11 @@ public:
   PopupMediaItem(QObject* parent = nullptr) = delete;
   explicit PopupMediaItem(PopupMedia* popupMedia, QObject* parent = nullptr);
 
+private:
   QString title() const;
   QString caption() const;
   PopupMediaType popupMediaType() const;
+public:
   PopupMedia* popupMediaItem() const;
 
 signals:

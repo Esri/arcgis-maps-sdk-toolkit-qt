@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2025 Esri
  *
@@ -18,6 +19,7 @@
 
 // Toolkit includes
 #include "ArcGISAuthenticationController.h"
+#include "AttachmentsPopupElementViewController.h"
 #include "AuthenticationController.h"
 #include "BarChartPopupMediaItem.h"
 #include "BasemapGalleryController.h"
@@ -39,6 +41,7 @@
 #include "NorthArrowController.h"
 #include "OverviewMapController.h"
 #include "PieChartPopupMediaItem.h"
+#include "PopupAttachmentItem.h"
 #include "PopupElementViewItem.h"
 #include "PopupMediaItem.h"
 #include "PopupViewController.h"
@@ -56,6 +59,7 @@
 
 // Internal includes
 #include "Internal/BasemapGalleryImageProvider.h"
+#include "Internal/PopupAttachmentImageProvider.h"
 #include "Internal/QmlEnums.h"
 
 // ArcGIS includes
@@ -220,9 +224,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void registerComponents(QQmlEngine& appEngine)
   {
     appEngine.addImageProvider(BasemapGalleryImageProvider::PROVIDER_ID, BasemapGalleryImageProvider::instance());
+    appEngine.addImageProvider(PopupAttachmentImageProvider::PROVIDER_ID, PopupAttachmentImageProvider::instance());
     appEngine.addImportPath(ESRI_COM_PATH);
     registerModuleRevisions();
     registerComponent<ArcGISAuthenticationController>(CreationType::Singleton);
+    registerComponent<AttachmentsPopupElementViewController>();
     registerComponent<AuthenticationController>();
     registerComponent<BarChartPopupMediaItem>();
     registerComponent<BasemapGalleryController>();
@@ -244,6 +250,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     registerComponent<NorthArrowController>();
     registerComponent<OverviewMapController>();
     registerComponent<PieChartPopupMediaItem>();
+    registerComponent<PopupAttachmentItem>();
     registerComponent<PopupElementViewItem>();
     registerComponent<PopupMediaItem>();
     registerComponent<PopupViewController>();
