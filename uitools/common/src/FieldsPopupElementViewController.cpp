@@ -36,7 +36,8 @@ FieldsPopupElementViewController::~FieldsPopupElementViewController() = default;
 
 QString FieldsPopupElementViewController::title() const
 {
-  return static_cast<FieldsPopupElement*>(popupElement())->title();
+  const auto title = static_cast<FieldsPopupElement*>(popupElement())->title();
+  return title != QStringLiteral("") ? title : QStringLiteral("Fields");
 }
 
 QVariantList FieldsPopupElementViewController::labelsAndValues() const

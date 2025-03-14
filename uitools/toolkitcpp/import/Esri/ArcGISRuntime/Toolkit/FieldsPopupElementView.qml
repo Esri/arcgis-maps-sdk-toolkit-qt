@@ -31,13 +31,13 @@ ListView {
 
     height: contentHeight
     interactive: false
-    model: controller.labelsAndValues
+    model: controller ? controller.labelsAndValues : null
     clip: true
     focus: true
     spacing: 10
 
     header: Label {
-        text: controller.title !== "" ? controller.title : "Fields"
+        text: controller ? controller.title : null
         wrapMode: Text.WordWrap
         width: parent.width
         font.pixelSize: 20

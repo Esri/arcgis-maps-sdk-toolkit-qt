@@ -44,8 +44,8 @@ ColumnLayout {
         id: fullScreenImageDialog
         modal: true
         visible: false
-        width: Overlay.overlay.width
-        height: Overlay.overlay.height
+        width: Overlay.overlay ? Overlay.overlay.width : 0
+        height: Overlay.overlay ? Overlay.overlay.height : 0
         anchors.centerIn: Overlay.overlay
 
         Image {
@@ -82,7 +82,7 @@ ColumnLayout {
         spacing: attachmentsPopupElementView.layoutSpacing
 
         Label {
-            text: attachmentsPopupElementView.controller.title !== "" ? controller.title : "Attachments"
+            text: attachmentsPopupElementView.controller ? attachmentsPopupElementView.controller.title : null
             wrapMode: Text.WordWrap
             font.pixelSize: 20
             font.weight: Font.Black
@@ -92,8 +92,8 @@ ColumnLayout {
             Layout.rightMargin: attachmentsPopupElementView.mediaMargin
         }
         Label {
-            text: attachmentsPopupElementView.controller.description
-            visible: attachmentsPopupElementView.controller.description !== ""
+            text: attachmentsPopupElementView.controller ? attachmentsPopupElementView.controller.description : null
+            visible: text !== ""
             wrapMode: Text.WordWrap
 
             Layout.fillWidth: true
@@ -113,7 +113,7 @@ ColumnLayout {
         focus: true
         Layout.preferredHeight: childrenRect.height
         spacing: attachmentsPopupElementView.mediaMargin
-        model: attachmentsPopupElementView.controller.popupAttachmentItems
+        model: attachmentsPopupElementView.controller ? attachmentsPopupElementView.controller.popupAttachmentItems : null
 
         Layout.fillWidth: true
         Layout.leftMargin: attachmentsPopupElementView.mediaMargin

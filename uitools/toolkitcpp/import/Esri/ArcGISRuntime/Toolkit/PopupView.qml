@@ -278,10 +278,17 @@ Page {
 
                 Component {
                     id: textPopupElementView
-                    TextPopupElementView {
-                        controller: listModelData
-                        width: elementsView.width
-                        height: children.height
+                    Column {
+                        MenuSeparator {
+                            width: elementsView.width
+                            leftPadding: 10
+                            rightPadding: 10
+                        }
+                        TextPopupElementView {
+                            controller: listModelData
+                            width: elementsView.width
+                            height: children.height
+                        }
                     }
                 }
 

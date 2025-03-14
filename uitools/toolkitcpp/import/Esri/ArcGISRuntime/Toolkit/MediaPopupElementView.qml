@@ -28,7 +28,6 @@ import QtQuick.Layouts
 
 ColumnLayout {
     id: mediaPopupElementView
-    height: childrenRect.height
     clip: true
     focus: true
     Layout.fillWidth: true
@@ -52,7 +51,7 @@ ColumnLayout {
         spacing: mediaPopupElementView.layoutSpacing
 
         Label {
-            text: mediaPopupElementView.controller.title !== "" ? controller.title : "Media"
+            text: mediaPopupElementView.controller ? mediaPopupElementView.controller.title : null
             wrapMode: Text.WordWrap
             font.pixelSize: 20
             font.weight: Font.Black
@@ -62,8 +61,8 @@ ColumnLayout {
             Layout.rightMargin: mediaPopupElementView.mediaMargin
         }
         Label {
-            text: mediaPopupElementView.controller.description
-            visible: mediaPopupElementView.controller.description !== ""
+            text: mediaPopupElementView.controller ? mediaPopupElementView.controller.description : null
+            visible: text !== ""
             wrapMode: Text.WordWrap
 
             Layout.fillWidth: true
@@ -85,7 +84,7 @@ ColumnLayout {
         focus: true
         implicitHeight: 170
         spacing: mediaPopupElementView.mediaMargin
-        model: mediaPopupElementView.controller.popupMediaItems
+        model: mediaPopupElementView.controller ? mediaPopupElementView.controller.popupMediaItems : null
 
         Layout.fillWidth: true
         Layout.leftMargin: mediaPopupElementView.mediaMargin
@@ -312,7 +311,6 @@ ColumnLayout {
 
                 ColumnLayout {
                     id: overlayTextLayout
-                    height: childrenRect.height
                     clip: true
                     focus: true
                     spacing: layoutSpacing
