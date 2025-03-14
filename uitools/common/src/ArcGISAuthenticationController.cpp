@@ -26,15 +26,16 @@
 #include <Authentication/ArcGISAuthenticationChallenge.h>
 #include <Authentication/AuthenticationManager.h>
 #include <Authentication/AuthenticationTypes.h>
-#include <ArcGISRuntimeEnvironment.h>
-#include <Error.h>
-#include <ErrorException.h>
 #include <Authentication/OAuthUserConfiguration.h>
 #include <Authentication/OAuthUserCredential.h>
 #include <Authentication/OAuthUserLoginPrompt.h>
 #include <Authentication/TokenCredential.h>
 #include <Authentication/ServerTrustCredential.h>
 #include <Authentication/NetworkAuthenticationChallenge.h>
+#include <Authentication/PasswordCredential.h>
+#include <ArcGISRuntimeEnvironment.h>
+#include <Error.h>
+#include <ErrorException.h>
 
 // Toolkit headers
 #include "ArcGISAuthenticationChallengeRelay.h"
@@ -175,10 +176,21 @@ void ArcGISAuthenticationController::handleNetworkAuthenticationChallenge(Networ
       emit displayServerTrustView();
       return;
     }
+    case NetworkChallengeType::Basic: [[fallthrough]];
+    case NetworkChallengeType::Digest: [[fallthrough]];
+    case NetworkChallengeType::Ntlm: [[fallthrough]];
+    case NetworkChallengeType::Negotiate:
+    {
+      emit displayUsernamePasswordSignInView();
+      return;
+    }
+    case NetworkChallengeType::ClientCertificate:
+    {
+      Q_UNIMPLEMENTED();
+    }
   }
 
   m_currentNetworkChallenge.reset();
-  Q_UNIMPLEMENTED();
   qWarning() << "unimplemented network authentication challenge";
 }
 
@@ -213,6 +225,21 @@ void ArcGISAuthenticationController::continueWithServerTrust(bool trust)
  */
 void ArcGISAuthenticationController::continueWithUsernamePassword(const QString& username, const QString& password)
 {
+  if (m_currentArcGISChallenge)
+  {
+    continueWithUsernamePasswordArcGIS_(username, password);
+  }
+  else if (m_currentNetworkChallenge)
+  {
+    continueWithUsernamePasswordNetwork_(username, password);
+  }
+}
+
+/*!
+  \internal
+ */
+void ArcGISAuthenticationController::continueWithUsernamePasswordArcGIS_(const QString& username, const QString& password)
+{
   if (!m_currentArcGISChallenge)
   {
     return;
@@ -223,21 +250,51 @@ void ArcGISAuthenticationController::continueWithUsernamePassword(const QString&
                                password,
                                0).then(this, [this](TokenCredential* credential)
   {
+    if (m_arcGISPreviousFailureCountsForUrl.contains(m_currentArcGISChallenge->requestUrl()))
+    {
+      m_arcGISPreviousFailureCountsForUrl.remove(m_currentArcGISChallenge->requestUrl());
+    }
+
     m_currentArcGISChallenge->continueWithCredential(credential);
     m_currentArcGISChallenge.reset();
   }).onFailed(this, [this](const ErrorException& e)
   {
-    if ((++m_currentChallengeFailureCount) >= s_maxChallengeFailureCount)
+    const auto requestUrl = m_currentArcGISChallenge->requestUrl();
+    if (m_arcGISPreviousFailureCountsForUrl.contains(requestUrl))
     {
-      m_currentChallengeFailureCount = 0;
+      m_arcGISPreviousFailureCountsForUrl[requestUrl] = m_arcGISPreviousFailureCountsForUrl[requestUrl] + 1;
+    }
+    else
+    {
+      m_arcGISPreviousFailureCountsForUrl[requestUrl] = 1;
+    }
+
+    if (m_arcGISPreviousFailureCountsForUrl[requestUrl] >= s_maxArcGISPreviousFailureCount)
+    {
+      m_arcGISPreviousFailureCountsForUrl.remove(requestUrl);
       m_currentArcGISChallenge->continueAndFailWithError(e.error());
       m_currentArcGISChallenge.reset();
       return;
     }
 
-    emit currentChallengeFailureCountChanged();
+    emit previousFailureCountChanged();
     emit displayUsernamePasswordSignInView();
   });
+}
+
+/*!
+  \internal
+ */
+void ArcGISAuthenticationController::ArcGISAuthenticationController::continueWithUsernamePasswordNetwork_(const QString& username, const QString& password)
+{
+  if (!m_currentNetworkChallenge)
+  {
+    return;
+  }
+
+  auto* passwordCredential = NetworkCredential::password(username, password, this);
+  m_currentNetworkChallenge->continueWithCredential(passwordCredential);
+  m_currentNetworkChallenge.reset();
 }
 
 /*!
@@ -345,23 +402,18 @@ QList<OAuthUserConfiguration*> ArcGISAuthenticationController::oAuthUserConfigur
 /*!
   \internal
  */
-QUrl ArcGISAuthenticationController::currentAuthenticatingHost_() const
+QString ArcGISAuthenticationController::currentAuthenticatingHost_() const
 {
   if (m_currentNetworkChallenge)
   {
-    return QUrl{m_currentNetworkChallenge->host()};
+    return m_currentNetworkChallenge->host();
   }
 
   if (m_currentArcGISChallenge)
   {
-    const auto requestUrl = m_currentArcGISChallenge->requestUrl();
-    if (!requestUrl.isEmpty())
-    {
-      const auto scheme = requestUrl.scheme();
-      const auto host = requestUrl.host();
-      return scheme + "://" + host;
-    }
+    return m_currentArcGISChallenge->requestUrl().host();
   }
+
   return {};
 }
 
@@ -392,9 +444,23 @@ QString ArcGISAuthenticationController::redirectUri_() const
 /*!
   \internal
  */
-int ArcGISAuthenticationController::currentChallengeFailureCount_() const
+int ArcGISAuthenticationController::previousFailureCount_() const
 {
-  return m_currentChallengeFailureCount;
+  if (m_currentNetworkChallenge)
+  {
+    return m_currentNetworkChallenge->previousFailureCount();
+  }
+
+  if (m_currentArcGISChallenge)
+  {
+    const auto requestUrl = m_currentArcGISChallenge->requestUrl();
+    if (m_arcGISPreviousFailureCountsForUrl.contains(requestUrl))
+    {
+      return m_arcGISPreviousFailureCountsForUrl[requestUrl];
+    }
+  }
+
+  return 0;
 }
 
 } //  Esri::ArcGISRuntime::Toolkit
