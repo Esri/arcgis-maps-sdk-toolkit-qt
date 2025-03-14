@@ -33,6 +33,7 @@
 #include <Authentication/ServerTrustCredential.h>
 #include <Authentication/NetworkAuthenticationChallenge.h>
 #include <Authentication/PasswordCredential.h>
+#include <Authentication/CertificateCredential.h>
 #include <ArcGISRuntimeEnvironment.h>
 #include <Error.h>
 #include <ErrorException.h>
@@ -186,7 +187,8 @@ void ArcGISAuthenticationController::handleNetworkAuthenticationChallenge(Networ
     }
     case NetworkChallengeType::ClientCertificate:
     {
-      Q_UNIMPLEMENTED();
+      emit displayClientCertificateView();
+      return;
     }
   }
 
@@ -218,6 +220,25 @@ void ArcGISAuthenticationController::continueWithServerTrust(bool trust)
   }
 
   m_currentNetworkChallenge.reset();
+}
+
+/*!
+  \internal
+ */
+void ArcGISAuthenticationController::respondWithClientCertificate(const QUrl& path, const QString& password)
+{
+  if (m_currentNetworkChallenge)
+  {
+    if (auto* clientCredential = NetworkCredential::certificate(path, password, this); clientCredential)
+    {
+      m_currentNetworkChallenge->continueWithCredential(clientCredential);
+      return;
+    }
+    else
+    {
+      emit clientCertificatePasswordRequired(path);
+    }
+  }
 }
 
 /*!

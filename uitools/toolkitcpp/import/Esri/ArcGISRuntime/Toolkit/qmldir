@@ -24,6 +24,7 @@ ArcGISAuthenticationView 200.7 ArcGISAuthenticationView.qml
 ArcGISAuthenticationView_internal 200.7 ArcGISAuthenticationView_internal.qml
 ArcGISOAuth2View 200.7 ArcGISOAuth2View.qml
 ArcGISUserCredentialsView 200.7 ArcGISUserCredentialsView.qml
+ArcGISClientCertificateView 200.7 ArcGISClientCertificateView.qml
 AuthenticationView 100.10 AuthenticationView.qml
 AuthenticationView 200.0 AuthenticationView.qml
 BasemapGallery 100.12 BasemapGallery.qml

@@ -27,5 +27,6 @@
         <file>UserCredentialsView.qml</file>
         <file>UtilityNetworkTrace.qml</file>
         <file>qmldir</file>
+        <file>ArcGISClientCertificateView.qml</file>
     </qresource>
 </RCC>

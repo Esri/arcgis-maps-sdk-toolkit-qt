@@ -76,6 +76,9 @@ public:
   // ServerTrust
   Q_INVOKABLE void continueWithServerTrust(bool trust);
 
+  // ClientCertificate
+  Q_INVOKABLE void respondWithClientCertificate(const QUrl& path, const QString& password);
+
   Q_INVOKABLE void cancel();
 
   // ArcGISAuthenticationChallengeHandler relay
@@ -91,6 +94,7 @@ public:
   QList<Esri::ArcGISRuntime::Authentication::OAuthUserConfiguration*> oAuthUserConfigurations() const;
 
 signals:
+  void displayClientCertificateView();
   void displayOAuthSignInView();
   void displayUsernamePasswordSignInView();
   void displayServerTrustView();
@@ -99,6 +103,7 @@ signals:
   void preferPrivateWebBrowserSessionChanged();
   void redirectUriChanged();
   void previousFailureCountChanged();
+  void clientCertificatePasswordRequired(const QUrl& certificatePath);
 
 private:
   explicit ArcGISAuthenticationController(QObject* parent = nullptr);
