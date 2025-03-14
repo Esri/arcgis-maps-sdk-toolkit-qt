@@ -37,7 +37,38 @@ ColumnLayout {
     property real imageTextMargin: 5
     property real layoutSpacing: 0
 
+    property bool isHoverable: true
+
     property var controller: null
+
+    Dialog {
+        id: fullScreenImageDialog
+        modal: true
+        visible: false
+        width: Overlay.overlay ? Overlay.overlay.width : 0
+        height: Overlay.overlay ? Overlay.overlay.height : 0
+        anchors.centerIn: Overlay.overlay
+
+        Loader {
+            id: chartsLoader
+            anchors{
+                top: parent.top
+                bottom: closeButton.top
+                left: parent.left
+                right: parent.right
+            }
+        }
+
+        Button {
+            id: closeButton
+            text: "Close"
+            anchors {
+                bottom: parent.bottom
+                horizontalCenter: parent.horizontalCenter
+            }
+            onClicked: fullScreenImageDialog.visible = false;
+        }
+    }
 
     MenuSeparator {
         Layout.fillWidth: true
@@ -97,6 +128,18 @@ ColumnLayout {
 
             Loader {
                 id: loader
+            }
+
+            MouseArea {
+                anchors.fill: parent
+
+                onClicked: {
+                    // if (popupMediaType === QmlEnums.PopupMediaTypeImage) {
+                        fullScreenImageDialog.visible = true;
+                        chartsLoader.sourceComponent = null;
+                        chartsLoader.sourceComponent = loader.sourceComponent;
+                    // }
+                }
             }
 
             Component.onCompleted: {
@@ -167,6 +210,8 @@ ColumnLayout {
                     }
 
                     BarSeries {
+                        hoverable: isHoverable
+
                         // BarSeries will take owership of the QList<QBarSet*> when we call append. This also applies to PieSeries and QPieSlice for PieChartPopupMediaItem.
                         // s.a https://doc.qt.io/qt-6/qbarseries.html#append-1
                         Component.onCompleted: {
@@ -175,6 +220,45 @@ ColumnLayout {
                                 append(sets);
                             else
                                 parent.visible = false;
+                        }
+
+                        onHoverEnter: {
+                            columnPopup.visible = true;
+                            columnPopup.x = position.x + 10;
+                            columnPopup.y = position.y + 10;
+                        }
+
+                        onHover: {
+                            columnPopup.x = position.x + 10;
+                            columnPopup.y = position.y + 10;
+                            columnLabelText.text = value.y;
+                        }
+
+                        onHoverExit: {
+                            columnPopup.visible = false;
+                        }
+
+                        Popup {
+                            id: columnPopup
+                            visible: false
+                            modal: false
+                            topInset: 0
+                            bottomInset: 0
+                            leftInset: 0
+                            rightInset: 0
+
+                            topPadding: 5
+                            bottomPadding: 5
+                            leftPadding: 5
+                            rightPadding: 5
+
+                            contentItem: Label {
+                                id: columnLabelText
+                                anchors{
+                                    horizontalCenter: parent.horizontalCenter
+                                    verticalCenter: parent.verticalCenter
+                                }
+                            }
                         }
                     }
                 }
@@ -206,6 +290,7 @@ ColumnLayout {
                     }
 
                     BarSeries {
+                        hoverable: isHoverable
                         // BarSeries will take owership of the QList<QBarSet*> when we call append. This also applies to PieSeries and QPieSlice for PieChartPopupMediaItem.
                         // s.a https://doc.qt.io/qt-6/qbarseries.html#append-1
                         Component.onCompleted: {
@@ -214,6 +299,45 @@ ColumnLayout {
                                 append(sets);
                             else
                                 parent.visible = false;
+                        }
+
+                        onHoverEnter: {
+                            barPopup.visible = true;
+                            barPopup.x = position.x + 20;
+                            barPopup.y = position.y + 20;
+                        }
+
+                        onHover: {
+                            barPopup.x = position.x + 20;
+                            barPopup.y = position.y + 20;
+                            barPopupText.text = value.y;
+                        }
+
+                        onHoverExit: {
+                            barPopup.visible = false;
+                        }
+
+                        Popup {
+                            id: barPopup
+                            visible: false
+                            modal: false
+                            topInset: 0
+                            bottomInset: 0
+                            leftInset: 0
+                            rightInset: 0
+
+                            topPadding: 5
+                            bottomPadding: 5
+                            leftPadding: 5
+                            rightPadding: 5
+
+                            contentItem: Label {
+                                id: barPopupText
+                                anchors{
+                                    horizontalCenter: parent.horizontalCenter
+                                    verticalCenter: parent.verticalCenter
+                                }
+                            }
                         }
                     }
                 }
@@ -238,14 +362,60 @@ ColumnLayout {
                     }
 
                     PieSeries {
+                        name: "PieSeries"
+                        hoverable: isHoverable
                         // PieSeries will take owership of the QList<QPieSlice*> when we call append. This also applies to BarSeries and QBarSet for BarChartPopupMediaItem.
                         // s.a https://doc.qt.io/qt-6/qpieseries.html#append-1
-                        Component.onCompleted: {
-                            let slices = listModelData.pieSlices;
-                            if (slices.length > 0)
-                                append(slices);
-                            else
-                                parent.visible = false;
+
+                        PieSlice {
+                            value: 14179
+                        }
+                        PieSlice {
+                            value: 9832
+                        }
+
+                        // Component.onCompleted: {
+                        //     let slices = listModelData.pieSlices;
+                        //     if (slices.length > 0)
+                        //         append(slices);
+                        //     else
+                        //         parent.visible = false;
+                        // }
+
+                        onHoverEnter: {
+                            popup.visible = true;
+                            popup.x = position.x + 20;
+                            popup.y = position.y + 20;
+                        }
+
+                        onHover: {
+                            popup.x = position.x + 20;
+                            popup.y = position.y + 20;
+                            dynamicText.text = value.y;
+                        }
+
+                        onHoverExit: {
+                            popup.visible = false;
+                        }
+
+                        Popup {
+                            id: popup
+                            visible: false
+                            modal: false
+                            height: dynamicText.height
+                            width: dynamicText.width
+
+                            Rectangle {
+                                anchors.fill: parent
+                                color: "white"
+                                border.color: "black"
+                                height: dynamicText.height
+                                width: dynamicText.width
+                                Label {
+                                    id: dynamicText
+                                    anchors.centerIn: parent
+                                }
+                            }
                         }
                     }
                 }
@@ -282,7 +452,8 @@ ColumnLayout {
                     }
 
                     LineSeries {
-
+                        hoverable: isHoverable
+                        name: "LineSeries"
                         Component.onCompleted: {
                             let points = listModelData.linePoints;
                             if (!listModelData.chartColorsEmpty)
@@ -291,6 +462,47 @@ ColumnLayout {
                                 append(points);
                             else
                                 parent.visible = false;
+                        }
+
+                        onHoverEnter: {
+                            linePopup.visible = true;
+                            linePopup.x = position.x + 20;
+                            linePopup.y = position.y + 20;
+                        }
+
+                        onHover: {
+                            linePopup.x = position.x + 20;
+                            linePopup.y = position.y + 20;
+                            linePopupText.text = value.y;
+                        }
+
+                        onHoverExit: {
+                            linePopup.x = position.x + 20;
+                            linePopup.y = position.y + 20;
+                            linePopup.visible = false;
+                        }
+
+                        Popup {
+                            id: linePopup
+                            visible: false
+                            modal: false
+                            topInset: 0
+                            bottomInset: 0
+                            leftInset: 0
+                            rightInset: 0
+
+                            topPadding: 5
+                            bottomPadding: 5
+                            leftPadding: 5
+                            rightPadding: 5
+
+                            contentItem: Label {
+                                id: linePopupText
+                                anchors{
+                                    horizontalCenter: parent.horizontalCenter
+                                    verticalCenter: parent.verticalCenter
+                                }
+                            }
                         }
                     }
                 }
