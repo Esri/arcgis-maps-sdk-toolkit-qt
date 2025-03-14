@@ -76,7 +76,7 @@ ColumnLayout {
         Layout.rightMargin: attachmentsPopupElementView.mediaMargin
     }
 
-    Column {
+    ColumnLayout {
         clip: true
         focus: true
         spacing: attachmentsPopupElementView.layoutSpacing
@@ -112,7 +112,6 @@ ColumnLayout {
         clip: true
         focus: true
         Layout.preferredHeight: childrenRect.height
-        spacing: attachmentsPopupElementView.mediaMargin
         model: attachmentsPopupElementView.controller ? attachmentsPopupElementView.controller.popupAttachmentItems : null
 
         Layout.fillWidth: true
