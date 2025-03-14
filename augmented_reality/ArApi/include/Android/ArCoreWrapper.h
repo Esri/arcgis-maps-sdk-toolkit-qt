@@ -17,11 +17,17 @@
 #ifndef ArCoreWrapper_H
 #define ArCoreWrapper_H
 
+// C++ API headers
+#include "Deprecated.h"
+
+// Qt headers
 #include <QJniEnvironment>
-#include <QSize>
-#include <QTimer>
 #include <QMatrix4x4>
 #include <QOpenGLFunctions>
+#include <QSize>
+#include <QTimer>
+
+// STL headers
 #include <array>
 
 // forward declaration of AR core types to avoid include "arcore_c_api.h" here.
@@ -42,7 +48,7 @@ class ArCoreFrameRenderer;
 class ArCorePointCloudRenderer;
 class ArCorePlaneRenderer;
 
-class ArCoreWrapper
+class QRT_DEPRECATED ArCoreWrapper
 {
 
 public:

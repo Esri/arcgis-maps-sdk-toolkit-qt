@@ -16,10 +16,11 @@
 
 #import <ARKit/ARKit.h>
 #include <QString>
+#include "Deprecated.h"
 
 namespace Esri::ArcGISRuntime::Toolkit::ArKitUtils {
 
-QString worldMappingStatusToString(ARWorldMappingStatus status)
+QRT_DEPRECATED QString worldMappingStatusToString(ARWorldMappingStatus status)
 {
   switch (status)
   {
@@ -36,7 +37,7 @@ QString worldMappingStatusToString(ARWorldMappingStatus status)
   }
 }
 
-QString worldMappingStatusToDescription(ARWorldMappingStatus status)
+QRT_DEPRECATED QString worldMappingStatusToDescription(ARWorldMappingStatus status)
 {
   switch (status)
   {
@@ -53,7 +54,7 @@ QString worldMappingStatusToDescription(ARWorldMappingStatus status)
   }
 }
 
-QString trackingStateToString(ARTrackingState trackingState)
+QRT_DEPRECATED QString trackingStateToString(ARTrackingState trackingState)
 {
   switch (trackingState)
   {
@@ -68,7 +69,7 @@ QString trackingStateToString(ARTrackingState trackingState)
   }
 }
 
-QString trackingStateToDescription(ARTrackingState trackingState)
+QRT_DEPRECATED QString trackingStateToDescription(ARTrackingState trackingState)
 {
   switch (trackingState)
   {
@@ -83,7 +84,7 @@ QString trackingStateToDescription(ARTrackingState trackingState)
   }
 }
 
-QString trackingStateReasonToString(ARTrackingStateReason trackingStateReason)
+QRT_DEPRECATED QString trackingStateReasonToString(ARTrackingStateReason trackingStateReason)
 {
   switch (trackingStateReason)
   {
@@ -102,7 +103,7 @@ QString trackingStateReasonToString(ARTrackingStateReason trackingStateReason)
   }
 }
 
-QString trackingStateReasonToDescription(ARTrackingStateReason trackingStateReason)
+QRT_DEPRECATED QString trackingStateReasonToDescription(ARTrackingStateReason trackingStateReason)
 {
   switch (trackingStateReason)
   {
@@ -123,7 +124,7 @@ QString trackingStateReasonToDescription(ARTrackingStateReason trackingStateReas
   }
 }
 
-QString arErrorCodeToString(ARErrorCode errorCode)
+QRT_DEPRECATED QString arErrorCodeToString(ARErrorCode errorCode)
 {
   switch (errorCode)
   {
@@ -158,7 +159,7 @@ QString arErrorCodeToString(ARErrorCode errorCode)
   }
 }
 
-QString arErrorCodeToDescription(ARErrorCode errorCode)
+QRT_DEPRECATED QString arErrorCodeToDescription(ARErrorCode errorCode)
 {
   switch (errorCode)
   {
