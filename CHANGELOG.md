@@ -2,7 +2,7 @@
 
 ## 200.7
 
-* Deprecate the augmented reality (AR) toolkit components.
+* The augmented reality (AR) toolkit components are deprecated.
 
 ## 200.5
 
