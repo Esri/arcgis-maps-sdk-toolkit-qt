@@ -19,7 +19,7 @@
 // Qt headers
 #include <QObject>
 
-// STL headers
+// ArcGIS Maps SDK headers
 #include <Point.h>
 
 // Other headers

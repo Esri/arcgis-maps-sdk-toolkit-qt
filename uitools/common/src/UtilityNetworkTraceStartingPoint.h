@@ -19,7 +19,7 @@
 // Qt headers
 #include <QObject>
 
-// STL headers
+// ArcGIS Maps SDK headers
 #include <Envelope.h>
 #include <GeoView.h>
 #include <UtilityNetwork.h>

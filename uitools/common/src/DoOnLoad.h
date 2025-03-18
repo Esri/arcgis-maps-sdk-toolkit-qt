@@ -19,9 +19,11 @@
 // Qt headers
 #include <QObject>
 
-// STL headers
+// ArcGIS Maps SDK headers
 #include <Loadable.h>
 #include <MapTypes.h>
+
+// STL headers
 #include <type_traits>
 
 namespace Esri::ArcGISRuntime::Toolkit {

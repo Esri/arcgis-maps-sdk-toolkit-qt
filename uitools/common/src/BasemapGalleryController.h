@@ -16,7 +16,7 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_BASEMAPGALLERYCONTROLLER_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_BASEMAPGALLERYCONTROLLER_H
 
-// STL headers
+// ArcGIS Maps SDK headers
 #include <Basemap.h>
 #include <GeoModel.h>
 #include <Portal.h>

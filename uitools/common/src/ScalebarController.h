@@ -19,7 +19,7 @@
 // Qt headers
 #include <QObject>
 
-// STL headers
+// ArcGIS Maps SDK headers
 #include <CoreTypes.h>
 #include <LinearUnit.h>
 

@@ -19,7 +19,7 @@
 // Qt headers
 #include <QObject>
 
-// STL headers
+// ArcGIS Maps SDK headers
 #include <Bookmark.h>
 #include <GeoView.h>
 
