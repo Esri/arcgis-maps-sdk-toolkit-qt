@@ -16,16 +16,16 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_UTILITYNETWORKTRACESTARTINGPOINT_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_UTILITYNETWORKTRACESTARTINGPOINT_H
 
-// Toolkit headers
-#include "Internal/GenericListModel.h"
+// Qt headers
+#include <QObject>
 
-// ArcGISRuntime headers
+// STL headers
 #include <Envelope.h>
 #include <GeoView.h>
 #include <UtilityNetwork.h>
 
-// Qt headers
-#include <QObject>
+// Other headers
+#include "GenericListModel.h"
 
 namespace Esri::ArcGISRuntime {
 class Graphic;

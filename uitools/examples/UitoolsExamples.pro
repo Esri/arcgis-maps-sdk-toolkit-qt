@@ -40,7 +40,7 @@ equals(QT_MAJOR_VERSION, 6) {
 
 ARCGIS_RUNTIME_VERSION = 200.7.0
 include($$PWD/arcgisruntime.pri)
-include($$PWD/../toolkitcpp.pri)
+include($$PWD/../toolkitcpp/toolkitcpp.pri)
 
 HEADERS += \
   $$files($$PWD/src/*.h)

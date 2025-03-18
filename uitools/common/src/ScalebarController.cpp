@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2021 Esri
  *
@@ -112,50 +113,24 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
   /*!
   \class Esri::ArcGISRuntime::Toolkit::ScalebarController
-  \inmodule Esri.ArcGISRuntime.Toolkit
-  \ingroup ArcGISQtToolkitUiCppControllers
-  \brief In MVC architecture, this is the controller for the corresponding
-  \c Scalebar view.
-
-  This controller object handles the Scalebar calculations for a Scalebar's width
-  and display units, based on a given mapview and owning scalebar's bounds.
+  \internal
+  This class is an internal implementation detail and is subject to change.
  */
 
-  /*!
-  \brief Constructor
-  \list
-    \li \a parent Parent owning \c QObject.
-  \endlist
- */
   ScalebarController::ScalebarController(QObject* parent) :
     QObject(parent)
   {
   }
 
-  /*!
-  \brief Destructor.
- */
   ScalebarController::~ScalebarController()
   {
   }
 
-  /*!
-    \brief Returns the \c MapView as a \c QObject.
-  */
   QObject* ScalebarController::mapView() const
   {
     return m_mapView;
   }
 
-  /*!
-    \brief Set the \c MapView object this Controller uses.
-
-    Internally this is cast to a \c MapView using \c qobject_cast.
-
-    \list
-    \li \a mapView MapView Object.
-    \endlist
-   */
   void ScalebarController::setMapView(QObject* mapView)
   {
     auto mapView2 = qobject_cast<MapViewToolkit*>(mapView);
@@ -167,9 +142,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     emit mapViewChanged();
   }
 
-  /*!
-     \brief Returns thee \c UnitSystem this controller uses for calculations.
-   */
   UnitSystem ScalebarController::unitSystem()
   {
     return m_unitSystem;
@@ -178,10 +150,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
   // TODO For dual scalebar rendering purposes the Controller should not store
   // a copy of the UnitSystem but should instead be passed the UnitSystem in the
   // calculation calls.
-  /*!
-     \brief Sets the active \c UnitSystem to \a unitSystem. This affects width and
-     distance calculations.
-   */
   void ScalebarController::setUnitSystem(UnitSystem unitSystem)
   {
     if (m_unitSystem == unitSystem)
@@ -203,19 +171,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
     emit unitSystemChanged();
   }
 
-  /*!
-   \brief Given a maximum length \a maxLength, calculate the appropriate length value to
-   display, which will be equal to or less than maxLength, rounded appropriately.
-   */
   double ScalebarController::calculateBestScalebarLength(double maxLength)
   {
     return calculateBestScalebarLength(maxLength, m_baseUnit);
   }
 
-  /*!
-   \brief Given a maximum length \a maxLength and unit system \a unit, calculate the best length value
-   to display, which will be equal to or less than maxLength, rounded appropriately.
-   */
   double ScalebarController::calculateBestScalebarLength(double maxLength, LinearUnit unit)
   {
     const double magnitude = calculateMagnitude(maxLength);
@@ -238,10 +198,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     return bestLength;
   }
 
-  /*!
-   \brief Given the \a width of a scalebar in screen coordinates, returns the distance the width
-   represents by projecting that width onto the mapView and returning the result.
-   */
   double ScalebarController::calculateDistance(double width)
   {
     double distance = 0.0;
@@ -273,23 +229,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
     return distance;
   }
 
-  /*!
-   \brief Returns the width a scalebar should be, based on a fraction of \a availableWidth calculated by the ratio
-   of \a displayDistance by \a maximumDistance.
-   */
   double ScalebarController::calculateDisplayWidth(double displayDistance, double maximumDistance, double availableWidth)
   {
     return displayDistance / maximumDistance * availableWidth;
   }
 
-  /*!
-   \brief Returns the distance text to display in a scaleBar, given a \a distance and \a unitSystem.
-
-   If \a unitSystem is metric, \a distance is assumed to be in meters, if \a unitSystem is imperial,
-   \a distance is assumed to be in feet.
-
-   Will appropriately return miles/feet or kilometers/meters based on size of distance given.
-   */
   QString ScalebarController::calculateDistanceInDisplayUnits(double distance, UnitSystem unitSystem)
   {
     double displayDistance = distance;
@@ -301,30 +245,5 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     return QString{"%1 %2"}.arg(displayDistance).arg(displayUnit.abbreviation());
   }
-
-  /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::ScalebarController::mapViewChanged()
-    \brief Emitted when the geoView changes.
-   */
-
-  /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::ScalebarController::unitSystemChanged()
-    \brief Emitted when the unitsSystem changes.
-   */
-
-  /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::ScalebarController::viewpointChanged()
-    \brief Emitted when the viewpoint changes.
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::ScalebarController::mapView
-    \brief the \c{MapView} object which scalebar calculations are based on.
-  */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::ScalebarController::unitSystem
-    \brief The current units system of this controller. Can be imperial or metric.
-  */
 
 } // Esri::ArcGISRuntime::Toolkit

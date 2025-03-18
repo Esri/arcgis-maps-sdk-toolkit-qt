@@ -16,15 +16,15 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_UTILITYNETWORKTRACECONTROLLER_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_UTILITYNETWORKTRACECONTROLLER_H
 
-// ArcGISRuntime headers
-#include <Point.h>
-
-// Toolkit headers
-#include "Internal/GenericListModel.h"
-#include "Internal/GeoViews.h"
-
 // Qt headers
 #include <QObject>
+
+// STL headers
+#include <Point.h>
+
+// Other headers
+#include "GenericListModel.h"
+#include "GeoViews.h"
 
 Q_MOC_INCLUDE("UtilityNetwork.h")
 Q_MOC_INCLUDE("UtilityNetworkTraceStartingPoint.h")

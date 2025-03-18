@@ -48,18 +48,10 @@ using Esri::ArcGISRuntime::Authentication::AuthenticationManager;
 namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
- \class Toolkit::ArcGISAuthenticationController
- \inmodule Esri.ArcGISRuntime.Toolkit
- \ingroup ArcGISQtToolkitUiCppControllers
- \brief In MVC architecture, this is the controller for the corresponding
-        AuthenticationView.
-
- \internal
- */
-
-/*!
   \internal
+  This class is an internal implementation detail and is subject to change.
  */
+
 ArcGISAuthenticationController::ArcGISAuthenticationController(QObject* parent) :
   QObject(parent)
 {
@@ -84,14 +76,8 @@ ArcGISAuthenticationController::ArcGISAuthenticationController(QObject* parent) 
   });
 }
 
-/*!
-  \internal
- */
 ArcGISAuthenticationController::~ArcGISAuthenticationController() = default;
 
-/*!
-  \internal
- */
 ArcGISAuthenticationController* ArcGISAuthenticationController::create(QQmlEngine* qmlEngine, QJSEngine* /*jsEngine*/)
 {
   static QPointer<ArcGISAuthenticationController> instance = new ArcGISAuthenticationController(qmlEngine);
@@ -104,17 +90,11 @@ ArcGISAuthenticationController* ArcGISAuthenticationController::create(QQmlEngin
   return instance;
 }
 
-/*!
-  \internal
- */
 ArcGISAuthenticationController* ArcGISAuthenticationController::instance()
 {
   return create(nullptr, nullptr);
 }
 
-/*!
-  \internal
- */
 void ArcGISAuthenticationController::handleArcGISAuthenticationChallenge(ArcGISAuthenticationChallenge* challenge)
 {
   std::lock_guard<std::mutex> lock(m_mutex);
@@ -155,9 +135,6 @@ void ArcGISAuthenticationController::handleArcGISAuthenticationChallenge(ArcGISA
   emit displayUsernamePasswordSignInView();
 }
 
-/*!
-  \internal
- */
 void ArcGISAuthenticationController::handleNetworkAuthenticationChallenge(NetworkAuthenticationChallenge* challenge)
 {
   std::lock_guard<std::mutex> lock(m_mutex);
@@ -194,9 +171,6 @@ void ArcGISAuthenticationController::handleNetworkAuthenticationChallenge(Networ
   qWarning() << "unimplemented network authentication challenge";
 }
 
-/*!
-  \internal
- */
 void ArcGISAuthenticationController::continueWithServerTrust(bool trust)
 {
   if (trust)
@@ -220,9 +194,6 @@ void ArcGISAuthenticationController::continueWithServerTrust(bool trust)
   m_currentNetworkChallenge.reset();
 }
 
-/*!
-  \internal
- */
 void ArcGISAuthenticationController::continueWithUsernamePassword(const QString& username, const QString& password)
 {
   if (m_currentArcGISChallenge)
@@ -235,9 +206,6 @@ void ArcGISAuthenticationController::continueWithUsernamePassword(const QString&
   }
 }
 
-/*!
-  \internal
- */
 void ArcGISAuthenticationController::continueWithUsernamePasswordArcGIS_(const QString& username, const QString& password)
 {
   if (!m_currentArcGISChallenge)
@@ -282,9 +250,6 @@ void ArcGISAuthenticationController::continueWithUsernamePasswordArcGIS_(const Q
   });
 }
 
-/*!
-  \internal
- */
 void ArcGISAuthenticationController::ArcGISAuthenticationController::continueWithUsernamePasswordNetwork_(const QString& username, const QString& password)
 {
   if (!m_currentNetworkChallenge)
@@ -297,9 +262,6 @@ void ArcGISAuthenticationController::ArcGISAuthenticationController::continueWit
   m_currentNetworkChallenge.reset();
 }
 
-/*!
-  \internal
- */
 void ArcGISAuthenticationController::respond(const QUrl& url)
 {
   if (!m_currentOAuthUserLoginPrompt)
@@ -311,9 +273,6 @@ void ArcGISAuthenticationController::respond(const QUrl& url)
   m_currentOAuthUserLoginPrompt.reset();
 }
 
-/*!
-  \internal
- */
 void ArcGISAuthenticationController::respondWithError(const QString& platformError)
 {
   if (!m_currentOAuthUserLoginPrompt)
@@ -325,9 +284,6 @@ void ArcGISAuthenticationController::respondWithError(const QString& platformErr
   m_currentOAuthUserLoginPrompt.reset();
 }
 
-/*!
-  \internal
- */
 void ArcGISAuthenticationController::cancel()
 {
   if (m_currentNetworkChallenge)
@@ -349,18 +305,12 @@ void ArcGISAuthenticationController::cancel()
   }
 }
 
-/*!
-  \internal
- */
 bool ArcGISAuthenticationController::canBeUsed_() const
 {
   // this class cannot be used with the legacy authentication system
   return ArcGISRuntimeEnvironment::useLegacyAuthentication() == false;
 }
 
-/*!
-  \internal
- */
 void ArcGISAuthenticationController::addOAuthUserConfiguration(OAuthUserConfiguration* userConfiguration)
 {
   std::lock_guard<std::mutex> lock(m_mutex);
@@ -368,9 +318,6 @@ void ArcGISAuthenticationController::addOAuthUserConfiguration(OAuthUserConfigur
   m_userConfigurations.append(userConfiguration);
 }
 
-/*!
-  \internal
- */
 void ArcGISAuthenticationController::setOAuthUserConfigurations(QList<OAuthUserConfiguration*> userConfigurations)
 {
   std::lock_guard<std::mutex> lock(m_mutex);
@@ -381,9 +328,6 @@ void ArcGISAuthenticationController::setOAuthUserConfigurations(QList<OAuthUserC
   });
 }
 
-/*!
-  \internal
- */
 void ArcGISAuthenticationController::clearOAuthUserConfigurations()
 {
   std::lock_guard<std::mutex> lock(m_mutex);
@@ -391,17 +335,11 @@ void ArcGISAuthenticationController::clearOAuthUserConfigurations()
   m_userConfigurations.clear();
 }
 
-/*!
-  \internal
- */
 QList<OAuthUserConfiguration*> ArcGISAuthenticationController::oAuthUserConfigurations() const
 {
   return m_userConfigurations;
 }
 
-/*!
-  \internal
- */
 QString ArcGISAuthenticationController::currentAuthenticatingHost_() const
 {
   if (m_currentNetworkChallenge)
@@ -417,33 +355,21 @@ QString ArcGISAuthenticationController::currentAuthenticatingHost_() const
   return {};
 }
 
-/*!
-  \internal
- */
 QUrl ArcGISAuthenticationController::authorizeUrl_() const
 {
   return m_currentOAuthUserLoginPrompt ? m_currentOAuthUserLoginPrompt->authorizeUrl() : QUrl{};
 }
 
-/*!
-  \internal
- */
 bool ArcGISAuthenticationController::preferPrivateWebBrowserSession_() const
 {
   return m_currentOAuthUserLoginPrompt ? m_currentOAuthUserLoginPrompt->preferPrivateWebBrowserSession() : false;
 }
 
-/*!
-  \internal
- */
 QString ArcGISAuthenticationController::redirectUri_() const
 {
   return m_currentOAuthUserLoginPrompt ? m_currentOAuthUserLoginPrompt->redirectUri() : QString{};
 }
 
-/*!
-  \internal
- */
 int ArcGISAuthenticationController::previousFailureCount_() const
 {
   if (m_currentNetworkChallenge)

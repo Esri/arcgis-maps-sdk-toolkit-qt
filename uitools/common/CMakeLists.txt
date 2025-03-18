@@ -14,7 +14,6 @@
 cmake_minimum_required(VERSION 3.16)
 
 set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_SOURCES
-    # public sources
     ../common/src/ArcGISAuthenticationController.cpp
     ../common/src/AuthenticationController.cpp
     ../common/src/BasemapGalleryController.cpp
@@ -46,18 +45,15 @@ set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_SOURCES
     ../common/src/UtilityNetworkTraceController.cpp
     ../common/src/UtilityNetworkTraceStartingPoint.cpp
     ../common/src/UtilityNetworkTraceStartingPointsModel.cpp
-
-    # internal sources
-    ../common/src/Internal/ArcGISAuthenticationChallengeRelay.cpp
-    ../common/src/Internal/BasemapGalleryImageProvider.cpp
-    ../common/src/Internal/GenericListModel.cpp
-    ../common/src/Internal/GenericTableProxyModel.cpp
-    ../common/src/Internal/MetaElement.cpp
-    ../common/src/Internal/NetworkAuthenticationChallengeRelay.cpp
+    ../common/src/ArcGISAuthenticationChallengeRelay.cpp
+    ../common/src/BasemapGalleryImageProvider.cpp
+    ../common/src/GenericListModel.cpp
+    ../common/src/GenericTableProxyModel.cpp
+    ../common/src/MetaElement.cpp
+    ../common/src/NetworkAuthenticationChallengeRelay.cpp
 )
 
 set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_HEADERS
-    #public headers
     ../common/src/ArcGISAuthenticationController.h
     ../common/src/AuthenticationController.h
     ../common/src/BasemapGalleryController.h
@@ -89,23 +85,20 @@ set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_HEADERS
     ../common/src/UtilityNetworkTraceController.h
     ../common/src/UtilityNetworkTraceStartingPoint.h
     ../common/src/UtilityNetworkTraceStartingPointsModel.h
-
-    # internal headers
-    ../common/src/Internal/ArcGISAuthenticationChallengeRelay.h
-    ../common/src/Internal/BasemapGalleryImageProvider.h
-    ../common/src/Internal/DisconnectOnSignal.h
-    ../common/src/Internal/DoOnLoad.h
-    ../common/src/Internal/GenericListModel.h
-    ../common/src/Internal/GenericTableProxyModel.h
-    ../common/src/Internal/GeoViews.h
-    ../common/src/Internal/MetaElement.h
-    ../common/src/Internal/NetworkAuthenticationChallengeRelay.h
-    ../common/src/Internal/SingleShotConnection.h
+    ../common/src/ArcGISAuthenticationChallengeRelay.h
+    ../common/src/BasemapGalleryImageProvider.h
+    ../common/src/DisconnectOnSignal.h
+    ../common/src/DoOnLoad.h
+    ../common/src/GenericListModel.h
+    ../common/src/GenericTableProxyModel.h
+    ../common/src/GeoViews.h
+    ../common/src/MetaElement.h
+    ../common/src/NetworkAuthenticationChallengeRelay.h
+    ../common/src/SingleShotConnection.h
 )
 
 set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_INCLUDES
     ../common/src
-    ../common/src/Internal
 )
 
 set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_IMAGES

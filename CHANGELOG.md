@@ -1,5 +1,9 @@
 # Changelog
 
+## 200.7
+
+* Deprecate the augmented reality (AR) toolkit components.
+
 ## 200.5
 
 * Remove `toolkitqml.pri` alongside the removal of the corresponding QML API.

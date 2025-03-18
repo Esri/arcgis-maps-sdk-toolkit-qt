@@ -19,12 +19,12 @@
 // Qt headers
 #include <QObject>
 
-// ArcGISRuntime headers
+// STL headers
 #include <CoreTypes.h>
 #include <LinearUnit.h>
 
-// Toolkit headers
-#include "Internal/GeoViews.h"
+// Other headers
+#include "GeoViews.h"
 
 namespace Esri::ArcGISRuntime::Toolkit {
 

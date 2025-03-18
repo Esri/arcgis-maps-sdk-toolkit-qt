@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -20,41 +21,26 @@
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-   /*!
-    \inmodule Esri.ArcGISRuntime.Toolkit
-    \class Esri::ArcGISRuntime::Toolkit::FloorFilterLevelItem
-    \brief An item contained within \l FloorFilterController::levels. This class wraps
-    a \c FloorLevel for easy manipulation/inspection within an AbstractItemModel.
-   */
+/*!
+  \internal
+  This class is an internal implementation detail and is subject to change.
+ */
 
-  /*!
-    \brief Constructs a new empty FloorFilterLevelItem object with a given \a parent.
-   */
   FloorFilterLevelItem::FloorFilterLevelItem(QObject* parent) :
     FloorFilterLevelItem(nullptr, parent)
   {
   }
 
-  /*!
-    \brief Constructs a new empty FloorFilterLevelItem object with a given \a parent and
-    \a floorLevel to wrap.
-   */
   FloorFilterLevelItem::FloorFilterLevelItem(FloorLevel* floorLevel, QObject* parent) :
     QObject(parent),
     m_floorLevel(floorLevel)
   {
   }
 
-  /*!
-   \brief Destructor.
-   */
   FloorFilterLevelItem::~FloorFilterLevelItem()
   {
   }
 
-  /*!
-   \brief Change the underlying wrapped item to \a floorLevel.
-   */
   void FloorFilterLevelItem::setFloorLevel(FloorLevel* floorLevel)
   {
     if (m_floorLevel == floorLevel)
@@ -64,44 +50,24 @@ namespace Esri::ArcGISRuntime::Toolkit {
     emit floorLevelChanged();
   }
 
-  /*!
-   \brief Returns the currently wrapped \c floorLevel.
-   */
   FloorLevel* FloorFilterLevelItem::floorLevel() const
   {
     return m_floorLevel;
   }
 
-  /*!
-   \property Esri::ArcGISRuntime::Toolkit::FloorFilterLevelItem::shortName
-   \brief Returns the \c shortName from the wrapped item.
-   */
   QString FloorFilterLevelItem::shortName() const
   {
     return m_floorLevel ? m_floorLevel->shortName() : QString{};
   }
 
-  /*!
-   \property Esri::ArcGISRuntime::Toolkit::FloorFilterLevelItem::longName
-   \brief Returns the \c longName from the wrapped item.
-   */
   QString FloorFilterLevelItem::longName() const
   {
     return m_floorLevel ? m_floorLevel->longName() : QString{};
   }
 
-  /*!
-   \property Esri::ArcGISRuntime::Toolkit::FloorFilterLevelItem::modelId
-   \brief Returns the \c levelId from the wrapped item.
-   */
   QString FloorFilterLevelItem::modelId() const
   {
     return m_floorLevel ? m_floorLevel->levelId() : QString{};
   }
-
-  /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::FloorFilterLevelItem::floorLevelChanged()
-    \brief Signal emitted when the wrapped \l floorLevel changes.
-   */
 
 } // Esri::ArcGISRuntime::Toolkit

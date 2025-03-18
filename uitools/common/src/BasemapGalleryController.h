@@ -16,14 +16,14 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_BASEMAPGALLERYCONTROLLER_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_BASEMAPGALLERYCONTROLLER_H
 
-// Toolkit headers
-#include "BasemapGalleryItem.h"
-#include "Internal/GenericListModel.h"
-
-// ArcGISRuntime headers
+// STL headers
 #include <Basemap.h>
 #include <GeoModel.h>
 #include <Portal.h>
+
+// Other headers
+#include "BasemapGalleryItem.h"
+#include "GenericListModel.h"
 
 // C++ Headers
 #include <mutex>

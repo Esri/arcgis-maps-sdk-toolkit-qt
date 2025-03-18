@@ -16,14 +16,12 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_DOONLOAD_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_DOONLOAD_H
 
-// ArcGISRuntime headers
-#include <Loadable.h>
-#include <MapTypes.h>
-
 // Qt headers
 #include <QObject>
 
-// C++ headers
+// STL headers
+#include <Loadable.h>
+#include <MapTypes.h>
 #include <type_traits>
 
 namespace Esri::ArcGISRuntime::Toolkit {

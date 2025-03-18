@@ -28,7 +28,7 @@ DemoPage {
             //! [Set up BasemapGallery QML]
             BasemapGallery {
                 id: gallery
-                controller: demo.controller
+                // controller: demo.controller
                 anchors {
                     right: parent.right
                     top: parent.top
@@ -50,7 +50,7 @@ DemoPage {
             id: view
             BasemapGallery {
                 id: gallery
-                controller: demo.controller
+                // controller: demo.controller
                 anchors {
                     right: parent.right
                     top: parent.top
