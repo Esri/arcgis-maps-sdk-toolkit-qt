@@ -17,13 +17,17 @@
 #ifndef ArKitPlaneRenderer_H
 #define ArKitPlaneRenderer_H
 
+// C++ API headers
+#include "Deprecated.h"
+
+// Qt headers
 #include <QOpenGLFunctions>
 
 namespace Esri::ArcGISRuntime::Toolkit::Internal {
 
 class ArKitWrapper;
 
-class ArKitPlaneRenderer : public QOpenGLFunctions
+class QRT_DEPRECATED ArKitPlaneRenderer : public QOpenGLFunctions
 {
 public:
   ArKitPlaneRenderer(ArKitWrapper* ArKitWrapper);

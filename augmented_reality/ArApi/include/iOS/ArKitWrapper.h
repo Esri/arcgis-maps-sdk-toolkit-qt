@@ -17,9 +17,13 @@
 #ifndef ArKitWrapper_H
 #define ArKitWrapper_H
 
-#include <QtGlobal>
-#include <QSizeF>
+// C++ API headers
+#include "Deprecated.h"
+
+// Qt headers
 #include <QMatrix4x4>
+#include <QSizeF>
+#include <QtGlobal>
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
@@ -31,7 +35,7 @@ class ArKitFrameRenderer;
 class ArKitPlaneRenderer;
 class ArKitPointCloudRenderer;
 
-class ArKitWrapper
+class QRT_DEPRECATED ArKitWrapper
 {
 public:
   ArKitWrapper(ArcGISArViewInterface* arcGISArView);
