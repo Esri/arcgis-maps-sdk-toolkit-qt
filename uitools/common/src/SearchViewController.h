@@ -21,7 +21,7 @@
 #include <QObject>
 #include <QPointer>
 
-// STL headers
+// ArcGIS Maps SDK headers
 #include <Geometry.h>
 
 // Other headers

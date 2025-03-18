@@ -34,12 +34,12 @@ class BasemapGalleryDemo : public BaseDemo
 {
   Q_OBJECT
   QML_ELEMENT
-  // Q_PROPERTY(Esri::ArcGISRuntime::Toolkit::BasemapGalleryController* controller READ controller CONSTANT)
+  Q_PROPERTY(Esri::ArcGISRuntime::Toolkit::BasemapGalleryController* controller READ controller CONSTANT)
 public:
   Q_INVOKABLE BasemapGalleryDemo(QObject* parent = nullptr);
   ~BasemapGalleryDemo() override;
 
-  // Esri::ArcGISRuntime::Toolkit::BasemapGalleryController* controller() const;
+  Esri::ArcGISRuntime::Toolkit::BasemapGalleryController* controller() const;
 
 protected:
   Esri::ArcGISRuntime::Map* initMap_(QObject* parent) const override;

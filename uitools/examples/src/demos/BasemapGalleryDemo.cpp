@@ -52,10 +52,10 @@ BasemapGalleryDemo::~BasemapGalleryDemo()
 {
 }
 
-// Esri::ArcGISRuntime::Toolkit::BasemapGalleryController* BasemapGalleryDemo::controller() const
-// {
-//   return m_controller;
-// }
+Esri::ArcGISRuntime::Toolkit::BasemapGalleryController* BasemapGalleryDemo::controller() const
+{
+  return m_controller;
+}
 
 Esri::ArcGISRuntime::Map* BasemapGalleryDemo::initMap_(QObject*) const
 {
