@@ -48,6 +48,7 @@ private:
 
 signals:
   void attachmentPopupElementChanged();
+  void attachmentDataFetched(const QByteArray& attachmentData);
 
 public slots:
   void popuplateAttachments();

@@ -84,6 +84,12 @@ Page {
      */
     property var popup: null
 
+    property bool openUrlsExternally: true
+
+    property bool openImagesInternally: true
+
+    property bool openAttachmentsExternally: true
+
     /*!
       \qmlproperty PopupViewController controller
       \brief The Controller handles reading from the PopupManager and monitoring

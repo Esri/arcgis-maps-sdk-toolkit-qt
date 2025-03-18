@@ -49,6 +49,7 @@ public:
 
 signals:
   void mediaPopupElementChanged();
+  void clickedUrl(const QUrl& url);
 
 private:
   GenericListModel* m_popupMediaItems = nullptr;

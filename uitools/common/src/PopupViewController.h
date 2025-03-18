@@ -99,6 +99,9 @@ signals:
 
   void attachmentThumbnailHeightChanged();
 
+  void attachmentDataFetched(const QByteArray& attachmentData);
+  void clickedUrl(const QUrl& url);
+
 private:
   int fieldCount() const;
 

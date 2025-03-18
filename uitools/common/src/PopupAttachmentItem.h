@@ -68,6 +68,7 @@ public:
 
 signals:
   void popupAttachmentItemChanged();
+  void attachmentDataFetched(const QByteArray& attachmentData);
 
 private:
   bool m_fetchingAttachment{false};

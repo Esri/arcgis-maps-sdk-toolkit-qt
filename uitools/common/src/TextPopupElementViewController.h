@@ -43,6 +43,7 @@ public:
 
 signals:
   void textPopupElementChanged();
+  void clickedUrl(const QUrl& url);
 };
 
 } // namespace Toolkit

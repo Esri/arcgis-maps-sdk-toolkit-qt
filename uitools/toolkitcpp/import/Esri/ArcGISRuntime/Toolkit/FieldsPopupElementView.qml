@@ -78,9 +78,16 @@ ListView {
                 }
             }
             onLinkActivated: (link) => {
-                if (link !== "" && link !== undefined) {
+                // propogate url/link to popupView
+                controller.clickedUrl(link);
+                if (link !== "" && link !== undefined && popupView.openUrlsExternally) {
                     Qt.openUrlExternally(link);
                 }
+            }
+
+            HoverHandler {
+                enabled: parent.hoveredLink
+                cursorShape: Qt.PointingHandCursor
             }
         }
     }

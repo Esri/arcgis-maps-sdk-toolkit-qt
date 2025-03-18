@@ -46,6 +46,7 @@ public:
 
 signals:
   void fieldsPopupElementChanged();
+  void clickedUrl(const QUrl& url);
 };
 
 } // namespace Toolkit
