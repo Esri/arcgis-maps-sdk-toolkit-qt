@@ -2,6 +2,6 @@
 
 # BookmarksView - Qt Quick UI/QML Type
 
-The [BookmarksView - Qt Quick UI/QML Type](https://developers.arcgis.com/qt/toolkit/api-reference/qml-bookmarksview.html) displays a collection of viewpoints represented by bookmarks from either Webmap/Webscene or are programmatically defined. When the user selects a bookmark from the provided list, the viewpoint in the geoView is set to the new bookmark's view extent.
+The [BookmarksView - Qt Quick UI/QML Type](https://developers.arcgis.com/qt/toolkit/api-reference/qml-esri-arcgisruntime-toolkit-bookmarksview.html) displays a collection of viewpoints represented by bookmarks from either Webmap/Webscene or are programmatically defined. When the user selects a bookmark from the provided list, the viewpoint in the geoView is set to the new bookmark's view extent.
 
 ![BookmarksView image](https://developers.arcgis.com/qt/toolkit/api-reference/images/bookmarksView.gif)
