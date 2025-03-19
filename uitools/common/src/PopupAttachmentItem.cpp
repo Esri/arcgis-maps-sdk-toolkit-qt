@@ -26,6 +26,7 @@
 
 // Toolkit headers
 #include "Internal/PopupAttachmentImageProvider.h"
+#include <PopupViewController.h>
 
 /*!
   \internal
@@ -59,12 +60,15 @@ namespace {
   }
 }
 
-PopupAttachmentItem::PopupAttachmentItem(PopupAttachment* popupAttachment, QObject *parent)
+PopupAttachmentItem::PopupAttachmentItem(PopupAttachment* popupAttachment, PopupViewController* popupViewController ,QObject *parent)
   : QObject{parent},
     m_fetchingAttachment{false},
     m_popupAttachment{popupAttachment},
     m_id{QUuid::createUuid()}
 {
+  // connect signal to bubble up attachment data and name to PopupViewController
+  connect(this, &PopupAttachmentItem::attachmentDataFetched, popupViewController, &PopupViewController::attachmentDataFetched);
+
   PopupAttachmentImageProvider::instance()->registerItem(this);
 }
 

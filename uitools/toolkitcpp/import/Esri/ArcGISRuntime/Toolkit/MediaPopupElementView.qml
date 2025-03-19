@@ -184,9 +184,11 @@ ColumnLayout {
                 anchors.fill: parent
 
                 onClicked: {
-                    model.listModelData.mediaImageSourceUrl(model.listModelData.sourceUrl);
+                    if(model.popupMediaType === QmlEnums.PopupMediaTypeImage) {
+                        model.listModelData.mediaImageSourceUrl(model.listModelData.sourceUrl);
+                    }
                     if (model.popupMediaType !== QmlEnums.PopupMediaTypeImage ||
-                            (model.popupMediaType === QmlEnums.PopupMediaTypeImage && popupView.openImagesInternally)) {
+                            (model.popupMediaType === QmlEnums.PopupMediaTypeImage && popupView.openImagesInApp)) {
                         dialogContentLoader.sourceComponent = null;
                         dialogContentLoader.sourceComponent = loader.sourceComponent;
                         fullScreenImageDialog.modelData = model.listModelData;
@@ -195,7 +197,7 @@ ColumnLayout {
                         fullScreenImageDialog.mediaType = model.popupMediaType;
                         fullScreenImageDialog.visible = true;
                     }
-                    if (model.popupMediaType === QmlEnums.PopupMediaTypeImage && !popupView.openImagesInternally) {
+                    if (model.popupMediaType === QmlEnums.PopupMediaTypeImage && !popupView.openImagesInApp) {
                         // emit signal to bubble up link to PopupViewController
                         model.listModelData.clickedUrl(model.listModelData.linkUrl);
                     }

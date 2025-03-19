@@ -27,6 +27,7 @@
 
 // Toolkit headers
 #include <PopupAttachmentItem.h>
+#include <PopupViewController.h>
 
 /*!
   \internal
@@ -35,13 +36,17 @@
 namespace Esri::ArcGISRuntime::Toolkit {
 
 AttachmentsPopupElementViewController::AttachmentsPopupElementViewController(
-    AttachmentsPopupElement* attachmentsPopupElement, QObject* parent)
+    AttachmentsPopupElement* attachmentsPopupElement, PopupViewController* popupViewController, QObject* parent)
   : PopupElementViewItem{attachmentsPopupElement, parent},
     m_popupAttachmentItems{new GenericListModel(&PopupAttachmentItem::staticMetaObject, this)}
 {
-  attachmentsPopupElement->fetchAttachmentsAsync().then([this] ()
+  attachmentsPopupElement->fetchAttachmentsAsync().then(this, [this, popupViewController] ()
   {
-    QMetaObject::invokeMethod(this, "popuplateAttachments", Qt::QueuedConnection);
+    for (auto* popupAttachment : static_cast<AttachmentsPopupElement*>(popupElement())->attachments())
+    {
+      m_popupAttachmentItems->append(new PopupAttachmentItem(popupAttachment, popupViewController, this));
+    }
+    emit attachmentPopupElementChanged();
   });
 }
 
@@ -61,20 +66,6 @@ QString AttachmentsPopupElementViewController::description() const
 GenericListModel* AttachmentsPopupElementViewController::popupAttachmentItems() const
 {
   return m_popupAttachmentItems;
-}
-
-void AttachmentsPopupElementViewController::popuplateAttachments()
-{
-  for (auto* popupAttachment : static_cast<AttachmentsPopupElement*>(popupElement())->attachments())
-  {
-    const auto item = new PopupAttachmentItem(popupAttachment, this);
-    m_popupAttachmentItems->append(item);
-    // bubble up signal to PopupViewController
-    connect(item, &PopupAttachmentItem::attachmentDataFetched,
-            this, &AttachmentsPopupElementViewController::attachmentDataFetched);
-
-  }
-  emit attachmentPopupElementChanged();
 }
 
 } // namespace Esri::ArcGISRuntime::Toolkit

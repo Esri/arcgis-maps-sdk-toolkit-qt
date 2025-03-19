@@ -29,6 +29,8 @@ class AttachmentsPopupElement;
 
 namespace Toolkit {
 
+class PopupViewController;
+
 class AttachmentsPopupElementViewController : public PopupElementViewItem
 {
   Q_OBJECT
@@ -38,7 +40,8 @@ class AttachmentsPopupElementViewController : public PopupElementViewItem
 
 public:
   explicit AttachmentsPopupElementViewController(AttachmentsPopupElement* attachmentsPopupElement,
-                                           QObject* parent = nullptr);
+                                                 PopupViewController* popupViewController,
+                                                 QObject* parent = nullptr);
   ~AttachmentsPopupElementViewController() override;
 
 private:
@@ -48,10 +51,6 @@ private:
 
 signals:
   void attachmentPopupElementChanged();
-  void attachmentDataFetched(const QByteArray& attachmentData, const QString& name);
-
-public slots:
-  void popuplateAttachments();
 
 private:
   GenericListModel* m_popupAttachmentItems = nullptr;

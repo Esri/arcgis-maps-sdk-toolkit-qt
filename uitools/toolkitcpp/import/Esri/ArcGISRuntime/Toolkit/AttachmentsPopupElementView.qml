@@ -128,7 +128,7 @@ ColumnLayout {
                         model.listModelData.downloadAttachment();
                     } else {
                         if (model.listModelData.popupAttachmentType === QmlEnums.PopupAttachmentTypeImage) {
-                            if (popupView.openImagesInternally) {
+                            if (popupView.openImagesInApp) {
                                 fullScreenImage.source = model.listModelData.localData;
                                 fullScreenImageDialog.visible = true;
                             } else {

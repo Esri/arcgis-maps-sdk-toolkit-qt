@@ -25,6 +25,8 @@
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
+class PopupViewController;
+
 class ImagePopupMediaItem : public PopupMediaItem
 {
   Q_OBJECT
@@ -32,7 +34,7 @@ class ImagePopupMediaItem : public PopupMediaItem
   Q_PROPERTY(QUrl linkUrl READ linkUrl NOTIFY imagePopupMediaItemChanged)
 
 public:
-  explicit ImagePopupMediaItem(PopupMedia* popupMedia, QObject* parent = nullptr);
+  explicit ImagePopupMediaItem(PopupMedia* popupMedia, PopupViewController* popupViewController, QObject* parent = nullptr);
   ~ImagePopupMediaItem() override;
 
 private:

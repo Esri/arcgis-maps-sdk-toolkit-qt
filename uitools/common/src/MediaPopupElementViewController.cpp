@@ -23,6 +23,7 @@
 
 // Toolkit headers
 #include <PopupMediaItem.h>
+#include <PopupViewController.h>
 #include <ImagePopupMediaItem.h>
 #include <BarChartPopupMediaItem.h>
 #include <PieChartPopupMediaItem.h>
@@ -35,7 +36,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   This class is an internal implementation detail and is subject to change.
  */
 MediaPopupElementViewController::MediaPopupElementViewController(
-    MediaPopupElement* mediaPopupElement, QObject* parent)
+    MediaPopupElement* mediaPopupElement, PopupViewController* popupViewController, QObject* parent)
   : PopupElementViewItem{mediaPopupElement, parent},
     m_popupMediaItems{new GenericListModel(&PopupMediaItem::staticMetaObject, this)}
 {
@@ -50,55 +51,39 @@ MediaPopupElementViewController::MediaPopupElementViewController(
     switch (popupMediaType)
     {
       case Esri::ArcGISRuntime::PopupMediaType::Image:
-      {
-        const auto imageMedia = new ImagePopupMediaItem(popupMedia, media);
-        // bubble up signal to PopupViewController
-        // bubble up linkUrl signal to PopupViewController. This is the linkUrl to be used for opening in an external browser
-        connect(imageMedia, &ImagePopupMediaItem::clickedUrl, this, &MediaPopupElementViewController::clickedUrl);
-
-        // bubble up sourceUrl signal to PopupViewController. This is the sourceUrl used to display the image inside the PopupView
-        connect(imageMedia, &ImagePopupMediaItem::mediaImageSourceUrl, this, &MediaPopupElementViewController::mediaImageSourceUrl);
-
-        m_popupMediaItems->append(imageMedia);
+        m_popupMediaItems->append(new ImagePopupMediaItem(
+                                    popupMedia,
+                                    popupViewController,
+                                    media)
+                                  );
         break;
-      }
       case Esri::ArcGISRuntime::PopupMediaType::BarChart:
-      {
         m_popupMediaItems->append(new BarChartPopupMediaItem(
                                     popupMedia,
                                     media)
                                   );
         break;
-      }
       case Esri::ArcGISRuntime::PopupMediaType::ColumnChart:
-      {
         m_popupMediaItems->append(new BarChartPopupMediaItem(
                                     popupMedia,
                                     media)
                                   );
         break;
-      }
       case Esri::ArcGISRuntime::PopupMediaType::PieChart:
-      {
         m_popupMediaItems->append(new PieChartPopupMediaItem(
                                     popupMedia,
                                     media)
                                   );
         break;
-      }
       case Esri::ArcGISRuntime::PopupMediaType::LineChart:
-      {
         m_popupMediaItems->append(new LineChartPopupMediaItem(
                                     popupMedia,
                                     media)
                                   );
         break;
-      }
       case Esri::ArcGISRuntime::PopupMediaType::Unknown:
-      {
         Q_UNIMPLEMENTED();
         break;
-      }
     }
   }
 }
