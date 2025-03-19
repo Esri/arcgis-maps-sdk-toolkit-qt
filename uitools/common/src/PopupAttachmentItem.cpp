@@ -144,6 +144,7 @@ void PopupAttachmentItem::downloadAttachment()
       return;
     }
 
+    // emit signal to bubble up attachment data and name to PopupViewController
     emit attachmentDataFetched(attachmentData, name());
     m_localData = m_popupAttachment->attachment()->attachmentUrl();
     m_fetchingAttachment = false;
