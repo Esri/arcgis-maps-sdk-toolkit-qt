@@ -90,9 +90,9 @@ Page {
        For more information see \l{https://doc.qt.io/qt-6/qml-qtqml-qt.html#openUrlExternally-method}{Qt.openUrlExternally}.
 
        Defaults to true.
-       \qmlproperty bool openUrlsExternally
+       \qmlproperty bool openUrlsWithSystemDefaultApplication
      */
-    property bool openUrlsExternally: true
+    property bool openUrlsWithSystemDefaultApplication: true
 
     /*!
        \brief Boolean that controls if the PopupView will attempt to open images with a full screen takeover.
@@ -107,9 +107,9 @@ Page {
        For more information see \l{https://doc.qt.io/qt-6/qml-qtqml-qt.html#openUrlExternally-method}{Qt.openUrlExternally}.
 
        Defaults to true.
-       \qmlproperty bool openAttachmentsExternally
+       \qmlproperty bool openAttachmentsWithSystemDefaultApplication
      */
-    property bool openAttachmentsExternally: true
+    property bool openAttachmentsWithSystemDefaultApplication: true
 
     /*!
       \qmlproperty PopupViewController controller

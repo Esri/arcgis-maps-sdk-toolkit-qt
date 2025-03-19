@@ -90,7 +90,7 @@ ColumnLayout {
                         if (fullScreenImageDialog.mediaType === QmlEnums.PopupMediaTypeImage) {
                             // emit signal to bubble up url to PopupViewController
                             fullScreenImageDialog.modelData.clickedUrl(fullScreenImageDialog.modelData.linkUrl);
-                            if (popupView.openUrlsExternally) {
+                            if (popupView.openUrlsWithSystemDefaultApplication) {
                                 Qt.openUrlExternally(fullScreenImageDialog.modelData.linkUrl);
                             } else {
                                 // user disabled default behavior, so we do nothing

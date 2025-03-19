@@ -135,7 +135,7 @@ ColumnLayout {
                                 // user disabled default behavior, so we do nothing
                             }
                         } else {
-                            if (popupView.openAttachmentsExternally) {
+                            if (popupView.openAttachmentsWithSystemDefaultApplication) {
                                 // This is a known limitation iOS but there are a few mentioned workarounds, https://bugreports.qt.io/browse/QTBUG-42942
                                 // Android currently has a bug logged against this, https://bugreports.qt.io/browse/QTBUG-133702
                                 // We plan on supporting these platforms in the future when it's implemented on iOS and fixed on Android.

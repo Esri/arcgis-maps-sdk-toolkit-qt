@@ -42,7 +42,7 @@ Item {
         onLinkActivated: (link) => {
             // emit signal to bubble up link to PopupViewController
             controller.clickedUrl(link);
-            if (link !== "" && link !== undefined && popupView.openUrlsExternally) {
+            if (link !== "" && link !== undefined && popupView.openUrlsWithSystemDefaultApplication) {
                 Qt.openUrlExternally(link);
             }
         }
