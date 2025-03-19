@@ -245,10 +245,7 @@ ColumnLayout {
                     id: columnGV
                     height: delegatePopupMedia.height
                     width: delegatePopupMedia.width
-                    // marginTop: 10
                     marginBottom: 0
-                    // marginLeft: 10
-                    // marginRight: 10
 
                     // Setting a default theme if no color information is provided on the BarSeries
                     // For more information on the MixSeries theme see https://doc.qt.io/qt-6/qtgraphs-overview-theme.html
@@ -328,8 +325,6 @@ ColumnLayout {
                     id: barGV
                     height: delegatePopupMedia.height
                     width: delegatePopupMedia.width
-                    // marginTop: 10
-                    // marginBottom: 10
                     marginLeft: -25
 
                     orientation: Qt.Horizontal
@@ -369,7 +364,6 @@ ColumnLayout {
                         }
 
                         onHover: (name, position, value) => {
-                                     print("hovering");
                             // adding in offsets so the popup is above the cursor
                             barPopup.x = position.x;
                             barPopup.y = position.y -20;
