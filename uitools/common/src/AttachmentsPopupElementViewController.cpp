@@ -49,7 +49,7 @@ AttachmentsPopupElementViewController::~AttachmentsPopupElementViewController() 
 
 QString AttachmentsPopupElementViewController::title() const
 {
-  auto title = static_cast<AttachmentsPopupElement*>(popupElement())->title();
+  const auto title = static_cast<AttachmentsPopupElement*>(popupElement())->title();
   return title != QStringLiteral("") ? title : QStringLiteral("Attachments");
 }
 
