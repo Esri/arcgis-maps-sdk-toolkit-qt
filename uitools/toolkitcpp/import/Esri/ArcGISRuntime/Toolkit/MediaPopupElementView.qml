@@ -106,6 +106,7 @@ ColumnLayout {
             Label {
                 id: label
                 text: isMobile ? qsTr("Tap on the image for more information") : qsTr("Click on the image for more information")
+                visible: fullScreenImageDialog.mediaType === QmlEnums.PopupMediaTypeImage
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignHCenter
             }
