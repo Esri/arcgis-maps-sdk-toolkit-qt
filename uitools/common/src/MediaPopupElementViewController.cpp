@@ -50,38 +50,50 @@ MediaPopupElementViewController::MediaPopupElementViewController(
     switch (popupMediaType)
     {
       case Esri::ArcGISRuntime::PopupMediaType::Image:
-        m_popupMediaItems->append(new ImagePopupMediaItem(
-                                    popupMedia,
-                                    media)
-                                  );
+      {
+        auto imageMedia = new ImagePopupMediaItem(popupMedia, media);
+        // bubble up signal to PopupViewController
+        connect(imageMedia, &ImagePopupMediaItem::clickedUrl, this, &MediaPopupElementViewController::clickedUrl);
+        m_popupMediaItems->append(imageMedia);
         break;
+      }
       case Esri::ArcGISRuntime::PopupMediaType::BarChart:
+      {
         m_popupMediaItems->append(new BarChartPopupMediaItem(
                                     popupMedia,
                                     media)
                                   );
         break;
+      }
       case Esri::ArcGISRuntime::PopupMediaType::ColumnChart:
+      {
         m_popupMediaItems->append(new BarChartPopupMediaItem(
                                     popupMedia,
                                     media)
                                   );
         break;
+      }
       case Esri::ArcGISRuntime::PopupMediaType::PieChart:
+      {
         m_popupMediaItems->append(new PieChartPopupMediaItem(
                                     popupMedia,
                                     media)
                                   );
         break;
+      }
       case Esri::ArcGISRuntime::PopupMediaType::LineChart:
+      {
         m_popupMediaItems->append(new LineChartPopupMediaItem(
                                     popupMedia,
                                     media)
                                   );
         break;
+      }
       case Esri::ArcGISRuntime::PopupMediaType::Unknown:
+      {
         Q_UNIMPLEMENTED();
         break;
+      }
     }
   }
 }

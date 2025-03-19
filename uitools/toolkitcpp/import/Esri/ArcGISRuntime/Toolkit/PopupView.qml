@@ -65,6 +65,7 @@ Page {
     id: popupView
 
     /*!
+       \deprecated
        \brief The PopupManager that controls the information being displayed in
        the view.
 

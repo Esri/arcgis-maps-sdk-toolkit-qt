@@ -42,6 +42,8 @@ public:
   PopupMediaItem(QObject* parent = nullptr) = delete;
   explicit PopupMediaItem(PopupMedia* popupMedia, QObject* parent = nullptr);
 
+  ~PopupMediaItem() override;
+
 private:
   QString title() const;
   QString caption() const;

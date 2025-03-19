@@ -67,7 +67,12 @@ void AttachmentsPopupElementViewController::popuplateAttachments()
 {
   for (auto* popupAttachment : static_cast<AttachmentsPopupElement*>(popupElement())->attachments())
   {
-    m_popupAttachmentItems->append(new PopupAttachmentItem(popupAttachment, this));
+    auto item = new PopupAttachmentItem(popupAttachment, this);
+    m_popupAttachmentItems->append(item);
+    // bubble up signal to PopupViewController
+    connect(item, &PopupAttachmentItem::attachmentDataFetched,
+            this, &AttachmentsPopupElementViewController::attachmentDataFetched);
+
   }
   emit attachmentPopupElementChanged();
 }

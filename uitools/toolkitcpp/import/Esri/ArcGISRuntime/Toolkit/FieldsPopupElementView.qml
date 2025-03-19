@@ -78,7 +78,7 @@ ListView {
                 }
             }
             onLinkActivated: (link) => {
-                // propogate url/link to popupView
+                // emit signal to bubble up link to PopupViewController
                 controller.clickedUrl(link);
                 if (link !== "" && link !== undefined && popupView.openUrlsExternally) {
                     Qt.openUrlExternally(link);

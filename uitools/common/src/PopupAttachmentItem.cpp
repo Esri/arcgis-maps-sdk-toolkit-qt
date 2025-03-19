@@ -18,7 +18,6 @@
 // Qt headers
 #include <QAbstractFileIconProvider>
 #include <QFuture>
-#include <QStandardPaths>
 #include <QtGlobal>
 
 // Maps SDK headers
@@ -136,8 +135,16 @@ void PopupAttachmentItem::downloadAttachment()
 {
   m_fetchingAttachment = true;
   emit popupAttachmentItemChanged();
-  m_popupAttachment->attachment()->fetchDataAsync().then([this] (const QByteArray&)
+  m_popupAttachment->attachment()->fetchDataAsync().then([this] (const QByteArray& attachmentData)
   {
+    if (attachmentData.isEmpty())
+    {
+      m_fetchingAttachment = false;
+      emit popupAttachmentItemChanged();
+      return;
+    }
+
+    emit attachmentDataFetched(attachmentData, name());
     m_localData = m_popupAttachment->attachment()->attachmentUrl();
     m_fetchingAttachment = false;
     // we delay the registration of this until the data has been fetched.
