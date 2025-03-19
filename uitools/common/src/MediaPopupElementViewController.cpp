@@ -113,7 +113,7 @@ QString MediaPopupElementViewController::description() const
 QString MediaPopupElementViewController::title() const
 {
   auto title = static_cast<MediaPopupElement*>(popupElement())->title();
-  return title != QStringLiteral("") ? title : QStringLiteral("Media");
+  return !title.isEmpty() ? title : QStringLiteral("Media");
 }
 
 GenericListModel* MediaPopupElementViewController::popupMediaItems() const
