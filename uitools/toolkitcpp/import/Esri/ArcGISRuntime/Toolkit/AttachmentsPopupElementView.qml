@@ -137,7 +137,7 @@ ColumnLayout {
                         } else {
                             if (popupView.openAttachmentsExternally) {
                                 // This is a known limitation iOS but there are a few mentioned workarounds, https://bugreports.qt.io/browse/QTBUG-42942
-                                // Android currnetly has a bug logged against this, https://bugreports.qt.io/browse/QTBUG-133702
+                                // Android currently has a bug logged against this, https://bugreports.qt.io/browse/QTBUG-133702
                                 // We plan on supporting these platforms in the future when it's implemented on iOS and fixed on Android.
                                 if (Qt.platform.os !== "android" && Qt.platform.os !== "ios") {
                                     Qt.openUrlExternally(model.listModelData.localData);
