@@ -36,8 +36,8 @@ ColumnLayout {
     property real mediaMargin: 10
     property real imageTextMargin: 5
     property real layoutSpacing: 0
-
     property bool isHoverable: true
+    property bool isMobile: (Qt.platform.os === "android" || Qt.platform.os === "ios")
 
     property var controller: null
 
@@ -49,24 +49,73 @@ ColumnLayout {
         height: Overlay.overlay ? Overlay.overlay.height : 0
         anchors.centerIn: Overlay.overlay
 
-        Loader {
-            id: chartsLoader
-            anchors{
-                top: parent.top
-                bottom: closeButton.top
-                left: parent.left
-                right: parent.right
-            }
-        }
+        property string imageTitle: ""
+        property string imageCaption: ""
+        property var modelData: null
+        property var mediaType: null
 
-        Button {
-            id: closeButton
-            text: "Close"
-            anchors {
-                bottom: parent.bottom
-                horizontalCenter: parent.horizontalCenter
+        ColumnLayout {
+            anchors.fill: parent
+            Layout.alignment: Qt.AlignHCenter
+
+            Label {
+                visible: fullScreenImageDialog.imageTitle !== ""
+                text: fullScreenImageDialog.imageTitle
+                font.weight: Font.Bold
+                color: "black"
+                elide: Text.ElideRight
+                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignHCenter
             }
-            onClicked: fullScreenImageDialog.visible = false;
+
+            Label {
+                visible: fullScreenImageDialog.imageCaption !== ""
+                text: fullScreenImageDialog.imageCaption
+                color: "black"
+                elide: Text.ElideRight
+                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignHCenter
+            }
+
+            Loader {
+                id: dialogContentLoader
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+
+                MouseArea {
+                    id: ma
+                    anchors.fill: parent
+
+                    onClicked: {
+                        if (fullScreenImageDialog.mediaType === QmlEnums.PopupMediaTypeImage) {
+                            // emit signal to bubble up url to PopupViewController
+                            fullScreenImageDialog.modelData.clickedUrl(fullScreenImageDialog.modelData.linkUrl);
+                            if (popupView.openUrlsExternally) {
+                                Qt.openUrlExternally(fullScreenImageDialog.modelData.linkUrl);
+                            } else {
+                                // user disabled default behavior, so we do nothing
+                            }
+                        }
+                    }
+
+                    // Images have additional functionality where charts do not. We indicate the former with the pointing hand cursor.
+                    cursorShape: fullScreenImageDialog.mediaType === QmlEnums.PopupMediaTypeImage ? Qt.PointingHandCursor : Qt.ArrowCursor
+                }
+            }
+
+            Label {
+                id: label
+                text: isMobile ? qsTr("Tap on the image for more information") : qsTr("Click on the image for more information")
+                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignHCenter
+            }
+
+            Button {
+                id: closeButton
+                text: "Close"
+                Layout.alignment: Qt.AlignHCenter
+                onClicked: fullScreenImageDialog.visible = false;
+            }
         }
     }
 
@@ -134,11 +183,24 @@ ColumnLayout {
                 anchors.fill: parent
 
                 onClicked: {
-                    // if (popupMediaType === QmlEnums.PopupMediaTypeImage) {
+                    if (model.popupMediaType !== QmlEnums.PopupMediaTypeImage ||
+                            (model.popupMediaType === QmlEnums.PopupMediaTypeImage && popupView.openImagesInternally)) {
+                        dialogContentLoader.sourceComponent = null;
+                        dialogContentLoader.sourceComponent = loader.sourceComponent;
+                        fullScreenImageDialog.modelData = model.listModelData;
+                        fullScreenImageDialog.imageTitle = model.title;
+                        fullScreenImageDialog.imageCaption = model.caption;
+                        fullScreenImageDialog.mediaType = model.popupMediaType;
                         fullScreenImageDialog.visible = true;
-                        chartsLoader.sourceComponent = null;
-                        chartsLoader.sourceComponent = loader.sourceComponent;
-                    // }
+                    }
+                    if (model.popupMediaType === QmlEnums.PopupMediaTypeImage && !popupView.openImagesInternally) {
+                        // emit signal to bubble up link to PopupViewController
+                        model.listModelData.clickedUrl(model.listModelData.linkUrl);
+                    }
+                }
+
+                HoverHandler {
+                    cursorShape: Qt.PointingHandCursor
                 }
             }
 
@@ -173,27 +235,19 @@ ColumnLayout {
                     width: delegatePopupMedia.width
 
                     Layout.leftMargin: mediaPopupElementView.mediaMargin
-
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: {
-                            // saving this as a placeholder. Should fire an event the user could take otherwise
-                            // we define our own default behavior to open the image in full screen mode.
-                            // Qt.openUrlExternally(model.linkUrl);
-                        }
-                    }
                 }
             }
 
             Component {
                 id: columnChartComp
                 GraphsView {
+                    id: columnGV
                     height: delegatePopupMedia.height
                     width: delegatePopupMedia.width
-                    marginTop: 10
-                    marginBottom: 10
-                    marginLeft: 10
-                    marginRight: 10
+                    // marginTop: 10
+                    marginBottom: 0
+                    // marginLeft: 10
+                    // marginRight: 10
 
                     // Setting a default theme if no color information is provided on the BarSeries
                     // For more information on the MixSeries theme see https://doc.qt.io/qt-6/qtgraphs-overview-theme.html
@@ -222,15 +276,18 @@ ColumnLayout {
                                 parent.visible = false;
                         }
 
-                        onHoverEnter: {
+                        onHoverEnter: (name, position, value) => {
                             columnPopup.visible = true;
-                            columnPopup.x = position.x + 10;
-                            columnPopup.y = position.y + 10;
+                            // adding in offsets so the popup is above the cursor
+                            columnPopup.x = position.x + 40;
+                            columnPopup.y = position.y - 20;
+                            columnLabelText.text = value.y;
                         }
 
-                        onHover: {
-                            columnPopup.x = position.x + 10;
-                            columnPopup.y = position.y + 10;
+                        onHover: (name, position, value) => {
+                            // adding in offsets so the popup is above the cursor
+                            columnPopup.x = position.x + 40;
+                            columnPopup.y = position.y - 20;
                             columnLabelText.text = value.y;
                         }
 
@@ -267,11 +324,12 @@ ColumnLayout {
             Component {
                 id: barChartComp
                 GraphsView {
+                    id: barGV
                     height: delegatePopupMedia.height
                     width: delegatePopupMedia.width
-                    marginTop: 10
-                    marginBottom: 10
-                    marginLeft: -50
+                    // marginTop: 10
+                    // marginBottom: 10
+                    marginLeft: -25
 
                     orientation: Qt.Horizontal
 
@@ -301,15 +359,19 @@ ColumnLayout {
                                 parent.visible = false;
                         }
 
-                        onHoverEnter: {
+                        onHoverEnter: (name, position, value) => {
                             barPopup.visible = true;
-                            barPopup.x = position.x + 20;
-                            barPopup.y = position.y + 20;
+                            // adding in offsets so the popup is above the cursor
+                            barPopup.x = position.x;
+                            barPopup.y = position.y - 20;
+                            barPopupText.text = value.y;
                         }
 
-                        onHover: {
-                            barPopup.x = position.x + 20;
-                            barPopup.y = position.y + 20;
+                        onHover: (name, position, value) => {
+                                     print("hovering");
+                            // adding in offsets so the popup is above the cursor
+                            barPopup.x = position.x;
+                            barPopup.y = position.y -20;
                             barPopupText.text = value.y;
                         }
 
@@ -362,58 +424,55 @@ ColumnLayout {
                     }
 
                     PieSeries {
-                        name: "PieSeries"
                         hoverable: isHoverable
                         // PieSeries will take owership of the QList<QPieSlice*> when we call append. This also applies to BarSeries and QBarSet for BarChartPopupMediaItem.
                         // s.a https://doc.qt.io/qt-6/qpieseries.html#append-1
-
-                        PieSlice {
-                            value: 14179
-                        }
-                        PieSlice {
-                            value: 9832
-                        }
-
-                        // Component.onCompleted: {
-                        //     let slices = listModelData.pieSlices;
-                        //     if (slices.length > 0)
-                        //         append(slices);
-                        //     else
-                        //         parent.visible = false;
-                        // }
-
-                        onHoverEnter: {
-                            popup.visible = true;
-                            popup.x = position.x + 20;
-                            popup.y = position.y + 20;
+                        Component.onCompleted: {
+                            let slices = listModelData.pieSlices;
+                            if (slices.length > 0)
+                                append(slices);
+                            else
+                                parent.visible = false;
                         }
 
-                        onHover: {
-                            popup.x = position.x + 20;
-                            popup.y = position.y + 20;
-                            dynamicText.text = value.y;
+                        onHoverEnter: (name, position, value) => {
+                            piePopup.visible = true;
+                            // adding in offsets so the popup is above the cursor
+                            piePopup.x = position.x;
+                            piePopup.y = position.y - 20;
+                            piePopupText.text = value.y;
+                        }
+
+                        onHover: (name, position, value) => {
+                            // adding in offsets so the popup is above the cursor
+                            piePopup.x = position.x;
+                            piePopup.y = position.y - 20;
+                            piePopupText.text = value.y;
                         }
 
                         onHoverExit: {
-                            popup.visible = false;
+                            piePopup.visible = false;
                         }
 
                         Popup {
-                            id: popup
+                            id: piePopup
                             visible: false
                             modal: false
-                            height: dynamicText.height
-                            width: dynamicText.width
+                            topInset: 0
+                            bottomInset: 0
+                            leftInset: 0
+                            rightInset: 0
 
-                            Rectangle {
-                                anchors.fill: parent
-                                color: "white"
-                                border.color: "black"
-                                height: dynamicText.height
-                                width: dynamicText.width
-                                Label {
-                                    id: dynamicText
-                                    anchors.centerIn: parent
+                            topPadding: 5
+                            bottomPadding: 5
+                            leftPadding: 5
+                            rightPadding: 5
+
+                            contentItem: Label {
+                                id: piePopupText
+                                anchors{
+                                    horizontalCenter: parent.horizontalCenter
+                                    verticalCenter: parent.verticalCenter
                                 }
                             }
                         }
@@ -426,10 +485,6 @@ ColumnLayout {
                 GraphsView {
                     height: delegatePopupMedia.height
                     width: delegatePopupMedia.width
-                    marginTop: 10
-                    marginBottom: 10
-                    marginLeft: 10
-                    marginRight: 10
 
                     // Setting a default theme if no color information is provided on the LineSeries
                     // For more information on the MixSeries theme see https://doc.qt.io/qt-6/qtgraphs-overview-theme.html
@@ -453,7 +508,6 @@ ColumnLayout {
 
                     LineSeries {
                         hoverable: isHoverable
-                        name: "LineSeries"
                         Component.onCompleted: {
                             let points = listModelData.linePoints;
                             if (!listModelData.chartColorsEmpty)
@@ -464,21 +518,22 @@ ColumnLayout {
                                 parent.visible = false;
                         }
 
-                        onHoverEnter: {
+                        onHoverEnter: (name, position, value) => {
                             linePopup.visible = true;
-                            linePopup.x = position.x + 20;
-                            linePopup.y = position.y + 20;
+                            // adding in offsets so the popup is above the cursor
+                            linePopup.x = position.x;
+                            linePopup.y = position.y - 20;
+                            linePopupText.text = value.y;
                         }
 
-                        onHover: {
-                            linePopup.x = position.x + 20;
-                            linePopup.y = position.y + 20;
+                        onHover: (name, position, value) => {
+                            // adding in offsets so the popup is above the cursor
+                            linePopup.x = position.x;
+                            linePopup.y = position.y - 20;
                             linePopupText.text = value.y;
                         }
 
                         onHoverExit: {
-                            linePopup.x = position.x + 20;
-                            linePopup.y = position.y + 20;
                             linePopup.visible = false;
                         }
 
