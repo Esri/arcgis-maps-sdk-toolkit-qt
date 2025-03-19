@@ -16,12 +16,12 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_OVERVIEWMAPCONTROLLER_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_OVERVIEWMAPCONTROLLER_H
 
-// ArcGISRUntime Toolkit headers
-#include "Internal/GeoViews.h"
-
 // Qt headers
-#include <QObject>
 #include <QFuture>
+#include <QObject>
+
+// Other headers
+#include "GeoViews.h"
 
 namespace Esri::ArcGISRuntime {
   class Graphic;
@@ -62,7 +62,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     void applyInsetNavigationToSceneView(SceneViewToolkit* view);
 
     void applyMapNavigationToInset(MapViewToolkit* view);
-    void applySceneNavigationToInset(SceneViewToolkit* viiew);
+    void applySceneNavigationToInset(SceneViewToolkit* view);
 
     void disableInteractions();
 

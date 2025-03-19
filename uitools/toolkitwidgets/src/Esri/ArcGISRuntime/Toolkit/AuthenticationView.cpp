@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2021 Esri
  *
@@ -86,8 +87,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     \list
       \li \a parent Parent widget.
     \endlist
-
-    Internally the view will create and maintain its own \l AuthenticationController.
    */
   AuthenticationView::AuthenticationView(QWidget* parent) :
     AuthenticationView(new AuthenticationController{}, parent)

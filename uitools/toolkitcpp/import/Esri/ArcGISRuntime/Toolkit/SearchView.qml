@@ -46,8 +46,6 @@ Pane {
       \qmlproperty SearchViewController controller
       \brief The Controller which performs the search and manages
       the results/suggestions.
-
-       The CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::SearchViewController}{here}.
     */
     property var controller: SearchViewController { }
 
@@ -63,8 +61,6 @@ Pane {
       \qmlproperty bool repeatSearchHereButtonEnabled
       \brief Determines whether a button that allows the user to repeat a search with a spatial constraint is displayed automatically.
       Set to false if you want to use a custom button, for example so that you can place it elsewhere on the map.
-      \l{Esri::ArcGISRuntime::Toolkit::SearchViewController} has properties and methods you can use to determine when the custom button should be visible and to
-      trigger the search repeat behavior.
 
       Defaults to true.
      */

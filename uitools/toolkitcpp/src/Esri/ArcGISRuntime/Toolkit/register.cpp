@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2025 Esri
  *
@@ -46,7 +47,7 @@
 #include "UtilityNetworkTraceStartingPointsModel.h"
 
 // Internal includes
-#include "Internal/BasemapGalleryImageProvider.h"
+#include "BasemapGalleryImageProvider.h"
 
 // ArcGIS includes
 #include <MapQuickView.h>
