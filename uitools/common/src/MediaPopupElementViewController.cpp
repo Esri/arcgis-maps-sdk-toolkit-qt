@@ -53,7 +53,12 @@ MediaPopupElementViewController::MediaPopupElementViewController(
       {
         const auto imageMedia = new ImagePopupMediaItem(popupMedia, media);
         // bubble up signal to PopupViewController
+        // bubble up linkUrl signal to PopupViewController. This is the linkUrl to be used for opening in an external browser
         connect(imageMedia, &ImagePopupMediaItem::clickedUrl, this, &MediaPopupElementViewController::clickedUrl);
+
+        // bubble up sourceUrl signal to PopupViewController. This is the sourceUrl used to display the image inside the PopupView
+        connect(imageMedia, &ImagePopupMediaItem::mediaImageSourceUrl, this, &MediaPopupElementViewController::mediaImageSourceUrl);
+
         m_popupMediaItems->append(imageMedia);
         break;
       }

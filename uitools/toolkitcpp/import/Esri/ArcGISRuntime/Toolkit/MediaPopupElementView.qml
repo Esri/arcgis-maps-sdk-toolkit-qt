@@ -184,6 +184,7 @@ ColumnLayout {
                 anchors.fill: parent
 
                 onClicked: {
+                    model.listModelData.mediaImageSourceUrl(model.listModelData.sourceUrl);
                     if (model.popupMediaType !== QmlEnums.PopupMediaTypeImage ||
                             (model.popupMediaType === QmlEnums.PopupMediaTypeImage && popupView.openImagesInternally)) {
                         dialogContentLoader.sourceComponent = null;

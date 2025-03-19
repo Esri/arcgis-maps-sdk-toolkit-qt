@@ -85,10 +85,28 @@ Page {
      */
     property var popup: null
 
+    /*!
+       \brief Boolean that controls if the PopupView will attempt to open URL's with an external browser.
+
+       Defaults to true.
+       \qmlproperty bool openUrlsExternally
+     */
     property bool openUrlsExternally: true
 
+    /*!
+       \brief Boolean that controls if the PopupView will attempt to open images with an internal viewer.
+
+       Defaults to true.
+       \qmlproperty bool openImagesInternally
+     */
     property bool openImagesInternally: true
 
+    /*!
+       \brief Boolean that controls if the PopupView will attempt to open attachments with an external viewer.
+
+       Defaults to true.
+       \qmlproperty bool openAttachmentsExternally
+     */
     property bool openAttachmentsExternally: true
 
     /*!

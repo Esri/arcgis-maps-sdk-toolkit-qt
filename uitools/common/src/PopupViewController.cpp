@@ -168,8 +168,13 @@ void PopupViewController::setPopup(Popup* popup)
           const auto controller = new MediaPopupElementViewController(static_cast<MediaPopupElement*>(element), m_popup);
           m_popupElementControllerModel->append(controller);
           // bubble up signal to controller for users to connect too
+          // This is the linkUrl to be used for opening in an external browser
           connect(controller, &MediaPopupElementViewController::clickedUrl,
                   this, &PopupViewController::clickedUrl);
+
+          // This is the sourceUrl used to display the image inside the PopupView
+          connect(controller, &MediaPopupElementViewController::mediaImageSourceUrl,
+                  this, &PopupViewController::mediaImageSourceUrl);
           break;
         }
         default:
@@ -398,6 +403,21 @@ void PopupViewController::setAttachmentThumbnailHeight(int height)
 /*!
   \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::attachmentThumbnailHeightChanged()
   \brief Signal emitted when the attachment minimum height changes.
+ */
+
+/*!
+  \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::attachmentDataFetched(const QByteArray& attachmentData, const QString& name)
+  \brief Signal emitted when attachment data has been fetched. This is exposed to the user if they want to define their own handler for the attachment.
+ */
+
+/*!
+  \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::clickedUrl(const QUrl& url)
+  \brief Signal emitted when a URL has been clicked. This is exposed to the user if they want to define their own handler for the url.
+ */
+
+/*!
+  \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::mediaImageSourceUrl(const QUrl& sourceUrl)
+  \brief Signal emitted when a media image has been clicked. This is exposed to the user if they want to define their own handler for the image.
  */
 
 /*!

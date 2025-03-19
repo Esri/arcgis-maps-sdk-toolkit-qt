@@ -50,6 +50,7 @@ public:
 signals:
   void mediaPopupElementChanged();
   void clickedUrl(const QUrl& url);
+  void mediaImageSourceUrl(const QUrl& sourceUrl);
 
 private:
   GenericListModel* m_popupMediaItems = nullptr;
