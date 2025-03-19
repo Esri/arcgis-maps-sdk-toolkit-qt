@@ -2,7 +2,7 @@
 
 # Callout - Qt Quick UI/QML Type
 
-The [Callout - Qt Quick UI/QML Type](https://developers.arcgis.com/qt/toolkit/api-reference/qml-callout.html) is a view for displaying information at a geographic location on a Map. A Callout can be displayed for several different scenarios:
+The [Callout - Qt Quick UI/QML Type](https://developers.arcgis.com/qt/toolkit/api-reference/qml-esri-arcgisruntime-toolkit-callout.html) is a view for displaying information at a geographic location on a Map. A Callout can be displayed for several different scenarios:
 
 - To display the coordinates where a user tapped on the map.
 - To display information about a GeoElement that has been identified on the MapView.
