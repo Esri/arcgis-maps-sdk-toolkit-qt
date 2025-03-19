@@ -138,7 +138,7 @@ void PopupViewController::setPopup(Popup* popup)
       {
         case Esri::ArcGISRuntime::PopupElementType::TextPopupElement:
         {
-          TextPopupElementViewController* controller = new TextPopupElementViewController(static_cast<TextPopupElement*>(element), m_popup);
+          const auto controller = new TextPopupElementViewController(static_cast<TextPopupElement*>(element), m_popup);
           m_popupElementControllerModel->append(controller);
           // bubble up signal to controller for users to connect too
           connect(controller, &TextPopupElementViewController::clickedUrl,
@@ -147,7 +147,7 @@ void PopupViewController::setPopup(Popup* popup)
         }
         case Esri::ArcGISRuntime::PopupElementType::FieldsPopupElement:
         {
-          FieldsPopupElementViewController* controller = new FieldsPopupElementViewController(static_cast<FieldsPopupElement*>(element), m_popup);
+          const auto controller = new FieldsPopupElementViewController(static_cast<FieldsPopupElement*>(element), m_popup);
           m_popupElementControllerModel->append(controller);
           // bubble up signal to controller for users to connect too
           connect(controller, &FieldsPopupElementViewController::clickedUrl,
@@ -156,7 +156,7 @@ void PopupViewController::setPopup(Popup* popup)
         }
         case Esri::ArcGISRuntime::PopupElementType::AttachmentsPopupElement:
         {
-          AttachmentsPopupElementViewController* controller = new AttachmentsPopupElementViewController(static_cast<AttachmentsPopupElement*>(element), m_popup);
+          const auto controller = new AttachmentsPopupElementViewController(static_cast<AttachmentsPopupElement*>(element), m_popup);
           m_popupElementControllerModel->append(controller);
           // bubble up signal to controller for users to connect too
           connect(controller, &AttachmentsPopupElementViewController::attachmentDataFetched,
@@ -165,7 +165,7 @@ void PopupViewController::setPopup(Popup* popup)
         }
         case Esri::ArcGISRuntime::PopupElementType::MediaPopupElement:
         {
-          MediaPopupElementViewController* controller = new MediaPopupElementViewController(static_cast<MediaPopupElement*>(element), m_popup);
+          const auto controller = new MediaPopupElementViewController(static_cast<MediaPopupElement*>(element), m_popup);
           m_popupElementControllerModel->append(controller);
           // bubble up signal to controller for users to connect too
           connect(controller, &MediaPopupElementViewController::clickedUrl,

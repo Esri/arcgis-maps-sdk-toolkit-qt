@@ -51,7 +51,7 @@ MediaPopupElementViewController::MediaPopupElementViewController(
     {
       case Esri::ArcGISRuntime::PopupMediaType::Image:
       {
-        auto imageMedia = new ImagePopupMediaItem(popupMedia, media);
+        const auto imageMedia = new ImagePopupMediaItem(popupMedia, media);
         // bubble up signal to PopupViewController
         connect(imageMedia, &ImagePopupMediaItem::clickedUrl, this, &MediaPopupElementViewController::clickedUrl);
         m_popupMediaItems->append(imageMedia);
