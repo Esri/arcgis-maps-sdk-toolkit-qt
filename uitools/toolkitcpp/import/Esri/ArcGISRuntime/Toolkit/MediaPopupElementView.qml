@@ -62,7 +62,6 @@ ColumnLayout {
                 visible: fullScreenImageDialog.imageTitle !== ""
                 text: fullScreenImageDialog.imageTitle
                 font.weight: Font.Bold
-                color: "black"
                 elide: Text.ElideRight
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignHCenter
@@ -71,7 +70,6 @@ ColumnLayout {
             Label {
                 visible: fullScreenImageDialog.imageCaption !== ""
                 text: fullScreenImageDialog.imageCaption
-                color: "black"
                 elide: Text.ElideRight
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignHCenter
