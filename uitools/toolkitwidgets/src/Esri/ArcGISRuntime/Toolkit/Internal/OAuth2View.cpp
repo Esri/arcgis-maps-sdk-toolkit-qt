@@ -39,6 +39,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
   /*!
   \internal
+  This class is an internal implementation detail and is subject to change.
  */
 
   OAuth2View::OAuth2View(AuthenticationController* controller, QWidget* parent) :

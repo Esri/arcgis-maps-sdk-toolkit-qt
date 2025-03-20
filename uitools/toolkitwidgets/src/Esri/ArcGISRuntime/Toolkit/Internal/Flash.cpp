@@ -25,6 +25,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
   \internal
+  This class is an internal implementation detail and is subject to change.
 */
 
 Flash::Flash(QWidget* parent):

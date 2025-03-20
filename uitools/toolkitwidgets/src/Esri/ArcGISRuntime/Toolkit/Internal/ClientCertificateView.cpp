@@ -27,6 +27,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
   \internal
+  This class is an internal implementation detail and is subject to change.
 */
 
   ClientCertificateView::ClientCertificateView(AuthenticationController* controller, QWidget* parent) :

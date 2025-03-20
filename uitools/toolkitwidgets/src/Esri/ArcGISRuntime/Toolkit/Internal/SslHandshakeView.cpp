@@ -22,6 +22,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
   \internal
+  This class is an internal implementation detail and is subject to change.
 */
 
   SslHandshakeView::SslHandshakeView(AuthenticationController* controller, QWidget* parent) :
