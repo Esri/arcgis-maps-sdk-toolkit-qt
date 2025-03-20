@@ -35,10 +35,8 @@ Item {
     id: overviewMap
 
     /*!
-      \qmlproperty OverviewMapController controller
-      \brief The controller handles binding logic between the OverviewMap and
-      the \c GeoView where applicable.
-     */
+      \internal
+    */
     property var controller: OverviewMapController { }
 
     /*!

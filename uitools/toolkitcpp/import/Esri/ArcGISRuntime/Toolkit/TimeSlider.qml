@@ -80,9 +80,7 @@ Pane {
     property var geoView;
 
     /*!
-      \qmlproperty TimeSliderController controller
-      \brief The controller handles calculating steps and setting extents on the
-       GeoView.
+      \internal
     */
     property var controller: TimeSliderController { }
 

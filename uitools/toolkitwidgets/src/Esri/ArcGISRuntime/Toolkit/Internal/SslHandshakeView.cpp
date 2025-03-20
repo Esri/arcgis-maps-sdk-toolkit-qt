@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2021 Esri
  *
@@ -20,11 +21,8 @@
 namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
-   \internal
-   \class Esri::ArcGISRuntime::Toolkit::SslHandshakeView
-   \inmodule Esri.ArcGISRuntime.Toolkit
-   \brief This is an implementation of dialog for SSL handshake.
- */
+  \internal
+*/
 
   SslHandshakeView::SslHandshakeView(AuthenticationController* controller, QWidget* parent) :
     QWidget(parent),

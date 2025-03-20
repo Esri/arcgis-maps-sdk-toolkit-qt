@@ -75,9 +75,7 @@ Page {
 
 
     /*!
-      \qmlproperty PopupViewController controller
-      \brief The Controller handles reading from the PopupManager and monitoring
-      the list-models.
+      \internal
     */
     property var controller: PopupViewController {}
 

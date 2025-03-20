@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2021 Esri
  *
@@ -25,11 +26,8 @@
 namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
-   \internal
-   \class Esri::ArcGISRuntime::Toolkit::ClientCertificateView
-   \inmodule Esri.ArcGISRuntime.Toolkit
-   \brief This is an implementation of dialog to select a client certificate.
- */
+  \internal
+*/
 
   ClientCertificateView::ClientCertificateView(AuthenticationController* controller, QWidget* parent) :
     QWidget(parent),

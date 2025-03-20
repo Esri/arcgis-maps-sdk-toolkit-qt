@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2021 Esri
  *
@@ -20,11 +21,8 @@
 namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
-   \internal
-   \class Esri::ArcGISRuntime::Toolkit::ClientCertificatePasswordDialog
-   \inmodule Esri.ArcGISRuntime.Toolkit
-   \brief This is an implementation of dialog to request password for client certificate.
- */
+  \internal
+*/
 
   ClientCertificatePasswordDialog::ClientCertificatePasswordDialog(QUrl certificateFile, AuthenticationController* controller, QWidget* parent) :
     QDialog(parent),
@@ -54,9 +52,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
             });
   }
 
-  /*!
-    \brief Destructor
-   */
   ClientCertificatePasswordDialog::~ClientCertificatePasswordDialog()
   {
     delete m_ui;

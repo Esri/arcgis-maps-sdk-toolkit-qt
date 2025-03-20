@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2021 Esri
  *
@@ -37,11 +38,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   }
 
   /*!
-  \brief Constructor.
-  \list
-    \li \a parent Parent widget.
-  \endlist
+  \internal
  */
+
   OAuth2View::OAuth2View(AuthenticationController* controller, QWidget* parent) :
     QWidget(parent),
     m_controller(controller),
