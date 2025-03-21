@@ -187,13 +187,18 @@ ColumnLayout {
                     }
                     if (model.popupMediaType !== QmlEnums.PopupMediaTypeImage ||
                             (model.popupMediaType === QmlEnums.PopupMediaTypeImage && popupView.openImagesInApp)) {
+                        // fullScreenImageDialog.visible = true needs to happen before transfering the source component
+                        // to the full screen takeover Dialog in order to
+                        // use this as a trigger to change the label visibility
+                        // for PieSeries
+                        fullScreenImageDialog.visible = true;
                         dialogContentLoader.sourceComponent = null;
-                        dialogContentLoader.sourceComponent = loader.sourceComponent;
+                        dialogContentLoader.sourceComponent = mediaLoader.sourceComponent;
+
                         fullScreenImageDialog.modelData = model.listModelData;
                         fullScreenImageDialog.imageTitle = model.title;
                         fullScreenImageDialog.imageCaption = model.caption;
                         fullScreenImageDialog.mediaType = model.popupMediaType;
-                        fullScreenImageDialog.visible = true;
                     }
                     if (model.popupMediaType === QmlEnums.PopupMediaTypeImage && !popupView.openImagesInApp) {
                         // emit signal to bubble up link to PopupViewController
@@ -262,15 +267,22 @@ ColumnLayout {
                         tickInterval: Math.abs(max) > Math.abs(min)? max / 3 : Math.abs(min) / 3
                     }
 
+                    axisX: BarCategoryAxis {
+                        id: barAxis
+                        visible: fullScreenImageDialog.visible
+                        subGridVisible: false
+                    }
+
                     BarSeries {
                         hoverable: isHoverable
-
                         // BarSeries will take owership of the QList<QBarSet*> when we call append. This also applies to PieSeries and QPieSlice for PieChartPopupMediaItem.
                         // s.a https://doc.qt.io/qt-6/qbarseries.html#append-1
                         Component.onCompleted: {
                             let sets = listModelData.barSets;
-                            if (sets.length > 0)
+                            if (sets.length > 0) {
                                 append(sets);
+                                barAxis.categories = listModelData.barSetLabels;
+                            }
                             else
                                 parent.visible = false;
                         }
@@ -326,7 +338,7 @@ ColumnLayout {
                     id: barGV
                     height: delegatePopupMedia.height
                     width: delegatePopupMedia.width
-                    marginLeft: -25
+                    marginLeft: fullScreenImageDialog.visible ? 0 : -25
 
                     orientation: Qt.Horizontal
 
@@ -344,16 +356,25 @@ ColumnLayout {
                         tickInterval: Math.abs(max) > Math.abs(min)? max / 3 : Math.abs(min) / 3
                     }
 
+                    axisX: BarCategoryAxis {
+                        id: barAxis
+                        labelsAngle: 90
+                        visible: fullScreenImageDialog.visible
+                        subGridVisible: false
+                    }
+
                     BarSeries {
                         hoverable: isHoverable
                         // BarSeries will take owership of the QList<QBarSet*> when we call append. This also applies to PieSeries and QPieSlice for PieChartPopupMediaItem.
                         // s.a https://doc.qt.io/qt-6/qbarseries.html#append-1
                         Component.onCompleted: {
                             let sets = listModelData.barSets;
-                            if (sets.length > 0)
+                            if (sets.length > 0) {
                                 append(sets);
-                            else
+                                barAxis.categories = listModelData.barSetLabels;
+                            } else {
                                 parent.visible = false;
+                            }
                         }
 
                         onHoverEnter: (name, position, value) => {
@@ -420,7 +441,9 @@ ColumnLayout {
                     }
 
                     PieSeries {
+                        id: pseries
                         hoverable: isHoverable
+                        pieSize: 1.0
                         // PieSeries will take owership of the QList<QPieSlice*> when we call append. This also applies to BarSeries and QBarSet for BarChartPopupMediaItem.
                         // s.a https://doc.qt.io/qt-6/qpieseries.html#append-1
                         Component.onCompleted: {
@@ -429,6 +452,14 @@ ColumnLayout {
                                 append(slices);
                             else
                                 parent.visible = false;
+
+                            // If we are loading the component again for full screen takeover, set lables visibility to true
+                            if (fullScreenImageDialog.visible) {
+                                for (let i = 0; i < pseries.count; i++) {
+                                    pseries.at(i).labelVisible = true;
+                                    pseries.at(i).labelPosition = PieSlice.LabelPosition.InsideHorizontal;
+                                }
+                            }
                         }
 
                         onHoverEnter: (name, position, value) => {
