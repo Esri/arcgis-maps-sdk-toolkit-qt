@@ -20,7 +20,7 @@
 #include <QObject>
 
 // Other headers
-#include "Internal/GenericListModel.h"
+#include "GenericListModel.h"
 #include "PopupElementViewItem.h"
 
 namespace Esri::ArcGISRuntime {

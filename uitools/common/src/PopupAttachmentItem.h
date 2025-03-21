@@ -24,7 +24,7 @@
 #include <QUrl>
 
 // Other headers
-#include "Internal/QmlEnums.h"
+#include "QmlEnums.h"
 
 namespace Esri::ArcGISRuntime {
 
