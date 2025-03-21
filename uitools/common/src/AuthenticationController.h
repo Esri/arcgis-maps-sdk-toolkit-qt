@@ -24,6 +24,10 @@
 #include <QObject>
 #include <QPointer>
 
+namespace Esri::ArcGISRuntime {
+  class AuthenticationChallenge;
+}
+
 namespace Esri::ArcGISRuntime::Toolkit {
 
 class AuthenticationController : public QObject

@@ -18,6 +18,7 @@
 
 // ArcGISRuntime headers
 #include <AuthenticationManager.h>
+#include <AuthenticationChallenge.h>
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
