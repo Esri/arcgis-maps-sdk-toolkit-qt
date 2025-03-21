@@ -182,7 +182,7 @@ ColumnLayout {
                 anchors.fill: parent
 
                 onClicked: {
-                    if(model.popupMediaType === QmlEnums.PopupMediaTypeImage) {
+                    if (model.popupMediaType === QmlEnums.PopupMediaTypeImage) {
                         model.listModelData.mediaImageSourceUrl(model.listModelData.sourceUrl);
                     }
                     if (model.popupMediaType !== QmlEnums.PopupMediaTypeImage ||
