@@ -427,10 +427,10 @@ ColumnLayout {
                 GraphsView {
                     height: delegatePopupMedia.height
                     width: delegatePopupMedia.width
-                    marginTop: -25
-                    marginBottom: -25
-                    marginLeft: -25
-                    marginRight: -25
+                    marginTop: fullScreenImageDialog.visible ? 20 : -25
+                    marginBottom: fullScreenImageDialog.visible ? 20 : -25
+                    marginLeft: fullScreenImageDialog.visible ? 20 : -25
+                    marginRight: fullScreenImageDialog.visible ? 20 : -25
 
                     // Setting a default theme if no color information is provided on the PieSeries
                     // For more information on the MixSeries theme see https://doc.qt.io/qt-6/qtgraphs-overview-theme.html
