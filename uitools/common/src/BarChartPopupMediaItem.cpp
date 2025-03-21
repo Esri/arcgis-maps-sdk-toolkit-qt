@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2025 Esri
  *
@@ -39,9 +40,10 @@ BarChartPopupMediaItem::BarChartPopupMediaItem(PopupMedia* popupMedia, QObject* 
 
 BarChartPopupMediaItem::~BarChartPopupMediaItem() = default;
 
-QList<QBarSet*> BarChartPopupMediaItem::barSets()
+QVariantList BarChartPopupMediaItem::barSetLabels() const
 {
-  QList<QBarSet*> barSets;
+  return m_barSetLabels;
+}
 
 QVariantList BarChartPopupMediaItem::barSets()
 {
@@ -55,6 +57,7 @@ QVariantList BarChartPopupMediaItem::barSets()
   {
     const auto label = mediaValue->labels().at(i);
     const auto value = mediaValue->data().at(i).toReal();
+    m_barSetLabels.append(label);
 
     if (value >= m_maxValue)
       m_maxValue = value;

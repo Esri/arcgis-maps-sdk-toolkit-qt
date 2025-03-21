@@ -34,6 +34,7 @@ class BarChartPopupMediaItem : public PopupMediaItem
   Q_PROPERTY(QVariantList barSets READ barSets NOTIFY barChartPopupMediaItemChanged)
   Q_PROPERTY(qreal maxValue READ maxValue NOTIFY barChartPopupMediaItemChanged)
   Q_PROPERTY(qreal minValue READ minValue NOTIFY barChartPopupMediaItemChanged)
+  Q_PROPERTY(QVariantList barSetLabels READ barSetLabels NOTIFY barChartPopupMediaItemChanged)
 
 public:
   explicit BarChartPopupMediaItem(PopupMedia* popupMedia, QObject* parent = nullptr);
@@ -41,6 +42,7 @@ public:
 
 private:
   QVariantList barSets();
+  QVariantList barSetLabels() const;
   qreal maxValue() const;
   qreal minValue() const;
 
@@ -50,6 +52,7 @@ signals:
 private:
   qreal m_maxValue = 0.0;
   qreal m_minValue = 0.0;
+  QVariantList m_barSetLabels;
 };
 
 } // Esri::ArcGISRuntime::Toolkit
