@@ -27,7 +27,7 @@
 #include <PopupManager.h>
 
 // Other headers
-#include "Internal/GenericListModel.h"
+#include "GenericListModel.h"
 
 Q_MOC_INCLUDE("PopupAttachmentListModel.h")
 

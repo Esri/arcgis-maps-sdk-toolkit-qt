@@ -25,7 +25,7 @@
 #include <PopupAttachment.h>
 
 // Toolkit headers
-#include "Internal/PopupAttachmentImageProvider.h"
+#include "PopupAttachmentImageProvider.h"
 #include <PopupViewController.h>
 
 /*!
