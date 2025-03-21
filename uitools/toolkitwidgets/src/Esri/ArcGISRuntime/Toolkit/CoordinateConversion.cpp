@@ -124,8 +124,8 @@ namespace Esri::ArcGISRuntime::Toolkit {
   }
 
   /*!
-  \brief Returns the controller object driving this widget.
- */
+    \internal
+   */
   CoordinateConversionController* CoordinateConversion::controller() const
   {
     return m_controller;

@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2021 Esri
  *
@@ -22,23 +23,10 @@
 namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
-  \class Esri::ArcGISRuntime::Toolkit::UserCredentialView
-  \inmodule Esri.ArcGISRuntime.Toolkit
-  \ingroup ArcGISQtToolkitUiCppWidgetsViews
-  \brief The user interface for displaying a username/password sign-in dialog.
+  \internal
+  This class is an internal implementation detail and is subject to change.
+*/
 
-  This will be used by the AuthenticationView for Token, HTTP Basic, HTTP Digest,
-  and IWA logins.
- */
-
-  /*!
-  \fn UserCredentialView::UserCredentialView(AuthenticationController*, QWidget*)
-  \brief Constructor.
-  \list
-    \li \a controller The authentication challenge controller.
-    \li \a parent Parent widget.
-  \endlist
- */
   UserCredentialView::UserCredentialView(AuthenticationController* controller, QWidget* parent) :
     QWidget(parent),
     m_controller(controller),

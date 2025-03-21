@@ -49,9 +49,7 @@ Control {
     property var geoView
 
     /*!
-      \qmlproperty FloorFilterController controller
-      \brief The controller handles binding logic between the FloorFilter, \c GeoModel, \c FloorManager and
-      the flooraware layers.
+      \internal
     */
     property var controller: FloorFilterController {}
 

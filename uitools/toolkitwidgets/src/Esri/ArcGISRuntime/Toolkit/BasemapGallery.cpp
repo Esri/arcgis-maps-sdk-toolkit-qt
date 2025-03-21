@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2021 Esri
  *
@@ -41,7 +42,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     \li \a parent Parent widget.
   \endlist
 
-  View mantains its associated controller, sets up the view itself and its model.
+  View maintains its associated controller, sets up the view itself and its model.
   \note If this constructor is used, a \c GeoModel must be set separately using \l setGeoModel.
   */
  BasemapGallery::BasemapGallery(QWidget* parent) :
@@ -83,7 +84,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   }
 
   /*!
-    \brief Returns the controller.
+    \internal
    */
   BasemapGalleryController* BasemapGallery::controller() const
   {
@@ -97,7 +98,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     item is selected from the gallery, the GeoModel will be updated with the associated
     basemap.
     \note If \a geomodel is passed as \c nullptr, the current geomodel is unset.
-    \sa BasemapGalleryController::currentBasemap
    */
   void BasemapGallery::setGeoModel(GeoModel* geomodel)
   {

@@ -49,8 +49,7 @@ Item {
     property bool autoHide: false
 
     /*!
-      \qmlproperty NorthArrowController controller
-      \brief The Controller handles connections writing/reading to the GeoView.
+      \internal
     */
     property var controller: NorthArrowController { }
 

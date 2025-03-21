@@ -64,10 +64,7 @@ Pane {
     property var inputFormat: CoordinateConversionResult { }
 
     /*!
-      \qmlproperty CoordinateConversionController controller
-      \brief The Controller handles connections writing/reading to the GeoView,
-      and maintaining our list of textual representations of a single point
-      in multiple formats.
+      \internal
     */
     property var controller: CoordinateConversionController { }
 

@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2020 Esri
  *
@@ -123,7 +124,7 @@ void NorthArrow::mouseDoubleClickEvent(QMouseEvent* event)
 }
 
 /*!
-  \brief Returns the controller object driving this widget.
+  \internal
  */
 NorthArrowController* NorthArrow::controller() const
 {

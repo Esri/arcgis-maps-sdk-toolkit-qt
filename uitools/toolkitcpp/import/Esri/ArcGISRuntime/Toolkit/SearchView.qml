@@ -43,9 +43,7 @@ Pane {
     property var geoView;
 
     /*!
-      \qmlproperty SearchViewController controller
-      \brief The Controller which performs the search and manages
-      the results/suggestions.
+      \internal
     */
     property var controller: SearchViewController { }
 
