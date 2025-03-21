@@ -43,13 +43,8 @@ Control {
     property var mapView;
 
     /*!
-     \qmlproperty ScalebarController controller
-      \brief The controller portion of the Scalebar which handles
-      distance calculations based on the visual properties of the given
-      \l{mapView}.
-
-      The CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::ScalebarController}{here}.
-     */
+      \internal
+    */
     property var controller: ScalebarController { }
 
     spacing: 5

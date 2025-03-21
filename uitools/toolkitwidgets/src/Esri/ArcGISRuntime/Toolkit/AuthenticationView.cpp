@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2021 Esri
  *
@@ -86,8 +87,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     \list
       \li \a parent Parent widget.
     \endlist
-
-    Internally the view will create and maintain its own \l AuthenticationController.
    */
   AuthenticationView::AuthenticationView(QWidget* parent) :
     AuthenticationView(new AuthenticationController{}, parent)
@@ -96,11 +95,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   }
 
   /*!
-  \brief Constructor.
-  \list
-    \li \a controller AuthenticationController which will drive the view.
-    \li \a parent Parent widget.
-  \endlist
+  \internal
  */
   AuthenticationView::AuthenticationView(AuthenticationController* controller, QWidget* parent) :
     QDialog(parent),
@@ -124,7 +119,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   }
 
   /*!
-    \brief Returns the controller.
+    \internal
    */
   AuthenticationController* AuthenticationView::controller() const
   {
@@ -132,7 +127,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   }
 
   /*!
-    \brief Sets the controller to \a controller.
+    \internal
    */
   void AuthenticationView::setController(AuthenticationController* controller)
   {
@@ -191,7 +186,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
   /*!
     \fn void Esri::ArcGISRuntime::Toolkit::AuthenticationView::authenticationControllerChanged()
-    \brief Emitted when the controller used to drive the view changes.
+    \internal
    */
 
 } // Esri::ArcGISRuntime::Toolkit

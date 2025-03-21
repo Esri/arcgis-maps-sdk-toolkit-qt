@@ -64,12 +64,7 @@ Pane {
     property var inputFormat: CoordinateConversionResult { }
 
     /*!
-      \qmlproperty CoordinateConversionController controller
-      \brief The Controller handles connections writing/reading to the GeoView,
-      and maintaining our list of textual representations of a single point
-      in multiple formats.
-
-      The CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::CoordinateConversionController}{here}.
+      \internal
     */
     property var controller: CoordinateConversionController { }
 

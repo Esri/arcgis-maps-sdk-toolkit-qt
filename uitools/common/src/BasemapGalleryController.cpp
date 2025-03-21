@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2021 Esri
  *
@@ -16,9 +17,9 @@
 #include "BasemapGalleryController.h"
 
 // Toolkit headers
-#include "Internal/DoOnLoad.h"
-#include "Internal/GeoViews.h"
-#include "Internal/SingleShotConnection.h"
+#include "DoOnLoad.h"
+#include "GeoViews.h"
+#include "SingleShotConnection.h"
 
 // ArcGISRuntime headers
 #include <Basemap.h>
@@ -43,8 +44,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
   namespace {
     /*!
       \internal
-      \brief Convenience function which creates a QPointer for a given type \c{T}
-      which avoids explicitly stating what \c{T} is.
      */
     template <typename T>
     auto qPointerFrom(T* t)
@@ -215,7 +214,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
       Because the basemaps are initially unloaded, Basemap->item() must be used to access the
       basemap metadata. The basemaps are sorted using Basemap->item()->title().
      */
-    void sortBasemapsAndAddToGallery(BasemapGalleryController* self, BasemapListModel* basemaps)
+    void sortBasemapsAndAddToGallery(BasemapGalleryController* self, BasemapListModel* basemaps, bool is3D = false)
     {
       // Convert BasemapListModel into a Basemap* vector and sort basemaps alphabetically using the title
       std::vector<Basemap*> basemapsVector;
@@ -224,18 +223,17 @@ namespace Esri::ArcGISRuntime::Toolkit {
       std::sort(std::begin(basemapsVector), std::end(basemapsVector), [](Basemap* b1, Basemap* b2)
                 {
                   // Check validity of basemap->item() and if title() is empty. If either is true, push to end of list.
-                  if (!b1->item() || b1->item()->title() == "")
+                  if (!b1->item() || b1->item()->title().isEmpty())
                     return false;
-                  else if (!b2->item() || b2->item()->title() == "")
+                  else if (!b2->item() || b2->item()->title().isEmpty())
                     return true;
                   else
                     return b1->item()->title() < b2->item()->title();
                 });
 
-      // For each discovered map, add it to our gallery.
       for (auto basemap : basemapsVector)
       {
-        self->append(basemap);
+        self->append(basemap, is3D);
       }
     }
 
@@ -264,6 +262,19 @@ namespace Esri::ArcGISRuntime::Toolkit {
                            // Notify the demo that the basemaps have changed.
                            emit self->basemapsChanged();
                          });
+
+                         if (qobject_cast<Scene*>(self->geoModel()))
+                         {
+                           portal->fetch3DBasemapsAsync().then(
+                                 [portal, self]()
+                           {
+                             // Sort and append the basemaps to the gallery.
+                             BasemapListModel* basemaps = portal->basemaps3D();
+                             sortBasemapsAndAddToGallery(self, basemaps, true);
+                             // Notify the demo that the basemaps have changed.
+                             emit self->basemapsChanged();
+                           });
+                         }
                        });
       portal->load();
     }
@@ -272,18 +283,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
   /*!
     \inmodule Esri.ArcGISRuntime.Toolkit
     \class Esri::ArcGISRuntime::Toolkit::BasemapGalleryController
-    \brief The controller part of a BasemapGallery. This class handles the
-    management of the BasemapGalleryItem objects, and listening to changes to the current
-    Basemap of an associated GeoModel.
+    \internal
+
+    This class is an internal implementation detail and is subject to change.
    */
 
-  /*!
-    \brief Constructs a new controller object with a given \a parent.
-
-    The controller will automatically populate itself with the developer basemaps from ArcGIS Online.
-
-    The given default basemaps require either an access token or user authentication to be signed into the app.
-   */
   BasemapGalleryController::BasemapGalleryController(QObject* parent) :
     QObject(parent),
     m_portal(new Portal(QUrl("https://arcgis.com"), this)),
@@ -346,26 +350,15 @@ namespace Esri::ArcGISRuntime::Toolkit {
     m_gallery->setTooltipPropertyName("tooltip");
   }
 
-  /*!
-   \brief Destructor.
-   */
   BasemapGalleryController::~BasemapGalleryController()
   {
   }
 
-  /*!
-  \brief Returns the \c GeoModel.
- */
   GeoModel* BasemapGalleryController::geoModel() const
   {
     return m_geoModel;
   }
 
-  /*!
-  \brief Set the GeoModel object this Controller uses to \a geoModel.
-  This function will also extract the basemap from the Geomodel and set it as the current one.
-  Passing a \a geoModel \c nullptr, will unset the current geomodel loaded.
- */
   void BasemapGalleryController::setGeoModel(GeoModel* geoModel)
   {
     if (geoModel == m_geoModel)
@@ -390,39 +383,16 @@ namespace Esri::ArcGISRuntime::Toolkit {
     emit m_gallery->dataChanged(m_gallery->index(0), m_gallery->index(std::max(m_gallery->rowCount() - 1, 0)));
   }
 
-  /*!
-    \brief Returns the known list of available basemaps.
-    Internally, this is a \c GenericListModel with an \c elementType of
-    \c Basemap.
- */
   GenericListModel* BasemapGalleryController::gallery() const
   {
     return m_gallery;
   }
 
-  /*!
-    \brief Returns the current portal if set.
- */
   Portal* BasemapGalleryController::portal() const
   {
     return m_portal;
   }
 
-  /*!
-    \brief Sets the current portal. This resets the gallery.
-
-    When \a portal is set, the basemaps of the Portal
-    are fetched via \c{Portal::fetchBasemapsAsync}.
-
-    This is useful for displaying an organization's basemaps or to display a gallery of the old-style basemaps
-    (which do not require an API key or named user.)
-
-    To display the old-style basemaps do the following:
-
-    \code
-    controller->setPortal(new Portal(QUrl("https://arcgis.com"), this));
-    \endcode
- */
   void BasemapGalleryController::setPortal(Portal* portal)
   {
     if (portal == m_portal)
@@ -466,33 +436,39 @@ namespace Esri::ArcGISRuntime::Toolkit {
                      emit basemapsChanged();
                    });
                  }
+
+                 if (qobject_cast<Scene*>(m_geoModel))
+                 {
+                   if (m_portal->basemaps3D()->rowCount() > 0)
+                   {
+                     for (auto basemap : *m_portal->basemaps3D())
+                     {
+                       append(basemap);
+                     }
+                   }
+                   else
+                   {
+                     m_portal->fetch3DBasemapsAsync().then(
+                     [this]()
+                     {
+                       BasemapListModel* basemaps = m_portal->basemaps3D();
+                       sortBasemapsAndAddToGallery(this, basemaps, true);
+                       emit basemapsChanged();
+                     });
+                   }
+                 }
                });
     }
 
     emit portalChanged();
   }
 
-  /*!
-    \brief Returns the current basemap selected in the BasemapGallery.
-
-    If a GeoModel is set, this is also the basemap applied to that
-    GeoModel.
-
-    It is possible for the current basemap to not be in the gallery.
-   */
   Basemap* BasemapGalleryController::currentBasemap() const
   {
     return m_currentBasemap;
   }
 
-  /*!
-    \brief Sets the current basemap associated with the map/scene
-    of the given GeoModel to \a basemap.
-
-    It is possible for the current basemap to not be in the gallery.
-   */
-  void
-  BasemapGalleryController::setCurrentBasemap(Basemap* basemap)
+  void BasemapGalleryController::setCurrentBasemap(Basemap* basemap)
   {
     auto apply = [basemap, this](Error e)
     {
@@ -535,53 +511,24 @@ namespace Esri::ArcGISRuntime::Toolkit {
     }
   }
 
-  /*!
-    \brief Convenience function that appends a basemap to the gallery.
-
-    \list
-    \li \a basemap Basemap to add to the gallery.
-    \endlist
-
-    This is equivelent to calling
-
-    \code
-    controller->gallery()->append(new BasemapGalleryItem(basemap, controller));
-    \endcode
-
-    Returns \c true if successfully added, false otherwise.
-  */
   bool BasemapGalleryController::append(Basemap* basemap)
   {
+    std::lock_guard<std::mutex> lock(m_galleryAccessMutex);
     return m_gallery->append(new BasemapGalleryItem(basemap, this));
   }
 
-  /*!
-    \brief Convenience function that appends a basemap to the gallery with an overloaded
-    thumbnail and tooltip.
+  bool BasemapGalleryController::append(Basemap* basemap, bool is3D)
+  {
+    std::lock_guard<std::mutex> lock(m_galleryAccessMutex);
+    return m_gallery->append(new BasemapGalleryItem(basemap, {}, {}, is3D, this));
+  }
 
-    \list
-    \li \a basemap Basemap to add to the gallery.
-    \li \a thumbnail Thumbnail to display in the gallery.
-    \li \a tooltip Tooltip to show when mouse hovers over the gallery item.
-    \endlist
-
-    This is equivelent to calling
-
-    \code
-    controller->gallery()->append(new BasemapGalleryItem(basemap, thumbnail, tooltip, controller));
-    \endcode
-   */
   bool BasemapGalleryController::append(Basemap* basemap, QImage thumbnail, QString tooltip)
   {
+    std::lock_guard<std::mutex> lock(m_galleryAccessMutex);
     return m_gallery->append(new BasemapGalleryItem(basemap, std::move(thumbnail), std::move(tooltip), this));
   }
 
-  /*!
-    \internal
-    \brief Given a \a basemap, returns the index of the basemap within the gallery.
-    This comparison is performed via pointer comparison.
-    If the basemap is not found then \c{-1} is returned.
-   */
   int BasemapGalleryController::basemapIndex(Basemap* basemap) const
   {
     for (int i = 0; i < m_gallery->rowCount(); ++i)
@@ -594,12 +541,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     return -1;
   }
 
-  /*!
-   \internal
-   \brief Given a \a basemap, returns whether the spatial reference of its layers
-   match the spatial reference of the GeoModel (and therefore if it is appropriate to apply
-   as the current basemap.)
-   */
   bool BasemapGalleryController::basemapMatchesCurrentSpatialReference(Basemap* basemap) const
   {
     if (!basemap)
@@ -660,27 +601,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     return false;
   }
 
-  /*!
-   \brief Convenience function for QML/C++ users which allows the map/scene to be extracted from a
-   SceneView or MapView assigned to \a view in QML code.
-
-   This is only a concern as [Map/Scene]QuickView does not expose a [Map/Scene] property in QML.
-
-   For example, to hook up BasemapGallery with a MapQuickView (which does not expose a map property):
-
-    \code
-     MapView {
-        BasemapGallery {
-            id: gallery
-            anchors {
-                left: view.left
-                top: view.top
-                margins: 5
-        }
-        onMapChanged: gallery.setGeoModelFromGeoView(this)
-     }
-    \endcode
-  */
   void BasemapGalleryController::setGeoModelFromGeoView(QObject* view)
   {
     //  Workaround as MapQuickView does not expose the map property in QML.
@@ -693,44 +613,5 @@ namespace Esri::ArcGISRuntime::Toolkit {
       setGeoModel(mapView->map());
     }
   }
-
-  /*!
-  \fn void Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::geoModelChanged()
-  \brief Emitted when the geoModel has changed.
- */
-
-  /*!
-  \fn void Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::portalChanged()
-  \brief Emitted when the portal has changed.
- */
-
-  /*!
-  \fn void Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::currentBasemapChanged()
-  \brief Emitted when the current basemap has changed.
- */
-
-  /*!
-  \property Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::geoModel
-  \brief The geoModel the controller is listening for basemap changes.
-  \sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::geoModel()
- */
-
-  /*!
-  \property Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::portal
-  \brief The optional portal the controller queries for basemaps
-  \sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::portal()
- */
-
-  /*!
-  \property Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::currentBasemap
-  \brief The current basemap of in the current geoModel.
-  \sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::currentBasemap()
- */
-
-  /*!
-  \property Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::gallery
-  \brief The gallery of BasemapGalleryItem objects.
-  \sa Esri::ArcGISRuntime::Toolkit::BasemapGalleryController::gallery()
- */
 
 } // Esri::ArcGISRuntime::Toolkit

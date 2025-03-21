@@ -17,6 +17,10 @@
 #ifndef ArKitFrameRenderer_H
 #define ArKitFrameRenderer_H
 
+// C++ API headers
+#include "Deprecated.h"
+
+// Qt headers
 #include <QOpenGLFunctions>
 #include <QOpenGLTexture>
 
@@ -24,7 +28,7 @@ class QOpenGLShaderProgram;
 
 namespace Esri::ArcGISRuntime::Toolkit::Internal {
 
-class ArKitFrameRenderer : public QOpenGLFunctions
+class QRT_DEPRECATED ArKitFrameRenderer : public QOpenGLFunctions
 {
 public:
   ArKitFrameRenderer();

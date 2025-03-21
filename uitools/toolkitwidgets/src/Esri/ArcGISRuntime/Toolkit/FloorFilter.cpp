@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -140,7 +141,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     GeoView but do not know the name of the site or facility.
 
     The user interface is driven from the FloorAware data that is available in the GeoModel's FloorManager.
-  
+
     2D maps and 3D scenes are supported.
 
     \note Double-clicking a site or facility will automatically open the next pane.
@@ -303,11 +304,8 @@ namespace Esri::ArcGISRuntime::Toolkit {
   }
 
   /*!
-    \brief Returns the controller.
-
-    The controller handles binding logic between the FloorFilter, \c GeoModel,
-    \c FloorManager and the flooraware layers.
-    */
+    \internal
+   */
   FloorFilterController* FloorFilter::controller() const
   {
     return m_controller;

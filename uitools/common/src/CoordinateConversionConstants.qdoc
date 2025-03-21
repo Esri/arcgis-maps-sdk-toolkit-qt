@@ -17,5 +17,5 @@
 /*!
   \inmodule EsriArcGISRuntimeToolkit
   \namespace Esri::ArcGISRuntime::Toolkit::CoordinateConversionConstants
-  \brief Contains the constants related to the coordinate conversion tool.
+  \internal
  */

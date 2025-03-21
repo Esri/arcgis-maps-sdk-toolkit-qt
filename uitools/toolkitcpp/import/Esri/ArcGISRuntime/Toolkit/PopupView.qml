@@ -73,7 +73,6 @@ Page {
      */
     property var popupManager: null
 
-
     /*!
        \brief The Popup that controls the information being displayed in
        the view.
@@ -111,11 +110,7 @@ Page {
     property bool openAttachmentsWithSystemDefaultApplication: true
 
     /*!
-      \qmlproperty PopupViewController controller
-      \brief The Controller handles reading from the PopupManager and monitoring
-      the list-models.
-
-      The CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::PopupViewController}{here}.
+      \internal
     */
     property var controller: PopupViewController {}
 

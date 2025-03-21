@@ -45,71 +45,33 @@
 namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
-  \class Esri::ArcGISRuntime::Toolkit::PopupViewController
-  \inmodule ArcGISRuntimeToolkit
-  \ingroup ArcGISQtToolkitUiCppControllers
-  \brief In MVC architecture, this is the controller for the corresponding
-  \c PopupView. This class handles the
-    management of the Different PopupElementViewController objects.
-
-  This controller is a thin wrapper around a \c PopupManager. It re-exposes some
-  \c PopupManager properties, including the number of total rows to render as a
-  property.
+  \internal
+  This class is an internal implementation detail and is subject to change.
  */
 
-/*!
- \brief Constructor
- \list
-   \li \a parent Parent owning \c QObject.
- \endlist
- */
 PopupViewController::PopupViewController(QObject* parent):
   QObject(parent),
   m_popupElementControllerModel(new GenericListModel(&PopupElementViewItem::staticMetaObject, this))
 {
 }
 
-/*!
-  \brief Destructor.
- */
 PopupViewController::~PopupViewController()
 {
 }
 
-/*!
-  \brief Returns the \c PopupManager that populates this controller with data.
- */
 PopupManager* PopupViewController::popupManager() const
 {
   return m_popupManager;
 }
 
-/*!
-  \brief Returns the \c Popup that populates this controller with data, this takes precedence over PopupManager.
- */
 Popup* PopupViewController::popup() const
 {
   return m_popup;
 }
-
-/*!
-    \brief Returns the known list of available PopupElementViewControllers.
-    Internally, this is a \c GenericListModel with an \c elementType of
-    \c TextPopupElementViewController.
- */
 GenericListModel* PopupViewController::popupElementControllers() const
 {
   return m_popupElementControllerModel;
 }
-
-/*!
-  \brief Sets the \c Popup. Setting this will call \l {Esri::ArcGISRuntime::Popup::evaluateExpressionsAsync} {evaluateExpressionsAsync}.
-  Then it will loop through \l {Esri::ArcGISRuntime::Popup::evaluatedElements} {evaluatedElements} and create the corresponding
-  PopupElementController and add it to the \c popupElementControllers. It will notify the popup and title have changed.
-  \list
-  \li \a The \c Popup which will be used to populate the PopupView.
-  \endlist
- */
 void PopupViewController::setPopup(Popup* popup)
 {
   if (m_popup == popup)
@@ -163,14 +125,6 @@ void PopupViewController::setPopup(Popup* popup)
   emit popupChanged();
   emit titleChanged();
 }
-
-/*!
-  \brief Sets the \c PopupManager. Setting this will trigger a notify on all
-  remaining properties.
-  \list
-  \li \a popupManager To deliver data from.
-  \endlist
- */
 void PopupViewController::setPopupManager(PopupManager* popupManager)
 {
   if (popupManager == m_popupManager)
@@ -215,21 +169,11 @@ void PopupViewController::setPopupManager(PopupManager* popupManager)
   emit attachmentThumbnailWidthChanged();
 }
 
-/*!
-  \brief Returns a list model containing the key/value fields of the
-  \c Popup associated with this PopupManager.
-  \note This can be null.
- */
 QAbstractListModel* PopupViewController::displayFields() const
 {
   return m_popupManager ? m_popupManager->displayedFields() : nullptr;
 }
 
-/*!
-  \brief Returns a list model containing the attachment images of the
-  Popup associated with this PopupManager.
-  \note This can be null.
- */
 PopupAttachmentListModel* PopupViewController::attachments() const
 {
   if (!m_popupManager)
@@ -242,12 +186,6 @@ PopupAttachmentListModel* PopupViewController::attachments() const
   return attachmentManager->attachmentsModel();
 }
 
-/*!
-  \internal
-  \brief Exposes the number of rows in the list model returned by
-  \c displayFields. This is a property for QML. In C++ code call
-  \c{displayFields()->rowCount()}.
- */
 int PopupViewController::fieldCount() const
 {
   if (auto displayFields = this->displayFields())
@@ -256,12 +194,6 @@ int PopupViewController::fieldCount() const
   return 0;
 }
 
-/*!
-  \internal
-  \brief Exposes the number of rows in the list model returned by
-  \c attachments. This is a property for QML. In C++ code call
-  \c{attachments()->rowCount()}.
- */
 int PopupViewController::attachmentCount() const
 {
   if (auto attachments = this->attachments())
@@ -270,10 +202,6 @@ int PopupViewController::attachmentCount() const
   return 0;
 }
 
-/*!
-  \brief Returns whether attachments should be displayed or not
-  according to the PopupManager.
- */
 bool PopupViewController::isShowAttachments() const
 {
   // This is re-exposed from PopupManager as PopupManager does not have
@@ -282,9 +210,6 @@ bool PopupViewController::isShowAttachments() const
   return m_popupManager ? m_popupManager->isShowAttachments() : false;
 }
 
-/*!
-  \brief Returns the title of the \c PopupManager.
- */
 QString PopupViewController::title() const
 {
   // This is re-exposed from PopupManager as PopupManager does not have
@@ -293,9 +218,6 @@ QString PopupViewController::title() const
   return m_popup ? m_popup->title() : m_popupManager ? m_popupManager->title() : nullptr;
 }
 
-/*!
-  \brief Returns the minimum attachment thumbnail width.
- */
 int PopupViewController::attachmentThumbnailWidth() const
 {
   auto attachmentModel = attachments();
@@ -305,9 +227,6 @@ int PopupViewController::attachmentThumbnailWidth() const
   return attachmentModel->thumbnailWidth();
 }
 
-/*!
-  \brief Sets the minimum attachment thumbnail width to \a width.
- */
 void PopupViewController::setAttachmentThumbnailWidth(int width)
 {
   auto attachmentModel = attachments();
@@ -317,9 +236,6 @@ void PopupViewController::setAttachmentThumbnailWidth(int width)
   attachmentModel->setThumbnailWidth(width);
 }
 
-/*!
-  \brief Returns the minimum attachment thumbnail width.
- */
 int PopupViewController::attachmentThumbnailHeight() const
 {
   auto attachmentModel = attachments();
@@ -329,9 +245,6 @@ int PopupViewController::attachmentThumbnailHeight() const
   return attachmentModel->thumbnailHeight();
 }
 
-/*!
-  \brief Sets the minimum attachment thumbnail height to \a height.
- */
 void PopupViewController::setAttachmentThumbnailHeight(int height)
 {
   auto attachmentModel = attachments();
@@ -340,43 +253,6 @@ void PopupViewController::setAttachmentThumbnailHeight(int height)
 
   attachmentModel->setThumbnailHeight(height);
 }
-
-/*!
-  \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::popupChanged()
-  \brief Signal emitted when the \c Popup changes.
- */
-
-/*!
-  \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::popupManagerChanged()
-  \brief Signal emitted when the \c PopupManager changes.
- */
-
-/*!
-  \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::titleChanged()
-  \brief Signal emitted when the title changes.
- */
-
-/*!
-  \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::fieldCountChanged()
-  \brief Signal emitted when the number of rows in the \c displayFields
-  list-model changes.
-*/
-
-/*!
-  \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::attachmentCountChanged()
-  \brief Signal emitted when the number of rows in the attachments list-model
-  changes.
- */
-
-/*!
-  \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::attachmentThumbnailWidthChanged()
-  \brief Signal emitted when the attachment minimum width changes.
- */
-
-/*!
-  \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::attachmentThumbnailHeightChanged()
-  \brief Signal emitted when the attachment minimum height changes.
- */
 
 /*!
   \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::attachmentDataFetched(const QByteArray& attachmentData, const QString& name)
@@ -392,45 +268,4 @@ void PopupViewController::setAttachmentThumbnailHeight(int height)
   \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::mediaImageSourceUrl(const QUrl& sourceUrl)
   \brief Signal emitted when a media image has been clicked. This is exposed to the user if they want to define their own handler for the image.
  */
-
-/*!
-  \property Esri::ArcGISRuntime::Toolkit::PopupViewController::showAttachments
- */
-
-/*!
-  \property Esri::ArcGISRuntime::Toolkit::PopupViewController::attachmentThumbnailWidth
- */
-
-/*!
-  \property Esri::ArcGISRuntime::Toolkit::PopupViewController::attachmentThumbnailHeight
- */
-
-/*!
-  \property Esri::ArcGISRuntime::Toolkit::PopupViewController::popup
- */
-
-/*!
-  \property Esri::ArcGISRuntime::Toolkit::PopupViewController::popupManager
- */
-
-/*!
-  \property Esri::ArcGISRuntime::Toolkit::PopupViewController::displayFields
- */
-
-/*!
-  \property Esri::ArcGISRuntime::Toolkit::PopupViewController::fieldCount
- */
-
-/*!
-  \property Esri::ArcGISRuntime::Toolkit::PopupViewController::attachments
- */
-
-/*!
-  \property Esri::ArcGISRuntime::Toolkit::PopupViewController::attachmentCount
- */
-
-/*!
-  \property Esri::ArcGISRuntime::Toolkit::PopupViewController::title
- */
-
 } // Esri::ArcGISRuntime::Toolkit

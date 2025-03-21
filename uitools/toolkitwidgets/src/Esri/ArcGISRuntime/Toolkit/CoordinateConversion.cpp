@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2020 Esri
  *
@@ -24,8 +25,8 @@
 // Toolkit Controller headers
 #include "CoordinateConversionController.h"
 #include "CoordinateConversionResult.h"
-#include "Internal/GenericListModel.h"
-#include "Internal/GenericTableProxyModel.h"
+#include "GenericListModel.h"
+#include "GenericTableProxyModel.h"
 
 // ArcGISRuntime headers
 #include <MapGraphicsView.h>
@@ -123,8 +124,8 @@ namespace Esri::ArcGISRuntime::Toolkit {
   }
 
   /*!
-  \brief Returns the controller object driving this widget.
- */
+    \internal
+   */
   CoordinateConversionController* CoordinateConversion::controller() const
   {
     return m_controller;

@@ -37,6 +37,7 @@ Dialog {
 
     footer: DialogButtonBox {
         Button {
+            id: skipButton
             text: qsTr("Skip")
             DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
         }
@@ -61,7 +62,7 @@ Dialog {
         Label {
             text: qsTr("Invalid username or password.")
             horizontalAlignment: Qt.AlignHCenter
-            visible: controller.currentChallengeFailureCount > 0
+            visible: controller.previousFailureCount > 0
             color: "red"
             background:  Rectangle {
                 color: "#FFCCCC"
@@ -138,5 +139,13 @@ Dialog {
                                                     passwordTextField.text);
             accept();
         }
+    }
+
+    /*!
+      \internal
+      \brief automated testing helper
+     */
+    function clickSkip() {
+        skipButton.clicked();
     }
 }

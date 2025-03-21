@@ -16,14 +16,14 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_COORDINATECONVERSIONCONTROLLER_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_COORDINATECONVERSIONCONTROLLER_H
 
-// Toolkit headers
-#include "CoordinateConversionOption.h"
-#include "Internal/GenericListModel.h"
-
 // Qt headers
 #include <QFuture>
 #include <QObject>
 #include <QString>
+
+// Other headers
+#include "CoordinateConversionOption.h"
+#include "GenericListModel.h"
 
 // Qt forward declarations
 class QAbstractListModel;
@@ -52,7 +52,6 @@ class CoordinateConversionController : public QObject
 public:
 
   Q_INVOKABLE CoordinateConversionController(QObject* parent = nullptr);
-
 
   ~CoordinateConversionController() override;
 

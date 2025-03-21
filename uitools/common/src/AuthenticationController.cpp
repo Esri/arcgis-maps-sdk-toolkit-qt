@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2020 Esri
  *
@@ -16,29 +17,16 @@
 #include "AuthenticationController.h"
 
 // ArcGISRuntime headers
+#include <AuthenticationChallenge.h>
 #include <AuthenticationManager.h>
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
- \class Esri::ArcGISRuntime::Toolkit::AuthenticationController
- \inmodule Esri.ArcGISRuntime.Toolkit
- \ingroup ArcGISQtToolkitUiCppControllers
- \brief In MVC architecture, this is the controller for the corresponding
- AuthenticationView.
-
- This controller is a thin wrapper around the AuthenticationManager. As
- AuthenticationManager challenges are queued, the controller holds onto a
- "current" challenge, which is the challenge the user is presented with, which
- will be discarded once the user chooses an action to perform on the challenge.
+  \internal
+  This class is an internal implementation detail and is subject to change.
  */
 
-/*!
-  \brief Constructor
-  \list
-    \li \a parent Owning QObject.
-  \endlist
- */
 AuthenticationController::AuthenticationController(QObject* parent) :
   QObject(parent)
 {
@@ -71,9 +59,6 @@ AuthenticationController::AuthenticationController(QObject* parent) :
           this, &AuthenticationController::clientCertificatePasswordRequired);
 }
 
-/*!
-  \brief Destructor.
- */
 AuthenticationController::~AuthenticationController()
 {
   // cancel the current challenge on destruction to ensure new challenges can be issued
@@ -82,71 +67,26 @@ AuthenticationController::~AuthenticationController()
     m_currentChallenge->cancel();
 }
 
-/*!
- \brief Adds a certificate and password to the AuthenticationManager.
- \sa clientCertificateInfos
- \list
- \li \a clientCertificate Url of certificate to add.
- \li \a password Optional password to open certificate.
- \endlist
- */
 void AuthenticationController::addClientCertificate(const QUrl& clientCertificate, const QString& password)
 {
   AuthenticationManager::addClientCertificate(clientCertificate, password);
 }
 
-/*!
- \brief Returns the list of ClientCertificateInfo strings currently held by the
- AuthenticationManager.
- \sa addClientCertificate
- */
 QStringList AuthenticationController::clientCertificateInfos() const
 {
   return AuthenticationManager::clientCertificateInfos();
 }
 
-/*!
- \brief Returns the authorization url of the current AuthenticationChallenge.
- */
 QUrl AuthenticationController::currentChallengeUrl() const
 {
     return m_currentChallenge ? m_currentChallenge->authorizationUrl() : QUrl{};
 }
 
-/*!
- \brief Returns the authorization hostname of the current
- AuthenticationChallenge.
- */
 QString AuthenticationController::currentAuthenticatingHost() const
 {
   return m_currentChallenge ? m_currentChallenge->authenticatingHost().toString(): QString{};
 }
 
-/*!
- \brief Returns the type of the current challenge as an int.
-
-  \table
-  \header
-      \li Challenge type
-      \li Constant
-  \row
-      \li \c Unknown
-      \li \c 0
-  \row
-      \li \c UsernamePassword
-      \li \c 1
-  \row
-      \li \c OAuth
-      \li \c 2
-  \row
-      \li \c ClientCertificate
-      \li \c 3
-  \row
-      \li \c SslHandshake
-      \li \c 4
-  \endtable
-
- */
 int AuthenticationController::currentChallengeType() const
 {
   if (m_currentChallenge)
@@ -155,56 +95,21 @@ int AuthenticationController::currentChallengeType() const
       return static_cast<int>(AuthenticationChallengeType::Unknown);
 }
 
-/*!
- \brief Returns the failure count of the current AuthenticationChallenge.
- */
 int AuthenticationController::currentChallengeFailureCount() const
 {
   return m_currentChallenge ? m_currentChallenge->failureCount() : 0;
 }
 
-/*!
- \brief Sets the \l deleteChallengeOnProcessed flag.
-
- \sa deleteChallengeOnProcessed
-
- \list
- \li \a deleteFlag When \c true, the current challenge is deleted after it has
-     been processed. Otherwise the challenge is not deleted after processing.
- \endlist
- */
 void AuthenticationController::setDeleteChallengeOnProcessed(bool deleteFlag)
 {
   m_deleteChallengeOnProcessed = deleteFlag;
 }
 
-/*!
- \brief After a challenge has been processed, the AuthenticationController
- clears the reference to the currently held challenge. When the returned value
- is \c true then the challenge is also deleted when the reference is cleared.
-
- In most cases it is desired to for the controller to clean up challenges that
- have been processed, but this options may be turned off in cases where there
- may be additional references to the AuthenticationChallenge emitted by the
- AuthenticationManager in the codebase.
-
- Defaults to \c true.
-
- \sa setDeleteChallengeOnProcessed
- */
 bool AuthenticationController::deleteChallengeOnProcessed() const
 {
   return m_deleteChallengeOnProcessed;
 }
 
-/*!
- \brief Calls \c continueWithUsernamePassword on the current challenge.
-
- \list
- \li \a username Username string.
- \li \a password Password string.
- \endlist
- */
 void AuthenticationController::continueWithUsernamePassword(const QString& username, const QString& password)
 {
   if (!m_currentChallenge)
@@ -215,13 +120,6 @@ void AuthenticationController::continueWithUsernamePassword(const QString& usern
   c->continueWithUsernamePassword(username, password);
 }
 
-/*!
- \brief Calls \c continueWithOAuthAuthorizationCode on the current challenge.
-
- \list
- \li \a oAuthAuthorizationCode Authorization code.
- \endlist
- */
 void AuthenticationController::continueWithOAuthAuthorizationCode(const QString& oAuthAuthorizationCode)
 {
   if (!m_currentChallenge)
@@ -232,14 +130,6 @@ void AuthenticationController::continueWithOAuthAuthorizationCode(const QString&
   c->continueWithOAuthAuthorizationCode(oAuthAuthorizationCode);
 }
 
-/*!
- \brief Calls \c continueWithClientCertificate on the current challenge.
-
- \list
- \li \a clientCertificateIndex The index is the index of the certificate
-     as seen in \l clientCertificateInfos.
- \endlist
- */
 void AuthenticationController::continueWithClientCertificate(int clientCertificateIndex)
 {
   if (!m_currentChallenge)
@@ -250,14 +140,6 @@ void AuthenticationController::continueWithClientCertificate(int clientCertifica
   c->continueWithClientCertificate(clientCertificateIndex);
 }
 
-/*!
- \brief Calls \c continueWithSslHandshake on the current challenge.
-
- \list
- \li \a trust When true, trusts the misconfigured resource.
- \li \a remember Remember the user's preferences this session.
- \endlist
- */
 void AuthenticationController::continueWithSslHandshake(bool trust, bool remember)
 {
   if (!m_currentChallenge)
@@ -268,9 +150,6 @@ void AuthenticationController::continueWithSslHandshake(bool trust, bool remembe
   c->continueWithSslHandshake(trust, remember);
 }
 
-/*!
- \brief Calls \c cancel on the current challenge.
- */
 void AuthenticationController::cancel()
 {
   if (!m_currentChallenge)
@@ -281,10 +160,6 @@ void AuthenticationController::cancel()
   c->cancel();
 }
 
-/*!
- \brief Calls \c cancelWithError on the current challenge, with the \a title
- and the \a html content from the web view.
- */
 void AuthenticationController::cancelWithError(const QString& title, const QString& html)
 {
   if (!m_currentChallenge)
@@ -295,11 +170,6 @@ void AuthenticationController::cancelWithError(const QString& title, const QStri
   c->cancelWithError(title, html);
 }
 
-/*!
- \internal
- \brief Clears the reference to the current challenge. Also deletes the current
- challenge where applicable.
- */
 void AuthenticationController::cleanup()
 {
   // This controller has the option of
@@ -311,47 +181,5 @@ void AuthenticationController::cleanup()
   m_currentChallenge = nullptr;
   emit currentChallengeChanged();
 }
-
-/*!
-  \fn void Esri::ArcGISRuntime::Toolkit::AuthenticationController::currentChallengeChanged()
-  \brief Emitted when the reference to the current challenge changes.
- */
-
-/*!
-  \fn void Esri::ArcGISRuntime::Toolkit::AuthenticationController::clientCertificateInfosChanged()
-  \brief Emitted when the clientCertificateInfos updates.
-  \sa clientCertificateInfos
- */
-
-/*!
-  \fn void Esri::ArcGISRuntime::Toolkit::AuthenticationController::clientCertificatePasswordRequired(QUrl certificate)
-  \brief Emitted when a \a certificate that was added to the AuthenticationManager requires a password.
-  \sa addClientCertificate
- */
-
-/*!
-  \property Esri::ArcGISRuntime::Toolkit::AuthenticationController::currentChallengeUrl
-  \brief The Url of the current challenge.
- */
-
-/*!
-  \property Esri::ArcGISRuntime::Toolkit::AuthenticationController::currentAuthenticatingHost
-  \brief Authenticating host of current challenge.
- */
-
-/*!
-  \property Esri::ArcGISRuntime::Toolkit::AuthenticationController::currentChallengeType
-  \brief Type of current challenge.
- */
-
-/*!
-  \property Esri::ArcGISRuntime::Toolkit::AuthenticationController::currentChallengeFailureCount
-  \brief Failure count of current challenge.
- */
-
-/*!
-  \property Esri::ArcGISRuntime::Toolkit::AuthenticationController::clientCertificateInfos
-  \brief List of strings representing the certificates held by the AuthenticationManager.
- */
 
 } // Esri::ArcGISRuntime::Toolkit

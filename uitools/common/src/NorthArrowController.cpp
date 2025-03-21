@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2020 Esri
  *
@@ -15,7 +16,7 @@
  ******************************************************************************/
 #include "NorthArrowController.h"
 
-#include "Internal/GeoViews.h"
+#include "GeoViews.h"
 
 #include "Camera.h"
 
@@ -26,39 +27,20 @@
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-  /*!
-    \class Esri::ArcGISRuntime::Toolkit::NorthArrowController
-    \inmodule Esri.ArcGISRuntime.Toolkit
-    \ingroup ArcGISQtToolkitUiCppControllers
-    \brief In MVC architecture, this is the controller for the corresponding
-    \c NorthArrow view.
+/*!
+  \internal
+  This class is an internal implementation detail and is subject to change.
+ */
 
-    This controller calculates the current heading from a GeoView, and allows
-    the \c NorthArrow to apply a given heading to the GeoView.
-   */
-
-  /*!
-    \brief Constructor
-    \list
-      \li \a parent Parent owning \c QObject.
-    \endlist
-   */
   NorthArrowController::NorthArrowController(QObject* parent) :
     QObject(parent)
   {
   }
 
-  /*!
-    \brief Destructor.
-   */
   NorthArrowController::~NorthArrowController()
   {
   }
 
-  /*!
-    \brief Set the heading by rotating the \c MapView or \c SceneView camera
-    to the given \a heading (in degrees).
-   */
   void NorthArrowController::setHeading(double heading)
   {
     if (auto mapView = qobject_cast<MapView*>(m_geoView))
@@ -74,9 +56,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
       Q_UNUSED(future)
     }
   }
-  /*!
-    \brief Returns the calculated heading of this controller in degrees.
-   */
+
   double NorthArrowController::heading() const
   {
     if (auto mapView = qobject_cast<MapView*>(m_geoView))
@@ -87,24 +67,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
     return static_cast<double>(NAN);
   }
 
-  /*!
-    \brief Returns the \c GeoView as a \c QObject.
-   */
   QObject* NorthArrowController::geoView() const
   {
     return m_geoView;
   }
 
-  /*!
-    \brief Set the \c GeoView object this Controller uses.
-
-    Internally this is cast to a \c MapView or SceneView using \c qobject_cast,
-    which is why the paremeter is of form \c QObject and not \c GeoView.
-
-    \list
-      \li \a geoView Object which must inherit from \c GeoView* and \c QObject*.
-    \endlist
-  */
   void NorthArrowController::setGeoView(QObject* geoView)
   {
     if (geoView == m_geoView)
@@ -130,23 +97,5 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     emit geoViewChanged();
   }
-
-  /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::NorthArrowController::geoViewChanged()
-    \brief Emitted when the geoView changes.
-   */
-
-  /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::NorthArrowController::headingChanged()
-    \brief Emitted when the heading changes.
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::NorthArrowController::geoView
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::NorthArrowController::heading
-   */
 
 } // Esri::ArcGISRuntime::Toolkit

@@ -2,6 +2,6 @@
 
 # OverviewMap - Qt Quick UI/QML Type
 
-The [OverviewMap - Qt Quick UI/QML Type](https://developers.arcgis.com/qt/toolkit/api-reference/qml-overviewmap.html) control defines a small "overview" (or "inset") map displaying a representation of the current viewpoint of the given GeoView. For MapViews, the current viewpoint will be represented by a polygon displaying the visible area of the MapView. For SceneViews, the current viewpoint will be represented by a reticle (cross-hairs) displaying the viewpoint center.
+The [OverviewMap - Qt Quick UI/QML Type](https://developers.arcgis.com/qt/toolkit/api-reference/qml-esri-arcgisruntime-toolkit-overviewmap.html) control defines a small "overview" (or "inset") map displaying a representation of the current viewpoint of the given GeoView. For MapViews, the current viewpoint will be represented by a polygon displaying the visible area of the MapView. For SceneViews, the current viewpoint will be represented by a reticle (cross-hairs) displaying the viewpoint center.
 
 ![OverviewMap image](https://developers.arcgis.com/qt/toolkit/api-reference/images/overviewmap.png)

@@ -28,6 +28,7 @@ import QtQuick.Controls
     \brief An item displaying controls for adjusting a scene view's clipping distance.
 
     This item can be used to change manually the clipping distance of the scene.
+    \deprecated
 */
 
 Item {

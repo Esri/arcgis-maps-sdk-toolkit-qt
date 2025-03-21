@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2021 Esri
  *
@@ -18,38 +19,25 @@
 namespace Esri::ArcGISRuntime::Toolkit {
 
   /*!
-    \inmodule Esri.ArcGISRuntime.Toolkit
     \class Esri::ArcGISRuntime::Toolkit::SearchSourceInterface
-    \brief Defines the contract for a search result provider.
+    \internal
+    This class is an internal implementation detail and is subject to change.
    */
 
-  /*!
-    \brief Constructs a new SearchSourceInterface object with a given \a parent.
-   */
   SearchSourceInterface::SearchSourceInterface(QObject* parent) :
     QObject(parent)
   {
   }
 
-  /*!
-    \brief Destructor.
-   */
   SearchSourceInterface::~SearchSourceInterface()
   {
   }
 
-  /*!
-    \brief Returns the name to show when presenting this source in the UI.
-   */
   QString SearchSourceInterface::displayName() const
   {
     return m_displayName;
   }
 
-  /*!
-    \brief Sets the name to show when presenting this source in the UI
-    to \a displayName.
-   */
   void SearchSourceInterface::setDisplayName(QString displayName)
   {
     if (displayName == m_displayName)
@@ -58,78 +46,5 @@ namespace Esri::ArcGISRuntime::Toolkit {
     m_displayName = std::move(displayName);
     emit displayNameChanged();
   }
-
-  // Interface methods.
-
-  /*!
-    \fn int Esri::ArcGISRuntime::Toolkit::SearchSourceInterface::maximumResults() const
-    \brief Returns the maximum results to return when performing a search.
-
-    Most sources default to 6.
-   */
-
-  /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::SearchSourceInterface::setMaximumResults(int maximumResults)
-    \brief Sets the maximum results to return when performing a search to \a maximumResults.
-   */
-
-  /*!
-    \fn int Esri::ArcGISRuntime::Toolkit::SearchSourceInterface::maximumSuggestions() const
-    \brief Returns the maximum suggestions to return when performing a search.
-
-    Most sources default to 6.
-   */
-
-  /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::SearchSourceInterface::setMaximumSuggestions(int maximumSuggestions)
-    \brief Sets the maximum suggestions to return when performing a search to \a maximumSuggestions.
-   */
-
-  /*!
-    \fn Esri::ArcGISRuntime::Point Esri::ArcGISRuntime::Toolkit::SearchSourceInterface::preferredSearchLocation() const
-    \brief Returns the point to be used as an input to searches and suggestions.
-   */
-
-  /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::SearchSourceInterface::setPreferredSearchLocation(Esri::ArcGISRuntime::Point preferredSearchLocation)
-    \brief Sets the point to be used as an input to searches and suggestions to \a preferredSearchLocation.
-   */
-
-  /*!
-    \fn Esri::ArcGISRuntime::SuggestListModel* Esri::ArcGISRuntime::Toolkit::SearchSourceInterface::suggestions() const
-    \brief Returns suggestions.
-   */
-
-  /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::SearchSourceInterface::search(const Esri::ArcGISRuntime::SuggestResult& suggestion, Esri::ArcGISRuntime::Geometry area)
-    \brief Gets search results using \a suggestion as input.
-
-    If \a area is not default constructed, search is restricted to that area.
-   */
-
-  /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::SearchSourceInterface::search(const QString& query, Esri::ArcGISRuntime::Geometry area)
-    \brief Gets search results using \a query as input.
-
-    If \a area is not default constructed, search is restricted to that area.
-   */
-
-  // Signals
-
-  /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::SearchSourceInterface::displayNameChanged()
-    \brief Signal emitted when the \l displayName changes.
-   */
-
-  /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::SearchSourceInterface::searchCompleted(QList<Esri::ArcGISRuntime::Toolkit::SearchResult*> searchResults)
-    \brief Signal emitted when the search completes, giving the found search results as \a searchResults.
-   */
-
-  // Properties
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::SearchSourceInterface::displayName
-   */
 
 } // Esri::ArcGISRuntime::Toolkit

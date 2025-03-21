@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2021 Esri
  *
@@ -17,7 +18,7 @@
 
 // Toolkit headers
 #include "BasemapGalleryItem.h"
-#include "Internal/DoOnLoad.h"
+#include "DoOnLoad.h"
 
 // ArcGISRuntime headers
 #include <Item.h>

@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2019 Esri
  *
@@ -32,6 +33,8 @@
 
   The texture coordinate must be adapted to respect the camera image ratio. These
   coordinates are calculated by the AR core function "transformedUvs".
+
+  \deprecated
  */
 
 using namespace Esri::ArcGISRuntime;

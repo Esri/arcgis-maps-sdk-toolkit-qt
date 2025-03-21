@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -41,7 +42,6 @@
 #include <SpatialReference.h>
 #include <Symbol.h>
 #include <SymbolTypes.h>
-#include <TaskWatcher.h>
 #include <UtilityAssetGroup.h>
 #include <UtilityAssetType.h>
 #include <UtilityElement.h>
@@ -64,9 +64,9 @@
 #include <ErrorException.h>
 
 // Toolkit headers
-#include "Internal/DisconnectOnSignal.h"
-#include "Internal/DoOnLoad.h"
-#include "Internal/GeoViews.h"
+#include "DisconnectOnSignal.h"
+#include "DoOnLoad.h"
+#include "GeoViews.h"
 #include "UtilityNetworkFunctionTraceResult.h"
 #include "UtilityNetworkFunctionTraceResultsModel.h"
 #include "UtilityNetworkTraceStartingPoint.h"
@@ -145,11 +145,8 @@ void connectToGeoView(GeoViewToolkit* geoView, UtilityNetworkTraceController* se
 /*!
 \class Esri::ArcGISRuntime::Toolkit::UtilityNetworkTraceController
 \ingroup ArcGISQtToolkitUiCppControllers
-\inmodule Esri.ArcGISRuntime.Toolkit
-
-\brief In MVC architecture, this is the controller for the corresponding
- Utility Network Trace that enables trace analysis to be performed on a Utility Network with the
- selected named trace configuration and starting points.
+\internal
+This class is an internal implementation detail and is subject to change.
 */
 
 /*!
