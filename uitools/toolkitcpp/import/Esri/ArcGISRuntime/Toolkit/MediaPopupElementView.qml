@@ -175,7 +175,7 @@ ColumnLayout {
             width: 220
 
             Loader {
-                id: loader
+                id: mediaLoader
             }
 
             MouseArea {
@@ -209,19 +209,19 @@ ColumnLayout {
             Component.onCompleted: {
                 switch (popupMediaType) {
                     case QmlEnums.PopupMediaTypeImage:
-                        loader.sourceComponent = imageComp;
+                        mediaLoader.sourceComponent = imageComp;
                         break;
                     case QmlEnums.PopupMediaTypeColumnChart:
-                        loader.sourceComponent = columnChartComp;
+                        mediaLoader.sourceComponent = columnChartComp;
                         break;
                     case QmlEnums.PopupMediaTypeBarChart:
-                        loader.sourceComponent = barChartComp;
+                        mediaLoader.sourceComponent = barChartComp;
                         break;
                     case QmlEnums.PopupMediaTypePieChart:
-                        loader.sourceComponent = pieChartComp;
+                        mediaLoader.sourceComponent = pieChartComp;
                         break;
                     case QmlEnums.PopupMediaTypeLineChart:
-                        loader.sourceComponent = lineChartComp;
+                        mediaLoader.sourceComponent = lineChartComp;
                         break;
                 }
             }
