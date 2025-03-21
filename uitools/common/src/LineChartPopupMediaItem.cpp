@@ -61,7 +61,7 @@ LineChartPopupMediaItem::LineChartPopupMediaItem(PopupMedia* popupMedia, QObject
 
 LineChartPopupMediaItem::~LineChartPopupMediaItem() = default;
 
-QList<QPointF> LineChartPopupMediaItem::linePoints() const
+QVariantList LineChartPopupMediaItem::linePoints() const
 {
   return m_linePoints;
 }

@@ -39,9 +39,9 @@ PieChartPopupMediaItem::PieChartPopupMediaItem(PopupMedia* popupMedia, QObject* 
 
 PieChartPopupMediaItem::~PieChartPopupMediaItem() = default;
 
-QList<QPieSlice*> PieChartPopupMediaItem::pieSlices()
+QVariantList PieChartPopupMediaItem::pieSlices()
 {
-  QList<QPieSlice*> pieSlices;
+  QVariantList pieSlices;
   auto mediaValue = popupMediaItem()->value();
   const auto popupMediaValueDataLength = mediaValue->data().length();
   const auto chartColors = mediaValue->chartColors();
@@ -59,7 +59,7 @@ QList<QPieSlice*> PieChartPopupMediaItem::pieSlices()
       pieSlice->setColor(color);
       pieSlice->setBorderColor(color);
     }
-    pieSlices.append(pieSlice);
+    pieSlices.append(QVariant::fromValue(pieSlice));
   }
   emit pieChartPopupMediaItemChanged();
   return pieSlices;

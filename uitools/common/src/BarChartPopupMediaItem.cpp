@@ -42,6 +42,10 @@ BarChartPopupMediaItem::~BarChartPopupMediaItem() = default;
 QList<QBarSet*> BarChartPopupMediaItem::barSets()
 {
   QList<QBarSet*> barSets;
+
+QVariantList BarChartPopupMediaItem::barSets()
+{
+  QVariantList barSets;
   auto mediaValue = popupMediaItem()->value();
   const auto popupMediaValueDataLength = mediaValue->data().length();
   const auto chartColors = mediaValue->chartColors();
@@ -67,7 +71,7 @@ QList<QBarSet*> BarChartPopupMediaItem::barSets()
       barset->setColor(color);
       barset->setBorderColor(color);
     }
-    barSets.append(barset);
+    barSets.append(QVariant::fromValue(barset));
   }
   emit barChartPopupMediaItemChanged();
   return barSets;

@@ -19,6 +19,7 @@
 // Qt headers
 #include <QJsonArray>
 #include <QObject>
+#include <QVariant>
 
 // Other headers
 #include "PopupMediaItem.h"
@@ -30,14 +31,14 @@ namespace Esri::ArcGISRuntime::Toolkit {
 class PieChartPopupMediaItem : public PopupMediaItem
 {
   Q_OBJECT
-  Q_PROPERTY(QList<QPieSlice*> pieSlices READ pieSlices NOTIFY pieChartPopupMediaItemChanged)
+  Q_PROPERTY(QVariantList pieSlices READ pieSlices NOTIFY pieChartPopupMediaItemChanged)
 
 public:
   explicit PieChartPopupMediaItem(PopupMedia* popupMedia, QObject* parent = nullptr);
   ~PieChartPopupMediaItem() override;
 
 private:
-  QList<QPieSlice*> pieSlices();
+  QVariantList pieSlices();
 
 signals:
   void pieChartPopupMediaItemChanged();
