@@ -154,6 +154,11 @@ set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_IMAGES
     ../common/images/trash.svg
     ../common/images/x.svg
     ../common/images/zoom-to-object.svg
+    ../common/images/video.svg
+    ../common/images/other.svg
+    ../common/images/image.svg
+    ../common/images/file.svg
+    ../common/images/arrow-circle-down.svg
 )
 
 set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_IMAGES_BASE

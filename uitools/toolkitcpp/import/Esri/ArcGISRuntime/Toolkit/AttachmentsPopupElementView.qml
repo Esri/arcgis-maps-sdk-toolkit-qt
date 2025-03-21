@@ -207,7 +207,7 @@ ColumnLayout {
                     Layout.preferredHeight: fileInfoColumn.height
                     Layout.preferredWidth: fileInfoColumn.height
                     visible: !fetchAttachment.running && !model.dataFetched
-                    source: "qrc:/esri.com/imports/Calcite/images/arrow-circle-down.svg"
+                    source: "qrc:/Esri/ArcGISRuntime/Toolkit/arrow-circle-down.svg"
                 }
 
                 BusyIndicator {
