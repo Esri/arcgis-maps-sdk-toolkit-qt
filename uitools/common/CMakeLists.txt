@@ -17,6 +17,8 @@ set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_SOURCES
     # public sources
     ../common/src/ArcGISAuthenticationController.cpp
     ../common/src/AuthenticationController.cpp
+    ../common/src/AttachmentsPopupElementViewController.cpp
+    ../common/src/BarChartPopupMediaItem.cpp
     ../common/src/BasemapGalleryController.cpp
     ../common/src/BasemapGalleryItem.cpp
     ../common/src/BookmarkListItem.cpp
@@ -26,13 +28,21 @@ set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_SOURCES
     ../common/src/CoordinateConversionOption.cpp
     ../common/src/CoordinateConversionResult.cpp
     ../common/src/CoordinateOptionDefaults.cpp
+    ../common/src/FieldsPopupElementViewController.cpp
     ../common/src/FloorFilterController.cpp
     ../common/src/FloorFilterFacilityItem.cpp
     ../common/src/FloorFilterLevelItem.cpp
     ../common/src/FloorFilterSiteItem.cpp
+    ../common/src/ImagePopupMediaItem.cpp
+    ../common/src/LineChartPopupMediaItem.cpp
     ../common/src/LocatorSearchSource.cpp
+    ../common/src/MediaPopupElementViewController.cpp
     ../common/src/NorthArrowController.cpp
     ../common/src/OverviewMapController.cpp
+    ../common/src/PieChartPopupMediaItem.cpp
+    ../common/src/PopupAttachmentItem.cpp
+    ../common/src/PopupElementViewItem.cpp
+    ../common/src/PopupMediaItem.cpp
     ../common/src/PopupViewController.cpp
     ../common/src/ScalebarController.cpp
     ../common/src/SearchResult.cpp
@@ -40,6 +50,7 @@ set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_SOURCES
     ../common/src/SearchSuggestion.cpp
     ../common/src/SearchViewController.cpp
     ../common/src/SmartLocatorSearchSource.cpp
+    ../common/src/TextPopupElementViewController.cpp
     ../common/src/TimeSliderController.cpp
     ../common/src/UtilityNetworkFunctionTraceResult.cpp
     ../common/src/UtilityNetworkFunctionTraceResultsModel.cpp
@@ -54,12 +65,15 @@ set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_SOURCES
     ../common/src/Internal/GenericTableProxyModel.cpp
     ../common/src/Internal/MetaElement.cpp
     ../common/src/Internal/NetworkAuthenticationChallengeRelay.cpp
+    ../common/src/Internal/PopupAttachmentImageProvider.cpp
 )
 
 set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_HEADERS
     #public headers
     ../common/src/ArcGISAuthenticationController.h
     ../common/src/AuthenticationController.h
+    ../common/src/AttachmentsPopupElementViewController.h
+    ../common/src/BarChartPopupMediaItem.h
     ../common/src/BasemapGalleryController.h
     ../common/src/BasemapGalleryItem.h
     ../common/src/BookmarkListItem.h
@@ -69,13 +83,21 @@ set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_HEADERS
     ../common/src/CoordinateConversionOption.h
     ../common/src/CoordinateConversionResult.h
     ../common/src/CoordinateOptionDefaults.h
+    ../common/src/FieldsPopupElementViewController.h
     ../common/src/FloorFilterController.h
     ../common/src/FloorFilterFacilityItem.h
     ../common/src/FloorFilterLevelItem.h
     ../common/src/FloorFilterSiteItem.h
+    ../common/src/ImagePopupMediaItem.h
+    ../common/src/LineChartPopupMediaItem.h
     ../common/src/LocatorSearchSource.h
+    ../common/src/MediaPopupElementViewController.h
     ../common/src/NorthArrowController.h
     ../common/src/OverviewMapController.h
+    ../common/src/PieChartPopupMediaItem.h
+    ../common/src/PopupAttachmentItem.h
+    ../common/src/PopupElementViewItem.h
+    ../common/src/PopupMediaItem.h
     ../common/src/PopupViewController.h
     ../common/src/ScalebarController.h
     ../common/src/SearchResult.h
@@ -83,6 +105,7 @@ set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_HEADERS
     ../common/src/SearchSuggestion.h
     ../common/src/SearchViewController.h
     ../common/src/SmartLocatorSearchSource.h
+    ../common/src/TextPopupElementViewController.h
     ../common/src/TimeSliderController.h
     ../common/src/UtilityNetworkFunctionTraceResult.h
     ../common/src/UtilityNetworkFunctionTraceResultsModel.h
@@ -100,6 +123,7 @@ set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_HEADERS
     ../common/src/Internal/GeoViews.h
     ../common/src/Internal/MetaElement.h
     ../common/src/Internal/NetworkAuthenticationChallengeRelay.h
+    ../common/src/Internal/PopupAttachmentImageProvider.h
     ../common/src/Internal/SingleShotConnection.h
 )
 
