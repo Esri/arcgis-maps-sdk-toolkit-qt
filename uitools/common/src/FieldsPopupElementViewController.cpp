@@ -20,6 +20,9 @@
 #include <PopupElement.h>
 #include <PopupField.h>
 
+// Toolkit headers
+#include "PopupViewController.h"
+
 namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
@@ -27,16 +30,19 @@ namespace Esri::ArcGISRuntime::Toolkit {
   This class is an internal implementation detail and is subject to change.
  */
 FieldsPopupElementViewController::FieldsPopupElementViewController(
-    FieldsPopupElement* fieldsPopupElement, QObject* parent)
+    FieldsPopupElement* fieldsPopupElement, PopupViewController* popupViewController, QObject* parent)
   : PopupElementViewItem{fieldsPopupElement, parent}
 {
+  // bubble up signal to PopupViewController
+  connect(this, &FieldsPopupElementViewController::clickedUrl, popupViewController, &PopupViewController::clickedUrl);
 }
 
 FieldsPopupElementViewController::~FieldsPopupElementViewController() = default;
 
 QString FieldsPopupElementViewController::title() const
 {
-  return static_cast<FieldsPopupElement*>(popupElement())->title();
+  const auto title = static_cast<FieldsPopupElement*>(popupElement())->title();
+  return !title.isEmpty() ? title : QStringLiteral("Fields");
 }
 
 QVariantList FieldsPopupElementViewController::labelsAndValues() const

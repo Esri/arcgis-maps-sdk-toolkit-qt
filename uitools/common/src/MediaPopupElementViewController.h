@@ -31,6 +31,8 @@ class PopupMediaListModel;
 
 namespace Toolkit {
 
+class PopupViewController;
+
 class MediaPopupElementViewController : public PopupElementViewItem
 {
   Q_OBJECT
@@ -40,6 +42,7 @@ class MediaPopupElementViewController : public PopupElementViewItem
 
 public:
   explicit MediaPopupElementViewController(MediaPopupElement* mediaPopupElement,
+                                           PopupViewController* popupViewController,
                                            QObject* parent = nullptr);
   ~MediaPopupElementViewController() override;
 

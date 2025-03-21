@@ -29,6 +29,8 @@ class PopupElement;
 
 namespace Toolkit {
 
+class PopupViewController;
+
 class TextPopupElementViewController : public PopupElementViewItem
 {
   Q_OBJECT
@@ -36,6 +38,7 @@ class TextPopupElementViewController : public PopupElementViewItem
 
 public:
   explicit TextPopupElementViewController(TextPopupElement* textPopupElement,
+                                          PopupViewController* popupViewController,
                                           QObject* parent = nullptr);
   ~TextPopupElementViewController() override;
 
@@ -43,6 +46,7 @@ public:
 
 signals:
   void textPopupElementChanged();
+  void clickedUrl(const QUrl& url);
 };
 
 } // namespace Toolkit

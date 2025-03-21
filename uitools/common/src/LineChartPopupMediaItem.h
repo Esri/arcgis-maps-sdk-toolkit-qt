@@ -21,6 +21,7 @@
 #include <QJsonArray>
 #include <QObject>
 #include <QPointF>
+#include <QVariant>
 
 // Other headers
 #include "PopupMediaItem.h"
@@ -30,7 +31,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 class LineChartPopupMediaItem : public PopupMediaItem
 {
   Q_OBJECT
-  Q_PROPERTY(QList<QPointF> linePoints READ linePoints NOTIFY lineChartPopupMediaItemChanged)
+  Q_PROPERTY(QVariantList linePoints READ linePoints NOTIFY lineChartPopupMediaItemChanged)
   Q_PROPERTY(QColor color READ color NOTIFY lineChartPopupMediaItemChanged)
   Q_PROPERTY(qreal maxValue READ maxValue NOTIFY lineChartPopupMediaItemChanged)
   Q_PROPERTY(qreal minValue READ minValue NOTIFY lineChartPopupMediaItemChanged)
@@ -41,7 +42,7 @@ public:
   ~LineChartPopupMediaItem() override;
 
 private:
-  QList<QPointF> linePoints() const;
+  QVariantList linePoints() const;
   QColor color() const;
   qreal maxValue() const;
   qreal minValue() const;
@@ -51,7 +52,7 @@ signals:
   void lineChartPopupMediaItemChanged();
 
 private:
-  QList<QPointF> m_linePoints;
+  QVariantList m_linePoints;
   QColor m_color;
   qreal m_maxValue = 0.0;
   qreal m_minValue = 0.0;

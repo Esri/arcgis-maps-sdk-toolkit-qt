@@ -32,6 +32,8 @@ PopupMediaItem::PopupMediaItem(PopupMedia* popupMedia, QObject* parent)
 {
 }
 
+PopupMediaItem::~PopupMediaItem() = default;
+
 QString PopupMediaItem::title() const
 {
   return m_popupMedia->title();

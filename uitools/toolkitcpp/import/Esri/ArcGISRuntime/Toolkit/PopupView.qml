@@ -85,6 +85,32 @@ Page {
     property var popup: null
 
     /*!
+       \brief Boolean that controls if the PopupView will attempt to open URL's with an external browser.
+       For more information see \l{https://doc.qt.io/qt-6/qml-qtqml-qt.html#openUrlExternally-method}{Qt.openUrlExternally}.
+
+       Defaults to true.
+       \qmlproperty bool openUrlsWithSystemDefaultApplication
+     */
+    property bool openUrlsWithSystemDefaultApplication: true
+
+    /*!
+       \brief Boolean that controls if the PopupView will attempt to open images with a full screen takeover.
+
+       Defaults to true.
+       \qmlproperty bool openImagesInApp
+     */
+    property bool openImagesInApp: true
+
+    /*!
+       \brief Boolean that controls if the PopupView will attempt to open attachments with an external viewer.
+       For more information see \l{https://doc.qt.io/qt-6/qml-qtqml-qt.html#openUrlExternally-method}{Qt.openUrlExternally}.
+
+       Defaults to true.
+       \qmlproperty bool openAttachmentsWithSystemDefaultApplication
+     */
+    property bool openAttachmentsWithSystemDefaultApplication: true
+
+    /*!
       \qmlproperty PopupViewController controller
       \brief The Controller handles reading from the PopupManager and monitoring
       the list-models.
@@ -278,10 +304,17 @@ Page {
 
                 Component {
                     id: textPopupElementView
-                    TextPopupElementView {
-                        controller: listModelData
-                        width: elementsView.width
-                        height: children.height
+                    Column {
+                        MenuSeparator {
+                            width: elementsView.width
+                            leftPadding: 10
+                            rightPadding: 10
+                        }
+                        TextPopupElementView {
+                            controller: listModelData
+                            width: elementsView.width
+                            height: children.height
+                        }
                     }
                 }
 

@@ -19,6 +19,9 @@
 #include <PopupElement.h>
 #include <TextPopupElement.h>
 
+// Toolkit headers
+#include "PopupViewController.h"
+
 namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
@@ -26,9 +29,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
   This class is an internal implementation detail and is subject to change.
  */
 TextPopupElementViewController::TextPopupElementViewController(
-    TextPopupElement* textPopupElement, QObject* parent)
+    TextPopupElement* textPopupElement, PopupViewController* popupViewController, QObject* parent)
   : PopupElementViewItem{textPopupElement, parent}
 {
+  // bubble up signal to PopupViewController
+  connect(this, &TextPopupElementViewController::clickedUrl, popupViewController, &PopupViewController::clickedUrl);
 }
 
 TextPopupElementViewController::~TextPopupElementViewController() = default;

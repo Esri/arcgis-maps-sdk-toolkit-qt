@@ -39,9 +39,14 @@ BarChartPopupMediaItem::BarChartPopupMediaItem(PopupMedia* popupMedia, QObject* 
 
 BarChartPopupMediaItem::~BarChartPopupMediaItem() = default;
 
-QList<QBarSet*> BarChartPopupMediaItem::barSets()
+QVariantList BarChartPopupMediaItem::barSetLabels() const
 {
-  QList<QBarSet*> barSets;
+  return m_barSetLabels;
+}
+
+QVariantList BarChartPopupMediaItem::barSets()
+{
+  QVariantList barSets;
   auto mediaValue = popupMediaItem()->value();
   const auto popupMediaValueDataLength = mediaValue->data().length();
   const auto chartColors = mediaValue->chartColors();
@@ -51,6 +56,7 @@ QList<QBarSet*> BarChartPopupMediaItem::barSets()
   {
     const auto label = mediaValue->labels().at(i);
     const auto value = mediaValue->data().at(i).toReal();
+    m_barSetLabels.append(label);
 
     if (value >= m_maxValue)
       m_maxValue = value;
@@ -67,7 +73,7 @@ QList<QBarSet*> BarChartPopupMediaItem::barSets()
       barset->setColor(color);
       barset->setBorderColor(color);
     }
-    barSets.append(barset);
+    barSets.append(QVariant::fromValue(barset));
   }
   emit barChartPopupMediaItemChanged();
   return barSets;

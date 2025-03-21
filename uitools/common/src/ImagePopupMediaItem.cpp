@@ -21,6 +21,7 @@
 
 // Toolkit headers
 #include <PopupMediaItem.h>
+#include <PopupViewController.h>
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
@@ -28,9 +29,15 @@ namespace Esri::ArcGISRuntime::Toolkit {
   \internal
   This class is an internal implementation detail and is subject to change.
  */
-ImagePopupMediaItem::ImagePopupMediaItem(PopupMedia* popupMedia, QObject* parent)
+ImagePopupMediaItem::ImagePopupMediaItem(PopupMedia* popupMedia, PopupViewController* popupViewController, QObject* parent)
   : PopupMediaItem{popupMedia, parent}
 {
+  // bubble up signal to PopupViewController
+  // bubble up linkUrl signal to PopupViewController. This is the linkUrl to be used for opening in an external browser
+  connect(this, &ImagePopupMediaItem::clickedUrl, popupViewController, &PopupViewController::clickedUrl);
+
+  // bubble up sourceUrl signal to PopupViewController. This is the sourceUrl used to display the image inside the PopupView
+  connect(this, &ImagePopupMediaItem::mediaImageSourceUrl, popupViewController, &PopupViewController::mediaImageSourceUrl);
 }
 
 ImagePopupMediaItem::~ImagePopupMediaItem() = default;

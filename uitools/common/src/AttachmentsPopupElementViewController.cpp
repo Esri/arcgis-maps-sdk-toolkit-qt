@@ -27,6 +27,7 @@
 
 // Toolkit headers
 #include <PopupAttachmentItem.h>
+#include <PopupViewController.h>
 
 /*!
   \internal
@@ -35,13 +36,17 @@
 namespace Esri::ArcGISRuntime::Toolkit {
 
 AttachmentsPopupElementViewController::AttachmentsPopupElementViewController(
-    AttachmentsPopupElement* attachmentsPopupElement, QObject* parent)
+    AttachmentsPopupElement* attachmentsPopupElement, PopupViewController* popupViewController, QObject* parent)
   : PopupElementViewItem{attachmentsPopupElement, parent},
     m_popupAttachmentItems{new GenericListModel(&PopupAttachmentItem::staticMetaObject, this)}
 {
-  attachmentsPopupElement->fetchAttachmentsAsync().then([this] ()
+  attachmentsPopupElement->fetchAttachmentsAsync().then(this, [this, popupViewController] ()
   {
-    QMetaObject::invokeMethod(this, "popuplateAttachments", Qt::QueuedConnection);
+    for (auto* popupAttachment : static_cast<AttachmentsPopupElement*>(popupElement())->attachments())
+    {
+      m_popupAttachmentItems->append(new PopupAttachmentItem(popupAttachment, popupViewController, this));
+    }
+    emit attachmentPopupElementChanged();
   });
 }
 
@@ -49,7 +54,8 @@ AttachmentsPopupElementViewController::~AttachmentsPopupElementViewController() 
 
 QString AttachmentsPopupElementViewController::title() const
 {
-  return static_cast<AttachmentsPopupElement*>(popupElement())->title();
+  const auto title = static_cast<AttachmentsPopupElement*>(popupElement())->title();
+  return !title.isEmpty() ? title : QStringLiteral("Attachments");
 }
 
 QString AttachmentsPopupElementViewController::description() const
@@ -60,15 +66,6 @@ QString AttachmentsPopupElementViewController::description() const
 GenericListModel* AttachmentsPopupElementViewController::popupAttachmentItems() const
 {
   return m_popupAttachmentItems;
-}
-
-void AttachmentsPopupElementViewController::popuplateAttachments()
-{
-  for (auto* popupAttachment : static_cast<AttachmentsPopupElement*>(popupElement())->attachments())
-  {
-    m_popupAttachmentItems->append(new PopupAttachmentItem(popupAttachment, this));
-  }
-  emit attachmentPopupElementChanged();
 }
 
 } // namespace Esri::ArcGISRuntime::Toolkit

@@ -130,7 +130,7 @@ void PopupViewController::setPopup(Popup* popup)
   if (m_popup)
     connect(m_popup.data(), &QObject::destroyed, this, &PopupViewController::popupChanged);
 
-  m_popup->evaluateExpressionsAsync(this).then([this](const QList<PopupExpressionEvaluation*>&)
+  m_popup->evaluateExpressionsAsync(this).then(this, [this](const QList<PopupExpressionEvaluation*>&)
   {
     for (auto element : m_popup->evaluatedElements())
     {
@@ -138,25 +138,26 @@ void PopupViewController::setPopup(Popup* popup)
       {
         case Esri::ArcGISRuntime::PopupElementType::TextPopupElement:
           m_popupElementControllerModel->append(
-                new TextPopupElementViewController(static_cast<TextPopupElement*>(element), m_popup));
+                new TextPopupElementViewController(static_cast<TextPopupElement*>(element), this, m_popup));
           break;
         case Esri::ArcGISRuntime::PopupElementType::FieldsPopupElement:
           m_popupElementControllerModel->append(
-                new FieldsPopupElementViewController(static_cast<FieldsPopupElement*>(element), m_popup));
+                new FieldsPopupElementViewController(static_cast<FieldsPopupElement*>(element), this, m_popup));
           break;
         case Esri::ArcGISRuntime::PopupElementType::AttachmentsPopupElement:
           m_popupElementControllerModel->append(
-                new AttachmentsPopupElementViewController(static_cast<AttachmentsPopupElement*>(element), m_popup));
+                new AttachmentsPopupElementViewController(static_cast<AttachmentsPopupElement*>(element), this, m_popup));
           break;
         case Esri::ArcGISRuntime::PopupElementType::MediaPopupElement:
           m_popupElementControllerModel->append(
-                new MediaPopupElementViewController(static_cast<MediaPopupElement*>(element), m_popup));
+                new MediaPopupElementViewController(static_cast<MediaPopupElement*>(element), this, m_popup));
           break;
         default:
           Q_UNIMPLEMENTED();
           break;
       }
     }
+    emit popupChanged();
   });
 
   emit popupChanged();
@@ -375,6 +376,21 @@ void PopupViewController::setAttachmentThumbnailHeight(int height)
 /*!
   \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::attachmentThumbnailHeightChanged()
   \brief Signal emitted when the attachment minimum height changes.
+ */
+
+/*!
+  \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::attachmentDataFetched(const QByteArray& attachmentData, const QString& name)
+  \brief Signal emitted when attachment data has been fetched. This is exposed to the user if they want to define their own handler for the attachment.
+ */
+
+/*!
+  \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::clickedUrl(const QUrl& url)
+  \brief Signal emitted when a URL has been clicked. This is exposed to the user if they want to define their own handler for the url.
+ */
+
+/*!
+  \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::mediaImageSourceUrl(const QUrl& sourceUrl)
+  \brief Signal emitted when a media image has been clicked. This is exposed to the user if they want to define their own handler for the image.
  */
 
 /*!

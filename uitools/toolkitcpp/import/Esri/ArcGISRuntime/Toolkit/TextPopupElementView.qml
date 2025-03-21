@@ -40,9 +40,16 @@ Item {
         rightPadding: 10
 
         onLinkActivated: (link) => {
-            if (link !== "" && link !== undefined) {
+            // emit signal to bubble up link to PopupViewController
+            controller.clickedUrl(link);
+            if (link !== "" && link !== undefined && popupView.openUrlsWithSystemDefaultApplication) {
                 Qt.openUrlExternally(link);
             }
+        }
+
+        HoverHandler {
+            enabled: parent.hoveredLink
+            cursorShape: Qt.PointingHandCursor
         }
     }
 }

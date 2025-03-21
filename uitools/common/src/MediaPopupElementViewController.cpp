@@ -23,6 +23,7 @@
 
 // Toolkit headers
 #include <PopupMediaItem.h>
+#include <PopupViewController.h>
 #include <ImagePopupMediaItem.h>
 #include <BarChartPopupMediaItem.h>
 #include <PieChartPopupMediaItem.h>
@@ -35,7 +36,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   This class is an internal implementation detail and is subject to change.
  */
 MediaPopupElementViewController::MediaPopupElementViewController(
-    MediaPopupElement* mediaPopupElement, QObject* parent)
+    MediaPopupElement* mediaPopupElement, PopupViewController* popupViewController, QObject* parent)
   : PopupElementViewItem{mediaPopupElement, parent},
     m_popupMediaItems{new GenericListModel(&PopupMediaItem::staticMetaObject, this)}
 {
@@ -52,6 +53,7 @@ MediaPopupElementViewController::MediaPopupElementViewController(
       case Esri::ArcGISRuntime::PopupMediaType::Image:
         m_popupMediaItems->append(new ImagePopupMediaItem(
                                     popupMedia,
+                                    popupViewController,
                                     media)
                                   );
         break;
@@ -95,7 +97,8 @@ QString MediaPopupElementViewController::description() const
 
 QString MediaPopupElementViewController::title() const
 {
-  return static_cast<MediaPopupElement*>(popupElement())->title();
+  auto title = static_cast<MediaPopupElement*>(popupElement())->title();
+  return !title.isEmpty() ? title : QStringLiteral("Media");
 }
 
 GenericListModel* MediaPopupElementViewController::popupMediaItems() const

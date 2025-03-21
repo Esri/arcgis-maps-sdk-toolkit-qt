@@ -31,13 +31,13 @@ ListView {
 
     height: contentHeight
     interactive: false
-    model: controller.labelsAndValues
+    model: controller ? controller.labelsAndValues : null
     clip: true
     focus: true
     spacing: 10
 
     header: Label {
-        text: controller.title !== "" ? controller.title : "Fields"
+        text: controller ? controller.title : null
         wrapMode: Text.WordWrap
         width: parent.width
         font.pixelSize: 20
@@ -78,9 +78,16 @@ ListView {
                 }
             }
             onLinkActivated: (link) => {
-                if (link !== "" && link !== undefined) {
+                // emit signal to bubble up link to PopupViewController
+                controller.clickedUrl(link);
+                if (link !== "" && link !== undefined && popupView.openUrlsWithSystemDefaultApplication) {
                     Qt.openUrlExternally(link);
                 }
+            }
+
+            HoverHandler {
+                enabled: parent.hoveredLink
+                cursorShape: Qt.PointingHandCursor
             }
         }
     }

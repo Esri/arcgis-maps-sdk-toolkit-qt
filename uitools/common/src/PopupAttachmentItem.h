@@ -32,6 +32,9 @@ class PopupAttachment;
 
 namespace Toolkit
 {
+
+class PopupViewController;
+
 class PopupAttachmentItem : public QObject
 {
   Q_OBJECT
@@ -45,7 +48,7 @@ class PopupAttachmentItem : public QObject
   Q_PROPERTY(QUrl thumbnailUrl READ thumbnailUrl NOTIFY popupAttachmentItemChanged)
 
 public:
-  explicit PopupAttachmentItem(PopupAttachment* popupAttachment, QObject* parent = nullptr);
+  explicit PopupAttachmentItem(PopupAttachment* popupAttachment, PopupViewController* popupViewController, QObject* parent = nullptr);
   ~PopupAttachmentItem() override;
 
   Q_INVOKABLE void downloadAttachment();
@@ -68,6 +71,7 @@ public:
 
 signals:
   void popupAttachmentItemChanged();
+  void attachmentDataFetched(const QByteArray& attachmentData, const QString& name);
 
 private:
   bool m_fetchingAttachment{false};

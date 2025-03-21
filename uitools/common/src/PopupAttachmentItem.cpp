@@ -18,7 +18,6 @@
 // Qt headers
 #include <QAbstractFileIconProvider>
 #include <QFuture>
-#include <QStandardPaths>
 #include <QtGlobal>
 
 // Maps SDK headers
@@ -27,6 +26,7 @@
 
 // Toolkit headers
 #include "Internal/PopupAttachmentImageProvider.h"
+#include <PopupViewController.h>
 
 /*!
   \internal
@@ -60,12 +60,15 @@ namespace {
   }
 }
 
-PopupAttachmentItem::PopupAttachmentItem(PopupAttachment* popupAttachment, QObject *parent)
+PopupAttachmentItem::PopupAttachmentItem(PopupAttachment* popupAttachment, PopupViewController* popupViewController ,QObject *parent)
   : QObject{parent},
     m_fetchingAttachment{false},
     m_popupAttachment{popupAttachment},
     m_id{QUuid::createUuid()}
 {
+  // connect signal to bubble up attachment data and name to PopupViewController
+  connect(this, &PopupAttachmentItem::attachmentDataFetched, popupViewController, &PopupViewController::attachmentDataFetched);
+
   PopupAttachmentImageProvider::instance()->registerItem(this);
 }
 
@@ -136,8 +139,17 @@ void PopupAttachmentItem::downloadAttachment()
 {
   m_fetchingAttachment = true;
   emit popupAttachmentItemChanged();
-  m_popupAttachment->attachment()->fetchDataAsync().then([this] (const QByteArray&)
+  m_popupAttachment->attachment()->fetchDataAsync().then([this] (const QByteArray& attachmentData)
   {
+    if (attachmentData.isEmpty())
+    {
+      m_fetchingAttachment = false;
+      emit popupAttachmentItemChanged();
+      return;
+    }
+
+    // emit signal to bubble up attachment data and name to PopupViewController
+    emit attachmentDataFetched(attachmentData, name());
     m_localData = m_popupAttachment->attachment()->attachmentUrl();
     m_fetchingAttachment = false;
     // we delay the registration of this until the data has been fetched.

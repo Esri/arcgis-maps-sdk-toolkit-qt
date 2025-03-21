@@ -30,7 +30,6 @@ ColumnLayout {
     id: attachmentsPopupElementView
 
     clip: true
-    focus: true
     Layout.fillWidth: true
     spacing: layoutSpacing
 
@@ -44,8 +43,8 @@ ColumnLayout {
         id: fullScreenImageDialog
         modal: true
         visible: false
-        width: Overlay.overlay.width
-        height: Overlay.overlay.height
+        width: Overlay.overlay ? Overlay.overlay.width : 0
+        height: Overlay.overlay ? Overlay.overlay.height : 0
         anchors.centerIn: Overlay.overlay
 
         Image {
@@ -61,7 +60,7 @@ ColumnLayout {
 
         Button {
             id: closeButton
-            text: "Close"
+            text: qsTr("Close")
             anchors {
                 bottom: parent.bottom
                 horizontalCenter: parent.horizontalCenter
@@ -76,13 +75,11 @@ ColumnLayout {
         Layout.rightMargin: attachmentsPopupElementView.mediaMargin
     }
 
-    Column {
-        clip: true
-        focus: true
+    ColumnLayout {
         spacing: attachmentsPopupElementView.layoutSpacing
 
         Label {
-            text: attachmentsPopupElementView.controller.title !== "" ? controller.title : "Attachments"
+            text: attachmentsPopupElementView.controller ? attachmentsPopupElementView.controller.title : null
             wrapMode: Text.WordWrap
             font.pixelSize: 20
             font.weight: Font.Black
@@ -92,8 +89,8 @@ ColumnLayout {
             Layout.rightMargin: attachmentsPopupElementView.mediaMargin
         }
         Label {
-            text: attachmentsPopupElementView.controller.description
-            visible: attachmentsPopupElementView.controller.description !== ""
+            text: attachmentsPopupElementView.controller ? attachmentsPopupElementView.controller.description : null
+            visible: text !== ""
             wrapMode: Text.WordWrap
 
             Layout.fillWidth: true
@@ -110,10 +107,9 @@ ColumnLayout {
 
     ListView {
         clip: true
-        focus: true
+        interactive: false
         Layout.preferredHeight: childrenRect.height
-        spacing: attachmentsPopupElementView.mediaMargin
-        model: attachmentsPopupElementView.controller.popupAttachmentItems
+        model: attachmentsPopupElementView.controller ? attachmentsPopupElementView.controller.popupAttachmentItems : null
 
         Layout.fillWidth: true
         Layout.leftMargin: attachmentsPopupElementView.mediaMargin
@@ -132,25 +128,39 @@ ColumnLayout {
                         model.listModelData.downloadAttachment();
                     } else {
                         if (model.listModelData.popupAttachmentType === QmlEnums.PopupAttachmentTypeImage) {
-                            fullScreenImage.source = model.listModelData.localData;
-                            fullScreenImageDialog.visible = true;
+                            if (popupView.openImagesInApp) {
+                                fullScreenImage.source = model.listModelData.localData;
+                                fullScreenImageDialog.visible = true;
+                            } else {
+                                // user disabled default behavior, so we do nothing
+                            }
                         } else {
-                            // This is a known limitation iOS but there are a few mentioned workarounds, https://bugreports.qt.io/browse/QTBUG-42942
-                            // Android currnetly has a bug logged against this, https://bugreports.qt.io/browse/QTBUG-133702
-                            // We plan on supporting these platforms in the future when it's implemented on iOS and fixed on Android.
-                            if (Qt.platform.os !== "android" && Qt.platform.os !== "ios") {
-                                Qt.openUrlExternally(model.listModelData.localData);
+                            if (popupView.openAttachmentsWithSystemDefaultApplication) {
+                                // This is a known limitation iOS but there are a few mentioned workarounds, https://bugreports.qt.io/browse/QTBUG-42942
+                                // Android currently has a bug logged against this, https://bugreports.qt.io/browse/QTBUG-133702
+                                // We plan on supporting these platforms in the future when it's implemented on iOS and fixed on Android.
+                                if (Qt.platform.os !== "android" && Qt.platform.os !== "ios") {
+                                    Qt.openUrlExternally(model.listModelData.localData);
+                                }
+                            } else {
+                                // user disabled default behavior, so we do nothing
                             }
                         }
                     }
                 }
                 onEntered: {
-                    if (model.listModelData.dataFetched && nameLabel.text !== "Click to open")
-                        nameLabel.text = "Click to open";
+                    if (model.listModelData.dataFetched && nameLabel.text !== qsTr("Click to open")) {
+                        nameLabel.text = qsTr("Click to open");
+                    }
                 }
                 onExited: {
-                    if (model.dataFetched && nameLabel.text === "Click to open")
+                    if (model.dataFetched && nameLabel.text === qsTr("Click to open")) {
                         nameLabel.text = model.name;
+                    }
+                }
+
+                HoverHandler {
+                    cursorShape: Qt.PointingHandCursor
                 }
             }
 

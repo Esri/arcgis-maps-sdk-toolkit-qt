@@ -19,6 +19,7 @@
 // Qt headers
 #include <QJsonArray>
 #include <QObject>
+#include <QVariant>
 
 // Other headers
 #include "PopupMediaItem.h"
@@ -30,16 +31,18 @@ namespace Esri::ArcGISRuntime::Toolkit {
 class BarChartPopupMediaItem : public PopupMediaItem
 {
   Q_OBJECT
-  Q_PROPERTY(QList<QBarSet*> barSets READ barSets NOTIFY barChartPopupMediaItemChanged)
+  Q_PROPERTY(QVariantList barSets READ barSets NOTIFY barChartPopupMediaItemChanged)
   Q_PROPERTY(qreal maxValue READ maxValue NOTIFY barChartPopupMediaItemChanged)
   Q_PROPERTY(qreal minValue READ minValue NOTIFY barChartPopupMediaItemChanged)
+  Q_PROPERTY(QVariantList barSetLabels READ barSetLabels NOTIFY barChartPopupMediaItemChanged)
 
 public:
   explicit BarChartPopupMediaItem(PopupMedia* popupMedia, QObject* parent = nullptr);
   ~BarChartPopupMediaItem() override;
 
 private:
-  QList<QBarSet*> barSets();
+  QVariantList barSets();
+  QVariantList barSetLabels() const;
   qreal maxValue() const;
   qreal minValue() const;
 
@@ -47,9 +50,9 @@ signals:
   void barChartPopupMediaItemChanged();
 
 private:
-  QList<QBarSet*> m_barSets;
   qreal m_maxValue = 0.0;
   qreal m_minValue = 0.0;
+  QVariantList m_barSetLabels;
 };
 
 } // Esri::ArcGISRuntime::Toolkit
