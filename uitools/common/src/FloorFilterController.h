@@ -16,14 +16,14 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_FLOORFILTERCONTROLLER_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_FLOORFILTERCONTROLLER_H
 
-// Toolkit headers
+// Qt headers
+#include <QObject>
+
+// Other headers
 #include "FloorFilterFacilityItem.h"
 #include "FloorFilterLevelItem.h"
 #include "FloorFilterSiteItem.h"
-#include "Internal/GenericListModel.h"
-
-// Qt headers
-#include <QObject>
+#include "GenericListModel.h"
 
 namespace Esri::ArcGISRuntime {
 

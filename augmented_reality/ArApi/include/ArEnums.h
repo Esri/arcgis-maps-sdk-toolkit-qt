@@ -17,13 +17,17 @@
 #ifndef ArEnums_H
 #define ArEnums_H
 
+// C++ API headers
+#include "Deprecated.h"
+
+// Qt headers
 #include <QObject>
 
 namespace Esri::ArcGISRuntime::Toolkit::ArEnums
 {
   Q_NAMESPACE
 
-  enum class LocationTrackingMode
+  enum class QRT_DEPRECATED LocationTrackingMode
   {
     Ignore = 0,
     Initial = 1,
@@ -31,7 +35,7 @@ namespace Esri::ArcGISRuntime::Toolkit::ArEnums
   };
   Q_ENUM_NS(LocationTrackingMode)
 
-  enum class SensorStatus
+  enum class QRT_DEPRECATED SensorStatus
   {
     Stopped = 0,
     Starting = 1,

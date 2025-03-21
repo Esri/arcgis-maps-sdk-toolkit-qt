@@ -17,15 +17,19 @@
 #ifndef ArCorePointCloudRenderer_H
 #define ArCorePointCloudRenderer_H
 
+// C++ API headers
+#include "Deprecated.h"
+
+// Qt headers
+#include <QColor>
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
-#include <QColor>
 
 namespace Esri::ArcGISRuntime::Toolkit::Internal {
 
 class ArCoreWrapper;
 
-class ArCorePointCloudRenderer : public QOpenGLFunctions
+class QRT_DEPRECATED ArCorePointCloudRenderer : public QOpenGLFunctions
 {
 public:
   ArCorePointCloudRenderer(ArCoreWrapper* arCoreWrapper);

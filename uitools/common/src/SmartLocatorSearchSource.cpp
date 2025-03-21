@@ -18,7 +18,7 @@
 
 #include <QUuid>
 
-#include "Internal/SingleShotConnection.h"
+#include "SingleShotConnection.h"
 
 #include "GeocodeResult.h"
 #include "SuggestListModel.h"
@@ -34,20 +34,10 @@ namespace Esri::ArcGISRuntime::Toolkit {
   }
 
   /*!
-    \inmodule Esri.ArcGISRuntime.Toolkit
-    \class Esri::ArcGISRuntime::Toolkit::SmartLocatorSearchSource
-    \brief Extends LocatorSearchSource with intelligent search behaviors; adds support for repeated search.
-    \note Advanced functionality requires knowledge of the underlying locator to be used well; this class implements behaviors that
-    make assumptions about the locator being the world geocode service.
+    \internal
+    This class is an internal implementation detail and is subject to change.
    */
 
-  /*!
-    \brief Constructs a new SmartLocatorSearchSource object with a \a locatorTask and a given \a parent.
-
-    \list
-      \li \a locatorTask Task to use for performing searches. This should be the world geocode service, or a similarly-configured service.
-    \endlist
-   */
   SmartLocatorSearchSource::SmartLocatorSearchSource(LocatorTask* locatorTask, QObject* parent) :
     LocatorSearchSource(locatorTask, parent),
     m_repeatSearchResultThreshold{DEFAULT_REPEAT_SEARCH_RESULT_THRESHOLD},
@@ -75,29 +65,15 @@ namespace Esri::ArcGISRuntime::Toolkit {
             });
   }
 
-  /*!
-     \brief Destructor.
-   */
   SmartLocatorSearchSource::~SmartLocatorSearchSource()
   {
   }
 
-  /*!
-    \brief Returns the minimum number of results to attempt to retrieve. If there are too few results, the search is repeated with
-    loosened parameters until enough results are accumulated.
-
-    \note If no search is successful, it is still possible to have a total number of results less than this threshold.
-    Set to zero to disable search repeat behavior. Defaults to 1.
-   */
   int SmartLocatorSearchSource::repeatSearchResultThreshold() const
   {
     return m_repeatSearchResultThreshold;
   }
 
-  /*!
-    \brief Sets the minimum number of results to attempt to retrieve
-    to \a repeatSearchResultThreshold.
-   */
   void SmartLocatorSearchSource::setRepeatSearchResultThreshold(int repeatSearchResultThreshold)
   {
     if (repeatSearchResultThreshold == m_repeatSearchResultThreshold)
@@ -107,22 +83,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
     emit repeatSearchResultThresholdChanged();
   }
 
-  /*!
-    \brief Returns the minimum number of suggestions to attempt to retrieve. If there are too few results, the search is repeated with
-    loosened parameters until enough suggestions are accumulated.
-
-    \note If no search is successful, it is still possible to have a total number of suggestions less than this threshold.
-    Set to zero to disable search repeat behavior. Defaults to 6.
-   */
   int SmartLocatorSearchSource::repeatSuggestResultThreshold() const
   {
     return m_repeatSearchSuggestThreshold;
   }
 
-  /*!
-    \brief Sets the minimum number of suggestions to attempt to retrieve
-    to \a repeatSearchSuggestThreshold.
-   */
   void SmartLocatorSearchSource::setRepeatSuggestResultThreshold(int repeatSearchSuggestThreshold)
   {
     if (repeatSearchSuggestThreshold == m_repeatSearchSuggestThreshold)
@@ -132,9 +97,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     emit repeatSuggestResultThresholdChanged();
   }
 
-  /*!
-    \reimp
-   */
   void SmartLocatorSearchSource::search(const SuggestResult& suggestion, const Geometry area)
   {
     m_lastSearchArea = area;
@@ -142,9 +104,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     LocatorSearchSource::search(suggestion, area);
   }
 
-  /*!
-    \reimp
-   */
   void SmartLocatorSearchSource::search(const QString& searchString, const Geometry area)
   {
     m_lastSearchArea = area;

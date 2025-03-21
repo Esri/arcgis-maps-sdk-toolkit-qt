@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2019 Esri
  *
@@ -38,6 +39,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
   This class provides the AR features without using the C++ API of the ArcGIS Maps SDK for Qt.
   It is used as a base class to create the API-dependent classe: \l ArcGISArView which uses the C++ API.
+  \deprecated
  */
 
 /*!

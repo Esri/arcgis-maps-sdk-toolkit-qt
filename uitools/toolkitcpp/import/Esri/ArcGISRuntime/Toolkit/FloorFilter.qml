@@ -52,16 +52,12 @@ Control {
       \qmlproperty FloorFilterController controller
       \brief The controller handles binding logic between the FloorFilter, \c GeoModel, \c FloorManager and
       the flooraware layers.
-
-      The CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::FloorFilterController}{here}.
     */
     property var controller: FloorFilterController {}
 
     /*!
       \qmlproperty enumeration updateLevelsMode
       \brief The mode to use for updating levels visibility.
-      Default is \c {FloorFilterController.UpdateLevelsMode.AllLevelsMatchingVerticalOrder}.
-      \sa {Esri::ArcGISRuntime::Toolkit::FloorFilterController} {FloorFilterController.updateLevelsMode}
     */
     property int updateLevelsMode: controller.updateLevelsMode
 

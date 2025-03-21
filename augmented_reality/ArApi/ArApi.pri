@@ -16,11 +16,13 @@
 
 # This configuration file is an internal file.
 # To use the AR features of the ArcGIS Runtime Toolkit for Qt,
-# uses the files ArApi.pri to use C++ API. See AR.md for details.
+# use the file ArApi.pri to use C++ API. See AR.md for details.
 
 isEmpty(ARCGIS_TOOLKIT_PATH) {
     error(ARCGIS_TOOLKIT_PATH is not set)
 }
+
+warning("The Augmented Reality (AR) toolkit components are deprecated and will be removed in a future release.")
 
 AUGMENTED_REALITY_PATH = $$ARCGIS_TOOLKIT_PATH/augmented_reality
 

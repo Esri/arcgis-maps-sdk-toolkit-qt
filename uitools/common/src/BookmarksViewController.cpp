@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -17,9 +18,9 @@
 
 // Toolkit headers
 #include "BookmarkListItem.h"
-#include "Internal/DisconnectOnSignal.h"
-#include "Internal/DoOnLoad.h"
-#include "Internal/GeoViews.h"
+#include "DisconnectOnSignal.h"
+#include "DoOnLoad.h"
+#include "GeoViews.h"
 
 // Qt headers
 #include <QtGlobal>
@@ -30,7 +31,6 @@
 #include <BookmarkListModel.h>
 #include <Map.h>
 #include <Scene.h>
-#include <TaskWatcher.h>
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
@@ -126,22 +126,12 @@ namespace Esri::ArcGISRuntime::Toolkit {
   }
 
   /*!
-  \class Esri::ArcGISRuntime::Toolkit::BookmarksViewController
-  \ingroup ArcGISQtToolkitUiCppControllers
   \inmodule Esri.ArcGISRuntime.Toolkit
+  \class Esri::ArcGISRuntime::Toolkit::BookmarksViewController
+  \internal
+  This class is an internal implementation detail and is subject to change.
+  */
 
-  \brief In MVC architecture, this is the controller for the corresponding
-  \c Bookmark view.
-  This class handles the management of the BookmarkListItem objects, and
-  displays the current bookmark.
- */
-
-  /*!
-  \brief Constructor.
-  \list
-    \li \a parent owning parent object.
-  \endlist
- */
   BookmarksViewController::BookmarksViewController(QObject* parent) :
     QObject(parent),
     m_bookmarks(new GenericListModel(&BookmarkListItem::staticMetaObject, this))
@@ -149,30 +139,13 @@ namespace Esri::ArcGISRuntime::Toolkit {
     m_bookmarks->setDisplayPropertyName("name");
   }
 
-  /*!
-  \brief Destructor
- */
   BookmarksViewController::~BookmarksViewController() = default;
 
-  /*!
-  \brief Returns the \c GeoView as a \c QObject.
- */
   QObject* BookmarksViewController::geoView() const
   {
     return m_geoView;
   }
 
-  /*!
-  \brief Set the GeoView object this Controller uses.
-
-  Internally this is cast to a \c MapView or \c SceneView using \c qobject_cast,
-  which is why the paremeter is of form \c QObject and not \c GeoView.
-
-  \list
-    \li \a geoView \c Object which must inherit from \c{GeoView*} and
-        \c{QObject*}.
-  \endlist
-*/
   void BookmarksViewController::setGeoView(QObject* geoView)
   {
     if (geoView == m_geoView)
@@ -233,22 +206,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
     }
   }
 
-  /*!
-  \brief Returns the known list of available bookmarks which
-  can be textually displayed.
-
-  Internally, this is a \c GenericListModel with an \c elementType of
-  \c Bookmark.
- */
   GenericListModel* BookmarksViewController::bookmarks() const
   {
     return m_bookmarks;
   }
 
-  /*!
-  \brief Updates the \c GeoView camera to point to the current \a bookmark's
-  location on the map.
- */
   void BookmarksViewController::zoomToBookmarkExtent(BookmarkListItem* bookmark)
   {
     if (!bookmark)
@@ -265,16 +227,5 @@ namespace Esri::ArcGISRuntime::Toolkit {
       Q_UNUSED(future)
     }
   }
-
-  /*!
-  \fn void Esri::ArcGISRuntime::Toolkit::BookmarksViewController::geoViewChanged()
-  \brief Emitted when the geoView has changed.
- */
-
-  /*!
-  \property Esri::ArcGISRuntime::Toolkit::BookmarksViewController::geoView
-  \brief The geoView the controller is utilizing for interactions.
-  \sa Esri::ArcGISRuntime::Toolkit::BookmarksViewController::geoView
- */
 
 } // Esri::ArcGISRuntime::Toolkit

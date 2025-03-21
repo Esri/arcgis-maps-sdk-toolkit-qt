@@ -17,8 +17,14 @@
 #ifndef LocationDataSource_H
 #define LocationDataSource_H
 
-#include <QObject>
+// toolkit headers
 #include "ArEnums.h"
+
+// C++ API headers
+#include "Deprecated.h"
+
+// Qt headers
+#include <QObject>
 
 class QCompass;
 class QGeoPositionInfoSource;
@@ -28,7 +34,7 @@ Q_MOC_INCLUDE("QGeoPositionInfoSource")
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-class LocationDataSource : public QObject
+class QRT_DEPRECATED LocationDataSource : public QObject
 {
   Q_OBJECT
 

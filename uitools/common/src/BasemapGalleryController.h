@@ -16,14 +16,17 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_BASEMAPGALLERYCONTROLLER_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_BASEMAPGALLERYCONTROLLER_H
 
-// Toolkit headers
-#include "BasemapGalleryItem.h"
-#include "Internal/GenericListModel.h"
-
-// ArcGISRuntime headers
+// ArcGIS Maps SDK headers
 #include <Basemap.h>
 #include <GeoModel.h>
 #include <Portal.h>
+
+// Other headers
+#include "BasemapGalleryItem.h"
+#include "GenericListModel.h"
+
+// C++ Headers
+#include <mutex>
 
 // Qt headers
 #include <QObject>
@@ -61,6 +64,8 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     Q_INVOKABLE bool append(Basemap* basemap);
 
+    Q_INVOKABLE bool append(Basemap* basemap, bool is3D);
+
     Q_INVOKABLE bool append(Basemap* basemap, QImage thumbnail, QString tooltip = {});
 
     Q_INVOKABLE int basemapIndex(Basemap* basemap) const;
@@ -80,6 +85,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     GeoModel* m_geoModel = nullptr;
     Portal* m_portal = nullptr;
     GenericListModel* m_gallery = nullptr;
+    std::mutex m_galleryAccessMutex;
   };
 
 } // Esri::ArcGISRuntime::Toolkit

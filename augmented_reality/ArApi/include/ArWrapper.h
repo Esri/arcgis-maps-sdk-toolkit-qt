@@ -17,9 +17,15 @@
 #ifndef ARWRAPPER_H
 #define ARWRAPPER_H
 
-#include <QtGlobal>
-#include <QSize>
+// C++ API headers
+#include "Deprecated.h"
+
+// Qt headers
 #include <QColor>
+#include <QSize>
+#include <QtGlobal>
+
+// STL headers
 #include <array>
 
 #if defined Q_OS_IOS
@@ -44,7 +50,7 @@ class ArWrapper : public ArCoreWrapper { using ArCoreWrapper::ArCoreWrapper; };
 #else
 
 // default implementation for desktop platforms.
-class ArWrapper
+class QRT_DEPRECATED ArWrapper
 {
 public:
   ArWrapper(void*);

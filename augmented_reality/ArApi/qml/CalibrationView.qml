@@ -29,7 +29,7 @@ import QtQuick.Controls
 
     This item can be used to change manually the location and heading of the scene, to ensure
     accuracy between the device live video and the scene.
-
+    \deprecated
 */
 
 Item {

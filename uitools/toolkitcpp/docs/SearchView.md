@@ -2,6 +2,6 @@
 
 # SearchView - Qt Quick UI/QML Type
 
-The [SearchView - Qt Quick UI/QML Type](https://developers.arcgis.com/qt/toolkit/api-reference/qml-searchview.html) control enables users to search for one or more locations or features, from a variety of sources, with suggestions. 
+The [SearchView - Qt Quick UI/QML Type](https://developers.arcgis.com/qt/toolkit/api-reference/qml-esri-arcgisruntime-toolkit-searchview.html) control enables users to search for one or more locations or features, from a variety of sources, with suggestions. 
 
 ![SearchView image](https://developers.arcgis.com/qt/toolkit/api-reference/images/search.png)

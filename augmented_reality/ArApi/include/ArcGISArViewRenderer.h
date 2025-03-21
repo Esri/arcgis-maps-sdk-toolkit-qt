@@ -17,6 +17,10 @@
 #ifndef ArcGISArViewRenderer_H
 #define ArcGISArViewRenderer_H
 
+// C++ API headers
+#include "Deprecated.h"
+
+// Qt headers
 #include <QQuickFramebufferObject>
 
 class QQuickWindow;
@@ -25,7 +29,7 @@ namespace Esri::ArcGISRuntime::Toolkit::Internal {
 
 class ArWrapper;
 
-class ArcGISArViewRenderer : public QQuickFramebufferObject::Renderer
+class QRT_DEPRECATED ArcGISArViewRenderer : public QQuickFramebufferObject::Renderer
 {
 public:
   ArcGISArViewRenderer(Internal::ArWrapper* arWrapper = nullptr);

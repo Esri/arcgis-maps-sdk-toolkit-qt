@@ -17,15 +17,19 @@
 #ifndef ArCorePlaneRenderer_H
 #define ArCorePlaneRenderer_H
 
+// C++ API headers
+#include "Deprecated.h"
+
+// Qt headers
+#include <QColor>
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
-#include <QColor>
 
 namespace Esri::ArcGISRuntime::Toolkit::Internal {
 
 class ArCoreWrapper;
 
-class ArCorePlaneRenderer : public QOpenGLFunctions
+class QRT_DEPRECATED ArCorePlaneRenderer : public QOpenGLFunctions
 {
 public:
   ArCorePlaneRenderer(ArCoreWrapper* arCoreWrapper);

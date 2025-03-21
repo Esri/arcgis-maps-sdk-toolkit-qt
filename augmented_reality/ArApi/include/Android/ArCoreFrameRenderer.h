@@ -17,6 +17,10 @@
 #ifndef ArCoreFrameRenderer_H
 #define ArCoreFrameRenderer_H
 
+// C++ API headers
+#include "Deprecated.h"
+
+// Qt headers
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
 
@@ -24,7 +28,7 @@ namespace Esri::ArcGISRuntime::Toolkit::Internal {
 
 class ArCoreWrapper;
 
-class ArCoreFrameRenderer : public QOpenGLFunctions
+class QRT_DEPRECATED ArCoreFrameRenderer : public QOpenGLFunctions
 {
 public:
   ArCoreFrameRenderer(ArCoreWrapper* arCoreWrapper);

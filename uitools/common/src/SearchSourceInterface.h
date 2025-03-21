@@ -19,7 +19,6 @@
 // ArcGISRuntime headers
 #include <Geometry.h>
 #include <Point.h>
-#include <TaskWatcher.h>
 
 // Qt headers
 #include <QList>

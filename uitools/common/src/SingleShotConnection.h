@@ -19,7 +19,7 @@
 // Qt headers
 #include <QObject>
 
-// C++ headers
+// STL headers
 #include <memory>
 
 namespace Esri::ArcGISRuntime::Toolkit {

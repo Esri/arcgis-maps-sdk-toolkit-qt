@@ -17,6 +17,7 @@
 #define ESRI_ARCGISRUNTIME_TOOLKIT_ARCGISAUTHENTICATIONCONTROLLER_H
 
 // Qt headers
+#include <QHash>
 #include <QObject>
 #include <QQmlEngine>
 
@@ -24,14 +25,16 @@
 #include <memory>
 #include <mutex>
 
+class QUrl;
+
+Q_MOC_INCLUDE(<QUrl>)
+
 namespace Esri::ArcGISRuntime::Authentication {
   class OAuthUserConfiguration;
   class OAuthUserLoginPrompt;
   class ArcGISAuthenticationChallenge;
   class NetworkAuthenticationChallenge;
 }
-
-Q_MOC_INCLUDE(<QUrl>)
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
@@ -46,14 +49,14 @@ class ArcGISAuthenticationController : public QObject
   Q_PROPERTY(bool canBeUsed READ canBeUsed_ CONSTANT)
 
   // token authentication
-  Q_PROPERTY(QUrl currentAuthenticatingHost READ currentAuthenticatingHost_ NOTIFY currentAuthenticatingHostChanged)
+  Q_PROPERTY(QString currentAuthenticatingHost READ currentAuthenticatingHost_ NOTIFY currentAuthenticatingHostChanged)
 
   // OAuth
   Q_PROPERTY(QUrl authorizeUrl READ authorizeUrl_ NOTIFY authorizeUrlChanged)
   Q_PROPERTY(bool preferPrivateWebBrowserSession READ preferPrivateWebBrowserSession_ NOTIFY preferPrivateWebBrowserSessionChanged)
   Q_PROPERTY(QString redirectUri READ redirectUri_ NOTIFY redirectUriChanged)
 
-  Q_PROPERTY(int currentChallengeFailureCount READ currentChallengeFailureCount_ NOTIFY currentChallengeFailureCountChanged)
+  Q_PROPERTY(int previousFailureCount READ previousFailureCount_ NOTIFY previousFailureCountChanged)
 
 public:
   // assumed to be owned by the QML engine
@@ -95,16 +98,19 @@ signals:
   void authorizeUrlChanged();
   void preferPrivateWebBrowserSessionChanged();
   void redirectUriChanged();
-  void currentChallengeFailureCountChanged();
+  void previousFailureCountChanged();
 
 private:
   explicit ArcGISAuthenticationController(QObject* parent = nullptr);
   bool canBeUsed_() const;
-  QUrl currentAuthenticatingHost_() const;
+  QString currentAuthenticatingHost_() const;
   QUrl authorizeUrl_() const;
   bool preferPrivateWebBrowserSession_() const;
   QString redirectUri_() const;
-  int currentChallengeFailureCount_() const;
+  int previousFailureCount_() const;
+
+  void continueWithUsernamePasswordArcGIS_(const QString& username, const QString& password);
+  void continueWithUsernamePasswordNetwork_(const QString& username, const QString& password);
 
   std::unique_ptr<ArcGISAuthenticationChallengeRelay> m_arcGISAuthenticationChallengeRelay;
   std::unique_ptr<NetworkAuthenticationChallengeRelay> m_networkAuthenticationChallengeRelay;
@@ -113,8 +119,11 @@ private:
   std::unique_ptr<Authentication::NetworkAuthenticationChallenge> m_currentNetworkChallenge;
   QList<Esri::ArcGISRuntime::Authentication::OAuthUserConfiguration*> m_userConfigurations;
   std::unique_ptr<Authentication::OAuthUserLoginPrompt> m_currentOAuthUserLoginPrompt;
-  int m_currentChallengeFailureCount = 0;
-  static inline constexpr int s_maxChallengeFailureCount = 5;
+
+  // ArcGISAuthenticationChallenges only. NetworkAuthenticationChallenges already contain this information
+  QHash<QUrl, int> m_arcGISPreviousFailureCountsForUrl;
+  static inline constexpr int s_maxArcGISPreviousFailureCount = 5;
+
   std::mutex m_mutex;
 };
 

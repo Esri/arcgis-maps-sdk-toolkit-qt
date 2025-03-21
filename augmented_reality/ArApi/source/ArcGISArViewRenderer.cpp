@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2019 Esri
  *
@@ -28,6 +29,7 @@ using namespace Esri::ArcGISRuntime::Toolkit::Internal;
   \class ArcGISArViewRenderer
   \internal
   \brief Renders the passthrough camera image into the OpenGL frame.
+  \deprecated
  */
 
 ArcGISArViewRenderer::ArcGISArViewRenderer(Internal::ArWrapper* arWrapper) :

@@ -15,6 +15,7 @@
  ******************************************************************************/
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_BASEMAPGALLERYIMAGEPROVIDER_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_BASEMAPGALLERYIMAGEPROVIDER_H
+
 #ifdef CPP_ARCGISRUNTIME_TOOLKIT
 
 #include <QQuickImageProvider>

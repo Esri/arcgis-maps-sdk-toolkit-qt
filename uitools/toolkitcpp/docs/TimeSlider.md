@@ -2,6 +2,6 @@
 
 # TimeSlider - Qt Quick UI/QML Type
 
-The [TimeSlider - Qt Quick UI/QML Type](https://developers.arcgis.com/qt/toolkit/api-reference/qml-timeslider.html) control provides a user interface for manually setting or animating changes to the current time extent of the `GeoView`. A time slider can be bound to a `GeoView` (`MapView` or `SceneView`) to allow filtering on temporal data. The time extents of all layers in the map or scene will be used to set up the slider with the full temporal range and the current time extent.
+The [TimeSlider - Qt Quick UI/QML Type](https://developers.arcgis.com/qt/toolkit/api-reference/qml-esri-arcgisruntime-toolkit-timeslider.html) control provides a user interface for manually setting or animating changes to the current time extent of the `GeoView`. A time slider can be bound to a `GeoView` (`MapView` or `SceneView`) to allow filtering on temporal data. The time extents of all layers in the map or scene will be used to set up the slider with the full temporal range and the current time extent.
 
 ![TimeSlider image](https://developers.arcgis.com/qt/toolkit/api-reference/images/timeslider.gif)

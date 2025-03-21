@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2021 Esri
  *
@@ -15,7 +16,7 @@
  ******************************************************************************/
 #include "OverviewMapController.h"
 
-#include "Internal/SingleShotConnection.h"
+#include "SingleShotConnection.h"
 
 // ArcGISRuntime headers
 #include <Geometry.h>
@@ -40,16 +41,11 @@
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-  /*!
-    \inmodule Esri.ArcGISRuntime.Toolkit
-    \class Esri::ArcGISRuntime::Toolkit::OverviewMapController
-    \brief The controller part of a OverviewMap. This class handles the
-    management of the inset MapView, including symbol styling and navigation.
-   */
+/*!
+  \internal
+  This class is an internal implementation detail and is subject to change.
+ */
 
-  /*!
-    \brief Constructs a new OverviewMapController object with a given \a parent.
-   */
   OverviewMapController::OverviewMapController(QObject* parent) :
     QObject(parent),
     m_insetView(new MapViewToolkit),
@@ -88,33 +84,16 @@ namespace Esri::ArcGISRuntime::Toolkit {
             });
   }
 
-  /*!
-    \brief Destructor.
-   */
   OverviewMapController::~OverviewMapController()
   {
     m_insetView->deleteLater();
   }
 
-  /*!
-    \brief Returns the \c GeoView as a \c QObject.
-   */
   QObject* OverviewMapController::geoView() const
   {
     return m_geoView;
   }
 
-  /*!
-  \brief Set the GeoView object this Controller uses.
-
-  Internally this is cast to a \c MapView or \c SceneView using \c qobject_cast,
-  which is why the paremeter is of form \c QObject and not \c GeoView.
-
-  \list
-    \li \a geoView \c Object which must inherit from \c{GeoView*} and
-        \c{QObject*}.
-  \endlist
-  */
   void OverviewMapController::setGeoView(QObject* geoView)
   {
     if (geoView == m_geoView)
@@ -182,41 +161,16 @@ namespace Esri::ArcGISRuntime::Toolkit {
     emit geoViewChanged();
   }
 
-  /*!
-    \brief Returns a MapView owned by this controller which represents the
-    underlying inset of the OverviewMap tool.
-
-    For the C++/Quick toolkit this is a MapQuickView, for the C++/Widgets toolkit
-    this is a MapGraphicsView.
-   */
   MapViewToolkit* OverviewMapController::insetView() const
   {
     return m_insetView;
   }
 
-  /*!
-    \brief Returns the symbol used to represent the GeoView's current viewpoint.
-
-    If \l OverviewMapController::geoView is not set, then the symbol will
-    return \c{nullptr} by default.
-
-    If \l OverviewMapController::geoView is set, and a custom symbol was not applied,
-    then a default will be provided.
-
-    For MapView, the default is an empty SimpleFillSymbol with a 1 point red outline;
-    for SceneView, it will be a red, cross-hair SimpleMarkerSymbol.
-   */
   Symbol* OverviewMapController::symbol() const
   {
     return m_reticle->symbol();
   }
 
-  /*!
-    \brief Sets the \a symbol used to represent the GeoView's current viewpoint.
-
-     For MapView, the default is an empty SimpleFillSymbol with a 1 point red outline;
-     for SceneView, it will be a red, cross-hair SimpleMarkerSymbol.
-   */
   void OverviewMapController::setSymbol(Symbol* symbol)
   {
     if (m_reticle->symbol() == symbol)
@@ -232,22 +186,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
     emit symbolChanged();
   }
 
-  /*!
-    \brief Returns the amount to scale the OverviewMap compared to the geoView.
-    Defaults to 25.0.
-   */
   double OverviewMapController::scaleFactor() const
   {
     return m_scaleFactor;
   }
 
-  /*!
-    \brief Sets the amount to scale the OverviewMap compared to the geoView.
-
-    \list
-      \li \a scaleFactor The scale factor. Defaults to 25.0.
-    \endlist
-   */
   void OverviewMapController::setScaleFactor(double scaleFactor)
   {
     if (m_scaleFactor == scaleFactor)
@@ -267,11 +210,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     }
   }
 
-  /*!
-    \internal
-    \brief If the inset view was navigated by the user, then this is called
-    to update the geoView viewpoint if it is a MapView.
-   */
   void OverviewMapController::applyInsetNavigationToMapView(MapViewToolkit* view)
   {
     // Note we care about rotation in the mapView case.
@@ -285,11 +223,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     m_setViewpointFuture = view->setViewpointAsync(newViewpoint, animationDuration);
   }
 
-  /*!
-    \internal
-    \brief If the inset view was navigated by the user, then this is called
-    to update the geoView viewpoint if it is a SceneView.
-   */
   void OverviewMapController::applyInsetNavigationToSceneView(SceneViewToolkit* view)
   {
     // Note we do not care about rotation in the sceneView case.
@@ -302,11 +235,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     m_setViewpointFuture = view->setViewpointAsync(newViewpoint, animationDuration);
   }
 
-  /*!
-    \internal
-    \brief If the geoView view was navigated by the user, and is a mapView,
-     then this is called to update the insetView viewpoint.
-   */
   void OverviewMapController::applyMapNavigationToInset(MapViewToolkit* view)
   {
     // Note we care about rotation in the mapView case.
@@ -320,11 +248,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     m_setViewpointInsetFuture = m_insetView->setViewpointAsync(newViewpoint, animationDuration);
   }
 
-  /*!
-    \internal
-    \brief If the geoView view was navigated by the user, and is a sceneView,
-     then this is called to update the insetView viewpoint.
-   */
   void OverviewMapController::applySceneNavigationToInset(SceneViewToolkit* view)
   {
     // Note we do not care about rotation in the sceneView case.
@@ -337,10 +260,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     m_setViewpointInsetFuture = m_insetView->setViewpointAsync(newViewpoint, animationDuration);
   }
 
-  /*!
-    \internal
-    Disables certain interactions on the insetView.
-   */
   void OverviewMapController::disableInteractions()
   {
     // Disable all keyboard interactions
@@ -384,38 +303,5 @@ namespace Esri::ArcGISRuntime::Toolkit {
                      });
 #endif
   }
-
-  /*!
-  \fn void Esri::ArcGISRuntime::Toolkit::OverviewMapController::geoViewChanged()
-  \brief Emitted when the geoView has changed.
- */
-
-  /*!
-  \fn void Esri::ArcGISRuntime::Toolkit::OverviewMapController::scaleFactorChanged()
-  \brief Emitted when the scaleFactor has changed.
- */
-
-  /*!
-  \fn void Esri::ArcGISRuntime::Toolkit::OverviewMapController::symbolChanged()
-  \brief Emitted when the symbol has changed.
- */
-
-  /*!
-  \property Esri::ArcGISRuntime::Toolkit::OverviewMapController::geoView
-  \brief The geoview the controller is listening to for viewpoint changes.
-  \sa Esri::ArcGISRuntime::Toolkit::OverviewMapController::geoView()
- */
-
-  /*!
-  \property Esri::ArcGISRuntime::Toolkit::OverviewMapController::insetView
-  \brief MapView which represents an overview/inset of the current viewpoint of the geoView.
-  \sa Esri::ArcGISRuntime::Toolkit::OverviewMapController::insetView()
- */
-
-  /*!
-  \property Esri::ArcGISRuntime::Toolkit::OverviewMapController::scaleFactor
-  \brief The scaleFactor between the geoView's viewpoint and the insetView's viewpoint.
-  \sa Esri::ArcGISRuntime::Toolkit::OverviewMapController::scaleFactor()
- */
 
 } // Esri::ArcGISRuntime::Toolkit

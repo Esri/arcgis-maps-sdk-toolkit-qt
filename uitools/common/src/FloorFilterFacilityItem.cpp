@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -21,41 +22,26 @@
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-    /*!
-    \inmodule Esri.ArcGISRuntime.Toolkit
-    \class Esri::ArcGISRuntime::Toolkit::FloorFilterFacilityItem
-    \brief An item contained within \l FloorFilterController::facilities. This class wraps
-    a \c FloorFacility for easy manipulation/inspection within an AbstractItemModel.
-   */
+/*!
+  \internal
+  This class is an internal implementation detail and is subject to change.
+ */
 
-  /*!
-    \brief Constructs a new empty FloorFilterFacilityItem object with a given \a parent.
-   */
   FloorFilterFacilityItem::FloorFilterFacilityItem(QObject* parent) :
     FloorFilterFacilityItem(nullptr, parent)
   {
   }
 
-  /*!
-    \brief Constructs a new empty FloorFilterFacilityItem object with a given \a parent and
-    \a floorFacility to wrap.
-   */
   FloorFilterFacilityItem::FloorFilterFacilityItem(FloorFacility* floorFacility, QObject* parent) :
     QObject(parent),
     m_floorFacility(floorFacility)
   {
   }
 
-  /*!
-   \brief Destructor.
-   */
   FloorFilterFacilityItem::~FloorFilterFacilityItem()
   {
   }
 
-  /*!
-   \brief Change the underlying wrapped item to \a floorFacility.
-   */
   void FloorFilterFacilityItem::setFloorFacility(FloorFacility* floorFacility)
   {
     if (m_floorFacility == floorFacility)
@@ -67,54 +53,31 @@ namespace Esri::ArcGISRuntime::Toolkit {
     emit floorFacilityChanged();
   }
 
-  /*!
-   \brief Returns the currently wrapped \c floorFacility.
-   */
   FloorFacility* FloorFilterFacilityItem::floorFacility() const
   {
     return m_floorFacility;
   }
 
-  /*!
-   \property Esri::ArcGISRuntime::Toolkit::FloorFilterFacilityItem::modelId
-   \brief Returns the \c facilityId from the wrapped item.
-   */
   QString FloorFilterFacilityItem::modelId() const
   {
     return m_floorFacility ?  m_floorFacility->facilityId() : QString{};
   }
 
-  /*!
-   \property Esri::ArcGISRuntime::Toolkit::FloorFilterFacilityItem::name
-   \brief Returns the name from the wrapped item.
-   */
   QString FloorFilterFacilityItem::name() const
   {
     return m_floorFacility ? m_floorFacility->name() : QString{};
   }
 
-  /*!
-   \property Esri::ArcGISRuntime::Toolkit::FloorFilterFacilityItem::parentSiteName
-   \brief Returns the name of the parent site.
-   */
   QString FloorFilterFacilityItem::parentSiteName() const
   {
     auto site = m_floorFacility ? m_floorFacility->site() : nullptr;
     return site ? site->name() : QString{};
   }
 
-  /*!
-   * \brief Returns the id of the parent site. 
-   */
   QString FloorFilterFacilityItem::parentSiteId() const
   {
     auto site = m_floorFacility ? m_floorFacility->site() : nullptr;
     return site ? site->siteId() : QString{};
   }
-
-  /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::FloorFilterFacilityItem::floorFacilityChanged()
-    \brief Signal emitted when the wrapped \l floorFacility changes.
-   */
 
 } // Esri::ArcGISRuntime::Toolkit

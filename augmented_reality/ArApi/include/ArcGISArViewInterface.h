@@ -17,9 +17,17 @@
 #ifndef ArcGISArViewInterface_H
 #define ArcGISArViewInterface_H
 
-#include <QQuickFramebufferObject>
-#include "LocationDataSource.h"
+// toolkit headers
 #include "ArEnums.h"
+#include "LocationDataSource.h"
+
+// C++ API headers
+#include "Deprecated.h"
+
+// Qt headers
+#include <QQuickFramebufferObject>
+
+// STL headers
 #include <array>
 #include <memory>
 
@@ -30,7 +38,7 @@ class ArWrapper;
 class ArcGISArViewRenderer;
 }
 
-class ArcGISArViewInterface : public QQuickFramebufferObject
+class QRT_DEPRECATED ArcGISArViewInterface : public QQuickFramebufferObject
 {
   Q_OBJECT
   Q_PROPERTY(bool tracking READ tracking WRITE setTracking NOTIFY trackingChanged)

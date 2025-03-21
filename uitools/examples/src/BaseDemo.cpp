@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -22,7 +23,6 @@
 #include <MapViewTypes.h>
 #include <Scene.h>
 #include <SceneQuickView.h>
-#include <stdexcept>
 
 using namespace Esri::ArcGISRuntime;
 

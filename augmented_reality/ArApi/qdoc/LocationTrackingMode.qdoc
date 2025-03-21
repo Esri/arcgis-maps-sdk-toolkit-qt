@@ -19,6 +19,8 @@
   \title LocationTrackingMode enumeration
   \since Esri::ArcGISRuntime 100.6
 
+  \deprecated
+
   Enumerates options for using locations generated from the location data
   source during AR tracking. The LocationTrackingMode can be one of:
   \table

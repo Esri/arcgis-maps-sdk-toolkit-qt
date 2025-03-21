@@ -16,19 +16,19 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_SEARCHVIEWCONTROLLER_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_SEARCHVIEWCONTROLLER_H
 
-// Toolkit headers
-#include "Internal/GenericListModel.h"
-#include "SearchResult.h"
-#include "SearchSourceInterface.h"
-#include "SearchSuggestion.h"
-
-// ArcGISRuntime headers
-#include <Geometry.h>
-
 // Qt headers
 #include <QAbstractListModel>
 #include <QObject>
 #include <QPointer>
+
+// ArcGIS Maps SDK headers
+#include <Geometry.h>
+
+// Other headers
+#include "GenericListModel.h"
+#include "SearchResult.h"
+#include "SearchSourceInterface.h"
+#include "SearchSuggestion.h"
 
 // Forward declarations
 namespace Esri::ArcGISRuntime {

@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2019 Esri
  *
@@ -46,6 +47,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   of AR into your application for a variety of scenarios.
 
   See \l {https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/blob/master/Common/AR/README.md} {additional details about using the ArcGISArView toolkit component}.
+  \deprecated
  */
 
 /*!

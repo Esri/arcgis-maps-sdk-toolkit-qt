@@ -16,16 +16,16 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_BOOKMARKSVIEWCONTROLLER_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_BOOKMARKSVIEWCONTROLLER_H
 
-// Toolkit headers
-#include "BookmarkListItem.h"
-#include "Internal/GenericListModel.h"
+// Qt headers
+#include <QObject>
 
-// ArcGISRuntime headers
+// ArcGIS Maps SDK headers
 #include <Bookmark.h>
 #include <GeoView.h>
 
-// Qt headers
-#include <QObject>
+// Other headers
+#include "BookmarkListItem.h"
+#include "GenericListModel.h"
 
 namespace Esri::ArcGISRuntime::Toolkit {
 

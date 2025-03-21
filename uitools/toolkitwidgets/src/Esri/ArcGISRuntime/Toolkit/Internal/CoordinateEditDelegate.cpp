@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2020 Esri
  *
@@ -18,8 +19,8 @@
 // Toolkit headers
 #include "CoordinateConversionResult.h"
 #include "CoordinateConversionController.h"
-#include "Internal/GenericListModel.h"
-#include "Internal/GenericTableProxyModel.h"
+#include "GenericListModel.h"
+#include "GenericTableProxyModel.h"
 
 //Qt headers
 #include <QLineEdit>

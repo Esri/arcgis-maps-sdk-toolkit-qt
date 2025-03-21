@@ -16,9 +16,11 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_GENERICLISTMODEL_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_GENERICLISTMODEL_H
 
+// Qt headers
 #include <QAbstractListModel>
 #include <QMetaObject>
 
+// STL headers
 #include <type_traits>
 
 namespace Esri::ArcGISRuntime::Toolkit {

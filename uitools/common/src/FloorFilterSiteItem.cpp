@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -20,41 +21,26 @@
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-    /*!
-    \inmodule Esri.ArcGISRuntime.Toolkit
-    \class Esri::ArcGISRuntime::Toolkit::FloorFilterSiteItem
-    \brief An item contained within \l FloorFilterController::sites. This class wraps
-    a \c FloorLevel for easy manipulation/inspection within an AbstractItemModel.
-   */
+/*!
+  \internal
+  This class is an internal implementation detail and is subject to change.
+ */
 
-  /*!
-    \brief Constructs a new empty FloorFilterSiteItem object with a given \a parent.
-   */
   FloorFilterSiteItem::FloorFilterSiteItem(QObject* parent) :
     FloorFilterSiteItem(nullptr, parent)
   {
   }
 
-  /*!
-    \brief Constructs a new empty FloorFilterSiteItem object with a given \a parent and
-    \a floorSite to wrap.
-   */
   FloorFilterSiteItem::FloorFilterSiteItem(FloorSite* floorSite, QObject* parent) :
     QObject(parent),
     m_floorSite(floorSite)
   {
   }
 
-  /*!
-   \brief Destructor.
-   */
   FloorFilterSiteItem::~FloorFilterSiteItem()
   {
   }
 
-  /*!
-   \brief Change the underlying wrapped item to \a floorSite.
-   */
   void FloorFilterSiteItem::setFloorSite(FloorSite* floorSite)
   {
     if (m_floorSite == floorSite)
@@ -64,35 +50,19 @@ namespace Esri::ArcGISRuntime::Toolkit {
     emit floorSiteChanged();
   }
 
-  /*!
-   \brief Returns the currently wrapped \c floorSite.
-   */
   FloorSite* FloorFilterSiteItem::floorSite() const
   {
     return m_floorSite;
   }
 
-  /*!
-   \property Esri::ArcGISRuntime::Toolkit::FloorFilterSiteItem::modelId
-   \brief Returns the \c siteId from the wrapped item.
-   */
   QString FloorFilterSiteItem::modelId() const
   {
     return m_floorSite ? m_floorSite->siteId() : QString{};
   }
 
-  /*!
-   \property Esri::ArcGISRuntime::Toolkit::FloorFilterSiteItem::name
-   \brief Returns the \c name from the wrapped item.
-   */
   QString FloorFilterSiteItem::name() const
   {
     return m_floorSite ? m_floorSite->name() : QString{};
   }
-
-  /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::FloorFilterSiteItem::floorSiteChanged()
-    \brief Signal emitted when the wrapped \l floorSite changes.
-   */
 
 } // Esri::ArcGISRuntime::Toolkit

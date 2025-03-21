@@ -16,11 +16,11 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_DISCONNECTONSIGNAL_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_DISCONNECTONSIGNAL_H
 
-// Toolkit headers
-#include "SingleShotConnection.h"
-
 // Qt headers
 #include <QObject>
+
+// Other headers
+#include "SingleShotConnection.h"
 
 namespace Esri::ArcGISRuntime::Toolkit {
 

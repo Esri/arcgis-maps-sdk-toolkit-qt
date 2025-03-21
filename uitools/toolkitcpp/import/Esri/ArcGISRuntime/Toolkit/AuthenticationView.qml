@@ -59,8 +59,6 @@ Item {
       \qmlproperty AuthenticationController controller
       \brief The Controller handles references to challenges emitted by the
       \c AuthenticationManager.
-
-      The CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::AuthenticationController}{here}.
     */
     property var controller: AuthenticationController { }
 

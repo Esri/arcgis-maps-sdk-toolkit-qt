@@ -44,7 +44,8 @@ qt_add_library(libtoolkitwidgets STATIC
     src/Esri/ArcGISRuntime/Toolkit/NorthArrow.cpp
     src/Esri/ArcGISRuntime/Toolkit/OverviewMap.cpp
 
-    # public UIsrc/Esri/ArcGISRuntime/Toolkit/AuthenticationView.ui
+    # public UI
+    src/Esri/ArcGISRuntime/Toolkit/AuthenticationView.ui
     src/Esri/ArcGISRuntime/Toolkit/BasemapGallery.ui
     src/Esri/ArcGISRuntime/Toolkit/BookmarksView.ui
     src/Esri/ArcGISRuntime/Toolkit/CoordinateConversion.ui

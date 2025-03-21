@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -30,6 +31,11 @@
 #include <UtilityTerminalConfiguration.h>
 
 namespace Esri::ArcGISRuntime::Toolkit {
+
+/*!
+  \internal
+  This class is an internal implementation detail and is subject to change.
+ */
 
 UtilityNetworkTraceStartingPoint::UtilityNetworkTraceStartingPoint(QObject* parent) :
   QObject(parent)

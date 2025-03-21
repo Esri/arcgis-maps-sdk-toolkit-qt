@@ -18,8 +18,8 @@
 #include "SearchViewController.h"
 
 // Toolkit headers
-#include "Internal/GeoViews.h"
-#include "Internal/SingleShotConnection.h"
+#include "GeoViews.h"
+#include "SingleShotConnection.h"
 #include "SmartLocatorSearchSource.h"
 
 #include <QFuture>
@@ -66,25 +66,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
   }
 
   /*!
-    \inmodule Esri.ArcGISRuntime.Toolkit
     \class Esri::ArcGISRuntime::Toolkit::SearchViewController
-    \brief Performs searches and manages search state for a SearchView.
+    \internal
+    This class is an internal implementation detail and is subject to change.
    */
 
-  /*!
-    \inmodule Esri.ArcGISRuntime.Toolkit
-    \enum Esri::ArcGISRuntime::Toolkit::SearchViewController::SearchResultMode
-    \brief The result mode used by the controller to display results.
-    \sa Esri::ArcGISRuntime::Toolkit::SearchViewController::resultMode
-    \value Single Always select the best result, even if multiple results are available.
-    \value Multiple Always display results as a list, even if only one result is available.
-    \value Automatic Show results as a list if there are multiple, otherwise if there is only
-    one found result then select that result.
-  */
-
-  /*!
-    \brief Constructs a new SearchViewController object with a given \a parent.
-   */
   SearchViewController::SearchViewController(QObject* parent) :
     QObject(parent),
     m_suggestions(new GenericListModel(&SearchSuggestion::staticMetaObject, this)),
@@ -103,32 +89,15 @@ namespace Esri::ArcGISRuntime::Toolkit {
     connect(m_sources, &QAbstractItemModel::rowsInserted, this, &SearchViewController::onSourcesAdded);
   }
 
-  /*!
-    \brief Destructor.
-   */
   SearchViewController::~SearchViewController()
   {
   }
 
-  /*!
-    \brief Returns the \c GeoView as a \c QObject.
-   */
   QObject* SearchViewController::geoView() const
   {
     return m_geoView;
   }
 
-  /*!
-    \brief Set the \c GeoView object this Controller uses. This will reset internal
-    state related to the old GeoView, such as the active query location and area.
-
-    Internally this is cast to a \c MapView or SceneView using \c qobject_cast,
-        which is why the paremeter is of form \c QObject and not \c GeoView.
-
-    \list
-      \li \a geoView Object which must inherit from \c GeoView* and \c QObject*.
-    \endlist
-   */
   void SearchViewController::setGeoView(QObject* geoView)
   {
     if (geoView == m_geoView)
@@ -201,20 +170,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
     emit geoViewChanged();
   }
 
-  /*!
-    \brief Returns the string shown in the search view when no user query is entered.
-
-    Default is "Find a place or address".
-   */
   QString SearchViewController::defaultPlaceholder() const
   {
     return m_defaultPlaceholder;
   }
 
-  /*!
-    \brief Sets the string shown in the search view when no user query is entered
-    to \a defaultPlaceholder.
-   */
   void SearchViewController::setDefaultPlaceholder(QString defaultPlaceholder)
   {
     if (defaultPlaceholder == m_defaultPlaceholder)
@@ -224,19 +184,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
     emit defaultPlaceholderChanged();
   }
 
-  /*!
-    \brief Returns the currently active search source.
-    All sources are used if this property is null.
-   */
   SearchSourceInterface* SearchViewController::activeSource() const
   {
     return m_activeSource;
   }
 
-  /*!
-    \brief Sets the currently active search source to \a activeSource.
-    All sources are used if this property is null.
-   */
   void SearchViewController::setActiveSource(SearchSourceInterface* activeSource)
   {
     if (m_activeSource == activeSource)
@@ -246,22 +198,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
     emit activeSourceChanged();
   }
 
-  /*!
-    \brief Returns the current user-entered query.
-
-    This property drives both suggestions and searches.
-   */
   QString SearchViewController::currentQuery() const
   {
     return m_currentQuery;
   }
 
-  /*!
-    \brief Sets the current user-entered query to \a currentQuery.
-    This should be updated by the view after every key press.
-
-    This property drives both suggestions and searches.
-   */
   void SearchViewController::setCurrentQuery(QString currentQuery)
   {
     if (m_currentQuery == currentQuery)
@@ -271,28 +212,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
     emit currentQueryChanged();
   }
 
-  /*!
-    \brief Returns the search area to be used for the current query.
-
-    Ignored in most queries, unless the \c{restrictToArea} flag is set to true when calling
-    \l SearchViewController::commitSearch.
-
-    This property should be updated as the user navigates the map/scene, or at minimum before calling
-    \l SearchViewController::commitSearch.
-
-    Defaults to a default constructed Geometry.
-   */
   Geometry SearchViewController::queryArea() const
   {
     return m_queryArea;
   }
 
-  /*!
-    \brief Sets the search area to be used for the current query to \a queryArea.
-
-    This property should be updated as the user navigates the map/scene, or at minimum
-    before calling \l commitSearch.
-   */
   void SearchViewController::setQueryArea(Geometry queryArea)
   {
     if (queryArea == m_queryArea)
@@ -302,26 +226,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
     emit queryAreaChanged();
   }
 
-  /*!
-    \brief Returns the center for the search.
-
-    This property is used to weigh results in favour of those results closest to the
-    center. This allows results to be local to the active viewpoint.
-
-    This should be updated by the view every time the user navigates the map.
-
-    Defaults to a default constructed Point.
-   */
   Point SearchViewController::queryCenter() const
   {
     return m_queryCenter;
   }
 
-  /*!
-    \brief Sets the center for the search to \a queryCenter.
-
-    This should be updated by the view every time the user navigates the map.
-   */
   void SearchViewController::setQueryCenter(Point queryCenter)
   {
     if (queryCenter == m_queryCenter)
@@ -341,29 +250,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
     emit queryCenterChanged();
   }
 
-  /*!
-    \brief Returns the mode which dictates how results are displayed.
-
-    With \l{Esri::ArcGISRuntime::Toolkit::SearchViewController::SearchResultMode}{SearchResultMode::Automatic},
-    if only a single result is found then this is automatically set as the selected result, otherwise when the is more than
-    one possible result then the \l results property is populated with all possible results.
-
-    With \l{Esri::ArcGISRuntime::Toolkit::SearchViewController::SearchResultMode}{SearchResultMode::Multiple}, the \l results property is
-    always populated with all found results (even if there is only 1 result in the list).
-
-    With \l{Esri::ArcGISRuntime::Toolkit::SearchViewController::SearchResultMode}{SearchResultMode::Single}, even if multiple results are found,
-    the best result is automatically set as the "selected" result and the \l results property is never populated.
-
-    The default value is \l{Esri::ArcGISRuntime::Toolkit::SearchViewController::SearchResultMode}{SearchResultMode::Automatic}.
-  */
   SearchViewController::SearchResultMode SearchViewController::resultMode() const
   {
     return m_resultMode;
   }
 
-  /*!
-    \brief Sets the mode which dictates how results are displayed to \a resultMode.
-   */
   void SearchViewController::setResultMode(SearchResultMode resultMode)
   {
     if (resultMode == m_resultMode)
@@ -373,34 +264,16 @@ namespace Esri::ArcGISRuntime::Toolkit {
     emit resultModeChanged();
   }
 
-  /*!
-   \brief Returns the collection of found results.
-
-    Defaults to an empty list.
-   */
   GenericListModel* SearchViewController::results() const
   {
     return m_results;
   }
 
-  /*!
-   \brief Returns the selected result from the \l results collection.
-
-    Defaults to null.
-
-    \sa resultMode
-   */
   SearchResult* SearchViewController::selectedResult() const
   {
     return m_selectedResult;
   }
 
-  /*!
-    \brief Sets the selected result from the \l results collection to \a selectedResult.
-
-    Selecting a result will trigger changing the viewpoint of the geoView to that result
-    if applicable.
-   */
   void SearchViewController::setSelectedResult(SearchResult* selectedResult)
   {
     if (m_selectedResult == selectedResult)
@@ -469,37 +342,21 @@ namespace Esri::ArcGISRuntime::Toolkit {
     emit selectedResultChanged();
   }
 
-  /*!
-      \brief Returns the collection of search sources to be used.
-   */
   GenericListModel* SearchViewController::sources() const
   {
     return m_sources;
   }
 
-  /*!
-      \brief Returns the collection of suggestion results from a query.
-   */
   GenericListModel* SearchViewController::suggestions() const
   {
     return m_suggestions;
   }
 
-  /*!
-      \brief Returns whether the user can perform a requery.
-      A requery will perform the search at the same location, but will only look at results
-      that exist within the current extent, ignoring all other results.
-   */
   bool SearchViewController::isEligableForRequery() const
   {
     return m_isEligableForRequery;
   }
 
-  /*!
-      \brief Sets whether the user can perform a requery to \a isEligableForRequery.
-      When \l automaticConfigurationEnabled is \c true, and the user changes the viewpoint, this is automatically set to
-      \c true. Clearing or changing the current query will set this property to \c false.
-   */
   void SearchViewController::setIsEligableForRequery(bool isEligableForRequery)
   {
     if (isEligableForRequery == m_isEligableForRequery)
@@ -509,10 +366,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     emit isEligableForRequeryChanged();
   }
 
-  /*!
-    \brief Starts a search using the current query. When \a restrictToArea is \c true then the
-    query will only look for results within the current \l queryArea.
-   */
   void SearchViewController::commitSearch(bool restrictToArea)
   {
     m_suggestions->clear();
@@ -531,9 +384,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     }
   }
 
-  /*!
-    \brief Starts a search using the given suggestion result \a searchSuggestion.
-   */
   void SearchViewController::acceptSuggestion(SearchSuggestion* searchSuggestion)
   {
     SuggestResult r;
@@ -559,10 +409,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     source->search(r);
   }
 
-  /*!
-      \brief Clears the search.
-      This will clear \l results , \l suggestions, \l selectedResult and \l currentQuery.
-   */
   void SearchViewController::clearSearch()
   {
     setSelectedResult(nullptr);
@@ -572,22 +418,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
     setIsEligableForRequery(false);
   }
 
-  /*!
-   \brief Returns whether automatic configuration is enabled or not.
-   Determines whether the view will update its configuration based on the attached
-   geoview's geomodel automatically. This includes such properties as \l queryCenter,
-   \l queryArea, and \l isEligableForRequery.
-
-   Defaults to true.
-   */
   bool SearchViewController::isAutomaticConfigurationEnabled() const
   {
     return m_isAutomaticConfigurationEnabled;
   }
 
-  /*!
-   \brief Sets whether automatic configuration is enabled to \a isAutomaticConfigurationEnabled.
-   */
   void SearchViewController::setIsAutomaticConfigurationEnabled(bool isAutomaticConfigurationEnabled)
   {
     if (isAutomaticConfigurationEnabled == m_isAutomaticConfigurationEnabled)
@@ -611,10 +446,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     emit thresholdRatioRepeatSearchChanged();
   }
 
-  /*!
-    \internal
-    \brief User has updated the query, update the sources.
-   */
   void SearchViewController::onQueryChanged()
   {
     setIsEligableForRequery(false);
@@ -629,10 +460,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     }
   }
 
-  /*!
-    \internal
-    \brief User has added one or more sources to the sources list, we hook up and listen to this source.
-   */
   void SearchViewController::onSourcesAdded(const QModelIndex& parent, int firstSource, int lastSource)
   {
     if (parent.isValid())
@@ -750,10 +577,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
       }
     }
   }
-  /*!
-    \internal
-    \brief User has removed one or more sources from the sources list, requiring cleanup.
-   */
+
   void SearchViewController::onSourcesRemoved(const QModelIndex& parent, int firstSource, int lastSource)
   {
     if (parent.isValid())
@@ -788,11 +612,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     }
   }
 
-  /*!
-   * \internal
-   * \brief Compares the last search viewpoint with the \a geom and checks they are not more different than a specified panning difference.
-   * The percentage used for the check is the variable returned from \l thresholdRatioRepeatSearch
-   */
   bool SearchViewController::checkPanningDifferenceLastSearch(const Geometry& geom) const
   {
     // Check center difference.
@@ -802,11 +621,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     return centerDiff > threshold;
   }
 
-  /*!
-   * \internal
-   * \brief Compares the last search viewpoint with the \a geom and checks they are not more different than a specified zooming difference.
-   * The percentage used for the check the variable returned from \l thresholdRatioRepeatSearch
-   */
   bool SearchViewController::checkZoomingDifferenceLastSearch(const Geometry& geom) const
   {
     // Check extent difference.
@@ -818,97 +632,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     return widthDiff > widthThreshold || heightDiff > heightThreshold;
   }
 
-  /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::SearchViewController::geoViewChanged()
-    \brief Signal emitted when the \l geoView changes.
-   */
-
-  /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::SearchViewController::defaultPlaceholderChanged()
-    \brief Signal emitted when the \l defaultPlaceholder changes.
-   */
-
-  /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::SearchViewController::activeSourceChanged()
-    \brief Signal emitted when the \l activeSource changes.
-   */
-
-  /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::SearchViewController::currentQueryChanged()
-    \brief Signal emitted when the \l currentQuery changes.
-   */
-
-  /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::SearchViewController::queryAreaChanged()
-    \brief Signal emitted when the \l queryArea changes.
-   */
-
-  /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::SearchViewController::queryCenterChanged()
-    \brief Signal emitted when the \l queryCenter changes.
-   */
-
-  /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::SearchViewController::resultModeChanged()
-    \brief Signal emitted when the \l resultMode changes.
-   */
-
-  /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::SearchViewController::selectedResultChanged()
-    \brief Signal emitted when the \l selectedResult changes.
-   */
-
-  /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::SearchViewController::isEligableForRequeryChanged()
-    \brief Signal emitted when the \l isEligableForRequery property changes.
-   */
-
-  /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::SearchViewController::isAutomaticConfigurationEnabledChanged()
-    \brief Signal emitted when the \l isAutomaticConfigurationEnabled property changes.
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::SearchViewController::geoView
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::SearchViewController::defaultPlaceholder
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::SearchViewController::activeSource
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::SearchViewController::currentQuery
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::SearchViewController::resultMode
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::SearchViewController::results
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::SearchViewController::selectedResult
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::SearchViewController::sources
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::SearchViewController::suggestions
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::SearchViewController::eligableForRequery
-   */
-
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::SearchViewController::automaticConfigurationEnabled
-   */
 } // Esri::ArcGISRuntime::Toolkit

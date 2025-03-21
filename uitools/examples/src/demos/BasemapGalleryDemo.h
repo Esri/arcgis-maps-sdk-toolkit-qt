@@ -17,10 +17,12 @@
 #ifndef ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_BASEMAPGALLERYDEMO_H
 #define ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_BASEMAPGALLERYDEMO_H
 
-#include "BaseDemo.h"
-
+// Qt headers
 #include <QObject>
 #include <QQmlEngine>
+
+// Other headers
+#include "BaseDemo.h"
 
 Q_MOC_INCLUDE("BasemapGalleryController.h")
 
