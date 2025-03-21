@@ -48,10 +48,7 @@ Pane {
     implicitWidth: 300
 
     /*!
-      \qmlproperty UtilityNetworkTraceController controller
-      \brief Loads a map with utility networks, on which different trace operations can be performed and the
-      operation's results are shown both on the map and textually in the UI.
-
+      \internal
     */
     property var controller: UtilityNetworkTraceController { }
 
