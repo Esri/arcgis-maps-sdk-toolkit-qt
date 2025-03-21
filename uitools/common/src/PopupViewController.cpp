@@ -254,18 +254,4 @@ void PopupViewController::setAttachmentThumbnailHeight(int height)
   attachmentModel->setThumbnailHeight(height);
 }
 
-/*!
-  \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::attachmentDataFetched(const QByteArray& attachmentData, const QString& name)
-  \brief Signal emitted when attachment data has been fetched. This is exposed to the user if they want to define their own handler for the attachment.
- */
-
-/*!
-  \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::clickedUrl(const QUrl& url)
-  \brief Signal emitted when a URL has been clicked. This is exposed to the user if they want to define their own handler for the url.
- */
-
-/*!
-  \fn void Esri::ArcGISRuntime::Toolkit::PopupViewController::mediaImageSourceUrl(const QUrl& sourceUrl)
-  \brief Signal emitted when a media image has been clicked. This is exposed to the user if they want to define their own handler for the image.
- */
 } // Esri::ArcGISRuntime::Toolkit
