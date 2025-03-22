@@ -29,12 +29,12 @@
 #include <PopupAttachmentItem.h>
 #include <PopupViewController.h>
 
+namespace Esri::ArcGISRuntime::Toolkit {
+
 /*!
   \internal
   This class is an internal implementation detail and is subject to change.
  */
-namespace Esri::ArcGISRuntime::Toolkit {
-
 AttachmentsPopupElementViewController::AttachmentsPopupElementViewController(
     AttachmentsPopupElement* attachmentsPopupElement, PopupViewController* popupViewController, QObject* parent)
   : PopupElementViewItem{attachmentsPopupElement, parent},

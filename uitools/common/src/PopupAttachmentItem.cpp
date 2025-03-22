@@ -28,10 +28,6 @@
 #include "PopupAttachmentImageProvider.h"
 #include <PopupViewController.h>
 
-/*!
-  \internal
-  This class is an internal implementation detail and is subject to change.
- */
 namespace Esri::ArcGISRuntime::Toolkit {
 
 namespace {
@@ -60,6 +56,10 @@ namespace {
   }
 }
 
+/*!
+  \internal
+  This class is an internal implementation detail and is subject to change.
+ */
 PopupAttachmentItem::PopupAttachmentItem(PopupAttachment* popupAttachment, PopupViewController* popupViewController ,QObject *parent)
   : QObject{parent},
     m_fetchingAttachment{false},
