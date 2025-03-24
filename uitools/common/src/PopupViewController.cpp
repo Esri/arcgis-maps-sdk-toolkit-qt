@@ -16,12 +16,31 @@
  ******************************************************************************/
 #include "PopupViewController.h"
 
+// Qt headers
 #include <QAbstractListModel>
+#include <QFuture>
+#include <QDebug>
 
+// Maps SDK headers
+#include "AttachmentsPopupElement.h"
+#include "FieldsPopupElement.h"
+#include "MediaPopupElement.h"
+#include "TextPopupElement.h"
+#include "Popup.h"
 #include "PopupAttachmentListModel.h"
 #include "PopupAttachmentManager.h"
 #include "PopupAttributeListModel.h"
+#include "PopupElement.h"
+#include "PopupExpressionEvaluation.h"
 #include "PopupManager.h"
+#include "PopupTypes.h"
+
+// Toolkit headers
+#include "AttachmentsPopupElementViewController.h"
+#include "FieldsPopupElementViewController.h"
+#include "MediaPopupElementViewController.h"
+#include "TextPopupElementViewController.h"
+#include "PopupElementViewItem.h"
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
@@ -31,7 +50,8 @@ namespace Esri::ArcGISRuntime::Toolkit {
  */
 
 PopupViewController::PopupViewController(QObject* parent):
-  QObject(parent)
+  QObject(parent),
+  m_popupElementControllerModel(new GenericListModel(&PopupElementViewItem::staticMetaObject, this))
 {
 }
 
@@ -44,6 +64,67 @@ PopupManager* PopupViewController::popupManager() const
   return m_popupManager;
 }
 
+Popup* PopupViewController::popup() const
+{
+  return m_popup;
+}
+GenericListModel* PopupViewController::popupElementControllers() const
+{
+  return m_popupElementControllerModel;
+}
+void PopupViewController::setPopup(Popup* popup)
+{
+  if (m_popup == popup)
+    return;
+
+  if (m_popup)
+  {
+    disconnect(m_popup.data(), nullptr, this, nullptr);
+    m_popupElementControllerModel->removeRows(0, m_popupElementControllerModel->rowCount());
+  }
+
+  m_popup = popup;
+
+  if (m_popupManager)
+    qWarning() << "Both Popup and PopupManager have been set. The PopupView will default to "
+                  "PopupView which supports PopupElements.";
+
+  if (m_popup)
+    connect(m_popup.data(), &QObject::destroyed, this, &PopupViewController::popupChanged);
+
+  m_popup->evaluateExpressionsAsync(this).then(this, [this](const QList<PopupExpressionEvaluation*>&)
+  {
+    for (auto element : m_popup->evaluatedElements())
+    {
+      switch (element->popupElementType())
+      {
+        case Esri::ArcGISRuntime::PopupElementType::TextPopupElement:
+          m_popupElementControllerModel->append(
+                new TextPopupElementViewController(static_cast<TextPopupElement*>(element), this, m_popup));
+          break;
+        case Esri::ArcGISRuntime::PopupElementType::FieldsPopupElement:
+          m_popupElementControllerModel->append(
+                new FieldsPopupElementViewController(static_cast<FieldsPopupElement*>(element), this, m_popup));
+          break;
+        case Esri::ArcGISRuntime::PopupElementType::AttachmentsPopupElement:
+          m_popupElementControllerModel->append(
+                new AttachmentsPopupElementViewController(static_cast<AttachmentsPopupElement*>(element), this, m_popup));
+          break;
+        case Esri::ArcGISRuntime::PopupElementType::MediaPopupElement:
+          m_popupElementControllerModel->append(
+                new MediaPopupElementViewController(static_cast<MediaPopupElement*>(element), this, m_popup));
+          break;
+        default:
+          Q_UNIMPLEMENTED();
+          break;
+      }
+    }
+    emit popupChanged();
+  });
+
+  emit popupChanged();
+  emit titleChanged();
+}
 void PopupViewController::setPopupManager(PopupManager* popupManager)
 {
   if (popupManager == m_popupManager)
@@ -59,6 +140,9 @@ void PopupViewController::setPopupManager(PopupManager* popupManager)
     disconnect(displayFields, nullptr, this, nullptr);
 
   m_popupManager = popupManager;
+
+  if (m_popup)
+    qWarning() << "Both Popup and PopupManager have been set. The PopupView will default to PopupView which supports PopupElements.";
 
   if (m_popupManager)
     connect(m_popupManager.data(), &QObject::destroyed, this, &PopupViewController::popupManagerChanged);
@@ -78,6 +162,7 @@ void PopupViewController::setPopupManager(PopupManager* popupManager)
   }
 
   emit popupManagerChanged();
+  emit titleChanged();
   emit fieldCountChanged();
   emit attachmentCountChanged();
   emit attachmentThumbnailHeightChanged();
@@ -130,7 +215,7 @@ QString PopupViewController::title() const
   // This is re-exposed from PopupManager as PopupManager does not have
   // NOTIFY/CONSTANT modifiers on its title property, so the Controller
   // re-exposes title to suppress warnings about this.
-  return m_popupManager ? m_popupManager->title() : nullptr;
+  return m_popup ? m_popup->title() : m_popupManager ? m_popupManager->title() : nullptr;
 }
 
 int PopupViewController::attachmentThumbnailWidth() const
