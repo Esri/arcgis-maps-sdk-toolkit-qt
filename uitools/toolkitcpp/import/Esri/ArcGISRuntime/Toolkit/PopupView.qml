@@ -150,8 +150,8 @@ Page {
     /*!
        \qmlsignal PopupView::imageClicked(var sourceUrl, var linkUrl)
        \brief Signal emitted when a Image Popup Media is clicked.
-       The \a sourceUrl of the image that was clicked on.
-       The \a linkUrl of the image that was clicked on.
+       The \a sourceUrl of the image that was clicked on. sourceUrl is the url of the image currently being displayed.
+       The \a linkUrl of the image that was clicked on. linkUrl is used when the image is clicked on to load in a browser.
      */
     signal imageClicked(var sourceUrl, var linkUrl)
 
