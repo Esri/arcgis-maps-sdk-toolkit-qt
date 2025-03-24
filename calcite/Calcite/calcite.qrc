@@ -45,10 +45,5 @@
         <file>images/chevron-left.svg</file>
         <file>images/chevron-right.svg</file>
         <file>images/line-solid.svg</file>
-        <file>images/arrow-circle-down.svg</file>
-        <file>images/image.svg</file>
-        <file>images/video.svg</file>
-        <file>images/file.svg</file>
-        <file>images/other.svg</file>
     </qresource>
 </RCC>
