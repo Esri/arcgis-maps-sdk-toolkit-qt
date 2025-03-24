@@ -43,8 +43,7 @@ private:
 
 signals:
   void imagePopupMediaItemChanged();
-  void clickedUrl(const QUrl& url);
-  void mediaImageSourceUrl(const QUrl& sourceUrl);
+  void imageClicked(const QUrl& sourceUrl, const QUrl& linkUrl);
 };
 
 } // Esri::ArcGISRuntime::Toolkit

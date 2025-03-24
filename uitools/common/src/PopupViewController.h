@@ -103,7 +103,7 @@ signals:
 
   void clickedUrl(const QUrl& url);
 
-  void mediaImageSourceUrl(const QUrl& sourceUrl);
+  void imageClicked(const QUrl& sourceUrl, const QUrl& linkUrl);
 
 private:
   int fieldCount() const;

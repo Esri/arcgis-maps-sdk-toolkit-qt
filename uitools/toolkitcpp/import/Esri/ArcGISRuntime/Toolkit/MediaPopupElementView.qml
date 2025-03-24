@@ -85,14 +85,10 @@ ColumnLayout {
                     anchors.fill: parent
 
                     onClicked: {
-                        if (fullScreenImageDialog.mediaType === QmlEnums.PopupMediaTypeImage) {
-                            // emit signal to bubble up url to PopupViewController
-                            fullScreenImageDialog.modelData.clickedUrl(fullScreenImageDialog.modelData.linkUrl);
-                            if (popupView.openUrlsWithSystemDefaultApplication) {
-                                Qt.openUrlExternally(fullScreenImageDialog.modelData.linkUrl);
-                            } else {
-                                // user disabled default behavior, so we do nothing
-                            }
+                        if (popupView.openUrlsWithSystemDefaultApplication) {
+                            Qt.openUrlExternally(fullScreenImageDialog.modelData.linkUrl);
+                        } else {
+                            // user disabled default behavior, so we do nothing
                         }
                     }
 
@@ -183,7 +179,8 @@ ColumnLayout {
 
                 onClicked: {
                     if (model.popupMediaType === QmlEnums.PopupMediaTypeImage) {
-                        model.listModelData.mediaImageSourceUrl(model.listModelData.sourceUrl);
+                        // emit signal to bubble up image source url and link url to PopupViewController
+                        model.listModelData.imageClicked(model.listModelData.sourceUrl, model.listModelData.linkUrl);
                     }
                     if (model.popupMediaType !== QmlEnums.PopupMediaTypeImage ||
                             (model.popupMediaType === QmlEnums.PopupMediaTypeImage && popupView.openImagesInApp)) {
@@ -199,10 +196,6 @@ ColumnLayout {
                         fullScreenImageDialog.imageTitle = model.title;
                         fullScreenImageDialog.imageCaption = model.caption;
                         fullScreenImageDialog.mediaType = model.popupMediaType;
-                    }
-                    if (model.popupMediaType === QmlEnums.PopupMediaTypeImage && !popupView.openImagesInApp) {
-                        // emit signal to bubble up link to PopupViewController
-                        model.listModelData.clickedUrl(model.listModelData.linkUrl);
                     }
                 }
 

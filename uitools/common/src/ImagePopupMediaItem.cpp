@@ -32,12 +32,8 @@ namespace Esri::ArcGISRuntime::Toolkit {
 ImagePopupMediaItem::ImagePopupMediaItem(PopupMedia* popupMedia, PopupViewController* popupViewController, QObject* parent)
   : PopupMediaItem{popupMedia, parent}
 {
-  // bubble up signal to PopupViewController
-  // bubble up linkUrl signal to PopupViewController. This is the linkUrl to be used for opening in an external browser
-  connect(this, &ImagePopupMediaItem::clickedUrl, popupViewController, &PopupViewController::clickedUrl);
-
-  // bubble up sourceUrl signal to PopupViewController. This is the sourceUrl used to display the image inside the PopupView
-  connect(this, &ImagePopupMediaItem::mediaImageSourceUrl, popupViewController, &PopupViewController::mediaImageSourceUrl);
+  // bubble up imageClicked signal to PopupViewController. This is the sourceUrl & linkUrl used for ImagePopupMediaItems.
+  connect(this, &ImagePopupMediaItem::imageClicked, popupViewController, &PopupViewController::imageClicked);
 }
 
 ImagePopupMediaItem::~ImagePopupMediaItem() = default;
