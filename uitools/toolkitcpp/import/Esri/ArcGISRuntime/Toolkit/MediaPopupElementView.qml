@@ -85,7 +85,7 @@ ColumnLayout {
                     anchors.fill: parent
 
                     onClicked: {
-                        if (popupView.openUrlsWithSystemDefaultApplication) {
+                        if (popupView.openUrlsWithSystemDefaultApplication && (fullScreenImageDialog.mediaType === QmlEnums.PopupMediaTypeImage)) {
                             Qt.openUrlExternally(fullScreenImageDialog.modelData.linkUrl);
                         } else {
                             // user disabled default behavior, so we do nothing
