@@ -132,6 +132,29 @@ Page {
      */
     signal attachmentThumbnailClicked(var index)
 
+    /*!
+       \qmlsignal PopupView::attachmentDataFetched(var attachmentData, var name)
+       \brief Signal emitted when a Popup Attachment is clicked to download the data.
+       The \a attachmentData of the Popup Attachment is the raw QByteData of the attachment.
+       The \a name of the Popup Attachment is the name of the attachment.
+     */
+    signal attachmentDataFetched(var attachmentData, var name)
+
+    /*!
+       \qmlsignal PopupView::clickedUrl(var url)
+       \brief Signal emitted when a url or hyperlink is clicked.
+       The \a url of the hyperlink from the Popup that was clicked on.
+     */
+    signal clickedUrl(var url)
+
+    /*!
+       \qmlsignal PopupView::imageClicked(var sourceUrl, var linkUrl)
+       \brief Signal emitted when a Image Popup Media is clicked.
+       The \a sourceUrl of the image that was clicked on.
+       The \a linkUrl of the image that was clicked on.
+     */
+    signal imageClicked(var sourceUrl, var linkUrl)
+
     Binding {
         target: controller
         property: "popupManager"
@@ -142,6 +165,22 @@ Page {
         target: controller
         property: "popup"
         value: popupView.popup
+    }
+
+    Connections {
+        target: controller
+
+        function onAttachmentDataFetched(attachmentData, name) {
+            attachmentDataFetched(attachmentData, name);
+        }
+
+        function onClickedUrl(url) {
+            clickedUrl(url);
+        }
+
+        function onImageClicked(sourceUrl, linkUrl) {
+            imageClicked(sourceUrl, linkUrl);
+        }
     }
 
     implicitWidth: 300 + padding
