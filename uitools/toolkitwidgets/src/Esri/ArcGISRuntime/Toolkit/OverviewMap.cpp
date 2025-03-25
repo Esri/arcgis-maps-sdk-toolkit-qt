@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2021 Esri
  *
@@ -86,7 +87,7 @@ void OverviewMap::setGeoView(SceneGraphicsView* sceneView)
 }
 
 /*!
-  \brief Returns the controller object driving this widget.
+  \internal
  */
 OverviewMapController* OverviewMap::controller() const
 {

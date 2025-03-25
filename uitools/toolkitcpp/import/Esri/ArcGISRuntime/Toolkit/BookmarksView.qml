@@ -38,9 +38,7 @@ Pane {
     id: bookmarksView
 
     /*!
-      \qmlproperty BookmarksViewController controller
-      \brief The controller handles binding logic between the BookmarksView and
-      the \c BookmarkListItem.
+      \internal
     */
     property var controller: BookmarksViewController { }
 
