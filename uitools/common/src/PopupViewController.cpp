@@ -68,10 +68,12 @@ Popup* PopupViewController::popup() const
 {
   return m_popup;
 }
+
 GenericListModel* PopupViewController::popupElementControllers() const
 {
   return m_popupElementControllerModel;
 }
+
 void PopupViewController::setPopup(Popup* popup)
 {
   if (m_popup == popup)
@@ -125,6 +127,7 @@ void PopupViewController::setPopup(Popup* popup)
   emit popupChanged();
   emit titleChanged();
 }
+
 void PopupViewController::setPopupManager(PopupManager* popupManager)
 {
   if (popupManager == m_popupManager)
