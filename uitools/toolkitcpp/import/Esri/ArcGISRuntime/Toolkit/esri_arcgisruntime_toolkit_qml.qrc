@@ -1,9 +1,5 @@
 <RCC>
     <qresource prefix="/esri.com/imports/Esri/ArcGISRuntime/Toolkit">
-        <file>ArcGISAuthenticationView_internal.qml</file>
-        <file>ArcGISAuthenticationView.qml</file>
-        <file>ArcGISOAuth2View.qml</file>
-        <file>ArcGISUserCredentialsView.qml</file>
         <file>AttachmentsPopupElementView.qml</file>
         <file>AuthenticationView.qml</file>
         <file>BasemapGallery.qml</file>

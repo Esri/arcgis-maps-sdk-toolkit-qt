@@ -19,7 +19,7 @@
 // Qt headers
 #include <QObject>
 
-// Maps SDK headers
+// STL headers
 #include <PopupElement.h>
 #include <PopupTypes.h>
 

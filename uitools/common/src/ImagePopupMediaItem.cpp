@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2025 Esri
  *
@@ -49,5 +50,3 @@ QUrl ImagePopupMediaItem::linkUrl() const
 }
 
 } // namespace Esri::ArcGISRuntime::Toolkit
-
-
