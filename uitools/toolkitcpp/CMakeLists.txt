@@ -18,7 +18,7 @@ include(../common/CMakeLists.txt)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui QuickControls2 Svg WebView)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui QuickControls2 Svg WebView Graphs)
 
 qt_standard_project_setup()
 
@@ -44,19 +44,23 @@ target_link_libraries(libtoolkitcpp PRIVATE
     Qt6::QuickControls2
     Qt6::Svg
     Qt6::WebView
+    Qt6::Graphs
     ArcGISRuntime::Cpp
 )
 
 set(esri_arcgisruntime_toolkit_view_resource_files
     "import/Esri/ArcGISRuntime/Toolkit/AuthenticationView.qml"
+    "import/Esri/ArcGISRuntime/Toolkit/AttachmentsPopupElementView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/BasemapGallery.qml"
     "import/Esri/ArcGISRuntime/Toolkit/BookmarksView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/Callout.qml"
     "import/Esri/ArcGISRuntime/Toolkit/ClientCertificateView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/CoordinateConversion.qml"
     "import/Esri/ArcGISRuntime/Toolkit/CurrentVersion.qml"
+    "import/Esri/ArcGISRuntime/Toolkit/FieldsPopupElementView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/FlashImage.qml"
     "import/Esri/ArcGISRuntime/Toolkit/FloorFilter.qml"
+    "import/Esri/ArcGISRuntime/Toolkit/MediaPopupElementView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/NorthArrow.qml"
     "import/Esri/ArcGISRuntime/Toolkit/OAuth2View.qml"
     "import/Esri/ArcGISRuntime/Toolkit/OverviewMap.qml"
@@ -66,6 +70,7 @@ set(esri_arcgisruntime_toolkit_view_resource_files
     "import/Esri/ArcGISRuntime/Toolkit/ScalebarImpl.qml"
     "import/Esri/ArcGISRuntime/Toolkit/SearchView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/SslHandshakeView.qml"
+    "import/Esri/ArcGISRuntime/Toolkit/TextPopupElementView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/TimeSlider.qml"
     "import/Esri/ArcGISRuntime/Toolkit/UserCredentialsView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/UtilityNetworkTrace.qml"
