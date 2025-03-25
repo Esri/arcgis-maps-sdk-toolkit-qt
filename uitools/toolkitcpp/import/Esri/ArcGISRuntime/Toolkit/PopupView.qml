@@ -70,6 +70,7 @@ Page {
 
        The PopupManager should be created from a Popup.
        \qmlproperty PopupManager popupManager
+       \deprecated
      */
     property var popupManager: null
 
@@ -77,8 +78,6 @@ Page {
        \brief The Popup that controls the information being displayed in
        the view.
 
-       If both a Popup and PopupManager are provided, the Popup will take priority
-       which utilizes the new PopupElements.
        \qmlproperty Popup popup
      */
     property var popup: null

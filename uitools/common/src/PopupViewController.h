@@ -21,7 +21,8 @@
 #include <QObject>
 #include <QPointer>
 
-// STL headers
+// Maps SDK headers
+#include <Deprecated.h>
 #include <Popup.h>
 #include <PopupElement.h>
 #include <PopupManager.h>
@@ -65,9 +66,9 @@ public:
 
   GenericListModel* popupElementControllers() const;
 
-  PopupManager* popupManager() const;
+  QRT_DEPRECATED PopupManager* popupManager() const;
 
-  void setPopupManager(PopupManager* popupManager);
+  QRT_DEPRECATED void setPopupManager(PopupManager* popupManager);
 
   QAbstractListModel* displayFields() const;
 
@@ -87,7 +88,7 @@ signals:
 
   void popupChanged();
 
-  void popupManagerChanged();
+  QRT_DEPRECATED void popupManagerChanged();
 
   void titleChanged();
 
