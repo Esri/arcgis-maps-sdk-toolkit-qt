@@ -154,6 +154,14 @@ Page {
      */
     signal imageClicked(var sourceUrl, var linkUrl)
 
+    MouseArea {
+        anchors.fill: parent
+        // stop wheel event from scrolling the map once we reach the end of the PopupView
+        onWheel: (event) => {
+            event.accepted = true;
+        }
+    }
+
     Binding {
         target: controller
         property: "popupManager"
