@@ -21,7 +21,7 @@
 #include <QObject>
 #include <QPointer>
 
-// STL headers
+// Maps SDK headers
 #include <Popup.h>
 #include <PopupElement.h>
 #include <PopupManager.h>

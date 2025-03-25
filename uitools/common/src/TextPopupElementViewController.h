@@ -16,11 +16,11 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_TEXTPOPUPELEMENTVIEWCONTROLLER_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_TEXTPOPUPELEMENTVIEWCONTROLLER_H
 
+// Toolkit headers
+#include "PopupElementViewItem.h"
+
 // Qt headers
 #include <QObject>
-
-// Other headers
-#include "PopupElementViewItem.h"
 
 namespace Esri::ArcGISRuntime {
 
