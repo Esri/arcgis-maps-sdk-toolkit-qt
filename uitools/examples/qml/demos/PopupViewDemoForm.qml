@@ -19,6 +19,7 @@ import QtQuick.Controls
 import Esri.ArcGISRuntime
 import Esri.ArcGISRuntime.Toolkit
 import DemoApp
+import QtGraphs
 
 DemoPage {
     sceneViewContents: Component {
@@ -29,14 +30,14 @@ DemoPage {
             PopupView {
                 id:popupView
                 anchors {
-                     left: parent.left
-                     top: parent.top
-                     bottom: parent.bottom
+                    left: parent.left
+                    top: parent.top
+                    bottom: parent.bottom
                 }
                 visible: false
                 popupManager: model.popupManager
+                popup: model.popup
             }
-            //! [Set up Popup View QML]
 
             PopupViewDemo {
                 id: model
@@ -53,12 +54,13 @@ DemoPage {
             PopupView {
                 id:popupView
                 anchors {
-                     left: parent.left
-                     top: parent.top
-                     bottom: parent.bottom
+                    left: parent.left
+                    top: parent.top
+                    bottom: parent.bottom
                 }
                 visible: false
                 popupManager: model.popupManager
+                popup: model.popup
             }
 
             PopupViewDemo {

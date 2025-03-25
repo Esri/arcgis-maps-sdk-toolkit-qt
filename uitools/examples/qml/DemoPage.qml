@@ -56,11 +56,12 @@ Control {
     signal showToolsButtonPressed()
 
     Component.onCompleted: {
-        if (ArcGISRuntimeEnvironment.apiKey === "") {
-            apiKeyPopup.open();
-        } else {
-            apiKeyPopup.resetLoader();
-        }
+        // if (ArcGISRuntimeEnvironment.apiKey === "") {
+        //     apiKeyPopup.open();
+        // } else {
+        //     apiKeyPopup.resetLoader();
+        // }
+        apiKeyPopup.resetLoader();
     }
 
     Keys.forwardTo: [geoView]
@@ -147,7 +148,7 @@ Control {
             autoExclusive: true
             checked: viewType === DemoPage.ViewType.Scene
             onClicked: viewType = DemoPage.ViewType.Scene;
-            enabled: ArcGISRuntimeEnvironment.apiKey !== "" && sceneViewContents !== null
+            // enabled: ArcGISRuntimeEnvironment.apiKey !== "" && sceneViewContents !== null
         }
         Button {
             Layout.topMargin: 5

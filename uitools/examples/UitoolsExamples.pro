@@ -71,6 +71,7 @@ macx {
 
 ios {
     include (iOS/iOS.pri)
+    QT -= multimedia
 }
 
 android {

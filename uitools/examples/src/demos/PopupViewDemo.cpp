@@ -39,6 +39,9 @@
 #include <QMouseEvent>
 #include <QUuid>
 #include <QFuture>
+#include "AuthenticationManager.h"
+#include "CredentialCache.h"
+#include "Credential.h"
 
 using namespace Esri::ArcGISRuntime;
 
@@ -54,9 +57,11 @@ PopupViewDemo::~PopupViewDemo()
 
 Esri::ArcGISRuntime::Map* PopupViewDemo::initMap_(QObject* parent) const
 {
-  return new Map(QUrl("https://runtime.maps.arcgis.com/home/webmap/"
-                      "viewer.html?webmap=e4c6eb667e6c43b896691f10cc2f1580"),
-                 parent);
+  // If you don't want to enter credentials in the authentication view
+  // copy past the CredentialCache code from the issue here
+ return new Map(QUrl("https://runtime.maps.arcgis.com/home/webmap/"
+                     "viewer.html?webmap=bfce95f294c341a580c608567956806d"),
+                parent);
 }
 
 Scene* PopupViewDemo::initScene_(QObject* parent) const
@@ -78,6 +83,11 @@ QObject* PopupViewDemo::popupManager_()
   return m_popupManager;
 }
 
+Popup* PopupViewDemo::popup()
+{
+  return m_popup;
+}
+
 void PopupViewDemo::setPopupManager_(QObject* popupManager)
 {
   if (popupManager == m_popupManager)
@@ -89,6 +99,20 @@ void PopupViewDemo::setPopupManager_(QObject* popupManager)
   delete oldManager;
 }
 
+void PopupViewDemo::setPopup(Popup* popup)
+{
+  if (m_popup == popup)
+    return;
+
+  if (m_popup)
+  {
+    m_popup->deleteLater();
+  }
+
+  m_popup = popup;
+  emit popupChanged();
+}
+
 void PopupViewDemo::setUp()
 {
   apply([this](auto geoView)
@@ -96,7 +120,8 @@ void PopupViewDemo::setUp()
           using ViewType = std::remove_pointer_t<decltype(geoView)>;
           connect(geoView, &ViewType::mouseClicked, this, [this, geoView](QMouseEvent& mouse)
                   {
-                    auto layer = geoModel()->operationalLayers()->first();
+                   auto layer = geoModel()->operationalLayers()->first();
+
                     if (layer->layerType() == LayerType::FeatureLayer)
                     {
                       m_featureLayer = static_cast<FeatureLayer*>(layer);
@@ -133,13 +158,25 @@ void PopupViewDemo::setUp()
                           return;
                         }
 
-                        Popup* popup = new Popup(identifyResult->geoElements().first());
+                        // SF Incidents seems to require this way of creating popups from geoelements
+                        // when we check `identifyResult->popups()` we are returned an empty QList
+                        // This is how we did it before PopupElements
+                        auto popup = new Popup(identifyResult->geoElements().at(0));
                         popup->popupDefinition()->setTitle(identifyResult->layerContent()->name());
+                        // Using the WebMap the identifyResult does return popups() so we use that as it's
+                        // the proper way of getting popups from an identify result
+                        if (!identifyResult->popups().isEmpty())
+                        {
+                          popup = identifyResult->popups().first();
+                        }
 
                         PopupManager* popupManager = new PopupManager{popup, this};
                         popup->setParent(popupManager);
+                        popup->setParent(this);
 
                         setPopupManager_(popupManager);
+                        setPopup(popup);
+                        emit popupChanged();
                         emit popupManagerChanged();
                       });
                     }
