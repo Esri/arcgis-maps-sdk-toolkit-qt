@@ -70,6 +70,7 @@ Page {
 
        The PopupManager should be created from a Popup.
        \qmlproperty PopupManager popupManager
+       \deprecated
      */
     property var popupManager: null
 
@@ -77,8 +78,6 @@ Page {
        \brief The Popup that controls the information being displayed in
        the view.
 
-       If both a Popup and PopupManager are provided, the Popup will take priority
-       which utilizes the new PopupElements.
        \qmlproperty Popup popup
      */
     property var popup: null
@@ -154,6 +153,14 @@ Page {
        The \a linkUrl of the image that was clicked on. linkUrl is used when the image is clicked on to load in a browser.
      */
     signal imageClicked(var sourceUrl, var linkUrl)
+
+    MouseArea {
+        anchors.fill: parent
+        // stop wheel event from scrolling the map once we reach the end of the PopupView
+        onWheel: (event) => {
+            event.accepted = true;
+        }
+    }
 
     Binding {
         target: controller

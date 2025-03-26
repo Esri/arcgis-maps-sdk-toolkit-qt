@@ -228,7 +228,7 @@ ColumnLayout {
                 id: imageComp
                 Image {
                     source: listModelData.sourceUrl
-                    fillMode: Image.PreserveAspectCrop
+                    fillMode: fullScreenImageDialog.visible ? Image.PreserveAspectFit : Image.PreserveAspectCrop
                     asynchronous: true
                     cache: true
                     height: delegatePopupMedia.height
