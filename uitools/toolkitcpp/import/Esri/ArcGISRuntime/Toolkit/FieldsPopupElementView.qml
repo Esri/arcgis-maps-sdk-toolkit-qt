@@ -73,7 +73,7 @@ ListView {
                 // displayed as `View`.
                 if (text.toLowerCase().startsWith("http")) {
                     let link = text;
-                    text = `<a href="${link}">View</a>`;
+                    text = `<a href="${link}" style="color:#0000FF;">View</a>`;
                     textFormat = Text.RichText;
                 }
             }
