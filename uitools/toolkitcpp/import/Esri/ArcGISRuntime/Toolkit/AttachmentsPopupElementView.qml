@@ -214,6 +214,7 @@ ColumnLayout {
                     id: fetchAttachment
                     running: model.listModelData.fetchingAttachment
                     visible: model.listModelData.fetchingAttachment
+                    Layout.maximumHeight: fileInfoColumn.height
                 }
 
                 MenuSeparator {
