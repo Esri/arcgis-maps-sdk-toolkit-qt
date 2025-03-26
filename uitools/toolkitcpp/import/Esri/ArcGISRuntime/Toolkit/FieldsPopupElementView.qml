@@ -73,7 +73,7 @@ ListView {
                 // displayed as `View`.
                 if (text.toLowerCase().startsWith("http")) {
                     let link = text;
-                    text = `<a href="${link}" style="color:#0070E0;">View</a>`;
+                    text = popupView.changeHyperlinkColor(`<a href="${link}">View</a>`);
                     textFormat = Text.RichText;
                 }
             }

@@ -32,7 +32,7 @@ Item {
 
     Label {
         id: richText
-        text: controller ? controller.text : ""
+        text: controller ? popupView.changeHyperlinkColor(controller.text) : ""
         textFormat: Text.RichText
         wrapMode: Text.WordWrap
         anchors.fill: parent
