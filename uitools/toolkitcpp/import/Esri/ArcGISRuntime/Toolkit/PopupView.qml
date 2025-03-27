@@ -190,6 +190,12 @@ Page {
         }
     }
 
+    // on certain Android devices the hyperlink color is not blue and makes it extremly difficult to see
+    // we are searching the input string and modifying it to ensure the hyperlink color is visible
+    function changeHyperlinkColor(html) {
+        return html.replace(/<a /g, "<a style='color:#0070E0;' ");
+    }
+
     implicitWidth: 300 + padding
 
     implicitHeight: 300 + padding
