@@ -394,12 +394,6 @@ Page {
                             controller: listModelData
                             width: elementsView.width
                         }
-
-                        MenuSeparator {
-                            width: elementsView.width
-                            leftPadding: 10
-                            rightPadding: 10
-                        }
                     }
                 }
             }
