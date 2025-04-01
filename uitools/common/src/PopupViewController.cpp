@@ -14,6 +14,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
+#define QRT_DISABLE_DEPRECATED_WARNINGS
+
 #include "PopupViewController.h"
 
 // Qt headers
