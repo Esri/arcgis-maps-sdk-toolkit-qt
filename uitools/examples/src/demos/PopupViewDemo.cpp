@@ -55,38 +55,27 @@ PopupViewDemo::~PopupViewDemo()
 Esri::ArcGISRuntime::Map* PopupViewDemo::initMap_(QObject* parent) const
 {
   return new Map(QUrl("https://runtime.maps.arcgis.com/home/webmap/"
-                      "viewer.html?webmap=e4c6eb667e6c43b896691f10cc2f1580"),
+                      "viewer.html?webmap=9f3a674e998f461580006e626611f9ad"),
                  parent);
 }
 
-Scene* PopupViewDemo::initScene_(QObject* parent) const
+QObject* PopupViewDemo::popup()
 {
-  Scene* scene = BaseDemo::initScene_(parent);
-  Viewpoint viewPoint(Envelope(-122.5277, 37.7204, -122.3511, 37.7956, SpatialReference(4326)));
-  scene->setInitialViewpoint(viewPoint);
-  FeatureLayer* fl = new FeatureLayer(new ServiceFeatureTable(
-                                          QUrl("https://sampleserver6.arcgisonline.com/arcgis/rest/services/"
-                                               "SF311/FeatureServer/0"),
-                                          parent),
-                                      parent);
-  scene->operationalLayers()->append(fl);
-  return scene;
+  return m_popup;
 }
 
-QObject* PopupViewDemo::popupManager_()
+void PopupViewDemo::setPopup(QObject* popup)
 {
-  return m_popupManager;
-}
-
-void PopupViewDemo::setPopupManager_(QObject* popupManager)
-{
-  if (popupManager == m_popupManager)
+  if (m_popup == popup)
     return;
 
-  auto oldManager = m_popupManager;
-  m_popupManager = popupManager;
-  emit popupManagerChanged();
-  delete oldManager;
+  if (m_popup)
+  {
+    m_popup->deleteLater();
+  }
+
+  m_popup = popup;
+  emit popupChanged();
 }
 
 void PopupViewDemo::setUp()
@@ -133,14 +122,11 @@ void PopupViewDemo::setUp()
                           return;
                         }
 
-                        Popup* popup = new Popup(identifyResult->geoElements().first());
-                        popup->popupDefinition()->setTitle(identifyResult->layerContent()->name());
+                        auto popup = identifyResult->popups().first();
+                        popup->setParent(this);
 
-                        PopupManager* popupManager = new PopupManager{popup, this};
-                        popup->setParent(popupManager);
-
-                        setPopupManager_(popupManager);
-                        emit popupManagerChanged();
+                        setPopup(popup);
+                        emit popupChanged();
                       });
                     }
                     else
