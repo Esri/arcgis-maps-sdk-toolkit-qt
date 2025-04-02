@@ -25,12 +25,12 @@
 #include <Deprecated.h>
 #include <Popup.h>
 #include <PopupElement.h>
-#include <PopupManager.h>
 
 // Other headers
 #include "GenericListModel.h"
 
 Q_MOC_INCLUDE("PopupAttachmentListModel.h")
+Q_MOC_INCLUDE("PopupManager.h")
 
 namespace Esri::ArcGISRuntime {
 
