@@ -55,16 +55,38 @@ ApplicationWindow {
                     id: themeSwitch
                     text: checked ? "Dark Mode" : "Light Mode"
                     Layout.alignment: Qt.AlignRight
+                    enabled: !C.Calcite.honorSystemTheme
+                    property var selectedTheme: themeSwitch.checked ? C.Calcite.Dark : C.Calcite.Light
+
                     Binding {
                         target: C.Calcite
                         property: "theme"
-                        value: themeSwitch.checked ? C.Calcite.Dark : C.Calcite.Light
+                        value: themeSwitch.enabled ? themeSwitch.selectedTheme : Application.styleHints.colorScheme
                     }
+
+
                 }
                 CheckBox {
                     id: enabler
                     text: "Enabled"
                     checked: true
+                }
+                CheckBox {
+                    id: honorSystemTheme
+                    text: "Honor System Theme"
+                    checked: true
+
+                    Binding {
+                        target: C.Calcite
+                        property: "honorSystemTheme"
+                        value: honorSystemTheme.checked
+                    }
+                    Binding {
+                        target: C.Calcite
+                        property: "theme"
+                        value: honorSystemTheme.checked ? Application.styleHints.colorScheme :
+                                                          themeSwitch.selectedTheme
+                    }
                 }
             }
         }
