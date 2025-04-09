@@ -21,6 +21,8 @@
   \inmodule ArcGISQtToolkit
   \since Esri::ArcGISRuntime 100.6
 
+  \deprecated
+
   Enumerates the status of a sensor. The SensorStatus can be one of:
   \table
     \header

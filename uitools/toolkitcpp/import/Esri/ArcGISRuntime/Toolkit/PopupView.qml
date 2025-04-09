@@ -58,7 +58,7 @@ import QtQuick.Layouts
    \note Each time a change is made to the Popup, PopupDefinition,
    PopupManager, or any of their properties, the PopupManager must
    be re-set to the PopupView.
-   \image docs/popupview.png popupview
+   \image popupview.png popupview
    \snippet qml/demos/PopupViewDemoForm.qml Set up Popup View QML
  */
 Page {
@@ -70,19 +70,48 @@ Page {
 
        The PopupManager should be created from a Popup.
        \qmlproperty PopupManager popupManager
+       \deprecated
      */
     property var popupManager: null
 
+    /*!
+       \brief The Popup that controls the information being displayed in
+       the view.
+
+       \qmlproperty Popup popup
+     */
+    property var popup: null
 
     /*!
-      \qmlproperty PopupViewController controller
-      \brief The Controller handles reading from the PopupManager and monitoring
-      the list-models.
+       \brief Boolean that controls if the PopupView will attempt to open URL's with an external browser.
+       For more information see \l{https://doc.qt.io/qt-6/qml-qtqml-qt.html#openUrlExternally-method}{Qt.openUrlExternally}.
 
-      The CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::PopupViewController}{here}.
+       Defaults to true.
+       \qmlproperty bool openUrlsWithSystemDefaultApplication
+     */
+    property bool openUrlsWithSystemDefaultApplication: true
+
+    /*!
+       \brief Boolean that controls if the PopupView will attempt to open images with a full screen takeover.
+
+       Defaults to true.
+       \qmlproperty bool openImagesInApp
+     */
+    property bool openImagesInApp: true
+
+    /*!
+       \brief Boolean that controls if the PopupView will attempt to open attachments with an external viewer.
+       For more information see \l{https://doc.qt.io/qt-6/qml-qtqml-qt.html#openUrlExternally-method}{Qt.openUrlExternally}.
+
+       Defaults to true.
+       \qmlproperty bool openAttachmentsWithSystemDefaultApplication
+     */
+    property bool openAttachmentsWithSystemDefaultApplication: true
+
+    /*!
+      \internal
     */
     property var controller: PopupViewController {}
-
 
     /*!
        \brief Callback function called when the close button is clicked. When
@@ -94,7 +123,6 @@ Page {
         popupView.visible = false;
     }
 
-
     /*!
        \qmlsignal PopupView::attachmentThumbnailClicked(var index)
        \brief Signal emitted when an attachment thumbnail is clicked.
@@ -103,10 +131,69 @@ Page {
      */
     signal attachmentThumbnailClicked(var index)
 
+    /*!
+       \qmlsignal PopupView::attachmentDataFetched(var attachmentData, var name)
+       \brief Signal emitted when a Popup Attachment is clicked to download the data.
+       The \a attachmentData of the Popup Attachment is the raw QByteData of the attachment.
+       The \a name of the Popup Attachment is the name of the attachment.
+     */
+    signal attachmentDataFetched(var attachmentData, var name)
+
+    /*!
+       \qmlsignal PopupView::clickedUrl(var url)
+       \brief Signal emitted when a url or hyperlink is clicked.
+       The \a url of the hyperlink from the Popup that was clicked on.
+     */
+    signal clickedUrl(var url)
+
+    /*!
+       \qmlsignal PopupView::imageClicked(var sourceUrl, var linkUrl)
+       \brief Signal emitted when a Image Popup Media is clicked.
+       The \a sourceUrl of the image that was clicked on. sourceUrl is the url of the image currently being displayed.
+       The \a linkUrl of the image that was clicked on. linkUrl is used when the image is clicked on to load in a browser.
+     */
+    signal imageClicked(var sourceUrl, var linkUrl)
+
+    MouseArea {
+        anchors.fill: parent
+        // stop wheel event from scrolling the map once we reach the end of the PopupView
+        onWheel: (event) => {
+            event.accepted = true;
+        }
+    }
+
     Binding {
         target: controller
         property: "popupManager"
         value: popupView.popupManager
+    }
+
+    Binding {
+        target: controller
+        property: "popup"
+        value: popupView.popup
+    }
+
+    Connections {
+        target: controller
+
+        function onAttachmentDataFetched(attachmentData, name) {
+            attachmentDataFetched(attachmentData, name);
+        }
+
+        function onClickedUrl(url) {
+            clickedUrl(url);
+        }
+
+        function onImageClicked(sourceUrl, linkUrl) {
+            imageClicked(sourceUrl, linkUrl);
+        }
+    }
+
+    // on certain Android devices the hyperlink color is not blue and makes it extremly difficult to see
+    // we are searching the input string and modifying it to ensure the hyperlink color is visible
+    function changeHyperlinkColor(html) {
+        return html.replace(/<a /g, "<a style='color:#0070E0;' ");
     }
 
     implicitWidth: 300 + padding
@@ -131,84 +218,181 @@ Page {
         rightPadding: popupView.spacing
     }
 
-    contentItem: Flickable {
-        id: flickable
-        clip: true
-        contentHeight: fieldsLayout.height
-        GridLayout {
-            id: fieldsLayout
-            flow: GridLayout.TopToBottom
-            anchors {
-                left: parent.left
-                right: parent.right
-            }
+    // prioritizes PopupElements over PopupManager styled Popups if both are present
+    contentItem: Loader {
+        id: popupDisplayLoader
+        sourceComponent: popup ? popupUsingPopupElements : popupUsingPopupManager
+    }
 
-            // We must account for what is visible, including title headers as rows.
-            rows: controller.showAttachments ? controller.fieldCount + controller.attachmentCount + 1
-                                             : controller.fieldCount
-            rowSpacing: popupView.spacing
-            columnSpacing: 30
-            // Field names
-            Repeater {
-                model: controller.displayFields
-                Label {
-                    text: label ?? fieldName ?? ""
-                    Layout.maximumWidth: flickable.width / 2
-                    wrapMode: Text.Wrap
-                    font: popupView.font
+    Component {
+        id: popupUsingPopupManager
+        Flickable {
+            id: flickable
+            clip: true
+            contentHeight: fieldsLayout.height
+            GridLayout {
+                id: fieldsLayout
+                flow: GridLayout.TopToBottom
+                anchors {
+                    left: parent.left
+                    right: parent.right
                 }
-            }
 
-            // Attachments header
-            Label {
-                Layout.columnSpan: 2
-                Layout.fillWidth: true
-                visible: controller.showAttachments
-                enabled: visible
-                textFormat: Text.StyledText
-                horizontalAlignment: Text.AlignHCenter
-                text: controller.attachmentCount > 0 ? "<h2>Attachments</h2>" : ""
-                font: popupView.font
-            }
+                // We must account for what is visible, including title headers as rows.
+                rows: controller.showAttachments ? controller.fieldCount + controller.attachmentCount + 1
+                                                 : controller.fieldCount
+                rowSpacing: popupView.spacing
+                columnSpacing: 30
+                // Field names
+                Repeater {
+                    model: controller.displayFields
+                    Label {
+                        text: label ?? fieldName ?? ""
+                        Layout.maximumWidth: flickable.width / 2
+                        wrapMode: Text.Wrap
+                        font: popupView.font
+                    }
+                }
 
-            // Attachment names
-            Repeater {
-                model: controller.attachments
+                // Attachments header
                 Label {
+                    Layout.columnSpan: 2
                     Layout.fillWidth: true
                     visible: controller.showAttachments
                     enabled: visible
-                    text: name
-                    wrapMode: Text.Wrap
+                    textFormat: Text.StyledText
+                    horizontalAlignment: Text.AlignHCenter
+                    text: controller.attachmentCount > 0 ? "<h2>Attachments</h2>" : ""
                     font: popupView.font
                 }
-            }
 
-            // Field contents
-            Repeater {
-                model: controller.displayFields
-                Label {
-                    Layout.fillWidth: true
-                    text: formattedValue
-                    wrapMode: Text.Wrap
-                    font: popupView.font
+                // Attachment names
+                Repeater {
+                    model: controller.attachments
+                    Label {
+                        Layout.fillWidth: true
+                        visible: controller.showAttachments
+                        enabled: visible
+                        text: name
+                        wrapMode: Text.Wrap
+                        font: popupView.font
+                    }
+                }
+
+                // Field contents
+                Repeater {
+                    model: controller.displayFields
+                    Label {
+                        Layout.fillWidth: true
+                        text: formattedValue
+                        wrapMode: Text.Wrap
+                        font: popupView.font
+                    }
+                }
+
+                // Attachment images
+                Repeater {
+                    model: controller.attachments
+                    Image {
+                        Layout.fillHeight: true
+                        Layout.minimumWidth: controller.attachmentThumbnailWidth
+                        Layout.minimumHeight: controller.attachmentThumbnailHeight
+                        visible: controller.showAttachments
+                        enabled: visible
+                        source: thumbnailUrl
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                attachmentThumbnailClicked(index)
+                            }
+                        }
+                    }
                 }
             }
+        }
+    }
 
-            // Attachment images
-            Repeater {
-                model: controller.attachments
-                Image {
-                    Layout.fillHeight: true
-                    Layout.minimumWidth: controller.attachmentThumbnailWidth
-                    Layout.minimumHeight: controller.attachmentThumbnailHeight
-                    visible: controller.showAttachments
-                    enabled: visible
-                    source: thumbnailUrl
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: {
-                            attachmentThumbnailClicked(index)
+    Component {
+        id: popupUsingPopupElements
+        ListView {
+            id: elementsView
+
+            anchors.fill: parent
+            model: controller.popupElementControllers
+            spacing: 10
+            clip: true
+            focus: true
+
+            delegate: Item {
+
+                height: loader.item ? loader.item.height : null
+
+                // Load the correct PopupElement based on the PopupElementType
+                Component.onCompleted: {
+                    switch (model.popupElementType) {
+                        case QmlEnums.PopupElementTypeTextPopupElement:
+                            loader.sourceComponent = textPopupElementView;
+                            break;
+                        case QmlEnums.PopupElementTypeFieldsPopupElement:
+                            loader.sourceComponent = fieldsPopupElementView;
+                            break;
+                        case QmlEnums.PopupElementTypeMediaPopupElement:
+                            loader.sourceComponent = mediaPopupElementView;
+                            break;
+                        case QmlEnums.PopupElementTypeAttachmentsPopupElement:
+                            loader.sourceComponent = attachmentsPopupElementView;
+                            break;
+                    }
+                }
+
+                Loader {
+                    id: loader
+                }
+
+                Component {
+                    id: textPopupElementView
+                    Column {
+                        MenuSeparator {
+                            width: elementsView.width
+                            leftPadding: 10
+                            rightPadding: 10
+                        }
+                        TextPopupElementView {
+                            controller: listModelData
+                            width: elementsView.width
+                            height: children.height
+                        }
+                    }
+                }
+
+                Component {
+                    id: mediaPopupElementView
+                    MediaPopupElementView {
+                        controller: listModelData
+                        width: elementsView.width
+                    }
+                }
+
+                Component {
+                    id: attachmentsPopupElementView
+                    AttachmentsPopupElementView {
+                        controller: listModelData
+                        width: elementsView.width
+                    }
+                }
+
+                Component {
+                    id: fieldsPopupElementView
+                    Column {
+                        MenuSeparator {
+                            width: elementsView.width
+                            leftPadding: 10
+                            rightPadding: 10
+                        }
+
+                        FieldsPopupElementView {
+                            controller: listModelData
+                            width: elementsView.width
                         }
                     }
                 }

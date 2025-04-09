@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2019 Esri
  *
@@ -79,6 +80,7 @@ using namespace Esri::ArcGISRuntime::Toolkit;
   \l QGeoPositionInfoSource and \l QCompass objects, default ones are created with the
   \l LocationDataSource as parent. If one of these objects is provided, the \l LocationDataSource
   doesn't take ownership of the object.
+  \deprecated
  */
 
 /*!
@@ -366,6 +368,6 @@ void LocationDataSource::updateObjectsAndConnections()
  */
 
 /*!
-  \property LocationDataSource::started
+  \property Esri::ArcGISRuntime::Toolkit::LocationDataSource::started
   \brief Holds the property that indicates if the tracking has started.
 */

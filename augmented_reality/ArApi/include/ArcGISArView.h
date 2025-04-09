@@ -17,8 +17,12 @@
 #ifndef ArcGISArView_H
 #define ArcGISArView_H
 
+// toolkit headers
 #include "ArcGISArViewInterface.h"
+
+// C++ API headers
 #include "Camera.h"
+#include "Deprecated.h"
 #include "SceneQuickView.h"
 
 Q_MOC_INCLUDE("Point.h")
@@ -29,7 +33,7 @@ class TransformationMatrixCameraController;
 
 namespace Toolkit {
 
-class ArcGISArView : public ArcGISArViewInterface
+class QRT_DEPRECATED ArcGISArView : public ArcGISArViewInterface
 {
   Q_OBJECT
 

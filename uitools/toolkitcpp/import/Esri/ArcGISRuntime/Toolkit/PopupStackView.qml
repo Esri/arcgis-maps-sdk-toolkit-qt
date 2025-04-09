@@ -60,6 +60,7 @@ import QtQuick.Layouts
    \note Each time a change is made to the Popup, PopupDefinition,
    PopupManager, or any of their properties, the popupManagers must be
    re-set to the PopupStackView.
+   \deprecated
  */
 Pane {
     id: popupStackView

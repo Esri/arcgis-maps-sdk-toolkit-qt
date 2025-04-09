@@ -1,5 +1,10 @@
 [![ArcGIS Maps SDK for Qt Toolkit API reference](https://img.shields.io/badge/API_Reference-purple)](https://developers.arcgis.com/qt/latest/toolkit/api-reference/) [![ArcGIS Maps SDK for Qt](https://img.shields.io/badge/ArcGIS%20Maps%20SDK%20for%20Qt-0b5394)](https://developers.arcgis.com/qt/) [![ArcGIS Maps SDK for Qt toolkit](https://img.shields.io/badge/ArcGIS%20Maps%20SDK%20for%20Qt%20toolkit-ea4d13)](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt)
 
+# Deprecation notice
+
+The ArcGIS Maps SDK for Qt Augmented Reality toolkit components are deprecated
+and will be removed in a future release.
+
 # Augmented Reality toolkit components
 
 The Augmented Reality (AR) toolkit components provide support for ARKit for iOS
@@ -86,7 +91,7 @@ for details.
 [ArcGIS Maps SDK for Qt Toolkit](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt).
 
 3. In Qt Creator, create a new project and select the app template named
-"ArcGIS Maps 200.6.0 Qt Quick C++ app". Select the option "3D project" in the
+"ArcGIS Maps 200.7.0 Qt Quick C++ app". Select the option "3D project" in the
 "Details" dialog.
 
 4. In the newly created project, add the following lines anywhere in the app's project (`.pro`)

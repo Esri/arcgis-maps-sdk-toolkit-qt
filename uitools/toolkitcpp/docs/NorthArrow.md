@@ -2,8 +2,8 @@
 
 # NorthArrow - Qt Quick UI/QML Type
 
-The [NorthArrow - Qt Quick UI/QML Type](https://developers.arcgis.com/qt/toolkit/api-reference/qml-northarrow.html) displays a compass overlaid on the GeoView, with the compass heading matching the current rotation of the MapView, or Camera heading of the SceneView. Double clicking on the NorthArrow triggers the heading of the connected GeoView to be orientainted to 0.
+The [NorthArrow - Qt Quick UI/QML Type](https://developers.arcgis.com/qt/toolkit/api-reference/qml-esri-arcgisruntime-toolkit-northarrow.html) displays a compass overlaid on the GeoView, with the compass heading matching the current rotation of the MapView, or Camera heading of the SceneView. Double clicking on the NorthArrow triggers the heading of the connected GeoView to be orientainted to 0.
 
 NOTE: default width and height is 48 pixels. It is exaggerated in the example below to highlight its behavior.
 
-![NorthArrow image](../images/NorthArrow.gif)
+![NorthArrow image](images/NorthArrow.gif)

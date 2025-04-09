@@ -4,6 +4,8 @@
 
 This toolkit is an open source resource intended for use with the ArcGIS Maps SDK for Qt. It provides ready made components to complement mapping and GIS applications. Because it is open source you are encouraged to modify these tools and add your own.
 
+Before you can utilize the toolkit, you should first ensure your development machine meets the [system requirements](https://developers.arcgis.com/qt/reference/system-requirements/) and has the ArcGIS Maps SDK for Qt properly [installed and set up](https://developers.arcgis.com/qt/install-and-set-up/). TIP: the toolkit requires the installation of the **Qt WebEngine** which can be found under **Select Components > Extensions** section of the Qt installer.
+
 ## Using this toolkit
 
 To use the toolkit, you need to copy this repository onto your development machine.

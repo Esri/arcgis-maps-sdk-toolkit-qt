@@ -36,7 +36,7 @@ import QtQml.Models
   The user interface is driven from the FloorAware data that is available in the GeoModel's FloorManager.
 
   2D maps and 3D scenes are supported.
-  \image docs/floorfilter.gif
+  \image floorfilter.gif
   \snippet qml/demos/FloorFilterDemoForm.qml Set up Floor Filter QML
 */
 Control {
@@ -49,19 +49,13 @@ Control {
     property var geoView
 
     /*!
-      \qmlproperty FloorFilterController controller
-      \brief The controller handles binding logic between the FloorFilter, \c GeoModel, \c FloorManager and
-      the flooraware layers.
-
-      The CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::FloorFilterController}{here}.
+      \internal
     */
     property var controller: FloorFilterController {}
 
     /*!
       \qmlproperty enumeration updateLevelsMode
       \brief The mode to use for updating levels visibility.
-      Default is \c {FloorFilterController.UpdateLevelsMode.AllLevelsMatchingVerticalOrder}.
-      \sa {Esri::ArcGISRuntime::Toolkit::FloorFilterController} {FloorFilterController.updateLevelsMode}
     */
     property int updateLevelsMode: controller.updateLevelsMode
 
@@ -112,7 +106,7 @@ Control {
                     visible: !closeButton.checked
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft
-                    icon.source: "images/x.svg"
+                    icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/x.svg"
                     text: qsTr("Close")
                     display: internal.collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
                 }
@@ -128,9 +122,11 @@ Control {
                     objectName: "collapser"
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft
-                    // use different pointing icon based on the leader position. if icons are collapsed and left position: use right pointing icon; if right position: use left pointing icon; if collapsedIcons === true, switch the icon.
+                    // use different pointing icon based on the leader position. if icons are collapsed and left position: use right pointing icon;
+                    // if right position: use left pointing icon; if collapsedIcons === true, switch the icon.
                     icon.source: (internal.parentPosition === FloorFilter.ParentPosition.UpperRight ||
-                                    internal.parentPosition === FloorFilter.ParentPosition.LowerRight) === internal.collapsedIcons ? "images/chevrons-left.svg" : "images/chevrons-right.svg"
+                                    internal.parentPosition === FloorFilter.ParentPosition.LowerRight) === internal.collapsedIcons
+                                 ? "qrc:/Esri/ArcGISRuntime/Toolkit/chevrons-left.svg" : "qrc:/Esri/ArcGISRuntime/Toolkit/chevrons-right.svg"
                     text: qsTr("Collapse")
                     flat: true
                     display: internal.collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
@@ -146,7 +142,7 @@ Control {
                     objectName: "zoom"
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft
-                    icon.source: "images/zoom-to-object.svg"
+                    icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/zoom-to-object.svg"
                     text: qsTr("Zoom to")
                     flat: true
                     // Zooming to currentVisibleListView, facility or site. If listView is not visible, zoom to facility (regardeless of currentVisibleListView).
@@ -260,7 +256,7 @@ Control {
                     checkable: true
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft
-                    icon.source: "images/organization.svg"
+                    icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/organization.svg"
                     text: qsTr("Browse")
                     flat: true
                     display: internal.collapsedIcons ? AbstractButton.IconOnly : AbstractButton.TextBesideIcon
@@ -298,7 +294,7 @@ Control {
                     icon {
                         width: 32
                         height: 32
-                        source: "images/chevron-left.svg"
+                        source: "qrc:/Esri/ArcGISRuntime/Toolkit/chevron-left.svg"
                     }
                     onClicked: {
                         internal.currentVisibileListView = FloorFilter.VisibleListView.Site;
@@ -320,7 +316,7 @@ Control {
                         sourceSize.width: 32
                         sourceSize.height: 32
                         visible: true
-                        source: "images/search.svg"
+                        source: "qrc:/Esri/ArcGISRuntime/Toolkit/search.svg"
                         width: height
                         anchors {
                             left: parent.left
@@ -546,7 +542,7 @@ Control {
                     icon {
                         width: 32
                         height: 32
-                        source: "images/x.svg"
+                        source: "qrc:/Esri/ArcGISRuntime/Toolkit/x.svg"
                         color: siteLabel.color
                     }
                     onClicked: buildingMenuButton.checked = false

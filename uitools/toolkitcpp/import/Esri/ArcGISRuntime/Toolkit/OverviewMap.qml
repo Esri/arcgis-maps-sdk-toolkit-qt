@@ -25,7 +25,7 @@ import Esri.ArcGISRuntime.Toolkit.Controller
    \brief Defines a small "overview" (or "inset") map displaying a representation of the current viewpoint of the given GeoView.
    For MapViews, the current viewpoint will be represented by a polygon displaying the visible area of the MapView. For SceneViews,
    the current viewpoint will be represented by a reticle (crosshairs) displaying the viewpoint center.
-   \image docs/overviewmap.png overviewmap
+   \image overviewmap.png overviewmap
    \snippet qml/demos/OverviewMapDemoForm.qml Set up Overview Map QML
 
     \note By default, the OverviewMap will attempt to use an ArcGIS Topographic basemap, which requires an \l{http://links.esri.com/create-an-api-key}{access token} to access.
@@ -35,12 +35,8 @@ Item {
     id: overviewMap
 
     /*!
-      \qmlproperty OverviewMapController controller
-      \brief The controller handles binding logic between the OverviewMap and
-      the \c GeoView where applicable.
-
-      The CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::OverviewMapController}{here}.
-     */
+      \internal
+    */
     property var controller: OverviewMapController { }
 
     /*!

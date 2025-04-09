@@ -38,7 +38,7 @@ import QtQuick.Shapes
      \endlist
 
      For more information, please see the CalloutData documentation.
-     \image docs/callout.png
+     \image callout.png
      \snippet qml/demos/CalloutDemoForm.qml Set up Callout QML
 
      \note That the Callout has gone through a major revision as of ArcGISRuntime 100.14.
@@ -343,9 +343,9 @@ Pane {
             onClicked: accessoryButtonClicked()
             icon.source: {
                 if (accessoryButtonType === "Info")
-                    return "images/information.svg";
+                    return "qrc:/Esri/ArcGISRuntime/Toolkit/information.svg";
                 else if (accessoryButtonType === "Add")
-                    return "images/plus-circle.svg";
+                    return "qrc:/Esri/ArcGISRuntime/Toolkit/plus-circle.svg";
                 else if (accessoryButtonType === "Custom")
                     return customImageUrl;
 

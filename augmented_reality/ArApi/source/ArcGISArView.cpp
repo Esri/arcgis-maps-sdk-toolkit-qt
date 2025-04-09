@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2019 Esri
  *
@@ -46,6 +47,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   of AR into your application for a variety of scenarios.
 
   See \l {https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/blob/master/Common/AR/README.md} {additional details about using the ArcGISArView toolkit component}.
+  \deprecated
  */
 
 /*!
@@ -90,7 +92,7 @@ Camera ArcGISArView::originCamera() const
 }
 
 /*!
-  \property ArcGISArView::originCamera
+  \property Esri::ArcGISRuntime::Toolkit::ArcGISArView::originCamera
   \brief Sets the origin camera of this ArcGISArView.
  */
 void ArcGISArView::setOriginCamera(const Camera& originCamera)
@@ -106,7 +108,7 @@ void ArcGISArView::setOriginCamera(const Camera& originCamera)
 }
 
 /*!
-  \property ArcGISArView::sceneView
+  \property Esri::ArcGISRuntime::Toolkit::ArcGISArView::sceneView
   \brief Gets the SceneView associated with this ArcGISArView.
  */
 SceneQuickView* ArcGISArView::sceneView() const

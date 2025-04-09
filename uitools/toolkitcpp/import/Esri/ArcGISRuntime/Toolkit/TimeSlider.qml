@@ -32,7 +32,7 @@ import QtQuick.Layouts
     (\c MapView or \c SceneView) to allow filtering on temporal data.
     The time extents of all layers in the map or scene will be used to set up the
     slider with the full temporal range and the current time extent.
-    \image docs/timeslider.gif timeslider
+    \image timeslider.gif timeslider
     \snippet qml/demos/TimeSliderDemoForm.qml Set up Time Slider QML
 */
 Pane {
@@ -80,11 +80,7 @@ Pane {
     property var geoView;
 
     /*!
-      \qmlproperty TimeSliderController controller
-      \brief The controller handles calculating steps and setting extents on the
-       GeoView.
-
-       The CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::TimeSliderController}{here}.
+      \internal
     */
     property var controller: TimeSliderController { }
 
@@ -205,7 +201,7 @@ Pane {
 
         Button {
             id: stepBackButton
-            icon.source: "images/reverse.svg"
+            icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/reverse.svg"
             enabled: (!startTimePinned || !endTimePinned) && !playAnimation.running
             Timer {
                 id: pressedHoldBack
@@ -221,8 +217,8 @@ Pane {
 
         Button {
             id: playButton
-            icon.source: checked ? "images/pause.svg"
-                                 : "images/play.svg"
+            icon.source: checked ? "qrc:/Esri/ArcGISRuntime/Toolkit/pause.svg"
+                                 : "qrc:/Esri/ArcGISRuntime/Toolkit/play.svg"
             enabled: !startTimePinned || !endTimePinned
             checkable: true
             Layout.alignment: Qt.AlignHCenter
@@ -238,7 +234,7 @@ Pane {
 
         Button {
             id: stepForwardButton
-            icon.source: "images/forward.svg"
+            icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/forward.svg"
             enabled: (!startTimePinned || !endTimePinned) && !playAnimation.running
             Timer {
                 id: pressedHoldForward

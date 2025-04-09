@@ -48,10 +48,7 @@ Pane {
     implicitWidth: 300
 
     /*!
-      \qmlproperty UtilityNetworkTraceController controller
-      \brief Loads a map with utility networks, on which different trace operations can be performed and the
-      operation's results are shown both on the map and textually in the UI.
-
+      \internal
     */
     property var controller: UtilityNetworkTraceController { }
 
@@ -156,14 +153,14 @@ Pane {
                                 }
                                 Button {
                                     Layout.preferredWidth: 48
-                                    icon.source: "images/zoom-to-object.svg"
+                                    icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/zoom-to-object.svg"
                                     icon.width: 16
                                     icon.height: 16
                                     onClicked: controller.zoomToStartingPoint(index)
                                 }
                                 Button {
                                     Layout.preferredWidth: 48
-                                    icon.source: "images/trash.svg"
+                                    icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/trash.svg"
                                     icon.width: 16
                                     icon.height: 16
                                     onClicked: controller.removeStartingPoint(index)

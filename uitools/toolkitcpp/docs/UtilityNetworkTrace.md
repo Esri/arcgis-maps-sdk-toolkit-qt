@@ -2,7 +2,7 @@
 
 # UtilityNetworkTrace - Qt Quick UI/QML Type
 
-The [UtilityNetworkTrace - Qt Quick UI/QML Type](https://developers.arcgis.com/qt/toolkit/api-reference/qml-utilitynetworktrace.html) tool UI enables a utility network trace experience for webmaps authored with utility network and  trace configurations. The tool is only displayed if there is at least one Utility Network loaded in the data model. When there are multiple Utility Networks present in the map, the first one in the list is displayed.
+The [UtilityNetworkTrace - Qt Quick UI/QML Type](https://developers.arcgis.com/qt/toolkit/api-reference/qml-esri-arcgisruntime-toolkit-utilitynetworktrace.html) tool UI enables a utility network trace experience for webmaps authored with utility network and  trace configurations. The tool is only displayed if there is at least one Utility Network loaded in the data model. When there are multiple Utility Networks present in the map, the first one in the list is displayed.
 
 The UI includes a TabBar with one tab for configuring a new trace and another Tab for displaying results.
 
@@ -10,4 +10,4 @@ The new trace Tab includes a custom UtilityNetworkTraceStartingPointsModel for d
 
 The result Tab itself contains a TabBar of the results made up of custom Tabs defined in UtilityNetworkFunctionTraceResultsModel.
 
-![UtilityNetworkTrace image](../images/UtilityNetworkTrace.png)
+![UtilityNetworkTrace image](images/UtilityNetworkTrace.png)

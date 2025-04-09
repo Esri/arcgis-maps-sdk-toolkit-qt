@@ -33,7 +33,7 @@ import QtQuick.Layouts
  the point on the GeoView.
  A list of different coordinate formats representing the same point are
  available to the user.
- \image docs/coordinateConversion.png coordinate_conversion
+ \image coordinateConversion.png coordinate_conversion
  \snippet qml/demos/CoordinateConversionDemoForm.qml Set up Coordinate Conversion QML
  */
 
@@ -64,12 +64,7 @@ Pane {
     property var inputFormat: CoordinateConversionResult { }
 
     /*!
-      \qmlproperty CoordinateConversionController controller
-      \brief The Controller handles connections writing/reading to the GeoView,
-      and maintaining our list of textual representations of a single point
-      in multiple formats.
-
-      The CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::CoordinateConversionController}{here}.
+      \internal
     */
     property var controller: CoordinateConversionController { }
 
@@ -149,7 +144,7 @@ Pane {
                 flat: true
                 Layout.margins: 5
                 Layout.alignment: Qt.AlignRight
-                icon.source: menuButton.checked ? "images/chevron-up.svg" : "images/chevron-down.svg"
+                icon.source: menuButton.checked ? "qrc:/Esri/ArcGISRuntime/Toolkit/chevron-up.svg" : "qrc:/Esri/ArcGISRuntime/Toolkit/chevron-down.svg"
             }
         }
 
@@ -185,7 +180,7 @@ Pane {
 
             Button {
                 id: zoomToButton
-                icon.source: "images/layer-zoom-to.svg"
+                icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/layer-zoom-to.svg"
                 flat: true
                 Layout.alignment: Qt.AlignRight
 
@@ -197,7 +192,7 @@ Pane {
 
             Button {
                 id: flashCoordinateButton
-                icon.source: "images/flash.svg"
+                icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/flash.svg"
                 flat: true
                 Layout.alignment: Qt.AlignRight
                 Layout.maximumWidth: Layout.maximumHeight
@@ -222,7 +217,7 @@ Pane {
                 id: editCoordinateButton
                 checkable: true
                 flat: true
-                icon.source: "images/edit-attributes.svg"
+                icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/edit-attributes.svg"
                 Layout.alignment: Qt.AlignRight
                 Layout.maximumWidth: Layout.maximumHeight
                 padding: 0
@@ -232,7 +227,7 @@ Pane {
                 id: captureModeButton
                 checkable: true
                 flat: true
-                icon.source: "images/cursor-click.svg"
+                icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/cursor-click.svg"
                 Layout.alignment: Qt.AlignRight
                 Layout.maximumWidth: Layout.maximumHeight
                 Layout.margins: 5
@@ -270,7 +265,7 @@ Pane {
                     Layout.maximumWidth: menuButton.width
                     Layout.alignment: Qt.AlignRight
                     Layout.margins: 5
-                    icon.source: "images/ellipsis.svg"
+                    icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/ellipsis.svg"
                     flat: true
                     onClicked: editMenu.open()
 

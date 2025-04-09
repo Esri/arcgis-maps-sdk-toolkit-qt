@@ -2,7 +2,7 @@
 
 # PopupStackView - Qt Quick UI/QML Type
 
-The [PopupStackView - Qt Quick UI/QML Type](https://developers.arcgis.com/qt/toolkit/api-reference/qml-popupstackview.html) control allows you display multiple [PopupViews](PopupView.md) at once, and you can page through them. A PopupStackView can be used to display information for any type that implements the PopupSource interface. For example, FeatureLayer implements PopupSource. This means that it has a PopupDefinition, which defines how the Popup should look for any features in that layer.
+The [PopupStackView - Qt Quick UI/QML Type](https://developers.arcgis.com/qt/toolkit/api-reference/qml-esri-arcgisruntime-toolkit-popupstackview.html) control allows you display multiple [PopupViews](PopupView.md) at once, and you can page through them. A PopupStackView can be used to display information for any type that implements the PopupSource interface. For example, FeatureLayer implements PopupSource. This means that it has a PopupDefinition, which defines how the Popup should look for any features in that layer.
 
 An example workflow for displaying a PopupStackView for features in a FeatureLayer would be:
 
@@ -19,4 +19,4 @@ For more information, please see the Popup and PopupManager documentation.
 
 NOTE: Each time a change is made to the Popup, PopupDefinition, PopupManager, or any of their properties, the popupManagers must be re-set to the PopupStackView.
 
-![NorthArrow image](../images/PopupStackView.png)
+![NorthArrow image](images/PopupStackView.png)

@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -16,7 +17,7 @@
 
 #include "BasemapGalleryDemo.h"
 
-#include "Esri/ArcGISRuntime/Toolkit/BasemapGalleryController.h"
+#include "BasemapGalleryController.h"
 
 #include "BasemapListModel.h"
 #include "GeoView.h"
