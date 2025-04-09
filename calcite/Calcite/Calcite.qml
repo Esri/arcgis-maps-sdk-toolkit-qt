@@ -26,12 +26,18 @@ import QtQuick
     {Calcite colors and themes}.
  */
 QtObject {
+    // Unknown was added it to more accurately match Application.styleHints.colorScheme
+    // This is an internal implementation detail.
+    // https://doc.qt.io/qt-6/qt.html#ColorScheme-enum
     enum Theme {
-        Light,
-        Dark
-    }
+    Unknown,
+    Light,
+    Dark
+}
 
-    property int theme: Calcite.Theme.Light
+    property int theme: honorSystemTheme ? Application.styleHints.colorScheme : Calcite.Theme.Light
+
+    property bool honorSystemTheme: true
 
     readonly property color offWhite: "#F8F8F8"
 
