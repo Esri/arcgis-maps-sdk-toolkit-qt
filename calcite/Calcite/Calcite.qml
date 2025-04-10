@@ -35,9 +35,9 @@ QtObject {
     Dark
 }
 
-    property int theme: honorSystemTheme ? Application.styleHints.colorScheme : Calcite.Theme.Light
+    property int theme: useSystemTheme ? Application.styleHints.colorScheme : Calcite.Theme.Light
 
-    property bool honorSystemTheme: true
+    property bool useSystemTheme: true
 
     readonly property color offWhite: "#F8F8F8"
 

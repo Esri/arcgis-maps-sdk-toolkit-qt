@@ -55,7 +55,7 @@ ApplicationWindow {
                     id: themeSwitch
                     text: checked ? "Dark Mode" : "Light Mode"
                     Layout.alignment: Qt.AlignRight
-                    enabled: !C.Calcite.honorSystemTheme
+                    enabled: !C.Calcite.useSystemTheme
                     property var selectedTheme: themeSwitch.checked ? C.Calcite.Dark : C.Calcite.Light
 
                     Binding {
@@ -72,19 +72,19 @@ ApplicationWindow {
                     checked: true
                 }
                 CheckBox {
-                    id: honorSystemTheme
-                    text: "Honor System Theme"
+                    id: useSystemThemeCheckBox
+                    text: "Use System Theme"
                     checked: true
 
                     Binding {
                         target: C.Calcite
-                        property: "honorSystemTheme"
-                        value: honorSystemTheme.checked
+                        property: "useSystemTheme"
+                        value: useSystemThemeCheckBox.checked
                     }
                     Binding {
                         target: C.Calcite
                         property: "theme"
-                        value: honorSystemTheme.checked ? Application.styleHints.colorScheme :
+                        value: useSystemThemeCheckBox.checked ? Application.styleHints.colorScheme :
                                                           themeSwitch.selectedTheme
                     }
                 }
