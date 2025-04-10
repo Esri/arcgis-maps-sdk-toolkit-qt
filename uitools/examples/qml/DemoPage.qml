@@ -120,15 +120,15 @@ Control {
             onClicked: showToolsButtonPressed()
             enabled: !apiKeyPopup.visible
         }
-        Switch {
-            text: "Dark Mode"
-            checked: C.Calcite.theme === C.Calcite.Theme.Dark
-            onCheckedChanged: C.Calcite.theme = checked ? C.Calcite.Theme.Dark : C.Calcite.Theme.Light
+
+        Item {
+            Layout.fillWidth: true
         }
 
         Item {
             Layout.fillWidth: true
         }
+
         RadioButton {
             Layout.topMargin: 5
             Layout.alignment: Qt.AlignRight
