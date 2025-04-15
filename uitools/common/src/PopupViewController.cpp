@@ -14,6 +14,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
+#define QRT_DISABLE_DEPRECATED_WARNINGS
+
 #include "PopupViewController.h"
 
 // Qt headers
@@ -68,10 +70,12 @@ Popup* PopupViewController::popup() const
 {
   return m_popup;
 }
+
 GenericListModel* PopupViewController::popupElementControllers() const
 {
   return m_popupElementControllerModel;
 }
+
 void PopupViewController::setPopup(Popup* popup)
 {
   if (m_popup == popup)
@@ -125,6 +129,7 @@ void PopupViewController::setPopup(Popup* popup)
   emit popupChanged();
   emit titleChanged();
 }
+
 void PopupViewController::setPopupManager(PopupManager* popupManager)
 {
   if (popupManager == m_popupManager)

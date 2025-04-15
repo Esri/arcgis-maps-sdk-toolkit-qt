@@ -99,12 +99,6 @@ ColumnLayout {
         }
     }
 
-    MenuSeparator {
-        Layout.fillWidth: true
-        Layout.leftMargin: attachmentsPopupElementView.mediaMargin
-        Layout.rightMargin: attachmentsPopupElementView.mediaMargin
-    }
-
     ListView {
         clip: true
         interactive: false
@@ -172,6 +166,11 @@ ColumnLayout {
                 columnSpacing: 5
                 rowSpacing: 0
 
+                MenuSeparator {
+                    Layout.fillWidth: true
+                    Layout.columnSpan: 3
+                }
+
                 Image {
                     fillMode: Image.PreserveAspectFit
                     Layout.preferredHeight: fileInfoColumn.height
@@ -214,11 +213,7 @@ ColumnLayout {
                     id: fetchAttachment
                     running: model.listModelData.fetchingAttachment
                     visible: model.listModelData.fetchingAttachment
-                }
-
-                MenuSeparator {
-                    Layout.fillWidth: true
-                    Layout.columnSpan: 3
+                    Layout.maximumHeight: fileInfoColumn.height
                 }
             }
         }

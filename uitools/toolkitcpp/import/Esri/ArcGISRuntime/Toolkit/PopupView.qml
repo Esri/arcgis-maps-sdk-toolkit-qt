@@ -70,6 +70,7 @@ Page {
 
        The PopupManager should be created from a Popup.
        \qmlproperty PopupManager popupManager
+       \deprecated
      */
     property var popupManager: null
 
@@ -77,8 +78,6 @@ Page {
        \brief The Popup that controls the information being displayed in
        the view.
 
-       If both a Popup and PopupManager are provided, the Popup will take priority
-       which utilizes the new PopupElements.
        \qmlproperty Popup popup
      */
     property var popup: null
@@ -155,6 +154,14 @@ Page {
      */
     signal imageClicked(var sourceUrl, var linkUrl)
 
+    MouseArea {
+        anchors.fill: parent
+        // stop wheel event from scrolling the map once we reach the end of the PopupView
+        onWheel: (event) => {
+            event.accepted = true;
+        }
+    }
+
     Binding {
         target: controller
         property: "popupManager"
@@ -181,6 +188,12 @@ Page {
         function onImageClicked(sourceUrl, linkUrl) {
             imageClicked(sourceUrl, linkUrl);
         }
+    }
+
+    // on certain Android devices the hyperlink color is not blue and makes it extremly difficult to see
+    // we are searching the input string and modifying it to ensure the hyperlink color is visible
+    function changeHyperlinkColor(html) {
+        return html.replace(/<a /g, "<a style='color:#0070E0;' ");
     }
 
     implicitWidth: 300 + padding
@@ -380,12 +393,6 @@ Page {
                         FieldsPopupElementView {
                             controller: listModelData
                             width: elementsView.width
-                        }
-
-                        MenuSeparator {
-                            width: elementsView.width
-                            leftPadding: 10
-                            rightPadding: 10
                         }
                     }
                 }
