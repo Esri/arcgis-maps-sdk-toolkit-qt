@@ -18,6 +18,7 @@
 #include "register.h"
 
 // Toolkit includes
+#include "ArcGISAuthenticationController.h"
 #include "AttachmentsPopupElementViewController.h"
 #include "AuthenticationController.h"
 #include "BarChartPopupMediaItem.h"
@@ -103,6 +104,8 @@ namespace Esri::ArcGISRuntime::Toolkit {
     constexpr int VERSION_MAJOR = 200;
     constexpr int VERSION_MINOR = 2;
 
+    QPointer<ArcGISAuthenticationController> s_arcGISAuthenticationController;
+
     /*
       \internal
       \brief This namespace is an implementation detail for how to register types with QML.
@@ -149,6 +152,22 @@ namespace Esri::ArcGISRuntime::Toolkit {
       struct Singleton_
       {
       };
+
+      template <class T>
+      void registerComponentImpl(CreationType::Singleton_, int majorVersion, int minorVersion, const char* name)
+      {
+        qmlRegisterSingletonType<T>(NAMESPACE, majorVersion, minorVersion, name,
+                                    [](QQmlEngine* qmlEngine, QJSEngine* jsEngine) -> QObject*
+                                    {
+                                      if (!s_arcGISAuthenticationController)
+                                      {
+                                        s_arcGISAuthenticationController = T::create(qmlEngine, jsEngine);
+                                      }
+                                      return s_arcGISAuthenticationController;
+                                    });
+      }
+
+      [[maybe_unused]] constexpr Singleton_ Singleton = Singleton_{};
     }
 
     /*
@@ -208,6 +227,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     appEngine.addImageProvider(PopupAttachmentImageProvider::PROVIDER_ID, PopupAttachmentImageProvider::instance());
     appEngine.addImportPath(ESRI_COM_PATH);
     registerModuleRevisions();
+    registerComponent<ArcGISAuthenticationController>(CreationType::Singleton);
     registerComponent<AttachmentsPopupElementViewController>();
     registerComponent<AuthenticationController>();
     registerComponent<BarChartPopupMediaItem>();

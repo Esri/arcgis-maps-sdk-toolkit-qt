@@ -16,12 +16,12 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_FIELDSPOPUPELEMENTVIEWCONTROLLER_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_FIELDSPOPUPELEMENTVIEWCONTROLLER_H
 
-// Qt headers
-#include <QObject>
-#include <QVariantList>
-
-// Other headers
+// Toolkit headers
 #include "PopupElementViewItem.h"
+
+// Qt headers
+#include <QVariantList>
+#include <QObject>
 
 namespace Esri::ArcGISRuntime {
 

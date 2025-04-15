@@ -19,9 +19,9 @@
 // Qt headers
 #include <QImage>
 #include <QObject>
+#include <QtCore/quuid.h>
 #include <QTemporaryDir>
 #include <QUrl>
-#include <QtCore/quuid.h>
 
 // Other headers
 #include "QmlEnums.h"
