@@ -35,12 +35,8 @@ Item {
     id: overviewMap
 
     /*!
-      \qmlproperty OverviewMapController controller
-      \brief The controller handles binding logic between the OverviewMap and
-      the \c GeoView where applicable.
-
-      The CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::OverviewMapController}{here}.
-     */
+      \internal
+    */
     property var controller: OverviewMapController { }
 
     /*!

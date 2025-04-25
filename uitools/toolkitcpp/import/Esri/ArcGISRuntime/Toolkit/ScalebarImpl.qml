@@ -15,8 +15,7 @@ Control {
     id: scalebar
 
     /*!
-      \qmlproperty ScalebarController controller
-      \brief The controller used for calculations based on the mapView.
+      \internal
     */
     property var controller: null
 

@@ -2,6 +2,6 @@
 
 # BasemapGallery - Qt Quick UI/QML Type
 
-The [BasemapGallery - Qt Quick UI/QML Type](https://developers.arcgis.com/qt/toolkit/api-reference/qml-basemapgallery.html) displays a collection of items representing basemaps from either ArcGIS Online, a user-defined portal, or an array of Basemaps. When the user selects a basemap from the BasemapGallery, the basemap rendered in the current geoModel is removed from the given map/scene and replaced with the basemap selected in the gallery.
+The [BasemapGallery - Qt Quick UI/QML Type](https://developers.arcgis.com/qt/toolkit/api-reference/qml-esri-arcgisruntime-toolkit-basemapgallery.html) displays a collection of items representing basemaps from either ArcGIS Online, a user-defined portal, or an array of Basemaps. When the user selects a basemap from the BasemapGallery, the basemap rendered in the current geoModel is removed from the given map/scene and replaced with the basemap selected in the gallery.
 
 ![BasemapGallery image](https://developers.arcgis.com/qt/toolkit/api-reference/images/basemap.gif)

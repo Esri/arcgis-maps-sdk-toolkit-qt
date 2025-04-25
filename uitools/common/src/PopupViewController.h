@@ -16,15 +16,21 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_POPUPVIEWCONTROLLER_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_POPUPVIEWCONTROLLER_H
 
-// ArcGISRuntime headers
-#include <PopupManager.h>
-
 // Qt headers
 #include <QAbstractListModel>
 #include <QObject>
 #include <QPointer>
 
+// Maps SDK headers
+#include <Deprecated.h>
+#include <Popup.h>
+#include <PopupElement.h>
+
+// Other headers
+#include "GenericListModel.h"
+
 Q_MOC_INCLUDE("PopupAttachmentListModel.h")
+Q_MOC_INCLUDE("PopupManager.h")
 
 namespace Esri::ArcGISRuntime {
 
@@ -37,8 +43,10 @@ namespace Toolkit
 class PopupViewController : public QObject
 {
   Q_OBJECT
+  Q_PROPERTY(Popup* popup READ popup WRITE setPopup NOTIFY popupChanged)
+  Q_PROPERTY(QAbstractListModel* popupElementControllers READ popupElementControllers NOTIFY popupChanged)
   Q_PROPERTY(PopupManager* popupManager READ popupManager WRITE setPopupManager NOTIFY popupManagerChanged)
-  Q_PROPERTY(QString title READ title NOTIFY popupManagerChanged)
+  Q_PROPERTY(QString title READ title NOTIFY titleChanged)
   Q_PROPERTY(QAbstractListModel* displayFields READ displayFields NOTIFY popupManagerChanged)
   Q_PROPERTY(int fieldCount READ fieldCount NOTIFY fieldCountChanged)
   Q_PROPERTY(QAbstractListModel* attachments READ attachments NOTIFY popupManagerChanged)
@@ -52,9 +60,15 @@ public:
 
   ~PopupViewController();
 
-  PopupManager* popupManager() const;
+  Popup* popup() const;
 
-  void setPopupManager(PopupManager* popupManager);
+  void setPopup(Popup* popup);
+
+  GenericListModel* popupElementControllers() const;
+
+  QRT_DEPRECATED PopupManager* popupManager() const;
+
+  QRT_DEPRECATED void setPopupManager(PopupManager* popupManager);
 
   QAbstractListModel* displayFields() const;
 
@@ -72,7 +86,11 @@ public:
 
 signals:
 
-  void popupManagerChanged();
+  void popupChanged();
+
+  QRT_DEPRECATED void popupManagerChanged();
+
+  void titleChanged();
 
   void fieldCountChanged();
 
@@ -82,6 +100,12 @@ signals:
 
   void attachmentThumbnailHeightChanged();
 
+  void attachmentDataFetched(const QByteArray& attachmentData, const QString& name);
+
+  void clickedUrl(const QUrl& url);
+
+  void imageClicked(const QUrl& sourceUrl, const QUrl& linkUrl);
+
 private:
   int fieldCount() const;
 
@@ -89,6 +113,8 @@ private:
 
 private:
   QPointer<PopupManager> m_popupManager;
+  QPointer<Popup> m_popup;
+  GenericListModel* m_popupElementControllerModel = nullptr;
 };
 
 } // Toolkit

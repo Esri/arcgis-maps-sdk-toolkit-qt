@@ -30,12 +30,12 @@ equals(QT_MAJOR_VERSION, 6) {
     lessThan(QT_MINOR_VERSION, 8) {
         error("This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.8.2")
     }
-  equals(QT_MINOR_VERSION, 8) : lessThan(QT_PATCH_VERSION, 6) {
+  equals(QT_MINOR_VERSION, 8) : lessThan(QT_PATCH_VERSION, 2) {
     error("This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.8.2")
   }
 }
 
-ARCGIS_RUNTIME_VERSION = 200.7.0
+ARCGIS_RUNTIME_VERSION = 200.8.0
 include($$PWD/arcgisruntime.pri)
 
 HEADERS += $$files($$PWD/*.h)

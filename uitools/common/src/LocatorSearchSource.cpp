@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2021 Esri
  *
@@ -30,7 +31,7 @@
 #include <SuggestResult.h>
 
 // Toolkit headers
-#include "Internal/DoOnLoad.h"
+#include "DoOnLoad.h"
 #include "SearchResult.h"
 
 namespace Esri::ArcGISRuntime::Toolkit {
@@ -99,14 +100,10 @@ namespace Esri::ArcGISRuntime::Toolkit {
   /*!
     \inmodule Esri.ArcGISRuntime.Toolkit
     \class Esri::ArcGISRuntime::Toolkit::LocatorSearchSource
-    \brief Uses a Locator to provide search and suggest results.
-
-    \note Most configuration should be done on the GeocodeParameters directly.
+    \internal
+    This class is an internal implementation detail and is subject to change.
    */
 
-  /*!
-    \brief Constructs a new LocatorSearchSource object with a \a locatorTask and a given \a parent.
-   */
   LocatorSearchSource::LocatorSearchSource(LocatorTask* locatorTask, QObject* parent) :
     SearchSourceInterface(parent),
     m_locatorTask(locatorTask)
@@ -153,66 +150,40 @@ namespace Esri::ArcGISRuntime::Toolkit {
              });
   }
 
-  /*!
-    \brief Destructor.
-   */
   LocatorSearchSource::~LocatorSearchSource()
   {
   }
 
-  /*!
-      \brief Returns the locator used by this search source.
-   */
   LocatorTask* LocatorSearchSource::locator()
   {
     return m_locatorTask;
   }
 
-  /*!
-      \brief Returns the parameters used for geocoding.
-      Some properties on parameters will be updated automatically based on searches.
-   */
   GeocodeParameters LocatorSearchSource::geocodeParameters() const
   {
     return m_geocodeParameters;
   }
 
-  /*!
-      \brief Returns the parameters used for suggestions.
-      Some properties on parameters will be updated automatically based on searches.
-   */
   SuggestParameters LocatorSearchSource::suggestParameters() const
   {
     return m_locatorTask->suggestions()->suggestParameters();
   }
 
-  /*!
-      \reimp
-   */
   int LocatorSearchSource::maximumResults() const
   {
     return m_geocodeParameters.maxResults();
   }
 
-  /*!
-      \reimp
-   */
   void LocatorSearchSource::setMaximumResults(int maximumResults)
   {
     m_geocodeParameters.setMaxResults(maximumResults);
   }
 
-  /*!
-      \reimp
-   */
   int LocatorSearchSource::maximumSuggestions() const
   {
     return suggestParameters().maxResults();
   }
 
-  /*!
-      \reimp
-   */
   void LocatorSearchSource::setMaximumSuggestions(int maximumSuggestions)
   {
     auto sg = suggestParameters();
@@ -220,17 +191,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
     m_locatorTask->suggestions()->setSuggestParameters(sg);
   }
 
-  /*!
-      \reimp
-   */
   Point LocatorSearchSource::preferredSearchLocation() const
   {
     return m_geocodeParameters.preferredSearchLocation();
   }
 
-  /*!
-      \reimp
-   */
   void LocatorSearchSource::setPreferredSearchLocation(Point preferredSearchLocation)
   {
     m_geocodeParameters.setPreferredSearchLocation(std::move(preferredSearchLocation));
@@ -257,9 +222,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     emit searchCompleted(std::move(results));
   }
 
-  /*!
-      \reimp
-   */
   void LocatorSearchSource::search(const SuggestResult& suggestion, Geometry area)
   {
     m_geocodeFuture.cancel();

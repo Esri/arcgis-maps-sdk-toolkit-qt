@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -46,7 +47,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     \li \a parent Parent widget.
   \endlist
 
-  The view mantains its associated controller, sets up the view itself and its model.
+  The view maintains its associated controller, sets up the view itself and its model.
   */
   BookmarksView::BookmarksView(QWidget* parent) :
     QFrame(parent),
@@ -75,7 +76,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   }
 
   /*!
-    \brief Returns the controller.
+    \internal
    */
   BookmarksViewController* BookmarksView::controller() const
   {

@@ -13,30 +13,39 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_ARCGISAUTHENTICATIONCHALLENGERELAY_H
-#define ESRI_ARCGISRUNTIME_TOOLKIT_ARCGISAUTHENTICATIONCHALLENGERELAY_H
+#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_IMAGEPOPUPMEDIAITEM_H
+#define ESRI_ARCGISRUNTIME_TOOLKIT_IMAGEPOPUPMEDIAITEM_H
 
-// Maps SDK headers
-#include <Authentication/ArcGISAuthenticationChallengeHandler.h>
+// Qt headers
+#include <QJsonObject>
+#include <QObject>
+
+// Other headers
+#include "PopupMediaItem.h"
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-class ArcGISAuthenticationController;
-class ArcGISAuthenticationChallengeRelay : public Authentication::ArcGISAuthenticationChallengeHandler
+class PopupViewController;
+
+class ImagePopupMediaItem : public PopupMediaItem
 {
   Q_OBJECT
+  Q_PROPERTY(QUrl sourceUrl READ sourceUrl NOTIFY imagePopupMediaItemChanged)
+  Q_PROPERTY(QUrl linkUrl READ linkUrl NOTIFY imagePopupMediaItemChanged)
 
 public:
-  explicit ArcGISAuthenticationChallengeRelay(ArcGISAuthenticationController* controller);
-  ~ArcGISAuthenticationChallengeRelay();
-
-protected:
-  void handleArcGISAuthenticationChallenge(Authentication::ArcGISAuthenticationChallenge* challenge) override;
+  explicit ImagePopupMediaItem(PopupMedia* popupMedia, PopupViewController* popupViewController, QObject* parent = nullptr);
+  ~ImagePopupMediaItem() override;
 
 private:
-  ArcGISAuthenticationController* m_controller = nullptr;
+  QUrl linkUrl() const;
+  QUrl sourceUrl() const;
+
+signals:
+  void imagePopupMediaItemChanged();
+  void imageClicked(const QUrl& sourceUrl, const QUrl& linkUrl);
 };
 
 } // Esri::ArcGISRuntime::Toolkit
 
-#endif // ESRI_ARCGISRUNTIME_TOOLKIT_ARCGISAUTHENTICATIONCHALLENGERELAY_H
+#endif // ESRI_ARCGISRUNTIME_TOOLKIT_IMAGEPOPUPMEDIAITEM_H

@@ -26,5 +26,10 @@
         <file>trash.svg</file>
         <file>x.svg</file>
         <file>zoom-to-object.svg</file>
+        <file>video.svg</file>
+        <file>other.svg</file>
+        <file>image.svg</file>
+        <file>file.svg</file>
+        <file>arrow-circle-down.svg</file>
     </qresource>
 </RCC>

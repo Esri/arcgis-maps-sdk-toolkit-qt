@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2019 Esri
  *
@@ -257,7 +258,7 @@ bool ArCoreWrapper::installArCore()
     return true;
 
   ArInstallStatus installStatus;
-  ArStatus error = ArCoreApk_requestInstall(jniEnvironment(), QNativeInterface::QAndroidApplication::context(), m_installRequested, &installStatus);
+  ArStatus error = ArCoreApk_requestInstall(jniEnvironment(), QNativeInterface::QAndroidApplication::context().object(), m_installRequested, &installStatus);
   if (error != AR_SUCCESS)
     return false;
 
@@ -298,7 +299,7 @@ void ArCoreWrapper::createArSession()
   }
 
   //checkPermission will never return Undetermined after call to requestPermission
-  switch (qApp->checkPermission(cameraPermission)) 
+  switch (qApp->checkPermission(cameraPermission))
   {
     case Qt::PermissionStatus::Granted:
       break;
@@ -310,7 +311,7 @@ void ArCoreWrapper::createArSession()
 
   // try to create the ARCore session. This function can fail if the user reject the authorization
   // to install ARCore.
-  auto status = ArSession_create(jniEnvironment(), QNativeInterface::QAndroidApplication::context(), &m_arSession);
+  auto status = ArSession_create(jniEnvironment(), QNativeInterface::QAndroidApplication::context().object(), &m_arSession);
   if (status != AR_SUCCESS || !m_arSession)
   {
     emit m_arcGISArView->errorOccurred("ARCore failure", "Failed to create the AR session.");

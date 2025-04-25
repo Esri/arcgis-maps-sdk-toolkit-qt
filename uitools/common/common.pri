@@ -15,21 +15,17 @@
 # file guard to avoid double inclusion
 !defined(TOOLKIT_COMMON_INCLUDED, var) {
 
-    QT += qml
+    QT += qml graphs
 
     TOOLKIT_COMMON_SRC = $$PWD/src
 
-    INCLUDEPATH += $$TOOLKIT_COMMON_SRC \
-                   $$TOOLKIT_COMMON_SRC/Internal
+    INCLUDEPATH += $$TOOLKIT_COMMON_SRC
 
-    DEPENDPATH += $$TOOLKIT_COMMON_SRC \
-                  $$TOOLKIT_COMMON_SRC/Internal
+    DEPENDPATH += $$TOOLKIT_COMMON_SRC
 
-    HEADERS += $$files($$TOOLKIT_COMMON_SRC/*.h) \
-               $$files($$TOOLKIT_COMMON_SRC/Internal/*.h)
+    HEADERS += $$files($$TOOLKIT_COMMON_SRC/*.h)
 
-    SOURCES += $$files($$TOOLKIT_COMMON_SRC/*.cpp) \
-               $$files($$TOOLKIT_COMMON_SRC/Internal/*.cpp)
+    SOURCES += $$files($$TOOLKIT_COMMON_SRC/*.cpp)
 
     RESOURCES += $$PWD/images/esri_arcgisruntime_toolkit_common_images.qrc
 

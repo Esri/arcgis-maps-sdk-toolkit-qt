@@ -13,6 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
+import QtQml
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.impl
@@ -20,6 +21,14 @@ import QtQuick.Templates as T
 
 T.ItemDelegate {
     id: control
+
+    Component.onCompleted: {
+        // disable hover behavior on mobile
+        const platform = Qt.platform.os;
+        if (platform === "android" || platform === "ios") {
+            hoverEnabled = false;
+        }
+    }
 
     implicitWidth: Math.max(background ? background.implicitWidth : 0,
                             contentItem.implicitWidth + leftPadding + rightPadding)

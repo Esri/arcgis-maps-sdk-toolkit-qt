@@ -13,30 +13,45 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_NETWORKAUTHENTICATIONCHALLENGERELAY_H
-#define ESRI_ARCGISRUNTIME_TOOLKIT_NETWORKAUTHENTICATIONCHALLENGERELAY_H
+#include "PopupMediaItem.h"
 
 // Maps SDK headers
-#include <Authentication/NetworkAuthenticationChallengeHandler.h>
+#include <ChartImage.h>
+#include <ChartImageParameters.h>
+#include <PopupMedia.h>
+#include <PopupMediaValue.h>
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-class ArcGISAuthenticationController;
-class NetworkAuthenticationChallengeRelay : public Authentication::NetworkAuthenticationChallengeHandler
+/*!
+  \internal
+  This class is an internal implementation detail and is subject to change.
+ */
+PopupMediaItem::PopupMediaItem(PopupMedia* popupMedia, QObject* parent)
+  : QObject{parent}, m_popupMedia{popupMedia}
 {
-  Q_OBJECT
+}
 
-public:
-  explicit NetworkAuthenticationChallengeRelay(ArcGISAuthenticationController* controller);
-  ~NetworkAuthenticationChallengeRelay();
+PopupMediaItem::~PopupMediaItem() = default;
 
-protected:
-  void handleNetworkAuthenticationChallenge(Authentication::NetworkAuthenticationChallenge* challenge) override;
+QString PopupMediaItem::title() const
+{
+  return m_popupMedia->title();
+}
 
-private:
-  ArcGISAuthenticationController* m_controller = nullptr;
-};
+QString PopupMediaItem::caption() const
+{
+  return m_popupMedia->caption();
+}
 
-} // Esri::ArcGISRuntime::Toolkit
+PopupMediaType PopupMediaItem::popupMediaType() const
+{
+  return m_popupMedia->popupMediaType();
+}
 
-#endif // ESRI_ARCGISRUNTIME_TOOLKIT_NETWORKAUTHENTICATIONCHALLENGERELAY_H
+PopupMedia* PopupMediaItem::popupMediaItem() const
+{
+  return m_popupMedia;
+}
+
+} // namespace Esri::ArcGISRuntime::Toolkit

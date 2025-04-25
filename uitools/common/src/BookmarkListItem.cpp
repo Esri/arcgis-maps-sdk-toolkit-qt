@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -23,22 +24,16 @@ namespace Esri::ArcGISRuntime::Toolkit {
   /*!
     \inmodule Esri.ArcGISRuntime.Toolkit
     \class Esri::ArcGISRuntime::Toolkit::BookmarkListItem
-    \brief An item contained within \l BookmarksViewController::bookmarks. This class wraps
-    a \c Bookmark for easy manipulation/inspection within an AbstractItemModel.
+    \internal
+
+    This class is an internal implementation detail and is subject to change.
    */
 
-  /*!
-    \brief Constructs a new empty BookmarkListItem object with a given \a parent.
-   */
   BookmarkListItem::BookmarkListItem(QObject* parent) :
     BookmarkListItem(nullptr, parent)
   {
   }
 
-  /*!
-    \brief Constructs a new BookmarkListItem object with a given \a bookmark and
-    \a parent.
-   */
   BookmarkListItem::BookmarkListItem(Bookmark* bookmark, QObject* parent) :
     QObject(parent),
     m_bookmark(bookmark)
@@ -46,14 +41,8 @@ namespace Esri::ArcGISRuntime::Toolkit {
     connect(this, &BookmarkListItem::bookmarkChanged, this, &BookmarkListItem::nameChanged);
   }
 
-  /*!
-    \brief Destructor.
-   */
   BookmarkListItem::~BookmarkListItem() = default;
 
-  /*!
-    \brief Change the underlying item to \a bookmark.
-   */
   void BookmarkListItem::setBookmark(Bookmark* bookmark)
   {
     if (m_bookmark == bookmark)
@@ -65,26 +54,16 @@ namespace Esri::ArcGISRuntime::Toolkit {
     emit bookmarkChanged();
   }
 
-  /*!
-    \brief Returns the current \c bookmark.
-   */
   Bookmark* BookmarkListItem::bookmark() const
   {
     return m_bookmark;
   }
 
-  /*!
-    \property Esri::ArcGISRuntime::Toolkit::BookmarkListItem::name
-    \brief Returns the name of the item.
-   */
   QString BookmarkListItem::name() const
   {
     return m_bookmark ? m_bookmark->name() : QString{};
   }
 
-  /*!
-    \brief Sets the underlying item to \a name.
-   */
   void BookmarkListItem::setName(const QString& name)
   {
     if (m_bookmark && m_bookmark->name() != name)
@@ -93,15 +72,5 @@ namespace Esri::ArcGISRuntime::Toolkit {
       emit nameChanged();
     }
   }
-
-  /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::BookmarkListItem::bookmarkChanged()
-    \brief Signal emitted when the \l bookmark changes.
-   */
-
-  /*!
-    \fn void Esri::ArcGISRuntime::Toolkit::BookmarkListItem::nameChanged()
-    \brief Signal emitted when the \l bookmark name changes.
-   */
 
 } // Esri::ArcGISRuntime::Toolkit

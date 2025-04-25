@@ -80,11 +80,7 @@ Pane {
     property var geoView;
 
     /*!
-      \qmlproperty TimeSliderController controller
-      \brief The controller handles calculating steps and setting extents on the
-       GeoView.
-
-       The CPP controller is documented \l{Esri::ArcGISRuntime::Toolkit::TimeSliderController}{here}.
+      \internal
     */
     property var controller: TimeSliderController { }
 

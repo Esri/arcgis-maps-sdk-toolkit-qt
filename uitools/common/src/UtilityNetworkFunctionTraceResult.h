@@ -17,13 +17,14 @@
 #ifndef UTILITYNETWORKFUNCTIONTRACERESULT_H
 #define UTILITYNETWORKFUNCTIONTRACERESULT_H
 
-// Toolkit headers
-#include "Internal/GenericListModel.h"
-
-#include <UtilityNetworkTypes.h>
-
 // Qt headers
 #include <QObject>
+
+// STL headers
+#include <UtilityNetworkTypes.h>
+
+// Other headers
+#include "GenericListModel.h"
 
 namespace Esri::ArcGISRuntime::Toolkit {
 

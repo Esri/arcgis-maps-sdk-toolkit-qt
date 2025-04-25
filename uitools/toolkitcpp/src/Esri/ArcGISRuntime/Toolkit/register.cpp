@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2025 Esri
  *
@@ -18,7 +19,9 @@
 
 // Toolkit includes
 #include "ArcGISAuthenticationController.h"
+#include "AttachmentsPopupElementViewController.h"
 #include "AuthenticationController.h"
+#include "BarChartPopupMediaItem.h"
 #include "BasemapGalleryController.h"
 #include "BasemapGalleryItem.h"
 #include "BookmarksViewController.h"
@@ -26,19 +29,28 @@
 #include "CoordinateConversionController.h"
 #include "CoordinateConversionOption.h"
 #include "CoordinateConversionResult.h"
+#include "FieldsPopupElementViewController.h"
 #include "FloorFilterController.h"
 #include "FloorFilterFacilityItem.h"
 #include "FloorFilterLevelItem.h"
 #include "FloorFilterSiteItem.h"
+#include "ImagePopupMediaItem.h"
+#include "LineChartPopupMediaItem.h"
 #include "LocatorSearchSource.h"
+#include "MediaPopupElementViewController.h"
 #include "NorthArrowController.h"
 #include "OverviewMapController.h"
+#include "PieChartPopupMediaItem.h"
+#include "PopupAttachmentItem.h"
+#include "PopupElementViewItem.h"
+#include "PopupMediaItem.h"
 #include "PopupViewController.h"
 #include "ScalebarController.h"
 #include "SearchResult.h"
 #include "SearchSuggestion.h"
 #include "SearchViewController.h"
 #include "SmartLocatorSearchSource.h"
+#include "TextPopupElementViewController.h"
 #include "TimeSliderController.h"
 #include "UtilityNetworkFunctionTraceResultsModel.h"
 #include "UtilityNetworkTraceController.h"
@@ -46,7 +58,9 @@
 #include "UtilityNetworkTraceStartingPointsModel.h"
 
 // Internal includes
-#include "Internal/BasemapGalleryImageProvider.h"
+#include "PopupAttachmentImageProvider.h"
+#include "QmlEnums.h"
+#include "BasemapGalleryImageProvider.h"
 
 // ArcGIS includes
 #include <MapQuickView.h>
@@ -210,10 +224,13 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void registerComponents(QQmlEngine& appEngine)
   {
     appEngine.addImageProvider(BasemapGalleryImageProvider::PROVIDER_ID, BasemapGalleryImageProvider::instance());
+    appEngine.addImageProvider(PopupAttachmentImageProvider::PROVIDER_ID, PopupAttachmentImageProvider::instance());
     appEngine.addImportPath(ESRI_COM_PATH);
     registerModuleRevisions();
     registerComponent<ArcGISAuthenticationController>(CreationType::Singleton);
+    registerComponent<AttachmentsPopupElementViewController>();
     registerComponent<AuthenticationController>();
+    registerComponent<BarChartPopupMediaItem>();
     registerComponent<BasemapGalleryController>();
     registerComponent<BasemapGalleryItem>();
     registerComponent<BookmarksViewController>();
@@ -221,19 +238,29 @@ namespace Esri::ArcGISRuntime::Toolkit {
     registerComponent<CoordinateConversionController>();
     registerComponent<CoordinateConversionOption>();
     registerComponent<CoordinateConversionResult>();
+    registerComponent<FieldsPopupElementViewController>();
     registerComponent<FloorFilterController>();
     registerComponent<FloorFilterFacilityItem>(CreationType::Uncreatable);
     registerComponent<FloorFilterLevelItem>(CreationType::Uncreatable);
     registerComponent<FloorFilterSiteItem>(CreationType::Uncreatable);
+    registerComponent<ImagePopupMediaItem>();
+    registerComponent<LineChartPopupMediaItem>();
     registerComponent<LocatorSearchSource>(CreationType::Uncreatable);
+    registerComponent<MediaPopupElementViewController>();
     registerComponent<NorthArrowController>();
     registerComponent<OverviewMapController>();
+    registerComponent<PieChartPopupMediaItem>();
+    registerComponent<PopupAttachmentItem>();
+    registerComponent<PopupElementViewItem>();
+    registerComponent<PopupMediaItem>();
     registerComponent<PopupViewController>();
+    registerComponent<QmlEnums>();
     registerComponent<ScalebarController>();
     registerComponent<SearchResult>();
     registerComponent<SearchSuggestion>();
     registerComponent<SearchViewController>();
     registerComponent<SmartLocatorSearchSource>(CreationType::Uncreatable);
+    registerComponent<TextPopupElementViewController>();
     registerComponent<TimeSliderController>();
     registerComponent<UtilityNetworkFunctionTraceResultsModel>();
     registerComponent<UtilityNetworkTraceController>();

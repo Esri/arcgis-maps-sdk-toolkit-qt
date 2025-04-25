@@ -17,9 +17,13 @@
 #ifndef ArKitPointCloudRenderer_H
 #define ArKitPointCloudRenderer_H
 
+// C++ API headers
+#include "Deprecated.h"
+
+// Qt headers
+#include <QColor>
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
-#include <QColor>
 
 class QOpenGLShaderProgram;
 
@@ -28,7 +32,7 @@ namespace Esri::ArcGISRuntime::Toolkit::Internal {
 class ArKitWrapper;
 
 // This class renders the detected point cloud into the view.
-class ArKitPointCloudRenderer : public QOpenGLFunctions
+class QRT_DEPRECATED ArKitPointCloudRenderer : public QOpenGLFunctions
 {
 public:
   ArKitPointCloudRenderer(ArKitWrapper* ArKitWrapper);

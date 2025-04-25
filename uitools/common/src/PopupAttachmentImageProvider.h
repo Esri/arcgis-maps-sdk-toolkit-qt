@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2021 Esri
+ *  Copyright 2012-2025 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -13,37 +13,35 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_BASEMAPGALLERYIMAGEPROVIDER_H
-#define ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_BASEMAPGALLERYIMAGEPROVIDER_H
-#ifdef CPP_ARCGISRUNTIME_TOOLKIT
+#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_POPUPATTACHMENTIMAGEPROVIDER_H
+#define ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_POPUPATTACHMENTIMAGEPROVIDER_H
 
+// Qt headers
 #include <QQuickImageProvider>
 #include <QUuid>
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-  class BasemapGalleryItem;
+  class PopupAttachmentItem;
 
-  class BasemapGalleryImageProvider : public QQuickAsyncImageProvider
+  class PopupAttachmentImageProvider : public QQuickAsyncImageProvider
   {
   public:
     static const QString PROVIDER_ID;
 
-    static BasemapGalleryImageProvider* instance();
+    static PopupAttachmentImageProvider* instance();
 
-    ~BasemapGalleryImageProvider() override;
+    ~PopupAttachmentImageProvider() override;
 
     QQuickImageResponse* requestImageResponse(const QString& id, const QSize& requestedSize) override;
 
-    bool registerItem(BasemapGalleryItem* item);
-    bool deregisterItem(BasemapGalleryItem* item);
+    bool registerItem(PopupAttachmentItem* item);
+    bool deregisterItem(PopupAttachmentItem* item);
 
   private:
-    BasemapGalleryImageProvider();
-    QObject* m_internalObject;
-    QMap<QUuid, BasemapGalleryItem*> m_itemMap;
+    PopupAttachmentImageProvider();
+    QMap<QUuid, PopupAttachmentItem*> m_itemMap;
   };
 } // Esri::ArcGISRuntime::Toolkit
 
-#endif // CPP_ARCGISRUNTIME_TOOLKIT
-#endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_BASEMAPGALLERYIMAGEPROVIDER_H
+#endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_POPUPATTACHMENTIMAGEPROVIDER_H
