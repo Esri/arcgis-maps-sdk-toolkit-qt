@@ -143,7 +143,6 @@ Dialog {
 
         switch(controller.respondWithClientCertificate(currentCertificate, passwordTextField.text)) {
             case ArcGISAuthenticationController.CertificateResult.Accepted:
-            case ArcGISAuthenticationController.CertificateResult.AttemptsExhausted:
             case ArcGISAuthenticationController.CertificateResult.Error: {
                 passwordDialog.close();
                 clientCertificateView.close();

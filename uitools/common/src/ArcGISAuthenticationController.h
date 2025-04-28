@@ -69,7 +69,6 @@ public:
   {
     Accepted,
     PasswordRejected,
-    AttemptsExhausted,
     Error
   };
   Q_ENUM(CertificateResult)
@@ -136,8 +135,6 @@ private:
   // ArcGISAuthenticationChallenges only. NetworkAuthenticationChallenges already contain this information
   QHash<QUrl, int> m_arcGISPreviousFailureCountsForUrl;
   static inline constexpr int s_maxArcGISPreviousFailureCount = 5;
-  static inline constexpr int s_maxCertificateFailureCount = 5;
-  int m_certificateFailureCount = 0;
   std::mutex m_mutex;
 };
 

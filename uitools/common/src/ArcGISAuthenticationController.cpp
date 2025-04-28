@@ -217,18 +217,7 @@ ArcGISAuthenticationController::CertificateResult ArcGISAuthenticationController
   {
     m_currentNetworkChallenge->continueWithCredential(clientCredential);
     m_currentNetworkChallenge.reset();
-    m_certificateFailureCount = 0;
     return CertificateResult::Accepted;
-  }
-
-  m_certificateFailureCount++;
-
-  if (m_certificateFailureCount >= s_maxCertificateFailureCount)
-  {
-    m_currentNetworkChallenge->continueAndFailWithError(Error{"Invalid password, or unable to decrypt certificate", ""});
-    m_currentNetworkChallenge.reset();
-    m_certificateFailureCount = 0;
-    return CertificateResult::AttemptsExhausted;
   }
 
   return CertificateResult::PasswordRejected;
