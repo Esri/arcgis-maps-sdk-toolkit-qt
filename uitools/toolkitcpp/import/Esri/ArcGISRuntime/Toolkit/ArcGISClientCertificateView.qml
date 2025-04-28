@@ -36,6 +36,7 @@ Dialog {
 
     footer: DialogButtonBox {
         Button {
+            id: mainDialogCancelButton
             text: qsTr("Cancel")
             DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
         }
@@ -97,6 +98,7 @@ Dialog {
                     onClicked: passwordDialog.reject()
                 }
                 Button {
+                    id: passwordDialogOkButton
                     text: qsTr("Ok")
                     enabled: passwordTextField.text.length > 0
                     onClicked: passwordDialog.accept()
@@ -107,7 +109,7 @@ Dialog {
                 // Disallow empty password
                 // We already attempt that when the file is selected.
                 if (passwordTextField.text.length === 0) {
-                    openPasswordInputDialog();
+                    openPasswordInputDialog_();
                     return;
                 }
                 processCertificate_();
@@ -150,13 +152,13 @@ Dialog {
             }
             case ArcGISAuthenticationController.CertificateResult.PasswordRejected: {
                 passwordTextField.text = "";
-                openPasswordInputDialog();
+                openPasswordInputDialog_();
                 break;
             }
         }
     }
 
-    function openPasswordInputDialog() {
+    function openPasswordInputDialog_() {
         if (!passwordDialog.opened) {
             passwordDialog.open();
         } else {
@@ -166,5 +168,29 @@ Dialog {
             };
             passwordDialog.closed.connect(openDialogFn);
         }
+    }
+
+    // the functions below are automated test helpers
+    function applyClientCertificate(path, password) {
+        const inputPasswordFn = () => {
+            if (!passwordDialog.opened)
+                return;
+
+            passwordDialog.openedChanged.disconnect(inputPasswordFn);
+            passwordTextField.text = password;
+            passwordDialogOkButton.click();
+        }
+
+        passwordDialog.openedChanged.connect(inputPasswordFn);
+
+        fileDialog.file = path;
+
+        // this will open the password dialog, which we are listening for it to become
+        // opened above to input the password
+        fileDialog.accept();
+    }
+
+    function clickCancel() {
+        mainDialogCancelButton.click();
     }
 }
