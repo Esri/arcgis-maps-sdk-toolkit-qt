@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2020 Esri
+ *  Copyright 2012-2025 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,7 +14,6 @@
  *  limitations under the License.
  ******************************************************************************/
 import Esri.ArcGISRuntime.Toolkit.Controller
-
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -23,30 +22,22 @@ import Qt.labs.platform as P
 Dialog {
     id: clientCertificateView
     property ArcGISAuthenticationController controller: null
+    property url currentCertificate: ""
 
     title: qsTr("Client certificate requested")
 
-    // closePolicy: Popup.NoAutoClose
+    closePolicy: Popup.NoAutoClose
 
     header: Label {
+        id: headerLabel
         text: `<h1>${title}</h1>`
         horizontalAlignment: Text.AlignHCenter
     }
 
     footer: DialogButtonBox {
         Button {
-            text: qsTr("Skip")
+            text: qsTr("Cancel")
             DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
-        }
-
-        Button {
-            text: qsTr("Continue")
-            enabled: certificateView.currentIndex >= 0
-            DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
-        }
-
-        onAccepted: {
-            controller.continueWithClientCertificate(certificateView.currentIndex, "");
         }
 
         onRejected: {
@@ -57,7 +48,7 @@ Dialog {
     ColumnLayout {
         anchors.centerIn: parent
         Label {
-            text:qsTr("The service has requested a client certificate to authenticate you. "
+            text: qsTr("The service has requested a client certificate to authenticate you. "
                       + "The app has identified the requesting server as "
                       + `'${controller.currentAuthenticatingHost}', but you `
                       + "should only give the app access to the certificate if you trust it.")
@@ -67,84 +58,70 @@ Dialog {
             Layout.margins: 5
         }
 
-        ListView {
-            id: certificateView
-            clip: true
-            model: controller.clientCertificateInfos
-
-            header: Label {
-                text: `<h2>${qsTr("Available certificates")}</h2>`
-                horizontalAlignment: Qt.AlignHCenter
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                }
-            }
-            footer: Button {
-                text: qsTr("Add certificate")
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                }
-                onClicked: fileDialog.open()
-                P.FileDialog {
-                    id: fileDialog
-                    folder: P.StandardPaths.writableLocation(P.StandardPaths.DocumentsLocation)
-                    onFileChanged: {
-                        controller.respondWithClientCertificate(file, "");
-                    }
-                }
-            }
-
-            delegate: ItemDelegate {
-                text: modelData
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                }
-                clip: true
-                highlighted: ListView.isCurrentItem
-            }
-
+        Button {
+            text: qsTr("Choose certificate")
             Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.preferredHeight: 200
-            Layout.margins: 5
+            onClicked: fileDialog.open()
         }
-    }
 
-    Connections {
-        target: controller
-
-        function onClientCertificatePasswordRequired(certificate) {
-            const dialog = passwordDialog.createObject(
-                             clientCertificateView.parent, { certificate: certificate});
-            dialog.open();
+        P.FileDialog {
+            id: fileDialog
+            folder: P.StandardPaths.writableLocation(P.StandardPaths.DocumentsLocation)
+            onAccepted: {
+                currentCertificate = file;
+                // first attempt with no password in case none is required
+                passwordDialog.firstAttemptWithNoPassword = true;
+                passwordTextField.text = "";
+                processCertificate_();
+            }
         }
-    }
 
-    Component {
-        id: passwordDialog
         Dialog {
-            id: pD
+            id: passwordDialog
             anchors.centerIn: parent
-            title: qsTr("Enter password")
-            property url certificate: ""
-            property string fileName: certificate.toString().split("/").pop();
+            property bool firstAttemptWithNoPassword: true
+            header: Label {
+                text: passwordDialog.firstAttemptWithNoPassword ? qsTr("Enter password") : qsTr("Invalid password - try again")
+                color: passwordDialog.firstAttemptWithNoPassword ? headerLabel.color : "red"
+                horizontalAlignment: Text.AlignLeft
+                padding: parent.padding
+            }
+            property string fileName: currentCertificate.toString().split("/").pop();
             modal: true
             closePolicy: Popup.NoAutoClose
-            standardButtons: Dialog.Ok | Dialog.Cancel
-            onAccepted: {
-                controller.respondWithClientCertificate(
-                            certificate, passwordTextField.text);
-                clientCertificateView.close();
+
+            footer: DialogButtonBox {
+                id: buttonBox
+                Button {
+                    text: qsTr("Cancel")
+                    onClicked: passwordDialog.reject()
+                }
+                Button {
+                    text: qsTr("Ok")
+                    enabled: passwordTextField.text.length > 0
+                    onClicked: passwordDialog.accept()
+                }
             }
+
+            onAccepted: {
+                // Disallow empty password
+                // We already attempt that when the file is selected.
+                if (passwordTextField.text.length === 0) {
+                    openPasswordInputDialog();
+                    return;
+                }
+                processCertificate_();
+            }
+            onRejected: {
+                passwordDialog.close();
+            }
+
             ColumnLayout {
                 Label {
                     Layout.fillWidth: true
                     Layout.maximumWidth: clientCertificateView.width
                     text: qsTr("The client certificate file "
-                               + `'${pD.fileName}' `
+                               + `'${passwordDialog.fileName}' `
                                + "requires a password to open.")
                     wrapMode: Text.Wrap
                 }
@@ -152,13 +129,43 @@ Dialog {
                     id: passwordTextField
                     Layout.fillWidth: true
                     placeholderText: qsTr("password")
-                    onAccepted: pD.accept();
+                    onAccepted: passwordDialog.accept();
                     echoMode: TextInput.Password
                 }
             }
-            onClosed: {
-                this.destroy();
+        }
+    }
+
+    function processCertificate_() {
+        if (passwordDialog.firstAttemptWithNoPassword && passwordTextField.text.length > 0) {
+            passwordDialog.firstAttemptWithNoPassword = false;
+        }
+
+        switch(controller.respondWithClientCertificate(currentCertificate, passwordTextField.text)) {
+            case ArcGISAuthenticationController.CertificateResult.Accepted:
+            case ArcGISAuthenticationController.CertificateResult.AttemptsExhausted:
+            case ArcGISAuthenticationController.CertificateResult.Error: {
+                passwordDialog.close();
+                clientCertificateView.close();
+                break;
             }
+            case ArcGISAuthenticationController.CertificateResult.PasswordRejected: {
+                passwordTextField.text = "";
+                openPasswordInputDialog();
+                break;
+            }
+        }
+    }
+
+    function openPasswordInputDialog() {
+        if (!passwordDialog.opened) {
+            passwordDialog.open();
+        } else {
+            const openDialogFn = () => {
+                passwordDialog.open();
+                passwordDialog.closed.disconnect(openDialogFn);
+            };
+            passwordDialog.closed.connect(openDialogFn);
         }
     }
 }

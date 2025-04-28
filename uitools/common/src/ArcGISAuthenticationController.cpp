@@ -21,6 +21,7 @@
 #include <QPointer>
 #include <QUrl>
 #include <QSslError>
+#include <QSslSocket>
 
 // Maps SDK headers
 #include <Authentication/ArcGISAuthenticationChallenge.h>
@@ -164,6 +165,15 @@ void ArcGISAuthenticationController::handleNetworkAuthenticationChallenge(Networ
     }
     case NetworkChallengeType::ClientCertificate:
     {
+      const auto sslBackend = QSslSocket::activeBackend();
+      if (QSslSocket::activeBackend() != "openssl")
+      {
+        qWarning() << QString("ClientCertificate authentication is not supported with the current SSL backend (%1). ").arg(sslBackend) +
+                      "See https://doc.qt.io/qt-6/qsslsocket.html#activeBackend for more details. "
+                      "Only the openssl backend supports Client Certificates (PKI).";
+        return;
+      }
+
       emit displayClientCertificateView();
       return;
     }
@@ -196,20 +206,32 @@ void ArcGISAuthenticationController::continueWithServerTrust(bool trust)
   m_currentNetworkChallenge.reset();
 }
 
-void ArcGISAuthenticationController::respondWithClientCertificate(const QUrl& path, const QString& password)
+ArcGISAuthenticationController::CertificateResult ArcGISAuthenticationController::respondWithClientCertificate(const QUrl& path, const QString& password)
 {
-  if (m_currentNetworkChallenge)
+  if (!m_currentNetworkChallenge)
   {
-    if (auto* clientCredential = NetworkCredential::certificate(path, password, this); clientCredential)
-    {
-      m_currentNetworkChallenge->continueWithCredential(clientCredential);
-      return;
-    }
-    else
-    {
-      emit clientCertificatePasswordRequired(path);
-    }
+    return CertificateResult::Error;
   }
+
+  if (auto* clientCredential = NetworkCredential::certificate(path, password, this); clientCredential)
+  {
+    m_currentNetworkChallenge->continueWithCredential(clientCredential);
+    m_currentNetworkChallenge.reset();
+    m_certificateFailureCount = 0;
+    return CertificateResult::Accepted;
+  }
+
+  m_certificateFailureCount++;
+
+  if (m_certificateFailureCount >= s_maxCertificateFailureCount)
+  {
+    m_currentNetworkChallenge->continueAndFailWithError(Error{"Invalid password, or unable to decrypt certificate", ""});
+    m_currentNetworkChallenge.reset();
+    m_certificateFailureCount = 0;
+    return CertificateResult::AttemptsExhausted;
+  }
+
+  return CertificateResult::PasswordRejected;
 }
 
 void ArcGISAuthenticationController::continueWithUsernamePassword(const QString& username, const QString& password)

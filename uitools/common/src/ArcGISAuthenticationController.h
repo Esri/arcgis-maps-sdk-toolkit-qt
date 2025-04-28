@@ -65,6 +65,15 @@ public:
 
   ~ArcGISAuthenticationController() override;
 
+  enum class CertificateResult
+  {
+    Accepted,
+    PasswordRejected,
+    AttemptsExhausted,
+    Error
+  };
+  Q_ENUM(CertificateResult)
+
   // callbacks invoked by QML
   // token authentication
   Q_INVOKABLE void continueWithUsernamePassword(const QString& username, const QString& password);
@@ -77,7 +86,7 @@ public:
   Q_INVOKABLE void continueWithServerTrust(bool trust);
 
   // ClientCertificate
-  Q_INVOKABLE void respondWithClientCertificate(const QUrl& path, const QString& password);
+  Q_INVOKABLE CertificateResult respondWithClientCertificate(const QUrl& path, const QString& password);
 
   Q_INVOKABLE void cancel();
 
@@ -103,7 +112,6 @@ signals:
   void preferPrivateWebBrowserSessionChanged();
   void redirectUriChanged();
   void previousFailureCountChanged();
-  void clientCertificatePasswordRequired(const QUrl& certificatePath);
 
 private:
   explicit ArcGISAuthenticationController(QObject* parent = nullptr);
@@ -128,7 +136,8 @@ private:
   // ArcGISAuthenticationChallenges only. NetworkAuthenticationChallenges already contain this information
   QHash<QUrl, int> m_arcGISPreviousFailureCountsForUrl;
   static inline constexpr int s_maxArcGISPreviousFailureCount = 5;
-
+  static inline constexpr int s_maxCertificateFailureCount = 5;
+  int m_certificateFailureCount = 0;
   std::mutex m_mutex;
 };
 
