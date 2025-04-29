@@ -22,6 +22,7 @@
 #include <QUrl>
 #include <QSslError>
 #include <QSslSocket>
+#include <QStringLiteral>
 
 // Maps SDK headers
 #include <Authentication/ArcGISAuthenticationChallenge.h>
@@ -166,11 +167,16 @@ void ArcGISAuthenticationController::handleNetworkAuthenticationChallenge(Networ
     case NetworkChallengeType::ClientCertificate:
     {
       const auto sslBackend = QSslSocket::activeBackend();
-      if (QSslSocket::activeBackend() != "openssl")
+      if (QSslSocket::activeBackend() != QStringLiteral("openssl"))
       {
-        qWarning() << QString("ClientCertificate authentication is not supported with the current SSL backend (%1). ").arg(sslBackend) +
-                      "See https://doc.qt.io/qt-6/qsslsocket.html#activeBackend for more details. "
-                      "Only the openssl backend supports Client Certificates (PKI).";
+        const auto error = QStringLiteral("ClientCertificate authentication is not supported with the current SSL backend (%1). ")
+            .arg(sslBackend) +
+            QStringLiteral("See https://doc.qt.io/qt-6/qsslsocket.html#activeBackend for more details. ") +
+            QStringLiteral("Only the openssl backend supports Client Certificates (PKI).");
+
+        qWarning() << error;
+        m_currentNetworkChallenge->continueAndFailWithError(Error{error, ""});
+        m_currentNetworkChallenge.reset();
         return;
       }
 
