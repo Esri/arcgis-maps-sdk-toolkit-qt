@@ -21,11 +21,14 @@
 #include <QPointer>
 #include <QUrl>
 #include <QSslError>
+#include <QSslSocket>
+#include <QStringLiteral>
 
 // Maps SDK headers
 #include <Authentication/ArcGISAuthenticationChallenge.h>
 #include <Authentication/AuthenticationManager.h>
 #include <Authentication/AuthenticationTypes.h>
+#include <Authentication/CertificateCredential.h>
 #include <Authentication/OAuthUserConfiguration.h>
 #include <Authentication/OAuthUserCredential.h>
 #include <Authentication/OAuthUserLoginPrompt.h>
@@ -163,7 +166,22 @@ void ArcGISAuthenticationController::handleNetworkAuthenticationChallenge(Networ
     }
     case NetworkChallengeType::ClientCertificate:
     {
-      Q_UNIMPLEMENTED();
+      const auto sslBackend = QSslSocket::activeBackend();
+      if (QSslSocket::activeBackend() != QStringLiteral("openssl"))
+      {
+        const auto error = QStringLiteral("ClientCertificate authentication is not supported with the current SSL backend (%1). ")
+            .arg(sslBackend) +
+            QStringLiteral("See https://doc.qt.io/qt-6/qsslsocket.html#activeBackend for more details. ") +
+            QStringLiteral("Only the openssl backend supports Client Certificates (PKI).");
+
+        qWarning() << error;
+        m_currentNetworkChallenge->continueAndFailWithError(Error{error, ""});
+        m_currentNetworkChallenge.reset();
+        return;
+      }
+
+      emit displayClientCertificateView();
+      return;
     }
   }
 
@@ -192,6 +210,23 @@ void ArcGISAuthenticationController::continueWithServerTrust(bool trust)
   }
 
   m_currentNetworkChallenge.reset();
+}
+
+ArcGISAuthenticationController::CertificateResult ArcGISAuthenticationController::respondWithClientCertificate(const QUrl& path, const QString& password)
+{
+  if (!m_currentNetworkChallenge)
+  {
+    return CertificateResult::Error;
+  }
+
+  if (auto* clientCredential = NetworkCredential::certificate(path, password, this); clientCredential)
+  {
+    m_currentNetworkChallenge->continueWithCredential(clientCredential);
+    m_currentNetworkChallenge.reset();
+    return CertificateResult::Accepted;
+  }
+
+  return CertificateResult::PasswordRejected;
 }
 
 void ArcGISAuthenticationController::continueWithUsernamePassword(const QString& username, const QString& password)

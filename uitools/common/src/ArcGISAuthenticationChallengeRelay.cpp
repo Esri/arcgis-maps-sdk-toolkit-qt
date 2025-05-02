@@ -40,24 +40,15 @@ namespace Esri::ArcGISRuntime::Toolkit {
   \internal
  */
 
-/*!
-  \internal
- */
 ArcGISAuthenticationChallengeRelay::ArcGISAuthenticationChallengeRelay(ArcGISAuthenticationController* controller) :
   ArcGISAuthenticationChallengeHandler(controller),
   m_controller(controller)
 {
-  ArcGISRuntimeEnvironment::instance()->authenticationManager()->setArcGISAuthenticationChallengeHandler(this);
+  ArcGISRuntimeEnvironment::authenticationManager()->setArcGISAuthenticationChallengeHandler(this);
 }
 
-/*!
-  \internal
- */
 ArcGISAuthenticationChallengeRelay::~ArcGISAuthenticationChallengeRelay() = default;
 
-/*!
-  \internal
- */
 void ArcGISAuthenticationChallengeRelay::handleArcGISAuthenticationChallenge(ArcGISAuthenticationChallenge* challenge)
 {
   m_controller->handleArcGISAuthenticationChallenge(challenge);

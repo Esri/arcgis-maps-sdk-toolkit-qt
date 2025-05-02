@@ -44,6 +44,22 @@ Item {
         function onDisplayServerTrustView() {
             displayView(serverTrustViewComponent);
         }
+
+        function onDisplayClientCertificateView() {
+            displayView(clientCertificateViewComponent);
+        }
+    }
+
+    Component {
+        id: clientCertificateViewComponent
+        ArcGISClientCertificateView {
+            anchors.centerIn: arcgisAuthenticationView_internal
+            controller: arcgisAuthenticationView_internal.controller
+            onClosed: {
+                this.destroy();
+            }
+            Component.onCompleted: activeLoginViewReady_(this)
+        }
     }
 
     Component {

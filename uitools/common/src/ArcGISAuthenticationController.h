@@ -65,6 +65,14 @@ public:
 
   ~ArcGISAuthenticationController() override;
 
+  enum class CertificateResult
+  {
+    Accepted,
+    PasswordRejected,
+    Error
+  };
+  Q_ENUM(CertificateResult)
+
   // callbacks invoked by QML
   // token authentication
   Q_INVOKABLE void continueWithUsernamePassword(const QString& username, const QString& password);
@@ -75,6 +83,9 @@ public:
 
   // ServerTrust
   Q_INVOKABLE void continueWithServerTrust(bool trust);
+
+  // ClientCertificate
+  Q_INVOKABLE CertificateResult respondWithClientCertificate(const QUrl& path, const QString& password);
 
   Q_INVOKABLE void cancel();
 
@@ -91,6 +102,7 @@ public:
   QList<Esri::ArcGISRuntime::Authentication::OAuthUserConfiguration*> oAuthUserConfigurations() const;
 
 signals:
+  void displayClientCertificateView();
   void displayOAuthSignInView();
   void displayUsernamePasswordSignInView();
   void displayServerTrustView();
@@ -123,7 +135,6 @@ private:
   // ArcGISAuthenticationChallenges only. NetworkAuthenticationChallenges already contain this information
   QHash<QUrl, int> m_arcGISPreviousFailureCountsForUrl;
   static inline constexpr int s_maxArcGISPreviousFailureCount = 5;
-
   std::mutex m_mutex;
 };
 
