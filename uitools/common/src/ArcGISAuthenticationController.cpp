@@ -44,6 +44,9 @@
 #include "ArcGISAuthenticationChallengeRelay.h"
 #include "NetworkAuthenticationChallengeRelay.h"
 
+// STL headers
+#include <optional>
+
 using namespace Esri::ArcGISRuntime;
 using namespace Esri::ArcGISRuntime::Authentication;
 using Esri::ArcGISRuntime::Authentication::AuthenticationManager;
@@ -251,7 +254,7 @@ void ArcGISAuthenticationController::continueWithUsernamePasswordArcGIS_(const Q
   TokenCredential::createAsync(m_currentArcGISChallenge->requestUrl(),
                                username,
                                password,
-                               0).then(this, [this](TokenCredential* credential)
+                               std::nullopt).then(this, [this](TokenCredential* credential)
   {
     if (m_arcGISPreviousFailureCountsForUrl.contains(m_currentArcGISChallenge->requestUrl()))
     {
