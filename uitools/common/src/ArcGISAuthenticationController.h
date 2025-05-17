@@ -121,6 +121,9 @@ private:
   QString redirectUri_() const;
   int previousFailureCount_() const;
 
+  void processOAuthExternalBrowserLogin_();
+  void finishChallengeFlow_();
+
   void continueWithUsernamePasswordArcGIS_(const QString& username, const QString& password);
   void continueWithUsernamePasswordNetwork_(const QString& username, const QString& password);
 
@@ -130,6 +133,7 @@ private:
   std::unique_ptr<Authentication::ArcGISAuthenticationChallenge> m_currentArcGISChallenge;
   std::unique_ptr<Authentication::NetworkAuthenticationChallenge> m_currentNetworkChallenge;
   QList<Esri::ArcGISRuntime::Authentication::OAuthUserConfiguration*> m_userConfigurations;
+  Esri::ArcGISRuntime::Authentication::OAuthUserConfiguration* m_currentOAuthUserConfiguration = nullptr;
   std::unique_ptr<Authentication::OAuthUserLoginPrompt> m_currentOAuthUserLoginPrompt;
 
   // ArcGISAuthenticationChallenges only. NetworkAuthenticationChallenges already contain this information

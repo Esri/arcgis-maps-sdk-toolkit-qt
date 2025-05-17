@@ -23,6 +23,9 @@
 #include <QSslError>
 #include <QSslSocket>
 #include <QStringLiteral>
+#include <QOAuth2AuthorizationCodeFlow>
+#include <QOAuthUriSchemeReplyHandler>
+#include <QDesktopServices>
 
 // Maps SDK headers
 #include <Authentication/ArcGISAuthenticationChallenge.h>
@@ -43,6 +46,7 @@
 // Toolkit headers
 #include "ArcGISAuthenticationChallengeRelay.h"
 #include "NetworkAuthenticationChallengeRelay.h"
+#include "CustomOAuth2AuthorizationCodeFlow.h"
 
 // STL headers
 #include <optional>
@@ -75,10 +79,20 @@ ArcGISAuthenticationController::ArcGISAuthenticationController(QObject* parent) 
   {
     currentOAuthUserLoginPrompt->setParent(nullptr);
     m_currentOAuthUserLoginPrompt = std::unique_ptr<OAuthUserLoginPrompt>{currentOAuthUserLoginPrompt};
-    emit authorizeUrlChanged();
-    emit preferPrivateWebBrowserSessionChanged();
-    emit redirectUriChanged();
-    emit displayOAuthSignInView();
+
+    if (const auto redirectUrl = m_currentOAuthUserLoginPrompt->redirectUri();
+          redirectUrl == QUrl{"urn:ietf:wg:oauth:2.0:oob"} || // this is the default value for "oob"
+          redirectUrl.contains("oob")) // this is what the Qt docs indicate to check for
+    { // use embedded web view session for "oob" redirect URI
+      emit authorizeUrlChanged();
+      emit preferPrivateWebBrowserSessionChanged();
+      emit redirectUriChanged();
+      emit displayOAuthSignInView();
+    }
+    else
+    {
+      processOAuthExternalBrowserLogin_();
+    }
   });
 }
 
@@ -114,6 +128,7 @@ void ArcGISAuthenticationController::handleArcGISAuthenticationChallenge(ArcGISA
   {
     if (userConfiguration->canBeUsedForUrl(requestUrl))
     {
+      m_currentOAuthUserConfiguration = userConfiguration;
       OAuthUserCredential::createAsync(userConfiguration, this).then(this, [this](OAuthUserCredential* credential)
       {
         if (!m_currentArcGISChallenge)
@@ -425,6 +440,60 @@ int ArcGISAuthenticationController::previousFailureCount_() const
   }
 
   return 0;
+}
+
+void ArcGISAuthenticationController::processOAuthExternalBrowserLogin_()
+{
+  CustomOAuth2AuthorizationCodeFlow* oauthFlow = new CustomOAuth2AuthorizationCodeFlow(m_currentOAuthUserLoginPrompt->authorizeUrl(),
+                                                                                       m_currentOAuthUserLoginPrompt.get());
+
+  QOAuthUriSchemeReplyHandler* callbackReplyHandler = new QOAuthUriSchemeReplyHandler(m_currentOAuthUserLoginPrompt.get());
+  connect(callbackReplyHandler, &QOAuthUriSchemeReplyHandler::callbackReceived, this, [this, oauthFlow](const QVariantMap& values)
+  {
+    if (!values.contains("code"))
+    {
+      m_currentOAuthUserLoginPrompt->respondWithError("There was an error obtaining the authorization code");
+      finishChallengeFlow_();
+      return;
+    }
+
+    const auto code = values.value("code").toString();
+    oauthFlow->setAuthorizationCode(code);
+    emit oauthFlow->granted();
+  });
+
+  oauthFlow->setAuthorizationUrl(m_currentOAuthUserLoginPrompt->authorizeUrl());
+  oauthFlow->setClientIdentifier(m_currentOAuthUserConfiguration->clientId());
+
+  connect(oauthFlow, &QAbstractOAuth::authorizeWithBrowser, this, &QDesktopServices::openUrl);
+  connect(oauthFlow, &QAbstractOAuth::granted, this, [callbackReplyHandler, oauthFlow, this]()
+  {
+    callbackReplyHandler->close();
+
+    // this needs to be in the form of redirectUri?code=authCode
+    const auto formattedResponseUrl = QUrl{QString("%1?code=%2").arg(m_currentOAuthUserConfiguration->redirectUri(),
+                                                                     oauthFlow->authorizationCode())};
+    m_currentOAuthUserLoginPrompt->respond(formattedResponseUrl);
+  });
+
+  callbackReplyHandler->setRedirectUrl(m_currentOAuthUserLoginPrompt->redirectUri());
+  oauthFlow->setReplyHandler(callbackReplyHandler);
+
+  if (callbackReplyHandler->listen())
+  {
+    oauthFlow->grant();
+  }
+}
+
+void ArcGISAuthenticationController::finishChallengeFlow_()
+{
+  m_currentArcGISChallenge = {};
+  m_currentOAuthUserConfiguration = nullptr;
+
+  if (m_currentOAuthUserLoginPrompt)
+  {
+    m_currentOAuthUserLoginPrompt.reset();
+  }
 }
 
 } //  Esri::ArcGISRuntime::Toolkit
