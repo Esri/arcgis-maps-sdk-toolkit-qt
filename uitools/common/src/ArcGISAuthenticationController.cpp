@@ -23,7 +23,6 @@
 #include <QSslError>
 #include <QSslSocket>
 #include <QStringLiteral>
-#include <QOAuth2AuthorizationCodeFlow>
 #include <QOAuthUriSchemeReplyHandler>
 #include <QDesktopServices>
 
