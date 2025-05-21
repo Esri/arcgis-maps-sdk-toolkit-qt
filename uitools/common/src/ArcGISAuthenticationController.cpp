@@ -444,10 +444,10 @@ int ArcGISAuthenticationController::previousFailureCount_() const
 
 void ArcGISAuthenticationController::processOAuthExternalBrowserLogin_()
 {
-  CustomOAuth2AuthorizationCodeFlow* oauthFlow = new CustomOAuth2AuthorizationCodeFlow(m_currentOAuthUserLoginPrompt->authorizeUrl(),
-                                                                                       m_currentOAuthUserLoginPrompt.get());
+  auto* oauthFlow = new CustomOAuth2AuthorizationCodeFlow(m_currentOAuthUserLoginPrompt->authorizeUrl(),
+                                                          m_currentOAuthUserLoginPrompt.get());
 
-  QOAuthUriSchemeReplyHandler* callbackReplyHandler = new QOAuthUriSchemeReplyHandler(m_currentOAuthUserLoginPrompt.get());
+  auto* callbackReplyHandler = new QOAuthUriSchemeReplyHandler(m_currentOAuthUserLoginPrompt.get());
   connect(callbackReplyHandler, &QOAuthUriSchemeReplyHandler::callbackReceived, this, [this, oauthFlow](const QVariantMap& values)
   {
     if (!values.contains("code"))
