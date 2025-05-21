@@ -85,7 +85,6 @@ ArcGISAuthenticationController::ArcGISAuthenticationController(QObject* parent) 
           redirectUrl.contains("oob")) // this is what the Qt docs indicate to check for
     { // use embedded web view session for "oob" redirect URI
       emit authorizeUrlChanged();
-      emit preferPrivateWebBrowserSessionChanged();
       emit redirectUriChanged();
       emit displayOAuthSignInView();
     }
@@ -413,11 +412,6 @@ QUrl ArcGISAuthenticationController::authorizeUrl_() const
   return m_currentOAuthUserLoginPrompt ? m_currentOAuthUserLoginPrompt->authorizeUrl() : QUrl{};
 }
 
-bool ArcGISAuthenticationController::preferPrivateWebBrowserSession_() const
-{
-  return m_currentOAuthUserLoginPrompt ? m_currentOAuthUserLoginPrompt->preferPrivateWebBrowserSession() : false;
-}
-
 QString ArcGISAuthenticationController::redirectUri_() const
 {
   return m_currentOAuthUserLoginPrompt ? m_currentOAuthUserLoginPrompt->redirectUri() : QString{};
@@ -453,7 +447,7 @@ void ArcGISAuthenticationController::processOAuthExternalBrowserLogin_()
     if (!values.contains("code"))
     {
       m_currentOAuthUserLoginPrompt->respondWithError("There was an error obtaining the authorization code");
-      finishChallengeFlow_();
+      finishOAuthExternalBrowserChallengeFlow_();
       return;
     }
 
@@ -474,6 +468,7 @@ void ArcGISAuthenticationController::processOAuthExternalBrowserLogin_()
     const auto formattedResponseUrl = QUrl{QString("%1?code=%2").arg(m_currentOAuthUserConfiguration->redirectUri(),
                                                                      oauthFlow->authorizationCode())};
     m_currentOAuthUserLoginPrompt->respond(formattedResponseUrl);
+    finishOAuthExternalBrowserChallengeFlow_();
   });
 
   callbackReplyHandler->setRedirectUrl(m_currentOAuthUserLoginPrompt->redirectUri());
@@ -485,15 +480,10 @@ void ArcGISAuthenticationController::processOAuthExternalBrowserLogin_()
   }
 }
 
-void ArcGISAuthenticationController::finishChallengeFlow_()
+void ArcGISAuthenticationController::finishOAuthExternalBrowserChallengeFlow_()
 {
-  m_currentArcGISChallenge = {};
   m_currentOAuthUserConfiguration = nullptr;
-
-  if (m_currentOAuthUserLoginPrompt)
-  {
-    m_currentOAuthUserLoginPrompt.reset();
-  }
+  m_currentOAuthUserLoginPrompt.reset();
 }
 
 } //  Esri::ArcGISRuntime::Toolkit
