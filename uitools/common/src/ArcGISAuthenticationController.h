@@ -53,7 +53,6 @@ class ArcGISAuthenticationController : public QObject
 
   // OAuth
   Q_PROPERTY(QUrl authorizeUrl READ authorizeUrl_ NOTIFY authorizeUrlChanged)
-  Q_PROPERTY(bool preferPrivateWebBrowserSession READ preferPrivateWebBrowserSession_ NOTIFY preferPrivateWebBrowserSessionChanged)
   Q_PROPERTY(QString redirectUri READ redirectUri_ NOTIFY redirectUriChanged)
 
   Q_PROPERTY(int previousFailureCount READ previousFailureCount_ NOTIFY previousFailureCountChanged)
@@ -108,7 +107,6 @@ signals:
   void displayServerTrustView();
   void currentAuthenticatingHostChanged();
   void authorizeUrlChanged();
-  void preferPrivateWebBrowserSessionChanged();
   void redirectUriChanged();
   void previousFailureCountChanged();
 
@@ -117,7 +115,6 @@ private:
   bool canBeUsed_() const;
   QString currentAuthenticatingHost_() const;
   QUrl authorizeUrl_() const;
-  bool preferPrivateWebBrowserSession_() const;
   QString redirectUri_() const;
   int previousFailureCount_() const;
 

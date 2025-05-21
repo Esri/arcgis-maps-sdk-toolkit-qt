@@ -76,7 +76,6 @@ ArcGISAuthenticationController::ArcGISAuthenticationController(QObject* parent) 
     currentOAuthUserLoginPrompt->setParent(nullptr);
     m_currentOAuthUserLoginPrompt = std::unique_ptr<OAuthUserLoginPrompt>{currentOAuthUserLoginPrompt};
     emit authorizeUrlChanged();
-    emit preferPrivateWebBrowserSessionChanged();
     emit redirectUriChanged();
     emit displayOAuthSignInView();
   });
@@ -396,11 +395,6 @@ QString ArcGISAuthenticationController::currentAuthenticatingHost_() const
 QUrl ArcGISAuthenticationController::authorizeUrl_() const
 {
   return m_currentOAuthUserLoginPrompt ? m_currentOAuthUserLoginPrompt->authorizeUrl() : QUrl{};
-}
-
-bool ArcGISAuthenticationController::preferPrivateWebBrowserSession_() const
-{
-  return m_currentOAuthUserLoginPrompt ? m_currentOAuthUserLoginPrompt->preferPrivateWebBrowserSession() : false;
 }
 
 QString ArcGISAuthenticationController::redirectUri_() const
