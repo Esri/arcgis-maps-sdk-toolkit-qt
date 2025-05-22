@@ -52,7 +52,7 @@ Item {
 
     Component {
         id: clientCertificateViewComponent
-        ArcGISClientCertificateView {
+        AuthenticatorClientCertificateView {
             anchors.centerIn: authenticatorView_internal
             controller: authenticatorView_internal.controller
             onClosed: {
@@ -76,7 +76,7 @@ Item {
 
     Component {
         id: oAuth2ViewComponent
-        ArcGISOAuth2View {
+        AuthenticatorOAuth2View {
             anchors.centerIn: authenticatorView_internal
             controller: authenticatorView_internal.controller
             onClosed: {
