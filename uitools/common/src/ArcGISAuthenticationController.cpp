@@ -1,4 +1,3 @@
-
 /*******************************************************************************
  *  Copyright 2012-2024 Esri
  *
@@ -17,31 +16,34 @@
 #include "ArcGISAuthenticationController.h"
 
 // Qt headers
+#include <QDesktopServices>
 #include <QFuture>
+#include <QOAuthUriSchemeReplyHandler>
 #include <QPointer>
-#include <QUrl>
 #include <QSslError>
 #include <QSslSocket>
 #include <QStringLiteral>
+#include <QUrl>
 
 // Maps SDK headers
 #include <Authentication/ArcGISAuthenticationChallenge.h>
 #include <Authentication/AuthenticationManager.h>
 #include <Authentication/AuthenticationTypes.h>
 #include <Authentication/CertificateCredential.h>
+#include <Authentication/NetworkAuthenticationChallenge.h>
 #include <Authentication/OAuthUserConfiguration.h>
 #include <Authentication/OAuthUserCredential.h>
 #include <Authentication/OAuthUserLoginPrompt.h>
-#include <Authentication/TokenCredential.h>
-#include <Authentication/ServerTrustCredential.h>
-#include <Authentication/NetworkAuthenticationChallenge.h>
 #include <Authentication/PasswordCredential.h>
+#include <Authentication/ServerTrustCredential.h>
+#include <Authentication/TokenCredential.h>
 #include <ArcGISRuntimeEnvironment.h>
 #include <Error.h>
 #include <ErrorException.h>
 
 // Toolkit headers
 #include "ArcGISAuthenticationChallengeRelay.h"
+#include "CustomOAuth2AuthorizationCodeFlow.h"
 #include "NetworkAuthenticationChallengeRelay.h"
 
 // STL headers
@@ -75,9 +77,19 @@ ArcGISAuthenticationController::ArcGISAuthenticationController(QObject* parent) 
   {
     currentOAuthUserLoginPrompt->setParent(nullptr);
     m_currentOAuthUserLoginPrompt = std::unique_ptr<OAuthUserLoginPrompt>{currentOAuthUserLoginPrompt};
-    emit authorizeUrlChanged();
-    emit redirectUriChanged();
-    emit displayOAuthSignInView();
+
+    if (const auto redirectUrl = m_currentOAuthUserLoginPrompt->redirectUri();
+          redirectUrl == QUrl{"urn:ietf:wg:oauth:2.0:oob"} || // this is the default value for "oob"
+          redirectUrl.contains("oob")) // this is what the Qt docs indicate to check for
+    { // use embedded web view session for "oob" redirect URI
+      emit authorizeUrlChanged();
+      emit redirectUriChanged();
+      emit displayOAuthSignInView();
+    }
+    else
+    {
+      processOAuthExternalBrowserLogin_();
+    }
   });
 }
 
@@ -113,6 +125,7 @@ void ArcGISAuthenticationController::handleArcGISAuthenticationChallenge(ArcGISA
   {
     if (userConfiguration->canBeUsedForUrl(requestUrl))
     {
+      m_currentOAuthUserConfiguration = userConfiguration;
       OAuthUserCredential::createAsync(userConfiguration, this).then(this, [this](OAuthUserCredential* credential)
       {
         if (!m_currentArcGISChallenge)
@@ -419,6 +432,61 @@ int ArcGISAuthenticationController::previousFailureCount_() const
   }
 
   return 0;
+}
+
+void ArcGISAuthenticationController::processOAuthExternalBrowserLogin_()
+{
+  auto* oauthFlow = new CustomOAuth2AuthorizationCodeFlow(m_currentOAuthUserLoginPrompt->authorizeUrl(),
+                                                          m_currentOAuthUserLoginPrompt.get());
+
+  auto* callbackReplyHandler = new QOAuthUriSchemeReplyHandler(m_currentOAuthUserLoginPrompt.get());
+  connect(callbackReplyHandler, &QOAuthUriSchemeReplyHandler::callbackReceived, this, [this, oauthFlow](const QVariantMap& values)
+  {
+    if (!values.contains("code"))
+    {
+      m_currentOAuthUserLoginPrompt->respondWithError("There was an error obtaining the authorization code");
+      finishOAuthExternalBrowserChallengeFlow_();
+      return;
+    }
+
+    const auto code = values.value("code").toString();
+    oauthFlow->setAuthorizationCode(code);
+    emit oauthFlow->granted();
+  });
+
+  oauthFlow->setAuthorizationUrl(m_currentOAuthUserLoginPrompt->authorizeUrl());
+  oauthFlow->setClientIdentifier(m_currentOAuthUserConfiguration->clientId());
+
+  connect(oauthFlow, &QAbstractOAuth::authorizeWithBrowser, this, &QDesktopServices::openUrl);
+  connect(oauthFlow, &QAbstractOAuth::granted, this, [callbackReplyHandler, oauthFlow, this]()
+  {
+    callbackReplyHandler->close();
+
+    // this needs to be in the form of redirectUri?code=authCode
+    const auto formattedResponseUrl = QUrl{QString("%1?code=%2").arg(m_currentOAuthUserConfiguration->redirectUri(),
+                                                                     oauthFlow->authorizationCode())};
+    m_currentOAuthUserLoginPrompt->respond(formattedResponseUrl);
+    finishOAuthExternalBrowserChallengeFlow_();
+  });
+
+  callbackReplyHandler->setRedirectUrl(m_currentOAuthUserLoginPrompt->redirectUri());
+  oauthFlow->setReplyHandler(callbackReplyHandler);
+
+  if (callbackReplyHandler->listen())
+  {
+    oauthFlow->grant();
+  }
+  else
+  {
+    m_currentOAuthUserLoginPrompt->respondWithError("There was an error establishing the redirect URL listener");
+    finishOAuthExternalBrowserChallengeFlow_();
+  }
+}
+
+void ArcGISAuthenticationController::finishOAuthExternalBrowserChallengeFlow_()
+{
+  m_currentOAuthUserConfiguration = nullptr;
+  m_currentOAuthUserLoginPrompt.reset();
 }
 
 } //  Esri::ArcGISRuntime::Toolkit
