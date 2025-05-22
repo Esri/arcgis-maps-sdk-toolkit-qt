@@ -1,7 +1,5 @@
 <RCC>
     <qresource prefix="/esri.com/imports/Esri/ArcGISRuntime/Toolkit">
-        <file>ArcGISAuthenticationView_internal.qml</file>
-        <file>ArcGISAuthenticationView.qml</file>
         <file>ArcGISOAuth2View.qml</file>
         <file>ArcGISUserCredentialsView.qml</file>
         <file>AttachmentsPopupElementView.qml</file>
@@ -32,5 +30,7 @@
         <file>UtilityNetworkTrace.qml</file>
         <file>qmldir</file>
         <file>ArcGISClientCertificateView.qml</file>
+        <file>AuthenticatorView_internal.qml</file>
+        <file>AuthenticatorView.qml</file>
     </qresource>
 </RCC>

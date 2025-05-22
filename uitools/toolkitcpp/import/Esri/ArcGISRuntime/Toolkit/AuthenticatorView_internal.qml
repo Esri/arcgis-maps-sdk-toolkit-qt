@@ -20,12 +20,12 @@ import QtQuick
 import QtQuick.Controls
 
 /*!
-  \qmltype ArcGISAuthenticationView_internal
+  \qmltype authenticatorView_internal
   \internal
  */
 
 Item {
-    id: arcgisAuthenticationView_internal
+    id: authenticatorView_internal
 
     property AuthenticatorController controller: AuthenticatorController
     signal activeLoginViewReady_(var activeLoginView)
@@ -53,8 +53,8 @@ Item {
     Component {
         id: clientCertificateViewComponent
         ArcGISClientCertificateView {
-            anchors.centerIn: arcgisAuthenticationView_internal
-            controller: arcgisAuthenticationView_internal.controller
+            anchors.centerIn: authenticatorView_internal
+            controller: authenticatorView_internal.controller
             onClosed: {
                 this.destroy();
             }
@@ -65,8 +65,8 @@ Item {
     Component {
         id: userCredentialsViewComponent
         ArcGISUserCredentialsView {
-            anchors.centerIn: arcgisAuthenticationView_internal
-            controller: arcgisAuthenticationView_internal.controller
+            anchors.centerIn: authenticatorView_internal
+            controller: authenticatorView_internal.controller
             onClosed: {
                 this.destroy();
             }
@@ -77,8 +77,8 @@ Item {
     Component {
         id: oAuth2ViewComponent
         ArcGISOAuth2View {
-            anchors.centerIn: arcgisAuthenticationView_internal
-            controller: arcgisAuthenticationView_internal.controller
+            anchors.centerIn: authenticatorView_internal
+            controller: authenticatorView_internal.controller
             onClosed: {
                 this.destroy();
             }
@@ -89,8 +89,8 @@ Item {
     Component {
         id: serverTrustViewComponent
         ServerTrustView {
-            anchors.centerIn: arcgisAuthenticationView_internal
-            controller: arcgisAuthenticationView_internal.controller
+            anchors.centerIn: authenticatorView_internal
+            controller: authenticatorView_internal.controller
             onClosed: {
                 this.destroy();
             }
@@ -100,7 +100,7 @@ Item {
 
     function displayView(componentToDisplay) {
         if (componentToDisplay) {
-            const incubator = componentToDisplay.incubateObject(arcgisAuthenticationView_internal);
+            const incubator = componentToDisplay.incubateObject(authenticatorView_internal);
             if (incubator.status === Component.Ready) {
                 incubator.object.open();
             } else {
