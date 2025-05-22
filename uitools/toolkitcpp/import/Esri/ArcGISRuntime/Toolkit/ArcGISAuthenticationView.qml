@@ -43,7 +43,7 @@ Item {
     signal activeLoginViewReady_(var activeLoginView)
 
     Component.onCompleted: {
-        viewLoader.source = ArcGISAuthenticationController.canBeUsed ?
+        viewLoader.source = AuthenticatorController.canBeUsed ?
                                 "ArcGISAuthenticationView_internal.qml" :
                                 "AuthenticationView.qml";
     }

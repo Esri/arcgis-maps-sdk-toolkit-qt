@@ -18,7 +18,7 @@
 #include "register.h"
 
 // Toolkit includes
-#include "ArcGISAuthenticationController.h"
+#include "AuthenticatorController.h"
 #include "AttachmentsPopupElementViewController.h"
 #include "AuthenticationController.h"
 #include "BarChartPopupMediaItem.h"
@@ -104,7 +104,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     constexpr int VERSION_MAJOR = 200;
     constexpr int VERSION_MINOR = 2;
 
-    QPointer<ArcGISAuthenticationController> s_arcGISAuthenticationController;
+    QPointer<AuthenticatorController> s_AuthenticatorController;
 
     /*
       \internal
@@ -159,11 +159,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
         qmlRegisterSingletonType<T>(NAMESPACE, majorVersion, minorVersion, name,
                                     [](QQmlEngine* qmlEngine, QJSEngine* jsEngine) -> QObject*
                                     {
-                                      if (!s_arcGISAuthenticationController)
+                                      if (!s_AuthenticatorController)
                                       {
-                                        s_arcGISAuthenticationController = T::create(qmlEngine, jsEngine);
+                                        s_AuthenticatorController = T::create(qmlEngine, jsEngine);
                                       }
-                                      return s_arcGISAuthenticationController;
+                                      return s_AuthenticatorController;
                                     });
       }
 
@@ -227,7 +227,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     appEngine.addImageProvider(PopupAttachmentImageProvider::PROVIDER_ID, PopupAttachmentImageProvider::instance());
     appEngine.addImportPath(ESRI_COM_PATH);
     registerModuleRevisions();
-    registerComponent<ArcGISAuthenticationController>(CreationType::Singleton);
+    registerComponent<AuthenticatorController>(CreationType::Singleton);
     registerComponent<AttachmentsPopupElementViewController>();
     registerComponent<AuthenticationController>();
     registerComponent<BarChartPopupMediaItem>();

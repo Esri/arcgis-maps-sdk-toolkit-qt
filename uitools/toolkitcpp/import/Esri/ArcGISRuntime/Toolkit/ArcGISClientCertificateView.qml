@@ -21,7 +21,7 @@ import Qt.labs.platform as P
 
 Dialog {
     id: clientCertificateView
-    property ArcGISAuthenticationController controller: null
+    property AuthenticatorController controller: null
     property url currentCertificate: ""
 
     title: qsTr("Client certificate requested")
@@ -144,13 +144,13 @@ Dialog {
         }
 
         switch(controller.respondWithClientCertificate(currentCertificate, passwordTextField.text)) {
-            case ArcGISAuthenticationController.CertificateResult.Accepted:
-            case ArcGISAuthenticationController.CertificateResult.Error: {
+            case AuthenticatorController.CertificateResult.Accepted:
+            case AuthenticatorController.CertificateResult.Error: {
                 passwordDialog.close();
                 clientCertificateView.close();
                 break;
             }
-            case ArcGISAuthenticationController.CertificateResult.PasswordRejected: {
+            case AuthenticatorController.CertificateResult.PasswordRejected: {
                 passwordTextField.text = "";
                 openPasswordInputDialog_();
                 break;

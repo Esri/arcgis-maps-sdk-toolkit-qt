@@ -27,7 +27,7 @@ import QtQuick.Controls
 Item {
     id: arcgisAuthenticationView_internal
 
-    property ArcGISAuthenticationController controller: ArcGISAuthenticationController
+    property AuthenticatorController controller: AuthenticatorController
     signal activeLoginViewReady_(var activeLoginView)
 
     Connections {

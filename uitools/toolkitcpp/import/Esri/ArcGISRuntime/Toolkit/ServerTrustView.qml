@@ -22,7 +22,7 @@ import QtQuick.Layouts
 
 Dialog {
 
-    property ArcGISAuthenticationController controller: null
+    property AuthenticatorController controller: null
 
     title: qsTr("Untrusted Host")
 

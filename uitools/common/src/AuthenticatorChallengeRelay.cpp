@@ -1,4 +1,3 @@
-
 /*******************************************************************************
  *  Copyright 2012-2025 Esri
  *
@@ -14,8 +13,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#include "ArcGISAuthenticationChallengeRelay.h"
-#include "ArcGISAuthenticationController.h"
+#include "AuthenticatorChallengeRelay.h"
+#include "AuthenticatorController.h"
 
 // Maps SDK headers
 #include <Authentication/ArcGISAuthenticationChallenge.h>
@@ -28,28 +27,28 @@ using namespace Esri::ArcGISRuntime::Authentication;
 namespace Esri::ArcGISRuntime::Toolkit {
 
 /*!
-  \class Esri::ArcGISRuntime::Toolkit::ArcGISAuthenticationChallengeRelay
+  \class Esri::ArcGISRuntime::Toolkit::AuthenticatorChallengeRelay
   \inmodule EsriArcGISRuntimeToolkit
   \ingroup ArcGISQtToolkitUiCppControllers
   \brief Simple implementation of the ArcGISAuthenticationChallengeHandler interface.
 
-  This class is used to relay authentication challenges to the ArcGISAuthenticationController. Since multiple
+  This class is used to relay authentication challenges to the AuthenticatorController. Since multiple
   inheritance of QObject is not allowed, and both ChallengeHandler classes inherit QObject, we use a
   composition pattern instead.
 
   \internal
  */
 
-ArcGISAuthenticationChallengeRelay::ArcGISAuthenticationChallengeRelay(ArcGISAuthenticationController* controller) :
+AuthenticatorChallengeRelay::AuthenticatorChallengeRelay(AuthenticatorController* controller) :
   ArcGISAuthenticationChallengeHandler(controller),
   m_controller(controller)
 {
   ArcGISRuntimeEnvironment::authenticationManager()->setArcGISAuthenticationChallengeHandler(this);
 }
 
-ArcGISAuthenticationChallengeRelay::~ArcGISAuthenticationChallengeRelay() = default;
+AuthenticatorChallengeRelay::~AuthenticatorChallengeRelay() = default;
 
-void ArcGISAuthenticationChallengeRelay::handleArcGISAuthenticationChallenge(ArcGISAuthenticationChallenge* challenge)
+void AuthenticatorChallengeRelay::handleArcGISAuthenticationChallenge(ArcGISAuthenticationChallenge* challenge)
 {
   m_controller->handleArcGISAuthenticationChallenge(challenge);
 }
