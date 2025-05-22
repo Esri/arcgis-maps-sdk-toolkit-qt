@@ -1,4 +1,3 @@
-
 /*******************************************************************************
  *  Copyright 2012-2024 Esri
  *
@@ -17,35 +16,35 @@
 #include "ArcGISAuthenticationController.h"
 
 // Qt headers
+#include <QDesktopServices>
 #include <QFuture>
+#include <QOAuthUriSchemeReplyHandler>
 #include <QPointer>
-#include <QUrl>
 #include <QSslError>
 #include <QSslSocket>
 #include <QStringLiteral>
-#include <QOAuthUriSchemeReplyHandler>
-#include <QDesktopServices>
+#include <QUrl>
 
 // Maps SDK headers
 #include <Authentication/ArcGISAuthenticationChallenge.h>
 #include <Authentication/AuthenticationManager.h>
 #include <Authentication/AuthenticationTypes.h>
 #include <Authentication/CertificateCredential.h>
+#include <Authentication/NetworkAuthenticationChallenge.h>
 #include <Authentication/OAuthUserConfiguration.h>
 #include <Authentication/OAuthUserCredential.h>
 #include <Authentication/OAuthUserLoginPrompt.h>
-#include <Authentication/TokenCredential.h>
-#include <Authentication/ServerTrustCredential.h>
-#include <Authentication/NetworkAuthenticationChallenge.h>
 #include <Authentication/PasswordCredential.h>
+#include <Authentication/ServerTrustCredential.h>
+#include <Authentication/TokenCredential.h>
 #include <ArcGISRuntimeEnvironment.h>
 #include <Error.h>
 #include <ErrorException.h>
 
 // Toolkit headers
 #include "ArcGISAuthenticationChallengeRelay.h"
-#include "NetworkAuthenticationChallengeRelay.h"
 #include "CustomOAuth2AuthorizationCodeFlow.h"
+#include "NetworkAuthenticationChallengeRelay.h"
 
 // STL headers
 #include <optional>
@@ -476,6 +475,11 @@ void ArcGISAuthenticationController::processOAuthExternalBrowserLogin_()
   if (callbackReplyHandler->listen())
   {
     oauthFlow->grant();
+  }
+  else
+  {
+    m_currentOAuthUserLoginPrompt->respondWithError("There was an error establishing the redirect URL listener");
+    finishOAuthExternalBrowserChallengeFlow_();
   }
 }
 
