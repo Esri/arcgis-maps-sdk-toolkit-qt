@@ -64,7 +64,7 @@ Item {
 
     Component {
         id: userCredentialsViewComponent
-        ArcGISUserCredentialsView {
+        AuthenticatorUserCredentialsView {
             anchors.centerIn: authenticatorView_internal
             controller: authenticatorView_internal.controller
             onClosed: {

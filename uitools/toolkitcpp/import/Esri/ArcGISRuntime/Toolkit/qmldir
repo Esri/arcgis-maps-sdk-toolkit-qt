@@ -23,7 +23,7 @@ CurrentVersion 200.8 CurrentVersion.qml
 AuthenticatorView 200.8 AuthenticatorView.qml
 AuthenticatorView_internal 200.8 AuthenticatorView_internal.qml
 AuthenticatorOAuth2View 200.8 AuthenticatorOAuth2View.qml
-ArcGISUserCredentialsView 200.8 ArcGISUserCredentialsView.qml
+AuthenticatorUserCredentialsView 200.8 AuthenticatorUserCredentialsView.qml
 AuthenticatorClientCertificateView 200.8 AuthenticatorClientCertificateView.qml
 AuthenticationView 100.10 AuthenticationView.qml
 AuthenticationView 200.0 AuthenticationView.qml
