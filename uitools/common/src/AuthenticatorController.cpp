@@ -373,9 +373,9 @@ void AuthenticatorController::setOAuthUserConfigurations(QList<OAuthUserConfigur
   std::lock_guard<std::mutex> lock(m_mutex);
   m_userConfigurations = std::move(userConfigurations);
   std::for_each(std::begin(m_userConfigurations), std::end(m_userConfigurations), [this](auto* userConfiguration)
-                {
-                  userConfiguration->setParent(this);
-                });
+  {
+    userConfiguration->setParent(this);
+  });
 }
 
 void AuthenticatorController::clearOAuthUserConfigurations()
