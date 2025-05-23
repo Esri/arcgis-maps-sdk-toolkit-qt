@@ -13,7 +13,7 @@
 # limitations under the License.
 include($$PWD/../common/common.pri)
 
-QT += quickcontrols2 webview svg graphs
+QT += quickcontrols2 webview svg graphs networkauth
 
 TOOLKITCPP_BASE_SRC = $$PWD/src
 TOOLKITCPP_TOOLKIT_SRC = $$TOOLKITCPP_BASE_SRC/Esri/ArcGISRuntime/Toolkit
