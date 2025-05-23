@@ -42,7 +42,7 @@
 #include <ErrorException.h>
 
 // Toolkit headers
-#include "AuthenticatorChallengeRelay.h"
+#include "ArcGISAuthenticationChallengeRelay.h"
 #include "CustomOAuth2AuthorizationCodeFlow.h"
 #include "NetworkAuthenticationChallengeRelay.h"
 
@@ -68,7 +68,7 @@ AuthenticatorController::AuthenticatorController(QObject* parent) :
     return;
   }
 
-  m_AuthenticatorChallengeRelay = std::make_unique<AuthenticatorChallengeRelay>(this);
+  m_arcGISAuthenticationChallengeRelay = std::make_unique<ArcGISAuthenticationChallengeRelay>(this);
   m_networkAuthenticationChallengeRelay = std::make_unique<NetworkAuthenticationChallengeRelay>(this);
 
   // listen for OAuth prompts

@@ -20,8 +20,8 @@ depends Esri.ArcGISRuntime.Toolkit.Controller 200.8
 CurrentVersion 200.8 CurrentVersion.qml
 
 # View components
-AuthenticatorView 200.8 AuthenticatorView.qml
-AuthenticatorView_internal 200.8 AuthenticatorView_internal.qml
+Authenticator 200.8 Authenticator.qml
+Authenticator_internal 200.8 Authenticator_internal.qml
 AuthenticatorOAuth2View 200.8 AuthenticatorOAuth2View.qml
 AuthenticatorUserCredentialsView 200.8 AuthenticatorUserCredentialsView.qml
 AuthenticatorClientCertificateView 200.8 AuthenticatorClientCertificateView.qml

@@ -104,7 +104,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     constexpr int VERSION_MAJOR = 200;
     constexpr int VERSION_MINOR = 2;
 
-    QPointer<AuthenticatorController> s_AuthenticatorController;
+    QPointer<AuthenticatorController> s_authenticatorController;
 
     /*
       \internal
@@ -159,11 +159,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
         qmlRegisterSingletonType<T>(NAMESPACE, majorVersion, minorVersion, name,
                                     [](QQmlEngine* qmlEngine, QJSEngine* jsEngine) -> QObject*
                                     {
-                                      if (!s_AuthenticatorController)
+                                      if (!s_authenticatorController)
                                       {
-                                        s_AuthenticatorController = T::create(qmlEngine, jsEngine);
+                                        s_authenticatorController = T::create(qmlEngine, jsEngine);
                                       }
-                                      return s_AuthenticatorController;
+                                      return s_authenticatorController;
                                     });
       }
 

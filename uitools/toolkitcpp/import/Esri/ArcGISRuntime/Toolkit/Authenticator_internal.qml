@@ -20,12 +20,12 @@ import QtQuick
 import QtQuick.Controls
 
 /*!
-  \qmltype authenticatorView_internal
+  \qmltype authenticator_internal
   \internal
  */
 
 Item {
-    id: authenticatorView_internal
+    id: authenticator_internal
 
     property AuthenticatorController controller: AuthenticatorController
     signal activeLoginViewReady_(var activeLoginView)
@@ -53,8 +53,8 @@ Item {
     Component {
         id: clientCertificateViewComponent
         AuthenticatorClientCertificateView {
-            anchors.centerIn: authenticatorView_internal
-            controller: authenticatorView_internal.controller
+            anchors.centerIn: authenticator_internal
+            controller: authenticator_internal.controller
             onClosed: {
                 this.destroy();
             }
@@ -65,8 +65,8 @@ Item {
     Component {
         id: userCredentialsViewComponent
         AuthenticatorUserCredentialsView {
-            anchors.centerIn: authenticatorView_internal
-            controller: authenticatorView_internal.controller
+            anchors.centerIn: authenticator_internal
+            controller: authenticator_internal.controller
             onClosed: {
                 this.destroy();
             }
@@ -77,8 +77,8 @@ Item {
     Component {
         id: oAuth2ViewComponent
         AuthenticatorOAuth2View {
-            anchors.centerIn: authenticatorView_internal
-            controller: authenticatorView_internal.controller
+            anchors.centerIn: authenticator_internal
+            controller: authenticator_internal.controller
             onClosed: {
                 this.destroy();
             }
@@ -89,8 +89,8 @@ Item {
     Component {
         id: serverTrustViewComponent
         ServerTrustView {
-            anchors.centerIn: authenticatorView_internal
-            controller: authenticatorView_internal.controller
+            anchors.centerIn: authenticator_internal
+            controller: authenticator_internal.controller
             onClosed: {
                 this.destroy();
             }
@@ -100,7 +100,7 @@ Item {
 
     function displayView(componentToDisplay) {
         if (componentToDisplay) {
-            const incubator = componentToDisplay.incubateObject(authenticatorView_internal);
+            const incubator = componentToDisplay.incubateObject(authenticator_internal);
             if (incubator.status === Component.Ready) {
                 incubator.object.open();
             } else {

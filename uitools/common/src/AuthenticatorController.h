@@ -13,8 +13,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_AuthenticatorController_H
-#define ESRI_ARCGISRUNTIME_TOOLKIT_AuthenticatorController_H
+#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_AUTHENTICATORCONTROLLER_H
+#define ESRI_ARCGISRUNTIME_TOOLKIT_AUTHENTICATORCONTROLLER_H
 
 // Qt headers
 #include <QHash>
@@ -38,7 +38,7 @@ class NetworkAuthenticationChallenge;
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-class AuthenticatorChallengeRelay;
+class ArcGISAuthenticationChallengeRelay;
 class NetworkAuthenticationChallengeRelay;
 
 class AuthenticatorController : public QObject
@@ -124,7 +124,7 @@ private:
   void continueWithUsernamePasswordArcGIS_(const QString& username, const QString& password);
   void continueWithUsernamePasswordNetwork_(const QString& username, const QString& password);
 
-  std::unique_ptr<AuthenticatorChallengeRelay> m_AuthenticatorChallengeRelay;
+  std::unique_ptr<ArcGISAuthenticationChallengeRelay> m_arcGISAuthenticationChallengeRelay;
   std::unique_ptr<NetworkAuthenticationChallengeRelay> m_networkAuthenticationChallengeRelay;
 
   std::unique_ptr<Authentication::ArcGISAuthenticationChallenge> m_currentArcGISChallenge;
@@ -141,4 +141,4 @@ private:
 
 } // Esri::ArcGISRuntime::Toolkit
 
-#endif // ESRI_ARCGISRUNTIME_TOOLKIT_AuthenticatorController_H
+#endif // ESRI_ARCGISRUNTIME_TOOLKIT_AUTHENTICATORCONTROLLER_H

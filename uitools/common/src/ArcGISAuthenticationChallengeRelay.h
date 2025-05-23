@@ -13,8 +13,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_AuthenticatorChallengeRelay_H
-#define ESRI_ARCGISRUNTIME_TOOLKIT_AuthenticatorChallengeRelay_H
+#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_ARCGISAUTHENTICATIONCHALLENGERELAY_H
+#define ESRI_ARCGISRUNTIME_TOOLKIT_ARCGISAUTHENTICATIONCHALLENGERELAY_H
 
 // ArcGIS Maps SDK headers
 #include <Authentication/ArcGISAuthenticationChallengeHandler.h>
@@ -22,13 +22,13 @@
 namespace Esri::ArcGISRuntime::Toolkit {
 
 class AuthenticatorController;
-class AuthenticatorChallengeRelay : public Authentication::ArcGISAuthenticationChallengeHandler
+class ArcGISAuthenticationChallengeRelay : public Authentication::ArcGISAuthenticationChallengeHandler
 {
   Q_OBJECT
 
 public:
-  explicit AuthenticatorChallengeRelay(AuthenticatorController* controller);
-  ~AuthenticatorChallengeRelay();
+  explicit ArcGISAuthenticationChallengeRelay(AuthenticatorController* controller);
+  ~ArcGISAuthenticationChallengeRelay();
 
 protected:
   void handleArcGISAuthenticationChallenge(Authentication::ArcGISAuthenticationChallenge* challenge) override;
@@ -39,4 +39,4 @@ private:
 
 } // Esri::ArcGISRuntime::Toolkit
 
-#endif // ESRI_ARCGISRUNTIME_TOOLKIT_AuthenticatorChallengeRelay_H
+#endif // ESRI_ARCGISRUNTIME_TOOLKIT_ARCGISAUTHENTICATIONCHALLENGERELAY_H
