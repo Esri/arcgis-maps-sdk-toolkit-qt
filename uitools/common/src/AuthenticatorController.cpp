@@ -139,7 +139,7 @@ void AuthenticatorController::handleArcGISAuthenticationChallenge(ArcGISAuthenti
       {
         if (!m_currentArcGISChallenge)
         {
-        return;
+         return;
         }
 
         m_currentArcGISChallenge->continueAndFailWithError(e.error());
