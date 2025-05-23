@@ -127,24 +127,24 @@ void AuthenticatorController::handleArcGISAuthenticationChallenge(ArcGISAuthenti
     {
       m_currentOAuthUserConfiguration = userConfiguration;
       OAuthUserCredential::createAsync(userConfiguration, this).then(this, [this](OAuthUserCredential* credential)
-                                                                     {
-                                                                       if (!m_currentArcGISChallenge)
-                                                                       {
-                                                                         return;
-                                                                       }
+      {
+        if (!m_currentArcGISChallenge)
+        {
+         return;
+        }
 
-                                                                       m_currentArcGISChallenge->continueWithCredential(credential);
-                                                                       m_currentArcGISChallenge.reset();
-                                                                     }).onFailed(this, [this](const ErrorException& e)
-                    {
-                      if (!m_currentArcGISChallenge)
-                      {
-                        return;
-                      }
+        m_currentArcGISChallenge->continueWithCredential(credential);
+        m_currentArcGISChallenge.reset();
+      }).onFailed(this, [this](const ErrorException& e)
+      {
+        if (!m_currentArcGISChallenge)
+        {
+        return;
+        }
 
-                      m_currentArcGISChallenge->continueAndFailWithError(e.error());
-                      m_currentArcGISChallenge.reset();
-                    });
+        m_currentArcGISChallenge->continueAndFailWithError(e.error());
+        m_currentArcGISChallenge.reset();
+      });
 
       return;
     }
@@ -267,37 +267,37 @@ void AuthenticatorController::continueWithUsernamePasswordArcGIS_(const QString&
                                username,
                                password,
                                std::nullopt).then(this, [this](TokenCredential* credential)
-            {
-              if (m_arcGISPreviousFailureCountsForUrl.contains(m_currentArcGISChallenge->requestUrl()))
-              {
-                m_arcGISPreviousFailureCountsForUrl.remove(m_currentArcGISChallenge->requestUrl());
-              }
+  {
+    if (m_arcGISPreviousFailureCountsForUrl.contains(m_currentArcGISChallenge->requestUrl()))
+    {
+      m_arcGISPreviousFailureCountsForUrl.remove(m_currentArcGISChallenge->requestUrl());
+    }
 
-              m_currentArcGISChallenge->continueWithCredential(credential);
-              m_currentArcGISChallenge.reset();
-            }).onFailed(this, [this](const ErrorException& e)
-                {
-                  const auto requestUrl = m_currentArcGISChallenge->requestUrl();
-                  if (m_arcGISPreviousFailureCountsForUrl.contains(requestUrl))
-                  {
-                    m_arcGISPreviousFailureCountsForUrl[requestUrl] = m_arcGISPreviousFailureCountsForUrl[requestUrl] + 1;
-                  }
-                  else
-                  {
-                    m_arcGISPreviousFailureCountsForUrl[requestUrl] = 1;
-                  }
+    m_currentArcGISChallenge->continueWithCredential(credential);
+    m_currentArcGISChallenge.reset();
+  }).onFailed(this, [this](const ErrorException& e)
+  {
+    const auto requestUrl = m_currentArcGISChallenge->requestUrl();
+    if (m_arcGISPreviousFailureCountsForUrl.contains(requestUrl))
+    {
+      m_arcGISPreviousFailureCountsForUrl[requestUrl] = m_arcGISPreviousFailureCountsForUrl[requestUrl] + 1;
+    }
+    else
+    {
+      m_arcGISPreviousFailureCountsForUrl[requestUrl] = 1;
+    }
 
-                  if (m_arcGISPreviousFailureCountsForUrl[requestUrl] >= s_maxArcGISPreviousFailureCount)
-                  {
-                    m_arcGISPreviousFailureCountsForUrl.remove(requestUrl);
-                    m_currentArcGISChallenge->continueAndFailWithError(e.error());
-                    m_currentArcGISChallenge.reset();
-                    return;
-                  }
+    if (m_arcGISPreviousFailureCountsForUrl[requestUrl] >= s_maxArcGISPreviousFailureCount)
+    {
+      m_arcGISPreviousFailureCountsForUrl.remove(requestUrl);
+      m_currentArcGISChallenge->continueAndFailWithError(e.error());
+      m_currentArcGISChallenge.reset();
+      return;
+    }
 
-                  emit previousFailureCountChanged();
-                  emit displayUsernamePasswordSignInView();
-                });
+    emit previousFailureCountChanged();
+    emit displayUsernamePasswordSignInView();
+  });
 }
 
 void AuthenticatorController::AuthenticatorController::continueWithUsernamePasswordNetwork_(const QString& username, const QString& password)
