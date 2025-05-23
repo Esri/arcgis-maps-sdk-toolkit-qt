@@ -52,7 +52,7 @@ Item {
 
     Component {
         id: clientCertificateViewComponent
-        AuthenticatorClientCertificateView {
+        AuthenticatorClientCertificate {
             anchors.centerIn: authenticator_internal
             controller: authenticator_internal.controller
             onClosed: {
@@ -64,7 +64,7 @@ Item {
 
     Component {
         id: userCredentialsViewComponent
-        AuthenticatorUserCredentialsView {
+        AuthenticatorUserCredentials {
             anchors.centerIn: authenticator_internal
             controller: authenticator_internal.controller
             onClosed: {
@@ -76,7 +76,7 @@ Item {
 
     Component {
         id: oAuth2ViewComponent
-        AuthenticatorOAuth2View {
+        AuthenticatorOAuth2 {
             anchors.centerIn: authenticator_internal
             controller: authenticator_internal.controller
             onClosed: {
