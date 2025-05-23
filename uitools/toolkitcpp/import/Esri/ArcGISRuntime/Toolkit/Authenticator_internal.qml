@@ -20,7 +20,7 @@ import QtQuick
 import QtQuick.Controls
 
 /*!
-  \qmltype authenticator_internal
+  \qmltype Authenticator_internal
   \internal
  */
 
