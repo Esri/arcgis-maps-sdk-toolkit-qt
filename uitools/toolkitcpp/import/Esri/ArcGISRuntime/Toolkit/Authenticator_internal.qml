@@ -41,8 +41,8 @@ Item {
             displayView(oAuth2ViewComponent);
         }
 
-        function onDisplayServerTrustView() {
-            displayView(serverTrustViewComponent);
+        function onDisplayAuthenticatorServerTrustView() {
+            displayView(authenticatorServerTrustViewComponent);
         }
 
         function onDisplayClientCertificateView() {
@@ -52,7 +52,7 @@ Item {
 
     Component {
         id: clientCertificateViewComponent
-        AuthenticatorClientCertificate {
+        AuthenticatorClientCertificateView {
             anchors.centerIn: authenticator_internal
             controller: authenticator_internal.controller
             onClosed: {
@@ -64,7 +64,7 @@ Item {
 
     Component {
         id: userCredentialsViewComponent
-        AuthenticatorUserCredentials {
+        AuthenticatorUserCredentialsView {
             anchors.centerIn: authenticator_internal
             controller: authenticator_internal.controller
             onClosed: {
@@ -76,7 +76,7 @@ Item {
 
     Component {
         id: oAuth2ViewComponent
-        AuthenticatorOAuth2 {
+        AuthenticatorOAuth2View {
             anchors.centerIn: authenticator_internal
             controller: authenticator_internal.controller
             onClosed: {
@@ -87,8 +87,8 @@ Item {
     }
 
     Component {
-        id: serverTrustViewComponent
-        ServerTrustView {
+        id: authenticatorServerTrustViewComponent
+        AuthenticatorServerTrustView {
             anchors.centerIn: authenticator_internal
             controller: authenticator_internal.controller
             onClosed: {

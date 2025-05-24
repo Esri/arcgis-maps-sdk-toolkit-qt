@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/esri.com/imports/Esri/ArcGISRuntime/Toolkit">
-        <file>AuthenticatorOAuth2.qml</file>
-        <file>AuthenticatorUserCredentials.qml</file>
+        <file>AuthenticatorOAuth2View.qml</file>
+        <file>AuthenticatorUserCredentialsView.qml</file>
         <file>AttachmentsPopupElementView.qml</file>
         <file>AuthenticationView.qml</file>
         <file>BasemapGallery.qml</file>
@@ -22,14 +22,14 @@
         <file>Scalebar.qml</file>
         <file>ScalebarImpl.qml</file>
         <file>SearchView.qml</file>
-        <file>ServerTrustView.qml</file>
+        <file>AuthenticatorServerTrustView.qml</file>
         <file>SslHandshakeView.qml</file>
         <file>TextPopupElementView.qml</file>
         <file>TimeSlider.qml</file>
         <file>UserCredentialsView.qml</file>
         <file>UtilityNetworkTrace.qml</file>
         <file>qmldir</file>
-        <file>AuthenticatorClientCertificate.qml</file>
+        <file>AuthenticatorClientCertificateView.qml</file>
         <file>Authenticator_internal.qml</file>
         <file>Authenticator.qml</file>
     </qresource>

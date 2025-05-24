@@ -168,7 +168,7 @@ void AuthenticatorController::handleNetworkAuthenticationChallenge(NetworkAuthen
   {
     case NetworkChallengeType::ServerTrust:
     {
-      emit displayServerTrustView();
+      emit displayAuthenticatorServerTrustView();
       return;
     }
     case NetworkChallengeType::Basic: [[fallthrough]];

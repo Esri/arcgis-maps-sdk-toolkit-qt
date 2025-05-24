@@ -22,9 +22,9 @@ CurrentVersion 200.8 CurrentVersion.qml
 # View components
 Authenticator 200.8 Authenticator.qml
 Authenticator_internal 200.8 Authenticator_internal.qml
-AuthenticatorOAuth2 200.8 AuthenticatorOAuth2.qml
-AuthenticatorUserCredentials 200.8 AuthenticatorUserCredentials.qml
-AuthenticatorClientCertificate 200.8 AuthenticatorClientCertificate.qml
+AuthenticatorOAuth2View 200.8 AuthenticatorOAuth2View.qml
+AuthenticatorUserCredentialsView 200.8 AuthenticatorUserCredentialsView.qml
+AuthenticatorClientCertificateView 200.8 AuthenticatorClientCertificateView.qml
 AuthenticationView 100.10 AuthenticationView.qml
 AuthenticationView 200.0 AuthenticationView.qml
 BasemapGallery 100.12 BasemapGallery.qml
@@ -57,7 +57,7 @@ Scalebar 100.13 Scalebar.qml
 Scalebar 200.0 Scalebar.qml
 SearchView 100.13 SearchView.qml
 SearchView 200.0 SearchView.qml
-ServerTrustView 200.0 ServerTrustView.qml
+AuthenticatorServerTrustView 200.0 AuthenticatorServerTrustView.qml
 SslHandshakeView 100.10 SslHandshakeView.qml
 SslHandshakeView 200.0 SslHandshakeView.qml
 TextPopupElementView 200.6 TextPopupElementView.qml

@@ -104,7 +104,7 @@ signals:
   void displayClientCertificateView();
   void displayOAuthSignInView();
   void displayUsernamePasswordSignInView();
-  void displayServerTrustView();
+  void displayAuthenticatorServerTrustView();
   void currentAuthenticatingHostChanged();
   void authorizeUrlChanged();
   void redirectUriChanged();
