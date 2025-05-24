@@ -18,7 +18,7 @@ include(../common/CMakeLists.txt)
 
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Svg WebEngineWidgets Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Svg WebEngineWidgets Widgets NetworkAuth)
 
 qt_standard_project_setup()
 
@@ -93,6 +93,7 @@ target_link_libraries(libtoolkitwidgets PRIVATE
     Qt6::Svg
     Qt6::WebEngineWidgets
     Qt6::Widgets
+    Qt6::NetworkAuth
     ArcGISRuntime::Cpp
 )
 

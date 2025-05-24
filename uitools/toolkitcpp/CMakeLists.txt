@@ -18,7 +18,7 @@ include(../common/CMakeLists.txt)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui QuickControls2 Svg WebView Graphs)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui QuickControls2 Svg WebView Graphs NetworkAuth)
 
 qt_standard_project_setup()
 
@@ -45,6 +45,7 @@ target_link_libraries(libtoolkitcpp PRIVATE
     Qt6::Svg
     Qt6::WebView
     Qt6::Graphs
+    Qt6::NetworkAuth
     ArcGISRuntime::Cpp
 )
 
