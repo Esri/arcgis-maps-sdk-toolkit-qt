@@ -33,7 +33,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   \ingroup ArcGISQtToolkitUiCppControllers
   \brief Simple implementation of the ArcGISAuthenticationChallengeHandler interface.
 
-  This class is used to relay authentication challenges to the ArcGISAuthenticationController. Since multiple
+  This class is used to relay authentication challenges to the AuthenticatorController. Since multiple
   inheritance of QObject is not allowed, and both ChallengeHandler classes inherit QObject, we use a
   composition pattern instead.
 
