@@ -23,7 +23,7 @@ import QtQuick.Layouts
 Dialog {
     id: userCredentialsView
 
-    property ArcGISAuthenticationController controller: null
+    property AuthenticatorController controller: null
 
     title: qsTr("Authentication required")
 

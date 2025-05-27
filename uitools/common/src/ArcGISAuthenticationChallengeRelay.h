@@ -21,20 +21,20 @@
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-class ArcGISAuthenticationController;
+class AuthenticatorController;
 class ArcGISAuthenticationChallengeRelay : public Authentication::ArcGISAuthenticationChallengeHandler
 {
   Q_OBJECT
 
 public:
-  explicit ArcGISAuthenticationChallengeRelay(ArcGISAuthenticationController* controller);
+  explicit ArcGISAuthenticationChallengeRelay(AuthenticatorController* controller);
   ~ArcGISAuthenticationChallengeRelay();
 
 protected:
   void handleArcGISAuthenticationChallenge(Authentication::ArcGISAuthenticationChallenge* challenge) override;
 
 private:
-  ArcGISAuthenticationController* m_controller = nullptr;
+  AuthenticatorController* m_controller = nullptr;
 };
 
 } // Esri::ArcGISRuntime::Toolkit

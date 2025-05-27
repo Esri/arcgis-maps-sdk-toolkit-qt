@@ -15,7 +15,7 @@
  *  limitations under the License.
  ******************************************************************************/
 #include "ArcGISAuthenticationChallengeRelay.h"
-#include "ArcGISAuthenticationController.h"
+#include "AuthenticatorController.h"
 
 // Maps SDK headers
 #include <Authentication/ArcGISAuthenticationChallenge.h>
@@ -40,7 +40,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   \internal
  */
 
-ArcGISAuthenticationChallengeRelay::ArcGISAuthenticationChallengeRelay(ArcGISAuthenticationController* controller) :
+ArcGISAuthenticationChallengeRelay::ArcGISAuthenticationChallengeRelay(AuthenticatorController* controller) :
   ArcGISAuthenticationChallengeHandler(controller),
   m_controller(controller)
 {

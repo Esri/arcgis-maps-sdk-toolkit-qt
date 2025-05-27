@@ -19,14 +19,14 @@ import QtQuick
 import QtQuick.Controls
 
 /*
-    \qmltype ArcGISAuthenticationView
+    \qmltype Authenticator
     \inqmlmodule Esri.ArcGISRuntime.Toolkit
     \ingroup ArcGISQtToolkitUiQmlViews
     \since Esri.ArcGISRuntime 200.7
     \brief A view for handling authentication challenges and automatically
            launching the appropriate UI for each type of authentication.
 
-    The ArcGISAuthenticationView will handle determining which type of authentication
+    The Authenticator will handle determining which type of authentication
     is in use by the ArcGIS Maps SDK for Qt, and will initiate the proper backend
     controller and UI components.
 
@@ -43,8 +43,8 @@ Item {
     signal activeLoginViewReady_(var activeLoginView)
 
     Component.onCompleted: {
-        viewLoader.source = ArcGISAuthenticationController.canBeUsed ?
-                                "ArcGISAuthenticationView_internal.qml" :
+        viewLoader.source = AuthenticatorController.canBeUsed ?
+                                "Authenticator_internal.qml" :
                                 "AuthenticationView.qml";
     }
 

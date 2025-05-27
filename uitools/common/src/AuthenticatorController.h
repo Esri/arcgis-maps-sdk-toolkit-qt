@@ -13,8 +13,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_ARCGISAUTHENTICATIONCONTROLLER_H
-#define ESRI_ARCGISRUNTIME_TOOLKIT_ARCGISAUTHENTICATIONCONTROLLER_H
+#ifndef ESRI_ARCGISRUNTIME_TOOLKIT_AUTHENTICATORCONTROLLER_H
+#define ESRI_ARCGISRUNTIME_TOOLKIT_AUTHENTICATORCONTROLLER_H
 
 // Qt headers
 #include <QHash>
@@ -30,10 +30,10 @@ class QUrl;
 Q_MOC_INCLUDE(<QUrl>)
 
 namespace Esri::ArcGISRuntime::Authentication {
-  class OAuthUserConfiguration;
-  class OAuthUserLoginPrompt;
-  class ArcGISAuthenticationChallenge;
-  class NetworkAuthenticationChallenge;
+class OAuthUserConfiguration;
+class OAuthUserLoginPrompt;
+class ArcGISAuthenticationChallenge;
+class NetworkAuthenticationChallenge;
 }
 
 namespace Esri::ArcGISRuntime::Toolkit {
@@ -41,7 +41,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 class ArcGISAuthenticationChallengeRelay;
 class NetworkAuthenticationChallengeRelay;
 
-class ArcGISAuthenticationController : public QObject
+class AuthenticatorController : public QObject
 {
   Q_OBJECT
 
@@ -59,10 +59,10 @@ class ArcGISAuthenticationController : public QObject
 
 public:
   // assumed to be owned by the QML engine
-  static ArcGISAuthenticationController* create(QQmlEngine* qmlEngine, QJSEngine* jsEngine);
-  static ArcGISAuthenticationController* instance();
+  static AuthenticatorController* create(QQmlEngine* qmlEngine, QJSEngine* jsEngine);
+  static AuthenticatorController* instance();
 
-  ~ArcGISAuthenticationController() override;
+  ~AuthenticatorController() override;
 
   enum class CertificateResult
   {
@@ -104,14 +104,14 @@ signals:
   void displayClientCertificateView();
   void displayOAuthSignInView();
   void displayUsernamePasswordSignInView();
-  void displayServerTrustView();
+  void displayAuthenticatorServerTrustView();
   void currentAuthenticatingHostChanged();
   void authorizeUrlChanged();
   void redirectUriChanged();
   void previousFailureCountChanged();
 
 private:
-  explicit ArcGISAuthenticationController(QObject* parent = nullptr);
+  explicit AuthenticatorController(QObject* parent = nullptr);
   bool canBeUsed_() const;
   QString currentAuthenticatingHost_() const;
   QUrl authorizeUrl_() const;
@@ -141,4 +141,4 @@ private:
 
 } // Esri::ArcGISRuntime::Toolkit
 
-#endif // ESRI_ARCGISRUNTIME_TOOLKIT_ARCGISAUTHENTICATIONCONTROLLER_H
+#endif // ESRI_ARCGISRUNTIME_TOOLKIT_AUTHENTICATORCONTROLLER_H
