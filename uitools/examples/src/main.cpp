@@ -39,6 +39,9 @@ int main(int argc, char* argv[])
   QtWebView::initialize();
   QGuiApplication app(argc, argv);
 
+  // opt-out of the legacy authentication system
+  Esri::ArcGISRuntime::ArcGISRuntimeEnvironment::setUseLegacyAuthentication(false);
+
   // Use of ArcGIS location services, such as basemap styles, geocoding, and routing services,
   // requires an access token. For more information see
   // https://links.esri.com/arcgis-runtime-security-auth.

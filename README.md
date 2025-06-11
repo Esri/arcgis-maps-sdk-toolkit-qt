@@ -24,20 +24,21 @@ The following table lists the various UI components available depending on how y
 
 |          Tool         | [Qt Quick UI components](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/main/uitools/toolkitcpp) |            [Qt Widgets UI components](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/main/uitools/toolkitwidgets)            |
 |:---------------------:|:--------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------:|
-|  AuthenticationView  |    [✔](uitools/toolkitcpp/docs/AuthenticationView.md)   |  [✔](uitools/toolkitwidgets/docs/AuthenticationView.md)  |
-|    BasemapGallery    |      [✔](uitools/toolkitcpp/docs/BasemapGallery.md)     |    [✔](uitools/toolkitwidgets/docs/BasemapGallery.md)   |
-|     BookmarksView    |       [✔](uitools/toolkitcpp/docs/BookmarksView.md)     |    [✔](uitools/toolkitwidgets/docs/BookmarksView.md)    |
-|        Callout       |         [✔](uitools/toolkitcpp/docs/Callout.md)         |                                                          |
-| CoordinateConversion |   [✔](uitools/toolkitcpp/docs/CoordinateConversion.md)  | [✔](uitools/toolkitwidgets/docs/CoordinateConversion.md) |
-|      FloorFilter     |       [✔](uitools/toolkitcpp/docs/FloorFilter.md)       |      [✔](uitools/toolkitwidgets/docs/FloorFilter.md)     |
-|      NorthArrow      |        [✔](uitools/toolkitcpp/docs/NorthArrow.md)       |      [✔](uitools/toolkitwidgets/docs/NorthArrow.md)      |
-|      OverviewMap     |       [✔](uitools/toolkitcpp/docs/OverviewMap.md)       |      [✔](uitools/toolkitwidgets/docs/OverviewMap.md)     |
-|    PopupStackView    |      [✔](uitools/toolkitcpp/docs/PopupStackView.md)     |                                                          |
-|       PopupView      |        [✔](uitools/toolkitcpp/docs/PopupView.md)        |                                                          |
-|        Scalebar      |         [✔](uitools/toolkitcpp/docs/Scalebar.md)        |                                                          |
-|      SearchView      |        [✔](uitools/toolkitcpp/docs/SearchView.md)       |                                                          |
-|      TimeSlider      |        [✔](uitools/toolkitcpp/docs/TimeSlider.md)       |                                                          |
-| UtilityNetworkTrace  |  [✔](uitools/toolkitcpp/docs/UtilityNetworkTrace.md)    |                                                          |
+|  Authenticator                    |    [✔](uitools/toolkitcpp/docs/Authenticator.md)        |                                                          |
+|  AuthenticationView (deprecated)  |    [✔](uitools/toolkitcpp/docs/AuthenticationView.md)   |  [✔](uitools/toolkitwidgets/docs/AuthenticationView.md)  |
+|    BasemapGallery                 |      [✔](uitools/toolkitcpp/docs/BasemapGallery.md)     |    [✔](uitools/toolkitwidgets/docs/BasemapGallery.md)    |
+|     BookmarksView                 |       [✔](uitools/toolkitcpp/docs/BookmarksView.md)     |    [✔](uitools/toolkitwidgets/docs/BookmarksView.md)     |
+|        Callout                    |         [✔](uitools/toolkitcpp/docs/Callout.md)         |                                                          |
+| CoordinateConversion              |   [✔](uitools/toolkitcpp/docs/CoordinateConversion.md)  | [✔](uitools/toolkitwidgets/docs/CoordinateConversion.md) |
+|      FloorFilter                  |       [✔](uitools/toolkitcpp/docs/FloorFilter.md)       |      [✔](uitools/toolkitwidgets/docs/FloorFilter.md)     |
+|      NorthArrow                   |        [✔](uitools/toolkitcpp/docs/NorthArrow.md)       |      [✔](uitools/toolkitwidgets/docs/NorthArrow.md)      |
+|      OverviewMap                  |       [✔](uitools/toolkitcpp/docs/OverviewMap.md)       |      [✔](uitools/toolkitwidgets/docs/OverviewMap.md)     |
+|    PopupStackView                 |      [✔](uitools/toolkitcpp/docs/PopupStackView.md)     |                                                          |
+|       PopupView                   |        [✔](uitools/toolkitcpp/docs/PopupView.md)        |                                                          |
+|        Scalebar                   |         [✔](uitools/toolkitcpp/docs/Scalebar.md)        |                                                          |
+|      SearchView                   |        [✔](uitools/toolkitcpp/docs/SearchView.md)       |                                                          |
+|      TimeSlider                   |        [✔](uitools/toolkitcpp/docs/TimeSlider.md)       |                                                          |
+| UtilityNetworkTrace               |  [✔](uitools/toolkitcpp/docs/UtilityNetworkTrace.md)    |                                                          |
 
 ## Other Toolkit features available
 
