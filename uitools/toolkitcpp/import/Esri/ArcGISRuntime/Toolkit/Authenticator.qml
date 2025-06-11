@@ -18,7 +18,7 @@ import Esri.ArcGISRuntime.Toolkit.Controller
 import QtQuick
 import QtQuick.Controls
 
-/*
+/*!
     \qmltype Authenticator
     \inqmlmodule Esri.ArcGISRuntime.Toolkit
     \ingroup ArcGISQtToolkitUiQmlViews
