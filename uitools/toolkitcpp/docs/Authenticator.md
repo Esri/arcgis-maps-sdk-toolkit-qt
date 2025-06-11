@@ -12,7 +12,7 @@ The [Authenticator- Qt Quick UI/QML Type](https://developers.arcgis.com/qt/toolk
 - IWA (Kerberos & NTLM)
 - PKI
 
-![Authenticator image](../docs/images/authenticator_qml.png)
+![Authenticator image](../../docs/images/authenticator_qml.png)
 
 ## How to use
 
@@ -24,7 +24,7 @@ Authenticator {
 }
 ```
 
-A full tutorial for setting up the Authenticator is available in https://developers.arcgis.com/qt/security-and-authentication/tutorials/access-services-with-oauth-2-0/
+A full tutorial for setting up the Authenticator is available in the [developer guide](https://developers.arcgis.com/qt/security-and-authentication/tutorials/access-services-with-oauth-2-0/)
 
 ## ArcGIS Authentication
 Portals configured to use ArcGIS Authentication will use token authentication by default. To use OAuth, you must pass in an instance of `OAuthUserConfiguration` with the Portal URL, client ID, and redirect URL to the `OAuthUserConfigurationManager`.

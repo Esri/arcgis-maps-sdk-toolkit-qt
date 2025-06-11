@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2022 Esri
+ *  Copyright 2012-2025 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,11 +25,11 @@ DemoPage {
         MapView {
             id: view
 
-            //! [Set up Authenticator View QML]
+            //! [Set up Authenticator QML]
             Authenticator {
                 anchors.centerIn: parent
             }
-            //! [Set up Authenticator View QML]
+            //! [Set up Authenticator QML]
 
             AuthenticatorDemo {
                 geoView: view;
