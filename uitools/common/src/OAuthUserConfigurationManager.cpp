@@ -38,7 +38,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   In order for your application to issue OAuth challenges, you must add at least one OAuthUserConfiguration
   to the OAuthUserConfigurationManager.
 
-  For more information, see \l
+  For more information, see the \l
   {https://developers.arcgis.com/documentation/security-and-authentication/user-authentication/tutorials/create-oauth-credentials-user-auth/}
   {OAuth tutorial}.
 
