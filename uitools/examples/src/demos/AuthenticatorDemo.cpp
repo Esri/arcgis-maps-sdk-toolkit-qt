@@ -25,9 +25,7 @@ AuthenticatorDemo::AuthenticatorDemo(QObject* parent) :
 {
 }
 
-AuthenticatorDemo::~AuthenticatorDemo()
-{
-}
+AuthenticatorDemo::~AuthenticatorDemo() = default;
 
 Esri::ArcGISRuntime::Map* AuthenticatorDemo::initMap_(QObject* parent) const
 {
