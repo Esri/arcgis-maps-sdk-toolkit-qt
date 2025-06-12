@@ -17,7 +17,8 @@
 INCLUDEPATH += $$PWD
 DEPENDPATH += $$PWD
 
-HEADERS += $$PWD/AuthenticationViewDemo.h \
+HEADERS += $$PWD/AuthenticatorDemo.h \
+           $$PWD/AuthenticationViewDemo.h \
            $$PWD/BasemapGalleryDemo.h \
            $$PWD/BookmarksViewDemo.h \
            $$PWD/CalloutDemo.h \
@@ -31,7 +32,8 @@ HEADERS += $$PWD/AuthenticationViewDemo.h \
            $$PWD/TimeSliderDemo.h \
            $$PWD/UtilityNetworkTraceDemo.h
 
-SOURCES += $$PWD/AuthenticationViewDemo.cpp \
+SOURCES += $$PWD/AuthenticatorDemo.cpp \
+           $$PWD/AuthenticationViewDemo.cpp \
            $$PWD/BasemapGalleryDemo.cpp \
            $$PWD/BookmarksViewDemo.cpp \
            $$PWD/CalloutDemo.cpp \

@@ -18,11 +18,11 @@ import Esri.ArcGISRuntime.Toolkit.Controller
 import QtQuick
 import QtQuick.Controls
 
-/*
+/*!
     \qmltype Authenticator
     \inqmlmodule Esri.ArcGISRuntime.Toolkit
     \ingroup ArcGISQtToolkitUiQmlViews
-    \since Esri.ArcGISRuntime 200.7
+    \since Esri.ArcGISRuntime 200.8
     \brief A view for handling authentication challenges and automatically
            launching the appropriate UI for each type of authentication.
 

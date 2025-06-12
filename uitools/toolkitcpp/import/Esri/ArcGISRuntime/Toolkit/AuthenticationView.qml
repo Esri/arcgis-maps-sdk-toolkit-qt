@@ -26,6 +26,7 @@ import QtQuick.Controls
   \since Esri.ArcGISRuntime 100.10
   \brief A view for handling authentication challenges and automatically
   launching the appropriate UI for each type of authentication.
+  \deprecated [200.8] Use Authenticator instead.
 
   Declare an AuthenticationView in your QML file. The AuthenticationView
   will then be connected to all authentication challenges, and will
