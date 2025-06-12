@@ -40,7 +40,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
   For more information, see the \l
   {https://developers.arcgis.com/documentation/security-and-authentication/user-authentication/tutorials/create-oauth-credentials-user-auth/}
-  {OAuth tutorial}.
+  {OAuth tutorial} and the OAuthUserConfiguration documentation in the ArcGIS Maps SDK for Qt.
 
   \since Esri.ArcGISRuntime::Toolkit 200.8
  */
@@ -58,7 +58,7 @@ void OAuthUserConfigurationManager::addConfiguration(OAuthUserConfiguration* use
 /*!
   \brief Clears all OAuthUserConfigurations.
 
-  All configurations will be removed and deleted. Your app will no longer be able to handle any OAuth challenges.
+  All configurations will be removed and deleted. Your app will no longer issue any OAuth challenges.
   This will not impact any existing, successfully authenticated credentials/sessions.
  */
 void OAuthUserConfigurationManager::clearConfigurations()
@@ -67,7 +67,7 @@ void OAuthUserConfigurationManager::clearConfigurations()
 }
 
 /*!
-  \brief Returns the list of OAuthUserConfigurations in use.
+  \brief Returns the list of OAuthUserConfiguration available.
 
   The returned objects are owned by the OAuthUserConfigurationManager.
  */
