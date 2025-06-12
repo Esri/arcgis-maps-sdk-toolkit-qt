@@ -36,7 +36,7 @@ DemoApp::DemoApp(QObject* parent /* = nullptr */):
 {
     const auto redirectUrl = QString{"qt-maps-sdk-app:/oauth2/callback"};
     auto* config = new OAuthUserConfiguration(QUrl{"https://www.arcgis.com/"}, s_clientId, redirectUrl, this);
-    OAuthUserConfigurationManager::instance()->addOAuthUserConfiguration(config); 
+    OAuthUserConfigurationManager::addConfiguration(config); 
 }
 ```
 
