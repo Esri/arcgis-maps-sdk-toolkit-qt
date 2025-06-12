@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2024 Esri
  *
@@ -366,16 +367,6 @@ void AuthenticatorController::addOAuthUserConfiguration(OAuthUserConfiguration* 
   std::lock_guard<std::mutex> lock(m_mutex);
   userConfiguration->setParent(this);
   m_userConfigurations.append(userConfiguration);
-}
-
-void AuthenticatorController::setOAuthUserConfigurations(QList<OAuthUserConfiguration*> userConfigurations)
-{
-  std::lock_guard<std::mutex> lock(m_mutex);
-  m_userConfigurations = std::move(userConfigurations);
-  std::for_each(std::begin(m_userConfigurations), std::end(m_userConfigurations), [this](auto* userConfiguration)
-  {
-    userConfiguration->setParent(this);
-  });
 }
 
 void AuthenticatorController::clearOAuthUserConfigurations()

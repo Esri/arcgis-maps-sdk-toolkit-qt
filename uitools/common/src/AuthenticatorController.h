@@ -96,7 +96,6 @@ public:
 
   // OAuth user challenge support
   void addOAuthUserConfiguration(Esri::ArcGISRuntime::Authentication::OAuthUserConfiguration* userConfiguration);
-  void setOAuthUserConfigurations(QList<Esri::ArcGISRuntime::Authentication::OAuthUserConfiguration*> userConfigurations);
   void clearOAuthUserConfigurations();
   QList<Esri::ArcGISRuntime::Authentication::OAuthUserConfiguration*> oAuthUserConfigurations() const;
 
