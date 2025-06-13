@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2025 Esri
  *
@@ -139,7 +140,7 @@ void PopupAttachmentItem::downloadAttachment()
 {
   m_fetchingAttachment = true;
   emit popupAttachmentItemChanged();
-  m_popupAttachment->attachment()->fetchDataAsync().then([this] (const QByteArray& attachmentData)
+  m_popupAttachment->attachment()->fetchDataAsync().then(this, [this] (const QByteArray& attachmentData)
   {
     if (attachmentData.isEmpty())
     {
