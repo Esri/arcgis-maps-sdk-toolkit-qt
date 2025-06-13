@@ -27,7 +27,7 @@ import QtQuick.Controls
            launching the appropriate UI for each type of authentication.
 
     The Authenticator provides a default experience for handling authentication challenges
-    with ArcGIS Maps SDK for Qt. The Authenticator will determine which type of authentication
+    with the ArcGIS Maps SDK for Qt. The Authenticator will determine which type of authentication
     is in use and will initiate the proper backend controller and UI components.
 
     To use, declare the `Authenticator` in your QML UI.
