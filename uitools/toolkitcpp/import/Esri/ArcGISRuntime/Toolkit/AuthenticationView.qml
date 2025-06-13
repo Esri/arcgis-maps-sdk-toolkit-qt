@@ -28,6 +28,24 @@ import QtQuick.Controls
   launching the appropriate UI for each type of authentication.
   \deprecated [200.8] Use Authenticator instead.
 
+  \note This component is deprecated and will be removed in an upcoming release. Use Authenticator instead.
+
+  To migrate to `Authenticator`, change 
+
+  \code
+  AuthenticationView {
+      anchors.centerIn: parent
+  }
+  \endcode
+
+  to:
+
+  \code
+  Authenticator {
+      anchors.centerIn: parent
+  }
+  \endcode
+
   Declare an AuthenticationView in your QML file. The AuthenticationView
   will then be connected to all authentication challenges, and will
   automatically launch the appropriate view for the type of
