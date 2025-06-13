@@ -26,9 +26,21 @@ import QtQuick.Controls
     \brief A view for handling authentication challenges and automatically
            launching the appropriate UI for each type of authentication.
 
-    The Authenticator will handle determining which type of authentication
-    is in use by the ArcGIS Maps SDK for Qt, and will initiate the proper backend
-    controller and UI components.
+    The Authenticator provides a default experience for handling authentication challenges
+    with ArcGIS Maps SDK for Qt. The Authenticator will determine which type of authentication
+    is in use and will initiate the proper backend controller and UI components.
+
+    To use, declare the `Authenticator` in your QML UI.
+
+    \code
+    Authenticator {
+        anchors.centerIn: parent
+    }
+    \endcode
+
+    \image authenticator_qml.png authenticator
+
+    For further details, consult the \l {https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/blob/main/uitools/toolkitcpp/docs/Authenticator.md}{Authenticator readme}.
 
     \note OAuth 2.0 uses a WebView. To use a OAuth you must call
           \c{QtWebView::initialize()} before the \c{QGuiApplication}
