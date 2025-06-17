@@ -143,7 +143,7 @@ void AuthenticatorController::handleArcGISAuthenticationChallenge(ArcGISAuthenti
           return;
         }
 
-        m_currentArcGISChallenge->continueAndFailWithError(e.error());
+        m_currentArcGISChallenge->continueWithError(e.error());
         m_currentArcGISChallenge.reset();
       });
 
@@ -191,7 +191,7 @@ void AuthenticatorController::handleNetworkAuthenticationChallenge(NetworkAuthen
             QStringLiteral("Only the openssl backend supports Client Certificates (PKI).");
 
         qWarning() << error;
-        m_currentNetworkChallenge->continueAndFailWithError(Error{error, ""});
+        m_currentNetworkChallenge->continueWithError(Error{error, ""});
         m_currentNetworkChallenge.reset();
         return;
       }
@@ -221,7 +221,7 @@ void AuthenticatorController::continueWithServerTrust(bool trust)
   }
   else
   {
-    m_currentNetworkChallenge->continueAndFailWithError(
+    m_currentNetworkChallenge->continueWithError(
         Error{"A ServerTrust challenge was issued, but was blocked by the user", ""});
   }
 
@@ -291,7 +291,7 @@ void AuthenticatorController::continueWithUsernamePasswordArcGIS_(const QString&
     if (m_arcGISPreviousFailureCountsForUrl[requestUrl] >= s_maxArcGISPreviousFailureCount)
     {
       m_arcGISPreviousFailureCountsForUrl.remove(requestUrl);
-      m_currentArcGISChallenge->continueAndFailWithError(e.error());
+      m_currentArcGISChallenge->continueWithError(e.error());
       m_currentArcGISChallenge.reset();
       return;
     }
