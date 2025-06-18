@@ -135,7 +135,6 @@ void AuthenticatorController::handleArcGISAuthenticationChallenge(ArcGISAuthenti
         }
 
         m_currentArcGISChallenge->continueWithCredential(credential);
-        m_currentArcGISChallenge.reset();
       }).onFailed(this, [this](const ErrorException& e)
       {
         if (!m_currentArcGISChallenge)
@@ -143,8 +142,8 @@ void AuthenticatorController::handleArcGISAuthenticationChallenge(ArcGISAuthenti
           return;
         }
 
+        emit previousFailureCountChanged();
         m_currentArcGISChallenge->continueWithError(e.error());
-        m_currentArcGISChallenge.reset();
       });
 
       return;
@@ -269,34 +268,15 @@ void AuthenticatorController::continueWithUsernamePasswordArcGIS_(const QString&
                                password,
                                std::nullopt).then(this, [this](TokenCredential* credential)
   {
-    if (m_arcGISPreviousFailureCountsForUrl.contains(m_currentArcGISChallenge->requestUrl()))
-    {
-      m_arcGISPreviousFailureCountsForUrl.remove(m_currentArcGISChallenge->requestUrl());
-    }
-
     m_currentArcGISChallenge->continueWithCredential(credential);
-    m_currentArcGISChallenge.reset();
   }).onFailed(this, [this](const ErrorException& e)
   {
-    const auto requestUrl = m_currentArcGISChallenge->requestUrl();
-    if (m_arcGISPreviousFailureCountsForUrl.contains(requestUrl))
+    if (!m_currentArcGISChallenge)
     {
-      m_arcGISPreviousFailureCountsForUrl[requestUrl] = m_arcGISPreviousFailureCountsForUrl[requestUrl] + 1;
-    }
-    else
-    {
-      m_arcGISPreviousFailureCountsForUrl[requestUrl] = 1;
-    }
-
-    if (m_arcGISPreviousFailureCountsForUrl[requestUrl] >= s_maxArcGISPreviousFailureCount)
-    {
-      m_arcGISPreviousFailureCountsForUrl.remove(requestUrl);
-      m_currentArcGISChallenge->continueWithError(e.error());
-      m_currentArcGISChallenge.reset();
       return;
     }
-
     emit previousFailureCountChanged();
+    m_currentArcGISChallenge->continueWithError(e.error());
     emit displayUsernamePasswordSignInView();
   });
 }
@@ -415,11 +395,7 @@ int AuthenticatorController::previousFailureCount_() const
 
   if (m_currentArcGISChallenge)
   {
-    const auto requestUrl = m_currentArcGISChallenge->requestUrl();
-    if (m_arcGISPreviousFailureCountsForUrl.contains(requestUrl))
-    {
-      return m_arcGISPreviousFailureCountsForUrl[requestUrl];
-    }
+    return m_currentArcGISChallenge->previousFailureCount();
   }
 
   return 0;
