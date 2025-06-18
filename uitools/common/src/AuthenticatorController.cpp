@@ -280,7 +280,6 @@ void AuthenticatorController::continueWithUsernamePasswordArcGIS_(const QString&
     }
     emit previousFailureCountChanged();
     m_currentArcGISChallenge->continueWithError(e.error());
-    emit displayUsernamePasswordSignInView();
     m_currentArcGISChallenge.reset();
   });
 }
