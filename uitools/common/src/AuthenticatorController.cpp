@@ -135,6 +135,7 @@ void AuthenticatorController::handleArcGISAuthenticationChallenge(ArcGISAuthenti
         }
 
         m_currentArcGISChallenge->continueWithCredential(credential);
+        m_currentArcGISChallenge.reset();
       }).onFailed(this, [this](const ErrorException& e)
       {
         if (!m_currentArcGISChallenge)
@@ -144,6 +145,7 @@ void AuthenticatorController::handleArcGISAuthenticationChallenge(ArcGISAuthenti
 
         emit previousFailureCountChanged();
         m_currentArcGISChallenge->continueWithError(e.error());
+        m_currentArcGISChallenge.reset();
       });
 
       return;
@@ -269,6 +271,7 @@ void AuthenticatorController::continueWithUsernamePasswordArcGIS_(const QString&
                                std::nullopt).then(this, [this](TokenCredential* credential)
   {
     m_currentArcGISChallenge->continueWithCredential(credential);
+    m_currentArcGISChallenge.reset();
   }).onFailed(this, [this](const ErrorException& e)
   {
     if (!m_currentArcGISChallenge)
@@ -278,6 +281,7 @@ void AuthenticatorController::continueWithUsernamePasswordArcGIS_(const QString&
     emit previousFailureCountChanged();
     m_currentArcGISChallenge->continueWithError(e.error());
     emit displayUsernamePasswordSignInView();
+    m_currentArcGISChallenge.reset();
   });
 }
 
