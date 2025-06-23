@@ -132,9 +132,6 @@ private:
   Esri::ArcGISRuntime::Authentication::OAuthUserConfiguration* m_currentOAuthUserConfiguration = nullptr;
   std::unique_ptr<Authentication::OAuthUserLoginPrompt> m_currentOAuthUserLoginPrompt;
 
-  // ArcGISAuthenticationChallenges only. NetworkAuthenticationChallenges already contain this information
-  QHash<QUrl, int> m_arcGISPreviousFailureCountsForUrl;
-  static inline constexpr int s_maxArcGISPreviousFailureCount = 5;
   std::mutex m_mutex;
 };
 
