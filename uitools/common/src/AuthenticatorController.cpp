@@ -279,8 +279,10 @@ void AuthenticatorController::continueWithUsernamePasswordArcGIS_(const QString&
       return;
     }
     emit previousFailureCountChanged();
-    m_currentArcGISChallenge->continueWithError(e.error());
-    m_currentArcGISChallenge.reset();
+    auto* arcgisChallenge = m_currentArcGISChallenge.release();
+    arcgisChallenge->setParent(this);
+    arcgisChallenge->deleteLater();
+    arcgisChallenge->continueWithError(e.error());
   });
 }
 
