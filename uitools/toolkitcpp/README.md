@@ -10,7 +10,8 @@ You can learn more about the benefits of building apps with the [Qt Quick UI con
 
 These are the **Qt Quick UI components/QML Type** available to use:
 
-- **[AuthenticationView](docs/AuthenticationView.md)** - A wrapper view that will automatically display the proper authentication view for any of the supported authentication types (OAuth, Token, HTTP Basic, HTTP Digest, SAML, PKI).
+- **[Authenticator](docs/Authenticator.md)** - A wrapper view that will automatically display the proper authentication view for any of the supported authentication types (OAuth, Token, HTTP Basic, HTTP Digest, SAML, PKI, IWA).
+- **[AuthenticationView (deprecated)](docs/AuthenticationView.md)** - A wrapper view that will automatically display the proper authentication view for any of the supported authentication types (OAuth, Token, HTTP Basic, HTTP Digest, SAML, PKI). This view is deprecated and is replaced by Authenticator.
 - **[BasemapGallery](docs/BasemapGallery.md)** - Shows a list of available basemaps by using a Portal or using a user defined collection. User is able to select a basemap, setting it on the current GeoModel.
 - **[BookmarksView](docs/BookmarksView.md)**- A control that displays and navigates to bookmarks that have been authored in a map.
 - **[Callout](docs/Callout.md)** - A view for displaying information at a geographic location.
