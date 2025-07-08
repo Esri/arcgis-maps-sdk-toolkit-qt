@@ -147,7 +147,7 @@ void AuthenticatorController::handleArcGISAuthenticationChallenge(ArcGISAuthenti
         auto* arcgisChallenge = m_currentArcGISChallenge.release();
         arcgisChallenge->setParent(this);
         arcgisChallenge->deleteLater();
-        m_currentArcGISChallenge->continueWithError(e.error());
+        arcgisChallenge->continueWithError(e.error());
       });
 
       return;
