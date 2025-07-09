@@ -36,6 +36,7 @@ target_include_directories(libtoolkitcpp PUBLIC
 
 target_compile_definitions(libtoolkitcpp PRIVATE
     CPP_ARCGISRUNTIME_TOOLKIT
+    QRT_DISABLE_DEPRECATED_WARNINGS
 )
 
 target_link_libraries(libtoolkitcpp PRIVATE
