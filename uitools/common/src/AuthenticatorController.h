@@ -110,6 +110,7 @@ signals:
   void previousFailureCountChanged();
 
 private:
+  friend class ToolkitTester;
   explicit AuthenticatorController(QObject* parent = nullptr);
   bool canBeUsed_() const;
   QString currentAuthenticatingHost_() const;
@@ -123,6 +124,11 @@ private:
   void continueWithUsernamePasswordArcGIS_(const QString& username, const QString& password);
   void continueWithUsernamePasswordNetwork_(const QString& username, const QString& password);
 
+  // For use in automated test environments when it's not part of the workflow being tested,
+  // but needs to be handled regardless. This accepts all server trust challenges and
+  // the dialog will never appear.
+  void acceptAllServerTrustChallengesForTesting_();
+
   std::unique_ptr<ArcGISAuthenticationChallengeRelay> m_arcGISAuthenticationChallengeRelay;
   std::unique_ptr<NetworkAuthenticationChallengeRelay> m_networkAuthenticationChallengeRelay;
 
@@ -131,6 +137,7 @@ private:
   QList<Esri::ArcGISRuntime::Authentication::OAuthUserConfiguration*> m_userConfigurations;
   Esri::ArcGISRuntime::Authentication::OAuthUserConfiguration* m_currentOAuthUserConfiguration = nullptr;
   std::unique_ptr<Authentication::OAuthUserLoginPrompt> m_currentOAuthUserLoginPrompt;
+  bool m_acceptAllServerTrustChallengesForTesting = false;
 
   std::mutex m_mutex;
 };

@@ -17,6 +17,7 @@
 #include "AuthenticatorController.h"
 
 // Qt headers
+#include <QDebug>
 #include <QDesktopServices>
 #include <QFuture>
 #include <QOAuthUriSchemeReplyHandler>
@@ -172,7 +173,15 @@ void AuthenticatorController::handleNetworkAuthenticationChallenge(NetworkAuthen
   {
     case NetworkChallengeType::ServerTrust:
     {
-      emit displayAuthenticatorServerTrustView();
+      if (m_acceptAllServerTrustChallengesForTesting)
+      {
+        qWarning() << "FOR TESTING PURPOSES ONLY - Automatically accepting server trust challenge for" << m_currentNetworkChallenge->host();
+        continueWithServerTrust(true);
+      }
+      else
+      {
+        emit displayAuthenticatorServerTrustView();
+      }
       return;
     }
     case NetworkChallengeType::Basic: [[fallthrough]];
@@ -461,6 +470,12 @@ void AuthenticatorController::finishOAuthExternalBrowserChallengeFlow_()
 {
   m_currentOAuthUserConfiguration = nullptr;
   m_currentOAuthUserLoginPrompt.reset();
+}
+
+void AuthenticatorController::acceptAllServerTrustChallengesForTesting_()
+{
+  qWarning() << "FOR TESTING PURPOSES ONLY - Automatically accepting all server trust challenges.";
+  m_acceptAllServerTrustChallengesForTesting = true;
 }
 
 } //  Esri::ArcGISRuntime::Toolkit
