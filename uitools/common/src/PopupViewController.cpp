@@ -153,7 +153,7 @@ void PopupViewController::setPopupManager(PopupManager* popupManager)
   if (m_popupManager)
     connect(m_popupManager.data(), &QObject::destroyed, this, &PopupViewController::popupManagerChanged);
 
-  if (auto attachments = this->attachments_())
+  if (auto attachments = this->popupAttachmentListModel_())
   {
     connect(attachments, &QAbstractListModel::rowsInserted , this, &PopupViewController::attachmentCountChanged);
     connect(attachments, &QAbstractListModel::rowsRemoved , this, &PopupViewController::attachmentCountChanged);
@@ -180,7 +180,7 @@ QAbstractListModel* PopupViewController::displayFields() const
   return m_popupManager ? m_popupManager->displayedFields() : nullptr;
 }
 
-PopupAttachmentListModel* PopupViewController::attachments_() const
+PopupAttachmentListModel* PopupViewController::popupAttachmentListModel_() const
 {
   auto* model = attachments();
   return model ? static_cast<PopupAttachmentListModel*>(model) : nullptr;
@@ -232,7 +232,7 @@ QString PopupViewController::title() const
 
 int PopupViewController::attachmentThumbnailWidth() const
 {
-  auto attachmentModel = attachments_();
+  auto attachmentModel = popupAttachmentListModel_();
   if (!attachmentModel)
     return 0;
 
@@ -241,7 +241,7 @@ int PopupViewController::attachmentThumbnailWidth() const
 
 void PopupViewController::setAttachmentThumbnailWidth(int width)
 {
-  auto attachmentModel = attachments_();
+  auto attachmentModel = popupAttachmentListModel_();
   if (!attachmentModel)
     return;
 
@@ -250,7 +250,7 @@ void PopupViewController::setAttachmentThumbnailWidth(int width)
 
 int PopupViewController::attachmentThumbnailHeight() const
 {
-  auto attachmentModel = attachments_();
+  auto attachmentModel = popupAttachmentListModel_();
   if (!attachmentModel)
     return 0;
 
@@ -259,7 +259,7 @@ int PopupViewController::attachmentThumbnailHeight() const
 
 void PopupViewController::setAttachmentThumbnailHeight(int height)
 {
-  auto attachmentModel = attachments_();
+  auto attachmentModel = popupAttachmentListModel_();
   if (!attachmentModel)
     return;
 

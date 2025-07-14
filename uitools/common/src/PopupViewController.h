@@ -109,7 +109,7 @@ private:
   int fieldCount() const;
 
   int attachmentCount() const;
-  PopupAttachmentListModel* attachments_() const;
+  PopupAttachmentListModel* popupAttachmentListModel_() const;
 
 private:
   QPointer<PopupManager> m_popupManager;
