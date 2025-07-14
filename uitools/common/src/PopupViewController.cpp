@@ -17,7 +17,6 @@
 #ifndef QRT_DISABLE_DEPRECATED_WARNINGS
 #define QRT_DISABLE_DEPRECATED_WARNINGS
 #endif
-
 #include "PopupViewController.h"
 
 // Qt headers
@@ -29,7 +28,6 @@
 #include "AttachmentsPopupElement.h"
 #include "FieldsPopupElement.h"
 #include "MediaPopupElement.h"
-#include "TextPopupElement.h"
 #include "Popup.h"
 #include "PopupAttachmentListModel.h"
 #include "PopupAttachmentManager.h"
@@ -38,6 +36,7 @@
 #include "PopupExpressionEvaluation.h"
 #include "PopupManager.h"
 #include "PopupTypes.h"
+#include "TextPopupElement.h"
 
 // Toolkit headers
 #include "AttachmentsPopupElementViewController.h"
@@ -154,7 +153,7 @@ void PopupViewController::setPopupManager(PopupManager* popupManager)
   if (m_popupManager)
     connect(m_popupManager.data(), &QObject::destroyed, this, &PopupViewController::popupManagerChanged);
 
-  if (auto attachments = this->attachments())
+  if (auto attachments = this->attachments_())
   {
     connect(attachments, &QAbstractListModel::rowsInserted , this, &PopupViewController::attachmentCountChanged);
     connect(attachments, &QAbstractListModel::rowsRemoved , this, &PopupViewController::attachmentCountChanged);
@@ -181,7 +180,13 @@ QAbstractListModel* PopupViewController::displayFields() const
   return m_popupManager ? m_popupManager->displayedFields() : nullptr;
 }
 
-PopupAttachmentListModel* PopupViewController::attachments() const
+PopupAttachmentListModel* PopupViewController::attachments_() const
+{
+  auto* model = attachments();
+  return model ? static_cast<PopupAttachmentListModel*>(model) : nullptr;
+}
+
+QAbstractListModel* PopupViewController::attachments() const
 {
   if (!m_popupManager)
     return nullptr;
@@ -227,7 +232,7 @@ QString PopupViewController::title() const
 
 int PopupViewController::attachmentThumbnailWidth() const
 {
-  auto attachmentModel = attachments();
+  auto attachmentModel = attachments_();
   if (!attachmentModel)
     return 0;
 
@@ -236,7 +241,7 @@ int PopupViewController::attachmentThumbnailWidth() const
 
 void PopupViewController::setAttachmentThumbnailWidth(int width)
 {
-  auto attachmentModel = attachments();
+  auto attachmentModel = attachments_();
   if (!attachmentModel)
     return;
 
@@ -245,7 +250,7 @@ void PopupViewController::setAttachmentThumbnailWidth(int width)
 
 int PopupViewController::attachmentThumbnailHeight() const
 {
-  auto attachmentModel = attachments();
+  auto attachmentModel = attachments_();
   if (!attachmentModel)
     return 0;
 
@@ -254,7 +259,7 @@ int PopupViewController::attachmentThumbnailHeight() const
 
 void PopupViewController::setAttachmentThumbnailHeight(int height)
 {
-  auto attachmentModel = attachments();
+  auto attachmentModel = attachments_();
   if (!attachmentModel)
     return;
 

@@ -14,6 +14,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
+#ifndef QRT_DISABLE_DEPRECATED_WARNINGS
+#define QRT_DISABLE_DEPRECATED_WARNINGS
+#endif
 #include "BasemapGalleryItem.h"
 
 // Toolkit headers
@@ -40,37 +43,37 @@ namespace Esri::ArcGISRuntime::Toolkit {
   namespace {
 #ifdef CPP_ARCGISRUNTIME_TOOLKIT
     /*!
-    \internal
-    \brief Given a BasemapGalleryItem, \a self, registers it with the BasemapGalleryImageProvider
-    for thumbnail URLs.
-   */
+      \internal
+      \brief Given a BasemapGalleryItem, \a self, registers it with the BasemapGalleryImageProvider
+      for thumbnail URLs.
+     */
     void registerItem(BasemapGalleryItem* self)
     {
       BasemapGalleryImageProvider::instance()->registerItem(self);
     }
 
     /*!
-    \internal
-    \brief Given a BasemapGalleryItem, \a self, unregisters it with the BasemapGalleryImageProvider
-    for thumbnail URLs.
-   */
+      \internal
+      \brief Given a BasemapGalleryItem, \a self, unregisters it with the BasemapGalleryImageProvider
+      for thumbnail URLs.
+     */
     void deregisterItem(BasemapGalleryItem* self)
     {
       BasemapGalleryImageProvider::instance()->deregisterItem(self);
     }
 #else
     /*!
-    \internal
-    \brief No-op. Thumbnail Urls are not required in the Widget's case.
-   */
+      \internal
+      \brief No-op. Thumbnail Urls are not required in the Widget's case.
+     */
     void registerItem(BasemapGalleryItem* /*self*/)
     {
     }
 
     /*!
-    \internal
-    \brief No-op. Thumbnail Urls are not required in the Widget's case.
-   */
+      \internal
+      \brief No-op. Thumbnail Urls are not required in the Widget's case.
+     */
     void deregisterItem(BasemapGalleryItem* /*self*/)
     {
     }
@@ -78,11 +81,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
   }
 
   /*!
-  \inmodule Esri.ArcGISRuntime.Toolkit
-  \class Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem
-  \internal
-  This class is an internal implementation detail and is subject to change.
-  */
+    \inmodule Esri.ArcGISRuntime.Toolkit
+    \class Esri::ArcGISRuntime::Toolkit::BasemapGalleryItem
+    \internal
+    This class is an internal implementation detail and is subject to change.
+   */
 
   BasemapGalleryItem::BasemapGalleryItem(QObject* parent) :
     BasemapGalleryItem(nullptr, {}, {}, parent)

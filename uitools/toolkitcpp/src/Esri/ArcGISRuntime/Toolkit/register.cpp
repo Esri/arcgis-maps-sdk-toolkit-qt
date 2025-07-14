@@ -14,7 +14,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-
+#ifndef QRT_DISABLE_DEPRECATED_WARNINGS
+#define QRT_DISABLE_DEPRECATED_WARNINGS
+#endif
 #include "register.h"
 
 // Toolkit includes
@@ -83,7 +85,7 @@
 
   Please refer to
   \c README.md for more information on workflows.
-*/
+ */
 
 /*!
   \fn void Esri::ArcGISRuntime::Toolkit::registerComponents(QQmlEngine& engine)
@@ -123,7 +125,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
       \value CreationType::Creatable for types that can be created in QML.
       \value CreationType::Uncreatable for types that can be referenced but not used in QML.
       \value CreationType::Interface for types that are interfaces for more concrete QML types.
-     */
+ */
     namespace CreationType {
       struct Creatable_
       {
@@ -175,16 +177,16 @@ namespace Esri::ArcGISRuntime::Toolkit {
      \brief Function for registration. Registers the C++ type Foo as
      Foo in QML with the 100.10, 200.0 version and namespace information.
 
-     \list
+  \list
       \li \a Determines how the type is instantiated in QML. Choose between CreationType::Creatable, CreationType::Uncreatable and CreationType::Interface.
           CreationType::Creatable is assumed by default if not provided.
-     \endlist
+  \endlist
 
       Example call:
       \code
       registerComponent<LocatorSearchSource>(CreationType::Uncreatable);
       \endcode
-     */
+ */
     template <typename T, typename CType = CreationType::Creatable_>
     void registerComponent(CType creationType = CType{})
     {
@@ -201,7 +203,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
      \internal
      \brief Ensures a Module revision is available from 100.10 and 200.0 onwards
      to the current version of the Toolkit.
-     */
+ */
     void registerModuleRevisions()
     {
       constexpr int MAJOR_VERSION_100 = 100;

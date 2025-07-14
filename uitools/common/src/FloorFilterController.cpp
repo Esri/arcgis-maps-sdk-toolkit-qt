@@ -14,6 +14,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
+#ifndef QRT_DISABLE_DEPRECATED_WARNINGS
+#define QRT_DISABLE_DEPRECATED_WARNINGS
+#endif
 #include "FloorFilterController.h"
 
 #include <QFuture>
@@ -47,22 +50,22 @@ namespace Esri::ArcGISRuntime::Toolkit {
   namespace {
 
     /*!
-     \internal
-     \brief default scale for our "observing" viewpoint to find
-     facility intersections if no viewpoint scale is available.
+      \internal
+      \brief default scale for our "observing" viewpoint to find
+      facility intersections if no viewpoint scale is available.
      */
     constexpr double DEFAULT_TARGET_SCALE = 4300.0;
 
     /*!
-     \internal
-     \brief Constant padding value for the extent when zooming
-            to the geometry of a FloorFacility.
+      \internal
+      \brief Constant padding value for the extent when zooming
+      to the geometry of a FloorFacility.
      */
     const float ZOOM_PADDING = 1.5;
 
     /*!
-     \internal
-     \brief Given a ListModel and id, finds the element in the ListModel that matches the given id.
+      \internal
+      \brief Given a ListModel and id, finds the element in the ListModel that matches the given id.
      */
     template <typename T>
     T* findElement(const GenericListModel* model, const QString& id)
@@ -105,12 +108,12 @@ namespace Esri::ArcGISRuntime::Toolkit {
     }
 
     /*!
-     \internal
-     \brief Manages the connection between Controller \a self and GeoView \a geoView.
-     Attempts to call functor `f` if/when the FloorFilter within the geoModel is loaded.
-     This may also cause the geoModel itself to load.
-     Will continue to call `f` every time a map/sceneChanged signal is triggered on
-     the GeoView.
+      \internal
+      \brief Manages the connection between Controller \a self and GeoView \a geoView.
+      Attempts to call functor `f` if/when the FloorFilter within the geoModel is loaded.
+      This may also cause the geoModel itself to load.
+      Will continue to call `f` every time a map/sceneChanged signal is triggered on
+      the GeoView.
      */
     template <typename GeoView, typename Func>
     void connectToGeoView(GeoView* geoView, FloorFilterController* self, Func&& f)

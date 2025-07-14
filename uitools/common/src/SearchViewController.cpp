@@ -14,7 +14,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-
+#ifndef QRT_DISABLE_DEPRECATED_WARNINGS
+#define QRT_DISABLE_DEPRECATED_WARNINGS
+#endif
 #include "SearchViewController.h"
 
 // Toolkit headers
@@ -48,7 +50,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
       Helper method to cast a GeoElement to a Graphic.
       We will improve the quality of this method when there becomes a better way to test the type of
       a GeoElement.
-     */
+ */
     void addGeoElementToOverlay(GraphicsOverlay* overlay, GeoElement* element)
     {
       if (overlay)

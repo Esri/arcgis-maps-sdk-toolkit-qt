@@ -14,6 +14,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
+#ifndef QRT_DISABLE_DEPRECATED_WARNINGS
+#define QRT_DISABLE_DEPRECATED_WARNINGS
+#endif
 #include "BasemapGalleryImageProvider.h"
 
 // Toolkit headers
@@ -55,8 +58,8 @@ namespace Esri::ArcGISRuntime::Toolkit {
       \internal
       \brief Constructor.
       \list
-      \li \a galleryItem The item to grab a thumbnail for.
-      \li \a requestedSize The size of image requested.
+        \li \a galleryItem The item to grab a thumbnail for.
+        \li \a requestedSize The size of image requested.
       \endlist
 
       Internally, we test the state of the GalleryItem. If there is a thumbnail available we return this immediately,
@@ -112,8 +115,8 @@ namespace Esri::ArcGISRuntime::Toolkit {
     }
 
     /*!
-     \internal
-     \brief Destructor
+      \internal
+      \brief Destructor
      */
     BasemapGalleryImageResponse::~BasemapGalleryImageResponse()
     {

@@ -14,6 +14,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
+#ifndef QRT_DISABLE_DEPRECATED_WARNINGS
+#define QRT_DISABLE_DEPRECATED_WARNINGS
+#endif
 #include "BookmarksViewController.h"
 
 // Toolkit headers
@@ -82,12 +85,12 @@ namespace Esri::ArcGISRuntime::Toolkit {
     }
 
     /*!
-     \internal
-     \brief Manages the connection between Controller \a self and GeoView \a geoView.
-     Attempts to call functor `f` if/when the Bookmark within the geoModel is loaded.
-     This may also cause the geoModel itself to load.
-     Will continue to call `f` every time a mapChanged/sceneChanged signal is triggered on
-     the GeoView.
+      \internal
+      \brief Manages the connection between Controller \a self and GeoView \a geoView.
+      Attempts to call functor `f` if/when the Bookmark within the geoModel is loaded.
+      This may also cause the geoModel itself to load.
+      Will continue to call `f` every time a mapChanged/sceneChanged signal is triggered on
+      the GeoView.
      */
     template <typename GeoViewToolkit, typename Func>
     void connectToGeoView(GeoViewToolkit* geoView, BookmarksViewController* self, Func&& f)
@@ -126,11 +129,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
   }
 
   /*!
-  \inmodule Esri.ArcGISRuntime.Toolkit
-  \class Esri::ArcGISRuntime::Toolkit::BookmarksViewController
-  \internal
-  This class is an internal implementation detail and is subject to change.
-  */
+    \inmodule Esri.ArcGISRuntime.Toolkit
+    \class Esri::ArcGISRuntime::Toolkit::BookmarksViewController
+    \internal
+    This class is an internal implementation detail and is subject to change.
+   */
 
   BookmarksViewController::BookmarksViewController(QObject* parent) :
     QObject(parent),
