@@ -14,6 +14,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
+#ifndef QRT_DISABLE_DEPRECATED_WARNINGS
+#define QRT_DISABLE_DEPRECATED_WARNINGS
+#endif
 #include "UtilityNetworkTraceController.h"
 
 // ArcGISRuntime headers
@@ -84,13 +87,13 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
 namespace {
 /*!
-     \internal
-     \brief Manages the connection between Controller \a self and GeoView \a geoView.
-     Attempts to call functor `f` if/when the UtilityNetwork within the geoModel is loaded.
-     This may also cause the geoModel itself to load.
-     Will continue to call `f` every time a mapChanged signal is triggered on
-     the GeoView.
-     */
+  \internal
+  \brief Manages the connection between Controller \a self and GeoView \a geoView.
+  Attempts to call functor `f` if/when the UtilityNetwork within the geoModel is loaded.
+  This may also cause the geoModel itself to load.
+  Will continue to call `f` every time a mapChanged signal is triggered on
+  the GeoView.
+ */
 template <typename GeoViewToolkit, typename Func>
 void connectToGeoView(GeoViewToolkit* geoView, UtilityNetworkTraceController* self, Func&& f)
 {
@@ -143,18 +146,18 @@ void connectToGeoView(GeoViewToolkit* geoView, UtilityNetworkTraceController* se
 }
 
 /*!
-\class Esri::ArcGISRuntime::Toolkit::UtilityNetworkTraceController
-\ingroup ArcGISQtToolkitUiCppControllers
-\internal
-This class is an internal implementation detail and is subject to change.
-*/
+  \class Esri::ArcGISRuntime::Toolkit::UtilityNetworkTraceController
+  \ingroup ArcGISQtToolkitUiCppControllers
+  \internal
+  This class is an internal implementation detail and is subject to change.
+ */
 
 /*!
-\brief Constructor.
-\list
-  \li \a parent owning parent object.
-\endlist
-*/
+  \brief Constructor.
+  \list
+    \li \a parent owning parent object.
+  \endlist
+ */
 UtilityNetworkTraceController::UtilityNetworkTraceController(QObject* parent) :
   QObject(parent),
   m_startingPointParent(new QObject(this)),
@@ -198,11 +201,11 @@ QObject* UtilityNetworkTraceController::geoView() const
   \brief Set the GeoView object this Controller uses.
 
   Internally this is cast to a \c MapView using \c qobject_cast,
-      which is why the paremeter is of form \c QObject and not \c GeoView.
+  which is why the paremeter is of form \c QObject and not \c GeoView.
 
   \list
     \li \a geoView \c Object which must inherit from \c{GeoView*} and
-        \c{QObject*}.
+      \c{QObject*}.
   \endlist
  */
 void UtilityNetworkTraceController::setGeoView(QObject* geoView)

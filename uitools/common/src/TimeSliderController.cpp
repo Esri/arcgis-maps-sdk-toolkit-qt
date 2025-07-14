@@ -14,6 +14,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
+#ifndef QRT_DISABLE_DEPRECATED_WARNINGS
+#define QRT_DISABLE_DEPRECATED_WARNINGS
+#endif
 #include "TimeSliderController.h"
 
 // ArcGISRuntime Toolkit headers
@@ -46,13 +49,13 @@ namespace
    \brief Calls `std::accumlate` on a \c LayerListModel, but filters out
           layers in the list-model that are not TimeAware.
           The type \c T must be default-constructible.
-   \list
+  \list
    \li \a listModel ListModel to accummalate.
    \li \a f Accumulation function that takes the current \c T and a \c TimeAware
        object.
-   \endlist
+  \endlist
    Returns the accumulation of \c T.
-   */
+ */
   template <class T, class BinaryOperation>
   T accumulateTimeAware(LayerListModel* listModel, BinaryOperation f)
   {
@@ -82,11 +85,11 @@ namespace
   /*
    \internal
    \brief Converts a \c TimeValue to a double in milliseconds.
-   \list
+  \list
    \li \a timeValue \c TimeValue to convert.
-   \endlist
+  \endlist
    Returns TimeValue as double in milliseconds.
-   */
+ */
   double toMilliseconds(const TimeValue& timeValue)
   {
     constexpr double millisecondsPerDay = 86400000.0;
@@ -129,12 +132,12 @@ namespace
   /*
    \internal
    \brief Compares two \c TimeValue objects and returns the smallest one.
-   \list
+  \list
      \li \a a First \c TimeValue.
      \li \a b Second \c TimeValue.
-   \endlist
+  \endlist
    Returns smallest \c TimeValue.
-   */
+ */
   TimeValue minTimeValue(const TimeValue& a, const TimeValue& b)
   {
     if (a.unit() == b.unit())

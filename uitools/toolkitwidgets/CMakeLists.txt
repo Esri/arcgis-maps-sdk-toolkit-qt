@@ -85,7 +85,6 @@ target_include_directories(libtoolkitwidgets PUBLIC
 
 target_compile_definitions(libtoolkitwidgets PRIVATE
     WIDGETS_ARCGISRUNTIME_TOOLKIT
-    QRT_DISABLE_DEPRECATED_WARNINGS
 )
 
 target_link_libraries(libtoolkitwidgets PRIVATE

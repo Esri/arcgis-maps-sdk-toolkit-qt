@@ -14,12 +14,16 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
+#ifndef QRT_DISABLE_DEPRECATED_WARNINGS
+#define QRT_DISABLE_DEPRECATED_WARNINGS
+#endif
 #include "ScalebarController.h"
 
 // C++ headers
 #include <cmath>
 
 // ArcGISRuntime headers
+#include <CoreTypes.h>
 #include <Envelope.h>
 #include <GeometryEngine.h>
 #include <Point.h>
@@ -33,7 +37,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     /*
       List of "good" multipliers in which it is appropriate to scale a scalebar
       by.
-     */
+ */
     constexpr double MULTIPLIERS[] = {
         1,
         1.2,
@@ -59,7 +63,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
        \a distance divided by \a magnitude.
        Multipliers are from the defined set of hard-coded \c{MULTIPLIERS}.
        If no multiplier is suitable then the first element in \c{MULTIPLIERS is returned.
-     */
+ */
     double selectMultiplierData(double distance, double magnitude)
     {
       double residual = distance / magnitude;
@@ -76,7 +80,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     /*
       Calculates the "magnitude" used when calculating the length of a scalebar or the number of segments. This is the
       largest power of 10 that's less than or equal to a given \a distance.
-    */
+ */
     double calculateMagnitude(double distance)
     {
       return std::pow(10, std::floor(std::log10(distance)));
@@ -86,7 +90,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
       Returns the appropriate \l LinearUnit given a \a distance and \a unitSystem.
       This method chooses whether miles or feet are appropriate display units for a given length in the imperial system,
       or if kilometers of meters are appropriate display units for a given length in the metric system.
-     */
+ */
     LinearUnit selectLinearUnit(double distance, UnitSystem unitSystem)
     {
       switch (unitSystem)
@@ -112,13 +116,14 @@ namespace Esri::ArcGISRuntime::Toolkit {
   }
 
   /*!
-  \class Esri::ArcGISRuntime::Toolkit::ScalebarController
-  \internal
-  This class is an internal implementation detail and is subject to change.
- */
+    \class Esri::ArcGISRuntime::Toolkit::ScalebarController
+    \internal
+    This class is an internal implementation detail and is subject to change.
+   */
 
   ScalebarController::ScalebarController(QObject* parent) :
-    QObject(parent)
+    QObject(parent),
+    m_unitSystem(UnitSystem::Metric)
   {
   }
 

@@ -14,11 +14,15 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
+#ifndef QRT_DISABLE_DEPRECATED_WARNINGS
+#define QRT_DISABLE_DEPRECATED_WARNINGS
+#endif
 #include "AuthenticationController.h"
 
 // ArcGISRuntime headers
 #include <AuthenticationChallenge.h>
 #include <AuthenticationManager.h>
+#include <CoreTypes.h>
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
