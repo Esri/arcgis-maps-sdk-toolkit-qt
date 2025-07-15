@@ -14,7 +14,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_SOURCES
-    ../common/src/ArcGISAuthenticationController.cpp
+    ../common/src/AuthenticatorController.cpp
     ../common/src/AuthenticationController.cpp
     ../common/src/AttachmentsPopupElementViewController.cpp
     ../common/src/BarChartPopupMediaItem.cpp
@@ -67,7 +67,7 @@ set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_SOURCES
 )
 
 set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_HEADERS
-    ../common/src/ArcGISAuthenticationController.h
+    ../common/src/AuthenticatorController.h
     ../common/src/AuthenticationController.h
     ../common/src/AttachmentsPopupElementViewController.h
     ../common/src/BarChartPopupMediaItem.h
