@@ -18,7 +18,7 @@ include(../common/CMakeLists.txt)
 
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Svg WebEngineWidgets Widgets NetworkAuth)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Svg WebEngineWidgets Widgets Graphs NetworkAuth)
 
 qt_standard_project_setup()
 
