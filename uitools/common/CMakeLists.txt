@@ -27,6 +27,7 @@ set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_SOURCES
     ../common/src/CoordinateConversionOption.cpp
     ../common/src/CoordinateConversionResult.cpp
     ../common/src/CoordinateOptionDefaults.cpp
+    ../common/src/CustomOAuth2AuthorizationCodeFlow.cpp
     ../common/src/FieldsPopupElementViewController.cpp
     ../common/src/FloorFilterController.cpp
     ../common/src/FloorFilterFacilityItem.cpp
@@ -80,6 +81,7 @@ set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_HEADERS
     ../common/src/CoordinateConversionOption.h
     ../common/src/CoordinateConversionResult.h
     ../common/src/CoordinateOptionDefaults.h
+    ../common/src/CustomOAuth2AuthorizationCodeFlow.h
     ../common/src/FieldsPopupElementViewController.h
     ../common/src/FloorFilterController.h
     ../common/src/FloorFilterFacilityItem.h
