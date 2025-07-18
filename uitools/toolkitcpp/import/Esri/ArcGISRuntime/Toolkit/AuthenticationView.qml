@@ -68,6 +68,11 @@ import QtQuick.Controls
         {Qt WebView}.
 
   \image authenticationview_qml.png authentication_view
+  \code
+    AuthenticationView {
+        anchors.centerIn: parent
+    }
+  \endcode
  */
 
 Item {
