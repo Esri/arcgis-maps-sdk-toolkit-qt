@@ -69,9 +69,9 @@ import QtQuick.Controls
 
   \image authenticationview_qml.png authentication_view
   \code
-    AuthenticationView {
-        anchors.centerIn: parent
-    }
+  AuthenticationView {
+    anchors.centerIn: parent
+  }
   \endcode
  */
 
