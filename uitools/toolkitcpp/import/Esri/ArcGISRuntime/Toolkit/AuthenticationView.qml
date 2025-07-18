@@ -68,7 +68,6 @@ import QtQuick.Controls
         {Qt WebView}.
 
   \image authenticationview_qml.png authentication_view
-  \snippet qml/demos/AuthenticationViewDemoForm.qml Set up Authentication View QML
  */
 
 Item {
