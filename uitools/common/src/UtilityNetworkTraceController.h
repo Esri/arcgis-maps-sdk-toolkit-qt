@@ -154,7 +154,7 @@ private:
   void addStartingPoint(ArcGISFeature* identifiedFeature, const Point& mapPoint);
   void setupUtilityNetworks();
   void applyStartingPointWarnings();
-  void handleArcGISAuthenticationChallenge(Esri::ArcGISRuntime::Authentication::ArcGISAuthenticationChallenge* challenge) override;
+  void handleArcGISAuthenticationChallenge(Authentication::ArcGISAuthenticationChallenge* challenge) override;
 
   QObject* m_geoView = nullptr;
   QObject* m_startingPointParent = nullptr;
