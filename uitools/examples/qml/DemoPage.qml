@@ -104,7 +104,7 @@ Control {
         anchors.centerIn: demoPage
         active: !handlesOwnAuthentication
         sourceComponent: Component {
-            AuthenticationView { }
+            Authenticator { }
         }
     }
 
