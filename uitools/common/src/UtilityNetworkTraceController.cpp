@@ -193,7 +193,10 @@ UtilityNetworkTraceController::UtilityNetworkTraceController(QObject* parent) :
   ArcGISRuntimeEnvironment::authenticationManager()->setArcGISAuthenticationChallengeHandler(this);
 }
 
-UtilityNetworkTraceController::~UtilityNetworkTraceController() = default;
+UtilityNetworkTraceController::~UtilityNetworkTraceController()
+{
+  ArcGISRuntimeEnvironment::authenticationManager()->setArcGISAuthenticationChallengeHandler(nullptr);
+}
 
 /*!
   \brief Returns the \c GeoView as a \c QObject.
