@@ -20,7 +20,7 @@
 #include <QObject>
 
 // ArcGIS Maps SDK headers
-#include "Authentication/ArcGISAuthenticationChallengeHandler.h"
+#include <Authentication/ArcGISAuthenticationChallengeHandler.h>
 #include <Point.h>
 
 // Other headers
