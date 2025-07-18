@@ -20,8 +20,12 @@
 #include "UtilityNetworkTraceController.h"
 
 // ArcGISRuntime headers
+#include <ArcGISRuntimeEnvironment.h>
 #include <ArcGISFeature.h>
 #include <ArcGISFeatureListModel.h>
+#include <Authentication/AuthenticationManager.h>
+#include <Authentication/ArcGISAuthenticationChallenge.h>
+#include <Authentication/TokenCredential.h>
 #include <AttributeListModel.h>
 #include <Error.h>
 #include <FeatureLayer.h>
@@ -82,6 +86,8 @@
 
 // std headers
 #include <cmath>
+
+using namespace Esri::ArcGISRuntime::Authentication;
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
@@ -159,7 +165,7 @@ void connectToGeoView(GeoViewToolkit* geoView, UtilityNetworkTraceController* se
   \endlist
  */
 UtilityNetworkTraceController::UtilityNetworkTraceController(QObject* parent) :
-  QObject(parent),
+  ArcGISAuthenticationChallengeHandler(parent),
   m_startingPointParent(new QObject(this)),
   m_startingPointsGraphicsOverlay(new GraphicsOverlay(m_startingPointParent)),
   m_startingPoints(new UtilityNetworkTraceStartingPointsModel(this)),
@@ -184,7 +190,7 @@ UtilityNetworkTraceController::UtilityNetworkTraceController(QObject* parent) :
                                                                this),
                                           this))
 {
-  //
+  ArcGISRuntimeEnvironment::authenticationManager()->setArcGISAuthenticationChallengeHandler(this);
 }
 
 UtilityNetworkTraceController::~UtilityNetworkTraceController() = default;
@@ -334,7 +340,10 @@ void UtilityNetworkTraceController::setSelectedUtilityNetwork(UtilityNetwork* se
   if (m_selectedUtilityNetwork == selectedUtilityNetwork)
     return;
 
-  disconnect(m_selectedUtilityNetwork, nullptr, this, nullptr);
+  if (m_selectedUtilityNetwork != nullptr)
+  {
+    disconnect(m_selectedUtilityNetwork, nullptr, this, nullptr);
+  }
 
   m_selectedUtilityNetwork = selectedUtilityNetwork;
 
@@ -904,6 +913,17 @@ void UtilityNetworkTraceController::applyStartingPointWarnings()
     setIsInsufficientStartingPoints(m_startingPoints->size() < minimum);
     setIsAboveMinimumStartingPoint(m_startingPoints->size() > minimum);
   }
+}
+
+void UtilityNetworkTraceController::handleArcGISAuthenticationChallenge(ArcGISAuthenticationChallenge* challenge)
+{
+  TokenCredential::createWithChallengeAsync(challenge, "viewer01", "I68VGU^nMurF", {}, this).then(this, [challenge](TokenCredential* tokenCredential)
+  {
+    challenge->continueWithCredential(tokenCredential);
+  }).onFailed(this, [challenge](const ErrorException& e)
+  {
+    challenge->continueWithError(e.error());
+  });
 }
 
 } // Esri::ArcGISRuntime::Toolkit
