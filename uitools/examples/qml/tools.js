@@ -64,8 +64,8 @@ const TOOLS = [
     "url": "ScalebarDemoForm.qml"
   },
   {
-    "name": "Authentication view",
-    "url": "AuthenticationViewDemoForm.qml",
+    "name": "Authenticator",
+    "url": "AuthenticatorDemoForm.qml",
     "handlesOwnAuthentication" : true
   }
 ];

@@ -14,6 +14,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
+#ifndef QRT_DISABLE_DEPRECATED_WARNINGS
+#define QRT_DISABLE_DEPRECATED_WARNINGS
+#endif
 #include "PopupAttachmentItem.h"
 
 // Qt headers
@@ -140,7 +143,7 @@ void PopupAttachmentItem::downloadAttachment()
 {
   m_fetchingAttachment = true;
   emit popupAttachmentItemChanged();
-  m_popupAttachment->attachment()->fetchDataAsync().then([this] (const QByteArray& attachmentData)
+  m_popupAttachment->attachment()->fetchDataAsync().then(this, [this] (const QByteArray& attachmentData)
   {
     if (attachmentData.isEmpty())
     {

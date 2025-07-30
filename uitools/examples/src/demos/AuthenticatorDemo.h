@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2022 Esri
+ *  Copyright 2012-2025 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,25 +14,25 @@
  *  limitations under the License.
  ******************************************************************************/
 
-#ifndef ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_AUTHENTICATIONVIEWDEMO_H
-#define ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_AUTHENTICATIONVIEWDEMO_H
+#ifndef ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_AUTHENTICATORDEMO_H
+#define ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_AUTHENTICATORDEMO_H
 
 #include "BaseDemo.h"
 
 #include <QObject>
 #include <QQmlEngine>
 
-class AuthenticationViewDemo : public BaseDemo
+class AuthenticatorDemo : public BaseDemo
 {
   Q_OBJECT
   QML_ELEMENT
 public:
-  AuthenticationViewDemo(QObject* parent = nullptr);
-  ~AuthenticationViewDemo();
+  AuthenticatorDemo(QObject* parent = nullptr);
+  ~AuthenticatorDemo();
 
 protected:
   Esri::ArcGISRuntime::Map* initMap_(QObject* parent) const override;
   Esri::ArcGISRuntime::Scene* initScene_(QObject* parent) const override;
 };
 
-#endif // ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_AUTHENTICATIONVIEWDEMO_H
+#endif // ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_AUTHENTICATORDEMO_H

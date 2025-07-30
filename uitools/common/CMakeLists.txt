@@ -14,7 +14,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_SOURCES
-    ../common/src/ArcGISAuthenticationController.cpp
+    ../common/src/AuthenticatorController.cpp
     ../common/src/AuthenticationController.cpp
     ../common/src/AttachmentsPopupElementViewController.cpp
     ../common/src/BarChartPopupMediaItem.cpp
@@ -27,6 +27,7 @@ set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_SOURCES
     ../common/src/CoordinateConversionOption.cpp
     ../common/src/CoordinateConversionResult.cpp
     ../common/src/CoordinateOptionDefaults.cpp
+    ../common/src/CustomOAuth2AuthorizationCodeFlow.cpp
     ../common/src/FieldsPopupElementViewController.cpp
     ../common/src/FloorFilterController.cpp
     ../common/src/FloorFilterFacilityItem.cpp
@@ -67,7 +68,7 @@ set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_SOURCES
 )
 
 set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_HEADERS
-    ../common/src/ArcGISAuthenticationController.h
+    ../common/src/AuthenticatorController.h
     ../common/src/AuthenticationController.h
     ../common/src/AttachmentsPopupElementViewController.h
     ../common/src/BarChartPopupMediaItem.h
@@ -80,6 +81,7 @@ set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_HEADERS
     ../common/src/CoordinateConversionOption.h
     ../common/src/CoordinateConversionResult.h
     ../common/src/CoordinateOptionDefaults.h
+    ../common/src/CustomOAuth2AuthorizationCodeFlow.h
     ../common/src/FieldsPopupElementViewController.h
     ../common/src/FloorFilterController.h
     ../common/src/FloorFilterFacilityItem.h

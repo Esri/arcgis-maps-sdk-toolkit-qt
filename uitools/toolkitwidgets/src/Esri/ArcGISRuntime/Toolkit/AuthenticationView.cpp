@@ -14,9 +14,15 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
+#ifndef QRT_DISABLE_DEPRECATED_WARNINGS
+#define QRT_DISABLE_DEPRECATED_WARNINGS
+#endif
 #include "AuthenticationView.h"
 
 #include "ui_AuthenticationView.h"
+
+// ArcGISRuntime headers
+#include <CoreTypes.h>
 
 // Toolkit widget headers
 #include "Internal/ClientCertificateView.h"
@@ -78,8 +84,8 @@ namespace Esri::ArcGISRuntime::Toolkit {
   \endlist
 
   \note OAuth 2.0 uses QWebEngineView. To use OAuth you must add \c{QT += webenginewidgets}
-        to \c{qmake}.
-        See \l{https://doc.qt.io/qt-5/qwebengineview.html}{QWebEngineView}.
+  to \c{qmake}.
+  See \l{https://doc.qt.io/qt-5/qwebengineview.html}{QWebEngineView}.
  */
 
   /*!
@@ -95,8 +101,8 @@ namespace Esri::ArcGISRuntime::Toolkit {
   }
 
   /*!
-  \internal
- */
+    \internal
+   */
   AuthenticationView::AuthenticationView(AuthenticationController* controller, QWidget* parent) :
     QDialog(parent),
     m_ui(new Ui::AuthenticationView)

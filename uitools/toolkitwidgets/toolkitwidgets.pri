@@ -18,7 +18,7 @@ android|ios {
     error("toolkitwidgets.pri is not usable on mobile platforms.")
 }
 
-QT += widgets webenginewidgets svg
+QT += widgets webenginewidgets svg graphs networkauth
 
 TOOLKITWIDGETS_BASE_SRC = $$PWD/src
 TOOLKITWIDGETS_TOOLKIT_SRC = $$TOOLKITWIDGETS_BASE_SRC/Esri/ArcGISRuntime/Toolkit

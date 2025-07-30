@@ -20,6 +20,7 @@
 #include <QObject>
 
 // ArcGIS Maps SDK headers
+#include <Authentication/ArcGISAuthenticationChallengeHandler.h>
 #include <Point.h>
 
 // Other headers
@@ -53,7 +54,7 @@ class UtilityNetworkFunctionTraceResultsModel;
 class UtilityNetworkTraceStartingPoint;
 class UtilityNetworkTraceStartingPointsModel;
 
-class UtilityNetworkTraceController : public QObject
+class UtilityNetworkTraceController : public Authentication::ArcGISAuthenticationChallengeHandler
 {
   Q_OBJECT
   Q_PROPERTY(QObject* geoView READ geoView WRITE setGeoView NOTIFY geoViewChanged)
@@ -153,6 +154,7 @@ private:
   void addStartingPoint(ArcGISFeature* identifiedFeature, const Point& mapPoint);
   void setupUtilityNetworks();
   void applyStartingPointWarnings();
+  void handleArcGISAuthenticationChallenge(Authentication::ArcGISAuthenticationChallenge* challenge) override;
 
   QObject* m_geoView = nullptr;
   QObject* m_startingPointParent = nullptr;

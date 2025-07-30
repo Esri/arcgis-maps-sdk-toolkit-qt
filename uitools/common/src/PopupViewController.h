@@ -21,7 +21,7 @@
 #include <QObject>
 #include <QPointer>
 
-// Maps SDK headers
+// STL headers
 #include <Deprecated.h>
 #include <Popup.h>
 #include <PopupElement.h>
@@ -29,7 +29,6 @@
 // Other headers
 #include "GenericListModel.h"
 
-Q_MOC_INCLUDE("PopupAttachmentListModel.h")
 Q_MOC_INCLUDE("PopupManager.h")
 
 namespace Esri::ArcGISRuntime {
@@ -72,7 +71,7 @@ public:
 
   QAbstractListModel* displayFields() const;
 
-  PopupAttachmentListModel* attachments() const;
+  QAbstractListModel* attachments() const;
 
   QString title() const;
 
@@ -110,6 +109,7 @@ private:
   int fieldCount() const;
 
   int attachmentCount() const;
+  PopupAttachmentListModel* popupAttachmentListModel_() const;
 
 private:
   QPointer<PopupManager> m_popupManager;

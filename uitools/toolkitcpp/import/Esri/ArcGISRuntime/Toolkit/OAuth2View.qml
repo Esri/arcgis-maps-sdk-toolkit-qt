@@ -57,7 +57,7 @@ Dialog {
                 forceActiveFocus();
                 webViewLoaded_();
             } else if (loadRequest.status === WebView.LoadFailedStatus) {
-                controller.cancelWithError("Failed to load");
+                controller.cancelWithError("Failed to load", html);
             }
         }
 

@@ -14,6 +14,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
+#ifndef QRT_DISABLE_DEPRECATED_WARNINGS
+#define QRT_DISABLE_DEPRECATED_WARNINGS
+#endif
 #include "BasemapGalleryController.h"
 
 // Toolkit headers
@@ -55,8 +58,8 @@ namespace Esri::ArcGISRuntime::Toolkit {
       \internal
       Takes a map or scene, and connects to it and its basemap.
       Emits a basemapChanged signal when:
-        - The map/scene basemapChanged signal fires.
-        - The basemap load status has changed.
+      - The map/scene basemapChanged signal fires.
+      - The basemap load status has changed.
 
       We automatically disconnect from the map/scene's old basemap if the
       map/scene basemapChanged signal is fired.
@@ -140,7 +143,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
       1. We listen for GalleryItem changes.
       2. We force the basemap to load if not already.
       3. We emit BasemapGalleryController::currentBasemapChanged if the current basemap was
-         added to the gallery.
+      added to the gallery.
      */
     void onBasemapAddedToGallery(BasemapGalleryController* self, GenericListModel* gallery, const QModelIndex& index, BasemapGalleryItem* galleryItem)
     {
@@ -183,7 +186,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
       1. We disconnect from the GalleryItem.
       2. We emit BasemapGalleryController::currentBasemapChanged if the current basemap was
-         removed from the gallery.
+      removed from the gallery.
       3. We delete the GalleryItem if we are the parent.
      */
     void onBasemapRemovedFromGallery(BasemapGalleryController* self, BasemapGalleryItem* galleryItem)
@@ -253,7 +256,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
                          if (!e.isEmpty())
                            return;
 
-                         portal->fetchDeveloperBasemapsAsync().then(
+                         portal->fetchDeveloperBasemapsAsync().then(self,
                          [portal, self]()
                          {
                            // Sort and append the basemaps to the gallery.
@@ -265,7 +268,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
                          if (qobject_cast<Scene*>(self->geoModel()))
                          {
-                           portal->fetch3DBasemapsAsync().then(
+                           portal->fetch3DBasemapsAsync().then(self,
                                  [portal, self]()
                            {
                              // Sort and append the basemaps to the gallery.
@@ -428,7 +431,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
                  }
                  else
                  {
-                   m_portal->fetchBasemapsAsync().then(
+                   m_portal->fetchBasemapsAsync().then(this,
                    [this]()
                    {
                      BasemapListModel* basemaps = m_portal->basemaps();
@@ -448,7 +451,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
                    }
                    else
                    {
-                     m_portal->fetch3DBasemapsAsync().then(
+                     m_portal->fetch3DBasemapsAsync().then(this,
                      [this]()
                      {
                        BasemapListModel* basemaps = m_portal->basemaps3D();

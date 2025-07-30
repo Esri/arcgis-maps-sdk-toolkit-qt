@@ -19,12 +19,15 @@
 // Qt headers
 #include <QObject>
 
-// ArcGIS Maps SDK headers
-#include <CoreTypes.h>
+// STL headers
 #include <LinearUnit.h>
 
 // Other headers
 #include "GeoViews.h"
+
+namespace Esri::ArcGISRuntime {
+  enum class UnitSystem;
+}
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
@@ -61,7 +64,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
   private:
     MapViewToolkit* m_mapView{nullptr};
-    UnitSystem m_unitSystem{UnitSystem::Metric};
+    UnitSystem m_unitSystem;
     LinearUnit m_baseUnit{LinearUnitId::Meters};
   };
 

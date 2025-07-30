@@ -343,14 +343,8 @@ Pane {
                     timerOnEntered.start();
                 }
 
-                // When mouse exits thumbnail area, use timer to delay hiding of tooltip.
                 onExited: {
-                    timerOnEntered.stop();
-                    // Create a definition for the hideTooltipFn property of timerOnExited
-                    timerOnExited.hideTooltipFn = () => {
-                        basemapDelegate.ToolTip.visible = false;
-                    }
-                    timerOnExited.start();
+                    basemapDelegate.ToolTip.visible = false;
                 }
             }
         }
@@ -367,19 +361,6 @@ Pane {
         onTriggered: {
             if (showTooltipFn)
                 showTooltipFn();
-        }
-    }
-
-    Timer {
-        id: timerOnExited
-
-        property var hideTooltipFn: null;
-
-        interval: Qt.styleHints.mousePressAndHoldInterval * 1.9
-        repeat: false
-        onTriggered: {
-            if (hideTooltipFn)
-                hideTooltipFn();
         }
     }
 

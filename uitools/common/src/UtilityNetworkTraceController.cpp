@@ -14,11 +14,18 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
+#ifndef QRT_DISABLE_DEPRECATED_WARNINGS
+#define QRT_DISABLE_DEPRECATED_WARNINGS
+#endif
 #include "UtilityNetworkTraceController.h"
 
 // ArcGISRuntime headers
+#include <ArcGISRuntimeEnvironment.h>
 #include <ArcGISFeature.h>
 #include <ArcGISFeatureListModel.h>
+#include <Authentication/AuthenticationManager.h>
+#include <Authentication/ArcGISAuthenticationChallenge.h>
+#include <Authentication/TokenCredential.h>
 #include <AttributeListModel.h>
 #include <Error.h>
 #include <FeatureLayer.h>
@@ -80,17 +87,19 @@
 // std headers
 #include <cmath>
 
+using namespace Esri::ArcGISRuntime::Authentication;
+
 namespace Esri::ArcGISRuntime::Toolkit {
 
 namespace {
 /*!
-     \internal
-     \brief Manages the connection between Controller \a self and GeoView \a geoView.
-     Attempts to call functor `f` if/when the UtilityNetwork within the geoModel is loaded.
-     This may also cause the geoModel itself to load.
-     Will continue to call `f` every time a mapChanged signal is triggered on
-     the GeoView.
-     */
+  \internal
+  \brief Manages the connection between Controller \a self and GeoView \a geoView.
+  Attempts to call functor `f` if/when the UtilityNetwork within the geoModel is loaded.
+  This may also cause the geoModel itself to load.
+  Will continue to call `f` every time a mapChanged signal is triggered on
+  the GeoView.
+ */
 template <typename GeoViewToolkit, typename Func>
 void connectToGeoView(GeoViewToolkit* geoView, UtilityNetworkTraceController* self, Func&& f)
 {
@@ -143,20 +152,20 @@ void connectToGeoView(GeoViewToolkit* geoView, UtilityNetworkTraceController* se
 }
 
 /*!
-\class Esri::ArcGISRuntime::Toolkit::UtilityNetworkTraceController
-\ingroup ArcGISQtToolkitUiCppControllers
-\internal
-This class is an internal implementation detail and is subject to change.
-*/
+  \class Esri::ArcGISRuntime::Toolkit::UtilityNetworkTraceController
+  \ingroup ArcGISQtToolkitUiCppControllers
+  \internal
+  This class is an internal implementation detail and is subject to change.
+ */
 
 /*!
-\brief Constructor.
-\list
-  \li \a parent owning parent object.
-\endlist
-*/
+  \brief Constructor.
+  \list
+    \li \a parent owning parent object.
+  \endlist
+ */
 UtilityNetworkTraceController::UtilityNetworkTraceController(QObject* parent) :
-  QObject(parent),
+  ArcGISAuthenticationChallengeHandler(parent),
   m_startingPointParent(new QObject(this)),
   m_startingPointsGraphicsOverlay(new GraphicsOverlay(m_startingPointParent)),
   m_startingPoints(new UtilityNetworkTraceStartingPointsModel(this)),
@@ -181,10 +190,13 @@ UtilityNetworkTraceController::UtilityNetworkTraceController(QObject* parent) :
                                                                this),
                                           this))
 {
-  //
+  ArcGISRuntimeEnvironment::authenticationManager()->setArcGISAuthenticationChallengeHandler(this);
 }
 
-UtilityNetworkTraceController::~UtilityNetworkTraceController() = default;
+UtilityNetworkTraceController::~UtilityNetworkTraceController()
+{
+  ArcGISRuntimeEnvironment::authenticationManager()->setArcGISAuthenticationChallengeHandler(nullptr);
+}
 
 /*!
   \brief Returns the \c GeoView as a \c QObject.
@@ -198,11 +210,11 @@ QObject* UtilityNetworkTraceController::geoView() const
   \brief Set the GeoView object this Controller uses.
 
   Internally this is cast to a \c MapView using \c qobject_cast,
-      which is why the paremeter is of form \c QObject and not \c GeoView.
+  which is why the paremeter is of form \c QObject and not \c GeoView.
 
   \list
     \li \a geoView \c Object which must inherit from \c{GeoView*} and
-        \c{QObject*}.
+      \c{QObject*}.
   \endlist
  */
 void UtilityNetworkTraceController::setGeoView(QObject* geoView)
@@ -331,7 +343,10 @@ void UtilityNetworkTraceController::setSelectedUtilityNetwork(UtilityNetwork* se
   if (m_selectedUtilityNetwork == selectedUtilityNetwork)
     return;
 
-  disconnect(m_selectedUtilityNetwork, nullptr, this, nullptr);
+  if (m_selectedUtilityNetwork != nullptr)
+  {
+    disconnect(m_selectedUtilityNetwork, nullptr, this, nullptr);
+  }
 
   m_selectedUtilityNetwork = selectedUtilityNetwork;
 
@@ -901,6 +916,17 @@ void UtilityNetworkTraceController::applyStartingPointWarnings()
     setIsInsufficientStartingPoints(m_startingPoints->size() < minimum);
     setIsAboveMinimumStartingPoint(m_startingPoints->size() > minimum);
   }
+}
+
+void UtilityNetworkTraceController::handleArcGISAuthenticationChallenge(ArcGISAuthenticationChallenge* challenge)
+{
+  TokenCredential::createWithChallengeAsync(challenge, "viewer01", "I68VGU^nMurF", {}, this).then(this, [challenge](TokenCredential* tokenCredential)
+  {
+    challenge->continueWithCredential(tokenCredential);
+  }).onFailed(this, [challenge](const ErrorException& e)
+  {
+    challenge->continueWithError(e.error());
+  });
 }
 
 } // Esri::ArcGISRuntime::Toolkit

@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2022 Esri
+ *  Copyright 2012-2025 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,26 +14,28 @@
  *  limitations under the License.
  ******************************************************************************/
 
-import QtQuick
-import QtQuick.Controls
-import Esri.ArcGISRuntime
-import Esri.ArcGISRuntime.Toolkit
-import DemoApp
+#include "AuthenticatorDemo.h"
 
-DemoPage {
-    mapViewContents: Component {
-        MapView {
-            id: view
+#include "Map.h"
+#include "PortalItem.h"
+#include "Scene.h"
 
-            //! [Set up Authentication View QML]
-            AuthenticationView {
-                anchors.centerIn: parent
-            }
-            //! [Set up Authentication View QML]
+AuthenticatorDemo::AuthenticatorDemo(QObject* parent) :
+  BaseDemo(parent)
+{
+}
 
-            AuthenticationViewDemo {
-                geoView: view;
-            }
-        }
-    }
+AuthenticatorDemo::~AuthenticatorDemo() = default;
+
+Esri::ArcGISRuntime::Map* AuthenticatorDemo::initMap_(QObject* parent) const
+{
+  //return a map that requires authentication
+  return new Esri::ArcGISRuntime::Map(
+      new Esri::ArcGISRuntime::PortalItem(QStringLiteral("e5039444ef3c48b8a8fdc9227f9be7c1"), parent),
+      parent);
+}
+
+Esri::ArcGISRuntime::Scene* AuthenticatorDemo::initScene_(QObject* /*parent*/) const
+{
+  return nullptr;
 }

@@ -20,7 +20,7 @@
 // Qt headers
 #include <QObject>
 
-// STL headers
+// Maps SDK headers
 #include <PopupTypes.h>
 
 class QmlEnums : public QObject

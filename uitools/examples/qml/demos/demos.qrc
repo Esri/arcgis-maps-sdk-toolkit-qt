@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>AuthenticationViewDemoForm.qml</file>
+        <file>AuthenticatorDemoForm.qml</file>
         <file>BasemapGalleryDemoForm.qml</file>
         <file>BookmarksViewDemoForm.qml</file>
         <file>CalloutDemoForm.qml</file>
