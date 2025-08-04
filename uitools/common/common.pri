@@ -15,7 +15,7 @@
 # file guard to avoid double inclusion
 !defined(TOOLKIT_COMMON_INCLUDED, var) {
 
-    QT += qml graphs
+    QT += qml
 
     TOOLKIT_COMMON_SRC = $$PWD/src
 
