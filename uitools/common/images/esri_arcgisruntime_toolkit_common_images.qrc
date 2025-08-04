@@ -1,0 +1,44 @@
+<RCC>
+    <qresource prefix="Esri/ArcGISRuntime/Toolkit">
+        <file>basemap.svg</file>
+        <file>chevron-left.svg</file>
+        <file>chevrons-left.svg</file>
+        <file>chevrons-right.svg</file>
+        <file>chevron-down.svg</file>
+        <file>chevron-up.svg</file>
+        <file>compass.svg</file>
+        <file>cursor-click.svg</file>
+        <file>edit-attributes.svg</file>
+        <file>ellipsis.svg</file>
+        <file>flash.svg</file>
+        <file>forward.svg</file>
+        <file>information.svg</file>
+        <file>layer-zoom-to.svg</file>
+        <file>organization.svg</file>
+        <file>pin-tear.svg</file>
+        <file>pin-tear.png</file>
+        <file>pause.svg</file>
+        <file>pin.svg</file>
+        <file>play.svg</file>
+        <file>plus-circle.svg</file>
+        <file>reverse.svg</file>
+        <file>search.svg</file>
+        <file>x.svg</file>
+        <file>zoom-to-object.svg</file>
+        <file>point.svg</file>
+        <file>polygon.svg</file>
+        <file>polyline.svg</file>
+        <file>redo.svg</file>
+        <file>undo.svg</file>
+        <file>check.svg</file>
+        <file>trash.svg</file>
+        <file>cursor.svg</file>
+        <file>freehand-area.svg</file>
+        <file>freehand-line.svg</file>
+        <file>video.svg</file>
+        <file>other.svg</file>
+        <file>image.svg</file>
+        <file>file.svg</file>
+        <file>arrow-circle-down.svg</file>
+    </qresource>
+</RCC>

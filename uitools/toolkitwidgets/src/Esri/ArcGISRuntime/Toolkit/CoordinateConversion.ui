@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CoordinateConversion</class>
+ <widget class="QFrame" name="CoordinateConversion">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>355</width>
+    <height>184</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Frame</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QPushButton" name="zoomTo">
+     <property name="text">
+      <string>Zoom to</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../../common/images/esri_arcgisruntime_toolkit_common_images.qrc">
+       <normaloff>:/Esri/ArcGISRuntime/Toolkit/layer-zoom-to.svg</normaloff>:/Esri/ArcGISRuntime/Toolkit/layer-zoom-to.svg</iconset>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QPushButton" name="flash">
+     <property name="text">
+      <string>Flash</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../../common/images/esri_arcgisruntime_toolkit_common_images.qrc">
+       <normaloff>:/Esri/ArcGISRuntime/Toolkit/flash.svg</normaloff>:/Esri/ArcGISRuntime/Toolkit/flash.svg</iconset>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QCheckBox" name="captureMode">
+     <property name="text">
+      <string>Capture</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../../common/images/esri_arcgisruntime_toolkit_common_images.qrc">
+       <normaloff>:/Esri/ArcGISRuntime/Toolkit/cursor-click.svg</normaloff>:/Esri/ArcGISRuntime/Toolkit/cursor-click.svg</iconset>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>55</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="0" colspan="4">
+    <widget class="QTableView" name="resultsView">
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+     </property>
+     <property name="sizeAdjustPolicy">
+      <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents</enum>
+     </property>
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+     <attribute name="verticalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../../common/images/esri_arcgisruntime_toolkit_common_images.qrc"/>
+ </resources>
+ <connections/>
+</ui>
