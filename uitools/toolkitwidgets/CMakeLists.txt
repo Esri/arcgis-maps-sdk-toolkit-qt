@@ -93,6 +93,7 @@ target_link_libraries(libtoolkitwidgets PRIVATE
     Qt6::Svg
     Qt6::WebEngineWidgets
     Qt6::Widgets
+    Qt6::Graphs
     Qt6::NetworkAuth
     ArcGISRuntime::Cpp
 )
