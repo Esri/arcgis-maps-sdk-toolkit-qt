@@ -20,7 +20,7 @@
 #include <QObject>
 
 // Toolkit headers
-#include "Internal/GeoViews.h"
+#include "GeoViews.h"
 
 namespace Esri::ArcGISRuntime {
 class FreehandTool;

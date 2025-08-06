@@ -127,8 +127,8 @@ Future enhancement for resize:
                 ButtonGroup.group: buttonGroup
                 checkable: true
                 Layout.fillHeight: true
-                Layout.alignment: Qt.AlignRight
-                icon.source: "images/cursor.svg"
+                Layout.alignment: Qt.AlignRight            
+                icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/cursor.svg"
                 display: AbstractButton.IconOnly
                 onCheckedChanged: {
                     if (checked)
@@ -146,7 +146,7 @@ Future enhancement for resize:
                 checkable: true
                 Layout.fillHeight: true
                 Layout.alignment: Qt.AlignCenter
-                icon.source: "images/point.svg"
+                icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/point.svg"
                 enabled: !controller.isEditing || checked
                 display: AbstractButton.IconOnly
                 onCheckedChanged: {
@@ -161,7 +161,7 @@ Future enhancement for resize:
                 checkable: true
                 Layout.fillHeight: true
                 Layout.alignment: Qt.AlignCenter
-                icon.source: "images/polyline.svg"
+                icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/polyline.svg"
                 enabled: !controller.isEditing || checked
                 display: AbstractButton.IconOnly
                 onCheckedChanged: {
@@ -176,7 +176,7 @@ Future enhancement for resize:
                 checkable: true
                 Layout.fillHeight: true
                 Layout.alignment: Qt.AlignCenter
-                icon.source: "images/polygon.svg"
+                icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/polygon.svg"
                 enabled: !controller.isEditing || checked
                 display: AbstractButton.IconOnly
                 onCheckedChanged: {
@@ -191,7 +191,7 @@ Future enhancement for resize:
                 checkable: true
                 Layout.fillHeight: true
                 Layout.alignment: Qt.AlignCenter
-                icon.source: "images/freehand-line.svg"
+                icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/freehand-line.svg"
                 enabled: !controller.isEditing || checked
                 display: AbstractButton.IconOnly
                 onCheckedChanged: {
@@ -206,7 +206,7 @@ Future enhancement for resize:
                 checkable: true
                 Layout.fillHeight: true
                 Layout.alignment: Qt.AlignCenter
-                icon.source: "images/freehand-area.svg"
+                icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/freehand-area.svg"
                 enabled: !controller.isEditing || checked
                 display: AbstractButton.IconOnly
                 onCheckedChanged: {
@@ -224,7 +224,7 @@ Future enhancement for resize:
                 Layout.fillHeight: true
                 Layout.alignment: Qt.AlignCenter
                 enabled: controller.canUndo
-                icon.source: "images/undo.svg"
+                icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/undo.svg"
                 display: AbstractButton.IconOnly
                 onClicked: {
                     controller.undo();
@@ -236,7 +236,7 @@ Future enhancement for resize:
                 Layout.fillHeight: true
                 Layout.alignment: Qt.AlignCenter
                 enabled: controller.canRedo
-                icon.source: "images/redo.svg"
+                icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/redo.svg"
                 display: AbstractButton.IconOnly
                 onClicked: {
                     controller.redo();
@@ -247,7 +247,7 @@ Future enhancement for resize:
                 checkable: false
                 Layout.fillHeight: true
                 Layout.alignment: Qt.AlignCenter
-                icon.source: "images/trash.svg"
+                icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/trash.svg"
                 display: AbstractButton.IconOnly
                 onClicked: {
                     controller.clearAll();
@@ -257,7 +257,7 @@ Future enhancement for resize:
             //                checkable: false
             //                Layout.fillHeight: true
             //                Layout.alignment: Qt.AlignCenter
-            //                icon.source: "images/check.svg"
+            //                icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/check.svg"
             //                display: AbstractButton.IconOnly
             //                onClicked: {
             //                    controller.save();

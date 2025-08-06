@@ -30,6 +30,7 @@
 #include <GeometryEditorTypes.h>
 #include <GeometryEditorVertex.h>
 #include <GeometryTypes.h>
+#include <GeoViews.h>
 #include <Graphic.h>
 #include <GraphicListModel.h>
 #include <GraphicsOverlay.h>
