@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -73,20 +74,23 @@ Scene* PopupViewDemo::initScene_(QObject* parent) const
   return scene;
 }
 
-QObject* PopupViewDemo::popupManager_()
+Popup* PopupViewDemo::popup()
 {
-  return m_popupManager;
+  return m_popup;
 }
 
-void PopupViewDemo::setPopupManager_(QObject* popupManager)
+void PopupViewDemo::setPopup(Popup* popup)
 {
-  if (popupManager == m_popupManager)
+  if (m_popup == popup)
     return;
 
-  auto oldManager = m_popupManager;
-  m_popupManager = popupManager;
-  emit popupManagerChanged();
-  delete oldManager;
+  if (m_popup)
+  {
+    m_popup->deleteLater();
+  }
+
+  m_popup = popup;
+  emit popupChanged();
 }
 
 void PopupViewDemo::setUp()
@@ -96,7 +100,7 @@ void PopupViewDemo::setUp()
           using ViewType = std::remove_pointer_t<decltype(geoView)>;
           connect(geoView, &ViewType::mouseClicked, this, [this, geoView](QMouseEvent& mouse)
                   {
-                    auto layer = geoModel()->operationalLayers()->first();
+              auto layer = geoModel()->operationalLayers()->at(0);
                     if (layer->layerType() == LayerType::FeatureLayer)
                     {
                       m_featureLayer = static_cast<FeatureLayer*>(layer);
@@ -117,30 +121,29 @@ void PopupViewDemo::setUp()
                         m_featureLayer->clearSelection();
 
                         const auto geoElements = identifyResult->geoElements();
-                        for (auto element : geoElements)
-                        {
-                          if (nullptr != element)
-                          {
-                            // add the element to the list and take ownership of it.
-                            Feature* feature = static_cast<Feature*>(element);
-                            m_featureLayer->selectFeature(feature);
-                          }
-                        }
 
-                        if (identifyResult->geoElements().length() == 0)
+                        if (geoElements.length() == 0)
                         {
                           qDebug() << "no geoElements";
                           return;
                         }
 
-                        Popup* popup = new Popup(identifyResult->geoElements().first());
-                        popup->popupDefinition()->setTitle(identifyResult->layerContent()->name());
+                        const auto popup = new Popup(geoElements.first(), this);
+                        popup->setParent(this);
 
-                        PopupManager* popupManager = new PopupManager{popup, this};
-                        popup->setParent(popupManager);
+                        if (popup->title().isEmpty())
+                        {
+                          popup->popupDefinition()->setTitle(identifyResult->layerContent()->name());
+                        }
 
-                        setPopupManager_(popupManager);
-                        emit popupManagerChanged();
+                        if (auto element = popup->geoElement())
+                        {
+                          Feature* feature = static_cast<Feature*>(element);
+                          m_featureLayer->selectFeature(feature);
+                        }
+
+                        setPopup(popup);
+                        emit popupChanged();
                       });
                     }
                     else
