@@ -131,9 +131,13 @@ void PopupViewDemo::setUp()
                         const auto popup = new Popup(geoElements.first(), this);
                         popup->setParent(this);
 
+                        if (popup->title().isEmpty())
+                        {
+                          popup->popupDefinition()->setTitle(identifyResult->layerContent()->name());
+                        }
+
                         if (auto element = popup->geoElement())
                         {
-                          // add the element to the list and take ownership of it.
                           Feature* feature = static_cast<Feature*>(element);
                           m_featureLayer->selectFeature(feature);
                         }
