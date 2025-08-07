@@ -17,17 +17,23 @@
 #ifndef ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_POPUPVIEWDEMO_H
 #define ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_POPUPVIEWDEMO_H
 
-#include "BaseDemo.h"
+// C++ API headers
 #include "FeatureLayer.h"
+#include "Popup.h"
 #include "PopupManager.h"
 
+// Qt headers
 #include <QObject>
 #include <QQmlEngine>
+
+// Other headers
+#include "BaseDemo.h"
 
 class PopupViewDemo : public BaseDemo
 {
   Q_OBJECT
-  Q_PROPERTY(QObject* popupManager READ popupManager_ WRITE setPopupManager_ NOTIFY popupManagerChanged)
+  Q_PROPERTY(Esri::ArcGISRuntime::Popup* popup READ popup WRITE setPopup NOTIFY popupChanged)
+
   QML_ELEMENT
 public:
   Q_INVOKABLE PopupViewDemo(QObject* parent = nullptr);
@@ -35,21 +41,20 @@ public:
 
 protected:
   Esri::ArcGISRuntime::Map* initMap_(QObject* parent) const override;
-  Esri::ArcGISRuntime::Scene* initScene_(QObject* parent) const override;
 
 signals:
-  void popupManagerChanged();
+  void popupChanged();
 
 private slots:
   void setUp();
 
 private:
-  QObject* popupManager_();
-  void setPopupManager_(QObject* popupManager);
+  Esri::ArcGISRuntime::Popup* popup();
+  void setPopup(Esri::ArcGISRuntime::Popup* popup);
 
 private:
   Esri::ArcGISRuntime::FeatureLayer* m_featureLayer = nullptr;
-  QObject* m_popupManager = nullptr;
+  Esri::ArcGISRuntime::Popup* m_popup = nullptr;
 };
 
 #endif // ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_POPUPVIEWDEMO_H

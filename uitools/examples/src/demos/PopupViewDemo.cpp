@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -59,34 +60,23 @@ Esri::ArcGISRuntime::Map* PopupViewDemo::initMap_(QObject* parent) const
                  parent);
 }
 
-Scene* PopupViewDemo::initScene_(QObject* parent) const
+Popup* PopupViewDemo::popup()
 {
-  Scene* scene = BaseDemo::initScene_(parent);
-  Viewpoint viewPoint(Envelope(-122.5277, 37.7204, -122.3511, 37.7956, SpatialReference(4326)));
-  scene->setInitialViewpoint(viewPoint);
-  FeatureLayer* fl = new FeatureLayer(new ServiceFeatureTable(
-                                          QUrl("https://sampleserver6.arcgisonline.com/arcgis/rest/services/"
-                                               "SF311/FeatureServer/0"),
-                                          parent),
-                                      parent);
-  scene->operationalLayers()->append(fl);
-  return scene;
+  return m_popup;
 }
 
-QObject* PopupViewDemo::popupManager_()
+void PopupViewDemo::setPopup(Popup* popup)
 {
-  return m_popupManager;
-}
-
-void PopupViewDemo::setPopupManager_(QObject* popupManager)
-{
-  if (popupManager == m_popupManager)
+  if (m_popup == popup)
     return;
 
-  auto oldManager = m_popupManager;
-  m_popupManager = popupManager;
-  emit popupManagerChanged();
-  delete oldManager;
+  if (m_popup)
+  {
+    m_popup->deleteLater();
+  }
+
+  m_popup = popup;
+  emit popupChanged();
 }
 
 void PopupViewDemo::setUp()
@@ -96,7 +86,7 @@ void PopupViewDemo::setUp()
           using ViewType = std::remove_pointer_t<decltype(geoView)>;
           connect(geoView, &ViewType::mouseClicked, this, [this, geoView](QMouseEvent& mouse)
                   {
-                    auto layer = geoModel()->operationalLayers()->first();
+              auto layer = geoModel()->operationalLayers()->at(0);
                     if (layer->layerType() == LayerType::FeatureLayer)
                     {
                       m_featureLayer = static_cast<FeatureLayer*>(layer);
@@ -116,31 +106,26 @@ void PopupViewDemo::setUp()
 
                         m_featureLayer->clearSelection();
 
-                        const auto geoElements = identifyResult->geoElements();
-                        for (auto element : geoElements)
-                        {
-                          if (nullptr != element)
-                          {
-                            // add the element to the list and take ownership of it.
-                            Feature* feature = static_cast<Feature*>(element);
-                            m_featureLayer->selectFeature(feature);
-                          }
-                        }
+                        const auto popups = identifyResult->popups();
 
-                        if (identifyResult->geoElements().length() == 0)
+                        if (popups.length() == 0)
                         {
-                          qDebug() << "no geoElements";
+                          qDebug() << "no popups";
                           return;
                         }
 
-                        Popup* popup = new Popup(identifyResult->geoElements().first());
-                        popup->popupDefinition()->setTitle(identifyResult->layerContent()->name());
+                        const auto popup = popups.first();
+                        popup->setParent(this);
 
-                        PopupManager* popupManager = new PopupManager{popup, this};
-                        popup->setParent(popupManager);
+                        if (auto element = popup->geoElement())
+                        {
+                          // add the element to the list and take ownership of it.
+                          Feature* feature = static_cast<Feature*>(element);
+                          m_featureLayer->selectFeature(feature);
+                        }
 
-                        setPopupManager_(popupManager);
-                        emit popupManagerChanged();
+                        setPopup(popup);
+                        emit popupChanged();
                       });
                     }
                     else
