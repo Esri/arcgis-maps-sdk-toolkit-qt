@@ -21,7 +21,6 @@ import Esri.ArcGISRuntime.Toolkit
 import DemoApp
 
 DemoPage {
-
     sceneViewContents: Component {
         SceneView {
             id: view
