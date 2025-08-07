@@ -60,6 +60,20 @@ Esri::ArcGISRuntime::Map* PopupViewDemo::initMap_(QObject* parent) const
                  parent);
 }
 
+Scene* PopupViewDemo::initScene_(QObject* parent) const
+{
+  Scene* scene = BaseDemo::initScene_(parent);
+  Viewpoint viewPoint(Envelope(-122.5277, 37.7204, -122.3511, 37.7956, SpatialReference(4326)));
+  scene->setInitialViewpoint(viewPoint);
+  FeatureLayer* fl = new FeatureLayer(new ServiceFeatureTable(
+                                          QUrl("https://sampleserver6.arcgisonline.com/arcgis/rest/services/"
+                                               "SF311/FeatureServer/0"),
+                                          parent),
+                                      parent);
+  scene->operationalLayers()->append(fl);
+  return scene;
+}
+
 Popup* PopupViewDemo::popup()
 {
   return m_popup;
@@ -106,15 +120,15 @@ void PopupViewDemo::setUp()
 
                         m_featureLayer->clearSelection();
 
-                        const auto popups = identifyResult->popups();
+                        const auto geoElements = identifyResult->geoElements();
 
-                        if (popups.length() == 0)
+                        if (geoElements.length() == 0)
                         {
-                          qDebug() << "no popups";
+                          qDebug() << "no geoElements";
                           return;
                         }
 
-                        const auto popup = popups.first();
+                        const auto popup = new Popup(geoElements.first(), this);
                         popup->setParent(this);
 
                         if (auto element = popup->geoElement())

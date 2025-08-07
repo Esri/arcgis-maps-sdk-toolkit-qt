@@ -41,6 +41,7 @@ public:
 
 protected:
   Esri::ArcGISRuntime::Map* initMap_(QObject* parent) const override;
+  Esri::ArcGISRuntime::Scene* initScene_(QObject* parent) const override;
 
 signals:
   void popupChanged();

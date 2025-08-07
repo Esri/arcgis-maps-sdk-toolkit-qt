@@ -22,6 +22,32 @@ import DemoApp
 
 DemoPage {
 
+    sceneViewContents: Component {
+        SceneView {
+            id: view
+
+            //! [Set up Popup View QML]
+            PopupView {
+                id:popupView
+                anchors {
+                     left: parent.left
+                     top: parent.top
+                     bottom: parent.bottom
+                }
+                visible: false
+                popup: model.popup
+            }
+            //! [Set up Popup View QML]
+
+            PopupViewDemo {
+                id: model
+                geoView : view
+                onPopupChanged: popupView.visible = true;
+            }
+        }
+    }
+
+
     mapViewContents: Component {
         MapView {
             id: view
