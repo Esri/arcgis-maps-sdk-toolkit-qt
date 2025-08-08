@@ -34,14 +34,14 @@ DemoPage {
                      bottom: parent.bottom
                 }
                 visible: false
-                popupManager: model.popupManager
+                popup: model.popup
             }
             //! [Set up Popup View QML]
 
             PopupViewDemo {
                 id: model
                 geoView : view
-                onPopupManagerChanged : popupView.visible = true;
+                onPopupChanged: popupView.visible = true;
             }
         }
     }
@@ -53,19 +53,20 @@ DemoPage {
             PopupView {
                 id:popupView
                 anchors {
-                     left: parent.left
-                     top: parent.top
-                     bottom: parent.bottom
+                    left: parent.left
+                    top: parent.top
+                    bottom: parent.bottom
                 }
                 visible: false
-                popupManager: model.popupManager
+                popup: model.popup
             }
 
             PopupViewDemo {
                 id: model
                 geoView : view
-                onPopupManagerChanged: popupView.visible = true;
+                onPopupChanged: popupView.visible = true;
             }
+
         }
     }
 }
