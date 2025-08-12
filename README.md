@@ -44,8 +44,6 @@ The following table lists the various UI components available depending on how y
 
 [Calcite style](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/main/calcite) - this feature provides visual styles that enable you to create beautiful and consistent experiences using the Calcite web style for Esri on UI controls you have in your app. These styles are QML compatible and are configured by adding them to your .qml files. The styles include options for creating Light and Dark themed UI's in you app. There are over 30 styles available that can be used on Qt controls like: Button, CheckBox, Menu, RadioButton, ToolBar, and so forth. 
 
-[Augmented Reality](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/main/augmented_reality) - these are UI components and C++ classes that provide Augmented Reality (AR) support for ARKit for iOS apps and ARCore for Android apps. AR experiences enhance the physical world with virtual content that respects real world scale, position, and orientation of a device. A `SceneView` object displays 3D geographic AR data as virtual content on top of a camera feed of the real, physical world.
-
 ## Resources
 
 * [ArcGIS Maps SDK for Qt](https://developers.arcgis.com/qt/)
