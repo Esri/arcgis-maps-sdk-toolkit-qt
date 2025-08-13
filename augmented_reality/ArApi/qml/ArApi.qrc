@@ -1,7 +1,0 @@
-<RCC>
-    <qresource prefix="/qml">
-        <file>CalibrationView.qml</file>
-        <file>CalibrationSlider.qml</file>
-        <file>ClippingView.qml</file>
-    </qresource>
-</RCC>

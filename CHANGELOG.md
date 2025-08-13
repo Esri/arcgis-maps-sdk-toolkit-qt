@@ -1,5 +1,14 @@
 # Changelog
 
+## 300.0
+
+* The augmented reality (AR) toolkit components are removed.
+
+## 200.8
+
+ * Updated authentication components.
+ * Popup UI tools now support Popup Elements.
+
 ## 200.7
 
 * The augmented reality (AR) toolkit components are deprecated.
