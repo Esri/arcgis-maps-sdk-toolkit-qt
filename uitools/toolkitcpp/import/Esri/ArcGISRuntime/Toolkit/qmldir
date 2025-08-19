@@ -25,8 +25,6 @@ Authenticator_internal 200.8 Authenticator_internal.qml
 AuthenticatorOAuth2View 200.8 AuthenticatorOAuth2View.qml
 AuthenticatorUserCredentialsView 200.8 AuthenticatorUserCredentialsView.qml
 AuthenticatorClientCertificateView 200.8 AuthenticatorClientCertificateView.qml
-AuthenticationView 100.10 AuthenticationView.qml
-AuthenticationView 200.0 AuthenticationView.qml
 BasemapGallery 100.12 BasemapGallery.qml
 BasemapGallery 200.0 BasemapGallery.qml
 BookmarksView 100.15 BookmarksView.qml

@@ -27,7 +27,6 @@ qt_add_library(libtoolkitwidgets STATIC
     ${ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_SOURCES}
 
     # public headers
-    src/Esri/ArcGISRuntime/Toolkit/AuthenticationView.h
     src/Esri/ArcGISRuntime/Toolkit/BasemapGallery.h
     src/Esri/ArcGISRuntime/Toolkit/BookmarksView.h
     src/Esri/ArcGISRuntime/Toolkit/CoordinateConversion.h
@@ -36,7 +35,6 @@ qt_add_library(libtoolkitwidgets STATIC
     src/Esri/ArcGISRuntime/Toolkit/OverviewMap.h
 
     # public sources
-    src/Esri/ArcGISRuntime/Toolkit/AuthenticationView.cpp
     src/Esri/ArcGISRuntime/Toolkit/BasemapGallery.cpp
     src/Esri/ArcGISRuntime/Toolkit/BookmarksView.cpp
     src/Esri/ArcGISRuntime/Toolkit/CoordinateConversion.cpp
@@ -45,7 +43,6 @@ qt_add_library(libtoolkitwidgets STATIC
     src/Esri/ArcGISRuntime/Toolkit/OverviewMap.cpp
 
     # public UI
-    src/Esri/ArcGISRuntime/Toolkit/AuthenticationView.ui
     src/Esri/ArcGISRuntime/Toolkit/BasemapGallery.ui
     src/Esri/ArcGISRuntime/Toolkit/BookmarksView.ui
     src/Esri/ArcGISRuntime/Toolkit/CoordinateConversion.ui

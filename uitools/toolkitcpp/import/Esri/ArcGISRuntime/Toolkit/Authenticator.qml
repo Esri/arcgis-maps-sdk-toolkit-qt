@@ -55,9 +55,7 @@ Item {
     signal activeLoginViewReady_(var activeLoginView)
 
     Component.onCompleted: {
-        viewLoader.source = AuthenticatorController.canBeUsed ?
-                                "Authenticator_internal.qml" :
-                                "AuthenticationView.qml";
+        viewLoader.source =  "Authenticator_internal.qml";
     }
 
     Loader {

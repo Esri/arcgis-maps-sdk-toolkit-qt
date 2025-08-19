@@ -50,7 +50,6 @@ target_link_libraries(libtoolkitcpp PRIVATE
 )
 
 set(esri_arcgisruntime_toolkit_view_resource_files
-    "import/Esri/ArcGISRuntime/Toolkit/AuthenticationView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/AttachmentsPopupElementView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/BasemapGallery.qml"
     "import/Esri/ArcGISRuntime/Toolkit/BookmarksView.qml"
