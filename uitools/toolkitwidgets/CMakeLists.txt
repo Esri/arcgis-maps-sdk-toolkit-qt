@@ -50,17 +50,12 @@ qt_add_library(libtoolkitwidgets STATIC
     src/Esri/ArcGISRuntime/Toolkit/OverviewMap.ui
 
     # internal headers
-    src/Esri/ArcGISRuntime/Toolkit/Internal/ClientCertificatePasswordDialog.h
     src/Esri/ArcGISRuntime/Toolkit/Internal/CoordinateEditDelegate.h
     src/Esri/ArcGISRuntime/Toolkit/Internal/Flash.h
 
     # internal sources
-    src/Esri/ArcGISRuntime/Toolkit/Internal/ClientCertificatePasswordDialog.cpp
     src/Esri/ArcGISRuntime/Toolkit/Internal/CoordinateEditDelegate.cpp
     src/Esri/ArcGISRuntime/Toolkit/Internal/Flash.cpp
-
-    # internal UI
-    src/Esri/ArcGISRuntime/Toolkit/Internal/ClientCertificatePasswordDialog.ui
 )
 
 target_include_directories(libtoolkitwidgets PUBLIC
