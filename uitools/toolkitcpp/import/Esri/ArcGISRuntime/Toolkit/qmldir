@@ -63,7 +63,5 @@ SslHandshakeView 200.0 SslHandshakeView.qml
 TextPopupElementView 200.6 TextPopupElementView.qml
 TimeSlider 100.10 TimeSlider.qml
 TimeSlider 200.0 TimeSlider.qml
-UserCredentialsView 100.10 UserCredentialsView.qml
-UserCredentialsView 200.0 UserCredentialsView.qml
 UtilityNetworkTrace 100.15 UtilityNetworkTrace.qml
 UtilityNetworkTrace 200.0 UtilityNetworkTrace.qml

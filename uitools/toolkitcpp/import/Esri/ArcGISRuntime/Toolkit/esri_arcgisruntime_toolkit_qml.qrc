@@ -26,7 +26,6 @@
         <file>SslHandshakeView.qml</file>
         <file>TextPopupElementView.qml</file>
         <file>TimeSlider.qml</file>
-        <file>UserCredentialsView.qml</file>
         <file>UtilityNetworkTrace.qml</file>
         <file>qmldir</file>
         <file>AuthenticatorClientCertificateView.qml</file>
