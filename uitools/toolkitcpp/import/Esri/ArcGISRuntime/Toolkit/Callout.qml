@@ -73,6 +73,13 @@ import QtQuick.Shapes
 Pane {
     id: root
 
+    background: Rectangle{
+        color: palette.window
+        border.color: palette.windowText
+    }
+
+    property color dynamicTextColor: background.border.color
+
     enum LeaderPosition {
         UpperLeft = 0,
         Top = 1,
@@ -291,7 +298,7 @@ Pane {
         Label {
             id: title
             text: calloutData ? calloutData.title : ""
-            color: palette.windowText
+            color: root.dynamicTextColor
             wrapMode: Text.Wrap
             clip: true
             elide: Text.ElideRight
@@ -355,7 +362,7 @@ Pane {
         Label {
             id: detail
             text: calloutData ? calloutData.detail : ""
-            color: palette.windowText
+            color: root.dynamicTextColor
             wrapMode: Text.Wrap
             elide: Text.ElideRight
             clip: true
