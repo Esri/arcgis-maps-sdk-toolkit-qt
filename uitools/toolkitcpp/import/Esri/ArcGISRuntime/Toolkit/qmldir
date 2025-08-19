@@ -33,8 +33,6 @@ BookmarksView 100.15 BookmarksView.qml
 BookmarksView 200.0 BookmarksView.qml
 Callout 100.10 Callout.qml
 Callout 200.0 Callout.qml
-ClientCertificateView 100.10 ClientCertificateView.qml
-ClientCertificateView 200.0 ClientCertificateView.qml
 CoordinateConversion 100.10 CoordinateConversion.qml
 CoordinateConversion 200.0 CoordinateConversion.qml
 FieldsPopupElementView 200.6 FieldsPopupElementView.qml

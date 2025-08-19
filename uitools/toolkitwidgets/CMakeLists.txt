@@ -54,21 +54,18 @@ qt_add_library(libtoolkitwidgets STATIC
 
     # internal headers
     src/Esri/ArcGISRuntime/Toolkit/Internal/ClientCertificatePasswordDialog.h
-    src/Esri/ArcGISRuntime/Toolkit/Internal/ClientCertificateView.h
     src/Esri/ArcGISRuntime/Toolkit/Internal/CoordinateEditDelegate.h
     src/Esri/ArcGISRuntime/Toolkit/Internal/Flash.h
     src/Esri/ArcGISRuntime/Toolkit/Internal/SslHandshakeView.h
 
     # internal sources
     src/Esri/ArcGISRuntime/Toolkit/Internal/ClientCertificatePasswordDialog.cpp
-    src/Esri/ArcGISRuntime/Toolkit/Internal/ClientCertificateView.cpp
     src/Esri/ArcGISRuntime/Toolkit/Internal/CoordinateEditDelegate.cpp
     src/Esri/ArcGISRuntime/Toolkit/Internal/Flash.cpp
     src/Esri/ArcGISRuntime/Toolkit/Internal/SslHandshakeView.cpp
 
     # internal UI
     src/Esri/ArcGISRuntime/Toolkit/Internal/ClientCertificatePasswordDialog.ui
-    src/Esri/ArcGISRuntime/Toolkit/Internal/ClientCertificateView.ui
     src/Esri/ArcGISRuntime/Toolkit/Internal/SslHandshakeView.ui
 )
 

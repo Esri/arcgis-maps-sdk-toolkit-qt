@@ -7,7 +7,6 @@
         <file>BasemapGallery.qml</file>
         <file>BookmarksView.qml</file>
         <file>Callout.qml</file>
-        <file>ClientCertificateView.qml</file>
         <file>CoordinateConversion.qml</file>
         <file>CurrentVersion.qml</file>
         <file>FieldsPopupElementView.qml</file>

@@ -55,7 +55,6 @@ set(esri_arcgisruntime_toolkit_view_resource_files
     "import/Esri/ArcGISRuntime/Toolkit/BasemapGallery.qml"
     "import/Esri/ArcGISRuntime/Toolkit/BookmarksView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/Callout.qml"
-    "import/Esri/ArcGISRuntime/Toolkit/ClientCertificateView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/CoordinateConversion.qml"
     "import/Esri/ArcGISRuntime/Toolkit/CurrentVersion.qml"
     "import/Esri/ArcGISRuntime/Toolkit/FieldsPopupElementView.qml"
