@@ -54,8 +54,6 @@ Scalebar 200.0 Scalebar.qml
 SearchView 100.13 SearchView.qml
 SearchView 200.0 SearchView.qml
 AuthenticatorServerTrustView 200.0 AuthenticatorServerTrustView.qml
-SslHandshakeView 100.10 SslHandshakeView.qml
-SslHandshakeView 200.0 SslHandshakeView.qml
 TextPopupElementView 200.6 TextPopupElementView.qml
 TimeSlider 100.10 TimeSlider.qml
 TimeSlider 200.0 TimeSlider.qml

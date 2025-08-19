@@ -21,7 +21,6 @@
         <file>ScalebarImpl.qml</file>
         <file>SearchView.qml</file>
         <file>AuthenticatorServerTrustView.qml</file>
-        <file>SslHandshakeView.qml</file>
         <file>TextPopupElementView.qml</file>
         <file>TimeSlider.qml</file>
         <file>UtilityNetworkTrace.qml</file>
