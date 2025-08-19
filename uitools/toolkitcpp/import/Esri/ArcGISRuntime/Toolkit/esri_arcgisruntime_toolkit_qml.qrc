@@ -15,7 +15,6 @@
         <file>FloorFilter.qml</file>
         <file>MediaPopupElementView.qml</file>
         <file>NorthArrow.qml</file>
-        <file>OAuth2View.qml</file>
         <file>OverviewMap.qml</file>
         <file>PopupStackView.qml</file>
         <file>PopupView.qml</file>

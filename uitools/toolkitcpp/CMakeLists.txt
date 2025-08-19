@@ -63,7 +63,6 @@ set(esri_arcgisruntime_toolkit_view_resource_files
     "import/Esri/ArcGISRuntime/Toolkit/FloorFilter.qml"
     "import/Esri/ArcGISRuntime/Toolkit/MediaPopupElementView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/NorthArrow.qml"
-    "import/Esri/ArcGISRuntime/Toolkit/OAuth2View.qml"
     "import/Esri/ArcGISRuntime/Toolkit/OverviewMap.qml"
     "import/Esri/ArcGISRuntime/Toolkit/PopupStackView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/PopupView.qml"
