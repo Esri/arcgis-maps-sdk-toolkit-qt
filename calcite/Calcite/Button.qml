@@ -58,7 +58,7 @@ T.Button {
                 if (control.flat) {
                    return "transparent";
                 } else {
-                    return control.hovered ? Calcite.brandHover : Calcite.brand;
+                    return control.enabled && control.hovered ? Calcite.brandHover : Calcite.brand;
                 }
             }
             width: 1
@@ -67,12 +67,12 @@ T.Button {
         color: {
             if (control.flat) {
                 return control.pressed || control.checked ? Calcite.foreground3 :
-                                                            control.hovered ? Calcite.foreground2
-                                                                            : "transparent"
+                                                            control.hovered && control.enabled ? Calcite.foreground2:
+                                                                                                 "transparent"
             }  else {
-                return control.pressed || control.checked ? Calcite.brandPress
-                                                          : control.hovered ? Calcite.brandHover
-                                                                            : Calcite.brand
+                return control.pressed || control.checked ? Calcite.brandPress :
+                                                            control.hovered && control.enabled ? Calcite.brandHover
+                                                                                               : Calcite.brand
             }
         }
         Behavior on color {

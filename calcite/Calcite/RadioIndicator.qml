@@ -23,7 +23,7 @@ Rectangle {
     implicitHeight: 20
     border {
         width: 2
-        color: control.checked ? control.hovered ? Calcite.brandHover : Calcite.brand : control.hovered ? Calcite.text3 : Calcite.borderInput
+        color: control.checked ? control.hovered && control.enabled ? Calcite.brandHover : Calcite.brand : control.hovered && control.enabled ? Calcite.text3 : Calcite.borderInput
     }
     radius: width / 2
     color: Calcite.offWhite
@@ -35,7 +35,7 @@ Rectangle {
         width: 12
         height: 12
         radius: width / 2
-        color: control.hovered ? Calcite.brandHover : Calcite.brand
+        color: control.hovered && control.enabled ? Calcite.brandHover : Calcite.brand
         visible: control.checked
     }
 }

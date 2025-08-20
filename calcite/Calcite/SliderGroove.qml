@@ -23,6 +23,7 @@ Rectangle {
     property real offset
     property real progress
     property real visualProgress
+    property bool enabled
     scale: control.horizontal && control.mirrored ? -1 : 1
 
     x: control.horizontal ? 0 : (control.availableWidth - width) / 2
@@ -32,7 +33,8 @@ Rectangle {
     implicitHeight: control.horizontal ? 2 : 160
     width: control.horizontal ? control.availableWidth : implicitWidth
     height: control.horizontal ? implicitHeight : control.availableHeight
-    color: control.hovered ? Calcite.border1: Calcite.border2
+    color: control.hovered && control.enabled ? Calcite.border1 : Calcite.border2
+    opacity: control.enabled ? 1.0 : 0.3
 
     Rectangle {
         x: groove.control.horizontal ? groove.offset * parent.width : 0

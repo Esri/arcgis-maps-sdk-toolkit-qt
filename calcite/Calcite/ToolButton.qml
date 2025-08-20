@@ -39,7 +39,7 @@ T.ToolButton {
     icon.width: 24
     icon.height: 24
     icon.color: control.down || control.checked
-                                || control.highlighted ? textDown : control.hovered ? Calcite.text1 : Calcite.text3
+                                || control.highlighted ? textDown : control.hovered && control.enabled ? Calcite.text1 : Calcite.text3
     contentItem: IconLabel {
         spacing: control.spacing
         mirrored: control.mirrored
@@ -57,7 +57,7 @@ T.ToolButton {
         implicitHeight: 48
         implicitWidth: 48
         color: control.down || control.checked
-                               || control.highlighted ? backgroundDown : control.hovered ? backgroundHovered : backgroundIdle
+                               || control.highlighted ? backgroundDown : control.hovered && control.enabled ? backgroundHovered : backgroundIdle
     }
     opacity: control.enabled ? 1.0 : 0.3
 }

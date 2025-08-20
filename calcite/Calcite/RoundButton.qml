@@ -59,7 +59,7 @@ T.RoundButton {
                 if (control.flat) {
                    return "transparent";
                 } else {
-                    return control.hovered ? Calcite.brandHover : Calcite.brand;
+                    return control.hovered && control.enabled ? Calcite.brandHover : Calcite.brand;
                 }
             }
             width: 1
@@ -68,11 +68,11 @@ T.RoundButton {
         color: {
             if (control.flat) {
                 return control.pressed || control.checked ? Calcite.foreground3 :
-                                                            control.hovered ? Calcite.foreground2
+                                                            control.hovered && control.enabled ? Calcite.foreground2
                                                                             : "transparent"
             } else {
                 return control.pressed || control.checked ? Calcite.brandPress
-                                                          : control.hovered ? Calcite.brandHover
+                                                          : control.hovered && control.enabled ? Calcite.brandHover
                                                                             : Calcite.brand
             }
         }

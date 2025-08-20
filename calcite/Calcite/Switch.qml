@@ -59,7 +59,7 @@ T.Switch {
             color: Calcite.foreground1
             border {
                 width: 2
-                color: control.checked ? Calcite.brandPress : control.activeFocus || control.hovered ? Calcite.brandHover : Calcite.borderInput
+                color: control.checked ? Calcite.brandPress : control.activeFocus || control.hovered && control.enabled ? Calcite.brandHover : Calcite.borderInput
             }
 
             Behavior on x {
