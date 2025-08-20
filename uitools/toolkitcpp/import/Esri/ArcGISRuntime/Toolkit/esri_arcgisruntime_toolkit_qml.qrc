@@ -25,7 +25,6 @@
         <file>UtilityNetworkTrace.qml</file>
         <file>qmldir</file>
         <file>AuthenticatorClientCertificateView.qml</file>
-        <file>Authenticator_internal.qml</file>
         <file>Authenticator.qml</file>
     </qresource>
 </RCC>

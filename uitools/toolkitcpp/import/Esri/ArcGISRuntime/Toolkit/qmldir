@@ -21,7 +21,6 @@ CurrentVersion 300.0 CurrentVersion.qml
 
 # View components
 Authenticator 200.8 Authenticator.qml
-Authenticator_internal 200.8 Authenticator_internal.qml
 AuthenticatorOAuth2View 200.8 AuthenticatorOAuth2View.qml
 AuthenticatorUserCredentialsView 200.8 AuthenticatorUserCredentialsView.qml
 AuthenticatorClientCertificateView 200.8 AuthenticatorClientCertificateView.qml
