@@ -79,10 +79,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
 AuthenticatorController::AuthenticatorController(QObject* parent) :
     QObject(parent)
 {
-  if (!canBeUsed_())
-  {
-    return;
-  }
 
   m_arcGISAuthenticationChallengeRelay = std::make_unique<ArcGISAuthenticationChallengeRelay>(this);
   m_networkAuthenticationChallengeRelay = std::make_unique<NetworkAuthenticationChallengeRelay>(this);
