@@ -1,3 +1,19 @@
+// COPYRIGHT 2025 ESRI
+// TRADE SECRETS: ESRI PROPRIETARY AND CONFIDENTIAL
+// Unpublished material - all rights reserved under the
+// Copyright Laws of the United States and applicable international
+// laws, treaties, and conventions.
+//
+// For additional information, contact:
+// Environmental Systems Research Institute, Inc.
+// Attn: Contracts and Legal Services Department
+// 380 New York Street
+// Redlands, California, 92373
+// USA
+//
+// email: contracts@esri.com
+/// \file PopupViewController.h
+
 /*******************************************************************************
  *  Copyright 2012-2020 Esri
  *
@@ -34,7 +50,6 @@ Q_MOC_INCLUDE("PopupManager.h")
 namespace Esri::ArcGISRuntime {
 
 class PopupAttachmentListModel;
-class PopupManager;
 
 namespace Toolkit
 {
@@ -44,13 +59,12 @@ class PopupViewController : public QObject
   Q_OBJECT
   Q_PROPERTY(Popup* popup READ popup WRITE setPopup NOTIFY popupChanged)
   Q_PROPERTY(QAbstractListModel* popupElementControllers READ popupElementControllers NOTIFY popupChanged)
-  Q_PROPERTY(PopupManager* popupManager READ popupManager WRITE setPopupManager NOTIFY popupManagerChanged)
   Q_PROPERTY(QString title READ title NOTIFY titleChanged)
-  Q_PROPERTY(QAbstractListModel* displayFields READ displayFields NOTIFY popupManagerChanged)
+  Q_PROPERTY(QList<PopupField*> displayFields READ displayFields NOTIFY popupChanged)
   Q_PROPERTY(int fieldCount READ fieldCount NOTIFY fieldCountChanged)
-  Q_PROPERTY(QAbstractListModel* attachments READ attachments NOTIFY popupManagerChanged)
+  Q_PROPERTY(QAbstractListModel* attachments READ attachments NOTIFY popupChanged)
   Q_PROPERTY(int attachmentCount READ attachmentCount NOTIFY attachmentCountChanged)
-  Q_PROPERTY(bool showAttachments READ isShowAttachments NOTIFY popupManagerChanged)
+  Q_PROPERTY(bool showAttachments READ isShowAttachments NOTIFY popupChanged)
   Q_PROPERTY(int attachmentThumbnailWidth READ attachmentThumbnailWidth WRITE setAttachmentThumbnailWidth NOTIFY attachmentThumbnailWidthChanged)
   Q_PROPERTY(int attachmentThumbnailHeight READ attachmentThumbnailHeight WRITE setAttachmentThumbnailHeight NOTIFY attachmentThumbnailHeightChanged)
 
@@ -65,11 +79,7 @@ public:
 
   GenericListModel* popupElementControllers() const;
 
-  QRT_DEPRECATED PopupManager* popupManager() const;
-
-  QRT_DEPRECATED void setPopupManager(PopupManager* popupManager);
-
-  QAbstractListModel* displayFields() const;
+  QList<PopupField*> displayFields() const;
 
   QAbstractListModel* attachments() const;
 
@@ -112,7 +122,6 @@ private:
   PopupAttachmentListModel* popupAttachmentListModel_() const;
 
 private:
-  QPointer<PopupManager> m_popupManager;
   QPointer<Popup> m_popup;
   GenericListModel* m_popupElementControllerModel = nullptr;
 };

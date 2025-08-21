@@ -1,3 +1,18 @@
+// COPYRIGHT 2025 ESRI
+// TRADE SECRETS: ESRI PROPRIETARY AND CONFIDENTIAL
+// Unpublished material - all rights reserved under the
+// Copyright Laws of the United States and applicable international
+// laws, treaties, and conventions.
+//
+// For additional information, contact:
+// Environmental Systems Research Institute, Inc.
+// Attn: Contracts and Legal Services Department
+// 380 New York Street
+// Redlands, California, 92373
+// USA
+//
+// email: contracts@esri.com
+/// \file PopupViewController.cpp
 
 /*******************************************************************************
  *  Copyright 2012-2020 Esri
@@ -32,6 +47,7 @@
 #include "PopupAttachmentListModel.h"
 #include "PopupAttachmentManager.h"
 #include "PopupAttributeListModel.h"
+#include "PopupDefinition.h"
 #include "PopupElement.h"
 #include "PopupExpressionEvaluation.h"
 #include "PopupManager.h"
@@ -62,11 +78,6 @@ PopupViewController::~PopupViewController()
 {
 }
 
-PopupManager* PopupViewController::popupManager() const
-{
-  return m_popupManager;
-}
-
 Popup* PopupViewController::popup() const
 {
   return m_popup;
@@ -89,10 +100,6 @@ void PopupViewController::setPopup(Popup* popup)
   }
 
   m_popup = popup;
-
-  if (m_popupManager)
-    qWarning() << "Both Popup and PopupManager have been set. The PopupView will default to "
-                  "PopupView which supports PopupElements.";
 
   if (m_popup)
     connect(m_popup.data(), &QObject::destroyed, this, &PopupViewController::popupChanged);
@@ -131,53 +138,9 @@ void PopupViewController::setPopup(Popup* popup)
   emit titleChanged();
 }
 
-void PopupViewController::setPopupManager(PopupManager* popupManager)
+QList<PopupField*> PopupViewController::displayFields() const
 {
-  if (popupManager == m_popupManager)
-    return;
-
-  if (m_popupManager)
-    disconnect(m_popupManager.data(), nullptr, this, nullptr);
-
-  if (auto attachments = this->attachments())
-    disconnect(attachments, nullptr, this, nullptr);
-
-  if (auto displayFields = this->displayFields())
-    disconnect(displayFields, nullptr, this, nullptr);
-
-  m_popupManager = popupManager;
-
-  if (m_popup)
-    qWarning() << "Both Popup and PopupManager have been set. The PopupView will default to PopupView which supports PopupElements.";
-
-  if (m_popupManager)
-    connect(m_popupManager.data(), &QObject::destroyed, this, &PopupViewController::popupManagerChanged);
-
-  if (auto attachments = this->popupAttachmentListModel_())
-  {
-    connect(attachments, &QAbstractListModel::rowsInserted , this, &PopupViewController::attachmentCountChanged);
-    connect(attachments, &QAbstractListModel::rowsRemoved , this, &PopupViewController::attachmentCountChanged);
-    connect(attachments, &PopupAttachmentListModel::thumbnailWidthChanged , this, &PopupViewController::attachmentThumbnailWidthChanged);
-    connect(attachments, &PopupAttachmentListModel::thumbnailHeightChanged , this, &PopupViewController::attachmentThumbnailHeightChanged);
-  }
-
-  if (auto displayFields = this->displayFields())
-  {
-    connect(displayFields, &QAbstractListModel::rowsInserted , this, &PopupViewController::fieldCountChanged);
-    connect(displayFields, &QAbstractListModel::rowsRemoved , this, &PopupViewController::fieldCountChanged);
-  }
-
-  emit popupManagerChanged();
-  emit titleChanged();
-  emit fieldCountChanged();
-  emit attachmentCountChanged();
-  emit attachmentThumbnailHeightChanged();
-  emit attachmentThumbnailWidthChanged();
-}
-
-QAbstractListModel* PopupViewController::displayFields() const
-{
-  return m_popupManager ? m_popupManager->displayedFields() : nullptr;
+  return m_popup ? m_popup->popupDefinition()->fields() : QList<PopupField*>();
 }
 
 PopupAttachmentListModel* PopupViewController::popupAttachmentListModel_() const
@@ -188,22 +151,20 @@ PopupAttachmentListModel* PopupViewController::popupAttachmentListModel_() const
 
 QAbstractListModel* PopupViewController::attachments() const
 {
-  if (!m_popupManager)
+  if (!m_popup)
     return nullptr;
+  return nullptr;
 
-  auto attachmentManager = m_popupManager->attachmentManager();
-  if (!attachmentManager)
-    return nullptr;
+  // auto attachmentManager = m_popup->geoElement()->
+  // if (!attachmentManager)
+  //   return nullptr;
 
-  return attachmentManager->attachmentsModel();
+  // return attachmentManager->attachmentsModel();
 }
 
 int PopupViewController::fieldCount() const
 {
-  if (auto displayFields = this->displayFields())
-    return displayFields->rowCount();
-
-  return 0;
+  return displayFields().size();
 }
 
 int PopupViewController::attachmentCount() const
@@ -216,18 +177,12 @@ int PopupViewController::attachmentCount() const
 
 bool PopupViewController::isShowAttachments() const
 {
-  // This is re-exposed from PopupManager as PopupManager does not have
-  // NOTIFY/CONSTANT modifiers on its showAttachments property, so the Controller
-  // re-exposes showAttachments to suppress warnings about this.
-  return m_popupManager ? m_popupManager->isShowAttachments() : false;
+  return m_popup ? m_popup->popupDefinition()->isShowAttachments() : false;
 }
 
 QString PopupViewController::title() const
 {
-  // This is re-exposed from PopupManager as PopupManager does not have
-  // NOTIFY/CONSTANT modifiers on its title property, so the Controller
-  // re-exposes title to suppress warnings about this.
-  return m_popup ? m_popup->title() : m_popupManager ? m_popupManager->title() : nullptr;
+  return m_popup ? m_popup->title() : nullptr;
 }
 
 int PopupViewController::attachmentThumbnailWidth() const
