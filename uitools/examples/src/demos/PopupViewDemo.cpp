@@ -1,3 +1,19 @@
+// COPYRIGHT 2025 ESRI
+// TRADE SECRETS: ESRI PROPRIETARY AND CONFIDENTIAL
+// Unpublished material - all rights reserved under the
+// Copyright Laws of the United States and applicable international
+// laws, treaties, and conventions.
+//
+// For additional information, contact:
+// Environmental Systems Research Institute, Inc.
+// Attn: Contracts and Legal Services Department
+// 380 New York Street
+// Redlands, California, 92373
+// USA
+//
+// email: contracts@esri.com
+/// \file PopupViewDemo.cpp
+
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -51,8 +67,8 @@ PopupViewDemo::~PopupViewDemo()
 
 Esri::ArcGISRuntime::Map* PopupViewDemo::initMap_(QObject* parent) const
 {
-  return new Map(QUrl("https://www.arcgis.com/apps/mapviewer/"
-                        "index.html?webmap=9f3a674e998f461580006e626611f9ad"),
+  return new Map(QUrl("https://runtime.maps.arcgis.com/home/webmap/"
+                      "viewer.html?webmap=e4c6eb667e6c43b896691f10cc2f1580"),
                  parent);
 }
 
