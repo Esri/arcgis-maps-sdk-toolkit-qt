@@ -51,7 +51,7 @@ import QtQuick.Controls
 Item {
     id: authenticator
 
-    property AuthenticatorController controller: AuthenticatorController
+    property var controller: AuthenticatorController
     signal activeLoginViewReady_(var activeLoginView)
 
     Connections {
