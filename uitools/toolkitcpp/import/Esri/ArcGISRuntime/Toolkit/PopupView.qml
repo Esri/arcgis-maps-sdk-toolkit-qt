@@ -45,6 +45,7 @@ import QtQuick.Layouts
      \li Create a Popup from the Feature.
      \li Optionally obtain the Popup's PopupDefinition and set the
      title, whether to show attachments, and so on.
+     // TODO: This doc needs to change
      \li Create a PopupManager from the Popup.
      \li Assign the PopupView's \c popupManager property the PopupManager
      created in the previous step.
@@ -53,26 +54,15 @@ import QtQuick.Layouts
    or positioned using XY screen coordinates. Transform, Transition, and
    other QML animation types can be used to animate the showing and
    dissmisal of the view.
-   For more information, please see the Popup and PopupManager
+   For more information, please see the Popup and PopupElement
    documentation.
    \note Each time a change is made to the Popup, PopupDefinition,
-   PopupManager, or any of their properties, the PopupManager must
-   be re-set to the PopupView.
+   or any of their properties, the Popup must be re-set to the PopupView.
    \image popupview.png popupview
    \snippet qml/demos/PopupViewDemoForm.qml Set up Popup View QML
  */
 Page {
     id: popupView
-
-    /*!
-       \brief The PopupManager that controls the information being displayed in
-       the view.
-
-       The PopupManager should be created from a Popup.
-       \qmlproperty PopupManager popupManager
-       \deprecated
-     */
-    property var popupManager: null
 
     /*!
        \brief The Popup that controls the information being displayed in
@@ -164,12 +154,6 @@ Page {
 
     Binding {
         target: controller
-        property: "popupManager"
-        value: popupView.popupManager
-    }
-
-    Binding {
-        target: controller
         property: "popup"
         value: popupView.popup
     }
@@ -221,95 +205,7 @@ Page {
     // prioritizes PopupElements over PopupManager styled Popups if both are present
     contentItem: Loader {
         id: popupDisplayLoader
-        sourceComponent: popup ? popupUsingPopupElements : popupUsingPopupManager
-    }
-
-    Component {
-        id: popupUsingPopupManager
-        Flickable {
-            id: flickable
-            clip: true
-            contentHeight: fieldsLayout.height
-            GridLayout {
-                id: fieldsLayout
-                flow: GridLayout.TopToBottom
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                }
-
-                // We must account for what is visible, including title headers as rows.
-                rows: controller.showAttachments ? controller.fieldCount + controller.attachmentCount + 1
-                                                 : controller.fieldCount
-                rowSpacing: popupView.spacing
-                columnSpacing: 30
-                // Field names
-                Repeater {
-                    model: controller.displayFields
-                    Label {
-                        text: label ?? fieldName ?? ""
-                        Layout.maximumWidth: flickable.width / 2
-                        wrapMode: Text.Wrap
-                        font: popupView.font
-                    }
-                }
-
-                // Attachments header
-                Label {
-                    Layout.columnSpan: 2
-                    Layout.fillWidth: true
-                    visible: controller.showAttachments
-                    enabled: visible
-                    textFormat: Text.StyledText
-                    horizontalAlignment: Text.AlignHCenter
-                    text: controller.attachmentCount > 0 ? "<h2>Attachments</h2>" : ""
-                    font: popupView.font
-                }
-
-                // Attachment names
-                Repeater {
-                    model: controller.attachments
-                    Label {
-                        Layout.fillWidth: true
-                        visible: controller.showAttachments
-                        enabled: visible
-                        text: name
-                        wrapMode: Text.Wrap
-                        font: popupView.font
-                    }
-                }
-
-                // Field contents
-                Repeater {
-                    model: controller.displayFields
-                    Label {
-                        Layout.fillWidth: true
-                        text: formattedValue
-                        wrapMode: Text.Wrap
-                        font: popupView.font
-                    }
-                }
-
-                // Attachment images
-                Repeater {
-                    model: controller.attachments
-                    Image {
-                        Layout.fillHeight: true
-                        Layout.minimumWidth: controller.attachmentThumbnailWidth
-                        Layout.minimumHeight: controller.attachmentThumbnailHeight
-                        visible: controller.showAttachments
-                        enabled: visible
-                        source: thumbnailUrl
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: {
-                                attachmentThumbnailClicked(index)
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        sourceComponent: popupUsingPopupElements
     }
 
     Component {
