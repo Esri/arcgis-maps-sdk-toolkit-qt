@@ -56,20 +56,13 @@ class PopupViewController : public QObject
 {
   Q_OBJECT
   Q_PROPERTY(Popup* popup READ popup WRITE setPopup NOTIFY popupChanged)
-  Q_PROPERTY(QAbstractListModel* popupElementControllers READ popupElementControllers NOTIFY popupChanged)
   Q_PROPERTY(QString title READ title NOTIFY titleChanged)
-  Q_PROPERTY(QList<PopupField*> displayFields READ displayFields NOTIFY popupChanged)
-  Q_PROPERTY(int fieldCount READ fieldCount NOTIFY fieldCountChanged)
-  Q_PROPERTY(QAbstractListModel* attachments READ attachments NOTIFY popupChanged)
-  Q_PROPERTY(int attachmentCount READ attachmentCount NOTIFY attachmentCountChanged)
-  Q_PROPERTY(bool showAttachments READ isShowAttachments NOTIFY popupChanged)
-  Q_PROPERTY(int attachmentThumbnailWidth READ attachmentThumbnailWidth WRITE setAttachmentThumbnailWidth NOTIFY attachmentThumbnailWidthChanged)
-  Q_PROPERTY(int attachmentThumbnailHeight READ attachmentThumbnailHeight WRITE setAttachmentThumbnailHeight NOTIFY attachmentThumbnailHeightChanged)
+  Q_PROPERTY(QAbstractListModel* popupElementControllers READ popupElementControllers NOTIFY popupChanged)
 
 public:
   Q_INVOKABLE explicit PopupViewController(QObject* parent = nullptr);
 
-  ~PopupViewController();
+  ~PopupViewController() override;
 
   Popup* popup() const;
 
@@ -77,19 +70,7 @@ public:
 
   GenericListModel* popupElementControllers() const;
 
-  QList<PopupField*> displayFields() const;
-
-  QAbstractListModel* attachments() const;
-
   QString title() const;
-
-  bool isShowAttachments() const;
-
-  int attachmentThumbnailWidth() const;
-  void setAttachmentThumbnailWidth(int width);
-
-  int attachmentThumbnailHeight() const;
-  void setAttachmentThumbnailHeight(int height);
 
 signals:
 
@@ -97,25 +78,11 @@ signals:
 
   void titleChanged();
 
-  void fieldCountChanged();
-
-  void attachmentCountChanged();
-
-  void attachmentThumbnailWidthChanged();
-
-  void attachmentThumbnailHeightChanged();
-
   void attachmentDataFetched(const QByteArray& attachmentData, const QString& name);
 
   void clickedUrl(const QUrl& url);
 
   void imageClicked(const QUrl& sourceUrl, const QUrl& linkUrl);
-
-private:
-  int fieldCount() const;
-
-  int attachmentCount() const;
-  PopupAttachmentListModel* popupAttachmentListModel_() const;
 
 private:
   QPointer<Popup> m_popup;

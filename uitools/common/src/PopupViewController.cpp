@@ -44,9 +44,6 @@
 #include "FieldsPopupElement.h"
 #include "MediaPopupElement.h"
 #include "Popup.h"
-#include "PopupAttachmentListModel.h"
-#include "PopupAttachmentManager.h"
-#include "PopupAttributeListModel.h"
 #include "PopupDefinition.h"
 #include "PopupElement.h"
 #include "PopupExpressionEvaluation.h"
@@ -137,87 +134,9 @@ void PopupViewController::setPopup(Popup* popup)
   emit titleChanged();
 }
 
-QList<PopupField*> PopupViewController::displayFields() const
-{
-  return m_popup ? m_popup->popupDefinition()->fields() : QList<PopupField*>();
-}
-
-PopupAttachmentListModel* PopupViewController::popupAttachmentListModel_() const
-{
-  auto* model = attachments();
-  return model ? static_cast<PopupAttachmentListModel*>(model) : nullptr;
-}
-
-QAbstractListModel* PopupViewController::attachments() const
-{
-  if (!m_popup)
-    return nullptr;
-  return nullptr;
-
-  // auto attachmentManager = m_popup->geoElement()->
-  // if (!attachmentManager)
-  //   return nullptr;
-
-  // return attachmentManager->attachmentsModel();
-}
-
-int PopupViewController::fieldCount() const
-{
-  return displayFields().size();
-}
-
-int PopupViewController::attachmentCount() const
-{
-  if (auto attachments = this->attachments())
-    return attachments->rowCount();
-
-  return 0;
-}
-
-bool PopupViewController::isShowAttachments() const
-{
-  return m_popup ? m_popup->popupDefinition()->isShowAttachments() : false;
-}
-
 QString PopupViewController::title() const
 {
-  return m_popup ? m_popup->title() : nullptr;
-}
-
-int PopupViewController::attachmentThumbnailWidth() const
-{
-  auto attachmentModel = popupAttachmentListModel_();
-  if (!attachmentModel)
-    return 0;
-
-  return attachmentModel->thumbnailWidth();
-}
-
-void PopupViewController::setAttachmentThumbnailWidth(int width)
-{
-  auto attachmentModel = popupAttachmentListModel_();
-  if (!attachmentModel)
-    return;
-
-  attachmentModel->setThumbnailWidth(width);
-}
-
-int PopupViewController::attachmentThumbnailHeight() const
-{
-  auto attachmentModel = popupAttachmentListModel_();
-  if (!attachmentModel)
-    return 0;
-
-  return attachmentModel->thumbnailHeight();
-}
-
-void PopupViewController::setAttachmentThumbnailHeight(int height)
-{
-  auto attachmentModel = popupAttachmentListModel_();
-  if (!attachmentModel)
-    return;
-
-  attachmentModel->setThumbnailHeight(height);
+  return m_popup ? m_popup->title() : QString();
 }
 
 } // Esri::ArcGISRuntime::Toolkit
