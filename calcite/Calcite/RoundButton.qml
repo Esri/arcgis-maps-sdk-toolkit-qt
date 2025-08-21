@@ -19,6 +19,7 @@ import QtQuick.Templates as T
 
 T.RoundButton {
     id: control
+    property bool isHoveredAndEnabled: control.hovered && control.enabled
 
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
                             implicitContentWidth + leftPadding + rightPadding)
@@ -59,7 +60,7 @@ T.RoundButton {
                 if (control.flat) {
                    return "transparent";
                 } else {
-                    return control.hovered ? Calcite.brandHover : Calcite.brand;
+                    return isHoveredAndEnabled ? Calcite.brandHover : Calcite.brand;
                 }
             }
             width: 1
@@ -68,11 +69,11 @@ T.RoundButton {
         color: {
             if (control.flat) {
                 return control.pressed || control.checked ? Calcite.foreground3 :
-                                                            control.hovered ? Calcite.foreground2
+                                                            isHoveredAndEnabled ? Calcite.foreground2
                                                                             : "transparent"
             } else {
                 return control.pressed || control.checked ? Calcite.brandPress
-                                                          : control.hovered ? Calcite.brandHover
+                                                          : isHoveredAndEnabled ? Calcite.brandHover
                                                                             : Calcite.brand
             }
         }

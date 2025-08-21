@@ -16,15 +16,16 @@
 import QtQuick
 
 Rectangle {
-    property var control;
+    property var control
+    property bool isHoveredAndEnabled: control.hovered && control.enabled
     width: 24
     height: 24
     border {
         width: 2
-        color: control.checkState !== Qt.Unchecked ? control.hovered ? Calcite.brandHover : Calcite.brand :
-        control.hovered ? Calcite.text3 : Calcite.borderInput
+        color: control.checkState !== Qt.Unchecked ? isHoveredAndEnabled ? Calcite.brandHover : Calcite.brand :
+        isHoveredAndEnabled ? Calcite.text3 : Calcite.borderInput
     }
-    color: control.checkState === Qt.Unchecked ? Calcite.offWhite : control.hovered ? Calcite.brandHover : Calcite.brand
+    color: control.checkState === Qt.Unchecked ? Calcite.offWhite : isHoveredAndEnabled ? Calcite.brandHover : Calcite.brand
     radius: 1
     opacity: enabled ? 1.0 : 0.3
 
