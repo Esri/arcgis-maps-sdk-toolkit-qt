@@ -51,7 +51,7 @@ import QtQuick.Layouts
    The PopupView is a QML Item that can be anchored, given to a dialog,
    or positioned using XY screen coordinates. Transform, Transition, and
    other QML animation types can be used to animate the showing and
-   dissmisal of the view.
+   dismissal of the view.
    For more information, please see the Popup and PopupElement
    documentation.
    \note Each time a change is made to the Popup, PopupDefinition,
