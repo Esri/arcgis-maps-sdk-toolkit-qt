@@ -25,6 +25,7 @@ Rectangle {
     property real visualProgress
     property bool enabled
     scale: control.horizontal && control.mirrored ? -1 : 1
+    property bool isHoveredAndEnabled: control.hovered && control.enabled
 
     x: control.horizontal ? 0 : (control.availableWidth - width) / 2
     y: control.horizontal ? (control.availableHeight - height) / 2 : 0
@@ -33,7 +34,7 @@ Rectangle {
     implicitHeight: control.horizontal ? 2 : 160
     width: control.horizontal ? control.availableWidth : implicitWidth
     height: control.horizontal ? implicitHeight : control.availableHeight
-    color: control.hovered && control.enabled ? Calcite.border1 : Calcite.border2
+    color: isHoveredAndEnabled ? Calcite.border1 : Calcite.border2
     opacity: control.enabled ? 1.0 : 0.3
 
     Rectangle {

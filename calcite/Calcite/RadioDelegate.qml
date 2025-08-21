@@ -21,6 +21,7 @@ import QtQuick.Templates as T
 
 T.RadioDelegate {
     id: control
+    property bool isHoveredAndEnabled: control.hovered && control.enabled
 
     implicitWidth: Math.max(
                        background ? background.implicitWidth : 0,
@@ -66,7 +67,7 @@ T.RadioDelegate {
     background: Rectangle {
         implicitHeight: 40
         color: control.visualFocus
-               || control.down ? Calcite.foreground3: control.hovered && control.enabled ? Calcite.foreground2 : "transparent"
+               || control.down ? Calcite.foreground3: isHoveredAndEnabled ? Calcite.foreground2 : "transparent"
     }
     opacity: control.enabled ? 1.0 : 0.3
 }

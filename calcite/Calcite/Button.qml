@@ -53,12 +53,15 @@ T.Button {
         radius: 0
         implicitWidth: 80
         implicitHeight: 24
+
+        property bool isHoveredAndEnabled: control.hovered && control.enabled
+
         border {
             color: {
                 if (control.flat) {
                    return "transparent";
                 } else {
-                    return control.enabled && control.hovered ? Calcite.brandHover : Calcite.brand;
+                    return isHoveredAndEnabled ? Calcite.brandHover : Calcite.brand;
                 }
             }
             width: 1
@@ -67,11 +70,11 @@ T.Button {
         color: {
             if (control.flat) {
                 return control.pressed || control.checked ? Calcite.foreground3 :
-                                                            control.hovered && control.enabled ? Calcite.foreground2:
+                                                            isHoveredAndEnabled ? Calcite.foreground2:
                                                                                                  "transparent"
             }  else {
                 return control.pressed || control.checked ? Calcite.brandPress :
-                                                            control.hovered && control.enabled ? Calcite.brandHover
+                                                            isHoveredAndEnabled ? Calcite.brandHover
                                                                                                : Calcite.brand
             }
         }
