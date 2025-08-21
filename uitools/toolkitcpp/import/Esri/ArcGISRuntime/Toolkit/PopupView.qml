@@ -45,9 +45,7 @@ import QtQuick.Layouts
      \li Create a Popup from the Feature.
      \li Optionally obtain the Popup's PopupDefinition and set the
      title, whether to show attachments, and so on.
-     // TODO: This doc needs to change
-     \li Create a PopupManager from the Popup.
-     \li Assign the PopupView's \c popupManager property the PopupManager
+     \li Assign the PopupView's \c popup property the Popup
      created in the previous step.
    \endlist
    The PopupView is a QML Item that can be anchored, given to a dialog,
