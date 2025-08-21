@@ -50,7 +50,6 @@
 #include "PopupDefinition.h"
 #include "PopupElement.h"
 #include "PopupExpressionEvaluation.h"
-#include "PopupManager.h"
 #include "PopupTypes.h"
 #include "TextPopupElement.h"
 

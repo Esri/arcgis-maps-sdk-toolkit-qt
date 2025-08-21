@@ -45,8 +45,6 @@
 // Other headers
 #include "GenericListModel.h"
 
-Q_MOC_INCLUDE("PopupManager.h")
-
 namespace Esri::ArcGISRuntime {
 
 class PopupAttachmentListModel;
@@ -96,8 +94,6 @@ public:
 signals:
 
   void popupChanged();
-
-  QRT_DEPRECATED void popupManagerChanged();
 
   void titleChanged();
 
