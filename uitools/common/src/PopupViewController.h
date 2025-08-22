@@ -29,12 +29,7 @@
 // Other headers
 #include "GenericListModel.h"
 
-Q_MOC_INCLUDE("PopupManager.h")
-
 namespace Esri::ArcGISRuntime {
-
-class PopupAttachmentListModel;
-class PopupManager;
 
 namespace Toolkit
 {
@@ -43,21 +38,13 @@ class PopupViewController : public QObject
 {
   Q_OBJECT
   Q_PROPERTY(Popup* popup READ popup WRITE setPopup NOTIFY popupChanged)
-  Q_PROPERTY(QAbstractListModel* popupElementControllers READ popupElementControllers NOTIFY popupChanged)
-  Q_PROPERTY(PopupManager* popupManager READ popupManager WRITE setPopupManager NOTIFY popupManagerChanged)
   Q_PROPERTY(QString title READ title NOTIFY titleChanged)
-  Q_PROPERTY(QAbstractListModel* displayFields READ displayFields NOTIFY popupManagerChanged)
-  Q_PROPERTY(int fieldCount READ fieldCount NOTIFY fieldCountChanged)
-  Q_PROPERTY(QAbstractListModel* attachments READ attachments NOTIFY popupManagerChanged)
-  Q_PROPERTY(int attachmentCount READ attachmentCount NOTIFY attachmentCountChanged)
-  Q_PROPERTY(bool showAttachments READ isShowAttachments NOTIFY popupManagerChanged)
-  Q_PROPERTY(int attachmentThumbnailWidth READ attachmentThumbnailWidth WRITE setAttachmentThumbnailWidth NOTIFY attachmentThumbnailWidthChanged)
-  Q_PROPERTY(int attachmentThumbnailHeight READ attachmentThumbnailHeight WRITE setAttachmentThumbnailHeight NOTIFY attachmentThumbnailHeightChanged)
+  Q_PROPERTY(QAbstractListModel* popupElementControllers READ popupElementControllers NOTIFY popupChanged)
 
 public:
   Q_INVOKABLE explicit PopupViewController(QObject* parent = nullptr);
 
-  ~PopupViewController();
+  ~PopupViewController() override;
 
   Popup* popup() const;
 
@@ -65,39 +52,13 @@ public:
 
   GenericListModel* popupElementControllers() const;
 
-  QRT_DEPRECATED PopupManager* popupManager() const;
-
-  QRT_DEPRECATED void setPopupManager(PopupManager* popupManager);
-
-  QAbstractListModel* displayFields() const;
-
-  QAbstractListModel* attachments() const;
-
   QString title() const;
-
-  bool isShowAttachments() const;
-
-  int attachmentThumbnailWidth() const;
-  void setAttachmentThumbnailWidth(int width);
-
-  int attachmentThumbnailHeight() const;
-  void setAttachmentThumbnailHeight(int height);
 
 signals:
 
   void popupChanged();
 
-  QRT_DEPRECATED void popupManagerChanged();
-
   void titleChanged();
-
-  void fieldCountChanged();
-
-  void attachmentCountChanged();
-
-  void attachmentThumbnailWidthChanged();
-
-  void attachmentThumbnailHeightChanged();
 
   void attachmentDataFetched(const QByteArray& attachmentData, const QString& name);
 
@@ -106,13 +67,6 @@ signals:
   void imageClicked(const QUrl& sourceUrl, const QUrl& linkUrl);
 
 private:
-  int fieldCount() const;
-
-  int attachmentCount() const;
-  PopupAttachmentListModel* popupAttachmentListModel_() const;
-
-private:
-  QPointer<PopupManager> m_popupManager;
   QPointer<Popup> m_popup;
   GenericListModel* m_popupElementControllerModel = nullptr;
 };
