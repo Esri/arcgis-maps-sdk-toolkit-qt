@@ -20,7 +20,6 @@
 // C++ API headers
 #include "FeatureLayer.h"
 #include "Popup.h"
-#include "PopupManager.h"
 
 // Qt headers
 #include <QObject>

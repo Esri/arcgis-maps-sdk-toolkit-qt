@@ -42,8 +42,6 @@ NorthArrow 100.10 NorthArrow.qml
 NorthArrow 200.0 NorthArrow.qml
 OverviewMap 100.12 OverviewMap.qml
 OverviewMap 200.0 OverviewMap.qml
-PopupStackView 100.10 PopupStackView.qml
-PopupStackView 200.0 PopupStackView.qml
 PopupView 100.10 PopupView.qml
 PopupView 200.0 PopupView.qml
 Scalebar 100.13 Scalebar.qml
