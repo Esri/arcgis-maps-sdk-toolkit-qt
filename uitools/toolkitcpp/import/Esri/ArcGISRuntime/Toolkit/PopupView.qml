@@ -45,7 +45,7 @@ import QtQuick.Layouts
      \li Create a Popup from the Feature.
      \li Optionally obtain the Popup's PopupDefinition and set the
      title, whether to show attachments, and so on.
-     \li Assign the PopupView's \c popup property the Popup
+     \li Assign the PopupView's \c popup property to the Popup
      created in the previous step.
    \endlist
    The PopupView is a QML Item that can be anchored, given to a dialog,
@@ -110,14 +110,6 @@ Page {
     property var closeCallback: function() {
         popupView.visible = false;
     }
-
-    /*!
-       \qmlsignal PopupView::attachmentThumbnailClicked(var index)
-       \brief Signal emitted when an attachment thumbnail is clicked.
-       The \a index of the PopupAttachment in the PopupAttachmentListModel
-       that was clicked on by the user.
-     */
-    signal attachmentThumbnailClicked(var index)
 
     /*!
        \qmlsignal PopupView::attachmentDataFetched(var attachmentData, var name)
@@ -200,7 +192,6 @@ Page {
         rightPadding: popupView.spacing
     }
 
-    // prioritizes PopupElements over PopupManager styled Popups if both are present
     contentItem: Loader {
         id: popupDisplayLoader
         sourceComponent: popupUsingPopupElements
