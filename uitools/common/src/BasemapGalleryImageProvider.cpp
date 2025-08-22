@@ -1,3 +1,18 @@
+// COPYRIGHT 2025 ESRI
+// TRADE SECRETS: ESRI PROPRIETARY AND CONFIDENTIAL
+// Unpublished material - all rights reserved under the
+// Copyright Laws of the United States and applicable international
+// laws, treaties, and conventions.
+//
+// For additional information, contact:
+// Environmental Systems Research Institute, Inc.
+// Attn: Contracts and Legal Services Department
+// 380 New York Street
+// Redlands, California, 92373
+// USA
+//
+// email: contracts@esri.com
+/// \file BasemapGalleryImageProvider.cpp
 
 /*******************************************************************************
  *  Copyright 2012-2021 Esri
@@ -14,9 +29,6 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#ifndef QRT_DISABLE_DEPRECATED_WARNINGS
-#define QRT_DISABLE_DEPRECATED_WARNINGS
-#endif
 #include "BasemapGalleryImageProvider.h"
 
 // Toolkit headers

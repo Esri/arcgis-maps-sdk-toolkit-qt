@@ -1,3 +1,19 @@
+// COPYRIGHT 2025 ESRI
+// TRADE SECRETS: ESRI PROPRIETARY AND CONFIDENTIAL
+// Unpublished material - all rights reserved under the
+// Copyright Laws of the United States and applicable international
+// laws, treaties, and conventions.
+//
+// For additional information, contact:
+// Environmental Systems Research Institute, Inc.
+// Attn: Contracts and Legal Services Department
+// 380 New York Street
+// Redlands, California, 92373
+// USA
+//
+// email: contracts@esri.com
+/// \file register.cpp
+
 /*******************************************************************************
  *  Copyright 2012-2025 Esri
  *
@@ -13,9 +29,6 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#ifndef QRT_DISABLE_DEPRECATED_WARNINGS
-#define QRT_DISABLE_DEPRECATED_WARNINGS
-#endif
 #include "register.h"
 
 // Toolkit includes
@@ -76,14 +89,14 @@
 
 /*!
   \headerfile Esri/ArcGISRuntime/Toolkit/register
-  \inmodule ArcGISRuntimeToolkit
+    \inmodule ArcGISRuntimeToolkit
 
-  This file contains the registration function required to register the toolkit
-  with the `QQmlEngine`.
+    This file contains the registration function required to register the toolkit
+    with the `QQmlEngine`.
 
-  Please refer to
-  \c README.md for more information on workflows.
- */
+    Please refer to
+    \c README.md for more information on workflows.
+   */
 
 /*!
   \fn void Esri::ArcGISRuntime::Toolkit::registerComponents(QQmlEngine& engine)
@@ -114,9 +127,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
       Provided is the overloaded method:
 
-      \code
+  \code
       void registerComponentImpl(<CreationType> creationType, int majorVersion, int minorVersion, const char* name)
-      \endcode
+  \endcode
 
       And the three currently accepted values for the \a creationType parameter.
 
@@ -181,9 +194,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   \endlist
 
       Example call:
-      \code
+  \code
       registerComponent<LocatorSearchSource>(CreationType::Uncreatable);
-      \endcode
+  \endcode
  */
     template <typename T, typename CType = CreationType::Creatable_>
     void registerComponent(CType creationType = CType{})
