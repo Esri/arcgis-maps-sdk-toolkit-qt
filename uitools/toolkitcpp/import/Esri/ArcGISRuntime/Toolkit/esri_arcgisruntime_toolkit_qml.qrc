@@ -3,11 +3,9 @@
         <file>AuthenticatorOAuth2View.qml</file>
         <file>AuthenticatorUserCredentialsView.qml</file>
         <file>AttachmentsPopupElementView.qml</file>
-        <file>AuthenticationView.qml</file>
         <file>BasemapGallery.qml</file>
         <file>BookmarksView.qml</file>
         <file>Callout.qml</file>
-        <file>ClientCertificateView.qml</file>
         <file>CoordinateConversion.qml</file>
         <file>CurrentVersion.qml</file>
         <file>FieldsPopupElementView.qml</file>
@@ -15,7 +13,6 @@
         <file>FloorFilter.qml</file>
         <file>MediaPopupElementView.qml</file>
         <file>NorthArrow.qml</file>
-        <file>OAuth2View.qml</file>
         <file>OverviewMap.qml</file>
         <file>PopupStackView.qml</file>
         <file>PopupView.qml</file>
@@ -23,14 +20,11 @@
         <file>ScalebarImpl.qml</file>
         <file>SearchView.qml</file>
         <file>AuthenticatorServerTrustView.qml</file>
-        <file>SslHandshakeView.qml</file>
         <file>TextPopupElementView.qml</file>
         <file>TimeSlider.qml</file>
-        <file>UserCredentialsView.qml</file>
         <file>UtilityNetworkTrace.qml</file>
         <file>qmldir</file>
         <file>AuthenticatorClientCertificateView.qml</file>
-        <file>Authenticator_internal.qml</file>
         <file>Authenticator.qml</file>
     </qresource>
 </RCC>

@@ -50,12 +50,10 @@ target_link_libraries(libtoolkitcpp PRIVATE
 )
 
 set(esri_arcgisruntime_toolkit_view_resource_files
-    "import/Esri/ArcGISRuntime/Toolkit/AuthenticationView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/AttachmentsPopupElementView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/BasemapGallery.qml"
     "import/Esri/ArcGISRuntime/Toolkit/BookmarksView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/Callout.qml"
-    "import/Esri/ArcGISRuntime/Toolkit/ClientCertificateView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/CoordinateConversion.qml"
     "import/Esri/ArcGISRuntime/Toolkit/CurrentVersion.qml"
     "import/Esri/ArcGISRuntime/Toolkit/FieldsPopupElementView.qml"
@@ -63,17 +61,14 @@ set(esri_arcgisruntime_toolkit_view_resource_files
     "import/Esri/ArcGISRuntime/Toolkit/FloorFilter.qml"
     "import/Esri/ArcGISRuntime/Toolkit/MediaPopupElementView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/NorthArrow.qml"
-    "import/Esri/ArcGISRuntime/Toolkit/OAuth2View.qml"
     "import/Esri/ArcGISRuntime/Toolkit/OverviewMap.qml"
     "import/Esri/ArcGISRuntime/Toolkit/PopupStackView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/PopupView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/Scalebar.qml"
     "import/Esri/ArcGISRuntime/Toolkit/ScalebarImpl.qml"
     "import/Esri/ArcGISRuntime/Toolkit/SearchView.qml"
-    "import/Esri/ArcGISRuntime/Toolkit/SslHandshakeView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/TextPopupElementView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/TimeSlider.qml"
-    "import/Esri/ArcGISRuntime/Toolkit/UserCredentialsView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/UtilityNetworkTrace.qml"
     "import/Esri/ArcGISRuntime/Toolkit/qmldir"
 )

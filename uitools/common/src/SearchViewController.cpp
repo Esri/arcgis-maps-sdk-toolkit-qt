@@ -1,4 +1,3 @@
-
 /*******************************************************************************
  *  Copyright 2012-2021 Esri
  *
@@ -122,7 +121,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
       // Reset sources to default.
       {
         sources()->clear();
-        auto locatorTask = new LocatorTask(QUrl(DEFAULT_LOCATOR_URL), nullptr, nullptr);
+        auto locatorTask = new LocatorTask(QUrl(DEFAULT_LOCATOR_URL));
         auto searchSource = new SmartLocatorSearchSource(locatorTask, m_sources);
         locatorTask->setParent(searchSource);
         sources()->append(searchSource);

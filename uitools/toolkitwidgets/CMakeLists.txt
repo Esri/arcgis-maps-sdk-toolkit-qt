@@ -27,7 +27,6 @@ qt_add_library(libtoolkitwidgets STATIC
     ${ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_SOURCES}
 
     # public headers
-    src/Esri/ArcGISRuntime/Toolkit/AuthenticationView.h
     src/Esri/ArcGISRuntime/Toolkit/BasemapGallery.h
     src/Esri/ArcGISRuntime/Toolkit/BookmarksView.h
     src/Esri/ArcGISRuntime/Toolkit/CoordinateConversion.h
@@ -36,7 +35,6 @@ qt_add_library(libtoolkitwidgets STATIC
     src/Esri/ArcGISRuntime/Toolkit/OverviewMap.h
 
     # public sources
-    src/Esri/ArcGISRuntime/Toolkit/AuthenticationView.cpp
     src/Esri/ArcGISRuntime/Toolkit/BasemapGallery.cpp
     src/Esri/ArcGISRuntime/Toolkit/BookmarksView.cpp
     src/Esri/ArcGISRuntime/Toolkit/CoordinateConversion.cpp
@@ -45,7 +43,6 @@ qt_add_library(libtoolkitwidgets STATIC
     src/Esri/ArcGISRuntime/Toolkit/OverviewMap.cpp
 
     # public UI
-    src/Esri/ArcGISRuntime/Toolkit/AuthenticationView.ui
     src/Esri/ArcGISRuntime/Toolkit/BasemapGallery.ui
     src/Esri/ArcGISRuntime/Toolkit/BookmarksView.ui
     src/Esri/ArcGISRuntime/Toolkit/CoordinateConversion.ui
@@ -53,29 +50,12 @@ qt_add_library(libtoolkitwidgets STATIC
     src/Esri/ArcGISRuntime/Toolkit/OverviewMap.ui
 
     # internal headers
-    src/Esri/ArcGISRuntime/Toolkit/Internal/ClientCertificatePasswordDialog.h
-    src/Esri/ArcGISRuntime/Toolkit/Internal/ClientCertificateView.h
     src/Esri/ArcGISRuntime/Toolkit/Internal/CoordinateEditDelegate.h
     src/Esri/ArcGISRuntime/Toolkit/Internal/Flash.h
-    src/Esri/ArcGISRuntime/Toolkit/Internal/OAuth2View.h
-    src/Esri/ArcGISRuntime/Toolkit/Internal/SslHandshakeView.h
-    src/Esri/ArcGISRuntime/Toolkit/Internal/UserCredentialView.h
 
     # internal sources
-    src/Esri/ArcGISRuntime/Toolkit/Internal/ClientCertificatePasswordDialog.cpp
-    src/Esri/ArcGISRuntime/Toolkit/Internal/ClientCertificateView.cpp
     src/Esri/ArcGISRuntime/Toolkit/Internal/CoordinateEditDelegate.cpp
     src/Esri/ArcGISRuntime/Toolkit/Internal/Flash.cpp
-    src/Esri/ArcGISRuntime/Toolkit/Internal/OAuth2View.cpp
-    src/Esri/ArcGISRuntime/Toolkit/Internal/SslHandshakeView.cpp
-    src/Esri/ArcGISRuntime/Toolkit/Internal/UserCredentialView.cpp
-
-    # internal UI
-    src/Esri/ArcGISRuntime/Toolkit/Internal/ClientCertificatePasswordDialog.ui
-    src/Esri/ArcGISRuntime/Toolkit/Internal/ClientCertificateView.ui
-    src/Esri/ArcGISRuntime/Toolkit/Internal/OAuth2View.ui
-    src/Esri/ArcGISRuntime/Toolkit/Internal/SslHandshakeView.ui
-    src/Esri/ArcGISRuntime/Toolkit/Internal/UserCredentialView.ui
 )
 
 target_include_directories(libtoolkitwidgets PUBLIC

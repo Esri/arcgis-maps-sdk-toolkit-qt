@@ -2,7 +2,7 @@
 
 ## ArcGIS Maps SDK - Qt Widgets UI components
 
-These are controls that compliment your `MapView` or `SceneView` by adding them to your projects .cpp files. They are components like: AuthenticationView, NorthArrow, OverviewMap, TimeSlider, and so forth. Using these components are very beneficial for traditional desktop based apps.
+These are controls that compliment your `MapView` or `SceneView` by adding them to your projects .cpp files. They are components like: Authenticator, NorthArrow, OverviewMap, TimeSlider, and so forth. Using these components are very beneficial for traditional desktop based apps.
 
 You can learn more about the benefits of building apps with the [Qt Widgets UI controls](https://doc.qt.io/qt-6/qtwidgets-index.html). 
 
@@ -10,7 +10,6 @@ You can learn more about the benefits of building apps with the [Qt Widgets UI c
 
 These are the **Qt Widgets UI control/Class** available to use:
 
-- **[AuthenticationView](docs/AuthenticationView.md)** - A wrapper view that will automatically display the proper authentication view for any of the supported authentication types (OAuth, Token, HTTP Basic, HTTP Digest, SAML, PKI).
 - **[BasemapGallery](docs/BasemapGallery.md)** - Shows a list of available basemaps by using a Portal or using a user defined collection. User is able to select a basemap, setting it on the current Geomodel.
 - **[BookmarksView](docs/BookmarksView.md)**- A control that displays and navigates to bookmarks that have been authored in a map.
 - **[CoordinateConversion](docs/CoordinateConversion.md)** - A tool that helps convert coordinates from one coordinate system to another.

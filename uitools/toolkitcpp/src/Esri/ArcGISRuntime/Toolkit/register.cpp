@@ -1,4 +1,3 @@
-
 /*******************************************************************************
  *  Copyright 2012-2025 Esri
  *
@@ -22,7 +21,6 @@
 // Toolkit includes
 #include "AuthenticatorController.h"
 #include "AttachmentsPopupElementViewController.h"
-#include "AuthenticationController.h"
 #include "BarChartPopupMediaItem.h"
 #include "BasemapGalleryController.h"
 #include "BasemapGalleryItem.h"
@@ -231,7 +229,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     registerModuleRevisions();
     registerComponent<AuthenticatorController>(CreationType::Singleton);
     registerComponent<AttachmentsPopupElementViewController>();
-    registerComponent<AuthenticationController>();
     registerComponent<BarChartPopupMediaItem>();
     registerComponent<BasemapGalleryController>();
     registerComponent<BasemapGalleryItem>();
