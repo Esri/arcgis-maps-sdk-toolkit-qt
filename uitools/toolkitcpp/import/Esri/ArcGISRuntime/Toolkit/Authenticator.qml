@@ -49,28 +49,91 @@ import QtQuick.Controls
 */
 
 Item {
-    id: root
+    id: authenticator
 
-    property var controller: viewLoader.controller
+    property var controller: AuthenticatorController
     signal activeLoginViewReady_(var activeLoginView)
 
-    Component.onCompleted: {
-        viewLoader.source = AuthenticatorController.canBeUsed ?
-                                "Authenticator_internal.qml" :
-                                "AuthenticationView.qml";
-    }
-
-    Loader {
-        id: viewLoader
-        anchors.fill: parent
-        focus: true
-    }
-
     Connections {
-        target: viewLoader.item
-        ignoreUnknownSignals: true
-        function onActiveLoginViewReady_(activeLoginView) {
-            activeLoginViewReady_(activeLoginView);
+        target: controller
+
+        function onDisplayUsernamePasswordSignInView() {
+            displayView(userCredentialsViewComponent);
+        }
+
+        function onDisplayOAuthSignInView() {
+            displayView(oAuth2ViewComponent);
+        }
+
+        function onDisplayAuthenticatorServerTrustView() {
+            displayView(authenticatorServerTrustViewComponent);
+        }
+
+        function onDisplayClientCertificateView() {
+            displayView(clientCertificateViewComponent);
+        }
+    }
+
+    Component {
+        id: clientCertificateViewComponent
+        AuthenticatorClientCertificateView {
+            anchors.centerIn: authenticator
+            controller: authenticator.controller
+            onClosed: {
+                this.destroy();
+            }
+            Component.onCompleted: activeLoginViewReady_(this)
+        }
+    }
+
+    Component {
+        id: userCredentialsViewComponent
+        AuthenticatorUserCredentialsView {
+            anchors.centerIn: authenticator
+            controller: authenticator.controller
+            onClosed: {
+                this.destroy();
+            }
+            Component.onCompleted: activeLoginViewReady_(this)
+        }
+    }
+
+    Component {
+        id: oAuth2ViewComponent
+        AuthenticatorOAuth2View {
+            anchors.centerIn: authenticator
+            controller: authenticator.controller
+            onClosed: {
+                this.destroy();
+            }
+            onWebViewLoaded_: activeLoginViewReady_(this)
+        }
+    }
+
+    Component {
+        id: authenticatorServerTrustViewComponent
+        AuthenticatorServerTrustView {
+            anchors.centerIn: authenticator
+            controller: authenticator.controller
+            onClosed: {
+                this.destroy();
+            }
+            Component.onCompleted: activeLoginViewReady_(this)
+        }
+    }
+
+    function displayView(componentToDisplay) {
+        if (componentToDisplay) {
+            const incubator = componentToDisplay.incubateObject(authenticator);
+            if (incubator.status === Component.Ready) {
+                incubator.object.open();
+            } else {
+                incubator.onStatusChanged = function(status) {
+                    if (status === Component.Ready) {
+                        this.object.open();
+                    }
+                }
+            }
         }
     }
 }

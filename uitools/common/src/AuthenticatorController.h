@@ -45,9 +45,6 @@ class AuthenticatorController : public QObject
 {
   Q_OBJECT
 
-  // general
-  Q_PROPERTY(bool canBeUsed READ canBeUsed_ CONSTANT)
-
   // token authentication
   Q_PROPERTY(QString currentAuthenticatingHost READ currentAuthenticatingHost_ NOTIFY currentAuthenticatingHostChanged)
 
@@ -111,7 +108,6 @@ signals:
 
 private:
   explicit AuthenticatorController(QObject* parent = nullptr);
-  bool canBeUsed_() const;
   QString currentAuthenticatingHost_() const;
   QUrl authorizeUrl_() const;
   QString redirectUri_() const;

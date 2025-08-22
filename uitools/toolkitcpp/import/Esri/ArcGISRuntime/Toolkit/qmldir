@@ -21,20 +21,15 @@ CurrentVersion 300.0 CurrentVersion.qml
 
 # View components
 Authenticator 200.8 Authenticator.qml
-Authenticator_internal 200.8 Authenticator_internal.qml
 AuthenticatorOAuth2View 200.8 AuthenticatorOAuth2View.qml
 AuthenticatorUserCredentialsView 200.8 AuthenticatorUserCredentialsView.qml
 AuthenticatorClientCertificateView 200.8 AuthenticatorClientCertificateView.qml
-AuthenticationView 100.10 AuthenticationView.qml
-AuthenticationView 200.0 AuthenticationView.qml
 BasemapGallery 100.12 BasemapGallery.qml
 BasemapGallery 200.0 BasemapGallery.qml
 BookmarksView 100.15 BookmarksView.qml
 BookmarksView 200.0 BookmarksView.qml
 Callout 100.10 Callout.qml
 Callout 200.0 Callout.qml
-ClientCertificateView 100.10 ClientCertificateView.qml
-ClientCertificateView 200.0 ClientCertificateView.qml
 CoordinateConversion 100.10 CoordinateConversion.qml
 CoordinateConversion 200.0 CoordinateConversion.qml
 FieldsPopupElementView 200.6 FieldsPopupElementView.qml
@@ -45,8 +40,6 @@ internal ScalebarImpl ScalebarImpl.qml
 MediaPopupElementView 200.6 MediaPopupElementView.qml
 NorthArrow 100.10 NorthArrow.qml
 NorthArrow 200.0 NorthArrow.qml
-OAuth2View 100.10 OAuth2View.qml
-OAuth2View 200.0 OAuth2View.qml
 OverviewMap 100.12 OverviewMap.qml
 OverviewMap 200.0 OverviewMap.qml
 PopupStackView 100.10 PopupStackView.qml
@@ -58,12 +51,8 @@ Scalebar 200.0 Scalebar.qml
 SearchView 100.13 SearchView.qml
 SearchView 200.0 SearchView.qml
 AuthenticatorServerTrustView 200.0 AuthenticatorServerTrustView.qml
-SslHandshakeView 100.10 SslHandshakeView.qml
-SslHandshakeView 200.0 SslHandshakeView.qml
 TextPopupElementView 200.6 TextPopupElementView.qml
 TimeSlider 100.10 TimeSlider.qml
 TimeSlider 200.0 TimeSlider.qml
-UserCredentialsView 100.10 UserCredentialsView.qml
-UserCredentialsView 200.0 UserCredentialsView.qml
 UtilityNetworkTrace 100.15 UtilityNetworkTrace.qml
 UtilityNetworkTrace 200.0 UtilityNetworkTrace.qml

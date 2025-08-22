@@ -1,4 +1,3 @@
-
 /*******************************************************************************
  *  Copyright 2012-2024 Esri
  *
@@ -64,10 +63,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
 AuthenticatorController::AuthenticatorController(QObject* parent) :
     QObject(parent)
 {
-  if (!canBeUsed_())
-  {
-    return;
-  }
 
   m_arcGISAuthenticationChallengeRelay = std::make_unique<ArcGISAuthenticationChallengeRelay>(this);
   m_networkAuthenticationChallengeRelay = std::make_unique<NetworkAuthenticationChallengeRelay>(this);
@@ -341,12 +336,6 @@ void AuthenticatorController::cancel()
     m_currentOAuthUserLoginPrompt->respondWithError("User canceled");
     m_currentOAuthUserLoginPrompt.reset();
   }
-}
-
-bool AuthenticatorController::canBeUsed_() const
-{
-  // this class cannot be used with the legacy authentication system
-  return ArcGISRuntimeEnvironment::useLegacyAuthentication() == false;
 }
 
 void AuthenticatorController::addOAuthUserConfiguration(OAuthUserConfiguration* userConfiguration)

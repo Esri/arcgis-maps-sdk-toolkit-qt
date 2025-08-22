@@ -16,7 +16,6 @@
 #include "UtilityNetworkTraceDemo.h"
 
 #include <Map.h>
-#include <Credential.h>
 #include <Portal.h>
 #include <PortalItem.h>
 #include <Error.h>
@@ -28,13 +27,6 @@ using namespace Esri::ArcGISRuntime;
 UtilityNetworkTraceDemo::UtilityNetworkTraceDemo(QObject* parent) :
   BaseDemo(parent)
 {
-  connect(AuthenticationManager::instance(),
-          &AuthenticationManager::authenticationChallenge,
-          this,
-          [parent](AuthenticationChallenge* challenge)
-  {
-    challenge->continueWithCredential(new Credential("viewer01", "I68VGU^nMurF", parent));
-  });
 }
 
 UtilityNetworkTraceDemo::~UtilityNetworkTraceDemo() = default;
