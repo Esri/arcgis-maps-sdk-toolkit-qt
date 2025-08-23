@@ -32,7 +32,6 @@ The following table lists the various UI components available depending on how y
 |      FloorFilter                  |       [✔](uitools/toolkitcpp/docs/FloorFilter.md)       |      [✔](uitools/toolkitwidgets/docs/FloorFilter.md)     |
 |      NorthArrow                   |        [✔](uitools/toolkitcpp/docs/NorthArrow.md)       |      [✔](uitools/toolkitwidgets/docs/NorthArrow.md)      |
 |      OverviewMap                  |       [✔](uitools/toolkitcpp/docs/OverviewMap.md)       |      [✔](uitools/toolkitwidgets/docs/OverviewMap.md)     |
-|    PopupStackView                 |      [✔](uitools/toolkitcpp/docs/PopupStackView.md)     |                                                          |
 |       PopupView                   |        [✔](uitools/toolkitcpp/docs/PopupView.md)        |                                                          |
 |        Scalebar                   |         [✔](uitools/toolkitcpp/docs/Scalebar.md)        |                                                          |
 |      SearchView                   |        [✔](uitools/toolkitcpp/docs/SearchView.md)       |                                                          |

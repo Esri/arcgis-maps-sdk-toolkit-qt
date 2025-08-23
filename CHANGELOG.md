@@ -65,7 +65,6 @@
 * (CoordinateConversion) Fixed UI issues when a QML theme was applied.
 * (PopupView) Fixed UI issues when a QML theme was applied.
 * (PopupView) Now respects label aliases when rendering field names.
-* (PopupStackView) Next/Back buttons only visible when there are multiple results. 
 * Added the new (WIP) Calcite QML style.
 * Added a new Calcite style demo app under `calcite-qml/demo`.
 * Added a new tool examples folder under `uitools/examples`.
