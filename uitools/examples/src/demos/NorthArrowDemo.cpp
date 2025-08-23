@@ -16,6 +16,8 @@
 
 #include "NorthArrowDemo.h"
 
+#include <QFuture>
+
 NorthArrowDemo::NorthArrowDemo(QObject* parent) :
   BaseDemo(parent)
 {
@@ -23,4 +25,9 @@ NorthArrowDemo::NorthArrowDemo(QObject* parent) :
 
 NorthArrowDemo::~NorthArrowDemo()
 {
+}
+
+void NorthArrowDemo::setMapViewRotation(Esri::ArcGISRuntime::MapQuickView* mapView, double degrees)
+{
+  mapView->setViewpointRotationAsync(degrees);
 }

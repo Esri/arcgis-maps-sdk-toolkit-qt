@@ -19,6 +19,7 @@ import QtQuick.Controls
 import Esri.ArcGISRuntime
 import Esri.ArcGISRuntime.Toolkit
 import DemoApp
+import Calcite as C
 
 DemoPage {
     sceneViewContents: Component {
@@ -54,7 +55,56 @@ DemoPage {
                 }
             }
             NorthArrowDemo {
+                id:model
                 geoView: view
+            }
+
+            // Slider UI presentation at bottom
+            Rectangle {
+                anchors {
+                    bottom: view.attributionTop
+                    horizontalCenter: parent.horizontalCenter
+                }
+
+
+                width: childrenRect.width
+                height: childrenRect.height
+                color: C.Calcite.background
+
+                // sliderCombo: A slider and text for its value
+                Row {
+                    id: sliderCombo
+                    spacing: 5
+                    leftPadding: 5
+                    rightPadding: 5
+                    C.Slider {
+                        id: slider1
+                        anchors {
+                            verticalCenter: parent.verticalCenter
+                        }
+                        // Slider controls degrees of rotation
+                        from: 0.0
+                        to: 360.0
+
+                        onPressedChanged: {
+                            // Call C++ invokable function to change the rotation
+                            // of the map view
+                            model.setMapViewRotation(view,value);
+                        }
+                    }
+
+                    Text {
+                        anchors {
+                            verticalCenter: parent.verticalCenter
+                            margins: 10
+                        }
+                        horizontalAlignment: TextInput.AlignHCenter
+                        font.pixelSize: 20
+                        color: C.Calcite.text2
+                        text: slider1.value.toPrecision(3);
+                        width: 40
+                    }
+                }
             }
         }
     }
