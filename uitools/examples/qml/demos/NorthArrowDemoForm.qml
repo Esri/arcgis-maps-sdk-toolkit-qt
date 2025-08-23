@@ -86,7 +86,7 @@ DemoPage {
                         from: 0.0
                         to: 360.0
 
-                        onPressedChanged: {
+                        onValueChanged: {
                             // Call C++ invokable function to change the rotation
                             // of the map view
                             model.setMapViewRotation(view,value);
