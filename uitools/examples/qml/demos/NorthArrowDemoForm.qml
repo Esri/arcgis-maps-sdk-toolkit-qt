@@ -89,7 +89,7 @@ DemoPage {
                         onValueChanged: {
                             // Call C++ invokable function to change the rotation
                             // of the map view
-                            model.setMapViewRotation(view,value);
+                            model.setMapViewRotation(view, value);
                         }
                     }
 
