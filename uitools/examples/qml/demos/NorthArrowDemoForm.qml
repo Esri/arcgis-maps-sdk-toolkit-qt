@@ -65,8 +65,6 @@ DemoPage {
                     bottom: view.attributionTop
                     horizontalCenter: parent.horizontalCenter
                 }
-
-
                 width: childrenRect.width
                 height: childrenRect.height
                 color: C.Calcite.background
