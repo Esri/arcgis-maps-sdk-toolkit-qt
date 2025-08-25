@@ -77,9 +77,7 @@ DemoPage {
                     rightPadding: 5
                     C.Slider {
                         id: slider1
-                        anchors {
-                            verticalCenter: parent.verticalCenter
-                        }
+                        anchors.verticalCenter: parent.verticalCenter
                         // Slider controls degrees of rotation
                         from: 0.0
                         to: 360.0
