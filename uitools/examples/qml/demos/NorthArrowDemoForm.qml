@@ -55,7 +55,7 @@ DemoPage {
                 }
             }
             NorthArrowDemo {
-                id:model
+                id: model
                 geoView: view
             }
 
