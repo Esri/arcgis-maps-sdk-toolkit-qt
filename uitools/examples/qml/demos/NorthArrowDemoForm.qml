@@ -89,7 +89,7 @@ DemoPage {
                         }
                     }
 
-                    Text {
+                    Label {
                         anchors {
                             verticalCenter: parent.verticalCenter
                             margins: 10
