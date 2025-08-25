@@ -31,7 +31,7 @@ public:
   Q_INVOKABLE NorthArrowDemo(QObject* parent = nullptr);
   ~NorthArrowDemo() override;
 
-   Q_INVOKABLE void setMapViewRotation(Esri::ArcGISRuntime::MapQuickView* mapView, double degrees);
+  Q_INVOKABLE void setMapViewRotation(Esri::ArcGISRuntime::MapQuickView* mapView, double degrees);
 };
 
 #endif // ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_NORTHARROWDEMO_H
