@@ -35,7 +35,8 @@ Rectangle {
             fill: parent
             margins: control.checkState === Qt.Checked ? -2 : 2
         }
-        source: control.checkState === Qt.Checked ? "images/check.svg": "images/line-solid.svg"
-        visible: true
+        source: control.checkState === Qt.Checked ? "images/check.svg":
+                control.checkState === Qt.PartiallyChecked ? "images/line-solid.svg": ""
+        visible: control.checkState !== Qt.Unchecked
     }
 }
