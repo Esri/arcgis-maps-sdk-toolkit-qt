@@ -53,6 +53,9 @@ DemoPage {
                     bottom: parent.attributionTop
                     margins: 10
                 }
+                onHeadingReset:{
+                    slider1.value = 0
+                }
             }
             NorthArrowDemo {
                 id: model
@@ -80,7 +83,7 @@ DemoPage {
                         anchors.verticalCenter: parent.verticalCenter
                         // Slider controls degrees of rotation
                         from: 0.0
-                        to: 360.0
+                        to: 359.0
 
                         onValueChanged: {
                             // Call C++ invokable function to change the rotation
