@@ -85,7 +85,7 @@ ApplicationWindow {
                         target: C.Calcite
                         property: "theme"
                         value: useSystemThemeCheckBox.checked ? Application.styleHints.colorScheme :
-                                                          themeSwitch.selectedTheme
+                                                                themeSwitch.selectedTheme
                     }
                 }
             }
@@ -205,19 +205,49 @@ ApplicationWindow {
                         }
                     }
                 }
-                CheckBox {
-                    Layout.alignment: Qt.AlignHCenter
-                    text: "Check box 1"
-                }
-                CheckBox {
-                    Layout.alignment: Qt.AlignHCenter
-                    text: "Check box 2"
-                    checkState: Qt.PartiallyChecked
-                }
-                CheckBox {
-                    Layout.alignment: Qt.AlignHCenter
-                    text: "Check box 3"
-                    checkState: Qt.Checked
+                Column {
+                    spacing: 4
+                    topPadding: 4
+                    bottomPadding: 4
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    CheckBox {
+                        id: parentCheck
+                        text: "Root Checkbox"
+                        checkState: {
+                            if (child1.checked && child2.checked) {
+                                return Qt.Checked
+                            } else if (!child1.checked && !child2.checked) {
+                                return Qt.Unchecked
+                            } else {
+                                return Qt.PartiallyChecked
+                            }
+                        }
+
+                        onClicked: {
+                            let newState = checkState
+                            child1.checked = newState
+                            child2.checked = newState
+                        }
+                    }
+                    Column {
+                        spacing: 4
+                        leftPadding: 32
+                        anchors.horizontalCenter: parent.horizontalCenter
+
+                        CheckBox {
+                            id: child1
+                            text: "Checkbox 1"
+                            checked: false
+                            onClicked: parentCheck.forceActiveFocus()
+                        }
+
+                        CheckBox {
+                            id: child2
+                            text: "Checkbox 2"
+                            checked: true
+                            onClicked: parentCheck.forceActiveFocus()
+                        }
+                    }
                 }
                 ComboBox {
                     Layout.alignment: Qt.AlignHCenter
