@@ -206,7 +206,6 @@ ApplicationWindow {
                     }
                 }
                 Column {
-                    id: treeRoot
                     spacing: 4
                     topPadding: 4
                     bottomPadding: 4
