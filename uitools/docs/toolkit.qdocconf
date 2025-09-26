@@ -32,6 +32,6 @@ headerdirs  = register widgets cpp common/src
 # The sourcedirs variable specifies the
 # directories containing the .cpp or .qdoc
 # files used in the documentation.
-sourcedirs  =  import register widgets cpp qdoc
+sourcedirs  =  import register widgets cpp qdoc common/src
 
 imagedirs  = images
