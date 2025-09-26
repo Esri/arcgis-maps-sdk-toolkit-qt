@@ -27,7 +27,7 @@ outputdir  = html
 # The headerdirs variable specifies the directories
 # containing the header files associated
 # with the .cpp source files used in the documentation.
-headerdirs  = register widgets cpp
+headerdirs  = register widgets cpp common/src
 
 # The sourcedirs variable specifies the
 # directories containing the .cpp or .qdoc
