@@ -42,19 +42,19 @@
   \brief When defined the toolkit is built to target Widgets, otherwise QtQuick.
  */
 
-// /*!
-//   \typedef Esri::ArcGISRuntime::Toolkit::SceneViewToolkit
-//   \relates Esri/ArcGISRuntime/Toolkit/Internal/GeoViews
-//   \brief If \c WIDGETS_ARCGISRUNTIME_TOOLKIT is defined then this type is
-//   \c SceneGraphicsView, otherwise it is \c SceneQuickView.
-//  */
+/*!
+  \typedef Esri::ArcGISRuntime::Toolkit::SceneViewToolkit
+  \relates Esri/ArcGISRuntime/Toolkit/Internal/GeoViews
+  \brief If \c WIDGETS_ARCGISRUNTIME_TOOLKIT is defined then this type is
+  \c SceneGraphicsView, otherwise it is \c SceneQuickView.
+ */
 
-// /*!
-//   \typedef Esri::ArcGISRuntime::Toolkit::MapViewToolkit
-//   \relates Esri/ArcGISRuntime/Toolkit/Internal/GeoViews
-//   \brief If \c WIDGETS_ARCGISRUNTIME_TOOLKIT is defined then this type is
-//   \c MapGraphicsView, otherwise it is \c MapQuickView.
-//  */
+/*!
+  \typedef Esri::ArcGISRuntime::Toolkit::MapViewToolkit
+  \relates Esri/ArcGISRuntime/Toolkit/Internal/GeoViews
+  \brief If \c WIDGETS_ARCGISRUNTIME_TOOLKIT is defined then this type is
+  \c MapGraphicsView, otherwise it is \c MapQuickView.
+ */
 
 /*!
   \internal
