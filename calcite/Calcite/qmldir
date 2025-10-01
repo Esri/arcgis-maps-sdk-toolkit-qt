@@ -44,12 +44,16 @@ RadioButton 1.0 RadioButton.qml
 RadioDelegate 1.0 RadioDelegate.qml
 internal RadioIndicator RadioIndicator.qml
 RoundButton 1.0 RoundButton.qml
+ScrollBar 1.0 ScrollBar.qml
 Slider 1.0 Slider.qml
 internal SliderGroove SliderGroove.qml
 internal SliderHandle SliderHandle.qml
 Switch 1.0 Switch.qml
 TextField 1.0 TextField.qml
 SpinBox 1.0 SpinBox.qml
+ToolBar 1.0 ToolBar.qml
+ToolButton 1.0 ToolButton.qml
+ToolSeperator 1.0 ToolSeperator.qml
 
 # Calcite global
 singleton Calcite 1.0 Calcite.qml
