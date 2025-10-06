@@ -54,7 +54,6 @@ SpinBox 1.0 SpinBox.qml
 ToolBar 1.0 ToolBar.qml
 ToolButton 1.0 ToolButton.qml
 ToolSeperator 1.0 ToolSeperator.qml
-ProgressBar 1.0 ProgressBar.qml
 
 # Calcite global
 singleton Calcite 1.0 Calcite.qml
