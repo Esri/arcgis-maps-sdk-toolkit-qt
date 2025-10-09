@@ -55,7 +55,7 @@ T.MenuItem {
         Rectangle {
             width: parent.width
             height: parent.height
-            color: control.visualFocus || control.down ? Calcite.brandPress : control.hovered ? Calcite.brand : "transparent"
+            color: control.visualFocus || control.down ? Calcite.brandPress : control.hovered ? Calcite.brandHover : "transparent"
         }
     }
 }

@@ -30,58 +30,58 @@ QtObject {
     // This is an internal implementation detail.
     // https://doc.qt.io/qt-6/qt.html#ColorScheme-enum
     enum Theme {
-    Unknown,
-    Light,
-    Dark
-}
+        Unknown,
+        Light,
+        Dark
+    }
 
-    property int theme: useSystemTheme ? Application.styleHints.colorScheme : Calcite.Theme.Light
+    property int theme: Calcite.Theme.Dark//useSystemTheme ? Application.styleHints.colorScheme : Calcite.Theme.Light
 
     property bool useSystemTheme: true
 
-    readonly property color offWhite: "#F8F8F8"
+    property color offWhite: "#F8F8F8"
 
-    readonly property color brand: theme === Calcite.Theme.Light ? "#007AC2" : "#009AF2"
+    property color brand: theme === Calcite.Theme.Light ? "#007AC2" : "#009AF2"
 
-    readonly property color brandHover: theme === Calcite.Theme.Light ? "#00619B" : "#007AC2"
+    property color brandHover: theme === Calcite.Theme.Light ? "#00619B" : "#007AC2"
 
-    readonly property color brandPress: theme === Calcite.Theme.Light ? "#004874" : "#00619B"
+    property color brandPress: theme === Calcite.Theme.Light ? "#004874" : "#00619B"
 
-    readonly property color background: theme === Calcite.Theme.Light ? offWhite : "#353535"
+    property color background: theme === Calcite.Theme.Light ? offWhite : "#353535"
 
-    readonly property color foreground1: theme === Calcite.Theme.Light ? "#FFFFFF" : "#2B2B2B"
+    property color foreground1: theme === Calcite.Theme.Light ? "#FFFFFF" : "#2B2B2B"
 
-    readonly property color foreground2: theme === Calcite.Theme.Light ? "#F3F3F3" : "#202020"
+    property color foreground2: theme === Calcite.Theme.Light ? "#F3F3F3" : "#202020"
 
-    readonly property color foreground3: theme === Calcite.Theme.Light ? "#EAEAEA" : "#151515"
+    property color foreground3: theme === Calcite.Theme.Light ? "#EAEAEA" : "#151515"
 
-    readonly property color text1: theme === Calcite.Theme.Light ? "#151515" : "#FFFFFF"
+    property color text1: theme === Calcite.Theme.Light ? "#151515" : "#FFFFFF"
 
-    readonly property color text2: theme === Calcite.Theme.Light ? "#4A4A4A" : "#BFBFBF"
+    property color text2: theme === Calcite.Theme.Light ? "#4A4A4A" : "#BFBFBF"
 
-    readonly property color text3: theme === Calcite.Theme.Light ? "#6A6A6A" : "#9F9F9F"
+    property color text3: theme === Calcite.Theme.Light ? "#6A6A6A" : "#9F9F9F"
 
-    readonly property color textInverse: theme === Calcite.Theme.Light ? "#FFFFFF" : "#151515"
+    property color textInverse: theme === Calcite.Theme.Light ? "#FFFFFF" : "#151515"
 
-    readonly property color textLink: theme === Calcite.Theme.Light ? "#00619B" : "#00A0FF"
+    property color textLink: theme === Calcite.Theme.Light ? "#00619B" : "#00A0FF"
 
-    readonly property color border1: theme === Calcite.Theme.Light ? "#CACACA" : "#4A4A4A"
+    property color border1: theme === Calcite.Theme.Light ? "#CACACA" : "#4A4A4A"
 
-    readonly property color border2: theme === Calcite.Theme.Light ? "#DFDFDF" : "#404040"
+    property color border2: theme === Calcite.Theme.Light ? "#DFDFDF" : "#404040"
 
-    readonly property color border3: theme === Calcite.Theme.Light ? "#EAEAEA" : "#353535"
+    property color border3: theme === Calcite.Theme.Light ? "#EAEAEA" : "#353535"
 
-    readonly property color borderInput: theme === Calcite.Theme.Light ? "#949494" : "#757575"
+    property color borderInput: theme === Calcite.Theme.Light ? "#949494" : "#757575"
 
-    readonly property color info: theme === Calcite.Theme.Light ? "#00619B" : "#00A0FF"
+    property color info: theme === Calcite.Theme.Light ? "#00619B" : "#00A0FF"
 
-    readonly property color success: theme === Calcite.Theme.Light ? "#35AC46" : "#36DA43"
+    property color success: theme === Calcite.Theme.Light ? "#35AC46" : "#36DA43"
 
-    readonly property color warning: theme === Calcite.Theme.Light ? "#EDD317" : "#FFC900"
+    property color warning: theme === Calcite.Theme.Light ? "#EDD317" : "#FFC900"
 
-    readonly property color danger: theme === Calcite.Theme.Light ? "#D83020" : "#FE583E"
+    property color danger: theme === Calcite.Theme.Light ? "#D83020" : "#FE583E"
 
-    readonly property color dangerHover: theme === Calcite.Theme.Light ? "#A82B1E" : "#FF0015"
+    property color dangerHover: theme === Calcite.Theme.Light ? "#A82B1E" : "#FF0015"
 
-    readonly property color dangerPress: theme === Calcite.Theme.Light ? "#7C1D13" : "#D90012"
+    property color dangerPress: theme === Calcite.Theme.Light ? "#7C1D13" : "#D90012"
 }
