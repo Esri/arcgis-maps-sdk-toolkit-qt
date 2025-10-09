@@ -17,7 +17,7 @@ import QtQuick
 import QtQuick.Templates as T
 
 T.ProgressBar {
-    id: control2
+    id: control
 
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
                             implicitContentWidth + leftPadding + rightPadding)
