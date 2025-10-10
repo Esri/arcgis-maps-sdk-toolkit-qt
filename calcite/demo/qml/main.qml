@@ -278,6 +278,26 @@ ApplicationWindow {
                     Layout.alignment: Qt.AlignHCenter
                     value: 5
                 }
+                Label {
+                    text: "Progress Bar"
+                }
+                ProgressBar{
+                    Layout.fillHeight: false
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    Layout.fillWidth: true
+                    from: 0
+                    to: 100
+                    value: 0
+                    clip: true
+
+                    // Simply animate from 0-100 for this example
+                    NumberAnimation on value {
+                        from: 0
+                        to: 100
+                        duration: 5000
+                        loops: Animation.Infinite
+                    }
+                }
             }
         }
 
