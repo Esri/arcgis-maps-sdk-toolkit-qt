@@ -35,6 +35,7 @@ T.Button {
     icon.height: 24
 
     property color color: control.flat ? Calcite.textLink : Calcite.textInverse
+    property color textColor: Calcite.offWhite
     icon.color: color
 
     contentItem: IconLabel {
@@ -45,7 +46,7 @@ T.Button {
         icon: control.icon
         text: control.text
         font: control.font
-        color: control.color
+        color: textColor
         opacity: control.flat && !control.enabled ? 0.3 : 1.0
     }
 
