@@ -73,12 +73,12 @@ import QtQuick.Shapes
 Pane {
     id: root
 
-    background: Rectangle{
-        color: palette.window
-        border.color: palette.windowText
+    background: Rectangle {
+        color: palette.base
+        border.color: palette.text
     }
 
-    property color dynamicTextColor: background.border.color
+    property color dynamicTextColor: palette.text
 
     enum LeaderPosition {
         UpperLeft = 0,
