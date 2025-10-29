@@ -27,12 +27,28 @@ T.ProgressBar {
     contentItem: Item {
         implicitWidth: 160
         implicitHeight: 4
+        clip: true
 
         Rectangle {
-            width: control.position * parent.width
+            id: bar
             height: parent.height
-            color: Calcite.brand
             radius: 2
+            color: Calcite.brand
+            width: control.indeterminate ? parent.width * 0.4 : control.position * parent.width
+            x: 0
+
+            SequentialAnimation on x {
+                loops: Animation.Infinite
+                running: control.indeterminate
+
+                PropertyAction { value: - parent.width * 0.4 }
+                NumberAnimation {
+                    to: bar.parent.width
+                    duration: 1000
+                }
+
+                PauseAnimation { duration: 1250 }
+            }
         }
     }
 
