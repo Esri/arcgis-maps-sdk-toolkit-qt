@@ -47,4 +47,18 @@ T.Drawer {
             y: control.edge === Qt.TopEdge ? parent.height - 1 : 0
         }
     }
+
+    T.Overlay.modal: Rectangle {
+        color: Qt.rgba(control.palette.shadow.r,
+                       control.palette.shadow.g,
+                       control.palette.shadow.b,
+                       0.5)
+    }
+
+    T.Overlay.modeless: Rectangle {
+        color: Qt.rgba(control.palette.shadow.r,
+                       control.palette.shadow.g,
+                       control.palette.shadow.b,
+                       0.12)
+    }
 }
