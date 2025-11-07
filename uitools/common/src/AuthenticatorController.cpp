@@ -265,7 +265,8 @@ void AuthenticatorController::continueWithUsernamePasswordArcGIS_(const QString&
   TokenCredential::createAsync(m_currentArcGISChallenge->requestUrl(),
                                username,
                                password,
-                               std::nullopt).then(this, [this](TokenCredential* credential)
+                               std::nullopt,
+                               this).then(this, [this](TokenCredential* credential)
   {
     m_currentArcGISChallenge->continueWithCredential(credential);
     m_currentArcGISChallenge.reset();
