@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -19,8 +20,6 @@
 #include <Portal.h>
 #include <PortalItem.h>
 #include <Error.h>
-#include <AuthenticationChallenge.h>
-#include <AuthenticationManager.h>
 
 using namespace Esri::ArcGISRuntime;
 
