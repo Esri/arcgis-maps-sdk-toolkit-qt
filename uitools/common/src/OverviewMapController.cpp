@@ -109,7 +109,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     m_geoView = geoView;
 
-
     if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
       // create a lambda to handle setting up the inset map and viewpoint
