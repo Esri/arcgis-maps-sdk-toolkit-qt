@@ -56,6 +56,8 @@ namespace Esri::ArcGISRuntime::Toolkit {
     m_insetView(new MapViewToolkit),
     m_reticle(new Graphic(this))
   {
+    m_insetView->setAttributionTextVisible(false);
+
     // Disable keyboard interactions, and mouse
     // interactions on devices. Keep track of mouse
     // touches.
@@ -123,7 +125,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
         // set the initial viewpoint before setting on the mapview
         map->setInitialViewpoint(sceneView->arcGISScene()->initialViewpoint());
         m_insetView->setMap(map);
-        m_insetView->setAttributionTextVisible(false);
       };
 
       if (sceneView->arcGISScene()->loadStatus() == LoadStatus::Loaded)
@@ -185,7 +186,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
         // set the initial viewpoint before setting on the mapview
         map->setInitialViewpoint(newViewpoint);
         m_insetView->setMap(map);
-        m_insetView->setAttributionTextVisible(false);
       };
 
       if (mapView->map()->loadStatus() == LoadStatus::Loaded)
