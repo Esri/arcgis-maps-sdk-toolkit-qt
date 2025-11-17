@@ -55,11 +55,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     QObject(parent),
     m_insetView(new MapViewToolkit),
     m_reticle(new Graphic(this))
-  {
-    // Setup insetViiew defaults.
-    m_insetView->setMap(new Map(BasemapStyle::ArcGISTopographic, m_insetView));
-    m_insetView->setAttributionTextVisible(false);
-
+  {    
     // Disable keyboard interactions, and mouse
     // interactions on devices. Keep track of mouse
     // touches.
