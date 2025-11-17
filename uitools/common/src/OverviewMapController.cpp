@@ -135,7 +135,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
       // set up the inset map once the scene is done loading
       else
       {
-        connect(sceneView->arcGISScene(), &Scene::doneLoading, this, [setupInsetMapForScene, sceneView](Error e)
+        connect(sceneView->arcGISScene(), &Scene::doneLoading, this, [setupInsetMapForScene = std::move(setupInsetMapForScene), sceneView](Error e)
                 {
                   if (!e.isEmpty())
                   {
@@ -198,7 +198,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
       // set up the inset map once the map is done loading
       else
       {
-        connect(mapView->map(), &Map::doneLoading, this, [setupInsetMapForMap, mapView](Error e)
+        connect(mapView->map(), &Map::doneLoading, this, [setupInsetMapForMap = std::move(setupInsetMapForMap), mapView](Error e)
                 {
                   if (!e.isEmpty())
                   {
