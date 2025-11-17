@@ -55,7 +55,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     QObject(parent),
     m_insetView(new MapViewToolkit),
     m_reticle(new Graphic(this))
-  {    
+  {
     // Disable keyboard interactions, and mouse
     // interactions on devices. Keep track of mouse
     // touches.
