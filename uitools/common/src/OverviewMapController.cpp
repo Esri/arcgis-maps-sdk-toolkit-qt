@@ -112,6 +112,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
+      // create a lambda to handle setting up the inset map and viewpoint
       auto setupInsetMapForScene = [this](SceneViewToolkit* sceneView)
       {
         // create the map
@@ -127,13 +128,14 @@ namespace Esri::ArcGISRuntime::Toolkit {
         m_insetView->setMap(map);
       };
 
+      // if the map is already loaded, setup the inset map
       if (sceneView->arcGISScene()->loadStatus() == LoadStatus::Loaded)
       {
         setupInsetMapForScene(sceneView);
       }
+      // set up the inset map once the scene is done loading
       else
       {
-        // set up the inset map once the scene is done loading
         connect(sceneView->arcGISScene(), &Scene::doneLoading, this, [setupInsetMapForScene, sceneView](Error e)
                 {
                   if (!e.isEmpty())
@@ -171,6 +173,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     }
     else if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
+      // create a lambda to handle setting up the inset map and viewpoint
       auto setupInsetMapForMap = [this](MapViewToolkit* mapView)
       {
         // create the map
@@ -188,13 +191,14 @@ namespace Esri::ArcGISRuntime::Toolkit {
         m_insetView->setMap(map);
       };
 
+      // if the map is already loaded, setup the inset map
       if (mapView->map()->loadStatus() == LoadStatus::Loaded)
       {
         setupInsetMapForMap(mapView);
       }
+      // set up the inset map once the map is done loading
       else
       {
-        // set up the inset map once the map is done loading
         connect(mapView->map(), &Map::doneLoading, this, [setupInsetMapForMap, mapView](Error e)
                 {
                   if (!e.isEmpty())
