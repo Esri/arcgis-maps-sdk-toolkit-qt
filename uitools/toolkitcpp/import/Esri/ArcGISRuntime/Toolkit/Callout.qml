@@ -75,10 +75,9 @@ Pane {
 
     background: Rectangle {
         color: palette.base
-        border.color: palette.text
+        border.color: palette.dark
     }
 
-    property color dynamicTextColor: palette.text
 
     enum LeaderPosition {
         UpperLeft = 0,
@@ -298,7 +297,6 @@ Pane {
         Label {
             id: title
             text: calloutData ? calloutData.title : ""
-            color: root.dynamicTextColor
             wrapMode: Text.Wrap
             clip: true
             elide: Text.ElideRight
@@ -362,7 +360,6 @@ Pane {
         Label {
             id: detail
             text: calloutData ? calloutData.detail : ""
-            color: root.dynamicTextColor
             wrapMode: Text.Wrap
             elide: Text.ElideRight
             clip: true
