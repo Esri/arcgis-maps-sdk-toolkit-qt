@@ -66,6 +66,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     void disableInteractions();
 
+    void setupInsetMapForMap(MapViewToolkit* mapView);
+    void setupInsetMapForScene(SceneViewToolkit* sceneView);
+
   private:
     QFuture<bool> m_setViewpointFuture;
     QFuture<bool> m_setViewpointInsetFuture;
