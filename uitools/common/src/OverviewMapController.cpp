@@ -111,40 +111,22 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
-      // create a lambda to handle setting up the inset map and viewpoint
-      auto setupInsetMapForScene = [this](SceneViewToolkit* sceneView)
-      {
-        // create the map
-        auto map = new Map(BasemapStyle::ArcGISTopographic, m_insetView);
-        // set the initial viewpoint (scale = main scene's scale * scaleFactor)
-        const Viewpoint viewpoint = sceneView->currentViewpoint(ViewpointType::CenterAndScale);
-        const Viewpoint newViewpoint{
-                                     geometry_cast<Point>(viewpoint.targetGeometry()),
-                                     viewpoint.targetScale() * scaleFactor()};
+      // set up the inset map once the scene is done loading
+      connect(sceneView->arcGISScene(), &Scene::doneLoading, this, [this, sceneView](Error e)
+              {
+                if (!e.isEmpty())
+                {
+                  qDebug() << "Error. Main map did not load" << e.message() << e.additionalMessage();
+                  return;
+                }
 
-        // set the initial viewpoint before setting on the mapview
-        map->setInitialViewpoint(sceneView->arcGISScene()->initialViewpoint());
-        m_insetView->setMap(map);
-      };
+                setupInsetMapForScene(sceneView);
+              });
 
-      // if the map is already loaded, setup the inset map
+      // double check if the map is already loaded, setup the inset map
       if (sceneView->arcGISScene()->loadStatus() == LoadStatus::Loaded)
       {
         setupInsetMapForScene(sceneView);
-      }
-      // set up the inset map once the scene is done loading
-      else
-      {
-        connect(sceneView->arcGISScene(), &Scene::doneLoading, this, [setupInsetMapForScene = std::move(setupInsetMapForScene), sceneView](Error e)
-                {
-                  if (!e.isEmpty())
-                  {
-                    qDebug() << "Error. Main map did not load" << e.message() << e.additionalMessage();
-                    return;
-                  }
-
-                  setupInsetMapForScene(sceneView);
-                });
       }
 
       // If Symbol has not yet been set, we provide a default symbol appropriate for SceneViews.
@@ -172,42 +154,22 @@ namespace Esri::ArcGISRuntime::Toolkit {
     }
     else if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
-      // create a lambda to handle setting up the inset map and viewpoint
-      auto setupInsetMapForMap = [this](MapViewToolkit* mapView)
-      {
-        // create the map
-        auto map = new Map(BasemapStyle::ArcGISTopographic, m_insetView);
+      // set up the inset map once the map is done loading
+      connect(mapView->map(), &Map::doneLoading, this, [this, mapView](Error e)
+              {
+                if (!e.isEmpty())
+                {
+                  qDebug() << "Error. Main map did not load" << e.message() << e.additionalMessage();
+                  return;
+                }
 
-        // set the initial viewpoint (scale = main maps's scale * scaleFactor)
-        auto initialViewpoint = mapView->map()->initialViewpoint();
-        const Viewpoint newViewpoint{
-                                     geometry_cast<Point>(initialViewpoint.targetGeometry()),
-                                     initialViewpoint.targetScale() * scaleFactor(),
-                                     initialViewpoint.rotation()};
+                setupInsetMapForMap(mapView);
+              });
 
-        // set the initial viewpoint before setting on the mapview
-        map->setInitialViewpoint(newViewpoint);
-        m_insetView->setMap(map);
-      };
-
-      // if the map is already loaded, setup the inset map
+      // double check if the map is already loaded, setup the inset map
       if (mapView->map()->loadStatus() == LoadStatus::Loaded)
       {
         setupInsetMapForMap(mapView);
-      }
-      // set up the inset map once the map is done loading
-      else
-      {
-        connect(mapView->map(), &Map::doneLoading, this, [setupInsetMapForMap = std::move(setupInsetMapForMap), mapView](Error e)
-                {
-                  if (!e.isEmpty())
-                  {
-                    qDebug() << "Error. Main map did not load" << e.message() << e.additionalMessage();
-                    return;
-                  }
-
-                  setupInsetMapForMap(mapView);
-                });
       }
 
       // If Symbol has not yet been set, we provide a default symbol appropriate for MapViews.
@@ -379,6 +341,41 @@ namespace Esri::ArcGISRuntime::Toolkit {
                        e.accept();
                      });
 #endif
+  }
+
+  // create a function to handle setting up the inset map and viewpoint
+  void OverviewMapController::setupInsetMapForMap(MapViewToolkit* mapView)
+  {
+    // create the map
+    auto map = new Map(BasemapStyle::ArcGISTopographic, m_insetView);
+
+    // set the initial viewpoint (scale = main maps's scale * scaleFactor)
+    auto initialViewpoint = mapView->map()->initialViewpoint();
+    const Viewpoint newViewpoint{
+                                 geometry_cast<Point>(initialViewpoint.targetGeometry()),
+                                 initialViewpoint.targetScale() * scaleFactor(),
+                                 initialViewpoint.rotation()};
+
+    // set the initial viewpoint before setting on the mapview
+    map->setInitialViewpoint(newViewpoint);
+    m_insetView->setMap(map);
+  }
+
+  // create a function to handle setting up the inset map and viewpoint
+  void OverviewMapController::setupInsetMapForScene(SceneViewToolkit* sceneView)
+  {
+    // create the map
+    auto map = new Map(BasemapStyle::ArcGISTopographic, m_insetView);
+    // set the initial viewpoint (scale = main scene's scale * scaleFactor)
+    // scenes shouldn't set the rotation parameter
+    const Viewpoint viewpoint = sceneView->currentViewpoint(ViewpointType::CenterAndScale);
+    const Viewpoint newViewpoint{
+                                 geometry_cast<Point>(viewpoint.targetGeometry()),
+                                 viewpoint.targetScale() * scaleFactor()};
+
+    // set the initial viewpoint before setting on the mapview
+    map->setInitialViewpoint(sceneView->arcGISScene()->initialViewpoint());
+    m_insetView->setMap(map);
   }
 
 } // Esri::ArcGISRuntime::Toolkit
