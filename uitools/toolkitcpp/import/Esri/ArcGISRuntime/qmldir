@@ -14,7 +14,7 @@
  *  limitations under the License.
  ******************************************************************************/
 
-# This a minimal placeholder qmldir file for compilation.
+# This a minimal placeholder qmldir file to avoid a deployment warning.
 # All required types are registered in C++.
 # So no QML component files or plugin library needed here. 
 
