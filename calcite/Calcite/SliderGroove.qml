@@ -41,7 +41,7 @@ Rectangle {
         x: groove.control.horizontal ? groove.offset * parent.width : 0
         y: groove.control.horizontal ? 0 : groove.visualProgress * parent.height
         width: groove.control.horizontal ? groove.progress * parent.width - groove.offset * parent.width : 2
-        height: groove.control.horizontal ? 2 : groove.progress * parent.height - groove.offset * parent.heigh
+        height: groove.control.horizontal ? 2 : groove.progress * parent.height - groove.offset * parent.height
         color: Calcite.brand
     }
 }
