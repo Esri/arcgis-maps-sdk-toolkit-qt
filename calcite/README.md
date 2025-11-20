@@ -6,7 +6,7 @@ Esri’s design system ([Calcite](https://esri.github.io/calcite-web/)) enables 
 
 Calcite provides visual styles that are applied to your UI controls in your app. These styles are QML compatible and are configured by adding them to your .qml files. The styles include options for creating Light and Dark themed UI's. There are over 30 styles available that can be used on Qt controls like: Button, CheckBox, Menu, RadioButton, ToolBar, and so forth. 
 
-Other styling options (like: Basic, Fusion, macOS, Material, Windows, and for forth) are available for your QML based UI controls and are provided by the Qt Group. You can learn more about these styles in the [Styling Qt Quick Controls](https://doc.qt.io/qt-6/qtquickcontrols-styles.html) documentation. 
+Other styling options (like: Basic, Fusion, macOS, Material, Windows...) are available for your QML based UI controls and are provided by the Qt Group. You can learn more about these styles in the [Styling Qt Quick Controls](https://doc.qt.io/qt-6/qtquickcontrols-styles.html) documentation. 
 
 ## Light Mode
 
@@ -18,27 +18,32 @@ Other styling options (like: Basic, Fusion, macOS, Material, Windows, and for fo
 
 ## Integration
 
-To integrate Calcite into your app, add the following lines to your `*.pro` file:
-
+Add Calcite to your `*.pro` file:
 ```pro
 QT += quickcontrols2
-RESOURCES += path/to/arcgis-maps-sdk-toolkit-qt/calcite-qml/Calcite/calcite.qrc
+RESOURCES += path/to/arcgis-maps-sdk-toolkit-qt/calcite/Calcite/calcite.qrc
+QML_IMPORT_PATH += path/to/arcgis-maps-sdk-toolkit-qt/calcite/
 ```
 
-And then in `main.cpp` add the following lines:
+### Method 1: Direct Import
 
-```cpp
-#include <QQuickStyle>
-...
-QQuickStyle::addStylePath("qrc:///esri.com/imports/");
+Import Calcite directly in your QML files:
+```qml
+import QtQuick
+import QtQuick.Controls
+import Calcite 1.0
+
+ApplicationWindow {
+    Button { text: "Calcite Button" }
+    Rectangle { color: Calcite.brand }
+}
 ```
 
-Then, the most flexible way to use the style is to create a [`qtquickcontrols2.conf`](https://doc.qt.io/qt-5/qtquickcontrols2-configuration.html) file
-with the following properties:
+### Method 2: Configuration File
 
+Create a [`qtquickcontrols2.conf`](https://doc.qt.io/qt-6/qtquickcontrols2-configuration.html) file:
 ```ini
 [Controls]
-FallbackStyle=Material
 Style=Calcite
 
 [Calcite]
@@ -46,6 +51,18 @@ Font\Family=Avenir
 Font\PixelSize=16
 Font\Weight=50
 ```
+
+Use standard Qt Quick Controls (styled automatically):
+```qml
+import QtQuick
+import QtQuick.Controls
+
+ApplicationWindow {
+    Button { text: "Calcite Button" }
+}
+```
+
+Add `import Calcite 1.0` to access colors: `Calcite.brand`, `Calcite.background`, etc.
 
 ### Typefaces
 
@@ -83,7 +100,7 @@ For further details see [Calcite Web TypeFaces](https://esri.github.io/calcite-w
   - [x] PageIndicator
   - [x] Pane
   - [x] Popup
-  - [ ] ProgressBar
+  - [x] ProgressBar
   - [x] RadioButton
   - [x] RadioDelegate
   - [x] RangeSlider
