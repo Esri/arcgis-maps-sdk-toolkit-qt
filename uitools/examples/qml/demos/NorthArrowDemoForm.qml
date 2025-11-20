@@ -16,7 +16,7 @@
 
 import QtQuick
 import QtQuick.Controls
-import Esri.ArcGISRuntime
+import Esri.Examples
 import Esri.ArcGISRuntime.Toolkit
 import DemoApp
 import Calcite as C

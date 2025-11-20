@@ -1,3 +1,19 @@
+// COPYRIGHT 2025 ESRI
+// TRADE SECRETS: ESRI PROPRIETARY AND CONFIDENTIAL
+// Unpublished material - all rights reserved under the
+// Copyright Laws of the United States and applicable international
+// laws, treaties, and conventions.
+//
+// For additional information, contact:
+// Environmental Systems Research Institute, Inc.
+// Attn: Contracts and Legal Services Department
+// 380 New York Street
+// Redlands, California, 92373
+// USA
+//
+// email: contracts@esri.com
+/// \file main.cpp
+
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -63,22 +79,22 @@ int main(int argc, char* argv[])
 
   // Register ArcGIS types with QML.
   qmlRegisterExtendedType<Esri::ArcGISRuntime::MapQuickView,
-                          MapQuickViewProxy>("Esri.ArcGISRuntime", 200, 0, "MapView");
+                          MapQuickViewProxy>("Esri.Examples", 200, 0, "MapView");
   qmlRegisterExtendedType<Esri::ArcGISRuntime::SceneQuickView,
-                          SceneQuickViewProxy>("Esri.ArcGISRuntime", 200, 0, "SceneView");
-  qmlRegisterUncreatableType<GeoModelProxy>("Esri.ArcGISRuntime",
+                          SceneQuickViewProxy>("Esri.Examples", 200, 0, "SceneView");
+  qmlRegisterUncreatableType<GeoModelProxy>("Esri.Examples",
                                             200,
                                             0,
                                             "Map",
                                             "Map not creatable in QML.");
-  qmlRegisterUncreatableType<GeoModelProxy>("Esri.ArcGISRuntime",
+  qmlRegisterUncreatableType<GeoModelProxy>("Esri.Examples",
                                             200,
                                             0,
                                             "Scene",
                                             "Scene not creatable in QML.");
 
   qmlRegisterSingletonType<ArcGISRuntimeEnvironmentProxy>(
-      "Esri.ArcGISRuntime",
+      "Esri.Examples",
       100,
       15,
       "ArcGISRuntimeEnvironment",
@@ -87,7 +103,7 @@ int main(int argc, char* argv[])
         return new ArcGISRuntimeEnvironmentProxy(engine);
       });
 
-  qmlRegisterSingletonType<EnumsProxy>("Esri.ArcGISRuntime",
+  qmlRegisterSingletonType<EnumsProxy>("Esri.Examples",
                                        200,
                                        0,
                                        "Enums",

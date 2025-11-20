@@ -18,7 +18,7 @@ import QtQml
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Esri.ArcGISRuntime
+import Esri.Examples
 import Esri.ArcGISRuntime.Toolkit
 import Calcite as C
 
