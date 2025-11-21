@@ -63,22 +63,22 @@ int main(int argc, char* argv[])
 
   // Register ArcGIS types with QML.
   qmlRegisterExtendedType<Esri::ArcGISRuntime::MapQuickView,
-                          MapQuickViewProxy>("Esri.ArcGISRuntime", 200, 0, "MapView");
+                          MapQuickViewProxy>("Esri.Examples", 200, 0, "MapView");
   qmlRegisterExtendedType<Esri::ArcGISRuntime::SceneQuickView,
-                          SceneQuickViewProxy>("Esri.ArcGISRuntime", 200, 0, "SceneView");
-  qmlRegisterUncreatableType<GeoModelProxy>("Esri.ArcGISRuntime",
+                          SceneQuickViewProxy>("Esri.Examples", 200, 0, "SceneView");
+  qmlRegisterUncreatableType<GeoModelProxy>("Esri.Examples",
                                             200,
                                             0,
                                             "Map",
                                             "Map not creatable in QML.");
-  qmlRegisterUncreatableType<GeoModelProxy>("Esri.ArcGISRuntime",
+  qmlRegisterUncreatableType<GeoModelProxy>("Esri.Examples",
                                             200,
                                             0,
                                             "Scene",
                                             "Scene not creatable in QML.");
 
   qmlRegisterSingletonType<ArcGISRuntimeEnvironmentProxy>(
-      "Esri.ArcGISRuntime",
+      "Esri.Examples",
       100,
       15,
       "ArcGISRuntimeEnvironment",
@@ -87,7 +87,7 @@ int main(int argc, char* argv[])
         return new ArcGISRuntimeEnvironmentProxy(engine);
       });
 
-  qmlRegisterSingletonType<EnumsProxy>("Esri.ArcGISRuntime",
+  qmlRegisterSingletonType<EnumsProxy>("Esri.Examples",
                                        200,
                                        0,
                                        "Enums",
