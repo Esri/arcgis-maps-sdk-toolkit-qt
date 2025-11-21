@@ -189,7 +189,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     /*
      \internal
      \brief Function for registration. Registers the C++ type Foo as
-     Foo in QML with the 100.10, 200.0 version and namespace information.
+     Foo in QML with the 3.0 version and namespace information.
 
   \list
       \li \a Determines how the type is instantiated in QML. Choose between CreationType::Creatable, CreationType::Uncreatable and CreationType::Interface.
