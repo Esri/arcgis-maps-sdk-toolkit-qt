@@ -38,6 +38,13 @@ The following table lists the various UI components available depending on how y
 |      TimeSlider                   |        [✔](uitools/toolkitcpp/docs/TimeSlider.md)       |                                                          |
 | UtilityNetworkTrace               |  [✔](uitools/toolkitcpp/docs/UtilityNetworkTrace.md)    |                                                          |
 
+## QML import versioning
+
+When importing the toolkit's QML types, eg: import Esri.ArcGISRuntime.Toolkit, Don't use import numbers for our toolkit.
+
+If you must, the version is 3.0 and will remain that throughout the entire 300 release lifecycle.
+The reason for that is that Qt's versioning system does not allow versions greater than 254, per https://doc.qt.io/qt-6/qtyperevision.html#isValidSegment
+
 ## Other Toolkit features available
 
 [Calcite style](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/main/calcite) - this feature provides visual styles that enable you to create beautiful and consistent experiences using the Calcite web style for Esri on UI controls you have in your app. These styles are QML compatible and are configured by adding them to your .qml files. The styles include options for creating Light and Dark themed UI's in you app. There are over 30 styles available that can be used on Qt controls like: Button, CheckBox, Menu, RadioButton, ToolBar, and so forth. 
