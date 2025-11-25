@@ -1,12 +1,9 @@
 # Changelog
 
-## 300.1
-
-* Toolkit module version is changed from 300.0 to 3.0 because Qt's versioning system does not allow versions greater than 254.
-  
 ## 300.0
 
 * The augmented reality (AR) toolkit components are removed.
+* Toolkit module version is changed from 300.0 to 3.0 because Qt's versioning system does not allow versions greater than 254.
 
 ## 200.8
 
