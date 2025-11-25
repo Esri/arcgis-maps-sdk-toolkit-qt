@@ -40,7 +40,7 @@ The following table lists the various UI components available depending on how y
 
 ## QML import versioning
 
-When importing the toolkit's QML types, for example `import Esri.ArcGISRuntime.Toolkit`, Don't use import numbers for our toolkit.
+When importing the toolkit's QML types, for example `import Esri.ArcGISRuntime.Toolkit`, don't use import numbers for our toolkit.
 
 If you must, the version is 3.0 and will remain that throughout the entire 300 release lifecycle.
 The reason for that is that Qt's versioning system does not allow versions greater than 254, per https://doc.qt.io/qt-6/qtyperevision.html#isValidSegment
