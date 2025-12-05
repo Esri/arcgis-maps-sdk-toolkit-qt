@@ -157,15 +157,11 @@ Ensure the path is packaged in your app if you are not using `qrc` resources.
 
 ### Initialize/update the icons submodule
 
-If you cloned this repo without submodules, or are updating to the latest icons:
+If you cloned this repo without submodules:
 
 ```zsh
 # From repository root
 git submodule update --init --recursive
-
-# Optional: stay in sync with upstream
-git submodule sync --recursive
-git submodule update --recursive --remote
 ```
 
 Rebuild your project so the `.qrc` picks up icon additions.
