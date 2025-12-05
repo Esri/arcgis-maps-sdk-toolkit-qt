@@ -130,9 +130,9 @@ In the [demo](./demo/) folder, there is a Qt demo application project (calcite_t
 
 The Calcite Design System icons are included as a Git submodule.
 
-- Source (submodule): `calcite-design-system/packages/ui-icons`
+- Source (submodule): `calcite-design-system/packages/ui-icons/icons/`
 
-Each icon is available in multiple sizes: 16, 24, and 32 pixels. The Calcite icon set contains over 1000 icons. Browse the full catalog here: https://developers.arcgis.com/calcite-design-system/icons/
+Each icon is an SVG and available in multiple sizes: 16, 24, and 32 pixels. The Calcite icon set contains over 1000 icons. Browse the full catalog [here](https://developers.arcgis.com/calcite-design-system/icons/).
 
 ### Using icons in QML
 
