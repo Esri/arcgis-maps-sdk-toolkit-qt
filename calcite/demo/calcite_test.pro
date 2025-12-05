@@ -58,6 +58,14 @@ RESOURCES += \
     Resources/Resources.qrc \
     $$absolute_path($$PWD/../Calcite/calcite.qrc)
 
+# Optional: Calcite Icons from submodule (only if submodule is initialized)
+exists($$PWD/../calcite-design-system/packages/ui-icons/icons) {
+    RESOURCES += Resources/calcite-icons.qrc
+    message("Calcite icons submodule detected - including icon resources")
+} else {
+    warning("Calcite icons submodule not initialized. Run: git submodule update --init --recursive")
+}
+
 OTHER_FILES += \
     wizard.xml \
     wizard.png

@@ -37,6 +37,13 @@ ApplicationWindow {
         //Calcite.theme = Calcite.Dark;
     }
 
+    // Check if Calcite icons submodule is initialized
+    property bool calciteIconsAvailable: {
+        // Check if icon resources are available
+        var testPath = "qrc:/calcite/icons/check-24.svg"
+        return Qt.resolvedUrl(testPath).toString().length > 0
+    }
+
     // add a mapView component
     MapView {
         id: mapView
@@ -111,6 +118,36 @@ ApplicationWindow {
                         text: modelData
                     }
                 }
+            }
+        }
+
+        Dialog {
+            id: iconShowcaseDialog
+            anchors.centerIn: parent
+            standardButtons: Dialog.Close
+            implicitWidth: 600
+            implicitHeight: 500
+
+            // Only available if submodule is initialized
+            property bool iconsAvailable: {
+                // Try to load an icon to check if submodule is initialized
+                var testImage = Qt.createQmlObject('import QtQuick; Image { source: "qrc:/calcite/icons/check-24.svg" }', iconShowcaseDialog, "testImage")
+                var available = testImage.status === Image.Ready || testImage.status === Image.Loading
+                testImage.destroy()
+                return available
+            }
+
+            IconShowcase {
+                anchors.fill: parent
+                visible: iconShowcaseDialog.iconsAvailable
+            }
+
+            Label {
+                anchors.centerIn: parent
+                visible: !iconShowcaseDialog.iconsAvailable
+                text: "Icons not available.\n\nInitialize the submodule:\ngit submodule update --init --recursive"
+                horizontalAlignment: Text.AlignHCenter
+                font.pixelSize: 14
             }
         }
 
@@ -291,6 +328,21 @@ ApplicationWindow {
                     clip: true
                     indeterminate: true
                 }
+            }
+        }
+
+        // Icon Showcase Button - Bottom Left
+        Button {
+            anchors {
+                left: parent.left
+                bottom: parent.attributionTop
+                margins: 10
+            }
+            text: "Calcite Icons"
+            visible: appWindow.calciteIconsAvailable
+            enabled: appWindow.calciteIconsAvailable
+            onPressed: {
+                iconShowcaseDialog.open()
             }
         }
 
