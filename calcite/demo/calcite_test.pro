@@ -63,7 +63,7 @@ exists($$PWD/../calcite-design-system/packages/ui-icons/icons) {
     RESOURCES += Resources/calcite-icons.qrc
     message("Calcite icons submodule detected - including icon resources")
 } else {
-    warning("Calcite icons submodule not initialized. Run: git submodule update --init --recursive")
+    message("Calcite icons submodule not initialized. Run: git submodule update --init --recursive")
 }
 
 OTHER_FILES += \

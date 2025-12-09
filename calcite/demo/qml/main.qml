@@ -32,11 +32,6 @@ ApplicationWindow {
         mapView: mapView
     }
 
-    Component.onCompleted: {
-
-        //Calcite.theme = Calcite.Dark;
-    }
-
     // Check if Calcite icons submodule is initialized
     property bool calciteIconsAvailable: {
         // Check if icon resources are available
@@ -140,12 +135,13 @@ ApplicationWindow {
             IconShowcase {
                 anchors.fill: parent
                 visible: iconShowcaseDialog.iconsAvailable
+                submoduleInitialized: iconShowcaseDialog.iconsAvailable
             }
 
             Label {
                 anchors.centerIn: parent
                 visible: !iconShowcaseDialog.iconsAvailable
-                text: "Icons not available.\n\nInitialize the submodule:\ngit submodule update --init --recursive"
+                text: "Icons not available.\n\nInitialize the submodule and rebuild:\ngit submodule update --init --recursive"
                 horizontalAlignment: Text.AlignHCenter
                 font.pixelSize: 14
             }

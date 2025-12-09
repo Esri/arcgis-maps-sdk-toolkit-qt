@@ -22,7 +22,9 @@ import Calcite as C
 Pane {
     id: root
 
-    property var icons: [
+    property bool submoduleInitialized
+
+    property var icons: !root.submoduleInitialized? [] :[
         // Arrows
         { name: "chevron-left", path: "qrc:/calcite/icons/chevron-left-24.svg", category: "Arrows" },
         { name: "chevron-right", path: "qrc:/calcite/icons/chevron-right-24.svg", category: "Arrows" },
@@ -63,14 +65,14 @@ Pane {
         spacing: 10
 
         Label {
-            text: "Calcite Icons Showcase"
+            text: qsTr("Calcite Icons Showcase")
             font.pixelSize: 20
             font.bold: true
             Layout.alignment: Qt.AlignHCenter
         }
 
         Label {
-            text: "Sample Icons from Calcite Design System"
+            text: qsTr("Sample Icons from the Calcite Design System")
             font.pixelSize: 12
             opacity: 0.7
             Layout.alignment: Qt.AlignHCenter
@@ -134,8 +136,8 @@ Pane {
             spacing: 10
 
             Button {
-                text: "View All Icons Online"
-                icon.source: "qrc:/calcite/icons/web-24.svg"
+                text: qsTr("View All Icons Online")
+                icon.source: root.submoduleInitialized? "qrc:/calcite/icons/web-24.svg" : ""
                 icon.color: "#ffffff"
                 Layout.fillWidth: true
                 onClicked: {
@@ -144,8 +146,8 @@ Pane {
             }
 
             Button {
-                text: "Open Icons Folder"
-                icon.source: "qrc:/calcite/icons/folder-24.svg"
+                text: qsTr("Open Icons Folder")
+                icon.source: root.submoduleInitialized? "qrc:/calcite/icons/folder-24.svg" : ""
                 icon.color: "#ffffff"
                 Layout.fillWidth: true
                 onClicked: {
@@ -165,7 +167,7 @@ Pane {
         }
 
         Label {
-            text: "23 sample icons shown • 1,000+ available in submodule"
+            text: qsTr("23 sample icons shown • 1,000+ available in submodule")
             font.pixelSize: 10
             opacity: 0.5
             Layout.alignment: Qt.AlignHCenter
