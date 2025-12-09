@@ -167,7 +167,7 @@ Pane {
         }
 
         Label {
-            text: qsTr("23 sample icons shown • 1,000+ available in submodule")
+            text: qsTr("23 sample icons shown • 1,000+ icons available in submodule")
             font.pixelSize: 10
             opacity: 0.5
             Layout.alignment: Qt.AlignHCenter
