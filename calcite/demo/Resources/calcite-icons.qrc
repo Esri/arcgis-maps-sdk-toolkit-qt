@@ -1,14 +1,11 @@
 <RCC>
     <qresource prefix="/calcite/icons">
-        <!-- Navigation Icons -->
         <file alias="chevron-left-24.svg">../../calcite-design-system/packages/ui-icons/icons/chevron-left-24.svg</file>
         <file alias="chevron-right-24.svg">../../calcite-design-system/packages/ui-icons/icons/chevron-right-24.svg</file>
         <file alias="chevron-up-24.svg">../../calcite-design-system/packages/ui-icons/icons/chevron-up-24.svg</file>
         <file alias="chevron-down-24.svg">../../calcite-design-system/packages/ui-icons/icons/chevron-down-24.svg</file>
         <file alias="arrow-left-24.svg">../../calcite-design-system/packages/ui-icons/icons/arrow-left-24.svg</file>
         <file alias="arrow-right-24.svg">../../calcite-design-system/packages/ui-icons/icons/arrow-right-24.svg</file>
-
-        <!-- Action Icons -->
         <file alias="plus-24.svg">../../calcite-design-system/packages/ui-icons/icons/plus-24.svg</file>
         <file alias="minus-24.svg">../../calcite-design-system/packages/ui-icons/icons/minus-24.svg</file>
         <file alias="x-24.svg">../../calcite-design-system/packages/ui-icons/icons/x-24.svg</file>
@@ -17,21 +14,15 @@
         <file alias="trash-24.svg">../../calcite-design-system/packages/ui-icons/icons/trash-24.svg</file>
         <file alias="pencil-24.svg">../../calcite-design-system/packages/ui-icons/icons/pencil-24.svg</file>
         <file alias="copy-24.svg">../../calcite-design-system/packages/ui-icons/icons/copy-24.svg</file>
-
-        <!-- UI Icons -->
         <file alias="search-24.svg">../../calcite-design-system/packages/ui-icons/icons/search-24.svg</file>
         <file alias="gear-24.svg">../../calcite-design-system/packages/ui-icons/icons/gear-24.svg</file>
         <file alias="information-24.svg">../../calcite-design-system/packages/ui-icons/icons/information-24.svg</file>
         <file alias="question-24.svg">../../calcite-design-system/packages/ui-icons/icons/question-24.svg</file>
         <file alias="ellipsis-24.svg">../../calcite-design-system/packages/ui-icons/icons/ellipsis-24.svg</file>
         <file alias="home-24.svg">../../calcite-design-system/packages/ui-icons/icons/home-24.svg</file>
-
-        <!-- Map/GIS Icons -->
         <file alias="map-24.svg">../../calcite-design-system/packages/ui-icons/icons/map-24.svg</file>
         <file alias="layer-24.svg">../../calcite-design-system/packages/ui-icons/icons/layer-24.svg</file>
         <file alias="pin-24.svg">../../calcite-design-system/packages/ui-icons/icons/pin-24.svg</file>
-
-        <!-- File Icons -->
         <file alias="folder-24.svg">../../calcite-design-system/packages/ui-icons/icons/folder-24.svg</file>
         <file alias="web-24.svg">../../calcite-design-system/packages/ui-icons/icons/web-24.svg</file>
     </qresource>
