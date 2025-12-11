@@ -125,3 +125,43 @@ For further details see [Calcite Web TypeFaces](https://esri.github.io/calcite-w
 ## Demo app
 
 In the [demo](./demo/) folder, there is a Qt demo application project (calcite_test.pro) that showcases many of the Qt toolkit Calcite components being used.
+
+## Calcite Icons
+
+The Calcite Design System icons are included as a Git submodule.
+
+- Source (submodule): `calcite-design-system/packages/ui-icons/icons/`
+
+Each icon is an SVG and available in multiple sizes: 16, 24, and 32 pixels. The Calcite icon set contains over 1000 icons. Browse the full catalog [here](https://developers.arcgis.com/calcite-design-system/icons/).
+
+### Using icons in QML
+
+Option A: via resource file (recommended)
+```qml
+import QtQuick
+
+Image {
+  source: "qrc:/calcite/Calcite/images/ui-icons/plus-16.svg"
+}
+```
+
+Option B: file path (when not using resources)
+```qml
+import QtQuick
+
+Image {
+  source: Qt.resolvedUrl("../calcite/Calcite/images/ui-icons/plus-24.svg")
+}
+```
+Ensure the path is packaged in your app if you are not using `qrc` resources.
+
+### Initialize/update the icons submodule
+
+If you cloned this repo without submodules:
+
+```zsh
+# From repository root
+git submodule update --init --recursive
+```
+
+Rebuild your project so the `.qrc` picks up icon additions.

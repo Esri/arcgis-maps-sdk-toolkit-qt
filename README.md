@@ -49,6 +49,8 @@ The toolkit version is declared this way because Qt's versioning system does not
 
 [Calcite style](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/main/calcite) - this feature provides visual styles that enable you to create beautiful and consistent experiences using the Calcite web style for Esri on UI controls you have in your app. These styles are QML compatible and are configured by adding them to your .qml files. The styles include options for creating Light and Dark themed UI's in you app. There are over 30 styles available that can be used on Qt controls like: Button, CheckBox, Menu, RadioButton, ToolBar, and so forth. 
 
+Note: Calcite UI icons are available via the Calcite Design System submodule.
+
 ## Resources
 
 * [ArcGIS Maps SDK for Qt](https://developers.arcgis.com/qt/)
@@ -61,7 +63,7 @@ Find a bug or want to request a new feature?  Please let us know by [submitting 
 
 # Licensing
 
-Copyright 2019-2022 Esri
+Copyright 2019-2025 Esri
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
