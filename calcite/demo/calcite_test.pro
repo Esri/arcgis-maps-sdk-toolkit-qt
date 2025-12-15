@@ -82,6 +82,8 @@ macx {
 
 ios {
     include (iOS/iOS.pri)
+    QT -= multimedia
+    DEFINES += QT_NO_MULTIMEDIA_WIDGETS
 }
 
 android {
