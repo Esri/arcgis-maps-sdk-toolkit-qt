@@ -63,9 +63,9 @@ ApplicationWindow {
                 }
                 z: 100
 
-                // Scale to fit smaller screens
                 implicitWidth: themeLayout.implicitWidth + leftPadding + rightPadding
                 implicitHeight: themeLayout.implicitHeight + topPadding + bottomPadding
+                // Scale to fit smaller screens
                 scale: Math.min(1.0,
                                 Math.min(mapView.width * 0.3 / Math.max(implicitWidth, 1),
                                          mapView.height * 0.3 / Math.max(implicitHeight, 1)))
@@ -120,14 +120,12 @@ ApplicationWindow {
                 anchors.centerIn: parent
                 modal: true
                 standardButtons: Dialog.Ok | Dialog.Cancel | Dialog.Help
-
-                // Responsive sizing instead of scaling
                 width: Math.min(400, appWindow.width * 0.85)
                 height: Math.min(300, appWindow.height * 0.85)
 
                 // Black tinted background
                 Overlay.modal: Rectangle {
-                    color: "#80000000"  // 50% transparent black
+                    color: "#80000000"
                 }
                 Pane {
                     anchors.fill: parent
