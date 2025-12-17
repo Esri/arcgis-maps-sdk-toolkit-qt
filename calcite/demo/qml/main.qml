@@ -242,7 +242,8 @@ ApplicationWindow {
                     spacing: 4
                     topPadding: 4
                     bottomPadding: 4
-                    anchors.horizontalCenter: parent.horizontalCenter
+                    Layout.alignment: Qt.AlignHCenter
+
                     CheckBox {
                         id: parentCheck
                         text: "Root Checkbox"
