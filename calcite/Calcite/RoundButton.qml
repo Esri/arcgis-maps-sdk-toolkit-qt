@@ -58,7 +58,7 @@ T.RoundButton {
         border {
             color: {
                 if (control.flat) {
-                   return "transparent";
+                    return "transparent";
                 } else {
                     return isHoveredAndEnabled ? Calcite.brandHover : Calcite.brand;
                 }
@@ -70,11 +70,11 @@ T.RoundButton {
             if (control.flat) {
                 return control.pressed || control.checked ? Calcite.foreground3 :
                                                             isHoveredAndEnabled ? Calcite.foreground2
-                                                                            : "transparent"
+                                                                                : "transparent"
             } else {
                 return control.pressed || control.checked ? Calcite.brandPress
                                                           : isHoveredAndEnabled ? Calcite.brandHover
-                                                                            : Calcite.brand
+                                                                                : Calcite.brand
             }
         }
         Behavior on color {
@@ -83,5 +83,16 @@ T.RoundButton {
             }
             enabled: !control.flat
         }
+    }
+
+    // Focus indicator
+    Rectangle {
+        anchors.fill: parent
+        anchors.margins: -2
+        radius: control.radius
+        color: "transparent"
+        border.color: Calcite.brandHover
+        visible: control.visualFocus
+        z: 10
     }
 }

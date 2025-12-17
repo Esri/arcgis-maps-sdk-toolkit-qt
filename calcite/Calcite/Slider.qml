@@ -40,4 +40,15 @@ T.Slider {
         progress: control.position
         visualProgress: control.visualPosition
     }
+
+    // Focus indicator
+    Rectangle {
+        x: handle.x - 2
+        y: handle.y - 2
+        width: handle.width + 4
+        height: handle.height + 4
+        color: "transparent"
+        border.color: Calcite.brandHover
+        visible: control.visualFocus
+    }
 }
