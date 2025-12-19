@@ -24,41 +24,45 @@ Pane {
 
     property bool submoduleInitialized
 
+    property bool canOpenLocalFolders: Qt.platform.os === "windows" ||
+                                       Qt.platform.os === "osx" ||
+                                       Qt.platform.os === "linux"
+
     property var icons: !root.submoduleInitialized? [] :[
-        // Arrows
-        { name: "chevron-left", path: "qrc:/calcite/icons/chevron-left-24.svg", category: "Arrows" },
-        { name: "chevron-right", path: "qrc:/calcite/icons/chevron-right-24.svg", category: "Arrows" },
-        { name: "chevron-up", path: "qrc:/calcite/icons/chevron-up-24.svg", category: "Arrows" },
-        { name: "chevron-down", path: "qrc:/calcite/icons/chevron-down-24.svg", category: "Arrows" },
-        { name: "arrow-left", path: "qrc:/calcite/icons/arrow-left-24.svg", category: "Arrows" },
-        { name: "arrow-right", path: "qrc:/calcite/icons/arrow-right-24.svg", category: "Arrows" },
+                                                        // Arrows
+                                                        { name: "chevron-left", path: "qrc:/calcite/icons/chevron-left-24.svg", category: "Arrows" },
+                                                        { name: "chevron-right", path: "qrc:/calcite/icons/chevron-right-24.svg", category: "Arrows" },
+                                                        { name: "chevron-up", path: "qrc:/calcite/icons/chevron-up-24.svg", category: "Arrows" },
+                                                        { name: "chevron-down", path: "qrc:/calcite/icons/chevron-down-24.svg", category: "Arrows" },
+                                                        { name: "arrow-left", path: "qrc:/calcite/icons/arrow-left-24.svg", category: "Arrows" },
+                                                        { name: "arrow-right", path: "qrc:/calcite/icons/arrow-right-24.svg", category: "Arrows" },
 
-        // Generic
-        { name: "save", path: "qrc:/calcite/icons/save-24.svg", category: "Generic" },
-        { name: "ellipsis", path: "qrc:/calcite/icons/ellipsis-24.svg", category: "Generic" },
-        { name: "home", path: "qrc:/calcite/icons/home-24.svg", category: "Generic" },
+                                                        // Generic
+                                                        { name: "save", path: "qrc:/calcite/icons/save-24.svg", category: "Generic" },
+                                                        { name: "ellipsis", path: "qrc:/calcite/icons/ellipsis-24.svg", category: "Generic" },
+                                                        { name: "home", path: "qrc:/calcite/icons/home-24.svg", category: "Generic" },
 
-        // Objects
-        { name: "trash", path: "qrc:/calcite/icons/trash-24.svg", category: "Objects" },
-        { name: "pencil", path: "qrc:/calcite/icons/pencil-24.svg", category: "Objects" },
-        { name: "copy", path: "qrc:/calcite/icons/copy-24.svg", category: "Objects" },
-        { name: "gear", path: "qrc:/calcite/icons/gear-24.svg", category: "Objects" },
+                                                        // Objects
+                                                        { name: "trash", path: "qrc:/calcite/icons/trash-24.svg", category: "Objects" },
+                                                        { name: "pencil", path: "qrc:/calcite/icons/pencil-24.svg", category: "Objects" },
+                                                        { name: "copy", path: "qrc:/calcite/icons/copy-24.svg", category: "Objects" },
+                                                        { name: "gear", path: "qrc:/calcite/icons/gear-24.svg", category: "Objects" },
 
-        // Symbols
-        { name: "plus", path: "qrc:/calcite/icons/plus-24.svg", category: "Symbols" },
-        { name: "minus", path: "qrc:/calcite/icons/minus-24.svg", category: "Symbols" },
-        { name: "x", path: "qrc:/calcite/icons/x-24.svg", category: "Symbols" },
-        { name: "check", path: "qrc:/calcite/icons/check-24.svg", category: "Symbols" },
-        { name: "search", path: "qrc:/calcite/icons/search-24.svg", category: "Symbols" },
-        { name: "information", path: "qrc:/calcite/icons/information-24.svg", category: "Symbols" },
-        { name: "question", path: "qrc:/calcite/icons/question-24.svg", category: "Symbols" },
+                                                        // Symbols
+                                                        { name: "plus", path: "qrc:/calcite/icons/plus-24.svg", category: "Symbols" },
+                                                        { name: "minus", path: "qrc:/calcite/icons/minus-24.svg", category: "Symbols" },
+                                                        { name: "x", path: "qrc:/calcite/icons/x-24.svg", category: "Symbols" },
+                                                        { name: "check", path: "qrc:/calcite/icons/check-24.svg", category: "Symbols" },
+                                                        { name: "search", path: "qrc:/calcite/icons/search-24.svg", category: "Symbols" },
+                                                        { name: "information", path: "qrc:/calcite/icons/information-24.svg", category: "Symbols" },
+                                                        { name: "question", path: "qrc:/calcite/icons/question-24.svg", category: "Symbols" },
 
-        // GIS/Layers
-        { name: "map", path: "qrc:/calcite/icons/map-24.svg", category: "GIS" },
-        { name: "pin", path: "qrc:/calcite/icons/pin-24.svg", category: "GIS" },
-        { name: "layer", path: "qrc:/calcite/icons/layer-24.svg", category: "Layers" }
+                                                        // GIS/Layers
+                                                        { name: "map", path: "qrc:/calcite/icons/map-24.svg", category: "GIS" },
+                                                        { name: "pin", path: "qrc:/calcite/icons/pin-24.svg", category: "GIS" },
+                                                        { name: "layer", path: "qrc:/calcite/icons/layer-24.svg", category: "Layers" }
 
-    ]
+                                                    ]
 
     ColumnLayout {
         anchors.fill: parent
@@ -79,12 +83,23 @@ Pane {
         }
 
         ScrollView {
+            id: scrollView
             Layout.fillWidth: true
             Layout.fillHeight: true
             clip: true
+            ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
             GridLayout {
-                columns: 4
+                id: iconGrid
+                width: scrollView.availableWidth
+                // Calculate columns based on actual available width
+                columns: {
+                    const itemWidth = 120
+                    const spacing = 15
+                    const availableWidth = iconGrid.width
+                    const cols = Math.floor(availableWidth / itemWidth)
+                    return Math.max(1, Math.min(cols, 4))
+                }
                 rowSpacing: 15
                 columnSpacing: 15
 
@@ -150,16 +165,29 @@ Pane {
                 icon.source: root.submoduleInitialized? "qrc:/calcite/icons/folder-24.svg" : ""
                 icon.color: "#ffffff"
                 Layout.fillWidth: true
+                visible: root.canOpenLocalFolders
                 onClicked: {
                     var appPath = Qt.application.arguments[0].replace(/\\/g, "/")
-                    var appDir = appPath.substring(0, appPath.lastIndexOf("/"))
+                    var iconsPath
+                    var fileUrl
 
-                    var parts = appDir.split("/")
-                    parts = parts.slice(0, -6)
-                    var basePath = parts.join("/")
-                    var iconsPath = basePath + "/calcite-design-system/packages/ui-icons/icons/"
-
-                    var fileUrl = encodeURI("file://" + iconsPath)
+                    if (Qt.platform.os === "windows") {
+                        var calciteIndex = appPath.lastIndexOf("/calcite/")
+                        if (calciteIndex === -1) {
+                            console.log("Could not find calcite folder in path")
+                            return
+                        }
+                        var calcitePath = appPath.substring(0, calciteIndex + 8)
+                        iconsPath = calcitePath + "/calcite-design-system/packages/ui-icons/icons/"
+                        fileUrl = "file:///" + iconsPath
+                    } else {
+                        var appDir = appPath.substring(0, appPath.lastIndexOf("/"))
+                        var parts = appDir.split("/")
+                        parts = parts.slice(0, -6)
+                        var basePath = parts.join("/")
+                        iconsPath = basePath + "/calcite-design-system/packages/ui-icons/icons/"
+                        fileUrl = encodeURI("file://" + iconsPath)
+                    }
                     Qt.openUrlExternally(fileUrl)
                 }
             }
