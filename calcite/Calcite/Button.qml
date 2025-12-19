@@ -60,7 +60,7 @@ T.Button {
         border {
             color: {
                 if (control.flat) {
-                   return "transparent";
+                    return "transparent";
                 } else {
                     return isHoveredAndEnabled ? Calcite.brandHover : Calcite.brand;
                 }
@@ -72,11 +72,11 @@ T.Button {
             if (control.flat) {
                 return control.pressed || control.checked ? Calcite.foreground3 :
                                                             isHoveredAndEnabled ? Calcite.foreground2:
-                                                                                                 "transparent"
+                                                                                  "transparent"
             }  else {
                 return control.pressed || control.checked ? Calcite.brandPress :
                                                             isHoveredAndEnabled ? Calcite.brandHover
-                                                                                               : Calcite.brand
+                                                                                : Calcite.brand
             }
         }
         Behavior on color {
@@ -84,6 +84,16 @@ T.Button {
                 duration: 50
             }
             enabled: !control.flat
+        }
+
+        // Keyboard Focus indicator
+        Rectangle {
+            anchors.fill: parent
+            anchors.margins: -2
+            color: "transparent"
+            border.color: Calcite.brandHover
+            visible: control.visualFocus
+            z: 10
         }
     }
 }

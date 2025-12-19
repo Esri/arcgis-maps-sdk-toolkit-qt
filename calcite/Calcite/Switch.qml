@@ -85,4 +85,14 @@ T.Switch {
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
     }
+
+    // Focus indicator
+    Rectangle {
+        anchors.fill: parent
+        anchors.margins: -2
+        color: "transparent"
+        border.color: Calcite.brandHover
+        border.width: 1
+        visible: control.visualFocus
+    }
 }

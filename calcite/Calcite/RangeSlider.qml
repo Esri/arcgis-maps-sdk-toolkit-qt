@@ -27,6 +27,7 @@ T.RangeSlider {
                              Math.max(first.implicitHandleHeight,
                                       second.implicitHandleHeight) + topPadding + bottomPadding)
     first.handle: SliderHandle {
+        id: firstHandle
         x: control.leftPadding + Math.round(control.horizontal ? control.first.visualPosition * (control.availableWidth - width) : (control.availableWidth - width) / 2)
         y: control.topPadding + Math.round(control.horizontal ? (control.availableHeight - height) / 2 : control.first.visualPosition * (control.availableHeight - height))
 
@@ -38,6 +39,7 @@ T.RangeSlider {
     }
 
     second.handle: SliderHandle {
+        id: secondHandle
         x: control.leftPadding + Math.round(control.horizontal ? control.second.visualPosition * (control.availableWidth - width) : (control.availableWidth - width) / 2)
         y: control.topPadding + Math.round(control.horizontal ? (control.availableHeight - height) / 2 : control.second.visualPosition * (control.availableHeight - height))
 
@@ -53,5 +55,27 @@ T.RangeSlider {
         offset: control.first.position
         progress: control.second.position
         visualProgress: control.second.visualPosition
+    }
+
+    // Focus indicator for first handle
+    Rectangle {
+        x: firstHandle.x - 2
+        y: firstHandle.y - 2
+        width: firstHandle.width + 4
+        height: firstHandle.height + 4
+        color: "transparent"
+        border.color: Calcite.brandHover
+        visible: control.visualFocus && firstHandle.activeFocus
+    }
+
+    // Focus indicator for second handle
+    Rectangle {
+        x: secondHandle.x - 2
+        y: secondHandle.y - 2
+        width: secondHandle.width + 4
+        height: secondHandle.height + 4
+        color: "transparent"
+        border.color: Calcite.brandHover
+        visible: control.visualFocus && secondHandle.activeFocus
     }
 }
