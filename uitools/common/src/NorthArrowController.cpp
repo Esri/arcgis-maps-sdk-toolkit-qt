@@ -16,9 +16,8 @@
  ******************************************************************************/
 #include "NorthArrowController.h"
 
-#include "GeoViews.h"
-
 #include "Camera.h"
+#include "GeoViews.h"
 
 #include <QFuture>
 
@@ -27,10 +26,10 @@
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-/*!
-  \internal
-  This class is an internal implementation detail and is subject to change.
- */
+  /*!
+    \internal
+    This class is an internal implementation detail and is subject to change.
+   */
 
   NorthArrowController::NorthArrowController(QObject* parent) :
     QObject(parent)

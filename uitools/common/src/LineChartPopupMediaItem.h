@@ -28,35 +28,35 @@
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-class LineChartPopupMediaItem : public PopupMediaItem
-{
-  Q_OBJECT
-  Q_PROPERTY(QVariantList linePoints READ linePoints NOTIFY lineChartPopupMediaItemChanged)
-  Q_PROPERTY(QColor color READ color NOTIFY lineChartPopupMediaItemChanged)
-  Q_PROPERTY(qreal maxValue READ maxValue NOTIFY lineChartPopupMediaItemChanged)
-  Q_PROPERTY(qreal minValue READ minValue NOTIFY lineChartPopupMediaItemChanged)
-  Q_PROPERTY(bool chartColorsEmpty READ chartColorsEmpty NOTIFY lineChartPopupMediaItemChanged)
+  class LineChartPopupMediaItem : public PopupMediaItem
+  {
+    Q_OBJECT
+    Q_PROPERTY(QVariantList linePoints READ linePoints NOTIFY lineChartPopupMediaItemChanged)
+    Q_PROPERTY(QColor color READ color NOTIFY lineChartPopupMediaItemChanged)
+    Q_PROPERTY(qreal maxValue READ maxValue NOTIFY lineChartPopupMediaItemChanged)
+    Q_PROPERTY(qreal minValue READ minValue NOTIFY lineChartPopupMediaItemChanged)
+    Q_PROPERTY(bool chartColorsEmpty READ chartColorsEmpty NOTIFY lineChartPopupMediaItemChanged)
 
-public:
-  explicit LineChartPopupMediaItem(PopupMedia* popupMedia, QObject* parent = nullptr);
-  ~LineChartPopupMediaItem() override;
+  public:
+    explicit LineChartPopupMediaItem(PopupMedia* popupMedia, QObject* parent = nullptr);
+    ~LineChartPopupMediaItem() override;
 
-private:
-  QVariantList linePoints() const;
-  QColor color() const;
-  qreal maxValue() const;
-  qreal minValue() const;
-  bool chartColorsEmpty() const;
+  private:
+    QVariantList linePoints() const;
+    QColor color() const;
+    qreal maxValue() const;
+    qreal minValue() const;
+    bool chartColorsEmpty() const;
 
-signals:
-  void lineChartPopupMediaItemChanged();
+  signals:
+    void lineChartPopupMediaItemChanged();
 
-private:
-  QVariantList m_linePoints;
-  QColor m_color;
-  qreal m_maxValue = 0.0;
-  qreal m_minValue = 0.0;
-};
+  private:
+    QVariantList m_linePoints;
+    QColor m_color;
+    qreal m_maxValue = 0.0;
+    qreal m_minValue = 0.0;
+  };
 
 } // Esri::ArcGISRuntime::Toolkit
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_LINECHARTPOPUPMEDIAITEM_H

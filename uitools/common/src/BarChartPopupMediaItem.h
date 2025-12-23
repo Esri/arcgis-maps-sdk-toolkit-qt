@@ -28,32 +28,32 @@ class QBarSet;
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-class BarChartPopupMediaItem : public PopupMediaItem
-{
-  Q_OBJECT
-  Q_PROPERTY(QVariantList barSets READ barSets NOTIFY barChartPopupMediaItemChanged)
-  Q_PROPERTY(qreal maxValue READ maxValue NOTIFY barChartPopupMediaItemChanged)
-  Q_PROPERTY(qreal minValue READ minValue NOTIFY barChartPopupMediaItemChanged)
-  Q_PROPERTY(QVariantList barSetLabels READ barSetLabels NOTIFY barChartPopupMediaItemChanged)
+  class BarChartPopupMediaItem : public PopupMediaItem
+  {
+    Q_OBJECT
+    Q_PROPERTY(QVariantList barSets READ barSets NOTIFY barChartPopupMediaItemChanged)
+    Q_PROPERTY(qreal maxValue READ maxValue NOTIFY barChartPopupMediaItemChanged)
+    Q_PROPERTY(qreal minValue READ minValue NOTIFY barChartPopupMediaItemChanged)
+    Q_PROPERTY(QVariantList barSetLabels READ barSetLabels NOTIFY barChartPopupMediaItemChanged)
 
-public:
-  explicit BarChartPopupMediaItem(PopupMedia* popupMedia, QObject* parent = nullptr);
-  ~BarChartPopupMediaItem() override;
+  public:
+    explicit BarChartPopupMediaItem(PopupMedia* popupMedia, QObject* parent = nullptr);
+    ~BarChartPopupMediaItem() override;
 
-private:
-  QVariantList barSets();
-  QVariantList barSetLabels() const;
-  qreal maxValue() const;
-  qreal minValue() const;
+  private:
+    QVariantList barSets();
+    QVariantList barSetLabels() const;
+    qreal maxValue() const;
+    qreal minValue() const;
 
-signals:
-  void barChartPopupMediaItemChanged();
+  signals:
+    void barChartPopupMediaItemChanged();
 
-private:
-  qreal m_maxValue = 0.0;
-  qreal m_minValue = 0.0;
-  QVariantList m_barSetLabels;
-};
+  private:
+    qreal m_maxValue = 0.0;
+    qreal m_minValue = 0.0;
+    QVariantList m_barSetLabels;
+  };
 
 } // Esri::ArcGISRuntime::Toolkit
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_BARCHARTPOPUPMEDIAITEM_H

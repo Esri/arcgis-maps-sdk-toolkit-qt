@@ -32,151 +32,151 @@
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-/*!
-  \internal
-  This class is an internal implementation detail and is subject to change.
- */
+  /*!
+    \internal
+    This class is an internal implementation detail and is subject to change.
+   */
 
-UtilityNetworkTraceStartingPoint::UtilityNetworkTraceStartingPoint(QObject* parent) :
-  QObject(parent)
-{
-  //
-}
-
-UtilityNetworkTraceStartingPoint::UtilityNetworkTraceStartingPoint(UtilityElement* utilityElement,
-                                                                   Graphic* selectionGraphic,
-                                                                   Symbol* featureSymbol,
-                                                                   Envelope extent,
-                                                                   QObject* parent) :
-  QObject(parent),
-  m_utilityElement(utilityElement),
-  m_selectionGraphic(selectionGraphic),
-  m_featureSymbol(featureSymbol),
-  m_extent(extent)
-{
-  if (m_utilityElement->assetType()->terminalConfiguration() != nullptr &&
-      m_utilityElement->assetType()->terminalConfiguration()->terminals().size() > 1)
+  UtilityNetworkTraceStartingPoint::UtilityNetworkTraceStartingPoint(QObject* parent) :
+    QObject(parent)
   {
-    m_hasMultipleTerminals = true;
+    //
+  }
 
-    m_multipleTerminals = m_utilityElement->assetType()->terminalConfiguration()->terminals();
-
-    QStringList multipleTerminalsTemp{};
-
-    for (const auto& terminal : m_multipleTerminals)
+  UtilityNetworkTraceStartingPoint::UtilityNetworkTraceStartingPoint(UtilityElement* utilityElement,
+                                                                     Graphic* selectionGraphic,
+                                                                     Symbol* featureSymbol,
+                                                                     Envelope extent,
+                                                                     QObject* parent) :
+    QObject(parent),
+    m_utilityElement(utilityElement),
+    m_selectionGraphic(selectionGraphic),
+    m_featureSymbol(featureSymbol),
+    m_extent(extent)
+  {
+    if (m_utilityElement->assetType()->terminalConfiguration() != nullptr &&
+        m_utilityElement->assetType()->terminalConfiguration()->terminals().size() > 1)
     {
-      multipleTerminalsTemp.append(terminal->name());
+      m_hasMultipleTerminals = true;
+
+      m_multipleTerminals = m_utilityElement->assetType()->terminalConfiguration()->terminals();
+
+      QStringList multipleTerminalsTemp{};
+
+      for (const auto& terminal : m_multipleTerminals)
+      {
+        multipleTerminalsTemp.append(terminal->name());
+      }
+
+      m_multipleTerminalNames = multipleTerminalsTemp;
     }
 
-    m_multipleTerminalNames = multipleTerminalsTemp;
-  }
+    if (m_selectionGraphic != nullptr &&
+        m_utilityElement->networkSource()->sourceType() == UtilityNetworkSourceType::Edge &&
+        m_selectionGraphic->geometry().geometryType() == GeometryType::Polyline)
+    {
+      m_hasFractionAlongEdge = true;
+      setFractionAlongEdge(m_utilityElement->fractionAlongEdge());
 
-  if (m_selectionGraphic != nullptr &&
-      m_utilityElement->networkSource()->sourceType() == UtilityNetworkSourceType::Edge &&
-      m_selectionGraphic->geometry().geometryType() == GeometryType::Polyline)
-  {
-    m_hasFractionAlongEdge = true;
-    setFractionAlongEdge(m_utilityElement->fractionAlongEdge());
-
-    const auto polyline = static_cast<Polyline>(m_selectionGraphic->geometry());
-    m_selectionGraphic->setGeometry(
+      const auto polyline = static_cast<Polyline>(m_selectionGraphic->geometry());
+      m_selectionGraphic->setGeometry(
           GeometryEngine::createPointAlong(polyline, GeometryEngine::length(polyline) * fractionAlongEdge()));
 
-    connect(this,
-            &UtilityNetworkTraceStartingPoint::fractionAlongEdgeChanged,
-            this,
-            [this, polyline](double newValue, double /*oldValue*/)
-    {
-      m_selectionGraphic->setGeometry(
-            GeometryEngine::createPointAlong(polyline, GeometryEngine::length(polyline) * fractionAlongEdge()));
-      m_utilityElement->setFractionAlongEdge(newValue);
-    });
+      connect(this,
+              &UtilityNetworkTraceStartingPoint::fractionAlongEdgeChanged,
+              this,
+              [this, polyline](double newValue, double /*oldValue*/)
+              {
+                m_selectionGraphic->setGeometry(
+                    GeometryEngine::createPointAlong(polyline, GeometryEngine::length(polyline) * fractionAlongEdge()));
+                m_utilityElement->setFractionAlongEdge(newValue);
+              });
+    }
   }
-}
 
-UtilityNetworkTraceStartingPoint::~UtilityNetworkTraceStartingPoint() = default;
+  UtilityNetworkTraceStartingPoint::~UtilityNetworkTraceStartingPoint() = default;
 
-Graphic* UtilityNetworkTraceStartingPoint::selectionGraphic() const
-{
-  return m_selectionGraphic;
-}
-
-UtilityElement* UtilityNetworkTraceStartingPoint::utilityElement() const
-{
-  return m_utilityElement;
-}
-
-Symbol* UtilityNetworkTraceStartingPoint::featureSymbol() const
-{
-  return m_featureSymbol;
-}
-
-bool UtilityNetworkTraceStartingPoint::hasMultipleTerminals() const
-{
-  return m_hasMultipleTerminals;
-}
-
-QStringList UtilityNetworkTraceStartingPoint::multipleTerminalNames() const
-{
-  return m_multipleTerminalNames;
-}
-
-void UtilityNetworkTraceStartingPoint::setMultipleTerminalNames(const QStringList& multipleTerminalNames)
-{
-  if (m_multipleTerminalNames == multipleTerminalNames)
-    return;
-
-  m_multipleTerminalNames = multipleTerminalNames;
-  emit multipleTerminalNamesChanged();
-}
-
-int UtilityNetworkTraceStartingPoint::selectedTerminalIndex() const
-{
-  return m_selectedTerminalIndex;
-}
-
-void UtilityNetworkTraceStartingPoint::setSelectedTerminalNameByIndex(int index)
-{
-  if (m_multipleTerminalNames.size() > index)
+  Graphic* UtilityNetworkTraceStartingPoint::selectionGraphic() const
   {
-    m_selectedMultipleTerminal = m_multipleTerminals.at(index);
-    m_selectedTerminalIndex = index;
+    return m_selectionGraphic;
   }
-}
 
-bool UtilityNetworkTraceStartingPoint::hasFractionAlongEdge() const
-{
-  return m_hasFractionAlongEdge;
-}
+  UtilityElement* UtilityNetworkTraceStartingPoint::utilityElement() const
+  {
+    return m_utilityElement;
+  }
 
-double UtilityNetworkTraceStartingPoint::fractionAlongEdge() const
-{
-  return m_fractionAlongEdge;
-}
+  Symbol* UtilityNetworkTraceStartingPoint::featureSymbol() const
+  {
+    return m_featureSymbol;
+  }
 
-void UtilityNetworkTraceStartingPoint::setFractionAlongEdge(double fractionAlongEdge)
-{
-  if (m_fractionAlongEdge == fractionAlongEdge)
-    return;
+  bool UtilityNetworkTraceStartingPoint::hasMultipleTerminals() const
+  {
+    return m_hasMultipleTerminals;
+  }
 
-  const auto oldValue = m_fractionAlongEdge;
-  m_fractionAlongEdge = fractionAlongEdge;
-  emit fractionAlongEdgeChanged(m_fractionAlongEdge, oldValue);
-}
+  QStringList UtilityNetworkTraceStartingPoint::multipleTerminalNames() const
+  {
+    return m_multipleTerminalNames;
+  }
 
-Envelope UtilityNetworkTraceStartingPoint::extent() const
-{
-  return m_extent;
-}
+  void UtilityNetworkTraceStartingPoint::setMultipleTerminalNames(const QStringList& multipleTerminalNames)
+  {
+    if (m_multipleTerminalNames == multipleTerminalNames)
+      return;
 
-QString UtilityNetworkTraceStartingPoint::groupName() const
-{
-  return utilityElement()->assetGroup()->name();
-}
+    m_multipleTerminalNames = multipleTerminalNames;
+    emit multipleTerminalNamesChanged();
+  }
 
-QString UtilityNetworkTraceStartingPoint::sourceName() const
-{
-  return utilityElement()->networkSource()->name();
-}
+  int UtilityNetworkTraceStartingPoint::selectedTerminalIndex() const
+  {
+    return m_selectedTerminalIndex;
+  }
+
+  void UtilityNetworkTraceStartingPoint::setSelectedTerminalNameByIndex(int index)
+  {
+    if (m_multipleTerminalNames.size() > index)
+    {
+      m_selectedMultipleTerminal = m_multipleTerminals.at(index);
+      m_selectedTerminalIndex = index;
+    }
+  }
+
+  bool UtilityNetworkTraceStartingPoint::hasFractionAlongEdge() const
+  {
+    return m_hasFractionAlongEdge;
+  }
+
+  double UtilityNetworkTraceStartingPoint::fractionAlongEdge() const
+  {
+    return m_fractionAlongEdge;
+  }
+
+  void UtilityNetworkTraceStartingPoint::setFractionAlongEdge(double fractionAlongEdge)
+  {
+    if (m_fractionAlongEdge == fractionAlongEdge)
+      return;
+
+    const auto oldValue = m_fractionAlongEdge;
+    m_fractionAlongEdge = fractionAlongEdge;
+    emit fractionAlongEdgeChanged(m_fractionAlongEdge, oldValue);
+  }
+
+  Envelope UtilityNetworkTraceStartingPoint::extent() const
+  {
+    return m_extent;
+  }
+
+  QString UtilityNetworkTraceStartingPoint::groupName() const
+  {
+    return utilityElement()->assetGroup()->name();
+  }
+
+  QString UtilityNetworkTraceStartingPoint::sourceName() const
+  {
+    return utilityElement()->networkSource()->name();
+  }
 
 } // Esri::ArcGISRuntime::Toolkit

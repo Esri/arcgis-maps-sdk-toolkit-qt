@@ -25,26 +25,26 @@
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-class PopupViewController;
+  class PopupViewController;
 
-class ImagePopupMediaItem : public PopupMediaItem
-{
-  Q_OBJECT
-  Q_PROPERTY(QUrl sourceUrl READ sourceUrl NOTIFY imagePopupMediaItemChanged)
-  Q_PROPERTY(QUrl linkUrl READ linkUrl NOTIFY imagePopupMediaItemChanged)
+  class ImagePopupMediaItem : public PopupMediaItem
+  {
+    Q_OBJECT
+    Q_PROPERTY(QUrl sourceUrl READ sourceUrl NOTIFY imagePopupMediaItemChanged)
+    Q_PROPERTY(QUrl linkUrl READ linkUrl NOTIFY imagePopupMediaItemChanged)
 
-public:
-  explicit ImagePopupMediaItem(PopupMedia* popupMedia, PopupViewController* popupViewController, QObject* parent = nullptr);
-  ~ImagePopupMediaItem() override;
+  public:
+    explicit ImagePopupMediaItem(PopupMedia* popupMedia, PopupViewController* popupViewController, QObject* parent = nullptr);
+    ~ImagePopupMediaItem() override;
 
-private:
-  QUrl linkUrl() const;
-  QUrl sourceUrl() const;
+  private:
+    QUrl linkUrl() const;
+    QUrl sourceUrl() const;
 
-signals:
-  void imagePopupMediaItemChanged();
-  void imageClicked(const QUrl& sourceUrl, const QUrl& linkUrl);
-};
+  signals:
+    void imagePopupMediaItemChanged();
+    void imageClicked(const QUrl& sourceUrl, const QUrl& linkUrl);
+  };
 
 } // Esri::ArcGISRuntime::Toolkit
 

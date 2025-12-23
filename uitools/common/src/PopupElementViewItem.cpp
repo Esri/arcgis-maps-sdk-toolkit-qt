@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2024 Esri
  *
@@ -17,50 +18,50 @@
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-/*!
-  \internal
-  This class is an internal implementation detail and is subject to change.
- */
-PopupElementViewItem::PopupElementViewItem(QObject *parent)
-  : QObject{parent}
-{
-}
+  /*!
+    \internal
+    This class is an internal implementation detail and is subject to change.
+   */
+  PopupElementViewItem::PopupElementViewItem(QObject* parent) :
+    QObject{parent}
+  {
+  }
 
-PopupElementViewItem::PopupElementViewItem(PopupElement* popupElement, QObject* parent)
-  : QObject{parent}
-  , m_popupElement{std::move(popupElement)}
-{
-}
+  PopupElementViewItem::PopupElementViewItem(PopupElement* popupElement, QObject* parent) :
+    QObject{parent},
+    m_popupElement{std::move(popupElement)}
+  {
+  }
 
-PopupElementViewItem::~PopupElementViewItem() = default;
+  PopupElementViewItem::~PopupElementViewItem() = default;
 
-QmlEnums::PopupElementType PopupElementViewItem::popupElementType() const
-{
-  return static_cast<QmlEnums::PopupElementType>(m_popupElement->popupElementType());
-}
+  QmlEnums::PopupElementType PopupElementViewItem::popupElementType() const
+  {
+    return static_cast<QmlEnums::PopupElementType>(m_popupElement->popupElementType());
+  }
 
-PopupElement* PopupElementViewItem::popupElement() const
-{
-  return m_popupElement ? m_popupElement : nullptr;
-}
+  PopupElement* PopupElementViewItem::popupElement() const
+  {
+    return m_popupElement ? m_popupElement : nullptr;
+  }
 
-void PopupElementViewItem::setPopupElement(PopupElement* popupElement)
-{
-  if (m_popupElement == popupElement)
-    return;
+  void PopupElementViewItem::setPopupElement(PopupElement* popupElement)
+  {
+    if (m_popupElement == popupElement)
+      return;
 
-  if (m_popupElement)
-    disconnect(m_popupElement, nullptr, this, nullptr);
+    if (m_popupElement)
+      disconnect(m_popupElement, nullptr, this, nullptr);
 
-  m_popupElement = popupElement;
+    m_popupElement = popupElement;
 
-  if (m_popupElement)
-    connect(m_popupElement,
-            &QObject::destroyed,
-            this,
-            &PopupElementViewItem::popupElementChanged);
+    if (m_popupElement)
+      connect(m_popupElement,
+              &QObject::destroyed,
+              this,
+              &PopupElementViewItem::popupElementChanged);
 
-  emit popupElementChanged();
-}
+    emit popupElementChanged();
+  }
 
 } // namespace Esri::ArcGISRuntime::Toolkit

@@ -25,81 +25,81 @@
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-/*!
-  \internal
-  This class is an internal implementation detail and is subject to change.
- */
+  /*!
+    \internal
+    This class is an internal implementation detail and is subject to change.
+   */
 
-CoordinateConversionResult::CoordinateConversionResult(QObject* parent):
-  QObject(parent)
-{
-}
+  CoordinateConversionResult::CoordinateConversionResult(QObject* parent) :
+    QObject(parent)
+  {
+  }
 
-CoordinateConversionResult::~CoordinateConversionResult()
-{
-}
+  CoordinateConversionResult::~CoordinateConversionResult()
+  {
+  }
 
-QString CoordinateConversionResult::name() const
-{
-  if (m_type)
-    return m_type->name();
-  else
-    return QString();
-}
+  QString CoordinateConversionResult::name() const
+  {
+    if (m_type)
+      return m_type->name();
+    else
+      return QString();
+  }
 
-CoordinateConversionOption* CoordinateConversionResult::type() const
-{
-  return m_type;
-}
+  CoordinateConversionOption* CoordinateConversionResult::type() const
+  {
+    return m_type;
+  }
 
-void CoordinateConversionResult::setType(CoordinateConversionOption* type)
-{
-  if (type == m_type)
-    return;
+  void CoordinateConversionResult::setType(CoordinateConversionOption* type)
+  {
+    if (type == m_type)
+      return;
 
-  if (m_type)
-    disconnect(m_type.data(), &CoordinateConversionOption::nameChanged, this, &CoordinateConversionResult::nameChanged);
+    if (m_type)
+      disconnect(m_type.data(), &CoordinateConversionOption::nameChanged, this, &CoordinateConversionResult::nameChanged);
 
-  m_type = type;
-  m_notation = "";
-
-  if (m_type)
-    connect(m_type.data(), &CoordinateConversionOption::nameChanged, this, &CoordinateConversionResult::nameChanged);
-
-  emit typeChanged();
-  emit nameChanged();
-  emit notationChanged();
-}
-
-QString CoordinateConversionResult::notation() const
-{
-  return m_notation;
-}
-
-void CoordinateConversionResult::setNotation(const QString& notation)
-{
-  if (m_notation == notation)
-    return;
-
-  m_notation = notation;
-  emit notationChanged();
-}
-
-void CoordinateConversionResult::updateCoordinatePoint(const Point& point)
-{
-  if(!m_type)
+    m_type = type;
     m_notation = "";
-  else
-    m_notation = m_type->prettyPrint(point);
 
-  emit notationChanged();
-}
+    if (m_type)
+      connect(m_type.data(), &CoordinateConversionOption::nameChanged, this, &CoordinateConversionResult::nameChanged);
 
-void CoordinateConversionResult::copyNotationToClipboard() const
-{
-  auto clipboard = QGuiApplication::clipboard();
-  if (clipboard && !m_notation.isEmpty())
-    clipboard->setText(m_notation);
-}
+    emit typeChanged();
+    emit nameChanged();
+    emit notationChanged();
+  }
+
+  QString CoordinateConversionResult::notation() const
+  {
+    return m_notation;
+  }
+
+  void CoordinateConversionResult::setNotation(const QString& notation)
+  {
+    if (m_notation == notation)
+      return;
+
+    m_notation = notation;
+    emit notationChanged();
+  }
+
+  void CoordinateConversionResult::updateCoordinatePoint(const Point& point)
+  {
+    if (!m_type)
+      m_notation = "";
+    else
+      m_notation = m_type->prettyPrint(point);
+
+    emit notationChanged();
+  }
+
+  void CoordinateConversionResult::copyNotationToClipboard() const
+  {
+    auto clipboard = QGuiApplication::clipboard();
+    if (clipboard && !m_notation.isEmpty())
+      clipboard->setText(m_notation);
+  }
 
 } // Esri::ArcGISRuntime::Toolkit

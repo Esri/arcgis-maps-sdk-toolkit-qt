@@ -16,39 +16,39 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_TEXTPOPUPELEMENTVIEWCONTROLLER_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_TEXTPOPUPELEMENTVIEWCONTROLLER_H
 
-// Toolkit headers
-#include "PopupElementViewItem.h"
-
 // Qt headers
 #include <QObject>
 
+// Other headers
+#include "PopupElementViewItem.h"
+
 namespace Esri::ArcGISRuntime {
 
-class TextPopupElement;
-class PopupElement;
+  class TextPopupElement;
+  class PopupElement;
 
-namespace Toolkit {
+  namespace Toolkit {
 
-class PopupViewController;
+    class PopupViewController;
 
-class TextPopupElementViewController : public PopupElementViewItem
-{
-  Q_OBJECT
-  Q_PROPERTY(QString text READ text NOTIFY textPopupElementChanged)
+    class TextPopupElementViewController : public PopupElementViewItem
+    {
+      Q_OBJECT
+      Q_PROPERTY(QString text READ text NOTIFY textPopupElementChanged)
 
-public:
-  explicit TextPopupElementViewController(TextPopupElement* textPopupElement,
-                                          PopupViewController* popupViewController,
-                                          QObject* parent = nullptr);
-  ~TextPopupElementViewController() override;
+    public:
+      explicit TextPopupElementViewController(TextPopupElement* textPopupElement,
+                                              PopupViewController* popupViewController,
+                                              QObject* parent = nullptr);
+      ~TextPopupElementViewController() override;
 
-  QString text() const;
+      QString text() const;
 
-signals:
-  void textPopupElementChanged();
-  void clickedUrl(const QUrl& url);
-};
+    signals:
+      void textPopupElementChanged();
+      void clickedUrl(const QUrl& url);
+    };
 
-} // namespace Toolkit
+  } // namespace Toolkit
 } // namespace Esri::ArcGISRuntime
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_TEXTPOPUPELEMENTVIEWCONTROLLER_H

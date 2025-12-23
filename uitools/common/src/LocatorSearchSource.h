@@ -16,19 +16,19 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_LOCATORSEARCHSOURCE_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_LOCATORSEARCHSOURCE_H
 
-// Toolkit headers
-#include "SearchSourceInterface.h"
+// Qt headers
+#include <QFuture>
+#include <QList>
+#include <QObject>
 
-// ArcGISRuntime headers
+// STL headers
 #include <GeocodeParameters.h>
 #include <GeocodeResult.h>
 #include <LocatorTask.h>
 #include <SuggestParameters.h>
 
-// Qt headers
-#include <QFuture>
-#include <QList>
-#include <QObject>
+// Other headers
+#include "SearchSourceInterface.h"
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
@@ -69,7 +69,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
   private:
     LocatorTask* m_locatorTask = nullptr;
     GeocodeParameters m_geocodeParameters;
-
   };
 
 } // Esri::ArcGISRuntime::Toolkit

@@ -25,17 +25,17 @@ namespace Esri::ArcGISRuntime::Authentication {
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-class OAuthUserConfigurationManager
-{
-public:
-  OAuthUserConfigurationManager() = delete;
+  class OAuthUserConfigurationManager
+  {
+  public:
+    OAuthUserConfigurationManager() = delete;
 
-  static void addConfiguration(Esri::ArcGISRuntime::Authentication::OAuthUserConfiguration* userConfiguration);
+    static void addConfiguration(Esri::ArcGISRuntime::Authentication::OAuthUserConfiguration* userConfiguration);
 
-  static void clearConfigurations();
+    static void clearConfigurations();
 
-  static QList<Esri::ArcGISRuntime::Authentication::OAuthUserConfiguration*> configurations();
-};
+    static QList<Esri::ArcGISRuntime::Authentication::OAuthUserConfiguration*> configurations();
+  };
 
 } // Esri::ArcGISRuntime::Toolkit
 

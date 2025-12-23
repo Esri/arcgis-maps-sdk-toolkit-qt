@@ -19,7 +19,7 @@
 // Qt headers
 #include <QObject>
 
-// ArcGIS Maps SDK headers
+// STL headers
 #include <Envelope.h>
 #include <GeoView.h>
 #include <UtilityNetwork.h>
@@ -28,65 +28,65 @@
 #include "GenericListModel.h"
 
 namespace Esri::ArcGISRuntime {
-class Graphic;
-class Symbol;
+  class Graphic;
+  class Symbol;
 } // Esri::ArcGISRuntime
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-class UtilityNetworkTraceStartingPoint : public QObject
-{
-  Q_OBJECT
+  class UtilityNetworkTraceStartingPoint : public QObject
+  {
+    Q_OBJECT
 
-public:
-  Q_INVOKABLE explicit UtilityNetworkTraceStartingPoint(QObject* parent = nullptr);
-  Q_INVOKABLE UtilityNetworkTraceStartingPoint(Esri::ArcGISRuntime::UtilityElement* utilityElement,
-                                               Esri::ArcGISRuntime::Graphic* selectionGraphic,
-                                               Esri::ArcGISRuntime::Symbol* featureSymbol,
-                                               Esri::ArcGISRuntime::Envelope extent,
-                                               QObject* parent = nullptr);
-  ~UtilityNetworkTraceStartingPoint() override;
+  public:
+    Q_INVOKABLE explicit UtilityNetworkTraceStartingPoint(QObject* parent = nullptr);
+    Q_INVOKABLE UtilityNetworkTraceStartingPoint(Esri::ArcGISRuntime::UtilityElement* utilityElement,
+                                                 Esri::ArcGISRuntime::Graphic* selectionGraphic,
+                                                 Esri::ArcGISRuntime::Symbol* featureSymbol,
+                                                 Esri::ArcGISRuntime::Envelope extent,
+                                                 QObject* parent = nullptr);
+    ~UtilityNetworkTraceStartingPoint() override;
 
-  Graphic* selectionGraphic() const;
+    Graphic* selectionGraphic() const;
 
-  UtilityElement* utilityElement() const;
+    UtilityElement* utilityElement() const;
 
-  Symbol* featureSymbol() const;
+    Symbol* featureSymbol() const;
 
-  bool hasMultipleTerminals() const;
+    bool hasMultipleTerminals() const;
 
-  QStringList multipleTerminalNames() const;
-  void setMultipleTerminalNames(const QStringList& multipleTerminals);
-  int selectedTerminalIndex() const;
-  void setSelectedTerminalNameByIndex(int index);
+    QStringList multipleTerminalNames() const;
+    void setMultipleTerminalNames(const QStringList& multipleTerminals);
+    int selectedTerminalIndex() const;
+    void setSelectedTerminalNameByIndex(int index);
 
-  bool hasFractionAlongEdge() const;
+    bool hasFractionAlongEdge() const;
 
-  double fractionAlongEdge() const;
-  void setFractionAlongEdge(double fractionAlongEdge);
+    double fractionAlongEdge() const;
+    void setFractionAlongEdge(double fractionAlongEdge);
 
-  Envelope extent() const;
+    Envelope extent() const;
 
-  QString groupName() const;
-  QString sourceName() const;
+    QString groupName() const;
+    QString sourceName() const;
 
-signals:
-  void multipleTerminalNamesChanged();
-  void fractionAlongEdgeChanged(double newValue, double oldValue);
+  signals:
+    void multipleTerminalNamesChanged();
+    void fractionAlongEdgeChanged(double newValue, double oldValue);
 
-private:
-  UtilityElement* m_utilityElement = nullptr;
-  Graphic* m_selectionGraphic = nullptr;
-  Symbol* m_featureSymbol = nullptr;
-  Envelope m_extent;
-  bool m_hasMultipleTerminals = false;
-  QStringList m_multipleTerminalNames;
-  QList<UtilityTerminal*> m_multipleTerminals;
-  UtilityTerminal* m_selectedMultipleTerminal = nullptr;
-  int m_selectedTerminalIndex = 0;
-  bool m_hasFractionAlongEdge = false;
-  double m_fractionAlongEdge = 0.0;
-};
+  private:
+    UtilityElement* m_utilityElement = nullptr;
+    Graphic* m_selectionGraphic = nullptr;
+    Symbol* m_featureSymbol = nullptr;
+    Envelope m_extent;
+    bool m_hasMultipleTerminals = false;
+    QStringList m_multipleTerminalNames;
+    QList<UtilityTerminal*> m_multipleTerminals;
+    UtilityTerminal* m_selectedMultipleTerminal = nullptr;
+    int m_selectedTerminalIndex = 0;
+    bool m_hasFractionAlongEdge = false;
+    double m_fractionAlongEdge = 0.0;
+  };
 
 } // Esri::ArcGISRuntime::Toolkit
 

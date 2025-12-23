@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -16,13 +17,13 @@
 
 #include "CalloutDemo.h"
 
-#include <QImage>
-
 #include "CalloutData.h"
 #include "GeoView.h"
 #include "MapQuickView.h"
 #include "MapView.h"
 #include "Point.h"
+
+#include <QImage>
 
 using namespace Esri::ArcGISRuntime;
 

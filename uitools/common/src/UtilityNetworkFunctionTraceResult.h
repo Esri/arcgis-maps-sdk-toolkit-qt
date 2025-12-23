@@ -28,26 +28,25 @@
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-class UtilityNetworkFunctionTraceResult
-{
+  class UtilityNetworkFunctionTraceResult
+  {
+  public:
+    explicit UtilityNetworkFunctionTraceResult();
+    UtilityNetworkFunctionTraceResult(const QString& name,
+                                      const UtilityTraceFunctionType type,
+                                      double value);
+    ~UtilityNetworkFunctionTraceResult();
 
-public:
-  explicit UtilityNetworkFunctionTraceResult();
-  UtilityNetworkFunctionTraceResult(const QString& name,
-                                                const UtilityTraceFunctionType type,
-                                                double value);
-  ~UtilityNetworkFunctionTraceResult();
+    QString name() const;
+    UtilityTraceFunctionType type() const;
+    QString typeAsLabel() const;
+    double value() const;
 
-  QString name() const;
-  UtilityTraceFunctionType type() const;
-  QString typeAsLabel() const;
-  double value() const;
-
-private:
-  QString m_name;
-  UtilityTraceFunctionType m_type;
-  double m_value;
-};
+  private:
+    QString m_name;
+    UtilityTraceFunctionType m_type;
+    double m_value;
+  };
 
 } // Esri::ArcGISRuntime::Toolkit
 

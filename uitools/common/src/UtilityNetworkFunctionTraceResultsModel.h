@@ -17,51 +17,53 @@
 #ifndef UTILITYNETWORKFUNCTIONTRACERESULTSMODEL_H
 #define UTILITYNETWORKFUNCTIONTRACERESULTSMODEL_H
 
+// Qt headers
 #include <QAbstractListModel>
 
+// Other headers
 #include "UtilityNetworkFunctionTraceResult.h"
 
 namespace Esri::ArcGISRuntime {
 
-class UtilityElement;
+  class UtilityElement;
 
-namespace Toolkit {
+  namespace Toolkit {
 
-class UtilityNetworkFunctionTraceResultsModel : public QAbstractListModel
-{
-  Q_OBJECT
+    class UtilityNetworkFunctionTraceResultsModel : public QAbstractListModel
+    {
+      Q_OBJECT
 
-public:
-  explicit UtilityNetworkFunctionTraceResultsModel(QObject* parent = nullptr);
+    public:
+      explicit UtilityNetworkFunctionTraceResultsModel(QObject* parent = nullptr);
 
-  enum StartingPointRoles
-  {
-    NameRole = Qt::UserRole + 1,
-    TypeRole = Qt::UserRole + 2,
-    ValueRole = Qt::UserRole + 3,
-  };
+      enum StartingPointRoles
+      {
+        NameRole = Qt::UserRole + 1,
+        TypeRole = Qt::UserRole + 2,
+        ValueRole = Qt::UserRole + 3,
+      };
 
-  Qt::ItemFlags flags(const QModelIndex& index) const override;
+      Qt::ItemFlags flags(const QModelIndex& index) const override;
 
-  int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+      int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 
-  QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+      QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 
-  void addFunctionResult(const UtilityNetworkFunctionTraceResult& functionResult);
+      void addFunctionResult(const UtilityNetworkFunctionTraceResult& functionResult);
 
-  void clear();
+      void clear();
 
-  int size() const;
+      int size() const;
 
-  private:
-    QHash<int, QByteArray> roleNames() const override;
+    private:
+      QHash<int, QByteArray> roleNames() const override;
 
-  void setupRoles();
+      void setupRoles();
 
-  QHash<int, QByteArray> m_roles;
-  QList<UtilityNetworkFunctionTraceResult> m_data;
-};
-} // namespace Toolkit
-}// namespace Esri::ArcGISRuntime
+      QHash<int, QByteArray> m_roles;
+      QList<UtilityNetworkFunctionTraceResult> m_data;
+    };
+  } // namespace Toolkit
+} // namespace Esri::ArcGISRuntime
 
 #endif // UTILITYNETWORKFUNCTIONTRACERESULTSMODEL_H

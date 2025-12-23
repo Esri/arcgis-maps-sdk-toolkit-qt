@@ -20,8 +20,8 @@
 #include "LocatorSearchSource.h"
 
 // Qt headers
-#include <QVariant>
 #include <QUuid>
+#include <QVariant>
 
 // ArcGISRuntime headers
 #include <Envelope.h>
@@ -116,41 +116,41 @@ namespace Esri::ArcGISRuntime::Toolkit {
     LocatorSearchSource::setMaximumSuggestions(DEFAULT_MAXIMUM_SUGGESTIONS);
 
     doOnLoaded(locatorTask, this, [this]
-             {
-               const auto& info = m_locatorTask->locatorInfo();
-               if (!info.name().isEmpty())
                {
-                 setDisplayName(info.name());
-               }
-               else if (!info.description().isEmpty())
-               {
-                 setDisplayName(info.description());
-               }
-
-               QStringList attrs{"Type", "LongLabel"};
-               auto resultAttrs = info.resultAttributes();
-               auto geocodeAttrs = m_geocodeParameters.resultAttributeNames();
-               bool foundOne{false};
-               for (const auto& attr : attrs)
-               {
-                 auto it = std::find_if(std::cbegin(resultAttrs), std::cend(resultAttrs), [attr](const LocatorAttribute& la)
-                                        {
-                                          return la.name() == attr;
-                                        });
-                 if (it != std::cend(resultAttrs))
+                 const auto& info = m_locatorTask->locatorInfo();
+                 if (!info.name().isEmpty())
                  {
-                   foundOne = true;
-                   geocodeAttrs << it->name();
+                   setDisplayName(info.name());
                  }
-               }
+                 else if (!info.description().isEmpty())
+                 {
+                   setDisplayName(info.description());
+                 }
 
-               if (!foundOne)
-               {
-                 geocodeAttrs << "*";
-               }
+                 QStringList attrs{"Type", "LongLabel"};
+                 auto resultAttrs = info.resultAttributes();
+                 auto geocodeAttrs = m_geocodeParameters.resultAttributeNames();
+                 bool foundOne{false};
+                 for (const auto& attr : attrs)
+                 {
+                   auto it = std::find_if(std::cbegin(resultAttrs), std::cend(resultAttrs), [attr](const LocatorAttribute& la)
+                                          {
+                                            return la.name() == attr;
+                                          });
+                   if (it != std::cend(resultAttrs))
+                   {
+                     foundOne = true;
+                     geocodeAttrs << it->name();
+                   }
+                 }
 
-               m_geocodeParameters.setResultAttributeNames(geocodeAttrs);
-             });
+                 if (!foundOne)
+                 {
+                   geocodeAttrs << "*";
+                 }
+
+                 m_geocodeParameters.setResultAttributeNames(geocodeAttrs);
+               });
   }
 
   LocatorSearchSource::~LocatorSearchSource()
@@ -232,9 +232,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
     auto params = normalizeGeometryParams(m_geocodeParameters, area);
     m_geocodeFuture = m_locatorTask->geocodeWithSuggestResultAndParametersAsync(suggestion, params);
     m_geocodeFuture.then(this, [this](const QList<GeocodeResult>& geocodeResults)
-    {
-      onGeocodeCompleted_(geocodeResults);
-    });
+                         {
+                           onGeocodeCompleted_(geocodeResults);
+                         });
   }
 
   void LocatorSearchSource::search(const QString& searchString, Geometry area)
@@ -244,9 +244,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
     auto params = normalizeGeometryParams(m_geocodeParameters, area);
     m_geocodeFuture = m_locatorTask->geocodeWithParametersAsync(searchString, params);
     m_geocodeFuture.then(this, [this](const QList<GeocodeResult>& geocodeResults)
-    {
-      onGeocodeCompleted_(geocodeResults);
-    });
+                         {
+                           onGeocodeCompleted_(geocodeResults);
+                         });
   }
 
 } // Esri::ArcGISRuntime::Toolkit

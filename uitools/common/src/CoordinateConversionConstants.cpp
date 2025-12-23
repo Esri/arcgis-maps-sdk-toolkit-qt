@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2020 Esri
  *
@@ -17,13 +18,13 @@
 
 namespace Esri::ArcGISRuntime::Toolkit::CoordinateConversionConstants {
 
-const QString DECIMAL_DEGREES_FORMAT = QStringLiteral("DD");
-const QString DEGREES_DECIMAL_MINUTES_FORMAT = QStringLiteral("DDM");
-const QString DEGREES_MINUTES_SECONDS_FORMAT = QStringLiteral("DMS");
-const QString GARS_FORMAT = QStringLiteral("GARS");
-const QString GEOREF_FORMAT = QStringLiteral("GeoRef");
-const QString MGRS_FORMAT = QStringLiteral("MGRS");
-const QString USNG_FORMAT = QStringLiteral("USNG");
-const QString UTM_FORMAT = QStringLiteral("UTM");
+  const QString DECIMAL_DEGREES_FORMAT = QStringLiteral("DD");
+  const QString DEGREES_DECIMAL_MINUTES_FORMAT = QStringLiteral("DDM");
+  const QString DEGREES_MINUTES_SECONDS_FORMAT = QStringLiteral("DMS");
+  const QString GARS_FORMAT = QStringLiteral("GARS");
+  const QString GEOREF_FORMAT = QStringLiteral("GeoRef");
+  const QString MGRS_FORMAT = QStringLiteral("MGRS");
+  const QString USNG_FORMAT = QStringLiteral("USNG");
+  const QString UTM_FORMAT = QStringLiteral("UTM");
 
 } // Esri::ArcGISRuntime::Toolkit::CoordinateConversionConstants

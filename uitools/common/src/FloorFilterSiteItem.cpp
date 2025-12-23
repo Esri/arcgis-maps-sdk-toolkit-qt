@@ -21,10 +21,10 @@
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-/*!
-  \internal
-  This class is an internal implementation detail and is subject to change.
- */
+  /*!
+    \internal
+    This class is an internal implementation detail and is subject to change.
+   */
 
   FloorFilterSiteItem::FloorFilterSiteItem(QObject* parent) :
     FloorFilterSiteItem(nullptr, parent)

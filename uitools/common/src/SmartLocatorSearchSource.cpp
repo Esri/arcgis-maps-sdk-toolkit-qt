@@ -16,13 +16,12 @@
  ******************************************************************************/
 #include "SmartLocatorSearchSource.h"
 
-#include <QUuid>
-
-#include "SingleShotConnection.h"
-
 #include "GeocodeResult.h"
+#include "SingleShotConnection.h"
 #include "SuggestListModel.h"
 #include "SuggestResult.h"
+
+#include <QUuid>
 
 Q_DECLARE_METATYPE(Esri::ArcGISRuntime::SuggestResult)
 
@@ -107,7 +106,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void SmartLocatorSearchSource::search(const QString& searchString, const Geometry area)
   {
     m_lastSearchArea = area;
-    m_searchStringOrSuggestResult = QVariant {searchString};
+    m_searchStringOrSuggestResult = QVariant{searchString};
     LocatorSearchSource::search(searchString, area);
   }
 

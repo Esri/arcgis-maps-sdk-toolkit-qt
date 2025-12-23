@@ -23,8 +23,8 @@ class AutoDisconnector
 {
 public:
   AutoDisconnector() :
-    m_conn(){};
-  explicit AutoDisconnector(QMetaObject::Connection connection):
+    m_conn() {};
+  explicit AutoDisconnector(QMetaObject::Connection connection) :
     m_conn(std::move(connection))
   {
   }

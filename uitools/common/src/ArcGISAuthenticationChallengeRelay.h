@@ -16,26 +16,26 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_ARCGISAUTHENTICATIONCHALLENGERELAY_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_ARCGISAUTHENTICATIONCHALLENGERELAY_H
 
-// ArcGIS Maps SDK headers
+// STL headers
 #include <Authentication/ArcGISAuthenticationChallengeHandler.h>
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-class AuthenticatorController;
-class ArcGISAuthenticationChallengeRelay : public Authentication::ArcGISAuthenticationChallengeHandler
-{
-  Q_OBJECT
+  class AuthenticatorController;
+  class ArcGISAuthenticationChallengeRelay : public Authentication::ArcGISAuthenticationChallengeHandler
+  {
+    Q_OBJECT
 
-public:
-  explicit ArcGISAuthenticationChallengeRelay(AuthenticatorController* controller);
-  ~ArcGISAuthenticationChallengeRelay();
+  public:
+    explicit ArcGISAuthenticationChallengeRelay(AuthenticatorController* controller);
+    ~ArcGISAuthenticationChallengeRelay();
 
-protected:
-  void handleArcGISAuthenticationChallenge(Authentication::ArcGISAuthenticationChallenge* challenge) override;
+  protected:
+    void handleArcGISAuthenticationChallenge(Authentication::ArcGISAuthenticationChallenge* challenge) override;
 
-private:
-  AuthenticatorController* m_controller = nullptr;
-};
+  private:
+    AuthenticatorController* m_controller = nullptr;
+  };
 
 } // Esri::ArcGISRuntime::Toolkit
 

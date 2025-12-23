@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2025 Esri
  *
@@ -23,35 +24,36 @@
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-/*!
-  \internal
-  This class is an internal implementation detail and is subject to change.
- */
-PopupMediaItem::PopupMediaItem(PopupMedia* popupMedia, QObject* parent)
-  : QObject{parent}, m_popupMedia{popupMedia}
-{
-}
+  /*!
+    \internal
+    This class is an internal implementation detail and is subject to change.
+   */
+  PopupMediaItem::PopupMediaItem(PopupMedia* popupMedia, QObject* parent) :
+    QObject{parent},
+    m_popupMedia{popupMedia}
+  {
+  }
 
-PopupMediaItem::~PopupMediaItem() = default;
+  PopupMediaItem::~PopupMediaItem() = default;
 
-QString PopupMediaItem::title() const
-{
-  return m_popupMedia->title();
-}
+  QString PopupMediaItem::title() const
+  {
+    return m_popupMedia->title();
+  }
 
-QString PopupMediaItem::caption() const
-{
-  return m_popupMedia->caption();
-}
+  QString PopupMediaItem::caption() const
+  {
+    return m_popupMedia->caption();
+  }
 
-PopupMediaType PopupMediaItem::popupMediaType() const
-{
-  return m_popupMedia->popupMediaType();
-}
+  PopupMediaType PopupMediaItem::popupMediaType() const
+  {
+    return m_popupMedia->popupMediaType();
+  }
 
-PopupMedia* PopupMediaItem::popupMediaItem() const
-{
-  return m_popupMedia;
-}
+  PopupMedia* PopupMediaItem::popupMediaItem() const
+  {
+    return m_popupMedia;
+  }
 
 } // namespace Esri::ArcGISRuntime::Toolkit

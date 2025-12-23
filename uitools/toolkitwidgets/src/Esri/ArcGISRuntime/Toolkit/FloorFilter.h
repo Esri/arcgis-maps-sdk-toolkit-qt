@@ -1,4 +1,3 @@
-
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -17,7 +16,10 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_FLOORFILTER_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_FLOORFILTER_H
 
+// Qt headers
 #include <QFrame>
+
+// STL headers
 #include <memory>
 
 namespace Ui {

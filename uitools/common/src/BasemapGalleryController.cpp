@@ -106,9 +106,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
     void connectToGeoModel(BasemapGalleryController* self, GeoModel* geoModel)
     {
       doOnLoaded(geoModel, self, [self, geoModel]
-               {
-                 self->setCurrentBasemap(geoModel->basemap());
-               });
+                 {
+                   self->setCurrentBasemap(geoModel->basemap());
+                 });
 
       // TODO: Cleanup this when GeoModel itself exposes the
       // basemapChanged signal.
@@ -257,26 +257,26 @@ namespace Esri::ArcGISRuntime::Toolkit {
                            return;
 
                          portal->fetchDeveloperBasemapsAsync().then(self,
-                         [portal, self]()
-                         {
-                           // Sort and append the basemaps to the gallery.
-                           BasemapListModel* basemaps = portal->developerBasemaps();
-                           sortBasemapsAndAddToGallery(self, basemaps);
-                           // Notify the demo that the basemaps have changed.
-                           emit self->basemapsChanged();
-                         });
+                                                                    [portal, self]()
+                                                                    {
+                                                                      // Sort and append the basemaps to the gallery.
+                                                                      BasemapListModel* basemaps = portal->developerBasemaps();
+                                                                      sortBasemapsAndAddToGallery(self, basemaps);
+                                                                      // Notify the demo that the basemaps have changed.
+                                                                      emit self->basemapsChanged();
+                                                                    });
 
                          if (qobject_cast<Scene*>(self->geoModel()))
                          {
                            portal->fetch3DBasemapsAsync().then(self,
-                                 [portal, self]()
-                           {
-                             // Sort and append the basemaps to the gallery.
-                             BasemapListModel* basemaps = portal->basemaps3D();
-                             sortBasemapsAndAddToGallery(self, basemaps, true);
-                             // Notify the demo that the basemaps have changed.
-                             emit self->basemapsChanged();
-                           });
+                                                               [portal, self]()
+                                                               {
+                                                                 // Sort and append the basemaps to the gallery.
+                                                                 BasemapListModel* basemaps = portal->basemaps3D();
+                                                                 sortBasemapsAndAddToGallery(self, basemaps, true);
+                                                                 // Notify the demo that the basemaps have changed.
+                                                                 emit self->basemapsChanged();
+                                                               });
                          }
                        });
       portal->load();
@@ -421,46 +421,46 @@ namespace Esri::ArcGISRuntime::Toolkit {
       // If portal basemaps are populated, add the contents to the gallery.
       // Otherwise attempt a fetch of the contents then add to the gallery.
       doOnLoaded(m_portal, this, [this]
-               {
-                 if (m_portal->basemaps()->rowCount() > 0)
                  {
-                   for (auto basemap : *m_portal->basemaps())
+                   if (m_portal->basemaps()->rowCount() > 0)
                    {
-                     append(basemap);
-                   }
-                 }
-                 else
-                 {
-                   m_portal->fetchBasemapsAsync().then(this,
-                   [this]()
-                   {
-                     BasemapListModel* basemaps = m_portal->basemaps();
-                     sortBasemapsAndAddToGallery(this, basemaps);
-                     emit basemapsChanged();
-                   });
-                 }
-
-                 if (qobject_cast<Scene*>(m_geoModel))
-                 {
-                   if (m_portal->basemaps3D()->rowCount() > 0)
-                   {
-                     for (auto basemap : *m_portal->basemaps3D())
+                     for (auto basemap : *m_portal->basemaps())
                      {
                        append(basemap);
                      }
                    }
                    else
                    {
-                     m_portal->fetch3DBasemapsAsync().then(this,
-                     [this]()
-                     {
-                       BasemapListModel* basemaps = m_portal->basemaps3D();
-                       sortBasemapsAndAddToGallery(this, basemaps, true);
-                       emit basemapsChanged();
-                     });
+                     m_portal->fetchBasemapsAsync().then(this,
+                                                         [this]()
+                                                         {
+                                                           BasemapListModel* basemaps = m_portal->basemaps();
+                                                           sortBasemapsAndAddToGallery(this, basemaps);
+                                                           emit basemapsChanged();
+                                                         });
                    }
-                 }
-               });
+
+                   if (qobject_cast<Scene*>(m_geoModel))
+                   {
+                     if (m_portal->basemaps3D()->rowCount() > 0)
+                     {
+                       for (auto basemap : *m_portal->basemaps3D())
+                       {
+                         append(basemap);
+                       }
+                     }
+                     else
+                     {
+                       m_portal->fetch3DBasemapsAsync().then(this,
+                                                             [this]()
+                                                             {
+                                                               BasemapListModel* basemaps = m_portal->basemaps3D();
+                                                               sortBasemapsAndAddToGallery(this, basemaps, true);
+                                                               emit basemapsChanged();
+                                                             });
+                     }
+                   }
+                 });
     }
 
     emit portalChanged();

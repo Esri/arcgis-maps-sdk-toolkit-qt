@@ -23,51 +23,50 @@ class QPropertyAnimation;
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-class Flash : public QWidget
-{
-  Q_OBJECT
-  Q_PROPERTY(int alpha READ alpha_ WRITE setAlpha_ NOTIFY alphaChanged)
-  Q_PROPERTY(QPointF point READ point WRITE setPoint NOTIFY pointChanged)
-  Q_PROPERTY(int radius READ radius WRITE setRadius NOTIFY radiusChanged)
-public:
+  class Flash : public QWidget
+  {
+    Q_OBJECT
+    Q_PROPERTY(int alpha READ alpha_ WRITE setAlpha_ NOTIFY alphaChanged)
+    Q_PROPERTY(QPointF point READ point WRITE setPoint NOTIFY pointChanged)
+    Q_PROPERTY(int radius READ radius WRITE setRadius NOTIFY radiusChanged)
+  public:
+    Flash(QWidget* parent = nullptr);
 
-  Flash(QWidget* parent = nullptr);
+    ~Flash() override;
 
-  ~Flash() override;
+    void setTargetColor(QColor color);
 
-  void setTargetColor(QColor color);
+    void setPoint(QPointF point);
 
-  void setPoint(QPointF point);
+    QPointF point() const;
 
-  QPointF point() const;
+    void setRadius(int radius);
 
-  void setRadius(int radius);
+    int radius() const;
 
-  int radius() const;
+  public slots:
+    void play(int duration);
 
-public slots:
-  void play(int duration);
+  signals:
+    void alphaChanged();
 
-signals:
-  void alphaChanged();
+    void pointChanged();
 
-  void pointChanged();
+    void radiusChanged();
 
-  void radiusChanged();
+  protected:
+    void paintEvent(QPaintEvent* event) override;
 
-protected:
-  void paintEvent(QPaintEvent* event) override;
+  private:
+    void setAlpha_(int alpha);
 
-private:
-  void setAlpha_(int alpha);
+    int alpha_() const;
 
-  int alpha_() const;
-
-private:
-  QColor m_color;
-  QPointF m_point;
-  int m_radius = 0;
-};
+  private:
+    QColor m_color;
+    QPointF m_point;
+    int m_radius = 0;
+  };
 
 } // Esri::ArcGISRuntime::Toolkit
 

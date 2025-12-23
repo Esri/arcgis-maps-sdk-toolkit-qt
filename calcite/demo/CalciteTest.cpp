@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2021 Esri
  *
@@ -24,7 +25,7 @@
 
 using namespace Esri::ArcGISRuntime;
 
-CalciteTest::CalciteTest(QObject* parent /* = nullptr */):
+CalciteTest::CalciteTest(QObject* parent /* = nullptr */) :
   QObject(parent),
   m_map(new Map(this))
 {

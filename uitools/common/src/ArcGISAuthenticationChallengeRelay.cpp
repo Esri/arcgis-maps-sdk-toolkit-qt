@@ -15,43 +15,44 @@
  *  limitations under the License.
  ******************************************************************************/
 #include "ArcGISAuthenticationChallengeRelay.h"
+
 #include "AuthenticatorController.h"
 
 // Maps SDK headers
+#include <ArcGISRuntimeEnvironment.h>
 #include <Authentication/ArcGISAuthenticationChallenge.h>
 #include <Authentication/AuthenticationManager.h>
-#include <ArcGISRuntimeEnvironment.h>
 
 using namespace Esri::ArcGISRuntime;
 using namespace Esri::ArcGISRuntime::Authentication;
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-/*!
-  \class Esri::ArcGISRuntime::Toolkit::ArcGISAuthenticationChallengeRelay
-  \inmodule EsriArcGISRuntimeToolkit
-  \ingroup ArcGISQtToolkitUiCppControllers
-  \brief Simple implementation of the ArcGISAuthenticationChallengeHandler interface.
+  /*!
+    \class Esri::ArcGISRuntime::Toolkit::ArcGISAuthenticationChallengeRelay
+    \inmodule EsriArcGISRuntimeToolkit
+    \ingroup ArcGISQtToolkitUiCppControllers
+    \brief Simple implementation of the ArcGISAuthenticationChallengeHandler interface.
 
-  This class is used to relay authentication challenges to the AuthenticatorController. Since multiple
-  inheritance of QObject is not allowed, and both ChallengeHandler classes inherit QObject, we use a
-  composition pattern instead.
+    This class is used to relay authentication challenges to the AuthenticatorController. Since multiple
+    inheritance of QObject is not allowed, and both ChallengeHandler classes inherit QObject, we use a
+    composition pattern instead.
 
-  \internal
- */
+    \internal
+   */
 
-ArcGISAuthenticationChallengeRelay::ArcGISAuthenticationChallengeRelay(AuthenticatorController* controller) :
-  ArcGISAuthenticationChallengeHandler(controller),
-  m_controller(controller)
-{
-  ArcGISRuntimeEnvironment::authenticationManager()->setArcGISAuthenticationChallengeHandler(this);
-}
+  ArcGISAuthenticationChallengeRelay::ArcGISAuthenticationChallengeRelay(AuthenticatorController* controller) :
+    ArcGISAuthenticationChallengeHandler(controller),
+    m_controller(controller)
+  {
+    ArcGISRuntimeEnvironment::authenticationManager()->setArcGISAuthenticationChallengeHandler(this);
+  }
 
-ArcGISAuthenticationChallengeRelay::~ArcGISAuthenticationChallengeRelay() = default;
+  ArcGISAuthenticationChallengeRelay::~ArcGISAuthenticationChallengeRelay() = default;
 
-void ArcGISAuthenticationChallengeRelay::handleArcGISAuthenticationChallenge(ArcGISAuthenticationChallenge* challenge)
-{
-  m_controller->handleArcGISAuthenticationChallenge(challenge);
-}
+  void ArcGISAuthenticationChallengeRelay::handleArcGISAuthenticationChallenge(ArcGISAuthenticationChallenge* challenge)
+  {
+    m_controller->handleArcGISAuthenticationChallenge(challenge);
+  }
 
 } //  Esri::ArcGISRuntime::Toolkit

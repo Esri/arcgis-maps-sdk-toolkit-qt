@@ -22,24 +22,24 @@
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-class CustomOAuth2AuthorizationCodeFlow : public QAbstractOAuth2
-{
-  Q_OBJECT
-public:
-  CustomOAuth2AuthorizationCodeFlow(QUrl m_authorizeUrl, QObject* parent);
-  ~CustomOAuth2AuthorizationCodeFlow() override;
+  class CustomOAuth2AuthorizationCodeFlow : public QAbstractOAuth2
+  {
+    Q_OBJECT
+  public:
+    CustomOAuth2AuthorizationCodeFlow(QUrl m_authorizeUrl, QObject* parent);
+    ~CustomOAuth2AuthorizationCodeFlow() override;
 
-  void grant() override;
+    void grant() override;
 
-  QString authorizationCode() const;
-  void setAuthorizationCode(const QString& code);
+    QString authorizationCode() const;
+    void setAuthorizationCode(const QString& code);
 
-private:
-  Q_DISABLE_COPY_MOVE(CustomOAuth2AuthorizationCodeFlow)
+  private:
+    Q_DISABLE_COPY_MOVE(CustomOAuth2AuthorizationCodeFlow)
 
-  QString m_authorizationCode;
-  const QUrl m_authorizeUrl;
-};
+    QString m_authorizationCode;
+    const QUrl m_authorizeUrl;
+  };
 
 } // Esri::ArcGISRuntime::Toolkit
 

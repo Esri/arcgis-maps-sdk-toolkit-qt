@@ -25,37 +25,37 @@
 
 namespace Esri::ArcGISRuntime {
 
-class AttachmentsPopupElement;
+  class AttachmentsPopupElement;
 
-namespace Toolkit {
+  namespace Toolkit {
 
-class PopupViewController;
+    class PopupViewController;
 
-class AttachmentsPopupElementViewController : public PopupElementViewItem
-{
-  Q_OBJECT
-  Q_PROPERTY(QString title READ title NOTIFY attachmentPopupElementChanged)
-  Q_PROPERTY(QString description READ description NOTIFY attachmentPopupElementChanged)
-  Q_PROPERTY(QAbstractListModel* popupAttachmentItems READ popupAttachmentItems NOTIFY attachmentPopupElementChanged)
+    class AttachmentsPopupElementViewController : public PopupElementViewItem
+    {
+      Q_OBJECT
+      Q_PROPERTY(QString title READ title NOTIFY attachmentPopupElementChanged)
+      Q_PROPERTY(QString description READ description NOTIFY attachmentPopupElementChanged)
+      Q_PROPERTY(QAbstractListModel* popupAttachmentItems READ popupAttachmentItems NOTIFY attachmentPopupElementChanged)
 
-public:
-  explicit AttachmentsPopupElementViewController(AttachmentsPopupElement* attachmentsPopupElement,
-                                                 PopupViewController* popupViewController,
-                                                 QObject* parent = nullptr);
-  ~AttachmentsPopupElementViewController() override;
+    public:
+      explicit AttachmentsPopupElementViewController(AttachmentsPopupElement* attachmentsPopupElement,
+                                                     PopupViewController* popupViewController,
+                                                     QObject* parent = nullptr);
+      ~AttachmentsPopupElementViewController() override;
 
-private:
-  QString title() const;
-  QString description() const;
-  GenericListModel* popupAttachmentItems() const;
+    private:
+      QString title() const;
+      QString description() const;
+      GenericListModel* popupAttachmentItems() const;
 
-signals:
-  void attachmentPopupElementChanged();
+    signals:
+      void attachmentPopupElementChanged();
 
-private:
-  GenericListModel* m_popupAttachmentItems = nullptr;
-};
+    private:
+      GenericListModel* m_popupAttachmentItems = nullptr;
+    };
 
-} // namespace Toolkit
+  } // namespace Toolkit
 } // namespace Esri::ArcGISRuntime
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_ATTACHMENTSPOPUPELEMENTVIEWCONTROLLER_H

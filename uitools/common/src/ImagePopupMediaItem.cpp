@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2025 Esri
  *
@@ -25,29 +26,27 @@
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-/*!
-  \internal
-  This class is an internal implementation detail and is subject to change.
- */
-ImagePopupMediaItem::ImagePopupMediaItem(PopupMedia* popupMedia, PopupViewController* popupViewController, QObject* parent)
-  : PopupMediaItem{popupMedia, parent}
-{
-  // bubble up imageClicked signal to PopupViewController. This is the sourceUrl & linkUrl used for ImagePopupMediaItems.
-  connect(this, &ImagePopupMediaItem::imageClicked, popupViewController, &PopupViewController::imageClicked);
-}
+  /*!
+    \internal
+    This class is an internal implementation detail and is subject to change.
+   */
+  ImagePopupMediaItem::ImagePopupMediaItem(PopupMedia* popupMedia, PopupViewController* popupViewController, QObject* parent) :
+    PopupMediaItem{popupMedia, parent}
+  {
+    // bubble up imageClicked signal to PopupViewController. This is the sourceUrl & linkUrl used for ImagePopupMediaItems.
+    connect(this, &ImagePopupMediaItem::imageClicked, popupViewController, &PopupViewController::imageClicked);
+  }
 
-ImagePopupMediaItem::~ImagePopupMediaItem() = default;
+  ImagePopupMediaItem::~ImagePopupMediaItem() = default;
 
-QUrl ImagePopupMediaItem::sourceUrl() const
-{
-  return popupMediaItem()->value()->sourceUrl();
-}
+  QUrl ImagePopupMediaItem::sourceUrl() const
+  {
+    return popupMediaItem()->value()->sourceUrl();
+  }
 
-QUrl ImagePopupMediaItem::linkUrl() const
-{
-  return popupMediaItem()->value()->linkUrl();
-}
+  QUrl ImagePopupMediaItem::linkUrl() const
+  {
+    return popupMediaItem()->value()->linkUrl();
+  }
 
 } // namespace Esri::ArcGISRuntime::Toolkit
-
-

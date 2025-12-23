@@ -16,42 +16,42 @@
 #ifndef ESRI_ARCGISRUNTIME_NORTHARROW_H
 #define ESRI_ARCGISRUNTIME_NORTHARROW_H
 
+// Qt headers
 #include <QLabel>
 #include <QPixmap>
 
 namespace Esri::ArcGISRuntime {
 
-class MapGraphicsView;
-class SceneGraphicsView;
+  class MapGraphicsView;
+  class SceneGraphicsView;
 
-namespace Toolkit
-{
+  namespace Toolkit {
 
-class NorthArrowController;
+    class NorthArrowController;
 
-class NorthArrow : public QLabel
-{
-  Q_OBJECT
-public:
-  explicit NorthArrow(QWidget* parent = nullptr);
+    class NorthArrow : public QLabel
+    {
+      Q_OBJECT
+    public:
+      explicit NorthArrow(QWidget* parent = nullptr);
 
-  ~NorthArrow() override;
+      ~NorthArrow() override;
 
-  void setMapView(MapGraphicsView* mapView);
+      void setMapView(MapGraphicsView* mapView);
 
-  void setSceneView(SceneGraphicsView* sceneView);
+      void setSceneView(SceneGraphicsView* sceneView);
 
-  NorthArrowController* controller() const;
+      NorthArrowController* controller() const;
 
-protected:
-  void mouseDoubleClickEvent(QMouseEvent* event) override;
+    protected:
+      void mouseDoubleClickEvent(QMouseEvent* event) override;
 
-private:
-  QPixmap m_image;
-  NorthArrowController* m_controller = nullptr;
-};
+    private:
+      QPixmap m_image;
+      NorthArrowController* m_controller = nullptr;
+    };
 
-} // Toolkit
+  } // Toolkit
 } // Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_NORTHARROW_H

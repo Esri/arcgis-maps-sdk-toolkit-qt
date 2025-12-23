@@ -16,9 +16,6 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_BASEMAPGALLERYITEM_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_BASEMAPGALLERYITEM_H
 
-// ArcGISRuntime headers
-#include <Basemap.h>
-
 // Qt headers
 #include <QImage>
 #include <QObject>
@@ -26,6 +23,9 @@
 #include <QString>
 #include <QUrl>
 #include <QUuid>
+
+// STL headers
+#include <Basemap.h>
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
@@ -67,10 +67,10 @@ namespace Esri::ArcGISRuntime::Toolkit {
     void setIs3D(bool is3D);
 
 #ifdef CPP_ARCGISRUNTIME_TOOLKIT
-        QUrl thumbnailUrl() const;
+    QUrl thumbnailUrl() const;
 #endif // CPP_ARCGISRUNTIME_TOOLKIT
 
-  QUuid id() const;
+    QUuid id() const;
 
   signals:
     void basemapChanged();

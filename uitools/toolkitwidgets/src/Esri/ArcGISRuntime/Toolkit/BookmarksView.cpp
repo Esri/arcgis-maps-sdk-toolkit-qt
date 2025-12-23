@@ -19,8 +19,8 @@
 #include "ui_BookmarksView.h"
 
 // Toolkit headers
-#include "BookmarksViewController.h"
 #include "BookmarkListItem.h"
+#include "BookmarksViewController.h"
 
 // ArcGISRuntime headers
 #include <MapGraphicsView.h>
@@ -29,26 +29,26 @@
 namespace Esri::ArcGISRuntime::Toolkit {
 
   /*!
-  \class Esri::ArcGISRuntime::Toolkit::BookmarksView
-  \inmodule Esri.ArcGISRuntime.Toolkit
-  \ingroup ArcGISQtToolkitUiCppWidgetsViews
-  \since Esri.ArcGISRuntime 100.15
-  \brief The user interface for the BookmarksView.
-  The BookmarksView displays a collection of bookmarks in the form of viewpoints from either Webmap/Webscene
-  or are programmatically defined. When the user selects a bookmark from the provided list,
-  the viewpoint in the geoView is set to the new bookmark's view extent.
+    \class Esri::ArcGISRuntime::Toolkit::BookmarksView
+    \inmodule Esri.ArcGISRuntime.Toolkit
+    \ingroup ArcGISQtToolkitUiCppWidgetsViews
+    \since Esri.ArcGISRuntime 100.15
+    \brief The user interface for the BookmarksView.
+    The BookmarksView displays a collection of bookmarks in the form of viewpoints from either Webmap/Webscene
+    or are programmatically defined. When the user selects a bookmark from the provided list,
+    the viewpoint in the geoView is set to the new bookmark's view extent.
 
-  \note By default, the BookmarksView will attempt to fetch the set of developer bookmarks, which require an \l{http://links.esri.com/create-an-api-key}{access token} to access.
-  */
+    \note By default, the BookmarksView will attempt to fetch the set of developer bookmarks, which require an \l{http://links.esri.com/create-an-api-key}{access token} to access.
+   */
 
   /*!
-  \brief Default constructor.
-  \list
-    \li \a parent Parent widget.
-  \endlist
+    \brief Default constructor.
+    \list
+      \li \a parent Parent widget.
+    \endlist
 
-  The view maintains its associated controller, sets up the view itself and its model.
-  */
+    The view maintains its associated controller, sets up the view itself and its model.
+   */
   BookmarksView::BookmarksView(QWidget* parent) :
     QFrame(parent),
     m_controller(new BookmarksViewController(this)),
@@ -84,22 +84,22 @@ namespace Esri::ArcGISRuntime::Toolkit {
   }
 
   /*!
-  \brief Set the \c GeoView.
-  \list
-    \li \a mapView Sets the \c GeoView to a \c MapView.
-  \endlist
- */
+    \brief Set the \c GeoView.
+    \list
+      \li \a mapView Sets the \c GeoView to a \c MapView.
+    \endlist
+   */
   void BookmarksView::setMapView(MapGraphicsView* mapView)
   {
     m_controller->setGeoView(mapView);
   }
 
   /*!
-  \brief Set the \c GeoView.
-  \list
-    \li \a sceneView Sets the \c GeoView to a \c SceneView.
-  \endlist
- */
+    \brief Set the \c GeoView.
+    \list
+      \li \a sceneView Sets the \c GeoView to a \c SceneView.
+    \endlist
+   */
   void BookmarksView::setSceneView(SceneGraphicsView* sceneView)
   {
     m_controller->setGeoView(sceneView);

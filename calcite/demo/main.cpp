@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2021 Esri
  *
@@ -13,19 +14,18 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-#include <QDir>
-#include <QGuiApplication>
-#include <QQmlApplicationEngine>
-#include <QQuickWindow>
-#include <QQuickStyle>
-
 #include "ArcGISRuntimeEnvironment.h"
 #include "CalciteTest.h"
 
+#include <QDir>
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
+#include <QQuickStyle>
+#include <QQuickWindow>
+
 //------------------------------------------------------------------------------
 
-int
-main(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
   qDebug() << "Initializing application";
 
@@ -49,8 +49,7 @@ main(int argc, char* argv[])
 
   if (accessToken.isEmpty())
   {
-    qWarning() << "Use of ArcGIS location services, such as the basemap styles service, requires" <<
-                  "you to authenticate with an ArcGIS account or set the API Key property.";
+    qWarning() << "Use of ArcGIS location services, such as the basemap styles service, requires" << "you to authenticate with an ArcGIS account or set the API Key property.";
   }
   else
   {
@@ -60,7 +59,6 @@ main(int argc, char* argv[])
   // Production deployment of applications built with ArcGIS Maps SDK for Native Apps
   // requires you to license its functionality. For more information see
   // https://links.esri.com/arcgis-runtime-license-and-deploy.
-
 
   CalciteTest::init();
 

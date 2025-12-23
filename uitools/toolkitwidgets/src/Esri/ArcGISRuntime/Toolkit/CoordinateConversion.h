@@ -16,55 +16,54 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_COORDIANTECONVERSION_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_COORDIANTECONVERSION_H
 
+// Qt headers
 #include <QFrame>
 #include <QPointer>
 
 class QGraphicsEllipseItem;
 class QMenu;
 
-namespace Ui
-{
-class CoordinateConversion;
+namespace Ui {
+  class CoordinateConversion;
 }
 
 namespace Esri::ArcGISRuntime {
-    
-class MapGraphicsView;
-class SceneGraphicsView;
 
-namespace Toolkit
-{
+  class MapGraphicsView;
+  class SceneGraphicsView;
 
-class CoordinateConversionController;
-class Flash;
+  namespace Toolkit {
 
-class CoordinateConversion : public QFrame
-{
-  Q_OBJECT
-public:
-  explicit CoordinateConversion(QWidget* parent = nullptr);
+    class CoordinateConversionController;
+    class Flash;
 
-  ~CoordinateConversion() override;
+    class CoordinateConversion : public QFrame
+    {
+      Q_OBJECT
+    public:
+      explicit CoordinateConversion(QWidget* parent = nullptr);
 
-  void setMapView(MapGraphicsView* mapView);
+      ~CoordinateConversion() override;
 
-  void setSceneView(SceneGraphicsView* sceneView);
+      void setMapView(MapGraphicsView* mapView);
 
-  CoordinateConversionController* controller() const;
+      void setSceneView(SceneGraphicsView* sceneView);
 
-private slots:
-  void addContextMenu(const QPoint& point);
+      CoordinateConversionController* controller() const;
 
-  void flash();
+    private slots:
+      void addContextMenu(const QPoint& point);
 
-private:
-  CoordinateConversionController* m_controller = nullptr;
-  QMenu* m_resultsMenu = nullptr;
-  QPointer<Flash> m_flash;
-  Ui::CoordinateConversion* m_ui = nullptr;
-};
+      void flash();
 
-} // Toolkit
+    private:
+      CoordinateConversionController* m_controller = nullptr;
+      QMenu* m_resultsMenu = nullptr;
+      QPointer<Flash> m_flash;
+      Ui::CoordinateConversion* m_ui = nullptr;
+    };
+
+  } // Toolkit
 } // Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_COORDIANTECONVERSION_H

@@ -35,11 +35,11 @@
 #include <Viewpoint.h>
 
 // Toolkit headers
+#include "DisconnectOnSignal.h"
+#include "DoOnLoad.h"
 #include "FloorFilterFacilityItem.h"
 #include "FloorFilterLevelItem.h"
 #include "FloorFilterSiteItem.h"
-#include "DisconnectOnSignal.h"
-#include "DoOnLoad.h"
 #include "GeoViews.h"
 
 // stl headers
@@ -135,21 +135,21 @@ namespace Esri::ArcGISRuntime::Toolkit {
         // This may happen immediately or asyncnronously.This can be interrupted if GeoView or
         // GeoModel changes in the interim.
         auto c = doOnLoaded(model, self, [self, model, geoView, f = std::move(f)]()
-                          {
-                            auto floorManager = model->floorManager();
-                            if (!floorManager)
-                              return;
+                            {
+                              auto floorManager = model->floorManager();
+                              if (!floorManager)
+                                return;
 
-                            auto c2 = doOnLoaded(floorManager, self, [f = std::move(f)]
-                                               {
-                                                 f();
-                                               });
-                            // Destroy the connection `c` if the map/scene changes, or the geoView changes.
-                            // This means the connection is only relevant for as long as the model/view is relavant to
-                            // the FloorFilterController.
-                            disconnectOnSignal(geoView, getGeoModelChangedSignal(geoView), self, c2);
-                            disconnectOnSignal(self, &FloorFilterController::geoViewChanged, self, c2);
-                          });
+                              auto c2 = doOnLoaded(floorManager, self, [f = std::move(f)]
+                                                   {
+                                                     f();
+                                                   });
+                              // Destroy the connection `c` if the map/scene changes, or the geoView changes.
+                              // This means the connection is only relevant for as long as the model/view is relavant to
+                              // the FloorFilterController.
+                              disconnectOnSignal(geoView, getGeoModelChangedSignal(geoView), self, c2);
+                              disconnectOnSignal(self, &FloorFilterController::geoViewChanged, self, c2);
+                            });
         // Destroy the connection `c` if the map/scene changes, or the geoView changes. This means
         // the connection is only relevant for as long as the model/view is relavant to the FloorFilterController.
         disconnectOnSignal(geoView, getGeoModelChangedSignal(geoView), self, c);
@@ -698,23 +698,23 @@ namespace Esri::ArcGISRuntime::Toolkit {
     {
       m_settingViewpoint = true;
       mapView->setViewpointAsync(b.toEnvelope()).then(this, [this](bool success)
-      {
-        if (success)
-        {
-          m_settingViewpoint = false;
-        }
-      });
+                                                      {
+                                                        if (success)
+                                                        {
+                                                          m_settingViewpoint = false;
+                                                        }
+                                                      });
     }
     else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
       m_settingViewpoint = true;
       sceneView->setViewpointAsync(b.toEnvelope()).then(this, [this](bool success)
-      {
-        if (success)
-        {
-          m_settingViewpoint = false;
-        }
-      });
+                                                        {
+                                                          if (success)
+                                                          {
+                                                            m_settingViewpoint = false;
+                                                          }
+                                                        });
     }
   }
 } // Esri::ArcGISRuntime::Toolkit

@@ -92,26 +92,26 @@ namespace Esri::ArcGISRuntime::Toolkit {
       }
 
       doOnLoaded(basemap, this, [this, basemap]
-               {
-                 auto item = basemap->item();
-                 if (!item)
                  {
-                   emit finished();
-                   return;
-                 }
+                   auto item = basemap->item();
+                   if (!item)
+                   {
+                     emit finished();
+                     return;
+                   }
 
-                 auto itemThumbnail = item->thumbnail();
-                 if (!itemThumbnail.isNull())
-                 {
-                   // We have a good thumbnail.
-                   emit finished();
-                   return;
-                 }
-                 item->fetchThumbnailAsync().then(this, [this](QImage)
-                 {
-                   emit finished();
+                   auto itemThumbnail = item->thumbnail();
+                   if (!itemThumbnail.isNull())
+                   {
+                     // We have a good thumbnail.
+                     emit finished();
+                     return;
+                   }
+                   item->fetchThumbnailAsync().then(this, [this](QImage)
+                                                    {
+                                                      emit finished();
+                                                    });
                  });
-               });
     }
 
     /*!

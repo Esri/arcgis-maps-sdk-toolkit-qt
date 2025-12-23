@@ -26,8 +26,8 @@
 #include "GeoViews.h"
 
 // Qt headers
-#include <QtGlobal>
 #include <QFuture>
+#include <QtGlobal>
 
 // ArcGISRuntime headers
 #include <Bookmark.h>

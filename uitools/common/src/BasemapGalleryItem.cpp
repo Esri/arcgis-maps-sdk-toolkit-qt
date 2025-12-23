@@ -30,8 +30,8 @@
 #include <Polygon.h>
 
 // Qt headers
-#include <QIcon>
 #include <QFuture>
+#include <QIcon>
 
 #ifdef CPP_ARCGISRUNTIME_TOOLKIT
 // Qt headers
@@ -157,33 +157,33 @@ namespace Esri::ArcGISRuntime::Toolkit {
     if (m_basemap)
     {
       doOnLoaded(m_basemap.data(), this, [this, basemap]
-               {
-                 emit basemapChanged();
-                 auto item = basemap->item();
-                 if (!item)
                  {
-                   return;
-                 }
-
-                 auto itemThumbnail = item->thumbnail();
-                 if (!itemThumbnail.isNull())
-                 {
-                   // We have a good thumbnail.
-
-                   return;
-                 }
-
-                 // fetchThumbnailAsync returns a single future, so don't keep attaching continuations
-                 // if it's already running
-                 auto future = item->fetchThumbnailAsync();
-                 if (!future.isRunning())
-                 {
-                   future.then(this, [this](const QImage&)
+                   emit basemapChanged();
+                   auto item = basemap->item();
+                   if (!item)
                    {
-                     emit basemapChanged();
-                   });
-                 }
-               });
+                     return;
+                   }
+
+                   auto itemThumbnail = item->thumbnail();
+                   if (!itemThumbnail.isNull())
+                   {
+                     // We have a good thumbnail.
+
+                     return;
+                   }
+
+                   // fetchThumbnailAsync returns a single future, so don't keep attaching continuations
+                   // if it's already running
+                   auto future = item->fetchThumbnailAsync();
+                   if (!future.isRunning())
+                   {
+                     future.then(this, [this](const QImage&)
+                                 {
+                                   emit basemapChanged();
+                                 });
+                   }
+                 });
     }
     emit basemapChanged();
   }

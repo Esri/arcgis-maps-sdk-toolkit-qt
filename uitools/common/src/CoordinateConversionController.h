@@ -36,83 +36,81 @@ class QPointF;
 
 namespace Esri::ArcGISRuntime {
 
-class GeoView;
+  class GeoView;
 
-namespace Toolkit
-{
+  namespace Toolkit {
 
-class CoordinateConversionController : public QObject
-{
-  Q_OBJECT
-  Q_PROPERTY(QObject* geoView READ geoView WRITE setGeoView NOTIFY geoViewChanged)
-  Q_PROPERTY(double zoomToDistance READ zoomToDistance WRITE setZoomToDistance NOTIFY zoomToDistanceChanged)
-  Q_PROPERTY(QAbstractListModel* formats READ coordinateFormats CONSTANT)
-  Q_PROPERTY(QAbstractListModel* results READ conversionResults CONSTANT)
-  Q_PROPERTY(bool inPickingMode READ inPickingMode WRITE setInPickingMode NOTIFY inPickingModeChanged)
-public:
+    class CoordinateConversionController : public QObject
+    {
+      Q_OBJECT
+      Q_PROPERTY(QObject* geoView READ geoView WRITE setGeoView NOTIFY geoViewChanged)
+      Q_PROPERTY(double zoomToDistance READ zoomToDistance WRITE setZoomToDistance NOTIFY zoomToDistanceChanged)
+      Q_PROPERTY(QAbstractListModel* formats READ coordinateFormats CONSTANT)
+      Q_PROPERTY(QAbstractListModel* results READ conversionResults CONSTANT)
+      Q_PROPERTY(bool inPickingMode READ inPickingMode WRITE setInPickingMode NOTIFY inPickingModeChanged)
+    public:
+      Q_INVOKABLE CoordinateConversionController(QObject* parent = nullptr);
 
-  Q_INVOKABLE CoordinateConversionController(QObject* parent = nullptr);
+      ~CoordinateConversionController() override;
 
-  ~CoordinateConversionController() override;
+      QObject* geoView() const;
 
-  QObject* geoView() const;
+      void setGeoView(QObject* mapView);
 
-  void setGeoView(QObject* mapView);
+      GenericListModel* coordinateFormats() const;
 
-  GenericListModel* coordinateFormats() const;
+      Q_INVOKABLE CoordinateConversionOption* getOption(int index) const;
 
-  Q_INVOKABLE CoordinateConversionOption* getOption(int index) const;
+      GenericListModel* conversionResults() const;
 
-  GenericListModel* conversionResults() const;
+      Q_INVOKABLE Esri::ArcGISRuntime::Point currentPoint() const;
 
-  Q_INVOKABLE Esri::ArcGISRuntime::Point currentPoint() const;
+      Q_INVOKABLE QPointF screenCoordinate() const;
 
-  Q_INVOKABLE QPointF screenCoordinate() const;
+      double zoomToDistance() const;
 
-  double zoomToDistance() const;
+      void setZoomToDistance(double distance);
 
-  void setZoomToDistance(double distance);
+      bool inPickingMode() const;
 
-  bool inPickingMode() const;
+      void setInPickingMode(bool mode);
 
-  void setInPickingMode(bool mode);
+    signals:
+      void geoViewChanged();
 
-signals:
-  void geoViewChanged();
+      void currentPointChanged(const Esri::ArcGISRuntime::Point& point);
 
-  void currentPointChanged(const Esri::ArcGISRuntime::Point& point);
+      void zoomToDistanceChanged();
 
-  void zoomToDistanceChanged();
+      void inPickingModeChanged();
 
-  void inPickingModeChanged();
+    public slots:
 
-public slots:
+      void setCurrentPoint(const Esri::ArcGISRuntime::Point& point);
 
-  void setCurrentPoint(const Esri::ArcGISRuntime::Point& point);
+      void setCurrentPoint(const QString& point, CoordinateConversionOption* option);
 
-  void setCurrentPoint(const QString& point, CoordinateConversionOption* option);
+      void setCurrentPoint(const QString& point,
+                           const SpatialReference& spatialReference,
+                           CoordinateConversionOption* option);
 
-  void setCurrentPoint(const QString& point,
-                       const SpatialReference& spatialReference,
-                       CoordinateConversionOption* option);
+      void zoomToCurrentPoint();
 
-  void zoomToCurrentPoint();
+      void addNewCoordinateResultForOption(CoordinateConversionOption* option);
 
-  void addNewCoordinateResultForOption(CoordinateConversionOption* option);
+      void removeCoordinateResultAtIndex(int index);
 
-  void removeCoordinateResultAtIndex(int index);
+    private:
+      QFuture<Point> m_screenToLocationFuture;
+      Point m_currentPoint;
+      double m_zoomToDistance = 0.0;
+      GenericListModel* m_coordinateFormats = nullptr;
+      GenericListModel* m_conversionResults = nullptr;
+      QObject* m_geoView = nullptr;
+      bool m_inPickingMode = false;
+    };
 
-private:
-  QFuture<Point> m_screenToLocationFuture;
-  Point m_currentPoint;
-  double m_zoomToDistance = 0.0;
-  GenericListModel* m_coordinateFormats = nullptr;
-  GenericListModel* m_conversionResults = nullptr;
-  QObject* m_geoView = nullptr;
-  bool m_inPickingMode = false;
-};
-
-} // Toolkit
+  } // Toolkit
 } // Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_COORDINATECONVERSIONCONTROLLER_H

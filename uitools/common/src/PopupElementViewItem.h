@@ -19,7 +19,7 @@
 // Qt headers
 #include <QObject>
 
-// Maps SDK headers
+// STL headers
 #include <PopupElement.h>
 #include <PopupTypes.h>
 
@@ -28,33 +28,31 @@
 
 namespace Esri::ArcGISRuntime {
 
-class TextPopupElement;
-class PopupElement;
+  class TextPopupElement;
+  class PopupElement;
 
-namespace Toolkit
-{
+  namespace Toolkit {
 
-class PopupElementViewItem : public QObject
-{
-  Q_OBJECT
-  Q_PROPERTY(QmlEnums::PopupElementType popupElementType READ popupElementType NOTIFY popupElementChanged)
-public:
-  explicit PopupElementViewItem(QObject *parent = nullptr);
-  explicit PopupElementViewItem(PopupElement* popupElement, QObject* parent = nullptr);
-  ~PopupElementViewItem() override;
+    class PopupElementViewItem : public QObject
+    {
+      Q_OBJECT
+      Q_PROPERTY(QmlEnums::PopupElementType popupElementType READ popupElementType NOTIFY popupElementChanged)
+    public:
+      explicit PopupElementViewItem(QObject* parent = nullptr);
+      explicit PopupElementViewItem(PopupElement* popupElement, QObject* parent = nullptr);
+      ~PopupElementViewItem() override;
 
-  QmlEnums::PopupElementType popupElementType() const;
-  PopupElement* popupElement() const;
-  void setPopupElement(PopupElement* popupElement);
+      QmlEnums::PopupElementType popupElementType() const;
+      PopupElement* popupElement() const;
+      void setPopupElement(PopupElement* popupElement);
 
-signals:
-  void popupElementChanged();
+    signals:
+      void popupElementChanged();
 
-private:
-  PopupElement* m_popupElement = nullptr;
+    private:
+      PopupElement* m_popupElement = nullptr;
+    };
 
-};
-
-} // Toolkit
+  } // Toolkit
 } // Esri::ArcGISRuntime
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_POPUPELEMENTVIEWITEM_H

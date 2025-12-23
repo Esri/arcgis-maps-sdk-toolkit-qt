@@ -16,15 +16,15 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_SEARCHSOURCEINTERFACE_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_SEARCHSOURCEINTERFACE_H
 
-// ArcGISRuntime headers
-#include <Geometry.h>
-#include <Point.h>
-
 // Qt headers
 #include <QList>
 #include <QObject>
-#include <QString>
 #include <QQmlEngine>
+#include <QString>
+
+// STL headers
+#include <Geometry.h>
+#include <Point.h>
 
 Q_MOC_INCLUDE("SearchResult.h")
 

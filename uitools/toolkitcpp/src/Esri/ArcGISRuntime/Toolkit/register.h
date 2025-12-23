@@ -20,7 +20,7 @@ class QQmlEngine;
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-void registerComponents(QQmlEngine& engine);
+  void registerComponents(QQmlEngine& engine);
 
 } // Esri::ArcGISRuntime::Toolkit
 

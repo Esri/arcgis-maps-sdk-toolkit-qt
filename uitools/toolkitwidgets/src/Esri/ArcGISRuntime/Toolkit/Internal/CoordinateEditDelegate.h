@@ -22,26 +22,26 @@
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-class CoordinateConversionController;
+  class CoordinateConversionController;
 
-class CoordinateEditDelegate : public QItemDelegate
-{
-  Q_OBJECT
-public:
-  CoordinateEditDelegate(QObject* parent = nullptr);
+  class CoordinateEditDelegate : public QItemDelegate
+  {
+    Q_OBJECT
+  public:
+    CoordinateEditDelegate(QObject* parent = nullptr);
 
-  ~CoordinateEditDelegate() override;
+    ~CoordinateEditDelegate() override;
 
-  void setController(CoordinateConversionController* c);
+    void setController(CoordinateConversionController* c);
 
-  CoordinateConversionController* controller() const;
+    CoordinateConversionController* controller() const;
 
-  void setModelData(QWidget* editor, QAbstractItemModel* model,
-                    const QModelIndex& index) const override;
+    void setModelData(QWidget* editor, QAbstractItemModel* model,
+                      const QModelIndex& index) const override;
 
-private:
-  QPointer<CoordinateConversionController> m_controller;
-};
+  private:
+    QPointer<CoordinateConversionController> m_controller;
+  };
 
 } // Esri::ArcGISRuntime::Toolkit
 

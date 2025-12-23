@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2025 Esri
  *
@@ -19,13 +20,13 @@
 #include "register.h"
 
 // Toolkit includes
-#include "AuthenticatorController.h"
 #include "AttachmentsPopupElementViewController.h"
+#include "AuthenticatorController.h"
 #include "BarChartPopupMediaItem.h"
 #include "BasemapGalleryController.h"
 #include "BasemapGalleryItem.h"
-#include "BookmarksViewController.h"
 #include "BookmarkListItem.h"
+#include "BookmarksViewController.h"
 #include "CoordinateConversionController.h"
 #include "CoordinateConversionOption.h"
 #include "CoordinateConversionResult.h"
@@ -58,18 +59,18 @@
 #include "UtilityNetworkTraceStartingPointsModel.h"
 
 // Internal includes
+#include "BasemapGalleryImageProvider.h"
 #include "PopupAttachmentImageProvider.h"
 #include "QmlEnums.h"
-#include "BasemapGalleryImageProvider.h"
 
 // ArcGIS includes
 #include <MapQuickView.h>
 #include <Point.h>
 
 // Qt Includes
+#include <QPointer>
 #include <QQmlEngine>
 #include <QQmlFileSelector>
-#include <QPointer>
 
 // std includes
 #include <type_traits>

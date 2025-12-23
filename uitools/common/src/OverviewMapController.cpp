@@ -41,15 +41,15 @@
 #include <Viewpoint.h>
 
 // Qt headers
-#include <QtGlobal>
 #include <QKeyEvent>
+#include <QtGlobal>
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-/*!
-  \internal
-  This class is an internal implementation detail and is subject to change.
- */
+  /*!
+    \internal
+    This class is an internal implementation detail and is subject to change.
+   */
 
   OverviewMapController::OverviewMapController(QObject* parent) :
     QObject(parent),
@@ -352,9 +352,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
     // set the initial viewpoint (scale = main maps's scale * scaleFactor)
     auto initialViewpoint = mapView->map()->initialViewpoint();
     const Viewpoint newViewpoint{
-                                 geometry_cast<Point>(initialViewpoint.targetGeometry()),
-                                 initialViewpoint.targetScale() * scaleFactor(),
-                                 initialViewpoint.rotation()};
+        geometry_cast<Point>(initialViewpoint.targetGeometry()),
+        initialViewpoint.targetScale() * scaleFactor(),
+        initialViewpoint.rotation()};
 
     // set the initial viewpoint before setting on the mapview
     map->setInitialViewpoint(newViewpoint);
@@ -370,8 +370,8 @@ namespace Esri::ArcGISRuntime::Toolkit {
     // scenes shouldn't set the rotation parameter
     const Viewpoint viewpoint = sceneView->currentViewpoint(ViewpointType::CenterAndScale);
     const Viewpoint newViewpoint{
-                                 geometry_cast<Point>(viewpoint.targetGeometry()),
-                                 viewpoint.targetScale() * scaleFactor()};
+        geometry_cast<Point>(viewpoint.targetGeometry()),
+        viewpoint.targetScale() * scaleFactor()};
 
     // set the initial viewpoint before setting on the mapview
     map->setInitialViewpoint(sceneView->arcGISScene()->initialViewpoint());

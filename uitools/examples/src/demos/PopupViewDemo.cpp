@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -22,8 +23,8 @@
 #include "IdentifyLayerResult.h"
 #include "LayerListModel.h"
 #include "Map.h"
-#include "MapTypes.h"
 #include "MapQuickView.h"
+#include "MapTypes.h"
 #include "Popup.h"
 #include "PopupDefinition.h"
 #include "Scene.h"
@@ -32,10 +33,10 @@
 #include "SpatialReference.h"
 #include "Viewpoint.h"
 
+#include <QFuture>
 #include <QList>
 #include <QMouseEvent>
 #include <QUuid>
-#include <QFuture>
 
 using namespace Esri::ArcGISRuntime;
 
@@ -96,51 +97,51 @@ void PopupViewDemo::setUp()
           using ViewType = std::remove_pointer_t<decltype(geoView)>;
           connect(geoView, &ViewType::mouseClicked, this, [this, geoView](QMouseEvent& mouse)
                   {
-              auto layer = geoModel()->operationalLayers()->at(0);
+                    auto layer = geoModel()->operationalLayers()->at(0);
                     if (layer->layerType() == LayerType::FeatureLayer)
                     {
                       m_featureLayer = static_cast<FeatureLayer*>(layer);
                       geoView->identifyLayerAsync(m_featureLayer, mouse.position(), 12, false).then(this, [this](IdentifyLayerResult* rawIdentifyResult)
-                      {
-                        // managed by smart pointer
-                        auto identifyResult = std::unique_ptr<IdentifyLayerResult>(rawIdentifyResult);
-                        if (!identifyResult)
-                          return;
+                                                                                                    {
+                                                                                                      // managed by smart pointer
+                                                                                                      auto identifyResult = std::unique_ptr<IdentifyLayerResult>(rawIdentifyResult);
+                                                                                                      if (!identifyResult)
+                                                                                                        return;
 
-                        if (!identifyResult->error().isEmpty())
-                        {
-                          qDebug() << "Identify error occurred: "
-                                   << identifyResult->error().message();
-                          return;
-                        }
+                                                                                                      if (!identifyResult->error().isEmpty())
+                                                                                                      {
+                                                                                                        qDebug() << "Identify error occurred: "
+                                                                                                                 << identifyResult->error().message();
+                                                                                                        return;
+                                                                                                      }
 
-                        m_featureLayer->clearSelection();
+                                                                                                      m_featureLayer->clearSelection();
 
-                        const auto geoElements = identifyResult->geoElements();
+                                                                                                      const auto geoElements = identifyResult->geoElements();
 
-                        if (geoElements.length() == 0)
-                        {
-                          qDebug() << "no geoElements";
-                          return;
-                        }
+                                                                                                      if (geoElements.length() == 0)
+                                                                                                      {
+                                                                                                        qDebug() << "no geoElements";
+                                                                                                        return;
+                                                                                                      }
 
-                        const auto popup = new Popup(geoElements.first(), this);
-                        popup->setParent(this);
+                                                                                                      const auto popup = new Popup(geoElements.first(), this);
+                                                                                                      popup->setParent(this);
 
-                        if (popup->title().isEmpty())
-                        {
-                          popup->popupDefinition()->setTitle(identifyResult->layerContent()->name());
-                        }
+                                                                                                      if (popup->title().isEmpty())
+                                                                                                      {
+                                                                                                        popup->popupDefinition()->setTitle(identifyResult->layerContent()->name());
+                                                                                                      }
 
-                        if (auto element = popup->geoElement())
-                        {
-                          Feature* feature = static_cast<Feature*>(element);
-                          m_featureLayer->selectFeature(feature);
-                        }
+                                                                                                      if (auto element = popup->geoElement())
+                                                                                                      {
+                                                                                                        Feature* feature = static_cast<Feature*>(element);
+                                                                                                        m_featureLayer->selectFeature(feature);
+                                                                                                      }
 
-                        setPopup(popup);
-                        emit popupChanged();
-                      });
+                                                                                                      setPopup(popup);
+                                                                                                      emit popupChanged();
+                                                                                                    });
                     }
                     else
                     {

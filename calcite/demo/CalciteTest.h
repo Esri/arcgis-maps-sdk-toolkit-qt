@@ -17,10 +17,9 @@
 #ifndef CALCITETEST_H
 #define CALCITETEST_H
 
-namespace Esri::ArcGISRuntime
-{
-class Map;
-class MapQuickView;
+namespace Esri::ArcGISRuntime {
+  class Map;
+  class MapQuickView;
 }
 
 #include <QObject>
@@ -47,7 +46,6 @@ private:
 
   Esri::ArcGISRuntime::Map* m_map = nullptr;
   Esri::ArcGISRuntime::MapQuickView* m_mapView = nullptr;
-
 };
 
 #endif // CALCITETEST_H

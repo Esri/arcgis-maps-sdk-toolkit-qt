@@ -18,7 +18,6 @@
 #include "BasemapGalleryDemo.h"
 
 #include "BasemapGalleryController.h"
-
 #include "BasemapListModel.h"
 #include "GeoView.h"
 #include "Map.h"

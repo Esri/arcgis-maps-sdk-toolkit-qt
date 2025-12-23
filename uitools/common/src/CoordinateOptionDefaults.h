@@ -16,23 +16,24 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_COORDIANTEOPTIONDEFAULTS_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_COORDIANTEOPTIONDEFAULTS_H
 
+// Other headers
 #include "CoordinateConversionOption.h"
 
 namespace Esri::ArcGISRuntime::Toolkit {
 
-CoordinateConversionOption* createDecimalDegrees(QObject* parent = nullptr);
+  CoordinateConversionOption* createDecimalDegrees(QObject* parent = nullptr);
 
-CoordinateConversionOption* createDegreesDecimalMinutes(QObject* parent = nullptr);
+  CoordinateConversionOption* createDegreesDecimalMinutes(QObject* parent = nullptr);
 
-CoordinateConversionOption* createDegreesMinutesSeconds(QObject* parent = nullptr);
+  CoordinateConversionOption* createDegreesMinutesSeconds(QObject* parent = nullptr);
 
-CoordinateConversionOption* createMgrs(MgrsConversionMode mode = MgrsConversionMode::Automatic, QObject* parent = nullptr);
+  CoordinateConversionOption* createMgrs(MgrsConversionMode mode = MgrsConversionMode::Automatic, QObject* parent = nullptr);
 
-CoordinateConversionOption* createUsng(int precision = 7, bool useSpaces = true, QObject* parent = nullptr);
+  CoordinateConversionOption* createUsng(int precision = 7, bool useSpaces = true, QObject* parent = nullptr);
 
-CoordinateConversionOption* createUtm(UtmConversionMode mode = UtmConversionMode::NorthSouthIndicators, bool useSpaces = true, QObject* parent = nullptr);
+  CoordinateConversionOption* createUtm(UtmConversionMode mode = UtmConversionMode::NorthSouthIndicators, bool useSpaces = true, QObject* parent = nullptr);
 
-CoordinateConversionOption* createGars(GarsConversionMode mode = GarsConversionMode::Center, QObject* parent = nullptr);
+  CoordinateConversionOption* createGars(GarsConversionMode mode = GarsConversionMode::Center, QObject* parent = nullptr);
 
 } // Esri::ArcGISRuntime::Toolkit
 

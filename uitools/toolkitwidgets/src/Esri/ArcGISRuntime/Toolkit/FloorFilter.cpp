@@ -39,9 +39,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   namespace {
 
     /*!
-     \internal
-     \brief Given a \a modelIndex, for \a model,
-     extracts the `T*` pointer from its \c userRole.
+      \internal
+      \brief Given a \a modelIndex, for \a model,
+      extracts the `T*` pointer from its \c userRole.
      */
     template <typename T>
     T* itemForIndex(QAbstractItemModel* model, const QModelIndex& modelIndex)
@@ -57,9 +57,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
     }
 
     /*!
-     \internal
-     \brief Given some modelId in a given model, returns that items index in the model.
-            O(n) search time.
+      \internal
+      \brief Given some modelId in a given model, returns that items index in the model.
+      O(n) search time.
      */
     template <typename T>
     QModelIndex indexForId(QAbstractItemModel* model, const QString& id)
@@ -75,10 +75,10 @@ namespace Esri::ArcGISRuntime::Toolkit {
       return QModelIndex{};
     }
 
-  /*!
-    \internal
-    \brief Wrap the \a sourceModel with a \l QSortFilterProxyModel that sorts and filters based on the \a filterField textEdited event.
-   */
+    /*!
+      \internal
+      \brief Wrap the \a sourceModel with a \l QSortFilterProxyModel that sorts and filters based on the \a filterField textEdited event.
+     */
     QSortFilterProxyModel* wrapFilterModel(QAbstractItemModel* sourceModel, QLineEdit* filterField, FloorFilter* parent)
     {
       auto model = new QSortFilterProxyModel(parent);
@@ -94,9 +94,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
     }
 
     /*!
-     \internal
-     \brief Helper struct that holds a reference to some value `tracked`, sets `tracked` to `val` on construction,
-     and then sets `tracked` back to its initial value on destruction.
+      \internal
+      \brief Helper struct that holds a reference to some value `tracked`, sets `tracked` to `val` on construction,
+      and then sets `tracked` back to its initial value on destruction.
      */
     template <typename T>
     struct PushValue
@@ -118,8 +118,8 @@ namespace Esri::ArcGISRuntime::Toolkit {
     };
 
     /*!
-     \internal
-     \brief Creates a `PushValue`.
+      \internal
+      \brief Creates a `PushValue`.
      */
     template <typename T>
     PushValue<T> push_value(T& t, T v)
@@ -275,7 +275,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   }
 
   /*!
-   \brief Destructor.
+    \brief Destructor.
    */
   FloorFilter::~FloorFilter()
   {
@@ -284,7 +284,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   /*!
     \brief Set the \c GeoView.
     \list
-    \li \a mapView Sets the \c GeoView to a \c MapView.
+      \li \a mapView Sets the \c GeoView to a \c MapView.
     \endlist
    */
   void FloorFilter::setMapView(MapGraphicsView* mapView)

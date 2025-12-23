@@ -31,45 +31,44 @@
 
 namespace Esri::ArcGISRuntime {
 
-namespace Toolkit
-{
+namespace Toolkit {
 
-class PopupViewController : public QObject
-{
-  Q_OBJECT
-  Q_PROPERTY(Popup* popup READ popup WRITE setPopup NOTIFY popupChanged)
-  Q_PROPERTY(QString title READ title NOTIFY titleChanged)
-  Q_PROPERTY(QAbstractListModel* popupElementControllers READ popupElementControllers NOTIFY popupChanged)
+  class PopupViewController : public QObject
+  {
+    Q_OBJECT
+    Q_PROPERTY(Popup* popup READ popup WRITE setPopup NOTIFY popupChanged)
+    Q_PROPERTY(QString title READ title NOTIFY titleChanged)
+    Q_PROPERTY(QAbstractListModel* popupElementControllers READ popupElementControllers NOTIFY popupChanged)
 
-public:
-  Q_INVOKABLE explicit PopupViewController(QObject* parent = nullptr);
+  public:
+    Q_INVOKABLE explicit PopupViewController(QObject* parent = nullptr);
 
-  ~PopupViewController() override;
+    ~PopupViewController() override;
 
-  Popup* popup() const;
+    Popup* popup() const;
 
-  void setPopup(Popup* popup);
+    void setPopup(Popup* popup);
 
-  GenericListModel* popupElementControllers() const;
+    GenericListModel* popupElementControllers() const;
 
-  QString title() const;
+    QString title() const;
 
-signals:
+  signals:
 
-  void popupChanged();
+    void popupChanged();
 
-  void titleChanged();
+    void titleChanged();
 
-  void attachmentDataFetched(const QByteArray& attachmentData, const QString& name);
+    void attachmentDataFetched(const QByteArray& attachmentData, const QString& name);
 
-  void clickedUrl(const QUrl& url);
+    void clickedUrl(const QUrl& url);
 
-  void imageClicked(const QUrl& sourceUrl, const QUrl& linkUrl);
+    void imageClicked(const QUrl& sourceUrl, const QUrl& linkUrl);
 
-private:
-  QPointer<Popup> m_popup;
-  GenericListModel* m_popupElementControllerModel = nullptr;
-};
+  private:
+    QPointer<Popup> m_popup;
+    GenericListModel* m_popupElementControllerModel = nullptr;
+  };
 
 } // Toolkit
 } // Esri::ArcGISRuntime
