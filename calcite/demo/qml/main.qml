@@ -25,6 +25,7 @@ ApplicationWindow {
     height: 800
     title: "Calcite_test"
     visible: true
+    visibility: Window.Maximized
 
     CalciteTest {
         id: model
