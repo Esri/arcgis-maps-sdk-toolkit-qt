@@ -25,6 +25,7 @@ ApplicationWindow {
     height: 800
     title: "Calcite_test"
     visible: true
+    visibility: Window.Maximized
 
     CalciteTest {
         id: model
@@ -70,6 +71,12 @@ ApplicationWindow {
                                 Math.min(mapView.width * 0.3 / Math.max(implicitWidth, 1),
                                          mapView.height * 0.3 / Math.max(implicitHeight, 1)))
                 transformOrigin: Item.TopRight
+
+                background: Rectangle {
+                    color: C.Calcite.background
+                    border.color: C.Calcite.border1
+                    border.width: 1
+                }
 
                 ColumnLayout {
                     id: themeLayout
@@ -227,25 +234,33 @@ ApplicationWindow {
                 id: pane
                 enabled: enabler.checked
                 anchors.centerIn: parent
+                padding: 20
 
                 implicitWidth: columnLayout.implicitWidth + leftPadding + rightPadding
                 implicitHeight: columnLayout.implicitHeight + topPadding + bottomPadding
 
                 scale: Math.min(1.0,
                                 Math.min(mapView.width * 0.8 / Math.max(implicitWidth, 1),
-                                         mapView.height * 0.75 / Math.max(implicitHeight, 1)))
+                                         mapView.height * 0.85 / Math.max(implicitHeight, 1)))
                 transformOrigin: Item.Center
 
                 ColumnLayout {
                     id: columnLayout
+                    width: Math.min(implicitWidth, parent.availableWidth)
+                    spacing: 8
+
                     TextField {
                         placeholderText: "Textfield"
                         Layout.alignment: Qt.AlignHCenter
+                        Layout.fillWidth: true
+                        Layout.maximumWidth: 160
                     }
 
                     TextField {
                         placeholderText: "Numbers 0-10"
                         Layout.alignment: Qt.AlignHCenter
+                        Layout.fillWidth: true
+                        Layout.maximumWidth: 160
                         validator: IntValidator {
                             bottom: 0
                             top: 10
@@ -333,6 +348,8 @@ ApplicationWindow {
                     }
                     ComboBox {
                         Layout.alignment: Qt.AlignHCenter
+                        Layout.fillWidth: true
+                        Layout.maximumWidth: 160
                         model: ["Banana", "Apple", "Coconut"]
                     }
 
@@ -358,7 +375,10 @@ ApplicationWindow {
                     }
                     SpinBox {
                         Layout.alignment: Qt.AlignHCenter
+                        Layout.fillWidth: true
+                        Layout.maximumWidth: 160
                         value: 5
+
                     }
                     Label {
                         text: "Progress Bar"
@@ -400,7 +420,7 @@ ApplicationWindow {
                 }
             }
 
-            ToolBar {
+            Pane {
                 id: bottomRightToolbar
                 enabled: enabler.checked
                 anchors {
@@ -408,12 +428,20 @@ ApplicationWindow {
                     bottom: parent.attributionTop
                     margins: 5
                 }
+
                 implicitWidth: toolbarLayout.implicitWidth + leftPadding + rightPadding
                 implicitHeight: toolbarLayout.implicitHeight + topPadding + bottomPadding
+
                 scale: Math.min(1.0,
                                 Math.min(mapView.width * 0.3 / Math.max(implicitWidth, 1),
                                          mapView.height * 0.3 / Math.max(implicitHeight, 1)))
                 transformOrigin: Item.BottomRight
+
+                background: Rectangle {
+                    color: C.Calcite.background
+                    border.color: C.Calcite.border1
+                    border.width: 1
+                }
 
                 ColumnLayout {
                     id: toolbarLayout
