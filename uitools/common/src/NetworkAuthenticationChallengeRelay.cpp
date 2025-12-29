@@ -15,43 +15,45 @@
  *  limitations under the License.
  ******************************************************************************/
 #include "NetworkAuthenticationChallengeRelay.h"
+
 #include "AuthenticatorController.h"
 
 // Maps SDK headers
-#include <Authentication/NetworkAuthenticationChallenge.h>
-#include <Authentication/AuthenticationManager.h>
 #include <ArcGISRuntimeEnvironment.h>
+#include <Authentication/AuthenticationManager.h>
+#include <Authentication/NetworkAuthenticationChallenge.h>
 
 using namespace Esri::ArcGISRuntime;
 using namespace Esri::ArcGISRuntime::Authentication;
 
-namespace Esri::ArcGISRuntime::Toolkit {
-
-/*!
-  \class Esri::ArcGISRuntime::Toolkit::NetworkAuthenticationChallengeRelay
-  \inmodule EsriArcGISRuntimeToolkit
-  \ingroup ArcGISQtToolkitUiCppControllers
-  \brief Simple implementation of the NetworkAuthenticationChallengeHandler interface.
-
-  This class is used to relay authentication challenges to the AuthenticatorController. Since multiple
-  inheritance of QObject is not allowed, and both ChallengeHandler classes inherit QObject, we use a
-  composition pattern instead.
-
-  \internal
- */
-
-NetworkAuthenticationChallengeRelay::NetworkAuthenticationChallengeRelay(AuthenticatorController* controller) :
-  NetworkAuthenticationChallengeHandler(controller),
-  m_controller(controller)
+namespace Esri::ArcGISRuntime::Toolkit
 {
-  ArcGISRuntimeEnvironment::authenticationManager()->setNetworkAuthenticationChallengeHandler(this);
-}
 
-NetworkAuthenticationChallengeRelay::~NetworkAuthenticationChallengeRelay() = default;
+  /*!
+    \class Esri::ArcGISRuntime::Toolkit::NetworkAuthenticationChallengeRelay
+    \inmodule EsriArcGISRuntimeToolkit
+    \ingroup ArcGISQtToolkitUiCppControllers
+    \brief Simple implementation of the NetworkAuthenticationChallengeHandler interface.
 
-void NetworkAuthenticationChallengeRelay::handleNetworkAuthenticationChallenge(NetworkAuthenticationChallenge* challenge)
-{
-  m_controller->handleNetworkAuthenticationChallenge(challenge);
-}
+    This class is used to relay authentication challenges to the AuthenticatorController. Since multiple
+    inheritance of QObject is not allowed, and both ChallengeHandler classes inherit QObject, we use a
+    composition pattern instead.
 
-} //  Esri::ArcGISRuntime::Toolkit
+    \internal
+   */
+
+  NetworkAuthenticationChallengeRelay::NetworkAuthenticationChallengeRelay(AuthenticatorController* controller) :
+    NetworkAuthenticationChallengeHandler(controller),
+    m_controller(controller)
+  {
+    ArcGISRuntimeEnvironment::authenticationManager()->setNetworkAuthenticationChallengeHandler(this);
+  }
+
+  NetworkAuthenticationChallengeRelay::~NetworkAuthenticationChallengeRelay() = default;
+
+  void NetworkAuthenticationChallengeRelay::handleNetworkAuthenticationChallenge(NetworkAuthenticationChallenge* challenge)
+  {
+    m_controller->handleNetworkAuthenticationChallenge(challenge);
+  }
+
+} // namespace Esri::ArcGISRuntime::Toolkit

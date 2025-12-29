@@ -19,69 +19,70 @@
 // Qt headers
 #include <QImage>
 #include <QObject>
-#include <QtCore/quuid.h>
 #include <QTemporaryDir>
 #include <QUrl>
+#include <QtCore/quuid.h>
 
 // Other headers
 #include "QmlEnums.h"
 
-namespace Esri::ArcGISRuntime {
-
-class PopupAttachment;
-
-namespace Toolkit
+namespace Esri::ArcGISRuntime
 {
 
-class PopupViewController;
+  class PopupAttachment;
 
-class PopupAttachmentItem : public QObject
-{
-  Q_OBJECT
-  Q_PROPERTY(bool dataFetched READ dataFetched NOTIFY popupAttachmentItemChanged)
-  Q_PROPERTY(bool fetchingAttachment READ fetchingAttachment NOTIFY popupAttachmentItemChanged)
-  Q_PROPERTY(PopupAttachmentType popupAttachmentType READ popupAttachmentType NOTIFY popupAttachmentItemChanged)
-  Q_PROPERTY(QString contentType READ contentType NOTIFY popupAttachmentItemChanged)
-  Q_PROPERTY(QString name READ name NOTIFY popupAttachmentItemChanged)
-  Q_PROPERTY(QString size READ size NOTIFY popupAttachmentItemChanged)
-  Q_PROPERTY(QUrl localData READ localData NOTIFY popupAttachmentItemChanged)
-  Q_PROPERTY(QUrl thumbnailUrl READ thumbnailUrl NOTIFY popupAttachmentItemChanged)
+  namespace Toolkit
+  {
 
-public:
-  explicit PopupAttachmentItem(PopupAttachment* popupAttachment, PopupViewController* popupViewController, QObject* parent = nullptr);
-  ~PopupAttachmentItem() override;
+    class PopupViewController;
 
-  Q_INVOKABLE void downloadAttachment();
+    class PopupAttachmentItem : public QObject
+    {
+      Q_OBJECT
+      Q_PROPERTY(bool dataFetched READ dataFetched NOTIFY popupAttachmentItemChanged)
+      Q_PROPERTY(bool fetchingAttachment READ fetchingAttachment NOTIFY popupAttachmentItemChanged)
+      Q_PROPERTY(PopupAttachmentType popupAttachmentType READ popupAttachmentType NOTIFY popupAttachmentItemChanged)
+      Q_PROPERTY(QString contentType READ contentType NOTIFY popupAttachmentItemChanged)
+      Q_PROPERTY(QString name READ name NOTIFY popupAttachmentItemChanged)
+      Q_PROPERTY(QString size READ size NOTIFY popupAttachmentItemChanged)
+      Q_PROPERTY(QUrl localData READ localData NOTIFY popupAttachmentItemChanged)
+      Q_PROPERTY(QUrl thumbnailUrl READ thumbnailUrl NOTIFY popupAttachmentItemChanged)
 
-private:
-  bool fetchingAttachment() const;
-  QString contentType() const;
-  QString name() const;
-  QString size() const;
-  QUrl thumbnailUrl() const;
+    public:
+      explicit PopupAttachmentItem(PopupAttachment* popupAttachment, PopupViewController* popupViewController, QObject* parent = nullptr);
+      ~PopupAttachmentItem() override;
 
-public:
-  bool dataFetched() const;
-  PopupAttachment* popupAttachment() const;
-  PopupAttachmentType popupAttachmentType() const;
-  QImage thumbnail() const;
-  QUrl localData() const;
-  QUuid id() const;
-  void setThumbnail(const QImage& thumbnail);
+      Q_INVOKABLE void downloadAttachment();
 
-signals:
-  void popupAttachmentItemChanged();
-  void attachmentDataFetched(const QByteArray& attachmentData, const QString& name);
+    private:
+      bool fetchingAttachment() const;
+      QString contentType() const;
+      QString name() const;
+      QString size() const;
+      QUrl thumbnailUrl() const;
 
-private:
-  bool m_fetchingAttachment{false};
-  PopupAttachment* m_popupAttachment = nullptr;
-  QImage m_thumbnail;
-  QUrl m_localData;
-  const QUuid m_id;
-};
+    public:
+      bool dataFetched() const;
+      PopupAttachment* popupAttachment() const;
+      PopupAttachmentType popupAttachmentType() const;
+      QImage thumbnail() const;
+      QUrl localData() const;
+      QUuid id() const;
+      void setThumbnail(const QImage& thumbnail);
 
-} // Toolkit
-} // Esri::ArcGISRuntime
+    signals:
+      void popupAttachmentItemChanged();
+      void attachmentDataFetched(const QByteArray& attachmentData, const QString& name);
+
+    private:
+      bool m_fetchingAttachment{false};
+      PopupAttachment* m_popupAttachment = nullptr;
+      QImage m_thumbnail;
+      QUrl m_localData;
+      const QUuid m_id;
+    };
+
+  } // namespace Toolkit
+} // namespace Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_POPUPATTACHMENTITEM_H

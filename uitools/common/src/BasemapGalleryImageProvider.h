@@ -21,7 +21,8 @@
 #include <QQuickImageProvider>
 #include <QUuid>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   class BasemapGalleryItem;
 
@@ -44,7 +45,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     QObject* m_internalObject;
     QMap<QUuid, BasemapGalleryItem*> m_itemMap;
   };
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // CPP_ARCGISRUNTIME_TOOLKIT
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_BASEMAPGALLERYIMAGEPROVIDER_H

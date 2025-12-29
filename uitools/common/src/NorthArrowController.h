@@ -19,35 +19,35 @@
 // Qt headers
 #include <QObject>
 
-namespace Esri::ArcGISRuntime::Toolkit {
-
-class NorthArrowController : public QObject
+namespace Esri::ArcGISRuntime::Toolkit
 {
-  Q_OBJECT
-  Q_PROPERTY(QObject* geoView READ geoView WRITE setGeoView NOTIFY geoViewChanged)
-  Q_PROPERTY(double heading READ heading NOTIFY headingChanged)
-public:
 
-  Q_INVOKABLE NorthArrowController(QObject* parent = nullptr);
+  class NorthArrowController : public QObject
+  {
+    Q_OBJECT
+    Q_PROPERTY(QObject* geoView READ geoView WRITE setGeoView NOTIFY geoViewChanged)
+    Q_PROPERTY(double heading READ heading NOTIFY headingChanged)
+  public:
+    Q_INVOKABLE NorthArrowController(QObject* parent = nullptr);
 
-  ~NorthArrowController();
+    ~NorthArrowController();
 
-  QObject* geoView() const;
-  void setGeoView(QObject* geoView);
+    QObject* geoView() const;
+    void setGeoView(QObject* geoView);
 
-  double heading() const;
+    double heading() const;
 
-signals:
-  void geoViewChanged();
-  void headingChanged();
+  signals:
+    void geoViewChanged();
+    void headingChanged();
 
-public slots:
-  void setHeading(double heading);
+  public slots:
+    void setHeading(double heading);
 
-private:
-  QObject* m_geoView = nullptr;
-};
+  private:
+    QObject* m_geoView = nullptr;
+  };
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_NORTHARROWCONTROLLER_H

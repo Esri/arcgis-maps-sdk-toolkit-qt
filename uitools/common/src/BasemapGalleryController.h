@@ -16,7 +16,7 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_BASEMAPGALLERYCONTROLLER_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_BASEMAPGALLERYCONTROLLER_H
 
-// ArcGIS Maps SDK headers
+// STL headers
 #include <Basemap.h>
 #include <GeoModel.h>
 #include <Portal.h>
@@ -34,7 +34,8 @@
 // Qt forward declarations
 class QAbstractListModel;
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   class BasemapGalleryController : public QObject
   {
@@ -88,6 +89,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     std::mutex m_galleryAccessMutex;
   };
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_BASEMAPGALLERYCONTROLLER_H

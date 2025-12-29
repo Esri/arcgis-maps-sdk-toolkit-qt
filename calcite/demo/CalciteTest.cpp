@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2021 Esri
  *
@@ -24,7 +25,7 @@
 
 using namespace Esri::ArcGISRuntime;
 
-CalciteTest::CalciteTest(QObject* parent /* = nullptr */):
+CalciteTest::CalciteTest(QObject* parent /* = nullptr */) :
   QObject(parent),
   m_map(new Map(this))
 {
@@ -49,7 +50,9 @@ MapQuickView* CalciteTest::mapView() const
 void CalciteTest::setMapView(MapQuickView* mapView)
 {
   if (!mapView || mapView == m_mapView)
+  {
     return;
+  }
 
   m_mapView = mapView;
   m_mapView->setMap(m_map);

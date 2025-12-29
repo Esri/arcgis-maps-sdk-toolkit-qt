@@ -34,20 +34,24 @@
 #include <QEvent>
 #include <QSortFilterProxyModel>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
-  namespace {
+  namespace
+  {
 
     /*!
-     \internal
-     \brief Given a \a modelIndex, for \a model,
-     extracts the `T*` pointer from its \c userRole.
+      \internal
+      \brief Given a \a modelIndex, for \a model,
+      extracts the `T*` pointer from its \c userRole.
      */
-    template <typename T>
+    template<typename T>
     T* itemForIndex(QAbstractItemModel* model, const QModelIndex& modelIndex)
     {
       if (!model)
+      {
         return nullptr;
+      }
 
       if (modelIndex.isValid())
       {
@@ -57,11 +61,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
     }
 
     /*!
-     \internal
-     \brief Given some modelId in a given model, returns that items index in the model.
-            O(n) search time.
+      \internal
+      \brief Given some modelId in a given model, returns that items index in the model.
+      O(n) search time.
      */
-    template <typename T>
+    template<typename T>
     QModelIndex indexForId(QAbstractItemModel* model, const QString& id)
     {
       const int rowCount = model->rowCount();
@@ -70,15 +74,17 @@ namespace Esri::ArcGISRuntime::Toolkit {
         const auto index = model->index(i, 0);
         const auto item = itemForIndex<T>(model, index);
         if (item && item->modelId() == id)
+        {
           return index;
+        }
       }
       return QModelIndex{};
     }
 
-  /*!
-    \internal
-    \brief Wrap the \a sourceModel with a \l QSortFilterProxyModel that sorts and filters based on the \a filterField textEdited event.
-   */
+    /*!
+      \internal
+      \brief Wrap the \a sourceModel with a \l QSortFilterProxyModel that sorts and filters based on the \a filterField textEdited event.
+     */
     QSortFilterProxyModel* wrapFilterModel(QAbstractItemModel* sourceModel, QLineEdit* filterField, FloorFilter* parent)
     {
       auto model = new QSortFilterProxyModel(parent);
@@ -87,18 +93,18 @@ namespace Esri::ArcGISRuntime::Toolkit {
       model->setFilterCaseSensitivity(Qt::CaseInsensitive);
 
       QObject::connect(filterField, &QLineEdit::textEdited, parent, [model](const QString& text)
-                       {
-                         model->setFilterFixedString(text);
-                       });
+      {
+        model->setFilterFixedString(text);
+      });
       return model;
     }
 
     /*!
-     \internal
-     \brief Helper struct that holds a reference to some value `tracked`, sets `tracked` to `val` on construction,
-     and then sets `tracked` back to its initial value on destruction.
+      \internal
+      \brief Helper struct that holds a reference to some value `tracked`, sets `tracked` to `val` on construction,
+      and then sets `tracked` back to its initial value on destruction.
      */
-    template <typename T>
+    template<typename T>
     struct PushValue
     {
       PushValue(T& tracked, T val) :
@@ -118,10 +124,10 @@ namespace Esri::ArcGISRuntime::Toolkit {
     };
 
     /*!
-     \internal
-     \brief Creates a `PushValue`.
+      \internal
+      \brief Creates a `PushValue`.
      */
-    template <typename T>
+    template<typename T>
     PushValue<T> push_value(T& t, T v)
     {
       return PushValue<T>(t, v);
@@ -163,119 +169,125 @@ namespace Esri::ArcGISRuntime::Toolkit {
     m_ui->levelsView->setModel(m_controller->levels());
 
     // Changes the contents of the facilities list.
-    connect(
-        m_ui->allSites, &QCheckBox::clicked, this, [this](bool checked)
-        {
-          m_controller->setIsSelectedSiteRespected(!checked);
-          if (checked)
-            m_ui->toolBox->setCurrentIndex(1);
-        });
+    connect(m_ui->allSites, &QCheckBox::clicked, this, [this](bool checked)
+    {
+      m_controller->setIsSelectedSiteRespected(!checked);
+      if (checked)
+      {
+        m_ui->toolBox->setCurrentIndex(1);
+      }
+    });
 
     // Sites setup
-    connect(
-        m_controller, &FloorFilterController::selectedSiteIdChanged, this, [this](const QString& /*oldId*/, const QString& newId)
-        {
-          // Set `m_sitesUpdatedFromController` for the duration of scope, then set back to false.
-          auto b = push_value(m_sitesUpdatedFromController, true);
-          const auto i = indexForId<FloorFilterSiteItem>(m_ui->sitesView->model(), newId);
-          m_ui->sitesView->selectionModel()->setCurrentIndex(i, QItemSelectionModel::SelectCurrent);
-        });
+    connect(m_controller, &FloorFilterController::selectedSiteIdChanged, this, [this](const QString& /*oldId*/, const QString& newId)
+    {
+      // Set `m_sitesUpdatedFromController` for the duration of scope, then set back to false.
+      auto b = push_value(m_sitesUpdatedFromController, true);
+      const auto i = indexForId<FloorFilterSiteItem>(m_ui->sitesView->model(), newId);
+      m_ui->sitesView->selectionModel()->setCurrentIndex(i, QItemSelectionModel::SelectCurrent);
+    });
 
-    connect(
-        m_ui->sitesView, &QListView::doubleClicked, this, [this](QModelIndex index)
-        {
-          if (index.isValid())
-            m_ui->toolBox->setCurrentIndex(1);
-        });
+    connect(m_ui->sitesView, &QListView::doubleClicked, this, [this](QModelIndex index)
+    {
+      if (index.isValid())
+      {
+        m_ui->toolBox->setCurrentIndex(1);
+      }
+    });
 
-    connect(
-        m_ui->sitesView->selectionModel(), &QItemSelectionModel::currentChanged, this, [this](const QModelIndex& index, const QModelIndex& previous)
-        {
-          if (index == previous || m_facilitiesUpdatedFromController)
-            return;
+    connect(m_ui->sitesView->selectionModel(), &QItemSelectionModel::currentChanged, this,
+            [this](const QModelIndex& index, const QModelIndex& previous)
+    {
+      if (index == previous || m_facilitiesUpdatedFromController)
+      {
+        return;
+      }
 
-          if (index == QModelIndex{})
-          {
-            m_controller->setSelectedSiteId("");
-          }
-          else
-          {
-            const auto data = itemForIndex<FloorFilterSiteItem>(m_ui->sitesView->model(), index);
-            m_controller->setSelectedSiteId(data->modelId());
-            m_controller->zoomToSite(data);
-          }
-        });
+      if (index == QModelIndex{})
+      {
+        m_controller->setSelectedSiteId("");
+      }
+      else
+      {
+        const auto data = itemForIndex<FloorFilterSiteItem>(m_ui->sitesView->model(), index);
+        m_controller->setSelectedSiteId(data->modelId());
+        m_controller->zoomToSite(data);
+      }
+    });
 
     // Facilities setup.
-    connect(
-        m_controller, &FloorFilterController::selectedFacilityIdChanged, this, [this](const QString& /*oldId*/, const QString& newId)
+    connect(m_controller, &FloorFilterController::selectedFacilityIdChanged, this, [this](const QString& /*oldId*/, const QString& newId)
+    {
+      auto b = push_value(m_facilitiesUpdatedFromController, true);
+      const auto i = indexForId<FloorFilterFacilityItem>(m_ui->facilitiesView->model(), newId);
+      m_ui->facilitiesView->selectionModel()->setCurrentIndex(i, QItemSelectionModel::SelectCurrent);
+    });
+
+    connect(m_ui->facilitiesView, &QListView::doubleClicked, this, [this](const QModelIndex& index)
+    {
+      if (index.isValid())
+      {
+        m_ui->toolBox->setCurrentIndex(2);
+      }
+    });
+
+    connect(m_ui->facilitiesView->selectionModel(), &QItemSelectionModel::currentChanged, this,
+            [this](const QModelIndex& index, const QModelIndex& previous)
+    {
+      if (index == previous)
+      {
+        return;
+      }
+
+      if (index == QModelIndex{})
+      {
+        m_controller->setSelectedFacilityId("");
+      }
+      else
+      {
+        const auto data = itemForIndex<FloorFilterFacilityItem>(m_ui->facilitiesView->model(), index);
+        m_controller->setSelectedFacilityId(data->modelId());
+        if (auto site = data->floorFacility()->site())
         {
-          auto b = push_value(m_facilitiesUpdatedFromController, true);
-          const auto i = indexForId<FloorFilterFacilityItem>(m_ui->facilitiesView->model(), newId);
-          m_ui->facilitiesView->selectionModel()->setCurrentIndex(i, QItemSelectionModel::SelectCurrent);
-        });
+          m_controller->setSelectedSiteId(site->siteId());
+        }
 
-    connect(
-        m_ui->facilitiesView, &QListView::doubleClicked, this, [this](const QModelIndex& index)
+        if (!m_facilitiesUpdatedFromController)
         {
-          if (index.isValid())
-            m_ui->toolBox->setCurrentIndex(2);
-        });
-
-    connect(
-        m_ui->facilitiesView->selectionModel(), &QItemSelectionModel::currentChanged, this, [this](const QModelIndex& index, const QModelIndex& previous)
-        {
-          if (index == previous)
-            return;
-
-          if (index == QModelIndex{})
-          {
-            m_controller->setSelectedFacilityId("");
-          }
-          else
-          {
-            const auto data = itemForIndex<FloorFilterFacilityItem>(m_ui->facilitiesView->model(), index);
-            m_controller->setSelectedFacilityId(data->modelId());
-            if (auto site = data->floorFacility()->site())
-            {
-              m_controller->setSelectedSiteId(site->siteId());
-            }
-
-            if (!m_facilitiesUpdatedFromController)
-            {
-              m_controller->zoomToFacility(data);
-            }
-          }
-        });
+          m_controller->zoomToFacility(data);
+        }
+      }
+    });
 
     // Levels setup.
-    connect(
-        m_controller, &FloorFilterController::selectedLevelIdChanged, this, [this](const QString& /*oldId*/, const QString& newId)
-        {
-          const auto i = indexForId<FloorFilterLevelItem>(m_ui->levelsView->model(), newId);
-          m_ui->levelsView->selectionModel()->setCurrentIndex(i, QItemSelectionModel::SelectCurrent);
-        });
+    connect(m_controller, &FloorFilterController::selectedLevelIdChanged, this, [this](const QString& /*oldId*/, const QString& newId)
+    {
+      const auto i = indexForId<FloorFilterLevelItem>(m_ui->levelsView->model(), newId);
+      m_ui->levelsView->selectionModel()->setCurrentIndex(i, QItemSelectionModel::SelectCurrent);
+    });
 
-    connect(
-        m_ui->levelsView->selectionModel(), &QItemSelectionModel::currentChanged, this, [this](const QModelIndex& index, const QModelIndex& previous)
-        {
-          if (index == previous)
-            return;
+    connect(m_ui->levelsView->selectionModel(), &QItemSelectionModel::currentChanged, this,
+            [this](const QModelIndex& index, const QModelIndex& previous)
+    {
+      if (index == previous)
+      {
+        return;
+      }
 
-          if (!index.isValid())
-          {
-            m_controller->setSelectedLevelId("");
-          }
-          else
-          {
-            const auto data = itemForIndex<FloorFilterLevelItem>(m_ui->levelsView->model(), index);
-            m_controller->setSelectedLevelId(data->modelId());
-          }
-        });
+      if (!index.isValid())
+      {
+        m_controller->setSelectedLevelId("");
+      }
+      else
+      {
+        const auto data = itemForIndex<FloorFilterLevelItem>(m_ui->levelsView->model(), index);
+        m_controller->setSelectedLevelId(data->modelId());
+      }
+    });
   }
 
   /*!
-   \brief Destructor.
+    \brief Destructor.
    */
   FloorFilter::~FloorFilter()
   {
@@ -284,7 +296,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   /*!
     \brief Set the \c GeoView.
     \list
-    \li \a mapView Sets the \c GeoView to a \c MapView.
+      \li \a mapView Sets the \c GeoView to a \c MapView.
     \endlist
    */
   void FloorFilter::setMapView(MapGraphicsView* mapView)
@@ -311,4 +323,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     return m_controller;
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

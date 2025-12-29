@@ -17,68 +17,72 @@
 #include "CoordinateEditDelegate.h"
 
 // Toolkit headers
-#include "CoordinateConversionResult.h"
 #include "CoordinateConversionController.h"
+#include "CoordinateConversionResult.h"
 #include "GenericListModel.h"
 #include "GenericTableProxyModel.h"
 
 //Qt headers
 #include <QLineEdit>
 
-namespace Esri::ArcGISRuntime::Toolkit {
-
-/*!
-  \internal
-  This class is an internal implementation detail and is subject to change.
-*/
-
-CoordinateEditDelegate::CoordinateEditDelegate(QObject* parent):
-  QItemDelegate(parent)
+namespace Esri::ArcGISRuntime::Toolkit
 {
-}
 
-CoordinateEditDelegate::~CoordinateEditDelegate()
-{
-}
+  /*!
+    \internal
+    This class is an internal implementation detail and is subject to change.
+   */
 
-void CoordinateEditDelegate::setController(CoordinateConversionController* c)
-{
-  m_controller = c;
-}
-
-CoordinateConversionController* CoordinateEditDelegate::controller() const
-{
-  return m_controller;
-}
-
-void CoordinateEditDelegate::setModelData(
-  QWidget* editor,
-  QAbstractItemModel* model,
-  const QModelIndex& index) const
-{
-  auto lineEdit = qobject_cast<QLineEdit*>(editor);
-
-  if (!lineEdit || !m_controller)
-    return QItemDelegate::setModelData(editor, model, index);
-
-  auto tableModel = qobject_cast<GenericTableProxyModel*>(model);
-
-  if (!tableModel)
-    return QItemDelegate::setModelData(editor, model, index);
-
-  auto listModel = tableModel->sourceModel();
-  auto result = listModel->element<CoordinateConversionResult>(index);
-  if (result)
+  CoordinateEditDelegate::CoordinateEditDelegate(QObject* parent) :
+    QItemDelegate(parent)
   {
-    // Only commit if text differs - otherwise what looks like a
-    // non-change will cause a change due to differences in format accuracies.
-    if (result->notation() != lineEdit->text())
-      m_controller->setCurrentPoint(lineEdit->text(), result->type());
   }
-  else
-  {
-    QItemDelegate::setModelData(editor, model, index);
-  }
-}
 
-} // Esri::ArcGISRuntime::Toolkit
+  CoordinateEditDelegate::~CoordinateEditDelegate()
+  {
+  }
+
+  void CoordinateEditDelegate::setController(CoordinateConversionController* c)
+  {
+    m_controller = c;
+  }
+
+  CoordinateConversionController* CoordinateEditDelegate::controller() const
+  {
+    return m_controller;
+  }
+
+  void CoordinateEditDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const
+  {
+    auto lineEdit = qobject_cast<QLineEdit*>(editor);
+
+    if (!lineEdit || !m_controller)
+    {
+      return QItemDelegate::setModelData(editor, model, index);
+    }
+
+    auto tableModel = qobject_cast<GenericTableProxyModel*>(model);
+
+    if (!tableModel)
+    {
+      return QItemDelegate::setModelData(editor, model, index);
+    }
+
+    auto listModel = tableModel->sourceModel();
+    auto result = listModel->element<CoordinateConversionResult>(index);
+    if (result)
+    {
+      // Only commit if text differs - otherwise what looks like a
+      // non-change will cause a change due to differences in format accuracies.
+      if (result->notation() != lineEdit->text())
+      {
+        m_controller->setCurrentPoint(lineEdit->text(), result->type());
+      }
+    }
+    else
+    {
+      QItemDelegate::setModelData(editor, model, index);
+    }
+  }
+
+} // namespace Esri::ArcGISRuntime::Toolkit

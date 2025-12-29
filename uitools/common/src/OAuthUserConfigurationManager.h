@@ -19,24 +19,26 @@
 // Qt headers
 #include <QtContainerFwd>
 
-namespace Esri::ArcGISRuntime::Authentication {
+namespace Esri::ArcGISRuntime::Authentication
+{
   class OAuthUserConfiguration;
 }
 
-namespace Esri::ArcGISRuntime::Toolkit {
-
-class OAuthUserConfigurationManager
+namespace Esri::ArcGISRuntime::Toolkit
 {
-public:
-  OAuthUserConfigurationManager() = delete;
 
-  static void addConfiguration(Esri::ArcGISRuntime::Authentication::OAuthUserConfiguration* userConfiguration);
+  class OAuthUserConfigurationManager
+  {
+  public:
+    OAuthUserConfigurationManager() = delete;
 
-  static void clearConfigurations();
+    static void addConfiguration(Esri::ArcGISRuntime::Authentication::OAuthUserConfiguration* userConfiguration);
 
-  static QList<Esri::ArcGISRuntime::Authentication::OAuthUserConfiguration*> configurations();
-};
+    static void clearConfigurations();
 
-} // Esri::ArcGISRuntime::Toolkit
+    static QList<Esri::ArcGISRuntime::Authentication::OAuthUserConfiguration*> configurations();
+  };
+
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_OAUTHUSERCONFIGURATIONMANAGER_H

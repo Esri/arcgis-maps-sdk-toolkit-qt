@@ -16,10 +16,10 @@
  ******************************************************************************/
 #include "UtilityNetworkTraceDemo.h"
 
+#include <Error.h>
 #include <Map.h>
 #include <Portal.h>
 #include <PortalItem.h>
-#include <Error.h>
 
 using namespace Esri::ArcGISRuntime;
 

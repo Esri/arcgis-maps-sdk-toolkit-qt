@@ -16,19 +16,20 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_SEARCHRESULT_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_SEARCHRESULT_H
 
-// Toolkit headers
-#include "SearchSourceInterface.h"
-
-// ArcGISRuntime headers
-#include <GeoElement.h>
-#include <Viewpoint.h>
-
 // Qt headers
 #include <QObject>
 #include <QString>
 #include <QUrl>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+// STL headers
+#include <GeoElement.h>
+#include <Viewpoint.h>
+
+// Other headers
+#include "SearchSourceInterface.h"
+
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   class SearchResult : public QObject
   {
@@ -77,6 +78,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     Viewpoint m_selectionViewpoint;
   };
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_SEARCHRESULT_H

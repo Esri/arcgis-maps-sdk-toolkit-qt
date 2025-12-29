@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2020 Esri
  *
@@ -20,8 +21,8 @@
 
 // Qt headers
 #include <QAbstractListModel>
-#include <QFuture>
 #include <QDebug>
+#include <QFuture>
 
 // Maps SDK headers
 #include "AttachmentsPopupElement.h"
@@ -38,89 +39,91 @@
 #include "AttachmentsPopupElementViewController.h"
 #include "FieldsPopupElementViewController.h"
 #include "MediaPopupElementViewController.h"
-#include "TextPopupElementViewController.h"
 #include "PopupElementViewItem.h"
+#include "TextPopupElementViewController.h"
 
-namespace Esri::ArcGISRuntime::Toolkit {
-
-/*!
-  \internal
-  This class is an internal implementation detail and is subject to change.
- */
-
-PopupViewController::PopupViewController(QObject* parent):
-  QObject(parent),
-  m_popupElementControllerModel(new GenericListModel(&PopupElementViewItem::staticMetaObject, this))
+namespace Esri::ArcGISRuntime::Toolkit
 {
-}
 
-PopupViewController::~PopupViewController()
-{
-}
+  /*!
+    \internal
+    This class is an internal implementation detail and is subject to change.
+   */
 
-Popup* PopupViewController::popup() const
-{
-  return m_popup;
-}
-
-GenericListModel* PopupViewController::popupElementControllers() const
-{
-  return m_popupElementControllerModel;
-}
-
-void PopupViewController::setPopup(Popup* popup)
-{
-  if (m_popup == popup)
-    return;
-
-  if (m_popup)
+  PopupViewController::PopupViewController(QObject* parent) :
+    QObject(parent),
+    m_popupElementControllerModel(new GenericListModel(&PopupElementViewItem::staticMetaObject, this))
   {
-    disconnect(m_popup.data(), nullptr, this, nullptr);
-    m_popupElementControllerModel->removeRows(0, m_popupElementControllerModel->rowCount());
   }
 
-  m_popup = popup;
-
-  if (m_popup)
-    connect(m_popup.data(), &QObject::destroyed, this, &PopupViewController::popupChanged);
-
-  m_popup->evaluateExpressionsAsync(this).then(this, [this](const QList<PopupExpressionEvaluation*>&)
+  PopupViewController::~PopupViewController()
   {
-    for (auto element : m_popup->evaluatedElements())
+  }
+
+  Popup* PopupViewController::popup() const
+  {
+    return m_popup;
+  }
+
+  GenericListModel* PopupViewController::popupElementControllers() const
+  {
+    return m_popupElementControllerModel;
+  }
+
+  void PopupViewController::setPopup(Popup* popup)
+  {
+    if (m_popup == popup)
     {
-      switch (element->popupElementType())
-      {
-        case Esri::ArcGISRuntime::PopupElementType::TextPopupElement:
-          m_popupElementControllerModel->append(
-                new TextPopupElementViewController(static_cast<TextPopupElement*>(element), this, m_popup));
-          break;
-        case Esri::ArcGISRuntime::PopupElementType::FieldsPopupElement:
-          m_popupElementControllerModel->append(
-                new FieldsPopupElementViewController(static_cast<FieldsPopupElement*>(element), this, m_popup));
-          break;
-        case Esri::ArcGISRuntime::PopupElementType::AttachmentsPopupElement:
-          m_popupElementControllerModel->append(
-                new AttachmentsPopupElementViewController(static_cast<AttachmentsPopupElement*>(element), this, m_popup));
-          break;
-        case Esri::ArcGISRuntime::PopupElementType::MediaPopupElement:
-          m_popupElementControllerModel->append(
-                new MediaPopupElementViewController(static_cast<MediaPopupElement*>(element), this, m_popup));
-          break;
-        default:
-          Q_UNIMPLEMENTED();
-          break;
-      }
+      return;
     }
+
+    if (m_popup)
+    {
+      disconnect(m_popup.data(), nullptr, this, nullptr);
+      m_popupElementControllerModel->removeRows(0, m_popupElementControllerModel->rowCount());
+    }
+
+    m_popup = popup;
+
+    if (m_popup)
+    {
+      connect(m_popup.data(), &QObject::destroyed, this, &PopupViewController::popupChanged);
+    }
+
+    m_popup->evaluateExpressionsAsync(this).then(this, [this](const QList<PopupExpressionEvaluation*>&)
+    {
+      for (auto element : m_popup->evaluatedElements())
+      {
+        switch (element->popupElementType())
+        {
+          case Esri::ArcGISRuntime::PopupElementType::TextPopupElement:
+            m_popupElementControllerModel->append(new TextPopupElementViewController(static_cast<TextPopupElement*>(element), this, m_popup));
+            break;
+          case Esri::ArcGISRuntime::PopupElementType::FieldsPopupElement:
+            m_popupElementControllerModel->append(new FieldsPopupElementViewController(static_cast<FieldsPopupElement*>(element), this, m_popup));
+            break;
+          case Esri::ArcGISRuntime::PopupElementType::AttachmentsPopupElement:
+            m_popupElementControllerModel->append(
+              new AttachmentsPopupElementViewController(static_cast<AttachmentsPopupElement*>(element), this, m_popup));
+            break;
+          case Esri::ArcGISRuntime::PopupElementType::MediaPopupElement:
+            m_popupElementControllerModel->append(new MediaPopupElementViewController(static_cast<MediaPopupElement*>(element), this, m_popup));
+            break;
+          default:
+            Q_UNIMPLEMENTED();
+            break;
+        }
+      }
+      emit popupChanged();
+    });
+
     emit popupChanged();
-  });
+    emit titleChanged();
+  }
 
-  emit popupChanged();
-  emit titleChanged();
-}
+  QString PopupViewController::title() const
+  {
+    return m_popup ? m_popup->title() : QString();
+  }
 
-QString PopupViewController::title() const
-{
-  return m_popup ? m_popup->title() : QString();
-}
-
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

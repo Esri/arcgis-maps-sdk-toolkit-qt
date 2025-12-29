@@ -23,40 +23,42 @@
 #include "GenericListModel.h"
 #include "PopupElementViewItem.h"
 
-namespace Esri::ArcGISRuntime {
-
-class PopupElement;
-class MediaPopupElement;
-class PopupMediaListModel;
-
-namespace Toolkit {
-
-class PopupViewController;
-
-class MediaPopupElementViewController : public PopupElementViewItem
+namespace Esri::ArcGISRuntime
 {
-  Q_OBJECT
-  Q_PROPERTY(QString title READ title NOTIFY mediaPopupElementChanged)
-  Q_PROPERTY(QString description READ description NOTIFY mediaPopupElementChanged)
-  Q_PROPERTY(QAbstractListModel* popupMediaItems READ popupMediaItems NOTIFY mediaPopupElementChanged)
 
-public:
-  explicit MediaPopupElementViewController(MediaPopupElement* mediaPopupElement,
-                                           PopupViewController* popupViewController,
-                                           QObject* parent = nullptr);
-  ~MediaPopupElementViewController() override;
+  class PopupElement;
+  class MediaPopupElement;
+  class PopupMediaListModel;
 
-  QString description() const;
-  QString title() const;
-  GenericListModel* popupMediaItems() const;
+  namespace Toolkit
+  {
 
-signals:
-  void mediaPopupElementChanged();
+    class PopupViewController;
 
-private:
-  GenericListModel* m_popupMediaItems = nullptr;
-};
+    class MediaPopupElementViewController : public PopupElementViewItem
+    {
+      Q_OBJECT
+      Q_PROPERTY(QString title READ title NOTIFY mediaPopupElementChanged)
+      Q_PROPERTY(QString description READ description NOTIFY mediaPopupElementChanged)
+      Q_PROPERTY(QAbstractListModel* popupMediaItems READ popupMediaItems NOTIFY mediaPopupElementChanged)
 
-} // namespace Toolkit
+    public:
+      explicit MediaPopupElementViewController(MediaPopupElement* mediaPopupElement,
+                                               PopupViewController* popupViewController,
+                                               QObject* parent = nullptr);
+      ~MediaPopupElementViewController() override;
+
+      QString description() const;
+      QString title() const;
+      GenericListModel* popupMediaItems() const;
+
+    signals:
+      void mediaPopupElementChanged();
+
+    private:
+      GenericListModel* m_popupMediaItems = nullptr;
+    };
+
+  } // namespace Toolkit
 } // namespace Esri::ArcGISRuntime
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_MEDIAPOPUPELEMENTVIEWCONTROLLER_H

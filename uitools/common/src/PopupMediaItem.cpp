@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2025 Esri
  *
@@ -21,37 +22,39 @@
 #include <PopupMedia.h>
 #include <PopupMediaValue.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
-
-/*!
-  \internal
-  This class is an internal implementation detail and is subject to change.
- */
-PopupMediaItem::PopupMediaItem(PopupMedia* popupMedia, QObject* parent)
-  : QObject{parent}, m_popupMedia{popupMedia}
+namespace Esri::ArcGISRuntime::Toolkit
 {
-}
 
-PopupMediaItem::~PopupMediaItem() = default;
+  /*!
+    \internal
+    This class is an internal implementation detail and is subject to change.
+   */
+  PopupMediaItem::PopupMediaItem(PopupMedia* popupMedia, QObject* parent) :
+    QObject{parent},
+    m_popupMedia{popupMedia}
+  {
+  }
 
-QString PopupMediaItem::title() const
-{
-  return m_popupMedia->title();
-}
+  PopupMediaItem::~PopupMediaItem() = default;
 
-QString PopupMediaItem::caption() const
-{
-  return m_popupMedia->caption();
-}
+  QString PopupMediaItem::title() const
+  {
+    return m_popupMedia->title();
+  }
 
-PopupMediaType PopupMediaItem::popupMediaType() const
-{
-  return m_popupMedia->popupMediaType();
-}
+  QString PopupMediaItem::caption() const
+  {
+    return m_popupMedia->caption();
+  }
 
-PopupMedia* PopupMediaItem::popupMediaItem() const
-{
-  return m_popupMedia;
-}
+  PopupMediaType PopupMediaItem::popupMediaType() const
+  {
+    return m_popupMedia->popupMediaType();
+  }
+
+  PopupMedia* PopupMediaItem::popupMediaItem() const
+  {
+    return m_popupMedia;
+  }
 
 } // namespace Esri::ArcGISRuntime::Toolkit

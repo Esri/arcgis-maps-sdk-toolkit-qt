@@ -16,27 +16,29 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_NETWORKAUTHENTICATIONCHALLENGERELAY_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_NETWORKAUTHENTICATIONCHALLENGERELAY_H
 
-// ArcGIS Maps SDK headers
+// STL headers
 #include <Authentication/NetworkAuthenticationChallengeHandler.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
-
-class AuthenticatorController;
-class NetworkAuthenticationChallengeRelay : public Authentication::NetworkAuthenticationChallengeHandler
+namespace Esri::ArcGISRuntime::Toolkit
 {
-  Q_OBJECT
 
-public:
-  explicit NetworkAuthenticationChallengeRelay(AuthenticatorController* controller);
-  ~NetworkAuthenticationChallengeRelay();
+  class AuthenticatorController;
 
-protected:
-  void handleNetworkAuthenticationChallenge(Authentication::NetworkAuthenticationChallenge* challenge) override;
+  class NetworkAuthenticationChallengeRelay : public Authentication::NetworkAuthenticationChallengeHandler
+  {
+    Q_OBJECT
 
-private:
-  AuthenticatorController* m_controller = nullptr;
-};
+  public:
+    explicit NetworkAuthenticationChallengeRelay(AuthenticatorController* controller);
+    ~NetworkAuthenticationChallengeRelay();
 
-} // Esri::ArcGISRuntime::Toolkit
+  protected:
+    void handleNetworkAuthenticationChallenge(Authentication::NetworkAuthenticationChallenge* challenge) override;
+
+  private:
+    AuthenticatorController* m_controller = nullptr;
+  };
+
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_NETWORKAUTHENTICATIONCHALLENGERELAY_H

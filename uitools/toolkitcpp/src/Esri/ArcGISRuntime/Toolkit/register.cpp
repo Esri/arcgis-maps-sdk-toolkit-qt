@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2025 Esri
  *
@@ -19,13 +20,13 @@
 #include "register.h"
 
 // Toolkit includes
-#include "AuthenticatorController.h"
 #include "AttachmentsPopupElementViewController.h"
+#include "AuthenticatorController.h"
 #include "BarChartPopupMediaItem.h"
 #include "BasemapGalleryController.h"
 #include "BasemapGalleryItem.h"
-#include "BookmarksViewController.h"
 #include "BookmarkListItem.h"
+#include "BookmarksViewController.h"
 #include "CoordinateConversionController.h"
 #include "CoordinateConversionOption.h"
 #include "CoordinateConversionResult.h"
@@ -58,18 +59,18 @@
 #include "UtilityNetworkTraceStartingPointsModel.h"
 
 // Internal includes
+#include "BasemapGalleryImageProvider.h"
 #include "PopupAttachmentImageProvider.h"
 #include "QmlEnums.h"
-#include "BasemapGalleryImageProvider.h"
 
 // ArcGIS includes
 #include <MapQuickView.h>
 #include <Point.h>
 
 // Qt Includes
+#include <QPointer>
 #include <QQmlEngine>
 #include <QQmlFileSelector>
-#include <QPointer>
 
 // std includes
 #include <type_traits>
@@ -93,9 +94,11 @@
   with the `QQmlEngine` and the toolkit.
  */
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
-  namespace {
+  namespace
+  {
 
     const QString ESRI_COM_PATH = QStringLiteral(":/esri.com/imports");
 
@@ -124,12 +127,13 @@ namespace Esri::ArcGISRuntime::Toolkit {
       \value CreationType::Uncreatable for types that can be referenced but not used in QML.
       \value CreationType::Interface for types that are interfaces for more concrete QML types.
  */
-    namespace CreationType {
+    namespace CreationType
+    {
       struct Creatable_
       {
       };
 
-      template <class T>
+      template<class T>
       void registerComponentImpl(CreationType::Creatable_, int majorVersion, int minorVersion, const char* name)
       {
         qmlRegisterType<T>(NAMESPACE, majorVersion, minorVersion, name);
@@ -141,7 +145,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
       {
       };
 
-      template <class T>
+      template<class T>
       void registerComponentImpl(CreationType::Uncreatable_, int majorVersion, int minorVersion, const char* name)
       {
         qmlRegisterUncreatableType<T>(NAMESPACE, majorVersion, minorVersion, name, "Cannot instantiate type in QML.");
@@ -153,22 +157,21 @@ namespace Esri::ArcGISRuntime::Toolkit {
       {
       };
 
-      template <class T>
+      template<class T>
       void registerComponentImpl(CreationType::Singleton_, int majorVersion, int minorVersion, const char* name)
       {
-        qmlRegisterSingletonType<T>(NAMESPACE, majorVersion, minorVersion, name,
-                                    [](QQmlEngine* qmlEngine, QJSEngine* jsEngine) -> QObject*
-                                    {
-                                      if (!s_authenticatorController)
-                                      {
-                                        s_authenticatorController = T::create(qmlEngine, jsEngine);
-                                      }
-                                      return s_authenticatorController;
-                                    });
+        qmlRegisterSingletonType<T>(NAMESPACE, majorVersion, minorVersion, name, [](QQmlEngine* qmlEngine, QJSEngine* jsEngine) -> QObject*
+        {
+          if (!s_authenticatorController)
+          {
+            s_authenticatorController = T::create(qmlEngine, jsEngine);
+          }
+          return s_authenticatorController;
+        });
       }
 
       [[maybe_unused]] constexpr Singleton_ Singleton = Singleton_{};
-    }
+    } // namespace CreationType
 
     /*
      \internal
@@ -185,7 +188,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
       registerComponent<LocatorSearchSource>(CreationType::Uncreatable);
   \endcode
  */
-    template <typename T, typename CType = CreationType::Creatable_>
+    template<typename T, typename CType = CreationType::Creatable_>
     void registerComponent(CType creationType = CType{})
     {
       static_assert(std::is_base_of<QObject, T>::value, "Must inherit QObject");
@@ -246,4 +249,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     qmlRegisterAnonymousType<MapQuickView>(NAMESPACE, VERSION_MAJOR);
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

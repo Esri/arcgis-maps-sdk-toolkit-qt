@@ -20,27 +20,28 @@
 #include <QAbstractOAuth2>
 #include <QUrl>
 
-namespace Esri::ArcGISRuntime::Toolkit {
-
-class CustomOAuth2AuthorizationCodeFlow : public QAbstractOAuth2
+namespace Esri::ArcGISRuntime::Toolkit
 {
-  Q_OBJECT
-public:
-  CustomOAuth2AuthorizationCodeFlow(QUrl m_authorizeUrl, QObject* parent);
-  ~CustomOAuth2AuthorizationCodeFlow() override;
 
-  void grant() override;
+  class CustomOAuth2AuthorizationCodeFlow : public QAbstractOAuth2
+  {
+    Q_OBJECT
+  public:
+    CustomOAuth2AuthorizationCodeFlow(QUrl m_authorizeUrl, QObject* parent);
+    ~CustomOAuth2AuthorizationCodeFlow() override;
 
-  QString authorizationCode() const;
-  void setAuthorizationCode(const QString& code);
+    void grant() override;
 
-private:
-  Q_DISABLE_COPY_MOVE(CustomOAuth2AuthorizationCodeFlow)
+    QString authorizationCode() const;
+    void setAuthorizationCode(const QString& code);
 
-  QString m_authorizationCode;
-  const QUrl m_authorizeUrl;
-};
+  private:
+    Q_DISABLE_COPY_MOVE(CustomOAuth2AuthorizationCodeFlow)
 
-} // Esri::ArcGISRuntime::Toolkit
+    QString m_authorizationCode;
+    const QUrl m_authorizeUrl;
+  };
+
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_CUSTOMOAUTH2AUTHORIZATIONCODEFLOW_H

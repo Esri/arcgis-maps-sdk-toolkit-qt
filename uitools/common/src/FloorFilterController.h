@@ -25,11 +25,13 @@
 #include "FloorFilterSiteItem.h"
 #include "GenericListModel.h"
 
-namespace Esri::ArcGISRuntime {
+namespace Esri::ArcGISRuntime
+{
 
   class Envelope;
 
-  namespace Toolkit {
+  namespace Toolkit
+  {
     class FloorFilterFacilityItem;
     class FloorFilterSiteItem;
     class FloorFilterLevelItem;
@@ -49,7 +51,8 @@ namespace Esri::ArcGISRuntime {
       Q_PROPERTY(QAbstractListModel* facilities READ facilities CONSTANT)
       Q_PROPERTY(QAbstractListModel* sites READ sites CONSTANT)
       Q_PROPERTY(UpdateLevelsMode updateLevelsMode READ updateLevelsMode WRITE setUpdateLevelsMode NOTIFY updateLevelsModeChanged)
-      Q_PROPERTY(AutomaticSelectionMode automaticSelectionMode READ automaticSelectionMode WRITE setAutomaticSelectionMode NOTIFY automaticSelectionModeChanged)
+      Q_PROPERTY(AutomaticSelectionMode automaticSelectionMode READ automaticSelectionMode WRITE setAutomaticSelectionMode NOTIFY
+                   automaticSelectionModeChanged)
     public:
       enum class UpdateLevelsMode
       {
@@ -142,7 +145,7 @@ namespace Esri::ArcGISRuntime {
       bool m_settingViewpoint{false};
     };
 
-  } // Toolkit
-} // Esri::ArcGISRuntime
+  } // namespace Toolkit
+} // namespace Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_FLOORFILTERCONTROLLER_H

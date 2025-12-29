@@ -16,7 +16,8 @@
  ******************************************************************************/
 #include "SearchSuggestion.h"
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
     \class Esri::ArcGISRuntime::Toolkit::SearchSuggestion
@@ -46,7 +47,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void SearchSuggestion::setDisplaySubtitle(QString displaySubtitle)
   {
     if (displaySubtitle == m_displaySubtitle)
+    {
       return;
+    }
 
     m_displaySubtitle = std::move(displaySubtitle);
     emit displaySubtitleChanged();
@@ -76,7 +79,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void SearchSuggestion::setOwningSource(SearchSourceInterface* owningSource)
   {
     if (owningSource == m_owningSource)
+    {
       return;
+    }
 
     m_owningSource = owningSource;
     emit owningSourceChanged();
@@ -90,7 +95,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void SearchSuggestion::setSuggestResult(SuggestResult suggestResult)
   {
     if (suggestResult.isCollection() == m_suggestResult.isCollection() && suggestResult.label() == m_suggestResult.label())
+    {
       return;
+    }
 
     m_suggestResult = std::move(suggestResult);
     emit suggestResultChanged();
@@ -101,4 +108,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     return m_suggestResult.isCollection();
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

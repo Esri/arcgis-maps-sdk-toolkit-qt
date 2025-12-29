@@ -16,58 +16,59 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_COORDINATECONVERSIONRESULT_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_COORDINATECONVERSIONRESULT_H
 
-// Toolkit headers
-#include "CoordinateConversionOption.h"
-
 // Qt headers
 #include <QObject>
 #include <QPointer>
 
-// ArcGISRuntime headers
+// STL headers
 #include <Point.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+// Other headers
+#include "CoordinateConversionOption.h"
 
-class CoordinateConversionResult : public QObject
+namespace Esri::ArcGISRuntime::Toolkit
 {
-  Q_OBJECT
-  Q_PROPERTY(QString name READ name NOTIFY nameChanged)
-  Q_PROPERTY(QString notation READ notation WRITE setNotation NOTIFY notationChanged)
-  Q_PROPERTY(CoordinateConversionOption* type READ type WRITE setType NOTIFY typeChanged)
-public:
-  Q_INVOKABLE CoordinateConversionResult(QObject* parent = nullptr);
 
-  ~CoordinateConversionResult() override;
+  class CoordinateConversionResult : public QObject
+  {
+    Q_OBJECT
+    Q_PROPERTY(QString name READ name NOTIFY nameChanged)
+    Q_PROPERTY(QString notation READ notation WRITE setNotation NOTIFY notationChanged)
+    Q_PROPERTY(CoordinateConversionOption* type READ type WRITE setType NOTIFY typeChanged)
+  public:
+    Q_INVOKABLE CoordinateConversionResult(QObject* parent = nullptr);
 
-  QString name() const;
+    ~CoordinateConversionResult() override;
 
-  QString notation() const;
+    QString name() const;
 
-  void setNotation(const QString& notation);
+    QString notation() const;
 
-  CoordinateConversionOption* type() const;
+    void setNotation(const QString& notation);
 
-  void setType(CoordinateConversionOption* type);
+    CoordinateConversionOption* type() const;
 
-signals:
-  void nameChanged();
+    void setType(CoordinateConversionOption* type);
 
-  void notationChanged();
+  signals:
+    void nameChanged();
 
-  void typeChanged();
+    void notationChanged();
 
-public slots:
+    void typeChanged();
 
-  void updateCoordinatePoint(const Esri::ArcGISRuntime::Point& point);
+  public slots:
 
-  void copyNotationToClipboard() const;
+    void updateCoordinatePoint(const Esri::ArcGISRuntime::Point& point);
 
-private:
-  QString m_name;
-  QString m_notation;
-  QPointer<CoordinateConversionOption> m_type;
-};
+    void copyNotationToClipboard() const;
 
-} // Esri::ArcGISRuntime::Toolkit
+  private:
+    QString m_name;
+    QString m_notation;
+    QPointer<CoordinateConversionOption> m_type;
+  };
+
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_COORDINATECONVERSIONRESULT_H

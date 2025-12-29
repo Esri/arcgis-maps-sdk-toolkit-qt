@@ -29,49 +29,50 @@
 // Other headers
 #include "GenericListModel.h"
 
-namespace Esri::ArcGISRuntime {
-
-namespace Toolkit
+namespace Esri::ArcGISRuntime
 {
 
-class PopupViewController : public QObject
-{
-  Q_OBJECT
-  Q_PROPERTY(Popup* popup READ popup WRITE setPopup NOTIFY popupChanged)
-  Q_PROPERTY(QString title READ title NOTIFY titleChanged)
-  Q_PROPERTY(QAbstractListModel* popupElementControllers READ popupElementControllers NOTIFY popupChanged)
+  namespace Toolkit
+  {
 
-public:
-  Q_INVOKABLE explicit PopupViewController(QObject* parent = nullptr);
+    class PopupViewController : public QObject
+    {
+      Q_OBJECT
+      Q_PROPERTY(Popup* popup READ popup WRITE setPopup NOTIFY popupChanged)
+      Q_PROPERTY(QString title READ title NOTIFY titleChanged)
+      Q_PROPERTY(QAbstractListModel* popupElementControllers READ popupElementControllers NOTIFY popupChanged)
 
-  ~PopupViewController() override;
+    public:
+      Q_INVOKABLE explicit PopupViewController(QObject* parent = nullptr);
 
-  Popup* popup() const;
+      ~PopupViewController() override;
 
-  void setPopup(Popup* popup);
+      Popup* popup() const;
 
-  GenericListModel* popupElementControllers() const;
+      void setPopup(Popup* popup);
 
-  QString title() const;
+      GenericListModel* popupElementControllers() const;
 
-signals:
+      QString title() const;
 
-  void popupChanged();
+    signals:
 
-  void titleChanged();
+      void popupChanged();
 
-  void attachmentDataFetched(const QByteArray& attachmentData, const QString& name);
+      void titleChanged();
 
-  void clickedUrl(const QUrl& url);
+      void attachmentDataFetched(const QByteArray& attachmentData, const QString& name);
 
-  void imageClicked(const QUrl& sourceUrl, const QUrl& linkUrl);
+      void clickedUrl(const QUrl& url);
 
-private:
-  QPointer<Popup> m_popup;
-  GenericListModel* m_popupElementControllerModel = nullptr;
-};
+      void imageClicked(const QUrl& sourceUrl, const QUrl& linkUrl);
 
-} // Toolkit
-} // Esri::ArcGISRuntime
+    private:
+      QPointer<Popup> m_popup;
+      GenericListModel* m_popupElementControllerModel = nullptr;
+    };
+
+  } // namespace Toolkit
+} // namespace Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_POPUPVIEWCONTROLLER_H

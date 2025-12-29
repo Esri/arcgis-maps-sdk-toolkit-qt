@@ -26,9 +26,10 @@
 
 Q_MOC_INCLUDE("BasemapGalleryController.h")
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
   class BasemapGalleryController;
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 class BasemapGalleryDemo : public BaseDemo
 {

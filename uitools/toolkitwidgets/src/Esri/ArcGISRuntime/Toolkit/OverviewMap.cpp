@@ -28,70 +28,71 @@
 // Qt headers
 #include <QGridLayout>
 
-namespace Esri::ArcGISRuntime::Toolkit {
-
-/*!
-  \class Esri::ArcGISRuntime::Toolkit::OverviewMap
-  \inmodule Esri.ArcGISRuntime.Toolkit
-  \ingroup ArcGISQtToolkitUiCppWidgetsViews
-  \brief Defines a small "overview" (or "inset") map displaying a representation of the current viewpoint of the given GeoView.
-   For MapViews, the current viewpoint will be represented by a polygon displaying the visible area of the MapView. For SceneViews,
-   the current viewpoint will be represented by a reticle (crosshairs) displaying the viewpoint center.
-
-  \note By default, the OverviewMap will attempt to use an ArcGIS Topographic basemap, which requires an \l{http://links.esri.com/create-an-api-key}{access token} to access.
- */
-
-/*!
-  \brief Constructor
-  \list
-  \li \a parent Parent widget.
-  \endlist
- */
-OverviewMap::OverviewMap(QWidget* parent) :
-  QWidget(parent),
-  m_ui(new Ui::OverviewMap),
-  m_controller(new OverviewMapController(this))
+namespace Esri::ArcGISRuntime::Toolkit
 {
-  m_ui->setupUi(this);
-  m_ui->gridLayout->addWidget(m_controller->insetView(),  0, 0, 1, 1);
-}
 
-/*!
-  \brief Destructor
- */
-OverviewMap::~OverviewMap()
-{
-  delete m_ui;
-}
+  /*!
+    \class Esri::ArcGISRuntime::Toolkit::OverviewMap
+    \inmodule Esri.ArcGISRuntime.Toolkit
+    \ingroup ArcGISQtToolkitUiCppWidgetsViews
+    \brief Defines a small "overview" (or "inset") map displaying a representation of the current viewpoint of the given GeoView.
+    For MapViews, the current viewpoint will be represented by a polygon displaying the visible area of the MapView. For SceneViews,
+    the current viewpoint will be represented by a reticle (crosshairs) displaying the viewpoint center.
 
-/*!
-  \brief Set the \c GeoView.
-  \list
-  \li \a mapView Sets the \c GeoView to a \c MapView.
-  \endlist
- */
-void OverviewMap::setGeoView(MapGraphicsView* mapView)
-{
-  m_controller->setGeoView(mapView);
-}
+    \note By default, the OverviewMap will attempt to use an ArcGIS Topographic basemap, which requires an \l{http://links.esri.com/create-an-api-key}{access token} to access.
+   */
 
-/*!
-  \brief Set the \c GeoView.
-  \list
-    \li \a sceneView Sets the \c GeoView to a \c SceneView.
-  \endlist
- */
-void OverviewMap::setGeoView(SceneGraphicsView* sceneView)
-{
-  m_controller->setGeoView(sceneView);
-}
+  /*!
+    \brief Constructor
+    \list
+      \li \a parent Parent widget.
+    \endlist
+   */
+  OverviewMap::OverviewMap(QWidget* parent) :
+    QWidget(parent),
+    m_ui(new Ui::OverviewMap),
+    m_controller(new OverviewMapController(this))
+  {
+    m_ui->setupUi(this);
+    m_ui->gridLayout->addWidget(m_controller->insetView(), 0, 0, 1, 1);
+  }
 
-/*!
-  \internal
- */
-OverviewMapController* OverviewMap::controller() const
-{
-  return m_controller;
-}
+  /*!
+    \brief Destructor
+   */
+  OverviewMap::~OverviewMap()
+  {
+    delete m_ui;
+  }
 
-} // Esri::ArcGISRuntime::Toolkit
+  /*!
+    \brief Set the \c GeoView.
+    \list
+      \li \a mapView Sets the \c GeoView to a \c MapView.
+    \endlist
+   */
+  void OverviewMap::setGeoView(MapGraphicsView* mapView)
+  {
+    m_controller->setGeoView(mapView);
+  }
+
+  /*!
+    \brief Set the \c GeoView.
+    \list
+      \li \a sceneView Sets the \c GeoView to a \c SceneView.
+    \endlist
+   */
+  void OverviewMap::setGeoView(SceneGraphicsView* sceneView)
+  {
+    m_controller->setGeoView(sceneView);
+  }
+
+  /*!
+    \internal
+   */
+  OverviewMapController* OverviewMap::controller() const
+  {
+    return m_controller;
+  }
+
+} // namespace Esri::ArcGISRuntime::Toolkit

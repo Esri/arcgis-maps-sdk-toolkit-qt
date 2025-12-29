@@ -19,9 +19,9 @@
 
 namespace Esri::ArcGISRuntime
 {
-class Map;
-class MapQuickView;
-}
+  class Map;
+  class MapQuickView;
+} // namespace Esri::ArcGISRuntime
 
 #include <QObject>
 
@@ -47,7 +47,6 @@ private:
 
   Esri::ArcGISRuntime::Map* m_map = nullptr;
   Esri::ArcGISRuntime::MapQuickView* m_mapView = nullptr;
-
 };
 
 #endif // CALCITETEST_H

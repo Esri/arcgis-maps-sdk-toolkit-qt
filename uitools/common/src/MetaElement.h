@@ -23,27 +23,28 @@
 
 class QAbstractItemModel;
 
-namespace Esri::ArcGISRuntime::Toolkit {
-
-class MetaElement : public QObject
+namespace Esri::ArcGISRuntime::Toolkit
 {
-  Q_OBJECT
-public:
-  MetaElement(QModelIndex index, int customRole, QObject* trackedObject, QAbstractItemModel* parent);
 
-signals:
-  void propertyChanged();
+  class MetaElement : public QObject
+  {
+    Q_OBJECT
+  public:
+    MetaElement(QModelIndex index, int customRole, QObject* trackedObject, QAbstractItemModel* parent);
 
-private slots:
-  void emitDataChanged();
+  signals:
+    void propertyChanged();
 
-private:
-  QPersistentModelIndex m_index;
-  int m_customRole = -1;
-  QPointer<QObject> m_trackedObject;
-  QAbstractItemModel* m_parentModel = nullptr;
-};
+  private slots:
+    void emitDataChanged();
 
-} // Esri::ArcGISRuntime::Toolkit
+  private:
+    QPersistentModelIndex m_index;
+    int m_customRole = -1;
+    QPointer<QObject> m_trackedObject;
+    QAbstractItemModel* m_parentModel = nullptr;
+  };
+
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_METAELEMENT_H

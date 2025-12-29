@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -16,13 +17,13 @@
 
 #include "CalloutDemo.h"
 
-#include <QImage>
-
 #include "CalloutData.h"
 #include "GeoView.h"
 #include "MapQuickView.h"
 #include "MapView.h"
 #include "Point.h"
+
+#include <QImage>
 
 using namespace Esri::ArcGISRuntime;
 
@@ -47,18 +48,20 @@ void CalloutDemo::setUp()
   callData->setImage(img);
 
   connect(mv, &MapQuickView::mouseClicked, this, [mv](QMouseEvent& mouse)
-          {
-            // check the geoView passed is a mapView, if so modify data
-            auto callData = mv->calloutData();
-            if (callData->isVisible())
-              callData->setVisible(false);
-            else
-            {
-              Point mapPoint(mv->screenToLocation(mouse.pos().x(), mouse.pos().y()));
-              //atm the position is not working correctly with the setLocation
-              callData->setLocation(mapPoint);
-              callData->setDetail("x: " + QString::number(mouse.pos().x()) + " y: " + QString::number(mouse.pos().y()));
-              callData->setVisible(true);
-            }
-          });
+  {
+    // check the geoView passed is a mapView, if so modify data
+    auto callData = mv->calloutData();
+    if (callData->isVisible())
+    {
+      callData->setVisible(false);
+    }
+    else
+    {
+      Point mapPoint(mv->screenToLocation(mouse.pos().x(), mouse.pos().y()));
+      //atm the position is not working correctly with the setLocation
+      callData->setLocation(mapPoint);
+      callData->setDetail("x: " + QString::number(mouse.pos().x()) + " y: " + QString::number(mouse.pos().y()));
+      callData->setVisible(true);
+    }
+  });
 }

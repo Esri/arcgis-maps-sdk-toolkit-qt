@@ -26,109 +26,109 @@
 // Qt headers
 #include <QMouseEvent>
 
-namespace Esri::ArcGISRuntime::Toolkit {
-
-/*!
-  \class Esri::ArcGISRuntime::Toolkit::NorthArrow
-  \inmodule Esri.ArcGISRuntime.Toolkit
-  \ingroup ArcGISQtToolkitUiCppWidgetsViews
-  \brief The \c NorthArrow displays a compass overlaid on the \c GeoView, with
-  the compass heading matching the current rotation of the \c MapView, or
-  \c Camera heading of the \c SceneView.
-  Double-clicking on the \c NorthArrow triggers the heading of the connected
-  \c GeoView to be orientated to 0 (North).
-  \note default width and height is 48.
- */
-
-/*!
-  \brief Constructor
-  \list
-  \li \a parent Parent widget.
-  \endlist
- */
-NorthArrow::NorthArrow(QWidget* parent) :
-  QLabel(parent),
-  m_controller(new NorthArrowController(this))
+namespace Esri::ArcGISRuntime::Toolkit
 {
-  setScaledContents(true);
-  m_image = QPixmap(":/Esri/ArcGISRuntime/Toolkit/compass.svg");
-  setAttribute(Qt::WA_TranslucentBackground);
 
-  if (!m_image.isNull())
+  /*!
+    \class Esri::ArcGISRuntime::Toolkit::NorthArrow
+    \inmodule Esri.ArcGISRuntime.Toolkit
+    \ingroup ArcGISQtToolkitUiCppWidgetsViews
+    \brief The \c NorthArrow displays a compass overlaid on the \c GeoView, with
+    the compass heading matching the current rotation of the \c MapView, or
+    \c Camera heading of the \c SceneView.
+    Double-clicking on the \c NorthArrow triggers the heading of the connected
+    \c GeoView to be orientated to 0 (North).
+    \note default width and height is 48.
+   */
+
+  /*!
+    \brief Constructor
+    \list
+      \li \a parent Parent widget.
+    \endlist
+   */
+  NorthArrow::NorthArrow(QWidget* parent) :
+    QLabel(parent),
+    m_controller(new NorthArrowController(this))
   {
-    const QSize defaultSize(48, 48);
-    setPixmap(m_image.scaled(defaultSize, Qt::IgnoreAspectRatio));
-    resize(defaultSize);
+    setScaledContents(true);
+    m_image = QPixmap(":/Esri/ArcGISRuntime/Toolkit/compass.svg");
+    setAttribute(Qt::WA_TranslucentBackground);
+
+    if (!m_image.isNull())
+    {
+      const QSize defaultSize(48, 48);
+      setPixmap(m_image.scaled(defaultSize, Qt::IgnoreAspectRatio));
+      resize(defaultSize);
+    }
+
+    connect(m_controller, &NorthArrowController::headingChanged, this, [this]()
+    {
+      if (m_image.isNull())
+      {
+        return;
+      }
+
+      QTransform rm;
+      rm.rotate(-m_controller->heading());
+      const int imageWidth = m_image.width();
+      const int imageHeight = m_image.height();
+      auto pix = m_image.transformed(rm, Qt::SmoothTransformation);
+      pix = pix.copy((pix.width() - imageWidth) / 2, (pix.height() - imageHeight) / 2, imageWidth, imageHeight);
+      setPixmap(pix);
+    });
   }
 
-  connect(m_controller, &NorthArrowController::headingChanged, this, [this]()
+  /*!
+    \brief Destructor
+   */
+  NorthArrow::~NorthArrow()
   {
-    if (m_image.isNull())
-      return;
+  }
 
-    QTransform rm;
-    rm.rotate(-m_controller->heading());
-    const int imageWidth = m_image.width();
-    const int imageHeight = m_image.height();
-    auto pix = m_image.transformed(rm, Qt::SmoothTransformation);
-    pix = pix.copy((pix.width() - imageWidth)/2,
-                   (pix.height() - imageHeight)/2,
-                   imageWidth,
-                   imageHeight);
-    setPixmap(pix);
-  });
-}
+  /*!
+    \brief Set the \c GeoView.
+    \list
+      \li \a mapView Sets the \c GeoView to a \c MapView.
+    \endlist
+   */
+  void NorthArrow::setMapView(MapGraphicsView* mapView)
+  {
+    m_controller->setGeoView(mapView);
+  }
 
-/*!
-  \brief Destructor
- */
-NorthArrow::~NorthArrow()
-{
-}
+  /*!
+    \brief Set the \c GeoView.
+    \list
+      \li \a sceneView Sets the \c GeoView to a \c SceneView.
+    \endlist
+   */
+  void NorthArrow::setSceneView(SceneGraphicsView* sceneView)
+  {
+    m_controller->setGeoView(sceneView);
+  }
 
-/*!
-  \brief Set the \c GeoView.
-  \list
-  \li \a mapView Sets the \c GeoView to a \c MapView.
-  \endlist
- */
-void NorthArrow::setMapView(MapGraphicsView* mapView)
-{
-  m_controller->setGeoView(mapView);
-}
+  /*!
+    \internal
+    \brief When triggered this will orient the \c GeoView such that this
+    \c NorthArrow has a heading of \c 0.
+    \list
+      \li \a event MouseEvent to accept.
+    \endlist
+   */
+  void NorthArrow::mouseDoubleClickEvent(QMouseEvent* event)
+  {
+    // Rotate back to North.
+    m_controller->setHeading(0);
+    event->accept();
+  }
 
-/*!
-  \brief Set the \c GeoView.
-  \list
-    \li \a sceneView Sets the \c GeoView to a \c SceneView.
-  \endlist
- */
-void NorthArrow::setSceneView(SceneGraphicsView* sceneView)
-{
-  m_controller->setGeoView(sceneView);
-}
+  /*!
+    \internal
+   */
+  NorthArrowController* NorthArrow::controller() const
+  {
+    return m_controller;
+  }
 
-/*!
-  \internal
-  \brief When triggered this will orient the \c GeoView such that this
-  \c NorthArrow has a heading of \c 0.
-  \list
-    \li \a event MouseEvent to accept.
-  \endlist
- */
-void NorthArrow::mouseDoubleClickEvent(QMouseEvent* event)
-{
-  // Rotate back to North.
-  m_controller->setHeading(0);
-  event->accept();
-}
-
-/*!
-  \internal
- */
-NorthArrowController* NorthArrow::controller() const
-{
-  return m_controller;
-}
-
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

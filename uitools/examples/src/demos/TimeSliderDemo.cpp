@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -24,7 +25,8 @@
 
 using namespace Esri::ArcGISRuntime;
 
-namespace {
+namespace
+{
   const char* dataUrl = "https://sampleserver6.arcgisonline.com/arcgis/rest/services/Hurricanes/MapServer";
 }
 

@@ -17,14 +17,17 @@
 #ifndef ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_MAPQUCIKVIEWPROXY_H
 #define ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_MAPQUCIKVIEWPROXY_H
 
-#include "GeoModelProxy.h"
-
+// Qt headers
 #include <QObject>
 #include <QPointer>
 
-namespace Esri::ArcGISRuntime {
+// Other headers
+#include "GeoModelProxy.h"
+
+namespace Esri::ArcGISRuntime
+{
   class MapQuickView;
-} // Esri::ArcGISRuntime
+} // namespace Esri::ArcGISRuntime
 
 class MapQuickViewProxy : public QObject
 {

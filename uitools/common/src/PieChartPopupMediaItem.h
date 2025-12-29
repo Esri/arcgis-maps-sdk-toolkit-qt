@@ -26,23 +26,24 @@
 
 class QPieSlice;
 
-namespace Esri::ArcGISRuntime::Toolkit {
-
-class PieChartPopupMediaItem : public PopupMediaItem
+namespace Esri::ArcGISRuntime::Toolkit
 {
-  Q_OBJECT
-  Q_PROPERTY(QVariantList pieSlices READ pieSlices NOTIFY pieChartPopupMediaItemChanged)
 
-public:
-  explicit PieChartPopupMediaItem(PopupMedia* popupMedia, QObject* parent = nullptr);
-  ~PieChartPopupMediaItem() override;
+  class PieChartPopupMediaItem : public PopupMediaItem
+  {
+    Q_OBJECT
+    Q_PROPERTY(QVariantList pieSlices READ pieSlices NOTIFY pieChartPopupMediaItemChanged)
 
-private:
-  QVariantList pieSlices();
+  public:
+    explicit PieChartPopupMediaItem(PopupMedia* popupMedia, QObject* parent = nullptr);
+    ~PieChartPopupMediaItem() override;
 
-signals:
-  void pieChartPopupMediaItemChanged();
-};
+  private:
+    QVariantList pieSlices();
 
-} // Esri::ArcGISRuntime::Toolkit
+  signals:
+    void pieChartPopupMediaItemChanged();
+  };
+
+} // namespace Esri::ArcGISRuntime::Toolkit
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_PIECHARTPOPUPMEDIAITEM_H

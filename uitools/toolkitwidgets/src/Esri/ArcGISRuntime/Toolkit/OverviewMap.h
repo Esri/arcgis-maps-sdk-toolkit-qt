@@ -16,42 +16,45 @@
 #ifndef ESRI_ARCGISRUNTIME_OVERVIEWMAP_H
 #define ESRI_ARCGISRUNTIME_OVERVIEWMAP_H
 
+// Qt headers
 #include <QWidget>
 
-namespace Ui {
+namespace Ui
+{
   class OverviewMap;
 }
 
-namespace Esri::ArcGISRuntime {
-
-class MapGraphicsView;
-class SceneGraphicsView;
-
-namespace Toolkit
+namespace Esri::ArcGISRuntime
 {
 
-class OverviewMapController;
+  class MapGraphicsView;
+  class SceneGraphicsView;
 
-class OverviewMap : public QWidget
-{
-  Q_OBJECT
-public:
-  explicit OverviewMap(QWidget* parent = nullptr);
+  namespace Toolkit
+  {
 
-  ~OverviewMap() override;
+    class OverviewMapController;
 
-  void setGeoView(MapGraphicsView* mapView);
+    class OverviewMap : public QWidget
+    {
+      Q_OBJECT
+    public:
+      explicit OverviewMap(QWidget* parent = nullptr);
 
-  void setGeoView(SceneGraphicsView* mapView);
+      ~OverviewMap() override;
 
-  OverviewMapController* controller() const;
+      void setGeoView(MapGraphicsView* mapView);
 
-private:
-  Ui::OverviewMap* m_ui;
-  OverviewMapController* m_controller = nullptr;
-};
+      void setGeoView(SceneGraphicsView* mapView);
 
-} // Toolkit
-} // Esri::ArcGISRuntime
+      OverviewMapController* controller() const;
+
+    private:
+      Ui::OverviewMap* m_ui;
+      OverviewMapController* m_controller = nullptr;
+    };
+
+  } // namespace Toolkit
+} // namespace Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_OVERVIEWMAP_H

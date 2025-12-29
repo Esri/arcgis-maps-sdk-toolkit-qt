@@ -17,13 +17,16 @@
 #ifndef ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_GEOMODELPROXY_H
 #define ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_GEOMODELPROXY_H
 
-#include "EnumsProxy.h"
-
+// Qt headers
 #include <QObject>
 
-namespace Esri::ArcGISRuntime {
+// Other headers
+#include "EnumsProxy.h"
+
+namespace Esri::ArcGISRuntime
+{
   class GeoModel;
-} // Esri::ArcGISRuntime
+} // namespace Esri::ArcGISRuntime
 
 class GeoModelProxy : public QObject
 {

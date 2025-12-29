@@ -16,40 +16,44 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_BOOKMARKSVIEW_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_BOOKMARKSVIEW_H
 
+// Qt headers
 #include <QFrame>
 
-namespace Ui {
+namespace Ui
+{
   class BookmarksView;
 }
 
-namespace Esri::ArcGISRuntime {
+namespace Esri::ArcGISRuntime
+{
 
   class MapGraphicsView;
   class SceneGraphicsView;
 
-namespace Toolkit {
-  class BookmarksViewController;
-
-  class BookmarksView : public QFrame
+  namespace Toolkit
   {
-    Q_OBJECT
-  public:
-    Q_INVOKABLE explicit BookmarksView(QWidget* parent = nullptr);
+    class BookmarksViewController;
 
-    ~BookmarksView() override;
+    class BookmarksView : public QFrame
+    {
+      Q_OBJECT
+    public:
+      Q_INVOKABLE explicit BookmarksView(QWidget* parent = nullptr);
 
-    BookmarksViewController* controller() const;
+      ~BookmarksView() override;
 
-    void setMapView(MapGraphicsView* mapView);
+      BookmarksViewController* controller() const;
 
-    void setSceneView(SceneGraphicsView* mapView);
+      void setMapView(MapGraphicsView* mapView);
 
-  private:
-    BookmarksViewController* m_controller = nullptr;
-    Ui::BookmarksView* m_ui = nullptr;
-  };
+      void setSceneView(SceneGraphicsView* mapView);
 
-} // Toolkit
-} // Esri::ArcGISRuntime
+    private:
+      BookmarksViewController* m_controller = nullptr;
+      Ui::BookmarksView* m_ui = nullptr;
+    };
+
+  } // namespace Toolkit
+} // namespace Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_BOOKMARKSVIEW_H

@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2025 Esri
  *
@@ -22,88 +23,74 @@
 #include <PopupTypes.h>
 
 // Toolkit headers
+#include <BarChartPopupMediaItem.h>
+#include <ImagePopupMediaItem.h>
+#include <LineChartPopupMediaItem.h>
+#include <PieChartPopupMediaItem.h>
 #include <PopupMediaItem.h>
 #include <PopupViewController.h>
-#include <ImagePopupMediaItem.h>
-#include <BarChartPopupMediaItem.h>
-#include <PieChartPopupMediaItem.h>
-#include <LineChartPopupMediaItem.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
-
-/*!
-  \internal
-  This class is an internal implementation detail and is subject to change.
- */
-MediaPopupElementViewController::MediaPopupElementViewController(
-    MediaPopupElement* mediaPopupElement, PopupViewController* popupViewController, QObject* parent)
-  : PopupElementViewItem{mediaPopupElement, parent},
-    m_popupMediaItems{new GenericListModel(&PopupMediaItem::staticMetaObject, this)}
+namespace Esri::ArcGISRuntime::Toolkit
 {
-  auto* media = mediaPopupElement->media();
-  const auto mediaListModelSize = media->size();
 
-  for (int i = 0; i < mediaListModelSize; i++)
+  /*!
+    \internal
+    This class is an internal implementation detail and is subject to change.
+   */
+  MediaPopupElementViewController::MediaPopupElementViewController(MediaPopupElement* mediaPopupElement,
+                                                                   PopupViewController* popupViewController,
+                                                                   QObject* parent) :
+    PopupElementViewItem{mediaPopupElement, parent},
+    m_popupMediaItems{new GenericListModel(&PopupMediaItem::staticMetaObject, this)}
   {
-    auto* popupMedia = media->at(i);
-    const auto popupMediaType = popupMedia->popupMediaType();
+    auto* media = mediaPopupElement->media();
+    const auto mediaListModelSize = media->size();
 
-    switch (popupMediaType)
+    for (int i = 0; i < mediaListModelSize; i++)
     {
-      case Esri::ArcGISRuntime::PopupMediaType::Image:
-        m_popupMediaItems->append(new ImagePopupMediaItem(
-                                    popupMedia,
-                                    popupViewController,
-                                    media)
-                                  );
-        break;
-      case Esri::ArcGISRuntime::PopupMediaType::BarChart:
-        m_popupMediaItems->append(new BarChartPopupMediaItem(
-                                    popupMedia,
-                                    media)
-                                  );
-        break;
-      case Esri::ArcGISRuntime::PopupMediaType::ColumnChart:
-        m_popupMediaItems->append(new BarChartPopupMediaItem(
-                                    popupMedia,
-                                    media)
-                                  );
-        break;
-      case Esri::ArcGISRuntime::PopupMediaType::PieChart:
-        m_popupMediaItems->append(new PieChartPopupMediaItem(
-                                    popupMedia,
-                                    media)
-                                  );
-        break;
-      case Esri::ArcGISRuntime::PopupMediaType::LineChart:
-        m_popupMediaItems->append(new LineChartPopupMediaItem(
-                                    popupMedia,
-                                    media)
-                                  );
-        break;
-      case Esri::ArcGISRuntime::PopupMediaType::Unknown:
-        Q_UNIMPLEMENTED();
-        break;
+      auto* popupMedia = media->at(i);
+      const auto popupMediaType = popupMedia->popupMediaType();
+
+      switch (popupMediaType)
+      {
+        case Esri::ArcGISRuntime::PopupMediaType::Image:
+          m_popupMediaItems->append(new ImagePopupMediaItem(popupMedia, popupViewController, media));
+          break;
+        case Esri::ArcGISRuntime::PopupMediaType::BarChart:
+          m_popupMediaItems->append(new BarChartPopupMediaItem(popupMedia, media));
+          break;
+        case Esri::ArcGISRuntime::PopupMediaType::ColumnChart:
+          m_popupMediaItems->append(new BarChartPopupMediaItem(popupMedia, media));
+          break;
+        case Esri::ArcGISRuntime::PopupMediaType::PieChart:
+          m_popupMediaItems->append(new PieChartPopupMediaItem(popupMedia, media));
+          break;
+        case Esri::ArcGISRuntime::PopupMediaType::LineChart:
+          m_popupMediaItems->append(new LineChartPopupMediaItem(popupMedia, media));
+          break;
+        case Esri::ArcGISRuntime::PopupMediaType::Unknown:
+          Q_UNIMPLEMENTED();
+          break;
+      }
     }
   }
-}
 
-MediaPopupElementViewController::~MediaPopupElementViewController() = default;
+  MediaPopupElementViewController::~MediaPopupElementViewController() = default;
 
-QString MediaPopupElementViewController::description() const
-{
-  return static_cast<MediaPopupElement*>(popupElement())->description();
-}
+  QString MediaPopupElementViewController::description() const
+  {
+    return static_cast<MediaPopupElement*>(popupElement())->description();
+  }
 
-QString MediaPopupElementViewController::title() const
-{
-  auto title = static_cast<MediaPopupElement*>(popupElement())->title();
-  return !title.isEmpty() ? title : QStringLiteral("Media");
-}
+  QString MediaPopupElementViewController::title() const
+  {
+    auto title = static_cast<MediaPopupElement*>(popupElement())->title();
+    return !title.isEmpty() ? title : QStringLiteral("Media");
+  }
 
-GenericListModel* MediaPopupElementViewController::popupMediaItems() const
-{
-  return m_popupMediaItems;
-}
+  GenericListModel* MediaPopupElementViewController::popupMediaItems() const
+  {
+    return m_popupMediaItems;
+  }
 
 } // namespace Esri::ArcGISRuntime::Toolkit

@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2021 Esri
  *
@@ -39,9 +40,11 @@
 #include <SuggestListModel.h>
 #include <SymbolStyle.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
-  namespace {
+  namespace
+  {
     const char* DEFAULT_DEFAULT_PLACEHOLDER = "Find a place or address";
     const char* DEFAULT_LOCATOR_URL = "https://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer";
 
@@ -64,7 +67,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
         }
       }
     }
-  }
+  } // namespace
 
   /*!
     \class Esri::ArcGISRuntime::Toolkit::SearchViewController
@@ -102,10 +105,14 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void SearchViewController::setGeoView(QObject* geoView)
   {
     if (geoView == m_geoView)
+    {
       return;
+    }
 
     if (m_geoView)
+    {
       disconnect(this, nullptr, m_geoView, nullptr);
+    }
 
     delete m_graphicsOverlay;
     m_graphicsOverlay = nullptr;
@@ -137,7 +144,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
       {
         //setting the lastsearcharea with the inital geoViewCast extent
         if (m_lastSearchArea.isEmpty())
+        {
           m_lastSearchArea = geoView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry();
+        }
 
         if (isAutomaticConfigurationEnabled())
         {
@@ -149,9 +158,13 @@ namespace Esri::ArcGISRuntime::Toolkit {
           {
             // m_queryArea at this point is effectively the currentviewpoint geometry.
             if (checkZoomingDifferenceLastSearch(m_queryArea))
+            {
               setIsEligableForRequery(true);
+            }
             if (checkPanningDifferenceLastSearch(m_queryArea))
+            {
               setIsEligableForRequery(true);
+            }
           }
         }
       };
@@ -179,7 +192,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void SearchViewController::setDefaultPlaceholder(QString defaultPlaceholder)
   {
     if (defaultPlaceholder == m_defaultPlaceholder)
+    {
       return;
+    }
 
     m_defaultPlaceholder = std::move(defaultPlaceholder);
     emit defaultPlaceholderChanged();
@@ -193,7 +208,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void SearchViewController::setActiveSource(SearchSourceInterface* activeSource)
   {
     if (m_activeSource == activeSource)
+    {
       return;
+    }
 
     m_activeSource = activeSource;
     emit activeSourceChanged();
@@ -207,7 +224,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void SearchViewController::setCurrentQuery(QString currentQuery)
   {
     if (m_currentQuery == currentQuery)
+    {
       return;
+    }
 
     m_currentQuery = std::move(currentQuery);
     emit currentQueryChanged();
@@ -221,7 +240,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void SearchViewController::setQueryArea(Geometry queryArea)
   {
     if (queryArea == m_queryArea)
+    {
       return;
+    }
 
     m_queryArea = std::move(queryArea);
     emit queryAreaChanged();
@@ -235,7 +256,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void SearchViewController::setQueryCenter(Point queryCenter)
   {
     if (queryCenter == m_queryCenter)
+    {
       return;
+    }
 
     m_queryCenter = std::move(queryCenter);
 
@@ -259,7 +282,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void SearchViewController::setResultMode(SearchResultMode resultMode)
   {
     if (resultMode == m_resultMode)
+    {
       return;
+    }
 
     m_resultMode = resultMode;
     emit resultModeChanged();
@@ -278,13 +303,19 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void SearchViewController::setSelectedResult(SearchResult* selectedResult)
   {
     if (m_selectedResult == selectedResult)
+    {
       return;
+    }
 
     if (m_selectedResult)
+    {
       m_selectedResult->deleteLater();
+    }
 
     if (m_graphicsOverlay)
+    {
       m_graphicsOverlay->graphics()->clear();
+    }
 
     m_selectedResult = selectedResult;
 
@@ -302,10 +333,10 @@ namespace Esri::ArcGISRuntime::Toolkit {
       {
         // When the geoview changes, update the lastsearcharea
         singleShotConnection(sceneView, &SceneViewToolkit::viewpointChanged, this, [sceneView, this]()
-                             {
-                               auto extent = sceneView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
-                               m_lastSearchArea = extent;
-                             });
+        {
+          auto extent = sceneView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
+          m_lastSearchArea = extent;
+        });
         // Set sceneView viewpoint to where graphic is.
         auto future = sceneView->setViewpointAsync(m_selectedResult->selectionViewpoint(), 0);
         Q_UNUSED(future)
@@ -314,10 +345,10 @@ namespace Esri::ArcGISRuntime::Toolkit {
       {
         // When the geoview changes, update the lastsearcharea
         singleShotConnection(mapView, &MapViewToolkit::viewpointChanged, this, [mapView, this]()
-                             {
-                               auto extent = mapView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
-                               m_lastSearchArea = extent;
-                             });
+        {
+          auto extent = mapView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
+          m_lastSearchArea = extent;
+        });
         // Set mapView callout and zoom to where graphic + callout are (if applicable.)
         mapView->calloutData()->setTitle(m_selectedResult->displayTitle());
         mapView->calloutData()->setDetail(m_selectedResult->displaySubtitle());
@@ -361,7 +392,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void SearchViewController::setIsEligableForRequery(bool isEligableForRequery)
   {
     if (isEligableForRequery == m_isEligableForRequery)
+    {
       return;
+    }
 
     m_isEligableForRequery = isEligableForRequery;
     emit isEligableForRequeryChanged();
@@ -405,7 +438,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
     setIsEligableForRequery(false);
 
     if (searchSuggestion == nullptr || source == nullptr)
+    {
       return;
+    }
 
     source->search(r);
   }
@@ -427,7 +462,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void SearchViewController::setIsAutomaticConfigurationEnabled(bool isAutomaticConfigurationEnabled)
   {
     if (isAutomaticConfigurationEnabled == m_isAutomaticConfigurationEnabled)
+    {
       return;
+    }
 
     m_isAutomaticConfigurationEnabled = isAutomaticConfigurationEnabled;
     emit isAutomaticConfigurationEnabledChanged();
@@ -441,7 +478,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void SearchViewController::setThresholdRatioRepeatSearch(double rate)
   {
     if (m_thresholdRatioRepeatSearch == rate)
+    {
       return;
+    }
 
     m_thresholdRatioRepeatSearch = rate;
     emit thresholdRatioRepeatSearchChanged();
@@ -464,7 +503,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void SearchViewController::onSourcesAdded(const QModelIndex& parent, int firstSource, int lastSource)
   {
     if (parent.isValid())
+    {
       return;
+    }
 
     for (int i = firstSource; i <= lastSource; ++i)
     {
@@ -473,108 +514,115 @@ namespace Esri::ArcGISRuntime::Toolkit {
       {
         // Handle search results coming from the source.
         connect(source, &SearchSourceInterface::searchCompleted, this, [this](QList<SearchResult*> results)
-                {
-                  if (results.empty())
-                    return;
-                  //connect either to a scene or a map event changedviewpoint
-                  if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
-                  {
-                    singleShotConnection(mapView, &MapViewToolkit::viewpointChanged, this, [mapView, this]()
-                                         {
-                                           auto extent = mapView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
-                                           m_lastSearchArea = extent;
-                                         });
-                  }
-                  else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
-                  {
-                    singleShotConnection(sceneView, &SceneViewToolkit::viewpointChanged, this, [sceneView, this]()
-                                         {
-                                           auto extent = sceneView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
-                                           m_lastSearchArea = extent;
-                                         });
-                  }
+        {
+          if (results.empty())
+          {
+            return;
+          }
+          //connect either to a scene or a map event changedviewpoint
+          if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
+          {
+            singleShotConnection(mapView, &MapViewToolkit::viewpointChanged, this, [mapView, this]()
+            {
+              auto extent = mapView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
+              m_lastSearchArea = extent;
+            });
+          }
+          else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+          {
+            singleShotConnection(sceneView, &SceneViewToolkit::viewpointChanged, this, [sceneView, this]()
+            {
+              auto extent = sceneView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
+              m_lastSearchArea = extent;
+            });
+          }
 
-                  // If only one result needs be applicable, automatically accept it, otherwise,
-                  // add all results to the list model.
-                  if (m_resultMode == SearchResultMode::Single ||
-                      (results.size() == 1 && m_resultMode != SearchResultMode::Multiple))
-                  {
-                    auto it = std::begin(results);
-                    // Take only first element.
-                    auto f = *it++;
-                    setSelectedResult(f);
+          // If only one result needs be applicable, automatically accept it, otherwise,
+          // add all results to the list model.
+          if (m_resultMode == SearchResultMode::Single || (results.size() == 1 && m_resultMode != SearchResultMode::Multiple))
+          {
+            auto it = std::begin(results);
+            // Take only first element.
+            auto f = *it++;
+            setSelectedResult(f);
 
-                    // Discard remaining elements.
-                    for (; it != std::end(results); ++it)
-                    {
-                      (*it)->deleteLater();
-                    }
-                  }
-                  else
-                  {
-                    // Take ownership of all elements.
-                    for (auto r : std::as_const(results))
-                    {
-                      r->setParent(m_results);
-                      m_results->append(r);
-                    }
+            // Discard remaining elements.
+            for (; it != std::end(results); ++it)
+            {
+              (*it)->deleteLater();
+            }
+          }
+          else
+          {
+            // Take ownership of all elements.
+            for (auto r : std::as_const(results))
+            {
+              r->setParent(m_results);
+              m_results->append(r);
+            }
 
-                    // Render all possible results on the geoView.
-                    if (m_graphicsOverlay)
-                    {
-                      m_graphicsOverlay->graphics()->clear();
+            // Render all possible results on the geoView.
+            if (m_graphicsOverlay)
+            {
+              m_graphicsOverlay->graphics()->clear();
 
-                      for (auto r : std::as_const(results))
-                      {
-                        addGeoElementToOverlay(m_graphicsOverlay, r->geoElement());
-                      }
+              for (auto r : std::as_const(results))
+              {
+                addGeoElementToOverlay(m_graphicsOverlay, r->geoElement());
+              }
 
-                      if (auto geoView = qobject_cast<GeoView*>(m_geoView))
-                      {
-                        const auto extent = m_graphicsOverlay->extent();
-                        EnvelopeBuilder b{extent};
-                        b.expandByFactor(1.2); // Give some margins to the view.
-                        auto future = geoView->setViewpointAsync(b.toEnvelope(), 0);
-                        Q_UNUSED(future)
-                      }
-                    }
-                  }
-                });
+              if (auto geoView = qobject_cast<GeoView*>(m_geoView))
+              {
+                const auto extent = m_graphicsOverlay->extent();
+                EnvelopeBuilder b{extent};
+                b.expandByFactor(1.2); // Give some margins to the view.
+                auto future = geoView->setViewpointAsync(b.toEnvelope(), 0);
+                Q_UNUSED(future)
+              }
+            }
+          }
+        });
 
         // Handle suggestion updates coming the source.
         auto suggestionModel = source->suggestions();
-        connect(suggestionModel, &QAbstractItemModel::rowsInserted, this, [source, suggestionModel, this](const QModelIndex& parent, int firstSugggest, int lastSuggest)
+        connect(suggestionModel, &QAbstractItemModel::rowsInserted, this,
+                [source, suggestionModel, this](const QModelIndex& parent, int firstSugggest, int lastSuggest)
+        {
+          if (parent.isValid())
+          {
+            return;
+          }
+
+          const auto suggestResults = suggestionModel->suggestResults();
+          for (int i = firstSugggest; i <= lastSuggest; ++i)
+          {
+            // Wrap a SuggestResult in our SearchSuggestion type.
+            const auto suggestion = suggestResults.at(i);
+            auto searchSuggestion = new SearchSuggestion(m_suggestions);
+            searchSuggestion->setSuggestResult(suggestion);
+            searchSuggestion->setOwningSource(source);
+            m_suggestions->append(searchSuggestion);
+            // Remove suggestion from our aggregate mode if it removed from the current source's suggestion model.
+            // Note that we keep track of the "true" position in the model via a QPersistentModelIndex.
+            QPersistentModelIndex pIndex = m_suggestions->index(m_suggestions->rowCount() - 1);
+            connect(suggestionModel, &QAbstractItemModel::rowsAboutToBeRemoved, this,
+                    [searchSuggestion, pIndex](const QModelIndex& parent, int first, int last)
+            {
+              if (parent.isValid())
+              {
+                return;
+              }
+
+              for (int i = first; i <= last; ++i)
+              {
+                if (i == pIndex.row())
                 {
-                  if (parent.isValid())
-                    return;
-
-                  const auto suggestResults = suggestionModel->suggestResults();
-                  for (int i = firstSugggest; i <= lastSuggest; ++i)
-                  {
-                    // Wrap a SuggestResult in our SearchSuggestion type.
-                    const auto suggestion = suggestResults.at(i);
-                    auto searchSuggestion = new SearchSuggestion(m_suggestions);
-                    searchSuggestion->setSuggestResult(suggestion);
-                    searchSuggestion->setOwningSource(source);
-                    m_suggestions->append(searchSuggestion);
-                    // Remove suggestion from our aggregate mode if it removed from the current source's suggestion model.
-                    // Note that we keep track of the "true" position in the model via a QPersistentModelIndex.
-                    QPersistentModelIndex pIndex = m_suggestions->index(m_suggestions->rowCount() - 1);
-                    connect(suggestionModel, &QAbstractItemModel::rowsAboutToBeRemoved, this, [searchSuggestion, pIndex](const QModelIndex& parent, int first, int last)
-                            {
-                              if (parent.isValid())
-                                return;
-
-                              for (int i = first; i <= last; ++i)
-                              {
-                                if (i == pIndex.row())
-                                {
-                                  searchSuggestion->deleteLater();
-                                }
-                              }
-                            });
-                  }
-                });
+                  searchSuggestion->deleteLater();
+                }
+              }
+            });
+          }
+        });
       }
     }
   }
@@ -582,7 +630,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void SearchViewController::onSourcesRemoved(const QModelIndex& parent, int firstSource, int lastSource)
   {
     if (parent.isValid())
+    {
       return;
+    }
 
     // Go through all removed sources.
     for (int i = firstSource; i <= lastSource; ++i)
@@ -633,4 +683,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     return widthDiff > widthThreshold || heightDiff > heightThreshold;
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

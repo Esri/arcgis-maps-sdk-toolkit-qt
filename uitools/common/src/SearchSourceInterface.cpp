@@ -16,7 +16,8 @@
  ******************************************************************************/
 #include "SearchSourceInterface.h"
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
     \class Esri::ArcGISRuntime::Toolkit::SearchSourceInterface
@@ -41,10 +42,12 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void SearchSourceInterface::setDisplayName(QString displayName)
   {
     if (displayName == m_displayName)
+    {
       return;
+    }
 
     m_displayName = std::move(displayName);
     emit displayNameChanged();
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

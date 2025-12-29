@@ -21,88 +21,95 @@
 #include <QPropertyAnimation>
 #include <QTimer>
 
-namespace Esri::ArcGISRuntime::Toolkit {
-
-/*!
-  \internal
-  This class is an internal implementation detail and is subject to change.
-*/
-
-Flash::Flash(QWidget* parent):
-  QWidget(parent)
+namespace Esri::ArcGISRuntime::Toolkit
 {
-  setAttribute(Qt::WA_TranslucentBackground, true);
-}
 
-Flash::~Flash()
-{
-}
+  /*!
+    \internal
+    This class is an internal implementation detail and is subject to change.
+   */
 
-void Flash::paintEvent(QPaintEvent* /*event*/)
-{
-  QPainter painter(this);
-  painter.setBrush(QBrush(m_color, Qt::SolidPattern));
-  painter.setPen(Qt::NoPen);
-  painter.drawEllipse(m_point, m_radius, m_radius);
-}
+  Flash::Flash(QWidget* parent) :
+    QWidget(parent)
+  {
+    setAttribute(Qt::WA_TranslucentBackground, true);
+  }
 
-void Flash::setTargetColor(QColor color)
-{
-  m_color = std::move(color);
-}
+  Flash::~Flash()
+  {
+  }
 
-void Flash::setAlpha_(int alpha)
-{
-  if (m_color.alpha() == alpha)
-    return;
+  void Flash::paintEvent(QPaintEvent* /*event*/)
+  {
+    QPainter painter(this);
+    painter.setBrush(QBrush(m_color, Qt::SolidPattern));
+    painter.setPen(Qt::NoPen);
+    painter.drawEllipse(m_point, m_radius, m_radius);
+  }
 
-  m_color.setAlpha(alpha);
-  emit alphaChanged();
-  update();
-}
+  void Flash::setTargetColor(QColor color)
+  {
+    m_color = std::move(color);
+  }
 
-int Flash::alpha_() const
-{
-  return m_color.alpha();
-}
+  void Flash::setAlpha_(int alpha)
+  {
+    if (m_color.alpha() == alpha)
+    {
+      return;
+    }
 
-void Flash::setPoint(QPointF point)
-{
-  if (m_point == point)
-    return;
+    m_color.setAlpha(alpha);
+    emit alphaChanged();
+    update();
+  }
 
-  m_point = std::move(point);
-  emit pointChanged();
-  update();
-}
+  int Flash::alpha_() const
+  {
+    return m_color.alpha();
+  }
 
-QPointF Flash::point() const
-{
-  return m_point;
-}
+  void Flash::setPoint(QPointF point)
+  {
+    if (m_point == point)
+    {
+      return;
+    }
 
-void Flash::setRadius(int radius)
-{
-  if (m_radius == radius)
-    return;
+    m_point = std::move(point);
+    emit pointChanged();
+    update();
+  }
 
-  m_radius = radius;
-  emit radiusChanged();
-  update();
-}
+  QPointF Flash::point() const
+  {
+    return m_point;
+  }
 
-int Flash::radius() const
-{
-  return m_radius;
-}
+  void Flash::setRadius(int radius)
+  {
+    if (m_radius == radius)
+    {
+      return;
+    }
 
-void Flash::play(int duration)
-{
-  auto animation = new QPropertyAnimation(this, "alpha", this);
-  animation->setKeyValues(QVariantAnimation::KeyValues { {0, 0}, {0.5, 255}, {1.0, 0} });
-  animation->setDuration(duration);
-  connect(animation, &QPropertyAnimation::finished, this, &QObject::deleteLater);
-  animation->start();
-}
+    m_radius = radius;
+    emit radiusChanged();
+    update();
+  }
 
-} // Esri::ArcGISRuntime::Toolkit
+  int Flash::radius() const
+  {
+    return m_radius;
+  }
+
+  void Flash::play(int duration)
+  {
+    auto animation = new QPropertyAnimation(this, "alpha", this);
+    animation->setKeyValues(QVariantAnimation::KeyValues{{0, 0}, {0.5, 255}, {1.0, 0}});
+    animation->setDuration(duration);
+    connect(animation, &QPropertyAnimation::finished, this, &QObject::deleteLater);
+    animation->start();
+  }
+
+} // namespace Esri::ArcGISRuntime::Toolkit

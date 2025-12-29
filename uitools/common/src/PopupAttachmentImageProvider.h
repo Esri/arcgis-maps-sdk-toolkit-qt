@@ -20,7 +20,8 @@
 #include <QQuickImageProvider>
 #include <QUuid>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   class PopupAttachmentItem;
 
@@ -42,6 +43,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     PopupAttachmentImageProvider();
     QMap<QUuid, PopupAttachmentItem*> m_itemMap;
   };
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_POPUPATTACHMENTIMAGEPROVIDER_H

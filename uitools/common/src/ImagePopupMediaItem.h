@@ -23,29 +23,30 @@
 // Other headers
 #include "PopupMediaItem.h"
 
-namespace Esri::ArcGISRuntime::Toolkit {
-
-class PopupViewController;
-
-class ImagePopupMediaItem : public PopupMediaItem
+namespace Esri::ArcGISRuntime::Toolkit
 {
-  Q_OBJECT
-  Q_PROPERTY(QUrl sourceUrl READ sourceUrl NOTIFY imagePopupMediaItemChanged)
-  Q_PROPERTY(QUrl linkUrl READ linkUrl NOTIFY imagePopupMediaItemChanged)
 
-public:
-  explicit ImagePopupMediaItem(PopupMedia* popupMedia, PopupViewController* popupViewController, QObject* parent = nullptr);
-  ~ImagePopupMediaItem() override;
+  class PopupViewController;
 
-private:
-  QUrl linkUrl() const;
-  QUrl sourceUrl() const;
+  class ImagePopupMediaItem : public PopupMediaItem
+  {
+    Q_OBJECT
+    Q_PROPERTY(QUrl sourceUrl READ sourceUrl NOTIFY imagePopupMediaItemChanged)
+    Q_PROPERTY(QUrl linkUrl READ linkUrl NOTIFY imagePopupMediaItemChanged)
 
-signals:
-  void imagePopupMediaItemChanged();
-  void imageClicked(const QUrl& sourceUrl, const QUrl& linkUrl);
-};
+  public:
+    explicit ImagePopupMediaItem(PopupMedia* popupMedia, PopupViewController* popupViewController, QObject* parent = nullptr);
+    ~ImagePopupMediaItem() override;
 
-} // Esri::ArcGISRuntime::Toolkit
+  private:
+    QUrl linkUrl() const;
+    QUrl sourceUrl() const;
+
+  signals:
+    void imagePopupMediaItemChanged();
+    void imageClicked(const QUrl& sourceUrl, const QUrl& linkUrl);
+  };
+
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_IMAGEPOPUPMEDIAITEM_H

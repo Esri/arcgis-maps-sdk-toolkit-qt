@@ -26,37 +26,38 @@
 // Other headers
 #include "PopupMediaItem.h"
 
-namespace Esri::ArcGISRuntime::Toolkit {
-
-class LineChartPopupMediaItem : public PopupMediaItem
+namespace Esri::ArcGISRuntime::Toolkit
 {
-  Q_OBJECT
-  Q_PROPERTY(QVariantList linePoints READ linePoints NOTIFY lineChartPopupMediaItemChanged)
-  Q_PROPERTY(QColor color READ color NOTIFY lineChartPopupMediaItemChanged)
-  Q_PROPERTY(qreal maxValue READ maxValue NOTIFY lineChartPopupMediaItemChanged)
-  Q_PROPERTY(qreal minValue READ minValue NOTIFY lineChartPopupMediaItemChanged)
-  Q_PROPERTY(bool chartColorsEmpty READ chartColorsEmpty NOTIFY lineChartPopupMediaItemChanged)
 
-public:
-  explicit LineChartPopupMediaItem(PopupMedia* popupMedia, QObject* parent = nullptr);
-  ~LineChartPopupMediaItem() override;
+  class LineChartPopupMediaItem : public PopupMediaItem
+  {
+    Q_OBJECT
+    Q_PROPERTY(QVariantList linePoints READ linePoints NOTIFY lineChartPopupMediaItemChanged)
+    Q_PROPERTY(QColor color READ color NOTIFY lineChartPopupMediaItemChanged)
+    Q_PROPERTY(qreal maxValue READ maxValue NOTIFY lineChartPopupMediaItemChanged)
+    Q_PROPERTY(qreal minValue READ minValue NOTIFY lineChartPopupMediaItemChanged)
+    Q_PROPERTY(bool chartColorsEmpty READ chartColorsEmpty NOTIFY lineChartPopupMediaItemChanged)
 
-private:
-  QVariantList linePoints() const;
-  QColor color() const;
-  qreal maxValue() const;
-  qreal minValue() const;
-  bool chartColorsEmpty() const;
+  public:
+    explicit LineChartPopupMediaItem(PopupMedia* popupMedia, QObject* parent = nullptr);
+    ~LineChartPopupMediaItem() override;
 
-signals:
-  void lineChartPopupMediaItemChanged();
+  private:
+    QVariantList linePoints() const;
+    QColor color() const;
+    qreal maxValue() const;
+    qreal minValue() const;
+    bool chartColorsEmpty() const;
 
-private:
-  QVariantList m_linePoints;
-  QColor m_color;
-  qreal m_maxValue = 0.0;
-  qreal m_minValue = 0.0;
-};
+  signals:
+    void lineChartPopupMediaItemChanged();
 
-} // Esri::ArcGISRuntime::Toolkit
+  private:
+    QVariantList m_linePoints;
+    QColor m_color;
+    qreal m_maxValue = 0.0;
+    qreal m_minValue = 0.0;
+  };
+
+} // namespace Esri::ArcGISRuntime::Toolkit
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_LINECHARTPOPUPMEDIAITEM_H
