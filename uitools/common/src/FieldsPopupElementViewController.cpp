@@ -24,14 +24,16 @@
 // Toolkit headers
 #include "PopupViewController.h"
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
     \internal
     This class is an internal implementation detail and is subject to change.
    */
-  FieldsPopupElementViewController::FieldsPopupElementViewController(
-      FieldsPopupElement* fieldsPopupElement, PopupViewController* popupViewController, QObject* parent) :
+  FieldsPopupElementViewController::FieldsPopupElementViewController(FieldsPopupElement* fieldsPopupElement,
+                                                                     PopupViewController* popupViewController,
+                                                                     QObject* parent) :
     PopupElementViewItem{fieldsPopupElement, parent}
   {
     // bubble up signal to PopupViewController
@@ -54,15 +56,13 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     Q_ASSERT(list1.size() == list2.size());
 
-    std::transform(list1.begin(), list1.end(), list2.begin(),
-                   std::back_inserter(combinedData),
-                   [](const QString& item1, const QString& item2)
-                   {
-                     QVariantMap item;
-                     item["label"] = item1;
-                     item["formattedValue"] = item2;
-                     return item;
-                   });
+    std::transform(list1.begin(), list1.end(), list2.begin(), std::back_inserter(combinedData), [](const QString& item1, const QString& item2)
+    {
+      QVariantMap item;
+      item["label"] = item1;
+      item["formattedValue"] = item2;
+      return item;
+    });
 
     return combinedData;
   }

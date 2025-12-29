@@ -25,7 +25,8 @@
 //Qt headers
 #include <QLineEdit>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
     \internal
@@ -51,20 +52,21 @@ namespace Esri::ArcGISRuntime::Toolkit {
     return m_controller;
   }
 
-  void CoordinateEditDelegate::setModelData(
-      QWidget* editor,
-      QAbstractItemModel* model,
-      const QModelIndex& index) const
+  void CoordinateEditDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const
   {
     auto lineEdit = qobject_cast<QLineEdit*>(editor);
 
     if (!lineEdit || !m_controller)
+    {
       return QItemDelegate::setModelData(editor, model, index);
+    }
 
     auto tableModel = qobject_cast<GenericTableProxyModel*>(model);
 
     if (!tableModel)
+    {
       return QItemDelegate::setModelData(editor, model, index);
+    }
 
     auto listModel = tableModel->sourceModel();
     auto result = listModel->element<CoordinateConversionResult>(index);
@@ -73,7 +75,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
       // Only commit if text differs - otherwise what looks like a
       // non-change will cause a change due to differences in format accuracies.
       if (result->notation() != lineEdit->text())
+      {
         m_controller->setCurrentPoint(lineEdit->text(), result->type());
+      }
     }
     else
     {
@@ -81,4 +85,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     }
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

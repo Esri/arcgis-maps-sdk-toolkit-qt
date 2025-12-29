@@ -21,7 +21,8 @@
 
 class QPropertyAnimation;
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   class Flash : public QWidget
   {
@@ -68,6 +69,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     int m_radius = 0;
   };
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_FLASH_H

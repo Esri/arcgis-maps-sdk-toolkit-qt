@@ -16,7 +16,8 @@
  ******************************************************************************/
 #include "PopupElementViewItem.h"
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
     \internal
@@ -48,18 +49,21 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void PopupElementViewItem::setPopupElement(PopupElement* popupElement)
   {
     if (m_popupElement == popupElement)
+    {
       return;
+    }
 
     if (m_popupElement)
+    {
       disconnect(m_popupElement, nullptr, this, nullptr);
+    }
 
     m_popupElement = popupElement;
 
     if (m_popupElement)
-      connect(m_popupElement,
-              &QObject::destroyed,
-              this,
-              &PopupElementViewItem::popupElementChanged);
+    {
+      connect(m_popupElement, &QObject::destroyed, this, &PopupElementViewItem::popupElementChanged);
+    }
 
     emit popupElementChanged();
   }

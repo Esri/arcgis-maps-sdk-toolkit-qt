@@ -23,7 +23,8 @@
 // Other headers
 #include "PopupMediaItem.h"
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   class PopupViewController;
 
@@ -46,6 +47,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     void imageClicked(const QUrl& sourceUrl, const QUrl& linkUrl);
   };
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_IMAGEPOPUPMEDIAITEM_H

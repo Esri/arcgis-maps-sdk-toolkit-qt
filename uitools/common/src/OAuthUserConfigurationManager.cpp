@@ -24,7 +24,8 @@
 
 using namespace Esri::ArcGISRuntime::Authentication;
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
     \inmodule Esri.ArcGISRuntime.Toolkit
@@ -77,4 +78,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     return AuthenticatorController::instance()->oAuthUserConfigurations();
   }
 
-} //  Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

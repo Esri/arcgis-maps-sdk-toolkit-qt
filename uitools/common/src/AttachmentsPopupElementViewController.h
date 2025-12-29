@@ -23,11 +23,13 @@
 #include "GenericListModel.h"
 #include "PopupElementViewItem.h"
 
-namespace Esri::ArcGISRuntime {
+namespace Esri::ArcGISRuntime
+{
 
   class AttachmentsPopupElement;
 
-  namespace Toolkit {
+  namespace Toolkit
+  {
 
     class PopupViewController;
 

@@ -17,16 +17,15 @@
 
 #include "UtilityNetworkFunctionTraceResult.h"
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
     \internal
     This class is an internal implementation detail and is subject to change.
    */
 
-  UtilityNetworkFunctionTraceResult::UtilityNetworkFunctionTraceResult(const QString& name,
-                                                                       UtilityTraceFunctionType type,
-                                                                       double value) :
+  UtilityNetworkFunctionTraceResult::UtilityNetworkFunctionTraceResult(const QString& name, UtilityTraceFunctionType type, double value) :
     m_name(name),
     m_type(type),
     m_value(value)
@@ -50,20 +49,20 @@ namespace Esri::ArcGISRuntime::Toolkit {
   {
     switch (m_type)
     {
-    case UtilityTraceFunctionType::Add:
-      return "Add";
-    case UtilityTraceFunctionType::Average:
-      return "Average";
-    case UtilityTraceFunctionType::Count:
-      return "Count";
-    case UtilityTraceFunctionType::Max:
-      return "Max";
-    case UtilityTraceFunctionType::Min:
-      return "Min";
-    case UtilityTraceFunctionType::Subtract:
-      return "Subtract";
-    default:
-      return "N/a";
+      case UtilityTraceFunctionType::Add:
+        return "Add";
+      case UtilityTraceFunctionType::Average:
+        return "Average";
+      case UtilityTraceFunctionType::Count:
+        return "Count";
+      case UtilityTraceFunctionType::Max:
+        return "Max";
+      case UtilityTraceFunctionType::Min:
+        return "Min";
+      case UtilityTraceFunctionType::Subtract:
+        return "Subtract";
+      default:
+        return "N/a";
     }
   }
 
@@ -72,4 +71,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     return m_value;
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

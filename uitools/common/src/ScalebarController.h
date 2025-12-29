@@ -25,11 +25,13 @@
 // Other headers
 #include "GeoViews.h"
 
-namespace Esri::ArcGISRuntime {
+namespace Esri::ArcGISRuntime
+{
   enum class UnitSystem;
 }
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   class ScalebarController : public QObject
   {
@@ -68,6 +70,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     LinearUnit m_baseUnit{LinearUnitId::Meters};
   };
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_NORTHARROWCONTROLLER_H

@@ -19,7 +19,8 @@
 // Qt headers
 #include <QObject>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   class NorthArrowController : public QObject
   {
@@ -47,6 +48,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     QObject* m_geoView = nullptr;
   };
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_NORTHARROWCONTROLLER_H

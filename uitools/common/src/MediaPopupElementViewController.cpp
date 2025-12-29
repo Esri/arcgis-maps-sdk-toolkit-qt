@@ -30,14 +30,16 @@
 #include <PopupMediaItem.h>
 #include <PopupViewController.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
     \internal
     This class is an internal implementation detail and is subject to change.
    */
-  MediaPopupElementViewController::MediaPopupElementViewController(
-      MediaPopupElement* mediaPopupElement, PopupViewController* popupViewController, QObject* parent) :
+  MediaPopupElementViewController::MediaPopupElementViewController(MediaPopupElement* mediaPopupElement,
+                                                                   PopupViewController* popupViewController,
+                                                                   QObject* parent) :
     PopupElementViewItem{mediaPopupElement, parent},
     m_popupMediaItems{new GenericListModel(&PopupMediaItem::staticMetaObject, this)}
   {
@@ -51,35 +53,24 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
       switch (popupMediaType)
       {
-      case Esri::ArcGISRuntime::PopupMediaType::Image:
-        m_popupMediaItems->append(new ImagePopupMediaItem(
-            popupMedia,
-            popupViewController,
-            media));
-        break;
-      case Esri::ArcGISRuntime::PopupMediaType::BarChart:
-        m_popupMediaItems->append(new BarChartPopupMediaItem(
-            popupMedia,
-            media));
-        break;
-      case Esri::ArcGISRuntime::PopupMediaType::ColumnChart:
-        m_popupMediaItems->append(new BarChartPopupMediaItem(
-            popupMedia,
-            media));
-        break;
-      case Esri::ArcGISRuntime::PopupMediaType::PieChart:
-        m_popupMediaItems->append(new PieChartPopupMediaItem(
-            popupMedia,
-            media));
-        break;
-      case Esri::ArcGISRuntime::PopupMediaType::LineChart:
-        m_popupMediaItems->append(new LineChartPopupMediaItem(
-            popupMedia,
-            media));
-        break;
-      case Esri::ArcGISRuntime::PopupMediaType::Unknown:
-        Q_UNIMPLEMENTED();
-        break;
+        case Esri::ArcGISRuntime::PopupMediaType::Image:
+          m_popupMediaItems->append(new ImagePopupMediaItem(popupMedia, popupViewController, media));
+          break;
+        case Esri::ArcGISRuntime::PopupMediaType::BarChart:
+          m_popupMediaItems->append(new BarChartPopupMediaItem(popupMedia, media));
+          break;
+        case Esri::ArcGISRuntime::PopupMediaType::ColumnChart:
+          m_popupMediaItems->append(new BarChartPopupMediaItem(popupMedia, media));
+          break;
+        case Esri::ArcGISRuntime::PopupMediaType::PieChart:
+          m_popupMediaItems->append(new PieChartPopupMediaItem(popupMedia, media));
+          break;
+        case Esri::ArcGISRuntime::PopupMediaType::LineChart:
+          m_popupMediaItems->append(new LineChartPopupMediaItem(popupMedia, media));
+          break;
+        case Esri::ArcGISRuntime::PopupMediaType::Unknown:
+          Q_UNIMPLEMENTED();
+          break;
       }
     }
   }

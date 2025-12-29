@@ -26,7 +26,8 @@
 // Toolkit headers
 #include <PopupMediaItem.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
     \internal
@@ -45,10 +46,14 @@ namespace Esri::ArcGISRuntime::Toolkit {
       const auto value = mediaValue->data().at(i).toReal();
 
       if (value >= m_maxValue)
+      {
         m_maxValue = value;
+      }
 
       if (value <= m_minValue)
+      {
         m_minValue = value;
+      }
 
       const auto point = QPointF(i, value);
       m_linePoints.append(point);

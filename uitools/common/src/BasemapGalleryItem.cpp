@@ -38,9 +38,11 @@
 #include <QQmlContext>
 #endif // CPP_ARCGISRUNTIME_TOOLKIT
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
-  namespace {
+  namespace
+  {
 #ifdef CPP_ARCGISRUNTIME_TOOLKIT
     /*!
       \internal
@@ -78,7 +80,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     {
     }
 #endif // CPP_ARCGISRUNTIME_TOOLKIT
-  }
+  } // namespace
 
   /*!
     \inmodule Esri.ArcGISRuntime.Toolkit
@@ -140,7 +142,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void BasemapGalleryItem::setBasemap(Basemap* basemap)
   {
     if (basemap == m_basemap)
+    {
       return;
+    }
 
     if (m_basemap)
     {
@@ -157,33 +161,33 @@ namespace Esri::ArcGISRuntime::Toolkit {
     if (m_basemap)
     {
       doOnLoaded(m_basemap.data(), this, [this, basemap]
-                 {
-                   emit basemapChanged();
-                   auto item = basemap->item();
-                   if (!item)
-                   {
-                     return;
-                   }
+      {
+        emit basemapChanged();
+        auto item = basemap->item();
+        if (!item)
+        {
+          return;
+        }
 
-                   auto itemThumbnail = item->thumbnail();
-                   if (!itemThumbnail.isNull())
-                   {
-                     // We have a good thumbnail.
+        auto itemThumbnail = item->thumbnail();
+        if (!itemThumbnail.isNull())
+        {
+          // We have a good thumbnail.
 
-                     return;
-                   }
+          return;
+        }
 
-                   // fetchThumbnailAsync returns a single future, so don't keep attaching continuations
-                   // if it's already running
-                   auto future = item->fetchThumbnailAsync();
-                   if (!future.isRunning())
-                   {
-                     future.then(this, [this](const QImage&)
-                                 {
-                                   emit basemapChanged();
-                                 });
-                   }
-                 });
+        // fetchThumbnailAsync returns a single future, so don't keep attaching continuations
+        // if it's already running
+        auto future = item->fetchThumbnailAsync();
+        if (!future.isRunning())
+        {
+          future.then(this, [this](const QImage&)
+          {
+            emit basemapChanged();
+          });
+        }
+      });
     }
     emit basemapChanged();
   }
@@ -218,7 +222,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void BasemapGalleryItem::setThumbnailOverride(QImage thumbnail)
   {
     if (thumbnail == m_thumbnail)
+    {
       return;
+    }
 
     m_thumbnail = std::move(thumbnail);
     emit thumbnailOverrideChanged();
@@ -245,7 +251,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void BasemapGalleryItem::setTooltipOverride(QString tooltip)
   {
     if (tooltip == m_tooltip)
+    {
       return;
+    }
 
     m_tooltip = std::move(tooltip);
     emit tooltipOverrideChanged();
@@ -264,7 +272,8 @@ namespace Esri::ArcGISRuntime::Toolkit {
 #ifdef CPP_ARCGISRUNTIME_TOOLKIT
   QUrl BasemapGalleryItem::thumbnailUrl() const
   {
-    return QUrl::fromUserInput(QString("image://%1/%2").arg(BasemapGalleryImageProvider::PROVIDER_ID, m_id.toString(QUuid::StringFormat::WithoutBraces)));
+    return QUrl::fromUserInput(
+      QString("image://%1/%2").arg(BasemapGalleryImageProvider::PROVIDER_ID, m_id.toString(QUuid::StringFormat::WithoutBraces)));
   }
 #endif // CPP_ARCGISRUNTIME_TOOLKIT
 
@@ -273,4 +282,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     return m_id;
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

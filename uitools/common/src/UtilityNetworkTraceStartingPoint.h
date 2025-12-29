@@ -27,12 +27,14 @@
 // Other headers
 #include "GenericListModel.h"
 
-namespace Esri::ArcGISRuntime {
+namespace Esri::ArcGISRuntime
+{
   class Graphic;
   class Symbol;
-} // Esri::ArcGISRuntime
+} // namespace Esri::ArcGISRuntime
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   class UtilityNetworkTraceStartingPoint : public QObject
   {
@@ -88,6 +90,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     double m_fractionAlongEdge = 0.0;
   };
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_UTILITYNETWORKTRACESTARTINGPOINT_H

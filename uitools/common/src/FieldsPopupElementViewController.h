@@ -23,12 +23,14 @@
 // Other headers
 #include "PopupElementViewItem.h"
 
-namespace Esri::ArcGISRuntime {
+namespace Esri::ArcGISRuntime
+{
 
   class FieldsPopupElement;
   class PopupElement;
 
-  namespace Toolkit {
+  namespace Toolkit
+  {
 
     class PopupViewController;
 

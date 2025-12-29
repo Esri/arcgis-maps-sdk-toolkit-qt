@@ -20,7 +20,8 @@
 #include <QItemDelegate>
 #include <QPointer>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   class CoordinateConversionController;
 
@@ -36,13 +37,12 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     CoordinateConversionController* controller() const;
 
-    void setModelData(QWidget* editor, QAbstractItemModel* model,
-                      const QModelIndex& index) const override;
+    void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const override;
 
   private:
     QPointer<CoordinateConversionController> m_controller;
   };
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_COORDIANTEEDITDELEGATE_H

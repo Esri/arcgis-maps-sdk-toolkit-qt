@@ -32,7 +32,8 @@ Q_MOC_INCLUDE("UtilityNetworkTraceStartingPoint.h")
 Q_MOC_INCLUDE("UtilityNamedTraceConfiguration.h")
 Q_MOC_INCLUDE("Symbol.h")
 
-namespace Esri::ArcGISRuntime {
+namespace Esri::ArcGISRuntime
+{
 
   class ArcGISFeature;
   class ErrorException;
@@ -48,7 +49,8 @@ namespace Esri::ArcGISRuntime {
   class UtilityTraceParameters;
   class UtilityTraceResultListModel;
 
-  namespace Toolkit {
+  namespace Toolkit
+  {
 
     class UtilityNetworkFunctionTraceResultsModel;
     class UtilityNetworkTraceStartingPoint;
@@ -58,17 +60,23 @@ namespace Esri::ArcGISRuntime {
     {
       Q_OBJECT
       Q_PROPERTY(QObject* geoView READ geoView WRITE setGeoView NOTIFY geoViewChanged)
-      Q_PROPERTY(UtilityNetwork* selectedUtilityNetwork READ selectedUtilityNetwork WRITE setSelectedUtilityNetwork NOTIFY selectedUtilityNetworkChanged)
-      Q_PROPERTY(UtilityNamedTraceConfiguration* selectedTraceConfiguration READ selectedTraceConfiguration WRITE setSelectedTraceConfiguration NOTIFY selectedTraceConfigurationChanged)
+      Q_PROPERTY(
+        UtilityNetwork* selectedUtilityNetwork READ selectedUtilityNetwork WRITE setSelectedUtilityNetwork NOTIFY selectedUtilityNetworkChanged)
+      Q_PROPERTY(UtilityNamedTraceConfiguration* selectedTraceConfiguration READ selectedTraceConfiguration WRITE setSelectedTraceConfiguration NOTIFY
+                   selectedTraceConfigurationChanged)
       Q_PROPERTY(bool isTraceInProgress READ isTraceInProgress WRITE setIsTraceInProgress NOTIFY isTraceInProgressChanged)
-      Q_PROPERTY(bool isAddingStartingPointEnabled READ isAddingStartingPointEnabled WRITE setIsAddingStartingPointEnabled NOTIFY isAddingStartingPointEnabledChanged)
-      Q_PROPERTY(bool isAddingStartingPointInProgress READ isAddingStartingPointInProgress WRITE setIsAddingStartingPointInProgress NOTIFY isAddingStartingPointInProgressChanged)
+      Q_PROPERTY(bool isAddingStartingPointEnabled READ isAddingStartingPointEnabled WRITE setIsAddingStartingPointEnabled NOTIFY
+                   isAddingStartingPointEnabledChanged)
+      Q_PROPERTY(bool isAddingStartingPointInProgress READ isAddingStartingPointInProgress WRITE setIsAddingStartingPointInProgress NOTIFY
+                   isAddingStartingPointInProgressChanged)
       Q_PROPERTY(Symbol* startingPointSymbol READ startingPointSymbol WRITE setStartingPointSymbol NOTIFY startingPointSymbolChanged)
       Q_PROPERTY(QAbstractItemModel* startingPoints READ startingPoints CONSTANT)
       Q_PROPERTY(QAbstractItemModel* functionResults READ functionResults CONSTANT)
       Q_PROPERTY(QStringList traceConfigurationNames READ traceConfigurationNames NOTIFY traceConfigurationNamesChanged)
-      Q_PROPERTY(bool isInsufficientStartingPoints READ isInsufficientStartingPoints WRITE setIsInsufficientStartingPoints NOTIFY isInsufficientStartingPointsChanged)
-      Q_PROPERTY(bool isAboveMinimumStartingPoint READ isAboveMinimumStartingPoint WRITE setIsAboveMinimumStartingPoint NOTIFY isAboveMinimumStartingPointChanged)
+      Q_PROPERTY(bool isInsufficientStartingPoints READ isInsufficientStartingPoints WRITE setIsInsufficientStartingPoints NOTIFY
+                   isInsufficientStartingPointsChanged)
+      Q_PROPERTY(bool isAboveMinimumStartingPoint READ isAboveMinimumStartingPoint WRITE setIsAboveMinimumStartingPoint NOTIFY
+                   isAboveMinimumStartingPointChanged)
       Q_PROPERTY(bool isResetResultsEnabled READ isResetResultsEnabled WRITE setIsResetResultsEnabled NOTIFY isResetResultsEnabledChanged)
 
     public:
@@ -183,7 +191,7 @@ namespace Esri::ArcGISRuntime {
       SimpleFillSymbol* m_resultFillSymbol = nullptr;
     };
 
-  } // Toolkit
-} // // Esri::ArcGISRuntime
+  } // namespace Toolkit
+} // namespace Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_UTILITYNETWORKTRACECONTROLLER_H

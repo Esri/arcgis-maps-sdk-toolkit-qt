@@ -26,11 +26,13 @@
 // Other headers
 #include "QmlEnums.h"
 
-namespace Esri::ArcGISRuntime {
+namespace Esri::ArcGISRuntime
+{
 
   class PopupAttachment;
 
-  namespace Toolkit {
+  namespace Toolkit
+  {
 
     class PopupViewController;
 
@@ -80,7 +82,7 @@ namespace Esri::ArcGISRuntime {
       const QUuid m_id;
     };
 
-  } // Toolkit
-} // Esri::ArcGISRuntime
+  } // namespace Toolkit
+} // namespace Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_POPUPATTACHMENTITEM_H

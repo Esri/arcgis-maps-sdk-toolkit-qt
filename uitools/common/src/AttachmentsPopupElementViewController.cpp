@@ -30,25 +30,27 @@
 #include <PopupAttachmentItem.h>
 #include <PopupViewController.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
     \internal
     This class is an internal implementation detail and is subject to change.
    */
-  AttachmentsPopupElementViewController::AttachmentsPopupElementViewController(
-      AttachmentsPopupElement* attachmentsPopupElement, PopupViewController* popupViewController, QObject* parent) :
+  AttachmentsPopupElementViewController::AttachmentsPopupElementViewController(AttachmentsPopupElement* attachmentsPopupElement,
+                                                                               PopupViewController* popupViewController,
+                                                                               QObject* parent) :
     PopupElementViewItem{attachmentsPopupElement, parent},
     m_popupAttachmentItems{new GenericListModel(&PopupAttachmentItem::staticMetaObject, this)}
   {
     attachmentsPopupElement->fetchAttachmentsAsync().then(this, [this, popupViewController]()
-                                                          {
-                                                            for (auto* popupAttachment : static_cast<AttachmentsPopupElement*>(popupElement())->attachments())
-                                                            {
-                                                              m_popupAttachmentItems->append(new PopupAttachmentItem(popupAttachment, popupViewController, this));
-                                                            }
-                                                            emit attachmentPopupElementChanged();
-                                                          });
+    {
+      for (auto* popupAttachment : static_cast<AttachmentsPopupElement*>(popupElement())->attachments())
+      {
+        m_popupAttachmentItems->append(new PopupAttachmentItem(popupAttachment, popupViewController, this));
+      }
+      emit attachmentPopupElementChanged();
+    });
   }
 
   AttachmentsPopupElementViewController::~AttachmentsPopupElementViewController() = default;

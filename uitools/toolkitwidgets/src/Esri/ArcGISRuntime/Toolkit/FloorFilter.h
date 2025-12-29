@@ -22,16 +22,19 @@
 // STL headers
 #include <memory>
 
-namespace Ui {
+namespace Ui
+{
   class FloorFilter;
 }
 
-namespace Esri::ArcGISRuntime {
+namespace Esri::ArcGISRuntime
+{
 
   class MapGraphicsView;
   class SceneGraphicsView;
 
-  namespace Toolkit {
+  namespace Toolkit
+  {
     class FloorFilterController;
 
     class FloorFilter : public QFrame
@@ -54,7 +57,7 @@ namespace Esri::ArcGISRuntime {
       bool m_sitesUpdatedFromController{false};
       bool m_facilitiesUpdatedFromController{false};
     };
-  } // Toolkit
-} // Esri::ArcGISRuntime
+  } // namespace Toolkit
+} // namespace Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_FLOORFILTER_H

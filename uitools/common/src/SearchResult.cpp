@@ -16,7 +16,8 @@
  ******************************************************************************/
 #include "SearchResult.h"
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
     \class Esri::ArcGISRuntime::Toolkit::SearchResult
@@ -41,7 +42,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void SearchResult::setDisplayTitle(QString displayTitle)
   {
     if (displayTitle == m_displayTitle)
+    {
       return;
+    }
 
     m_displayTitle = std::move(displayTitle);
     emit displayTitleChanged();
@@ -55,7 +58,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void SearchResult::setDisplaySubtitle(QString displaySubtitle)
   {
     if (displaySubtitle == m_displaySubtitle)
+    {
       return;
+    }
 
     m_displaySubtitle = std::move(displaySubtitle);
     emit displaySubtitleChanged();
@@ -69,7 +74,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void SearchResult::setMarkerImageUrl(QUrl markerImageUrl)
   {
     if (markerImageUrl == m_markerImageUrl)
+    {
       return;
+    }
 
     m_markerImageUrl = std::move(markerImageUrl);
     emit markerImageUrlChanged();
@@ -83,7 +90,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void SearchResult::setOwningSource(SearchSourceInterface* owningSource)
   {
     if (owningSource == m_owningSource)
+    {
       return;
+    }
 
     m_owningSource = owningSource;
     emit owningSourceChanged();
@@ -97,7 +106,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void SearchResult::setGeoElement(GeoElement* geoElement)
   {
     if (geoElement == m_geoElement)
+    {
       return;
+    }
 
     m_geoElement = geoElement;
     emit geoElementChanged();
@@ -111,10 +122,12 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void SearchResult::setSelectionViewpoint(Viewpoint selectionViewpoint)
   {
     if (selectionViewpoint.toJson() == m_selectionViewpoint.toJson())
+    {
       return;
+    }
 
     m_selectionViewpoint = std::move(selectionViewpoint);
     emit selectionViewpointChanged();
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

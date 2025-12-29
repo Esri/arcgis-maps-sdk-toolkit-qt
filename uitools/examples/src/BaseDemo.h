@@ -17,17 +17,19 @@
 #ifndef ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_BASEDEMO_H
 #define ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_BASEDEMO_H
 
+// Qt headers
 #include <QObject>
 #include <QQmlEngine>
 
-namespace Esri::ArcGISRuntime {
+namespace Esri::ArcGISRuntime
+{
   class GeoView;
   class GeoModel;
   class Map;
   class MapQuickView;
   class Scene;
   class SceneQuickView;
-} // Esri::ArcGISRuntime
+} // namespace Esri::ArcGISRuntime
 
 class BaseDemo : public QObject
 {
@@ -62,7 +64,7 @@ protected:
   //                  });
   //        });
   // \endcode
-  template <typename Func>
+  template<typename Func>
   auto apply(Func&& f)
   {
     using namespace Esri::ArcGISRuntime;

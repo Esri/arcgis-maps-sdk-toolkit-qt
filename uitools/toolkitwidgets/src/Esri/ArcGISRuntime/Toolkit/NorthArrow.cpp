@@ -26,7 +26,8 @@
 // Qt headers
 #include <QMouseEvent>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
     \class Esri::ArcGISRuntime::Toolkit::NorthArrow
@@ -62,21 +63,20 @@ namespace Esri::ArcGISRuntime::Toolkit {
     }
 
     connect(m_controller, &NorthArrowController::headingChanged, this, [this]()
-            {
-              if (m_image.isNull())
-                return;
+    {
+      if (m_image.isNull())
+      {
+        return;
+      }
 
-              QTransform rm;
-              rm.rotate(-m_controller->heading());
-              const int imageWidth = m_image.width();
-              const int imageHeight = m_image.height();
-              auto pix = m_image.transformed(rm, Qt::SmoothTransformation);
-              pix = pix.copy((pix.width() - imageWidth) / 2,
-                             (pix.height() - imageHeight) / 2,
-                             imageWidth,
-                             imageHeight);
-              setPixmap(pix);
-            });
+      QTransform rm;
+      rm.rotate(-m_controller->heading());
+      const int imageWidth = m_image.width();
+      const int imageHeight = m_image.height();
+      auto pix = m_image.transformed(rm, Qt::SmoothTransformation);
+      pix = pix.copy((pix.width() - imageWidth) / 2, (pix.height() - imageHeight) / 2, imageWidth, imageHeight);
+      setPixmap(pix);
+    });
   }
 
   /*!
@@ -131,4 +131,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     return m_controller;
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

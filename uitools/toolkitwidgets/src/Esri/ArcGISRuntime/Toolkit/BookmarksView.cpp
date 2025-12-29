@@ -26,7 +26,8 @@
 #include <MapGraphicsView.h>
 #include <SceneGraphicsView.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
     \class Esri::ArcGISRuntime::Toolkit::BookmarksView
@@ -58,13 +59,13 @@ namespace Esri::ArcGISRuntime::Toolkit {
     m_ui->listView->setModel(m_controller->bookmarks());
 
     connect(m_ui->listView->selectionModel(), &QItemSelectionModel::currentChanged, this, [this](const QModelIndex& index)
-            {
-              // Slot that sets the current viewpoint at \a index.
-              // When a click event is received (and thus item is selected),
-              // the `bookmark` at the given \a index is zoomed to via the controller.
-              auto item = m_controller->bookmarks()->element<BookmarkListItem>(index);
-              m_controller->zoomToBookmarkExtent(item);
-            });
+    {
+      // Slot that sets the current viewpoint at \a index.
+      // When a click event is received (and thus item is selected),
+      // the `bookmark` at the given \a index is zoomed to via the controller.
+      auto item = m_controller->bookmarks()->element<BookmarkListItem>(index);
+      m_controller->zoomToBookmarkExtent(item);
+    });
   }
 
   /*!
@@ -104,4 +105,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
   {
     m_controller->setGeoView(sceneView);
   }
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

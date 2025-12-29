@@ -19,7 +19,8 @@
 // ArcGISRuntime headers
 #include <FloorSite.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
     \internal
@@ -44,7 +45,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void FloorFilterSiteItem::setFloorSite(FloorSite* floorSite)
   {
     if (m_floorSite == floorSite)
+    {
       return;
+    }
 
     m_floorSite = floorSite;
     emit floorSiteChanged();
@@ -65,4 +68,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     return m_floorSite ? m_floorSite->name() : QString{};
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

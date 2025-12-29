@@ -22,25 +22,28 @@
 // Other headers
 #include "SingleShotConnection.h"
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*
    \internal
    \brief When \a signal fires on \a sender, the given \a connection is disconnected.
    This makes the connection's invocation depdendent on \a signal not firing.
-   */
-  template <typename Sender, typename Signal>
+ */
+  template<typename Sender, typename Signal>
   QMetaObject::Connection disconnectOnSignal(Sender* sender, Signal&& signal, QObject* self, QMetaObject::Connection connection)
   {
     if (!connection)
+    {
       return QMetaObject::Connection{};
+    }
 
     return singleShotConnection(sender, signal, self, [c = std::move(connection)]
-                                {
-                                  QObject::disconnect(c);
-                                });
+    {
+      QObject::disconnect(c);
+    });
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_DISCONNECTONSIGNAL_H

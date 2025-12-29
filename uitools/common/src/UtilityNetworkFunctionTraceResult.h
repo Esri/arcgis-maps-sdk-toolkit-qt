@@ -26,15 +26,14 @@
 // Other headers
 #include "GenericListModel.h"
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   class UtilityNetworkFunctionTraceResult
   {
   public:
     explicit UtilityNetworkFunctionTraceResult();
-    UtilityNetworkFunctionTraceResult(const QString& name,
-                                      const UtilityTraceFunctionType type,
-                                      double value);
+    UtilityNetworkFunctionTraceResult(const QString& name, const UtilityTraceFunctionType type, double value);
     ~UtilityNetworkFunctionTraceResult();
 
     QString name() const;
@@ -48,6 +47,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     double m_value;
   };
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // UTILITYNETWORKFUNCTIONTRACERESULT_H

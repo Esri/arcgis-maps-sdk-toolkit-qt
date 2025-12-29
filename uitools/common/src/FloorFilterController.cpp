@@ -45,9 +45,11 @@
 // stl headers
 #include <cmath>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
-  namespace {
+  namespace
+  {
 
     /*!
       \internal
@@ -67,7 +69,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
       \internal
       \brief Given a ListModel and id, finds the element in the ListModel that matches the given id.
      */
-    template <typename T>
+    template<typename T>
     T* findElement(const GenericListModel* model, const QString& id)
     {
       const auto rows = model->rowCount();
@@ -115,13 +117,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
       Will continue to call `f` every time a map/sceneChanged signal is triggered on
       the GeoView.
      */
-    template <typename GeoView, typename Func>
+    template<typename GeoView, typename Func>
     void connectToGeoView(GeoView* geoView, FloorFilterController* self, Func&& f)
     {
-      static_assert(
-          std::is_same<GeoView, MapViewToolkit>::value ||
-              std::is_same<GeoView, SceneViewToolkit>::value,
-          "Must be connected to a SceneView or MapView");
+      static_assert(std::is_same<GeoView, MapViewToolkit>::value || std::is_same<GeoView, SceneViewToolkit>::value,
+                    "Must be connected to a SceneView or MapView");
 
       auto connectToGeoModel = [self, geoView, f = std::forward<Func>(f)]
       {
@@ -135,21 +135,23 @@ namespace Esri::ArcGISRuntime::Toolkit {
         // This may happen immediately or asyncnronously.This can be interrupted if GeoView or
         // GeoModel changes in the interim.
         auto c = doOnLoaded(model, self, [self, model, geoView, f = std::move(f)]()
-                            {
-                              auto floorManager = model->floorManager();
-                              if (!floorManager)
-                                return;
+        {
+          auto floorManager = model->floorManager();
+          if (!floorManager)
+          {
+            return;
+          }
 
-                              auto c2 = doOnLoaded(floorManager, self, [f = std::move(f)]
-                                                   {
-                                                     f();
-                                                   });
-                              // Destroy the connection `c` if the map/scene changes, or the geoView changes.
-                              // This means the connection is only relevant for as long as the model/view is relavant to
-                              // the FloorFilterController.
-                              disconnectOnSignal(geoView, getGeoModelChangedSignal(geoView), self, c2);
-                              disconnectOnSignal(self, &FloorFilterController::geoViewChanged, self, c2);
-                            });
+          auto c2 = doOnLoaded(floorManager, self, [f = std::move(f)]
+          {
+            f();
+          });
+          // Destroy the connection `c` if the map/scene changes, or the geoView changes.
+          // This means the connection is only relevant for as long as the model/view is relavant to
+          // the FloorFilterController.
+          disconnectOnSignal(geoView, getGeoModelChangedSignal(geoView), self, c2);
+          disconnectOnSignal(self, &FloorFilterController::geoViewChanged, self, c2);
+        });
         // Destroy the connection `c` if the map/scene changes, or the geoView changes. This means
         // the connection is only relevant for as long as the model/view is relavant to the FloorFilterController.
         disconnectOnSignal(geoView, getGeoModelChangedSignal(geoView), self, c);
@@ -161,11 +163,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
       connectToGeoModel();
 
       // Hook up to any viewpoint changes on the GeoView.
-      auto c2 = QObject::connect(geoView, &std::remove_pointer<decltype(geoView)>::type::viewpointChanged,
-                                 self, &FloorFilterController::tryUpdateSelection);
+      auto c2 =
+        QObject::connect(geoView, &std::remove_pointer<decltype(geoView)>::type::viewpointChanged, self, &FloorFilterController::tryUpdateSelection);
       disconnectOnSignal(self, &FloorFilterController::geoViewChanged, self, c2);
     }
-  }
+  } // namespace
 
   /*!
     \inmodule Esri.ArcGISRuntime.Toolkit
@@ -190,28 +192,27 @@ namespace Esri::ArcGISRuntime::Toolkit {
     connect(this, &FloorFilterController::selectedSiteIdChanged, this, &FloorFilterController::populateFacilitiesForSelectedSite);
     connect(this, &FloorFilterController::isSelectedSiteRespectedChanged, this, &FloorFilterController::populateFacilitiesForSelectedSite);
 
-    connect(this, &FloorFilterController::selectedLevelIdChanged, this,
-            [this](QString /*oldId*/, QString newId)
+    connect(this, &FloorFilterController::selectedLevelIdChanged, this, [this](QString /*oldId*/, QString newId)
+    {
+      auto newLevelItem = level(newId);
+      auto newLevel = newLevelItem ? newLevelItem->floorLevel() : nullptr;
+      auto floorManager = getFloorManager(m_geoView);
+      if (floorManager)
+      {
+        const auto levels = floorManager->levels();
+        for (const auto level : levels)
+        {
+          if (level)
+          {
+            switch (m_updatelevelMode)
+            case UpdateLevelsMode::AllLevelsMatchingVerticalOrder:
             {
-              auto newLevelItem = level(newId);
-              auto newLevel = newLevelItem ? newLevelItem->floorLevel() : nullptr;
-              auto floorManager = getFloorManager(m_geoView);
-              if (floorManager)
-              {
-                const auto levels = floorManager->levels();
-                for (const auto level : levels)
-                {
-                  if (level)
-                  {
-                    switch (m_updatelevelMode)
-                    case UpdateLevelsMode::AllLevelsMatchingVerticalOrder:
-                    {
-                      level->setVisible(newLevel ? level->verticalOrder() == newLevel->verticalOrder() : false);
-                    }
-                  }
-                }
-              }
-            });
+              level->setVisible(newLevel ? level->verticalOrder() == newLevel->verticalOrder() : false);
+            }
+          }
+        }
+      }
+    });
   }
 
   FloorFilterController::~FloorFilterController()
@@ -259,16 +260,16 @@ namespace Esri::ArcGISRuntime::Toolkit {
     if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
       connectToGeoView(mapView, this, [this]
-                       {
-                         populateSites();
-                       });
+      {
+        populateSites();
+      });
     }
     else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
       connectToGeoView(sceneView, this, [this]
-                       {
-                         populateSites();
-                       });
+      {
+        populateSites();
+      });
     }
   }
 
@@ -342,9 +343,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     // Sort levels by vertical order.
     std::sort(std::begin(allLevels), std::end(allLevels), [](FloorLevel* a, FloorLevel* b)
-              {
-                return a && b ? a->verticalOrder() < b->verticalOrder() : static_cast<bool>(a);
-              });
+    {
+      return a && b ? a->verticalOrder() < b->verticalOrder() : static_cast<bool>(a);
+    });
 
     QString defaultLevel = allLevels.first()->levelId();
     QList<QObject*> levelItems;
@@ -464,7 +465,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void FloorFilterController::zoomToSite(FloorFilterSiteItem* siteItem)
   {
     if (!siteItem)
+    {
       return;
+    }
 
     const auto s = siteItem->floorSite();
     if (s)
@@ -579,8 +582,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     }
 
     // Expectation: viewpoint is center and scale
-    if (observedViewpoint.isEmpty() ||
-        std::isnan(observedViewpoint.targetScale()))
+    if (observedViewpoint.isEmpty() || std::isnan(observedViewpoint.targetScale()))
     {
       return;
     }
@@ -617,18 +619,21 @@ namespace Esri::ArcGISRuntime::Toolkit {
     // If the centerpoint is within a site's geometry, select that site.
     // This code gracefully skips selection if there are no sites or no matching sites
     auto sites = floorManager ? floorManager->sites() : QList<FloorSite*>{};
-    auto siteResult = std::find_if(std::cbegin(sites), std::cend(sites),
-                                   [&observedViewpoint](FloorSite* site)
-                                   {
-                                     if (site == nullptr)
-                                       return false;
+    auto siteResult = std::find_if(std::cbegin(sites), std::cend(sites), [&observedViewpoint](FloorSite* site)
+    {
+      if (site == nullptr)
+      {
+        return false;
+      }
 
-                                     auto extent = site->geometry().extent();
-                                     if (extent.isEmpty())
-                                       return false;
+      auto extent = site->geometry().extent();
+      if (extent.isEmpty())
+      {
+        return false;
+      }
 
-                                     return GeometryEngine::intersects(extent, observedViewpoint.targetGeometry());
-                                   });
+      return GeometryEngine::intersects(extent, observedViewpoint.targetGeometry());
+    });
 
     if (siteResult != std::cend(sites))
     {
@@ -661,18 +666,21 @@ namespace Esri::ArcGISRuntime::Toolkit {
     }
 
     auto facilities = floorManager ? floorManager->facilities() : QList<FloorFacility*>{};
-    auto facilityResult = std::find_if(std::cbegin(facilities), std::cend(facilities),
-                                       [&observedViewpoint](FloorFacility* facility)
-                                       {
-                                         if (facility == nullptr)
-                                           return false;
+    auto facilityResult = std::find_if(std::cbegin(facilities), std::cend(facilities), [&observedViewpoint](FloorFacility* facility)
+    {
+      if (facility == nullptr)
+      {
+        return false;
+      }
 
-                                         auto extent = facility->geometry().extent();
-                                         if (extent.isEmpty())
-                                           return false;
+      auto extent = facility->geometry().extent();
+      if (extent.isEmpty())
+      {
+        return false;
+      }
 
-                                         return GeometryEngine::intersects(extent, observedViewpoint.targetGeometry());
-                                       });
+      return GeometryEngine::intersects(extent, observedViewpoint.targetGeometry());
+    });
 
     if (facilityResult != std::cend(facilities))
     {
@@ -697,24 +705,26 @@ namespace Esri::ArcGISRuntime::Toolkit {
     if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
       m_settingViewpoint = true;
-      mapView->setViewpointAsync(b.toEnvelope()).then(this, [this](bool success)
-                                                      {
-                                                        if (success)
-                                                        {
-                                                          m_settingViewpoint = false;
-                                                        }
-                                                      });
+      mapView->setViewpointAsync(b.toEnvelope())
+        .then(this, [this](bool success)
+      {
+        if (success)
+        {
+          m_settingViewpoint = false;
+        }
+      });
     }
     else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
       m_settingViewpoint = true;
-      sceneView->setViewpointAsync(b.toEnvelope()).then(this, [this](bool success)
-                                                        {
-                                                          if (success)
-                                                          {
-                                                            m_settingViewpoint = false;
-                                                          }
-                                                        });
+      sceneView->setViewpointAsync(b.toEnvelope())
+        .then(this, [this](bool success)
+      {
+        if (success)
+        {
+          m_settingViewpoint = false;
+        }
+      });
     }
   }
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

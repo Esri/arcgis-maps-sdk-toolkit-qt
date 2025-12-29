@@ -16,12 +16,14 @@
 #ifndef TST_BASEMAPGALLERYITEMUNITTEST_H
 #define TST_BASEMAPGALLERYITEMUNITTEST_H
 
+// Qt headers
 #include <QtTest>
 
-namespace Esri::ArcGISRuntime {
+namespace Esri::ArcGISRuntime
+{
   class Basemap;
   class Map;
-} // Esri::ArcGISRuntime
+} // namespace Esri::ArcGISRuntime
 
 class BasemapGalleryItemUnitTest : public QObject
 {

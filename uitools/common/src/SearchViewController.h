@@ -21,7 +21,7 @@
 #include <QObject>
 #include <QPointer>
 
-// ArcGIS Maps SDK headers
+// STL headers
 #include <Geometry.h>
 
 // Other headers
@@ -31,15 +31,17 @@
 #include "SearchSuggestion.h"
 
 // Forward declarations
-namespace Esri::ArcGISRuntime {
+namespace Esri::ArcGISRuntime
+{
   class Map;
   class Scene;
   class SymbolStyle;
   class Graphic;
   class GraphicsOverlay;
-} // Esri::ArcGISRuntime
+} // namespace Esri::ArcGISRuntime
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   class SearchViewController : public QObject
   {
@@ -54,8 +56,10 @@ namespace Esri::ArcGISRuntime::Toolkit {
     Q_PROPERTY(QAbstractListModel* sources READ sources CONSTANT)
     Q_PROPERTY(QAbstractListModel* suggestions READ suggestions CONSTANT)
     Q_PROPERTY(bool eligableForRequery READ isEligableForRequery WRITE setIsEligableForRequery NOTIFY isEligableForRequeryChanged)
-    Q_PROPERTY(bool automaticConfigurationEnabled READ isAutomaticConfigurationEnabled WRITE setIsAutomaticConfigurationEnabled NOTIFY isAutomaticConfigurationEnabledChanged)
-    Q_PROPERTY(double thresholdRatioRepeatSearch READ thresholdRatioRepeatSearch WRITE setThresholdRatioRepeatSearch NOTIFY thresholdRatioRepeatSearchChanged)
+    Q_PROPERTY(bool automaticConfigurationEnabled READ isAutomaticConfigurationEnabled WRITE setIsAutomaticConfigurationEnabled NOTIFY
+                 isAutomaticConfigurationEnabledChanged)
+    Q_PROPERTY(
+      double thresholdRatioRepeatSearch READ thresholdRatioRepeatSearch WRITE setThresholdRatioRepeatSearch NOTIFY thresholdRatioRepeatSearchChanged)
   public:
     enum class SearchResultMode
     {
@@ -154,6 +158,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     double m_thresholdRatioRepeatSearch{0.25};
   };
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_SEARCHVIEWCONTROLLER_H

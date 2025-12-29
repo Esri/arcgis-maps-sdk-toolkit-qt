@@ -40,20 +40,21 @@
 // std headers
 #include <cmath>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
-  \class Esri::ArcGISRuntime::Toolkit::CoordinateConversion
-  \inmodule Esri.ArcGISRuntime.Toolkit
-  \ingroup ArcGISQtToolkitUiCppWidgetsViews
-  \brief The user interface for the coordinate conversion tool.
-  This tool allows a user to select a point on the map or to enter a point by
-  text entry.
-  The point may be highlighted by zooming into that point, or by highlighting
-  the point on the \c GeoView.
-  A list of different coordinate formats represnenting the same point are
-  available to the user.
- */
+    \class Esri::ArcGISRuntime::Toolkit::CoordinateConversion
+    \inmodule Esri.ArcGISRuntime.Toolkit
+    \ingroup ArcGISQtToolkitUiCppWidgetsViews
+    \brief The user interface for the coordinate conversion tool.
+    This tool allows a user to select a point on the map or to enter a point by
+    text entry.
+    The point may be highlighted by zooming into that point, or by highlighting
+    the point on the \c GeoView.
+    A list of different coordinate formats represnenting the same point are
+    available to the user.
+   */
 
   /*!
     \brief Constructor.
@@ -80,44 +81,40 @@ namespace Esri::ArcGISRuntime::Toolkit {
     m_ui->resultsView->hideColumn(2);
 
     m_ui->resultsView->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(m_ui->resultsView, &QTableView::customContextMenuRequested,
-            this, &CoordinateConversion::addContextMenu);
+    connect(m_ui->resultsView, &QTableView::customContextMenuRequested, this, &CoordinateConversion::addContextMenu);
 
-    connect(m_ui->captureMode, &QCheckBox::toggled, m_controller,
-            &CoordinateConversionController::setInPickingMode);
+    connect(m_ui->captureMode, &QCheckBox::toggled, m_controller, &CoordinateConversionController::setInPickingMode);
 
-    connect(m_ui->zoomTo, &QPushButton::clicked, m_controller,
-            &CoordinateConversionController::zoomToCurrentPoint);
+    connect(m_ui->zoomTo, &QPushButton::clicked, m_controller, &CoordinateConversionController::zoomToCurrentPoint);
 
-    connect(m_ui->flash, &QPushButton::clicked, this,
-            &CoordinateConversion::flash);
+    connect(m_ui->flash, &QPushButton::clicked, this, &CoordinateConversion::flash);
   }
 
   /*!
-  \brief Destructor.
- */
+    \brief Destructor.
+   */
   CoordinateConversion::~CoordinateConversion()
   {
     delete m_ui;
   }
 
   /*!
-  \brief Set the \c GeoView.
-  \list
-    \li \a mapView Sets the GeoView to a \c MapView.
-  \endlist
- */
+    \brief Set the \c GeoView.
+    \list
+      \li \a mapView Sets the GeoView to a \c MapView.
+    \endlist
+   */
   void CoordinateConversion::setMapView(MapGraphicsView* mapView)
   {
     m_controller->setGeoView(mapView);
   }
 
   /*!
-  \brief Set the \c GeoView.
-  \list
-  \li \a sceneView Sets the \c GeoView to a \c SceneView.
-  \endlist
- */
+    \brief Set the \c GeoView.
+    \list
+      \li \a sceneView Sets the \c GeoView to a \c SceneView.
+    \endlist
+   */
   void CoordinateConversion::setSceneView(SceneGraphicsView* sceneView)
   {
     m_controller->setGeoView(sceneView);
@@ -132,12 +129,12 @@ namespace Esri::ArcGISRuntime::Toolkit {
   }
 
   /*!
-  \internal
-  \brief Bring up the context menu at the given point.
-  \list
-  \li \a point Point to show menu
-  \endlist
- */
+    \internal
+    \brief Bring up the context menu at the given point.
+    \list
+      \li \a point Point to show menu
+    \endlist
+   */
   void CoordinateConversion::addContextMenu(const QPoint& point)
   {
     auto menu = new QMenu(m_ui->resultsView);
@@ -150,14 +147,15 @@ namespace Esri::ArcGISRuntime::Toolkit {
     for (int i = 0; i < rowCount; ++i)
     {
       auto format = formats->element<CoordinateConversionOption>(formats->index(i));
-      addMenu->addAction(format->name(), m_controller,
-                         [this, menu, f(QPointer<CoordinateConversionOption>(format))]()
-                         {
-                           if (f)
-                             m_controller->addNewCoordinateResultForOption(f.data());
+      addMenu->addAction(format->name(), m_controller, [this, menu, f(QPointer<CoordinateConversionOption>(format))]()
+      {
+        if (f)
+        {
+          m_controller->addNewCoordinateResultForOption(f.data());
+        }
 
-                           menu->deleteLater();
-                         });
+        menu->deleteLater();
+      });
     }
     menu->addMenu(addMenu);
 
@@ -166,12 +164,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
     if (index.isValid())
     {
       auto action = menu->addAction("Delete");
-      connect(action, &QAction::triggered, menu,
-              [this, index, menu]()
-              {
-                m_ui->resultsView->model()->removeRow(index.row());
-                menu->deleteLater();
-              });
+      connect(action, &QAction::triggered, menu, [this, index, menu]()
+      {
+        m_ui->resultsView->model()->removeRow(index.row());
+        menu->deleteLater();
+      });
     }
 
     // Show the menu.
@@ -179,20 +176,24 @@ namespace Esri::ArcGISRuntime::Toolkit {
   }
 
   /*!
-  \internal
-  \brief Flash the dot on the screen at current location.
- */
+    \internal
+    \brief Flash the dot on the screen at current location.
+   */
   void CoordinateConversion::flash()
   {
     delete m_flash;
 
     auto graphicsView = qobject_cast<QGraphicsView*>(m_controller->geoView());
     if (!graphicsView)
+    {
       return;
+    }
 
     const auto point = m_controller->screenCoordinate();
     if (point.isNull() || std::isnan(point.x()) || std::isnan(point.y()))
+    {
       return;
+    }
 
     m_flash = new Flash();
     m_flash->setRadius(8);
@@ -202,4 +203,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     graphicsView->scene()->addWidget(m_flash.data());
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

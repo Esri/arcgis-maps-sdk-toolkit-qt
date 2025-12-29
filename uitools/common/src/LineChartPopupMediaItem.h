@@ -26,7 +26,8 @@
 // Other headers
 #include "PopupMediaItem.h"
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   class LineChartPopupMediaItem : public PopupMediaItem
   {
@@ -58,5 +59,5 @@ namespace Esri::ArcGISRuntime::Toolkit {
     qreal m_minValue = 0.0;
   };
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_LINECHARTPOPUPMEDIAITEM_H

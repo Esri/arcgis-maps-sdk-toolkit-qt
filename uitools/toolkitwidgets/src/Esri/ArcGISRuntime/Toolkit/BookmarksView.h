@@ -19,16 +19,19 @@
 // Qt headers
 #include <QFrame>
 
-namespace Ui {
+namespace Ui
+{
   class BookmarksView;
 }
 
-namespace Esri::ArcGISRuntime {
+namespace Esri::ArcGISRuntime
+{
 
   class MapGraphicsView;
   class SceneGraphicsView;
 
-  namespace Toolkit {
+  namespace Toolkit
+  {
     class BookmarksViewController;
 
     class BookmarksView : public QFrame
@@ -50,7 +53,7 @@ namespace Esri::ArcGISRuntime {
       Ui::BookmarksView* m_ui = nullptr;
     };
 
-  } // Toolkit
-} // Esri::ArcGISRuntime
+  } // namespace Toolkit
+} // namespace Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_BOOKMARKSVIEW_H

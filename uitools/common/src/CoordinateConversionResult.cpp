@@ -23,7 +23,8 @@
 // ArcGISRuntime headers
 #include <Point.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
     \internal
@@ -42,9 +43,13 @@ namespace Esri::ArcGISRuntime::Toolkit {
   QString CoordinateConversionResult::name() const
   {
     if (m_type)
+    {
       return m_type->name();
+    }
     else
+    {
       return QString();
+    }
   }
 
   CoordinateConversionOption* CoordinateConversionResult::type() const
@@ -55,16 +60,22 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void CoordinateConversionResult::setType(CoordinateConversionOption* type)
   {
     if (type == m_type)
+    {
       return;
+    }
 
     if (m_type)
+    {
       disconnect(m_type.data(), &CoordinateConversionOption::nameChanged, this, &CoordinateConversionResult::nameChanged);
+    }
 
     m_type = type;
     m_notation = "";
 
     if (m_type)
+    {
       connect(m_type.data(), &CoordinateConversionOption::nameChanged, this, &CoordinateConversionResult::nameChanged);
+    }
 
     emit typeChanged();
     emit nameChanged();
@@ -79,7 +90,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void CoordinateConversionResult::setNotation(const QString& notation)
   {
     if (m_notation == notation)
+    {
       return;
+    }
 
     m_notation = notation;
     emit notationChanged();
@@ -88,9 +101,13 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void CoordinateConversionResult::updateCoordinatePoint(const Point& point)
   {
     if (!m_type)
+    {
       m_notation = "";
+    }
     else
+    {
       m_notation = m_type->prettyPrint(point);
+    }
 
     emit notationChanged();
   }
@@ -99,7 +116,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   {
     auto clipboard = QGuiApplication::clipboard();
     if (clipboard && !m_notation.isEmpty())
+    {
       clipboard->setText(m_notation);
+    }
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

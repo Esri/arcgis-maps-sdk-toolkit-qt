@@ -28,7 +28,8 @@
 // Qt headers
 #include <QGridLayout>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
     \class Esri::ArcGISRuntime::Toolkit::OverviewMap
@@ -94,4 +95,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     return m_controller;
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

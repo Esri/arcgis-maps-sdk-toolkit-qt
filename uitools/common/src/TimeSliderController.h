@@ -25,14 +25,16 @@
 #include <TimeExtent.h>
 #include <TimeValue.h>
 
-namespace Esri::ArcGISRuntime {
+namespace Esri::ArcGISRuntime
+{
 
   class GeoView;
   class LayerListModel;
   class MapView;
   class SceneView;
 
-  namespace Toolkit {
+  namespace Toolkit
+  {
 
     class TimeSliderController : public QObject
     {
@@ -85,7 +87,7 @@ namespace Esri::ArcGISRuntime {
       QPointer<LayerListModel> m_operationalLayers;
     };
 
-  } // Toolkit
-} // Esri::ArcGISRuntime
+  } // namespace Toolkit
+} // namespace Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_TIMESLIDERCONTROLLER_H

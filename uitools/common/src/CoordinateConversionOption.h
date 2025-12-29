@@ -24,7 +24,8 @@
 #include <Point.h>
 #include <SpatialReference.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   class CoordinateConversionOption : public QObject
   {
@@ -58,8 +59,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     QString prettyPrint(const Point& point) const;
 
-    Point pointFromString(const QString& point,
-                          const SpatialReference& spatialReference);
+    Point pointFromString(const QString& point, const SpatialReference& spatialReference);
 
     QString name() const;
 
@@ -128,6 +128,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     GarsConversionMode m_garsConvesrionMode = GarsConversionMode::Center;
   };
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_COORDINATECONVERSIONOPTION_H

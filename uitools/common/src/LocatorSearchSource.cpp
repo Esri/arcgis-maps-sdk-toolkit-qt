@@ -37,9 +37,11 @@
 #include "DoOnLoad.h"
 #include "SearchResult.h"
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
-  namespace {
+  namespace
+  {
     auto constexpr MAP_PIN = "qrc:/Esri/ArcGISRuntime/Toolkit/pin-tear.png";
 
     constexpr const int DEFAULT_MAXIMUM_RESULTS = 6;
@@ -69,14 +71,14 @@ namespace Esri::ArcGISRuntime::Toolkit {
       auto graphic = new Graphic(g.displayLocation(), g.attributes(), nullptr, searchResult);
       auto symbol = new PictureMarkerSymbol(QUrl{MAP_PIN}, graphic);
       QObject::connect(symbol, &PictureMarkerSymbol::doneLoading, symbol, [symbol](Error loadError)
-                       {
-                         if (!loadError.isEmpty())
-                         {
-                           qDebug() << loadError.message() << loadError.additionalMessage();
-                           return;
-                         }
-                         symbol->setLeaderOffsetY(symbol->height() / 2);
-                       });
+      {
+        if (!loadError.isEmpty())
+        {
+          qDebug() << loadError.message() << loadError.additionalMessage();
+          return;
+        }
+        symbol->setLeaderOffsetY(symbol->height() / 2);
+      });
       symbol->load();
       graphic->setSymbol(symbol);
       searchResult->setGeoElement(graphic);
@@ -85,7 +87,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     // Takes a GeocodeParameters or a SuggestParameters \a params and returns a copy of the same with
     // \c{preferredSearchLocation} and \c{searchArea} set to area iff \a area is valid.
-    template <typename Params>
+    template<typename Params>
     auto normalizeGeometryParams(Params params, Geometry area)
     {
       static_assert(std::is_same<Params, GeocodeParameters>::value || std::is_same<Params, SuggestParameters>::value,
@@ -98,7 +100,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
       }
       return params;
     }
-  }
+  } // namespace
 
   /*!
     \inmodule Esri.ArcGISRuntime.Toolkit
@@ -116,41 +118,41 @@ namespace Esri::ArcGISRuntime::Toolkit {
     LocatorSearchSource::setMaximumSuggestions(DEFAULT_MAXIMUM_SUGGESTIONS);
 
     doOnLoaded(locatorTask, this, [this]
-               {
-                 const auto& info = m_locatorTask->locatorInfo();
-                 if (!info.name().isEmpty())
-                 {
-                   setDisplayName(info.name());
-                 }
-                 else if (!info.description().isEmpty())
-                 {
-                   setDisplayName(info.description());
-                 }
+    {
+      const auto& info = m_locatorTask->locatorInfo();
+      if (!info.name().isEmpty())
+      {
+        setDisplayName(info.name());
+      }
+      else if (!info.description().isEmpty())
+      {
+        setDisplayName(info.description());
+      }
 
-                 QStringList attrs{"Type", "LongLabel"};
-                 auto resultAttrs = info.resultAttributes();
-                 auto geocodeAttrs = m_geocodeParameters.resultAttributeNames();
-                 bool foundOne{false};
-                 for (const auto& attr : attrs)
-                 {
-                   auto it = std::find_if(std::cbegin(resultAttrs), std::cend(resultAttrs), [attr](const LocatorAttribute& la)
-                                          {
-                                            return la.name() == attr;
-                                          });
-                   if (it != std::cend(resultAttrs))
-                   {
-                     foundOne = true;
-                     geocodeAttrs << it->name();
-                   }
-                 }
+      QStringList attrs{"Type", "LongLabel"};
+      auto resultAttrs = info.resultAttributes();
+      auto geocodeAttrs = m_geocodeParameters.resultAttributeNames();
+      bool foundOne{false};
+      for (const auto& attr : attrs)
+      {
+        auto it = std::find_if(std::cbegin(resultAttrs), std::cend(resultAttrs), [attr](const LocatorAttribute& la)
+        {
+          return la.name() == attr;
+        });
+        if (it != std::cend(resultAttrs))
+        {
+          foundOne = true;
+          geocodeAttrs << it->name();
+        }
+      }
 
-                 if (!foundOne)
-                 {
-                   geocodeAttrs << "*";
-                 }
+      if (!foundOne)
+      {
+        geocodeAttrs << "*";
+      }
 
-                 m_geocodeParameters.setResultAttributeNames(geocodeAttrs);
-               });
+      m_geocodeParameters.setResultAttributeNames(geocodeAttrs);
+    });
   }
 
   LocatorSearchSource::~LocatorSearchSource()
@@ -232,9 +234,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
     auto params = normalizeGeometryParams(m_geocodeParameters, area);
     m_geocodeFuture = m_locatorTask->geocodeWithSuggestResultAndParametersAsync(suggestion, params);
     m_geocodeFuture.then(this, [this](const QList<GeocodeResult>& geocodeResults)
-                         {
-                           onGeocodeCompleted_(geocodeResults);
-                         });
+    {
+      onGeocodeCompleted_(geocodeResults);
+    });
   }
 
   void LocatorSearchSource::search(const QString& searchString, Geometry area)
@@ -244,9 +246,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
     auto params = normalizeGeometryParams(m_geocodeParameters, area);
     m_geocodeFuture = m_locatorTask->geocodeWithParametersAsync(searchString, params);
     m_geocodeFuture.then(this, [this](const QList<GeocodeResult>& geocodeResults)
-                         {
-                           onGeocodeCompleted_(geocodeResults);
-                         });
+    {
+      onGeocodeCompleted_(geocodeResults);
+    });
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

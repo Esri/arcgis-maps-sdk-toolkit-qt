@@ -17,10 +17,11 @@
 #ifndef CALCITETEST_H
 #define CALCITETEST_H
 
-namespace Esri::ArcGISRuntime {
+namespace Esri::ArcGISRuntime
+{
   class Map;
   class MapQuickView;
-}
+} // namespace Esri::ArcGISRuntime
 
 #include <QObject>
 

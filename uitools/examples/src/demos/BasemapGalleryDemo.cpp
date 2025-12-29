@@ -33,18 +33,23 @@ BasemapGalleryDemo::BasemapGalleryDemo(QObject* parent) :
   auto portal = m_controller->portal();
   // Once the portal has loaded up basemaps. Choose the first available basemap from the model
   // and apply it to our active view.
-  connect(m_controller, &Toolkit::BasemapGalleryController::basemapsChanged, this,
-          [this, portal]
-          {
-            if (!portal->developerBasemaps() || portal->developerBasemaps()->isEmpty())
-              return;
+  connect(m_controller, &Toolkit::BasemapGalleryController::basemapsChanged, this, [this, portal]
+  {
+    if (!portal->developerBasemaps() || portal->developerBasemaps()->isEmpty())
+    {
+      return;
+    }
 
-            auto basemap = portal->developerBasemaps()->at(0);
-            if (geoView()->geoViewType() == GeoViewType::MapView)
-              setGeoModel(new Map(basemap, this));
-            else if (geoView()->geoViewType() == GeoViewType::SceneView)
-              setGeoModel(new Scene(basemap, this));
-          });
+    auto basemap = portal->developerBasemaps()->at(0);
+    if (geoView()->geoViewType() == GeoViewType::MapView)
+    {
+      setGeoModel(new Map(basemap, this));
+    }
+    else if (geoView()->geoViewType() == GeoViewType::SceneView)
+    {
+      setGeoModel(new Scene(basemap, this));
+    }
+  });
 }
 
 BasemapGalleryDemo::~BasemapGalleryDemo()

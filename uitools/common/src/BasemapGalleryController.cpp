@@ -42,13 +42,15 @@
 #include <QPersistentModelIndex>
 #include <QPointer>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
-  namespace {
+  namespace
+  {
     /*!
       \internal
      */
-    template <typename T>
+    template<typename T>
     auto qPointerFrom(T* t)
     {
       return QPointer<T>{t};
@@ -64,33 +66,36 @@ namespace Esri::ArcGISRuntime::Toolkit {
       We automatically disconnect from the map/scene's old basemap if the
       map/scene basemapChanged signal is fired.
      */
-    template <typename T>
+    template<typename T>
     void connectToBasemap(BasemapGalleryController* self, T* geoModel)
     {
       static_assert(std::is_base_of<GeoModel, T>::value, "Must be a GeoModel.");
 
       if (!geoModel)
+      {
         return;
+      }
 
       auto listenToLoadSignals = [self](Basemap* basemap)
       {
         if (basemap)
         {
           if (basemap->loadStatus() != LoadStatus::Loaded)
+          {
             QObject::connect(basemap, &Basemap::doneLoading, self, &BasemapGalleryController::currentBasemapChanged);
+          }
         }
       };
 
       // If basemap changes on map or scene, disconnect from basemap and
       // signal that basemap has changed.
-      QObject::connect(geoModel, &T::basemapChanged, self,
-                       [self, listenToLoadSignals, geoModel](Basemap* oldBasemap)
-                       {
-                         QObject::disconnect(self, nullptr, oldBasemap, nullptr);
-                         auto newBasemap = geoModel->basemap();
-                         listenToLoadSignals(newBasemap); // Connect to new basemap.
-                         self->setCurrentBasemap(newBasemap);
-                       });
+      QObject::connect(geoModel, &T::basemapChanged, self, [self, listenToLoadSignals, geoModel](Basemap* oldBasemap)
+      {
+        QObject::disconnect(self, nullptr, oldBasemap, nullptr);
+        auto newBasemap = geoModel->basemap();
+        listenToLoadSignals(newBasemap); // Connect to new basemap.
+        self->setCurrentBasemap(newBasemap);
+      });
 
       listenToLoadSignals(geoModel->basemap());
     }
@@ -106,9 +111,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
     void connectToGeoModel(BasemapGalleryController* self, GeoModel* geoModel)
     {
       doOnLoaded(geoModel, self, [self, geoModel]
-                 {
-                   self->setCurrentBasemap(geoModel->basemap());
-                 });
+      {
+        self->setCurrentBasemap(geoModel->basemap());
+      });
 
       // TODO: Cleanup this when GeoModel itself exposes the
       // basemapChanged signal.
@@ -148,7 +153,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
     void onBasemapAddedToGallery(BasemapGalleryController* self, GenericListModel* gallery, const QModelIndex& index, BasemapGalleryItem* galleryItem)
     {
       if (!galleryItem)
+      {
         return;
+      }
 
       auto pIndex = QPersistentModelIndex(index);
       auto notifyChange = [pIndex, gallery]
@@ -192,7 +199,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
     void onBasemapRemovedFromGallery(BasemapGalleryController* self, BasemapGalleryItem* galleryItem)
     {
       if (!galleryItem)
+      {
         return;
+      }
 
       QObject::disconnect(galleryItem, nullptr, self, nullptr);
 
@@ -224,15 +233,21 @@ namespace Esri::ArcGISRuntime::Toolkit {
       basemapsVector.reserve(basemaps->rowCount());
       std::copy(std::cbegin(*basemaps), std::cend(*basemaps), std::back_inserter(basemapsVector));
       std::sort(std::begin(basemapsVector), std::end(basemapsVector), [](Basemap* b1, Basemap* b2)
-                {
-                  // Check validity of basemap->item() and if title() is empty. If either is true, push to end of list.
-                  if (!b1->item() || b1->item()->title().isEmpty())
-                    return false;
-                  else if (!b2->item() || b2->item()->title().isEmpty())
-                    return true;
-                  else
-                    return b1->item()->title() < b2->item()->title();
-                });
+      {
+        // Check validity of basemap->item() and if title() is empty. If either is true, push to end of list.
+        if (!b1->item() || b1->item()->title().isEmpty())
+        {
+          return false;
+        }
+        else if (!b2->item() || b2->item()->title().isEmpty())
+        {
+          return true;
+        }
+        else
+        {
+          return b1->item()->title() < b2->item()->title();
+        }
+      });
 
       for (auto basemap : basemapsVector)
       {
@@ -252,36 +267,36 @@ namespace Esri::ArcGISRuntime::Toolkit {
     {
       // Load the portal and kick-off the group discovery.
       QObject::connect(portal, &Portal::doneLoading, self, [portal, self](Error e)
-                       {
-                         if (!e.isEmpty())
-                           return;
+      {
+        if (!e.isEmpty())
+        {
+          return;
+        }
 
-                         portal->fetchDeveloperBasemapsAsync().then(self,
-                                                                    [portal, self]()
-                                                                    {
-                                                                      // Sort and append the basemaps to the gallery.
-                                                                      BasemapListModel* basemaps = portal->developerBasemaps();
-                                                                      sortBasemapsAndAddToGallery(self, basemaps);
-                                                                      // Notify the demo that the basemaps have changed.
-                                                                      emit self->basemapsChanged();
-                                                                    });
+        portal->fetchDeveloperBasemapsAsync().then(self, [portal, self]()
+        {
+          // Sort and append the basemaps to the gallery.
+          BasemapListModel* basemaps = portal->developerBasemaps();
+          sortBasemapsAndAddToGallery(self, basemaps);
+          // Notify the demo that the basemaps have changed.
+          emit self->basemapsChanged();
+        });
 
-                         if (qobject_cast<Scene*>(self->geoModel()))
-                         {
-                           portal->fetch3DBasemapsAsync().then(self,
-                                                               [portal, self]()
-                                                               {
-                                                                 // Sort and append the basemaps to the gallery.
-                                                                 BasemapListModel* basemaps = portal->basemaps3D();
-                                                                 sortBasemapsAndAddToGallery(self, basemaps, true);
-                                                                 // Notify the demo that the basemaps have changed.
-                                                                 emit self->basemapsChanged();
-                                                               });
-                         }
-                       });
+        if (qobject_cast<Scene*>(self->geoModel()))
+        {
+          portal->fetch3DBasemapsAsync().then(self, [portal, self]()
+          {
+            // Sort and append the basemaps to the gallery.
+            BasemapListModel* basemaps = portal->basemaps3D();
+            sortBasemapsAndAddToGallery(self, basemaps, true);
+            // Notify the demo that the basemaps have changed.
+            emit self->basemapsChanged();
+          });
+        }
+      });
       portal->load();
     }
-  }
+  } // namespace
 
   /*!
     \inmodule Esri.ArcGISRuntime.Toolkit
@@ -298,53 +313,53 @@ namespace Esri::ArcGISRuntime::Toolkit {
   {
     // Listen in to items added to the gallery.
     connect(m_gallery, &GenericListModel::rowsInserted, this, [this](const QModelIndex& parent, int first, int last)
-            {
-              if (parent.isValid())
-              {
-                return;
-              }
+    {
+      if (parent.isValid())
+      {
+        return;
+      }
 
-              for (auto i = first; i <= last; ++i)
-              {
-                auto index = m_gallery->index(i);
-                if (auto galleryItem = m_gallery->element<BasemapGalleryItem>(index))
-                {
-                  onBasemapAddedToGallery(this, m_gallery, index, galleryItem);
-                }
-              }
-            });
+      for (auto i = first; i <= last; ++i)
+      {
+        auto index = m_gallery->index(i);
+        if (auto galleryItem = m_gallery->element<BasemapGalleryItem>(index))
+        {
+          onBasemapAddedToGallery(this, m_gallery, index, galleryItem);
+        }
+      }
+    });
 
     // Listen in to items removed from the gallery.
     connect(m_gallery, &GenericListModel::rowsRemoved, this, [this](const QModelIndex& parent, int first, int last)
-            {
-              if (parent.isValid())
-              {
-                return;
-              }
+    {
+      if (parent.isValid())
+      {
+        return;
+      }
 
-              for (auto i = first; i <= last; ++i)
-              {
-                auto index = m_gallery->index(i);
-                if (auto galleryItem = m_gallery->element<BasemapGalleryItem>(index))
-                {
-                  onBasemapRemovedFromGallery(this, galleryItem);
-                }
-              }
-            });
+      for (auto i = first; i <= last; ++i)
+      {
+        auto index = m_gallery->index(i);
+        if (auto galleryItem = m_gallery->element<BasemapGalleryItem>(index))
+        {
+          onBasemapRemovedFromGallery(this, galleryItem);
+        }
+      }
+    });
     m_gallery->setFlagsCallback([this](const QModelIndex& index)
-                                {
-                                  BasemapGalleryItem* galleryItem = m_gallery->element<BasemapGalleryItem>(index);
-                                  if (!basemapMatchesCurrentSpatialReference(galleryItem->basemap()))
-                                  {
-                                    //disabled item flags
-                                    return Qt::ItemFlags(Qt::NoItemFlags);
-                                  }
-                                  else
-                                  {
-                                    //enabled and selectable item flags
-                                    return Qt::ItemFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-                                  }
-                                });
+    {
+      BasemapGalleryItem* galleryItem = m_gallery->element<BasemapGalleryItem>(index);
+      if (!basemapMatchesCurrentSpatialReference(galleryItem->basemap()))
+      {
+        //disabled item flags
+        return Qt::ItemFlags(Qt::NoItemFlags);
+      }
+      else
+      {
+        //enabled and selectable item flags
+        return Qt::ItemFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+      }
+    });
     setToDefaultBasemaps(this, m_portal);
     // Have to set the property names, so the controller will know how to match the properties from
     // basemapgalleryitem with the specific Qt::<namespace> invoked in the .data() from the View (ListView) obj
@@ -365,7 +380,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void BasemapGalleryController::setGeoModel(GeoModel* geoModel)
   {
     if (geoModel == m_geoModel)
+    {
       return;
+    }
 
     if (m_geoModel)
     {
@@ -399,7 +416,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void BasemapGalleryController::setPortal(Portal* portal)
   {
     if (portal == m_portal)
+    {
       return;
+    }
 
     if (m_portal)
     {
@@ -421,46 +440,44 @@ namespace Esri::ArcGISRuntime::Toolkit {
       // If portal basemaps are populated, add the contents to the gallery.
       // Otherwise attempt a fetch of the contents then add to the gallery.
       doOnLoaded(m_portal, this, [this]
-                 {
-                   if (m_portal->basemaps()->rowCount() > 0)
-                   {
-                     for (auto basemap : *m_portal->basemaps())
-                     {
-                       append(basemap);
-                     }
-                   }
-                   else
-                   {
-                     m_portal->fetchBasemapsAsync().then(this,
-                                                         [this]()
-                                                         {
-                                                           BasemapListModel* basemaps = m_portal->basemaps();
-                                                           sortBasemapsAndAddToGallery(this, basemaps);
-                                                           emit basemapsChanged();
-                                                         });
-                   }
+      {
+        if (m_portal->basemaps()->rowCount() > 0)
+        {
+          for (auto basemap : *m_portal->basemaps())
+          {
+            append(basemap);
+          }
+        }
+        else
+        {
+          m_portal->fetchBasemapsAsync().then(this, [this]()
+          {
+            BasemapListModel* basemaps = m_portal->basemaps();
+            sortBasemapsAndAddToGallery(this, basemaps);
+            emit basemapsChanged();
+          });
+        }
 
-                   if (qobject_cast<Scene*>(m_geoModel))
-                   {
-                     if (m_portal->basemaps3D()->rowCount() > 0)
-                     {
-                       for (auto basemap : *m_portal->basemaps3D())
-                       {
-                         append(basemap);
-                       }
-                     }
-                     else
-                     {
-                       m_portal->fetch3DBasemapsAsync().then(this,
-                                                             [this]()
-                                                             {
-                                                               BasemapListModel* basemaps = m_portal->basemaps3D();
-                                                               sortBasemapsAndAddToGallery(this, basemaps, true);
-                                                               emit basemapsChanged();
-                                                             });
-                     }
-                   }
-                 });
+        if (qobject_cast<Scene*>(m_geoModel))
+        {
+          if (m_portal->basemaps3D()->rowCount() > 0)
+          {
+            for (auto basemap : *m_portal->basemaps3D())
+            {
+              append(basemap);
+            }
+          }
+          else
+          {
+            m_portal->fetch3DBasemapsAsync().then(this, [this]()
+            {
+              BasemapListModel* basemaps = m_portal->basemaps3D();
+              sortBasemapsAndAddToGallery(this, basemaps, true);
+              emit basemapsChanged();
+            });
+          }
+        }
+      });
     }
 
     emit portalChanged();
@@ -478,12 +495,13 @@ namespace Esri::ArcGISRuntime::Toolkit {
       if (e.isEmpty())
       {
         if (basemap == m_currentBasemap)
+        {
           return;
+        }
         if (!basemapMatchesCurrentSpatialReference(basemap))
         {
           // force redraw for the single basemapGalleryItem updated
-          emit m_gallery->dataChanged(
-              m_gallery->index(basemapIndex(basemap)), m_gallery->index(basemapIndex(basemap)));
+          emit m_gallery->dataChanged(m_gallery->index(basemapIndex(basemap)), m_gallery->index(basemapIndex(basemap)));
           return;
         }
         m_currentBasemap = basemap;
@@ -503,8 +521,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     {
       if (basemap->baseLayers()->first()->loadStatus() != LoadStatus::Loaded)
       {
-        singleShotConnection(
-            basemap->baseLayers()->first(), &Layer::doneLoading, this, apply);
+        singleShotConnection(basemap->baseLayers()->first(), &Layer::doneLoading, this, apply);
         basemap->baseLayers()->first()->load();
       }
       else
@@ -539,7 +556,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
       auto index = m_gallery->index(i);
       auto b = m_gallery->element<BasemapGalleryItem>(index);
       if (basemap == b->basemap())
+      {
         return i;
+      }
     }
     return -1;
   }
@@ -547,7 +566,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   bool BasemapGalleryController::basemapMatchesCurrentSpatialReference(Basemap* basemap) const
   {
     if (!basemap)
+    {
       return false;
+    }
 
     SpatialReference sp;
     if (m_geoModel)
@@ -557,38 +578,46 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     // If no spatial reference is set, any basemap can be applied.
     if (sp.isEmpty())
+    {
       return true;
+    }
     auto item = basemap->item();
 
     if (item)
     {
       auto it_sp = item->spatialReference();
       if (item && !it_sp.isEmpty())
+      {
         return sp == item->spatialReference();
+      }
     }
 
     const auto layers = basemap->baseLayers();
     if (layers->size() <= 0)
+    {
       return false;
+    }
 
     //scene case:
     if (auto scene = qobject_cast<Scene*>(m_geoModel))
     {
       const auto sp2 = basemap->baseLayers()->first()->spatialReference();
       if (sp2.isEmpty()) //case used by the listview painter
+      {
         return true;
+      }
       auto svts = scene->sceneViewTilingScheme();
       switch (svts)
       {
-      case SceneViewTilingScheme::Geographic:
-        return sp2.isGeographic();
+        case SceneViewTilingScheme::Geographic:
+          return sp2.isGeographic();
 
-      case SceneViewTilingScheme::WebMercator:
-        return sp2 == SpatialReference::webMercator();
+        case SceneViewTilingScheme::WebMercator:
+          return sp2 == SpatialReference::webMercator();
 
-      default:
-        qDebug() << "a new sceneviewTilingScheme has been used";
-        break;
+        default:
+          qDebug() << "a new sceneviewTilingScheme has been used";
+          break;
       }
       return false;
     }
@@ -617,4 +646,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     }
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

@@ -20,9 +20,11 @@
 
 #include <QMetaProperty>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
-  namespace {
+  namespace
+  {
 
     /*
   \internal
@@ -46,7 +48,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
       return parts.join(" ");
     }
 
-  }
+  } // namespace
 
   /*!
     \internal
@@ -113,7 +115,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
     beginResetModel();
 
     if (m_sourceModel)
+    {
       disconnect(m_sourceModel, nullptr, this, nullptr);
+    }
 
     m_sourceModel = listModel;
 
@@ -124,11 +128,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
       connect(m_sourceModel, &GenericListModel::dataChanged, this,
               [this](const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int>& /*roles*/)
-              {
-                emit dataChanged(index(topLeft.row(), 0),
-                                 index(bottomRight.row(), columnCount() - 1),
-                                 {Qt::DisplayRole, Qt::EditRole});
-              });
+      {
+        emit dataChanged(index(topLeft.row(), 0), index(bottomRight.row(), columnCount() - 1), {Qt::DisplayRole, Qt::EditRole});
+      });
 
       connect(m_sourceModel, &GenericListModel::rowsAboutToBeInserted, this, &GenericTableProxyModel::rowsAboutToBeInserted);
       connect(m_sourceModel, &GenericListModel::rowsAboutToBeMoved, this, &GenericTableProxyModel::rowsAboutToBeMoved);
@@ -151,7 +153,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   int GenericTableProxyModel::rowCount(const QModelIndex& parent) const
   {
     if (parent.isValid())
+    {
       return 0;
+    }
     return m_sourceModel ? m_sourceModel->rowCount() : 0;
   }
 
@@ -170,7 +174,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   int GenericTableProxyModel::columnCount(const QModelIndex& parent) const
   {
     if (parent.isValid())
+    {
       return 0;
+    }
     return m_sourceModel ? m_sourceModel->roleNames().size() - 1 : 0;
   }
 
@@ -194,16 +200,24 @@ namespace Esri::ArcGISRuntime::Toolkit {
   QVariant GenericTableProxyModel::data(const QModelIndex& index, int role) const
   {
     if (!m_sourceModel)
+    {
       return QVariant();
+    }
 
     if (!index.isValid())
+    {
       return QVariant();
+    }
 
     if (role == Qt::UserRole)
+    {
       return m_sourceModel->data(m_sourceModel->index(index.row()), Qt::UserRole);
+    }
 
     if (role != Qt::DisplayRole && role != Qt::EditRole)
+    {
       return QVariant();
+    }
 
     const auto c = index.column() + (Qt::UserRole + 1);
     return m_sourceModel->data(m_sourceModel->index(index.row()), c);
@@ -230,13 +244,19 @@ namespace Esri::ArcGISRuntime::Toolkit {
   bool GenericTableProxyModel::setData(const QModelIndex& index, const QVariant& value, int role)
   {
     if (!index.isValid())
+    {
       return false;
+    }
 
     if (role == Qt::UserRole)
+    {
       return m_sourceModel->setData(m_sourceModel->index(index.row()), value, Qt::UserRole);
+    }
 
     if (role != Qt::DisplayRole && role != Qt::EditRole)
+    {
       return false;
+    }
 
     const auto c = index.column() + (Qt::UserRole + 1);
     return m_sourceModel->setData(m_sourceModel->index(index.row()), value, c);
@@ -257,11 +277,15 @@ namespace Esri::ArcGISRuntime::Toolkit {
   Qt::ItemFlags GenericTableProxyModel::flags(const QModelIndex& index) const
   {
     if (!m_sourceModel)
+    {
       return Qt::NoItemFlags;
+    }
 
     auto metaObject = m_sourceModel->elementType();
     if (!metaObject)
+    {
       return Qt::NoItemFlags;
+    }
 
     auto flags = QAbstractTableModel::flags(index);
     auto property = metaObject->property(index.column() + metaObject->propertyOffset());
@@ -287,17 +311,25 @@ namespace Esri::ArcGISRuntime::Toolkit {
   QVariant GenericTableProxyModel::headerData(int section, Qt::Orientation orientation, int role) const
   {
     if (role != Qt::DisplayRole)
+    {
       return QVariant();
+    }
 
     if (Qt::Orientation::Vertical == orientation)
+    {
       return section + 1;
+    }
 
     const auto roles = m_sourceModel ? m_sourceModel->roleNames() : QHash<int, QByteArray>();
     auto it = roles.find(section + Qt::UserRole + 1);
     if (it != roles.end())
+    {
       return toTitleCase(QString(it.value()));
+    }
     else
+    {
       return "";
+    }
   }
 
   /*!
@@ -315,10 +347,14 @@ namespace Esri::ArcGISRuntime::Toolkit {
   bool GenericTableProxyModel::insertRows(int row, int count, const QModelIndex& parent)
   {
     if (parent.isValid())
+    {
       return false;
+    }
 
     if (!m_sourceModel)
+    {
       return false;
+    }
 
     return m_sourceModel->insertRows(row, count);
   }
@@ -338,10 +374,14 @@ namespace Esri::ArcGISRuntime::Toolkit {
   bool GenericTableProxyModel::removeRows(int row, int count, const QModelIndex& parent)
   {
     if (parent.isValid())
+    {
       return false;
+    }
 
     if (!m_sourceModel)
+    {
       return false;
+    }
 
     return m_sourceModel->removeRows(row, count);
   }
@@ -376,4 +416,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     return m_sourceModel ? m_sourceModel->append(object) : false;
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

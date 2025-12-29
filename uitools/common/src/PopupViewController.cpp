@@ -42,7 +42,8 @@
 #include "PopupElementViewItem.h"
 #include "TextPopupElementViewController.h"
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
     \internal
@@ -72,7 +73,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void PopupViewController::setPopup(Popup* popup)
   {
     if (m_popup == popup)
+    {
       return;
+    }
 
     if (m_popup)
     {
@@ -83,37 +86,36 @@ namespace Esri::ArcGISRuntime::Toolkit {
     m_popup = popup;
 
     if (m_popup)
+    {
       connect(m_popup.data(), &QObject::destroyed, this, &PopupViewController::popupChanged);
+    }
 
     m_popup->evaluateExpressionsAsync(this).then(this, [this](const QList<PopupExpressionEvaluation*>&)
-                                                 {
-                                                   for (auto element : m_popup->evaluatedElements())
-                                                   {
-                                                     switch (element->popupElementType())
-                                                     {
-                                                     case Esri::ArcGISRuntime::PopupElementType::TextPopupElement:
-                                                       m_popupElementControllerModel->append(
-                                                           new TextPopupElementViewController(static_cast<TextPopupElement*>(element), this, m_popup));
-                                                       break;
-                                                     case Esri::ArcGISRuntime::PopupElementType::FieldsPopupElement:
-                                                       m_popupElementControllerModel->append(
-                                                           new FieldsPopupElementViewController(static_cast<FieldsPopupElement*>(element), this, m_popup));
-                                                       break;
-                                                     case Esri::ArcGISRuntime::PopupElementType::AttachmentsPopupElement:
-                                                       m_popupElementControllerModel->append(
-                                                           new AttachmentsPopupElementViewController(static_cast<AttachmentsPopupElement*>(element), this, m_popup));
-                                                       break;
-                                                     case Esri::ArcGISRuntime::PopupElementType::MediaPopupElement:
-                                                       m_popupElementControllerModel->append(
-                                                           new MediaPopupElementViewController(static_cast<MediaPopupElement*>(element), this, m_popup));
-                                                       break;
-                                                     default:
-                                                       Q_UNIMPLEMENTED();
-                                                       break;
-                                                     }
-                                                   }
-                                                   emit popupChanged();
-                                                 });
+    {
+      for (auto element : m_popup->evaluatedElements())
+      {
+        switch (element->popupElementType())
+        {
+          case Esri::ArcGISRuntime::PopupElementType::TextPopupElement:
+            m_popupElementControllerModel->append(new TextPopupElementViewController(static_cast<TextPopupElement*>(element), this, m_popup));
+            break;
+          case Esri::ArcGISRuntime::PopupElementType::FieldsPopupElement:
+            m_popupElementControllerModel->append(new FieldsPopupElementViewController(static_cast<FieldsPopupElement*>(element), this, m_popup));
+            break;
+          case Esri::ArcGISRuntime::PopupElementType::AttachmentsPopupElement:
+            m_popupElementControllerModel->append(
+              new AttachmentsPopupElementViewController(static_cast<AttachmentsPopupElement*>(element), this, m_popup));
+            break;
+          case Esri::ArcGISRuntime::PopupElementType::MediaPopupElement:
+            m_popupElementControllerModel->append(new MediaPopupElementViewController(static_cast<MediaPopupElement*>(element), this, m_popup));
+            break;
+          default:
+            Q_UNIMPLEMENTED();
+            break;
+        }
+      }
+      emit popupChanged();
+    });
 
     emit popupChanged();
     emit titleChanged();
@@ -124,4 +126,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     return m_popup ? m_popup->title() : QString();
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

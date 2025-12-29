@@ -20,7 +20,8 @@
 #include <FloorFacility.h>
 #include <FloorSite.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
     \internal
@@ -80,4 +81,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     return site ? site->siteId() : QString{};
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

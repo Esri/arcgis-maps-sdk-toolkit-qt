@@ -24,7 +24,8 @@
 // std headers
 #include <cmath>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
     \internal
@@ -59,9 +60,13 @@ namespace Esri::ArcGISRuntime::Toolkit {
   double NorthArrowController::heading() const
   {
     if (auto mapView = qobject_cast<MapView*>(m_geoView))
+    {
       return mapView->mapRotation();
+    }
     else if (auto sceneView = qobject_cast<SceneView*>(m_geoView))
+    {
       return sceneView->currentViewpointCamera().heading();
+    }
 
     return static_cast<double>(NAN);
   }
@@ -74,7 +79,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void NorthArrowController::setGeoView(QObject* geoView)
   {
     if (geoView == m_geoView)
+    {
       return;
+    }
 
     if (m_geoView)
     {
@@ -85,16 +92,14 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
-      connect(mapView, &MapViewToolkit::mapRotationChanged,
-              this, &NorthArrowController::headingChanged);
+      connect(mapView, &MapViewToolkit::mapRotationChanged, this, &NorthArrowController::headingChanged);
     }
     else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
-      connect(sceneView, &SceneViewToolkit::viewpointChanged,
-              this, &NorthArrowController::headingChanged);
+      connect(sceneView, &SceneViewToolkit::viewpointChanged, this, &NorthArrowController::headingChanged);
     }
 
     emit geoViewChanged();
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

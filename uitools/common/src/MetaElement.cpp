@@ -16,7 +16,8 @@
  ******************************************************************************/
 #include "MetaElement.h"
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
     \internal
@@ -57,11 +58,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
       \li \a parent The parent ListModel.
     \endlist
    */
-  MetaElement::MetaElement(
-      QModelIndex index,
-      int customRole,
-      QObject* trackedObject,
-      QAbstractItemModel* parent) :
+  MetaElement::MetaElement(QModelIndex index, int customRole, QObject* trackedObject, QAbstractItemModel* parent) :
     QObject(parent),
     m_index(std::move(index)),
     m_customRole(customRole),
@@ -79,7 +76,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void MetaElement::emitDataChanged()
   {
     if (!m_trackedObject || !m_index.isValid())
+    {
       return;
+    }
 
     emit m_parentModel->dataChanged(m_index, m_index, {Qt::UserRole, m_customRole});
   }
@@ -96,4 +95,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     \c QMetaMethod connection purposes.
    */
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

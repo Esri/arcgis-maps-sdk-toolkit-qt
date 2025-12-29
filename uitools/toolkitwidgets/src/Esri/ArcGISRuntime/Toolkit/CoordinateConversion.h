@@ -23,16 +23,19 @@
 class QGraphicsEllipseItem;
 class QMenu;
 
-namespace Ui {
+namespace Ui
+{
   class CoordinateConversion;
 }
 
-namespace Esri::ArcGISRuntime {
+namespace Esri::ArcGISRuntime
+{
 
   class MapGraphicsView;
   class SceneGraphicsView;
 
-  namespace Toolkit {
+  namespace Toolkit
+  {
 
     class CoordinateConversionController;
     class Flash;
@@ -63,7 +66,7 @@ namespace Esri::ArcGISRuntime {
       Ui::CoordinateConversion* m_ui = nullptr;
     };
 
-  } // Toolkit
-} // Esri::ArcGISRuntime
+  } // namespace Toolkit
+} // namespace Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_COORDIANTECONVERSION_H

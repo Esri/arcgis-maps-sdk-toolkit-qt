@@ -27,7 +27,8 @@
 // STL headers
 #include <Basemap.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   class BasemapGalleryItem : public QObject
   {
@@ -88,6 +89,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     bool m_is3D = false;
   };
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_BASEMAPGALLERYCONTROLLER_H

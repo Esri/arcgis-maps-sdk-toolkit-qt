@@ -89,9 +89,11 @@
 
 using namespace Esri::ArcGISRuntime::Authentication;
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
-  namespace {
+  namespace
+  {
     /*!
       \internal
       \brief Manages the connection between Controller \a self and GeoView \a geoView.
@@ -100,12 +102,10 @@ namespace Esri::ArcGISRuntime::Toolkit {
       Will continue to call `f` every time a mapChanged signal is triggered on
       the GeoView.
      */
-    template <typename GeoViewToolkit, typename Func>
+    template<typename GeoViewToolkit, typename Func>
     void connectToGeoView(GeoViewToolkit* geoView, UtilityNetworkTraceController* self, Func&& f)
     {
-      static_assert(
-          std::is_same<GeoViewToolkit, MapViewToolkit>::value,
-          "Must be connected to a MapView");
+      static_assert(std::is_same<GeoViewToolkit, MapViewToolkit>::value, "Must be connected to a MapView");
 
       auto connectToGeoModel = [self, geoView, f = std::forward<Func>(f)]
       {
@@ -119,25 +119,27 @@ namespace Esri::ArcGISRuntime::Toolkit {
         // This may happen immediately or asyncnronously. This can be interrupted if GeoView or
         // GeoModel changes in the interim.
         auto c = doOnLoaded(model, self, [self, model, geoView, f = std::move(f)]()
-                            {
-                              auto utilityNetworks = model->utilityNetworks();
+        {
+          auto utilityNetworks = model->utilityNetworks();
 
-                              for (const auto utilityNetwork : *utilityNetworks)
-                              {
-                                if (!utilityNetwork)
-                                  continue;
+          for (const auto utilityNetwork : *utilityNetworks)
+          {
+            if (!utilityNetwork)
+            {
+              continue;
+            }
 
-                                auto c2 = doOnLoaded(utilityNetwork, self, [f = std::move(f)]
-                                                     {
-                                                       f();
-                                                     });
-                                // Destroy the connection `c` if the map changes, or the geoView changes.
-                                // This means the connection is only relevant for as long as the model/view is relavant to
-                                // the UtilityNetworkTraceController.
-                                disconnectOnSignal(geoView, getGeoModelChangedSignal(geoView), self, c2);
-                                disconnectOnSignal(self, &UtilityNetworkTraceController::geoViewChanged, self, c2);
-                              }
-                            });
+            auto c2 = doOnLoaded(utilityNetwork, self, [f = std::move(f)]
+            {
+              f();
+            });
+            // Destroy the connection `c` if the map changes, or the geoView changes.
+            // This means the connection is only relevant for as long as the model/view is relavant to
+            // the UtilityNetworkTraceController.
+            disconnectOnSignal(geoView, getGeoModelChangedSignal(geoView), self, c2);
+            disconnectOnSignal(self, &UtilityNetworkTraceController::geoViewChanged, self, c2);
+          }
+        });
 
         // Destroy the connection `c` if the map changes, or the geoView changes. This means
         // the connection is only relevant for as long as the model/view is relavant to the UtilityNetworkTraceController.
@@ -149,7 +151,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
       QObject::connect(geoView, getGeoModelChangedSignal(geoView), self, connectToGeoModel);
       connectToGeoModel();
     }
-  }
+  } // namespace
 
   /*!
     \class Esri::ArcGISRuntime::Toolkit::UtilityNetworkTraceController
@@ -174,20 +176,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
     m_isAddingStartingPointInProgress(false),
     m_startingPointSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle::Cross, QColor(Qt::green), 20.0f, this)),
     m_resultsGraphicsOverlay(new GraphicsOverlay(this)),
-    m_resultPointSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle::Circle,
-                                               QColor(0, 0, 255, 126),
-                                               20,
-                                               this)),
-    m_resultLineSymbol(new SimpleLineSymbol(SimpleLineSymbolStyle::Dot,
-                                            QColor(0, 0, 255, 126),
-                                            5,
-                                            this)),
+    m_resultPointSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle::Circle, QColor(0, 0, 255, 126), 20, this)),
+    m_resultLineSymbol(new SimpleLineSymbol(SimpleLineSymbolStyle::Dot, QColor(0, 0, 255, 126), 5, this)),
     m_resultFillSymbol(new SimpleFillSymbol(SimpleFillSymbolStyle::ForwardDiagonal,
                                             QColor(0, 0, 255, 126),
-                                            new SimpleLineSymbol(SimpleLineSymbolStyle::Solid,
-                                                                 QColor(0, 0, 255, 126),
-                                                                 2,
-                                                                 this),
+                                            new SimpleLineSymbol(SimpleLineSymbolStyle::Solid, QColor(0, 0, 255, 126), 2, this),
                                             this))
   {
     ArcGISRuntimeEnvironment::authenticationManager()->setArcGISAuthenticationChallengeHandler(this);
@@ -220,7 +213,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void UtilityNetworkTraceController::setGeoView(QObject* geoView)
   {
     if (geoView == m_geoView)
+    {
       return;
+    }
 
     if (m_geoView)
     {
@@ -245,88 +240,91 @@ namespace Esri::ArcGISRuntime::Toolkit {
               &UtilityNetworkTraceController::selectedUtilityNetworkChanged, // this should've already been handled and newValue used
               this,
               [this](UtilityNetwork* newValue) // when it's used, we also need to use it
-              {
-                if (newValue)
-                {
-                  auto traceConfigs = m_selectedUtilityNetwork->queryNamedTraceConfigurationsAsync(nullptr).then(this,
-                                                                                                                 [this](const QList<UtilityNamedTraceConfiguration*>& utilityNamedTraceConfigurationResults)
-                                                                                                                 {
-                                                                                                                   m_traceConfigurations.clear();
-                                                                                                                   m_traceConfigurations = utilityNamedTraceConfigurationResults;
-                                                                                                                   std::sort(std::begin(m_traceConfigurations),
-                                                                                                                             std::end(m_traceConfigurations),
-                                                                                                                             [](const auto& a, const auto& b)
-                                                                                                                             {
-                                                                                                                               return a->name() < b->name();
-                                                                                                                             });
+      {
+        if (newValue)
+        {
+          auto traceConfigs = m_selectedUtilityNetwork->queryNamedTraceConfigurationsAsync(nullptr).then(
+            this, [this](const QList<UtilityNamedTraceConfiguration*>& utilityNamedTraceConfigurationResults)
+          {
+            m_traceConfigurations.clear();
+            m_traceConfigurations = utilityNamedTraceConfigurationResults;
+            std::sort(std::begin(m_traceConfigurations), std::end(m_traceConfigurations), [](const auto& a, const auto& b)
+            {
+              return a->name() < b->name();
+            });
 
-                                                                                                                   QStringList traceConfigNamesTemp{};
+            QStringList traceConfigNamesTemp{};
 
-                                                                                                                   for (const auto& traceConfig : m_traceConfigurations)
-                                                                                                                   {
-                                                                                                                     traceConfigNamesTemp.append(traceConfig->name());
-                                                                                                                   }
+            for (const auto& traceConfig : m_traceConfigurations)
+            {
+              traceConfigNamesTemp.append(traceConfig->name());
+            }
 
-                                                                                                                   setTraceConfigurationNames(traceConfigNamesTemp);
+            setTraceConfigurationNames(traceConfigNamesTemp);
 
-                                                                                                                   if (!m_traceConfigurations.isEmpty())
-                                                                                                                   {
-                                                                                                                     // select the first trace configuration by default
-                                                                                                                     m_selectedTraceConfiguration = m_traceConfigurations.at(0);
-                                                                                                                   }
-                                                                                                                 });
-                }
-                else
-                {
-                  refresh();
-                }
-              });
+            if (!m_traceConfigurations.isEmpty())
+            {
+              // select the first trace configuration by default
+              m_selectedTraceConfiguration = m_traceConfigurations.at(0);
+            }
+          });
+        }
+        else
+        {
+          refresh();
+        }
+      });
 
       mapView->graphicsOverlays()->append(m_startingPointsGraphicsOverlay);
       mapView->graphicsOverlays()->append(m_resultsGraphicsOverlay);
 
       // identify symbols on mouse click
       connect(mapView, &MapViewToolkit::mouseClicked, this, [this, mapView](QMouseEvent& mouseEvent)
+      {
+        if (isAddingStartingPointInProgress() || !isAddingStartingPointEnabled())
+        {
+          return;
+        }
+
+        setIsAddingStartingPointEnabled(false);
+        setIsAddingStartingPointInProgress(true);
+
+        const double tolerance = 10.0;
+        const bool returnPopups = false;
+        m_mapPoint = mapView->screenToLocation(mouseEvent.pos().x(), mouseEvent.pos().y());
+
+        mapView->identifyLayersAsync(mouseEvent.position(), tolerance, returnPopups)
+          .then(this, [this](const QList<IdentifyLayerResult*>& results)
+        {
+          // handle the identify results
+          for (const auto& layer : results)
+          {
+            for (const auto& geoElement : layer->geoElements())
+            {
+              const auto ft = dynamic_cast<ArcGISFeature*>(geoElement);
+
+              if (geoElement)
               {
-                if (isAddingStartingPointInProgress() || !isAddingStartingPointEnabled())
-                  return;
+                addStartingPoint(ft, m_mapPoint);
+              }
+            }
+          }
 
-                setIsAddingStartingPointEnabled(false);
-                setIsAddingStartingPointInProgress(true);
+          qDeleteAll(results);
 
-                const double tolerance = 10.0;
-                const bool returnPopups = false;
-                m_mapPoint = mapView->screenToLocation(mouseEvent.pos().x(), mouseEvent.pos().y());
-
-                mapView->identifyLayersAsync(mouseEvent.position(), tolerance, returnPopups).then(this, [this](const QList<IdentifyLayerResult*>& results)
-                                                                                                  {
-                                                                                                    // handle the identify results
-                                                                                                    for (const auto& layer : results)
-                                                                                                    {
-                                                                                                      for (const auto& geoElement : layer->geoElements())
-                                                                                                      {
-                                                                                                        const auto ft = dynamic_cast<ArcGISFeature*>(geoElement);
-
-                                                                                                        if (geoElement)
-                                                                                                          addStartingPoint(ft, m_mapPoint);
-                                                                                                      }
-                                                                                                    }
-
-                                                                                                    qDeleteAll(results);
-
-                                                                                                    setIsAddingStartingPointInProgress(false);
-                                                                                                  });
-              });
+          setIsAddingStartingPointInProgress(false);
+        });
+      });
 
       connect(this, &UtilityNetworkTraceController::selectedTraceConfigurationChanged, this, [this]()
-              {
-                applyStartingPointWarnings();
-              });
+      {
+        applyStartingPointWarnings();
+      });
 
       connect(this, &UtilityNetworkTraceController::startingPointsChanged, this, [this]()
-              {
-                applyStartingPointWarnings();
-              });
+      {
+        applyStartingPointWarnings();
+      });
 
       setupUtilityNetworks();
     }
@@ -340,7 +338,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void UtilityNetworkTraceController::setSelectedUtilityNetwork(UtilityNetwork* selectedUtilityNetwork)
   {
     if (m_selectedUtilityNetwork == selectedUtilityNetwork)
+    {
       return;
+    }
 
     if (m_selectedUtilityNetwork != nullptr)
     {
@@ -370,7 +370,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void UtilityNetworkTraceController::setTraceConfigurationNames(const QStringList& traceConfigurationNames)
   {
     if (m_traceConfigurationNames == traceConfigurationNames)
+    {
       return;
+    }
 
     m_traceConfigurationNames = traceConfigurationNames;
     emit traceConfigurationNamesChanged();
@@ -384,7 +386,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void UtilityNetworkTraceController::setSelectedTraceConfiguration(UtilityNamedTraceConfiguration* selectedTraceConfiguration)
   {
     if (m_selectedTraceConfiguration == selectedTraceConfiguration)
+    {
       return;
+    }
 
     m_selectedTraceConfiguration = selectedTraceConfiguration;
     emit selectedTraceConfigurationChanged();
@@ -398,7 +402,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void UtilityNetworkTraceController::setIsTraceInProgress(const bool isTraceInProgress)
   {
     if (m_isTraceInProgress == isTraceInProgress)
+    {
       return;
+    }
 
     m_isTraceInProgress = isTraceInProgress;
     emit isTraceInProgressChanged();
@@ -412,7 +418,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void UtilityNetworkTraceController::setIsAddingStartingPointEnabled(const bool isAddingStartingPointEnabled)
   {
     if (m_isAddingStartingPointEnabled == isAddingStartingPointEnabled)
+    {
       return;
+    }
 
     m_isAddingStartingPointEnabled = isAddingStartingPointEnabled;
     emit isAddingStartingPointEnabledChanged();
@@ -426,7 +434,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void UtilityNetworkTraceController::setIsAddingStartingPointInProgress(const bool isAddingStartingPointInProgress)
   {
     if (m_isAddingStartingPointInProgress == isAddingStartingPointInProgress)
+    {
       return;
+    }
 
     m_isAddingStartingPointInProgress = isAddingStartingPointInProgress;
     emit isAddingStartingPointInProgressChanged();
@@ -440,7 +450,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void UtilityNetworkTraceController::setStartingPointSymbol(Symbol* startingPointSymbol)
   {
     if (m_startingPointSymbol == startingPointSymbol)
+    {
       return;
+    }
 
     m_startingPointSymbol = startingPointSymbol;
     emit startingPointSymbolChanged();
@@ -454,7 +466,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void UtilityNetworkTraceController::setIsInsufficientStartingPoints(bool isInsufficientStartingPoints)
   {
     if (m_isInsufficientStartingPoints == isInsufficientStartingPoints)
+    {
       return;
+    }
 
     m_isInsufficientStartingPoints = isInsufficientStartingPoints;
     emit isInsufficientStartingPointsChanged();
@@ -468,7 +482,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void UtilityNetworkTraceController::setIsAboveMinimumStartingPoint(bool isAboveMinimumStartingPoint)
   {
     if (m_isAboveMinimumStartingPoint == isAboveMinimumStartingPoint)
+    {
       return;
+    }
 
     m_isAboveMinimumStartingPoint = isAboveMinimumStartingPoint;
     emit isAboveMinimumStartingPointChanged();
@@ -482,7 +498,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void UtilityNetworkTraceController::setIsResetResultsEnabled(bool isResetResultsEnabled)
   {
     if (m_isResetResultsEnabled == isResetResultsEnabled)
+    {
       return;
+    }
 
     m_isResetResultsEnabled = isResetResultsEnabled;
     emit isResetResultsEnabledChanged();
@@ -491,7 +509,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void UtilityNetworkTraceController::runTrace(const QString& /*name*/)
   {
     if (isTraceInProgress())
+    {
       return;
+    }
 
     resetTraceResults();
 
@@ -506,14 +526,16 @@ namespace Esri::ArcGISRuntime::Toolkit {
     m_utilityTraceParameters = new UtilityTraceParameters(m_selectedTraceConfiguration, m_startingPoints->utilityElements(), this);
 
     // Async UtilityNetwork::trace
-    m_selectedUtilityNetwork->traceAsync(m_utilityTraceParameters).then(this, [this](const QList<UtilityTraceResult*>&)
-                                                                        {
-                                                                          onTraceCompleted();
-                                                                        })
-        .onFailed([this](const ErrorException& e)
-                  {
-                    onSelectedUtilityNetworkError(e);
-                  });
+    m_selectedUtilityNetwork->traceAsync(m_utilityTraceParameters)
+      .then(this,
+            [this](const QList<UtilityTraceResult*>&)
+    {
+      onTraceCompleted();
+    })
+      .onFailed([this](const ErrorException& e)
+    {
+      onSelectedUtilityNetworkError(e);
+    });
   }
 
   QList<UtilityNamedTraceConfiguration*> UtilityNetworkTraceController::traceConfigurations() const
@@ -561,7 +583,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
     auto geometry = identifiedFeature->geometry();
 
     if (!m_selectedUtilityNetwork)
+    {
       return;
+    }
 
     auto utilityElement = m_selectedUtilityNetwork->createElementWithArcGISFeature(identifiedFeature);
 
@@ -576,8 +600,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     // skip if starting point already exists for the selected utility element
     if (!startingPointAlreadyExists)
     {
-      if (utilityElement->networkSource()->sourceType() == UtilityNetworkSourceType::Edge &&
-          geometry.geometryType() == GeometryType::Polyline)
+      if (utilityElement->networkSource()->sourceType() == UtilityNetworkSourceType::Edge && geometry.geometryType() == GeometryType::Polyline)
       {
         auto polyline = geometry_cast<Polyline>(geometry);
         if (polyline.hasZ())
@@ -622,13 +645,15 @@ namespace Esri::ArcGISRuntime::Toolkit {
       if (symbol == nullptr)
       {
         // Adding with null symbol
-        m_startingPoints->addStartingPoint(new UtilityNetworkTraceStartingPoint(utilityElement, graphic, symbol, featureLayer->fullExtent(), m_startingPointParent));
+        m_startingPoints->addStartingPoint(
+          new UtilityNetworkTraceStartingPoint(utilityElement, graphic, symbol, featureLayer->fullExtent(), m_startingPointParent));
         emit startingPointsChanged();
       }
       else
       {
         // Adding with extent
-        m_startingPoints->addStartingPoint(new UtilityNetworkTraceStartingPoint(utilityElement, graphic, symbol, graphic->geometry().extent(), m_startingPointParent));
+        m_startingPoints->addStartingPoint(
+          new UtilityNetworkTraceStartingPoint(utilityElement, graphic, symbol, graphic->geometry().extent(), m_startingPointParent));
         emit startingPointsChanged();
       }
     }
@@ -662,7 +687,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void UtilityNetworkTraceController::setSelectedTraceConfigurationNameByIndex(int index)
   {
     if (m_traceConfigurations.size() > index)
+    {
       setSelectedTraceConfiguration(m_traceConfigurations.at(index));
+    }
   }
 
   void UtilityNetworkTraceController::resetTraceResults()
@@ -717,87 +744,82 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
       switch (type)
       {
-      case UtilityTraceResultObjectType::UtilityElementTraceResult:
-      {
-        // Trace completed with Element Result
-        setIsResetResultsEnabled(true);
-        auto elementResult = static_cast<UtilityElementTraceResult*>(result);
-        allElements.append(elementResult->elements());
-        break;
-      }
-      case UtilityTraceResultObjectType::UtilityFunctionTraceResult:
-      {
-        // Trace completed with Function Result
-        setIsResetResultsEnabled(true);
-        const auto functionResult = static_cast<UtilityFunctionTraceResult*>(result);
-        const auto outputList = functionResult->functionOutputs();
-
-        for (const auto o : outputList)
+        case UtilityTraceResultObjectType::UtilityElementTraceResult:
         {
-          m_functionResults->addFunctionResult(UtilityNetworkFunctionTraceResult(o->function()->networkAttribute()->name(),
-                                                                                 o->function()->functionType(),
-                                                                                 o->result().toDouble()));
+          // Trace completed with Element Result
+          setIsResetResultsEnabled(true);
+          auto elementResult = static_cast<UtilityElementTraceResult*>(result);
+          allElements.append(elementResult->elements());
+          break;
         }
-
-        break;
-      }
-      case UtilityTraceResultObjectType::UtilityGeometryTraceResult:
-      {
-        // Trace completed with Geometry Result
-        setIsResetResultsEnabled(true);
-        auto geometryTraceResult = static_cast<UtilityGeometryTraceResult*>(result);
-
-        auto multipoint = geometryTraceResult->multipoint();
-        if (!multipoint.isEmpty())
+        case UtilityTraceResultObjectType::UtilityFunctionTraceResult:
         {
-          // will be deleted in resetTraceResults()
-          auto graphic = new Graphic(multipoint,
-                                     m_resultPointSymbol,
-                                     this);
-          m_resultsGraphicsOverlay->graphics()->append(graphic);
-        }
+          // Trace completed with Function Result
+          setIsResetResultsEnabled(true);
+          const auto functionResult = static_cast<UtilityFunctionTraceResult*>(result);
+          const auto outputList = functionResult->functionOutputs();
 
-        auto polyline = geometryTraceResult->polyline();
-        if (!polyline.isEmpty())
+          for (const auto o : outputList)
+          {
+            m_functionResults->addFunctionResult(
+              UtilityNetworkFunctionTraceResult(o->function()->networkAttribute()->name(), o->function()->functionType(), o->result().toDouble()));
+          }
+
+          break;
+        }
+        case UtilityTraceResultObjectType::UtilityGeometryTraceResult:
         {
-          // will be deleted in resetTraceResults()
-          auto graphic = new Graphic(polyline,
-                                     m_resultLineSymbol,
-                                     this);
-          m_resultsGraphicsOverlay->graphics()->append(graphic);
-        }
+          // Trace completed with Geometry Result
+          setIsResetResultsEnabled(true);
+          auto geometryTraceResult = static_cast<UtilityGeometryTraceResult*>(result);
 
-        auto polygon = geometryTraceResult->polygon();
-        if (!polygon.isEmpty())
+          auto multipoint = geometryTraceResult->multipoint();
+          if (!multipoint.isEmpty())
+          {
+            // will be deleted in resetTraceResults()
+            auto graphic = new Graphic(multipoint, m_resultPointSymbol, this);
+            m_resultsGraphicsOverlay->graphics()->append(graphic);
+          }
+
+          auto polyline = geometryTraceResult->polyline();
+          if (!polyline.isEmpty())
+          {
+            // will be deleted in resetTraceResults()
+            auto graphic = new Graphic(polyline, m_resultLineSymbol, this);
+            m_resultsGraphicsOverlay->graphics()->append(graphic);
+          }
+
+          auto polygon = geometryTraceResult->polygon();
+          if (!polygon.isEmpty())
+          {
+            // will be deleted in resetTraceResults()
+            auto graphic = new Graphic(polygon, m_resultFillSymbol, this);
+            m_resultsGraphicsOverlay->graphics()->append(graphic);
+          }
+
+          break;
+        }
+        default:
         {
-          // will be deleted in resetTraceResults()
-          auto graphic = new Graphic(polygon,
-                                     m_resultFillSymbol,
-                                     this);
-          m_resultsGraphicsOverlay->graphics()->append(graphic);
+          qDebug() << "Trace completed without usable object type";
+          break;
         }
-
-        break;
-      }
-      default:
-      {
-        qDebug() << "Trace completed without usable object type";
-        break;
-      }
       }
     }
 
     if (!allElements.isEmpty())
     {
       // calling async featuresForElements with elements
-      m_selectedUtilityNetwork->featuresForElementsAsync(allElements).then(this, [this](const QList<ArcGISFeature*>&)
-                                                                           {
-                                                                             onFeaturesForElementsCompleted();
-                                                                           })
-          .onFailed([this](const ErrorException& e)
-                    {
-                      onSelectedUtilityNetworkError(e);
-                    });
+      m_selectedUtilityNetwork->featuresForElementsAsync(allElements)
+        .then(this,
+              [this](const QList<ArcGISFeature*>&)
+      {
+        onFeaturesForElementsCompleted();
+      })
+        .onFailed([this](const ErrorException& e)
+      {
+        onSelectedUtilityNetworkError(e);
+      });
     }
     else
     {
@@ -847,47 +869,47 @@ namespace Esri::ArcGISRuntime::Toolkit {
     if (mapView->map() != nullptr)
     {
       connect(mapView->map(), &Map::doneLoading, this, [this, mapView]()
+      {
+        const auto& map = mapView->map();
+
+        if (!map->utilityNetworks()->isEmpty())
+        {
+          // TODO append all UNs into a list and allow the user to select which one to load
+          // User can load any of them during the app's lifetime.
+          // Load the first one by default.
+          setSelectedUtilityNetwork(map->utilityNetworks()->at(0));
+
+          for (const auto un : std::as_const(*map->utilityNetworks()))
+          {
+            if (un->loadStatus() == LoadStatus::NotLoaded)
+            {
+              //single shot connection
+              QMetaObject::Connection* const connection = new QMetaObject::Connection;
+              QT_WARNING_PUSH
+              QT_WARNING_DISABLE_MSVC(4573)
+              *connection = connect(un, &UtilityNetwork::doneLoading, this, [connection](const Error& e)
               {
-                const auto& map = mapView->map();
-
-                if (!map->utilityNetworks()->isEmpty())
+                if (!e.isEmpty())
                 {
-                  // TODO append all UNs into a list and allow the user to select which one to load
-                  // User can load any of them during the app's lifetime.
-                  // Load the first one by default.
-                  setSelectedUtilityNetwork(map->utilityNetworks()->at(0));
-
-                  for (const auto un : std::as_const(*map->utilityNetworks()))
-                  {
-                    if (un->loadStatus() == LoadStatus::NotLoaded)
-                    {
-                      //single shot connection
-                      QMetaObject::Connection* const connection = new QMetaObject::Connection;
-                      QT_WARNING_PUSH
-                      QT_WARNING_DISABLE_MSVC(4573)
-                      *connection = connect(un, &UtilityNetwork::doneLoading, this, [connection](const Error& e)
-                                            {
-                                              if (!e.isEmpty())
-                                              {
-                                                qDebug() << "Utility Network done loading with error:" << e.message() << e.additionalMessage();
-                                                return;
-                                              }
-                                              // append UN with explicit loading
-                                              QObject::disconnect(*connection);
-                                              delete connection;
-                                            });
-                      QT_WARNING_POP
-                      un->load();
-                    }
-                  }
+                  qDebug() << "Utility Network done loading with error:" << e.message() << e.additionalMessage();
+                  return;
                 }
-                else
-                {
-                  qDebug() << "There are no Utility Networks associated with the ArcGIS Map attached "
-                           << "to the MapView. Utility Network Trace will not be displayed. Call "
-                           << "UtilityNetworkTrace.refresh() after updating the ArcGIS Map to try again.";
-                }
+                // append UN with explicit loading
+                QObject::disconnect(*connection);
+                delete connection;
               });
+              QT_WARNING_POP
+              un->load();
+            }
+          }
+        }
+        else
+        {
+          qDebug() << "There are no Utility Networks associated with the ArcGIS Map attached "
+                   << "to the MapView. Utility Network Trace will not be displayed. Call "
+                   << "UtilityNetworkTrace.refresh() after updating the ArcGIS Map to try again.";
+        }
+      });
 
       if (mapView->map()->loadStatus() != LoadStatus::Loaded)
       {
@@ -920,14 +942,16 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
   void UtilityNetworkTraceController::handleArcGISAuthenticationChallenge(ArcGISAuthenticationChallenge* challenge)
   {
-    TokenCredential::createWithChallengeAsync(challenge, "viewer01", "I68VGU^nMurF", {}, this).then(this, [challenge](TokenCredential* tokenCredential)
-                                                                                                    {
-                                                                                                      challenge->continueWithCredential(tokenCredential);
-                                                                                                    })
-        .onFailed(this, [challenge](const ErrorException& e)
-                  {
-                    challenge->continueWithError(e.error());
-                  });
+    TokenCredential::createWithChallengeAsync(challenge, "viewer01", "I68VGU^nMurF", {}, this)
+      .then(this,
+            [challenge](TokenCredential* tokenCredential)
+    {
+      challenge->continueWithCredential(tokenCredential);
+    })
+      .onFailed(this, [challenge](const ErrorException& e)
+    {
+      challenge->continueWithError(e.error());
+    });
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

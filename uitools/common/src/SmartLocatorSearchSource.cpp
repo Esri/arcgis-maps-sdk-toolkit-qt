@@ -25,12 +25,14 @@
 
 Q_DECLARE_METATYPE(Esri::ArcGISRuntime::SuggestResult)
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
-  namespace {
+  namespace
+  {
     constexpr int DEFAULT_REPEAT_SEARCH_RESULT_THRESHOLD = 1;
     constexpr int DEFAULT_REPEAT_SEARCH_SUGGEST_THRESHOLD = 6;
-  }
+  } // namespace
 
   /*!
     \internal
@@ -45,23 +47,20 @@ namespace Esri::ArcGISRuntime::Toolkit {
     qRegisterMetaType<SuggestResult>("SuggestResult");
     // If suggestion count is below are below our criteria, redo the suggestion search
     // with area removed.
-    connect(suggestions(),
-            &SuggestListModel::suggestCompleted,
-            this,
-            [this]
-            {
-              if (suggestions()->suggestParameters().searchArea().isEmpty())
-              {
-                return;
-              }
+    connect(suggestions(), &SuggestListModel::suggestCompleted, this, [this]
+    {
+      if (suggestions()->suggestParameters().searchArea().isEmpty())
+      {
+        return;
+      }
 
-              if (suggestions()->suggestResults().length() < repeatSuggestResultThreshold())
-              {
-                auto params = suggestions()->suggestParameters();
-                params.setSearchArea(Geometry{});
-                suggestions()->setSuggestParameters(params);
-              }
-            });
+      if (suggestions()->suggestResults().length() < repeatSuggestResultThreshold())
+      {
+        auto params = suggestions()->suggestParameters();
+        params.setSearchArea(Geometry{});
+        suggestions()->setSuggestParameters(params);
+      }
+    });
   }
 
   SmartLocatorSearchSource::~SmartLocatorSearchSource()
@@ -76,7 +75,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void SmartLocatorSearchSource::setRepeatSearchResultThreshold(int repeatSearchResultThreshold)
   {
     if (repeatSearchResultThreshold == m_repeatSearchResultThreshold)
+    {
       return;
+    }
 
     m_repeatSearchResultThreshold = repeatSearchResultThreshold;
     emit repeatSearchResultThresholdChanged();
@@ -90,7 +91,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void SmartLocatorSearchSource::setRepeatSuggestResultThreshold(int repeatSearchSuggestThreshold)
   {
     if (repeatSearchSuggestThreshold == m_repeatSearchSuggestThreshold)
+    {
       return;
+    }
 
     m_repeatSearchSuggestThreshold = repeatSearchSuggestThreshold;
     emit repeatSuggestResultThresholdChanged();
@@ -138,4 +141,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     LocatorSearchSource::onGeocodeCompleted_(geocodeResults);
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

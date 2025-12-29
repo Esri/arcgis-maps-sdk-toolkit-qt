@@ -22,7 +22,8 @@
 #include <PopupMedia.h>
 #include <PopupMediaValue.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
     \internal

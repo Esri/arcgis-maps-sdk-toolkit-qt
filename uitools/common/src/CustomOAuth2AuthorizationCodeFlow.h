@@ -20,7 +20,8 @@
 #include <QAbstractOAuth2>
 #include <QUrl>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   class CustomOAuth2AuthorizationCodeFlow : public QAbstractOAuth2
   {
@@ -41,6 +42,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     const QUrl m_authorizeUrl;
   };
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_CUSTOMOAUTH2AUTHORIZATIONCODEFLOW_H

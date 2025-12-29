@@ -19,7 +19,8 @@
 // Other headers
 #include "CoordinateConversionOption.h"
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   CoordinateConversionOption* createDecimalDegrees(QObject* parent = nullptr);
 
@@ -31,10 +32,12 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
   CoordinateConversionOption* createUsng(int precision = 7, bool useSpaces = true, QObject* parent = nullptr);
 
-  CoordinateConversionOption* createUtm(UtmConversionMode mode = UtmConversionMode::NorthSouthIndicators, bool useSpaces = true, QObject* parent = nullptr);
+  CoordinateConversionOption* createUtm(UtmConversionMode mode = UtmConversionMode::NorthSouthIndicators,
+                                        bool useSpaces = true,
+                                        QObject* parent = nullptr);
 
   CoordinateConversionOption* createGars(GarsConversionMode mode = GarsConversionMode::Center, QObject* parent = nullptr);
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_COORDIANTEOPTIONDEFAULTS_H

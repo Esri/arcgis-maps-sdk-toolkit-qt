@@ -54,7 +54,8 @@ using namespace Esri::ArcGISRuntime;
 using namespace Esri::ArcGISRuntime::Authentication;
 using Esri::ArcGISRuntime::Authentication::AuthenticationManager;
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
     \internal
@@ -70,23 +71,23 @@ namespace Esri::ArcGISRuntime::Toolkit {
     // listen for OAuth prompts
     connect(ArcGISRuntimeEnvironment::authenticationManager(), &AuthenticationManager::oAuthUserLoginPromptIssued, this,
             [this](OAuthUserLoginPrompt* currentOAuthUserLoginPrompt)
-            {
-              currentOAuthUserLoginPrompt->setParent(nullptr);
-              m_currentOAuthUserLoginPrompt = std::unique_ptr<OAuthUserLoginPrompt>{currentOAuthUserLoginPrompt};
+    {
+      currentOAuthUserLoginPrompt->setParent(nullptr);
+      m_currentOAuthUserLoginPrompt = std::unique_ptr<OAuthUserLoginPrompt>{currentOAuthUserLoginPrompt};
 
-              if (const auto redirectUrl = m_currentOAuthUserLoginPrompt->redirectUri();
-                  redirectUrl == QUrl{"urn:ietf:wg:oauth:2.0:oob"} || // this is the default value for "oob"
-                  redirectUrl.contains("oob")) // this is what the Qt docs indicate to check for
-              { // use embedded web view session for "oob" redirect URI
-                emit authorizeUrlChanged();
-                emit redirectUriChanged();
-                emit displayOAuthSignInView();
-              }
-              else
-              {
-                processOAuthExternalBrowserLogin_();
-              }
-            });
+      if (const auto redirectUrl = m_currentOAuthUserLoginPrompt->redirectUri();
+          redirectUrl == QUrl{"urn:ietf:wg:oauth:2.0:oob"} || // this is the default value for "oob"
+          redirectUrl.contains("oob")) // this is what the Qt docs indicate to check for
+      { // use embedded web view session for "oob" redirect URI
+        emit authorizeUrlChanged();
+        emit redirectUriChanged();
+        emit displayOAuthSignInView();
+      }
+      else
+      {
+        processOAuthExternalBrowserLogin_();
+      }
+    });
   }
 
   AuthenticatorController::~AuthenticatorController() = default;
@@ -122,29 +123,31 @@ namespace Esri::ArcGISRuntime::Toolkit {
       if (userConfiguration->canBeUsedForUrl(requestUrl))
       {
         m_currentOAuthUserConfiguration = userConfiguration;
-        OAuthUserCredential::createAsync(userConfiguration, this).then(this, [this](OAuthUserCredential* credential)
-                                                                       {
-                                                                         if (!m_currentArcGISChallenge)
-                                                                         {
-                                                                           return;
-                                                                         }
+        OAuthUserCredential::createAsync(userConfiguration, this)
+          .then(this,
+                [this](OAuthUserCredential* credential)
+        {
+          if (!m_currentArcGISChallenge)
+          {
+            return;
+          }
 
-                                                                         m_currentArcGISChallenge->continueWithCredential(credential);
-                                                                         m_currentArcGISChallenge.reset();
-                                                                       })
-            .onFailed(this, [this](const ErrorException& e)
-                      {
-                        if (!m_currentArcGISChallenge)
-                        {
-                          return;
-                        }
+          m_currentArcGISChallenge->continueWithCredential(credential);
+          m_currentArcGISChallenge.reset();
+        })
+          .onFailed(this, [this](const ErrorException& e)
+        {
+          if (!m_currentArcGISChallenge)
+          {
+            return;
+          }
 
-                        emit previousFailureCountChanged();
-                        auto* arcgisChallenge = m_currentArcGISChallenge.release();
-                        arcgisChallenge->setParent(this);
-                        arcgisChallenge->deleteLater();
-                        arcgisChallenge->continueWithError(e.error());
-                      });
+          emit previousFailureCountChanged();
+          auto* arcgisChallenge = m_currentArcGISChallenge.release();
+          arcgisChallenge->setParent(this);
+          arcgisChallenge->deleteLater();
+          arcgisChallenge->continueWithError(e.error());
+        });
 
         return;
       }
@@ -166,38 +169,40 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     switch (m_currentNetworkChallenge->networkChallengeType())
     {
-    case NetworkChallengeType::ServerTrust:
-    {
-      emit displayAuthenticatorServerTrustView();
-      return;
-    }
-    case NetworkChallengeType::Basic: [[fallthrough]];
-    case NetworkChallengeType::Digest: [[fallthrough]];
-    case NetworkChallengeType::Ntlm: [[fallthrough]];
-    case NetworkChallengeType::Negotiate:
-    {
-      emit displayUsernamePasswordSignInView();
-      return;
-    }
-    case NetworkChallengeType::ClientCertificate:
-    {
-      const auto sslBackend = QSslSocket::activeBackend();
-      if (QSslSocket::activeBackend() != QStringLiteral("openssl"))
+      case NetworkChallengeType::ServerTrust:
       {
-        const auto error = QStringLiteral("ClientCertificate authentication is not supported with the current SSL backend (%1). ")
-                               .arg(sslBackend) +
-                           QStringLiteral("See https://doc.qt.io/qt-6/qsslsocket.html#activeBackend for more details. ") +
-                           QStringLiteral("Only the openssl backend supports Client Certificates (PKI).");
-
-        qWarning() << error;
-        m_currentNetworkChallenge->continueWithError(Error{error, ""});
-        m_currentNetworkChallenge.reset();
+        emit displayAuthenticatorServerTrustView();
         return;
       }
+      case NetworkChallengeType::Basic:
+        [[fallthrough]];
+      case NetworkChallengeType::Digest:
+        [[fallthrough]];
+      case NetworkChallengeType::Ntlm:
+        [[fallthrough]];
+      case NetworkChallengeType::Negotiate:
+      {
+        emit displayUsernamePasswordSignInView();
+        return;
+      }
+      case NetworkChallengeType::ClientCertificate:
+      {
+        const auto sslBackend = QSslSocket::activeBackend();
+        if (QSslSocket::activeBackend() != QStringLiteral("openssl"))
+        {
+          const auto error = QStringLiteral("ClientCertificate authentication is not supported with the current SSL backend (%1). ").arg(sslBackend) +
+                             QStringLiteral("See https://doc.qt.io/qt-6/qsslsocket.html#activeBackend for more details. ") +
+                             QStringLiteral("Only the openssl backend supports Client Certificates (PKI).");
 
-      emit displayClientCertificateView();
-      return;
-    }
+          qWarning() << error;
+          m_currentNetworkChallenge->continueWithError(Error{error, ""});
+          m_currentNetworkChallenge.reset();
+          return;
+        }
+
+        emit displayClientCertificateView();
+        return;
+      }
     }
 
     m_currentNetworkChallenge.reset();
@@ -220,8 +225,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     }
     else
     {
-      m_currentNetworkChallenge->continueWithError(
-          Error{"A ServerTrust challenge was issued, but was blocked by the user", ""});
+      m_currentNetworkChallenge->continueWithError(Error{"A ServerTrust challenge was issued, but was blocked by the user", ""});
     }
 
     m_currentNetworkChallenge.reset();
@@ -263,28 +267,25 @@ namespace Esri::ArcGISRuntime::Toolkit {
       return;
     }
 
-    TokenCredential::createAsync(m_currentArcGISChallenge->requestUrl(),
-                                 username,
-                                 password,
-                                 std::nullopt,
-                                 this)
-        .then(this, [this](TokenCredential* credential)
-              {
-                m_currentArcGISChallenge->continueWithCredential(credential);
-                m_currentArcGISChallenge.reset();
-              })
-        .onFailed(this, [this](const ErrorException& e)
-                  {
-                    if (!m_currentArcGISChallenge)
-                    {
-                      return;
-                    }
-                    emit previousFailureCountChanged();
-                    auto* arcgisChallenge = m_currentArcGISChallenge.release();
-                    arcgisChallenge->setParent(this);
-                    arcgisChallenge->deleteLater();
-                    arcgisChallenge->continueWithError(e.error());
-                  });
+    TokenCredential::createAsync(m_currentArcGISChallenge->requestUrl(), username, password, std::nullopt, this)
+      .then(this,
+            [this](TokenCredential* credential)
+    {
+      m_currentArcGISChallenge->continueWithCredential(credential);
+      m_currentArcGISChallenge.reset();
+    })
+      .onFailed(this, [this](const ErrorException& e)
+    {
+      if (!m_currentArcGISChallenge)
+      {
+        return;
+      }
+      emit previousFailureCountChanged();
+      auto* arcgisChallenge = m_currentArcGISChallenge.release();
+      arcgisChallenge->setParent(this);
+      arcgisChallenge->deleteLater();
+      arcgisChallenge->continueWithError(e.error());
+    });
   }
 
   void AuthenticatorController::AuthenticatorController::continueWithUsernamePasswordNetwork_(const QString& username, const QString& password)
@@ -403,37 +404,37 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
   void AuthenticatorController::processOAuthExternalBrowserLogin_()
   {
-    auto* oauthFlow = new CustomOAuth2AuthorizationCodeFlow(m_currentOAuthUserLoginPrompt->authorizeUrl(),
-                                                            m_currentOAuthUserLoginPrompt.get());
+    auto* oauthFlow = new CustomOAuth2AuthorizationCodeFlow(m_currentOAuthUserLoginPrompt->authorizeUrl(), m_currentOAuthUserLoginPrompt.get());
 
     auto* callbackReplyHandler = new QOAuthUriSchemeReplyHandler(m_currentOAuthUserLoginPrompt.get());
     connect(callbackReplyHandler, &QOAuthUriSchemeReplyHandler::callbackReceived, this, [this, oauthFlow](const QVariantMap& values)
-            {
-              if (!values.contains("code"))
-              {
-                m_currentOAuthUserLoginPrompt->respondWithError("There was an error obtaining the authorization code");
-                finishOAuthExternalBrowserChallengeFlow_();
-                return;
-              }
+    {
+      if (!values.contains("code"))
+      {
+        m_currentOAuthUserLoginPrompt->respondWithError("There was an error obtaining the authorization code");
+        finishOAuthExternalBrowserChallengeFlow_();
+        return;
+      }
 
-              const auto code = values.value("code").toString();
-              oauthFlow->setAuthorizationCode(code);
-              emit oauthFlow->granted();
-            });
+      const auto code = values.value("code").toString();
+      oauthFlow->setAuthorizationCode(code);
+      emit oauthFlow->granted();
+    });
 
     oauthFlow->setAuthorizationUrl(m_currentOAuthUserLoginPrompt->authorizeUrl());
     oauthFlow->setClientIdentifier(m_currentOAuthUserConfiguration->clientId());
 
     connect(oauthFlow, &QAbstractOAuth::authorizeWithBrowser, this, &QDesktopServices::openUrl);
     connect(oauthFlow, &QAbstractOAuth::granted, this, [callbackReplyHandler, oauthFlow, this]()
-            {
-              callbackReplyHandler->close();
+    {
+      callbackReplyHandler->close();
 
-              // this needs to be in the form of redirectUri?code=authCode
-              const auto formattedResponseUrl = QUrl{QString("%1?code=%2").arg(m_currentOAuthUserConfiguration->redirectUri(), oauthFlow->authorizationCode())};
-              m_currentOAuthUserLoginPrompt->respond(formattedResponseUrl);
-              finishOAuthExternalBrowserChallengeFlow_();
-            });
+      // this needs to be in the form of redirectUri?code=authCode
+      const auto formattedResponseUrl =
+        QUrl{QString("%1?code=%2").arg(m_currentOAuthUserConfiguration->redirectUri(), oauthFlow->authorizationCode())};
+      m_currentOAuthUserLoginPrompt->respond(formattedResponseUrl);
+      finishOAuthExternalBrowserChallengeFlow_();
+    });
 
     callbackReplyHandler->setRedirectUrl(m_currentOAuthUserLoginPrompt->redirectUri());
     oauthFlow->setReplyHandler(callbackReplyHandler);
@@ -455,4 +456,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     m_currentOAuthUserLoginPrompt.reset();
   }
 
-} //  Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

@@ -21,7 +21,8 @@
 #include <QPropertyAnimation>
 #include <QTimer>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
     \internal
@@ -54,7 +55,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void Flash::setAlpha_(int alpha)
   {
     if (m_color.alpha() == alpha)
+    {
       return;
+    }
 
     m_color.setAlpha(alpha);
     emit alphaChanged();
@@ -69,7 +72,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void Flash::setPoint(QPointF point)
   {
     if (m_point == point)
+    {
       return;
+    }
 
     m_point = std::move(point);
     emit pointChanged();
@@ -84,7 +89,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void Flash::setRadius(int radius)
   {
     if (m_radius == radius)
+    {
       return;
+    }
 
     m_radius = radius;
     emit radiusChanged();
@@ -105,4 +112,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     animation->start();
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

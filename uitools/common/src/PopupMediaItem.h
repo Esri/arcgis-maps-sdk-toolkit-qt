@@ -22,13 +22,15 @@
 // Other headers
 #include "QmlEnums.h"
 
-namespace Esri::ArcGISRuntime {
+namespace Esri::ArcGISRuntime
+{
 
   class TextPopupElement;
   class PopupElement;
   class PopupMedia;
 
-  namespace Toolkit {
+  namespace Toolkit
+  {
 
     class PopupMediaItem : public QObject
     {
@@ -58,6 +60,6 @@ namespace Esri::ArcGISRuntime {
       PopupMedia* m_popupMedia = nullptr;
     };
 
-  } // Toolkit
-} // Esri::ArcGISRuntime
+  } // namespace Toolkit
+} // namespace Esri::ArcGISRuntime
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_POPUPMEDIAITEM_H

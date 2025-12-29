@@ -21,7 +21,8 @@
 // Toolkit headers
 #include "BasemapGalleryController.h"
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
     \class Esri::ArcGISRuntime::Toolkit::BasemapGallery
@@ -135,7 +136,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
     auto index = m_controller->gallery()->index(idx);
     //index can be invalid in case the current basemap is not part of the gallery items (idx = -1)
     if (!index.isValid())
+    {
       return;
+    }
     m_ui->listView->selectionModel()->select(index, QItemSelectionModel::Select);
   }
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

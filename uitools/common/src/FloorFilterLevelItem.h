@@ -19,11 +19,13 @@
 // Qt headers
 #include <QObject>
 
-namespace Esri::ArcGISRuntime {
+namespace Esri::ArcGISRuntime
+{
 
   class FloorLevel;
 
-  namespace Toolkit {
+  namespace Toolkit
+  {
 
     class FloorFilterLevelItem : public QObject
     {
@@ -50,7 +52,7 @@ namespace Esri::ArcGISRuntime {
       FloorLevel* m_floorLevel = nullptr;
     };
 
-  } // Toolkit
-} // Esri::ArcGISRuntime
+  } // namespace Toolkit
+} // namespace Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_FLOORFITLERFLOORITEM_H

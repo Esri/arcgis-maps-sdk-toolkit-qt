@@ -22,26 +22,26 @@
 // STL headers
 #include <memory>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*
     \internal
     \brief Creates a connection and automatically disconnects it on trigger. Follows same syntax as `QObject::connect`.
     \note This method differs from \c QObject::connect in that the signal and slot parameters must match.
-   */
-  template <typename Sender, typename Signal, typename Receiver, typename Slot>
+ */
+  template<typename Sender, typename Signal, typename Receiver, typename Slot>
   QMetaObject::Connection singleShotConnection(Sender* sender, Signal&& signal, Receiver* reciever, Slot&& slot)
   {
     auto connection = std::make_shared<QMetaObject::Connection>();
-    *connection = QObject::connect(sender, std::forward<Signal>(signal),
-                                   reciever, [connection, slot = std::forward<Slot>(slot)](auto&&... args)
-                                   {
-                                     QObject::disconnect(*connection);
-                                     slot(std::forward<decltype(args)>(args)...);
-                                   });
+    *connection = QObject::connect(sender, std::forward<Signal>(signal), reciever, [connection, slot = std::forward<Slot>(slot)](auto&&... args)
+    {
+      QObject::disconnect(*connection);
+      slot(std::forward<decltype(args)>(args)...);
+    });
     return *connection;
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_SINGLESHOTCONNECTION_H

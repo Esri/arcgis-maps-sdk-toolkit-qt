@@ -38,9 +38,11 @@
 #include <SceneViewTypes.h>
 #include <Viewpoint.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
-  namespace {
+  namespace
+  {
     constexpr double DEFAULT_ZOOM_TO_DISTANCE = 1500.0;
   }
 
@@ -59,38 +61,30 @@ namespace Esri::ArcGISRuntime::Toolkit {
     {
       // Some default coordinate conversion formats to set us up with.
       m_coordinateFormats->setDisplayPropertyName("name");
-      m_coordinateFormats->append(QList<QObject*>()
-                                  << createDecimalDegrees()
-                                  << createDegreesDecimalMinutes()
-                                  << createDegreesMinutesSeconds()
-                                  << createMgrs()
-                                  << createUsng()
-                                  << createUtm()
-                                  << createGars());
+      m_coordinateFormats->append(QList<QObject*>() << createDecimalDegrees() << createDegreesDecimalMinutes() << createDegreesMinutesSeconds()
+                                                    << createMgrs() << createUsng() << createUtm() << createGars());
     }
 
     {
       m_conversionResults->setDisplayPropertyName("name");
-      connect(m_conversionResults, &QAbstractItemModel::rowsInserted, this,
-              [this](const QModelIndex& /*parent*/, int first, int last)
-              {
-                // Every result owned by the controller needs to listen to the
-                // currentPointChanged signal to update its notation.
-                for (int i = first; i <= last; ++i)
-                {
-                  auto index = m_conversionResults->index(i);
-                  auto result = m_conversionResults->element<CoordinateConversionResult>(index);
-                  if (result)
-                  {
-                    connect(this, &CoordinateConversionController::currentPointChanged,
-                            result, &CoordinateConversionResult::updateCoordinatePoint);
-                  }
-                  else
-                  {
-                    qWarning("Empty CoordinateConversionResult in the CoordinateConversionController results model at index %d", i);
-                  }
-                }
-              });
+      connect(m_conversionResults, &QAbstractItemModel::rowsInserted, this, [this](const QModelIndex& /*parent*/, int first, int last)
+      {
+        // Every result owned by the controller needs to listen to the
+        // currentPointChanged signal to update its notation.
+        for (int i = first; i <= last; ++i)
+        {
+          auto index = m_conversionResults->index(i);
+          auto result = m_conversionResults->element<CoordinateConversionResult>(index);
+          if (result)
+          {
+            connect(this, &CoordinateConversionController::currentPointChanged, result, &CoordinateConversionResult::updateCoordinatePoint);
+          }
+          else
+          {
+            qWarning("Empty CoordinateConversionResult in the CoordinateConversionController results model at index %d", i);
+          }
+        }
+      });
     }
   }
 
@@ -106,41 +100,43 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void CoordinateConversionController::setGeoView(QObject* geoView)
   {
     if (geoView == m_geoView)
+    {
       return;
+    }
 
     if (m_geoView)
+    {
       disconnect(this, nullptr, m_geoView, nullptr);
+    }
 
     m_geoView = geoView;
 
     if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
-      connect(sceneView, &SceneViewToolkit::mouseClicked, this,
-              [sceneView, this](QMouseEvent& event)
-              {
-                if (m_inPickingMode && !m_screenToLocationFuture.isRunning())
-                {
-                  m_screenToLocationFuture = sceneView->screenToLocationAsync(event.pos().x(), event.pos().y());
-                  m_screenToLocationFuture.then(this, [this](const Point& point)
-                                                {
-                                                  setCurrentPoint(point);
-                                                });
+      connect(sceneView, &SceneViewToolkit::mouseClicked, this, [sceneView, this](QMouseEvent& event)
+      {
+        if (m_inPickingMode && !m_screenToLocationFuture.isRunning())
+        {
+          m_screenToLocationFuture = sceneView->screenToLocationAsync(event.pos().x(), event.pos().y());
+          m_screenToLocationFuture.then(this, [this](const Point& point)
+          {
+            setCurrentPoint(point);
+          });
 
-                  event.accept();
-                }
-              });
+          event.accept();
+        }
+      });
     }
     else if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
-      connect(mapView, &MapViewToolkit::mouseClicked, this,
-              [mapView, this](QMouseEvent& event)
-              {
-                if (m_inPickingMode)
-                {
-                  setCurrentPoint(mapView->screenToLocation(event.pos().x(), event.pos().y()));
-                  event.accept();
-                }
-              });
+      connect(mapView, &MapViewToolkit::mouseClicked, this, [mapView, this](QMouseEvent& event)
+      {
+        if (m_inPickingMode)
+        {
+          setCurrentPoint(mapView->screenToLocation(event.pos().x(), event.pos().y()));
+          event.accept();
+        }
+      });
     }
 
     emit geoViewChanged();
@@ -149,33 +145,40 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void CoordinateConversionController::setCurrentPoint(const Point& point)
   {
     if (point == m_currentPoint)
+    {
       return;
+    }
 
     m_currentPoint = point;
     emit currentPointChanged(point);
   }
 
-  void CoordinateConversionController::setCurrentPoint(
-      const QString& point,
-      CoordinateConversionOption* option)
+  void CoordinateConversionController::setCurrentPoint(const QString& point, CoordinateConversionOption* option)
   {
     if (auto geoView = qobject_cast<GeoView*>(m_geoView))
+    {
       setCurrentPoint(point, geoView->spatialReference(), option);
+    }
     else
+    {
       setCurrentPoint(point, SpatialReference(), option);
+    }
   }
 
-  void CoordinateConversionController::setCurrentPoint(
-      const QString& point,
-      const SpatialReference& spatialReference,
-      CoordinateConversionOption* option)
+  void CoordinateConversionController::setCurrentPoint(const QString& point,
+                                                       const SpatialReference& spatialReference,
+                                                       CoordinateConversionOption* option)
   {
     if (!option)
+    {
       return;
+    }
 
     auto p = option->pointFromString(point, spatialReference);
     if (p.isValid())
+    {
       setCurrentPoint(p);
+    }
   }
 
   QPointF CoordinateConversionController::screenCoordinate() const
@@ -265,7 +268,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void CoordinateConversionController::setZoomToDistance(double distance)
   {
     if (distance == m_zoomToDistance)
+    {
       return;
+    }
 
     m_zoomToDistance = distance;
     emit zoomToDistanceChanged();
@@ -279,10 +284,12 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void CoordinateConversionController::setInPickingMode(bool mode)
   {
     if (m_inPickingMode == mode)
+    {
       return;
+    }
 
     m_inPickingMode = mode;
     emit inPickingModeChanged();
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

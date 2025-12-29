@@ -30,7 +30,8 @@
 #include <UtilityTerminal.h>
 #include <UtilityTerminalConfiguration.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
     \internal
@@ -71,26 +72,20 @@ namespace Esri::ArcGISRuntime::Toolkit {
       m_multipleTerminalNames = multipleTerminalsTemp;
     }
 
-    if (m_selectionGraphic != nullptr &&
-        m_utilityElement->networkSource()->sourceType() == UtilityNetworkSourceType::Edge &&
+    if (m_selectionGraphic != nullptr && m_utilityElement->networkSource()->sourceType() == UtilityNetworkSourceType::Edge &&
         m_selectionGraphic->geometry().geometryType() == GeometryType::Polyline)
     {
       m_hasFractionAlongEdge = true;
       setFractionAlongEdge(m_utilityElement->fractionAlongEdge());
 
       const auto polyline = static_cast<Polyline>(m_selectionGraphic->geometry());
-      m_selectionGraphic->setGeometry(
-          GeometryEngine::createPointAlong(polyline, GeometryEngine::length(polyline) * fractionAlongEdge()));
+      m_selectionGraphic->setGeometry(GeometryEngine::createPointAlong(polyline, GeometryEngine::length(polyline) * fractionAlongEdge()));
 
-      connect(this,
-              &UtilityNetworkTraceStartingPoint::fractionAlongEdgeChanged,
-              this,
-              [this, polyline](double newValue, double /*oldValue*/)
-              {
-                m_selectionGraphic->setGeometry(
-                    GeometryEngine::createPointAlong(polyline, GeometryEngine::length(polyline) * fractionAlongEdge()));
-                m_utilityElement->setFractionAlongEdge(newValue);
-              });
+      connect(this, &UtilityNetworkTraceStartingPoint::fractionAlongEdgeChanged, this, [this, polyline](double newValue, double /*oldValue*/)
+      {
+        m_selectionGraphic->setGeometry(GeometryEngine::createPointAlong(polyline, GeometryEngine::length(polyline) * fractionAlongEdge()));
+        m_utilityElement->setFractionAlongEdge(newValue);
+      });
     }
   }
 
@@ -124,7 +119,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void UtilityNetworkTraceStartingPoint::setMultipleTerminalNames(const QStringList& multipleTerminalNames)
   {
     if (m_multipleTerminalNames == multipleTerminalNames)
+    {
       return;
+    }
 
     m_multipleTerminalNames = multipleTerminalNames;
     emit multipleTerminalNamesChanged();
@@ -157,7 +154,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void UtilityNetworkTraceStartingPoint::setFractionAlongEdge(double fractionAlongEdge)
   {
     if (m_fractionAlongEdge == fractionAlongEdge)
+    {
       return;
+    }
 
     const auto oldValue = m_fractionAlongEdge;
     m_fractionAlongEdge = fractionAlongEdge;
@@ -179,4 +178,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     return utilityElement()->networkSource()->name();
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

@@ -23,11 +23,13 @@
 // STL headers
 #include <Point.h>
 
-namespace Esri::ArcGISRuntime {
+namespace Esri::ArcGISRuntime
+{
 
   class UtilityElement;
 
-  namespace Toolkit {
+  namespace Toolkit
+  {
     class UtilityNetworkTraceStartingPoint;
 
     class UtilityNetworkTraceStartingPointsModel : public QAbstractListModel

@@ -62,39 +62,21 @@ int main(int argc, char* argv[])
   }
 
   // Register ArcGIS types with QML.
-  qmlRegisterExtendedType<Esri::ArcGISRuntime::MapQuickView,
-                          MapQuickViewProxy>("Esri.Examples", 200, 0, "MapView");
-  qmlRegisterExtendedType<Esri::ArcGISRuntime::SceneQuickView,
-                          SceneQuickViewProxy>("Esri.Examples", 200, 0, "SceneView");
-  qmlRegisterUncreatableType<GeoModelProxy>("Esri.Examples",
-                                            200,
-                                            0,
-                                            "Map",
-                                            "Map not creatable in QML.");
-  qmlRegisterUncreatableType<GeoModelProxy>("Esri.Examples",
-                                            200,
-                                            0,
-                                            "Scene",
-                                            "Scene not creatable in QML.");
+  qmlRegisterExtendedType<Esri::ArcGISRuntime::MapQuickView, MapQuickViewProxy>("Esri.Examples", 200, 0, "MapView");
+  qmlRegisterExtendedType<Esri::ArcGISRuntime::SceneQuickView, SceneQuickViewProxy>("Esri.Examples", 200, 0, "SceneView");
+  qmlRegisterUncreatableType<GeoModelProxy>("Esri.Examples", 200, 0, "Map", "Map not creatable in QML.");
+  qmlRegisterUncreatableType<GeoModelProxy>("Esri.Examples", 200, 0, "Scene", "Scene not creatable in QML.");
 
-  qmlRegisterSingletonType<ArcGISRuntimeEnvironmentProxy>(
-      "Esri.Examples",
-      100,
-      15,
-      "ArcGISRuntimeEnvironment",
-      [](QQmlEngine* engine, QJSEngine*) -> QObject*
-      {
-        return new ArcGISRuntimeEnvironmentProxy(engine);
-      });
+  qmlRegisterSingletonType<ArcGISRuntimeEnvironmentProxy>("Esri.Examples", 100, 15, "ArcGISRuntimeEnvironment",
+                                                          [](QQmlEngine* engine, QJSEngine*) -> QObject*
+  {
+    return new ArcGISRuntimeEnvironmentProxy(engine);
+  });
 
-  qmlRegisterSingletonType<EnumsProxy>("Esri.Examples",
-                                       200,
-                                       0,
-                                       "Enums",
-                                       [](QQmlEngine* engine, QJSEngine*) -> QObject*
-                                       {
-                                         return new EnumsProxy(engine);
-                                       });
+  qmlRegisterSingletonType<EnumsProxy>("Esri.Examples", 200, 0, "Enums", [](QQmlEngine* engine, QJSEngine*) -> QObject*
+  {
+    return new EnumsProxy(engine);
+  });
 
   // Register Own types with QML.
   // Initialize application view

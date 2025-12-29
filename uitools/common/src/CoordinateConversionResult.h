@@ -26,7 +26,8 @@
 // Other headers
 #include "CoordinateConversionOption.h"
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   class CoordinateConversionResult : public QObject
   {
@@ -68,6 +69,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     QPointer<CoordinateConversionOption> m_type;
   };
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_COORDINATECONVERSIONRESULT_H

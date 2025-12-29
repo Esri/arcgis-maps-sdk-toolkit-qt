@@ -26,7 +26,8 @@
 
 class QBarSet;
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   class BarChartPopupMediaItem : public PopupMediaItem
   {
@@ -55,5 +56,5 @@ namespace Esri::ArcGISRuntime::Toolkit {
     QVariantList m_barSetLabels;
   };
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_BARCHARTPOPUPMEDIAITEM_H

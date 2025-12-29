@@ -19,7 +19,8 @@
 // Qt headers
 #include <QString>
 
-namespace Esri::ArcGISRuntime::Toolkit::CoordinateConversionConstants {
+namespace Esri::ArcGISRuntime::Toolkit::CoordinateConversionConstants
+{
 
   extern const QString DECIMAL_DEGREES_FORMAT;
   extern const QString DEGREES_DECIMAL_MINUTES_FORMAT;
@@ -30,6 +31,6 @@ namespace Esri::ArcGISRuntime::Toolkit::CoordinateConversionConstants {
   extern const QString USNG_FORMAT;
   extern const QString UTM_FORMAT;
 
-} // Esri::ArcGISRuntime::Toolkit::CoordinateConversionConstants
+} // namespace Esri::ArcGISRuntime::Toolkit::CoordinateConversionConstants
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_COORDINATECONVERSIONCONSTANTS_H

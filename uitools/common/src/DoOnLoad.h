@@ -19,14 +19,13 @@
 // Qt headers
 #include <QObject>
 
-// ArcGIS Maps SDK headers
+// STL headers
 #include <Loadable.h>
 #include <MapTypes.h>
-
-// STL headers
 #include <type_traits>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*
     \internal
@@ -40,17 +39,13 @@ namespace Esri::ArcGISRuntime::Toolkit {
              {
                 qDebug() << "FloorManager is guaranteed loaded."
              });
-    \endcode
-   */
-  template <typename Target, typename Func>
+  \endcode
+ */
+  template<typename Target, typename Func>
   QMetaObject::Connection doOnLoaded(Target* sender, QObject* reveiver, Func&& f)
   {
-    static_assert(
-        std::is_convertible<Target*, ::Esri::ArcGISRuntime::Loadable*>::value,
-        "Target type must use Loadable interface");
-    static_assert(
-        std::is_convertible<Target*, QObject*>::value,
-        "Target type must be a QObject");
+    static_assert(std::is_convertible<Target*, ::Esri::ArcGISRuntime::Loadable*>::value, "Target type must use Loadable interface");
+    static_assert(std::is_convertible<Target*, QObject*>::value, "Target type must be a QObject");
 
     if (sender->loadStatus() == LoadStatus::Loaded)
     {
@@ -59,23 +54,27 @@ namespace Esri::ArcGISRuntime::Toolkit {
     }
     else
     {
-      auto connection = QObject::connect(
-          sender, &Target::loadStatusChanged, reveiver,
-          [f = std::forward<Func>(f)](LoadStatus loadStatus)
-          {
-            if (loadStatus == LoadStatus::Loaded)
-              f();
-          });
+      auto connection = QObject::connect(sender, &Target::loadStatusChanged, reveiver, [f = std::forward<Func>(f)](LoadStatus loadStatus)
+      {
+        if (loadStatus == LoadStatus::Loaded)
+        {
+          f();
+        }
+      });
 
       if (sender->loadStatus() == LoadStatus::NotLoaded)
+      {
         sender->load();
+      }
       else if (sender->loadStatus() != LoadStatus::Loading)
+      {
         sender->retryLoad();
+      }
 
       return connection;
     }
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_DOONLOAD_H

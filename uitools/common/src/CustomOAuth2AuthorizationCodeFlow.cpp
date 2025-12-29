@@ -20,7 +20,8 @@
 
 using namespace Esri::ArcGISRuntime;
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   CustomOAuth2AuthorizationCodeFlow::CustomOAuth2AuthorizationCodeFlow(QUrl authorizeUrl, QObject* parent) :
     QAbstractOAuth2(parent),
@@ -45,4 +46,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     m_authorizationCode = code;
   }
 
-} //  Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

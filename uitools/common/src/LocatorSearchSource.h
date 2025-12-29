@@ -30,7 +30,8 @@
 // Other headers
 #include "SearchSourceInterface.h"
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   class LocatorSearchSource : public SearchSourceInterface
   {
@@ -71,6 +72,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     GeocodeParameters m_geocodeParameters;
   };
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_LOCATORSEARCHSOURCE_H

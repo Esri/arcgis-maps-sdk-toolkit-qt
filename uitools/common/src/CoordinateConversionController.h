@@ -34,11 +34,13 @@ class QAbstractListModel;
 Q_MOC_INCLUDE(<QPointF>)
 class QPointF;
 
-namespace Esri::ArcGISRuntime {
+namespace Esri::ArcGISRuntime
+{
 
   class GeoView;
 
-  namespace Toolkit {
+  namespace Toolkit
+  {
 
     class CoordinateConversionController : public QObject
     {
@@ -90,9 +92,7 @@ namespace Esri::ArcGISRuntime {
 
       void setCurrentPoint(const QString& point, CoordinateConversionOption* option);
 
-      void setCurrentPoint(const QString& point,
-                           const SpatialReference& spatialReference,
-                           CoordinateConversionOption* option);
+      void setCurrentPoint(const QString& point, const SpatialReference& spatialReference, CoordinateConversionOption* option);
 
       void zoomToCurrentPoint();
 
@@ -110,7 +110,7 @@ namespace Esri::ArcGISRuntime {
       bool m_inPickingMode = false;
     };
 
-  } // Toolkit
-} // Esri::ArcGISRuntime
+  } // namespace Toolkit
+} // namespace Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_COORDINATECONVERSIONCONTROLLER_H

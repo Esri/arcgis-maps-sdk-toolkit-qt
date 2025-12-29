@@ -17,7 +17,8 @@
 
 #include "UtilityNetworkFunctionTraceResultsModel.h"
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   UtilityNetworkFunctionTraceResultsModel::UtilityNetworkFunctionTraceResultsModel(QObject* parent) :
     QAbstractListModel(parent)
@@ -38,20 +39,22 @@ namespace Esri::ArcGISRuntime::Toolkit {
   QVariant UtilityNetworkFunctionTraceResultsModel::data(const QModelIndex& index, int role) const
   {
     if (index.row() < 0 || index.row() >= rowCount())
+    {
       return QVariant();
+    }
 
     const auto& functionResult = m_data[static_cast<size_t>(index.row())];
 
     switch (role)
     {
-    case NameRole:
-      return functionResult.name();
-    case TypeRole:
-      return functionResult.typeAsLabel();
-    case ValueRole:
-      return functionResult.value();
-    default:
-      qDebug() << "Incorrect UtilityNetworkFunctionTraceResultsModel data.";
+      case NameRole:
+        return functionResult.name();
+      case TypeRole:
+        return functionResult.typeAsLabel();
+      case ValueRole:
+        return functionResult.value();
+      default:
+        qDebug() << "Incorrect UtilityNetworkFunctionTraceResultsModel data.";
     }
 
     return {};
@@ -90,4 +93,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     m_roles[TypeRole] = "type";
     m_roles[ValueRole] = "value";
   }
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

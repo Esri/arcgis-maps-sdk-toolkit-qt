@@ -19,7 +19,8 @@
 // Qt headers
 #include <QAbstractProxyModel>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   class GenericListModel;
 
@@ -41,8 +42,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     Qt::ItemFlags flags(const QModelIndex& index) const override;
 
-    QVariant headerData(int section, Qt::Orientation orientation,
-                        int role = Qt::DisplayRole) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
     bool insertRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
 
@@ -60,6 +60,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     GenericListModel* m_sourceModel = nullptr;
   };
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_GENERICTABLEPROXYMODEL_H

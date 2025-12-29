@@ -20,12 +20,14 @@
 #include <QLabel>
 #include <QPixmap>
 
-namespace Esri::ArcGISRuntime {
+namespace Esri::ArcGISRuntime
+{
 
   class MapGraphicsView;
   class SceneGraphicsView;
 
-  namespace Toolkit {
+  namespace Toolkit
+  {
 
     class NorthArrowController;
 
@@ -51,7 +53,7 @@ namespace Esri::ArcGISRuntime {
       NorthArrowController* m_controller = nullptr;
     };
 
-  } // Toolkit
-} // Esri::ArcGISRuntime
+  } // namespace Toolkit
+} // namespace Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_NORTHARROW_H

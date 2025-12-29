@@ -34,9 +34,11 @@
 // Toolkit headers
 #include "PopupAttachmentItem.h"
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
-  namespace {
+  namespace
+  {
 
     /*!
       \internal
@@ -113,20 +115,20 @@ namespace Esri::ArcGISRuntime::Toolkit {
       {
         switch (m_popupAttachmentItem->popupAttachmentType())
         {
-        case PopupAttachmentType::Image:
-          icon = QIcon(QStringLiteral(":/Esri/ArcGISRuntime/Toolkit/image.svg"));
-          break;
-        case PopupAttachmentType::Video:
-          icon = QIcon(QStringLiteral(":/Esri/ArcGISRuntime/Toolkit/video.svg"));
-          break;
-        case PopupAttachmentType::Document:
-          icon = QIcon(QStringLiteral(":/Esri/ArcGISRuntime/Toolkit/file.svg"));
-          break;
-        case PopupAttachmentType::Other:
-          [[fallthrough]];
-        default:
-          icon = QIcon(QStringLiteral(":/Esri/ArcGISRuntime/Toolkit/other.svg"));
-          break;
+          case PopupAttachmentType::Image:
+            icon = QIcon(QStringLiteral(":/Esri/ArcGISRuntime/Toolkit/image.svg"));
+            break;
+          case PopupAttachmentType::Video:
+            icon = QIcon(QStringLiteral(":/Esri/ArcGISRuntime/Toolkit/video.svg"));
+            break;
+          case PopupAttachmentType::Document:
+            icon = QIcon(QStringLiteral(":/Esri/ArcGISRuntime/Toolkit/file.svg"));
+            break;
+          case PopupAttachmentType::Other:
+            [[fallthrough]];
+          default:
+            icon = QIcon(QStringLiteral(":/Esri/ArcGISRuntime/Toolkit/other.svg"));
+            break;
         }
 
         auto pixmap = icon.pixmap(32, 32);
@@ -147,7 +149,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
       return QQuickTextureFactory::textureFactoryForImage(m_requestedSize.isValid() ? thumbnail.scaled(m_requestedSize) : thumbnail);
     }
-  }
+  } // namespace
 
   const QString PopupAttachmentImageProvider::PROVIDER_ID = QStringLiteral("PopupAttachmentItems");
 
@@ -171,25 +173,31 @@ namespace Esri::ArcGISRuntime::Toolkit {
   bool PopupAttachmentImageProvider::registerItem(PopupAttachmentItem* item)
   {
     if (!item)
+    {
       return false;
+    }
 
     const auto key = item->id();
 
     if (m_itemMap.contains(key))
+    {
       return false;
+    }
 
     m_itemMap.insert(key, item);
     QObject::connect(item, &QObject::destroyed, this, [this, key]
-                     {
-                       m_itemMap.remove(key);
-                     });
+    {
+      m_itemMap.remove(key);
+    });
     return true;
   }
 
   bool PopupAttachmentImageProvider::deregisterItem(PopupAttachmentItem* item)
   {
     if (!item)
+    {
       return false;
+    }
     QObject::disconnect(item, nullptr, this, nullptr);
     return m_itemMap.remove(item->id()) > 0;
   }
@@ -200,4 +208,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     return new PopupAttachmentImageResponse(itemIt == std::end(m_itemMap) ? nullptr : itemIt.value(), requestedSize);
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

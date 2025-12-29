@@ -33,9 +33,11 @@
 
 #include <PopupViewController.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
-  namespace {
+  namespace
+  {
     QString formatFileSize(qint64 bytes)
     {
       if (bytes < 0)
@@ -59,7 +61,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
       return QString::number(size, 'f', 2) + " " + units[unitIndex];
     }
-  }
+  } // namespace
 
   /*!
     \internal
@@ -122,23 +124,26 @@ namespace Esri::ArcGISRuntime::Toolkit {
     QUrl defaultThumbnail;
     switch (popupAttachmentType())
     {
-    case PopupAttachmentType::Image:
-      defaultThumbnail = QStringLiteral("qrc:/Esri/ArcGISRuntime/Toolkit/image.svg");
-      break;
-    case PopupAttachmentType::Video:
-      defaultThumbnail = QStringLiteral("qrc:/Esri/ArcGISRuntime/Toolkit/video.svg");
-      break;
-    case PopupAttachmentType::Document:
-      defaultThumbnail = QStringLiteral("qrc:/Esri/ArcGISRuntime/Toolkit/file.svg");
-      break;
-    case PopupAttachmentType::Other:
-      [[fallthrough]];
-    default:
-      defaultThumbnail = QStringLiteral("qrc:/Esri/ArcGISRuntime/Toolkit/other.svg");
-      break;
+      case PopupAttachmentType::Image:
+        defaultThumbnail = QStringLiteral("qrc:/Esri/ArcGISRuntime/Toolkit/image.svg");
+        break;
+      case PopupAttachmentType::Video:
+        defaultThumbnail = QStringLiteral("qrc:/Esri/ArcGISRuntime/Toolkit/video.svg");
+        break;
+      case PopupAttachmentType::Document:
+        defaultThumbnail = QStringLiteral("qrc:/Esri/ArcGISRuntime/Toolkit/file.svg");
+        break;
+      case PopupAttachmentType::Other:
+        [[fallthrough]];
+      default:
+        defaultThumbnail = QStringLiteral("qrc:/Esri/ArcGISRuntime/Toolkit/other.svg");
+        break;
     }
 
-    return dataFetched() ? QUrl::fromUserInput(QString("image://%1/%2").arg(PopupAttachmentImageProvider::PROVIDER_ID, m_id.toString(QUuid::StringFormat::WithoutBraces))) : defaultThumbnail;
+    return dataFetched() ?
+             QUrl::fromUserInput(
+               QString("image://%1/%2").arg(PopupAttachmentImageProvider::PROVIDER_ID, m_id.toString(QUuid::StringFormat::WithoutBraces))) :
+             defaultThumbnail;
   }
 
   void PopupAttachmentItem::downloadAttachment()
@@ -146,30 +151,30 @@ namespace Esri::ArcGISRuntime::Toolkit {
     m_fetchingAttachment = true;
     emit popupAttachmentItemChanged();
     m_popupAttachment->attachment()->fetchDataAsync().then(this, [this](const QByteArray& attachmentData)
-                                                           {
-                                                             if (attachmentData.isEmpty())
-                                                             {
-                                                               m_fetchingAttachment = false;
-                                                               emit popupAttachmentItemChanged();
-                                                               return;
-                                                             }
+    {
+      if (attachmentData.isEmpty())
+      {
+        m_fetchingAttachment = false;
+        emit popupAttachmentItemChanged();
+        return;
+      }
 
-                                                             // emit signal to bubble up attachment data and name to PopupViewController
-                                                             emit attachmentDataFetched(attachmentData, name());
-                                                             m_localData = m_popupAttachment->attachment()->attachmentUrl();
-                                                             m_fetchingAttachment = false;
-                                                             // we delay the registration of this until the data has been fetched.
-                                                             // Otherwise the creating of the thumbnail/image will do this for us.
-                                                             if (m_popupAttachment->popupAttachmentType() == PopupAttachmentType::Image)
-                                                             {
-                                                               setThumbnail(QImage(m_localData.toLocalFile()));
-                                                             }
-                                                             else
-                                                             {
-                                                               setThumbnail(QImage());
-                                                             }
-                                                             emit popupAttachmentItemChanged();
-                                                           });
+      // emit signal to bubble up attachment data and name to PopupViewController
+      emit attachmentDataFetched(attachmentData, name());
+      m_localData = m_popupAttachment->attachment()->attachmentUrl();
+      m_fetchingAttachment = false;
+      // we delay the registration of this until the data has been fetched.
+      // Otherwise the creating of the thumbnail/image will do this for us.
+      if (m_popupAttachment->popupAttachmentType() == PopupAttachmentType::Image)
+      {
+        setThumbnail(QImage(m_localData.toLocalFile()));
+      }
+      else
+      {
+        setThumbnail(QImage());
+      }
+      emit popupAttachmentItemChanged();
+    });
   }
 
   QUuid PopupAttachmentItem::id() const
@@ -193,4 +198,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     return m_thumbnail;
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -43,9 +44,9 @@ void BasemapGalleryItemUnitTest::initTestCase()
   QSignalSpy mapLoaded(m_map, &GeoModel::doneLoading);
   m_map->load();
   AutoDisconnector ad1(connect(m_map, &Map::doneLoading, this, [](Error loadError)
-                               {
-                                 QVERIFY2(loadError.isEmpty(), qPrintable(loadError.message()));
-                               }));
+  {
+    QVERIFY2(loadError.isEmpty(), qPrintable(loadError.message()));
+  }));
 
   QVERIFY2(mapLoaded.wait(), "problem in loading the map.");
 }

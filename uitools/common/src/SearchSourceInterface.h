@@ -29,16 +29,19 @@
 Q_MOC_INCLUDE("SearchResult.h")
 
 // Forward declarations
-namespace Esri::ArcGISRuntime {
+namespace Esri::ArcGISRuntime
+{
   class SuggestListModel;
   class SuggestResult;
 
-  namespace Toolkit {
+  namespace Toolkit
+  {
     class SearchResult;
   }
-} // Esri::ArcGISRuntime
+} // namespace Esri::ArcGISRuntime
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   class SearchSourceInterface : public QObject
   {
@@ -77,7 +80,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
     QString m_displayName;
   };
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 Q_DECLARE_INTERFACE(Esri::ArcGISRuntime::Toolkit::SearchSourceInterface, "Esri::ArcGISRuntime::Toolkit::SearchSourceInterface")
 

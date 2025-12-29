@@ -20,7 +20,9 @@
 
 #include <QMetaProperty>
 #include <QPointer>
-namespace Esri::ArcGISRuntime::Toolkit {
+
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
     \inmodule Esri.ArcGISRuntime.Toolkit
@@ -116,27 +118,37 @@ namespace Esri::ArcGISRuntime::Toolkit {
     // that are updating are also the same properties associated with our
     // Qt::DisplayRole and Qt::EditRole or Qt::DecorationRole or Qt::ToolTipRole. If so then we need to emit dataChanged
     // for these roles as well if they are not already emitting.
-    connect(this, &GenericListModel::dataChanged, this,
-            [this](const QModelIndex& topLeft, const QModelIndex& bottomRight,
-                   const QVector<int>& roles)
-            {
-              if (m_displayPropIndex < 0)
-                return;
+    connect(this, &GenericListModel::dataChanged, this, [this](const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int>& roles)
+    {
+      if (m_displayPropIndex < 0)
+      {
+        return;
+      }
 
-              if (!m_elementType)
-                return;
+      if (!m_elementType)
+      {
+        return;
+      }
 
-              if (roles.contains(Qt::DisplayRole))
-                return;
+      if (roles.contains(Qt::DisplayRole))
+      {
+        return;
+      }
 
-              const auto offset = m_elementType->propertyOffset();
-              if (roles.contains(m_displayPropIndex - offset + Qt::UserRole + 1))
-                emit dataChanged(topLeft, bottomRight, QVector<int>() << Qt::DisplayRole << Qt::EditRole);
-              if (roles.contains(m_decorationPropIndex - offset + Qt::UserRole + 1))
-                emit dataChanged(topLeft, bottomRight, QVector<int>() << Qt::DecorationRole);
-              if (roles.contains(m_tooltipPropIndex - offset + Qt::UserRole + 1))
-                emit dataChanged(topLeft, bottomRight, QVector<int>() << Qt::ToolTipRole);
-            });
+      const auto offset = m_elementType->propertyOffset();
+      if (roles.contains(m_displayPropIndex - offset + Qt::UserRole + 1))
+      {
+        emit dataChanged(topLeft, bottomRight, QVector<int>() << Qt::DisplayRole << Qt::EditRole);
+      }
+      if (roles.contains(m_decorationPropIndex - offset + Qt::UserRole + 1))
+      {
+        emit dataChanged(topLeft, bottomRight, QVector<int>() << Qt::DecorationRole);
+      }
+      if (roles.contains(m_tooltipPropIndex - offset + Qt::UserRole + 1))
+      {
+        emit dataChanged(topLeft, bottomRight, QVector<int>() << Qt::ToolTipRole);
+      }
+    });
   }
 
   /*!
@@ -156,9 +168,13 @@ namespace Esri::ArcGISRuntime::Toolkit {
   int GenericListModel::rowCount(const QModelIndex& parent) const
   {
     if (parent.isValid())
+    {
       return 0;
+    }
     else
+    {
       return m_objects.size();
+    }
   }
 
   /*!
@@ -188,9 +204,13 @@ namespace Esri::ArcGISRuntime::Toolkit {
   QVariant GenericListModel::data(const QModelIndex& index, int role) const
   {
     if (!m_elementType)
+    {
       return QVariant();
+    }
     else if (!index.isValid())
+    {
       return QVariant();
+    }
 
     auto o = m_objects.at(index.row());
     if (role == Qt::DisplayRole || role == Qt::EditRole)
@@ -252,9 +272,13 @@ namespace Esri::ArcGISRuntime::Toolkit {
   bool GenericListModel::setData(const QModelIndex& index, const QVariant& value, int role)
   {
     if (!m_elementType)
+    {
       return false;
+    }
     else if (!index.isValid())
+    {
       return false;
+    }
 
     if (role == Qt::DisplayRole || role == Qt::EditRole)
     {
@@ -324,7 +348,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   QHash<int, QByteArray> GenericListModel::roleNames() const
   {
     if (!m_elementType)
+    {
       return {};
+    }
 
     QHash<int, QByteArray> output;
     output.insert(Qt::UserRole, "listModelData");
@@ -364,17 +390,29 @@ namespace Esri::ArcGISRuntime::Toolkit {
   bool GenericListModel::insertRows(int row, int count, const QModelIndex& parent)
   {
     if (!m_elementType)
+    {
       return false;
+    }
     else if (m_elementType->constructorCount() < 1)
+    {
       return false;
+    }
     if (parent.isValid())
+    {
       return false;
+    }
     else if (count < 1)
+    {
       return false;
+    }
     else if (row < 0)
+    {
       return false;
+    }
     else if (row > m_objects.size())
+    {
       return false;
+    }
 
     beginInsertRows(parent, row, row + count - 1);
     for (int i = 0; i < count; ++i)
@@ -404,17 +442,29 @@ namespace Esri::ArcGISRuntime::Toolkit {
   bool GenericListModel::removeRows(int row, int count, const QModelIndex& parent)
   {
     if (parent.isValid())
+    {
       return false;
+    }
     else if (count < 0)
+    {
       return false;
+    }
     else if (row < 0)
+    {
       return false;
+    }
     else if (row >= rowCount(parent))
+    {
       return false;
+    }
     else if (row + count > rowCount(parent))
+    {
       return false;
+    }
     else if (count == 0)
+    {
       return true; // A valid no-op.
+    }
 
     beginRemoveRows(parent, row, row + count - 1);
     for (int i = count - 1; i >= row; --i)
@@ -502,6 +552,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
   {
     m_tooltipPropIndex = m_elementType->indexOfProperty(propertyName.toLatin1());
   }
+
   /*!
     \brief Returns the name of the property which has been elevated to be used
     as the \c Qt::DisplayRole and Qt::EditRole in this model.
@@ -511,7 +562,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   QString GenericListModel::displayPropertyName()
   {
     if (m_displayPropIndex < 0)
+    {
       return "";
+    }
 
     return m_elementType->property(m_displayPropIndex).name();
   }
@@ -525,7 +578,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   QString GenericListModel::decorationPropertyName()
   {
     if (m_decorationPropIndex < 0)
+    {
       return "";
+    }
 
     return m_elementType->property(m_decorationPropIndex).name();
   }
@@ -539,7 +594,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   QString GenericListModel::tooltipPropertyName()
   {
     if (m_tooltipPropIndex < 0)
+    {
       return "";
+    }
 
     return m_elementType->property(m_tooltipPropIndex).name();
   }
@@ -559,13 +616,19 @@ namespace Esri::ArcGISRuntime::Toolkit {
   bool GenericListModel::append(QObject* object)
   {
     if (!m_elementType)
+    {
       return false;
+    }
 
     if (!object)
+    {
       return false;
+    }
 
     if (!object->metaObject()->inherits(m_elementType))
+    {
       return false;
+    }
 
     auto i = rowCount();
     beginInsertRows(QModelIndex(), i, i);
@@ -592,16 +655,24 @@ namespace Esri::ArcGISRuntime::Toolkit {
     const auto size = objects.size();
 
     if (!m_elementType)
+    {
       return false;
+    }
     if (size < 1)
+    {
       return true;
+    }
 
     for (auto o : objects)
     {
       if (!o)
+      {
         return false;
+      }
       else if (!o->metaObject()->inherits(m_elementType))
+      {
         return false;
+      }
     }
 
     auto i = rowCount();
@@ -611,7 +682,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
     endInsertRows();
 
     for (; i < size; ++i)
+    {
       connectElement(index(i));
+    }
 
     return true;
   }
@@ -634,28 +707,35 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void GenericListModel::connectElement(QModelIndex index)
   {
     if (!m_elementType || !index.isValid())
+    {
       return;
+    }
 
     QObject* object = m_objects.at(index.row());
 
     if (!object || !object->metaObject()->inherits(m_elementType))
+    {
       return;
+    }
 
     // If object is deleted externally we remove from the model.
-    connect(object, &QObject::destroyed, this,
-            [this, pIndex = QPersistentModelIndex(index)]
-            {
-              if (!pIndex.isValid())
-                return;
+    connect(object, &QObject::destroyed, this, [this, pIndex = QPersistentModelIndex(index)]
+    {
+      if (!pIndex.isValid())
+      {
+        return;
+      }
 
-              const auto row = pIndex.row();
+      const auto row = pIndex.row();
 
-              if (row < 0 || row >= m_objects.size())
-                return;
+      if (row < 0 || row >= m_objects.size())
+      {
+        return;
+      }
 
-              m_objects[row] = nullptr; // Prevents double delete.
-              removeRow(row, pIndex.parent());
-            });
+      m_objects[row] = nullptr; // Prevents double delete.
+      removeRow(row, pIndex.parent());
+    });
 
     // Connect to each property notifySignal and hook up to our dataChanged signal
     // using MetaElement objects as drop-in replacements for lambdas.
@@ -665,15 +745,10 @@ namespace Esri::ArcGISRuntime::Toolkit {
       auto property = m_elementType->property(i);
       if (property.hasNotifySignal())
       {
-        auto element = new MetaElement(
-            index,
-            i - offset + Qt::UserRole + 1,
-            object,
-            this);
+        auto element = new MetaElement(index, i - offset + Qt::UserRole + 1, object, this);
 
         // Signal to signal connection.
-        connect(object, property.notifySignal(),
-                element, QMetaMethod::fromSignal(&MetaElement::propertyChanged));
+        connect(object, property.notifySignal(), element, QMetaMethod::fromSignal(&MetaElement::propertyChanged));
       }
     }
   }
@@ -706,17 +781,27 @@ namespace Esri::ArcGISRuntime::Toolkit {
   QVariant GenericListModel::headerData(int section, Qt::Orientation orientation, int role) const
   {
     if (!m_elementType)
+    {
       return QVariant();
+    }
 
     if (role != Qt::DisplayRole)
+    {
       return QVariant();
+    }
 
     if (Qt::Orientation::Vertical == orientation)
+    {
       return section + 1;
+    }
     else if (Qt::Orientation::Horizontal && section == 0)
+    {
       return QString(m_elementType->className());
+    }
     else
+    {
       return "";
+    }
   }
 
   /*!
@@ -733,7 +818,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   Qt::ItemFlags GenericListModel::flags(const QModelIndex& index) const
   {
     if (m_flagsCallback)
+    {
       return m_flagsCallback(index);
+    }
     // call default base class .flags()
     return QAbstractItemModel::flags(index);
   }
@@ -791,4 +878,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     \brief The current number of elements in this list model.
    */
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

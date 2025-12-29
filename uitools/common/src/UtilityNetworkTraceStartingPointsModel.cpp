@@ -20,7 +20,8 @@
 
 #include <UtilityElement.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
     \internal
@@ -46,28 +47,30 @@ namespace Esri::ArcGISRuntime::Toolkit {
   QVariant UtilityNetworkTraceStartingPointsModel::data(const QModelIndex& index, int role) const
   {
     if (index.row() < 0 || index.row() >= rowCount())
+    {
       return QVariant();
+    }
 
     const auto& startingPoint = m_data[static_cast<size_t>(index.row())];
 
     switch (role)
     {
-    case SourceNameRole:
-      return startingPoint->sourceName();
-    case GroupNameRole:
-      return startingPoint->groupName();
-    case HasFractionAlongEdgeRole:
-      return startingPoint->hasFractionAlongEdge();
-    case FractionAlongEdgeRole:
-      return startingPoint->fractionAlongEdge();
-    case HasMultipleTerminalsRole:
-      return startingPoint->hasMultipleTerminals();
-    case MultipleTerminalNamesRole:
-      return startingPoint->multipleTerminalNames();
-    case SelectedTerminalIndexRole:
-      return startingPoint->selectedTerminalIndex();
-    default:
-      qDebug() << "Incorrect UtilityNetworkTraceStartingPointsModel data.";
+      case SourceNameRole:
+        return startingPoint->sourceName();
+      case GroupNameRole:
+        return startingPoint->groupName();
+      case HasFractionAlongEdgeRole:
+        return startingPoint->hasFractionAlongEdge();
+      case FractionAlongEdgeRole:
+        return startingPoint->fractionAlongEdge();
+      case HasMultipleTerminalsRole:
+        return startingPoint->hasMultipleTerminals();
+      case MultipleTerminalNamesRole:
+        return startingPoint->multipleTerminalNames();
+      case SelectedTerminalIndexRole:
+        return startingPoint->selectedTerminalIndex();
+      default:
+        qDebug() << "Incorrect UtilityNetworkTraceStartingPointsModel data.";
     }
 
     return {};
@@ -76,38 +79,44 @@ namespace Esri::ArcGISRuntime::Toolkit {
   bool UtilityNetworkTraceStartingPointsModel::setData(const QModelIndex& index, const QVariant& value, int role)
   {
     if (index.row() < 0 || index.row() >= rowCount())
+    {
       return false;
+    }
 
     auto& startingPoint = m_data[static_cast<size_t>(index.row())];
 
     switch (role)
     {
-    case SourceNameRole:
-      break;
-    case GroupNameRole:
-      break;
-    case HasFractionAlongEdgeRole:
-      break;
-    case FractionAlongEdgeRole:
-    {
-      bool success = false;
-      double fraction = value.toDouble(&success);
-      if (success)
-        startingPoint->setFractionAlongEdge(fraction);
-      return success;
-    }
-    case HasMultipleTerminalsRole:
-      break;
-    case MultipleTerminalNamesRole:
-      break;
-    case SelectedTerminalIndexRole:
-    {
-      bool success = false;
-      int i = value.toInt(&success);
-      if (success)
-        startingPoint->setSelectedTerminalNameByIndex(i);
-      return success;
-    }
+      case SourceNameRole:
+        break;
+      case GroupNameRole:
+        break;
+      case HasFractionAlongEdgeRole:
+        break;
+      case FractionAlongEdgeRole:
+      {
+        bool success = false;
+        double fraction = value.toDouble(&success);
+        if (success)
+        {
+          startingPoint->setFractionAlongEdge(fraction);
+        }
+        return success;
+      }
+      case HasMultipleTerminalsRole:
+        break;
+      case MultipleTerminalNamesRole:
+        break;
+      case SelectedTerminalIndexRole:
+      {
+        bool success = false;
+        int i = value.toInt(&success);
+        if (success)
+        {
+          startingPoint->setSelectedTerminalNameByIndex(i);
+        }
+        return success;
+      }
     }
 
     return false;

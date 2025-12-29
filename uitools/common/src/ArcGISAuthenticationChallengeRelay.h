@@ -19,9 +19,11 @@
 // STL headers
 #include <Authentication/ArcGISAuthenticationChallengeHandler.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   class AuthenticatorController;
+
   class ArcGISAuthenticationChallengeRelay : public Authentication::ArcGISAuthenticationChallengeHandler
   {
     Q_OBJECT
@@ -37,6 +39,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     AuthenticatorController* m_controller = nullptr;
   };
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_ARCGISAUTHENTICATIONCHALLENGERELAY_H

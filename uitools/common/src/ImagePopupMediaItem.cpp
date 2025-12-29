@@ -24,7 +24,8 @@
 #include <PopupMediaItem.h>
 #include <PopupViewController.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
     \internal

@@ -20,7 +20,8 @@
 #include <CoordinateFormatter.h>
 #include <Point.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   CoordinateConversionOption::CoordinateConversionOption(QObject* parent) :
     QObject(parent)
@@ -39,7 +40,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void CoordinateConversionOption::setOutputMode(CoordinateType outputMode)
   {
     if (outputMode == m_outputMode)
+    {
       return;
+    }
 
     m_outputMode = outputMode;
     emit outputModeChanged();
@@ -53,7 +56,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void CoordinateConversionOption::setName(const QString& name)
   {
     if (name == m_name)
+    {
       return;
+    }
 
     m_name = name;
     emit nameChanged();
@@ -67,7 +72,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void CoordinateConversionOption::setHasSpaces(bool hasSpaces)
   {
     if (m_hasSpaces == hasSpaces)
+    {
       return;
+    }
 
     m_hasSpaces = hasSpaces;
     emit hasSpacesChanged();
@@ -81,7 +88,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void CoordinateConversionOption::setPrecision(int precision)
   {
     if (m_precision == precision)
+    {
       return;
+    }
 
     m_precision = precision;
     emit precisionChanged();
@@ -95,7 +104,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void CoordinateConversionOption::setDecimalPlaces(int decimalPlaces)
   {
     if (m_decimalPlaces == decimalPlaces)
+    {
       return;
+    }
 
     m_decimalPlaces = decimalPlaces;
     emit decimalPlacesChanged();
@@ -109,7 +120,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void CoordinateConversionOption::setMgrsConversionMode(MgrsConversionMode mgrsConversionMode)
   {
     if (m_mgrsConversionMode == mgrsConversionMode)
+    {
       return;
+    }
 
     m_mgrsConversionMode = mgrsConversionMode;
     emit mgrsConversionModeChanged();
@@ -123,7 +136,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void CoordinateConversionOption::setLatLonFormat(LatitudeLongitudeFormat latLonFormat)
   {
     if (m_latLonFormat == latLonFormat)
+    {
       return;
+    }
 
     m_latLonFormat = latLonFormat;
     emit latLonFormatChanged();
@@ -137,7 +152,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void CoordinateConversionOption::setUtmConversionMode(UtmConversionMode utmConversionMode)
   {
     if (m_utmConversionMode == utmConversionMode)
+    {
       return;
+    }
 
     m_utmConversionMode = utmConversionMode;
     emit utmConversionModeChanged();
@@ -151,7 +168,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void CoordinateConversionOption::setGarsConversionMode(GarsConversionMode conversionMode)
   {
     if (m_garsConvesrionMode == conversionMode)
+    {
       return;
+    }
 
     m_garsConvesrionMode = conversionMode;
     emit garsConversionModeChanged();
@@ -161,80 +180,74 @@ namespace Esri::ArcGISRuntime::Toolkit {
   {
     switch (outputMode())
     {
-    case CoordinateType::Gars:
-    {
-      return CoordinateFormatter::toGars(point);
-    }
-    case CoordinateType::GeoRef:
-    {
-      return CoordinateFormatter::toGeoRef(point, precision());
-    }
-    case CoordinateType::LatLon:
-    {
-      const auto format = latLonFormat();
-      return CoordinateFormatter::toLatitudeLongitude(point, format, decimalPlaces());
-    }
-    case CoordinateType::Mgrs:
-    {
-      const auto conversionMode = mgrsConversionMode();
-      return CoordinateFormatter::toMgrs(point, conversionMode, decimalPlaces(), hasSpaces());
-    }
-    case CoordinateType::Usng:
-    {
-      return CoordinateFormatter::toUsng(point, precision(), decimalPlaces());
-    }
-    case CoordinateType::Utm:
-    {
-      const auto conversionMode = utmConversionMode();
-      return CoordinateFormatter::toUtm(point, conversionMode, hasSpaces());
-    }
-    default:
-      return QString();
+      case CoordinateType::Gars:
+      {
+        return CoordinateFormatter::toGars(point);
+      }
+      case CoordinateType::GeoRef:
+      {
+        return CoordinateFormatter::toGeoRef(point, precision());
+      }
+      case CoordinateType::LatLon:
+      {
+        const auto format = latLonFormat();
+        return CoordinateFormatter::toLatitudeLongitude(point, format, decimalPlaces());
+      }
+      case CoordinateType::Mgrs:
+      {
+        const auto conversionMode = mgrsConversionMode();
+        return CoordinateFormatter::toMgrs(point, conversionMode, decimalPlaces(), hasSpaces());
+      }
+      case CoordinateType::Usng:
+      {
+        return CoordinateFormatter::toUsng(point, precision(), decimalPlaces());
+      }
+      case CoordinateType::Utm:
+      {
+        const auto conversionMode = utmConversionMode();
+        return CoordinateFormatter::toUtm(point, conversionMode, hasSpaces());
+      }
+      default:
+        return QString();
     }
   }
 
   Point CoordinateConversionOption::pointFromString(const QString& point, const SpatialReference& spatialReference)
   {
     if (spatialReference.isEmpty())
+    {
       qWarning("The spatial reference property is empty: conversions will fail.");
+    }
 
     switch (outputMode())
     {
-    case CoordinateType::Gars:
-    {
-      return CoordinateFormatter::fromGars(point,
-                                           spatialReference,
-                                           garsConversionMode());
-    }
-    case CoordinateType::GeoRef:
-    {
-      return CoordinateFormatter::fromGeoRef(point,
-                                             spatialReference);
-    }
-    case CoordinateType::LatLon:
-    {
-      return CoordinateFormatter::fromLatitudeLongitude(point,
-                                                        spatialReference);
-    }
-    case CoordinateType::Mgrs:
-    {
-      return CoordinateFormatter::fromMgrs(point,
-                                           spatialReference,
-                                           mgrsConversionMode());
-    }
-    case CoordinateType::Usng:
-    {
-      return CoordinateFormatter::fromUsng(point,
-                                           spatialReference);
-    }
-    case CoordinateType::Utm:
-    {
-      return CoordinateFormatter::fromUtm(point,
-                                          spatialReference,
-                                          utmConversionMode());
-    }
-    default: return Point();
+      case CoordinateType::Gars:
+      {
+        return CoordinateFormatter::fromGars(point, spatialReference, garsConversionMode());
+      }
+      case CoordinateType::GeoRef:
+      {
+        return CoordinateFormatter::fromGeoRef(point, spatialReference);
+      }
+      case CoordinateType::LatLon:
+      {
+        return CoordinateFormatter::fromLatitudeLongitude(point, spatialReference);
+      }
+      case CoordinateType::Mgrs:
+      {
+        return CoordinateFormatter::fromMgrs(point, spatialReference, mgrsConversionMode());
+      }
+      case CoordinateType::Usng:
+      {
+        return CoordinateFormatter::fromUsng(point, spatialReference);
+      }
+      case CoordinateType::Utm:
+      {
+        return CoordinateFormatter::fromUtm(point, spatialReference, utmConversionMode());
+      }
+      default:
+        return Point();
     }
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

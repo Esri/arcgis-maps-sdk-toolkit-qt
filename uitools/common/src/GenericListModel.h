@@ -23,7 +23,8 @@
 // STL headers
 #include <type_traits>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   class GenericListModel : public QAbstractListModel
   {
@@ -65,12 +66,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
 
-    QVariant headerData(int section, Qt::Orientation orientation,
-                        int role = Qt::DisplayRole) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
     Qt::ItemFlags flags(const QModelIndex& index) const override;
 
-    template <typename Func>
+    template<typename Func>
     void setFlagsCallback(Func&& f)
     {
       m_flagsCallback = std::forward<Func>(f);
@@ -82,7 +82,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     Q_INVOKABLE bool clear();
 
-    template <typename T>
+    template<typename T>
     T* element(const QModelIndex& index) const
     {
       static_assert(std::is_base_of<QObject, T>::value, "Must inherit QObject");
@@ -108,6 +108,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     std::function<FlagsCallback> m_flagsCallback;
   };
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_GENERICLISTMODEL_H

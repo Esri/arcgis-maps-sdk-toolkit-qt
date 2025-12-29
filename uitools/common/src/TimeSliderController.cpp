@@ -40,9 +40,11 @@
 #include <QDateTime>
 #include <QDebug>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
-  namespace {
+  namespace
+  {
     /*
    \internal
    \brief Calls `std::accumlate` on a \c LayerListModel, but filters out
@@ -55,29 +57,31 @@ namespace Esri::ArcGISRuntime::Toolkit {
   \endlist
    Returns the accumulation of \c T.
  */
-    template <class T, class BinaryOperation>
+    template<class T, class BinaryOperation>
     T accumulateTimeAware(LayerListModel* listModel, BinaryOperation f)
     {
       if (!listModel)
+      {
         return T{};
+      }
 
-      return std::accumulate(
-          listModel->cbegin(),
-          listModel->cend(),
-          T{},
-          [f = std::move(f)](const T& val, Layer* layer)
-          {
-            if (!layer || layer->loadStatus() != LoadStatus::Loaded)
-              return val;
+      return std::accumulate(listModel->cbegin(), listModel->cend(), T{}, [f = std::move(f)](const T& val, Layer* layer)
+      {
+        if (!layer || layer->loadStatus() != LoadStatus::Loaded)
+        {
+          return val;
+        }
 
-            auto timeAware = dynamic_cast<TimeAware*>(layer);
-            if (!timeAware || !timeAware->isTimeFilteringEnabled())
-              return val;
+        auto timeAware = dynamic_cast<TimeAware*>(layer);
+        if (!timeAware || !timeAware->isTimeFilteringEnabled())
+        {
+          return val;
+        }
 
-            // TODO test for visible here.
+        // TODO test for visible here.
 
-            return f(val, timeAware);
-          });
+        return f(val, timeAware);
+      });
     }
 
     /*
@@ -102,28 +106,28 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
       switch (timeValue.unit())
       {
-      case TimeUnit::Milliseconds:
-        return timeValue.duration();
-      case TimeUnit::Centuries:
-        return timeValue.duration() * millisecondsPerDay * daysPerCentury;
-      case TimeUnit::Decades:
-        return timeValue.duration() * millisecondsPerDay * daysPerDecade;
-      case TimeUnit::Years:
-        return timeValue.duration() * millisecondsPerDay * daysPerYear;
-      case TimeUnit::Months:
-        return timeValue.duration() * (daysPerYear / mothsPerYear) * millisecondsPerDay;
-      case TimeUnit::Weeks:
-        return timeValue.duration() * millisecondsPerWeek;
-      case TimeUnit::Days:
-        return timeValue.duration() * millisecondsPerDay;
-      case TimeUnit::Hours:
-        return timeValue.duration() * millisecondsPerHour;
-      case TimeUnit::Minutes:
-        return timeValue.duration() * millisecondsPerMinute;
-      case TimeUnit::Seconds:
-        return timeValue.duration() * millisecondsPerSecond;
-      default:
-        return timeValue.duration();
+        case TimeUnit::Milliseconds:
+          return timeValue.duration();
+        case TimeUnit::Centuries:
+          return timeValue.duration() * millisecondsPerDay * daysPerCentury;
+        case TimeUnit::Decades:
+          return timeValue.duration() * millisecondsPerDay * daysPerDecade;
+        case TimeUnit::Years:
+          return timeValue.duration() * millisecondsPerDay * daysPerYear;
+        case TimeUnit::Months:
+          return timeValue.duration() * (daysPerYear / mothsPerYear) * millisecondsPerDay;
+        case TimeUnit::Weeks:
+          return timeValue.duration() * millisecondsPerWeek;
+        case TimeUnit::Days:
+          return timeValue.duration() * millisecondsPerDay;
+        case TimeUnit::Hours:
+          return timeValue.duration() * millisecondsPerHour;
+        case TimeUnit::Minutes:
+          return timeValue.duration() * millisecondsPerMinute;
+        case TimeUnit::Seconds:
+          return timeValue.duration() * millisecondsPerSecond;
+        default:
+          return timeValue.duration();
       }
     }
 
@@ -139,11 +143,15 @@ namespace Esri::ArcGISRuntime::Toolkit {
     TimeValue minTimeValue(const TimeValue& a, const TimeValue& b)
     {
       if (a.unit() == b.unit())
+      {
         return a.duration() < b.duration() ? a : b;
+      }
       else
+      {
         return toMilliseconds(a) < toMilliseconds(b) ? a : b;
+      }
     }
-  }
+  } // namespace
 
   /*!
     \class Esri::ArcGISRuntime::Toolkit::TimeSliderController
@@ -168,7 +176,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void TimeSliderController::setGeoView(QObject* geoView)
   {
     if (geoView == m_geoView.data())
+    {
       return;
+    }
 
     disconnect(this, nullptr, m_geoView.data(), nullptr);
     disconnectAllLayers();
@@ -183,13 +193,11 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView.data()))
     {
-      connect(mapView, &MapViewToolkit::mapChanged,
-              this, qOverload<>(&TimeSliderController::initializeTimeProperties));
+      connect(mapView, &MapViewToolkit::mapChanged, this, qOverload<>(&TimeSliderController::initializeTimeProperties));
     }
     else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView.data()))
     {
-      connect(sceneView, &SceneViewToolkit::sceneChanged,
-              this, qOverload<>(&TimeSliderController::initializeTimeProperties));
+      connect(sceneView, &SceneViewToolkit::sceneChanged, this, qOverload<>(&TimeSliderController::initializeTimeProperties));
     }
 
     emit geoViewChanged();
@@ -200,11 +208,15 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void TimeSliderController::disconnectAllLayers()
   {
     if (!m_operationalLayers)
+    {
       return;
+    }
 
     disconnect(m_operationalLayers, nullptr, this, nullptr);
     for (const auto* layer : *m_operationalLayers)
+    {
       disconnect(layer, nullptr, this, nullptr);
+    }
   }
 
   void TimeSliderController::initializeTimeProperties()
@@ -214,12 +226,16 @@ namespace Esri::ArcGISRuntime::Toolkit {
     if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView.data()))
     {
       if (auto map = mapView->map())
+      {
         model = map->operationalLayers();
+      }
     }
     else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView.data()))
     {
       if (auto scene = sceneView->arcGISScene())
+      {
         model = scene->operationalLayers();
+      }
     }
     initializeTimeProperties(model);
   }
@@ -230,20 +246,19 @@ namespace Esri::ArcGISRuntime::Toolkit {
     m_operationalLayers = opLayers;
 
     if (!m_operationalLayers)
+    {
       return;
+    }
 
-    connect(m_operationalLayers.data(), &LayerListModel::itemAdded,
-            this, qOverload<>(&TimeSliderController::initializeTimeProperties));
+    connect(m_operationalLayers.data(), &LayerListModel::itemAdded, this, qOverload<>(&TimeSliderController::initializeTimeProperties));
 
-    connect(m_operationalLayers.data(), &LayerListModel::itemRemoved,
-            this, qOverload<>(&TimeSliderController::initializeTimeProperties));
+    connect(m_operationalLayers.data(), &LayerListModel::itemRemoved, this, qOverload<>(&TimeSliderController::initializeTimeProperties));
 
     for (auto layer : *m_operationalLayers)
     {
       if (dynamic_cast<TimeAware*>(layer))
       {
-        connect(layer, &Layer::loadStatusChanged,
-                this, qOverload<>(&TimeSliderController::initializeTimeProperties));
+        connect(layer, &Layer::loadStatusChanged, this, qOverload<>(&TimeSliderController::initializeTimeProperties));
       }
     }
 
@@ -254,46 +269,57 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
   TimeExtent TimeSliderController::fullTimeExtent() const
   {
-    return accumulateTimeAware<TimeExtent>(
-        m_operationalLayers,
-        [](const TimeExtent& t, TimeAware* tLayer)
-        {
-          const auto f = tLayer->fullTimeExtent();
-          if (t.isEmpty())
-            return f;
-          else if (f.isEmpty())
-            return t;
-          else
-            return TimeExtent{std::min(t.startTime(), f.startTime()),
-                              std::max(t.endTime(), f.endTime())};
-        });
+    return accumulateTimeAware<TimeExtent>(m_operationalLayers, [](const TimeExtent& t, TimeAware* tLayer)
+    {
+      const auto f = tLayer->fullTimeExtent();
+      if (t.isEmpty())
+      {
+        return f;
+      }
+      else if (f.isEmpty())
+      {
+        return t;
+      }
+      else
+      {
+        return TimeExtent{std::min(t.startTime(), f.startTime()), std::max(t.endTime(), f.endTime())};
+      }
+    });
   }
 
   TimeValue TimeSliderController::timeInterval() const
   {
-    return accumulateTimeAware<TimeValue>(
-        m_operationalLayers,
-        [](const TimeValue& t, TimeAware* tLayer)
-        {
-          const auto f = tLayer->timeInterval();
-          if (t.isEmpty())
-            return f;
-          else if (f.isEmpty())
-            return t;
-          else
-            return minTimeValue(t, f);
-        });
+    return accumulateTimeAware<TimeValue>(m_operationalLayers, [](const TimeValue& t, TimeAware* tLayer)
+    {
+      const auto f = tLayer->timeInterval();
+      if (t.isEmpty())
+      {
+        return f;
+      }
+      else if (f.isEmpty())
+      {
+        return t;
+      }
+      else
+      {
+        return minTimeValue(t, f);
+      }
+    });
   }
 
   int TimeSliderController::numberOfSteps() const
   {
     const auto extent = fullTimeExtent();
     if (extent.isEmpty())
+    {
       return 0;
+    }
 
     const auto interval = timeInterval();
     if (interval.isEmpty())
+    {
       return 0;
+    }
 
     const auto range = extent.startTime().msecsTo(extent.endTime());
     const auto intervalMS = toMilliseconds(interval);
@@ -319,7 +345,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void TimeSliderController::setSteps(std::pair<int, int> steps)
   {
     if (steps == m_steps)
+    {
       return;
+    }
 
     m_steps = std::move(steps);
 
@@ -336,11 +364,15 @@ namespace Esri::ArcGISRuntime::Toolkit {
   {
     const auto extent = fullTimeExtent();
     if (extent.isEmpty())
+    {
       return QDateTime{};
+    }
 
     const auto interval = timeInterval();
     if (interval.isEmpty())
+    {
       return QDateTime{};
+    }
 
     const auto intervalMS = toMilliseconds(interval);
     return extent.startTime().addMSecs(step * intervalMS);
@@ -351,15 +383,21 @@ namespace Esri::ArcGISRuntime::Toolkit {
     auto geoView = qobject_cast<GeoView*>(m_geoView);
 
     if (!geoView)
+    {
       return std::make_pair(0, 0);
+    }
 
     const auto fullExtent = fullTimeExtent();
     if (fullExtent.isEmpty())
+    {
       return std::make_pair(0, 0);
+    }
 
     const auto interval = timeInterval();
     if (interval.isEmpty())
+    {
       return std::make_pair(0, 0);
+    }
 
     const auto intervalMS = toMilliseconds(interval);
 
@@ -370,14 +408,10 @@ namespace Esri::ArcGISRuntime::Toolkit {
       return std::make_pair(0, std::ceil(range / intervalMS));
     }
 
-    const int s = std::ceil(fullExtent.startTime().msecsTo(
-                                geoExtent.startTime()) /
-                            intervalMS);
-    const int e = std::ceil(geoExtent.endTime().msecsTo(
-                                fullExtent.endTime()) /
-                            intervalMS);
+    const int s = std::ceil(fullExtent.startTime().msecsTo(geoExtent.startTime()) / intervalMS);
+    const int e = std::ceil(geoExtent.endTime().msecsTo(fullExtent.endTime()) / intervalMS);
 
     return std::make_pair(s, e);
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

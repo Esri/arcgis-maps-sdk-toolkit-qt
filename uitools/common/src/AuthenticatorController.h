@@ -29,14 +29,16 @@ class QUrl;
 
 Q_MOC_INCLUDE(<QUrl>)
 
-namespace Esri::ArcGISRuntime::Authentication {
+namespace Esri::ArcGISRuntime::Authentication
+{
   class OAuthUserConfiguration;
   class OAuthUserLoginPrompt;
   class ArcGISAuthenticationChallenge;
   class NetworkAuthenticationChallenge;
-}
+} // namespace Esri::ArcGISRuntime::Authentication
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   class ArcGISAuthenticationChallengeRelay;
   class NetworkAuthenticationChallengeRelay;
@@ -131,6 +133,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     std::mutex m_mutex;
   };
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_AUTHENTICATORCONTROLLER_H

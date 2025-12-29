@@ -26,7 +26,8 @@
 using namespace Esri::ArcGISRuntime;
 using namespace Esri::ArcGISRuntime::Authentication;
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
     \class Esri::ArcGISRuntime::Toolkit::ArcGISAuthenticationChallengeRelay
@@ -55,4 +56,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     m_controller->handleArcGISAuthenticationChallenge(challenge);
   }
 
-} //  Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

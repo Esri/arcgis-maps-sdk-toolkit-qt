@@ -27,7 +27,8 @@
 // Toolkit headers
 #include <PopupMediaItem.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   QColor determineLabelColor(const QColor& sliceColor)
   {

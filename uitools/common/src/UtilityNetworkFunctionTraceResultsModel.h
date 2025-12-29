@@ -23,11 +23,13 @@
 // Other headers
 #include "UtilityNetworkFunctionTraceResult.h"
 
-namespace Esri::ArcGISRuntime {
+namespace Esri::ArcGISRuntime
+{
 
   class UtilityElement;
 
-  namespace Toolkit {
+  namespace Toolkit
+  {
 
     class UtilityNetworkFunctionTraceResultsModel : public QAbstractListModel
     {

@@ -27,7 +27,8 @@
 // Toolkit headers
 #include <PopupMediaItem.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
     \internal
@@ -60,10 +61,14 @@ namespace Esri::ArcGISRuntime::Toolkit {
       m_barSetLabels.append(label);
 
       if (value >= m_maxValue)
+      {
         m_maxValue = value;
+      }
 
       if (value <= m_minValue)
+      {
         m_minValue = value;
+      }
 
       const auto barset = new QBarSet(label);
       barset->append(value);

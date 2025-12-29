@@ -27,7 +27,8 @@
 // Other headers
 #include "SearchSourceInterface.h"
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   class SearchSuggestion : public QObject
   {
@@ -70,6 +71,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     SuggestResult m_suggestResult;
   };
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_SEARCHSUGGESTION_H

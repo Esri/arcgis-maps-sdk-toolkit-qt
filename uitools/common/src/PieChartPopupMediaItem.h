@@ -26,7 +26,8 @@
 
 class QPieSlice;
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   class PieChartPopupMediaItem : public PopupMediaItem
   {
@@ -44,5 +45,5 @@ namespace Esri::ArcGISRuntime::Toolkit {
     void pieChartPopupMediaItemChanged();
   };
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_PIECHARTPOPUPMEDIAITEM_H

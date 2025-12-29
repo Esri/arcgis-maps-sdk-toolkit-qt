@@ -19,16 +19,19 @@
 // Qt headers
 #include <QWidget>
 
-namespace Ui {
+namespace Ui
+{
   class OverviewMap;
 }
 
-namespace Esri::ArcGISRuntime {
+namespace Esri::ArcGISRuntime
+{
 
   class MapGraphicsView;
   class SceneGraphicsView;
 
-  namespace Toolkit {
+  namespace Toolkit
+  {
 
     class OverviewMapController;
 
@@ -51,7 +54,7 @@ namespace Esri::ArcGISRuntime {
       OverviewMapController* m_controller = nullptr;
     };
 
-  } // Toolkit
-} // Esri::ArcGISRuntime
+  } // namespace Toolkit
+} // namespace Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_OVERVIEWMAP_H

@@ -18,7 +18,8 @@
 
 #include "CoordinateConversionConstants.h"
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   CoordinateConversionOption* createDecimalDegrees(QObject* parent)
   {
@@ -85,4 +86,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     return option;
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

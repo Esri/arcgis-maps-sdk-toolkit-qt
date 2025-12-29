@@ -23,7 +23,8 @@
 
 class QAbstractItemModel;
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   class MetaElement : public QObject
   {
@@ -44,6 +45,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     QAbstractItemModel* m_parentModel = nullptr;
   };
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_METAELEMENT_H
