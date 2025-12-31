@@ -26,6 +26,27 @@ T.ComboBox {
                              Math.max(contentItem.implicitHeight,
                                       indicator ? indicator.implicitHeight : 0) + topPadding + bottomPadding)
 
+    property bool _justOpened: false
+
+    Keys.onPressed: (event) => {
+                        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                            if (!control.popup.visible) {
+                                control.popup.open();
+                                _justOpened = true;
+                                event.accepted = true;
+                            }
+                        }
+                    }
+
+    Keys.onReleased: (event) => {
+                         if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                             if (_justOpened) {
+                                 _justOpened = false;
+                                 event.accepted = true;
+                             }
+                         }
+                     }
+
     delegate: ItemDelegate {
         width: control.popup.width
         text: control.textRole ? (Array.isArray(control.model) ? modelData[control.textRole] : model[control.textRole]) : modelData
@@ -65,10 +86,10 @@ T.ComboBox {
             width: 1
             color: control.activeFocus ? Calcite.brand : Calcite.borderInput
             Behavior on color {
-              ColorAnimation {
-                  duration: 50
-              }
-          }
+                ColorAnimation {
+                    duration: 50
+                }
+            }
         }
         color: Calcite.background
         visible: !control.flat || control.pressed || control.hovered || control.visualFocus

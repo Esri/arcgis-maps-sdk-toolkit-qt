@@ -27,6 +27,25 @@ T.CheckBox {
                              Math.max(contentItem.implicitHeight,
                                       indicator ? indicator.implicitHeight : 0) + topPadding + bottomPadding)
 
+    Keys.onPressed: (event) => {
+                        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                            control.down = true;
+                            control.click();
+                            event.accepted = true;
+                        }
+                    }
+
+    Keys.onReleased: (event) => {
+                         control.down = false;
+                         event.accepted = true;
+                     }
+
+    onActiveFocusChanged: {
+        if (!activeFocus) {
+            control.down = false;
+        }
+    }
+
     indicator: CheckIndicator {
         x: text ? (control.mirrored ? control.width - width - control.rightPadding : control.leftPadding) : control.leftPadding + (control.availableWidth - width) / 2
         y: control.topPadding + (control.availableHeight - height) / 2

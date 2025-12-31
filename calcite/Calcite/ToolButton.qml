@@ -40,6 +40,26 @@ T.ToolButton {
     icon.height: 24
     icon.color: control.down || control.checked
                 || control.highlighted ? textDown : isHoveredAndEnabled ? Calcite.text1 : Calcite.text3
+
+    Keys.onPressed: (event) => {
+                        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                            control.down = true;
+                            control.click();
+                            event.accepted = true;
+                        }
+                    }
+
+    Keys.onReleased: (event) => {
+                         control.down = false;
+                         event.accepted = true;
+                     }
+
+    onActiveFocusChanged: {
+        if (!activeFocus) {
+            control.down = false;
+        }
+    }
+
     contentItem: IconLabel {
         spacing: control.spacing
         mirrored: control.mirrored
