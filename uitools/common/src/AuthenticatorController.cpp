@@ -26,6 +26,7 @@
 #include <QStringLiteral>
 #include <QUrl>
 #include <QtGlobal>
+#include <QGuiApplication>
 
 // Maps SDK headers
 #include <ArcGISRuntimeEnvironment.h>
@@ -617,56 +618,26 @@ namespace Esri::ArcGISRuntime::Toolkit
     });
 
     m_iosWebAuthenticationSession->start(m_currentOAuthUserLogoutPrompt->logoutUrl(), callbackScheme);
-    return;
-#endif
+#else
+    // for IAP logout workflows, there is no way to get back to the app. The callback URI does not fire back to the app after logging out.
+    // As such, we just open the browser, allow the user to do this, and then assume whenever control returns to the app, it works sucessfully.
 
-    auto* oauthFlow = new CustomOAuth2AuthorizationCodeFlow(m_currentOAuthUserLogoutPrompt->logoutUrl(), m_currentOAuthUserLogoutPrompt.get());
-
-    auto* callbackReplyHandler = new QOAuthUriSchemeReplyHandler(m_currentOAuthUserLogoutPrompt.get());
-
-    connect(callbackReplyHandler, &QOAuthUriSchemeReplyHandler::callbackReceived, this, [this, oauthFlow](const QVariantMap& values)
+    m_appState = QGuiApplication::applicationState();
+    m_logoutStateChangeConnection = connect(qGuiApp, &QGuiApplication::applicationStateChanged, this, [this](Qt::ApplicationState state)
     {
-      if (!values.contains("code"))
+      const auto previousState = m_appState;
+      m_appState = state;
+      if (previousState != Qt::ApplicationActive && m_appState == Qt::ApplicationActive)
       {
-        m_currentOAuthUserLogoutPrompt->respondWithError("There was an error obtaining the authorization code");
+        constexpr auto loggedOut = true;
+        m_currentOAuthUserLogoutPrompt->respond(loggedOut);
         finishOAuthExternalBrowserFlow_();
-        return;
+        disconnect(m_logoutStateChangeConnection);
       }
-
-      const auto code = values.value("code").toString();
-      oauthFlow->setAuthorizationCode(code);
-      emit oauthFlow->granted();
     });
 
-    oauthFlow->setAuthorizationUrl(m_currentOAuthUserLogoutPrompt->logoutUrl());
-
-    if (m_currentOAuthUserConfiguration)
-    { // identity-aware proxy workflows will not have any OAuthUserConfiguration
-      oauthFlow->setClientIdentifier(m_currentOAuthUserConfiguration->clientId());
-    }
-
-    connect(oauthFlow, &QAbstractOAuth::authorizeWithBrowser, this, &QDesktopServices::openUrl);
-    connect(oauthFlow, &QAbstractOAuth::granted, this, [callbackReplyHandler, this]()
-    {
-      callbackReplyHandler->close();
-
-      constexpr auto loggedOut = true;
-      m_currentOAuthUserLogoutPrompt->respond(loggedOut);
-      finishOAuthExternalBrowserFlow_();
-    });
-
-    callbackReplyHandler->setRedirectUrl(m_currentOAuthUserLogoutPrompt->redirectUri());
-    oauthFlow->setReplyHandler(callbackReplyHandler);
-
-    if (callbackReplyHandler->listen())
-    {
-      oauthFlow->grant();
-    }
-    else
-    {
-      m_currentOAuthUserLogoutPrompt->respondWithError("There was an error establishing the redirect URL listener");
-      finishOAuthExternalBrowserFlow_();
-    }
+    QDesktopServices::openUrl(m_currentOAuthUserLogoutPrompt->logoutUrl());
+#endif // Q_OS_IOS
   }
 
   void AuthenticatorController::finishOAuthExternalBrowserFlow_()

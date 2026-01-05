@@ -149,6 +149,8 @@ namespace Esri::ArcGISRuntime::Toolkit
     std::unique_ptr<IOSWebAuthenticationSession> m_iosWebAuthenticationSession;
 #endif
 
+    QMetaObject::Connection m_logoutStateChangeConnection;
+    Qt::ApplicationState m_appState = Qt::ApplicationState::ApplicationActive;
     std::mutex m_mutex;
   };
 
