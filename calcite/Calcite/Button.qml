@@ -38,25 +38,6 @@ T.Button {
     property color textColor: Calcite.offWhite
     icon.color: color
 
-    Keys.onPressed: (event) => {
-                        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-                            control.down = true;
-                            control.click();
-                            event.accepted = true;
-                        }
-                    }
-
-    Keys.onReleased: (event) => {
-                         control.down = false;
-                         event.accepted = true;
-                     }
-
-    onActiveFocusChanged: {
-        if (!activeFocus) {
-            control.down = false;
-        }
-    }
-
     contentItem: IconLabel {
         id: textItem
         spacing: control.spacing
@@ -89,13 +70,13 @@ T.Button {
         opacity: control.enabled ? 1.0 : 0.3
         color: {
             if (control.flat) {
-                return (control.pressed || control.down) || control.checked ? Calcite.foreground3 :
-                                                                              isHoveredAndEnabled ? Calcite.foreground2:
-                                                                                                    "transparent"
+                return control.pressed || control.checked ? Calcite.foreground3 :
+                                                            isHoveredAndEnabled ? Calcite.foreground2:
+                                                                                  "transparent"
             }  else {
-                return (control.pressed || control.down) || control.checked ? Calcite.brandPress :
-                                                                              isHoveredAndEnabled ? Calcite.brandHover
-                                                                                                  : Calcite.brand
+                return control.pressed || control.checked ? Calcite.brandPress :
+                                                            isHoveredAndEnabled ? Calcite.brandHover
+                                                                                : Calcite.brand
             }
         }
         Behavior on color {
