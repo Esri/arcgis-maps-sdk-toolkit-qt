@@ -127,6 +127,24 @@ set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_INCLUDES
     ../common/src
 )
 
+set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_IOS_FRAMEWORKS)
+
+if(IOS)
+    list(APPEND ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_SOURCES
+        ../common/src/IOS/IOSWebAuthenticationSession.mm
+    )
+    list(APPEND ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_HEADERS
+        ../common/src/IOS/IOSWebAuthenticationSession.h
+    )
+    list(APPEND ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_INCLUDES
+        ../common/src/IOS
+    )
+
+    list(APPEND ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_IOS_FRAMEWORKS
+        "-framework AuthenticationServices"
+    )
+endif()
+
 set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_IMAGES
     ../common/images/basemap.svg
     ../common/images/chevron-down.svg

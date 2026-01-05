@@ -27,6 +27,15 @@
 
     SOURCES += $$files($$TOOLKIT_COMMON_SRC/*.cpp)
 
+    ios {
+        INCLUDEPATH += $$TOOLKIT_COMMON_SRC/IOS
+        DEPENDPATH += $$TOOLKIT_COMMON_SRC/IOS
+        HEADERS += $$files($$TOOLKIT_COMMON_SRC/IOS/*.h)
+        SOURCES += $$files($$TOOLKIT_COMMON_SRC/IOS/*.mm)
+
+        LIBS += -framework AuthenticationServices
+    }
+
     RESOURCES += $$PWD/images/esri_arcgisruntime_toolkit_common_images.qrc
 
     TOOLKIT_COMMON_INCLUDED = true
