@@ -22,6 +22,7 @@
 
 // Maps SDK headers
 #include <PopupTypes.h>
+#include <SceneViewTypes.h>
 
 class QmlEnums : public QObject
 {
@@ -62,6 +63,16 @@ public:
     PopupAttachmentTypeOther = static_cast<int>(Esri::ArcGISRuntime::PopupAttachmentType::Other)
   };
   Q_ENUM(PopupAttachmentType)
+
+  enum class SceneLocationVisibility
+  {
+    SceneLocationVisibilityVisible = static_cast<int>(Esri::ArcGISRuntime::SceneLocationVisibility::Visible),
+    SceneLocationVisibilityHiddenByBaseSurface = static_cast<int>(Esri::ArcGISRuntime::SceneLocationVisibility::HiddenByBaseSurface),
+    SceneLocationVisibilityHiddenByEarth = static_cast<int>(Esri::ArcGISRuntime::SceneLocationVisibility::HiddenByEarth),
+    SceneLocationVisibilityHiddenByElevation = static_cast<int>(Esri::ArcGISRuntime::SceneLocationVisibility::HiddenByElevation),
+    SceneLocationVisibilityNotOnScreen = static_cast<int>(Esri::ArcGISRuntime::SceneLocationVisibility::NotOnScreen)
+  };
+  Q_ENUM(SceneLocationVisibility)
 };
 
 #endif // ARCGIS_RUNTIME_TOOLKIT_CPP_QMLENUMS_H

@@ -19,6 +19,7 @@ import QtQuick.Window
 import QtQuick.Layouts
 import QtQuick.Controls
 import QtQuick.Shapes
+import Esri.ArcGISRuntime.Toolkit.Controller
 
 /*!
     \qmltype Callout
@@ -72,6 +73,15 @@ import QtQuick.Shapes
 */
 Pane {
     id: root
+
+    opacity: {
+        if (!calloutData || calloutData.sceneLocationVisibility === undefined) {
+            return 1.0;
+        }
+        const visibility = calloutData.sceneLocationVisibility;
+        return (visibility === QmlEnums.SceneLocationVisibilityHiddenByBaseSurface ||
+                visibility === QmlEnums.SceneLocationVisibilityHiddenByElevation) ? 0.5 : 1.0;
+    }
 
     background: Rectangle {
         color: palette.base
