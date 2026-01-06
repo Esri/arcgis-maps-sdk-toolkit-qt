@@ -78,9 +78,9 @@ Pane {
         if (!calloutData || calloutData.sceneLocationVisibility === undefined)
             return 1.0;
 
-        const v = calloutData.sceneLocationVisibility;
-        return (v === QmlEnums.SceneLocationVisibilityHiddenByBaseSurface ||
-            v === QmlEnums.SceneLocationVisibilityHiddenByElevation) ? 0.5 : 1.0;
+        const visibility = calloutData.sceneLocationVisibility;
+        return (visibility === QmlEnums.SceneLocationVisibilityHiddenByBaseSurface ||
+            visibility === QmlEnums.SceneLocationVisibilityHiddenByElevation) ? 0.5 : 1.0;
     }
 
     background: Rectangle {
