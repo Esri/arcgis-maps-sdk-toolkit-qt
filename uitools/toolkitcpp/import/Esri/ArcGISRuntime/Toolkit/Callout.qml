@@ -75,12 +75,12 @@ Pane {
     id: root
 
     opacity: {
-        if (!calloutData || calloutData.sceneLocationVisibility === undefined)
+        if (!calloutData || calloutData.sceneLocationVisibility === undefined) {
             return 1.0;
-
+        }
         const visibility = calloutData.sceneLocationVisibility;
         return (visibility === QmlEnums.SceneLocationVisibilityHiddenByBaseSurface ||
-            visibility === QmlEnums.SceneLocationVisibilityHiddenByElevation) ? 0.5 : 1.0;
+                visibility === QmlEnums.SceneLocationVisibilityHiddenByElevation) ? 0.5 : 1.0;
     }
 
     background: Rectangle {
