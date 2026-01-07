@@ -575,6 +575,10 @@ namespace Esri::ArcGISRuntime::Toolkit
   void AuthenticatorController::processOAuthExternalBrowserLogout_()
   {
 #ifdef Q_OS_IOS
+    // IAP logout provides no way to get back to the app, so m_iosWebAuthenticationSession is a custom implementation
+    // that pops Safari (or whatever system default browser) up within the same app window, and it contains a cancel
+    // button that allows users to more gracefully return to the app, and this code to more gracefully know when it
+    // happens.
     if (!m_currentOAuthUserLogoutPrompt)
     {
       return;
