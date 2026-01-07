@@ -85,10 +85,6 @@ namespace Esri::ArcGISRuntime::Toolkit
     Q_INVOKABLE void respond(const QUrl& url);
     Q_INVOKABLE void respondWithError(const QString& platformError);
 
-    // OAuth (logout)
-    Q_INVOKABLE void logoutRespond(bool result);
-    Q_INVOKABLE void logoutRespondWithError(const QString& platformError);
-
     // ServerTrust
     Q_INVOKABLE void continueWithServerTrust(bool trust);
 

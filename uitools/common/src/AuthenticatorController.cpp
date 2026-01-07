@@ -355,28 +355,6 @@ namespace Esri::ArcGISRuntime::Toolkit
     m_currentOAuthUserLoginPrompt.reset();
   }
 
-  void AuthenticatorController::logoutRespond(bool result)
-  {
-    if (!m_currentOAuthUserLogoutPrompt)
-    {
-      return;
-    }
-
-    m_currentOAuthUserLogoutPrompt->respond(result);
-    m_currentOAuthUserLogoutPrompt.reset();
-  }
-
-  void AuthenticatorController::logoutRespondWithError(const QString& platformError)
-  {
-    if (!m_currentOAuthUserLogoutPrompt)
-    {
-      return;
-    }
-
-    m_currentOAuthUserLogoutPrompt->respondWithError(platformError);
-    m_currentOAuthUserLogoutPrompt.reset();
-  }
-
   void AuthenticatorController::cancel()
   {
 #ifdef Q_OS_IOS
