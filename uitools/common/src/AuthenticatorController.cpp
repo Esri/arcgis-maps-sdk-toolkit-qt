@@ -602,7 +602,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     m_iosWebAuthenticationSession->start(m_currentOAuthUserLogoutPrompt->logoutUrl(), callbackScheme);
 #else
     // for IAP logout workflows, there is no way to get back to the app. The callback URI does not fire back to the app after logging out.
-    // As such, we just open the browser, allow the user to do this, and then assume whenever control returns to the app, it works sucessfully.
+    // As such, we just open the browser, allow the user to do this, and then assume whenever control returns to the app, it works successfully.
 
     m_appState = QGuiApplication::applicationState();
     m_logoutStateChangeConnection = connect(qGuiApp, &QGuiApplication::applicationStateChanged, this, [this](Qt::ApplicationState state)
