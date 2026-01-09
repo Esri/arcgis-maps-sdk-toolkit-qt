@@ -57,8 +57,7 @@ namespace Esri::ArcGISRuntime::Toolkit
           m_popupMediaItems->append(new ImagePopupMediaItem(popupMedia, popupViewController, media));
           break;
         case Esri::ArcGISRuntime::PopupMediaType::BarChart:
-          m_popupMediaItems->append(new BarChartPopupMediaItem(popupMedia, media));
-          break;
+          [[fallthrough]];
         case Esri::ArcGISRuntime::PopupMediaType::ColumnChart:
           m_popupMediaItems->append(new BarChartPopupMediaItem(popupMedia, media));
           break;
