@@ -68,8 +68,7 @@ namespace Esri::ArcGISRuntime::Toolkit
   {
     bool isInProcessOAuthRedirect(const QString& redirectUri)
     {
-      return redirectUri == QStringLiteral("urn:ietf:wg:oauth:2.0:oob") || // this is the default value for "oob"
-             redirectUri.contains(QStringLiteral("oob")); // this is what the Qt docs indicate to check for
+      return redirectUri == QStringLiteral("urn:ietf:wg:oauth:2.0:oob");
     }
   } // namespace
 
