@@ -58,14 +58,8 @@ T.Button {
         property bool isHoveredAndEnabled: control.hovered && control.enabled
 
         border {
-            color: {
-                if (control.flat) {
-                    return "transparent";
-                } else {
-                    return isHoveredAndEnabled ? Calcite.brandHover : Calcite.brand;
-                }
-            }
             width: 1
+            color: Calcite.border1
         }
         opacity: control.enabled ? 1.0 : 0.3
         color: {
@@ -89,9 +83,10 @@ T.Button {
         // Keyboard Focus indicator
         Rectangle {
             anchors.fill: parent
-            anchors.margins: -2
+            anchors.margins: -4
             color: "transparent"
             border.color: Calcite.brandHover
+            border.width: 2
             visible: control.visualFocus
             z: 10
         }

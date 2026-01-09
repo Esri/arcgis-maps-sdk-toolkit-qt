@@ -19,6 +19,7 @@ import QtQuick.Window
 import QtQuick.Layouts
 import QtQuick.Controls
 import QtQuick.Shapes
+import Calcite
 
 /*!
     \qmltype Callout
@@ -72,6 +73,26 @@ import QtQuick.Shapes
 */
 Pane {
     id: root
+
+    // Accessibility - screen reader will announce when callout becomes visible
+    Accessible.role: Accessible.ToolTip
+    Accessible.name: "Feature callout"
+
+    // Focus title when callout appears so screen reader announces contents
+    onVisibleChanged: {
+        if (visible && calloutData) {
+            Qt.callLater(focusTitle)
+        }
+    }
+
+    /*!
+        \brief Focus the title programmatically (for screen reader announcement).
+    */
+    function focusTitle() {
+        if (titleFocusScope.visible) {
+            titleFocusScope.forceActiveFocus(Qt.TabFocusReason)
+        }
+    }
 
     background: Rectangle {
         color: palette.base
@@ -211,6 +232,11 @@ Pane {
     */
     signal accessoryButtonClicked()
 
+    /*!
+        \brief The signal emitted when Shift+Tab is pressed on the accessory button.
+    */
+    signal backTabPressed()
+
     implicitHeight: 100
     visible: false
 
@@ -274,6 +300,15 @@ Pane {
         root.visible = false;
     }
 
+    /*!
+        \brief Focus the accessory button programmatically (for keyboard navigation).
+    */
+    function focusAccessoryButton() {
+        if (accessoryButton.visible) {
+            accessoryButton.forceActiveFocus(Qt.TabFocusReason);
+        }
+    }
+
     Component.onCompleted: {
         background.children.push(shapeTail.createObject())
     }
@@ -294,42 +329,54 @@ Pane {
             fillMode : Image.PreserveAspectFit
             visible: source && source.toString() !== ""
         }
-        Label {
-            id: title
-            text: calloutData ? calloutData.title : ""
-            wrapMode: Text.Wrap
-            clip: true
-            elide: Text.ElideRight
-            // Is visible (even when empty) if detail is visible, otherise
-            // row & columnspan offsets go askew.
-            visible: text || detail.visible
+        FocusScope {
+            id: titleFocusScope
+            implicitWidth: title.implicitWidth
+            implicitHeight: title.implicitHeight
             Layout.alignment: Qt.AlignVCenter
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.preferredWidth: autoAdjustWidth ? -1 : internal.labelWidthFrom.bind(this)(root.maxWidth)
-            Layout.maximumWidth: autoAdjustWidth ? internal.labelWidthFrom.bind(this)(root.maxWidth) : -1
+            Layout.preferredWidth: autoAdjustWidth ? -1 : internal.labelWidthFrom.bind(title)(root.maxWidth)
+            Layout.maximumWidth: autoAdjustWidth ? internal.labelWidthFrom.bind(title)(root.maxWidth) : -1
             Layout.columnSpan: {
                 let span = 1;
                 if (!accessoryButton.visible)
                     span++;
                 if (!image.visible)
                     span++;
-
                 return span;
             }
             Layout.rowSpan: {
                 let span = 1;
                 if (!detail.visible)
                     span++;
-
                 return span;
             }
+            // Is visible (even when empty) if detail is visible
+            visible: title.text || detail.visible
+
+            activeFocusOnTab: false  // Not in Tab order - only focused programmatically for screen reader
+            Accessible.role: Accessible.StaticText
+            Accessible.name: title.text + (calloutData && calloutData.detail ? ", " + calloutData.detail : "")
+            Accessible.focusable: true
+            Accessible.readOnly: true
+
+            Label {
+                id: title
+                anchors.fill: parent
+                text: calloutData ? calloutData.title : ""
+                font.bold: true
+                wrapMode: Text.Wrap
+                clip: true
+                elide: Text.ElideRight
+            }
         }
-        RoundButton {
+        Button {
             id: accessoryButton
             Layout.rowSpan: 2
             Layout.alignment: Qt.AlignVCenter
-            Layout.preferredWidth: 40
+            Layout.preferredWidth: 24
+            Layout.preferredHeight: 24
             Layout.columnSpan: {
                 let span = 1;
                 if (!title.visible && detail.visible)
@@ -338,14 +385,31 @@ Pane {
                 return span;
             }
             display: AbstractButton.IconOnly
+            padding: 0
             topPadding: 0
             bottomPadding: 0
             leftPadding: 0
             rightPadding: 0
             flat: true
-            radius: 32
             visible: accessoryButtonVisible && icon.source.toString() !== ""
+            activeFocusOnTab: true
             onClicked: accessoryButtonClicked()
+
+            Keys.onEscapePressed: {
+                if (calloutData) {
+                    calloutData.visible = false
+                }
+            }
+
+            Keys.onDeletePressed: {
+                accessoryButtonClicked()
+            }
+
+            Keys.onBacktabPressed: function(event) {
+                root.backTabPressed()
+                event.accepted = true
+            }
+
             icon.source: {
                 if (accessoryButtonType === "Info")
                     return "qrc:/Esri/ArcGISRuntime/Toolkit/information.svg";
@@ -356,6 +420,29 @@ Pane {
 
                 return "";
             }
+            icon.color: accessoryButton.hovered ? Calcite.brandHover : Calcite.text1
+            icon.width: 20
+            icon.height: 20
+
+            background: Rectangle {
+                color: "transparent"
+                radius: 4
+                border.width: accessoryButton.visualFocus ? 2 : 0
+                border.color: Calcite.brand
+            }
+
+            Accessible.role: Accessible.Button
+            Accessible.name: {
+                if (accessoryButtonType === "Custom")
+                    return "Delete feature"
+                else if (accessoryButtonType === "Info")
+                    return "More information"
+                else if (accessoryButtonType === "Add")
+                    return "Add"
+                return "Action button"
+            }
+            Accessible.description: accessoryButtonType === "Custom" ? "Delete the currently selected feature" : ""
+            Accessible.focusable: true
         }
         Label {
             id: detail

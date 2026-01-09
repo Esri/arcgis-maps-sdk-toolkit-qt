@@ -38,6 +38,12 @@ QtObject {
 
     property bool useSystemTheme: true
 
+    // High contrast border support
+    property bool enableHighContrastBorders: true
+    property bool isHighContrast: Qt.styleHints.accessibility.contrastPreference
+    property bool useHighContrastBorders: enableHighContrastBorders && isHighContrast
+    property color highContrastBorder: theme === Calcite.Theme.Light ? "#000000" : "#FFFFFF"
+
     property color offWhite: "#F8F8F8"
 
     property color brand: theme === Calcite.Theme.Light ? "#007AC2" : "#009AF2"
@@ -64,13 +70,21 @@ QtObject {
 
     property color textLink: theme === Calcite.Theme.Light ? "#00619B" : "#00A0FF"
 
-    property color border1: theme === Calcite.Theme.Light ? "#CACACA" : "#4A4A4A"
+    property color border1: useHighContrastBorders
+        ? highContrastBorder
+        : (theme === Calcite.Theme.Light ? "#CACACA" : "#4A4A4A")
 
-    property color border2: theme === Calcite.Theme.Light ? "#DFDFDF" : "#404040"
+    property color border2: useHighContrastBorders
+        ? highContrastBorder
+        : (theme === Calcite.Theme.Light ? "#DFDFDF" : "#404040")
 
-    property color border3: theme === Calcite.Theme.Light ? "#EAEAEA" : "#353535"
+    property color border3: useHighContrastBorders
+        ? highContrastBorder
+        : (theme === Calcite.Theme.Light ? "#EAEAEA" : "#353535")
 
-    property color borderInput: theme === Calcite.Theme.Light ? "#949494" : "#757575"
+    property color borderInput: useHighContrastBorders
+        ? highContrastBorder
+        : (theme === Calcite.Theme.Light ? "#949494" : "#757575")
 
     property color info: theme === Calcite.Theme.Light ? "#00619B" : "#00A0FF"
 

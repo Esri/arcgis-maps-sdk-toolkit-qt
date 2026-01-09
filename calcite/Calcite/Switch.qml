@@ -92,7 +92,7 @@ T.Switch {
         anchors.margins: -2
         color: "transparent"
         border.color: Calcite.brandHover
-        border.width: 1
+        border.width: 2
         visible: control.visualFocus
     }
 }

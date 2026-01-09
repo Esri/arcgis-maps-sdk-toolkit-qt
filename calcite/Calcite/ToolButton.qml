@@ -58,15 +58,18 @@ T.ToolButton {
         implicitWidth: 48
         color: control.down || control.checked
                || control.highlighted ? backgroundDown : isHoveredAndEnabled ? backgroundHovered : backgroundIdle
+        border.width: 1
+        border.color: Calcite.border1
     }
     opacity: control.enabled ? 1.0 : 0.3
 
     // Focus indicator
     Rectangle {
         anchors.fill: parent
-        anchors.margins: -2
+        anchors.margins: -4
         color: "transparent"
         border.color: Calcite.brandHover
+        border.width: 2
         visible: control.visualFocus
         z: 10
     }
