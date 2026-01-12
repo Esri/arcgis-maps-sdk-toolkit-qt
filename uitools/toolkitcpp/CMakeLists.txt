@@ -49,6 +49,12 @@ target_link_libraries(libtoolkitcpp PRIVATE
     ArcGISRuntime::Cpp
 )
 
+if(IOS)
+    target_link_libraries(libtoolkitcpp PRIVATE
+        ${ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_IOS_FRAMEWORKS}
+    )
+endif()
+
 set(esri_arcgisruntime_toolkit_view_resource_files
     "import/Esri/ArcGISRuntime/Toolkit/AttachmentsPopupElementView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/BasemapGallery.qml"

@@ -20,6 +20,7 @@
 #include <QHash>
 #include <QObject>
 #include <QQmlEngine>
+#include <QtGlobal>
 
 // STL headers
 #include <memory>
@@ -33,6 +34,7 @@ namespace Esri::ArcGISRuntime::Authentication
 {
   class OAuthUserConfiguration;
   class OAuthUserLoginPrompt;
+  class OAuthUserLogoutPrompt;
   class ArcGISAuthenticationChallenge;
   class NetworkAuthenticationChallenge;
 } // namespace Esri::ArcGISRuntime::Authentication
@@ -42,6 +44,10 @@ namespace Esri::ArcGISRuntime::Toolkit
 
   class ArcGISAuthenticationChallengeRelay;
   class NetworkAuthenticationChallengeRelay;
+
+#ifdef Q_OS_IOS
+  class IOSWebAuthenticationSession;
+#endif
 
   class AuthenticatorController : public QObject
   {
@@ -75,7 +81,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     // token authentication
     Q_INVOKABLE void continueWithUsernamePassword(const QString& username, const QString& password);
 
-    // OAuth
+    // OAuth (login)
     Q_INVOKABLE void respond(const QUrl& url);
     Q_INVOKABLE void respondWithError(const QString& platformError);
 
@@ -115,8 +121,12 @@ namespace Esri::ArcGISRuntime::Toolkit
     QString redirectUri_() const;
     int previousFailureCount_() const;
 
+    // login
     void processOAuthExternalBrowserLogin_();
-    void finishOAuthExternalBrowserChallengeFlow_();
+    // logout
+    void processOAuthExternalBrowserLogout_();
+    // login and logout
+    void finishOAuthExternalBrowserFlow_();
 
     void continueWithUsernamePasswordArcGIS_(const QString& username, const QString& password);
     void continueWithUsernamePasswordNetwork_(const QString& username, const QString& password);
@@ -129,7 +139,14 @@ namespace Esri::ArcGISRuntime::Toolkit
     QList<Esri::ArcGISRuntime::Authentication::OAuthUserConfiguration*> m_userConfigurations;
     Esri::ArcGISRuntime::Authentication::OAuthUserConfiguration* m_currentOAuthUserConfiguration = nullptr;
     std::unique_ptr<Authentication::OAuthUserLoginPrompt> m_currentOAuthUserLoginPrompt;
+    std::unique_ptr<Authentication::OAuthUserLogoutPrompt> m_currentOAuthUserLogoutPrompt;
 
+#ifdef Q_OS_IOS
+    std::unique_ptr<IOSWebAuthenticationSession> m_iosWebAuthenticationSession;
+#endif
+
+    QMetaObject::Connection m_logoutStateChangeConnection;
+    Qt::ApplicationState m_appState = Qt::ApplicationState::ApplicationActive;
     std::mutex m_mutex;
   };
 
