@@ -62,10 +62,10 @@ namespace
   }
 } // namespace
 
-@interface QRTWebAuthPresentationContextProvider : NSObject<ASWebAuthenticationPresentationContextProviding>
+@interface QtWebAuthPresentationContextProvider : NSObject<ASWebAuthenticationPresentationContextProviding>
 @end
 
-@implementation QRTWebAuthPresentationContextProvider
+@implementation QtWebAuthPresentationContextProvider
 
 - (ASPresentationAnchor)presentationAnchorForWebAuthenticationSession:(ASWebAuthenticationSession*)session
 {
@@ -82,7 +82,7 @@ namespace Esri::ArcGISRuntime::Toolkit
   IOSWebAuthenticationSession::IOSWebAuthenticationSession(QObject* parent) :
     QObject(parent)
   {
-    m_presentationContextProvider = [[QRTWebAuthPresentationContextProvider alloc] init];
+    m_presentationContextProvider = [[QtWebAuthPresentationContextProvider alloc] init];
   }
 
   IOSWebAuthenticationSession::~IOSWebAuthenticationSession()
