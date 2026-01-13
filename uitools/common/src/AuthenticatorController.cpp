@@ -524,18 +524,42 @@ namespace Esri::ArcGISRuntime::Toolkit
       oauthFlow->setClientIdentifier(m_currentOAuthUserConfiguration->clientId());
     }
 
+    const auto adjustedRedirectUri = [this]() -> QString
+    {
+      // There is a known problem with Microsoft Entra IAP services where it will add a
+      // trailing slash to the redirect URI, causing a mismatch and failure within Qt
+      // and the process will not work. This logic will attempt to detect this and add
+      // the trailing slash if needed.
+      // https://qt-project.atlassian.net/browse/QTBUG-143283
+
+      // check for anything of the form 'someString://auth' and add a trailing slash
+      // so it will match the callback URI from the service ('someString://auth/'), but only
+      // for a custom scheme, and only for known Microsoft login hosts.
+      if (const auto host = m_currentOAuthUserLoginPrompt->authorizeUrl().host();
+          host == QStringLiteral("login.microsoftonline.com") || host.endsWith(QStringLiteral(".msappproxy.net")))
+      {
+        const auto redirectAsUrl = QUrl{m_currentOAuthUserLoginPrompt->redirectUri()};
+        const auto scheme = redirectAsUrl.scheme();
+        if (scheme != QStringLiteral("http") && scheme != QStringLiteral("https") && !redirectAsUrl.path().endsWith('/'))
+        {
+          return m_currentOAuthUserLoginPrompt->redirectUri() + "/";
+        }
+      }
+      return m_currentOAuthUserLoginPrompt->redirectUri();
+    }();
+
     connect(oauthFlow, &QAbstractOAuth::authorizeWithBrowser, this, &QDesktopServices::openUrl);
-    connect(oauthFlow, &QAbstractOAuth::granted, this, [callbackReplyHandler, oauthFlow, this]()
+    connect(oauthFlow, &QAbstractOAuth::granted, this, [adjustedRedirectUri, callbackReplyHandler, oauthFlow, this]()
     {
       callbackReplyHandler->close();
 
       // this needs to be in the form of redirectUri?code=authCode
-      const auto formattedResponseUrl = QUrl{QString("%1?code=%2").arg(m_currentOAuthUserLoginPrompt->redirectUri(), oauthFlow->authorizationCode())};
+      const auto formattedResponseUrl = QUrl{QString("%1?code=%2").arg(adjustedRedirectUri, oauthFlow->authorizationCode())};
       m_currentOAuthUserLoginPrompt->respond(formattedResponseUrl);
       finishOAuthExternalBrowserFlow_();
     });
 
-    callbackReplyHandler->setRedirectUrl(m_currentOAuthUserLoginPrompt->redirectUri());
+    callbackReplyHandler->setRedirectUrl(adjustedRedirectUri);
     oauthFlow->setReplyHandler(callbackReplyHandler);
 
     if (callbackReplyHandler->listen())
