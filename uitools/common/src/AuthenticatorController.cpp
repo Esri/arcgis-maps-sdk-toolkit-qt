@@ -535,6 +535,11 @@ namespace Esri::ArcGISRuntime::Toolkit
       // check for anything of the form 'someString://auth' and add a trailing slash
       // so it will match the callback URI from the service ('someString://auth/'), but only
       // for a custom scheme, and only for known Microsoft login hosts.
+
+      // Note that if you have customized the Entra experience per
+      // https://learn.microsoft.com/en-us/entra/identity/app-proxy/how-to-configure-custom-domain,
+      // then this code will not be able to detect that. In that case, you can add your known authorize
+      // domain(s) to the check below, or use a version of Qt where QTBUG-143283 is addressed.
       if (const auto host = m_currentOAuthUserLoginPrompt->authorizeUrl().host();
           host == QStringLiteral("login.microsoftonline.com") || host.endsWith(QStringLiteral(".msappproxy.net")))
       {
