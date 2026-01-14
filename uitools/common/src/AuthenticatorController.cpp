@@ -526,20 +526,21 @@ namespace Esri::ArcGISRuntime::Toolkit
 
     const auto adjustedRedirectUri = [this]() -> QString
     {
-      // There is a known problem with Microsoft Entra IAP services where it will add a
-      // trailing slash to the redirect URI, causing a mismatch and failure within Qt
-      // and the process will not work. This logic will attempt to detect this and add
-      // the trailing slash if needed.
-      // https://qt-project.atlassian.net/browse/QTBUG-143283
-
-      // check for anything of the form 'someString://auth' and add a trailing slash
-      // so it will match the callback URI from the service ('someString://auth/'), but only
-      // for a custom scheme, and only for known Microsoft login hosts.
-
-      // Note that if you have customized the Entra experience per
-      // https://learn.microsoft.com/en-us/entra/identity/app-proxy/how-to-configure-custom-domain,
-      // then this code will not be able to detect that. In that case, you can add your known authorize
-      // domain(s) to the check below, or use a version of Qt where QTBUG-143283 is addressed.
+      // Known issue: The Microsoft Entra IAP authorize response may append a trailing slash to the redirect URI,
+      // causing a mismatch and failure in Qt, which prevents the process from completing.
+      // This logic detects the issue and adds the trailing slash if necessary.
+      // Reference: https://qt-project.atlassian.net/browse/QTBUG-143283
+      //
+      // Specifically, this logic checks for redirect URIs of the form 'scheme://auth' and appends a trailing slash
+      // to match the authorize response URI ('scheme://auth/'), but only for:
+      //   - Microsoft login domain (login.microsoftonline.com)
+      //   - Domains of published applications through Microsoft Entra application proxy (*.msappproxy.net)
+      //
+      // Note: If the published application uses a custom domain as described in:
+      // https://learn.microsoft.com/en-us/entra/identity/app-proxy/how-to-configure-custom-domain
+      // this code will not detect it automatically. In such cases, you can:
+      //   - Add your known authorize domain(s) to the check below, or
+      //   - Use a Qt version where QTBUG-143283 is resolved.
       if (const auto host = m_currentOAuthUserLoginPrompt->authorizeUrl().host();
           host == QStringLiteral("login.microsoftonline.com") || host.endsWith(QStringLiteral(".msappproxy.net")))
       {
