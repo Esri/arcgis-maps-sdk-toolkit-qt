@@ -524,18 +524,48 @@ namespace Esri::ArcGISRuntime::Toolkit
       oauthFlow->setClientIdentifier(m_currentOAuthUserConfiguration->clientId());
     }
 
+    const auto adjustedRedirectUri = [this]() -> QString
+    {
+      // Known issue: The Microsoft Entra IAP authorize response may append a trailing slash to the redirect URI,
+      // causing a mismatch and failure in Qt, which prevents the process from completing.
+      // This logic detects the issue and adds the trailing slash if necessary.
+      // Reference: https://qt-project.atlassian.net/browse/QTBUG-143283
+      //
+      // Specifically, this logic checks for redirect URIs of the form 'scheme://auth' and appends a trailing slash
+      // to match the authorize response URI ('scheme://auth/'), but only for:
+      //   - Microsoft login domain (login.microsoftonline.com)
+      //   - Domains of published applications through Microsoft Entra application proxy (*.msappproxy.net)
+      //
+      // Note: If the published application uses a custom domain as described in:
+      // https://learn.microsoft.com/en-us/entra/identity/app-proxy/how-to-configure-custom-domain
+      // this code will not detect it automatically. In such cases, you can:
+      //   - Add your known authorize domain(s) to the check below, or
+      //   - Use a Qt version where QTBUG-143283 is resolved.
+      if (const auto host = m_currentOAuthUserLoginPrompt->authorizeUrl().host();
+          host == QStringLiteral("login.microsoftonline.com") || host.endsWith(QStringLiteral(".msappproxy.net")))
+      {
+        const auto redirectAsUrl = QUrl{m_currentOAuthUserLoginPrompt->redirectUri()};
+        const auto scheme = redirectAsUrl.scheme();
+        if (scheme != QStringLiteral("http") && scheme != QStringLiteral("https") && !redirectAsUrl.path().endsWith('/'))
+        {
+          return m_currentOAuthUserLoginPrompt->redirectUri() + "/";
+        }
+      }
+      return m_currentOAuthUserLoginPrompt->redirectUri();
+    }();
+
     connect(oauthFlow, &QAbstractOAuth::authorizeWithBrowser, this, &QDesktopServices::openUrl);
-    connect(oauthFlow, &QAbstractOAuth::granted, this, [callbackReplyHandler, oauthFlow, this]()
+    connect(oauthFlow, &QAbstractOAuth::granted, this, [adjustedRedirectUri, callbackReplyHandler, oauthFlow, this]()
     {
       callbackReplyHandler->close();
 
       // this needs to be in the form of redirectUri?code=authCode
-      const auto formattedResponseUrl = QUrl{QString("%1?code=%2").arg(m_currentOAuthUserLoginPrompt->redirectUri(), oauthFlow->authorizationCode())};
+      const auto formattedResponseUrl = QUrl{QString("%1?code=%2").arg(adjustedRedirectUri, oauthFlow->authorizationCode())};
       m_currentOAuthUserLoginPrompt->respond(formattedResponseUrl);
       finishOAuthExternalBrowserFlow_();
     });
 
-    callbackReplyHandler->setRedirectUrl(m_currentOAuthUserLoginPrompt->redirectUri());
+    callbackReplyHandler->setRedirectUrl(adjustedRedirectUri);
     oauthFlow->setReplyHandler(callbackReplyHandler);
 
     if (callbackReplyHandler->listen())
