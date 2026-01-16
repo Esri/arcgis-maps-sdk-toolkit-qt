@@ -228,6 +228,24 @@ Pane {
     property real maxWidth: 300
 
     /*!
+        \brief The font size for the callout title text.
+        The default is \c 14.
+    */
+    property real titleFontSize: 14
+
+    /*!
+        \brief The font size for the callout detail text.
+        The default is \c 12.
+    */
+    property real detailFontSize: 12
+
+    /*!
+        \brief The size of the accessory button.
+        The default is \c 24.
+    */
+    property real accessoryButtonSize: 24
+
+    /*!
         \brief The signal emitted when the accessory button is clicked.
     */
     signal accessoryButtonClicked()
@@ -237,7 +255,6 @@ Pane {
     */
     signal backTabPressed()
 
-    implicitHeight: 100
     visible: false
 
     x: {
@@ -366,6 +383,7 @@ Pane {
                 anchors.fill: parent
                 text: calloutData ? calloutData.title : ""
                 font.bold: true
+                font.pointSize: root.titleFontSize
                 wrapMode: Text.Wrap
                 clip: true
                 elide: Text.ElideRight
@@ -375,8 +393,8 @@ Pane {
             id: accessoryButton
             Layout.rowSpan: 2
             Layout.alignment: Qt.AlignVCenter
-            Layout.preferredWidth: 24
-            Layout.preferredHeight: 24
+            Layout.preferredWidth: root.accessoryButtonSize
+            Layout.preferredHeight: root.accessoryButtonSize
             Layout.columnSpan: {
                 let span = 1;
                 if (!title.visible && detail.visible)
@@ -421,8 +439,8 @@ Pane {
                 return "";
             }
             icon.color: accessoryButton.hovered ? Calcite.brandHover : Calcite.text1
-            icon.width: 20
-            icon.height: 20
+            icon.width: root.accessoryButtonSize * 0.83
+            icon.height: root.accessoryButtonSize * 0.83
 
             background: Rectangle {
                 color: "transparent"
@@ -447,6 +465,7 @@ Pane {
         Label {
             id: detail
             text: calloutData ? calloutData.detail : ""
+            font.pointSize: root.detailFontSize
             wrapMode: Text.Wrap
             elide: Text.ElideRight
             clip: true
