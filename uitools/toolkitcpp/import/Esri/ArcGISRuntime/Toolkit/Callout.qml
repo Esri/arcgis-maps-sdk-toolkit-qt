@@ -85,9 +85,6 @@ Pane {
         }
     }
 
-    /*!
-        \brief Focus the title programmatically (for screen reader announcement).
-    */
     function focusTitle() {
         if (titleFocusScope.visible) {
             titleFocusScope.forceActiveFocus(Qt.TabFocusReason)
@@ -99,6 +96,8 @@ Pane {
         border.color: palette.dark
     }
 
+    // Extra right padding to make room for the close button
+    rightPadding: padding + (titleFontSize * 2) + 4
 
     enum LeaderPosition {
         UpperLeft = 0,
@@ -326,8 +325,72 @@ Pane {
         }
     }
 
+    function focusCloseButton() {
+        closeButton.forceActiveFocus(Qt.TabFocusReason);
+    }
+
     Component.onCompleted: {
         background.children.push(shapeTail.createObject())
+    }
+
+    Button {
+        id: closeButton
+        parent: root
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.rightMargin: 2
+        anchors.topMargin: 2
+        z: 10
+        width: root.titleFontSize * 2.5
+        height: root.titleFontSize * 2.5
+        padding: 0
+        topPadding: 0
+        bottomPadding: 0
+        leftPadding: 0
+        rightPadding: 0
+        flat: true
+        display: AbstractButton.IconOnly
+        activeFocusOnTab: true
+
+        icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/x.svg"
+        icon.color: closeButton.hovered ? Calcite.brandHover : Calcite.text1
+        icon.width: root.titleFontSize * 2
+        icon.height: root.titleFontSize * 2
+
+        onClicked: {
+            if (calloutData) {
+                calloutData.visible = false
+            } else {
+                root.dismiss()
+            }
+        }
+
+        Keys.onEscapePressed: {
+            if (calloutData) {
+                calloutData.visible = false
+            }
+        }
+
+        Keys.onBacktabPressed: function(event) {
+            if (accessoryButton.visible) {
+                accessoryButton.forceActiveFocus(Qt.BacktabFocusReason)
+            } else {
+                root.backTabPressed()
+            }
+            event.accepted = true
+        }
+
+        background: Rectangle {
+            color: "transparent"
+            radius: 4
+            border.width: closeButton.visualFocus ? 2 : 0
+            border.color: Calcite.brand
+        }
+
+        Accessible.role: Accessible.Button
+        Accessible.name: "Close callout"
+        Accessible.description: "Close the callout popup"
+        Accessible.focusable: true
     }
 
     contentItem: GridLayout {
@@ -336,17 +399,17 @@ Pane {
         rows: 2
         columnSpacing: 7
 
-        Image {
-            id: image
-            source: calloutData ? calloutData.imageUrl : ""
-            Layout.rowSpan: 2
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            Layout.fillHeight: true
-            Layout.preferredWidth: 40
-            fillMode : Image.PreserveAspectFit
-            visible: source && source.toString() !== ""
-        }
-        FocusScope {
+            Image {
+                id: image
+                source: calloutData ? calloutData.imageUrl : ""
+                Layout.rowSpan: 2
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                Layout.fillHeight: true
+                Layout.preferredWidth: 40
+                fillMode : Image.PreserveAspectFit
+                visible: source && source.toString() !== ""
+            }
+            FocusScope {
             id: titleFocusScope
             implicitWidth: title.implicitWidth
             implicitHeight: title.implicitHeight
