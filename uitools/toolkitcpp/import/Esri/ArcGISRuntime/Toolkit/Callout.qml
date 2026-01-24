@@ -78,13 +78,6 @@ Pane {
     Accessible.role: Accessible.ToolTip
     Accessible.name: "Feature callout"
 
-    // Focus title when callout appears so screen reader announces contents
-    onVisibleChanged: {
-        if (visible && calloutData) {
-            Qt.callLater(focusTitle)
-        }
-    }
-
     function focusTitle() {
         if (titleFocusScope.visible) {
             titleFocusScope.forceActiveFocus(Qt.TabFocusReason)
@@ -399,17 +392,17 @@ Pane {
         rows: 2
         columnSpacing: 7
 
-            Image {
-                id: image
-                source: calloutData ? calloutData.imageUrl : ""
-                Layout.rowSpan: 2
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                Layout.fillHeight: true
-                Layout.preferredWidth: 40
-                fillMode : Image.PreserveAspectFit
-                visible: source && source.toString() !== ""
-            }
-            FocusScope {
+        Image {
+            id: image
+            source: calloutData ? calloutData.imageUrl : ""
+            Layout.rowSpan: 2
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            Layout.fillHeight: true
+            Layout.preferredWidth: 40
+            fillMode : Image.PreserveAspectFit
+            visible: source && source.toString() !== ""
+        }
+        FocusScope {
             id: titleFocusScope
             implicitWidth: title.implicitWidth
             implicitHeight: title.implicitHeight
