@@ -503,18 +503,14 @@ namespace Esri::ArcGISRuntime::Toolkit
 
     auto* callbackReplyHandler = new QOAuthUriSchemeReplyHandler(m_currentOAuthUserLoginPrompt.get());
 
-    connect(callbackReplyHandler, &QOAuthUriSchemeReplyHandler::callbackReceived, this, [this, oauthFlow](const QVariantMap& values)
+    connect(callbackReplyHandler, &QOAuthUriSchemeReplyHandler::callbackDataReceived, this,
+            [this, oauthFlow, callbackReplyHandler](const QByteArray& data)
     {
-      if (!values.contains("code"))
-      {
-        m_currentOAuthUserLoginPrompt->respondWithError("There was an error obtaining the authorization code");
-        finishOAuthExternalBrowserFlow_();
-        return;
-      }
+      callbackReplyHandler->close();
 
-      const auto code = values.value("code").toString();
-      oauthFlow->setAuthorizationCode(code);
+      m_currentOAuthUserLoginPrompt->respond(QUrl{data});
       emit oauthFlow->granted();
+      finishOAuthExternalBrowserFlow_();
     });
 
     oauthFlow->setAuthorizationUrl(m_currentOAuthUserLoginPrompt->authorizeUrl());
@@ -555,15 +551,6 @@ namespace Esri::ArcGISRuntime::Toolkit
     }();
 
     connect(oauthFlow, &QAbstractOAuth::authorizeWithBrowser, this, &QDesktopServices::openUrl);
-    connect(oauthFlow, &QAbstractOAuth::granted, this, [adjustedRedirectUri, callbackReplyHandler, oauthFlow, this]()
-    {
-      callbackReplyHandler->close();
-
-      // this needs to be in the form of redirectUri?code=authCode
-      const auto formattedResponseUrl = QUrl{QString("%1?code=%2").arg(adjustedRedirectUri, oauthFlow->authorizationCode())};
-      m_currentOAuthUserLoginPrompt->respond(formattedResponseUrl);
-      finishOAuthExternalBrowserFlow_();
-    });
 
     callbackReplyHandler->setRedirectUrl(adjustedRedirectUri);
     oauthFlow->setReplyHandler(callbackReplyHandler);
