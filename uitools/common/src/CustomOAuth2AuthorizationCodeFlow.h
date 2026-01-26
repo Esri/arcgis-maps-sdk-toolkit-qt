@@ -32,13 +32,9 @@ namespace Esri::ArcGISRuntime::Toolkit
 
     void grant() override;
 
-    QString authorizationCode() const;
-    void setAuthorizationCode(const QString& code);
-
   private:
     Q_DISABLE_COPY_MOVE(CustomOAuth2AuthorizationCodeFlow)
 
-    QString m_authorizationCode;
     const QUrl m_authorizeUrl;
   };
 
