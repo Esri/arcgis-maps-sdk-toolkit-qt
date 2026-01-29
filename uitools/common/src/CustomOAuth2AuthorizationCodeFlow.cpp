@@ -36,14 +36,4 @@ namespace Esri::ArcGISRuntime::Toolkit
     emit authorizeWithBrowser(m_authorizeUrl);
   }
 
-  QString CustomOAuth2AuthorizationCodeFlow::authorizationCode() const
-  {
-    return m_authorizationCode;
-  }
-
-  void CustomOAuth2AuthorizationCodeFlow::setAuthorizationCode(const QString& code)
-  {
-    m_authorizationCode = code;
-  }
-
 } // namespace Esri::ArcGISRuntime::Toolkit
