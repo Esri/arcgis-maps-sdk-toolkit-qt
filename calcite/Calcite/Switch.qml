@@ -18,7 +18,16 @@ import QtQuick.Templates as T
 
 T.Switch {
     id: control
+
     property bool isHoveredAndEnabled: control.hovered && control.enabled
+
+    property real uiScale: 1.0
+
+    // Scaled dimensions
+    readonly property real trackWidth: Math.round(36 * uiScale)
+    readonly property real trackHeight: Math.round(20 * uiScale)
+    readonly property real handleSize: Math.round(20 * uiScale)
+    readonly property real indicatorHeight: Math.round(32 * uiScale)
 
     implicitWidth: Math.max(background ? background.implicitWidth : 0,
                             contentItem.implicitWidth + leftPadding + rightPadding)
@@ -26,22 +35,24 @@ T.Switch {
                              Math.max(contentItem.implicitHeight,
                                       indicator ? indicator.implicitHeight : 0) + topPadding + bottomPadding)
 
-    spacing: 16
+    spacing: Math.round(16 * uiScale)
 
-    indicator:  Item {
-        id: indicator
-        implicitWidth: 36
-        implicitHeight: 32
+    indicator: Item {
+        id: indicatorItem
+        implicitWidth: control.trackWidth
+        implicitHeight: control.indicatorHeight
         opacity: control.enabled ? 1 : 0.3
 
         property Item control: control
-        x: text ? (control.mirrored ? control.width - width - control.rightPadding : control.leftPadding) : control.leftPadding + (control.availableWidth - width) / 2
+        x: text ? (control.mirrored ? control.width - width - control.rightPadding : control.leftPadding)
+                : control.leftPadding + (control.availableWidth - width) / 2
         y: control.topPadding + (control.availableHeight - height) / 2
 
+        // Track
         Rectangle {
-            width: parent.width
-            height: 20
-            radius: 30
+            width: control.trackWidth
+            height: control.trackHeight
+            radius: height / 2
             y: parent.height / 2 - height / 2
             color: control.checked ? Calcite.brand : Calcite.background
             border {
@@ -50,17 +61,20 @@ T.Switch {
             }
         }
 
+        // Handle
         Rectangle {
             id: handle
             x: Math.max(0, Math.min(parent.width - width, control.visualPosition * parent.width - (width / 2)))
             y: (parent.height - height) / 2
-            width: 20
-            height: 20
-            radius: 30
+            width: control.handleSize
+            height: control.handleSize
+            radius: height / 2
             color: Calcite.foreground1
             border {
-                width: 2
-                color: control.checked ? Calcite.brandPress : control.activeFocus || isHoveredAndEnabled ? Calcite.brandHover : Calcite.borderInput
+                width: Math.round(2 * control.uiScale)
+                color: control.checked ? Calcite.brandPress
+                                       : control.activeFocus || isHoveredAndEnabled ? Calcite.brandHover
+                                                                                    : Calcite.borderInput
             }
 
             Behavior on x {
@@ -89,10 +103,10 @@ T.Switch {
     // Focus indicator
     Rectangle {
         anchors.fill: parent
-        anchors.margins: -2
+        anchors.margins: Math.round(-2 * uiScale)
         color: "transparent"
         border.color: Calcite.brandHover
-        border.width: 2
+        border.width: Math.round(2 * uiScale)
         visible: control.visualFocus
     }
 }

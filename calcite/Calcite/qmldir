@@ -45,6 +45,7 @@ RadioDelegate 1.0 RadioDelegate.qml
 internal RadioIndicator RadioIndicator.qml
 RoundButton 1.0 RoundButton.qml
 ScrollBar 1.0 ScrollBar.qml
+ScrollView 1.0 ScrollView.qml
 Slider 1.0 Slider.qml
 internal SliderGroove SliderGroove.qml
 internal SliderHandle SliderHandle.qml

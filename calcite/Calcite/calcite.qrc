@@ -46,5 +46,6 @@
         <file>images/chevron-right.svg</file>
         <file>images/line-solid.svg</file>
         <file>ProgressBar.qml</file>
+        <file>ScrollView.qml</file>
     </qresource>
 </RCC>
