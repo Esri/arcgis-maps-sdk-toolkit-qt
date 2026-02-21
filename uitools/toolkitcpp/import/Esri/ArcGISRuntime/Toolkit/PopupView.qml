@@ -288,7 +288,7 @@ Page {
     // Footer: edit summary + close button
     footer: ColumnLayout {
         spacing: 0
-        visible: popupView.closeCallback !== null
+        visible: popupView.closeCallback
 
         Rectangle {
             Layout.fillWidth: true
@@ -304,18 +304,20 @@ Page {
             wrapMode: Text.Wrap
             Layout.fillWidth: true
             Layout.topMargin: 8
-            Layout.bottomMargin: popupView.closeCallback !== null ? 0 : 8
+            Layout.bottomMargin: popupView.closeCallback ? 0 : 8
             Layout.leftMargin: 16
             Layout.rightMargin: 16
         }
 
         Button {
-            visible: popupView.closeCallback !== null
-            text: "Close"
+            text: qsTr("Close")
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             Layout.topMargin: 4
             Layout.bottomMargin: 8
-            onClicked: if (popupView.closeCallback) popupView.closeCallback()
+            onClicked: {
+                if (popupView.closeCallback)
+                    popupView.closeCallback()
+            }
         }
     }
 }
