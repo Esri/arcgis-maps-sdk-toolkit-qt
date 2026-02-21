@@ -138,8 +138,8 @@ Page {
         anchors.fill: parent
         // stop wheel event from scrolling the map once we reach the end of the PopupView
         onWheel: (event) => {
-            event.accepted = true;
-        }
+                     event.accepted = true;
+                 }
     }
 
     Binding {
@@ -215,18 +215,18 @@ Page {
                 // Load the correct PopupElement based on the PopupElementType
                 Component.onCompleted: {
                     switch (model.popupElementType) {
-                        case QmlEnums.PopupElementTypeTextPopupElement:
-                            loader.sourceComponent = textPopupElementView;
-                            break;
-                        case QmlEnums.PopupElementTypeFieldsPopupElement:
-                            loader.sourceComponent = fieldsPopupElementView;
-                            break;
-                        case QmlEnums.PopupElementTypeMediaPopupElement:
-                            loader.sourceComponent = mediaPopupElementView;
-                            break;
-                        case QmlEnums.PopupElementTypeAttachmentsPopupElement:
-                            loader.sourceComponent = attachmentsPopupElementView;
-                            break;
+                    case QmlEnums.PopupElementTypeTextPopupElement:
+                        loader.sourceComponent = textPopupElementView;
+                        break;
+                    case QmlEnums.PopupElementTypeFieldsPopupElement:
+                        loader.sourceComponent = fieldsPopupElementView;
+                        break;
+                    case QmlEnums.PopupElementTypeMediaPopupElement:
+                        loader.sourceComponent = mediaPopupElementView;
+                        break;
+                    case QmlEnums.PopupElementTypeAttachmentsPopupElement:
+                        loader.sourceComponent = attachmentsPopupElementView;
+                        break;
                     }
                 }
 
@@ -285,16 +285,37 @@ Page {
         }
     }
 
+    // Footer: edit summary + close button
     footer: ColumnLayout {
-        visible: popupView.closeCallback
+        spacing: 0
+        visible: popupView.closeCallback !== null
+
+        Rectangle {
+            Layout.fillWidth: true
+            height: 1
+            color: palette.mid
+        }
+
+        Label {
+            text: controller.editSummary
+            visible: text.length > 0
+            font.pixelSize: 11
+            font.italic: true
+            wrapMode: Text.Wrap
+            Layout.fillWidth: true
+            Layout.topMargin: 8
+            Layout.bottomMargin: popupView.closeCallback !== null ? 0 : 8
+            Layout.leftMargin: 16
+            Layout.rightMargin: 16
+        }
+
         Button {
+            visible: popupView.closeCallback !== null
             text: "Close"
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            onClicked: {
-                if (popupView.closeCallback)
-                    popupView.closeCallback()
-            }
-            Layout.bottomMargin: popupView.spacing
+            Layout.topMargin: 4
+            Layout.bottomMargin: 8
+            onClicked: if (popupView.closeCallback) popupView.closeCallback()
         }
     }
 }

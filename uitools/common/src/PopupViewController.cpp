@@ -119,11 +119,17 @@ namespace Esri::ArcGISRuntime::Toolkit
 
     emit popupChanged();
     emit titleChanged();
+    emit editSummaryChanged();
   }
 
   QString PopupViewController::title() const
   {
     return m_popup ? m_popup->title() : QString();
+  }
+
+  QString PopupViewController::editSummary() const
+  {
+    return m_popup ? m_popup->editSummary() : QString("");
   }
 
 } // namespace Esri::ArcGISRuntime::Toolkit

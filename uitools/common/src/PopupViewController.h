@@ -40,6 +40,7 @@ namespace Esri::ArcGISRuntime
       Q_OBJECT
       Q_PROPERTY(Popup* popup READ popup WRITE setPopup NOTIFY popupChanged)
       Q_PROPERTY(QString title READ title NOTIFY titleChanged)
+      Q_PROPERTY(QString editSummary READ editSummary NOTIFY editSummaryChanged)
       Q_PROPERTY(QAbstractListModel* popupElementControllers READ popupElementControllers NOTIFY popupChanged)
 
     public:
@@ -54,12 +55,15 @@ namespace Esri::ArcGISRuntime
       GenericListModel* popupElementControllers() const;
 
       QString title() const;
+      QString editSummary() const;
 
     signals:
 
       void popupChanged();
 
       void titleChanged();
+
+      void editSummaryChanged();
 
       void attachmentDataFetched(const QByteArray& attachmentData, const QString& name);
 
