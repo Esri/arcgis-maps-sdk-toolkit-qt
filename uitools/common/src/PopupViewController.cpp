@@ -129,7 +129,7 @@ namespace Esri::ArcGISRuntime::Toolkit
 
   QString PopupViewController::editSummary() const
   {
-    return m_popup ? m_popup->editSummary() : QString("");
+    return m_popup ? m_popup->editSummary() : QString{};
   }
 
 } // namespace Esri::ArcGISRuntime::Toolkit
