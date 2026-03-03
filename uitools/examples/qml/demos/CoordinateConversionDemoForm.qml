@@ -47,6 +47,7 @@ DemoPage {
         MapView {
             id: view
             CoordinateConversion {
+                id: coco
                 geoView: parent
                 anchors {
                     right: parent.right
@@ -54,7 +55,19 @@ DemoPage {
                     bottom: parent.attributionTop
                 }
             }
+            // Testing
+            Button {
+                text: "Test - programatically set type"
+                anchors {
+                    left: parent.left
+                    top: parent.top
+                    margins: 10
+                }
+                // getOption - 0 indexed in this order : DD, DDM, DMS, MGRS, USNG, UTM, GARS
+                onClicked: conversionDemo.setConversionType(coco.inputFormat, coco.controller.getOption(5))
+            }
             CoordinateConversionDemo {
+                id: conversionDemo
                 geoView: view
             }
         }

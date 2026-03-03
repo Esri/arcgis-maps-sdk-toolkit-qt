@@ -16,9 +16,24 @@
 
 #include "CoordinateConversionDemo.h"
 
+#include "CoordinateConversionOption.h"
+#include "CoordinateConversionResult.h"
+
 CoordinateConversionDemo::CoordinateConversionDemo(QObject* parent) :
   BaseDemo(parent)
 {
+}
+
+void CoordinateConversionDemo::setConversionType(Esri::ArcGISRuntime::Toolkit::CoordinateConversionResult* result,
+                                                 Esri::ArcGISRuntime::Toolkit::CoordinateConversionOption* type)
+{
+  if (!result || !type)
+  {
+    return;
+  }
+  qDebug() << "set type called = " << type->name();
+
+  result->setType(type);
 }
 
 CoordinateConversionDemo::~CoordinateConversionDemo()

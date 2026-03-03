@@ -18,6 +18,8 @@
 #define ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_COORDINATECONVERSIONDEMO_H
 
 #include "BaseDemo.h"
+#include "CoordinateConversionOption.h"
+#include "CoordinateConversionResult.h"
 
 #include <QObject>
 #include <QQmlEngine>
@@ -28,6 +30,8 @@ class CoordinateConversionDemo : public BaseDemo
   QML_ELEMENT
 public:
   Q_INVOKABLE CoordinateConversionDemo(QObject* parent = nullptr);
+  Q_INVOKABLE void setConversionType(Esri::ArcGISRuntime::Toolkit::CoordinateConversionResult* result,
+                                     Esri::ArcGISRuntime::Toolkit::CoordinateConversionOption* type);
   ~CoordinateConversionDemo() override;
 };
 
