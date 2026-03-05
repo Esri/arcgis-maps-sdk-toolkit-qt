@@ -46,6 +46,80 @@
 namespace Esri::ArcGISRuntime::Toolkit
 {
 
+  namespace
+  {
+    bool isReusableElementType(PopupElementType type)
+    {
+      return type == PopupElementType::TextPopupElement || type == PopupElementType::FieldsPopupElement;
+    }
+
+    PopupElementViewItem* popupElementViewItemAt(GenericListModel* model, int index)
+    {
+      auto* object = model->element(model->index(index, 0));
+      return qobject_cast<PopupElementViewItem*>(object);
+    }
+
+    bool canReuseControllersForElements(GenericListModel* model, const QList<PopupElement*>& evaluatedElements)
+    {
+      if (model->rowCount() != evaluatedElements.size())
+      {
+        return false;
+      }
+
+      for (int i = 0; i < evaluatedElements.size(); ++i)
+      {
+        auto* existingItem = popupElementViewItemAt(model, i);
+        const auto newType = evaluatedElements.at(i)->popupElementType();
+
+        if (!existingItem ||
+            existingItem->popupElementType() != static_cast<QmlEnums::PopupElementType>(newType) ||
+            !isReusableElementType(newType))
+        {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    void notifyControllerChanged(QObject* object, PopupElementType type)
+    {
+      switch (type)
+      {
+        case PopupElementType::TextPopupElement:
+          QMetaObject::invokeMethod(object, "textPopupElementChanged", Qt::DirectConnection);
+          break;
+        case PopupElementType::FieldsPopupElement:
+          QMetaObject::invokeMethod(object, "fieldsPopupElementChanged", Qt::DirectConnection);
+          break;
+        default:
+          break;
+      }
+    }
+
+    void appendControllerForElement(GenericListModel* model, PopupElement* element, PopupViewController* controller, Popup* popup)
+    {
+      switch (element->popupElementType())
+      {
+        case PopupElementType::TextPopupElement:
+          model->append(new TextPopupElementViewController(static_cast<TextPopupElement*>(element), controller, popup));
+          break;
+        case PopupElementType::FieldsPopupElement:
+          model->append(new FieldsPopupElementViewController(static_cast<FieldsPopupElement*>(element), controller, popup));
+          break;
+        case PopupElementType::AttachmentsPopupElement:
+          model->append(new AttachmentsPopupElementViewController(static_cast<AttachmentsPopupElement*>(element), controller, popup));
+          break;
+        case PopupElementType::MediaPopupElement:
+          model->append(new MediaPopupElementViewController(static_cast<MediaPopupElement*>(element), controller, popup));
+          break;
+        default:
+          Q_UNIMPLEMENTED();
+          break;
+      }
+    }
+  } // namespace
+
   /*!
     \internal
     This class is an internal implementation detail and is subject to change.
@@ -87,8 +161,6 @@ namespace Esri::ArcGISRuntime::Toolkit
       return;
     }
 
-    m_popupElementControllerModel->removeRows(0, m_popupElementControllerModel->rowCount());
-
     m_popup->evaluateExpressionsAsync(this).then(this, [this](const QList<PopupExpressionEvaluation*>&)
     {
       if (!m_popup)
@@ -96,26 +168,28 @@ namespace Esri::ArcGISRuntime::Toolkit
         return;
       }
 
-      for (auto element : m_popup->evaluatedElements())
+      const auto evaluatedElements = m_popup->evaluatedElements();
+      const bool canReuseControllers = canReuseControllersForElements(m_popupElementControllerModel, evaluatedElements);
+
+      if (canReuseControllers)
       {
-        switch (element->popupElementType())
+        for (int i = 0; i < evaluatedElements.size(); ++i)
         {
-          case Esri::ArcGISRuntime::PopupElementType::TextPopupElement:
-            m_popupElementControllerModel->append(new TextPopupElementViewController(static_cast<TextPopupElement*>(element), this, m_popup));
-            break;
-          case Esri::ArcGISRuntime::PopupElementType::FieldsPopupElement:
-            m_popupElementControllerModel->append(new FieldsPopupElementViewController(static_cast<FieldsPopupElement*>(element), this, m_popup));
-            break;
-          case Esri::ArcGISRuntime::PopupElementType::AttachmentsPopupElement:
-            m_popupElementControllerModel->append(
-              new AttachmentsPopupElementViewController(static_cast<AttachmentsPopupElement*>(element), this, m_popup));
-            break;
-          case Esri::ArcGISRuntime::PopupElementType::MediaPopupElement:
-            m_popupElementControllerModel->append(new MediaPopupElementViewController(static_cast<MediaPopupElement*>(element), this, m_popup));
-            break;
-          default:
-            Q_UNIMPLEMENTED();
-            break;
+          auto* existingObject = m_popupElementControllerModel->element(m_popupElementControllerModel->index(i, 0));
+          auto* existingItem = popupElementViewItemAt(m_popupElementControllerModel, i);
+          auto* newElement = evaluatedElements.at(i);
+
+          existingItem->setPopupElement(newElement);
+          notifyControllerChanged(existingObject, newElement->popupElementType());
+        }
+      }
+      else
+      {
+        m_popupElementControllerModel->removeRows(0, m_popupElementControllerModel->rowCount());
+
+        for (auto* const element : evaluatedElements)
+        {
+          appendControllerForElement(m_popupElementControllerModel, element, this, m_popup);
         }
       }
 
