@@ -1,4 +1,3 @@
-
 /*******************************************************************************
  *  Copyright 2012-2020 Esri
  *
@@ -26,7 +25,9 @@
 
 // Maps SDK headers
 #include "AttachmentsPopupElement.h"
+#include "AttributeListModel.h"
 #include "FieldsPopupElement.h"
+#include "GeoElement.h"
 #include "MediaPopupElement.h"
 #include "Popup.h"
 #include "PopupDefinition.h"
@@ -70,28 +71,31 @@ namespace Esri::ArcGISRuntime::Toolkit
     return m_popupElementControllerModel;
   }
 
-  void PopupViewController::setPopup(Popup* popup)
+  void PopupViewController::disconnectAttributeModelSignal_()
   {
-    if (m_popup == popup)
+    if (m_attributeModelConnection)
+    {
+      disconnect(m_attributeModelConnection);
+      m_attributeModelConnection = {};
+    }
+  }
+
+  void PopupViewController::refreshPopupContent_()
+  {
+    if (!m_popup)
     {
       return;
     }
 
-    if (m_popup)
-    {
-      disconnect(m_popup.data(), nullptr, this, nullptr);
-      m_popupElementControllerModel->removeRows(0, m_popupElementControllerModel->rowCount());
-    }
-
-    m_popup = popup;
-
-    if (m_popup)
-    {
-      connect(m_popup.data(), &QObject::destroyed, this, &PopupViewController::popupChanged);
-    }
+    m_popupElementControllerModel->removeRows(0, m_popupElementControllerModel->rowCount());
 
     m_popup->evaluateExpressionsAsync(this).then(this, [this](const QList<PopupExpressionEvaluation*>&)
     {
+      if (!m_popup)
+      {
+        return;
+      }
+
       for (auto element : m_popup->evaluatedElements())
       {
         switch (element->popupElementType())
@@ -114,8 +118,48 @@ namespace Esri::ArcGISRuntime::Toolkit
             break;
         }
       }
+
       emit popupChanged();
+      emit titleChanged();
+      emit editSummaryChanged();
     });
+  }
+
+  void PopupViewController::setPopup(Popup* popup)
+  {
+    if (m_popup == popup)
+    {
+      return;
+    }
+
+    if (m_popup)
+    {
+      disconnect(m_popup.data(), nullptr, this, nullptr);
+      disconnectAttributeModelSignal_();
+      m_popupElementControllerModel->removeRows(0, m_popupElementControllerModel->rowCount());
+    }
+
+    m_popup = popup;
+
+    if (m_popup)
+    {
+      connect(m_popup.data(), &QObject::destroyed, this, &PopupViewController::popupChanged);
+
+      if (auto* geoElement = m_popup->geoElement())
+      {
+        if (auto* attributes = geoElement->attributes())
+        {
+          // AttributeListModel currently forwards streamed attribute updates as begin/endResetModel, so we listen for model reset only.
+          // If the attributes model starts emitting more fine grained signals for attribute updates in the future, this can be updated to listen for those.
+          m_attributeModelConnection = connect(attributes, &QAbstractItemModel::modelReset, this, [this]()
+          {
+            refreshPopupContent_();
+          });
+        }
+      }
+    }
+
+    refreshPopupContent_();
 
     emit popupChanged();
     emit titleChanged();

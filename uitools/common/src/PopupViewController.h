@@ -18,6 +18,7 @@
 
 // Qt headers
 #include <QAbstractListModel>
+#include <QMetaObject>
 #include <QObject>
 #include <QPointer>
 
@@ -72,8 +73,12 @@ namespace Esri::ArcGISRuntime
       void imageClicked(const QUrl& sourceUrl, const QUrl& linkUrl);
 
     private:
+      void refreshPopupContent_();
+      void disconnectAttributeModelSignal_();
+
       QPointer<Popup> m_popup;
       GenericListModel* m_popupElementControllerModel = nullptr;
+      QMetaObject::Connection m_attributeModelConnection;
     };
 
   } // namespace Toolkit
