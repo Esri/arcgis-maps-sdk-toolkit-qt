@@ -93,6 +93,7 @@ namespace Esri::ArcGISRuntime::Toolkit
           QMetaObject::invokeMethod(object, "fieldsPopupElementChanged", Qt::DirectConnection);
           break;
         default:
+          Q_UNIMPLEMENTED();
           break;
       }
     }
