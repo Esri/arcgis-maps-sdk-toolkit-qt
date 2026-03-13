@@ -257,8 +257,6 @@ ColumnLayout {
                         border.color: palette.dark
                         border.width: 1
 
-
-
                         Text {
                             text: qsTr("Image unavailable")
                             color: palette.text
