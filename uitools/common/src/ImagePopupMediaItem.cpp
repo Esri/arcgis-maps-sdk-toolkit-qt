@@ -50,4 +50,9 @@ namespace Esri::ArcGISRuntime::Toolkit
     return popupMediaItem()->value()->linkUrl();
   }
 
+  quint64 ImagePopupMediaItem::imageRefreshInterval() const
+  {
+    return popupMediaItem()->imageRefreshInterval();
+  }
+
 } // namespace Esri::ArcGISRuntime::Toolkit

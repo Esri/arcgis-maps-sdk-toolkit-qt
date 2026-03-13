@@ -33,6 +33,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     Q_OBJECT
     Q_PROPERTY(QUrl sourceUrl READ sourceUrl NOTIFY imagePopupMediaItemChanged)
     Q_PROPERTY(QUrl linkUrl READ linkUrl NOTIFY imagePopupMediaItemChanged)
+    Q_PROPERTY(quint64 imageRefreshInterval READ imageRefreshInterval NOTIFY imagePopupMediaItemChanged)
 
   public:
     explicit ImagePopupMediaItem(PopupMedia* popupMedia, PopupViewController* popupViewController, QObject* parent = nullptr);
@@ -41,6 +42,7 @@ namespace Esri::ArcGISRuntime::Toolkit
   private:
     QUrl linkUrl() const;
     QUrl sourceUrl() const;
+    quint64 imageRefreshInterval() const;
 
   signals:
     void imagePopupMediaItemChanged();
