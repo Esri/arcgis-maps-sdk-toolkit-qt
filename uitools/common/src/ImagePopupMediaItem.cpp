@@ -36,6 +36,10 @@ namespace Esri::ArcGISRuntime::Toolkit
   {
     // bubble up imageClicked signal to PopupViewController. This is the sourceUrl & linkUrl used for ImagePopupMediaItems.
     connect(this, &ImagePopupMediaItem::imageClicked, popupViewController, &PopupViewController::imageClicked);
+
+    setupRefreshTimer();
+
+    connect(this, &ImagePopupMediaItem::imagePopupMediaItemChanged, this, &ImagePopupMediaItem::setupRefreshTimer);
   }
 
   ImagePopupMediaItem::~ImagePopupMediaItem() = default;
@@ -53,6 +57,20 @@ namespace Esri::ArcGISRuntime::Toolkit
   quint64 ImagePopupMediaItem::imageRefreshInterval() const
   {
     return popupMediaItem()->imageRefreshInterval();
+  }
+
+  void ImagePopupMediaItem::setupRefreshTimer()
+  {
+    m_refreshTimer.stop();
+
+    const quint64 interval = imageRefreshInterval();
+    if (interval > 0)
+    {
+      m_refreshTimer.setInterval(static_cast<int>(interval));
+      m_refreshTimer.setSingleShot(false);
+      connect(&m_refreshTimer, &QTimer::timeout, this, &ImagePopupMediaItem::refreshImage, Qt::UniqueConnection);
+      m_refreshTimer.start();
+    }
   }
 
 } // namespace Esri::ArcGISRuntime::Toolkit

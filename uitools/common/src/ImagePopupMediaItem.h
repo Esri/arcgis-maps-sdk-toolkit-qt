@@ -19,6 +19,7 @@
 // Qt headers
 #include <QJsonObject>
 #include <QObject>
+#include <QTimer>
 
 // Other headers
 #include "PopupMediaItem.h"
@@ -44,9 +45,13 @@ namespace Esri::ArcGISRuntime::Toolkit
     QUrl sourceUrl() const;
     quint64 imageRefreshInterval() const;
 
+    void setupRefreshTimer();
+    QTimer m_refreshTimer;
+
   signals:
     void imagePopupMediaItemChanged();
     void imageClicked(const QUrl& sourceUrl, const QUrl& linkUrl);
+    void refreshImage();
   };
 
 } // namespace Esri::ArcGISRuntime::Toolkit

@@ -228,9 +228,8 @@ ColumnLayout {
                 id: imageComp
                 Image {
                     id: popupImage
-                    property url currentSourceUrl: listModelData.sourceUrl
                     property bool hasLoggedImageError: false
-                    source: currentSourceUrl
+                    source: listModelData.sourceUrl
                     fillMode: fullScreenImageDialog.visible ? Image.PreserveAspectFit : Image.PreserveAspectCrop
                     asynchronous: true
                     // Disable cache when refresh interval is set so timed reloads fetch updated content.
@@ -242,7 +241,7 @@ ColumnLayout {
 
                     onStatusChanged: {
                         if (status === Image.Error && !hasLoggedImageError) {
-                            console.warn("Failed to load popup image from source:", currentSourceUrl);
+                            console.warn("Failed to load popup image from source:", popupImage.source);
                             hasLoggedImageError = true;
                         } else if (status === Image.Ready) {
                             hasLoggedImageError = false;
@@ -270,18 +269,9 @@ ColumnLayout {
                     Connections {
                         target: listModelData
 
-                        function onImagePopupMediaItemChanged() {
-                            popupImage.currentSourceUrl = listModelData.sourceUrl;
-                        }
-                    }
-
-                    Timer {
-                        running: listModelData.imageRefreshInterval > 0
-                        repeat: true
-                        interval: listModelData.imageRefreshInterval
-                        onTriggered: {
-                            popupImage.currentSourceUrl = "";
-                            popupImage.currentSourceUrl = listModelData.sourceUrl;
+                        function onRefreshImage() {
+                            popupImage.source = "";
+                            popupImage.source = listModelData.sourceUrl;
                         }
                     }
                 }
