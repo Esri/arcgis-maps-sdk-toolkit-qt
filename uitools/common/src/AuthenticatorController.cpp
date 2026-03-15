@@ -124,6 +124,22 @@ namespace Esri::ArcGISRuntime::Toolkit
 
   AuthenticatorController::~AuthenticatorController() = default;
 
+  void AuthenticatorController::cancelOutstandingChallenges()
+  {
+    std::lock_guard<std::mutex> lock(m_mutex);
+    if (m_currentNetworkChallenge)
+    {
+      m_currentNetworkChallenge->cancel();
+      m_currentNetworkChallenge.reset();
+    }
+
+    if (m_currentArcGISChallenge)
+    {
+      m_currentArcGISChallenge->cancel();
+      m_currentArcGISChallenge.reset();
+    }
+  }
+
   AuthenticatorController* AuthenticatorController::create(QQmlEngine* qmlEngine, QJSEngine* /*jsEngine*/)
   {
     static QPointer<AuthenticatorController> instance = new AuthenticatorController(qmlEngine);

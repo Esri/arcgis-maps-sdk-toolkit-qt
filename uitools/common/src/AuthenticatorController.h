@@ -69,6 +69,9 @@ namespace Esri::ArcGISRuntime::Toolkit
 
     ~AuthenticatorController() override;
 
+    // for when users abandon a challenge view without responding (e.g. back button, app switch, etc.)
+    void cancelOutstandingChallenges();
+
     enum class CertificateResult
     {
       Accepted,
