@@ -206,35 +206,74 @@ ColumnLayout {
 
             Component.onCompleted: {
                 switch (popupMediaType) {
-                    case QmlEnums.PopupMediaTypeImage:
-                        mediaLoader.sourceComponent = imageComp;
-                        break;
-                    case QmlEnums.PopupMediaTypeColumnChart:
-                        mediaLoader.sourceComponent = columnChartComp;
-                        break;
-                    case QmlEnums.PopupMediaTypeBarChart:
-                        mediaLoader.sourceComponent = barChartComp;
-                        break;
-                    case QmlEnums.PopupMediaTypePieChart:
-                        mediaLoader.sourceComponent = pieChartComp;
-                        break;
-                    case QmlEnums.PopupMediaTypeLineChart:
-                        mediaLoader.sourceComponent = lineChartComp;
-                        break;
+                case QmlEnums.PopupMediaTypeImage:
+                    mediaLoader.sourceComponent = imageComp;
+                    break;
+                case QmlEnums.PopupMediaTypeColumnChart:
+                    mediaLoader.sourceComponent = columnChartComp;
+                    break;
+                case QmlEnums.PopupMediaTypeBarChart:
+                    mediaLoader.sourceComponent = barChartComp;
+                    break;
+                case QmlEnums.PopupMediaTypePieChart:
+                    mediaLoader.sourceComponent = pieChartComp;
+                    break;
+                case QmlEnums.PopupMediaTypeLineChart:
+                    mediaLoader.sourceComponent = lineChartComp;
+                    break;
                 }
             }
 
             Component {
                 id: imageComp
                 Image {
+                    id: popupImage
+                    property bool hasLoggedImageError: false
                     source: listModelData.sourceUrl
                     fillMode: fullScreenImageDialog.visible ? Image.PreserveAspectFit : Image.PreserveAspectCrop
                     asynchronous: true
-                    cache: true
+                    // Disable cache when refresh interval is set so timed reloads fetch updated content.
+                    cache: listModelData.imageRefreshInterval === 0
                     height: delegatePopupMedia.height
                     width: delegatePopupMedia.width
 
                     Layout.leftMargin: mediaPopupElementView.mediaMargin
+
+                    onStatusChanged: {
+                        if (status === Image.Error && !hasLoggedImageError) {
+                            console.warn("Failed to load popup image from source:", popupImage.source);
+                            hasLoggedImageError = true;
+                        } else if (status === Image.Ready) {
+                            hasLoggedImageError = false;
+                        }
+                    }
+
+                    // Image fallback
+                    Rectangle {
+                        anchors.fill: parent
+                        visible: popupImage.status === Image.Error
+                        color: palette.base
+                        border.color: palette.dark
+                        border.width: 1
+
+                        Text {
+                            text: qsTr("Image unavailable")
+                            color: palette.text
+                            anchors.centerIn: parent
+                            anchors.verticalCenterOffset: -15
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                        }
+                    }
+
+                    Connections {
+                        target: listModelData
+
+                        function onRefreshImage() {
+                            popupImage.source = "";
+                            popupImage.source = listModelData.sourceUrl;
+                        }
+                    }
                 }
             }
 
@@ -281,19 +320,19 @@ ColumnLayout {
                         }
 
                         onHoverEnter: (name, position, value) => {
-                            columnPopup.visible = true;
-                            // adding in offsets so the popup is above the cursor
-                            columnPopup.x = position.x + 40;
-                            columnPopup.y = position.y - 20;
-                            columnLabelText.text = value.y;
-                        }
+                                          columnPopup.visible = true;
+                                          // adding in offsets so the popup is above the cursor
+                                          columnPopup.x = position.x + 40;
+                                          columnPopup.y = position.y - 20;
+                                          columnLabelText.text = value.y;
+                                      }
 
                         onHover: (name, position, value) => {
-                            // adding in offsets so the popup is above the cursor
-                            columnPopup.x = position.x + 40;
-                            columnPopup.y = position.y - 20;
-                            columnLabelText.text = value.y;
-                        }
+                                     // adding in offsets so the popup is above the cursor
+                                     columnPopup.x = position.x + 40;
+                                     columnPopup.y = position.y - 20;
+                                     columnLabelText.text = value.y;
+                                 }
 
                         onHoverExit: {
                             columnPopup.visible = false;
@@ -371,19 +410,19 @@ ColumnLayout {
                         }
 
                         onHoverEnter: (name, position, value) => {
-                            barPopup.visible = true;
-                            // adding in offsets so the popup is above the cursor
-                            barPopup.x = position.x;
-                            barPopup.y = position.y - 20;
-                            barPopupText.text = value.y;
-                        }
+                                          barPopup.visible = true;
+                                          // adding in offsets so the popup is above the cursor
+                                          barPopup.x = position.x;
+                                          barPopup.y = position.y - 20;
+                                          barPopupText.text = value.y;
+                                      }
 
                         onHover: (name, position, value) => {
-                            // adding in offsets so the popup is above the cursor
-                            barPopup.x = position.x;
-                            barPopup.y = position.y -20;
-                            barPopupText.text = value.y;
-                        }
+                                     // adding in offsets so the popup is above the cursor
+                                     barPopup.x = position.x;
+                                     barPopup.y = position.y -20;
+                                     barPopupText.text = value.y;
+                                 }
 
                         onHoverExit: {
                             barPopup.visible = false;
@@ -456,19 +495,19 @@ ColumnLayout {
                         }
 
                         onHoverEnter: (name, position, value) => {
-                            piePopup.visible = true;
-                            // adding in offsets so the popup is above the cursor
-                            piePopup.x = position.x;
-                            piePopup.y = position.y - 20;
-                            piePopupText.text = value.y;
-                        }
+                                          piePopup.visible = true;
+                                          // adding in offsets so the popup is above the cursor
+                                          piePopup.x = position.x;
+                                          piePopup.y = position.y - 20;
+                                          piePopupText.text = value.y;
+                                      }
 
                         onHover: (name, position, value) => {
-                            // adding in offsets so the popup is above the cursor
-                            piePopup.x = position.x;
-                            piePopup.y = position.y - 20;
-                            piePopupText.text = value.y;
-                        }
+                                     // adding in offsets so the popup is above the cursor
+                                     piePopup.x = position.x;
+                                     piePopup.y = position.y - 20;
+                                     piePopupText.text = value.y;
+                                 }
 
                         onHoverExit: {
                             piePopup.visible = false;
@@ -539,19 +578,19 @@ ColumnLayout {
                         }
 
                         onHoverEnter: (name, position, value) => {
-                            linePopup.visible = true;
-                            // adding in offsets so the popup is above the cursor
-                            linePopup.x = position.x;
-                            linePopup.y = position.y - 20;
-                            linePopupText.text = value.y;
-                        }
+                                          linePopup.visible = true;
+                                          // adding in offsets so the popup is above the cursor
+                                          linePopup.x = position.x;
+                                          linePopup.y = position.y - 20;
+                                          linePopupText.text = value.y;
+                                      }
 
                         onHover: (name, position, value) => {
-                            // adding in offsets so the popup is above the cursor
-                            linePopup.x = position.x;
-                            linePopup.y = position.y - 20;
-                            linePopupText.text = value.y;
-                        }
+                                     // adding in offsets so the popup is above the cursor
+                                     linePopup.x = position.x;
+                                     linePopup.y = position.y - 20;
+                                     linePopupText.text = value.y;
+                                 }
 
                         onHoverExit: {
                             linePopup.visible = false;
