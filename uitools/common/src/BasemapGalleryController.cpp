@@ -601,25 +601,28 @@ namespace Esri::ArcGISRuntime::Toolkit
     //scene case:
     if (auto scene = qobject_cast<Scene*>(m_geoModel))
     {
-      const auto sp2 = basemap->baseLayers()->first()->spatialReference();
-      if (sp2.isEmpty()) //case used by the listview painter
+      if (scene->viewingMode() == SceneViewingMode::Global)
       {
-        return true;
-      }
-      auto svts = scene->sceneViewTilingScheme();
-      switch (svts)
-      {
-        case SceneViewTilingScheme::Geographic:
-          return sp2.isGeographic();
+        const auto sp2 = basemap->baseLayers()->first()->spatialReference();
+        if (sp2.isEmpty()) //case used by the listview painter
+        {
+          return true;
+        }
+        auto svts = scene->sceneViewTilingScheme();
+        switch (svts)
+        {
+          case SceneViewTilingScheme::Geographic:
+            return sp2.isGeographic();
 
-        case SceneViewTilingScheme::WebMercator:
-          return sp2 == SpatialReference::webMercator();
+          case SceneViewTilingScheme::WebMercator:
+            return sp2 == SpatialReference::webMercator();
 
-        default:
-          qDebug() << "a new sceneviewTilingScheme has been used";
-          break;
+          default:
+            qDebug() << "a new sceneviewTilingScheme has been used";
+            break;
+        }
+        return false;
       }
-      return false;
     }
 
     // Test if first layer matches the spatial reference.
@@ -640,10 +643,13 @@ namespace Esri::ArcGISRuntime::Toolkit
     {
       setGeoModel(sceneView->arcGISScene());
     }
+    else if (auto localSceneView = qobject_cast<LocalSceneViewToolkit*>(view))
+    {
+      setGeoModel(localSceneView->arcGISScene());
+    }
     else if (auto mapView = qobject_cast<MapViewToolkit*>(view))
     {
       setGeoModel(mapView->map());
     }
   }
-
 } // namespace Esri::ArcGISRuntime::Toolkit

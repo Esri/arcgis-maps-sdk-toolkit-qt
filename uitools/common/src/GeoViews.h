@@ -18,23 +18,27 @@
 
 #ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
 
+#include <LocalSceneGraphicsView.h>
 #include <MapGraphicsView.h>
 #include <SceneGraphicsView.h>
 
 namespace Esri::ArcGISRuntime::Toolkit
 {
   using SceneViewToolkit = SceneGraphicsView;
+  using LocalSceneViewToolkit = LocalSceneGraphicsView;
   using MapViewToolkit = MapGraphicsView;
 } // namespace Esri::ArcGISRuntime::Toolkit
 
 #else
 
+#include <LocalSceneQuickView.h>
 #include <MapQuickView.h>
 #include <SceneQuickView.h>
 
 namespace Esri::ArcGISRuntime::Toolkit
 {
   using SceneViewToolkit = SceneQuickView;
+  using LocalSceneViewToolkit = LocalSceneQuickView;
   using MapViewToolkit = MapQuickView;
 } // namespace Esri::ArcGISRuntime::Toolkit
 
@@ -52,6 +56,11 @@ namespace Esri::ArcGISRuntime::Toolkit
     return sceneView ? sceneView->arcGISScene() : nullptr;
   }
 
+  inline Scene* getGeoModel(LocalSceneViewToolkit* localSceneView)
+  {
+    return localSceneView ? localSceneView->arcGISScene() : nullptr;
+  }
+
   inline auto getGeoModelChangedSignal(MapViewToolkit* /*mapView*/)
   {
     return &MapViewToolkit::mapChanged;
@@ -60,6 +69,11 @@ namespace Esri::ArcGISRuntime::Toolkit
   inline auto getGeoModelChangedSignal(SceneViewToolkit* /*sceneView*/)
   {
     return &SceneViewToolkit::sceneChanged;
+  }
+
+  inline auto getGeoModelChangedSignal(LocalSceneViewToolkit* /*localSceneView*/)
+  {
+    return &LocalSceneViewToolkit::sceneChanged;
   }
 } // namespace Esri::ArcGISRuntime::Toolkit
 
