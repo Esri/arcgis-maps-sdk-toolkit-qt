@@ -127,6 +127,22 @@ namespace Esri::ArcGISRuntime::Toolkit
         }
       });
     }
+    else if (auto localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
+    {
+      connect(localSceneView, &LocalSceneViewToolkit::mouseClicked, this, [localSceneView, this](QMouseEvent& event)
+      {
+        if (m_inPickingMode && !m_screenToLocationFuture.isRunning())
+        {
+          m_screenToLocationFuture = localSceneView->screenToLocationAsync(event.pos().x(), event.pos().y());
+          m_screenToLocationFuture.then(this, [this](const Point& point)
+          {
+            setCurrentPoint(point);
+          });
+
+          event.accept();
+        }
+      });
+    }
     else if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
       connect(mapView, &MapViewToolkit::mouseClicked, this, [mapView, this](QMouseEvent& event)

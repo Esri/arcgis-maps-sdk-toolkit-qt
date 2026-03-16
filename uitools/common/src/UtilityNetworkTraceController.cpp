@@ -221,7 +221,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     {
       disconnect(m_geoView, nullptr, this, nullptr);
 
-      if (qobject_cast<SceneViewToolkit*>(m_geoView))
+      if (qobject_cast<SceneViewToolkit*>(m_geoView) || qobject_cast<LocalSceneViewToolkit*>(m_geoView))
       {
         // scene does not have utility networks
         return;

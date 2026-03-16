@@ -199,6 +199,10 @@ namespace Esri::ArcGISRuntime::Toolkit
     {
       connect(sceneView, &SceneViewToolkit::sceneChanged, this, qOverload<>(&TimeSliderController::initializeTimeProperties));
     }
+    else if (auto localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView.data()))
+    {
+      connect(localSceneView, &LocalSceneViewToolkit::sceneChanged, this, qOverload<>(&TimeSliderController::initializeTimeProperties));
+    }
 
     emit geoViewChanged();
 
@@ -233,6 +237,13 @@ namespace Esri::ArcGISRuntime::Toolkit
     else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView.data()))
     {
       if (auto scene = sceneView->arcGISScene())
+      {
+        model = scene->operationalLayers();
+      }
+    }
+    else if (auto localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView.data()))
+    {
+      if (auto scene = localSceneView->arcGISScene())
       {
         model = scene->operationalLayers();
       }

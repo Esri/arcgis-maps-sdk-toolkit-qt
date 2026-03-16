@@ -62,14 +62,17 @@ namespace Esri::ArcGISRuntime::Toolkit
   private:
     void applyInsetNavigationToMapView(MapViewToolkit* view);
     void applyInsetNavigationToSceneView(SceneViewToolkit* view);
+    void applyInsetNavigationToLocalSceneView(LocalSceneViewToolkit* view);
 
     void applyMapNavigationToInset(MapViewToolkit* view);
     void applySceneNavigationToInset(SceneViewToolkit* view);
+    void applySceneNavigationToInset(LocalSceneViewToolkit* view);
 
     void disableInteractions();
 
     void setupInsetMapForMap(MapViewToolkit* mapView);
     void setupInsetMapForScene(SceneViewToolkit* sceneView);
+  void setupInsetMapForScene(LocalSceneViewToolkit* localSceneView);
 
   private:
     QFuture<bool> m_setViewpointFuture;

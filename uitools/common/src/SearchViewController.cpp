@@ -179,6 +179,11 @@ namespace Esri::ArcGISRuntime::Toolkit
         connect(sceneView, &SceneViewToolkit::viewpointChanged, this, setViewpoint);
         setViewpoint();
       }
+      else if (auto localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
+      {
+        connect(localSceneView, &LocalSceneViewToolkit::viewpointChanged, this, setViewpoint);
+        setViewpoint();
+      }
     }
 
     emit geoViewChanged();
@@ -339,6 +344,18 @@ namespace Esri::ArcGISRuntime::Toolkit
         });
         // Set sceneView viewpoint to where graphic is.
         auto future = sceneView->setViewpointAsync(m_selectedResult->selectionViewpoint(), 0);
+        Q_UNUSED(future)
+      }
+      else if (auto localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
+      {
+        // When the geoview changes, update the lastsearcharea
+        singleShotConnection(localSceneView, &LocalSceneViewToolkit::viewpointChanged, this, [localSceneView, this]()
+        {
+          auto extent = localSceneView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
+          m_lastSearchArea = extent;
+        });
+        // Set localSceneView viewpoint to where graphic is.
+        auto future = localSceneView->setViewpointAsync(m_selectedResult->selectionViewpoint(), 0);
         Q_UNUSED(future)
       }
       else if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
@@ -533,6 +550,14 @@ namespace Esri::ArcGISRuntime::Toolkit
             singleShotConnection(sceneView, &SceneViewToolkit::viewpointChanged, this, [sceneView, this]()
             {
               auto extent = sceneView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
+              m_lastSearchArea = extent;
+            });
+          }
+          else if (auto localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
+          {
+            singleShotConnection(localSceneView, &LocalSceneViewToolkit::viewpointChanged, this, [localSceneView, this]()
+            {
+              auto extent = localSceneView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
               m_lastSearchArea = extent;
             });
           }

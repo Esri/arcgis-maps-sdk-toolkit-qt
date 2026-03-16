@@ -106,8 +106,10 @@ namespace Esri::ArcGISRuntime::Toolkit
     template<typename GeoViewToolkit, typename Func>
     void connectToGeoView(GeoViewToolkit* geoView, BookmarksViewController* self, Func&& f)
     {
-      static_assert(std::is_same<GeoViewToolkit, MapViewToolkit>::value || std::is_same<GeoViewToolkit, SceneViewToolkit>::value,
-                    "Must be connected to a SceneView or MapView");
+      static_assert(std::is_same<GeoViewToolkit, MapViewToolkit>::value
+                      || std::is_same<GeoViewToolkit, SceneViewToolkit>::value
+                      || std::is_same<GeoViewToolkit, LocalSceneViewToolkit>::value,
+                    "Must be connected to a SceneView, LocalSceneView, or MapView");
 
       auto connectToGeoModel = [self, geoView, f = std::forward<Func>(f)]
       {
@@ -187,6 +189,15 @@ namespace Esri::ArcGISRuntime::Toolkit
           disconnect(scene->bookmarks(), nullptr, m_bookmarks, nullptr);
         }
       }
+      else if (auto localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
+      {
+        auto scene = localSceneView->arcGISScene();
+
+        if (scene && scene->bookmarks())
+        {
+          disconnect(scene->bookmarks(), nullptr, m_bookmarks, nullptr);
+        }
+      }
 
       m_bookmarks->clear();
     }
@@ -222,6 +233,18 @@ namespace Esri::ArcGISRuntime::Toolkit
         setupBookmarks(sceneView->arcGISScene()->bookmarks(), m_bookmarks);
       });
     }
+    else if (auto localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
+    {
+      connect(localSceneView, &LocalSceneViewToolkit::sceneChanged, this, [this]()
+      {
+        m_bookmarks->clear();
+      });
+
+      connectToGeoView(localSceneView, this, [this, localSceneView]
+      {
+        setupBookmarks(localSceneView->arcGISScene()->bookmarks(), m_bookmarks);
+      });
+    }
   }
 
   GenericListModel* BookmarksViewController::bookmarks() const
@@ -239,6 +262,11 @@ namespace Esri::ArcGISRuntime::Toolkit
     if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
       auto future = sceneView->setBookmarkAsync(bookmark->bookmark());
+      Q_UNUSED(future)
+    }
+    else if (auto localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
+    {
+      auto future = localSceneView->setBookmarkAsync(bookmark->bookmark());
       Q_UNUSED(future)
     }
     else if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))

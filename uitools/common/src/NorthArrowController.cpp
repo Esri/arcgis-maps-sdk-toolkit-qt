@@ -98,6 +98,10 @@ namespace Esri::ArcGISRuntime::Toolkit
     {
       connect(sceneView, &SceneViewToolkit::viewpointChanged, this, &NorthArrowController::headingChanged);
     }
+    else if (auto localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
+    {
+      connect(localSceneView, &LocalSceneViewToolkit::viewpointChanged, this, &NorthArrowController::headingChanged);
+    }
 
     emit geoViewChanged();
   }
