@@ -126,13 +126,13 @@ namespace Esri::ArcGISRuntime::Toolkit
           return;
         }
 
-        setupInsetMapForScene(sceneView);
+        setupInsetMapForSceneView(sceneView);
       });
 
       // double check if the map is already loaded, setup the inset map
       if (sceneView->arcGISScene()->loadStatus() == LoadStatus::Loaded)
       {
-        setupInsetMapForScene(sceneView);
+        setupInsetMapForSceneView(sceneView);
       }
 
       // If Symbol has not yet been set, we provide a default symbol appropriate for SceneViews.
@@ -147,7 +147,7 @@ namespace Esri::ArcGISRuntime::Toolkit
         m_reticle->setGeometry(viewpoint.targetGeometry());
         if (sceneView->isNavigating() && !m_setViewpointInsetFuture.isRunning())
         {
-          applySceneNavigationToInset(sceneView);
+          applySceneViewNavigationToInset(sceneView);
         }
       });
       // Create single-shot connection to geoView's drawStatusChanged to ensure OverviewMap updates when the scene initially loads.
@@ -155,7 +155,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       {
         if (status == DrawStatus::Completed)
         {
-          applySceneNavigationToInset(sceneView);
+          applySceneViewNavigationToInset(sceneView);
         }
       });
     }
@@ -170,13 +170,13 @@ namespace Esri::ArcGISRuntime::Toolkit
           return;
         }
 
-        setupInsetMapForScene(localSceneView);
+        setupInsetMapForLocalSceneView(localSceneView);
       });
 
       // double check if the map is already loaded, setup the inset map
       if (localSceneView->arcGISScene()->loadStatus() == LoadStatus::Loaded)
       {
-        setupInsetMapForScene(localSceneView);
+        setupInsetMapForLocalSceneView(localSceneView);
       }
 
       // If Symbol has not yet been set, we provide a default symbol appropriate for LocalSceneViews.
@@ -191,7 +191,7 @@ namespace Esri::ArcGISRuntime::Toolkit
         m_reticle->setGeometry(viewpoint.targetGeometry());
         if (localSceneView->isNavigating() && !m_setViewpointInsetFuture.isRunning())
         {
-          applySceneNavigationToInset(localSceneView);
+          applyLocalSceneViewNavigationToInset(localSceneView);
         }
       });
       // Create single-shot connection to geoView's drawStatusChanged to ensure OverviewMap updates when the scene initially loads.
@@ -199,7 +199,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       {
         if (status == DrawStatus::Completed)
         {
-          applySceneNavigationToInset(localSceneView);
+          applyLocalSceneViewNavigationToInset(localSceneView);
         }
       });
     }
@@ -214,13 +214,13 @@ namespace Esri::ArcGISRuntime::Toolkit
           return;
         }
 
-        setupInsetMapForMap(mapView);
+        setupInsetMapForMapView(mapView);
       });
 
       // double check if the map is already loaded, setup the inset map
       if (mapView->map()->loadStatus() == LoadStatus::Loaded)
       {
-        setupInsetMapForMap(mapView);
+        setupInsetMapForMapView(mapView);
       }
 
       // If Symbol has not yet been set, we provide a default symbol appropriate for MapViews.
@@ -237,7 +237,7 @@ namespace Esri::ArcGISRuntime::Toolkit
         m_reticle->setGeometry(mapView->visibleArea());
         if (mapView->isNavigating() && !m_setViewpointInsetFuture.isRunning())
         {
-          applyMapNavigationToInset(mapView);
+          applyMapViewNavigationToInset(mapView);
         }
       });
       // Create single-shot connection to geoView's drawStatusChanged to ensure OverviewMap updates when the map initially loads.
@@ -245,7 +245,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       {
         if (status == DrawStatus::Completed)
         {
-          applyMapNavigationToInset(mapView);
+          applyMapViewNavigationToInset(mapView);
         }
       });
     }
@@ -339,7 +339,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     m_setViewpointFuture = view->setViewpointAsync(newViewpoint, animationDuration);
   }
 
-  void OverviewMapController::applyMapNavigationToInset(MapViewToolkit* view)
+  void OverviewMapController::applyMapViewNavigationToInset(MapViewToolkit* view)
   {
     // Note we care about rotation in the mapView case.
     const Viewpoint viewpoint = view->currentViewpoint(ViewpointType::CenterAndScale);
@@ -349,7 +349,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     m_setViewpointInsetFuture = m_insetView->setViewpointAsync(newViewpoint, animationDuration);
   }
 
-  void OverviewMapController::applySceneNavigationToInset(SceneViewToolkit* view)
+  void OverviewMapController::applySceneViewNavigationToInset(SceneViewToolkit* view)
   {
     // Note we do not care about rotation in the sceneView case.
     const Viewpoint viewpoint = view->currentViewpoint(ViewpointType::CenterAndScale);
@@ -359,7 +359,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     m_setViewpointInsetFuture = m_insetView->setViewpointAsync(newViewpoint, animationDuration);
   }
 
-  void OverviewMapController::applySceneNavigationToInset(LocalSceneViewToolkit* view)
+  void OverviewMapController::applyLocalSceneViewNavigationToInset(LocalSceneViewToolkit* view)
   {
     // Note we do not care about rotation in the sceneView case.
     const Viewpoint viewpoint = view->currentViewpoint(ViewpointType::CenterAndScale);
@@ -414,13 +414,13 @@ namespace Esri::ArcGISRuntime::Toolkit
   }
 
   // create a function to handle setting up the inset map and viewpoint
-  void OverviewMapController::setupInsetMapForMap(MapViewToolkit* mapView)
+  void OverviewMapController::setupInsetMapForMapView(MapViewToolkit* view)
   {
     // create the map
     auto map = new Map(BasemapStyle::ArcGISTopographic, m_insetView);
 
     // set the initial viewpoint (scale = main maps's scale * scaleFactor)
-    auto initialViewpoint = mapView->map()->initialViewpoint();
+    auto initialViewpoint = view->map()->initialViewpoint();
     const Viewpoint newViewpoint{geometry_cast<Point>(initialViewpoint.targetGeometry()), initialViewpoint.targetScale() * scaleFactor(),
                                  initialViewpoint.rotation()};
 
@@ -430,13 +430,13 @@ namespace Esri::ArcGISRuntime::Toolkit
   }
 
   // create a function to handle setting up the inset map and viewpoint
-  void OverviewMapController::setupInsetMapForScene(SceneViewToolkit* sceneView)
+  void OverviewMapController::setupInsetMapForSceneView(SceneViewToolkit* view)
   {
     // create the map
     auto map = new Map(BasemapStyle::ArcGISTopographic, m_insetView);
     // set the initial viewpoint (scale = main scene's scale * scaleFactor)
     // scenes shouldn't set the rotation parameter
-    const Viewpoint viewpoint = sceneView->currentViewpoint(ViewpointType::CenterAndScale);
+    const Viewpoint viewpoint = view->currentViewpoint(ViewpointType::CenterAndScale);
     const Viewpoint newViewpoint{geometry_cast<Point>(viewpoint.targetGeometry()), viewpoint.targetScale() * scaleFactor()};
 
     // set the initial viewpoint before setting on the inset view
@@ -445,13 +445,13 @@ namespace Esri::ArcGISRuntime::Toolkit
   }
 
   // create a function to handle setting up the inset map and viewpoint
-  void OverviewMapController::setupInsetMapForScene(LocalSceneViewToolkit* localSceneView)
+  void OverviewMapController::setupInsetMapForLocalSceneView(LocalSceneViewToolkit* view)
   {
     // create the map
     auto map = new Map(BasemapStyle::ArcGISTopographic, m_insetView);
     // set the initial viewpoint (scale = main scene's scale * scaleFactor)
     // scenes shouldn't set the rotation parameter
-    const Viewpoint viewpoint = localSceneView->currentViewpoint(ViewpointType::CenterAndScale);
+    const Viewpoint viewpoint = view->currentViewpoint(ViewpointType::CenterAndScale);
     const Viewpoint newViewpoint{geometry_cast<Point>(viewpoint.targetGeometry()), viewpoint.targetScale() * scaleFactor()};
 
     // set the initial viewpoint before setting on the inset view
