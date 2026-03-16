@@ -1,4 +1,3 @@
-
 /*******************************************************************************
  *  Copyright 2012-2025 Esri
  *
@@ -42,7 +41,10 @@ namespace Esri::ArcGISRuntime::Toolkit
     connect(this, &ImagePopupMediaItem::imagePopupMediaItemChanged, this, &ImagePopupMediaItem::setupRefreshTimer);
   }
 
-  ImagePopupMediaItem::~ImagePopupMediaItem() = default;
+  ImagePopupMediaItem::~ImagePopupMediaItem()
+  {
+    m_refreshTimer.stop();
+  }
 
   QUrl ImagePopupMediaItem::sourceUrl() const
   {
