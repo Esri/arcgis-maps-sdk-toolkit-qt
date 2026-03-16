@@ -359,10 +359,10 @@ namespace Esri::ArcGISRuntime::Toolkit
     m_setViewpointInsetFuture = m_insetView->setViewpointAsync(newViewpoint, animationDuration);
   }
 
-  void OverviewMapController::applySceneNavigationToInset(LocalSceneViewToolkit* view)
+  void OverviewMapController::applySceneNavigationToInset(LocalSceneViewToolkit* localSceneView)
   {
     // Note we do not care about rotation in the sceneView case.
-    const Viewpoint viewpoint = view->currentViewpoint(ViewpointType::CenterAndScale);
+    const Viewpoint viewpoint = localSceneView->currentViewpoint(ViewpointType::CenterAndScale);
     const Viewpoint newViewpoint{geometry_cast<Point>(viewpoint.targetGeometry()), viewpoint.targetScale() * scaleFactor()};
 
     constexpr float animationDuration{0};
@@ -445,17 +445,17 @@ namespace Esri::ArcGISRuntime::Toolkit
   }
 
   // create a function to handle setting up the inset map and viewpoint
-  void OverviewMapController::setupInsetMapForScene(LocalSceneViewToolkit* sceneView)
+  void OverviewMapController::setupInsetMapForScene(LocalSceneViewToolkit* localSceneView)
   {
     // create the map
     auto map = new Map(BasemapStyle::ArcGISTopographic, m_insetView);
     // set the initial viewpoint (scale = main scene's scale * scaleFactor)
     // scenes shouldn't set the rotation parameter
-    const Viewpoint viewpoint = sceneView->currentViewpoint(ViewpointType::CenterAndScale);
+    const Viewpoint viewpoint = localSceneView->currentViewpoint(ViewpointType::CenterAndScale);
     const Viewpoint newViewpoint{geometry_cast<Point>(viewpoint.targetGeometry()), viewpoint.targetScale() * scaleFactor()};
 
     // set the initial viewpoint before setting on the mapview
-    map->setInitialViewpoint(sceneView->arcGISScene()->initialViewpoint());
+    map->setInitialViewpoint(localSceneView->arcGISScene()->initialViewpoint());
     m_insetView->setMap(map);
   }
 
