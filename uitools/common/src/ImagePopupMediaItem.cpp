@@ -43,7 +43,10 @@ namespace Esri::ArcGISRuntime::Toolkit
 
   ImagePopupMediaItem::~ImagePopupMediaItem()
   {
-    m_refreshTimer.stop();
+    if (m_refreshTimer.isActive())
+    {
+      m_refreshTimer.stop();
+    }
   }
 
   QUrl ImagePopupMediaItem::sourceUrl() const
