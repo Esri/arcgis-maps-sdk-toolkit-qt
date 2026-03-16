@@ -166,7 +166,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       {
         if (!e.isEmpty())
         {
-          qDebug() << "Error. Main map did not load" << e.message() << e.additionalMessage();
+          qDebug() << "Error. Main scene did not load" << e.message() << e.additionalMessage();
           return;
         }
 
@@ -210,7 +210,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       {
         if (!e.isEmpty())
         {
-          qDebug() << "Error. Main map did not load" << e.message() << e.additionalMessage();
+          qDebug() << "Error. Main scene did not load" << e.message() << e.additionalMessage();
           return;
         }
 
@@ -359,10 +359,10 @@ namespace Esri::ArcGISRuntime::Toolkit
     m_setViewpointInsetFuture = m_insetView->setViewpointAsync(newViewpoint, animationDuration);
   }
 
-  void OverviewMapController::applySceneNavigationToInset(LocalSceneViewToolkit* localSceneView)
+  void OverviewMapController::applySceneNavigationToInset(LocalSceneViewToolkit* view)
   {
     // Note we do not care about rotation in the sceneView case.
-    const Viewpoint viewpoint = localSceneView->currentViewpoint(ViewpointType::CenterAndScale);
+    const Viewpoint viewpoint = view->currentViewpoint(ViewpointType::CenterAndScale);
     const Viewpoint newViewpoint{geometry_cast<Point>(viewpoint.targetGeometry()), viewpoint.targetScale() * scaleFactor()};
 
     constexpr float animationDuration{0};
@@ -439,8 +439,8 @@ namespace Esri::ArcGISRuntime::Toolkit
     const Viewpoint viewpoint = sceneView->currentViewpoint(ViewpointType::CenterAndScale);
     const Viewpoint newViewpoint{geometry_cast<Point>(viewpoint.targetGeometry()), viewpoint.targetScale() * scaleFactor()};
 
-    // set the initial viewpoint before setting on the mapview
-    map->setInitialViewpoint(sceneView->arcGISScene()->initialViewpoint());
+    // set the initial viewpoint before setting on the inset view
+    map->setInitialViewpoint(newViewpoint);
     m_insetView->setMap(map);
   }
 
@@ -454,8 +454,8 @@ namespace Esri::ArcGISRuntime::Toolkit
     const Viewpoint viewpoint = localSceneView->currentViewpoint(ViewpointType::CenterAndScale);
     const Viewpoint newViewpoint{geometry_cast<Point>(viewpoint.targetGeometry()), viewpoint.targetScale() * scaleFactor()};
 
-    // set the initial viewpoint before setting on the mapview
-    map->setInitialViewpoint(localSceneView->arcGISScene()->initialViewpoint());
+    // set the initial viewpoint before setting on the inset view
+    map->setInitialViewpoint(newViewpoint);
     m_insetView->setMap(map);
   }
 
