@@ -72,7 +72,7 @@ namespace Esri::ArcGISRuntime::Toolkit
 
     void setupInsetMapForMap(MapViewToolkit* mapView);
     void setupInsetMapForScene(SceneViewToolkit* sceneView);
-  void setupInsetMapForScene(LocalSceneViewToolkit* localSceneView);
+    void setupInsetMapForScene(LocalSceneViewToolkit* localSceneView);
 
   private:
     QFuture<bool> m_setViewpointFuture;
