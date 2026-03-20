@@ -18,9 +18,9 @@
 #define ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_POPUPVIEWDEMO_H
 
 // C++ API headers
+#include "DynamicEntity.h"
 #include "FeatureLayer.h"
 #include "Popup.h"
-#include "PopupManager.h"
 
 // Qt headers
 #include <QObject>
@@ -56,6 +56,8 @@ private:
 private:
   Esri::ArcGISRuntime::FeatureLayer* m_featureLayer = nullptr;
   Esri::ArcGISRuntime::Popup* m_popup = nullptr;
+  Esri::ArcGISRuntime::DynamicEntity* m_trackedEntity = nullptr;
+  QMetaObject::Connection m_mouseClickedConnection;
 };
 
 #endif // ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_POPUPVIEWDEMO_H

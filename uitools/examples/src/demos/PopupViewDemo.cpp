@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -19,26 +20,28 @@
 #include "Envelope.h"
 #include "Error.h"
 #include "Feature.h"
-#include "GeoElement.h"
 #include "IdentifyLayerResult.h"
 #include "LayerListModel.h"
+#include "AttributeListModel.h"
 #include "Map.h"
-#include "MapTypes.h"
 #include "MapQuickView.h"
-#include "MapViewTypes.h"
+#include "MapTypes.h"
 #include "Popup.h"
 #include "PopupDefinition.h"
-#include "PopupManager.h"
 #include "Scene.h"
 #include "SceneQuickView.h"
 #include "ServiceFeatureTable.h"
 #include "SpatialReference.h"
 #include "Viewpoint.h"
+#include "DynamicEntity.h"
+#include "DynamicEntityLayer.h"
 
+#include "DynamicEntityObservation.h"
+
+#include <QFuture>
 #include <QList>
 #include <QMouseEvent>
 #include <QUuid>
-#include <QFuture>
 
 using namespace Esri::ArcGISRuntime;
 
@@ -54,9 +57,7 @@ PopupViewDemo::~PopupViewDemo()
 
 Esri::ArcGISRuntime::Map* PopupViewDemo::initMap_(QObject* parent) const
 {
-  return new Map(QUrl("https://runtime.maps.arcgis.com/home/webmap/"
-                      "viewer.html?webmap=e4c6eb667e6c43b896691f10cc2f1580"),
-                 parent);
+  return new Map(QUrl("https://arcgisruntime.maps.arcgis.com/home/item.html?id=07f8e6e5145542ca8cbeda17797c6a4c"), parent);
 }
 
 Scene* PopupViewDemo::initScene_(QObject* parent) const
@@ -64,10 +65,9 @@ Scene* PopupViewDemo::initScene_(QObject* parent) const
   Scene* scene = BaseDemo::initScene_(parent);
   Viewpoint viewPoint(Envelope(-122.5277, 37.7204, -122.3511, 37.7956, SpatialReference(4326)));
   scene->setInitialViewpoint(viewPoint);
-  FeatureLayer* fl = new FeatureLayer(new ServiceFeatureTable(
-                                          QUrl("https://sampleserver6.arcgisonline.com/arcgis/rest/services/"
-                                               "SF311/FeatureServer/0"),
-                                          parent),
+  FeatureLayer* fl = new FeatureLayer(new ServiceFeatureTable(QUrl("https://sampleserver6.arcgisonline.com/arcgis/rest/services/"
+                                                                   "SF311/FeatureServer/0"),
+                                                              parent),
                                       parent);
   scene->operationalLayers()->append(fl);
   return scene;
@@ -81,11 +81,22 @@ Popup* PopupViewDemo::popup()
 void PopupViewDemo::setPopup(Popup* popup)
 {
   if (m_popup == popup)
+  {
     return;
+  }
 
   if (m_popup)
   {
     m_popup->deleteLater();
+  }
+
+  if (!popup)
+  {
+    auto layers = geoModel()->operationalLayers();
+    if (auto* deLayer = dynamic_cast<DynamicEntityLayer*>(layers->at(1)))
+    {
+      deLayer->clearSelection();
+    }
   }
 
   m_popup = popup;
@@ -94,61 +105,65 @@ void PopupViewDemo::setPopup(Popup* popup)
 
 void PopupViewDemo::setUp()
 {
+  // Disconnect any previous connection
+  if (m_mouseClickedConnection)
+  {
+    disconnect(m_mouseClickedConnection);
+  }
+
   apply([this](auto geoView)
         {
           using ViewType = std::remove_pointer_t<decltype(geoView)>;
-          connect(geoView, &ViewType::mouseClicked, this, [this, geoView](QMouseEvent& mouse)
-                  {
-              auto layer = geoModel()->operationalLayers()->at(0);
-                    if (layer->layerType() == LayerType::FeatureLayer)
-                    {
-                      m_featureLayer = static_cast<FeatureLayer*>(layer);
-                      geoView->identifyLayerAsync(m_featureLayer, mouse.position(), 12, false).then(this, [this](IdentifyLayerResult* rawIdentifyResult)
-                      {
-                        // managed by smart pointer
-                        auto identifyResult = std::unique_ptr<IdentifyLayerResult>(rawIdentifyResult);
-                        if (!identifyResult)
-                          return;
+          m_mouseClickedConnection = connect(geoView, &ViewType::mouseClicked, this, [this, geoView](QMouseEvent& mouse)
+                                             {
+                                               auto layers = geoModel()->operationalLayers();
+                                               if (!layers || layers->size() < 2)
+                                               {
+                                                 return;
+                                               }
 
-                        if (!identifyResult->error().isEmpty())
-                        {
-                          qDebug() << "Identify error occurred: "
-                                   << identifyResult->error().message();
-                          return;
-                        }
+                                               auto layer = layers->at(1);
+                                               geoView->identifyLayerAsync(layer, mouse.position(), 12, false)
+                                                   .then(this, [layer, this](IdentifyLayerResult* rawIdentifyResult)
+                                                         {
+                                                           auto identifyResult = std::unique_ptr<IdentifyLayerResult>(rawIdentifyResult);
+                                                           if (!identifyResult)
+                                                           {
+                                                             return;
+                                                           }
+                                                           if (!identifyResult->error().isEmpty())
+                                                           {
+                                                             qDebug() << "Identify error occurred: " << identifyResult->error().message();
+                                                             return;
+                                                           }
+                                                           const auto geoElements = identifyResult->geoElements();
+                                                           if (geoElements.isEmpty())
+                                                           {
+                                                             qDebug() << "No elements found";
+                                                             return;
+                                                           }
+                                                           if (DynamicEntityObservation* observation = dynamic_cast<DynamicEntityObservation*>(geoElements.constFirst()); observation)
+                                                           {
+                                                             m_trackedEntity = observation->dynamicEntity();
+                                                             if (!m_trackedEntity)
+                                                             {
+                                                               return;
+                                                             }
+                                                             m_trackedEntity->setParent(this);
+                                                             const auto popup = new Popup(m_trackedEntity, this);
+                                                             if (popup->title().isEmpty())
+                                                             {
+                                                               popup->popupDefinition()->setTitle(identifyResult->layerContent()->name());
+                                                             }
+                                                             setPopup(popup);
 
-                        m_featureLayer->clearSelection();
-
-                        const auto geoElements = identifyResult->geoElements();
-
-                        if (geoElements.length() == 0)
-                        {
-                          qDebug() << "no geoElements";
-                          return;
-                        }
-
-                        const auto popup = new Popup(geoElements.first(), this);
-                        popup->setParent(this);
-
-                        if (popup->title().isEmpty())
-                        {
-                          popup->popupDefinition()->setTitle(identifyResult->layerContent()->name());
-                        }
-
-                        if (auto element = popup->geoElement())
-                        {
-                          Feature* feature = static_cast<Feature*>(element);
-                          m_featureLayer->selectFeature(feature);
-                        }
-
-                        setPopup(popup);
-                        emit popupChanged();
-                      });
-                    }
-                    else
-                    {
-                      qDebug() << "Unexpected layer type taken from click.";
-                    }
-                  });
+                                                             if (auto* deLayer = dynamic_cast<DynamicEntityLayer*>(layer))
+                                                             {
+                                                               deLayer->clearSelection();
+                                                               deLayer->selectDynamicEntity(m_trackedEntity);
+                                                             }
+                                                           }
+                                                         });
+                                             });
         });
 }
