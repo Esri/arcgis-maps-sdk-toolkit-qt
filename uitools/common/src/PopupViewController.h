@@ -18,6 +18,7 @@
 
 // Qt headers
 #include <QAbstractListModel>
+#include <QMetaObject>
 #include <QObject>
 #include <QPointer>
 
@@ -111,10 +112,14 @@ private:
   int attachmentCount() const;
   PopupAttachmentListModel* popupAttachmentListModel_() const;
 
+  void refreshPopupContent_();
+  void disconnectAttributeModelSignal_();
+
 private:
   QPointer<PopupManager> m_popupManager;
   QPointer<Popup> m_popup;
   GenericListModel* m_popupElementControllerModel = nullptr;
+  QMetaObject::Connection m_attributeModelConnection;
 };
 
 } // Toolkit
