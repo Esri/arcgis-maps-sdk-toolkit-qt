@@ -27,6 +27,7 @@ namespace Ui
 namespace Esri::ArcGISRuntime
 {
 
+  class LocalSceneWidget;
   class MapGraphicsView;
   class SceneGraphicsView;
 
@@ -45,7 +46,9 @@ namespace Esri::ArcGISRuntime
 
       void setGeoView(MapGraphicsView* mapView);
 
-      void setGeoView(SceneGraphicsView* mapView);
+      void setGeoView(SceneGraphicsView* sceneView);
+
+      void setGeoView(LocalSceneWidget* localSceneView);
 
       OverviewMapController* controller() const;
 

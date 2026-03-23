@@ -96,7 +96,7 @@ What follows is general advice to be effective in writing tools.
    This may seem counter-intuitive, but will save you headaches down the line.
 
    At the time of writing `GeoView` does not inherit from `QObject`, meaning you can not `qobject_cast` a
-   `GeoView` into a `SceneViewToolkit` or a `MapViewToolkit`. 
+   `GeoView` into a `SceneViewToolkit`, `LocalSceneViewToolkit`, or `MapViewToolkit`. 
 
    Never attempt a `dynamic_cast`! `dynamic_cast` is not supported across library boundaries and we have hit
    issues in the past. `qobject_cast` is the only way to safely execute a dynamic upcast. Thus, you must accept

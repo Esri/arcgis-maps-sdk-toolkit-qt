@@ -29,6 +29,7 @@
 #include "GenericTableProxyModel.h"
 
 // ArcGISRuntime headers
+#include <LocalSceneWidget.h>
 #include <MapGraphicsView.h>
 #include <SceneGraphicsView.h>
 
@@ -118,6 +119,17 @@ namespace Esri::ArcGISRuntime::Toolkit
   void CoordinateConversion::setSceneView(SceneGraphicsView* sceneView)
   {
     m_controller->setGeoView(sceneView);
+  }
+
+    /*!
+    \brief Set the \c GeoView.
+    \list
+      \li \a localSceneView Sets the \c GeoView to a \c LocalSceneView.
+    \endlist
+   */
+  void CoordinateConversion::setLocalSceneView(LocalSceneWidget* localSceneView)
+  {
+    m_controller->setGeoView(localSceneView);
   }
 
   /*!

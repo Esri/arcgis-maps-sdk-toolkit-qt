@@ -27,6 +27,7 @@
 // ArcGISRuntime headers
 #include <FloorFacility.h>
 #include <FloorSite.h>
+#include <LocalSceneWidget.h>
 #include <MapGraphicsView.h>
 #include <SceneGraphicsView.h>
 
@@ -313,6 +314,17 @@ namespace Esri::ArcGISRuntime::Toolkit
   void FloorFilter::setSceneView(SceneGraphicsView* sceneView)
   {
     m_controller->setGeoView(sceneView);
+  }
+
+  /*!
+    \brief Set the \c GeoView.
+    \list
+      \li \a localSceneView Sets the \c GeoView to a \c LocalSceneWidget.
+    \endlist
+   */
+  void FloorFilter::setLocalSceneView(LocalSceneWidget* localSceneView)
+  {
+    m_controller->setGeoView(localSceneView);
   }
 
   /*!
