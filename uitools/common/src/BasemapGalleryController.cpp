@@ -582,6 +582,8 @@ namespace Esri::ArcGISRuntime::Toolkit
     {
       if (auto* scene = qobject_cast<Scene*>(geoModel))
       {
+        // Local Scenes use SceneViewTilingScheme::Automatic, so won't engage with this logic
+        // Global Scenes are always in WGS84, but can support WebMercator SRs if the tiling Scheme is set to SceneViewTilingScheme::WebMercator
         if (scene->sceneViewTilingScheme() == SceneViewTilingScheme::WebMercator)
         {
           return SpatialReference::webMercator();
