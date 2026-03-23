@@ -55,6 +55,13 @@ namespace Esri::ArcGISRuntime::Toolkit
       auto future = sceneView->setViewpointCameraAsync(updatedCamera, 0.50);
       Q_UNUSED(future)
     }
+    else if (auto localSceneView = qobject_cast<LocalSceneView*>(m_geoView))
+    {
+      Camera currentCamera = localSceneView->currentViewpointCamera();
+      Camera updatedCamera = currentCamera.rotateTo(heading, currentCamera.pitch(), currentCamera.roll());
+      auto future = localSceneView->setViewpointCameraAsync(updatedCamera, 0.50);
+      Q_UNUSED(future)
+    }
   }
 
   double NorthArrowController::heading() const
@@ -66,6 +73,10 @@ namespace Esri::ArcGISRuntime::Toolkit
     else if (auto sceneView = qobject_cast<SceneView*>(m_geoView))
     {
       return sceneView->currentViewpointCamera().heading();
+    }
+    else if (auto localSceneView = qobject_cast<LocalSceneView*>(m_geoView))
+    {
+      return localSceneView->currentViewpointCamera().heading();
     }
 
     return static_cast<double>(NAN);

@@ -450,7 +450,8 @@ namespace Esri::ArcGISRuntime::Toolkit
         }
         else
         {
-          m_portal->fetchBasemapsAsync().then(this, [this]()
+          m_portal->fetchBasemapsAsync()
+          .then(this, [this]()
           {
             BasemapListModel* basemaps = m_portal->basemaps();
             sortBasemapsAndAddToGallery(this, basemaps);
@@ -565,75 +566,37 @@ namespace Esri::ArcGISRuntime::Toolkit
 
   bool BasemapGalleryController::basemapMatchesCurrentSpatialReference(Basemap* basemap) const
   {
-    if (!basemap)
+    if (!basemap || basemap->baseLayers()->isEmpty())
     {
       return false;
     }
 
-    SpatialReference sp;
-    if (m_geoModel)
+    SpatialReference basemapSR = basemap->baseLayers()->first()->spatialReference();
+
+    if (basemapSR.isEmpty())
     {
-      sp = m_geoModel->spatialReference();
+      return true; // case used by the listview painter
     }
 
+    SpatialReference geoModelSR = [](GeoModel* geoModel)
+    {
+      if (auto* scene = qobject_cast<Scene*>(geoModel))
+      {
+        if (scene->sceneViewTilingScheme() == SceneViewTilingScheme::WebMercator)
+        {
+          return SpatialReference::webMercator();
+        }
+      }
+      return geoModel->spatialReference();
+    }(m_geoModel);
+
     // If no spatial reference is set, any basemap can be applied.
-    if (sp.isEmpty())
+    if (geoModelSR.isEmpty())
     {
       return true;
     }
-    auto item = basemap->item();
 
-    if (item)
-    {
-      auto it_sp = item->spatialReference();
-      if (item && !it_sp.isEmpty())
-      {
-        return sp == item->spatialReference();
-      }
-    }
-
-    const auto layers = basemap->baseLayers();
-    if (layers->size() <= 0)
-    {
-      return false;
-    }
-
-    //scene case:
-    if (auto scene = qobject_cast<Scene*>(m_geoModel))
-    {
-      if (scene->viewingMode() == SceneViewingMode::Global)
-      {
-        const auto sp2 = basemap->baseLayers()->first()->spatialReference();
-        if (sp2.isEmpty()) //case used by the listview painter
-        {
-          return true;
-        }
-        auto svts = scene->sceneViewTilingScheme();
-        switch (svts)
-        {
-          case SceneViewTilingScheme::Geographic:
-            return sp2.isGeographic();
-
-          case SceneViewTilingScheme::WebMercator:
-            return sp2 == SpatialReference::webMercator();
-
-          default:
-            qDebug() << "a new sceneviewTilingScheme has been used";
-            break;
-        }
-        return false;
-      }
-    }
-
-    // Test if first layer matches the spatial reference.
-    // From the spec we are guaranteed the homogeneity of the spatial references of these layers.
-    // https://developers.arcgis.com/web-map-specification/objects/spatialReference/
-
-    const auto layer = layers->first();
-    const auto sp2 = layer->spatialReference();
-    return sp2.isEmpty() || sp == sp2;
-
-    return false;
+    return basemapSR == geoModelSR;
   }
 
   void BasemapGalleryController::setGeoModelFromGeoView(QObject* view)

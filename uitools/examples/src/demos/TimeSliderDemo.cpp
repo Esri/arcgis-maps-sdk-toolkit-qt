@@ -22,6 +22,7 @@
 #include "Map.h"
 #include "MapTypes.h"
 #include "Scene.h"
+#include "SceneViewTypes.h"
 
 using namespace Esri::ArcGISRuntime;
 
@@ -46,9 +47,16 @@ Map* TimeSliderDemo::initMap_(QObject* parent) const
   return map;
 }
 
-Scene* TimeSliderDemo::initScene_(QObject* parent) const
+Scene* TimeSliderDemo::initGlobalScene_(QObject* parent) const
 {
   auto scene = new Scene(BasemapStyle::ArcGISDarkGray, parent);
+  scene->operationalLayers()->append(new ArcGISMapImageLayer(QUrl{dataUrl}, scene));
+  return scene;
+}
+
+Scene* TimeSliderDemo::initLocalScene_(QObject* parent) const
+{
+  auto scene = new Scene(SceneViewingMode::Local, BasemapStyle::ArcGISDarkGray, parent);
   scene->operationalLayers()->append(new ArcGISMapImageLayer(QUrl{dataUrl}, scene));
   return scene;
 }

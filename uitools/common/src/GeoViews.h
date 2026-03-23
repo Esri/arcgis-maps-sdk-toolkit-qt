@@ -18,14 +18,14 @@
 
 #ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
 
-#include <LocalSceneGraphicsView.h>
+#include <LocalSceneWidget.h>
 #include <MapGraphicsView.h>
 #include <SceneGraphicsView.h>
 
 namespace Esri::ArcGISRuntime::Toolkit
 {
   using SceneViewToolkit = SceneGraphicsView;
-  using LocalSceneViewToolkit = LocalSceneGraphicsView;
+  using LocalSceneViewToolkit = LocalSceneWidget;
   using MapViewToolkit = MapGraphicsView;
 } // namespace Esri::ArcGISRuntime::Toolkit
 

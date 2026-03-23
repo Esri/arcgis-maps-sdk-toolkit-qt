@@ -42,6 +42,27 @@ DemoPage {
             }
         }
     }
+    localSceneViewContents: Component {
+        LocalSceneView {
+            id: view
+
+            //! [Set up Coordinate Conversion QML]
+            CoordinateConversion {
+                id: gallery
+                geoView: parent
+                anchors {
+                    right: parent.right
+                    margins: 10
+                    bottom: parent.attributionTop
+                }
+            }
+            //! [Set up Coordinate Conversion QML]
+
+            CoordinateConversionDemo {
+                geoView: view
+            }
+        }
+    }
 
     mapViewContents: Component {
         MapView {

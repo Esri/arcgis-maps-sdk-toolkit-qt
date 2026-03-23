@@ -34,7 +34,12 @@ Map* BookmarksViewDemo::initMap_(QObject* parent) const
   return map;
 }
 
-Scene* BookmarksViewDemo::initScene_(QObject* /*parent*/) const
+Scene* BookmarksViewDemo::initGlobalScene_(QObject* /*parent*/) const
+{
+  return nullptr;
+}
+
+Scene* BookmarksViewDemo::initLocalScene_(QObject* /*parent*/) const
 {
   return nullptr;
 }

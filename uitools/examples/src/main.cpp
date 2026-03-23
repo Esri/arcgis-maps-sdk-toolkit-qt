@@ -18,6 +18,7 @@
 #include "Esri/ArcGISRuntime/Toolkit/register.h"
 #include "proxies/ArcGISRuntimeEnvironmentProxy.h"
 #include "proxies/GeoModelProxy.h"
+#include "proxies/LocalSceneQuickViewProxy.h"
 #include "proxies/MapQuickViewProxy.h"
 #include "proxies/SceneQuickViewProxy.h"
 
@@ -28,6 +29,7 @@
 #include <QtWebView>
 
 #include <ArcGISRuntimeEnvironment.h>
+#include <LocalSceneQuickView.h>
 #include <Map.h>
 #include <MapQuickView.h>
 #include <Scene.h>
@@ -64,6 +66,7 @@ int main(int argc, char* argv[])
   // Register ArcGIS types with QML.
   qmlRegisterExtendedType<Esri::ArcGISRuntime::MapQuickView, MapQuickViewProxy>("Esri.Examples", 200, 0, "MapView");
   qmlRegisterExtendedType<Esri::ArcGISRuntime::SceneQuickView, SceneQuickViewProxy>("Esri.Examples", 200, 0, "SceneView");
+  qmlRegisterExtendedType<Esri::ArcGISRuntime::LocalSceneQuickView, LocalSceneQuickViewProxy>("Esri.Examples", 200, 0, "LocalSceneView");
   qmlRegisterUncreatableType<GeoModelProxy>("Esri.Examples", 200, 0, "Map", "Map not creatable in QML.");
   qmlRegisterUncreatableType<GeoModelProxy>("Esri.Examples", 200, 0, "Scene", "Scene not creatable in QML.");
 

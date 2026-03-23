@@ -17,12 +17,14 @@
 
 #include "BaseDemo.h"
 
+#include <LocalSceneQuickView.h>
 #include <Map.h>
 #include <MapQuickView.h>
 #include <MapTypes.h>
 #include <MapViewTypes.h>
 #include <Scene.h>
 #include <SceneQuickView.h>
+#include <SceneViewTypes.h>
 
 using namespace Esri::ArcGISRuntime;
 
@@ -45,6 +47,10 @@ Esri::ArcGISRuntime::GeoView* BaseDemo::geoView() const
   else if (auto sceneView = qobject_cast<SceneQuickView*>(m_geoView))
   {
     return sceneView;
+  }
+  else if (auto localSceneView = qobject_cast<LocalSceneQuickView*>(m_geoView))
+  {
+    return localSceneView;
   }
   return nullptr;
 }
@@ -69,6 +75,10 @@ void BaseDemo::setGeoView(Esri::ArcGISRuntime::GeoView* geoView)
     else if (geoView->geoViewType() == GeoViewType::SceneView)
     {
       setGeoView_(static_cast<SceneQuickView*>(geoView));
+    }
+    else if (geoView->geoViewType() == GeoViewType::LocalSceneView)
+    {
+      setGeoView_(static_cast<LocalSceneQuickView*>(geoView));
     }
     else
     {
@@ -98,7 +108,14 @@ void BaseDemo::setGeoView_(QObject* geoView)
   {
     if (sceneView->arcGISScene() == nullptr)
     {
-      sceneView->setArcGISScene(initScene_(sceneView));
+      sceneView->setArcGISScene(initGlobalScene_(sceneView));
+    }
+  }
+  else if (auto localSceneView = qobject_cast<LocalSceneQuickView*>(m_geoView))
+  {
+    if (localSceneView->arcGISScene() == nullptr)
+    {
+      localSceneView->setArcGISScene(initLocalScene_(localSceneView));
     }
   }
 
@@ -135,6 +152,11 @@ bool BaseDemo::setGeoModel(Esri::ArcGISRuntime::Scene* scene)
     sceneView->setArcGISScene(scene);
     return true;
   }
+  else if (auto localSceneView = qobject_cast<LocalSceneQuickView*>(m_geoView))
+  {
+    localSceneView->setArcGISScene(scene);
+    return true;
+  }
   return false;
 }
 
@@ -143,7 +165,12 @@ Esri::ArcGISRuntime::Map* BaseDemo::initMap_(QObject* parent) const
   return new Map(BasemapStyle::ArcGISCommunity, parent);
 }
 
-Esri::ArcGISRuntime::Scene* BaseDemo::initScene_(QObject* parent) const
+Esri::ArcGISRuntime::Scene* BaseDemo::initGlobalScene_(QObject* parent) const
 {
-  return new Scene(BasemapStyle::ArcGISCommunity, parent);
+  return new Scene(SceneViewingMode::Global, BasemapStyle::ArcGISCommunity, parent);
+}
+
+Esri::ArcGISRuntime::Scene* BaseDemo::initLocalScene_(QObject* parent) const
+{
+  return new Scene(SceneViewingMode::Local, BasemapStyle::ArcGISCommunity, parent);
 }

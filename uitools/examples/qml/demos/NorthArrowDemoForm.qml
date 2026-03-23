@@ -42,6 +42,26 @@ DemoPage {
             }
         }
     }
+    localSceneViewContents: Component {
+        LocalSceneView {
+            id: view
+
+            //! [Set up North Arrow QML]
+            NorthArrow {
+                geoView: parent
+                anchors {
+                    right: parent.right
+                    bottom: parent.attributionTop
+                    margins: 10
+                }
+            }
+            //! [Set up North Arrow QML]
+
+            NorthArrowDemo {
+                geoView: view
+            }
+        }
+    }
 
     mapViewContents: Component {
         MapView {

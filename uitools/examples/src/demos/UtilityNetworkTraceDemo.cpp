@@ -35,7 +35,7 @@ Map* UtilityNetworkTraceDemo::initMap_(QObject* parent) const
   return new Map(QUrl{"https://www.arcgis.com/home/item.html?id=471eb0bf37074b1fbb972b1da70fb310"}, parent);
 }
 
-Scene* UtilityNetworkTraceDemo::initScene_(QObject* /*parent*/) const
+Scene* UtilityNetworkTraceDemo::initGlobalScene_(QObject* /*parent*/) const
 {
   return nullptr;
 }

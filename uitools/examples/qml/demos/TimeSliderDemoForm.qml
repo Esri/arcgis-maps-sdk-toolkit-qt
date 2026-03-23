@@ -41,6 +41,29 @@ DemoPage {
             }
         }
     }
+
+    // Local Scene View does not yet support the graphics layer used in this demo
+    // localSceneViewContents: Component {
+    //     LocalSceneView {
+    //         id: view
+
+    //         //! [Set up Time Slider QML]
+    //         TimeSlider {
+    //             geoView: parent
+    //             anchors {
+    //                 left: parent.left
+    //                 right: parent.right
+    //                 bottom: parent.bottom
+    //             }
+    //         }
+    //         //! [Set up Time Slider QML]
+
+    //         TimeSliderDemo {
+    //             geoView: view
+    //         }
+    //     }
+    // }
+
     mapViewContents: Component {
         MapView {
             id: view

@@ -29,6 +29,7 @@ namespace Esri::ArcGISRuntime
   class MapQuickView;
   class Scene;
   class SceneQuickView;
+  class LocalSceneQuickView;
 } // namespace Esri::ArcGISRuntime
 
 class BaseDemo : public QObject
@@ -49,7 +50,8 @@ public:
 
 protected:
   virtual Esri::ArcGISRuntime::Map* initMap_(QObject* parent) const;
-  virtual Esri::ArcGISRuntime::Scene* initScene_(QObject* parent) const;
+  virtual Esri::ArcGISRuntime::Scene* initGlobalScene_(QObject* parent) const;
+  virtual Esri::ArcGISRuntime::Scene* initLocalScene_(QObject* parent) const;
 
   // Helper util that allows a function `f` that takes a single `GeoView` parameter to
   // work agnostically on a SceneView or MapView. This reduces boilerplate around signals.
@@ -75,6 +77,10 @@ protected:
     else if (auto sceneView = qobject_cast<SceneQuickView*>(m_geoView))
     {
       return f(sceneView);
+    }
+    else if (auto localSceneView = qobject_cast<LocalSceneQuickView*>(m_geoView))
+    {
+      return f(localSceneView);
     }
     else
     {

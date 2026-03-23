@@ -41,6 +41,27 @@ DemoPage {
             }
         }
     }
+    localSceneViewContents: Component {
+        LocalSceneView {
+            id: view
+
+            //! [Set up Overview Map QML]
+            OverviewMap {
+                anchors {
+                    top: parent.top
+                    left: parent.left
+                    margins: 10
+                }
+                geoView: parent
+            }
+            //! [Set up Overview Map QML]
+
+            OverviewMapDemo {
+                geoView: view
+            }
+        }
+    }
+
     mapViewContents: Component {
         MapView {
             id: view

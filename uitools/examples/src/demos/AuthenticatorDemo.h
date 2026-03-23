@@ -32,7 +32,8 @@ public:
 
 protected:
   Esri::ArcGISRuntime::Map* initMap_(QObject* parent) const override;
-  Esri::ArcGISRuntime::Scene* initScene_(QObject* parent) const override;
+  Esri::ArcGISRuntime::Scene* initGlobalScene_(QObject* parent) const override;
+  Esri::ArcGISRuntime::Scene* initLocalScene_(QObject* parent) const override;
 };
 
 #endif // ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_AUTHENTICATORDEMO_H
