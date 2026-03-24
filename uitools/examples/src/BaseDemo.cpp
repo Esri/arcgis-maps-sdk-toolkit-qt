@@ -93,10 +93,7 @@ void BaseDemo::setGeoView_(QObject* geoView)
   {
     return;
   }
-  if (m_geoView)
-  {
-    m_geoView->deleteLater();
-  }
+
   m_geoView = geoView;
 
   // If the GeoView has no map or scene applied, we apply our own using the
@@ -145,11 +142,6 @@ Esri::ArcGISRuntime::GeoModel* BaseDemo::geoModel() const
 
 bool BaseDemo::setGeoModel(Esri::ArcGISRuntime::Map* map)
 {
-  if (geoModel())
-  {
-    geoModel()->deleteLater();
-  }
-
   if (auto* mapView = qobject_cast<MapQuickView*>(m_geoView))
   {
     mapView->setMap(map);
@@ -160,11 +152,6 @@ bool BaseDemo::setGeoModel(Esri::ArcGISRuntime::Map* map)
 
 bool BaseDemo::setGeoModel(Esri::ArcGISRuntime::Scene* scene)
 {
-  if (geoModel())
-  {
-    geoModel()->deleteLater();
-  }
-
   if (auto* sceneView = qobject_cast<SceneQuickView*>(m_geoView))
   {
     sceneView->setArcGISScene(scene);

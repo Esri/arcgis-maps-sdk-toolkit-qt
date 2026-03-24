@@ -38,9 +38,7 @@ LocalSceneQuickViewProxy::LocalSceneQuickViewProxy(QObject* parent) :
   }
 }
 
-LocalSceneQuickViewProxy::~LocalSceneQuickViewProxy()
-{
-}
+LocalSceneQuickViewProxy::~LocalSceneQuickViewProxy() = default;
 
 GeoModelProxy* LocalSceneQuickViewProxy::scene()
 {
