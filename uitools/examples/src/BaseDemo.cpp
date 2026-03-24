@@ -40,15 +40,15 @@ BaseDemo::~BaseDemo()
 
 Esri::ArcGISRuntime::GeoView* BaseDemo::geoView() const
 {
-  if (auto mapView = qobject_cast<MapQuickView*>(m_geoView))
+  if (auto* mapView = qobject_cast<MapQuickView*>(m_geoView))
   {
     return mapView;
   }
-  else if (auto sceneView = qobject_cast<SceneQuickView*>(m_geoView))
+  else if (auto* sceneView = qobject_cast<SceneQuickView*>(m_geoView))
   {
     return sceneView;
   }
-  else if (auto localSceneView = qobject_cast<LocalSceneQuickView*>(m_geoView))
+  else if (auto* localSceneView = qobject_cast<LocalSceneQuickView*>(m_geoView))
   {
     return localSceneView;
   }
@@ -97,21 +97,21 @@ void BaseDemo::setGeoView_(QObject* geoView)
 
   // If the GeoView has no map or scene applied, we apply our own using the
   // `initMap_`/`initScene_` overloads.
-  if (auto mapView = qobject_cast<MapQuickView*>(m_geoView))
+  if (auto* mapView = qobject_cast<MapQuickView*>(m_geoView))
   {
     if (mapView->map() == nullptr)
     {
       mapView->setMap(initMap_(mapView));
     }
   }
-  else if (auto sceneView = qobject_cast<SceneQuickView*>(m_geoView))
+  else if (auto* sceneView = qobject_cast<SceneQuickView*>(m_geoView))
   {
     if (sceneView->arcGISScene() == nullptr)
     {
       sceneView->setArcGISScene(initGlobalScene_(sceneView));
     }
   }
-  else if (auto localSceneView = qobject_cast<LocalSceneQuickView*>(m_geoView))
+  else if (auto* localSceneView = qobject_cast<LocalSceneQuickView*>(m_geoView))
   {
     if (localSceneView->arcGISScene() == nullptr)
     {
@@ -124,11 +124,11 @@ void BaseDemo::setGeoView_(QObject* geoView)
 
 Esri::ArcGISRuntime::GeoModel* BaseDemo::geoModel() const
 {
-  if (auto mapView = qobject_cast<MapQuickView*>(m_geoView))
+  if (auto* mapView = qobject_cast<MapQuickView*>(m_geoView))
   {
     return mapView->map();
   }
-  else if (auto sceneView = qobject_cast<SceneQuickView*>(m_geoView))
+  else if (auto* sceneView = qobject_cast<SceneQuickView*>(m_geoView))
   {
     return sceneView->arcGISScene();
   }
@@ -137,7 +137,7 @@ Esri::ArcGISRuntime::GeoModel* BaseDemo::geoModel() const
 
 bool BaseDemo::setGeoModel(Esri::ArcGISRuntime::Map* map)
 {
-  if (auto mapView = qobject_cast<MapQuickView*>(m_geoView))
+  if (auto* mapView = qobject_cast<MapQuickView*>(m_geoView))
   {
     mapView->setMap(map);
     return true;
@@ -147,12 +147,12 @@ bool BaseDemo::setGeoModel(Esri::ArcGISRuntime::Map* map)
 
 bool BaseDemo::setGeoModel(Esri::ArcGISRuntime::Scene* scene)
 {
-  if (auto sceneView = qobject_cast<SceneQuickView*>(m_geoView))
+  if (auto* sceneView = qobject_cast<SceneQuickView*>(m_geoView))
   {
     sceneView->setArcGISScene(scene);
     return true;
   }
-  else if (auto localSceneView = qobject_cast<LocalSceneQuickView*>(m_geoView))
+  else if (auto* localSceneView = qobject_cast<LocalSceneQuickView*>(m_geoView))
   {
     localSceneView->setArcGISScene(scene);
     return true;

@@ -92,23 +92,23 @@ namespace Esri::ArcGISRuntime::Toolkit
      */
     FloorManager* getFloorManager(QObject* geoView)
     {
-      if (auto mapView = qobject_cast<MapViewToolkit*>(geoView))
+      if (auto* mapView = qobject_cast<MapViewToolkit*>(geoView))
       {
-        if (auto map = mapView->map())
+        if (auto* map = mapView->map())
         {
           return map->floorManager();
         }
       }
-      else if (auto sceneView = qobject_cast<SceneViewToolkit*>(geoView))
+      else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(geoView))
       {
-        if (auto scene = sceneView->arcGISScene())
+        if (auto* scene = sceneView->arcGISScene())
         {
           return scene->floorManager();
         }
       }
-      else if (auto localSceneView = qobject_cast<LocalSceneViewToolkit*>(geoView))
+      else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(geoView))
       {
-        if (auto scene = localSceneView->arcGISScene())
+        if (auto* scene = localSceneView->arcGISScene())
         {
           return scene->floorManager();
         }
@@ -266,21 +266,21 @@ namespace Esri::ArcGISRuntime::Toolkit
     // as this emit will destroy the connections set up below.
     emit geoViewChanged();
 
-    if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
+    if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
       connectToGeoView(mapView, this, [this]
       {
         populateSites();
       });
     }
-    else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+    else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
       connectToGeoView(sceneView, this, [this]
       {
         populateSites();
       });
     }
-    else if (auto localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
+    else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
     {
       connectToGeoView(localSceneView, this, [this]
       {
@@ -588,15 +588,15 @@ namespace Esri::ArcGISRuntime::Toolkit
     }
 
     Viewpoint observedViewpoint;
-    if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+    if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
       observedViewpoint = sceneView->currentViewpoint(ViewpointType::CenterAndScale);
     }
-    else if (auto localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
+    else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
     {
       observedViewpoint = localSceneView->currentViewpoint(ViewpointType::CenterAndScale);
     }
-    else if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
+    else if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
       observedViewpoint = mapView->currentViewpoint(ViewpointType::CenterAndScale);
     }
@@ -613,7 +613,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     double targetScale = 0.0;
     if (floorManager)
     {
-      if (auto siteLayer = floorManager->siteLayer())
+      if (auto* siteLayer = floorManager->siteLayer())
       {
         targetScale = siteLayer->minScale();
       }
@@ -668,7 +668,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     targetScale = 0.0;
     if (floorManager)
     {
-      if (auto siteLayer = floorManager->facilityLayer())
+      if (auto* siteLayer = floorManager->facilityLayer())
       {
         targetScale = siteLayer->minScale();
       }
@@ -722,7 +722,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     EnvelopeBuilder b{envelope};
     b.expandByFactor(ZOOM_PADDING);
 
-    if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
+    if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
       m_settingViewpoint = true;
       mapView->setViewpointAsync(b.toEnvelope())
@@ -734,7 +734,7 @@ namespace Esri::ArcGISRuntime::Toolkit
         }
       });
     }
-    else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+    else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
       m_settingViewpoint = true;
       sceneView->setViewpointAsync(b.toEnvelope())
@@ -746,7 +746,7 @@ namespace Esri::ArcGISRuntime::Toolkit
         }
       });
     }
-    else if (auto localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
+    else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
     {
       m_settingViewpoint = true;
       localSceneView->setViewpointAsync(b.toEnvelope())

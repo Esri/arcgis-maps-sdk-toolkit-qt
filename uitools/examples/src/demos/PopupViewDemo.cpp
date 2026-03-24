@@ -137,7 +137,7 @@ void PopupViewDemo::setUp()
             popup->popupDefinition()->setTitle(identifyResult->layerContent()->name());
           }
 
-          if (auto element = popup->geoElement())
+          if (auto* element = popup->geoElement())
           {
             Feature* feature = static_cast<Feature*>(element);
             m_featureLayer->selectFeature(feature);

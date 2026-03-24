@@ -49,7 +49,7 @@ namespace Esri::ArcGISRuntime::Toolkit
   QVariantList BarChartPopupMediaItem::barSets()
   {
     QVariantList barSets;
-    auto mediaValue = popupMediaItem()->value();
+    auto* mediaValue = popupMediaItem()->value();
     const auto popupMediaValueDataLength = mediaValue->data().length();
     const auto chartColors = mediaValue->chartColors();
     const auto colorsHasLessThanLabels = chartColors.size() < popupMediaValueDataLength;

@@ -75,15 +75,15 @@ namespace Esri::ArcGISRuntime::Toolkit
     {
       if (m_insetView->isNavigating() && !m_setViewpointFuture.isRunning())
       {
-        if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+        if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
         {
           applyInsetNavigationToSceneView(sceneView);
         }
-        else if (auto localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
+        else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
         {
           applyInsetNavigationToLocalSceneView(localSceneView);
         }
-        else if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
+        else if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView))
         {
           applyInsetNavigationToMapView(mapView);
         }
@@ -115,10 +115,10 @@ namespace Esri::ArcGISRuntime::Toolkit
 
     m_geoView = geoView;
 
-    if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+    if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
       // set up the inset map once the scene is done loading
-      connect(sceneView->arcGISScene(), &Scene::doneLoading, this, [this, sceneView](Error e)
+      connect(sceneView->arcGISScene(), &Scene::doneLoading, this, [this, sceneView](const Error& e)
       {
         if (!e.isEmpty())
         {
@@ -159,10 +159,10 @@ namespace Esri::ArcGISRuntime::Toolkit
         }
       });
     }
-    else if (auto localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
+    else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
     {
       // set up the inset map once the scene is done loading
-      connect(localSceneView->arcGISScene(), &Scene::doneLoading, this, [this, localSceneView](Error e)
+      connect(localSceneView->arcGISScene(), &Scene::doneLoading, this, [this, localSceneView](const Error& e)
       {
         if (!e.isEmpty())
         {
@@ -203,10 +203,10 @@ namespace Esri::ArcGISRuntime::Toolkit
         }
       });
     }
-    else if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
+    else if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
       // set up the inset map once the map is done loading
-      connect(mapView->map(), &Map::doneLoading, this, [this, mapView](Error e)
+      connect(mapView->map(), &Map::doneLoading, this, [this, mapView](const Error& e)
       {
         if (!e.isEmpty())
         {
@@ -295,15 +295,15 @@ namespace Esri::ArcGISRuntime::Toolkit
     emit scaleFactorChanged();
 
     // Force a redraw of the inset geometry.
-    if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+    if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
       emit sceneView->viewpointChanged();
     }
-    else if (auto localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
+    else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
     {
       emit localSceneView->viewpointChanged();
     }
-    else if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
+    else if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
       emit mapView->viewpointChanged();
     }

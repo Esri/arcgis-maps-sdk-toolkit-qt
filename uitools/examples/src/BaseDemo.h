@@ -70,15 +70,15 @@ protected:
   auto apply(Func&& f)
   {
     using namespace Esri::ArcGISRuntime;
-    if (auto mapView = qobject_cast<MapQuickView*>(m_geoView))
+    if (auto* mapView = qobject_cast<MapQuickView*>(m_geoView))
     {
       return f(mapView);
     }
-    else if (auto sceneView = qobject_cast<SceneQuickView*>(m_geoView))
+    else if (auto* sceneView = qobject_cast<SceneQuickView*>(m_geoView))
     {
       return f(sceneView);
     }
-    else if (auto localSceneView = qobject_cast<LocalSceneQuickView*>(m_geoView))
+    else if (auto* localSceneView = qobject_cast<LocalSceneQuickView*>(m_geoView))
     {
       return f(localSceneView);
     }

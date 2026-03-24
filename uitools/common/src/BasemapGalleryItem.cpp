@@ -148,7 +148,7 @@ namespace Esri::ArcGISRuntime::Toolkit
 
     if (m_basemap)
     {
-      if (auto item = m_basemap->item())
+      if (auto* item = m_basemap->item())
       {
         disconnect(item, nullptr, this, nullptr);
       }
@@ -163,13 +163,13 @@ namespace Esri::ArcGISRuntime::Toolkit
       doOnLoaded(m_basemap.data(), this, [this, basemap]
       {
         emit basemapChanged();
-        auto item = basemap->item();
+        auto* item = basemap->item();
         if (!item)
         {
           return;
         }
 
-        auto itemThumbnail = item->thumbnail();
+        const auto itemThumbnail = item->thumbnail();
         if (!itemThumbnail.isNull())
         {
           // We have a good thumbnail.
@@ -201,7 +201,7 @@ namespace Esri::ArcGISRuntime::Toolkit
   {
     if (m_thumbnail.isNull() && m_basemap)
     {
-      if (auto item = m_basemap->item())
+      if (auto* item = m_basemap->item())
       {
         return item->thumbnail();
       }
@@ -234,7 +234,7 @@ namespace Esri::ArcGISRuntime::Toolkit
   {
     if (m_tooltip.isEmpty() && m_basemap)
     {
-      if (auto item = m_basemap->item())
+      if (auto* item = m_basemap->item())
       {
         return item->description();
       }

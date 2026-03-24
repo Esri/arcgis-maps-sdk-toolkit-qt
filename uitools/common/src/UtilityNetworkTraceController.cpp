@@ -234,7 +234,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     // as this emit will destroy the connections set up below.
     emit geoViewChanged();
 
-    if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
+    if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
       connect(this,
               &UtilityNetworkTraceController::selectedUtilityNetworkChanged, // this should've already been handled and newValue used
@@ -668,7 +668,7 @@ namespace Esri::ArcGISRuntime::Toolkit
 
   void UtilityNetworkTraceController::zoomToStartingPoint(int index)
   {
-    if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
+    if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
       const Viewpoint currVP = mapView->currentViewpoint(ViewpointType::CenterAndScale);
       const Viewpoint newViewPoint(m_startingPoints->pointAt(index), currVP.targetScale());

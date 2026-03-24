@@ -171,7 +171,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     {
       disconnect(m_geoView, nullptr, this, nullptr);
 
-      if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
+      if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView))
       {
         auto map = mapView->map();
 
@@ -180,7 +180,7 @@ namespace Esri::ArcGISRuntime::Toolkit
           disconnect(map->bookmarks(), nullptr, m_bookmarks, nullptr);
         }
       }
-      else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+      else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
       {
         auto scene = sceneView->arcGISScene();
 
@@ -189,7 +189,7 @@ namespace Esri::ArcGISRuntime::Toolkit
           disconnect(scene->bookmarks(), nullptr, m_bookmarks, nullptr);
         }
       }
-      else if (auto localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
+      else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
       {
         auto scene = localSceneView->arcGISScene();
 
@@ -208,7 +208,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     // as this emit will destroy the connections set up below.
     emit geoViewChanged();
 
-    if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
+    if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
       connect(mapView, &MapViewToolkit::mapChanged, this, [this]()
       {
@@ -221,7 +221,7 @@ namespace Esri::ArcGISRuntime::Toolkit
         setupBookmarks(mapView->map()->bookmarks(), m_bookmarks);
       });
     }
-    else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+    else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
       connect(sceneView, &SceneViewToolkit::sceneChanged, this, [this]()
       {
@@ -233,7 +233,7 @@ namespace Esri::ArcGISRuntime::Toolkit
         setupBookmarks(sceneView->arcGISScene()->bookmarks(), m_bookmarks);
       });
     }
-    else if (auto localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
+    else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
     {
       connect(localSceneView, &LocalSceneViewToolkit::sceneChanged, this, [this]()
       {
@@ -259,17 +259,17 @@ namespace Esri::ArcGISRuntime::Toolkit
       return;
     }
 
-    if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+    if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
       auto future = sceneView->setBookmarkAsync(bookmark->bookmark());
       Q_UNUSED(future)
     }
-    else if (auto localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
+    else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
     {
       auto future = localSceneView->setBookmarkAsync(bookmark->bookmark());
       Q_UNUSED(future)
     }
-    else if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
+    else if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
       auto future = mapView->setBookmarkAsync(bookmark->bookmark());
       Q_UNUSED(future)

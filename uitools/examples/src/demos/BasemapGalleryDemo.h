@@ -50,7 +50,6 @@ protected:
 
 private:
   Esri::ArcGISRuntime::Toolkit::BasemapGalleryController* m_controller;
-  QScopedPointer<QObject> m_parent;
 };
 
 #endif // ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_BASEMAPGALLERYDEMO_H
