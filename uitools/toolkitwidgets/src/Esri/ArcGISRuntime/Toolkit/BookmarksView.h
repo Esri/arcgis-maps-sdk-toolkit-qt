@@ -47,7 +47,7 @@ namespace Esri::ArcGISRuntime
 
       void setMapView(MapGraphicsView* mapView);
 
-      void setSceneView(SceneGraphicsView* mapView);
+      void setSceneView(SceneGraphicsView* sceneView);
 
       void setLocalSceneView(LocalSceneWidget* localSceneView);
 

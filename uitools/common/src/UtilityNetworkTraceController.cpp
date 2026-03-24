@@ -668,7 +668,7 @@ namespace Esri::ArcGISRuntime::Toolkit
 
   void UtilityNetworkTraceController::zoomToStartingPoint(int index)
   {
-    if (auto mapView = qobject_cast<MapView*>(m_geoView))
+    if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
       const Viewpoint currVP = mapView->currentViewpoint(ViewpointType::CenterAndScale);
       const Viewpoint newViewPoint(m_startingPoints->pointAt(index), currVP.targetScale());

@@ -51,7 +51,7 @@ namespace Esri::ArcGISRuntime::Toolkit
 
     GeoModel* geoModel() const;
 
-    void setGeoModel(GeoModel* mapView);
+    void setGeoModel(GeoModel* geoModel);
 
     Portal* portal() const;
 

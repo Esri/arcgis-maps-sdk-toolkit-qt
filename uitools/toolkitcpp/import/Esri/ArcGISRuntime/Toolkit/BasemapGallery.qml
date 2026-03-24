@@ -203,7 +203,7 @@ Pane {
             id: basemapDelegate
             property bool isGrid: basemapGallery.internal.calculatedStyle === BasemapGallery.ViewStyle.Grid
             width: view.cellWidth
-            height:view.cellHeight
+            height: view.cellHeight
             enabled: controller.basemapMatchesCurrentSpatialReference(listModelData.basemap)
             onClicked: controller.setCurrentBasemap(listModelData.basemap)
             indicator: Item { }

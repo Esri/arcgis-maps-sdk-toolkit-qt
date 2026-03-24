@@ -22,8 +22,8 @@
 /*!
     \internal
     \class LocalSceneQuickViewProxy
-    \brief This class exposes LocalSceneQuickViewProxy such that SceneView.scene is accessible from QML
-    This is registered as an extension to SceneQuickView in main.cpp.
+    \brief This class exposes LocalSceneQuickViewProxy such that LocalSceneView.scene is accessible from QML
+    This is registered as an extension to LocalSceneQuickView in main.cpp.
 */
 
 LocalSceneQuickViewProxy::LocalSceneQuickViewProxy(QObject* parent) :

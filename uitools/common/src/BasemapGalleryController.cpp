@@ -578,6 +578,20 @@ namespace Esri::ArcGISRuntime::Toolkit
       return true; // case used by the listview painter
     }
 
+    if (!m_geoModel)
+    {
+      return true;
+    }
+
+    // For Global scenes using the Geographic tiling scheme, allow any geographic basemap SR.
+    if (auto* scene = qobject_cast<Scene*>(m_geoModel))
+    {
+      if (scene->sceneViewTilingScheme() == SceneViewTilingScheme::Geographic)
+      {
+        return basemapSR.isGeographic();
+      }
+    }
+
     SpatialReference geoModelSR = [](GeoModel* geoModel)
     {
       if (auto* scene = qobject_cast<Scene*>(geoModel))

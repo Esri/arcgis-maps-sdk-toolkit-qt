@@ -31,7 +31,7 @@ BasemapGalleryDemo::BasemapGalleryDemo(QObject* parent) :
   BaseDemo(parent),
   m_controller(new Esri::ArcGISRuntime::Toolkit::BasemapGalleryController(this))
 {
-  m_parent.reset(new QObject(this)); // Used as the parent for the inital GeoModels
+  m_parent.reset(new QObject(this)); // Used as the parent for the initial GeoModels
   auto portal = m_controller->portal();
   // Once the portal has loaded up basemaps. Choose the first available basemap from the model
   // and apply it to our active view.
@@ -76,12 +76,12 @@ Esri::ArcGISRuntime::Map* BasemapGalleryDemo::initMap_(QObject*) const
 
 Esri::ArcGISRuntime::Scene* BasemapGalleryDemo::initGlobalScene_(QObject*) const
 {
-  // Create a temporary Scene to instatiate the Gallery with so it will fetch 3D basemaps
+  // Create a temporary Scene to instantiate the Gallery with so it will fetch 3D basemaps
   return new Scene(SceneViewingMode::Global, m_parent.get());
 }
 
-Esri::ArcGISRuntime::Scene *BasemapGalleryDemo::initLocalScene_(QObject *parent) const
+Esri::ArcGISRuntime::Scene *BasemapGalleryDemo::initLocalScene_(QObject*) const
 {
-  // Create a temporary Scene to instatiate the Gallery with so it will fetch 3D basemaps
+  // Create a temporary Scene to instantiate the Gallery with so it will fetch 3D basemaps
   return new Scene(SceneViewingMode::Local, m_parent.get());
 }

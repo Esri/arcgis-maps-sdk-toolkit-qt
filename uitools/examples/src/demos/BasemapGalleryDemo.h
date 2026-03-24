@@ -20,6 +20,7 @@
 // Qt headers
 #include <QObject>
 #include <QQmlEngine>
+#include <QScopedPointer>
 
 // Other headers
 #include "BaseDemo.h"

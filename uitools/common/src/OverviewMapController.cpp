@@ -122,7 +122,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       {
         if (!e.isEmpty())
         {
-          qDebug() << "Error. Main map did not load" << e.message() << e.additionalMessage();
+          qDebug() << "Error. Main scene did not load" << e.message() << e.additionalMessage();
           return;
         }
 
@@ -210,7 +210,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       {
         if (!e.isEmpty())
         {
-          qDebug() << "Error. Main scene did not load" << e.message() << e.additionalMessage();
+          qDebug() << "Error. Main map did not load" << e.message() << e.additionalMessage();
           return;
         }
 
