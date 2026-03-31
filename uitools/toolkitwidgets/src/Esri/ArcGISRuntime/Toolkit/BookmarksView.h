@@ -27,6 +27,7 @@ namespace Ui
 namespace Esri::ArcGISRuntime
 {
 
+  class LocalSceneWidget;
   class MapGraphicsView;
   class SceneGraphicsView;
 
@@ -46,7 +47,9 @@ namespace Esri::ArcGISRuntime
 
       void setMapView(MapGraphicsView* mapView);
 
-      void setSceneView(SceneGraphicsView* mapView);
+      void setSceneView(SceneGraphicsView* sceneView);
+
+      void setLocalSceneView(LocalSceneWidget* localSceneView);
 
     private:
       BookmarksViewController* m_controller = nullptr;

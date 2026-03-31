@@ -41,6 +41,25 @@ DemoPage {
             }
         }
     }
+    localSceneViewContents: Component {
+        LocalSceneView {
+            id: view
+
+            OverviewMap {
+                anchors {
+                    top: parent.top
+                    left: parent.left
+                    margins: 10
+                }
+                geoView: parent
+            }
+
+            OverviewMapDemo {
+                geoView: view
+            }
+        }
+    }
+
     mapViewContents: Component {
         MapView {
             id: view

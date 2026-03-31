@@ -29,6 +29,7 @@
 #include "PopupDefinition.h"
 #include "Scene.h"
 #include "SceneQuickView.h"
+#include "LocalSceneQuickView.h"
 #include "ServiceFeatureTable.h"
 #include "SpatialReference.h"
 #include "Viewpoint.h"
@@ -57,9 +58,9 @@ Esri::ArcGISRuntime::Map* PopupViewDemo::initMap_(QObject* parent) const
                  parent);
 }
 
-Scene* PopupViewDemo::initScene_(QObject* parent) const
+Scene* PopupViewDemo::initGlobalScene_(QObject* parent) const
 {
-  Scene* scene = BaseDemo::initScene_(parent);
+  Scene* scene = BaseDemo::initGlobalScene_(parent);
   Viewpoint viewPoint(Envelope(-122.5277, 37.7204, -122.3511, 37.7956, SpatialReference(4326)));
   scene->setInitialViewpoint(viewPoint);
   FeatureLayer* fl = new FeatureLayer(new ServiceFeatureTable(QUrl("https://sampleserver6.arcgisonline.com/arcgis/rest/services/"
@@ -136,7 +137,7 @@ void PopupViewDemo::setUp()
             popup->popupDefinition()->setTitle(identifyResult->layerContent()->name());
           }
 
-          if (auto element = popup->geoElement())
+          if (auto* element = popup->geoElement())
           {
             Feature* feature = static_cast<Feature*>(element);
             m_featureLayer->selectFeature(feature);

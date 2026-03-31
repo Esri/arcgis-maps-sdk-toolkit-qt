@@ -106,8 +106,10 @@ namespace Esri::ArcGISRuntime::Toolkit
     template<typename GeoViewToolkit, typename Func>
     void connectToGeoView(GeoViewToolkit* geoView, BookmarksViewController* self, Func&& f)
     {
-      static_assert(std::is_same<GeoViewToolkit, MapViewToolkit>::value || std::is_same<GeoViewToolkit, SceneViewToolkit>::value,
-                    "Must be connected to a SceneView or MapView");
+      static_assert(std::is_same<GeoViewToolkit, MapViewToolkit>::value
+                      || std::is_same<GeoViewToolkit, SceneViewToolkit>::value
+                      || std::is_same<GeoViewToolkit, LocalSceneViewToolkit>::value,
+                    "Must be connected to a SceneView, LocalSceneView, or MapView");
 
       auto connectToGeoModel = [self, geoView, f = std::forward<Func>(f)]
       {
@@ -169,18 +171,27 @@ namespace Esri::ArcGISRuntime::Toolkit
     {
       disconnect(m_geoView, nullptr, this, nullptr);
 
-      if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
+      if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView))
       {
-        auto map = mapView->map();
+        auto* map = mapView->map();
 
         if (map && map->bookmarks())
         {
           disconnect(map->bookmarks(), nullptr, m_bookmarks, nullptr);
         }
       }
-      else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+      else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
       {
-        auto scene = sceneView->arcGISScene();
+        auto* scene = sceneView->arcGISScene();
+
+        if (scene && scene->bookmarks())
+        {
+          disconnect(scene->bookmarks(), nullptr, m_bookmarks, nullptr);
+        }
+      }
+      else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
+      {
+        auto* scene = localSceneView->arcGISScene();
 
         if (scene && scene->bookmarks())
         {
@@ -197,7 +208,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     // as this emit will destroy the connections set up below.
     emit geoViewChanged();
 
-    if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
+    if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
       connect(mapView, &MapViewToolkit::mapChanged, this, [this]()
       {
@@ -210,7 +221,7 @@ namespace Esri::ArcGISRuntime::Toolkit
         setupBookmarks(mapView->map()->bookmarks(), m_bookmarks);
       });
     }
-    else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+    else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
       connect(sceneView, &SceneViewToolkit::sceneChanged, this, [this]()
       {
@@ -220,6 +231,18 @@ namespace Esri::ArcGISRuntime::Toolkit
       connectToGeoView(sceneView, this, [this, sceneView]
       {
         setupBookmarks(sceneView->arcGISScene()->bookmarks(), m_bookmarks);
+      });
+    }
+    else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
+    {
+      connect(localSceneView, &LocalSceneViewToolkit::sceneChanged, this, [this]()
+      {
+        m_bookmarks->clear();
+      });
+
+      connectToGeoView(localSceneView, this, [this, localSceneView]
+      {
+        setupBookmarks(localSceneView->arcGISScene()->bookmarks(), m_bookmarks);
       });
     }
   }
@@ -236,12 +259,17 @@ namespace Esri::ArcGISRuntime::Toolkit
       return;
     }
 
-    if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+    if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
       auto future = sceneView->setBookmarkAsync(bookmark->bookmark());
       Q_UNUSED(future)
     }
-    else if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
+    else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
+    {
+      auto future = localSceneView->setBookmarkAsync(bookmark->bookmark());
+      Q_UNUSED(future)
+    }
+    else if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
       auto future = mapView->setBookmarkAsync(bookmark->bookmark());
       Q_UNUSED(future)

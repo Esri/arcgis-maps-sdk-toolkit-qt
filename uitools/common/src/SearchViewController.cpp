@@ -57,7 +57,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     {
       if (overlay)
       {
-        if (auto graphic = dynamic_cast<Graphic*>(element))
+        if (auto* graphic = dynamic_cast<Graphic*>(element))
         {
           overlay->graphics()->append(graphic);
         }
@@ -135,7 +135,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       }
     }
 
-    if (auto geoView = qobject_cast<GeoView*>(m_geoView))
+    if (auto* geoView = qobject_cast<GeoView*>(m_geoView))
     {
       m_graphicsOverlay = new GraphicsOverlay(this);
       geoView->graphicsOverlays()->append(m_graphicsOverlay);
@@ -169,14 +169,19 @@ namespace Esri::ArcGISRuntime::Toolkit
         }
       };
 
-      if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
+      if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView))
       {
         connect(mapView, &MapViewToolkit::viewpointChanged, this, setViewpoint);
         setViewpoint();
       }
-      else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+      else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
       {
         connect(sceneView, &SceneViewToolkit::viewpointChanged, this, setViewpoint);
+        setViewpoint();
+      }
+      else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
+      {
+        connect(localSceneView, &LocalSceneViewToolkit::viewpointChanged, this, setViewpoint);
         setViewpoint();
       }
     }
@@ -329,7 +334,7 @@ namespace Esri::ArcGISRuntime::Toolkit
 
       addGeoElementToOverlay(m_graphicsOverlay, m_selectedResult->geoElement());
 
-      if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+      if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
       {
         // When the geoview changes, update the lastsearcharea
         singleShotConnection(sceneView, &SceneViewToolkit::viewpointChanged, this, [sceneView, this]()
@@ -341,7 +346,19 @@ namespace Esri::ArcGISRuntime::Toolkit
         auto future = sceneView->setViewpointAsync(m_selectedResult->selectionViewpoint(), 0);
         Q_UNUSED(future)
       }
-      else if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
+      else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
+      {
+        // When the geoview changes, update the lastsearcharea
+        singleShotConnection(localSceneView, &LocalSceneViewToolkit::viewpointChanged, this, [localSceneView, this]()
+        {
+          auto extent = localSceneView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
+          m_lastSearchArea = extent;
+        });
+        // Set localSceneView viewpoint to where graphic is.
+        auto future = localSceneView->setViewpointAsync(m_selectedResult->selectionViewpoint(), 0);
+        Q_UNUSED(future)
+      }
+      else if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView))
       {
         // When the geoview changes, update the lastsearcharea
         singleShotConnection(mapView, &MapViewToolkit::viewpointChanged, this, [mapView, this]()
@@ -362,7 +379,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     else
     {
       // Hide callout if we are unsetting the selectedResult.
-      if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
+      if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView))
       {
         mapView->calloutData()->setVisible(false);
       }
@@ -520,7 +537,7 @@ namespace Esri::ArcGISRuntime::Toolkit
             return;
           }
           //connect either to a scene or a map event changedviewpoint
-          if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
+          if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView))
           {
             singleShotConnection(mapView, &MapViewToolkit::viewpointChanged, this, [mapView, this]()
             {
@@ -528,11 +545,19 @@ namespace Esri::ArcGISRuntime::Toolkit
               m_lastSearchArea = extent;
             });
           }
-          else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+          else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
           {
             singleShotConnection(sceneView, &SceneViewToolkit::viewpointChanged, this, [sceneView, this]()
             {
               auto extent = sceneView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
+              m_lastSearchArea = extent;
+            });
+          }
+          else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
+          {
+            singleShotConnection(localSceneView, &LocalSceneViewToolkit::viewpointChanged, this, [localSceneView, this]()
+            {
+              auto extent = localSceneView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry().extent();
               m_lastSearchArea = extent;
             });
           }
@@ -571,7 +596,7 @@ namespace Esri::ArcGISRuntime::Toolkit
                 addGeoElementToOverlay(m_graphicsOverlay, r->geoElement());
               }
 
-              if (auto geoView = qobject_cast<GeoView*>(m_geoView))
+              if (auto* geoView = qobject_cast<GeoView*>(m_geoView))
               {
                 const auto extent = m_graphicsOverlay->extent();
                 EnvelopeBuilder b{extent};

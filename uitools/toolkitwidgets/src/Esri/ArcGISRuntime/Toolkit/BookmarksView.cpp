@@ -23,6 +23,7 @@
 #include "BookmarksViewController.h"
 
 // ArcGISRuntime headers
+#include <LocalSceneWidget.h>
 #include <MapGraphicsView.h>
 #include <SceneGraphicsView.h>
 
@@ -105,4 +106,16 @@ namespace Esri::ArcGISRuntime::Toolkit
   {
     m_controller->setGeoView(sceneView);
   }
+
+  /*!
+    \brief Set the \c GeoView.
+    \list
+      \li \a localSceneView Sets the \c GeoView to a \c LocalSceneWidget.
+    \endlist
+   */
+  void BookmarksView::setLocalSceneView(LocalSceneWidget* localSceneView)
+  {
+    m_controller->setGeoView(localSceneView);
+  }
+
 } // namespace Esri::ArcGISRuntime::Toolkit

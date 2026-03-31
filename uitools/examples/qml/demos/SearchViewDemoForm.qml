@@ -59,4 +59,20 @@ DemoPage {
             }
         }
     }
+    localSceneViewContents: Component {
+        LocalSceneView {
+            id: view
+            SearchView {
+                geoView: parent
+                anchors {
+                    top: parent.top
+                    right: parent.right
+                    margins: 10
+                }
+            }
+            SearchViewDemo {
+                geoView: view
+            }
+        }
+    }
 }

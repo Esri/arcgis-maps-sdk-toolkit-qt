@@ -41,6 +41,27 @@ DemoPage {
             }
         }
     }
+
+    // Local Scene View does not yet support the graphics layer used in this demo
+    // localSceneViewContents: Component {
+    //     LocalSceneView {
+    //         id: view
+
+    //         TimeSlider {
+    //             geoView: parent
+    //             anchors {
+    //                 left: parent.left
+    //                 right: parent.right
+    //                 bottom: parent.bottom
+    //             }
+    //         }
+
+    //         TimeSliderDemo {
+    //             geoView: view
+    //         }
+    //     }
+    // }
+
     mapViewContents: Component {
         MapView {
             id: view

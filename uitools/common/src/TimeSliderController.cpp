@@ -191,13 +191,17 @@ namespace Esri::ArcGISRuntime::Toolkit
       return;
     }
 
-    if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView.data()))
+    if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView.data()))
     {
       connect(mapView, &MapViewToolkit::mapChanged, this, qOverload<>(&TimeSliderController::initializeTimeProperties));
     }
-    else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView.data()))
+    else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView.data()))
     {
       connect(sceneView, &SceneViewToolkit::sceneChanged, this, qOverload<>(&TimeSliderController::initializeTimeProperties));
+    }
+    else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView.data()))
+    {
+      connect(localSceneView, &LocalSceneViewToolkit::sceneChanged, this, qOverload<>(&TimeSliderController::initializeTimeProperties));
     }
 
     emit geoViewChanged();
@@ -223,16 +227,23 @@ namespace Esri::ArcGISRuntime::Toolkit
   {
     LayerListModel* model = nullptr;
 
-    if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView.data()))
+    if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView.data()))
     {
-      if (auto map = mapView->map())
+      if (auto* map = mapView->map())
       {
         model = map->operationalLayers();
       }
     }
-    else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView.data()))
+    else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView.data()))
     {
-      if (auto scene = sceneView->arcGISScene())
+      if (auto* scene = sceneView->arcGISScene())
+      {
+        model = scene->operationalLayers();
+      }
+    }
+    else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView.data()))
+    {
+      if (auto* scene = localSceneView->arcGISScene())
       {
         model = scene->operationalLayers();
       }
@@ -351,7 +362,7 @@ namespace Esri::ArcGISRuntime::Toolkit
 
     m_steps = std::move(steps);
 
-    if (auto geoView = qobject_cast<GeoView*>(m_geoView))
+    if (auto* geoView = qobject_cast<GeoView*>(m_geoView))
     {
       TimeExtent extent{timeForStep(startStep()), timeForStep(endStep())};
       geoView->setTimeExtent(std::move(extent));

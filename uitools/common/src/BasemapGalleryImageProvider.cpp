@@ -86,7 +86,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       }
 
       // Otherwise attempt a thumbnail fetch.
-      auto basemap = m_galleryItem->basemap();
+      auto* basemap = m_galleryItem->basemap();
       if (!basemap)
       {
         emit finished();

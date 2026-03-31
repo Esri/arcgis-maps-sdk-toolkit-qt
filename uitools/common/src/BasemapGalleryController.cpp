@@ -51,7 +51,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       \internal
      */
     template<typename T>
-    auto qPointerFrom(T* t)
+    auto* qPointerFrom(T* t)
     {
       return QPointer<T>{t};
     }
@@ -76,7 +76,7 @@ namespace Esri::ArcGISRuntime::Toolkit
         return;
       }
 
-      auto listenToLoadSignals = [self](Basemap* basemap)
+      const auto listenToLoadSignals = [self](Basemap* basemap)
       {
         if (basemap)
         {
@@ -92,7 +92,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       QObject::connect(geoModel, &T::basemapChanged, self, [self, listenToLoadSignals, geoModel](Basemap* oldBasemap)
       {
         QObject::disconnect(self, nullptr, oldBasemap, nullptr);
-        auto newBasemap = geoModel->basemap();
+        auto* newBasemap = geoModel->basemap();
         listenToLoadSignals(newBasemap); // Connect to new basemap.
         self->setCurrentBasemap(newBasemap);
       });
@@ -117,11 +117,11 @@ namespace Esri::ArcGISRuntime::Toolkit
 
       // TODO: Cleanup this when GeoModel itself exposes the
       // basemapChanged signal.
-      if (auto scene = qobject_cast<Scene*>(geoModel))
+      if (auto* scene = qobject_cast<Scene*>(geoModel))
       {
         connectToBasemap(self, scene);
       }
-      else if (auto map = qobject_cast<Map*>(geoModel))
+      else if (auto* map = qobject_cast<Map*>(geoModel))
       {
         connectToBasemap(self, map);
       }
@@ -157,8 +157,8 @@ namespace Esri::ArcGISRuntime::Toolkit
         return;
       }
 
-      auto pIndex = QPersistentModelIndex(index);
-      auto notifyChange = [pIndex, gallery]
+      const auto pIndex = QPersistentModelIndex(index);
+      const auto notifyChange = [pIndex, gallery]
       {
         // Notify that the item has changed.
         if (pIndex.isValid())
@@ -171,7 +171,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       QObject::connect(galleryItem, &BasemapGalleryItem::thumbnailChanged, self, notifyChange);
       QObject::connect(galleryItem, &BasemapGalleryItem::tooltipChanged, self, notifyChange);
 
-      auto basemap = galleryItem->basemap();
+      auto* basemap = galleryItem->basemap();
 
       if (basemap && basemap->loadStatus() != LoadStatus::Loaded)
       {
@@ -249,7 +249,7 @@ namespace Esri::ArcGISRuntime::Toolkit
         }
       });
 
-      for (auto basemap : basemapsVector)
+      for (auto* basemap : basemapsVector)
       {
         self->append(basemap, is3D);
       }
@@ -266,7 +266,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     void setToDefaultBasemaps(BasemapGalleryController* self, Portal* portal)
     {
       // Load the portal and kick-off the group discovery.
-      QObject::connect(portal, &Portal::doneLoading, self, [portal, self](Error e)
+      QObject::connect(portal, &Portal::doneLoading, self, [portal, self](const Error& e)
       {
         if (!e.isEmpty())
         {
@@ -322,7 +322,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       for (auto i = first; i <= last; ++i)
       {
         auto index = m_gallery->index(i);
-        if (auto galleryItem = m_gallery->element<BasemapGalleryItem>(index))
+        if (auto* galleryItem = m_gallery->element<BasemapGalleryItem>(index))
         {
           onBasemapAddedToGallery(this, m_gallery, index, galleryItem);
         }
@@ -340,7 +340,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       for (auto i = first; i <= last; ++i)
       {
         auto index = m_gallery->index(i);
-        if (auto galleryItem = m_gallery->element<BasemapGalleryItem>(index))
+        if (auto* galleryItem = m_gallery->element<BasemapGalleryItem>(index))
         {
           onBasemapRemovedFromGallery(this, galleryItem);
         }
@@ -443,14 +443,15 @@ namespace Esri::ArcGISRuntime::Toolkit
       {
         if (m_portal->basemaps()->rowCount() > 0)
         {
-          for (auto basemap : *m_portal->basemaps())
+          for (auto* basemap : *m_portal->basemaps())
           {
             append(basemap);
           }
         }
         else
         {
-          m_portal->fetchBasemapsAsync().then(this, [this]()
+          m_portal->fetchBasemapsAsync()
+          .then(this, [this]()
           {
             BasemapListModel* basemaps = m_portal->basemaps();
             sortBasemapsAndAddToGallery(this, basemaps);
@@ -462,7 +463,7 @@ namespace Esri::ArcGISRuntime::Toolkit
         {
           if (m_portal->basemaps3D()->rowCount() > 0)
           {
-            for (auto basemap : *m_portal->basemaps3D())
+            for (auto* basemap : *m_portal->basemaps3D())
             {
               append(basemap);
             }
@@ -490,7 +491,7 @@ namespace Esri::ArcGISRuntime::Toolkit
 
   void BasemapGalleryController::setCurrentBasemap(Basemap* basemap)
   {
-    auto apply = [basemap, this](Error e)
+    const auto apply = [basemap, this](const Error& e)
     {
       if (e.isEmpty())
       {
@@ -553,8 +554,8 @@ namespace Esri::ArcGISRuntime::Toolkit
   {
     for (int i = 0; i < m_gallery->rowCount(); ++i)
     {
-      auto index = m_gallery->index(i);
-      auto b = m_gallery->element<BasemapGalleryItem>(index);
+      const auto index = m_gallery->index(i);
+      auto* b = m_gallery->element<BasemapGalleryItem>(index);
       if (basemap == b->basemap())
       {
         return i;
@@ -565,85 +566,69 @@ namespace Esri::ArcGISRuntime::Toolkit
 
   bool BasemapGalleryController::basemapMatchesCurrentSpatialReference(Basemap* basemap) const
   {
-    if (!basemap)
+    if (!basemap || !basemap->baseLayers() || basemap->baseLayers()->isEmpty())
     {
       return false;
     }
 
-    SpatialReference sp;
-    if (m_geoModel)
+    const SpatialReference basemapSR = basemap->baseLayers()->first()->spatialReference();
+
+    if (basemapSR.isEmpty())
     {
-      sp = m_geoModel->spatialReference();
+      return true; // case used by the listview painter
     }
 
-    // If no spatial reference is set, any basemap can be applied.
-    if (sp.isEmpty())
+    if (!m_geoModel)
     {
       return true;
     }
-    auto item = basemap->item();
 
-    if (item)
+    // For Global scenes using the Geographic tiling scheme, allow any geographic basemap SR.
+    if (auto* scene = qobject_cast<Scene*>(m_geoModel))
     {
-      auto it_sp = item->spatialReference();
-      if (item && !it_sp.isEmpty())
+      if (scene->sceneViewTilingScheme() == SceneViewTilingScheme::Geographic)
       {
-        return sp == item->spatialReference();
+        return basemapSR.isGeographic();
       }
     }
 
-    const auto layers = basemap->baseLayers();
-    if (layers->size() <= 0)
+    const SpatialReference geoModelSR = [](GeoModel* geoModel)
     {
-      return false;
+      if (auto* scene = qobject_cast<Scene*>(geoModel))
+      {
+        // Local Scenes use SceneViewTilingScheme::Automatic, so won't engage with this logic
+        // Global Scenes are always in WGS84, but can support WebMercator SRs if the tiling Scheme is set to SceneViewTilingScheme::WebMercator
+        if (scene->sceneViewTilingScheme() == SceneViewTilingScheme::WebMercator)
+        {
+          return SpatialReference::webMercator();
+        }
+      }
+      return geoModel->spatialReference();
+    }(m_geoModel);
+
+    // If no spatial reference is set, any basemap can be applied.
+    if (geoModelSR.isEmpty())
+    {
+      return true;
     }
 
-    //scene case:
-    if (auto scene = qobject_cast<Scene*>(m_geoModel))
-    {
-      const auto sp2 = basemap->baseLayers()->first()->spatialReference();
-      if (sp2.isEmpty()) //case used by the listview painter
-      {
-        return true;
-      }
-      auto svts = scene->sceneViewTilingScheme();
-      switch (svts)
-      {
-        case SceneViewTilingScheme::Geographic:
-          return sp2.isGeographic();
-
-        case SceneViewTilingScheme::WebMercator:
-          return sp2 == SpatialReference::webMercator();
-
-        default:
-          qDebug() << "a new sceneviewTilingScheme has been used";
-          break;
-      }
-      return false;
-    }
-
-    // Test if first layer matches the spatial reference.
-    // From the spec we are guaranteed the homogeneity of the spatial references of these layers.
-    // https://developers.arcgis.com/web-map-specification/objects/spatialReference/
-
-    const auto layer = layers->first();
-    const auto sp2 = layer->spatialReference();
-    return sp2.isEmpty() || sp == sp2;
-
-    return false;
+    return basemapSR == geoModelSR;
   }
 
   void BasemapGalleryController::setGeoModelFromGeoView(QObject* view)
   {
     //  Workaround as MapQuickView does not expose the map property in QML.
-    if (auto sceneView = qobject_cast<SceneViewToolkit*>(view))
+    if (auto* sceneView = qobject_cast<SceneViewToolkit*>(view))
     {
       setGeoModel(sceneView->arcGISScene());
     }
-    else if (auto mapView = qobject_cast<MapViewToolkit*>(view))
+    else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(view))
+    {
+      setGeoModel(localSceneView->arcGISScene());
+    }
+    else if (auto* mapView = qobject_cast<MapViewToolkit*>(view))
     {
       setGeoModel(mapView->map());
     }
   }
-
 } // namespace Esri::ArcGISRuntime::Toolkit

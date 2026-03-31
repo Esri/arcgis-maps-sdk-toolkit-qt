@@ -24,6 +24,7 @@
 // ArcGISRuntime headers
 #include <MapGraphicsView.h>
 #include <SceneGraphicsView.h>
+#include <LocalSceneWidget.h>
 
 // Qt headers
 #include <QGridLayout>
@@ -85,6 +86,17 @@ namespace Esri::ArcGISRuntime::Toolkit
   void OverviewMap::setGeoView(SceneGraphicsView* sceneView)
   {
     m_controller->setGeoView(sceneView);
+  }
+
+  /*!
+    \brief Set the \c GeoView.
+    \list
+      \li \a localSceneView Sets the \c GeoView to a \c LocalSceneWidget.
+    \endlist
+   */
+  void OverviewMap::setGeoView(LocalSceneWidget* localSceneView)
+  {
+    m_controller->setGeoView(localSceneView);
   }
 
   /*!

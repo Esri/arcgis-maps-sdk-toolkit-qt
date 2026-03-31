@@ -42,6 +42,24 @@ DemoPage {
             }
         }
     }
+    localSceneViewContents: Component {
+        LocalSceneView {
+            id: view
+
+            NorthArrow {
+                geoView: parent
+                anchors {
+                    right: parent.right
+                    bottom: parent.attributionTop
+                    margins: 10
+                }
+            }
+
+            NorthArrowDemo {
+                geoView: view
+            }
+        }
+    }
 
     mapViewContents: Component {
         MapView {

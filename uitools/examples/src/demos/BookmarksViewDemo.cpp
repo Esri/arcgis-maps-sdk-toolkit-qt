@@ -30,11 +30,16 @@ BookmarksViewDemo::~BookmarksViewDemo() = default;
 
 Map* BookmarksViewDemo::initMap_(QObject* parent) const
 {
-  auto map = new Map(new PortalItem("16f1b8ba37b44dc3884afc8d5f454dd2", parent), parent);
+  auto* map = new Map(new PortalItem("16f1b8ba37b44dc3884afc8d5f454dd2", parent), parent);
   return map;
 }
 
-Scene* BookmarksViewDemo::initScene_(QObject* /*parent*/) const
+Scene* BookmarksViewDemo::initGlobalScene_(QObject* /*parent*/) const
+{
+  return nullptr;
+}
+
+Scene* BookmarksViewDemo::initLocalScene_(QObject* /*parent*/) const
 {
   return nullptr;
 }

@@ -26,13 +26,18 @@ Control {
     id: demoPage
     property bool handlesOwnAuthentication : false
     enum ViewType {
-        Scene,
+        LocalScene,
+        GlobalScene,
         Map
     }
 
     property int viewType: {
-        if (mapViewContents === null && sceneViewContents !== null) {
-            return DemoPage.ViewType.Scene;
+        if (mapViewContents === null) {
+            if (sceneViewContents === null && localSceneViewContents !== null) {
+                return DemoPage.ViewType.LocalScene;
+            } else if (sceneViewContents !== null) {
+                return DemoPage.ViewType.GlobalScene;
+            }
         } else {
             return DemoPage.ViewType.Map;
         }
@@ -43,11 +48,13 @@ Control {
     readonly property var geoModel: {
         if (geoView instanceof MapView)
             return geoView.map
-        else if (geoView instanceof SceneView)
+        else if (geoView instanceof SceneView || geoView instanceof LocalSceneView)
             return geoView.scene;
         else
             return null;
     }
+
+    property Component localSceneViewContents: null
 
     property Component sceneViewContents: null
 
@@ -96,7 +103,14 @@ Control {
         }
         function resetLoader() {
             geoViewLoader.sourceComponent = undefined;
-            geoViewLoader.sourceComponent = Qt.binding(() => viewType === DemoPage.ViewType.Scene ? sceneViewContents : mapViewContents);
+            geoViewLoader.sourceComponent = Qt.binding(
+                        () =>
+                        viewType === DemoPage.ViewType.GlobalScene ?
+                            sceneViewContents :
+                            viewType === DemoPage.ViewType.LocalScene ?
+                                localSceneViewContents :
+                                mapViewContents
+                        );
         }
     }
 
@@ -110,7 +124,7 @@ Control {
 
     contentItem: GridLayout {
         id: gridLayout
-        columns: 6
+        columns: 7
         clip: true
         Button {
             Layout.leftMargin: 5
@@ -142,12 +156,22 @@ Control {
         RadioButton {
             Layout.topMargin: 5
             Layout.alignment: Qt.AlignRight
-            text: "Scene"
+            text: "Global Scene"
             checkable: true
             autoExclusive: true
-            checked: viewType === DemoPage.ViewType.Scene
-            onClicked: viewType = DemoPage.ViewType.Scene;
+            checked: viewType === DemoPage.ViewType.GlobalScene
+            onClicked: viewType = DemoPage.ViewType.GlobalScene;
             enabled: ArcGISRuntimeEnvironment.apiKey !== "" && sceneViewContents !== null
+        }
+        RadioButton {
+            Layout.topMargin: 5
+            Layout.alignment: Qt.AlignRight
+            text: "Local Scene"
+            checkable: true
+            autoExclusive: true
+            checked: viewType === DemoPage.ViewType.LocalScene
+            onClicked: viewType = DemoPage.ViewType.LocalScene;
+            enabled: ArcGISRuntimeEnvironment.apiKey !== "" && localSceneViewContents !== null
         }
         Button {
             Layout.topMargin: 5
@@ -161,7 +185,7 @@ Control {
             id: geoViewLoader;
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Layout.columnSpan: 6
+            Layout.columnSpan: 7
             Layout.maximumWidth: parent.width
             focus: true
             sourceComponent: Component {

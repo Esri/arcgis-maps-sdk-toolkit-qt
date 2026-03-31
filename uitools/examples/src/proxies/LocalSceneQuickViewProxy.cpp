@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2022 Esri
+ *  Copyright 2012-2026 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,39 +14,37 @@
  *  limitations under the License.
  ******************************************************************************/
 
-#include "SceneQuickViewProxy.h"
+#include "LocalSceneQuickViewProxy.h"
 
 #include <Scene.h>
-#include <SceneQuickView.h>
+#include <LocalSceneQuickView.h>
 
 /*!
     \internal
-    \class SceneQuickViewProxy
-    \brief This class exposes SceneQuickViewProxy such that SceneView.scene is accessible from QML
-    This is registered as an extension to SceneQuickView in main.cpp.
+    \class LocalSceneQuickViewProxy
+    \brief This class exposes LocalSceneQuickViewProxy such that LocalSceneView.scene is accessible from QML
+    This is registered as an extension to LocalSceneQuickView in main.cpp.
 */
 
-SceneQuickViewProxy::SceneQuickViewProxy(QObject* parent) :
+LocalSceneQuickViewProxy::LocalSceneQuickViewProxy(QObject* parent) :
   QObject(parent),
-  m_sceneQuickView(qobject_cast<Esri::ArcGISRuntime::SceneQuickView*>(parent)),
+  m_localSceneQuickView(qobject_cast<Esri::ArcGISRuntime::LocalSceneQuickView*>(parent)),
   m_scene(nullptr)
 {
-  if (m_sceneQuickView)
+  if (m_localSceneQuickView)
   {
     using namespace Esri::ArcGISRuntime;
-    connect(m_sceneQuickView, &SceneQuickView::sceneChanged, this, &SceneQuickViewProxy::sceneChangedProxy);
+    connect(m_localSceneQuickView, &LocalSceneQuickView::sceneChanged, this, &LocalSceneQuickViewProxy::sceneChangedProxy);
   }
 }
 
-SceneQuickViewProxy::~SceneQuickViewProxy()
-{
-}
+LocalSceneQuickViewProxy::~LocalSceneQuickViewProxy() = default;
 
-GeoModelProxy* SceneQuickViewProxy::scene()
+GeoModelProxy* LocalSceneQuickViewProxy::scene()
 {
-  if (m_sceneQuickView)
+  if (m_localSceneQuickView)
   {
-    auto* scene = m_sceneQuickView->arcGISScene();
+    auto* scene = m_localSceneQuickView->arcGISScene();
     if (!m_scene || m_scene->parent() != scene)
     {
       m_scene = new GeoModelProxy(scene);

@@ -44,6 +44,27 @@ DemoPage {
             onSceneChanged: gallery.setGeoModelFromGeoView(view)
         }
     }
+    localSceneViewContents: Component {
+        LocalSceneView {
+            id: view
+
+            BasemapGallery {
+                id: gallery
+                controller: demo.controller
+                anchors {
+                    right: parent.right
+                    top: parent.top
+                    margins: 10
+                }
+            }
+
+            BasemapGalleryDemo {
+                id: demo
+                geoView: view
+            }
+            onSceneChanged: gallery.setGeoModelFromGeoView(view)
+        }
+    }
 
     mapViewContents: Component {
         MapView {

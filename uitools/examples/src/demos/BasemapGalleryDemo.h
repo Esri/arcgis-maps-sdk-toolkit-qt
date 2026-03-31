@@ -20,6 +20,7 @@
 // Qt headers
 #include <QObject>
 #include <QQmlEngine>
+#include <QScopedPointer>
 
 // Other headers
 #include "BaseDemo.h"
@@ -44,7 +45,8 @@ public:
 
 protected:
   Esri::ArcGISRuntime::Map* initMap_(QObject* parent) const override;
-  Esri::ArcGISRuntime::Scene* initScene_(QObject* parent) const override;
+  Esri::ArcGISRuntime::Scene* initGlobalScene_(QObject* parent) const override;
+  Esri::ArcGISRuntime::Scene* initLocalScene_(QObject* parent) const override;
 
 private:
   Esri::ArcGISRuntime::Toolkit::BasemapGalleryController* m_controller;
