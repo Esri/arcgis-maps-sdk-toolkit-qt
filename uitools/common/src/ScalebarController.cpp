@@ -118,16 +118,16 @@ namespace Esri::ArcGISRuntime::Toolkit
     return m_mapView;
   }
 
-  void ScalebarController::setMapView(QObject* mapView)
+  void ScalebarController::setMapView(QObject* geoView)
   {
-    auto mapView2 = qobject_cast<MapViewToolkit*>(mapView);
+    auto* mapView = qobject_cast<MapViewToolkit*>(geoView);
 
-    if (m_mapView == mapView2)
+    if (m_mapView == mapView)
     {
       return;
     }
 
-    m_mapView = mapView2;
+    m_mapView = mapView;
     emit mapViewChanged();
   }
 

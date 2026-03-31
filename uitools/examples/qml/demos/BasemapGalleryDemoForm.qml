@@ -48,7 +48,6 @@ DemoPage {
         LocalSceneView {
             id: view
 
-            //! [Set up BasemapGallery QML]
             BasemapGallery {
                 id: gallery
                 controller: demo.controller
@@ -58,7 +57,6 @@ DemoPage {
                     margins: 10
                 }
             }
-            //! [Set up BasemapGallery QML]
 
             BasemapGalleryDemo {
                 id: demo

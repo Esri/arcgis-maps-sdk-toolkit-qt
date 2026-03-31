@@ -46,7 +46,7 @@ GeoModelProxy* SceneQuickViewProxy::scene()
 {
   if (m_sceneQuickView)
   {
-    auto scene = m_sceneQuickView->arcGISScene();
+    auto* scene = m_sceneQuickView->arcGISScene();
     if (!m_scene || m_scene->parent() != scene)
     {
       m_scene = new GeoModelProxy(scene);

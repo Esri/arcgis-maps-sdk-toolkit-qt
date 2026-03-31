@@ -46,7 +46,6 @@ DemoPage {
         LocalSceneView {
             id: view
 
-            //! [Set up Coordinate Conversion QML]
             CoordinateConversion {
                 id: gallery
                 geoView: parent
@@ -56,7 +55,6 @@ DemoPage {
                     bottom: parent.attributionTop
                 }
             }
-            //! [Set up Coordinate Conversion QML]
 
             CoordinateConversionDemo {
                 geoView: view

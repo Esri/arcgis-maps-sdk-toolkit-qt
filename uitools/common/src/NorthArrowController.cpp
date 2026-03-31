@@ -50,15 +50,15 @@ namespace Esri::ArcGISRuntime::Toolkit
     }
     else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
-      Camera currentCamera = sceneView->currentViewpointCamera();
-      Camera updatedCamera = currentCamera.rotateTo(heading, currentCamera.pitch(), currentCamera.roll());
+      const Camera currentCamera = sceneView->currentViewpointCamera();
+      const Camera updatedCamera = currentCamera.rotateTo(heading, currentCamera.pitch(), currentCamera.roll());
       auto future = sceneView->setViewpointCameraAsync(updatedCamera, 0.50);
       Q_UNUSED(future)
     }
     else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
     {
-      Camera currentCamera = localSceneView->currentViewpointCamera();
-      Camera updatedCamera = currentCamera.rotateTo(heading, currentCamera.pitch(), currentCamera.roll());
+      const Camera currentCamera = localSceneView->currentViewpointCamera();
+      const Camera updatedCamera = currentCamera.rotateTo(heading, currentCamera.pitch(), currentCamera.roll());
       auto future = localSceneView->setViewpointCameraAsync(updatedCamera, 0.50);
       Q_UNUSED(future)
     }

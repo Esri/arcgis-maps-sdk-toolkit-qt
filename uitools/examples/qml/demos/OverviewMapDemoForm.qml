@@ -45,7 +45,6 @@ DemoPage {
         LocalSceneView {
             id: view
 
-            //! [Set up Overview Map QML]
             OverviewMap {
                 anchors {
                     top: parent.top
@@ -54,7 +53,6 @@ DemoPage {
                 }
                 geoView: parent
             }
-            //! [Set up Overview Map QML]
 
             OverviewMapDemo {
                 geoView: view

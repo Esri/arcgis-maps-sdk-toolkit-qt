@@ -173,7 +173,7 @@ namespace Esri::ArcGISRuntime::Toolkit
 
       if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView))
       {
-        auto map = mapView->map();
+        auto* map = mapView->map();
 
         if (map && map->bookmarks())
         {
@@ -182,7 +182,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       }
       else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
       {
-        auto scene = sceneView->arcGISScene();
+        auto* scene = sceneView->arcGISScene();
 
         if (scene && scene->bookmarks())
         {
@@ -191,7 +191,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       }
       else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
       {
-        auto scene = localSceneView->arcGISScene();
+        auto* scene = localSceneView->arcGISScene();
 
         if (scene && scene->bookmarks())
         {

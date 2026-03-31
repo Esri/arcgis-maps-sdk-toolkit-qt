@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2022 Esri
+ *  Copyright 2012-2026 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ GeoModelProxy* LocalSceneQuickViewProxy::scene()
 {
   if (m_localSceneQuickView)
   {
-    auto scene = m_localSceneQuickView->arcGISScene();
+    auto* scene = m_localSceneQuickView->arcGISScene();
     if (!m_scene || m_scene->parent() != scene)
     {
       m_scene = new GeoModelProxy(scene);

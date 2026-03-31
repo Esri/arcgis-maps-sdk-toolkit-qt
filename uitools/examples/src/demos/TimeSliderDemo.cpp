@@ -42,21 +42,21 @@ TimeSliderDemo::~TimeSliderDemo()
 
 Map* TimeSliderDemo::initMap_(QObject* parent) const
 {
-  auto map = new Map(BasemapStyle::ArcGISDarkGray, parent);
+  auto* map = new Map(BasemapStyle::ArcGISDarkGray, parent);
   map->operationalLayers()->append(new ArcGISMapImageLayer(QUrl{dataUrl}, map));
   return map;
 }
 
 Scene* TimeSliderDemo::initGlobalScene_(QObject* parent) const
 {
-  auto scene = new Scene(BasemapStyle::ArcGISDarkGray, parent);
+  auto* scene = new Scene(SceneViewingMode::Global, BasemapStyle::ArcGISDarkGray, parent);
   scene->operationalLayers()->append(new ArcGISMapImageLayer(QUrl{dataUrl}, scene));
   return scene;
 }
 
 Scene* TimeSliderDemo::initLocalScene_(QObject* parent) const
 {
-  auto scene = new Scene(SceneViewingMode::Local, BasemapStyle::ArcGISDarkGray, parent);
+  auto* scene = new Scene(SceneViewingMode::Local, BasemapStyle::ArcGISDarkGray, parent);
   scene->operationalLayers()->append(new ArcGISMapImageLayer(QUrl{dataUrl}, scene));
   return scene;
 }
