@@ -66,7 +66,7 @@ int main(int argc, char* argv[])
   // Register ArcGIS types with QML.
   qmlRegisterExtendedType<Esri::ArcGISRuntime::MapQuickView, MapQuickViewProxy>("Esri.Examples", 200, 0, "MapView");
   qmlRegisterExtendedType<Esri::ArcGISRuntime::SceneQuickView, SceneQuickViewProxy>("Esri.Examples", 200, 0, "SceneView");
-  qmlRegisterExtendedType<Esri::ArcGISRuntime::LocalSceneQuickView, LocalSceneQuickViewProxy>("Esri.Examples", 300, 0, "LocalSceneView");
+  qmlRegisterExtendedType<Esri::ArcGISRuntime::LocalSceneQuickView, LocalSceneQuickViewProxy>("Esri.Examples", 3, 0, "LocalSceneView");
   qmlRegisterUncreatableType<GeoModelProxy>("Esri.Examples", 200, 0, "Map", "Map not creatable in QML.");
   qmlRegisterUncreatableType<GeoModelProxy>("Esri.Examples", 200, 0, "Scene", "Scene not creatable in QML.");
 
