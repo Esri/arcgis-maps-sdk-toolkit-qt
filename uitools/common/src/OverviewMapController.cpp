@@ -327,12 +327,12 @@ namespace Esri::ArcGISRuntime::Toolkit
       return false;
     }
 
-    if (geoView == m_geoView)
+    if (geoView == qobject_cast<GeoView*>(m_geoView))
     {
       return !m_isUpdatingGeoViewFromInset;
     }
 
-    if (geoView == m_insetView)
+    if (geoView == qobject_cast<GeoView*>(m_insetView))
     {
       return !m_isUpdatingInsetFromGeoView;
     }
