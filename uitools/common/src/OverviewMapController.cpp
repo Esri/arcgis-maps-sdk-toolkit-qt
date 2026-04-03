@@ -322,7 +322,22 @@ namespace Esri::ArcGISRuntime::Toolkit
 
   bool OverviewMapController::shouldApplyNavigationUpdate(GeoView* geoView) const
   {
-    return geoView && geoView->isNavigating() && !m_isUpdatingGeoViewFromInset && !m_isUpdatingInsetFromGeoView;
+    if (!geoView || !geoView->isNavigating())
+    {
+      return false;
+    }
+
+    if (geoView == m_geoView)
+    {
+      return !m_isUpdatingGeoViewFromInset;
+    }
+
+    if (geoView == m_insetView)
+    {
+      return !m_isUpdatingInsetFromGeoView;
+    }
+
+    return !m_isUpdatingGeoViewFromInset && !m_isUpdatingInsetFromGeoView;
   }
 
   void OverviewMapController::resetNavigationSynchronization()
