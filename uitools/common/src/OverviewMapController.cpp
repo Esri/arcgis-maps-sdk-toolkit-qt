@@ -57,6 +57,15 @@ namespace Esri::ArcGISRuntime::Toolkit
     m_insetView(new MapViewToolkit),
     m_reticle(new Graphic(this))
   {
+    connect(&m_setViewpointWatcher, &QFutureWatcher<bool>::finished, this, [this]
+    {
+      m_isUpdatingGeoViewFromInset = false;
+    });
+    connect(&m_setViewpointInsetWatcher, &QFutureWatcher<bool>::finished, this, [this]
+    {
+      m_isUpdatingInsetFromGeoView = false;
+    });
+
     m_insetView->setAttributionTextVisible(false);
 
     // Disable keyboard interactions, and mouse
@@ -73,7 +82,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     // to the main GeoView if applicable.
     connect(m_insetView, &MapViewToolkit::viewpointChanged, this, [this]
     {
-      if (m_insetView->isNavigating() && !m_setViewpointFuture.isRunning())
+      if (shouldApplyNavigationUpdate(m_insetView))
       {
         if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
         {
@@ -107,6 +116,8 @@ namespace Esri::ArcGISRuntime::Toolkit
     {
       return;
     }
+
+    resetNavigationSynchronization();
 
     if (m_geoView)
     {
@@ -145,7 +156,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       {
         const Viewpoint viewpoint = sceneView->currentViewpoint(ViewpointType::CenterAndScale);
         m_reticle->setGeometry(viewpoint.targetGeometry());
-        if (sceneView->isNavigating() && !m_setViewpointInsetFuture.isRunning())
+        if (shouldApplyNavigationUpdate(sceneView))
         {
           applySceneNavigationToInset(sceneView);
         }
@@ -189,7 +200,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       {
         const Viewpoint viewpoint = localSceneView->currentViewpoint(ViewpointType::CenterAndScale);
         m_reticle->setGeometry(viewpoint.targetGeometry());
-        if (localSceneView->isNavigating() && !m_setViewpointInsetFuture.isRunning())
+        if (shouldApplyNavigationUpdate(localSceneView))
         {
           applyLocalSceneNavigationToInset(localSceneView);
         }
@@ -235,7 +246,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       QObject::connect(mapView, &MapViewToolkit::viewpointChanged, this, [this, mapView]
       {
         m_reticle->setGeometry(mapView->visibleArea());
-        if (mapView->isNavigating() && !m_setViewpointInsetFuture.isRunning())
+        if (shouldApplyNavigationUpdate(mapView))
         {
           applyMapNavigationToInset(mapView);
         }
@@ -309,6 +320,29 @@ namespace Esri::ArcGISRuntime::Toolkit
     }
   }
 
+  bool OverviewMapController::shouldApplyNavigationUpdate(GeoView* geoView) const
+  {
+    return geoView && geoView->isNavigating() && !m_isUpdatingGeoViewFromInset && !m_isUpdatingInsetFromGeoView;
+  }
+
+  void OverviewMapController::resetNavigationSynchronization()
+  {
+    m_isUpdatingGeoViewFromInset = false;
+    m_isUpdatingInsetFromGeoView = false;
+  }
+
+  void OverviewMapController::startGeoViewNavigationUpdate(const QFuture<bool>& future)
+  {
+    m_isUpdatingGeoViewFromInset = true;
+    m_setViewpointWatcher.setFuture(future);
+  }
+
+  void OverviewMapController::startInsetNavigationUpdate(const QFuture<bool>& future)
+  {
+    m_isUpdatingInsetFromGeoView = true;
+    m_setViewpointInsetWatcher.setFuture(future);
+  }
+
   void OverviewMapController::applyInsetNavigationToMapView(MapViewToolkit* view)
   {
     // Note we care about rotation in the mapView case.
@@ -316,7 +350,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     const Viewpoint newViewpoint{geometry_cast<Point>(viewpoint.targetGeometry()), viewpoint.targetScale() / scaleFactor(), viewpoint.rotation()};
 
     constexpr float animationDuration{0};
-    m_setViewpointFuture = view->setViewpointAsync(newViewpoint, animationDuration);
+    startGeoViewNavigationUpdate(view->setViewpointAsync(newViewpoint, animationDuration));
   }
 
   void OverviewMapController::applyInsetNavigationToSceneView(SceneViewToolkit* view)
@@ -326,7 +360,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     const Viewpoint newViewpoint{geometry_cast<Point>(viewpoint.targetGeometry()), viewpoint.targetScale() / scaleFactor()};
 
     constexpr float animationDuration{0};
-    m_setViewpointFuture = view->setViewpointAsync(newViewpoint, animationDuration);
+    startGeoViewNavigationUpdate(view->setViewpointAsync(newViewpoint, animationDuration));
   }
 
   void OverviewMapController::applyInsetNavigationToLocalSceneView(LocalSceneViewToolkit* view)
@@ -336,7 +370,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     const Viewpoint newViewpoint{geometry_cast<Point>(viewpoint.targetGeometry()), viewpoint.targetScale() / scaleFactor()};
 
     constexpr float animationDuration{0};
-    m_setViewpointFuture = view->setViewpointAsync(newViewpoint, animationDuration);
+    startGeoViewNavigationUpdate(view->setViewpointAsync(newViewpoint, animationDuration));
   }
 
   void OverviewMapController::applyMapNavigationToInset(MapViewToolkit* view)
@@ -346,7 +380,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     const Viewpoint newViewpoint{geometry_cast<Point>(viewpoint.targetGeometry()), viewpoint.targetScale() * scaleFactor(), viewpoint.rotation()};
 
     constexpr float animationDuration{0};
-    m_setViewpointInsetFuture = m_insetView->setViewpointAsync(newViewpoint, animationDuration);
+    startInsetNavigationUpdate(m_insetView->setViewpointAsync(newViewpoint, animationDuration));
   }
 
   void OverviewMapController::applySceneNavigationToInset(SceneViewToolkit* view)
@@ -356,7 +390,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     const Viewpoint newViewpoint{geometry_cast<Point>(viewpoint.targetGeometry()), viewpoint.targetScale() * scaleFactor()};
 
     constexpr float animationDuration{0};
-    m_setViewpointInsetFuture = m_insetView->setViewpointAsync(newViewpoint, animationDuration);
+    startInsetNavigationUpdate(m_insetView->setViewpointAsync(newViewpoint, animationDuration));
   }
 
   void OverviewMapController::applyLocalSceneNavigationToInset(LocalSceneViewToolkit* view)
@@ -366,7 +400,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     const Viewpoint newViewpoint{geometry_cast<Point>(viewpoint.targetGeometry()), viewpoint.targetScale() * scaleFactor()};
 
     constexpr float animationDuration{0};
-    m_setViewpointInsetFuture = m_insetView->setViewpointAsync(newViewpoint, animationDuration);
+    startInsetNavigationUpdate(m_insetView->setViewpointAsync(newViewpoint, animationDuration));
   }
 
   void OverviewMapController::disableInteractions()
