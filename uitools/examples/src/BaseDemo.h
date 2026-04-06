@@ -86,7 +86,7 @@ protected:
     }
 
     // Since `f` is for agnostic calls the type of the nullptr
-    // doesn't matter if it's a MapQuickView or SceneQuickView.
+    // doesn't matter which type of view it is.
     return f(static_cast<MapQuickView*>(nullptr));
   }
 
