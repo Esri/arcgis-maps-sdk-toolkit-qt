@@ -18,6 +18,7 @@ import QtQml
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Effects
 import Esri.Examples
 import Esri.ArcGISRuntime.Toolkit
 import Calcite as C
@@ -25,6 +26,7 @@ import Calcite as C
 Control {
     id: demoPage
     property bool handlesOwnAuthentication : false
+    readonly property bool useCompactLayout: demoPage.width < 600
     enum ViewType {
         LocalScene,
         GlobalScene,
@@ -143,9 +145,52 @@ Control {
             Layout.fillWidth: true
         }
 
+        ComboBox {
+            id: viewTypeCombo
+            Layout.topMargin: 5
+            Layout.columnSpan: 3
+            Layout.alignment: Qt.AlignRight
+            visible: useCompactLayout
+            enabled: ArcGISRuntimeEnvironment.apiKey !== ""
+
+            model: ["Map", "Global Scene", "Local Scene"]
+
+            TextMetrics {
+                id: comboMetrics
+                font: viewTypeCombo.font
+                text: "Global Scene"
+            }
+
+            Layout.preferredWidth: comboMetrics.width + viewTypeCombo.indicator.width + 50
+
+            currentIndex: {
+                if (viewType === DemoPage.ViewType.Map) return 0;
+                if (viewType === DemoPage.ViewType.GlobalScene) return 1;
+                if (viewType === DemoPage.ViewType.LocalScene) return 2;
+                return 0;
+            }
+
+            delegate: ItemDelegate {
+                required property int index
+                required property string modelData
+                width: parent.width
+                text: modelData
+                enabled: [mapViewContents !== null,
+                    sceneViewContents !== null,
+                    localSceneViewContents !== null][index]
+                highlighted: index === parent.currentIndex
+            }
+            onActivated: (index) => {
+                             if (index === 0) viewType = DemoPage.ViewType.Map;
+                             else if (index === 1) viewType = DemoPage.ViewType.GlobalScene;
+                             else if (index === 2) viewType = DemoPage.ViewType.LocalScene;
+                         }
+        }
+
         RadioButton {
             Layout.topMargin: 5
             Layout.alignment: Qt.AlignRight
+            visible: !useCompactLayout
             text: "Map"
             checkable: true
             autoExclusive: true
@@ -156,6 +201,7 @@ Control {
         RadioButton {
             Layout.topMargin: 5
             Layout.alignment: Qt.AlignRight
+            visible: !useCompactLayout
             text: "Global Scene"
             checkable: true
             autoExclusive: true
@@ -166,6 +212,7 @@ Control {
         RadioButton {
             Layout.topMargin: 5
             Layout.alignment: Qt.AlignRight
+            visible: !useCompactLayout
             text: "Local Scene"
             checkable: true
             autoExclusive: true
@@ -174,12 +221,55 @@ Control {
             enabled: ArcGISRuntimeEnvironment.apiKey !== "" && localSceneViewContents !== null
         }
         Button {
+            id: accessTokenButton
             Layout.topMargin: 5
             Layout.rightMargin: 5
-            text: "Set access token"
             Layout.alignment: Qt.AlignRight
+            Layout.preferredWidth: useCompactLayout ? 36 : -1
+            Layout.preferredHeight: 36
+            leftPadding: useCompactLayout ? 0 : 8
+            rightPadding: useCompactLayout ? 0 : 8
+            topPadding: useCompactLayout ? 0 : 8
+            bottomPadding: useCompactLayout ? 0 : 8
             onClicked: apiKeyPopup.open()
             enabled: !apiKeyPopup.visible
+            text: useCompactLayout ? "" : qsTr("Set access token")
+
+            contentItem: Item {
+                implicitWidth: useCompactLayout ? 24 : textLabel.implicitWidth
+                implicitHeight: useCompactLayout ? 24 : textLabel.implicitHeight
+
+                Image {
+                    id: keyIcon
+                    source: "images/user-key.svg"
+                    width: 24
+                    height: 24
+                    sourceSize.width: 24
+                    sourceSize.height: 24
+                    fillMode: Image.PreserveAspectFit
+                    anchors.centerIn: parent
+                    visible: useCompactLayout
+                    layer.enabled: true
+                    layer.smooth: true
+                    layer.effect: MultiEffect {
+                        anchors.fill: keyIcon
+                        source: keyIcon
+                        colorization: 1.0
+                        brightness: 1.0
+                        colorizationColor: Calcite.offWhite
+                        visible: true
+                    }
+                }
+
+                Label {
+                    id: textLabel
+                    text: accessTokenButton.text
+                    anchors.fill: parent
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    visible: !useCompactLayout
+                }
+            }
         }
         Loader {
             id: geoViewLoader;
