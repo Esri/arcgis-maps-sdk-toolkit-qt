@@ -82,11 +82,11 @@ Control {
 
     Dialog {
         id: apiKeyPopup
-        title: "Set access token"
+        title: qsTr("Set access token")
         implicitWidth: 300
         contentItem: TextField {
             id: apiKeyInput
-            placeholderText: "Enter your access token here."
+            placeholderText: qsTr("Enter your access token here.")
             Keys.onReturnPressed: apiKeyPopup.accept()
             Component.onCompleted: forceActiveFocus()
         }
@@ -132,7 +132,7 @@ Control {
             Layout.leftMargin: 5
             Layout.topMargin: 5
             Layout.alignment: Qt.AlignLeft
-            text: "Select a tool"
+            text: qsTr("Select a tool")
             onClicked: showToolsButtonPressed()
             enabled: !apiKeyPopup.visible
         }
@@ -158,7 +158,7 @@ Control {
             TextMetrics {
                 id: comboMetrics
                 font: viewTypeCombo.font
-                text: "Global Scene"
+                text: qsTr("Global Scene")
             }
 
             Layout.preferredWidth: comboMetrics.width + viewTypeCombo.indicator.width + 50
@@ -191,7 +191,7 @@ Control {
             Layout.topMargin: 5
             Layout.alignment: Qt.AlignRight
             visible: !useCompactLayout
-            text: "Map"
+            text: qsTr("Map")
             checkable: true
             autoExclusive: true
             checked: viewType === DemoPage.ViewType.Map
@@ -202,7 +202,7 @@ Control {
             Layout.topMargin: 5
             Layout.alignment: Qt.AlignRight
             visible: !useCompactLayout
-            text: "Global Scene"
+            text: qsTr("Global Scene")
             checkable: true
             autoExclusive: true
             checked: viewType === DemoPage.ViewType.GlobalScene
@@ -213,7 +213,7 @@ Control {
             Layout.topMargin: 5
             Layout.alignment: Qt.AlignRight
             visible: !useCompactLayout
-            text: "Local Scene"
+            text: qsTr("Local Scene")
             checkable: true
             autoExclusive: true
             checked: viewType === DemoPage.ViewType.LocalScene
@@ -280,7 +280,7 @@ Control {
             focus: true
             sourceComponent: Component {
                 Label {
-                    text: "No access token set. Please set an access token."
+                    text: qsTr("No access token set. Please set an access token.")
                     horizontalAlignment: Qt.AlignHCenter
                     verticalAlignment: Qt.AlignVCenter
                 }
