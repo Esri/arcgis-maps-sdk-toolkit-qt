@@ -19,13 +19,33 @@
 
 #include "CalloutData.h"
 #include "GeoView.h"
+#include "LocalSceneQuickView.h"
 #include "MapQuickView.h"
-#include "MapView.h"
 #include "Point.h"
+#include "SceneQuickView.h"
 
 #include <QImage>
+#include <QMouseEvent>
 
 using namespace Esri::ArcGISRuntime;
+
+namespace
+{
+  Point screenToCalloutLocation(MapQuickView* geoView, const QPointF& clickPosition)
+  {
+    return geoView->screenToLocation(clickPosition.x(), clickPosition.y());
+  }
+
+  Point screenToCalloutLocation(SceneQuickView* geoView, const QPointF& clickPosition)
+  {
+    return geoView->screenToBaseSurface(clickPosition.x(), clickPosition.y());
+  }
+
+  Point screenToCalloutLocation(LocalSceneQuickView* geoView, const QPointF& clickPosition)
+  {
+    return geoView->screenToBaseSurface(clickPosition.x(), clickPosition.y());
+  }
+} // namespace
 
 CalloutDemo::CalloutDemo(QObject* parent) :
   BaseDemo(parent)
@@ -39,29 +59,29 @@ CalloutDemo::~CalloutDemo()
 
 void CalloutDemo::setUp()
 {
-  //initialize the callout
-  MapQuickView* mv = static_cast<MapQuickView*>(geoView());
-  CalloutData* callData = mv->calloutData();
-  callData->setTitle("This is the location callout");
-  callData->setDetail(QString("x: %1 y: %2").arg(m_xClickLoc, m_yClickLoc));
-  QImage img(QStringLiteral(":/Esri/ArcGISRuntime/Toolkit/pin-tear.svg"));
-  callData->setImage(img);
-
-  connect(mv, &MapQuickView::mouseClicked, this, [mv](QMouseEvent& mouse)
+  apply([this](auto* geoView)
   {
-    // check the geoView passed is a mapView, if so modify data
-    auto callData = mv->calloutData();
-    if (callData->isVisible())
+    using ViewType = std::remove_pointer_t<decltype(geoView)>;
+
+    auto* callData = geoView->calloutData();
+    callData->setTitle("This is the location callout");
+    callData->setImage(QImage(QStringLiteral(":/Esri/ArcGISRuntime/Toolkit/pin-tear.svg")));
+
+    connect(geoView, &ViewType::mouseClicked, this, [geoView](QMouseEvent& mouse)
     {
-      callData->setVisible(false);
-    }
-    else
-    {
-      Point mapPoint(mv->screenToLocation(mouse.pos().x(), mouse.pos().y()));
-      //atm the position is not working correctly with the setLocation
-      callData->setLocation(mapPoint);
-      callData->setDetail("x: " + QString::number(mouse.pos().x()) + " y: " + QString::number(mouse.pos().y()));
-      callData->setVisible(true);
-    }
+      auto* viewCalloutData = geoView->calloutData();
+      if (viewCalloutData->isVisible())
+      {
+        viewCalloutData->setVisible(false);
+      }
+      else
+      {
+        const auto clickPosition = mouse.position();
+        const Point mapPoint(screenToCalloutLocation(geoView, clickPosition));
+        viewCalloutData->setLocation(mapPoint);
+        viewCalloutData->setDetail(QString("x: %1 y: %2").arg(QString::number(clickPosition.x()), QString::number(clickPosition.y())));
+        viewCalloutData->setVisible(true);
+      }
+    });
   });
 }
