@@ -26,7 +26,6 @@
 
 namespace Esri::ArcGISRuntime
 {
-  class GeoView;
   class Graphic;
   class Symbol;
 } // namespace Esri::ArcGISRuntime
@@ -71,8 +70,6 @@ namespace Esri::ArcGISRuntime::Toolkit
     void applyLocalSceneNavigationToInset(LocalSceneViewToolkit* view);
 
     void disableInteractions();
-
-    bool shouldApplyNavigationUpdate(GeoView* geoView) const;
 
     void resetNavigationSynchronization();
     void startGeoViewNavigationUpdate(const QFuture<bool>& future);

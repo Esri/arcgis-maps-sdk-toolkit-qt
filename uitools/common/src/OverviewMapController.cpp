@@ -82,7 +82,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     // to the main GeoView if applicable.
     connect(m_insetView, &MapViewToolkit::viewpointChanged, this, [this]
     {
-      if (shouldApplyNavigationUpdate(m_insetView))
+      if (m_insetView->isNavigating() && !m_isUpdatingInsetFromGeoView)
       {
         if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
         {
@@ -156,7 +156,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       {
         const Viewpoint viewpoint = sceneView->currentViewpoint(ViewpointType::CenterAndScale);
         m_reticle->setGeometry(viewpoint.targetGeometry());
-        if (shouldApplyNavigationUpdate(sceneView))
+        if (sceneView->isNavigating() && !m_isUpdatingGeoViewFromInset)
         {
           applySceneNavigationToInset(sceneView);
         }
@@ -200,7 +200,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       {
         const Viewpoint viewpoint = localSceneView->currentViewpoint(ViewpointType::CenterAndScale);
         m_reticle->setGeometry(viewpoint.targetGeometry());
-        if (shouldApplyNavigationUpdate(localSceneView))
+        if (localSceneView->isNavigating() && !m_isUpdatingGeoViewFromInset)
         {
           applyLocalSceneNavigationToInset(localSceneView);
         }
@@ -246,7 +246,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       QObject::connect(mapView, &MapViewToolkit::viewpointChanged, this, [this, mapView]
       {
         m_reticle->setGeometry(mapView->visibleArea());
-        if (shouldApplyNavigationUpdate(mapView))
+        if (mapView->isNavigating() && !m_isUpdatingGeoViewFromInset)
         {
           applyMapNavigationToInset(mapView);
         }
@@ -318,26 +318,6 @@ namespace Esri::ArcGISRuntime::Toolkit
     {
       emit mapView->viewpointChanged();
     }
-  }
-
-  bool OverviewMapController::shouldApplyNavigationUpdate(GeoView* geoView) const
-  {
-    if (!geoView || !geoView->isNavigating())
-    {
-      return false;
-    }
-
-    if (geoView == qobject_cast<GeoView*>(m_geoView))
-    {
-      return !m_isUpdatingGeoViewFromInset;
-    }
-
-    if (geoView == qobject_cast<GeoView*>(m_insetView))
-    {
-      return !m_isUpdatingInsetFromGeoView;
-    }
-
-    return !m_isUpdatingGeoViewFromInset && !m_isUpdatingInsetFromGeoView;
   }
 
   void OverviewMapController::resetNavigationSynchronization()
