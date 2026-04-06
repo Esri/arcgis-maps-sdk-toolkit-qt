@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -16,18 +17,37 @@
 
 #include "NorthArrowDemo.h"
 
+#include <MapQuickView.h>
+#include <MapViewTypes.h>
+
 #include <QFuture>
+
+using namespace Esri::ArcGISRuntime;
 
 NorthArrowDemo::NorthArrowDemo(QObject* parent) :
   BaseDemo(parent)
 {
+  connect(this, &BaseDemo::geoViewChanged, this, &NorthArrowDemo::setup);
 }
 
 NorthArrowDemo::~NorthArrowDemo()
 {
 }
 
-void NorthArrowDemo::setMapViewRotation(Esri::ArcGISRuntime::MapQuickView* mapView, double degrees)
+double NorthArrowDemo::mapViewRotation(MapQuickView* mapView) const
+{
+  return mapView ? mapView->mapRotation() : 0.0;
+}
+
+void NorthArrowDemo::setMapViewRotation(MapQuickView* mapView, double degrees)
 {
   mapView->setViewpointRotationAsync(degrees);
+}
+
+void NorthArrowDemo::setup()
+{
+  if (auto* view = geoView(); view && view->geoViewType() == GeoViewType::MapView)
+  {
+    static_cast<MapQuickView*>(view)->setRotationByPinchingEnabled(true);
+  }
 }

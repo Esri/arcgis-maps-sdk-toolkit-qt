@@ -71,13 +71,22 @@ DemoPage {
                     bottom: parent.attributionTop
                     margins: 10
                 }
-                onHeadingReset:{
-                    slider1.value = 0
-                }
             }
             NorthArrowDemo {
                 id: model
                 geoView: view
+            }
+
+            Connections {
+                target: view
+
+                function onMapRotationChanged() {
+                    if (slider.pressed) {
+                        return;
+                    }
+
+                    slider.value = model.mapViewRotation(view);
+                }
             }
 
             // Slider UI presentation at bottom
@@ -97,15 +106,13 @@ DemoPage {
                     leftPadding: 5
                     rightPadding: 5
                     C.Slider {
-                        id: slider1
+                        id: slider
                         anchors.verticalCenter: parent.verticalCenter
                         // Slider controls degrees of rotation
                         from: 0.0
                         to: 359.0
 
-                        onValueChanged: {
-                            // Call C++ invokable function to change the rotation
-                            // of the map view
+                        onMoved: {
                             model.setMapViewRotation(view, value);
                         }
                     }
@@ -118,7 +125,7 @@ DemoPage {
                         horizontalAlignment: TextInput.AlignHCenter
                         font.pixelSize: 20
                         color: C.Calcite.text2
-                        text: slider1.value.toPrecision(3);
+                        text: slider.value.toPrecision(3);
                         width: 40
                     }
                 }

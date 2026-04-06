@@ -17,11 +17,15 @@
 #ifndef ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_NORTHARROWDEMO_H
 #define ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_NORTHARROWDEMO_H
 
-#include "BaseDemo.h"
+// C++ API headers
 #include "MapQuickView.h"
 
+// Qt headers
 #include <QObject>
 #include <QQmlEngine>
+
+// Other headers
+#include "BaseDemo.h"
 
 class NorthArrowDemo : public BaseDemo
 {
@@ -31,7 +35,11 @@ public:
   Q_INVOKABLE NorthArrowDemo(QObject* parent = nullptr);
   ~NorthArrowDemo() override;
 
+  Q_INVOKABLE double mapViewRotation(Esri::ArcGISRuntime::MapQuickView* mapView) const;
   Q_INVOKABLE void setMapViewRotation(Esri::ArcGISRuntime::MapQuickView* mapView, double degrees);
+
+private:
+  void setup();
 };
 
 #endif // ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_NORTHARROWDEMO_H
