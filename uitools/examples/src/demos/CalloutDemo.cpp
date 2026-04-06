@@ -63,9 +63,9 @@ void CalloutDemo::setUp()
   {
     using ViewType = std::remove_pointer_t<decltype(geoView)>;
 
-    auto* callData = geoView->calloutData();
-    callData->setTitle("This is the location callout");
-    callData->setImage(QImage(QStringLiteral(":/Esri/ArcGISRuntime/Toolkit/pin-tear.svg")));
+    auto* calloutData = geoView->calloutData();
+    calloutData->setTitle("This is the location callout");
+    calloutData->setImage(QImage(QStringLiteral(":/Esri/ArcGISRuntime/Toolkit/pin-tear.svg")));
 
     connect(geoView, &ViewType::mouseClicked, this, [geoView](QMouseEvent& mouse)
     {
