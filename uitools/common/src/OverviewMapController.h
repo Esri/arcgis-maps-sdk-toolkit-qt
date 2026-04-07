@@ -18,6 +18,7 @@
 
 // Qt headers
 #include <QFuture>
+#include <QFutureWatcher>
 #include <QObject>
 
 // Other headers
@@ -70,17 +71,23 @@ namespace Esri::ArcGISRuntime::Toolkit
 
     void disableInteractions();
 
+    void resetNavigationSynchronization();
+    void startGeoViewNavigationUpdate(const QFuture<bool>& future);
+    void startInsetNavigationUpdate(const QFuture<bool>& future);
+
     void setupInsetMapForMap(MapViewToolkit* mapView);
     void setupInsetMapForScene(SceneViewToolkit* sceneView);
     void setupInsetMapForLocalScene(LocalSceneViewToolkit* localSceneView);
 
   private:
-    QFuture<bool> m_setViewpointFuture;
-    QFuture<bool> m_setViewpointInsetFuture;
+    QFutureWatcher<bool> m_setViewpointWatcher;
+    QFutureWatcher<bool> m_setViewpointInsetWatcher;
     MapViewToolkit* m_insetView = nullptr;
     QObject* m_geoView = nullptr;
     Graphic* m_reticle = nullptr;
     double m_scaleFactor = 25.0;
+    bool m_isUpdatingGeoViewFromInset = false;
+    bool m_isUpdatingInsetFromGeoView = false;
   };
 
 } // namespace Esri::ArcGISRuntime::Toolkit
