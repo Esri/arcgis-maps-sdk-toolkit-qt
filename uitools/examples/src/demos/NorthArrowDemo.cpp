@@ -41,7 +41,13 @@ double NorthArrowDemo::mapViewRotation(MapQuickView* mapView) const
 
 void NorthArrowDemo::setMapViewRotation(MapQuickView* mapView, double degrees)
 {
-  mapView->setViewpointRotationAsync(degrees);
+  if (!mapView)
+  {
+    return;
+  }
+
+  auto future = mapView->setViewpointRotationAsync(degrees);
+  Q_UNUSED(future);
 }
 
 void NorthArrowDemo::setup()
