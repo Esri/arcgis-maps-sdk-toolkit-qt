@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -16,17 +17,25 @@
 
 #include "ArcGISRuntimeEnvironmentProxy.h"
 
+#include "OAuthUserConfigurationManager.h"
+
 #include <ArcGISRuntimeEnvironment.h>
+#include <Authentication/ArcGISCredentialStore.h>
+#include <Authentication/AuthenticationManager.h>
+#include <Authentication/NetworkCredentialStore.h>
+#include <AuthenticatorController.h>
+#include <QFuture>
 
 /*!
-    \internal
-    \class ArcGISRuntimeEnvironmentProxy
-    \brief This class exposes the global `ArcGISRuntimeEnvironmentProxy.apiKey` property such
-    that it is accessible to QML.
-*/
+  \internal
+  \class ArcGISRuntimeEnvironmentProxy
+  \brief This class exposes the global `ArcGISRuntimeEnvironmentProxy.apiKey` property such
+  that it is accessible to QML.
+ */
 
 ArcGISRuntimeEnvironmentProxy::ArcGISRuntimeEnvironmentProxy(QObject* parent) :
-  QObject(parent)
+  QObject(parent),
+  m_cachedApiKey(Esri::ArcGISRuntime::ArcGISRuntimeEnvironment::apiKey())
 {
 }
 
@@ -36,17 +45,52 @@ ArcGISRuntimeEnvironmentProxy::~ArcGISRuntimeEnvironmentProxy()
 
 QString ArcGISRuntimeEnvironmentProxy::apiKey() const
 {
-  using namespace Esri::ArcGISRuntime;
-  return ArcGISRuntimeEnvironment::apiKey();
+  return Esri::ArcGISRuntime::ArcGISRuntimeEnvironment::apiKey();
 }
 
 void ArcGISRuntimeEnvironmentProxy::setApiKey(const QString& apiKey)
 {
   using namespace Esri::ArcGISRuntime;
+  const auto normalizedApiKey = apiKey.trimmed();
   const auto oldApiKey = ArcGISRuntimeEnvironment::apiKey();
-  if (oldApiKey != apiKey)
+  m_cachedApiKey = normalizedApiKey;
+
+  ArcGISRuntimeEnvironment::setApiKey(normalizedApiKey);
+  emit apiKeyChanged();
+}
+
+void ArcGISRuntimeEnvironmentProxy::cacheCurrentChallengeHandler()
+{
+  using namespace Esri::ArcGISRuntime;
+  if (m_toolkitChallengeHandler == nullptr)
   {
-    ArcGISRuntimeEnvironment::setApiKey(apiKey);
-    emit apiKeyChanged();
+    m_toolkitChallengeHandler = ArcGISRuntimeEnvironment::authenticationManager()->arcGISAuthenticationChallengeHandler();
+  }
+}
+
+void ArcGISRuntimeEnvironmentProxy::prepareForDemoSwitch()
+{
+  setApiKey(m_cachedApiKey);
+  resetAuthenticationState();
+}
+
+void ArcGISRuntimeEnvironmentProxy::resetAuthenticationState()
+{
+  using namespace Esri::ArcGISRuntime;
+
+  ArcGISRuntimeEnvironment::authenticationManager()->arcGISCredentialStore()->removeAll();
+  auto removeAllFuture = ArcGISRuntimeEnvironment::authenticationManager()->networkCredentialStore()->removeAllAsync();
+  Q_UNUSED(removeAllFuture)
+
+  Esri::ArcGISRuntime::Toolkit::OAuthUserConfigurationManager::clearConfigurations();
+
+  if (m_toolkitChallengeHandler != nullptr)
+  {
+    ArcGISRuntimeEnvironment::authenticationManager()->setArcGISAuthenticationChallengeHandler(m_toolkitChallengeHandler);
+  }
+
+  if (auto* authController = Toolkit::AuthenticatorController::instance(); authController)
+  {
+    authController->cancelOutstandingChallenges();
   }
 }
