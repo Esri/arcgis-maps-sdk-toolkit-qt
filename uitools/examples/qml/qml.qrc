@@ -5,5 +5,6 @@
         <file>DemoApp.qml</file>
         <file>DemoPage.qml</file>
         <file>main.qml</file>
+		<file>images/user-key.svg</file>
     </qresource>
 </RCC>
