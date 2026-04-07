@@ -21,6 +21,28 @@ import Esri.ArcGISRuntime.Toolkit
 import "tools.js" as T
 
 Item {
+    id: demoApp
+    property int pendingDemoIndex: -1
+    property string currentDemoSource: ""
+
+    function switchDemo(index) {
+        if (index === viewList.currentIndex || pendingDemoIndex >= 0) {
+            return;
+        }
+
+        pendingDemoIndex = index;
+        currentDemoSource = "";
+
+        Qt.callLater(function () {
+            const nextIndex = pendingDemoIndex;
+            pendingDemoIndex = -1;
+
+            ArcGISRuntimeEnvironment.prepareForDemoSwitch();
+            viewList.currentIndex = nextIndex;
+            currentDemoSource = listModel.get(nextIndex).url;
+        });
+    }
+
     Drawer {
         id: drawer
         height: parent.height
@@ -37,6 +59,8 @@ Item {
                         listModel.append(tool);
                     }
                     viewList.currentIndex = 0;
+                    currentDemoSource = listModel.get(0).url;
+                    print(listModel.count + " demos loaded");
                 }
             }
             delegate: ItemDelegate {
@@ -44,7 +68,7 @@ Item {
                 highlighted: ListView.isCurrentItem
                 width: parent.width
                 onClicked: {
-                    viewList.currentIndex = index;
+                    demoApp.switchDemo(index);
                     drawer.close();
                 }
             }
@@ -54,7 +78,7 @@ Item {
     Connections {
         target: content.item
         function onShowToolsButtonPressed() {
-            drawer.open()
+            drawer.open();
         }
     }
 
@@ -62,7 +86,9 @@ Item {
         id: content
         anchors.fill: parent
         focus: true
-        source: viewList.currentIndex >= 0 ? listModel.get(viewList.currentIndex).url : ""
-        onLoaded: {item.handlesOwnAuthentication = listModel.get(viewList.currentIndex).handlesOwnAuthentication ?? false;}
+        source: currentDemoSource
+        onLoaded: {
+            item.handlesOwnAuthentication = listModel.get(viewList.currentIndex).handlesOwnAuthentication ?? false;
+        }
     }
 }
