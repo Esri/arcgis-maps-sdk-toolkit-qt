@@ -60,7 +60,6 @@ Item {
                     }
                     viewList.currentIndex = 0;
                     currentDemoSource = listModel.get(0).url;
-                    print(listModel.count + " demos loaded");
                 }
             }
             delegate: ItemDelegate {

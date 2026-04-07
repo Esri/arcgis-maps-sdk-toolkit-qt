@@ -81,7 +81,7 @@ Control {
 
     Dialog {
         id: apiKeyPopup
-        title: "Set access token"
+        title: qsTr("Set access token")
         implicitWidth: 300
         contentItem: TextField {
             id: apiKeyInput
