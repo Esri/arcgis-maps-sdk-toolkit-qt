@@ -85,7 +85,7 @@ Control {
         implicitWidth: 300
         contentItem: TextField {
             id: apiKeyInput
-            placeholderText: "Enter your access token here."
+            placeholderText: qsTr("Enter your access token here.")
             Keys.onReturnPressed: apiKeyPopup.accept()
             Component.onCompleted: forceActiveFocus()
         }
@@ -125,7 +125,7 @@ Control {
             Layout.leftMargin: 5
             Layout.topMargin: 5
             Layout.alignment: Qt.AlignLeft
-            text: "Select a tool"
+            text: qsTr("Select a tool")
             onClicked: showToolsButtonPressed()
             enabled: !apiKeyPopup.visible
         }
@@ -141,7 +141,7 @@ Control {
         RadioButton {
             Layout.topMargin: 5
             Layout.alignment: Qt.AlignRight
-            text: "Map"
+            text: qsTr("Map")
             checkable: true
             autoExclusive: true
             checked: viewType === DemoPage.ViewType.Map
@@ -151,7 +151,7 @@ Control {
         RadioButton {
             Layout.topMargin: 5
             Layout.alignment: Qt.AlignRight
-            text: "Global Scene"
+            text: qsTr("Global Scene")
             checkable: true
             autoExclusive: true
             checked: viewType === DemoPage.ViewType.GlobalScene
@@ -161,7 +161,7 @@ Control {
         RadioButton {
             Layout.topMargin: 5
             Layout.alignment: Qt.AlignRight
-            text: "Local Scene"
+            text: qsTr("Local Scene")
             checkable: true
             autoExclusive: true
             checked: viewType === DemoPage.ViewType.LocalScene
@@ -171,7 +171,7 @@ Control {
         Button {
             Layout.topMargin: 5
             Layout.rightMargin: 5
-            text: "Set access token"
+            text: qsTr("Set access token")
             Layout.alignment: Qt.AlignRight
             onClicked: apiKeyPopup.open()
             enabled: !apiKeyPopup.visible
@@ -185,7 +185,7 @@ Control {
             focus: true
             sourceComponent: Component {
                 Label {
-                    text: "No access token set. Please set an access token."
+                    text: qsTr("No access token set. Please set an access token.")
                     horizontalAlignment: Qt.AlignHCenter
                     verticalAlignment: Qt.AlignVCenter
                 }
