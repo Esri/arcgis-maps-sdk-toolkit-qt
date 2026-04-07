@@ -70,7 +70,6 @@ void ArcGISRuntimeEnvironmentProxy::cacheCurrentChallengeHandler()
 
 void ArcGISRuntimeEnvironmentProxy::prepareForDemoSwitch()
 {
-  cacheCurrentChallengeHandler();
   setApiKey(m_cachedApiKey);
   resetAuthenticationState();
 }
