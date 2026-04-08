@@ -25,13 +25,14 @@ import Calcite as C
 
 Control {
     id: demoPage
-    property bool handlesOwnAuthentication : false
+    property bool handlesOwnAuthentication: false
     readonly property bool useCompactLayout: demoPage.width < 600
     enum ViewType {
         LocalScene,
         GlobalScene,
         Map
     }
+    enabled: geoModel && geoModel.loadStatus === Enums.LoadStatusLoaded
 
     property int viewType: {
         if (mapViewContents === null) {
@@ -49,7 +50,7 @@ Control {
 
     readonly property var geoModel: {
         if (geoView instanceof MapView)
-            return geoView.map
+            return geoView.map;
         else if (geoView instanceof SceneView || geoView instanceof LocalSceneView)
             return geoView.scene;
         else
@@ -122,6 +123,7 @@ Control {
         sourceComponent: Component {
             Authenticator { }
         }
+        onLoaded: ArcGISRuntimeEnvironment.cacheCurrentChallengeHandler()
     }
 
     contentItem: GridLayout {
@@ -272,7 +274,7 @@ Control {
             }
         }
         Loader {
-            id: geoViewLoader;
+            id: geoViewLoader
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.columnSpan: 7

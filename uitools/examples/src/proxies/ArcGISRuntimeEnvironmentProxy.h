@@ -17,7 +17,14 @@
 #ifndef ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_ARCGISRUNTIMEENVIRONMENTPROXY_H
 #define ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_ARCGISRUNTIMEENVIRONMENTPROXY_H
 
+// Qt headers
 #include <QObject>
+#include <QString>
+
+namespace Esri::ArcGISRuntime::Authentication
+{
+  class ArcGISAuthenticationChallengeHandler;
+}
 
 class ArcGISRuntimeEnvironmentProxy : public QObject
 {
@@ -30,8 +37,16 @@ public:
   QString apiKey() const;
   void setApiKey(const QString& apiKey);
 
+  Q_INVOKABLE void cacheCurrentChallengeHandler();
+  Q_INVOKABLE void prepareForDemoSwitch();
+  void resetAuthenticationState();
+
 signals:
   void apiKeyChanged();
+
+private:
+  QString m_cachedApiKey;
+  Esri::ArcGISRuntime::Authentication::ArcGISAuthenticationChallengeHandler* m_toolkitChallengeHandler = nullptr;
 };
 
 #endif // ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_ARCGISRUNTIMEENVIRONMENTPROXY_H
