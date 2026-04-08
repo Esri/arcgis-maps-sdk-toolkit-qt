@@ -64,6 +64,8 @@ DemoPage {
     mapViewContents: Component {
         MapView {
             id: view
+            property bool sliderDrivesRotation: false
+
             NorthArrow {
                 geoView: parent
                 anchors {
@@ -81,10 +83,25 @@ DemoPage {
                 target: view
 
                 function onMapRotationChanged() {
-                    if (slider.pressed) {
+                    if (view.sliderDrivesRotation && !model.drawingComplete) {
                         return;
                     }
 
+                    view.sliderDrivesRotation = false;
+
+                    slider.value = model.mapViewRotation(view);
+                }
+            }
+
+            Connections {
+                target: model
+
+                function onDrawingCompleteChanged() {
+                    if (!view.sliderDrivesRotation || !model.drawingComplete) {
+                        return;
+                    }
+
+                    view.sliderDrivesRotation = false;
                     slider.value = model.mapViewRotation(view);
                 }
             }
@@ -113,6 +130,7 @@ DemoPage {
                         to: 359.0
 
                         onMoved: {
+                            view.sliderDrivesRotation = true;
                             model.setMapViewRotation(view, value);
                         }
                     }
