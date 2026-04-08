@@ -32,7 +32,7 @@ Control {
         GlobalScene,
         Map
     }
-    enabled: geoModel.loadStatus === Enums.LoadStatusLoaded
+    enabled: geoModel && geoModel.loadStatus === Enums.LoadStatusLoaded
 
     property int viewType: {
         if (mapViewContents === null) {
