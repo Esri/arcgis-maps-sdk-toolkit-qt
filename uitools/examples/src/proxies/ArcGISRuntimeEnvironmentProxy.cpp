@@ -22,7 +22,6 @@
 #include <ArcGISRuntimeEnvironment.h>
 #include <Authentication/ArcGISCredentialStore.h>
 #include <Authentication/AuthenticationManager.h>
-#include <Authentication/NetworkCredentialStore.h>
 #include <AuthenticatorController.h>
 #include <QFuture>
 
@@ -85,8 +84,6 @@ void ArcGISRuntimeEnvironmentProxy::resetAuthenticationState()
   using namespace Esri::ArcGISRuntime;
 
   ArcGISRuntimeEnvironment::authenticationManager()->arcGISCredentialStore()->removeAll();
-  auto removeAllFuture = ArcGISRuntimeEnvironment::authenticationManager()->networkCredentialStore()->removeAllAsync();
-  Q_UNUSED(removeAllFuture)
 
   Esri::ArcGISRuntime::Toolkit::OAuthUserConfigurationManager::clearConfigurations();
 
