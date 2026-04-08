@@ -52,7 +52,6 @@ void ArcGISRuntimeEnvironmentProxy::setApiKey(const QString& apiKey)
 {
   using namespace Esri::ArcGISRuntime;
   const auto normalizedApiKey = apiKey.trimmed();
-  const auto oldApiKey = ArcGISRuntimeEnvironment::apiKey();
   m_cachedApiKey = normalizedApiKey;
 
   ArcGISRuntimeEnvironment::setApiKey(normalizedApiKey);
