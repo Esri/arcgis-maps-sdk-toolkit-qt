@@ -46,8 +46,6 @@ signals:
 
 private:
   void setupMapView_();
-  void allowTouchRotationForMapView_();
-  void monitorMapViewDrawStatus_();
   void setDrawingComplete_(bool completed);
 
 private:
