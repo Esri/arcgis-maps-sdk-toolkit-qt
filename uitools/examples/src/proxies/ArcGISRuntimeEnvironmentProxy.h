@@ -19,6 +19,7 @@
 
 // Qt headers
 #include <QObject>
+#include <QString>
 
 namespace Esri::ArcGISRuntime::Authentication
 {
