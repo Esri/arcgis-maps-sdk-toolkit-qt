@@ -22,6 +22,44 @@ import Esri.ArcGISRuntime.Toolkit
 import DemoApp
 
 DemoPage {
+    sceneViewContents: Component {
+        SceneView {
+            id: view
+
+            Callout {
+                id: callout
+                calloutData : view.calloutData
+                accessoryButtonVisible: false
+                implicitHeight: 100
+                leaderPosition: Callout.LeaderPosition.Automatic
+                maxWidth: 250
+            }
+
+            CalloutDemo {
+                geoView: view
+            }
+        }
+    }
+
+    localSceneViewContents: Component {
+        LocalSceneView {
+            id: view
+
+            Callout {
+                id: callout
+                calloutData : view.calloutData
+                accessoryButtonVisible: false
+                implicitHeight: 100
+                leaderPosition: Callout.LeaderPosition.Automatic
+                maxWidth: 250
+            }
+
+            CalloutDemo {
+                geoView: view
+            }
+        }
+    }
+
     mapViewContents: Component {
         MapView {
             id:view

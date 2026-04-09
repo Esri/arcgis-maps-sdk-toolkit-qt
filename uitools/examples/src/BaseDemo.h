@@ -54,7 +54,7 @@ protected:
   virtual Esri::ArcGISRuntime::Scene* initLocalScene_(QObject* parent) const;
 
   // Helper util that allows a function `f` that takes a single `GeoView` parameter to
-  // work agnostically on a SceneView or MapView. This reduces boilerplate around signals.
+  // work agnostically on a SceneView, MapView, or LocalSceneView. This reduces boilerplate around signals.
   // I.E.:
   // \begincode
   //  apply([this](auto geoView)
@@ -74,20 +74,20 @@ protected:
     {
       return f(mapView);
     }
-    else if (auto* sceneView = qobject_cast<SceneQuickView*>(m_geoView))
+
+    if (auto* sceneView = qobject_cast<SceneQuickView*>(m_geoView))
     {
       return f(sceneView);
     }
-    else if (auto* localSceneView = qobject_cast<LocalSceneQuickView*>(m_geoView))
+
+    if (auto* localSceneView = qobject_cast<LocalSceneQuickView*>(m_geoView))
     {
       return f(localSceneView);
     }
-    else
-    {
-      // Since `f` is for agnostic calls the type of the nullptr
-      // doesn't matter if it's a MapQuickView or SceneQuickView.
-      return f(static_cast<MapQuickView*>(nullptr));
-    }
+
+    // Since `f` is for agnostic calls the type of the nullptr
+    // doesn't matter which type of view it is.
+    return f(static_cast<MapQuickView*>(nullptr));
   }
 
 private:

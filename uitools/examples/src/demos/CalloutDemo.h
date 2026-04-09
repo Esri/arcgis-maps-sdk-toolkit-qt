@@ -17,10 +17,12 @@
 #ifndef ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_CALLOUTDEMO_H
 #define ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_CALLOUTDEMO_H
 
-#include "BaseDemo.h"
-
+// Qt headers
 #include <QObject>
 #include <QQmlEngine>
+
+// Other headers
+#include "BaseDemo.h"
 
 class CalloutDemo : public BaseDemo
 {
@@ -32,10 +34,6 @@ public:
 
 private slots:
   void setUp();
-
-private:
-  double m_xClickLoc = 0.0;
-  double m_yClickLoc = 0.0;
 };
 
 #endif // ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_CALLOUTDEMO_H
