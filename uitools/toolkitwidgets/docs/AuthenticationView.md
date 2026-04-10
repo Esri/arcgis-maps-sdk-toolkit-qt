@@ -1,8 +1,8 @@
-[![ArcGIS Maps SDK for Qt](https://img.shields.io/badge/ArcGIS%20Maps%20SDK%20for%20Qt-0b5394)](https://developers.arcgis.com/qt/) [![ArcGIS Maps SDK for Qt toolkit](https://img.shields.io/badge/ArcGIS%20Maps%20SDK%20for%20Qt%20toolkit-ea4d13)](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt) [![Qt Widgets UI components](https://img.shields.io/badge/Qt%20Qt%20Widgets%20UI%20components-ea4d13)](../../toolkitwidgets/)
+[![ArcGIS Maps SDK for Qt](https://img.shields.io/badge/ArcGIS%20Maps%20SDK%20for%20Qt-0b5394)](https://developers.arcgis.com/qt/v200/) [![ArcGIS Maps SDK for Qt toolkit](https://img.shields.io/badge/ArcGIS%20Maps%20SDK%20for%20Qt%20toolkit-ea4d13)](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/lts.next) [![Qt Widgets UI components](https://img.shields.io/badge/Qt%20Qt%20Widgets%20UI%20components-ea4d13)](../../toolkitwidgets/)
 
 # AuthenticationView - Qt Widgets UI/Class
 
-The [AuthenticationView - Qt Widgets UI/Class](https://developers.arcgis.com/qt/toolkit/api-reference/esri-arcgisruntime-toolkit-authenticationview.html) handles authentication challenges and automatically launching the appropriate UI for each type of authentication. Declare an AuthenticationView widget. The AuthenticationView will then be connected to all authentication challenges, and will automatically launch the appropriate view for the type of challenge. Supported security formats include:
+The [AuthenticationView - Qt Widgets UI/Class](https://developers.arcgis.com/qt/v200/toolkit/api-reference/esri-arcgisruntime-toolkit-authenticationview.html) handles authentication challenges and automatically launching the appropriate UI for each type of authentication. Declare an AuthenticationView widget. The AuthenticationView will then be connected to all authentication challenges, and will automatically launch the appropriate view for the type of challenge. Supported security formats include:
 
 - ArcGIS Token (UserCredentialsView)
 - HTTP Basic (UserCredentialsView)
@@ -15,4 +15,4 @@ The [AuthenticationView - Qt Widgets UI/Class](https://developers.arcgis.com/qt/
 
 NOTE: OAuth 2.0 uses a WebView. To use an OAuthView you must call `QtWebView::initialize()` before the QGuiApplication instance is created. See [Qt WebView](https://doc.qt.io/qt-6/qtwebview-index.html).
 
-![AuthenticationView image](https://developers.arcgis.com/qt/toolkit/api-reference/images/authenticationview_qml.png)
+![AuthenticationView image](https://developers.arcgis.com/qt/v200/toolkit/api-reference/images/authenticationview_qml.png)

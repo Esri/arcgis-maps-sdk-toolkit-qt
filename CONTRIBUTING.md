@@ -12,17 +12,17 @@ For specific resources on:
 
 You will need:
 
-- System requirements as laid out [here](https://developers.arcgis.com/qt/reference/system-requirements/)
+- System requirements as laid out [here](https://developers.arcgis.com/qt/v200/reference/system-requirements/)
   for your development platform.
-- Latest version of the [ArcGIS Maps SDK for Qt](https://developers.arcgis.com/qt/).
+- Latest version of the [ArcGIS Maps SDK for Qt](https://developers.arcgis.com/qt/v200/).
 
 ## Important resources
 
-- The [ArcGIS Maps SDK for Qt Reference](https://developers.arcgis.com/qt/api-reference/). Which includes:
-  - [Qt Toolkit API](https://developers.arcgis.com/qt/toolkit/api-reference/).
-  - [C++ API](https://developers.arcgis.com/qt/cpp/api-reference/).
+- The [ArcGIS Maps SDK for Qt Reference](https://developers.arcgis.com/qt/v200/api-reference/). Which includes:
+  - [Qt Toolkit API](https://developers.arcgis.com/qt/v200/toolkit/api-reference/).
+  - [C++ API](https://developers.arcgis.com/qt/v200/cpp/api-reference/).
 
-- The [ArcGIS Maps SDK for Qt Guide](https://developers.arcgis.com/qt/).
+- The [ArcGIS Maps SDK for Qt Guide](https://developers.arcgis.com/qt/v200/).
 
 - [Qt's board on Esri Community](https://community.esri.com/t5/arcgis-runtime-sdk-for-qt-questions/bd-p/arcgis-runtime-sdk-for-qt-questions).
 
@@ -35,7 +35,7 @@ You will need:
 There are two active branches within toolkit: `main` and `v.next`.
 
 - **main** is the active branch, and must always be compatible with
-  the [release version of ArcGIS Maps SDK for Qt](https://developers.arcgis.com/qt/). This is
+  the [release version of ArcGIS Maps SDK for Qt](https://developers.arcgis.com/qt/v200/). This is
   the main branch all our users consume to access toolkit features.
 
 - **v.next** is the "next version" branch which contains upcoming features and is

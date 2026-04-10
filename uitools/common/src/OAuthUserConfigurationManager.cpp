@@ -40,7 +40,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
   For more information, see the \l
   {https://developers.arcgis.com/documentation/security-and-authentication/user-authentication/tutorials/create-oauth-credentials-user-auth/}
-  {OAuth tutorial} and the \l {https://developers.arcgis.com/qt/cpp/api-reference/esri-arcgisruntime-authentication-oauthuserconfiguration.html}{OAuthUserConfiguration}
+  {OAuth tutorial} and the \l {https://developers.arcgis.com/qt/v200/cpp/api-reference/esri-arcgisruntime-authentication-oauthuserconfiguration.html}{OAuthUserConfiguration}
   doc for more information.
 
   \since Esri.ArcGISRuntime::Toolkit 200.8

@@ -1,8 +1,8 @@
-[![ArcGIS Maps SDK for Qt](https://img.shields.io/badge/ArcGIS%20Maps%20SDK%20for%20Qt-0b5394)](https://developers.arcgis.com/qt/) [![ArcGIS Maps SDK for Qt toolkit](https://img.shields.io/badge/ArcGIS%20Maps%20SDK%20for%20Qt%20toolkit-ea4d13)](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt) [![Qt Quick UI components](https://img.shields.io/badge/Qt%20Qt%20Quick%20UI%20components-ea4d13)](../../toolkitcpp/)
+[![ArcGIS Maps SDK for Qt](https://img.shields.io/badge/ArcGIS%20Maps%20SDK%20for%20Qt-0b5394)](https://developers.arcgis.com/qt/v200/) [![ArcGIS Maps SDK for Qt toolkit](https://img.shields.io/badge/ArcGIS%20Maps%20SDK%20for%20Qt%20toolkit-ea4d13)](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/lts.next) [![Qt Quick UI components](https://img.shields.io/badge/Qt%20Qt%20Quick%20UI%20components-ea4d13)](../../toolkitcpp/)
 
 # Authenticator - Qt Quick UI/QML Type
 
-The [Authenticator- Qt Quick UI/QML Type](https://developers.arcgis.com/qt/toolkit/api-reference/qml-esri-arcgisruntime-toolkit-authenticator.html) handles authentication challenges and automatically launches the appropriate UI for each type of authentication. The following security formats are supported.
+The [Authenticator- Qt Quick UI/QML Type](https://developers.arcgis.com/qt/v200/toolkit/api-reference/qml-esri-arcgisruntime-toolkit-authenticator.html) handles authentication challenges and automatically launches the appropriate UI for each type of authentication. The following security formats are supported.
 
 - ArcGIS Token 
 - HTTP Basic 
@@ -24,7 +24,7 @@ Authenticator {
 }
 ```
 
-A full tutorial for setting up the Authenticator is available in the [developer guide](https://developers.arcgis.com/qt/security-and-authentication/tutorials/access-services-with-oauth-2-0/)
+A full tutorial for setting up the Authenticator is available in the [developer guide](https://developers.arcgis.com/qt/v200/security-and-authentication/tutorials/access-services-with-oauth-2-0/)
 
 ## ArcGIS Authentication
 Portals configured to use ArcGIS Authentication will use token authentication by default. To use OAuth, you must pass in an instance of `OAuthUserConfiguration` with the Portal URL, client ID, and redirect URL to the `OAuthUserConfigurationManager`.
@@ -40,7 +40,7 @@ DemoApp::DemoApp(QObject* parent /* = nullptr */):
 }
 ```
 
-When using OAuth, there are two different login experiences available: 1) an external out-of-process browser, and 2) an in-app embedded browser. Full details on these two options are found in the API Reference documentation for [OAuthUserConfiguration](https://developers.arcgis.com/qt/cpp/api-reference/esri-arcgisruntime-authentication-oauthuserconfiguration.html). The Authenticator will respond to however the `OAuthUserConfiguration` is setup without any further modification, provided all the requirements are fulfilled.
+When using OAuth, there are two different login experiences available: 1) an external out-of-process browser, and 2) an in-app embedded browser. Full details on these two options are found in the API Reference documentation for [OAuthUserConfiguration](https://developers.arcgis.com/qt/v200/cpp/api-reference/esri-arcgisruntime-authentication-oauthuserconfiguration.html). The Authenticator will respond to however the `OAuthUserConfiguration` is setup without any further modification, provided all the requirements are fulfilled.
 
 NOTE: OAuth 2.0 uses a WebView when using the in-app embedded browser workflow. To use an OAuthView you must call `QtWebView::initialize()` before the QGuiApplication instance is created. See [Qt WebView](https://doc.qt.io/qt-6/qtwebview-index.html).
 
