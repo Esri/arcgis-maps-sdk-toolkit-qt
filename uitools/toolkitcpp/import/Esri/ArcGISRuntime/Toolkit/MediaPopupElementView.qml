@@ -678,21 +678,13 @@ ColumnLayout {
                 height: overlayTextLayout.height
                 color: "white"
                 opacity: 0.7
+                border.color: palette.dark
+                border.width: 1
 
                 anchors {
                     bottom: parent.bottom
                     left: parent.left
                     right: parent.right
-                }
-
-                Rectangle {
-                    height: 1
-                    color: palette.dark
-                    anchors {
-                        top: parent.top
-                        left: parent.left
-                        right: parent.right
-                    }
                 }
 
                 ColumnLayout {
