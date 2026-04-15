@@ -292,7 +292,7 @@ ColumnLayout {
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.verticalCenterOffset: model.alternativeText !== "" ? -20 : 0
 
-                            Text {
+                            Label {
                                 text: qsTr("Image unavailable")
                                 color: palette.text
                                 width: parent.width
@@ -301,7 +301,7 @@ ColumnLayout {
                                 verticalAlignment: Text.AlignVCenter
                             }
 
-                            Text {
+                            Label {
                                 text: model.alternativeText
                                 visible: model.alternativeText !== ""
                                 color: palette.text
