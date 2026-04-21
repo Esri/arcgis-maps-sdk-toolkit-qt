@@ -7,11 +7,11 @@ guidelines see [here](/CONTRIBUTING.md).
 
 - The [Building a better toolkit](https://community.esri.com/t5/arcgis-runtime-sdks-blog/building-a-better-toolkit/ba-p/888826) Esri community blog.
 
-- The [ArcGIS Maps SDK for Qt Reference](https://developers.arcgis.com/qt/api-reference/). Which includes:
-  - [Qt Toolkit API](https://developers.arcgis.com/qt/toolkit/api-reference/).
-  - [C++ API](https://developers.arcgis.com/qt/cpp/api-reference/).
+- The [ArcGIS Maps SDK for Qt Reference](https://developers.arcgis.com/qt/v200/api-reference/). Which includes:
+  - [Qt Toolkit API](https://developers.arcgis.com/qt/v200/toolkit/api-reference/).
+  - [C++ API](https://developers.arcgis.com/qt/v200/cpp/api-reference/).
 
-- The [ArcGIS Maps SDK for Qt Guide](https://developers.arcgis.com/qt/).
+- The [ArcGIS Maps SDK for Qt Guide](https://developers.arcgis.com/qt/v200/).
 
 ## UI Tools Architecture
 
@@ -77,7 +77,7 @@ What follows is general advice to be effective in writing tools.
    Exposing a Maps SDK class to to QML can be tricky because the C++ types don't expose properties for
    free. The best way around this is to wrap a Maps SDK type in an adaptor, which exposes the required
    properties in a QML friendly-way. For example, [FloorFilterSiteItem](cpp/Esri//ArcGISRuntime/Toolkit/FloorFilterSiteItem.h),
-   wraps and exposes the properties of [FloorSite](https://developers.arcgis.com/qt/cpp/api-reference/esri-arcgisruntime-floorsite.html).
+   wraps and exposes the properties of [FloorSite](https://developers.arcgis.com/qt/v200/cpp/api-reference/esri-arcgisruntime-floorsite.html).
 
    Widget views may also benefit from the adaptor pattern, as the adaptor has full control over data formatting 
    and update behavior.

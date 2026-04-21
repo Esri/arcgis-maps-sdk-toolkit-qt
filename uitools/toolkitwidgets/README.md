@@ -1,4 +1,4 @@
-[![ArcGIS Maps SDK for Qt Toolkit API reference](https://img.shields.io/badge/API_Reference-purple)](https://developers.arcgis.com/qt/latest/toolkit/api-reference/) [![ArcGIS Maps SDK for Qt](https://img.shields.io/badge/ArcGIS%20Maps%20SDK%20for%20Qt-0b5394)](https://developers.arcgis.com/qt/) [![ArcGIS Maps SDK for Qt toolkit](https://img.shields.io/badge/ArcGIS%20Maps%20SDK%20for%20Qt%20toolkit-ea4d13)](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt)
+[![ArcGIS Maps SDK for Qt Toolkit API reference](https://img.shields.io/badge/API_Reference-purple)](https://developers.arcgis.com/qt/v200/toolkit/api-reference/) [![ArcGIS Maps SDK for Qt](https://img.shields.io/badge/ArcGIS%20Maps%20SDK%20for%20Qt-0b5394)](https://developers.arcgis.com/qt/v200/) [![ArcGIS Maps SDK for Qt toolkit](https://img.shields.io/badge/ArcGIS%20Maps%20SDK%20for%20Qt%20toolkit-ea4d13)](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/lts.next)
 
 ## ArcGIS Maps SDK - Qt Widgets UI components
 
@@ -18,7 +18,7 @@ These are the **Qt Widgets UI control/Class** available to use:
 - **[NorthArrow](docs/NorthArrow.md)** - A control that indicates north, reacting to rotation changes of the map.
 - **[OverviewMap](docs/OverviewMap.md)** - An inset map that shows the current extent of an associated GeoView in the context of a larger area.
 
-NOTE: Due to the open source nature of the Qt toolkit repo, you may notice that currently there are not as many Qt Widget UI components as there are Qt Quick UI versions. You are welcome to create you own components to suit your needs. The [Qt Toolkit API Reference](https://developers.arcgis.com/qt/toolkit/api-reference/) should be your starting point (in particular expand the "C++ Classes" section in the TOC) to learn about developing custom UI components. The API classes have been architected to utilize MVC design principals, so for each view, there is an associated controller (the word "Controller" is appended to the class name).
+NOTE: Due to the open source nature of the Qt toolkit repo, you may notice that currently there are not as many Qt Widget UI components as there are Qt Quick UI versions. You are welcome to create you own components to suit your needs. The [Qt Toolkit API Reference](https://developers.arcgis.com/qt/v200/toolkit/api-reference/) should be your starting point (in particular expand the "C++ Classes" section in the TOC) to learn about developing custom UI components. The API classes have been architected to utilize MVC design principals, so for each view, there is an associated controller (the word "Controller" is appended to the class name).
 
 ## Example steps showing how to use a Qt Widget UI component in your project
 
@@ -66,7 +66,7 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 > ...
 > # To integrate the toolkit, copy the `toolkitwidgets` subdirectory from the toolkit
 > # into your project's directory. Then uncomment the following lines to add it to your project.
-> # See https://github.com/Esri/arcgis-maps-sdk-toolkit-qt for details
+> # See https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/lts.next for details
 > add_subdirectory(toolkitwidgets)
 > target_link_libraries(${PROJECT_NAME} PRIVATE libtoolkitwidgets)
 > ...

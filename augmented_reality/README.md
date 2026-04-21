@@ -1,4 +1,4 @@
-[![ArcGIS Maps SDK for Qt Toolkit API reference](https://img.shields.io/badge/API_Reference-purple)](https://developers.arcgis.com/qt/latest/toolkit/api-reference/) [![ArcGIS Maps SDK for Qt](https://img.shields.io/badge/ArcGIS%20Maps%20SDK%20for%20Qt-0b5394)](https://developers.arcgis.com/qt/) [![ArcGIS Maps SDK for Qt toolkit](https://img.shields.io/badge/ArcGIS%20Maps%20SDK%20for%20Qt%20toolkit-ea4d13)](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt)
+[![ArcGIS Maps SDK for Qt Toolkit API reference](https://img.shields.io/badge/API_Reference-purple)](https://developers.arcgis.com/qt/v200/toolkit/api-reference/) [![ArcGIS Maps SDK for Qt](https://img.shields.io/badge/ArcGIS%20Maps%20SDK%20for%20Qt-0b5394)](https://developers.arcgis.com/qt/v200/) [![ArcGIS Maps SDK for Qt toolkit](https://img.shields.io/badge/ArcGIS%20Maps%20SDK%20for%20Qt%20toolkit-ea4d13)](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/lts.next)
 
 # Deprecation notice
 
@@ -84,11 +84,11 @@ Note: In the following explanation, `<ProjectName>` refers to the project name
 used to create the Qt project.
 
 1. Install the ArcGIS Maps SDK for Qt. See
-[ArcGIS Maps SDK for Qt](https://developers.arcgis.com/qt/install-and-set-up)
+[ArcGIS Maps SDK for Qt](https://developers.arcgis.com/qt/v200/install-and-set-up)
 for details.
 
 2. Download from GitHub the source files of the
-[ArcGIS Maps SDK for Qt Toolkit](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt).
+[ArcGIS Maps SDK for Qt Toolkit](https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/tree/lts.next).
 
 3. In Qt Creator, create a new project and select the app template named
 "ArcGIS Maps 200.8.1 Qt Quick C++ app". Select the option "3D project" in the
@@ -193,9 +193,9 @@ An example of parameters for tabletop AR app is given in the following code:
 ```
 
 In the constructor of the app's root class, adapt the creation of the scene.
-When creating the [Scene](https://developers.arcgis.com/qt/latest/cpp/api-reference/esri-arcgisruntime-scene.html),
+When creating the [Scene](https://developers.arcgis.com/qt/v200/cpp/api-reference/esri-arcgisruntime-scene.html),
 add some data that will visualize well in AR, like an
-[IntegratedMeshLayer](https://developers.arcgis.com/qt/latest/cpp/api-reference/esri-arcgisruntime-integratedmeshlayer.html), for example.
+[IntegratedMeshLayer](https://developers.arcgis.com/qt/v200/cpp/api-reference/esri-arcgisruntime-integratedmeshlayer.html), for example.
 The default Scene is suitable for full scale mode.
 
 8. In the `<ProjectName>Form.qml` file,  make the following changes:
@@ -321,7 +321,7 @@ ARCore requires Android 7.0 or later. The list of compatible devices can be foun
 ## Note for performance issues
 
 There are some conflicts between the AR frameworks and Qt's rendering thread.
-See the [SceneView::renderFrame](https://developers.arcgis.com/qt/latest/cpp/api-reference/esri-arcgisruntime-sceneview.html#renderFrame) API documentation and
+See the [SceneView::renderFrame](https://developers.arcgis.com/qt/v200/cpp/api-reference/esri-arcgisruntime-sceneview.html#renderFrame) API documentation and
 [Qt's documentation about non-threaded render loops](https://doc.qt.io/qt-5/qtquick-visualcanvas-scenegraph.html#non-threaded-render-loops-basic-and-windows)
 for more information.
 

@@ -40,7 +40,7 @@ import QtQuick.Controls
 
     \image authenticator_qml.png authenticator
 
-    For further details, consult the \l {https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/blob/main/uitools/toolkitcpp/docs/Authenticator.md}{Authenticator readme}.
+    For further details, consult the \l {https://github.com/Esri/arcgis-maps-sdk-toolkit-qt/blob/lts.next/uitools/toolkitcpp/docs/Authenticator.md}{Authenticator readme}.
 
     \note OAuth 2.0 uses a WebView. To use a OAuth you must call
           \c{QtWebView::initialize()} before the \c{QGuiApplication}
