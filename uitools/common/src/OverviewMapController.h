@@ -18,17 +18,20 @@
 
 // Qt headers
 #include <QFuture>
+#include <QFutureWatcher>
 #include <QObject>
 
 // Other headers
 #include "GeoViews.h"
 
-namespace Esri::ArcGISRuntime {
+namespace Esri::ArcGISRuntime
+{
   class Graphic;
   class Symbol;
-} // Esri::ArcGISRuntime
+} // namespace Esri::ArcGISRuntime
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   class OverviewMapController : public QObject
   {
@@ -60,21 +63,33 @@ namespace Esri::ArcGISRuntime::Toolkit {
   private:
     void applyInsetNavigationToMapView(MapViewToolkit* view);
     void applyInsetNavigationToSceneView(SceneViewToolkit* view);
+    void applyInsetNavigationToLocalSceneView(LocalSceneViewToolkit* view);
 
     void applyMapNavigationToInset(MapViewToolkit* view);
     void applySceneNavigationToInset(SceneViewToolkit* view);
+    void applyLocalSceneNavigationToInset(LocalSceneViewToolkit* view);
 
     void disableInteractions();
 
+    void resetNavigationSynchronization();
+    void startGeoViewNavigationUpdate(const QFuture<bool>& future);
+    void startInsetNavigationUpdate(const QFuture<bool>& future);
+
+    void setupInsetMapForMap(MapViewToolkit* mapView);
+    void setupInsetMapForScene(SceneViewToolkit* sceneView);
+    void setupInsetMapForLocalScene(LocalSceneViewToolkit* localSceneView);
+
   private:
-    QFuture<bool> m_setViewpointFuture;
-    QFuture<bool> m_setViewpointInsetFuture;
+    QFutureWatcher<bool> m_setViewpointWatcher;
+    QFutureWatcher<bool> m_setViewpointInsetWatcher;
     MapViewToolkit* m_insetView = nullptr;
     QObject* m_geoView = nullptr;
     Graphic* m_reticle = nullptr;
     double m_scaleFactor = 25.0;
+    bool m_isUpdatingGeoViewFromInset = false;
+    bool m_isUpdatingInsetFromGeoView = false;
   };
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_OVERVIEWMAPCONTROLLER_H

@@ -109,6 +109,22 @@ Pane {
                 id: inputModeButton
                 model: coordinateConversionWindow.controller.formats
                 textRole: "name"
+
+                // keep currentIndex in sync when inputFormat.type changes externally
+                Connections {
+                    target: coordinateConversionWindow.inputFormat
+                    function onTypeChanged() {
+                        const formats = coordinateConversionWindow.controller.formats;
+                        for (let i = 0; i < formats.rowCount(); i++) {
+                            let modelData = formats.element(formats.index(i, 0));
+                            if (modelData === coordinateConversionWindow.inputFormat.type) {
+                                inputModeButton.currentIndex = i;
+                                return;
+                            }
+                        }
+                    }
+                }
+
                 onCurrentIndexChanged: {
                     const index = currentIndex;
                     const formats = coordinateConversionWindow.controller.formats;

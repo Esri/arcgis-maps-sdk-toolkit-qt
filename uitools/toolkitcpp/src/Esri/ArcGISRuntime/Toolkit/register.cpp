@@ -20,14 +20,13 @@
 #include "register.h"
 
 // Toolkit includes
-#include "AuthenticatorController.h"
 #include "AttachmentsPopupElementViewController.h"
-#include "AuthenticationController.h"
+#include "AuthenticatorController.h"
 #include "BarChartPopupMediaItem.h"
 #include "BasemapGalleryController.h"
 #include "BasemapGalleryItem.h"
-#include "BookmarksViewController.h"
 #include "BookmarkListItem.h"
+#include "BookmarksViewController.h"
 #include "CoordinateConversionController.h"
 #include "CoordinateConversionOption.h"
 #include "CoordinateConversionResult.h"
@@ -60,32 +59,32 @@
 #include "UtilityNetworkTraceStartingPointsModel.h"
 
 // Internal includes
+#include "BasemapGalleryImageProvider.h"
 #include "PopupAttachmentImageProvider.h"
 #include "QmlEnums.h"
-#include "BasemapGalleryImageProvider.h"
 
 // ArcGIS includes
 #include <MapQuickView.h>
 #include <Point.h>
 
 // Qt Includes
+#include <QPointer>
 #include <QQmlEngine>
 #include <QQmlFileSelector>
-#include <QPointer>
 
 // std includes
 #include <type_traits>
 
 /*!
   \headerfile Esri/ArcGISRuntime/Toolkit/register
-  \inmodule ArcGISRuntimeToolkit
+    \inmodule ArcGISRuntimeToolkit
 
-  This file contains the registration function required to register the toolkit
-  with the `QQmlEngine`.
+    This file contains the registration function required to register the toolkit
+    with the `QQmlEngine`.
 
-  Please refer to
-  \c README.md for more information on workflows.
- */
+    Please refer to
+    \c README.md for more information on workflows.
+   */
 
 /*!
   \fn void Esri::ArcGISRuntime::Toolkit::registerComponents(QQmlEngine& engine)
@@ -95,16 +94,18 @@
   with the `QQmlEngine` and the toolkit.
  */
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
-  namespace {
+  namespace
+  {
 
     const QString ESRI_COM_PATH = QStringLiteral(":/esri.com/imports");
 
     constexpr char const* NAMESPACE = "Esri.ArcGISRuntime.Toolkit.Controller";
 
-    constexpr int VERSION_MAJOR = 200;
-    constexpr int VERSION_MINOR = 2;
+    constexpr int VERSION_MAJOR = 3;
+    constexpr int VERSION_MINOR = 0;
 
     QPointer<AuthenticatorController> s_authenticatorController;
 
@@ -116,9 +117,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
       Provided is the overloaded method:
 
-      \code
+  \code
       void registerComponentImpl(<CreationType> creationType, int majorVersion, int minorVersion, const char* name)
-      \endcode
+  \endcode
 
       And the three currently accepted values for the \a creationType parameter.
 
@@ -126,12 +127,13 @@ namespace Esri::ArcGISRuntime::Toolkit {
       \value CreationType::Uncreatable for types that can be referenced but not used in QML.
       \value CreationType::Interface for types that are interfaces for more concrete QML types.
  */
-    namespace CreationType {
+    namespace CreationType
+    {
       struct Creatable_
       {
       };
 
-      template <class T>
+      template<class T>
       void registerComponentImpl(CreationType::Creatable_, int majorVersion, int minorVersion, const char* name)
       {
         qmlRegisterType<T>(NAMESPACE, majorVersion, minorVersion, name);
@@ -143,7 +145,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
       {
       };
 
-      template <class T>
+      template<class T>
       void registerComponentImpl(CreationType::Uncreatable_, int majorVersion, int minorVersion, const char* name)
       {
         qmlRegisterUncreatableType<T>(NAMESPACE, majorVersion, minorVersion, name, "Cannot instantiate type in QML.");
@@ -155,27 +157,26 @@ namespace Esri::ArcGISRuntime::Toolkit {
       {
       };
 
-      template <class T>
+      template<class T>
       void registerComponentImpl(CreationType::Singleton_, int majorVersion, int minorVersion, const char* name)
       {
-        qmlRegisterSingletonType<T>(NAMESPACE, majorVersion, minorVersion, name,
-                                    [](QQmlEngine* qmlEngine, QJSEngine* jsEngine) -> QObject*
-                                    {
-                                      if (!s_authenticatorController)
-                                      {
-                                        s_authenticatorController = T::create(qmlEngine, jsEngine);
-                                      }
-                                      return s_authenticatorController;
-                                    });
+        qmlRegisterSingletonType<T>(NAMESPACE, majorVersion, minorVersion, name, [](QQmlEngine* qmlEngine, QJSEngine* jsEngine) -> QObject*
+        {
+          if (!s_authenticatorController)
+          {
+            s_authenticatorController = T::create(qmlEngine, jsEngine);
+          }
+          return s_authenticatorController;
+        });
       }
 
       [[maybe_unused]] constexpr Singleton_ Singleton = Singleton_{};
-    }
+    } // namespace CreationType
 
     /*
      \internal
      \brief Function for registration. Registers the C++ type Foo as
-     Foo in QML with the 100.10, 200.0 version and namespace information.
+     Foo in QML with the 3.0 version and namespace information.
 
   \list
       \li \a Determines how the type is instantiated in QML. Choose between CreationType::Creatable, CreationType::Uncreatable and CreationType::Interface.
@@ -183,42 +184,17 @@ namespace Esri::ArcGISRuntime::Toolkit {
   \endlist
 
       Example call:
-      \code
+  \code
       registerComponent<LocatorSearchSource>(CreationType::Uncreatable);
-      \endcode
+  \endcode
  */
-    template <typename T, typename CType = CreationType::Creatable_>
+    template<typename T, typename CType = CreationType::Creatable_>
     void registerComponent(CType creationType = CType{})
     {
       static_assert(std::is_base_of<QObject, T>::value, "Must inherit QObject");
       auto name = QString{T::staticMetaObject.className()};
       name.remove("Esri::ArcGISRuntime::Toolkit::");
-      // register component on version 100
-      CreationType::registerComponentImpl<T>(creationType, 100, 10, name.toLatin1());
-      // register component on version 200
-      CreationType::registerComponentImpl<T>(creationType, 200, 0, name.toLatin1());
-    }
-
-    /*
-     \internal
-     \brief Ensures a Module revision is available from 100.10 and 200.0 onwards
-     to the current version of the Toolkit.
- */
-    void registerModuleRevisions()
-    {
-      constexpr int MAJOR_VERSION_100 = 100;
-      constexpr int START_MINOR_VERSION_100 = 10;
-      constexpr int END_MINOR_VERSION_100 = 15;
-      // register version 100
-      for (int i = START_MINOR_VERSION_100; i <= END_MINOR_VERSION_100; ++i)
-      {
-        qmlRegisterModule(NAMESPACE, MAJOR_VERSION_100, i);
-      }
-      // register version 200 onwards
-      for (int i = 0; i <= VERSION_MINOR; ++i)
-      {
-        qmlRegisterModule(NAMESPACE, VERSION_MAJOR, i);
-      }
+      CreationType::registerComponentImpl<T>(creationType, VERSION_MAJOR, VERSION_MINOR, name.toLatin1());
     }
 
   } // namespace
@@ -228,10 +204,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
     appEngine.addImageProvider(BasemapGalleryImageProvider::PROVIDER_ID, BasemapGalleryImageProvider::instance());
     appEngine.addImageProvider(PopupAttachmentImageProvider::PROVIDER_ID, PopupAttachmentImageProvider::instance());
     appEngine.addImportPath(ESRI_COM_PATH);
-    registerModuleRevisions();
+    qmlRegisterModule(NAMESPACE, VERSION_MAJOR, VERSION_MINOR);
     registerComponent<AuthenticatorController>(CreationType::Singleton);
     registerComponent<AttachmentsPopupElementViewController>();
-    registerComponent<AuthenticationController>();
     registerComponent<BarChartPopupMediaItem>();
     registerComponent<BasemapGalleryController>();
     registerComponent<BasemapGalleryItem>();
@@ -271,8 +246,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     // Register ArcGISRuntime types with toolkit.
     qRegisterMetaType<Point>("Esri::ArcGISRuntime::Point");
-    qmlRegisterAnonymousType<MapQuickView>(NAMESPACE, 100);
-    qmlRegisterAnonymousType<MapQuickView>(NAMESPACE, 200);
+    qmlRegisterAnonymousType<MapQuickView>(NAMESPACE, VERSION_MAJOR);
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

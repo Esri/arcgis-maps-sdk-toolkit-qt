@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2024 Esri
  *
@@ -23,46 +24,47 @@
 // Toolkit headers
 #include "PopupViewController.h"
 
-namespace Esri::ArcGISRuntime::Toolkit {
-
-/*!
-  \internal
-  This class is an internal implementation detail and is subject to change.
- */
-FieldsPopupElementViewController::FieldsPopupElementViewController(
-    FieldsPopupElement* fieldsPopupElement, PopupViewController* popupViewController, QObject* parent)
-  : PopupElementViewItem{fieldsPopupElement, parent}
+namespace Esri::ArcGISRuntime::Toolkit
 {
-  // bubble up signal to PopupViewController
-  connect(this, &FieldsPopupElementViewController::clickedUrl, popupViewController, &PopupViewController::clickedUrl);
-}
 
-FieldsPopupElementViewController::~FieldsPopupElementViewController() = default;
+  /*!
+    \internal
+    This class is an internal implementation detail and is subject to change.
+   */
+  FieldsPopupElementViewController::FieldsPopupElementViewController(FieldsPopupElement* fieldsPopupElement,
+                                                                     PopupViewController* popupViewController,
+                                                                     QObject* parent) :
+    PopupElementViewItem{fieldsPopupElement, parent}
+  {
+    // bubble up signal to PopupViewController
+    connect(this, &FieldsPopupElementViewController::clickedUrl, popupViewController, &PopupViewController::clickedUrl);
+  }
 
-QString FieldsPopupElementViewController::title() const
-{
-  const auto title = static_cast<FieldsPopupElement*>(popupElement())->title();
-  return !title.isEmpty() ? title : QStringLiteral("Fields");
-}
+  FieldsPopupElementViewController::~FieldsPopupElementViewController() = default;
 
-QVariantList FieldsPopupElementViewController::labelsAndValues() const
-{
-  const auto list1 = static_cast<FieldsPopupElement*>(popupElement())->labels();
-  const auto list2 = static_cast<FieldsPopupElement*>(popupElement())->formattedValues();
-  QVariantList combinedData;
+  QString FieldsPopupElementViewController::title() const
+  {
+    const auto title = static_cast<FieldsPopupElement*>(popupElement())->title();
+    return !title.isEmpty() ? title : QStringLiteral("Fields");
+  }
 
-  Q_ASSERT(list1.size() == list2.size());
+  QVariantList FieldsPopupElementViewController::labelsAndValues() const
+  {
+    const auto list1 = static_cast<FieldsPopupElement*>(popupElement())->labels();
+    const auto list2 = static_cast<FieldsPopupElement*>(popupElement())->formattedValues();
+    QVariantList combinedData;
 
-  std::transform(list1.begin(), list1.end(), list2.begin(),
-                 std::back_inserter(combinedData),
-                 [](const QString &item1, const QString &item2) {
-    QVariantMap item;
-    item["label"] = item1;
-    item["formattedValue"] = item2;
-    return item;
-  });
+    Q_ASSERT(list1.size() == list2.size());
 
-  return combinedData;
-}
+    std::transform(list1.begin(), list1.end(), list2.begin(), std::back_inserter(combinedData), [](const QString& item1, const QString& item2)
+    {
+      QVariantMap item;
+      item["label"] = item1;
+      item["formattedValue"] = item2;
+      return item;
+    });
+
+    return combinedData;
+  }
 
 } // namespace Esri::ArcGISRuntime::Toolkit

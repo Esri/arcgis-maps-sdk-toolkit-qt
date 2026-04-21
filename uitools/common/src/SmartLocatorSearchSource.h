@@ -16,18 +16,19 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_SMARTLOCATORSEARCHSOURCE_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_SMARTLOCATORSEARCHSOURCE_H
 
-// Toolkit headers
-#include "LocatorSearchSource.h"
-
-// ArcGISRuntime headers
-#include <LocatorTask.h>
-#include <SymbolStyle.h>
-
 // Qt headers
 #include <QObject>
 #include <QVariant>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+// STL headers
+#include <LocatorTask.h>
+#include <SymbolStyle.h>
+
+// Other headers
+#include "LocatorSearchSource.h"
+
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   class SmartLocatorSearchSource : public LocatorSearchSource
   {
@@ -60,6 +61,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     int m_repeatSearchSuggestThreshold;
   };
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_SMARTLOCATORSEARCHSOURCE_H

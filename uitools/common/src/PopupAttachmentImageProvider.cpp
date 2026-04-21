@@ -22,10 +22,10 @@
 // Qt headers
 #include <QFileSystemModel>
 #include <QFuture>
-#include <QtGlobal>
 #include <QIcon>
 #include <QMimeDatabase>
 #include <QPointer>
+#include <QtGlobal>
 
 // Maps SDK headers
 #include <Item.h>
@@ -34,169 +34,178 @@
 // Toolkit headers
 #include "PopupAttachmentItem.h"
 
-namespace Esri::ArcGISRuntime::Toolkit {
-
-namespace {
-
-/*!
-  \internal
-  This class is an internal implementation detail and is subject to change.
- */
-class PopupAttachmentImageResponse : public QQuickImageResponse
+namespace Esri::ArcGISRuntime::Toolkit
 {
-public:
-  PopupAttachmentImageResponse(PopupAttachmentItem* popupAttachmentItem, QSize requestedSize);
-  ~PopupAttachmentImageResponse() override;
-  QQuickTextureFactory* textureFactory() const override;
 
-private:
-  QPointer<PopupAttachmentItem> m_popupAttachmentItem;
-  QSize m_requestedSize;
-};
-
-PopupAttachmentImageResponse::PopupAttachmentImageResponse(PopupAttachmentItem* popupAttachmentItem, QSize requestedSize) :
-  m_popupAttachmentItem(popupAttachmentItem),
-  m_requestedSize(std::move(requestedSize))
-{
-  if (!m_popupAttachmentItem)
+  namespace
   {
-    emit finished();
-    return;
-  }
 
-  auto thumbnail = popupAttachmentItem->thumbnail();
-  if (!thumbnail.isNull())
-  {
-    // We have a thumbnail to display so just go ahead and display this.
-    emit finished();
-    return;
-  }
+    /*!
+      \internal
+      This class is an internal implementation detail and is subject to change.
+     */
+    class PopupAttachmentImageResponse : public QQuickImageResponse
+    {
+    public:
+      PopupAttachmentImageResponse(PopupAttachmentItem* popupAttachmentItem, QSize requestedSize);
+      ~PopupAttachmentImageResponse() override;
+      QQuickTextureFactory* textureFactory() const override;
 
-  auto item = m_popupAttachmentItem;
-  if (!item)
-  {
-    emit finished();
-    return;
-  }
+    private:
+      QPointer<PopupAttachmentItem> m_popupAttachmentItem;
+      QSize m_requestedSize;
+    };
 
-  auto itemThumbnail = item->thumbnail();
-  if (!itemThumbnail.isNull())
-  {
-    // We have a good thumbnail.
-    emit finished();
-    return;
-  }
+    PopupAttachmentImageResponse::PopupAttachmentImageResponse(PopupAttachmentItem* popupAttachmentItem, QSize requestedSize) :
+      m_popupAttachmentItem(popupAttachmentItem),
+      m_requestedSize(std::move(requestedSize))
+    {
+      if (!m_popupAttachmentItem)
+      {
+        emit finished();
+        return;
+      }
 
-  auto popupAttachment = item->popupAttachment();
-  if (popupAttachment->popupAttachmentType() != PopupAttachmentType::Image)
-  {
-    emit finished();
-    return;
-  }
-}
+      auto thumbnail = popupAttachmentItem->thumbnail();
+      if (!thumbnail.isNull())
+      {
+        // We have a thumbnail to display so just go ahead and display this.
+        emit finished();
+        return;
+      }
 
-PopupAttachmentImageResponse::~PopupAttachmentImageResponse() = default;
+      auto item = m_popupAttachmentItem;
+      if (!item)
+      {
+        emit finished();
+        return;
+      }
 
-QQuickTextureFactory* PopupAttachmentImageResponse::textureFactory() const
-{
-  QImage thumbnail;
-  QIcon icon;
+      auto itemThumbnail = item->thumbnail();
+      if (!itemThumbnail.isNull())
+      {
+        // We have a good thumbnail.
+        emit finished();
+        return;
+      }
 
-  if (m_popupAttachmentItem)
-  {
-    thumbnail = m_popupAttachmentItem->thumbnail();
-  }
-
-  // Handles edge case for Mobile since QAbstractFileIconProvider returns a Null QIcon.
-#if defined(Q_OS_IOS) || defined(Q_OS_ANDROID)
-  if (thumbnail.isNull() || m_popupAttachmentItem->popupAttachmentType() != PopupAttachmentType::Image)
-  {
-    switch (m_popupAttachmentItem->popupAttachmentType()) {
-      case PopupAttachmentType::Image:
-        icon = QIcon(QStringLiteral(":/Esri/ArcGISRuntime/Toolkit/image.svg"));
-        break;
-      case PopupAttachmentType::Video:
-        icon = QIcon(QStringLiteral(":/Esri/ArcGISRuntime/Toolkit/video.svg"));
-        break;
-      case PopupAttachmentType::Document:
-        icon = QIcon(QStringLiteral(":/Esri/ArcGISRuntime/Toolkit/file.svg"));
-        break;
-      case PopupAttachmentType::Other:
-        [[fallthrough]];
-      default:
-        icon = QIcon(QStringLiteral(":/Esri/ArcGISRuntime/Toolkit/other.svg"));
-        break;
+      auto popupAttachment = item->popupAttachment();
+      if (popupAttachment->popupAttachmentType() != PopupAttachmentType::Image)
+      {
+        emit finished();
+        return;
+      }
     }
 
-    auto pixmap = icon.pixmap(32, 32);
-    thumbnail = pixmap.toImage();
-    return QQuickTextureFactory::textureFactoryForImage(thumbnail);
-  }
+    PopupAttachmentImageResponse::~PopupAttachmentImageResponse() = default;
+
+    QQuickTextureFactory* PopupAttachmentImageResponse::textureFactory() const
+    {
+      QImage thumbnail;
+      QIcon icon;
+
+      if (m_popupAttachmentItem)
+      {
+        thumbnail = m_popupAttachmentItem->thumbnail();
+      }
+
+      // Handles edge case for Mobile since QAbstractFileIconProvider returns a Null QIcon.
+#if defined(Q_OS_IOS) || defined(Q_OS_ANDROID)
+      if (thumbnail.isNull() || m_popupAttachmentItem->popupAttachmentType() != PopupAttachmentType::Image)
+      {
+        switch (m_popupAttachmentItem->popupAttachmentType())
+        {
+          case PopupAttachmentType::Image:
+            icon = QIcon(QStringLiteral(":/Esri/ArcGISRuntime/Toolkit/image.svg"));
+            break;
+          case PopupAttachmentType::Video:
+            icon = QIcon(QStringLiteral(":/Esri/ArcGISRuntime/Toolkit/video.svg"));
+            break;
+          case PopupAttachmentType::Document:
+            icon = QIcon(QStringLiteral(":/Esri/ArcGISRuntime/Toolkit/file.svg"));
+            break;
+          case PopupAttachmentType::Other:
+            [[fallthrough]];
+          default:
+            icon = QIcon(QStringLiteral(":/Esri/ArcGISRuntime/Toolkit/other.svg"));
+            break;
+        }
+
+        auto pixmap = icon.pixmap(32, 32);
+        thumbnail = pixmap.toImage();
+        return QQuickTextureFactory::textureFactoryForImage(thumbnail);
+      }
 #endif
 
-  if (thumbnail.isNull() && m_popupAttachmentItem->dataFetched())
-  {
-    QFileSystemModel fileSystemModel;
-    auto index = fileSystemModel.index(m_popupAttachmentItem->localData().toLocalFile());
-    icon = fileSystemModel.fileIcon(index);
+      if (thumbnail.isNull() && m_popupAttachmentItem->dataFetched())
+      {
+        QFileSystemModel fileSystemModel;
+        auto index = fileSystemModel.index(m_popupAttachmentItem->localData().toLocalFile());
+        icon = fileSystemModel.fileIcon(index);
 
-    auto pixmap = icon.pixmap(32, 32);
-    thumbnail = pixmap.toImage();
+        auto pixmap = icon.pixmap(32, 32);
+        thumbnail = pixmap.toImage();
+      }
+
+      return QQuickTextureFactory::textureFactoryForImage(m_requestedSize.isValid() ? thumbnail.scaled(m_requestedSize) : thumbnail);
+    }
+  } // namespace
+
+  const QString PopupAttachmentImageProvider::PROVIDER_ID = QStringLiteral("PopupAttachmentItems");
+
+  PopupAttachmentImageProvider* PopupAttachmentImageProvider::instance()
+  {
+    // It is assumed that the instance is passed to QQuickEngine image providers -- which will take
+    // ownership and delete this object, otherwise a memory leak will occur.
+    // we do not know when QQuickEngine will delete it so we check before creating a new instance
+    static QPointer<PopupAttachmentImageProvider> self;
+    if (!self)
+    {
+      self = new PopupAttachmentImageProvider;
+    }
+    return self;
   }
 
-  return QQuickTextureFactory::textureFactoryForImage(m_requestedSize.isValid() ? thumbnail.scaled(m_requestedSize) : thumbnail);
-}
-}
+  PopupAttachmentImageProvider::PopupAttachmentImageProvider() = default;
 
-const QString PopupAttachmentImageProvider::PROVIDER_ID = QStringLiteral("PopupAttachmentItems");
+  PopupAttachmentImageProvider::~PopupAttachmentImageProvider() = default;
 
-PopupAttachmentImageProvider* PopupAttachmentImageProvider::instance()
-{
-  // It is assumed that the instance is passed to QQuickEngine image providers -- which will take
-  // ownership and delete this object, otherwise a memory leak will occur.
-  // we do not know when QQuickEngine will delete it so we check before creating a new instance
-  static QPointer<PopupAttachmentImageProvider> self;
-  if (!self)
+  bool PopupAttachmentImageProvider::registerItem(PopupAttachmentItem* item)
   {
-    self = new PopupAttachmentImageProvider;
+    if (!item)
+    {
+      return false;
+    }
+
+    const auto key = item->id();
+
+    if (m_itemMap.contains(key))
+    {
+      return false;
+    }
+
+    m_itemMap.insert(key, item);
+    QObject::connect(item, &QObject::destroyed, this, [this, key]
+    {
+      m_itemMap.remove(key);
+    });
+    return true;
   }
-  return self;
-}
 
-PopupAttachmentImageProvider::PopupAttachmentImageProvider() = default;
-
-PopupAttachmentImageProvider::~PopupAttachmentImageProvider() = default;
-
-bool PopupAttachmentImageProvider::registerItem(PopupAttachmentItem* item)
-{
-  if (!item)
-    return false;
-
-  const auto key = item->id();
-
-  if (m_itemMap.contains(key))
-    return false;
-
-  m_itemMap.insert(key, item);
-  QObject::connect(item, &QObject::destroyed, this, [this, key]
+  bool PopupAttachmentImageProvider::deregisterItem(PopupAttachmentItem* item)
   {
-    m_itemMap.remove(key);
-  });
-  return true;
-}
+    if (!item)
+    {
+      return false;
+    }
+    QObject::disconnect(item, nullptr, this, nullptr);
+    return m_itemMap.remove(item->id()) > 0;
+  }
 
-bool PopupAttachmentImageProvider::deregisterItem(PopupAttachmentItem* item)
-{
-  if (!item)
-    return false;
-  QObject::disconnect(item, nullptr, this, nullptr);
-  return m_itemMap.remove(item->id()) > 0;
-}
+  QQuickImageResponse* PopupAttachmentImageProvider::requestImageResponse(const QString& id, const QSize& requestedSize)
+  {
+    auto itemIt = m_itemMap.find(QUuid::fromString(id));
+    return new PopupAttachmentImageResponse(itemIt == std::end(m_itemMap) ? nullptr : itemIt.value(), requestedSize);
+  }
 
-QQuickImageResponse* PopupAttachmentImageProvider::requestImageResponse(const QString& id, const QSize& requestedSize)
-{
-  auto itemIt = m_itemMap.find(QUuid::fromString(id));
-  return new PopupAttachmentImageResponse(itemIt == std::end(m_itemMap) ? nullptr : itemIt.value(), requestedSize);
-}
-
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

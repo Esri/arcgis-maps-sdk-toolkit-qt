@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2020 Esri
  *
@@ -17,71 +18,72 @@
 
 #include "CoordinateConversionConstants.h"
 
-namespace Esri::ArcGISRuntime::Toolkit {
-
-CoordinateConversionOption* createDecimalDegrees(QObject* parent)
+namespace Esri::ArcGISRuntime::Toolkit
 {
-  auto option = new CoordinateConversionOption(parent);
-  option->setName(CoordinateConversionConstants::DECIMAL_DEGREES_FORMAT);
-  option->setOutputMode(CoordinateConversionOption::CoordinateType::LatLon);
-  option->setLatLonFormat(LatitudeLongitudeFormat::DecimalDegrees);
-  return option;
-}
 
-CoordinateConversionOption* createDegreesDecimalMinutes(QObject* parent)
-{
-  auto option = new CoordinateConversionOption(parent);
-  option->setName(CoordinateConversionConstants::DEGREES_DECIMAL_MINUTES_FORMAT);
-  option->setOutputMode(CoordinateConversionOption::CoordinateType::LatLon);
-  option->setLatLonFormat(LatitudeLongitudeFormat::DegreesDecimalMinutes);
-  return option;
-}
+  CoordinateConversionOption* createDecimalDegrees(QObject* parent)
+  {
+    auto option = new CoordinateConversionOption(parent);
+    option->setName(CoordinateConversionConstants::DECIMAL_DEGREES_FORMAT);
+    option->setOutputMode(CoordinateConversionOption::CoordinateType::LatLon);
+    option->setLatLonFormat(LatitudeLongitudeFormat::DecimalDegrees);
+    return option;
+  }
 
-CoordinateConversionOption* createDegreesMinutesSeconds(QObject* parent)
-{
-  auto option = new CoordinateConversionOption(parent);
-  option->setName(CoordinateConversionConstants::DEGREES_MINUTES_SECONDS_FORMAT);
-  option->setOutputMode(CoordinateConversionOption::CoordinateType::LatLon);
-  option->setLatLonFormat(LatitudeLongitudeFormat::DegreesMinutesSeconds);
-  return option;
-}
+  CoordinateConversionOption* createDegreesDecimalMinutes(QObject* parent)
+  {
+    auto option = new CoordinateConversionOption(parent);
+    option->setName(CoordinateConversionConstants::DEGREES_DECIMAL_MINUTES_FORMAT);
+    option->setOutputMode(CoordinateConversionOption::CoordinateType::LatLon);
+    option->setLatLonFormat(LatitudeLongitudeFormat::DegreesDecimalMinutes);
+    return option;
+  }
 
-CoordinateConversionOption* createMgrs(MgrsConversionMode mode, QObject* parent)
-{
-  auto option = new CoordinateConversionOption(parent);
-  option->setName(CoordinateConversionConstants::MGRS_FORMAT);
-  option->setOutputMode(CoordinateConversionOption::CoordinateType::Mgrs);
-  option->setMgrsConversionMode(mode);
-  return option;
-}
+  CoordinateConversionOption* createDegreesMinutesSeconds(QObject* parent)
+  {
+    auto option = new CoordinateConversionOption(parent);
+    option->setName(CoordinateConversionConstants::DEGREES_MINUTES_SECONDS_FORMAT);
+    option->setOutputMode(CoordinateConversionOption::CoordinateType::LatLon);
+    option->setLatLonFormat(LatitudeLongitudeFormat::DegreesMinutesSeconds);
+    return option;
+  }
 
-CoordinateConversionOption* createUsng(int precision, bool useSpaces, QObject* parent)
-{
-  auto option = new CoordinateConversionOption(parent);
-  option->setName(CoordinateConversionConstants::USNG_FORMAT);
-  option->setOutputMode(CoordinateConversionOption::CoordinateType::Usng);
-  option->setPrecision(precision);
-  option->setHasSpaces(useSpaces);
-  return option;
-}
+  CoordinateConversionOption* createMgrs(MgrsConversionMode mode, QObject* parent)
+  {
+    auto option = new CoordinateConversionOption(parent);
+    option->setName(CoordinateConversionConstants::MGRS_FORMAT);
+    option->setOutputMode(CoordinateConversionOption::CoordinateType::Mgrs);
+    option->setMgrsConversionMode(mode);
+    return option;
+  }
 
-CoordinateConversionOption* createUtm(UtmConversionMode mode, bool useSpaces, QObject* parent)
-{
-  auto option = new CoordinateConversionOption(parent);
-  option->setName(CoordinateConversionConstants::UTM_FORMAT);
-  option->setOutputMode(CoordinateConversionOption::CoordinateType::Utm);
-  option->setUtmConversionMode(mode);
-  option->setHasSpaces(useSpaces);
-  return option;
-}
+  CoordinateConversionOption* createUsng(int precision, bool useSpaces, QObject* parent)
+  {
+    auto option = new CoordinateConversionOption(parent);
+    option->setName(CoordinateConversionConstants::USNG_FORMAT);
+    option->setOutputMode(CoordinateConversionOption::CoordinateType::Usng);
+    option->setPrecision(precision);
+    option->setHasSpaces(useSpaces);
+    return option;
+  }
 
-CoordinateConversionOption* createGars(GarsConversionMode mode, QObject* parent)
-{
-  auto option = new CoordinateConversionOption(parent);
-  option->setName(CoordinateConversionConstants::GARS_FORMAT);
-  option->setOutputMode(CoordinateConversionOption::CoordinateType::Gars);
-  option->setGarsConversionMode(mode);
-  return option;
-}
+  CoordinateConversionOption* createUtm(UtmConversionMode mode, bool useSpaces, QObject* parent)
+  {
+    auto option = new CoordinateConversionOption(parent);
+    option->setName(CoordinateConversionConstants::UTM_FORMAT);
+    option->setOutputMode(CoordinateConversionOption::CoordinateType::Utm);
+    option->setUtmConversionMode(mode);
+    option->setHasSpaces(useSpaces);
+    return option;
+  }
 
-} // Esri::ArcGISRuntime::Toolkit
+  CoordinateConversionOption* createGars(GarsConversionMode mode, QObject* parent)
+  {
+    auto option = new CoordinateConversionOption(parent);
+    option->setName(CoordinateConversionConstants::GARS_FORMAT);
+    option->setOutputMode(CoordinateConversionOption::CoordinateType::Gars);
+    option->setGarsConversionMode(mode);
+    return option;
+  }
+
+} // namespace Esri::ArcGISRuntime::Toolkit

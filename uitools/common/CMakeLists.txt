@@ -15,7 +15,6 @@ cmake_minimum_required(VERSION 3.16)
 
 set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_SOURCES
     ../common/src/AuthenticatorController.cpp
-    ../common/src/AuthenticationController.cpp
     ../common/src/AttachmentsPopupElementViewController.cpp
     ../common/src/BarChartPopupMediaItem.cpp
     ../common/src/BasemapGalleryController.cpp
@@ -69,7 +68,6 @@ set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_SOURCES
 
 set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_HEADERS
     ../common/src/AuthenticatorController.h
-    ../common/src/AuthenticationController.h
     ../common/src/AttachmentsPopupElementViewController.h
     ../common/src/BarChartPopupMediaItem.h
     ../common/src/BasemapGalleryController.h
@@ -128,6 +126,24 @@ set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_HEADERS
 set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_INCLUDES
     ../common/src
 )
+
+set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_IOS_FRAMEWORKS)
+
+if(IOS)
+    list(APPEND ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_SOURCES
+        ../common/src/IOS/IOSWebAuthenticationSession.mm
+    )
+    list(APPEND ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_HEADERS
+        ../common/src/IOS/IOSWebAuthenticationSession.h
+    )
+    list(APPEND ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_INCLUDES
+        ../common/src/IOS
+    )
+
+    list(APPEND ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_IOS_FRAMEWORKS
+        "-framework AuthenticationServices"
+    )
+endif()
 
 set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_IMAGES
     ../common/images/basemap.svg

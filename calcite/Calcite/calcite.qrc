@@ -45,5 +45,6 @@
         <file>images/chevron-left.svg</file>
         <file>images/chevron-right.svg</file>
         <file>images/line-solid.svg</file>
+        <file>ProgressBar.qml</file>
     </qresource>
 </RCC>

@@ -22,42 +22,44 @@
 // Other headers
 #include "QmlEnums.h"
 
-namespace Esri::ArcGISRuntime {
-
-class TextPopupElement;
-class PopupElement;
-class PopupMedia;
-
-namespace Toolkit
+namespace Esri::ArcGISRuntime
 {
 
-class PopupMediaItem : public QObject
-{
-  Q_OBJECT
-  Q_PROPERTY(QString title READ title NOTIFY popupMediaItemChanged)
-  Q_PROPERTY(QString caption READ caption NOTIFY popupMediaItemChanged)
-  Q_PROPERTY(PopupMediaType popupMediaType READ popupMediaType NOTIFY popupMediaItemChanged)
+  class TextPopupElement;
+  class PopupElement;
+  class PopupMedia;
 
-public:
-  PopupMediaItem(QObject* parent = nullptr) = delete;
-  explicit PopupMediaItem(PopupMedia* popupMedia, QObject* parent = nullptr);
+  namespace Toolkit
+  {
 
-  ~PopupMediaItem() override;
+    class PopupMediaItem : public QObject
+    {
+      Q_OBJECT
+      Q_PROPERTY(QString title READ title NOTIFY popupMediaItemChanged)
+      Q_PROPERTY(QString caption READ caption NOTIFY popupMediaItemChanged)
+      Q_PROPERTY(PopupMediaType popupMediaType READ popupMediaType NOTIFY popupMediaItemChanged)
 
-private:
-  QString title() const;
-  QString caption() const;
-  PopupMediaType popupMediaType() const;
-public:
-  PopupMedia* popupMediaItem() const;
+    public:
+      PopupMediaItem(QObject* parent = nullptr) = delete;
+      explicit PopupMediaItem(PopupMedia* popupMedia, QObject* parent = nullptr);
 
-signals:
-  void popupMediaItemChanged();
+      ~PopupMediaItem() override;
 
-private:
-  PopupMedia* m_popupMedia = nullptr;
-};
+    private:
+      QString title() const;
+      QString caption() const;
+      PopupMediaType popupMediaType() const;
 
-} // Toolkit
-} // Esri::ArcGISRuntime
+    public:
+      PopupMedia* popupMediaItem() const;
+
+    signals:
+      void popupMediaItemChanged();
+
+    private:
+      PopupMedia* m_popupMedia = nullptr;
+    };
+
+  } // namespace Toolkit
+} // namespace Esri::ArcGISRuntime
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_POPUPMEDIAITEM_H

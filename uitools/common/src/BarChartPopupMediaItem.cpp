@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2025 Esri
  *
@@ -26,67 +27,72 @@
 // Toolkit headers
 #include <PopupMediaItem.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
-
-/*!
-  \internal
-  This class is an internal implementation detail and is subject to change.
- */
-BarChartPopupMediaItem::BarChartPopupMediaItem(PopupMedia* popupMedia, QObject* parent)
-  : PopupMediaItem{popupMedia, parent}
+namespace Esri::ArcGISRuntime::Toolkit
 {
-}
 
-BarChartPopupMediaItem::~BarChartPopupMediaItem() = default;
-
-QVariantList BarChartPopupMediaItem::barSetLabels() const
-{
-  return m_barSetLabels;
-}
-
-QVariantList BarChartPopupMediaItem::barSets()
-{
-  QVariantList barSets;
-  auto mediaValue = popupMediaItem()->value();
-  const auto popupMediaValueDataLength = mediaValue->data().length();
-  const auto chartColors = mediaValue->chartColors();
-  const auto colorsHasLessThanLabels = chartColors.size() < popupMediaValueDataLength;
-
-  for (int i = 0; i < popupMediaValueDataLength; i++)
+  /*!
+    \internal
+    This class is an internal implementation detail and is subject to change.
+   */
+  BarChartPopupMediaItem::BarChartPopupMediaItem(PopupMedia* popupMedia, QObject* parent) :
+    PopupMediaItem{popupMedia, parent}
   {
-    const auto label = mediaValue->labels().at(i);
-    const auto value = mediaValue->data().at(i).toReal();
-    m_barSetLabels.append(label);
-
-    if (value >= m_maxValue)
-      m_maxValue = value;
-
-    if (value <= m_minValue)
-      m_minValue = value;
-
-    const auto barset = new QBarSet(label);
-    barset->append(value);
-
-    if (!chartColors.isEmpty() && !colorsHasLessThanLabels)
-    {
-      const auto color = chartColors.at(i);
-      barset->setColor(color);
-      barset->setBorderColor(color);
-    }
-    barSets.append(QVariant::fromValue(barset));
   }
-  emit barChartPopupMediaItemChanged();
-  return barSets;
-}
 
-qreal BarChartPopupMediaItem::maxValue() const
-{
-  return m_maxValue;
-}
+  BarChartPopupMediaItem::~BarChartPopupMediaItem() = default;
 
-qreal BarChartPopupMediaItem::minValue() const
-{
-  return m_minValue;
-}
+  QVariantList BarChartPopupMediaItem::barSetLabels() const
+  {
+    return m_barSetLabels;
+  }
+
+  QVariantList BarChartPopupMediaItem::barSets()
+  {
+    QVariantList barSets;
+    auto* mediaValue = popupMediaItem()->value();
+    const auto popupMediaValueDataLength = mediaValue->data().length();
+    const auto chartColors = mediaValue->chartColors();
+    const auto colorsHasLessThanLabels = chartColors.size() < popupMediaValueDataLength;
+
+    for (int i = 0; i < popupMediaValueDataLength; i++)
+    {
+      const auto label = mediaValue->labels().at(i);
+      const auto value = mediaValue->data().at(i).toReal();
+      m_barSetLabels.append(label);
+
+      if (value >= m_maxValue)
+      {
+        m_maxValue = value;
+      }
+
+      if (value <= m_minValue)
+      {
+        m_minValue = value;
+      }
+
+      const auto barset = new QBarSet(label);
+      barset->append(value);
+
+      if (!chartColors.isEmpty() && !colorsHasLessThanLabels)
+      {
+        const auto color = chartColors.at(i);
+        barset->setColor(color);
+        barset->setBorderColor(color);
+      }
+      barSets.append(QVariant::fromValue(barset));
+    }
+    emit barChartPopupMediaItemChanged();
+    return barSets;
+  }
+
+  qreal BarChartPopupMediaItem::maxValue() const
+  {
+    return m_maxValue;
+  }
+
+  qreal BarChartPopupMediaItem::minValue() const
+  {
+    return m_minValue;
+  }
 
 } // namespace Esri::ArcGISRuntime::Toolkit

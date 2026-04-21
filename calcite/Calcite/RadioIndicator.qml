@@ -18,12 +18,13 @@ import QtQuick
 
 Rectangle {
     property var control;
+    property bool isHoveredAndEnabled: control.hovered && control.enabled
 
     implicitWidth: 20
     implicitHeight: 20
     border {
         width: 2
-        color: control.checked ? control.hovered ? Calcite.brandHover : Calcite.brand : control.hovered ? Calcite.text3 : Calcite.borderInput
+        color: control.checked ? isHoveredAndEnabled ? Calcite.brandHover : Calcite.brand : isHoveredAndEnabled ? Calcite.text3 : Calcite.borderInput
     }
     radius: width / 2
     color: Calcite.offWhite
@@ -35,7 +36,7 @@ Rectangle {
         width: 12
         height: 12
         radius: width / 2
-        color: control.hovered ? Calcite.brandHover : Calcite.brand
+        color: isHoveredAndEnabled ? Calcite.brandHover : Calcite.brand
         visible: control.checked
     }
 }

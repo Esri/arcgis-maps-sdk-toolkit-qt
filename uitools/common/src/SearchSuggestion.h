@@ -16,20 +16,21 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_SEARCHSUGGESTION_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_SEARCHSUGGESTION_H
 
-// Toolkit headers
-#include "SearchSourceInterface.h"
-
-// ArcGISRuntime headers
-#include <SuggestResult.h>
-
 // Qt headers
 #include <QObject>
 #include <QString>
 #include <QUrl>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+// STL headers
+#include <SuggestResult.h>
 
-  class SearchSuggestion: public QObject
+// Other headers
+#include "SearchSourceInterface.h"
+
+namespace Esri::ArcGISRuntime::Toolkit
+{
+
+  class SearchSuggestion : public QObject
   {
     Q_OBJECT
     Q_PROPERTY(QString displayTitle READ displayTitle NOTIFY suggestResultChanged)
@@ -70,7 +71,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     SuggestResult m_suggestResult;
   };
 
-} // Esri::ArcGISRuntime::Toolkit
-
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_SEARCHSUGGESTION_H

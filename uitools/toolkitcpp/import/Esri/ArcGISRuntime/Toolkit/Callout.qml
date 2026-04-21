@@ -19,6 +19,7 @@ import QtQuick.Window
 import QtQuick.Layouts
 import QtQuick.Controls
 import QtQuick.Shapes
+import Esri.ArcGISRuntime.Toolkit.Controller
 
 /*!
     \qmltype Callout
@@ -72,6 +73,21 @@ import QtQuick.Shapes
 */
 Pane {
     id: root
+
+    opacity: {
+        if (!calloutData || calloutData.sceneLocationVisibility === undefined) {
+            return 1.0;
+        }
+        const visibility = calloutData.sceneLocationVisibility;
+        return (visibility === QmlEnums.SceneLocationVisibilityHiddenByBaseSurface ||
+                visibility === QmlEnums.SceneLocationVisibilityHiddenByElevation) ? 0.5 : 1.0;
+    }
+
+    background: Rectangle {
+        color: palette.base
+        border.color: palette.dark
+    }
+
 
     enum LeaderPosition {
         UpperLeft = 0,
@@ -291,7 +307,6 @@ Pane {
         Label {
             id: title
             text: calloutData ? calloutData.title : ""
-            color: palette.windowText
             wrapMode: Text.Wrap
             clip: true
             elide: Text.ElideRight
@@ -355,7 +370,6 @@ Pane {
         Label {
             id: detail
             text: calloutData ? calloutData.detail : ""
-            color: palette.windowText
             wrapMode: Text.Wrap
             elide: Text.ElideRight
             clip: true

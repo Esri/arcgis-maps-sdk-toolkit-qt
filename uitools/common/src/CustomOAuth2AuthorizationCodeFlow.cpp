@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2025 Esri
  *
@@ -19,29 +20,20 @@
 
 using namespace Esri::ArcGISRuntime;
 
-namespace Esri::ArcGISRuntime::Toolkit {
-
-CustomOAuth2AuthorizationCodeFlow::CustomOAuth2AuthorizationCodeFlow(QUrl authorizeUrl, QObject* parent) :
-  QAbstractOAuth2(parent),
-  m_authorizeUrl(std::move(authorizeUrl))
+namespace Esri::ArcGISRuntime::Toolkit
 {
-}
 
-CustomOAuth2AuthorizationCodeFlow::~CustomOAuth2AuthorizationCodeFlow() = default;
+  CustomOAuth2AuthorizationCodeFlow::CustomOAuth2AuthorizationCodeFlow(QUrl authorizeUrl, QObject* parent) :
+    QAbstractOAuth2(parent),
+    m_authorizeUrl(std::move(authorizeUrl))
+  {
+  }
 
-void CustomOAuth2AuthorizationCodeFlow::grant()
-{
-  emit authorizeWithBrowser(m_authorizeUrl);
-}
+  CustomOAuth2AuthorizationCodeFlow::~CustomOAuth2AuthorizationCodeFlow() = default;
 
-QString CustomOAuth2AuthorizationCodeFlow::authorizationCode() const
-{
-  return m_authorizationCode;
-}
+  void CustomOAuth2AuthorizationCodeFlow::grant()
+  {
+    emit authorizeWithBrowser(m_authorizeUrl);
+  }
 
-void CustomOAuth2AuthorizationCodeFlow::setAuthorizationCode(const QString& code)
-{
-  m_authorizationCode = code;
-}
-
-} //  Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

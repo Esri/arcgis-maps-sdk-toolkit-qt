@@ -16,9 +16,10 @@
 
 import QtQuick
 import QtQuick.Controls
-import Esri.ArcGISRuntime
+import Esri.Examples
 import Esri.ArcGISRuntime.Toolkit
 import DemoApp
+import Calcite as C
 
 DemoPage {
     sceneViewContents: Component {
@@ -41,10 +42,30 @@ DemoPage {
             }
         }
     }
+    localSceneViewContents: Component {
+        LocalSceneView {
+            id: view
+
+            NorthArrow {
+                geoView: parent
+                anchors {
+                    right: parent.right
+                    bottom: parent.attributionTop
+                    margins: 10
+                }
+            }
+
+            NorthArrowDemo {
+                geoView: view
+            }
+        }
+    }
 
     mapViewContents: Component {
         MapView {
             id: view
+            property bool sliderDrivesRotation: false
+
             NorthArrow {
                 geoView: parent
                 anchors {
@@ -54,7 +75,78 @@ DemoPage {
                 }
             }
             NorthArrowDemo {
+                id: model
                 geoView: view
+            }
+
+            Connections {
+                target: view
+
+                function onMapRotationChanged() {
+                    if (view.sliderDrivesRotation && !model.drawingComplete) {
+                        return;
+                    }
+
+                    view.sliderDrivesRotation = false;
+
+                    slider.value = model.mapViewRotation(view);
+                }
+            }
+
+            Connections {
+                target: model
+
+                function onDrawingCompleteChanged() {
+                    if (!view.sliderDrivesRotation || !model.drawingComplete) {
+                        return;
+                    }
+
+                    view.sliderDrivesRotation = false;
+                    slider.value = model.mapViewRotation(view);
+                }
+            }
+
+            // Slider UI presentation at bottom
+            Rectangle {
+                anchors {
+                    bottom: view.attributionTop
+                    horizontalCenter: parent.horizontalCenter
+                }
+                width: childrenRect.width
+                height: childrenRect.height
+                color: C.Calcite.background
+
+                // sliderCombo: A slider and text for its value
+                Row {
+                    id: sliderCombo
+                    spacing: 5
+                    leftPadding: 5
+                    rightPadding: 5
+                    C.Slider {
+                        id: slider
+                        anchors.verticalCenter: parent.verticalCenter
+                        // Slider controls degrees of rotation
+                        from: 0.0
+                        to: 359.0
+
+                        onMoved: {
+                            view.sliderDrivesRotation = true;
+                            model.setMapViewRotation(view, value);
+                        }
+                    }
+
+                    Label {
+                        anchors {
+                            verticalCenter: parent.verticalCenter
+                            margins: 10
+                        }
+                        horizontalAlignment: TextInput.AlignHCenter
+                        font.pixelSize: 20
+                        color: C.Calcite.text2
+                        text: slider.value.toPrecision(3);
+                        width: 40
+                    }
+                }
             }
         }
     }

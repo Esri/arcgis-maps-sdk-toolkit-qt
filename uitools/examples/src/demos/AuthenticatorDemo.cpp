@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2025 Esri
  *
@@ -30,12 +31,15 @@ AuthenticatorDemo::~AuthenticatorDemo() = default;
 Esri::ArcGISRuntime::Map* AuthenticatorDemo::initMap_(QObject* parent) const
 {
   //return a map that requires authentication
-  return new Esri::ArcGISRuntime::Map(
-      new Esri::ArcGISRuntime::PortalItem(QStringLiteral("e5039444ef3c48b8a8fdc9227f9be7c1"), parent),
-      parent);
+  return new Esri::ArcGISRuntime::Map(new Esri::ArcGISRuntime::PortalItem(QStringLiteral("e5039444ef3c48b8a8fdc9227f9be7c1"), parent), parent);
 }
 
-Esri::ArcGISRuntime::Scene* AuthenticatorDemo::initScene_(QObject* /*parent*/) const
+Esri::ArcGISRuntime::Scene* AuthenticatorDemo::initGlobalScene_(QObject* /*parent*/) const
+{
+  return nullptr;
+}
+
+Esri::ArcGISRuntime::Scene* AuthenticatorDemo::initLocalScene_(QObject* /*parent*/) const
 {
   return nullptr;
 }

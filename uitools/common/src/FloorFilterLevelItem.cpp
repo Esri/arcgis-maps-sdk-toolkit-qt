@@ -19,12 +19,13 @@
 // ArcGISRuntime headers
 #include <FloorLevel.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
-/*!
-  \internal
-  This class is an internal implementation detail and is subject to change.
- */
+  /*!
+    \internal
+    This class is an internal implementation detail and is subject to change.
+   */
 
   FloorFilterLevelItem::FloorFilterLevelItem(QObject* parent) :
     FloorFilterLevelItem(nullptr, parent)
@@ -44,7 +45,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void FloorFilterLevelItem::setFloorLevel(FloorLevel* floorLevel)
   {
     if (m_floorLevel == floorLevel)
+    {
       return;
+    }
 
     m_floorLevel = floorLevel;
     emit floorLevelChanged();
@@ -70,4 +73,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     return m_floorLevel ? m_floorLevel->levelId() : QString{};
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

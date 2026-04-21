@@ -35,6 +35,7 @@ T.Button {
     icon.height: 24
 
     property color color: control.flat ? Calcite.textLink : Calcite.textInverse
+    property color textColor: Calcite.offWhite
     icon.color: color
 
     contentItem: IconLabel {
@@ -45,7 +46,7 @@ T.Button {
         icon: control.icon
         text: control.text
         font: control.font
-        color: control.color
+        color: textColor
         opacity: control.flat && !control.enabled ? 0.3 : 1.0
     }
 
@@ -53,12 +54,15 @@ T.Button {
         radius: 0
         implicitWidth: 80
         implicitHeight: 24
+
+        property bool isHoveredAndEnabled: control.hovered && control.enabled
+
         border {
             color: {
                 if (control.flat) {
-                   return "transparent";
+                    return "transparent";
                 } else {
-                    return control.hovered ? Calcite.brandHover : Calcite.brand;
+                    return isHoveredAndEnabled ? Calcite.brandHover : Calcite.brand;
                 }
             }
             width: 1
@@ -67,12 +71,12 @@ T.Button {
         color: {
             if (control.flat) {
                 return control.pressed || control.checked ? Calcite.foreground3 :
-                                                            control.hovered ? Calcite.foreground2
-                                                                            : "transparent"
+                                                            isHoveredAndEnabled ? Calcite.foreground2:
+                                                                                  "transparent"
             }  else {
-                return control.pressed || control.checked ? Calcite.brandPress
-                                                          : control.hovered ? Calcite.brandHover
-                                                                            : Calcite.brand
+                return control.pressed || control.checked ? Calcite.brandPress :
+                                                            isHoveredAndEnabled ? Calcite.brandHover
+                                                                                : Calcite.brand
             }
         }
         Behavior on color {
@@ -80,6 +84,16 @@ T.Button {
                 duration: 50
             }
             enabled: !control.flat
+        }
+
+        // Keyboard Focus indicator
+        Rectangle {
+            anchors.fill: parent
+            anchors.margins: -2
+            color: "transparent"
+            border.color: Calcite.brandHover
+            visible: control.visualFocus
+            z: 10
         }
     }
 }

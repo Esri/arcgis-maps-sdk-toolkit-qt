@@ -45,4 +45,15 @@ T.CheckBox {
         verticalAlignment: Text.AlignVCenter
         color: Calcite.text2
     }
+
+    // Focus indicator
+    Rectangle {
+        x: control.indicator.x - 2
+        y: control.indicator.y - 2
+        width: control.indicator.width + 4
+        height: control.indicator.height + 4
+        color: "transparent"
+        border.color: Calcite.brandHover
+        visible: control.visualFocus
+    }
 }

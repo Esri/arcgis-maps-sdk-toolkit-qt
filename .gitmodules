@@ -1,0 +1,3 @@
+[submodule "calcite/calcite-design-system"]
+	path = calcite/calcite-design-system
+	url = https://github.com/Esri/calcite-design-system.git

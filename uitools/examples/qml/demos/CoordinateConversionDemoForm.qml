@@ -16,7 +16,7 @@
 
 import QtQuick
 import QtQuick.Controls
-import Esri.ArcGISRuntime
+import Esri.Examples
 import Esri.ArcGISRuntime.Toolkit
 import DemoApp
 
@@ -36,6 +36,25 @@ DemoPage {
                 }
             }
             //! [Set up Coordinate Conversion QML]
+
+            CoordinateConversionDemo {
+                geoView: view
+            }
+        }
+    }
+    localSceneViewContents: Component {
+        LocalSceneView {
+            id: view
+
+            CoordinateConversion {
+                id: gallery
+                geoView: parent
+                anchors {
+                    right: parent.right
+                    margins: 10
+                    bottom: parent.attributionTop
+                }
+            }
 
             CoordinateConversionDemo {
                 geoView: view

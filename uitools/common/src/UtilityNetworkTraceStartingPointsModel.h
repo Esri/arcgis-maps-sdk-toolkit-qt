@@ -17,66 +17,69 @@
 #ifndef UTILITYNETWORKTRACESTARTINGPOINTSMODEL_H
 #define UTILITYNETWORKTRACESTARTINGPOINTSMODEL_H
 
+// Qt headers
 #include <QAbstractListModel>
 
-// ArcGISRuntime headers
+// STL headers
 #include <Point.h>
 
-namespace Esri::ArcGISRuntime {
-
-class UtilityElement;
-
-namespace Toolkit {
-class UtilityNetworkTraceStartingPoint;
-
-class UtilityNetworkTraceStartingPointsModel : public QAbstractListModel
+namespace Esri::ArcGISRuntime
 {
-  Q_OBJECT
 
-public:
-  explicit UtilityNetworkTraceStartingPointsModel(QObject* parent = nullptr);
+  class UtilityElement;
 
-  enum StartingPointRoles
+  namespace Toolkit
   {
-    SourceNameRole = Qt::UserRole + 1,
-    GroupNameRole = Qt::UserRole + 2,
-    HasFractionAlongEdgeRole = Qt::UserRole + 3,
-    FractionAlongEdgeRole = Qt::UserRole + 4,
-    HasMultipleTerminalsRole = Qt::UserRole + 5,
-    MultipleTerminalNamesRole = Qt::UserRole + 6,
-    SelectedTerminalIndexRole = Qt::UserRole + 7,
-  };
+    class UtilityNetworkTraceStartingPoint;
 
-  Qt::ItemFlags flags(const QModelIndex& index) const override;
+    class UtilityNetworkTraceStartingPointsModel : public QAbstractListModel
+    {
+      Q_OBJECT
 
-  int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    public:
+      explicit UtilityNetworkTraceStartingPointsModel(QObject* parent = nullptr);
 
-  QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
-  bool setData(const QModelIndex& index, const QVariant& value, int role) override;
+      enum StartingPointRoles
+      {
+        SourceNameRole = Qt::UserRole + 1,
+        GroupNameRole = Qt::UserRole + 2,
+        HasFractionAlongEdgeRole = Qt::UserRole + 3,
+        FractionAlongEdgeRole = Qt::UserRole + 4,
+        HasMultipleTerminalsRole = Qt::UserRole + 5,
+        MultipleTerminalNamesRole = Qt::UserRole + 6,
+        SelectedTerminalIndexRole = Qt::UserRole + 7,
+      };
 
-  void addStartingPoint(UtilityNetworkTraceStartingPoint* startingPoint);
+      Qt::ItemFlags flags(const QModelIndex& index) const override;
 
-  QList<UtilityElement*> utilityElements() const;
+      int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 
-  void clear();
+      QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+      bool setData(const QModelIndex& index, const QVariant& value, int role) override;
 
-  bool doesItemAlreadyExist(UtilityElement* utilityElement) const;
+      void addStartingPoint(UtilityNetworkTraceStartingPoint* startingPoint);
 
-  void removeAt(int index);
+      QList<UtilityElement*> utilityElements() const;
 
-  Point pointAt(int index);
+      void clear();
 
-  int size() const;
+      bool doesItemAlreadyExist(UtilityElement* utilityElement) const;
 
-  private:
-    QHash<int, QByteArray> roleNames() const override;
+      void removeAt(int index);
 
-  void setupRoles();
+      Point pointAt(int index);
 
-  QHash<int, QByteArray> m_roles;
-  QList<UtilityNetworkTraceStartingPoint*> m_data;
-};
-} // namespace Toolkit
+      int size() const;
+
+    private:
+      QHash<int, QByteArray> roleNames() const override;
+
+      void setupRoles();
+
+      QHash<int, QByteArray> m_roles;
+      QList<UtilityNetworkTraceStartingPoint*> m_data;
+    };
+  } // namespace Toolkit
 } // namespace Esri::ArcGISRuntime
 
 #endif // UTILITYNETWORKTRACESTARTINGPOINTSMODEL_H

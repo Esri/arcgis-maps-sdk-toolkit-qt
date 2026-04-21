@@ -16,17 +16,21 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_BASEMAPGALLERY_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_BASEMAPGALLERY_H
 
+// Qt headers
 #include <QFrame>
 
-namespace Ui {
+namespace Ui
+{
   class BasemapGallery;
 }
 
-namespace Esri::ArcGISRuntime {
+namespace Esri::ArcGISRuntime
+{
 
   class GeoModel;
 
-  namespace Toolkit {
+  namespace Toolkit
+  {
     class BasemapGalleryController;
 
     class BasemapGallery : public QFrame
@@ -51,7 +55,7 @@ namespace Esri::ArcGISRuntime {
       Ui::BasemapGallery* m_ui;
     };
 
-  } // Toolkit
-} // Esri::ArcGISRuntime
+  } // namespace Toolkit
+} // namespace Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_BASEMAPGALLERY_H

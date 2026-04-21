@@ -238,7 +238,7 @@ Pane {
                 }
 
                 // Text display
-                Text {
+                Label {
                     id: basemapLabel
                     anchors.margins: 5
                     width: basemapDelegate.isGrid ? view.cellWidth - anchors.margins * 2 : view.cellWidth - (basemapIcon.width + (anchors.margins * 2) + scrollBar.width)

@@ -16,77 +16,78 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_TIMESLIDERCONTROLLER_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_TIMESLIDERCONTROLLER_H
 
-// ArcGISRuntime headers
-#include <TimeExtent.h>
-#include <TimeValue.h>
-
 // Qt headers
 #include <QDateTime>
 #include <QObject>
 #include <QPointer>
 
-namespace Esri::ArcGISRuntime {
+// STL headers
+#include <TimeExtent.h>
+#include <TimeValue.h>
 
-class GeoView;
-class LayerListModel;
-class MapView;
-class SceneView;
-
-namespace Toolkit
+namespace Esri::ArcGISRuntime
 {
 
-class TimeSliderController : public QObject
-{
-  Q_OBJECT
-  Q_PROPERTY(QObject* geoView READ geoView WRITE setGeoView NOTIFY geoViewChanged)
-  Q_PROPERTY(int numberOfSteps READ numberOfSteps NOTIFY extentsChanged)
-  Q_PROPERTY(int startStep READ startStep NOTIFY stepsChanged)
-  Q_PROPERTY(int endStep READ endStep NOTIFY stepsChanged)
-public:
-  explicit Q_INVOKABLE TimeSliderController(QObject* parent = nullptr);
+  class GeoView;
+  class LayerListModel;
+  class MapView;
+  class SceneView;
 
-  ~TimeSliderController() override;
+  namespace Toolkit
+  {
 
-  QObject* geoView() const;
-  void setGeoView(QObject* geoView);
+    class TimeSliderController : public QObject
+    {
+      Q_OBJECT
+      Q_PROPERTY(QObject* geoView READ geoView WRITE setGeoView NOTIFY geoViewChanged)
+      Q_PROPERTY(int numberOfSteps READ numberOfSteps NOTIFY extentsChanged)
+      Q_PROPERTY(int startStep READ startStep NOTIFY stepsChanged)
+      Q_PROPERTY(int endStep READ endStep NOTIFY stepsChanged)
+    public:
+      explicit Q_INVOKABLE TimeSliderController(QObject* parent = nullptr);
 
-  TimeExtent fullTimeExtent() const;
+      ~TimeSliderController() override;
 
-  TimeValue timeInterval() const;
+      QObject* geoView() const;
+      void setGeoView(QObject* geoView);
 
-  int numberOfSteps() const;
+      TimeExtent fullTimeExtent() const;
 
-  int startStep() const;
-  void setStartStep(int index);
+      TimeValue timeInterval() const;
 
-  int endStep() const;
-  void setEndStep(int index);
+      int numberOfSteps() const;
 
-  Q_INVOKABLE QDateTime timeForStep(int step) const;
+      int startStep() const;
+      void setStartStep(int index);
 
-  void setSteps(std::pair<int, int> steps);
-  Q_INVOKABLE void setSteps(int startStep, int endStep);
+      int endStep() const;
+      void setEndStep(int index);
 
-signals:
-  void geoViewChanged();
-  void extentsChanged();
-  void stepsChanged();
+      Q_INVOKABLE QDateTime timeForStep(int step) const;
 
-private slots:
-    void initializeTimeProperties();
+      void setSteps(std::pair<int, int> steps);
+      Q_INVOKABLE void setSteps(int startStep, int endStep);
 
-private:
-  void initializeTimeProperties(LayerListModel* operationalLayers);
-  void disconnectAllLayers();
-  std::pair<int, int> stepsForGeoViewExtent() const;
+    signals:
+      void geoViewChanged();
+      void extentsChanged();
+      void stepsChanged();
 
-private:
-  std::pair<int, int> m_steps {0, 0};
-  QPointer<QObject> m_geoView = nullptr;
-  QPointer<LayerListModel> m_operationalLayers;
-};
+    private slots:
+      void initializeTimeProperties();
 
-} // Toolkit
-} // Esri::ArcGISRuntime
+    private:
+      void initializeTimeProperties(LayerListModel* operationalLayers);
+      void disconnectAllLayers();
+      std::pair<int, int> stepsForGeoViewExtent() const;
+
+    private:
+      std::pair<int, int> m_steps{0, 0};
+      QPointer<QObject> m_geoView = nullptr;
+      QPointer<LayerListModel> m_operationalLayers;
+    };
+
+  } // namespace Toolkit
+} // namespace Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_TIMESLIDERCONTROLLER_H

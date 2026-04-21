@@ -84,9 +84,10 @@ T.ComboBox {
             id: list
             clip: true
             implicitHeight: contentHeight
-            model: control.popup.visible ? control.delegateModel : null
+            model: control.delegateModel
             currentIndex: control.highlightedIndex
             highlightRangeMode: ListView.ApplyRange
+            highlightMoveDuration: 0
             T.ScrollIndicator.vertical: ScrollIndicator { }
             highlight: Rectangle {
                 width: list.currentItem ? list.currentItem.width : 0
@@ -94,7 +95,7 @@ T.ComboBox {
                 color: !list.currentItem ? "transparent"
                                          : list.currentItem.pressed ? Calcite.brandPress
                                                                     : list.currentItem.hovered ? Calcite.brand
-                                                                                               : "transparent"
+                                                                                               : Calcite.brandHover
             }
         }
 
@@ -102,7 +103,7 @@ T.ComboBox {
             color: Calcite.background
             border {
                 color: Calcite.border1
-                width: Calcite.theme === Calcite.Light ?  1 : 0
+                width: 1
             }
         }
     }

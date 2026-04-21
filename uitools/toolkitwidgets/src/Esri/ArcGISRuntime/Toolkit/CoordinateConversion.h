@@ -16,6 +16,7 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_COORDIANTECONVERSION_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_COORDIANTECONVERSION_H
 
+// Qt headers
 #include <QFrame>
 #include <QPointer>
 
@@ -24,47 +25,51 @@ class QMenu;
 
 namespace Ui
 {
-class CoordinateConversion;
+  class CoordinateConversion;
 }
 
-namespace Esri::ArcGISRuntime {
-    
-class MapGraphicsView;
-class SceneGraphicsView;
-
-namespace Toolkit
+namespace Esri::ArcGISRuntime
 {
 
-class CoordinateConversionController;
-class Flash;
+  class LocalSceneWidget;
+  class MapGraphicsView;
+  class SceneGraphicsView;
 
-class CoordinateConversion : public QFrame
-{
-  Q_OBJECT
-public:
-  explicit CoordinateConversion(QWidget* parent = nullptr);
+  namespace Toolkit
+  {
 
-  ~CoordinateConversion() override;
+    class CoordinateConversionController;
+    class Flash;
 
-  void setMapView(MapGraphicsView* mapView);
+    class CoordinateConversion : public QFrame
+    {
+      Q_OBJECT
+    public:
+      explicit CoordinateConversion(QWidget* parent = nullptr);
 
-  void setSceneView(SceneGraphicsView* sceneView);
+      ~CoordinateConversion() override;
 
-  CoordinateConversionController* controller() const;
+      void setMapView(MapGraphicsView* mapView);
 
-private slots:
-  void addContextMenu(const QPoint& point);
+      void setSceneView(SceneGraphicsView* sceneView);
+      
+      void setLocalSceneView(LocalSceneWidget* localSceneView);
 
-  void flash();
+      CoordinateConversionController* controller() const;
 
-private:
-  CoordinateConversionController* m_controller = nullptr;
-  QMenu* m_resultsMenu = nullptr;
-  QPointer<Flash> m_flash;
-  Ui::CoordinateConversion* m_ui = nullptr;
-};
+    private slots:
+      void addContextMenu(const QPoint& point);
 
-} // Toolkit
-} // Esri::ArcGISRuntime
+      void flash();
+
+    private:
+      CoordinateConversionController* m_controller = nullptr;
+      QMenu* m_resultsMenu = nullptr;
+      QPointer<Flash> m_flash;
+      Ui::CoordinateConversion* m_ui = nullptr;
+    };
+
+  } // namespace Toolkit
+} // namespace Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_COORDIANTECONVERSION_H

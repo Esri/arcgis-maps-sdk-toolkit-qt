@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -17,6 +18,7 @@
 #include "Esri/ArcGISRuntime/Toolkit/register.h"
 #include "proxies/ArcGISRuntimeEnvironmentProxy.h"
 #include "proxies/GeoModelProxy.h"
+#include "proxies/LocalSceneQuickViewProxy.h"
 #include "proxies/MapQuickViewProxy.h"
 #include "proxies/SceneQuickViewProxy.h"
 
@@ -27,6 +29,7 @@
 #include <QtWebView>
 
 #include <ArcGISRuntimeEnvironment.h>
+#include <LocalSceneQuickView.h>
 #include <Map.h>
 #include <MapQuickView.h>
 #include <Scene.h>
@@ -35,12 +38,8 @@
 //------------------------------------------------------------------------------
 int main(int argc, char* argv[])
 {
-
   QtWebView::initialize();
   QGuiApplication app(argc, argv);
-
-  // opt-out of the legacy authentication system
-  Esri::ArcGISRuntime::ArcGISRuntimeEnvironment::setUseLegacyAuthentication(false);
 
   // Use of ArcGIS location services, such as basemap styles, geocoding, and routing services,
   // requires an access token. For more information see
@@ -65,39 +64,22 @@ int main(int argc, char* argv[])
   }
 
   // Register ArcGIS types with QML.
-  qmlRegisterExtendedType<Esri::ArcGISRuntime::MapQuickView,
-                          MapQuickViewProxy>("Esri.ArcGISRuntime", 200, 0, "MapView");
-  qmlRegisterExtendedType<Esri::ArcGISRuntime::SceneQuickView,
-                          SceneQuickViewProxy>("Esri.ArcGISRuntime", 200, 0, "SceneView");
-  qmlRegisterUncreatableType<GeoModelProxy>("Esri.ArcGISRuntime",
-                                            200,
-                                            0,
-                                            "Map",
-                                            "Map not creatable in QML.");
-  qmlRegisterUncreatableType<GeoModelProxy>("Esri.ArcGISRuntime",
-                                            200,
-                                            0,
-                                            "Scene",
-                                            "Scene not creatable in QML.");
+  qmlRegisterExtendedType<Esri::ArcGISRuntime::MapQuickView, MapQuickViewProxy>("Esri.Examples", 200, 0, "MapView");
+  qmlRegisterExtendedType<Esri::ArcGISRuntime::SceneQuickView, SceneQuickViewProxy>("Esri.Examples", 200, 0, "SceneView");
+  qmlRegisterExtendedType<Esri::ArcGISRuntime::LocalSceneQuickView, LocalSceneQuickViewProxy>("Esri.Examples", 3, 0, "LocalSceneView");
+  qmlRegisterUncreatableType<GeoModelProxy>("Esri.Examples", 200, 0, "Map", "Map not creatable in QML.");
+  qmlRegisterUncreatableType<GeoModelProxy>("Esri.Examples", 200, 0, "Scene", "Scene not creatable in QML.");
 
-  qmlRegisterSingletonType<ArcGISRuntimeEnvironmentProxy>(
-      "Esri.ArcGISRuntime",
-      100,
-      15,
-      "ArcGISRuntimeEnvironment",
-      [](QQmlEngine* engine, QJSEngine*) -> QObject*
-      {
-        return new ArcGISRuntimeEnvironmentProxy(engine);
-      });
+  qmlRegisterSingletonType<ArcGISRuntimeEnvironmentProxy>("Esri.Examples", 100, 15, "ArcGISRuntimeEnvironment",
+                                                          [](QQmlEngine* engine, QJSEngine*) -> QObject*
+  {
+    return new ArcGISRuntimeEnvironmentProxy(engine);
+  });
 
-  qmlRegisterSingletonType<EnumsProxy>("Esri.ArcGISRuntime",
-                                       200,
-                                       0,
-                                       "Enums",
-                                       [](QQmlEngine* engine, QJSEngine*) -> QObject*
-                                       {
-                                         return new EnumsProxy(engine);
-                                       });
+  qmlRegisterSingletonType<EnumsProxy>("Esri.Examples", 200, 0, "Enums", [](QQmlEngine* engine, QJSEngine*) -> QObject*
+  {
+    return new EnumsProxy(engine);
+  });
 
   // Register Own types with QML.
   // Initialize application view

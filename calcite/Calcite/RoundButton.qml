@@ -19,6 +19,7 @@ import QtQuick.Templates as T
 
 T.RoundButton {
     id: control
+    property bool isHoveredAndEnabled: control.hovered && control.enabled
 
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
                             implicitContentWidth + leftPadding + rightPadding)
@@ -57,9 +58,9 @@ T.RoundButton {
         border {
             color: {
                 if (control.flat) {
-                   return "transparent";
+                    return "transparent";
                 } else {
-                    return control.hovered ? Calcite.brandHover : Calcite.brand;
+                    return isHoveredAndEnabled ? Calcite.brandHover : Calcite.brand;
                 }
             }
             width: 1
@@ -68,12 +69,12 @@ T.RoundButton {
         color: {
             if (control.flat) {
                 return control.pressed || control.checked ? Calcite.foreground3 :
-                                                            control.hovered ? Calcite.foreground2
-                                                                            : "transparent"
+                                                            isHoveredAndEnabled ? Calcite.foreground2
+                                                                                : "transparent"
             } else {
                 return control.pressed || control.checked ? Calcite.brandPress
-                                                          : control.hovered ? Calcite.brandHover
-                                                                            : Calcite.brand
+                                                          : isHoveredAndEnabled ? Calcite.brandHover
+                                                                                : Calcite.brand
             }
         }
         Behavior on color {
@@ -82,5 +83,16 @@ T.RoundButton {
             }
             enabled: !control.flat
         }
+    }
+
+    // Focus indicator
+    Rectangle {
+        anchors.fill: parent
+        anchors.margins: -2
+        radius: control.radius
+        color: "transparent"
+        border.color: Calcite.brandHover
+        visible: control.visualFocus
+        z: 10
     }
 }

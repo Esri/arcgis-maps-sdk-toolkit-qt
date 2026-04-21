@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -19,26 +20,24 @@
 #include "Envelope.h"
 #include "Error.h"
 #include "Feature.h"
-#include "GeoElement.h"
 #include "IdentifyLayerResult.h"
 #include "LayerListModel.h"
 #include "Map.h"
-#include "MapTypes.h"
 #include "MapQuickView.h"
-#include "MapViewTypes.h"
+#include "MapTypes.h"
 #include "Popup.h"
 #include "PopupDefinition.h"
-#include "PopupManager.h"
 #include "Scene.h"
 #include "SceneQuickView.h"
+#include "LocalSceneQuickView.h"
 #include "ServiceFeatureTable.h"
 #include "SpatialReference.h"
 #include "Viewpoint.h"
 
+#include <QFuture>
 #include <QList>
 #include <QMouseEvent>
 #include <QUuid>
-#include <QFuture>
 
 using namespace Esri::ArcGISRuntime;
 
@@ -54,20 +53,19 @@ PopupViewDemo::~PopupViewDemo()
 
 Esri::ArcGISRuntime::Map* PopupViewDemo::initMap_(QObject* parent) const
 {
-  return new Map(QUrl("https://runtime.maps.arcgis.com/home/webmap/"
-                      "viewer.html?webmap=e4c6eb667e6c43b896691f10cc2f1580"),
+  return new Map(QUrl("https://www.arcgis.com/apps/mapviewer/"
+                      "index.html?webmap=9f3a674e998f461580006e626611f9ad"),
                  parent);
 }
 
-Scene* PopupViewDemo::initScene_(QObject* parent) const
+Scene* PopupViewDemo::initGlobalScene_(QObject* parent) const
 {
-  Scene* scene = BaseDemo::initScene_(parent);
+  Scene* scene = BaseDemo::initGlobalScene_(parent);
   Viewpoint viewPoint(Envelope(-122.5277, 37.7204, -122.3511, 37.7956, SpatialReference(4326)));
   scene->setInitialViewpoint(viewPoint);
-  FeatureLayer* fl = new FeatureLayer(new ServiceFeatureTable(
-                                          QUrl("https://sampleserver6.arcgisonline.com/arcgis/rest/services/"
-                                               "SF311/FeatureServer/0"),
-                                          parent),
+  FeatureLayer* fl = new FeatureLayer(new ServiceFeatureTable(QUrl("https://sampleserver6.arcgisonline.com/arcgis/rest/services/"
+                                                                   "SF311/FeatureServer/0"),
+                                                              parent),
                                       parent);
   scene->operationalLayers()->append(fl);
   return scene;
@@ -81,7 +79,9 @@ Popup* PopupViewDemo::popup()
 void PopupViewDemo::setPopup(Popup* popup)
 {
   if (m_popup == popup)
+  {
     return;
+  }
 
   if (m_popup)
   {
@@ -95,60 +95,62 @@ void PopupViewDemo::setPopup(Popup* popup)
 void PopupViewDemo::setUp()
 {
   apply([this](auto geoView)
+  {
+    using ViewType = std::remove_pointer_t<decltype(geoView)>;
+    connect(geoView, &ViewType::mouseClicked, this, [this, geoView](QMouseEvent& mouse)
+    {
+      auto layer = geoModel()->operationalLayers()->at(0);
+      if (layer->layerType() == LayerType::FeatureLayer)
+      {
+        m_featureLayer = static_cast<FeatureLayer*>(layer);
+        geoView->identifyLayerAsync(m_featureLayer, mouse.position(), 12, false)
+          .then(this, [this](IdentifyLayerResult* rawIdentifyResult)
         {
-          using ViewType = std::remove_pointer_t<decltype(geoView)>;
-          connect(geoView, &ViewType::mouseClicked, this, [this, geoView](QMouseEvent& mouse)
-                  {
-              auto layer = geoModel()->operationalLayers()->at(0);
-                    if (layer->layerType() == LayerType::FeatureLayer)
-                    {
-                      m_featureLayer = static_cast<FeatureLayer*>(layer);
-                      geoView->identifyLayerAsync(m_featureLayer, mouse.position(), 12, false).then(this, [this](IdentifyLayerResult* rawIdentifyResult)
-                      {
-                        // managed by smart pointer
-                        auto identifyResult = std::unique_ptr<IdentifyLayerResult>(rawIdentifyResult);
-                        if (!identifyResult)
-                          return;
+          // managed by smart pointer
+          auto identifyResult = std::unique_ptr<IdentifyLayerResult>(rawIdentifyResult);
+          if (!identifyResult)
+          {
+            return;
+          }
 
-                        if (!identifyResult->error().isEmpty())
-                        {
-                          qDebug() << "Identify error occurred: "
-                                   << identifyResult->error().message();
-                          return;
-                        }
+          if (!identifyResult->error().isEmpty())
+          {
+            qDebug() << "Identify error occurred: " << identifyResult->error().message();
+            return;
+          }
 
-                        m_featureLayer->clearSelection();
+          m_featureLayer->clearSelection();
 
-                        const auto geoElements = identifyResult->geoElements();
+          const auto geoElements = identifyResult->geoElements();
 
-                        if (geoElements.length() == 0)
-                        {
-                          qDebug() << "no geoElements";
-                          return;
-                        }
+          if (geoElements.length() == 0)
+          {
+            qDebug() << "no geoElements";
+            return;
+          }
 
-                        const auto popup = new Popup(geoElements.first(), this);
-                        popup->setParent(this);
+          const auto popup = new Popup(geoElements.first(), this);
+          popup->setParent(this);
 
-                        if (popup->title().isEmpty())
-                        {
-                          popup->popupDefinition()->setTitle(identifyResult->layerContent()->name());
-                        }
+          if (popup->title().isEmpty())
+          {
+            popup->popupDefinition()->setTitle(identifyResult->layerContent()->name());
+          }
 
-                        if (auto element = popup->geoElement())
-                        {
-                          Feature* feature = static_cast<Feature*>(element);
-                          m_featureLayer->selectFeature(feature);
-                        }
+          if (auto* element = popup->geoElement())
+          {
+            Feature* feature = static_cast<Feature*>(element);
+            m_featureLayer->selectFeature(feature);
+          }
 
-                        setPopup(popup);
-                        emit popupChanged();
-                      });
-                    }
-                    else
-                    {
-                      qDebug() << "Unexpected layer type taken from click.";
-                    }
-                  });
+          setPopup(popup);
+          emit popupChanged();
         });
+      }
+      else
+      {
+        qDebug() << "Unexpected layer type taken from click.";
+      }
+    });
+  });
 }

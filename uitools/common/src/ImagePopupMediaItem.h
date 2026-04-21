@@ -19,33 +19,41 @@
 // Qt headers
 #include <QJsonObject>
 #include <QObject>
+#include <QTimer>
 
 // Other headers
 #include "PopupMediaItem.h"
 
-namespace Esri::ArcGISRuntime::Toolkit {
-
-class PopupViewController;
-
-class ImagePopupMediaItem : public PopupMediaItem
+namespace Esri::ArcGISRuntime::Toolkit
 {
-  Q_OBJECT
-  Q_PROPERTY(QUrl sourceUrl READ sourceUrl NOTIFY imagePopupMediaItemChanged)
-  Q_PROPERTY(QUrl linkUrl READ linkUrl NOTIFY imagePopupMediaItemChanged)
 
-public:
-  explicit ImagePopupMediaItem(PopupMedia* popupMedia, PopupViewController* popupViewController, QObject* parent = nullptr);
-  ~ImagePopupMediaItem() override;
+  class PopupViewController;
 
-private:
-  QUrl linkUrl() const;
-  QUrl sourceUrl() const;
+  class ImagePopupMediaItem : public PopupMediaItem
+  {
+    Q_OBJECT
+    Q_PROPERTY(QUrl sourceUrl READ sourceUrl NOTIFY imagePopupMediaItemChanged)
+    Q_PROPERTY(QUrl linkUrl READ linkUrl NOTIFY imagePopupMediaItemChanged)
+    Q_PROPERTY(quint64 imageRefreshInterval READ imageRefreshInterval NOTIFY imagePopupMediaItemChanged)
 
-signals:
-  void imagePopupMediaItemChanged();
-  void imageClicked(const QUrl& sourceUrl, const QUrl& linkUrl);
-};
+  public:
+    explicit ImagePopupMediaItem(PopupMedia* popupMedia, PopupViewController* popupViewController, QObject* parent = nullptr);
+    ~ImagePopupMediaItem() override;
 
-} // Esri::ArcGISRuntime::Toolkit
+  private:
+    QUrl linkUrl() const;
+    QUrl sourceUrl() const;
+    quint64 imageRefreshInterval() const;
+
+    void setupRefreshTimer();
+    QTimer m_refreshTimer;
+
+  signals:
+    void imagePopupMediaItemChanged();
+    void imageClicked(const QUrl& sourceUrl, const QUrl& linkUrl);
+    void refreshImage();
+  };
+
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_IMAGEPOPUPMEDIAITEM_H

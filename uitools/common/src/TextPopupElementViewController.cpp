@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2024 Esri
  *
@@ -22,25 +23,27 @@
 // Toolkit headers
 #include "PopupViewController.h"
 
-namespace Esri::ArcGISRuntime::Toolkit {
-
-/*!
-  \internal
-  This class is an internal implementation detail and is subject to change.
- */
-TextPopupElementViewController::TextPopupElementViewController(
-    TextPopupElement* textPopupElement, PopupViewController* popupViewController, QObject* parent)
-  : PopupElementViewItem{textPopupElement, parent}
+namespace Esri::ArcGISRuntime::Toolkit
 {
-  // bubble up signal to PopupViewController
-  connect(this, &TextPopupElementViewController::clickedUrl, popupViewController, &PopupViewController::clickedUrl);
-}
 
-TextPopupElementViewController::~TextPopupElementViewController() = default;
+  /*!
+    \internal
+    This class is an internal implementation detail and is subject to change.
+   */
+  TextPopupElementViewController::TextPopupElementViewController(TextPopupElement* textPopupElement,
+                                                                 PopupViewController* popupViewController,
+                                                                 QObject* parent) :
+    PopupElementViewItem{textPopupElement, parent}
+  {
+    // bubble up signal to PopupViewController
+    connect(this, &TextPopupElementViewController::clickedUrl, popupViewController, &PopupViewController::clickedUrl);
+  }
 
-QString TextPopupElementViewController::text() const
-{
-  return popupElement() ? static_cast<TextPopupElement*>(popupElement())->text() : nullptr;
-}
+  TextPopupElementViewController::~TextPopupElementViewController() = default;
+
+  QString TextPopupElementViewController::text() const
+  {
+    return popupElement() ? static_cast<TextPopupElement*>(popupElement())->text() : nullptr;
+  }
 
 } // namespace Esri::ArcGISRuntime::Toolkit

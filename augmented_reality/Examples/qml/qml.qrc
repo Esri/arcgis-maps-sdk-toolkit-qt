@@ -1,7 +1,0 @@
-<RCC>
-    <qresource prefix="/qml">
-        <file>main.qml</file>
-        <file>SettingsWindow.qml</file>
-        <file>Message.qml</file>
-    </qresource>
-</RCC>

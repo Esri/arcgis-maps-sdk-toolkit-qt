@@ -30,10 +30,12 @@
 #include <QFuture>
 #include <QIcon>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
 #ifdef CPP_ARCGISRUNTIME_TOOLKIT
-  namespace {
+  namespace
+  {
 
     /*!
       \internal
@@ -84,7 +86,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
       }
 
       // Otherwise attempt a thumbnail fetch.
-      auto basemap = m_galleryItem->basemap();
+      auto* basemap = m_galleryItem->basemap();
       if (!basemap)
       {
         emit finished();
@@ -92,26 +94,26 @@ namespace Esri::ArcGISRuntime::Toolkit {
       }
 
       doOnLoaded(basemap, this, [this, basemap]
-               {
-                 auto item = basemap->item();
-                 if (!item)
-                 {
-                   emit finished();
-                   return;
-                 }
+      {
+        auto item = basemap->item();
+        if (!item)
+        {
+          emit finished();
+          return;
+        }
 
-                 auto itemThumbnail = item->thumbnail();
-                 if (!itemThumbnail.isNull())
-                 {
-                   // We have a good thumbnail.
-                   emit finished();
-                   return;
-                 }
-                 item->fetchThumbnailAsync().then(this, [this](QImage)
-                 {
-                   emit finished();
-                 });
-               });
+        auto itemThumbnail = item->thumbnail();
+        if (!itemThumbnail.isNull())
+        {
+          // We have a good thumbnail.
+          emit finished();
+          return;
+        }
+        item->fetchThumbnailAsync().then(this, [this](QImage)
+        {
+          emit finished();
+        });
+      });
     }
 
     /*!
@@ -132,7 +134,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
       QImage thumbnail;
 
       if (m_galleryItem)
+      {
         thumbnail = m_galleryItem->thumbnail();
+      }
 
       if (thumbnail.isNull())
       {
@@ -142,7 +146,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
       return QQuickTextureFactory::textureFactoryForImage(m_requestedSize.isValid() ? thumbnail.scaled(m_requestedSize) : thumbnail);
     }
-  }
+  } // namespace
 
   /*!
     \internal
@@ -205,18 +209,22 @@ namespace Esri::ArcGISRuntime::Toolkit {
   bool BasemapGalleryImageProvider::registerItem(BasemapGalleryItem* item)
   {
     if (!item)
+    {
       return false;
+    }
 
     const auto key = item->id();
 
     if (m_itemMap.contains(key))
+    {
       return false;
+    }
 
     m_itemMap.insert(key, item);
     QObject::connect(item, &QObject::destroyed, m_internalObject, [this, key]
-                     {
-                       m_itemMap.remove(key);
-                     });
+    {
+      m_itemMap.remove(key);
+    });
     return true;
   }
 
@@ -228,7 +236,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   bool BasemapGalleryImageProvider::deregisterItem(BasemapGalleryItem* item)
   {
     if (!item)
+    {
       return false;
+    }
     QObject::disconnect(item, nullptr, m_internalObject, nullptr);
     return m_itemMap.remove(item->id()) > 0;
   }
@@ -245,4 +255,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
 #endif // CPP_ARCGISRUNTIME_TOOLKIT
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

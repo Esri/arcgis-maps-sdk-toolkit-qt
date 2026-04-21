@@ -18,6 +18,7 @@ import QtQuick.Templates as T
 
 T.Switch {
     id: control
+    property bool isHoveredAndEnabled: control.hovered && control.enabled
 
     implicitWidth: Math.max(background ? background.implicitWidth : 0,
                             contentItem.implicitWidth + leftPadding + rightPadding)
@@ -59,7 +60,7 @@ T.Switch {
             color: Calcite.foreground1
             border {
                 width: 2
-                color: control.checked ? Calcite.brandPress : control.activeFocus || control.hovered ? Calcite.brandHover : Calcite.borderInput
+                color: control.checked ? Calcite.brandPress : control.activeFocus || isHoveredAndEnabled ? Calcite.brandHover : Calcite.borderInput
             }
 
             Behavior on x {
@@ -83,5 +84,15 @@ T.Switch {
         visible: control.text
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
+    }
+
+    // Focus indicator
+    Rectangle {
+        anchors.fill: parent
+        anchors.margins: -2
+        color: "transparent"
+        border.color: Calcite.brandHover
+        border.width: 1
+        visible: control.visualFocus
     }
 }

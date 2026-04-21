@@ -17,59 +17,58 @@
 
 #include "UtilityNetworkFunctionTraceResult.h"
 
-namespace Esri::ArcGISRuntime::Toolkit {
-
-/*!
-  \internal
-  This class is an internal implementation detail and is subject to change.
- */
-
-UtilityNetworkFunctionTraceResult::UtilityNetworkFunctionTraceResult(const QString& name,
-                                                                     UtilityTraceFunctionType type,
-                                                                     double value) :
-  m_name(name),
-  m_type(type),
-  m_value(value)
+namespace Esri::ArcGISRuntime::Toolkit
 {
-  //
-}
 
-UtilityNetworkFunctionTraceResult::~UtilityNetworkFunctionTraceResult() = default;
+  /*!
+    \internal
+    This class is an internal implementation detail and is subject to change.
+   */
 
-QString UtilityNetworkFunctionTraceResult::name() const
-{
-  return m_name;
-}
-
-UtilityTraceFunctionType UtilityNetworkFunctionTraceResult::type() const
-{
-  return m_type;
-}
-
-QString UtilityNetworkFunctionTraceResult::typeAsLabel() const
-{
-  switch(m_type)
+  UtilityNetworkFunctionTraceResult::UtilityNetworkFunctionTraceResult(const QString& name, UtilityTraceFunctionType type, double value) :
+    m_name(name),
+    m_type(type),
+    m_value(value)
   {
-    case UtilityTraceFunctionType::Add:
-      return "Add";
-    case UtilityTraceFunctionType::Average:
-      return "Average";
-    case UtilityTraceFunctionType::Count:
-      return "Count";
-    case UtilityTraceFunctionType::Max:
-      return "Max";
-    case UtilityTraceFunctionType::Min:
-      return "Min";
-    case UtilityTraceFunctionType::Subtract:
-      return "Subtract";
-    default:
-      return "N/a";
+    //
   }
-}
 
-double UtilityNetworkFunctionTraceResult::value() const
-{
-  return m_value;
-}
+  UtilityNetworkFunctionTraceResult::~UtilityNetworkFunctionTraceResult() = default;
 
-} // Esri::ArcGISRuntime::Toolkit
+  QString UtilityNetworkFunctionTraceResult::name() const
+  {
+    return m_name;
+  }
+
+  UtilityTraceFunctionType UtilityNetworkFunctionTraceResult::type() const
+  {
+    return m_type;
+  }
+
+  QString UtilityNetworkFunctionTraceResult::typeAsLabel() const
+  {
+    switch (m_type)
+    {
+      case UtilityTraceFunctionType::Add:
+        return "Add";
+      case UtilityTraceFunctionType::Average:
+        return "Average";
+      case UtilityTraceFunctionType::Count:
+        return "Count";
+      case UtilityTraceFunctionType::Max:
+        return "Max";
+      case UtilityTraceFunctionType::Min:
+        return "Min";
+      case UtilityTraceFunctionType::Subtract:
+        return "Subtract";
+      default:
+        return "N/a";
+    }
+  }
+
+  double UtilityNetworkFunctionTraceResult::value() const
+  {
+    return m_value;
+  }
+
+} // namespace Esri::ArcGISRuntime::Toolkit

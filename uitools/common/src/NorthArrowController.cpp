@@ -16,21 +16,21 @@
  ******************************************************************************/
 #include "NorthArrowController.h"
 
-#include "GeoViews.h"
-
 #include "Camera.h"
+#include "GeoViews.h"
 
 #include <QFuture>
 
 // std headers
 #include <cmath>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
-/*!
-  \internal
-  This class is an internal implementation detail and is subject to change.
- */
+  /*!
+    \internal
+    This class is an internal implementation detail and is subject to change.
+   */
 
   NorthArrowController::NorthArrowController(QObject* parent) :
     QObject(parent)
@@ -43,26 +43,41 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
   void NorthArrowController::setHeading(double heading)
   {
-    if (auto mapView = qobject_cast<MapView*>(m_geoView))
+    if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
       auto future = mapView->setViewpointRotationAsync(heading);
       Q_UNUSED(future)
     }
-    else if (auto sceneView = qobject_cast<SceneView*>(m_geoView))
+    else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
-      Camera currentCamera = sceneView->currentViewpointCamera();
-      Camera updatedCamera = currentCamera.rotateTo(heading, currentCamera.pitch(), currentCamera.roll());
+      const Camera currentCamera = sceneView->currentViewpointCamera();
+      const Camera updatedCamera = currentCamera.rotateTo(heading, currentCamera.pitch(), currentCamera.roll());
       auto future = sceneView->setViewpointCameraAsync(updatedCamera, 0.50);
+      Q_UNUSED(future)
+    }
+    else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
+    {
+      const Camera currentCamera = localSceneView->currentViewpointCamera();
+      const Camera updatedCamera = currentCamera.rotateTo(heading, currentCamera.pitch(), currentCamera.roll());
+      auto future = localSceneView->setViewpointCameraAsync(updatedCamera, 0.50);
       Q_UNUSED(future)
     }
   }
 
   double NorthArrowController::heading() const
   {
-    if (auto mapView = qobject_cast<MapView*>(m_geoView))
+    if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView))
+    {
       return mapView->mapRotation();
-    else if (auto sceneView = qobject_cast<SceneView*>(m_geoView))
+    }
+    else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+    {
       return sceneView->currentViewpointCamera().heading();
+    }
+    else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
+    {
+      return localSceneView->currentViewpointCamera().heading();
+    }
 
     return static_cast<double>(NAN);
   }
@@ -75,7 +90,9 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void NorthArrowController::setGeoView(QObject* geoView)
   {
     if (geoView == m_geoView)
+    {
       return;
+    }
 
     if (m_geoView)
     {
@@ -84,18 +101,20 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
     m_geoView = geoView;
 
-    if (auto mapView = qobject_cast<MapViewToolkit*>(m_geoView))
+    if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
-      connect(mapView, &MapViewToolkit::mapRotationChanged,
-              this, &NorthArrowController::headingChanged);
+      connect(mapView, &MapViewToolkit::mapRotationChanged, this, &NorthArrowController::headingChanged);
     }
-    else if (auto sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+    else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
-      connect(sceneView, &SceneViewToolkit::viewpointChanged,
-              this, &NorthArrowController::headingChanged);
+      connect(sceneView, &SceneViewToolkit::viewpointChanged, this, &NorthArrowController::headingChanged);
+    }
+    else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
+    {
+      connect(localSceneView, &LocalSceneViewToolkit::viewpointChanged, this, &NorthArrowController::headingChanged);
     }
 
     emit geoViewChanged();
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

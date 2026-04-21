@@ -19,47 +19,47 @@
 // Qt headers
 #include <QAbstractProxyModel>
 
-namespace Esri::ArcGISRuntime::Toolkit {
-
-class GenericListModel;
-
-class GenericTableProxyModel : public QAbstractTableModel
+namespace Esri::ArcGISRuntime::Toolkit
 {
-  Q_OBJECT
-public:
-  Q_INVOKABLE explicit GenericTableProxyModel(QObject* parent = nullptr);
 
-  ~GenericTableProxyModel() override;
+  class GenericListModel;
 
-  int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+  class GenericTableProxyModel : public QAbstractTableModel
+  {
+    Q_OBJECT
+  public:
+    Q_INVOKABLE explicit GenericTableProxyModel(QObject* parent = nullptr);
 
-  int columnCount(const QModelIndex& parent = QModelIndex()) const override;
+    ~GenericTableProxyModel() override;
 
-  QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 
-  bool setData(const QModelIndex& index, const QVariant& value, int role) override;
+    int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 
-  Qt::ItemFlags flags(const QModelIndex &index) const override;
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 
-  QVariant headerData(int section, Qt::Orientation orientation,
-                      int role = Qt::DisplayRole) const override;
+    bool setData(const QModelIndex& index, const QVariant& value, int role) override;
 
-  bool insertRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
+    Qt::ItemFlags flags(const QModelIndex& index) const override;
 
-  bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
-  Q_INVOKABLE bool append(QList<QObject*> object);
+    bool insertRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
 
-  Q_INVOKABLE bool append(QObject* object);
+    bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
 
-  GenericListModel* sourceModel() const;
+    Q_INVOKABLE bool append(QList<QObject*> object);
 
-  void setSourceModel(GenericListModel* listModel);
+    Q_INVOKABLE bool append(QObject* object);
 
-private:
-  GenericListModel* m_sourceModel = nullptr;
-};
+    GenericListModel* sourceModel() const;
 
-} // Esri::ArcGISRuntime::Toolkit
+    void setSourceModel(GenericListModel* listModel);
+
+  private:
+    GenericListModel* m_sourceModel = nullptr;
+  };
+
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_GENERICTABLEPROXYMODEL_H

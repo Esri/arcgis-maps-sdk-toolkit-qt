@@ -20,7 +20,6 @@
 // C++ API headers
 #include "FeatureLayer.h"
 #include "Popup.h"
-#include "PopupManager.h"
 
 // Qt headers
 #include <QObject>
@@ -41,7 +40,7 @@ public:
 
 protected:
   Esri::ArcGISRuntime::Map* initMap_(QObject* parent) const override;
-  Esri::ArcGISRuntime::Scene* initScene_(QObject* parent) const override;
+  Esri::ArcGISRuntime::Scene* initGlobalScene_(QObject* parent) const override;
 
 signals:
   void popupChanged();

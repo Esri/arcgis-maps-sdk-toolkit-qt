@@ -16,7 +16,7 @@
 
 import QtQuick
 import QtQuick.Controls
-import Esri.ArcGISRuntime
+import Esri.Examples
 import Esri.ArcGISRuntime.Toolkit
 import DemoApp
 
@@ -45,6 +45,22 @@ DemoPage {
 
     sceneViewContents: Component {
         SceneView {
+            id: view
+            SearchView {
+                geoView: parent
+                anchors {
+                    top: parent.top
+                    right: parent.right
+                    margins: 10
+                }
+            }
+            SearchViewDemo {
+                geoView: view
+            }
+        }
+    }
+    localSceneViewContents: Component {
+        LocalSceneView {
             id: view
             SearchView {
                 geoView: parent

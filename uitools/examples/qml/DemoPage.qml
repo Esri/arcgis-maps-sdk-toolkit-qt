@@ -18,21 +18,29 @@ import QtQml
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Esri.ArcGISRuntime
+import QtQuick.Effects
+import Esri.Examples
 import Esri.ArcGISRuntime.Toolkit
 import Calcite as C
 
 Control {
     id: demoPage
-    property bool handlesOwnAuthentication : false
+    property bool handlesOwnAuthentication: false
+    readonly property bool useCompactLayout: demoPage.width < 600
     enum ViewType {
-        Scene,
+        LocalScene,
+        GlobalScene,
         Map
     }
+    enabled: geoModel && geoModel.loadStatus === Enums.LoadStatusLoaded
 
     property int viewType: {
-        if (mapViewContents === null && sceneViewContents !== null) {
-            return DemoPage.ViewType.Scene;
+        if (mapViewContents === null) {
+            if (sceneViewContents === null && localSceneViewContents !== null) {
+                return DemoPage.ViewType.LocalScene;
+            } else if (sceneViewContents !== null) {
+                return DemoPage.ViewType.GlobalScene;
+            }
         } else {
             return DemoPage.ViewType.Map;
         }
@@ -42,12 +50,14 @@ Control {
 
     readonly property var geoModel: {
         if (geoView instanceof MapView)
-            return geoView.map
-        else if (geoView instanceof SceneView)
+            return geoView.map;
+        else if (geoView instanceof SceneView || geoView instanceof LocalSceneView)
             return geoView.scene;
         else
             return null;
     }
+
+    property Component localSceneViewContents: null
 
     property Component sceneViewContents: null
 
@@ -73,11 +83,11 @@ Control {
 
     Dialog {
         id: apiKeyPopup
-        title: "Set access token"
+        title: qsTr("Set access token")
         implicitWidth: 300
         contentItem: TextField {
             id: apiKeyInput
-            placeholderText: "Enter your access token here."
+            placeholderText: qsTr("Enter your access token here.")
             Keys.onReturnPressed: apiKeyPopup.accept()
             Component.onCompleted: forceActiveFocus()
         }
@@ -96,7 +106,14 @@ Control {
         }
         function resetLoader() {
             geoViewLoader.sourceComponent = undefined;
-            geoViewLoader.sourceComponent = Qt.binding(() => viewType === DemoPage.ViewType.Scene ? sceneViewContents : mapViewContents);
+            geoViewLoader.sourceComponent = Qt.binding(
+                        () =>
+                        viewType === DemoPage.ViewType.GlobalScene ?
+                            sceneViewContents :
+                            viewType === DemoPage.ViewType.LocalScene ?
+                                localSceneViewContents :
+                                mapViewContents
+                        );
         }
     }
 
@@ -106,17 +123,18 @@ Control {
         sourceComponent: Component {
             Authenticator { }
         }
+        onLoaded: ArcGISRuntimeEnvironment.cacheCurrentChallengeHandler()
     }
 
     contentItem: GridLayout {
         id: gridLayout
-        columns: 6
+        columns: 7
         clip: true
         Button {
             Layout.leftMargin: 5
             Layout.topMargin: 5
             Layout.alignment: Qt.AlignLeft
-            text: "Select a tool"
+            text: qsTr("Select a tool")
             onClicked: showToolsButtonPressed()
             enabled: !apiKeyPopup.visible
         }
@@ -129,10 +147,53 @@ Control {
             Layout.fillWidth: true
         }
 
+        ComboBox {
+            id: viewTypeCombo
+            Layout.topMargin: 5
+            Layout.columnSpan: 3
+            Layout.alignment: Qt.AlignRight
+            visible: useCompactLayout
+            enabled: ArcGISRuntimeEnvironment.apiKey !== ""
+
+            model: ["Map", "Global Scene", "Local Scene"]
+
+            TextMetrics {
+                id: comboMetrics
+                font: viewTypeCombo.font
+                text: qsTr("Global Scene")
+            }
+
+            Layout.preferredWidth: comboMetrics.width + viewTypeCombo.indicator.width + 50
+
+            currentIndex: {
+                if (viewType === DemoPage.ViewType.Map) return 0;
+                if (viewType === DemoPage.ViewType.GlobalScene) return 1;
+                if (viewType === DemoPage.ViewType.LocalScene) return 2;
+                return 0;
+            }
+
+            delegate: ItemDelegate {
+                required property int index
+                required property string modelData
+                width: parent.width
+                text: modelData
+                enabled: [mapViewContents !== null,
+                    sceneViewContents !== null,
+                    localSceneViewContents !== null][index]
+                highlighted: index === parent.currentIndex
+            }
+            onActivated: (index) => {
+                             if (index === 0) viewType = DemoPage.ViewType.Map;
+                             else if (index === 1) viewType = DemoPage.ViewType.GlobalScene;
+                             else if (index === 2) viewType = DemoPage.ViewType.LocalScene;
+                         }
+        }
+
         RadioButton {
             Layout.topMargin: 5
             Layout.alignment: Qt.AlignRight
-            text: "Map"
+            visible: !useCompactLayout
+            text: qsTr("Map")
             checkable: true
             autoExclusive: true
             checked: viewType === DemoPage.ViewType.Map
@@ -142,31 +203,86 @@ Control {
         RadioButton {
             Layout.topMargin: 5
             Layout.alignment: Qt.AlignRight
-            text: "Scene"
+            visible: !useCompactLayout
+            text: qsTr("Global Scene")
             checkable: true
             autoExclusive: true
-            checked: viewType === DemoPage.ViewType.Scene
-            onClicked: viewType = DemoPage.ViewType.Scene;
+            checked: viewType === DemoPage.ViewType.GlobalScene
+            onClicked: viewType = DemoPage.ViewType.GlobalScene;
             enabled: ArcGISRuntimeEnvironment.apiKey !== "" && sceneViewContents !== null
         }
+        RadioButton {
+            Layout.topMargin: 5
+            Layout.alignment: Qt.AlignRight
+            visible: !useCompactLayout
+            text: qsTr("Local Scene")
+            checkable: true
+            autoExclusive: true
+            checked: viewType === DemoPage.ViewType.LocalScene
+            onClicked: viewType = DemoPage.ViewType.LocalScene;
+            enabled: ArcGISRuntimeEnvironment.apiKey !== "" && localSceneViewContents !== null
+        }
         Button {
+            id: accessTokenButton
             Layout.topMargin: 5
             Layout.rightMargin: 5
-            text: "Set access token"
             Layout.alignment: Qt.AlignRight
+            Layout.preferredWidth: useCompactLayout ? 36 : -1
+            Layout.preferredHeight: 36
+            leftPadding: useCompactLayout ? 0 : 8
+            rightPadding: useCompactLayout ? 0 : 8
+            topPadding: useCompactLayout ? 0 : 8
+            bottomPadding: useCompactLayout ? 0 : 8
             onClicked: apiKeyPopup.open()
             enabled: !apiKeyPopup.visible
+            text: useCompactLayout ? "" : qsTr("Set access token")
+
+            contentItem: Item {
+                implicitWidth: useCompactLayout ? 24 : textLabel.implicitWidth
+                implicitHeight: useCompactLayout ? 24 : textLabel.implicitHeight
+
+                Image {
+                    id: keyIcon
+                    source: "images/user-key.svg"
+                    width: 24
+                    height: 24
+                    sourceSize.width: 24
+                    sourceSize.height: 24
+                    fillMode: Image.PreserveAspectFit
+                    anchors.centerIn: parent
+                    visible: useCompactLayout
+                    layer.enabled: true
+                    layer.smooth: true
+                    layer.effect: MultiEffect {
+                        anchors.fill: keyIcon
+                        source: keyIcon
+                        colorization: 1.0
+                        brightness: 1.0
+                        colorizationColor: Calcite.offWhite
+                        visible: true
+                    }
+                }
+
+                Label {
+                    id: textLabel
+                    text: accessTokenButton.text
+                    anchors.fill: parent
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    visible: !useCompactLayout
+                }
+            }
         }
         Loader {
-            id: geoViewLoader;
+            id: geoViewLoader
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Layout.columnSpan: 6
+            Layout.columnSpan: 7
             Layout.maximumWidth: parent.width
             focus: true
             sourceComponent: Component {
                 Label {
-                    text: "No access token set. Please set an access token."
+                    text: qsTr("No access token set. Please set an access token.")
                     horizontalAlignment: Qt.AlignHCenter
                     verticalAlignment: Qt.AlignVCenter
                 }

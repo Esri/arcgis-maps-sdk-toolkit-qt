@@ -17,17 +17,20 @@
 #ifndef ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_BASEDEMO_H
 #define ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_BASEDEMO_H
 
+// Qt headers
 #include <QObject>
 #include <QQmlEngine>
 
-namespace Esri::ArcGISRuntime {
+namespace Esri::ArcGISRuntime
+{
   class GeoView;
   class GeoModel;
   class Map;
   class MapQuickView;
   class Scene;
   class SceneQuickView;
-} // Esri::ArcGISRuntime
+  class LocalSceneQuickView;
+} // namespace Esri::ArcGISRuntime
 
 class BaseDemo : public QObject
 {
@@ -47,10 +50,11 @@ public:
 
 protected:
   virtual Esri::ArcGISRuntime::Map* initMap_(QObject* parent) const;
-  virtual Esri::ArcGISRuntime::Scene* initScene_(QObject* parent) const;
+  virtual Esri::ArcGISRuntime::Scene* initGlobalScene_(QObject* parent) const;
+  virtual Esri::ArcGISRuntime::Scene* initLocalScene_(QObject* parent) const;
 
   // Helper util that allows a function `f` that takes a single `GeoView` parameter to
-  // work agnostically on a SceneView or MapView. This reduces boilerplate around signals.
+  // work agnostically on a SceneView, MapView, or LocalSceneView. This reduces boilerplate around signals.
   // I.E.:
   // \begincode
   //  apply([this](auto geoView)
@@ -62,24 +66,28 @@ protected:
   //                  });
   //        });
   // \endcode
-  template <typename Func>
+  template<typename Func>
   auto apply(Func&& f)
   {
     using namespace Esri::ArcGISRuntime;
-    if (auto mapView = qobject_cast<MapQuickView*>(m_geoView))
+    if (auto* mapView = qobject_cast<MapQuickView*>(m_geoView))
     {
       return f(mapView);
     }
-    else if (auto sceneView = qobject_cast<SceneQuickView*>(m_geoView))
+
+    if (auto* sceneView = qobject_cast<SceneQuickView*>(m_geoView))
     {
       return f(sceneView);
     }
-    else
+
+    if (auto* localSceneView = qobject_cast<LocalSceneQuickView*>(m_geoView))
     {
-      // Since `f` is for agnostic calls the type of the nullptr
-      // doesn't matter if it's a MapQuickView or SceneQuickView.
-      return f(static_cast<MapQuickView*>(nullptr));
+      return f(localSceneView);
     }
+
+    // Since `f` is for agnostic calls the type of the nullptr
+    // doesn't matter which type of view it is.
+    return f(static_cast<MapQuickView*>(nullptr));
   }
 
 private:

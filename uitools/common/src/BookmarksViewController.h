@@ -19,7 +19,7 @@
 // Qt headers
 #include <QObject>
 
-// ArcGIS Maps SDK headers
+// STL headers
 #include <Bookmark.h>
 #include <GeoView.h>
 
@@ -27,7 +27,8 @@
 #include "BookmarkListItem.h"
 #include "GenericListModel.h"
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   class BookmarksViewController : public QObject
   {
@@ -55,6 +56,6 @@ namespace Esri::ArcGISRuntime::Toolkit {
     GenericListModel* m_bookmarks = nullptr;
   };
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_BOOKMARKSVIEWCONTROLLER_H

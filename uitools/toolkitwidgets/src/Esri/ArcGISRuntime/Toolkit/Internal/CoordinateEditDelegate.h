@@ -20,29 +20,29 @@
 #include <QItemDelegate>
 #include <QPointer>
 
-namespace Esri::ArcGISRuntime::Toolkit {
-
-class CoordinateConversionController;
-
-class CoordinateEditDelegate : public QItemDelegate
+namespace Esri::ArcGISRuntime::Toolkit
 {
-  Q_OBJECT
-public:
-  CoordinateEditDelegate(QObject* parent = nullptr);
 
-  ~CoordinateEditDelegate() override;
+  class CoordinateConversionController;
 
-  void setController(CoordinateConversionController* c);
+  class CoordinateEditDelegate : public QItemDelegate
+  {
+    Q_OBJECT
+  public:
+    CoordinateEditDelegate(QObject* parent = nullptr);
 
-  CoordinateConversionController* controller() const;
+    ~CoordinateEditDelegate() override;
 
-  void setModelData(QWidget* editor, QAbstractItemModel* model,
-                    const QModelIndex& index) const override;
+    void setController(CoordinateConversionController* c);
 
-private:
-  QPointer<CoordinateConversionController> m_controller;
-};
+    CoordinateConversionController* controller() const;
 
-} // Esri::ArcGISRuntime::Toolkit
+    void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const override;
+
+  private:
+    QPointer<CoordinateConversionController> m_controller;
+  };
+
+} // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_INTERNAL_COORDIANTEEDITDELEGATE_H

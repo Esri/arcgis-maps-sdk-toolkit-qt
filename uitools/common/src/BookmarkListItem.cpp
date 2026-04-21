@@ -19,7 +19,8 @@
 // ArcGISRuntime headers
 #include <Bookmark.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
   /*!
     \inmodule Esri.ArcGISRuntime.Toolkit
@@ -73,4 +74,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     }
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

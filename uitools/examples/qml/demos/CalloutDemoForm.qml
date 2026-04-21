@@ -17,11 +17,49 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Esri.ArcGISRuntime
+import Esri.Examples
 import Esri.ArcGISRuntime.Toolkit
 import DemoApp
 
 DemoPage {
+    sceneViewContents: Component {
+        SceneView {
+            id: view
+
+            Callout {
+                id: callout
+                calloutData : view.calloutData
+                accessoryButtonVisible: false
+                implicitHeight: 100
+                leaderPosition: Callout.LeaderPosition.Automatic
+                maxWidth: 250
+            }
+
+            CalloutDemo {
+                geoView: view
+            }
+        }
+    }
+
+    localSceneViewContents: Component {
+        LocalSceneView {
+            id: view
+
+            Callout {
+                id: callout
+                calloutData : view.calloutData
+                accessoryButtonVisible: false
+                implicitHeight: 100
+                leaderPosition: Callout.LeaderPosition.Automatic
+                maxWidth: 250
+            }
+
+            CalloutDemo {
+                geoView: view
+            }
+        }
+    }
+
     mapViewContents: Component {
         MapView {
             id:view
@@ -34,12 +72,6 @@ DemoPage {
                 implicitHeight: 100
                 leaderPosition: Callout.LeaderPosition.Automatic
                 maxWidth: 250
-                background: Rectangle {
-                    radius: 5
-                    border.width: 2
-                    border.color: "black"
-                }
-                palette.windowText: "black"
             }
             //! [Set up Callout QML]
 

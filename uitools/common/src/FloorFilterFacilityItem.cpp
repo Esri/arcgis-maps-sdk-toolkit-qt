@@ -20,12 +20,13 @@
 #include <FloorFacility.h>
 #include <FloorSite.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
-/*!
-  \internal
-  This class is an internal implementation detail and is subject to change.
- */
+  /*!
+    \internal
+    This class is an internal implementation detail and is subject to change.
+   */
 
   FloorFilterFacilityItem::FloorFilterFacilityItem(QObject* parent) :
     FloorFilterFacilityItem(nullptr, parent)
@@ -60,7 +61,7 @@ namespace Esri::ArcGISRuntime::Toolkit {
 
   QString FloorFilterFacilityItem::modelId() const
   {
-    return m_floorFacility ?  m_floorFacility->facilityId() : QString{};
+    return m_floorFacility ? m_floorFacility->facilityId() : QString{};
   }
 
   QString FloorFilterFacilityItem::name() const
@@ -80,4 +81,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     return site ? site->siteId() : QString{};
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

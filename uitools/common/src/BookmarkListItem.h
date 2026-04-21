@@ -20,11 +20,13 @@
 #include <QObject>
 #include <QPointer>
 
-namespace Esri::ArcGISRuntime {
+namespace Esri::ArcGISRuntime
+{
 
   class Bookmark;
 
-  namespace Toolkit {
+  namespace Toolkit
+  {
     class BookmarkListItem : public QObject
     {
       Q_OBJECT
@@ -49,7 +51,7 @@ namespace Esri::ArcGISRuntime {
       QPointer<Bookmark> m_bookmark;
     };
 
-  } // Toolkit
-} // Esri::ArcGISRuntime
+  } // namespace Toolkit
+} // namespace Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_BOOKMARKLISTITEM_H

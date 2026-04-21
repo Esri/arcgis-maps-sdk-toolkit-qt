@@ -1,4 +1,3 @@
-
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -17,19 +16,26 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_FLOORFILTER_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_FLOORFILTER_H
 
+// Qt headers
 #include <QFrame>
+
+// STL headers
 #include <memory>
 
-namespace Ui {
+namespace Ui
+{
   class FloorFilter;
 }
 
-namespace Esri::ArcGISRuntime {
+namespace Esri::ArcGISRuntime
+{
 
+  class LocalSceneWidget;
   class MapGraphicsView;
   class SceneGraphicsView;
 
-  namespace Toolkit {
+  namespace Toolkit
+  {
     class FloorFilterController;
 
     class FloorFilter : public QFrame
@@ -44,6 +50,8 @@ namespace Esri::ArcGISRuntime {
 
       void setSceneView(SceneGraphicsView* sceneView);
 
+      void setLocalSceneView(LocalSceneWidget* localSceneView);
+
       FloorFilterController* controller() const;
 
     private:
@@ -52,7 +60,7 @@ namespace Esri::ArcGISRuntime {
       bool m_sitesUpdatedFromController{false};
       bool m_facilitiesUpdatedFromController{false};
     };
-  } // Toolkit
-} // Esri::ArcGISRuntime
+  } // namespace Toolkit
+} // namespace Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_FLOORFILTER_H

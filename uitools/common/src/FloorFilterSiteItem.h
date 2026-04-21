@@ -19,11 +19,13 @@
 // Qt headers
 #include <QObject>
 
-namespace Esri::ArcGISRuntime {
+namespace Esri::ArcGISRuntime
+{
 
   class FloorSite;
 
-  namespace Toolkit {
+  namespace Toolkit
+  {
     class FloorFilterSiteItem : public QObject
     {
       Q_OBJECT
@@ -47,7 +49,7 @@ namespace Esri::ArcGISRuntime {
       FloorSite* m_floorSite = nullptr;
     };
 
-  } // Toolkit
-} // Esri::ArcGISRuntime
+  } // namespace Toolkit
+} // namespace Esri::ArcGISRuntime
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_FLOORFITLERFSITEITEM_H

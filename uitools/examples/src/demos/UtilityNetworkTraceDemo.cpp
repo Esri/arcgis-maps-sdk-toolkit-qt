@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
  *
@@ -15,26 +16,16 @@
  ******************************************************************************/
 #include "UtilityNetworkTraceDemo.h"
 
+#include <Error.h>
 #include <Map.h>
-#include <Credential.h>
 #include <Portal.h>
 #include <PortalItem.h>
-#include <Error.h>
-#include <AuthenticationChallenge.h>
-#include <AuthenticationManager.h>
 
 using namespace Esri::ArcGISRuntime;
 
 UtilityNetworkTraceDemo::UtilityNetworkTraceDemo(QObject* parent) :
   BaseDemo(parent)
 {
-  connect(AuthenticationManager::instance(),
-          &AuthenticationManager::authenticationChallenge,
-          this,
-          [parent](AuthenticationChallenge* challenge)
-  {
-    challenge->continueWithCredential(new Credential("viewer01", "I68VGU^nMurF", parent));
-  });
 }
 
 UtilityNetworkTraceDemo::~UtilityNetworkTraceDemo() = default;
@@ -44,7 +35,7 @@ Map* UtilityNetworkTraceDemo::initMap_(QObject* parent) const
   return new Map(QUrl{"https://www.arcgis.com/home/item.html?id=471eb0bf37074b1fbb972b1da70fb310"}, parent);
 }
 
-Scene* UtilityNetworkTraceDemo::initScene_(QObject* /*parent*/) const
+Scene* UtilityNetworkTraceDemo::initGlobalScene_(QObject* /*parent*/) const
 {
   return nullptr;
 }

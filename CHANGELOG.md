@@ -1,5 +1,15 @@
 # Changelog
 
+## 300.0
+
+* The augmented reality (AR) toolkit components are removed.
+* Toolkit module version is changed from 300.0 to 3.0 because Qt's versioning system does not allow versions greater than 254.
+
+## 200.8
+
+ * Updated authentication components.
+ * Popup UI tools now support Popup Elements.
+
 ## 200.7
 
 * The augmented reality (AR) toolkit components are deprecated.

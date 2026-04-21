@@ -16,42 +16,44 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_FIELDSPOPUPELEMENTVIEWCONTROLLER_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_FIELDSPOPUPELEMENTVIEWCONTROLLER_H
 
-// Toolkit headers
+// Qt headers
+#include <QObject>
+#include <QVariantList>
+
+// Other headers
 #include "PopupElementViewItem.h"
 
-// Qt headers
-#include <QVariantList>
-#include <QObject>
-
-namespace Esri::ArcGISRuntime {
-
-class FieldsPopupElement;
-class PopupElement;
-
-namespace Toolkit {
-
-class PopupViewController;
-
-class FieldsPopupElementViewController : public PopupElementViewItem
+namespace Esri::ArcGISRuntime
 {
-  Q_OBJECT
-  Q_PROPERTY(QString title READ title NOTIFY fieldsPopupElementChanged)
-  Q_PROPERTY(QVariantList labelsAndValues READ labelsAndValues NOTIFY fieldsPopupElementChanged)
 
-public:
-  explicit FieldsPopupElementViewController(FieldsPopupElement* fieldsPopupElement,
-                                            PopupViewController* popupViewController,
-                                            QObject* parent = nullptr);
-  ~FieldsPopupElementViewController() override;
+  class FieldsPopupElement;
+  class PopupElement;
 
-  QString title() const;
-  QVariantList labelsAndValues() const;
+  namespace Toolkit
+  {
 
-signals:
-  void fieldsPopupElementChanged();
-  void clickedUrl(const QUrl& url);
-};
+    class PopupViewController;
 
-} // namespace Toolkit
+    class FieldsPopupElementViewController : public PopupElementViewItem
+    {
+      Q_OBJECT
+      Q_PROPERTY(QString title READ title NOTIFY fieldsPopupElementChanged)
+      Q_PROPERTY(QVariantList labelsAndValues READ labelsAndValues NOTIFY fieldsPopupElementChanged)
+
+    public:
+      explicit FieldsPopupElementViewController(FieldsPopupElement* fieldsPopupElement,
+                                                PopupViewController* popupViewController,
+                                                QObject* parent = nullptr);
+      ~FieldsPopupElementViewController() override;
+
+      QString title() const;
+      QVariantList labelsAndValues() const;
+
+    signals:
+      void fieldsPopupElementChanged();
+      void clickedUrl(const QUrl& url);
+    };
+
+  } // namespace Toolkit
 } // namespace Esri::ArcGISRuntime
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_FIELDSPOPUPELEMENTVIEWCONTROLLER_H

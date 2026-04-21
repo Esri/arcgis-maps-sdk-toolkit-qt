@@ -13,7 +13,6 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
-
 import QtQuick
 
 Rectangle {
@@ -30,10 +29,10 @@ Rectangle {
     implicitHeight: 18
     radius: 50
     rotation: handle.vertical ? -90 : 0
-    color: handle.pressed ? Calcite.brandHover : handle.lingeringFocus || mouseArea.containsMouse ? Calcite.brand : Calcite.foreground1
+    color: handle.pressed && handle.enabled ? Calcite.brandHover : handle.lingeringFocus && handle.enabled || mouseArea.containsMouse && handle.enabled ? Calcite.brand : Calcite.foreground1
     border {
         width: 2
-        color: handle.lingeringFocus || handle.hovered ? Calcite.brand : Calcite.borderInput
+        color: (handle.lingeringFocus || handle.hovered) && handle.enabled  ? Calcite.brand : Calcite.borderInput
     }
 
     MouseArea {

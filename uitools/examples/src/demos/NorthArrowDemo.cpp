@@ -16,11 +16,73 @@
 
 #include "NorthArrowDemo.h"
 
+#include <MapQuickView.h>
+#include <MapViewTypes.h>
+
+#include <QFuture>
+
+using namespace Esri::ArcGISRuntime;
+
 NorthArrowDemo::NorthArrowDemo(QObject* parent) :
   BaseDemo(parent)
 {
+  connect(this, &BaseDemo::geoViewChanged, this, &NorthArrowDemo::setupMapView_);
 }
 
 NorthArrowDemo::~NorthArrowDemo()
 {
+}
+
+double NorthArrowDemo::mapViewRotation(MapQuickView* mapView) const
+{
+  return mapView ? mapView->mapRotation() : 0.0;
+}
+
+void NorthArrowDemo::setMapViewRotation(MapQuickView* mapView, double degrees)
+{
+  if (!mapView)
+  {
+    return;
+  }
+
+  // indicate this sooner than necessary to prevent a feedback loop with the slider in QML
+  setDrawingComplete_(false);
+
+  auto future = mapView->setViewpointRotationAsync(degrees);
+  Q_UNUSED(future);
+}
+
+void NorthArrowDemo::setupMapView_()
+{
+  auto* view = geoView();
+
+  if (!view || view->geoViewType() != GeoViewType::MapView)
+  {
+    return;
+  }
+
+  if (m_drawStatusChangedConnection)
+  {
+    disconnect(m_drawStatusChangedConnection);
+    m_drawStatusChangedConnection = {};
+  }
+
+  auto* mapView = static_cast<MapQuickView*>(view);
+  mapView->setRotationByPinchingEnabled(true);
+  setDrawingComplete_(mapView->drawStatus() == DrawStatus::Completed);
+  m_drawStatusChangedConnection = connect(mapView, &MapQuickView::drawStatusChanged, this, [this](DrawStatus drawStatus)
+  {
+    setDrawingComplete_(drawStatus == DrawStatus::Completed);
+  });
+}
+
+void NorthArrowDemo::setDrawingComplete_(bool completed)
+{
+  if (m_drawingComplete == completed)
+  {
+    return;
+  }
+
+  m_drawingComplete = completed;
+  emit drawingCompleteChanged();
 }

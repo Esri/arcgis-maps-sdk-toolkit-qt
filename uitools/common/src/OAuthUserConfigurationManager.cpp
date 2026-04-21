@@ -24,57 +24,58 @@
 
 using namespace Esri::ArcGISRuntime::Authentication;
 
-namespace Esri::ArcGISRuntime::Toolkit {
-
-/*!
-  \inmodule Esri.ArcGISRuntime.Toolkit
-  \ingroup GenericTools
-  \class Esri::ArcGISRuntime::Toolkit::OAuthUserConfigurationManager
-  \brief A class that manages the available OAuthUserConfiguration instances for the application.
-
-  All added configurations will become owned by the OAuthUserConfigurationManager. Any parent
-  applied will be removed.
-
-  In order for your application to issue OAuth challenges, you must add at least one OAuthUserConfiguration
-  to the OAuthUserConfigurationManager.
-
-  For more information, see the \l
-  {https://developers.arcgis.com/documentation/security-and-authentication/user-authentication/tutorials/create-oauth-credentials-user-auth/}
-  {OAuth tutorial} and the \l {https://developers.arcgis.com/qt/cpp/api-reference/esri-arcgisruntime-authentication-oauthuserconfiguration.html}{OAuthUserConfiguration}
-  doc for more information.
-
-  \since Esri.ArcGISRuntime::Toolkit 200.8
- */
-
-/*!
-  \brief Adds \a userConfiguration to the list of OAuthUserConfigurations.
-
-  \note any QObject parent will be removed and reset. Ownership is managed by the OAuthUserConfigurationManager.
- */
-void OAuthUserConfigurationManager::addConfiguration(OAuthUserConfiguration* userConfiguration)
+namespace Esri::ArcGISRuntime::Toolkit
 {
-  AuthenticatorController::instance()->addOAuthUserConfiguration(userConfiguration);
-}
 
-/*!
-  \brief Clears all OAuthUserConfigurations.
+  /*!
+    \inmodule Esri.ArcGISRuntime.Toolkit
+    \ingroup GenericTools
+    \class Esri::ArcGISRuntime::Toolkit::OAuthUserConfigurationManager
+    \brief A class that manages the available OAuthUserConfiguration instances for the application.
 
-  All configurations will be removed and deleted. Your app will no longer issue any OAuth challenges.
-  This will not impact any existing, successfully authenticated credentials/sessions.
- */
-void OAuthUserConfigurationManager::clearConfigurations()
-{
-  AuthenticatorController::instance()->clearOAuthUserConfigurations();
-}
+    All added configurations will become owned by the OAuthUserConfigurationManager. Any parent
+    applied will be removed.
 
-/*!
-  \brief Returns the list of OAuthUserConfiguration available.
+    In order for your application to issue OAuth challenges, you must add at least one OAuthUserConfiguration
+    to the OAuthUserConfigurationManager.
 
-  The returned objects are owned by the OAuthUserConfigurationManager.
- */
-QList<OAuthUserConfiguration*> OAuthUserConfigurationManager::configurations()
-{
-  return AuthenticatorController::instance()->oAuthUserConfigurations();
-}
+    For more information, see the \l
+    {https://developers.arcgis.com/documentation/security-and-authentication/user-authentication/tutorials/create-oauth-credentials-user-auth/}
+    {OAuth tutorial} and the \l {https://developers.arcgis.com/qt/cpp/api-reference/esri-arcgisruntime-authentication-oauthuserconfiguration.html}{OAuthUserConfiguration}
+    doc for more information.
 
-} //  Esri::ArcGISRuntime::Toolkit
+    \since Esri.ArcGISRuntime::Toolkit 200.8
+   */
+
+  /*!
+    \brief Adds \a userConfiguration to the list of OAuthUserConfigurations.
+
+    \note any QObject parent will be removed and reset. Ownership is managed by the OAuthUserConfigurationManager.
+   */
+  void OAuthUserConfigurationManager::addConfiguration(OAuthUserConfiguration* userConfiguration)
+  {
+    AuthenticatorController::instance()->addOAuthUserConfiguration(userConfiguration);
+  }
+
+  /*!
+    \brief Clears all OAuthUserConfigurations.
+
+    All configurations will be removed and deleted. Your app will no longer issue any OAuth challenges.
+    This will not impact any existing, successfully authenticated credentials/sessions.
+   */
+  void OAuthUserConfigurationManager::clearConfigurations()
+  {
+    AuthenticatorController::instance()->clearOAuthUserConfigurations();
+  }
+
+  /*!
+    \brief Returns the list of OAuthUserConfiguration available.
+
+    The returned objects are owned by the OAuthUserConfigurationManager.
+   */
+  QList<OAuthUserConfiguration*> OAuthUserConfigurationManager::configurations()
+  {
+    return AuthenticatorController::instance()->oAuthUserConfigurations();
+  }
+
+} // namespace Esri::ArcGISRuntime::Toolkit

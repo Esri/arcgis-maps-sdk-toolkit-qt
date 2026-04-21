@@ -16,19 +16,21 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_COORDINATECONVERSIONCONSTANTS_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_COORDINATECONVERSIONCONSTANTS_H
 
+// Qt headers
 #include <QString>
 
-namespace Esri::ArcGISRuntime::Toolkit::CoordinateConversionConstants {
+namespace Esri::ArcGISRuntime::Toolkit::CoordinateConversionConstants
+{
 
-extern const QString DECIMAL_DEGREES_FORMAT;
-extern const QString DEGREES_DECIMAL_MINUTES_FORMAT;
-extern const QString DEGREES_MINUTES_SECONDS_FORMAT;
-extern const QString GARS_FORMAT;
-extern const QString GEOREF_FORMAT;
-extern const QString MGRS_FORMAT;
-extern const QString USNG_FORMAT;
-extern const QString UTM_FORMAT;
+  extern const QString DECIMAL_DEGREES_FORMAT;
+  extern const QString DEGREES_DECIMAL_MINUTES_FORMAT;
+  extern const QString DEGREES_MINUTES_SECONDS_FORMAT;
+  extern const QString GARS_FORMAT;
+  extern const QString GEOREF_FORMAT;
+  extern const QString MGRS_FORMAT;
+  extern const QString USNG_FORMAT;
+  extern const QString UTM_FORMAT;
 
-} // Esri::ArcGISRuntime::Toolkit::CoordinateConversionConstants
+} // namespace Esri::ArcGISRuntime::Toolkit::CoordinateConversionConstants
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_COORDINATECONVERSIONCONSTANTS_H

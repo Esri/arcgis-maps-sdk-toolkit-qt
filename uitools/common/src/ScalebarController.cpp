@@ -31,31 +31,17 @@
 #include <PolylineBuilder.h>
 #include <SpatialReference.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
+namespace Esri::ArcGISRuntime::Toolkit
+{
 
-  namespace {
+  namespace
+  {
     /*
       List of "good" multipliers in which it is appropriate to scale a scalebar
       by.
  */
     constexpr double MULTIPLIERS[] = {
-        1,
-        1.2,
-        1.25,
-        1.5,
-        1.75,
-        2.0,
-        2.4,
-        2.5,
-        3,
-        3.75,
-        4,
-        5,
-        6,
-        7.5,
-        8.0,
-        9.0,
-        10,
+      1, 1.2, 1.25, 1.5, 1.75, 2.0, 2.4, 2.5, 3, 3.75, 4, 5, 6, 7.5, 8.0, 9.0, 10,
     };
 
     /*
@@ -67,14 +53,10 @@ namespace Esri::ArcGISRuntime::Toolkit {
     double selectMultiplierData(double distance, double magnitude)
     {
       double residual = distance / magnitude;
-      return std::accumulate(
-          std::cbegin(MULTIPLIERS),
-          std::cend(MULTIPLIERS),
-          MULTIPLIERS[0],
-          [residual](double i, double m)
-          {
-            return m < residual && m > i ? m : i;
-          });
+      return std::accumulate(std::cbegin(MULTIPLIERS), std::cend(MULTIPLIERS), MULTIPLIERS[0], [residual](double i, double m)
+      {
+        return m < residual && m > i ? m : i;
+      });
     }
 
     /*
@@ -95,25 +77,25 @@ namespace Esri::ArcGISRuntime::Toolkit {
     {
       switch (unitSystem)
       {
-      case UnitSystem::Imperial:
-        // use miles if at least half a mile
-        if (distance >= 2640)
-        {
-          return LinearUnit{LinearUnitId::Miles};
-        }
-        return LinearUnit{LinearUnitId::Feet};
+        case UnitSystem::Imperial:
+          // use miles if at least half a mile
+          if (distance >= 2640)
+          {
+            return LinearUnit{LinearUnitId::Miles};
+          }
+          return LinearUnit{LinearUnitId::Feet};
 
-      case UnitSystem::Metric:
-      default:
-        // use kilometers if at least one kilometer
-        if (distance >= 1000)
-        {
-          return LinearUnit{LinearUnitId::Kilometers};
-        }
-        return LinearUnit{LinearUnitId::Meters};
+        case UnitSystem::Metric:
+        default:
+          // use kilometers if at least one kilometer
+          if (distance >= 1000)
+          {
+            return LinearUnit{LinearUnitId::Kilometers};
+          }
+          return LinearUnit{LinearUnitId::Meters};
       }
     }
-  }
+  } // namespace
 
   /*!
     \class Esri::ArcGISRuntime::Toolkit::ScalebarController
@@ -136,14 +118,16 @@ namespace Esri::ArcGISRuntime::Toolkit {
     return m_mapView;
   }
 
-  void ScalebarController::setMapView(QObject* mapView)
+  void ScalebarController::setMapView(QObject* geoView)
   {
-    auto mapView2 = qobject_cast<MapViewToolkit*>(mapView);
+    auto* mapView = qobject_cast<MapViewToolkit*>(geoView);
 
-    if (m_mapView == mapView2)
+    if (m_mapView == mapView)
+    {
       return;
+    }
 
-    m_mapView = mapView2;
+    m_mapView = mapView;
     emit mapViewChanged();
   }
 
@@ -158,19 +142,21 @@ namespace Esri::ArcGISRuntime::Toolkit {
   void ScalebarController::setUnitSystem(UnitSystem unitSystem)
   {
     if (m_unitSystem == unitSystem)
+    {
       return;
+    }
 
     m_unitSystem = unitSystem;
 
     switch (m_unitSystem)
     {
-    case UnitSystem::Imperial:
-      m_baseUnit = LinearUnit{LinearUnitId::Feet};
-      break;
-    case UnitSystem::Metric:
-    default:
-      m_baseUnit = LinearUnit{LinearUnitId::Meters};
-      break;
+      case UnitSystem::Imperial:
+        m_baseUnit = LinearUnit{LinearUnitId::Feet};
+        break;
+      case UnitSystem::Metric:
+      default:
+        m_baseUnit = LinearUnit{LinearUnitId::Meters};
+        break;
     }
 
     emit unitSystemChanged();
@@ -251,4 +237,4 @@ namespace Esri::ArcGISRuntime::Toolkit {
     return QString{"%1 %2"}.arg(displayDistance).arg(displayUnit.abbreviation());
   }
 
-} // Esri::ArcGISRuntime::Toolkit
+} // namespace Esri::ArcGISRuntime::Toolkit

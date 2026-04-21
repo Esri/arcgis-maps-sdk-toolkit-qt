@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  *  Copyright 2012-2025 Esri
  *
@@ -25,65 +26,70 @@
 // Toolkit headers
 #include <PopupMediaItem.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
-
-/*!
-  \internal
-  This class is an internal implementation detail and is subject to change.
- */
-LineChartPopupMediaItem::LineChartPopupMediaItem(PopupMedia* popupMedia, QObject* parent)
-  : PopupMediaItem{popupMedia, parent}
+namespace Esri::ArcGISRuntime::Toolkit
 {
-  auto mediaValue = popupMediaItem()->value();
-  const auto popupMediaValueDataLength = mediaValue->data().length();
-  const auto chartColors = mediaValue->chartColors();
 
-  for (int i = 0; i < popupMediaValueDataLength; i++ )
+  /*!
+    \internal
+    This class is an internal implementation detail and is subject to change.
+   */
+  LineChartPopupMediaItem::LineChartPopupMediaItem(PopupMedia* popupMedia, QObject* parent) :
+    PopupMediaItem{popupMedia, parent}
   {
-    const auto label = mediaValue->labels().at(i);
-    const auto value = mediaValue->data().at(i).toReal();
+    auto mediaValue = popupMediaItem()->value();
+    const auto popupMediaValueDataLength = mediaValue->data().length();
+    const auto chartColors = mediaValue->chartColors();
 
-    if (value >= m_maxValue)
-      m_maxValue = value;
+    for (int i = 0; i < popupMediaValueDataLength; i++)
+    {
+      const auto label = mediaValue->labels().at(i);
+      const auto value = mediaValue->data().at(i).toReal();
 
-    if (value <= m_minValue)
-      m_minValue = value;
+      if (value >= m_maxValue)
+      {
+        m_maxValue = value;
+      }
 
-    const auto point = QPointF(i, value);
-    m_linePoints.append(point);
+      if (value <= m_minValue)
+      {
+        m_minValue = value;
+      }
+
+      const auto point = QPointF(i, value);
+      m_linePoints.append(point);
+    }
+
+    if (!chartColors.isEmpty())
+    {
+      m_color = chartColors.at(0);
+    }
   }
 
-  if (!chartColors.isEmpty())
+  LineChartPopupMediaItem::~LineChartPopupMediaItem() = default;
+
+  QVariantList LineChartPopupMediaItem::linePoints() const
   {
-    m_color = chartColors.at(0);
+    return m_linePoints;
   }
-}
 
-LineChartPopupMediaItem::~LineChartPopupMediaItem() = default;
+  QColor LineChartPopupMediaItem::color() const
+  {
+    return m_color;
+  }
 
-QVariantList LineChartPopupMediaItem::linePoints() const
-{
-  return m_linePoints;
-}
+  qreal LineChartPopupMediaItem::maxValue() const
+  {
+    return m_maxValue;
+  }
 
-QColor LineChartPopupMediaItem::color() const
-{
-  return m_color;
-}
+  qreal LineChartPopupMediaItem::minValue() const
+  {
+    return m_minValue;
+  }
 
-qreal LineChartPopupMediaItem::maxValue() const
-{
-  return m_maxValue;
-}
-
-qreal LineChartPopupMediaItem::minValue() const
-{
-  return m_minValue;
-}
-
-bool LineChartPopupMediaItem::chartColorsEmpty() const
-{
-  return popupMediaItem()->value()->chartColors().isEmpty();
-}
+  bool LineChartPopupMediaItem::chartColorsEmpty() const
+  {
+    return popupMediaItem()->value()->chartColors().isEmpty();
+  }
 
 } // namespace Esri::ArcGISRuntime::Toolkit

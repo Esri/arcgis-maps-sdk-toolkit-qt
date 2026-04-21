@@ -53,6 +53,12 @@ Item {
     */
     property var controller: NorthArrowController { }
 
+    /*
+      \qmlsignal NorthArrow::headingReset()
+      \brief Signal emitted when the heading is reset to 0 on double click.
+      */
+    signal headingReset()
+
     implicitWidth: 48
 
     implicitHeight: implicitWidth
@@ -80,8 +86,10 @@ Item {
     MouseArea {
         anchors.fill: parent
         onDoubleClicked: {
-            if (geoView)
+            if (geoView){
                 controller.setHeading(0); // Rotate back to north.
+                headingReset();
+            }
         }
     }
 }

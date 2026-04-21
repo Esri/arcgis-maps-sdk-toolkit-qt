@@ -2,7 +2,7 @@
 
 ## ArcGIS Maps SDK - Qt Quick UI components
 
-These are controls that compliment your `MapView` or `SceneView` by adding them to your Qt project's .qml files (QML based UI development). They are components like: AuthenticationView, NorthArrow, OverviewMap, TimeSlider, and so forth. Using these components are very beneficial for device based apps like phones and tablets.
+These are controls that compliment your `MapView` or `SceneView` by adding them to your Qt project's .qml files (QML based UI development). They are components like: Authenticator, NorthArrow, OverviewMap, TimeSlider, and so forth. Using these components are very beneficial for device based apps like phones and tablets.
 
 You can learn more about the benefits of building apps with the [Qt Quick UI controls](https://doc.qt.io/qt-6/qtquickcontrols-index.html) from the Qt Group. 
 
@@ -11,7 +11,6 @@ You can learn more about the benefits of building apps with the [Qt Quick UI con
 These are the **Qt Quick UI components/QML Type** available to use:
 
 - **[Authenticator](docs/Authenticator.md)** - A wrapper view that will automatically display the proper authentication view for any of the supported authentication types (OAuth, Token, HTTP Basic, HTTP Digest, SAML, PKI, IWA).
-- **[AuthenticationView (deprecated)](docs/AuthenticationView.md)** - A wrapper view that will automatically display the proper authentication view for any of the supported authentication types (OAuth, Token, HTTP Basic, HTTP Digest, SAML, PKI). This view is deprecated and is replaced by Authenticator.
 - **[BasemapGallery](docs/BasemapGallery.md)** - Shows a list of available basemaps by using a Portal or using a user defined collection. User is able to select a basemap, setting it on the current GeoModel.
 - **[BookmarksView](docs/BookmarksView.md)**- A control that displays and navigates to bookmarks that have been authored in a map.
 - **[Callout](docs/Callout.md)** - A view for displaying information at a geographic location.
@@ -19,7 +18,6 @@ These are the **Qt Quick UI components/QML Type** available to use:
 - **[FloorFilter](docs/FloorFilter.md)** - A tool that shows sites and facilities, and enables toggling the visibility of levels on floor-aware maps and scenes.
 - **[NorthArrow](docs/NorthArrow.md)** - A control that indicates north, reacting to rotation changes of the map.
 - **[OverviewMap](docs/OverviewMap.md)** - An inset map that shows the current extent of an associated GeoView in the context of a larger area.
-- **[PopupStackView](docs/PopupStackView.md)** - A view that displays multiple PopupViews, typically used when multiple map element were tapped on.
 - **[PopupView](docs/PopupView.md)** - A view that displays feature attributes and attachments.
 - **[Scalebar](docs/Scalebar.md)** - A tool that indicates the proportions of a map to the actual geographic area so users can visually gauge distances on a map view.
 - **[SearchView](docs/SearchView.md)** - A tool that submits search queries and shows single or multiple results. Queries can be restricted to the current view extent.

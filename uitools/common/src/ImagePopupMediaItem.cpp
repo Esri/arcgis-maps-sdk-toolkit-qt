@@ -23,31 +23,59 @@
 #include <PopupMediaItem.h>
 #include <PopupViewController.h>
 
-namespace Esri::ArcGISRuntime::Toolkit {
-
-/*!
-  \internal
-  This class is an internal implementation detail and is subject to change.
- */
-ImagePopupMediaItem::ImagePopupMediaItem(PopupMedia* popupMedia, PopupViewController* popupViewController, QObject* parent)
-  : PopupMediaItem{popupMedia, parent}
+namespace Esri::ArcGISRuntime::Toolkit
 {
-  // bubble up imageClicked signal to PopupViewController. This is the sourceUrl & linkUrl used for ImagePopupMediaItems.
-  connect(this, &ImagePopupMediaItem::imageClicked, popupViewController, &PopupViewController::imageClicked);
-}
 
-ImagePopupMediaItem::~ImagePopupMediaItem() = default;
+  /*!
+    \internal
+    This class is an internal implementation detail and is subject to change.
+   */
+  ImagePopupMediaItem::ImagePopupMediaItem(PopupMedia* popupMedia, PopupViewController* popupViewController, QObject* parent) :
+    PopupMediaItem{popupMedia, parent}
+  {
+    // bubble up imageClicked signal to PopupViewController. This is the sourceUrl & linkUrl used for ImagePopupMediaItems.
+    connect(this, &ImagePopupMediaItem::imageClicked, popupViewController, &PopupViewController::imageClicked);
 
-QUrl ImagePopupMediaItem::sourceUrl() const
-{
-  return popupMediaItem()->value()->sourceUrl();
-}
+    setupRefreshTimer();
 
-QUrl ImagePopupMediaItem::linkUrl() const
-{
-  return popupMediaItem()->value()->linkUrl();
-}
+    connect(this, &ImagePopupMediaItem::imagePopupMediaItemChanged, this, &ImagePopupMediaItem::setupRefreshTimer);
+  }
+
+  ImagePopupMediaItem::~ImagePopupMediaItem()
+  {
+    if (m_refreshTimer.isActive())
+    {
+      m_refreshTimer.stop();
+    }
+  }
+
+  QUrl ImagePopupMediaItem::sourceUrl() const
+  {
+    return popupMediaItem()->value()->sourceUrl();
+  }
+
+  QUrl ImagePopupMediaItem::linkUrl() const
+  {
+    return popupMediaItem()->value()->linkUrl();
+  }
+
+  quint64 ImagePopupMediaItem::imageRefreshInterval() const
+  {
+    return popupMediaItem()->imageRefreshInterval();
+  }
+
+  void ImagePopupMediaItem::setupRefreshTimer()
+  {
+    m_refreshTimer.stop();
+
+    const quint64 interval = imageRefreshInterval();
+    if (interval > 0)
+    {
+      m_refreshTimer.setInterval(static_cast<int>(interval));
+      m_refreshTimer.setSingleShot(false);
+      connect(&m_refreshTimer, &QTimer::timeout, this, &ImagePopupMediaItem::refreshImage, Qt::UniqueConnection);
+      m_refreshTimer.start();
+    }
+  }
 
 } // namespace Esri::ArcGISRuntime::Toolkit
-
-

@@ -46,7 +46,7 @@ GeoModelProxy* MapQuickViewProxy::map()
 {
   if (m_mapQuickView)
   {
-    auto map = m_mapQuickView->map();
+    auto* map = m_mapQuickView->map();
     if (!m_map || m_map->parent() != map)
     {
       m_map = new GeoModelProxy(map);

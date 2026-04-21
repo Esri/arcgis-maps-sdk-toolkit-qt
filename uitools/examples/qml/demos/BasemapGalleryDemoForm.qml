@@ -16,7 +16,7 @@
 
 import QtQuick
 import QtQuick.Controls
-import Esri.ArcGISRuntime
+import Esri.Examples
 import Esri.ArcGISRuntime.Toolkit
 import DemoApp
 
@@ -36,6 +36,27 @@ DemoPage {
                 }
             }
             //! [Set up BasemapGallery QML]
+
+            BasemapGalleryDemo {
+                id: demo
+                geoView: view
+            }
+            onSceneChanged: gallery.setGeoModelFromGeoView(view)
+        }
+    }
+    localSceneViewContents: Component {
+        LocalSceneView {
+            id: view
+
+            BasemapGallery {
+                id: gallery
+                controller: demo.controller
+                anchors {
+                    right: parent.right
+                    top: parent.top
+                    margins: 10
+                }
+            }
 
             BasemapGalleryDemo {
                 id: demo
