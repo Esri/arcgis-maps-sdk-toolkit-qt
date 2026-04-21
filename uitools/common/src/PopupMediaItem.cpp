@@ -37,6 +37,11 @@ namespace Esri::ArcGISRuntime::Toolkit
 
   PopupMediaItem::~PopupMediaItem() = default;
 
+  QString PopupMediaItem::alternativeText() const
+  {
+    return m_popupMedia->alternativeText();
+  }
+
   QString PopupMediaItem::title() const
   {
     return m_popupMedia->title();

@@ -41,6 +41,29 @@ ColumnLayout {
 
     property var controller: null
 
+    function accessibleMediaName(media) {
+        if (!media)
+            return "";
+        if (media.alternativeText !== "")
+            return media.alternativeText;
+        if (media.title !== "")
+            return media.title;
+        if (media.caption !== "")
+            return media.caption;
+        return qsTr("Popup media");
+    }
+
+    function accessibleMediaDescription(media) {
+        if (!media)
+            return "";
+        const name = accessibleMediaName(media);
+        if (media.caption !== "" && media.caption !== name)
+            return media.caption;
+        if (media.title !== "" && media.title !== name)
+            return media.title;
+        return "";
+    }
+
     Dialog {
         id: fullScreenImageDialog
         modal: true
@@ -170,34 +193,40 @@ ColumnLayout {
             height: 170
             width: 220
 
+            function openPopupMedia() {
+                if (model.popupMediaType === QmlEnums.PopupMediaTypeImage) {
+                    // emit signal to bubble up image source url and link url to PopupViewController
+                    model.listModelData.imageClicked(model.listModelData.sourceUrl, model.listModelData.linkUrl);
+                }
+                if (model.popupMediaType !== QmlEnums.PopupMediaTypeImage ||
+                        (model.popupMediaType === QmlEnums.PopupMediaTypeImage && popupView.openImagesInApp)) {
+                    // fullScreenImageDialog.visible = true needs to happen before transfering the source component
+                    // to the full screen takeover Dialog in order to
+                    // use this as a trigger to change the label visibility
+                    // for PieSeries
+                    fullScreenImageDialog.visible = true;
+                    dialogContentLoader.sourceComponent = null;
+                    dialogContentLoader.sourceComponent = mediaLoader.sourceComponent;
+
+                    fullScreenImageDialog.modelData = model.listModelData;
+                    fullScreenImageDialog.imageTitle = model.title;
+                    fullScreenImageDialog.imageCaption = model.caption;
+                    fullScreenImageDialog.mediaType = model.popupMediaType;
+                }
+            }
+
             Loader {
                 id: mediaLoader
             }
 
             MouseArea {
                 anchors.fill: parent
+                Accessible.role: Accessible.Button
+                Accessible.name: mediaPopupElementView.accessibleMediaName(model)
+                Accessible.description: mediaPopupElementView.accessibleMediaDescription(model)
+                Accessible.onPressAction: delegatePopupMedia.openPopupMedia()
 
-                onClicked: {
-                    if (model.popupMediaType === QmlEnums.PopupMediaTypeImage) {
-                        // emit signal to bubble up image source url and link url to PopupViewController
-                        model.listModelData.imageClicked(model.listModelData.sourceUrl, model.listModelData.linkUrl);
-                    }
-                    if (model.popupMediaType !== QmlEnums.PopupMediaTypeImage ||
-                            (model.popupMediaType === QmlEnums.PopupMediaTypeImage && popupView.openImagesInApp)) {
-                        // fullScreenImageDialog.visible = true needs to happen before transfering the source component
-                        // to the full screen takeover Dialog in order to
-                        // use this as a trigger to change the label visibility
-                        // for PieSeries
-                        fullScreenImageDialog.visible = true;
-                        dialogContentLoader.sourceComponent = null;
-                        dialogContentLoader.sourceComponent = mediaLoader.sourceComponent;
-
-                        fullScreenImageDialog.modelData = model.listModelData;
-                        fullScreenImageDialog.imageTitle = model.title;
-                        fullScreenImageDialog.imageCaption = model.caption;
-                        fullScreenImageDialog.mediaType = model.popupMediaType;
-                    }
-                }
+                onClicked: delegatePopupMedia.openPopupMedia()
 
                 HoverHandler {
                     cursorShape: Qt.PointingHandCursor
@@ -256,13 +285,34 @@ ColumnLayout {
                         border.color: palette.dark
                         border.width: 1
 
-                        Text {
-                            text: qsTr("Image unavailable")
-                            color: palette.text
-                            anchors.centerIn: parent
-                            anchors.verticalCenterOffset: -15
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
+                        Column {
+                            width: parent.width - (mediaPopupElementView.mediaMargin * 2)
+                            spacing: mediaPopupElementView.imageTextMargin
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.verticalCenterOffset: model.alternativeText !== "" ? -20 : 0
+
+                            Label {
+                                text: qsTr("Image unavailable")
+                                color: palette.text
+                                width: parent.width
+                                font.bold: true
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                            }
+
+                            Label {
+                                text: model.alternativeText
+                                visible: model.alternativeText !== ""
+                                color: palette.text
+                                width: parent.width
+                                font.italic: true
+                                wrapMode: Text.WordWrap
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                                elide: Text.ElideRight
+                                maximumLineCount: 2
+                            }
                         }
                     }
 
@@ -628,6 +678,8 @@ ColumnLayout {
                 height: overlayTextLayout.height
                 color: "white"
                 opacity: 0.7
+                border.color: palette.dark
+                border.width: 1
 
                 anchors {
                     bottom: parent.bottom
