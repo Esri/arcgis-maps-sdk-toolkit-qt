@@ -83,13 +83,13 @@ set(esri_arcgisruntime_toolkit_view_resource_files
     "import/Esri/ArcGISRuntime/Toolkit/qmldir"
 )
 
-qt_add_resources(libtoolkitcpp "esri_arcgisruntime_toolkit_view"
-    PREFIX
-        "/esri.com/imports/Esri/ArcGISRuntime/Toolkit"
-    BASE
-        "import/Esri/ArcGISRuntime/Toolkit"
-    FILES
+qt_add_qml_module(libtoolkitcpp
+    URI "Esri.ArcGISRuntime.Toolkit"
+    VERSION "1.0"
+    RESOURCE_PREFIX "/esri.com/imports"
+    QML_FILES
         ${esri_arcgisruntime_toolkit_view_resource_files}
+    NO_PLUGIN
 )
 
 list(APPEND QML_IMPORT_PATH ${CMAKE_CURRENT_LIST_DIR}/import)
