@@ -64,6 +64,7 @@ set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_SOURCES
     ../common/src/NetworkAuthenticationChallengeRelay.cpp
     ../common/src/QmlEnums.cpp
     ../common/src/PopupAttachmentImageProvider.cpp
+    ../common/src/OAuthUserConfigurationManager.cpp
 )
 
 set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_HEADERS
@@ -121,6 +122,7 @@ set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_HEADERS
     ../common/src/PopupAttachmentImageProvider.h
     ../common/src/QmlEnums.h
     ../common/src/SingleShotConnection.h
+    ../common/src/OAuthUserConfigurationManager.h
 )
 
 set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_INCLUDES

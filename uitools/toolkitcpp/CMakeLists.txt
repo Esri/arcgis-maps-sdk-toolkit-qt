@@ -57,6 +57,11 @@ endif()
 
 set(esri_arcgisruntime_toolkit_view_resource_files
     "import/Esri/ArcGISRuntime/Toolkit/AttachmentsPopupElementView.qml"
+    "import/Esri/ArcGISRuntime/Toolkit/Authenticator.qml"
+    "import/Esri/ArcGISRuntime/Toolkit/AuthenticatorClientCertificateView.qml"
+    "import/Esri/ArcGISRuntime/Toolkit/AuthenticatorOAuth2View.qml"
+    "import/Esri/ArcGISRuntime/Toolkit/AuthenticatorServerTrustView.qml"
+    "import/Esri/ArcGISRuntime/Toolkit/AuthenticatorUserCredentialsView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/BasemapGallery.qml"
     "import/Esri/ArcGISRuntime/Toolkit/BookmarksView.qml"
     "import/Esri/ArcGISRuntime/Toolkit/Callout.qml"
