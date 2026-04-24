@@ -34,7 +34,7 @@ elseif(APPLE)
   set(CMAKE_OSX_DEPLOYMENT_TARGET "14.0" CACHE STRING "Minimum macOS deployment version" FORCE)
 endif()
 
-find_package(Qt6 COMPONENTS REQUIRED Core Quick Qml OpenGL QuickControls2)
+find_package(Qt6 COMPONENTS REQUIRED Core Quick Qml OpenGL QuickControls2 WebSockets Positioning Sensors)
 if(Qt6Core_VERSION VERSION_LESS 6.8.2)
   message(FATAL_ERROR "This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.8.2")
 endif()
@@ -95,6 +95,7 @@ else()
       XCODE_EMBED_FRAMEWORKS "${ArcGISRuntime_runtimecore_LIB};${FFMPEG_FRAMEWORKS}"
       XCODE_EMBED_FRAMEWORKS_CODE_SIGN_ON_COPY TRUE
       LINK_FLAGS "-F${FFMPEG_LIB_DIR} -F${ArcGISRuntime_runtimecore_LIB_DIR} -Wl,-rpath,@executable_path -Wl,-rpath,@loader_path/Frameworks")
+    target_link_libraries(${PROJECT_NAME} PRIVATE "-framework CoreLocation")
   endif()
   # On MacOSX add icon to app bundle.
   set(MACOSX_BUNDLE_ICON_FILE AppIcon.icns)
@@ -119,6 +120,9 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
   Qt6::Qml
   Qt6::OpenGL
   Qt6::QuickControls2
+  Qt6::WebSockets
+  Qt6::Positioning
+  Qt6::Sensors
   ArcGISRuntime::Cpp)
 
 if(ANDROID)
