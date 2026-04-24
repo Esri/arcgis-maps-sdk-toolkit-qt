@@ -14,23 +14,9 @@
 
 Find the native ArcGISRuntime includes and libraries.
 
-Hints
-^^^^^
-
-A user may set ``ArcGISRuntime_ROOT`` to override the default search path.
-See "ArcGISRuntime.cmake" for additional information.
-
 #]================================================]
 
 function(GET_INSTALL_DIR OUT_VAR DESC_VAR)
-  # Explicit override
-  if(DEFINED ArcGISRuntime_ROOT AND EXISTS "${ArcGISRuntime_ROOT}")
-    set(${OUT_VAR} "${ArcGISRuntime_ROOT}" CACHE STRING ${DESC_VAR})
-    return()
-  elseif(DEFINED ArcGISRuntime_ROOT)
-    message(WARNING "ArcGISRuntime_ROOT is set to '${ArcGISRuntime_ROOT}' but the path does not exist. Falling back to INI lookup.")
-  endif()
-
   # Discover the INI file with an install location (if it exists).
   set(VER_MAJ_MIN ${ArcGISRuntime_FIND_VERSION_MAJOR}.${ArcGISRuntime_FIND_VERSION_MINOR}.${ArcGISRuntime_FIND_VERSION_PATCH} CACHE STRING "Major Minor version ArcGISRuntime" FORCE)
   if(${CMAKE_HOST_SYSTEM_NAME} STREQUAL Windows)
