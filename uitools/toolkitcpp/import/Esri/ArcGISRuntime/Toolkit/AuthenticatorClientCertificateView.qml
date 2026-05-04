@@ -182,11 +182,11 @@ Dialog {
 
         passwordDialog.openedChanged.connect(inputPasswordFn);
 
-        fileDialog.selectedFile = path;
-
-        // this will open the password dialog, which we are listening for it to become
-        // opened above to input the password
-        fileDialog.accept();
+        // Mirror the file dialog's accepted flow directly
+        currentCertificate = path;
+        passwordDialog.firstAttemptWithNoPassword = true;
+        passwordTextField.text = "";
+        processCertificate_();
     }
 
     function clickCancel() {
