@@ -428,11 +428,22 @@ Pane {
             // Is visible (even when empty) if detail is visible
             visible: title.text || detail.visible
 
-            activeFocusOnTab: false  // Not in Tab order - only focused programmatically for screen reader
+            activeFocusOnTab: true
             Accessible.role: Accessible.StaticText
-            Accessible.name: title.text + (calloutData && calloutData.detail ? ", " + calloutData.detail : "")
+            Accessible.name: title.text
             Accessible.focusable: true
             Accessible.readOnly: true
+
+            // Visible focus indicator while narrator is announcing the content
+            Rectangle {
+                anchors.fill: parent
+                anchors.margins: -2
+                color: "transparent"
+                border.color: Calcite.brand
+                border.width: titleFocusScope.activeFocus ? 2 : 0
+                radius: 4
+                z: -1
+            }
 
             Label {
                 id: title
@@ -518,19 +529,56 @@ Pane {
             Accessible.description: accessoryButtonType === "Custom" ? "Delete the currently selected feature" : ""
             Accessible.focusable: true
         }
-        Label {
+        Column {
             id: detail
-            text: calloutData ? calloutData.detail : ""
-            font.pointSize: root.detailFontSize
-            wrapMode: Text.Wrap
-            elide: Text.ElideRight
-            clip: true
-            visible: text
+            // Each newline-separated line of calloutData.detail becomes its own
+            // tab-focusable element so narrator focus + visual focus is per-line.
+            property string text: calloutData ? calloutData.detail : ""
+            visible: text.length > 0
+            spacing: 2
+
             Layout.alignment: Qt.AlignVCenter
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.preferredWidth: autoAdjustWidth ? -1 : internal.labelWidthFrom.bind(this)(root.maxWidth)
             Layout.maximumWidth: autoAdjustWidth ? internal.labelWidthFrom.bind(this)(root.maxWidth) : -1
+
+            Repeater {
+                model: detail.text ? detail.text.split('\n') : []
+
+                FocusScope {
+                    id: detailLineScope
+                    required property string modelData
+                    width: detail.width
+                    implicitHeight: detailLineLabel.implicitHeight
+
+                    activeFocusOnTab: true
+                    Accessible.role: Accessible.StaticText
+                    Accessible.name: modelData
+                    Accessible.focusable: true
+                    Accessible.readOnly: true
+
+                    Rectangle {
+                        anchors.fill: parent
+                        anchors.margins: -2
+                        color: "transparent"
+                        border.color: Calcite.brand
+                        border.width: detailLineScope.activeFocus ? 2 : 0
+                        radius: 4
+                        z: -1
+                    }
+
+                    Label {
+                        id: detailLineLabel
+                        anchors.fill: parent
+                        text: modelData
+                        font.pointSize: root.detailFontSize
+                        wrapMode: Text.Wrap
+                        clip: true
+                        elide: Text.ElideRight
+                    }
+                }
+            }
         }
     }
 
