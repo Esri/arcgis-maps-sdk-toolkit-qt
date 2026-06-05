@@ -243,9 +243,18 @@ Pane {
     signal accessoryButtonClicked()
 
     /*!
-        \brief The signal emitted when Shift+Tab is pressed on the accessory button.
+        \brief The item that should receive focus when Tab is pressed on the
+        close button (exit the callout forward). If null, Tab does nothing
+        special and the event is not accepted (default tree walk applies).
     */
-    signal backTabPressed()
+    property Item tabExitTarget: null
+
+    /*!
+        \brief The item that should receive focus when Shift+Tab is pressed on
+        the title (exit the callout backward). If null, Shift+Tab does nothing
+        special and the event is not accepted (default tree walk applies).
+    */
+    property Item backtabExitTarget: null
 
     visible: false
 
@@ -318,72 +327,12 @@ Pane {
         }
     }
 
-    function focusCloseButton() {
-        closeButton.forceActiveFocus(Qt.TabFocusReason);
+    function focusCloseButton(reason) {
+        closeButton.forceActiveFocus(reason !== undefined ? reason : Qt.TabFocusReason);
     }
 
     Component.onCompleted: {
         background.children.push(shapeTail.createObject())
-    }
-
-    Button {
-        id: closeButton
-        parent: root
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.rightMargin: 2
-        anchors.topMargin: 2
-        z: 10
-        width: root.titleFontSize * 2.5
-        height: root.titleFontSize * 2.5
-        padding: 0
-        topPadding: 0
-        bottomPadding: 0
-        leftPadding: 0
-        rightPadding: 0
-        flat: true
-        display: AbstractButton.IconOnly
-        activeFocusOnTab: true
-
-        icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/x.svg"
-        icon.color: closeButton.hovered ? Calcite.brandHover : Calcite.text1
-        icon.width: root.titleFontSize * 2
-        icon.height: root.titleFontSize * 2
-
-        onClicked: {
-            if (calloutData) {
-                calloutData.visible = false
-            } else {
-                root.dismiss()
-            }
-        }
-
-        Keys.onEscapePressed: {
-            if (calloutData) {
-                calloutData.visible = false
-            }
-        }
-
-        Keys.onBacktabPressed: function(event) {
-            if (accessoryButton.visible) {
-                accessoryButton.forceActiveFocus(Qt.BacktabFocusReason)
-            } else {
-                root.backTabPressed()
-            }
-            event.accepted = true
-        }
-
-        background: Rectangle {
-            color: "transparent"
-            radius: 4
-            border.width: closeButton.visualFocus ? 2 : 0
-            border.color: Calcite.brand
-        }
-
-        Accessible.role: Accessible.Button
-        Accessible.name: "Close callout"
-        Accessible.description: "Close the callout popup"
-        Accessible.focusable: true
     }
 
     contentItem: GridLayout {
@@ -434,6 +383,16 @@ Pane {
             Accessible.focusable: true
             Accessible.readOnly: true
 
+            // Backtab from the first callout focus stop exits the callout.
+            // Container points backtabExitTarget at the previous element
+            // (e.g. the "Press Esc" hint label).
+            Keys.onBacktabPressed: function(event) {
+                if (root.backtabExitTarget) {
+                    root.backtabExitTarget.forceActiveFocus(Qt.BacktabFocusReason)
+                    event.accepted = true
+                }
+            }
+
             // Visible focus indicator while narrator is announcing the content
             Rectangle {
                 anchors.fill: parent
@@ -454,7 +413,6 @@ Pane {
                 wrapMode: Text.Wrap
                 clip: true
                 elide: Text.ElideRight
-                Accessible.ignored: true
             }
         }
         Button {
@@ -491,10 +449,8 @@ Pane {
                 accessoryButtonClicked()
             }
 
-            Keys.onBacktabPressed: function(event) {
-                root.backTabPressed()
-                event.accepted = true
-            }
+            // Note: no custom Keys.onBacktabPressed. Backtab from the accessory
+            // button goes naturally to the title via tree order.
 
             icon.source: {
                 if (accessoryButtonType === "Info")
@@ -577,11 +533,75 @@ Pane {
                         wrapMode: Text.Wrap
                         clip: true
                         elide: Text.ElideRight
-                        Accessible.ignored: true
                     }
                 }
             }
         }
+    }
+
+    Button {
+        id: closeButton
+        parent: root
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.rightMargin: 2
+        anchors.topMargin: 2
+        z: 10
+        width: root.titleFontSize * 2.5
+        height: root.titleFontSize * 2.5
+        padding: 0
+        topPadding: 0
+        bottomPadding: 0
+        leftPadding: 0
+        rightPadding: 0
+        flat: true
+        display: AbstractButton.IconOnly
+        activeFocusOnTab: true
+
+        icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/x.svg"
+        icon.color: closeButton.hovered ? Calcite.brandHover : Calcite.text1
+        icon.width: root.titleFontSize * 2
+        icon.height: root.titleFontSize * 2
+
+        onClicked: {
+            if (calloutData) {
+                calloutData.visible = false
+            } else {
+                root.dismiss()
+            }
+        }
+
+        Keys.onEscapePressed: {
+            if (calloutData) {
+                calloutData.visible = false
+            }
+        }
+
+        // Tab from the last callout focus stop exits the callout.
+        // Container points tabExitTarget at the next element (e.g. settings).
+        Keys.onTabPressed: function(event) {
+            if (root.tabExitTarget) {
+                root.tabExitTarget.forceActiveFocus(Qt.TabFocusReason)
+                event.accepted = true
+            }
+        }
+
+        // Note: no custom Keys.onBacktabPressed. Backtab from the close button
+        // walks the natural tree order in reverse, which now matches the
+        // visual order: close -> last detail line -> ... -> accessory button
+        // -> title.
+
+        background: Rectangle {
+            color: "transparent"
+            radius: 4
+            border.width: closeButton.visualFocus ? 2 : 0
+            border.color: Calcite.brand
+        }
+
+        Accessible.role: Accessible.Button
+        Accessible.name: "Close callout"
+        Accessible.description: "Close the callout popup"
+        Accessible.focusable: true
     }
 
     Component {
