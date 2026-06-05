@@ -454,6 +454,7 @@ Pane {
                 wrapMode: Text.Wrap
                 clip: true
                 elide: Text.ElideRight
+                Accessible.ignored: true
             }
         }
         Button {
@@ -576,6 +577,7 @@ Pane {
                         wrapMode: Text.Wrap
                         clip: true
                         elide: Text.ElideRight
+                        Accessible.ignored: true
                     }
                 }
             }
