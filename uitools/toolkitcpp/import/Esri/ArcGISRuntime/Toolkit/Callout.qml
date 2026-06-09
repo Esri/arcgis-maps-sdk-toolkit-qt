@@ -74,9 +74,21 @@ import Calcite
 Pane {
     id: root
 
-    // Accessibility - screen reader will announce when callout becomes visible
-    Accessible.role: Accessible.ToolTip
+    // Accessibility role. Pane (not ToolTip) so iOS VoiceOver treats the
+    // callout as a navigable container and follows Qt Tab focus into it.
+    // ToolTip is for transient hints and VO will not traverse children of a
+    // tooltip-role element. The "Callout open..." announcement that ToolTip
+    // used to trigger automatically is now fired explicitly from the view
+    // forms when calloutData becomes visible.
+    //
+    // Accessible.ignored: true keeps the Pane out of the iOS a11y tree as a
+    // leaf element. Without this, the Pane (because it has both role and name)
+    // is exposed as a single UIAccessibilityElement with isAccessibilityElement
+    // = YES, which causes iOS VO to treat it as a leaf and hides the children
+    // from swipe navigation. Children are still exposed and reachable.
+    Accessible.role: Accessible.Pane
     Accessible.name: "Feature callout"
+    Accessible.ignored: true
 
     function focusTitle() {
         if (titleFocusScope.visible) {
@@ -338,13 +350,35 @@ Pane {
     contentItem: GridLayout {
         id: calloutLayout
         columns: 3
-        rows: 2
+        rows: detailModel.lineCount > 0 ? 1 + detailModel.lineCount : 2
         columnSpacing: 7
+        // rowSpacing matches the previous `Column { spacing: 2 }` between
+        // detail lines. The title-to-first-detail gap is therefore 2 instead
+        // of GridLayout's default 5; the layout is otherwise visually
+        // identical to the previous Column-based version.
+        rowSpacing: 2
+
+        // Newline-split detail content. Replaces the old `Column { id: detail }`
+        // wrapper. The Column had to be removed because Qt 6.11's iOS a11y
+        // plugin does not give items inside a QQuickPositioner a working
+        // parent QAccessibleInterface, so FocusScope children of a Column
+        // never make it into the iOS UIAccessibility tree. Putting each
+        // detail line as a direct GridLayout child (GridLayout is a
+        // QQuickLayout, which the plugin walks correctly) restores VoiceOver
+        // swipe access without changing the visual layout.
+        QtObject {
+            id: detailModel
+            readonly property string text: calloutData ? calloutData.detail : ""
+            readonly property var lines: text ? text.split('\n') : []
+            readonly property int lineCount: lines.length
+        }
 
         Image {
             id: image
             source: calloutData ? calloutData.imageUrl : ""
-            Layout.rowSpan: 2
+            Layout.row: 0
+            Layout.column: 0
+            Layout.rowSpan: detailModel.lineCount > 0 ? 1 + detailModel.lineCount : 2
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             Layout.fillHeight: true
             Layout.preferredWidth: 40
@@ -355,6 +389,8 @@ Pane {
             id: titleFocusScope
             implicitWidth: title.implicitWidth
             implicitHeight: title.implicitHeight
+            Layout.row: 0
+            Layout.column: image.visible ? 1 : 0
             Layout.alignment: Qt.AlignVCenter
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -368,14 +404,9 @@ Pane {
                     span++;
                 return span;
             }
-            Layout.rowSpan: {
-                let span = 1;
-                if (!detail.visible)
-                    span++;
-                return span;
-            }
-            // Is visible (even when empty) if detail is visible
-            visible: title.text || detail.visible
+            Layout.rowSpan: detailModel.lineCount > 0 ? 1 : 2
+            // Is visible (even when empty) if any detail lines are present.
+            visible: title.text || detailModel.lineCount > 0
 
             activeFocusOnTab: true
             Accessible.role: Accessible.StaticText
@@ -413,17 +444,24 @@ Pane {
                 wrapMode: Text.Wrap
                 clip: true
                 elide: Text.ElideRight
+                // Hidden from VO: titleFocusScope above already exposes the
+                // title as a focusable StaticText. Without this, Qt Quick
+                // Controls auto-exposes Label as another StaticText, so VO
+                // would announce "title" twice and need two swipes per step.
+                Accessible.ignored: true
             }
         }
         Button {
             id: accessoryButton
-            Layout.rowSpan: 2
+            Layout.row: 0
+            Layout.column: 2
+            Layout.rowSpan: detailModel.lineCount > 0 ? 1 + detailModel.lineCount : 2
             Layout.alignment: Qt.AlignVCenter
             Layout.preferredWidth: root.accessoryButtonSize
             Layout.preferredHeight: root.accessoryButtonSize
             Layout.columnSpan: {
                 let span = 1;
-                if (!title.visible && detail.visible)
+                if (!title.visible && detailModel.lineCount > 0)
                     span++;
 
                 return span;
@@ -486,54 +524,65 @@ Pane {
             Accessible.description: accessoryButtonType === "Custom" ? "Delete the currently selected feature" : ""
             Accessible.focusable: true
         }
-        Column {
-            id: detail
-            // Each newline-separated line of calloutData.detail becomes its own
-            // tab-focusable element so narrator focus + visual focus is per-line.
-            property string text: calloutData ? calloutData.detail : ""
-            visible: text.length > 0
-            spacing: 2
 
-            Layout.alignment: Qt.AlignVCenter
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.preferredWidth: autoAdjustWidth ? -1 : internal.labelWidthFrom.bind(this)(root.maxWidth)
-            Layout.maximumWidth: autoAdjustWidth ? internal.labelWidthFrom.bind(this)(root.maxWidth) : -1
+        // Detail lines as direct GridLayout children, one per row. Same
+        // column as title (col 1 normally, col 0 if image is hidden).
+        // Visually equivalent to the prior Column-based stacking; the
+        // accessibility difference is that these are now reachable by
+        // VoiceOver swipe because they sit under a QQuickLayout instead of
+        // a QQuickPositioner.
+        Repeater {
+            id: detailRepeater
+            model: detailModel.lines
 
-            Repeater {
-                model: detail.text ? detail.text.split('\n') : []
+            FocusScope {
+                id: detailLineScope
+                required property string modelData
+                required property int index
 
-                FocusScope {
-                    id: detailLineScope
-                    required property string modelData
-                    width: detail.width
-                    implicitHeight: detailLineLabel.implicitHeight
+                // Same width plumbing as titleFocusScope: report the Label's
+                // natural width as the implicit width so the GridLayout sizes
+                // this column to fit the text instead of collapsing it to
+                // the spanning-item minimum, and respect autoAdjustWidth /
+                // root.maxWidth the same way the title does.
+                implicitWidth: detailLineLabel.implicitWidth
+                implicitHeight: detailLineLabel.implicitHeight
 
-                    activeFocusOnTab: true
-                    Accessible.role: Accessible.StaticText
-                    Accessible.name: modelData
-                    Accessible.focusable: true
-                    Accessible.readOnly: true
+                Layout.row: 1 + index
+                Layout.column: image.visible ? 1 : 0
+                Layout.columnSpan: accessoryButton.visible ? 1 : 2
+                Layout.alignment: Qt.AlignVCenter
+                Layout.fillWidth: true
+                Layout.preferredWidth: autoAdjustWidth ? -1 : internal.labelWidthFrom.bind(detailLineLabel)(root.maxWidth)
+                Layout.maximumWidth: autoAdjustWidth ? internal.labelWidthFrom.bind(detailLineLabel)(root.maxWidth) : -1
 
-                    Rectangle {
-                        anchors.fill: parent
-                        anchors.margins: -2
-                        color: "transparent"
-                        border.color: Calcite.brand
-                        border.width: detailLineScope.activeFocus ? 2 : 0
-                        radius: 4
-                        z: -1
-                    }
+                activeFocusOnTab: true
+                Accessible.role: Accessible.StaticText
+                Accessible.name: modelData
+                Accessible.focusable: true
+                Accessible.readOnly: true
 
-                    Label {
-                        id: detailLineLabel
-                        anchors.fill: parent
-                        text: modelData
-                        font.pointSize: root.detailFontSize
-                        wrapMode: Text.Wrap
-                        clip: true
-                        elide: Text.ElideRight
-                    }
+                Rectangle {
+                    anchors.fill: parent
+                    anchors.margins: -2
+                    color: "transparent"
+                    border.color: Calcite.brand
+                    border.width: detailLineScope.activeFocus ? 2 : 0
+                    radius: 4
+                    z: -1
+                }
+
+                Label {
+                    id: detailLineLabel
+                    anchors.fill: parent
+                    text: modelData
+                    font.pointSize: root.detailFontSize
+                    wrapMode: Text.Wrap
+                    clip: true
+                    elide: Text.ElideRight
+                    // Hidden from VO: detailLineScope above exposes the
+                    // text as a focusable StaticText. See note on `title`.
+                    Accessible.ignored: true
                 }
             }
         }
