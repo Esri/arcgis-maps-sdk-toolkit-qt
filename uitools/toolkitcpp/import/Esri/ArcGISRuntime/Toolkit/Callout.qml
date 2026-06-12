@@ -76,16 +76,6 @@ Pane {
 
     // Accessibility role. Pane (not ToolTip) so iOS VoiceOver treats the
     // callout as a navigable container and follows Qt Tab focus into it.
-    // ToolTip is for transient hints and VO will not traverse children of a
-    // tooltip-role element. The "Callout open..." announcement that ToolTip
-    // used to trigger automatically is now fired explicitly from the view
-    // forms when calloutData becomes visible.
-    //
-    // Accessible.ignored: true keeps the Pane out of the iOS a11y tree as a
-    // leaf element. Without this, the Pane (because it has both role and name)
-    // is exposed as a single UIAccessibilityElement with isAccessibilityElement
-    // = YES, which causes iOS VO to treat it as a leaf and hides the children
-    // from swipe navigation. Children are still exposed and reachable.
     Accessible.role: Accessible.Pane
     Accessible.name: "Feature callout"
     Accessible.ignored: true
