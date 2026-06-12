@@ -6,7 +6,7 @@ This module demonstrates how to integrate the Qt toolkit tools into a C++ app us
 
 ## Access token setup
 
-To run the application and use the tools, please have an [access token](http://links.esri.com/create-an-api-key) ready to access the features. 
+To run the application and use the tools, please have an [access token](https://links.esri.com/create-an-api-key) ready to access the features.
 
 You can set the access token in a number of ways:
 

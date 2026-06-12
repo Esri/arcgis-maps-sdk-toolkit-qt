@@ -1,3 +1,18 @@
+// COPYRIGHT 2026 ESRI
+// TRADE SECRETS: ESRI PROPRIETARY AND CONFIDENTIAL
+// Unpublished material - all rights reserved under the
+// Copyright Laws of the United States and applicable international
+// laws, treaties, and conventions.
+//
+// For additional information, contact:
+// Environmental Systems Research Institute, Inc.
+// Attn: Contracts and Legal Services Department
+// 380 New York Street
+// Redlands, California, 92373
+// USA
+//
+// email: contracts@esri.com
+/// \file BasemapGallery.cpp
 
 /*******************************************************************************
  *  Copyright 2012-2021 Esri
@@ -34,7 +49,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     or an array of Basemaps. When the user selects a basemap from the BasemapGallery, the basemap rendered in the current
     geoModel is removed from the given map/scene and replaced with the basemap selected in the gallery.
 
-    \note By default, the BasemapGallery will attempt to fetch the set of developer basemaps, which require an \l{http://links.esri.com/create-an-api-key}{access token} to access.
+    \note By default, the BasemapGallery will attempt to fetch the set of developer basemaps, which require an \l{https://links.esri.com/create-an-api-key}{access token} to access.
    */
 
   /*!

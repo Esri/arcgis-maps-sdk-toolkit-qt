@@ -1,3 +1,18 @@
+// COPYRIGHT 2026 ESRI
+// TRADE SECRETS: ESRI PROPRIETARY AND CONFIDENTIAL
+// Unpublished material - all rights reserved under the
+// Copyright Laws of the United States and applicable international
+// laws, treaties, and conventions.
+//
+// For additional information, contact:
+// Environmental Systems Research Institute, Inc.
+// Attn: Contracts and Legal Services Department
+// 380 New York Street
+// Redlands, California, 92373
+// USA
+//
+// email: contracts@esri.com
+/// \file OverviewMap.cpp
 
 /*******************************************************************************
  *  Copyright 2012-2021 Esri
@@ -40,7 +55,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     For MapViews, the current viewpoint will be represented by a polygon displaying the visible area of the MapView. For SceneViews,
     the current viewpoint will be represented by a reticle (crosshairs) displaying the viewpoint center.
 
-    \note By default, the OverviewMap will attempt to use an ArcGIS Topographic basemap, which requires an \l{http://links.esri.com/create-an-api-key}{access token} to access.
+    \note By default, the OverviewMap will attempt to use an ArcGIS Topographic basemap, which requires an \l{https://links.esri.com/create-an-api-key}{access token} to access.
    */
 
   /*!

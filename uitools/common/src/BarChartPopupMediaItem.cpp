@@ -1,3 +1,18 @@
+// COPYRIGHT 2026 ESRI
+// TRADE SECRETS: ESRI PROPRIETARY AND CONFIDENTIAL
+// Unpublished material - all rights reserved under the
+// Copyright Laws of the United States and applicable international
+// laws, treaties, and conventions.
+//
+// For additional information, contact:
+// Environmental Systems Research Institute, Inc.
+// Attn: Contracts and Legal Services Department
+// 380 New York Street
+// Redlands, California, 92373
+// USA
+//
+// email: contracts@esri.com
+/// \file BarChartPopupMediaItem.cpp
 
 /*******************************************************************************
  *  Copyright 2012-2025 Esri
@@ -14,6 +29,11 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************/
+
+// At the top of your .cpp file or before Qt includes
+//#if defined(__aarch64__) || defined(__ARM_ARCH)
+#include <arm_acle.h>
+//#endif
 #include "BarChartPopupMediaItem.h"
 
 // Qt headers

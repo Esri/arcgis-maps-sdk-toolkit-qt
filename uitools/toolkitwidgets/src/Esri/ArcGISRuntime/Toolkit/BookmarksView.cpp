@@ -1,3 +1,18 @@
+// COPYRIGHT 2026 ESRI
+// TRADE SECRETS: ESRI PROPRIETARY AND CONFIDENTIAL
+// Unpublished material - all rights reserved under the
+// Copyright Laws of the United States and applicable international
+// laws, treaties, and conventions.
+//
+// For additional information, contact:
+// Environmental Systems Research Institute, Inc.
+// Attn: Contracts and Legal Services Department
+// 380 New York Street
+// Redlands, California, 92373
+// USA
+//
+// email: contracts@esri.com
+/// \file BookmarksView.cpp
 
 /*******************************************************************************
  *  Copyright 2012-2022 Esri
@@ -40,7 +55,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     or are programmatically defined. When the user selects a bookmark from the provided list,
     the viewpoint in the geoView is set to the new bookmark's view extent.
 
-    \note By default, the BookmarksView will attempt to fetch the set of developer bookmarks, which require an \l{http://links.esri.com/create-an-api-key}{access token} to access.
+    \note By default, the BookmarksView will attempt to fetch the set of developer bookmarks, which require an \l{https://links.esri.com/create-an-api-key}{access token} to access.
    */
 
   /*!
