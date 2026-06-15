@@ -33,7 +33,7 @@ import QtQuick.Layouts
  \image basemap.gif
  \snippet qml/demos/BasemapGalleryDemoForm.qml Set up BasemapGallery QML
 
- \note By default, the BasemapGallery will attempt to fetch the set of developer basemaps, which require an \l{http://links.esri.com/create-an-api-key}{access token} to access.
+ \note By default, the BasemapGallery will attempt to fetch the set of developer basemaps, which require an \l{https://links.esri.com/create-an-api-key}{access token} to access.
  */
 
 Pane {

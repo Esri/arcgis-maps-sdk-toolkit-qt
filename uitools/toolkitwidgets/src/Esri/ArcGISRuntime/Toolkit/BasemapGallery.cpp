@@ -34,7 +34,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     or an array of Basemaps. When the user selects a basemap from the BasemapGallery, the basemap rendered in the current
     geoModel is removed from the given map/scene and replaced with the basemap selected in the gallery.
 
-    \note By default, the BasemapGallery will attempt to fetch the set of developer basemaps, which require an \l{http://links.esri.com/create-an-api-key}{access token} to access.
+    \note By default, the BasemapGallery will attempt to fetch the set of developer basemaps, which require an \l{https://links.esri.com/create-an-api-key}{access token} to access.
    */
 
   /*!

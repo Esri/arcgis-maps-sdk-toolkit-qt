@@ -88,7 +88,7 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 
 ## Access token requirements
 
-Some of the toolkit components and examples utilize ArcGIS location services which require an access token. Please see the [setup guide](http://links.esri.com/create-an-api-key) for more information.
+Some of the toolkit components and examples utilize ArcGIS location services which require an access token. Please see the [setup guide](https://links.esri.com/create-an-api-key) for more information.
 
 ## Example app
 

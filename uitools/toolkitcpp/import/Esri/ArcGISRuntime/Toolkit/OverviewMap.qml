@@ -28,7 +28,7 @@ import Esri.ArcGISRuntime.Toolkit.Controller
    \image overviewmap.png overviewmap
    \snippet qml/demos/OverviewMapDemoForm.qml Set up Overview Map QML
 
-    \note By default, the OverviewMap will attempt to use an ArcGIS Topographic basemap, which requires an \l{http://links.esri.com/create-an-api-key}{access token} to access.
+    \note By default, the OverviewMap will attempt to use an ArcGIS Topographic basemap, which requires an \l{https://links.esri.com/create-an-api-key}{access token} to access.
  */
 
 Item {
