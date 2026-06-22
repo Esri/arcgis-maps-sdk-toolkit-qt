@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
  *  Copyright 2012-2021 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,6 +40,10 @@
 #include <QFuture>
 #include <QPersistentModelIndex>
 #include <QPointer>
+#include <QPromise>
+
+// C++ headers
+#include <memory>
 
 namespace Esri::ArcGISRuntime::Toolkit
 {
@@ -84,46 +88,22 @@ namespace Esri::ArcGISRuntime::Toolkit
       items2D.reserve(items.size());
 
       for (auto* item : items)
-      {
-        if (!item)
         {
-          continue;
-        }
+          if (!item)
+          {
+            continue;
+          }
 
-        if (item->is3D())
-        {
-          items3D.push_back(item);
-        }
-        else
-        {
-          items2D.push_back(item);
-        }
-      }
-    }
-
-    void appendGalleryItem(BasemapGalleryController* self, GenericListModel* gallery, BasemapGalleryItem* sourceItem)
-    {
-      if (!self || !gallery || !sourceItem || !sourceItem->basemap())
-      {
-        return;
-      }
-
-      if (sourceItem->is3D() && sourceItem->thumbnailOverride().isNull() && sourceItem->tooltipOverride().isEmpty())
-      {
-        self->append(sourceItem->basemap(), true);
-        return;
-      }
-
-      self->append(sourceItem->basemap(), sourceItem->thumbnailOverride(), sourceItem->tooltipOverride());
-      if (sourceItem->is3D())
-      {
-        const auto insertedIndex = gallery->index(gallery->rowCount() - 1);
-        if (auto* insertedItem = gallery->element<BasemapGalleryItem>(insertedIndex))
-        {
-          insertedItem->setIs3D(true);
+          if (item->is3D())
+          {
+            items3D.push_back(item);
+          }
+          else
+          {
+            items2D.push_back(item);
+          }
         }
       }
-    }
 
     /*!
       \internal
@@ -288,6 +268,11 @@ namespace Esri::ArcGISRuntime::Toolkit
       }
     }
 
+    /*!
+      \internal
+      Refreshes basemaps shown in the gallery from the loaded portal. Removes any gallery items that are no longer in the portal basemap lists
+      and preserves gallery items that are still in the portal basemap lists to preserve thumbnails and tooltips set by the developer.
+    */
     void refreshGalleryBasemaps(BasemapGalleryController* self, bool useDeveloperBasemaps = false)
     {
       if (!self)
@@ -324,13 +309,13 @@ namespace Esri::ArcGISRuntime::Toolkit
           {
             BasemapGalleryItem* existingItem = nullptr;
             for (auto* currentItem : currentItems)
-            {
-              if (currentItem && currentItem->basemap() == portalBasemap)
               {
-                existingItem = currentItem;
-                break;
+              if (currentItem && currentItem->basemap() == portalBasemap)
+                {
+                  existingItem = currentItem;
+                  break;
+                }
               }
-            }
 
             if (existingItem)
             {
@@ -400,7 +385,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       gallery->removeRows(0, gallery->rowCount());
       for (auto* item : desiredItems)
       {
-        appendGalleryItem(self, gallery, item);
+        gallery->append(item);
       }
 
       emit self->basemapsChanged();
@@ -408,19 +393,36 @@ namespace Esri::ArcGISRuntime::Toolkit
 
     /*!
       \internal
-      Fetches basemaps from the portal if not already fetched, and then sets the gallery basemap items based on the portal basemap lists.
+      Fetches 2D and 3D basemaps from the current portal. Returns a boolean future that indicates when the fetch is complete and successful. 
      */
-    void fetchAndSetPortalBasemaps(BasemapGalleryController* self, Portal* portal, bool useDeveloperBasemaps)
+    QFuture<bool> fetchPortalBasemaps(BasemapGalleryController* self, Portal* portal, bool useDeveloperBasemaps)
     {
-      auto doOnPortalLoaded = [self, portal, useDeveloperBasemaps]()
+      auto promise = std::make_shared<QPromise<bool>>();
+      promise->start();
+      auto readyFuture = promise->future();
+
+      auto complete = [promise](bool ok)
+      {
+        promise->addResult(ok);
+        promise->finish();
+      };
+
+      if (!self || !portal)
+      {
+        complete(false);
+        return readyFuture;
+      }
+
+
+      auto fetchBasemapsFromLoadedPortal = [portal, useDeveloperBasemaps, complete]()
       {
         QList<QFuture<void>> basemapFutures;
         if (useDeveloperBasemaps)
         {
-          if (portal->developerBasemaps()->rowCount() == 0)
-          {
-            basemapFutures.append(portal->fetchDeveloperBasemapsAsync());
-          }
+        if (portal->developerBasemaps()->rowCount() == 0)
+        {
+          basemapFutures.append(portal->fetchDeveloperBasemapsAsync());
+        }
         }
         else if (portal->basemaps()->rowCount() == 0)
         {
@@ -434,46 +436,47 @@ namespace Esri::ArcGISRuntime::Toolkit
 
         if (basemapFutures.isEmpty())
         {
-          refreshGalleryBasemaps(self, useDeveloperBasemaps);
+          complete(true);
+        }
+        else if (basemapFutures.size() == 1)
+        {
+          basemapFutures.first().then([complete](const auto&)
+          {
+            complete(true);
+          });
         }
         else
         {
-          if (basemapFutures.size() == 1)
+          using FuturesVariant = std::variant<QFuture<void>, QFuture<void>>;
+          QtFuture::whenAll(basemapFutures.first(), basemapFutures.last())
+            .then([complete](const QList<FuturesVariant>&)
           {
-            basemapFutures.first().then(self, [self, useDeveloperBasemaps](const auto&)
-            {
-              refreshGalleryBasemaps(self, useDeveloperBasemaps);
-            });
-          }
-          else
-          {
-            using FuturesVariant = std::variant<QFuture<void>, QFuture<void>>;
-            QtFuture::whenAll(basemapFutures.first(), basemapFutures.last())
-              .then(self, [self, useDeveloperBasemaps](const QList<FuturesVariant>&)
-            {
-              refreshGalleryBasemaps(self, useDeveloperBasemaps);
-            });
-          }
+            complete(true);
+          });
         }
       };
 
       if (portal->loadStatus() == LoadStatus::Loaded)
       {
-        doOnPortalLoaded();
+        fetchBasemapsFromLoadedPortal();
       }
       else
       {
-        QObject::connect(portal, &Portal::doneLoading, self, [doOnPortalLoaded](const Error& loadError)
+        singleShotConnection(portal, &Portal::doneLoading, self, [fetchBasemapsFromLoadedPortal, complete](const Error& loadError)
         {
           if (!loadError.isEmpty())
           {
             qWarning() << "Failed to load portal with error:" << loadError.message() << loadError.additionalMessage();
+            complete(false);
             return;
           }
-          doOnPortalLoaded();
+          fetchBasemapsFromLoadedPortal();
         });
+
         portal->load();
-       }
+      }
+
+      return readyFuture;
     }
   } // namespace
 
@@ -531,7 +534,14 @@ namespace Esri::ArcGISRuntime::Toolkit
         return Qt::ItemFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
       }
     });
-    fetchAndSetPortalBasemaps(this, m_portal, /*useDeveloperBasemaps=*/true);
+    fetchPortalBasemaps(this, m_portal, /*useDeveloperBasemaps=*/true)
+      .then(this, [this](bool ready)
+    {
+      if (ready)
+      {
+        refreshGalleryBasemaps(this, true);
+      }
+    });
     // Have to set the property names, so the controller will know how to match the properties from
     // BasemapGalleryItem with the specific Qt::<namespace> invoked in the .data() from the View (ListView) obj
     m_gallery->setDisplayPropertyName("name");
@@ -610,7 +620,14 @@ namespace Esri::ArcGISRuntime::Toolkit
 
     if (m_portal)
     {
-      fetchAndSetPortalBasemaps(this, m_portal, false);
+      fetchPortalBasemaps(this, m_portal, false)
+        .then(this, [this](bool ready)
+      {
+        if (ready)
+        {
+          refreshGalleryBasemaps(this, false);
+        }
+      });
     }
 
     emit portalChanged();
@@ -664,22 +681,16 @@ namespace Esri::ArcGISRuntime::Toolkit
     }
   }
 
-  bool BasemapGalleryController::append(Basemap* basemap)
-  {
-    std::lock_guard<std::mutex> lock(m_galleryAccessMutex);
-    return m_gallery->append(new BasemapGalleryItem(basemap, this));
-  }
-
-  bool BasemapGalleryController::append(Basemap* basemap, bool is3D)
+  bool BasemapGalleryController::append(Basemap* basemap, bool is3D /* = false */)
   {
     std::lock_guard<std::mutex> lock(m_galleryAccessMutex);
     return m_gallery->append(new BasemapGalleryItem(basemap, {}, {}, is3D, this));
   }
 
-  bool BasemapGalleryController::append(Basemap* basemap, QImage thumbnail, QString tooltip)
+  bool BasemapGalleryController::append(Basemap* basemap, QImage thumbnail, QString tooltip /* = {} */, bool is3D /* = false */)
   {
     std::lock_guard<std::mutex> lock(m_galleryAccessMutex);
-    return m_gallery->append(new BasemapGalleryItem(basemap, std::move(thumbnail), std::move(tooltip), this));
+    return m_gallery->append(new BasemapGalleryItem(basemap, std::move(thumbnail), std::move(tooltip), is3D, this));
   }
 
   int BasemapGalleryController::basemapIndex(Basemap* basemap) const
