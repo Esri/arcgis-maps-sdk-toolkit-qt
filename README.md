@@ -2,7 +2,7 @@
 
 # ArcGIS Maps SDK for Qt Toolkit
 
-NOTE: This is the version 208.x version of the Qt toolkit (`lts.next` branch). It should be used in conjunction with the [ArcGIS Maps SDK for Qt version 208.x](https://developers.arcgis.com/qt/v200/).
+NOTE: This is the version 200.8.x version of the Qt toolkit (`lts.next` branch). It should be used in conjunction with the [ArcGIS Maps SDK for Qt version 200.8.x](https://developers.arcgis.com/qt/v200/).
 
 This toolkit is an open source resource intended for use with the ArcGIS Maps SDK for Qt. It provides ready made components to complement mapping and GIS applications. Because it is open source you are encouraged to modify these tools and add your own.
 
