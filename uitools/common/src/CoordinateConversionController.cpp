@@ -61,8 +61,14 @@ namespace Esri::ArcGISRuntime::Toolkit
     {
       // Some default coordinate conversion formats to set us up with.
       m_coordinateFormats->setDisplayPropertyName("name");
-      m_coordinateFormats->append(QList<QObject*>() << createDecimalDegrees() << createDegreesDecimalMinutes() << createDegreesMinutesSeconds()
-                                                    << createMgrs() << createUsng() << createUtm() << createGars());
+      m_coordinateFormats->append(QList<QObject*>()
+                                  << createDecimalDegrees(parent)
+                                  << createDegreesDecimalMinutes(parent)
+                                  << createDegreesMinutesSeconds(parent)
+                                  << createMgrs(MgrsConversionMode::Automatic ,parent)
+                                  << createUsng(7, true, parent)
+                                  << createUtm(UtmConversionMode::NorthSouthIndicators, true,parent)
+                                  << createGars(GarsConversionMode::Center, parent));
     }
 
     {
