@@ -74,33 +74,6 @@ namespace Esri::ArcGISRuntime::Toolkit
     return items;
   }
 
-  static void splitGalleryItemsByDimension(const QList<BasemapGalleryItem*>& items,
-                                           QList<BasemapGalleryItem*>& items3D,
-                                           QList<BasemapGalleryItem*>& items2D)
-  {
-    items3D.clear();
-    items2D.clear();
-    items3D.reserve(items.size());
-    items2D.reserve(items.size());
-
-    for (auto* item : items)
-    {
-      if (!item)
-      {
-        continue;
-      }
-
-      if (item->is3D())
-      {
-        items3D.push_back(item);
-      }
-      else
-      {
-        items2D.push_back(item);
-      }
-    }
-  }
-
   /*!
     \internal
     Takes a map or scene, and connects to it and its basemap.
@@ -136,7 +109,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     // signal that basemap has changed.
     QObject::connect(geoModel, &T::basemapChanged, self, [self, listenToLoadSignals, geoModel](Basemap* oldBasemap)
     {
-      QObject::disconnect(self, nullptr, oldBasemap, nullptr);
+      QObject::disconnect(oldBasemap, nullptr, self, nullptr);
       auto* newBasemap = geoModel->basemap();
       listenToLoadSignals(newBasemap); // Connect to new basemap.
       self->setCurrentBasemap(newBasemap);
@@ -276,7 +249,6 @@ namespace Esri::ArcGISRuntime::Toolkit
     {
       return;
     }
-    const auto currentItems = galleryItems(gallery);
 
     // Remove existing gallery items to refresh the gallery with new basemaps from the portal. This will also disconnect signals from the removed gallery items.
     gallery->removeRows(0, gallery->rowCount());
