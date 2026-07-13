@@ -63,9 +63,10 @@ namespace Esri::ArcGISRuntime::Toolkit
 
     Q_INVOKABLE void setCurrentBasemap(Basemap* basemap);
 
-    Q_INVOKABLE bool append(Basemap* basemap, bool is3D = false);
-
-    Q_INVOKABLE bool append(Basemap* basemap, QImage thumbnail, QString tooltip = {}, bool is3D = false);
+    Q_INVOKABLE bool append(Basemap* basemap);
+    Q_INVOKABLE bool append(Basemap* basemap, bool is3D);
+    Q_INVOKABLE bool append(Basemap* basemap, QImage thumbnail, QString tooltip = {});
+    Q_INVOKABLE bool append(Basemap* basemap, QImage thumbnail, QString tooltip, bool is3D);
 
     Q_INVOKABLE int basemapIndex(Basemap* basemap) const;
 
