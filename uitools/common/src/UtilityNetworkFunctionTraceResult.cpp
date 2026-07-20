@@ -17,6 +17,8 @@
 
 #include "UtilityNetworkFunctionTraceResult.h"
 
+#include <utility>
+
 namespace Esri::ArcGISRuntime::Toolkit
 {
 
@@ -25,19 +27,22 @@ namespace Esri::ArcGISRuntime::Toolkit
     This class is an internal implementation detail and is subject to change.
    */
 
-  UtilityNetworkFunctionTraceResult::UtilityNetworkFunctionTraceResult(const QString& name, UtilityTraceFunctionType type, double value) :
-    m_name(name),
+  UtilityNetworkFunctionTraceResult::UtilityNetworkFunctionTraceResult(QString functionName,
+                                                                       QString networkAttributeName,
+                                                                       UtilityTraceFunctionType type,
+                                                                       double value) :
+    m_functionName(std::move(functionName)),
+    m_networkAttributeName(std::move(networkAttributeName)),
     m_type(type),
     m_value(value)
   {
-    //
   }
 
   UtilityNetworkFunctionTraceResult::~UtilityNetworkFunctionTraceResult() = default;
 
   QString UtilityNetworkFunctionTraceResult::name() const
   {
-    return m_name;
+    return m_functionName.isEmpty() ? QStringLiteral("%1 (%2)").arg(m_networkAttributeName, typeAsLabel()) : m_functionName;
   }
 
   UtilityTraceFunctionType UtilityNetworkFunctionTraceResult::type() const
