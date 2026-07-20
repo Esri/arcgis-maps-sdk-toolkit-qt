@@ -29,7 +29,6 @@ namespace Esri::ArcGISRuntime::Toolkit
   class UtilityNetworkFunctionTraceResult
   {
   public:
-    explicit UtilityNetworkFunctionTraceResult();
     UtilityNetworkFunctionTraceResult(QString functionName, QString networkAttributeName, UtilityTraceFunctionType type, double value);
     ~UtilityNetworkFunctionTraceResult();
 
@@ -37,6 +36,8 @@ namespace Esri::ArcGISRuntime::Toolkit
     UtilityTraceFunctionType type() const;
     QString typeAsLabel() const;
     double value() const;
+
+    UtilityNetworkFunctionTraceResult() = delete;
 
   private:
     QString m_functionName;
