@@ -62,7 +62,6 @@
 #include <UtilityNetworkListModel.h>
 #include <UtilityNetworkSource.h>
 #include <UtilityNetworkTypes.h>
-#include <UtilityTerminal.h>
 #include <UtilityTerminalConfiguration.h>
 #include <UtilityTraceFunction.h>
 #include <UtilityTraceFunctionOutput.h>
@@ -551,7 +550,9 @@ namespace Esri::ArcGISRuntime::Toolkit
 
   void UtilityNetworkTraceController::refresh()
   {
+    delete m_selectedUtilityNetwork;
     m_selectedUtilityNetwork = nullptr;
+    delete m_selectedTraceConfiguration;
     m_selectedTraceConfiguration = nullptr;
     m_traceConfigurations.clear();
     m_startingPoints->clear();
@@ -577,18 +578,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     setupUtilityNetworks();
   }
 
-  void UtilityNetworkTraceController::addStartingPoint(QObject* identifiedFeatureObject, const QString& terminalName)
-  {
-    auto* identifiedFeature = qobject_cast<ArcGISFeature*>(identifiedFeatureObject);
-    if (!identifiedFeature)
-    {
-      return;
-    }
-
-    addStartingPoint(identifiedFeature, identifiedFeature->geometry().extent().center(), terminalName);
-  }
-
-  void UtilityNetworkTraceController::addStartingPoint(ArcGISFeature* identifiedFeature, const Point& mapPoint, const QString& terminalName)
+  void UtilityNetworkTraceController::addStartingPoint(ArcGISFeature* identifiedFeature, const Point& mapPoint)
   {
     auto geometry = identifiedFeature->geometry();
 
@@ -640,16 +630,8 @@ namespace Esri::ArcGISRuntime::Toolkit
         QList<UtilityTerminal*> terminals = utilityTerminalConfiguration->terminals();
         if (terminals.size() > 1)
         {
-          auto* selectedTerminal = terminals.first();
-          for (auto* terminal : terminals)
-          {
-            if (terminal->name() == terminalName || terminalName.endsWith(QStringLiteral(":%1").arg(terminal->name())))
-            {
-              selectedTerminal = terminal;
-              break;
-            }
-          }
-          utilityElement->setTerminal(selectedTerminal);
+          // The user can select between multiple terminals, but by default the first one is selected
+          utilityElement->setTerminal(utilityElement->assetType()->terminalConfiguration()->terminals().at(0));
         }
       }
 
@@ -779,9 +761,8 @@ namespace Esri::ArcGISRuntime::Toolkit
 
           for (const auto o : outputList)
           {
-            const auto function = o->function();
-            m_functionResults->addFunctionResult(UtilityNetworkFunctionTraceResult(function->functionName(), function->networkAttribute()->name(),
-                                                                                   function->functionType(), o->result().toDouble()));
+            m_functionResults->addFunctionResult(
+              UtilityNetworkFunctionTraceResult(o->function()->networkAttribute()->name(), o->function()->functionType(), o->result().toDouble()));
           }
 
           break;
@@ -961,19 +942,7 @@ namespace Esri::ArcGISRuntime::Toolkit
 
   void UtilityNetworkTraceController::handleArcGISAuthenticationChallenge(ArcGISAuthenticationChallenge* challenge)
   {
-    const bool isFallback = challenge->requestUrl().host() == QStringLiteral("sampleserver7.arcgisonline.com");
-    const char* usernameVariable = isFallback ? "UTILITY_NETWORK_TRACE_FALLBACK_USERNAME" : "UTILITY_NETWORK_TRACE_NAMED_USERNAME";
-    const char* passwordVariable = isFallback ? "UTILITY_NETWORK_TRACE_FALLBACK_PASSWORD" : "UTILITY_NETWORK_TRACE_NAMED_PASSWORD";
-    const QString username = qEnvironmentVariable(usernameVariable);
-    const QString password = qEnvironmentVariable(passwordVariable);
-    if (username.isEmpty() || password.isEmpty())
-    {
-      qWarning() << "Set" << usernameVariable << "and" << passwordVariable << "to run this trace test.";
-      challenge->cancel();
-      return;
-    }
-
-    TokenCredential::createWithChallengeAsync(challenge, username, password, {}, this)
+    TokenCredential::createWithChallengeAsync(challenge, "viewer01", "I68VGU^nMurF", {}, this)
       .then(this,
             [challenge](TokenCredential* tokenCredential)
     {
