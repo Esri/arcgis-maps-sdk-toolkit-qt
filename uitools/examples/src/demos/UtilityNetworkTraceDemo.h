@@ -16,22 +16,38 @@
 #ifndef ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_UTILITYNETWORKTRACEDEMO_H
 #define ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_UTILITYNETWORKTRACEDEMO_H
 
-#include "BaseDemo.h"
-
+// Qt headers
 #include <QObject>
 #include <QQmlEngine>
+
+// Other headers
+#include "BaseDemo.h"
 
 class UtilityNetworkTraceDemo : public BaseDemo
 {
   Q_OBJECT
+  Q_PROPERTY(QObject* testFeature READ testFeature NOTIFY testFeatureChanged)
   QML_ELEMENT
 public:
   Q_INVOKABLE UtilityNetworkTraceDemo(QObject* parent = nullptr);
   ~UtilityNetworkTraceDemo() override;
 
+  Q_INVOKABLE void loadTestCase(int index);
+
+  QObject* testFeature() const;
+
 protected:
   Esri::ArcGISRuntime::Map* initMap_(QObject* parent) const override;
   Esri::ArcGISRuntime::Scene* initGlobalScene_(QObject* parent) const override;
+
+private:
+  void focusTestFeature(Esri::ArcGISRuntime::Map* map);
+
+  int m_testCaseIndex = 0;
+  QObject* m_testFeature = nullptr;
+
+signals:
+  void testFeatureChanged();
 };
 
 #endif // ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_UTILITYNETWORKTRACEDEMO_H

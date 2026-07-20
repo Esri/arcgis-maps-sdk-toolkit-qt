@@ -23,18 +23,77 @@ DemoPage {
     mapViewContents: Component {
         MapView {
             id: view
-            UtilityNetworkTrace {
-                id: utilityNetworkTrace
-                geoView: view
+
+            function addTestStartingPoint() {
+                const traceTool = traceToolLoader.item
+                if (demo.testFeature && traceTool && traceTool.controller.selectedUtilityNetwork) {
+                    const terminalName = testCasePicker.currentIndex === 0 ? "XFR:High" : "High"
+                    traceTool.controller.addStartingPoint(demo.testFeature, terminalName)
+                }
+            }
+
+            ComboBox {
+                id: testCasePicker
+                anchors {
+                    right: parent.right
+                    top: parent.top
+                    margins: 10
+                }
+                model: [qsTr("Named function labels"), qsTr("Fallback labels")]
+                onActivated: {
+                    traceToolLoader.active = false
+                    demo.loadTestCase(currentIndex)
+                    Qt.callLater(function() {
+                        traceToolLoader.active = true
+                    })
+                }
+            }
+
+            Loader {
+                id: traceToolLoader
                 anchors {
                     left: parent.left
                     top: parent.top
                     margins: 10
                 }
+                active: true
+
+                sourceComponent: UtilityNetworkTrace {
+                    geoView: view
+                }
             }
+
+            Connections {
+                target: traceToolLoader.item ? traceToolLoader.item.controller : null
+
+                function onTraceConfigurationNamesChanged() {
+                    const configurationName = testCasePicker.currentIndex === 0
+                        ? "Upstream with Function Results"
+                        : "Downstream Trace"
+                    Qt.callLater(function() {
+                        if (traceToolLoader.item)
+                            traceToolLoader.item.selectTraceConfiguration(configurationName)
+                    })
+                }
+
+                function onSelectedUtilityNetworkChanged() {
+                    view.addTestStartingPoint()
+                }
+            }
+
+            Connections {
+                target: traceToolLoader.item ? traceToolLoader.item.controller.selectedUtilityNetwork : null
+
+                function onDoneLoading() {
+                    view.addTestStartingPoint()
+                }
+            }
+
             UtilityNetworkTraceDemo {
                 id: demo
                 geoView: view
+
+                onTestFeatureChanged: view.addTestStartingPoint()
             }
         }
     }

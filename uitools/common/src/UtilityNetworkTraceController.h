@@ -129,6 +129,8 @@ namespace Esri::ArcGISRuntime
 
       Q_INVOKABLE void refresh();
 
+      Q_INVOKABLE void addStartingPoint(QObject* identifiedFeature, const QString& terminalName = {});
+
       Q_INVOKABLE void removeStartingPoint(int index);
 
       Q_INVOKABLE void zoomToStartingPoint(int index);
@@ -159,7 +161,7 @@ namespace Esri::ArcGISRuntime
       void onFeaturesForElementsCompleted();
 
     private:
-      void addStartingPoint(ArcGISFeature* identifiedFeature, const Point& mapPoint);
+      void addStartingPoint(ArcGISFeature* identifiedFeature, const Point& mapPoint, const QString& terminalName = {});
       void setupUtilityNetworks();
       void applyStartingPointWarnings();
       void handleArcGISAuthenticationChallenge(Authentication::ArcGISAuthenticationChallenge* challenge) override;

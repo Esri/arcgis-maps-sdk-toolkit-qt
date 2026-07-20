@@ -70,6 +70,11 @@ namespace Esri::ArcGISRuntime::Toolkit
       }
 
       m_multipleTerminalNames = multipleTerminalsTemp;
+      m_selectedTerminalIndex = m_multipleTerminals.indexOf(m_utilityElement->terminal());
+      if (m_selectedTerminalIndex < 0)
+      {
+        m_selectedTerminalIndex = 0;
+      }
     }
 
     if (m_selectionGraphic != nullptr && m_utilityElement->networkSource()->sourceType() == UtilityNetworkSourceType::Edge &&
@@ -134,9 +139,9 @@ namespace Esri::ArcGISRuntime::Toolkit
 
   void UtilityNetworkTraceStartingPoint::setSelectedTerminalNameByIndex(int index)
   {
-    if (m_multipleTerminalNames.size() > index)
+    if (index >= 0 && index < m_multipleTerminals.size())
     {
-      m_selectedMultipleTerminal = m_multipleTerminals.at(index);
+      m_utilityElement->setTerminal(m_multipleTerminals.at(index));
       m_selectedTerminalIndex = index;
     }
   }

@@ -58,6 +58,14 @@ Pane {
      */
     property var geoView;
 
+    function selectTraceConfiguration(configurationName) {
+        const configurationIndex = controller.traceConfigurationNames.indexOf(configurationName)
+        if (configurationIndex >= 0) {
+            traceConfigurationBox.currentIndex = configurationIndex
+            controller.setSelectedTraceConfigurationNameByIndex(configurationIndex)
+        }
+    }
+
     Binding {
         target: controller
         property: "geoView"

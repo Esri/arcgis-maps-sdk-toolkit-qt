@@ -84,7 +84,6 @@ namespace Esri::ArcGISRuntime::Toolkit
     bool m_hasMultipleTerminals = false;
     QStringList m_multipleTerminalNames;
     QList<UtilityTerminal*> m_multipleTerminals;
-    UtilityTerminal* m_selectedMultipleTerminal = nullptr;
     int m_selectedTerminalIndex = 0;
     bool m_hasFractionAlongEdge = false;
     double m_fractionAlongEdge = 0.0;
