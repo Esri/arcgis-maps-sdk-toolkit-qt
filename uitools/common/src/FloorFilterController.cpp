@@ -127,9 +127,8 @@ namespace Esri::ArcGISRuntime::Toolkit
     template<typename GeoView, typename Func>
     void connectToGeoView(GeoView* geoView, FloorFilterController* self, Func&& f)
     {
-      static_assert(std::is_same<GeoView, MapViewToolkit>::value
-                      || std::is_same<GeoView, SceneViewToolkit>::value
-                      || std::is_same<GeoView, LocalSceneViewToolkit>::value,
+      static_assert(std::is_same<GeoView, MapViewToolkit>::value || std::is_same<GeoView, SceneViewToolkit>::value ||
+                      std::is_same<GeoView, LocalSceneViewToolkit>::value,
                     "Must be connected to a SceneView, LocalSceneView, or MapView");
 
       auto connectToGeoModel = [self, geoView, f = std::forward<Func>(f)]
@@ -725,7 +724,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
       m_settingViewpoint = true;
-      mapView->setViewpointAsync(b.toEnvelope())
+      mapView->setViewpointAsync(Viewpoint(b.toEnvelope()))
         .then(this, [this](bool success)
       {
         if (success)
@@ -737,7 +736,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
       m_settingViewpoint = true;
-      sceneView->setViewpointAsync(b.toEnvelope())
+      sceneView->setViewpointAsync(Viewpoint(b.toEnvelope()))
         .then(this, [this](bool success)
       {
         if (success)
@@ -749,7 +748,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
     {
       m_settingViewpoint = true;
-      localSceneView->setViewpointAsync(b.toEnvelope())
+      localSceneView->setViewpointAsync(Viewpoint(b.toEnvelope()))
         .then(this, [this](bool success)
       {
         if (success)
