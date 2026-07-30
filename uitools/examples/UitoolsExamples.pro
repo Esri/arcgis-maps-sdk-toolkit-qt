@@ -38,7 +38,7 @@ equals(QT_MAJOR_VERSION, 6) {
   }
 }
 
-ARCGIS_RUNTIME_VERSION = 300.1.0
+ARCGIS_RUNTIME_VERSION = 300.2.0
 include($$PWD/arcgisruntime.pri)
 include($$PWD/../toolkitcpp/toolkitcpp.pri)
 
