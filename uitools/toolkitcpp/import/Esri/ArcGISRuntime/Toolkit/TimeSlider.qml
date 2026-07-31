@@ -297,7 +297,8 @@ Pane {
                         if (slider.first.pressed) {
                             if (slider.first.handle.enabled) {
                                 controller.setSteps(first.value, controller.endStep);
-                            } else { // Reset
+                            } else {
+                                 // Reset
                                 slider.first.value = controller.startStep;
                             }
                         }
@@ -356,7 +357,8 @@ Pane {
                     property var firstHandleLabel: null;
                     property var secondHandleLabel: null;
                     model: Math.round(marks)
-                    Item { // Holds a tickmark and the label for that mark.
+                    // Holds a tickmark and the label for that mark.
+                    Item {
                         id: tickHold
                         x: {
                             const h = Math.max(slider.first.handle.width, slider.second.handle.width)/2 - width;
@@ -367,7 +369,8 @@ Pane {
                         }
                         width: tickMark.width
                         height: childrenRect.height
-                        Rectangle  { // Mark itself.
+                        // Mark itself.
+                        Rectangle  {
                             id: tickMark
                             anchors.top: parent.top
                             width: 2
@@ -375,7 +378,8 @@ Pane {
                                                                           : 10
                             color: slider.background.color
                         }
-                        Label { // Tickmark label
+                        // Tickmark label
+                        Label {
                             id: tickLabel
                             anchors {
                                 top: tickMark.bottom
