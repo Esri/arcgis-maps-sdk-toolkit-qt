@@ -65,9 +65,9 @@ namespace Esri::ArcGISRuntime::Toolkit
                                   << createDecimalDegrees(parent)
                                   << createDegreesDecimalMinutes(parent)
                                   << createDegreesMinutesSeconds(parent)
-                                  << createMgrs(MgrsConversionMode::Automatic ,parent)
+                                  << createMgrs(MgrsConversionMode::Automatic, parent)
                                   << createUsng(7, true, parent)
-                                  << createUtm(UtmConversionMode::NorthSouthIndicators, true,parent)
+                                  << createUtm(UtmConversionMode::NorthSouthIndicators, true, parent)
                                   << createGars(GarsConversionMode::Center, parent));
     }
 
