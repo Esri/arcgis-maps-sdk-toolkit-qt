@@ -70,7 +70,7 @@ Control {
             // Calculate the new displayed scalebar width.
             internal.displayWidth = controller.calculateDisplayWidth(displayDistance, maxDistance, availableWidth);
             // Display the value of the calculated distance.
-            internal.displayDistance = controller.calculateDistanceInDisplayUnits(displayDistance, scalebar.unitSystem);
+            internal.displayDistance = controller.calculateDistanceInDisplayUnits(displayDistance, controller.unitSystem);
         }
 
         property Connections geoViewConnections: Connections {
