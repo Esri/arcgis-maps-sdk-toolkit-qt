@@ -54,12 +54,6 @@ Control {
         }
     }
 
-    onUnitSystemChanged: {
-        if (controller && controller.mapView) {
-            internal.calculateScale();
-        }
-    }
-
     QtObject {
         id: internal
 
@@ -82,6 +76,13 @@ Control {
         property Connections geoViewConnections: Connections {
             target: controller.mapView
             function onViewpointChanged() {
+                internal.calculateScale();
+            }
+        }
+
+        property Connections controllerConnections: Connections {
+            target: controller
+            function onUnitSystemChanged() {
                 internal.calculateScale();
             }
         }
