@@ -102,7 +102,7 @@ Control {
             implicitHeight: scalebar.implicitHeight
             font: scalebar.font
             controller: scalebar.controller
-            unitSystem: unitSystem === unitSystem.Dual ? Scalebar.UnitSystem.Metric : unitSystem
+            unitSystem: scalebar.unitSystem === Scalebar.UnitSystem.Dual ? Scalebar.UnitSystem.Metric : scalebar.unitSystem
         }
     }
 
