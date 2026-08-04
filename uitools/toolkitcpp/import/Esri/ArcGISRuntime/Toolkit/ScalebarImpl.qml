@@ -54,6 +54,12 @@ Control {
         }
     }
 
+    onUnitSystemChanged: {
+        if (controller && controller.mapView) {
+            internal.calculateScale();
+        }
+    }
+
     QtObject {
         id: internal
 
