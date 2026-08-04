@@ -117,9 +117,7 @@ Control {
         restoreMode: Binding.RestoreNone
         target: controller
         property: "unitSystem"
-        value: unitSystem === Scalebar.UnitSystem.Dual
-               ? Scalebar.UnitSystem.Metric
-               : unitSystem
+        value: unitSystem === Scalebar.UnitSystem.Dual ? Scalebar.UnitSystem.Metric : unitSystem
     }
 
     onMapViewChanged: {
