@@ -102,7 +102,7 @@ Control {
             implicitHeight: scalebar.implicitHeight
             font: scalebar.font
             controller: scalebar.controller
-            unitSystem: unitSystem === unitSystem.Dual ? Scalebar.UnitSystem.Metric : unitSystem
+            unitSystem: scalebar.unitSystem === Scalebar.UnitSystem.Dual ? Scalebar.UnitSystem.Metric : scalebar.unitSystem
         }
     }
 
@@ -113,6 +113,13 @@ Control {
         value: mapView
     }
 
+    Binding {
+        restoreMode: Binding.RestoreNone
+        target: controller
+        property: "unitSystem"
+        value: unitSystem === Scalebar.UnitSystem.Dual ? Scalebar.UnitSystem.Metric : unitSystem
+    }
+    
     onMapViewChanged: {
         if (controller) {
             controller.mapView = mapView;
