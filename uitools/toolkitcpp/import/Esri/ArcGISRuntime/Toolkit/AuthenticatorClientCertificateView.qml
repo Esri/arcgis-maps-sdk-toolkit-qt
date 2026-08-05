@@ -17,7 +17,7 @@ import Esri.ArcGISRuntime.Toolkit.Controller
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Qt.labs.platform as P
+import QtQuick.Dialogs as P
 
 Dialog {
     id: clientCertificateView
@@ -67,9 +67,8 @@ Dialog {
 
         P.FileDialog {
             id: fileDialog
-            folder: P.StandardPaths.writableLocation(P.StandardPaths.DocumentsLocation)
             onAccepted: {
-                currentCertificate = file;
+                currentCertificate = selectedFile;
                 // first attempt with no password in case none is required
                 passwordDialog.firstAttemptWithNoPassword = true;
                 passwordTextField.text = "";
@@ -183,11 +182,11 @@ Dialog {
 
         passwordDialog.openedChanged.connect(inputPasswordFn);
 
-        fileDialog.file = path;
-
-        // this will open the password dialog, which we are listening for it to become
-        // opened above to input the password
-        fileDialog.accept();
+        // Mirror the file dialog's accepted flow directly
+        currentCertificate = path;
+        passwordDialog.firstAttemptWithNoPassword = true;
+        passwordTextField.text = "";
+        processCertificate_();
     }
 
     function clickCancel() {

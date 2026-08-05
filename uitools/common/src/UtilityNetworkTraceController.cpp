@@ -761,8 +761,9 @@ namespace Esri::ArcGISRuntime::Toolkit
 
           for (const auto o : outputList)
           {
-            m_functionResults->addFunctionResult(
-              UtilityNetworkFunctionTraceResult(o->function()->networkAttribute()->name(), o->function()->functionType(), o->result().toDouble()));
+            const auto function = o->function();
+            m_functionResults->addFunctionResult(UtilityNetworkFunctionTraceResult(function->functionName(), function->networkAttribute()->name(),
+                                                                                   function->functionType(), o->result().toDouble()));
           }
 
           break;

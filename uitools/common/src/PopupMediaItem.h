@@ -35,6 +35,7 @@ namespace Esri::ArcGISRuntime
     class PopupMediaItem : public QObject
     {
       Q_OBJECT
+      Q_PROPERTY(QString alternativeText READ alternativeText NOTIFY popupMediaItemChanged)
       Q_PROPERTY(QString title READ title NOTIFY popupMediaItemChanged)
       Q_PROPERTY(QString caption READ caption NOTIFY popupMediaItemChanged)
       Q_PROPERTY(PopupMediaType popupMediaType READ popupMediaType NOTIFY popupMediaItemChanged)
@@ -46,6 +47,7 @@ namespace Esri::ArcGISRuntime
       ~PopupMediaItem() override;
 
     private:
+      QString alternativeText() const;
       QString title() const;
       QString caption() const;
       PopupMediaType popupMediaType() const;

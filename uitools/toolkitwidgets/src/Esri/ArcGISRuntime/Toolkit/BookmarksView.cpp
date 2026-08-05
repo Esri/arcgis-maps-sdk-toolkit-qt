@@ -40,7 +40,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     or are programmatically defined. When the user selects a bookmark from the provided list,
     the viewpoint in the geoView is set to the new bookmark's view extent.
 
-    \note By default, the BookmarksView will attempt to fetch the set of developer bookmarks, which require an \l{http://links.esri.com/create-an-api-key}{access token} to access.
+    \note By default, the BookmarksView will attempt to fetch the set of developer bookmarks, which require an \l{https://links.esri.com/create-an-api-key}{access token} to access.
    */
 
   /*!

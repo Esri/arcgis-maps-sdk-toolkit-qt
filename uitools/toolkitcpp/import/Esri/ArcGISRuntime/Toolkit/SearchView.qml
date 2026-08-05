@@ -30,7 +30,7 @@ import QtQuick.Layouts
     \image search.png search
     \snippet qml/demos/SearchViewDemoForm.qml Set up Search View QML
 
-    \note By default, the SearchView will attempt to access the World Geocoding Service, which requires an \l{http://links.esri.com/create-an-api-key}{access token}.
+    \note By default, the SearchView will attempt to access the World Geocoding Service, which requires an \l{https://links.esri.com/create-an-api-key}{access token}.
 */
 Pane {
     id: searchView
