@@ -119,7 +119,7 @@ Control {
         property: "unitSystem"
         value: unitSystem === Scalebar.UnitSystem.Dual ? Scalebar.UnitSystem.Metric : unitSystem
     }
-    
+
     onMapViewChanged: {
         if (controller) {
             controller.mapView = mapView;

@@ -39,6 +39,7 @@
 #include <PictureMarkerSymbol.h>
 #include <SuggestListModel.h>
 #include <SymbolStyle.h>
+#include <Viewpoint.h>
 
 namespace Esri::ArcGISRuntime::Toolkit
 {
@@ -601,7 +602,7 @@ namespace Esri::ArcGISRuntime::Toolkit
                 const auto extent = m_graphicsOverlay->extent();
                 EnvelopeBuilder b{extent};
                 b.expandByFactor(1.2); // Give some margins to the view.
-                auto future = geoView->setViewpointAsync(b.toEnvelope(), 0);
+                auto future = geoView->setViewpointAsync(Viewpoint(b.toEnvelope()), 0);
                 Q_UNUSED(future)
               }
             }
