@@ -32,6 +32,7 @@
 #include <PictureMarkerSymbol.h>
 #include <SuggestListModel.h>
 #include <SuggestResult.h>
+#include <Viewpoint.h>
 
 // Toolkit headers
 #include "DoOnLoad.h"
@@ -65,7 +66,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       }
 
       searchResult->setOwningSource(owningSource);
-      searchResult->setSelectionViewpoint(g.extent());
+      searchResult->setSelectionViewpoint(Viewpoint(g.extent()));
       searchResult->setMarkerImageUrl(QUrl{MAP_PIN});
 
       auto graphic = new Graphic(g.displayLocation(), g.attributes(), nullptr, searchResult);
