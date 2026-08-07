@@ -41,6 +41,10 @@ Pane {
     id: coordinateConversionWindow
 
     clip: true
+    implicitWidth: geoView && geoView.width > 20 ?
+                       Math.min(gridLayout.implicitWidth + leftPadding + rightPadding, geoView.width - 20) :
+                       gridLayout.implicitWidth + leftPadding + rightPadding
+    implicitHeight: gridLayout.implicitHeight + topPadding + bottomPadding
 
     /*!
        \qmlproperty GeoView geoView
