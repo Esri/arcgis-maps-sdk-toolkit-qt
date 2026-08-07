@@ -1,5 +1,4 @@
-
-/*******************************************************************************
+﻿/*******************************************************************************
  *  Copyright 2012-2021 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,6 +27,7 @@
 #include <Basemap.h>
 #include <BasemapListModel.h>
 #include <Error.h>
+#include <GroupLayer.h>
 #include <Item.h>
 #include <Layer.h>
 #include <LayerListModel.h>
@@ -41,270 +41,321 @@
 #include <QFuture>
 #include <QPersistentModelIndex>
 #include <QPointer>
+#include <QPromise>
+
+// C++ headers
+#include <algorithm>
+#include <memory>
+#include <type_traits>
+#include <utility>
 
 namespace Esri::ArcGISRuntime::Toolkit
 {
+  /*!
+    \internal
+   */
 
-  namespace
+  static QList<BasemapGalleryItem*> galleryItems(GenericListModel* gallery)
   {
-    /*!
-      \internal
-     */
-    template<typename T>
-    auto* qPointerFrom(T* t)
+    QList<BasemapGalleryItem*> items;
+    if (!gallery)
     {
-      return QPointer<T>{t};
+      return items;
     }
 
-    /*!
-      \internal
-      Takes a map or scene, and connects to it and its basemap.
-      Emits a basemapChanged signal when:
-      - The map/scene basemapChanged signal fires.
-      - The basemap load status has changed.
-
-      We automatically disconnect from the map/scene's old basemap if the
-      map/scene basemapChanged signal is fired.
-     */
-    template<typename T>
-    void connectToBasemap(BasemapGalleryController* self, T* geoModel)
+    items.reserve(gallery->rowCount());
+    for (int i = 0; i < gallery->rowCount(); ++i)
     {
-      static_assert(std::is_base_of<GeoModel, T>::value, "Must be a GeoModel.");
-
-      if (!geoModel)
+      if (auto* item = gallery->element<BasemapGalleryItem>(gallery->index(i)))
       {
-        return;
-      }
-
-      const auto listenToLoadSignals = [self](Basemap* basemap)
-      {
-        if (basemap)
-        {
-          if (basemap->loadStatus() != LoadStatus::Loaded)
-          {
-            QObject::connect(basemap, &Basemap::doneLoading, self, &BasemapGalleryController::currentBasemapChanged);
-          }
-        }
-      };
-
-      // If basemap changes on map or scene, disconnect from basemap and
-      // signal that basemap has changed.
-      QObject::connect(geoModel, &T::basemapChanged, self, [self, listenToLoadSignals, geoModel](Basemap* oldBasemap)
-      {
-        QObject::disconnect(self, nullptr, oldBasemap, nullptr);
-        auto* newBasemap = geoModel->basemap();
-        listenToLoadSignals(newBasemap); // Connect to new basemap.
-        self->setCurrentBasemap(newBasemap);
-      });
-
-      listenToLoadSignals(geoModel->basemap());
-    }
-
-    /*!
-      \internal
-      Connect to [Scene/Map].
-
-      1. Update our cached basemap with the Scene/Map basemap.
-      2. Discover the runtime type of GeoModel
-      3. Connect to that type's basemapChanged signal.
-     */
-    void connectToGeoModel(BasemapGalleryController* self, GeoModel* geoModel)
-    {
-      doOnLoaded(geoModel, self, [self, geoModel]
-      {
-        self->setCurrentBasemap(geoModel->basemap());
-      });
-
-      // TODO: Cleanup this when GeoModel itself exposes the
-      // basemapChanged signal.
-      if (auto* scene = qobject_cast<Scene*>(geoModel))
-      {
-        connectToBasemap(self, scene);
-      }
-      else if (auto* map = qobject_cast<Map*>(geoModel))
-      {
-        connectToBasemap(self, map);
+        items.push_back(item);
       }
     }
-
-    /*!
-      \internal
-      1. Disconnect from the associated Map/Scene.
-      2. Disconnect from the associated Basemap.
-     */
-    void disconnectFromGeoModel(BasemapGalleryController* self, GeoModel* geoModel)
-    {
-      QObject::disconnect(geoModel, nullptr, self, nullptr);
-      if (Basemap* basemap = geoModel->basemap())
-      {
-        QObject::disconnect(basemap, nullptr, self, nullptr);
-      }
-    }
-
-    /*!
-      \internal
-      Triggered when a basemap is added to the gallery.
-
-      1. We listen for GalleryItem changes.
-      2. We force the basemap to load if not already.
-      3. We emit BasemapGalleryController::currentBasemapChanged if the current basemap was
-      added to the gallery.
-     */
-    void onBasemapAddedToGallery(BasemapGalleryController* self, GenericListModel* gallery, const QModelIndex& index, BasemapGalleryItem* galleryItem)
-    {
-      if (!galleryItem)
-      {
-        return;
-      }
-
-      const auto pIndex = QPersistentModelIndex(index);
-      const auto notifyChange = [pIndex, gallery]
-      {
-        // Notify that the item has changed.
-        if (pIndex.isValid())
-        {
-          emit gallery->dataChanged(pIndex, pIndex);
-        }
-      };
-
-      QObject::connect(galleryItem, &BasemapGalleryItem::basemapChanged, self, notifyChange);
-      QObject::connect(galleryItem, &BasemapGalleryItem::thumbnailChanged, self, notifyChange);
-      QObject::connect(galleryItem, &BasemapGalleryItem::tooltipChanged, self, notifyChange);
-
-      auto* basemap = galleryItem->basemap();
-
-      if (basemap && basemap->loadStatus() != LoadStatus::Loaded)
-      {
-        basemap->load();
-      }
-
-      if (self->currentBasemap() == basemap)
-      {
-        // If the currently active basemap was added to the gallery, we notify
-        // downstream consumers that the currently active basemap has changed also to
-        // trigger UI updates
-        emit self->currentBasemapChanged();
-      }
-    }
-
-    /*!
-      \internal
-      Triggered when a basemap is removed from the gallery.
-
-      1. We disconnect from the GalleryItem.
-      2. We emit BasemapGalleryController::currentBasemapChanged if the current basemap was
-      removed from the gallery.
-      3. We delete the GalleryItem if we are the parent.
-     */
-    void onBasemapRemovedFromGallery(BasemapGalleryController* self, BasemapGalleryItem* galleryItem)
-    {
-      if (!galleryItem)
-      {
-        return;
-      }
-
-      QObject::disconnect(galleryItem, nullptr, self, nullptr);
-
-      if (self->currentBasemap() == galleryItem->basemap())
-      {
-        // If the currently active basemap was added to the gallery, we let
-        // downstream consumers the currently active basemap has changed also to
-        // trigger UI updates.
-        emit self->currentBasemapChanged();
-      }
-
-      if (galleryItem->parent() == self)
-      {
-        galleryItem->deleteLater();
-      }
-    }
-
-    /*!
-      \internal
-      Takes a BasemapListModel*, sorts them alphabetically, and adds them to the basemap gallery.
-
-      Because the basemaps are initially unloaded, Basemap->item() must be used to access the
-      basemap metadata. The basemaps are sorted using Basemap->item()->title().
-     */
-    void sortBasemapsAndAddToGallery(BasemapGalleryController* self, BasemapListModel* basemaps, bool is3D = false)
-    {
-      // Convert BasemapListModel into a Basemap* vector and sort basemaps alphabetically using the title
-      std::vector<Basemap*> basemapsVector;
-      basemapsVector.reserve(basemaps->rowCount());
-      std::copy(std::cbegin(*basemaps), std::cend(*basemaps), std::back_inserter(basemapsVector));
-      std::sort(std::begin(basemapsVector), std::end(basemapsVector), [](Basemap* b1, Basemap* b2)
-      {
-        // Check validity of basemap->item() and if title() is empty. If either is true, push to end of list.
-        if (!b1->item() || b1->item()->title().isEmpty())
-        {
-          return false;
-        }
-        else if (!b2->item() || b2->item()->title().isEmpty())
-        {
-          return true;
-        }
-        else
-        {
-          return b1->item()->title() < b2->item()->title();
-        }
-      });
-
-      for (auto* basemap : basemapsVector)
-      {
-        self->append(basemap, is3D);
-      }
-    }
-
-    /*!
-      \internal
-      Calls Portal::fetchDeveloperBasemapsAsync on the portal. Note that we do
-      not call Portal::fetchBasemapsAsync. The former call is for retrieving the modern API-key
-      metered basemaps, while the latter returns older-style basemaps. The latter is required
-      only when the user applies a custom portal, as it is also the call for retrieving an
-      enterprises's custom basemaps if set.
-     */
-    void setToDefaultBasemaps(BasemapGalleryController* self, Portal* portal)
-    {
-      // Load the portal and kick-off the group discovery.
-      QObject::connect(portal, &Portal::doneLoading, self, [portal, self](const Error& e)
-      {
-        if (!e.isEmpty())
-        {
-          return;
-        }
-
-        portal->fetchDeveloperBasemapsAsync().then(self, [portal, self]()
-        {
-          // Sort and append the basemaps to the gallery.
-          BasemapListModel* basemaps = portal->developerBasemaps();
-          sortBasemapsAndAddToGallery(self, basemaps);
-          // Notify the demo that the basemaps have changed.
-          emit self->basemapsChanged();
-        });
-
-        if (qobject_cast<Scene*>(self->geoModel()))
-        {
-          portal->fetch3DBasemapsAsync().then(self, [portal, self]()
-          {
-            // Sort and append the basemaps to the gallery.
-            BasemapListModel* basemaps = portal->basemaps3D();
-            sortBasemapsAndAddToGallery(self, basemaps, true);
-            // Notify the demo that the basemaps have changed.
-            emit self->basemapsChanged();
-          });
-        }
-      });
-      portal->load();
-    }
-  } // namespace
+    return items;
+  }
 
   /*!
-    \inmodule Esri.ArcGISRuntime.Toolkit
-    \class Esri::ArcGISRuntime::Toolkit::BasemapGalleryController
     \internal
+    Takes a map or scene, and connects to it and its basemap.
+    Emits a basemapChanged signal when:
+    - The map/scene basemapChanged signal fires.
+    - The basemap load status has changed.
 
-    This class is an internal implementation detail and is subject to change.
+    We automatically disconnect from the map/scene's old basemap if the
+    map/scene basemapChanged signal is fired.
    */
+  template<typename T>
+  static void connectToBasemap(BasemapGalleryController* self, T* geoModel)
+  {
+    static_assert(std::is_base_of_v<GeoModel, T>, "Must be a GeoModel.");
+
+    if (!geoModel)
+    {
+      return;
+    }
+
+    const auto listenToLoadSignals = [self](Basemap* basemap)
+    {
+      if (basemap)
+      {
+        if (basemap->loadStatus() != LoadStatus::Loaded)
+        {
+          QObject::connect(basemap, &Basemap::doneLoading, self, &BasemapGalleryController::currentBasemapChanged);
+        }
+      }
+    };
+
+    // If basemap changes on map or scene, disconnect from basemap and
+    // signal that basemap has changed.
+    QObject::connect(geoModel, &T::basemapChanged, self, [self, listenToLoadSignals, geoModel](Basemap* oldBasemap)
+    {
+      QObject::disconnect(oldBasemap, nullptr, self, nullptr);
+      auto* newBasemap = geoModel->basemap();
+      listenToLoadSignals(newBasemap); // Connect to new basemap.
+      self->setCurrentBasemap(newBasemap);
+    });
+
+    listenToLoadSignals(geoModel->basemap());
+  }
+
+  /*!
+    \internal
+    Connect to [Scene/Map].
+
+    1. Update our cached basemap with the Scene/Map basemap.
+    2. Discover the runtime type of GeoModel
+    3. Connect to that type's basemapChanged signal.
+   */
+  static void connectToGeoModel(BasemapGalleryController* self, GeoModel* geoModel)
+  {
+    doOnLoaded(geoModel, self, [self, geoModel]
+    {
+      self->setCurrentBasemap(geoModel->basemap());
+    });
+
+    connectToBasemap(self, geoModel);
+  }
+
+  /*!
+    \internal
+    1. Disconnect from the associated Map/Scene.
+    2. Disconnect from the associated Basemap.
+   */
+  static void disconnectFromGeoModel(BasemapGalleryController* self, GeoModel* geoModel)
+  {
+    QObject::disconnect(geoModel, nullptr, self, nullptr);
+    if (Basemap* basemap = geoModel->basemap())
+    {
+      QObject::disconnect(basemap, nullptr, self, nullptr);
+    }
+  }
+
+  /*!
+    \internal
+    Triggered when a basemap is added to the gallery.
+
+    1. We listen for GalleryItem changes.
+    2. We force the basemap to load if not already.
+    3. We emit BasemapGalleryController::currentBasemapChanged if the current basemap was
+    added to the gallery.
+   */
+  static void onBasemapAddedToGallery(BasemapGalleryController* self,
+                                      GenericListModel* gallery,
+                                      const QModelIndex& index,
+                                      BasemapGalleryItem* galleryItem)
+  {
+    if (!galleryItem)
+    {
+      return;
+    }
+
+    const auto pIndex = QPersistentModelIndex(index);
+    const auto notifyChange = [pIndex, gallery]
+    {
+      // Notify that the item has changed.
+      if (pIndex.isValid())
+      {
+        emit gallery->dataChanged(pIndex, pIndex);
+      }
+    };
+
+    QObject::connect(galleryItem, &BasemapGalleryItem::basemapChanged, self, notifyChange);
+    QObject::connect(galleryItem, &BasemapGalleryItem::thumbnailChanged, self, notifyChange);
+    QObject::connect(galleryItem, &BasemapGalleryItem::tooltipChanged, self, notifyChange);
+
+    auto* basemap = galleryItem->basemap();
+
+    if (basemap && basemap->loadStatus() != LoadStatus::Loaded)
+    {
+      basemap->load();
+    }
+
+    if (self->currentBasemap() == basemap)
+    {
+      // If the currently active basemap was added to the gallery, we notify
+      // downstream consumers that the currently active basemap has changed also to
+      // trigger UI updates
+      emit self->currentBasemapChanged();
+    }
+  }
+
+  /*!
+    \internal
+    Triggered when a basemap is removed from the gallery.
+
+    1. We disconnect from the GalleryItem.
+    2. We emit BasemapGalleryController::currentBasemapChanged if the current basemap was
+    removed from the gallery.
+    3. We delete the GalleryItem if we are the parent.
+   */
+  static void onBasemapRemovedFromGallery(BasemapGalleryController* self, BasemapGalleryItem* galleryItem)
+  {
+    if (!galleryItem)
+    {
+      return;
+    }
+
+    QObject::disconnect(galleryItem, nullptr, self, nullptr);
+
+    if (self->currentBasemap() == galleryItem->basemap())
+    {
+      // If the currently active basemap was added to the gallery, we let
+      // downstream consumers the currently active basemap has changed also to
+      // trigger UI updates.
+      emit self->currentBasemapChanged();
+    }
+
+    if (galleryItem->parent() == self)
+    {
+      galleryItem->deleteLater();
+    }
+  }
+
+  /*!
+    \internal
+    Refreshes basemaps shown in the gallery from the loaded portal. Removes all existing BasemapGalleryItems and replaces them with
+    new instances from the Portal. Assumes the Portal is already loaded and the Basemaps have been fetched.
+  */
+  static void refreshGalleryBasemaps(BasemapGalleryController* self)
+  {
+    if (!self)
+    {
+      return;
+    }
+
+    auto* gallery = self->gallery();
+    auto* portal = self->portal();
+    if (!gallery || !portal || portal->loadStatus() != LoadStatus::Loaded)
+    {
+      return;
+    }
+
+    // Remove existing gallery items to refresh the gallery with new basemaps from the portal. This will also disconnect signals from the removed gallery items.
+    gallery->removeRows(0, gallery->rowCount());
+
+    if (auto* scene = dynamic_cast<Scene*>(self->geoModel()))
+    {
+      // Add 3D basemaps
+      for (auto* basemap3D : *portal->basemaps3D())
+      {
+        self->append(basemap3D, true);
+      }
+    }
+    if (portal->portalUser())
+    {
+      // Add Org Basemaps
+      for (auto* basemap : *portal->basemaps())
+      {
+        self->append(basemap, false);
+      }
+    }
+    else // Anonymous Portal
+    {
+      for (auto* basemap : *portal->developerBasemaps())
+      {
+        self->append(basemap, false);
+      }
+    }
+
+    emit self->basemapsChanged();
+  }
+
+  /*!
+    \internal
+    Fetches 2D and 3D basemaps from the current portal. Returns a boolean future that indicates when the fetch is complete and successful. 
+   */
+  static QFuture<bool> fetchPortalBasemaps(BasemapGalleryController* self, Portal* portal)
+  {
+    auto promise = std::make_shared<QPromise<bool>>();
+    promise->start();
+    auto readyFuture = promise->future();
+
+    auto complete = [promise](bool ok)
+    {
+      promise->addResult(ok);
+      promise->finish();
+    };
+
+    if (!self || !portal)
+    {
+      complete(false);
+      return readyFuture;
+    }
+
+    auto* geoModel = self->geoModel();
+
+    auto fetchBasemapsFromLoadedPortal = [portal, geoModel, complete]()
+    {
+      QList<QFuture<void>> basemapFutures;
+      if (!portal->portalUser()) // returns nullptr if portal access is anonymous
+      {
+        if (portal->developerBasemaps()->rowCount() == 0)
+        {
+          basemapFutures.append(portal->fetchDeveloperBasemapsAsync());
+        }
+      }
+      else
+      {
+        if (portal->basemaps()->rowCount() == 0)
+        {
+          basemapFutures.append(portal->fetchBasemapsAsync());
+        }
+      }
+
+      if (portal->basemaps3D()->rowCount() == 0)
+      {
+        basemapFutures.append(portal->fetch3DBasemapsAsync());
+      }
+
+      QtFuture::whenAll(basemapFutures.begin(), basemapFutures.end())
+        .then([complete](const QList<QFuture<void>>&)
+      {
+        complete(true);
+      });
+    };
+
+    if (portal->loadStatus() == LoadStatus::Loaded)
+    {
+      fetchBasemapsFromLoadedPortal();
+    }
+    else
+    {
+      singleShotConnection(portal, &Portal::doneLoading, self, [fetchBasemapsFromLoadedPortal, complete](const Error& loadError)
+      {
+        if (!loadError.isEmpty())
+        {
+          qWarning() << "Failed to load portal with error:" << loadError.message() << loadError.additionalMessage();
+          complete(false);
+          return;
+        }
+        fetchBasemapsFromLoadedPortal();
+      });
+
+      portal->load();
+    }
+
+    return readyFuture;
+  }
 
   BasemapGalleryController::BasemapGalleryController(QObject* parent) :
     QObject(parent),
@@ -316,6 +367,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     {
       if (parent.isValid())
       {
+        // We only care about top-level items in the gallery; ignore children of other items
         return;
       }
 
@@ -330,13 +382,13 @@ namespace Esri::ArcGISRuntime::Toolkit
     });
 
     // Listen in to items removed from the gallery.
-    connect(m_gallery, &GenericListModel::rowsRemoved, this, [this](const QModelIndex& parent, int first, int last)
+    connect(m_gallery, &GenericListModel::rowsAboutToBeRemoved, this, [this](const QModelIndex& parent, int first, int last)
     {
       if (parent.isValid())
       {
+        // This gallery should only ever have top level items, so ignore any children of other items
         return;
       }
-
       for (auto i = first; i <= last; ++i)
       {
         auto index = m_gallery->index(i);
@@ -346,23 +398,31 @@ namespace Esri::ArcGISRuntime::Toolkit
         }
       }
     });
+
     m_gallery->setFlagsCallback([this](const QModelIndex& index)
     {
-      BasemapGalleryItem* galleryItem = m_gallery->element<BasemapGalleryItem>(index);
+      auto* galleryItem = m_gallery->element<BasemapGalleryItem>(index);
       if (!basemapMatchesCurrentSpatialReference(galleryItem->basemap()))
       {
         //disabled item flags
         return Qt::ItemFlags(Qt::NoItemFlags);
       }
-      else
+
+      //enabled and selectable item flags
+      return Qt::ItemFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+    });
+
+    fetchPortalBasemaps(this, m_portal)
+      .then(this, [this](bool ready)
+    {
+      if (ready)
       {
-        //enabled and selectable item flags
-        return Qt::ItemFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        refreshGalleryBasemaps(this);
       }
     });
-    setToDefaultBasemaps(this, m_portal);
+
     // Have to set the property names, so the controller will know how to match the properties from
-    // basemapgalleryitem with the specific Qt::<namespace> invoked in the .data() from the View (ListView) obj
+    // BasemapGalleryItem with the specific Qt::<namespace> invoked in the .data() from the View (ListView) obj
     m_gallery->setDisplayPropertyName("name");
     m_gallery->setDecorationPropertyName("thumbnail");
     m_gallery->setTooltipPropertyName("tooltip");
@@ -399,6 +459,13 @@ namespace Esri::ArcGISRuntime::Toolkit
     }
 
     emit geoModelChanged();
+
+    // Refresh the gallery basemaps, potentially adding or removing 3D basemaps
+    if (m_portal)
+    {
+      refreshGalleryBasemaps(this);
+    }
+
     //forcing all the items in the gallery to recalculate the ::ItemFlags for the view.
     emit m_gallery->dataChanged(m_gallery->index(0), m_gallery->index(std::max(m_gallery->rowCount() - 1, 0)));
   }
@@ -424,6 +491,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     {
       disconnect(m_portal, nullptr, this, nullptr);
       m_gallery->removeRows(0, m_gallery->rowCount());
+
       if (m_portal->parent() == this)
       {
         // If we own the Portal we can delete it when
@@ -437,46 +505,12 @@ namespace Esri::ArcGISRuntime::Toolkit
 
     if (m_portal)
     {
-      // If portal basemaps are populated, add the contents to the gallery.
-      // Otherwise attempt a fetch of the contents then add to the gallery.
-      doOnLoaded(m_portal, this, [this]
+      fetchPortalBasemaps(this, m_portal)
+        .then(this, [this](bool ready)
       {
-        if (m_portal->basemaps()->rowCount() > 0)
+        if (ready)
         {
-          for (auto* basemap : *m_portal->basemaps())
-          {
-            append(basemap);
-          }
-        }
-        else
-        {
-          m_portal->fetchBasemapsAsync()
-          .then(this, [this]()
-          {
-            BasemapListModel* basemaps = m_portal->basemaps();
-            sortBasemapsAndAddToGallery(this, basemaps);
-            emit basemapsChanged();
-          });
-        }
-
-        if (qobject_cast<Scene*>(m_geoModel))
-        {
-          if (m_portal->basemaps3D()->rowCount() > 0)
-          {
-            for (auto* basemap : *m_portal->basemaps3D())
-            {
-              append(basemap);
-            }
-          }
-          else
-          {
-            m_portal->fetch3DBasemapsAsync().then(this, [this]()
-            {
-              BasemapListModel* basemaps = m_portal->basemaps3D();
-              sortBasemapsAndAddToGallery(this, basemaps, true);
-              emit basemapsChanged();
-            });
-          }
+          refreshGalleryBasemaps(this);
         }
       });
     }
@@ -499,6 +533,7 @@ namespace Esri::ArcGISRuntime::Toolkit
         {
           return;
         }
+
         if (!basemapMatchesCurrentSpatialReference(basemap))
         {
           // force redraw for the single basemapGalleryItem updated
@@ -515,7 +550,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       }
       else
       {
-        qDebug() << "problem in loading the layer";
+        qWarning() << "problem in loading the layer";
       }
     };
     if (basemap->baseLayers()->size() > 0)
@@ -534,20 +569,26 @@ namespace Esri::ArcGISRuntime::Toolkit
 
   bool BasemapGalleryController::append(Basemap* basemap)
   {
-    std::lock_guard<std::mutex> lock(m_galleryAccessMutex);
-    return m_gallery->append(new BasemapGalleryItem(basemap, this));
+    std::scoped_lock<std::mutex> lock(m_galleryAccessMutex);
+    return m_gallery->append(new BasemapGalleryItem(basemap, {}, {}, false, this));
   }
 
   bool BasemapGalleryController::append(Basemap* basemap, bool is3D)
   {
-    std::lock_guard<std::mutex> lock(m_galleryAccessMutex);
+    std::scoped_lock<std::mutex> lock(m_galleryAccessMutex);
     return m_gallery->append(new BasemapGalleryItem(basemap, {}, {}, is3D, this));
   }
 
   bool BasemapGalleryController::append(Basemap* basemap, QImage thumbnail, QString tooltip)
   {
-    std::lock_guard<std::mutex> lock(m_galleryAccessMutex);
-    return m_gallery->append(new BasemapGalleryItem(basemap, std::move(thumbnail), std::move(tooltip), this));
+    std::scoped_lock<std::mutex> lock(m_galleryAccessMutex);
+    return m_gallery->append(new BasemapGalleryItem(basemap, std::move(thumbnail), std::move(tooltip), false, this));
+  }
+
+  bool BasemapGalleryController::append(Basemap* basemap, QImage thumbnail, QString tooltip, bool is3D)
+  {
+    std::scoped_lock<std::mutex> lock(m_galleryAccessMutex);
+    return m_gallery->append(new BasemapGalleryItem(basemap, std::move(thumbnail), std::move(tooltip), is3D, this));
   }
 
   int BasemapGalleryController::basemapIndex(Basemap* basemap) const
@@ -568,51 +609,81 @@ namespace Esri::ArcGISRuntime::Toolkit
   {
     if (!basemap || !basemap->baseLayers() || basemap->baseLayers()->isEmpty())
     {
+      // If the basemap object doesn't exist or doesn't have layers, flag it as incompatible
       return false;
     }
 
-    const SpatialReference basemapSR = basemap->baseLayers()->first()->spatialReference();
+    const SpatialReference basemapSR = [this](LayerListModel* baseLayers) -> SpatialReference
+    {
+      // Note: Ogc3dTilesLayer is a 3D layer type and can be reprojected. The following tile layer types *cannot* be reprojected
+      static const QList<LayerType> tileLayerTypes = {LayerType::ImageTiledLayer,     LayerType::ServiceImageTiledLayer,
+                                                      LayerType::ArcGISMapImageLayer, LayerType::ArcGISTiledLayer,
+                                                      LayerType::RasterLayer,         LayerType::ArcGISVectorTiledLayer,
+                                                      LayerType::WebTiledLayer};
+
+      for (auto* layer : *baseLayers)
+      {
+        if (tileLayerTypes.contains(layer->layerType()))
+        {
+          return layer->spatialReference();
+        }
+
+        // Check for group layer contents
+        if (layer->layerType() == LayerType::GroupLayer)
+        {
+          if (auto* groupLayer = dynamic_cast<GroupLayer*>(layer))
+          {
+            for (auto* subLayer : *groupLayer->layers())
+            {
+              if (tileLayerTypes.contains(subLayer->layerType()))
+              {
+                return subLayer->spatialReference();
+              }
+            }
+          }
+        }
+      }
+      return {};
+    }(basemap->baseLayers());
 
     if (basemapSR.isEmpty())
     {
-      return true; // case used by the listview painter
-    }
-
-    if (!m_geoModel)
-    {
+      // The basemap may not have tiled layers that cannot be reprojected, or may not be loaded
       return true;
     }
 
-    // For Global scenes using the Geographic tiling scheme, allow any geographic basemap SR.
+    // Check GeoModel
+    if (!m_geoModel)
+    {
+      // If the user has not set a GeoModel, do not flag any basemaps as incompatible
+      return true;
+    }
+
+    // Check Scene GeoModels
     if (auto* scene = qobject_cast<Scene*>(m_geoModel))
     {
+      // Global Scenes use Geographic and WebMercator SceneViewTilingSchemes while Local scenes use Automatic.
+      // Therefore this check only affects Global Scenes
       if (scene->sceneViewTilingScheme() == SceneViewTilingScheme::Geographic)
       {
         return basemapSR.isGeographic();
       }
+      if (scene->sceneViewTilingScheme() == SceneViewTilingScheme::WebMercator)
+      {
+        return basemapSR == SpatialReference::webMercator();
+      }
+      // else SceneViewTilingScheme::Automatic -- continue with Local Scene case
     }
 
-    const SpatialReference geoModelSR = [](GeoModel* geoModel)
+    // Map and Local Scene cases
+    if (m_geoModel->spatialReference().isEmpty())
     {
-      if (auto* scene = qobject_cast<Scene*>(geoModel))
-      {
-        // Local Scenes use SceneViewTilingScheme::Automatic, so won't engage with this logic
-        // Global Scenes are always in WGS84, but can support WebMercator SRs if the tiling Scheme is set to SceneViewTilingScheme::WebMercator
-        if (scene->sceneViewTilingScheme() == SceneViewTilingScheme::WebMercator)
-        {
-          return SpatialReference::webMercator();
-        }
-      }
-      return geoModel->spatialReference();
-    }(m_geoModel);
-
-    // If no spatial reference is set, any basemap can be applied.
-    if (geoModelSR.isEmpty())
-    {
+      // If no spatial reference is set, the GeoModel will use the SR of the basemap
       return true;
     }
 
-    return basemapSR == geoModelSR;
+    // Finally, check if the basemap spatial reference matches the GeoModel spatial reference
+    return basemapSR == m_geoModel->spatialReference();
   }
 
   void BasemapGalleryController::setGeoModelFromGeoView(QObject* view)
