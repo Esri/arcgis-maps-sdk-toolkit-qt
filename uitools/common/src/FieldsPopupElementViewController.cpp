@@ -45,7 +45,7 @@ namespace Esri::ArcGISRuntime::Toolkit
   QString FieldsPopupElementViewController::title() const
   {
     const auto title = static_cast<FieldsPopupElement*>(popupElement())->title();
-    return !title.isEmpty() ? title : QStringLiteral("Fields");
+    return title.trimmed().isEmpty() ? QString{} : title;
   }
 
   QVariantList FieldsPopupElementViewController::labelsAndValues() const
