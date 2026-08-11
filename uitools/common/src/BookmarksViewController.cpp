@@ -37,65 +37,60 @@
 
 namespace Esri::ArcGISRuntime::Toolkit
 {
-
-  namespace
+  static void setupBookmarks(BookmarkListModel* sourceModel, GenericListModel* targetModel)
   {
-    void setupBookmarks(BookmarkListModel* sourceModel, GenericListModel* targetModel)
+    QObject::connect(sourceModel, &BookmarkListModel::rowsInserted, targetModel,
+                     [sourceModel, targetModel](const QModelIndex& parent, int first, int last)
     {
-      QObject::connect(sourceModel, &BookmarkListModel::rowsInserted, targetModel,
-                       [sourceModel, targetModel](const QModelIndex& parent, int first, int last)
+      if (parent.isValid())
       {
-        if (parent.isValid())
-        {
-          return;
-        }
-
-        if (!targetModel->insertRows(first, last - first + 1))
-        {
-          return;
-        }
-
-        for (auto i = first; i <= last; ++i)
-        {
-          QModelIndex j = targetModel->index(i);
-          auto targetItem = targetModel->element<BookmarkListItem>(j);
-          if (targetItem)
-          {
-            targetItem->setBookmark(sourceModel->at(i));
-          }
-        }
-      });
-
-      QObject::connect(sourceModel, &BookmarkListModel::rowsRemoved, targetModel, [targetModel](const QModelIndex& parent, int first, int last)
-      {
-        if (parent.isValid())
-        {
-          return;
-        }
-
-        targetModel->removeRows(first, last - first + 1);
-      });
-
-      QObject::connect(sourceModel, &BookmarkListModel::rowsMoved, targetModel,
-                       [targetModel](const QModelIndex& parent, int start, int end, const QModelIndex& destination, int row)
-      {
-        if (parent.isValid() || destination.isValid())
-        {
-          return;
-        }
-
-        targetModel->moveRows(QModelIndex{}, start, end - start + 1, QModelIndex{}, row);
-      });
-
-      QList<QObject*> targetItems;
-      for (int i = 0; i < sourceModel->size(); ++i)
-      {
-        targetItems << new BookmarkListItem(sourceModel->at(i), targetModel);
+        return;
       }
-      targetModel->append(targetItems);
-    }
 
-  } // namespace
+      if (!targetModel->insertRows(first, last - first + 1))
+      {
+        return;
+      }
+
+      for (auto i = first; i <= last; ++i)
+      {
+        QModelIndex j = targetModel->index(i);
+        auto* targetItem = targetModel->element<BookmarkListItem>(j);
+        if (targetItem)
+        {
+          targetItem->setBookmark(sourceModel->at(i));
+        }
+      }
+    });
+
+    QObject::connect(sourceModel, &BookmarkListModel::rowsRemoved, targetModel, [targetModel](const QModelIndex& parent, int first, int last)
+    {
+      if (parent.isValid())
+      {
+        return;
+      }
+
+      targetModel->removeRows(first, last - first + 1);
+    });
+
+    QObject::connect(sourceModel, &BookmarkListModel::rowsMoved, targetModel,
+                     [targetModel](const QModelIndex& parent, int sourceRow, int end, const QModelIndex& destination, int destinationChild)
+    {
+      if (parent.isValid() || destination.isValid())
+      {
+        return;
+      }
+
+      targetModel->moveRows(QModelIndex{}, sourceRow, end - sourceRow + 1, QModelIndex{}, destinationChild);
+    });
+
+    QList<QObject*> targetItems;
+    for (auto bookmark : *sourceModel)
+    {
+      targetItems << new BookmarkListItem(bookmark, targetModel);
+    }
+    targetModel->append(targetItems);
+  }
 
   /*!
     \inmodule Esri.ArcGISRuntime.Toolkit

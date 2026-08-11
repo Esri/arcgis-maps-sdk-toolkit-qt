@@ -146,13 +146,9 @@ namespace Esri::ArcGISRuntime::Toolkit
         const auto levels = floorManager->levels();
         for (auto* const level : levels)
         {
-          if (level)
+          if (level && (m_updatelevelMode == UpdateLevelsMode::AllLevelsMatchingVerticalOrder))
           {
-            switch (m_updatelevelMode)
-            case UpdateLevelsMode::AllLevelsMatchingVerticalOrder:
-            {
-              level->setVisible(newLevel ? level->verticalOrder() == newLevel->verticalOrder() : false);
-            }
+            level->setVisible(newLevel ? level->verticalOrder() == newLevel->verticalOrder() : false);
           }
         }
       }
