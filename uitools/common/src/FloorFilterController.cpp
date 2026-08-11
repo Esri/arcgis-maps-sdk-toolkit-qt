@@ -48,75 +48,70 @@
 namespace Esri::ArcGISRuntime::Toolkit
 {
 
-  namespace
+  /*!
+    \internal
+    \brief default scale for our "observing" viewpoint to find
+    facility intersections if no viewpoint scale is available.
+   */
+  static constexpr double DEFAULT_TARGET_SCALE = 4300.0;
+
+  /*!
+    \internal
+    \brief Constant padding value for the extent when zooming
+    to the geometry of a FloorFacility.
+   */
+  static constexpr float ZOOM_PADDING = 1.5;
+
+  /*!
+    \internal
+    \brief Given a ListModel and id, finds the element in the ListModel that matches the given id.
+   */
+  template<typename T>
+  static T* findElement(const GenericListModel* model, const QString& id)
   {
-
-    /*!
-      \internal
-      \brief default scale for our "observing" viewpoint to find
-      facility intersections if no viewpoint scale is available.
-     */
-    constexpr double DEFAULT_TARGET_SCALE = 4300.0;
-
-    /*!
-      \internal
-      \brief Constant padding value for the extent when zooming
-      to the geometry of a FloorFacility.
-     */
-    const float ZOOM_PADDING = 1.5;
-
-    /*!
-      \internal
-      \brief Given a ListModel and id, finds the element in the ListModel that matches the given id.
-     */
-    template<typename T>
-    static T* findElement(const GenericListModel* model, const QString& id)
+    const auto rows = model->rowCount();
+    for (int i = 0; i < rows; ++i)
     {
-      const auto rows = model->rowCount();
-      for (int i = 0; i < rows; ++i)
+      auto index = model->index(i);
+      auto item = model->element<T>(index);
+      if (item->modelId() == id)
       {
-        auto index = model->index(i);
-        auto item = model->element<T>(index);
-        if (item->modelId() == id)
-        {
-          return item;
-        }
+        return item;
       }
-      return nullptr;
     }
+    return nullptr;
+  }
 
-    /*!
-      \internal
-      \brief Returns the FloorManager from the GeoView's model.
-      Can return null if map is not loaded.
-     */
-    static FloorManager* getFloorManager(QObject* geoView)
+  /*!
+    \internal
+    \brief Returns the FloorManager from the GeoView's model.
+    Can return null if map is not loaded.
+   */
+  static FloorManager* getFloorManager(QObject* geoView)
+  {
+    if (auto* mapView = qobject_cast<MapViewToolkit*>(geoView))
     {
-      if (auto* mapView = qobject_cast<MapViewToolkit*>(geoView))
+      if (auto* map = mapView->map())
       {
-        if (auto* map = mapView->map())
-        {
-          return map->floorManager();
-        }
+        return map->floorManager();
       }
-      else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(geoView))
-      {
-        if (auto* scene = sceneView->arcGISScene())
-        {
-          return scene->floorManager();
-        }
-      }
-      else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(geoView))
-      {
-        if (auto* scene = localSceneView->arcGISScene())
-        {
-          return scene->floorManager();
-        }
-      }
-      return nullptr;
     }
-
-  } // namespace
+    else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(geoView))
+    {
+      if (auto* scene = sceneView->arcGISScene())
+      {
+        return scene->floorManager();
+      }
+    }
+    else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(geoView))
+    {
+      if (auto* scene = localSceneView->arcGISScene())
+      {
+        return scene->floorManager();
+      }
+    }
+    return nullptr;
+  }
 
   /*!
     \inmodule Esri.ArcGISRuntime.Toolkit
