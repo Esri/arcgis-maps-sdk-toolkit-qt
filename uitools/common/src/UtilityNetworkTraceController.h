@@ -85,7 +85,7 @@ namespace Esri::ArcGISRuntime
       ~UtilityNetworkTraceController() override;
 
       QObject* geoView() const;
-      void setGeoView(QObject* mapView);
+      void setGeoView(QObject* geoView);
 
       UtilityNetwork* selectedUtilityNetwork() const;
       void setSelectedUtilityNetwork(UtilityNetwork* selectedUtilityNetwork);
@@ -158,11 +158,13 @@ namespace Esri::ArcGISRuntime
       void onSelectedUtilityNetworkError(const Esri::ArcGISRuntime::ErrorException& e);
       void onFeaturesForElementsCompleted();
 
+    protected:
+      void handleArcGISAuthenticationChallenge(Authentication::ArcGISAuthenticationChallenge* challenge) override;
+
     private:
       void addStartingPoint(ArcGISFeature* identifiedFeature, const Point& mapPoint);
       void setupUtilityNetworks();
       void applyStartingPointWarnings();
-      void handleArcGISAuthenticationChallenge(Authentication::ArcGISAuthenticationChallenge* challenge) override;
 
       QObject* m_geoView = nullptr;
       QObject* m_startingPointParent = nullptr;

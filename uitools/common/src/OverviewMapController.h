@@ -47,7 +47,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     MapViewToolkit* insetView() const;
 
     QObject* geoView() const;
-    void setGeoView(QObject* mapView);
+    void setGeoView(QObject* geoView);
 
     Symbol* symbol() const;
     void setSymbol(Symbol* symbol);

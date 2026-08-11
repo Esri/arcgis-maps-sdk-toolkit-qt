@@ -103,9 +103,9 @@ namespace Esri::ArcGISRuntime::Toolkit
       the GeoView.
      */
     template<typename GeoViewToolkit, typename Func>
-    void connectToGeoView(GeoViewToolkit* geoView, UtilityNetworkTraceController* self, Func&& f)
+    static void connectToGeoView(GeoViewToolkit* geoView, UtilityNetworkTraceController* self, Func&& f)
     {
-      static_assert(std::is_same<GeoViewToolkit, MapViewToolkit>::value, "Must be connected to a MapView");
+      static_assert(std::is_same_v<GeoViewToolkit, MapViewToolkit>, "Must be connected to a MapView");
 
       auto connectToGeoModel = [self, geoView, f = std::forward<Func>(f)]
       {
@@ -172,9 +172,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     m_startingPointsGraphicsOverlay(new GraphicsOverlay(m_startingPointParent)),
     m_startingPoints(new UtilityNetworkTraceStartingPointsModel(this)),
     m_functionResults(new UtilityNetworkFunctionTraceResultsModel(this)),
-    m_isAddingStartingPointEnabled(false),
-    m_isAddingStartingPointInProgress(false),
-    m_startingPointSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle::Cross, QColor(Qt::green), 20.0f, this)),
+    m_startingPointSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle::Cross, QColor(Qt::green), 20.0F, this)),
     m_resultsGraphicsOverlay(new GraphicsOverlay(this)),
     m_resultPointSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle::Circle, QColor(0, 0, 255, 126), 20, this)),
     m_resultLineSymbol(new SimpleLineSymbol(SimpleLineSymbolStyle::Dot, QColor(0, 0, 255, 126), 5, this)),
@@ -301,7 +299,7 @@ namespace Esri::ArcGISRuntime::Toolkit
           {
             for (const auto& geoElement : layer->geoElements())
             {
-              const auto ft = dynamic_cast<ArcGISFeature*>(geoElement);
+              auto* const ft = dynamic_cast<ArcGISFeature*>(geoElement);
 
               if (geoElement)
               {
@@ -587,7 +585,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       return;
     }
 
-    auto utilityElement = m_selectedUtilityNetwork->createElementWithArcGISFeature(identifiedFeature);
+    auto* utilityElement = m_selectedUtilityNetwork->createElementWithArcGISFeature(identifiedFeature);
 
     if (!utilityElement)
     {
@@ -626,7 +624,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       else if (utilityElement->networkSource()->sourceType() == UtilityNetworkSourceType::Junction &&
                utilityElement->assetType()->terminalConfiguration() != nullptr)
       {
-        auto utilityTerminalConfiguration = utilityElement->assetType()->terminalConfiguration();
+        auto* utilityTerminalConfiguration = utilityElement->assetType()->terminalConfiguration();
         QList<UtilityTerminal*> terminals = utilityTerminalConfiguration->terminals();
         if (terminals.size() > 1)
         {
@@ -635,11 +633,11 @@ namespace Esri::ArcGISRuntime::Toolkit
         }
       }
 
-      auto graphic = new Graphic(geometry, m_startingPointParent);
+      auto* graphic = new Graphic(geometry, m_startingPointParent);
       graphic->attributes()->insertAttribute("GlobalId", utilityElement->globalId());
       graphic->setSymbol(m_startingPointSymbol);
-      auto featureLayer = dynamic_cast<FeatureLayer*>(identifiedFeature->featureTable()->layer());
-      auto symbol = featureLayer->renderer()->symbol(identifiedFeature);
+      auto* featureLayer = dynamic_cast<FeatureLayer*>(identifiedFeature->featureTable()->layer());
+      auto* symbol = featureLayer->renderer()->symbol(identifiedFeature);
 
       m_startingPointsGraphicsOverlay->graphics()->append(graphic);
       if (symbol == nullptr)
@@ -697,10 +695,10 @@ namespace Esri::ArcGISRuntime::Toolkit
     setIsResetResultsEnabled(false);
 
     // Clearing GEOMETRY TRACE RESULTS
-    auto graphics = m_resultsGraphicsOverlay->graphics();
-    for (int i = 0; i < graphics->size(); ++i)
+    auto* graphics = m_resultsGraphicsOverlay->graphics();
+    for (auto* graphic : *graphics)
     {
-      delete graphics->at(i);
+      delete graphic;
     }
     m_resultsGraphicsOverlay->graphics()->clear();
 
@@ -708,11 +706,11 @@ namespace Esri::ArcGISRuntime::Toolkit
     m_functionResults->clear();
 
     // Clearing ELEMENT TRACE RESULTS
-    auto featuresList = m_selectedUtilityNetwork->featuresForElementsResult();
+    auto* featuresList = m_selectedUtilityNetwork->featuresForElementsResult();
     QHash<FeatureLayer*, QList<Feature*>> layerToFeatures;
-    for (const auto f : *featuresList)
+    for (auto* const f : *featuresList)
     {
-      auto featureLayer = static_cast<FeatureLayer*>(f->featureTable()->layer());
+      auto* featureLayer = static_cast<FeatureLayer*>(f->featureTable()->layer());
 
       auto findLayer = layerToFeatures.find(featureLayer);
       if (findLayer == std::end(layerToFeatures))
@@ -726,7 +724,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     }
 
     const auto layerKeys = layerToFeatures.keys();
-    for (const auto lyr : layerKeys)
+    for (auto* const lyr : layerKeys)
     {
       lyr->unselectFeatures(layerToFeatures[lyr]);
     }
@@ -737,6 +735,34 @@ namespace Esri::ArcGISRuntime::Toolkit
     m_traceResults = m_selectedUtilityNetwork->traceResult();
 
     QList<UtilityElement*> allElements;
+    const auto appendGeometryTraceResultGraphics = [this](UtilityTraceResult* traceResult)
+    {
+      auto* geometryTraceResult = static_cast<UtilityGeometryTraceResult*>(traceResult);
+
+      auto multipoint = geometryTraceResult->multipoint();
+      if (!multipoint.isEmpty())
+      {
+        // will be deleted in resetTraceResults()
+        auto* graphic = new Graphic(multipoint, m_resultPointSymbol, this);
+        m_resultsGraphicsOverlay->graphics()->append(graphic);
+      }
+
+      auto polyline = geometryTraceResult->polyline();
+      if (!polyline.isEmpty())
+      {
+        // will be deleted in resetTraceResults()
+        auto* graphic = new Graphic(polyline, m_resultLineSymbol, this);
+        m_resultsGraphicsOverlay->graphics()->append(graphic);
+      }
+
+      auto polygon = geometryTraceResult->polygon();
+      if (!polygon.isEmpty())
+      {
+        // will be deleted in resetTraceResults()
+        auto* graphic = new Graphic(polygon, m_resultFillSymbol, this);
+        m_resultsGraphicsOverlay->graphics()->append(graphic);
+      }
+    };
 
     for (auto* result : *m_traceResults)
     {
@@ -748,7 +774,7 @@ namespace Esri::ArcGISRuntime::Toolkit
         {
           // Trace completed with Element Result
           setIsResetResultsEnabled(true);
-          auto elementResult = static_cast<UtilityElementTraceResult*>(result);
+          auto* elementResult = static_cast<UtilityElementTraceResult*>(result);
           allElements.append(elementResult->elements());
           break;
         }
@@ -756,12 +782,12 @@ namespace Esri::ArcGISRuntime::Toolkit
         {
           // Trace completed with Function Result
           setIsResetResultsEnabled(true);
-          const auto functionResult = static_cast<UtilityFunctionTraceResult*>(result);
+          auto* const functionResult = static_cast<UtilityFunctionTraceResult*>(result);
           const auto outputList = functionResult->functionOutputs();
 
-          for (const auto o : outputList)
+          for (auto* const o : outputList)
           {
-            const auto function = o->function();
+            auto* const function = o->function();
             m_functionResults->addFunctionResult(UtilityNetworkFunctionTraceResult(function->functionName(), function->networkAttribute()->name(),
                                                                                    function->functionType(), o->result().toDouble()));
           }
@@ -772,31 +798,7 @@ namespace Esri::ArcGISRuntime::Toolkit
         {
           // Trace completed with Geometry Result
           setIsResetResultsEnabled(true);
-          auto geometryTraceResult = static_cast<UtilityGeometryTraceResult*>(result);
-
-          auto multipoint = geometryTraceResult->multipoint();
-          if (!multipoint.isEmpty())
-          {
-            // will be deleted in resetTraceResults()
-            auto graphic = new Graphic(multipoint, m_resultPointSymbol, this);
-            m_resultsGraphicsOverlay->graphics()->append(graphic);
-          }
-
-          auto polyline = geometryTraceResult->polyline();
-          if (!polyline.isEmpty())
-          {
-            // will be deleted in resetTraceResults()
-            auto graphic = new Graphic(polyline, m_resultLineSymbol, this);
-            m_resultsGraphicsOverlay->graphics()->append(graphic);
-          }
-
-          auto polygon = geometryTraceResult->polygon();
-          if (!polygon.isEmpty())
-          {
-            // will be deleted in resetTraceResults()
-            auto graphic = new Graphic(polygon, m_resultFillSymbol, this);
-            m_resultsGraphicsOverlay->graphics()->append(graphic);
-          }
+          appendGeometryTraceResultGraphics(result);
 
           break;
         }
@@ -837,11 +839,11 @@ namespace Esri::ArcGISRuntime::Toolkit
 
   void UtilityNetworkTraceController::onFeaturesForElementsCompleted()
   {
-    auto featuresList = m_selectedUtilityNetwork->featuresForElementsResult();
+    auto* featuresList = m_selectedUtilityNetwork->featuresForElementsResult();
     QHash<FeatureLayer*, QList<Feature*>> layerToFeatures;
-    for (const auto f : *featuresList)
+    for (auto* const f : *featuresList)
     {
-      auto featureLayer = static_cast<FeatureLayer*>(f->featureTable()->layer());
+      auto* featureLayer = static_cast<FeatureLayer*>(f->featureTable()->layer());
 
       auto findLayer = layerToFeatures.find(featureLayer);
       if (findLayer == std::end(layerToFeatures))
@@ -855,7 +857,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     }
 
     const auto layerKeys = layerToFeatures.keys();
-    for (const auto lyr : layerKeys)
+    for (auto* const lyr : layerKeys)
     {
       lyr->selectFeatures(layerToFeatures[lyr]);
     }
@@ -865,7 +867,7 @@ namespace Esri::ArcGISRuntime::Toolkit
 
   void UtilityNetworkTraceController::setupUtilityNetworks()
   {
-    const auto mapView = qobject_cast<MapViewToolkit*>(m_geoView);
+    auto* const mapView = qobject_cast<MapViewToolkit*>(m_geoView);
     // first check if there's a map
     if (mapView->map() != nullptr)
     {
@@ -880,12 +882,12 @@ namespace Esri::ArcGISRuntime::Toolkit
           // Load the first one by default.
           setSelectedUtilityNetwork(map->utilityNetworks()->at(0));
 
-          for (const auto un : std::as_const(*map->utilityNetworks()))
+          for (auto* const un : std::as_const(*map->utilityNetworks()))
           {
             if (un->loadStatus() == LoadStatus::NotLoaded)
             {
               //single shot connection
-              QMetaObject::Connection* const connection = new QMetaObject::Connection;
+              auto* const connection = new QMetaObject::Connection;
               QT_WARNING_PUSH
               QT_WARNING_DISABLE_MSVC(4573)
               *connection = connect(un, &UtilityNetwork::doneLoading, this, [connection](const Error& e)
