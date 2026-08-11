@@ -95,48 +95,6 @@ namespace Esri::ArcGISRuntime::Toolkit
       targetModel->append(targetItems);
     }
 
-    /*!
-      \internal
-      \brief Manages the connection between Controller \a self and GeoView \a geoView.
-      Attempts to call functor `f` if/when the Bookmark within the geoModel is loaded.
-      This may also cause the geoModel itself to load.
-      Will continue to call `f` every time a mapChanged/sceneChanged signal is triggered on
-      the GeoView.
-     */
-    template<typename GeoViewToolkit, typename Func>
-    void connectToGeoView(GeoViewToolkit* geoView, BookmarksViewController* self, Func&& f)
-    {
-      static_assert(std::is_same<GeoViewToolkit, MapViewToolkit>::value
-                      || std::is_same<GeoViewToolkit, SceneViewToolkit>::value
-                      || std::is_same<GeoViewToolkit, LocalSceneViewToolkit>::value,
-                    "Must be connected to a SceneView, LocalSceneView, or MapView");
-
-      auto connectToGeoModel = [self, geoView, f = std::forward<Func>(f)]
-      {
-        auto model = getGeoModel(geoView);
-        if (!model)
-        {
-          return;
-        }
-
-        // Here we attempt to calls `f` if/when the GeoModel is loaded.
-        // This may happen immediately or asyncnronously. This can be interrupted if GeoView or
-        // GeoModel changes in the interim.
-        auto c = doOnLoaded(model, self, [f = std::move(f)]()
-        {
-          f();
-        });
-
-        // Destroy the connection `c` if the map/scene changes, or the geoView changes. This means
-        // the connection is only relevant for as long as the model/view is relavant to the BookmarksViewController.
-        disconnectOnSignal(geoView, getGeoModelChangedSignal(geoView), self, c);
-        disconnectOnSignal(self, &BookmarksViewController::geoViewChanged, self, c);
-      };
-
-      // Hooks up to any geoModels that appear when the mapView/sceneView changed signal is called.
-      QObject::connect(geoView, getGeoModelChangedSignal(geoView), self, connectToGeoModel);
-      connectToGeoModel();
-    }
   } // namespace
 
   /*!
@@ -208,6 +166,37 @@ namespace Esri::ArcGISRuntime::Toolkit
     // as this emit will destroy the connections set up below.
     emit geoViewChanged();
 
+    // Manages the connection between Controller \a self and GeoView \a geoView.
+    // Attempts to call functor `f` if/when the Bookmark within the geoModel is loaded.
+    // This may also cause the geoModel itself to load.
+    // Will continue to call `f` every time a mapChanged/sceneChanged signal is triggered on
+    // the GeoView.
+    auto connectToGeoView = [this](auto* typedGeoView, auto&& f)
+    {
+      auto connectToGeoModel = [this, typedGeoView, f]()
+      {
+        auto model = getGeoModel(typedGeoView);
+        if (!model)
+        {
+          return;
+        }
+
+        // Call `f` once the GeoModel is loaded.
+        auto c = doOnLoaded(model, this, [f]()
+        {
+          f();
+        });
+
+        // Tear down if map/scene or GeoView changes.
+        disconnectOnSignal(typedGeoView, getGeoModelChangedSignal(typedGeoView), this, c);
+        disconnectOnSignal(this, &BookmarksViewController::geoViewChanged, this, c);
+      };
+
+      // Re-run when the map/scene changes.
+      QObject::connect(typedGeoView, getGeoModelChangedSignal(typedGeoView), this, connectToGeoModel);
+      connectToGeoModel();
+    };
+
     if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
       connect(mapView, &MapViewToolkit::mapChanged, this, [this]()
@@ -216,7 +205,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       });
 
       // `connectToGeoView` guarantees the map and/or scene exists as it is only invoked once the geomodel is loaded.
-      connectToGeoView(mapView, this, [this, mapView]
+      connectToGeoView(mapView, [this, mapView]
       {
         setupBookmarks(mapView->map()->bookmarks(), m_bookmarks);
       });
@@ -228,7 +217,7 @@ namespace Esri::ArcGISRuntime::Toolkit
         m_bookmarks->clear();
       });
 
-      connectToGeoView(sceneView, this, [this, sceneView]
+      connectToGeoView(sceneView, [this, sceneView]
       {
         setupBookmarks(sceneView->arcGISScene()->bookmarks(), m_bookmarks);
       });
@@ -240,7 +229,7 @@ namespace Esri::ArcGISRuntime::Toolkit
         m_bookmarks->clear();
       });
 
-      connectToGeoView(localSceneView, this, [this, localSceneView]
+      connectToGeoView(localSceneView, [this, localSceneView]
       {
         setupBookmarks(localSceneView->arcGISScene()->bookmarks(), m_bookmarks);
       });

@@ -70,7 +70,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       \brief Given a ListModel and id, finds the element in the ListModel that matches the given id.
      */
     template<typename T>
-    T* findElement(const GenericListModel* model, const QString& id)
+    static T* findElement(const GenericListModel* model, const QString& id)
     {
       const auto rows = model->rowCount();
       for (int i = 0; i < rows; ++i)
@@ -90,7 +90,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       \brief Returns the FloorManager from the GeoView's model.
       Can return null if map is not loaded.
      */
-    FloorManager* getFloorManager(QObject* geoView)
+    static FloorManager* getFloorManager(QObject* geoView)
     {
       if (auto* mapView = qobject_cast<MapViewToolkit*>(geoView))
       {
@@ -116,65 +116,6 @@ namespace Esri::ArcGISRuntime::Toolkit
       return nullptr;
     }
 
-    /*!
-      \internal
-      \brief Manages the connection between Controller \a self and GeoView \a geoView.
-      Attempts to call functor `f` if/when the FloorFilter within the geoModel is loaded.
-      This may also cause the geoModel itself to load.
-      Will continue to call `f` every time a map/sceneChanged signal is triggered on
-      the GeoView.
-     */
-    template<typename GeoView, typename Func>
-    void connectToGeoView(GeoView* geoView, FloorFilterController* self, Func&& f)
-    {
-      static_assert(std::is_same<GeoView, MapViewToolkit>::value || std::is_same<GeoView, SceneViewToolkit>::value ||
-                      std::is_same<GeoView, LocalSceneViewToolkit>::value,
-                    "Must be connected to a SceneView, LocalSceneView, or MapView");
-
-      auto connectToGeoModel = [self, geoView, f = std::forward<Func>(f)]
-      {
-        auto model = getGeoModel(geoView);
-        if (!model)
-        {
-          return;
-        }
-
-        // Here we attempt to calls `f` if/when both the GeoModel and FloorManager are loaded.
-        // This may happen immediately or asyncnronously.This can be interrupted if GeoView or
-        // GeoModel changes in the interim.
-        auto c = doOnLoaded(model, self, [self, model, geoView, f = std::move(f)]()
-        {
-          auto floorManager = model->floorManager();
-          if (!floorManager)
-          {
-            return;
-          }
-
-          auto c2 = doOnLoaded(floorManager, self, [f = std::move(f)]
-          {
-            f();
-          });
-          // Destroy the connection `c` if the map/scene changes, or the geoView changes.
-          // This means the connection is only relevant for as long as the model/view is relavant to
-          // the FloorFilterController.
-          disconnectOnSignal(geoView, getGeoModelChangedSignal(geoView), self, c2);
-          disconnectOnSignal(self, &FloorFilterController::geoViewChanged, self, c2);
-        });
-        // Destroy the connection `c` if the map/scene changes, or the geoView changes. This means
-        // the connection is only relevant for as long as the model/view is relavant to the FloorFilterController.
-        disconnectOnSignal(geoView, getGeoModelChangedSignal(geoView), self, c);
-        disconnectOnSignal(self, &FloorFilterController::geoViewChanged, self, c);
-      };
-
-      // Hooks up to any geoModels that appear when the mapView/sceneView changed signal is called.
-      QObject::connect(geoView, getGeoModelChangedSignal(geoView), self, connectToGeoModel);
-      connectToGeoModel();
-
-      // Hook up to any viewpoint changes on the GeoView.
-      auto c2 =
-        QObject::connect(geoView, &std::remove_pointer<decltype(geoView)>::type::viewpointChanged, self, &FloorFilterController::tryUpdateSelection);
-      disconnectOnSignal(self, &FloorFilterController::geoViewChanged, self, c2);
-    }
   } // namespace
 
   /*!
@@ -200,15 +141,15 @@ namespace Esri::ArcGISRuntime::Toolkit
     connect(this, &FloorFilterController::selectedSiteIdChanged, this, &FloorFilterController::populateFacilitiesForSelectedSite);
     connect(this, &FloorFilterController::isSelectedSiteRespectedChanged, this, &FloorFilterController::populateFacilitiesForSelectedSite);
 
-    connect(this, &FloorFilterController::selectedLevelIdChanged, this, [this](QString /*oldId*/, QString newId)
+    connect(this, &FloorFilterController::selectedLevelIdChanged, this, [this](const QString& /*oldId*/, const QString& newId)
     {
-      auto newLevelItem = level(newId);
-      auto newLevel = newLevelItem ? newLevelItem->floorLevel() : nullptr;
-      auto floorManager = getFloorManager(m_geoView);
+      auto* newLevelItem = level(newId);
+      auto* newLevel = newLevelItem ? newLevelItem->floorLevel() : nullptr;
+      auto* floorManager = getFloorManager(m_geoView);
       if (floorManager)
       {
         const auto levels = floorManager->levels();
-        for (const auto level : levels)
+        for (auto* const level : levels)
         {
           if (level)
           {
@@ -223,9 +164,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     });
   }
 
-  FloorFilterController::~FloorFilterController()
-  {
-  }
+  FloorFilterController::~FloorFilterController() = default;
 
   QObject* FloorFilterController::geoView() const
   {
@@ -265,23 +204,72 @@ namespace Esri::ArcGISRuntime::Toolkit
     // as this emit will destroy the connections set up below.
     emit geoViewChanged();
 
+    // Manages the connection between Controller \a self and GeoView \a geoView.
+    // Attempts to call functor `f` if/when the FloorFilter within the geoModel is loaded.
+    // This may also cause the geoModel itself to load.
+    // Will continue to call `f` every time a map/sceneChanged signal is triggered on
+    // the GeoView.
+    auto connectToGeoView = [this](auto* typedGeoView, auto&& f)
+    {
+      auto connectToGeoModel = [this, typedGeoView, f]()
+      {
+        auto model = getGeoModel(typedGeoView);
+        if (!model)
+        {
+          return;
+        }
+
+        // Call `f` once GeoModel and FloorManager are loaded.
+        auto c = doOnLoaded(model, this, [this, model, typedGeoView, f]()
+        {
+          auto floorManager = model->floorManager();
+          if (!floorManager)
+          {
+            return;
+          }
+
+          auto c2 = doOnLoaded(floorManager, this, [f]()
+          {
+            f();
+          });
+
+          // Tear down if map/scene or GeoView changes.
+          disconnectOnSignal(typedGeoView, getGeoModelChangedSignal(typedGeoView), this, c2);
+          disconnectOnSignal(this, &FloorFilterController::geoViewChanged, this, c2);
+        });
+
+        // Tear down if map/scene or GeoView changes.
+        disconnectOnSignal(typedGeoView, getGeoModelChangedSignal(typedGeoView), this, c);
+        disconnectOnSignal(this, &FloorFilterController::geoViewChanged, this, c);
+      };
+
+      // Re-run when map/scene changes.
+      QObject::connect(typedGeoView, getGeoModelChangedSignal(typedGeoView), this, connectToGeoModel);
+      connectToGeoModel();
+
+      // Track viewpoint changes.
+      auto c2 = QObject::connect(typedGeoView, &std::remove_pointer_t<decltype(typedGeoView)>::viewpointChanged, this,
+                                 &FloorFilterController::tryUpdateSelection);
+      disconnectOnSignal(this, &FloorFilterController::geoViewChanged, this, c2);
+    };
+
     if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView))
     {
-      connectToGeoView(mapView, this, [this]
+      connectToGeoView(mapView, [this]
       {
         populateSites();
       });
     }
     else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
-      connectToGeoView(sceneView, this, [this]
+      connectToGeoView(sceneView, [this]
       {
         populateSites();
       });
     }
     else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
     {
-      connectToGeoView(localSceneView, this, [this]
+      connectToGeoView(localSceneView, [this]
       {
         populateSites();
       });
@@ -302,7 +290,7 @@ namespace Esri::ArcGISRuntime::Toolkit
 
     QString oldId = m_selectedFacilityId;
     m_selectedFacilityId = std::move(selectedFacilityId);
-    emit selectedFacilityIdChanged(std::move(oldId), m_selectedFacilityId);
+    emit selectedFacilityIdChanged(oldId, m_selectedFacilityId);
   }
 
   QString FloorFilterController::selectedLevelId() const
@@ -319,7 +307,7 @@ namespace Esri::ArcGISRuntime::Toolkit
 
     QString oldId = m_selectedLevelId;
     m_selectedLevelId = std::move(selectedLevelId);
-    emit selectedLevelIdChanged(std::move(oldId), m_selectedLevelId);
+    emit selectedLevelIdChanged(oldId, m_selectedLevelId);
   }
 
   QString FloorFilterController::selectedSiteId() const
@@ -336,13 +324,13 @@ namespace Esri::ArcGISRuntime::Toolkit
 
     QString oldId = m_selectedSiteId;
     m_selectedSiteId = std::move(selectedSiteId);
-    emit selectedSiteIdChanged(std::move(oldId), m_selectedSiteId);
+    emit selectedSiteIdChanged(oldId, m_selectedSiteId);
   }
 
   void FloorFilterController::populateLevelsForSelectedFacility()
   {
     m_levels->clear();
-    auto manager = getFloorManager(m_geoView);
+    auto* manager = getFloorManager(m_geoView);
     if (!manager)
     {
       return;
@@ -364,7 +352,7 @@ namespace Esri::ArcGISRuntime::Toolkit
 
     QString defaultLevel = allLevels.first()->levelId();
     QList<QObject*> levelItems;
-    for (const auto level : std::as_const(allLevels))
+    for (auto* const level : std::as_const(allLevels))
     {
       if (level && level->facility()->facilityId() == selectedFacilityId())
       {
@@ -385,7 +373,7 @@ namespace Esri::ArcGISRuntime::Toolkit
 
   void FloorFilterController::populateFacilitiesForSelectedSite()
   {
-    auto manager = getFloorManager(m_geoView);
+    auto* manager = getFloorManager(m_geoView);
     if (!manager)
     {
       m_facilities->clear();
@@ -403,7 +391,7 @@ namespace Esri::ArcGISRuntime::Toolkit
 
     const auto allFacilites = manager->facilities();
     QList<QObject*> facilityItems;
-    for (const auto facility : allFacilites)
+    for (auto* const facility : allFacilites)
     {
       // If we have no sites take everything, otherwise filter by the selected site.
       if (!m_selectedSiteRespected || manager->sites().isEmpty() || facility->site()->siteId() == selectedSiteId())
@@ -428,7 +416,7 @@ namespace Esri::ArcGISRuntime::Toolkit
   void FloorFilterController::populateSites()
   {
     m_sites->clear();
-    auto manager = getFloorManager(m_geoView);
+    auto* manager = getFloorManager(m_geoView);
     if (!manager)
     {
       return;
@@ -437,7 +425,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     const auto allSites = manager->sites();
 
     QList<QObject*> siteItems;
-    for (const auto site : allSites)
+    for (auto* const site : allSites)
     {
       siteItems << new FloorFilterSiteItem(site, m_sites);
     }
@@ -465,7 +453,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       return;
     }
 
-    const auto f = facilityItem->floorFacility();
+    auto* const f = facilityItem->floorFacility();
     if (f)
     {
       zoomToEnvelope(f->geometry().extent());
@@ -484,7 +472,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       return;
     }
 
-    const auto s = siteItem->floorSite();
+    auto* const s = siteItem->floorSite();
     if (s)
     {
       zoomToEnvelope(s->geometry().extent());
@@ -606,7 +594,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       return;
     }
 
-    auto floorManager = getFloorManager(m_geoView);
+    auto* floorManager = getFloorManager(m_geoView);
 
     // Only take action if viewpoint is within minimum scale. Default minscale is 4300 or less (~zoom level 17 or greater)
     double targetScale = 0.0;
