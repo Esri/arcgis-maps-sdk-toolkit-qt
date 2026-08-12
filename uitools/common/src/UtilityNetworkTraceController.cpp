@@ -299,9 +299,9 @@ namespace Esri::ArcGISRuntime::Toolkit
           {
             for (const auto& geoElement : layer->geoElements())
             {
-              auto* const ft = dynamic_cast<ArcGISFeature*>(geoElement);
+              auto* ft = dynamic_cast<ArcGISFeature*>(geoElement);
 
-              if (geoElement)
+              if (ft)
               {
                 addStartingPoint(ft, m_mapPoint);
               }
@@ -578,6 +578,11 @@ namespace Esri::ArcGISRuntime::Toolkit
 
   void UtilityNetworkTraceController::addStartingPoint(ArcGISFeature* identifiedFeature, const Point& mapPoint)
   {
+    if (!identifiedFeature)
+    {
+      return;
+    }
+
     auto geometry = identifiedFeature->geometry();
 
     if (!m_selectedUtilityNetwork)
@@ -636,15 +641,17 @@ namespace Esri::ArcGISRuntime::Toolkit
       auto* graphic = new Graphic(geometry, m_startingPointParent);
       graphic->attributes()->insertAttribute("GlobalId", utilityElement->globalId());
       graphic->setSymbol(m_startingPointSymbol);
-      auto* featureLayer = dynamic_cast<FeatureLayer*>(identifiedFeature->featureTable()->layer());
-      auto* symbol = featureLayer->renderer()->symbol(identifiedFeature);
+      auto* featureTable = identifiedFeature->featureTable();
+      auto* featureLayer = featureTable ? dynamic_cast<FeatureLayer*>(featureTable->layer()) : nullptr;
+      auto* renderer = featureLayer ? featureLayer->renderer() : nullptr;
+      auto* symbol = renderer ? renderer->symbol(identifiedFeature) : nullptr;
 
       m_startingPointsGraphicsOverlay->graphics()->append(graphic);
-      if (symbol == nullptr)
+      if (!symbol)
       {
         // Adding with null symbol
-        m_startingPoints->addStartingPoint(
-          new UtilityNetworkTraceStartingPoint(utilityElement, graphic, symbol, featureLayer->fullExtent(), m_startingPointParent));
+        const auto extent = featureLayer ? featureLayer->fullExtent() : graphic->geometry().extent();
+        m_startingPoints->addStartingPoint(new UtilityNetworkTraceStartingPoint(utilityElement, graphic, symbol, extent, m_startingPointParent));
         emit startingPointsChanged();
       }
       else
