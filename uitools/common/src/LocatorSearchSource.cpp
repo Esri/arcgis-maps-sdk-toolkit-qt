@@ -50,9 +50,9 @@ namespace Esri::ArcGISRuntime::Toolkit
 
     // Helper method that takes a GeocodeResult and the source that generated the result, and produces our UI-friendly
     // SearchResult.
-    SearchResult* resultFromGeocodeResult(const GeocodeResult& g, SearchSourceInterface* owningSource)
+    static SearchResult* resultFromGeocodeResult(const GeocodeResult& g, SearchSourceInterface* owningSource)
     {
-      auto searchResult = new SearchResult(owningSource);
+      auto* searchResult = new SearchResult(owningSource);
       searchResult->setDisplayTitle(g.label());
 
       const auto attributes = g.attributes();
@@ -69,9 +69,9 @@ namespace Esri::ArcGISRuntime::Toolkit
       searchResult->setSelectionViewpoint(Viewpoint(g.extent()));
       searchResult->setMarkerImageUrl(QUrl{MAP_PIN});
 
-      auto graphic = new Graphic(g.displayLocation(), g.attributes(), nullptr, searchResult);
-      auto symbol = new PictureMarkerSymbol(QUrl{MAP_PIN}, graphic);
-      QObject::connect(symbol, &PictureMarkerSymbol::doneLoading, symbol, [symbol](Error loadError)
+      auto* graphic = new Graphic(g.displayLocation(), g.attributes(), nullptr, searchResult);
+      auto* symbol = new PictureMarkerSymbol(QUrl{MAP_PIN}, graphic);
+      QObject::connect(symbol, &PictureMarkerSymbol::doneLoading, symbol, [symbol](const Error& loadError)
       {
         if (!loadError.isEmpty())
         {
@@ -89,9 +89,9 @@ namespace Esri::ArcGISRuntime::Toolkit
     // Takes a GeocodeParameters or a SuggestParameters \a params and returns a copy of the same with
     // \c{preferredSearchLocation} and \c{searchArea} set to area iff \a area is valid.
     template<typename Params>
-    auto normalizeGeometryParams(Params params, Geometry area)
+    static auto normalizeGeometryParams(Params params, const Geometry& area)
     {
-      static_assert(std::is_same<Params, GeocodeParameters>::value || std::is_same<Params, SuggestParameters>::value,
+      static_assert(std::is_same_v<Params, GeocodeParameters> || std::is_same_v<Params, SuggestParameters>,
                     "Must be a Geocodeparameters or SuggestParameters");
 
       if (!area.isEmpty())
@@ -134,16 +134,16 @@ namespace Esri::ArcGISRuntime::Toolkit
       auto resultAttrs = info.resultAttributes();
       auto geocodeAttrs = m_geocodeParameters.resultAttributeNames();
       bool foundOne{false};
-      for (const auto& attr : attrs)
+      for (const auto& requestedAttr : attrs)
       {
-        auto it = std::find_if(std::cbegin(resultAttrs), std::cend(resultAttrs), [attr](const LocatorAttribute& la)
+        const auto hasAttr = std::any_of(std::cbegin(resultAttrs), std::cend(resultAttrs), [&requestedAttr](const LocatorAttribute& locatorAttribute)
         {
-          return la.name() == attr;
+          return locatorAttribute.name() == requestedAttr;
         });
-        if (it != std::cend(resultAttrs))
+        if (hasAttr)
         {
           foundOne = true;
-          geocodeAttrs << it->name();
+          geocodeAttrs << requestedAttr;
         }
       }
 
@@ -225,7 +225,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       results << resultFromGeocodeResult(g, this);
     }
 
-    emit searchCompleted(std::move(results));
+    emit searchCompleted(results);
   }
 
   void LocatorSearchSource::search(const SuggestResult& suggestion, Geometry area)

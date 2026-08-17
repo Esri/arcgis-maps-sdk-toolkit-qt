@@ -58,7 +58,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     bool hasMultipleTerminals() const;
 
     QStringList multipleTerminalNames() const;
-    void setMultipleTerminalNames(const QStringList& multipleTerminals);
+    void setMultipleTerminalNames(const QStringList& multipleTerminalNames);
     int selectedTerminalIndex() const;
     void setSelectedTerminalNameByIndex(int index);
 

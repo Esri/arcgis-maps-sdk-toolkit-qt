@@ -74,7 +74,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     disableInteractions();
 
     // Add the Graphic to the insetView.
-    auto graphicsOverlay = new GraphicsOverlay(m_insetView);
+    auto* graphicsOverlay = new GraphicsOverlay(m_insetView);
     graphicsOverlay->graphics()->append(m_reticle);
     m_insetView->graphicsOverlays()->append(graphicsOverlay);
 
@@ -149,7 +149,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       // If Symbol has not yet been set, we provide a default symbol appropriate for SceneViews.
       if (symbol() == nullptr)
       {
-        setSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle::Cross, Qt::GlobalColor::red, 16.0f, this));
+        setSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle::Cross, Qt::GlobalColor::red, 16.0F, this));
       }
       // Connect to geoViews's viewpointChanged. Updates insetView when the SceneView-geoView viewpoint changes.
       QObject::connect(sceneView, &SceneViewToolkit::viewpointChanged, this, [this, sceneView]
@@ -193,7 +193,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       // If Symbol has not yet been set, we provide a default symbol appropriate for LocalSceneViews.
       if (symbol() == nullptr)
       {
-        setSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle::Cross, Qt::GlobalColor::red, 16.0f, this));
+        setSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle::Cross, Qt::GlobalColor::red, 16.0F, this));
       }
       // Connect to geoViews's viewpointChanged. Updates insetView when the SceneView-geoView viewpoint changes.
       QObject::connect(localSceneView, &LocalSceneViewToolkit::viewpointChanged, this, [this, localSceneView]
@@ -237,9 +237,9 @@ namespace Esri::ArcGISRuntime::Toolkit
       // If Symbol has not yet been set, we provide a default symbol appropriate for MapViews.
       if (symbol() == nullptr)
       {
-        auto symbol = new SimpleFillSymbol(this);
+        auto* symbol = new SimpleFillSymbol(this);
         symbol->setStyle(SimpleFillSymbolStyle::Null);
-        symbol->setOutline(new SimpleLineSymbol(SimpleLineSymbolStyle::Solid, Qt::GlobalColor::red, 1.0f, symbol));
+        symbol->setOutline(new SimpleLineSymbol(SimpleLineSymbolStyle::Solid, Qt::GlobalColor::red, 1.0F, symbol));
         setSymbol(symbol);
       }
       // Connect to geoView's viewpointChanged. Updates insetView when MapView-geoView viewpoint changes.
@@ -297,7 +297,7 @@ namespace Esri::ArcGISRuntime::Toolkit
 
   void OverviewMapController::setScaleFactor(double scaleFactor)
   {
-    if (m_scaleFactor == scaleFactor)
+    if (qFuzzyIsNull(m_scaleFactor - scaleFactor))
     {
       return;
     }

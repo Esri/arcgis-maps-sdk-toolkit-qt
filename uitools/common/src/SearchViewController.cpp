@@ -44,31 +44,26 @@
 namespace Esri::ArcGISRuntime::Toolkit
 {
 
-  namespace
-  {
-    const char* DEFAULT_DEFAULT_PLACEHOLDER = "Find a place or address";
-    const char* DEFAULT_LOCATOR_URL = "https://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer";
+  static constexpr auto* DEFAULT_DEFAULT_PLACEHOLDER = "Find a place or address";
+  static constexpr auto* DEFAULT_LOCATOR_URL = "https://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer";
 
-    /*
-      Helper method to cast a GeoElement to a Graphic.
-      We will improve the quality of this method when there becomes a better way to test the type of
-      a GeoElement.
- */
-    void addGeoElementToOverlay(GraphicsOverlay* overlay, GeoElement* element)
+  // Helper method to cast a GeoElement to a Graphic.
+  // We will improve the quality of this method when there becomes a better way to test the type of
+  // a GeoElement.
+  static void addGeoElementToOverlay(GraphicsOverlay* overlay, GeoElement* element)
+  {
+    if (overlay)
     {
-      if (overlay)
+      if (auto* graphic = dynamic_cast<Graphic*>(element))
       {
-        if (auto* graphic = dynamic_cast<Graphic*>(element))
-        {
-          overlay->graphics()->append(graphic);
-        }
-        else
-        {
-          qDebug() << "Failure in converting GeoElement to Graphic. Skipping.";
-        }
+        overlay->graphics()->append(graphic);
+      }
+      else
+      {
+        qDebug() << "Failure in converting GeoElement to Graphic. Skipping.";
       }
     }
-  } // namespace
+  }
 
   /*!
     \class Esri::ArcGISRuntime::Toolkit::SearchViewController
@@ -129,33 +124,33 @@ namespace Esri::ArcGISRuntime::Toolkit
       // Reset sources to default.
       {
         sources()->clear();
-        auto locatorTask = new LocatorTask(QUrl(DEFAULT_LOCATOR_URL));
-        auto searchSource = new SmartLocatorSearchSource(locatorTask, m_sources);
+        auto* locatorTask = new LocatorTask(QUrl(DEFAULT_LOCATOR_URL));
+        auto* searchSource = new SmartLocatorSearchSource(locatorTask, m_sources);
         locatorTask->setParent(searchSource);
         sources()->append(searchSource);
       }
     }
 
-    if (auto* geoView = qobject_cast<GeoView*>(m_geoView))
+    if (auto* currentGeoView = qobject_cast<GeoView*>(m_geoView))
     {
       m_graphicsOverlay = new GraphicsOverlay(this);
-      geoView->graphicsOverlays()->append(m_graphicsOverlay);
+      currentGeoView->graphicsOverlays()->append(m_graphicsOverlay);
 
-      auto setViewpoint = [geoView, this]
+      auto setViewpoint = [currentGeoView, this]
       {
         //setting the lastsearcharea with the inital geoViewCast extent
         if (m_lastSearchArea.isEmpty())
         {
-          m_lastSearchArea = geoView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry();
+          m_lastSearchArea = currentGeoView->currentViewpoint(ViewpointType::BoundingGeometry).targetGeometry();
         }
 
         if (isAutomaticConfigurationEnabled())
         {
-          auto vp = geoView->currentViewpoint(ViewpointType::BoundingGeometry);
+          auto vp = currentGeoView->currentViewpoint(ViewpointType::BoundingGeometry);
           setQueryCenter(vp.targetGeometry().extent().center());
           setQueryArea(vp.targetGeometry());
 
-          if (geoView->isNavigating())
+          if (currentGeoView->isNavigating())
           {
             // m_queryArea at this point is effectively the currentviewpoint geometry.
             if (checkZoomingDifferenceLastSearch(m_queryArea))
@@ -270,7 +265,7 @@ namespace Esri::ArcGISRuntime::Toolkit
 
     for (int i = 0; i <= m_sources->rowCount(); ++i)
     {
-      auto source = m_sources->element<SearchSourceInterface>(m_sources->index((i)));
+      auto* source = m_sources->element<SearchSourceInterface>(m_sources->index(i));
       if (source)
       {
         source->setPreferredSearchLocation(m_queryCenter);
@@ -427,7 +422,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     auto queryRestrictionArea = restrictToArea ? queryArea() : Geometry{};
     for (int i = 0; i <= m_sources->rowCount(); ++i)
     {
-      auto source = m_sources->element<SearchSourceInterface>(m_sources->index((i)));
+      auto* source = m_sources->element<SearchSourceInterface>(m_sources->index(i));
       if (source)
       {
         //set the lastSearchArea after the geoView viewpoint has changed and only once.
@@ -495,7 +490,7 @@ namespace Esri::ArcGISRuntime::Toolkit
 
   void SearchViewController::setThresholdRatioRepeatSearch(double rate)
   {
-    if (m_thresholdRatioRepeatSearch == rate)
+    if (qFuzzyIsNull(m_thresholdRatioRepeatSearch - rate))
     {
       return;
     }
@@ -510,7 +505,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     const int rowCount = m_sources->rowCount();
     for (int i = 0; i < rowCount; ++i)
     {
-      auto source = m_sources->element<SearchSourceInterface>(m_sources->index(i));
+      auto* source = m_sources->element<SearchSourceInterface>(m_sources->index(i));
       if (source)
       {
         source->suggestions()->setSearchText(currentQuery());
@@ -527,7 +522,7 @@ namespace Esri::ArcGISRuntime::Toolkit
 
     for (int i = firstSource; i <= lastSource; ++i)
     {
-      auto source = m_sources->element<SearchSourceInterface>(m_sources->index(i));
+      auto* source = m_sources->element<SearchSourceInterface>(m_sources->index(i));
       if (source)
       {
         // Handle search results coming from the source.
@@ -569,7 +564,7 @@ namespace Esri::ArcGISRuntime::Toolkit
           {
             auto it = std::begin(results);
             // Take only first element.
-            auto f = *it++;
+            auto* f = *it++;
             setSelectedResult(f);
 
             // Discard remaining elements.
@@ -581,7 +576,7 @@ namespace Esri::ArcGISRuntime::Toolkit
           else
           {
             // Take ownership of all elements.
-            for (auto r : std::as_const(results))
+            for (auto* r : std::as_const(results))
             {
               r->setParent(m_results);
               m_results->append(r);
@@ -592,7 +587,7 @@ namespace Esri::ArcGISRuntime::Toolkit
             {
               m_graphicsOverlay->graphics()->clear();
 
-              for (auto r : std::as_const(results))
+              for (auto* r : std::as_const(results))
               {
                 addGeoElementToOverlay(m_graphicsOverlay, r->geoElement());
               }
@@ -610,7 +605,7 @@ namespace Esri::ArcGISRuntime::Toolkit
         });
 
         // Handle suggestion updates coming the source.
-        auto suggestionModel = source->suggestions();
+        auto* suggestionModel = source->suggestions();
         connect(suggestionModel, &QAbstractItemModel::rowsInserted, this,
                 [source, suggestionModel, this](const QModelIndex& parent, int firstSugggest, int lastSuggest)
         {
@@ -623,8 +618,8 @@ namespace Esri::ArcGISRuntime::Toolkit
           for (int i = firstSugggest; i <= lastSuggest; ++i)
           {
             // Wrap a SuggestResult in our SearchSuggestion type.
-            const auto suggestion = suggestResults.at(i);
-            auto searchSuggestion = new SearchSuggestion(m_suggestions);
+            const auto& suggestion = suggestResults.at(i);
+            auto* searchSuggestion = new SearchSuggestion(m_suggestions);
             searchSuggestion->setSuggestResult(suggestion);
             searchSuggestion->setOwningSource(source);
             m_suggestions->append(searchSuggestion);
@@ -663,7 +658,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     // Go through all removed sources.
     for (int i = firstSource; i <= lastSource; ++i)
     {
-      auto source = m_sources->element<SearchSourceInterface>(m_sources->index(i));
+      auto* source = m_sources->element<SearchSourceInterface>(m_sources->index(i));
       if (source)
       {
         // disconnect from sources and their suggestions
@@ -678,7 +673,7 @@ namespace Esri::ArcGISRuntime::Toolkit
           for (int j = rowCount - 1; j >= 0; --j)
           {
             auto index = m_suggestions->index(j);
-            auto suggestion = m_suggestions->element<SearchSuggestion>(index);
+            auto* suggestion = m_suggestions->element<SearchSuggestion>(index);
             if (suggestion->owningSource() == source)
             {
               m_suggestions->removeRow(j);

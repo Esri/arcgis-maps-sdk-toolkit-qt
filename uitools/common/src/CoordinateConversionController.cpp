@@ -305,7 +305,7 @@ namespace Esri::ArcGISRuntime::Toolkit
 
   void CoordinateConversionController::setZoomToDistance(double distance)
   {
-    if (distance == m_zoomToDistance)
+    if (qFuzzyIsNull(distance - m_zoomToDistance))
     {
       return;
     }
