@@ -46,7 +46,6 @@ Item {
         });
         html = html.replace(/\swidth\s*=\s*(['\"])?[^'\"\s>]+\1?/gi, "");
 
-        // Clamp only known overflow-prone tags.
         html = html.replace(/<img\b([^>]*)>/gi, "<img$1 width='" + safeWidth + "'>");
         html = html.replace(/<table\b([^>]*)>/gi, "<table$1 width='100%'>");
 
