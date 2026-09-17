@@ -18,7 +18,7 @@ include(../common/CMakeLists.txt)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui QuickControls2 Svg WebView Graphs NetworkAuth)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui QuickControls2 Svg WebView Graphs NetworkAuth WebEngineQuick)
 
 qt_standard_project_setup()
 
@@ -43,10 +43,16 @@ target_link_libraries(libtoolkitcpp PRIVATE
     Qt6::Gui
     Qt6::QuickControls2
     Qt6::Svg
-    Qt6::WebView
     Qt6::Graphs
     Qt6::NetworkAuth
     ArcGISRuntime::Cpp
+)
+
+# Consumers must initialize the Qt Quick web modules before constructing QGuiApplication.
+# https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html#target-usage-requirements
+target_link_libraries(libtoolkitcpp PUBLIC
+    Qt6::WebView
+    Qt6::WebEngineQuick
 )
 
 if(IOS)
