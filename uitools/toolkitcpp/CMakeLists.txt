@@ -18,7 +18,8 @@ include(../common/CMakeLists.txt)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui QuickControls2 Svg WebView Graphs NetworkAuth WebEngineQuick)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui QuickControls2 Svg WebView Graphs NetworkAuth)
+find_package(Qt6 QUIET COMPONENTS WebEngineQuick)
 
 qt_standard_project_setup()
 
@@ -52,8 +53,13 @@ target_link_libraries(libtoolkitcpp PRIVATE
 # https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html#target-usage-requirements
 target_link_libraries(libtoolkitcpp PUBLIC
     Qt6::WebView
-    Qt6::WebEngineQuick
 )
+
+if(TARGET Qt6::WebEngineQuick)
+    target_link_libraries(libtoolkitcpp PUBLIC
+        Qt6::WebEngineQuick
+    )
+endif()
 
 if(IOS)
     target_link_libraries(libtoolkitcpp PRIVATE
