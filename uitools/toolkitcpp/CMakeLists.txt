@@ -19,7 +19,13 @@ include(../common/CMakeLists.txt)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui QuickControls2 Svg WebView Graphs NetworkAuth)
-find_package(Qt6 QUIET COMPONENTS WebEngineQuick)
+
+if(ANDROID OR IOS)
+    set(TOOLKITCPP_USE_WEBENGINEQUICK OFF)
+else()
+    find_package(Qt6 REQUIRED COMPONENTS WebEngineQuick)
+    set(TOOLKITCPP_USE_WEBENGINEQUICK ON)
+endif()
 
 qt_standard_project_setup()
 
@@ -55,7 +61,7 @@ target_link_libraries(libtoolkitcpp PUBLIC
     Qt6::WebView
 )
 
-if(TARGET Qt6::WebEngineQuick)
+if(TOOLKITCPP_USE_WEBENGINEQUICK)
     target_link_libraries(libtoolkitcpp PUBLIC
         Qt6::WebEngineQuick
     )
