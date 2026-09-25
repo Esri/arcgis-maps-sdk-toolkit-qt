@@ -23,17 +23,13 @@
 // STL headers
 #include <UtilityNetworkTypes.h>
 
-// Other headers
-#include "GenericListModel.h"
-
 namespace Esri::ArcGISRuntime::Toolkit
 {
 
   class UtilityNetworkFunctionTraceResult
   {
   public:
-    explicit UtilityNetworkFunctionTraceResult();
-    UtilityNetworkFunctionTraceResult(const QString& name, const UtilityTraceFunctionType type, double value);
+    UtilityNetworkFunctionTraceResult(QString functionName, QString networkAttributeName, UtilityTraceFunctionType type, double value);
     ~UtilityNetworkFunctionTraceResult();
 
     QString name() const;
@@ -41,8 +37,11 @@ namespace Esri::ArcGISRuntime::Toolkit
     QString typeAsLabel() const;
     double value() const;
 
+    UtilityNetworkFunctionTraceResult() = delete;
+
   private:
-    QString m_name;
+    QString m_functionName;
+    QString m_networkAttributeName;
     UtilityTraceFunctionType m_type;
     double m_value;
   };

@@ -38,7 +38,7 @@ find_package(Qt6 COMPONENTS REQUIRED Core Quick Qml OpenGL Multimedia Positionin
 if(Qt6Core_VERSION VERSION_LESS 6.8.2)
   message(FATAL_ERROR "This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.8.2")
 endif()
-find_package(ArcGISRuntime 300.1.0 COMPONENTS REQUIRED Cpp)
+find_package(ArcGISRuntime 300.2.0 COMPONENTS REQUIRED Cpp)
 
 file(GLOB_RECURSE APP_HEADERS CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h")
 file(GLOB_RECURSE APP_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")

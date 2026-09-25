@@ -42,7 +42,7 @@ namespace Esri::ArcGISRuntime::Toolkit
 
     QObject* geoView() const;
 
-    void setGeoView(QObject* mapView);
+    void setGeoView(QObject* geoView);
 
     GenericListModel* bookmarks() const;
 

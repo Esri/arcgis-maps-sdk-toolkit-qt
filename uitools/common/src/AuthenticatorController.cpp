@@ -59,6 +59,7 @@
 
 using namespace Esri::ArcGISRuntime;
 using namespace Esri::ArcGISRuntime::Authentication;
+using namespace Esri::ArcGISRuntime::Internal;
 using Esri::ArcGISRuntime::Authentication::AuthenticationManager;
 
 namespace Esri::ArcGISRuntime::Toolkit

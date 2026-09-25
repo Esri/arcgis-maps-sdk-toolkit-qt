@@ -34,10 +34,10 @@ namespace Esri::ArcGISRuntime::Toolkit
   QMetaObject::Connection singleShotConnection(Sender* sender, Signal&& signal, Receiver* reciever, Slot&& slot)
   {
     auto connection = std::make_shared<QMetaObject::Connection>();
-    *connection = QObject::connect(sender, std::forward<Signal>(signal), reciever, [connection, slot = std::forward<Slot>(slot)](auto&&... args)
+    *connection = QObject::connect(sender, std::forward<Signal>(signal), reciever, [connection, slot = std::forward<Slot>(slot)](auto&&... signalArgs)
     {
       QObject::disconnect(*connection);
-      slot(std::forward<decltype(args)>(args)...);
+      slot(std::forward<decltype(signalArgs)>(signalArgs)...);
     });
     return *connection;
   }

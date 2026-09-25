@@ -1,0 +1,20 @@
+# CodeQL configuration file that combines the settings from the codeql configuration options with the sarif-tools
+# configurations options. Codeql options only allow filtering queries for compiled languages and the sarif-tools allow
+# filtering results from a single configuration file.
+
+# CodeQL configurations
+# https://docs.github.com/en/code-security/reference/code-scanning/workflow-configuration-options#custom-configuration-files
+name: "CodeQL"
+
+queries:
+  # - uses: "code-scanning" # level 1 minimal baseline checks
+  # - uses: "security-extended" # level 2 minimal baseline and extended security checks
+  - uses: "security-and-quality" # level 3 minimal baseline, extended security and code quality level checks
+
+# paths: does not work with compiled languages, the build command dictates what files are analyzed
+# paths-ignore: does not work with compiled languages, use exclude in the sarif-tools filter configuration instead
+
+# SARIF Tools filter configurations
+# https://github.com/microsoft/sarif-tools?tab=readme-ov-file#filtering
+exclude:
+  - location: "**/moc_*"

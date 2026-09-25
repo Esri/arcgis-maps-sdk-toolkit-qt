@@ -79,5 +79,12 @@ Control {
                 internal.calculateScale();
             }
         }
+
+        property Connections controllerConnections: Connections {
+            target: controller
+            function onUnitSystemChanged() {
+                internal.calculateScale();
+            }
+        }
     }
 }

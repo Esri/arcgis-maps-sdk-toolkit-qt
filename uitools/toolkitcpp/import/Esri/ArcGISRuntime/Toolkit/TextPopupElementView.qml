@@ -27,12 +27,36 @@ Item {
     This class is an internal implementation detail and is subject to change.
     */
     property var controller: null
+    readonly property int availableTextWidth: Math.max(1, richText.width - richText.leftPadding - richText.rightPadding)
+
+    function sanitizePopupHtmlForWidth(rawHtml, maxWidth) {
+        if (!rawHtml)
+            return "";
+
+        const safeWidth = Math.max(1, Math.floor(maxWidth || 1));
+        let html = popupView.changeHyperlinkColor(rawHtml);
+
+        // Strip width constraints from inline CSS and width attributes.
+        html = html.replace(/\sstyle\s*=\s*(['\"])([\s\S]*?)\1/gi, function (_, quote, styleValue) {
+            const sanitized = styleValue
+                .replace(/(^|;)\s*width\s*:[^;]*/gi, "$1")
+                .replace(/^\s*;|;\s*$/g, "")
+                .trim();
+            return sanitized ? " style=" + quote + sanitized + quote : "";
+        });
+        html = html.replace(/\swidth\s*=\s*(['\"])?[^'\"\s>]+\1?/gi, "");
+
+        html = html.replace(/<img\b([^>]*)>/gi, "<img$1 width='" + safeWidth + "'>");
+        html = html.replace(/<table\b([^>]*)>/gi, "<table$1 width='100%'>");
+
+        return html;
+    }
 
     implicitHeight: richText.implicitHeight
 
     Label {
         id: richText
-        text: controller ? popupView.changeHyperlinkColor(controller.text) : ""
+        text: controller ? sanitizePopupHtmlForWidth(controller.text, availableTextWidth) : ""
         textFormat: Text.RichText
         wrapMode: Text.WordWrap
         anchors.fill: parent

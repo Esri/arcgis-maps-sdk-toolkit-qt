@@ -310,12 +310,6 @@ Pane {
                                         text: name + ": " + value
                                         horizontalAlignment: Text.AlignLeft
                                     }
-                                    Label {
-                                        Layout.fillWidth: true
-                                        elide: Text.ElideRight
-                                        text: "Function type: <i>" + type + "</i>"
-                                        horizontalAlignment: Text.AlignLeft
-                                    }
                                 }
                             }
                         }
