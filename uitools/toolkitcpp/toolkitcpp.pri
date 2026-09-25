@@ -15,10 +15,6 @@ include($$PWD/../common/common.pri)
 
 QT += quickcontrols2 webview svg graphs networkauth
 
-qtHaveModule(webenginequick) {
-  QT += webenginequick
-}
-
 TOOLKITCPP_BASE_SRC = $$PWD/src
 TOOLKITCPP_TOOLKIT_SRC = $$TOOLKITCPP_BASE_SRC/Esri/ArcGISRuntime/Toolkit
 

@@ -20,13 +20,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui QuickControls2 Svg WebView Graphs NetworkAuth)
 
-if(ANDROID OR IOS)
-    set(TOOLKITCPP_USE_WEBENGINEQUICK OFF)
-else()
-    find_package(Qt6 REQUIRED COMPONENTS WebEngineQuick)
-    set(TOOLKITCPP_USE_WEBENGINEQUICK ON)
-endif()
-
 qt_standard_project_setup()
 
 qt_add_library(libtoolkitcpp STATIC
@@ -60,12 +53,6 @@ target_link_libraries(libtoolkitcpp PRIVATE
 target_link_libraries(libtoolkitcpp PUBLIC
     Qt6::WebView
 )
-
-if(TOOLKITCPP_USE_WEBENGINEQUICK)
-    target_link_libraries(libtoolkitcpp PUBLIC
-        Qt6::WebEngineQuick
-    )
-endif()
 
 if(IOS)
     target_link_libraries(libtoolkitcpp PRIVATE
