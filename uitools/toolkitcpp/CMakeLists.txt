@@ -45,13 +45,8 @@ target_link_libraries(libtoolkitcpp PRIVATE
     Qt6::Svg
     Qt6::Graphs
     Qt6::NetworkAuth
-    ArcGISRuntime::Cpp
-)
-
-# Consumers must initialize the Qt Quick web modules before constructing QGuiApplication.
-# https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html#target-usage-requirements
-target_link_libraries(libtoolkitcpp PUBLIC
     Qt6::WebView
+    ArcGISRuntime::Cpp
 )
 
 if(IOS)
