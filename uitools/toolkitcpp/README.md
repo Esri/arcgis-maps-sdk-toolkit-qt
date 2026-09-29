@@ -69,6 +69,7 @@ These are the **Qt Quick UI components/QML Type** available to use:
 > 
 > # Add these lines after the completed target_link_libraries(...) block.
 > 
+> # Set this to the directory where the arcgis-maps-sdk-toolkit-qt repository was cloned.
 > set(ARCGIS_TOOLKIT_PATH "C:/arcgis-maps-sdk-toolkit-qt")
 > add_subdirectory("${ARCGIS_TOOLKIT_PATH}/uitools/toolkitcpp" toolkitcpp)
 > target_link_libraries(${PROJECT_NAME} PRIVATE libtoolkitcpp)

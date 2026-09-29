@@ -65,6 +65,7 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 > 
 > # Add these lines after the completed target_link_libraries(...) block.
 > 
+> # Set this to the directory where the arcgis-maps-sdk-toolkit-qt repository was cloned.
 > set(ARCGIS_TOOLKIT_PATH "C:/arcgis-maps-sdk-toolkit-qt")
 > add_subdirectory("${ARCGIS_TOOLKIT_PATH}/uitools/toolkitwidgets" toolkitwidgets)
 > target_link_libraries(${PROJECT_NAME} PRIVATE libtoolkitwidgets)
