@@ -43,30 +43,31 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 
 **qmake**
 
-- If you chose the **qmake** build system, edit your apps `TestNorthArrow.pro` file (it was created when you went through the ArcGIS Maps SDK for Qt template wizards), add an `include` statement that points to the path of the `toolkit.pri` file that you have on disk.
+- If you chose the **qmake** build system, edit your apps `TestNorthArrow.pro` file (it was created when you went through the ArcGIS Maps SDK for Qt template wizards), add an `include` statement that points to the path of the `toolkitwidgets.pri` file that you have on disk.
+
 > For example:
 > ```qmake
 > ...
-> # Locate this existing line in your project
-> include($$PWD/arcgisruntime.pri)
-> .
-> # Include the path to the toolkit.pri file
+> include($$PWD/arcgisruntime.pri) # <-- Locate this existing line in your project
+> 
+> # Include this toolkit pri qmake file directly afterwards
 > include(C:/arcgis-maps-sdk-toolkit-qt/uitools/toolkitwidgets/toolkitwidgets.pri)
 > ...
 > ```  
 
 **CMake**
 
-- If you chose the **CMake** build system, copy the `toolkitwidgets` and the `common` subdirectories into your project's directory.
-
-- Edit the `CMakeLists.txt` in your Qt project (it was created when you went through the ArcGIS Maps SDK for Qt template wizards). Uncomment the `add_subdirectory` and `target_link_libraries` commands:
+- Edit the `CMakeLists.txt` in your Qt project (it was created when you went through the ArcGIS Maps SDK for Qt template wizards).
 
 > ```CMake
 > ...
-> # To integrate the toolkit, copy the `toolkitwidgets` subdirectory from the toolkit
-> # into your project's directory. Then uncomment the following lines to add it to your project.
-> # See https://github.com/Esri/arcgis-maps-sdk-toolkit-qt for details
-> add_subdirectory(toolkitwidgets)
+> # locate the existing `target_link_libraries` block in your project.
+> # e.g. target_link_libraries(${PROJECT_NAME}...)
+> 
+> # After the completed `target_link_libraries(...)` add the following two lines and update <path_to_toolkit_uitools_toolkitwidgets> to the correct path on your system.
+> # e.g. add_subdirectory(C:/arcgis-maps-sdk-toolkit-qt/uitools/toolkitwidgets toolkitwidgets)
+> 
+> add_subdirectory(<path_to_toolkit_uitools_toolkitwidgets> toolkitwidgets)
 > target_link_libraries(${PROJECT_NAME} PRIVATE libtoolkitwidgets)
 > ...
 > ```

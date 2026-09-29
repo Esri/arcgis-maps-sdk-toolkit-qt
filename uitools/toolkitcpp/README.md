@@ -48,7 +48,7 @@ These are the **Qt Quick UI components/QML Type** available to use:
 
 **qmake**
 
-- If you chose the **qmake** build system, edit your apps `TestNorthArrow.pro` file (it was created when you went through the ArcGIS Maps SDK for Qt template wizards), add an `include` statement that points to the path of the `toolkit.pri` file that you have on disk. 
+- If you chose the **qmake** build system, edit your apps `TestNorthArrow.pro` file (it was created when you went through the ArcGIS Maps SDK for Qt template wizards), add an `include` statement that points to the path of the `toolkitcpp.pri` file that you have on disk. 
 
 > ```qmake
 > ...
@@ -61,16 +61,17 @@ These are the **Qt Quick UI components/QML Type** available to use:
 
 **CMake**
 
-- If you chose the **CMake** build system, copy the `toolkitcpp` and the `common` subdirectories into your project's directory.
-
-- Edit the `CMakeLists.txt` in your Qt project (it was created when you went through the ArcGIS Maps SDK for Qt template wizards). Uncomment the `add_subdirectory` and `target_link_libraries` commands:
+- Edit the `CMakeLists.txt` in your Qt project (it was created when you went through the ArcGIS Maps SDK for Qt template wizards).
 
 > ```CMake
 > ...
-> # To integrate the toolkit, copy the `toolkitcpp` subdirectory from the toolkit
-> # into your project's directory. Then uncomment the following lines to add it to your project.
-> # See https://github.com/Esri/arcgis-maps-sdk-toolkit-qt for details
-> add_subdirectory(toolkitcpp)
+> # locate the existing `target_link_libraries` block in your project.
+> # e.g. target_link_libraries(${PROJECT_NAME}...)
+> 
+> # After the completed `target_link_libraries(...)` add the following two lines and update <path_to_toolkit_uitools_toolkitcpp> to the correct path on your system.
+> # e.g. add_subdirectory(C:/arcgis-maps-sdk-toolkit-qt/uitools/toolkitcpp toolkitcpp)
+> 
+> add_subdirectory(<path_to_toolkit_uitools_toolkitcpp> toolkitcpp)
 > target_link_libraries(${PROJECT_NAME} PRIVATE libtoolkitcpp)
 > ...
 > ```
