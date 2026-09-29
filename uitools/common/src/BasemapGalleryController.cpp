@@ -250,8 +250,18 @@ namespace Esri::ArcGISRuntime::Toolkit
       }
     }
 
-    void add3DBasemapsToGallery(BasemapGalleryController* self)
+    /*!
+      \internal
+      If the currently connected GeoModel is a Scene, 3D basemaps are fetched and added to the gallery.
+      If the currently connected GeoModel is a Map, any 3D basemaps are removed from the gallery.
+     */
+    void addOrRemove3DBasemapsFromGallery(BasemapGalleryController* self)
     {
+      if (!self)
+      {
+        return;
+      }
+
       const auto add3DBasemaps = [self]()
       {
         auto* portal = self->portal();
@@ -275,28 +285,7 @@ namespace Esri::ArcGISRuntime::Toolkit
           emit self->basemapsChanged();
         }
       };
-      if (self->portal() && self->portal()->loadStatus() == LoadStatus::Loaded)
-      {
-        add3DBasemaps();
-      }
-      else
-      {
-        QObject::connect(self->portal(), &Portal::doneLoading, self, [self, add3DBasemaps](const Error& e)
-        {
-          if (!e.isEmpty())
-          {
-            qWarning() << "Failed to load portal. Error:" << e.message() << e.additionalMessage();
-            return;
-          }
-          add3DBasemaps();
-        }, Qt::SingleShotConnection);
 
-        self->portal()->load();
-      }
-    }
-
-    void remove3DBasemapsFromGallery(BasemapGalleryController* self)
-    {
       const auto remove3DBasemaps = [self]()
       {
         for (int i = self->gallery()->rowCount() - 1; i >= 0; --i)
@@ -313,7 +302,33 @@ namespace Esri::ArcGISRuntime::Toolkit
         }
       };
 
-      if (self->geoModel() && qobject_cast<Scene*>(self->geoModel()))
+      if (qobject_cast<Scene*>(self->geoModel()))
+      {
+        if (!self->portal())
+        {
+          return;
+        }
+
+        if (self->portal() && self->portal()->loadStatus() == LoadStatus::Loaded)
+        {
+          add3DBasemaps();
+        }
+        else
+        {
+          QObject::connect(self->portal(), &Portal::doneLoading, self, [self, add3DBasemaps](const Error& e)
+          {
+            if (!e.isEmpty())
+            {
+              qWarning() << "Failed to load portal. Error:" << e.message() << e.additionalMessage();
+              return;
+            }
+            add3DBasemaps();
+          }, Qt::SingleShotConnection);
+
+          self->portal()->load();
+        }
+      }
+      else
       {
         remove3DBasemaps();
       }
@@ -383,14 +398,7 @@ namespace Esri::ArcGISRuntime::Toolkit
           }
         }
 
-        if (qobject_cast<Scene*>(self->geoModel()))
-        {
-          add3DBasemapsToGallery(self);
-        }
-        else
-        {
-          remove3DBasemapsFromGallery(self);
-        }
+        addOrRemove3DBasemapsFromGallery(self);
       };
 
       if (!self->portal())
@@ -515,14 +523,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     if (m_geoModel)
     {
       connectToGeoModel(this, m_geoModel);
-      if (qobject_cast<Scene*>(m_geoModel))
-      {
-        add3DBasemapsToGallery(this);
-      }
-      else
-      {
-        remove3DBasemapsFromGallery(this);
-      }
+      addOrRemove3DBasemapsFromGallery(this);
       setCurrentBasemap(geoModel->basemap());
     }
 
