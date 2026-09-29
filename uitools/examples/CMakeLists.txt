@@ -16,6 +16,10 @@ cmake_minimum_required(VERSION 3.16)
 
 project(UitoolsExamples LANGUAGES CXX)
 
+option(ARCGIS_RUNTIME_TOOLKIT_USE_INSTALLED_PACKAGE
+  "Build examples against an installed ArcGISRuntimeToolkit package"
+  OFF)
+
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -129,8 +133,13 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
   Qt6::NetworkAuth
   ArcGISRuntime::Cpp)
 
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../toolkitcpp toolkitcpp)
-target_link_libraries(${PROJECT_NAME} PRIVATE libtoolkitcpp)
+if(ARCGIS_RUNTIME_TOOLKIT_USE_INSTALLED_PACKAGE)
+  find_package(ArcGISRuntimeToolkit 300.2 CONFIG REQUIRED COMPONENTS Quick)
+  target_link_libraries(${PROJECT_NAME} PRIVATE ArcGISRuntimeToolkit::Quick)
+else()
+  add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../toolkitcpp toolkitcpp)
+  target_link_libraries(${PROJECT_NAME} PRIVATE libtoolkitcpp)
+endif()
 
 if(ANDROID)
   set(PROJECT_DEPLOYABLE_LIBS

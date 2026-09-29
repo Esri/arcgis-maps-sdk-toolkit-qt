@@ -57,18 +57,27 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 
 **CMake**
 
-- If you chose the **CMake** build system, copy the `toolkitwidgets` and the `common` subdirectories into your project's directory.
+- Install the toolkit from its repository checkout. The install prefix can be any directory outside the source tree:
 
-- Edit the `CMakeLists.txt` in your Qt project (it was created when you went through the ArcGIS Maps SDK for Qt template wizards). Uncomment the `add_subdirectory` and `target_link_libraries` commands:
+> ```sh
+> cmake -S arcgis-maps-sdk-toolkit-qt/uitools -B build/toolkit \
+>   -DCMAKE_PREFIX_PATH=/path/to/Qt/6.8.2/platform
+> cmake --build build/toolkit
+> cmake --install build/toolkit --prefix /path/to/arcgis-runtime-toolkit
+> ```
+
+- In your application's `CMakeLists.txt`, load the ArcGIS Maps SDK for Qt integration before finding the toolkit package. Add the toolkit install prefix to `CMAKE_PREFIX_PATH` when configuring the application.
 
 > ```CMake
-> ...
-> # To integrate the toolkit, copy the `toolkitwidgets` subdirectory from the toolkit
-> # into your project's directory. Then uncomment the following lines to add it to your project.
-> # See https://github.com/Esri/arcgis-maps-sdk-toolkit-qt for details
-> add_subdirectory(toolkitwidgets)
-> target_link_libraries(${PROJECT_NAME} PRIVATE libtoolkitwidgets)
-> ...
+> find_package(ArcGISRuntime 300.2 REQUIRED COMPONENTS Cpp)
+> find_package(ArcGISRuntimeToolkit 300.2 CONFIG REQUIRED COMPONENTS Widgets)
+>
+> target_link_libraries(${PROJECT_NAME} PRIVATE ArcGISRuntimeToolkit::Widgets)
+> ```
+
+> ```sh
+> cmake -S . -B build \
+>   -DCMAKE_PREFIX_PATH="/path/to/Qt/6.8.2/platform;/path/to/arcgis-runtime-toolkit"
 > ```
 
 **STEP 5:** Once you have successfully included the toolkit, you can create individual tools in your own widgets files. In your widgets code file (for example: `TestNorthArrow.cpp`), create a new instance of the tool you wish to use and add it to your widgets layout. You will also normally need to pass the `GeoView` which the tool is designed to work with:

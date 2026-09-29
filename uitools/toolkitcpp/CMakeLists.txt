@@ -14,7 +14,13 @@
 cmake_minimum_required(VERSION 3.16)
 project(libtoolkitcpp VERSION 1.0 LANGUAGES CXX)
 
-include(../common/CMakeLists.txt)
+include("${CMAKE_CURRENT_LIST_DIR}/../common/CMakeLists.txt")
+
+include(GNUInstallDirs)
+
+if(NOT DEFINED ARCGIS_RUNTIME_TOOLKIT_QML_VERSION)
+    set(ARCGIS_RUNTIME_TOOLKIT_QML_VERSION "3.0")
+endif()
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -29,9 +35,15 @@ qt_add_library(libtoolkitcpp STATIC
     src/Esri/ArcGISRuntime/Toolkit/register.cpp
 )
 
+add_library(ArcGISRuntimeToolkit::Quick ALIAS libtoolkitcpp)
+set_target_properties(libtoolkitcpp PROPERTIES EXPORT_NAME Quick)
+target_compile_features(libtoolkitcpp PUBLIC cxx_std_17)
+
 target_include_directories(libtoolkitcpp PUBLIC
-    ${ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_INCLUDES}
-    src
+    $<BUILD_INTERFACE:${ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_INCLUDES}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/src>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/Esri/ArcGISRuntime/Toolkit>
 )
 
 target_compile_definitions(libtoolkitcpp PRIVATE
@@ -43,10 +55,13 @@ target_link_libraries(libtoolkitcpp PRIVATE
     Qt6::Gui
     Qt6::QuickControls2
     Qt6::Svg
-    Qt6::WebView
     Qt6::Graphs
     Qt6::NetworkAuth
     ArcGISRuntime::Cpp
+)
+
+target_link_libraries(libtoolkitcpp PUBLIC
+    Qt6::WebView
 )
 
 if(IOS)
@@ -85,8 +100,9 @@ set(esri_arcgisruntime_toolkit_view_resource_files
 
 qt_add_qml_module(libtoolkitcpp
     URI "Esri.ArcGISRuntime.Toolkit"
-    VERSION "1.0"
+    VERSION "${ARCGIS_RUNTIME_TOOLKIT_QML_VERSION}"
     RESOURCE_PREFIX "/esri.com/imports"
+    OUTPUT_TARGETS toolkitcpp_qml_output_targets
     QML_FILES
         ${esri_arcgisruntime_toolkit_view_resource_files}
     NO_PLUGIN
@@ -106,6 +122,38 @@ qt_add_resources(libtoolkitcpp "ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_IMAGES"
         ${ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_IMAGES_PREFIX}
     BASE
         ${ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_IMAGES_BASE}
+    OUTPUT_TARGETS toolkitcpp_common_resource_targets
     FILES
         ${ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_IMAGES}
+)
+
+install(TARGETS
+    libtoolkitcpp
+    ${toolkitcpp_qml_output_targets}
+    ${toolkitcpp_common_resource_targets}
+    EXPORT ArcGISRuntimeToolkitQuickTargets
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    OBJECTS DESTINATION ${CMAKE_INSTALL_LIBDIR}/ArcGISRuntimeToolkit/objects
+)
+
+install(FILES
+    src/Esri/ArcGISRuntime/Toolkit/register.h
+    ${ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_HEADERS}
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Esri/ArcGISRuntime/Toolkit
+)
+
+install(EXPORT ArcGISRuntimeToolkitQuickTargets
+    FILE ArcGISRuntimeToolkitQuickTargets.cmake
+    NAMESPACE ArcGISRuntimeToolkit::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ArcGISRuntimeToolkit
+)
+
+install(DIRECTORY
+    "${CMAKE_CURRENT_LIST_DIR}/import/Esri/ArcGISRuntime/Toolkit/"
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/qml/Esri/ArcGISRuntime/Toolkit
+    FILES_MATCHING
+        PATTERN "*.qml"
+        PATTERN "qmldir"
 )

@@ -14,11 +14,13 @@
 cmake_minimum_required(VERSION 3.16)
 project(libtoolkitwidgets VERSION 1.0 LANGUAGES CXX)
 
-include(../common/CMakeLists.txt)
+include("${CMAKE_CURRENT_LIST_DIR}/../common/CMakeLists.txt")
+
+include(GNUInstallDirs)
 
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Svg WebEngineWidgets Widgets Graphs NetworkAuth)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui OpenGLWidgets Svg WebEngineWidgets Widgets Graphs NetworkAuth)
 
 qt_standard_project_setup()
 
@@ -58,9 +60,15 @@ qt_add_library(libtoolkitwidgets STATIC
     src/Esri/ArcGISRuntime/Toolkit/Internal/Flash.cpp
 )
 
+add_library(ArcGISRuntimeToolkit::Widgets ALIAS libtoolkitwidgets)
+set_target_properties(libtoolkitwidgets PROPERTIES EXPORT_NAME Widgets)
+target_compile_features(libtoolkitwidgets PUBLIC cxx_std_17)
+
 target_include_directories(libtoolkitwidgets PUBLIC
-    ${ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_INCLUDES}
-    src
+    $<BUILD_INTERFACE:${ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_INCLUDES}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/src>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/Esri/ArcGISRuntime/Toolkit>
 )
 
 target_compile_definitions(libtoolkitwidgets PRIVATE
@@ -70,6 +78,7 @@ target_compile_definitions(libtoolkitwidgets PRIVATE
 target_link_libraries(libtoolkitwidgets PRIVATE
     Qt6::Core
     Qt6::Gui
+    Qt6::OpenGLWidgets
     Qt6::Svg
     Qt6::WebEngineWidgets
     Qt6::Widgets
@@ -78,11 +87,43 @@ target_link_libraries(libtoolkitwidgets PRIVATE
     ArcGISRuntime::Cpp
 )
 
+if(APPLE)
+    target_link_libraries(libtoolkitwidgets PRIVATE "-framework QuartzCore")
+endif()
+
 qt_add_resources(libtoolkitwidgets "ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_IMAGES"
     PREFIX
         ${ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_IMAGES_PREFIX}
     BASE
         ${ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_IMAGES_BASE}
+    OUTPUT_TARGETS toolkitwidgets_common_resource_targets
     FILES
         ${ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_IMAGES}
+)
+
+install(TARGETS
+    libtoolkitwidgets
+    ${toolkitwidgets_common_resource_targets}
+    EXPORT ArcGISRuntimeToolkitWidgetsTargets
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    OBJECTS DESTINATION ${CMAKE_INSTALL_LIBDIR}/ArcGISRuntimeToolkit/objects
+)
+
+install(FILES
+    src/Esri/ArcGISRuntime/Toolkit/BasemapGallery.h
+    src/Esri/ArcGISRuntime/Toolkit/BookmarksView.h
+    src/Esri/ArcGISRuntime/Toolkit/CoordinateConversion.h
+    src/Esri/ArcGISRuntime/Toolkit/FloorFilter.h
+    src/Esri/ArcGISRuntime/Toolkit/NorthArrow.h
+    src/Esri/ArcGISRuntime/Toolkit/OverviewMap.h
+    ${ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_HEADERS}
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Esri/ArcGISRuntime/Toolkit
+)
+
+install(EXPORT ArcGISRuntimeToolkitWidgetsTargets
+    FILE ArcGISRuntimeToolkitWidgetsTargets.cmake
+    NAMESPACE ArcGISRuntimeToolkit::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ArcGISRuntimeToolkit
 )

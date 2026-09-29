@@ -1,0 +1,51 @@
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+
+set(ArcGISRuntimeToolkit_QML_IMPORT_PATH "@PACKAGE_ARCGIS_RUNTIME_TOOLKIT_QML_INSTALL_DIR@")
+
+if(NOT TARGET ArcGISRuntime::Cpp)
+    set(ArcGISRuntimeToolkit_NOT_FOUND_MESSAGE
+        "ArcGISRuntime::Cpp must exist before finding ArcGISRuntimeToolkit. Load the ArcGIS Maps SDK for Qt CMake integration first."
+    )
+    set(ArcGISRuntimeToolkit_FOUND FALSE)
+    return()
+endif()
+
+if(NOT ArcGISRuntimeToolkit_FIND_COMPONENTS)
+    set(ArcGISRuntimeToolkit_FIND_COMPONENTS Quick)
+endif()
+
+set(_ArcGISRuntimeToolkit_supported_components Quick Widgets)
+
+foreach(_component IN LISTS ArcGISRuntimeToolkit_FIND_COMPONENTS)
+    if(NOT _component IN_LIST _ArcGISRuntimeToolkit_supported_components)
+        set(ArcGISRuntimeToolkit_NOT_FOUND_MESSAGE
+            "Unsupported ArcGISRuntimeToolkit component: ${_component}"
+        )
+        set(ArcGISRuntimeToolkit_FOUND FALSE)
+        return()
+    endif()
+
+    if(_component STREQUAL "Quick")
+        if(NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/ArcGISRuntimeToolkitQuickTargets.cmake")
+            set(ArcGISRuntimeToolkit_Quick_FOUND FALSE)
+            continue()
+        endif()
+
+        find_dependency(Qt6 6.8.2 COMPONENTS Core Gui QuickControls2 Svg WebView Graphs NetworkAuth)
+        include("${CMAKE_CURRENT_LIST_DIR}/ArcGISRuntimeToolkitQuickTargets.cmake")
+        set(ArcGISRuntimeToolkit_Quick_FOUND TRUE)
+    elseif(_component STREQUAL "Widgets")
+        if(ANDROID OR IOS OR NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/ArcGISRuntimeToolkitWidgetsTargets.cmake")
+            set(ArcGISRuntimeToolkit_Widgets_FOUND FALSE)
+            continue()
+        endif()
+
+        find_dependency(Qt6 6.8.2 COMPONENTS Core Gui OpenGLWidgets Svg WebEngineWidgets Widgets Graphs NetworkAuth)
+        include("${CMAKE_CURRENT_LIST_DIR}/ArcGISRuntimeToolkitWidgetsTargets.cmake")
+        set(ArcGISRuntimeToolkit_Widgets_FOUND TRUE)
+    endif()
+endforeach()
+
+check_required_components(ArcGISRuntimeToolkit)

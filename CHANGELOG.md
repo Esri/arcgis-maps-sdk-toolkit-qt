@@ -1,5 +1,11 @@
 # Changelog
 
+## 300.2
+
+* Add an installable CMake package with `Quick` and `Widgets` components.
+* Add namespaced `ArcGISRuntimeToolkit::Quick` and `ArcGISRuntimeToolkit::Widgets` targets.
+* Install the Qt Quick QML module for Qt Creator, QML tooling, and deployment discovery.
+
 ## 300.0
 
 * The augmented reality (AR) toolkit components are removed.
