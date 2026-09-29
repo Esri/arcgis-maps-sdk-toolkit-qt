@@ -270,12 +270,14 @@ namespace Esri::ArcGISRuntime::Toolkit
         // Clear all basemaps from the gallery.
         self->gallery()->removeRows(0, self->gallery()->rowCount());
 
+        // If the portal access is anonymous, portalUser will be null
         if (portal->portalUser())
         {
           if (portal->basemaps()->isEmpty())
           {
             portal->fetchBasemapsAsync().then(self, [portal, self]()
             {
+              // Ensure the portal is still the same before adding basemaps to the gallery
               if (portal != self->portal())
               {
                 return;
@@ -297,6 +299,7 @@ namespace Esri::ArcGISRuntime::Toolkit
           {
             portal->fetchDeveloperBasemapsAsync().then(self, [portal, self]()
             {
+              // Ensure the portal is still the same before adding developer basemaps to the gallery
               if (portal != self->portal())
               {
                 return;
@@ -319,7 +322,8 @@ namespace Esri::ArcGISRuntime::Toolkit
           {
             portal->fetch3DBasemapsAsync().then(self, [portal, self]()
             {
-              if (portal != self->portal())
+              // Ensure the portal is still the same and the geoModel is still a Scene before adding 3D basemaps to the gallery
+              if (portal != self->portal() || !qobject_cast<Scene*>(self->geoModel()))
               {
                 return;
               }
@@ -336,6 +340,11 @@ namespace Esri::ArcGISRuntime::Toolkit
         }
       };
 
+      if (!self->portal())
+      {
+        return;
+      }
+
       if (self->portal()->loadStatus() == LoadStatus::Loaded)
       {
         fetchBasemapsFromLoadedPortal(self);
@@ -351,6 +360,7 @@ namespace Esri::ArcGISRuntime::Toolkit
           }
           fetchBasemapsFromLoadedPortal(self);
         }, Qt::SingleShotConnection);
+
         self->portal()->load();
       }
     }
