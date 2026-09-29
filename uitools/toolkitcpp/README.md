@@ -65,13 +65,12 @@ These are the **Qt Quick UI components/QML Type** available to use:
 
 > ```CMake
 > ...
-> # locate the existing `target_link_libraries` block in your project.
-> # e.g. target_link_libraries(${PROJECT_NAME}...)
+> # Locate the existing target_link_libraries(...) block in your project.
 > 
-> # After the completed `target_link_libraries(...)` add the following two lines and update <path_to_toolkit_uitools_toolkitcpp> to the correct path on your system.
-> # e.g. add_subdirectory(C:/arcgis-maps-sdk-toolkit-qt/uitools/toolkitcpp toolkitcpp)
+> # Add these lines after the completed target_link_libraries(...) block.
 > 
-> add_subdirectory(<path_to_toolkit_uitools_toolkitcpp> toolkitcpp)
+> set(ARCGIS_TOOLKIT_PATH "C:/arcgis-maps-sdk-toolkit-qt")
+> add_subdirectory("${ARCGIS_TOOLKIT_PATH}/uitools/toolkitcpp" toolkitcpp)
 > target_link_libraries(${PROJECT_NAME} PRIVATE libtoolkitcpp)
 > ...
 > ```
