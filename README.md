@@ -4,7 +4,7 @@
 
 This toolkit is an open source resource intended for use with the ArcGIS Maps SDK for Qt. It provides ready made components to complement mapping and GIS applications. Because it is open source you are encouraged to modify these tools and add your own.
 
-Before you can utilize the toolkit, you should first ensure your development machine meets the [system requirements](https://developers.arcgis.com/qt/reference/system-requirements/) and has the ArcGIS Maps SDK for Qt properly [installed and set up](https://developers.arcgis.com/qt/install-and-set-up/). TIP: the toolkit requires the installation of the **Qt WebEngine** which can be found under **Select Components > Extensions** section of the Qt installer.
+Before you can utilize the toolkit, you should first ensure your development machine meets the [system requirements](https://developers.arcgis.com/qt/reference/system-requirements/) and has the ArcGIS Maps SDK for Qt properly [installed and set up](https://developers.arcgis.com/qt/install-and-set-up/). TIP: the Qt Quick Authenticator uses **Qt WebView** for embedded OAuth sign-in. On platforms where Qt WebView uses a separate browser backend, such as Qt WebEngine on Linux or WebView2/Qt WebEngine on Windows, ensure the required backend is installed with Qt.
 
 ## Using this toolkit
 
