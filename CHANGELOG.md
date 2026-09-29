@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+* Add source-based CMake integration through `FetchContent` or an external `add_subdirectory`, without copying toolkit sources into an application.
+* Add `ArcGISRuntimeToolkit::Quick` and `ArcGISRuntimeToolkit::Widgets` target aliases.
+
 ## 300.0
 
 * The augmented reality (AR) toolkit components are removed.

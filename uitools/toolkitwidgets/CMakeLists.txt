@@ -14,11 +14,15 @@
 cmake_minimum_required(VERSION 3.16)
 project(libtoolkitwidgets VERSION 1.0 LANGUAGES CXX)
 
-include(../common/CMakeLists.txt)
+if(ANDROID OR IOS)
+    message(FATAL_ERROR "The ArcGISRuntimeToolkit Widgets component is not supported on Android or iOS.")
+endif()
+
+include("${CMAKE_CURRENT_LIST_DIR}/../common/CMakeLists.txt")
 
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Svg WebEngineWidgets Widgets Graphs NetworkAuth)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui OpenGLWidgets Svg WebEngineWidgets Widgets Graphs NetworkAuth)
 
 qt_standard_project_setup()
 
@@ -58,9 +62,12 @@ qt_add_library(libtoolkitwidgets STATIC
     src/Esri/ArcGISRuntime/Toolkit/Internal/Flash.cpp
 )
 
+add_library(ArcGISRuntimeToolkit::Widgets ALIAS libtoolkitwidgets)
+target_compile_features(libtoolkitwidgets PUBLIC cxx_std_17)
+
 target_include_directories(libtoolkitwidgets PUBLIC
     ${ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_INCLUDES}
-    src
+    "${CMAKE_CURRENT_LIST_DIR}/src"
 )
 
 target_compile_definitions(libtoolkitwidgets PRIVATE
@@ -70,6 +77,7 @@ target_compile_definitions(libtoolkitwidgets PRIVATE
 target_link_libraries(libtoolkitwidgets PRIVATE
     Qt6::Core
     Qt6::Gui
+    Qt6::OpenGLWidgets
     Qt6::Svg
     Qt6::WebEngineWidgets
     Qt6::Widgets
@@ -77,6 +85,10 @@ target_link_libraries(libtoolkitwidgets PRIVATE
     Qt6::NetworkAuth
     ArcGISRuntime::Cpp
 )
+
+if(APPLE)
+    target_link_libraries(libtoolkitwidgets PRIVATE "-framework QuartzCore")
+endif()
 
 qt_add_resources(libtoolkitwidgets "ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_IMAGES"
     PREFIX

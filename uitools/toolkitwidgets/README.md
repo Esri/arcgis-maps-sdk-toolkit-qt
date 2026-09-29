@@ -57,18 +57,38 @@ A good way to start using the toolkit is to use one of the ArcGIS Maps SDK for Q
 
 **CMake**
 
-- If you chose the **CMake** build system, copy the `toolkitwidgets` and the `common` subdirectories into your project's directory.
-
-- Edit the `CMakeLists.txt` in your Qt project (it was created when you went through the ArcGIS Maps SDK for Qt template wizards). Uncomment the `add_subdirectory` and `target_link_libraries` commands:
+- Load the ArcGIS Maps SDK for Qt before adding the toolkit. With CMake 3.18 or later, use `FetchContent` to obtain and build the toolkit source with your application, enable Widgets, and pin `GIT_TAG` to a release tag or commit:
 
 > ```CMake
-> ...
-> # To integrate the toolkit, copy the `toolkitwidgets` subdirectory from the toolkit
-> # into your project's directory. Then uncomment the following lines to add it to your project.
-> # See https://github.com/Esri/arcgis-maps-sdk-toolkit-qt for details
-> add_subdirectory(toolkitwidgets)
-> target_link_libraries(${PROJECT_NAME} PRIVATE libtoolkitwidgets)
-> ...
+> find_package(Qt6 6.8.2 REQUIRED COMPONENTS Core Gui OpenGLWidgets Svg WebEngineWidgets Widgets Graphs NetworkAuth)
+> find_package(ArcGISRuntime 300.2.0 REQUIRED COMPONENTS Cpp)
+>
+> include(FetchContent)
+> set(ARCGIS_RUNTIME_TOOLKIT_BUILD_WIDGETS ON)
+> FetchContent_Declare(
+>     arcgis_runtime_toolkit
+>     GIT_REPOSITORY https://github.com/Esri/arcgis-maps-sdk-toolkit-qt.git
+>     GIT_TAG <release-tag-or-commit>
+>     SOURCE_SUBDIR uitools
+> )
+> FetchContent_MakeAvailable(arcgis_runtime_toolkit)
+>
+> target_link_libraries(${PROJECT_NAME} PRIVATE ArcGISRuntimeToolkit::Widgets)
+> ```
+
+- To build from an existing local checkout instead, enable Widgets and provide the toolkit's `uitools` source directory and a binary directory:
+
+> ```CMake
+> find_package(Qt6 6.8.2 REQUIRED COMPONENTS Core Gui OpenGLWidgets Svg WebEngineWidgets Widgets Graphs NetworkAuth)
+> find_package(ArcGISRuntime 300.2.0 REQUIRED COMPONENTS Cpp)
+>
+> set(ARCGIS_RUNTIME_TOOLKIT_BUILD_WIDGETS ON)
+> add_subdirectory(
+>     /path/to/arcgis-maps-sdk-toolkit-qt/uitools
+>     ${CMAKE_CURRENT_BINARY_DIR}/arcgis-runtime-toolkit
+> )
+>
+> target_link_libraries(${PROJECT_NAME} PRIVATE ArcGISRuntimeToolkit::Widgets)
 > ```
 
 **STEP 5:** Once you have successfully included the toolkit, you can create individual tools in your own widgets files. In your widgets code file (for example: `TestNorthArrow.cpp`), create a new instance of the tool you wish to use and add it to your widgets layout. You will also normally need to pass the `GeoView` which the tool is designed to work with:

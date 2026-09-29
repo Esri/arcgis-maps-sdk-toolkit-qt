@@ -129,8 +129,9 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
   Qt6::NetworkAuth
   ArcGISRuntime::Cpp)
 
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../toolkitcpp toolkitcpp)
-target_link_libraries(${PROJECT_NAME} PRIVATE libtoolkitcpp)
+set(ARCGIS_RUNTIME_TOOLKIT_BUILD_QUICK ON)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/.. toolkit)
+target_link_libraries(${PROJECT_NAME} PRIVATE ArcGISRuntimeToolkit::Quick)
 
 if(ANDROID)
   set(PROJECT_DEPLOYABLE_LIBS

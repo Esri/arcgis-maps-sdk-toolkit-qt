@@ -14,7 +14,7 @@
 cmake_minimum_required(VERSION 3.16)
 project(libtoolkitcpp VERSION 1.0 LANGUAGES CXX)
 
-include(../common/CMakeLists.txt)
+include("${CMAKE_CURRENT_LIST_DIR}/../common/CMakeLists.txt")
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -29,9 +29,12 @@ qt_add_library(libtoolkitcpp STATIC
     src/Esri/ArcGISRuntime/Toolkit/register.cpp
 )
 
+add_library(ArcGISRuntimeToolkit::Quick ALIAS libtoolkitcpp)
+target_compile_features(libtoolkitcpp PUBLIC cxx_std_17)
+
 target_include_directories(libtoolkitcpp PUBLIC
     ${ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_INCLUDES}
-    src
+    "${CMAKE_CURRENT_LIST_DIR}/src"
 )
 
 target_compile_definitions(libtoolkitcpp PRIVATE
@@ -43,10 +46,13 @@ target_link_libraries(libtoolkitcpp PRIVATE
     Qt6::Gui
     Qt6::QuickControls2
     Qt6::Svg
-    Qt6::WebView
     Qt6::Graphs
     Qt6::NetworkAuth
     ArcGISRuntime::Cpp
+)
+
+target_link_libraries(libtoolkitcpp PUBLIC
+    Qt6::WebView
 )
 
 if(IOS)
@@ -85,7 +91,7 @@ set(esri_arcgisruntime_toolkit_view_resource_files
 
 qt_add_qml_module(libtoolkitcpp
     URI "Esri.ArcGISRuntime.Toolkit"
-    VERSION "1.0"
+    VERSION "3.0"
     RESOURCE_PREFIX "/esri.com/imports"
     QML_FILES
         ${esri_arcgisruntime_toolkit_view_resource_files}

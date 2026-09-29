@@ -61,18 +61,38 @@ These are the **Qt Quick UI components/QML Type** available to use:
 
 **CMake**
 
-- If you chose the **CMake** build system, copy the `toolkitcpp` and the `common` subdirectories into your project's directory.
-
-- Edit the `CMakeLists.txt` in your Qt project (it was created when you went through the ArcGIS Maps SDK for Qt template wizards). Uncomment the `add_subdirectory` and `target_link_libraries` commands:
+- Load the ArcGIS Maps SDK for Qt before adding the toolkit. With CMake 3.18 or later, use `FetchContent` to obtain and build the toolkit source with your application, and pin `GIT_TAG` to a release tag or commit:
 
 > ```CMake
-> ...
-> # To integrate the toolkit, copy the `toolkitcpp` subdirectory from the toolkit
-> # into your project's directory. Then uncomment the following lines to add it to your project.
-> # See https://github.com/Esri/arcgis-maps-sdk-toolkit-qt for details
-> add_subdirectory(toolkitcpp)
-> target_link_libraries(${PROJECT_NAME} PRIVATE libtoolkitcpp)
-> ...
+> find_package(Qt6 6.8.2 REQUIRED COMPONENTS Core Gui Qml QuickControls2 Svg WebView Graphs NetworkAuth)
+> find_package(ArcGISRuntime 300.2.0 REQUIRED COMPONENTS Cpp)
+>
+> include(FetchContent)
+> set(ARCGIS_RUNTIME_TOOLKIT_BUILD_QUICK ON)
+> FetchContent_Declare(
+>     arcgis_runtime_toolkit
+>     GIT_REPOSITORY https://github.com/Esri/arcgis-maps-sdk-toolkit-qt.git
+>     GIT_TAG <release-tag-or-commit>
+>     SOURCE_SUBDIR uitools
+> )
+> FetchContent_MakeAvailable(arcgis_runtime_toolkit)
+>
+> target_link_libraries(${PROJECT_NAME} PRIVATE ArcGISRuntimeToolkit::Quick)
+> ```
+
+- To build from an existing local checkout instead, provide its `uitools` source directory and a binary directory. The toolkit source remains outside your application source tree:
+
+> ```CMake
+> find_package(Qt6 6.8.2 REQUIRED COMPONENTS Core Gui Qml QuickControls2 Svg WebView Graphs NetworkAuth)
+> find_package(ArcGISRuntime 300.2.0 REQUIRED COMPONENTS Cpp)
+>
+> set(ARCGIS_RUNTIME_TOOLKIT_BUILD_QUICK ON)
+> add_subdirectory(
+>     /path/to/arcgis-maps-sdk-toolkit-qt/uitools
+>     ${CMAKE_CURRENT_BINARY_DIR}/arcgis-runtime-toolkit
+> )
+>
+> target_link_libraries(${PROJECT_NAME} PRIVATE ArcGISRuntimeToolkit::Quick)
 > ```
 
 **STEP 5:** In the `main.cpp` file, add an `include` statement near the top of the file to import the toolkit `register.h` file and then later in file call the `Toolkit::registerComponents()` function.
