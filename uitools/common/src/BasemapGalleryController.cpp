@@ -250,30 +250,6 @@ namespace Esri::ArcGISRuntime::Toolkit
       }
     }
 
-    void remove3DBasemapsFromGallery(BasemapGalleryController* self)
-    {
-      const auto remove3DBasemaps = [self]()
-      {
-        for (int i = self->gallery()->rowCount() - 1; i >= 0; --i)
-        {
-          auto index = self->gallery()->index(i);
-          if (auto* galleryItem = self->gallery()->element<BasemapGalleryItem>(index))
-          {
-            if (galleryItem->is3D())
-            {
-              self->gallery()->removeRow(i);
-              onBasemapRemovedFromGallery(self, galleryItem);
-            }
-          }
-        }
-      };
-
-      if (self->geoModel() && qobject_cast<Scene*>(self->geoModel()))
-      {
-        remove3DBasemaps();
-      }
-    }
-
     void add3DBasemapsToGallery(BasemapGalleryController* self)
     {
       const auto add3DBasemaps = [self]()
@@ -316,6 +292,30 @@ namespace Esri::ArcGISRuntime::Toolkit
         }, Qt::SingleShotConnection);
 
         self->portal()->load();
+      }
+    }
+
+    void remove3DBasemapsFromGallery(BasemapGalleryController* self)
+    {
+      const auto remove3DBasemaps = [self]()
+      {
+        for (int i = self->gallery()->rowCount() - 1; i >= 0; --i)
+        {
+          auto index = self->gallery()->index(i);
+          if (auto* galleryItem = self->gallery()->element<BasemapGalleryItem>(index))
+          {
+            if (galleryItem->is3D())
+            {
+              self->gallery()->removeRow(i);
+              onBasemapRemovedFromGallery(self, galleryItem);
+            }
+          }
+        }
+      };
+
+      if (self->geoModel() && qobject_cast<Scene*>(self->geoModel()))
+      {
+        remove3DBasemaps();
       }
     }
 
