@@ -297,6 +297,10 @@ namespace Esri::ArcGISRuntime::Toolkit
           {
             portal->fetchDeveloperBasemapsAsync().then(self, [portal, self]()
             {
+              if (portal != self->portal())
+              {
+                return;
+              }
               BasemapListModel* basemaps = portal->developerBasemaps();
               sortBasemapsAndAddToGallery(self, basemaps);
               emit self->basemapsChanged();
@@ -315,6 +319,10 @@ namespace Esri::ArcGISRuntime::Toolkit
           {
             portal->fetch3DBasemapsAsync().then(self, [portal, self]()
             {
+              if (portal != self->portal())
+              {
+                return;
+              }
               BasemapListModel* basemaps = portal->basemaps3D();
               sortBasemapsAndAddToGallery(self, basemaps, true);
               emit self->basemapsChanged();
