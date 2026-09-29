@@ -617,12 +617,6 @@ namespace Esri::ArcGISRuntime::Toolkit
 
       for (auto* layer : *baseLayers)
       {
-        if (!reprojectableLayers.contains(layer->layerType()))
-        {
-          return layer->spatialReference();
-        }
-
-        // Check for group layer contents
         if (layer->layerType() == LayerType::GroupLayer)
         {
           if (auto* groupLayer = dynamic_cast<GroupLayer*>(layer))
@@ -634,7 +628,13 @@ namespace Esri::ArcGISRuntime::Toolkit
                 return subLayer->spatialReference();
               }
             }
+            continue;
           }
+        }
+
+        if (!reprojectableLayers.contains(layer->layerType()))
+        {
+          return layer->spatialReference();
         }
       }
       return {};
