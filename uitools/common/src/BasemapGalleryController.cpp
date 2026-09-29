@@ -250,15 +250,84 @@ namespace Esri::ArcGISRuntime::Toolkit
       }
     }
 
+    void remove3DBasemapsFromGallery(BasemapGalleryController* self)
+    {
+      const auto remove3DBasemaps = [self]()
+      {
+        for (int i = self->gallery()->rowCount() - 1; i >= 0; --i)
+        {
+          auto index = self->gallery()->index(i);
+          if (auto* galleryItem = self->gallery()->element<BasemapGalleryItem>(index))
+          {
+            if (galleryItem->is3D())
+            {
+              self->gallery()->removeRow(i);
+              onBasemapRemovedFromGallery(self, galleryItem);
+            }
+          }
+        }
+      };
+
+      if (self->geoModel() && qobject_cast<Scene*>(self->geoModel()))
+      {
+        remove3DBasemaps();
+      }
+    }
+
+    void add3DBasemapsToGallery(BasemapGalleryController* self)
+    {
+      const auto add3DBasemaps = [self]()
+      {
+        auto* portal = self->portal();
+        if (portal->basemaps3D()->isEmpty())
+        {
+          portal->fetch3DBasemapsAsync().then(self, [portal, self]()
+          {
+            // Ensure the portal is still the same and the geoModel is still a Scene before adding 3D basemaps to the gallery
+            if (portal != self->portal() || !qobject_cast<Scene*>(self->geoModel()))
+            {
+              return;
+            }
+            BasemapListModel* basemaps = portal->basemaps3D();
+            sortBasemapsAndAddToGallery(self, basemaps, true);
+            emit self->basemapsChanged();
+          });
+        }
+        else
+        {
+          sortBasemapsAndAddToGallery(self, portal->basemaps3D(), true);
+          emit self->basemapsChanged();
+        }
+      };
+      if (self->portal() && self->portal()->loadStatus() == LoadStatus::Loaded)
+      {
+        add3DBasemaps();
+      }
+      else
+      {
+        QObject::connect(self->portal(), &Portal::doneLoading, self, [self, add3DBasemaps](const Error& e)
+        {
+          if (!e.isEmpty())
+          {
+            qWarning() << "Failed to load portal. Error:" << e.message() << e.additionalMessage();
+            return;
+          }
+          add3DBasemaps();
+        }, Qt::SingleShotConnection);
+
+        self->portal()->load();
+      }
+    }
+
     /*!
       \internal
-      Removes all existing basemaps from the gallery and fetches new basemaps from the portal.
+      Adds appropriate basemaps to the gallery based on the current portal and geoModel.
       If the Portal is not authenticated, the developer basemaps are fetched, otherwise basemaps
       from the user's organization are fetched.
       If the currently connected GeoModel is a Scene, 3D basemaps are also fetched and added to the gallery.
       The new basemaps are sorted alphabetically by title and added to the gallery.
      */
-    void refreshBasemaps(BasemapGalleryController* self)
+    void setBasemapsInGallery(BasemapGalleryController* self)
     {
       const auto fetchBasemapsFromLoadedPortal = [](BasemapGalleryController* self)
       {
@@ -267,8 +336,6 @@ namespace Esri::ArcGISRuntime::Toolkit
         {
           return;
         }
-        // Clear all basemaps from the gallery.
-        self->gallery()->removeRows(0, self->gallery()->rowCount());
 
         // If the portal access is anonymous, portalUser will be null
         if (portal->portalUser())
@@ -318,25 +385,11 @@ namespace Esri::ArcGISRuntime::Toolkit
 
         if (qobject_cast<Scene*>(self->geoModel()))
         {
-          if (portal->basemaps3D()->isEmpty())
-          {
-            portal->fetch3DBasemapsAsync().then(self, [portal, self]()
-            {
-              // Ensure the portal is still the same and the geoModel is still a Scene before adding 3D basemaps to the gallery
-              if (portal != self->portal() || !qobject_cast<Scene*>(self->geoModel()))
-              {
-                return;
-              }
-              BasemapListModel* basemaps = portal->basemaps3D();
-              sortBasemapsAndAddToGallery(self, basemaps, true);
-              emit self->basemapsChanged();
-            });
-          }
-          else
-          {
-            sortBasemapsAndAddToGallery(self, portal->basemaps3D(), true);
-            emit self->basemapsChanged();
-          }
+          add3DBasemapsToGallery(self);
+        }
+        else
+        {
+          remove3DBasemapsFromGallery(self);
         }
       };
 
@@ -429,7 +482,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       }
     });
 
-    refreshBasemaps(this);
+    setBasemapsInGallery(this);
     // Have to set the property names, so the controller will know how to match the properties from
     // basemapgalleryitem with the specific Qt::<namespace> invoked in the .data() from the View (ListView) obj
     m_gallery->setDisplayPropertyName("name");
@@ -462,7 +515,14 @@ namespace Esri::ArcGISRuntime::Toolkit
     if (m_geoModel)
     {
       connectToGeoModel(this, m_geoModel);
-      refreshBasemaps(this);
+      if (qobject_cast<Scene*>(m_geoModel))
+      {
+        add3DBasemapsToGallery(this);
+      }
+      else
+      {
+        remove3DBasemapsFromGallery(this);
+      }
       setCurrentBasemap(geoModel->basemap());
     }
 
@@ -488,9 +548,13 @@ namespace Esri::ArcGISRuntime::Toolkit
       return;
     }
 
+    // If a portal is already set, disconnect from it and clear the gallery.
+    // This clears any user added basemaps because the credentials for any existing
+    // basemaps may be invalidated when the portal is changed.
     if (m_portal)
     {
       disconnect(m_portal, nullptr, this, nullptr);
+      m_gallery->removeRows(0, m_gallery->rowCount());
       if (m_portal->parent() == this)
       {
         // If we own the Portal we can delete it when
@@ -504,8 +568,8 @@ namespace Esri::ArcGISRuntime::Toolkit
 
     if (m_portal)
     {
-      // Replace the basemaps in the gallery with the new portal's basemaps.
-      refreshBasemaps(this);
+      // Add basemaps from the new portal to the gallery.
+      setBasemapsInGallery(this);
     }
 
     emit portalChanged();
