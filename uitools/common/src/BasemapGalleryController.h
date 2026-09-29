@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2021 Esri
+ *  Copyright 2012-2026 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -36,7 +36,6 @@ class QAbstractListModel;
 
 namespace Esri::ArcGISRuntime::Toolkit
 {
-
   class BasemapGalleryController : public QObject
   {
     Q_OBJECT
@@ -66,9 +65,9 @@ namespace Esri::ArcGISRuntime::Toolkit
     Q_INVOKABLE bool append(Basemap* basemap);
     Q_INVOKABLE bool append(Basemap* basemap, bool is3D);
     Q_INVOKABLE bool append(Basemap* basemap, QImage thumbnail, QString tooltip = {});
-    Q_INVOKABLE bool append(Basemap* basemap, QImage thumbnail, QString tooltip, bool is3D);
 
     Q_INVOKABLE int basemapIndex(Basemap* basemap) const;
+    Q_INVOKABLE int basemapIndexByItemId(Basemap* basemap) const;
 
     Q_INVOKABLE bool basemapMatchesCurrentSpatialReference(Basemap* basemap) const;
 
@@ -87,7 +86,6 @@ namespace Esri::ArcGISRuntime::Toolkit
     GenericListModel* m_gallery = nullptr;
     std::mutex m_galleryAccessMutex;
   };
-
 } // namespace Esri::ArcGISRuntime::Toolkit
 
 #endif // ESRI_ARCGISRUNTIME_TOOLKIT_BASEMAPGALLERYCONTROLLER_H

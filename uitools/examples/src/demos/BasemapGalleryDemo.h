@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2012-2022 Esri
+ *  Copyright 2012-2026 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,39 +17,20 @@
 #ifndef ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_BASEMAPGALLERYDEMO_H
 #define ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_BASEMAPGALLERYDEMO_H
 
+#include "BaseDemo.h"
+
 // Qt headers
 #include <QObject>
 #include <QQmlEngine>
 #include <QScopedPointer>
 
-// Other headers
-#include "BaseDemo.h"
-
-Q_MOC_INCLUDE("BasemapGalleryController.h")
-
-namespace Esri::ArcGISRuntime::Toolkit
-{
-  class BasemapGalleryController;
-} // namespace Esri::ArcGISRuntime::Toolkit
-
 class BasemapGalleryDemo : public BaseDemo
 {
   Q_OBJECT
   QML_ELEMENT
-  Q_PROPERTY(Esri::ArcGISRuntime::Toolkit::BasemapGalleryController* controller READ controller CONSTANT)
 public:
   Q_INVOKABLE BasemapGalleryDemo(QObject* parent = nullptr);
   ~BasemapGalleryDemo() override;
-
-  Esri::ArcGISRuntime::Toolkit::BasemapGalleryController* controller() const;
-
-protected:
-  Esri::ArcGISRuntime::Map* initMap_(QObject* parent) const override;
-  Esri::ArcGISRuntime::Scene* initGlobalScene_(QObject* parent) const override;
-  Esri::ArcGISRuntime::Scene* initLocalScene_(QObject* parent) const override;
-
-private:
-  Esri::ArcGISRuntime::Toolkit::BasemapGalleryController* m_controller;
 };
 
 #endif // ARCGIS_RUNTIME_TOOLKIT_CPP_QUICK_DEMO_BASEMAPGALLERYDEMO_H
