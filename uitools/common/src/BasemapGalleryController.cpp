@@ -276,6 +276,10 @@ namespace Esri::ArcGISRuntime::Toolkit
           {
             portal->fetchBasemapsAsync().then(self, [portal, self]()
             {
+              if (portal != self->portal())
+              {
+                return;
+              }
               BasemapListModel* basemaps = portal->basemaps();
               sortBasemapsAndAddToGallery(self, basemaps);
               emit self->basemapsChanged();
