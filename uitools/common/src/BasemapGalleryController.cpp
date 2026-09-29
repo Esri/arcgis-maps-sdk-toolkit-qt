@@ -469,7 +469,6 @@ namespace Esri::ArcGISRuntime::Toolkit
     if (m_portal)
     {
       disconnect(m_portal, nullptr, this, nullptr);
-      m_gallery->removeRows(0, m_gallery->rowCount());
       if (m_portal->parent() == this)
       {
         // If we own the Portal we can delete it when
