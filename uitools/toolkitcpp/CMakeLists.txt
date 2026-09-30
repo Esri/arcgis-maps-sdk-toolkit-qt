@@ -38,15 +38,18 @@ target_compile_definitions(libtoolkitcpp PRIVATE
     CPP_ARCGISRUNTIME_TOOLKIT
 )
 
+# Consumers must initialize the QtWebView before constructing QGuiApplication.
+# https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html#target-usage-requirements
 target_link_libraries(libtoolkitcpp PRIVATE
     Qt6::Core
     Qt6::Gui
     Qt6::QuickControls2
     Qt6::Svg
-    Qt6::WebView
     Qt6::Graphs
     Qt6::NetworkAuth
     ArcGISRuntime::Cpp
+    PUBLIC
+    Qt6::WebView
 )
 
 if(IOS)
