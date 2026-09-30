@@ -586,19 +586,16 @@ namespace Esri::ArcGISRuntime::Toolkit
 
       const auto findNonReprojectableLayer = [](auto&& findLayer, Layer* layer) -> Layer*
       {
-        if (layer->layerType() == LayerType::GroupLayer)
+        if (auto* groupLayer = dynamic_cast<GroupLayer*>(layer); groupLayer)
         {
-          if (auto* groupLayer = dynamic_cast<GroupLayer*>(layer))
+          for (auto* subLayer : *groupLayer->layers())
           {
-            for (auto* subLayer : *groupLayer->layers())
+            if (auto* result = findLayer(findLayer, subLayer); result)
             {
-              if (auto* result = findLayer(findLayer, subLayer))
-              {
-                return result;
-              }
+              return result;
             }
-            return nullptr;
           }
+          return nullptr;
         }
 
         return reprojectableLayers.contains(layer->layerType()) ? nullptr : layer;
