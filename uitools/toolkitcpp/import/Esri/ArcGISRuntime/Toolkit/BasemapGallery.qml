@@ -204,8 +204,8 @@ Pane {
             property bool isGrid: basemapGallery.internal.calculatedStyle === BasemapGallery.ViewStyle.Grid
             width: view.cellWidth
             height: view.cellHeight
-            enabled: controller.basemapMatchesCurrentSpatialReference(listModelData.basemap)
-            onClicked: controller.setCurrentBasemap(listModelData.basemap)
+            enabled: listModelData ? controller.basemapMatchesCurrentSpatialReference(listModelData.basemap) : false
+            onClicked: listModelData ? controller.setCurrentBasemap(listModelData.basemap) : null
             indicator: Item { }
             down: GridView.isCurrentItem
 
@@ -243,7 +243,7 @@ Pane {
                     anchors.margins: 5
                     width: basemapDelegate.isGrid ? view.cellWidth - anchors.margins * 2 : view.cellWidth - (basemapIcon.width + (anchors.margins * 2) + scrollBar.width)
                     height: basemapDelegate.isGrid ? view.cellHeight - (basemapIcon.height + (anchors.margins * 2)) : view.cellHeight - (anchors.margins * 2)
-                    text: listModelData.name === "" ? "Unnamed basemap" : listModelData.name
+                    text: listModelData ? (listModelData.name === "" ? "Unnamed basemap" : listModelData.name) : ""
                     elide: Text.ElideRight
                     wrapMode: Text.WordWrap
                     verticalAlignment: basemapDelegate.isGrid ? Qt.AlignTop : Qt.AlignVCenter
@@ -263,7 +263,7 @@ Pane {
                     width: height * 2
                     color: "lightgrey"
                     radius: 15
-                    visible: listModelData.is3D
+                    visible: listModelData ? listModelData.is3D : false
 
                     Text {
                         anchors.centerIn: parent

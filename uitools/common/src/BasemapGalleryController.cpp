@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
  *  Copyright 2012-2026 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -75,28 +75,14 @@ namespace Esri::ArcGISRuntime::Toolkit
         return;
       }
 
-      const auto listenToLoadSignals = [self](Basemap* basemap)
-      {
-        if (basemap)
-        {
-          if (basemap->loadStatus() != LoadStatus::Loaded)
-          {
-            QObject::connect(basemap, &Basemap::doneLoading, self, &BasemapGalleryController::currentBasemapChanged);
-          }
-        }
-      };
-
       // If basemap changes on map or scene, disconnect from basemap and
       // signal that basemap has changed.
-      QObject::connect(geoModel, &T::basemapChanged, self, [self, listenToLoadSignals, geoModel](Basemap* oldBasemap)
+      QObject::connect(geoModel, &T::basemapChanged, self, [self, geoModel](Basemap* oldBasemap)
       {
         QObject::disconnect(self, nullptr, oldBasemap, nullptr);
         auto* newBasemap = geoModel->basemap();
-        listenToLoadSignals(newBasemap); // Connect to new basemap.
         self->setCurrentBasemap(newBasemap);
       });
-
-      listenToLoadSignals(geoModel->basemap());
     }
 
     /*!
@@ -260,6 +246,9 @@ namespace Esri::ArcGISRuntime::Toolkit
      */
     void refreshBasemaps(BasemapGalleryController* self)
     {
+      // Clear all basemaps from the gallery.
+      self->gallery()->removeRows(0, self->gallery()->rowCount());
+
       const auto fetchBasemapsFromLoadedPortal = [](BasemapGalleryController* self)
       {
         auto* portal = self->portal();
@@ -267,77 +256,46 @@ namespace Esri::ArcGISRuntime::Toolkit
         {
           return;
         }
-        // Clear all basemaps from the gallery.
-        self->gallery()->removeRows(0, self->gallery()->rowCount());
 
-        // If the portal access is anonymous, portalUser will be null
-        if (portal->portalUser())
+        QList<QFuture<void>> futures;
+        if (!portal->portalUser() && portal->developerBasemaps()->isEmpty())
         {
-          if (portal->basemaps()->isEmpty())
+          futures.append(portal->fetchDeveloperBasemapsAsync());
+        }
+        if (portal->portalUser() && portal->basemaps()->isEmpty())
+        {
+          futures.append(portal->fetchBasemapsAsync());
+        }
+        if (qobject_cast<Scene*>(self->geoModel()) && portal->basemaps3D()->isEmpty())
+        {
+          futures.append(portal->fetch3DBasemapsAsync());
+        }
+
+        QtFuture::whenAll(futures.begin(), futures.end())
+          .then(self, [self, portal](const QList<QFuture<void>>&)
+        {
+          if (portal != self->portal())
           {
-            portal->fetchBasemapsAsync().then(self, [portal, self]()
-            {
-              // Ensure the portal is still the same before adding basemaps to the gallery
-              if (portal != self->portal())
-              {
-                return;
-              }
-              BasemapListModel* basemaps = portal->basemaps();
-              sortBasemapsAndAddToGallery(self, basemaps);
-              emit self->basemapsChanged();
-            });
+            return;
           }
-          else
+
+          if (qobject_cast<Scene*>(self->geoModel()))
+          {
+            sortBasemapsAndAddToGallery(self, portal->basemaps3D(), true);
+            emit self->basemapsChanged();
+          }
+
+          if (portal->portalUser())
           {
             sortBasemapsAndAddToGallery(self, portal->basemaps());
             emit self->basemapsChanged();
-          }
-        }
-        else
-        {
-          if (portal->developerBasemaps()->isEmpty())
-          {
-            portal->fetchDeveloperBasemapsAsync().then(self, [portal, self]()
-            {
-              // Ensure the portal is still the same before adding developer basemaps to the gallery
-              if (portal != self->portal())
-              {
-                return;
-              }
-              BasemapListModel* basemaps = portal->developerBasemaps();
-              sortBasemapsAndAddToGallery(self, basemaps);
-              emit self->basemapsChanged();
-            });
           }
           else
           {
             sortBasemapsAndAddToGallery(self, portal->developerBasemaps());
             emit self->basemapsChanged();
           }
-        }
-
-        if (qobject_cast<Scene*>(self->geoModel()))
-        {
-          if (portal->basemaps3D()->isEmpty())
-          {
-            portal->fetch3DBasemapsAsync().then(self, [portal, self]()
-            {
-              // Ensure the portal is still the same and the geoModel is still a Scene before adding 3D basemaps to the gallery
-              if (portal != self->portal() || !qobject_cast<Scene*>(self->geoModel()))
-              {
-                return;
-              }
-              BasemapListModel* basemaps = portal->basemaps3D();
-              sortBasemapsAndAddToGallery(self, basemaps, true);
-              emit self->basemapsChanged();
-            });
-          }
-          else
-          {
-            sortBasemapsAndAddToGallery(self, portal->basemaps3D(), true);
-            emit self->basemapsChanged();
-          }
-        }
+        });
       };
 
       if (!self->portal())
@@ -398,7 +356,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     });
 
     // Listen in to items removed from the gallery.
-    connect(m_gallery, &GenericListModel::rowsRemoved, this, [this](const QModelIndex& parent, int first, int last)
+    connect(m_gallery, &GenericListModel::rowsAboutToBeRemoved, this, [this](const QModelIndex& parent, int first, int last)
     {
       if (parent.isValid())
       {
@@ -452,18 +410,25 @@ namespace Esri::ArcGISRuntime::Toolkit
     {
       return;
     }
-
     if (m_geoModel)
     {
       disconnectFromGeoModel(this, m_geoModel);
     }
+    auto* oldGeoModelAsMap = qobject_cast<Map*>(m_geoModel);
+    auto* newGeoModelAsMap = qobject_cast<Map*>(geoModel);
+
+    const bool isDimensionChanged = (!!oldGeoModelAsMap != !!newGeoModelAsMap);
+
     m_geoModel = geoModel;
 
     if (m_geoModel)
     {
       connectToGeoModel(this, m_geoModel);
-      refreshBasemaps(this);
       setCurrentBasemap(geoModel->basemap());
+      if (isDimensionChanged)
+      {
+        refreshBasemaps(this);
+      }
     }
 
     emit geoModelChanged();
@@ -631,9 +596,11 @@ namespace Esri::ArcGISRuntime::Toolkit
     // Determine the spatial reference of the first non-reprojectable base layer in the basemap.
     const SpatialReference basemapSR = [](LayerListModel* baseLayers) -> SpatialReference
     {
+      // The following 3D layer types can be reprojected in any SR, so we ignore them when checking for SR compatibility.
+      // These layer types cannot be present in 2D basemaps, so it is not necessary to check if the GeoModel is a Map or Scene.
       static const QList<LayerType> reprojectableLayers = {LayerType::ArcGISSceneLayer, LayerType::IntegratedMeshLayer, LayerType::Ogc3dTilesLayer};
 
-      for (auto* layer : *baseLayers)
+      const auto findNonReprojectableLayer = [](auto&& findLayer, Layer* layer) -> Layer*
       {
         if (layer->layerType() == LayerType::GroupLayer)
         {
@@ -641,18 +608,24 @@ namespace Esri::ArcGISRuntime::Toolkit
           {
             for (auto* subLayer : *groupLayer->layers())
             {
-              if (!reprojectableLayers.contains(subLayer->layerType()))
+              if (auto* result = findLayer(findLayer, subLayer))
               {
-                return subLayer->spatialReference();
+                return result;
               }
             }
-            continue;
+            return nullptr;
           }
         }
 
-        if (!reprojectableLayers.contains(layer->layerType()))
+        return reprojectableLayers.contains(layer->layerType()) ? nullptr : layer;
+      };
+
+      for (auto* layer : *baseLayers)
+      {
+        if (auto* nonReprojectableLayer = findNonReprojectableLayer(findNonReprojectableLayer, layer))
         {
-          return layer->spatialReference();
+          // All base layers can be assumed to have the same spatial reference so we only need to check the first non-reprojectable layer.
+          return nonReprojectableLayer->spatialReference();
         }
       }
       return {};
@@ -660,11 +633,11 @@ namespace Esri::ArcGISRuntime::Toolkit
 
     if (basemapSR.isEmpty())
     {
-      // The basemap may not have tiled layers that cannot be reprojected, or may not be loaded
+      // The basemap may only contain layers that can be reprojected, or may not be loaded
       return true;
     }
 
-    // Check Scene GeoModels
+    // Check Global Scene GeoModels for SceneViewTilingScheme
     if (auto* scene = qobject_cast<Scene*>(m_geoModel))
     {
       // Global Scenes use Geographic and WebMercator SceneViewTilingSchemes while Local scenes use Automatic.
