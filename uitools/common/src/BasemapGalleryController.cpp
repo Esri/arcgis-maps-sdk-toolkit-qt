@@ -469,8 +469,47 @@ namespace Esri::ArcGISRuntime::Toolkit
 
     if (m_portal)
     {
-      // Replace the basemaps in the gallery with the new portal's basemaps.
-      refreshBasemaps(this);
+      // If portal basemaps are populated, add the contents to the gallery.
+      // Otherwise attempt a fetch of the contents then add to the gallery.
+      doOnLoaded(m_portal, this, [this]
+      {
+        if (m_portal->basemaps()->rowCount() > 0)
+        {
+          for (auto* basemap : *m_portal->basemaps())
+          {
+            append(basemap);
+          }
+        }
+        else
+        {
+          m_portal->fetchBasemapsAsync().then(this, [this]()
+          {
+            BasemapListModel* basemaps = m_portal->basemaps();
+            sortBasemapsAndAddToGallery(this, basemaps);
+            emit basemapsChanged();
+          });
+        }
+
+        if (qobject_cast<Scene*>(m_geoModel))
+        {
+          if (m_portal->basemaps3D()->rowCount() > 0)
+          {
+            for (auto* basemap : *m_portal->basemaps3D())
+            {
+              append(basemap);
+            }
+          }
+          else
+          {
+            m_portal->fetch3DBasemapsAsync().then(this, [this]()
+            {
+              BasemapListModel* basemaps = m_portal->basemaps3D();
+              sortBasemapsAndAddToGallery(this, basemaps, true);
+              emit basemapsChanged();
+            });
+          }
+        }
+      });
     }
 
     emit portalChanged();
@@ -602,19 +641,16 @@ namespace Esri::ArcGISRuntime::Toolkit
 
       const auto findNonReprojectableLayer = [](auto&& findLayer, Layer* layer) -> Layer*
       {
-        if (layer->layerType() == LayerType::GroupLayer)
+        if (auto* groupLayer = dynamic_cast<GroupLayer*>(layer); groupLayer)
         {
-          if (auto* groupLayer = dynamic_cast<GroupLayer*>(layer))
+          for (auto* subLayer : *groupLayer->layers())
           {
-            for (auto* subLayer : *groupLayer->layers())
+            if (auto* result = findLayer(findLayer, subLayer); result)
             {
-              if (auto* result = findLayer(findLayer, subLayer))
-              {
-                return result;
-              }
+              return result;
             }
-            return nullptr;
           }
+          return nullptr;
         }
 
         return reprojectableLayers.contains(layer->layerType()) ? nullptr : layer;
