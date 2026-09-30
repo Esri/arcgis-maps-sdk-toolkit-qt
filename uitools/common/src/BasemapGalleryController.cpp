@@ -1,5 +1,4 @@
-
-/*******************************************************************************
+﻿/*******************************************************************************
  *  Copyright 2012-2021 Esri
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,6 +27,7 @@
 #include <Basemap.h>
 #include <BasemapListModel.h>
 #include <Error.h>
+#include <GroupLayer.h>
 #include <Item.h>
 #include <Layer.h>
 #include <LayerListModel.h>
@@ -44,7 +44,6 @@
 
 namespace Esri::ArcGISRuntime::Toolkit
 {
-
   namespace
   {
     /*!
@@ -450,8 +449,7 @@ namespace Esri::ArcGISRuntime::Toolkit
         }
         else
         {
-          m_portal->fetchBasemapsAsync()
-          .then(this, [this]()
+          m_portal->fetchBasemapsAsync().then(this, [this]()
           {
             BasemapListModel* basemaps = m_portal->basemaps();
             sortBasemapsAndAddToGallery(this, basemaps);
@@ -568,51 +566,83 @@ namespace Esri::ArcGISRuntime::Toolkit
   {
     if (!basemap || !basemap->baseLayers() || basemap->baseLayers()->isEmpty())
     {
+      // If the basemap object doesn't exist or doesn't have layers, flag it as incompatible
       return false;
     }
 
-    const SpatialReference basemapSR = basemap->baseLayers()->first()->spatialReference();
-
-    if (basemapSR.isEmpty())
-    {
-      return true; // case used by the listview painter
-    }
-
+    // Check GeoModel
     if (!m_geoModel)
     {
+      // If the user has not set a GeoModel, do not flag any basemaps as incompatible
       return true;
     }
 
-    // For Global scenes using the Geographic tiling scheme, allow any geographic basemap SR.
+    // Determine the spatial reference of the first non-reprojectable base layer in the basemap.
+    const SpatialReference basemapSR = [](LayerListModel* baseLayers) -> SpatialReference
+    {
+      // The following 3D layer types can be reprojected in any SR, so we ignore them when checking for SR compatibility.
+      // These layer types cannot be present in 2D basemaps, so it is not necessary to check if the GeoModel is a Map or Scene.
+      static const QList<LayerType> reprojectableLayers = {LayerType::ArcGISSceneLayer, LayerType::IntegratedMeshLayer, LayerType::Ogc3dTilesLayer};
+
+      const auto findNonReprojectableLayer = [](auto&& findLayer, Layer* layer) -> Layer*
+      {
+        if (auto* groupLayer = dynamic_cast<GroupLayer*>(layer); groupLayer)
+        {
+          for (auto* subLayer : *groupLayer->layers())
+          {
+            if (auto* result = findLayer(findLayer, subLayer); result)
+            {
+              return result;
+            }
+          }
+          return nullptr;
+        }
+
+        return reprojectableLayers.contains(layer->layerType()) ? nullptr : layer;
+      };
+
+      for (auto* layer : *baseLayers)
+      {
+        if (auto* nonReprojectableLayer = findNonReprojectableLayer(findNonReprojectableLayer, layer))
+        {
+          // All base layers can be assumed to have the same spatial reference so we only need to check the first non-reprojectable layer.
+          return nonReprojectableLayer->spatialReference();
+        }
+      }
+      return {};
+    }(basemap->baseLayers());
+
+    if (basemapSR.isEmpty())
+    {
+      // The basemap may only contain layers that can be reprojected, or may not be loaded
+      return true;
+    }
+
+    // Check Global Scene GeoModels for SceneViewTilingScheme
     if (auto* scene = qobject_cast<Scene*>(m_geoModel))
     {
+      // Global Scenes use Geographic and WebMercator SceneViewTilingSchemes while Local scenes use Automatic.
+      // Therefore this check only affects Global Scenes
       if (scene->sceneViewTilingScheme() == SceneViewTilingScheme::Geographic)
       {
         return basemapSR.isGeographic();
       }
+      else if (scene->sceneViewTilingScheme() == SceneViewTilingScheme::WebMercator)
+      {
+        return basemapSR == SpatialReference::webMercator();
+      }
+      // else SceneViewTilingScheme::Automatic -- continue with Local Scene case
     }
 
-    const SpatialReference geoModelSR = [](GeoModel* geoModel)
+    // Map and Local Scene cases
+    if (m_geoModel->spatialReference().isEmpty())
     {
-      if (auto* scene = qobject_cast<Scene*>(geoModel))
-      {
-        // Local Scenes use SceneViewTilingScheme::Automatic, so won't engage with this logic
-        // Global Scenes are always in WGS84, but can support WebMercator SRs if the tiling Scheme is set to SceneViewTilingScheme::WebMercator
-        if (scene->sceneViewTilingScheme() == SceneViewTilingScheme::WebMercator)
-        {
-          return SpatialReference::webMercator();
-        }
-      }
-      return geoModel->spatialReference();
-    }(m_geoModel);
-
-    // If no spatial reference is set, any basemap can be applied.
-    if (geoModelSR.isEmpty())
-    {
+      // If no spatial reference is set, the GeoModel will use the SR of the basemap
       return true;
     }
 
-    return basemapSR == geoModelSR;
+    // Finally, check if the basemap spatial reference matches the GeoModel spatial reference
+    return basemapSR == m_geoModel->spatialReference();
   }
 
   void BasemapGalleryController::setGeoModelFromGeoView(QObject* view)
