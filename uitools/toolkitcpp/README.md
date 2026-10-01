@@ -48,7 +48,7 @@ These are the **Qt Quick UI components/QML Type** available to use:
 
 **qmake**
 
-- If you chose the **qmake** build system, edit your apps `TestNorthArrow.pro` file (it was created when you went through the ArcGIS Maps SDK for Qt template wizards), add an `include` statement that points to the path of the `toolkit.pri` file that you have on disk. 
+- If you chose the **qmake** build system, edit your apps `TestNorthArrow.pro` file (it was created when you went through the ArcGIS Maps SDK for Qt template wizards), add an `include` statement that points to the path of the `toolkitcpp.pri` file that you have on disk. 
 
 > ```qmake
 > ...
@@ -61,16 +61,17 @@ These are the **Qt Quick UI components/QML Type** available to use:
 
 **CMake**
 
-- If you chose the **CMake** build system, copy the `toolkitcpp` and the `common` subdirectories into your project's directory.
-
-- Edit the `CMakeLists.txt` in your Qt project (it was created when you went through the ArcGIS Maps SDK for Qt template wizards). Uncomment the `add_subdirectory` and `target_link_libraries` commands:
+- Edit the `CMakeLists.txt` in your Qt project (it was created when you went through the ArcGIS Maps SDK for Qt template wizards).
 
 > ```CMake
 > ...
-> # To integrate the toolkit, copy the `toolkitcpp` subdirectory from the toolkit
-> # into your project's directory. Then uncomment the following lines to add it to your project.
-> # See https://github.com/Esri/arcgis-maps-sdk-toolkit-qt for details
-> add_subdirectory(toolkitcpp)
+> # Locate the existing target_link_libraries(...) block in your project.
+> 
+> # Add these lines after the completed target_link_libraries(...) block.
+> 
+> # Set this to the directory where the arcgis-maps-sdk-toolkit-qt repository was cloned.
+> set(ARCGIS_TOOLKIT_PATH "C:/arcgis-maps-sdk-toolkit-qt")
+> add_subdirectory("${ARCGIS_TOOLKIT_PATH}/uitools/toolkitcpp" toolkitcpp)
 > target_link_libraries(${PROJECT_NAME} PRIVATE libtoolkitcpp)
 > ...
 > ```
