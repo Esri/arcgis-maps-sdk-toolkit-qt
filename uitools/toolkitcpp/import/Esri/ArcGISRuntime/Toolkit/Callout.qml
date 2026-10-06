@@ -224,9 +224,13 @@ Pane {
       When \l autoAdjustWidth is \c true, the content width is calculated dynamically
       and may be smaller than this value, but will be no greater than this value.
 
-      This property defaults to \c 300.
+              The default is \c 300 at a 12-point font size and scales proportionally
+              with the effective Qt font size, including changes after creation.
+              Setting this property explicitly disables the default font-based scaling.
+              This follows font changes supplied by Qt, not system text-scale settings
+              that Qt does not propagate to the font. Content padding is additional.
     */
-    property real maxWidth: 300
+            property real maxWidth: 300 * calloutFontInfo.pointSize / 12
 
     /*!
         \brief The signal emitted when the accessory button is clicked.
@@ -300,6 +304,11 @@ Pane {
 
     Component.onCompleted: {
         background.children.push(shapeTail.createObject())
+    }
+
+    FontInfo {
+        id: calloutFontInfo
+        font: root.font
     }
 
     contentItem: Item {
