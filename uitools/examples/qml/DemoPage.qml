@@ -275,6 +275,7 @@ Control {
         }
         Loader {
             id: geoViewLoader
+            clip: true
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.columnSpan: 7
