@@ -39,6 +39,11 @@ import Esri.ArcGISRuntime.Toolkit.Controller
      \endlist
 
      For more information, please see the CalloutData documentation.
+    When the callout becomes visible, it requests a polite screen-reader announcement
+    of the nonempty title and detail without moving keyboard focus. It uses the full
+    text, even when the labels are elided. Changes while visible do not trigger another
+    announcement. Set the content before showing the callout; reopening announces it again.
+    Announcement delivery depends on the platform and assistive technology.
      \image callout.png
      \snippet qml/demos/CalloutDemoForm.qml Set up Callout QML
 
@@ -241,6 +246,10 @@ Pane {
     implicitHeight: Math.max(45, implicitBackgroundHeight + topInset + bottomInset,
                              implicitContentHeight + topPadding + bottomPadding)
     visible: false
+    onVisibleChanged: {
+        if (visible)
+            Qt.callLater(internal.announceContents);
+    }
 
     x: {
         switch(internal.leaderPosition) {
@@ -604,6 +613,16 @@ Pane {
 
     QtObject {
         id: internal
+        function announceContents() {
+            if (!root.visible || !root.calloutData)
+                return;
+
+            const message = [root.calloutData.title, root.calloutData.detail]
+                .filter(text => text && text.trim().length > 0).join("\n");
+            if (message.length > 0)
+                root.Accessible.announce(message, Accessible.Polite);
+        }
+
         readonly property bool hasImage: image.source.toString() !== ""
         readonly property url buttonImageSource: {
             if (root.accessoryButtonType === "Info")
