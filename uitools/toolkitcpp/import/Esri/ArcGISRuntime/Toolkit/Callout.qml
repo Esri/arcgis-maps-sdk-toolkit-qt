@@ -179,7 +179,7 @@ Pane {
         The tooltip is shown on hover or keyboard focus when this text is not empty.
     */
     property string accessoryButtonToolTip: accessoryButtonType === "Info" ? qsTr("Show information")
-                                          : accessoryButtonType === "Add" ? qsTr("Add") : ""
+                                                                           : accessoryButtonType === "Add" ? qsTr("Add") : ""
 
     /*!
         \brief The url of the image to be used for the accessory button of the Callout if the type
@@ -229,13 +229,13 @@ Pane {
       When \l autoAdjustWidth is \c true, the content width is calculated dynamically
       and may be smaller than this value, but will be no greater than this value.
 
-              The default is \c 300 at a 12-point font size and scales proportionally
-              with the effective Qt font size, including changes after creation.
-              Setting this property explicitly disables the default font-based scaling.
-              This follows font changes supplied by Qt, not system text-scale settings
-              that Qt does not propagate to the font. Content padding is additional.
+      The default is \c 300 at a 12-point font size and scales proportionally
+      with the effective Qt font size, including changes after creation.
+      Setting this property explicitly disables the default font-based scaling.
+      This follows font changes supplied by Qt, not system text-scale settings
+      that Qt does not propagate to the font. Content padding is additional.
     */
-            property real maxWidth: 300 * calloutFontInfo.pointSize / 12
+    property real maxWidth: 300 * calloutFontInfo.pointSize / 12
 
     /*!
         \brief The signal emitted when the accessory button is clicked.
@@ -618,7 +618,7 @@ Pane {
                 return;
 
             const message = [root.calloutData.title, root.calloutData.detail]
-                .filter(text => text && text.trim().length > 0).join("\n");
+            .filter(text => text && text.trim().length > 0).join("\n");
             if (message.length > 0)
                 root.Accessible.announce(message, Accessible.Polite);
         }
