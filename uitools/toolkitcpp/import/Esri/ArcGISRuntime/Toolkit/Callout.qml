@@ -221,7 +221,9 @@ Pane {
     */
     signal accessoryButtonClicked()
 
-    implicitHeight: 100
+    contentWidth: contentItem ? contentItem.implicitWidth : 0
+    implicitHeight: Math.max(45, implicitBackgroundHeight + topInset + bottomInset,
+                             implicitContentHeight + topPadding + bottomPadding)
     visible: false
 
     x: {
@@ -288,97 +290,93 @@ Pane {
         background.children.push(shapeTail.createObject())
     }
 
-    contentItem: GridLayout {
-        id: calloutLayout
-        columns: 3
-        rows: 2
-        columnSpacing: 7
+    contentItem: Item {
+        implicitWidth: root.autoAdjustWidth ? Math.min(internal.widthLimit, internal.naturalWidth) : internal.widthLimit
+        implicitHeight: Math.max(textColumn.implicitHeight, internal.accessoryCount > 0 ? internal.accessorySize : 0)
 
-        Image {
-            id: image
-            source: calloutData ? calloutData.imageUrl : ""
-            Layout.rowSpan: 2
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            Layout.fillHeight: true
-            Layout.preferredWidth: 40
-            fillMode : Image.PreserveAspectFit
-            visible: source && source.toString() !== ""
-        }
-        Label {
-            id: title
-            text: calloutData ? calloutData.title : ""
-            wrapMode: Text.Wrap
-            clip: true
-            elide: Text.ElideRight
-            // Is visible (even when empty) if detail is visible, otherise
-            // row & columnspan offsets go askew.
-            visible: text || detail.visible
-            Layout.alignment: Qt.AlignVCenter
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.preferredWidth: autoAdjustWidth ? -1 : internal.labelWidthFrom.bind(this)(root.maxWidth)
-            Layout.maximumWidth: autoAdjustWidth ? internal.labelWidthFrom.bind(this)(root.maxWidth) : -1
-            Layout.columnSpan: {
-                let span = 1;
-                if (!accessoryButton.visible)
-                    span++;
-                if (!image.visible)
-                    span++;
+        RowLayout {
+            id: calloutLayout
+            width: Math.min(parent.width, internal.widthLimit)
+            height: parent.height
+            spacing: 0
 
-                return span;
+            Image {
+                id: image
+                source: root.calloutData ? root.calloutData.imageUrl : ""
+                sourceSize: Qt.size(40, 40)
+                fillMode: Image.PreserveAspectFit
+                visible: internal.hasImage
+                Layout.alignment: Qt.AlignVCenter
+                Layout.minimumWidth: internal.accessorySize
+                Layout.preferredWidth: internal.accessorySize
+                Layout.maximumWidth: internal.accessorySize
+                Layout.minimumHeight: internal.accessorySize
+                Layout.preferredHeight: internal.accessorySize
+                Layout.maximumHeight: internal.accessorySize
+                Layout.rightMargin: internal.hasText || internal.hasButton ? internal.elementSpacing : 0
             }
-            Layout.rowSpan: {
-                let span = 1;
-                if (!detail.visible)
-                    span++;
 
-                return span;
-            }
-        }
-        RoundButton {
-            id: accessoryButton
-            Layout.rowSpan: 2
-            Layout.alignment: Qt.AlignVCenter
-            Layout.preferredWidth: 40
-            Layout.columnSpan: {
-                let span = 1;
-                if (!title.visible && detail.visible)
-                    span++;
+            ColumnLayout {
+                id: textColumn
+                spacing: 5
+                Layout.alignment: Qt.AlignVCenter
+                Layout.fillWidth: true
+                Layout.minimumWidth: 0
+                Layout.preferredWidth: internal.textWidth
+                Layout.maximumWidth: internal.textWidth
+                Layout.rightMargin: internal.hasText && internal.hasButton ? internal.elementSpacing : 0
 
-                return span;
-            }
-            display: AbstractButton.IconOnly
-            topPadding: 0
-            bottomPadding: 0
-            leftPadding: 0
-            rightPadding: 0
-            flat: true
-            radius: 32
-            visible: accessoryButtonVisible && icon.source.toString() !== ""
-            onClicked: accessoryButtonClicked()
-            icon.source: {
-                if (accessoryButtonType === "Info")
-                    return "qrc:/Esri/ArcGISRuntime/Toolkit/information.svg";
-                else if (accessoryButtonType === "Add")
-                    return "qrc:/Esri/ArcGISRuntime/Toolkit/plus-circle.svg";
-                else if (accessoryButtonType === "Custom")
-                    return customImageUrl;
+                Label {
+                    id: title
+                    text: root.calloutData ? root.calloutData.title : ""
+                    textFormat: Text.PlainText
+                    wrapMode: Text.NoWrap
+                    maximumLineCount: 1
+                    clip: true
+                    elide: Text.ElideRight
+                    visible: text.length > 0
+                    Layout.fillWidth: true
+                    Layout.minimumWidth: 0
+                    Layout.maximumWidth: internal.textWidth
+                }
 
-                return "";
+                Label {
+                    id: detail
+                    text: root.calloutData ? root.calloutData.detail : ""
+                    textFormat: Text.PlainText
+                    wrapMode: Text.NoWrap
+                    maximumLineCount: 1
+                    elide: Text.ElideRight
+                    clip: true
+                    visible: text.length > 0
+                    Layout.fillWidth: true
+                    Layout.minimumWidth: 0
+                    Layout.maximumWidth: internal.textWidth
+                }
             }
-        }
-        Label {
-            id: detail
-            text: calloutData ? calloutData.detail : ""
-            wrapMode: Text.Wrap
-            elide: Text.ElideRight
-            clip: true
-            visible: text
-            Layout.alignment: Qt.AlignVCenter
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.preferredWidth: autoAdjustWidth ? -1 : internal.labelWidthFrom.bind(this)(root.maxWidth)
-            Layout.maximumWidth: autoAdjustWidth ? internal.labelWidthFrom.bind(this)(root.maxWidth) : -1
+
+            RoundButton {
+                id: accessoryButton
+                Layout.alignment: Qt.AlignVCenter
+                Layout.minimumWidth: internal.accessorySize
+                Layout.preferredWidth: internal.accessorySize
+                Layout.maximumWidth: internal.accessorySize
+                Layout.minimumHeight: internal.accessorySize
+                Layout.preferredHeight: internal.accessorySize
+                Layout.maximumHeight: internal.accessorySize
+                display: AbstractButton.IconOnly
+                topPadding: 0
+                bottomPadding: 0
+                leftPadding: 0
+                rightPadding: 0
+                icon.width: Math.min(24, internal.accessorySize)
+                icon.height: Math.min(24, internal.accessorySize)
+                flat: true
+                radius: 32
+                visible: internal.hasButton
+                onClicked: root.accessoryButtonClicked()
+                icon.source: internal.buttonImageSource
+            }
         }
     }
 
@@ -575,6 +573,30 @@ Pane {
 
     QtObject {
         id: internal
+        readonly property bool hasImage: image.source.toString() !== ""
+        readonly property url buttonImageSource: {
+            if (root.accessoryButtonType === "Info")
+                return "qrc:/Esri/ArcGISRuntime/Toolkit/information.svg";
+            else if (root.accessoryButtonType === "Add")
+                return "qrc:/Esri/ArcGISRuntime/Toolkit/plus-circle.svg";
+            else if (root.accessoryButtonType === "Custom")
+                return root.customImageUrl;
+
+            return "";
+        }
+        readonly property bool hasButton: root.accessoryButtonVisible && buttonImageSource.toString() !== ""
+        readonly property bool hasText: title.text.length > 0 || detail.text.length > 0
+        readonly property int accessoryCount: (hasImage ? 1 : 0) + (hasButton ? 1 : 0)
+        readonly property int gapCount: Math.max(0, accessoryCount + (hasText ? 1 : 0) - 1)
+        readonly property real widthLimit: Math.max(0, root.maxWidth)
+        readonly property real naturalWidth: accessoryCount * 40 + gapCount * 7
+                                             + Math.ceil(Math.max(title.text.length > 0 ? title.implicitWidth : 0,
+                                                                  detail.text.length > 0 ? detail.implicitWidth : 0))
+        readonly property real elementSpacing: gapCount > 0
+                                               ? Math.min(7, Math.max(0, calloutLayout.width - accessoryCount * 40) / gapCount) : 0
+        readonly property real accessorySize: accessoryCount > 0
+                                              ? Math.min(40, Math.max(0, calloutLayout.width - gapCount * elementSpacing) / accessoryCount) : 0
+        readonly property real textWidth: Math.max(0, calloutLayout.width - accessoryCount * accessorySize - gapCount * elementSpacing)
         property real anchorPointX: (calloutData ? calloutData.screenPoint.x : 0) + screenOffsetX
         property real anchorPointY: (calloutData ? calloutData.screenPoint.y : 0) + screenOffsetY
         // Is either the contents of root.leaderPosition, or a calculated LeaderPosition if root.leaderPosition
@@ -616,14 +638,6 @@ Pane {
                     root.dismiss();
                 }
             }
-        }
-        // Calculate the portion of property `width` allocated to the label `this`.
-        // Called via `labelWidthFrom.bind(label)(width)`.
-        function labelWidthFrom(width) {
-            if (!this.text)
-                return 0;
-
-            return width - (image.visible ? image.width : 0 ) - (accessoryButton.visible ? accessoryButton.width : 0);
         }
     }
 }
