@@ -31,7 +31,7 @@ DemoPage {
                 calloutData : view.calloutData
                 accessoryButtonVisible: false
                 leaderPosition: Callout.LeaderPosition.Automatic
-                maxWidth: 300
+                maxWidth: 250
             }
 
             CalloutDemo {
@@ -49,7 +49,7 @@ DemoPage {
                 calloutData : view.calloutData
                 accessoryButtonVisible: false
                 leaderPosition: Callout.LeaderPosition.Automatic
-                maxWidth: 300
+                maxWidth: 250
             }
 
             CalloutDemo {
@@ -68,7 +68,7 @@ DemoPage {
                 calloutData : view.calloutData //binding to parent. Any change is reflected on this
                 accessoryButtonVisible: false
                 leaderPosition: Callout.LeaderPosition.Automatic
-                maxWidth: 300
+                maxWidth: 250
             }
             //! [Set up Callout QML]
 
