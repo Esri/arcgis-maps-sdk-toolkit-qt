@@ -622,7 +622,7 @@ Pane {
             else if (anchorPointX < root.width / 2) {
                 return Callout.LeaderPosition.Left;
             }
-            else if (anchorPointY < root.height) {
+            else if (anchorPointY < root.height + root.leaderHeight) {
                 return Callout.LeaderPosition.Top;
             }
 
