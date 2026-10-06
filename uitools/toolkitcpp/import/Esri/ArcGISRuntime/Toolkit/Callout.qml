@@ -392,6 +392,12 @@ Pane {
                 visible: internal.hasButton
                 onClicked: root.accessoryButtonClicked()
                 icon.source: internal.buttonImageSource
+
+                Shortcut {
+                    sequence: "Escape"
+                    enabled: accessoryButton.ToolTip.visible
+                    onActivated: accessoryButton.ToolTip.hide()
+                }
             }
         }
     }
