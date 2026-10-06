@@ -165,6 +165,18 @@ Pane {
     property string accessoryButtonType: "Info"
 
     /*!
+        \brief The tooltip and accessible name of the accessory button.
+
+        The default is the translated text "Show information" for "Info", "Add" for
+        "Add", and an empty string for other button types. Set a meaningful action
+        description when using a "Custom" button or overriding the default action.
+
+        The tooltip is shown on hover or keyboard focus when this text is not empty.
+    */
+    property string accessoryButtonToolTip: accessoryButtonType === "Info" ? qsTr("Show information")
+                                          : accessoryButtonType === "Add" ? qsTr("Add") : ""
+
+    /*!
         \brief The url of the image to be used for the accessory button of the Callout if the type
         of the accessoryButton is "Custom".
     */
@@ -365,6 +377,10 @@ Pane {
                 Layout.preferredHeight: internal.accessorySize
                 Layout.maximumHeight: internal.accessorySize
                 display: AbstractButton.IconOnly
+                text: root.accessoryButtonToolTip
+                hoverEnabled: true
+                ToolTip.text: text
+                ToolTip.visible: visible && enabled && text.length > 0 && (hovered || visualFocus)
                 topPadding: 0
                 bottomPadding: 0
                 leftPadding: 0
