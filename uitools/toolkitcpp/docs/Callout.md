@@ -16,6 +16,6 @@ Set the title and detail before showing the callout. On each showing, it request
 
 Set `accessoryButtonToolTip` to a meaningful action name; it supplies both the tooltip and the button's accessible name.
 
-Announcement delivery and navigation depend on the platform, keyboard settings, and screen reader. Verify them in your application;
+Announcement delivery and navigation depend on the platform, keyboard settings, and screen reader. Verify them in your application.
 
 ![Callout image](https://developers.arcgis.com/qt/toolkit/api-reference/images/callout.png)
