@@ -20,6 +20,9 @@
 #include <QLabel>
 #include <QPixmap>
 
+// STL headers
+#include <Deprecated.h>
+
 namespace Esri::ArcGISRuntime
 {
 
@@ -41,11 +44,11 @@ namespace Esri::ArcGISRuntime
 
       ~NorthArrow() override;
 
-      QT_DEPRECATED_X("use setGeoViewWidget instead") void setMapView(MapGraphicsView* mapView);
+      QRT_DEPRECATED_SUGGEST("use setGeoViewWidget instead") void setMapView(MapGraphicsView* mapView);
 
-      QT_DEPRECATED_X("use setGeoViewWidget instead") void setSceneView(SceneGraphicsView* sceneView);
+      QRT_DEPRECATED_SUGGEST("use setGeoViewWidget instead") void setSceneView(SceneGraphicsView* sceneView);
 
-      QT_DEPRECATED_X("use setGeoViewWidget instead") void setLocalSceneView(LocalSceneWidget* localSceneView);
+      QRT_DEPRECATED_SUGGEST("use setGeoViewWidget instead") void setLocalSceneView(LocalSceneWidget* localSceneView);
 
       void setGeoViewWidget(NativeWidget* geoViewWidget);
 

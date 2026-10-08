@@ -19,6 +19,9 @@
 // Qt headers
 #include <QWidget>
 
+// STL headers
+#include <Deprecated.h>
+
 namespace Ui
 {
   class OverviewMap;
@@ -45,11 +48,11 @@ namespace Esri::ArcGISRuntime
 
       ~OverviewMap() override;
 
-      QT_DEPRECATED_X("use setGeoViewWidget instead") void setGeoView(MapGraphicsView* mapView);
+      QRT_DEPRECATED_SUGGEST("use setGeoViewWidget instead") void setGeoView(MapGraphicsView* mapView);
 
-      QT_DEPRECATED_X("use setGeoViewWidget instead") void setGeoView(SceneGraphicsView* sceneView);
+      QRT_DEPRECATED_SUGGEST("use setGeoViewWidget instead") void setGeoView(SceneGraphicsView* sceneView);
 
-      QT_DEPRECATED_X("use setGeoViewWidget instead") void setGeoView(LocalSceneWidget* localSceneView);
+      QRT_DEPRECATED_SUGGEST("use setGeoViewWidget instead") void setGeoView(LocalSceneWidget* localSceneView);
 
       void setGeoViewWidget(NativeWidget* geoViewWidget);
 
