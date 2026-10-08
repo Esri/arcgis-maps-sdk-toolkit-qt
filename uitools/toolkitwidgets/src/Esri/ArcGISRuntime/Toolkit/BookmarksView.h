@@ -30,6 +30,7 @@ namespace Esri::ArcGISRuntime
   class LocalSceneWidget;
   class MapGraphicsView;
   class SceneGraphicsView;
+  class NativeWidget;
 
   namespace Toolkit
   {
@@ -45,11 +46,13 @@ namespace Esri::ArcGISRuntime
 
       BookmarksViewController* controller() const;
 
-      void setMapView(MapGraphicsView* mapView);
+      QT_DEPRECATED_X("use setGeoViewWidget instead") void setMapView(MapGraphicsView* mapView);
 
-      void setSceneView(SceneGraphicsView* sceneView);
+      QT_DEPRECATED_X("use setGeoViewWidget instead") void setSceneView(SceneGraphicsView* sceneView);
 
-      void setLocalSceneView(LocalSceneWidget* localSceneView);
+      QT_DEPRECATED_X("use setGeoViewWidget instead") void setLocalSceneView(LocalSceneWidget* localSceneView);
+
+      void setGeoViewWidget(NativeWidget* geoViewWidget);
 
     private:
       BookmarksViewController* m_controller = nullptr;
