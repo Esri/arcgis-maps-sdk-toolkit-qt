@@ -32,6 +32,7 @@
 #include <Layer.h>
 #include <Map.h>
 #include <Scene.h>
+#include <SpatialReference.h>
 #include <Viewpoint.h>
 
 // Toolkit headers
@@ -82,6 +83,18 @@ namespace Esri::ArcGISRuntime::Toolkit
     return nullptr;
   }
 
+  static bool intersectsViewpoint(const Envelope& extent, const Geometry& targetGeometry)
+  {
+    if (extent.isEmpty() || targetGeometry.isEmpty())
+    {
+      return false;
+    }
+
+    // Site selection is horizontal; compare XY extents in the viewpoint's spatial reference.
+    const Envelope horizontalExtent(extent.xMin(), extent.yMin(), extent.xMax(), extent.yMax(), targetGeometry.spatialReference());
+    return GeometryEngine::intersects(horizontalExtent, targetGeometry);
+  }
+
   /*!
     \internal
     \brief Returns the FloorManager from the GeoView's model.
@@ -96,6 +109,15 @@ namespace Esri::ArcGISRuntime::Toolkit
         return map->floorManager();
       }
     }
+#ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
+    else if (auto* mapWidget = qobject_cast<MapWidgetToolkit*>(geoView))
+    {
+      if (auto* map = mapWidget->map())
+      {
+        return map->floorManager();
+      }
+    }
+#endif
     else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(geoView))
     {
       if (auto* scene = sceneView->arcGISScene())
@@ -103,6 +125,15 @@ namespace Esri::ArcGISRuntime::Toolkit
         return scene->floorManager();
       }
     }
+#ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
+    else if (auto* sceneWidget = qobject_cast<SceneWidgetToolkit*>(geoView))
+    {
+      if (auto* scene = sceneWidget->arcGISScene())
+      {
+        return scene->floorManager();
+      }
+    }
+#endif
     else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(geoView))
     {
       if (auto* scene = localSceneView->arcGISScene())
@@ -265,6 +296,22 @@ namespace Esri::ArcGISRuntime::Toolkit
         populateSites();
       });
     }
+#ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
+    else if (auto* mapWidget = qobject_cast<MapWidgetToolkit*>(m_geoView))
+    {
+      connectToGeoView(mapWidget, [this]
+      {
+        populateSites();
+      });
+    }
+    else if (auto* sceneWidget = qobject_cast<SceneWidgetToolkit*>(m_geoView))
+    {
+      connectToGeoView(sceneWidget, [this]
+      {
+        populateSites();
+      });
+    }
+#endif
   }
 
   QString FloorFilterController::selectedFacilityId() const
@@ -578,6 +625,16 @@ namespace Esri::ArcGISRuntime::Toolkit
     {
       observedViewpoint = mapView->currentViewpoint(ViewpointType::CenterAndScale);
     }
+#ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
+    else if (auto* sceneWidget = qobject_cast<SceneWidgetToolkit*>(m_geoView))
+    {
+      observedViewpoint = sceneWidget->currentViewpoint(ViewpointType::CenterAndScale);
+    }
+    else if (auto* mapWidget = qobject_cast<MapWidgetToolkit*>(m_geoView))
+    {
+      observedViewpoint = mapWidget->currentViewpoint(ViewpointType::CenterAndScale);
+    }
+#endif
 
     // Expectation: viewpoint is center and scale
     if (observedViewpoint.isEmpty() || std::isnan(observedViewpoint.targetScale()))
@@ -625,12 +682,14 @@ namespace Esri::ArcGISRuntime::Toolkit
       }
 
       auto extent = site->geometry().extent();
+      qDebug() << "extent json: " << extent.toJson();
+      qDebug() << "targetgeom json: " << observedViewpoint.targetGeometry().extent().toJson();
       if (extent.isEmpty())
       {
         return false;
       }
 
-      return GeometryEngine::intersects(extent, observedViewpoint.targetGeometry());
+      return intersectsViewpoint(extent, observedViewpoint.targetGeometry());
     });
 
     if (siteResult != std::cend(sites))
@@ -677,7 +736,7 @@ namespace Esri::ArcGISRuntime::Toolkit
         return false;
       }
 
-      return GeometryEngine::intersects(extent, observedViewpoint.targetGeometry());
+      return intersectsViewpoint(extent, observedViewpoint.targetGeometry());
     });
 
     if (facilityResult != std::cend(facilities))
@@ -736,5 +795,31 @@ namespace Esri::ArcGISRuntime::Toolkit
         }
       });
     }
+#ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
+    else if (auto* mapWidget = qobject_cast<MapWidgetToolkit*>(m_geoView))
+    {
+      m_settingViewpoint = true;
+      mapWidget->setViewpointAsync(Viewpoint(b.toEnvelope()))
+        .then(this, [this](bool success)
+      {
+        if (success)
+        {
+          m_settingViewpoint = false;
+        }
+      });
+    }
+    else if (auto* sceneWidget = qobject_cast<SceneWidgetToolkit*>(m_geoView))
+    {
+      m_settingViewpoint = true;
+      sceneWidget->setViewpointAsync(Viewpoint(b.toEnvelope()))
+        .then(this, [this](bool success)
+      {
+        if (success)
+        {
+          m_settingViewpoint = false;
+        }
+      });
+    }
+#endif
   }
 } // namespace Esri::ArcGISRuntime::Toolkit
