@@ -33,6 +33,7 @@ namespace Esri::ArcGISRuntime
 
   class LocalSceneWidget;
   class MapGraphicsView;
+  class NativeWidget;
   class SceneGraphicsView;
 
   namespace Toolkit
@@ -49,11 +50,13 @@ namespace Esri::ArcGISRuntime
 
       ~CoordinateConversion() override;
 
-      void setMapView(MapGraphicsView* mapView);
+      QT_DEPRECATED_X("use setGeoViewWidget instead") void setMapView(MapGraphicsView* mapView);
 
-      void setSceneView(SceneGraphicsView* sceneView);
-      
-      void setLocalSceneView(LocalSceneWidget* localSceneView);
+      QT_DEPRECATED_X("use setGeoViewWidget instead") void setSceneView(SceneGraphicsView* sceneView);
+
+      QT_DEPRECATED_X("use setGeoViewWidget instead") void setLocalSceneView(LocalSceneWidget* localSceneView);
+
+      void setGeoViewWidget(NativeWidget* geoViewWidget);
 
       CoordinateConversionController* controller() const;
 

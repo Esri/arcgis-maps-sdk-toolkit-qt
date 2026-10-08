@@ -31,10 +31,11 @@
 // ArcGISRuntime headers
 #include <LocalSceneWidget.h>
 #include <MapGraphicsView.h>
+#include <NativeWidget.h>
 #include <SceneGraphicsView.h>
 
 // Qt headers
-#include <QGraphicsEllipseItem>
+#include <QGraphicsView>
 #include <QItemDelegate>
 #include <QMenu>
 
@@ -89,6 +90,11 @@ namespace Esri::ArcGISRuntime::Toolkit
     connect(m_ui->zoomTo, &QPushButton::clicked, m_controller, &CoordinateConversionController::zoomToCurrentPoint);
 
     connect(m_ui->flash, &QPushButton::clicked, this, &CoordinateConversion::flash);
+
+    connect(m_controller, &CoordinateConversionController::geoViewChanged, this, [this]()
+    {
+      delete m_flash;
+    });
   }
 
   /*!
@@ -96,6 +102,7 @@ namespace Esri::ArcGISRuntime::Toolkit
    */
   CoordinateConversion::~CoordinateConversion()
   {
+    delete m_flash;
     delete m_ui;
   }
 
@@ -121,7 +128,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     m_controller->setGeoView(sceneView);
   }
 
-    /*!
+  /*!
     \brief Set the \c GeoView.
     \list
       \li \a localSceneView Sets the \c GeoView to a \c LocalSceneView.
@@ -130,6 +137,20 @@ namespace Esri::ArcGISRuntime::Toolkit
   void CoordinateConversion::setLocalSceneView(LocalSceneWidget* localSceneView)
   {
     m_controller->setGeoView(localSceneView);
+  }
+
+  /*!
+    \brief Sets the view to \a geoViewWidget.
+    \list
+      \li \a geoViewWidget Sets the \c GeoView to a \c NativeWidget.
+    \endlist
+
+    Supported views are \c MapWidget, \c SceneWidget, and \c LocalSceneWidget.
+    Passing \c nullptr detaches the current view.
+   */
+  void CoordinateConversion::setGeoViewWidget(NativeWidget* geoViewWidget)
+  {
+    m_controller->setGeoView(geoViewWidget);
   }
 
   /*!
@@ -195,24 +216,34 @@ namespace Esri::ArcGISRuntime::Toolkit
   {
     delete m_flash;
 
-    auto graphicsView = qobject_cast<QGraphicsView*>(m_controller->geoView());
-    if (!graphicsView)
+    QWidget* overlayHost = qobject_cast<NativeWidget*>(m_controller->geoView());
+    if (auto* graphicsView = qobject_cast<QGraphicsView*>(m_controller->geoView()))
+    {
+      overlayHost = graphicsView->viewport();
+    }
+    if (!overlayHost)
     {
       return;
     }
 
     const auto point = m_controller->screenCoordinate();
-    if (point.isNull() || std::isnan(point.x()) || std::isnan(point.y()))
+    if (!std::isfinite(point.x()) || !std::isfinite(point.y()) || point.x() < 0.0 || point.y() < 0.0 || point.x() >= overlayHost->width() ||
+        point.y() >= overlayHost->height())
     {
       return;
     }
 
-    m_flash = new Flash();
-    m_flash->setRadius(8);
+    constexpr int radius = 8;
+    m_flash = new Flash(overlayHost);
+    m_flash->setRadius(radius);
     m_flash->setTargetColor(QApplication::palette().color(QPalette::Highlight));
-    m_flash->setPoint(m_controller->screenCoordinate());
+    m_flash->setAttribute(Qt::WA_TransparentForMouseEvents);
+    m_flash->setFocusPolicy(Qt::NoFocus);
+    m_flash->setGeometry(QRect((point - QPointF(radius, radius)).toPoint(), QSize(2 * radius, 2 * radius)));
+    m_flash->setPoint(point - QPointF(m_flash->pos()));
+    m_flash->show();
+    m_flash->raise();
     m_flash->play(750);
-    graphicsView->scene()->addWidget(m_flash.data());
   }
 
 } // namespace Esri::ArcGISRuntime::Toolkit

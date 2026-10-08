@@ -38,12 +38,46 @@
 #include <SceneViewTypes.h>
 #include <Viewpoint.h>
 
+#include <type_traits>
+
 namespace Esri::ArcGISRuntime::Toolkit
 {
 
   namespace
   {
     constexpr double DEFAULT_ZOOM_TO_DISTANCE = 1500.0;
+  }
+
+  template<typename MapFunc, typename SceneFunc>
+  static bool applyToGeoView(QObject* geoView, MapFunc&& mapFunc, SceneFunc&& sceneFunc)
+  {
+    if (auto* mapView = qobject_cast<MapViewToolkit*>(geoView))
+    {
+      mapFunc(mapView);
+    }
+    else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(geoView))
+    {
+      sceneFunc(sceneView);
+    }
+    else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(geoView))
+    {
+      sceneFunc(localSceneView);
+    }
+#ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
+    else if (auto* mapWidget = qobject_cast<MapWidgetToolkit*>(geoView))
+    {
+      mapFunc(mapWidget);
+    }
+    else if (auto* sceneWidget = qobject_cast<SceneWidgetToolkit*>(geoView))
+    {
+      sceneFunc(sceneWidget);
+    }
+#endif
+    else
+    {
+      return false;
+    }
+    return true;
   }
 
   /*!
@@ -106,46 +140,18 @@ namespace Esri::ArcGISRuntime::Toolkit
 
     if (m_geoView)
     {
-      disconnect(this, nullptr, m_geoView, nullptr);
+      disconnect(m_geoView, nullptr, this, nullptr);
     }
 
+    ++m_geoViewGeneration;
+    m_screenToLocationFuture.cancel();
+    m_screenToLocationFuture = QFuture<Point>();
     m_geoView = geoView;
 
-    if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+    auto connectToMapView = [this](auto* mapView)
     {
-      connect(sceneView, &SceneViewToolkit::mouseClicked, this, [sceneView, this](QMouseEvent& event)
-      {
-        if (m_inPickingMode && !m_screenToLocationFuture.isRunning())
-        {
-          m_screenToLocationFuture = sceneView->screenToLocationAsync(event.pos().x(), event.pos().y());
-          m_screenToLocationFuture.then(this, [this](const Point& point)
-          {
-            setCurrentPoint(point);
-          });
-
-          event.accept();
-        }
-      });
-    }
-    else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
-    {
-      connect(localSceneView, &LocalSceneViewToolkit::mouseClicked, this, [localSceneView, this](QMouseEvent& event)
-      {
-        if (m_inPickingMode && !m_screenToLocationFuture.isRunning())
-        {
-          m_screenToLocationFuture = localSceneView->screenToLocationAsync(event.pos().x(), event.pos().y());
-          m_screenToLocationFuture.then(this, [this](const Point& point)
-          {
-            setCurrentPoint(point);
-          });
-
-          event.accept();
-        }
-      });
-    }
-    else if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView))
-    {
-      connect(mapView, &MapViewToolkit::mouseClicked, this, [mapView, this](QMouseEvent& event)
+      using ViewType = std::remove_pointer_t<decltype(mapView)>;
+      connect(mapView, &ViewType::mouseClicked, this, [mapView, this](QMouseEvent& event)
       {
         if (m_inPickingMode)
         {
@@ -153,7 +159,28 @@ namespace Esri::ArcGISRuntime::Toolkit
           event.accept();
         }
       });
-    }
+    };
+    auto connectToSceneView = [this](auto* sceneView)
+    {
+      using ViewType = std::remove_pointer_t<decltype(sceneView)>;
+      connect(sceneView, &ViewType::mouseClicked, this, [sceneView, this](QMouseEvent& event)
+      {
+        if (m_inPickingMode && !m_screenToLocationFuture.isRunning())
+        {
+          m_screenToLocationFuture = sceneView->screenToLocationAsync(event.pos().x(), event.pos().y());
+          m_screenToLocationFuture.then(this, [this, generation = m_geoViewGeneration](const Point& point)
+          {
+            if (generation == m_geoViewGeneration)
+            {
+              setCurrentPoint(point);
+            }
+          });
+
+          event.accept();
+        }
+      });
+    };
+    applyToGeoView(m_geoView, connectToMapView, connectToSceneView);
 
     emit geoViewChanged();
   }
@@ -171,11 +198,11 @@ namespace Esri::ArcGISRuntime::Toolkit
 
   void CoordinateConversionController::setCurrentPoint(const QString& point, CoordinateConversionOption* option)
   {
-    if (auto* geoView = qobject_cast<GeoView*>(m_geoView))
+    auto setPointFromView = [this, &point, option](auto* typedGeoView)
     {
-      setCurrentPoint(point, geoView->spatialReference(), option);
-    }
-    else
+      setCurrentPoint(point, typedGeoView->spatialReference(), option);
+    };
+    if (!applyToGeoView(m_geoView, setPointFromView, setPointFromView))
     {
       setCurrentPoint(point, SpatialReference(), option);
     }
@@ -202,7 +229,11 @@ namespace Esri::ArcGISRuntime::Toolkit
     // TODO additional work required here to show a coordinate on the "edge" of
     // the screen if coordinate is not in the current view.
     QPointF res(-1.0, -1.0);
-    if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+    auto projectFromMapView = [this, &res](auto* mapView)
+    {
+      res = mapView->locationToScreen(m_currentPoint);
+    };
+    auto projectFromSceneView = [this, &res](auto* sceneView)
     {
       const auto location = sceneView->locationToScreen(m_currentPoint);
       const auto lx = location.screenPoint().x();
@@ -216,26 +247,8 @@ namespace Esri::ArcGISRuntime::Toolkit
       {
         res = QPointF(lx, ly);
       }
-    }
-    else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
-    {
-      const auto location = localSceneView->locationToScreen(m_currentPoint);
-      const auto lx = location.screenPoint().x();
-      const auto ly = location.screenPoint().y();
-
-      if (location.visibility() == SceneLocationVisibility::NotOnScreen)
-      {
-        // TODO attach to edge of screen.
-      }
-      else
-      {
-        res = QPointF(lx, ly);
-      }
-    }
-    else if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView))
-    {
-      res = mapView->locationToScreen(m_currentPoint);
-    }
+    };
+    applyToGeoView(m_geoView, projectFromMapView, projectFromSceneView);
 
     return res;
   }
@@ -262,27 +275,21 @@ namespace Esri::ArcGISRuntime::Toolkit
 
   void CoordinateConversionController::zoomToCurrentPoint()
   {
-    if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
-    {
-      const Camera currentCam = sceneView->currentViewpointCamera();
-      const Camera newCam(m_currentPoint, m_zoomToDistance, currentCam.heading(), currentCam.pitch(), currentCam.roll());
-      auto future = sceneView->setViewpointCameraAsync(newCam, 1.0);
-      Q_UNUSED(future)
-    }
-    else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
-    {
-      const Camera currentCam = localSceneView->currentViewpointCamera();
-      const Camera newCam(m_currentPoint, m_zoomToDistance, currentCam.heading(), currentCam.pitch(), currentCam.roll());
-      auto future = localSceneView->setViewpointCameraAsync(newCam, 1.0);
-      Q_UNUSED(future)
-    }
-    else if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView))
+    auto zoomMapView = [this](auto* mapView)
     {
       const Viewpoint currVP = mapView->currentViewpoint(ViewpointType::CenterAndScale);
       const Viewpoint newViewPoint(m_currentPoint, currVP.targetScale());
       auto future = mapView->setViewpointAsync(newViewPoint, 1.0);
       Q_UNUSED(future)
-    }
+    };
+    auto zoomSceneView = [this](auto* sceneView)
+    {
+      const Camera currentCam = sceneView->currentViewpointCamera();
+      const Camera newCam(m_currentPoint, m_zoomToDistance, currentCam.heading(), currentCam.pitch(), currentCam.roll());
+      auto future = sceneView->setViewpointCameraAsync(newCam, 1.0);
+      Q_UNUSED(future)
+    };
+    applyToGeoView(m_geoView, zoomMapView, zoomSceneView);
   }
 
   void CoordinateConversionController::addNewCoordinateResultForOption(CoordinateConversionOption* option)
