@@ -4,6 +4,10 @@
 
 * The augmented reality (AR) toolkit components are removed.
 * Toolkit module version is changed from 300.0 to 3.0 because Qt's versioning system does not allow versions greater than 254.
+* Added `NativeWidget` support to BookmarksView, CoordinateConversion, FloorFilter, NorthArrow, and OverviewMap.
+* BasemapGallery already supports native widgets through its existing `GeoModel` API.
+* (GenericListModel) Fix removal of rows and ranges starting after row zero.
+* (CoordinateConversion) Use a shared child overlay to flash on native widgets and graphics-view viewports.
 
 ## 200.8
 
