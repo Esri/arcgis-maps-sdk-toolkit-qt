@@ -46,10 +46,10 @@ namespace Esri::ArcGISRuntime::Toolkit
   namespace
   {
     constexpr double DEFAULT_ZOOM_TO_DISTANCE = 1500.0;
-  }
+  } // namespace
 
   template<typename MapFunc, typename SceneFunc>
-  static bool applyToGeoView(QObject* geoView, MapFunc&& mapFunc, SceneFunc&& sceneFunc)
+  static bool applyToGeoView(QObject* geoView, const MapFunc& mapFunc, const SceneFunc& sceneFunc)
   {
     if (auto* mapView = qobject_cast<MapViewToolkit*>(geoView))
     {
@@ -108,7 +108,7 @@ namespace Esri::ArcGISRuntime::Toolkit
         for (int i = first; i <= last; ++i)
         {
           auto index = m_conversionResults->index(i);
-          auto result = m_conversionResults->element<CoordinateConversionResult>(index);
+          auto* result = m_conversionResults->element<CoordinateConversionResult>(index);
           if (result)
           {
             connect(this, &CoordinateConversionController::currentPointChanged, result, &CoordinateConversionResult::updateCoordinatePoint);
@@ -294,7 +294,7 @@ namespace Esri::ArcGISRuntime::Toolkit
 
   void CoordinateConversionController::addNewCoordinateResultForOption(CoordinateConversionOption* option)
   {
-    auto result = new CoordinateConversionResult(m_conversionResults);
+    auto* result = new CoordinateConversionResult(m_conversionResults);
     result->setType(option);
     result->updateCoordinatePoint(currentPoint());
     m_conversionResults->append(result);

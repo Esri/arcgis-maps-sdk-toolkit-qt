@@ -682,8 +682,6 @@ namespace Esri::ArcGISRuntime::Toolkit
       }
 
       auto extent = site->geometry().extent();
-      qDebug() << "extent json: " << extent.toJson();
-      qDebug() << "targetgeom json: " << observedViewpoint.targetGeometry().extent().toJson();
       if (extent.isEmpty())
       {
         return false;

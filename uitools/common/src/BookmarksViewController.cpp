@@ -39,7 +39,7 @@
 namespace Esri::ArcGISRuntime::Toolkit
 {
   template<typename Func>
-  static void applyToGeoView(QObject* geoView, Func&& func)
+  static void applyToGeoView(QObject* geoView, const Func& func)
   {
     if (auto* mapView = qobject_cast<MapViewToolkit*>(geoView))
     {

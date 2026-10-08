@@ -87,22 +87,22 @@ namespace Esri::ArcGISRuntime::Toolkit
       return mapView->mapRotation();
     }
 #ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
-    else if (auto* mapWidget = qobject_cast<MapWidgetToolkit*>(m_geoView))
+    if (auto* mapWidget = qobject_cast<MapWidgetToolkit*>(m_geoView))
     {
       return mapWidget->mapRotation();
     }
 #endif
-    else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+    if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
       return sceneView->currentViewpointCamera().heading();
     }
 #ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
-    else if (auto* sceneWidget = qobject_cast<SceneWidgetToolkit*>(m_geoView))
+    if (auto* sceneWidget = qobject_cast<SceneWidgetToolkit*>(m_geoView))
     {
       return sceneWidget->currentViewpointCamera().heading();
     }
 #endif
-    else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
+    if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
     {
       return localSceneView->currentViewpointCamera().heading();
     }
