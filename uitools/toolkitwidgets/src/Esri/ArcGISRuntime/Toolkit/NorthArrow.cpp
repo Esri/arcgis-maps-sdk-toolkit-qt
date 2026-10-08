@@ -22,6 +22,7 @@
 // ArcGISRuntime headers
 #include <LocalSceneWidget.h>
 #include <MapGraphicsView.h>
+#include <NativeWidget.h>
 #include <SceneGraphicsView.h>
 
 // Qt headers
@@ -118,6 +119,20 @@ namespace Esri::ArcGISRuntime::Toolkit
   void NorthArrow::setLocalSceneView(LocalSceneWidget* localSceneView)
   {
     m_controller->setGeoView(localSceneView);
+  }
+
+  /*!
+    \brief Sets the view to \a geoViewWidget.
+    \list
+      \li \a geoViewWidget Sets the \c GeoView to a \c NativeWidget.
+    \endlist
+
+    Supported views are \c MapWidget, \c SceneWidget, and \c LocalSceneWidget.
+    Passing \c nullptr detaches the current view.
+   */
+  void NorthArrow::setGeoViewWidget(NativeWidget* geoViewWidget)
+  {
+    m_controller->setGeoView(geoViewWidget);
   }
 
   /*!

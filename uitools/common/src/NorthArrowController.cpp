@@ -48,6 +48,13 @@ namespace Esri::ArcGISRuntime::Toolkit
       auto future = mapView->setViewpointRotationAsync(heading);
       Q_UNUSED(future)
     }
+#ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
+    else if (auto* mapWidget = qobject_cast<MapWidgetToolkit*>(m_geoView))
+    {
+      auto future = mapWidget->setViewpointRotationAsync(heading);
+      Q_UNUSED(future)
+    }
+#endif
     else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
       const Camera currentCamera = sceneView->currentViewpointCamera();
@@ -55,6 +62,15 @@ namespace Esri::ArcGISRuntime::Toolkit
       auto future = sceneView->setViewpointCameraAsync(updatedCamera, 0.50);
       Q_UNUSED(future)
     }
+#ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
+    else if (auto* sceneWidget = qobject_cast<SceneWidgetToolkit*>(m_geoView))
+    {
+      const Camera currentCamera = sceneWidget->currentViewpointCamera();
+      const Camera updatedCamera = currentCamera.rotateTo(heading, currentCamera.pitch(), currentCamera.roll());
+      auto future = sceneWidget->setViewpointCameraAsync(updatedCamera, 0.50);
+      Q_UNUSED(future)
+    }
+#endif
     else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
     {
       const Camera currentCamera = localSceneView->currentViewpointCamera();
@@ -70,10 +86,22 @@ namespace Esri::ArcGISRuntime::Toolkit
     {
       return mapView->mapRotation();
     }
+#ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
+    else if (auto* mapWidget = qobject_cast<MapWidgetToolkit*>(m_geoView))
+    {
+      return mapWidget->mapRotation();
+    }
+#endif
     else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
       return sceneView->currentViewpointCamera().heading();
     }
+#ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
+    else if (auto* sceneWidget = qobject_cast<SceneWidgetToolkit*>(m_geoView))
+    {
+      return sceneWidget->currentViewpointCamera().heading();
+    }
+#endif
     else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
     {
       return localSceneView->currentViewpointCamera().heading();
@@ -105,10 +133,22 @@ namespace Esri::ArcGISRuntime::Toolkit
     {
       connect(mapView, &MapViewToolkit::mapRotationChanged, this, &NorthArrowController::headingChanged);
     }
+#ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
+    else if (auto* mapWidget = qobject_cast<MapWidgetToolkit*>(m_geoView))
+    {
+      connect(mapWidget, &MapWidgetToolkit::mapRotationChanged, this, &NorthArrowController::headingChanged);
+    }
+#endif
     else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
     {
       connect(sceneView, &SceneViewToolkit::viewpointChanged, this, &NorthArrowController::headingChanged);
     }
+#ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
+    else if (auto* sceneWidget = qobject_cast<SceneWidgetToolkit*>(m_geoView))
+    {
+      connect(sceneWidget, &SceneWidgetToolkit::viewpointChanged, this, &NorthArrowController::headingChanged);
+    }
+#endif
     else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
     {
       connect(localSceneView, &LocalSceneViewToolkit::viewpointChanged, this, &NorthArrowController::headingChanged);
