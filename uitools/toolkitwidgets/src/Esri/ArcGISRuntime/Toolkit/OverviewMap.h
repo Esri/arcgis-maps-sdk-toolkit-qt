@@ -29,6 +29,7 @@ namespace Esri::ArcGISRuntime
 
   class LocalSceneWidget;
   class MapGraphicsView;
+  class NativeWidget;
   class SceneGraphicsView;
 
   namespace Toolkit
@@ -44,11 +45,13 @@ namespace Esri::ArcGISRuntime
 
       ~OverviewMap() override;
 
-      void setGeoView(MapGraphicsView* mapView);
+      QT_DEPRECATED_X("use setGeoViewWidget instead") void setGeoView(MapGraphicsView* mapView);
 
-      void setGeoView(SceneGraphicsView* sceneView);
+      QT_DEPRECATED_X("use setGeoViewWidget instead") void setGeoView(SceneGraphicsView* sceneView);
 
-      void setGeoView(LocalSceneWidget* localSceneView);
+      QT_DEPRECATED_X("use setGeoViewWidget instead") void setGeoView(LocalSceneWidget* localSceneView);
+
+      void setGeoViewWidget(NativeWidget* geoViewWidget);
 
       OverviewMapController* controller() const;
 
