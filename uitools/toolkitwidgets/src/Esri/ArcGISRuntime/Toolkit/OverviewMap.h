@@ -16,11 +16,11 @@
 #ifndef ESRI_ARCGISRUNTIME_OVERVIEWMAP_H
 #define ESRI_ARCGISRUNTIME_OVERVIEWMAP_H
 
+// C++ API headers
+#include "Deprecated.h"
+
 // Qt headers
 #include <QWidget>
-
-// STL headers
-#include <Deprecated.h>
 
 namespace Ui
 {

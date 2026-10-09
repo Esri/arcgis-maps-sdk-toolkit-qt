@@ -16,11 +16,13 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_FLOORFILTER_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_FLOORFILTER_H
 
+// C++ API headers
+#include "Deprecated.h"
+
 // Qt headers
 #include <QFrame>
 
 // STL headers
-#include <Deprecated.h>
 #include <memory>
 
 namespace Ui

@@ -16,12 +16,12 @@
 #ifndef ESRI_ARCGISRUNTIME_NORTHARROW_H
 #define ESRI_ARCGISRUNTIME_NORTHARROW_H
 
+// C++ API headers
+#include "Deprecated.h"
+
 // Qt headers
 #include <QLabel>
 #include <QPixmap>
-
-// STL headers
-#include <Deprecated.h>
 
 namespace Esri::ArcGISRuntime
 {

@@ -16,11 +16,11 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_BOOKMARKSVIEW_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_BOOKMARKSVIEW_H
 
+// C++ API headers
+#include "Deprecated.h"
+
 // Qt headers
 #include <QFrame>
-
-// STL headers
-#include <Deprecated.h>
 
 namespace Ui
 {

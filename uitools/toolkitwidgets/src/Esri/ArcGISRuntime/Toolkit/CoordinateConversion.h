@@ -16,12 +16,12 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_COORDIANTECONVERSION_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_COORDIANTECONVERSION_H
 
+// C++ API headers
+#include "Deprecated.h"
+
 // Qt headers
 #include <QFrame>
 #include <QPointer>
-
-// STL headers
-#include <Deprecated.h>
 
 class QGraphicsEllipseItem;
 class QMenu;
