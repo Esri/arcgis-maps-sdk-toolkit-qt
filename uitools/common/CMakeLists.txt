@@ -112,6 +112,7 @@ set(ESRI_ARCGISRUNTIME_TOOLKIT_COMMON_HEADERS
     ../common/src/UtilityNetworkTraceStartingPointsModel.h
     ../common/src/ArcGISAuthenticationChallengeRelay.h
     ../common/src/BasemapGalleryImageProvider.h
+    ../common/src/ApplyToGeoView.h
     ../common/src/DisconnectOnSignal.h
     ../common/src/DoOnLoad.h
     ../common/src/GenericListModel.h

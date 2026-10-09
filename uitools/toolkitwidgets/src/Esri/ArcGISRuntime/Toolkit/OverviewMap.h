@@ -16,6 +16,9 @@
 #ifndef ESRI_ARCGISRUNTIME_OVERVIEWMAP_H
 #define ESRI_ARCGISRUNTIME_OVERVIEWMAP_H
 
+// C++ API headers
+#include "Deprecated.h"
+
 // Qt headers
 #include <QWidget>
 
@@ -29,6 +32,7 @@ namespace Esri::ArcGISRuntime
 
   class LocalSceneWidget;
   class MapGraphicsView;
+  class NativeWidget;
   class SceneGraphicsView;
 
   namespace Toolkit
@@ -44,11 +48,13 @@ namespace Esri::ArcGISRuntime
 
       ~OverviewMap() override;
 
-      void setGeoView(MapGraphicsView* mapView);
+      QRT_DEPRECATED_SUGGEST("use setGeoViewWidget instead") void setGeoView(MapGraphicsView* mapView);
 
-      void setGeoView(SceneGraphicsView* sceneView);
+      QRT_DEPRECATED_SUGGEST("use setGeoViewWidget instead") void setGeoView(SceneGraphicsView* sceneView);
 
-      void setGeoView(LocalSceneWidget* localSceneView);
+      QRT_DEPRECATED_SUGGEST("use setGeoViewWidget instead") void setGeoView(LocalSceneWidget* localSceneView);
+
+      void setGeoViewWidget(NativeWidget* geoViewWidget);
 
       OverviewMapController* controller() const;
 

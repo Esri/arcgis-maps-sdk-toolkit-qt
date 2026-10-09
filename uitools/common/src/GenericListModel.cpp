@@ -58,35 +58,35 @@ namespace Esri::ArcGISRuntime::Toolkit
         \li Value
         \li Type
       \row
-      \li listModelData
-      \li \c{Qt::UserRole}
-      \li \c{Foo*}
-    \row
-    \li propertyA
-    \li \c{ Qt::UserRole + 1 }
-    \li \c {int}
-  \row
-  \li propertyB
-  \li \c{ Qt::UserRole + 2 }
-  \li \c {QString}
-  \row
-  \li propertyC
-  \li \c{ Qt::UserRole + 3}
-  \li \c {bool}
-  \endtable
+        \li listModelData
+        \li \c{Qt::UserRole}
+        \li \c{Foo*}
+      \row
+        \li propertyA
+        \li \c{ Qt::UserRole + 1 }
+        \li \c {int}
+      \row
+        \li propertyB
+        \li \c{ Qt::UserRole + 2 }
+        \li \c {QString}
+      \row
+        \li propertyC
+        \li \c{ Qt::UserRole + 3}
+        \li \c {bool}
+    \endtable
 
-  A hard-coded \e{listModelData} role is always exposed as \c Qt::UserRole,
-  followed by each property on \c Foo in order of declaration.
+    A hard-coded \e{listModelData} role is always exposed as \c Qt::UserRole,
+    followed by each property on \c Foo in order of declaration.
 
-  Both \c data and \c setData can be called respectively on these roles.
-  Likewise, every time a property updates, the notify signal will be consumed
-  and this model will emit a dataChanged signal.
+    Both \c data and \c setData can be called respectively on these roles.
+    Likewise, every time a property updates, the notify signal will be consumed
+    and this model will emit a dataChanged signal.
 
-  The class definition for a given \c QObject must have
-  a constructor of form \c{Q_INVOKABLE Foo(QObject* parent = nullptr)}.
-  An ElementType that does not have this form of constructor will trigger
-  undefined behaviour when insertRows is called.
- */
+    The class definition for a given \c QObject must have
+    a constructor of form \c{Q_INVOKABLE Foo(QObject* parent = nullptr)}.
+    An ElementType that does not have this form of constructor will trigger
+    undefined behaviour when insertRows is called.
+   */
 
   /*!
     \brief Constructor
@@ -329,22 +329,22 @@ namespace Esri::ArcGISRuntime::Toolkit
         \li Name
         \li Value
       \row
-      \li listModelData
-      \li \c{Qt::UserRole}
-    \row
-    \li propertyA
-    \li \c{ Qt::UserRole + 1 }
-  \row
-  \li propertyB
-  \li \c{ Qt::UserRole + 2 }
-  \li \c {QString}
-  \row
-  \li propertyC
-  \li \c{ Qt::UserRole + 3}
-  \endtable
+        \li listModelData
+        \li \c{Qt::UserRole}
+      \row
+        \li propertyA
+        \li \c{ Qt::UserRole + 1 }
+      \row
+        \li propertyB
+        \li \c{ Qt::UserRole + 2 }
+        \li \c {QString}
+      \row
+        \li propertyC
+        \li \c{ Qt::UserRole + 3}
+    \endtable
 
-  \sa elementType
- */
+    \sa elementType
+   */
   QHash<int, QByteArray> GenericListModel::roleNames() const
   {
     if (!m_elementType)
@@ -467,9 +467,9 @@ namespace Esri::ArcGISRuntime::Toolkit
     }
 
     beginRemoveRows(parent, row, row + count - 1);
-    for (int i = count - 1; i >= row; --i)
+    for (int index = row + count - 1; index >= row; --index)
     {
-      auto o = m_objects.at(i);
+      auto o = m_objects.at(index);
 
       // Ensure additional removal signals are not triggered.
       if (o && o->parent() == this)
@@ -478,7 +478,7 @@ namespace Esri::ArcGISRuntime::Toolkit
         delete o;
       }
 
-      m_objects.removeAt(i);
+      m_objects.removeAt(index);
     }
     endRemoveRows();
     return true;

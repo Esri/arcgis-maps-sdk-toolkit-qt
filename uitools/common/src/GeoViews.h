@@ -20,13 +20,17 @@
 
 #include <LocalSceneWidget.h>
 #include <MapGraphicsView.h>
+#include <MapWidget.h>
 #include <SceneGraphicsView.h>
+#include <SceneWidget.h>
 
 namespace Esri::ArcGISRuntime::Toolkit
 {
   using SceneViewToolkit = SceneGraphicsView;
   using LocalSceneViewToolkit = LocalSceneWidget;
   using MapViewToolkit = MapGraphicsView;
+  using SceneWidgetToolkit = SceneWidget;
+  using MapWidgetToolkit = MapWidget;
 } // namespace Esri::ArcGISRuntime::Toolkit
 
 #else
@@ -46,34 +50,31 @@ namespace Esri::ArcGISRuntime::Toolkit
 
 namespace Esri::ArcGISRuntime::Toolkit
 {
-  inline Map* getGeoModel(MapViewToolkit* mapView)
+  // Share model access across native widgets, graphics views, and Quick views without extra build guards.
+  // The decltype return types select the overload supported by the concrete view.
+  template<typename GeoViewType>
+  inline auto getGeoModel(GeoViewType* geoView) -> decltype(geoView->map())
   {
-    return mapView ? mapView->map() : nullptr;
+    return geoView ? geoView->map() : nullptr;
   }
 
-  inline Scene* getGeoModel(SceneViewToolkit* sceneView)
+  template<typename GeoViewType>
+  inline auto getGeoModel(GeoViewType* geoView) -> decltype(geoView->arcGISScene())
   {
-    return sceneView ? sceneView->arcGISScene() : nullptr;
+    return geoView ? geoView->arcGISScene() : nullptr;
   }
 
-  inline Scene* getGeoModel(LocalSceneViewToolkit* localSceneView)
+  // Select the available signal while preserving its concrete member-pointer type for typed QObject::connect calls.
+  template<typename GeoViewType>
+  inline auto getGeoModelChangedSignal(GeoViewType*) -> decltype(&GeoViewType::mapChanged)
   {
-    return localSceneView ? localSceneView->arcGISScene() : nullptr;
+    return &GeoViewType::mapChanged;
   }
 
-  inline auto getGeoModelChangedSignal(MapViewToolkit* /*mapView*/)
+  template<typename GeoViewType>
+  inline auto getGeoModelChangedSignal(GeoViewType*) -> decltype(&GeoViewType::sceneChanged)
   {
-    return &MapViewToolkit::mapChanged;
-  }
-
-  inline auto getGeoModelChangedSignal(SceneViewToolkit* /*sceneView*/)
-  {
-    return &SceneViewToolkit::sceneChanged;
-  }
-
-  inline auto getGeoModelChangedSignal(LocalSceneViewToolkit* /*localSceneView*/)
-  {
-    return &LocalSceneViewToolkit::sceneChanged;
+    return &GeoViewType::sceneChanged;
   }
 } // namespace Esri::ArcGISRuntime::Toolkit
 

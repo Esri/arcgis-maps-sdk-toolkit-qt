@@ -16,6 +16,9 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_BOOKMARKSVIEW_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_BOOKMARKSVIEW_H
 
+// C++ API headers
+#include "Deprecated.h"
+
 // Qt headers
 #include <QFrame>
 
@@ -30,6 +33,7 @@ namespace Esri::ArcGISRuntime
   class LocalSceneWidget;
   class MapGraphicsView;
   class SceneGraphicsView;
+  class NativeWidget;
 
   namespace Toolkit
   {
@@ -45,11 +49,13 @@ namespace Esri::ArcGISRuntime
 
       BookmarksViewController* controller() const;
 
-      void setMapView(MapGraphicsView* mapView);
+      QRT_DEPRECATED_SUGGEST("use setGeoViewWidget instead") void setMapView(MapGraphicsView* mapView);
 
-      void setSceneView(SceneGraphicsView* sceneView);
+      QRT_DEPRECATED_SUGGEST("use setGeoViewWidget instead") void setSceneView(SceneGraphicsView* sceneView);
 
-      void setLocalSceneView(LocalSceneWidget* localSceneView);
+      QRT_DEPRECATED_SUGGEST("use setGeoViewWidget instead") void setLocalSceneView(LocalSceneWidget* localSceneView);
+
+      void setGeoViewWidget(NativeWidget* geoViewWidget);
 
     private:
       BookmarksViewController* m_controller = nullptr;
