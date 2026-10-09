@@ -111,7 +111,6 @@ namespace Esri::ArcGISRuntime::Toolkit
       disconnect(m_geoView, nullptr, this, nullptr);
     }
 
-    ++m_geoViewGeneration;
     m_screenToLocationFuture.cancel();
     m_screenToLocationFuture = QFuture<Point>();
     m_geoView = geoView;
@@ -136,12 +135,9 @@ namespace Esri::ArcGISRuntime::Toolkit
         if (m_inPickingMode && !m_screenToLocationFuture.isRunning())
         {
           m_screenToLocationFuture = sceneView->screenToLocationAsync(event.pos().x(), event.pos().y());
-          m_screenToLocationFuture.then(this, [this, generation = m_geoViewGeneration](const Point& point)
+          m_screenToLocationFuture.then(this, [this](const Point& point)
           {
-            if (generation == m_geoViewGeneration)
-            {
-              setCurrentPoint(point);
-            }
+            setCurrentPoint(point);
           });
 
           event.accept();

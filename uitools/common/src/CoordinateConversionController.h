@@ -107,7 +107,6 @@ namespace Esri::ArcGISRuntime
       GenericListModel* m_coordinateFormats = nullptr;
       GenericListModel* m_conversionResults = nullptr;
       QObject* m_geoView = nullptr;
-      quint64 m_geoViewGeneration = 0;
       bool m_inPickingMode = false;
     };
 
