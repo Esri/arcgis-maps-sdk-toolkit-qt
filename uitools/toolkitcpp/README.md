@@ -84,6 +84,8 @@ These are the **Qt Quick UI components/QML Type** available to use:
 >
 > // Include the register.h file for the Qt toolkit
 > #include "Esri/ArcGISRuntime/Toolkit/register.h"
+> // Include Qt WebView for initializing
+> #include <QtWebView>
 > ...
 >
 > ...
