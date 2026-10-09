@@ -109,6 +109,20 @@ namespace Esri::ArcGISRuntime::Toolkit
         return map->floorManager();
       }
     }
+    else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(geoView))
+    {
+      if (auto* scene = sceneView->arcGISScene())
+      {
+        return scene->floorManager();
+      }
+    }
+    else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(geoView))
+    {
+      if (auto* scene = localSceneView->arcGISScene())
+      {
+        return scene->floorManager();
+      }
+    }
 #ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
     else if (auto* mapWidget = qobject_cast<MapWidgetToolkit*>(geoView))
     {
@@ -117,15 +131,6 @@ namespace Esri::ArcGISRuntime::Toolkit
         return map->floorManager();
       }
     }
-#endif
-    else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(geoView))
-    {
-      if (auto* scene = sceneView->arcGISScene())
-      {
-        return scene->floorManager();
-      }
-    }
-#ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
     else if (auto* sceneWidget = qobject_cast<SceneWidgetToolkit*>(geoView))
     {
       if (auto* scene = sceneWidget->arcGISScene())
@@ -134,13 +139,6 @@ namespace Esri::ArcGISRuntime::Toolkit
       }
     }
 #endif
-    else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(geoView))
-    {
-      if (auto* scene = localSceneView->arcGISScene())
-      {
-        return scene->floorManager();
-      }
-    }
     return nullptr;
   }
 
