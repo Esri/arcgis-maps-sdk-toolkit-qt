@@ -227,8 +227,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     }
 
     const auto point = m_controller->screenCoordinate();
-    if (!std::isfinite(point.x()) || !std::isfinite(point.y()) || point.x() < 0.0 || point.y() < 0.0 || point.x() >= overlayHost->width() ||
-        point.y() >= overlayHost->height())
+    if (point.x() < 0.0 || point.y() < 0.0 || point.x() >= overlayHost->width() || point.y() >= overlayHost->height())
     {
       return;
     }
