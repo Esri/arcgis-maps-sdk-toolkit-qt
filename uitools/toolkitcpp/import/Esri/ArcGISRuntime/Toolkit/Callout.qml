@@ -361,7 +361,7 @@ Pane {
                 Label {
                     id: title
                     text: root.calloutData ? root.calloutData.title : ""
-                    textFormat: Text.PlainText
+                    textFormat: Text.AutoText
                     wrapMode: Text.NoWrap
                     maximumLineCount: 1
                     clip: true
@@ -375,7 +375,7 @@ Pane {
                 Label {
                     id: detail
                     text: root.calloutData ? root.calloutData.detail : ""
-                    textFormat: Text.PlainText
+                    textFormat: Text.AutoText
                     wrapMode: Text.NoWrap
                     maximumLineCount: 1
                     elide: Text.ElideRight
