@@ -76,7 +76,7 @@ These are the **Qt Quick UI components/QML Type** available to use:
 > ...
 > ```
 
-**STEP 5:** In the `main.cpp` file, add an `include` statement near the top of the file to import the toolkit `register.h` file. Locate `QGuiApplication` and before that line initalize Qt WebView. Then later in the file call the `Toolkit::registerComponents()` function.
+**STEP 5:** In the `main.cpp` file, add an `include` statement near the top of the file to import the toolkit `register.h` file and then later in file call the `Toolkit::registerComponents()` function.
 
 > ```cpp
 > ...
@@ -86,9 +86,6 @@ These are the **Qt Quick UI components/QML Type** available to use:
 > #include "Esri/ArcGISRuntime/Toolkit/register.h"
 > ...
 >
-> ...
-> QtWebView::initialize(); // <-- Initialize Qt WebView before creating QGuiApplication
-> QGuiApplication app(argc, argv);
 > ...
 > QQmlApplicationEngine engine; // <-- Locate this existing line in your project
 >
