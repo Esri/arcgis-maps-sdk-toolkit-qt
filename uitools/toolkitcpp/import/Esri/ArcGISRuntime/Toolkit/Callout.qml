@@ -29,38 +29,40 @@ import Esri.ArcGISRuntime.Toolkit.Controller
     \since Esri.ArcGISRuntime 100.10
     \brief A view for displaying information at a geographic location on a Map.
 
-     A Callout can be displayed for several different scenarios:
+    A Callout can be displayed for several different scenarios:
 
-     \list
+    \list
         \li To display the coordinates where a user tapped on the map.
         \li To display information about a GeoElement that has been identified
         on the MapView.
         \li To display a callout at your current location.
-     \endlist
+    \endlist
 
-     For more information, please see the CalloutData documentation.
+    For more information, please see the CalloutData documentation.
+
     When the callout becomes visible, it requests a polite screen-reader announcement
     of the nonempty title and detail without moving keyboard focus. It uses the full
     text, even when the labels are elided. Changes while visible do not trigger another
     announcement. Set the content before showing the callout; reopening announces it again.
     Announcement delivery depends on the platform and assistive technology.
-     \image callout.png
-     \snippet qml/demos/CalloutDemoForm.qml Set up Callout QML
 
-     \note That the Callout has gone through a major revision as of ArcGISRuntime 100.14.
-     Part of this revision has been a change to the styling behaviour of the Callout, making the Callout
-     compliant with your currently applied theme. To revert to the classic Callout look, you can supply the
-     old style properties to the Callout as provided below.
+    \image callout.png
+    \snippet qml/demos/CalloutDemoForm.qml Set up Callout QML
 
-     \code
+    \note That the Callout has gone through a major revision as of ArcGISRuntime 100.14.
+    Part of this revision has been a change to the styling behaviour of the Callout, making the Callout
+    compliant with your currently applied theme. To revert to the classic Callout look, you can supply the
+    old style properties to the Callout as provided below.
+
+    \code
             Callout {
               calloutData: myCalloutData
             }
-     \endcode
+    \endcode
 
-     can be rewritten as:
+    can be rewritten as:
 
-     \code
+    \code
             Callout {
               calloutData: myCalloutData
               palette.windowText: "#000000"
@@ -74,7 +76,7 @@ import Esri.ArcGISRuntime.Toolkit.Controller
               leaderWidth: 20
               leaderPosition: Callout.LeaderPosition.Bottom
             }
-     \endcode
+    \endcode
 */
 Pane {
     id: root
@@ -212,28 +214,28 @@ Pane {
     }
 
     /*!
-      \brief When \c true, the width of the callout content automatically resizes up
-      to the value of \l maxWidth. When \c false, the content width will fixed
-      to the size of \l maxWidth.
+                \brief When \c true, the width of the callout content automatically resizes up
+                to the value of \l maxWidth. When \c false, the content width will fixed
+                to the size of \l maxWidth.
 
-      This property defaults to \c true.
+                This property defaults to \c true.
     */
     property bool autoAdjustWidth: true
 
     /*!
-      \brief The width of the callout contents.
+                \brief The width of the callout contents.
 
-      When \l autoAdjustWidth is \c false, the width of the
-      callout content will be fixed to this value.
+                When \l autoAdjustWidth is \c false, the width of the
+                callout content will be fixed to this value.
 
-      When \l autoAdjustWidth is \c true, the content width is calculated dynamically
-      and may be smaller than this value, but will be no greater than this value.
+                When \l autoAdjustWidth is \c true, the content width is calculated dynamically
+                and may be smaller than this value, but will be no greater than this value.
 
-      The default is \c 300 at a 12-point font size and scales proportionally
-      with the effective Qt font size, including changes after creation.
-      Setting this property explicitly disables the default font-based scaling.
-      This follows font changes supplied by Qt, not system text-scale settings
-      that Qt does not propagate to the font. Content padding is additional.
+                The default is \c 300 at a 12-point font size and scales proportionally
+                with the effective Qt font size, including changes after creation.
+                Setting this property explicitly disables the default font-based scaling.
+                This follows font changes supplied by Qt, not system text-scale settings
+                that Qt does not propagate to the font. Content padding is additional.
     */
     property real maxWidth: 300 * calloutFontInfo.pointSize / 12
 
