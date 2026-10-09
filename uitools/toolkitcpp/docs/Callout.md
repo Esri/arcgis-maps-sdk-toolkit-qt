@@ -10,4 +10,12 @@ The [Callout - Qt Quick UI/QML Type](https://developers.arcgis.com/qt/toolkit/ap
 
 For more information, please see the [CalloutData](https://developers.arcgis.com/qt/toolkit/api-reference/qml-callout.html#calloutData-prop) documentation.
 
+## Accessibility
+
+Set the title and detail before showing the callout. On each showing, it requests a polite announcement of the full text without moving focus. Empty content and text updates while visible do not trigger announcements.
+
+Set `accessoryButtonToolTip` to a meaningful action name; it supplies both the tooltip and the button's accessible name.
+
+Announcement delivery and navigation depend on the platform, keyboard settings, and screen reader. Verify them in your application.
+
 ![Callout image](https://developers.arcgis.com/qt/toolkit/api-reference/images/callout.png)
