@@ -20,9 +20,9 @@
 #include "CoordinateConversionController.h"
 
 // Toolkit headers
+#include "ApplyToGeoView.h"
 #include "CoordinateConversionResult.h"
 #include "CoordinateOptionDefaults.h"
-#include "GeoViews.h"
 
 // Qt headers
 #include <QMouseEvent>
@@ -47,38 +47,6 @@ namespace Esri::ArcGISRuntime::Toolkit
   {
     constexpr double DEFAULT_ZOOM_TO_DISTANCE = 1500.0;
   } // namespace
-
-  template<typename MapFunc, typename SceneFunc>
-  static bool applyToGeoView(QObject* geoView, const MapFunc& mapFunc, const SceneFunc& sceneFunc)
-  {
-    if (auto* mapView = qobject_cast<MapViewToolkit*>(geoView))
-    {
-      mapFunc(mapView);
-    }
-    else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(geoView))
-    {
-      sceneFunc(sceneView);
-    }
-    else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(geoView))
-    {
-      sceneFunc(localSceneView);
-    }
-#ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
-    else if (auto* mapWidget = qobject_cast<MapWidgetToolkit*>(geoView))
-    {
-      mapFunc(mapWidget);
-    }
-    else if (auto* sceneWidget = qobject_cast<SceneWidgetToolkit*>(geoView))
-    {
-      sceneFunc(sceneWidget);
-    }
-#endif
-    else
-    {
-      return false;
-    }
-    return true;
-  }
 
   /*!
     \class Esri::ArcGISRuntime::Toolkit::CoordinateConversionController

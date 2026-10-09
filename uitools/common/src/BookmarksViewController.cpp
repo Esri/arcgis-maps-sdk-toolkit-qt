@@ -20,6 +20,7 @@
 #include "BookmarksViewController.h"
 
 // Toolkit headers
+#include "ApplyToGeoView.h"
 #include "BookmarkListItem.h"
 #include "DisconnectOnSignal.h"
 #include "DoOnLoad.h"
@@ -38,33 +39,6 @@
 
 namespace Esri::ArcGISRuntime::Toolkit
 {
-  template<typename Func>
-  static void applyToGeoView(QObject* geoView, const Func& func)
-  {
-    if (auto* mapView = qobject_cast<MapViewToolkit*>(geoView))
-    {
-      func(mapView);
-    }
-    else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(geoView))
-    {
-      func(sceneView);
-    }
-    else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(geoView))
-    {
-      func(localSceneView);
-    }
-#ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
-    else if (auto* mapWidget = qobject_cast<MapWidgetToolkit*>(geoView))
-    {
-      func(mapWidget);
-    }
-    else if (auto* sceneWidget = qobject_cast<SceneWidgetToolkit*>(geoView))
-    {
-      func(sceneWidget);
-    }
-#endif
-  }
-
   static QList<QMetaObject::Connection> setupBookmarks(BookmarkListModel* sourceModel, GenericListModel* targetModel)
   {
     QList<QMetaObject::Connection> connections;
@@ -199,7 +173,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       connectToGeoModel();
     };
 
-    applyToGeoView(m_geoView, connectToGeoView);
+    applyToGeoView(m_geoView, connectToGeoView, connectToGeoView);
   }
 
   GenericListModel* BookmarksViewController::bookmarks() const
@@ -214,11 +188,12 @@ namespace Esri::ArcGISRuntime::Toolkit
       return;
     }
 
-    applyToGeoView(m_geoView, [bookmark](auto* typedGeoView)
+    const auto setBookmark = [bookmark](auto* typedGeoView)
     {
       auto future = typedGeoView->setBookmarkAsync(bookmark->bookmark());
       Q_UNUSED(future)
-    });
+    };
+    applyToGeoView(m_geoView, setBookmark, setBookmark);
   }
 
 } // namespace Esri::ArcGISRuntime::Toolkit
