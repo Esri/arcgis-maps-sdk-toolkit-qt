@@ -146,7 +146,6 @@ namespace Esri::ArcGISRuntime::Toolkit
     \endlist
 
     Supported views are \c MapWidget, \c SceneWidget, and \c LocalSceneWidget.
-    Passing \c nullptr detaches the current view.
    */
   void CoordinateConversion::setGeoViewWidget(NativeWidget* geoViewWidget)
   {
