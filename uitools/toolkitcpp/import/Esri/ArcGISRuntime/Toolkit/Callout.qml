@@ -237,7 +237,7 @@ Pane {
       This follows font changes supplied by Qt, not system text-scale settings
       that Qt does not propagate to the font. Content padding is additional.
     */
-    property real maxWidth: 300 * calloutFontInfo.pointSize / 18
+    property real maxWidth: 300 * root.font.pointSize / 18
 
     /*!
         \brief The signal emitted when the accessory button is clicked.
@@ -315,11 +315,6 @@ Pane {
 
     Component.onCompleted: {
         background.children.push(shapeTail.createObject())
-    }
-
-    FontInfo {
-        id: calloutFontInfo
-        font: root.font
     }
 
     contentItem: Item {
