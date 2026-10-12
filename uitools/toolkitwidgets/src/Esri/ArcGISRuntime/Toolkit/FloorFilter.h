@@ -16,6 +16,9 @@
 #ifndef ESRI_ARCGISRUNTIME_TOOLKIT_FLOORFILTER_H
 #define ESRI_ARCGISRUNTIME_TOOLKIT_FLOORFILTER_H
 
+// C++ API headers
+#include "Deprecated.h"
+
 // Qt headers
 #include <QFrame>
 
@@ -32,6 +35,7 @@ namespace Esri::ArcGISRuntime
 
   class LocalSceneWidget;
   class MapGraphicsView;
+  class NativeWidget;
   class SceneGraphicsView;
 
   namespace Toolkit
@@ -46,11 +50,13 @@ namespace Esri::ArcGISRuntime
 
       ~FloorFilter() override;
 
-      void setMapView(MapGraphicsView* mapView);
+      QRT_DEPRECATED_SUGGEST("use setGeoViewWidget instead") void setMapView(MapGraphicsView* mapView);
 
-      void setSceneView(SceneGraphicsView* sceneView);
+      QRT_DEPRECATED_SUGGEST("use setGeoViewWidget instead") void setSceneView(SceneGraphicsView* sceneView);
 
-      void setLocalSceneView(LocalSceneWidget* localSceneView);
+      QRT_DEPRECATED_SUGGEST("use setGeoViewWidget instead") void setLocalSceneView(LocalSceneWidget* localSceneView);
+
+      void setGeoViewWidget(NativeWidget* geoViewWidget);
 
       FloorFilterController* controller() const;
 

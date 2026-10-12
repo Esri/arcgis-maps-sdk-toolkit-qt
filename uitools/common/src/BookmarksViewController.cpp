@@ -20,6 +20,7 @@
 #include "BookmarksViewController.h"
 
 // Toolkit headers
+#include "ApplyToGeoView.h"
 #include "BookmarkListItem.h"
 #include "DisconnectOnSignal.h"
 #include "DoOnLoad.h"
@@ -27,6 +28,7 @@
 
 // Qt headers
 #include <QFuture>
+#include <QList>
 #include <QtGlobal>
 
 // ArcGISRuntime headers
@@ -37,10 +39,11 @@
 
 namespace Esri::ArcGISRuntime::Toolkit
 {
-  static void setupBookmarks(BookmarkListModel* sourceModel, GenericListModel* targetModel)
+  static QList<QMetaObject::Connection> setupBookmarks(BookmarkListModel* sourceModel, GenericListModel* targetModel)
   {
-    QObject::connect(sourceModel, &BookmarkListModel::rowsInserted, targetModel,
-                     [sourceModel, targetModel](const QModelIndex& parent, int first, int last)
+    QList<QMetaObject::Connection> connections;
+    connections.append(QObject::connect(sourceModel, &BookmarkListModel::rowsInserted, targetModel,
+                                        [sourceModel, targetModel](const QModelIndex& parent, int first, int last)
     {
       if (parent.isValid())
       {
@@ -61,9 +64,10 @@ namespace Esri::ArcGISRuntime::Toolkit
           targetItem->setBookmark(sourceModel->at(i));
         }
       }
-    });
+    }));
 
-    QObject::connect(sourceModel, &BookmarkListModel::rowsRemoved, targetModel, [targetModel](const QModelIndex& parent, int first, int last)
+    connections.append(QObject::connect(sourceModel, &BookmarkListModel::rowsRemoved, targetModel,
+                                        [targetModel](const QModelIndex& parent, int first, int last)
     {
       if (parent.isValid())
       {
@@ -71,10 +75,11 @@ namespace Esri::ArcGISRuntime::Toolkit
       }
 
       targetModel->removeRows(first, last - first + 1);
-    });
+    }));
 
-    QObject::connect(sourceModel, &BookmarkListModel::rowsMoved, targetModel,
-                     [targetModel](const QModelIndex& parent, int sourceRow, int end, const QModelIndex& destination, int destinationChild)
+    connections.append(
+      QObject::connect(sourceModel, &BookmarkListModel::rowsMoved, targetModel,
+                       [targetModel](const QModelIndex& parent, int sourceRow, int end, const QModelIndex& destination, int destinationChild)
     {
       if (parent.isValid() || destination.isValid())
       {
@@ -82,14 +87,15 @@ namespace Esri::ArcGISRuntime::Toolkit
       }
 
       targetModel->moveRows(QModelIndex{}, sourceRow, end - sourceRow + 1, QModelIndex{}, destinationChild);
-    });
+    }));
 
     QList<QObject*> targetItems;
-    for (auto bookmark : *sourceModel)
+    for (auto* bookmark : *sourceModel)
     {
       targetItems << new BookmarkListItem(bookmark, targetModel);
     }
     targetModel->append(targetItems);
+    return connections;
   }
 
   /*!
@@ -123,38 +129,9 @@ namespace Esri::ArcGISRuntime::Toolkit
     if (m_geoView)
     {
       disconnect(m_geoView, nullptr, this, nullptr);
-
-      if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView))
-      {
-        auto* map = mapView->map();
-
-        if (map && map->bookmarks())
-        {
-          disconnect(map->bookmarks(), nullptr, m_bookmarks, nullptr);
-        }
-      }
-      else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
-      {
-        auto* scene = sceneView->arcGISScene();
-
-        if (scene && scene->bookmarks())
-        {
-          disconnect(scene->bookmarks(), nullptr, m_bookmarks, nullptr);
-        }
-      }
-      else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
-      {
-        auto* scene = localSceneView->arcGISScene();
-
-        if (scene && scene->bookmarks())
-        {
-          disconnect(scene->bookmarks(), nullptr, m_bookmarks, nullptr);
-        }
-      }
-
-      m_bookmarks->clear();
     }
 
+    m_bookmarks->clear();
     m_geoView = geoView;
 
     // Important that this emit happens before the below connections,
@@ -162,29 +139,33 @@ namespace Esri::ArcGISRuntime::Toolkit
     emit geoViewChanged();
 
     // Manages the connection between Controller \a self and GeoView \a geoView.
-    // Attempts to call functor `f` if/when the Bookmark within the geoModel is loaded.
+    // Populates the bookmark list when the geoModel is loaded.
     // This may also cause the geoModel itself to load.
-    // Will continue to call `f` every time a mapChanged/sceneChanged signal is triggered on
-    // the GeoView.
-    auto connectToGeoView = [this](auto* typedGeoView, auto&& f)
+    // Reconnects every time a mapChanged/sceneChanged signal is triggered on the GeoView.
+    auto connectToGeoView = [this](auto* typedGeoView)
     {
-      auto connectToGeoModel = [this, typedGeoView, f]()
+      auto connectToGeoModel = [this, typedGeoView]()
       {
-        auto model = getGeoModel(typedGeoView);
+        m_bookmarks->clear();
+        auto* model = getGeoModel(typedGeoView);
         if (!model)
         {
           return;
         }
 
-        // Call `f` once the GeoModel is loaded.
-        auto c = doOnLoaded(model, this, [f]()
+        auto connection = doOnLoaded(model, this, [this, typedGeoView, model]()
         {
-          f();
+          const auto bookmarkConnections = setupBookmarks(model->bookmarks(), m_bookmarks);
+          for (const auto& bookmarkConnection : bookmarkConnections)
+          {
+            disconnectOnSignal(typedGeoView, getGeoModelChangedSignal(typedGeoView), this, bookmarkConnection);
+            disconnectOnSignal(this, &BookmarksViewController::geoViewChanged, this, bookmarkConnection);
+          }
         });
 
         // Tear down if map/scene or GeoView changes.
-        disconnectOnSignal(typedGeoView, getGeoModelChangedSignal(typedGeoView), this, c);
-        disconnectOnSignal(this, &BookmarksViewController::geoViewChanged, this, c);
+        disconnectOnSignal(typedGeoView, getGeoModelChangedSignal(typedGeoView), this, connection);
+        disconnectOnSignal(this, &BookmarksViewController::geoViewChanged, this, connection);
       };
 
       // Re-run when the map/scene changes.
@@ -192,43 +173,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       connectToGeoModel();
     };
 
-    if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView))
-    {
-      connect(mapView, &MapViewToolkit::mapChanged, this, [this]()
-      {
-        m_bookmarks->clear();
-      });
-
-      // `connectToGeoView` guarantees the map and/or scene exists as it is only invoked once the geomodel is loaded.
-      connectToGeoView(mapView, [this, mapView]
-      {
-        setupBookmarks(mapView->map()->bookmarks(), m_bookmarks);
-      });
-    }
-    else if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
-    {
-      connect(sceneView, &SceneViewToolkit::sceneChanged, this, [this]()
-      {
-        m_bookmarks->clear();
-      });
-
-      connectToGeoView(sceneView, [this, sceneView]
-      {
-        setupBookmarks(sceneView->arcGISScene()->bookmarks(), m_bookmarks);
-      });
-    }
-    else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
-    {
-      connect(localSceneView, &LocalSceneViewToolkit::sceneChanged, this, [this]()
-      {
-        m_bookmarks->clear();
-      });
-
-      connectToGeoView(localSceneView, [this, localSceneView]
-      {
-        setupBookmarks(localSceneView->arcGISScene()->bookmarks(), m_bookmarks);
-      });
-    }
+    applyToGeoView(m_geoView, connectToGeoView, connectToGeoView);
   }
 
   GenericListModel* BookmarksViewController::bookmarks() const
@@ -243,21 +188,12 @@ namespace Esri::ArcGISRuntime::Toolkit
       return;
     }
 
-    if (auto* sceneView = qobject_cast<SceneViewToolkit*>(m_geoView))
+    const auto setBookmark = [bookmark](auto* typedGeoView)
     {
-      auto future = sceneView->setBookmarkAsync(bookmark->bookmark());
+      auto future = typedGeoView->setBookmarkAsync(bookmark->bookmark());
       Q_UNUSED(future)
-    }
-    else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
-    {
-      auto future = localSceneView->setBookmarkAsync(bookmark->bookmark());
-      Q_UNUSED(future)
-    }
-    else if (auto* mapView = qobject_cast<MapViewToolkit*>(m_geoView))
-    {
-      auto future = mapView->setBookmarkAsync(bookmark->bookmark());
-      Q_UNUSED(future)
-    }
+    };
+    applyToGeoView(m_geoView, setBookmark, setBookmark);
   }
 
 } // namespace Esri::ArcGISRuntime::Toolkit

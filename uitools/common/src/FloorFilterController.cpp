@@ -32,6 +32,7 @@
 #include <Layer.h>
 #include <Map.h>
 #include <Scene.h>
+#include <SpatialReference.h>
 #include <Viewpoint.h>
 
 // Toolkit headers
@@ -110,6 +111,22 @@ namespace Esri::ArcGISRuntime::Toolkit
         return scene->floorManager();
       }
     }
+#ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
+    else if (auto* mapWidget = qobject_cast<MapWidgetToolkit*>(geoView))
+    {
+      if (auto* map = mapWidget->map())
+      {
+        return map->floorManager();
+      }
+    }
+    else if (auto* sceneWidget = qobject_cast<SceneWidgetToolkit*>(geoView))
+    {
+      if (auto* scene = sceneWidget->arcGISScene())
+      {
+        return scene->floorManager();
+      }
+    }
+#endif
     return nullptr;
   }
 
@@ -265,6 +282,22 @@ namespace Esri::ArcGISRuntime::Toolkit
         populateSites();
       });
     }
+#ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
+    else if (auto* mapWidget = qobject_cast<MapWidgetToolkit*>(m_geoView))
+    {
+      connectToGeoView(mapWidget, [this]
+      {
+        populateSites();
+      });
+    }
+    else if (auto* sceneWidget = qobject_cast<SceneWidgetToolkit*>(m_geoView))
+    {
+      connectToGeoView(sceneWidget, [this]
+      {
+        populateSites();
+      });
+    }
+#endif
   }
 
   QString FloorFilterController::selectedFacilityId() const
@@ -578,6 +611,16 @@ namespace Esri::ArcGISRuntime::Toolkit
     {
       observedViewpoint = mapView->currentViewpoint(ViewpointType::CenterAndScale);
     }
+#ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
+    else if (auto* sceneWidget = qobject_cast<SceneWidgetToolkit*>(m_geoView))
+    {
+      observedViewpoint = sceneWidget->currentViewpoint(ViewpointType::CenterAndScale);
+    }
+    else if (auto* mapWidget = qobject_cast<MapWidgetToolkit*>(m_geoView))
+    {
+      observedViewpoint = mapWidget->currentViewpoint(ViewpointType::CenterAndScale);
+    }
+#endif
 
     // Expectation: viewpoint is center and scale
     if (observedViewpoint.isEmpty() || std::isnan(observedViewpoint.targetScale()))
@@ -736,5 +779,31 @@ namespace Esri::ArcGISRuntime::Toolkit
         }
       });
     }
+#ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
+    else if (auto* mapWidget = qobject_cast<MapWidgetToolkit*>(m_geoView))
+    {
+      m_settingViewpoint = true;
+      mapWidget->setViewpointAsync(Viewpoint(b.toEnvelope()))
+        .then(this, [this](bool success)
+      {
+        if (success)
+        {
+          m_settingViewpoint = false;
+        }
+      });
+    }
+    else if (auto* sceneWidget = qobject_cast<SceneWidgetToolkit*>(m_geoView))
+    {
+      m_settingViewpoint = true;
+      sceneWidget->setViewpointAsync(Viewpoint(b.toEnvelope()))
+        .then(this, [this](bool success)
+      {
+        if (success)
+        {
+          m_settingViewpoint = false;
+        }
+      });
+    }
+#endif
   }
 } // namespace Esri::ArcGISRuntime::Toolkit
