@@ -83,18 +83,6 @@ namespace Esri::ArcGISRuntime::Toolkit
     return nullptr;
   }
 
-  static bool intersectsViewpoint(const Envelope& extent, const Geometry& targetGeometry)
-  {
-    if (extent.isEmpty() || targetGeometry.isEmpty())
-    {
-      return false;
-    }
-
-    // Site selection is horizontal; compare XY extents in the viewpoint's spatial reference.
-    const Envelope horizontalExtent(extent.xMin(), extent.yMin(), extent.xMax(), extent.yMax(), targetGeometry.spatialReference());
-    return GeometryEngine::intersects(horizontalExtent, targetGeometry);
-  }
-
   /*!
     \internal
     \brief Returns the FloorManager from the GeoView's model.
@@ -685,7 +673,7 @@ namespace Esri::ArcGISRuntime::Toolkit
         return false;
       }
 
-      return intersectsViewpoint(extent, observedViewpoint.targetGeometry());
+      return GeometryEngine::intersects(extent, observedViewpoint.targetGeometry());
     });
 
     if (siteResult != std::cend(sites))
@@ -732,7 +720,7 @@ namespace Esri::ArcGISRuntime::Toolkit
         return false;
       }
 
-      return intersectsViewpoint(extent, observedViewpoint.targetGeometry());
+      return GeometryEngine::intersects(extent, observedViewpoint.targetGeometry());
     });
 
     if (facilityResult != std::cend(facilities))
