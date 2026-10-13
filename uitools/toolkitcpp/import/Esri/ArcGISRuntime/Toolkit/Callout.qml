@@ -231,13 +231,13 @@ Pane {
       When \l autoAdjustWidth is \c true, the content width is calculated dynamically
       and may be smaller than this value, but will be no greater than this value.
 
-      The default is \c 300 at an 18-point font size and scales proportionally
+      The default is \c 300 at a 16-pixel font size and scales proportionally
       with the effective Qt font size, including changes after creation.
       Setting this property explicitly disables the default font-based scaling.
       This follows font changes supplied by Qt, not system text-scale settings
       that Qt does not propagate to the font. Content padding is additional.
     */
-    property real maxWidth: 300 * root.font.pointSize / 18
+    property real maxWidth: 300 * root.font.pixelSize / 16
 
     /*!
         \brief The signal emitted when the accessory button is clicked.
@@ -393,9 +393,8 @@ Pane {
                 Layout.maximumHeight: internal.accessorySize
                 display: AbstractButton.IconOnly
                 text: root.accessoryButtonToolTip
-                hoverEnabled: true
                 ToolTip.text: text
-                ToolTip.visible: visible && enabled && text.length > 0 && (hovered || visualFocus)
+                ToolTip.visible: visible && enabled && text.length > 0 && !toolTipSuppressed && (hovered || visualFocus)
                 topPadding: 0
                 bottomPadding: 0
                 leftPadding: 0
@@ -407,6 +406,11 @@ Pane {
                 visible: internal.hasButton
                 onClicked: root.accessoryButtonClicked()
                 icon.source: internal.buttonImageSource
+
+                property bool toolTipSuppressed: false
+                onPressedChanged: if (pressed) toolTipSuppressed = true
+                onHoveredChanged: if (hovered && !pressed) toolTipSuppressed = false
+                onVisualFocusChanged: if (visualFocus && !pressed) toolTipSuppressed = false
 
                 Shortcut {
                     sequence: "Escape"
