@@ -12,7 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #-------------------------------------------------
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.28)
 
 project(UitoolsExamples LANGUAGES CXX)
 
@@ -56,36 +56,13 @@ if(ANDROID)
   qt_add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 else()
   qt_add_executable(${PROJECT_NAME} MACOSX_BUNDLE ${SOURCE_FILES})
-  # IOS uses static Runtimecore Framework
   if(IOS)
-    # Workaround for the CMake version of https://bugreports.qt.io/browse/QTBUG-129651
-    # ArcGIS Maps SDK for Qt adds 'INSTALL_RPATH = ${FFMPEG_FRAMEWORKS}'
-    # which contains the path to the FFmpeg frameworks.
-    # This ensures that the FFmpeg frameworks are included in the application bundle.
-
-    if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.28")
-      qt_add_ios_ffmpeg_libraries(${PROJECT_NAME})
-    else()
-      set(FFMPEG_LIB_DIR "${QT6_INSTALL_PREFIX}/${QT6_INSTALL_LIBS}/ffmpeg")
-      if(Qt6Core_VERSION VERSION_LESS "6.8.3")
-        set(FRAMEWORK "framework")
-      else()
-        set(FRAMEWORK "xcframework")
-      endif()
-
-      set(FFMPEG_FRAMEWORKS
-        "${FFMPEG_LIB_DIR}/libavcodec.${FRAMEWORK}"
-        "${FFMPEG_LIB_DIR}/libavformat.${FRAMEWORK}"
-        "${FFMPEG_LIB_DIR}/libavutil.${FRAMEWORK}"
-        "${FFMPEG_LIB_DIR}/libswresample.${FRAMEWORK}"
-        "${FFMPEG_LIB_DIR}/libswscale.${FRAMEWORK}")
-      target_link_libraries(${PROJECT_NAME} PRIVATE ${FFMPEG_FRAMEWORKS})
-      set_target_properties(${PROJECT_NAME} PROPERTIES
-        INSTALL_RPATH "@executable_path/Frameworks;@loader_path/Frameworks"
-        XCODE_EMBED_FRAMEWORKS "${ArcGISRuntime_runtimecore_LIB};${FFMPEG_FRAMEWORKS}"
-        XCODE_EMBED_FRAMEWORKS_CODE_SIGN_ON_COPY TRUE
-        LINK_FLAGS "-F${FFMPEG_LIB_DIR} -F${ArcGISRuntime_runtimecore_LIB_DIR} -Wl,-rpath,@executable_path -Wl,-rpath,@loader_path/Frameworks")
-    endif()
+    qt_add_ios_ffmpeg_libraries(${PROJECT_NAME})
+    set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY XCODE_EMBED_FRAMEWORKS "${ArcGISRuntime_runtimecore_LIB}")
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+      INSTALL_RPATH "@executable_path/Frameworks;@loader_path/Frameworks"
+      XCODE_EMBED_FRAMEWORKS_CODE_SIGN_ON_COPY TRUE)
+    target_link_libraries(${PROJECT_NAME} PRIVATE "-framework CoreLocation")
   endif()
   # On MacOSX add icon to app bundle.
   set(MACOSX_BUNDLE_ICON_FILE AppIcon.icns)
