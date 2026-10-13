@@ -393,9 +393,8 @@ Pane {
                 Layout.maximumHeight: internal.accessorySize
                 display: AbstractButton.IconOnly
                 text: root.accessoryButtonToolTip
-                hoverEnabled: true
                 ToolTip.text: text
-                ToolTip.visible: visible && enabled && text.length > 0 && (hovered || visualFocus)
+                ToolTip.visible: visible && enabled && text.length > 0 && !toolTipSuppressed && (hovered || visualFocus)
                 topPadding: 0
                 bottomPadding: 0
                 leftPadding: 0
@@ -407,6 +406,11 @@ Pane {
                 visible: internal.hasButton
                 onClicked: root.accessoryButtonClicked()
                 icon.source: internal.buttonImageSource
+
+                property bool toolTipSuppressed: false
+                onPressedChanged: if (pressed) toolTipSuppressed = true
+                onHoveredChanged: if (hovered && !pressed) toolTipSuppressed = false
+                onVisualFocusChanged: if (visualFocus && !pressed) toolTipSuppressed = false
 
                 Shortcut {
                     sequence: "Escape"
