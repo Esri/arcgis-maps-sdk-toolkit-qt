@@ -60,7 +60,7 @@ else()
     qt_add_ios_ffmpeg_libraries(${PROJECT_NAME})
     set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY XCODE_EMBED_FRAMEWORKS "${ArcGISRuntime_runtimecore_LIB}")
     set_target_properties(${PROJECT_NAME} PROPERTIES
-      INSTALL_RPATH "@executable_path/Frameworks;@loader_path/Frameworks"
+      XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@executable_path/ @executable_path/Frameworks"
       XCODE_EMBED_FRAMEWORKS_CODE_SIGN_ON_COPY TRUE)
     target_link_libraries(${PROJECT_NAME} PRIVATE "-framework CoreLocation")
   endif()
