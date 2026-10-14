@@ -58,23 +58,52 @@ Pane {
         value: geoView
     }
 
+    Connections {
+        target: bookmarksView.geoView
+        ignoreUnknownSignals: true
+
+        function onMousePressed() {
+            if (listView.activeFocus) {
+                listView.keyboardFocusVisible = false;
+                bookmarksView.geoView.forceActiveFocus(Qt.MouseFocusReason);
+            }
+        }
+    }
+
     wheelEnabled: true
     hoverEnabled: true
 
     contentItem: ListView{
         id: listView
+        property bool keyboardFocusVisible: false
+        property bool includeListNameInCurrentItem: false
+
         model: controller.bookmarks
         clip: true
 
         // The list is a single tab stop. Up/Down, Home and End move the current bookmark;
         // only Enter, Space or a click moves the GeoView.
         activeFocusOnTab: count > 0
+        onActiveFocusChanged: {
+            keyboardFocusVisible = activeFocus;
+            includeListNameInCurrentItem = activeFocus;
+        }
         onCountChanged: {
             if (count > 0 && currentIndex < 0)
                 currentIndex = 0;
         }
         Keys.onPressed: event => {
-                            if (event.key === Qt.Key_Home) {
+                            keyboardFocusVisible = true;
+                            includeListNameInCurrentItem = false;
+                            if (event.key === Qt.Key_Up) {
+                                currentIndex = Math.max(0, currentIndex - 1);
+                                event.accepted = true;
+                            } else if (event.key === Qt.Key_Down) {
+                                currentIndex = Math.min(count - 1, currentIndex + 1);
+                                event.accepted = true;
+                            } else if (event.key === Qt.Key_Left || event.key === Qt.Key_Right) {
+                                event.accepted = true;
+                            } else if (event.key === Qt.Key_Home) {
                                 currentIndex = 0;
                                 event.accepted = true;
                             } else if (event.key === Qt.Key_End) {
@@ -90,25 +119,16 @@ Pane {
         ScrollBar.vertical: ScrollBar {
             active: true
             snapMode: ScrollBar.SnapOnRelease
-        }
-
-        Label {
-            objectName: "emptyLabel"
-            anchors.fill: parent
-            visible: listView.count === 0
-            text: qsTr("No bookmarks")
-            wrapMode: Text.Wrap
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
+            Accessible.ignored: true
         }
 
         delegate: ItemDelegate {
             id: bookmarkDelegate
+            property bool suppressStyleFocusRing: true
 
             function zoomToBookmark() {
                 listView.currentIndex = index;
                 controller.zoomToBookmarkExtent(listModelData);
-                bookmarksView.Accessible.announce(qsTr("Showing %1").arg(name), Accessible.Polite);
             }
 
             // `name` is a role within GenericListModel's BookmarkListItem specification.
@@ -121,13 +141,17 @@ Pane {
             contentItem: Label {
                 text: bookmarkDelegate.text
                 font: bookmarkDelegate.font
+                color: bookmarkDelegate.color
                 wrapMode: Text.Wrap
                 verticalAlignment: Text.AlignVCenter
                 // The row already carries the bookmark name.
                 Accessible.ignored: true
             }
 
-            Accessible.name: name
+            Accessible.role: Accessible.Button
+            Accessible.name: listView.includeListNameInCurrentItem && ListView.isCurrentItem
+                             ? qsTr("%1 list, %2").arg(listView.Accessible.name).arg(name)
+                             : name
             Accessible.focusable: true
             Accessible.selectable: true
             Accessible.selected: ListView.isCurrentItem
@@ -136,6 +160,12 @@ Pane {
                     listView.currentIndex = index;
             }
             onClicked: zoomToBookmark()
+            onPressedChanged: {
+                if (pressed) {
+                    listView.keyboardFocusVisible = false;
+                    listView.includeListNameInCurrentItem = false;
+                }
+            }
             Keys.onReturnPressed: zoomToBookmark()
             Keys.onEnterPressed: zoomToBookmark()
 
@@ -143,7 +173,7 @@ Pane {
             Rectangle {
                 objectName: "focusRing"
                 anchors.fill: parent
-                visible: bookmarkDelegate.ListView.isCurrentItem && listView.activeFocus
+                visible: bookmarkDelegate.ListView.isCurrentItem && listView.activeFocus && listView.keyboardFocusVisible
                 color: "transparent"
                 border.width: 2
                 border.color: bookmarkDelegate.contentItem.color
@@ -151,12 +181,13 @@ Pane {
         }
     }
 
-    implicitHeight: Math.min(listView.count > 0 ? Math.min(200 * bookmarksView.font.pointSize / 12,
-                                                           listView.contentHeight + topPadding + bottomPadding)
-                                                : 200 * bookmarksView.font.pointSize / 12,
-                             parent ? Math.max(0, parent.height - anchors.topMargin - anchors.bottomMargin)
-                                    : 200 * bookmarksView.font.pointSize / 12)
-    implicitWidth: Math.min(300 * bookmarksView.font.pointSize / 12,
-                            parent ? Math.max(0, parent.width - anchors.leftMargin - anchors.rightMargin)
-                                   : 300 * bookmarksView.font.pointSize / 12)
+    implicitHeight: {
+        const most = 200 * bookmarksView.font.pixelSize / 16;
+        const wanted = listView.count > 0 ? Math.min(most, listView.contentHeight + topPadding + bottomPadding) : most;
+        return Window.height > 0 ? Math.min(wanted, Window.height) : wanted;
+    }
+    implicitWidth: {
+        const most = 300 * bookmarksView.font.pixelSize / 16;
+        return Window.width > 0 ? Math.min(most, Window.width) : most;
+    }
 }
