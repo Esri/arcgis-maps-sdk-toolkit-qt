@@ -76,7 +76,6 @@ Pane {
     contentItem: ListView{
         id: listView
         property bool keyboardFocusVisible: false
-        property bool includeListNameInCurrentItem: false
 
         model: controller.bookmarks
         clip: true
@@ -84,17 +83,13 @@ Pane {
         // The list is a single tab stop. Up/Down, Home and End move the current bookmark;
         // only Enter, Space or a click moves the GeoView.
         activeFocusOnTab: count > 0
-        onActiveFocusChanged: {
-            keyboardFocusVisible = activeFocus;
-            includeListNameInCurrentItem = activeFocus;
-        }
+        onActiveFocusChanged: keyboardFocusVisible = activeFocus
         onCountChanged: {
             if (count > 0 && currentIndex < 0)
                 currentIndex = 0;
         }
         Keys.onPressed: event => {
                             keyboardFocusVisible = true;
-                            includeListNameInCurrentItem = false;
                             if (event.key === Qt.Key_Up) {
                                 currentIndex = Math.max(0, currentIndex - 1);
                                 event.accepted = true;
@@ -149,9 +144,7 @@ Pane {
             }
 
             Accessible.role: Accessible.Button
-            Accessible.name: listView.includeListNameInCurrentItem && ListView.isCurrentItem
-                             ? qsTr("%1 list, %2").arg(listView.Accessible.name).arg(name)
-                             : name
+            Accessible.name: name
             Accessible.focusable: true
             Accessible.selectable: true
             Accessible.selected: ListView.isCurrentItem
@@ -161,10 +154,8 @@ Pane {
             }
             onClicked: zoomToBookmark()
             onPressedChanged: {
-                if (pressed) {
+                if (pressed)
                     listView.keyboardFocusVisible = false;
-                    listView.includeListNameInCurrentItem = false;
-                }
             }
             Keys.onReturnPressed: zoomToBookmark()
             Keys.onEnterPressed: zoomToBookmark()
