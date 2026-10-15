@@ -162,7 +162,6 @@ Pane {
 
             // Keyboard focus indicator.
             Rectangle {
-                objectName: "focusRing"
                 anchors.fill: parent
                 visible: bookmarkDelegate.ListView.isCurrentItem && listView.activeFocus && listView.keyboardFocusVisible
                 color: "transparent"

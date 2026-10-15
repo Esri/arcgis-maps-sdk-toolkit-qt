@@ -42,7 +42,7 @@ T.ItemDelegate {
     icon.width: 16
     icon.height: 16
 
-    property color color : control.enabled ? Calcite.text1 : Calcite.text3
+    property color color: control.enabled ? control.hovered || control.down ? Calcite.offWhite : Calcite.text1 : Calcite.text3
     icon.color: color
 
     indicator: Image {
@@ -86,13 +86,12 @@ T.ItemDelegate {
     background: Rectangle {
         implicitWidth: 200
         implicitHeight: 40
-        // Hover, press and focus follow calcite-list-item: neutral fills, and an inset outline for keyboard focus.
-        color: control.down ? Calcite.foreground3 : control.hovered ? Calcite.foreground2 : "transparent"
+        color: control.down ? Calcite.brandPress : control.hovered ? Calcite.brand : "transparent"
 
         Rectangle {
             objectName: "focusRing"
             anchors.fill: parent
-            visible: control.visualFocus
+            visible: control.visualFocus && control["suppressStyleFocusRing"] !== true
             color: "transparent"
             border.width: 2
             border.color: Calcite.brand
