@@ -88,8 +88,8 @@ T.ItemDelegate {
         implicitHeight: 40
         color: control.down ? Calcite.brandPress : control.hovered ? Calcite.brand : "transparent"
 
+        // Callers with custom keyboard focus handling can suppress this style-provided keyboard focus ring.
         Rectangle {
-            objectName: "focusRing"
             anchors.fill: parent
             visible: control.visualFocus && control["suppressStyleFocusRing"] !== true
             color: "transparent"
