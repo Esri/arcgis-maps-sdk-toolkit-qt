@@ -33,7 +33,7 @@ import QtQuick.Layouts
     Enter in the text field searches for the typed text. The Down key moves into the list of suggestions
     or results, where Up and Down move between rows and Enter accepts the current one. Escape closes the
     suggestions. Anything typed while on a row goes to the text field. Assistive technologies see the text
-    field under its placeholder text.
+    field under its placeholder text, and are told how many suggestions or results arrived.
 
     \note By default, the SearchView will attempt to access the World Geocoding Service, which requires an \l{https://links.esri.com/create-an-api-key}{access token}.
 */
@@ -257,6 +257,34 @@ Pane {
                      && !controller.searchInProgress
             horizontalAlignment: Text.AlignHCenter
             wrapMode: Text.Wrap
+            onVisibleChanged: noResultAnnouncement.restart()
+        }
+
+        // Selecting a result empties the results just before the state changes, so the label is only
+        // announced once it has stayed up.
+        Timer {
+            id: noResultAnnouncement
+            interval: 250
+            onTriggered: {
+                if (noResultFoundLabel.visible)
+                    searchView.Accessible.announce(noResultFoundLabel.text, Accessible.Polite);
+            }
+        }
+
+        // Tells assistive technologies how many rows arrived, once the list has settled.
+        Timer {
+            id: countAnnouncement
+            interval: 700
+            onTriggered: {
+                if (!list.visible || list.count === 0)
+                    return;
+                let message;
+                if (searchView.state === "searchCommitted")
+                    message = list.count === 1 ? qsTr("1 result") : qsTr("%1 results").arg(list.count);
+                else
+                    message = list.count === 1 ? qsTr("1 suggestion") : qsTr("%1 suggestions").arg(list.count);
+                searchView.Accessible.announce(message, Accessible.Polite);
+            }
         }
 
         ListView {
@@ -273,7 +301,9 @@ Pane {
                 // Rows arrive after the list is created, which leaves no current item.
                 if (count > 0 && currentIndex < 0)
                     currentIndex = 0;
+                countAnnouncement.restart();
             }
+            onVisibleChanged: countAnnouncement.restart()
             Keys.onPressed: event => {
                 if ((event.key === Qt.Key_Return || event.key === Qt.Key_Enter) && currentIndex >= 0) {
                     // Handled here, not on the row, because the row may not have been created yet.
@@ -508,6 +538,7 @@ Pane {
             // state until the user interacts with the tool.
             if (controller.selectedResult !== null) {
                 searchView.state = "resultSelected";
+                searchView.Accessible.announce(qsTr("Showing %1").arg(controller.selectedResult.displayTitle), Accessible.Polite);
             }
         }
     }
