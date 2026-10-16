@@ -555,7 +555,6 @@ Pane {
             // state until the user interacts with the tool.
             if (controller.selectedResult !== null) {
                 searchView.state = "resultSelected";
-                searchView.Accessible.announce(qsTr("Showing %1").arg(controller.selectedResult.displayTitle), Accessible.Polite);
             }
         }
     }
