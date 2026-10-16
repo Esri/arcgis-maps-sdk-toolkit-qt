@@ -114,7 +114,6 @@ Pane {
 
         TextField {
             id: textField
-            objectName: "searchField"
             Layout.fillWidth: true
             // Keeps the 24px buttons inside the field at small font sizes.
             Layout.minimumHeight: 24
@@ -141,7 +140,6 @@ Pane {
 
             RoundButton {
                 id: searchButton
-                objectName: "searchButton"
                 // Not displayed; gives the button its accessible name.
                 text: qsTr("Search")
                 display: AbstractButton.IconOnly
@@ -167,7 +165,6 @@ Pane {
 
             RoundButton {
                 id: clearButton
-                objectName: "clearButton"
                 // Not displayed; gives the button its accessible name.
                 text: qsTr("Clear")
                 display: AbstractButton.IconOnly
@@ -226,7 +223,6 @@ Pane {
 
 
         Button {
-            objectName: "repeatButton"
             text: qsTr("Repeat search here.")
             Layout.fillWidth: true
             visible: {
@@ -257,7 +253,6 @@ Pane {
 
         Label {
             id: noResultFoundLabel
-            objectName: "noResultsLabel"
             text: qsTr("No results found.")
             Layout.fillWidth: true
             // Same gap below the text as the layout leaves above it.
@@ -298,7 +293,6 @@ Pane {
 
         ListView {
             id: list
-            objectName: "resultList"
             clip: true
             spacing: searchView.spacing
             cacheBuffer: Math.max(0, Math.ceil(contentHeight))
@@ -401,7 +395,6 @@ Pane {
                     rows: 2
                     Image {
                         id: sourceImage
-                        objectName: "markerImage"
                         Layout.rowSpan: 2
                         source: markerImageUrl
                         sourceSize.height: 32
@@ -418,7 +411,6 @@ Pane {
                     }
                     Label {
                         id: textLabel
-                        objectName: "titleLabel"
                         Layout.fillHeight: true
                         Layout.fillWidth: true
                         text: displayTitle
@@ -429,7 +421,6 @@ Pane {
                         Accessible.ignored: true
                     }
                     Label {
-                        objectName: "subtitleLabel"
                         Layout.fillWidth: true
                         text: displaySubtitle
                         visible: text !== ""
@@ -453,7 +444,6 @@ Pane {
 
                 // Keyboard focus indicator. Drawn in the text color so that it contrasts with the row in any style.
                 Rectangle {
-                    objectName: "focusRing"
                     anchors.fill: parent
                     visible: resultDelegate.ListView.isCurrentItem && list.activeFocus
                     color: "transparent"
