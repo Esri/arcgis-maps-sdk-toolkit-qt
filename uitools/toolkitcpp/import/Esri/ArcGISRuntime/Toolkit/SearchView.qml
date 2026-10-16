@@ -18,6 +18,7 @@ import Esri.ArcGISRuntime.Toolkit.Controller
 
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Effects
 import QtQuick.Layouts
 
 /*!
@@ -403,6 +404,14 @@ Pane {
                         source: markerImageUrl
                         sourceSize.height: 32
                         visible: searchView.state !== "searchCommitted"
+                        // The suggestion icons are black drawings; give them the text color so they follow the theme.
+                        layer.enabled: true
+                        layer.effect: MultiEffect {
+                            // Colorization keeps the source's lightness, so black is first raised to white.
+                            brightness: 1.0
+                            colorization: 1.0
+                            colorizationColor: textLabel.color
+                        }
                         Accessible.ignored: true
                     }
                     Label {
