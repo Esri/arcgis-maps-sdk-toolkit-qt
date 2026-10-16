@@ -18,6 +18,7 @@ import Esri.ArcGISRuntime.Toolkit.Controller
 
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Effects
 import QtQuick.Layouts
 
 /*!
@@ -29,6 +30,14 @@ import QtQuick.Layouts
     from a variety of sources, with suggestions.
     \image search.png search
     \snippet qml/demos/SearchViewDemoForm.qml Set up Search View QML
+
+    Enter in the text field searches for the typed text. The Down key moves into the list of suggestions
+    or results, where Up and Down move between rows and Enter accepts the current one. Escape closes the
+    suggestions. Anything typed while on a row goes to the text field. Assistive technologies see the text
+    field under its placeholder text, and are told how many suggestions or results arrived.
+
+    The default width is \c 300 at a 16-pixel font size and scales proportionally with the effective Qt
+    font size, including changes after creation. Setting \c width explicitly disables the font-based default.
 
     \note By default, the SearchView will attempt to access the World Geocoding Service, which requires an \l{https://links.esri.com/create-an-api-key}{access token}.
 */
@@ -83,6 +92,8 @@ Pane {
     property alias noResultMessage: noResultFoundLabel.text
 
     padding: 0
+    // Keeps the wheel from reaching the map under the view, also when the list cannot scroll further.
+    wheelEnabled: true
 
     states: [
         // State that is triggered when the user gains a valid selection result.
@@ -97,17 +108,29 @@ Pane {
 
     contentItem: ColumnLayout {
         id: searchContentItem
+
+        // Set when the user closes the suggestions with Escape, until the text is edited again.
+        property bool suggestionsDismissed: false
+
         TextField {
             id: textField
             Layout.fillWidth: true
+            // Keeps the 24px buttons inside the field at small font sizes.
+            Layout.minimumHeight: 24
             Layout.margins: 0
             placeholderText: controller.defaultPlaceholder
-            implicitWidth: 300
+            implicitWidth: 300 * searchView.font.pixelSize / 16
 
             leftPadding: searchButton.width + searchButton.leftPadding + searchButton.rightPadding
             rightPadding: clearButton.width + clearButton.leftPadding + clearButton.rightPadding
+            // Room above and below the text, so that the field is not dwarfed by the rows under it.
+            topPadding: 10
+            bottomPadding: 10
 
             property bool isUserEditing: true
+
+            Accessible.name: placeholderText
+            Accessible.searchEdit: true
 
             Binding {
                 target: controller
@@ -117,7 +140,12 @@ Pane {
 
             RoundButton {
                 id: searchButton
+                // Not displayed; gives the button its accessible name.
+                text: qsTr("Search")
+                display: AbstractButton.IconOnly
                 icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/search.svg"
+                // 24 is the WCAG 2.5.8 minimum target size.
+                height: Math.max(24, parent.height - 8)
                 width: height
                 flat: true
                 leftPadding: 2
@@ -126,9 +154,8 @@ Pane {
                 bottomPadding: 0
                 anchors {
                     left: parent.left
-                    top: parent.top
-                    bottom: parent.bottom
-                    margins: 4
+                    verticalCenter: parent.verticalCenter
+                    leftMargin: 4
                 }
 
                 onClicked: {
@@ -138,7 +165,12 @@ Pane {
 
             RoundButton {
                 id: clearButton
+                // Not displayed; gives the button its accessible name.
+                text: qsTr("Clear")
+                display: AbstractButton.IconOnly
                 icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/x.svg"
+                // 24 is the WCAG 2.5.8 minimum target size.
+                height: Math.max(24, parent.height - 8)
                 width: height
                 flat: true
                 leftPadding: 2
@@ -147,9 +179,8 @@ Pane {
                 bottomPadding: 0
                 anchors {
                     right: parent.right
-                    top: parent.top
-                    bottom: parent.bottom
-                    margins: 4
+                    verticalCenter: parent.verticalCenter
+                    rightMargin: 4
                 }
                 onClicked: {
                     controller.clearSearch();
@@ -158,25 +189,26 @@ Pane {
             }
 
             Keys.onPressed: event => {
-                if (event.key === Qt.Key_Up) {
-                    if (list.currentIndex === 0) {
-                        list.currentIndex = -1;
-                    } else {
-                        list.decrementCurrentIndex();
+                if (event.key === Qt.Key_Down) {
+                    // Down moves keyboard focus into the list. Enter in the field always searches the typed text.
+                    if (list.visible && list.count > 0) {
+                        if (list.currentIndex < 0)
+                            list.currentIndex = 0;
+                        list.forceActiveFocus(Qt.TabFocusReason);
                     }
-
                     event.accepted = true;
-                } else if (event.key === Qt.Key_Down) {
-                    list.incrementCurrentIndex();
+                } else if (event.key === Qt.Key_Escape && list.visible && searchView.state === "") {
+                    searchContentItem.suggestionsDismissed = true;
                     event.accepted = true;
                 }
             }
-            onAccepted: searchContentItem.acceptDropdownItem(list.currentIndex);
+            onAccepted: searchContentItem.acceptDropdownItem(-1);
             onTextChanged: {
                 // Bring us back to the user seeing suggestions. This changes the
                 // state, but does not unselect any on-screen results.
                 if (isUserEditing) {
-                    list.currentIndex = -1;
+                    list.currentIndex = 0;
+                    searchContentItem.suggestionsDismissed = false;
                     searchView.state = "";
                 }
             }
@@ -191,7 +223,7 @@ Pane {
 
 
         Button {
-            text: "Repeat search here."
+            text: qsTr("Repeat search here.")
             Layout.fillWidth: true
             visible: {
                 if (!repeatSearchHereButtonEnabled) {
@@ -221,10 +253,42 @@ Pane {
 
         Label {
             id: noResultFoundLabel
-            text: "No results found."
+            text: qsTr("No results found.")
             Layout.fillWidth: true
+            // Same gap below the text as the layout leaves above it.
+            Layout.bottomMargin: searchContentItem.spacing
             visible: resultListViewEnabled && searchView.state === "searchCommitted" && controller.results.count === 0
+                     && !controller.searchInProgress
             horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.Wrap
+            onVisibleChanged: noResultAnnouncement.restart()
+        }
+
+        // Selecting a result empties the results just before the state changes, so the label is only
+        // announced once it has stayed up.
+        Timer {
+            id: noResultAnnouncement
+            interval: 250
+            onTriggered: {
+                if (noResultFoundLabel.visible)
+                    searchView.Accessible.announce(noResultFoundLabel.text, Accessible.Polite);
+            }
+        }
+
+        // Tells assistive technologies how many rows arrived, once the list has settled.
+        Timer {
+            id: countAnnouncement
+            interval: 700
+            onTriggered: {
+                if (!list.visible || list.count === 0)
+                    return;
+                let message;
+                if (searchView.state === "searchCommitted")
+                    message = list.count === 1 ? qsTr("1 result") : qsTr("%1 results").arg(list.count);
+                else
+                    message = list.count === 1 ? qsTr("1 suggestion") : qsTr("%1 suggestions").arg(list.count);
+                searchView.Accessible.announce(message, Accessible.Polite);
+            }
         }
 
         ListView {
@@ -232,6 +296,47 @@ Pane {
             clip: true
             spacing: searchView.spacing
             cacheBuffer: Math.max(0, Math.ceil(contentHeight))
+
+            // The list is a single tab stop, also reached with Down from the text field. Up and Down move
+            // between rows and Enter accepts the current one. Anything typed goes back to the text field.
+            activeFocusOnTab: visible && count > 0
+            onCountChanged: {
+                // Rows arrive after the list is created, which leaves no current item.
+                if (count > 0 && currentIndex < 0)
+                    currentIndex = 0;
+                countAnnouncement.restart();
+            }
+            onVisibleChanged: countAnnouncement.restart()
+            Keys.onPressed: event => {
+                if ((event.key === Qt.Key_Return || event.key === Qt.Key_Enter) && currentIndex >= 0) {
+                    // Handled here, not on the row, because the row may not have been created yet.
+                    searchContentItem.acceptDropdownItem(currentIndex);
+                    event.accepted = true;
+                } else if (event.key === Qt.Key_Up && currentIndex <= 0) {
+                    searchContentItem.returnToField();
+                    event.accepted = true;
+                } else if (event.key === Qt.Key_Escape) {
+                    if (searchView.state === "")
+                        searchContentItem.suggestionsDismissed = true;
+                    searchContentItem.returnToField();
+                    event.accepted = true;
+                } else if (event.key === Qt.Key_Backspace) {
+                    searchContentItem.returnToField();
+                    textField.remove(textField.cursorPosition - 1, textField.cursorPosition);
+                    event.accepted = true;
+                } else if (!(event.modifiers & (Qt.ControlModifier | Qt.AltModifier | Qt.MetaModifier))
+                           && event.text.length > 0 && event.text.charCodeAt(0) >= 32 && event.text.charCodeAt(0) !== 127) {
+                    searchContentItem.typeInField(event.text);
+                    event.accepted = true;
+                }
+            }
+
+            Accessible.role: Accessible.List
+            Accessible.name: searchView.state === "searchCommitted" ? qsTr("Results") : qsTr("Suggestions")
+
+            ScrollBar.vertical: ScrollBar {
+                Accessible.ignored: true
+            }
             model: {
                 if (searchView.state === "resultSelected") {
                     return null;
@@ -263,14 +368,30 @@ Pane {
                     return true;
                 }
 
-                return controller.suggestions.count > 0;
+                return !searchContentItem.suggestionsDismissed && controller.suggestions.count > 0;
             }
             Layout.fillWidth: true
-            Layout.minimumHeight: childrenRect.height
+            // A long list scrolls instead of growing past the window.
+            Layout.preferredHeight: searchView.Window.window ? Math.min(contentHeight, searchView.Window.height / 2)
+                                                             : contentHeight
+            Layout.maximumHeight: contentHeight
+            Layout.fillHeight: true
             Layout.margins: 0
             // Individual results rendering
             delegate: ItemDelegate {
+                id: resultDelegate
                 width: list.width
+                // 24 is the WCAG 2.5.8 minimum target size.
+                height: Math.max(implicitHeight, 24)
+                // Set directly because a button's `text` loses "&" to mnemonic handling.
+                Accessible.name: {
+                    if (displaySubtitle === "")
+                        return displayTitle;
+                    // Result subtitles usually begin with the title; do not read it twice.
+                    if (displaySubtitle.startsWith(displayTitle))
+                        return displaySubtitle;
+                    return qsTr("%1, %2").arg(displayTitle).arg(displaySubtitle);
+                }
                 contentItem: GridLayout {
                     flow: GridLayout.TopToBottom
                     rows: 2
@@ -280,32 +401,56 @@ Pane {
                         source: markerImageUrl
                         sourceSize.height: 32
                         visible: searchView.state !== "searchCommitted"
+                        // The suggestion icons are black drawings; give them the text color so they follow the theme.
+                        layer.enabled: true
+                        layer.effect: MultiEffect {
+                            // Colorization keeps the source's lightness, so black is first raised to white.
+                            brightness: 1.0
+                            colorization: 1.0
+                            colorizationColor: textLabel.color
+                        }
+                        Accessible.ignored: true
                     }
                     Label {
                         id: textLabel
                         Layout.fillHeight: true
                         Layout.fillWidth: true
                         text: displayTitle
-                        elide: Text.ElideRight
+                        wrapMode: Text.Wrap
                         font: searchView.font
                         Layout.rowSpan: displaySubtitle === "" ? 2 : 1
                         verticalAlignment: Label.AlignVCenter
+                        Accessible.ignored: true
                     }
                     Label {
                         Layout.fillWidth: true
                         text: displaySubtitle
+                        visible: text !== ""
                         font: searchView.font
-                        elide: Text.ElideRight
+                        wrapMode: Text.Wrap
+                        Accessible.ignored: true
                     }
                 }
-                MouseArea {
+                Accessible.focusable: true
+                // A focused list item that is not selected is read out as "not selected".
+                Accessible.selectable: true
+                Accessible.selected: ListView.isCurrentItem
+                // A screen reader can focus a row directly, without moving through the list.
+                onActiveFocusChanged: {
+                    if (activeFocus)
+                        list.currentIndex = index;
+                }
+                onClicked: searchContentItem.acceptDropdownItem(index)
+                // Space belongs to the query, for example "new york"; only Enter accepts a row.
+                Keys.onSpacePressed: event => searchContentItem.typeInField(event.text)
+
+                // Keyboard focus indicator. Drawn in the text color so that it contrasts with the row in any style.
+                Rectangle {
                     anchors.fill: parent
-                    hoverEnabled: true
-                    onPositionChanged: list.currentIndex = index;
-                    onClicked: searchContentItem.acceptDropdownItem(index);
-                    onExited: {
-                        list.currentIndex = -1;
-                    }
+                    visible: resultDelegate.ListView.isCurrentItem && list.activeFocus
+                    color: "transparent"
+                    border.width: 2
+                    border.color: textLabel.color
                 }
             }
             // Group suggestions by the owning source's name.
@@ -327,8 +472,15 @@ Pane {
 //                    }
 //                }
 //            }
-            // Simple highlight rectangle for selected result.
-            highlightFollowsCurrentItem: false
+        }
+
+        function returnToField() {
+            textField.forceActiveFocus();
+        }
+
+        function typeInField(text) {
+            returnToField();
+            textField.insert(textField.cursorPosition, text);
         }
 
         function acceptDropdownItem(index) {
@@ -338,9 +490,11 @@ Pane {
                 searchView.state = "searchCommitted";
             } else if (searchView.state === "searchCommitted") {
                 acceptResult(index);
+                returnToField();
             } else {
                 acceptSuggestion(index);
                 searchView.state = "searchCommitted";
+                returnToField();
             }
         }
 

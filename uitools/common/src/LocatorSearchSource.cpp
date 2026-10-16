@@ -234,9 +234,16 @@ namespace Esri::ArcGISRuntime::Toolkit
 
     auto params = normalizeGeometryParams(m_geocodeParameters, area);
     m_geocodeFuture = m_locatorTask->geocodeWithSuggestResultAndParametersAsync(suggestion, params);
-    m_geocodeFuture.then(this, [this](const QList<GeocodeResult>& geocodeResults)
+    m_geocodeFuture
+      .then(this,
+            [this](const QList<GeocodeResult>& geocodeResults)
     {
       onGeocodeCompleted_(geocodeResults);
+    })
+      .onFailed(this, [this]
+    {
+      // A failed search still ends; report it as one that found nothing.
+      emit searchCompleted({});
     });
   }
 
@@ -246,9 +253,16 @@ namespace Esri::ArcGISRuntime::Toolkit
 
     auto params = normalizeGeometryParams(m_geocodeParameters, area);
     m_geocodeFuture = m_locatorTask->geocodeWithParametersAsync(searchString, params);
-    m_geocodeFuture.then(this, [this](const QList<GeocodeResult>& geocodeResults)
+    m_geocodeFuture
+      .then(this,
+            [this](const QList<GeocodeResult>& geocodeResults)
     {
       onGeocodeCompleted_(geocodeResults);
+    })
+      .onFailed(this, [this]
+    {
+      // A failed search still ends; report it as one that found nothing.
+      emit searchCompleted({});
     });
   }
 

@@ -425,6 +425,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       auto* source = m_sources->element<SearchSourceInterface>(m_sources->index(i));
       if (source)
       {
+        setIsSearchInProgress(true);
         //set the lastSearchArea after the geoView viewpoint has changed and only once.
         source->search(currentQuery(), queryRestrictionArea);
       }
@@ -455,6 +456,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       return;
     }
 
+    setIsSearchInProgress(true);
     source->search(r);
   }
 
@@ -465,6 +467,29 @@ namespace Esri::ArcGISRuntime::Toolkit
     m_results->clear();
     setCurrentQuery({});
     setIsEligableForRequery(false);
+    setIsSearchInProgress(false);
+  }
+
+  /*!
+    \internal
+    \brief Returns whether a search has been requested and no source has answered it yet.
+
+    The view uses this to tell a search that found nothing from one that is still running.
+   */
+  bool SearchViewController::isSearchInProgress() const
+  {
+    return m_isSearchInProgress;
+  }
+
+  void SearchViewController::setIsSearchInProgress(bool isSearchInProgress)
+  {
+    if (isSearchInProgress == m_isSearchInProgress)
+    {
+      return;
+    }
+
+    m_isSearchInProgress = isSearchInProgress;
+    emit searchInProgressChanged();
   }
 
   bool SearchViewController::isAutomaticConfigurationEnabled() const
@@ -528,6 +553,8 @@ namespace Esri::ArcGISRuntime::Toolkit
         // Handle search results coming from the source.
         connect(source, &SearchSourceInterface::searchCompleted, this, [this](QList<SearchResult*> results)
         {
+          setIsSearchInProgress(false);
+
           if (results.empty())
           {
             return;

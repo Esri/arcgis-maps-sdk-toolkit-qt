@@ -60,6 +60,7 @@ namespace Esri::ArcGISRuntime::Toolkit
                  isAutomaticConfigurationEnabledChanged)
     Q_PROPERTY(
       double thresholdRatioRepeatSearch READ thresholdRatioRepeatSearch WRITE setThresholdRatioRepeatSearch NOTIFY thresholdRatioRepeatSearchChanged)
+    Q_PROPERTY(bool searchInProgress READ isSearchInProgress NOTIFY searchInProgressChanged)
   public:
     enum class SearchResultMode
     {
@@ -112,6 +113,8 @@ namespace Esri::ArcGISRuntime::Toolkit
     double thresholdRatioRepeatSearch();
     void setThresholdRatioRepeatSearch(double);
 
+    bool isSearchInProgress() const;
+
     Q_INVOKABLE void commitSearch(bool restrictToArea);
 
     Q_INVOKABLE void acceptSuggestion(SearchSuggestion* searchSuggestion);
@@ -130,8 +133,10 @@ namespace Esri::ArcGISRuntime::Toolkit
     void isEligableForRequeryChanged();
     void isAutomaticConfigurationEnabledChanged();
     void thresholdRatioRepeatSearchChanged();
+    void searchInProgressChanged();
 
   private:
+    void setIsSearchInProgress(bool isSearchInProgress);
     void onQueryChanged();
     void onSourcesAdded(const QModelIndex& parent, int firstSource, int lastSource);
     void onSourcesRemoved(const QModelIndex& parent, int firstSource, int lastSource);
@@ -152,6 +157,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     SearchResultMode m_resultMode{SearchResultMode::Automatic};
     bool m_isEligableForRequery{false};
     bool m_isAutomaticConfigurationEnabled{true};
+    bool m_isSearchInProgress{false};
     Point m_queryCenter;
     Geometry m_queryArea;
     Geometry m_lastSearchArea;
