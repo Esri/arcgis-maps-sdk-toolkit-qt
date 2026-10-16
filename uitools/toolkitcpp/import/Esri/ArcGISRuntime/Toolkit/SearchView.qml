@@ -35,6 +35,9 @@ import QtQuick.Layouts
     suggestions. Anything typed while on a row goes to the text field. Assistive technologies see the text
     field under its placeholder text, and are told how many suggestions or results arrived.
 
+    The default width is \c 300 at a 16-pixel font size and scales proportionally with the effective Qt
+    font size, including changes after creation. Setting \c width explicitly disables the font-based default.
+
     \note By default, the SearchView will attempt to access the World Geocoding Service, which requires an \l{https://links.esri.com/create-an-api-key}{access token}.
 */
 Pane {
@@ -114,7 +117,7 @@ Pane {
             Layout.minimumHeight: 24
             Layout.margins: 0
             placeholderText: controller.defaultPlaceholder
-            implicitWidth: 300
+            implicitWidth: 300 * searchView.font.pixelSize / 16
 
             leftPadding: searchButton.width + searchButton.leftPadding + searchButton.rightPadding
             rightPadding: clearButton.width + clearButton.leftPadding + clearButton.rightPadding
