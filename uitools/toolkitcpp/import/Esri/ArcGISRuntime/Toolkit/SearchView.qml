@@ -121,6 +121,9 @@ Pane {
 
             leftPadding: searchButton.width + searchButton.leftPadding + searchButton.rightPadding
             rightPadding: clearButton.width + clearButton.leftPadding + clearButton.rightPadding
+            // Room above and below the text, so that the field is not dwarfed by the rows under it.
+            topPadding: 10
+            bottomPadding: 10
 
             property bool isUserEditing: true
 
