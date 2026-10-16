@@ -334,7 +334,9 @@ Pane {
             Accessible.role: Accessible.List
             Accessible.name: searchView.state === "searchCommitted" ? qsTr("Results") : qsTr("Suggestions")
 
-            ScrollBar.vertical: ScrollBar { }
+            ScrollBar.vertical: ScrollBar {
+                Accessible.ignored: true
+            }
             model: {
                 if (searchView.state === "resultSelected") {
                     return null;
