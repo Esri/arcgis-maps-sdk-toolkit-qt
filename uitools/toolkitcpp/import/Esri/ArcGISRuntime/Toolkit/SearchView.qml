@@ -254,6 +254,7 @@ Pane {
             // Same gap below the text as the layout leaves above it.
             Layout.bottomMargin: searchContentItem.spacing
             visible: resultListViewEnabled && searchView.state === "searchCommitted" && controller.results.count === 0
+                     && !controller.searchInProgress
             horizontalAlignment: Text.AlignHCenter
             wrapMode: Text.Wrap
         }
