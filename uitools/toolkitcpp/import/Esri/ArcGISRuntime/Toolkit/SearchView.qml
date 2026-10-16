@@ -92,6 +92,8 @@ Pane {
     property alias noResultMessage: noResultFoundLabel.text
 
     padding: 0
+    // Keeps the wheel from reaching the map under the view, also when the list cannot scroll further.
+    wheelEnabled: true
 
     states: [
         // State that is triggered when the user gains a valid selection result.
