@@ -30,7 +30,7 @@ namespace Ui
 namespace Esri::ArcGISRuntime
 {
 
-  class LocalSceneWidget;
+  class LocalSceneViewWidget;
   class MapGraphicsView;
   class SceneGraphicsView;
   class NativeWidget;
@@ -53,7 +53,7 @@ namespace Esri::ArcGISRuntime
 
       QRT_DEPRECATED_SUGGEST("use setGeoViewWidget instead") void setSceneView(SceneGraphicsView* sceneView);
 
-      QRT_DEPRECATED_SUGGEST("use setGeoViewWidget instead") void setLocalSceneView(LocalSceneWidget* localSceneView);
+      QRT_DEPRECATED_SUGGEST("use setGeoViewWidget instead") void setLocalSceneView(LocalSceneViewWidget* localSceneView);
 
       void setGeoViewWidget(NativeWidget* geoViewWidget);
 
