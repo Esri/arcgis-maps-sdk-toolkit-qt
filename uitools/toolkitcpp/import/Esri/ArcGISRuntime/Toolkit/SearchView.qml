@@ -121,8 +121,8 @@ Pane {
             placeholderText: controller.defaultPlaceholder
             implicitWidth: 300 * searchView.font.pixelSize / 16
 
-            leftPadding: searchButton.width + searchButton.leftPadding + searchButton.rightPadding
-            rightPadding: clearButton.width + clearButton.leftPadding + clearButton.rightPadding
+            rightPadding: searchButton.width + searchButton.leftPadding + searchButton.rightPadding
+                          + (clearButton.visible ? clearButton.width + clearButton.leftPadding + clearButton.rightPadding : 0)
             // Room above and below the text, so that the field is not dwarfed by the rows under it.
             topPadding: 10
             bottomPadding: 10
@@ -136,6 +136,42 @@ Pane {
                 target: controller
                 property: "currentQuery"
                 value: textField.text
+            }
+
+            RoundButton {
+                id: clearButton
+                // Not displayed; gives the button its accessible name.
+                text: qsTr("Clear")
+                display: AbstractButton.IconOnly
+                icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/x.svg"
+                // 24 is the WCAG 2.5.8 minimum target size.
+                height: Math.max(24, parent.height - 8)
+                width: height
+                flat: true
+                leftPadding: 2
+                rightPadding: 2
+                topPadding: 0
+                bottomPadding: 0
+                visible: textField.text.length > 0
+                anchors {
+                    right: searchButton.left
+                    verticalCenter: parent.verticalCenter
+                }
+
+                function clearSearch() {
+                    controller.clearSearch();
+                    searchView.state = "";
+                }
+
+                Keys.onReturnPressed: event => {
+                    clearSearch();
+                    event.accepted = true;
+                }
+                Keys.onEnterPressed: event => {
+                    clearSearch();
+                    event.accepted = true;
+                }
+                onClicked: clearSearch()
             }
 
             RoundButton {
@@ -153,38 +189,13 @@ Pane {
                 topPadding: 0
                 bottomPadding: 0
                 anchors {
-                    left: parent.left
-                    verticalCenter: parent.verticalCenter
-                    leftMargin: 4
-                }
-
-                onClicked: {
-                    textField.accepted();
-                }
-            }
-
-            RoundButton {
-                id: clearButton
-                // Not displayed; gives the button its accessible name.
-                text: qsTr("Clear")
-                display: AbstractButton.IconOnly
-                icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/x.svg"
-                // 24 is the WCAG 2.5.8 minimum target size.
-                height: Math.max(24, parent.height - 8)
-                width: height
-                flat: true
-                leftPadding: 2
-                rightPadding: 2
-                topPadding: 0
-                bottomPadding: 0
-                anchors {
                     right: parent.right
                     verticalCenter: parent.verticalCenter
                     rightMargin: 4
                 }
+
                 onClicked: {
-                    controller.clearSearch();
-                    searchView.state = "";
+                    textField.accepted();
                 }
             }
 
