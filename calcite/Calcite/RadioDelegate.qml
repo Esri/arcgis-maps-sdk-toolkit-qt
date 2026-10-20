@@ -65,8 +65,15 @@ T.RadioDelegate {
 
     background: Rectangle {
         implicitHeight: 40
-        color: control.visualFocus
-               || control.down ? Calcite.foreground3: isHoveredAndEnabled ? Calcite.foreground2 : "transparent"
+        color: control.down ? Calcite.foreground3 : isHoveredAndEnabled ? Calcite.foreground2 : "transparent"
+
+        Rectangle {
+            anchors.fill: parent
+            color: "transparent"
+            border.width: 2
+            border.color: Calcite.text1
+            visible: control.visualFocus
+        }
     }
     opacity: control.enabled ? 1.0 : 0.3
 }

@@ -91,8 +91,8 @@ T.Switch {
         anchors.fill: parent
         anchors.margins: -2
         color: "transparent"
-        border.color: Calcite.brandHover
-        border.width: 1
+        border.color: Calcite.text1
+        border.width: 2
         visible: control.visualFocus
     }
 }

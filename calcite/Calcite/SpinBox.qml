@@ -124,7 +124,8 @@ T.SpinBox {
             color: enabled ? Calcite.foreground1 : Calcite.background
             border {
                 // error box not shown. No error shown in the calcite interactive design.
-                color: control.activeFocus ? Calcite.brand : Calcite.borderInput
+                width: control.visualFocus ? 2 : 1
+                color: control.visualFocus ? Calcite.text1 : control.activeFocus ? Calcite.brand : Calcite.borderInput
             }
         }
     }

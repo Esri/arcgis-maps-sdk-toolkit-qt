@@ -53,7 +53,8 @@ T.CheckBox {
         width: control.indicator.width + 4
         height: control.indicator.height + 4
         color: "transparent"
-        border.color: Calcite.brandHover
+        border.width: 2
+        border.color: Calcite.text1
         visible: control.visualFocus
     }
 }

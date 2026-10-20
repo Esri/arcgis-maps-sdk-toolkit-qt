@@ -47,4 +47,12 @@ T.CheckDelegate {
         y: control.topPadding + (control.availableHeight - height) / 2
         control: control
     }
+
+    Rectangle {
+        anchors.fill: parent
+        color: "transparent"
+        border.width: 2
+        border.color: Calcite.text1
+        visible: control.visualFocus
+    }
 }

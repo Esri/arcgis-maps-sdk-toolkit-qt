@@ -42,7 +42,7 @@ T.ItemDelegate {
     icon.width: 16
     icon.height: 16
 
-    property color color : control.enabled ? control.hovered || control.down ? Calcite.offWhite : Calcite.text1 : Calcite.text3
+    property color color: control.enabled ? control.hovered || control.down ? Calcite.offWhite : Calcite.text1 : Calcite.text3
     icon.color: color
 
     indicator: Image {
@@ -86,6 +86,15 @@ T.ItemDelegate {
     background: Rectangle {
         implicitWidth: 200
         implicitHeight: 40
-        color: control.visualFocus || control.down ? Calcite.brandPress : control.hovered ? Calcite.brand : "transparent"
+        color: control.down ? Calcite.brandPress : control.hovered ? Calcite.brand : "transparent"
+
+        // Callers with custom keyboard focus handling can suppress this style-provided keyboard focus ring.
+        Rectangle {
+            anchors.fill: parent
+            visible: control.visualFocus && control["suppressStyleFocusRing"] !== true
+            color: "transparent"
+            border.width: 2
+            border.color: Calcite.text1
+        }
     }
 }

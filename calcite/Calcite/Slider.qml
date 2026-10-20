@@ -48,7 +48,8 @@ T.Slider {
         width: handle.width + 4
         height: handle.height + 4
         color: "transparent"
-        border.color: Calcite.brandHover
+        border.width: 2
+        border.color: Calcite.text1
         visible: control.visualFocus
     }
 }

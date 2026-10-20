@@ -91,7 +91,8 @@ T.Button {
             anchors.fill: parent
             anchors.margins: -2
             color: "transparent"
-            border.color: Calcite.brandHover
+            border.width: 2
+            border.color: Calcite.text1
             visible: control.visualFocus
             z: 10
         }

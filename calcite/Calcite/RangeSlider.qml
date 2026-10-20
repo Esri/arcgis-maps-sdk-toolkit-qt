@@ -64,7 +64,8 @@ T.RangeSlider {
         width: firstHandle.width + 4
         height: firstHandle.height + 4
         color: "transparent"
-        border.color: Calcite.brandHover
+        border.width: 2
+        border.color: Calcite.text1
         visible: control.visualFocus && firstHandle.activeFocus
     }
 
@@ -75,7 +76,8 @@ T.RangeSlider {
         width: secondHandle.width + 4
         height: secondHandle.height + 4
         color: "transparent"
-        border.color: Calcite.brandHover
+        border.width: 2
+        border.color: Calcite.text1
         visible: control.visualFocus && secondHandle.activeFocus
     }
 }
