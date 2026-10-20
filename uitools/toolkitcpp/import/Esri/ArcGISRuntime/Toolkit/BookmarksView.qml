@@ -166,7 +166,7 @@ Pane {
                 visible: bookmarkDelegate.ListView.isCurrentItem && listView.activeFocus && listView.keyboardFocusVisible
                 color: "transparent"
                 border.width: 2
-                border.color: bookmarkDelegate.contentItem.color
+                border.color: bookmarkDelegate.palette.highlight
             }
         }
     }
