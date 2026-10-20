@@ -145,7 +145,10 @@ Pane {
                 // Not displayed; gives the button its accessible name.
                 text: qsTr("Clear")
                 display: AbstractButton.IconOnly
+                ToolTip.text: text
+                ToolTip.visible: visible && enabled && !toolTipSuppressed && (hovered || visualFocus)
                 icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/x.svg"
+                icon.color: textField.color
                 // 24 is the WCAG 2.5.8 minimum target size.
                 height: Math.max(24, parent.height - 8)
                 width: height
@@ -162,9 +165,15 @@ Pane {
                     verticalCenter: parent.verticalCenter
                 }
 
+                property bool toolTipSuppressed: false
+                onPressedChanged: if (pressed) toolTipSuppressed = true
+                onHoveredChanged: if (hovered && !pressed) toolTipSuppressed = false
+                onVisualFocusChanged: if (visualFocus && !pressed) toolTipSuppressed = false
+
                 function clearSearch() {
                     controller.clearSearch();
                     searchView.state = "";
+                    textField.forceActiveFocus();
                 }
 
                 Keys.onReturnPressed: event => {
@@ -176,6 +185,12 @@ Pane {
                     event.accepted = true;
                 }
                 onClicked: clearSearch()
+
+                Shortcut {
+                    sequence: "Escape"
+                    enabled: clearButton.ToolTip.visible
+                    onActivated: clearButton.ToolTip.hide()
+                }
             }
 
             RoundButton {
@@ -183,7 +198,10 @@ Pane {
                 // Not displayed; gives the button its accessible name.
                 text: qsTr("Search")
                 display: AbstractButton.IconOnly
+                ToolTip.text: text
+                ToolTip.visible: visible && enabled && !toolTipSuppressed && (hovered || visualFocus)
                 icon.source: "qrc:/Esri/ArcGISRuntime/Toolkit/search.svg"
+                icon.color: textField.color
                 // 24 is the WCAG 2.5.8 minimum target size.
                 height: Math.max(24, parent.height - 8)
                 width: height
@@ -199,8 +217,19 @@ Pane {
                     rightMargin: 4
                 }
 
+                property bool toolTipSuppressed: false
+                onPressedChanged: if (pressed) toolTipSuppressed = true
+                onHoveredChanged: if (hovered && !pressed) toolTipSuppressed = false
+                onVisualFocusChanged: if (visualFocus && !pressed) toolTipSuppressed = false
+
                 onClicked: {
                     textField.accepted();
+                }
+
+                Shortcut {
+                    sequence: "Escape"
+                    enabled: searchButton.ToolTip.visible
+                    onActivated: searchButton.ToolTip.hide()
                 }
             }
 
