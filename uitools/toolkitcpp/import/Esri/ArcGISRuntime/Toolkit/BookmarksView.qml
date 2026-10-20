@@ -30,6 +30,10 @@ import QtQuick.Layouts
  The BookmarksView displays a collection of viewpoints represented by bookmarks from either Webmap/Webscene
  or are programmatically defined. When the user selects a bookmark from the provided list,
  the viewpoint in the geoView is set to the new bookmark's view extent.
+
+ The list is a single tab stop. The Up, Down, Home and End keys move between bookmarks, and Enter or Space
+ selects the current one. Assistive technologies see the list as "Bookmarks"; set \c Accessible.name on the
+ BookmarksView to change that name.
  \image bookmarksView.gif
  \snippet qml/demos/BookmarksViewDemoForm.qml Set up Bookmark QML
 */
@@ -54,30 +58,126 @@ Pane {
         value: geoView
     }
 
+    Connections {
+        target: bookmarksView.geoView
+        ignoreUnknownSignals: true
+
+        function onMousePressed() {
+            if (listView.activeFocus) {
+                listView.keyboardFocusVisible = false;
+                bookmarksView.geoView.forceActiveFocus(Qt.MouseFocusReason);
+            }
+        }
+    }
+
     wheelEnabled: true
     hoverEnabled: true
 
     contentItem: ListView{
         id: listView
+        property bool keyboardFocusVisible: false
+
         model: controller.bookmarks
         clip: true
+
+        // The list is a single tab stop. Up/Down, Home and End move the current bookmark;
+        // only Enter, Space or a click moves the GeoView.
+        activeFocusOnTab: count > 0
+        onActiveFocusChanged: keyboardFocusVisible = activeFocus
+        onCountChanged: {
+            if (count > 0 && currentIndex < 0)
+                currentIndex = 0;
+        }
+        Keys.onPressed: event => {
+                            keyboardFocusVisible = true;
+                            if (event.key === Qt.Key_Up) {
+                                currentIndex = Math.max(0, currentIndex - 1);
+                                event.accepted = true;
+                            } else if (event.key === Qt.Key_Down) {
+                                currentIndex = Math.min(count - 1, currentIndex + 1);
+                                event.accepted = true;
+                            } else if (event.key === Qt.Key_Left || event.key === Qt.Key_Right) {
+                                event.accepted = true;
+                            } else if (event.key === Qt.Key_Home) {
+                                currentIndex = 0;
+                                event.accepted = true;
+                            } else if (event.key === Qt.Key_End) {
+                                currentIndex = count - 1;
+                                event.accepted = true;
+                            }
+                        }
+
+        Accessible.role: Accessible.List
+        Accessible.name: bookmarksView.Accessible.name.length > 0 ? bookmarksView.Accessible.name
+                                                                  : qsTr("Bookmarks")
 
         ScrollBar.vertical: ScrollBar {
             active: true
             snapMode: ScrollBar.SnapOnRelease
+            Accessible.ignored: true
         }
 
         delegate: ItemDelegate {
+            id: bookmarkDelegate
+            property bool suppressStyleFocusRing: true
+
+            function zoomToBookmark() {
+                listView.currentIndex = index;
+                controller.zoomToBookmarkExtent(listModelData);
+            }
+
             // `name` is a role within GenericListModel's BookmarkListItem specification.
             // `text` can take `name` because the `model` builds the roles from the
             // properties of BookmarkListItem that is set in BookmarksViewController.
             text: name
             width: listView.width
+            height: Math.max(implicitHeight, 24)
             indicator: null
-            onClicked: controller.zoomToBookmarkExtent(listModelData)
+            contentItem: Label {
+                text: bookmarkDelegate.text
+                font: bookmarkDelegate.font
+                color: bookmarkDelegate.color
+                wrapMode: Text.Wrap
+                verticalAlignment: Text.AlignVCenter
+                // The row already carries the bookmark name.
+                Accessible.ignored: true
+            }
+
+            Accessible.role: Accessible.Button
+            Accessible.name: name
+            Accessible.focusable: true
+            Accessible.selectable: true
+            Accessible.selected: ListView.isCurrentItem
+            onActiveFocusChanged: {
+                if (activeFocus)
+                    listView.currentIndex = index;
+            }
+            onClicked: zoomToBookmark()
+            onPressedChanged: {
+                if (pressed)
+                    listView.keyboardFocusVisible = false;
+            }
+            Keys.onReturnPressed: zoomToBookmark()
+            Keys.onEnterPressed: zoomToBookmark()
+
+            // Keyboard focus indicator.
+            Rectangle {
+                anchors.fill: parent
+                visible: bookmarkDelegate.ListView.isCurrentItem && listView.activeFocus && listView.keyboardFocusVisible
+                color: "transparent"
+                border.width: 2
+                border.color: bookmarkDelegate.palette.highlight
+            }
         }
     }
 
-    implicitHeight: 200
-    implicitWidth: 300
+    implicitHeight: {
+        const most = 200 * bookmarksView.font.pixelSize / 16;
+        const wanted = listView.count > 0 ? Math.min(most, listView.contentHeight + topPadding + bottomPadding) : most;
+        return Window.height > 0 ? Math.min(wanted, Window.height) : wanted;
+    }
+    implicitWidth: {
+        const most = 300 * bookmarksView.font.pixelSize / 16;
+        return Window.width > 0 ? Math.min(most, Window.width) : most;
+    }
 }
