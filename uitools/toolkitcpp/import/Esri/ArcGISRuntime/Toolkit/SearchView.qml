@@ -425,6 +425,8 @@ Pane {
             // Individual results rendering
             delegate: ItemDelegate {
                 id: resultDelegate
+                property bool suppressStyleFocusRing: true
+
                 width: list.width
                 // 24 is the WCAG 2.5.8 minimum target size.
                 height: Math.max(implicitHeight, 24)
