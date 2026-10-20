@@ -88,10 +88,10 @@ T.Switch {
 
     // Focus indicator
     Rectangle {
-        anchors.fill: parent
-        anchors.margins: -2
+        anchors.fill: control.indicator
+        anchors.margins: -4
         color: "transparent"
-        border.color: Calcite.text1
+        border.color: Calcite.focus
         border.width: 2
         visible: control.visualFocus
     }

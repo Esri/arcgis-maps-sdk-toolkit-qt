@@ -59,25 +59,25 @@ T.RangeSlider {
 
     // Focus indicator for first handle
     Rectangle {
-        x: firstHandle.x - 2
-        y: firstHandle.y - 2
-        width: firstHandle.width + 4
-        height: firstHandle.height + 4
+        x: firstHandle.x - 4
+        y: firstHandle.y - 4
+        width: firstHandle.width + 8
+        height: firstHandle.height + 8
         color: "transparent"
         border.width: 2
-        border.color: Calcite.text1
+        border.color: Calcite.focus
         visible: control.visualFocus && firstHandle.activeFocus
     }
 
     // Focus indicator for second handle
     Rectangle {
-        x: secondHandle.x - 2
-        y: secondHandle.y - 2
-        width: secondHandle.width + 4
-        height: secondHandle.height + 4
+        x: secondHandle.x - 4
+        y: secondHandle.y - 4
+        width: secondHandle.width + 8
+        height: secondHandle.height + 8
         color: "transparent"
         border.width: 2
-        border.color: Calcite.text1
+        border.color: Calcite.focus
         visible: control.visualFocus && secondHandle.activeFocus
     }
 }

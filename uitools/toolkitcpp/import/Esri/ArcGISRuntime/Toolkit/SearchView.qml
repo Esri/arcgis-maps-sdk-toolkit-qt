@@ -489,13 +489,13 @@ Pane {
                 // Space belongs to the query, for example "new york"; only Enter accepts a row.
                 Keys.onSpacePressed: event => searchContentItem.typeInField(event.text)
 
-                // Keyboard focus indicator. Drawn in the text color so that it contrasts with the row in any style.
+                // Keyboard focus indicator. Uses the active style's highlight color.
                 Rectangle {
                     anchors.fill: parent
                     visible: resultDelegate.ListView.isCurrentItem && list.activeFocus
                     color: "transparent"
                     border.width: 2
-                    border.color: textLabel.color
+                    border.color: resultDelegate.palette.highlight
                 }
             }
             // Group suggestions by the owning source's name.

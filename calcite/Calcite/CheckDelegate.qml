@@ -52,7 +52,7 @@ T.CheckDelegate {
         anchors.fill: parent
         color: "transparent"
         border.width: 2
-        border.color: Calcite.text1
+        border.color: Calcite.focus
         visible: control.visualFocus
     }
 }

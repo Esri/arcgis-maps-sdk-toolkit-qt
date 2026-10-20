@@ -83,7 +83,7 @@ T.TextField {
         border {
             width: control.visualFocus ? 2 : 1
             color: !control.acceptableInput ? control.activeFocus ? Calcite.dangerHover : Calcite.danger
-                                            : control.visualFocus ? Calcite.text1
+                                            : control.visualFocus ? Calcite.focus
                                                                   : control.activeFocus ? Calcite.brand : Calcite.borderInput
             Behavior on color {
                 ColorAnimation {

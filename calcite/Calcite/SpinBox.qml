@@ -125,7 +125,7 @@ T.SpinBox {
             border {
                 // error box not shown. No error shown in the calcite interactive design.
                 width: control.visualFocus ? 2 : 1
-                color: control.visualFocus ? Calcite.text1 : control.activeFocus ? Calcite.brand : Calcite.borderInput
+                color: control.visualFocus ? Calcite.focus : control.activeFocus ? Calcite.brand : Calcite.borderInput
             }
         }
     }
