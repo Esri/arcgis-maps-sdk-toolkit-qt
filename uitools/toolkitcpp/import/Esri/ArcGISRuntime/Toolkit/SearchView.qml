@@ -37,7 +37,8 @@ import QtQuick.Layouts
     field under its placeholder text, and are told how many suggestions or results arrived.
 
     The default width is \c 300 at a 16-pixel font size and scales proportionally with the effective Qt
-    font size, including changes after creation. Setting \c width explicitly disables the font-based default.
+    font size, including changes after creation, up to the available window width. Setting \c width explicitly
+    disables the font-based default.
 
     \note By default, the SearchView will attempt to access the World Geocoding Service, which requires an \l{https://links.esri.com/create-an-api-key}{access token}.
 */
@@ -91,6 +92,10 @@ Pane {
      */
     property alias noResultMessage: noResultFoundLabel.text
 
+    implicitWidth: {
+        const most = 300 * searchView.font.pixelSize / 16;
+        return Window.width > 0 ? Math.min(most, Window.width) : most;
+    }
     padding: 0
     // Keeps the wheel from reaching the map under the view, also when the list cannot scroll further.
     wheelEnabled: true
