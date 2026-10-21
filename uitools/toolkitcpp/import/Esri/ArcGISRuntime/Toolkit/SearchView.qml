@@ -136,7 +136,6 @@ Pane {
             property bool isUserEditing: true
 
             Accessible.name: placeholderText
-            Accessible.searchEdit: true
 
             Binding {
                 target: controller
