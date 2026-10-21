@@ -411,6 +411,7 @@ Pane {
             delegate: ItemDelegate {
                 id: resultDelegate
                 property bool suppressStyleFocusRing: true
+                activeFocusOnTab: false
 
                 width: list.width
                 // 24 is the WCAG 2.5.8 minimum target size.
