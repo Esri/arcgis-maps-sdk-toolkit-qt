@@ -136,6 +136,7 @@ Pane {
             property bool isUserEditing: true
 
             Accessible.name: placeholderText
+            Accessible.searchEdit: true
 
             Binding {
                 target: controller
@@ -464,6 +465,7 @@ Pane {
                         Accessible.ignored: true
                     }
                 }
+                Accessible.role: Accessible.ListItem
                 Accessible.focusable: true
                 Accessible.selectable: true
                 Accessible.selected: ListView.isCurrentItem
