@@ -553,6 +553,7 @@ namespace Esri::ArcGISRuntime::Toolkit
         // Handle search results coming from the source.
         connect(source, &SearchSourceInterface::searchCompleted, this, [this](QList<SearchResult*> results)
         {
+          // TODO: Track outstanding searches before enabling multiple search sources.
           setIsSearchInProgress(false);
 
           if (results.empty())
