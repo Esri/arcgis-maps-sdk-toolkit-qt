@@ -125,7 +125,6 @@ Pane {
 
             rightPadding: searchButton.width + searchButton.leftPadding + searchButton.rightPadding
                           + (clearButton.visible ? clearButton.width + clearButton.leftPadding + clearButton.rightPadding : 0)
-            // Room above and below the text, so that the field is not dwarfed by the rows under it.
             topPadding: 10
             bottomPadding: 10
 
@@ -186,11 +185,6 @@ Pane {
                 }
                 onClicked: clearSearch()
 
-                Shortcut {
-                    sequence: "Escape"
-                    enabled: clearButton.ToolTip.visible
-                    onActivated: clearButton.ToolTip.hide()
-                }
             }
 
             RoundButton {
@@ -226,11 +220,6 @@ Pane {
                     textField.accepted();
                 }
 
-                Shortcut {
-                    sequence: "Escape"
-                    enabled: searchButton.ToolTip.visible
-                    onActivated: searchButton.ToolTip.hide()
-                }
             }
 
             Keys.onPressed: event => {
@@ -241,9 +230,6 @@ Pane {
                             list.currentIndex = 0;
                         list.forceActiveFocus(Qt.TabFocusReason);
                     }
-                    event.accepted = true;
-                } else if (event.key === Qt.Key_Escape && list.visible && searchView.state === "") {
-                    searchContentItem.suggestionsDismissed = true;
                     event.accepted = true;
                 }
             }
@@ -360,11 +346,6 @@ Pane {
                 } else if (event.key === Qt.Key_Up && currentIndex <= 0) {
                     searchContentItem.returnToField();
                     event.accepted = true;
-                } else if (event.key === Qt.Key_Escape) {
-                    if (searchView.state === "")
-                        searchContentItem.suggestionsDismissed = true;
-                    searchContentItem.returnToField();
-                    event.accepted = true;
                 } else if (event.key === Qt.Key_Backspace) {
                     searchContentItem.returnToField();
                     textField.remove(textField.cursorPosition - 1, textField.cursorPosition);
@@ -479,16 +460,14 @@ Pane {
                     }
                 }
                 Accessible.focusable: true
-                // A focused list item that is not selected is read out as "not selected".
                 Accessible.selectable: true
                 Accessible.selected: ListView.isCurrentItem
-                // A screen reader can focus a row directly, without moving through the list.
                 onActiveFocusChanged: {
                     if (activeFocus)
                         list.currentIndex = index;
                 }
                 onClicked: searchContentItem.acceptDropdownItem(index)
-                // Space belongs to the query, for example "new york"; only Enter accepts a row.
+
                 Keys.onSpacePressed: event => searchContentItem.typeInField(event.text)
 
                 // Keyboard focus indicator. Uses the active style's highlight color.
@@ -558,6 +537,33 @@ Pane {
             textField.setControllerText(result.displayTitle);
             controller.selectedResult = result;
         }
+    }
+
+    Shortcut {
+        sequence: "Escape"
+        enabled: searchView.hasActiveFocus()
+                 && (clearButton.ToolTip.visible || searchButton.ToolTip.visible || list.visible)
+        onActivated: {
+            if (clearButton.ToolTip.visible || searchButton.ToolTip.visible) {
+                clearButton.ToolTip.hide();
+                searchButton.ToolTip.hide();
+            } else {
+                if (list.visible && searchView.state === "")
+                    searchContentItem.suggestionsDismissed = true;
+                if (list.activeFocus)
+                    searchContentItem.returnToField();
+            }
+        }
+    }
+
+    function hasActiveFocus() {
+        let item = searchView.Window.window ? searchView.Window.window.activeFocusItem : null;
+        while (item) {
+            if (item === searchView)
+                return true;
+            item = item.parent;
+        }
+        return false;
     }
 
     Binding {
