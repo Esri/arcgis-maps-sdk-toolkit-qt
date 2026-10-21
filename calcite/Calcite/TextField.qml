@@ -82,9 +82,15 @@ T.TextField {
         opacity: control.enabled ? 1 : 0.3
         border {
             width: control.visualFocus ? 2 : 1
-            color: !control.acceptableInput ? control.activeFocus ? Calcite.dangerHover : Calcite.danger
-                                            : control.visualFocus ? Calcite.focus
-                                                                  : control.activeFocus ? Calcite.brand : Calcite.borderInput
+            color: {
+                if (!control.acceptableInput)
+                    return control.activeFocus ? Calcite.dangerHover : Calcite.danger;
+                if (control.visualFocus)
+                    return Calcite.focus;
+                if (control.activeFocus)
+                    return Calcite.brand;
+                return Calcite.borderInput;
+            }
             Behavior on color {
                 ColorAnimation {
                     duration: 150
