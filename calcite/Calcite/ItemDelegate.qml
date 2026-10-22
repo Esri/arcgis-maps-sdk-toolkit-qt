@@ -94,7 +94,7 @@ T.ItemDelegate {
             visible: control.visualFocus && control["suppressStyleFocusRing"] !== true
             color: "transparent"
             border.width: 2
-            border.color: Calcite.brand
+            border.color: Calcite.focus
         }
     }
 }

@@ -62,8 +62,8 @@ T.ComboBox {
         implicitWidth: 120
         implicitHeight: 32
         border {
-            width: 1
-            color: control.activeFocus ? Calcite.brand : Calcite.borderInput
+            width: control.visualFocus ? 2 : 1
+            color: control.visualFocus ? Calcite.focus : control.activeFocus ? Calcite.brand : Calcite.borderInput
             Behavior on color {
               ColorAnimation {
                   duration: 50
