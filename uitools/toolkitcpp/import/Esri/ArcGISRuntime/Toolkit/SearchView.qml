@@ -120,7 +120,6 @@ Pane {
         TextField {
             id: textField
             activeFocusOnTab: true
-            KeyNavigation.tab: clearButton.visible ? clearButton : searchButton
             Layout.fillWidth: true
             // Keeps the 24px buttons inside the field at small font sizes.
             Layout.minimumHeight: 24
@@ -144,7 +143,7 @@ Pane {
                 value: textField.text
             }
 
-            RoundButton {
+            Button {
                 id: clearButton
                 // Not displayed; gives the button its accessible name.
                 text: qsTr("Clear")
@@ -162,8 +161,6 @@ Pane {
                 topPadding: 0
                 bottomPadding: 0
                 visible: textField.text.length > 0
-                KeyNavigation.tab: searchButton
-                KeyNavigation.backtab: textField
                 anchors {
                     right: searchButton.left
                     verticalCenter: parent.verticalCenter
@@ -192,7 +189,7 @@ Pane {
 
             }
 
-            RoundButton {
+            Button {
                 id: searchButton
                 // Not displayed; gives the button its accessible name.
                 text: qsTr("Search")
@@ -209,7 +206,6 @@ Pane {
                 rightPadding: 2
                 topPadding: 0
                 bottomPadding: 0
-                KeyNavigation.backtab: clearButton.visible ? clearButton : textField
                 anchors {
                     right: parent.right
                     verticalCenter: parent.verticalCenter
