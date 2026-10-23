@@ -4,4 +4,12 @@
 
 The [BookmarksView - Qt Quick UI/QML Type](https://developers.arcgis.com/qt/toolkit/api-reference/qml-esri-arcgisruntime-toolkit-bookmarksview.html) displays a collection of viewpoints represented by bookmarks from either Webmap/Webscene or are programmatically defined. When the user selects a bookmark from the provided list, the viewpoint in the geoView is set to the new bookmark's view extent.
 
+## Accessibility
+
+Set `Accessible.name` to provide an application-specific name for the bookmark list. The default name is "Bookmarks." Each bookmark is exposed as a named button with its selected state.
+
+The list is a single tab stop. Use Up, Down, Home, and End to move between bookmarks. Use Enter or Space to activate the current bookmark and move the GeoView to its viewpoint.
+
+Navigation depends on the platform, keyboard settings, and screen reader. Verify it in your application.
+
 ![BookmarksView image](https://developers.arcgis.com/qt/toolkit/api-reference/images/bookmarksView.gif)
