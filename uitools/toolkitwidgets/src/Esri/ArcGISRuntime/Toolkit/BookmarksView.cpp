@@ -23,7 +23,7 @@
 #include "BookmarksViewController.h"
 
 // ArcGISRuntime headers
-#include <LocalSceneWidget.h>
+#include <LocalSceneViewWidget.h>
 #include <MapGraphicsView.h>
 #include <NativeWidget.h>
 #include <SceneGraphicsView.h>
@@ -111,10 +111,10 @@ namespace Esri::ArcGISRuntime::Toolkit
   /*!
     \brief Set the \c GeoView.
     \list
-      \li \a localSceneView Sets the \c GeoView to a \c LocalSceneWidget.
+      \li \a localSceneView Sets the \c GeoView to a \c LocalSceneViewWidget.
     \endlist
    */
-  void BookmarksView::setLocalSceneView(LocalSceneWidget* localSceneView)
+  void BookmarksView::setLocalSceneView(LocalSceneViewWidget* localSceneView)
   {
     m_controller->setGeoView(localSceneView);
   }
@@ -125,7 +125,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       \li \a geoViewWidget Sets the \c GeoView to a \c NativeWidget.
     \endlist
 
-    Supported views are \c MapWidget, \c SceneWidget, and \c LocalSceneWidget.
+    Supported views are \c MapViewWidget, \c SceneViewWidget, and \c LocalSceneViewWidget.
    */
   void BookmarksView::setGeoViewWidget(NativeWidget* geoViewWidget)
   {
