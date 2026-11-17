@@ -173,6 +173,9 @@ Pane {
      */
     property alias stepForwardIcon: stepForwardButton.icon
 
+    // Keeps the wheel from reaching the map under the view, also when the list cannot scroll further.
+    wheelEnabled: true
+
     contentItem: GridLayout {
         columns: 5
 

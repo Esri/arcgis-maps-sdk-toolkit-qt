@@ -67,6 +67,8 @@ Control {
     property int maxNumberLevels: 2
 
     padding: 5
+    // Keeps the wheel from reaching the map under the view, also when the list cannot scroll further.
+    wheelEnabled: true
 
     Binding {
         target: controller
