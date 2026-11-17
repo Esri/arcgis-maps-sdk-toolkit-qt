@@ -115,6 +115,9 @@ Pane {
      */
     property bool allowTooltips: true
 
+    // Keeps the wheel from reaching the map under the view, also when the list cannot scroll further.
+    wheelEnabled: true
+
     implicitWidth: style === BasemapGallery.ViewStyle.List ? internal.defaultCellWidthList
                                                            : internal.defaultCellWidthGrid * 3
 
