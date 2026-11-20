@@ -26,15 +26,15 @@ QML_IMPORT_NAME = "DemoApp"
 QML_IMPORT_MAJOR_VERSION = 1
 
 lessThan(QT_MAJOR_VERSION, 6) {
-    error("This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.8.2")
+    error("This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.8.9")
 }
 
 equals(QT_MAJOR_VERSION, 6) {
     lessThan(QT_MINOR_VERSION, 8) {
-        error("This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.8.2")
+        error("This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.8.9")
     }
-  equals(QT_MINOR_VERSION, 8) : lessThan(QT_PATCH_VERSION, 2) {
-    error("This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.8.2")
+  equals(QT_MINOR_VERSION, 8) : lessThan(QT_PATCH_VERSION, 9) {
+    error("This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.8.9")
   }
 }
 
@@ -72,9 +72,7 @@ macx {
 ios {
     include (iOS/iOS.pri)
 
-    versionAtLeast(QT_VERSION, 6.8.4):!equals(QT_VERSION, 6.9.0) { # Qt 6.8.4 and later, except 6.9.0
-      CONFIG += add_ios_ffmpeg_libraries
-    } else {
+    equals(QT_VERSION, 6.9.0) {
       # workaround for https://bugreports.qt.io/browse/QTBUG-129651
       # ArcGIS Maps SDK for Qt adds 'QMAKE_RPATHDIR = @executable_path/Frameworks'
       # and ffmpeg frameworks have embedded '@rpath/Frameworks' path.
@@ -82,11 +80,7 @@ ios {
       # search path.
       FFMPEG_LIB_DIR = $$clean_path($$[QT_INSTALL_LIBS]/ffmpeg)
       QMAKE_LFLAGS += -F$${FFMPEG_LIB_DIR} -Wl,-rpath,@executable_path
-      versionAtLeast(QT_VERSION, 6.8.3) {
-        FRAMEWORK = "xcframework"
-      } else {
-        FRAMEWORK = "framework"
-      }
+      FRAMEWORK = "xcframework"
       LIBS += -framework libavcodec \
               -framework libavformat \
               -framework libavutil \
@@ -99,6 +93,8 @@ ios {
                      $${FFMPEG_LIB_DIR}/libswscale.$${FRAMEWORK}
       ffmpeg.path = Frameworks
       QMAKE_BUNDLE_DATA += ffmpeg
+    } else {
+      CONFIG += add_ios_ffmpeg_libraries
     }
 }
 
