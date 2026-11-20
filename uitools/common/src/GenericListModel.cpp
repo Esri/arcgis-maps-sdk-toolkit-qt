@@ -825,6 +825,17 @@ namespace Esri::ArcGISRuntime::Toolkit
     return QAbstractItemModel::flags(index);
   }
 
+/*!
+  \brief Helper function to grab the object at index and cast to type T.
+
+  \list
+    \li \a index Index of element to grab.
+  \endlist
+
+  Returns the cast of object in list to \c T.
+ 
+  \c nullptr is returned if the cast fails.
+ */
   QObject* GenericListModel::element(const QModelIndex& index)
   {
     return qvariant_cast<QObject*>(data(index, Qt::UserRole));
@@ -852,20 +863,6 @@ namespace Esri::ArcGISRuntime::Toolkit
       \li \c Func Signature type that is accepted. Should be implicitly convertible to \l Esri::ArcGISRuntime::Toolkit::GenericListModel::FlagsCallback.
       \li \a f Function which handles the return of \c Qt::ItemFlags for each item in the collection \c QList<QObject*>
     \endlist
-   */
-
-  /*!
-    \fn T* Esri::ArcGISRuntime::Toolkit::GenericListModel::element(const QModelIndex& index) const
-
-    \brief Helper function to grab the object at index and cast to type T.
-
-    \list
-      \li \c T The type to cast to.
-      \li \a index Index of element to grab.
-    \endlist
-
-    Returns the cast of object in list to \c T. Nullptr is returned if the cast
-    fails.
    */
 
   /*!
