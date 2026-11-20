@@ -855,7 +855,7 @@ namespace Esri::ArcGISRuntime::Toolkit
    */
 
   /*!
-    \fn T* Esri::ArcGISRuntime::Toolkit::GenericListModel::element(const QModelIndex& index) const
+    \fn template<typename T> T* Esri::ArcGISRuntime::Toolkit::GenericListModel::element(const QModelIndex& index) const
 
     \brief Helper function to grab the object at index and cast to type T.
 
