@@ -35,8 +35,8 @@ elseif(APPLE)
 endif()
 
 find_package(Qt6 COMPONENTS REQUIRED Core Quick Qml OpenGL QuickControls2 WebSockets Positioning Sensors)
-if(Qt6Core_VERSION VERSION_LESS 6.8.2)
-  message(FATAL_ERROR "This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.8.2")
+if(Qt6Core_VERSION VERSION_LESS 6.8.9)
+  message(FATAL_ERROR "This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.8.9")
 endif()
 find_package(ArcGISRuntime 300.2.0 COMPONENTS REQUIRED Cpp)
 
