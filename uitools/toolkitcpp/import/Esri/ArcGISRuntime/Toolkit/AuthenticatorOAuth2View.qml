@@ -25,13 +25,14 @@ Dialog {
     id: oAuthView
 
     property AuthenticatorController controller: null
+    property string webViewTitle: ""
 
-    title: webView.title
+    title: webViewTitle
 
     closePolicy: Popup.NoAutoClose
 
     header: Label {
-        text: `<h2>${webView.title}</h2>`
+        text: `<h2>${oAuthView.webViewTitle}</h2>`
         horizontalAlignment: Text.AlignHCenter
     }
 
@@ -62,9 +63,11 @@ Dialog {
         }
 
         onTitleChanged: {
+            oAuthView.webViewTitle = title;
+
             // If the title contains "SUCCESS", get the authorization code from the title and continue authenticationChallenge.
             if (isSuccess()) {
-                const authCode = title.replace("SUCCESS code=", "");
+                const authCode = oAuthView.webViewTitle.replace("SUCCESS code=", "");
                 const responseAsUrlWithCode = controller.redirectUri + "?code=" + authCode;
                 controller.respond(responseAsUrlWithCode);
                 close();
@@ -90,15 +93,16 @@ Dialog {
 
         // Helper functions
         function isSuccess() {
-            return title.indexOf("SUCCESS code=") > -1;
+            return oAuthView.webViewTitle.indexOf("SUCCESS code=") > -1;
         }
 
         function isInvalidRequest() {
-            return (title.indexOf("Denied error=invalid_request") > -1);
+            return (oAuthView.webViewTitle.indexOf("Denied error=invalid_request") > -1);
         }
 
         function isError() {
-            return (title.indexOf("Denied error=") > -1) || (title.indexOf("Error: ") > -1);
+            return (oAuthView.webViewTitle.indexOf("Denied error=") > -1)
+                || (oAuthView.webViewTitle.indexOf("Error: ") > -1);
         }
 
         function readHtmlContent() {

@@ -88,10 +88,11 @@ T.RoundButton {
     // Focus indicator
     Rectangle {
         anchors.fill: parent
-        anchors.margins: -2
-        radius: control.radius
+        anchors.margins: -4
+        radius: control.radius + 4
         color: "transparent"
-        border.color: Calcite.brandHover
+        border.width: 2
+        border.color: Calcite.focus
         visible: control.visualFocus
         z: 10
     }

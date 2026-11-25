@@ -47,7 +47,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     MapViewToolkit* insetView() const;
 
     QObject* geoView() const;
-    void setGeoView(QObject* mapView);
+    void setGeoView(QObject* geoView);
 
     Symbol* symbol() const;
     void setSymbol(Symbol* symbol);
@@ -78,6 +78,15 @@ namespace Esri::ArcGISRuntime::Toolkit
     void setupInsetMapForMap(MapViewToolkit* mapView);
     void setupInsetMapForScene(SceneViewToolkit* sceneView);
     void setupInsetMapForLocalScene(LocalSceneViewToolkit* localSceneView);
+
+#ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
+    void applyInsetNavigationToMapWidget(MapWidgetToolkit* view);
+    void applyInsetNavigationToSceneWidget(SceneWidgetToolkit* view);
+    void applyMapWidgetNavigationToInset(MapWidgetToolkit* view);
+    void applySceneWidgetNavigationToInset(SceneWidgetToolkit* view);
+    void setupInsetMapForMapWidget(MapWidgetToolkit* mapWidget);
+    void setupInsetMapForSceneWidget(SceneWidgetToolkit* sceneWidget);
+#endif
 
   private:
     QFutureWatcher<bool> m_setViewpointWatcher;

@@ -20,4 +20,5 @@ T.ApplicationWindow {
   id: window
 
   color: Calcite.background
+  palette.highlight: Calcite.focus
 }

@@ -74,7 +74,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     disableInteractions();
 
     // Add the Graphic to the insetView.
-    auto graphicsOverlay = new GraphicsOverlay(m_insetView);
+    auto* graphicsOverlay = new GraphicsOverlay(m_insetView);
     graphicsOverlay->graphics()->append(m_reticle);
     m_insetView->graphicsOverlays()->append(graphicsOverlay);
 
@@ -96,6 +96,16 @@ namespace Esri::ArcGISRuntime::Toolkit
         {
           applyInsetNavigationToMapView(mapView);
         }
+#ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
+        else if (auto* sceneWidget = qobject_cast<SceneWidgetToolkit*>(m_geoView))
+        {
+          applyInsetNavigationToSceneWidget(sceneWidget);
+        }
+        else if (auto* mapWidget = qobject_cast<MapWidgetToolkit*>(m_geoView))
+        {
+          applyInsetNavigationToMapWidget(mapWidget);
+        }
+#endif
       }
     });
   }
@@ -149,7 +159,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       // If Symbol has not yet been set, we provide a default symbol appropriate for SceneViews.
       if (symbol() == nullptr)
       {
-        setSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle::Cross, Qt::GlobalColor::red, 16.0f, this));
+        setSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle::Cross, Qt::GlobalColor::red, 16.0F, this));
       }
       // Connect to geoViews's viewpointChanged. Updates insetView when the SceneView-geoView viewpoint changes.
       QObject::connect(sceneView, &SceneViewToolkit::viewpointChanged, this, [this, sceneView]
@@ -170,6 +180,48 @@ namespace Esri::ArcGISRuntime::Toolkit
         }
       });
     }
+#ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
+    else if (auto* sceneWidget = qobject_cast<SceneWidgetToolkit*>(m_geoView))
+    {
+      connect(sceneWidget->arcGISScene(), &Scene::doneLoading, this, [this, sceneWidget](const Error& e)
+      {
+        if (!e.isEmpty())
+        {
+          qDebug() << "Error. Main scene did not load" << e.message() << e.additionalMessage();
+          return;
+        }
+
+        setupInsetMapForSceneWidget(sceneWidget);
+      });
+
+      if (sceneWidget->arcGISScene()->loadStatus() == LoadStatus::Loaded)
+      {
+        setupInsetMapForSceneWidget(sceneWidget);
+      }
+
+      if (symbol() == nullptr)
+      {
+        setSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle::Cross, Qt::GlobalColor::red, 16.0F, this));
+      }
+
+      QObject::connect(sceneWidget, &SceneWidgetToolkit::viewpointChanged, this, [this, sceneWidget]
+      {
+        const Viewpoint viewpoint = sceneWidget->currentViewpoint(ViewpointType::CenterAndScale);
+        m_reticle->setGeometry(viewpoint.targetGeometry());
+        if (sceneWidget->isNavigating() && !m_isUpdatingGeoViewFromInset)
+        {
+          applySceneWidgetNavigationToInset(sceneWidget);
+        }
+      });
+      singleShotConnection(sceneWidget, &SceneWidgetToolkit::drawStatusChanged, this, [this, sceneWidget](DrawStatus status)
+      {
+        if (status == DrawStatus::Completed)
+        {
+          applySceneWidgetNavigationToInset(sceneWidget);
+        }
+      });
+    }
+#endif
     else if (auto* localSceneView = qobject_cast<LocalSceneViewToolkit*>(m_geoView))
     {
       // set up the inset map once the scene is done loading
@@ -193,7 +245,7 @@ namespace Esri::ArcGISRuntime::Toolkit
       // If Symbol has not yet been set, we provide a default symbol appropriate for LocalSceneViews.
       if (symbol() == nullptr)
       {
-        setSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle::Cross, Qt::GlobalColor::red, 16.0f, this));
+        setSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbolStyle::Cross, Qt::GlobalColor::red, 16.0F, this));
       }
       // Connect to geoViews's viewpointChanged. Updates insetView when the SceneView-geoView viewpoint changes.
       QObject::connect(localSceneView, &LocalSceneViewToolkit::viewpointChanged, this, [this, localSceneView]
@@ -237,9 +289,9 @@ namespace Esri::ArcGISRuntime::Toolkit
       // If Symbol has not yet been set, we provide a default symbol appropriate for MapViews.
       if (symbol() == nullptr)
       {
-        auto symbol = new SimpleFillSymbol(this);
+        auto* symbol = new SimpleFillSymbol(this);
         symbol->setStyle(SimpleFillSymbolStyle::Null);
-        symbol->setOutline(new SimpleLineSymbol(SimpleLineSymbolStyle::Solid, Qt::GlobalColor::red, 1.0f, symbol));
+        symbol->setOutline(new SimpleLineSymbol(SimpleLineSymbolStyle::Solid, Qt::GlobalColor::red, 1.0F, symbol));
         setSymbol(symbol);
       }
       // Connect to geoView's viewpointChanged. Updates insetView when MapView-geoView viewpoint changes.
@@ -260,6 +312,50 @@ namespace Esri::ArcGISRuntime::Toolkit
         }
       });
     }
+#ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
+    else if (auto* mapWidget = qobject_cast<MapWidgetToolkit*>(m_geoView))
+    {
+      connect(mapWidget->map(), &Map::doneLoading, this, [this, mapWidget](const Error& e)
+      {
+        if (!e.isEmpty())
+        {
+          qDebug() << "Error. Main map did not load" << e.message() << e.additionalMessage();
+          return;
+        }
+
+        setupInsetMapForMapWidget(mapWidget);
+      });
+
+      if (mapWidget->map()->loadStatus() == LoadStatus::Loaded)
+      {
+        setupInsetMapForMapWidget(mapWidget);
+      }
+
+      if (symbol() == nullptr)
+      {
+        auto* mapSymbol = new SimpleFillSymbol(this);
+        mapSymbol->setStyle(SimpleFillSymbolStyle::Null);
+        mapSymbol->setOutline(new SimpleLineSymbol(SimpleLineSymbolStyle::Solid, Qt::GlobalColor::red, 1.0F, mapSymbol));
+        setSymbol(mapSymbol);
+      }
+
+      QObject::connect(mapWidget, &MapWidgetToolkit::viewpointChanged, this, [this, mapWidget]
+      {
+        m_reticle->setGeometry(mapWidget->visibleArea());
+        if (mapWidget->isNavigating() && !m_isUpdatingGeoViewFromInset)
+        {
+          applyMapWidgetNavigationToInset(mapWidget);
+        }
+      });
+      singleShotConnection(mapWidget, &MapWidgetToolkit::drawStatusChanged, this, [this, mapWidget](DrawStatus status)
+      {
+        if (status == DrawStatus::Completed)
+        {
+          applyMapWidgetNavigationToInset(mapWidget);
+        }
+      });
+    }
+#endif
     emit geoViewChanged();
   }
 
@@ -297,7 +393,7 @@ namespace Esri::ArcGISRuntime::Toolkit
 
   void OverviewMapController::setScaleFactor(double scaleFactor)
   {
-    if (m_scaleFactor == scaleFactor)
+    if (qFuzzyIsNull(m_scaleFactor - scaleFactor))
     {
       return;
     }
@@ -318,6 +414,16 @@ namespace Esri::ArcGISRuntime::Toolkit
     {
       emit mapView->viewpointChanged();
     }
+#ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
+    else if (auto* sceneWidget = qobject_cast<SceneWidgetToolkit*>(m_geoView))
+    {
+      emit sceneWidget->viewpointChanged();
+    }
+    else if (auto* mapWidget = qobject_cast<MapWidgetToolkit*>(m_geoView))
+    {
+      emit mapWidget->viewpointChanged();
+    }
+#endif
   }
 
   void OverviewMapController::resetNavigationSynchronization()
@@ -348,6 +454,17 @@ namespace Esri::ArcGISRuntime::Toolkit
     startGeoViewNavigationUpdate(view->setViewpointAsync(newViewpoint, animationDuration));
   }
 
+#ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
+  void OverviewMapController::applyInsetNavigationToMapWidget(MapWidgetToolkit* view)
+  {
+    const Viewpoint viewpoint = m_insetView->currentViewpoint(ViewpointType::CenterAndScale);
+    const Viewpoint newViewpoint{geometry_cast<Point>(viewpoint.targetGeometry()), viewpoint.targetScale() / scaleFactor(), viewpoint.rotation()};
+
+    constexpr float animationDuration{0};
+    startGeoViewNavigationUpdate(view->setViewpointAsync(newViewpoint, animationDuration));
+  }
+#endif
+
   void OverviewMapController::applyInsetNavigationToSceneView(SceneViewToolkit* view)
   {
     // Note we do not care about rotation in the sceneView case.
@@ -357,6 +474,17 @@ namespace Esri::ArcGISRuntime::Toolkit
     constexpr float animationDuration{0};
     startGeoViewNavigationUpdate(view->setViewpointAsync(newViewpoint, animationDuration));
   }
+
+#ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
+  void OverviewMapController::applyInsetNavigationToSceneWidget(SceneWidgetToolkit* view)
+  {
+    const Viewpoint viewpoint = m_insetView->currentViewpoint(ViewpointType::CenterAndScale);
+    const Viewpoint newViewpoint{geometry_cast<Point>(viewpoint.targetGeometry()), viewpoint.targetScale() / scaleFactor()};
+
+    constexpr float animationDuration{0};
+    startGeoViewNavigationUpdate(view->setViewpointAsync(newViewpoint, animationDuration));
+  }
+#endif
 
   void OverviewMapController::applyInsetNavigationToLocalSceneView(LocalSceneViewToolkit* view)
   {
@@ -378,6 +506,17 @@ namespace Esri::ArcGISRuntime::Toolkit
     startInsetNavigationUpdate(m_insetView->setViewpointAsync(newViewpoint, animationDuration));
   }
 
+#ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
+  void OverviewMapController::applyMapWidgetNavigationToInset(MapWidgetToolkit* view)
+  {
+    const Viewpoint viewpoint = view->currentViewpoint(ViewpointType::CenterAndScale);
+    const Viewpoint newViewpoint{geometry_cast<Point>(viewpoint.targetGeometry()), viewpoint.targetScale() * scaleFactor(), viewpoint.rotation()};
+
+    constexpr float animationDuration{0};
+    startInsetNavigationUpdate(m_insetView->setViewpointAsync(newViewpoint, animationDuration));
+  }
+#endif
+
   void OverviewMapController::applySceneNavigationToInset(SceneViewToolkit* view)
   {
     // Note we do not care about rotation in the sceneView case.
@@ -387,6 +526,17 @@ namespace Esri::ArcGISRuntime::Toolkit
     constexpr float animationDuration{0};
     startInsetNavigationUpdate(m_insetView->setViewpointAsync(newViewpoint, animationDuration));
   }
+
+#ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
+  void OverviewMapController::applySceneWidgetNavigationToInset(SceneWidgetToolkit* view)
+  {
+    const Viewpoint viewpoint = view->currentViewpoint(ViewpointType::CenterAndScale);
+    const Viewpoint newViewpoint{geometry_cast<Point>(viewpoint.targetGeometry()), viewpoint.targetScale() * scaleFactor()};
+
+    constexpr float animationDuration{0};
+    startInsetNavigationUpdate(m_insetView->setViewpointAsync(newViewpoint, animationDuration));
+  }
+#endif
 
   void OverviewMapController::applyLocalSceneNavigationToInset(LocalSceneViewToolkit* view)
   {
@@ -458,6 +608,18 @@ namespace Esri::ArcGISRuntime::Toolkit
     m_insetView->setMap(map);
   }
 
+#ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
+  void OverviewMapController::setupInsetMapForMapWidget(MapWidgetToolkit* mapWidget)
+  {
+    auto* map = new Map(BasemapStyle::ArcGISTopographic, m_insetView);
+    const auto initialViewpoint = mapWidget->map()->initialViewpoint();
+    const Viewpoint newViewpoint{geometry_cast<Point>(initialViewpoint.targetGeometry()), initialViewpoint.targetScale() * scaleFactor(),
+                                 initialViewpoint.rotation()};
+    map->setInitialViewpoint(newViewpoint);
+    m_insetView->setMap(map);
+  }
+#endif
+
   // create a function to handle setting up the inset map and viewpoint
   void OverviewMapController::setupInsetMapForScene(SceneViewToolkit* sceneView)
   {
@@ -472,6 +634,17 @@ namespace Esri::ArcGISRuntime::Toolkit
     map->setInitialViewpoint(newViewpoint);
     m_insetView->setMap(map);
   }
+
+#ifdef WIDGETS_ARCGISRUNTIME_TOOLKIT
+  void OverviewMapController::setupInsetMapForSceneWidget(SceneWidgetToolkit* sceneWidget)
+  {
+    auto* map = new Map(BasemapStyle::ArcGISTopographic, m_insetView);
+    const Viewpoint viewpoint = sceneWidget->currentViewpoint(ViewpointType::CenterAndScale);
+    const Viewpoint newViewpoint{geometry_cast<Point>(viewpoint.targetGeometry()), viewpoint.targetScale() * scaleFactor()};
+    map->setInitialViewpoint(newViewpoint);
+    m_insetView->setMap(map);
+  }
+#endif
 
   // create a function to handle setting up the inset map and viewpoint
   void OverviewMapController::setupInsetMapForLocalScene(LocalSceneViewToolkit* localSceneView)

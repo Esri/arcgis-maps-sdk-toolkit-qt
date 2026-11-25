@@ -26,19 +26,19 @@ QML_IMPORT_NAME = "DemoApp"
 QML_IMPORT_MAJOR_VERSION = 1
 
 lessThan(QT_MAJOR_VERSION, 6) {
-    error("This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.8.2")
+    error("This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.8.9")
 }
 
 equals(QT_MAJOR_VERSION, 6) {
     lessThan(QT_MINOR_VERSION, 8) {
-        error("This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.8.2")
+        error("This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.8.9")
     }
-  equals(QT_MINOR_VERSION, 8) : lessThan(QT_PATCH_VERSION, 2) {
-    error("This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.8.2")
+  equals(QT_MINOR_VERSION, 8) : lessThan(QT_PATCH_VERSION, 9) {
+    error("This version of the ArcGIS Maps SDK for Qt requires at least Qt 6.8.9")
   }
 }
 
-ARCGIS_RUNTIME_VERSION = 300.1.0
+ARCGIS_RUNTIME_VERSION = 300.2.0
 include($$PWD/arcgisruntime.pri)
 include($$PWD/../toolkitcpp/toolkitcpp.pri)
 
@@ -72,31 +72,30 @@ macx {
 ios {
     include (iOS/iOS.pri)
 
-    # workaround for https://bugreports.qt.io/browse/QTBUG-129651
-    # ArcGIS Maps SDK for Qt adds 'QMAKE_RPATHDIR = @executable_path/Frameworks'
-    # and ffmpeg frameworks have embedded '@rpath/Frameworks' path.
-    # so in order for them to be found, we need to add @executable_path to the
-    # search path.
-    FFMPEG_LIB_DIR = $$absolute_path($$replace(QMAKE_QMAKE, "qmake6", "../../ios/lib/ffmpeg"))
-    FFMPEG_LIB_DIR = $$absolute_path($$replace(FFMPEG_LIB_DIR, "qmake", "../../ios/lib/ffmpeg"))
-    QMAKE_LFLAGS += -F$${FFMPEG_LIB_DIR} -Wl,-rpath,@executable_path
-    versionAtLeast(QT_VERSION, 6.8.3) {
+    equals(QT_VERSION, 6.9.0) {
+      # workaround for https://bugreports.qt.io/browse/QTBUG-129651
+      # ArcGIS Maps SDK for Qt adds 'QMAKE_RPATHDIR = @executable_path/Frameworks'
+      # and ffmpeg frameworks have embedded '@rpath/Frameworks' path.
+      # so in order for them to be found, we need to add @executable_path to the
+      # search path.
+      FFMPEG_LIB_DIR = $$clean_path($$[QT_INSTALL_LIBS]/ffmpeg)
+      QMAKE_LFLAGS += -F$${FFMPEG_LIB_DIR} -Wl,-rpath,@executable_path
       FRAMEWORK = "xcframework"
+      LIBS += -framework libavcodec \
+              -framework libavformat \
+              -framework libavutil \
+              -framework libswresample \
+              -framework libswscale
+      ffmpeg.files = $${FFMPEG_LIB_DIR}/libavcodec.$${FRAMEWORK} \
+                     $${FFMPEG_LIB_DIR}/libavformat.$${FRAMEWORK} \
+                     $${FFMPEG_LIB_DIR}/libavutil.$${FRAMEWORK} \
+                     $${FFMPEG_LIB_DIR}/libswresample.$${FRAMEWORK} \
+                     $${FFMPEG_LIB_DIR}/libswscale.$${FRAMEWORK}
+      ffmpeg.path = Frameworks
+      QMAKE_BUNDLE_DATA += ffmpeg
     } else {
-      FRAMEWORK = "framework"
+      CONFIG += add_ios_ffmpeg_libraries
     }
-    LIBS += -framework libavcodec \
-            -framework libavformat \
-            -framework libavutil \
-            -framework libswresample \
-            -framework libswscale
-    ffmpeg.files = $${FFMPEG_LIB_DIR}/libavcodec.$${FRAMEWORK} \
-                   $${FFMPEG_LIB_DIR}/libavformat.$${FRAMEWORK} \
-                   $${FFMPEG_LIB_DIR}/libavutil.$${FRAMEWORK} \
-                   $${FFMPEG_LIB_DIR}/libswresample.$${FRAMEWORK} \
-                   $${FFMPEG_LIB_DIR}/libswscale.$${FRAMEWORK}
-    ffmpeg.path = Frameworks
-    QMAKE_BUNDLE_DATA += ffmpeg
 }
 
 android {

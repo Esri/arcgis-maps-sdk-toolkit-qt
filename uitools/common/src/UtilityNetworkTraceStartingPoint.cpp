@@ -30,6 +30,9 @@
 #include <UtilityTerminal.h>
 #include <UtilityTerminalConfiguration.h>
 
+// STL headers
+#include <utility>
+
 namespace Esri::ArcGISRuntime::Toolkit
 {
 
@@ -53,7 +56,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     m_utilityElement(utilityElement),
     m_selectionGraphic(selectionGraphic),
     m_featureSymbol(featureSymbol),
-    m_extent(extent)
+    m_extent(std::move(extent))
   {
     if (m_utilityElement->assetType()->terminalConfiguration() != nullptr &&
         m_utilityElement->assetType()->terminalConfiguration()->terminals().size() > 1)
@@ -153,7 +156,7 @@ namespace Esri::ArcGISRuntime::Toolkit
 
   void UtilityNetworkTraceStartingPoint::setFractionAlongEdge(double fractionAlongEdge)
   {
-    if (m_fractionAlongEdge == fractionAlongEdge)
+    if (qFuzzyIsNull(m_fractionAlongEdge - fractionAlongEdge))
     {
       return;
     }

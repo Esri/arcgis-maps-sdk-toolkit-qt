@@ -75,6 +75,16 @@ Control {
 
     Keys.forwardTo: [geoView]
 
+    Connections {
+        target: demoPage.geoView instanceof MapView
+            || demoPage.geoView instanceof SceneView
+            || demoPage.geoView instanceof LocalSceneView ? demoPage.geoView : null
+
+        function onMousePressed() {
+            demoPage.geoView.forceActiveFocus(Qt.MouseFocusReason);
+        }
+    }
+
     BusyIndicator {
         anchors.centerIn: demoPage
         running: geoModel && geoModel.loadStatus === Enums.LoadStatusLoading
@@ -275,6 +285,7 @@ Control {
         }
         Loader {
             id: geoViewLoader
+            clip: true
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.columnSpan: 7

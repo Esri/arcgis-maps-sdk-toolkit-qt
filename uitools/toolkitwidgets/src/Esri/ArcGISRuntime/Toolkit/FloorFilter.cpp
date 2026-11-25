@@ -27,8 +27,9 @@
 // ArcGISRuntime headers
 #include <FloorFacility.h>
 #include <FloorSite.h>
-#include <LocalSceneWidget.h>
+#include <LocalSceneViewWidget.h>
 #include <MapGraphicsView.h>
+#include <NativeWidget.h>
 #include <SceneGraphicsView.h>
 
 // Qt headers
@@ -199,7 +200,7 @@ namespace Esri::ArcGISRuntime::Toolkit
     connect(m_ui->sitesView->selectionModel(), &QItemSelectionModel::currentChanged, this,
             [this](const QModelIndex& index, const QModelIndex& previous)
     {
-      if (index == previous || m_facilitiesUpdatedFromController)
+      if (index == previous || m_sitesUpdatedFromController)
       {
         return;
       }
@@ -319,12 +320,25 @@ namespace Esri::ArcGISRuntime::Toolkit
   /*!
     \brief Set the \c GeoView.
     \list
-      \li \a localSceneView Sets the \c GeoView to a \c LocalSceneWidget.
+      \li \a localSceneView Sets the \c GeoView to a \c LocalSceneViewWidget.
     \endlist
    */
-  void FloorFilter::setLocalSceneView(LocalSceneWidget* localSceneView)
+  void FloorFilter::setLocalSceneView(LocalSceneViewWidget* localSceneView)
   {
     m_controller->setGeoView(localSceneView);
+  }
+
+  /*!
+    \brief Sets the view to \a geoViewWidget.
+    \list
+      \li \a geoViewWidget Sets the \c GeoView to a \c NativeWidget.
+    \endlist
+
+    Supported views are \c MapViewWidget, \c SceneViewWidget, and \c LocalSceneViewWidget.
+   */
+  void FloorFilter::setGeoViewWidget(NativeWidget* geoViewWidget)
+  {
+    m_controller->setGeoView(geoViewWidget);
   }
 
   /*!

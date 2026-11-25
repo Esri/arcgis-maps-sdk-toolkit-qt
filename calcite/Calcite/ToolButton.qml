@@ -64,9 +64,9 @@ T.ToolButton {
     // Focus indicator
     Rectangle {
         anchors.fill: parent
-        anchors.margins: -2
         color: "transparent"
-        border.color: Calcite.brandHover
+        border.width: 2
+        border.color: Calcite.focus
         visible: control.visualFocus
         z: 10
     }

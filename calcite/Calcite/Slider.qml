@@ -43,12 +43,13 @@ T.Slider {
 
     // Focus indicator
     Rectangle {
-        x: handle.x - 2
-        y: handle.y - 2
-        width: handle.width + 4
-        height: handle.height + 4
+        x: handle.x - 4
+        y: handle.y - 4
+        width: handle.width + 8
+        height: handle.height + 8
         color: "transparent"
-        border.color: Calcite.brandHover
+        border.width: 2
+        border.color: Calcite.focus
         visible: control.visualFocus
     }
 }

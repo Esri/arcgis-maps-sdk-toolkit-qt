@@ -42,6 +42,8 @@ QtObject {
 
     property color brand: theme === Calcite.Theme.Light ? "#007AC2" : "#009AF2"
 
+    property color focus: brand
+
     property color brandHover: theme === Calcite.Theme.Light ? "#00619B" : "#007AC2"
 
     property color brandPress: theme === Calcite.Theme.Light ? "#004874" : "#00619B"

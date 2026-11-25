@@ -57,7 +57,7 @@ namespace Esri::ArcGISRuntime
 
       QObject* geoView() const;
 
-      void setGeoView(QObject* mapView);
+      void setGeoView(QObject* geoView);
 
       GenericListModel* coordinateFormats() const;
 

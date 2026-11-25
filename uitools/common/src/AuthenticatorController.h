@@ -33,11 +33,16 @@ Q_MOC_INCLUDE(<QUrl>)
 namespace Esri::ArcGISRuntime::Authentication
 {
   class OAuthUserConfiguration;
-  class OAuthUserLoginPrompt;
-  class OAuthUserLogoutPrompt;
   class ArcGISAuthenticationChallenge;
   class NetworkAuthenticationChallenge;
 } // namespace Esri::ArcGISRuntime::Authentication
+
+namespace Esri::ArcGISRuntime::Internal
+{
+
+  class OAuthUserLoginPrompt;
+  class OAuthUserLogoutPrompt;
+} // namespace Esri::ArcGISRuntime::Internal
 
 namespace Esri::ArcGISRuntime::Toolkit
 {
@@ -141,8 +146,8 @@ namespace Esri::ArcGISRuntime::Toolkit
     std::unique_ptr<Authentication::NetworkAuthenticationChallenge> m_currentNetworkChallenge;
     QList<Esri::ArcGISRuntime::Authentication::OAuthUserConfiguration*> m_userConfigurations;
     Esri::ArcGISRuntime::Authentication::OAuthUserConfiguration* m_currentOAuthUserConfiguration = nullptr;
-    std::unique_ptr<Authentication::OAuthUserLoginPrompt> m_currentOAuthUserLoginPrompt;
-    std::unique_ptr<Authentication::OAuthUserLogoutPrompt> m_currentOAuthUserLogoutPrompt;
+    std::unique_ptr<Esri::ArcGISRuntime::Internal::OAuthUserLoginPrompt> m_currentOAuthUserLoginPrompt;
+    std::unique_ptr<Esri::ArcGISRuntime::Internal::OAuthUserLogoutPrompt> m_currentOAuthUserLogoutPrompt;
 
 #ifdef Q_OS_IOS
     std::unique_ptr<IOSWebAuthenticationSession> m_iosWebAuthenticationSession;

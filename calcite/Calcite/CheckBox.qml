@@ -48,12 +48,13 @@ T.CheckBox {
 
     // Focus indicator
     Rectangle {
-        x: control.indicator.x - 2
-        y: control.indicator.y - 2
-        width: control.indicator.width + 4
-        height: control.indicator.height + 4
+        x: control.indicator.x - 4
+        y: control.indicator.y - 4
+        width: control.indicator.width + 8
+        height: control.indicator.height + 8
         color: "transparent"
-        border.color: Calcite.brandHover
+        border.width: 2
+        border.color: Calcite.focus
         visible: control.visualFocus
     }
 }
